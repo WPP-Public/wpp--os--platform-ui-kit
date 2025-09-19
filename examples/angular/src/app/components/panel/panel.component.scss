@@ -1,0 +1,10 @@
+:host {
+  display: flex;
+
+  place: {
+    content: normal center;
+    items: center normal;
+  }
+
+  gap: 8px;
+}

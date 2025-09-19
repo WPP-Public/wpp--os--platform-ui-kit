@@ -1,0 +1,15 @@
+FROM node:20.14.0
+
+WORKDIR /app
+
+COPY . .
+
+RUN npm ci --no-audit --progress=false
+
+RUN npm run build:cl
+
+RUN npm run build:cl.react
+
+EXPOSE 3000
+
+CMD ["npm","run","start:react"]

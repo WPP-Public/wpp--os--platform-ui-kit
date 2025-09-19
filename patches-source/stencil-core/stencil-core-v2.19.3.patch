@@ -1,0 +1,901 @@
+Subject: [PATCH] Components versions patch for @stencil/core v2.19.3
+---
+Index: src/compiler/transformers/transform-utils.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/compiler/transformers/transform-utils.ts b/src/compiler/transformers/transform-utils.ts
+--- a/src/compiler/transformers/transform-utils.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/compiler/transformers/transform-utils.ts	(date 1689930928517)
+@@ -616,6 +616,18 @@
+   return null;
+ };
+ 
++export const getComponentRegistryTagName = (staticMembers: ts.ClassElement[]) => {
++  if (staticMembers.length > 0) {
++    const registryTagName = getStaticValue(staticMembers, 'registryIs') as string;
++
++    if (typeof registryTagName === 'string' && registryTagName.includes('-')) {
++      return registryTagName;
++    }
++  }
++
++  return null;
++};
++
+ export const isStaticGetter = (member: ts.ClassElement) => {
+   return (
+     member.kind === ts.SyntaxKind.GetAccessor &&
+Index: src/compiler/types/tests/ComponentCompilerMeta.stub.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/compiler/types/tests/ComponentCompilerMeta.stub.ts b/src/compiler/types/tests/ComponentCompilerMeta.stub.ts
+--- a/src/compiler/types/tests/ComponentCompilerMeta.stub.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/compiler/types/tests/ComponentCompilerMeta.stub.ts	(date 1689930928518)
+@@ -87,6 +87,7 @@
+   styleDocs: [],
+   styles: [],
+   tagName: 'stub-cmp',
++  registryTagName: 'stub-cmp',
+   virtualProperties: [],
+   watchers: [],
+   ...overrides,
+Index: src/client/client-load-module.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/client/client-load-module.ts b/src/client/client-load-module.ts
+--- a/src/client/client-load-module.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/client/client-load-module.ts	(date 1689930928514)
+@@ -5,8 +5,9 @@
+ 
+ export const cmpModules = /*@__PURE__*/ new Map<string, { [exportName: string]: d.ComponentConstructor }>();
+ 
++// TODO: May need fixing due to incomplete cmpMeta
+ export const loadModule = (
+-  cmpMeta: d.ComponentRuntimeMeta,
++  cmpMeta: Omit<d.ComponentRuntimeMeta, '$registryTagName$'>,
+   hostRef: d.HostRef,
+   hmrVersionId?: string
+ ): Promise<d.ComponentConstructor> | d.ComponentConstructor => {
+Index: src/compiler/transformers/static-to-meta/component.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/compiler/transformers/static-to-meta/component.ts b/src/compiler/transformers/static-to-meta/component.ts
+--- a/src/compiler/transformers/static-to-meta/component.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/compiler/transformers/static-to-meta/component.ts	(date 1689930928516)
+@@ -5,7 +5,7 @@
+ import type * as d from '../../../declarations';
+ import { addComponentMetaStatic } from '../add-component-meta-static';
+ import { setComponentBuildConditionals } from '../component-build-conditionals';
+-import { getComponentTagName, getStaticValue, isInternal, isStaticGetter, serializeSymbol } from '../transform-utils';
++import { getComponentRegistryTagName, getComponentTagName, getStaticValue, isInternal, isStaticGetter, serializeSymbol } from '../transform-utils';
+ import { parseCallExpression } from './call-expression';
+ import { parseClassMethods } from './class-methods';
+ import { parseStaticElementRef } from './element-ref';
+@@ -49,6 +49,10 @@
+   if (tagName == null) {
+     return cmpNode;
+   }
++  const registryTagName = getComponentRegistryTagName(staticMembers);
++  if (registryTagName == null) {
++    return cmpNode;
++  }
+ 
+   const symbol = typeChecker ? typeChecker.getSymbolAtLocation(cmpNode.name) : undefined;
+   const docs = serializeSymbol(typeChecker, symbol);
+@@ -57,6 +61,7 @@
+ 
+   const cmp: d.ComponentCompilerMeta = {
+     tagName: tagName,
++    registryTagName: registryTagName,
+     excludeFromCollection: moduleFile.excludeFromCollection,
+     isCollectionDependency,
+     componentClassName: cmpNode.name ? cmpNode.name.text : '',
+Index: src/compiler/transpile/run-program.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/compiler/transpile/run-program.ts b/src/compiler/transpile/run-program.ts
+--- a/src/compiler/transpile/run-program.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/compiler/transpile/run-program.ts	(date 1689930928518)
+@@ -1,4 +1,4 @@
+-import { loadTypeScriptDiagnostics, normalizePath } from '@utils';
++import { convertTagNames, loadTypeScriptDiagnostics, normalizePath } from '@utils';
+ import { basename, join, relative } from 'path';
+ import type ts from 'typescript';
+ 
+@@ -50,9 +50,16 @@
+     }
+   };
+ 
++  const afterTransformers: ts.CustomTransformers['after'] = [];
++
++  if (config.flags?.tagNamePostfix) {
++    afterTransformers.push(convertTagNames(config));
++  }
++
+   // Emit files that changed
+   tsBuilder.emit(undefined, emitCallback, undefined, false, {
+     before: [convertDecoratorsToStatic(config, buildCtx.diagnostics, tsTypeChecker)],
++    after: afterTransformers,
+   });
+ 
+   const changedmodules = Array.from(compilerCtx.changedModules.keys());
+Index: src/testing/spec-page.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/testing/spec-page.ts b/src/testing/spec-page.ts
+--- a/src/testing/spec-page.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/testing/spec-page.ts	(date 1689930928520)
+@@ -168,6 +168,7 @@
+     const cmpMeta: ComponentRuntimeMeta = {
+       $flags$: 0,
+       $tagName$: 'body',
++      $registryTagName$: 'body',
+     };
+     const ref: HostRef = {
+       $ancestorComponent$: undefined,
+Index: src/compiler/transformers/decorators-to-static/component-decorator.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/compiler/transformers/decorators-to-static/component-decorator.ts b/src/compiler/transformers/decorators-to-static/component-decorator.ts
+--- a/src/compiler/transformers/decorators-to-static/component-decorator.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/compiler/transformers/decorators-to-static/component-decorator.ts	(date 1689930928516)
+@@ -1,4 +1,4 @@
+-import { augmentDiagnosticWithNode, buildError, buildWarn, isString, validateComponentTag } from '@utils';
++import { addTagNamePostfix, augmentDiagnosticWithNode, buildError, buildWarn, isString, validateComponentTag } from '@utils';
+ import ts from 'typescript';
+ 
+ import type * as d from '../../../declarations';
+@@ -23,7 +23,11 @@
+     return;
+   }
+ 
+-  newMembers.push(createStaticGetter('is', convertValueToLiteral(componentOptions.tag.trim())));
++  const tagName = componentOptions.tag.trim();
++  const registryTagName = addTagNamePostfix(tagName, config.flags?.tagNamePostfix);
++
++  newMembers.push(createStaticGetter('is', convertValueToLiteral(tagName)));
++  newMembers.push(createStaticGetter('registryIs', convertValueToLiteral(registryTagName)));
+ 
+   if (componentOptions.shadow) {
+     newMembers.push(createStaticGetter('encapsulation', convertValueToLiteral('shadow')));
+Index: src/compiler/transformers/test/parse-styles.spec.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/compiler/transformers/test/parse-styles.spec.ts b/src/compiler/transformers/test/parse-styles.spec.ts
+--- a/src/compiler/transformers/test/parse-styles.spec.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/compiler/transformers/test/parse-styles.spec.ts	(date 1689930928517)
+@@ -50,7 +50,7 @@
+       export class CmpA {}
+     `);
+     expect(t.outputText).toEqual(
+-      `const md = 'p{color:red}';const ios = 'p{color:black}';export class CmpA { static get is() { return "cmp-a"; } static get styles() { return { "md": md, "ios": ios }; }}`
++      `const md = 'p{color:red}';const ios = 'p{color:black}';export class CmpA { static get is() { return "cmp-a"; } static get registryIs() { return "cmp-a"; } static get styles() { return { "md": md, "ios": ios }; }}`
+     );
+   });
+ 
+@@ -82,7 +82,7 @@
+       export class CmpA {}
+     `);
+     expect(t.outputText).toEqual(
+-      `const styles = 'p{color:red}';export class CmpA { static get is() { return "cmp-a"; } static get styles() { return styles; }}`
++      `const styles = 'p{color:red}';export class CmpA { static get is() { return "cmp-a"; } static get registryIs() { return "cmp-a"; } static get styles() { return styles; }}`
+     );
+   });
+ });
+Index: src/cli/config-flags.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/cli/config-flags.ts b/src/cli/config-flags.ts
+--- a/src/cli/config-flags.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/cli/config-flags.ts	(date 1689930928513)
+@@ -99,6 +99,8 @@
+  * All the String options supported by the Stencil CLI
+  */
+ export const STRING_CLI_FLAGS = [
++  'tagNamePostfix',
++
+   'address',
+   'config',
+   'docsApi',
+Index: package.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/package.json b/package.json
+--- a/package.json	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/package.json	(date 1689930928511)
+@@ -33,7 +33,7 @@
+     "prettier.base": "prettier \"./({bin,scripts,src,test}/**/*.{ts,tsx,js,jsx})|bin/stencil|.github/(**/)?*.(yml|yaml)|*.js\"",
+     "prettier.dry-run": "npm run prettier.base -- --list-different",
+     "release": "node scripts --release --publish",
+-    "release.prepare": "node scripts --release --prepare",
++    "release.prepare": "node --max-old-space-size=8192 scripts --release --prepare",
+     "rollup": "rollup --config",
+     "rollup.prod": "rollup --config --config-prod",
+     "rollup.prod.ci": "rollup --config --config-prod --config-ci",
+Index: src/runtime/initialize-component.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/runtime/initialize-component.ts b/src/runtime/initialize-component.ts
+--- a/src/runtime/initialize-component.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/runtime/initialize-component.ts	(date 1689930928520)
+@@ -85,7 +85,7 @@
+       // wait for the CustomElementRegistry to mark the component as ready before setting `isWatchReady`. Otherwise,
+       // watchers may fire prematurely if `customElements.get()`/`customElements.whenDefined()` resolves _before_
+       // Stencil has completed instantiating the component.
+-      customElements.whenDefined(cmpMeta.$tagName$).then(() => (hostRef.$flags$ |= HOST_FLAGS.isWatchReady));
++      customElements.whenDefined(cmpMeta.$registryTagName$).then(() => (hostRef.$flags$ |= HOST_FLAGS.isWatchReady));
+     }
+ 
+     if (BUILD.style && Cstr.style) {
+Index: src/utils/tagNamePostfix.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/utils/tagNamePostfix.ts b/src/utils/tagNamePostfix.ts
+new file mode 100644
+--- /dev/null	(date 1689930928521)
++++ b/src/utils/tagNamePostfix.ts	(date 1689930928521)
+@@ -0,0 +1,112 @@
++import ts from 'typescript';
++import { H } from '../compiler/transformers/core-runtime-apis';
++import * as d from '@stencil/core/declarations';
++
++export const addTagNamePostfix = (tagName: string, postfix?: string) => {
++  if (postfix) {
++    return `${tagName}-${postfix}`;
++  }
++
++  return tagName;
++};
++
++export const isTargetWebComponent = (tagName: string) => tagName.startsWith('wpp-');
++
++export const convertTagNames = (config: d.Config): ts.TransformerFactory<ts.SourceFile> => {
++  config.logger.debug('==> Updating components JSX');
++
++  return (transformCtx) => {
++    const visit = (node: ts.Node): ts.VisitResult<ts.Node> => {
++      if (ts.isClassDeclaration(node)) {
++        config.logger.debug(`==> Class '${node.name?.text}'`);
++        return visitDeclaration(config, node, transformCtx);
++      } else if (ts.isFunctionDeclaration(node)) {
++        config.logger.debug(`==> Function '${node.name?.text}'`);
++        return visitDeclaration(config, node, transformCtx);
++      } else if (ts.isArrowFunction(node)) {
++        config.logger.debug(`==> Arrow function`);
++        return visitDeclaration(config, node, transformCtx);
++      }
++      return ts.visitEachChild(node, visit, transformCtx);
++    };
++
++    return (tsSourceFile) => {
++      return ts.visitEachChild(tsSourceFile, visit, transformCtx);
++    };
++  };
++};
++
++const visitDeclaration = (config: d.Config, node: ts.Node, transformCtx: ts.TransformationContext) => {
++  let isUpdateLogged = false;
++  const visitNode = (node: ts.Node) => {
++    if (ts.isCallExpression(node)) {
++      const updatedNode = transformCtx.factory.createCallExpression(node.expression, node.typeArguments, [...node.arguments]);
++      const hasUpdates = updateCallExpression(config, updatedNode);
++
++      if (hasUpdates) {
++        if (!isUpdateLogged) {
++          config.logger.debug(`- Updated component usage`);
++          isUpdateLogged = true;
++        }
++        transformCtx.factory.updateCallExpression(node, updatedNode.expression, updatedNode.typeArguments, updatedNode.arguments);
++      }
++    }
++    node.forEachChild(visitNode);
++  };
++
++  visitNode(node);
++
++  return node;
++};
++
++export const updateCallExpression = (config: d.Config, node: ts.CallExpression): boolean => {
++  if (node.arguments != null && node.arguments.length > 0) {
++    if (ts.isIdentifier(node.expression)) {
++      // h('tag')
++      return visitCallExpressionArgs(config, node.expression, node.arguments);
++    } else if (ts.isPropertyAccessExpression(node.expression)) {
++      // document.createElement('tag')
++      const n = node.expression.name;
++      if (ts.isIdentifier(n) && n) {
++        return visitCallExpressionArgs(config, n, node.arguments);
++      }
++    }
++  }
++
++  return false;
++};
++
++const visitCallExpressionArgs = (
++  config: d.Config,
++  callExpressionName: ts.Identifier,
++  args: ts.NodeArray<ts.Expression>
++): boolean => {
++  const fnName = callExpressionName.escapedText as string;
++
++  if (fnName === 'h' || fnName === H || fnName === 'createElement') {
++    return visitCallExpressionArg(config, args[0]);
++  } else if (args.length > 1 && fnName === 'createElementNS') {
++    return visitCallExpressionArg(config, args[1]);
++  }
++
++  return false;
++};
++
++const visitCallExpressionArg = (config: d.Config, arg: ts.Expression): boolean => {
++  if (ts.isStringLiteral(arg)) {
++    let tag = arg.text;
++
++    if (typeof tag === 'string') {
++      tag = tag.toLowerCase();
++
++      if (isTargetWebComponent(tag)) {
++        tag = addTagNamePostfix(tag, config.flags?.tagNamePostfix);
++        arg.text = tag;
++
++        return true;
++      }
++    }
++  }
++
++  return false;
++};
+Index: src/runtime/bootstrap-custom-element.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/runtime/bootstrap-custom-element.ts b/src/runtime/bootstrap-custom-element.ts
+--- a/src/runtime/bootstrap-custom-element.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/runtime/bootstrap-custom-element.ts	(date 1689930928519)
+@@ -11,19 +11,20 @@
+ import { attachStyles, getScopeId, registerStyle } from './styles';
+ 
+ export const defineCustomElement = (Cstr: any, compactMeta: d.ComponentRuntimeMetaCompact) => {
+-  customElements.define(compactMeta[1], proxyCustomElement(Cstr, compactMeta) as CustomElementConstructor);
++  customElements.define(compactMeta[2], proxyCustomElement(Cstr, compactMeta) as CustomElementConstructor);
+ };
+ 
+ export const proxyCustomElement = (Cstr: any, compactMeta: d.ComponentRuntimeMetaCompact) => {
+   const cmpMeta: d.ComponentRuntimeMeta = {
+     $flags$: compactMeta[0],
+     $tagName$: compactMeta[1],
++    $registryTagName$: compactMeta[2],
+   };
+   if (BUILD.member) {
+-    cmpMeta.$members$ = compactMeta[2];
++    cmpMeta.$members$ = compactMeta[3];
+   }
+   if (BUILD.hostListener) {
+-    cmpMeta.$listeners$ = compactMeta[3];
++    cmpMeta.$listeners$ = compactMeta[4];
+   }
+   if (BUILD.watchCallback) {
+     cmpMeta.$watchers$ = Cstr.$watchers$;
+Index: src/utils/format-component-runtime-meta.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/utils/format-component-runtime-meta.ts b/src/utils/format-component-runtime-meta.ts
+--- a/src/utils/format-component-runtime-meta.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/utils/format-component-runtime-meta.ts	(date 1689930928521)
+@@ -41,6 +41,7 @@
+   return trimFalsy([
+     flags,
+     compilerMeta.tagName,
++    compilerMeta.registryTagName,
+     Object.keys(members).length > 0 ? members : undefined,
+     hostListeners.length > 0 ? hostListeners : undefined,
+   ]);
+Index: src/utils/index.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/utils/index.ts b/src/utils/index.ts
+--- a/src/utils/index.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/utils/index.ts	(date 1689930928521)
+@@ -13,3 +13,4 @@
+ export * from './url-paths';
+ export * from './util';
+ export * from './validation';
++export * from './tagNamePostfix';
+Index: scripts/release-tasks.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/scripts/release-tasks.ts b/scripts/release-tasks.ts
+--- a/scripts/release-tasks.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/scripts/release-tasks.ts	(date 1689930928512)
+@@ -11,7 +11,6 @@
+   isValidVersionInput,
+   postGithubRelease,
+   SEMVER_INCREMENTS,
+-  updateChangeLog,
+ } from './utils/release-utils';
+ 
+ /**
+@@ -25,8 +24,6 @@
+   const tasks: ListrTask[] = [];
+   const newVersion = opts.version;
+   const isDryRun = args.includes('--dry-run') || opts.version.includes('dryrun');
+-  const isAnyBranch = args.includes('--any-branch');
+-  let tagPrefix: string;
+ 
+   if (isDryRun) {
+     console.log(color.bold.yellow(`\n  🏃‍ Dry Run!\n`));
+@@ -57,68 +54,6 @@
+     });
+   }
+ 
+-  tasks.push(
+-    {
+-      title: 'Check git tag existence',
+-      task: () =>
+-        execa('git', ['fetch'])
+-          // Retrieve the prefix for a version string - https://docs.npmjs.com/cli/v7/using-npm/config#tag-version-prefix
+-          .then(() => execa('npm', ['config', 'get', 'tag-version-prefix']))
+-          .then(
+-            ({ stdout }) => (tagPrefix = stdout),
+-            () => {}
+-          )
+-          // verify that a tag for the new version string does not already exist by checking the output of
+-          // `git rev-parse --verify`
+-          .then(() => execa('git', ['rev-parse', '--quiet', '--verify', `refs/tags/${tagPrefix}${newVersion}`]))
+-          .then(
+-            ({ stdout }) => {
+-              if (stdout) {
+-                throw new Error(`Git tag \`${tagPrefix}${newVersion}\` already exists.`);
+-              }
+-            },
+-            (err) => {
+-              // Command fails with code 1 and no output if the tag does not exist, even though `--quiet` is provided
+-              // https://github.com/sindresorhus/np/pull/73#discussion_r72385685
+-              if (err.stdout !== '' || err.stderr !== '') {
+-                throw err;
+-              }
+-            }
+-          ),
+-      skip: () => isDryRun,
+-    },
+-    {
+-      title: 'Check current branch',
+-      task: () =>
+-        execa('git', ['symbolic-ref', '--short', 'HEAD']).then(({ stdout }) => {
+-          if (stdout !== 'main' && !isAnyBranch) {
+-            throw new Error('Not on `main` branch. Use --any-branch to publish anyway.');
+-          }
+-        }),
+-      skip: () => isDryRun,
+-    },
+-    {
+-      title: 'Check local working tree',
+-      task: () =>
+-        execa('git', ['status', '--porcelain']).then(({ stdout }) => {
+-          if (stdout !== '') {
+-            throw new Error('Unclean working tree. Commit or stash changes first.');
+-          }
+-        }),
+-      skip: () => isDryRun,
+-    },
+-    {
+-      title: 'Check remote history',
+-      task: () =>
+-        execa('git', ['rev-list', '--count', '--left-only', '@{u}...HEAD']).then(({ stdout }) => {
+-          if (stdout !== '0' && !isAnyBranch) {
+-            throw new Error('Remote history differs. Please pull changes.');
+-          }
+-        }),
+-      skip: () => isDryRun,
+-    }
+-  );
+-
+   if (!opts.isPublishRelease) {
+     tasks.push(
+       {
+@@ -155,12 +90,6 @@
+           // use `--no-git-tag-version` to ensure that the tag for the release is not prematurely created
+           await execa('npm', ['version', '--no-git-tag-version', opts.version], { cwd: rootDir });
+         },
+-      },
+-      {
+-        title: `Generate ${opts.version} Changelog ${opts.vermoji}`,
+-        task: () => {
+-          return updateChangeLog(opts);
+-        },
+       }
+     );
+   }
+Index: src/compiler/transformers/component-native/add-define-custom-element-function.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/compiler/transformers/component-native/add-define-custom-element-function.ts b/src/compiler/transformers/component-native/add-define-custom-element-function.ts
+--- a/src/compiler/transformers/component-native/add-define-custom-element-function.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/compiler/transformers/component-native/add-define-custom-element-function.ts	(date 1689930928515)
+@@ -1,4 +1,4 @@
+-import { dashToPascalCase } from '@utils';
++import { addTagNamePostfix, dashToPascalCase } from '@utils';
+ import ts from 'typescript';
+ 
+ import type * as d from '../../../declarations';
+@@ -7,12 +7,14 @@
+ /**
+  * Import and define components along with any component dependents within the `dist-custom-elements` output.
+  * Adds `defineCustomElement()` function for all components.
++ * @param config - current config
+  * @param compilerCtx - current compiler context
+  * @param components - all current components within the stencil buildCtx
+  * @param outputTarget - the output target being compiled
+  * @returns a TS AST transformer factory function
+  */
+ export const addDefineCustomElementFunctions = (
++  config: d.Config,
+   compilerCtx: d.CompilerCtx,
+   components: d.ComponentCompilerMeta[],
+   outputTarget: d.OutputTargetDistCustomElements
+@@ -36,11 +38,14 @@
+         );
+         // create a `case` block that defines the current component. We'll add them to our switch statement later.
+         caseStatements.push(
+-          createCustomElementsDefineCase(principalComponent.tagName, customElementsDefineCallExpression)
++          createCustomElementsDefineCase(principalComponent.tagName, customElementsDefineCallExpression, config.flags?.tagNamePostfix)
+         );
+ 
+-        setupComponentDependencies(moduleFile, components, newStatements, caseStatements, tagNames);
+-        addDefineCustomElementFunction(tagNames, newStatements, caseStatements);
++        setupComponentDependencies(moduleFile, components, newStatements, caseStatements, tagNames, config.flags?.tagNamePostfix);
++
++        const registryTagNames = tagNames.map(tagName => addTagNamePostfix(tagName, config.flags?.tagNamePostfix));
++
++        addDefineCustomElementFunction(registryTagNames, newStatements, caseStatements);
+ 
+         if (outputTarget.autoDefineCustomElements) {
+           const conditionalDefineCustomElementCall = createAutoDefinitionExpression(
+@@ -64,13 +69,15 @@
+  * @param newStatements new top level statement array to add to that will get added to the AST
+  * @param caseStatements an array of case statement blocks to add to. Will get added to `defineCustomElement` later
+  * @param tagNames array of all related component tag-names to add to
++ * @param tagNamePostfix tagName modifier
+  */
+ const setupComponentDependencies = (
+   moduleFile: d.Module,
+   components: d.ComponentCompilerMeta[],
+   newStatements: ts.Statement[],
+   caseStatements: ts.CaseClause[],
+-  tagNames: string[]
++  tagNames: string[],
++  tagNamePostfix?: string
+ ) => {
+   moduleFile.cmps.forEach((cmp) => {
+     cmp.dependencies.forEach((dCmp) => {
+@@ -85,7 +92,7 @@
+       // define a dependent component by recursively calling their own `defineCustomElement()`
+       const callExpression = ts.factory.createCallExpression(ts.factory.createIdentifier(importAs), undefined, []);
+       // `case` blocks that define the dependent components. We'll add them to our switch statement later.
+-      caseStatements.push(createCustomElementsDefineCase(foundDep.tagName, callExpression));
++      caseStatements.push(createCustomElementsDefineCase(foundDep.tagName, callExpression, tagNamePostfix));
+     });
+   });
+ };
+@@ -104,10 +111,13 @@
+   ```
+  * @param tagName the components' tagName saved within stencil.
+  * @param actionExpression the actual expression to call to define the customElement
++ * @param tagNamePostfix tagName modifier
+  * @returns ts AST CaseClause
+  */
+-const createCustomElementsDefineCase = (tagName: string, actionExpression: ts.Expression): ts.CaseClause => {
+-  return ts.factory.createCaseClause(ts.factory.createStringLiteral(tagName), [
++const createCustomElementsDefineCase = (tagName: string, actionExpression: ts.Expression, tagNamePostfix?: string): ts.CaseClause => {
++  const registryTagName = addTagNamePostfix(tagName, tagNamePostfix);
++
++  return ts.factory.createCaseClause(ts.factory.createStringLiteral(registryTagName), [
+     ts.factory.createIfStatement(
+       ts.factory.createPrefixUnaryExpression(
+         ts.SyntaxKind.ExclamationToken,
+Index: src/compiler/output-targets/dist-custom-elements/index.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/compiler/output-targets/dist-custom-elements/index.ts b/src/compiler/output-targets/dist-custom-elements/index.ts
+--- a/src/compiler/output-targets/dist-custom-elements/index.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/compiler/output-targets/dist-custom-elements/index.ts	(date 1689930928514)
+@@ -269,7 +269,7 @@
+     styleImportData: 'queryparams',
+   };
+   return [
+-    addDefineCustomElementFunctions(compilerCtx, components, outputTarget),
++    addDefineCustomElementFunctions(config, compilerCtx, components, outputTarget),
+     updateStencilCoreImports(transformOpts.coreImportPath),
+     nativeComponentTransform(compilerCtx, transformOpts),
+     proxyCustomElement(compilerCtx, transformOpts),
+Index: scripts/release.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/scripts/release.ts b/scripts/release.ts
+--- a/scripts/release.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/scripts/release.ts	(date 1689930928512)
+@@ -6,13 +6,7 @@
+ 
+ import { runReleaseTasks } from './release-tasks';
+ import { BuildOptions, getOptions } from './utils/options';
+-import {
+-  getNewVersion,
+-  isPrereleaseVersion,
+-  isValidVersionInput,
+-  prettyVersionDiff,
+-  SEMVER_INCREMENTS,
+-} from './utils/release-utils';
++import { isPrereleaseVersion } from './utils/release-utils';
+ 
+ /**
+  * Runner for creating a release of Stencil
+@@ -59,47 +53,12 @@
+     `\nPrepare to publish ${opts.vermoji}  ${color.bold.magenta(pkg.name)} ${color.dim(`(currently ${oldVersion})`)}\n`
+   );
+ 
+-  const NON_SERVER_INCREMENTS: ReadonlyArray<{ name: string; value: string }> = [
+-    {
+-      name: 'Dry Run',
+-      value: getNewVersion(oldVersion, 'patch') + '-dryrun',
+-    },
+-    {
+-      name: 'Other (specify)',
+-      value: null,
+-    },
+-  ];
+-
+   const prompts = [
+     {
+-      type: 'list',
+-      name: 'version',
+-      message: 'Select semver increment or specify new version',
+-      pageSize: SEMVER_INCREMENTS.length + NON_SERVER_INCREMENTS.length,
+-      choices: SEMVER_INCREMENTS.map((inc) => ({
+-        name: `${inc}   ${prettyVersionDiff(oldVersion, inc)}`,
+-        value: inc,
+-      })).concat([new inquirer.Separator() as any, ...NON_SERVER_INCREMENTS]),
+-      filter: (input: string) => (isValidVersionInput(input) ? getNewVersion(oldVersion, input) : input),
+-    },
+-    {
+-      type: 'input',
+-      name: 'version',
+-      message: 'Version',
+-      when: (answers: any) => !answers.version,
+-      filter: (input: string) => (isValidVersionInput(input) ? getNewVersion(pkg.version, input) : input),
+-      validate: (input: string) => {
+-        if (!isValidVersionInput(input)) {
+-          return 'Please specify a valid semver, for example, `1.2.3`. See http://semver.org';
+-        }
+-        return true;
+-      },
+-    },
+-    {
+       type: 'confirm',
+       name: 'confirm',
+-      message: (answers: any) => {
+-        return `Prepare release ${opts.vermoji}  ${color.yellow(answers.version)} from ${oldVersion}. Continue?`;
++      message: () => {
++        return `Prepare release ${opts.vermoji} ${color.yellow(oldVersion)}. Continue?`;
+       },
+     },
+   ];
+@@ -108,7 +67,7 @@
+     .prompt(prompts)
+     .then((answers) => {
+       if (answers.confirm) {
+-        opts.version = answers.version;
++        opts.version = oldVersion;
+         // write `release-data.json`
+         fs.writeJsonSync(releaseDataPath, opts, { spaces: 2 });
+         runReleaseTasks(opts, args);
+Index: src/compiler/entries/resolve-component-dependencies.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/compiler/entries/resolve-component-dependencies.ts b/src/compiler/entries/resolve-component-dependencies.ts
+--- a/src/compiler/entries/resolve-component-dependencies.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/compiler/entries/resolve-component-dependencies.ts	(date 1689930928514)
+@@ -31,15 +31,17 @@
+   }
+   visited.add(cmp);
+ 
+-  const dependencies = unique(cmp.potentialCmpRefs.filter((tagName) => cmps.some((c) => c.tagName === tagName)));
++  const dependencies = unique(cmp.potentialCmpRefs
++    .filter((registryTagName) => cmps.some((c) => c.registryTagName === registryTagName)));
++  const dependenciesCmps = dependencies
++    .map((registryTagName) => cmps.find((c) => c.registryTagName === registryTagName));
+ 
+-  cmp.dependencies = cmp.directDependencies = dependencies;
++  cmp.dependencies = cmp.directDependencies = dependenciesCmps.map((c) => c.tagName);
++
+   const transitiveDeps = flatOne(
+-    dependencies
+-      .map((tagName) => cmps.find((c) => c.tagName === tagName))
+-      .map((c) => resolveTransitiveDependencies(c, cmps, visited))
++    dependenciesCmps.map((c) => resolveTransitiveDependencies(c, cmps, visited))
+   );
+-  return (cmp.dependencies = [...dependencies, ...transitiveDeps]);
++  return (cmp.dependencies = [...cmp.directDependencies, ...transitiveDeps]);
+ }
+ 
+ function resolveTransitiveDependents(cmp: d.ComponentCompilerMeta, cmps: d.ComponentCompilerMeta[]) {
+Index: src/runtime/bootstrap-lazy.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/runtime/bootstrap-lazy.ts b/src/runtime/bootstrap-lazy.ts
+--- a/src/runtime/bootstrap-lazy.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/runtime/bootstrap-lazy.ts	(date 1689930928520)
+@@ -55,14 +55,15 @@
+       const cmpMeta: d.ComponentRuntimeMeta = {
+         $flags$: compactMeta[0],
+         $tagName$: compactMeta[1],
+-        $members$: compactMeta[2],
+-        $listeners$: compactMeta[3],
++        $registryTagName$: compactMeta[2],
++        $members$: compactMeta[3],
++        $listeners$: compactMeta[4],
+       };
+       if (BUILD.member) {
+-        cmpMeta.$members$ = compactMeta[2];
++        cmpMeta.$members$ = compactMeta[3];
+       }
+       if (BUILD.hostListener) {
+-        cmpMeta.$listeners$ = compactMeta[3];
++        cmpMeta.$listeners$ = compactMeta[4];
+       }
+       if (BUILD.reflect) {
+         cmpMeta.$attrsToReflect$ = [];
+Index: src/compiler/transformers/test/add-component-meta-proxy.spec.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/compiler/transformers/test/add-component-meta-proxy.spec.ts b/src/compiler/transformers/test/add-component-meta-proxy.spec.ts
+--- a/src/compiler/transformers/test/add-component-meta-proxy.spec.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/compiler/transformers/test/add-component-meta-proxy.spec.ts	(date 1689930928517)
+@@ -39,7 +39,7 @@
+ 
+       formatComponentRuntimeMetaSpy = jest.spyOn(FormatComponentRuntimeMeta, 'formatComponentRuntimeMeta');
+       formatComponentRuntimeMetaSpy.mockImplementation(
+-        (_compilerMeta: d.ComponentCompilerMeta, _includeMethods: boolean) => [0, 'tag-name']
++        (_compilerMeta: d.ComponentCompilerMeta, _includeMethods: boolean) => [0, 'tag-name', 'tag-name']
+       );
+ 
+       convertValueToLiteralSpy = jest.spyOn(TransformUtils, 'convertValueToLiteral');
+Index: src/declarations/stencil-private.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/declarations/stencil-private.ts b/src/declarations/stencil-private.ts
+--- a/src/declarations/stencil-private.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/declarations/stencil-private.ts	(date 1689930928519)
+@@ -795,6 +795,7 @@
+   styleDocs: CompilerStyleDoc[];
+   styles: StyleCompiler[];
+   tagName: string;
++  registryTagName: string;
+   internal: boolean;
+   legacyConnect: ComponentCompilerLegacyConnect[];
+   legacyContext: ComponentCompilerLegacyContext[];
+@@ -1574,6 +1575,9 @@
+   /** tagname */
+   string,
+ 
++  /** registryTagName */
++  string,
++
+   /** members */
+   { [memberName: string]: ComponentRuntimeMember }?,
+ 
+@@ -1596,6 +1600,7 @@
+    * the `@Component` decorator.
+    */
+   $tagName$: string;
++  $registryTagName$: string;
+   /**
+    * A map of the component's members, which could include fields decorated
+    * with `@Prop`, `@State`, etc as well as methods.
+Index: src/testing/platform/testing-host-ref.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/testing/platform/testing-host-ref.ts b/src/testing/platform/testing-host-ref.ts
+--- a/src/testing/platform/testing-host-ref.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/testing/platform/testing-host-ref.ts	(date 1689930928520)
+@@ -15,8 +15,9 @@
+   if (hostRef == null) {
+     const Cstr = lazyInstance.constructor as d.ComponentTestingConstructor;
+     const tagName = Cstr.COMPILER_META && Cstr.COMPILER_META.tagName ? Cstr.COMPILER_META.tagName : 'div';
+-    const elm = document.createElement(tagName);
+-    registerHost(elm, { $flags$: 0, $tagName$: tagName });
++    const registryTagName = Cstr.COMPILER_META && Cstr.COMPILER_META.registryTagName ? Cstr.COMPILER_META.registryTagName : tagName;
++    const elm = document.createElement(registryTagName);
++    registerHost(elm, { $flags$: 0, $tagName$: tagName, $registryTagName$: registryTagName });
+     hostRef = getHostRef(elm);
+   }
+ 
+Index: src/compiler/transformers/component-hydrate/hydrate-runtime-cmp-meta.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/compiler/transformers/component-hydrate/hydrate-runtime-cmp-meta.ts b/src/compiler/transformers/component-hydrate/hydrate-runtime-cmp-meta.ts
+--- a/src/compiler/transformers/component-hydrate/hydrate-runtime-cmp-meta.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/compiler/transformers/component-hydrate/hydrate-runtime-cmp-meta.ts	(date 1689930928515)
+@@ -10,8 +10,9 @@
+   const cmpMeta: d.ComponentRuntimeMeta = {
+     $flags$: compactMeta[0],
+     $tagName$: compactMeta[1],
+-    $members$: compactMeta[2],
+-    $listeners$: compactMeta[3],
++    $registryTagName$: compactMeta[2],
++    $members$: compactMeta[3],
++    $listeners$: compactMeta[4],
+     $lazyBundleId$: fakeBundleIds(cmp),
+     $attrsToReflect$: getHydrateAttrsToReflect(cmp),
+   };
+Index: src/cli/task-build.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/cli/task-build.ts b/src/cli/task-build.ts
+--- a/src/cli/task-build.ts	(revision 9c3264ee93e6a3e4eaa74d92d5446cf7065b98c2)
++++ b/src/cli/task-build.ts	(date 1689930928513)
+@@ -17,6 +17,12 @@
+   let exitCode = 0;
+ 
+   try {
++    config.logger.warn('==> 32 - Patched Stencil with tagNamePostfix support');
++
++    if (config.flags?.tagNamePostfix) {
++      config.logger.debug('==> Version Postfix:', config.flags.tagNamePostfix);
++    }
++
+     startupCompilerLog(coreCompiler, config);
+ 
+     const versionChecker = startCheckVersion(config, coreCompiler.version);

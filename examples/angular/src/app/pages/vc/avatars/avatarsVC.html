@@ -1,0 +1,721 @@
+<div class="container" data-testid="avatars-container">
+  <div>
+    <h3>Avatars</h3>
+    <div class="items">
+      <div class="stack">
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="xs"
+          name="John Doe"
+          with-tooltip
+          color="var(--wpp-dataviz-color-cat-dark-1)"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="s"
+          name="John Doe"
+          color="var(--wpp-dataviz-color-cat-dark-1)"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          size="m"
+          name="John Doe"
+          with-tooltip
+          [tooltipConfig]="{ placement: 'top' }"
+          color="var(--wpp-dataviz-color-cat-dark-1)"
+          data-testid="hover-avatar"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="l"
+          name="John Doe"
+          color="var(--wpp-dataviz-color-cat-dark-1)"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="xl"
+          name="John Doe"
+          color="var(--wpp-dataviz-color-cat-dark-1)"
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="2xl"
+          name="John Doe"
+          color="var(--wpp-dataviz-color-cat-dark-1)"
+        ></wpp-avatar>
+      </div>
+
+      <div class="stack">
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="xs"
+          name="John Doe"
+          with-tooltip
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8huvp8b3bXl2v8ac6MSqz0Uk3zqauY2ttIA&usqp=CAU"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="s"
+          name="John Doe"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8huvp8b3bXl2v8ac6MSqz0Uk3zqauY2ttIA&usqp=CAU"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="m"
+          name="John Doe"
+          with-tooltip
+          [tooltipConfig]="{ placement: 'top' }"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8huvp8b3bXl2v8ac6MSqz0Uk3zqauY2ttIA&usqp=CAU"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="l"
+          name="John Doe"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8huvp8b3bXl2v8ac6MSqz0Uk3zqauY2ttIA&usqp=CAU"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="xl"
+          name="John Doe"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8huvp8b3bXl2v8ac6MSqz0Uk3zqauY2ttIA&usqp=CAU"
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="2xl"
+          name="John Doe"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8huvp8b3bXl2v8ac6MSqz0Uk3zqauY2ttIA&usqp=CAU"
+        ></wpp-avatar>
+      </div>
+
+      <div class="stack">
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="xs"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="s" amount-of-hidden-avatars="5"></wpp-avatar>
+
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="m" amount-of-hidden-avatars="5"></wpp-avatar>
+
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="l" amount-of-hidden-avatars="5"></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="xl"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="2xl"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3>Logos</h3>
+    <div class="items">
+      <div class="stack">
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="xs"
+          [src]="logoLink"
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="s"
+          [src]="logoLink"
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="m"
+          [src]="logoLink"
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="l"
+          [src]="logoLink"
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="xl"
+          [src]="logoLink"
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="2xl"
+          [src]="logoLink"
+        ></wpp-avatar>
+      </div>
+
+      <div class="stack">
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="xs"
+          name="linkedIn"
+          color="var(--wpp-dataviz-color-cat-dark-3)"
+          with-tooltip
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="s"
+          name="linkedIn"
+          color="var(--wpp-dataviz-color-cat-dark-3)"
+          with-tooltip
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="m"
+          name="linkedIn"
+          color="var(--wpp-dataviz-color-cat-dark-3)"
+          with-tooltip
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="l"
+          name="linkedIn"
+          color="var(--wpp-dataviz-color-cat-dark-3)"
+          with-tooltip
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="xl"
+          name="linkedIn"
+          color="var(--wpp-dataviz-color-cat-dark-3)"
+          with-tooltip
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="2xl"
+          name="linkedIn"
+          color="var(--wpp-dataviz-color-cat-dark-3)"
+          with-tooltip
+        ></wpp-avatar>
+      </div>
+
+      <div class="stack">
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="xs"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="s"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="m"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="l"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="xl"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="2xl"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3>Icons</h3>
+    <div class="items">
+      <div class="stack">
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="xs" [icon]="icon"></wpp-avatar>
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="s" [icon]="icon"></wpp-avatar>
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="m" [icon]="icon"></wpp-avatar>
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="l" [icon]="icon"></wpp-avatar>
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="xl" [icon]="icon"></wpp-avatar>
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="2xl" [icon]="icon"></wpp-avatar>
+      </div>
+    </div>
+  </div>
+
+  <div class="groups">
+    <h3>Avatar Groups</h3>
+    <div class="group">
+      <wpp-avatar-group
+        (wppSelectItem)="handleWppClick($event)"
+        size="xs"
+        [avatars]="users"
+        max-avatars-to-display="5"
+        with-tooltip
+      ></wpp-avatar-group>
+    </div>
+
+    <div class="group">
+      <wpp-avatar-group
+        (wppSelectItem)="handleWppClick($event)"
+        size="s"
+        [avatars]="users"
+        max-avatars-to-display="6"
+        with-tooltip
+        [tooltipConfig]="{ placement: 'top' }"
+      ></wpp-avatar-group>
+    </div>
+
+    <h3>Logo Groups</h3>
+    <div class="group">
+      <wpp-avatar-group
+        (wppSelectItem)="handleWppClick($event)"
+        size="s"
+        variant="square"
+        [avatars]="users"
+        max-avatars-to-display="6"
+        with-tooltip
+        [tooltipConfig]="{ placement: 'top' }"
+      ></wpp-avatar-group>
+    </div>
+  </div>
+</div>
+
+<div class="container" data-testid="avatars-container">
+  <div>
+    <h3>Interactable Avatars</h3>
+    <div class="items">
+      <div class="stack">
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="xs"
+          name="John Doe"
+          with-tooltip
+          interactable
+          color="var(--wpp-dataviz-color-cat-dark-1)"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="s"
+          name="John Doe"
+          interactable
+          color="var(--wpp-dataviz-color-cat-dark-1)"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          size="m"
+          name="John Doe"
+          with-tooltip
+          [tooltipConfig]="{ placement: 'top' }"
+          color="var(--wpp-dataviz-color-cat-dark-1)"
+          interactable
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="l"
+          name="John Doe"
+          interactable
+          color="var(--wpp-dataviz-color-cat-dark-1)"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="xl"
+          name="John Doe"
+          interactable
+          color="var(--wpp-dataviz-color-cat-dark-1)"
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="2xl"
+          name="John Doe"
+          interactable
+          color="var(--wpp-dataviz-color-cat-dark-1)"
+        ></wpp-avatar>
+      </div>
+
+      <div class="stack">
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="xs"
+          name="John Doe"
+          with-tooltip
+          interactable
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8huvp8b3bXl2v8ac6MSqz0Uk3zqauY2ttIA&usqp=CAU"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="s"
+          name="John Doe"
+          interactable
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8huvp8b3bXl2v8ac6MSqz0Uk3zqauY2ttIA&usqp=CAU"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="m"
+          name="John Doe"
+          interactable
+          with-tooltip
+          [tooltipConfig]="{ placement: 'top' }"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8huvp8b3bXl2v8ac6MSqz0Uk3zqauY2ttIA&usqp=CAU"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="l"
+          interactable
+          name="John Doe"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8huvp8b3bXl2v8ac6MSqz0Uk3zqauY2ttIA&usqp=CAU"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="xl"
+          name="John Doe"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8huvp8b3bXl2v8ac6MSqz0Uk3zqauY2ttIA&usqp=CAU"
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="2xl"
+          interactable
+          name="John Doe"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8huvp8b3bXl2v8ac6MSqz0Uk3zqauY2ttIA&usqp=CAU"
+        ></wpp-avatar>
+      </div>
+
+      <div class="stack">
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="xs"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="s" amount-of-hidden-avatars="5"></wpp-avatar>
+
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="m" amount-of-hidden-avatars="5"></wpp-avatar>
+
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="l" amount-of-hidden-avatars="5"></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="xl"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          size="2xl"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3>Logos</h3>
+    <div class="items">
+      <div class="stack">
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="xs"
+          [src]="logoLink"
+          interactable
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="s"
+          [src]="logoLink"
+          interactable
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="m"
+          [src]="logoLink"
+          interactable
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="l"
+          [src]="logoLink"
+          interactable
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="xl"
+          [src]="logoLink"
+          interactable
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="2xl"
+          [src]="logoLink"
+          interactable
+        ></wpp-avatar>
+      </div>
+
+      <div class="stack">
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="xs"
+          name="linkedIn"
+          color="var(--wpp-dataviz-color-cat-dark-3)"
+          with-tooltip
+          interactable
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="s"
+          name="linkedIn"
+          color="var(--wpp-dataviz-color-cat-dark-3)"
+          with-tooltip
+          interactable
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="m"
+          name="linkedIn"
+          color="var(--wpp-dataviz-color-cat-dark-3)"
+          with-tooltip
+          interactable
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="l"
+          name="linkedIn"
+          color="var(--wpp-dataviz-color-cat-dark-3)"
+          with-tooltip
+          interactable
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="xl"
+          name="linkedIn"
+          color="var(--wpp-dataviz-color-cat-dark-3)"
+          with-tooltip
+          interactable
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="2xl"
+          name="linkedIn"
+          color="var(--wpp-dataviz-color-cat-dark-3)"
+          with-tooltip
+          interactable
+        ></wpp-avatar>
+      </div>
+
+      <div class="stack">
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="xs"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="s"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="m"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="l"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="xl"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+        <wpp-avatar
+          (wppClick)="handleWppClick($event)"
+          class="item"
+          variant="square"
+          size="2xl"
+          amount-of-hidden-avatars="5"
+        ></wpp-avatar>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3>Icons</h3>
+    <div class="items">
+      <div class="stack">
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="xs" [icon]="icon" interactable></wpp-avatar>
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="s" [icon]="icon" interactable></wpp-avatar>
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="m" [icon]="icon" interactable></wpp-avatar>
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="l" [icon]="icon" interactable></wpp-avatar>
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="xl" [icon]="icon" interactable></wpp-avatar>
+        <wpp-avatar (wppClick)="handleWppClick($event)" class="item" size="2xl" [icon]="icon" interactable></wpp-avatar>
+      </div>
+    </div>
+  </div>
+
+  <div class="groups">
+    <h3>Avatar Groups</h3>
+    <div class="group">
+      <wpp-avatar-group
+        (wppSelectItem)="handleWppClick($event)"
+        size="xs"
+        [avatars]="interactableUsers"
+        max-avatars-to-display="5"
+        with-tooltip
+      ></wpp-avatar-group>
+    </div>
+
+    <div class="group">
+      <wpp-avatar-group
+        (wppSelectItem)="handleWppClick($event)"
+        size="s"
+        [avatars]="interactableUsers"
+        max-avatars-to-display="6"
+        with-tooltip
+        [tooltipConfig]="{ placement: 'top' }"
+      ></wpp-avatar-group>
+    </div>
+
+    <h3>Logo Groups</h3>
+    <div class="group">
+      <wpp-avatar-group
+        (wppSelectItem)="handleWppClick($event)"
+        size="s"
+        variant="square"
+        [avatars]="interactableUsers"
+        max-avatars-to-display="6"
+        with-tooltip
+        [tooltipConfig]="{ placement: 'top' }"
+      ></wpp-avatar-group>
+    </div>
+  </div>
+</div>

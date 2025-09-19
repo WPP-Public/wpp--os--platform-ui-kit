@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-menu-list Should renders wpp-menu-list 1`] = `
+<wpp-menu-list class="wpp-menu-list wpp-menu-list-wrapper" exportparts="trigger, inner">
+  <mock:shadow-root>
+    <slot class="trigger-element" name="trigger-element" part="trigger"></slot>
+    <div class="inner-wrapper">
+      <slot part="inner"></slot>
+    </div>
+  </mock:shadow-root>
+  <wpp-button .disabled="false" .loading="false" .size="m" slot="trigger-element" variant="destructive">
+    Button
+  </wpp-button>
+  <wpp-list-item>
+    Item
+  </wpp-list-item>
+  <wpp-list-item>
+    Item
+  </wpp-list-item>
+</wpp-menu-list>
+`;

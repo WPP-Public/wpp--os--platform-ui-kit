@@ -1,0 +1,11 @@
+.ql-editor {
+  .ql-attachment,
+  .ql-attachment-uploading span {
+    display: inline-block;
+    margin: 5px 10px 0 0;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+  }
+}

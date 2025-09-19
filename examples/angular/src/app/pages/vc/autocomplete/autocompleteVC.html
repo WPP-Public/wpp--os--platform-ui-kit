@@ -1,0 +1,427 @@
+<div>
+  <h2>Autocomplete - without suggestions</h2>
+  <div class="container" data-testid="autocompletes">
+    <div>
+      <div>
+        <wpp-autocomplete
+          class="item"
+          [labelConfig]="getLabelConfig('Single Autocomplete with search')"
+          placeholder="Select fruits"
+          [value]="basicValue"
+          (wppChange)="handleBasicValue($event)"
+          data-testid="single-autocomplete"
+          show-create-new-element
+          simple-search
+          required
+        >
+          <wpp-list-item *ngFor="let option of fruitOptions" [value]="option" [label]="option.label">
+            <p slot="label">{{ option.label }}</p>
+          </wpp-list-item>
+        </wpp-autocomplete>
+      </div>
+
+      <div class="bottomItem" data-testid="extended-autocomplete-area">
+        <wpp-autocomplete
+          class="item"
+          [labelConfig]="getLabelConfig('Extended Multiple Autocomplete')"
+          placeholder="Select fruits"
+          [value]="multipleValue"
+          (wppChange)="handleMultipleValue($event)"
+          data-testid="extended-autocomplete"
+          type="extended"
+          multiple
+          simpleSearch
+          required
+        >
+          <wpp-list-item *ngFor="let option of fruitOptions" [value]="option" [label]="option.label">
+            <p slot="label">{{ option.label }}</p>
+          </wpp-list-item>
+          <div slot="selected-values" class="selected-values extended">
+            <wpp-pill
+              *ngFor="let selectedValue of multipleValue"
+              [label]="selectedValue.label"
+              [value]="selectedValue.id"
+              type="display"
+              (wppClose)="handleExamplePillCloseClick(selectedValue.id)"
+              removable
+            >
+              {{ selectedValue.label }}
+            </wpp-pill>
+          </div>
+        </wpp-autocomplete>
+      </div>
+    </div>
+
+    <div>
+      <div>
+        <wpp-autocomplete
+          class="item"
+          [value]="basicValue1"
+          [labelConfig]="getLabelConfig('Single Autocomplete without search')"
+          placeholder="Select fruits"
+          (wppChange)="handleBasicValue1($event)"
+          data-testid="single-autocomplete-without-search"
+          required
+        >
+          <wpp-list-item *ngFor="let option of fruitOptions" [value]="option" [label]="option.label">
+            <p slot="label">{{ option.label }}</p>
+          </wpp-list-item>
+        </wpp-autocomplete>
+      </div>
+
+      <div class="bottomItem" data-testid="regular-autocomplete-area">
+        <wpp-autocomplete
+          class="item"
+          [labelConfig]="getLabelConfig('Regular Multiple Autocomplete')"
+          placeholder="Select fruits"
+          [value]="multipleValue1"
+          (wppChange)="handleMultipleValue1($event)"
+          type="regular"
+          multiple
+          simpleSearch
+          required
+          data-testid="regular-autocomplete"
+        >
+          <wpp-list-item *ngFor="let option of fruitOptions" [value]="option" [label]="option.label">
+            <p slot="label">{{ option.label }}</p>
+          </wpp-list-item>
+        </wpp-autocomplete>
+      </div>
+    </div>
+
+    <div>
+      <div>
+        <wpp-autocomplete
+          class="item"
+          [labelConfig]="getLabelConfig('Single Autocomplete with search')"
+          placeholder="Select fruits"
+          [value]="basicValue2"
+          (wppChange)="handleBasicValue2($event)"
+          data-testid="single-autocomplete"
+          size="s"
+          show-create-new-element
+          simple-search
+          required
+        >
+          <wpp-list-item *ngFor="let option of fruitOptions" [value]="option" [label]="option.label">
+            <p slot="label">{{ option.label }}</p>
+          </wpp-list-item>
+        </wpp-autocomplete>
+      </div>
+
+      <div class="bottomItem" data-testid="extended-autocomplete-area">
+        <wpp-autocomplete
+          class="item"
+          [labelConfig]="getLabelConfig('Extended Multiple Autocomplete')"
+          placeholder="Select fruits"
+          [value]="multipleValue2"
+          (wppChange)="handleMultipleValue2($event)"
+          data-testid="extended-autocomplete"
+          type="extended"
+          size="s"
+          multiple
+          simpleSearch
+          required
+        >
+          <wpp-list-item *ngFor="let option of fruitOptions" [value]="option" [label]="option.label">
+            <p slot="label">{{ option.label }}</p>
+          </wpp-list-item>
+          <div slot="selected-values" class="selected-values extended">
+            <wpp-pill
+              *ngFor="let selectedValue of multipleValue2"
+              [label]="selectedValue.label"
+              [value]="selectedValue.id"
+              type="display"
+              (wppClose)="handleExamplePillCloseClick2(selectedValue.id)"
+              removable
+            >
+              {{ selectedValue.label }}
+            </wpp-pill>
+          </div>
+        </wpp-autocomplete>
+      </div>
+    </div>
+
+    <div class="inlineAutocompletes" data-testid="inline-messages-autocompletes">
+      <div>
+        <wpp-autocomplete
+          class="inlineItem"
+          [labelConfig]="getLabelConfig('Autocomplete with error message')"
+          placeholder="Select fruits"
+          message="Error message"
+          message-type="error"
+          data-testid="error-autocomplete"
+          loading
+          required
+        ></wpp-autocomplete>
+      </div>
+
+      <div [ngStyle]="{ marginTop: '5px' }">
+        <wpp-autocomplete
+          class="inlineItem"
+          [labelConfig]="getLabelConfig('Autocomplete with warning message')"
+          placeholder="Select fruits"
+          message="Warning message"
+          message-type="warning"
+          required
+        ></wpp-autocomplete>
+      </div>
+    </div>
+  </div>
+  <h2>Autocomplete - with suggestions</h2>
+  <div class="container" data-testid="autocompletes">
+    <div>
+      <div>
+        <wpp-autocomplete
+          class="item"
+          [labelConfig]="getLabelConfig('Single Autocomplete with search')"
+          placeholder="Select fruits"
+          [value]="basicValue3"
+          [suggestions]="staticSuggestions"
+          (wppChange)="handleBasicValue3($event)"
+          data-testid="single-autocomplete"
+          show-create-new-element
+          simple-search
+        >
+          <wpp-list-item *ngFor="let option of fruitOptions" [value]="option" [label]="option.label">
+            <p slot="label">{{ option.label }}</p>
+          </wpp-list-item>
+        </wpp-autocomplete>
+      </div>
+
+      <div class="bottomItem" data-testid="extended-autocomplete-area">
+        <wpp-autocomplete
+          class="item"
+          [labelConfig]="getLabelConfig('Extended Multiple Autocomplete')"
+          placeholder="Select fruits"
+          [value]="multipleValue3"
+          (wppChange)="handleMultipleValue3($event)"
+          [suggestions]="staticSuggestions"
+          data-testid="extended-autocomplete"
+          type="extended"
+          multiple
+          simpleSearch
+          required
+        >
+          <wpp-list-item *ngFor="let option of fruitOptions" [value]="option" [label]="option.label">
+            <p slot="label">{{ option.label }}</p>
+          </wpp-list-item>
+          <div slot="selected-values" class="selected-values extended">
+            <wpp-pill
+              *ngFor="let selectedValue of multipleValue3"
+              [label]="selectedValue.label"
+              [value]="selectedValue.id"
+              type="display"
+              (wppClose)="handleExamplePillCloseClick3(selectedValue.id)"
+              removable
+            >
+              {{ selectedValue.label }}
+            </wpp-pill>
+          </div>
+        </wpp-autocomplete>
+      </div>
+    </div>
+
+    <div>
+      <div>
+        <wpp-autocomplete
+          class="item"
+          [suggestions]="staticSuggestions"
+          [labelConfig]="getLabelConfig('Single Autocomplete without search')"
+          placeholder="Select fruits"
+          [value]="basicValue4"
+          (wppChange)="handleBasicValue4($event)"
+          data-testid="single-autocomplete-without-search"
+          required
+        >
+          <wpp-list-item *ngFor="let option of fruitOptions" [value]="option" [label]="option.label">
+            <p slot="label">{{ option.label }}</p>
+          </wpp-list-item>
+        </wpp-autocomplete>
+      </div>
+
+      <div class="bottomItem" data-testid="regular-autocomplete-area">
+        <wpp-autocomplete
+          class="item"
+          [suggestions]="staticSuggestions"
+          [labelConfig]="getLabelConfig('Regular Multiple Autocomplete')"
+          placeholder="Select fruits"
+          [value]="multipleValue4"
+          (wppChange)="handleMultipleValue4($event)"
+          type="regular"
+          data-testid="regular-autocomplete"
+          required
+          multiple
+          simpleSearch
+        >
+          <wpp-list-item *ngFor="let option of fruitOptions" [value]="option" [label]="option.label">
+            <p slot="label">{{ option.label }}</p>
+          </wpp-list-item>
+        </wpp-autocomplete>
+      </div>
+    </div>
+
+    <div data-testid="s-size-autocompletes">
+      <div>
+        <wpp-autocomplete
+          class="item"
+          [suggestions]="staticSuggestions"
+          [labelConfig]="getLabelConfig('Single Autocomplete with search')"
+          placeholder="Select fruits"
+          [value]="basicValue5"
+          (wppChange)="handleBasicValue5($event)"
+          data-testid="single-autocomplete"
+          size="s"
+          show-create-new-element
+          simple-search
+          required
+        >
+          <wpp-list-item *ngFor="let option of fruitOptions" [value]="option" [label]="option.label">
+            <p slot="label">{{ option.label }}</p>
+          </wpp-list-item>
+        </wpp-autocomplete>
+      </div>
+
+      <div class="bottomItem" data-testid="extended-autocomplete-area">
+        <wpp-autocomplete
+          class="item"
+          [suggestions]="staticSuggestions"
+          [labelConfig]="getLabelConfig('Extended Multiple Autocomplete')"
+          placeholder="Select fruits"
+          [value]="multipleValue5"
+          (wppChange)="handleMultipleValue5($event)"
+          data-testid="extended-autocomplete"
+          type="extended"
+          size="s"
+          multiple
+          simpleSearch
+          required
+        >
+          <wpp-list-item *ngFor="let option of fruitOptions" [value]="option" [label]="option.label">
+            <p slot="label">{{ option.label }}</p>
+          </wpp-list-item>
+          <div slot="selected-values" class="selected-values extended">
+            <wpp-pill
+              *ngFor="let selectedValue of multipleValue5"
+              [label]="selectedValue.label"
+              [value]="selectedValue.id"
+              type="display"
+              (wppClose)="handleExamplePillCloseClick5(selectedValue.id)"
+              removable
+            >
+              {{ selectedValue.label }}
+            </wpp-pill>
+          </div>
+        </wpp-autocomplete>
+      </div>
+    </div>
+
+    <div>
+      <div>
+        <wpp-autocomplete
+          class="item"
+          [labelConfig]="getLabelConfig('Multiple Autocomplete with slot suggestions')"
+          placeholder="Select fruits"
+          [value]="multipleValue6"
+          (wppChange)="handleMultipleValue6($event)"
+          [suggestions]="staticSuggestionWithSlots"
+          data-testid="extended-autocomplete"
+          multiple
+        >
+          <wpp-list-item *ngFor="let option of fruitOptions" [value]="option" [label]="option.label">
+            <p slot="label">{{ option.label }}</p>
+          </wpp-list-item>
+        </wpp-autocomplete>
+      </div>
+    </div>
+
+    <div>
+      <div>
+        <wpp-autocomplete
+          class="dynamicItem"
+          [labelConfig]="getLabelConfig('Single Autocomplete with Infinity loading')"
+          name="Single Autocomplete with dynamic suggestions"
+          placeholder="Select fruits"
+          [value]="basicValue7"
+          (wppChange)="handleBasicValue7($event)"
+          [suggestions]="dynamicSuggestions"
+          data-testid="single-autocomplete-dynamic-suggestions"
+        >
+          <wpp-list-item *ngFor="let option of fruitOptions" [value]="option" [label]="option.label">
+            <p slot="label">{{ option.label }}</p>
+          </wpp-list-item>
+        </wpp-autocomplete>
+      </div>
+      <div>
+        <wpp-autocomplete
+          class="dynamicItem"
+          [labelConfig]="getLabelConfig('Single Autocomplete with Infinity loading')"
+          name="Multiple Autocomplete with dynamic suggestions"
+          placeholder="Select fruits"
+          [value]="multipleValue7"
+          (wppChange)="handleMultipleValue7($event)"
+          [suggestions]="dynamicSuggestions"
+          multiple
+          data-testid="multiple-autocomplete-dynamic-suggestions"
+        >
+          <wpp-list-item *ngFor="let option of fruitOptions" [value]="option" [label]="option.label">
+            <p slot="label">{{ option.label }}</p>
+          </wpp-list-item>
+        </wpp-autocomplete>
+      </div>
+
+      <div>
+        <wpp-autocomplete
+          class="dynamicItem"
+          [labelConfig]="getLabelConfig('Single Autocomplete with Infinity loading')"
+          name="Multiple Autocomplete with dynamic suggestions and persitant searc"
+          placeholder="Select fruits"
+          [value]="multipleValue8"
+          (wppChange)="handleMultipleValue8($event)"
+          [suggestions]="dynamicSuggestions"
+          multiple
+          persistent-search
+          data-testid="multiple-autocomplete-dynamic-suggestions-search"
+        >
+          <wpp-list-item *ngFor="let option of fruitOptions" [value]="option" [label]="option.label">
+            <p slot="label">{{ option.label }}</p>
+          </wpp-list-item>
+        </wpp-autocomplete>
+      </div>
+
+      <wpp-button (click)="handleSuggestionsChange($event)"> Update suggestions </wpp-button>
+    </div>
+  </div>
+  <h2>Autocomplete - rest</h2>
+  <div class="container">
+    <div>
+      <wpp-autocomplete
+        class="item"
+        [labelConfig]="getLabelConfig('Single Autocomplete with persistent search')"
+        placeholder="Select fruits"
+        [value]="basicValue6"
+        (wppChange)="handleBasicValue6($event)"
+        data-testid="single-autocomplete"
+        persistent-search
+        simple-search
+        required
+      >
+        <wpp-list-item *ngFor="let option of fruitOptions" [value]="option" [label]="option.label">
+          <p slot="label">{{ option.label }}</p>
+        </wpp-list-item>
+      </wpp-autocomplete>
+    </div>
+
+    <div>
+      <wpp-autocomplete
+        class="item"
+        [labelConfig]="getLabelConfig('Single Autocomplete with Infinity loading')"
+        placeholder="Select fruits"
+        [loading]="true"
+        simple-search
+        required
+      >
+      </wpp-autocomplete>
+    </div>
+  </div>
+</div>

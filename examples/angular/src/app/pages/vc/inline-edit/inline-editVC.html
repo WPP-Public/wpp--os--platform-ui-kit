@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="block" data-testid="input-inline-edit-container">
+    <h3>Inline Edit Input (With inputWidth)</h3>
+    <wpp-inline-edit [value]='inputText1' [mode]='inputMode1' (wppModeChange)='handleInputModeChange1($event)'
+      data-testid="default-input-inline-edit" [inputWidth]="'300px'">
+      <wpp-input size="s" slot="form-element" name="test" [value]='inputText1'
+        (wppChange)='handleInputValueChange1($event)'></wpp-input>
+    </wpp-inline-edit>
+
+    <p class="bottomItem">Icon Placement test</p>
+    <wpp-inline-edit [value]='inputText1' [mode]='inputMode1' [dropdownConfig]='bottomPlacement'
+      (wppModeChange)='handleInputModeChange1($event)' data-testid="bottom-input-inline-edit" [inputWidth]="'300px'">
+      <wpp-input size="s" slot="form-element" name="test" [value]="inputText1"></wpp-input>
+    </wpp-inline-edit>
+  </div>
+
+  <!-- Example without inputWidth to use the default width -->
+  <div class="block" data-testid="input-inline-edit-container-default">
+    <h3>Inline Edit Input (Default Width)</h3>
+    <wpp-inline-edit [value]='inputText2' [mode]='inputMode2' (wppModeChange)='handleInputModeChange2($event)'
+      data-testid="default-width-input-inline-edit">
+      <wpp-input size="s" slot="form-element" name="test" [value]='inputText2'
+        (wppChange)='handleInputValueChange2($event)'></wpp-input>
+    </wpp-inline-edit>
+  </div>
+
+  <div class="block" data-testid="textarea-inline-edit-container">
+    <h3>Inline Edit Textarea</h3>
+    <wpp-inline-edit [mode]='textareaMode' [value]='textareaText' [dropdownConfig]='bottomStartPlacement'
+      (wppModeChange)='handleTextareaModeChange($event)' data-testid="default-textarea-inline-edit"
+      [inputWidth]="'300px'">
+      <wpp-textarea-input slot="form-element" size="s" rows="3" [value]='textareaText'
+        (wppChange)='handleTextareaValueChange($event)'></wpp-textarea-input>
+    </wpp-inline-edit>
+    <p class="bottomItem">Icon Placement test</p>
+    <wpp-inline-edit [mode]='textareaMode' [value]='textareaText' [dropdownConfig]='bottomPlacement'
+      data-testid="bottom-textarea-inline-edit" [inputWidth]="'300px'">
+      <wpp-textarea-input slot="form-element" size="s" rows="3" [value]='textareaText'></wpp-textarea-input>
+    </wpp-inline-edit>
+  </div>
+</div>

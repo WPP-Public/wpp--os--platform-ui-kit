@@ -1,0 +1,55 @@
+/**
+  * @prop --wpp-tree-item-padding:
+  * @prop --wpp-tree-container-width:
+  * @prop --wpp-tree-container-height:
+  * @prop --wpp-tree-container-bg-color:
+  * @prop --wpp-tree-input-margin:
+  * @prop --wpp-tree-trigger-area:
+  * @prop --wpp-tree-icon-end-color:
+*/
+
+:host {
+  --tree-item-padding: var(--wpp-tree-item-padding, 6px 4px 0 4px);
+  --tree-container-width: var(--wpp-tree-container-width, 100%);
+  --tree-container-height: var(--wpp-tree-container-height, 100%);
+  --tree-container-bg-color: var(--wpp-tree-container-bg-color, var(--wpp-grey-color-000));
+  --tree-input-trigger-area: var(--wpp-tree-trigger-area, 32px);
+  --tree-item-icon-end-color: var(--wpp-tree-icon-end-color, var(--wpp-grey-color-800));
+  --tree-skeleton-height: var(--wpp-tree-skeleton-height, 22px);
+  --tree-skeleton-padding: var(--wpp-tree-skeleton-padding, 3px 0 3px 36px);
+  --tree-skeleton-width: var(--wpp-tree-skeleton-width, 100%);
+
+  display: flex;
+  padding: var(--tree-item-padding);
+}
+
+.container {
+  display: grid;
+  width: 100%;
+  overflow: hidden;
+}
+
+.content-container {
+  display: grid;
+
+  overflow: hidden;
+  transition: height 500ms ease;
+}
+
+.skeleton-wrapper {
+  width: var(--tree-skeleton-width);
+
+  .skeleton-item {
+    padding: var(--tree-skeleton-padding);
+  }
+
+  .wpp-skeleton {
+    --skeleton-height: var(--tree-skeleton-height);
+  }
+}
+
+.empty-tree-text {
+  @include typographySBody;
+  margin: 0;
+  text-align: center;
+}

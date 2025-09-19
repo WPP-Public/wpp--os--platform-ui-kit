@@ -1,0 +1,130 @@
+$column-amount: 24;
+$breakpoints: 'sm' 1280, 'md' 1366, 'lg' 1440, 'xl' 1920, 'xxl' 2220;
+$min-space: 4px;
+
+/**
+  * @prop --wpp-grid-total-columns:
+  * @prop --wpp-grid-width:
+  * @prop --wpp-grid-max-width:
+  * @prop --wpp-grid-row-spacing:
+  * @prop --wpp-grid-column-spacing:
+  * @prop --wpp-grid-min-spacing:
+  * @prop --wpp-grid-max-spacing:
+*/
+
+.wpp-grid-container {
+  --grid-total-columns: var(--wpp-grid-total-columns, #{$column-amount});
+  --grid-width: var(--wpp-grid-width, 95%);
+  --grid-max-width: var(--wpp-grid-max-width, 1812px);
+  --grid-row-spacing: var(--wpp-grid-row-spacing, 2);
+  --grid-column-spacing: var(--wpp-grid-column-spacing, 2);
+  --grid-min-spacing: var(--wpp-grid-min-spacing, 8px);
+  --grid-max-spacing: var(--wpp-grid-max-spacing, 1%);
+  --grid-row-spacing-in-px: calc(var(--grid-row-spacing) * #{$min-space});
+  --grid-column-spacing-in-px: calc(var(--grid-column-spacing) * #{$min-space});
+  --grid-horizontal-spacing: clamp(
+    var(--grid-min-spacing),
+    calc(var(--grid-row-spacing-in-px) * var(--grid-row-spacing) / 2),
+    var(--grid-max-spacing)
+  );
+  --grid-vertical-spacing: clamp(
+    var(--grid-min-spacing),
+    calc(var(--grid-column-spacing-in-px) * var(--grid-column-spacing) / 2),
+    var(--grid-max-spacing)
+  );
+
+  display: flex;
+  flex-flow: row wrap;
+  box-sizing: border-box;
+  min-width: 0;
+
+  width: calc(var(--grid-width) + calc(2 * var(--grid-horizontal-spacing)));
+  max-width: calc(var(--grid-max-width) + calc(2 * var(--grid-horizontal-spacing)));
+  margin: calc(-1 * var(--grid-vertical-spacing)) auto;
+
+  &.full-width {
+    width: calc(100% + calc(2 * var(--grid-horizontal-spacing)));
+    margin: calc(-1 * var(--grid-vertical-spacing)) calc(-1 * var(--grid-horizontal-spacing));
+  }
+
+  &.full-height {
+    height: calc(100% + calc(2 * var(--grid-vertical-spacing)));;
+    margin: calc(-1 * var(--grid-vertical-spacing)) calc(-1 * var(--grid-horizontal-spacing));
+  }
+
+  &.fluid {
+    height: calc(100% + calc(2 * var(--grid-vertical-spacing)));
+    width: calc(100% + calc(2 * var(--grid-horizontal-spacing)));
+    margin: calc(-1 * var(--grid-vertical-spacing)) calc(-1 * var(--grid-horizontal-spacing));
+  }
+
+  .wpp-grid-item-all {
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: var(--grid-vertical-spacing) var(--grid-horizontal-spacing);
+  }
+
+  .wpp-grid-item-all-auto {
+    flex-basis: auto;
+    flex-grow: 0;
+    flex-shrink: 0;
+    max-width: none;
+    width: auto;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: var(--grid-vertical-spacing) var(--grid-horizontal-spacing);
+  }
+
+  @for $i from 1 through $column-amount {
+    .wpp-grid-item-all-#{$i} {
+      --grid-column: var(--wpp-grid-column, #{$i});
+
+      flex-basis: auto;
+      flex-grow: 0;
+      box-sizing: border-box;
+      width: calc(100% * var(--grid-column) / var(--grid-total-columns));
+      min-width: 0;
+      padding: var(--grid-vertical-spacing) var(--grid-horizontal-spacing);
+    }
+  }
+
+  @each $name, $size in $breakpoints {
+    .wpp-grid-item-#{$name} {
+      flex-basis: 0;
+      flex-grow: 1;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+      padding: var(--grid-vertical-spacing) var(--grid-horizontal-spacing);
+    }
+
+    .wpp-grid-item-#{$name}-auto {
+      flex-basis: auto;
+      flex-grow: 0;
+      flex-shrink: 0;
+      max-width: none;
+      width: auto;
+      min-width: 0;
+      box-sizing: border-box;
+      padding: var(--grid-vertical-spacing) var(--grid-horizontal-spacing);
+    }
+
+    @media (min-width: #{$size}px) {
+      @for $i from 1 through $column-amount {
+        .wpp-grid-item-#{$name}-#{$i} {
+          --grid-column: var(--wpp-grid-column, #{$i});
+
+          flex-basis: auto;
+          flex-grow: 0;
+          box-sizing: border-box;
+          width: calc(100% * var(--grid-column) / var(--grid-total-columns));
+          min-width: 0;
+          padding: var(--grid-vertical-spacing) var(--grid-horizontal-spacing);
+        }
+      }
+    }
+  }
+}

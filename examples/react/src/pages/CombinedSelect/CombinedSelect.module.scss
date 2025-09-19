@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  align-items: flex-start;
+  padding: 50px;
+
+  .item {
+    margin-bottom: 20px;
+  }
+
+  .section {
+    margin-right: 50px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .selectsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 200px;
+    padding: 10px;
+    overflow: hidden;
+    border: 1px solid black;
+    border-radius: 20px;
+  }
+}

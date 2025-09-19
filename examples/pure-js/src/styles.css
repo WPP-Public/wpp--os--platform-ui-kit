@@ -1,0 +1,35 @@
+body {
+  margin: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 24px;
+  align-items: center;
+  background-color: var(--wpp-grey-color-400);
+}
+
+.body {
+  padding: 10px 24px;
+}
+
+.section {
+  margin-top: 20px;
+  margin-left: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.section .description {
+  display: flex;
+  flex-direction: column;
+}
+
+.inline {
+  display: flex;
+}
+
+.inline > * {
+  margin-right: 10px;
+}

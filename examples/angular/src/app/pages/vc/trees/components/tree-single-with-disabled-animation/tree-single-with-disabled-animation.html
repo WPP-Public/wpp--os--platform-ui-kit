@@ -1,0 +1,11 @@
+<div>
+  <h3 class="title">Single tree with disabled open/close animation</h3>
+  <wpp-tree
+    class="tree"
+    [data]="treeData"
+    (wppChange)="handleTreeChange($event)"
+    data-testid="single-tree"
+    (wppActionClick)="handleActionClick($event)"
+    disable-open-close-animation=true
+  ></wpp-tree>
+</div>

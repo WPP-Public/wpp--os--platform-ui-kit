@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig",
+
+  "compilerOptions": {
+    "experimentalDecorators": true,
+
+    "jsx": "react",
+    "jsxFactory": "h",
+
+    "baseUrl": ".",
+
+    "allowSyntheticDefaultImports": true,
+    "strictPropertyInitialization": false
+  }
+}

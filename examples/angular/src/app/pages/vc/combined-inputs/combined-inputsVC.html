@@ -1,0 +1,219 @@
+<div>
+  <div data-testid="combined-selects">
+    <h2>Combined Inputs</h2>
+    <h3>M Size</h3>
+    <wpp-select
+      class="select"
+      type="combined"
+      placeholder="Placeholder"
+      [labelConfig]="getLabelConfig('Donate sum')"
+      [value]="valueUsd"
+      (wppChange)="handleChangeUsd($event)"
+      inputValue="100"
+      [list]="SAMPLE_LIST_COMBINED"
+    >
+    </wpp-select>
+
+    <wpp-select
+      class="select"
+      type="combined"
+      placeholder="Placeholder"
+      [labelConfig]="getLabelConfig('Regular')"
+      [value]="valueEur"
+      (wppChange)="handleChangeEur($event)"
+      required
+      data-testid="combined-input"
+      [list]="SAMPLE_LIST_COMBINED"
+    >
+    </wpp-select>
+
+    <wpp-select
+      class="select"
+      type="combined"
+      placeholder="Placeholder"
+      [labelConfig]="getLabelConfig('Disabled')"
+      [value]="valueEur"
+      (wppChange)="handleChangeEur($event)"
+      required
+      disabled
+      [list]="SAMPLE_LIST_COMBINED"
+    >
+    </wpp-select>
+
+    <wpp-select
+      class="select"
+      type="combined"
+      placeholder="Placeholder"
+      [labelConfig]="getLabelConfig('Disabled')"
+      [value]="valueEur"
+      (wppChange)="handleChangeEur($event)"
+      disabled
+      [list]="SAMPLE_LIST_COMBINED"
+    >
+    </wpp-select>
+
+    <wpp-select
+      class="select"
+      type="combined"
+      placeholder="Placeholder"
+      [value]="valueUah"
+      (wppChange)="handleChangeUah($event)"
+      required
+      message="Info message"
+      [labelConfig]="combinedSelectLabelConfig"
+      [list]="SAMPLE_LIST_COMBINED"
+    >
+    </wpp-select>
+
+    <wpp-select
+      class="select"
+      type="combined"
+      placeholder="Placeholder"
+      [labelConfig]="getLabelConfig('Error')"
+      [value]="valueUsd"
+      (wppChange)="handleChangeUsd($event)"
+      message="Error message"
+      message-type="error"
+      required
+      [list]="SAMPLE_LIST_COMBINED"
+    >
+    </wpp-select>
+
+    <wpp-select
+      class="select"
+      type="combined"
+      placeholder="Placeholder"
+      [labelConfig]="getLabelConfig('Warning')"
+      [value]="valueUsd"
+      (wppChange)="handleChangeUsd($event)"
+      message="Warning message"
+      message-type="warning"
+      required
+      [list]="SAMPLE_LIST_COMBINED"
+    >
+    </wpp-select>
+
+    <wpp-select
+      class="select"
+      type="combined"
+      placeholder="Placeholder"
+      [labelConfig]="getLabelConfig('Error disabled')"
+      [value]="valueUsd"
+      (wppChange)="handleChangeUsd($event)"
+      message="Error message"
+      message-type="error"
+      required
+      disabled
+      [list]="SAMPLE_LIST_COMBINED"
+    >
+    </wpp-select>
+
+    <wpp-select
+      class="select"
+      type="combined"
+      placeholder="Placeholder"
+      [labelConfig]="getLabelConfig('Warning disabled')"
+      [value]="valueUsd"
+      (wppChange)="handleChangeUsd($event)"
+      message="Warning message"
+      message-type="warning"
+      required
+      disabled
+      [list]="SAMPLE_LIST_COMBINED"
+    >
+    </wpp-select>
+
+    <wpp-select
+      class="select"
+      type="combined"
+      [labelConfig]="getLabelConfig('Long value')"
+      [value]="valueUsd"
+      (wppChange)="handleChangeUsd($event)"
+      required
+      input-value="10000000000000000000000000000000000000000000000000"
+      [list]="SAMPLE_LIST_COMBINED"
+    >
+    </wpp-select>
+
+    <wpp-select
+      class="select"
+      type="combined"
+      placeholder="Placeholder"
+      [labelConfig]="getLabelConfig('Message truncation')"
+      [value]="valueUsd"
+      (wppChange)="handleChangeUsd($event)"
+      message="Warning message"
+      message-type="warning"
+      required
+      [maxMessageLength]="10"
+      data-testid="combined-select"
+      [list]="SAMPLE_LIST_COMBINED"
+    >
+    </wpp-select>
+
+    <wpp-select
+      class="select"
+      type="combined"
+      [value]="valueEur"
+      (wppChange)="handleChangeEur($event)"
+      name="min-params"
+      auto-focus
+      data-testid="focus-combined-select"
+      [list]="SAMPLE_LIST_COMBINED"
+    >
+    </wpp-select>
+
+    <h3>S Size</h3>
+    <wpp-select
+      class="select"
+      type="combined"
+      [value]="valueEur"
+      (wppChange)="handleChangeEur($event)"
+      size="s"
+      [labelConfig]="inputWithIconLabelConfig"
+    >
+    </wpp-select>
+
+    <wpp-select
+      class="select"
+      type="combined"
+      [value]="valueEur"
+      (wppChange)="handleChangeEur($event)"
+      size="s"
+      disabled
+      [labelConfig]="getLabelConfig('Disabled Combined Input')"
+      [list]="SAMPLE_LIST_COMBINED"
+    >
+    </wpp-select>
+
+    <wpp-select
+      class="select"
+      type="combined"
+      placeholder="Placeholder"
+      size="s"
+      [labelConfig]="getLabelConfig('Combined Input with warning')"
+      [value]="valueUsd"
+      (wppChange)="handleChangeUsd($event)"
+      message="Warning message"
+      message-type="warning"
+      required
+      [list]="SAMPLE_LIST_COMBINED"
+    >
+    </wpp-select>
+
+    <wpp-select
+      class="select"
+      type="combined"
+      placeholder="Placeholder"
+      size="s"
+      [labelConfig]="getLabelConfig('Combined Input with error')"
+      [value]="valueUsd"
+      (wppChange)="handleChangeUsd($event)"
+      message="Error message"
+      message-type="error"
+      required
+      [list]="SAMPLE_LIST_COMBINED"
+    >
+    </wpp-select>
+  </div>
+</div>

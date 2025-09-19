@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown {
+  display: flex;
+  gap: 20px;
+}
+
+.listItemPreview {
+  margin: 10px;
+  margin-bottom: 50px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}

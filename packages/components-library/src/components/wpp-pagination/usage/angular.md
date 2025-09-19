@@ -1,0 +1,9 @@
+```html
+<wpp-pagination
+  [count]='count'
+  [itemsPerPage]='itemsPerPage'
+  [selectedItemPerPage]='selectedItemPerPage'
+  [pageSelectThreshold]='pageSelectThreshold'
+  [activePageNumber]='activePageNumber'
+></wpp-pagination>
+```

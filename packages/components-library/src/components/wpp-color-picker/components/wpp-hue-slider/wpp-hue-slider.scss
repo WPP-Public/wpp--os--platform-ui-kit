@@ -1,0 +1,29 @@
+@import '../../styles/_shared.scss';
+
+:host {
+  position: relative;
+  display: block;
+  height: 16px;
+  user-select: none;
+
+  .slider-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    user-select: none;
+  }
+
+  canvas {
+    width: 100%;
+    height: 100%;
+    border-radius: 32px;
+    display: block;
+  }
+
+  .marker {
+    @include marker-styles;
+    top: 50%;
+    left: calc(var(--marker-position) - 8px);
+    z-index: 2;
+  }
+}

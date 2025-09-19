@@ -1,0 +1,25 @@
+.ql-picker.ql-size
+  width: 47px
+  .ql-picker-label
+    justify-content: space-between
+  .ql-picker-label, .ql-picker-item
+    &::before
+      content: 'S'
+    &[data-value="2xs"]::before
+      content: '2XS'
+    &[data-value="xs"]::before
+      content: 'XS'
+    &[data-value="m"]::before
+      content: 'M'
+    &[data-value="l"]::before
+      content: 'L'
+    &[data-value="xl"]::before
+      content: 'XL'
+    &[data-value="2xl"]::before
+      content: '2XL'
+    &[data-value="3xl"]::before
+      content: '3XL'
+    &[data-value="4xl"]::before
+      content: '4XL'
+    &[data-value="5xl"]::before
+      content: '5XL'

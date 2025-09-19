@@ -1,0 +1,64 @@
+<div class="example-page">
+  <div class="table-header">
+    <wpp-button (click)="handleAutoHeightToggle()"> Set table {{ isAutoHeight ? 'fixed' : 'auto' }} height </wpp-button>
+    <div>
+      <wpp-button (click)="handleRemoveAvatarsColumn()">Remove avatars column</wpp-button>
+      <wpp-button (click)="handleAddAvatarsColumn()">Add avatars column</wpp-button>
+    </div>
+  </div>
+
+  <div class="filters">
+    <div class="left">
+      <wpp-input
+        ngDefaultControl
+        [(ngModel)]="search"
+        type="search"
+        placeholder="Search by First Name"
+        (wppChange)="handleSearchChange($event)"
+        size="s"
+      ></wpp-input>
+      <wpp-select
+        [value]="selectedGender"
+        size="s"
+        placeholder="Filter by gender"
+        (wppChange)="handleGenderChange($event)"
+        [list]="gendersList1"
+      >
+      </wpp-select>
+    </div>
+    <div class="right">
+      <wpp-pill label="{{ selectedItems.length }} selected" removable (wppClose)="handleDeselectAll()"></wpp-pill>
+      <wpp-button variant="secondary" (click)="handleEditClick()" size="s"> Edit </wpp-button>
+    </div>
+  </div>
+
+  <ag-grid-angular
+    [ngStyle]="getStyles()"
+    class="ag-theme-wpp"
+    [rowData]="displayData"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    rowSelection="multiple"
+    rowDragMultiRow
+    animateRows
+    rowDragManaged
+    pagination
+    [paginationPageSize]="paginationPageSize"
+    suppressPaginationPanel
+    [loadingOverlayComponent]="loadingOverlayComponent"
+    [noRowsOverlayComponent]="noRowsOverlayComponent"
+    [rowClassRules]="rowClassRules"
+    [domLayout]="domLayout"
+    (rowSelected)="handleRowsSelect()"
+    (firstDataRendered)="onFirstDataRendered($event)"
+  ></ag-grid-angular>
+
+  <wpp-pagination
+    [count]="displayData.length"
+    [itemsPerPage]="[3, 5, 10]"
+    [activePageNumber]="currPage"
+    [pageSelectThreshold]="9"
+    [selectedItemPerPage]="paginationPageSize"
+    (wppChange)="handlePaginationChange($event)"
+  ></wpp-pagination>
+</div>

@@ -1,0 +1,161 @@
+<div data-testid="expandable-cards">
+  <div>
+    <wpp-expandable-card class="progress" header="What's next" size="2xl">
+      <div class="content">
+        <wpp-typography>
+          Having a proactive Board and strong leadership that is deeply committed to high ethical standards is a
+          business imperative for ensuring sustainable success
+        </wpp-typography>
+        <wpp-input></wpp-input>
+      </div>
+      <div slot="actions" class="information">
+        <wpp-typography type="s-body" class="info"> 35% Complete </wpp-typography>
+        <wpp-progress-indicator :value="35" :width="173"></wpp-progress-indicator>
+      </div>
+    </wpp-expandable-card>
+
+    <wpp-expandable-card header="Governance & Ethics" expanded (wppChange)="handleChange($event)">
+      <wpp-typography>
+        Having a proactive Board and strong leadership that is deeply committed to high ethical standards is a business
+        imperative for ensuring sustainable success
+      </wpp-typography>
+    </wpp-expandable-card>
+  </div>
+
+  <div class="container">
+    <div class="variant">
+      <h3>Collapsed</h3>
+      <wpp-expandable-card
+        class="item"
+        header="Governance & Ethics (S Size)"
+        size="s"
+        (wppChange)="handleChange($event)"
+      >
+        <wpp-typography>Having a proactive Board and strong leadership...</wpp-typography>
+      </wpp-expandable-card>
+
+      <wpp-expandable-card
+        class="item"
+        header="Governance & Ethics (M Size)"
+        size="m"
+        (wppChange)="handleChange($event)"
+      >
+        <wpp-typography>Having a proactive Board and strong leadership...</wpp-typography>
+      </wpp-expandable-card>
+
+      <wpp-expandable-card
+        class="item"
+        header="Governance & Ethics (L Size)"
+        size="l"
+        (wppChange)="handleChange($event)"
+      >
+        <wpp-typography>Having a proactive Board and strong leadership...</wpp-typography>
+      </wpp-expandable-card>
+
+      <wpp-expandable-card
+        class="item"
+        header="Governance & Ethics (XL Size)"
+        size="xl"
+        (wppChange)="handleChange($event)"
+      >
+        <wpp-typography>Having a proactive Board and strong leadership...</wpp-typography>
+      </wpp-expandable-card>
+
+      <wpp-expandable-card
+        class="item"
+        header="Governance & Ethics (2XL Size)"
+        size="2xl"
+        (wppChange)="handleChange($event)"
+      >
+        <wpp-typography>Having a proactive Board and strong leadership...</wpp-typography>
+      </wpp-expandable-card>
+    </div>
+
+    <div class="variant">
+      <h3>Expanded</h3>
+      <wpp-expandable-card
+        class="item"
+        header="Governance & Ethics (S Size)"
+        size="s"
+        expanded
+        (wppChange)="handleChange($event)"
+      >
+        <wpp-typography>Having a proactive Board and strong leadership...</wpp-typography>
+      </wpp-expandable-card>
+
+      <wpp-expandable-card
+        class="item"
+        header="Governance & Ethics (M Size)"
+        size="m"
+        expanded
+        (wppChange)="handleChange($event)"
+      >
+        <wpp-typography>Having a proactive Board and strong leadership...</wpp-typography>
+      </wpp-expandable-card>
+
+      <wpp-expandable-card
+        class="item"
+        header="Governance & Ethics (L Size)"
+        size="l"
+        expanded
+        (wppChange)="handleChange($event)"
+      >
+        <wpp-typography>Having a proactive Board and strong leadership...</wpp-typography>
+      </wpp-expandable-card>
+
+      <wpp-expandable-card
+        class="item"
+        header="Governance & Ethics (XL Size)"
+        size="xl"
+        expanded
+        (wppChange)="handleChange($event)"
+      >
+        <wpp-typography>Having a proactive Board and strong leadership...</wpp-typography>
+      </wpp-expandable-card>
+
+      <wpp-expandable-card
+        class="item"
+        header="Governance & Ethics (2XL Size)"
+        size="2xl"
+        expanded
+        (wppChange)="handleChange($event)"
+      >
+        <wpp-typography>Having a proactive Board and strong leadership...</wpp-typography>
+      </wpp-expandable-card>
+    </div>
+  </div>
+
+  <wpp-card class="cardWithCards">
+    <wpp-typography slot="header" type="m-strong">
+      Card with Expandable Cards inside. The expandable cards have variant = "secondary"
+    </wpp-typography>
+    <wpp-expandable-card variant="secondary" class="cardInside" size="2xl">
+      <wpp-typography slot="header" type="l-strong"> What's next </wpp-typography>
+      <div class="content">
+        <wpp-typography>
+          Having a proactive Board and strong leadership that is deeply committed to high ethical standards is a
+          business imperative for ensuring sustainable success
+        </wpp-typography>
+        <wpp-input></wpp-input>
+      </div>
+      <div slot="actions" class="information">
+        <wpp-typography type="s-body" class="info"> 35% Complete </wpp-typography>
+        <wpp-progress-indicator :value="35" :width="173"></wpp-progress-indicator>
+      </div>
+    </wpp-expandable-card>
+    <wpp-expandable-card variant="secondary" class="cardInside" size="2xl">
+      <wpp-typography slot="header" type="l-strong"> What's next </wpp-typography>
+      <div class="content">
+        <wpp-typography>
+          Having a proactive Board and strong leadership that is deeply committed to high ethical standards is a
+          business imperative for ensuring sustainable success
+        </wpp-typography>
+        <wpp-input></wpp-input>
+      </div>
+      <div slot="actions" class="information">
+        <wpp-typography type="s-body" class="info"> 35% Complete </wpp-typography>
+        <wpp-progress-indicator :value="35" :width="173"></wpp-progress-indicator>
+      </div>
+    </wpp-expandable-card>
+  </wpp-card>
+</div>

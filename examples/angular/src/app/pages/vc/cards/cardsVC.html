@@ -1,0 +1,588 @@
+<div class="container" data-testid="cards-container">
+  <div class="pack">
+    <div>
+      <h3>Regular</h3>
+      <wpp-card class="item" variant="primary" size="s">
+        <wpp-typography slot="header" type="s-strong">
+          Card Size S
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="m">
+        <wpp-typography slot="header" type="m-strong">
+          Card Size M
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="l">
+        <wpp-typography slot="header" type="l-strong">
+          Card Size L
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="xl">
+        <wpp-typography slot="header" type="xl-heading">
+          Card Size XL
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="2xl">
+        <wpp-typography slot="header" type="2xl-heading">
+          Card Size 2XL
+        </wpp-typography>
+      </wpp-card>
+    </div>
+
+    <div class="section sectionend">
+      <wpp-card class="item" variant="secondary" size="s">
+        <wpp-typography slot="header" type="s-strong">
+          Secondary Card Size S
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="secondary" size="m">
+        <wpp-typography slot="header" type="m-strong">
+          Secondary Card Size M
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="secondary" size="l">
+        <wpp-typography slot="header" type="l-strong">
+          Secondary Card Size L
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="secondary" size="xl">
+        <wpp-typography slot="header" type="xl-heading">
+          Secondary Card Size XL
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="secondary" size="2xl">
+        <wpp-typography slot="header" type="2xl-heading">
+          Secondary Card Size 2XL
+        </wpp-typography>
+      </wpp-card>
+    </div>
+
+    <div class="sectionend">
+      <h3>Clickable</h3>
+      <wpp-card class="item" variant="primary" size="s" interactive>
+        <wpp-typography slot="header" type="s-strong">
+          Interactive Card Size S
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="m" interactive>
+        <wpp-typography slot="header" type="m-strong">
+          Interactive Card Size M
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="l" interactive>
+        <wpp-typography slot="header" type="l-strong">
+          Interactive Card Size L
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="xl" interactive>
+        <wpp-typography slot="header" type="xl-heading">
+          Interactive Card Size XL
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="2xl" interactive>
+        <wpp-typography slot="header" type="2xl-heading">
+          Interactive Card Size 2XL
+        </wpp-typography>
+      </wpp-card>
+    </div>
+  </div>
+
+  <div class="pack">
+    <div>
+      <h3>Truncation with actions</h3>
+      <wpp-card class="item" variant="primary" size="s">
+        <wpp-typography slot="header" type="s-strong">
+          Long title S size just to test how truncation works inside the card
+        </wpp-typography>
+        <div slot="actions">
+          <wpp-action-button variant="secondary">
+            <wpp-icon-more slot="icon-start" direction="horizontal"></wpp-icon-more>
+          </wpp-action-button>
+        </div>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="m">
+        <div class="content">
+            <span>
+              This is not a header but a simply content. This is not a header but a simply content. This is not a
+                header but a simply content. This is not a header but a simply content. This is not a header but a
+                simply content
+            </span>
+        </div>
+        <div slot="actions">
+          <wpp-action-button variant="secondary">
+            <wpp-icon-more slot="icon-start" direction="horizontal"></wpp-icon-more>
+          </wpp-action-button>
+        </div>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="l">
+        <wpp-typography slot="header" type="l-strong">
+          Long title L size just to test how truncation works inside the card
+        </wpp-typography>
+        <span>
+              This is not a header but a simply content. This is not a header but a simply content. This is not a header
+              but a simply content. This is not a header but a simply content. This is not a header but a simply content
+            </span>
+        <div slot="actions">
+          <wpp-action-button variant="secondary">
+            <wpp-icon-more slot="icon-start" direction="horizontal"></wpp-icon-more>
+          </wpp-action-button>
+        </div>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="xl">
+        <wpp-typography slot="header" type="xl-heading">
+          Long title XL size just to test how truncation works inside the card
+        </wpp-typography>
+        <span>
+              This is not a header but a simply content. This is not a header but a simply content. This is not a header
+              but a simply content. This is not a header but a simply content. This is not a header but a simply content
+            </span>
+        <div slot="actions">
+          <wpp-action-button variant="secondary">
+            <wpp-icon-more slot="icon-start" direction="horizontal"></wpp-icon-more>
+          </wpp-action-button>
+        </div>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="2xl">
+        <wpp-typography slot="header" type="2xl-heading">
+          Long title 2XL size just to test how truncation works inside the
+          card
+        </wpp-typography>
+        <span>
+              This is not a header but a simply content. This is not a header but a simply content. This is not a header
+              but a simply content. This is not a header but a simply content. This is not a header but a simply content
+            </span>
+        <div slot="actions">
+          <wpp-action-button variant="secondary">
+            <wpp-icon-more slot="icon-start" direction="horizontal"></wpp-icon-more>
+          </wpp-action-button>
+        </div>
+      </wpp-card>
+    </div>
+  </div>
+
+  <div class="pack">
+    <div>
+      <h3>Selectable (Single)</h3>
+      <wpp-card class="item" variant="primary" size="s" type="single">
+        <wpp-typography slot="header" type="s-strong">
+          Single Select Card Size S
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="m" type="single">
+        <wpp-typography slot="header" type="m-strong">
+          Single Select Card Size M
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="l" type="single">
+        <wpp-typography slot="header" type="l-strong">
+          Single Select Card Size L
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="xl" type="single">
+        <wpp-typography slot="header" type="xl-heading">
+          Single Select Card Size XL
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="2xl" type="single">
+        <wpp-typography slot="header" type="2xl-heading">
+          Single Select Card Size 2XL
+        </wpp-typography>
+      </wpp-card>
+    </div>
+
+    <div class="section">
+      <wpp-card class="item" variant="primary" size="s" type="single" disabled>
+        <wpp-typography slot="header" type="s-strong">
+          Disabled Single Select Card Size S
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="m" type="single" disabled>
+        <wpp-typography slot="header" type="m-strong">
+          Disabled Single Select Card Size M
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="l" type="single" disabled>
+        <wpp-typography slot="header" type="l-strong">
+          Disabled Single Select Card Size L
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="xl"
+        type="single"
+        disabled
+      >
+        <wpp-typography slot="header" type="xl-heading">
+          Disabled Single Select Card Size XL
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="2xl"
+        type="single"
+        disabled
+      >
+        <wpp-typography slot="header" type="2xl-heading">
+          Disabled Single Select Card Size 2XL
+        </wpp-typography>
+      </wpp-card>
+    </div>
+
+    <div class="section">
+      <wpp-card class="item" variant="primary" size="s" type="single" checked>
+        <wpp-typography slot="header" type="s-strong">
+          Checked Single Select Card Size S
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="m" type="single" checked>
+        <wpp-typography slot="header" type="m-strong">
+          Checked Single Select Card Size M
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="l" type="single" checked>
+        <wpp-typography slot="header" type="l-strong">
+          Checked Single Select Card Size L
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="xl" type="single" checked>
+        <wpp-typography slot="header" type="xl-heading">
+          Checked Single Select Card Size XL
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="2xl"
+        type="single"
+        checked
+      >
+        <wpp-typography slot="header" type="2xl-heading">
+          Checked Single Select Card Size 2XL
+        </wpp-typography>
+      </wpp-card>
+    </div>
+
+    <div class="section sectionend">
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="s"
+        type="single"
+        checked
+        disabled
+      >
+        <wpp-typography slot="header" type="s-strong">
+          Disabled Checked Single Select Card Size S
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="m"
+        type="single"
+        checked
+        disabled
+      >
+        <wpp-typography slot="header" type="m-strong">
+          Disabled Checked Single Select Card Size M
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="l"
+        type="single"
+        checked
+        disabled
+      >
+        <wpp-typography slot="header" type="l-strong">
+          Disabled Checked Single Select Card Size L
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="xl"
+        type="single"
+        checked
+        disabled
+      >
+        <wpp-typography slot="header" type="xl-heading">
+          Disabled Checked Single Select Card Size XL
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="2xl"
+        type="single"
+        checked
+        disabled
+      >
+        <wpp-typography slot="header" type="2xl-heading">
+          Disabled Checked Single Select Card Size 2XL
+        </wpp-typography>
+      </wpp-card>
+    </div>
+  </div>
+
+  <div class="pack">
+    <div>
+      <h3>Selectable (Multiple)</h3>
+      <wpp-card class="item" variant="primary" size="s" type="multiple">
+        <wpp-typography slot="header" type="s-strong">
+          Multiple Select Card Size S
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="m" type="multiple">
+        <wpp-typography slot="header" type="m-strong">
+          Multiple Select Card Size M
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="l" type="multiple">
+        <wpp-typography slot="header" type="l-strong">
+          Multiple Select Card Size L
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="xl" type="multiple">
+        <wpp-typography slot="header" type="xl-heading">
+          Multiple Select Card Size XL
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card class="item" variant="primary" size="2xl" type="multiple">
+        <wpp-typography slot="header" type="2xl-heading">
+          Multiple Select Card Size 2XL
+        </wpp-typography>
+      </wpp-card>
+    </div>
+
+    <div class="section">
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="s"
+        type="multiple"
+        disabled
+      >
+        <wpp-typography slot="header" type="s-strong">
+          Disabled Multiple Select Card Size S
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="m"
+        type="multiple"
+        disabled
+      >
+        <wpp-typography slot="header" type="m-strong">
+          Disabled Multiple Select Card Size M
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="l"
+        type="multiple"
+        disabled
+      >
+        <wpp-typography slot="header" type="l-strong">
+          Disabled Multiple Select Card Size L
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="xl"
+        type="multiple"
+        disabled
+      >
+        <wpp-typography slot="header" type="xl-heading">
+          Disabled Multiple Select Card Size XL
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="2xl"
+        type="multiple"
+        disabled
+      >
+        <wpp-typography slot="header" type="2xl-heading">
+          Disabled Multiple Select Card Size 2XL
+        </wpp-typography>
+      </wpp-card>
+    </div>
+
+    <div class="section">
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="s"
+        type="multiple"
+        checked
+      >
+        <wpp-typography slot="header" type="s-strong">
+          Checked Multiple Select Card Size S
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="m"
+        type="multiple"
+        checked
+      >
+        <wpp-typography slot="header" type="m-strong">
+          Checked Multiple Select Card Size M
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="l"
+        type="multiple"
+        checked
+      >
+        <wpp-typography slot="header" type="l-strong">
+          Checked Multiple Select Card Size L
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="xl"
+        type="multiple"
+        checked
+      >
+        <wpp-typography slot="header" type="xl-heading">
+          Checked Multiple Select Card Size XL
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="2xl"
+        type="multiple"
+        checked
+      >
+        <wpp-typography slot="header" type="2xl-heading">
+          Checked Multiple Select Card Size 2XL
+        </wpp-typography>
+      </wpp-card>
+    </div>
+
+    <div class="section">
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="s"
+        type="multiple"
+        checked
+        disabled
+      >
+        <wpp-typography slot="header" type="s-strong">
+          Disabled Checked Multiple Select Card Size S
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="m"
+        type="multiple"
+        checked
+        disabled
+      >
+        <wpp-typography slot="header" type="m-strong">
+          Disabled Checked Multiple Select Card Size M
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="l"
+        type="multiple"
+        checked
+        disabled
+      >
+        <wpp-typography slot="header" type="l-strong">
+          Disabled Checked Multiple Select Card Size L
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="xl"
+        type="multiple"
+        checked
+        disabled
+      >
+        <wpp-typography slot="header" type="xl-heading">
+          Disabled Checked Multiple Select Card Size XL
+        </wpp-typography>
+      </wpp-card>
+
+      <wpp-card
+        class="item"
+        variant="primary"
+        size="2xl"
+        type="multiple"
+        checked
+        disabled
+      >
+        <wpp-typography slot="header" type="2xl-heading">
+          Disabled Checked Multiple Select Card Size 2XL
+        </wpp-typography>
+      </wpp-card>
+    </div>
+  </div>
+</div>

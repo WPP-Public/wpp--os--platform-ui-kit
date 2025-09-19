@@ -1,0 +1,27 @@
+.content {
+  width: 238px;
+  height: 200px;
+}
+
+.item {
+  width: 320px;
+  margin-right: 15px;
+  margin-bottom: 10px;
+}
+
+.multipleButton {
+  margin-bottom: 10px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+}
+
+.userIcon {
+  margin-right: 8px;
+}
+
+.disabledLabel {
+  color: var(--wpp-grey-color-500);
+}

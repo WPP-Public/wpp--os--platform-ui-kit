@@ -1,0 +1,80 @@
+/**
+  * @prop --wpp-label-tooltip-width:
+  * @prop --wpp-label-optional-text-color:
+  * @prop --wpp-label-optional-margin:
+  * @prop --wpp-label-text-color:
+  * @prop --wpp-label-text-color-disabled:
+  * @prop --wpp-label-info-wrapper-margin:
+  * @prop --wpp-label-icon-color:
+  * @prop --wpp-label-s-strong-text-color:
+  * @prop --wpp-label-s-body-text-color:
+*/
+
+:host {
+  --label-tooltip-width: var(--wpp-label-tooltip-width, 100%);
+  --label-optional-text-color: var(--wpp-label-optional-text-color, var(--wpp-text-color-info));
+  --label-optional-margin: var(--wpp-label-optional-margin, 0 0 0 4px);
+  --label-text-color: var(--wpp-label-text-color, var(--wpp-text-color));
+  --label-text-color-disabled: var(--wpp-label-text-color-disabled, var(--wpp-text-color-disabled));
+  --label-info-wrapper-margin: var(--wpp-label-info-wrapper-margin, 0 4px 0 0);
+  --label-icon-color: var(--wpp-label-icon-color, var(--wpp-icon-color));
+
+  --label-s-strong-text-color: var(--wpp-label-s-strong-text-color, var(--wpp-text-color-info));
+  --label-s-body-text-color: var(--wpp-label-s-body-text-color, var(--wpp-text-color));
+
+  --icon-first-border-color-focus: var(--wpp-icon-first-border-color-focus, var(--wpp-grey-color-000));
+  --icon-second-border-color-focus: var(--wpp-icon-second-border-color-focus, var(--wpp-brand-color));
+
+  display: inline-flex;
+  align-items: center;
+
+  .info-wrapper {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+
+    .optional {
+      color: var(--label-optional-text-color);
+      margin: var(--label-optional-margin);
+
+    }
+
+    &.with-icon {
+      margin: var(--label-info-wrapper-margin);
+    }
+  }
+
+  .tooltip {
+    --tooltip-width: var(--label-tooltip-width);
+  }
+
+  .icon {
+    @include slotWrapper;
+
+    display: inline-flex;
+    color: var(--label-icon-color);
+    cursor: pointer;
+    outline: none;
+    border-radius: 50%;
+
+    @include tabFocus(var(--checkbox-first-border-color-focus), var(--checkbox-second-border-color-focus));
+  }
+
+  &:host(.s-strong) {
+    .info-wrapper {
+      .text {
+        color: var(--label-s-strong-text-color)
+      }
+    }
+  }
+
+  &:host(.disabled) {
+    pointer-events: none;
+
+    .info-wrapper {
+      .text, .optional {
+        color: var(--label-text-color-disabled)
+      }
+    }
+  }
+}

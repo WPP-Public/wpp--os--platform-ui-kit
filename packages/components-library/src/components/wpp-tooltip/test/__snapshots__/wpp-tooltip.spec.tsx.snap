@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-tooltip should render component 1`] = `
+<wpp-tooltip class="wpp-tooltip" dropdown-width="auto" role="presentation">
+  <mock:shadow-root>
+    <div class="anchor" part="anchor">
+      <slot part="inner"></slot>
+    </div>
+    <div class="content-wrapper">
+      <wpp-internal-tooltip externalclass="" theme="dark" wordbreak="break-word"></wpp-internal-tooltip>
+    </div>
+  </mock:shadow-root>
+</wpp-tooltip>
+`;
+
+exports[`wpp-tooltip should render component with error state 1`] = `
+<wpp-tooltip class="wpp-tooltip" dropdown-width="auto" error="" role="presentation" text="Tooltip">
+  <mock:shadow-root>
+    <div class="anchor" part="anchor">
+      <slot part="inner"></slot>
+    </div>
+    <div class="content-wrapper">
+      <wpp-internal-tooltip error="" externalclass="" text="Tooltip" theme="dark" wordbreak="break-word"></wpp-internal-tooltip>
+    </div>
+  </mock:shadow-root>
+</wpp-tooltip>
+`;
+
+exports[`wpp-tooltip should render component with right placement 1`] = `
+<wpp-tooltip class="wpp-tooltip" dropdown-width="auto" error="" placement="right" role="presentation" text="Tooltip">
+  <mock:shadow-root>
+    <div class="anchor" part="anchor">
+      <slot part="inner"></slot>
+    </div>
+    <div class="content-wrapper">
+      <wpp-internal-tooltip error="" externalclass="" text="Tooltip" theme="dark" wordbreak="break-word"></wpp-internal-tooltip>
+    </div>
+  </mock:shadow-root>
+</wpp-tooltip>
+`;
+
+exports[`wpp-tooltip should render component with text and value 1`] = `
+<wpp-tooltip class="wpp-tooltip" dropdown-width="auto" role="presentation" text="Tooltip" value="100">
+  <mock:shadow-root>
+    <div class="anchor" part="anchor">
+      <slot part="inner"></slot>
+    </div>
+    <div class="content-wrapper">
+      <wpp-internal-tooltip externalclass="" text="Tooltip" theme="dark" value="100" wordbreak="break-word"></wpp-internal-tooltip>
+    </div>
+  </mock:shadow-root>
+</wpp-tooltip>
+`;

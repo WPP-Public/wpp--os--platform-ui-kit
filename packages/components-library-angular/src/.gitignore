@@ -1,0 +1,6 @@
+*
+!/.gitignore
+
+# Whitelisted Files
+!/components-library.module.ts
+!/index.ts

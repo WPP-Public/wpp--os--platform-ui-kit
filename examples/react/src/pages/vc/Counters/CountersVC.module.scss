@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+}
+
+.counters {
+  margin-right: 15px;
+}
+
+.info {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.counter {
+  margin-bottom: 10px;
+}
+
+.message {
+  color: var(--wpp-dataviz-color-cat-dark-7);
+}

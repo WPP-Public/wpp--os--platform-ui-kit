@@ -1,0 +1,13 @@
+<div class="actions-cell">
+  <wpp-menu-context [dropdownConfig]='dropdownConfig'>
+    <wpp-action-button slot="trigger-button">
+      <wpp-icon-more direction="horizontal" color="var(--wpp-color-primary-500)"></wpp-icon-more>
+    </wpp-action-button>
+    <wpp-list-item class="centered" (wppChangeListItem)='handleEditClick()'>
+      <p slot="label">Edit</p>
+    </wpp-list-item>
+    <wpp-list-item class="centered" (wppChangeListItem)='handleDeleteClick()'>
+      <p slot="label">Delete</p>
+    </wpp-list-item>
+  </wpp-menu-context>
+</div>

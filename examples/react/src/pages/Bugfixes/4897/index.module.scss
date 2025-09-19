@@ -1,0 +1,48 @@
+.page {
+  .pageSection {
+    margin-bottom: 100px;
+
+    .buttons {
+      margin-bottom: 20px;
+
+      & > * {
+        margin-right: 10px;
+        margin-bottom: 10px;
+      }
+    }
+
+    .elementContainer {
+      display: flex;
+      flex-direction: column;
+      margin-top: 10px;
+
+      & > *:first-child {
+        margin-bottom: 20px;
+      }
+
+      .item p {
+        margin: 0;
+      }
+
+      .item {
+        width: 500px;
+        margin-right: 20px;
+      }
+
+      .infiniteItem {
+        width: 500px;
+        margin-right: 20px;
+        margin-bottom: 40px;
+      }
+
+      .text {
+        width: 200px;
+        margin-right: 20px;
+      }
+
+      .text p {
+        margin: 0;
+      }
+    }
+  }
+}

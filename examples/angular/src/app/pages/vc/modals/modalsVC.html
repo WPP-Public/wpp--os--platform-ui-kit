@@ -1,0 +1,419 @@
+<div>
+  <wpp-button (click)="handleOpenModal()">Open Modal (Custom Width)</wpp-button>
+  <wpp-modal
+    class="custom"
+    [open]="isModalOpen"
+    (wppModalClose)="handleCloseReasonForModal()"
+    (wppModalOpen)="handleOpenModal()"
+    (wppModalCloseStart)="openCloseTransitionEvent($event, 'Close animation start!')"
+    (wppModalCloseComplete)="openCloseTransitionEvent($event, 'Close animation complete!')"
+    (wppModalOpenStart)="openCloseTransitionEvent($event, 'Open animation start!')"
+    (wppModalOpenComplete)="openCloseTransitionEvent($event, 'Open animation complete!')"
+  >
+    <div slot="header">Modal Title</div>
+    <div slot="body">
+      <p>Modal content</p>
+
+      <wpp-select
+        placeholder="Placeholder"
+        [list]="LIST"
+        [value]="selectValue"
+        (wppChange)="handleSelectChange($event)"
+      >
+      </wpp-select>
+    </div>
+    <div class="modalActions" slot="actions">
+      <wpp-button variant="secondary" (click)="handleCloseModal()"> Cancel </wpp-button>
+      <wpp-button variant="destructive" class="margin" (click)="handleActionModal()"> Confirm </wpp-button>
+    </div>
+  </wpp-modal>
+
+  <wpp-button class="margin" (click)="handleOpenSideModal()"> Open Side Modal (S Size) </wpp-button>
+  <wpp-side-modal
+    [open]="isSideModalOpen"
+    (wppSideModalClose)="handleCloseReasonForSideModal()"
+    (wppSideModalOpen)="handleOpenSideModal()"
+    (wppSideModalCloseStart)="openCloseTransitionEvent($event, 'Close animation start!')"
+    (wppSideModalCloseComplete)="openCloseTransitionEvent($event, 'Close animation complete!')"
+    (wppSideModalOpenStart)="openCloseTransitionEvent($event, 'Open animation start!')"
+    (wppSideModalOpenComplete)="openCloseTransitionEvent($event, 'Open animation complete!')"
+    size="s"
+  >
+    <div slot="header">First Page Title</div>
+    <div slot="body">
+      <wpp-inline-message
+        size="m"
+        message="Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum"
+        type="information"
+      ></wpp-inline-message>
+      <wpp-avatar
+        size="m"
+        name="John Doe"
+        with-tooltip
+        [tooltipConfig]="tooltipConfig"
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8huvp8b3bXl2v8ac6MSqz0Uk3zqauY2ttIA&usqp=CAU"
+      ></wpp-avatar>
+      <p>First Page Body</p>
+      <wpp-select
+        placeholder="Placeholder"
+        [list]="LIST"
+        [value]="selectValue"
+        (wppChange)="handleSelectChange($event)"
+      >
+      </wpp-select>
+      <wpp-textarea-input
+        placeholder="Enter text"
+        value="Regular Text Area with Limit"
+        characters-limit="10"
+        required
+        [labelConfig]="getLabelConfig('Regular Text Area with Limit')"
+      ></wpp-textarea-input>
+      <wpp-file-upload></wpp-file-upload>
+    </div>
+    <div class="modalActions" slot="actions">
+      <wpp-button variant="secondary" (click)="handleCloseSideModal()" class="button"> Cancel </wpp-button>
+      <wpp-button variant="destructive" class="margin" (click)="handleNextPage()"> Next Page </wpp-button>
+    </div>
+  </wpp-side-modal>
+</div>
+
+<div class="container">
+  <wpp-button (click)="handleOpenRegularModal()" class="button" data-testid="regular-modal">
+    Open Regular Modal (M Size)
+  </wpp-button>
+  <wpp-modal
+    [open]="isRegularModalOpen"
+    (wppModalClose)="handleCloseRegularModal()"
+    (wppModalOpen)="handleOpenRegularModal()"
+    size="m"
+    data-testid="regular-modal-size-m"
+  >
+    <div slot="header">Regular Modal</div>
+    <div slot="body">
+      <p style="padding: 100px 0">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+      <wpp-select
+        placeholder="Placeholder"
+        [list]="LIST"
+        [value]="selectValue"
+        (wppChange)="handleSelectChange($event)"
+      >
+      </wpp-select>
+    </div>
+    <div slot="actions" class="buttons">
+      <wpp-button variant="secondary" class="button" (click)="handleCloseRegularModal()"> Cancel </wpp-button>
+      <wpp-button variant="primary">Confirm</wpp-button>
+    </div>
+  </wpp-modal>
+
+  <wpp-button (click)="handleOpenErrorModal()" class="button" data-testid="error-modal">
+    Open Error Modal (S Size)
+  </wpp-button>
+  <wpp-modal
+    [open]="isErrorModalOpen"
+    (wppModalClose)="handleCloseErrorModal()"
+    (wppModalOpen)="handleOpenErrorModal()"
+    size="s"
+  >
+    <div class="modal-header" slot="header">
+      <span class="text">This is an error message</span>
+    </div>
+    <div slot="body">Lorem ipsum dolor sit amet, consectetur adipiscing elit</div>
+    <div slot="actions" class="buttons">
+      <wpp-button variant="secondary" class="button" (click)="handleCloseErrorModal()"> Cancel </wpp-button>
+      <wpp-button variant="destructive">Confirm</wpp-button>
+    </div>
+  </wpp-modal>
+</div>
+
+<div class="container">
+  <wpp-button (click)="handleOpenSideModalWithControls()" class="button" data-testid="side-modal-with-controls">
+    Side Modal with Controls (M Size)
+  </wpp-button>
+  <wpp-side-modal
+    [open]="isSideModalWithControlsOpen"
+    (wppSideModalClose)="handleCloseSideModalWithControls()"
+    (wppSideModalOpen)="handleOpenSideModalWithControls()"
+    size="m"
+    data-testid="side-modal-with-controls-m-size"
+  >
+    <div slot="header">Page Title</div>
+    <div slot="body">
+      Page Body
+      <wpp-file-upload></wpp-file-upload>
+      <wpp-select
+        placeholder="Placeholder"
+        [list]="LIST"
+        [value]="selectValue"
+        (wppChange)="handleSelectChange($event)"
+      >
+      </wpp-select>
+      <div class="main">
+        <div class="wrapper" [ngStyle]="{ height: '200px' }">
+          <div class="stepper">
+            <wpp-stepper [activeStep]="1">
+              <wpp-step>
+                <p slot="label" class="textSide">Step</p>
+              </wpp-step>
+              <wpp-step>
+                <p slot="label" class="textSide">Step</p>
+              </wpp-step>
+              <wpp-step>
+                <p slot="label" class="textSide">Step</p>
+              </wpp-step>
+            </wpp-stepper>
+          </div>
+          <div class="pages">
+            <div class="inner">
+              <div class="page" [ngStyle]="{ height: '200px' }">
+                <h3>Page 1</h3>
+                <wpp-radio class="marginSide" [labelConfig]="getLabelConfig('Option 1')" required></wpp-radio>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="buttonsSide">
+          <wpp-button>Previous Step</wpp-button>
+          <wpp-button>Next Step</wpp-button>
+        </div>
+      </div>
+    </div>
+    <div slot="actions" class="buttons">
+      <wpp-button variant="secondary" (click)="handleCloseSideModal()" class="button"> Cancel </wpp-button>
+      <wpp-button variant="primary">Select</wpp-button>
+    </div>
+  </wpp-side-modal>
+
+  <wpp-button (click)="handleOpenSideModalWithoutControls()" data-testid="side-modal-without-controls">
+    Side Modal w/o Controls (L Size)
+  </wpp-button>
+  <wpp-side-modal
+    [open]="isSideModalWithoutControlsOpen"
+    (wppSideModalClose)="handleCloseSideModalWithoutControls()"
+    (wppSideModalOpen)="handleOpenSideModalWithoutControls()"
+    size="l"
+  >
+    <div slot="header">Fourth Page Title</div>
+    <div slot="body">
+      <div class="message">
+        <wpp-avatar
+          class="avatar hover-avatar"
+          with-tooltip
+          size="s"
+          name="John Smith Junior"
+          color="var(--wpp-dataviz-color-cat-dark-9)"
+        ></wpp-avatar>
+        <wpp-card class="card">
+          <p>
+            Good morning team,
+            <br />
+            Will take a sick leave for today 🍋
+            <br />
+            <br />
+            🙏 Please water my plants, thanks!
+          </p>
+        </wpp-card>
+      </div>
+      <h3>File Upload</h3>
+      <wpp-file-upload></wpp-file-upload>
+    </div>
+  </wpp-side-modal>
+</div>
+
+<div class="container">
+  <wpp-button
+    (click)="handleOpenFullScreenModalWithControls()"
+    class="button"
+    data-testid="fullscreen-modal-with-controls-button"
+  >
+    Full Screen Modal with Controls
+  </wpp-button>
+  <wpp-full-screen-modal
+    [open]="isFullScreenModalWithControlsOpen"
+    (wppFullScreenModalClose)="handleCloseFullScreenModalWithControls()"
+    (wppFullScreenModalOpen)="handleOpenFullScreenModalWithControls()"
+    (wppFullScreenModalCloseStart)="openCloseTransitionEvent($event, 'Close animation start!')"
+    (wppFullScreenModalCloseComplete)="openCloseTransitionEvent($event, 'Close animation complete!')"
+    (wppFullScreenModalOpenStart)="openCloseTransitionEvent($event, 'Open animation start!')"
+    (wppFullScreenModalOpenComplete)="openCloseTransitionEvent($event, 'Open animation complete!')"
+    data-testid="fullscreen-side-modal-with-controls-m-size"
+  >
+    <div slot="header">Page Title</div>
+    <div slot="body">
+      Page Body
+      <wpp-file-upload></wpp-file-upload>
+      <wpp-select
+        placeholder="Placeholder"
+        [list]="LIST"
+        [value]="selectValue"
+        (wppChange)="handleSelectChange($event)"
+      >
+      </wpp-select>
+      <div class="main">
+        <div class="wrapper" [ngStyle]="{ height: '200px' }">
+          <div class="stepper">
+            <wpp-stepper [activeStep]="1">
+              <wpp-step>
+                <p slot="label" class="textSide">Step</p>
+              </wpp-step>
+              <wpp-step>
+                <p slot="label" class="textSide">Step</p>
+              </wpp-step>
+              <wpp-step>
+                <p slot="label" class="textSide">Step</p>
+              </wpp-step>
+            </wpp-stepper>
+          </div>
+          <div class="pages">
+            <div class="inner">
+              <div class="page" [ngStyle]="{ height: '200px' }">
+                <h3>Page 1</h3>
+                <wpp-radio class="marginSide" [labelConfig]="getLabelConfig('Option 1')" required></wpp-radio>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="buttonsSide">
+          <wpp-button>Previous Step</wpp-button>
+          <wpp-button>Next Step</wpp-button>
+        </div>
+      </div>
+    </div>
+    <div slot="actions" class="buttons">
+      <wpp-button variant="secondary" (click)="handleCloseFullScreenModalWithControls()" class="button">
+        Cancel
+      </wpp-button>
+      <wpp-button variant="primary">Select</wpp-button>
+    </div>
+  </wpp-full-screen-modal>
+
+  <wpp-button
+    (click)="handleOpenFullScreenModalWithoutControls()"
+    data-testid="fullscreen-modal-without-controls-button"
+  >
+    Full Screen Modal w/o Controls
+  </wpp-button>
+  <wpp-full-screen-modal
+    [open]="isFullScreenModalWithoutControlsOpen"
+    (wppFullScreenModalClose)="handleCloseFullScreenModalWithoutControls()"
+    (wppFullScreenModalOpen)="handleOpenFullScreenModalWithoutControls()"
+  >
+    <div slot="header">Fourth Page Title</div>
+    <div slot="body">
+      <div class="message">
+        <wpp-avatar
+          class="avatar hover-avatar"
+          with-tooltip
+          size="s"
+          name="John Smith Junior"
+          color="var(--wpp-dataviz-color-cat-dark-9)"
+        ></wpp-avatar>
+        <wpp-card class="card">
+          <p>
+            Good morning team,
+            <br />
+            Will take a sick leave for today 🍋
+            <br />
+            <br />
+            🙏 Please water my plants, thanks!
+          </p>
+        </wpp-card>
+      </div>
+      <h3>File Upload</h3>
+      <wpp-file-upload></wpp-file-upload>
+    </div>
+  </wpp-full-screen-modal>
+</div>
+<div class="actionsContainer">
+  <wpp-typography class="sectionTitle" type="xl-heading"> Side Modal with new property `actionsConfig` </wpp-typography>
+
+  <wpp-button
+    (click)="handleOpenSideModalWithActionsConfig()"
+    class="button"
+    data-testid="side-modal-with-actionsconfig"
+  >
+    Side Modal with ActionsConfig (New Example)
+  </wpp-button>
+
+  <form id="test-form">
+    <wpp-side-modal
+      [open]="isSideModalWithActionsConfigOpen"
+      (wppSideModalClose)="handleCloseSideModalWithActionsConfig()"
+      (wppSideModalOpen)="handleOpenSideModalWithActionsConfig()"
+      size="m"
+      [actionsConfig]="getActionsConfig()"
+      (actionClick)="handleActionClick($event)"
+    >
+      <div slot="header">Fifth Page Title</div>
+      <div slot="body">
+        <p>This is the content of the fifth page, used to demonstrate the <code>actionsConfig</code> feature.</p>
+      </div>
+    </wpp-side-modal>
+  </form>
+
+  <div class="actionsSection">
+    <wpp-button (click)="handleChangeLoading()" class="actionItem"> Trigger loading in buttons </wpp-button>
+    <wpp-button (click)="handleChangeDisabled()" class="actionItem">
+      {{disabled ? 'Enable' : 'Disable'}} buttons
+    </wpp-button>
+  </div>
+
+  <div class="configurations">
+    <wpp-typography class="sectionTitle" type="xl-heading">
+      Setting different button configurations to the side-modal in order to test restrictions
+    </wpp-typography>
+    <div class="section">
+      <wpp-typography class="subTitle" type="xl-heading"> Case 01 </wpp-typography>
+
+      <div class="sectionContent">
+        <wpp-button (click)="handleChangeSelectedCase(1)" class="sectionSetBtn"> Set configuration to: </wpp-button>
+
+        <div class="btnsContainer">
+          <wpp-button variant="primary" class="btnItem"> Submit </wpp-button>
+        </div>
+      </div>
+
+      <wpp-divider></wpp-divider>
+    </div>
+
+    <div class="section">
+      <wpp-typography class="subTitle" type="xl-heading"> Case 02 </wpp-typography>
+
+      <div class="sectionContent">
+        <wpp-button (click)="handleChangeSelectedCase(2)" class="sectionSetBtn"> Set configuration to: </wpp-button>
+
+        <div class="btnsContainer">
+          <wpp-button variant="secondary" class="btnItem"> Close </wpp-button>
+          <wpp-button class="btnItem">Submit</wpp-button>
+        </div>
+      </div>
+
+      <wpp-divider></wpp-divider>
+    </div>
+
+    <div class="section">
+      <wpp-typography class="subTitle" type="xl-heading"> Case 03 </wpp-typography>
+
+      <div class="sectionContent">
+        <wpp-button (click)="handleChangeSelectedCase(3)" class="sectionSetBtn"> Set configuration to: </wpp-button>
+
+        <div class="btnsContainer">
+          <wpp-action-button variant="destructive">
+            <wpp-icon-remove-circle slot="icon-start"></wpp-icon-remove-circle>
+            Remove
+          </wpp-action-button>
+          <wpp-button variant="secondary" class="btnItem"> Close </wpp-button>
+          <wpp-button class="btnItem">Submit</wpp-button>
+        </div>
+      </div>
+
+      <wpp-divider></wpp-divider>
+    </div>
+  </div>
+</div>
+<wpp-toast
+  class="withMargin"
+  header="Info Header"
+  message="Info Message Text"
+  type="information"
+  duration="60000"
+></wpp-toast>

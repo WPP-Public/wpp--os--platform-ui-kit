@@ -1,0 +1,37 @@
+.container {
+  width: 100%;
+  padding: 20px;
+}
+
+.cardSkeleton {
+  width: 260px;
+  padding: 20px;
+}
+
+.tableSkeleton {
+  width: 100%;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.skeletonRow {
+  display: flex;
+  gap: 40px;
+}
+
+/* Custom Layout Styles */
+.customLayout {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  padding: 20px;
+}
+
+.customLayoutText {
+  flex: 1;
+}

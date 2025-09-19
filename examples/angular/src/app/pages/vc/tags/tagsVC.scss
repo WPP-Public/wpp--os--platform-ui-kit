@@ -1,0 +1,25 @@
+.item {
+  margin-right: 10px;
+}
+
+.custom1 {
+  --wpp-tag-positive-bg-color: var(--wpp-dataviz-color-cat-light-1);
+  --wpp-tag-positive-color: var(--wpp-dataviz-color-cat-dark-1);
+  --wpp-tag-negative-bg-color: var(--wpp-dataviz-color-cat-light-2);
+  --wpp-tag-negative-color: var(--wpp-dataviz-color-cat-dark-2);
+  --wpp-tag-neutral-bg-color: var(--wpp-dataviz-color-cat-light-3);
+  --wpp-tag-neutral-color: var(--wpp-dataviz-color-cat-dark-3);
+  --wpp-tag-warning-bg-color: var(--wpp-dataviz-color-cat-light-4);
+  --wpp-tag-warning-color: var(--wpp-dataviz-color-cat-dark-4);
+}
+
+.custom2 {
+  --wpp-tag-positive-bg-color: var(--wpp-dataviz-color-cat-light-5);
+  --wpp-tag-positive-color: var(--wpp-dataviz-color-cat-dark-5);
+  --wpp-tag-warning-bg-color: var(--wpp-dataviz-color-cat-light-6);
+  --wpp-tag-warning-color: var(--wpp-dataviz-color-cat-dark-6);
+  --wpp-tag-neutral-bg-color: var(--wpp-dataviz-color-cat-light-7);
+  --wpp-tag-neutral-color: var(--wpp-dataviz-color-cat-dark-7);
+  --wpp-tag-negative-bg-color: var(--wpp-dataviz-color-cat-light-9);
+  --wpp-tag-negative-color: var(--wpp-dataviz-color-cat-dark-9);
+}

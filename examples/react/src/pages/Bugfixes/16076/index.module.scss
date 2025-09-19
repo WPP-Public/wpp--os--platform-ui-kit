@@ -1,0 +1,58 @@
+.page {
+  min-height: 150vh;
+
+  .pageSection {
+    margin-bottom: 100px;
+
+    .btnsContainer {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+
+      .blurBtn {
+        margin: 0 30px;
+      }
+    }
+  }
+
+  .item p {
+    margin: 0;
+  }
+
+  .item {
+    width: 500px;
+    margin-right: 20px;
+  }
+
+  .text {
+    width: 200px;
+    margin-right: 20px;
+  }
+
+  .text p {
+    margin: 0;
+  }
+
+  .accordion {
+    width: 300px;
+    margin-top: 30px;
+    margin-left: 15px;
+  }
+
+  .top {
+    width: 200px;
+    margin-top: 800px;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .flexRow {
+    display: flex;
+    flex-direction: row;
+    min-height: 480px;
+    margin-bottom: 16px;
+  }
+}

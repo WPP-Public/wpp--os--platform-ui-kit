@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-textarea-input renders component 1`] = `
+<wpp-textarea-input class="wpp-textarea-input wpp-textarea-wrapper" exportparts="label, textarea, message-wrapper, message, limit-wrapper, limit-label, limit-text">
+  <mock:shadow-root><textarea part="textarea"></textarea>
+  </mock:shadow-root>
+</wpp-textarea-input>
+`;
+
+exports[`wpp-textarea-input renders component with characters-limit and warning text messages 1`] = `
+<wpp-textarea-input characters-limit="40" class="wpp-textarea-input wpp-textarea-wrapper" error-threshold="25" exportparts="label, textarea, message-wrapper, message, limit-wrapper, limit-label, limit-text" message="Warning message" message-type="warning" warning-threshold="30">
+  <mock:shadow-root><textarea class="warning" part="textarea"></textarea>
+    <div class="messages-wrapper" part="message-wrapper">
+      <wpp-inline-message class="wpp-inline-message" exportparts="wrapper, message-icon, message, message-block" part="message">
+        <mock:shadow-root>
+          <div class="inline-message-wrapper size-s warning-message" part="wrapper">
+            <div class="message-block tooltip-maxlength-auto" part="message-block">
+              <wpp-icon-warning class="left-icon" part="message-icon" role="presentation"></wpp-icon-warning>
+              <span class="message" part="message">
+                Warning message
+              </span>
+            </div>
+          </div>
+        </mock:shadow-root>
+      </wpp-inline-message>
+      <div class="characters-limit" data-testid="char-entered-label" part="limit-wrapper">
+        <wpp-typography part="limit-label" tag="span" type="xs-body">
+          Characters:
+        </wpp-typography>
+        <wpp-typography class="entered-characters" part="limit-text" tag="span" type="xs-strong">
+          0/40
+        </wpp-typography>
+      </div>
+    </div>
+  </mock:shadow-root>
+</wpp-textarea-input>
+`;
+
+exports[`wpp-textarea-input renders component with characters-limit message 1`] = `
+<wpp-textarea-input characters-limit="40" class="wpp-textarea-input wpp-textarea-wrapper" error-threshold="25" exportparts="label, textarea, message-wrapper, message, limit-wrapper, limit-label, limit-text" warning-threshold="30">
+  <mock:shadow-root><textarea part="textarea"></textarea>
+    <div class="messages-wrapper without-text-message" part="message-wrapper">
+      <div class="characters-limit" data-testid="char-entered-label" part="limit-wrapper">
+        <wpp-typography part="limit-label" tag="span" type="xs-body">
+          Characters:
+        </wpp-typography>
+        <wpp-typography class="entered-characters" part="limit-text" tag="span" type="xs-strong">
+          0/40
+        </wpp-typography>
+      </div>
+    </div>
+  </mock:shadow-root>
+</wpp-textarea-input>
+`;
+
+exports[`wpp-textarea-input renders component with error message and label, icon and tooltip description 1`] = `
+<wpp-textarea-input class="wpp-textarea-input wpp-textarea-wrapper" exportparts="label, textarea, message-wrapper, message, limit-wrapper, limit-label, limit-text" message-type="warning">
+  <mock:shadow-root>
+    <wpp-label class="label wpp-label" exportparts="wrapper, content, icon" part="label">
+      <label class="internal-label-wrapper" part="wrapper">
+        <wpp-internal-label class="s-strong wpp-internal-label" exportparts="info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" part="content">
+          <mock:shadow-root>
+            <div class="info-wrapper with-icon" part="info-wrapper" role="presentation">
+              <wpp-typography class="text" part="text" type="s-strong">
+                Test label
+              </wpp-typography>
+              <wpp-typography class="optional" part="optional-text" type="s-body">
+                (Optick)
+              </wpp-typography>
+            </div>
+            <wpp-tooltip class="tooltip" part="tooltip" text="Your email will be used to send you a confirmation number">
+              <div aria-label="Show info" class="icon" part="icon-wrapper" role="button" tabindex="0">
+                <slot name="icon" part="icon"></slot>
+              </div>
+            </wpp-tooltip>
+          </mock:shadow-root>
+          <wpp-icon-mail-v3-1-1 part="icon" slot="icon"></wpp-icon-mail-v3-1-1>
+        </wpp-internal-label>
+      </label>
+    </wpp-label><textarea class="warning" part="textarea"></textarea>
+    <div class="messages-wrapper" part="message-wrapper">
+      <wpp-inline-message class="wpp-inline-message" exportparts="wrapper, message-icon, message, message-block" part="message">
+        <mock:shadow-root>
+          <div class="inline-message-wrapper size-s warning-message" part="wrapper">
+            <div class="message-block tooltip-maxlength-auto" part="message-block">
+              <wpp-icon-warning class="left-icon" part="message-icon" role="presentation"></wpp-icon-warning>
+              <span class="message" part="message">
+                warning message
+              </span>
+            </div>
+          </div>
+        </mock:shadow-root>
+      </wpp-inline-message>
+    </div>
+  </mock:shadow-root>
+</wpp-textarea-input>
+`;

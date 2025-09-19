@@ -1,0 +1,21 @@
+<h1>Load More</h1>
+<div class="container">
+  <div class="load-more">
+    <h3>with progress bar</h3>
+    <wpp-load-more [totalItems]="100" [itemsLoaded]="itemsLoaded" [showProgressBar]="true" [loading]="loading"
+      [incrementBy]="incrementBy" (wppClickLoadMore)="handleLoadMore($event)">
+    </wpp-load-more>
+  </div>
+
+  <div class="load-more">
+    <h3>without progress bar</h3>
+    <wpp-load-more [totalItems]="100" [itemsLoaded]="50">
+    </wpp-load-more>
+  </div>
+
+  <div class="load-more">
+    <h3>Disabled</h3>
+    <wpp-load-more [totalItems]="100" [showProgressBar]="true" [disabled]="true" [itemsLoaded]="50">
+    </wpp-load-more>
+  </div>
+</div>

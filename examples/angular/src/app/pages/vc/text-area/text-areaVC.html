@@ -1,0 +1,97 @@
+<div>
+  <h2 class="title">Text areas</h2>
+  <div class="inputs" data-testid="text-area-inputs">
+    <wpp-textarea-input
+      placeholder="Enter text"
+      name="asd"
+      characters-limit="10"
+      warning-threshold="5"
+      data-testid="regular-limited-text-area"
+      required
+      auto-focus
+      [labelConfig]="labelConfig"
+    ></wpp-textarea-input>
+
+    <wpp-textarea-input
+      name="wpp-text-area"
+      placeholder="Enter text"
+      [labelConfig]="getLabelConfig('Regular Text Area w/o Limit')"
+      warning-threshold="5"
+      data-testid="regular-limitless-text-area"
+      required
+    ></wpp-textarea-input>
+
+    <wpp-textarea-input
+      name="wpp-text-area"
+      placeholder="Enter text"
+      [labelConfig]="getLabelConfig('Disabled Regular Text Area')"
+      disabled
+      warning-threshold="5"
+      data-testid="disabled-limitless-text-area"
+      required
+    ></wpp-textarea-input>
+
+    <wpp-textarea-input
+      name="wpp-text-area"
+      placeholder="Enter text"
+      [labelConfig]="getLabelConfig('Limited Text Area with Error')"
+      warning-threshold="5"
+      characters-limit="10"
+      maxMessageLength="120"
+      message-type="error"
+      [message]="messageText"
+      data-testid="limited-error-text-area"
+      required
+    ></wpp-textarea-input>
+
+    <wpp-textarea-input
+      name="wpp-text-area"
+      placeholder="Enter text"
+      [labelConfig]="getLabelConfig('Limitless Text Area with Error')"
+      warning-threshold="5"
+      maxMessageLength="120"
+      message-type="error"
+      [message]="messageText"
+      data-testid="limitless-error-text-area"
+      required
+    ></wpp-textarea-input>
+
+    <wpp-textarea-input
+      name="wpp-text-area"
+      placeholder="Enter text"
+      [labelConfig]="getLabelConfig('Limitless Text Area with Warning')"
+      warning-threshold="5"
+      maxMessageLength="120"
+      message-type="warning"
+      [message]="messageText"
+      data-testid="limitless-warning-text-area"
+      required
+    ></wpp-textarea-input>
+
+    <wpp-textarea-input
+      name="wpp-text-area"
+      [labelConfig]="getLabelConfig('Limited Text Area with Warning')"
+      warning-threshold="5"
+      characters-limit="10"
+      maxMessageLength="120"
+      message-type="warning"
+      [message]="messageText"
+      data-testid="limited-warning-text-area"
+      required
+    ></wpp-textarea-input>
+
+    <wpp-textarea-input
+      placeholder="Enter text"
+      [labelConfig]="getLabelConfig('All In Text Area')"
+      characters-limit="10"
+      disabled
+      warning-threshold="5"
+      maxMessageLength="120"
+      message-type="error"
+      name="all-in-text-area"
+      value="Test text"
+      [message]="messageText"
+      data-testid="all-in-text-area"
+    ></wpp-textarea-input>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+<div>
+  <div>
+    <h3 data-testid="test-label">Menu Context Test</h3>
+    <wpp-menu-context
+      [dropdownConfig]="dropdownConfig"
+      [appendToListWrapper]="true"
+      data-testid="functional-menu-context"
+    >
+      <wpp-button slot="trigger-element" data-testid="context-trigger-button"> Click me </wpp-button>
+      <div>
+        <wpp-list-item data-testid="item-with-left-icon">
+          <wpp-icon-plus slot="left"></wpp-icon-plus>
+          <p slot="label">Lorem ipsum dolor sit amet, consectetur</p>
+        </wpp-list-item>
+        <wpp-list-item data-testid="item-with-right-icon">
+          <p slot="label">Pellentesque venenatis eget diam sit amet dictum</p>
+          <wpp-icon-cross slot="right"></wpp-icon-cross>
+        </wpp-list-item>
+        <wpp-menu-context [appendToListWrapper]="true">
+          <wpp-list-item slot="trigger-element" [isExtended]="true" data-testid="extendable-item">
+            <p slot="label">Extendable Item</p>
+          </wpp-list-item>
+          <div>
+            <wpp-menu-context [appendToListWrapper]="true">
+              <wpp-list-item slot="trigger-element" [isExtended]="true">
+                <p slot="label">SubItem 1</p>
+              </wpp-list-item>
+              <div>
+                <wpp-list-item>
+                  <p slot="label">SubItem 2</p>
+                </wpp-list-item>
+                <wpp-list-item>
+                  <p slot="label">SubItem 3</p>
+                </wpp-list-item>
+                <wpp-list-item>
+                  <p slot="label">SubItem 3</p>
+                </wpp-list-item>
+                <wpp-list-item>
+                  <p slot="label">SubItem 3</p>
+                </wpp-list-item>
+                <wpp-list-item>
+                  <p slot="label">SubItem 3</p>
+                </wpp-list-item>
+              </div>
+            </wpp-menu-context>
+            <wpp-list-item disabled data-testid="disabled-item">
+              <p slot="label">SubItem 2</p>
+            </wpp-list-item>
+            <wpp-list-item data-testid="regular-nested-item">
+              <p slot="label">SubItem 3</p>
+            </wpp-list-item>
+            <wpp-list-item data-testid="nested-item-left-icon">
+              <wpp-icon-plus slot="left"></wpp-icon-plus>
+              <p slot="label">SubItem 4</p>
+            </wpp-list-item>
+            <wpp-list-item data-testid="nested-item-right-icon">
+              <p slot="label">SubItem 5</p>
+              <wpp-icon-cross slot="right"></wpp-icon-cross>
+            </wpp-list-item>
+          </div>
+        </wpp-menu-context>
+        <wpp-list-item data-testid="regular-item">
+          <p slot="label">Nulla sit amet bibendum augue curabitur non erat purus</p>
+        </wpp-list-item>
+      </div>
+    </wpp-menu-context>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-skeleton renders component 1`] = `
+<wpp-skeleton class="wpp-animated wpp-rectangle wpp-skeleton">
+  <mock:shadow-root></mock:shadow-root>
+</wpp-skeleton>
+`;
+
+exports[`wpp-skeleton renders component with custom width and height 1`] = `
+<wpp-skeleton class="wpp-animated wpp-rectangle wpp-skeleton" height="99px" width="99px" style="--skeleton-width: 99px; --skeleton-height: 99px;">
+  <mock:shadow-root></mock:shadow-root>
+</wpp-skeleton>
+`;

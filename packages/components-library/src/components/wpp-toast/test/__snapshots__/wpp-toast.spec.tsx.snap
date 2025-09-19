@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-toast renders component 1`] = `
+<wpp-toast class="wpp-toast wpp-toast-wrapper wpp-visible wpp-with-multiple-message-lines" exportparts="body, message, body, info-wrapper, header, message, actions, action-button, icon-start, icon-wrapper" role="alert" style="--mt-show-animation-duration: 0.5s; --mt-hide-animation-duration: 0.3333333333333333s; --mt-max-message-lines: 3;">
+  <mock:shadow-root>
+    <div class="actions" part="actions">
+      <wpp-action-button part="action-button" variant="inverted">
+        <wpp-icon-cross part="icon-start" slot="icon-start"></wpp-icon-cross>
+      </wpp-action-button>
+    </div>
+  </mock:shadow-root>
+</wpp-toast>
+`;

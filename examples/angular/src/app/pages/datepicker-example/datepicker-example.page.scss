@@ -1,0 +1,39 @@
+.datepicker {
+  margin-right: 30px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+.belowCalendar {
+  margin-top: 310px;
+}
+
+.row,
+.lastRow,
+.customRow {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.rowPresets,
+.lastRow {
+  height: 250px;
+}
+
+.customRow {
+  flex-direction: column;
+  margin-bottom: 200px;
+
+  .customRowContent {
+    display: flex;
+    flex-wrap: wrap;
+
+    .datepicker {
+      width: 280px;
+    }
+  }
+}

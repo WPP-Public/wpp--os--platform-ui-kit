@@ -1,0 +1,58 @@
+tooltipMargin = 8px
+
+.ql-tooltip
+  min-width: 250px
+  .ql-tooltip-wrapper
+    &::before
+      content: "Visit URL:"
+      line-height: 32px
+      white-space: nowrap
+    display: flex
+    flex-direction: column
+    flex-wrap: nowrap
+
+    a.ql-preview
+      max-width: 100%
+      word-break: break-all
+      overflow-wrap: anywhere
+      line-height: 32px
+
+    .ql-action-buttons
+      display: flex
+      flex-wrap: wrap
+      gap: tooltipMargin
+
+      .wpp-action-button
+        white-space: nowrap
+
+.ql-tooltip.ql-editing
+  .ql-tooltip-wrapper
+    flex-direction: row
+    gap: tooltipMargin
+    a.ql-preview,
+    .ql-action-buttons,
+    .ql-delete,
+    .ql-edit
+      display: none
+    [type="text"]
+      min-width: 180px
+    .ql-action.ql-save
+      white-space: nowrap
+
+.ql-tooltip:not(.ql-editing)
+  .ql-tooltip-wrapper
+    [type="text"],
+    .ql-save
+      display: none
+
+.ql-tooltip[data-mode=link]
+  .ql-tooltip-wrapper::before
+    content: "Enter link:"
+
+.ql-tooltip[data-mode=formula]
+  .ql-tooltip-wrapper::before
+    content: "Enter formula:"
+
+.ql-tooltip[data-mode=video]
+  .ql-tooltip-wrapper::before
+    content: "Enter video:"

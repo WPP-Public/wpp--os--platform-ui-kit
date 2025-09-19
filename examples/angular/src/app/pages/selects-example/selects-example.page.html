@@ -1,0 +1,156 @@
+<div class="container">
+  <div class="flexRow">
+    <div data-testid="left-column-selects">
+      <wpp-select
+        placeholder="Choose options"
+        type="multiple"
+        required
+        with-folder
+        with-search
+        [labelConfig]="getLabelConfig('Multiple Select with search')"
+        data-testid="focus-multiple-select"
+        auto-focus
+        (wppChange)="handleMultipleItems($event)"
+        class="item"
+        [value]="multipleItems"
+        name="My custom select"
+        [list]="SAMPLE_LIST_MULTIPLE"
+      >
+      </wpp-select>
+      <div class="reset">
+        <wpp-button variant="secondary" (click)="handleResetClick()" data-testid="reset-button"> Reset </wpp-button>
+      </div>
+
+      <wpp-accordion class="accordion" expanded text="Test Accordion">
+        <wpp-select
+          placeholder="Choose option"
+          required
+          type="multiple"
+          with-folder
+          with-search
+          [labelConfig]="getLabelConfig('Multiple Select')"
+          data-testid="select-in-accordion"
+          class="item"
+          name="My custom select 2"
+          [value]="multipleItems2"
+          (wppChange)="handleMultipleItems2($event)"
+          [list]="SAMPLE_LIST_MULTIPLE"
+        >
+        </wpp-select>
+      </wpp-accordion>
+
+      <app-custom-dropdown></app-custom-dropdown>
+
+      <wpp-select
+        type="multiple"
+        required
+        [labelConfig]="getLabelConfig('Select with top dropdown list')"
+        data-testid="multiple-top-dropdown-select"
+        class="top"
+        name="My custom select 3"
+        (wppChange)="handleMultipleItems($event)"
+        [value]="multipleItems"
+        [list]="SAMPLE_LIST_MULTIPLE"
+      >
+      </wpp-select>
+    </div>
+
+    <div data-testid="central-column-selects">
+      <wpp-select
+        placeholder="Choose options"
+        type="single"
+        required
+        with-search
+        [labelConfig]="getLabelConfig('Single Select with search')"
+        data-testid="single-select"
+        (wppChange)="handleSingleItems($event)"
+        class="item"
+        [value]="singleItems"
+        name="My custom select 4"
+        [list]="SAMPLE_LIST_2"
+      >
+      </wpp-select>
+
+      <wpp-accordion class="accordion" expanded text="Test Accordion" [ngStyle]="{ marginBottom: '80px' }">
+        <wpp-select
+          placeholder="Choose option"
+          required
+          type="single"
+          with-folder
+          with-search
+          [labelConfig]="getLabelConfig('Single Select')"
+          data-testid="single-select-in-accordion"
+          class="item"
+          (wppChange)="handleSingleItems($event)"
+          [value]="singleItems"
+          name="My custom select 5"
+          [list]="SAMPLE_LIST_2"
+        >
+        </wpp-select>
+      </wpp-accordion>
+
+      <wpp-select
+        required
+        [labelConfig]="getLabelConfig('Select with top dropdown list')"
+        data-testid="single-top-dropdown-select"
+        class="top"
+        name="My custom select 6"
+        [list]="SAMPLE_LIST_2"
+        (wppChange)="handleSingleItems($event)"
+        [value]="singleItems"
+      >
+      </wpp-select>
+    </div>
+
+    <div>
+      <div>
+        <h5>Text Select</h5>
+        <wpp-select
+          placeholder="Choose options"
+          type="text"
+          required
+          data-testid="text-select"
+          (wppChange)="handleTextItems($event)"
+          class="text"
+          [value]="textItems"
+          name="My custom select 7"
+          [list]="SAMPLE_LIST_1"
+        >
+        </wpp-select>
+      </div>
+
+      <div>
+        <wpp-accordion class="accordion" expanded text="Test Accordion">
+          <wpp-select
+            placeholder="Choose option"
+            required
+            type="text"
+            data-testid="text-select-in-accordion"
+            (wppChange)="handleTextItems($event)"
+            class="text"
+            [value]="textItems"
+            name="My custom select 8"
+            [list]="SAMPLE_LIST_1"
+          >
+          </wpp-select>
+        </wpp-accordion>
+      </div>
+
+      <div>
+        <h5 class="top">Text Select</h5>
+        <wpp-select
+          type="text"
+          required
+          placeholder="Choose option"
+          data-testid="text-top-dropdown-select"
+          name="My custom select 9"
+          [list]="SAMPLE_LIST_1"
+          (wppChange)="handleTextItems($event)"
+          class="text"
+          [value]="textItems"
+        >
+        </wpp-select>
+      </div>
+    </div>
+  </div>
+</div>

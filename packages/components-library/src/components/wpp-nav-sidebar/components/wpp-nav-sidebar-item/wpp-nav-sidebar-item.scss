@@ -1,0 +1,373 @@
+/**
+  * @prop --wpp-nav-sidebar-item-height:
+  * @prop --wpp-nav-sidebar-item-padding:
+  * @prop --wpp-nav-sidebar-item-without-icon-start-padding:
+  * @prop --wpp-nav-sidebar-item-margin:
+  * @prop --wpp-nav-sidebar-item-border-radius:
+  * @prop --wpp-nav-sidebar-item-label-paddings:
+  * @prop --wpp-nav-sidebar-item-label-text-color:
+  * @prop --wpp-nav-sidebar-item-label-text-color-hover:
+  * @prop --wpp-nav-sidebar-item-label-text-color-pressed:
+  * @prop --wpp-nav-sidebar-item-label-text-color-active:
+  * @prop --wpp-nav-sidebar-item-expanded-label-text-color:
+  * @prop --wpp-nav-sidebar-item-expanded-icon-start-color:
+  * @prop --wpp-nav-sidebar-item-submenu-width:
+  * @prop --wpp-nav-sidebar-item-submenu-paddings:
+  * @prop --wpp-nav-sidebar-item-submenu-label-margin:
+  * @prop --wpp-nav-sidebar-item-nested-label-text-color:
+  * @prop --wpp-nav-sidebar-item-nested-label-text-color-hover:
+  * @prop --wpp-nav-sidebar-item-nested-label-text-color-active:
+  * @prop --wpp-nav-sidebar-item-nested-label-text-color-selected:
+  * @prop --wpp-nav-sidebar-item-nested-label-text-color-selected-hover:
+  * @prop --wpp-nav-sidebar-item-nested-label-text-color-selected-active:
+  * @prop --wpp-nav-sidebar-item-nested-label-padding:
+  * @prop --wpp-nav-sidebar-item-group-title-margin:
+  * @prop --wpp-nav-sidebar-item-icons-color:
+  * @prop --wpp-nav-sidebar-item-icons-color-hover:
+  * @prop --wpp-nav-sidebar-item-icons-color-pressed:
+  * @prop --wpp-nav-sidebar-item-icons-active-color:
+  * @prop --wpp-nav-sidebar-item-icons-active-color-hover:
+  * @prop --wpp-nav-sidebar-item-icons-active-color-pressed:
+*/
+
+:host {
+  display: inline-flex;
+  flex-direction: column;
+  outline: none;
+  width: 100%;
+
+  --ns-item-height: var(--wpp-nav-sidebar-item-height, 32px);
+  --ns-item-padding: var(--wpp-nav-sidebar-item-padding, 0 10px);
+  --ns-item-margin: var(--wpp-nav-sidebar-item-margin, 8px 0 0 0);
+  --ns-item-border-radius: var(--wpp-nav-sidebar-item-border-radius, var(--wpp-border-radius-s));
+  --ns-item-label-paddings: var(--wpp-nav-sidebar-item-label-paddings, 8px 20px);
+  --ns-item-label-text-color: var(--wpp-nav-sidebar-item-label-text-color, var(--wpp-text-color-info));
+  --ns-item-label-text-color-hover: var(--wpp-nav-sidebar-item-label-text-color-hover, var(--wpp-text-color));
+  --ns-item-label-text-color-pressed: var(--wpp-nav-sidebar-item-label-text-color-pressed, var(--wpp-text-color));
+  --ns-item-label-text-color-active: var(--wpp-nav-sidebar-item-label-text-color-active, var(--wpp-text-color));
+  --ns-item-expanded-label-text-color: var(--wpp-nav-sidebar-item-expanded-label-text-color, var(--wpp-text-color));
+  --ns-item-expanded-icon-start-color: var(--wpp-nav-sidebar-item-expanded-icon-start-color, var(--wpp-text-color));
+  --ns-item-submenu-width: var(--wpp-nav-sidebar-item-submenu-width, 224px);
+  --ns-item-submenu-paddings: var(--wpp-nav-sidebar-item-submenu-paddings, 8px 18px);
+  --ns-item-submenu-label-margin: var(--wpp-nav-sidebar-item-submenu-label-margin, 8px 0 8px 20px);
+  --ns-item-nested-label-text-color: var(--wpp-nav-sidebar-item-nested-label-text-color, var(--wpp-text-color-info));
+  --ns-item-nested-label-text-color-hover: var(--wpp-nav-sidebar-item-nested-label-text-color-hover, var(--wpp-text-color));
+  --ns-item-nested-label-text-color-active: var(--wpp-nav-sidebar-item-nested-label-text-color-active, var(--wpp-text-color));
+  --ns-item-nested-label-text-color-selected: var(--wpp-nav-sidebar-item-nested-label-text-color-selected, var(--wpp-text-color));
+  --ns-item-nested-label-text-color-selected-hover: var(--wpp-nav-sidebar-item-nested-label-text-color-selected-hover, var(--wpp-text-color));
+  --ns-item-nested-label-text-color-selected-active: var(--wpp-nav-sidebar-item-nested-label-text-color-selected-active, var(--wpp-text-color));
+  --ns-item-nested-label-padding: var(--wpp-nav-sidebar-item-nested-label-padding, 0 0 0 20px);
+  --ns-item-group-title-margin: var(--wpp-nav-sidebar-item-group-title-margin, 16px 0 0 12px);
+  --ns-item-icons-color: var(--wpp-nav-sidebar-item-icons-color, var(--wpp-icon-color));
+  --ns-item-icons-color-hover: var(--wpp-nav-sidebar-item-icons-color-hover, var(--wpp-icon-color-hover));
+  --ns-item-icons-color-pressed: var(--wpp-nav-sidebar-item-icons-color-pressed, var(--wpp-icon-color-active));
+  --ns-item-icons-active-color: var(--wpp-nav-sidebar-item-icons-active-color, var(--wpp-grey-color-1000));
+  --ns-item-icons-active-color-hover: var(
+    --wpp-nav-sidebar-item-icons-active-color-hover,
+    var(--wpp-grey-color-1000)
+  );
+  --ns-item-icons-active-color-pressed: var(
+    --wpp-nav-sidebar-item-icons-active-color-pressed,
+    var(--wpp-grey-color-1000)
+  );
+  --ns-item-without-icon-start-padding: var(--wpp-nav-sidebar-item-without-icon-start-padding, 5px 12px);
+
+  --ns-item-start-icon-color-selected-idle: var(--wpp-nav-sidebar-item-start-icon-color-selected-idle, var(--wpp-grey-color-900));
+  --ns-item-start-icon-color-selected-active: var(--wpp-nav-sidebar-item-start-icon-color-selected-active, var(--wpp-grey-color-900));
+  --ns-item-start-icon-color-unselected-active: var(--wpp-nav-sidebar-item-start-icon-color-unselected-active, var(--wpp-grey-color-900));
+  --ns-item-start-icon-color-unselected-pressed: var(--wpp-nav-sidebar-item-start-icon-color-unselected-pressed, var(--wpp-grey-color-900));
+  --ns-item-start-icon-color-unselected-hover: var(--wpp-nav-sidebar-item-start-icon-color-unselected-hover, var(--wpp-grey-color-800));
+  --ns-item-start-icon-color-unselected: var(--wpp-nav-sidebar-item-start-icon-color-unselected, var(--wpp-grey-color-700));
+}
+
+@mixin setIconsColor($color) {
+  ::slotted([slot='icon-start']),
+  ::slotted([slot='icon-end']),
+  .slot-icon-start-fallback {
+    color: $color;
+  }
+}
+
+:host(:focus-visible) {
+  .item {
+    @include setIconsColor(var(--ns-item-icons-color-pressed));
+
+    background-color: var(--wpp-grey-color-300);
+
+    .label,
+    .nested-label {
+      color: var(--ns-item-label-text-color-active);
+    }
+
+    .label {
+      &.open-nested-label {
+        color: var(--ns-item-nested-label-text-color-selected-hover);
+      }
+    }
+
+    .extended-icon {
+      color: var(--ns-item-icons-color-hover);
+    }
+  }
+}
+
+.wpp-tooltip {
+  width: 100%;
+
+  &::part(anchor) {
+    display: block;
+    width: 100%;
+  }
+}
+
+.slot-divider-fallback {
+  margin: var(--ns-item-margin);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: var(--ns-item-height);
+  margin: var(--ns-item-margin);
+  padding: var(--ns-item-padding);
+  text-decoration: none;
+  border-radius: var(--ns-item-border-radius);
+  cursor: pointer;
+  gap: 8px;
+
+  .icon-end-wrapper {
+    margin-left: auto;
+  }
+
+  .icon-wrapper {
+    display: flex;
+  }
+
+  .extended-icon {
+    color: var(--ns-item-icons-color);
+  }
+
+  &.active {
+    background-color: var(--wpp-grey-color-300);
+
+    .label,
+    .nested-label {
+      color: var(--ns-item-label-text-color-active);
+    }
+
+    .label {
+      &.open-nested-label {
+        color: var(--ns-item-nested-label-text-color-selected);
+      }
+    }
+
+    @include setIconsColor(var(--ns-item-icons-active-color));
+
+    &:hover {
+      background-color: var(--wpp-grey-color-300);
+
+      .label,
+      .nested-label {
+        color: var(--ns-item-label-text-color-active);
+      }
+
+      .label {
+        &.open-nested-label {
+          color: var(--ns-item-nested-label-text-color-selected-hover);
+        }
+      }
+
+      .extended-icon {
+        color: var(--ns-item-icons-color);
+      }
+
+      @include setIconsColor(var(--ns-item-icons-active-color-hover));
+    }
+
+    &:active {
+      background-color: var(--wpp-grey-color-300);
+
+      .label,
+      .nested-label {
+        color: var(--ns-item-label-text-color-active);
+      }
+
+      .label {
+        &.open-nested-label {
+          color: var(--ns-item-nested-label-text-color-selected-active);
+        }
+      }
+    }
+
+    .extended-icon {
+      color: var(--ns-item-icons-color);
+    }
+
+    &.expanded {
+      ::slotted([slot='icon-start']) {
+        color: var(--ns-item-start-icon-color-selected-active);
+      }
+    }
+
+    @include setIconsColor(var(--ns-item-icons-active-color-pressed));
+
+    ::slotted([slot='icon-start']) {
+      color: var(--ns-item-start-icon-color-selected-idle);
+    }
+  }
+
+  &:hover {
+    background-color: var(--wpp-grey-color-200);
+
+    .label {
+      color: var(--ns-item-label-text-color-hover);
+
+      &.open-nested-label {
+        color: var(--ns-item-nested-label-text-color-hover);
+      }
+    }
+
+    .extended-icon {
+      color: var(--ns-item-icons-color-hover);
+    }
+
+    @include setIconsColor(var(--ns-item-icons-color-hover));
+
+    ::slotted([slot='icon-start']) {
+      color: var(--ns-item-start-icon-color-unselected-hover);
+    }
+  }
+
+  &:active {
+    background-color: var(--wpp-grey-color-300);
+
+    .label {
+      color: var(--ns-item-label-text-color-pressed);
+
+      &.open-nested-label {
+        color: var(--ns-item-nested-label-text-color-active);
+      }
+    }
+
+    .extended-icon {
+      color: var(--ns-item-icons-color-pressed);
+    }
+
+    @include setIconsColor(var(--ns-item-icons-color-pressed));
+
+    ::slotted([slot='icon-start']) {
+      color: var(--ns-item-start-icon-color-unselected-pressed);
+    }
+  }
+
+  .label {
+    @include typographySMidi;
+
+    flex-grow: 1;
+    overflow: auto;
+    color: var(--ns-item-label-text-color);
+    white-space: nowrap;
+    transition: 0.3s ease-in-out;
+
+    &.open {
+      overflow: initial;
+    }
+
+    &.nested-label {
+      font-weight: 500;
+    }
+
+    &.open-nested-label {
+      @include typographySBody;
+      color: var(--ns-item-nested-label-text-color);
+
+      padding: var(--ns-item-nested-label-padding);
+    }
+  }
+
+  .extended-icon {
+    margin-left: auto;
+  }
+
+  @include iconChevronTransition;
+
+  &.expanded {
+    @include iconChevronTransform(90deg);
+
+    .label {
+      color: var(--ns-item-expanded-label-text-color);
+    }
+
+    ::slotted([slot='icon-start']),
+    .slot-icon-start-fallback {
+      color: var(--ns-item-expanded-icon-start-color);
+    }
+
+    ::slotted([slot='icon-start']) {
+      color: var(--ns-item-start-icon-color-unselected-active);
+    }
+  }
+
+  &.without-icon-start:not(.nested) {
+    padding: var(--ns-item-without-icon-start-padding);
+    margin: var(--ns-item-margin);
+
+    .label {
+      margin: 0;
+    }
+  }
+
+  ::slotted([slot='icon-start']) {
+    color: var(--ns-item-start-icon-color-unselected)
+  }
+}
+
+.sub-items-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: 0.4s ease-in-out;
+  pointer-events: none;
+
+  .item-label {
+    @include typography2XSStrong;
+
+    margin: 0;
+    padding: var(--ns-item-label-paddings);
+    color: var(--wpp-grey-color-800);
+  }
+
+  &.expanded {
+    max-height: 100vh;
+    opacity: 1;
+    pointer-events: initial;
+  }
+}
+
+.sub-level-menu {
+  width: var(--ns-item-submenu-width);
+  max-height: 100vh;
+  padding: var(--ns-item-submenu-paddings);
+  text-transform: capitalize;
+  background-color: var(--wpp-grey-color-000);
+  border-radius: var(--ns-item-border-radius);
+  box-shadow: var(--wpp-box-shadow-m);
+  opacity: 1;
+  pointer-events: initial;
+
+  .sub-level-menu-label {
+    @include typography2XSStrong;
+
+    margin: var(--ns-item-submenu-label-margin);
+  }
+}
+
+.group-title {
+  @include typography2XSStrong;
+
+  margin: var(--ns-item-group-title-margin);
+  color: var(--wpp-grey-color-700);
+  opacity: 1;
+  transition: 0.3s ease-in-out;
+}

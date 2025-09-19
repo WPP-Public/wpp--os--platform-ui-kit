@@ -1,0 +1,98 @@
+<div class="main">
+  <div class="wrapper">
+    <div class="stepper">
+      <wpp-stepper [stepperWidth]="'100%'" [activeStep]="currentStep" (wppChange)="handleChange($event)">
+        <wpp-step>
+          <p slot="label" class="text">Step with a long text and even longer text</p>
+          <span slot="description">
+            First step (this text gets truncated if it's too long and a tooltip is displayed)
+          </span>
+        </wpp-step>
+        <wpp-step>
+          <p slot="label" class="text">Step 2</p>
+          <span slot="description">With substeps</span>
+          <wpp-step substep>
+            <p class="subtext" slot="label">Step 2 Sub step 1</p>
+          </wpp-step>
+          <wpp-step substep>
+            <p class="subtext" slot="label">Step 2 Sub step 2</p>
+          </wpp-step>
+        </wpp-step>
+        <wpp-step>
+          <p slot="label" class="text">Step 3 which also has a really long text</p>
+          <span slot="description">With substeps and a really long description</span>
+          <wpp-step substep>
+            <p class="subtext" slot="label">Step 3 Sub step 1</p>
+          </wpp-step>
+          <wpp-step substep [error]="isError" icon-description="Error message">
+            <p class="subtext" slot="label">Step 3 Sub step 2</p>
+          </wpp-step>
+          <wpp-step substep>
+            <p class="subtext" slot="label">Step 3 Sub step 3</p>
+          </wpp-step>
+        </wpp-step>
+        <wpp-step>
+          <p slot="label" class="text">Step 4</p>
+        </wpp-step>
+        <wpp-step>
+          <p slot="label" class="text">Step 5 with a long text that gets truncated</p>
+        </wpp-step>
+        <wpp-step>
+          <p slot="label" class="text">Step 6 and again a really long text</p>
+          <span slot="description">Last Step with a really really long text</span>
+        </wpp-step>
+      </wpp-stepper>
+    </div>
+    <div class="pages">
+      <div [class]="getPageClassName()">
+        <div class="page" data-testid="first-page">
+          <h3>Page 1</h3>
+          <wpp-radio
+            class="margin"
+            [labelConfig]="getLabelConfig('Option 1')"
+            required
+            data-testid="stepper-radio-button"
+          ></wpp-radio>
+        </div>
+        <div class="page" data-testid="second-page">
+          <h3>Page 2</h3>
+        </div>
+        <div class="page" data-testid="second-page-subpage-one">
+          <h3>Page 2 Sub page 1</h3>
+        </div>
+        <div class="page" data-testid="second-page-subpage-two">
+          <h3>Page 2 Sub page 2</h3>
+        </div>
+        <div class="page" data-testid="third-page">
+          <h3>Page 3</h3>
+        </div>
+        <div class="page" data-testid="third-page-subpage-one">
+          <h3>Page 3 Sub page 1</h3>
+        </div>
+        <div class="page" data-testid="third-page-subpage-two">
+          <h3>Page 3 Sub page 2</h3>
+          <wpp-checkbox class="margin" required (wppChange)="handleCheckbox($event)"></wpp-checkbox>
+        </div>
+        <div class="page" data-testid="third-page-subpage-three">
+          <h3>Page 3 Sub page 3</h3>
+        </div>
+        <div class="page" data-testid="forth-page">
+          <h3>Page 4</h3>
+        </div>
+        <div class="page" data-testid="fifth-page">
+          <h3>Page 5</h3>
+        </div>
+        <div class="page" data-testid="sixth-page">
+          <h3>Page 6</h3>
+        </div>
+        <div class="page" data-testid="final-page">
+          <h3>FINAL</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="buttons">
+    <wpp-button (click)="handlePreviousStep()" data-testid="previous-button">Previous Step</wpp-button>
+    <wpp-button (click)="handleNextStep()" class="button" data-testid="next-button">Next Step</wpp-button>
+  </div>
+</div>

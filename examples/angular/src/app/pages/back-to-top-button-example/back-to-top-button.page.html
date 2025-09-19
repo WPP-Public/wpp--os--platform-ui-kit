@@ -1,0 +1,15 @@
+<div class="page">
+  <div class="cards-list">
+    <div class="card-item" *ngFor="let card of cardsList">
+      <img [src]="card.src" alt=""/>
+      <div class="content">
+        <wpp-typography type="xl-heading" class="title">
+          {{card.title}}
+        </wpp-typography>
+      </div>
+    </div>
+  </div>
+  <wpp-back-to-top-button *ngIf='showBackToTop' (click)='handleBackToTopClick()' data-testid="backToTopButton">212
+  </wpp-back-to-top-button>
+</div>
+

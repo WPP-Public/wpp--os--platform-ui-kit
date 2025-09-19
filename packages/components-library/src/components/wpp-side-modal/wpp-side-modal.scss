@@ -1,0 +1,226 @@
+$column-amount: 24;
+
+/**
+  * @prop --wpp-side-modal-width-s:
+  * @prop --wpp-side-modal-width-m:
+  * @prop --wpp-side-modal-width-l:
+  * @prop --wpp-side-modal-width-xl:
+  * @prop --wpp-side-modal-width-2xl:
+  * @prop --wpp-side-modal-overlay-background-color:
+  * @prop --wpp-side-modal-box-shadow:
+  * @prop --wpp-side-modal-vertical-position-animation-minus-number:
+  * @prop --wpp-side-modal-header-with-back-button-paddings:
+  * @prop --wpp-side-modal-header-paddings:
+  * @prop --wpp-side-modal-body-paddings:
+  * @prop --wpp-side-modal-actions-paddings:
+  * @prop --wpp-side-modal-close-button-margin-left:
+  * @prop --wpp-side-modal-back-button-margin-left:
+  * @prop --wpp-side-modal-bg-color:
+  * @prop --wpp-side-modal-actions-bg-color:
+  * @prop --wpp-side-modal-actions-border-color:
+*/
+
+:host {
+  --side-modal-width-s: var(--wpp-side-modal-width-s, 440px);
+  --side-modal-width-m: var(--wpp-side-modal-width-m, 600px);
+  --side-modal-width-l: var(--wpp-side-modal-width-l, 760px);
+  --side-modal-width-xl: var(--wpp-side-modal-width-xl, 920px);
+  --side-modal-width-2xl: var(--wpp-side-modal-width-2xl, 1080px);
+  --side-modal-box-shadow: var(--wpp-side-modal-box-shadow, var(--wpp-box-shadow-l));
+  --side-modal-vertical-position-animation-minus-number: var(
+    --wpp-side-modal-vertical-position-animation-minus-number,
+    200px
+  );
+  --side-modal-header-paddings: var(--wpp-side-modal-header-paddings, 24px 24px 20px 32px);
+  --side-modal-header-with-back-button-paddings: var(
+    --wpp-side-modal-header-with-back-button-paddings,
+    24px 24px 20px 24px
+  );
+  --side-modal-body-paddings: var(--wpp-side-modal-body-paddings, 0 32px);
+  --side-modal-actions-paddings: var(--wpp-side-modal-actions-paddings, 24px 32px 24px 32px);
+  --side-modal-close-button-margin-left: var(--wpp-side-modal-close-button-margin-left, auto);
+  --side-modal-back-button-margin-right: var(--wpp-side-modal-close-button-margin-left, 8px);
+  --side-modal-transition: 0.2s ease-in-out;
+  --side-modal-bg-color: var(--wpp-side-modal-bg-color, var(--wpp-grey-color-000));
+  --side-modal-actions-bg-color: var(--wpp-side-modal-actions-bg-color, var(--wpp-grey-color-000));
+  --side-modal-actions-border-color: var(--wpp-side-modal-actions-border-color, var(--wpp-grey-color-300));
+}
+
+:host(.wpp-side-modal-wrapper) {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  font-family: var(--wpp-font-family);
+  visibility: hidden;
+}
+
+:host(.wpp-component-ready) {
+  transition: var(--side-modal-transition);
+}
+
+:host(.wpp-component-ready.wpp-visible) {
+  display: block;
+  visibility: visible;
+  opacity: 1;
+}
+
+:host(.wpp-component-ready.wpp-visible.wpp-overlay-hidden) {
+  width: fit-content;
+  right: 0;
+  left: auto;
+}
+
+:host(.wpp-hidden) {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.header,
+.body,
+.actions {
+  @include slotWrapper;
+}
+
+.header {
+  @include typography2XLHeading;
+}
+
+.body {
+  @include typographySBody;
+
+  height: 100%;
+  padding: var(--side-modal-body-paddings);
+  overflow-y: auto;
+}
+
+.actions {
+  @include typographySStrong;
+
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin-top: auto;
+  padding: var(--side-modal-actions-paddings);
+  background-color: var(--side-modal-actions-bg-color);
+  border-top: 1px solid var(--side-modal-actions-border-color);
+
+  .right-button-container {
+    display: flex;
+    gap: 12px;
+  }
+
+  .left-button-container {
+    margin-left: -8px;
+  }
+
+  &.with-actions-config {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.modal-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.side-modal {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  height: 100%;
+  word-break: break-all;
+  background-color: var(--side-modal-bg-color);
+  box-shadow: var(--side-modal-box-shadow);
+
+  &.visible {
+    animation: fadeIn 0.2s ease-in-out forwards;
+  }
+
+  &.hide {
+    animation: fadeOut 0.2s ease-in-out forwards;
+  }
+
+  &.size-s {
+    width: var(--side-modal-width-s);
+  }
+
+  &.size-m {
+    width: var(--side-modal-width-m);
+  }
+
+  &.size-l {
+    width: var(--side-modal-width-l);
+  }
+
+  &.size-xl {
+    width: var(--side-modal-width-xl);
+  }
+
+  &.size-2xl {
+    width: var(--side-modal-width-2xl);
+  }
+}
+
+@for $i from 1 through $column-amount {
+  $itemWidth: getItemGridWidth($i, $column-amount);
+  .modal-width-#{$i} {
+    width: $itemWidth;
+  }
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  padding: var(--side-modal-header-paddings);
+
+  .header-with-back-button {
+    display: flex;
+    align-items: center;
+  }
+
+  .close-button {
+    margin-left: var(--side-modal-close-button-margin-left);
+  }
+
+  .back-button {
+    margin-right: var(--side-modal-back-button-margin-right);
+  }
+
+  &.with-back-button {
+    padding: var(--side-modal-header-with-back-button-paddings);
+  }
+
+  &.with-bottom-border {
+    border-bottom: 1px solid var(--side-modal-actions-border-color);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    transform: translateX(0%);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}

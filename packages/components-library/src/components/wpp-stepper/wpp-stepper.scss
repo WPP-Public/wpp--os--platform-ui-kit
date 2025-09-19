@@ -1,0 +1,53 @@
+:host {
+  display: block;
+  min-width: 70px;
+}
+
+:host([orientation='horizontal']) {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+
+  --stepper-translate-position: var(--wpp-stepper-translate-position, 0);
+}
+
+:host([orientation='vertical']) {
+  --vertical-stepper-width: var(--wpp-vertical-stepper-width, 158px);
+
+  width: var(--vertical-stepper-width);
+}
+
+.stepper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.orientation-horizontal {
+  flex-direction: row;
+  width: 9999px;
+  transform: translateX(var(--stepper-translate-position));
+  transition: 0.5s ease-in-out;
+}
+
+.step-indicator {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 24px;
+  color: var(--wpp-grey-color-800);
+  background-color: var(--wpp-grey-color-300);
+  border-radius: 24px;
+  transition: 0.5s ease-in-out;
+
+  @include typographyXSStrong;
+
+  &.hide {
+    visibility: hidden;
+    opacity: 0;
+  }
+}

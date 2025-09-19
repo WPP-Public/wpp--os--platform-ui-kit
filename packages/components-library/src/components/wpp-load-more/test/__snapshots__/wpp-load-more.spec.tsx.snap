@@ -1,0 +1,103 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-load-more should render load more component 1`] = `
+<wpp-load-more class="wpp-load-more" exportparts="container, progress-text, button" items-loaded="30" loading="false" show-progress-bar="true" total-items="100">
+  <mock:shadow-root>
+    <div class="progress-container" part="container">
+      <span class="progress-text" id="wpp-progress-indicator-label" part="progress-text">
+        30 of 100 items
+      </span>
+      <wpp-progress-indicator aria-labelledby="wpp-progress-indicator-label" aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="progress-indicator wpp-progress-indicator wpp-wrapper" exportparts="label, content, inner" role="progressbar" style="--pi-width: 200px; --pi-value: 30;">
+        <mock:shadow-root>
+          <div class="linear-wrapper progress-bar-wrapper" part="body">
+            <div class="linear" part="line"></div>
+          </div>
+        </mock:shadow-root>
+      </wpp-progress-indicator>
+    </div>
+    <wpp-button class="load-more-button wpp-button" exportparts="button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper" part="button">
+      <mock:shadow-root>
+        <button aria-pressed="false" class="button secondary size-s" data-testid="wppButton" part="button" type="button">
+          <div class="content">
+            <div class="icon-start slot-hidden" part="icon-start-wrapper">
+              <slot name="icon-start" part="icon-start"></slot>
+            </div>
+            <span class="truncate" part="text">
+              <slot part="inner"></slot>
+            </span>
+            <div class="icon-end slot-hidden" part="icon-end-wrapper">
+              <slot name="icon-end" part="icon-end"></slot>
+            </div>
+          </div>
+        </button>
+      </mock:shadow-root>
+      Load more
+    </wpp-button>
+  </mock:shadow-root>
+</wpp-load-more>
+`;
+
+exports[`wpp-load-more should render load more component in loading state 1`] = `
+<wpp-load-more class="wpp-load-more" exportparts="container, progress-text, button" items-loaded="30" loading="true" show-progress-bar="true" total-items="100">
+  <mock:shadow-root>
+    <div class="progress-container" part="container">
+      <span class="progress-text" id="wpp-progress-indicator-label" part="progress-text">
+        30 of 100 items
+      </span>
+      <wpp-progress-indicator aria-labelledby="wpp-progress-indicator-label" aria-valuemax="100" aria-valuemin="0" aria-valuenow="30" class="progress-indicator wpp-progress-indicator wpp-wrapper" exportparts="label, content, inner" role="progressbar" style="--pi-width: 200px; --pi-value: 30;">
+        <mock:shadow-root>
+          <div class="linear-wrapper progress-bar-wrapper" part="body">
+            <div class="linear" part="line"></div>
+          </div>
+        </mock:shadow-root>
+      </wpp-progress-indicator>
+    </div>
+    <wpp-button class="load-more-button wpp-button wpp-loading" exportparts="button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper" loading="" part="button">
+      <mock:shadow-root>
+        <button aria-pressed="false" class="button loading secondary size-s" data-testid="wppButton" disabled="" part="button" type="button">
+          <div class="loader" part="spinner-wrapper">
+            <wpp-spinner color="var(--wpp-primary-color-500)" part="spinner"></wpp-spinner>
+          </div>
+          <div class="content hide">
+            <div class="icon-start slot-hidden" part="icon-start-wrapper">
+              <slot name="icon-start" part="icon-start"></slot>
+            </div>
+            <span class="truncate" part="text">
+              <slot part="inner"></slot>
+            </span>
+            <div class="icon-end slot-hidden" part="icon-end-wrapper">
+              <slot name="icon-end" part="icon-end"></slot>
+            </div>
+          </div>
+        </button>
+      </mock:shadow-root>
+      Load more
+    </wpp-button>
+  </mock:shadow-root>
+</wpp-load-more>
+`;
+
+exports[`wpp-load-more should render load more component with progress bar hidden 1`] = `
+<wpp-load-more class="wpp-load-more" exportparts="container, progress-text, button" items-loaded="30" loading="false" show-progress-bar="false" total-items="100">
+  <mock:shadow-root>
+    <wpp-button class="load-more-button wpp-button" exportparts="button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper" part="button">
+      <mock:shadow-root>
+        <button aria-pressed="false" class="button secondary size-s" data-testid="wppButton" part="button" type="button">
+          <div class="content">
+            <div class="icon-start slot-hidden" part="icon-start-wrapper">
+              <slot name="icon-start" part="icon-start"></slot>
+            </div>
+            <span class="truncate" part="text">
+              <slot part="inner"></slot>
+            </span>
+            <div class="icon-end slot-hidden" part="icon-end-wrapper">
+              <slot name="icon-end" part="icon-end"></slot>
+            </div>
+          </div>
+        </button>
+      </mock:shadow-root>
+      Load more
+    </wpp-button>
+  </mock:shadow-root>
+</wpp-load-more>
+`;

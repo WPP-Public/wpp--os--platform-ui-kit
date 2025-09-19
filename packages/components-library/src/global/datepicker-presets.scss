@@ -1,0 +1,54 @@
+@mixin datepicker-presets {
+  .wpp-presets-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 120px;
+    padding: var(--datepicker-padding);
+    padding-right: 0;
+    padding-bottom: 0;
+    background-color: var(--datepicker-bg-color);
+
+    .wpp-presets-list {
+      padding-right: var(--datepicker-padding);
+
+      .wpp-presets-item {
+        width: 100%;
+        margin-bottom: 4px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        &::part(item) {
+          width: 100%;
+        }
+      }
+    }
+
+    &::before {
+      position: absolute;
+      top: var(--datepicker-padding);
+      right: 0;
+      bottom: var(--datepicker-buttons-height);
+      border-right: 1px solid var(--wpp-grey-color-300);
+      content: '';
+    }
+
+    .wpp-presets-footer {
+      position: relative;
+      width: 100%;
+      height: var(--datepicker-buttons-height);
+
+      &::before {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        border-top: 1px solid var(--wpp-grey-color-300);
+        content: '';
+      }
+    }
+  }
+}

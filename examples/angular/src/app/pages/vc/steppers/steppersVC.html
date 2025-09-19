@@ -1,0 +1,18 @@
+<div class="tabs" data-testid="stepper">
+  <wpp-tabs [value]="currentTab" (wppChange)="handleTabChange($event)">
+    <wpp-tab value="vertical">Vertical Stepper</wpp-tab>
+    <wpp-tab value="verticalWWidth">Vertical Stepper with width</wpp-tab>
+    <wpp-tab value="decimalVertical">Decimal Vertical Stepper</wpp-tab>
+    <wpp-tab value="horizontal">Horizontal Stepper</wpp-tab>
+  </wpp-tabs>
+  <div class="content">
+    <app-vertical-stepper-example *ngIf="currentTab === 'vertical'"></app-vertical-stepper-example>
+    <app-vertical-stepper-with-width-example
+      *ngIf="currentTab === 'verticalWWidth'"
+    ></app-vertical-stepper-with-width-example>
+    <app-decimal-vertical-stepper-example
+      *ngIf="currentTab === 'decimalVertical'"
+    ></app-decimal-vertical-stepper-example>
+    <app-horizontal-stepper-example *ngIf="currentTab === 'horizontal'"></app-horizontal-stepper-example>
+  </div>
+</div>

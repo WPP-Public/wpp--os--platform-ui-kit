@@ -1,0 +1,9 @@
+```html
+<wpp-textarea-input
+  [labelConfig]='labelConfig'
+  [message]='message'
+  [messageType]='messageType'
+  name='name'
+  id='name'
+></wpp-textarea-input>
+```

@@ -1,0 +1,25 @@
+<wpp-popover
+  [ref]='popoverRef'
+  [config]='popoverConfig'
+>
+  <wpp-input
+    [value]='selectedOption'
+    slot="trigger-element"
+    placeholder="Select user role"
+    [labelConfig]='labelConfig'
+    required
+    name="custom-input-name"
+  >
+    <wpp-icon-chevron slot="icon-end" [direction]='handleIconState()'></wpp-icon-chevron>
+  </wpp-input>
+  <div [style]='style'>
+    <wpp-list-item
+      *ngFor="let option of OPTIONS_LIST"
+      [key]='option'
+      [checked]='selectedOption === option'
+      (wppChangeListItem)='handleOptionSelect(selectedOption)'
+    >
+      <p slot="label">{{ option }}</p>
+    </wpp-list-item>
+  </div>
+</wpp-popover>

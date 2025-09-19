@@ -1,0 +1,21 @@
+.cardGroupWrapper {
+  margin-bottom: 16px;
+}
+
+.cardGroupWrapper,
+.itemsWrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  width: 100%;
+}
+
+.item {
+  flex: 1 0 auto;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}

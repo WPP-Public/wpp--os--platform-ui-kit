@@ -1,0 +1,31 @@
+.formWrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  box-sizing: border-box;
+  width: 700px;
+  text-align: initial;
+  background-color: var(--wpp-grey-color-200);
+  border-radius: 8px;
+  box-shadow: var(--wpp-box-shadow-m);
+  transform: translate(-50%, -40%);
+}
+
+.img {
+  width: 220px;
+  height: 500px;
+  object-fit: fill;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stepWrapper {
+  width: 100%;
+  margin: 0 60px;
+}

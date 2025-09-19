@@ -1,0 +1,33 @@
+.container {
+  box-sizing: border-box;
+  padding: 50px;
+  padding-bottom: 200px;
+
+  .scenario {
+    margin-bottom: 50px;
+
+    .scenarioSubTitle {
+      margin: 20px 0;
+    }
+
+    .item {
+      margin-bottom: 20px;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .modalBtn {
+      margin-right: 20px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+
+    .modalBody {
+      width: 100%;
+    }
+  }
+}

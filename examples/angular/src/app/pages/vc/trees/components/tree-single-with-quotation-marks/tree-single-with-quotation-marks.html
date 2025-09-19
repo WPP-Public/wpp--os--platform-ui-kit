@@ -1,0 +1,13 @@
+<div [ngStyle]="{ marginTop: '1px' }">
+  <h3 class="title">Single tree with search with quotation marks</h3>
+  <wpp-input class="search" (wppChange)='handleSearch($event)' type="search" placeholder="Search"></wpp-input>
+  <wpp-tree
+    class="tree"
+    [data]='treeData'
+    (wppChange)='handleTreeChange($event)'
+    data-testid="single-tree-with-quotation-marks"
+    (wppActionClick)='handleActionClick($event)'
+    [search]='searchValue'
+    [searchConfig]="searchConfig"
+  ></wpp-tree>
+</div>

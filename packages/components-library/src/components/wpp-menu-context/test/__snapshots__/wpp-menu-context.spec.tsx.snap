@@ -1,0 +1,119 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-menu-context should render context be the same width as anchor 1`] = `
+<wpp-menu-context .is-list-have-trigger-element-width="true" class="wpp-menu-context wpp-menu-context-wrapper" exportparts="trigger, list-wrapper, list, inner" list-width="auto">
+  <!---->
+  <div class="trigger-wrapper" role="button" tabindex="0">
+    <wpp-button .disabled="false" .loading="false" .size="m" slot="trigger-element" variant="destructive">
+      Button
+    </wpp-button>
+  </div>
+  <div class="wpp-list-wrapper" part="list-wrapper">
+    <ul class="wpp-list" part="list" role="menu">
+      <div>
+        <wpp-list-item class="wpp-list-item wpp-mounted" exportparts="item, info-wrapper, checkbox, body-wrapper, left, label, caption, right, left-wrapper, label-wrapper, caption-wrapper, right-wrapper" highlight="" label="" role="WPP-LIST-ITEM" tabindex="0">
+          <mock:shadow-root>
+            <li class="item" part="item">
+              <div class="info-wrapper" part="info-wrapper">
+                <div class="left slot-hidden" part="left-wrapper">
+                  <slot name="left" part="left"></slot>
+                </div>
+                <div class="body-wrapper" part="body-wrapper" style="width: auto;">
+                  <div class="label" part="label-wrapper">
+                    <slot name="label" part="label"></slot>
+                  </div>
+                  <div class="caption slot-hidden" part="caption-wrapper">
+                    <slot name="caption" part="caption"></slot>
+                  </div>
+                </div>
+              </div>
+              <div class="right slot-hidden" part="right-wrapper">
+                <slot name="right" part="right"></slot>
+              </div>
+            </li>
+          </mock:shadow-root>
+          Item
+        </wpp-list-item>
+      </div>
+    </ul>
+  </div>
+</wpp-menu-context>
+`;
+
+exports[`wpp-menu-context should render context item with custom svg and default right icon 1`] = `
+<wpp-list-item class="wpp-list-item wpp-mounted" exportparts="item, info-wrapper, checkbox, body-wrapper, left, label, caption, right, left-wrapper, label-wrapper, caption-wrapper, right-wrapper" highlight="" is-extended="" label="" role="menubar" tabindex="0">
+  <mock:shadow-root>
+    <li class="item" part="item">
+      <div class="info-wrapper" part="info-wrapper">
+        <div class="left slot-hidden" part="left-wrapper">
+          <slot name="left" part="left"></slot>
+        </div>
+        <div class="body-wrapper" part="body-wrapper" style="width: auto;">
+          <div class="label" part="label-wrapper">
+            <slot name="label" part="label"></slot>
+          </div>
+          <div class="caption slot-hidden" part="caption-wrapper">
+            <slot name="caption" part="caption"></slot>
+          </div>
+        </div>
+      </div>
+      <div class="right" part="right-wrapper">
+        <slot name="right" part="right">
+          <wpp-icon-chevron class="fallback-icon" part="icon-extended" size="s"></wpp-icon-chevron>
+        </slot>
+      </div>
+    </li>
+  </mock:shadow-root>
+  <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+  Item
+</wpp-list-item>
+`;
+
+exports[`wpp-menu-context should render context with button 1`] = `
+<wpp-menu-context class="wpp-menu-context wpp-menu-context-wrapper" exportparts="trigger, list-wrapper, list, inner" list-width="auto">
+  <!---->
+  <wpp-button .disabled="false" .loading="false" .size="m" hidden="" slot="parent" variant="destructive">
+    Button
+  </wpp-button>
+  <div class="trigger-wrapper" role="button" tabindex="0"></div>
+  <div class="wpp-list-wrapper" part="list-wrapper">
+    <ul class="wpp-list" part="list" role="menu">
+      <div>
+        <wpp-list-item class="wpp-list-item wpp-mounted" exportparts="item, info-wrapper, checkbox, body-wrapper, left, label, caption, right, left-wrapper, label-wrapper, caption-wrapper, right-wrapper" highlight="" label="" role="WPP-LIST-ITEM" tabindex="0">
+          <mock:shadow-root>
+            <li class="item" part="item">
+              <div class="info-wrapper" part="info-wrapper">
+                <div class="left slot-hidden" part="left-wrapper">
+                  <slot name="left" part="left"></slot>
+                </div>
+                <div class="body-wrapper" part="body-wrapper" style="width: auto;">
+                  <div class="label" part="label-wrapper">
+                    <slot name="label" part="label"></slot>
+                  </div>
+                  <div class="caption slot-hidden" part="caption-wrapper">
+                    <slot name="caption" part="caption"></slot>
+                  </div>
+                </div>
+              </div>
+              <div class="right slot-hidden" part="right-wrapper">
+                <slot name="right" part="right"></slot>
+              </div>
+            </li>
+          </mock:shadow-root>
+          Item
+        </wpp-list-item>
+      </div>
+    </ul>
+  </div>
+</wpp-menu-context>
+`;
+
+exports[`wpp-menu-context should render empty context 1`] = `
+<wpp-menu-context class="wpp-menu-context wpp-menu-context-wrapper" exportparts="trigger, list-wrapper, list, inner" list-width="auto">
+  <!---->
+  <div class="trigger-wrapper" role="button" tabindex="0"></div>
+  <div class="wpp-list-wrapper" part="list-wrapper">
+    <ul class="wpp-list" part="list" role="menu"></ul>
+  </div>
+</wpp-menu-context>
+`;

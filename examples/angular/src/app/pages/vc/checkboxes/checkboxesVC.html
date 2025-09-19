@@ -1,0 +1,176 @@
+<div class="checkboxes">
+  <h3>With Label</h3>
+  <wpp-checkbox
+    [labelConfig]="getLabelConfig('Option 1')"
+    class="checkbox"
+    name="options"
+    required
+    auto-focus
+    (wppChange)='handleChange($event)'
+    data-testid="focus-checkbox"
+  ></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    [labelConfig]="labelConfig"
+    required
+  ></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    [labelConfig]="getLabelConfig('Option 1')"
+    name="options"
+  ></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    [labelConfig]="getLabelConfig('Option 1')"
+    name="options"
+    disabled
+    required
+  ></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    [labelConfig]="getLabelConfig('Option 1')"
+    name="options"
+    checked
+    required
+  ></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    [labelConfig]="getLabelConfig('Option 1')"
+    name="options"
+    checked
+    disabled
+    required
+  ></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    [labelConfig]="getLabelConfig('Option 1')"
+    name="options"
+    indeterminate
+    required
+  ></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    [labelConfig]="getLabelConfig('Option 1')"
+    name="options"
+    indeterminate
+    disabled
+    required
+  ></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    [labelConfig]="getLabelConfig('Hover test')"
+    required
+    data-testid="hover-сheckbox"
+  ></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    [labelConfig]="getLabelConfig('Option 1')"
+    required
+    messageType="error"
+    message="Error message"
+  ></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    [labelConfig]="getLabelConfig('Option 1')"
+    required
+    message-type="error"
+    message="Error message"
+    max-message-length="10"
+  ></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    [labelConfig]="getLabelConfig('Option 1')"
+    required
+    message-type="warning"
+    message="Warning message"
+  ></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    [labelConfig]="getLabelConfig('Option 1')"
+    required
+    message-type="warning"
+    message="Warning message"
+    max-message-length="10"
+  ></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    [labelConfig]="getLabelConfig('Option 1')"
+    required
+    message="Info message"
+  ></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    [labelConfig]="getLabelConfig('Option 1')"
+    required
+    message="Info message"
+    max-message-length="10"
+  ></wpp-checkbox>
+
+  <h3>Without Label</h3>
+  <wpp-checkbox class="checkbox" required></wpp-checkbox>
+
+  <wpp-checkbox class="checkbox"></wpp-checkbox>
+
+  <wpp-checkbox class="checkbox" disabled required></wpp-checkbox>
+
+  <wpp-checkbox class="checkbox" checked required></wpp-checkbox>
+
+  <wpp-checkbox class="checkbox" checked disabled required></wpp-checkbox>
+
+  <wpp-checkbox class="checkbox" indeterminate required></wpp-checkbox>
+
+  <wpp-checkbox class="checkbox" indeterminate disabled required></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    required
+    message-type="error"
+    message="Error message"
+  ></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    required
+    message-type="error"
+    message="Error message"
+    max-message-length="10"
+  ></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    required
+    message-type="warning"
+    message="Warning message"
+  ></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    required
+    message-type="warning"
+    message="Warning message"
+    max-message-length="10"
+  ></wpp-checkbox>
+
+  <wpp-checkbox class="checkbox" required message="Info message"></wpp-checkbox>
+
+  <wpp-checkbox
+    class="checkbox"
+    required
+    message="Info message"
+    max-message-length="10"
+  ></wpp-checkbox>
+</div>

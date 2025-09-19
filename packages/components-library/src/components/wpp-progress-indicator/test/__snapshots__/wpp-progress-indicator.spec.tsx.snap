@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-progress-indicator Should render circle progress indicator 1`] = `
+<wpp-progress-indicator aria-valuemax="100" aria-valuemin="0" class="wpp-progress-indicator wpp-wrapper" exportparts="label, content, inner" role="progressbar" variant="circle" style="--pi-width: 80px;">
+  <mock:shadow-root>
+    <div class="progress-bar-wrapper" part="body">
+      <svg class="circle-wrapper infinity-scroll" part="circle" viewBox="0 0 120 120">
+        <circle class="circle" cx="60" cy="60" fill="none" r="54"></circle>
+        <circle class="circle infinity-scroll-circle-progress-bar progress" cx="60" cy="60" fill="none" pathLength="100" r="54"></circle>
+      </svg>
+    </div>
+  </mock:shadow-root>
+</wpp-progress-indicator>
+`;
+
+exports[`wpp-progress-indicator Should render circle progress indicator with custom width and text 1`] = `
+<wpp-progress-indicator aria-valuemax="100" aria-valuemin="0" class="wpp-progress-indicator wpp-wrapper" exportparts="label, content, inner" role="progressbar" variant="circle" width="100" style="--pi-width: 100px;">
+  <mock:shadow-root>
+    <div class="progress-bar-wrapper" part="body">
+      <svg class="circle-wrapper infinity-scroll" part="circle" viewBox="0 0 120 120">
+        <circle class="circle" cx="60" cy="60" fill="none" r="54"></circle>
+        <circle class="circle infinity-scroll-circle-progress-bar progress" cx="60" cy="60" fill="none" pathLength="100" r="54"></circle>
+      </svg>
+    </div>
+  </mock:shadow-root>
+</wpp-progress-indicator>
+`;
+
+exports[`wpp-progress-indicator Should render default progress indicator 1`] = `
+<wpp-progress-indicator aria-valuemax="100" aria-valuemin="0" class="wpp-progress-indicator wpp-wrapper wpp-wrapper-linear-full-width" exportparts="label, content, inner" role="progressbar" style="--pi-width: 100%;">
+  <mock:shadow-root>
+    <div class="linear-wrapper overflow-hide progress-bar-wrapper" part="body">
+      <div class="infinity-scroll-linear linear" part="line"></div>
+    </div>
+  </mock:shadow-root>
+</wpp-progress-indicator>
+`;
+
+exports[`wpp-progress-indicator Should render linear progress indicator with text 1`] = `
+<wpp-progress-indicator aria-valuemax="100" aria-valuemin="0" class="wpp-progress-indicator wpp-wrapper" exportparts="label, content, inner" label="Loading..." role="progressbar" width="600" style="--pi-width: 600px;">
+  <mock:shadow-root>
+    <div class="linear-wrapper overflow-hide progress-bar-wrapper" part="body">
+      <div class="infinity-scroll-linear linear" part="line"></div>
+    </div>
+    <p class="progress-text" part="label">
+      Loading...
+    </p>
+  </mock:shadow-root>
+</wpp-progress-indicator>
+`;

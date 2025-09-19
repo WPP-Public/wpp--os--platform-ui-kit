@@ -1,0 +1,41 @@
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
+.information {
+  display: inline-flex;
+  align-items: center;
+}
+
+.info {
+  margin-right: 18px;
+}
+
+.progress {
+  margin-right: 15px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  margin-top: 30px;
+}
+
+.item {
+  width: 500px;
+  margin-bottom: 10px;
+}
+
+.variant {
+  width: 600px;
+}
+
+.cardWithCards {
+  width: 800px;
+  margin: 50px 0;
+}
+
+.cardInside {
+  margin-bottom: 20px;
+}
