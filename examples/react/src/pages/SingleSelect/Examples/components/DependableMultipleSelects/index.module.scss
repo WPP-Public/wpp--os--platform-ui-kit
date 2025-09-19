@@ -1,0 +1,17 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px;
+}
+
+.pageTitle {
+  margin-bottom: 40px;
+}
+
+.componentsContainer {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  width: 100%;
+}

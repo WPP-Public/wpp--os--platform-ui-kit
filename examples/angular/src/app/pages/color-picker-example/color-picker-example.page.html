@@ -1,0 +1,142 @@
+<div class="colorPickers">
+  <wpp-typography class="sectionTitle" type="2xl-heading"> Default mode: "theme" </wpp-typography>
+  <div class="section">
+    <div class="sectionItem">
+      <wpp-typography class="sectionItemTitle" type="2xl-heading"> Hex </wpp-typography>
+      <wpp-color-picker
+        (wppChange)="handleChangeColor($event)"
+        (wppSaveColor)="handleSaveColor($event)"
+        type="hex"
+      ></wpp-color-picker>
+    </div>
+
+    <div class="sectionItem">
+      <wpp-typography class="sectionItemTitle" type="2xl-heading">Hex and disabled</wpp-typography>
+      <wpp-color-picker
+        (wppChange)="handleChangeColor($event)"
+        (wppSaveColor)="handleSaveColor($event)"
+        [disabled]="true"
+        type="hex"
+      >
+      </wpp-color-picker>
+    </div>
+
+    <div class="sectionItem">
+      <wpp-typography class="sectionItemTitle" type="2xl-heading"> Hex with Theme object passed </wpp-typography>
+      <wpp-color-picker
+        (wppChange)="handleChangeColor($event)"
+        (wppSaveColor)="handleSaveColor($event)"
+        [themeColors]="theme"
+        type="hex"
+      ></wpp-color-picker>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sectionItem">
+      <wpp-typography class="sectionItemTitle" type="2xl-heading"> RGBA </wpp-typography>
+      <wpp-color-picker
+        (wppChange)="handleChangeColor($event)"
+        (wppSaveColor)="handleSaveColor($event)"
+        type="rgba"
+      ></wpp-color-picker>
+    </div>
+
+    <div class="sectionItem">
+      <wpp-typography class="sectionItemTitle" type="2xl-heading">RGBA and disabled</wpp-typography>
+      <wpp-color-picker
+        (wppChange)="handleChangeColor($event)"
+        (wppSaveColor)="handleSaveColor($event)"
+        [disabled]="true"
+        type="rgba"
+      >
+      </wpp-color-picker>
+    </div>
+  </div>
+
+  <wpp-typography class="sectionTitle" type="2xl-heading"> Mode: "custom" </wpp-typography>
+
+  <div class="section">
+    <div class="sectionItem">
+      <wpp-typography class="sectionItemTitle" type="2xl-heading"> Hex </wpp-typography>
+      <wpp-color-picker
+        (wppChange)="handleChangeColor($event)"
+        (wppSaveColor)="handleSaveColor($event)"
+        (wppRemoveSavedColor)="handleRemoveSavedColor($event)"
+        [savedColors]="savedColors"
+        mode="theme"
+      ></wpp-color-picker>
+    </div>
+
+    <div class="sectionItem">
+      <wpp-typography class="sectionItemTitle" type="2xl-heading">RGBA</wpp-typography>
+      <wpp-color-picker
+        (wppChange)="handleChangeColor($event)"
+        (wppSaveColor)="handleSaveColor($event)"
+        (wppRemoveSavedColor)="handleRemoveSavedColor($event)"
+        [savedColors]="savedColors"
+        mode="theme"
+        type="rgba"
+      >
+      </wpp-color-picker>
+    </div>
+  </div>
+
+  <wpp-typography class="sectionTitle" type="2xl-heading"> Mode: "theme and custom" </wpp-typography>
+
+  <div class="section">
+    <div class="sectionItem">
+      <wpp-typography class="sectionItemTitle" type="2xl-heading"> Hex </wpp-typography>
+      <wpp-color-picker
+        (wppChange)="handleChangeColor($event)"
+        (wppSaveColor)="handleSaveColor($event)"
+        (wppRemoveSavedColor)="handleRemoveSavedColor($event)"
+        [savedColors]="savedColors"
+        mode="theme and custom"
+      ></wpp-color-picker>
+    </div>
+
+    <div class="sectionItem">
+      <wpp-typography class="sectionItemTitle" type="2xl-heading">RGBA</wpp-typography>
+      <wpp-color-picker
+        (wppChange)="handleChangeColor($event)"
+        (wppSaveColor)="handleSaveColor($event)"
+        (wppRemoveSavedColor)="handleRemoveSavedColor($event)"
+        [savedColors]="savedColors"
+        mode="theme and custom"
+        type="rgba"
+      >
+      </wpp-color-picker>
+    </div>
+  </div>
+
+  <wpp-typography class="sectionTitle" type="2xl-heading"> With initial color: </wpp-typography>
+
+  <div class="section">
+    <div class="sectionItem">
+      <wpp-typography class="sectionItemTitle" type="2xl-heading"> Hex </wpp-typography>
+      <wpp-color-picker
+        (wppChange)="handleChangeColor($event)"
+        (wppSaveColor)="handleSaveColor($event)"
+        (wppRemoveSavedColor)="handleRemoveSavedColor($event)"
+        [savedColors]="savedColors"
+        [initialColor]="initialColorHex"
+        mode="theme and custom"
+      ></wpp-color-picker>
+    </div>
+
+    <div class="sectionItem">
+      <wpp-typography class="sectionItemTitle" type="2xl-heading">RGBA</wpp-typography>
+      <wpp-color-picker
+        (wppChange)="handleChangeColor($event)"
+        (wppSaveColor)="handleSaveColor($event)"
+        (wppRemoveSavedColor)="handleRemoveSavedColor($event)"
+        [savedColors]="savedColors"
+        [initialColor]="initialColorRGBA"
+        mode="theme and custom"
+        type="rgba"
+      >
+      </wpp-color-picker>
+    </div>
+  </div>
+</div>

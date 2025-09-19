@@ -1,0 +1,162 @@
+<div class="container" data-testid="menu-context-container">
+  <div class="context">
+    <h3>The list is the Same Width as a Button</h3>
+    <wpp-menu-context [dropdownConfig]="dropdownConfig" append-to-list-wrapper>
+      <wpp-button disabled="false" slot="trigger-element" data-testid="same-width-button"> Click to open </wpp-button>
+      <div>
+        <wpp-list-item>
+          <wpp-icon-plus slot="left"></wpp-icon-plus>
+          <p slot="label">Item 1</p>
+        </wpp-list-item>
+        <wpp-list-item active>
+          <p slot="label">Item 2</p>
+        </wpp-list-item>
+        <wpp-list-item disabled>
+          <p slot="label">Item 3</p>
+        </wpp-list-item>
+        <wpp-list-item>
+          <p slot="label">Item 4</p>
+          <wpp-icon-success slot="right"></wpp-icon-success>
+        </wpp-list-item>
+        <wpp-list-item>
+          <wpp-icon-plus slot="left"></wpp-icon-plus>
+          <p slot="label">withPlus</p>
+        </wpp-list-item>
+        <wpp-list-item>
+          <p slot="label">With label</p>
+        </wpp-list-item>
+        <wpp-list-item value="text">
+          <p slot="label">With value</p>
+        </wpp-list-item>
+        <wpp-list-item [linkConfig]="linkConfig">
+          <p slot="label">Link</p>
+        </wpp-list-item>
+        <wpp-list-item [linkConfig]="linkConfig">
+          <p slot="label">Link with preventDefault</p>
+        </wpp-list-item>
+      </div>
+    </wpp-menu-context>
+  </div>
+
+  <div class="context">
+    <h3>Expandable List with Fixed Width</h3>
+    <wpp-menu-context list-width="100px" append-to-list-wrapper>
+      <wpp-button slot="trigger-element" data-testid="fixed-width-button"> Click to open </wpp-button>
+      <div>
+        <wpp-list-item>
+          <wpp-icon-plus slot="left"></wpp-icon-plus>
+          <p slot="label">Lorem ipsum dolor sit amet, consectetur</p>
+        </wpp-list-item>
+        <wpp-list-item>
+          <p slot="label">Pellentesque venenatis eget diam sit amet dictum</p>
+          <wpp-icon-cross slot="right"></wpp-icon-cross>
+        </wpp-list-item>
+        <wpp-menu-context append-to-list-wrapper>
+          <wpp-list-item slot="trigger-element" is-extended data-testid="extendable-item">
+            <p slot="label">Extendable Item</p>
+          </wpp-list-item>
+          <div>
+            <wpp-menu-context append-to-list-wrapper>
+              <wpp-list-item slot="trigger-element" is-extended>
+                <p slot="label">SubItem 1</p>
+              </wpp-list-item>
+              <div>
+                <wpp-list-item>
+                  <p slot="label">SubItem 4</p>
+                </wpp-list-item>
+                <wpp-list-item>
+                  <p slot="label">SubItem 5</p>
+                </wpp-list-item>
+                <wpp-list-item>
+                  <p slot="label">SubItem 6</p>
+                </wpp-list-item>
+                <wpp-list-item>
+                  <p slot="label">SubItem 7</p>
+                </wpp-list-item>
+                <wpp-list-item>
+                  <p slot="label">SubItem 8</p>
+                </wpp-list-item>
+              </div>
+            </wpp-menu-context>
+            <wpp-list-item disabled>
+              <p slot="label">SubItem 2</p>
+            </wpp-list-item>
+            <wpp-list-item>
+              <p slot="label">SubItem 3</p>
+            </wpp-list-item>
+          </div>
+        </wpp-menu-context>
+        <wpp-list-item>
+          <p slot="label">Nulla sit amet bibendum augue curabitur non erat purus</p>
+        </wpp-list-item>
+      </div>
+    </wpp-menu-context>
+  </div>
+
+  <div class="context">
+    <h3>Expandable List with Groups and Divider</h3>
+    <wpp-menu-context list-width="150px">
+      <wpp-button slot="trigger-element" data-testid="group-menu-button"> Click to open </wpp-button>
+      <div>
+        <wpp-menu-group header="Admin"></wpp-menu-group>
+        <wpp-list-item>
+          <p slot="label">Tenant</p>
+        </wpp-list-item>
+        <wpp-list-item>
+          <p slot="label">Client</p>
+        </wpp-list-item>
+        <wpp-menu-context>
+          <wpp-list-item slot="trigger-element" is-extended data-testid="extendable-item">
+            <p slot="label">Apps & Roles</p>
+          </wpp-list-item>
+          <div>
+            <wpp-menu-group header="Apps" with-divider></wpp-menu-group>
+            <wpp-list-item>
+              <p slot="label">App 1</p>
+            </wpp-list-item>
+            <wpp-list-item>
+              <p slot="label">App 2</p>
+            </wpp-list-item>
+            <wpp-menu-group header="Roles"></wpp-menu-group>
+            <wpp-list-item>
+              <p slot="label">Role 1</p>
+            </wpp-list-item>
+          </div>
+        </wpp-menu-context>
+        <wpp-list-item>
+          <p slot="label">Users & Groups</p>
+        </wpp-list-item>
+        <wpp-menu-group header="Group Title" with-divider>
+          <wpp-list-item>
+            <p slot="label">Text</p>
+          </wpp-list-item>
+          <wpp-list-item>
+            <p slot="label">Settings</p>
+          </wpp-list-item>
+          <wpp-menu-group with-divider></wpp-menu-group>
+          <wpp-list-item>
+            <p slot="label">Feedback</p>
+          </wpp-list-item>
+          <wpp-list-item>
+            <p slot="label">Copyrights</p>
+          </wpp-list-item>
+        </wpp-menu-group>
+        <wpp-list-item>
+          <wpp-icon-logout slot="left"></wpp-icon-logout>
+          <p slot="label">Sign Out</p>
+        </wpp-list-item>
+      </div>
+    </wpp-menu-context>
+  </div>
+
+  <div>
+    <h3>Test tooltip in menu context</h3>
+    <wpp-menu-context [dropdownConfig]="dropdownConfig">
+      <wpp-button slot="trigger-element">Click to open</wpp-button>
+      <wpp-list-item [tooltipConfig]="tooltipConfig">
+        <span slot="label">Test 1</span>
+        <wpp-icon-warning slot="right"></wpp-icon-warning>
+      </wpp-list-item>
+    </wpp-menu-context>
+  </div>
+</div>

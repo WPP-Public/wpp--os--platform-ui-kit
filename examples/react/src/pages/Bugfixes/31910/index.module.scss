@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 40px;
+  padding-bottom: 100px;
+}
+
+.block {
+  width: 500px;
+  word-break: break-word;
+  border: 2px dotted #007acc;
+}
+
+.input {
+  width: 300px;
+}

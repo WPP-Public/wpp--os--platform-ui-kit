@@ -1,0 +1,115 @@
+.label {
+  margin-top: 15px;
+}
+
+.item {
+  margin-bottom: 30px;
+}
+
+.item p {
+  margin: 0;
+}
+
+.infiniteItem {
+  width: 500px;
+  margin-right: 20px;
+  margin-bottom: 40px;
+}
+
+.selects {
+  display: flex;
+}
+
+.size {
+  width: 400px;
+  margin-right: 50px;
+}
+
+.expanded {
+  width: 200px;
+}
+
+.select {
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
+.container {
+  height: 450px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  height: 500px;
+}
+
+.multiple {
+  height: 500px;
+}
+
+.multiple .select {
+  display: grid;
+  grid-column-gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  height: 550px;
+}
+
+.selectRange {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  height: 550px;
+}
+
+.selectRange .item {
+  min-width: 250px;
+  padding: 8px;
+}
+
+.multipleContainer {
+  height: 500px;
+}
+
+.flexRow {
+  display: flex;
+  flex-direction: row;
+  min-height: 480px;
+  margin-bottom: 16px;
+}
+
+.dependableItem {
+  width: 500px;
+  margin-right: 20px;
+}
+
+.customSelect {
+  --input-select-min-width: 100%;
+  --input-select-border-color: transparent;
+  --input-select-border-color-hover: red;
+  --input-select-border-color-active: green;
+  --input-select-expanded-border-color: red;
+  --input-select-expanded-border-color-hover: blue;
+  --input-select-expanded-border-color-active: green;
+  --input-select-icon-color: transparent;
+  --input-select-icon-color-hover: red;
+  --input-select-icon-color-active: green;
+  --input-select-expanded-icon-color: red;
+  --input-select-expanded-icon-color-hover: blue;
+  --input-select-expanded-icon-color-active: green;
+
+  &::part(single-select-input) {
+    transition: border-color 0.3s;
+  }
+
+  &::part(icon-chevron) {
+    transition: color 0.3s, transform 0.15s ease-out 0s, -webkit-transform 0.15s ease-out 0s;
+  }
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}

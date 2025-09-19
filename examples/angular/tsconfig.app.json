@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+
+  "compilerOptions": {
+    "types": [],
+    "skipLibCheck": true,
+  },
+
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ]
+}

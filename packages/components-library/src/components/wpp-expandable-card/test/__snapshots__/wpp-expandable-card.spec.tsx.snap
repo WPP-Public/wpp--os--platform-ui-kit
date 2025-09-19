@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-expandable-card should render card with context inside 1`] = `
+<wpp-expandable-card class="wpp-expandable-card wpp-primary wpp-size-s" exportparts="expandable-card-body, accordion, section, title, icon, counter, divider, title-wrapper">
+  <mock:shadow-root>
+    <div class="body-container" part="expandable-card-body">
+      <wpp-accordion part="accordion" size="s" text="">
+        <slot></slot>
+        <slot class="header" name="header" slot="header"></slot>
+        <slot class="actions" name="actions" slot="actions"></slot>
+      </wpp-accordion>
+    </div>
+  </mock:shadow-root>
+  <span>
+    test context
+  </span>
+</wpp-expandable-card>
+`;
+
+exports[`wpp-expandable-card should render expandable section with size xl 1`] = `
+<wpp-expandable-card aria-expanded="" class="wpp-expandable-card wpp-primary wpp-size-xl" expanded="" exportparts="expandable-card-body, accordion, section, title, icon, counter, divider, title-wrapper" size="xl">
+  <mock:shadow-root>
+    <div class="body-container" part="expandable-card-body">
+      <wpp-accordion expanded="" part="accordion" size="xl" text="">
+        <slot></slot>
+        <slot class="header" name="header" slot="header"></slot>
+        <slot class="actions" name="actions" slot="actions"></slot>
+      </wpp-accordion>
+    </div>
+  </mock:shadow-root>
+  <wpp-typography slot="header" type="xl-heading">
+    Section name
+  </wpp-typography>
+  <wpp-typography type="s-body">
+    Having a proactive Board and strong leadership that is deeply committed to high ethical standards is a business imperative for ensuring sustainable success.
+  </wpp-typography>
+</wpp-expandable-card>
+`;

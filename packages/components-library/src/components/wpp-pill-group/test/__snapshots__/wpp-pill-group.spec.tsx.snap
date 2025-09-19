@@ -1,0 +1,197 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-pill-group renders component with users with prop src and color attributes 1`] = `
+<wpp-pill-group aria-multiselectable="" class="wpp-pill-group" exportparts="label, content, inner">
+  <mock:shadow-root>
+    <div class="pills-wrapper" part="content">
+      <slot part="inner"></slot>
+    </div>
+  </mock:shadow-root>
+  <wpp-pill class="wpp-pill" exportparts="input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper" name="contact" role="checkbox" tabindex="0" value="email">
+    <mock:shadow-root>
+      <input class="pill-input" name="contact" part="input" tabindex="-1" type="checkbox">
+      <div class="pill-wrapper size-m" part="pill-wrapper">
+        <div class="icon-start size-m slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <div class="label" part="label">
+          Email
+        </div>
+      </div>
+    </mock:shadow-root>
+  </wpp-pill>
+  <wpp-pill class="wpp-pill" exportparts="input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper" name="contact" role="checkbox" tabindex="0" value="mail">
+    <mock:shadow-root>
+      <input class="pill-input" name="contact" part="input" tabindex="-1" type="checkbox">
+      <div class="pill-wrapper size-m" part="pill-wrapper">
+        <div class="icon-start size-m slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <div class="label" part="label">
+          Mail
+        </div>
+      </div>
+    </mock:shadow-root>
+  </wpp-pill>
+  <wpp-pill class="wpp-pill" exportparts="input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper" name="contact" role="checkbox" tabindex="0" value="phone">
+    <mock:shadow-root>
+      <input class="pill-input" name="contact" part="input" tabindex="-1" type="checkbox">
+      <div class="pill-wrapper size-m" part="pill-wrapper">
+        <div class="icon-start size-m slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <div class="label" part="label">
+          Phone
+        </div>
+      </div>
+    </mock:shadow-root>
+  </wpp-pill>
+</wpp-pill-group>
+`;
+
+exports[`wpp-pill-group renders display type pill with items and attributes 1`] = `
+<wpp-pill-group class="wpp-pill-group" exportparts="label, content, inner" size="m" type="display" value="phone">
+  <mock:shadow-root>
+    <div class="pills-wrapper" part="content">
+      <slot part="inner"></slot>
+    </div>
+  </mock:shadow-root>
+  <wpp-pill class="wpp-pill" exportparts="input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper" label="Email" name="contact" removable="" role="checkbox" value="email">
+    <mock:shadow-root>
+      <input class="pill-input" name="contact" part="input" tabindex="-1" type="checkbox">
+      <div class="pill-wrapper removable size-m" part="pill-wrapper">
+        <div class="icon-start size-m slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <div class="label" part="label">
+          Email
+        </div>
+      </div>
+    </mock:shadow-root>
+  </wpp-pill>
+  <wpp-pill class="wpp-pill" exportparts="input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper" label="Mail" name="contact" removable="" role="checkbox" value="mail">
+    <mock:shadow-root>
+      <input class="pill-input" name="contact" part="input" tabindex="-1" type="checkbox">
+      <div class="pill-wrapper removable size-m" part="pill-wrapper">
+        <div class="icon-start size-m slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <div class="label" part="label">
+          Mail
+        </div>
+      </div>
+    </mock:shadow-root>
+  </wpp-pill>
+  <wpp-pill class="wpp-pill" exportparts="input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper" label="Phone" name="contact" removable="" role="checkbox" value="phone">
+    <mock:shadow-root>
+      <input class="pill-input" name="contact" part="input" tabindex="-1" type="checkbox">
+      <div class="pill-wrapper removable size-m" part="pill-wrapper">
+        <div class="icon-start size-m slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <div class="label" part="label">
+          Phone
+        </div>
+      </div>
+    </mock:shadow-root>
+  </wpp-pill>
+</wpp-pill-group>
+`;
+
+exports[`wpp-pill-group renders draggable type pill with items and attributes 1`] = `
+<wpp-pill-group class="wpp-pill-group" exportparts="label, content, inner" size="m" type="draggable" value="phone">
+  <mock:shadow-root>
+    <div class="pills-wrapper" part="content">
+      <slot part="inner"></slot>
+    </div>
+  </mock:shadow-root>
+  <wpp-pill class="wpp-pill" exportparts="input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper" label="Email" name="contact" removable="" role="checkbox" value="email">
+    <mock:shadow-root>
+      <input class="pill-input" name="contact" part="input" tabindex="-1" type="checkbox">
+      <div class="pill-wrapper removable size-m" part="pill-wrapper">
+        <div class="icon-start size-m slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <div class="label" part="label">
+          Email
+        </div>
+      </div>
+    </mock:shadow-root>
+  </wpp-pill>
+  <wpp-pill class="wpp-pill" exportparts="input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper" label="Mail" name="contact" removable="" role="checkbox" value="mail">
+    <mock:shadow-root>
+      <input class="pill-input" name="contact" part="input" tabindex="-1" type="checkbox">
+      <div class="pill-wrapper removable size-m" part="pill-wrapper">
+        <div class="icon-start size-m slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <div class="label" part="label">
+          Mail
+        </div>
+      </div>
+    </mock:shadow-root>
+  </wpp-pill>
+  <wpp-pill class="wpp-pill" exportparts="input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper" label="Phone" name="contact" removable="" role="checkbox" value="phone">
+    <mock:shadow-root>
+      <input class="pill-input" name="contact" part="input" tabindex="-1" type="checkbox">
+      <div class="pill-wrapper removable size-m" part="pill-wrapper">
+        <div class="icon-start size-m slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <div class="label" part="label">
+          Phone
+        </div>
+      </div>
+    </mock:shadow-root>
+  </wpp-pill>
+</wpp-pill-group>
+`;
+
+exports[`wpp-pill-group renders single type pill with items and attributes 1`] = `
+<wpp-pill-group class="wpp-pill-group" exportparts="label, content, inner" size="m" type="single" value="phone">
+  <mock:shadow-root>
+    <div class="pills-wrapper" part="content">
+      <slot part="inner"></slot>
+    </div>
+  </mock:shadow-root>
+  <wpp-pill class="wpp-pill" exportparts="input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper" label="Email" name="contact" role="checkbox" tabindex="0" value="email">
+    <mock:shadow-root>
+      <input class="pill-input" name="contact" part="input" tabindex="-1" type="checkbox">
+      <div class="pill-wrapper size-m" part="pill-wrapper">
+        <div class="icon-start size-m slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <div class="label" part="label">
+          Email
+        </div>
+      </div>
+    </mock:shadow-root>
+  </wpp-pill>
+  <wpp-pill class="wpp-pill" exportparts="input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper" label="Mail" name="contact" role="checkbox" tabindex="0" value="mail">
+    <mock:shadow-root>
+      <input class="pill-input" name="contact" part="input" tabindex="-1" type="checkbox">
+      <div class="pill-wrapper size-m" part="pill-wrapper">
+        <div class="icon-start size-m slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <div class="label" part="label">
+          Mail
+        </div>
+      </div>
+    </mock:shadow-root>
+  </wpp-pill>
+  <wpp-pill class="wpp-pill" exportparts="input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper" label="Phone" name="contact" role="checkbox" tabindex="0" value="phone">
+    <mock:shadow-root>
+      <input class="pill-input" name="contact" part="input" tabindex="-1" type="checkbox">
+      <div class="pill-wrapper size-m" part="pill-wrapper">
+        <div class="icon-start size-m slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <div class="label" part="label">
+          Phone
+        </div>
+      </div>
+    </mock:shadow-root>
+  </wpp-pill>
+</wpp-pill-group>
+`;

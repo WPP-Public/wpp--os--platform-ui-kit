@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+}
+
+.spinners {
+  display: flex;
+  flex-direction: column;
+  margin-right: 50px;
+}
+
+.containerBlack {
+  background-color: var(--wpp-grey-color-900);
+}

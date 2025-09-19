@@ -1,0 +1,14 @@
+<div>
+  <h3 class="title">Multiple tree without search highlight</h3>
+  <wpp-input class="search" (wppChange)="debouncedHandleSearch($event)" type="search" placeholder="Search"></wpp-input>
+
+  <wpp-tree
+    class="tree"
+    [data]="treeData"
+    [search]="search"
+    multiple
+    (wppChange)="handleTreeChange($event)"
+    disable-search-highlight
+    data-testid="multiple-tree"
+  ></wpp-tree>
+</div>

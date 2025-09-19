@@ -1,0 +1,367 @@
+<div class="main-div">
+  <wpp-typography type="xs-body">Buttons with Dynamic Elements</wpp-typography>
+  <div class="dynamic-elements">
+    <wpp-button loading data-testid="loading-button"> Loading </wpp-button>
+
+    <wpp-button loading data-testid="loading-secondary-button" variant="secondary"> Loading </wpp-button>
+
+    <wpp-button loading data-testid="loading-destructive-button" variant="destructive"> Loading </wpp-button>
+
+    <wpp-button loading data-testid="loading-destructive-secondary-button" variant="destructive-secondary">
+      Loading
+    </wpp-button>
+
+    <wpp-action-button loading data-testid="loading-action-primary-button"> Loading </wpp-action-button>
+
+    <wpp-action-button loading data-testid="loading-action-secondary-button" variant="secondary">
+      Loading
+    </wpp-action-button>
+  </div>
+
+  <div class="invertedButtons">
+    <h2>wpp inverted buttons</h2>
+    <p>wpp inverted primary buttons</p>
+    <div class="primary-buttons">
+      <wpp-button inverted data-testid="regular-button">Inverted</wpp-button>
+      <wpp-button inverted class="fixed">Very Long Button Name</wpp-button>
+
+      <wpp-button inverted disabled data-testid="disabled-button"> Disabled </wpp-button>
+
+      <wpp-button inverted size="s" data-testid="small-button"> S Size </wpp-button>
+
+      <wpp-button inverted class="fixed" data-testid="custom-width-button"> Custom Width </wpp-button>
+
+      <wpp-button inverted data-testid="regular-plus-icon-button">
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+        Plus Icon
+      </wpp-button>
+
+      <wpp-button inverted loading data-testid="loading-button"> Loading </wpp-button>
+    </div>
+
+    <p>wpp inverted secondary button</p>
+    <div class="secondary-buttons">
+      <wpp-button inverted data-testid="regular-secondary-button" variant="secondary"> Inverted </wpp-button>
+
+      <wpp-button inverted variant="secondary" class="fixed"> Very Long Button Name </wpp-button>
+
+      <wpp-button inverted disabled data-testid="disabled-secondary-button" variant="secondary"> Disabled </wpp-button>
+
+      <wpp-button inverted size="s" data-testid="small-secondary-button" variant="secondary"> S Size </wpp-button>
+
+      <wpp-button inverted class="fixed" data-testid="custom-width-secondary-button" variant="secondary">
+        Custom Width
+      </wpp-button>
+
+      <wpp-button inverted data-testid="plus-icon-secondary-button" variant="secondary">
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+        Plus Icon
+      </wpp-button>
+
+      <wpp-button inverted loading data-testid="loading-secondary-button" variant="secondary"> Loading </wpp-button>
+    </div>
+  </div>
+
+  <div class="regular-buttons">
+    <h2>wpp regular buttons</h2>
+    <p>wpp regular primary buttons</p>
+    <div class="primary-buttons">
+      <wpp-button data-testid="regular-button">Regular</wpp-button>
+      <wpp-button class="fixed">Very Long Button Name</wpp-button>
+
+      <wpp-button disabled data-testid="disabled-button"> Disabled </wpp-button>
+
+      <wpp-button size="s" data-testid="small-button"> S Size </wpp-button>
+
+      <wpp-button class="fixed" data-testid="custom-width-button"> Custom Width </wpp-button>
+
+      <wpp-button data-testid="regular-plus-icon-button">
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+        Plus Icon
+      </wpp-button>
+    </div>
+
+    <p>wpp regular secondary button</p>
+    <div class="secondary-buttons">
+      <wpp-button data-testid="regular-secondary-button" variant="secondary"> Regular </wpp-button>
+
+      <wpp-button variant="secondary" class="fixed"> Very Long Button Name </wpp-button>
+
+      <wpp-button disabled data-testid="disabled-secondary-button" variant="secondary"> Disabled </wpp-button>
+
+      <wpp-button size="s" data-testid="small-secondary-button" variant="secondary"> S Size </wpp-button>
+
+      <wpp-button class="fixed" data-testid="custom-width-secondary-button" variant="secondary">
+        Custom Width
+      </wpp-button>
+
+      <wpp-button data-testid="plus-icon-secondary-button" variant="secondary">
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+        Plus Icon
+      </wpp-button>
+    </div>
+
+    <p>wpp regular destructive button</p>
+    <div class="destructive-buttons">
+      <wpp-button data-testid="regular-destructive-button" variant="destructive"> Regular </wpp-button>
+
+      <wpp-button class="fixed" variant="destructive"> Very Long Button Name </wpp-button>
+
+      <wpp-button disabled data-testid="disabled-destructive-button" variant="destructive"> Disabled </wpp-button>
+
+      <wpp-button size="s" data-testid="small-destructive-button" variant="destructive"> S Size </wpp-button>
+
+      <wpp-button class="fixed" data-testid="custom-width-destructive-button" variant="destructive">
+        Custom Width
+      </wpp-button>
+      <wpp-button data-testid="plus-icon-secondary-button" variant="destructive">
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+        Plus Icon
+      </wpp-button>
+    </div>
+
+    <p>wpp regular destructive-secondary button</p>
+    <div class="destructive-secondary-buttons">
+      <wpp-button data-testid="regular-destructive-secondary-button" variant="destructive-secondary">
+        Regular
+      </wpp-button>
+
+      <wpp-button class="fixed" variant="destructive-secondary"> Very Long Button Name </wpp-button>
+
+      <wpp-button disabled data-testid="disabled-destructive-secondary-button" variant="destructive-secondary">
+        Disabled
+      </wpp-button>
+
+      <wpp-button size="s" data-testid="small-destructive-secondary-button" variant="destructive-secondary">
+        S Size
+      </wpp-button>
+
+      <wpp-button class="fixed" data-testid="custom-width-destructive-secondary-button" variant="destructive-secondary">
+        Custom Width
+      </wpp-button>
+
+      <wpp-button data-testid="plus-icon-secondary-button" variant="destructive-secondary">
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+        Plus Icon
+      </wpp-button>
+    </div>
+  </div>
+
+  <div class="action-buttons">
+    <h2>wpp action button</h2>
+    <p>wpp action primary button</p>
+    <div class="action-primary-buttons">
+      <wpp-action-button data-testid="regular-action-primary-button"> Regular</wpp-action-button>
+
+      <wpp-action-button disabled data-testid="disabled-action-primary-button"> Disabled</wpp-action-button>
+
+      <wpp-action-button>
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+        Plus Icon
+      </wpp-action-button>
+
+      <wpp-action-button>
+        Arrow Icon
+        <wpp-icon-arrow slot="icon-end"></wpp-icon-arrow>
+      </wpp-action-button>
+
+      <wpp-action-button>
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+      </wpp-action-button>
+
+      <wpp-action-button>
+        <wpp-icon-arrow slot="icon-end"></wpp-icon-arrow>
+      </wpp-action-button>
+
+      <wpp-action-button disabled>
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+      </wpp-action-button>
+
+      <wpp-action-button disabled>
+        <wpp-icon-arrow slot="icon-end"></wpp-icon-arrow>
+      </wpp-action-button>
+    </div>
+
+    <p>wpp action secondary button</p>
+    <div class="action-secondary-buttons">
+      <wpp-action-button variant="secondary" data-testid="regular-action-secondary-button"> Regular</wpp-action-button>
+
+      <wpp-action-button disabled variant="secondary" data-testid="disabled-action-secondary-button">
+        Disabled
+      </wpp-action-button>
+
+      <wpp-action-button variant="secondary">
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+        Plus Icon
+      </wpp-action-button>
+
+      <wpp-action-button variant="secondary">
+        Arrow Icon
+        <wpp-icon-arrow slot="icon-end"></wpp-icon-arrow>
+      </wpp-action-button>
+
+      <wpp-action-button variant="secondary">
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+      </wpp-action-button>
+
+      <wpp-action-button variant="secondary">
+        <wpp-icon-arrow slot="icon-end"></wpp-icon-arrow>
+      </wpp-action-button>
+
+      <wpp-action-button disabled variant="secondary">
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+      </wpp-action-button>
+
+      <wpp-action-button disabled variant="secondary">
+        <wpp-icon-arrow slot="icon-end"></wpp-icon-arrow>
+      </wpp-action-button>
+    </div>
+
+    <p>wpp action destructive button</p>
+    <div class="action-destructive-buttons">
+      <wpp-action-button data-testid="regular-action-destructive-button" variant="destructive">
+        Regular
+      </wpp-action-button>
+
+      <wpp-action-button disabled data-testid="disabled-action-destructive-button" variant="destructive">
+        Disabled
+      </wpp-action-button>
+
+      <wpp-action-button data-testid="plus-icon-action-destructive-button" variant="destructive">
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+        Plus Icon
+      </wpp-action-button>
+
+      <wpp-action-button data-testid="arrow-icon-action-destructive-button" variant="destructive">
+        Arrow Icon
+        <wpp-icon-arrow slot="icon-end"></wpp-icon-arrow>
+      </wpp-action-button>
+
+      <wpp-action-button data-testid="plus-icon-only-button" variant="destructive">
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+      </wpp-action-button>
+
+      <wpp-action-button data-testid="arrow-icon-only-button" variant="destructive">
+        <wpp-icon-arrow slot="icon-end"></wpp-icon-arrow>
+      </wpp-action-button>
+
+      <wpp-action-button data-testid="plus-icon-only-button" disabled variant="destructive">
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+      </wpp-action-button>
+
+      <wpp-action-button data-testid="arrow-icon-only-button" disabled variant="destructive">
+        <wpp-icon-arrow slot="icon-end"></wpp-icon-arrow>
+      </wpp-action-button>
+    </div>
+
+    <p>wpp action inverted button</p>
+    <div class="toasts">
+      <wpp-action-button variant="inverted">Regular</wpp-action-button>
+      <wpp-action-button variant="inverted" disabled> Disabled </wpp-action-button>
+      <wpp-action-button variant="inverted" loading> Loading </wpp-action-button>
+      <wpp-action-button variant="inverted">
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+        Button
+      </wpp-action-button>
+      <wpp-action-button variant="inverted" disabled>
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+        Button
+      </wpp-action-button>
+      <wpp-action-button variant="inverted">
+        <wpp-icon-arrow slot="icon-end"></wpp-icon-arrow>
+        Button
+      </wpp-action-button>
+      <wpp-action-button variant="inverted" disabled>
+        <wpp-icon-arrow slot="icon-end"></wpp-icon-arrow>
+        Button
+      </wpp-action-button>
+      <wpp-action-button variant="inverted">
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+      </wpp-action-button>
+      <wpp-action-button variant="inverted" disabled>
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+      </wpp-action-button>
+      <wpp-action-button variant="inverted" loading>
+        <wpp-icon-plus slot="icon-start"></wpp-icon-plus>
+      </wpp-action-button>
+    </div>
+  </div>
+
+  <div class="icon-buttons">
+    <h2>wpp filter button</h2>
+    <wpp-filter-button>Filter</wpp-filter-button>
+    <wpp-filter-button disabled>Filter</wpp-filter-button>
+    <wpp-filter-button counter="3">Filter</wpp-filter-button>
+    <wpp-filter-button counter="3" disabled> Filter</wpp-filter-button>
+
+    <h2>wpp sort button</h2>
+    <wpp-sort-button>Sort</wpp-sort-button>
+    <wpp-sort-button disabled>Sort</wpp-sort-button>
+
+    <h2>wpp floating button</h2>
+    <wpp-floating-button></wpp-floating-button>
+    <wpp-floating-button disabled></wpp-floating-button>
+    <wpp-floating-button loading></wpp-floating-button>
+    <wpp-floating-button>
+      <wpp-icon-more></wpp-icon-more>
+    </wpp-floating-button>
+
+    <h2>wpp back to top button</h2>
+    <wpp-back-to-top-button></wpp-back-to-top-button>
+  </div>
+
+  <div class="moreBtn">
+    <wpp-typography type="2xl-heading">wpp-more-button</wpp-typography>
+
+    <wpp-typography class="subtitle" type="xl-heading"> Default </wpp-typography>
+    <div class="moreBtnSection">
+      <wpp-more-button
+        (click)="handleClick()"
+        ariaProps="ariaProps"
+        data-testid="default-more-btn-m"
+        class="moreBtnItem"
+      ></wpp-more-button>
+      <wpp-more-button
+        (click)="handleClick()"
+        ariaProps="ariaProps"
+        data-testid="default-more-btn-s"
+        class="moreBtnItem"
+        size="s"
+      ></wpp-more-button>
+    </div>
+
+    <wpp-typography class="subtitle" type="xl-heading"> Loading </wpp-typography>
+    <div class="moreBtnSection">
+      <wpp-more-button
+        ariaProps="ariaProps"
+        loading
+        data-testid="loading-more-btn-m"
+        class="moreBtnItem"
+      ></wpp-more-button>
+      <wpp-more-button
+        ariaProps="ariaProps"
+        loading
+        data-testid="loading-more-btn-s"
+        class="moreBtnItem"
+        size="s"
+      ></wpp-more-button>
+    </div>
+
+    <wpp-typography class="subtitle" type="xl-heading"> Disabled </wpp-typography>
+    <div class="moreBtnSection">
+      <wpp-more-button
+        ariaProps="ariaProps"
+        disabled
+        data-testid="disabled-more-btn-m"
+        class="moreBtnItem"
+      ></wpp-more-button>
+      <wpp-more-button
+        ariaProps="ariaProps"
+        disabled
+        data-testid="disabled-more-btn-s"
+        class="moreBtnItem"
+        size="s"
+      ></wpp-more-button>
+    </div>
+  </div>
+</div>

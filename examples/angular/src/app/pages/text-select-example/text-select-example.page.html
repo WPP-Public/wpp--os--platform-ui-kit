@@ -1,0 +1,67 @@
+<div class="container">
+  <div class="section">
+    <wpp-typography type="2xl-heading">Default Select</wpp-typography>
+
+    <div class="content">
+      <wpp-select
+        type="text"
+        name="select-component"
+        class="selectItem"
+        data-testid="default-text-select-m"
+        [list]="SAMPLE_LIST_2"
+        [labelConfig]="{ text: 'Size M' }"
+        placeholder="Choose option"
+        [value]="value"
+        autoFocus
+        (wppChange)="handleChange($event)"
+      ></wpp-select>
+
+      <wpp-select
+        type="text"
+        name="select-component"
+        class="selectItem"
+        data-testid="default-text-select-s"
+        [list]="SAMPLE_LIST_2"
+        [labelConfig]="{ text: 'Size S' }"
+        placeholder="Choose option"
+        [value]="value"
+        autoFocus
+        size="s"
+        (wppChange)="handleChange($event)"
+      ></wpp-select>
+    </div>
+  </div>
+
+  <div class="section">
+    <wpp-typography type="2xl-heading">Disabled Select</wpp-typography>
+
+    <div class="content">
+      <wpp-select
+        type="text"
+        name="select-component"
+        class="selectItem"
+        data-testid="disabled-text-select-m"
+        disabled
+        [list]="SAMPLE_LIST_2"
+        [labelConfig]="{ text: 'Size M' }"
+        placeholder="Choose option"
+        [value]="value"
+        (wppChange)="handleChange($event)"
+      ></wpp-select>
+
+      <wpp-select
+        type="text"
+        name="select-component"
+        class="selectItem"
+        data-testid="disabled-text-select-s"
+        disabled
+        [list]="SAMPLE_LIST_2"
+        [labelConfig]="{ text: 'Size S' }"
+        placeholder="Choose option"
+        [value]="value"
+        size="s"
+        (wppChange)="handleChange($event)"
+      ></wpp-select>
+    </div>
+  </div>
+</div>

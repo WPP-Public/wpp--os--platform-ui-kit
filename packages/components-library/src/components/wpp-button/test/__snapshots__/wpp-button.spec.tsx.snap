@@ -1,0 +1,190 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-button snapshots should render destructive button 1`] = `
+<wpp-button class="wpp-button" exportparts="button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper" variant="destructive">
+  <mock:shadow-root>
+    <button aria-pressed="false" class="button destructive size-m" data-testid="wppButton" part="button" type="button">
+      <div class="content">
+        <div class="icon-start slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <span class="truncate" part="text">
+          <slot part="inner"></slot>
+        </span>
+        <div class="icon-end slot-hidden" part="icon-end-wrapper">
+          <slot name="icon-end" part="icon-end"></slot>
+        </div>
+      </div>
+    </button>
+  </mock:shadow-root>
+</wpp-button>
+`;
+
+exports[`wpp-button snapshots should render destructive-secondary button with size m and loading 1`] = `
+<wpp-button class="wpp-button wpp-loading" exportparts="button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper" loading="" size="m" variant="destructive-secondary">
+  <mock:shadow-root>
+    <button aria-pressed="false" class="button destructive-secondary loading size-m" data-testid="wppButton" disabled="" part="button" type="button">
+      <div class="loader" part="spinner-wrapper">
+        <wpp-spinner color="var(--wpp-danger-color-500)" part="spinner"></wpp-spinner>
+      </div>
+      <div class="content hide">
+        <div class="icon-start slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <span class="truncate" part="text">
+          <slot part="inner"></slot>
+        </span>
+        <div class="icon-end slot-hidden" part="icon-end-wrapper">
+          <slot name="icon-end" part="icon-end"></slot>
+        </div>
+      </div>
+    </button>
+  </mock:shadow-root>
+</wpp-button>
+`;
+
+exports[`wpp-button snapshots should render disabled destructive button with size s 1`] = `
+<wpp-button class="wpp-button wpp-disabled" disabled="" exportparts="button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper" size="s" variant="destructive">
+  <mock:shadow-root>
+    <button aria-pressed="false" class="button destructive disabled size-s" data-testid="wppButton" disabled="" part="button" type="button">
+      <div class="content">
+        <div class="icon-start slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <span class="truncate" part="text">
+          <slot part="inner"></slot>
+        </span>
+        <div class="icon-end slot-hidden" part="icon-end-wrapper">
+          <slot name="icon-end" part="icon-end"></slot>
+        </div>
+      </div>
+    </button>
+  </mock:shadow-root>
+</wpp-button>
+`;
+
+exports[`wpp-button snapshots should render disabled primary button with size m 1`] = `
+<wpp-button class="wpp-button wpp-disabled" disabled="" exportparts="button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper" size="m">
+  <mock:shadow-root>
+    <button aria-pressed="false" class="button disabled primary size-m" data-testid="wppButton" disabled="" part="button" type="button">
+      <div class="content">
+        <div class="icon-start slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <span class="truncate" part="text">
+          <slot part="inner"></slot>
+        </span>
+        <div class="icon-end slot-hidden" part="icon-end-wrapper">
+          <slot name="icon-end" part="icon-end"></slot>
+        </div>
+      </div>
+    </button>
+  </mock:shadow-root>
+</wpp-button>
+`;
+
+exports[`wpp-button snapshots should render disabled secondary button with size s 1`] = `
+<wpp-button class="wpp-button wpp-disabled" disabled="" exportparts="button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper" size="s" variant="secondary">
+  <mock:shadow-root>
+    <button aria-pressed="false" class="button disabled secondary size-s" data-testid="wppButton" disabled="" part="button" type="button">
+      <div class="content">
+        <div class="icon-start slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <span class="truncate" part="text">
+          <slot part="inner"></slot>
+        </span>
+        <div class="icon-end slot-hidden" part="icon-end-wrapper">
+          <slot name="icon-end" part="icon-end"></slot>
+        </div>
+      </div>
+    </button>
+  </mock:shadow-root>
+</wpp-button>
+`;
+
+exports[`wpp-button snapshots should render primary button 1`] = `
+<wpp-button class="wpp-button" exportparts="button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper">
+  <mock:shadow-root>
+    <button aria-pressed="false" class="button primary size-m" data-testid="wppButton" part="button" type="button">
+      <div class="content">
+        <div class="icon-start slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <span class="truncate" part="text">
+          <slot part="inner"></slot>
+        </span>
+        <div class="icon-end slot-hidden" part="icon-end-wrapper">
+          <slot name="icon-end" part="icon-end"></slot>
+        </div>
+      </div>
+    </button>
+  </mock:shadow-root>
+</wpp-button>
+`;
+
+exports[`wpp-button snapshots should render primary button with loading spinner and size s 1`] = `
+<wpp-button class="wpp-button wpp-loading" exportparts="button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper" loading="" size="s">
+  <mock:shadow-root>
+    <button aria-pressed="false" class="button loading primary size-s" data-testid="wppButton" disabled="" part="button" type="button">
+      <div class="loader" part="spinner-wrapper">
+        <wpp-spinner color="var(--wpp-grey-color-000)" part="spinner"></wpp-spinner>
+      </div>
+      <div class="content hide">
+        <div class="icon-start slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <span class="truncate" part="text">
+          <slot part="inner"></slot>
+        </span>
+        <div class="icon-end slot-hidden" part="icon-end-wrapper">
+          <slot name="icon-end" part="icon-end"></slot>
+        </div>
+      </div>
+    </button>
+  </mock:shadow-root>
+</wpp-button>
+`;
+
+exports[`wpp-button snapshots should render secondary button 1`] = `
+<wpp-button class="wpp-button" exportparts="button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper" variant="secondary">
+  <mock:shadow-root>
+    <button aria-pressed="false" class="button secondary size-m" data-testid="wppButton" part="button" type="button">
+      <div class="content">
+        <div class="icon-start slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <span class="truncate" part="text">
+          <slot part="inner"></slot>
+        </span>
+        <div class="icon-end slot-hidden" part="icon-end-wrapper">
+          <slot name="icon-end" part="icon-end"></slot>
+        </div>
+      </div>
+    </button>
+  </mock:shadow-root>
+</wpp-button>
+`;
+
+exports[`wpp-button snapshots should render secondary button with size m and loading 1`] = `
+<wpp-button class="wpp-button wpp-loading" exportparts="button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper" loading="" size="m" variant="secondary">
+  <mock:shadow-root>
+    <button aria-pressed="false" class="button loading secondary size-m" data-testid="wppButton" disabled="" part="button" type="button">
+      <div class="loader" part="spinner-wrapper">
+        <wpp-spinner color="var(--wpp-primary-color-500)" part="spinner"></wpp-spinner>
+      </div>
+      <div class="content hide">
+        <div class="icon-start slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <span class="truncate" part="text">
+          <slot part="inner"></slot>
+        </span>
+        <div class="icon-end slot-hidden" part="icon-end-wrapper">
+          <slot name="icon-end" part="icon-end"></slot>
+        </div>
+      </div>
+    </button>
+  </mock:shadow-root>
+</wpp-button>
+`;

@@ -1,0 +1,348 @@
+<div class="control-bars">
+  <div>
+    <h2>Segmented Control Bar - M Size</h2>
+    <h3>Text Variant</h3>
+    <div class="container">
+      <div class="margin">
+        <wpp-segmented-control [value]="currentItem" (wppChange)="handleSegmentedControlChange($event)"
+          [labelConfig]="{ text: 'Segmented Control with auto width' }" required>
+          <wpp-segmented-control-item variant="text" value="1">
+            Item 1
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="2">
+            Item 2
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="3" disabled>
+            Item 3
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="4" counter="3">
+            Item 4
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="5" counter="3" disabled>
+            Item 5
+          </wpp-segmented-control-item>
+        </wpp-segmented-control>
+      </div>
+
+      <div class="margin">
+        <wpp-segmented-control value="4" width="600px" hug-content-off
+          [labelConfig]="{ text: 'Segmented Control with fixed width and hugContentOff' }" required>
+          <wpp-segmented-control-item variant="text" value="1">
+            Item 1
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="2">
+            Item 2
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="3" disabled>
+            Item 3
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="4" counter="3">
+            Item 4
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="5" counter="3" disabled>
+            Item 5
+          </wpp-segmented-control-item>
+        </wpp-segmented-control>
+      </div>
+      <div class="margin">
+        <wpp-segmented-control value="5" width="600px" hug-content-off
+          [labelConfig]="{ text: 'Segmented Control with fixed width and hugContentOff - selected disabled item' }" required>
+          <wpp-segmented-control-item variant="text" value="1">
+            Item 1
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="2">
+            Item 2
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="3" disabled>
+            Item 3
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="4" counter="3">
+            Item 4
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="5" counter="3" disabled>
+            Item 5
+          </wpp-segmented-control-item>
+        </wpp-segmented-control>
+      </div>
+      
+      <div class="margin">
+        <wpp-segmented-control value="5" (wppChange)="handleSegmentedControlChange($event)"
+          [labelConfig]="{ text: 'Segmented Control with auto width - selected disabled item' }" required>
+          <wpp-segmented-control-item variant="text" value="1">
+            Item 1
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="2">
+            Item 2
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="3" disabled>
+            Item 3
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="4" counter="3">
+            Item 4
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="5" counter="3" disabled>
+            Item 5
+          </wpp-segmented-control-item>
+        </wpp-segmented-control>
+      </div>
+    </div>
+
+    <h3>Icon Variant</h3>
+    <div class="container">
+      <div class="margin">
+        <wpp-segmented-control value="1" variant="icon" [labelConfig]="{ text: 'Segmented Control with auto width' }" required>
+          <wpp-segmented-control-item variant="icon" value="1">
+            <wpp-icon-grid></wpp-icon-grid>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="2">
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="3" disabled>
+            <wpp-icon-data-view-cards></wpp-icon-data-view-cards>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="4" counter="3">
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="5" counter="3" disabled>
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+        </wpp-segmented-control>
+      </div>
+
+      <div class="margin">
+        <wpp-segmented-control value="4" width="500px" hug-content-off
+          [labelConfig]="{ text: 'Segmented Control with fixed width and hugContentOff' }" required>
+          <wpp-segmented-control-item variant="icon" value="1">
+            <wpp-icon-grid></wpp-icon-grid>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="2">
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="3" disabled>
+            <wpp-icon-data-view-cards></wpp-icon-data-view-cards>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="4" counter="3">
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="5" counter="3" disabled>
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+        </wpp-segmented-control>
+      </div>
+      <div class="margin">
+        <wpp-segmented-control value="5" width="500px" hug-content-off
+          [labelConfig]="{ text: 'Segmented Control with fixed width and hugContentOff - selected disabled item' }" required>
+          <wpp-segmented-control-item variant="icon" value="1">
+            <wpp-icon-grid></wpp-icon-grid>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="2">
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="3" disabled>
+            <wpp-icon-data-view-cards></wpp-icon-data-view-cards>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="4" counter="3">
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="5" counter="3" disabled>
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+        </wpp-segmented-control>
+      </div>
+      <div class="margin">
+        <wpp-segmented-control value="5" variant="icon"
+          [labelConfig]="{ text: 'Segmented Control with auto width - selected disabled item' }" required>
+          <wpp-segmented-control-item variant="icon" value="1">
+            <wpp-icon-grid></wpp-icon-grid>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="2">
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="3" disabled>
+            <wpp-icon-data-view-cards></wpp-icon-data-view-cards>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="4" counter="3">
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="5" counter="3" disabled>
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+        </wpp-segmented-control>
+      </div>
+    </div>
+  </div>
+
+  <div class="small">
+    <h2>Segmented Control Bar - S Size</h2>
+    <h3>Text Variant</h3>
+    <div class="container">
+      <div class="margin">
+        <wpp-segmented-control value="1" size="s" [labelConfig]="{ text: 'Segmented Control with auto width' }" required>
+          <wpp-segmented-control-item variant="text" value="1">
+            Item 1
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="2">
+            Item 2
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="3" disabled>
+            Item 3
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="4" counter="3">
+            Item 4
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="5" counter="3" disabled>
+            Item 5
+          </wpp-segmented-control-item>
+        </wpp-segmented-control>
+      </div>
+
+      <div class="margin">
+        <wpp-segmented-control value="4" size="s" width="600px" hug-content-off
+          [labelConfig]="{ text: 'Segmented Control with fixed width and hugContentOff' }" required>
+          <wpp-segmented-control-item variant="text" value="1">
+            Item 1
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="2">
+            Item 2
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="3" disabled>
+            Item 3
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="4" counter="3">
+            Item 4
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="5" counter="3" disabled>
+            Item 5
+          </wpp-segmented-control-item>
+        </wpp-segmented-control>
+      </div>
+      <div class="margin">
+        <wpp-segmented-control value="5" size="s"
+          [labelConfig]="{ text: 'Segmented Control with auto width - selected disabled item' }" required>
+          <wpp-segmented-control-item variant="text" value="1">
+            Item 1
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="2">
+            Item 2
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="3" disabled>
+            Item 3
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="4" counter="3">
+            Item 4
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="5" counter="3" disabled>
+            Item 5
+          </wpp-segmented-control-item>
+        </wpp-segmented-control>
+      </div>
+      
+      <div class="margin">
+        <wpp-segmented-control value="5" size="s" width="600px" hug-content-off
+          [labelConfig]="{ text: 'Segmented Control with fixed width and hugContentOff - selected disabled item' }" required>
+          <wpp-segmented-control-item variant="text" value="1">
+            Item 1
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="2">
+            Item 2
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="3" disabled>
+            Item 3
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="4" counter="3">
+            Item 4
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="text" value="5" counter="3" disabled>
+            Item 5
+          </wpp-segmented-control-item>
+        </wpp-segmented-control>
+      </div>
+    </div>
+
+    <h3>Icon Variant</h3>
+    <div class="container">
+      <div class="margin">
+        <wpp-segmented-control value="1" size="s" variant="icon" [labelConfig]="{ text: 'Segmented Control with auto width' }"
+          required>
+          <wpp-segmented-control-item variant="icon" value="1">
+            <wpp-icon-grid></wpp-icon-grid>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="2">
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="3" disabled>
+            <wpp-icon-data-view-cards></wpp-icon-data-view-cards>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="4" counter="3">
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="5" counter="3" disabled>
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+        </wpp-segmented-control>
+      </div>
+
+      <div class="margin">
+        <wpp-segmented-control variant="icon" value="4" size="s" width="500px" hug-content-off
+          [labelConfig]="{ text: 'Segmented Control with fixed width and hugContentOff' }" required>
+          <wpp-segmented-control-item variant="icon" value="1">
+            <wpp-icon-grid></wpp-icon-grid>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="2">
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="3" disabled>
+            <wpp-icon-data-view-cards></wpp-icon-data-view-cards>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="4" counter="3">
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="5" counter="3" disabled>
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+        </wpp-segmented-control>
+      </div>
+      <div class="margin">
+        <wpp-segmented-control value="5" size="s" variant="icon"
+          [labelConfig]="{ text: 'Segmented Control with auto width - selected disabled item' }" required>
+          <wpp-segmented-control-item variant="icon" value="1">
+            <wpp-icon-grid></wpp-icon-grid>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="2">
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="3" disabled>
+            <wpp-icon-data-view-cards></wpp-icon-data-view-cards>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="4" counter="3">
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="5" counter="3" disabled>
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+        </wpp-segmented-control>
+      </div>
+      
+      <div class="margin">
+        <wpp-segmented-control variant="icon" value="5" size="s" width="500px" hug-content-off
+          [labelConfig]="{ text: 'Segmented Control with fixed width and hugContentOff - selected disabled item' }" required>
+          <wpp-segmented-control-item variant="icon" value="1">
+            <wpp-icon-grid></wpp-icon-grid>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="2">
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="3" disabled>
+            <wpp-icon-data-view-cards></wpp-icon-data-view-cards>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="4" counter="3">
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+          <wpp-segmented-control-item variant="icon" value="5" counter="3" disabled>
+            <wpp-icon-data-view-list></wpp-icon-data-view-list>
+          </wpp-segmented-control-item>
+        </wpp-segmented-control>
+      </div>
+    </div>
+  </div>
+</div>

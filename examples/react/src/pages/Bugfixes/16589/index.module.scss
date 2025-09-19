@@ -1,0 +1,36 @@
+.examplesRow {
+  display: flex;
+  flex-direction: column;
+
+  .btn {
+    margin: 30px 0;
+  }
+
+  .infoText {
+    margin-top: 10px;
+  }
+
+  .empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 650px;
+    height: 800px;
+    margin: 24px auto;
+    background-color: var(--wpp-primary-color-100);
+    border: 1px solid var(--wpp-grey-color-600);
+    border-radius: 8px;
+    opacity: 0.35;
+  }
+
+  .typeContainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+
+    .typeText {
+      margin-bottom: 10px;
+    }
+  }
+}

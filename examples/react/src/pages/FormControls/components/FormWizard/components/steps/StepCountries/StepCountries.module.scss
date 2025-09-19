@@ -1,0 +1,9 @@
+.agreement {
+  margin-top: 40px;
+
+  --wpp-typography-color: var(wpp-text-color);
+}
+
+.agreementDisabled {
+  --wpp-typography-color: var(--wpp-danger-color-400);
+}

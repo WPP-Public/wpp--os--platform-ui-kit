@@ -1,0 +1,117 @@
+/**
+  * @prop --wpp-expandable-card-width:
+  * @prop --wpp-expandable-card-actions-wrapper-left-margin:
+  * @prop --wpp-expandable-card-border-radius:
+  * @prop --wpp-expandable-card-box-shadow:
+  * @prop --wpp-expandable-card-bg-color:
+  * @prop --wpp-expandable-card-accordion-first-border-color-focus:
+  * @prop --wpp-expandable-card-accordion-second-border-color-focus:
+  * @prop --wpp-expandable-card-padding-s:
+  * @prop --wpp-expandable-card-padding-m:
+  * @prop --wpp-expandable-card-padding-l:
+  * @prop --wpp-expandable-card-padding-xl:
+  * @prop --wpp-expandable-card-padding-2xl:
+*/
+
+:host {
+  --expandable-card-width: var(--wpp-expandable-card-width, 640px);
+  --expandable-card-actions-wrapper-left-margin: var(--wpp-expandable-card-actions-wrapper-left-margin, 10px);
+  --expandable-card-border-radius: var(--wpp-expandable-card-border-radius, var(--wpp-border-radius-m));
+  --expandable-card-box-shadow: var(--wpp-expandable-card-box-shadow, var(--wpp-box-shadow-s));
+  --expandable-card-bg-color: var(--wpp-expandable-card-bg-color, var(--wpp-grey-color-000));
+  --expandable-card-secondary-bg-color: var(--wpp-expandable-card-secondary-bg-color, var(--wpp-grey-color-100));
+  --expandable-card-padding-s: var(--wpp-expandable-card-padding-s, 3px 4px 3px 12px);
+  --expandable-card-padding-m: var(--wpp-expandable-card-padding-m, 8px 8px 8px 16px);
+  --expandable-card-padding-l: var(--wpp-expandable-card-padding-l, 18px 16px 18px 24px);
+  --expandable-card-padding-xl: var(--wpp-expandable-card-padding-xl, 24px 24px 24px 32px);
+  --expandable-card-padding-2xl: var(--wpp-expandable-card-padding-2xl, 32px 32px 32px 40px);
+  --expandable-card-accordion-padding-2xl: var(--wpp-expandable-card-padding-2xl, 32px 32px 32px 40px);
+  --expandable-card-accordion-first-border-color-focus: var(
+    --wpp-expandable-card-accordion-first-border-color-focus,
+    var(--wpp-grey-color-000)
+  );
+  --expandable-card-accordion-second-border-color-focus: var(
+    --wpp-expandable-card-accordion-second-border-color-focus,
+    var(--wpp-brand-color)
+  );
+
+  --expandable-card-accordion-content-margin-s-internal: var(
+    --wpp-expandable-card-accordion-content-margin-s-internal,
+    3px 8px 9px 0px
+  );
+  --expandable-card-accordion-content-margin-m-internal: var(
+    --wpp-expandable-card-accordion-content-margin-m-internal,
+    8px 8px 8px 0px
+  );
+  --expandable-card-accordion-content-margin-l-internal: var(
+    --wpp-expandable-card-accordion-content-margin-l-internal,
+    18px 8px 6px 0px
+  );
+  --expandable-card-accordion-content-margin-xl-internal: var(
+    --wpp-expandable-card-accordion-content-margin-xl-internal,
+    24px 8px 8px 0px
+  );
+  --expandable-card-accordion-content-margin-2xl-internal: var(
+    --wpp-expandable-card-accordion-content-margin-2xl-internal,
+    32px 8px 8px 0px
+  );
+
+  display: inline-flex;
+  background-color: var(--expandable-card-bg-color);
+  box-shadow: var(--expandable-card-box-shadow);
+  border-radius: var(--expandable-card-border-radius);
+  width: var(--expandable-card-width);
+
+  .body-container {
+    width: 100%;
+    position: relative;
+
+    .wpp-accordion {
+      --accordion-expandable-section-margin-s-internal: var(--expandable-card-accordion-content-margin-s-internal);
+      --accordion-expandable-section-margin-m-internal: var(--expandable-card-accordion-content-margin-m-internal);
+      --accordion-expandable-section-margin-l-internal: var(--expandable-card-accordion-content-margin-l-internal);
+      --accordion-expandable-section-margin-xl-internal: var(--expandable-card-accordion-content-margin-xl-internal);
+      --accordion-expandable-section-margin-2xl-internal: var(--expandable-card-accordion-content-margin-2xl-internal);
+
+      &::part(section) {
+        &.tab-focus {
+          box-shadow: 0 0 0 5px var(--expandable-card-accordion-first-border-color-focus),
+            0 0 0 7px var(--expandable-card-accordion-second-border-color-focus);
+        }
+      }
+
+      &::part(title) {
+        @include truncate;
+      }
+    }
+
+    .actions {
+      display: inline-flex;
+    }
+  }
+
+  &:host(.wpp-secondary) {
+    background: var(--expandable-card-secondary-bg-color);
+    box-shadow: none;
+  }
+
+  &:host(.wpp-size-s) {
+    padding: var(--expandable-card-padding-s);
+  }
+
+  &:host(.wpp-size-m) {
+    padding: var(--expandable-card-padding-m);
+  }
+
+  &:host(.wpp-size-l) {
+    padding: var(--expandable-card-padding-l);
+  }
+
+  &:host(.wpp-size-xl) {
+    padding: var(--expandable-card-padding-xl);
+  }
+
+  &:host(.wpp-size-2xl) {
+    padding: var(--expandable-card-padding-2xl);
+  }
+}

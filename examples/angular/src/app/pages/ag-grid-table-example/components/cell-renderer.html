@@ -1,0 +1,4 @@
+<wpp-typography type="s-body" *ngIf="!search">{{ value }}</wpp-typography>
+<wpp-typography type="s-body" *ngIf="search">
+  {{ firstPart }}<span class="ag-search-highlight">{{search}}</span>{{ secondPart }}
+</wpp-typography>

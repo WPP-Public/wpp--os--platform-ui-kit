@@ -1,0 +1,315 @@
+:host {
+  --chat-input-container-min-width: var(--wpp-chat-input-container-min-width, 320px);
+  --chat-input-container-max-width: var(--wpp-chat-input-container-max-width, 720px);
+  --chat-input-container-bg-color: var(--wpp-chat-input-container-bg-color, var(--wpp-grey-color-000));
+  --chat-input-container-outline-width: var(--wpp-chat-input-container-outline-width, 1px);
+  --chat-input-container-outline-style: var(--wpp-chat-input-container-outline-style, solid);
+  --chat-input-container-outline-color: var(--wpp-chat-input-container-outline-color, var(--wpp-grey-color-500));
+  --chat-input-container-outline-color-hover: var(
+    --wpp-chat-input-container-outline-color-hover,
+    var(--wpp-grey-color-700)
+  );
+  --chat-input-container-outline-color-active: var(
+    --wpp-chat-input-container-outline-color-active,
+    var(--wpp-grey-color-800)
+  );
+  --chat-input-container-outline-color-disabled: var(
+    --wpp-chat-input-container-outline-color-disabled,
+    var(--wpp-grey-color-400)
+  );
+  --chat-input-container-border-radius: var(--wpp-chat-input-container-border-radius, 8px);
+
+  --chat-input-area-min-height: var(--wpp-chat-input-area-min-height, 52px);
+  --chat-input-area-max-height: var(--wpp-chat-input-area-max-height, 240px);
+  --chat-input-area-padding: var(--wpp-chat-input-area-padding, 12px 6px 0 12px);
+  --chat-input-area-placeholder-color: var(--wpp-chat-input-area-placeholder-color, var(--wpp-grey-color-700));
+
+  --chat-text-input-min-height: var(--wpp-chat-text-input-min-height, 52px);
+  --chat-text-input-padding: var(--wpp-chat-text-input-padding, 0);
+  --chat-text-input-bg-color: var(--wpp-chat-text-input-bg-color, transparent);
+  --chat-text-input-color-disabled: var(--wpp-chat-text-input-color-disabled, var(--wpp-grey-color-500));
+  --chat-text-input-placeholder-color: var(--wpp-chat-text-input-placeholder-color, var(--wpp-grey-color-700));
+  --chat-text-input-placeholder-color-disabled: var(
+    --wpp-chat-text-input-placeholder-color-disabled,
+    var(--wpp-text-color-disabled)
+  );
+
+  --chat-actions-bar-padding: var(--wpp-chat-actions-bar-padding, 0 10px 8px 10px);
+  --chat-actions-bar-color: var(--wpp-chat-actions-bar-color, var(--wpp-grey-color-500));
+  --chat-actions-bar-color-disabled: var(--wpp-chat-actions-bar-color-disabled, var(--wpp-grey-color-400));
+  --chat-actions-bar-char-counter-color: var(--wpp-chat-actions-bar-char-counter-color, var(--wpp-danger-color-500));
+  --chat-actions-bar-char-counter-color-disabled: var(
+    --wpp-chat-actions-bar-char-counter-color-disabled,
+    var(--wpp-danger-color-300)
+  );
+
+  --chat-text-input-minimized-width: var(--wpp-chat-text-input-minimized-width, 264px);
+  --chat-text-input-minimized-height: var(--wpp-chat-text-input-minimized-height, 22px);
+  --chat-text-input-minimized-padding: var(--wpp-chat-text-input-minimized-padding, 8px 10px);
+
+  --chat-input-transition-timing: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  position: relative;
+  align-items: center;
+  width: 100%;
+  z-index: 100;
+}
+
+/* Chat Input Container */
+.chat-input-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 100%;
+  background-color: var(--chat-input-container-bg-color);
+  gap: 8px;
+  outline: var(--chat-input-container-outline-width) var(--chat-input-container-outline-style)
+    var(--chat-input-container-outline-color);
+  border-radius: var(--chat-input-container-border-radius);
+  min-width: var(--chat-input-container-min-width);
+  max-width: var(--chat-input-container-max-width);
+  box-sizing: border-box;
+  transition: width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);
+  will-change: width, height;
+  cursor: text;
+
+  &:hover {
+    outline: var(--chat-input-container-outline-width) var(--chat-input-container-outline-style)
+      var(--chat-input-container-outline-color-hover);
+  }
+
+  &:active {
+    outline: var(--chat-input-container-outline-width) var(--chat-input-container-outline-style)
+      var(--chat-input-container-outline-color-active);
+  }
+
+  &.disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    outline: var(--chat-input-container-outline-width) var(--chat-input-container-outline-style)
+      var(--chat-input-container-outline-color-disabled);
+  }
+}
+
+/* File Upload Toast */
+.chat-file-upload-toast {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  z-index: 2000;
+}
+
+/* Input Area */
+/**
+ * Flexbox Column-Reverse Pattern for Chat Input
+ * ---------------------------------------------
+ * The `.input-area` uses `display: flex; flex-direction: column-reverse;` to keep the textarea visually anchored at the bottom,
+ * ensuring smooth caret and scroll behavior as the user types or pastes large content.
+ *
+ * To maintain the correct visual order (attachments above textarea), we use the CSS `order` property:
+ *   .attachments { order: 2; }
+ *   .text-input  { order: 1; }
+ *
+ * This approach avoids manual scroll-to-bottom logic and provides a native, flicker-free experience.
+ * If you add more elements to `.input-area`, assign their `order` as needed to preserve the intended layout.
+ *
+ */
+.input-area {
+  @include typographySBody;
+
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: stretch;
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  color: var(--wpp-grey-color-1000);
+  min-height: var(--chat-input-area-min-height);
+  max-height: var(--chat-input-area-max-height);
+  overflow-y: hidden;
+  flex: 1;
+  padding: var(--chat-input-area-padding);
+  gap: 12px;
+  box-sizing: border-box;
+  border-radius: 8px 8px 0 0;
+  transition: height var(--chat-input-transition-timing);
+  will-change: height;
+  transform-origin: bottom;
+
+  .attachments {
+    order: 2; // appears above textarea
+  }
+
+  .text-input {
+    order: 1; // appears at the bottom
+  }
+
+  &:not(.minimized) {
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: var(--wpp-grey-color-400) transparent;
+  }
+
+  &::placeholder {
+    color: var(--chat-input-area-placeholder-color);
+  }
+
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--wpp-grey-color-400);
+    border-radius: 4px;
+    margin: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: var(--chat-text-input-min-height);
+    resize: none;
+    border: none;
+    outline: none;
+    padding: var(--chat-text-input-padding);
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    background-color: var(--chat-text-input-bg-color);
+    overflow: hidden;
+    box-sizing: border-box;
+    color: inherit;
+    transition: min-height var(--chat-input-transition-timing);
+    will-change: min-height;
+    transform-origin: bottom;
+    margin: 0;
+
+    &::placeholder {
+      color: var(--chat-text-input-placeholder-color);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      color: var(--chat-text-input-color-disabled);
+
+      &::placeholder {
+        color: var(--chat-text-input-placeholder-color-disabled);
+      }
+    }
+  }
+}
+
+.input-area.minimized {
+  min-height: 0;
+  padding: var(--chat-text-input-minimized-padding);
+
+  .input-area-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .minimized-input {
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: var(--chat-text-input-minimized-width);
+
+    .input-value {
+      width: 100%;
+    }
+
+    .input-value.disabled {
+      color: var(--chat-text-input-color-disabled);
+    }
+
+    .input-value-placeholder {
+      color: var(--chat-text-input-placeholder-color);
+    }
+
+    .input-value-placeholder.disabled {
+      color: var(--chat-text-input-placeholder-color-disabled);
+    }
+  }
+}
+
+/* Actions Bar */
+.actions-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: var(--chat-actions-bar-padding);
+  border-radius: 0 0 8px 8px;
+
+  .left-actions {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+
+    .select {
+      display: flex;
+      width: 100%;
+    }
+
+    .wpp-action-button::part(button) {
+      color: var(--chat-actions-bar-color);
+    }
+
+    &.disabled {
+      .wpp-action-button::part(button) {
+        cursor: not-allowed;
+        color: var(--chat-actions-bar-color-disabled);
+      }
+    }
+  }
+
+  .right-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .char-counter {
+      color: var(--chat-actions-bar-char-counter-color);
+    }
+
+    .wpp-action-button::part(button) {
+      color: var(--chat-actions-bar-color);
+    }
+
+    &.disabled {
+      .wpp-action-button::part(button) {
+        cursor: not-allowed;
+        color: var(--chat-actions-bar-color-disabled);
+      }
+
+      .char-counter {
+        color: var(--chat-actions-bar-char-counter-color-disabled);
+      }
+    }
+  }
+}
+
+.attachments {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+
+  .wpp-file-upload-item {
+    width: 100%;
+
+    &::part(file-item) {
+      margin-top: 0;
+    }
+  }
+}

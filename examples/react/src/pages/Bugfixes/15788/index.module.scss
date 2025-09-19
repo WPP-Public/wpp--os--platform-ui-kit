@@ -1,0 +1,15 @@
+.buttons {
+  display: flex;
+}
+
+.stateButton {
+  margin-left: 30px;
+
+  &::part(button) {
+    width: 200px;
+  }
+
+  &::part(body) {
+    width: 100%;
+  }
+}

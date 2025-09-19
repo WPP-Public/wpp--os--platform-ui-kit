@@ -1,0 +1,87 @@
+.wrapper {
+  margin-left: 72px;
+  padding: 20px;
+  background-color: var(--wpp-grey-color-300);
+  transition: 0.5s ease-in-out;
+}
+
+.open {
+  margin-left: 240px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  background-color: var(--wpp-grey-color-000);
+}
+
+.icon {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgb(0 0 0 / 20%);
+}
+
+.menu {
+  flex: 1;
+}
+
+.menu-list {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  list-style: none;
+}
+
+.menu-item {
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  color: var(--wpp-grey-color-800);
+}
+
+.name {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+  color: var(--wpp-grey-color-1000);
+}
+
+.controlPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background-color: var(--wpp-grey-color-200);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+}
+
+.controlPanel p {
+  margin: 0 0 8px;
+  color: var(--wpp-grey-color-1000);
+  font-weight: 600;
+}
+
+.controlPanel button {
+  padding: 8px 12px;
+  color: var(--wpp-grey-color-000);
+  font-size: 14px;
+  background-color: var(--wpp-primary-color-500);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.controlPanel button:hover {
+  background-color: var(--wpp-primary-color-600);
+}
+
+.controlPanel button:active {
+  background-color: var(--wpp-primary-color-700);
+}

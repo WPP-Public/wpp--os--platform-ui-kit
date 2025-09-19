@@ -1,0 +1,87 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 50px;
+
+  .item {
+    margin-bottom: 20px;
+  }
+
+  .selectsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: flex-start;
+    width: 900px;
+    margin-top: 50px;
+    padding: 10px;
+    overflow: hidden;
+    border: 1px solid black;
+    border-radius: 20px;
+  }
+
+  .section {
+    width: 900px;
+    margin-bottom: 40px;
+
+    .content {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+
+      .selectItem {
+        width: 300px;
+      }
+    }
+  }
+
+  .scenarios {
+    width: 900px;
+
+    .scenario {
+      margin-top: 20px;
+      margin-bottom: 60px;
+
+      .title {
+        margin-bottom: 20px;
+      }
+
+      .subTitle {
+        display: block;
+        margin: 10px 0;
+      }
+
+      .truncationContainer {
+        flex-direction: column;
+
+        .selectItem {
+          margin-bottom: 20px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+
+      .selects {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+
+        .selectItem {
+          width: 300px;
+        }
+      }
+
+      .actions {
+        margin-bottom: 20px;
+
+        .buttonItem {
+          margin-right: 20px;
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}

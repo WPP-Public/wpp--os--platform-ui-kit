@@ -1,0 +1,39 @@
+diff --git a/node_modules/@stencil/react-output-target/dist/index.cjs.js b/node_modules/@stencil/react-output-target/dist/index.cjs.js
+index fd6fd4c..70d7144 100644
+--- a/node_modules/@stencil/react-output-target/dist/index.cjs.js
++++ b/node_modules/@stencil/react-output-target/dist/index.cjs.js
+@@ -220,7 +220,7 @@ import { createReactComponent } from './react-component-lib';\n`;
+  */
+ function createComponentDefinition(cmpMeta, includeCustomElement = false) {
+     const tagNameAsPascal = dashToPascalCase(cmpMeta.tagName);
+-    let template = `export const ${tagNameAsPascal} = /*@__PURE__*/createReactComponent<${IMPORT_TYPES}.${tagNameAsPascal}, HTML${tagNameAsPascal}Element>('${cmpMeta.tagName}'`;
++    let template = `export const ${tagNameAsPascal} = /*@__PURE__*/createReactComponent<${IMPORT_TYPES}.${tagNameAsPascal}, HTML${tagNameAsPascal}Element>('${cmpMeta.registryTagName}'`;
+     if (includeCustomElement) {
+         template += `, undefined, undefined, define${tagNameAsPascal}`;
+     }
+diff --git a/node_modules/@stencil/react-output-target/dist/index.js b/node_modules/@stencil/react-output-target/dist/index.js
+index d54a546..b386d40 100644
+--- a/node_modules/@stencil/react-output-target/dist/index.js
++++ b/node_modules/@stencil/react-output-target/dist/index.js
+@@ -211,7 +211,7 @@ import { createReactComponent } from './react-component-lib';\n`;
+  */
+ function createComponentDefinition(cmpMeta, includeCustomElement = false) {
+     const tagNameAsPascal = dashToPascalCase(cmpMeta.tagName);
+-    let template = `export const ${tagNameAsPascal} = /*@__PURE__*/createReactComponent<${IMPORT_TYPES}.${tagNameAsPascal}, HTML${tagNameAsPascal}Element>('${cmpMeta.tagName}'`;
++    let template = `export const ${tagNameAsPascal} = /*@__PURE__*/createReactComponent<${IMPORT_TYPES}.${tagNameAsPascal}, HTML${tagNameAsPascal}Element>('${cmpMeta.registryTagName}'`;
+     if (includeCustomElement) {
+         template += `, undefined, undefined, define${tagNameAsPascal}`;
+     }
+diff --git a/node_modules/@stencil/react-output-target/dist/output-react.js b/node_modules/@stencil/react-output-target/dist/output-react.js
+index 6c53e30..aab71fd 100644
+--- a/node_modules/@stencil/react-output-target/dist/output-react.js
++++ b/node_modules/@stencil/react-output-target/dist/output-react.js
+@@ -100,7 +100,7 @@ import { createReactComponent } from './react-component-lib';\n`;
+  */
+ export function createComponentDefinition(cmpMeta, includeCustomElement = false) {
+     const tagNameAsPascal = dashToPascalCase(cmpMeta.tagName);
+-    let template = `export const ${tagNameAsPascal} = /*@__PURE__*/createReactComponent<${IMPORT_TYPES}.${tagNameAsPascal}, HTML${tagNameAsPascal}Element>('${cmpMeta.tagName}'`;
++    let template = `export const ${tagNameAsPascal} = /*@__PURE__*/createReactComponent<${IMPORT_TYPES}.${tagNameAsPascal}, HTML${tagNameAsPascal}Element>('${cmpMeta.registryTagName}'`;
+     if (includeCustomElement) {
+         template += `, undefined, undefined, define${tagNameAsPascal}`;
+     }

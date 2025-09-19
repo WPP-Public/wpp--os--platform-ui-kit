@@ -1,0 +1,36 @@
+.slide {
+  padding: 300px 0;
+  font-size: 64px;
+  text-align: center;
+}
+
+.swiper {
+  margin-bottom: 20px;
+}
+
+.gallerySwiper {
+  width: 90%;
+  height: 450px;
+  margin-top: 20px;
+
+  .slideContent {
+    height: 100%;
+
+    .slide {
+      height: 95%;
+      padding: 0;
+      border-radius: var(--wpp-border-radius-m);
+      box-shadow: var(--wpp-box-shadow-m);
+    }
+  }
+}
+
+.contrast {
+  --swiper-theme-color: var(--wpp-grey-color-000);
+  --swiper-pagination-bullet-inactive-color: var(--wpp-grey-color-000);
+  --swiper-pagination-bullet-active-color: var(--wpp-grey-color-000);
+
+  .slide {
+    color: var(--wpp-grey-color-000);
+  }
+}

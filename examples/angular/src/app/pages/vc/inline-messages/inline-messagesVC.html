@@ -1,0 +1,87 @@
+<div class="container" data-testid="inline-messages-container">
+  <div class="sizeL">
+    <h3>L Size Messages</h3>
+    <wpp-inline-message
+      *ngFor="let item of ITEMS"
+      class="item"
+      size="l"
+      action-btn-text="Action"
+      [hideCloseBtn]="isBtnHidden"
+      [titleText]="title"
+      [message]="item.message"
+      [type]="item.type"
+      (wppClickCloseBtn)="handleClickCloseBtn()"
+      (wppClickActionBtn)="handleClickActionBtn()"
+    ></wpp-inline-message>
+
+    <wpp-inline-message
+      class="item"
+      size="l"
+      message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+      [titleText]="title === '' ? '' : 'Title (auto)'"
+      type="information"
+    ></wpp-inline-message>
+
+    <wpp-inline-message
+      class="item"
+      size="l"
+      message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+      show-tooltip-from="30"
+      [titleText]="title === '' ? '' : 'Title (30 symbols)'"
+      type="information"
+      data-testid="hover-message"
+    ></wpp-inline-message>
+
+    <wpp-button class="buttonItem" (click)="handleBtnClick()"
+      >{{ isBtnHidden ? 'Show' : 'Hide' }} close button</wpp-button
+    >
+    <wpp-button class="buttonItem" (click)="handleClickChangeTitle()"
+      >{{ title === '' ? 'Add' : 'Remove' }} title</wpp-button
+    >
+  </div>
+
+  <div class="size">
+    <h3>M Size Messages</h3>
+    <wpp-inline-message class="item" size="m" message="Warning message" type="warning"></wpp-inline-message>
+
+    <wpp-inline-message class="item" size="m" message="Error message" type="error"></wpp-inline-message>
+
+    <wpp-inline-message class="item" size="m" message="Info message" type="information"></wpp-inline-message>
+
+    <wpp-inline-message class="item" size="m" message="Success message" type="success"></wpp-inline-message>
+
+    <wpp-inline-message
+      class="item"
+      size="m"
+      message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+      type="information"
+      data-testid="hover-message"
+    ></wpp-inline-message>
+  </div>
+
+  <div class="size">
+    <h3>S Size Messages</h3>
+    <wpp-inline-message class="item" size="s" message="Warning message" type="warning"></wpp-inline-message>
+
+    <wpp-inline-message class="item" size="s" message="Error message" type="error"></wpp-inline-message>
+
+    <wpp-inline-message class="item" size="s" message="Info message" type="information"></wpp-inline-message>
+
+    <wpp-inline-message class="item" size="s" message="Success message" type="success"></wpp-inline-message>
+
+    <wpp-inline-message
+      class="item"
+      size="s"
+      type="information"
+      message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+      show-tooltip-from="30"
+    ></wpp-inline-message>
+
+    <wpp-inline-message
+      class="item"
+      size="s"
+      type="information"
+      message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+    ></wpp-inline-message>
+  </div>
+</div>

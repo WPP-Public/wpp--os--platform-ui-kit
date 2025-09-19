@@ -1,0 +1,43 @@
+.fixed::part(button) {
+  width: 170px;
+}
+
+.toasts {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background-color: rgb(52 58 63);
+}
+
+.invertedButtons {
+  margin-top: 10px;
+  padding: 10px;
+  color: white;
+  background-color: #343a3f;
+}
+
+.moreBtn {
+  margin-top: 20px;
+  padding-bottom: 150px;
+
+  .subtitle {
+    display: block;
+    margin: 10px 0;
+  }
+
+  .moreBtnSection {
+    margin-bottom: 20px;
+
+    .moreBtnItem {
+      margin-right: 100px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+.setFocusBtn {
+  margin: 0 10px 10px 0;
+}

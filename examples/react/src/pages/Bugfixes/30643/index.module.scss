@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 50px;
+  padding-bottom: 150px;
+
+  .title {
+    margin-bottom: 20px;
+  }
+}
+
+.dropdownContent {
+  padding: 10px;
+}

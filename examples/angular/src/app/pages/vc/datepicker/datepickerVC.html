@@ -1,0 +1,135 @@
+<div class="container" data-testid="datepickers">
+    <div class="datepicker">
+        <h3 class="text">Default Single select</h3>
+        <wpp-datepicker (wppBlur)="handleBlur($event)" (wppFocus)="handleFocus($event)"></wpp-datepicker>
+
+        <h3 class="text">Single select with S size</h3>
+        <wpp-datepicker size="s"></wpp-datepicker>
+
+        <h3 class="text">Default Range select</h3>
+        <wpp-datepicker range (wppDateClear)="handleClearAll($event)"
+                        data-testid="default-range-datepicker"></wpp-datepicker>
+
+        <h3 class="text">Range select with S size</h3>
+        <wpp-datepicker size="s" range></wpp-datepicker>
+
+        <h3 class="text">With Placeholder</h3>
+        <wpp-datepicker placeholder="Enter the date"></wpp-datepicker>
+
+        <h3 class="text">Single select initial date</h3>
+        <wpp-datepicker value="12/12/2022"></wpp-datepicker>
+
+        <h3 class="text">Range select initial date</h3>
+        <wpp-datepicker range [value]="['07/12/2011', '07/21/2011']"></wpp-datepicker>
+
+        <h3 class="text">Range select input test</h3>
+        <wpp-datepicker range data-testid="datepicker"></wpp-datepicker>
+    </div>
+
+<div class="datepicker">
+        <h3 class="text">Date Locale Example - en-US</h3>
+        <wpp-datepicker [locale]="{
+          dateLocale: 'en-US',
+          firstDay: 3,
+          dateFormat: 'dd/MM/yyyy'
+        }" value="15/10/2023"></wpp-datepicker>
+
+        <h3 class="text">Date Locale Example - ar-SA</h3>
+        <wpp-datepicker [locale]="{
+          dateLocale: 'ar-SA',
+          dateFormat: 'dd/MM/yyyy'
+        }" value="15/10/2023"></wpp-datepicker>
+</div>
+
+    <div class="datepicker">
+        <h3 class="text">Spanish locale</h3>
+        <wpp-datepicker
+                [locale]="spanishLocale"
+                static
+                value="08/02/2022"
+                (wppBlur)="handleBlur($event)"
+                (wppFocus)="handleFocus($event)"
+                (wppChange)="handleChange($event)"
+        ></wpp-datepicker>
+
+        <h3 class="text">Min and max - [04/07 - 20/07]</h3>
+        <wpp-datepicker min-date="04/07/2022" max-date="20/07/2022" static></wpp-datepicker>
+
+        <h3 class="text">max date - 04/07/2022</h3>
+        <wpp-datepicker max-date="04/07/2022" static></wpp-datepicker>
+
+        <h3 class="text">Min date - 20/07/2042</h3>
+        <wpp-datepicker min-date="20/07/2042" static></wpp-datepicker>
+    </div>
+
+    <div class="datepicker">
+        <h3 class="text">With error message</h3>
+        <wpp-datepicker message-type="error" message="Error message"></wpp-datepicker>
+
+        <h3 class="text">With error message (truncated)</h3>
+        <wpp-datepicker
+                message-type="error"
+                message="Error message"
+                max-message-length="12"
+        ></wpp-datepicker>
+
+        <h3 class="text">With warning message</h3>
+        <wpp-datepicker message-type="warning" message="Warning message"></wpp-datepicker>
+
+        <h3 class="text">With warning message (truncated)</h3>
+        <wpp-datepicker
+                message-type="warning"
+                message="Warning message"
+                max-message-length="12"
+        ></wpp-datepicker>
+
+        <h3 class="text">W/o messageType</h3>
+        <wpp-datepicker message="Info message"></wpp-datepicker>
+
+        <h3 class="text">W/o messageType (truncated)</h3>
+        <wpp-datepicker message="Information message" max-message-length="12"></wpp-datepicker>
+
+        <h3 class="text">Modified Date Format only</h3>
+        <wpp-datepicker
+                placeholder="dd/MM/yyyy"
+                value="20/08/2021"
+                [locale]="newFormat"
+        ></wpp-datepicker>
+
+        <h3 class="text">With button</h3>
+        <wpp-datepicker
+                [value]="datepickerTodayDate"
+                [key]="datepickerTodayDate"
+                [locale]="newFormat"
+                (wppChange)="handleTodayChange($event)"
+        ></wpp-datepicker>
+        <wpp-button class="button" (click)="handleButtonDateClick()">
+            Set current date
+        </wpp-button>
+
+        <h3 class="text">With info icon</h3>
+        <wpp-datepicker
+                value="12/12/2022"
+                [labelConfig]="labelConfig"
+        ></wpp-datepicker>
+
+        <h3 class="text">Disabled</h3>
+        <wpp-datepicker value="12/12/2022" disabled required></wpp-datepicker>
+
+        <h3 class="text">Format - EEEE dd MMMM yyyy</h3>
+        <wpp-datepicker
+                value="12/12/2022"
+                [locale]="localeWithDay"
+                required
+        ></wpp-datepicker>
+    </div>
+
+    <div class="datepicker">
+        <h3 class="text">Auto Focus</h3>
+        <wpp-datepicker
+                value="12/12/2020"
+                auto-focus
+                data-testid="focus-datepicker"
+        ></wpp-datepicker>
+    </div>
+</div>

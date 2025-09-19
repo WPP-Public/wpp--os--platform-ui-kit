@@ -1,0 +1,69 @@
+<div data-testid="tab-control">
+  <h2 class="title">Tabs example M Size</h2>
+  <div class="page">
+    <wpp-tabs [value]="currentTab" (wppChange)="handleTabChange($event)">
+      <wpp-tab value="houses">Houses</wpp-tab>
+      <wpp-tab value="cars">Cars</wpp-tab>
+      <wpp-tab disabled counter="2" value="food"> Food </wpp-tab>
+      <wpp-tab value="drinks" counter="4"> Drinks </wpp-tab>
+    </wpp-tabs>
+
+    <div class="content">
+      <wpp-typography
+        *ngIf="currentTab === 'houses'"
+        type="xs-body"
+        class="content"
+      >
+        First content
+      </wpp-typography>
+      <wpp-typography
+        *ngIf="currentTab === 'cars'"
+        type="xs-body"
+        class="content"
+      >
+        Second content
+      </wpp-typography>
+      <wpp-typography
+        *ngIf="currentTab === 'drinks'"
+        type="xs-body"
+        class="content"
+      >
+        Fourth content
+      </wpp-typography>
+    </div>
+  </div>
+
+  <h2 class="title">Tabs example S Size</h2>
+  <div class="page">
+    <wpp-tabs size="s" [value]="currentTab" (wppChange)="handleTabChange($event)">
+      <wpp-tab value="houses">Houses</wpp-tab>
+      <wpp-tab value="cars">Cars</wpp-tab>
+      <wpp-tab disabled counter="2" value="food"> Food </wpp-tab>
+      <wpp-tab value="drinks" counter="4"> Drinks </wpp-tab>
+    </wpp-tabs>
+
+    <div class="content">
+      <wpp-typography
+        *ngIf="currentTab === 'houses'"
+        type="xs-body"
+        class="content"
+      >
+        First content
+      </wpp-typography>
+      <wpp-typography
+        *ngIf="currentTab === 'cars'"
+        type="xs-body"
+        class="content"
+      >
+        Second content
+      </wpp-typography>
+      <wpp-typography
+        *ngIf="currentTab === 'drinks'"
+        type="xs-body"
+        class="content"
+      >
+        Fourth content
+      </wpp-typography>
+    </div>
+  </div>
+</div>

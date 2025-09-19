@@ -1,0 +1,29 @@
+.item {
+  width: 500px;
+  margin-right: 20px;
+}
+
+.inlineItem {
+  width: 300px;
+  margin-right: 20px;
+}
+
+.inlineAutocompletes {
+  height: 200px;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 300px;
+}
+
+.bottomItem {
+  height: 200px;
+  margin-top: 30px;
+}
+
+.dynamicItem {
+  margin-bottom: 20px;
+}

@@ -1,0 +1,5 @@
+@mixin slotWrapper() {
+  &.slot-hidden {
+    display: none;
+  }
+}

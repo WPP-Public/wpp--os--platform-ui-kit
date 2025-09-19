@@ -1,0 +1,44 @@
+@mixin menuList() {
+  /**
+  * @prop --DEPRECATED-wpp-menu-context-list-max-height:
+  * @prop --DEPRECATED-wpp-menu-context-list-padding:
+  * @prop --DEPRECATED-wpp-menu-context-bg-color:
+  * @prop --DEPRECATED-wpp-menu-context-list-border-radius:
+  * @prop --DEPRECATED-wpp-menu-context-list-box-shadow:
+  */
+
+  --mc-list-max-height: var(--wpp-menu-context-list-max-height, 496px);
+  --mc-list-padding: var(--wpp-menu-context-list-padding, 8px);
+  --mc-list-bg-color: var(--wpp-menu-context-bg-color, var(--wpp-grey-color-000));
+  --mc-list-border-radius: var(--wpp-menu-context-list-border-radius, var(--wpp-border-radius-s));
+  --mc-list-box-shadow: var(--wpp-menu-context-list-box-shadow, var(--wpp-box-shadow-m));
+
+  .wpp-list {
+    box-sizing: border-box;
+    max-height: var(--mc-list-max-height); // 15 elements
+    margin: 0;
+    padding: var(--mc-list-padding);
+    overflow-y: auto;
+    list-style-type: none;
+    background-color: var(--mc-list-bg-color);
+    border-radius: var(--mc-list-border-radius);
+    outline: 0;
+    box-shadow: var(--mc-list-box-shadow);
+    scrollbar-width: thin;
+
+    // TODO: Replace with @mixin scrollbarThin()
+    &::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--wpp-grey-color-400);
+      border: 2px solid var(--wpp-grey-color-000);
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      margin-top: 8px;
+    }
+  }
+}

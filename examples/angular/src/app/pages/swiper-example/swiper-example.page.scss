@@ -1,0 +1,48 @@
+.page {
+  padding: 20px 0 50px;
+}
+
+.swiper {
+  --swiper-theme-color: var(--wpp-grey-color-000);
+  --swiper-pagination-color: var(--wpp-brand-color);
+}
+
+.slide {
+  width: 100%;
+  padding: 300px 0;
+  font-size: 64px;
+  text-align: center;
+}
+
+.gallerySwiper {
+  --swiper-theme-color: var(--wpp-grey-color-000);
+  --swiper-pagination-color: var(--wpp-brand-color);
+  --swiper-pagination-bottom: 26px;
+
+  width: 90%;
+  height: 450px;
+  margin-top: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  .slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 97%;
+    padding: 0;
+    border-radius: var(--wpp-border-radius-m);
+    box-shadow: var(--wpp-box-shadow-m);
+  }
+}
+
+swiper-container.contrast {
+  --swiper-theme-color: var(--wpp-grey-color-000);
+  --swiper-pagination-color: var(--wpp-grey-color-000);
+  --swiper-navigation-bg-color: var(--wpp-grey-color-000);
+  --swiper-pagination-bullet-inactive-color: var(--wpp-grey-color-000);
+
+  .slide {
+    color: var(--wpp-grey-color-000);
+  }
+}

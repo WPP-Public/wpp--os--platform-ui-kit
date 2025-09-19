@@ -1,0 +1,20 @@
+.form {
+  width: 500px;
+  height: 300px;
+  margin: 20px;
+  background-color: gray;
+}
+
+.title {
+  margin-bottom: 10px;
+}
+
+.divider {
+  margin-bottom: 10px;
+}
+
+.verticalContainer {
+  display: flex;
+  justify-content: center;
+  height: 150px;
+}

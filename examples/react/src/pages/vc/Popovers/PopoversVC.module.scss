@@ -1,0 +1,210 @@
+.popoversPage {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 50px;
+
+  .defaultPopover {
+    margin-right: 200px;
+  }
+}
+
+.defaultContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 260px;
+  height: 200px;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    max-width: calc(100% - 55px);
+    padding: 8px 8px 7px 16px;
+  }
+
+  .divider {
+    --divider-bg-color: var(--wpp-grey-color-300);
+  }
+
+  .body {
+    display: flex;
+    padding: 8px 12px 8px 16px;
+    overflow-y: auto;
+
+    .text {
+      height: fit-content;
+    }
+
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border: 2px solid transparent;
+      border-radius: 4px;
+      box-shadow: inset 0 0 0 3px var(--wpp-grey-color-400);
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 8px;
+
+    .secondaryButton {
+      margin-right: 4px;
+    }
+  }
+}
+
+.triggerWrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  .avatar {
+    margin-right: 4px;
+    cursor: pointer;
+  }
+
+  .description {
+    cursor: pointer;
+  }
+}
+
+.extendedContent {
+  display: flex;
+  flex-direction: column;
+  width: 256px;
+  height: fit-content;
+
+  .header {
+    display: flex;
+    flex-direction: column;
+
+    .searchInput {
+      --text-input-border-color: '';
+      --text-input-border-width: 0;
+
+      &::part(input) {
+        border-radius: 0;
+      }
+
+      &::part(input-label) {
+        padding-top: 9px;
+      }
+    }
+
+    .divider {
+      --divider-bg-color: var(--wpp-grey-color-300);
+    }
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    max-height: 324px;
+    padding: 5px 4px;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border: 2px solid transparent;
+      border-radius: 4px;
+      box-shadow: inset 0 0 0 3px var(--wpp-grey-color-400);
+    }
+
+    .userItem {
+      &:not(:last-child) {
+        margin-bottom: 4px;
+      }
+
+      p {
+        margin: 0;
+      }
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 8px;
+
+    .secondaryButton {
+      margin-right: 4px;
+    }
+  }
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 275px;
+  margin-right: 100px;
+  margin-bottom: 40px;
+}
+
+.openBtn,
+.disableBtn {
+  margin-top: 20px;
+}
+
+.withSearch {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-start;
+  width: 100%;
+  // This padding to be removed when additional content is added on the page.
+  // The only reason this was added was to have space below the element to test positioning of dropdown.
+  padding-bottom: 100px;
+}
+
+.withSearchContent {
+  box-sizing: border-box;
+  width: 300px;
+  max-height: 400px;
+  padding: 10px 20px;
+  overflow-y: auto;
+
+  .contentText {
+    margin-bottom: 200px;
+  }
+}
+
+.scenario {
+  padding-bottom: 100px;
+
+  .subTitle {
+    margin: 20px 0;
+  }
+}
+
+.withComponents {
+  box-sizing: border-box;
+  width: 300px;
+  max-height: 400px;
+  padding: 10px 20px;
+  overflow-y: auto;
+
+  .contentText {
+    margin-bottom: 50px;
+  }
+
+  .selectItem {
+    margin-bottom: 20px;
+  }
+}

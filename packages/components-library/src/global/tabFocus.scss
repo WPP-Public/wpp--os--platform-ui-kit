@@ -1,0 +1,37 @@
+@mixin tabFocusProperties(
+  $focusFirstStrokeColor: var(--wpp-grey-color-000),
+  $focusSecondStrokeColor: var(--wpp-brand-color),
+  $borderRadius: '',
+  $focusFirstStrokeWidth: 1px,
+  $focusSecondStrokeWidth: 2px
+) {
+  border-radius: $borderRadius;
+  outline: none;
+  box-shadow: 0 0 0 $focusFirstStrokeWidth $focusFirstStrokeColor, 0 0 0 $focusSecondStrokeWidth $focusSecondStrokeColor;
+}
+
+@mixin tabFocus(
+  $focusFirstStrokeColor: var(--wpp-grey-color-000),
+  $focusSecondStrokeColor: var(--wpp-brand-color),
+  $borderRadius: ''
+) {
+  @if $borderRadius != '' {
+    &.tab-focus {
+      @include tabFocusProperties($focusFirstStrokeColor, $focusSecondStrokeColor, $borderRadius);
+    }
+  } @else {
+    &.tab-focus {
+      @include tabFocusProperties($focusFirstStrokeColor, $focusSecondStrokeColor);
+    }
+  }
+}
+
+@mixin tabFocusVisible(
+  $focusFirstStrokeColor: var(--wpp-grey-color-000),
+  $focusSecondStrokeColor: var(--wpp-brand-color),
+  $borderRadius: ''
+) {
+  &:focus-visible {
+    @include tabFocusProperties($focusFirstStrokeColor, $focusSecondStrokeColor, $borderRadius);
+  }
+}

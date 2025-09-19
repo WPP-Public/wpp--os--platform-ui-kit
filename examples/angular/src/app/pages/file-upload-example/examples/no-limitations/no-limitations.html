@@ -1,0 +1,16 @@
+<div class="container">
+  <h3 class="text">File Upload with no limitations</h3>
+  <pre>
+          accept=[]
+          <br/>
+        <p>acceptConfig={{{}|json}}</p>
+        </pre>
+  <wpp-file-upload
+    [value]='file'
+    (wppChange)='handleFileUploadChange($event)'
+    data-testid="file-upload-multiple"
+    size='1'
+    [accept]='acceptPropNoLimit'
+    [acceptConfig]='acceptNoLimit'
+  ></wpp-file-upload>
+</div>

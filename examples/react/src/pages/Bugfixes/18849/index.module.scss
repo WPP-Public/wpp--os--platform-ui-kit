@@ -1,0 +1,20 @@
+.row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding: 10px;
+
+  .rowText {
+    margin-bottom: 20px;
+  }
+
+  .text {
+    width: 200px;
+    margin-right: 20px;
+  }
+
+  .text p {
+    margin: 0;
+  }
+}

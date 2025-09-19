@@ -1,0 +1,289 @@
+{
+  "root": true,
+
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended"
+  ],
+
+  "plugins": [
+    "import"
+  ],
+
+  "rules": {
+    "arrow-body-style": ["error", "as-needed"],
+    "object-shorthand": ["error", "always", { "avoidQuotes": true }],
+    "array-callback-return": "error",
+    "default-case": ["error", { "commentPattern": "^no default$" }],
+    "dot-location": ["error", "property"],
+    "eqeqeq": ["error", "smart"],
+    "new-parens": "error",
+    "no-array-constructor": "error",
+    "no-caller": "error",
+    "no-cond-assign": ["error", "except-parens"],
+    "no-const-assign": "error",
+    "no-control-regex": "error",
+    "no-delete-var": "error",
+    "no-dupe-args": "error",
+    "no-dupe-class-members": "error",
+    "no-dupe-keys": "error",
+    "no-duplicate-case": "error",
+    "no-empty-character-class": "error",
+    "no-empty-pattern": "error",
+    "no-eval": "error",
+    "no-ex-assign": "error",
+    "no-extend-native": "error",
+    "no-extra-bind": "error",
+    "no-extra-label": "error",
+    "no-fallthrough": "error",
+    "no-func-assign": "error",
+    "no-implied-eval": "error",
+    "no-invalid-regexp": "error",
+    "no-iterator": "error",
+    "no-label-var": "error",
+    "no-labels": ["error", { "allowLoop": true, "allowSwitch": false }],
+    "no-lone-blocks": "error",
+    "no-loop-func": "error",
+    "no-mixed-operators": [
+      "error",
+      {
+        "groups": [
+          ["&", "|", "^", "~", "<<", ">>", ">>>"],
+          ["==", "!=", "===", "!==", ">", ">=", "<", "<="],
+          ["&&", "||"],
+          ["in", "instanceof"]
+        ],
+        "allowSamePrecedence": false
+      }
+    ],
+    "no-multi-str": "error",
+    "no-native-reassign": "error",
+    "no-negated-in-lhs": "error",
+    "no-new-func": "error",
+    "no-new-object": "error",
+    "no-new-symbol": "error",
+    "no-new-wrappers": "error",
+    "no-obj-calls": "error",
+    "no-octal": "error",
+    "no-octal-escape": "error",
+    "no-redeclare": "error",
+    "no-regex-spaces": "error",
+    "no-restricted-syntax": ["error", "WithStatement"],
+    "no-script-url": "error",
+    "no-self-assign": "error",
+    "no-self-compare": "error",
+    "no-sequences": "error",
+    "no-shadow-restricted-names": "error",
+    "no-sparse-arrays": "error",
+    "no-template-curly-in-string": "error",
+    "no-this-before-super": "error",
+    "no-throw-literal": "error",
+    "no-undef": "error",
+    "no-restricted-globals": [
+      "error",
+      "addEventListener",
+      "blur",
+      "close",
+      "closed",
+      "confirm",
+      "defaultStatus",
+      "defaultstatus",
+      "event",
+      "external",
+      "find",
+      "focus",
+      "frameElement",
+      "frames",
+      "history",
+      "innerHeight",
+      "innerWidth",
+      "length",
+      "location",
+      "locationbar",
+      "menubar",
+      "moveBy",
+      "moveTo",
+      "name",
+      "onblur",
+      "onerror",
+      "onfocus",
+      "onload",
+      "onresize",
+      "onunload",
+      "open",
+      "opener",
+      "opera",
+      "outerHeight",
+      "outerWidth",
+      "pageXOffset",
+      "pageYOffset",
+      "parent",
+      "print",
+      "removeEventListener",
+      "resizeBy",
+      "resizeTo",
+      "screen",
+      "screenLeft",
+      "screenTop",
+      "screenX",
+      "screenY",
+      "scroll",
+      "scrollbars",
+      "scrollBy",
+      "scrollTo",
+      "scrollX",
+      "scrollY",
+      "self",
+      "status",
+      "statusbar",
+      "stop",
+      "toolbar",
+      "top"
+    ],
+    "no-unreachable": "error",
+    "no-unused-expressions": [
+      "error",
+      {
+        "allowShortCircuit": true,
+        "allowTernary": true,
+        "allowTaggedTemplates": true
+      }
+    ],
+    "no-unused-labels": "error",
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "args": "after-used",
+        "ignoreRestSiblings": true
+      }
+    ],
+    "no-use-before-define": [
+      "error",
+      {
+        "functions": false,
+        "classes": true,
+        "variables": true
+      }
+    ],
+    "no-useless-computed-key": "error",
+    "no-useless-concat": "error",
+    "no-useless-constructor": "error",
+    "no-useless-escape": "error",
+    "no-useless-rename": [
+      "error",
+      {
+        "ignoreDestructuring": false,
+        "ignoreImport": false,
+        "ignoreExport": false
+      }
+    ],
+    "newline-before-return": "off",
+    "newline-after-var": "off",
+    "padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "prev": "*", "next": "return" },
+      { "blankLine": "always", "prev": ["const", "let", "var"], "next": "*" },
+      { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"] }
+    ],
+    "no-with": "error",
+    "no-whitespace-before-property": "error",
+    "require-yield": "error",
+    "rest-spread-spacing": ["error", "never"],
+    "strict": ["error", "never"],
+    "unicode-bom": ["error", "never"],
+    "use-isnan": "error",
+    "valid-typeof": "error",
+    "no-restricted-properties": [
+      "error",
+      {
+        "object": "require",
+        "property": "ensure",
+        "message":
+          "Please use import() instead. More info: https://facebook.github.io/create-react-app/docs/code-splitting"
+      },
+      {
+        "object": "System",
+        "property": "import",
+        "message": "Please use import() instead. More info: https://facebook.github.io/create-react-app/docs/code-splitting"
+      }
+    ],
+    "getter-return": "error",
+    "import/first": "error",
+    "import/no-amd": "error",
+    "import/no-anonymous-default-export": "off",
+    "import/no-webpack-loader-syntax": "error"
+  },
+
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+
+      "extends": [
+        "plugin:@typescript-eslint/recommended"
+      ],
+
+      "rules": {
+        "default-case": "off",
+        "no-dupe-class-members": "off",
+        "no-undef": "off",
+        "@typescript-eslint/consistent-type-assertions": "error",
+        "no-array-constructor": "off",
+        "@typescript-eslint/no-array-constructor": "error",
+        "no-redeclare": "off",
+        "@typescript-eslint/no-redeclare": "error",
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": [
+          "error",
+          {
+            "functions": false,
+            "classes": true,
+            "variables": true,
+            "typedefs": true
+          }
+        ],
+        "no-unused-expressions": "off",
+        "@typescript-eslint/no-unused-expressions": [
+          "error",
+          {
+            "allowShortCircuit": true,
+            "allowTernary": true,
+            "allowTaggedTemplates": true
+          }
+        ],
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "argsIgnorePattern": "^_",
+            "args": "after-used",
+            "ignoreRestSiblings": true
+          }
+        ],
+        "no-useless-constructor": "off",
+        "@typescript-eslint/no-useless-constructor": "error",
+        "@typescript-eslint/no-inferrable-types": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-empty-interface": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/ban-ts-comment": [
+          "error",
+          {
+            "ts-ignore": "allow-with-description",
+            "minimumDescriptionLength": 5
+          }
+        ],
+        "@typescript-eslint/ban-types": [
+          "error",
+          {
+            "types": {
+              "{}": false
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

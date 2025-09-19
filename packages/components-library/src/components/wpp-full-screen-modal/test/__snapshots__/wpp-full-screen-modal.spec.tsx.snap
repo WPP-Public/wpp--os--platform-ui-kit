@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-full-screen-modal Should render default modal 1`] = `
+<wpp-full-screen-modal aria-modal="true" class="wpp-full-screen-modal wpp-full-screen-modal-wrapper wpp-hide" exportparts="wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper" style="z-index: 875;">
+  <mock:shadow-root>
+    <div class="full-screen-modal-overlay" part="wrapper">
+      <wpp-overlay zindex="0"></wpp-overlay>
+      <div class="full-screen-modal hide" data-testid="wpp-fullscreen-modal-content" part="content" role="dialog">
+        <div class="header-container">
+          <div class="header slot-hidden" part="header-wrapper">
+            <slot name="header" part="header"></slot>
+          </div>
+          <wpp-action-button class="close-button" variant="secondary">
+            <wpp-icon-cross slot="icon-start"></wpp-icon-cross>
+          </wpp-action-button>
+        </div>
+        <div class="body slot-hidden" part="body-wrapper">
+          <slot name="body" part="body"></slot>
+        </div>
+        <div class="actions slot-hidden" part="actions-wrapper">
+          <slot name="actions" part="actions"></slot>
+        </div>
+      </div>
+    </div>
+  </mock:shadow-root>
+</wpp-full-screen-modal>
+`;
+
+exports[`wpp-full-screen-modal Should render open full-screen modal 1`] = `
+<wpp-full-screen-modal aria-modal="true" class="wpp-full-screen-modal wpp-full-screen-modal-wrapper wpp-hide" exportparts="wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper" is-open="true" style="z-index: 875;">
+  <mock:shadow-root>
+    <div class="full-screen-modal-overlay" part="wrapper">
+      <wpp-overlay zindex="0"></wpp-overlay>
+      <div class="full-screen-modal hide" data-testid="wpp-fullscreen-modal-content" part="content" role="dialog">
+        <div class="header-container">
+          <div class="header slot-hidden" part="header-wrapper">
+            <slot name="header" part="header"></slot>
+          </div>
+          <wpp-action-button class="close-button" variant="secondary">
+            <wpp-icon-cross slot="icon-start"></wpp-icon-cross>
+          </wpp-action-button>
+        </div>
+        <div class="body slot-hidden" part="body-wrapper">
+          <slot name="body" part="body"></slot>
+        </div>
+        <div class="actions slot-hidden" part="actions-wrapper">
+          <slot name="actions" part="actions"></slot>
+        </div>
+      </div>
+    </div>
+  </mock:shadow-root>
+</wpp-full-screen-modal>
+`;

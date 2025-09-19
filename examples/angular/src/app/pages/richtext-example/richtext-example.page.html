@@ -1,0 +1,38 @@
+<h3>Rich text</h3>
+<wpp-richtext
+  [name]="'content'"
+  [value]="value"
+  [modules]="modules"
+  (wppChange)='handleChange($event)'
+  (wppSelectionChange)='handleSelectionChange($event)'
+  (wppUploadRequest)='handleUploadRequest($event)'
+  required="true"
+  [charactersLimit]="500"
+  [warningThreshold]="480"
+  auto-focus="true"
+  [labelConfig]="{ text: 'Content:' }"
+  [message]="'Some component message'"
+  [placeholder]="'Insert text here...'"
+></wpp-richtext>
+<h3>Rich text view</h3>
+<wpp-richtext-view [value]="value"></wpp-richtext-view>
+<h3>Rich text HTML view</h3>
+<wpp-richtext-html [value]="value"></wpp-richtext-html>
+<h3>Rich text Markdown view</h3>
+<wpp-richtext-markdown [value]="value"></wpp-richtext-markdown>
+
+<h2>Markdown Demo</h2>
+<p>
+  This demo shows the new Markdown features. Simply copy and paste or type Markdown into the editor.
+</p>
+<pre style="background-color: #f7f7f7; padding: 1rem;">{{ markdownValue }}</pre>
+
+<h3>Markdown Editor</h3>
+<wpp-richtext [name]="'markdownContent'" [value]="markdownValue" [format]="'markdown'" [modules]="modules"
+  (wppChange)="handleMarkdownChange($event)" (wppSelectionChange)="handleSelectionChange($event)"
+  (wppUploadRequest)="handleUploadRequest($event)" required="true" [charactersLimit]="500" [warningThreshold]="480"
+  auto-focus="true" [labelConfig]="{ text: 'Markdown Content:' }" [message]="'Markdown editor demo'"
+  [placeholder]="'Type your Markdown here...'"></wpp-richtext>
+
+<h3>Output as HTML</h3>
+<wpp-richtext-html [value]="htmlOutput"></wpp-richtext-html>

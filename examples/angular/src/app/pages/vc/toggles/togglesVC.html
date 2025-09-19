@@ -1,0 +1,25 @@
+<div class="toggles">
+  <h3>With Label</h3>
+  <wpp-toggle class="item" [labelConfig]="labelConfig" required></wpp-toggle>
+
+  <wpp-toggle class="item" [labelConfig]="labelConfigHover" data-testid="hover-toggle" required></wpp-toggle>
+
+  <wpp-toggle class="item" [labelConfig]="labelConfig" disabled required></wpp-toggle>
+
+  <wpp-toggle class="item" [labelConfig]="labelConfig" checked required></wpp-toggle>
+
+  <wpp-toggle class="item" [labelConfig]="labelConfig" disabled checked required></wpp-toggle>
+
+  <wpp-toggle class="item" [labelConfig]="labelConfig"></wpp-toggle>
+
+  <h3>Without Label</h3>
+  <wpp-toggle class="item" [ariaProps]="{ label: 'no label' }"></wpp-toggle>
+
+  <wpp-toggle class="item" disabled [ariaProps]="{ label: 'no label' }"></wpp-toggle>
+
+  <wpp-toggle class="item" checked [ariaProps]="{ label: 'no label' }"></wpp-toggle>
+
+  <wpp-toggle class="item" disabled checked [ariaProps]="{ label: 'no label' }"></wpp-toggle>
+
+  <wpp-toggle class="item" required [ariaProps]="{ label: 'no label' }"></wpp-toggle>
+</div>

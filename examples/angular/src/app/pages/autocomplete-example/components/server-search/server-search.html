@@ -1,0 +1,25 @@
+<div class="item">
+  <wpp-autocomplete
+    required
+    [loading]='isSearchingMovies'
+    [disabled]='isGettingInitialMoviesValue'
+    name="server-data"
+    [labelConfig]="getLabelConfig(labelConfig)"
+    placeholder="Select movies"
+    [value]='serverDataValue'
+    (wppSearchValueChange)='handleSearchValueChange($event)'
+    (wppChange)='handleServerDataValueChange($event)'
+    limit-selected-items='5'
+    multiple
+    show-create-new-element
+    simple-search
+  >
+    <movie-option-view *ngFor='let option of movieSearchResult' [key]='option.id' [option]='option'></movie-option-view>
+    <selected-values
+      [values]='serverDataValue'
+      (closeClick)={value => setServerDataValue(serverDataValue.filter(i => i.id !== value))}
+    />
+    </wpp-autocomplete>
+
+  <results-view [value]={serverDataValue.map(item=> item.id)}></results-view>
+</div>

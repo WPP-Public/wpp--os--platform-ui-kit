@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  height: 550px;
+}
+
+.long-button {
+  &::part(button) {
+    width: 150px;
+  }
+}
+
+.context {
+  margin-right: 50px;
+}

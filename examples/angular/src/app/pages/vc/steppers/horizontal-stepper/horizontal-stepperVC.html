@@ -1,0 +1,66 @@
+<div class="main">
+    <div class="wrapper column">
+        <div class="['full-width-stepper']">
+            <wpp-stepper [activeStep]="currentStep" orientation="horizontal" (wppChange)="handleStepClick($event)">
+                <wpp-step>
+                    <p slot="label" class="text">
+                        Step
+                    </p>
+                </wpp-step>
+                <wpp-step>
+                    <p slot="label" class="text">
+                        Step
+                    </p>
+                </wpp-step>
+                <wpp-step>
+                    <p slot="label" class="text">
+                        Step
+                    </p>
+                </wpp-step>
+                <wpp-step [error]="isError" iconDescription="Error message">
+                    <p slot="label" class="text">
+                        Step
+                    </p>
+                </wpp-step>
+                <wpp-step>
+                    <p slot="label" class="text">
+                        Step
+                    </p>
+                </wpp-step>
+            </wpp-stepper>
+        </div>
+        <div class="pages" data-testid="pages">
+            <div [class]="getPageClassName()">
+                <div class="page">
+                    <h3>Page 1</h3>
+                    <wpp-radio
+                            class="margin"
+                            [labelConfig]="getLabelConfig('Option 1')"
+                            required
+                            data-testid="stepper-radio-button"
+                    ></wpp-radio>
+                </div>
+                <div class="page" data-testid="second-page">
+                    <h3>Page 2</h3>
+                </div>
+                <div class="page">
+                    <h3>Page 3</h3>
+                </div>
+                <div class="page" data-testid="fourth-page">
+                    <h3>Page 4</h3>
+                    <wpp-checkbox class="margin" required (wppChange)="handleCheckbox($event)"></wpp-checkbox>
+                </div>
+                <div class="page">
+                    <h3>Page 5</h3>
+                </div>
+                <div class="page">
+                    <h3>FINAL</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="buttons">
+        <wpp-button (click)="handlePreviousStep()" data-testid="previous-button">Previous Step</wpp-button>
+        <wpp-button (click)="handleNextStep()" class="button" data-testid="next-button"> Next Step</wpp-button>
+    </div>
+</div>

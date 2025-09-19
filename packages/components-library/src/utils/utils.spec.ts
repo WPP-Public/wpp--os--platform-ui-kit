@@ -1,0 +1,66 @@
+import { format } from './utils'
+import { getHighlightData } from './utils'
+
+describe('format', () => {
+  it('returns empty string for no names defined', () => {
+    expect(format(undefined, undefined, undefined)).toEqual('')
+  })
+
+  it('formats just first names', () => {
+    expect(format('Joseph', undefined, undefined)).toEqual('Joseph')
+  })
+
+  it('formats first and last names', () => {
+    expect(format('Joseph', undefined, 'Publique')).toEqual('Joseph Publique')
+  })
+
+  it('formats first, middle and last names', () => {
+    expect(format('Joseph', 'Quincy', 'Publique')).toEqual('Joseph Quincy Publique')
+  })
+})
+
+describe('given getHighlightData', () => {
+  it('returns proper parts', () => {
+    expect(getHighlightData('', 'ea')).toEqual({
+      firstPart: '',
+      highlight: '',
+      secondPart: '',
+    })
+
+    expect(getHighlightData('team from devs', '')).toEqual({
+      firstPart: '',
+      highlight: '',
+      secondPart: 'team from devs',
+    })
+
+    expect(getHighlightData('team from devs', 'ea')).toEqual({
+      firstPart: 't',
+      highlight: 'ea',
+      secondPart: 'm from devs',
+    })
+
+    expect(getHighlightData('team from devs', 'te')).toEqual({
+      firstPart: '',
+      highlight: 'te',
+      secondPart: 'am from devs',
+    })
+
+    expect(getHighlightData('team from devs', 'vs')).toEqual({
+      firstPart: 'team from de',
+      highlight: 'vs',
+      secondPart: '',
+    })
+
+    expect(getHighlightData('team from devs', 'team ')).toEqual({
+      firstPart: '',
+      highlight: 'team ',
+      secondPart: 'from devs',
+    })
+
+    expect(getHighlightData('team from devs', 'team f')).toEqual({
+      firstPart: '',
+      highlight: 'team f',
+      secondPart: 'rom devs',
+    })
+  })
+})

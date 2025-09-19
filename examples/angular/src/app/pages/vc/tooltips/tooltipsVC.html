@@ -1,0 +1,108 @@
+<div data-testid="tooltips">
+  <div class="container">
+    <h2 class="title">Tooltips</h2>
+    <div class="containerTooltips">
+      <wpp-tooltip
+        [config]="{ placement: 'right' }"
+        header="Header Text"
+        text="Tooltip Message"
+        value="$100,000"
+        data-testid="right-tooltip-button"
+      >
+        <wpp-button class="button">Right</wpp-button>
+      </wpp-tooltip>
+
+      <wpp-tooltip [config]="{ placement: 'bottom' }" text="Error Message" error data-testid="bottom-tooltip-button">
+        <wpp-button class="button">Bottom</wpp-button>
+      </wpp-tooltip>
+
+      <wpp-tooltip
+        [config]="{ placement: 'top' }"
+        [text]="textContent"
+        value="$100,000"
+        data-testid="top-tooltip-button"
+      >
+        <wpp-button class="button">With word-break: break-word</wpp-button>
+      </wpp-tooltip>
+
+      <wpp-tooltip [config]="{ placement: 'left' }" header="Header Only" data-testid="left-tooltip-button">
+        <wpp-button class="button">Left</wpp-button>
+      </wpp-tooltip>
+
+      <wpp-tooltip
+        [config]="{ placement: 'top' }"
+        [text]="textContent"
+        [wordBreak]="'break-all'"
+        value="$100,000"
+        data-testid="top-tooltip-button"
+      >
+        <wpp-button class="button">With word-break: break-all</wpp-button>
+      </wpp-tooltip>
+
+      <wpp-tooltip
+        [config]="{ placement: 'top' }"
+        [text]="textContent"
+        [wordBreak]="'auto-phrase'"
+        value="$100,000"
+        data-testid="top-tooltip-button"
+      >
+        <wpp-button class="button">With word-break: auto-phrase</wpp-button>
+      </wpp-tooltip>
+
+      <wpp-tooltip [config]="{ placement: 'top' }" text="Price" value="$100,000" data-testid="top-tooltip-button">
+        <wpp-button class="button">Top</wpp-button>
+      </wpp-tooltip>
+
+      <wpp-tooltip [config]="getTooltipConfig()" text="Tooltip info">
+        <wpp-button (click)="handleCopyBtnClick()" data-testid="tippyButton"> Click to update position </wpp-button>
+      </wpp-tooltip>
+    </div>
+
+    <div class="customTooltipContainer">
+      <wpp-typography class="customContentTitle" type="2xl-heading"> Tooltips with custom content </wpp-typography>
+      <wpp-tooltip [theme]="theme" [config]="{ placement: 'right', allowHTML: true }">
+        <wpp-button class="button" data-testid="allow-html-tooltip-button"> Custom Content Tooltip </wpp-button>
+        <div slot="tooltip-content" class="customContentContainer" [ngClass]="{ light: theme === 'light' }">
+          <wpp-list-item class="item">
+            <span slot="label">List Item</span>
+          </wpp-list-item>
+
+          <wpp-list-item class="item">
+            <span slot="label">List Item</span>
+          </wpp-list-item>
+
+          <wpp-list-item class="item">
+            <span slot="label">List Item</span>
+          </wpp-list-item>
+        </div>
+      </wpp-tooltip>
+
+      <div class="theme-container">
+        <wpp-button class="changeBtn" (click)="handleChangeTheme()" data-testid="change-theme-of-tooltip">
+          Change theme
+        </wpp-button>
+        <wpp-typography type="l-strong">Current theme: {{ theme }}</wpp-typography>
+      </div>
+    </div>
+
+    <div class="otherTooltipsContainer">
+      <h2 class="title">Other types of Tooltips</h2>
+      <wpp-tooltip [config]="{ placement: 'bottom' }" text="Warning Message" warning data-testid="warning-tooltip">
+        <wpp-button variant="primary" class="button"> Warning Tooltip </wpp-button>
+      </wpp-tooltip>
+      <wpp-tooltip [config]="{ placement: 'bottom' }" text="Error Message" error data-testid="error-tooltip">
+        <wpp-button variant="destructive" class="button"> Error Tooltip </wpp-button>
+      </wpp-tooltip>
+    </div>
+    <div class="otherTooltipsContainer">
+      <h4 class="title">Title + Text</h4>
+      <wpp-tooltip [config]="{ placement: 'bottom' }" text="Warning Message" header="Title" warning
+        data-testid="warning-tooltip">
+        <wpp-button variant="primary" class="button"> Warning Tooltip </wpp-button>
+      </wpp-tooltip>
+      <wpp-tooltip [config]="{ placement: 'bottom' }" text="Error Message" header="Title" error data-testid="error-tooltip">
+        <wpp-button variant="destructive" class="button"> Error Tooltip </wpp-button>
+      </wpp-tooltip>
+    </div>
+  </div>
+</div>

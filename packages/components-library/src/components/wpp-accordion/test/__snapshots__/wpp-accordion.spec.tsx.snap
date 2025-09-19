@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-accordion should render expandable section 1`] = `
+<wpp-accordion class="wpp-accordion wpp-section-wrapper" exportparts="section, title, icon, counter, divider, title-wrapper, content" role="treeitem" tabindex="0" with-divider="" style="--accordion-max-height: undefinedpx; --accordion-show-animation-duration: NaNms; --accordion-hide-animation-duration: NaNms;">
+  <mock:shadow-root>
+    <div class="size-l wpp-section" part="section">
+      <div class="title-tags-wrapper">
+        <div class="title-wrapper" part="title-wrapper">
+          <wpp-icon-chevron part="icon"></wpp-icon-chevron>
+          <div class="header" part="header-wrapper">
+            <slot name="header" part="header"></slot>
+          </div>
+        </div>
+      </div>
+      <div class="actions slot-hidden" part="actions-wrapper">
+        <slot name="actions" part="actions"></slot>
+      </div>
+    </div>
+    <div class="closed content" part="content">
+      <slot class="slot-content"></slot>
+    </div>
+    <wpp-divider part="divider"></wpp-divider>
+  </mock:shadow-root>
+  <wpp-typography slot="header" type="m-strong">
+    Section name
+  </wpp-typography>
+</wpp-accordion>
+`;
+
+exports[`wpp-accordion should render expanded expandable section with size s 1`] = `
+<wpp-accordion aria-expanded="" class="wpp-accordion wpp-section-wrapper" expanded="" exportparts="section, title, icon, counter, divider, title-wrapper, content" role="treeitem" size="s" tabindex="0" with-divider="" style="--accordion-max-height: undefinedpx; --accordion-show-animation-duration: NaNms; --accordion-hide-animation-duration: NaNms;">
+  <mock:shadow-root>
+    <div class="size-s wpp-section" part="section">
+      <div class="title-tags-wrapper">
+        <div class="title-wrapper" part="title-wrapper">
+          <wpp-icon-chevron part="icon"></wpp-icon-chevron>
+          <div class="header" part="header-wrapper">
+            <slot name="header" part="header"></slot>
+          </div>
+        </div>
+      </div>
+      <div class="actions slot-hidden" part="actions-wrapper">
+        <slot name="actions" part="actions"></slot>
+      </div>
+    </div>
+    <div class="closed content" part="content">
+      <slot class="slot-content"></slot>
+    </div>
+    <wpp-divider part="divider"></wpp-divider>
+  </mock:shadow-root>
+  <wpp-typography slot="header" type="s-strong">
+    Section name
+  </wpp-typography>
+  <wpp-checkbox></wpp-checkbox>
+  <wpp-checkbox></wpp-checkbox>
+  <wpp-checkbox></wpp-checkbox>
+</wpp-accordion>
+`;

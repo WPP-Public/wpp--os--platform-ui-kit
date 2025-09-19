@@ -1,0 +1,33 @@
+.example-page {
+  padding: 20px 30px;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 15px 0;
+
+  .left {
+    display: flex;
+
+    > * {
+      width: 250px;
+      margin-right: 20px;
+    }
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+
+    > * {
+      margin-left: 10px;
+    }
+  }
+}

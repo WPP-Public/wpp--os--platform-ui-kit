@@ -1,0 +1,22 @@
+.container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+
+  h2 {
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  p {
+    color: #555;
+    line-height: 1.6;
+  }
+
+  .demo {
+    width: 150px;
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+}

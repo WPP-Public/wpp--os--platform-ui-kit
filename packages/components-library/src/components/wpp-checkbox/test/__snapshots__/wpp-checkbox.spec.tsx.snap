@@ -1,0 +1,172 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-checkbox should render checkbox 1`] = `
+<wpp-checkbox class="wpp-checkbox wpp-checkbox-wrapper" exportparts="body, input, square, icon-tick, icon-dash, message">
+  <mock:shadow-root>
+    <wpp-label class="label" optional="" part="body" typography="s-body">
+      <input aria-required="false" class="checkbox-input" part="input" tabindex="0" type="checkbox">
+      <div class="square" part="square"></div>
+      <wpp-icon-tick part="icon-tick"></wpp-icon-tick>
+      <wpp-icon-dash part="icon-dash"></wpp-icon-dash>
+    </wpp-label>
+  </mock:shadow-root>
+</wpp-checkbox>
+`;
+
+exports[`wpp-checkbox should render checked checkbox 1`] = `
+<wpp-checkbox checked="" class="wpp-checkbox wpp-checkbox-wrapper wpp-checked" exportparts="body, input, square, icon-tick, icon-dash, message">
+  <mock:shadow-root>
+    <wpp-label class="label" optional="" part="body" typography="s-body">
+      <input aria-required="false" checked="" class="checkbox-input" part="input" tabindex="0" type="checkbox">
+      <div class="square" part="square"></div>
+      <wpp-icon-tick part="icon-tick"></wpp-icon-tick>
+      <wpp-icon-dash part="icon-dash"></wpp-icon-dash>
+    </wpp-label>
+  </mock:shadow-root>
+</wpp-checkbox>
+`;
+
+exports[`wpp-checkbox should render checked disabled checkbox 1`] = `
+<wpp-checkbox checked="" class="wpp-checkbox wpp-checkbox-wrapper wpp-checked wpp-disabled" disabled="" exportparts="body, input, square, icon-tick, icon-dash, message">
+  <mock:shadow-root>
+    <wpp-label class="label" disabled="" optional="" part="body" typography="s-body">
+      <input aria-hidden="true" aria-required="false" checked="" class="checkbox-input" disabled="" part="input" tabindex="-1" type="checkbox">
+      <div class="square" part="square"></div>
+      <wpp-icon-tick part="icon-tick"></wpp-icon-tick>
+      <wpp-icon-dash part="icon-dash"></wpp-icon-dash>
+    </wpp-label>
+  </mock:shadow-root>
+</wpp-checkbox>
+`;
+
+exports[`wpp-checkbox should render checked disabled checkbox with label 1`] = `
+<wpp-checkbox checked="" class="wpp-checkbox wpp-checkbox-wrapper wpp-checked wpp-disabled" disabled="" exportparts="body, input, square, icon-tick, icon-dash, message">
+  <mock:shadow-root>
+    <wpp-label class="label with-text wpp-label" disabled="" exportparts="wrapper, content, icon" part="body">
+      <input aria-hidden="true" aria-required="false" checked="" class="checkbox-input" disabled="" part="input" tabindex="-1" type="checkbox">
+      <div class="square" part="square"></div>
+      <wpp-icon-tick part="icon-tick"></wpp-icon-tick>
+      <wpp-icon-dash part="icon-dash"></wpp-icon-dash>
+      <label class="internal-label-wrapper" part="wrapper">
+        <wpp-internal-label class="disabled s-body wpp-internal-label" disabled="" exportparts="info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" part="content">
+          <mock:shadow-root>
+            <div class="info-wrapper" part="info-wrapper" role="presentation">
+              <wpp-typography class="text" part="text" type="s-body">
+                Label
+              </wpp-typography>
+              <wpp-typography class="optional" part="optional-text" type="s-body">
+                (Optional)
+              </wpp-typography>
+            </div>
+            <div aria-label="Show info" class="icon slot-hidden" part="icon-wrapper" role="button" tabindex="0">
+              <slot name="icon" part="icon"></slot>
+            </div>
+          </mock:shadow-root>
+        </wpp-internal-label>
+      </label>
+    </wpp-label>
+  </mock:shadow-root>
+</wpp-checkbox>
+`;
+
+exports[`wpp-checkbox should render disabled checkbox 1`] = `
+<wpp-checkbox class="wpp-checkbox wpp-checkbox-wrapper wpp-disabled" disabled="" exportparts="body, input, square, icon-tick, icon-dash, message">
+  <mock:shadow-root>
+    <wpp-label class="label" disabled="" optional="" part="body" typography="s-body">
+      <input aria-hidden="true" aria-required="false" class="checkbox-input" disabled="" part="input" tabindex="-1" type="checkbox">
+      <div class="square" part="square"></div>
+      <wpp-icon-tick part="icon-tick"></wpp-icon-tick>
+      <wpp-icon-dash part="icon-dash"></wpp-icon-dash>
+    </wpp-label>
+  </mock:shadow-root>
+</wpp-checkbox>
+`;
+
+exports[`wpp-checkbox should render indeterminate checkbox 1`] = `
+<wpp-checkbox class="wpp-checkbox wpp-checkbox-wrapper wpp-indeterminate" exportparts="body, input, square, icon-tick, icon-dash, message" indeterminate="">
+  <mock:shadow-root>
+    <wpp-label class="label" optional="" part="body" typography="s-body">
+      <input aria-required="false" checked="" class="checkbox-input" part="input" tabindex="0" type="checkbox">
+      <div class="square" part="square"></div>
+      <wpp-icon-tick part="icon-tick"></wpp-icon-tick>
+      <wpp-icon-dash part="icon-dash"></wpp-icon-dash>
+    </wpp-label>
+  </mock:shadow-root>
+</wpp-checkbox>
+`;
+
+exports[`wpp-checkbox should render indeterminate checkbox with label 1`] = `
+<wpp-checkbox class="wpp-checkbox wpp-checkbox-wrapper wpp-indeterminate" exportparts="body, input, square, icon-tick, icon-dash, message" indeterminate="">
+  <mock:shadow-root>
+    <wpp-label class="label with-text wpp-label" exportparts="wrapper, content, icon" part="body">
+      <input aria-required="false" checked="" class="checkbox-input" part="input" tabindex="0" type="checkbox">
+      <div class="square" part="square"></div>
+      <wpp-icon-tick part="icon-tick"></wpp-icon-tick>
+      <wpp-icon-dash part="icon-dash"></wpp-icon-dash>
+      <label class="internal-label-wrapper" part="wrapper">
+        <wpp-internal-label class="s-body wpp-internal-label" exportparts="info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" part="content">
+          <mock:shadow-root>
+            <div class="info-wrapper" part="info-wrapper" role="presentation">
+              <wpp-typography class="text" part="text" type="s-body">
+                Label
+              </wpp-typography>
+              <wpp-typography class="optional" part="optional-text" type="s-body">
+                (Optional)
+              </wpp-typography>
+            </div>
+            <div aria-label="Show info" class="icon slot-hidden" part="icon-wrapper" role="button" tabindex="0">
+              <slot name="icon" part="icon"></slot>
+            </div>
+          </mock:shadow-root>
+        </wpp-internal-label>
+      </label>
+    </wpp-label>
+  </mock:shadow-root>
+</wpp-checkbox>
+`;
+
+exports[`wpp-checkbox should render indeterminate disabled checkbox 1`] = `
+<wpp-checkbox class="wpp-checkbox wpp-checkbox-wrapper wpp-disabled wpp-indeterminate" disabled="" exportparts="body, input, square, icon-tick, icon-dash, message" indeterminate="">
+  <mock:shadow-root>
+    <wpp-label class="label" disabled="" optional="" part="body" typography="s-body">
+      <input aria-hidden="true" aria-required="false" checked="" class="checkbox-input" disabled="" part="input" tabindex="-1" type="checkbox">
+      <div class="square" part="square"></div>
+      <wpp-icon-tick part="icon-tick"></wpp-icon-tick>
+      <wpp-icon-dash part="icon-dash"></wpp-icon-dash>
+    </wpp-label>
+  </mock:shadow-root>
+</wpp-checkbox>
+`;
+
+exports[`wpp-checkbox should render indeterminate disabled checkbox with label, icon and tooltip description 1`] = `
+<wpp-checkbox class="wpp-checkbox wpp-checkbox-wrapper wpp-disabled wpp-indeterminate" disabled="" exportparts="body, input, square, icon-tick, icon-dash, message" indeterminate="" name="checkbox">
+  <mock:shadow-root>
+    <wpp-label class="label with-text wpp-label" disabled="" exportparts="wrapper, content, icon" part="body">
+      <input aria-hidden="true" aria-required="false" checked="" class="checkbox-input" disabled="" id="checkbox" name="checkbox" part="input" tabindex="-1" type="checkbox">
+      <div class="square" part="square"></div>
+      <wpp-icon-tick part="icon-tick"></wpp-icon-tick>
+      <wpp-icon-dash part="icon-dash"></wpp-icon-dash>
+      <label aria-label="checkbox" class="internal-label-wrapper" htmlfor="checkbox" part="wrapper">
+        <wpp-internal-label class="disabled s-body wpp-internal-label" disabled="" exportparts="info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" part="content">
+          <mock:shadow-root>
+            <div class="info-wrapper with-icon" part="info-wrapper" role="presentation">
+              <wpp-typography class="text" part="text" type="s-body">
+                Test label
+              </wpp-typography>
+              <wpp-typography class="optional" part="optional-text" type="s-body">
+                (Optick)
+              </wpp-typography>
+            </div>
+            <wpp-tooltip class="tooltip" part="tooltip" text="Your email will be used to send you a confirmation number">
+              <div aria-label="Show info" class="icon" part="icon-wrapper" role="button" tabindex="0">
+                <slot name="icon" part="icon"></slot>
+              </div>
+            </wpp-tooltip>
+          </mock:shadow-root>
+          <wpp-icon-mail-v3-1-1 part="icon" slot="icon"></wpp-icon-mail-v3-1-1>
+        </wpp-internal-label>
+      </label>
+    </wpp-label>
+  </mock:shadow-root>
+</wpp-checkbox>
+`;

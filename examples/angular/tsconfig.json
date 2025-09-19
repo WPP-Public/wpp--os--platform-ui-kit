@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
+    "moduleResolution": "node",
+    "lib": ["dom", "es2019"],
+    "target": "ES2015"
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true
+  }
+}

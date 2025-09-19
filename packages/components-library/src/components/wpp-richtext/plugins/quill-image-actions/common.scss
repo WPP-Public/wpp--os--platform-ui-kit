@@ -1,0 +1,18 @@
+.ql-editor {
+  img, video {
+    display: inline-block;
+    position: relative;
+    top: .15em;
+    max-width: 100%;
+  }
+}
+
+.ql-float-left {
+  float: left;
+  margin-right: var(--richtext-float-gap);
+}
+
+.ql-float-right {
+  float: right;
+  margin-left: var(--richtext-float-gap);
+}

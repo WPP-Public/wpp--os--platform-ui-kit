@@ -1,0 +1,24 @@
+:host {
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    background-color: color-mix(in srgb, var(--wpp-grey-color-500) 60%, transparent);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  .overlay--visible {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  .overlay--hidden {
+    visibility: hidden;
+    pointer-events: none;
+  }
+}

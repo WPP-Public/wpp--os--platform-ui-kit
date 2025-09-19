@@ -1,0 +1,48 @@
+<div class="chatContainer">
+  <wpp-chat-input
+    [enableAttach]="true"
+    [fileUploadConfig]="fileUploadConfig"
+    [charactersLimit]="charactersLimit"
+    [disabled]="disable"
+    (wppSend)="handleSendMessage($event)"
+    (wppMessageChanged)="handleMessageChanged($event)"
+    [textValue]="chatValue"
+    [debounceEnabled]="disableDebounce"
+    withSelect>
+    <wpp-select type="text" (wppChange)="handleChange($event)" placeholder="Select models" slot="select"
+      [disabled]="disable">
+      <wpp-list-item value="gpt4.1">
+        <p slot="label">GPT-4.1</p>
+      </wpp-list-item>
+      <wpp-list-item value="claudesonnet3.5" [disabled]="true">
+        <p slot="label">Claude sonnet 3.5</p>
+      </wpp-list-item>
+      <wpp-list-item value="gpt4o">
+        <p slot="label">GPT-4o</p>
+      </wpp-list-item>
+    </wpp-select>
+  </wpp-chat-input>
+
+  <wpp-chat-input [enableAttach]="true" [fileUploadConfig]="fileUploadConfig" [charactersLimit]="charactersLimit"
+    [disabled]="disable" withSelect (wppSend)="handleSendMessage($event)" size="s" [textValue]="chatValue">
+    <wpp-select type="text" (wppChange)="handleChange($event)" placeholder="Select models" slot="select"
+      [disabled]="disable">
+      <wpp-list-item value="gpt4.1">
+        <p slot="label">GPT-4.1</p>
+      </wpp-list-item>
+      <wpp-list-item value="claudesonnet3.5" [disabled]="true">
+        <p slot="label">Claude sonnet 3.5</p>
+      </wpp-list-item>
+      <wpp-list-item value="gpt4o">
+        <p slot="label">GPT-4o</p>
+      </wpp-list-item>
+    </wpp-select>
+  </wpp-chat-input>
+</div>
+<div class="actionsContainer">
+  <wpp-action-button (click)="toggleDisable()">Disable</wpp-action-button>
+
+  <wpp-action-button (click)="chatValueChange()">Change Input Message</wpp-action-button>
+
+  <wpp-action-button (click)="toggleDebounce()">Debounce - {{ disableDebounce ? 'On' : 'Off' }}</wpp-action-button>
+</div>

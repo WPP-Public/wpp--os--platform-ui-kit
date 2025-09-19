@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-toggle renders component 1`] = `
+<wpp-toggle class="wpp-toggle wpp-toggle-wrapper" exportparts="label, input" name="toggle">
+  <mock:shadow-root>
+    <wpp-label class="hide label" htmlfor="toggle" labelid="toggle-label" optional="" part="label" typography="s-body">
+      <input aria-checked="false" class="toggle-input" id="toggle" name="toggle" part="input" role="switch" tabindex="0" type="checkbox">
+    </wpp-label>
+  </mock:shadow-root>
+</wpp-toggle>
+`;
+
+exports[`wpp-toggle renders component with disabled state 1`] = `
+<wpp-toggle class="wpp-disabled wpp-toggle wpp-toggle-wrapper" disabled="" exportparts="label, input" name="toggle">
+  <mock:shadow-root>
+    <wpp-label class="hide label" disabled="" htmlfor="toggle" labelid="toggle-label" optional="" part="label" typography="s-body">
+      <input aria-checked="false" aria-hidden="true" class="toggle-input" disabled="" id="toggle" name="toggle" part="input" role="switch" tabindex="-1" type="checkbox">
+    </wpp-label>
+  </mock:shadow-root>
+</wpp-toggle>
+`;
+
+exports[`wpp-toggle should render label with all text and icon with tooltip description 1`] = `
+<wpp-toggle class="wpp-toggle wpp-toggle-wrapper" exportparts="label, input" required="">
+  <mock:shadow-root>
+    <wpp-label class="label with-text wpp-label" exportparts="wrapper, content, icon" part="label">
+      <input aria-checked="false" class="toggle-input" id="toggle" name="toggle" part="input" required="" role="switch" tabindex="0" title="Test label" type="checkbox">
+      <label aria-label="toggle" class="internal-label-wrapper" htmlfor="toggle" part="wrapper">
+        <wpp-internal-label class="s-body wpp-internal-label" exportparts="info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" id="toggle-label" part="content">
+          <mock:shadow-root>
+            <div class="info-wrapper with-icon" part="info-wrapper" role="presentation">
+              <wpp-typography class="text" part="text" type="s-body">
+                Test label
+              </wpp-typography>
+            </div>
+            <wpp-tooltip class="tooltip" part="tooltip" text="Your email will be used to send you a confirmation number">
+              <div aria-label="Show info" class="icon" part="icon-wrapper" role="button" tabindex="0">
+                <slot name="icon" part="icon"></slot>
+              </div>
+            </wpp-tooltip>
+          </mock:shadow-root>
+          <wpp-icon-mail-v3-1-1 part="icon" slot="icon"></wpp-icon-mail-v3-1-1>
+        </wpp-internal-label>
+      </label>
+    </wpp-label>
+  </mock:shadow-root>
+</wpp-toggle>
+`;

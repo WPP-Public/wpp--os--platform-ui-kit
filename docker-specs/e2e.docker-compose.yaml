@@ -1,0 +1,32 @@
+services:
+  front-server:
+    healthcheck:
+      test: ["CMD", "curl", "localhost:3000"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    ports:
+      - "3000:3000"
+    build:
+      context: ../
+      dockerfile: ./docker-specs/Dockerfile.e2e-example-server
+    networks:
+      - tests-network
+  e2e-tests:
+    build:
+      context: ../
+      dockerfile: ./docker-specs/Dockerfile.e2e-tests
+    depends_on:
+      front-server:
+        condition: service_healthy
+    environment:
+      - BASE_URL=http://front-server:3000/
+    networks:
+      - tests-network
+    volumes:
+      - "../playwright-report:/app/packages/components-library-automation/playwright-report"
+      - "../test-results:/app/packages/components-library-automation/test-results"
+      
+networks:
+  tests-network:
+    driver: bridge

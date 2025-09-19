@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-floating-button should render disabled floating button 1`] = `
+<wpp-floating-button class="wpp-disabled wpp-floating-button" disabled="" exportparts="button, spinner-wrapper, spinner, icon-plus, ws-wrapper, ws-inner">
+  <mock:shadow-root>
+    <button aria-pressed="false" class="button disabled primary" data-testid="wppFloatingButton" disabled="" part="button" type="button">
+      <div class="content icon" part="ws-wrapper">
+        <slot part="ws-inner">
+          <wpp-icon-plus class="icon-plus" part="icon-plus"></wpp-icon-plus>
+        </slot>
+      </div>
+    </button>
+  </mock:shadow-root>
+</wpp-floating-button>
+`;
+
+exports[`wpp-floating-button should render loading floating button 1`] = `
+<wpp-floating-button class="wpp-floating-button wpp-loading" exportparts="button, spinner-wrapper, spinner, icon-plus, ws-wrapper, ws-inner" loading="">
+  <mock:shadow-root>
+    <button aria-pressed="false" class="button loading primary" data-testid="wppFloatingButton" disabled="" part="button" type="button">
+      <div class="loader" part="spinner-wrapper">
+        <wpp-spinner color="var(--wpp-grey-color-000)" part="spinner"></wpp-spinner>
+      </div>
+      <div class="content hide icon" part="ws-wrapper">
+        <slot part="ws-inner">
+          <wpp-icon-plus class="icon-plus" part="icon-plus"></wpp-icon-plus>
+        </slot>
+      </div>
+    </button>
+  </mock:shadow-root>
+</wpp-floating-button>
+`;
+
+exports[`wpp-floating-button should render primary floating button 1`] = `
+<wpp-floating-button class="wpp-floating-button" exportparts="button, spinner-wrapper, spinner, icon-plus, ws-wrapper, ws-inner">
+  <mock:shadow-root>
+    <button aria-pressed="false" class="button primary" data-testid="wppFloatingButton" part="button" type="button">
+      <div class="content icon" part="ws-wrapper">
+        <slot part="ws-inner">
+          <wpp-icon-plus class="icon-plus" part="icon-plus"></wpp-icon-plus>
+        </slot>
+      </div>
+    </button>
+  </mock:shadow-root>
+</wpp-floating-button>
+`;

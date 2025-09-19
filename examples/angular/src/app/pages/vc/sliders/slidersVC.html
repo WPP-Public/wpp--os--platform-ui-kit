@@ -1,0 +1,772 @@
+<div class="container" data-testid="sliders">
+  <div class="range">
+    <h2>Range Slider - Size M</h2>
+    <div class="slider">
+      <wpp-slider
+        type="range"
+        [value]="rangeValue"
+        max="7"
+        step="2"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="labelConfig"
+        required
+      ></wpp-slider>
+      <wpp-typography class="result">
+        Result of range slider: {{ rangeValue[0] }} - {{ rangeValue[1] }}
+      </wpp-typography>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        type="range"
+        [value]="rangeValue"
+        max="7"
+        step="1"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('Range slider with continuous selection')"
+        required
+        continuous
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        type="range"
+        [value]="rangeValue"
+        max="7"
+        step="1"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('With continuous selection and input')"
+        required
+        continuous
+        with-input
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        type="range"
+        [value]="rangeValue"
+        [maskOptions]="maskOptionsRangeOption1"
+        max="1500"
+        step="1"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('With inputs that have mask options. Up to 2 decimals are allowed, but they will be converted to closest integer.')"
+        required
+        continuous
+        with-input
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        type="range"
+        [value]="rangeValue"
+        [maskOptions]="maskOptionsRangeOption2"
+        max="1500"
+        step="1"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('With inputs that have mask options. No decimals are allowed. Also has as thousand separator: ,')"
+        required
+        continuous
+        with-input
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        type="range"
+        [value]="rangeValue"
+        max="7"
+        step="1"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('With stepped selection and input')"
+        required
+        with-input
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        type="range"
+        [value]="rangeValue"
+        max="7"
+        step="1"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('Disabled input')"
+        required
+        continuous
+        with-input
+        disabled
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        type="range"
+        [value]="rangeValue"
+        max="7"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('Disabled Range slider')"
+        disabled
+        required
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        type="range"
+        [value]="rangeValue"
+        max="7"
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('Range slider w/o marks')"
+        required
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        type="range"
+        [value]="rangeValue"
+        max="5"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('Range slider max')"
+        step="0.5"
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        type="range"
+        [value]="rangeValue"
+        marks
+        min="3"
+        max="10"
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('Range slider min')"
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        type="range"
+        [value]="[9, 9]"
+        marks
+        max="9"
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('Range slider with single max value')"
+        required
+        with-value
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        type="range"
+        [value]="[1, 1]"
+        marks
+        max="9"
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('Range slider with single min value')"
+        required
+        with-value
+      ></wpp-slider>
+    </div>
+  </div>
+
+  <div class="single">
+    <h2>Single Slider - Size M</h2>
+    <div class="slider">
+      <wpp-slider
+        [value]="singleValue"
+        max="3"
+        [marks]="marks"
+        (wppChange)="handleSingleSliderChange($event)"
+        [labelConfig]="getLabelConfig('Single slider with custom marks')"
+        required
+      ></wpp-slider>
+      <wpp-typography class="result">Result of single slider: {{ singleValue }}</wpp-typography>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        [value]="singleValue"
+        max="3"
+        marks
+        (wppChange)="handleSingleSliderChange($event)"
+        [labelConfig]="getLabelConfig('Single slider with continuous selection')"
+        required
+        continuous
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        [value]="singleValue"
+        max="3"
+        marks
+        (wppChange)="handleSingleSliderChange($event)"
+        [labelConfig]="getLabelConfig('With continuous selection and input')"
+        required
+        continuous
+        with-input
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        [value]="singleValue"
+        [maskOptions]="maskOptionsSingleOption1"
+        max="1500"
+        marks
+        (wppChange)="handleSingleSliderChange($event)"
+        [labelConfig]="getLabelConfig('With inputs that have mask options. Up to 2 decimals are allowed, but they will be converted to closest integer.')"
+        required
+        continuous
+        with-input
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        [value]="singleValue"
+        [maskOptions]="maskOptionsSingleOption2"
+        max="1500"
+        marks
+        (wppChange)="handleSingleSliderChange($event)"
+        [labelConfig]="getLabelConfig('With inputs that have mask options. No decimals are allowed. Also has as thousand separator: ,')"
+        required
+        continuous
+        with-input
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        [value]="singleValue"
+        max="3"
+        marks
+        (wppChange)="handleSingleSliderChange($event)"
+        [labelConfig]="getLabelConfig('With stepped selection and input')"
+        required
+        with-input
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        [value]="2"
+        max="3"
+        marks
+        (wppChange)="handleSingleSliderChange($event)"
+        [labelConfig]="getLabelConfig('Disabled input')"
+        required
+        continuous
+        with-input
+        disabled
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        [value]="singleValue"
+        max="3"
+        [marks]="marks"
+        (wppChange)="handleSingleSliderChange($event)"
+        disabled
+        required
+        [labelConfig]="getLabelConfig('Disabled Single slider')"
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        [value]="2"
+        max="3"
+        (wppChange)="handleSingleSliderChange($event)"
+        required
+        [labelConfig]="getLabelConfig('Single slider w/o marks')"
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        [value]="3"
+        max="3"
+        (wppChange)="handleSingleSliderChange($event)"
+        [marks]="marks"
+        [labelConfig]="getLabelConfig('Single slider max value')"
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        [value]="1"
+        max="3"
+        (wppChange)="handleSingleSliderChange($event)"
+        [marks]="marks"
+        [labelConfig]="getLabelConfig('Single slider min value')"
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        [value]="3"
+        max="3"
+        (wppChange)="handleSingleSliderChange($event)"
+        [marks]="marks"
+        [labelConfig]="getLabelConfig('value = max')"
+        with-value
+        required
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        [value]="1"
+        min="1"
+        (wppChange)="handleSingleSliderChange($event)"
+        [marks]="marks"
+        [labelConfig]="getLabelConfig('value = min')"
+        with-value
+        required
+      ></wpp-slider>
+    </div>
+  </div>
+</div>
+<div class="container" data-testid="sliders">
+  <div class="range">
+    <h2>Range Slider - Size M</h2>
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        type="range"
+        [value]="rangeValue"
+        max="7"
+        step="2"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="labelConfig"
+        required
+      ></wpp-slider>
+      <wpp-typography class="result">
+        Result of range slider: {{ rangeValue[0] }} - {{ rangeValue[1] }}
+      </wpp-typography>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        type="range"
+        [value]="rangeValue"
+        max="7"
+        step="1"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('Range slider with continuous selection')"
+        required
+        continuous
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        type="range"
+        [value]="rangeValue"
+        max="7"
+        step="1"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('With continuous selection and input')"
+        required
+        continuous
+        with-input
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        type="range"
+        [value]="rangeValue"
+        [maskOptions]="maskOptionsRangeOption1"
+        max="1500"
+        step="1"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('With inputs that have mask options. Up to 2 decimals are allowed, but they will be converted to closest integer.')"
+        required
+        continuous
+        with-input
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        type="range"
+        [value]="rangeValue"
+        [maskOptions]="maskOptionsRangeOption2"
+        max="1500"
+        step="1"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('With inputs that have mask options. No decimals are allowed. Also has as thousand separator: ,')"
+        required
+        continuous
+        with-input
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        type="range"
+        [value]="rangeValue"
+        max="7"
+        step="1"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('With stepped selection and input')"
+        required
+        with-input
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        type="range"
+        [value]="rangeValue"
+        max="7"
+        step="1"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('Disabled input')"
+        required
+        continuous
+        with-input
+        disabled
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        type="range"
+        [value]="rangeValue"
+        max="7"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('Disabled Range slider')"
+        disabled
+        required
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        type="range"
+        [value]="rangeValue"
+        max="7"
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('Range slider w/o marks')"
+        required
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        type="range"
+        [value]="rangeValue"
+        max="5"
+        marks
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('Range slider max')"
+        step="0.5"
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        type="range"
+        [value]="rangeValue"
+        marks
+        min="3"
+        max="10"
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('Range slider min')"
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        type="range"
+        [value]="[9, 9]"
+        marks
+        max="9"
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('Range slider with single max value')"
+        required
+        with-value
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        type="range"
+        [value]="[1, 1]"
+        marks
+        max="9"
+        (wppChange)="handleRangeSliderChange($event)"
+        [labelConfig]="getLabelConfig('Range slider with single min value')"
+        required
+        with-value
+      ></wpp-slider>
+    </div>
+  </div>
+
+  <div class="single">
+    <h2>Single Slider - Size S</h2>
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        [value]="singleValue"
+        max="3"
+        [marks]="marks"
+        (wppChange)="handleSingleSliderChange($event)"
+        [labelConfig]="getLabelConfig('Single slider with custom marks')"
+        required
+      ></wpp-slider>
+      <wpp-typography class="result">Result of single slider: {{ singleValue }}</wpp-typography>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        [value]="singleValue"
+        max="3"
+        marks
+        (wppChange)="handleSingleSliderChange($event)"
+        [labelConfig]="getLabelConfig('Single slider with continuous selection')"
+        required
+        continuous
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        [value]="singleValue"
+        max="3"
+        marks
+        (wppChange)="handleSingleSliderChange($event)"
+        [labelConfig]="getLabelConfig('With continuous selection and input')"
+        required
+        continuous
+        with-input
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        [value]="singleValue"
+        [maskOptions]="maskOptionsSingleOption1"
+        max="1500"
+        marks
+        (wppChange)="handleSingleSliderChange($event)"
+        [labelConfig]="getLabelConfig('With inputs that have mask options. Up to 2 decimals are allowed, but they will be converted to closest integer.')"
+        required
+        continuous
+        with-input
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        [value]="singleValue"
+        [maskOptions]="maskOptionsSingleOption2"
+        max="1500"
+        marks
+        (wppChange)="handleSingleSliderChange($event)"
+        [labelConfig]="getLabelConfig('With inputs that have mask options. No decimals are allowed. Also has as thousand separator: ,')"
+        required
+        continuous
+        with-input
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        [value]="singleValue"
+        max="3"
+        marks
+        (wppChange)="handleSingleSliderChange($event)"
+        [labelConfig]="getLabelConfig('With stepped selection and input')"
+        required
+        with-input
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        [value]="2"
+        max="3"
+        marks
+        (wppChange)="handleSingleSliderChange($event)"
+        [labelConfig]="getLabelConfig('Disabled input')"
+        required
+        continuous
+        with-input
+        disabled
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        [value]="singleValue"
+        max="3"
+        [marks]="marks"
+        (wppChange)="handleSingleSliderChange($event)"
+        disabled
+        required
+        [labelConfig]="getLabelConfig('Disabled Single slider')"
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        [value]="2"
+        max="3"
+        (wppChange)="handleSingleSliderChange($event)"
+        required
+        [labelConfig]="getLabelConfig('Single slider w/o marks')"
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        [value]="3"
+        max="3"
+        (wppChange)="handleSingleSliderChange($event)"
+        [marks]="marks"
+        [labelConfig]="getLabelConfig('Single slider max value')"
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        [value]="1"
+        max="3"
+        (wppChange)="handleSingleSliderChange($event)"
+        [marks]="marks"
+        [labelConfig]="getLabelConfig('Single slider min value')"
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        [value]="3"
+        max="3"
+        (wppChange)="handleSingleSliderChange($event)"
+        [marks]="marks"
+        [labelConfig]="getLabelConfig('value = max')"
+        with-value
+        required
+      ></wpp-slider>
+    </div>
+
+    <div class="slider">
+      <wpp-slider
+        size="s"
+        [value]="1"
+        min="1"
+        (wppChange)="handleSingleSliderChange($event)"
+        [marks]="marks"
+        [labelConfig]="getLabelConfig('value = min')"
+        with-value
+        required
+      ></wpp-slider>
+    </div>
+  </div>
+</div>
+
+<div class="containerForInputWidth">
+  <div class="sliders">
+    <h3>Sliders with inputs with different input widths:</h3>
+
+    <wpp-slider
+      [value]="singleValue"
+      [inputWidth]="inputWidth"
+      [maskOptions]="maskOptionsSingleOption1"
+      max="1500"
+      marks
+      (wppChange)="handleSingleSliderChange($event)"
+      [labelConfig]="getLabelConfig('With inputs that have mask options. Up to 2 decimals are allowed, but they will be converted to closest integer.')"
+      required
+      continuous
+      with-input
+    ></wpp-slider>
+
+    <wpp-slider
+      type="range"
+      [value]="rangeValue"
+      [inputWidth]="inputWidth"
+      [maskOptions]="maskOptionsRangeOption1"
+      max="1500"
+      step="1"
+      marks
+      (wppChange)="handleRangeSliderChange($event)"
+      [labelConfig]="getLabelConfig('With inputs that have mask options. Up to 2 decimals are allowed, but they will be converted to closest integer.')"
+      required
+      continuous
+      with-input
+    ></wpp-slider>
+
+    <wpp-slider
+      type="range"
+      [value]="rangeValue"
+      [inputWidth]="inputWidth"
+      [maskOptions]="maskOptionsRangeOption3"
+      max="1500"
+      step="0.25"
+      marks
+      (wppChange)="handleRangeSliderChange($event)"
+      [labelConfig]="getLabelConfig('With inputs that have mask options. Step is: 0.25. Up to 2 decimals are allowed. Also has thousand separator as: ,')"
+      required
+      continuous
+      with-input
+    ></wpp-slider>
+  </div>
+
+  <div class="controls">
+    <wpp-typography type="xl-heading">Change Width</wpp-typography>
+    <wpp-button class="btn" (click)="setInputWidth('100px')"> to 100px </wpp-button>
+    <wpp-button class="btn" (click)="setInputWidth('200px')"> to 200px </wpp-button>
+    <wpp-button class="btn" (click)="setInputWidth(undefined)"> to Default </wpp-button>
+  </div>
+</div>

@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-radio renders component 1`] = `
+<wpp-radio class="wpp-radio wpp-radio-wrapper" exportparts="label, content, inner" tabindex="0">
+  <mock:shadow-root>
+    <wpp-label class="label" optional="" part="label" typography="s-body">
+      <input class="radio-input" part="input" tabindex="-1" type="radio">
+      <div class="circle" part="circle"></div>
+    </wpp-label>
+  </mock:shadow-root>
+</wpp-radio>
+`;
+
+exports[`wpp-radio renders component with checked state 1`] = `
+<wpp-radio aria-checked="" checked="" class="wpp-checked wpp-radio wpp-radio-wrapper" exportparts="label, content, inner" tabindex="0">
+  <mock:shadow-root>
+    <wpp-label class="label" optional="" part="label" typography="s-body">
+      <input checked="" class="radio-input" part="input" tabindex="-1" type="radio">
+      <div class="circle" part="circle"></div>
+    </wpp-label>
+  </mock:shadow-root>
+</wpp-radio>
+`;
+
+exports[`wpp-radio renders component with disabled state 1`] = `
+<wpp-radio aria-disabled="" class="wpp-disabled wpp-radio wpp-radio-wrapper" disabled="" exportparts="label, content, inner" label="LabelRadioButton" tabindex="-1">
+  <mock:shadow-root>
+    <wpp-label class="label" disabled="" optional="" part="label" typography="s-body">
+      <input class="radio-input" disabled="" part="input" tabindex="-1" type="radio">
+      <div class="circle" part="circle"></div>
+    </wpp-label>
+  </mock:shadow-root>
+</wpp-radio>
+`;
+
+exports[`wpp-radio renders component with label text 1`] = `
+<wpp-radio class="wpp-radio wpp-radio-wrapper" exportparts="label, content, inner" tabindex="0">
+  <mock:shadow-root>
+    <wpp-label class="label with-text wpp-label" exportparts="wrapper, content, icon" part="label">
+      <input class="radio-input" id="contact" name="contact" part="input" tabindex="-1" type="radio" value="email">
+      <div class="circle" part="circle"></div>
+      <label aria-label="contact" class="internal-label-wrapper" htmlfor="contact" part="wrapper">
+        <wpp-internal-label class="s-body wpp-internal-label" exportparts="info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" part="content">
+          <mock:shadow-root>
+            <div class="info-wrapper" part="info-wrapper" role="presentation">
+              <wpp-typography class="text" part="text" type="s-body">
+                Email
+              </wpp-typography>
+              <wpp-typography class="optional" part="optional-text" type="s-body">
+                (Optional)
+              </wpp-typography>
+            </div>
+            <div aria-label="Show info" class="icon slot-hidden" part="icon-wrapper" role="button" tabindex="0">
+              <slot name="icon" part="icon"></slot>
+            </div>
+          </mock:shadow-root>
+        </wpp-internal-label>
+      </label>
+    </wpp-label>
+  </mock:shadow-root>
+</wpp-radio>
+`;
+
+exports[`wpp-radio renders component with label, icon and tooltip description 1`] = `
+<wpp-radio class="wpp-radio wpp-radio-wrapper" exportparts="label, content, inner" tabindex="0">
+  <mock:shadow-root>
+    <wpp-label class="label with-text wpp-label" exportparts="wrapper, content, icon" part="label">
+      <input class="radio-input" id="contact" name="contact" part="input" tabindex="-1" type="radio" value="email">
+      <div class="circle" part="circle"></div>
+      <label aria-label="contact" class="internal-label-wrapper" htmlfor="contact" part="wrapper">
+        <wpp-internal-label class="s-body wpp-internal-label" exportparts="info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" part="content">
+          <mock:shadow-root>
+            <div class="info-wrapper with-icon" part="info-wrapper" role="presentation">
+              <wpp-typography class="text" part="text" type="s-body">
+                Test label
+              </wpp-typography>
+              <wpp-typography class="optional" part="optional-text" type="s-body">
+                (Optick)
+              </wpp-typography>
+            </div>
+            <wpp-tooltip class="tooltip" part="tooltip" text="Your email will be used to send you a confirmation number">
+              <div aria-label="Show info" class="icon" part="icon-wrapper" role="button" tabindex="0">
+                <slot name="icon" part="icon"></slot>
+              </div>
+            </wpp-tooltip>
+          </mock:shadow-root>
+          <wpp-icon-mail-v3-1-1 part="icon" slot="icon"></wpp-icon-mail-v3-1-1>
+        </wpp-internal-label>
+      </label>
+    </wpp-label>
+  </mock:shadow-root>
+</wpp-radio>
+`;

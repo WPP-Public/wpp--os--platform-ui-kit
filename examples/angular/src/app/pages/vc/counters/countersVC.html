@@ -1,0 +1,157 @@
+<div class="container">
+  <div class="counters">
+    <div class="info">
+      <h3>Counter</h3>
+      <wpp-counter
+        min="10"
+        [value]="value"
+        (wppChange)="handleCounterChange($event)"
+        class="counter"
+        max="1000000"
+        data-testid="hover-counter"
+        [format]="format"
+     ></wpp-counter>
+      <wpp-typography tag="span" type="m-strong" class="message">
+        Our current value is: {{ formattedNumber }}
+      </wpp-typography>
+    </div>
+
+    <div>
+      <h3>Counter in mid state</h3>
+      <wpp-counter value="5" auto-focus data-testid="focus-counter"></wpp-counter>
+    </div>
+
+    <div>
+      <h3>Counter with info message</h3>
+      <wpp-counter message="Info message"></wpp-counter>
+    </div>
+
+    <div>
+      <h3>Counter with warning message</h3>
+      <wpp-counter message="Warning message" message-type="warning"></wpp-counter>
+    </div>
+
+    <div>
+      <h3>Counter with error message</h3>
+      <wpp-counter message="Error message" message-type="error"></wpp-counter>
+    </div>
+  </div>
+
+  <div class="counters">
+    <div>
+      <h3>Counter with truncation</h3>
+      <wpp-counter
+        message="Error message"
+        message-type="error"
+        max-message-length="10"
+        data-testid="counter-with-tooltip"
+     ></wpp-counter>
+    </div>
+
+    <div>
+      <h3>Counter with disabled state</h3>
+      <wpp-counter disabled></wpp-counter>
+    </div>
+
+    <div>
+      <h3>Counter with label message</h3>
+      <wpp-counter [labelConfig]="getLabelConfig('Label')"></wpp-counter>
+    </div>
+
+    <div>
+      <h3>Required Counter</h3>
+      <wpp-counter [labelConfig]="getLabelConfig('Label')" required></wpp-counter>
+    </div>
+
+    <div>
+      <h3>Counter with max value</h3>
+      <wpp-counter value="99" max="99" required></wpp-counter>
+    </div>
+  </div>
+
+  <div class="counters">
+    <div>
+      <h3>Counter without buttons</h3>
+      <wpp-counter required with-buttons="false" value="5" data-testid="counter-without-buttons"></wpp-counter>
+    </div>
+
+    <div>
+      <h3>Counter with info</h3>
+      <wpp-counter
+        required
+        with-buttons="false"
+        value="5"
+        message="Info message"
+     ></wpp-counter>
+    </div>
+
+    <div>
+      <h3>Counter with warning</h3>
+      <wpp-counter
+        required
+        with-buttons="false"
+        value="5"
+        message="Warning message"
+        message-type="warning"
+     ></wpp-counter>
+    </div>
+
+    <div>
+      <h3>Counter with error</h3>
+      <wpp-counter
+        required
+        with-buttons="false"
+        value="5"
+        message="Error message"
+        message-type="error"
+     ></wpp-counter>
+    </div>
+
+    <div>
+      <h3>Counter with info icon</h3>
+      <wpp-counter
+        value="50"
+        max="99"
+        required
+        [labelConfig]="labelConfig"
+     ></wpp-counter>
+    </div>
+  </div>
+
+  <div class="counters">
+    <div>
+      <h3>Counter S size</h3>
+      <wpp-counter
+        value="5"
+        size="s"
+        [labelConfig]="labelConfig"
+      >
+     </wpp-counter>
+    </div>
+
+    <div>
+      <h3>Counter disabled S size</h3>
+      <wpp-counter disabled size="s"></wpp-counter>
+    </div>
+
+    <div>
+      <h3>Warning Counter S size</h3>
+      <wpp-counter message="Warning message" message-type="warning" size="s"></wpp-counter>
+    </div>
+
+    <div>
+      <h3>Error Counter S size</h3>
+      <wpp-counter message="Error message" message-type="error" size="s"></wpp-counter>
+    </div>
+
+    <div>
+      <h3>No buttons S size</h3>
+      <wpp-counter size="s" with-buttons="false"></wpp-counter>
+    </div>
+
+    <div>
+      <h3>Counter with Step of 0.1</h3>
+      <wpp-counter value="1.5" step="0.1" size="s"></wpp-counter>
+    </div>
+  </div>
+</div>

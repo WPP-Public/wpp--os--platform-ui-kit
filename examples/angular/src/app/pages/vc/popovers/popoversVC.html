@@ -1,0 +1,148 @@
+<div class="popoversPage" data-testid="popover-container">
+  <div class="item" data-testid="default-popover">
+    <wpp-popover #popoverElement class="defaultPopover" closable>
+      <wpp-button variant="secondary" slot="trigger-element">Trigger button to open Popover</wpp-button>
+      <div class="defaultContent" data-testid="popover-content">
+        <div class="header">
+          <wpp-typography type="m-strong">Title</wpp-typography>
+        </div>
+        <wpp-divider class="divider"></wpp-divider>
+        <div class="body">
+          <wpp-typography class="text">
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+            industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+            scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
+            electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of
+            Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like
+            Aldus PageMaker including.
+          </wpp-typography>
+        </div>
+        <wpp-divider class="divider"></wpp-divider>
+        <div class="actions">
+          <wpp-action-button variant="secondary" class="secondaryButton" (click)="handleCrossIconClick()"
+            >Close
+          </wpp-action-button>
+          <wpp-action-button (click)="handleSubmitButtonClick()">Submit</wpp-action-button>
+        </div>
+      </div>
+    </wpp-popover>
+    <wpp-button variant="primary" class="openBtn" (click)="handleClickOpenBtn()">Open Popover</wpp-button>
+  </div>
+
+  <div class="item" data-testid="custom-popover">
+    <wpp-popover #userPopoverElement>
+      <div slot="trigger-element" class="triggerWrapper">
+        <wpp-avatar size="s" [src]="currentUser.src" class="avatar"></wpp-avatar>
+        <wpp-typography type="s-strong" class="description"> {{currentUser.name}} </wpp-typography>
+      </div>
+      <div class="extendedContent">
+        <div class="header">
+          <wpp-input
+            [value]="searchValue"
+            placeholder="Search"
+            type="search"
+            class="searchInput"
+            (wppChange)="handleInputChange"
+          ></wpp-input>
+          <wpp-divider class="divider"></wpp-divider>
+        </div>
+        <div class="body">
+          <wpp-list-item
+            *ngFor="let user of users"
+            class="userItem"
+            [checked]="currentUser.name === user.name"
+            (wppChangeListItem)="handleListItemChecked($event, user.src)"
+          >
+            <p slot="label">{{user.name}}</p>
+            <wpp-avatar size="xs" [src]="user.src" [name]="user.name" slot="left"></wpp-avatar>
+          </wpp-list-item>
+          <wpp-list-item *ngIf="users.length === 0" class="userItem" disabled>
+            <p slot="label">Nothing Found</p>
+          </wpp-list-item>
+        </div>
+      </div>
+    </wpp-popover>
+  </div>
+
+  <div class="withSearch">
+    <wpp-typography class="withSearchTitle" type="l-body"> Popover with `withSearch=true` property </wpp-typography>
+    <wpp-popover
+      [withSearch]="true"
+      [persistantSearch]="persistantSearch"
+      searchName="Dropdown Input with no content"
+      [searchValue]="popoverSearchValue"
+      (wppSearchChange)="handleSearchChange($event)"
+    >
+      <wpp-button slot="trigger-element" variant="secondary"> With no content </wpp-button>
+    </wpp-popover>
+
+    <wpp-popover
+      [withSearch]="true"
+      [persistantSearch]="persistantSearch"
+      searchName="Dropdown Input with content"
+      [searchValue]="popoverSearchValue"
+      (wppSearchChange)="handleSearchChange($event)"
+    >
+      <wpp-button slot="trigger-element" variant="secondary"> With content </wpp-button>
+      <div class="withSearchContent">
+        <wpp-typography class="contentText" type="m-body"> Content inside the popover. </wpp-typography>
+      </div>
+    </wpp-popover>
+
+    <wpp-button (click)="handleSetSearchValue()"> Set search value to: 'Test' </wpp-button>
+
+    <wpp-button (click)="handleTogglePersistantSearch()">
+      Toggle persistantSearch: {{ persistantSearch ? 'disable' : 'enable' }}
+    </wpp-button>
+  </div>
+
+  <div class="scenario">
+    <wpp-typography class="title" type="xl-heading">
+      Scenario 01: Placing other components with dropdowns inside the popover
+    </wpp-typography>
+
+    <wpp-typography class="subTitle" type="m-body">
+      - Note: The popover's dropdown should close only when clicking outside of the popover. The dropdown of the select
+      is considered as part of the popover's dropdown.
+    </wpp-typography>
+
+    <div class="content">
+      <wpp-popover
+        [withSearch]="true"
+        [searchName]="'Popover with content'"
+        (wppSearchChange)="onSearchChangePopover($event)"
+      >
+        <wpp-button slot="trigger-element" variant="secondary"> With content </wpp-button>
+        <div class="withComponents">
+          <wpp-typography class="contentText" type="m-body"> Content inside the popover. </wpp-typography>
+
+          <wpp-select
+            type="multiple"
+            name="select-component"
+            class="selectItem"
+            [list]="selectList"
+            [labelConfig]="getLabelConfig('Size M')"
+            placeholder="Choose option"
+            [value]="[]"
+          ></wpp-select>
+
+          <wpp-inline-edit
+            [value]="inputText1"
+            [mode]="inputMode1"
+            [inputWidth]="'150px'"
+            (wppModeChange)="onChangeInlineEdit($event)"
+            data-testid="default-input-inline-edit"
+          >
+            <wpp-input
+              size="s"
+              slot="form-element"
+              name="test"
+              [value]="inputText1"
+              (wppChange)="onChangeInput($event)"
+            ></wpp-input>
+          </wpp-inline-edit>
+        </div>
+      </wpp-popover>
+    </div>
+  </div>
+</div>

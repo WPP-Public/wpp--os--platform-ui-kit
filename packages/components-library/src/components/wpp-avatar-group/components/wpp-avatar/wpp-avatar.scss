@@ -1,0 +1,376 @@
+/**
+  * @prop --wpp-avatar-size-xs
+  * @prop --wpp-avatar-size-s
+  * @prop --wpp-avatar-size-m
+  * @prop --wpp-avatar-size-l
+  * @prop --wpp-avatar-size-xl
+  * @prop --wpp-avatar-size-2xl
+  * @prop --wpp-avatar-size-xs-square-border-radius
+  * @prop --wpp-avatar-size-s-square-border-radius
+  * @prop --wpp-avatar-size-m-square-border-radius
+  * @prop --wpp-avatar-size-l-square-border-radius
+  * @prop --wpp-avatar-size-xl-square-border-radius
+  * @prop --wpp-avatar-size-2xl-square-border-radius
+  * @prop --wpp-avatar-circle-border-radius
+  * @prop --wpp-avatar-icon-border-radius
+  * @prop --wpp-avatar-icon-bg-color
+  * @prop --wpp-avatar-icon-color
+  * @prop --wpp-avatar-without-image-border-radius
+  * @prop --wpp-avatar-without-image-text-color
+  * @prop --wpp-avatar-circle-counter-border-radius
+  * @prop --wpp-avatar-square-counter-border-radius
+  * @prop --wpp-avatar-counter-text-color
+  * @prop --wpp-avatar-counter-text-color-hover
+  * @prop --wpp-avatar-counter-text-color-active
+  * @prop --wpp-avatar-counter-bg-color
+  * @prop --wpp-avatar-counter-bg-color-hover
+  * @prop --wpp-avatar-counter-bg-color-active
+  * @prop --wpp-avatar-first-border-color-focus
+  * @prop --wpp-avatar-second-border-color-focus
+*/
+
+:host {
+  --avatar-size-xs: var(--wpp-avatar-size-xs, 24px);
+  --avatar-size-s: var(--wpp-avatar-size-s, 32px);
+  --avatar-size-m: var(--wpp-avatar-size-m, 40px);
+  --avatar-size-l: var(--wpp-avatar-size-l, 56px);
+  --avatar-size-xl: var(--wpp-avatar-size-xl, 72px);
+  --avatar-size-2xl: var(--wpp-avatar-size-2xl, 120px);
+
+  --avatar-size-xs-square-border-radius: var(--wpp-avatar-size-xs-square-border-radius, var(--wpp-border-radius-xs));
+  --avatar-size-s-square-border-radius: var(--wpp-avatar-size-s-square-border-radius, var(--wpp-border-radius-s));
+  --avatar-size-m-square-border-radius: var(--wpp-avatar-size-m-square-border-radius, var(--wpp-border-radius-m));
+  --avatar-size-l-square-border-radius: var(--wpp-avatar-size-l-square-border-radius, var(--wpp-border-radius-m));
+  --avatar-size-xl-square-border-radius: var(--wpp-avatar-size-xl-square-border-radius, var(--wpp-border-radius-m));
+  --avatar-size-2xl-square-border-radius: var(--wpp-avatar-size-2xl-square-border-radius, var(--wpp-border-radius-l));
+  --avatar-circle-border-radius: var(--wpp-avatar-circle-border-radius, var(--wpp-border-radius-round));
+
+  --avatar-icon-border-radius: var(--wpp-avatar-icon-border-radius, var(--wpp-border-radius-round));
+  --avatar-icon-bg-color: var(--wpp-avatar-icon-bg-color, var(--wpp-grey-color-200));
+  --avatar-icon-bg-color-hover: var(--wpp-avatar-icon-bg-color-hover, var(--wpp-grey-color-300));
+  --avatar-icon-color: var(--wpp-avatar-icon-color, var(--wpp-grey-color-800));
+
+  --avatar-without-image-border-radius: var(--wpp-avatar-without-image-border-radius, var(--wpp-border-radius-round));
+  --avatar-without-image-text-color: var(--wpp-avatar-without-image-text-color, var(--wpp-grey-color-000));
+
+  --avatar-circle-counter-border-radius: var(--wpp-avatar-circle-counter-border-radius, var(--wpp-border-radius-round));
+  --avatar-square-counter-border-radius: var(--wpp-avatar-square-counter-border-radius, var(--wpp-border-radius-round));
+  --avatar-counter-text-color: var(--wpp-avatar-counter-text-color, var(--wpp-grey-color-800));
+  --avatar-counter-text-color-hover: var(--wpp-avatar-counter-text-color-hover, var(--wpp-grey-color-900));
+  --avatar-counter-text-color-active: var(--wpp-avatar-counter-text-color-active, var(--wpp-grey-color-900));
+  --avatar-counter-bg-color: var(--wpp-avatar-counter-bg-color, var(--wpp-grey-color-300));
+  --avatar-counter-bg-color-hover: var(--wpp-avatar-counter-bg-color-hover, var(--wpp-grey-color-200));
+  --avatar-counter-bg-color-active: var(--wpp-avatar-counter-bg-color-active, var(--wpp-grey-color-300));
+
+  --avatar-first-border-color-focus: var(--wpp-avatar-first-border-color-focus, var(--wpp-grey-color-000));
+  --avatar-second-border-color-focus: var(--wpp-avatar-second-border-color-focus, var(--wpp-brand-color));
+
+  --avatar-interactable-hover-background-color: var(
+    --wpp-avatar-interactable-hover-background-color,
+    rgba(255, 255, 255, 0.4)
+  );
+
+  display: inline-flex;
+  user-select: none;
+  outline: none;
+
+  &::part(content) {
+    width: 100%;
+  }
+
+  .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--avatar-circle-border-radius);
+  }
+
+  .without-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background-color: var(--wpp-avatar-generated-bg-color);
+    border-radius: var(--avatar-without-image-border-radius);
+    color: var(--avatar-without-image-text-color);
+    text-transform: capitalize;
+
+    &.with-amount-of-hidden-avatars {
+      background-color: var(--avatar-counter-bg-color);
+      border-radius: var(--avatar-circle-counter-border-radius);
+      color: var(--avatar-counter-text-color);
+      user-select: none;
+
+      &:hover {
+        cursor: pointer;
+        background-color: var(--avatar-counter-bg-color-hover);
+        color: var(--avatar-counter-text-color-hover);
+      }
+
+      &:active {
+        background-color: var(--avatar-counter-bg-color-active);
+        color: var(--avatar-counter-text-color-active);
+      }
+
+      &.square {
+        border-radius: var(--avatar-square-counter-border-radius);
+      }
+    }
+  }
+
+  .icon-wrapper {
+    background-color: var(--avatar-icon-bg-color);
+
+    .wpp-icon {
+      color: var(--avatar-icon-color);
+    }
+  }
+
+  &:host(.tab-focus) {
+    &.with-amount-of-hidden-avatars {
+      background-color: var(--avatar-counter-bg-color-hover);
+      color: var(--avatar-counter-text-color-hover);
+    }
+  }
+
+  &:host(.size-xs) {
+    width: var(--avatar-size-xs);
+    height: var(--avatar-size-xs);
+
+    .without-image {
+      @include typography2XSStrong;
+
+      &.with-amount-of-hidden-avatars {
+        color: var(--avatar-counter-text-color);
+
+        &:hover {
+          background-color: var(--avatar-counter-bg-color-hover);
+          color: var(--avatar-counter-text-color-hover);
+        }
+
+        &:active {
+          background-color: var(--avatar-counter-bg-color-active);
+          color: var(--avatar-counter-text-color-active);
+        }
+      }
+
+      &:not(.with-amount-of-hidden-avatars) {
+        color: var(--avatar-without-image-text-color);
+      }
+    }
+
+    .square {
+      border-radius: var(--avatar-size-xs-square-border-radius);
+    }
+  }
+
+  &:host(.size-s) {
+    width: var(--avatar-size-s);
+    height: var(--avatar-size-s);
+
+    .without-image {
+      @include typography2XSStrong;
+
+      &.with-amount-of-hidden-avatars {
+        color: var(--avatar-counter-text-color);
+
+        &:hover {
+          background-color: var(--avatar-counter-bg-color-hover);
+          color: var(--avatar-counter-text-color-hover);
+        }
+
+        &:active {
+          background-color: var(--avatar-counter-bg-color-active);
+          color: var(--avatar-counter-text-color-active);
+        }
+      }
+
+      &:not(.with-amount-of-hidden-avatars) {
+        color: var(--avatar-without-image-text-color);
+      }
+    }
+
+    .square {
+      border-radius: var(--avatar-size-s-square-border-radius);
+    }
+  }
+
+  &:host(.size-m) {
+    width: var(--avatar-size-m);
+    height: var(--avatar-size-m);
+
+    .without-image {
+      @include typographySStrong;
+      color: var(--avatar-counter-text-color);
+
+      &:not(.with-amount-of-hidden-avatars) {
+        color: var(--avatar-without-image-text-color);
+      }
+    }
+
+    .square {
+      border-radius: var(--avatar-size-m-square-border-radius);
+    }
+  }
+
+  &:host(.size-l) {
+    width: var(--avatar-size-l);
+    height: var(--avatar-size-l);
+
+    .without-image {
+      @include typographyMStrong;
+      color: var(--avatar-counter-text-color);
+
+      &:not(.with-amount-of-hidden-avatars) {
+        color: var(--avatar-without-image-text-color);
+      }
+    }
+
+    .square {
+      border-radius: var(--avatar-size-l-square-border-radius);
+    }
+  }
+
+  &:host(.size-xl) {
+    width: var(--avatar-size-xl);
+    height: var(--avatar-size-xl);
+
+    .without-image {
+      @include typographyXLHeading;
+      color: var(--avatar-counter-text-color);
+
+      &:not(.with-amount-of-hidden-avatars) {
+        color: var(--avatar-without-image-text-color);
+      }
+    }
+
+    .square {
+      border-radius: var(--avatar-size-xl-square-border-radius);
+    }
+  }
+
+  &:host(.size-2xl) {
+    width: var(--avatar-size-2xl);
+    height: var(--avatar-size-2xl);
+
+    .without-image {
+      @include typography4XLDisplay;
+      color: var(--avatar-counter-text-color);
+
+      &:not(.with-amount-of-hidden-avatars) {
+        color: var(--avatar-without-image-text-color);
+      }
+    }
+
+    .square {
+      border-radius: var(--avatar-size-2xl-square-border-radius);
+    }
+  }
+
+  &:host(.with-tooltip) {
+    .wpp-tooltip,
+    .wpp-tooltip::part(anchor) {
+      width: 100%;
+      outline: none;
+    }
+  }
+
+  &:host(.tab-focus) {
+    .image,
+    .without-image {
+      @include tabFocusProperties(
+        var(--avatar-first-border-color-focus),
+        var(--avatar-second-border-color-focus),
+        var(--avatar-border-radius)
+      );
+    }
+
+    .with-amount-of-hidden-avatars {
+      background-color: var(--avatar-counter-bg-color-hover);
+    }
+  }
+}
+
+:host(.interactable) {
+  .interactable-wrapper {
+    position: relative;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      border-radius: var(--avatar-circle-border-radius);
+    }
+
+    &:hover {
+      cursor: pointer;
+      z-index: 1;
+
+      &:before {
+        background-color: var(--avatar-interactable-hover-background-color);
+      }
+    }
+
+    &.image-wrapper:before {
+      border-radius: var(--avatar-circle-border-radius);
+    }
+
+    &.without-image:before {
+      border-radius: var(--avatar-without-image-border-radius);
+    }
+  }
+
+  &:host(.tab-focus) {
+    .interactable-wrapper {
+      z-index: 1;
+
+      &:before {
+        background-color: var(--avatar-interactable-hover-background-color);
+      }
+    }
+  }
+
+  &:host(.size-xs) {
+    .square:before {
+      border-radius: var(--avatar-size-xs-square-border-radius);
+    }
+  }
+
+  &:host(.size-s) {
+    .square:before {
+      border-radius: var(--avatar-size-s-square-border-radius);
+    }
+  }
+
+  &:host(.size-m) {
+    .square:before {
+      border-radius: var(--avatar-size-m-square-border-radius);
+    }
+  }
+
+  &:host(.size-l) {
+    .square:before {
+      border-radius: var(--avatar-size-l-square-border-radius);
+    }
+  }
+
+  &:host(.size-xl) {
+    .square:before {
+      border-radius: var(--avatar-size-xl-square-border-radius);
+    }
+  }
+
+  &:host(.size-2xl) {
+    .square:before {
+      border-radius: var(--avatar-size-2xl-square-border-radius);
+    }
+  }
+
+  .with-amount-of-hidden-avatars:before {
+    content: none;
+  }
+}

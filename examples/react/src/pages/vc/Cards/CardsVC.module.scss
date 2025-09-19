@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  width: 4150px;
+}
+
+.item {
+  width: 320px;
+  height: 250px;
+  margin-right: 15px;
+  margin-bottom: 10px;
+}
+
+.pack {
+  display: flex;
+  flex-direction: row;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+}
+
+.section {
+  margin-top: 60px;
+}
+
+.sectionend {
+  margin-right: 35px;
+}

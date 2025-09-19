@@ -1,0 +1,37 @@
+.title {
+  margin: 20px 0;
+}
+
+.text {
+  margin: 0;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 0 12px;
+}
+
+.tree {
+  width: 100%;
+  margin-right: 30px;
+}
+
+.multiple {
+  width: 400px;
+}
+
+.search {
+  margin-bottom: 15px;
+}
+
+.filter {
+  width: 500px;
+  margin-right: 30px;
+}
+
+.trees {
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+}
