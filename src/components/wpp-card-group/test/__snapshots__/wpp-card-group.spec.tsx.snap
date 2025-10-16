@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-card-group renders component with items and content inside cards 1`] = `
+<wpp-card-group class="wpp-card-group" exportparts="inner" role="radiogroup" size="m" value="phone" with-radio-or-checkbox="">
+  <mock:shadow-root>
+    <slot part="inner"></slot>
+  </mock:shadow-root>
+  <wpp-card class="wpp-card" exportparts="card, header-outer-wrapper, header-wrapper radio, checkbox, actions-wrapper" htmlfor="contact" name="contact" value="email">
+    <mock:shadow-root>
+      <div class="card primary size-m" part="card">
+        <div class="header-wrapper" part="header-outer-wrapper">
+          <div class="header" part="header-wrapper">
+            <slot name="header" part="header"></slot>
+          </div>
+          <div class="actions slot-hidden" part="actions-wrapper">
+            <slot name="actions" part="actions"></slot>
+          </div>
+        </div>
+        <slot></slot>
+      </div>
+    </mock:shadow-root>
+    <wpp-typography>
+      Email info content
+    </wpp-typography>
+    <p slot="header">
+      Email
+    </p>
+  </wpp-card>
+  <wpp-card class="wpp-card" exportparts="card, header-outer-wrapper, header-wrapper radio, checkbox, actions-wrapper" htmlfor="contact" name="contact" value="mail">
+    <mock:shadow-root>
+      <div class="card primary size-m" part="card">
+        <div class="header-wrapper" part="header-outer-wrapper">
+          <div class="header" part="header-wrapper">
+            <slot name="header" part="header"></slot>
+          </div>
+          <div class="actions slot-hidden" part="actions-wrapper">
+            <slot name="actions" part="actions"></slot>
+          </div>
+        </div>
+        <slot></slot>
+      </div>
+    </mock:shadow-root>
+    <wpp-typography>
+      Email info content
+    </wpp-typography>
+    <p slot="header">
+      Mail
+    </p>
+  </wpp-card>
+  <wpp-card class="wpp-card" exportparts="card, header-outer-wrapper, header-wrapper radio, checkbox, actions-wrapper" htmlfor="contact" name="contact" value="phone">
+    <mock:shadow-root>
+      <div class="card primary size-m" part="card">
+        <div class="header-wrapper" part="header-outer-wrapper">
+          <div class="header" part="header-wrapper">
+            <slot name="header" part="header"></slot>
+          </div>
+          <div class="actions slot-hidden" part="actions-wrapper">
+            <slot name="actions" part="actions"></slot>
+          </div>
+        </div>
+        <slot></slot>
+      </div>
+    </mock:shadow-root>
+    <wpp-typography>
+      Email info content
+    </wpp-typography>
+    <p slot="header">
+      Phone
+    </p>
+  </wpp-card>
+</wpp-card-group>
+`;

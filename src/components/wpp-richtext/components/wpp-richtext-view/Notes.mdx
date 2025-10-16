@@ -1,0 +1,10 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Markdown } from '@storybook/addon-docs/blocks'
+
+import readme from './readme.md?raw'
+
+import * as RichtextViewStories from './wpp-richtext-view.stories.tsx'
+
+<Meta of={RichtextViewStories} />
+
+<Markdown>{readme}</Markdown>

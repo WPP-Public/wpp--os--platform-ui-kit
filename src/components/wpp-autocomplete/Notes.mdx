@@ -1,0 +1,10 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Markdown } from '@storybook/addon-docs/blocks'
+
+import readme from './readme.md?raw'
+
+import * as AutocompleteStories from './wpp-autocomplete.stories.tsx'
+
+<Meta of={AutocompleteStories} />
+
+<Markdown>{readme}</Markdown>

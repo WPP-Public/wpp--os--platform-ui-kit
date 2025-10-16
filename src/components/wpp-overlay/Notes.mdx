@@ -1,0 +1,10 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Markdown } from '@storybook/addon-docs/blocks'
+
+import readme from './readme.md?raw'
+
+import * as OverlayStories from './wpp-overlay.stories.tsx'
+
+<Meta of={OverlayStories} />
+
+<Markdown>{readme}</Markdown>

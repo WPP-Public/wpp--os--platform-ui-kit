@@ -1,0 +1,637 @@
+/**
+  * @prop --wpp-button-font-weight:
+  * @prop --wpp-button-font-size:
+  * @prop --wpp-button-line-height:
+  * @prop --wpp-button-padding-m:
+  * @prop --wpp-button-padding-s:
+  * @prop --wpp-button-icon-padding-m:
+  * @prop --wpp-button-icon-padding-s:
+  * @prop --wpp-button-border-width:
+  * @prop --wpp-button-border-style:
+  * @prop --wpp-button-first-border-color-focus:
+  * @prop --wpp-button-second-border-color-focus:
+
+  * @prop --wpp-button-primary-bg-color:
+  * @prop --wpp-button-primary-bg-color-hover:
+  * @prop --wpp-button-primary-bg-color-active:
+  * @prop --wpp-button-primary-bg-color-disabled:
+  * @prop --wpp-button-primary-text-color:
+  * @prop --wpp-button-primary-icon-color:
+
+  * @prop --wpp-button-secondary-padding-m:
+  * @prop --wpp-button-secondary-padding-s:
+  * @prop --wpp-button-secondary-bg-color:
+  * @prop --wpp-button-secondary-bg-color-hover:
+  * @prop --wpp-button-secondary-bg-color-active:
+  * @prop --wpp-button-secondary-bg-color-disabled:
+  * @prop --wpp-button-secondary-border-color:
+  * @prop --wpp-button-secondary-border-color-active:
+  * @prop --wpp-button-secondary-border-color-disabled:
+  * @prop --wpp-button-secondary-text-color:
+  * @prop --wpp-button-secondary-text-color-active:
+  * @prop --wpp-button-secondary-text-color-disabled:
+  * @prop --wpp-button-secondary-icon-color:
+  * @prop --wpp-button-secondary-icon-color-active:
+  * @prop --wpp-button-secondary-icon-color-disabled:
+
+  * @prop --wpp-button-destructive-secondary-padding-m:
+  * @prop --wpp-button-destructive-secondary-padding-s:
+  * @prop --wpp-button-destructive-secondary-bg-color:
+  * @prop --wpp-button-destructive-secondary-bg-color-hover:
+  * @prop --wpp-button-destructive-secondary-bg-color-active:
+  * @prop --wpp-button-destructive-secondary-bg-color-disabled:
+  * @prop --wpp-button-destructive-secondary-bg-color-loading:
+  * @prop --wpp-button-destructive-secondary-border-color:
+  * @prop --wpp-button-destructive-secondary-border-color-hover:
+  * @prop --wpp-button-destructive-secondary-border-color-active:
+  * @prop --wpp-button-destructive-secondary-border-color-disabled:
+  * @prop --wpp-button-destructive-secondary-border-color-loading:
+  * @prop --wpp-button-destructive-secondary-text-color:
+  * @prop --wpp-button-destructive-secondary-text-color-disabled:
+  * @prop --wpp-button-destructive-secondary-icon-color:
+
+  * @prop --wpp-button-inverted-primary-bg-color
+  * @prop --wpp-button-inverted-primary-disabled-bg-color
+  * @prop --wpp-button-inverted-primary-hover-opacity
+  * @prop --wpp-button-inverted-primary-active-opacity
+  * @prop --wpp-button-inverted-primary-loading-opacity
+  * @prop --wpp-button-inverted-primary-text-color
+  * @prop --wpp-button-inverted-primary-text-color-disabled
+  * @prop --wpp-button-inverted-primary-icon-color
+  * @prop --wpp-button-inverted-primary-icon-color-disabled
+
+  * @prop --wpp-button-inverted-secondary-bg-color
+  * @prop --wpp-button-inverted-secondary-bg-color-disabled
+  * @prop --wpp-button-inverted-secondary-hover-opacity
+  * @prop --wpp-button-inverted-secondary-active-opacity
+  * @prop --wpp-button-inverted-secondary-loading-opacity
+  * @prop --wpp-button-inverted-secondary-text-color
+  * @prop --wpp-button-inverted-secondary-text-color-disabled
+  * @prop --wpp-button-inverted-secondary-icon-color
+  * @prop --wpp-button-inverted-secondary-icon-color-disabled
+  * @prop --wpp-button-inverted-secondary-border-color
+  * @prop --wpp-button-inverted-secondary-border-color-disabled
+*/
+
+:host {
+  --button-font-weight: var(--wpp-button-font-weight, 600);
+  --button-font-size: var(--wpp-button-font-size, 14px);
+  --button-line-height: var(--wpp-button-line-height, 22px);
+  --button-padding-m: var(--wpp-button-padding-m, 9px 20px);
+  --button-padding-s: var(--wpp-button-padding-s, 5px 16px);
+  --button-icon-padding-m: var(--wpp-button-icon-padding-m, calc(10px - var(--button-border-width)));
+  --button-icon-padding-s: var(--wpp-button-icon-padding-s, calc(6px - var(--button-border-width)));
+  --button-border-width: var(--wpp-button-border-width, var(--wpp-border-width-s));
+  --button-border-style: var(--wpp-button-border-style, solid);
+  --button-button-width: auto;
+  --button-first-border-color-focus: var(--wpp-button-first-border-color-focus, var(--wpp-grey-color-000));
+  --button-second-border-color-focus: var(--wpp-button-second-border-color-focus, var(--wpp-brand-color));
+
+  // primary
+  --button-primary-bg-color: var(--wpp-button-primary-bg-color, var(--wpp-brand-color));
+  --button-primary-bg-color-hover: var(--wpp-button-primary-bg-color-hover, var(--wpp-brand-color-hover));
+  --button-primary-bg-color-active: var(--wpp-button-primary-bg-color-active, var(--wpp-brand-color-active));
+  --button-primary-bg-color-disabled: var(--wpp-button-primary-bg-color-disabled, var(--wpp-brand-color-disabled));
+  --button-primary-text-color: var(--wpp-button-primary-text-color, var(--wpp-grey-color-000));
+  --button-primary-icon-color: var(--wpp-button-primary-icon-color, var(--wpp-grey-color-000));
+
+  // secondary
+  --button-secondary-padding-m: var(
+    --wpp-button-secondary-padding-m,
+    calc(9px - var(--button-border-width)) calc(20px - var(--button-border-width))
+  );
+  --button-secondary-padding-s: var(
+    --wpp-button-secondary-padding-s,
+    calc(5px - var(--button-border-width)) calc(16px - var(--button-border-width))
+  );
+  --button-secondary-bg-color-hover: var(--wpp-button-secondary-bg-color-hover, var(--wpp-primary-color-100));
+  --button-secondary-bg-color-active: var(--wpp-button-secondary-bg-color-active, var(--wpp-primary-color-200));
+  --button-secondary-bg-color-disabled: var(--wpp-button-secondary-bg-color-disabled, transparent);
+  --button-secondary-border-color: var(--wpp-button-secondary-border-color, var(--wpp-brand-color));
+  --button-secondary-border-color-active: var(
+    --wpp-button-secondary-border-color-active,
+    var(--wpp-brand-color-active)
+  );
+  --button-secondary-border-color-disabled: var(
+    --wpp-button-secondary-border-color-disabled,
+    var(--wpp-brand-color-disabled)
+  );
+  --button-secondary-text-color: var(--wpp-button-secondary-text-color, var(--wpp-brand-color));
+  --button-secondary-text-color-active: var(--wpp-button-secondary-text-color-active, var(--wpp-brand-color-active));
+  --button-secondary-text-color-disabled: var(
+    --wpp-button-secondary-text-color-disabled,
+    var(--wpp-brand-color-disabled)
+  );
+  --button-secondary-icon-color: var(--wpp-button-secondary-icon-color, var(--wpp-brand-color));
+  --button-secondary-icon-color-active: var(--wpp-button-secondary-icon-color-active, var(--wpp-brand-color-active));
+  --button-secondary-icon-color-disabled: var(
+    --wpp-button-secondary-icon-color-disabled,
+    var(--wpp-brand-color-disabled)
+  );
+
+  // destructive-secondary
+  --button-destructive-secondary-padding-m: var(
+    --wpp-button-destructive-secondary-padding-m,
+    calc(9px - var(--button-border-width)) calc(20px - var(--button-border-width))
+  );
+  --button-destructive-secondary-padding-s: var(
+    --wpp-button-destructive-secondary-padding-s,
+    calc(5px - var(--button-border-width)) calc(16px - var(--button-border-width))
+  );
+  --button-destructive-secondary-bg-color: var(--wpp-button-destructive-secondary-bg-color, transparent);
+  --button-destructive-secondary-bg-color-hover: var(
+    --wpp-button-destructive-secondary-bg-color-hover,
+    var(--wpp-danger-color-200)
+  );
+  --button-destructive-secondary-bg-color-active: var(
+    --wpp-button-destructive-secondary-bg-color-active,
+    var(--wpp-danger-color-300)
+  );
+  --button-destructive-secondary-bg-color-disabled: var(
+    --wpp-button-destructive-secondary-bg-color-disabled,
+    transparent
+  );
+  --button-destructive-secondary-bg-color-loading: var(
+    --wpp-button-destructive-secondary-bg-color-loading,
+    transparent
+  );
+  --button-destructive-secondary-border-color: var(
+    --wpp-button-destructive-secondary-border-color,
+    var(--wpp-danger-color-500)
+  );
+  --button-destructive-secondary-border-color-hover: var(
+    --wpp-button-destructive-secondary-border-color-hover,
+    var(--wpp-danger-color-500)
+  );
+  --button-destructive-secondary-border-color-active: var(
+    --wpp-button-destructive-secondary-border-color-active,
+    var(--wpp-danger-color-600)
+  );
+  --button-destructive-secondary-border-color-disabled: var(
+    --wpp-button-destructive-secondary-border-color-disabled,
+    var(--wpp-danger-color-300)
+  );
+  --button-destructive-secondary-border-color-loading: var(
+    --wpp-button-destructive-secondary-border-color-loading,
+    var(--wpp-danger-color-500)
+  );
+  --button-destructive-secondary-text-color: var(
+    --wpp-button-destructive-secondary-text-color,
+    var(--wpp-danger-color-500)
+  );
+  --button-destructive-secondary-text-color-disabled: var(
+    --wpp-button-destructive-secondary-text-color-disabled,
+    var(--wpp-danger-color-300)
+  );
+  --button-destructive-secondary-icon-color: var(
+    --wpp-button-destructive-secondary-icon-color,
+    var(--wpp-danger-color-500)
+  );
+
+  // Inverted primary
+  --button-inverted-primary-bg-color: var(--wpp-button-inverted-primary-bg-color, var(--wpp-grey-color-000));
+  --button-inverted-primary-disabled-bg-color: var(
+    --wpp-button-inverted-primary-disabled-bg-color,
+    var(--wpp-grey-color-000)
+  );
+  --button-inverted-primary-hover-opacity: var(--wpp-button-inverted-primary-hover-opacity, 88%);
+  --button-inverted-primary-active-opacity: var(--wpp-button-inverted-primary-active-opacity, 80%);
+  --button-inverted-primary-loading-opacity: var(--wpp-button-inverted-primary-loading-opacity, 80%);
+  --button-inverted-primary-text-color: var(--wpp-button-inverted-primary-text-color, var(--wpp-grey-color-1000));
+  --button-inverted-primary-text-color-disabled: var(
+    --wpp-button-inverted-primary-text-color-disabled,
+    var(--wpp-grey-color-500)
+  );
+  --button-inverted-primary-icon-color: var(--wpp-button-inverted-primary-icon-color, var(--wpp-grey-color-1000));
+  --button-inverted-primary-icon-color-disabled: var(
+    --wpp-button-inverted-primary-icon-color-disabled,
+    var(--wpp-grey-color-500)
+  );
+  --button-inverted-first-border-color-focus: var(
+    --wpp-button-inverted-first-border-color-focus,
+    var(--wpp-grey-color-000)
+  );
+  --button-inverted-second-border-color-focus: var(
+    --wpp-button-inverted-second-border-color-focus,
+    var(--wpp-grey-color-000)
+  );
+
+  // Inverted secondary
+  --button-inverted-secondary-bg-color: var(--wpp-button-inverted-secondary-bg-color, var(--wpp-grey-color-900));
+  --button-inverted-secondary-bg-color-disabled: var(
+    --wpp-button-inverted-secondary-bg-color-disabled,
+    var(--wpp-grey-color-900)
+  );
+  --button-inverted-secondary-hover-opacity: var(--wpp-button-inverted-secondary-hover-opacity, 12%);
+  --button-inverted-secondary-active-opacity: var(--wpp-button-inverted-secondary-active-opacity, 18%);
+  --button-inverted-secondary-loading-opacity: var(--wpp-button-inverted-secondary-loading-opacity, 18%);
+  --button-inverted-secondary-text-color: var(--wpp-button-inverted-secondary-text-color, var(--wpp-grey-color-000));
+  --button-inverted-secondary-text-color-disabled: var(
+    --wpp-button-inverted-secondary-text-color-disabled,
+    var(--wpp-grey-color-500)
+  );
+  --button-inverted-secondary-icon-color: var(--wpp-button-inverted-secondary-icon-color, var(--wpp-grey-color-000));
+  --button-inverted-secondary-icon-color-disabled: var(
+    --wpp-button-inverted-secondary-icon-color-disabled,
+    var(--wpp-grey-color-500)
+  );
+  --button-inverted-secondary-border-color: var(
+    --wpp-button-inverted-secondary-border-color,
+    var(--wpp-grey-color-000)
+  );
+  --button-inverted-secondary-border-color-disabled: var(
+    --wpp-button-inverted-secondary-border-color-disabled,
+    var(--wpp-grey-color-500)
+  );
+
+  display: inline-flex;
+  outline: none;
+
+  // solution to the positioning problem from https://github.com/ionic-team/ionic-framework/blob/c52f3ad2c24e0c0d766061c91ac5d748cc6d78b8/core/src/components/button/button.scss
+  vertical-align: top; // the better option for most scenarios
+}
+
+:host(.wpp-disabled:active),
+:host(.wpp-loading:active) {
+  pointer-events: none;
+}
+
+.icon-start,
+.icon-end {
+  @include slotWrapper;
+
+  display: flex;
+}
+
+.icon-start {
+  margin-right: 8px;
+}
+
+.icon-end {
+  margin-left: 8px;
+
+  ::slotted(.wpp-icon-chevron[direction='down']) {
+    transition: transform 0.15s ease-out;
+  }
+}
+
+:host([aria-expanded='true']) {
+  .icon-end {
+    ::slotted(.wpp-icon-chevron[direction='down']) {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  margin: 0;
+  font-weight: var(--button-font-weight);
+  font-size: var(--button-font-size);
+  font-family: var(--wpp-font-family);
+  font-style: normal;
+  line-height: var(--button-line-height);
+  text-decoration: none;
+  border: none;
+  outline: 0;
+  cursor: pointer;
+  position: relative;
+
+  .truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .content {
+    overflow: hidden;
+  }
+
+  @include loaderOverlay;
+  @include tabFocus(var(--button-first-border-color-focus), var(--button-second-border-color-focus));
+
+  &.disabled {
+    cursor: not-allowed;
+  }
+
+  &.size-m {
+    padding: var(--button-padding-m);
+    border-radius: var(--wpp-border-radius-fully-rounded, var(--wpp-border-radius-m));
+  }
+
+  &.size-s {
+    padding: var(--button-padding-s);
+    border-radius: var(--wpp-border-radius-fully-rounded, var(--wpp-border-radius-s));
+  }
+
+  &.loading {
+    cursor: not-allowed;
+  }
+
+  &.with-icon-only {
+    &.secondary,
+    .destructive-secondary {
+      .icon-start,
+      .icon-end {
+        margin: 0;
+      }
+
+      &.size-m {
+        padding: var(--button-icon-padding-m);
+      }
+
+      &.size-s {
+        padding: var(--button-icon-padding-s);
+      }
+    }
+  }
+
+  &.with-icon-start {
+    &:not(.with-icon-only) {
+      &.size-m {
+        padding-left: 16px;
+      }
+
+      &.size-s {
+        padding-left: 12px;
+      }
+    }
+  }
+
+  &.with-icon-end {
+    &:not(.with-icon-only) {
+      &.size-m {
+        padding-right: 16px;
+      }
+
+      &.size-s {
+        padding-right: 12px;
+      }
+    }
+  }
+
+  &.primary {
+    color: var(--button-primary-text-color);
+    background-color: var(--button-primary-bg-color);
+
+    .icon-start,
+    .icon-end {
+      ::slotted(*) {
+        color: var(--button-primary-icon-color);
+      }
+    }
+
+    &:hover,
+    &.tab-focus {
+      background-color: var(--button-primary-bg-color-hover);
+    }
+
+    &:active,
+    &.pressed {
+      background-color: var(--button-primary-bg-color-active);
+    }
+
+    &:disabled {
+      background-color: var(--button-primary-bg-color-disabled);
+    }
+
+    &.loading {
+      background-color: var(--button-primary-bg-color);
+    }
+  }
+
+  &.destructive {
+    color: var(--wpp-grey-color-000);
+    background-color: var(--wpp-danger-color-500);
+
+    .icon-start,
+    .icon-end {
+      ::slotted(*) {
+        color: var(--wpp-grey-color-000);
+      }
+    }
+
+    &:hover,
+    &.tab-focus {
+      background-color: var(--wpp-danger-color-400);
+    }
+
+    &:active,
+    &.pressed {
+      background-color: var(--wpp-danger-color-600);
+    }
+
+    &:disabled {
+      background-color: var(--wpp-danger-color-300);
+    }
+
+    &.loading {
+      background-color: var(--wpp-danger-color-500);
+    }
+  }
+
+  &.destructive-secondary {
+    color: var(--button-destructive-secondary-text-color);
+    background-color: var(--button-destructive-secondary-bg-color);
+    border: var(--button-border-width) var(--button-border-style) var(--button-destructive-secondary-border-color);
+
+    .icon-start,
+    .icon-end {
+      ::slotted(*) {
+        color: var(--button-destructive-secondary-icon-color);
+      }
+    }
+
+    &.size-s {
+      padding: var(--button-destructive-secondary-padding-s);
+    }
+
+    &.size-m {
+      padding: var(--button-destructive-secondary-padding-m);
+    }
+
+    &:hover,
+    &.tab-focus {
+      background-color: var(--button-destructive-secondary-bg-color-hover);
+      border-color: var(--button-destructive-secondary-border-color-hover);
+    }
+
+    &:active,
+    &.pressed {
+      background-color: var(--button-destructive-secondary-bg-color-active);
+      border-color: var(--button-destructive-secondary-border-color-active);
+    }
+
+    &:disabled {
+      color: var(--button-destructive-secondary-text-color-disabled);
+      border-color: var(--button-destructive-secondary-border-color-disabled);
+      background-color: var(--button-destructive-secondary-bg-color-disabled);
+
+      .icon-start,
+      .icon-end {
+        ::slotted(*) {
+          color: var(--button-destructive-secondary-text-color-disabled);
+        }
+      }
+    }
+
+    &.loading {
+      border-color: var(--button-destructive-secondary-border-color-loading);
+      background-color: var(--button-destructive-secondary-bg-color-loading);
+    }
+  }
+
+  &.secondary {
+    color: var(--button-secondary-text-color);
+    background-color: var(--button-secondary-bg-color);
+    border: var(--button-border-width) var(--button-border-style) var(--button-secondary-border-color);
+
+    .icon-start,
+    .icon-end {
+      ::slotted(*) {
+        color: var(--button-secondary-icon-color);
+      }
+    }
+
+    &.size-s {
+      padding: var(--button-secondary-padding-s);
+    }
+
+    &.size-m {
+      padding: var(--button-secondary-padding-m);
+    }
+
+    &:hover,
+    &.tab-focus {
+      background-color: var(--button-secondary-bg-color-hover);
+    }
+
+    &:active,
+    &.pressed {
+      background-color: var(--button-secondary-bg-color-active);
+      border-color: var(--button-secondary-border-color-active);
+      color: var(--button-secondary-text-color-active);
+
+      .icon-start,
+      .icon-end {
+        ::slotted(*) {
+          color: var(--button-secondary-icon-color-active);
+        }
+      }
+    }
+
+    &:disabled {
+      color: var(--button-secondary-text-color-disabled);
+      background-color: var(--button-secondary-bg-color-disabled);
+      border: var(--button-border-width) var(--button-border-style) var(--button-secondary-border-color-disabled);
+
+      .icon-start,
+      .icon-end {
+        ::slotted(*) {
+          color: var(--button-secondary-icon-color-disabled);
+        }
+      }
+    }
+
+    &.loading {
+      background-color: var(--button-secondary-bg-color);
+      border: var(--button-border-width) var(--button-border-style) var(--button-secondary-border-color);
+    }
+  }
+
+  &.inverted {
+    &.primary {
+      @include tabFocus(var(--button-inverted-primary-text-color), var(--button-inverted-second-border-color-focus));
+
+      color: var(--button-inverted-primary-text-color);
+      background-color: var(--button-inverted-primary-bg-color);
+
+      .icon-start,
+      .icon-end {
+        ::slotted(*) {
+          color: var(--button-inverted-primary-icon-color);
+        }
+      }
+
+      &:hover,
+      &.tab-focus {
+        // rgba(255, 255, 255, 0.88) is same as --wpp-grey-color-000 with 88% opacity and needs to be updated if --wpp-grey-color-000 changes
+        background-color: rgba(255, 255, 255, var(--button-inverted-primary-hover-opacity));
+      }
+
+      &:active,
+      &.pressed {
+        // rgba(255, 255, 255, 0.80) is same as --wpp-grey-color-000 with 80% opacity and needs to be updated if --wpp-grey-color-000 changes
+        background-color: rgba(255, 255, 255, var(--button-inverted-primary-active-opacity));
+      }
+
+      &:disabled {
+        opacity: 1;
+        color: var(--button-inverted-primary-text-color-disabled);
+        background-color: var(--button-inverted-primary-disabled-bg-color);
+
+        .icon-start,
+        .icon-end {
+          ::slotted(*) {
+            color: var(--button-inverted-primary-icon-color-disabled);
+          }
+        }
+      }
+
+      &.loading {
+        // rgba(255, 255, 255, 0.80) is same as --wpp-grey-color-000 with 80% opacity and needs to be updated if --wpp-grey-color-000 changes
+        background-color: rgba(255, 255, 255, var(--button-inverted-primary-loading-opacity));
+      }
+    }
+
+    &.secondary {
+      @include tabFocus(var(--button-inverted-secondary-bg-color), var(--button-inverted-second-border-color-focus));
+
+      color: var(--button-inverted-secondary-text-color);
+      background-color: var(--button-inverted-secondary-bg-color);
+      border: var(--button-border-width) var(--button-border-style) var(--button-inverted-secondary-border-color);
+
+      .icon-start,
+      .icon-end {
+        ::slotted(*) {
+          color: var(--button-inverted-secondary-icon-color);
+        }
+      }
+
+      &:hover,
+      &.tab-focus {
+        // rgba(248, 249, 251, 0.12) is same as --wpp-grey-color-100 with 12% opacity and needs to be updated if --wpp-grey-color-100 changes
+        background-color: rgba(248, 249, 251, var(--button-inverted-secondary-hover-opacity));
+      }
+
+      &:active,
+      &.pressed {
+        // rgba(248, 249, 251, 0.18) is same as --wpp-grey-color-100 with 18% opacity and needs to be updated if --wpp-grey-color-100 changes
+        background-color: rgba(248, 249, 251, var(--button-inverted-secondary-active-opacity));
+      }
+
+      &:disabled {
+        color: var(--button-inverted-secondary-text-color-disabled);
+        border: var(--button-border-width) var(--button-border-style)
+          var(--button-inverted-secondary-border-color-disabled);
+        background-color: var(--button-inverted-secondary-bg-color-disabled);
+        opacity: 1;
+
+        .icon-start,
+        .icon-end {
+          ::slotted(*) {
+            color: var(--button-inverted-secondary-icon-color-disabled);
+          }
+        }
+      }
+
+      &.loading {
+        // rgba(248, 249, 251, 0.18) is same as --wpp-grey-color-100 with 18% opacity and needs to be updated if --wpp-grey-color-100 changes
+        background-color: rgba(248, 249, 251, var(--button-inverted-secondary-loading-opacity));
+      }
+    }
+  }
+}

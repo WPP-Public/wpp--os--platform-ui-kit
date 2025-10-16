@@ -1,0 +1,76 @@
+.ql-image-actions__overlay {
+  position: absolute;
+  box-sizing: border-box;
+  border: 1px dashed var(--richtext-border-color-hover);
+}
+
+.ql-image-actions__toolbar {
+  position: absolute;
+  box-sizing: border-box;
+  top: -26px;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  padding: 0 6px;
+  z-index: 1;
+  display: flex;
+  gap: 4px;
+  border: 1px solid var(--richtext-border-color);
+  background: white;
+  cursor: default;
+  border-radius: var(--wpp-border-radius-s);
+
+  &:hover {
+    border: 1px solid var(--richtext-border-color-active)
+  }
+}
+
+.ql-image-actions__toolbar-button {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  padding: 2px;
+  vertical-align: middle;
+  color: var(--richtext-button-inactive-color);
+  background-color: var(--richtext-button-background-color);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--richtext-button-inactive-hover-color);
+  }
+  &:active {
+    color: var(--richtext-button-inactive-click-color);
+  }
+
+  &.is-selected {
+    color: var(--richtext-button-active-color);
+
+    &:hover {
+      color: var(--richtext-button-active-hover-color);
+    }
+    &:active {
+      color: var(--richtext-button-active-click-color);
+    }
+  }
+
+  svg {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    fill: currentColor;
+  }
+}
+
+.ql-image-actions__resize-handle {
+  position: absolute;
+  background-color: white;
+  border: 1px solid var(--richtext-border-color);
+  box-sizing: border-box;
+  opacity: 0.80;
+}
+
+.image-actions__proxy-image {
+  position: absolute;
+  display: block;
+  max-width: none;
+}

@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-popover should render component 1`] = `
+<wpp-popover class="wpp-popover" dropdown-width="auto" exportparts="anchor, trigger-element">
+  <mock:shadow-root>
+    <div class="anchor" part="anchor">
+      <slot name="trigger-element" part="trigger-element"></slot>
+    </div>
+    <div aria-modal="true" class="wpp-popover-content" part="content" role="dialog">
+      <slot></slot>
+      <div>
+        <wpp-typography>
+          Some content inside popover
+        </wpp-typography>
+        <wpp-action-button>
+          Content Button
+        </wpp-action-button>
+      </div>
+    </div>
+  </mock:shadow-root>
+  <wpp-button slot="trigger-element">
+    Trigger Button
+  </wpp-button>
+</wpp-popover>
+`;

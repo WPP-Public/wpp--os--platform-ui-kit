@@ -1,0 +1,20 @@
+.ql-editor {
+  .ql-attachment-uploading {
+    .wpp-progress-indicator {
+      --pi-width: .8em !important;
+      --pi-circle-stroke-width: 12;
+
+      margin-right: 7px;
+    }
+  }
+}
+
+.ql-container {
+  & > .ql-uploading-progress-indicator {
+    --pi-width: 20px;
+    --pi-circle-stroke-width: 8;
+
+    position: absolute;
+    pointer-events: none;
+  }
+}

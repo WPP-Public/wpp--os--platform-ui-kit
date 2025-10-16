@@ -1,0 +1,146 @@
+/**
+  * @prop --wpp-modal-overlay-bg-color:
+  * @prop --wpp-modal-width-s:
+  * @prop --wpp-modal-width-m:
+  * @prop --wpp-modal-box-shadow:
+  * @prop --wpp-modal-vertical-position-minus-number:
+  * @prop --wpp-modal-vertical-position-animation-minus-number:
+  * @prop --wpp-modal-body-paddings:
+  * @prop --wpp-modal-actions-paddings:
+  * @prop --wpp-modal-header-padding:
+  * @prop --wpp-modal-bg-color:
+*/
+
+:host {
+  --modal-width-s: var(--wpp-modal-width-s, 440px);
+  --modal-width-m: var(--wpp-modal-width-m, 600px);
+  --modal-box-shadow: var(--wpp-modal-box-shadow, var(--wpp-box-shadow-l));
+  --modal-vertical-position-minus-number: var(--wpp-modal-vertical-position-minus-number, 160px);
+  --modal-vertical-position-animation-minus-number: var(--wpp-modal-vertical-position-animation-minus-number, 200px);
+  --modal-body-paddings: var(--wpp-modal-body-paddings, 0 24px);
+  --modal-actions-paddings: var(--wpp-modal-actions-paddings, 24px);
+  --modal-header-padding: var(--wpp-modal-header-padding, 20px 24px 16px 24px);
+  --modal-transition: visibility 0.15s linear 0.2s, opacity 0.2s 0.2s;
+  --modal-bg-color: var(--wpp-modal-bg-color, var(--wpp-grey-color-000));
+}
+
+:host(.wpp-modal-wrapper) {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  font-family: var(--wpp-font-family);
+  visibility: hidden;
+  opacity: 0;
+  overflow: auto;
+}
+
+:host(.wpp-component-ready) {
+  transition: var(--modal-transition);
+}
+
+:host(.wpp-visible.wpp-component-ready) {
+  display: block;
+  visibility: visible;
+  opacity: 1;
+}
+
+:host(.wpp-hide) {
+  visibility: hidden !important;
+  opacity: 0;
+}
+
+:host(.wpp-visible:target) {
+  opacity: 1;
+}
+
+.header,
+.body,
+.actions {
+  @include slotWrapper;
+}
+
+.header {
+  @include typographyXLHeading;
+
+  padding: var(--modal-header-padding);
+}
+
+.body {
+  @include scrollbarThin;
+  @include typographySBody;
+
+  padding: var(--modal-body-paddings);
+}
+
+.actions {
+  @include typographySStrong;
+
+  padding: var(--modal-actions-paddings);
+}
+
+.modal-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: var(--modal-bg-color);
+  border-radius: var(--wpp-border-radius-l);
+  box-shadow: var(--modal-box-shadow);
+  transform: translate(-50%, calc(-50% - var(--modal-vertical-position-minus-number)));
+  max-height: 90vh;
+  max-width: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &.visible {
+    animation: modalAppearAboveCenterAnimations 0.2s linear;
+    animation-delay: 0.15s;
+  }
+
+  &.size-s {
+    width: var(--modal-width-s);
+  }
+
+  &.size-m {
+    width: var(--modal-width-m);
+  }
+}
+
+@media (max-height: 800px) {
+  .modal {
+    transform: translate(-50%, -50%);
+
+    &.visible {
+      animation: modalAppearInCenterAnimations 0.2s linear forwards;
+      animation-delay: 0.15s;
+    }
+  }
+}
+
+@keyframes modalAppearInCenterAnimations {
+  0% {
+    transform: translate(-50%, -70%);
+  }
+
+  100% {
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes modalAppearAboveCenterAnimations {
+  0% {
+    transform: translate(-50%, calc(-50% - var(--modal-vertical-position-animation-minus-number)));
+  }
+
+  100% {
+    transform: translate(-50%, calc(-50% - var(--modal-vertical-position-minus-number)));
+  }
+}

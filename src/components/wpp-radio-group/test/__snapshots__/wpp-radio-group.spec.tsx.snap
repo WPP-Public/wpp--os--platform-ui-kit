@@ -1,0 +1,88 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-radio-group renders component with items and attributes 1`] = `
+<wpp-radio-group class="wpp-radio-group" direction="column" exportparts="inner">
+  <mock:shadow-root>
+    <div aria-labelledby="label-id" class="group-container" role="radiogroup">
+      <div class="content direction-column">
+        <slot part="inner"></slot>
+      </div>
+    </div>
+  </mock:shadow-root>
+  <wpp-radio class="wpp-radio wpp-radio-wrapper" exportparts="label, content, inner" name="contact">
+    <mock:shadow-root>
+      <wpp-label class="label with-text wpp-label" exportparts="wrapper, content, icon" part="label">
+        <input aria-required="false" class="radio-input" id="contact" name="contact" part="input" tabindex="0" type="radio" value="email">
+        <div class="circle" part="circle"></div>
+        <label aria-label="contact" class="internal-label-wrapper" htmlfor="contact" part="wrapper">
+          <wpp-internal-label class="s-body wpp-internal-label" exportparts="info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" part="content">
+            <mock:shadow-root>
+              <div class="info-wrapper" part="info-wrapper" role="presentation">
+                <wpp-typography class="text" part="text" type="s-body">
+                  Email
+                </wpp-typography>
+                <wpp-typography class="optional" part="optional-text" type="s-body">
+                  (Optional)
+                </wpp-typography>
+              </div>
+              <div aria-label="Show info" class="icon slot-hidden" part="icon-wrapper" role="button" tabindex="0">
+                <slot name="icon" part="icon"></slot>
+              </div>
+            </mock:shadow-root>
+          </wpp-internal-label>
+        </label>
+      </wpp-label>
+    </mock:shadow-root>
+  </wpp-radio>
+  <wpp-radio class="wpp-radio wpp-radio-wrapper" exportparts="label, content, inner" name="contact">
+    <mock:shadow-root>
+      <wpp-label class="label with-text wpp-label" exportparts="wrapper, content, icon" part="label">
+        <input aria-required="false" class="radio-input" id="contact" name="contact" part="input" tabindex="0" type="radio" value="mail">
+        <div class="circle" part="circle"></div>
+        <label aria-label="contact" class="internal-label-wrapper" htmlfor="contact" part="wrapper">
+          <wpp-internal-label class="s-body wpp-internal-label" exportparts="info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" part="content">
+            <mock:shadow-root>
+              <div class="info-wrapper" part="info-wrapper" role="presentation">
+                <wpp-typography class="text" part="text" type="s-body">
+                  Mail
+                </wpp-typography>
+                <wpp-typography class="optional" part="optional-text" type="s-body">
+                  (Optional)
+                </wpp-typography>
+              </div>
+              <div aria-label="Show info" class="icon slot-hidden" part="icon-wrapper" role="button" tabindex="0">
+                <slot name="icon" part="icon"></slot>
+              </div>
+            </mock:shadow-root>
+          </wpp-internal-label>
+        </label>
+      </wpp-label>
+    </mock:shadow-root>
+  </wpp-radio>
+  <wpp-radio class="wpp-radio wpp-radio-wrapper" exportparts="label, content, inner" name="contact">
+    <mock:shadow-root>
+      <wpp-label class="label with-text wpp-label" exportparts="wrapper, content, icon" part="label">
+        <input aria-required="false" class="radio-input" id="contact" name="contact" part="input" tabindex="0" type="radio" value="phone">
+        <div class="circle" part="circle"></div>
+        <label aria-label="contact" class="internal-label-wrapper" htmlfor="contact" part="wrapper">
+          <wpp-internal-label class="s-body wpp-internal-label" exportparts="info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" part="content">
+            <mock:shadow-root>
+              <div class="info-wrapper" part="info-wrapper" role="presentation">
+                <wpp-typography class="text" part="text" type="s-body">
+                  Phone
+                </wpp-typography>
+                <wpp-typography class="optional" part="optional-text" type="s-body">
+                  (Optional)
+                </wpp-typography>
+              </div>
+              <div aria-label="Show info" class="icon slot-hidden" part="icon-wrapper" role="button" tabindex="0">
+                <slot name="icon" part="icon"></slot>
+              </div>
+            </mock:shadow-root>
+          </wpp-internal-label>
+        </label>
+      </wpp-label>
+    </mock:shadow-root>
+  </wpp-radio>
+</wpp-radio-group>
+`;

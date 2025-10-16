@@ -1,0 +1,23 @@
+@import '../../styles/_shared.scss';
+
+:host {
+  position: relative;
+  display: block;
+  user-select: none;
+
+  .picker-container {
+    position: relative;
+    width: 100%;
+    height: 208px;
+  }
+
+  canvas {
+    width: 100%;
+    height: 100%;
+    border-radius: var(--wpp-border-radius-s);
+  }
+
+  .marker {
+    @include marker-styles;
+  }
+}

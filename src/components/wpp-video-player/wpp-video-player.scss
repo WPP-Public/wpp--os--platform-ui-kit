@@ -1,0 +1,167 @@
+@import "./components/wpp-seek-bar";
+@import "./components/wpp-video-time";
+@import "./components/wpp-volume-bar";
+@import "./components/wpp-progress-bar";
+@import "./components/wpp-captions";
+
+:host {
+  display: flex;
+  position: relative;
+  width: fit-content;
+  background-color: #000;
+  color: #fff;
+  outline: none;
+
+  &:host(.wpp-full-screen) {
+    .video-player {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .controls-bar {
+      bottom: 16px;
+      width: 100%;
+      max-width: 62.5%;
+    }
+  }
+}
+
+.video-player {
+  aspect-ratio: var(--aspect-ratio, 16 / 9);
+}
+
+.controls {
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: opacity .15s ease-in-out;
+
+  @include tabFocus(var(--wpp-grey-color-900), var(--wpp-grey-color-000));
+
+  &.state-idle {
+    cursor: default;
+    background-color: var(--wpp-grey-color-800);
+
+    .play-button {
+      display: flex;
+    }
+
+    .controls-bar {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  &.state-playing,
+  &.state-paused {
+    // To override the inline style
+    background-image: none !important;
+    background-color: transparent;
+
+    .play-button {
+      display: none;
+    }
+
+    .controls-bar {
+      opacity: 1;
+      pointer-events: initial;
+    }
+  }
+
+  &.state-playing.invisible {
+    .controls-bar {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .captions-wrapper {
+      bottom: 8px;
+    }
+  }
+}
+
+/**
+ * Main Play button
+ */
+.play-button {
+  --wpp-icon-color: #fff;
+
+  border: none;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.875);
+  width: 66px;
+  height: 66px;
+  padding: 2px;
+  overflow: hidden;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.6);
+  transition: transform 0.15s ease-in-out, background-color 0.15s ease-in-out;
+  z-index: 1;
+
+  &:hover {
+    transform: translate(-50%, -50%) scale(1);
+    background-color: rgba(0, 0, 0, 0.72);
+  }
+
+  &:active {
+    transform: translate(-50%, -50%) scale(0.875);
+    background-color: rgba(0, 0, 0, 0.78);
+  }
+
+  &::part(overlay) {
+    display: none;
+  }
+
+  &::part(button) {
+    border-radius: 50%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &.invisible {
+    visibility: hidden;
+    z-index: -1;
+  }
+}
+
+/**
+ * Control bar at the bottom of the video component
+ */
+.controls-bar {
+  box-sizing: border-box;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 6px 8px;
+  border-radius: 6px;
+  width: calc(100% - 32px);
+  transition: opacity .15s ease-in-out;
+  cursor: default;
+  z-index: 10;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

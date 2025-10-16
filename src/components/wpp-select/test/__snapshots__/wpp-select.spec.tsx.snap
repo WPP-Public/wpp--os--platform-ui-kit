@@ -1,0 +1,165 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-select should render wpp-select with combined type with options list 1`] = `
+<wpp-select class="wpp-combined-select" placeholder="placeholder" type="combined" with-search="auto">
+  <mock:shadow-root>
+    <div class="inputs-container">
+      <div class="anchor size-m" tabindex="0">
+        <div class="icon-start slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <div class="overflow-container">
+          <p></p>
+        </div>
+        <input class="input" readonly="" tabindex="-1" type="text" style="width: auto;">
+        <wpp-icon-chevron direction="down"></wpp-icon-chevron>
+      </div>
+      <div class="wpp-select-portal">
+        <div class="list"></div>
+      </div>
+      <wpp-input placeholder="placeholder" size="m" tabindex="-1" type="text"></wpp-input>
+    </div>
+  </mock:shadow-root>
+  <wpp-list-item data-id="1" value="car">
+    <span slot="label">
+      Car
+    </span>
+  </wpp-list-item>
+  <wpp-list-item data-id="2" disabled="" value="house">
+    <span slot="label">
+      House
+    </span>
+  </wpp-list-item>
+  <wpp-list-item data-id="3" value="apartment">
+    <span slot="label">
+      Apartment
+    </span>
+  </wpp-list-item>
+</wpp-select>
+`;
+
+exports[`wpp-select should render wpp-select with combined type with options list and with label, icon and tooltip description 1`] = `
+<wpp-select class="wpp-combined-select" type="combined" with-search="auto">
+  <mock:shadow-root>
+    <wpp-label class="wpp-label" exportparts="wrapper, content, icon">
+      <label class="internal-label-wrapper" part="wrapper">
+        <wpp-internal-label class="s-strong wpp-internal-label" exportparts="info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" part="content">
+          <mock:shadow-root>
+            <div class="info-wrapper with-icon" part="info-wrapper" role="presentation">
+              <wpp-typography class="text" part="text" type="s-strong">
+                Test label
+              </wpp-typography>
+              <wpp-typography class="optional" part="optional-text" type="s-body">
+                (Optick)
+              </wpp-typography>
+            </div>
+            <wpp-tooltip class="tooltip" part="tooltip" text="Your email will be used to send you a confirmation number">
+              <div aria-label="Show info" class="icon" part="icon-wrapper" role="button" tabindex="0">
+                <slot name="icon" part="icon"></slot>
+              </div>
+            </wpp-tooltip>
+          </mock:shadow-root>
+          <wpp-icon-mail-v3-2-0 part="icon" slot="icon"></wpp-icon-mail-v3-2-0>
+        </wpp-internal-label>
+      </label>
+    </wpp-label>
+    <div class="inputs-container">
+      <div class="anchor size-m" tabindex="0">
+        <div class="icon-start slot-hidden" part="icon-start-wrapper">
+          <slot name="icon-start" part="icon-start"></slot>
+        </div>
+        <div class="overflow-container">
+          <p></p>
+        </div>
+        <input class="input" readonly="" tabindex="-1" type="text" style="width: auto;">
+        <wpp-icon-chevron direction="down"></wpp-icon-chevron>
+      </div>
+      <div class="wpp-select-portal">
+        <div class="list"></div>
+      </div>
+      <wpp-input placeholder="Placeholder" size="m" tabindex="-1" type="text"></wpp-input>
+    </div>
+  </mock:shadow-root>
+  <wpp-list-item class="wpp-list-item wpp-mounted" data-id="1" exportparts="item, info-wrapper, checkbox, body-wrapper, left, label, caption, right, left-wrapper, label-wrapper, caption-wrapper, right-wrapper" highlight="" label="" role="presentation" tabindex="0" value="car">
+    <mock:shadow-root>
+      <ul class="ul-wrapper" part="ul-wrapper">
+        <li class="item" part="item">
+          <div class="info-wrapper" part="info-wrapper">
+            <div class="left slot-hidden" part="left-wrapper">
+              <slot name="left" part="left"></slot>
+            </div>
+            <div class="body-wrapper" part="body-wrapper" style="width: auto;">
+              <div class="label" part="label-wrapper">
+                <slot name="label" part="label"></slot>
+              </div>
+              <div class="caption slot-hidden" part="caption-wrapper">
+                <slot name="caption" part="caption"></slot>
+              </div>
+            </div>
+          </div>
+          <div class="right slot-hidden" part="right-wrapper">
+            <slot name="right" part="right"></slot>
+          </div>
+        </li>
+      </ul>
+    </mock:shadow-root>
+    <span slot="label">
+      Car
+    </span>
+  </wpp-list-item>
+  <wpp-list-item class="wpp-disabled wpp-list-item wpp-mounted" data-id="2" disabled="" exportparts="item, info-wrapper, checkbox, body-wrapper, left, label, caption, right, left-wrapper, label-wrapper, caption-wrapper, right-wrapper" highlight="" label="" role="presentation" tabindex="-1" value="house">
+    <mock:shadow-root>
+      <ul class="ul-wrapper" part="ul-wrapper">
+        <li class="disabled item" part="item">
+          <div class="info-wrapper" part="info-wrapper">
+            <div class="left slot-hidden" part="left-wrapper">
+              <slot name="left" part="left"></slot>
+            </div>
+            <div class="body-wrapper" part="body-wrapper" style="width: auto;">
+              <div class="label" part="label-wrapper">
+                <slot name="label" part="label"></slot>
+              </div>
+              <div class="caption slot-hidden" part="caption-wrapper">
+                <slot name="caption" part="caption"></slot>
+              </div>
+            </div>
+          </div>
+          <div class="right slot-hidden" part="right-wrapper">
+            <slot name="right" part="right"></slot>
+          </div>
+        </li>
+      </ul>
+    </mock:shadow-root>
+    <span slot="label">
+      House
+    </span>
+  </wpp-list-item>
+  <wpp-list-item class="wpp-list-item wpp-mounted" data-id="3" exportparts="item, info-wrapper, checkbox, body-wrapper, left, label, caption, right, left-wrapper, label-wrapper, caption-wrapper, right-wrapper" highlight="" label="" role="presentation" tabindex="0" value="apartment">
+    <mock:shadow-root>
+      <ul class="ul-wrapper" part="ul-wrapper">
+        <li class="item" part="item">
+          <div class="info-wrapper" part="info-wrapper">
+            <div class="left slot-hidden" part="left-wrapper">
+              <slot name="left" part="left"></slot>
+            </div>
+            <div class="body-wrapper" part="body-wrapper" style="width: auto;">
+              <div class="label" part="label-wrapper">
+                <slot name="label" part="label"></slot>
+              </div>
+              <div class="caption slot-hidden" part="caption-wrapper">
+                <slot name="caption" part="caption"></slot>
+              </div>
+            </div>
+          </div>
+          <div class="right slot-hidden" part="right-wrapper">
+            <slot name="right" part="right"></slot>
+          </div>
+        </li>
+      </ul>
+    </mock:shadow-root>
+    <span slot="label">
+      Apartment
+    </span>
+  </wpp-list-item>
+</wpp-select>
+`;

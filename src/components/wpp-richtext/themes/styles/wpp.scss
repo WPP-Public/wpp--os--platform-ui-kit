@@ -1,0 +1,24 @@
+// Variable definitions
+$themeName: 'wpp';
+$inactiveColor: var(--wpp-grey-color-600);
+$inactiveHoverColor: var(--wpp-grey-color-700);
+$inactiveClickColor: var(--wpp-grey-color-800);
+$activeColor: var(--wpp-primary-color-500);
+$activeHoverColor: var(--wpp-primary-color-400);
+$activeClickColor: var(--wpp-primary-color-600);
+$backgroundColor: var(--wpp-grey-color-000);
+
+// Imports (SCSS requires file extensions unless configured otherwise)
+@import './core.scss';
+@import './base.scss';
+@import './toolbar.scss';
+@import './tooltip.scss';
+@import './wpp-image-library.scss';
+@import './wpp-size.scss';
+
+// Styles
+.ql-container {
+  a {
+    color: $activeColor;
+  }
+}

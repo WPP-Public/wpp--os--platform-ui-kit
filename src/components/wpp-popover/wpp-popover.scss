@@ -1,0 +1,33 @@
+:host {
+  display: inline-flex;
+
+  .anchor {
+    width: fit-content;
+    display: inline-flex;
+  }
+
+  .wpp-popover-content {
+    &.wpp-hidden {
+      position: absolute;
+      z-index: -1;
+      opacity: 0;
+    }
+
+    // Styles to resolve issue with shadow DOM and attaching to `parent`
+    &.inline-edit-popover {
+      display: inline-flex;
+      width: 100%;
+      height: 100%;
+      box-shadow: var(--wpp-box-shadow-m);
+      background-color: var(--wpp-grey-color-800);
+      border-radius: var(--wpp-border-radius-s);
+      scrollbar-width: thin;
+      position: relative;
+      overflow: hidden;
+    }
+  }
+
+  slot {
+    display: block;
+  }
+}

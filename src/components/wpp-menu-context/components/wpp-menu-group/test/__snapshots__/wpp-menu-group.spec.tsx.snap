@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-menu-group renders base component 1`] = `
+<wpp-menu-group class="wpp-menu-group" exportparts="header, divider">
+  <mock:shadow-root>
+    <slot></slot>
+  </mock:shadow-root>
+</wpp-menu-group>
+`;
+
+exports[`wpp-menu-group should render divider when flag was enabled 1`] = `
+<wpp-menu-group class="wpp-menu-group" exportparts="header, divider" header="Actions" with-divider="">
+  <mock:shadow-root>
+    <wpp-typography part="header" type="2xs-strong">
+      Actions
+    </wpp-typography>
+    <slot></slot>
+    <wpp-divider class="slot-divider" part="divider"></wpp-divider>
+  </mock:shadow-root>
+</wpp-menu-group>
+`;
+
+exports[`wpp-menu-group should render header when it was provided 1`] = `
+<wpp-menu-group class="wpp-menu-group" exportparts="header, divider" header="Actions">
+  <mock:shadow-root>
+    <wpp-typography part="header" type="2xs-strong">
+      Actions
+    </wpp-typography>
+    <slot></slot>
+  </mock:shadow-root>
+</wpp-menu-group>
+`;

@@ -1,0 +1,10 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Markdown } from '@storybook/addon-docs/blocks'
+
+import readme from './readme.md?raw'
+
+import * as TimePickerStories from './wpp-time-picker.stories.tsx'
+
+<Meta of={TimePickerStories} />
+
+<Markdown>{readme}</Markdown>

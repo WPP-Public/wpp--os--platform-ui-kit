@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-navigation-item renders component 1`] = `
+<wpp-navigation-item class="wpp-navigation-item" exportparts="list-item, chevron-icon" role="WPP-LIST-ITEM" tabindex="0">
+  <mock:shadow-root>
+    <a class="link" tabindex="-1">
+      <div class="navigation-item-wrapper">
+        <wpp-typography class="label-text" type="s-midi"></wpp-typography>
+      </div>
+    </a>
+  </mock:shadow-root>
+</wpp-navigation-item>
+`;
+
+exports[`wpp-navigation-item renders component with chevron icon 1`] = `
+<wpp-navigation-item class="wpp-navigation-item" exportparts="list-item, chevron-icon" hasnesteditems="" role="WPP-LIST-ITEM" tabindex="0">
+  <mock:shadow-root>
+    <a class="link" tabindex="-1">
+      <div class="navigation-item-wrapper">
+        <wpp-typography class="label-text" type="s-midi"></wpp-typography>
+      </div>
+    </a>
+  </mock:shadow-root>
+</wpp-navigation-item>
+`;
+
+exports[`wpp-navigation-item renders component with menu icon 1`] = `
+<wpp-navigation-item class="wpp-navigation-item" exportparts="list-item, chevron-icon" menu="" role="WPP-LIST-ITEM" tabindex="0">
+  <mock:shadow-root>
+    <div class="menu navigation-item-wrapper">
+      <wpp-icon-more class="menu-icon" direction="horizontal"></wpp-icon-more>
+    </div>
+  </mock:shadow-root>
+</wpp-navigation-item>
+`;
+
+exports[`wpp-navigation-item renders selected component with label Title 1`] = `
+<wpp-navigation-item class="wpp-navigation-item" exportparts="list-item, chevron-icon" label="Title" role="WPP-LIST-ITEM" selected="" tabindex="0">
+  <mock:shadow-root>
+    <a class="link" tabindex="-1">
+      <div class="navigation-item-wrapper">
+        <wpp-typography class="label-text" type="s-midi">
+          Title
+        </wpp-typography>
+      </div>
+    </a>
+  </mock:shadow-root>
+</wpp-navigation-item>
+`;

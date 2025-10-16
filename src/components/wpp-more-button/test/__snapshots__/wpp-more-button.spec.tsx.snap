@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-more-button Testing snapshots Testing button with aria-desribedby 1`] = `
+<wpp-more-button class="wpp-more-button" size="m">
+  <mock:shadow-root>
+    <button aria-describedby="More items menu" class="button size-m" data-testid="wpp-more-button" type="button">
+      <wpp-icon-more direction="horizontal"></wpp-icon-more>
+    </button>
+  </mock:shadow-root>
+</wpp-more-button>
+`;
+
+exports[`wpp-more-button Testing snapshots Testing button with aria-label 1`] = `
+<wpp-more-button class="wpp-more-button" size="m">
+  <mock:shadow-root>
+    <button aria-label="More items menu" class="button size-m" data-testid="wpp-more-button" type="button">
+      <wpp-icon-more direction="horizontal"></wpp-icon-more>
+    </button>
+  </mock:shadow-root>
+</wpp-more-button>
+`;
+
+exports[`wpp-more-button Testing snapshots Testing default button with name 1`] = `
+<wpp-more-button class="wpp-more-button" size="m">
+  <mock:shadow-root>
+    <button class="button size-m" data-testid="wpp-more-button" name="More items button" type="button">
+      <wpp-icon-more direction="horizontal"></wpp-icon-more>
+    </button>
+  </mock:shadow-root>
+</wpp-more-button>
+`;
+
+exports[`wpp-more-button Testing snapshots Testing disabled button 1`] = `
+<wpp-more-button class="wpp-disabled wpp-more-button" disabled="" size="m">
+  <mock:shadow-root>
+    <button class="button disabled size-m" data-testid="wpp-more-button" disabled="" type="button">
+      <wpp-icon-more direction="horizontal"></wpp-icon-more>
+    </button>
+  </mock:shadow-root>
+</wpp-more-button>
+`;
+
+exports[`wpp-more-button Testing snapshots Testing loading button 1`] = `
+<wpp-more-button class="wpp-more-button" loading="" size="m">
+  <mock:shadow-root>
+    <button class="button loading size-m" data-testid="wpp-more-button" disabled="" type="button">
+      <wpp-spinner size="s"></wpp-spinner>
+    </button>
+  </mock:shadow-root>
+</wpp-more-button>
+`;

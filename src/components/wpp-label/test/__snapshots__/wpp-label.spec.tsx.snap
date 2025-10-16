@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-label should render label with all text and icon with tooltip description  1`] = `
+<wpp-label class="wpp-label" exportparts="wrapper, content, icon">
+  <label class="internal-label-wrapper" part="wrapper">
+    <wpp-internal-label class="s-body wpp-internal-label" exportparts="info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" part="content">
+      <mock:shadow-root>
+        <div class="info-wrapper with-icon" part="info-wrapper" role="presentation">
+          <wpp-typography class="text" part="text" type="s-body">
+            Test label
+          </wpp-typography>
+          <wpp-typography class="optional" part="optional-text" type="s-body">
+            (Optick)
+          </wpp-typography>
+        </div>
+        <wpp-tooltip class="tooltip" part="tooltip" text="Your email will be used to send you a confirmation number">
+          <div aria-label="Show info" class="icon" part="icon-wrapper" role="button" tabindex="0">
+            <slot name="icon" part="icon"></slot>
+          </div>
+        </wpp-tooltip>
+      </mock:shadow-root>
+      <wpp-icon-mail-v3-2-0 part="icon" slot="icon"></wpp-icon-mail-v3-2-0>
+    </wpp-internal-label>
+  </label>
+</wpp-label>
+`;
+
+exports[`wpp-label should render label with optional text and icon 1`] = `
+<wpp-label class="wpp-label" exportparts="wrapper, content, icon">
+  <label class="internal-label-wrapper" part="wrapper">
+    <wpp-internal-label class="s-body wpp-internal-label" exportparts="info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" part="content">
+      <mock:shadow-root>
+        <div class="info-wrapper with-icon" part="info-wrapper" role="presentation">
+          <wpp-typography class="text" part="text" type="s-body">
+            Test label
+          </wpp-typography>
+        </div>
+        <div aria-label="Show info" class="icon" part="icon-wrapper" role="button" tabindex="0">
+          <slot name="icon" part="icon"></slot>
+        </div>
+      </mock:shadow-root>
+      <wpp-icon-edit-v3-2-0 part="icon" slot="icon"></wpp-icon-edit-v3-2-0>
+    </wpp-internal-label>
+  </label>
+</wpp-label>
+`;
+
+exports[`wpp-label should render label with text and disabled state 1`] = `
+<wpp-label class="wpp-label" disabled="" exportparts="wrapper, content, icon">
+  <label class="internal-label-wrapper" part="wrapper">
+    <wpp-internal-label class="disabled s-body wpp-internal-label" disabled="" exportparts="info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" part="content">
+      <mock:shadow-root>
+        <div class="info-wrapper" part="info-wrapper" role="presentation">
+          <wpp-typography class="text" part="text" type="s-body">
+            Test label
+          </wpp-typography>
+        </div>
+        <div aria-label="Show info" class="icon slot-hidden" part="icon-wrapper" role="button" tabindex="0">
+          <slot name="icon" part="icon"></slot>
+        </div>
+      </mock:shadow-root>
+    </wpp-internal-label>
+  </label>
+</wpp-label>
+`;

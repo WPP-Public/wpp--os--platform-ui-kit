@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-counter should render component 1`] = `
+<wpp-counter class="wpp-counter" exportparts="label, body, decrease-button, decrease-icon, input, increase-button, increase-icon, message">
+  <mock:shadow-root>
+    <div class="counter-wrapper size-m" part="body">
+      <button aria-label="Decrease value" class="decrease-wrapper disabled" disabled="" part="decrease-button" tabindex="-1" type="button">
+        <wpp-icon-remove class="icon-minus" part="decrease-icon"></wpp-icon-remove>
+      </button>
+      <input aria-label="Counter value" autocomplete="off" class="counter-input" part="input" type="text" value="1">
+      <button aria-label="Increase value" class="increase-wrapper" part="increase-button" tabindex="0" type="button">
+        <wpp-icon-plus class="icon-plus" part="increase-icon"></wpp-icon-plus>
+      </button>
+    </div>
+  </mock:shadow-root>
+</wpp-counter>
+`;
+
+exports[`wpp-counter should render component with label, icon and tooltip description 1`] = `
+<wpp-counter class="wpp-counter" exportparts="label, body, decrease-button, decrease-icon, input, increase-button, increase-icon, message">
+  <mock:shadow-root>
+    <wpp-label class="label wpp-label" exportparts="wrapper, content, icon" part="label">
+      <label class="internal-label-wrapper" part="wrapper">
+        <wpp-internal-label class="s-strong wpp-internal-label" exportparts="info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" part="content">
+          <mock:shadow-root>
+            <div class="info-wrapper with-icon" part="info-wrapper" role="presentation">
+              <wpp-typography class="text" part="text" type="s-strong">
+                Test label
+              </wpp-typography>
+              <wpp-typography class="optional" part="optional-text" type="s-body">
+                (Optick)
+              </wpp-typography>
+            </div>
+            <wpp-tooltip class="tooltip" part="tooltip" text="Your email will be used to send you a confirmation number">
+              <div aria-label="Show info" class="icon" part="icon-wrapper" role="button" tabindex="0">
+                <slot name="icon" part="icon"></slot>
+              </div>
+            </wpp-tooltip>
+          </mock:shadow-root>
+          <wpp-icon-mail-v3-2-0 part="icon" slot="icon"></wpp-icon-mail-v3-2-0>
+        </wpp-internal-label>
+      </label>
+    </wpp-label>
+    <div class="counter-wrapper size-m" part="body">
+      <button aria-label="Decrease value" class="decrease-wrapper disabled" disabled="" part="decrease-button" tabindex="-1" type="button">
+        <wpp-icon-remove class="icon-minus" part="decrease-icon"></wpp-icon-remove>
+      </button>
+      <input autocomplete="off" class="counter-input" part="input" type="text" value="1">
+      <button aria-label="Increase value" class="increase-wrapper" part="increase-button" tabindex="0" type="button">
+        <wpp-icon-plus class="icon-plus" part="increase-icon"></wpp-icon-plus>
+      </button>
+    </div>
+  </mock:shadow-root>
+</wpp-counter>
+`;
+
+exports[`wpp-counter should render component with value 50 1`] = `
+<wpp-counter class="wpp-counter" exportparts="label, body, decrease-button, decrease-icon, input, increase-button, increase-icon, message" value="50">
+  <mock:shadow-root>
+    <div class="counter-wrapper size-m" part="body">
+      <button aria-label="Decrease value" class="decrease-wrapper" part="decrease-button" tabindex="0" type="button">
+        <wpp-icon-remove class="icon-minus" part="decrease-icon"></wpp-icon-remove>
+      </button>
+      <input aria-label="Counter value" autocomplete="off" class="counter-input" part="input" type="text" value="50">
+      <button aria-label="Increase value" class="increase-wrapper" part="increase-button" tabindex="0" type="button">
+        <wpp-icon-plus class="icon-plus" part="increase-icon"></wpp-icon-plus>
+      </button>
+    </div>
+  </mock:shadow-root>
+</wpp-counter>
+`;
+
+exports[`wpp-counter should render component with warning message 1`] = `
+<wpp-counter class="wpp-counter" exportparts="label, body, decrease-button, decrease-icon, input, increase-button, increase-icon, message" message-type="warning">
+  <mock:shadow-root>
+    <div class="counter-wrapper size-m warning" part="body">
+      <button aria-label="Decrease value" class="decrease-wrapper disabled" disabled="" part="decrease-button" tabindex="-1" type="button">
+        <wpp-icon-remove class="icon-minus" part="decrease-icon"></wpp-icon-remove>
+      </button>
+      <input aria-label="Counter value" autocomplete="off" class="counter-input warning" part="input" type="text" value="1">
+      <button aria-label="Increase value" class="increase-wrapper" part="increase-button" tabindex="0" type="button">
+        <wpp-icon-plus class="icon-plus" part="increase-icon"></wpp-icon-plus>
+      </button>
+    </div>
+  </mock:shadow-root>
+</wpp-counter>
+`;

@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-input renders component with label, icon and tooltip description 1`] = `
+<wpp-input class="wpp-input wpp-size-m" exportparts="label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper">
+  <mock:shadow-root>
+    <wpp-label class="label wpp-label" exportparts="wrapper, content, icon" id="text-input-label" part="label">
+      <label aria-label="text-input" class="internal-label-wrapper" htmlfor="text-input" part="wrapper">
+        <wpp-internal-label class="s-strong wpp-internal-label" exportparts="info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" part="content">
+          <mock:shadow-root>
+            <div class="info-wrapper with-icon" part="info-wrapper" role="presentation">
+              <wpp-typography class="text" part="text" type="s-strong">
+                Test label
+              </wpp-typography>
+              <wpp-typography class="optional" part="optional-text" type="s-body">
+                (Optick)
+              </wpp-typography>
+            </div>
+            <wpp-tooltip class="tooltip" part="tooltip" text="Your email will be used to send you a confirmation number">
+              <div aria-label="Show info" class="icon" part="icon-wrapper" role="button" tabindex="0">
+                <slot name="icon" part="icon"></slot>
+              </div>
+            </wpp-tooltip>
+          </mock:shadow-root>
+          <wpp-icon-mail-v3-2-0 part="icon" slot="icon"></wpp-icon-mail-v3-2-0>
+        </wpp-internal-label>
+      </label>
+    </wpp-label>
+    <div class="input-with-icons" part="body">
+      <div class="icon-start slot-hidden" part="icon-start-wrapper">
+        <slot name="icon-start" part="icon-start"></slot>
+      </div>
+      <wpp-tooltip anchortabindex="-1" class="with-tooltip" disabled="" part="anchor">
+        <input aria-disabled="false" aria-labelledby="text-input-label" autocomplete="off" class="input-element size-m" data-testid="input" id="text-input" name="text-input" part="input" type="text">
+      </wpp-tooltip>
+      <div aria-label="Clear input" class="icon-end slot-hidden" part="icon-end-wrapper" role="button" tabindex="-1">
+        <slot name="icon-end" part="icon-end"></slot>
+      </div>
+    </div>
+  </mock:shadow-root>
+</wpp-input>
+`;
+
+exports[`wpp-input should render component 1`] = `
+<wpp-input class="with-value wpp-input wpp-size-m" exportparts="label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" name="text-input" placeholder="Text" size="m" type="text" value="test">
+  <mock:shadow-root>
+    <div class="input-with-icons" part="body">
+      <div class="icon-start slot-hidden" part="icon-start-wrapper">
+        <slot name="icon-start" part="icon-start"></slot>
+      </div>
+      <wpp-tooltip anchortabindex="-1" class="with-tooltip" disabled="" part="anchor" text="test">
+        <input aria-disabled="false" autocomplete="off" class="input-element size-m" data-testid="input" id="text-input" name="text-input" part="input" placeholder="Text" type="text" value="test">
+      </wpp-tooltip>
+      <div aria-label="Clear input" class="icon-end slot-hidden" part="icon-end-wrapper" role="button" tabindex="-1">
+        <slot name="icon-end" part="icon-end"></slot>
+      </div>
+    </div>
+  </mock:shadow-root>
+</wpp-input>
+`;
+
+exports[`wpp-input should render component with search type 1`] = `
+<wpp-input class="with-value wpp-input wpp-size-s" exportparts="label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" message="Warning message" message-type="warning" name="search-input" placeholder="Text" size="s" type="search" value="test">
+  <mock:shadow-root>
+    <div class="input-with-icons" part="body">
+      <div class="icon-start slot-hidden" part="icon-start-wrapper">
+        <slot name="icon-start" part="icon-start"></slot>
+      </div>
+      <wpp-icon-search class="icon-start slot-hidden" part="icon-search"></wpp-icon-search>
+      <wpp-tooltip anchortabindex="-1" class="with-tooltip" disabled="" part="anchor" text="test">
+        <input aria-disabled="false" autocomplete="off" class="input-element size-s warning with-icon-end with-icon-start" data-testid="input" id="search-input" name="search-input" part="input" placeholder="Text" type="search" value="test">
+      </wpp-tooltip>
+      <wpp-icon-cross aria-label="Erase input text" class="icon-end slot-hidden" part="icon-cross" tabindex="0"></wpp-icon-cross>
+      <div aria-label="Clear input" class="icon-end slot-hidden" part="icon-end-wrapper" role="button" tabindex="-1">
+        <slot name="icon-end" part="icon-end"></slot>
+      </div>
+    </div>
+    <wpp-inline-message message="Warning message" part="message" type="warning"></wpp-inline-message>
+  </mock:shadow-root>
+</wpp-input>
+`;
+
+exports[`wpp-input should render component with warning message 1`] = `
+<wpp-input class="with-value wpp-input wpp-size-s" exportparts="label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" message="Warning message" message-type="warning" name="text-input" placeholder="Text" size="s" type="text" value="test">
+  <mock:shadow-root>
+    <div class="input-with-icons" part="body">
+      <div class="icon-start slot-hidden" part="icon-start-wrapper">
+        <slot name="icon-start" part="icon-start"></slot>
+      </div>
+      <wpp-tooltip anchortabindex="-1" class="with-tooltip" disabled="" part="anchor" text="test">
+        <input aria-disabled="false" autocomplete="off" class="input-element size-s warning" data-testid="input" id="text-input" name="text-input" part="input" placeholder="Text" type="text" value="test">
+      </wpp-tooltip>
+      <div aria-label="Clear input" class="icon-end slot-hidden" part="icon-end-wrapper" role="button" tabindex="-1">
+        <slot name="icon-end" part="icon-end"></slot>
+      </div>
+    </div>
+    <wpp-inline-message message="Warning message" part="message" type="warning"></wpp-inline-message>
+  </mock:shadow-root>
+</wpp-input>
+`;

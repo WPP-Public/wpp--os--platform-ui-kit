@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-accordion should render expandable section 1`] = `
+<wpp-accordion class="wpp-accordion wpp-section-wrapper" exportparts="section, title, icon, counter, divider, title-wrapper, content" with-divider="" style="--accordion-max-height: undefinedpx; --accordion-show-animation-duration: NaNms; --accordion-hide-animation-duration: NaNms;">
+  <mock:shadow-root>
+    <div class="size-l wpp-section" part="section">
+      <button aria-controls="expandable-panel" aria-expanded="false" class="title-tags-wrapper" id="expandable-button">
+        <div class="title-wrapper" part="title-wrapper" role="none">
+          <wpp-icon-chevron part="icon" role="presentation"></wpp-icon-chevron>
+          <div class="header" part="header-wrapper" role="presentation">
+            <slot name="header" part="header"></slot>
+          </div>
+        </div>
+      </button>
+      <div class="actions slot-hidden" part="actions-wrapper">
+        <slot name="actions" part="actions"></slot>
+      </div>
+    </div>
+    <div aria-hidden="" aria-labelledby="expandable-button" class="closed content" id="expandable-panel" inert="" part="content" role="region">
+      <slot class="slot-content"></slot>
+    </div>
+    <wpp-divider part="divider"></wpp-divider>
+  </mock:shadow-root>
+  <wpp-typography slot="header" type="m-strong">
+    Section name
+  </wpp-typography>
+</wpp-accordion>
+`;
+
+exports[`wpp-accordion should render expanded expandable section with size s 1`] = `
+<wpp-accordion class="wpp-accordion wpp-expanded wpp-section-wrapper" expanded="" exportparts="section, title, icon, counter, divider, title-wrapper, content" size="s" with-divider="" style="--accordion-max-height: undefinedpx; --accordion-show-animation-duration: NaNms; --accordion-hide-animation-duration: NaNms;">
+  <mock:shadow-root>
+    <div class="size-s wpp-section" part="section">
+      <button aria-controls="expandable-panel" aria-expanded="true" class="title-tags-wrapper" id="expandable-button">
+        <div class="title-wrapper" part="title-wrapper" role="none">
+          <wpp-icon-chevron part="icon" role="presentation"></wpp-icon-chevron>
+          <div class="header" part="header-wrapper" role="presentation">
+            <slot name="header" part="header"></slot>
+          </div>
+        </div>
+      </button>
+      <div class="actions slot-hidden" part="actions-wrapper">
+        <slot name="actions" part="actions"></slot>
+      </div>
+    </div>
+    <div aria-labelledby="expandable-button" class="closed content" id="expandable-panel" part="content" role="region">
+      <slot class="slot-content"></slot>
+    </div>
+    <wpp-divider part="divider"></wpp-divider>
+  </mock:shadow-root>
+  <wpp-typography slot="header" type="s-strong">
+    Section name
+  </wpp-typography>
+  <wpp-checkbox></wpp-checkbox>
+  <wpp-checkbox></wpp-checkbox>
+  <wpp-checkbox></wpp-checkbox>
+</wpp-accordion>
+`;

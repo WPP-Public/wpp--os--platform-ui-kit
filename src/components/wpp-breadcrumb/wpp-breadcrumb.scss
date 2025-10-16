@@ -1,0 +1,180 @@
+/**
+  * @prop --wpp-breadcrumb-color:
+  * @prop --wpp-breadcrumb-slash-margin:
+  * @prop --wpp-breadcrumb-item-text-color:
+  * @prop --wpp-breadcrumb-item-text-hover-color:
+  * @prop --wpp-breadcrumb-item-text-active-color:
+  * @prop --wpp-breadcrumb-menu-trigger-color:
+  * @prop --wpp-breadcrumb-menu-trigger-color-hover:
+  * @prop --wpp-breadcrumb-menu-trigger-color-active:
+  * @prop --wpp-breadcrumb-item-border-radius-focus:
+  * @prop --wpp-breadcrumb-item-first-border-color-focus:
+  * @prop --wpp-breadcrumb-item-second-border-color-focus:
+*/
+
+:host {
+  --breadcrumb-color: var(--wpp-breadcrumb-color, var(--wpp-grey-color-500));
+  --breadcrumb-slash-margin: var(--wpp-breadcrumb-slash-margin, 0 12px);
+  --breadcrumb-item-text-color: var(--wpp-breadcrumb-item-text-color, var(--wpp-grey-color-800));
+  --breadcrumb-item-text-hover-color: var(--wpp-breadcrumb-item-text-color-hover, var(--wpp-grey-color-900));
+  --breadcrumb-item-text-active-color: var(--wpp-breadcrumb-item-text-color-active, var(--wpp-grey-color-1000));
+  --breadcrumb-item-icon-hover-color: var(--wpp-breadcrumb-item-icon-color-hover, var(--wpp-grey-color-800));
+  --breadcrumb-item-icon-active-color: var(--wpp-breadcrumb-item-icon-color-active, var(--wpp-grey-color-900));
+  --breadcrumb-menu-trigger-color: var(--wpp-breadcrumb-menu-trigger-color, var(--wpp-icon-color));
+  --breadcrumb-menu-trigger-hover-color: var(--wpp-breadcrumb-menu-trigger-color-hover, var(--wpp-icon-color-hover));
+  --breadcrumb-menu-trigger-active-color: var(--wpp-breadcrumb-menu-trigger-color-active, var(--wpp-icon-color-active));
+
+  --breadcrumb-item-first-border-color-focus: var(
+    --wpp-breadcrumb-item-first-border-color-focus,
+    var(--wpp-grey-color-000)
+  );
+  --breadcrumb-item-second-border-color-focus: var(
+    --wpp-breadcrumb-item-second-border-color-focus,
+    var(--wpp-brand-color)
+  );
+  --breadcrumb-item-border-radius-focus: var(--wpp-breadcrumb-item-border-radius-focus, 2px);
+
+  @include typographySBody;
+
+  display: flex;
+  color: var(--breadcrumb-color);
+  white-space: nowrap;
+
+  .menu {
+    --mc-wrapper-width: 20px;
+    height: 20px;
+    vertical-align: text-top;
+
+    .wpp-list {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.item {
+  color: var(--breadcrumb-item-text-color);
+  text-decoration: none;
+
+  &:not(.active) {
+    cursor: pointer;
+
+    &:hover {
+      color: var(--breadcrumb-item-text-hover-color);
+      text-decoration: underline;
+    }
+
+    &:active {
+      color: var(--breadcrumb-item-text-active-color);
+      text-decoration: underline;
+    }
+  }
+
+  &.active {
+    color: var(--breadcrumb-item-text-active-color);
+    cursor: default;
+  }
+}
+
+.menu-trigger {
+  color: var(--breadcrumb-menu-trigger-color);
+  cursor: pointer;
+
+  &[aria-expanded='true'] {
+    color: var(--breadcrumb-item-text-color);
+  }
+
+  &:hover {
+    color: var(--breadcrumb-menu-trigger-hover-color);
+  }
+
+  &:active {
+    color: var(--breadcrumb-menu-trigger-active-color);
+  }
+}
+
+.link {
+  text-decoration: none;
+}
+
+.unclickable {
+  text-decoration: none;
+
+  &:not(.active) {
+    cursor: default;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.item,
+.menu {
+  @include tabFocusVisible(
+    var(--breadcrumb-item-first-border-color-focus),
+    var(--breadcrumb-item-second-border-color-focus),
+    var(--breadcrumb-item-border-radius-focus)
+  );
+}
+
+.item {
+  &:focus-visible {
+    color: var(--breadcrumb-item-text-hover-color);
+    text-decoration: underline;
+  }
+}
+
+.menu {
+  &:focus-visible {
+    .menu-trigger {
+      color: var(--breadcrumb-menu-trigger-hover-color);
+    }
+  }
+}
+
+.slash {
+  margin: var(--breadcrumb-slash-margin);
+}
+
+.back {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--breadcrumb-item-text-color);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--breadcrumb-item-text-hover-color);
+    text-decoration: underline;
+
+    .back-icon-chevron {
+      color: var(--breadcrumb-item-icon-hover-color);
+    }
+  }
+
+  &:active {
+    color: var(--breadcrumb-item-text-active-color);
+    text-decoration: underline;
+
+    .back-icon-chevron {
+      color: var(--breadcrumb-item-icon-active-color);
+    }
+  }
+
+  .back-label {
+    margin-left: 4px;
+  }
+
+  @include tabFocusVisible(
+    var(--breadcrumb-item-first-border-color-focus),
+    var(--breadcrumb-item-second-border-color-focus),
+    var(--breadcrumb-item-border-radius-focus)
+  );
+
+  // Update to use button reset styles
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+}

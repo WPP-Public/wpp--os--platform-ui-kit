@@ -1,0 +1,10 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Markdown } from '@storybook/addon-docs/blocks'
+
+import scrollReadme from './scrollReadme.md?raw'
+
+import * as AgGridTableStories from './ag-grid-table.stories.tsx'
+
+<Meta of={AgGridTableStories} />
+
+<Markdown>{scrollReadme}</Markdown>

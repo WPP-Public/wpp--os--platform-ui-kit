@@ -1,0 +1,40 @@
+import { Component, h, Prop } from '@stencil/core'
+import { WppIcon } from '../../../../WppIcon'
+
+@Component({
+  tag: 'wpp-icon-table-link',
+  styleUrl: '../../../../wpp-icon.scss',
+  shadow: true,
+})
+export class WppIconTableLink {
+  /**
+   Defines the icon size, where `s` is **16px** and `m` is **20px**.
+   */
+  @Prop() readonly size: 's' | 'm' = 'm'
+
+  /**
+   Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
+   */
+  @Prop() readonly width?: number
+
+  /**
+    Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
+    */
+  @Prop() readonly height?: number
+
+  /**
+   Defines the icon color.
+   */
+  @Prop() readonly color: string = 'var(--wpp-icon-color)'
+
+  render() {
+    return (
+      <WppIcon name="wpp-icon-table-link" width={this.width} height={this.height} size={this.size} color={this.color}>
+        <path
+          d="M3 5.6C3 4.16406 4.16406 3 5.6 3H14.8C16.236 3 17.4 4.16406 17.4 5.6V12.0662C17.0256 11.9177 16.6219 11.8271 16.2 11.8052V8.60001H13V11.8052C12.6866 11.8214 12.3832 11.8757 12.0943 11.9634C11.9944 11.9937 11.8963 12.0281 11.8 12.0662C11.2755 12.2742 10.8084 12.5955 10.4287 13H8.60001V16.2H9.44711C9.515 16.628 9.65434 17.0322 9.85253 17.4H5.6C4.16406 17.4 3 16.236 3 14.8V5.6ZM11.8 8.60001H8.60001L8.60001 11.8H11.8L11.8 8.60001ZM5.6 4.2C4.8268 4.2 4.2 4.8268 4.2 5.6V7.40001H7.40001V4.2H5.6ZM4.2 8.60001V11.8H7.40001L7.40001 8.60001H4.2ZM13 7.40001H16.2V5.6C16.2 4.8268 15.5732 4.2 14.8 4.2H13V7.40001ZM11.8 4.2H8.60001V7.40001H11.8V4.2ZM4.2 13V14.8C4.2 15.5732 4.8268 16.2 5.6 16.2H7.40001V13H4.2ZM16 12.6C17.6569 12.6 19 13.9432 19 15.6C19 17.2034 17.7421 18.513 16.1618 18.5959L16.0028 18.6V18.6037C15.6714 18.6052 15.4015 18.3378 15.4 18.0065C15.3986 17.7027 15.6232 17.4506 15.9159 17.4096L15.9973 17.4037L16 17.4C16.9941 17.4 17.8 16.5941 17.8 15.6C17.8 14.6473 17.0599 13.8675 16.1233 13.8042L16 13.8C15.6687 13.8 15.4 13.5314 15.4 13.2C15.4 12.8963 15.6257 12.6452 15.9186 12.6055L16 12.6ZM13.2 12.6C13.5314 12.6 13.8 12.8686 13.8 13.2C13.8 13.5038 13.5743 13.7548 13.2814 13.7945L13.2 13.8C12.2059 13.8 11.4 14.6059 11.4 15.6C11.4 16.5527 12.1401 17.3325 13.0768 17.3959L13.2 17.4C13.5314 17.4 13.8 17.6687 13.8 18C13.8 18.3038 13.5743 18.5548 13.2814 18.5945L13.2 18.6C11.5432 18.6 10.2 17.2569 10.2 15.6C10.2 13.9966 11.4579 12.687 13.0407 12.6042L13.2 12.6ZM16 15C16.3314 15 16.6 15.2687 16.6 15.6C16.6 15.9038 16.3743 16.1548 16.0814 16.1945L16 16.2H13.2C12.8686 16.2 12.6 15.9314 12.6 15.6C12.6 15.2963 12.8257 15.0452 13.1186 15.0055L13.2 15H16Z"
+          fill="currentColor"
+        />
+      </WppIcon>
+    )
+  }
+}

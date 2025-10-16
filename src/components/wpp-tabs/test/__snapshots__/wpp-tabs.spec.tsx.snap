@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-tab should render bar with items and attributes 1`] = `
+<wpp-tabs class="wpp-tabs" exportparts="wrapper, inner, slider" value="food" style="--item-length: 3;">
+  <mock:shadow-root>
+    <div aria-multiselectable="false" class="wpp-tab-control-wrapper" part="wrapper" role="listbox">
+      <slot part="inner"></slot>
+    </div>
+    <div class="slider" part="slider"></div>
+  </mock:shadow-root>
+  <wpp-tab class="wpp-tab" exportparts="wrapper, inner, counter" tabindex="0" value="houses">
+    <mock:shadow-root>
+      <div aria-selected="false" class="size-m wpp-tab wpp-tab-wrapper" id="houses" part="wrapper" role="option">
+        <slot part="inner"></slot>
+      </div>
+    </mock:shadow-root>
+    Houses
+  </wpp-tab>
+  <wpp-tab class="wpp-tab" disabled="" exportparts="wrapper, inner, counter" tabindex="-1" value="cars">
+    <mock:shadow-root>
+      <div aria-selected="false" class="size-m wpp-tab wpp-tab-wrapper" id="cars" part="wrapper" role="option">
+        <slot part="inner"></slot>
+      </div>
+    </mock:shadow-root>
+    Cars
+  </wpp-tab>
+  <wpp-tab class="wpp-tab" counter="6" exportparts="wrapper, inner, counter" tabindex="0" value="food">
+    <mock:shadow-root>
+      <div aria-selected="false" class="size-m wpp-tab wpp-tab-wrapper" id="food" part="wrapper" role="option">
+        <slot part="inner"></slot>
+        <div class="counter" part="counter">
+          (6)
+        </div>
+      </div>
+    </mock:shadow-root>
+    Food
+  </wpp-tab>
+</wpp-tabs>
+`;

@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-back-to-top-button should render component 1`] = `
+<wpp-back-to-top-button class="wpp-back-to-top-button" exportparts="button, icon">
+  <mock:shadow-root>
+    <button aria-label="Back to top" aria-pressed="false" data-testid="wppBackToTopButton" part="button" type="button">
+      <wpp-icon-arrow class="icon" direction="top" part="icon"></wpp-icon-arrow>
+    </button>
+  </mock:shadow-root>
+</wpp-back-to-top-button>
+`;

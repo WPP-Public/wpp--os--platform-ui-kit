@@ -1,0 +1,176 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-segmented-control should render bar with icons and size s 1`] = `
+<wpp-segmented-control class="wpp-segmented-control" exportparts="wrapper, inner, label" size="s" style="--wpp-bar-width: auto;">
+  <mock:shadow-root>
+    <div aria-multiselectable="false" class="size-s wpp-bar-wrapper" part="wrapper" role="listbox">
+      <slot part="inner"></slot>
+    </div>
+  </mock:shadow-root>
+  <wpp-segmented-control-item active="" class="wpp-segmented-control-item" exportparts="item" tabindex="-1" value="item-1" variant="icon">
+    <mock:shadow-root>
+      <div aria-selected="true" class="active icon segmented-control-item size-m" id="item-1" part="item" role="option">
+        <div class="content-wrapper" part="ws-wrapper">
+          <slot part="ws-inner"></slot>
+        </div>
+      </div>
+    </mock:shadow-root>
+    <wpp-icon-grid-dots></wpp-icon-grid-dots>
+  </wpp-segmented-control-item>
+  <wpp-segmented-control-item class="wpp-segmented-control-item" exportparts="item" tabindex="0" value="item-2" variant="icon">
+    <mock:shadow-root>
+      <div aria-selected="false" class="icon segmented-control-item size-m" id="item-2" part="item" role="option">
+        <div class="content-wrapper" part="ws-wrapper">
+          <slot part="ws-inner"></slot>
+        </div>
+      </div>
+    </mock:shadow-root>
+    <wpp-icon-list></wpp-icon-list>
+  </wpp-segmented-control-item>
+  <wpp-segmented-control-item class="wpp-segmented-control-item" exportparts="item" tabindex="0" value="item-3" variant="icon">
+    <mock:shadow-root>
+      <div aria-selected="false" class="icon segmented-control-item size-m" id="item-3" part="item" role="option">
+        <div class="content-wrapper" part="ws-wrapper">
+          <slot part="ws-inner"></slot>
+        </div>
+      </div>
+    </mock:shadow-root>
+    <wpp-icon-addd-document></wpp-icon-addd-document>
+  </wpp-segmented-control-item>
+</wpp-segmented-control>
+`;
+
+exports[`wpp-segmented-control should render bar with items text and size m 1`] = `
+<wpp-segmented-control class="wpp-segmented-control" exportparts="wrapper, inner, label" size="m" style="--wpp-bar-width: auto;">
+  <mock:shadow-root>
+    <div aria-multiselectable="false" class="size-m wpp-bar-wrapper" part="wrapper" role="listbox">
+      <slot part="inner"></slot>
+    </div>
+  </mock:shadow-root>
+  <wpp-segmented-control-item active="" class="wpp-segmented-control-item" exportparts="item" tabindex="-1" value="item-1">
+    <mock:shadow-root>
+      <div aria-selected="true" class="active segmented-control-item size-m text" id="item-1" part="item" role="option">
+        <div class="content-wrapper" part="ws-wrapper">
+          <slot part="ws-inner"></slot>
+        </div>
+      </div>
+    </mock:shadow-root>
+    Text
+  </wpp-segmented-control-item>
+  <wpp-segmented-control-item class="wpp-segmented-control-item" exportparts="item" tabindex="0" value="item-2">
+    <mock:shadow-root>
+      <div aria-selected="false" class="segmented-control-item size-m text" id="item-2" part="item" role="option">
+        <div class="content-wrapper" part="ws-wrapper">
+          <slot part="ws-inner"></slot>
+        </div>
+      </div>
+    </mock:shadow-root>
+    Text
+  </wpp-segmented-control-item>
+  <wpp-segmented-control-item class="wpp-segmented-control-item" exportparts="item" tabindex="0" value="item-3">
+    <mock:shadow-root>
+      <div aria-selected="false" class="segmented-control-item size-m text" id="item-3" part="item" role="option">
+        <div class="content-wrapper" part="ws-wrapper">
+          <slot part="ws-inner"></slot>
+        </div>
+      </div>
+    </mock:shadow-root>
+    Text
+  </wpp-segmented-control-item>
+</wpp-segmented-control>
+`;
+
+exports[`wpp-segmented-control should render bar with items text and size s and hug content off 1`] = `
+<wpp-segmented-control class="wpp-segmented-control" exportparts="wrapper, inner, label" hug-content-off="" size="s" style="--wpp-bar-width: auto;">
+  <mock:shadow-root>
+    <div aria-multiselectable="false" class="hug-content-off size-s wpp-bar-wrapper" part="wrapper" role="listbox">
+      <slot part="inner"></slot>
+    </div>
+  </mock:shadow-root>
+  <wpp-segmented-control-item active="" class="wpp-segmented-control-item" exportparts="item" hug-content-off="" tabindex="-1" value="item-1">
+    <mock:shadow-root>
+      <div aria-selected="true" class="active segmented-control-item size-m text" id="item-1" part="item" role="option">
+        <div class="content-wrapper" part="ws-wrapper">
+          <slot part="ws-inner"></slot>
+        </div>
+      </div>
+    </mock:shadow-root>
+    Text
+  </wpp-segmented-control-item>
+  <wpp-segmented-control-item class="wpp-segmented-control-item" exportparts="item" hug-content-off="" tabindex="0" value="item-2">
+    <mock:shadow-root>
+      <div aria-selected="false" class="segmented-control-item size-m text" id="item-2" part="item" role="option">
+        <div class="content-wrapper" part="ws-wrapper">
+          <slot part="ws-inner"></slot>
+        </div>
+      </div>
+    </mock:shadow-root>
+    Text
+  </wpp-segmented-control-item>
+  <wpp-segmented-control-item class="wpp-segmented-control-item" exportparts="item" hug-content-off="" tabindex="0" value="item-3">
+    <mock:shadow-root>
+      <div aria-selected="false" class="segmented-control-item size-m text" id="item-3" part="item" role="option">
+        <div class="content-wrapper" part="ws-wrapper">
+          <slot part="ws-inner"></slot>
+        </div>
+      </div>
+    </mock:shadow-root>
+    Text
+  </wpp-segmented-control-item>
+</wpp-segmented-control>
+`;
+
+exports[`wpp-segmented-control should render checked item with text and size m 1`] = `
+<wpp-segmented-control-item active="" class="wpp-segmented-control-item" exportparts="item" size="m" tabindex="-1" value="item-1">
+  <mock:shadow-root>
+    <div aria-selected="true" class="active segmented-control-item size-m text" id="item-1" part="item" role="option">
+      <div class="content-wrapper" part="ws-wrapper">
+        <slot part="ws-inner"></slot>
+      </div>
+    </div>
+  </mock:shadow-root>
+  Text
+</wpp-segmented-control-item>
+`;
+
+exports[`wpp-segmented-control should render disabled item with text and size s 1`] = `
+<wpp-segmented-control-item class="wpp-segmented-control-item" disabled="" exportparts="item" size="s" tabindex="-1" value="item-1">
+  <mock:shadow-root>
+    <div aria-selected="false" class="disabled segmented-control-item size-s text" id="item-1" part="item" role="option">
+      <div class="content-wrapper" part="ws-wrapper">
+        <slot part="ws-inner"></slot>
+      </div>
+    </div>
+  </mock:shadow-root>
+  Text
+</wpp-segmented-control-item>
+`;
+
+exports[`wpp-segmented-control should render item with text 1`] = `
+<wpp-segmented-control-item class="wpp-segmented-control-item" exportparts="item" tabindex="0" value="item-1">
+  <mock:shadow-root>
+    <div aria-selected="false" class="segmented-control-item size-m text" id="item-1" part="item" role="option">
+      <div class="content-wrapper" part="ws-wrapper">
+        <slot part="ws-inner"></slot>
+      </div>
+    </div>
+  </mock:shadow-root>
+  Text
+</wpp-segmented-control-item>
+`;
+
+exports[`wpp-segmented-control should render item with text and counter 1`] = `
+<wpp-segmented-control-item class="wpp-segmented-control-item" counter="2" exportparts="item" tabindex="0" value="item-1">
+  <mock:shadow-root>
+    <div aria-selected="false" class="segmented-control-item size-m text" id="item-1" part="item" role="option">
+      <div class="content-wrapper" part="ws-wrapper">
+        <slot part="ws-inner"></slot>
+      </div>
+      <div class="counter">
+        (2)
+      </div>
+    </div>
+  </mock:shadow-root>
+  Text
+</wpp-segmented-control-item>
+`;

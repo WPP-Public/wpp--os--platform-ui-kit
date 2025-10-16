@@ -1,0 +1,25 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: default;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+}
+
+:host(:hover) {
+  .wpp-typography {
+    color: var(--wpp-grey-color-800) !important;
+  }
+}
+
+:host(.wpp-disabled) {
+  pointer-events: none;
+
+  .dot {
+    opacity: 0.5;
+  }
+}

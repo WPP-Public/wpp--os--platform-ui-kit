@@ -1,0 +1,419 @@
+@import '../../global/iconChevron';
+
+/**
+  * @prop --wpp-accordion-actions-wrapper-left-margin:
+  * @prop --wpp-accordion-counter-font-weight:
+  * @prop --wpp-accordion-counter-font-size:
+  * @prop --wpp-accordion-counter-height:
+  * @prop --wpp-accordion-margin-s:
+  * @prop --wpp-accordion-margin-m:
+  * @prop --wpp-accordion-margin-l:
+  * @prop --wpp-accordion-margin-xl:
+  * @prop --wpp-accordion-margin-2xl:
+  * @prop --wpp-accordion-margin-bottom-s:
+  * @prop --wpp-accordion-margin-bottom-m:
+  * @prop --wpp-accordion-margin-bottom-l:
+  * @prop --wpp-accordion-icon-margin:
+  * @prop --wpp-accordion-icon-color:
+  * @prop --wpp-accordion-icon-color-hover:
+  * @prop --wpp-accordion-icon-color-active:
+  * @prop --wpp-accordion-icon-color-disabled:
+  * @prop --wpp-accordion-text-color-disabled:
+  * @prop --wpp-accordion-counter-color:
+  * @prop --wpp-accordion-expandable-section-margin-left:
+  * @prop --wpp-accordion-expandable-section-margin-s:
+  * @prop --wpp-accordion-expandable-section-margin-m:
+  * @prop --wpp-accordion-expandable-section-margin-l:
+  * @prop --wpp-accordion-expandable-section-margin-xl:
+  * @prop --wpp-accordion-expandable-section-margin-2xl:
+  * @prop --wpp-accordion-first-border-color-focus:
+  * @prop --wpp-accordion-second-border-color-focus:
+*/
+
+:host {
+  --accordion-actions-wrapper-left-margin: var(--wpp-accordion-actions-wrapper-left-margin, 8px);
+  --accordion-counter-font-weight: var(--wpp-accordion-counter-font-weight, 400);
+  --accordion-counter-font-size: var(--wpp-accordion-counter-font-size, 16px);
+  --accordion-counter-height: var(--wpp-accordion-counter-height, 24px);
+  --accordion-margin-s: var(--wpp-accordion-margin-s, 7px 0);
+  --accordion-margin-m: var(--wpp-accordion-margin-m, 11px 0);
+  --accordion-margin-l: var(--wpp-accordion-margin-l, 15px 0);
+  --accordion-margin-xl: var(--wpp-accordion-margin-xl, 23px 0);
+  --accordion-margin-2xl: var(--wpp-accordion-margin-2xl, 23px 0);
+  --accordion-icon-margin: var(--wpp-accordion-icon-margin, 0 8px 0 0);
+  --accordion-icon-color: var(--wpp-accordion-icon-color, var(--wpp-grey-color-600));
+  --accordion-icon-color-hover: var(--wpp-accordion-icon-color-hover, var(--wpp-grey-color-800));
+  --accordion-icon-color-active: var(--wpp-accordion-icon-color-active, var(--wpp-grey-color-900));
+  --accordion-icon-color-disabled: var(--wpp-accordion-icon-color-disabled, var(--wpp-grey-color-500));
+  --accordion-text-color-disabled: var(--wpp-accordion-text-color-disabled, var(--wpp-text-color-disabled));
+  --accordion-counter-color: var(--wpp-accordion-counter-color, var(--wpp-text-color-info));
+  --accordion-first-border-color-focus: var(--wpp-accordion-first-border-color-focus, var(--wpp-grey-color-000));
+  --accordion-second-border-color-focus: var(--wpp-accordion-second-border-color-focus, var(--wpp-brand-color));
+  --accordion-expandable-section-margin-left: var(--wpp-accordion-expandable-section-margin-left, 24px);
+
+  --accordion-expandable-section-margin-s: var(
+    --wpp-accordion-expandable-section-margin-s,
+    -3px 0 11px var(--accordion-expandable-section-margin-left)
+  );
+  --accordion-expandable-section-margin-m: var(
+    --wpp-accordion-expandable-section-margin-m,
+    -3px 0 15px var(--accordion-expandable-section-margin-left)
+  );
+  --accordion-expandable-section-margin-l: var(
+    --wpp-accordion-expandable-section-margin-l,
+    -3px 0 19px var(--accordion-expandable-section-margin-left)
+  );
+  --accordion-expandable-section-margin-xl: var(
+    --wpp-accordion-expandable-section-margin-xl,
+    -7px 0 23px var(--accordion-expandable-section-margin-left)
+  );
+  --accordion-expandable-section-margin-2xl: var(
+    --wpp-accordion-expandable-section-margin-2xl,
+    -7px 0 23px var(--accordion-expandable-section-margin-left)
+  );
+
+  --accordion-margin-s-internal: var(--wpp-accordion-margin-s-internal, 5px 0);
+  --accordion-margin-m-internal: var(--wpp-accordion-margin-m-internal, 4px 0);
+  --accordion-margin-l-internal: var(--wpp-accordion-margin-l-internal, 2px 0);
+  --accordion-margin-xl-internal: var(--wpp-accordion-margin-xl-internal, 0);
+  --accordion-margin-2xl-internal: var(--wpp-accordion-margin-2xl-internal, 0);
+
+  --accordion-expandable-section-margin-s-internal: var(
+    --wpp-accordion-expandable-section-margin-s-internal,
+    -1px 0 0 var(--accordion-expandable-section-margin-left)
+  );
+  --accordion-expandable-section-margin-m-internal: var(
+    --wpp-accordion-expandable-section-margin-m-internal,
+    8px 0 0 var(--accordion-expandable-section-margin-left)
+  );
+  --accordion-expandable-section-margin-l-internal: var(
+    --wpp-accordion-expandable-section-margin-l-internal,
+    12px 0 0 var(--accordion-expandable-section-margin-left)
+  );
+  --accordion-expandable-section-margin-xl-internal: var(
+    --wpp-accordion-expandable-section-margin-xl-internal,
+    16px 0 0 var(--accordion-expandable-section-margin-left)
+  );
+  --accordion-expandable-section-margin-2xl-internal: var(
+    --wpp-accordion-expandable-section-margin-2xl-internal,
+    16px 0 0 var(--accordion-expandable-section-margin-left)
+  );
+}
+
+:host(.wpp-section-wrapper) {
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+  outline: none;
+
+  .wpp-section {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    position: relative;
+
+    &.size-s {
+      margin: var(--accordion-margin-s);
+    }
+
+    &.size-m {
+      margin: var(--accordion-margin-m);
+    }
+
+    &.size-l {
+      margin: var(--accordion-margin-l);
+    }
+
+    &.size-xl {
+      margin: var(--accordion-margin-xl);
+    }
+
+    &.size-2xl {
+      margin: var(--accordion-margin-2xl);
+    }
+
+    @include iconChevronTransition(var(--accordion-hide-animation-duration));
+
+    .title-tags-wrapper {
+      @include tabFocus(var(--accordion-first-border-color-focus), var(--accordion-second-border-color-focus), 3px);
+
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: nowrap;
+      position: relative;
+      border: none;
+      background: none;
+      padding: 0;
+      outline: none;
+      flex-grow: 1;
+
+      &:focus-visible,
+      .tab-focus {
+        .title-wrapper .wpp-icon-chevron {
+          // override inline style for WppIconChevron
+          color: var(--accordion-icon-color-hover) !important;
+        }
+      }
+
+      .title-wrapper {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        .wpp-tooltip {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          &::part(anchor) {
+            width: 100%;
+          }
+        }
+
+        .typography-title {
+          color: var(--accordion-title-color);
+
+          &.disabled {
+            cursor: not-allowed;
+            color: var(--wpp-text-color-disabled);
+          }
+        }
+
+        .wpp-icon-chevron {
+          margin: var(--accordion-icon-margin);
+          color: var(--accordion-icon-color);
+
+          &.disabled {
+            color: var(--wpp-text-color-disabled);
+          }
+        }
+
+        &:hover .wpp-icon-chevron {
+          color: var(--accordion-icon-color-hover);
+        }
+
+        &:active .wpp-icon-chevron {
+          color: var(--accordion-icon-color-active);
+        }
+
+        .wpp-typography {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .tags {
+        @include slotWrapper;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+
+    .actions {
+      @include slotWrapper;
+      text-wrap: nowrap;
+    }
+
+    .header:not(.disabled) {
+      @include truncate;
+      @include slotWrapper;
+
+      display: flex;
+
+      ::slotted([slot='header']) {
+        @include truncate;
+      }
+
+      &.disabled {
+        cursor: not-allowed;
+        color: var(--wpp-text-color-disabled);
+      }
+    }
+
+    .counter {
+      padding-left: 4px;
+      color: var(--accordion-counter-color);
+    }
+  }
+
+  .closed {
+    overflow: hidden;
+  }
+
+  .content {
+    display: block;
+    max-height: 0;
+    margin-left: var(--accordion-expandable-section-margin-left);
+    transition: max-height var(--accordion-hide-animation-duration) ease-out,
+      margin var(--accordion-hide-animation-duration) var(--accordion-hide-animation-duration);
+
+    slot {
+      display: flex;
+    }
+  }
+
+  &:host(.wpp-internal) {
+    .wpp-section {
+      &.size-s {
+        margin: var(--accordion-margin-s-internal);
+      }
+
+      &.size-m {
+        margin: var(--accordion-margin-m-internal);
+      }
+
+      &.size-l {
+        margin: var(--accordion-margin-l-internal);
+      }
+
+      &.size-xl {
+        margin: var(--accordion-margin-xl-internal);
+      }
+
+      &.size-2xl {
+        margin: var(--accordion-margin-2xl-internal);
+      }
+    }
+  }
+}
+
+:host([disabled]:not([disabled='false'])) {
+  cursor: not-allowed;
+
+  .wpp-section {
+    cursor: not-allowed;
+
+    .title-tags-wrapper {
+      .title-wrapper {
+        cursor: not-allowed;
+        color: var(--wpp-text-color-disabled);
+
+        &:hover {
+          .wpp-icon-chevron {
+            color: var(--accordion-icon-color-disabled);
+          }
+        }
+
+        .wpp-icon-chevron {
+          color: var(--accordion-icon-color-disabled);
+        }
+      }
+    }
+
+    .header {
+      ::slotted([slot='header']) {
+        color: var(--accordion-text-color-disabled);
+      }
+    }
+
+    .wpp-icon-chevron {
+      color: var(--accordion-icon-color-disabled);
+    }
+
+    .actions {
+      cursor: not-allowed;
+
+      ::slotted([slot='actions']) {
+        color: var(--accordion-text-color-disabled);
+      }
+    }
+  }
+
+  .content {
+    ::slotted(.wpp-typography) {
+      color: var(--accordion-text-color-disabled);
+    }
+  }
+}
+
+:host(.wpp-section-wrapper.wpp-expanded) {
+  .wpp-section {
+    @include iconChevronTransform(90deg);
+    @include iconChevronTransition(var(--accordion-show-animation-duration));
+
+    &.size-s {
+      ~ .content {
+        margin: var(--accordion-expandable-section-margin-s);
+      }
+    }
+
+    &.size-m {
+      ~ .content {
+        margin: var(--accordion-expandable-section-margin-m);
+      }
+    }
+
+    &.size-l {
+      ~ .content {
+        margin: var(--accordion-expandable-section-margin-l);
+      }
+    }
+
+    &.size-xl {
+      ~ .content {
+        margin: var(--accordion-expandable-section-margin-xl);
+      }
+    }
+
+    &.size-2xl {
+      ~ .content {
+        margin: var(--accordion-expandable-section-margin-2xl);
+      }
+    }
+  }
+
+  &:host(.wpp-internal) {
+    .wpp-section {
+      &.size-s {
+        ~ .content {
+          margin: var(--accordion-expandable-section-margin-s-internal);
+        }
+      }
+
+      &.size-m {
+        ~ .content {
+          margin: var(--accordion-expandable-section-margin-m-internal);
+        }
+      }
+
+      &.size-l {
+        ~ .content {
+          margin: var(--accordion-expandable-section-margin-l-internal);
+        }
+      }
+
+      &.size-xl {
+        ~ .content {
+          margin: var(--accordion-expandable-section-margin-xl-internal);
+        }
+      }
+
+      &.size-2xl {
+        ~ .content {
+          margin: var(--accordion-expandable-section-margin-2xl-internal);
+        }
+      }
+    }
+  }
+
+  .content {
+    max-height: var(--accordion-max-height);
+    transition: max-height var(--accordion-show-animation-duration) ease;
+  }
+}
+
+:host([disabled]:not([disabled='false'])) .content {
+  pointer-events: none;
+  color: var(--wpp-text-color-disabled);
+}

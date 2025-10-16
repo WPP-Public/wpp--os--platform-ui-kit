@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-grid should render wpp-grid component 1`] = `
+<wpp-grid exportparts="inner">
+  <mock:shadow-root>
+    <slot part="inner"></slot>
+  </mock:shadow-root>
+</wpp-grid>
+`;
+
+exports[`wpp-grid should render wpp-grid component with item inside 1`] = `
+<wpp-grid class="align-normal container justify-flex-start row" container="true" exportparts="inner">
+  <mock:shadow-root>
+    <slot part="inner"></slot>
+  </mock:shadow-root>
+  <wpp-grid class="item-all" exportparts="inner" item="true">
+    <mock:shadow-root>
+      <slot part="inner"></slot>
+    </mock:shadow-root>
+  </wpp-grid>
+</wpp-grid>
+`;
+
+exports[`wpp-grid should render wpp-grid container component with all default styles 1`] = `
+<wpp-grid class="align-normal container justify-flex-start row" container="true" exportparts="inner">
+  <mock:shadow-root>
+    <slot part="inner"></slot>
+  </mock:shadow-root>
+</wpp-grid>
+`;
+
+exports[`wpp-grid should render wpp-grid content with inner spacing 1`] = `
+<wpp-grid class="align-normal container justify-flex-start row" container="true" exportparts="inner" fullwidth="true">
+  <mock:shadow-root>
+    <slot part="inner"></slot>
+  </mock:shadow-root>
+</wpp-grid>
+`;
+
+exports[`wpp-grid should render wpp-grid content with row spacing 1`] = `
+<wpp-grid class="align-normal column-spacing-12 container justify-flex-start row row-spacing-12" container="true" exportparts="inner" row-spacing="12">
+  <mock:shadow-root>
+    <slot part="inner"></slot>
+  </mock:shadow-root>
+</wpp-grid>
+`;
+
+exports[`wpp-grid should render wpp-grid item component with all default styles 1`] = `
+<wpp-grid class="item-all" exportparts="inner" item="true">
+  <mock:shadow-root>
+    <slot part="inner"></slot>
+  </mock:shadow-root>
+</wpp-grid>
+`;
+
+exports[`wpp-grid should render wpp-grid item without adding container classes 1`] = `
+<wpp-grid alignitems="center" class="item-all" direction="column" exportparts="inner" item="true">
+  <mock:shadow-root>
+    <slot part="inner"></slot>
+  </mock:shadow-root>
+</wpp-grid>
+`;

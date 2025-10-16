@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-side-modal Should render defaut side modal 1`] = `
+<wpp-side-modal aria-modal="true" class="wpp-hidden wpp-side-modal wpp-side-modal-wrapper" exportparts="wrapper, side-modal, header-container, button, icon-cross, header, body, actions, header-wrapper, body-wrapper, actions-wrapper, back-button, icon-chevron, header-with-back-button" style="z-index: 870; --wpp-side-modal-top-offset: 0px;">
+  <mock:shadow-root>
+    <div class="modal-overlay" part="wrapper">
+      <wpp-overlay zindex="0"></wpp-overlay>
+      <div class="hide side-modal" data-testid="wpp-side-modal-content" part="content" role="dialog">
+        <div class="header-container" part="header-container">
+          <div class="header slot-hidden" part="header-wrapper">
+            <slot name="header" part="header"></slot>
+          </div>
+          <wpp-action-button class="close-button" part="button" variant="secondary">
+            <wpp-icon-cross part="icon-cross" slot="icon-start"></wpp-icon-cross>
+          </wpp-action-button>
+        </div>
+        <div class="body slot-hidden" part="body-wrapper">
+          <slot name="body" part="body"></slot>
+        </div>
+      </div>
+    </div>
+  </mock:shadow-root>
+</wpp-side-modal>
+`;
+
+exports[`wpp-side-modal Should render open side modal 1`] = `
+<wpp-side-modal aria-modal="true" class="wpp-hidden wpp-side-modal wpp-side-modal-wrapper" exportparts="wrapper, side-modal, header-container, button, icon-cross, header, body, actions, header-wrapper, body-wrapper, actions-wrapper, back-button, icon-chevron, header-with-back-button" is-open="true" style="z-index: 870; --wpp-side-modal-top-offset: 0px;">
+  <mock:shadow-root>
+    <div class="modal-overlay" part="wrapper">
+      <wpp-overlay zindex="0"></wpp-overlay>
+      <div class="hide side-modal" data-testid="wpp-side-modal-content" part="content" role="dialog">
+        <div class="header-container" part="header-container">
+          <div class="header" part="header-wrapper">
+            <slot name="header" part="header"></slot>
+          </div>
+          <wpp-action-button class="close-button" part="button" variant="secondary">
+            <wpp-icon-cross part="icon-cross" slot="icon-start"></wpp-icon-cross>
+          </wpp-action-button>
+        </div>
+        <div class="body slot-hidden" part="body-wrapper">
+          <slot name="body" part="body"></slot>
+        </div>
+        <div class="actions" part="actions-wrapper">
+          <slot name="actions" part="actions"></slot>
+        </div>
+      </div>
+    </div>
+  </mock:shadow-root>
+  <div slot="header">
+    Title
+  </div>
+  <div slot="actions" style="display: flex; justify-content: end;">
+    <wpp-action-button size="s" variant="secondary">
+      Close
+    </wpp-action-button>
+    <wpp-button size="s" variant="primary">
+      Action
+    </wpp-button>
+  </div>
+</wpp-side-modal>
+`;

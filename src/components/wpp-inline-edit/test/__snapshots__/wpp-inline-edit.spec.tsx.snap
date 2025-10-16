@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-inline-edit should render component 1`] = `
+<wpp-inline-edit class="wpp-inline-edit" exportparts="label, wrapper, input, textarea, buttons, inline-edit-typography, content, content-bg" input-width="auto">
+  <mock:shadow-root>
+    <wpp-popover class="popover" exportparts="content" externalclass="inline-edit-popover">
+      <div class="trigger-element" slot="trigger-element">
+        <div class="trigger" role="button" tabindex="0">
+          <div class="content" part="content">
+            <div class="content-bg" part="content-bg"></div>
+            <wpp-typography class="placeholder" part="inline-edit-typography" type="s-body">
+              placeholder
+            </wpp-typography>
+            <wpp-icon-edit></wpp-icon-edit>
+          </div>
+        </div>
+      </div>
+      <div class="buttons" part="buttons">
+        <wpp-action-button disabled="" variant="inverted">
+          <wpp-icon-done slot="icon-start"></wpp-icon-done>
+        </wpp-action-button>
+        <wpp-action-button variant="inverted">
+          <wpp-icon-cross slot="icon-start"></wpp-icon-cross>
+        </wpp-action-button>
+      </div>
+    </wpp-popover>
+  </mock:shadow-root>
+  Text
+</wpp-inline-edit>
+`;

@@ -1,0 +1,138 @@
+/**
+  * @prop --wpp-nav-sidebar-top-position:
+  * @prop --wpp-nav-sidebar-width:
+  * @prop --wpp-nav-sidebar-min-width:
+  * @prop --wpp-nav-sidebar-title-margin:
+  * @prop --wpp-nav-sidebar-padding:
+  * @prop --wpp-nav-sidebar-background-color:
+  * @prop --wpp-nav-sidebar-open-padding:
+  * @prop --wpp-nav-sidebar-close-padding:
+  * @prop --wpp-nav-sidebar-close-label-margin:
+  * @prop --wpp-nav-sidebar-background-color:
+  * @prop --wpp-nav-sidebar-close-wrapper-height:
+  * @prop --wpp-nav-sidebar-border-color:
+  * @prop --wpp-nav-sidebar-border-width:
+  * @prop --wpp-nav-sidebar-border-style:
+*/
+
+:host {
+  display: inline-block;
+
+  --ns-top-position: var(--wpp-nav-sidebar-top-position, 0);
+  --ns-width: var(--wpp-nav-sidebar-width, 240px);
+  --ns-title-margin: var(--wpp-nav-sidebar-title-margin, 16px);
+  --ns-padding: var(--wpp-nav-sidebar-padding, 24px 16px);
+  --ns-bg-color: var(--wpp-nav-sidebar-background-color, var(--wpp-grey-color-000));
+  --ns-open-padding: var(--wpp-nav-sidebar-open-padding, 0 30px);
+  --ns-close-padding: var(--wpp-nav-sidebar-close-padding, 0 26px);
+  --ns-close-label-margin: var(--wpp-nav-sidebar-close-label-margin, 0 0 0 8px);
+  --ns-close-wrapper-height: var(--wpp-nav-sidebar-close-wrapper-height, 50px);
+  --ns-border-color: var(--wpp-nav-sidebar-border-color, var(--wpp-grey-color-300));
+  --ns-border-width: var(--wpp-nav-sidebar-border-width, 1px);
+  --ns-border-style: var(--wpp-nav-sidebar-border-style, solid);
+}
+
+.nav-sidebar {
+  position: fixed;
+  top: var(--ns-top-position);
+  bottom: 0;
+  left: 0;
+  box-sizing: border-box;
+  width: var(--wpp-nav-sidebar-min-width);
+  min-width: var(--wpp-nav-sidebar-min-width);
+  height: calc(100% - var(--ns-top-position));
+  padding: var(--ns-padding);
+  background-color: var(--ns-bg-color);
+  transition: 0.5s ease-in-out;
+  border-right: var(--ns-border-width) var(--ns-border-style) var(--ns-border-color);
+  overflow-y: auto;
+
+  &.open {
+    width: var(--ns-width);
+
+    .title {
+      opacity: 1;
+    }
+  }
+}
+
+.nav-wrapper {
+  width: 100%;
+  height: 100%;
+
+  .title-wrapper {
+    margin-bottom: var(--ns-title-margin);
+  }
+
+  .items-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .close-wrapper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    width: var(--sidebar-navigation-sidebar-min-width);
+    height: var(--ns-close-wrapper-height);
+    padding: var(--ns-close-padding);
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+
+    .wpp-icon-double-chevron {
+      transform: rotate(180deg);
+      transition: 0.3s ease-in-out;
+    }
+
+    &:hover {
+      .slot-icon-chevron-fallback {
+        color: var(--wpp-grey-color-700);
+      }
+
+      .close-label {
+        color: var(--wpp-grey-color-800);
+      }
+    }
+
+    &:active {
+      .slot-icon-chevron-fallback {
+        color: var(--wpp-grey-color-800);
+      }
+
+      .close-label {
+        color: var(--wpp-grey-color-1000);
+      }
+    }
+
+    &.show {
+      width: var(--ns-width);
+      padding: var(--ns-open-padding);
+
+      .wpp-icon-double-chevron {
+        transform: rotate(0deg);
+      }
+    }
+
+    .close-label {
+      @include typographySBody;
+
+      width: 0;
+      margin: 0;
+      color: var(--wpp-grey-color-800);
+      opacity: 0;
+      transition: 0.3s ease-in-out;
+      pointer-events: none;
+
+      &.show {
+        width: auto;
+        margin: var(--ns-close-label-margin);
+        opacity: 1;
+        pointer-events: initial;
+      }
+    }
+  }
+}

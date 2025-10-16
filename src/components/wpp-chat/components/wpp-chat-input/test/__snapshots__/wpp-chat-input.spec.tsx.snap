@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-chat-input should apply custom file upload configuration 1`] = `
+<wpp-chat-input class="wpp-chat-input" exportparts="chat-input-container, toast, input-area, attachments, text-input, actions-bar, left-actions, right-actions, file-item" fileuploadconfig="{&quot;maxFiles&quot;: 3, &quot;size&quot;: 100, &quot;accept&quot;: [&quot;.jpg&quot;, &quot;.png&quot;]}" size="m" style="z-index: 100;">
+  <mock:shadow-root>
+    <div class="chat-input-container" part="chat-input-container">
+      <div class="input-area" part="input-area"><textarea class="text-input" part="text-input" placeholder="Type your message..." value=""></textarea>
+      </div>
+      <div class="actions-bar" part="actions-bar">
+        <div class="left-actions" part="left-actions"></div>
+        <div class="right-actions" part="right-actions">
+          <wpp-action-button data-testid="send-icon-only-button" disabled="" variant="secondary">
+            <wpp-icon-send slot="icon-start"></wpp-icon-send>
+          </wpp-action-button>
+        </div>
+      </div>
+    </div>
+  </mock:shadow-root>
+</wpp-chat-input>
+`;
+
+exports[`wpp-chat-input should render chat input with attachments enabled 1`] = `
+<wpp-chat-input class="wpp-chat-input" enableattach="true" exportparts="chat-input-container, toast, input-area, attachments, text-input, actions-bar, left-actions, right-actions, file-item" size="m" style="z-index: 100;">
+  <mock:shadow-root>
+    <div class="chat-input-container" part="chat-input-container">
+      <div class="input-area" part="input-area"><textarea class="text-input" part="text-input" placeholder="Type your message..." value=""></textarea>
+      </div>
+      <div class="actions-bar" part="actions-bar">
+        <div class="left-actions" part="left-actions"></div>
+        <div class="right-actions" part="right-actions">
+          <wpp-action-button data-testid="send-icon-only-button" disabled="" variant="secondary">
+            <wpp-icon-send slot="icon-start"></wpp-icon-send>
+          </wpp-action-button>
+        </div>
+      </div>
+    </div>
+  </mock:shadow-root>
+</wpp-chat-input>
+`;

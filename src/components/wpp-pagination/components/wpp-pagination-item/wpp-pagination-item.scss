@@ -1,0 +1,110 @@
+/**
+  * @prop --wpp-pagination-item-padding:
+  * @prop --wpp-pagination-item-size:
+  * @prop --wpp-pagination-item-border-radius:
+  * @prop --wpp-pagination-item-first-border-color-focus:
+  * @prop --wpp-pagination-item-second-border-color-focus:
+  * @prop --wpp-pagination-item-text-color:
+  * @prop --wpp-pagination-item-text-color-hover:
+  * @prop --wpp-pagination-item-text-color-active:
+  * @prop --wpp-pagination-item-bg-color-hover:
+  * @prop --wpp-pagination-item-bg-color-active:
+  * @prop --wpp-pagination-item-text-color-selected:
+*/
+
+:host {
+  --pagination-item-padding: var(--wpp-pagination-item-padding, 5px 1px);
+  --pagination-item-size: var(--wpp-pagination-item-size, 32px);
+  --pagination-item-border-radius: var(--wpp-pagination-item-border-radius, var(--wpp-border-radius-xs));
+  --pagination-item-first-border-color-focus: var(
+    --wpp-pagination-item-first-border-color-focus,
+    var(--wpp-grey-color-000)
+  );
+  --pagination-item-second-border-color-focus: var(
+    --wpp-pagination-item-second-border-color-focus,
+    var(--wpp-brand-color)
+  );
+
+  --pagination-item-text-color: var(--wpp-pagination-item-text-color, var(--wpp-text-color-info));
+  --pagination-item-text-color-hover: var(--wpp-pagination-item-text-color-hover, var(--wpp-text-color));
+  --pagination-item-text-color-active: var(--wpp-pagination-item-text-color-active, var(--wpp-text-color));
+  --pagination-item-bg-color-hover: var(--wpp-pagination-item-bg-color-hover, var(--wpp-grey-color-200));
+  --pagination-item-bg-color-active: var(--wpp-pagination-item-bg-color-active, var(--wpp-grey-color-300));
+  --pagination-item-text-color-selected: var(--wpp-pagination-item-text-color-selected, var(--wpp-brand-color));
+  --pagination-item-bg-color-selected: var(--wpp-pagination-item-bg-color-selected, var(--wpp-primary-color-100));
+}
+
+:host(.pagination-item-wrapper) {
+  display: inline-flex;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--pagination-item-size);
+  height: var(--pagination-item-size);
+  padding: var(--pagination-item-padding);
+  border-radius: var(--pagination-item-border-radius);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+
+  .wpp-typography {
+    color: var(--pagination-item-text-color);
+  }
+
+  &:host(:focus-visible) {
+    @include tabFocusProperties(
+      var(--pagination-item-first-border-color-focus),
+      var(--pagination-item-second-border-color-focus)
+    );
+
+    position: relative;
+    z-index: 1;
+  }
+}
+
+:host(.pagination-item-wrapper:hover) {
+  background-color: var(--pagination-item-bg-color-hover);
+
+  &:host(:not(.selected)) .wpp-typography {
+    color: var(--pagination-item-text-color-hover);
+  }
+}
+
+:host(.pagination-item-wrapper:active) {
+  background-color: var(--pagination-item-bg-color-active);
+
+  &:host(:not(.selected)) .wpp-typography {
+    color: var(--pagination-item-text-color-active);
+  }
+}
+
+:host(.pagination-item-wrapper:focus-visible) {
+  background-color: var(--pagination-item-bg-color-hover);
+
+  &:host(:not(.selected)) .wpp-typography {
+    color: var(--pagination-item-text-color-hover);
+  }
+}
+
+:host(.selected) {
+  background-color: var(--pagination-item-bg-color-selected);
+
+  .wpp-typography {
+    color: var(--pagination-item-text-color-selected);
+
+    &::part(typography) {
+      font-weight: 600;
+    }
+  }
+}
+
+:host(.selected:active) {
+  background-color: var(--pagination-item-bg-color-selected);
+}
+
+:host(.selected:hover) {
+  background-color: var(--pagination-item-bg-color-selected);
+}
+
+:host(.selected:focus-visible) {
+  background-color: var(--wpp-primary-color-100);
+}

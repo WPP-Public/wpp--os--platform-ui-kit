@@ -1,0 +1,50 @@
+.volume-container {
+  position: relative;
+}
+
+.slider-container {
+  position: absolute;
+  top: -68px;
+  left: 50%;
+  height: 32px;
+  width: 80px;
+  border-radius: 6px;
+  background-color: rgba(0, 0, 0, 0.6);
+  transform: translateX(-50%) rotate(270deg);
+  transform-origin: center center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s ease-in-out;
+
+  &.active {
+    opacity: 1;
+    pointer-events: initial;
+  }
+
+  .progress-bar {
+    width: 64px;
+    height: auto;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.wpp-action-button {
+  &::part(button) {
+    &.hover-active {
+      color: var(--ab-inverted-text-color-hover);
+
+      ~ .overlay {
+        background-color: var(--ab-inverted-bg-color-hover);
+      }
+
+      .icon-start,
+      .icon-end {
+        ::slotted(*) {
+          color: var(--ab-inverted-icon-color-hover);
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,525 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-time-picker renders component 1`] = `
+<wpp-time-picker class="wpp-time-picker" minutes-interval="5" style="width: 198px;">
+  <mock:shadow-root>
+    <div class="idle no-value size-m" id="anchor">
+      <div class="anchor-time">
+        <wpp-icon-clock class="clock-icon"></wpp-icon-clock>
+        <input id="time-picker" placeholder="hh:mm" type="text" value="">
+      </div>
+      <div class="cross-icon-container"></div>
+    </div>
+    <div class="wpp-time-picker-portal">
+      <div class="hours section">
+        <wpp-list-item id="hour-00">
+          <span slot="label">
+            00
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-01">
+          <span slot="label">
+            01
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-02">
+          <span slot="label">
+            02
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-03">
+          <span slot="label">
+            03
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-04">
+          <span slot="label">
+            04
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-05">
+          <span slot="label">
+            05
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-06">
+          <span slot="label">
+            06
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-07">
+          <span slot="label">
+            07
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-08">
+          <span slot="label">
+            08
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-09">
+          <span slot="label">
+            09
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-10">
+          <span slot="label">
+            10
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-11">
+          <span slot="label">
+            11
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-12">
+          <span slot="label">
+            12
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-13">
+          <span slot="label">
+            13
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-14">
+          <span slot="label">
+            14
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-15">
+          <span slot="label">
+            15
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-16">
+          <span slot="label">
+            16
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-17">
+          <span slot="label">
+            17
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-18">
+          <span slot="label">
+            18
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-19">
+          <span slot="label">
+            19
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-20">
+          <span slot="label">
+            20
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-21">
+          <span slot="label">
+            21
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-22">
+          <span slot="label">
+            22
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-23">
+          <span slot="label">
+            23
+          </span>
+        </wpp-list-item>
+      </div>
+      <wpp-divider vertical=""></wpp-divider>
+      <div class="minutes section">
+        <wpp-list-item id="minutes-00">
+          <span slot="label">
+            00
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="minutes-05">
+          <span slot="label">
+            05
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="minutes-10">
+          <span slot="label">
+            10
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="minutes-15">
+          <span slot="label">
+            15
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="minutes-20">
+          <span slot="label">
+            20
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="minutes-25">
+          <span slot="label">
+            25
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="minutes-30">
+          <span slot="label">
+            30
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="minutes-35">
+          <span slot="label">
+            35
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="minutes-40">
+          <span slot="label">
+            40
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="minutes-45">
+          <span slot="label">
+            45
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="minutes-50">
+          <span slot="label">
+            50
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="minutes-55">
+          <span slot="label">
+            55
+          </span>
+        </wpp-list-item>
+      </div>
+    </div>
+  </mock:shadow-root>
+</wpp-time-picker>
+`;
+
+exports[`wpp-time-picker renders component with minutesInterval = 15 1`] = `
+<wpp-time-picker class="wpp-time-picker" minutes-interval="15" style="width: 198px;">
+  <mock:shadow-root>
+    <div class="idle no-value size-m" id="anchor">
+      <div class="anchor-time">
+        <wpp-icon-clock class="clock-icon"></wpp-icon-clock>
+        <input id="time-picker" placeholder="hh:mm" type="text" value="">
+      </div>
+      <div class="cross-icon-container"></div>
+    </div>
+    <div class="wpp-time-picker-portal">
+      <div class="hours section">
+        <wpp-list-item id="hour-00">
+          <span slot="label">
+            00
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-01">
+          <span slot="label">
+            01
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-02">
+          <span slot="label">
+            02
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-03">
+          <span slot="label">
+            03
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-04">
+          <span slot="label">
+            04
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-05">
+          <span slot="label">
+            05
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-06">
+          <span slot="label">
+            06
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-07">
+          <span slot="label">
+            07
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-08">
+          <span slot="label">
+            08
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-09">
+          <span slot="label">
+            09
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-10">
+          <span slot="label">
+            10
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-11">
+          <span slot="label">
+            11
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-12">
+          <span slot="label">
+            12
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-13">
+          <span slot="label">
+            13
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-14">
+          <span slot="label">
+            14
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-15">
+          <span slot="label">
+            15
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-16">
+          <span slot="label">
+            16
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-17">
+          <span slot="label">
+            17
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-18">
+          <span slot="label">
+            18
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-19">
+          <span slot="label">
+            19
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-20">
+          <span slot="label">
+            20
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-21">
+          <span slot="label">
+            21
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-22">
+          <span slot="label">
+            22
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-23">
+          <span slot="label">
+            23
+          </span>
+        </wpp-list-item>
+      </div>
+      <wpp-divider vertical=""></wpp-divider>
+      <div class="minutes section">
+        <wpp-list-item id="minutes-00">
+          <span slot="label">
+            00
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="minutes-15">
+          <span slot="label">
+            15
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="minutes-30">
+          <span slot="label">
+            30
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="minutes-45">
+          <span slot="label">
+            45
+          </span>
+        </wpp-list-item>
+      </div>
+    </div>
+  </mock:shadow-root>
+</wpp-time-picker>
+`;
+
+exports[`wpp-time-picker renders component with minutesInterval = 15 and label 1`] = `
+<wpp-time-picker class="wpp-time-picker" minutes-interval="15" style="width: 198px;">
+  <mock:shadow-root>
+    <wpp-label class="label" optional="" typography="s-strong"></wpp-label>
+    <div class="idle no-value size-m" id="anchor">
+      <div class="anchor-time">
+        <wpp-icon-clock class="clock-icon"></wpp-icon-clock>
+        <input id="time-picker" placeholder="hh:mm" type="text" value="">
+      </div>
+      <div class="cross-icon-container"></div>
+    </div>
+    <div class="wpp-time-picker-portal">
+      <div class="hours section">
+        <wpp-list-item id="hour-00">
+          <span slot="label">
+            00
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-01">
+          <span slot="label">
+            01
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-02">
+          <span slot="label">
+            02
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-03">
+          <span slot="label">
+            03
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-04">
+          <span slot="label">
+            04
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-05">
+          <span slot="label">
+            05
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-06">
+          <span slot="label">
+            06
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-07">
+          <span slot="label">
+            07
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-08">
+          <span slot="label">
+            08
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-09">
+          <span slot="label">
+            09
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-10">
+          <span slot="label">
+            10
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-11">
+          <span slot="label">
+            11
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-12">
+          <span slot="label">
+            12
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-13">
+          <span slot="label">
+            13
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-14">
+          <span slot="label">
+            14
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-15">
+          <span slot="label">
+            15
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-16">
+          <span slot="label">
+            16
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-17">
+          <span slot="label">
+            17
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-18">
+          <span slot="label">
+            18
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-19">
+          <span slot="label">
+            19
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-20">
+          <span slot="label">
+            20
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-21">
+          <span slot="label">
+            21
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-22">
+          <span slot="label">
+            22
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="hour-23">
+          <span slot="label">
+            23
+          </span>
+        </wpp-list-item>
+      </div>
+      <wpp-divider vertical=""></wpp-divider>
+      <div class="minutes section">
+        <wpp-list-item id="minutes-00">
+          <span slot="label">
+            00
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="minutes-15">
+          <span slot="label">
+            15
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="minutes-30">
+          <span slot="label">
+            30
+          </span>
+        </wpp-list-item>
+        <wpp-list-item id="minutes-45">
+          <span slot="label">
+            45
+          </span>
+        </wpp-list-item>
+      </div>
+    </div>
+  </mock:shadow-root>
+</wpp-time-picker>
+`;

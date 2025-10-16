@@ -1,0 +1,46 @@
+import { Component, h, Prop } from '@stencil/core'
+import { WppIcon } from '../../../../WppIcon'
+
+@Component({
+  tag: 'wpp-icon-data-trending',
+  styleUrl: '../../../../wpp-icon.scss',
+  shadow: true,
+})
+export class WppIconDataTrending {
+  /**
+   Defines the icon size, where `s` is **16px** and `m` is **20px**.
+   */
+  @Prop() readonly size: 's' | 'm' = 'm'
+
+  /**
+   Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
+   */
+  @Prop() readonly width?: number
+
+  /**
+    Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
+    */
+  @Prop() readonly height?: number
+
+  /**
+   Defines the icon color.
+   */
+  @Prop() readonly color: string = 'var(--wpp-icon-color)'
+
+  render() {
+    return (
+      <WppIcon
+        name="wpp-icon-data-trending"
+        width={this.width}
+        height={this.height}
+        size={this.size}
+        color={this.color}
+      >
+        <path
+          d="M4.23529 3.61765C4.23529 3.27653 3.95876 3 3.61765 3C3.27653 3 3 3.27653 3 3.61765V15.5588C3 16.3548 3.64524 17 4.44118 17H16.3824C16.7235 17 17 16.7235 17 16.3824C17 16.0412 16.7235 15.7647 16.3824 15.7647H4.44118C4.32747 15.7647 4.23529 15.6725 4.23529 15.5588V3.61765ZM11.6471 5.67647C11.6471 5.33535 11.9236 5.05882 12.2647 5.05882H16.3836C16.7247 5.05882 17.0012 5.33535 17.0012 5.67646L17.0013 9.79822C17.0013 10.1393 16.7247 10.4159 16.3836 10.4159C16.0425 10.4159 15.766 10.1393 15.766 9.79823L15.7659 7.16637L11.4662 11.4662C11.2249 11.7074 10.8339 11.7074 10.5927 11.4662L8.97059 9.84407L6.3191 12.4956C6.07789 12.7368 5.68682 12.7368 5.44561 12.4956C5.2044 12.2544 5.2044 11.8633 5.44561 11.6221L8.53385 8.53385C8.77505 8.29264 9.16612 8.29264 9.40733 8.53385L11.0294 10.1559L14.8912 6.29412H12.2647C11.9236 6.29412 11.6471 6.01759 11.6471 5.67647Z"
+          fill="currentColor"
+        />
+      </WppIcon>
+    )
+  }
+}

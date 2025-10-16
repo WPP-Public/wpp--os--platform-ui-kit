@@ -1,0 +1,10 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Markdown } from '@storybook/addon-docs/blocks'
+
+import readme from './readme.md?raw'
+
+import * as TagStories from './wpp-tag.stories.tsx'
+
+<Meta of={TagStories} />
+
+<Markdown>{readme}</Markdown>

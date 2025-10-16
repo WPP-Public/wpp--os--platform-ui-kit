@@ -1,0 +1,13 @@
+:host {
+  display: inline-flex;
+
+  .wpp-menu-context {
+    .trigger-wrapper[aria-expanded='true'] {
+      .wpp-navigation-item {
+        &::part(chevron-icon) {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+}

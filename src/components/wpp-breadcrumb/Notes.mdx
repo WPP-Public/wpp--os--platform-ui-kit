@@ -1,0 +1,10 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Markdown } from '@storybook/addon-docs/blocks'
+
+import readme from './readme.md?raw'
+
+import * as BreadcrumbStories from './wpp-breadcrumb.stories.tsx'
+
+<Meta of={BreadcrumbStories} />
+
+<Markdown>{readme}</Markdown>

@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-video-player snapshots should render component with autoplay and mute 1`] = `
+<wpp-video-player aria-label="Video player component" class="wpp-autoplay wpp-playing wpp-video-player" exportparts="video-player, controls" role="region" style="width: 640px; height: 360px;">
+  <mock:shadow-root>
+    <video aria-label="Video content" autoplay="" class="video-player" height="360" id="video-element" muted="" part="video-player" poster="" preload="metadata" tabindex="0" width="640">
+      <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <wpp-action-button class="invisible play-button" variant="inverted">
+      <wpp-icon-pause-filled aria-hidden="true" slot="icon-start"></wpp-icon-pause-filled>
+    </wpp-action-button>
+  </mock:shadow-root>
+</wpp-video-player>
+`;
+
+exports[`wpp-video-player snapshots should render default component 1`] = `
+<wpp-video-player aria-label="Video player component" class="wpp-idle wpp-video-player" exportparts="video-player, controls" role="region" style="width: 640px; height: 360px;">
+  <mock:shadow-root>
+    <video class="video-player" height="360" id="video-element" part="video-player" poster="" preload="metadata" width="640">
+      <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <wpp-action-button class="play-button" variant="inverted">
+      <wpp-icon-play-filled aria-hidden="true" slot="icon-start"></wpp-icon-play-filled>
+    </wpp-action-button>
+    <div class="controls state-idle" part="controls" tabindex="-1"></div>
+  </mock:shadow-root>
+</wpp-video-player>
+`;

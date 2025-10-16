@@ -1,0 +1,81 @@
+/**
+  * @prop --wpp-avatar-stroke-color:
+  * @prop --wpp-avatar-stroke-width:
+  * @prop --wpp-avatar-circle-group-margin-left-size-xs:
+  * @prop --wpp-avatar-circle-group-margin-left-size-s:
+  * @prop --wpp-avatar-square-group-margin-left-size-xs:
+  * @prop --wpp-avatar-square-group-margin-left-size-s:
+*/
+
+:host {
+  --avatar-stroke-color: var(--wpp-avatar-stroke-color, var(--wpp-grey-color-000));
+  --avatar-stroke-width: var(--wpp-avatar-stroke-width, 2px);
+  --avatar-circle-group-margin-left-size-xs: var(--wpp-avatar-circle-group-margin-left-size-xs, -4px);
+  --avatar-circle-group-margin-left-size-s: var(--wpp-avatar-circle-group-margin-left-size-s, -12px);
+
+  --avatar-square-group-margin-left-size-xs: var(--wpp-avatar-square-group-margin-left-size-xs, -4px);
+  --avatar-square-group-margin-left-size-s: var(--wpp-avatar-square-group-margin-left-size-s, -12px);
+
+  display: inline-flex;
+
+  .avatar-item {
+    display: inline-flex;
+    position: relative;
+
+    &.interactable:hover {
+      z-index: 1;
+    }
+  }
+
+  .avatars-list {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+
+  &:host(.wpp-circle) {
+    .avatar-item {
+      border-radius: var(--wpp-border-radius-round);
+      box-shadow: 0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color);
+    }
+
+    &:host(.wpp-size-xs) {
+      .avatar-item:not(:first-child) {
+        margin-left: var(--avatar-circle-group-margin-left-size-xs);
+      }
+    }
+
+    &:host(.wpp-size-s) {
+      .avatar-item:not(:first-child) {
+        margin-left: var(--avatar-circle-group-margin-left-size-s);
+      }
+    }
+  }
+
+  &:host(.wpp-square) {
+    .avatar-item {
+      box-shadow: 0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color);
+    }
+
+    &:host(.wpp-size-xs) {
+      .avatar-item {
+        border-radius: var(--wpp-border-radius-xs);
+      }
+
+      .avatar-item:not(:first-child) {
+        margin-left: var(--avatar-square-group-margin-left-size-xs);
+      }
+    }
+
+    &:host(.wpp-size-s) {
+      .avatar-item {
+        border-radius: var(--wpp-border-radius-s);
+      }
+
+      .avatar-item:not(:first-child) {
+        margin-left: var(--avatar-square-group-margin-left-size-s);
+      }
+    }
+  }
+}
