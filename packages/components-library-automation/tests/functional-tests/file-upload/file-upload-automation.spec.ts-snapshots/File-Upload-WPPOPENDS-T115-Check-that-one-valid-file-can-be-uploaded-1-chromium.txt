@@ -1,1 +1,0 @@
-{"value":[{"url":"https://test.png","name":"below_1MB-file-1.png","size":171615,"type":""},{"name":"image.png","size":293340}],"hasError":false,"errorFiles":[],"eventType":"wppChange"}

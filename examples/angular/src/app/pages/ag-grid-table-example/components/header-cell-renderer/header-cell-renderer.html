@@ -1,9 +1,0 @@
-<div class="ag-header-cell-comp" (click)='handleHeaderCellClick()'>
-  <wpp-typography type='s-strong'>{{ params?.displayName }}</wpp-typography>
-  <div class="ag-sorting" *ngIf='params?.enableSorting'>
-    <wpp-icon-table-sort-triangle direction='top' [color]='getColor(params?.column?.isSortAscending())'>
-    </wpp-icon-table-sort-triangle>
-    <wpp-icon-table-sort-triangle direction='down' [color]='getColor(params?.column?.isSortDescending())'>
-    </wpp-icon-table-sort-triangle>
-  </div>
-</div>

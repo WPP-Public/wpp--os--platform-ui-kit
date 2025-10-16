@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`wpp-toast-container renders component 1`] = `
-<wpp-toast-container class="wpp-toast-container" exportparts="item">
-  <mock:shadow-root></mock:shadow-root>
-</wpp-toast-container>
-`;
