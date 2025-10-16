@@ -1,7 +1,7 @@
 ```vue
 
 <script setup lang="ts">
-import { WppAccordion, WppTypography, WppActionButton, WppIconEdit, WppTag } from '@platform-ui-kit/components-library-vue'
+import { WppAccordion, WppTypography, WppActionButton, WppIconEdit, WppTag } from '@wppopen/components-library-vue'
 </script>
 
 <template>

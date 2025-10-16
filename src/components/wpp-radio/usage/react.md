@@ -1,5 +1,5 @@
 ```tsx
-import { WppRadio } from '@platform-ui-kit/components-library-react'
+import { WppRadio } from '@wppopen/components-library-react'
 
 export const RadioExample = () => (
   <>

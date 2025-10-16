@@ -8,7 +8,7 @@ import {
   WppActionButton,
   WppIconCross,
   WppDivider,
-} from '@platform-ui-kit/components-library-react'
+} from '@wppopen/components-library-react'
 
 export const PopoversVCPage = () => {
   const defaultPopoverRef = useRef<HTMLWppPopoverElement>(null)

@@ -36,7 +36,7 @@ The action button is used when the user is expected to perform some action.
 ### React
 
 ```tsx
-import { WppActionButton, WppIconAddCircle } from '@platform-ui-kit/components-library-react'
+import { WppActionButton, WppIconAddCircle } from '@wppopen/components-library-react'
 
 export const ActionButtonExample = () => (
   <>
@@ -70,7 +70,7 @@ export const ActionButtonExample = () => (
 ```vue
 
 <script setup lang="ts">
-import { WppActionButton, WppIconPlus } from "@platform-ui-kit/components-library-vue"
+import { WppActionButton, WppIconPlus } from "@wppopen/components-library-vue"
 
 // ...
 </script>

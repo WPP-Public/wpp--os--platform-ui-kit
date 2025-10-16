@@ -195,14 +195,14 @@ import {
   WppRichtext,
   WppRichtextHtml,
   WppRichtextView,
-} from '@platform-ui-kit/components-library-react'
+} from '@wppopen/components-library-react'
 import { useCallback, useState } from 'react'
 import {
   RichtextChangeEventDetail,
   RichtextSelectionChangeEventDetail,
   RichtextUploadRequestEventDetail,
   WppRichtextCustomEvent,
-} from '@platform-ui-kit/components-library/dist/types/components'
+} from '@wppopen/components-library/dist/types/components'
 import { marked } from 'marked'
 
 const markdownDemoText = `
@@ -378,7 +378,7 @@ export const RichTextPage = () => {
     WppRichtext,
     WppRichtextView,
     WppRichtextHtml,
-  } from '@platform-ui-kit/components-library-vue'
+  } from '@wppopen/components-library-vue'
   import { ref } from "vue"
   import { marked } from 'marked'
   import { defaultTextValue, markdownDemoText, modulesJSON } from './consts'

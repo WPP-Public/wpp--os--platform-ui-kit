@@ -17,7 +17,7 @@ Example of implementation is provided below:
 ```tsx
 import React, { useRef, useState } from 'react'
 
-import { WppPopover, WppSelect, WppButton } from '@platform-ui-kit/components-library-react'
+import { WppPopover, WppSelect, WppButton } from '@wppopen/components-library-react'
 
 import styles from './CustomSelect.module.scss'
 
@@ -233,7 +233,7 @@ This makes list construction more intuitive and clean:
 
 ```tsx
 import { ChangeDetectionStrategy, Component } from '@angular/core'
-import { ListItemInterface } from '@platform-ui-kit/components-library'
+import { ListItemInterface } from '@wppopen/components-library'
 
 const SAMPLE_LIST: ListItemInterface[] = [
   {
@@ -336,7 +336,7 @@ export class SingleSelectPage {
 
 ```tsx
 import { ChangeDetectionStrategy, Component } from '@angular/core'
-import { ListItemInterface } from '@platform-ui-kit/components-library'
+import { ListItemInterface } from '@wppopen/components-library'
 
 const SAMPLE_LIST: ListItemInterface[] = [
   {
@@ -422,8 +422,8 @@ export class CombinedSelectPage {
 ### React
 
 ```tsx
-import { ListItemInterface } from '@platform-ui-kit/components-library'
-import { WppSelect, WppIconClock } from '@platform-ui-kit/components-library-react'
+import { ListItemInterface } from '@wppopen/components-library'
+import { WppSelect, WppIconClock } from '@wppopen/components-library-react'
 
 const SAMPLE_LIST: ListItemInterface[] = [
   {
@@ -507,8 +507,8 @@ export const SelectExample = () => {
 ```tsx
 import { useState } from 'react'
 import { h } from '@stencil/core'
-import { ListItemInterface } from '@platform-ui-kit/components-library'
-import { WppSelect } from '@platform-ui-kit/components-library-react'
+import { ListItemInterface } from '@wppopen/components-library'
+import { WppSelect } from '@wppopen/components-library-react'
 
 export const SAMPLE_LIST: ListItemInterface[] = [
   {
@@ -572,8 +572,8 @@ export const SelectCombinedExample = () => {
 
 ```vue
 <script setup lang="ts">
-import type { ListItemInterface } from '@platform-ui-kit/components-library/src/components'
-import { WppSelect, WppIconClock } from '@platform-ui-kit/components-library-vue'
+import type { ListItemInterface } from '@wppopen/components-library/src/components'
+import { WppSelect, WppIconClock } from '@wppopen/components-library-vue'
 
 const SAMPLE_LIST: ListItemInterface[] = [
   {
@@ -657,8 +657,8 @@ const handleChange = event => {
 
 ```vue
 <script setup lang="ts">
-import type { ListItemInterface } from '@platform-ui-kit/components-library/src/components'
-import { WppSelect } from '@platform-ui-kit/components-library-vue'
+import type { ListItemInterface } from '@wppopen/components-library/src/components'
+import { WppSelect } from '@wppopen/components-library-vue'
 import { ref } from 'vue'
 
 export const SAMPLE_LIST: ListItemInterface[] = [

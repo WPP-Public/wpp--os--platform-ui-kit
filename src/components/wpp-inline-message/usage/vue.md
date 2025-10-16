@@ -1,6 +1,6 @@
 ```vue
 <script setup lang="ts">
-import { WppInlineMessage } from '@platform-ui-kit/components-library-vue'
+import { WppInlineMessage } from '@wppopen/components-library-vue'
 </script>
 
 <template>

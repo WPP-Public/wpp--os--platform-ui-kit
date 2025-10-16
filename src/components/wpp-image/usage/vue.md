@@ -1,6 +1,6 @@
 ```vue
 <script setup lang="ts">
-import { WppEmptyContent, WppEmpty404 } from '@platform-ui-kit/components-library-vue'
+import { WppEmptyContent, WppEmpty404 } from '@wppopen/components-library-vue'
 </script>
 
 <template>

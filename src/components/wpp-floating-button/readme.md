@@ -32,7 +32,7 @@ Create a call to perform the primary, or most common, action on the screen.
 ### React
 
 ```tsx
-import { WppFloatingButton, WppIconDirections } from '@platform-ui-kit/components-library-react'
+import { WppFloatingButton, WppIconDirections } from '@wppopen/components-library-react'
 
 export const FloatingButtonExample = () => (
   <>
@@ -60,7 +60,7 @@ export const FloatingButtonExample = () => (
 ```vue
 
 <script setup lang="ts">
-import { WppFloatingButton, WppIconArrow } from '@platform-ui-kit/components-library-vue'
+import { WppFloatingButton, WppIconArrow } from '@wppopen/components-library-vue'
 </script>
 
 <template>

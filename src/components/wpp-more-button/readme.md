@@ -60,7 +60,7 @@ export class WppMoreButtons {
 ### React
 
 ```tsx
-import { WppMoreButton } from '@platform-ui-kit/components-library-react'
+import { WppMoreButton } from '@wppopen/components-library-react'
 
 export const WppMoreButtons = () => {
   const handleClick = () => {
@@ -106,7 +106,7 @@ export const WppMoreButtons = () => {
 
 ```vue
 <script setup lang="ts">
-import { WppMoreButton } from '@platform-ui-kit/components-library-vue'
+import { WppMoreButton } from '@wppopen/components-library-vue'
 </script>
 
 <template>

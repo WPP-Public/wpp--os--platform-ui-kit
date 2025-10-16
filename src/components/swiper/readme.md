@@ -13,7 +13,7 @@ npm i swiper
 #### Add these imports to your project
 ```ts
 import 'swiper/swiper-element-bundle.js'
-import '@platform-ui-kit/components-library/dist/collection/swiper.css'
+import '@wppopen/components-library/dist/collection/swiper.css'
 ```
 
 ## Usage

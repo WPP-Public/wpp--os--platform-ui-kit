@@ -1,7 +1,7 @@
 ```vue
 
 <script setup lang="ts">
-import { WppSkeleton } from '@platform-ui-kit/components-library-vue'
+import { WppSkeleton } from '@wppopen/components-library-vue'
 </script>
 
 <template>

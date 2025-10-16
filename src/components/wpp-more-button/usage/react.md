@@ -1,5 +1,5 @@
 ```tsx
-import { WppMoreButton } from '@platform-ui-kit/components-library-react'
+import { WppMoreButton } from '@wppopen/components-library-react'
 
 export const WppMoreButtons = () => {
   const handleClick = () => {

@@ -60,8 +60,8 @@ export class PillGroupExample {
 
 ```tsx
 import React from 'react'
-import { WppPill, WppPillGroup } from '@platform-ui-kit/components-library-react'
-import { PillGroupChangeEvent } from '@platform-ui-kit/components-library'
+import { WppPill, WppPillGroup } from '@wppopen/components-library-react'
+import { PillGroupChangeEvent } from '@wppopen/components-library'
 
 export const PillGroupExample = () => {
   const handlePillGroupChange = (event: CustomEvent<PillGroupChangeEvent>) => {
@@ -117,7 +117,7 @@ import {
   WppPill,
   WppAvatar,
   WppIconFavorites,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 
 const pillValue = ref<string>("item-a");
 

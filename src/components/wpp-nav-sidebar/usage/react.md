@@ -7,7 +7,7 @@ import {
   WppIconFavorites,
   WppIconCalendar,
   WppIconMail,
-} from '@platform-ui-kit/components-library-react';
+} from '@wppopen/components-library-react';
 
 export const NavSidebarExample = () => {
   const [activePath, setActivePath] = useState('/dashboard');

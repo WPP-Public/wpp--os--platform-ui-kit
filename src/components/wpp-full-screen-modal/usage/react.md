@@ -1,5 +1,5 @@
 ```tsx
-import { WppFullScreenModal, WppButton } from '@platform-ui-kit/components-library-react'
+import { WppFullScreenModal, WppButton } from '@wppopen/components-library-react'
 
 export const FullScreenModalExample = () => {
   const [isFullScreenModalOpen, setFullScreenModalOpen] = useState(false)

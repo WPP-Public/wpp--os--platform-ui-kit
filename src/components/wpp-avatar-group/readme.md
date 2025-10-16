@@ -63,7 +63,7 @@ export class AvatarGroupExample {
 ### React
 
 ```tsx
-import { WppAvatarGroup } from '@platform-ui-kit/components-library-react'
+import { WppAvatarGroup } from '@wppopen/components-library-react'
 
 export const AvatarGroupExample = () => (
   <WppAvatarGroup
@@ -98,7 +98,7 @@ export const AvatarGroupExample = () => (
 ```vue
 
 <script setup lang="ts">
-import { WppAvatarGroup } from '@platform-ui-kit/components-library-vue'
+import { WppAvatarGroup } from '@wppopen/components-library-vue'
 </script>
 
 <template>

@@ -116,13 +116,13 @@ export class InlineEditExamplePage {
 ```tsx
 import React, { useState } from 'react'
 
-import { WppInlineEdit, WppInput, WppTextareaInput } from '@platform-ui-kit/components-library-react'
-import { InputChangeEventDetail, InlineEditChangeModeEventDetail } from '@platform-ui-kit/components-library'
+import { WppInlineEdit, WppInput, WppTextareaInput } from '@wppopen/components-library-react'
+import { InputChangeEventDetail, InlineEditChangeModeEventDetail } from '@wppopen/components-library'
 import {
   InlineEditConfirmDetail,
   WppInlineEditCustomEvent,
   WppInputCustomEvent,
-} from '@platform-ui-kit/components-library/dist/types/components'
+} from '@wppopen/components-library/dist/types/components'
 
 const simulateServerRequest = (value: string): Promise<void> => {
   return new Promise((resolve, reject) => {
@@ -206,7 +206,7 @@ export const InlineEditVCPage = () => {
 
 ```vue
 <script setup lang="ts">
-import { WppInlineEdit, WppInput, WppTextareaInput } from '@platform-ui-kit/components-library-vue'
+import { WppInlineEdit, WppInput, WppTextareaInput } from '@wppopen/components-library-vue'
 import { ref } from 'vue'
 
 const inputMode = ref('read')

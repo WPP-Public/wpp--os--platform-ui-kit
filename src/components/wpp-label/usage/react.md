@@ -1,5 +1,5 @@
 ```tsx
-import { WppLabel } from '@platform-ui-kit/components-library-react'
+import { WppLabel } from '@wppopen/components-library-react'
 
 export const LabelExample = () => (
     <>

@@ -1,5 +1,5 @@
 ```tsx
-import { WppModal, WppButton } from '@platform-ui-kit/components-library-react'
+import { WppModal, WppButton } from '@wppopen/components-library-react'
 
 export const ModalExample = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)

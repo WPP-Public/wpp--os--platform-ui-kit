@@ -10,8 +10,8 @@ In order to implement theming, you can check ECharts [documentation](https://apa
 Using components library theme, theming can be implemented in the following way:
 
 ```tsx
-import themeJson from '@platform-ui-kit/components-library/dist/platform-ui-kit/wpp-theme.json'
-import { Theme, ThemeCatDataviz } from '@platform-ui-kit/components-library'
+import themeJson from '@wppopen/components-library/dist/platform-ui-kit/wpp-theme.json'
+import { Theme, ThemeCatDataviz } from '@wppopen/components-library'
 
 const themeType = (searchParams.get('themeType') as 'dark' | 'light') || 'dark'
 const colors = Object.values(((themeJson as Theme).content.light?.color.dataviz.cat as ThemeCatDataviz)[themeType])

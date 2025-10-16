@@ -1,7 +1,7 @@
 ```tsx
-import { WppRadioGroup, WppRadio, WppTypography, WppButton } from '@platform-ui-kit/components-library-react'
-import { WppRadioGroupCustomEvent } from '@platform-ui-kit/components-library/dist/types/components'
-import { RadioGroupChangeEvent } from '@platform-ui-kit/components-library'
+import { WppRadioGroup, WppRadio, WppTypography, WppButton } from '@wppopen/components-library-react'
+import { WppRadioGroupCustomEvent } from '@wppopen/components-library/dist/types/components'
+import { RadioGroupChangeEvent } from '@wppopen/components-library'
 
 export const RadioGroupExample = () => {
   const [value, setValue] = useState('email')

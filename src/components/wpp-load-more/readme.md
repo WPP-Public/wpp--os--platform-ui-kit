@@ -58,7 +58,7 @@ export class AppComponent {
 
 ```tsx
 import React, { useState } from 'react';
-import { WppLoadMore } from '@platform-ui-kit/components-library-react';
+import { WppLoadMore } from '@wppopen/components-library-react';
 
 export const LoadMoreExample = () => {
   const [itemsLoaded, setItemsLoaded] = useState(30);

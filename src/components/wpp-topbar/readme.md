@@ -63,8 +63,8 @@ export class TabControlExample {
 
 ```tsx
 import React, { useState } from 'react'
-import { WppTopbar, WppButton } from '@platform-ui-kit/components-library-react'
-import { NavigationState } from '@platform-ui-kit/components-library'
+import { WppTopbar, WppButton } from '@wppopen/components-library-react'
+import { NavigationState } from '@wppopen/components-library'
 import { useNavigate } from 'react-router-dom'
 
 const initNavigation: NavigationState[] = [
@@ -168,7 +168,7 @@ import {
   WppTopbar,
   WppButton,
   WppTypography,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 
 const initNavigation = [
   {

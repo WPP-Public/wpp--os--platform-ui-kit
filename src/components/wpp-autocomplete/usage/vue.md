@@ -7,7 +7,7 @@ import {
   WppTypography,
   WppListItem,
   WppPill,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 
 import type { CountryOption } from "./options";
 import { countryOptions } from "./options";

@@ -68,7 +68,7 @@ export class TimePickerExamplePage {
 ```tsx
 import React, { useState } from 'react'
 import styles from './TimePicker.module.scss'
-import { WppButton, WppTimePicker, WppTypography } from '@platform-ui-kit/components-library-react'
+import { WppButton, WppTimePicker, WppTypography } from '@wppopen/components-library-react'
 
 const TimePicker = () => {
   const [value, setValue] = useState<string>('')
@@ -102,7 +102,7 @@ const TimePicker = () => {
 ```vue
 <script setup>
 import { ref } from 'vue'
-import { WppButton, WppTimePicker, WppTypography } from '@platform-ui-kit/components-library-vue'
+import { WppButton, WppTimePicker, WppTypography } from '@wppopen/components-library-vue'
 
 const value = ref('')
 const minutesInterval = ref(15)

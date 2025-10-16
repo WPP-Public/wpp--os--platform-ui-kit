@@ -1,6 +1,6 @@
 ```tsx
-import { WppPaginationSelect } from '@platform-ui-kit/components-library-react'
-import { PageChangeEventDetail } from '@platform-ui-kit/components-library'
+import { WppPaginationSelect } from '@wppopen/components-library-react'
+import { PageChangeEventDetail } from '@wppopen/components-library'
 
 export const PaginationSelectExample = () => {
   const handleChange = (event: CustomEvent<PageChangeEventDetail>) => {

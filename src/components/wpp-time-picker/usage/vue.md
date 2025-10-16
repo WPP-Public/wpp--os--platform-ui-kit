@@ -1,7 +1,7 @@
 ```vue
 <script setup>
 import { ref } from 'vue'
-import { WppButton, WppTimePicker, WppTypography } from '@platform-ui-kit/components-library-vue'
+import { WppButton, WppTimePicker, WppTypography } from '@wppopen/components-library-vue'
 
 const value = ref('')
 const minutesInterval = ref(15)

@@ -1,6 +1,6 @@
 ```vue
 <script setup lang="ts">
-import { WppRadio } from "@platform-ui-kit/components-library-vue";
+import { WppRadio } from "@wppopen/components-library-vue";
 </script>
 
 <template>

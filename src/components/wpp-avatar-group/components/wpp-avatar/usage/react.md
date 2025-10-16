@@ -1,5 +1,5 @@
 ```tsx
-import { WppAvatar } from '@platform-ui-kit/components-library-react'
+import { WppAvatar } from '@wppopen/components-library-react'
 
 export const AvatarExample = () => (
   <WppAvatar

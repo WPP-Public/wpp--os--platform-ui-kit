@@ -1,7 +1,7 @@
 ```vue
 
 <script setup lang="ts">
-import { WppAvatar } from '@platform-ui-kit/components-library-vue'
+import { WppAvatar } from '@wppopen/components-library-vue'
 </script>
 
 <template>

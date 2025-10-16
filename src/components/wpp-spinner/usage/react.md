@@ -1,5 +1,5 @@
 ```tsx
-import { WppButton } from '@platform-ui-kit/components-library-react'
+import { WppButton } from '@wppopen/components-library-react'
 
 export const SpinnerExample = () => (
   <>

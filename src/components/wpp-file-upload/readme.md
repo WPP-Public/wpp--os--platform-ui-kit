@@ -54,7 +54,7 @@
 ```tsx
 import { ChangeDetectionStrategy, Component } from '@angular/core'
 
-import { FileUploadEventDetail, FileUploadLocales } from '@platform-ui-kit/components-library'
+import { FileUploadEventDetail, FileUploadLocales } from '@wppopen/components-library'
 
 @Component({
   selector: 'file-upload-example',
@@ -109,7 +109,7 @@ export class FileUploadExamplePage {
 ```tsx
 import React from 'react'
 
-import { WppFileUpload } from '@platform-ui-kit/components-library-react'
+import { WppFileUpload } from '@wppopen/components-library-react'
 
 export const FileUploadExample = () => {
   const handleFileUploadChange = (event: CustomEvent) => {
@@ -148,7 +148,7 @@ export const FileUploadExample = () => {
 <script setup lang="ts">
 import { ref } from "vue";
 
-import { WppFileUpload } from "@platform-ui-kit/components-library-vue";
+import { WppFileUpload } from "@wppopen/components-library-vue";
 
 const hasError = ref(false);
 const errorMessage = ref("");

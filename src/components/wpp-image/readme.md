@@ -15,7 +15,7 @@ Create OS error illustrations as images for empty states.
 ### React
 
 ```tsx
-import { WppEmpty404, WppEmptyContent } from '@platform-ui-kit/components-library-react'
+import { WppEmpty404, WppEmptyContent } from '@wppopen/components-library-react'
 
 export const WppEmptyExample = () => (
   <>
@@ -30,7 +30,7 @@ export const WppEmptyExample = () => (
 
 ```vue
 <script setup lang="ts">
-import { WppEmptyContent, WppEmpty404 } from '@platform-ui-kit/components-library-vue'
+import { WppEmptyContent, WppEmpty404 } from '@wppopen/components-library-vue'
 </script>
 
 <template>

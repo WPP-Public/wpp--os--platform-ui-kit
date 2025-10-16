@@ -61,7 +61,7 @@ export class TextInputExample {
 ### React
 
 ```tsx
-import { WppInput } from '@platform-ui-kit/components-library-react'
+import { WppInput } from '@wppopen/components-library-react'
 
 export const TextInputExample = () => (
   <WppInput
@@ -87,7 +87,7 @@ export const TextInputExample = () => (
 import {
   WppIconSearch,
   WppInput,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 </script>
 
 <template>

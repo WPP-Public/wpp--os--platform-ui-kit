@@ -29,7 +29,7 @@ A tooltip with an error state is used to indicate validation errors when they ca
 ### React
 
 ```tsx
-import { WppTooltip } from '@platform-ui-kit/components-library-react'
+import { WppTooltip } from '@wppopen/components-library-react'
 import { renderToString } from 'react-dom/server'
 
 export const TooltipExample = () => (
@@ -77,7 +77,7 @@ export const TooltipWithAllowHTML = () => (
 ```vue
 
 <script setup lang="ts">
-import { WppTooltip } from '@platform-ui-kit/components-library-vue'
+import { WppTooltip } from '@wppopen/components-library-vue'
 </script>
 
 <template>

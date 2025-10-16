@@ -1,6 +1,6 @@
 ```vue
 <script setup lang="ts">
-import { WppDivider } from '@platform-ui-kit/components-library-vue'
+import { WppDivider } from '@wppopen/components-library-vue'
 </script>
 
 <template>

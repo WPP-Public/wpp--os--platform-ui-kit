@@ -1,7 +1,7 @@
 ```vue
 
 <script setup lang="ts">
-import { WppTooltip } from '@platform-ui-kit/components-library-vue'
+import { WppTooltip } from '@wppopen/components-library-vue'
 </script>
 
 <template>

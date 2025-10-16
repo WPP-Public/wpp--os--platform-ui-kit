@@ -1,8 +1,8 @@
 ```vue
 <script setup lang="ts">
-import type { CheckboxGroupChangeEvent, CheckboxGroupValue } from '@platform-ui-kit/components-library'
-import { WppCheckbox, WppTypography, WppCheckboxGroup, WppButton } from '@platform-ui-kit/components-library-vue'
-import type { WppCheckboxGroupCustomEvent } from '@platform-ui-kit/components-library/src/components'
+import type { CheckboxGroupChangeEvent, CheckboxGroupValue } from '@wppopen/components-library'
+import { WppCheckbox, WppTypography, WppCheckboxGroup, WppButton } from '@wppopen/components-library-vue'
+import type { WppCheckboxGroupCustomEvent } from '@wppopen/components-library/src/components'
 import { ref } from 'vue'
 
 const checkboxes = ref([

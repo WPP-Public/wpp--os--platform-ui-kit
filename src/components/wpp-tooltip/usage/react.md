@@ -1,5 +1,5 @@
 ```tsx
-import { WppTooltip } from '@platform-ui-kit/components-library-react'
+import { WppTooltip } from '@wppopen/components-library-react'
 import { renderToString } from 'react-dom/server'
 
 export const TooltipExample = () => (

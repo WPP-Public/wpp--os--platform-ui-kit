@@ -1,7 +1,7 @@
 ```vue
 <script setup lang="ts">
-import type { ListItemInterface } from '@platform-ui-kit/components-library/src/components'
-import { WppSelect, WppIconClock } from '@platform-ui-kit/components-library-vue'
+import type { ListItemInterface } from '@wppopen/components-library/src/components'
+import { WppSelect, WppIconClock } from '@wppopen/components-library-vue'
 
 const SAMPLE_LIST: ListItemInterface[] = [
   {
@@ -85,8 +85,8 @@ const handleChange = event => {
 
 ```vue
 <script setup lang="ts">
-import type { ListItemInterface } from '@platform-ui-kit/components-library/src/components'
-import { WppSelect } from '@platform-ui-kit/components-library-vue'
+import type { ListItemInterface } from '@wppopen/components-library/src/components'
+import { WppSelect } from '@wppopen/components-library-vue'
 import { ref } from 'vue'
 
 export const SAMPLE_LIST: ListItemInterface[] = [

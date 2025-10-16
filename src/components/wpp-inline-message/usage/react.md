@@ -1,5 +1,5 @@
 ```tsx
-import { WppInlineMessage } from '@platform-ui-kit/components-library-react'
+import { WppInlineMessage } from '@wppopen/components-library-react'
 
 export const InlineMessageExample = () => (
   <>

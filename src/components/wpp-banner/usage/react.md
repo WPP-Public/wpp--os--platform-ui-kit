@@ -1,6 +1,6 @@
 ```tsx
 import React, { useState } from 'react'
-import { WppBanner } from '@platform-ui-kit/components-library-react'
+import { WppBanner } from '@wppopen/components-library-react'
 
 export const BannerExample = () => {
   const [isToShowBanner, setIsToShowBanner] = useState(true)

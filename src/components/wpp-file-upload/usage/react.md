@@ -1,7 +1,7 @@
 ```tsx
 import React from 'react'
 
-import { WppFileUpload } from '@platform-ui-kit/components-library-react'
+import { WppFileUpload } from '@wppopen/components-library-react'
 
 export const FileUploadExample = () => {
   const handleFileUploadChange = (event: CustomEvent) => {

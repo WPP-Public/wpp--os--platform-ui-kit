@@ -1,7 +1,7 @@
 ```tsx
 import React, { useState } from 'react'
-import { WppTabs, WppTab, WppTypography } from '@platform-ui-kit/components-library-react'
-import { TabsChangeEventDetail } from '@platform-ui-kit/components-library'
+import { WppTabs, WppTab, WppTypography } from '@wppopen/components-library-react'
+import { TabsChangeEventDetail } from '@wppopen/components-library'
 
 export const TabsExample = () => {
   const [currentTab, setCurrentTab] = useState('cars')

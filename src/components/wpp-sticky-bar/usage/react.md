@@ -2,14 +2,14 @@
 import React from 'react'
 
 import styles from './StickyBar.module.scss'
-import { WppStickyBar, WppTypography } from '@platform-ui-kit/components-library-react'
+import { WppStickyBar, WppTypography } from '@wppopen/components-library-react'
 import { validButtonsList, validTabsList } from './consts'
 
 import {
   StickyBarButtonItem,
   StickyBarTabItem,
-} from '@platform-ui-kit/components-library/dist/types/components/wpp-sticky-bar/types'
-import { WppStickyBarCustomEvent } from '@platform-ui-kit/components-library/dist/types/components'
+} from '@wppopen/components-library/dist/types/components/wpp-sticky-bar/types'
+import { WppStickyBarCustomEvent } from '@wppopen/components-library/dist/types/components'
 
 export const StickyBarPage = () => (
   <>
@@ -59,8 +59,8 @@ export const StickyBarPage = () => (
 ```
 
 ```ts
-import { StickyBarTabItem } from '@platform-ui-kit/components-library/dist/types/components/wpp-sticky-bar/types'
-import { StickyBarButtonItem } from '@platform-ui-kit/components-library/dist/types/components/wpp-sticky-bar/types'
+import { StickyBarTabItem } from '@wppopen/components-library/dist/types/components/wpp-sticky-bar/types'
+import { StickyBarButtonItem } from '@wppopen/components-library/dist/types/components/wpp-sticky-bar/types'
 
 export const validButtonsList: StickyBarButtonItem[] = [
   {

@@ -1,7 +1,7 @@
 ```tsx
 import React, { useState } from 'react'
 import styles from './TimePicker.module.scss'
-import { WppButton, WppTimePicker, WppTypography } from '@platform-ui-kit/components-library-react'
+import { WppButton, WppTimePicker, WppTypography } from '@wppopen/components-library-react'
 
 const TimePicker = () => {
   const [value, setValue] = useState<string>('')

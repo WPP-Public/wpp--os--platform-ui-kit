@@ -1,9 +1,9 @@
 ```tsx
-import { WppButton, WppCheckbox, WppCheckboxGroup, WppTypography } from '@platform-ui-kit/components-library-react'
-import { WppCheckboxGroupCustomEvent } from '@platform-ui-kit/components-library/dist/types/components'
-import { CheckboxGroupChangeEvent } from '@platform-ui-kit/components-library'
+import { WppButton, WppCheckbox, WppCheckboxGroup, WppTypography } from '@wppopen/components-library-react'
+import { WppCheckboxGroupCustomEvent } from '@wppopen/components-library/dist/types/components'
+import { CheckboxGroupChangeEvent } from '@wppopen/components-library'
 import { useState } from 'react'
-import { CheckboxGroupValue } from '@platform-ui-kit/components-library'
+import { CheckboxGroupValue } from '@wppopen/components-library'
 
 export const CheckboxesPage = () => {
   const [checkboxes, setCheckboxes] = useState([

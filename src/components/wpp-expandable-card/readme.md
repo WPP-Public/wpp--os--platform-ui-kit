@@ -44,8 +44,8 @@ import {
   WppProgressIndicator,
   WppInput,
   WppTypography,
-} from '@platform-ui-kit/components-library-react'
-import { ExpandableCardSectionChangeEventDetail } from '@platform-ui-kit/components-library'
+} from '@wppopen/components-library-react'
+import { ExpandableCardSectionChangeEventDetail } from '@wppopen/components-library'
 
 export const ExpandableCardExample = () => {
   const handleChange = (event: CustomEvent<ExpandableCardSectionChangeEventDetail>) => {

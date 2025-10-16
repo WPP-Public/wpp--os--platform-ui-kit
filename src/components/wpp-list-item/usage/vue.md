@@ -7,7 +7,7 @@ import {
   WppIconChevron,
   WppIconMail,
   WppListItem,
-} from '@platform-ui-kit/components-library-vue'
+} from '@wppopen/components-library-vue'
 
 const handleListItemClick = (ev: CustomEvent) => console.log("change item: ", ev.detail);
 </script>

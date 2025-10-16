@@ -1,6 +1,6 @@
 ```ts
 import { ChangeDetectionStrategy, Component } from '@angular/core'
-import { ChangeColorEventDetails, Theme } from '@platform-ui-kit/components-library'
+import { ChangeColorEventDetails, Theme } from '@wppopen/components-library'
 
 @Component({
   selector: 'app-color-picker-example',

@@ -17,8 +17,8 @@ The `wpp-expandable-card` component supports lazy loading of content to improve 
 
 ```tsx
 import { useState } from 'react'
-import { WppExpandableCard } from '@platform-ui-kit/components-library-react'
-import { ExpandableCardSectionChangeEventDetail } from '@platform-ui-kit/components-library'
+import { WppExpandableCard } from '@wppopen/components-library-react'
+import { ExpandableCardSectionChangeEventDetail } from '@wppopen/components-library'
 
 interface DynamicContent {
   [key: string]: any
@@ -407,7 +407,7 @@ objectKeys = Object.keys;
 
 ```vue
 <script setup lang="ts">
-import { WppExpandableCard } from '@platform-ui-kit/components-library-vue'
+import { WppExpandableCard } from '@wppopen/components-library-vue'
 import { ref, reactive } from 'vue'
 
 // Define types

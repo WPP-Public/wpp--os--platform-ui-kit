@@ -79,7 +79,7 @@ import {
   LoadMoreHandler,
   AutocompleteChangeEventDetail,
   AutocompleteDefaultOption,
-} from '@platform-ui-kit/components-library'
+} from '@wppopen/components-library'
 import periodicTable from '../../dummy-data/periodic-table'
 import countriesOptions from '../../dummy-data/countries'
 

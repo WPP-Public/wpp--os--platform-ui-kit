@@ -30,7 +30,7 @@
 ### React
 
 ```tsx
-import { WppToggle } from '@platform-ui-kit/components-library-react'
+import { WppToggle } from '@wppopen/components-library-react'
 
 export const ToggleExample = () => {
   const toggleLabelConfig={
@@ -66,7 +66,7 @@ export const ToggleExample = () => {
 
 ```vue
 <script setup>
-import { WppToggle } from "@platform-ui-kit/components-library-vue";
+import { WppToggle } from "@wppopen/components-library-vue";
 
 const labelConfig = {
   text: "Label Text",

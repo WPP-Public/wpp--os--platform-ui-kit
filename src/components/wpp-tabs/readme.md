@@ -52,8 +52,8 @@ export class TabsExample {
 
 ```tsx
 import React, { useState } from 'react'
-import { WppTabs, WppTab, WppTypography } from '@platform-ui-kit/components-library-react'
-import { TabsChangeEventDetail } from '@platform-ui-kit/components-library'
+import { WppTabs, WppTab, WppTypography } from '@wppopen/components-library-react'
+import { TabsChangeEventDetail } from '@wppopen/components-library'
 
 export const TabsExample = () => {
   const [currentTab, setCurrentTab] = useState('cars')
@@ -104,7 +104,7 @@ export const TabsExample = () => {
 <script setup lang="ts">
 import { ref } from "vue"
 
-import { WppTabs, WppTab, WppTypography } from "@platform-ui-kit/components-library-vue"
+import { WppTabs, WppTab, WppTypography } from "@wppopen/components-library-vue"
 
 const currentTab = ref("cars")
 

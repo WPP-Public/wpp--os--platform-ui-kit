@@ -32,7 +32,7 @@ Create a label that helps to qualify information. Must be used in `wpp-pill-grou
 ### React
 
 ```tsx
-import { WppPill } from '@platform-ui-kit/components-library-react'
+import { WppPill } from '@wppopen/components-library-react'
 
 export const Example = () => (
   <>

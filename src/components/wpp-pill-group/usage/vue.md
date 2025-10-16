@@ -7,7 +7,7 @@ import {
   WppPill,
   WppAvatar,
   WppIconFavorites,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 
 const pillValue = ref<string>("item-a");
 

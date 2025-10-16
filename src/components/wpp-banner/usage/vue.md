@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { WppBanner } from '@platform-ui-kit/components-library-vue'
+import { WppBanner } from '@wppopen/components-library-vue'
 
 const isToShowBanner = ref(true)
 

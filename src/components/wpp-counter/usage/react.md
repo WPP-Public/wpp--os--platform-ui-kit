@@ -1,8 +1,8 @@
 ```tsx
 import React, { useState } from 'react'
 
-import { WppCounter, WppTypography } from '@platform-ui-kit/components-library-react'
-import { CounterChangeEventDetail } from '@platform-ui-kit/components-library'
+import { WppCounter, WppTypography } from '@wppopen/components-library-react'
+import { CounterChangeEventDetail } from '@wppopen/components-library'
 
 export const CounterExample = () => {
   const [value, setValue] = useState(5)

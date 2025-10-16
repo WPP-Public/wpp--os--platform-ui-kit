@@ -35,7 +35,7 @@
 ### React
 
 ```tsx
-import { WppInlineMessage } from '@platform-ui-kit/components-library-react'
+import { WppInlineMessage } from '@wppopen/components-library-react'
 
 export const InlineMessageExample = () => (
   <>
@@ -64,7 +64,7 @@ export const InlineMessageExample = () => (
 
 ```vue
 <script setup lang="ts">
-import { WppInlineMessage } from '@platform-ui-kit/components-library-vue'
+import { WppInlineMessage } from '@wppopen/components-library-vue'
 </script>
 
 <template>

@@ -5,7 +5,7 @@ import {
   WppButton,
   WppIconAdd,
   WppIconAddCircle,
-} from '@platform-ui-kit/components-library-react'
+} from '@wppopen/components-library-react'
 
 export const MenuContextExample = () => (
   <>

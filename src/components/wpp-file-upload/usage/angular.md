@@ -43,7 +43,7 @@
 ```tsx
 import { ChangeDetectionStrategy, Component } from '@angular/core'
 
-import { FileUploadEventDetail, FileUploadLocales } from '@platform-ui-kit/components-library'
+import { FileUploadEventDetail, FileUploadLocales } from '@wppopen/components-library'
 
 @Component({
   selector: 'file-upload-example',

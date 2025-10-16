@@ -1,8 +1,8 @@
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { WppButton, WppCheckbox, WppStepper, WppStep, WppRadio } from '@platform-ui-kit/components-library-vue'
-import type { StepChangeEventDetail } from '@platform-ui-kit/components-library/src'
+import { WppButton, WppCheckbox, WppStepper, WppStep, WppRadio } from '@wppopen/components-library-vue'
+import type { StepChangeEventDetail } from '@wppopen/components-library/src'
 
 const LAST_PAGE = 7
 const FIRST_PAGE = 1
@@ -196,8 +196,8 @@ const handleStepClick = (event: CustomEvent<StepChangeEventDetail>) => {
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { WppButton, WppCheckbox, WppStepper, WppStep, WppRadio } from '@platform-ui-kit/components-library-vue'
-import type { StepChangeEventDetail } from '@platform-ui-kit/components-library/src'
+import { WppButton, WppCheckbox, WppStepper, WppStep, WppRadio } from '@wppopen/components-library-vue'
+import type { StepChangeEventDetail } from '@wppopen/components-library/src'
 
 const LAST_PAGE = 4
 const FIRST_PAGE = 1

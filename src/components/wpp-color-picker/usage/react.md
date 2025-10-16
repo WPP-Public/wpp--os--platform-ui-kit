@@ -1,7 +1,7 @@
 ```tsx
 import React, { useState } from 'react'
-import { WppColorPicker, WppTypography } from '@platform-ui-kit/components-library-react'
-import { ChangeColorEventDetails, Theme } from '@platform-ui-kit/components-library/components'
+import { WppColorPicker, WppTypography } from '@wppopen/components-library-react'
+import { ChangeColorEventDetails, Theme } from '@wppopen/components-library/components'
 
 const SAVED_COLORS = ['#7AB6FF', '#45E4B6', '#ECC707', '#FF9E66', '#FF7A91']
 

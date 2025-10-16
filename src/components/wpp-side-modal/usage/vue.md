@@ -1,7 +1,7 @@
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { WppButton, WppSideModal } from '@platform-ui-kit/components-library-vue'
+import { WppButton, WppSideModal } from '@wppopen/components-library-vue'
 
 const isSideModalOpen = ref(false)
 

@@ -1,5 +1,5 @@
 ```tsx
-import { WppFilterButton } from '@platform-ui-kit/components-library-react'
+import { WppFilterButton } from '@wppopen/components-library-react'
 
 export const FilterButtonExample = () => (
   <>

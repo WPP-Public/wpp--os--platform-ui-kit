@@ -68,9 +68,9 @@ export class RadioGroupExample {
 ### React
 
 ```tsx
-import { WppRadioGroup, WppRadio, WppTypography, WppButton } from '@platform-ui-kit/components-library-react'
-import { WppRadioGroupCustomEvent } from '@platform-ui-kit/components-library/dist/types/components'
-import { RadioGroupChangeEvent } from '@platform-ui-kit/components-library'
+import { WppRadioGroup, WppRadio, WppTypography, WppButton } from '@wppopen/components-library-react'
+import { WppRadioGroupCustomEvent } from '@wppopen/components-library/dist/types/components'
+import { RadioGroupChangeEvent } from '@wppopen/components-library'
 
 export const RadioGroupExample = () => {
   const [value, setValue] = useState('email')
@@ -121,9 +121,9 @@ export const RadioGroupExample = () => {
 
 ```vue
 <script setup lang="ts">
-import type { RadioGroupChangeEvent, RadioGroupValue } from '@platform-ui-kit/components-library'
-import { WppButton, WppRadio, WppRadioGroup, WppTypography } from '@platform-ui-kit/components-library-vue'
-import type { WppRadioGroupCustomEvent } from '@platform-ui-kit/components-library/dist/types/components'
+import type { RadioGroupChangeEvent, RadioGroupValue } from '@wppopen/components-library'
+import { WppButton, WppRadio, WppRadioGroup, WppTypography } from '@wppopen/components-library-vue'
+import type { WppRadioGroupCustomEvent } from '@wppopen/components-library/dist/types/components'
 import { ref } from 'vue'
 
 const radioGroupValue = ref<RadioGroupValue>('option-1')

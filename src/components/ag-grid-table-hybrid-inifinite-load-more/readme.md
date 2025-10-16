@@ -24,10 +24,10 @@ import {
   WppIconTrash,
   WppIconPlus,
   WppAvatarGroup,
-} from '@platform-ui-kit/components-library-react'
+} from '@wppopen/components-library-react'
 import 'ag-grid-community/styles/ag-grid.css'
-import '@platform-ui-kit/components-library/dist/collection/ag-theme-wpp.css'
-import { InputChangeEventDetail, SelectChangeEventDetail } from '@platform-ui-kit/components-library'
+import '@wppopen/components-library/dist/collection/ag-theme-wpp.css'
+import { InputChangeEventDetail, SelectChangeEventDetail } from '@wppopen/components-library'
 
 import { capitalize, delay } from '../../../utils'
 import HeaderCell from '../components/HeaderCell'
@@ -514,7 +514,7 @@ export const HybridInfiniteScrollAgGridTable = () => {
 import { ChangeDetectionStrategy, Component, ViewChild, ChangeDetectorRef } from '@angular/core'
 import { AgGridAngular } from 'ag-grid-angular'
 import { ColDef, FirstDataRenderedEvent, RowClassRules } from 'ag-grid-community'
-import { InputChangeEventDetail, SelectChangeEventDetail } from '@platform-ui-kit/components-library'
+import { InputChangeEventDetail, SelectChangeEventDetail } from '@wppopen/components-library'
 
 import { AvatarRenderer } from './components/avatar-renderer/avatar-renderer'
 import { CustomLoadingOverlay } from './components/custom-loading-overlay'

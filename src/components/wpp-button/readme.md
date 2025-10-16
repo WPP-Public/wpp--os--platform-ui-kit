@@ -46,7 +46,7 @@ Buttons can be used in forms or anywhere you want a user to act (submit, cancel,
 ### React
 
 ```tsx
-import { WppButton, WppIconDirections, WppIconAddCircle } from '@platform-ui-kit/components-library-react'
+import { WppButton, WppIconDirections, WppIconAddCircle } from '@wppopen/components-library-react'
 
 export const ButtonExample = () => (
   <>
@@ -92,7 +92,7 @@ export const ButtonExample = () => (
 ```vue
 
 <script setup lang="ts">
-import { WppButton, WppIconArrow, WppIconPlus } from "@platform-ui-kit/components-library-vue"
+import { WppButton, WppIconArrow, WppIconPlus } from "@wppopen/components-library-vue"
 
 // ...
 </script>

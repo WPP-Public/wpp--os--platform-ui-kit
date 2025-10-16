@@ -28,7 +28,7 @@
 ### React
 
 ```tsx
-import { WppCard, WppActionButton, WppIconMore, WppTypography } from '@platform-ui-kit/components-library-react'
+import { WppCard, WppActionButton, WppIconMore, WppTypography } from '@wppopen/components-library-react'
 
 export const CardExample = () => (
   <WppCard>
@@ -56,7 +56,7 @@ import {
   WppActionButton,
   WppIconMore,
   WppTypography
-} from '@platform-ui-kit/components-library-vue'
+} from '@wppopen/components-library-vue'
 </script>
 
 <template>

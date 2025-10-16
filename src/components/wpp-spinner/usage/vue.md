@@ -1,7 +1,7 @@
 ```vue
 
 <script setup lang="ts">
-import { WppSpinner } from "@platform-ui-kit/components-library-vue"
+import { WppSpinner } from "@wppopen/components-library-vue"
 </script>
 
 <template>

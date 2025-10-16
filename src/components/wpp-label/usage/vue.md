@@ -1,7 +1,7 @@
 ```vue
 
 <script setup lang="ts">
-import { WppLabel } from '@platform-ui-kit/components-library-vue'
+import { WppLabel } from '@wppopen/components-library-vue'
 </script>
 
 <template>

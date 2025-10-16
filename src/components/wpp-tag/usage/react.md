@@ -1,5 +1,5 @@
 ```tsx
-import { WppTag } from '@platform-ui-kit/components-library-react'
+import { WppTag } from '@wppopen/components-library-react'
 
 export const TagExample = () => (
   <WppTag

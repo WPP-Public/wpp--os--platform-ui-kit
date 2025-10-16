@@ -1,5 +1,5 @@
 ```tsx
-import {  WppDivider } from '@platform-ui-kit/components-library-react'
+import {  WppDivider } from '@wppopen/components-library-react'
 
 export const DividerExample = () => (
   <WppDivider></WppDivider>

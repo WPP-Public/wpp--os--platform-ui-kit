@@ -1,5 +1,5 @@
 ```tsx
-import { WppChatInput } from '@platform-ui-kit/components-library-react'
+import { WppChatInput } from '@wppopen/components-library-react'
 
 export const ChatInputExample = () => {
   const [chatValue, setChatValue] = useState('')

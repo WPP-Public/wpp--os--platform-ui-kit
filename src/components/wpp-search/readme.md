@@ -16,8 +16,8 @@ Create a component that combines the search input, a multiselect dropdown with a
 
 ```tsx
 import React, { useState } from 'react'
-import { SearchDefaultOption } from '@platform-ui-kit/components-library'
-import { WppSearch, WppListItem } from '@platform-ui-kit/components-library-react'
+import { SearchDefaultOption } from '@wppopen/components-library'
+import { WppSearch, WppListItem } from '@wppopen/components-library-react'
 
 export const fruitOptions = [
   {

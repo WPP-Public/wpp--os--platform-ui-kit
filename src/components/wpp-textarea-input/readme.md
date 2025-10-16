@@ -23,7 +23,7 @@
 ### React
 
 ```tsx
-import { WppTextareaInput } from '@platform-ui-kit/components-library-react'
+import { WppTextareaInput } from '@wppopen/components-library-react'
 
 export const TextareaInputExample = () => (
   <WppTextareaInput
@@ -45,7 +45,7 @@ export const TextareaInputExample = () => (
 
 ```vue
 <script setup>
-import { WppTextareaInput } from "@platform-ui-kit/components-library-vue";
+import { WppTextareaInput } from "@wppopen/components-library-vue";
 </script>
 
 <template>

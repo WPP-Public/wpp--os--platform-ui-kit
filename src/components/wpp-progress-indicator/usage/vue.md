@@ -1,7 +1,7 @@
 ```vue
 
 <script setup lang="ts">
-import { WppProgressIndicator } from '@platform-ui-kit/components-library-vue'
+import { WppProgressIndicator } from '@wppopen/components-library-vue'
 </script>
 
 <template>

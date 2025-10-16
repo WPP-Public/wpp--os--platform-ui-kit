@@ -90,7 +90,7 @@ import {
   LoadMoreHandler,
   AutocompleteChangeEventDetail,
   AutocompleteDefaultOption,
-} from '@platform-ui-kit/components-library'
+} from '@wppopen/components-library'
 import periodicTable from '../../dummy-data/periodic-table'
 import countriesOptions from '../../dummy-data/countries'
 
@@ -146,8 +146,8 @@ export class AutocompleteExamplePage {
 
 ```tsx
 import React, { useState } from 'react'
-import { AutocompleteDefaultOption } from '@platform-ui-kit/components-library'
-import { WppAccordion, WppAutocomplete, WppTypography, WppListItem } from '@platform-ui-kit/components-library-react'
+import { AutocompleteDefaultOption } from '@wppopen/components-library'
+import { WppAccordion, WppAutocomplete, WppTypography, WppListItem } from '@wppopen/components-library-react'
 
 import { countryOptions, fruitOptions, hugeListOptions } from './options'
 
@@ -264,7 +264,7 @@ export const Autocomplete = () => {
 
 ```tsx
 import styles from './Autocomplete.module.scss'
-import { WppTypography } from '@platform-ui-kit/components-library-react'
+import { WppTypography } from '@wppopen/components-library-react'
 import React from 'react'
 
 export const ResultsView = ({ value }: { value: (string | number)[] | string }) => (
@@ -278,8 +278,8 @@ export const ResultsView = ({ value }: { value: (string | number)[] | string }) 
 **SelectedValues.tsx**
 
 ```tsx
-import { WppPill } from '@platform-ui-kit/components-library-react'
-import { AutocompleteDefaultOption } from '@platform-ui-kit/components-library'
+import { WppPill } from '@wppopen/components-library-react'
+import { AutocompleteDefaultOption } from '@wppopen/components-library'
 
 import styles from './Autocomplete.module.scss'
 import React from 'react'
@@ -312,8 +312,8 @@ export const SelectedValues = ({ values, onCloseClick }: SelectedValuesComponent
 
 ```tsx
 import React, { useEffect, useRef, useState } from 'react'
-import { AutocompleteDefaultOption, LoadMoreHandler } from '@platform-ui-kit/components-library'
-import { WppAutocomplete, WppListItem } from '@platform-ui-kit/components-library-react'
+import { AutocompleteDefaultOption, LoadMoreHandler } from '@wppopen/components-library'
+import { WppAutocomplete, WppListItem } from '@wppopen/components-library-react'
 
 import { BasicOption, generateInfiniteResults, isInfiniteLastPage } from '../options'
 
@@ -447,7 +447,7 @@ import {
   WppTypography,
   WppListItem,
   WppPill,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 
 import type { CountryOption } from "./options";
 import { countryOptions } from "./options";

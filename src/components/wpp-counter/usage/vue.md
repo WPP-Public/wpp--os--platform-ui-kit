@@ -5,7 +5,7 @@ import { ref } from "vue";
 import {
   WppCounter,
   WppTypography,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 
 const initiallyValue = 1;
 

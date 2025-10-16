@@ -1,6 +1,6 @@
 ```vue
 <script setup>
-import { WppToggle } from "@platform-ui-kit/components-library-vue";
+import { WppToggle } from "@wppopen/components-library-vue";
 
 const labelConfig = {
   text: "Label Text",

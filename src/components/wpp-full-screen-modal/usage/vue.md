@@ -1,7 +1,7 @@
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { WppButton, WppFullScreenModal } from '@platform-ui-kit/components-library-vue'
+import { WppButton, WppFullScreenModal } from '@wppopen/components-library-vue'
 
 const isFullScreenModalOpen = ref(false)
 

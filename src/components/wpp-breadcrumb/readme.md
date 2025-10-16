@@ -69,7 +69,7 @@ export class BreadcrumbExample {
 ### React
 
 ```tsx
-import { WppBreadcrumb } from '@platform-ui-kit/components-library-react';
+import { WppBreadcrumb } from '@wppopen/components-library-react';
 import { useNavigate } from 'react-router-dom';
 
 const items = [
@@ -130,7 +130,7 @@ export const BreadcrumbExample = () => {
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 
-import { WppBreadcrumb } from '@platform-ui-kit/components-library-vue';
+import { WppBreadcrumb } from '@wppopen/components-library-vue';
 
 const items = [
   {

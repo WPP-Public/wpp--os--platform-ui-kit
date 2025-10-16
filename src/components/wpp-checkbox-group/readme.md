@@ -40,7 +40,7 @@
 **component.ts**
 
 ```tsx
-import { CheckboxGroupValue } from '@platform-ui-kit/components-library'
+import { CheckboxGroupValue } from '@wppopen/components-library'
 
 @Component({…})
 
@@ -89,11 +89,11 @@ export class CheckboxExamplePage {
 ### React
 
 ```tsx
-import { WppButton, WppCheckbox, WppCheckboxGroup, WppTypography } from '@platform-ui-kit/components-library-react'
-import { WppCheckboxGroupCustomEvent } from '@platform-ui-kit/components-library/dist/types/components'
-import { CheckboxGroupChangeEvent } from '@platform-ui-kit/components-library'
+import { WppButton, WppCheckbox, WppCheckboxGroup, WppTypography } from '@wppopen/components-library-react'
+import { WppCheckboxGroupCustomEvent } from '@wppopen/components-library/dist/types/components'
+import { CheckboxGroupChangeEvent } from '@wppopen/components-library'
 import { useState } from 'react'
-import { CheckboxGroupValue } from '@platform-ui-kit/components-library'
+import { CheckboxGroupValue } from '@wppopen/components-library'
 
 export const CheckboxesPage = () => {
   const [checkboxes, setCheckboxes] = useState([
@@ -160,9 +160,9 @@ export const CheckboxesPage = () => {
 
 ```vue
 <script setup lang="ts">
-import type { CheckboxGroupChangeEvent, CheckboxGroupValue } from '@platform-ui-kit/components-library'
-import { WppCheckbox, WppTypography, WppCheckboxGroup, WppButton } from '@platform-ui-kit/components-library-vue'
-import type { WppCheckboxGroupCustomEvent } from '@platform-ui-kit/components-library/src/components'
+import type { CheckboxGroupChangeEvent, CheckboxGroupValue } from '@wppopen/components-library'
+import { WppCheckbox, WppTypography, WppCheckboxGroup, WppButton } from '@wppopen/components-library-vue'
+import type { WppCheckboxGroupCustomEvent } from '@wppopen/components-library/src/components'
 import { ref } from 'vue'
 
 const checkboxes = ref([

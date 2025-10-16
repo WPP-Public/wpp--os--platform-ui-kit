@@ -7,7 +7,7 @@ import {
   WppToastContainer,
   WppButton,
   WppToast,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 
 const childRef = ref(null);
 const toastRef = ref<any>(null);

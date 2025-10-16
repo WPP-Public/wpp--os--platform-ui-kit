@@ -10,7 +10,7 @@ import {
   WppTableRow,
   WppAvatar,
   WppPagination,
-} from '@platform-ui-kit/components-library-vue'
+} from '@wppopen/components-library-vue'
 
 import { dataList } from './consts'
 

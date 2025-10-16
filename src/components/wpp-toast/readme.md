@@ -36,7 +36,7 @@ export class ToastExample {
 
 ```tsx
 import React, { useRef, useEffect, useState } from 'react'
-import { WppToastContainer, WppButton } from '@platform-ui-kit/components-library-react'
+import { WppToastContainer, WppButton } from '@wppopen/components-library-react'
 
 export const useToast = () => {
   const [toastRef, setToastRef] = useState<HTMLWppToastContainerElement | null>()
@@ -102,7 +102,7 @@ import {
   WppToastContainer,
   WppButton,
   WppToast,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 
 const childRef = ref(null);
 const toastRef = ref<any>(null);

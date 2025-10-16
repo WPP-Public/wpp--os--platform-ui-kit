@@ -68,8 +68,8 @@ export class CardGroupExample {
 
 ```tsx
 import React from 'react'
-import { WppCard, WppCardGroup, WppTypography } from '@platform-ui-kit/components-library-react'
-import { CardGroupChangeEventDetail } from '@platform-ui-kit/components-library'
+import { WppCard, WppCardGroup, WppTypography } from '@wppopen/components-library-react'
+import { CardGroupChangeEventDetail } from '@wppopen/components-library'
 
 export const CardGroupExample = () => {
   const handleMultipleCardGroupChange = (event: CustomEvent<CardGroupChangeEventDetail>) => {
@@ -129,7 +129,7 @@ import {
   WppCard,
   WppCardGroup,
   WppTypography,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 
 const isToShowBanner = ref(true)
 

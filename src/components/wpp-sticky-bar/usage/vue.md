@@ -1,6 +1,6 @@
 ```vue
 <script setup lang="ts">
-import { WppStickyBar, WppTypography } from '@platform-ui-kit/components-library-vue'
+import { WppStickyBar, WppTypography } from '@wppopen/components-library-vue'
 import { btns_list_1, tabs_list_1 } from './consts'
 
 const onClickBackIcon = () => {

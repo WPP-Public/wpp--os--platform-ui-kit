@@ -33,7 +33,7 @@ export class SliderExample {
 
 ```tsx
 import React, { useState } from 'react'
-import { WppSlider, WppTypography } from '@platform-ui-kit/components-library-react'
+import { WppSlider, WppTypography } from '@wppopen/components-library-react'
 
 import styles from './SlidersVC.module.css'
 
@@ -96,7 +96,7 @@ import { ref } from "vue";
 import {
   WppSlider,
   WppTypography,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 
 const initiallySingleValue = 1;
 const initiallyRangeValue = [3, 5];

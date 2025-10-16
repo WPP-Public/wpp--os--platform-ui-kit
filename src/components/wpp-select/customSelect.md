@@ -15,8 +15,8 @@ import {
   WppSelect,
   WppTree,
   WppActionButton,
-} from '@platform-ui-kit/components-library-react'
-import { TreeChangeEventDetail, TreeType } from '@platform-ui-kit/components-library'
+} from '@wppopen/components-library-react'
+import { TreeChangeEventDetail, TreeType } from '@wppopen/components-library'
 import { dataWithLongNames } from '../../vc/Tree/config'
 
 const TreeInCustomSelect = () => {
@@ -402,8 +402,8 @@ export const dataWithLongNames: TreeType[] = [
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
-import { WppTypography, WppPopover, WppSelect, WppActionButton, WppTree } from '@platform-ui-kit/components-library-vue'
-import type { TreeType } from '@platform-ui-kit/components-library'
+import { WppTypography, WppPopover, WppSelect, WppActionButton, WppTree } from '@wppopen/components-library-vue'
+import type { TreeType } from '@wppopen/components-library'
 import { dataWithLongNames } from './consts'
 
 const treeRef = ref<HTMLWppTreeElement | null>(null)
@@ -503,7 +503,7 @@ import {
   ChangeDetectorRef,
 } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import type { TreeType } from '@platform-ui-kit/components-library'
+import type { TreeType } from '@wppopen/components-library'
 import { dataWithLongNames } from './consts'
 
 @Component({

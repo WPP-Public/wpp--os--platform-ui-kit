@@ -32,8 +32,8 @@ export class CounterExample {
 ```tsx
 import React, { useState } from 'react'
 
-import { WppCounter, WppTypography } from '@platform-ui-kit/components-library-react'
-import { CounterChangeEventDetail } from '@platform-ui-kit/components-library'
+import { WppCounter, WppTypography } from '@wppopen/components-library-react'
+import { CounterChangeEventDetail } from '@wppopen/components-library'
 
 export const CounterExample = () => {
   const [value, setValue] = useState(5)
@@ -68,7 +68,7 @@ import { ref } from "vue";
 import {
   WppCounter,
   WppTypography,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 
 const initiallyValue = 1;
 

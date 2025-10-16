@@ -51,7 +51,7 @@ export class FullScreenModalExample {
 ### React
 
 ```tsx
-import { WppFullScreenModal, WppButton } from '@platform-ui-kit/components-library-react'
+import { WppFullScreenModal, WppButton } from '@wppopen/components-library-react'
 
 export const FullScreenModalExample = () => {
   const [isFullScreenModalOpen, setFullScreenModalOpen] = useState(false)
@@ -83,7 +83,7 @@ export const FullScreenModalExample = () => {
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { WppButton, WppFullScreenModal } from '@platform-ui-kit/components-library-vue'
+import { WppButton, WppFullScreenModal } from '@wppopen/components-library-vue'
 
 const isFullScreenModalOpen = ref(false)
 

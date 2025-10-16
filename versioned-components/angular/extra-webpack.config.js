@@ -7,7 +7,7 @@ module.exports = {
       {
         test: /\.ts/,
         loader:
-          '@platform-ui-kit/components-library/dist/platform-ui-kit/versioned-components/angular/versioned-components-aot-loader',
+          '@wppopen/components-library/dist/platform-ui-kit/versioned-components/angular/versioned-components-aot-loader',
         enforce: 'post',
       },
       // jit compiler

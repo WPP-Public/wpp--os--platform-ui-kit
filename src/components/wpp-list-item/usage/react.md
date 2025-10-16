@@ -6,8 +6,8 @@ import {
   WppIconChevron,
   WppIconMail,
   WppListItem,
-} from '@platform-ui-kit/components-library-react'
-import { ListItemChangeEventDetail } from '@platform-ui-kit/components-library'
+} from '@wppopen/components-library-react'
+import { ListItemChangeEventDetail } from '@wppopen/components-library'
 
 export const ListItemsExample = () => {
   const handleListItemClick = (event: CustomEvent<ListItemChangeEventDetail>) => {

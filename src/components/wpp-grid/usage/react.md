@@ -1,5 +1,5 @@
 ```tsx
-import { WppGrid } from '@platform-ui-kit/components-library-react'
+import { WppGrid } from '@wppopen/components-library-react'
 ​
 export const GridExample = () => (
    <WppGrid container rowSpacing={4}>

@@ -1,8 +1,8 @@
 ```vue
 <script setup lang="ts">
-import type { RadioGroupChangeEvent, RadioGroupValue } from '@platform-ui-kit/components-library'
-import { WppButton, WppRadio, WppRadioGroup, WppTypography } from '@platform-ui-kit/components-library-vue'
-import type { WppRadioGroupCustomEvent } from '@platform-ui-kit/components-library/dist/types/components'
+import type { RadioGroupChangeEvent, RadioGroupValue } from '@wppopen/components-library'
+import { WppButton, WppRadio, WppRadioGroup, WppTypography } from '@wppopen/components-library-vue'
+import type { WppRadioGroupCustomEvent } from '@wppopen/components-library/dist/types/components'
 import { ref } from 'vue'
 
 const radioGroupValue = ref<RadioGroupValue>('option-1')

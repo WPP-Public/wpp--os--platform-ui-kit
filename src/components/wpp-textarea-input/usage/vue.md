@@ -1,6 +1,6 @@
 ```vue
 <script setup>
-import { WppTextareaInput } from "@platform-ui-kit/components-library-vue";
+import { WppTextareaInput } from "@wppopen/components-library-vue";
 </script>
 
 <template>

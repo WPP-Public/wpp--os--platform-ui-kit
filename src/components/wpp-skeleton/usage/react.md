@@ -1,5 +1,5 @@
 ```tsx
-import { WppSkeleton } from '@platform-ui-kit/components-library-react'
+import { WppSkeleton } from '@wppopen/components-library-react'
 
 export const SkeletonExample = () => (
   <>

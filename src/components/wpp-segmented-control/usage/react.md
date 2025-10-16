@@ -1,5 +1,5 @@
 ```tsx
-import { WppIconHome, WppIconBoard, WppSegmentedControl, WppSegmentedControlItem } from '@platform-ui-kit/components-library-react'
+import { WppIconHome, WppIconBoard, WppSegmentedControl, WppSegmentedControlItem } from '@wppopen/components-library-react'
 
 export const SegmentedControlExample = () => (
   <>

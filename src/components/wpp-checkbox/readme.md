@@ -44,7 +44,7 @@ interface CheckboxChangeEventDetail {
 ### React
 
 ```tsx
-import { WppCheckbox } from '@platform-ui-kit/components-library-react'
+import { WppCheckbox } from '@wppopen/components-library-react'
 
 export const CheckboxExample = () => (
   <>
@@ -79,7 +79,7 @@ export const CheckboxExample = () => (
 <script setup lang="ts">
 import { ref } from "vue";
 
-import { WppCheckbox } from '@platform-ui-kit/components-library-vue'
+import { WppCheckbox } from '@wppopen/components-library-vue'
 
 const isChecked = ref(false)
 

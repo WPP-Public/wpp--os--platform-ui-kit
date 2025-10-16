@@ -52,7 +52,7 @@
 ### React
 
 ```tsx
-import { WppSkeleton } from '@platform-ui-kit/components-library-react'
+import { WppSkeleton } from '@wppopen/components-library-react'
 
 export const SkeletonExample = () => (
   <>
@@ -111,7 +111,7 @@ export const SkeletonExample = () => (
 ```vue
 
 <script setup lang="ts">
-import { WppSkeleton } from '@platform-ui-kit/components-library-vue'
+import { WppSkeleton } from '@wppopen/components-library-vue'
 </script>
 
 <template>

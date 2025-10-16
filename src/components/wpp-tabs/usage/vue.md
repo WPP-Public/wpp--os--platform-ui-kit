@@ -3,7 +3,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 
-import { WppTabs, WppTab, WppTypography } from "@platform-ui-kit/components-library-vue"
+import { WppTabs, WppTab, WppTypography } from "@wppopen/components-library-vue"
 
 const currentTab = ref("cars")
 

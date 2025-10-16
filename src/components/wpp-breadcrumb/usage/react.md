@@ -1,5 +1,5 @@
 ```tsx
-import { WppBreadcrumb } from '@platform-ui-kit/components-library-react';
+import { WppBreadcrumb } from '@wppopen/components-library-react';
 import { useNavigate } from 'react-router-dom';
 
 const items = [

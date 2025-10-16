@@ -1,7 +1,7 @@
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { WppColorPicker, WppTypography } from '@platform-ui-kit/components-library-vue'
+import { WppColorPicker, WppTypography } from '@wppopen/components-library-vue'
 
 const SAVED_COLORS = ['#7AB6FF', '#45E4B6', '#ECC707', '#FF9E66', '#FF7A91']
 const color = ref<string | undefined>(undefined)

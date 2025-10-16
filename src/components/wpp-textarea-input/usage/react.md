@@ -1,5 +1,5 @@
 ```tsx
-import { WppTextareaInput } from '@platform-ui-kit/components-library-react'
+import { WppTextareaInput } from '@wppopen/components-library-react'
 
 export const TextareaInputExample = () => (
   <WppTextareaInput

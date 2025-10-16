@@ -42,7 +42,7 @@ export const config: Config = {
   outputTargets: [
     // @ts-ignore
     reactOutputTarget({
-      componentCorePackage: '@platform-ui-kit/components-library',
+      componentCorePackage: '@wppopen/components-library',
       proxiesFile: '../components-library-react/src/index.ts',
       includeImportCustomElements: true,
       includePolyfills: false,
@@ -50,7 +50,7 @@ export const config: Config = {
     }),
     // @ts-ignore
     angularOutputTarget({
-      componentCorePackage: '@platform-ui-kit/components-library',
+      componentCorePackage: '@wppopen/components-library',
       outputType: 'standalone',
       directivesProxyFile: '../components-library-angular/src/directives/proxies.ts',
       directivesArrayFile: '../components-library-angular/src/directives/proxies-list.ts',
@@ -58,7 +58,7 @@ export const config: Config = {
     }),
     // @ts-ignore
     vueOutputTarget({
-      componentCorePackage: '@platform-ui-kit/components-library',
+      componentCorePackage: '@wppopen/components-library',
       proxiesFile: '../components-library-vue/src/components.ts',
       includeImportCustomElements: true,
     }),

@@ -1,5 +1,5 @@
 ```tsx
-import { WppFloatingButton, WppIconDirections } from '@platform-ui-kit/components-library-react'
+import { WppFloatingButton, WppIconDirections } from '@wppopen/components-library-react'
 
 export const FloatingButtonExample = () => (
   <>

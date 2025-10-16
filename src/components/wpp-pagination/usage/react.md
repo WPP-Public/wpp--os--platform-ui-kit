@@ -7,8 +7,8 @@ import {
   WppTableRow,
   WppAvatar,
   WppPagination,
-} from '@platform-ui-kit/components-library-react'
-import { PaginationChangeEventDetail } from '@platform-ui-kit/components-library'
+} from '@wppopen/components-library-react'
+import { PaginationChangeEventDetail } from '@wppopen/components-library'
 
 import { dataList } from './consts'
 

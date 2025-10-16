@@ -32,7 +32,7 @@
 ### React
 
 ```tsx
-import { WppProgressIndicator } from '@platform-ui-kit/components-library-react'
+import { WppProgressIndicator } from '@wppopen/components-library-react'
 
 export const ProgressIndicatorExample = () => (
   <>
@@ -60,7 +60,7 @@ export const ProgressIndicatorExample = () => (
 ```vue
 
 <script setup lang="ts">
-import { WppProgressIndicator } from '@platform-ui-kit/components-library-vue'
+import { WppProgressIndicator } from '@wppopen/components-library-vue'
 </script>
 
 <template>

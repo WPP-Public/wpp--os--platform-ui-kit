@@ -5,7 +5,7 @@ import { ref } from "vue";
 import {
   WppSlider,
   WppTypography,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 
 const initiallySingleValue = 1;
 const initiallyRangeValue = [3, 5];

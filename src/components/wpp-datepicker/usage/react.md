@@ -1,7 +1,7 @@
 ```tsx
 import React from 'react'
 
-import { WppDatepicker } from '@platform-ui-kit/components-library-react'
+import { WppDatepicker } from '@wppopen/components-library-react'
 
 export const DatepickerExample = () => {
   return (

@@ -26,7 +26,7 @@ Create a call to take actions and make choices with a single tap.
 ### React
 
 ```tsx
-import { WppIconButton, WppIconMenuMore } from '@platform-ui-kit/components-library-react'
+import { WppIconButton, WppIconMenuMore } from '@wppopen/components-library-react'
 
 export const IconButtonExample = () => (
   <>
@@ -50,7 +50,7 @@ export const IconButtonExample = () => (
 ```vue
 
 <script setup lang="ts">
-import { WppIconButton, WppIconMenuMore } from '@platform-ui-kit/components-library-vue'
+import { WppIconButton, WppIconMenuMore } from '@wppopen/components-library-vue'
 </script>
 
 <template>

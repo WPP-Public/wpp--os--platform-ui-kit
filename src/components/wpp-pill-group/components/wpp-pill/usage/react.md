@@ -1,5 +1,5 @@
 ```tsx
-import { WppPill } from '@platform-ui-kit/components-library-react'
+import { WppPill } from '@wppopen/components-library-react'
 
 export const Example = () => (
   <>

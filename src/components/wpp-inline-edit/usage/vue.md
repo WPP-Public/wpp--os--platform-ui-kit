@@ -1,6 +1,6 @@
 ```vue
 <script setup lang="ts">
-import { WppInlineEdit, WppInput, WppTextareaInput } from '@platform-ui-kit/components-library-vue'
+import { WppInlineEdit, WppInput, WppTextareaInput } from '@wppopen/components-library-vue'
 import { ref } from 'vue'
 
 const inputMode = ref('read')

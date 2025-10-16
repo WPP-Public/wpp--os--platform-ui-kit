@@ -116,7 +116,7 @@ export class SideModalExample {
 
 ```tsx
 import { useState } from 'react'
-import { WppSideModal, WppButton } from '@platform-ui-kit/components-library-react'
+import { WppSideModal, WppButton } from '@wppopen/components-library-react'
 
 export const SideModalExample = () => {
   const [isModalOpen, setModalStatus] = useState(false)
@@ -194,7 +194,7 @@ export const SideModalExample = () => {
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { WppButton, WppSideModal } from '@platform-ui-kit/components-library-vue'
+import { WppButton, WppSideModal } from '@wppopen/components-library-vue'
 
 const isSideModalOpen = ref(false)
 

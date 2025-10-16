@@ -37,7 +37,7 @@ export class AvatarExample {
 ### React
 
 ```tsx
-import { WppAvatar } from '@platform-ui-kit/components-library-react'
+import { WppAvatar } from '@wppopen/components-library-react'
 
 export const AvatarExample = () => (
   <WppAvatar
@@ -55,7 +55,7 @@ export const AvatarExample = () => (
 ```vue
 
 <script setup lang="ts">
-import { WppAvatar } from '@platform-ui-kit/components-library-vue'
+import { WppAvatar } from '@wppopen/components-library-vue'
 </script>
 
 <template>

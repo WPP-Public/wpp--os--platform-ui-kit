@@ -105,7 +105,7 @@ export class OverlayExamplePage {
 
 ```tsx
 import React, { useState } from 'react'
-import { WppOverlay, WppTypography, WppButton } from '@platform-ui-kit/components-library-react'
+import { WppOverlay, WppTypography, WppButton } from '@wppopen/components-library-react'
 import styles from './Overlay.module.scss'
 
 const OverlayExample = () => {
@@ -202,7 +202,7 @@ const OverlayExample = () => {
 
 <script setup>
 import { ref } from 'vue'
-import { WppOverlay, WppTypography, WppButton } from '@platform-ui-kit/components-library-vue'
+import { WppOverlay, WppTypography, WppButton } from '@wppopen/components-library-vue'
 
 const isVisible = ref(true)
 

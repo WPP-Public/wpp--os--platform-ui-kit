@@ -1,5 +1,5 @@
 ```tsx
-import "@platform-ui-kit/components-library/dist/collection/grid.css";
+import "@wppopen/components-library/dist/collection/grid.css";
 
 const list = [...new Array(24)]
 

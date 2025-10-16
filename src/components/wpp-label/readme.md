@@ -26,7 +26,7 @@ The label binds its text to another element. Usage of this component you can see
 ### React
 
 ```tsx
-import { WppLabel } from '@platform-ui-kit/components-library-react'
+import { WppLabel } from '@wppopen/components-library-react'
 
 export const LabelExample = () => (
     <>
@@ -50,7 +50,7 @@ export const LabelExample = () => (
 ```vue
 
 <script setup lang="ts">
-import { WppLabel } from '@platform-ui-kit/components-library-vue'
+import { WppLabel } from '@wppopen/components-library-vue'
 </script>
 
 <template>

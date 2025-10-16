@@ -1,6 +1,6 @@
 ```tsx
 import { useState } from 'react'
-import { WppSideModal, WppButton } from '@platform-ui-kit/components-library-react'
+import { WppSideModal, WppButton } from '@wppopen/components-library-react'
 
 export const SideModalExample = () => {
   const [isModalOpen, setModalStatus] = useState(false)

@@ -18,7 +18,7 @@
 ### React
 
 ```tsx
-import {  WppDivider } from '@platform-ui-kit/components-library-react'
+import {  WppDivider } from '@wppopen/components-library-react'
 
 export const DividerExample = () => (
   <WppDivider></WppDivider>
@@ -34,7 +34,7 @@ export const VerticalDividerExample = () => (
 
 ```vue
 <script setup lang="ts">
-import { WppDivider } from '@platform-ui-kit/components-library-vue'
+import { WppDivider } from '@wppopen/components-library-vue'
 </script>
 
 <template>

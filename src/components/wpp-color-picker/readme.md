@@ -11,7 +11,7 @@
 
 ```ts
 import { ChangeDetectionStrategy, Component } from '@angular/core'
-import { ChangeColorEventDetails, Theme } from '@platform-ui-kit/components-library'
+import { ChangeColorEventDetails, Theme } from '@wppopen/components-library'
 
 @Component({
   selector: 'app-color-picker-example',
@@ -75,8 +75,8 @@ export class ColorPickerExamplePage {
 
 ```tsx
 import React, { useState } from 'react'
-import { WppColorPicker, WppTypography } from '@platform-ui-kit/components-library-react'
-import { ChangeColorEventDetails, Theme } from '@platform-ui-kit/components-library/components'
+import { WppColorPicker, WppTypography } from '@wppopen/components-library-react'
+import { ChangeColorEventDetails, Theme } from '@wppopen/components-library/components'
 
 const SAVED_COLORS = ['#7AB6FF', '#45E4B6', '#ECC707', '#FF9E66', '#FF7A91']
 
@@ -134,7 +134,7 @@ const ColorPicker = () => {
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { WppColorPicker, WppTypography } from '@platform-ui-kit/components-library-vue'
+import { WppColorPicker, WppTypography } from '@wppopen/components-library-vue'
 
 const SAVED_COLORS = ['#7AB6FF', '#45E4B6', '#ECC707', '#FF9E66', '#FF7A91']
 const color = ref<string | undefined>(undefined)

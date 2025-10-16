@@ -68,7 +68,7 @@ import {
   WppIconFavorites,
   WppIconCalendar,
   WppIconMail,
-} from '@platform-ui-kit/components-library-react';
+} from '@wppopen/components-library-react';
 
 export const NavSidebarExample = () => {
   const [activePath, setActivePath] = useState('/dashboard');
@@ -124,7 +124,7 @@ import {
   WppIconFavorites,
   WppIconCalendar,
   WppIconMail,
-} from '@platform-ui-kit/components-library-vue';
+} from '@wppopen/components-library-vue';
 
 const activePath = ref('/dashboard');
 

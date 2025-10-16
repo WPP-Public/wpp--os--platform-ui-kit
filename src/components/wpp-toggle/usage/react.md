@@ -1,5 +1,5 @@
 ```tsx
-import { WppToggle } from '@platform-ui-kit/components-library-react'
+import { WppToggle } from '@wppopen/components-library-react'
 
 export const ToggleExample = () => {
   const toggleLabelConfig={

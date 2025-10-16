@@ -5,7 +5,7 @@ import {
   WppActionButton,
   WppIconMore,
   WppTypography
-} from '@platform-ui-kit/components-library-vue'
+} from '@wppopen/components-library-vue'
 </script>
 
 <template>

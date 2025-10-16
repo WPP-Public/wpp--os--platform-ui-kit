@@ -1,5 +1,5 @@
 ```tsx
-import { WppEmpty404, WppEmptyContent } from '@platform-ui-kit/components-library-react'
+import { WppEmpty404, WppEmptyContent } from '@wppopen/components-library-react'
 
 export const WppEmptyExample = () => (
   <>

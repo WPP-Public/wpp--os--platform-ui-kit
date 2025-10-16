@@ -7,7 +7,7 @@ import {
   WppButton,
   WppIconCross,
   WppIconPlus,
-} from '@platform-ui-kit/components-library-vue'
+} from '@wppopen/components-library-vue'
 </script>
 
 <template>

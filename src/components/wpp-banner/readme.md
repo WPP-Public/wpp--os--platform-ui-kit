@@ -36,7 +36,7 @@ export class BannerExample {
 
 ```tsx
 import React, { useState } from 'react'
-import { WppBanner } from '@platform-ui-kit/components-library-react'
+import { WppBanner } from '@wppopen/components-library-react'
 
 export const BannerExample = () => {
   const [isToShowBanner, setIsToShowBanner] = useState(true)
@@ -63,7 +63,7 @@ export const BannerExample = () => {
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { WppBanner } from '@platform-ui-kit/components-library-vue'
+import { WppBanner } from '@wppopen/components-library-vue'
 
 const isToShowBanner = ref(true)
 

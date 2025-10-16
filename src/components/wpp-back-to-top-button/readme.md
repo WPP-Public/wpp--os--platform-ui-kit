@@ -42,7 +42,7 @@ export class BackToTopButtonExamplePage {
 
 ```tsx
 import { useState, useEffect } from 'react'
-import { WppBackToTopButton } from '@platform-ui-kit/components-library-react'
+import { WppBackToTopButton } from '@wppopen/components-library-react'
 import { debounce } from 'utils'
 
 export const BackToTopButton = () => {

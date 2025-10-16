@@ -462,8 +462,8 @@ $pageHeight: 70vh;
 
 ```tsx
 import { useState } from 'react'
-import { WppStepper, WppStep, WppButton, WppCheckbox, WppRadio } from '@platform-ui-kit/components-library-react'
-import { StepChangeEventDetail } from '@platform-ui-kit/components-library'
+import { WppStepper, WppStep, WppButton, WppCheckbox, WppRadio } from '@wppopen/components-library-react'
+import { StepChangeEventDetail } from '@wppopen/components-library'
 
 import styles from './CommonStepperVC.module.scss'
 
@@ -689,8 +689,8 @@ export const StepperExample = () => {
 
 ```tsx
 import { useState } from 'react'
-import { WppStepper, WppStep, WppButton, WppCheckbox, WppRadio } from '@platform-ui-kit/components-library-react'
-import { StepChangeEventDetail } from '@platform-ui-kit/components-library'
+import { WppStepper, WppStep, WppButton, WppCheckbox, WppRadio } from '@wppopen/components-library-react'
+import { StepChangeEventDetail } from '@wppopen/components-library'
 
 import styles from './CommonStepperVC.module.scss'
 
@@ -949,8 +949,8 @@ export const DecimalStepperExample = () => {
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { WppButton, WppCheckbox, WppStepper, WppStep, WppRadio } from '@platform-ui-kit/components-library-vue'
-import type { StepChangeEventDetail } from '@platform-ui-kit/components-library/src'
+import { WppButton, WppCheckbox, WppStepper, WppStep, WppRadio } from '@wppopen/components-library-vue'
+import type { StepChangeEventDetail } from '@wppopen/components-library/src'
 
 const LAST_PAGE = 7
 const FIRST_PAGE = 1
@@ -1144,8 +1144,8 @@ const handleStepClick = (event: CustomEvent<StepChangeEventDetail>) => {
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { WppButton, WppCheckbox, WppStepper, WppStep, WppRadio } from '@platform-ui-kit/components-library-vue'
-import type { StepChangeEventDetail } from '@platform-ui-kit/components-library/src'
+import { WppButton, WppCheckbox, WppStepper, WppStep, WppRadio } from '@wppopen/components-library-vue'
+import type { StepChangeEventDetail } from '@wppopen/components-library/src'
 
 const LAST_PAGE = 4
 const FIRST_PAGE = 1

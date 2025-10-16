@@ -1,7 +1,7 @@
 ```tsx
 import { useState } from 'react'
-import { WppStepper, WppStep, WppButton, WppCheckbox, WppRadio } from '@platform-ui-kit/components-library-react'
-import { StepChangeEventDetail } from '@platform-ui-kit/components-library'
+import { WppStepper, WppStep, WppButton, WppCheckbox, WppRadio } from '@wppopen/components-library-react'
+import { StepChangeEventDetail } from '@wppopen/components-library'
 
 import styles from './CommonStepperVC.module.scss'
 
@@ -227,8 +227,8 @@ export const StepperExample = () => {
 
 ```tsx
 import { useState } from 'react'
-import { WppStepper, WppStep, WppButton, WppCheckbox, WppRadio } from '@platform-ui-kit/components-library-react'
-import { StepChangeEventDetail } from '@platform-ui-kit/components-library'
+import { WppStepper, WppStep, WppButton, WppCheckbox, WppRadio } from '@wppopen/components-library-react'
+import { StepChangeEventDetail } from '@wppopen/components-library'
 
 import styles from './CommonStepperVC.module.scss'
 

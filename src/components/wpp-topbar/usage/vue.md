@@ -7,7 +7,7 @@ import {
   WppTopbar,
   WppButton,
   WppTypography,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 
 const initNavigation = [
   {

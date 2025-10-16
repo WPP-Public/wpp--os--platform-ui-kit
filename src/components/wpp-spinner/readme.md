@@ -18,7 +18,7 @@ Loading spinners can be used when retrieving data or performing slow computation
 ### React
 
 ```tsx
-import { WppButton } from '@platform-ui-kit/components-library-react'
+import { WppButton } from '@wppopen/components-library-react'
 
 export const SpinnerExample = () => (
   <>
@@ -34,7 +34,7 @@ export const SpinnerExample = () => (
 ```vue
 
 <script setup lang="ts">
-import { WppSpinner } from "@platform-ui-kit/components-library-vue"
+import { WppSpinner } from "@wppopen/components-library-vue"
 </script>
 
 <template>

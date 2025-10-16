@@ -30,7 +30,7 @@ export class TagExample {
 ### React
 
 ```tsx
-import { WppTag } from '@platform-ui-kit/components-library-react'
+import { WppTag } from '@wppopen/components-library-react'
 
 export const TagExample = () => (
   <WppTag
@@ -46,7 +46,7 @@ export const TagExample = () => (
 ```vue
 
 <script setup lang="ts">
-import { WppTag } from '@platform-ui-kit/components-library-vue'
+import { WppTag } from '@wppopen/components-library-vue'
 </script>
 
 <template>

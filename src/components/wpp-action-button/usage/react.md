@@ -1,5 +1,5 @@
 ```tsx
-import { WppActionButton, WppIconAddCircle } from '@platform-ui-kit/components-library-react'
+import { WppActionButton, WppIconAddCircle } from '@wppopen/components-library-react'
 
 export const ActionButtonExample = () => (
   <>

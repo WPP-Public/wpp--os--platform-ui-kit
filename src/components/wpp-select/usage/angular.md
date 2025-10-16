@@ -39,7 +39,7 @@
 
 ```tsx
 import { ChangeDetectionStrategy, Component } from '@angular/core'
-import { ListItemInterface } from '@platform-ui-kit/components-library'
+import { ListItemInterface } from '@wppopen/components-library'
 
 const SAMPLE_LIST: ListItemInterface[] = [
   {
@@ -142,7 +142,7 @@ export class SingleSelectPage {
 
 ```tsx
 import { ChangeDetectionStrategy, Component } from '@angular/core'
-import { ListItemInterface } from '@platform-ui-kit/components-library'
+import { ListItemInterface } from '@wppopen/components-library'
 
 const SAMPLE_LIST: ListItemInterface[] = [
   {

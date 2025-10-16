@@ -10,7 +10,7 @@ by default feel free to add 'open: true' property in the data to the desired ite
 <script setup lang="ts">
 import { ref } from "vue"
 
-import { WppTree } from "@platform-ui-kit/components-library-vue"}
+import { WppTree } from "@wppopen/components-library-vue"}
 
 const data = [
   {
@@ -153,7 +153,7 @@ const handleActionClick = (event: CustomEvent) => {
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { WppTree } from '@platform-ui-kit/components-library-vue'
+import { WppTree } from '@wppopen/components-library-vue'
 
 const treeData = ref([
   {

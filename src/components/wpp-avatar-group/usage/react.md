@@ -1,5 +1,5 @@
 ```tsx
-import { WppAvatarGroup } from '@platform-ui-kit/components-library-react'
+import { WppAvatarGroup } from '@wppopen/components-library-react'
 
 export const AvatarGroupExample = () => (
   <WppAvatarGroup

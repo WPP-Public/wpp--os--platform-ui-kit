@@ -1,5 +1,5 @@
 ```tsx
-import { WppCheckbox } from '@platform-ui-kit/components-library-react'
+import { WppCheckbox } from '@wppopen/components-library-react'
 
 export const CheckboxExample = () => (
   <>

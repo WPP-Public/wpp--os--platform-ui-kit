@@ -8,7 +8,7 @@
 
 #### [AG Grid Community](https://www.ag-grid.com/archive/28.0.0/javascript-data-grid/getting-started/#getting-started-with-ag-grid-community) version provided for free covers the main needs of the Table components.
 
-#### Corresponding styles for the Table can be found here: `@platform-ui-kit/components-library/dist/collection/ag-theme-wpp.css`
+#### Corresponding styles for the Table can be found here: `@wppopen/components-library/dist/collection/ag-theme-wpp.css`
 
 #### ./components/cell-renderer.ts
 ```tsx
@@ -238,7 +238,7 @@ export class ActionsRenderer implements ICellRendererAngularComp {
 #### styles.scss
 ```scss
 @import 'ag-grid-community/styles/ag-grid.css';
-@import '@platform-ui-kit/components-library/dist/platform-ui-kit/ag-theme-wpp';
+@import '@wppopen/components-library/dist/platform-ui-kit/ag-theme-wpp';
 
 .wpp-menu-context-wrapper > :where([hidden]) {
   display: block;
@@ -248,7 +248,7 @@ export class ActionsRenderer implements ICellRendererAngularComp {
 #### ./component/HeaderCell.tsx
 ```tsx
 import React, { FunctionComponent } from 'react'
-import { WppTypography, WppIconTableSortTriangle } from '@platform-ui-kit/components-library-react'
+import { WppTypography, WppIconTableSortTriangle } from '@wppopen/components-library-react'
 import { IHeaderParams } from 'ag-grid-community'
 
 const HeaderCell: FunctionComponent<IHeaderParams> = props => {
@@ -288,7 +288,7 @@ export default HeaderCell
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import { WppTypography } from "@platform-ui-kit/components-library-vue";
+import { WppTypography } from "@wppopen/components-library-vue";
 import { capitalize } from "@/utils";
 
 export default defineComponent({
@@ -352,7 +352,7 @@ import { defineComponent } from "vue";
 import {
   WppTypography,
   WppIconSort,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 
 export default defineComponent({
   components: {
@@ -403,7 +403,7 @@ export default defineComponent({
 ```vue
 <script lang="ts">
 import { defineComponent } from "vue";
-import { WppSpinner } from "@platform-ui-kit/components-library-vue";
+import { WppSpinner } from "@wppopen/components-library-vue";
 
 export default defineComponent({
   components: {
@@ -429,7 +429,7 @@ import {
   WppListItem,
   WppActionButton,
   WppIconMore,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 
 export default defineComponent({
   components: {
@@ -492,7 +492,7 @@ export default defineComponent({
 ```vue
 <script lang="ts">
 import { defineComponent } from "vue";
-import { WppAvatarGroup } from "@platform-ui-kit/components-library-vue";
+import { WppAvatarGroup } from "@wppopen/components-library-vue";
 
 export default defineComponent({
   components: {

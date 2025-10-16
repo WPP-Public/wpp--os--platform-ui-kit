@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import { WppFileUpload } from "@platform-ui-kit/components-library-vue";
+import { WppFileUpload } from "@wppopen/components-library-vue";
 
 const hasError = ref(false);
 const errorMessage = ref("");

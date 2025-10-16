@@ -1,6 +1,6 @@
 ```tsx
 import React, { useState } from 'react'
-import { WppSlider, WppTypography } from '@platform-ui-kit/components-library-react'
+import { WppSlider, WppTypography } from '@wppopen/components-library-react'
 
 import styles from './SlidersVC.module.css'
 

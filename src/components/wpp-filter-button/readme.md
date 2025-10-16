@@ -21,7 +21,7 @@ Create a custom filter button.
 ### React
 
 ```tsx
-import { WppFilterButton } from '@platform-ui-kit/components-library-react'
+import { WppFilterButton } from '@wppopen/components-library-react'
 
 export const FilterButtonExample = () => (
   <>
@@ -38,7 +38,7 @@ export const FilterButtonExample = () => (
 ```vue
 
 <script setup lang="ts">
-import { WppFilterButton } from '@platform-ui-kit/components-library-vue'
+import { WppFilterButton } from '@wppopen/components-library-vue'
 </script>
 
 <template>

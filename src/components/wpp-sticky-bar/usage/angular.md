@@ -1,6 +1,6 @@
 ```ts
 import { ChangeDetectionStrategy, Component } from '@angular/core'
-import { StickyBarButtonItem, StickyBarTabItem } from '@platform-ui-kit/components-library'
+import { StickyBarButtonItem, StickyBarTabItem } from '@wppopen/components-library'
 import { btns_list_1, tabs_list_1 } from './consts'
 
 @Component({

@@ -20,7 +20,7 @@ Create a custom filter button.
 ### React
 
 ```tsx
-import { WppSortButton } from '@platform-ui-kit/components-library-react'
+import { WppSortButton } from '@wppopen/components-library-react'
 
 export const SortButtonExample = () => (
   <>
@@ -36,7 +36,7 @@ export const SortButtonExample = () => (
 ```vue
 
 <script setup lang="ts">
-import { WppSortButton } from '@platform-ui-kit/components-library-vue'
+import { WppSortButton } from '@wppopen/components-library-vue'
 </script>
 
 <template>

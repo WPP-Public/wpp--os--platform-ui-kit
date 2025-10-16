@@ -3,7 +3,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 
-import { WppBreadcrumb } from '@platform-ui-kit/components-library-vue';
+import { WppBreadcrumb } from '@wppopen/components-library-vue';
 
 const items = [
   {

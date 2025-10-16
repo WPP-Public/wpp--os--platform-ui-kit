@@ -24,14 +24,14 @@ import {
   WppIconTrash,
   WppIconPlus,
   WppAvatarGroup,
-} from '@platform-ui-kit/components-library-react'
+} from '@wppopen/components-library-react'
 import 'ag-grid-community/styles/ag-grid.css'
-import '@platform-ui-kit/components-library/dist/collection/ag-theme-wpp.css'
+import '@wppopen/components-library/dist/collection/ag-theme-wpp.css'
 import {
   InputChangeEventDetail,
   PaginationChangeEventDetail,
   SelectChangeEventDetail,
-} from '@platform-ui-kit/components-library'
+} from '@wppopen/components-library'
 
 import { capitalize, delay } from '../../../utils'
 
@@ -524,7 +524,7 @@ import {
   PaginationChangeEventDetail,
   InputChangeEventDetail,
   SelectChangeEventDetail,
-} from '@platform-ui-kit/components-library'
+} from '@wppopen/components-library'
 
 import { AvatarRenderer } from './components/avatar-renderer/avatar-renderer'
 import { CustomLoadingOverlay } from './components/custom-loading-overlay'
@@ -737,7 +737,7 @@ import { AgGridVue } from "ag-grid-vue3";
 import type { GridApi, ColDef } from "ag-grid-community";
 
 import "ag-grid-community/styles/ag-grid.css";
-import "@platform-ui-kit/components-library/dist/collection/ag-theme-wpp.css";
+import "@wppopen/components-library/dist/collection/ag-theme-wpp.css";
 
 import {
   WppButton,
@@ -750,7 +750,7 @@ import {
   WppSelect,
   WppListItem,
   WppPagination,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 import { delay } from "@/utils";
 
 import LinkedInCellRenderer from "./components/LinkedInCellRenderer.vue";

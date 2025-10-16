@@ -1,5 +1,5 @@
 ```tsx
-import { WppIconButton, WppIconMenuMore } from '@platform-ui-kit/components-library-react'
+import { WppIconButton, WppIconMenuMore } from '@wppopen/components-library-react'
 
 export const IconButtonExample = () => (
   <>

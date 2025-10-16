@@ -9,7 +9,7 @@ import {
   WppIconFavorites,
   WppIconCalendar,
   WppIconMail,
-} from '@platform-ui-kit/components-library-vue';
+} from '@wppopen/components-library-vue';
 
 const activePath = ref('/dashboard');
 

@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import { WppDatepicker } from "@platform-ui-kit/components-library-vue";
+import { WppDatepicker } from "@wppopen/components-library-vue";
 
 const datepickerValue = ref(null);
 

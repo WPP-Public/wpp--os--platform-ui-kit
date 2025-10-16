@@ -31,7 +31,7 @@ Radio button must be used only in wpp-radio-group.
 ### React
 
 ```tsx
-import { WppRadio } from '@platform-ui-kit/components-library-react'
+import { WppRadio } from '@wppopen/components-library-react'
 
 export const RadioExample = () => (
   <>
@@ -60,7 +60,7 @@ export const RadioExample = () => (
 
 ```vue
 <script setup lang="ts">
-import { WppRadio } from "@platform-ui-kit/components-library-vue";
+import { WppRadio } from "@wppopen/components-library-vue";
 </script>
 
 <template>

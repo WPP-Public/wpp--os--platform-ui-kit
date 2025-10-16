@@ -31,7 +31,7 @@
 **component.ts**
 
 ```tsx
-import { CheckboxGroupValue } from '@platform-ui-kit/components-library'
+import { CheckboxGroupValue } from '@wppopen/components-library'
 
 @Component({…})
 

@@ -14,7 +14,7 @@ import {
   WppSpinner,
   WppTooltip,
   WppTypography,
-} from '@platform-ui-kit/components-library-react'
+} from '@wppopen/components-library-react'
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react'
 
 import 'ag-grid-community/styles/ag-grid.css'
@@ -26,7 +26,7 @@ import HeaderCell from '../components/HeaderCell'
 import { ColDef, GridReadyEvent, IDatasource, IGetRowsParams } from 'ag-grid-community'
 import { TableDataItem } from '../Pagination/PaginationAgGridTable'
 import { dataList } from '../consts'
-import { InputChangeEventDetail } from '@platform-ui-kit/components-library'
+import { InputChangeEventDetail } from '@wppopen/components-library'
 import { capitalize } from '../../../utils'
 
 const URL_EXAMPLE = 'http://url-example:9000/rows'
@@ -446,7 +446,7 @@ export default InfiniteScrollAgGridTable
 import { ChangeDetectionStrategy, Component, ViewChild, ChangeDetectorRef } from '@angular/core'
 import { AgGridAngular } from 'ag-grid-angular'
 import { ColDef, FirstDataRenderedEvent, RowClassRules } from 'ag-grid-community'
-import { InputChangeEventDetail, SelectChangeEventDetail } from '@platform-ui-kit/components-library'
+import { InputChangeEventDetail, SelectChangeEventDetail } from '@wppopen/components-library'
 
 import { AvatarRenderer } from './components/avatar-renderer/avatar-renderer'
 import { CustomLoadingOverlay } from './components/custom-loading-overlay'

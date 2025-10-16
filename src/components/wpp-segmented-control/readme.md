@@ -39,7 +39,7 @@ The segmented control is a linear set of two or more segments, each of which fun
 ### React
 
 ```tsx
-import { WppIconHome, WppIconBoard, WppSegmentedControl, WppSegmentedControlItem } from '@platform-ui-kit/components-library-react'
+import { WppIconHome, WppIconBoard, WppSegmentedControl, WppSegmentedControlItem } from '@wppopen/components-library-react'
 
 export const SegmentedControlExample = () => (
   <>
@@ -77,7 +77,7 @@ import { ref } from "vue";
 import {
   WppSegmentedControl,
   WppSegmentedControlItem,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 
 const currentItem = ref("1");
 

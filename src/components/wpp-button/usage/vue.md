@@ -1,7 +1,7 @@
 ```vue
 
 <script setup lang="ts">
-import { WppButton, WppIconArrow, WppIconPlus } from "@platform-ui-kit/components-library-vue"
+import { WppButton, WppIconArrow, WppIconPlus } from "@wppopen/components-library-vue"
 
 // ...
 </script>

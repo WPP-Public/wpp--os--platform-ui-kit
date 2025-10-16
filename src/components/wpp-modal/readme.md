@@ -51,7 +51,7 @@ export class ModalExample {
 ### React
 
 ```tsx
-import { WppModal, WppButton } from '@platform-ui-kit/components-library-react'
+import { WppModal, WppButton } from '@wppopen/components-library-react'
 
 export const ModalExample = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -83,7 +83,7 @@ export const ModalExample = () => {
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { WppButton, WppModal } from '@platform-ui-kit/components-library-vue'
+import { WppButton, WppModal } from '@wppopen/components-library-vue'
 
 const isModalOpen = ref(false)
 

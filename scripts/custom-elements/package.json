@@ -1,5 +1,5 @@
 {
-  "name": "@platform-ui-kit/components-library/components",
+  "name": "@wppopen/components-library/components",
   "version": "0.0.0",
   "description": "WPP Platform Open Components exported as custom elements, extending HTMLElement. Required for correct tree-shaking in Webpack.",
   "main": "./index.js",

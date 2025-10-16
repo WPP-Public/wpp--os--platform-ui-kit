@@ -1,7 +1,7 @@
 ```vue
 
 <script setup lang="ts">
-import { WppFilterButton } from '@platform-ui-kit/components-library-vue'
+import { WppFilterButton } from '@wppopen/components-library-vue'
 </script>
 
 <template>

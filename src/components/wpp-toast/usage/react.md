@@ -1,6 +1,6 @@
 ```tsx
 import React, { useRef, useEffect, useState } from 'react'
-import { WppToastContainer, WppButton } from '@platform-ui-kit/components-library-react'
+import { WppToastContainer, WppButton } from '@wppopen/components-library-react'
 
 export const useToast = () => {
   const [toastRef, setToastRef] = useState<HTMLWppToastContainerElement | null>()

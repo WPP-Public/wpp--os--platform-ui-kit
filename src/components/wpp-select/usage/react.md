@@ -1,6 +1,6 @@
 ```tsx
-import { ListItemInterface } from '@platform-ui-kit/components-library'
-import { WppSelect, WppIconClock } from '@platform-ui-kit/components-library-react'
+import { ListItemInterface } from '@wppopen/components-library'
+import { WppSelect, WppIconClock } from '@wppopen/components-library-react'
 
 const SAMPLE_LIST: ListItemInterface[] = [
   {
@@ -84,8 +84,8 @@ export const SelectExample = () => {
 ```tsx
 import { useState } from 'react'
 import { h } from '@stencil/core'
-import { ListItemInterface } from '@platform-ui-kit/components-library'
-import { WppSelect } from '@platform-ui-kit/components-library-react'
+import { ListItemInterface } from '@wppopen/components-library'
+import { WppSelect } from '@wppopen/components-library-react'
 
 export const SAMPLE_LIST: ListItemInterface[] = [
   {

@@ -61,7 +61,7 @@
 ### React
 
 ```tsx
-import { WppGrid } from '@platform-ui-kit/components-library-react'
+import { WppGrid } from '@wppopen/components-library-react'
 ​
 export const GridExample = () => (
    <WppGrid container rowSpacing={4}>
@@ -98,7 +98,7 @@ export const GridExample = () => (
 ```vue
 
 <script setup lang="ts">
-import { WppGrid } from '@platform-ui-kit/components-library-vue';
+import { WppGrid } from '@wppopen/components-library-vue';
 </script>
 
 <template>

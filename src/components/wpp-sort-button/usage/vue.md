@@ -1,7 +1,7 @@
 ```vue
 
 <script setup lang="ts">
-import { WppSortButton } from '@platform-ui-kit/components-library-vue'
+import { WppSortButton } from '@wppopen/components-library-vue'
 </script>
 
 <template>

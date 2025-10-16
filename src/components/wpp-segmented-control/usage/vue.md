@@ -5,7 +5,7 @@ import { ref } from "vue";
 import {
   WppSegmentedControl,
   WppSegmentedControlItem,
-} from "@platform-ui-kit/components-library-vue";
+} from "@wppopen/components-library-vue";
 
 const currentItem = ref("1");
 
