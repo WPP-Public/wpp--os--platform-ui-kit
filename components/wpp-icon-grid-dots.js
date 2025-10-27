@@ -1,0 +1,47 @@
+import { proxyCustomElement, HTMLElement, h } from '@stencil/core/internal/client';
+import { W as WppIcon } from './WppIcon.js';
+
+const wppIconCss = ":host{display:-ms-inline-flexbox;display:inline-flex;color:var(--wpp-prop-icon-color)}";
+
+const WppIconGridDots$1 = /*@__PURE__*/ proxyCustomElement(class WppIconGridDots extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    this.__attachShadow();
+    this.size = 'm';
+    this.width = undefined;
+    this.height = undefined;
+    this.color = 'var(--wpp-icon-color)';
+  }
+  componentWillLoad() {
+    console.warn('%cwpp-icon-grid-dots component is deprecated. Please, use wpp-icon-grid instead', 'color: black; font-size: 12px;');
+  }
+  render() {
+    return (h(WppIcon, { name: "wpp-icon-grid-dots", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M10 15.1765C10.7797 15.1765 11.4118 15.8085 11.4118 16.5882C11.4118 17.3679 10.7797 18 10 18C9.2203 18 8.58824 17.3679 8.58824 16.5882C8.58824 15.8085 9.2203 15.1765 10 15.1765ZM16.5882 15.1765C17.3679 15.1765 18 15.8085 18 16.5882C18 17.3679 17.3679 18 16.5882 18C15.8085 18 15.1765 17.3679 15.1765 16.5882C15.1765 15.8085 15.8085 15.1765 16.5882 15.1765ZM3.41176 15.1765C4.19146 15.1765 4.82353 15.8085 4.82353 16.5882C4.82353 17.3679 4.19146 18 3.41176 18C2.63207 18 2 17.3679 2 16.5882C2 15.8085 2.63207 15.1765 3.41176 15.1765ZM10 8.58824C10.7797 8.58824 11.4118 9.2203 11.4118 10C11.4118 10.7797 10.7797 11.4118 10 11.4118C9.2203 11.4118 8.58824 10.7797 8.58824 10C8.58824 9.2203 9.2203 8.58824 10 8.58824ZM16.5882 8.58824C17.3679 8.58824 18 9.2203 18 10C18 10.7797 17.3679 11.4118 16.5882 11.4118C15.8085 11.4118 15.1765 10.7797 15.1765 10C15.1765 9.2203 15.8085 8.58824 16.5882 8.58824ZM3.41176 8.58824C4.19146 8.58824 4.82353 9.2203 4.82353 10C4.82353 10.7797 4.19146 11.4118 3.41176 11.4118C2.63207 11.4118 2 10.7797 2 10C2 9.2203 2.63207 8.58824 3.41176 8.58824ZM10 2C10.7797 2 11.4118 2.63207 11.4118 3.41176C11.4118 4.19146 10.7797 4.82353 10 4.82353C9.2203 4.82353 8.58824 4.19146 8.58824 3.41176C8.58824 2.63207 9.2203 2 10 2ZM16.5882 2C17.3679 2 18 2.63207 18 3.41176C18 4.19146 17.3679 4.82353 16.5882 4.82353C15.8085 4.82353 15.1765 4.19146 15.1765 3.41176C15.1765 2.63207 15.8085 2 16.5882 2ZM3.41176 2C4.19146 2 4.82353 2.63207 4.82353 3.41176C4.82353 4.19146 4.19146 4.82353 3.41176 4.82353C2.63207 4.82353 2 4.19146 2 3.41176C2 2.63207 2.63207 2 3.41176 2Z", fill: "currentColor" })));
+  }
+  static get registryIs() { return "wpp-icon-grid-dots-v3-3-0"; }
+  static get style() { return wppIconCss; }
+}, [1, "wpp-icon-grid-dots", "wpp-icon-grid-dots-v3-3-0", {
+    "size": [1],
+    "width": [2],
+    "height": [2],
+    "color": [1]
+  }]);
+function defineCustomElement$1() {
+  if (typeof customElements === "undefined") {
+    return;
+  }
+  const components = ["wpp-icon-grid-dots-v3-3-0"];
+  components.forEach(tagName => { switch (tagName) {
+    case "wpp-icon-grid-dots-v3-3-0":
+      if (!customElements.get(tagName)) {
+        customElements.define(tagName, WppIconGridDots$1);
+      }
+      break;
+  } });
+}
+
+const WppIconGridDots = WppIconGridDots$1;
+const defineCustomElement = defineCustomElement$1;
+
+export { WppIconGridDots, defineCustomElement };

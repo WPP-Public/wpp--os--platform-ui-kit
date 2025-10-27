@@ -1,0 +1,44 @@
+import { proxyCustomElement, HTMLElement, h } from '@stencil/core/internal/client';
+import { W as WppIcon } from './WppIcon.js';
+
+const wppIconCss = ":host{display:-ms-inline-flexbox;display:inline-flex;color:var(--wpp-prop-icon-color)}";
+
+const WppIconAutofitWidthDotted$1 = /*@__PURE__*/ proxyCustomElement(class WppIconAutofitWidthDotted extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    this.__attachShadow();
+    this.size = 'm';
+    this.width = undefined;
+    this.height = undefined;
+    this.color = 'var(--wpp-icon-color)';
+  }
+  render() {
+    return (h(WppIcon, { name: "wpp-icon-autofit-width-dotted", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M14.768 15.7113L16.2811 14.25L14.768 12.7887C14.47 12.501 14.4617 12.0261 14.7495 11.7282C15.0372 11.4302 15.512 11.422 15.81 11.7097L17.6955 13.5307C18.1026 13.9238 18.1026 14.5762 17.6955 14.9693L15.81 16.7903C15.512 17.078 15.0372 17.0698 14.7495 16.7718C14.4617 16.4739 14.47 15.999 14.768 15.7113ZM5.23374 15.7113L3.72061 14.25L5.23374 12.7887C5.5317 12.501 5.53997 12.0261 5.25222 11.7282C4.96448 11.4302 4.48968 11.422 4.19172 11.7097L2.30617 13.5307C1.89908 13.9238 1.89908 14.5762 2.30617 14.9693L4.19172 16.7903C4.48968 17.078 4.96448 17.0698 5.25222 16.7718C5.53997 16.4738 5.5317 15.999 5.23374 15.7113ZM8.00084 14.252C8.00084 14.6662 7.66505 15.002 7.25084 15.002H6.75084C6.33663 15.002 6.00084 14.6662 6.00084 14.252C6.00084 13.8377 6.33663 13.502 6.75084 13.502H7.25084C7.66505 13.502 8.00084 13.8377 8.00084 14.252ZM9.75084 15.002C9.33663 15.002 9.00084 14.6662 9.00084 14.252C9.00084 13.8377 9.33663 13.502 9.75084 13.502H10.2508C10.6651 13.502 11.0008 13.8377 11.0008 14.252C11.0008 14.6662 10.6651 15.002 10.2508 15.002H9.75084ZM12.0008 14.252C12.0008 14.6662 12.3366 15.002 12.7508 15.002H13.2508C13.6651 15.002 14.0008 14.6662 14.0008 14.252C14.0008 13.8377 13.6651 13.502 13.2508 13.502H12.7508C12.3366 13.502 12.0008 13.8377 12.0008 14.252ZM17.0008 4.99921C17.0008 3.89464 16.1054 2.99921 15.0008 2.99921H5.00084C3.89627 2.99921 3.00084 3.89464 3.00084 4.99921V9.24921C3.00084 9.66342 3.33663 9.99921 3.75084 9.99921C4.16505 9.99921 4.50084 9.66342 4.50084 9.24921V4.99921C4.50084 4.72306 4.7247 4.49921 5.00084 4.49921H15.0008C15.277 4.49921 15.5008 4.72306 15.5008 4.99921V9.24921C15.5008 9.66342 15.8366 9.99921 16.2508 9.99921C16.6651 9.99921 17.0008 9.66342 17.0008 9.24921V4.99921Z", fill: "currentColor" })));
+  }
+  static get registryIs() { return "wpp-icon-autofit-width-dotted-v3-3-0"; }
+  static get style() { return wppIconCss; }
+}, [1, "wpp-icon-autofit-width-dotted", "wpp-icon-autofit-width-dotted-v3-3-0", {
+    "size": [1],
+    "width": [2],
+    "height": [2],
+    "color": [1]
+  }]);
+function defineCustomElement$1() {
+  if (typeof customElements === "undefined") {
+    return;
+  }
+  const components = ["wpp-icon-autofit-width-dotted-v3-3-0"];
+  components.forEach(tagName => { switch (tagName) {
+    case "wpp-icon-autofit-width-dotted-v3-3-0":
+      if (!customElements.get(tagName)) {
+        customElements.define(tagName, WppIconAutofitWidthDotted$1);
+      }
+      break;
+  } });
+}
+
+const WppIconAutofitWidthDotted = WppIconAutofitWidthDotted$1;
+const defineCustomElement = defineCustomElement$1;
+
+export { WppIconAutofitWidthDotted, defineCustomElement };

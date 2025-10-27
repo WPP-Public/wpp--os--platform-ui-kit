@@ -1,0 +1,44 @@
+import { proxyCustomElement, HTMLElement, h } from '@stencil/core/internal/client';
+import { W as WppIcon } from './WppIcon.js';
+
+const wppIconCss = ":host{display:-ms-inline-flexbox;display:inline-flex;color:var(--wpp-prop-icon-color)}";
+
+const WppIconFolderBlocked$1 = /*@__PURE__*/ proxyCustomElement(class WppIconFolderBlocked extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    this.__attachShadow();
+    this.size = 'm';
+    this.width = undefined;
+    this.height = undefined;
+    this.color = 'var(--wpp-icon-color)';
+  }
+  render() {
+    return (h(WppIcon, { name: "wpp-icon-folder-blocked", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M14.5476 8.66667C17.0066 8.66667 19 10.6601 19 13.119C19 15.578 17.0066 17.5714 14.5476 17.5714C12.0886 17.5714 10.0952 15.578 10.0952 13.119C10.0952 10.6601 12.0886 8.66667 14.5476 8.66667ZM17.2265 11.2995L12.728 15.7979C13.2466 16.1509 13.873 16.3571 14.5476 16.3571C16.336 16.3571 17.7857 14.9074 17.7857 13.119C17.7857 12.4445 17.5794 11.818 17.2265 11.2995ZM7.02465 3C7.39749 3 7.76 3.11437 8.0641 3.32571L8.1907 3.42217L10.113 5.02381H16.369C17.2893 5.02381 18.0501 5.70621 18.1731 6.59257L18.1863 6.72053L18.1905 6.84524L18.1911 9.32267C17.8316 8.97749 17.4231 8.6829 16.9771 8.45034L16.9762 6.84524C16.9762 6.53787 16.7478 6.28384 16.4514 6.24364L16.369 6.2381H10.1122L8.1907 7.83974C7.90428 8.07842 7.55257 8.22263 7.18367 8.25495L7.02465 8.2619L3.21429 8.2611V14.131C3.21429 14.4383 3.4427 14.6923 3.73904 14.7326L3.82143 14.7381L9.53961 14.7384C9.67923 15.1705 9.87323 15.5782 10.1135 15.9534L3.82143 15.9524C2.8574 15.9524 2.06829 15.2034 2.0042 14.2557L2 14.131V4.82143C2 3.8574 2.74894 3.06829 3.69672 3.0042L3.82143 3H7.02465ZM14.5476 9.88095C12.7593 9.88095 11.3095 11.3307 11.3095 13.119C11.3095 13.7936 11.5158 14.42 11.8687 14.9386L16.3672 10.4402C15.8486 10.0872 15.2222 9.88095 14.5476 9.88095ZM7.02465 4.21429H3.82143C3.51406 4.21429 3.26003 4.4427 3.21983 4.73904L3.21429 4.82143V7.04681L7.02465 7.04762C7.13828 7.04762 7.24903 7.01575 7.34465 6.95645L7.41334 6.9069L8.9441 5.63014L7.41334 4.35501C7.32605 4.28227 7.22056 4.23585 7.10914 4.22019L7.02465 4.21429Z", fill: "currentColor" })));
+  }
+  static get registryIs() { return "wpp-icon-folder-blocked-v3-3-0"; }
+  static get style() { return wppIconCss; }
+}, [1, "wpp-icon-folder-blocked", "wpp-icon-folder-blocked-v3-3-0", {
+    "size": [1],
+    "width": [2],
+    "height": [2],
+    "color": [1]
+  }]);
+function defineCustomElement$1() {
+  if (typeof customElements === "undefined") {
+    return;
+  }
+  const components = ["wpp-icon-folder-blocked-v3-3-0"];
+  components.forEach(tagName => { switch (tagName) {
+    case "wpp-icon-folder-blocked-v3-3-0":
+      if (!customElements.get(tagName)) {
+        customElements.define(tagName, WppIconFolderBlocked$1);
+      }
+      break;
+  } });
+}
+
+const WppIconFolderBlocked = WppIconFolderBlocked$1;
+const defineCustomElement = defineCustomElement$1;
+
+export { WppIconFolderBlocked, defineCustomElement };
