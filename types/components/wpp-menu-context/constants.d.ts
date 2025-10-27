@@ -1,0 +1,12 @@
+export declare const MENU_BAR_ROLE = "menubar";
+export declare const MENU_CONTEXT_TAG = "WPP-MENU-CONTEXT";
+export declare const CONTEXT_ITEM_TAG = "WPP-LIST-ITEM";
+export declare const LIST_ITEM = "listitem";
+export declare const OPTION_ROLE = "option";
+export declare const BUTTON_ROLE = "button";
+export declare const TOPBAR_NAVIGATION_ITEM_TAG = "WPP-NAVIGATION-ITEM";
+export declare const MENU_ROLE = "menu";
+export declare const MENU_ITEM = "menuitem";
+export declare const GROUP_ROLE = "group";
+export declare const PRESENTATION_ROLE = "presentation";
+export declare const WPP_LIST_CLASSNAME = "wpp-list";

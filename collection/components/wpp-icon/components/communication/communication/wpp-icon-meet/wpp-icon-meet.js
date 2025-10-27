@@ -1,0 +1,100 @@
+import { h } from '@stencil/core';
+import { WppIcon } from '../../../../WppIcon';
+export class WppIconMeet {
+  constructor() {
+    this.size = 'm';
+    this.width = undefined;
+    this.height = undefined;
+    this.color = 'var(--wpp-icon-color)';
+  }
+  render() {
+    return (h(WppIcon, { name: "wpp-icon-meet", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M5.41212 5.32758C4.35609 5.32758 3.5 6.18366 3.5 7.2397V12.7636C3.5 13.8196 4.35609 14.6757 5.41212 14.6757H10.936C11.9921 14.6757 12.8482 13.8196 12.8482 12.7636V12.1472L15.7255 13.7457C15.9229 13.8554 16.1636 13.8524 16.3583 13.7379C16.5529 13.6233 16.6724 13.4144 16.6724 13.1885V6.81874C16.6724 6.59299 16.553 6.38409 16.3585 6.26953C16.164 6.15497 15.9233 6.15185 15.7259 6.26133L12.8482 7.85712V7.2397C12.8482 6.18366 11.9921 5.32758 10.936 5.32758H5.41212ZM12.8482 9.31474L15.3976 7.90098V12.1053L12.8482 10.6889V9.31474ZM11.5734 7.2397V12.7636C11.5734 13.1156 11.288 13.401 10.936 13.401H5.41212C5.06011 13.401 4.77475 13.1156 4.77475 12.7636V7.2397C4.77475 6.88769 5.06011 6.60232 5.41212 6.60232H10.936C11.288 6.60232 11.5734 6.88769 11.5734 7.2397ZM5.12852 17.5836L5.1299 17.5843L5.13228 17.5854L5.13894 17.5887L5.15974 17.5986C5.17692 17.6067 5.20069 17.6177 5.2309 17.6312C5.29131 17.6582 5.37752 17.695 5.48827 17.7384C5.70972 17.8252 6.02969 17.9383 6.43807 18.0507C7.25466 18.2755 8.42694 18.4979 9.87283 18.5C11.3197 18.5021 12.4929 18.2795 13.3101 18.0535C13.7189 17.9405 14.0391 17.8265 14.2608 17.7389C14.3716 17.6951 14.4579 17.6579 14.5185 17.6307C14.5487 17.6171 14.5725 17.606 14.5897 17.5978C14.876 17.4597 15.0517 17.0188 14.9049 16.7267C14.747 16.4122 14.3641 16.2853 14.0496 16.4431L14.0415 16.447C14.0324 16.4513 14.017 16.4585 13.9954 16.4682C13.9522 16.4877 13.8841 16.5171 13.7925 16.5533C13.6092 16.6257 13.3319 16.7249 12.9704 16.8249C12.2474 17.0248 11.1897 17.2271 9.87465 17.2252C8.55859 17.2234 7.50006 17.0209 6.77633 16.8217C6.41455 16.7221 6.13697 16.6235 5.95343 16.5516C5.86168 16.5156 5.79353 16.4864 5.7502 16.467C5.72854 16.4574 5.7131 16.4502 5.70403 16.4459L5.69576 16.442C5.38069 16.2854 4.99829 16.4138 4.84151 16.7288C4.68467 17.0439 4.81338 17.4267 5.12852 17.5836ZM6.43686 1.94833C7.25426 1.72144 8.42763 1.49795 9.87479 1.50001C11.3209 1.50208 12.4934 1.72542 13.3102 1.95109C13.7186 2.06394 14.0386 2.17752 14.2601 2.26467C14.3709 2.30826 14.4571 2.34527 14.5176 2.37233C14.5478 2.38587 14.5716 2.39692 14.5887 2.40506L14.6096 2.41505L14.6162 2.41831L14.6186 2.4195L14.6196 2.41997C14.6196 2.41997 15.1266 2.71722 14.9057 3.27542C14.7486 3.58981 14.3667 3.71763 14.0521 3.56146L14.051 3.56088L14.0427 3.55694C14.0337 3.55265 14.0182 3.54545 13.9966 3.53575C13.9533 3.51636 13.8851 3.48699 13.7934 3.4509C13.6099 3.3787 13.3324 3.27974 12.9707 3.1798C12.2471 2.97987 11.1888 2.77664 9.87297 2.77476C8.55817 2.77288 7.50073 2.97597 6.77781 3.17664C6.41643 3.27695 6.13919 3.37651 5.95591 3.44918C5.8643 3.4855 5.79627 3.51507 5.75305 3.53459C5.73145 3.54435 5.71606 3.55159 5.70703 3.55591L5.6983 3.56013C5.38405 3.71836 5.00159 3.59172 4.84315 3.27753C4.68465 2.96322 4.81096 2.57993 5.12527 2.42143L5.12705 2.42054L5.12945 2.41934L5.13614 2.41603L5.15701 2.40592C5.17423 2.39769 5.19806 2.38652 5.22832 2.37285C5.28884 2.34551 5.37517 2.30815 5.48606 2.26418C5.70778 2.17627 6.02808 2.0618 6.43686 1.94833ZM5.6983 3.56013L5.69751 3.56052L5.6983 3.56013Z", fill: "currentColor" })));
+  }
+  static get is() { return "wpp-icon-meet"; }
+  static get registryIs() { return "wpp-icon-meet-v3-3-0"; }
+  static get encapsulation() { return "shadow"; }
+  static get originalStyleUrls() {
+    return {
+      "$": ["../../../../wpp-icon.scss"]
+    };
+  }
+  static get styleUrls() {
+    return {
+      "$": ["../../../../wpp-icon.css"]
+    };
+  }
+  static get properties() {
+    return {
+      "size": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "'s' | 'm'",
+          "resolved": "\"m\" | \"s\"",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the icon size, where `s` is **16px** and `m` is **20px**."
+        },
+        "attribute": "size",
+        "reflect": false,
+        "defaultValue": "'m'"
+      },
+      "width": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same."
+        },
+        "attribute": "width",
+        "reflect": false
+      },
+      "height": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected."
+        },
+        "attribute": "height",
+        "reflect": false
+      },
+      "color": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the icon color."
+        },
+        "attribute": "color",
+        "reflect": false,
+        "defaultValue": "'var(--wpp-icon-color)'"
+      }
+    };
+  }
+}

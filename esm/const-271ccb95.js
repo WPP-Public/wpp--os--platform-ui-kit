@@ -1,0 +1,14 @@
+const AVATAR_COLORS_VARIANTS = [
+  'var(--wpp-dataviz-color-cat-neutral-1)',
+  'var(--wpp-dataviz-color-cat-neutral-2)',
+  'var(--wpp-dataviz-color-cat-neutral-3)',
+  'var(--wpp-dataviz-color-cat-neutral-4)',
+  'var(--wpp-dataviz-color-cat-neutral-5)',
+  'var(--wpp-dataviz-color-cat-neutral-6)',
+  'var(--wpp-dataviz-color-cat-neutral-7)',
+  'var(--wpp-dataviz-color-cat-neutral-8)',
+  'var(--wpp-dataviz-color-cat-neutral-9)',
+  'var(--wpp-dataviz-color-cat-neutral-10)',
+];
+
+export { AVATAR_COLORS_VARIANTS as A };

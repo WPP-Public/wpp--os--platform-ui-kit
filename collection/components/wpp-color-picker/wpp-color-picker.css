@@ -1,0 +1,64 @@
+:host {
+  display: inline-flex;
+}
+:host .anchor {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: var(--wpp-border-radius-s);
+  width: 220px;
+  padding: 4px 8px;
+}
+:host .anchor:hover {
+  background-color: var(--wpp-grey-color-200);
+  cursor: pointer;
+}
+:host .anchor:active {
+  background-color: var(--wpp-grey-color-300);
+}
+:host .anchor .color-container {
+  display: flex;
+  align-items: center;
+}
+:host .anchor .color-container .color-preview {
+  box-sizing: border-box;
+  border-radius: var(--wpp-border-radius-xs);
+  width: 24px;
+  height: 24px;
+  border: var(--wpp-border-width-s) solid var(--wpp-grey-color-400);
+  margin-right: 8px;
+  overflow: hidden;
+  position: relative;
+}
+:host .anchor .color-container .color-preview .color-preview-box {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+:host .anchor .hex-opacity {
+  --wpp-typography-color: var(--wpp-grey-color-800);
+}
+
+:host(.wpp-disabled) .anchor {
+  --wpp-typography-color: var(--wpp-grey-color-500);
+}
+:host(.wpp-disabled) .anchor:hover {
+  cursor: not-allowed;
+  background-color: transparent;
+}
+:host(.wpp-disabled) .anchor:active {
+  background-color: transparent;
+}
+:host(.wpp-disabled) .anchor .color-container .color-preview {
+  opacity: 0.4;
+}
+:host(.wpp-disabled) .anchor .hex-opacity {
+  --wpp-typography-color: var(--wpp-grey-color-500);
+}
+
+:host(.wpp-active) .anchor {
+  background-color: var(--wpp-grey-color-200);
+}

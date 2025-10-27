@@ -1,0 +1,15 @@
+/**
+  * @prop --wpp-toast-margin-bottom:
+*/
+:host(.wpp-toast-container) {
+  --toast-margin-bottom: var(--wpp-toast-margin-bottom, 8px);
+  display: inline-flex;
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+:host(.wpp-toast-container) .wpp-toast:not(:last-child) {
+  margin-bottom: var(--toast-margin-bottom);
+}

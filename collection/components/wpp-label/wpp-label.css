@@ -1,0 +1,7 @@
+:host {
+  display: flex;
+}
+:host .internal-label-wrapper {
+  display: flex;
+  margin: 0;
+}

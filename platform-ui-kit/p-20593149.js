@@ -1,0 +1,1 @@
+import{h as i,H as e}from"./p-000a6ed6.js";const o=({name:o,width:t,height:h,viewBoxX:w=0,viewBoxY:a=0,viewBoxWidth:s=100,viewBoxHeight:g=100},v)=>i(e,{class:{"wpp-image":!0,[o]:!0}},i("svg",{width:t||h,height:h||t||"auto",viewBox:`${w} ${a} ${s} ${g}`,fill:"none",role:"img"},v));export{o as W}

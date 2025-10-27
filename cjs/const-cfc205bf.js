@@ -1,0 +1,5 @@
+'use strict';
+
+const ANIMATION_DURATION = 500;
+
+exports.ANIMATION_DURATION = ANIMATION_DURATION;

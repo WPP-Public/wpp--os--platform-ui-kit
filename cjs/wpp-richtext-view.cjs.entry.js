@@ -1,0 +1,199 @@
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+const index = require('./index-ecf423ba.js');
+const config = require('./config-6eb72f46.js');
+const types = require('./types-3dbf006d.js');
+const utils = require('./utils-15478fd5.js');
+require('./wpp-icon-unordered-list-f619af28.js');
+require('./WppIcon-55327707.js');
+require('./wpp-icon-video-clip-86ee96a7.js');
+require('./_commonjsHelpers-bcc1208a.js');
+require('./wpp-progress-indicator-c3d169fc.js');
+require('./wpp-icon-chevron-92588571.js');
+require('./wpp-icon-gallery-2e9c2077.js');
+require('./lodash-04cddce7.js');
+require('./wpp-action-button-e8657378.js');
+require('./common-ee802540.js');
+require('./WrappedSlot-ab2104d8.js');
+require('./wpp-input-9f3f1f0d.js');
+require('./turndown.browser.es-40bb3069.js');
+require('./consts-779fd4ec.js');
+
+const WppRichtextView = class {
+  constructor(hostRef) {
+    index.registerInstance(this, hostRef);
+    this.value = undefined;
+    this.format = types.formats.html;
+    this.debug = 'warn';
+    this.formats = undefined;
+    this.modules = undefined;
+    this.strict = true;
+    this.styles = '{}';
+    this.preserveWhitespace = false;
+    this.name = undefined;
+  }
+  setValue(value, isInitialLoad = false) {
+    if (this.format === types.formats.markdown) {
+      const editorTag = utils.transformToVersionedTag('wpp-richtext');
+      let editorEl;
+      if (this.name) {
+        editorEl = document.querySelector(`${editorTag}[name="${this.name}"]`);
+      }
+      else {
+        editorEl = document.querySelector(editorTag);
+      }
+      if (editorEl && editorEl.quill && editorEl.format === this.format) {
+        const editorHtml = editorEl.quill.root.innerHTML;
+        this.quill.root.innerHTML = editorHtml;
+        return;
+      }
+    }
+    // Fallback: process markdown into HTML for the view
+    if (this.format === types.formats.html) {
+      const contents = this.quill.clipboard.convert(value);
+      this.quill.setContents(contents, types.sources.api);
+    }
+    else if (this.format === types.formats.markdown) {
+      const { html } = config.processMarkdownValue(value, this.preserveWhitespace, isInitialLoad);
+      const contents = this.quill.clipboard.convert(html);
+      this.quill.setContents(contents, types.sources.api);
+      // normalize empty blocks when parsing stored value
+      const normalizeNode = (node) => {
+        const html = node.innerHTML.trim().toLowerCase();
+        if (html === '' || html === '<br>' || html === '<br/>' || html === '<br />' || html === '&nbsp;') {
+          node.innerHTML = '&nbsp;';
+        }
+      };
+      const blocks = Array.from(this.quill.root.querySelectorAll('p, blockquote'));
+      blocks.forEach(b => normalizeNode(b));
+      const emptyListItems = this.quill.root.querySelectorAll('li');
+      let removedCount = 0;
+      emptyListItems.forEach(li => {
+        const liContent = li.innerHTML.trim();
+        if (liContent === '<br>' || liContent === '') {
+          li.remove();
+          removedCount++;
+        }
+      });
+      if (removedCount > 0)
+        this.quill.update(types.sources.api);
+    }
+    else if (this.format === types.formats.text) {
+      this.quill.setText(value, types.sources.api);
+    }
+    else if (this.format === types.formats.json) {
+      try {
+        this.quill.setContents(JSON.parse(value), types.sources.api);
+      }
+      catch (_) {
+        this.quill.setText(value, types.sources.api);
+      }
+    }
+    else {
+      this.quill.setText(value, types.sources.api);
+    }
+  }
+  getValue() {
+    const text = this.quill.getText();
+    const content = this.quill.getContents();
+    let html = this.containerElement.children[0].innerHTML || '';
+    if (html === '<p><br></p>' || html === '<div><br></div>') {
+      html = '';
+    }
+    if (this.format === 'html') {
+      return html;
+    }
+    else if (this.format === 'markdown') {
+      // Convert the rendered HTML back to Markdown
+      return config.turndownService.turndown(html);
+    }
+    else if (this.format === 'text') {
+      return text;
+    }
+    else if (this.format === 'json') {
+      try {
+        return JSON.stringify(content);
+      }
+      catch (_) {
+        return text;
+      }
+    }
+    else {
+      return text;
+    }
+  }
+  componentDidLoad() {
+    const modules = this.modules ? JSON.parse(this.modules) : { toolbar: false };
+    if (modules.toolbar)
+      modules.toolbar = false;
+    this.quill = new types.Quill(this.containerElement, {
+      debug: this.debug,
+      modules,
+      readOnly: true,
+      theme: 'wpp',
+      formats: this.formats,
+      strict: this.strict,
+    });
+    if (this.styles) {
+      const styles = JSON.parse(this.styles);
+      Object.keys(styles).forEach((key) => {
+        this.containerElement?.style.setProperty(key, styles[key]);
+      });
+    }
+    this.containerElement?.classList.add('quill-view');
+    if (this.value) {
+      this.setValue(this.value, true);
+      this.quill['history'].clear();
+    }
+  }
+  updateStyle(newValue, oldValue) {
+    if (!this.containerElement) {
+      return;
+    }
+    if (oldValue) {
+      const old = JSON.parse(oldValue);
+      Object.keys(old).forEach((key) => {
+        this.containerElement?.style.setProperty(key, '');
+      });
+    }
+    if (newValue) {
+      const value = JSON.parse(newValue);
+      Object.keys(value).forEach((key) => {
+        this.containerElement?.style.setProperty(key, value[key]);
+      });
+    }
+  }
+  updateContent(newValue) {
+    const value = this.getValue();
+    if (Object.values(types.formats).indexOf(this.format) > -1 && newValue === value) {
+      return null;
+    }
+    else {
+      let changed = false;
+      try {
+        const newContentString = JSON.stringify(newValue);
+        changed = JSON.stringify(value) !== newContentString;
+      }
+      catch {
+        return null;
+      }
+      if (!changed) {
+        return null;
+      }
+    }
+    this.setValue(newValue);
+  }
+  render() {
+    return (index.h(index.Host, null, index.h("wpp-quill-styles-v3-3-0", null), index.h("wpp-richtext-common-styles-v3-3-0", null), index.h("div", { ref: (el) => (this.containerElement = el), class: this.preserveWhitespace ? 'preserve-whitespace' : '' })));
+  }
+  static get registryIs() { return "wpp-richtext-view-v3-3-0"; }
+  get host() { return index.getElement(this); }
+  static get watchers() { return {
+    "styles": ["updateStyle"],
+    "value": ["updateContent"]
+  }; }
+};
+
+exports.wpp_richtext_view = WppRichtextView;

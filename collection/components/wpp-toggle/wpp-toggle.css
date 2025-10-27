@@ -1,0 +1,151 @@
+/**
+  * @prop --wpp-toggle-height:
+  * @prop --wpp-toggle-width:
+  * @prop --wpp-toggle-inside-circle-size:
+  * @prop --wpp-toggle-inside-circle-bg-color:
+  * @prop --wpp-toggle-inside-circle-margin-left:
+  * @prop --wpp-toggle-border-radius:
+  * @prop --wpp-toggle-label-margin:
+  * @prop --wpp-toggle-label-color-disabled:
+  * @prop --wpp-toggle-label-color-checked-disabled:
+  * @prop --wpp-toggle-bg-color:
+  * @prop --wpp-toggle-bg-color-hover:
+  * @prop --wpp-toggle-bg-color-active:
+  * @prop --wpp-toggle-bg-color-disabled:
+  * @prop --wpp-toggle-bg-color-checked:
+  * @prop --wpp-toggle-bg-color-checked-hover:
+  * @prop --wpp-toggle-bg-color-checked-active:
+  * @prop --wpp-toggle-bg-color-checked-disabled:
+  * @prop --wpp-counter-first-border-color-focus:
+  * @prop --wpp-counter-second-border-color-focus:
+*/
+:host {
+  --toggle-height: var(--wpp-toggle-height, 20px);
+  --toggle-width: var(--wpp-toggle-width, 34px);
+  --toggle-inside-circle-size: var(--wpp-toggle-inside-circle-size, 16px);
+  --toggle-inside-circle-bg-color: var(--wpp-toggle-inside-circle-bg-color, var(--wpp-grey-color-000));
+  --toggle-inside-circle-margin-left: var(--wpp-toggle-inside-circle-margin-left, 2px);
+  --toggle-border-radius: var(--wpp-toggle-border-radius, var(--wpp-border-radius-round));
+  --toggle-label-margin: var(--wpp-toggle-label-margin, 0 0 0 8px);
+  --toggle-label-color-disabled: var(--wpp-toggle-label-color-disabled, var(--wpp-text-color-disabled));
+  --toggle-label-color-checked-disabled: var(--wpp-toggle-label-color-checked-disabled, var(--wpp-text-color-disabled));
+  --toggle-bg-color: var(--wpp-toggle-bg-color, var(--wpp-grey-color-500));
+  --toggle-bg-color-hover: var(--wpp-toggle-bg-color-hover, var(--wpp-grey-color-700));
+  --toggle-bg-color-active: var(--wpp-toggle-bg-color-active, var(--wpp-grey-color-800));
+  --toggle-bg-color-disabled: var(--wpp-toggle-bg-color-disabled, var(--wpp-grey-color-400));
+  --toggle-bg-color-checked: var(--wpp-toggle-bg-color-checked, var(--wpp-brand-color));
+  --toggle-bg-color-checked-hover: var(--wpp-toggle-bg-color-checked-hover, var(--wpp-brand-color-hover));
+  --toggle-bg-color-checked-active: var(--wpp-toggle-bg-color-checked-active, var(--wpp-brand-color-active));
+  --toggle-bg-color-checked-disabled: var(--wpp-toggle-bg-color-checked-disabled, var(--wpp-brand-color-disabled));
+  --counter-first-border-color-focus: var(--wpp-counter-first-border-color-focus, var(--wpp-grey-color-000));
+  --counter-second-border-color-focus: var(--wpp-counter-second-border-color-focus, var(--wpp-brand-color));
+}
+
+:host(.wpp-toggle-wrapper) {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: var(--toggle-height);
+  padding-left: var(--toggle-width);
+  cursor: pointer;
+  outline: none;
+}
+:host(.wpp-toggle-wrapper) .label {
+  cursor: pointer;
+  user-select: none;
+}
+:host(.wpp-toggle-wrapper) .label.hide > label {
+  display: none;
+}
+:host(.wpp-toggle-wrapper) .label.with-text .internal-label-wrapper {
+  margin: var(--toggle-label-margin);
+}
+:host(.wpp-toggle-wrapper) .label.tab-focus::before {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--counter-first-border-color-focus), 0 0 0 3px var(--counter-second-border-color-focus);
+  background-color: var(--toggle-bg-color-hover);
+}
+:host(.wpp-toggle-wrapper) .label::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--toggle-width);
+  height: var(--toggle-height);
+  background-color: var(--toggle-bg-color);
+  border-radius: var(--toggle-border-radius);
+  cursor: pointer;
+  transition: 0.25s ease-in-out;
+  content: "";
+}
+:host(.wpp-toggle-wrapper) .label:hover::before {
+  background-color: var(--toggle-bg-color-hover);
+}
+:host(.wpp-toggle-wrapper) .label:active::before {
+  background-color: var(--toggle-bg-color-active);
+}
+:host(.wpp-toggle-wrapper) .label::after {
+  position: absolute;
+  top: 50%;
+  left: var(--toggle-inside-circle-margin-left);
+  width: var(--toggle-inside-circle-size);
+  height: var(--toggle-inside-circle-size);
+  background-color: var(--toggle-inside-circle-bg-color);
+  border-radius: var(--wpp-border-radius-round);
+  transform: translateY(-50%);
+  transition: 0.25s ease-in-out;
+  content: "";
+}
+:host(.wpp-toggle-wrapper) .label .toggle-input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  opacity: 0;
+  outline: none;
+}
+:host(.wpp-toggle-wrapper) .label .toggle-input:checked ~ .label-wrapper .wpp-label-selector::after {
+  transform: translate(calc(var(--toggle-width) - (var(--toggle-inside-circle-size) + var(--toggle-inside-circle-margin-left) * 2)), -50%);
+}
+:host(.wpp-toggle-wrapper):host(.wpp-disabled) {
+  cursor: not-allowed;
+}
+:host(.wpp-toggle-wrapper):host(.wpp-disabled) .label {
+  pointer-events: none;
+}
+:host(.wpp-toggle-wrapper):host(.wpp-disabled) .label .internal-label-wrapper {
+  margin-left: 8px;
+}
+:host(.wpp-toggle-wrapper):host(.wpp-disabled) .label .wpp-internal-label {
+  --label-text-color-disabled: var(--toggle-label-color-disabled);
+}
+:host(.wpp-toggle-wrapper):host(.wpp-disabled) .label::before {
+  background-color: var(--toggle-bg-color-disabled);
+}
+
+:host(.wpp-checked) .label.tab-focus::before {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--counter-first-border-color-focus), 0 0 0 3px var(--counter-second-border-color-focus);
+  background-color: var(--toggle-bg-color-checked-hover);
+}
+:host(.wpp-checked) .label::before {
+  background-color: var(--toggle-bg-color-checked);
+}
+:host(.wpp-checked) .label:hover::before {
+  background-color: var(--toggle-bg-color-checked-hover);
+}
+:host(.wpp-checked) .label:active::before {
+  background-color: var(--toggle-bg-color-checked-active);
+}
+:host(.wpp-checked) .label::after {
+  transform: translate(calc(var(--toggle-width) - (var(--toggle-inside-circle-size) + var(--toggle-inside-circle-margin-left) * 2)), -50%);
+}
+:host(.wpp-checked):host(.wpp-disabled) .label .wpp-internal-label {
+  --label-text-color-disabled: var(--toggle-label-color-checked-disabled);
+}
+:host(.wpp-checked):host(.wpp-disabled) .label::before {
+  background-color: var(--toggle-bg-color-checked-disabled);
+}

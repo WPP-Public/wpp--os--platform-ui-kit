@@ -1,0 +1,28 @@
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+const index = require('./index-ecf423ba.js');
+const WppIcon = require('./WppIcon-55327707.js');
+
+const wppIconCss = ":host{display:-ms-inline-flexbox;display:inline-flex;color:var(--wpp-prop-icon-color)}";
+
+const WppIconRise = class {
+  constructor(hostRef) {
+    index.registerInstance(this, hostRef);
+    this.size = 'm';
+    this.width = undefined;
+    this.height = undefined;
+    this.color = 'var(--wpp-icon-color)';
+  }
+  componentWillLoad() {
+    console.warn('%cwpp-icon-rise component is deprecated. Please, use wpp-icon-trend-ascend instead', 'color: black; font-size: 12px;');
+  }
+  render() {
+    return (index.h(WppIcon.WppIcon, { name: "wpp-icon-rise", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: "M14.7916 5.70831C14.3774 5.70831 14.0416 6.0441 14.0416 6.45831C14.0416 6.87253 14.3774 7.20831 14.7916 7.20831H16.7311L12.2917 11.6477L7.82204 7.17802C7.52914 6.88513 7.05427 6.88513 6.76138 7.17802L0.928044 13.0114C0.635151 13.3042 0.635151 13.7791 0.928044 14.072C1.22094 14.3649 1.69581 14.3649 1.9887 14.072L7.29171 8.76901L11.7614 13.2387C12.0543 13.5316 12.5291 13.5316 12.822 13.2387L17.7916 8.26909V10.2083C17.7916 10.6225 18.1274 10.9583 18.5416 10.9583C18.9558 10.9583 19.2916 10.6225 19.2916 10.2083V6.45831C19.2916 6.0441 18.9558 5.70831 18.5416 5.70831H14.7916Z", fill: "currentColor" })));
+  }
+  static get registryIs() { return "wpp-icon-rise-v3-3-0"; }
+};
+WppIconRise.style = wppIconCss;
+
+exports.wpp_icon_rise = WppIconRise;

@@ -1,0 +1,147 @@
+/**
+  * @prop --wpp-pagination-icons-color:
+  * @prop --wpp-pagination-icons-color-hover:
+  * @prop --wpp-pagination-icons-color-active:
+  * @prop --wpp-pagination-icons-color-disabled:
+  * @prop --wpp-pagination-icons-first-border-color-focus:
+  * @prop --wpp-pagination-icons-second-border-color-focus:
+  * @prop --wpp-pagination-total-count-color:
+  * @prop --wpp-pagination-input-border-color:
+  * @prop --wpp-pagination-input-border-color-hover:
+  * @prop --wpp-pagination-input-border-color-active:
+  * @prop --wpp-pagination-input-border-width:
+  * @prop --wpp-pagination-input-border-style:
+  * @prop --wpp-pagination-input-first-border-color-focus:
+  * @prop --wpp-pagination-input-second-border-color-focus:
+*/
+:host {
+  --pagination-icons-color: var(--wpp-pagination-icons-color, var(--wpp-icon-color));
+  --pagination-icons-color-hover: var(--wpp-pagination-icons-color-hover, var(--wpp-icon-color-hover));
+  --pagination-icons-color-active: var(--wpp-pagination-icons-color-active, var(--wpp-icon-color-active));
+  --pagination-icons-color-disabled: var(
+    --wpp-pagination-icons-color-disabled,
+    var(--wpp-icon-color-disabled)
+  );
+  --pagination-icons-first-border-color-focus: var(--wpp-pagination-icons-first-border-color-focus, var(--wpp-grey-color-000));
+  --pagination-icons-second-border-color-focus: var(--wpp-pagination-icons-second-border-color-focus, var(--wpp-brand-color));
+  --pagination-total-count-color: var(--wpp-pagination-total-count-color, var(--wpp-text-color-info));
+  --pagination-input-border-color: var(--wpp-pagination-input-border-color, var(--wpp-grey-color-600));
+  --pagination-input-border-color-hover: var(--wpp-pagination-input-border-color-hover, var(--wpp-grey-color-700));
+  --pagination-input-border-color-active: var(--wpp-pagination-input-border-color-active, var(--wpp-grey-color-800));
+  --pagination-input-border-width: var(--wpp-pagination-input-border-width, var(--wpp-border-width-s));
+  --pagination-input-border-style: var(--wpp-pagination-input-border-style, solid);
+  --pagination-input-first-border-color-focus: var(--wpp-pagination-input-first-border-color-focus, var(--wpp-grey-color-000));
+  --pagination-input-second-border-color-focus: var(--wpp-pagination-input-second-border-color-focus, var(--wpp-brand-color));
+}
+
+:host(.pagination-select-wrapper) {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.icon-start {
+  margin-right: 4px;
+  transform: rotate(-180deg);
+}
+
+.icon-end {
+  margin-left: 4px;
+}
+
+.icon-start,
+.icon-end {
+  display: inline-flex;
+  color: var(--pagination-icons-color);
+  cursor: pointer;
+  outline: none;
+}
+.icon-start:active,
+.icon-end:active {
+  color: var(--pagination-icons-color-active);
+}
+.icon-start:hover:not(:active),
+.icon-end:hover:not(:active) {
+  color: var(--pagination-icons-color-hover);
+}
+.icon-start.disabled,
+.icon-end.disabled {
+  color: var(--pagination-icons-color-disabled);
+  pointer-events: none;
+}
+.icon-start.tab-focus,
+.icon-end.tab-focus {
+  border-radius: 3px;
+  outline: none;
+  box-shadow: 0 0 0 1px var(--pagination-icons-first-border-color-focus), 0 0 0 3px var(--pagination-icons-second-border-color-focus);
+  background-color: var(--wpp-grey-color-000);
+  color: var(--pagination-icons-color-hover);
+}
+
+.wpp-pagination-item:not(:last-child) {
+  margin-right: 2px;
+}
+
+.page-numeric {
+  display: inline-flex;
+  align-items: center;
+}
+.page-numeric .input-page {
+  font-size: var(--wpp-typography-s-body-font-size, 14px);
+  line-height: var(--wpp-typography-s-body-line-height, 22px);
+  font-weight: var(--wpp-typography-s-body-font-weight, 400);
+  color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
+  box-sizing: border-box;
+  width: 40px;
+  height: 32px;
+  padding: 5px 0;
+  text-align: center;
+  border-radius: var(--wpp-border-radius-s);
+  outline: none;
+  border: var(--pagination-input-border-width) var(--pagination-input-border-style) var(--pagination-input-border-color);
+}
+.page-numeric .input-page::-webkit-outer-spin-button, .page-numeric .input-page::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+  appearance: none;
+}
+.page-numeric .input-page[type=number] {
+  appearance: textfield;
+}
+.page-numeric .input-page:focus {
+  border: var(--pagination-input-border-width) var(--pagination-input-border-style) var(--pagination-input-border-color-active);
+}
+.page-numeric .input-page:hover:not(:focus) {
+  background: var(--wpp-grey-color-200);
+  border: var(--pagination-input-border-width) var(--pagination-input-border-style) var(--pagination-input-border-color-hover);
+}
+.page-numeric .input-page:active {
+  border: var(--pagination-input-border-width) var(--pagination-input-border-style) var(--pagination-input-border-color-active);
+}
+.page-numeric .input-page.tab-focus {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--pagination-input-first-border-color-focus), 0 0 0 3px var(--pagination-input-second-border-color-focus);
+  background: var(--wpp-grey-color-200);
+  border: var(--pagination-input-border-width) var(--pagination-input-border-style) var(--pagination-input-border-color-hover);
+}
+.page-numeric .total-pages {
+  font-size: var(--wpp-typography-s-body-font-size, 14px);
+  line-height: var(--wpp-typography-s-body-line-height, 22px);
+  font-weight: var(--wpp-typography-s-body-font-weight, 400);
+  color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
+  display: flex;
+  justify-content: center;
+  min-width: 40px;
+  color: var(--pagination-total-count-color);
+  user-select: none;
+}
+.page-numeric .wpp-divider {
+  --divider-width: 1px;
+  --divider-height: 12px;
+  margin: 0 8px;
+}

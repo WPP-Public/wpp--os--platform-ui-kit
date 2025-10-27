@@ -1,0 +1,312 @@
+.ql-image-actions__overlay {
+  position: absolute;
+  box-sizing: border-box;
+  border: 1px dashed var(--richtext-border-color-hover);
+}
+
+.ql-image-actions__toolbar {
+  position: absolute;
+  box-sizing: border-box;
+  top: -26px;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  padding: 0 6px;
+  z-index: 1;
+  display: flex;
+  gap: 4px;
+  border: 1px solid var(--richtext-border-color);
+  background: white;
+  cursor: default;
+  border-radius: var(--wpp-border-radius-s);
+}
+.ql-image-actions__toolbar:hover {
+  border: 1px solid var(--richtext-border-color-active);
+}
+
+.ql-image-actions__toolbar-button {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  padding: 2px;
+  vertical-align: middle;
+  color: var(--richtext-button-inactive-color);
+  background-color: var(--richtext-button-background-color);
+  cursor: pointer;
+}
+.ql-image-actions__toolbar-button:hover {
+  color: var(--richtext-button-inactive-hover-color);
+}
+.ql-image-actions__toolbar-button:active {
+  color: var(--richtext-button-inactive-click-color);
+}
+.ql-image-actions__toolbar-button.is-selected {
+  color: var(--richtext-button-active-color);
+}
+.ql-image-actions__toolbar-button.is-selected:hover {
+  color: var(--richtext-button-active-hover-color);
+}
+.ql-image-actions__toolbar-button.is-selected:active {
+  color: var(--richtext-button-active-click-color);
+}
+.ql-image-actions__toolbar-button svg {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  fill: currentColor;
+}
+
+.ql-image-actions__resize-handle {
+  position: absolute;
+  background-color: white;
+  border: 1px solid var(--richtext-border-color);
+  box-sizing: border-box;
+  opacity: 0.8;
+}
+
+.image-actions__proxy-image {
+  position: absolute;
+  display: block;
+  max-width: none;
+}
+
+.ql-editor .ql-attachment-uploading .wpp-progress-indicator {
+  --pi-width: .8em !important;
+  --pi-circle-stroke-width: 12;
+  margin-right: 7px;
+}
+
+.ql-container > .ql-uploading-progress-indicator {
+  --pi-width: 20px;
+  --pi-circle-stroke-width: 8;
+  position: absolute;
+  pointer-events: none;
+}
+
+.wpp-richtext {
+  --richtext-padding: var(--wpp-richtext-padding, 9px 12px);
+  --richtext-label-color: var(--wpp-richtext-label-color, var(--wpp-text-color-info));
+  --richtext-characters-limit-label-color: var(--wpp-richtext-characters-limit-label-color, var(--wpp-grey-color-800));
+  --richtext-label-margin: var(--wpp-richtext-label-margin, 0 0 8px 0);
+  --richtext-inline-message-margin: var(--wpp-richtext-inline-message-margin, 4px 0 0 0);
+  --richtext-placeholder-color: var(--wpp-richtext-placeholder-color, var(--wpp-grey-color-700));
+  --richtext-text-color-disabled: var(--wpp-richtext-text-color-disabled, var(--wpp-text-color-disabled));
+  --richtext-characters-limit-font-weight: var(--wpp-richtext-characters-limit-font-weight, 400);
+  --richtext-warning-charecters-limit-color: var(--wpp-richtext-border-radius, var(--wpp-warning-color-500));
+  --richtext-error-charecters-limit-color: var(--wpp-richtext-border-radius, var(--wpp-danger-color-500));
+  --richtext-bg-color: var(--wpp-richtext-bg-color, transparent);
+  --richtext-bg-color-hover: var(--wpp-richtext-bg-color-hover, var(--wpp-grey-color-200));
+  --richtext-bg-color-active: var(--wpp-richtext-bg-color-active, transparent);
+  --richtext-bg-color-disabled: var(--wpp-richtext-bg-color-disabled, var(--wpp-grey-color-100));
+  --counter-first-border-color-focus: var(--wpp-counter-first-border-color-focus, var(--wpp-grey-color-000));
+  --counter-second-border-color-focus: var(--wpp-counter-second-border-color-focus, var(--wpp-brand-color));
+  --richtext-border-width: var(--wpp-richtext-border-width, var(--wpp-border-width-s));
+  --richtext-border-style: var(--wpp-richtext-border-style, solid);
+  --richtext-border-radius: var(--wpp-richtext-border-radius, var(--wpp-border-radius-m));
+  --richtext-border-color: var(--wpp-richtext-border-color, var(--wpp-grey-color-500));
+  --richtext-border-color-hover: var(--wpp-richtext-border-color-hover, var(--wpp-grey-color-700));
+  --richtext-border-color-active: var(--wpp-richtext-border-color-active, var(--wpp-grey-color-800));
+  --richtext-border-color-disabled: var(--wpp-richtext-border-color-disabled, var(--wpp-grey-color-400));
+  --richtext-first-border-color-focus: var(--wpp-richtext-first-border-color-focus, var(--wpp-grey-color-000));
+  --richtext-second-border-color-focus: var(--wpp-richtext-second-border-color-focus, var(--wpp-brand-color));
+  --richtext-toolbar-outline-color: var(--wpp-richtext-toolbar-outline-color, var(--wpp-brand-color));
+  --richtext-warning-border-color: var(--wpp-richtext-warning-border-color, var(--wpp-warning-color-400));
+  --richtext-error-border-color: var(--wpp-richtext-error-border-color, var(--wpp-danger-color-400));
+  --richtext-tooltip-padding: var(--wpp-richtext-tooltip-padding, 5px 12px);
+  --richtext-tooltip-color: var(--wpp-richtext-tooltip-color, var(--wpp-typography-color));
+  --richtext-tooltip-bg-color: var(--wpp-richtext-tooltip-bg-color, var(--wpp-grey-color-000));
+  --richtext-button-inactive-color: var(--wpp-grey-color-600);
+  --richtext-button-inactive-hover-color: var(--wpp-grey-color-700);
+  --richtext-button-inactive-click-color: var(--wpp-grey-color-800);
+  --richtext-button-active-color: var(--wpp-primary-color-500);
+  --richtext-button-active-hover-color: var(--wpp-primary-color-400);
+  --richtext-button-active-click-color: var(--wpp-primary-color-600);
+  --richtext-button-background-color: var(--wpp-grey-color-000);
+  --richtext-editor-min-width: var(--wpp-richtext-editor-min-width, 376px);
+  --richtext-float-gap: 1em;
+  --richtext-editor-min-height: var(--wpp-richtext-editor-min-height, 136px);
+  display: flex;
+  flex-direction: column;
+  min-width: var(--richtext-editor-min-width);
+}
+.wpp-richtext .label {
+  margin: var(--richtext-label-margin);
+}
+.wpp-richtext .ql-form-control {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: var(--richtext-editor-min-width);
+}
+.wpp-richtext .ql-form-control.tab-focus.tab-focus {
+  border-radius: var(--wpp-border-radius-m);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--richtext-first-border-color-focus), 0 0 0 3px var(--richtext-second-border-color-focus);
+}
+.wpp-richtext .ql-form-control.tab-focus .ql-toolbar *:focus {
+  outline-color: var(--richtext-toolbar-outline-color);
+}
+.wpp-richtext .ql-form-control,
+.wpp-richtext .ql-form-control .ql-toolbar,
+.wpp-richtext .ql-form-control .ql-container {
+  border: var(--richtext-border-width) var(--richtext-border-style) var(--richtext-border-color);
+  border-radius: var(--richtext-border-radius);
+}
+.wpp-richtext .ql-form-control .ql-container {
+  height: 100%;
+  min-height: var(--richtext-editor-min-height);
+}
+.wpp-richtext .ql-form-control .ql-toolbar,
+.wpp-richtext .ql-form-control .ql-container {
+  border-left: none;
+  border-right: none;
+  border-top-width: 0;
+  border-bottom-width: 0;
+}
+.wpp-richtext .ql-form-control .ql-toolbar + .ql-container,
+.wpp-richtext .ql-form-control .ql-container + .ql-toolbar {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top-width: var(--richtext-border-width);
+}
+.wpp-richtext .ql-form-control:hover:not(.active),
+.wpp-richtext .ql-form-control:hover:not(.active) .ql-toolbar,
+.wpp-richtext .ql-form-control:hover:not(.active) .ql-container {
+  border-color: var(--richtext-border-color-hover);
+}
+.wpp-richtext .ql-form-control:hover:not(.active) .ql-container {
+  background-color: var(--wpp-grey-color-200);
+}
+.wpp-richtext .ql-form-control.active,
+.wpp-richtext .ql-form-control.active .ql-toolbar,
+.wpp-richtext .ql-form-control.active .ql-container {
+  border-color: var(--richtext-border-color-active);
+}
+.wpp-richtext .ql-form-control.warning, .wpp-richtext .ql-form-control.warning:hover {
+  border: var(--richtext-border-width) var(--richtext-border-style) var(--wpp-warning-color-400);
+}
+.wpp-richtext .ql-form-control.error, .wpp-richtext .ql-form-control.error:hover {
+  border: var(--richtext-border-width) var(--richtext-border-style) var(--wpp-danger-color-400);
+}
+.wpp-richtext .ql-form-control.disabled *,
+.wpp-richtext .ql-form-control.disabled .ql-editor.ql-blank:before, .wpp-richtext .ql-form-control.disabled:hover *,
+.wpp-richtext .ql-form-control.disabled:hover .ql-editor.ql-blank:before {
+  cursor: not-allowed;
+  color: var(--richtext-text-color-disabled);
+}
+.wpp-richtext .ql-form-control.disabled,
+.wpp-richtext .ql-form-control.disabled .ql-toolbar,
+.wpp-richtext .ql-form-control.disabled .ql-container, .wpp-richtext .ql-form-control.disabled:hover,
+.wpp-richtext .ql-form-control.disabled:hover .ql-toolbar,
+.wpp-richtext .ql-form-control.disabled:hover .ql-container {
+  border-color: var(--richtext-border-color-disabled);
+}
+.wpp-richtext .ql-form-control.disabled .ql-toolbar, .wpp-richtext .ql-form-control.disabled:hover .ql-toolbar {
+  pointer-events: none;
+}
+.wpp-richtext .ql-form-control.disabled .ql-container, .wpp-richtext .ql-form-control.disabled:hover .ql-container {
+  background-color: var(--richtext-bg-color-disabled);
+}
+.wpp-richtext .ql-form-control.warning, .wpp-richtext .ql-form-control.warning:hover {
+  border-color: var(--richtext-warning-border-color);
+}
+.wpp-richtext .ql-form-control.error, .wpp-richtext .ql-form-control.error:hover {
+  border-color: var(--richtext-error-border-color);
+}
+.wpp-richtext .ql-form-control .form-control-input {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.wpp-richtext .ql-toolbar {
+  display: flex;
+  padding: 2px 12px;
+  flex-wrap: wrap;
+  font-size: var(--wpp-typography-s-body-font-size, 14px);
+  line-height: var(--wpp-typography-s-body-line-height, 22px);
+  font-weight: var(--wpp-typography-s-body-font-weight, 400);
+  color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
+}
+.wpp-richtext .ql-toolbar *:focus {
+  outline-color: transparent;
+}
+.wpp-richtext .ql-toolbar .ql-picker-label .wpp-icon-chevron {
+  transition: transform 0.15s ease-out;
+}
+.wpp-richtext .ql-toolbar .ql-picker-label[aria-expanded=true] .wpp-icon-chevron {
+  transform: rotate(180deg);
+}
+.wpp-richtext .ql-editor {
+  height: 100%;
+}
+.wpp-richtext .ql-editor.ql-blank:before {
+  color: var(--richtext-placeholder-color);
+}
+.wpp-richtext .messages-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin: var(--richtext-inline-message-margin);
+}
+.wpp-richtext .messages-wrapper.without-text-message {
+  justify-content: flex-end;
+}
+.wpp-richtext .characters-limit {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-left: 32px;
+}
+.wpp-richtext .characters-limit.warning .wpp-typography {
+  color: var(--richtext-warning-charecters-limit-color);
+}
+.wpp-richtext .characters-limit.warning .wpp-typography:first-child::part(typography) {
+  color: var(--richtext-warning-charecters-limit-color);
+}
+.wpp-richtext .characters-limit.error .wpp-typography {
+  color: var(--richtext-error-charecters-limit-color);
+}
+.wpp-richtext .characters-limit.error .wpp-typography:first-child::part(typography) {
+  color: var(--richtext-error-charecters-limit-color);
+}
+.wpp-richtext .characters-limit .wpp-typography:first-child {
+  --wpp-typography-color: $labelColor;
+  white-space: nowrap;
+}
+.wpp-richtext .characters-limit .wpp-typography:first-child::part(typography) {
+  color: var(--richtext-characters-limit-label-color);
+  font-weight: var(--richtext-characters-limit-font-weight);
+}
+.wpp-richtext .characters-limit .entered-characters {
+  margin-left: 2px;
+  white-space: nowrap;
+}
+
+.ql-toolbar[hidden],
+.ql-container[hidden] {
+  display: block;
+}
+
+.ql-tooltip {
+  padding: var(--richtext-tooltip-padding);
+  box-shadow: var(--wpp-box-shadow-m);
+  border-radius: var(--wpp-border-radius-s);
+  color: var(--richtext-tooltip-color);
+  background-color: var(--richtext-tooltip-bg-color);
+  font-size: var(--wpp-typography-s-body-font-size, 14px);
+  line-height: var(--wpp-typography-s-body-line-height, 22px);
+  font-weight: var(--wpp-typography-s-body-font-weight, 400);
+  color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
+}
+
+.preserve-whitespace,
+.preserve-whitespace .ql-editor {
+  white-space: pre-wrap;
+  word-break: break-word;
+}

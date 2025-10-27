@@ -1,0 +1,432 @@
+/**
+  * @prop --wpp-action-button-padding:
+  * @prop --wpp-action-border-radius:
+  * @prop --wpp-action-button-font-weight:
+  * @prop --wpp-action-button-font-size:
+  * @prop --wpp-action-button-line-height:
+  * @prop --wpp-action-button-icon-only-padding:
+  * @prop --wpp-action-button-bg-color:
+  * @prop --wpp-action-button-bg-color-hover:
+  * @prop --wpp-action-button-bg-color-active:
+  * @prop --wpp-action-button-bg-color-disabled:
+  * @prop --wpp-action-button-bg-color-loading:
+  * @prop --wpp-action-button-first-border-color-focus:
+  * @prop --wpp-action-button-second-border-color-focus:
+
+  * @prop --wpp-action-button-primary-text-color:
+  * @prop --wpp-action-button-primary-text-color-hover:
+  * @prop --wpp-action-button-primary-text-color-active:
+  * @prop --wpp-action-button-primary-text-color-disabled:
+  * @prop --wpp-action-button-primary-icon-color:
+  * @prop --wpp-action-button-primary-icon-color-hover:
+  * @prop --wpp-action-button-primary-icon-color-active:
+  * @prop --wpp-action-button-primary-icon-color-disabled:
+
+  * @prop --wpp-action-button-secondary-text-color:
+  * @prop --wpp-action-button-secondary-text-color-hover:
+  * @prop --wpp-action-button-secondary-text-color-active:
+  * @prop --wpp-action-button-secondary-text-color-disabled:
+  * @prop --wpp-action-button-secondary-icon-color:
+  * @prop --wpp-action-button-secondary-icon-color-hover:
+  * @prop --wpp-action-button-secondary-icon-color-active:
+  * @prop --wpp-action-button-secondary-icon-color-disabled:
+
+  * @prop --wpp-action-button-inverted-text-color:
+  * @prop --wpp-action-button-inverted-text-color-hover:
+  * @prop --wpp-action-button-inverted-text-color-active:
+  * @prop --wpp-action-button-inverted-text-color-disabled:
+  * @prop --wpp-action-button-inverted-icon-color:
+  * @prop --wpp-action-button-inverted-icon-color-hover:
+  * @prop --wpp-action-button-inverted-icon-color-active:
+  * @prop --wpp-action-button-inverted-icon-color-disabled:
+  * @prop --wpp-action-button-inverted-bg-color-hover:
+  * @prop --wpp-action-button-inverted-bg-color-active:
+  * @prop --wpp-action-button-inverted-bg-color-loading:
+  * @prop --wpp-action-button-inverted-bg-color-disabled:
+  * @prop --wpp-action-button-inverted-first-border-color-focus:
+  * @prop --wpp-action-button-inverted-second-border-color-focus:
+
+  * @prop --wpp-action-button-destructive-text-color:
+  * @prop --wpp-action-button-destructive-text-color-hover:
+  * @prop --wpp-action-button-destructive-text-color-active:
+  * @prop --wpp-action-button-destructive-text-color-disabled:
+  * @prop --wpp-action-button-destructive-icon-color:
+  * @prop --wpp-action-button-destructive-icon-color-hover:
+  * @prop --wpp-action-button-destructive-icon-color-active:
+  * @prop --wpp-action-button-destructive-icon-color-disabled:
+  * @prop --wpp-action-button-destructive-bg-color-hover:
+  * @prop --wpp-action-button-destructive-bg-color-active:
+  * @prop --wpp-action-button-destructive-bg-color-loading:
+  * @prop --wpp-action-button-destructive-bg-color-disabled:
+*/
+:host {
+  --ab-padding: var(--wpp-action-button-padding, 5px 8px);
+  --ab-border-radius: var(
+    --wpp-border-radius-fully-rounded,
+    var(--wpp-action-border-radius, var(--wpp-border-radius-s))
+  );
+  --ab-font-weight: var(--wpp-action-button-font-weight, 600);
+  --ab-font-size: var(--wpp-action-button-font-size, 14px);
+  --ab-line-height: var(--wpp-action-button-line-height, 22px);
+  --ab-icon-padding: var(--wpp-action-button-icon-only-padding, 6px);
+  --ab-bg-color: var(--wpp-action-button-bg-color, var(--wpp-btns-action-color-fill, transparent));
+  --ab-bg-color-hover: var(--wpp-action-button-bg-color-hover, var(--wpp-grey-color-700));
+  --ab-bg-color-active: var(--wpp-action-button-bg-color-active, var(--wpp-grey-color-800));
+  --ab-bg-color-disabled: var(--wpp-action-button-bg-color-disabled, transparent);
+  --ab-bg-color-loading: var(--wpp-action-button-bg-color-loading, var(--wpp-grey-color-800));
+  --ab-bg-opacity: var(--wpp-action-button-opacity, 0);
+  --ab-bg-opacity-hover: var(--wpp-action-button-opacity-hover, 0.12);
+  --ab-bg-opacity-active: var(--wpp-action-button-opacity-active, 0.18);
+  --ab-bg-opacity-disabled: var(--wpp-action-button-opacity-disabled, 0);
+  --ab-bg-opacity-loading: var(--wpp-action-button-opacity-loading, 0.18);
+  --ab-first-border-color-focus: var(--wpp-action-button-first-border-color-focus, var(--wpp-grey-color-000));
+  --ab-second-border-color-focus: var(--wpp-action-button-second-border-color-focus, var(--wpp-brand-color));
+  --ab-primary-text-color: var(--wpp-action-button-primary-text-color, var(--wpp-brand-color));
+  --ab-primary-text-color-hover: var(--wpp-action-button-primary-text-color-hover, var(--wpp-brand-color));
+  --ab-primary-text-color-active: var(--wpp-action-button-primary-text-color-active, var(--wpp-brand-color-active));
+  --ab-primary-text-color-disabled: var(
+    --wpp-action-button-primary-text-color-disabled,
+    var(--wpp-brand-color-disabled)
+  );
+  --ab-primary-icon-color: var(--wpp-action-button-primary-icon-color, var(--wpp-brand-color));
+  --ab-primary-icon-color-hover: var(--wpp-action-button-primary-icon-color-hover, var(--wpp-brand-color));
+  --ab-primary-icon-color-active: var(--wpp-action-button-primary-icon-color-active, var(--wpp-brand-color-active));
+  --ab-primary-icon-color-disabled: var(
+    --wpp-action-button-primary-icon-color-disabled,
+    var(--wpp-brand-color-disabled)
+  );
+  --ab-secondary-text-color: var(--wpp-action-button-secondary-text-color, var(--wpp-grey-color-900));
+  --ab-secondary-text-color-hover: var(--wpp-action-button-secondary-text-color-hover, var(--wpp-grey-color-900));
+  --ab-secondary-text-color-active: var(--wpp-action-button-secondary-text-color-active, var(--wpp-grey-color-1000));
+  --ab-secondary-text-color-disabled: var(
+    --wpp-action-button-secondary-text-color-disabled,
+    var(--wpp-text-color-disabled)
+  );
+  --ab-secondary-icon-color: var(--wpp-action-button-secondary-icon-color, var(--wpp-grey-color-800));
+  --ab-secondary-icon-color-hover: var(--wpp-action-button-secondary-icon-color-hover, var(--wpp-icon-color-hover));
+  --ab-secondary-icon-color-active: var(--wpp-action-button-secondary-icon-color-active, var(--wpp-icon-color-active));
+  --ab-secondary-icon-color-disabled: var(
+    --wpp-action-button-secondary-icon-color-disabled,
+    var(--wpp-icon-color-disabled)
+  );
+  --ab-inverted-text-color: var(--wpp-action-button-inverted-txt-color, var(--wpp-grey-color-000));
+  --ab-inverted-text-color-hover: var(--wpp-action-button-inverted-txt-color-hover, var(--wpp-grey-color-000));
+  --ab-inverted-text-color-active: var(--wpp-action-button-inverted-txt-color-active, var(--wpp-grey-color-000));
+  --ab-inverted-text-color-disabled: var(--wpp-action-button-inverted-txt-color-disabled, var(--wpp-grey-color-500));
+  --ab-inverted-icon-color: var(--wpp-action-button-inverted-icon-color, var(--wpp-grey-color-000));
+  --ab-inverted-icon-color-hover: var(--wpp-action-button-inverted-icon-color-hover, var(--wpp-grey-color-000));
+  --ab-inverted-icon-color-active: var(--wpp-action-button-inverted-icon-color-active, var(--wpp-grey-color-100));
+  --ab-inverted-icon-color-disabled: var(--wpp-action-button-inverted-icon-color-disabled, var(--wpp-grey-color-500));
+  --ab-inverted-bg-color: var(--wpp-action-button-inverted-bg-color, var(--wpp-grey-color-100));
+  --ab-inverted-bg-color-hover: var(--wpp-action-button-inverted-bg-color-hover, var(--wpp-grey-color-100));
+  --ab-inverted-bg-color-active: var(--wpp-action-button-inverted-bg-color-active, var(--wpp-grey-color-100));
+  --ab-inverted-bg-color-disabled: var(--wpp-action-button-inverted-bg-color-disabled, transparent);
+  --ab-inverted-bg-color-loading: var(--wpp-action-button-inverted-bg-color-loading, var(--wpp-grey-color-100));
+  --ab-inverted-first-border-color-focus: var(
+    --wpp-action-button-inverted-first-border-color-focus,
+    var(--wpp-grey-color-000)
+  );
+  --ab-inverted-second-border-color-focus: var(
+    --wpp-action-button-inverted-second-border-color-focus,
+    var(--wpp-grey-color-000)
+  );
+  --ab-destructive-text-color: var(--wpp-action-button-destructive-txt-color, var(--wpp-danger-color-500));
+  --ab-destructive-text-color-hover: var(--wpp-action-button-destructive-txt-color-hover, var(--wpp-danger-color-500));
+  --ab-destructive-text-color-active: var(
+    --wpp-action-button-destructive-txt-color-active,
+    var(--wpp-danger-color-600)
+  );
+  --ab-destructive-text-color-disabled: var(
+    --wpp-action-button-destructive-txt-color-disabled,
+    var(--wpp-danger-color-300)
+  );
+  --ab-destructive-icon-color: var(--wpp-action-button-destructive-icon-color, var(--wpp-danger-color-500));
+  --ab-destructive-icon-color-hover: var(--wpp-action-button-destructive-icon-color-hover, var(--wpp-danger-color-500));
+  --ab-destructive-icon-color-active: var(
+    --wpp-action-button-destructive-icon-color-active,
+    var(--wpp-danger-color-600)
+  );
+  --ab-destructive-icon-color-disabled: var(
+    --wpp-action-button-destructive-icon-color-disabled,
+    var(--wpp-danger-color-300)
+  );
+  --ab-destructive-bg-color: var(--wpp-action-button-destructive-bg-color, transparent);
+  --ab-destructive-bg-color-hover: var(--wpp-action-button-destructive-bg-color-hover, var(--wpp-grey-color-700));
+  --ab-destructive-bg-color-active: var(--wpp-action-button-destructive-bg-color-active, var(--wpp-grey-color-800));
+  --ab-destructive-bg-color-disabled: var(--wpp-action-button-destructive-bg-color-disabled, transparent);
+  --ab-destructive-bg-color-loading: var(--wpp-action-button-destructive-bg-color-loading, var(--wpp-grey-color-800));
+  display: inline-flex;
+  outline: none;
+  position: relative;
+  width: fit-content;
+  vertical-align: top;
+}
+
+:host(.wpp-disabled:active),
+:host(.wpp-loading:active) {
+  pointer-events: none;
+}
+
+:host(.nowrap) {
+  white-space: nowrap;
+}
+
+.icon-start,
+.icon-end {
+  display: flex;
+}
+.icon-start.slot-hidden,
+.icon-end.slot-hidden {
+  display: none;
+}
+
+.icon-start {
+  margin-right: 4px;
+}
+
+.icon-end {
+  margin-left: 4px;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: var(--ab-padding);
+  font-weight: var(--ab-font-weight);
+  font-size: var(--ab-font-size);
+  font-family: var(--wpp-font-family);
+  font-style: normal;
+  line-height: var(--ab-line-height);
+  background-color: var(--ab-bg-color);
+  border: none;
+  border-radius: var(--ab-border-radius);
+  outline: none;
+  z-index: 1;
+  cursor: pointer;
+  position: relative;
+  height: 100%;
+}
+button .loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+button .content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+}
+button .content.hide {
+  opacity: 0;
+}
+button.tab-focus {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--ab-first-border-color-focus), 0 0 0 3px var(--ab-second-border-color-focus);
+}
+button:hover ~ .overlay, button.tab-focus ~ .overlay {
+  background-color: var(--ab-bg-color-hover);
+  opacity: var(--ab-bg-opacity-hover);
+}
+button:active ~ .overlay, button.pressed ~ .overlay {
+  background-color: var(--ab-bg-color-active);
+  opacity: var(--ab-bg-opacity-active);
+}
+button.disabled {
+  cursor: not-allowed;
+}
+button.disabled ~ .overlay {
+  background-color: var(--ab-bg-color-disabled);
+  opacity: var(--ab-bg-opacity-disabled);
+}
+button.loading {
+  cursor: not-allowed;
+}
+button.loading ~ .overlay {
+  background-color: var(--ab-bg-color-loading);
+  opacity: var(--ab-bg-opacity-loading);
+}
+button.with-icon-only {
+  padding: var(--ab-icon-padding);
+}
+button.with-icon-only .icon-start,
+button.with-icon-only .icon-end {
+  margin: 0;
+}
+button.with-icon-start:not(.with-icon-only) {
+  padding-left: var(--ab-icon-padding);
+}
+button.with-icon-end:not(.with-icon-only) {
+  padding-right: var(--ab-icon-padding);
+}
+button.primary {
+  color: var(--ab-primary-text-color);
+}
+button.primary .icon-start ::slotted(*),
+button.primary .icon-end ::slotted(*) {
+  color: var(--ab-primary-icon-color);
+}
+button.primary:hover, button.primary.tab-focus {
+  color: var(--ab-primary-text-color-hover);
+}
+button.primary:hover .icon-start ::slotted(*),
+button.primary:hover .icon-end ::slotted(*), button.primary.tab-focus .icon-start ::slotted(*),
+button.primary.tab-focus .icon-end ::slotted(*) {
+  color: var(--ab-primary-icon-color-hover);
+}
+button.primary:active, button.primary.pressed {
+  color: var(--ab-primary-text-color-active);
+}
+button.primary:active .icon-start ::slotted(*),
+button.primary:active .icon-end ::slotted(*), button.primary.pressed .icon-start ::slotted(*),
+button.primary.pressed .icon-end ::slotted(*) {
+  color: var(--ab-primary-icon-color-active);
+}
+button.primary.disabled {
+  color: var(--ab-primary-text-color-disabled);
+}
+button.primary.disabled .icon-start ::slotted(*),
+button.primary.disabled .icon-end ::slotted(*) {
+  color: var(--ab-primary-icon-color-disabled);
+}
+button.secondary {
+  color: var(--ab-secondary-text-color);
+}
+button.secondary .icon-start ::slotted(*),
+button.secondary .icon-end ::slotted(*) {
+  color: var(--ab-secondary-icon-color);
+}
+button.secondary:hover, button.secondary.tab-focus {
+  color: var(--ab-secondary-text-color-hover);
+}
+button.secondary:hover .icon-start ::slotted(*),
+button.secondary:hover .icon-end ::slotted(*), button.secondary.tab-focus .icon-start ::slotted(*),
+button.secondary.tab-focus .icon-end ::slotted(*) {
+  color: var(--ab-secondary-icon-color-hover);
+}
+button.secondary:active, button.secondary.pressed {
+  color: var(--ab-secondary-text-color-active);
+}
+button.secondary:active .icon-start ::slotted(*),
+button.secondary:active .icon-end ::slotted(*), button.secondary.pressed .icon-start ::slotted(*),
+button.secondary.pressed .icon-end ::slotted(*) {
+  color: var(--ab-secondary-icon-color-active);
+}
+button.secondary.disabled {
+  color: var(--ab-secondary-text-color-disabled);
+}
+button.secondary.disabled .icon-start ::slotted(*),
+button.secondary.disabled .icon-end ::slotted(*) {
+  color: var(--ab-secondary-icon-color-disabled);
+}
+button.inverted {
+  color: var(--ab-inverted-text-color);
+}
+button.inverted.tab-focus {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--ab-inverted-first-border-color-focus), 0 0 0 3px var(--ab-inverted-second-border-color-focus);
+}
+button.inverted ~ .overlay {
+  background-color: var(--ab-inverted-bg-color);
+}
+button.inverted .icon-start ::slotted(*),
+button.inverted .icon-end ::slotted(*) {
+  color: var(--ab-inverted-icon-color);
+}
+button.inverted:hover:not(.disabled):not(.loading):not(:active), button.inverted.tab-focus:not(.disabled):not(.loading):not(:active) {
+  color: var(--ab-inverted-text-color-hover);
+}
+button.inverted:hover:not(.disabled):not(.loading):not(:active) ~ .overlay, button.inverted.tab-focus:not(.disabled):not(.loading):not(:active) ~ .overlay {
+  background-color: var(--ab-inverted-bg-color-hover);
+}
+button.inverted:hover:not(.disabled):not(.loading):not(:active) .icon-start ::slotted(*),
+button.inverted:hover:not(.disabled):not(.loading):not(:active) .icon-end ::slotted(*), button.inverted.tab-focus:not(.disabled):not(.loading):not(:active) .icon-start ::slotted(*),
+button.inverted.tab-focus:not(.disabled):not(.loading):not(:active) .icon-end ::slotted(*) {
+  color: var(--ab-inverted-icon-color-hover);
+}
+button.inverted:active, button.inverted.pressed {
+  color: var(--ab-inverted-text-color-active);
+}
+button.inverted:active ~ .overlay, button.inverted.pressed ~ .overlay {
+  background-color: var(--ab-inverted-bg-color-active);
+}
+button.inverted:active .icon-start ::slotted(*),
+button.inverted:active .icon-end ::slotted(*), button.inverted.pressed .icon-start ::slotted(*),
+button.inverted.pressed .icon-end ::slotted(*) {
+  color: var(--ab-inverted-icon-color-active);
+}
+button.inverted.loading ~ .overlay {
+  background-color: var(--ab-inverted-bg-color-loading);
+}
+button.inverted.disabled {
+  color: var(--ab-inverted-text-color-disabled);
+}
+button.inverted.disabled ~ .overlay {
+  background-color: var(--ab-inverted-bg-color-disabled);
+}
+button.inverted.disabled .icon-start ::slotted(*),
+button.inverted.disabled .icon-end ::slotted(*) {
+  color: var(--ab-inverted-icon-color-disabled);
+}
+button.destructive {
+  color: var(--ab-destructive-text-color);
+}
+button.destructive ~ .overlay {
+  background-color: var(--ab-destructive-bg-color);
+}
+button.destructive .icon-start ::slotted(*),
+button.destructive .icon-end ::slotted(*) {
+  color: var(--ab-destructive-icon-color);
+}
+button.destructive:hover:not(.disabled):not(.loading):not(:active):not(.pressed), button.destructive.tab-focus:not(.disabled):not(.loading):not(:active):not(.pressed) {
+  color: var(--ab-destructive-text-color-hover);
+}
+button.destructive:hover:not(.disabled):not(.loading):not(:active):not(.pressed) ~ .overlay, button.destructive.tab-focus:not(.disabled):not(.loading):not(:active):not(.pressed) ~ .overlay {
+  background-color: var(--ab-destructive-bg-color-hover);
+}
+button.destructive:hover:not(.disabled):not(.loading):not(:active):not(.pressed) .icon-start ::slotted(*),
+button.destructive:hover:not(.disabled):not(.loading):not(:active):not(.pressed) .icon-end ::slotted(*), button.destructive.tab-focus:not(.disabled):not(.loading):not(:active):not(.pressed) .icon-start ::slotted(*),
+button.destructive.tab-focus:not(.disabled):not(.loading):not(:active):not(.pressed) .icon-end ::slotted(*) {
+  color: var(--ab-destructive-icon-color-hover);
+}
+button.destructive:active, button.destructive.pressed {
+  color: var(--ab-destructive-text-color-active);
+}
+button.destructive:active ~ .overlay, button.destructive.pressed ~ .overlay {
+  background-color: var(--ab-destructive-bg-color-active);
+}
+button.destructive:active .icon-start ::slotted(*),
+button.destructive:active .icon-end ::slotted(*), button.destructive.pressed .icon-start ::slotted(*),
+button.destructive.pressed .icon-end ::slotted(*) {
+  color: var(--ab-destructive-icon-color-active);
+}
+button.destructive.loading ~ .overlay {
+  background-color: var(--ab-destructive-bg-color-loading);
+}
+button.destructive.disabled {
+  color: var(--ab-destructive-text-color-disabled);
+}
+button.destructive.disabled ~ .overlay {
+  background-color: var(--ab-destructive-bg-color-disabled);
+}
+button.destructive.disabled .icon-start ::slotted(*),
+button.destructive.disabled .icon-end ::slotted(*) {
+  color: var(--ab-destructive-icon-color-disabled);
+}
+
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  border-radius: var(--ab-border-radius);
+  opacity: var(--ab-bg-opacity);
+}

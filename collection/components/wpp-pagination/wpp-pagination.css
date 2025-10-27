@@ -1,0 +1,36 @@
+/**
+  * @prop --wpp-pagination-text-color:
+  * @prop --wpp-pagination-options-list-width:
+*/
+:host {
+  --pagination-text-color: var(--wpp-pagination-text-color, var(--wpp-text-color-info));
+  --pagination-options-list-width: var(--wpp-pagination-options-list-width, 100px);
+}
+
+:host(.wpp-pagination-wrapper) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+:host(.wpp-pagination-wrapper) .control-pagination-wrapper {
+  display: inline-flex;
+  align-items: center;
+}
+:host(.wpp-pagination-wrapper) .wpp-divider {
+  --divider-width: 1px;
+  --divider-height: 12px;
+  margin: 0 16px 0 6px;
+}
+:host(.wpp-pagination-wrapper) .wpp-typography {
+  color: var(--pagination-text-color);
+}
+:host(.wpp-pagination-wrapper) .wpp-text-select {
+  --wpp-input-select-min-width: 46px;
+  margin-left: 2px;
+}
+:host(.wpp-pagination-wrapper) .wpp-text-select::part(options-list) {
+  width: var(--pagination-options-list-width);
+}
+:host(.wpp-pagination-wrapper) .wpp-text-select::part(body) {
+  display: inline-flex;
+}

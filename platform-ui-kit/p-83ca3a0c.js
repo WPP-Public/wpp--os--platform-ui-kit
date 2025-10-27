@@ -1,0 +1,1 @@
+var o;!function(o){o.MOUSE="focus",o.TAB="tab-focus",o.NONE="idle"}(o||(o={}));export{o as F}

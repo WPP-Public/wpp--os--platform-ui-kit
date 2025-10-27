@@ -1,0 +1,41 @@
+:host {
+  --load-more-progress-text-color: var(--wpp-load-more-progress-text-color, var(--wpp-grey-color-700));
+  --load-more-progress-text-color-disabled: var(--wpp-load-more-progress-text-color-disabled, var(--wpp-text-color-disabled));
+  --load-more-progress-bar-color-disabled: var(--wpp-load-more-progress-bar-color-disabled, var(--wpp-brand-color-disabled));
+  --load-more-button-width: var(--wpp-load-more-button-width, 200px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: var(--load-more-button-width);
+}
+
+.progress-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.progress-container.disabled {
+  cursor: not-allowed;
+}
+.progress-container.disabled .progress-indicator::part(body) {
+  --pi-linear-bg-color: var(--load-more-progress-bar-color-disabled);
+}
+
+.progress-text {
+  font-size: var(--wpp-typography-s-midi-font-size, 14px);
+  line-height: var(--wpp-typography-s-midi-line-height, 22px);
+  font-weight: var(--wpp-typography-s-midi-font-weight, 500);
+  color: var(--wpp-typography-s-midi-color, var(--wpp-text-color));
+  font-family: var(--wpp-typography-s-midi-font-family, var(--wpp-font-family));
+  letter-spacing: var(--wpp-typography-s-midi-letter-spacing, 0);
+  color: var(--load-more-progress-text-color);
+}
+.progress-text.disabled {
+  color: var(--load-more-progress-text-color-disabled);
+}
+
+.load-more-button::part(button) {
+  width: var(--load-more-button-width);
+}

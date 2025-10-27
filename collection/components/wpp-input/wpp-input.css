@@ -1,0 +1,302 @@
+/**
+  * @prop --wpp-input-height-m:
+  * @prop --wpp-input-height-s:
+  * @prop --wpp-input-padding-m:
+  * @prop --wpp-input-padding-s:
+  * @prop --wpp-input-with-icons-padding-m:
+  * @prop --wpp-input-with-icons-padding-s:
+  * @prop --wpp-input-label-color:
+  * @prop --wpp-input-placeholder-color:
+  * @prop --wpp-input-text-color-disabled:
+  * @prop --wpp-input-bg-color:
+  * @prop --wpp-input-bg-color-hover:
+  * @prop --wpp-input-bg-color-active:
+  * @prop --wpp-input-bg-color-disabled:
+  * @prop --wpp-input-border-color:
+  * @prop --wpp-input-border-color-hover:
+  * @prop --wpp-input-border-color-active:
+  * @prop --wpp-input-border-color-disabled:
+  * @prop --wpp-input-first-border-color-focus:
+  * @prop --wpp-input-second-border-color-focus:
+  * @prop --wpp-input-border-width:
+  * @prop --wpp-input-border-style:
+  * @prop --wpp-input-icon-start-margin-m:
+  * @prop --wpp-input-icon-end-margin-m:
+  * @prop --wpp-input-icon-start-margin-s:
+  * @prop --wpp-input-icon-end-margin-s:
+  * @prop --wpp-input-icon-end-color-hover:
+  * @prop --wpp-input-icon-end-color-active:
+  * @prop --wpp-input-icon-end-first-border-color-focus:
+  * @prop --wpp-input-icon-end-second-border-color-focus:
+  * @prop --wpp-input-icon-color:
+  * @prop --wpp-input-icon-color-disabled:
+*/
+:host {
+  --text-input-height-m: var(--wpp-input-height-m, 40px);
+  --text-input-height-s: var(--wpp-input-height-s, 32px);
+  --text-input-padding-m: var(--wpp-input-padding-m, calc(9px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width)));
+  --text-input-padding-s: var(--wpp-input-padding-s, calc(5px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width)));
+  --text-input-with-icons-padding-m: var(--wpp-input-with-icons-padding-m, 38px);
+  --text-input-with-icons-padding-s: var(--wpp-input-with-icons-padding-s, 36px);
+  --text-input-label-color: var(--wpp-input-label-color, var(--wpp-text-color-info));
+  --text-input-label-margin: var(--wpp-input-label-margin, 0 0 8px 0);
+  --text-input-inline-message-margin: var(--wpp-input-inline-message-margin, 4px 0 0 0);
+  --text-input-placeholder-color: var(--wpp-input-placeholder-color, var(--wpp-grey-color-700));
+  --text-input-text-color-disabled: var(--wpp-input-text-color-disabled, var(--wpp-text-color-disabled));
+  --text-input-bg-color: var(--wpp-input-bg-color, transparent);
+  --text-input-bg-color-hover: var(--wpp-input-bg-color-hover, var(--wpp-grey-color-200));
+  --text-input-bg-color-active: var(--wpp-input-bg-color-active, var(--wpp-grey-color-000));
+  --text-input-bg-color-disabled: var(--wpp-input-bg-color-disabled, var(--wpp-grey-color-100));
+  --text-input-border-color: var(--wpp-input-border-color, var(--wpp-grey-color-500));
+  --text-input-border-color-hover: var(--wpp-input-border-color-hover, var(--wpp-grey-color-700));
+  --text-input-border-color-active: var(--wpp-input-border-color-active, var(--wpp-grey-color-800));
+  --text-input-border-color-disabled: var(--wpp-input-border-color-disabled, var(--wpp-grey-color-400));
+  --text-input-first-border-color-focus: var(--wpp-input-first-border-color-focus, var(--wpp-grey-color-000));
+  --text-input-second-border-color-focus: var(--wpp-input-second-border-color-focus, var(--wpp-brand-color));
+  --text-input-warning-border-color: var(--wpp-input-warning-border-color, var(--wpp-warning-color-400));
+  --text-input-warning-border-color-hover: var(--wpp-input-warning-border-color-hover, var(--wpp-warning-color-500));
+  --text-input-error-border-color: var(--wpp-input-error-border-color, var(--wpp-danger-color-400));
+  --text-input-error-border-color-hover: var(--wpp-input-error-border-color-hover, var(--wpp-danger-color-500));
+  --text-input-icon-start-margin-m: var(--wpp-input-icon-start-margin-m, 0 0 0 10px);
+  --text-input-icon-end-margin-m: var(--wpp-input-icon-end-margin-m, 0 12px 0 0);
+  --text-input-icon-start-margin-s: var(--wpp-input-icon-start-margin-s, 0 0 0 8px);
+  --text-input-icon-end-margin-s: var(--wpp-input-icon-end-margin-s, 0 10px 0 0);
+  --text-input-icon-end-color-hover: var(--wpp-input-icon-end-color-hover, var(--wpp-icon-color-hover));
+  --text-input-icon-end-color-active: var(--wpp-input-icon-end-color-active, var(--wpp-icon-color-active));
+  --text-input-icon-end-first-border-color-focus: var(--wpp-input-icon-end-first-border-color-focus, var(--wpp-grey-color-000));
+  --text-input-icon-end-second-border-color-focus: var(--wpp-input-icon-end-second-border-color-focus, var(--wpp-brand-color));
+  --text-input-icon-color: var(--wpp-input-icon-color, var(--wpp-icon-color));
+  --text-input-icon-color-disabled: var(--wpp-input-icon-color-disabled, var(--wpp-icon-color-disabled));
+  --text-input-border-width: var(--wpp-input-border-width, var(--wpp-border-width-s));
+  --text-input-border-style: var(--wpp-input-border-style, solid);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.with-tooltip {
+  width: 100%;
+}
+.with-tooltip::part(anchor) {
+  width: 100%;
+}
+
+.label-wrapper {
+  color: var(--text-input-label-color);
+}
+
+.label {
+  margin: var(--text-input-label-margin);
+}
+
+.icon-start,
+.icon-end {
+  position: absolute;
+  top: 50%;
+  display: flex;
+  max-width: 20px;
+  overflow: hidden;
+  color: var(--text-input-icon-color);
+  transform: translateY(-50%);
+}
+.icon-start ::slotted(*),
+.icon-end ::slotted(*) {
+  color: var(--text-input-icon-color);
+}
+
+.icon-start {
+  color: var(--wpp-grey-color-600);
+}
+.icon-start ::slotted(*) {
+  color: var(--wpp-grey-color-600);
+}
+
+.icon-end {
+  right: 0;
+  cursor: pointer;
+}
+.icon-end:hover {
+  color: var(--text-input-icon-end-color-hover);
+}
+.icon-end:hover ::slotted([slot=icon-end]) {
+  color: var(--text-input-icon-end-color-hover);
+}
+.icon-end:active {
+  color: var(--text-input-icon-end-color-active);
+}
+.icon-end:active ::slotted([slot=icon-end]) {
+  color: var(--text-input-icon-end-color-active);
+}
+
+.input-with-icons {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+.input-with-icons .disabled-icon {
+  cursor: not-allowed;
+  color: var(--text-input-icon-color-disabled);
+}
+.input-with-icons .disabled-icon ::slotted([slot=icon-start]),
+.input-with-icons .disabled-icon ::slotted([slot=icon-end]) {
+  color: var(--text-input-icon-color-disabled);
+}
+.input-with-icons .icon-end {
+  outline: none;
+}
+.input-with-icons .icon-end:focus-visible {
+  border-radius: 3px;
+  outline: none;
+  box-shadow: 0 0 0 1px var(--text-input-icon-end-first-border-color-focus), 0 0 0 3px var(--text-input-icon-end-second-border-color-focus);
+  color: var(--text-input-icon-end-color-hover);
+}
+.input-with-icons:hover .icon-start {
+  color: var(--wpp-grey-color-800);
+}
+.input-with-icons:hover .icon-start ::slotted(*) {
+  color: var(--wpp-grey-color-800);
+}
+
+.wpp-inline-message {
+  margin: var(--text-input-inline-message-margin);
+}
+
+:host(.wpp-size-m) .input-with-icons .with-icon-start {
+  padding-left: var(--text-input-with-icons-padding-m);
+}
+:host(.wpp-size-m) .input-with-icons .with-icon-end {
+  padding-right: var(--text-input-with-icons-padding-m);
+}
+:host(.wpp-size-m) .input-with-icons .icon-start {
+  margin: var(--text-input-icon-start-margin-m);
+}
+:host(.wpp-size-m) .input-with-icons .icon-end {
+  margin: var(--text-input-icon-end-margin-m);
+}
+
+:host(.wpp-size-s) .input-with-icons .with-icon-start {
+  padding-left: var(--text-input-with-icons-padding-s);
+}
+:host(.wpp-size-s) .input-with-icons .with-icon-end {
+  padding-right: var(--text-input-with-icons-padding-s);
+}
+:host(.wpp-size-s) .input-with-icons .icon-start {
+  margin: var(--text-input-icon-start-margin-s);
+}
+:host(.wpp-size-s) .input-with-icons .icon-end {
+  margin: var(--text-input-icon-end-margin-s);
+}
+
+:host([disabled]:not([disabled=false])) {
+  cursor: not-allowed;
+}
+:host([disabled]:not([disabled=false])) .input-with-icons {
+  pointer-events: none;
+}
+
+:host(.with-value) .icon-start:not(.disabled-icon) {
+  color: var(--wpp-grey-color-800);
+}
+:host(.with-value) .icon-start:not(.disabled-icon) ::slotted(*) {
+  color: var(--wpp-grey-color-800);
+}
+
+input {
+  font-size: var(--wpp-typography-s-body-font-size, 14px);
+  line-height: var(--wpp-typography-s-body-line-height, 22px);
+  font-weight: var(--wpp-typography-s-body-font-weight, 400);
+  color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--text-input-height-m);
+  background-color: var(--text-input-bg-color);
+  border: var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color);
+  border-radius: var(--wpp-border-radius-m);
+  outline: none;
+  text-overflow: ellipsis;
+}
+input[type=search]::-webkit-search-cancel-button {
+  display: none;
+}
+input .loading {
+  pointer-events: none;
+}
+input .loading ::part(info-wrapper) {
+  height: inherit;
+}
+input .loading .wpp-spinner {
+  margin-right: 7px;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+input:hover {
+  background: var(--text-input-bg-color-hover);
+  border: var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-hover);
+}
+input:active {
+  border: var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-active);
+}
+input::placeholder {
+  color: var(--text-input-placeholder-color);
+}
+input:focus {
+  background: var(--text-input-bg-color-active);
+  border: var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-active);
+}
+input:disabled {
+  color: var(--text-input-text-color-disabled);
+  background: var(--text-input-bg-color-disabled);
+  border: var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-disabled);
+  cursor: not-allowed;
+}
+input:disabled::placeholder {
+  color: var(--text-input-text-color-disabled);
+}
+input.size-m {
+  padding: var(--text-input-padding-m);
+}
+input.size-m.tab-focus {
+  border-radius: var(--wpp-border-radius-m);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus);
+}
+input.size-s {
+  height: var(--text-input-height-s);
+  padding: var(--text-input-padding-s);
+  border-radius: var(--wpp-border-radius-s);
+}
+input.size-s.tab-focus {
+  border-radius: var(--wpp-border-radius-s);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus);
+}
+input.warning, input.warning:hover {
+  border: var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-400);
+}
+input.error, input.error:hover {
+  border: var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-400);
+}
+input.warning {
+  border: var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-400);
+}
+input.warning:hover {
+  border: var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-500);
+}
+input.error, input.with-validation-error {
+  border: var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-400);
+}
+input.error:hover, input.with-validation-error:hover {
+  border: var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-500);
+}
+
+@keyframes onAutoFillStart {}
+input:autofill, input:-webkit-autofill {
+  animation-name: onAutoFillStart;
+  transition: background-color 50000s ease-in-out 0s;
+}

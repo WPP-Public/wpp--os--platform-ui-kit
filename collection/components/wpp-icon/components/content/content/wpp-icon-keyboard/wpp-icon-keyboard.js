@@ -1,0 +1,100 @@
+import { h } from '@stencil/core';
+import { WppIcon } from '../../../../WppIcon';
+export class WppIconKeyboard {
+  constructor() {
+    this.size = 'm';
+    this.width = undefined;
+    this.height = undefined;
+    this.color = 'var(--wpp-icon-color)';
+  }
+  render() {
+    return (h(WppIcon, { name: "wpp-icon-keyboard", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M16.1996 4C17.1939 4 18 4.80607 18 5.80042V13.4059C18 14.4002 17.1939 15.2063 16.1996 15.2063H3.80042C2.80607 15.2063 2 14.4002 2 13.4059V5.80042C2 4.80607 2.80607 4 3.80042 4H16.1996ZM16.1996 5.20028H3.80042C3.46897 5.20028 3.20028 5.46897 3.20028 5.80042V13.4059C3.20028 13.7373 3.46897 14.006 3.80042 14.006H16.1996C16.531 14.006 16.7997 13.7373 16.7997 13.4059V5.80042C16.7997 5.46897 16.531 5.20028 16.1996 5.20028ZM5.80088 11.6018H14.2028C14.5343 11.6018 14.803 11.8705 14.803 12.2019C14.803 12.5057 14.5772 12.7568 14.2843 12.7966L14.2028 12.802H5.80088C5.46943 12.802 5.20074 12.5333 5.20074 12.2019C5.20074 11.8981 5.42652 11.647 5.71945 11.6072L5.80088 11.6018H14.2028H5.80088ZM13.6027 8.80111C14.0446 8.80111 14.4029 9.15937 14.4029 9.6013C14.4029 10.0432 14.0446 10.4015 13.6027 10.4015C13.1608 10.4015 12.8025 10.0432 12.8025 9.6013C12.8025 9.15937 13.1608 8.80111 13.6027 8.80111ZM8.80548 8.80111C9.24741 8.80111 9.60566 9.15937 9.60566 9.6013C9.60566 10.0432 9.24741 10.4015 8.80548 10.4015C8.36355 10.4015 8.00529 10.0432 8.00529 9.6013C8.00529 9.15937 8.36355 8.80111 8.80548 8.80111ZM6.40492 8.80111C6.84685 8.80111 7.20511 9.15937 7.20511 9.6013C7.20511 10.0432 6.84685 10.4015 6.40492 10.4015C5.96299 10.4015 5.60474 10.0432 5.60474 9.6013C5.60474 9.15937 5.96299 8.80111 6.40492 8.80111ZM11.206 8.80111C11.648 8.80111 12.0062 9.15937 12.0062 9.6013C12.0062 10.0432 11.648 10.4015 11.206 10.4015C10.7641 10.4015 10.4058 10.0432 10.4058 9.6013C10.4058 9.15937 10.7641 8.80111 11.206 8.80111ZM5.20074 6.40056C5.64267 6.40056 6.00093 6.75881 6.00093 7.20074C6.00093 7.64267 5.64267 8.00093 5.20074 8.00093C4.75881 8.00093 4.40056 7.64267 4.40056 7.20074C4.40056 6.75881 4.75881 6.40056 5.20074 6.40056ZM7.5974 6.40056C8.03933 6.40056 8.39758 6.75881 8.39758 7.20074C8.39758 7.64267 8.03933 8.00093 7.5974 8.00093C7.15547 8.00093 6.79721 7.64267 6.79721 7.20074C6.79721 6.75881 7.15547 6.40056 7.5974 6.40056ZM9.99795 6.40056C10.4399 6.40056 10.7981 6.75881 10.7981 7.20074C10.7981 7.64267 10.4399 8.00093 9.99795 8.00093C9.55602 8.00093 9.19777 7.64267 9.19777 7.20074C9.19777 6.75881 9.55602 6.40056 9.99795 6.40056ZM12.3985 6.40056C12.8404 6.40056 13.1987 6.75881 13.1987 7.20074C13.1987 7.64267 12.8404 8.00093 12.3985 8.00093C11.9566 8.00093 11.5983 7.64267 11.5983 7.20074C11.5983 6.75881 11.9566 6.40056 12.3985 6.40056ZM14.7991 6.40056C15.241 6.40056 15.5993 6.75881 15.5993 7.20074C15.5993 7.64267 15.241 8.00093 14.7991 8.00093C14.3571 8.00093 13.9989 7.64267 13.9989 7.20074C13.9989 6.75881 14.3571 6.40056 14.7991 6.40056Z", fill: "currentColor" })));
+  }
+  static get is() { return "wpp-icon-keyboard"; }
+  static get registryIs() { return "wpp-icon-keyboard-v3-3-0"; }
+  static get encapsulation() { return "shadow"; }
+  static get originalStyleUrls() {
+    return {
+      "$": ["../../../../wpp-icon.scss"]
+    };
+  }
+  static get styleUrls() {
+    return {
+      "$": ["../../../../wpp-icon.css"]
+    };
+  }
+  static get properties() {
+    return {
+      "size": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "'s' | 'm'",
+          "resolved": "\"m\" | \"s\"",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the icon size, where `s` is **16px** and `m` is **20px**."
+        },
+        "attribute": "size",
+        "reflect": false,
+        "defaultValue": "'m'"
+      },
+      "width": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same."
+        },
+        "attribute": "width",
+        "reflect": false
+      },
+      "height": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected."
+        },
+        "attribute": "height",
+        "reflect": false
+      },
+      "color": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the icon color."
+        },
+        "attribute": "color",
+        "reflect": false,
+        "defaultValue": "'var(--wpp-icon-color)'"
+      }
+    };
+  }
+}

@@ -1,0 +1,355 @@
+/**
+  * @prop --wpp-segmented-control-item-height-m:
+  * @prop --wpp-segmented-control-item-height-s:
+  * @prop --wpp-segmented-control-item-border-radius-m:
+  * @prop --wpp-segmented-control-item-border-radius-s:
+  * @prop --wpp-segmented-control-item-icon-padding-m:
+  * @prop --wpp-segmented-control-item-icon-padding-s:
+  * @prop --wpp-segmented-control-item-counter-font-weight:
+  * @prop --wpp-segmented-control-item-border-width:
+  * @prop --wpp-segmented-control-item-border-style:
+  * @prop --wpp-segmented-control-item-border-color:
+  * @prop --wpp-segmented-control-item-bg-color:
+  * @prop --wpp-segmented-control-item-text-padding-m:
+  * @prop --wpp-segmented-control-item-text-padding-s:
+  * @prop --wpp-segmented-control-item-text-border-color:
+  * @prop --wpp-segmented-control-item-text-border-color-hover:
+  * @prop --wpp-segmented-control-item-text-border-color-active:
+  * @prop --wpp-segmented-control-item-text-border-color-selected:
+  * @prop --wpp-segmented-control-item-text-border-color-disabled:
+  * @prop --wpp-segmented-control-item-text-color:
+  * @prop --wpp-segmented-control-item-text-color-hover:
+  * @prop --wpp-segmented-control-item-text-color-active:
+  * @prop --wpp-segmented-control-item-text-color-selected:
+  * @prop --wpp-segmented-control-item-text-color-disabled:
+  * @prop --wpp-segmented-control-item-text-bg-color-hover:
+  * @prop --wpp-segmented-control-item-text-bg-color-active:
+  * @prop --wpp-segmented-control-item-text-bg-color-selected:
+  * @prop --wpp-segmented-control-item-text-bg-color-disabled:
+  * @prop --wpp-segmented-control-item-icon-border-color:
+  * @prop --wpp-segmented-control-item-icon-border-color-hover:
+  * @prop --wpp-segmented-control-item-icon-border-color-active:
+  * @prop --wpp-segmented-control-item-icon-border-color-selected:
+  * @prop --wpp-segmented-control-item-icon-border-color-disabled:
+  * @prop --wpp-segmented-control-item-icon-color:
+  * @prop --wpp-segmented-control-item-icon-color-hover:
+  * @prop --wpp-segmented-control-item-icon-color-active:
+  * @prop --wpp-segmented-control-item-icon-color-selected:
+  * @prop --wpp-segmented-control-item-icon-color-disabled:
+  * @prop --wpp-segmented-control-item-icon-bg-color-hover:
+  * @prop --wpp-segmented-control-item-icon-bg-color-active:
+  * @prop --wpp-segmented-control-item-icon-bg-color-selected:
+  * @prop --wpp-segmented-control-item-icon-bg-color-disabled:
+*/
+:host {
+  --sc-item-height-m: var(--wpp-segmented-control-item-height-m, 40px);
+  --sc-item-height-s: var(--wpp-segmented-control-item-height-s, 32px);
+  --sc-item-border-radius-m: var(--wpp-segmented-control-item-border-radius-m, var(--wpp-border-radius-m));
+  --sc-item-border-radius-s: var(--wpp-segmented-control-item-border-radius-s, var(--wpp-border-radius-s));
+  --sc-item-icon-padding-m: var(--wpp-segmented-control-item-icon-padding-m, 6px);
+  --sc-item-icon-padding-s: var(--wpp-segmented-control-item-icon-padding-s, 4px);
+  --sc-item-counter-font-weight: var(--wpp-segmented-control-item-counter-font-weight, 400);
+  --sc-item-border-width: var(--wpp-segmented-control-item-border-width, 1px);
+  --sc-item-border-style: var(--wpp-segmented-control-item-border-style, solid);
+  --sc-item-border-color: var(--wpp-segmented-control-item-border-color, var(--wpp-grey-color-500));
+  --sc-item-bg-color: var(--wpp-segmented-control-item-bg-color, transparent);
+  --sc-item-text-padding-m: var(--wpp-segmented-control-item-text-padding-m, 9px 16px);
+  --sc-item-text-padding-s: var(--wpp-segmented-control-item-text-padding-s, 5px 12px);
+  --sc-item-text-border-color: var(--wpp-segmented-control-item-text-border-color, var(--wpp-grey-color-500));
+  --sc-item-text-border-color-hover: var(
+    --wpp-segmented-control-item-text-border-color-hover,
+    var(--wpp-grey-color-500)
+  );
+  --sc-item-text-border-color-active: var(
+    --wpp-segmented-control-item-text-border-color-active,
+    var(--wpp-grey-color-500)
+  );
+  --sc-item-text-border-color-selected: var(
+    --wpp-segmented-control-item-text-border-color-selected,
+    var(--wpp-brand-color)
+  );
+  --sc-item-text-border-color-disabled: var(
+    --wpp-segmented-control-item-text-border-color-disabled,
+    var(--wpp-grey-color-400)
+  );
+  --sc-item-text-color: var(--wpp-segmented-control-item-text-color, var(--wpp-text-color-info));
+  --sc-item-text-color-hover: var(--wpp-segmented-control-item-text-color-hover, var(--wpp-text-color));
+  --sc-item-text-color-active: var(--wpp-segmented-control-item-text-color-active, var(--wpp-text-color));
+  --sc-item-text-color-selected: var(--wpp-segmented-control-item-text-color-selected, var(--wpp-brand-color));
+  --sc-item-text-color-disabled: var(--wpp-segmented-control-item-text-color-disabled, var(--wpp-text-color-disabled));
+  --sc-item-text-bg-color-hover: var(--wpp-segmented-control-item-text-bg-color-hover, var(--wpp-grey-color-200));
+  --sc-item-text-bg-color-active: var(--wpp-segmented-control-item-text-bg-color-active, var(--wpp-grey-color-300));
+  --sc-item-text-bg-color-selected: var(
+    --wpp-segmented-control-item-text-bg-color-selected,
+    var(--wpp-primary-color-100)
+  );
+  --sc-item-text-bg-color-disabled: var(--wpp-segmented-control-item-text-bg-color-disabled, transparent);
+  --sc-item-icon-border-color: var(--wpp-segmented-control-item-icon-border-color, var(--wpp-grey-color-500));
+  --sc-item-icon-border-color-hover: var(
+    --wpp-segmented-control-item-icon-border-color-hover,
+    var(--wpp-grey-color-500)
+  );
+  --sc-item-icon-border-color-active: var(
+    --wpp-segmented-control-item-icon-border-color-active,
+    var(--wpp-grey-color-500)
+  );
+  --sc-item-icon-border-color-selected: var(
+    --wpp-segmented-control-item-icon-border-color-selected,
+    var(--wpp-brand-color)
+  );
+  --sc-item-icon-border-color-disabled: var(
+    --wpp-segmented-control-item-icon-border-color-disabled,
+    var(--wpp-grey-color-400)
+  );
+  --sc-item-icon-color: var(--wpp-segmented-control-item-icon-color, var(--wpp-icon-color));
+  --sc-item-icon-color-hover: var(--wpp-segmented-control-item-icon-color-hover, var(--wpp-icon-color-hover));
+  --sc-item-icon-color-active: var(--wpp-segmented-control-item-icon-color-active, var(--wpp-icon-color-active));
+  --sc-item-icon-color-selected: var(--wpp-segmented-control-item-icon-color-selected, var(--wpp-brand-color));
+  --sc-item-icon-color-disabled: var(--wpp-segmented-control-item-icon-color-disabled, var(--wpp-grey-color-400));
+  --sc-item-icon-bg-color-hover: var(--wpp-segmented-control-item-icon-bg-color-hover, var(--wpp-grey-color-200));
+  --sc-item-icon-bg-color-active: var(--wpp-segmented-control-item-icon-bg-color-active, var(--wpp-grey-color-300));
+  --sc-item-icon-bg-color-selected: var(
+    --wpp-segmented-control-item-icon-bg-color-selected,
+    var(--wpp-primary-color-100)
+  );
+  --sc-item-icon-bg-color-disabled: var(--wpp-segmented-control-item-icon-bg-color-disabled, transparent);
+  --sc-item-text-border-color-selected-disabled: var(
+    --wpp-segmented-control-item-text-border-color-selected-disabled,
+    var(--wpp-primary-color-300)
+  );
+  --sc-item-text-bg-color-selected-disabled: var(
+    --wpp-segmented-control-item-text-bg-color-selected-disabled,
+    var(--wpp-primary-color-100)
+  );
+  --sc-item-text-color-selected-disabled: var(
+    --wpp-segmented-control-item-text-color-selected-disabled,
+    var(--wpp-primary-color-300)
+  );
+  --sc-item-icon-border-color-selected-disabled: var(
+    --wpp-segmented-control-item-icon-border-color-selected-disabled,
+    var(--wpp-primary-color-300)
+  );
+  --sc-item-icon-bg-color-selected-disabled: var(
+    --wpp-segmented-control-item-icon-bg-color-selected-disabled,
+    var(--wpp-primary-color-100)
+  );
+  --sc-item-icon-color-selected-disabled: var(
+    --wpp-segmented-control-item-icon-color-selected-disabled,
+    var(--wpp-primary-color-300)
+  );
+  display: flex;
+  align-items: center;
+  outline: none;
+  width: 100%;
+}
+
+:host([disabled]:not([disabled=false]):active) {
+  pointer-events: none;
+}
+
+:host(:first-child) .segmented-control-item.size-m {
+  border-top-left-radius: var(--sc-item-border-radius-m);
+  border-bottom-left-radius: var(--sc-item-border-radius-m);
+  border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-border-color);
+  border-right: none;
+}
+:host(:first-child) .segmented-control-item.size-s {
+  border-top-left-radius: var(--sc-item-border-radius-s);
+  border-bottom-left-radius: var(--sc-item-border-radius-s);
+  border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-border-color);
+  border-right: none;
+}
+:host(:first-child) .segmented-control-item.disabled {
+  border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-text-border-color-disabled);
+  border-right: none;
+}
+
+:host(:last-child) .segmented-control-item.size-m {
+  border-top-right-radius: var(--sc-item-border-radius-m);
+  border-bottom-right-radius: var(--sc-item-border-radius-m);
+  border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-border-color);
+  border-left: none;
+}
+:host(:last-child) .segmented-control-item.size-s {
+  border-top-right-radius: var(--sc-item-border-radius-s);
+  border-bottom-right-radius: var(--sc-item-border-radius-s);
+  border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-border-color);
+  border-left: none;
+}
+:host(:last-child) .segmented-control-item.disabled {
+  border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-text-border-color-disabled);
+  border-left: none;
+}
+
+:host(:first-child:last-child) .segmented-control-item.size-m {
+  border-radius: var(--sc-item-border-radius-m);
+  border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-border-color);
+}
+:host(:first-child:last-child) .segmented-control-item.size-s {
+  border-radius: var(--sc-item-border-radius-s);
+  border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-border-color);
+}
+
+:host(:not(:first-child):not(:last-child)) .segmented-control-item {
+  border-left: none;
+  border-right: none;
+}
+
+.content-wrapper {
+  display: flex;
+}
+
+.segmented-control-item {
+  font-size: var(--wpp-typography-s-midi-font-size, 14px);
+  line-height: var(--wpp-typography-s-midi-line-height, 22px);
+  font-weight: var(--wpp-typography-s-midi-font-weight, 500);
+  color: var(--wpp-typography-s-midi-color, var(--wpp-text-color));
+  font-family: var(--wpp-typography-s-midi-font-family, var(--wpp-font-family));
+  letter-spacing: var(--wpp-typography-s-midi-letter-spacing, 0);
+  box-sizing: border-box;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  color: var(--sc-item-text-color);
+  text-overflow: ellipsis;
+  background-color: var(--sc-item-bg-color);
+  outline: 0;
+  cursor: pointer;
+  white-space: nowrap;
+  border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-border-color);
+}
+.segmented-control-item.size-s {
+  height: var(--sc-item-height-s);
+}
+.segmented-control-item.size-m {
+  height: var(--sc-item-height-m);
+}
+.segmented-control-item .counter {
+  padding-left: 4px;
+  font-weight: var(--sc-item-counter-font-weight);
+}
+.segmented-control-item.icon {
+  display: flex;
+  justify-content: center;
+  border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-icon-border-color);
+}
+.segmented-control-item.icon .counter {
+  padding: 0;
+}
+.segmented-control-item.icon .content-wrapper {
+  padding: var(--sc-item-icon-padding-m);
+}
+.segmented-control-item.icon .content-wrapper ::slotted(*) {
+  color: var(--sc-item-icon-color);
+}
+.segmented-control-item.icon.size-s .content-wrapper {
+  padding: var(--sc-item-icon-padding-s);
+}
+.segmented-control-item.icon.size-s .content-wrapper ::slotted(*) {
+  color: var(--sc-item-icon-color);
+}
+.segmented-control-item.icon:hover {
+  background-color: var(--sc-item-icon-bg-color-hover);
+}
+.segmented-control-item.icon:hover .content-wrapper ::slotted(*) {
+  color: var(--sc-item-icon-color-hover);
+}
+.segmented-control-item.icon:active {
+  background-color: var(--sc-item-icon-bg-color-active);
+}
+.segmented-control-item.icon:active .content-wrapper ::slotted(*) {
+  color: var(--sc-item-icon-color-active);
+}
+.segmented-control-item.text {
+  border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-text-border-color);
+}
+.segmented-control-item.text.size-m {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sc-item-text-padding-m);
+}
+.segmented-control-item.text.size-s {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sc-item-text-padding-s);
+}
+.segmented-control-item.text:hover {
+  color: var(--sc-item-text-color-hover);
+  background-color: var(--sc-item-text-bg-color-hover);
+  border-top: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-text-border-color-hover);
+  border-bottom: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-text-border-color-hover);
+}
+.segmented-control-item.text:active {
+  color: var(--sc-item-text-color-active);
+  background-color: var(--sc-item-text-bg-color-active);
+  border-top: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-text-border-color-active);
+  border-bottom: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-text-border-color-active);
+}
+
+:host([active]:not([active=false])) .segmented-control-item.icon {
+  outline-offset: calc(var(--sc-item-border-width) * -1);
+  outline: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-icon-border-color-selected);
+  background-color: var(--sc-item-icon-bg-color-selected);
+  transition: background-color 500ms ease, color 500ms ease;
+}
+:host([active]:not([active=false])) .segmented-control-item.icon .content-wrapper ::slotted(*) {
+  color: var(--sc-item-icon-color-selected);
+}
+:host([active]:not([active=false])) .segmented-control-item.text {
+  outline-offset: calc(var(--sc-item-border-width) * -1);
+  outline: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-text-border-color-selected);
+  color: var(--sc-item-text-color-selected);
+  background-color: var(--sc-item-text-bg-color-selected);
+  transition: background-color 500ms ease, color 500ms ease;
+}
+
+:host([disabled]:not([disabled=false])) .segmented-control-item.icon {
+  background-color: var(--sc-item-icon-bg-color-disabled);
+  cursor: not-allowed;
+}
+:host([disabled]:not([disabled=false])) .segmented-control-item.icon .content-wrapper ::slotted(*) {
+  color: var(--sc-item-icon-color-disabled);
+}
+:host([disabled]:not([disabled=false])) .segmented-control-item.text {
+  color: var(--sc-item-text-color-disabled);
+  background-color: var(--sc-item-text-bg-color-disabled);
+  cursor: not-allowed;
+}
+
+:host(:focus-visible) .segmented-control-item:not(.active) {
+  outline: none;
+  z-index: 1;
+  background-color: var(--sc-item-icon-bg-color-hover);
+}
+:host(:focus-visible) .segmented-control-item:not(.active).size-s {
+  border-radius: var(--sc-item-border-radius-s);
+  outline: none;
+  box-shadow: 0 0 0 0.5px var(--wpp-grey-color-300), 0 0 0 1.5px var(--wpp-brand-color);
+}
+:host(:focus-visible) .segmented-control-item:not(.active).size-m {
+  border-radius: var(--sc-item-border-radius-m);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-300), 0 0 0 3px var(--wpp-brand-color);
+}
+
+/* Styles for the Selected-Disabled state */
+:host([active]:not([active=false])[disabled]:not([disabled=false])) .segmented-control-item {
+  cursor: not-allowed;
+}
+:host([active]:not([active=false])[disabled]:not([disabled=false])) .segmented-control-item.icon {
+  cursor: not-allowed;
+  outline: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-text-border-color-selected-disabled);
+  background-color: var(--sc-item-icon-bg-color-selected-disabled);
+}
+:host([active]:not([active=false])[disabled]:not([disabled=false])) .segmented-control-item.icon .content-wrapper ::slotted(*) {
+  color: var(--sc-item-icon-color-selected-disabled);
+}
+:host([active]:not([active=false])[disabled]:not([disabled=false])) .segmented-control-item.text {
+  cursor: not-allowed;
+  outline: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-icon-border-color-selected-disabled);
+  color: var(--sc-item-text-color-selected-disabled);
+  background-color: var(--sc-item-text-bg-color-selected-disabled);
+}

@@ -1,0 +1,13 @@
+import { TreeType } from './types';
+export declare const areAllChildrenSelected: (treeData: TreeType[]) => boolean;
+export declare const areAnyChildrenSelected: (treeData: TreeType[]) => boolean;
+export declare const areAnyChildrenDisabled: (treeData: TreeType[]) => boolean;
+export declare const findTreeItemById: (treeData: TreeType[], id: string) => TreeType | undefined;
+export declare const updateTreeById: (tree: TreeType[], id: string | number | (string | number)[], newItem: any) => TreeType[];
+export declare const updateTreeByIds: (tree: TreeType[], idsList: (string | number)[], newItemParamsCb: (item: Partial<TreeType>) => Partial<TreeType>, passedCheckOnParent?: boolean) => TreeType[];
+export declare const findSelectedItems: (tree: TreeType[]) => (TreeType | null)[];
+export declare const convertToOriginalItems: (treeArr: (TreeType | null)[]) => any[];
+export declare const markChildrenAs: (tree: TreeType[], treeItemCb: (item: TreeType) => Partial<TreeType>) => TreeType[];
+export declare const isHaveFoundChildren: (tree: TreeType[], search: string, matcherFn: (item: TreeType, search: string) => boolean) => boolean;
+export declare const recalculateIndeterminateTreeState: (treeData: TreeType[]) => TreeType[];
+export declare const extractExtraProps: (tree: TreeType) => Record<string, any>;

@@ -1,0 +1,100 @@
+import { h } from '@stencil/core';
+import { WppIcon } from '../../../../WppIcon';
+export class WppIconCollection {
+  constructor() {
+    this.size = 'm';
+    this.width = undefined;
+    this.height = undefined;
+    this.color = 'var(--wpp-icon-color)';
+  }
+  render() {
+    return (h(WppIcon, { name: "wpp-icon-collection", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M9.25292 6.80341L9.40046 6.7993H15.4008C16.7874 6.7993 17.9204 7.88453 17.9969 9.25191L18.001 9.39946V15.3998C18.001 16.7863 16.9158 17.9194 15.5484 17.9959L15.4008 18H9.40046C8.01395 18 6.88091 16.9148 6.80442 15.5474L6.8003 15.3998V9.39946C6.8003 8.01295 7.88553 6.87991 9.25292 6.80341ZM15.4008 7.99937H9.40046C8.66588 7.99937 8.06343 8.5651 8.00502 9.28463L8.00038 9.39946V15.3998C8.00038 16.1344 8.5661 16.7369 9.28563 16.7953L9.40046 16.7999H15.4008C16.1354 16.7999 16.7379 16.2342 16.7963 15.5147L16.8009 15.3998V9.39946C16.8009 8.62621 16.1741 7.99937 15.4008 7.99937ZM12.4007 9.20045C12.732 9.20045 13.0007 9.4691 13.0007 9.80049V11.799L15.0008 11.7996C15.3322 11.7996 15.6009 12.0683 15.6009 12.3996C15.6009 12.731 15.3322 12.9997 15.0008 12.9997L13.0007 12.9991V15.0008C13.0007 15.3322 12.732 15.6009 12.4007 15.6009C12.0693 15.6009 11.8006 15.3322 11.8006 15.0008V12.9991L9.80049 12.9997C9.4691 12.9997 9.20045 12.731 9.20045 12.3996C9.20045 12.0683 9.4691 11.7996 9.80049 11.7996L11.8006 11.799V9.80049C11.8006 9.4691 12.0693 9.20045 12.4007 9.20045ZM12.8661 3.78638L12.9083 3.92784L13.4623 5.99865H12.2198L11.7491 4.23844C11.549 3.49154 10.7813 3.0483 10.0344 3.24843L4.23844 4.80144C3.53085 4.99104 3.09579 5.69005 3.22212 6.39817L3.24843 6.51619L4.80144 12.3121C4.95516 12.8858 5.44378 13.2804 6.00061 13.3418L6.0007 14.5461C4.95964 14.4849 4.02382 13.7963 3.68442 12.7642L3.64226 12.6227L2.08924 6.82679C1.73039 5.48752 2.48539 4.11221 3.78638 3.68442L3.92784 3.64226L9.72375 2.08924C11.063 1.73039 12.4383 2.48539 12.8661 3.78638Z", fill: "currentColor" })));
+  }
+  static get is() { return "wpp-icon-collection"; }
+  static get registryIs() { return "wpp-icon-collection-v3-3-0"; }
+  static get encapsulation() { return "shadow"; }
+  static get originalStyleUrls() {
+    return {
+      "$": ["../../../../wpp-icon.scss"]
+    };
+  }
+  static get styleUrls() {
+    return {
+      "$": ["../../../../wpp-icon.css"]
+    };
+  }
+  static get properties() {
+    return {
+      "size": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "'s' | 'm'",
+          "resolved": "\"m\" | \"s\"",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the icon size, where `s` is **16px** and `m` is **20px**."
+        },
+        "attribute": "size",
+        "reflect": false,
+        "defaultValue": "'m'"
+      },
+      "width": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same."
+        },
+        "attribute": "width",
+        "reflect": false
+      },
+      "height": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected."
+        },
+        "attribute": "height",
+        "reflect": false
+      },
+      "color": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the icon color."
+        },
+        "attribute": "color",
+        "reflect": false,
+        "defaultValue": "'var(--wpp-icon-color)'"
+      }
+    };
+  }
+}

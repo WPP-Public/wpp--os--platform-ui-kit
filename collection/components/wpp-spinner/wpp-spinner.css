@@ -1,0 +1,110 @@
+/**
+  * @prop --wpp-spinner-padding-s:
+  * @prop --wpp-spinner-padding-m:
+  * @prop --wpp-spinner-padding-l:
+*/
+:host {
+  --spinner-padding-s: var(--wpp-spinner-padding-s, 3px);
+  --spinner-padding-m: var(--wpp-spinner-padding-m, 8px);
+  --spinner-padding-l: var(--wpp-spinner-padding-l, 8px);
+  display: inline-flex;
+}
+
+:host(.wpp-size-s) {
+  padding: var(--spinner-padding-s);
+}
+
+:host(.wpp-size-m) {
+  padding: var(--spinner-padding-m);
+}
+
+:host(.wpp-size-l) {
+  padding: var(--spinner-padding-l);
+}
+
+.spinner {
+  animation: rotate-spinner 3s linear infinite;
+}
+@keyframes spinner-s {
+  0% {
+    stroke-dashoffset: 9.24;
+  }
+  50% {
+    stroke-dashoffset: 43.96;
+  }
+  100% {
+    stroke-dashoffset: 0.66;
+  }
+}
+@keyframes spinner-m {
+  0% {
+    stroke-dashoffset: 21.12;
+  }
+  50% {
+    stroke-dashoffset: 100.48;
+  }
+  100% {
+    stroke-dashoffset: 0.66;
+  }
+}
+@keyframes spinner-l {
+  0% {
+    stroke-dashoffset: 42.24;
+  }
+  50% {
+    stroke-dashoffset: 200.96;
+  }
+  100% {
+    stroke-dashoffset: 0.66;
+  }
+}
+.spinner.size-s {
+  width: 14px;
+  height: 14px;
+  transform-origin: 7px 7px 0;
+}
+.spinner.size-s circle {
+  animation: spinner-s 3s linear infinite;
+  stroke-dasharray: 43.96px;
+  stroke-dashoffset: 14;
+  stroke-width: 2;
+}
+.spinner.size-m {
+  width: 32px;
+  height: 32px;
+  transform-origin: 16px 16px 0;
+}
+.spinner.size-m circle {
+  animation: spinner-m 3s linear infinite;
+  stroke-dasharray: 100.48px;
+  stroke-dashoffset: 32;
+  stroke-width: 4;
+}
+.spinner.size-l {
+  width: 64px;
+  height: 64px;
+  transform-origin: 32px 32px 0;
+}
+.spinner.size-l circle {
+  animation: spinner-l 3s linear infinite;
+  stroke-dasharray: 200.96px;
+  stroke-dashoffset: 64;
+  stroke-width: 6;
+}
+
+@keyframes rotate-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(720deg);
+  }
+  100% {
+    transform: rotate(1080deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :host .spinner {
+    animation: none !important; /* stop rotation/shimmer */
+  }
+}

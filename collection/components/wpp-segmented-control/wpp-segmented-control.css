@@ -1,0 +1,50 @@
+/**
+  * @prop --wpp-segmented-control-padding-s:
+  * @prop --wpp-segmented-control-padding-m:
+  * @prop --wpp-segmented-control-item-margin-s:
+  * @prop --wpp-segmented-control-item-margin-m:
+  * @prop --wpp-segmented-control-border-radius-s:
+  * @prop --wpp-segmented-control-border-radius-m:
+  * @prop --wpp-segmented-control-bg-color:
+*/
+:host {
+  --sc-padding-s: var(--wpp-segmented-control-padding-s, 0);
+  --sc-padding-m: var(--wpp-segmented-control-padding-m, 0);
+  --sc-item-margin-s: var(--wpp-segmented-control-item-margin-s, 0);
+  --sc-item-margin-m: var(--wpp-segmented-control-item-margin-m, 0);
+  --sc-border-radius-s: var(--wpp-segmented-control-border-radius-s, var(--wpp-border-radius-s));
+  --sc-border-radius-m: var(--wpp-segmented-control-border-radius-m, var(--wpp-border-radius-m));
+  --sc-border-width: var(--wpp-segmented-control-border-width, 1px);
+  --sc-border-style: var(--wpp-segmented-control-border-style, solid);
+  --sc-border-color: var(--wpp-segmented-control-border-color, var(--wpp-grey-color-500));
+  --sc-bg-color: var(--wpp-segmented-control-bg-color, transparent);
+  --sc-label-margin: var(--wpp-segmented-control-label-margin, 0 0 8px 0);
+  --wpp-bar-width: auto;
+  display: inline-flex;
+  flex-direction: column;
+}
+:host .label {
+  margin: var(--sc-label-margin);
+}
+:host .wpp-bar-wrapper {
+  display: inline-flex;
+  padding: var(--sc-padding-m);
+  background-color: var(--sc-bg-color);
+}
+:host .wpp-bar-wrapper.hug-content-off {
+  width: var(--wpp-bar-width);
+}
+:host .wpp-bar-wrapper.size-s {
+  padding: var(--sc-padding-s);
+  border-radius: var(--sc-border-radius-s);
+}
+:host .wpp-bar-wrapper.size-s ::slotted(.wpp-segmented-control-item:not(:last-child)) {
+  margin-right: var(--sc-item-margin-s);
+}
+:host .wpp-bar-wrapper.size-m {
+  padding: var(--sc-padding-m);
+  border-radius: var(--sc-border-radius-m);
+}
+:host .wpp-bar-wrapper.size-m ::slotted(.wpp-segmented-control-item:not(:last-child)) {
+  margin-right: var(--sc-item-margin-m);
+}
