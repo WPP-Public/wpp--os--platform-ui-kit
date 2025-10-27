@@ -49,8 +49,8 @@ export default {
 } as Meta<Components.WppTypography>
 
 export const Typography: StoryObj<Components.WppTypography> = (args: Components.WppTypography) =>
-  html` <wpp-typography-v3-2-0 .type="${args.type}" .tag="${args.tag}" .color="${args.color}"
-    >Preview Heading</wpp-typography-v3-2-0
+  html` <wpp-typography-v3-3-0 .type="${args.type}" .tag="${args.tag}" .color="${args.color}"
+    >Preview Heading</wpp-typography-v3-3-0
   >`
 
 Typography.args = {

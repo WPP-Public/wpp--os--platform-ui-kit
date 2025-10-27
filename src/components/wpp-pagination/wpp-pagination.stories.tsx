@@ -24,7 +24,7 @@ export default {
 } as Meta<typeof WppPagination>
 
 export const PaginationControl: StoryObj<Components.WppPagination> = (args: Components.WppPagination) =>
-  html`<wpp-pagination-v3-2-0
+  html`<wpp-pagination-v3-3-0
     .selectedItemPerPage="${args.selectedItemPerPage}"
     .count="${args.count}"
     .itemsPerPage="${args.itemsPerPage}"

@@ -18,5 +18,5 @@ export default {
 } as Meta<Components.WppRichtextHtml>
 
 export const HTMLView: StoryObj<Components.WppRichtextHtml> = {
-  render: () => html` <wpp-richtext-html-v3-2-0 .value=${value} /> `,
+  render: () => html` <wpp-richtext-html-v3-3-0 .value=${value} /> `,
 }

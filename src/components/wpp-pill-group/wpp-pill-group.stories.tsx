@@ -28,16 +28,16 @@ export const Display: StoryObj<PillTypes> = (args: PillTypes) => {
   }
 
   return html`
-    <wpp-pill-group-v3-2-0
+    <wpp-pill-group-v3-3-0
       type="display"
       .size="${args.size}"
       .required="${args.required}"
       .labelConfig="${args.labelConfig}"
       @wppChange="${handlePillGroupChange}"
     >
-      <wpp-pill-v3-2-0 label="Item A" value="item-a" .removable="${args.removable}"></wpp-pill-v3-2-0>
-      <wpp-pill-v3-2-0 label="Item B" value="item-b" .disabled="${args.disabled}" .removable="${args.removable}">
-        <wpp-avatar-v3-2-0
+      <wpp-pill-v3-3-0 label="Item A" value="item-a" .removable="${args.removable}"></wpp-pill-v3-3-0>
+      <wpp-pill-v3-3-0 label="Item B" value="item-b" .disabled="${args.disabled}" .removable="${args.removable}">
+        <wpp-avatar-v3-3-0
           name="Name"
           size="xs"
           src="https://mui.com/static/images/avatar/1.jpg"
@@ -45,20 +45,20 @@ export const Display: StoryObj<PillTypes> = (args: PillTypes) => {
           .removable="${args.removable}"
           index="-1"
         />
-      </wpp-pill-v3-2-0>
-      <wpp-pill-v3-2-0 label="Item C" value="item-c" .removable="${args.removable}">
-        <wpp-icon-smile-v3-2-0 slot="icon-start" />
-      </wpp-pill-v3-2-0>
-      <wpp-pill-v3-2-0 label="Item D" value="item-d" .disabled="${args.disabled}" .removable="${args.removable}">
-        <wpp-avatar-v3-2-0
+      </wpp-pill-v3-3-0>
+      <wpp-pill-v3-3-0 label="Item C" value="item-c" .removable="${args.removable}">
+        <wpp-icon-smile-v3-3-0 slot="icon-start" />
+      </wpp-pill-v3-3-0>
+      <wpp-pill-v3-3-0 label="Item D" value="item-d" .disabled="${args.disabled}" .removable="${args.removable}">
+        <wpp-avatar-v3-3-0
           variant="square"
           name="Linkedin"
           size="xs"
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJizK-O7rjmwzro2mvul2xv-Uw1AuPEQajqA&usqp=CAU"
           slot="icon-start"
         />
-      </wpp-pill-v3-2-0>
-    </wpp-pill-group-v3-2-0>
+      </wpp-pill-v3-3-0>
+    </wpp-pill-group-v3-3-0>
   `
 }
 
@@ -83,21 +83,21 @@ export const Draggable: StoryObj<PillTypes> = (args: PillTypes) => {
   }
 
   return html`
-    <wpp-pill-group-v3-2-0
+    <wpp-pill-group-v3-3-0
       type="draggable"
       .size="${args.size}"
       .required="${args.required}"
       .labelConfig="${args.labelConfig}"
       @wppChange="${handlePillGroupChange}"
     >
-      <wpp-pill-v3-2-0
+      <wpp-pill-v3-3-0
         label="Item A"
         value="item-a"
         .disabled="${args.disabled}"
         .removable="${args.removable}"
-      ></wpp-pill-v3-2-0>
-      <wpp-pill-v3-2-0 label="Item B" value="item-b" removable></wpp-pill-v3-2-0>
-    </wpp-pill-group-v3-2-0>
+      ></wpp-pill-v3-3-0>
+      <wpp-pill-v3-3-0 label="Item B" value="item-b" removable></wpp-pill-v3-3-0>
+    </wpp-pill-group-v3-3-0>
   `
 }
 
@@ -122,36 +122,36 @@ export const SingleSelectGroup: StoryObj<PillTypes> = (args: PillTypes) => {
   }
 
   return html`
-    <wpp-pill-group-v3-2-0
+    <wpp-pill-group-v3-3-0
       type="single"
       .size="${args.size}"
       .required="${args.required}"
       .labelConfig="${args.labelConfig}"
       @wppChange="${handlePillGroupChange}"
     >
-      <wpp-pill-v3-2-0 label="Item A" value="item-a"></wpp-pill-v3-2-0>
-      <wpp-pill-v3-2-0 label="Item B" value="item-b" .disabled="${args.disabled}">
-        <wpp-avatar-v3-2-0
+      <wpp-pill-v3-3-0 label="Item A" value="item-a"></wpp-pill-v3-3-0>
+      <wpp-pill-v3-3-0 label="Item B" value="item-b" .disabled="${args.disabled}">
+        <wpp-avatar-v3-3-0
           name="Name"
           size="xs"
           src="https://mui.com/static/images/avatar/1.jpg"
           slot="icon-start"
           index="-1"
         />
-      </wpp-pill-v3-2-0>
-      <wpp-pill-v3-2-0 label="Item C" value="item-c">
-        <wpp-avatar-v3-2-0
+      </wpp-pill-v3-3-0>
+      <wpp-pill-v3-3-0 label="Item C" value="item-c">
+        <wpp-avatar-v3-3-0
           variant="square"
           name="Linkedin"
           size="xs"
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJizK-O7rjmwzro2mvul2xv-Uw1AuPEQajqA&usqp=CAU"
           slot="icon-start"
         />
-      </wpp-pill-v3-2-0>
-      <wpp-pill-v3-2-0 label="Item D" value="item-d">
-        <wpp-icon-smile-v3-2-0 slot="icon-start" />
-      </wpp-pill-v3-2-0>
-    </wpp-pill-group-v3-2-0>
+      </wpp-pill-v3-3-0>
+      <wpp-pill-v3-3-0 label="Item D" value="item-d">
+        <wpp-icon-smile-v3-3-0 slot="icon-start" />
+      </wpp-pill-v3-3-0>
+    </wpp-pill-group-v3-3-0>
   `
 }
 
@@ -177,7 +177,7 @@ export const MultipleSelectGroup: StoryObj<PillTypes> = (args: PillTypes) => {
   }
 
   return html`
-    <wpp-pill-group-v3-2-0
+    <wpp-pill-group-v3-3-0
       type="multiple"
       .value="${pillGroupValue}"
       .size="${args.size}"
@@ -185,36 +185,36 @@ export const MultipleSelectGroup: StoryObj<PillTypes> = (args: PillTypes) => {
       .labelConfig="${args.labelConfig}"
       @wppChange="${handlePillGroupChange}"
     >
-      <wpp-pill-v3-2-0 label="Item A" value="item-a"></wpp-pill-v3-2-0>
-      <wpp-pill-v3-2-0 label="Item B" value="item-b" .disabled="${args.disabled}">
-        <wpp-avatar-v3-2-0
+      <wpp-pill-v3-3-0 label="Item A" value="item-a"></wpp-pill-v3-3-0>
+      <wpp-pill-v3-3-0 label="Item B" value="item-b" .disabled="${args.disabled}">
+        <wpp-avatar-v3-3-0
           name="Name"
           size="xs"
           src="https://mui.com/static/images/avatar/1.jpg"
           slot="icon-start"
           index="-1"
         />
-      </wpp-pill-v3-2-0>
-      <wpp-pill-v3-2-0 label="Item C" value="item-c">
-        <wpp-avatar-v3-2-0
+      </wpp-pill-v3-3-0>
+      <wpp-pill-v3-3-0 label="Item C" value="item-c">
+        <wpp-avatar-v3-3-0
           variant="square"
           name="Linkedin"
           size="xs"
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJizK-O7rjmwzro2mvul2xv-Uw1AuPEQajqA&usqp=CAU"
           slot="icon-start"
         />
-      </wpp-pill-v3-2-0>
-      <wpp-pill-v3-2-0 label="Item D" value="item-d">
-        <wpp-icon-smile-v3-2-0 slot="icon-start" />
-      </wpp-pill-v3-2-0>
-      <wpp-pill-v3-2-0 label="Item E" value="item-e">
+      </wpp-pill-v3-3-0>
+      <wpp-pill-v3-3-0 label="Item D" value="item-d">
+        <wpp-icon-smile-v3-3-0 slot="icon-start" />
+      </wpp-pill-v3-3-0>
+      <wpp-pill-v3-3-0 label="Item E" value="item-e">
         <img
           src="https://easydrawingguides.com/wp-content/uploads/2018/09/Impossible-Triangle-09.png"
           style="display: flex; width: 20px; height: 20px;"
           slot="icon-start"
         />
-      </wpp-pill-v3-2-0>
-    </wpp-pill-group-v3-2-0>
+      </wpp-pill-v3-3-0>
+    </wpp-pill-group-v3-3-0>
   `
 }
 

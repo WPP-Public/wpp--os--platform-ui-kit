@@ -28,7 +28,7 @@ export const Spinner: StoryObj<Components.WppSpinner> = (args: Components.WppSpi
   html` <div
     style="padding: 10px; background-color: ${args.color === 'var(--wpp-grey-color-000)' ? '#697077' : 'white'}"
   >
-    <wpp-spinner-v3-2-0 .color="${args.color}" .size="${args.size}" .ariaProps="${args.ariaProps}" />
+    <wpp-spinner-v3-3-0 .color="${args.color}" .size="${args.size}" .ariaProps="${args.ariaProps}" />
   </div>`
 
 Spinner.args = {

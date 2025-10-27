@@ -65,7 +65,7 @@ export const CombinedInput: StoryObj<Components.WppSelect> = (args: Components.W
   }
 
   return html`
-    <wpp-select-v3-2-0
+    <wpp-select-v3-3-0
       type="combined"
       name="combined-select"
       .message=${args.message}
@@ -83,7 +83,7 @@ export const CombinedInput: StoryObj<Components.WppSelect> = (args: Components.W
       .list=${SAMPLE_LIST_COMBINED}
       @wppChange=${handleChange}
     >
-    </wpp-select-v3-2-0>
+    </wpp-select-v3-3-0>
   `
 }
 

@@ -8,18 +8,18 @@ by default feel free to add 'open: true' property in the data to the desired ite
 ```html
 <div>
   <div>
-    <h3 class='text'>Single select</h3>
-    <wpp-tree [data]='treeData' (wppChange)='handleTreeChange($event)'></wpp-tree>
+    <h3 class="text">Single select</h3>
+    <wpp-tree [data]="treeData" (wppChange)="handleTreeChange($event)"></wpp-tree>
   </div>
   <div>
-    <h3 class='text'>Multiple select</h3>
-    <wpp-tree [data]='treeData' multiple="true" (wppChange)='handleTreeChange($event)'></wpp-tree>
+    <h3 class="text">Multiple select</h3>
+    <wpp-tree [data]="treeData" multiple="true" (wppChange)="handleTreeChange($event)"></wpp-tree>
   </div>
   <div>
-    <h3 class='text'>Tree with filter</h3>
+    <h3 class="text">Tree with filter</h3>
 
-    <wpp-input type="search" placeholder="Search" (wppChange)='handleSearchChange($event)'></wpp-input>
-    <wpp-tree [data]='treeData' [search]='search' (wppChange)='handleTreeChange($event)'></wpp-tree>
+    <wpp-input type="search" placeholder="Search" (wppChange)="handleSearchChange($event)"></wpp-input>
+    <wpp-tree [data]="treeData" [search]="search" (wppChange)="handleTreeChange($event)"></wpp-tree>
   </div>
 </div>
 ```
@@ -39,21 +39,26 @@ export class Tree2ExamplePage {
       children: [
         {
           title: 'Toyota',
-          id: '1',
+          // This particular property makes impossible to select item, but you still can open it or operate with icons
+          isNotSelectable: true,
+          id: '0-0',
+          'data-testid': 'item-toyota',
           iconsEnd: [
-            { icon: `wpp-icon-arrow`, name: 'remove' },
+            { icon: `wpp-icon-info`, name: 'remove' },
             { icon: 'wpp-icon-cross', name: 'save' },
           ],
           children: [
             {
               title: 'Avalon',
-              id: '1-1',
+              id: '0-0-0',
               disabled: true,
+              'data-testid': 'item-avalon',
             },
             {
               title: 'Prius',
-              id: '1-2',
+              id: '0-0-1',
               disabled: true,
+              'data-testid': 'item-prius',
               iconsEnd: [
                 { icon: `wpp-icon-arrow`, name: 'remove' },
                 { icon: 'wpp-icon-cross', name: 'save' },
@@ -61,7 +66,8 @@ export class Tree2ExamplePage {
             },
             {
               title: 'Camry Variants',
-              id: '1-3',
+              id: '0-0-2',
+              'data-testid': 'item-camry',
               iconsEnd: [
                 { icon: `wpp-icon-arrow`, name: 'remove' },
                 { icon: 'wpp-icon-cross', name: 'save' },
@@ -69,11 +75,13 @@ export class Tree2ExamplePage {
               children: [
                 {
                   title: 'Camry 3.5',
-                  id: '1-3-1',
+                  id: '0-0-2-1',
+                  'data-testid': 'item-camry-3-5',
                 },
                 {
                   title: 'Camry Hybrid',
-                  id: '1-3-2',
+                  id: '0-0-2-2',
+                  'data-testid': 'item-cambry-hybrid',
                 },
               ],
             },
@@ -81,61 +89,73 @@ export class Tree2ExamplePage {
         },
         {
           title: 'Skoda',
-          id: '2',
+          id: '0-1',
+          'data-testid': 'item-skoda',
           children: [
             {
               title: 'Kodiaq',
-              id: '2-1',
+              id: '0-1-0',
+              someProps: true,
               iconEnd: {
                 icon: 'wpp-icon-sad',
                 name: 'edit',
               },
+              'data-testid': 'item-kodiaq',
             },
             {
               title: 'Superb',
-              id: '2-2',
+              id: '0-1-1',
+              'data-testid': 'item-superb',
             },
             {
               title: 'Octavia',
-              id: '2-3',
+              id: '0-1-2',
+              'data-testid': 'item-octavia',
             },
           ],
         },
         {
           title: 'Volkswagen',
-          id: '3',
+          id: '0-2',
           children: [
             {
               title: 'Passat',
-              id: '3-1',
+              id: '0-2-0',
+              'data-testid': 'item-passat',
             },
             {
               title: 'Tiguan',
-              id: '3-2',
+              id: '0-2-1',
+              'data-testid': 'item-tiguan',
             },
             {
               title: 'Touareg',
-              id: '3-3',
+              id: '0-2-2',
+              'data-testid': 'item-touareg',
             },
           ],
         },
       ],
     },
     {
-      title: 'Motocicle',
-      id: '4',
+      title: 'Motorcycle',
+      id: '1',
+      'data-testid': 'item-motorcycle',
     },
     {
       title: 'Planes',
-      id: '5',
+      id: '2',
+      'data-testid': 'item-planes',
       children: [
         {
           title: 'B-52',
-          id: '5-1',
+          id: '2-0',
+          'data-testid': 'item-B-52',
         },
         {
           title: 'MIG-21',
-          id: '5-2',
+          id: '2-1',
+          'data-testid': 'item-MIG-21',
         },
       ],
     },
@@ -156,17 +176,17 @@ export class Tree2ExamplePage {
 ```html
 <div>
   <div>
-    <h3 class='text'>Single select with End Content</h3>
-    <wpp-tree [data]='treeData' (wppChange)='handleTreeChange($event)'></wpp-tree>
+    <h3 class="text">Single select with End Content</h3>
+    <wpp-tree [data]="treeData" (wppChange)="handleTreeChange($event)"></wpp-tree>
   </div>
   <div>
-    <h3 class='text'>Multiple select</h3>
-    <wpp-tree [data]='treeData' multiple="true" (wppChange)='handleTreeChange($event)'></wpp-tree>
+    <h3 class="text">Multiple select</h3>
+    <wpp-tree [data]="treeData" multiple="true" (wppChange)="handleTreeChange($event)"></wpp-tree>
   </div>
   <div>
-    <h3 class='text'>Tree with filter</h3>
-    <wpp-input type="search" placeholder="Search" (wppChange)='handleSearchChange($event)'></wpp-input>
-    <wpp-tree [data]='treeData' [search]='search' (wppChange)='handleTreeChange($event)'></wpp-tree>
+    <h3 class="text">Tree with filter</h3>
+    <wpp-input type="search" placeholder="Search" (wppChange)="handleSearchChange($event)"></wpp-input>
+    <wpp-tree [data]="treeData" [search]="search" (wppChange)="handleTreeChange($event)"></wpp-tree>
   </div>
 </div>
 ```
@@ -182,29 +202,32 @@ export class TreeExamplePage {
   public treeData: TreeType[] = [
     {
       title: 'Task 1',
-      id: '0',
+      id: '1',
+      'data-testid': 'task-1',
       endContent: {
         contentType: 'text',
-        props: { text: 'Due in 3 days' }
+        props: { text: 'Due in 3 days' },
       },
       children: [
         {
           title: 'Subtask 1.1',
-          id: '0-1',
+          id: '1-1',
+          'data-testid': 'task-1-1',
           endContent: {
             contentType: 'tag',
             props: {
               label: 'In Progress',
               variant: 'warning',
-              icon: 'wpp-icon-info'
-            }
+              icon: 'wpp-icon-info',
+            },
           },
-        }
-      ]
+        },
+      ],
     },
     {
       title: 'Task 2',
-      id: '1',
+      id: '2',
+      'data-testid': 'task-2',
       endContent: {
         contentType: 'avatar',
         props: {
@@ -216,29 +239,30 @@ export class TreeExamplePage {
       children: [
         {
           title: 'Subtask 2.1',
-          id: '1-1',
+          id: '2-1',
+          'data-testid': 'task-2-1',
           endContent: {
             contentType: 'avatarGroup',
             props: {
               avatars: [
                 { src: 'https://example.com/avatar2.jpg', name: 'Jane' },
                 { src: 'https://example.com/avatar3.jpg', name: 'Tom' },
-              ]
-            }
-          }
-        }
-      ]
-    }
-  ];
+              ],
+            },
+          },
+        },
+      ],
+    },
+  ]
 
-  public search = '';
+  public search = ''
 
   public handleTreeChange(event: any): void {
-    this.treeData = event.detail.treeState;
+    this.treeData = event.detail.treeState
   }
 
   public handleSearchChange(event: any): void {
-    this.search = event.detail.value || '';
+    this.search = event.detail.value || ''
   }
 }
 ```

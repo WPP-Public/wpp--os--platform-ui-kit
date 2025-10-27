@@ -125,6 +125,7 @@
     border-radius: var(--datepicker-input-border-radius);
     box-sizing: border-box;
     outline: none;
+    background-color: transparent;
 
     &:focus {
       border-color: var(--datepicker-input-border-color-active);

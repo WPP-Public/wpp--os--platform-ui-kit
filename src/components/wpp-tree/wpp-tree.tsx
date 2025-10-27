@@ -16,6 +16,7 @@ import {
   convertToOriginalItems,
   updateTreeById,
   updateTreeByIds,
+  extractExtraProps,
 } from './utils'
 import { LOCALES_DEFAULTS } from './const'
 
@@ -474,6 +475,8 @@ export class WppTree {
 
   private renderTree = (treeData: TreeType[], level: number = 1) =>
     treeData.map(item => {
+      const extraProps: Record<string, any> = extractExtraProps(item)
+
       if (item.children) {
         return (
           <wpp-tree-item
@@ -488,6 +491,7 @@ export class WppTree {
             disableOpenCloseAnimation={this.disableOpenCloseAnimation}
             withItemsTruncation={this.withItemsTruncation}
             endContent={item.endContent}
+            {...extraProps}
           >
             {item.iconStart?.icon &&
               h(transformToVersionedTag(item.iconStart.icon), {
@@ -524,6 +528,7 @@ export class WppTree {
           disableOpenCloseAnimation={this.disableOpenCloseAnimation}
           withItemsTruncation={this.withItemsTruncation}
           endContent={item.endContent}
+          {...extraProps}
         >
           {item.iconStart?.icon &&
             h(transformToVersionedTag(item.iconStart.icon), {

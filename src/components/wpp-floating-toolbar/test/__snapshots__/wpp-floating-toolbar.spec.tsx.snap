@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wpp-floating-toolbar snapshots should render WppFloatingToolbar with 2 action buttons 1`] = `
+<wpp-floating-toolbar aria-orientation="horizontal" class="wpp-floating-toolbar" role="toolbar">
+  <mock:shadow-root>
+    <div class="wrapper">
+      <wpp-action-button icon="wpp-icon-add" variant="secondary">
+        <wpp-icon-add-v3-3-0 part="icon" slot="icon-start"></wpp-icon-add-v3-3-0>
+      </wpp-action-button>
+      <wpp-action-button icon="wpp-icon-add" variant="secondary">
+        <wpp-icon-add-v3-3-0 part="icon" slot="icon-start"></wpp-icon-add-v3-3-0>
+      </wpp-action-button>
+    </div>
+  </mock:shadow-root>
+</wpp-floating-toolbar>
+`;
+
+exports[`wpp-floating-toolbar snapshots should render WppFloatingToolbar with 7 action buttons 1`] = `
+<wpp-floating-toolbar aria-orientation="horizontal" class="wpp-floating-toolbar" role="toolbar">
+  <mock:shadow-root>
+    <div class="wrapper">
+      <wpp-action-button icon="wpp-icon-add" variant="secondary">
+        <wpp-icon-add-v3-3-0 part="icon" slot="icon-start"></wpp-icon-add-v3-3-0>
+      </wpp-action-button>
+      <wpp-action-button icon="wpp-icon-add" variant="secondary">
+        <wpp-icon-add-v3-3-0 part="icon" slot="icon-start"></wpp-icon-add-v3-3-0>
+      </wpp-action-button>
+      <wpp-action-button icon="wpp-icon-add" variant="secondary">
+        <wpp-icon-add-v3-3-0 part="icon" slot="icon-start"></wpp-icon-add-v3-3-0>
+      </wpp-action-button>
+      <wpp-action-button icon="wpp-icon-add" variant="secondary">
+        <wpp-icon-add-v3-3-0 part="icon" slot="icon-start"></wpp-icon-add-v3-3-0>
+      </wpp-action-button>
+      <wpp-action-button icon="wpp-icon-add" variant="secondary">
+        <wpp-icon-add-v3-3-0 part="icon" slot="icon-start"></wpp-icon-add-v3-3-0>
+      </wpp-action-button>
+      <wpp-action-button icon="wpp-icon-add" variant="secondary">
+        <wpp-icon-add-v3-3-0 part="icon" slot="icon-start"></wpp-icon-add-v3-3-0>
+      </wpp-action-button>
+      <wpp-action-button icon="wpp-icon-add" variant="secondary">
+        <wpp-icon-add-v3-3-0 part="icon" slot="icon-start"></wpp-icon-add-v3-3-0>
+      </wpp-action-button>
+    </div>
+  </mock:shadow-root>
+</wpp-floating-toolbar>
+`;

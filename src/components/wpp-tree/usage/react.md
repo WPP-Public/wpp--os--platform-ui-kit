@@ -66,6 +66,7 @@ const dataWithEndContent: TreeType[] = [
   {
     title: 'Task 1',
     id: '1',
+    'data-testid': 'task-1',
     endContent: {
       contentType: 'text',
       props: { text: 'Due in 3 days' }
@@ -74,6 +75,7 @@ const dataWithEndContent: TreeType[] = [
       {
         title: 'Subtask 1.1',
         id: '1-1',
+        'data-testid': 'task-1-1',
         endContent: {
           contentType: 'tag',
           props: {
@@ -88,6 +90,7 @@ const dataWithEndContent: TreeType[] = [
   {
     title: 'Task 2',
     id: '2',
+    'data-testid': 'task-2',
     endContent: {
       contentType: 'avatar',
       props: {
@@ -100,6 +103,7 @@ const dataWithEndContent: TreeType[] = [
       {
         title: 'Subtask 2.1',
         id: '2-1',
+        'data-testid': 'task-2-1',
         endContent: {
           contentType: 'avatarGroup',
           props: {
@@ -261,10 +265,12 @@ const TreeMultipleWithNotSelectableItem = () => {
     {
       title: 'Cars',
       id: '0',
+      'data-testid': 'item-cars',
       children: [
         {
           title: 'Toyota',
           id: '0-0',
+          'data-testid': 'item-toyota',
           iconsEnd: [
             { icon: `wpp-icon-info`, name: 'remove' },
             { icon: 'wpp-icon-cross', name: 'save' },
@@ -276,14 +282,17 @@ const TreeMultipleWithNotSelectableItem = () => {
       title: 'Planes',
       isNotSelectable: true,
       id: '1',
+      'data-testid': 'item-planes',
       children: [
         {
           title: 'B-52',
           id: '1-0',
+          'data-testid': 'item-B-52',
         },
         {
           title: 'MIG-21',
           id: '1-1',
+          'data-testid': 'item-MIG-21',
         },
       ],
     },
@@ -356,6 +365,7 @@ export const data: TreeType[] = [
         // This particular property makes impossible to select item, but you still can open it or operate with icons
         isNotSelectable: true,
         id: '0-0',
+        'data-testid': 'item-toyota',
         iconsEnd: [
           { icon: `wpp-icon-info`, name: 'remove' },
           { icon: 'wpp-icon-cross', name: 'save' },
@@ -365,11 +375,13 @@ export const data: TreeType[] = [
             title: 'Avalon',
             id: '0-0-0',
             disabled: true,
+            'data-testid': 'item-avalon',
           },
           {
             title: 'Prius',
             id: '0-0-1',
             disabled: true,
+            'data-testid': 'item-prius',
             iconsEnd: [
               { icon: `wpp-icon-arrow`, name: 'remove' },
               { icon: 'wpp-icon-cross', name: 'save' },
@@ -378,6 +390,7 @@ export const data: TreeType[] = [
           {
             title: 'Camry Variants',
             id: '0-0-2',
+            'data-testid': 'item-camry',
             iconsEnd: [
               { icon: `wpp-icon-arrow`, name: 'remove' },
               { icon: 'wpp-icon-cross', name: 'save' },
@@ -386,10 +399,12 @@ export const data: TreeType[] = [
               {
                 title: 'Camry 3.5',
                 id: '0-0-2-1',
+                'data-testid': 'item-camry-3-5',
               },
               {
                 title: 'Camry Hybrid',
                 id: '0-0-2-2',
+                'data-testid': 'item-cambry-hybrid',
               },
             ],
           },
@@ -398,6 +413,7 @@ export const data: TreeType[] = [
       {
         title: 'Skoda',
         id: '0-1',
+        'data-testid': 'item-skoda',
         children: [
           {
             title: 'Kodiaq',
@@ -407,14 +423,17 @@ export const data: TreeType[] = [
               icon: 'wpp-icon-sad',
               name: 'edit',
             },
+            'data-testid': 'item-kodiaq',
           },
           {
             title: 'Superb',
             id: '0-1-1',
+            'data-testid': 'item-superb',
           },
           {
             title: 'Octavia',
             id: '0-1-2',
+            'data-testid': 'item-octavia',
           },
         ],
       },
@@ -425,14 +444,17 @@ export const data: TreeType[] = [
           {
             title: 'Passat',
             id: '0-2-0',
+            'data-testid': 'item-passat',
           },
           {
             title: 'Tiguan',
             id: '0-2-1',
+            'data-testid': 'item-tiguan',
           },
           {
             title: 'Touareg',
             id: '0-2-2',
+            'data-testid': 'item-touareg',
           },
         ],
       },
@@ -441,18 +463,22 @@ export const data: TreeType[] = [
   {
     title: 'Motorcycle',
     id: '1',
+    'data-testid': 'item-motorcycle',
   },
   {
     title: 'Planes',
     id: '2',
+    'data-testid': 'item-planes',
     children: [
       {
         title: 'B-52',
         id: '2-0',
+        'data-testid': 'item-B-52',
       },
       {
         title: 'MIG-21',
         id: '2-1',
+        'data-testid': 'item-MIG-21',
       },
     ],
   },

@@ -45,7 +45,7 @@ export const Primary: StoryObj<WppButtonTypes> = {
 
     return html`
       <div style=${styleMap(divStyles)}>
-        <wpp-button-v3-2-0
+        <wpp-button-v3-3-0
           .size=${args.size}
           .text=${args.text}
           .disabled=${args.disabled}
@@ -55,26 +55,26 @@ export const Primary: StoryObj<WppButtonTypes> = {
           @click=${() => console.log('Button clicked')}
         >
           ${args.showIconStart
-            ? html`<wpp-icon-plus-v3-2-0
+            ? html`<wpp-icon-plus-v3-3-0
                 slot="icon-start"
                 @click=${(e: Event) => {
                   e.stopPropagation()
                   console.log('Left icon clicked')
                 }}
-              ></wpp-icon-plus-v3-2-0>`
+              ></wpp-icon-plus-v3-3-0>`
             : null}
           ${args.text}
           ${args.showIconEnd
-            ? html`<wpp-icon-chevron-v3-2-0
+            ? html`<wpp-icon-chevron-v3-3-0
                 slot="icon-end"
                 direction="down"
                 @click=${(e: Event) => {
                   e.stopPropagation()
                   console.log('Right icon clicked')
                 }}
-              ></wpp-icon-chevron-v3-2-0>`
+              ></wpp-icon-chevron-v3-3-0>`
             : null}
-        </wpp-button-v3-2-0>
+        </wpp-button-v3-3-0>
       </div>
     `
   },
@@ -90,7 +90,7 @@ export const Secondary: StoryObj<WppButtonTypes> = {
 
     return html`
       <div style=${styleMap(divStyles)}>
-        <wpp-button-v3-2-0
+        <wpp-button-v3-3-0
           .size=${args.size}
           .disabled=${args.disabled}
           .inverted=${args.inverted}
@@ -99,26 +99,26 @@ export const Secondary: StoryObj<WppButtonTypes> = {
           @click=${() => console.log('Button clicked')}
         >
           ${args.showIconStart
-            ? html`<wpp-icon-plus-v3-2-0
+            ? html`<wpp-icon-plus-v3-3-0
                 slot="icon-start"
                 @click=${(e: Event) => {
                   e.stopPropagation()
                   console.log('Left icon clicked')
                 }}
-              ></wpp-icon-plus-v3-2-0>`
+              ></wpp-icon-plus-v3-3-0>`
             : null}
           ${args.text}
           ${args.showIconEnd
-            ? html`<wpp-icon-chevron-v3-2-0
+            ? html`<wpp-icon-chevron-v3-3-0
                 slot="icon-end"
                 direction="down"
                 @click=${(e: Event) => {
                   e.stopPropagation()
                   console.log('Right icon clicked')
                 }}
-              ></wpp-icon-chevron-v3-2-0>`
+              ></wpp-icon-chevron-v3-3-0>`
             : null}
-        </wpp-button-v3-2-0>
+        </wpp-button-v3-3-0>
       </div>
     `
   },
@@ -139,7 +139,7 @@ export const Destructive: StoryObj<DestructiveArgs> = {
     const variant = args.secondary ? 'destructive-secondary' : 'destructive'
 
     return html`
-      <wpp-button-v3-2-0
+      <wpp-button-v3-3-0
         .size=${args.size}
         .disabled=${args.disabled}
         .loading=${args.loading}
@@ -147,7 +147,7 @@ export const Destructive: StoryObj<DestructiveArgs> = {
         @click=${() => console.log('Button clicked')}
       >
         ${args.text}
-      </wpp-button-v3-2-0>
+      </wpp-button-v3-3-0>
     `
   },
 }

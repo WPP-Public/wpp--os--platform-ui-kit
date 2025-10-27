@@ -44,7 +44,7 @@ export const SingleSelectGroup: StoryObj<CardSingleStoryArgsTypes> = (args: Card
   }
 
   return html`
-    <wpp-card-group-v3-2-0
+    <wpp-card-group-v3-3-0
       .size="${args.size}"
       .required="${args.required}"
       .withRadioOrCheckbox="${args.withRadioOrCheckbox}"
@@ -52,26 +52,26 @@ export const SingleSelectGroup: StoryObj<CardSingleStoryArgsTypes> = (args: Card
       @wppChange="${handleCardGroupChange}"
       style="width: 1000px; justify-content: space-between"
     >
-      <wpp-card-v3-2-0 name="item-a" value="item-a">
+      <wpp-card-v3-3-0 name="item-a" value="item-a">
         <div style="width: 238px; height: 200px"></div>
-        <wpp-typography-v3-2-0 type=${handleTypographyType(args.size)} slot="header">Item A</wpp-typography-v3-2-0>
-      </wpp-card-v3-2-0>
-      <wpp-card-v3-2-0 name="item-b" value="item-b">
+        <wpp-typography-v3-3-0 type=${handleTypographyType(args.size)} slot="header">Item A</wpp-typography-v3-3-0>
+      </wpp-card-v3-3-0>
+      <wpp-card-v3-3-0 name="item-b" value="item-b">
         <div style="width: 238px; height: 200px"></div>
-        <wpp-typography-v3-2-0 type=${handleTypographyType(args.size)} slot="header">Item B</wpp-typography-v3-2-0>
-      </wpp-card-v3-2-0>
-      <wpp-card-v3-2-0 value="item-c" .disabled="${args.disabled}">
+        <wpp-typography-v3-3-0 type=${handleTypographyType(args.size)} slot="header">Item B</wpp-typography-v3-3-0>
+      </wpp-card-v3-3-0>
+      <wpp-card-v3-3-0 value="item-c" .disabled="${args.disabled}">
         <div style="width: 238px; height: 200px"></div>
         <div slot="header" style="display: flex; align-items: center">
-          <wpp-icon-user-v3-2-0 style="margin-right: 8px"></wpp-icon-user-v3-2-0>
-          <wpp-typography-v3-2-0
+          <wpp-icon-user-v3-3-0 style="margin-right: 8px"></wpp-icon-user-v3-3-0>
+          <wpp-typography-v3-3-0
             type=${handleTypographyType(args.size)}
             style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; ${handleDisabledText(args.disabled)}"
-            >${args.header}</wpp-typography-v3-2-0
+            >${args.header}</wpp-typography-v3-3-0
           >
         </div>
-      </wpp-card-v3-2-0>
-    </wpp-card-group-v3-2-0>
+      </wpp-card-v3-3-0>
+    </wpp-card-group-v3-3-0>
   `
 }
 
@@ -92,7 +92,7 @@ export const MultipleSelectGroup: StoryObj<CardStoryArgsTypes> = {
     }
 
     return html`
-      <wpp-card-group-v3-2-0
+      <wpp-card-group-v3-3-0
         multiple
         .value="${cardGroupValue}"
         .size="${args.size}"
@@ -101,21 +101,21 @@ export const MultipleSelectGroup: StoryObj<CardStoryArgsTypes> = {
         @wppChange="${handleCardGroupChange}"
         style="width: 1000px; justify-content: space-between"
       >
-        <wpp-card-v3-2-0 header="Item A" value="item-a">
+        <wpp-card-v3-3-0 header="Item A" value="item-a">
           <div style="width: 238px; height: 200px"></div>
-          <wpp-typography-v3-2-0 type=${handleTypographyType(args.size)} slot="header">Item A</wpp-typography-v3-2-0>
-        </wpp-card-v3-2-0>
-        <wpp-card-v3-2-0 header="Item B" value="item-b">
+          <wpp-typography-v3-3-0 type=${handleTypographyType(args.size)} slot="header">Item A</wpp-typography-v3-3-0>
+        </wpp-card-v3-3-0>
+        <wpp-card-v3-3-0 header="Item B" value="item-b">
           <div style="width: 238px; height: 200px"></div>
-          <wpp-typography-v3-2-0 type=${handleTypographyType(args.size)} slot="header">Item B</wpp-typography-v3-2-0>
-        </wpp-card-v3-2-0>
-        <wpp-card-v3-2-0 value="item-c" .disabled="${args.disabled}">
+          <wpp-typography-v3-3-0 type=${handleTypographyType(args.size)} slot="header">Item B</wpp-typography-v3-3-0>
+        </wpp-card-v3-3-0>
+        <wpp-card-v3-3-0 value="item-c" .disabled="${args.disabled}">
           <div style="width: 238px; height: 200px"></div>
-          <wpp-typography-v3-2-0 type=${handleTypographyType(args.size)} slot="header"
+          <wpp-typography-v3-3-0 type=${handleTypographyType(args.size)} slot="header"
             >${args.header}
-          </wpp-typography-v3-2-0>
-        </wpp-card-v3-2-0>
-      </wpp-card-group-v3-2-0>
+          </wpp-typography-v3-3-0>
+        </wpp-card-v3-3-0>
+      </wpp-card-group-v3-3-0>
     `
   },
   args: {

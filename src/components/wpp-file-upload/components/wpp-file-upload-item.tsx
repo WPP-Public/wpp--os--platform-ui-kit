@@ -1,4 +1,4 @@
-import { Component, Prop, h, Host, State, EventEmitter, Event, Watch } from '@stencil/core'
+import { Component, Prop, h, Host, State, EventEmitter, Event, Watch, Element } from '@stencil/core'
 
 import { truncate } from '../../../utils/utils'
 import { FOCUS_TYPE } from '../../../types/common'
@@ -26,6 +26,17 @@ import { LOCALES_DEFAULTS, returnIconFromExtension } from '../const'
 })
 export class WppFileUploadItem {
   private _locales: FileUploadItemLocales = LOCALES_DEFAULTS
+  private fileNameRef?: HTMLWppTypographyElement
+  private tooltipRef?: HTMLWppTooltipElement
+  private measureRef?: HTMLWppTypographyElement
+  private loadingRef?: HTMLSpanElement
+  private observer: ResizeObserver
+  private pendingTruncation = false
+  private isTruncated = false
+  private readonly ELLIPSIS = '...'
+  private readonly MIN_WIDTH_THRESHOLD = 0
+
+  @Element() host: HTMLWppFileUploadItemElement
 
   @State() thumbnailUrl: string | null = null
 
@@ -43,6 +54,8 @@ export class WppFileUploadItem {
 
   @State() focusType: FOCUS_TYPE
 
+  @Prop() fileName: string
+
   /**
    * Current file
    */
@@ -55,8 +68,10 @@ export class WppFileUploadItem {
 
   /**
    * Maximum label length (in characters) of single loading item
+   *
+   * @deprecated - this prop will be removed in 4.0.0 version. Truncation will be calculated based on available space.
    */
-  @Prop() readonly maxLabelLength: number = 30
+  @Prop() readonly maxLabelLength?: number
 
   /**
    * Represent current index in files list
@@ -159,6 +174,131 @@ export class WppFileUploadItem {
     } else {
       this.handleFileReading()
     }
+  }
+
+  componentDidLoad() {
+    if (!this.maxLabelLength) {
+      const elementsToObserve = [this.host, this.fileNameRef, this.loadingRef].filter(
+        (el, i, arr) => el && arr.indexOf(el) === i,
+      ) as Element[]
+
+      this.observer = new ResizeObserver(() => this.scheduleTruncate())
+      elementsToObserve.forEach(el => this.observer.observe(el))
+
+      this.scheduleTruncate()
+    } else {
+      this.isTruncated = this.file?.name?.length > this.maxLabelLength
+    }
+  }
+
+  disconnectedCallback() {
+    this.observer?.disconnect()
+  }
+
+  private scheduleTruncate = () => {
+    if (this.pendingTruncation) return
+    this.pendingTruncation = true
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        this.pendingTruncation = false
+        this.truncateFileName()
+      })
+    })
+  }
+
+  private truncateFileName = () => {
+    const text = this.file?.name || ''
+
+    if (!this.fileNameRef || !text || !this.tooltipRef) return
+
+    this.isTruncated = false
+    this.tooltipRef.classList.remove('computed')
+    if (this.fileNameRef.textContent !== text) this.fileNameRef.textContent = text
+
+    // Compute the available width of the visible container
+    const maxWidth = this.computeAvailableWidth()
+
+    // If not yet laid out, try on the next frame
+    if (!maxWidth || maxWidth <= 0) {
+      this.scheduleTruncate()
+
+      return
+    }
+
+    const fullWidth = this.measure(text)
+
+    // Fits fully, keep original
+    if (fullWidth <= maxWidth) {
+      this.updateFileNameAndMarkComputed(text)
+
+      return
+    }
+
+    const ellipsis = '...'
+    const ellipsisWidth = this.measure(ellipsis)
+
+    // If even the ellipsis alone can't fit
+    if (ellipsisWidth > maxWidth) {
+      this.fileNameRef.textContent = ellipsis
+      this.isTruncated = true
+      this.tooltipRef.classList.add('computed')
+
+      return
+    }
+
+    const best = this.findLargestNumberOfCharacters(text, maxWidth, ellipsis)
+
+    this.updateFileNameAndMarkComputed(best)
+    this.isTruncated = true
+  }
+
+  private computeAvailableWidth = () => {
+    if (!this.fileNameRef) return 0
+
+    const rect = this.fileNameRef.getBoundingClientRect()
+    const hostStyle = getComputedStyle(this.fileNameRef)
+    const padL = parseFloat(hostStyle.paddingLeft) || 0
+    const padR = parseFloat(hostStyle.paddingRight) || 0
+
+    return Math.max(0, rect.width - padL - padR)
+  }
+
+  // Helper: measure a candidate using the hidden wpp-typography
+  private measure = (s: string): number => {
+    if (!this.measureRef) return Number.POSITIVE_INFINITY // or 0 to force another frame
+    this.measureRef.textContent = s
+
+    return this.measureRef.scrollWidth
+  }
+
+  // Binary search the largest n (equal head and tail length) such that
+  // head(n) + '...' + tail(n) fits into maxWidth
+  private findLargestNumberOfCharacters = (text: string, maxWidth: number, ellipsis = '...') => {
+    let lo = 0
+    let hi = Math.floor(text.length / 2)
+    let best = ellipsis
+
+    while (lo <= hi) {
+      const mid = (lo + hi) >> 1
+      const candidate = text.slice(0, mid) + ellipsis + text.slice(text.length - mid)
+      const w = this.measure(candidate)
+
+      if (w <= maxWidth) {
+        best = candidate
+        lo = mid + 1
+      } else {
+        hi = mid - 1
+      }
+    }
+
+    return best
+  }
+
+  private updateFileNameAndMarkComputed = (name: string) => {
+    if (!this.fileNameRef || !this.tooltipRef) return
+
+    if (this.fileNameRef.textContent !== name) this.fileNameRef.textContent = name
+    if (!this.tooltipRef.classList.contains('computed')) this.tooltipRef.classList.add('computed')
   }
 
   private handleFileReading() {
@@ -329,11 +469,11 @@ export class WppFileUploadItem {
 
   private blockCssClasses = () => ({
     block: true,
+    'block-error': this.isFileWithError(),
   })
 
   private fileNameCssClasses = () => ({
     name: true,
-    'name-error': this.isFileWithError(),
   })
 
   private hostCssClasses = () => ({
@@ -365,37 +505,46 @@ export class WppFileUploadItem {
 
           <div class="content-wrapper" part="wrapper">
             <div class={this.blockCssClasses()} part="content">
-              {this.setCurrentIcon()}
+              <div class="icon-wrapper">{this.setCurrentIcon()}</div>
 
               <wpp-tooltip
+                class={this.maxLabelLength ? 'computed' : ''}
+                ref={ref => (this.tooltipRef = ref)}
                 text={this.file.name}
                 config={{
                   popperOptions: { strategy: 'fixed' },
                   onShow: () => {
-                    if (!(this.file?.name?.length > this.maxLabelLength)) return false
+                    if (!this.isTruncated || (this.maxLabelLength && !(this.file?.name?.length > this.maxLabelLength)))
+                      return false
                   },
                 }}
                 part="tooltip"
               >
-                <p class={this.fileNameCssClasses()} part="file-name" title={this.file.name}>
-                  {truncate(this.file.name, this.maxLabelLength, true)}
-                </p>
+                <wpp-typography
+                  ref={ref => (this.fileNameRef = ref)}
+                  class={this.fileNameCssClasses()}
+                  type="s-body"
+                  part="file-name"
+                  title={this.file.name}
+                >
+                  {this.maxLabelLength ? truncate(this.file.name, this.maxLabelLength, true) : this.file?.name}
+                </wpp-typography>
               </wpp-tooltip>
 
               {!this.isFileWithError() && (
-                <p class="loading" part="loading">
+                <span ref={ref => (this.loadingRef = ref)} class="loading" part="loading">
                   {this.isFileLoading()
                     ? `${this.loaded}/${this.total} ${this.measurementUnit}`
                     : `${this.total} ${this.measurementUnit}`}
-                </p>
+                </span>
               )}
             </div>
 
             <div class="controls-wrapper" part="controls">
               {this.isFileLoading() && (
-                <p class="percentage" part="percentage">
+                <span class="percentage" part="percentage">
                   {this.percentage}%
-                </p>
+                </span>
               )}
 
               {this.file.deletable !== false && !this.isFileWithError() && (
@@ -415,6 +564,13 @@ export class WppFileUploadItem {
             </div>
           </div>
         </div>
+        <wpp-typography
+          ref={ref => (this.measureRef = ref)}
+          type="s-body"
+          class="measure"
+          aria-hidden="true"
+          role="presentation"
+        ></wpp-typography>
       </Host>
     )
   }

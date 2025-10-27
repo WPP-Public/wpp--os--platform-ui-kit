@@ -30,7 +30,7 @@ export default {
 } as Meta<Components.WppTooltip>
 
 export const TitleAndText: StoryObj<Components.WppTooltip> = (args: Components.WppTooltip) => html`
-  <wpp-tooltip-v3-2-0
+  <wpp-tooltip-v3-3-0
     .dropdownWidth="${args.dropdownWidth}"
     .header="${args.header}"
     .text="${args.text}"
@@ -40,10 +40,10 @@ export const TitleAndText: StoryObj<Components.WppTooltip> = (args: Components.W
     .warning="${args.warning}"
     .error="${args.error}"
   >
-    <wpp-button-v3-2-0 variant="${args.error ? 'destructive' : 'primary'}">
+    <wpp-button-v3-3-0 variant="${args.error ? 'destructive' : 'primary'}">
       ${args.error ? 'Error tooltip' : args.warning ? 'Warning tooltip' : 'Tooltip'}
-    </wpp-button-v3-2-0>
-  </wpp-tooltip-v3-2-0>
+    </wpp-button-v3-3-0>
+  </wpp-tooltip-v3-3-0>
 `
 
 TitleAndText.args = {
@@ -62,7 +62,7 @@ TitleAndText.parameters = {
 }
 
 export const Value: StoryObj<Components.WppTooltip> = (args: Components.WppTooltip) =>
-  html` <wpp-tooltip-v3-2-0
+  html` <wpp-tooltip-v3-3-0
     .text="${args.text}"
     .value="${args.value}"
     .theme="${args.theme}"
@@ -70,8 +70,8 @@ export const Value: StoryObj<Components.WppTooltip> = (args: Components.WppToolt
     .dropdownWidth="${args.dropdownWidth}"
     .wordBreak="${args.wordBreak}"
   >
-    <wpp-button-v3-2-0 variant="primary">Button</wpp-button-v3-2-0>
-  </wpp-tooltip-v3-2-0>`
+    <wpp-button-v3-3-0 variant="primary">Button</wpp-button-v3-3-0>
+  </wpp-tooltip-v3-3-0>`
 
 Value.args = {
   text: 'Label',
@@ -96,30 +96,30 @@ const styles = {
 }
 
 export const CustomContent: StoryObj<Components.WppTooltip> = (args: Components.WppTooltip) => html`
-  <wpp-tooltip-v3-2-0
+  <wpp-tooltip-v3-3-0
     .dropdownWidth="${args.dropdownWidth}"
     .text="${args.text}"
     .config="${args.config}"
     .theme="${args.theme}"
     .wordBreak="${args.wordBreak}"
   >
-    <wpp-button-v3-2-0 data-testid="allow-html-tooltip-button">Tooltip with Custom Content</wpp-button-v3-2-0>
+    <wpp-button-v3-3-0 data-testid="allow-html-tooltip-button">Tooltip with Custom Content</wpp-button-v3-3-0>
     <div slot="tooltip-content">
-      <wpp-typography-v3-2-0
+      <wpp-typography-v3-3-0
         tag="h2"
         type="m-strong"
         style=${args.theme === 'dark' ? styleMap(styles.typographyDark) : styleMap(styles.typographyLight)}
         >Bold Content
-      </wpp-typography-v3-2-0>
-      <wpp-typography-v3-2-0
+      </wpp-typography-v3-3-0>
+      <wpp-typography-v3-3-0
         tag="p"
         type="s-body"
         style=${args.theme === 'dark' ? styleMap(styles.typographyDark) : styleMap(styles.typographyLight)}
       >
         Body content
-      </wpp-typography-v3-2-0>
+      </wpp-typography-v3-3-0>
     </div>
-  </wpp-tooltip-v3-2-0>
+  </wpp-tooltip-v3-3-0>
 `
 
 CustomContent.args = {

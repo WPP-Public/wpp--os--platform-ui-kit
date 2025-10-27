@@ -44,6 +44,7 @@
  - [wpp-chat-input](../wpp-chat/components/wpp-chat-input)
  - [wpp-color-picker](../wpp-color-picker)
  - [wpp-datepicker](../wpp-datepicker)
+ - [wpp-file-upload-item](../wpp-file-upload/components)
  - [wpp-filter-button](../wpp-filter-button)
  - [wpp-inline-edit](../wpp-inline-edit)
  - [wpp-inline-message](../wpp-inline-message)
@@ -72,6 +73,7 @@ graph TD;
   wpp-chat-input --> wpp-typography
   wpp-color-picker --> wpp-typography
   wpp-datepicker --> wpp-typography
+  wpp-file-upload-item --> wpp-typography
   wpp-filter-button --> wpp-typography
   wpp-inline-edit --> wpp-typography
   wpp-inline-message --> wpp-typography

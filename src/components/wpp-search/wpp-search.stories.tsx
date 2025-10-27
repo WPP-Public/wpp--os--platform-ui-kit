@@ -69,7 +69,7 @@ const heroes: Hero[] = [
 export const Search: StoryObj<SearchStoryArgs> = (args: SearchStoryArgs) => {
   const [value, setValue] = useState<Hero[]>([])
 
-  return html` <wpp-search-v3-2-0
+  return html` <wpp-search-v3-3-0
     .loading="${args.loading}"
     .disabled="${args.disabled}"
     .required="${args.required}"
@@ -93,13 +93,13 @@ export const Search: StoryObj<SearchStoryArgs> = (args: SearchStoryArgs) => {
   >
     ${heroes.map(
       hero => html`
-        <wpp-list-item-v3-2-0 .value="${hero}">
-          <wpp-avatar-v3-2-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-2-0>
+        <wpp-list-item-v3-3-0 .value="${hero}">
+          <wpp-avatar-v3-3-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-3-0>
           <p slot="label">${hero.label}</p>
-        </wpp-list-item-v3-2-0>
+        </wpp-list-item-v3-3-0>
       `,
     )}
-  </wpp-search-v3-2-0>`
+  </wpp-search-v3-3-0>`
 }
 
 Search.args = {

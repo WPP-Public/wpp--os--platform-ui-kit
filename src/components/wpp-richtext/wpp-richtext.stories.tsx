@@ -110,7 +110,7 @@ const uploadRequestHandler = {
  */
 export const Editor: StoryObj<Components.WppRichtext> = {
   render: (args: Components.WppRichtext) => html`
-    <wpp-richtext-v3-2-0
+    <wpp-richtext-v3-3-0
       @wppChange="${changeHandler}"
       @wppSelectionChange="${selectionChangeHandler}"
       @wppUploadRequest="${uploadRequestHandler}"
@@ -131,7 +131,7 @@ export const Editor: StoryObj<Components.WppRichtext> = {
       warning-threshold="${args.warningThreshold}"
       style="width: 900px; height: 600px"
       class="custom-class-1"
-    ></wpp-richtext-v3-2-0>
+    ></wpp-richtext-v3-3-0>
   `,
   args: {
     name: 'content',
@@ -195,7 +195,7 @@ export const View: StoryObj<Components.WppRichtext> = {
     }
 
     return html`
-      <wpp-richtext-v3-2-0
+      <wpp-richtext-v3-3-0
         @wppChange="${liveChangeHandler}"
         @wppSelectionChange="${selectionChangeHandler}"
         @wppUploadRequest="${uploadRequestHandler}"
@@ -216,16 +216,16 @@ export const View: StoryObj<Components.WppRichtext> = {
         warning-threshold="${args.warningThreshold}"
         style="width: 900px; height: 300px"
         class="custom-class-1"
-      ></wpp-richtext-v3-2-0>
+      ></wpp-richtext-v3-3-0>
 
-      <wpp-typography-v3-2-0 type="m-strong">Markdown view with preserve whitespace</wpp-typography-v3-2-0>
+      <wpp-typography-v3-3-0 type="m-strong">Markdown view with preserve whitespace</wpp-typography-v3-3-0>
 
-      <wpp-richtext-view-v3-2-0
+      <wpp-richtext-view-v3-3-0
         .value=${value}
         .format=${args.format}
         .name="markdownContent"
         .preserve-whitespace=${args.preserveWhitespace}
-      ></wpp-richtext-view-v3-2-0>
+      ></wpp-richtext-view-v3-3-0>
     `
   },
   args: {

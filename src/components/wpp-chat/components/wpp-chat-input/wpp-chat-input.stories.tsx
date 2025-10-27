@@ -72,14 +72,14 @@ export const DefaultChatInput: StoryObj<Components.WppChatInput> = {
               style=${'display: flex; flex-direction: column; height: 100vh; padding: 20px; box-sizing: border-box;'}
             >
               <div style=${'display: flex;'}>
-                <wpp-typography-v3-2-0>Message History:</wpp-typography-v3-2-0>
+                <wpp-typography-v3-3-0>Message History:</wpp-typography-v3-3-0>
                 <ul>
-                  ${updatedMessages.map(msg => html`<li><wpp-typography-v3-2-0>${msg}</wpp-typography-v3-2-0></li>`)}
+                  ${updatedMessages.map(msg => html`<li><wpp-typography-v3-3-0>${msg}</wpp-typography-v3-3-0></li>`)}
                 </ul>
               </div>
 
               <div style=${'display: flex; align-items: flex-end; height: 100vh;'}>
-                <wpp-chat-input-v3-2-0
+                <wpp-chat-input-v3-3-0
                   .placeholder=${args.placeholder}
                   .enableAttach=${args.enableAttach}
                   .disabled=${args.disabled}
@@ -92,7 +92,7 @@ export const DefaultChatInput: StoryObj<Components.WppChatInput> = {
                   @wppSend=${handleSendMessage}
                   @wppMessageChanged=${handleMessageChanged}
                 >
-                </wpp-chat-input-v3-2-0>
+                </wpp-chat-input-v3-3-0>
               </div>
             </div>
           `,

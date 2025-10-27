@@ -39,6 +39,7 @@ export class WppProgressIndicator {
 
   /**
    * Defines the loading label.
+   * @deprecated This property will be removed in version 5.0.0.
    */
   @Prop() readonly label?: string
 

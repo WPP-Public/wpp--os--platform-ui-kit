@@ -1,3 +1,4 @@
+import { KNOWN_KEYS_OF_TREE_TYPE } from './const'
 import { TreeType } from './types'
 
 export const areAllChildrenSelected = (treeData: TreeType[]): boolean =>
@@ -150,3 +151,15 @@ export const recalculateIndeterminateTreeState = (treeData: TreeType[]): TreeTyp
 
     return [...acc, item]
   }, [] as TreeType[])
+
+export const extractExtraProps = (tree: TreeType): Record<string, any> => {
+  const extras: Record<string, any> = {}
+
+  for (const key in tree) {
+    if (!KNOWN_KEYS_OF_TREE_TYPE[key] && key.startsWith('data-')) {
+      extras[key] = tree[key]
+    }
+  }
+
+  return extras
+}

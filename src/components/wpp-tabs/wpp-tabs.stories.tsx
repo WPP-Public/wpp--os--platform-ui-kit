@@ -21,12 +21,12 @@ export default {
 } as Meta<Components.WppTabs>
 
 export const Tabs: StoryObj<Components.WppTab> = (args: Components.WppTab) => html`
-  <wpp-tabs-v3-2-0 value="houses" .size="${args.size}">
-    <wpp-tab-v3-2-0 value="houses" icon="wpp-icon-pie-chart" .counter="${args.counter}">Houses</wpp-tab-v3-2-0>
-    <wpp-tab-v3-2-0 icon="wpp-icon-bar-chart" .counter="${args.counter}" value="cars">A Bit Longer Text</wpp-tab-v3-2-0>
-    <wpp-tab-v3-2-0 value="food" .counter="${args.counter}">Food</wpp-tab-v3-2-0>
-    <wpp-tab-v3-2-0 value="drinks" .counter="${args.counter}">Drinks</wpp-tab-v3-2-0>
-  </wpp-tabs-v3-2-0>
+  <wpp-tabs-v3-3-0 value="houses" .size="${args.size}">
+    <wpp-tab-v3-3-0 value="houses" icon="wpp-icon-pie-chart" .counter="${args.counter}">Houses</wpp-tab-v3-3-0>
+    <wpp-tab-v3-3-0 icon="wpp-icon-bar-chart" .counter="${args.counter}" value="cars">A Bit Longer Text</wpp-tab-v3-3-0>
+    <wpp-tab-v3-3-0 value="food" .counter="${args.counter}">Food</wpp-tab-v3-3-0>
+    <wpp-tab-v3-3-0 value="drinks" .counter="${args.counter}">Drinks</wpp-tab-v3-3-0>
+  </wpp-tabs-v3-3-0>
 `
 
 Tabs.args = {

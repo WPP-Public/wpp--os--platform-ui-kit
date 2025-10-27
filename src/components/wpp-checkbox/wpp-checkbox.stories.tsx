@@ -23,7 +23,7 @@ export default {
 
 export const NoLabel: StoryObj<Components.WppCheckbox> = {
   render: args =>
-    html` <wpp-checkbox-v3-2-0
+    html` <wpp-checkbox-v3-3-0
       @click="${() => console.log('checkbox clicked')}"
       .disabled="${args.disabled}"
       .checked="${args.checked}"
@@ -31,7 +31,7 @@ export const NoLabel: StoryObj<Components.WppCheckbox> = {
       .name="${args.name}"
       .message="${args.message}"
       .messageType="${args.messageType}"
-    ></wpp-checkbox-v3-2-0>`,
+    ></wpp-checkbox-v3-3-0>`,
   args: {
     disabled: false,
     checked: false,
@@ -43,7 +43,7 @@ export const NoLabel: StoryObj<Components.WppCheckbox> = {
 
 export const WithLabel: StoryObj<Components.WppCheckbox> = {
   render: args =>
-    html` <wpp-checkbox-v3-2-0
+    html` <wpp-checkbox-v3-3-0
       @click="${() => console.log('checkbox clicked')}"
       .disabled="${args.disabled}"
       .checked="${args.checked}"
@@ -53,7 +53,7 @@ export const WithLabel: StoryObj<Components.WppCheckbox> = {
       .message="${args.message}"
       .messageType="${args.messageType}"
       .labelConfig="${args.labelConfig}"
-    ></wpp-checkbox-v3-2-0>`,
+    ></wpp-checkbox-v3-3-0>`,
   args: {
     disabled: false,
     checked: false,

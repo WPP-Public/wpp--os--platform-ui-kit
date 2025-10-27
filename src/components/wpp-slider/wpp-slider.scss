@@ -134,7 +134,8 @@
   flex-direction: column;
 
   @mixin tabThumbBorderColor($thumbBgColor) {
-    box-shadow: 0 0 0 var(--slider-handle-border-width) $thumbBgColor,
+    box-shadow:
+      0 0 0 var(--slider-handle-border-width) $thumbBgColor,
       0 0 0 calc(var(--slider-handle-border-width) + 1px) var(--slider-handle-first-border-color-focus),
       0 0 0 calc(var(--slider-handle-border-width) + 1px + 2px) var(--slider-handle-second-border-color-focus);
   }
@@ -279,7 +280,8 @@
   }
 
   .single-slider-wrapper,
-  .range-slider-wrapper {
+  .range-slider-wrapper,
+  .middle-range-wrapper {
     position: relative;
     display: flex;
     align-items: center;
@@ -325,7 +327,8 @@
     }
   }
 
-  .range-slider-wrapper {
+  .range-slider-wrapper,
+  .middle-range-wrapper {
     height: var(--slider-clickable-wrapper-height);
     border-radius: var(--slider-track-border-radius);
 
@@ -428,6 +431,10 @@
         }
       }
 
+      &.middle-mark-active {
+        z-index: 1;
+      }
+
       &.active {
         .mark {
           background-color: var(--slider-mark-color-active);
@@ -491,6 +498,7 @@
 
   .with-value {
     width: var(--slider-width);
+    justify-content: space-between;
 
     &.disabled {
       .wpp-typography {
@@ -507,6 +515,10 @@
         margin: var(--slider-value-wrapper-divider-margin);
       }
     }
+  }
+
+  .slider-control.with-value {
+    margin-bottom: 8px;
   }
 
   .with-input {

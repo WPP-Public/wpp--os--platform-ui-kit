@@ -23,7 +23,7 @@ export default {
 } as Meta<Components.WppToggle>
 
 export const NoLabel: StoryObj<Components.WppToggle> = (args: Components.WppToggle) =>
-  html` <wpp-toggle-v3-2-0
+  html` <wpp-toggle-v3-3-0
     @wppChange="${(event: any) => console.log('wppChange => ', event.detail.value)}"
     .name="${args.name}"
     .value="${args.value}"
@@ -41,7 +41,7 @@ NoLabel.args = {
 }
 
 export const WithLabel: StoryObj<Components.WppToggle> = (args: Components.WppToggle) =>
-  html` <wpp-toggle-v3-2-0
+  html` <wpp-toggle-v3-3-0
     @wppChange="${(event: any) => console.log('wppChange => ', event.detail.value)}"
     .name="${args.name}"
     .value="${args.value}"

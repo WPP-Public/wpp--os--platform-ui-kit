@@ -24,7 +24,7 @@ export default {
  * Basic Skeleton Example
  */
 export const Skeleton: StoryObj<Components.WppSkeleton> = (args: Components.WppSkeleton) => html`
-  <wpp-skeleton-v3-2-0 .variant="${args.variant}" .width=${args.width} .height=${args.height} />
+  <wpp-skeleton-v3-3-0 .variant="${args.variant}" .width=${args.width} .height=${args.height} />
 `
 
 Skeleton.args = {

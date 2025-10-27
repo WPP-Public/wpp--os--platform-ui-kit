@@ -107,16 +107,16 @@ export const NoLogo: StoryObj<Components.WppTopbar> = (args: Components.WppTopba
     setValue(event.detail.value)
   }
 
-  return html` <wpp-topbar-v3-2-0
+  return html` <wpp-topbar-v3-3-0
     .navigation="${args.navigation}"
     .value="${value}"
     @wppChange="${handleTopbarItemChange}"
     .nativeLink=${args.nativeLink}
   >
     <div slot="app" style="display: flex; margin-right: 32px">
-      <wpp-typography-v3-2-0 style="white-space: nowrap" type="m-strong" tag="h3"> APP Name</wpp-typography-v3-2-0>
+      <wpp-typography-v3-3-0 style="white-space: nowrap" type="m-strong" tag="h3"> APP Name</wpp-typography-v3-3-0>
     </div>
-  </wpp-topbar-v3-2-0>`
+  </wpp-topbar-v3-3-0>`
 }
 
 NoLogo.args = {
@@ -132,7 +132,7 @@ export const WithLogo: StoryObj<Components.WppTopbar> = (args: Components.WppTop
     setValue(event.detail.value)
   }
 
-  return html` <wpp-topbar-v3-2-0
+  return html` <wpp-topbar-v3-3-0
     .navigation="${args.navigation}"
     .value="${value}"
     @wppChange="${handleTopbarItemChange}"
@@ -143,11 +143,11 @@ export const WithLogo: StoryObj<Components.WppTopbar> = (args: Components.WppTop
         src="https://easydrawingguides.com/wp-content/uploads/2018/09/Impossible-Triangle-09.png"
         style="display: flex; width: 40px; height: 40px; max-width: 40px; margin-right: 12px"
       />
-      <wpp-typography-v3-2-0 class="application-name" style="white-space: nowrap" type="m-strong" tag="h3">
+      <wpp-typography-v3-3-0 class="application-name" style="white-space: nowrap" type="m-strong" tag="h3">
         APP Name
-      </wpp-typography-v3-2-0>
+      </wpp-typography-v3-3-0>
     </div>
-  </wpp-topbar-v3-2-0>`
+  </wpp-topbar-v3-3-0>`
 }
 
 WithLogo.args = {

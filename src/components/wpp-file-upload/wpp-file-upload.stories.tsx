@@ -29,7 +29,7 @@ export default {
 
 export const FileUpload: StoryObj<Components.WppFileUpload> = {
   render: args =>
-    html` <wpp-file-upload-v3-2-0
+    html` <wpp-file-upload-v3-3-0
       .disabled=${args.disabled}
       .acceptConfig=${args.acceptConfig}
       .size=${args.size}

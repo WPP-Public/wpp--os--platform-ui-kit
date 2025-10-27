@@ -37,7 +37,7 @@ export default {
 
 export const Warning: StoryObj<Components.WppInlineMessage> = {
   render: args =>
-    html` <wpp-inline-message-v3-2-0
+    html` <wpp-inline-message-v3-3-0
       .titleText="${args.titleText}"
       .actionBtnText="${args.actionBtnText}"
       .size="${args.size}"
@@ -63,7 +63,7 @@ Warning.parameters = {
 
 export const Error: StoryObj<Components.WppInlineMessage> = {
   render: args =>
-    html` <wpp-inline-message-v3-2-0
+    html` <wpp-inline-message-v3-3-0
       .titleText="${args.titleText}"
       .actionBtnText="${args.actionBtnText}"
       .size="${args.size}"
@@ -89,7 +89,7 @@ Error.parameters = {
 
 export const Informational: StoryObj<Components.WppInlineMessage> = {
   render: args =>
-    html` <wpp-inline-message-v3-2-0
+    html` <wpp-inline-message-v3-3-0
       .titleText="${args.titleText}"
       .actionBtnText="${args.actionBtnText}"
       .size="${args.size}"
@@ -114,7 +114,7 @@ Informational.parameters = {
 
 export const Success: StoryObj<Components.WppInlineMessage> = {
   render: args =>
-    html` <wpp-inline-message-v3-2-0
+    html` <wpp-inline-message-v3-3-0
       .titleText="${args.titleText}"
       .actionBtnText="${args.actionBtnText}"
       .size="${args.size}"
@@ -140,7 +140,7 @@ Success.parameters = {
 
 export const WithInput = (args: Components.WppInput) => html`
   <div style="max-width: 500px; width: 100%;">
-    <wpp-input-v3-2-0
+    <wpp-input-v3-3-0
       .size="${args.size}"
       .labelConfig="${args.labelConfig}"
       .message="${args.message}"

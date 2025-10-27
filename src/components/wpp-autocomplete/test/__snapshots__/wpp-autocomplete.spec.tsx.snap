@@ -47,7 +47,7 @@ exports[`wpp-autocomplete should render empty with label, icon and tooltip descr
                 </div>
               </wpp-tooltip>
             </mock:shadow-root>
-            <wpp-icon-mail-v3-2-0 part="icon" slot="icon"></wpp-icon-mail-v3-2-0>
+            <wpp-icon-mail-v3-3-0 part="icon" slot="icon"></wpp-icon-mail-v3-3-0>
           </wpp-internal-label>
         </label>
       </wpp-label>

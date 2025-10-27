@@ -38,7 +38,7 @@ export default {
 export const Regular: StoryObj<Components.WppInput & { showIconStart: boolean; showIconEnd: boolean }> = (
   args: Components.WppInput & { showIconStart: boolean; showIconEnd: boolean },
 ) =>
-  html` <wpp-input-v3-2-0
+  html` <wpp-input-v3-3-0
     .type="${args.type}"
     .name="${args.name}"
     .value="${args.value}"
@@ -54,27 +54,27 @@ export const Regular: StoryObj<Components.WppInput & { showIconStart: boolean; s
   >
     ${args.showIconStart
       ? html`
-          <wpp-icon-search-v3-2-0
+          <wpp-icon-search-v3-3-0
             slot="icon-start"
             @click="${(e: any) => {
               e.stopPropagation()
               console.log('Left icon clicked')
             }}"
-          ></wpp-icon-search-v3-2-0>
+          ></wpp-icon-search-v3-3-0>
         `
       : null}
     ${args.showIconEnd
       ? html`
-          <wpp-icon-ordered-list-v3-2-0
+          <wpp-icon-ordered-list-v3-3-0
             slot="icon-end"
             @click="${(e: any) => {
               e.stopPropagation()
               console.log('Right icon clicked')
             }}"
-          ></wpp-icon-ordered-list-v3-2-0>
+          ></wpp-icon-ordered-list-v3-3-0>
         `
       : null}
-  </wpp-input-v3-2-0>`
+  </wpp-input-v3-3-0>`
 
 Regular.args = {
   type: 'text',
@@ -102,7 +102,7 @@ Regular.args = {
 Regular.parameters = {}
 
 export const Search: StoryObj<Components.WppInput> = (args: Components.WppInput) =>
-  html` <wpp-input-v3-2-0
+  html` <wpp-input-v3-3-0
     type="search"
     .name="${args.name}"
     .value="${args.value}"
@@ -115,7 +115,7 @@ export const Search: StoryObj<Components.WppInput> = (args: Components.WppInput)
     .labelConfig="${args.labelConfig}"
     .autocomplete="${args.autocomplete}"
     .loading="${args.loading}"
-  ></wpp-input-v3-2-0>`
+  ></wpp-input-v3-3-0>`
 
 Search.args = {
   size: 'm',
@@ -142,7 +142,7 @@ Search.parameters = {
 }
 
 export const DecimalWithLimits: StoryObj<Components.WppInput> = (args: Components.WppInput) =>
-  html` <wpp-input-v3-2-0
+  html` <wpp-input-v3-3-0
       type="decimal"
       .name="${args.name}"
       .value="${args.value}"
@@ -156,9 +156,9 @@ export const DecimalWithLimits: StoryObj<Components.WppInput> = (args: Component
       .autocomplete="${args.autocomplete}"
       .minLength=${args.minLength}
       .maxLength=${args.maxLength}
-    ></wpp-input-v3-2-0>
+    ></wpp-input-v3-3-0>
     <br />
-    <wpp-input-v3-2-0
+    <wpp-input-v3-3-0
       type="decimal"
       .name="${args.name}"
       .value="${args.value}"
@@ -179,7 +179,7 @@ export const DecimalWithLimits: StoryObj<Components.WppInput> = (args: Component
       .minLength=${args.minLength}
       .maxLength=${args.maxLength}
       .locales=${args.locales}
-    ></wpp-input-v3-2-0>`
+    ></wpp-input-v3-3-0>`
 
 DecimalWithLimits.args = {
   type: 'decimal',
@@ -212,7 +212,7 @@ DecimalWithLimits.parameters = {
 }
 
 export const DecimalWithMask: StoryObj<Components.WppInput> = (args: Components.WppInput) => html`
-  <wpp-input-v3-2-0
+  <wpp-input-v3-3-0
     type=${args.type}
     .name="${args.name}"
     .value="${args.value}"
@@ -225,7 +225,7 @@ export const DecimalWithMask: StoryObj<Components.WppInput> = (args: Components.
     .message="${args.message}"
     .labelConfig="${args.labelConfig}"
     .maskOptions="${args.maskOptions}"
-  ></wpp-input-v3-2-0>
+  ></wpp-input-v3-3-0>
 `
 
 DecimalWithMask.args = {
@@ -260,7 +260,7 @@ DecimalWithMask.parameters = {
 }
 
 export const TextWithMask: StoryObj<Components.WppInput> = (args: Components.WppInput) => html`
-  <wpp-input-v3-2-0
+  <wpp-input-v3-3-0
     type=${args.type}
     .name="${args.name}"
     .value="${args.value}"
@@ -273,7 +273,7 @@ export const TextWithMask: StoryObj<Components.WppInput> = (args: Components.Wpp
     .message="${args.message}"
     .labelConfig="${args.labelConfig}"
     .maskOptions="${args.maskOptions}"
-  ></wpp-input-v3-2-0>
+  ></wpp-input-v3-3-0>
 `
 
 TextWithMask.args = {
@@ -327,7 +327,7 @@ TextWithMask.parameters = {
 }
 
 export const TelWithMask: StoryObj<Components.WppInput> = (args: Components.WppInput) => html`
-  <wpp-input-v3-2-0
+  <wpp-input-v3-3-0
     type=${args.type}
     .name="${args.name}"
     .size="${args.size}"
@@ -338,7 +338,7 @@ export const TelWithMask: StoryObj<Components.WppInput> = (args: Components.WppI
     .messageType="${args.messageType}"
     .labelConfig="${args.labelConfig}"
     .maskOptions="${args.maskOptions}"
-  ></wpp-input-v3-2-0>
+  ></wpp-input-v3-3-0>
 `
 
 TelWithMask.args = {

@@ -22,13 +22,13 @@ export default {
 } as Meta<Components.WppLabel>
 
 export const Label: StoryObj<Components.WppLabel> = (args: Components.WppLabel) =>
-  html` <wpp-label-v3-2-0
+  html` <wpp-label-v3-3-0
     .optional="${args.optional}"
     .typography="${args.typography}"
     .config="${args.config}"
     .tooltipConfig="${args.tooltipConfig}"
   >
-  </wpp-label-v3-2-0>`
+  </wpp-label-v3-3-0>`
 
 Label.args = {
   typography: 's-strong',

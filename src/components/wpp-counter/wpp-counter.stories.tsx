@@ -43,7 +43,7 @@ export default {
 
 export const Counter: StoryObj<Components.WppCounter> = {
   render: args =>
-    html` <wpp-counter-v3-2-0
+    html` <wpp-counter-v3-3-0
       .name="${args.name}"
       .value="${args.value}"
       .disabled="${args.disabled}"
@@ -56,7 +56,7 @@ export const Counter: StoryObj<Components.WppCounter> = {
       .labelConfig="${args.labelConfig}"
       .withButtons="${args.withButtons}"
     >
-    </wpp-counter-v3-2-0>`,
+    </wpp-counter-v3-3-0>`,
   args: {
     name: 'counter',
     value: 1,

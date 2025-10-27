@@ -78,6 +78,8 @@ export class WppSelect implements BaseComponent, BaseFormControl<SelectValue[] |
 
   @State() hasIconStartSlot: boolean = false
 
+  @State() anchorButton: boolean = false
+
   @State() shouldShowSearch: boolean = false
 
   @State() focusType: FOCUS_TYPE
@@ -491,7 +493,7 @@ export class WppSelect implements BaseComponent, BaseFormControl<SelectValue[] |
       console.warn('The value "text" for the type property is deprecated and will be removed in version 4.0.0.')
 
     this.versionToCompare = (version as string).slice(1).split('-').join('')
-
+    this.updateSlotData()
     this.checkMessageInTooltip()
 
     // Specific "componentWillLoad()" behaviour based on type of component.
@@ -1148,9 +1150,11 @@ export class WppSelect implements BaseComponent, BaseFormControl<SelectValue[] |
   protected updateSlotData = () => {
     const emptyStates = getSlotEmptyStates(this.host.childNodes, {
       icon: '[slot="icon-start"]',
+      anchorButton: '[slot="anchor-button"]',
     })
 
     this.hasIconStartSlot = !emptyStates.icon
+    this.anchorButton = !emptyStates.anchorButton
   }
 
   protected onKeyUp = (event: KeyboardEvent) => {

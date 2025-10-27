@@ -20,15 +20,12 @@
 :host {
   --fu-item-bg-color: var(--wpp-file-upload-item-bg-color, var(--wpp-grey-color-200));
   --fu-item-height: var(--wpp-file-upload-item-height, 32px);
-  --fu-item-padding: var(--wpp-file-upload-item-padding, 8px);
-  --fu-item-margin: var(--wpp-file-upload-item-margin, 8px 0 0 0);
+  --fu-item-padding: var(--wpp-file-upload-item-padding, 8px 10px 8px 8px);
   --fu-item-percentage-margin: var(--wpp-file-upload-item-percentage-margin, 0 8px 0 0);
-  --fu-item-name-margin: var(--wpp-file-upload-item-name-margin, 0 0 0 2px);
-  --fu-item-name-error-margin: var(--wpp-file-upload-item-name-error-margin, 0 8px 0 24px);
   --fu-item-border-radius: var(--wpp-file-upload-item-border-radius, var(--wpp-border-radius-m));
   --fu-item-thumbnail-border-radius: var(--wpp-file-upload-item-thumbnail-border-radius, var(--wpp-border-radius-xs));
-  --fu-item-thumbnail-width: var(--wpp-file-upload-item-thumbnail-width, 24px);
-  --fu-item-thumbnail-height: var(--wpp-file-upload-item-thumbnail-height, 24px);
+  --fu-item-icon-wrapper-width: var(--wpp-file-upload-item-icon-wrapper-width, 24px);
+  --fu-item-icon-wrapper-height: var(--wpp-file-upload-item-icon-wrapper-height, 24px);
   --fu-item-thumbnail-margin: var(--wpp-file-upload-item-thumbnail-margin, 0 8px 0 0);
   --fu-item-item-icon-margin: var(--wpp-file-upload-item-icon-margin, 0 2px 0 0);
   --fu-item-item-color: var(--wpp-file-upload-item-color, var(--wpp-grey-color-700));
@@ -51,11 +48,25 @@
   --fu-item-error-color: var(--wpp-file-upload-item-error-color, var(--wpp-text-color-danger));
   --fu-item-bg-color-disabled: var(--wpp-file-upload-item-bg-color-disabled, var(--wpp-grey-color-200));
   --fu-item-text-color-disabled: var(--wpp-file-upload-item-text-color-disabled, var(--wpp-text-color-disabled));
+
+  .wpp-tooltip {
+    width: 100%;
+    overflow: hidden;
+
+    &.computed {
+      width: fit-content;
+    }
+
+    &::part(anchor) {
+      position: relative;
+      width: 100%;
+    }
+  }
 }
 
 .thumbnail-preview {
-  width: var(--fu-item-thumbnail-width);
-  height: var(--fu-item-thumbnail-height);
+  width: 100%;
+  height: 100%;
   border-radius: var(--fu-item-thumbnail-border-radius);
   object-fit: cover;
 }
@@ -79,7 +90,6 @@
   background-color: var(--fu-item-bg-color);
   padding: var(--fu-item-padding);
   border-radius: var(--fu-item-border-radius);
-  margin: var(--fu-item-margin);
 
   @include typographySBody;
 
@@ -90,7 +100,7 @@
 
     .name,
     .loading {
-      color: var(--fu-item-text-color-disabled);
+      --wpp-typography-color: var(--fu-item-text-color-disabled);
     }
 
     .wpp-icon {
@@ -104,6 +114,22 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  overflow: hidden;
+  width: 100%;
+  min-width: 0;
+
+  &.block-error {
+    gap: 0;
+  }
+}
+
+.icon-wrapper {
+  width: 100%;
+  max-width: var(--fu-item-icon-wrapper-width);
+  height: var(--fu-item-icon-wrapper-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .extension-icon {
@@ -122,18 +148,31 @@
 }
 
 .loading {
-  min-width: 60px;
+  white-space: nowrap;
   color: var(--fu-item-item-color);
-  margin: var(--fu-item-loading-margin);
 }
 
 .name {
-  margin: var(--fu-item-name-margin);
-  color: var(--fu-item-item-name-color);
+   --wpp-typography-color: var(--fu-item-item-name-color);
+  width: 100%;
+  white-space: nowrap;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  display: block;
 
-  &.name-error {
-    margin: var(--fu-item-name-error-margin);
+  &::part(typography) {
+    text-overflow: initial;
   }
+}
+
+.measure {
+  position: absolute;
+  visibility: hidden;
+  white-space: nowrap;
+  left: -9999px;
+  top: 0;
+  pointer-events: none;
 }
 
 .error {
@@ -146,7 +185,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 20px;
+  min-width: 0;
 }
 
 .cross-icon {

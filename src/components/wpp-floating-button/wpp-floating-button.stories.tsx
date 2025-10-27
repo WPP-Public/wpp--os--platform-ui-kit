@@ -16,7 +16,7 @@ export default {
 
 export const Floating: StoryObj<Components.WppFloatingButton> = {
   render: args =>
-    html` <wpp-floating-button-v3-2-0
+    html` <wpp-floating-button-v3-3-0
       .disabled="${args.disabled}"
       .loading="${args.loading}"
       .ariaProps="${args.ariaProps}"

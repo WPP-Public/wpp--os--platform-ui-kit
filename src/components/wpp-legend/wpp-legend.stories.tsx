@@ -35,7 +35,7 @@ export default {
 
 export const Default: StoryObj<Components.WppLegend> = {
   render: args => html`
-    <wpp-legend-v3-2-0 .label="${args.label}" .color="${args.color}" .disabled="${args.disabled}"></wpp-legend-v3-2-0>
+    <wpp-legend-v3-3-0 .label="${args.label}" .color="${args.color}" .disabled="${args.disabled}"></wpp-legend-v3-3-0>
   `,
   args: {
     label: 'Label',

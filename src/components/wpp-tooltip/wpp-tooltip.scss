@@ -33,7 +33,10 @@
   --tooltip-error-text-color: var(--wpp-tooltip-error-text-color, var(--wpp-grey-color-1000));
   --tooltip-error-header-text-color: var(--wpp-tooltip-error-header-text-color, var(--wpp-grey-color-1000));
   --tooltip-error-bg-color: var(--wpp-tooltip-error-bg-color, var(--wpp-danger-color-200));
-  --tooltip-error-with-header-header-color: var(--wpp-tooltip-error-with-header-header-color, var(--wpp-grey-color-1000));
+  --tooltip-error-with-header-header-color: var(
+    --wpp-tooltip-error-with-header-header-color,
+    var(--wpp-grey-color-1000)
+  );
   --tooltip-error-with-header-text-color: var(--wpp-tooltip-error-with-header-text-color, var(--wpp-grey-color-800));
   --tooltip-error-with-value-text-color: var(--wpp-tooltip-error-with-value-text-color, var(--wpp-grey-color-800));
   --tooltip-error-with-value-value-color: var(--wpp-tooltip-error-with-value-value-color, var(--wpp-grey-color-1000));
@@ -50,7 +53,10 @@
   --tooltip-light-bg-color: var(--wpp-tooltip-light-bg-color, var(--wpp-grey-color-000));
   --tooltip-light-value-color: var(--wpp-tooltip-light-value-color, var(--wpp-text-color));
   --tooltip-light-text-color: var(--wpp-tooltip-light-text-color, var(--wpp-grey-color-1000));
-  --tooltip-light-with-header-header-color: var(--wpp-tooltip-light-with-header-header-color, var(--wpp-grey-color-1000));
+  --tooltip-light-with-header-header-color: var(
+    --wpp-tooltip-light-with-header-header-color,
+    var(--wpp-grey-color-1000)
+  );
   --tooltip-light-with-header-text-color: var(--wpp-tooltip-light-with-header-text-color, var(--wpp-grey-color-800));
   --tooltip-light-with-value-text-color: var(--wpp-tooltip-light-with-value-text-color, var(--wpp-grey-color-800));
   --tooltip-light-with-value-value-color: var(--wpp-tooltip-light-with-value-value-color, var(--wpp-grey-color-1000));
@@ -70,8 +76,7 @@
   .content-wrapper {
     &.hidden {
       position: absolute;
-      z-index: -1;
-      opacity: 0;
+      display: none;
     }
   }
 

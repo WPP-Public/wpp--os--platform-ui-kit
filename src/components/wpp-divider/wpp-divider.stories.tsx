@@ -24,11 +24,11 @@ export const Divider: StoryObj<DividerStoryArgs> = {
   render: args => {
     const style = args.vertical ? 'height: 150px;' : ''
 
-    return html` <wpp-divider-v3-2-0
+    return html` <wpp-divider-v3-3-0
       .vertical="${args.vertical}"
       .resizable="${args.resizable}"
       style="${style}"
-    ></wpp-divider-v3-2-0>`
+    ></wpp-divider-v3-3-0>`
   },
   args: {
     vertical: false,

@@ -199,7 +199,7 @@ const handleRangeSliderChange = (event: CustomEvent) => {
 | `required`           | `required`    | If the slider is required.                                                                                                                                                                          | `boolean`                                                   | `false`                                           |
 | `size`               | `size`        | Defines the size of the slider.                                                                                                                                                                     | `"m" \| "s" \| undefined`                                   | `'m'`                                             |
 | `step`               | `step`        | Defines the interval between slider markers.                                                                                                                                                        | `number`                                                    | `1`                                               |
-| `type`               | `type`        | Defines the slider type.                                                                                                                                                                            | `"range" \| "single" \| undefined`                          | `'single'`                                        |
+| `type`               | `type`        | Defines the slider type.                                                                                                                                                                            | `"middle-range" \| "range" \| "single" \| undefined`        | `'single'`                                        |
 | `value` _(required)_ | `value`       | Defines the default slider value.                                                                                                                                                                   | `number \| number[]`                                        | `undefined`                                       |
 | `withInput`          | `with-input`  | If the slider has an input field that allows users to enter a value for the slider to display.                                                                                                      | `boolean`                                                   | `false`                                           |
 | `withValue`          | `with-value`  | If the slider displays its current value.                                                                                                                                                           | `boolean`                                                   | `false`                                           |
@@ -207,11 +207,11 @@ const handleRangeSliderChange = (event: CustomEvent) => {
 
 ## Events
 
-| Event       | Description                            | Type                                                                                     |
-| ----------- | -------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `wppBlur`   | Emitted when the slider loses focus.   | `CustomEvent<FocusEvent>`                                                                |
-| `wppChange` | Emitted when the slider value changes. | `CustomEvent<BaseFormControlEventDetail<SliderValue> & { name?: string \| undefined; }>` |
-| `wppFocus`  | Emitted when the slider is in focus.   | `CustomEvent<FocusEvent>`                                                                |
+| Event       | Description                            | Type                                                                                                                        |
+| ----------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `wppBlur`   | Emitted when the slider loses focus.   | `CustomEvent<FocusEvent>`                                                                                                   |
+| `wppChange` | Emitted when the slider value changes. | `CustomEvent<BaseFormControlEventDetail<SliderValue> & { name?: string \| undefined; middleValue?: number \| undefined; }>` |
+| `wppFocus`  | Emitted when the slider is in focus.   | `CustomEvent<FocusEvent>`                                                                                                   |
 
 
 ## Methods

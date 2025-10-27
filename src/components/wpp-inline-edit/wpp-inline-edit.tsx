@@ -144,7 +144,7 @@ export class WppInlineEdit {
     this.wppModeChange.emit({ mode, closePopover: () => this.popoverRef?.closePopover(), reason })
   }
 
-  private handleAccept = async (reason: InlineEditClosePopoverReason) => {
+  private handleAccept = async () => {
     const formEl: HTMLWppInputElement | HTMLWppTextareaInputElement | undefined = this.getFormElement()
 
     if (!formEl) return
@@ -178,7 +178,7 @@ export class WppInlineEdit {
 
       // Successful validation, close the popover, clear errors.
       this.setErrorState('clear', formEl)
-      this.emitModeChange('read', reason)
+      this.emitModeChange('read', 'apply')
 
       this.popoverRef?.closePopover()
       this.lastValueWithError = undefined
@@ -243,13 +243,19 @@ export class WppInlineEdit {
     'full-width': this.mode === InlineEditModeEnum.EDIT && this.inputWidth !== 'auto' && this.inputWidth !== undefined,
   })
 
+  private onKeyDownFormEl = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      this.handleAccept()
+    }
+  }
+
   private placeholderCssClasses = () => ({ placeholder: !this.value })
 
   private renderTriggerElement = () => (
     <div tabIndex={0} role="button" class="trigger">
       {this.mode === InlineEditModeEnum.EDIT ? (
         <div class="wrapper" part="wrapper">
-          <div class="form-element">
+          <div class="form-element" onKeyDown={this.onKeyDownFormEl}>
             <slot name="form-element" />
           </div>
         </div>
@@ -331,7 +337,7 @@ export class WppInlineEdit {
             <wpp-action-button
               disabled={this.isPendingRequest || this.value === this.lastValueWithError}
               variant="inverted"
-              onClick={() => this.handleAccept('apply')}
+              onClick={this.handleAccept}
             >
               <wpp-icon-done slot="icon-start" />
             </wpp-action-button>

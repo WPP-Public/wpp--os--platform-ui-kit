@@ -47,7 +47,7 @@ export const Single: StoryObj<DatepickerWithLimits> = {
       args.view = 'days'
     }
 
-    return html`<wpp-datepicker-v3-2-0
+    return html`<wpp-datepicker-v3-3-0
       .range=${args.range}
       .messageType="${args.messageType}"
       .message="${args.message}"
@@ -63,7 +63,7 @@ export const Single: StoryObj<DatepickerWithLimits> = {
       .view="${args.view}"
       @wppDateClear="${(e: any) => console.log('wppDateClear', e.detail)}"
       @wppChange="${(e: any) => console.log('wppChange', e.detail)}"
-    ></wpp-datepicker-v3-2-0>`
+    ></wpp-datepicker-v3-3-0>`
   },
   args: {
     range: false,
@@ -106,7 +106,7 @@ Single.parameters = {
 
 export const Range: StoryObj<DatepickerWithLimits> = {
   render: args =>
-    html`<wpp-datepicker-v3-2-0
+    html`<wpp-datepicker-v3-3-0
       .range=${args.range}
       .messageType="${args.messageType}"
       .message="${args.message}"
@@ -121,7 +121,7 @@ export const Range: StoryObj<DatepickerWithLimits> = {
       .toggleSelected="${args.toggleSelected}"
       @wppDateClear="${(e: any) => console.log('wppDateClear', e.detail)}"
       @wppChange="${(e: any) => console.log('wppChange', e.detail)}"
-    ></wpp-datepicker-v3-2-0>`,
+    ></wpp-datepicker-v3-3-0>`,
   args: {
     range: true,
     static: false,
@@ -162,7 +162,7 @@ Range.parameters = {
 
 export const RangeWithPresets: StoryObj<DatepickerWithLimits> = {
   render: args =>
-    html`<wpp-datepicker-v3-2-0
+    html`<wpp-datepicker-v3-3-0
       .range=${args.range}
       .messageType="${args.messageType}"
       .message="${args.message}"
@@ -179,7 +179,7 @@ export const RangeWithPresets: StoryObj<DatepickerWithLimits> = {
       .toggleSelected="${args.toggleSelected}"
       @wppDateClear="${(e: any) => console.log('wppDateClear', e.detail)}"
       @wppChange="${(e: any) => console.log('wppChange', e.detail)}"
-    ></wpp-datepicker-v3-2-0>`,
+    ></wpp-datepicker-v3-3-0>`,
   args: {
     range: true,
     static: false,
@@ -239,7 +239,7 @@ export const DependableDatepickers: StoryObj<DatepickerWithLimits> = {
 
     return html`
       <div>
-        <wpp-datepicker-v3-2-0
+        <wpp-datepicker-v3-3-0
           style="margin-right: 40px;"
           .range=${args.range}
           .messageType="${args.messageType}"
@@ -256,9 +256,9 @@ export const DependableDatepickers: StoryObj<DatepickerWithLimits> = {
           .view="${args.view}"
           @wppDateClear="${(e: any) => console.log('wppDateClear', e.detail)}"
           @wppChange="${handleDateChange}"
-        ></wpp-datepicker-v3-2-0>
+        ></wpp-datepicker-v3-3-0>
 
-        <wpp-datepicker-v3-2-0
+        <wpp-datepicker-v3-3-0
           id="second-datepicker"
           .range=${args.range}
           .messageType="${args.messageType}"
@@ -273,7 +273,7 @@ export const DependableDatepickers: StoryObj<DatepickerWithLimits> = {
           .locale="${args.locale}"
           .toggleSelected="${args.toggleSelected}"
           .view="${args.view}"
-        ></wpp-datepicker-v3-2-0>
+        ></wpp-datepicker-v3-3-0>
       </div>
     `
   },

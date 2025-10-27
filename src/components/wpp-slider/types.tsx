@@ -4,10 +4,10 @@ import { LabelConfig } from '../wpp-label/types'
 export type SliderValue = number[] | number
 export type SliderLabel = string | number
 export type SliderInputValue = string[] | string
-export type SliderTypes = 'single' | 'range'
+export type SliderTypes = 'single' | 'range' | 'middle-range'
 export type SliderRangeType = 'min' | 'max'
 
-export type SliderChangeEventDetail = BaseFormControlEventDetail<SliderValue> & { name?: string }
+export type SliderChangeEventDetail = BaseFormControlEventDetail<SliderValue> & { name?: string; middleValue?: number }
 
 export interface MarkState {
   label?: SliderLabel
@@ -21,6 +21,7 @@ export interface DisplayMarkState extends MarkState {
 export interface HandleType<T> {
   single: (value: number) => T
   range: (value: number[]) => T
+  'middle-range': (value: number) => T
 }
 
 export type SliderLabelConfig = LabelConfig

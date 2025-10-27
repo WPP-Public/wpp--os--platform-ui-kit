@@ -162,8 +162,10 @@ export class WppFileUpload implements BaseFormControl<FileItemType[], FileUpload
 
   /**
    * Maximum label length (in characters) of single item
+   *
+   * @deprecated - this prop will be removed in 4.0.0 version. Truncation will be calculated based on available space.
    */
-  @Prop() readonly maxLabelLength: number = 30
+  @Prop() readonly maxLabelLength?: number
 
   /**
    * Indicates locales for file upload component

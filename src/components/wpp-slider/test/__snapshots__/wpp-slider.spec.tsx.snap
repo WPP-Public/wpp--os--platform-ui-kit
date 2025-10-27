@@ -18,7 +18,8 @@ exports[`wpp-slider should render disabled slider with input 1`] = `
 exports[`wpp-slider should render range slider with displayed value 1`] = `
 <wpp-slider class="wpp-slider" exportparts="label, input-number, input-wrapper, input-min, divider, input-max, control-wrapper, editable-input-wrapper, value, value-wrapper, value-divider, mark, mark-circle, mark-inner, slider, input-slider-min, input-slider-max, marks-list" with-value="">
   <mock:shadow-root>
-    <div class="size-m with-value without-label" part="control-wrapper">
+    <div class="size-m slider-control with-value without-label" part="control-wrapper">
+      <div></div>
       <div class="range-value-wrapper" part="value-wrapper">
         <wpp-typography part="value" type="s-midi">
           1
@@ -63,7 +64,7 @@ exports[`wpp-slider should render range slider with label, icon and tooltip desc
               </div>
             </wpp-tooltip>
           </mock:shadow-root>
-          <wpp-icon-mail-v3-2-0 part="icon" slot="icon"></wpp-icon-mail-v3-2-0>
+          <wpp-icon-mail-v3-3-0 part="icon" slot="icon"></wpp-icon-mail-v3-3-0>
         </wpp-internal-label>
       </label>
     </wpp-label>

@@ -1,6 +1,6 @@
 export type PopoverShouldCloseOnOutsideClickHandler = (event: Event) => boolean
 
-export interface PopoverLocalesInteface {
+export interface PopoverLocalesInterface {
   searchInputPlaceholder: string
 }
 

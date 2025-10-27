@@ -107,50 +107,50 @@ type ListItemStoryArgsTypes = Components.WppListItem & {
 const lineOptionMap: Record<string, (disabled?: boolean, size?: AvatarSize) => ReturnType<typeof html>> = {
   // Basic right content variants
   'with-action-btn': _disabled => html`
-    <wpp-action-button-v3-2-0 variant="secondary" slot="right" .ariaProps=${{ label: 'Add' }}>
-      <wpp-icon-plus-v3-2-0 slot="icon-start"></wpp-icon-plus-v3-2-0>
-    </wpp-action-button-v3-2-0>
+    <wpp-action-button-v3-3-0 variant="secondary" slot="right" .ariaProps=${{ label: 'Add' }}>
+      <wpp-icon-plus-v3-3-0 slot="icon-start"></wpp-icon-plus-v3-3-0>
+    </wpp-action-button-v3-3-0>
   `,
-  'with-chevron': () => html`<wpp-icon-chevron-v3-2-0 slot="right"></wpp-icon-chevron-v3-2-0>`,
+  'with-chevron': () => html`<wpp-icon-chevron-v3-3-0 slot="right"></wpp-icon-chevron-v3-3-0>`,
   'with-tag': disabled => html`
-    <wpp-tag-v3-2-0 ?disabled="${disabled}" label="Text" variant="positive" slot="right"></wpp-tag-v3-2-0>
+    <wpp-tag-v3-3-0 ?disabled="${disabled}" label="Text" variant="positive" slot="right"></wpp-tag-v3-3-0>
   `,
   'with-toggle': () =>
-    html`<wpp-toggle-v3-2-0 slot="right" .ariaProps=${{ label: 'no label' }} .name="toggle"></wpp-toggle-v3-2-0>`,
-  'with-text': () => html`<wpp-typography-v3-2-0 slot="right" type="s-body">Text</wpp-typography-v3-2-0>`,
+    html`<wpp-toggle-v3-3-0 slot="right" .ariaProps=${{ label: 'no label' }} .name="toggle"></wpp-toggle-v3-3-0>`,
+  'with-text': () => html`<wpp-typography-v3-3-0 slot="right" type="s-body">Text</wpp-typography-v3-3-0>`,
 
   // Icon left variants
-  'with-icon': () => html`<wpp-icon-document-v3-2-0 slot="left"></wpp-icon-document-v3-2-0>`,
+  'with-icon': () => html`<wpp-icon-document-v3-3-0 slot="left"></wpp-icon-document-v3-3-0>`,
   'with-icon-and-action-btn': disabled => html`
-    <wpp-icon-document-v3-2-0 slot="left"></wpp-icon-document-v3-2-0>
+    <wpp-icon-document-v3-3-0 slot="left"></wpp-icon-document-v3-3-0>
     ${lineOptionMap['with-action-btn'](disabled)}
   `,
   'with-icon-and-chevron': disabled => html`
-    <wpp-icon-document-v3-2-0 slot="left"></wpp-icon-document-v3-2-0>
+    <wpp-icon-document-v3-3-0 slot="left"></wpp-icon-document-v3-3-0>
     ${lineOptionMap['with-chevron'](disabled)}
   `,
   'with-icon-and-tag': disabled => html`
-    <wpp-icon-document-v3-2-0 slot="left"></wpp-icon-document-v3-2-0>
+    <wpp-icon-document-v3-3-0 slot="left"></wpp-icon-document-v3-3-0>
     ${lineOptionMap['with-tag'](disabled)}
   `,
   'with-icon-and-toggle': disabled => html`
-    <wpp-icon-document-v3-2-0 slot="left"></wpp-icon-document-v3-2-0>
+    <wpp-icon-document-v3-3-0 slot="left"></wpp-icon-document-v3-3-0>
     ${lineOptionMap['with-toggle'](disabled)}
   `,
   'with-icon-and-text': disabled => html`
-    <wpp-icon-document-v3-2-0 slot="left"></wpp-icon-document-v3-2-0>
+    <wpp-icon-document-v3-3-0 slot="left"></wpp-icon-document-v3-3-0>
     ${lineOptionMap['with-text'](disabled)}
   `,
 
   // Avatar left variants
   'with-avatar': (disabled, size = 'xs') => html`
-    <wpp-avatar-v3-2-0
+    <wpp-avatar-v3-3-0
       size=${size}
       src="https://cdna.artstation.com/p/assets/images/images/004/966/196/large/hossein-diba-1.jpg?1487536028"
       slot="left"
       role="presentation"
       name="image"
-    ></wpp-avatar-v3-2-0>
+    ></wpp-avatar-v3-3-0>
   `,
   'with-avatar-and-action-btn': (disabled, size = 'xs') => html`
     ${lineOptionMap['with-avatar'](disabled, size)} ${lineOptionMap['with-action-btn'](disabled)}
@@ -170,12 +170,12 @@ const lineOptionMap: Record<string, (disabled?: boolean, size?: AvatarSize) => R
 
   // Logo left variants
   'with-logo': (disabled, size = 'xs') => html`
-    <wpp-avatar-v3-2-0
+    <wpp-avatar-v3-3-0
       size=${size}
       variant="square"
       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJizK-O7rjmwzro2mvul2xv-Uw1AuPEQajqA&usqp=CAU"
       slot="left"
-    ></wpp-avatar-v3-2-0>
+    ></wpp-avatar-v3-3-0>
   `,
   'with-logo-and-action-btn': (disabled, size = 'xs') => html`
     ${lineOptionMap['with-logo'](disabled, size)} ${lineOptionMap['with-action-btn'](disabled)}
@@ -185,16 +185,16 @@ const lineOptionMap: Record<string, (disabled?: boolean, size?: AvatarSize) => R
   `,
   'with-logo-and-tag': (disabled, size = 'xs') => html`
     ${lineOptionMap['with-logo'](disabled, size)}
-    <wpp-tag-v3-2-0 ?disabled="${disabled}" label="Text" variant="neutral" slot="right"></wpp-tag-v3-2-0>
+    <wpp-tag-v3-3-0 ?disabled="${disabled}" label="Text" variant="neutral" slot="right"></wpp-tag-v3-3-0>
   `,
   'with-logo-and-toggle': (disabled, size = 'xs') => html`
     ${lineOptionMap['with-logo'](disabled, size)} ${lineOptionMap['with-toggle'](disabled)}
   `,
   'with-logo-and-text': (disabled, size = 'xs') => html`
     ${lineOptionMap['with-logo'](disabled, size)}
-    <wpp-typography-v3-2-0 slot="right" type="s-body" style="color:var(--wpp-grey-color-800)">
+    <wpp-typography-v3-3-0 slot="right" type="s-body" style="color:var(--wpp-grey-color-800)">
       Text
-    </wpp-typography-v3-2-0>
+    </wpp-typography-v3-3-0>
   `,
 
   // Default or no special slots
@@ -232,7 +232,7 @@ function getTwoListItemOption(twoLineOption?: string, multiple?: boolean, disabl
 
 export const SingleLine: StoryObj<ListItemStoryArgsTypes> = (args: ListItemStoryArgsTypes) => html`
   <div style="width: 500px">
-    <wpp-list-item-v3-2-0
+    <wpp-list-item-v3-3-0
       .multiple="${args.multiple}"
       .nonInteractive="${args.nonInteractive}"
       .disabled="${args.disabled}"
@@ -247,7 +247,7 @@ export const SingleLine: StoryObj<ListItemStoryArgsTypes> = (args: ListItemStory
         : ''}
       ${getOneListItemOption(args.singleLineOptions, args.multiple, args.disabled)}
       <span slot="label">${args.labelText}</span>
-    </wpp-list-item-v3-2-0>
+    </wpp-list-item-v3-3-0>
   </div>
 `
 
@@ -276,7 +276,7 @@ SingleLine.parameters = {
 
 export const TwoLine: StoryObj<ListItemStoryArgsTypes> = (args: ListItemStoryArgsTypes) => html`
   <div style="width: 500px">
-    <wpp-list-item-v3-2-0
+    <wpp-list-item-v3-3-0
       .multiple="${args.multiple}"
       .nonInteractive="${args.nonInteractive}"
       .disabled="${args.disabled}"
@@ -292,7 +292,7 @@ export const TwoLine: StoryObj<ListItemStoryArgsTypes> = (args: ListItemStoryArg
       ${getTwoListItemOption(args.twoLineOptions, args.multiple, args.disabled)}
       <span slot="label">${args.labelText}</span>
       <span slot="caption">${args.labelText}</span>
-    </wpp-list-item-v3-2-0>
+    </wpp-list-item-v3-3-0>
   </div>
 `
 
@@ -322,8 +322,8 @@ TwoLine.parameters = {
 export const DynamicWidth: StoryObj<ListItemStoryArgsTypes> = {
   render: args => html`
     <div>
-      <wpp-typography-v3-2-0 type="xl-heading">Current width: ${args.width}</wpp-typography-v3-2-0>
-      <wpp-list-item-v3-2-0
+      <wpp-typography-v3-3-0 type="xl-heading">Current width: ${args.width}</wpp-typography-v3-3-0>
+      <wpp-list-item-v3-3-0
         style="width: ${args.width}; --wpp-list-item-width: 100%; margin-top: 20px"
         .multiple="${args.multiple}"
         .nonInteractive="${args.nonInteractive}"
@@ -338,7 +338,7 @@ export const DynamicWidth: StoryObj<ListItemStoryArgsTypes> = {
           : ''}
         ${getTwoListItemOption(args.twoLineOptions, args.multiple)}
         <p slot="label">${args.labelText}</p>
-      </wpp-list-item-v3-2-0>
+      </wpp-list-item-v3-3-0>
     </div>
   `,
   args: {

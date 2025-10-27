@@ -32,7 +32,7 @@ export default {
 } as Meta<Components.WppTimePicker>
 
 export const TimePicker: StoryObj<Components.WppTimePicker> = (args: Components.WppTimePicker) =>
-  html`<wpp-time-picker-v3-2-0
+  html`<wpp-time-picker-v3-3-0
     .size="${args.size}"
     .messageType="${args.messageType}"
     .minutesInterval="${args.minutesInterval}"
@@ -45,7 +45,7 @@ export const TimePicker: StoryObj<Components.WppTimePicker> = (args: Components.
     .name="${args.name}"
     @wppChange="${(e: any) => console.log('onWppClick', e)}"
     @wppClear="${(e: any) => console.log('onWppClear', e)}"
-    ></wpp-time-picker-v3-2-0
+    ></wpp-time-picker-v3-3-0
     `
 
 TimePicker.args = {

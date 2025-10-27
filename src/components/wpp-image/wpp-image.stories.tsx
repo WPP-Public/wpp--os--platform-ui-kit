@@ -74,7 +74,7 @@ const getEmptyStates = () =>
             `wpp-empty-${image.name}`,
           )}>`,
         )}
-        <wpp-typography-v3-2-0 type="xs-body" style=${styleMap(labelStyle)}>${image.label}</wpp-typography-v3-2-0>
+        <wpp-typography-v3-3-0 type="xs-body" style=${styleMap(labelStyle)}>${image.label}</wpp-typography-v3-3-0>
       </div>
     `,
   )
@@ -83,9 +83,9 @@ export const EmptyStates: StoryObj<WppImageProps> = {
   render: () => html`
     <div style=${styleMap(pageStyle)}>
       <div style=${styleMap(pageWrapper)}>
-        <wpp-typography-v3-2-0 type="3xl-heading" tag="h3" style=${styleMap(headerStyle)}>
+        <wpp-typography-v3-3-0 type="3xl-heading" tag="h3" style=${styleMap(headerStyle)}>
           Empty States
-        </wpp-typography-v3-2-0>
+        </wpp-typography-v3-3-0>
         <hr />
         <section style=${styleMap(contentWrapper)}>${getEmptyStates()}</section>
       </div>

@@ -12,6 +12,7 @@ export function renderMultipleSelect(this: WppSelect) {
     'with-errors': this.hasErrorsOrWarnings('error'),
     'with-warnings': this.hasErrorsOrWarnings('warning'),
     'tab-focus': this.focusType === FOCUS_TYPE.TAB,
+    'anchor-button': this.anchorButton,
   })
 
   const getRenderedText = () => {
@@ -50,29 +51,35 @@ export function renderMultipleSelect(this: WppSelect) {
       tabIndex={this.disabled ? -1 : 0}
       onClick={() => this.handleClick()}
     >
-      <WrappedSlot wrapperClass={this.iconStartCssClasses()} name="icon-start" onSlotchange={this.updateSlotData} />
+      {this.anchorButton ? (
+        <slot name="anchor-button" onSlotchange={this.updateSlotData} />
+      ) : (
+        <Fragment>
+          <WrappedSlot wrapperClass={this.iconStartCssClasses()} name="icon-start" onSlotchange={this.updateSlotData} />
 
-      <div class="overflow-container" ref={refEl => (this.overflowContainerRef = refEl)}>
-        <p>{getRenderedText()}</p>
-      </div>
+          <div class="overflow-container" ref={refEl => (this.overflowContainerRef = refEl)}>
+            <p>{getRenderedText()}</p>
+          </div>
 
-      <input
-        class="input"
-        type="text"
-        ref={refEl => (this.inputRef = refEl)}
-        name={this.name}
-        onChange={() => this.checkIfTextOverflows()}
-        disabled={this.disabled}
-        value={this.renderedText}
-        tabIndex={-1}
-        readonly
-        aria-label={this.ariaProps.label}
-        title=""
-        style={{ width: this.overflowContainerRef ? `${this.overflowContainerRef.clientWidth}px` : 'auto' }}
-        required={this.required}
-      />
+          <input
+            class="input"
+            type="text"
+            ref={refEl => (this.inputRef = refEl)}
+            name={this.name}
+            onChange={() => this.checkIfTextOverflows()}
+            disabled={this.disabled}
+            value={this.renderedText}
+            tabIndex={-1}
+            readonly
+            aria-label={this.ariaProps.label}
+            title=""
+            style={{ width: this.overflowContainerRef ? `${this.overflowContainerRef.clientWidth}px` : 'auto' }}
+            required={this.required}
+          />
 
-      <wpp-icon-chevron class={this.isOpen ? 'isOpen' : ''} direction={'down'} />
+          <wpp-icon-chevron class={this.isOpen ? 'isOpen' : ''} direction={'down'} />
+        </Fragment>
+      )}
     </div>
   )
 

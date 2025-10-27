@@ -19,7 +19,7 @@ export default {
 
 export const View: StoryObj<Components.WppRichtextView> = {
   render: (args: Components.WppRichtextView) => html`
-    <wpp-richtext-view-v3-2-0 .value=${value} preserve-whitespace=${args.preserveWhitespace} debug=${args.debug} />
+    <wpp-richtext-view-v3-3-0 .value=${value} preserve-whitespace=${args.preserveWhitespace} debug=${args.debug} />
   `,
   args: {
     preserveWhitespace: false,

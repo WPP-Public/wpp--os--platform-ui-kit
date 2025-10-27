@@ -28,6 +28,7 @@ const data: TreeType[] = [
     title: 'Cars',
     id: '0',
     open: true,
+    'data-testid': 'tree-item-cars',
     children: [
       {
         title: 'Toyota',
@@ -36,16 +37,19 @@ const data: TreeType[] = [
           { icon: `wpp-icon-info`, name: 'remove' },
           { icon: 'wpp-icon-cross', name: 'save' },
         ],
+        'data-testid': 'tree-item-toyota',
         children: [
           {
             title: 'Avalon',
             id: '0-0-0',
             disabled: true,
+            'data-testid': 'tree-item-avalon',
           },
           {
             title: 'Prius',
             id: '0-0-1',
             disabled: true,
+            'data-testid': 'tree-item-prius',
             iconsEnd: [
               { icon: `wpp-icon-arrow`, name: 'remove' },
               { icon: 'wpp-icon-cross', name: 'save' },
@@ -195,7 +199,7 @@ export const Tree: StoryObj<Components.WppTree> = (args: Components.WppTree) => 
     setTreeState(detail.treeState)
   }
 
-  return html`<wpp-tree-v3-2-0
+  return html`<wpp-tree-v3-3-0
     .multiple=${args.multiple}
     .data=${treeState}
     .search="${args.search}"
@@ -204,7 +208,7 @@ export const Tree: StoryObj<Components.WppTree> = (args: Components.WppTree) => 
     .skeletonNumberItems=${args.skeletonNumberItems}
     .withItemsTruncation=${args.withItemsTruncation}
     @wppChange="${handleTreeChange}"
-  ></wpp-tree-v3-2-0>`
+  ></wpp-tree-v3-3-0>`
 }
 
 Tree.args = {
@@ -224,11 +228,11 @@ export const TreeWithCustomSearch: StoryObj<Components.WppTree> = (args: Compone
 
   return html`
     <Fragment>
-      <wpp-typography-v3-2-0 .type=${'l-strong'}>
+      <wpp-typography-v3-3-0 .type=${'l-strong'}>
         Single tree with custom search: the search string should match exactly the title of the tree-item (case
         sensitive).
-      </wpp-typography-v3-2-0>
-      <wpp-tree-v3-2-0
+      </wpp-typography-v3-3-0>
+      <wpp-tree-v3-3-0
         .multiple=${args.multiple}
         .data=${treeState}
         .search="${args.search}"
@@ -236,7 +240,7 @@ export const TreeWithCustomSearch: StoryObj<Components.WppTree> = (args: Compone
         .withItemsTruncation=${args.withItemsTruncation}
         .searchConfig=${args.searchConfig}
         @wppChange="${handleTreeChange}"
-      ></wpp-tree-v3-2-0>
+      ></wpp-tree-v3-3-0>
     </Fragment>
   `
 }

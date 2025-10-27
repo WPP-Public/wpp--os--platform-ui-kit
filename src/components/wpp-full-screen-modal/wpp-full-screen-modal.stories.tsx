@@ -78,8 +78,8 @@ export const FullScreenModal: StoryObj<FullScreenModalStoryArgs> = {
   render: args => {
     const { handleFullScreenModalOpen, handleFullScreenModalClose, handleFullScreenModalAction } = getModalHandlers()
 
-    return html` <wpp-button-v3-2-0 @click=${handleFullScreenModalOpen}>Open Full Screen Modal</wpp-button-v3-2-0>
-      <wpp-full-screen-modal-v3-2-0
+    return html` <wpp-button-v3-3-0 @click=${handleFullScreenModalOpen}>Open Full Screen Modal</wpp-button-v3-3-0>
+      <wpp-full-screen-modal-v3-3-0
         @wppFullScreenModalClose=${() => {
           console.log('Called wppFullScreenModalClose')
           handleFullScreenModalClose()
@@ -93,21 +93,21 @@ export const FullScreenModal: StoryObj<FullScreenModalStoryArgs> = {
       >
         <div slot="header" style=${styleMap(styles.header)}>
           ${args.withTitle
-            ? html` <wpp-typography-v3-2-0 type="2xl-heading" style=${styleMap(styles.title)}
-                >Title</wpp-typography-v3-2-0
+            ? html` <wpp-typography-v3-3-0 type="2xl-heading" style=${styleMap(styles.title)}
+                >Title</wpp-typography-v3-3-0
               >`
             : null}
         </div>
         <p slot="body" style=${styleMap(styles.body)}></p>
         ${args.withActionBar
           ? html`<div slot="actions" style=${styleMap(styles.actions)}>
-              <wpp-button-v3-2-0 variant="secondary" style="margin-right: 12px" @click=${handleFullScreenModalClose}>
+              <wpp-button-v3-3-0 variant="secondary" style="margin-right: 12px" @click=${handleFullScreenModalClose}>
                 Cancel
-              </wpp-button-v3-2-0>
-              <wpp-button-v3-2-0 variant="primary" @click=${handleFullScreenModalAction}>Action</wpp-button-v3-2-0>
+              </wpp-button-v3-3-0>
+              <wpp-button-v3-3-0 variant="primary" @click=${handleFullScreenModalAction}>Action</wpp-button-v3-3-0>
             </div>`
           : null}
-      </wpp-full-screen-modal-v3-2-0>`
+      </wpp-full-screen-modal-v3-3-0>`
   },
   args: {
     open: false,

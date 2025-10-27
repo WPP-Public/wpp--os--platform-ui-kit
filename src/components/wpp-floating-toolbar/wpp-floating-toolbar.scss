@@ -1,0 +1,17 @@
+:host {
+  background-color: var(--wpp-grey-color-000);
+  display: inline-flex;
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 4px;
+  gap: 8px;
+  border-radius: 8px;
+  box-shadow: 0 1px 5px 0 rgba(#343A3F, 10%), 0 0 1px 0 rgba(#343A3F, 10%);
+
+  &.vertical {
+    flex-direction: column;
+  }
+}

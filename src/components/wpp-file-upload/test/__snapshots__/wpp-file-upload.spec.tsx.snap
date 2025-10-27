@@ -81,21 +81,24 @@ exports[`wpp-file-upload should render file uploader with file items based on ur
             <div class="item-wrapper" part="file-item">
               <div class="content-wrapper" part="wrapper">
                 <div class="block" part="content">
-                  <wpp-icon-image></wpp-icon-image>
+                  <div class="icon-wrapper">
+                    <wpp-icon-image></wpp-icon-image>
+                  </div>
                   <wpp-tooltip part="tooltip" text="FileData.png">
-                    <p class="name" part="file-name" title="FileData.png">
+                    <wpp-typography class="name" part="file-name" title="FileData.png" type="s-body">
                       FileData.png
-                    </p>
+                    </wpp-typography>
                   </wpp-tooltip>
-                  <p class="loading" part="loading">
+                  <span class="loading" part="loading">
                     45 KB
-                  </p>
+                  </span>
                 </div>
                 <div class="controls-wrapper" part="controls">
                   <wpp-icon-cross aria-label="Remove file FileData.png" class="cross-icon" part="cross-icon" role="button" tabindex="0"></wpp-icon-cross>
                 </div>
               </div>
             </div>
+            <wpp-typography aria-hidden="true" class="measure" role="presentation" type="s-body"></wpp-typography>
           </mock:shadow-root>
         </wpp-file-upload-item>
         <wpp-file-upload-item class="file-upload-item wpp-file-upload-item" exportparts="file-item, wrapper, content, file-name, tooltip, loading, percentage, cross-icon" part="file-item" role="listitem">
@@ -103,21 +106,24 @@ exports[`wpp-file-upload should render file uploader with file items based on ur
             <div class="item-wrapper" part="file-item">
               <div class="content-wrapper" part="wrapper">
                 <div class="block" part="content">
-                  <wpp-icon-image></wpp-icon-image>
+                  <div class="icon-wrapper">
+                    <wpp-icon-image></wpp-icon-image>
+                  </div>
                   <wpp-tooltip part="tooltip" text="FileDataSecond.png">
-                    <p class="name" part="file-name" title="FileDataSecond.png">
+                    <wpp-typography class="name" part="file-name" title="FileDataSecond.png" type="s-body">
                       FileDataSecond.png
-                    </p>
+                    </wpp-typography>
                   </wpp-tooltip>
-                  <p class="loading" part="loading">
+                  <span class="loading" part="loading">
                     452 KB
-                  </p>
+                  </span>
                 </div>
                 <div class="controls-wrapper" part="controls">
                   <wpp-icon-cross aria-label="Remove file FileDataSecond.png" class="cross-icon" part="cross-icon" role="button" tabindex="0"></wpp-icon-cross>
                 </div>
               </div>
             </div>
+            <wpp-typography aria-hidden="true" class="measure" role="presentation" type="s-body"></wpp-typography>
           </mock:shadow-root>
         </wpp-file-upload-item>
       </ul>

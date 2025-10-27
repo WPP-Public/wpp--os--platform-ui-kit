@@ -31,7 +31,7 @@ const primaryBtn = {
 }
 
 export const ActionOff: StoryObj<Components.WppToast> = (args: Components.WppToast) => html`
-  <wpp-toast-v3-2-0
+  <wpp-toast-v3-3-0
     .message="${args.message}"
     .icon="${args.icon}"
     .maxMessageLines="${args.maxMessageLines}"
@@ -54,7 +54,7 @@ ActionOff.args = {
 }
 
 export const ActionOn: StoryObj<Components.WppToast> = (args: Components.WppToast) => html`
-  <wpp-toast-v3-2-0
+  <wpp-toast-v3-3-0
     .message="${args.message}"
     .icon="${args.icon}"
     .maxMessageLines="${args.maxMessageLines}"
@@ -64,7 +64,7 @@ export const ActionOn: StoryObj<Components.WppToast> = (args: Components.WppToas
     .duration="${30000}"
     .ariaProps="${args.ariaProps}"
   >
-  </wpp-toast-v3-2-0>
+  </wpp-toast-v3-3-0>
 `
 
 ActionOn.args = {

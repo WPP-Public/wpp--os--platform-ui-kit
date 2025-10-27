@@ -269,6 +269,7 @@ export class WppActionButton {
           part="button"
           data-testid="wppActionButton"
           aria-pressed={this.isPressed ? 'true' : 'false'}
+          tabindex={this.ariaProps?.tabIndex}
           {...this.validAriaProps}
         >
           {this.loading && (

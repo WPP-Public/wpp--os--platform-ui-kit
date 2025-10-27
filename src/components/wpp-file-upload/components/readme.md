@@ -11,9 +11,10 @@
 | ---------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | `currentIndex`   | `current-index`    | Represent current index in files list                                                                                                                                                                                                                                          | `number`                                                                                                                                                                                  | `undefined` |
 | `file`           | --                 | Current file                                                                                                                                                                                                                                                                   | `FileBasedItemType \| FileMetaData & { name: string; url: string; size: number; type: string; lastModified?: number \| undefined; result?: string \| ArrayBuffer \| null \| undefined; }` | `undefined` |
+| `fileName`       | `file-name`        |                                                                                                                                                                                                                                                                                | `string`                                                                                                                                                                                  | `undefined` |
 | `format`         | `format`           | Represent what result format datepicker return, it can be base64, arrayBuffer, binaryString, by default it returns base64                                                                                                                                                      | `"arrayBuffer" \| "base64" \| "binaryString"`                                                                                                                                             | `'base64'`  |
 | `locales`        | --                 | Indicates locales for file upload component                                                                                                                                                                                                                                    | `{ sizeError: string; formatError: string; }`                                                                                                                                             | `undefined` |
-| `maxLabelLength` | `max-label-length` | Maximum label length (in characters) of single loading item                                                                                                                                                                                                                    | `number`                                                                                                                                                                                  | `30`        |
+| `maxLabelLength` | `max-label-length` | <span style="color:red">**[DEPRECATED]**</span> - this prop will be removed in 4.0.0 version. Truncation will be calculated based on available space.<br/><br/>Maximum label length (in characters) of single loading item                                                     | `number \| undefined`                                                                                                                                                                     | `undefined` |
 | `parentDisabled` | `parent-disabled`  | When true, this item inherits the parent uploader’s disabled state. Interactive controls inside the item (e.g., the delete icon) must be non-interactive: - removed from the tab order (tabindex = -1) - marked as aria-disabled="true" - click/keyboard handlers should no-op | `boolean \| undefined`                                                                                                                                                                    | `undefined` |
 
 
@@ -67,6 +68,7 @@
 - [wpp-inline-message](../../wpp-inline-message)
 - [wpp-icon-cross](../../wpp-icon/components/add-and-remove/wpp-icon-cross)
 - [wpp-tooltip](../../wpp-tooltip)
+- [wpp-typography](../../wpp-typography)
 - [wpp-icon-document](../../wpp-icon/components/content/files/wpp-icon-document)
 - [wpp-icon-file-zip](../../wpp-icon/components/content/files/wpp-icon-file-zip)
 - [wpp-icon-image](../../wpp-icon/components/media/media/wpp-icon-image)
@@ -84,6 +86,7 @@ graph TD;
   wpp-file-upload-item --> wpp-inline-message
   wpp-file-upload-item --> wpp-icon-cross
   wpp-file-upload-item --> wpp-tooltip
+  wpp-file-upload-item --> wpp-typography
   wpp-file-upload-item --> wpp-icon-document
   wpp-file-upload-item --> wpp-icon-file-zip
   wpp-file-upload-item --> wpp-icon-image

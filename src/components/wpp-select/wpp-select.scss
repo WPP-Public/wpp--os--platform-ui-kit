@@ -35,7 +35,6 @@
     width: 100%;
     border-radius: var(--wpp-border-radius-m);
     border: 1px solid var(--wpp-grey-color-500);
-    background-color: var(--wpp-white-color);
     position: relative;
     box-sizing: border-box;
     outline: none;
@@ -104,7 +103,6 @@
       width: 100%;
       min-width: 32px;
       align-items: center;
-      background-color: var(--wpp-white-color);
       color: var(--grey-color-1000);
       height: var(--wpp-typography-s-body-line-height, 22px);
       padding: 0 2px;
@@ -201,6 +199,13 @@
           color: var(--wpp-grey-color-500);
         }
       }
+    }
+
+    &.anchor-button {
+      padding: 0;
+      border: none;
+      background: none;
+      width: fit-content;
     }
   }
 

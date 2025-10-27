@@ -313,6 +313,7 @@ export class WppTooltip {
           }
         },
         popperOptions: {
+          strategy: 'fixed',
           ...(this.config.popperOptions || {}),
           modifiers: [
             {

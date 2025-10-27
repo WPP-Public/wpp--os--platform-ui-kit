@@ -70,6 +70,9 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
   private segmentWidth: number = 0
   private totalWidth: number = 0
 
+  /* For slider with type="middle-range" */
+  private middleValue: number = 0
+
   @Element() host: HTMLWppSliderElement
 
   @State() tooltipTexts: Record<number, string> = {}
@@ -79,6 +82,8 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
   @State() inputValue: SliderInputValue
 
   @State() focusType: FocusType = getInitFocusInfo()
+
+  // @State() internalMidRangeValue: [number, number] = [0, 0]
 
   /**
    * Defines the slider name.
@@ -189,6 +194,11 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
    */
   @Event({ bubbles: false, composed: false }) readonly wppBlur: EventEmitter<FocusEvent>
 
+  @Watch('value')
+  onUpdateValue() {
+    this.inputValue = this.getSliderInputValue()
+  }
+
   @Watch('min')
   onUpdateMinValue(newValue: number) {
     this.onUpdateMinMaxValues('min', newValue)
@@ -208,6 +218,10 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
       range: () => {
         this.value = [this.min, this.min + newStepValue]
       },
+      'middle-range': () => {
+        this.value = this.min
+        this.middleValue = this.getMidValueRespectingStep()
+      },
     })
 
     this.computeSegmentWidth()
@@ -217,7 +231,7 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
 
   @Watch('inputValue')
   onUpdateInputValue(newInputValue: SliderInputValue) {
-    if (this.type === 'single') {
+    if (this.type === 'single' || this.type === 'middle-range') {
       const inputMaskOptions: MaskitoNumberParams = getMaskOptionsForInput(this.type, undefined, this.maskOptions)
 
       if (this.inputRef) {
@@ -250,6 +264,10 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
 
   componentWillLoad() {
     this.getDisplayMarks()
+
+    if (this.type === 'middle-range') {
+      this.middleValue = this.getMidValueRespectingStep()
+    }
   }
 
   componentDidLoad() {
@@ -259,6 +277,9 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
       },
       range: value => {
         this.inputValue = value.map(String)
+      },
+      'middle-range': value => {
+        this.inputValue = String(value)
       },
     })
 
@@ -282,6 +303,16 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
       this.getDisplayMarks()
       this.applyTruncationToMarks()
     })
+  }
+
+  private getMidValueRespectingStep = (): number => {
+    const range = this.max - this.min
+    const half = range / 2
+    // Round to the nearest valid step increment
+    const stepsFromMin = Math.round(half / this.step)
+    const middle = this.min + stepsFromMin * this.step
+
+    return Math.min(this.max, Math.max(this.min, Number(middle.toFixed(2))))
   }
 
   private computeSegmentWidth = () => {
@@ -308,6 +339,10 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
           this.value = [value[0], Math.min(newValue, value[1])]
         }
       },
+      'middle-range': () => {
+        this.value = newValue
+        this.middleValue = this.getMidValueRespectingStep()
+      },
     })
 
     this.computeSegmentWidth()
@@ -316,6 +351,10 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
   }
 
   private handleType = <T,>(handlers: HandleType<T>) => {
+    if (this.type === 'middle-range') {
+      return handlers['middle-range'](this.value as number)
+    }
+
     if (this.type === 'range' && Array.isArray(this.value)) {
       return handlers.range(this.value)
     }
@@ -402,7 +441,23 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
     })
   }
 
+  private updateSingleSliderValue = (nearestLowerValue: number) => {
+    // This function is called only for single and middle-range sliders,
+    // when the input value changes (after onBlur).
+    const newValue = Math.max(Math.min(nearestLowerValue, this.max), this.min)
+
+    if (this.value === newValue) {
+      this.onUpdateInputValue(this.inputValue)
+    } else {
+      this.value = newValue
+    }
+  }
+
+  // Function used to get the nearest lower value based on step
+  private getNearestLowerValue = (value: number) => Math.floor((value - this.min) / this.step) * this.step + this.min
+
   private handleInputChange = (type?: SliderRangeType) => (event: Event) => {
+    // We validate the value of the input only onBlur
     const target = event.target as HTMLInputElement
 
     const inputMaskOptions: MaskitoNumberParams = getMaskOptionsForInput(this.type, type, this.maskOptions)
@@ -415,26 +470,24 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
       target.value === inputMaskOptions?.prefix
     ) {
       this.handleType({
-        single: () => {
-          this.onUpdateInputValue(String(this.value))
+        single: value => {
+          this.onUpdateInputValue(String(value))
         },
         range: value => {
           this.value = value
-          this.inputValue = this.getSliderInputValue()
+        },
+        'middle-range': value => {
+          this.onUpdateInputValue(String(value))
         },
       })
 
       return
     }
 
-    const nearestLowerValue = Math.floor((inputValue - this.min) / this.step) * this.step + this.min
+    const nearestLowerValue = this.getNearestLowerValue(inputValue)
 
     this.handleType({
-      single: () => {
-        const newValue = Math.max(Math.min(nearestLowerValue, this.max), this.min)
-
-        this.value = newValue
-      },
+      single: () => this.updateSingleSliderValue(nearestLowerValue),
       range: value => {
         if (type === 'min') {
           const newValue = Math.min(Math.max(nearestLowerValue, this.min), value[1] - this.step)
@@ -448,19 +501,13 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
           this.value = [value[0], newValue]
         }
       },
+      'middle-range': () => this.updateSingleSliderValue(nearestLowerValue),
     })
-
-    const newInputValue = this.getSliderInputValue()
-
-    if (this.inputValue === newInputValue) {
-      this.onUpdateInputValue(newInputValue)
-    } else {
-      this.inputValue = this.getSliderInputValue()
-    }
 
     this.wppChange.emit({
       value: this.value,
       name: this.name,
+      ...(this.type === 'middle-range' ? { middleValue: this.middleValue } : {}),
     })
   }
 
@@ -517,7 +564,7 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
 
     this.handleType({
       single: () => {
-        this.value = mark.value
+        this.value = this.getNearestLowerValue(mark.value)
       },
       range: value => {
         const distanceToTheStart = Math.abs(value[0] - mark.value)
@@ -529,13 +576,15 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
           this.value = [value[0], mark.value]
         }
       },
+      'middle-range': () => {
+        this.value = this.getNearestLowerValue(mark.value)
+      },
     })
-
-    this.inputValue = this.getSliderInputValue()
 
     this.wppChange.emit({
       value: this.value,
       name: this.name,
+      ...(this.type === 'middle-range' ? { middleValue: this.middleValue } : {}),
     })
   }
 
@@ -547,7 +596,7 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
 
     // This value determines which half of the segment was clicked. -1 means that the first half was clicked and that the clicked segment
     // is placed on the right of the mark, so we should approximate to the starting mark of the segment (left one).
-    const halfOfSegment = clickedSegmentPosition > Math.round(clickedSegmentPosition) ? -1 : 0
+    const halfOfSegment = clickedSegmentPosition >= Math.round(clickedSegmentPosition) ? -1 : 0
 
     const clickedValue = this.min + (clickedSegmentNumber + halfOfSegment) * this.step
 
@@ -578,11 +627,16 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
 
         this.inputValue = (this.value as number[]).map(String)
       },
+      'middle-range': () => {
+        this.value = Math.round(clickedValue)
+        this.inputValue = String(this.value)
+      },
     })
 
     this.wppChange.emit({
       value: this.value,
       name: this.name,
+      ...(this.type === 'middle-range' ? { middleValue: this.middleValue } : {}),
     })
   }
 
@@ -593,6 +647,7 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
     this.wppChange.emit({
       value: this.value,
       name: this.name,
+      ...(this.type === 'middle-range' ? { middleValue: this.middleValue } : {}),
     })
   }
 
@@ -617,22 +672,36 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
           target.value = String(Math.max(this.value[0] + this.step, Number(target.value)))
         }
       },
+      'middle-range': () => {
+        this.value = Number((event.target as HTMLInputElement).value)
+      },
     })
-
-    this.inputValue = this.getSliderInputValue()
 
     this.wppChange.emit({
       value: this.value,
       name: this.name,
+      ...(this.type === 'middle-range' ? { middleValue: this.middleValue } : {}),
     })
+  }
+
+  private isMarkInRange = (markValue: number): boolean => {
+    if (this.type === 'middle-range') {
+      if (this.isMiddlePointHigher()) {
+        return (this.value as number) <= markValue && this.middleValue >= markValue
+      }
+
+      return (this.value as number) >= markValue && this.middleValue <= markValue
+    }
+
+    return (this.value as number[])[0] <= markValue && (this.value as number[])[1] >= markValue
   }
 
   private markCssClasses = (markValue: number) => ({
     'mark-item': true,
-    active:
-      (this.value as number) >= markValue ||
-      (Array.isArray(this.value) && this.value[0] <= markValue && this.value[1] >= markValue),
+    active: this.type === 'single' ? (this.value as number) >= markValue : this.isMarkInRange(markValue),
     disabled: this.disabled,
+    'middle-mark-active':
+      this.type === 'middle-range' && markValue === this.middleValue && markValue !== (this.value as number),
     first: markValue === this.min,
     last: markValue === this.max,
   })
@@ -640,6 +709,7 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
   private singleSliderWrapperCssClasses = () => ({
     'single-slider-wrapper': true,
     disabled: this.disabled,
+    'middle-range-wrapper': this.type === 'middle-range',
   })
 
   private rangeSliderWrapperCssClasses = () => ({
@@ -648,6 +718,7 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
   })
 
   private controlCssClasses = () => ({
+    'slider-control': true,
     'with-value': this.withValue,
     'without-label': !this.labelConfig?.text,
     disabled: this.disabled,
@@ -697,7 +768,7 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
     if (this.withValue && !this.withInput) {
       return (
         <div class={this.controlCssClasses()} part="control-wrapper">
-          {label}
+          {label || <div></div>}
           {this.handleType<HTMLElement>({
             single: value => (
               <wpp-typography type="s-midi" part="value">
@@ -715,6 +786,17 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
                 </wpp-typography>
               </div>
             ),
+            'middle-range': value => (
+              <div class="range-value-wrapper" part="value-wrapper">
+                <wpp-typography type="s-midi" part="value">
+                  {this.isMiddlePointHigher() ? value : this.middleValue}
+                </wpp-typography>
+                <wpp-divider part="value-divider" class={{ divider: true, disabled: this.disabled }} />
+                <wpp-typography type="s-midi" part="value">
+                  {this.isMiddlePointHigher() ? this.middleValue : value}
+                </wpp-typography>
+              </div>
+            ),
           })}
         </div>
       )
@@ -723,30 +805,32 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
     return label
   }
 
+  private renderSingleInput = () => (
+    <wpp-input
+      ref={inputRef => (this.inputRef = inputRef)}
+      type="decimal"
+      size={this.size}
+      disabled={this.disabled}
+      part="input-number"
+      onBlur={this.handleBlur}
+      onFocus={this.handleFocus}
+      style={{ width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }}
+      class={{ [`size-${this.size}`]: true }}
+      maskOptions={{
+        decimalPatternOptions: this.maskOptions
+          ? {
+              ...getDefaultMaskOptions(this.step),
+              ...(this.maskOptions as MaskitoNumberParams),
+            }
+          : getDefaultMaskOptions(this.step),
+      }}
+    />
+  )
+
   private renderEditableInput = () => (
     <div class={this.editableInputCssClasses()} part="editable-input-wrapper">
       {this.handleType<HTMLElement>({
-        single: () => (
-          <wpp-input
-            ref={inputRef => (this.inputRef = inputRef)}
-            type="decimal"
-            size={this.size}
-            disabled={this.disabled}
-            part="input-number"
-            onBlur={this.handleBlur}
-            onFocus={this.handleFocus}
-            style={{ width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }}
-            class={{ [`size-${this.size}`]: true }}
-            maskOptions={{
-              decimalPatternOptions: this.maskOptions
-                ? {
-                    ...getDefaultMaskOptions(this.step),
-                    ...(this.maskOptions as MaskitoNumberParams),
-                  }
-                : getDefaultMaskOptions(this.step),
-            }}
-          />
-        ),
+        single: () => this.renderSingleInput(),
         range: () => (
           <div class="range-input-wrapper" part="input-wrapper">
             <wpp-input
@@ -792,6 +876,7 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
             />
           </div>
         ),
+        'middle-range': () => this.renderSingleInput(),
       })}
     </div>
   )
@@ -857,6 +942,97 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
     }
   }
 
+  private renderRangeSliders = (style: Record<string, string>, value?: any) => (
+    <div class={this.rangeSliderWrapperCssClasses()} part="slider">
+      <div
+        ref={elRef => (this.clickableAreaRef = elRef)}
+        class="slider-clickable-wrapper"
+        onClick={this.handleSliderWrapperClick}
+      />
+      <input
+        class={{ slider: true, [`min-range-${this.focusType.min}`]: true }}
+        type="range"
+        name={this.name}
+        min={this.min}
+        max={this.max}
+        step={this.step}
+        value={value[0]}
+        required={this.required}
+        disabled={this.disabled}
+        aria-label={this.ariaProps.label}
+        part="input-slider-min"
+        style={style}
+        onInput={this.handleRangeSliderChange('min')}
+        onBlur={() => this.handleInputBlur('min')}
+        onMouseDown={() => this.handleInputMouseDown('min')}
+        onKeyUp={(event: KeyboardEvent) => this.handleInputKeyUp(event, 'min')}
+        onClick={event => {
+          event.preventDefault()
+          event.stopPropagation()
+        }}
+        title=""
+      />
+      <input
+        class={{
+          slider: true,
+          [`max-range-${this.focusType.max}`]: true,
+        }}
+        type="range"
+        name={this.name}
+        min={this.min}
+        max={this.max}
+        step={this.step}
+        value={value[1]}
+        required={this.required}
+        disabled={this.disabled}
+        aria-label={this.ariaProps.label}
+        part="input-slider-max"
+        onInput={this.handleRangeSliderChange('max')}
+        onBlur={() => this.handleInputBlur('max')}
+        onMouseDown={() => this.handleInputMouseDown('max')}
+        onKeyUp={(event: KeyboardEvent) => this.handleInputKeyUp(event, 'max')}
+        onClick={event => {
+          event.preventDefault()
+          event.stopPropagation()
+        }}
+        title=""
+      />
+    </div>
+  )
+
+  private renderSingleSlider = (style: Record<string, string>, value: number) => (
+    <div class={this.singleSliderWrapperCssClasses()} part="slider">
+      <div
+        ref={elRef => (this.clickableAreaRef = elRef)}
+        class="slider-clickable-wrapper"
+        onClick={this.handleSliderWrapperClick}
+      />
+      <input
+        class={{ slider: true, [`max-range-${this.focusType.max}`]: true }}
+        type="range"
+        name={this.name}
+        id={this.name}
+        min={this.min}
+        max={this.max}
+        step={this.step}
+        value={value}
+        required={this.required}
+        disabled={this.disabled}
+        aria-label={this.ariaProps.label}
+        part="input-slider-max"
+        onInput={this.handleSingleSliderChange}
+        onBlur={() => this.handleInputBlur('max')}
+        onKeyUp={(event: KeyboardEvent) => this.handleInputKeyUp(event, 'max')}
+        onMouseDown={() => this.handleInputMouseDown('max')}
+        style={style}
+        title=""
+      />
+    </div>
+  )
+
+  // This function is used only in the middle-range slider type
+  private isMiddlePointHigher = (): boolean => this.middleValue > (this.value as number)
+
   render() {
     const style = this.handleType<Record<string, string>>({
       single: value => ({
@@ -865,6 +1041,14 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
       range: value => ({
         '--active-range-from-progress-bar': this.calculateProgressBar(value[0]),
         '--active-range-to-progress-bar': this.calculateProgressBar(value[1]),
+      }),
+      'middle-range': value => ({
+        '--active-range-from-progress-bar': this.calculateProgressBar(
+          this.isMiddlePointHigher() ? value : this.middleValue,
+        ),
+        '--active-range-to-progress-bar': this.calculateProgressBar(
+          this.isMiddlePointHigher() ? this.middleValue : value,
+        ),
       }),
     })
 
@@ -878,89 +1062,9 @@ export class WppSlider implements BaseComponent, BaseFormControl<SliderValue> {
         <div class="slider-container">
           <div class="slider-column">
             {this.handleType<HTMLElement>({
-              single: value => (
-                <div class={this.singleSliderWrapperCssClasses()} part="slider">
-                  <div
-                    ref={elRef => (this.clickableAreaRef = elRef)}
-                    class="slider-clickable-wrapper"
-                    onClick={this.handleSliderWrapperClick}
-                  />
-                  <input
-                    class={{ slider: true, [`max-range-${this.focusType.max}`]: true }}
-                    type="range"
-                    name={this.name}
-                    id={this.name}
-                    min={this.min}
-                    max={this.max}
-                    step={this.step}
-                    value={value}
-                    required={this.required}
-                    disabled={this.disabled}
-                    aria-label={this.ariaProps.label}
-                    part="input-slider-max"
-                    onInput={this.handleSingleSliderChange}
-                    onBlur={() => this.handleInputBlur('max')}
-                    onKeyUp={(event: KeyboardEvent) => this.handleInputKeyUp(event, 'max')}
-                    onMouseDown={() => this.handleInputMouseDown('max')}
-                    style={style}
-                    title=""
-                  />
-                </div>
-              ),
-              range: value => (
-                <div class={this.rangeSliderWrapperCssClasses()} part="slider">
-                  <div
-                    ref={elRef => (this.clickableAreaRef = elRef)}
-                    class="slider-clickable-wrapper"
-                    onClick={this.handleSliderWrapperClick}
-                  />
-                  <input
-                    class={{ slider: true, [`min-range-${this.focusType.min}`]: true }}
-                    type="range"
-                    name={this.name}
-                    min={this.min}
-                    max={this.max}
-                    step={this.step}
-                    value={value[0]}
-                    required={this.required}
-                    disabled={this.disabled}
-                    aria-label={this.ariaProps.label}
-                    part="input-slider-min"
-                    style={style}
-                    onInput={this.handleRangeSliderChange('min')}
-                    onBlur={() => this.handleInputBlur('min')}
-                    onMouseDown={() => this.handleInputMouseDown('min')}
-                    onKeyUp={(event: KeyboardEvent) => this.handleInputKeyUp(event, 'min')}
-                    onClick={event => {
-                      event.preventDefault()
-                      event.stopPropagation()
-                    }}
-                    title=""
-                  />
-                  <input
-                    class={{ slider: true, [`max-range-${this.focusType.max}`]: true }}
-                    type="range"
-                    name={this.name}
-                    min={this.min}
-                    max={this.max}
-                    step={this.step}
-                    value={value[1]}
-                    required={this.required}
-                    disabled={this.disabled}
-                    aria-label={this.ariaProps.label}
-                    part="input-slider-max"
-                    onInput={this.handleRangeSliderChange('max')}
-                    onBlur={() => this.handleInputBlur('max')}
-                    onMouseDown={() => this.handleInputMouseDown('max')}
-                    onKeyUp={(event: KeyboardEvent) => this.handleInputKeyUp(event, 'max')}
-                    onClick={event => {
-                      event.preventDefault()
-                      event.stopPropagation()
-                    }}
-                    title=""
-                  />
-                </div>
-              ),
+              single: value => this.renderSingleSlider(style, value),
+              range: value => this.renderRangeSliders(style, value),
+              'middle-range': value => this.renderSingleSlider(style, value),
             })}
 
             {this.marks && (

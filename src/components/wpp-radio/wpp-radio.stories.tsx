@@ -23,7 +23,7 @@ export default {
 } as Meta<Components.WppRadio>
 
 export const NoLabel: StoryObj<Components.WppRadio> = (args: Components.WppRadio) =>
-  html` <wpp-radio-v3-2-0
+  html` <wpp-radio-v3-3-0
     @wppChange="${(event: any) => console.log('wppChange => ', event.detail.value)}"
     .name="${args.name}"
     .value="${args.value}"
@@ -39,7 +39,7 @@ NoLabel.args = {
 }
 
 export const WithLabel: StoryObj<Components.WppRadio> = (args: Components.WppRadio) =>
-  html` <wpp-radio-v3-2-0
+  html` <wpp-radio-v3-3-0
     @wppChange="${(event: any) => console.log('wppChange => ', event.detail.value)}"
     .name="${args.name}"
     .value="${args.value}"

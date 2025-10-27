@@ -46,14 +46,14 @@ export const Input: StoryObj<Components.WppInlineEdit> = {
     return html`
       <div style="display: flex; gap: 20px;">
         <!-- Inline Edit with inputWidth -->
-        <wpp-inline-edit-v3-2-0
+        <wpp-inline-edit-v3-3-0
           .value="${value}"
           .placeholder="${args.placeholder}"
           .mode="${mode}"
           .inputWidth="${args.inputWidth}"
           @wppModeChange="${handleInputModeChange}"
         >
-          <wpp-input-v3-2-0
+          <wpp-input-v3-3-0
             size="s"
             slot="form-element"
             .value="${value}"
@@ -62,22 +62,22 @@ export const Input: StoryObj<Components.WppInlineEdit> = {
             .inputWidth="${args.inputWidth}"
             @wppChange="${handleInputValueChange}"
           >
-        </wpp-inline-edit-v3-2-0>
+        </wpp-inline-edit-v3-3-0>
 
         <!-- Inline Edit without inputWidth (default width) -->
-        <wpp-inline-edit-v3-2-0
+        <wpp-inline-edit-v3-3-0
           .value="${valueDefault}"
           .placeholder="${args.placeholder}"
           .mode="${modeDefault}"
           @wppModeChange="${handleInputModeChangeDefault}"
         >
-          <wpp-input-v3-2-0
+          <wpp-input-v3-3-0
             size="s"
             slot="form-element"
             .value="${valueDefault}"
             .placeholder="${args.placeholder}"
-          ></wpp-input-v3-2-0>
-        </wpp-inline-edit-v3-2-0>
+          ></wpp-input-v3-3-0>
+        </wpp-inline-edit-v3-3-0>
       </div>
     `
   },
@@ -119,7 +119,7 @@ export const TextArea: StoryObj<Components.WppInlineEdit> = {
     return html`
       <div style="display: flex; gap: 20px;">
         <!-- TextArea with inputWidth -->
-        <wpp-inline-edit-v3-2-0
+        <wpp-inline-edit-v3-3-0
           .value="${value}"
           .placeholder="${args.placeholder}"
           .mode="${mode}"
@@ -127,29 +127,29 @@ export const TextArea: StoryObj<Components.WppInlineEdit> = {
           .dropdownConfig="${{ placement: 'bottom-start' }}"
           @wppModeChange="${handleTextareaModeChange}"
         >
-          <wpp-textarea-input-v3-2-0
+          <wpp-textarea-input-v3-3-0
             slot="form-element"
             .value="${value}"
             .placeholder="${args.placeholder}"
             @wppChange="${handleTextareaValueChange}"
-          ></wpp-textarea-input-v3-2-0>
-        </wpp-inline-edit-v3-2-0>
+          ></wpp-textarea-input-v3-3-0>
+        </wpp-inline-edit-v3-3-0>
 
         <!-- TextArea without inputWidth (default width) -->
-        <wpp-inline-edit-v3-2-0
+        <wpp-inline-edit-v3-3-0
           .value="${valueDefault}"
           .placeholder="${args.placeholder}"
           .mode="${modeDefault}"
           .dropdownConfig="${{ placement: 'bottom-start' }}"
           @wppModeChange="${handleTextareaModeChangeDefault}"
         >
-          <wpp-textarea-input-v3-2-0
+          <wpp-textarea-input-v3-3-0
             slot="form-element"
             .value="${valueDefault}"
             .placeholder="${args.placeholder}"
             @wppChange="${handleTextareaValueChangeDefault}"
-          ></wpp-textarea-input-v3-2-0>
-        </wpp-inline-edit-v3-2-0>
+          ></wpp-textarea-input-v3-3-0>
+        </wpp-inline-edit-v3-3-0>
       </div>
     `
   },
@@ -195,12 +195,12 @@ export const WithServerValidations: StoryObj<Components.WppInlineEdit> = {
 
     return html`
     <div>
-      <wpp-typography-v3-2-0 style="margin-bottom: 20px;">
+      <wpp-typography-v3-3-0 style="margin-bottom: 20px;">
         The example simulates server validations for the input when the "Confirm" button is clicked. The text needs to be at least 5 characters long.
-      </wpp-typography-v3-2-0>
+      </wpp-typography-v3-3-0>
       <div style="display: flex; gap: 20px;">
         <!-- Inline Edit with inputWidth -->
-        <wpp-inline-edit-v3-2-0
+        <wpp-inline-edit-v3-3-0
           .value="${value}"
           .placeholder="${args.placeholder}"
           .mode="${mode}"
@@ -208,7 +208,7 @@ export const WithServerValidations: StoryObj<Components.WppInlineEdit> = {
           @wppModeChange="${handleInputModeChange}"
           @wppConfirm=${onConfirm}
         >
-          <wpp-input-v3-2-0
+          <wpp-input-v3-3-0
             size="s"
             slot="form-element"
             .value="${value}"
@@ -217,7 +217,7 @@ export const WithServerValidations: StoryObj<Components.WppInlineEdit> = {
             .inputWidth="${args.inputWidth}"
             @wppChange="${handleInputValueChange}"
           >
-        </wpp-inline-edit-v3-2-0>
+        </wpp-inline-edit-v3-3-0>
       </div>
     </div>
     `

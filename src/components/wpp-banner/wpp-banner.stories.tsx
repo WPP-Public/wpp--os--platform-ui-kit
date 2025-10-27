@@ -126,24 +126,24 @@ type BannerStoryArgs = Components.WppBanner & { message: string; withActions: bo
 
 export const NoTopBar: StoryObj<BannerStoryArgs> = {
   render: args =>
-    html` <wpp-banner-v3-2-0 .show="${true}" .closable="${args.closable}" .type="${args.type}">
+    html` <wpp-banner-v3-3-0 .show="${true}" .closable="${args.closable}" .type="${args.type}">
       Warning message
       ${args.withActions
         ? html`
         ${
           args.type === 'warning'
-            ? html` <wpp-action-button-v3-2-0 variant="secondary" slot="actions">Action</wpp-action-button-v3-2-0>`
+            ? html` <wpp-action-button-v3-3-0 variant="secondary" slot="actions">Action</wpp-action-button-v3-3-0>`
             : null
         }
         ${
           args.type === 'information'
-            ? html` <wpp-action-button-v3-2-0 variant="inverted" slot="actions">Action</wpp-action-button-v3-2-0>`
+            ? html` <wpp-action-button-v3-3-0 variant="inverted" slot="actions">Action</wpp-action-button-v3-3-0>`
             : null
         }
         </div>
       `
         : null}
-    </wpp-banner-v3-2-0>`,
+    </wpp-banner-v3-3-0>`,
   args: {
     type: 'warning',
     closable: false,
@@ -174,16 +174,16 @@ export const WithTopBar: StoryObj<BannerStoryArgs> = {
 
     return html` <div style=${styleMap(styles.page)}>
       <div style=${styleMap(styles.header)}>
-        <wpp-topbar-v3-2-0 .navigation="${initNavigation}" .value="${value}" @wppChange="${handleTopbarItemChange}">
+        <wpp-topbar-v3-3-0 .navigation="${initNavigation}" .value="${value}" @wppChange="${handleTopbarItemChange}">
           <div slot="app" style=${styleMap(styles.app)}>
-            <wpp-typography-v3-2-0 type="m-strong" tag="h3" style=${styleMap(styles.appName)}>
+            <wpp-typography-v3-3-0 type="m-strong" tag="h3" style=${styleMap(styles.appName)}>
               APP Name
-            </wpp-typography-v3-2-0>
+            </wpp-typography-v3-3-0>
           </div>
-        </wpp-topbar-v3-2-0>
+        </wpp-topbar-v3-3-0>
       </div>
       <div style=${styleMap(styles.container)}>
-        <wpp-banner-v3-2-0
+        <wpp-banner-v3-3-0
           .type="${args.type}"
           .show="${isToShowBanner}"
           .closable="${args.closable}"
@@ -195,22 +195,22 @@ export const WithTopBar: StoryObj<BannerStoryArgs> = {
           ${args.withActions
             ? html`
                 ${args.type === 'warning'
-                  ? html`<wpp-action-button-v3-2-0 variant="secondary" slot="actions">
+                  ? html`<wpp-action-button-v3-3-0 variant="secondary" slot="actions">
                       Action
-                    </wpp-action-button-v3-2-0>`
+                    </wpp-action-button-v3-3-0>`
                   : null}
                 ${args.type === 'information'
-                  ? html` <wpp-action-button-v3-2-0 variant="inverted" slot="actions">Action</wpp-action-button-v3-2-0>`
+                  ? html` <wpp-action-button-v3-3-0 variant="inverted" slot="actions">Action</wpp-action-button-v3-3-0>`
                   : null}
               `
             : null}
-        </wpp-banner-v3-2-0>
+        </wpp-banner-v3-3-0>
         <div style=${styleMap(styles.body)}>
           <div style=${styleMap(styles.section)}>
-            <wpp-typography-v3-2-0 type="3xl-heading">Scrollable section</wpp-typography-v3-2-0>
+            <wpp-typography-v3-3-0 type="3xl-heading">Scrollable section</wpp-typography-v3-3-0>
             <div style=${styleMap(styles.actions)}>
-              <wpp-button-v3-2-0 variant="secondary" @click="${handleShowBanner}"> Show Banner</wpp-button-v3-2-0>
-              <wpp-button-v3-2-0 variant="primary" @click="${handleCloseBanner}"> Close Banner</wpp-button-v3-2-0>
+              <wpp-button-v3-3-0 variant="secondary" @click="${handleShowBanner}"> Show Banner</wpp-button-v3-3-0>
+              <wpp-button-v3-3-0 variant="primary" @click="${handleCloseBanner}"> Close Banner</wpp-button-v3-3-0>
             </div>
           </div>
           <div style=${styleMap(styles.scrollWrapper)} />

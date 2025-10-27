@@ -74,7 +74,7 @@ exports[`wpp-textarea-input renders component with error message and label, icon
               </div>
             </wpp-tooltip>
           </mock:shadow-root>
-          <wpp-icon-mail-v3-2-0 part="icon" slot="icon"></wpp-icon-mail-v3-2-0>
+          <wpp-icon-mail-v3-3-0 part="icon" slot="icon"></wpp-icon-mail-v3-3-0>
         </wpp-internal-label>
       </label>
     </wpp-label><textarea class="warning" part="textarea"></textarea>

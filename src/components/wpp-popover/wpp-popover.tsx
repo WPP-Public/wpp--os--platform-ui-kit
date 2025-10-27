@@ -6,7 +6,11 @@ import { AriaProps, DropdownConfig } from '../../types/common'
 
 import { menuListConfig } from '../../common/menuListConfig'
 
-import { PopoverInputChangeEventDetail, PopoverShouldCloseOnOutsideClickHandler } from './types'
+import {
+  PopoverInputChangeEventDetail,
+  PopoverLocalesInterface,
+  PopoverShouldCloseOnOutsideClickHandler,
+} from './types'
 import { Z_INDEX } from '../../common/consts'
 import { getHighestContainerInDOM, hasParentWithId, isEventTargetContained } from '../../utils/utils'
 import { DEFAULT_POPOVER_LOCALES } from './config'
@@ -101,7 +105,7 @@ export class WppPopover {
   /**
    * Defines the component locale types.
    */
-  @Prop() readonly locales = DEFAULT_POPOVER_LOCALES
+  @Prop() readonly locales: PopoverLocalesInterface = DEFAULT_POPOVER_LOCALES
 
   /**
    * Emitted when the value of the search input inside the dropdown changes.

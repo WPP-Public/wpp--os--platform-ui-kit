@@ -270,6 +270,7 @@ graph TD;
   wpp-file-upload-item --> wpp-inline-message
   wpp-file-upload-item --> wpp-icon-cross
   wpp-file-upload-item --> wpp-tooltip
+  wpp-file-upload-item --> wpp-typography
   wpp-file-upload-item --> wpp-icon-document
   wpp-file-upload-item --> wpp-icon-file-zip
   wpp-file-upload-item --> wpp-icon-image

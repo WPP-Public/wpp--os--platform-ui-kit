@@ -38,7 +38,7 @@ export const Single: StoryObj<Components.WppSlider> = (args: Components.WppSlide
 
   render(
     html`
-      <wpp-slider-v3-2-0
+      <wpp-slider-v3-3-0
         type="single"
         .name=${args.name}
         .value=${args.value}
@@ -53,7 +53,7 @@ export const Single: StoryObj<Components.WppSlider> = (args: Components.WppSlide
         .withValue=${args.withValue}
         .size=${args.size}
         .labelConfig=${args.labelConfig}
-      ></wpp-slider-v3-2-0>
+      ></wpp-slider-v3-3-0>
     `,
     container,
   )
@@ -109,7 +109,7 @@ export const Range: StoryObj<Components.WppSlider> = (args: Components.WppSlider
   const container = document.createElement('div')
 
   render(
-    html`<wpp-slider-v3-2-0
+    html`<wpp-slider-v3-3-0
       type="range"
       .name=${args.name}
       .value=${args.value}
@@ -124,7 +124,7 @@ export const Range: StoryObj<Components.WppSlider> = (args: Components.WppSlider
       .withValue=${args.withValue}
       .size=${args.size}
       .labelConfig=${args.labelConfig}
-    ></wpp-slider-v3-2-0> `,
+    ></wpp-slider-v3-3-0> `,
     container,
   )
 
@@ -155,7 +155,7 @@ Range.args = {
 }
 
 export const RangeWithInputsAndMask: StoryObj<Components.WppSlider> = (args: Components.WppSlider) =>
-  html`<wpp-slider-v3-2-0
+  html`<wpp-slider-v3-3-0
     type="range"
     .name=${args.name}
     .value=${args.value}
@@ -172,7 +172,7 @@ export const RangeWithInputsAndMask: StoryObj<Components.WppSlider> = (args: Com
     .size=${args.size}
     .labelConfig=${args.labelConfig}
     .maskOptions=${args.maskOptions}
-  ></wpp-slider-v3-2-0> `
+  ></wpp-slider-v3-3-0> `
 
 RangeWithInputsAndMask.args = {
   name: 'slider-range',
@@ -214,4 +214,96 @@ RangeWithInputsAndMask.args = {
 
 RangeWithInputsAndMask.parameters = {
   controls: { exclude: ['withInput', 'continuous', 'withValue'] },
+}
+
+export const MiddleRange: StoryObj<Components.WppSlider> = (args: Components.WppSlider) =>
+  html`<wpp-slider-v3-3-0
+    type="middle-range"
+    .name=${args.name}
+    .value=${args.value}
+    .marks=${args.marks}
+    .min=${args.min}
+    .max=${args.max}
+    .step=${args.step}
+    .disabled=${args.disabled}
+    .required=${args.required}
+    .withValue=${args.withValue}
+    .size=${args.size}
+    .labelConfig=${args.labelConfig}
+    .maskOptions=${args.maskOptions}
+  ></wpp-slider-v3-3-0> `
+
+MiddleRange.args = {
+  name: 'slider-range',
+  value: 3,
+  min: 1,
+  max: 5,
+  step: 1,
+  disabled: false,
+  withValue: false,
+  required: true,
+  marks: [
+    { label: 'Very low', value: 1 },
+    { label: 'Low', value: 2 },
+    { label: 'Medium', value: 3 },
+    { label: 'High', value: 4 },
+    { label: 'Very High', value: 5 },
+  ],
+  size: 'm',
+  labelConfig: {
+    icon: '',
+    text: 'Middle-range Slider',
+    description: '',
+    locales: {
+      optional: 'Optional',
+    },
+  },
+}
+
+MiddleRange.parameters = {
+  controls: { exclude: ['inputWidth', 'continuous', 'withInput'] },
+}
+
+export const MiddleRangeContinuous: StoryObj<Components.WppSlider> = (args: Components.WppSlider) =>
+  html`<wpp-slider-v3-3-0
+    type="middle-range"
+    .name=${args.name}
+    .value=${args.value}
+    .inputWidth=${args.inputWidth}
+    .marks=${args.marks}
+    .min=${args.min}
+    .withInput=${true}
+    .max=${args.max}
+    .step=${args.step}
+    .disabled=${args.disabled}
+    .continuous=${true}
+    .required=${args.required}
+    .size=${args.size}
+    .labelConfig=${args.labelConfig}
+    .maskOptions=${args.maskOptions}
+  ></wpp-slider-v3-3-0> `
+
+MiddleRangeContinuous.args = {
+  name: 'slider-range',
+  value: 3,
+  min: -5,
+  max: 5,
+  step: 1,
+  disabled: false,
+  required: true,
+  marks: true,
+  inputWidth: undefined,
+  size: 'm',
+  labelConfig: {
+    icon: '',
+    text: 'Continuous middle-range slider with input',
+    description: '',
+    locales: {
+      optional: 'Optional',
+    },
+  },
+}
+
+MiddleRangeContinuous.parameters = {
+  controls: { exclude: ['continuous', 'withValue', 'withInput'] },
 }

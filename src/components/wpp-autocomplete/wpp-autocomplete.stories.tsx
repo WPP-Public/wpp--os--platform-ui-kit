@@ -80,7 +80,7 @@ export const Regular: StoryObj<AutocompleteStoryArgs> = {
   render: args => {
     const [value, setValue] = useState<Hero[]>([])
 
-    return html` <wpp-autocomplete-v3-2-0
+    return html` <wpp-autocomplete-v3-3-0
       .loading="${args.loading}"
       .disabled="${args.disabled}"
       .required="${args.required}"
@@ -110,7 +110,7 @@ export const Regular: StoryObj<AutocompleteStoryArgs> = {
       <div slot="selected-values">
         ${value.map(
           selectedValue => html`
-            <wpp-pill-v3-2-0
+            <wpp-pill-v3-3-0
               label="${selectedValue.label}"
               value="${selectedValue.id}"
               removable="${true}"
@@ -118,25 +118,25 @@ export const Regular: StoryObj<AutocompleteStoryArgs> = {
               .maxLength="${20}"
               @wppClose="${() => setValue(value.filter(i => i.id !== selectedValue.id))}"
             >
-              <wpp-avatar-v3-2-0
+              <wpp-avatar-v3-3-0
                 name="${selectedValue.label}"
                 size="xs"
                 src="${selectedValue!.url}"
                 slot="icon-start"
               />
-            </wpp-pill-v3-2-0>
+            </wpp-pill-v3-3-0>
           `,
         )}
       </div>
       ${heroes.map(
         hero => html`
-          <wpp-list-item-v3-2-0 .value="${hero}">
-            <wpp-avatar-v3-2-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-2-0>
+          <wpp-list-item-v3-3-0 .value="${hero}">
+            <wpp-avatar-v3-3-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-3-0>
             <p slot="label">${hero.label}</p>
-          </wpp-list-item-v3-2-0>
+          </wpp-list-item-v3-3-0>
         `,
       )}
-    </wpp-autocomplete-v3-2-0>`
+    </wpp-autocomplete-v3-3-0>`
   },
   args: {
     loading: false,
@@ -180,7 +180,7 @@ export const Extended: StoryObj<AutocompleteStoryArgs> = {
   render: args => {
     const [value, setValue] = useState<Hero[]>([])
 
-    return html` <wpp-autocomplete-v3-2-0
+    return html` <wpp-autocomplete-v3-3-0
       style="--wpp-autocomplete-extended-selected-values-wrapper-padding: 2px 10px 10px 10px;"
       .loading="${args.loading}"
       .disabled="${args.disabled}"
@@ -210,7 +210,7 @@ export const Extended: StoryObj<AutocompleteStoryArgs> = {
       <div slot="selected-values">
         ${value.map(
           selectedValue => html`
-            <wpp-pill-v3-2-0
+            <wpp-pill-v3-3-0
               label="${selectedValue.label}"
               value="${selectedValue.id}"
               disabled="${args.disabled}"
@@ -219,25 +219,25 @@ export const Extended: StoryObj<AutocompleteStoryArgs> = {
               .maxLength="${20}"
               @wppClose="${() => setValue(value.filter(i => i.id !== selectedValue.id))}"
             >
-              <wpp-avatar-v3-2-0
+              <wpp-avatar-v3-3-0
                 name="${selectedValue!.label}"
                 size="xs"
                 src="${selectedValue.url}"
                 slot="icon-start"
               />
-            </wpp-pill-v3-2-0>
+            </wpp-pill-v3-3-0>
           `,
         )}
       </div>
       ${heroes.map(
         hero => html`
-          <wpp-list-item-v3-2-0 .value="${hero}">
-            <wpp-avatar-v3-2-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-2-0>
+          <wpp-list-item-v3-3-0 .value="${hero}">
+            <wpp-avatar-v3-3-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-3-0>
             <p slot="label">${hero.label}</p>
-          </wpp-list-item-v3-2-0>
+          </wpp-list-item-v3-3-0>
         `,
       )}
-    </wpp-autocomplete-v3-2-0>`
+    </wpp-autocomplete-v3-3-0>`
   },
   args: {
     loading: false,
@@ -423,7 +423,7 @@ export const RegularSlotSuggestions: StoryObj<AutocompleteStoryArgs> = {
   render: args => {
     const [value, setValue] = useState<Hero[]>([])
 
-    return html` <wpp-autocomplete-v3-2-0
+    return html` <wpp-autocomplete-v3-3-0
       .loading="${args.loading}"
       .disabled="${args.disabled}"
       .required="${args.required}"
@@ -453,7 +453,7 @@ export const RegularSlotSuggestions: StoryObj<AutocompleteStoryArgs> = {
       <div slot="selected-values">
         ${value.map(
           selectedValue => html`
-            <wpp-pill-v3-2-0
+            <wpp-pill-v3-3-0
               label="${selectedValue.label}"
               value="${selectedValue.id}"
               removable="${true}"
@@ -461,25 +461,25 @@ export const RegularSlotSuggestions: StoryObj<AutocompleteStoryArgs> = {
               .maxLength="${20}"
               @wppClose="${() => setValue(value.filter(i => i.id !== selectedValue.id))}"
             >
-              <wpp-avatar-v3-2-0
+              <wpp-avatar-v3-3-0
                 name="${selectedValue.label}"
                 size="xs"
                 src="${selectedValue!.url}"
                 slot="icon-start"
               />
-            </wpp-pill-v3-2-0>
+            </wpp-pill-v3-3-0>
           `,
         )}
       </div>
       ${heroes.map(
         hero => html`
-          <wpp-list-item-v3-2-0 .value="${hero}">
-            <wpp-avatar-v3-2-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-2-0>
+          <wpp-list-item-v3-3-0 .value="${hero}">
+            <wpp-avatar-v3-3-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-3-0>
             <p slot="label">${hero.label}</p>
-          </wpp-list-item-v3-2-0>
+          </wpp-list-item-v3-3-0>
         `,
       )}
-    </wpp-autocomplete-v3-2-0>`
+    </wpp-autocomplete-v3-3-0>`
   },
   args: {
     loading: false,

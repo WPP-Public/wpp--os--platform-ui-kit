@@ -12,13 +12,13 @@ exports[`wpp-tree should render multiple tree component 1`] = `
                 <wpp-icon-more class="menu-trigger" direction="horizontal" slot="trigger-element" style="padding: 4px; color: var(--wpp-grey-color-800);"></wpp-icon-more>
                 <div>
                   <wpp-list-item value="remove">
-                    <wpp-icon-info-v3-2-0 slot="left"></wpp-icon-info-v3-2-0>
+                    <wpp-icon-info-v3-3-0 slot="left"></wpp-icon-info-v3-3-0>
                     <span slot="label">
                       remove
                     </span>
                   </wpp-list-item>
                   <wpp-list-item value="save">
-                    <wpp-icon-cross-v3-2-0 slot="left"></wpp-icon-cross-v3-2-0>
+                    <wpp-icon-cross-v3-3-0 slot="left"></wpp-icon-cross-v3-3-0>
                     <span slot="label">
                       save
                     </span>
@@ -57,13 +57,13 @@ exports[`wpp-tree should render tree component 1`] = `
                 <wpp-icon-more class="menu-trigger" direction="horizontal" slot="trigger-element" style="padding: 4px; color: var(--wpp-grey-color-800);"></wpp-icon-more>
                 <div>
                   <wpp-list-item value="remove">
-                    <wpp-icon-info-v3-2-0 slot="left"></wpp-icon-info-v3-2-0>
+                    <wpp-icon-info-v3-3-0 slot="left"></wpp-icon-info-v3-3-0>
                     <span slot="label">
                       remove
                     </span>
                   </wpp-list-item>
                   <wpp-list-item value="save">
-                    <wpp-icon-cross-v3-2-0 slot="left"></wpp-icon-cross-v3-2-0>
+                    <wpp-icon-cross-v3-3-0 slot="left"></wpp-icon-cross-v3-3-0>
                     <span slot="label">
                       save
                     </span>
@@ -102,13 +102,13 @@ exports[`wpp-tree should render tree component with filtered data 1`] = `
                 <wpp-icon-more class="menu-trigger" direction="horizontal" slot="trigger-element" style="padding: 4px; color: var(--wpp-grey-color-800);"></wpp-icon-more>
                 <div>
                   <wpp-list-item value="remove">
-                    <wpp-icon-info-v3-2-0 slot="left"></wpp-icon-info-v3-2-0>
+                    <wpp-icon-info-v3-3-0 slot="left"></wpp-icon-info-v3-3-0>
                     <span slot="label">
                       remove
                     </span>
                   </wpp-list-item>
                   <wpp-list-item value="save">
-                    <wpp-icon-cross-v3-2-0 slot="left"></wpp-icon-cross-v3-2-0>
+                    <wpp-icon-cross-v3-3-0 slot="left"></wpp-icon-cross-v3-3-0>
                     <span slot="label">
                       save
                     </span>

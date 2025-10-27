@@ -23,6 +23,7 @@ import { Theme } from "./types/theme";
 import { CounterChangeEventDetail, CounterFormat, CounterLabelConfig } from "./components/wpp-counter/types";
 import { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes } from "./components/wpp-datepicker/types";
 import { ExpandableCardSectionChangeEventDetail } from "./components/wpp-expandable-card/types";
+import { ActionButtonData } from "./components/wpp-floating-toolbar/types";
 import { FullScreenModalCloseDetails, FullScreenModalFormConfig } from "./components/wpp-full-screen-modal/types";
 import { AlignItemsType, DirectionType, JustifyContentType } from "./components/wpp-grid/types";
 import { RangeOf } from "./types/numberRange";
@@ -41,7 +42,7 @@ import { NavigationItemEventDetail, NavigationState, TopbarChangeEventDetail } f
 import { PaginationChangeEventDetail, PaginationLocales, PaginationPageChangeEventDetail } from "./components/wpp-pagination/types";
 import { PillChangeEventDetail, PillSize, PillType, PillValue } from "./components/wpp-pill-group/components/wpp-pill/types";
 import { PillGroupChangeEvent, PillGroupLabelConfig, PillGroupValue } from "./components/wpp-pill-group/types";
-import { PopoverInputChangeEventDetail, PopoverShouldCloseOnOutsideClickHandler } from "./components/wpp-popover/types";
+import { PopoverInputChangeEventDetail, PopoverLocalesInterface, PopoverShouldCloseOnOutsideClickHandler } from "./components/wpp-popover/types";
 import { RadioChangeEvent, RadioLabelConfig, RadioValue } from "./components/wpp-radio/types";
 import { RadioGroupChangeEvent, RadioGroupValue } from "./components/wpp-radio-group/types";
 import { DebugLevels, Formats, QuillInstance, RichtextChangeEventDetail, RichtextLocales, RichtextSelectionChangeEventDetail, RichtextUploadRequestEventDetail, RichtextValue } from "./components/wpp-richtext/types";
@@ -80,6 +81,7 @@ export { Theme } from "./types/theme";
 export { CounterChangeEventDetail, CounterFormat, CounterLabelConfig } from "./components/wpp-counter/types";
 export { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes } from "./components/wpp-datepicker/types";
 export { ExpandableCardSectionChangeEventDetail } from "./components/wpp-expandable-card/types";
+export { ActionButtonData } from "./components/wpp-floating-toolbar/types";
 export { FullScreenModalCloseDetails, FullScreenModalFormConfig } from "./components/wpp-full-screen-modal/types";
 export { AlignItemsType, DirectionType, JustifyContentType } from "./components/wpp-grid/types";
 export { RangeOf } from "./types/numberRange";
@@ -98,7 +100,7 @@ export { NavigationItemEventDetail, NavigationState, TopbarChangeEventDetail } f
 export { PaginationChangeEventDetail, PaginationLocales, PaginationPageChangeEventDetail } from "./components/wpp-pagination/types";
 export { PillChangeEventDetail, PillSize, PillType, PillValue } from "./components/wpp-pill-group/components/wpp-pill/types";
 export { PillGroupChangeEvent, PillGroupLabelConfig, PillGroupValue } from "./components/wpp-pill-group/types";
-export { PopoverInputChangeEventDetail, PopoverShouldCloseOnOutsideClickHandler } from "./components/wpp-popover/types";
+export { PopoverInputChangeEventDetail, PopoverLocalesInterface, PopoverShouldCloseOnOutsideClickHandler } from "./components/wpp-popover/types";
 export { RadioChangeEvent, RadioLabelConfig, RadioValue } from "./components/wpp-radio/types";
 export { RadioGroupChangeEvent, RadioGroupValue } from "./components/wpp-radio-group/types";
 export { DebugLevels, Formats, QuillInstance, RichtextChangeEventDetail, RichtextLocales, RichtextSelectionChangeEventDetail, RichtextUploadRequestEventDetail, RichtextValue } from "./components/wpp-richtext/types";
@@ -1224,8 +1226,9 @@ export namespace Components {
         "maxFiles": number;
         /**
           * Maximum label length (in characters) of single item
+          * @deprecated - this prop will be removed in 4.0.0 version. Truncation will be calculated based on available space.
          */
-        "maxLabelLength": number;
+        "maxLabelLength"?: number;
         /**
           * Indicates file upload message maximum length
          */
@@ -1284,6 +1287,7 @@ export namespace Components {
           * Current file
          */
         "file": FileItemType;
+        "fileName": string;
         /**
           * Represent what result format datepicker return, it can be base64, arrayBuffer, binaryString, by default it returns base64
          */
@@ -1294,8 +1298,9 @@ export namespace Components {
         "locales": FileUploadItemLocales;
         /**
           * Maximum label length (in characters) of single loading item
+          * @deprecated - this prop will be removed in 4.0.0 version. Truncation will be calculated based on available space.
          */
-        "maxLabelLength": number;
+        "maxLabelLength"?: number;
         /**
           * When true, this item inherits the parent uploader’s disabled state. Interactive controls inside the item (e.g., the delete icon) must be non-interactive: - removed from the tab order (tabindex = -1) - marked as aria-disabled="true" - click/keyboard handlers should no-op
          */
@@ -1388,6 +1393,20 @@ export namespace Components {
           * Defines the button value.
          */
         "value"?: string;
+    }
+    interface WppFloatingToolbar {
+        /**
+          * Defines the action buttons configuration. Must contain between 2 and 7 items.
+         */
+        "actionButtonsConfig": ActionButtonData[];
+        /**
+          * Contains the floating toolbar `aria-` props.
+         */
+        "ariaProps": AriaProps;
+        /**
+          * Defines the orientation of the floating toolbar.
+         */
+        "orientation": 'horizontal' | 'vertical';
     }
     interface WppFullScreenModal {
         /**
@@ -12024,7 +12043,7 @@ export namespace Components {
         /**
           * Defines the component locale types.
          */
-        "locales": PopoverLocalesInteface;
+        "locales": PopoverLocalesInterface;
         /**
           * Method for opening the popover programatically
          */
@@ -12065,6 +12084,7 @@ export namespace Components {
         "isShowPercentage": boolean;
         /**
           * Defines the loading label.
+          * @deprecated This property will be removed in version 5.0.0.
          */
         "label"?: string;
         /**
@@ -14025,6 +14045,12 @@ declare global {
     var HTMLWppFloatingButtonElement: {
         prototype: HTMLWppFloatingButtonElement;
         new (): HTMLWppFloatingButtonElement;
+    };
+    interface HTMLWppFloatingToolbarElement extends Components.WppFloatingToolbar, HTMLStencilElement {
+    }
+    var HTMLWppFloatingToolbarElement: {
+        prototype: HTMLWppFloatingToolbarElement;
+        new (): HTMLWppFloatingToolbarElement;
     };
     interface HTMLWppFullScreenModalElement extends Components.WppFullScreenModal, HTMLStencilElement {
     }
@@ -17652,6 +17678,7 @@ declare global {
         "wpp-file-upload-item": HTMLWppFileUploadItemElement;
         "wpp-filter-button": HTMLWppFilterButtonElement;
         "wpp-floating-button": HTMLWppFloatingButtonElement;
+        "wpp-floating-toolbar": HTMLWppFloatingToolbarElement;
         "wpp-full-screen-modal": HTMLWppFullScreenModalElement;
         "wpp-grid": HTMLWppGridElement;
         "wpp-hue-slider": HTMLWppHueSliderElement;
@@ -19504,6 +19531,7 @@ declare namespace LocalJSX {
         "maxFiles"?: number;
         /**
           * Maximum label length (in characters) of single item
+          * @deprecated - this prop will be removed in 4.0.0 version. Truncation will be calculated based on available space.
          */
         "maxLabelLength"?: number;
         /**
@@ -19584,6 +19612,7 @@ declare namespace LocalJSX {
           * Current file
          */
         "file"?: FileItemType;
+        "fileName"?: string;
         /**
           * Represent what result format datepicker return, it can be base64, arrayBuffer, binaryString, by default it returns base64
          */
@@ -19594,6 +19623,7 @@ declare namespace LocalJSX {
         "locales"?: FileUploadItemLocales;
         /**
           * Maximum label length (in characters) of single loading item
+          * @deprecated - this prop will be removed in 4.0.0 version. Truncation will be calculated based on available space.
          */
         "maxLabelLength"?: number;
         "onFileLoaded"?: (event: WppFileUploadItemCustomEvent<{ name: string; size: number }>) => void;
@@ -19683,6 +19713,20 @@ declare namespace LocalJSX {
           * Defines the button value.
          */
         "value"?: string;
+    }
+    interface WppFloatingToolbar {
+        /**
+          * Defines the action buttons configuration. Must contain between 2 and 7 items.
+         */
+        "actionButtonsConfig"?: ActionButtonData[];
+        /**
+          * Contains the floating toolbar `aria-` props.
+         */
+        "ariaProps"?: AriaProps;
+        /**
+          * Defines the orientation of the floating toolbar.
+         */
+        "orientation"?: 'horizontal' | 'vertical';
     }
     interface WppFullScreenModal {
         /**
@@ -30430,7 +30474,7 @@ declare namespace LocalJSX {
         /**
           * Defines the component locale types.
          */
-        "locales"?: PopoverLocalesInteface;
+        "locales"?: PopoverLocalesInterface;
         /**
           * Emitted when the value of the search input inside the dropdown changes.
          */
@@ -30471,6 +30515,7 @@ declare namespace LocalJSX {
         "isShowPercentage"?: boolean;
         /**
           * Defines the loading label.
+          * @deprecated This property will be removed in version 5.0.0.
          */
         "label"?: string;
         /**
@@ -32201,6 +32246,7 @@ declare namespace LocalJSX {
         "wpp-file-upload-item": WppFileUploadItem;
         "wpp-filter-button": WppFilterButton;
         "wpp-floating-button": WppFloatingButton;
+        "wpp-floating-toolbar": WppFloatingToolbar;
         "wpp-full-screen-modal": WppFullScreenModal;
         "wpp-grid": WppGrid;
         "wpp-hue-slider": WppHueSlider;
@@ -32837,6 +32883,7 @@ declare module "@stencil/core" {
             "wpp-file-upload-item": LocalJSX.WppFileUploadItem & JSXBase.HTMLAttributes<HTMLWppFileUploadItemElement>;
             "wpp-filter-button": LocalJSX.WppFilterButton & JSXBase.HTMLAttributes<HTMLWppFilterButtonElement>;
             "wpp-floating-button": LocalJSX.WppFloatingButton & JSXBase.HTMLAttributes<HTMLWppFloatingButtonElement>;
+            "wpp-floating-toolbar": LocalJSX.WppFloatingToolbar & JSXBase.HTMLAttributes<HTMLWppFloatingToolbarElement>;
             "wpp-full-screen-modal": LocalJSX.WppFullScreenModal & JSXBase.HTMLAttributes<HTMLWppFullScreenModalElement>;
             "wpp-grid": LocalJSX.WppGrid & JSXBase.HTMLAttributes<HTMLWppGridElement>;
             "wpp-hue-slider": LocalJSX.WppHueSlider & JSXBase.HTMLAttributes<HTMLWppHueSliderElement>;

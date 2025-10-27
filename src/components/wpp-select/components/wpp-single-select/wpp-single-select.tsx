@@ -18,6 +18,7 @@ export function renderSingleSelect(
     'with-errors': this.hasErrorsOrWarnings('error'),
     'with-warnings': this.hasErrorsOrWarnings('warning'),
     'tab-focus': this.focusType === FOCUS_TYPE.TAB,
+    'anchor-button': this.anchorButton,
   })
 
   const getSelectPlaceholder = () => {
@@ -49,35 +50,41 @@ export function renderSingleSelect(
       tabIndex={this.disabled ? -1 : 0}
       onClick={() => this.handleClick()}
     >
-      <WrappedSlot wrapperClass={this.iconStartCssClasses()} name="icon-start" onSlotchange={this.updateSlotData} />
+      {this.anchorButton ? (
+        <slot name="anchor-button" onSlotchange={this.updateSlotData} />
+      ) : (
+        <Fragment>
+          <WrappedSlot wrapperClass={this.iconStartCssClasses()} name="icon-start" onSlotchange={this.updateSlotData} />
 
-      <div class="overflow-container" ref={refEl => (this.overflowContainerRef = refEl)}>
-        {this.textOverflows ? (
-          <wpp-tooltip text={getSelectPlaceholder()}>
-            <p>{getSelectPlaceholder()}</p>
-          </wpp-tooltip>
-        ) : (
-          <p>{getSelectPlaceholder()}</p>
-        )}
-      </div>
+          <div class="overflow-container" ref={refEl => (this.overflowContainerRef = refEl)}>
+            {this.textOverflows ? (
+              <wpp-tooltip text={getSelectPlaceholder()}>
+                <p>{getSelectPlaceholder()}</p>
+              </wpp-tooltip>
+            ) : (
+              <p>{getSelectPlaceholder()}</p>
+            )}
+          </div>
 
-      <input
-        class="input"
-        ref={refEl => (this.inputRef = refEl)}
-        type="text"
-        name={this.name}
-        onChange={() => this.checkIfTextOverflows()}
-        disabled={this.disabled}
-        value={getSelectPlaceholder()}
-        tabIndex={-1}
-        readonly
-        aria-label={this.ariaProps.label}
-        title=""
-        style={{ width: this.overflowContainerRef ? `${this.overflowContainerRef.clientWidth}px` : 'auto' }}
-        required={this.required}
-      />
+          <input
+            class="input"
+            ref={refEl => (this.inputRef = refEl)}
+            type="text"
+            name={this.name}
+            onChange={() => this.checkIfTextOverflows()}
+            disabled={this.disabled}
+            value={getSelectPlaceholder()}
+            tabIndex={-1}
+            readonly
+            aria-label={this.ariaProps.label}
+            title=""
+            style={{ width: this.overflowContainerRef ? `${this.overflowContainerRef.clientWidth}px` : 'auto' }}
+            required={this.required}
+          />
 
-      <wpp-icon-chevron class={this.isOpen || this.isDropdownOpen ? 'isOpen' : ''} direction={'down'} />
+          <wpp-icon-chevron class={this.isOpen || this.isDropdownOpen ? 'isOpen' : ''} direction={'down'} />
+        </Fragment>
+      )}
     </div>
   )
 

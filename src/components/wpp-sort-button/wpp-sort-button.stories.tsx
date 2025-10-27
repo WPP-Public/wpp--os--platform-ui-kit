@@ -17,9 +17,9 @@ export default {
 type WppSortButtonTypes = Components.WppFilterButton & { text: string }
 
 export const Sort: StoryObj<WppSortButtonTypes> = (args: WppSortButtonTypes) =>
-  html` <wpp-sort-button-v3-2-0 .disabled="${args.disabled}" @click="${() => console.log('Button clicked')}">
+  html` <wpp-sort-button-v3-3-0 .disabled="${args.disabled}" @click="${() => console.log('Button clicked')}">
     ${args.text}
-  </wpp-sort-button-v3-2-0>`
+  </wpp-sort-button-v3-3-0>`
 
 Sort.args = {
   text: 'Sort',

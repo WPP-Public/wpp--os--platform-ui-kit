@@ -15,5 +15,5 @@ export default {
 } as Meta<Components.WppBackToTopButton>
 
 export const BackToTop: StoryObj<Components.WppBackToTopButton> = {
-  render: () => html`<wpp-back-to-top-button-v3-2-0 @click="${() => console.log('Button clicked')}" />`,
+  render: () => html`<wpp-back-to-top-button-v3-3-0 @click="${() => console.log('Button clicked')}" />`,
 }

@@ -45,12 +45,12 @@ export default meta
 
 export const Default: StoryObj<Components.WppVideoPlayer> = {
   render: args => html`
-    <wpp-video-player-v3-2-0
+    <wpp-video-player-v3-3-0
       .src=${args.src}
       .thumbnail=${args.thumbnail}
       .size=${args.size}
       .controlPanelConfig=${args.controlPanelConfig}
-    ></wpp-video-player-v3-2-0>
+    ></wpp-video-player-v3-3-0>
   `,
   args: {
     src: 'https://www.w3schools.com/html/mov_bbb.mp4',

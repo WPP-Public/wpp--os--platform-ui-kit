@@ -18,7 +18,7 @@ export default {
 }
 
 export const Select: StoryObj<Components.WppPaginationSelect> = (args: Components.WppPaginationSelect) =>
-  html` <wpp-pagination-select-v3-2-0 .count="${args.count}" .activePageNumber="${args.activePageNumber}" />`
+  html` <wpp-pagination-select-v3-3-0 .count="${args.count}" .activePageNumber="${args.activePageNumber}" />`
 
 Select.args = {
   count: 8,
@@ -26,7 +26,7 @@ Select.args = {
 }
 
 export const Input: StoryObj<Components.WppPaginationSelect> = (args: Components.WppPaginationSelect) =>
-  html` <wpp-pagination-select-v3-2-0 .count="${args.count}" .activePageNumber="${args.activePageNumber}" />`
+  html` <wpp-pagination-select-v3-3-0 .count="${args.count}" .activePageNumber="${args.activePageNumber}" />`
 
 Input.args = {
   count: 10,

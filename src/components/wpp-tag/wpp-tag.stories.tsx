@@ -54,10 +54,10 @@ export const Tag: StoryObj<WppTagTypes> = (args: WppTagTypes) => html`
   </style>
 
   <div class="wrapper">
-    <wpp-tag-v3-2-0 .label="${args.label}" .variant=${args.variant}></wpp-tag-v3-2-0>
-    <wpp-tag-v3-2-0 .label="${args.label}" .variant=${args.variant}>
-      ${args.showIconStart ? html` <wpp-icon-premium-v3-2-0 slot="icon-start"></wpp-icon-premium-v3-2-0> ` : null}
-    </wpp-tag-v3-2-0>
+    <wpp-tag-v3-3-0 .label="${args.label}" .variant=${args.variant}></wpp-tag-v3-3-0>
+    <wpp-tag-v3-3-0 .label="${args.label}" .variant=${args.variant}>
+      ${args.showIconStart ? html` <wpp-icon-premium-v3-3-0 slot="icon-start"></wpp-icon-premium-v3-3-0> ` : null}
+    </wpp-tag-v3-3-0>
   </div>
 `
 

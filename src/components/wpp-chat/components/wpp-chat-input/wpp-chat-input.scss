@@ -315,7 +315,6 @@
     // This section addresses that issue to ensure consistent layout during file uploads.
     &::part(controls) {
       justify-content: flex-end;
-      min-width: 50px;
     }
   }
 }

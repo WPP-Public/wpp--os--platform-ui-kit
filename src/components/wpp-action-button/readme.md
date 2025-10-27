@@ -223,6 +223,7 @@ Type: `Promise<void>`
  - [wpp-autocomplete](../wpp-autocomplete)
  - [wpp-banner](../wpp-banner)
  - [wpp-chat-input](../wpp-chat/components/wpp-chat-input)
+ - [wpp-floating-toolbar](../wpp-floating-toolbar)
  - [wpp-full-screen-modal](../wpp-full-screen-modal)
  - [wpp-inline-edit](../wpp-inline-edit)
  - [wpp-inline-message](../wpp-inline-message)
@@ -245,6 +246,7 @@ graph TD;
   wpp-autocomplete --> wpp-action-button
   wpp-banner --> wpp-action-button
   wpp-chat-input --> wpp-action-button
+  wpp-floating-toolbar --> wpp-action-button
   wpp-full-screen-modal --> wpp-action-button
   wpp-inline-edit --> wpp-action-button
   wpp-inline-message --> wpp-action-button

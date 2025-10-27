@@ -30,7 +30,7 @@ export default {
 } as Meta<Components.WppTextareaInput>
 
 export const WithinLimit: StoryObj<Components.WppTextareaInput> = (args: Components.WppTextareaInput) =>
-  html` <wpp-textarea-input-v3-2-0
+  html` <wpp-textarea-input-v3-3-0
     @click="${() => console.log('textarea clicked')}"
     .name="${args.name}"
     .placeholder="${args.placeholder}"
@@ -76,7 +76,7 @@ WithinLimit.parameters = {
 }
 
 export const LimitExceeded: StoryObj<Components.WppTextareaInput> = (args: Components.WppTextareaInput) =>
-  html` <wpp-textarea-input-v3-2-0
+  html` <wpp-textarea-input-v3-3-0
     @click="${() => console.log('textarea clicked')}"
     .name="${args.name}"
     .placeholder="${args.placeholder}"
@@ -119,7 +119,7 @@ LimitExceeded.parameters = {
 export const NoneLimit: StoryObj<Components.WppTextareaInput & Components.WppInlineMessage> = (
   args: Components.WppTextareaInput & Components.WppInlineMessage,
 ) =>
-  html` <wpp-textarea-input-v3-2-0
+  html` <wpp-textarea-input-v3-3-0
     @click="${() => console.log('textarea clicked')}"
     .name="${args.name}"
     .placeholder="${args.placeholder}"

@@ -371,7 +371,7 @@ export const AvatarGroup: StoryObj<Components.WppAvatarGroup> = {
       return []
     }
 
-    return html` <wpp-avatar-group-v3-2-0
+    return html` <wpp-avatar-group-v3-3-0
       .size="${args.size}"
       .variant="${args.variant}"
       .avatars="${getData()}"
@@ -400,7 +400,7 @@ export const AvatarGroupInteractable: StoryObj<Components.WppAvatarGroup> = {
       if (args.variant === 'square') return interactableLogos
     }
 
-    return html` <wpp-avatar-group-v3-2-0
+    return html` <wpp-avatar-group-v3-3-0
       .size="${args.size}"
       .variant="${args.variant}"
       .avatars="${getData()}"

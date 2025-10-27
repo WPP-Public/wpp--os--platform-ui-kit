@@ -147,7 +147,7 @@ export const Single: StoryObj<SelectStoryArgs> = (args: SelectStoryArgs) => {
   }
 
   return html`
-    <wpp-select-v3-2-0
+    <wpp-select-v3-3-0
       type="single"
       name="single-select"
       .message=${args.message}
@@ -169,16 +169,16 @@ export const Single: StoryObj<SelectStoryArgs> = (args: SelectStoryArgs) => {
     >
       ${args.showIconStart
         ? html`
-            <wpp-icon-clock-v3-2-0
+            <wpp-icon-clock-v3-3-0
               slot="icon-start"
               @click="${(e: any) => {
                 e.stopPropagation()
                 console.log('Left icon clicked')
               }}"
-            ></wpp-icon-clock-v3-2-0>
+            ></wpp-icon-clock-v3-3-0>
           `
         : null}
-    </wpp-select-v3-2-0>
+    </wpp-select-v3-3-0>
   `
 }
 
@@ -220,7 +220,7 @@ export const Multiple: StoryObj<SelectStoryArgs> = (args: SelectStoryArgs) => {
   }
 
   return html`
-    <wpp-select-v3-2-0
+    <wpp-select-v3-3-0
       type="multiple"
       name="multiple-select"
       .message=${args.message}
@@ -244,16 +244,16 @@ export const Multiple: StoryObj<SelectStoryArgs> = (args: SelectStoryArgs) => {
     >
       ${args.showIconStart
         ? html`
-            <wpp-icon-clock-v3-2-0
+            <wpp-icon-clock-v3-3-0
               slot="icon-start"
               @click="${(e: any) => {
                 e.stopPropagation()
                 console.log('Left icon clicked')
               }}"
-            ></wpp-icon-clock-v3-2-0>
+            ></wpp-icon-clock-v3-3-0>
           `
         : null}
-    </wpp-select-v3-2-0>
+    </wpp-select-v3-3-0>
   `
 }
 
@@ -330,7 +330,7 @@ export const Text: StoryObj<Components.WppSelect & { showIconStart: boolean }> =
     if (updatedEl) (updatedEl as HTMLWppSelectElement).value = selectedValue
   }
 
-  return html` <wpp-select-v3-2-0
+  return html` <wpp-select-v3-3-0
     .disabled="${args.disabled}"
     .placeholder="${args.placeholder}"
     .dropdownWidth="${args.dropdownWidth}"
@@ -344,16 +344,16 @@ export const Text: StoryObj<Components.WppSelect & { showIconStart: boolean }> =
   >
     ${args.showIconStart
       ? html`
-          <wpp-icon-clock-v3-2-0
+          <wpp-icon-clock-v3-3-0
             slot="icon-start"
             @click="${(e: any) => {
               e.stopPropagation()
               console.log('Left icon clicked')
             }}"
-          ></wpp-icon-clock-v3-2-0>
+          ></wpp-icon-clock-v3-3-0>
         `
       : null}
-  </wpp-select-v3-2-0>`
+  </wpp-select-v3-3-0>`
 }
 
 Text.args = {
@@ -365,4 +365,118 @@ Text.args = {
 
 Text.parameters = {
   controls: { exclude: ['message', 'messageType', 'size', 'withSearch'] },
+}
+
+type ButtonAnchorStoryArgs = Components.WppSelect & {
+  anchorComponent: 'WppButton' | 'WppActionButton' | 'WppActionButtonWithIcon'
+  anchorLabel: string
+  showIconStart: boolean
+}
+
+export const ButtonAnchor: StoryObj<ButtonAnchorStoryArgs> = (args: ButtonAnchorStoryArgs) => {
+  let selectedValue: any = null
+
+  const handleChange = (event: CustomEvent) => {
+    selectedValue = event.detail.value
+    const updatedEl = document.querySelector('#button-anchor-select') as HTMLWppSelectElement | null
+
+    if (updatedEl) updatedEl.value = selectedValue
+  }
+
+  const renderAnchor = () => {
+    switch (args.anchorComponent) {
+      case 'WppActionButton':
+        return html` <wpp-action-button-v3-3-0 slot="anchor-button"> ${args.anchorLabel} </wpp-action-button-v3-3-0> `
+      case 'WppActionButtonWithIcon':
+        return html`
+          <wpp-action-button-v3-3-0 slot="anchor-button">
+            <wpp-icon-plus-v3-3-0 slot="icon-start"></wpp-icon-plus-v3-3-0>
+            ${args.anchorLabel}
+          </wpp-action-button-v3-3-0>
+        `
+      case 'WppButton':
+      default:
+        return html` <wpp-button-v3-3-0 slot="anchor-button"> ${args.anchorLabel} </wpp-button-v3-3-0> `
+    }
+  }
+
+  return html`
+    <wpp-select-v3-3-0
+      id="button-anchor-select"
+      type="single"
+      name="button-anchor-select"
+      .message=${args.message}
+      .messageType=${args.messageType}
+      .placeholder=${args.placeholder}
+      .size=${args.size}
+      .messageInTooltip=${args.messageInTooltip}
+      .disabled=${args.disabled}
+      .required=${args.required}
+      .dropdownConfig=${args.dropdownConfig}
+      .labelConfig=${args.labelConfig}
+      .withSearch=${args.withSearch}
+      .consistentSearch=${args.consistentSearch}
+      .dropdownWidth=${args.dropdownWidth}
+      .list=${getList('single')}
+      .value=${selectedValue}
+      anchor="custom"
+      @wppChange=${handleChange}
+    >
+      ${renderAnchor()}
+      ${args.showIconStart
+        ? html`
+            <wpp-icon-clock-v3-3-0
+              slot="icon-start"
+              @click="${(e: any) => {
+                e.stopPropagation()
+              }}"
+            ></wpp-icon-clock-v3-3-0>
+          `
+        : null}
+    </wpp-select-v3-3-0>
+  `
+}
+
+ButtonAnchor.args = {
+  message: '',
+  messageType: undefined,
+  placeholder: 'Select option',
+  size: 'm',
+  dropdownWidth: 'auto',
+  disabled: false,
+  required: false,
+  withSearch: false,
+  consistentSearch: false,
+  showIconStart: false,
+  anchorComponent: 'WppButton',
+  anchorLabel: 'Open Select',
+  labelConfig: {
+    icon: '',
+    text: '',
+    description: '',
+    locales: { optional: 'Optional' },
+  },
+}
+
+ButtonAnchor.argTypes = {
+  anchorComponent: {
+    options: ['WppButton', 'WppActionButton', 'WppActionButtonWithIcon'],
+    control: { type: 'select' },
+  },
+  anchorLabel: { control: { type: 'text' } },
+}
+
+ButtonAnchor.parameters = {
+  controls: {
+    exclude: [
+      'maximumSelectedItems',
+      'withFolder',
+      'showSelectAllText',
+      'placeholder',
+      'size',
+      'disabled',
+      'showIconStart',
+    ],
+  },
+  docs: { description: { story: 'Select anchored to a customizable button component.' } },
 }

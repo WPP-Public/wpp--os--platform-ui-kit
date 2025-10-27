@@ -21,7 +21,7 @@ export default {
 } as Meta<Components.WppMoreButton>
 
 export const MoreButton: StoryObj<Components.WppMoreButton> = (args: Components.WppMoreButton) =>
-  html` <wpp-more-button-v3-2-0
+  html` <wpp-more-button-v3-3-0
     .size="${args.size}"
     .name="${args.name}"
     .disabled="${args.disabled}"

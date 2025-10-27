@@ -66,7 +66,7 @@ export const LoadMore: StoryObj<Components.WppLoadMore> = (args: Components.WppL
   }
 
   return html`
-    <wpp-load-more-v3-2-0
+    <wpp-load-more-v3-3-0
       id="load-more-component"
       .totalItems="${args.totalItems}"
       .itemsLoaded="${currentItemsLoaded}"
@@ -75,7 +75,7 @@ export const LoadMore: StoryObj<Components.WppLoadMore> = (args: Components.WppL
       .disabled="${args.disabled}"
       .incrementBy="${args.incrementBy}"
       @wppClickLoadMore="${handleLoadMoreClicked}"
-    ></wpp-load-more-v3-2-0>
+    ></wpp-load-more-v3-3-0>
   `
 }
 

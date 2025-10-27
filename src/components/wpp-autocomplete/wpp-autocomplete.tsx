@@ -605,10 +605,8 @@ export class WppAutocomplete implements BaseComponent, InlineMessage {
         },
         onHide: () => {
           this.isShowMore = true
-          requestAnimationFrame(this.validateTruncatedPills)
-        },
-        onHidden: () => {
           this.isInComponent = false
+          requestAnimationFrame(this.validateTruncatedPills)
         },
         onClickOutside: (_, event: Event) => {
           if (!isEventTargetContained(this.host, event)) {

@@ -131,7 +131,7 @@ export const Regular: StoryObj<Components.WppGrid> = {
         }
       </style>
 
-      <wpp-grid-v3-2-0
+      <wpp-grid-v3-3-0
         .container="${true}"
         .fluid="${args.fluid}"
         .fullWidth="${args.fullWidth}"
@@ -144,7 +144,7 @@ export const Regular: StoryObj<Components.WppGrid> = {
       >
         ${innerList.map(
           (_, i) =>
-            html` <wpp-grid-v3-2-0
+            html` <wpp-grid-v3-3-0
               .item="${true}"
               .all="${args.all}"
               .sm="${args.sm}"
@@ -154,9 +154,9 @@ export const Regular: StoryObj<Components.WppGrid> = {
               .xxl="${args.xxl}"
             >
               <p class="grid-item">${i + 1}</p>
-            </wpp-grid-v3-2-0>`,
+            </wpp-grid-v3-3-0>`,
         )}
-      </wpp-grid-v3-2-0>
+      </wpp-grid-v3-3-0>
     `
   },
   args: {
