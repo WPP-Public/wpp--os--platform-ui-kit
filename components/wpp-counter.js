@@ -28,6 +28,11 @@ const WppCounter$1 = /*@__PURE__*/ proxyCustomElement(class WppCounter extends H
     this.wppFocus = createEvent(this, "wppFocus", 1);
     this.wppBlur = createEvent(this, "wppBlur", 1);
     this.handleValidate = (event) => {
+      // Any non-Tab keyboard interaction should exit the "tab highlight" mode
+      if (event.key !== 'Tab') {
+        this.inputRef?.classList.remove('tab-focus');
+        this.focusType = FOCUS_TYPE.NONE;
+      }
       if (event.key === 'ArrowUp') {
         if (this.value !== this.max)
           return this.addStepToValue(this.step);
@@ -46,6 +51,7 @@ const WppCounter$1 = /*@__PURE__*/ proxyCustomElement(class WppCounter extends H
     };
     this.onInput = (event) => {
       this.focusType = FOCUS_TYPE.NONE;
+      this.inputRef?.classList.remove('tab-focus');
       const target = event.target;
       const cleaned = target.value.replace(' ', '').replace(/[^0-9.]/g, '');
       // If empty, keep view empty and don’t emit a stale value
@@ -77,6 +83,8 @@ const WppCounter$1 = /*@__PURE__*/ proxyCustomElement(class WppCounter extends H
     };
     this.onMouseDown = () => {
       this.focusType = FOCUS_TYPE.MOUSE;
+      // Clear keyboard focus styling when switching to mouse modality
+      this.host?.shadowRoot?.querySelectorAll('.tab-focus').forEach(el => el.classList.remove('tab-focus'));
     };
     this.onBlur = (event) => {
       this.focusType = FOCUS_TYPE.NONE;

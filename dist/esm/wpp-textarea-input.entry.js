@@ -1,6 +1,6 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
-import { n as autoFocusElement } from './utils-90721dcb.js';
+import { n as autoFocusElement } from './utils-d423b01f.js';
 import './consts-5bf9c29f.js';
 
 const LOCALES_DEFAULTS = {

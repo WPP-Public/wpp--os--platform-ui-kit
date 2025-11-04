@@ -1,5 +1,5 @@
 import { r as registerInstance, h, H as Host, g as getElement, c as createEvent } from './index-9177bb6d.js';
-import { e as truncate } from './utils-90721dcb.js';
+import { e as truncate } from './utils-d423b01f.js';
 import { C as CONTEXT_ITEM_TAG } from './constants-f59668a0.js';
 import './consts-5bf9c29f.js';
 

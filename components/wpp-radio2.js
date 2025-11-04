@@ -34,11 +34,11 @@ const WppRadio = /*@__PURE__*/ proxyCustomElement(class WppRadio extends HTMLEle
         checked: this.checked,
       });
     };
-    this.onInput = () => {
-      if (this.disabled)
-        return;
-      this.setFocus();
-    };
+    // private onInput = () => {
+    //   if (this.disabled) return
+    //
+    //   this.setFocus()
+    // }
     this.onFocus = (event) => {
       this.wppFocus.emit(event);
     };
@@ -130,7 +130,7 @@ const WppRadio = /*@__PURE__*/ proxyCustomElement(class WppRadio extends HTMLEle
           tabIndex: -1,
         },
         ...this.labelTooltipConfig,
-      }, part: "label" }, h("input", { class: this.inputCssClasses(), type: "radio", name: this.name, id: this.name, value: this.value, disabled: this.disabled, checked: this.checked, required: this.required, onInput: this.onInput, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-hidden": this.disabled ? 'true' : null, "aria-required": this.required.toString(), tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "circle", part: "circle" }))));
+      }, part: "label" }, h("input", { class: this.inputCssClasses(), type: "radio", name: this.name, id: this.name, value: this.value, disabled: this.disabled, checked: this.checked, required: this.required, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-hidden": this.disabled ? 'true' : null, "aria-required": this.required.toString(), tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "circle", part: "circle" }))));
   }
   static get registryIs() { return "wpp-radio-v3-3-0"; }
   get host() { return this; }

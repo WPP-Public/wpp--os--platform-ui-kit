@@ -151,7 +151,7 @@
 :host .anchor.disabled {
   background-color: var(--wpp-grey-color-100);
   border-color: var(--wpp-grey-color-400);
-  --wpp-text-color: var(--wpp-grey-color-500);
+  --wpp-text-color: var(--wpp-text-color-disabled);
   --wpp-icon-color: var(--wpp-grey-color-400);
 }
 :host .anchor.disabled:hover {
@@ -159,19 +159,19 @@
 }
 :host .anchor.disabled .input {
   background-color: var(--wpp-grey-color-100);
-  color: var(--wpp-grey-color-500);
+  color: var(--wpp-text-color-disabled);
 }
 :host .anchor.disabled .input:hover {
   cursor: not-allowed;
 }
 :host .anchor.disabled .input::placeholder {
-  color: var(--wpp-grey-color-500);
+  color: var(--wpp-text-color-disabled);
 }
 :host .anchor.disabled .overflow-container {
   background-color: var(--wpp-grey-color-100);
 }
 :host .anchor.disabled .overflow-container p {
-  color: var(--wpp-grey-color-500);
+  color: var(--wpp-text-color-disabled);
 }
 :host .anchor.anchor-button {
   padding: 0;
@@ -360,7 +360,7 @@
 }
 :host(.wpp-combined-select) .inputs-container.disabled {
   background-color: var(--wpp-grey-color-100);
-  color: var(--wpp-grey-color-500);
+  color: var(--wpp-text-color-disabled);
 }
 :host(.wpp-combined-select) .inputs-container.disabled .anchor,
 :host(.wpp-combined-select) .inputs-container.disabled .wpp-input {

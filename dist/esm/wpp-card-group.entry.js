@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { k as transformToVersionedTag } from './utils-90721dcb.js';
+import { k as transformToVersionedTag } from './utils-d423b01f.js';
 import './consts-5bf9c29f.js';
 
 const wppCardGroupCss = ":host{display:-ms-flexbox;display:flex}";

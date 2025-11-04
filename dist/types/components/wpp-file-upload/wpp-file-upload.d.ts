@@ -29,7 +29,9 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
   private _locales;
   private inputId;
   private labelId;
+  private lastKeyWasTab;
   host: HTMLWppFileUploadElement;
+  private hasTabFocus;
   scrollState: ScrollState | false;
   focusType: FocusType;
   isFileDrag: boolean;
@@ -174,10 +176,15 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
    */
   reset(): Promise<void>;
   private reInitValue;
+  protected onDisabledChange(disabled: boolean): void;
   onValueChange(newValue: FileItemType[]): void;
   onUpdateLocales(newLocales: Partial<FileUploadLocales>): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  private onGlobalKeyDown;
+  private onPointerDown;
+  private onInputFocus;
+  private onInputBlur;
   private onFocus;
   private onBlur;
   private onMouseDown;

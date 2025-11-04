@@ -2,7 +2,7 @@ import { r as registerInstance, c as createEvent, h, H as Host, g as getElement 
 import { i as isEqual_1 } from './isEqual-9c20096c.js';
 import { m as menuListConfig } from './menuListConfig-200865d3.js';
 import { Z as Z_INDEX } from './consts-5bf9c29f.js';
-import { w as getHighestContainerInDOM, b as isEventTargetContained, c as hasParentWithId } from './utils-90721dcb.js';
+import { w as getHighestContainerInDOM, b as isEventTargetContained, c as hasParentWithId } from './utils-d423b01f.js';
 import './_commonjsHelpers-ba3f0406.js';
 
 const DEFAULT_POPOVER_LOCALES = {

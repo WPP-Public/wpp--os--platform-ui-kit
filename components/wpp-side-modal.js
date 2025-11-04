@@ -267,7 +267,7 @@ const WppSideModal$1 = /*@__PURE__*/ proxyCustomElement(class WppSideModal exten
     }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, side-modal, header-container, button, icon-cross, header, body, actions, header-wrapper, body-wrapper, actions-wrapper, back-button, icon-chevron, header-with-back-button", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-side-modal-top-offset': `${this.topOffset}px` }, onClick: (event) => event.stopPropagation() }, this.backdropVisible && (h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-3-0", { isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), this.renderBody())), !this.backdropVisible && this.renderBody()));
+    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, side-modal, header-container, button, icon-cross, header, body, actions, header-wrapper, body-wrapper, actions-wrapper, back-button, icon-chevron, header-with-back-button", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-side-modal-top-offset': `${this.topOffset}px` } }, this.backdropVisible && (h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-3-0", { isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), this.renderBody())), !this.backdropVisible && this.renderBody()));
   }
   static get registryIs() { return "wpp-side-modal-v3-3-0"; }
   get host() { return this; }

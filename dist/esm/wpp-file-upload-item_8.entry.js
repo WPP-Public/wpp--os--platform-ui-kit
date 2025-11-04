@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { e as truncate } from './utils-90721dcb.js';
+import { e as truncate } from './utils-d423b01f.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
 import { L as LOCALES_DEFAULTS, a as getExtension, d as returnIconFromExtension } from './const-8820c817.js';
 import { W as WppIcon } from './WppIcon-f4802cc9.js';

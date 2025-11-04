@@ -1,5 +1,5 @@
 import { r as registerInstance, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { h as hasShadowDom, x as getAriaProps } from './utils-90721dcb.js';
+import { h as hasShadowDom, x as getAriaProps } from './utils-d423b01f.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
 import { W as WrappedSlot } from './WrappedSlot-2ee5325a.js';
 import './consts-5bf9c29f.js';

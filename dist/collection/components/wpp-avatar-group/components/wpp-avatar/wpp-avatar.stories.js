@@ -36,7 +36,7 @@ export default {
 };
 export const User = {
   render: args => html `
-    <wpp-avatar-v3-2-0
+    <wpp-avatar-v3-3-0
       .name="${args.name}"
       .size="${args.size}"
       .src="${args.src}"
@@ -64,7 +64,7 @@ User.parameters = {
 };
 export const Logo = {
   render: args => html `
-    <wpp-avatar-v3-2-0
+    <wpp-avatar-v3-3-0
       variant="square"
       .name="${args.name}"
       .size="${args.size}"
@@ -93,7 +93,7 @@ Logo.parameters = {
 };
 export const Icon = {
   render: args => html `
-    <wpp-avatar-v3-2-0
+    <wpp-avatar-v3-3-0
       .icon="${args.icon}"
       .size="${args.size}"
       .interactable="${args.interactable}"

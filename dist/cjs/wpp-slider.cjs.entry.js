@@ -4,7 +4,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
 const common = require('./common-ee802540.js');
-const utils = require('./utils-15478fd5.js');
+const utils = require('./utils-2b192dec.js');
 require('./consts-779fd4ec.js');
 
 const DEFAULT_INPUT_WIDTH = '68px';
@@ -460,7 +460,7 @@ const WppSlider = class {
             ...getDefaultMaskOptions(this.step),
             ...this.maskOptions,
           }
-          : getDefaultMaskOptions(this.step),
+          : undefined,
       } }));
     this.renderEditableInput = () => (index.h("div", { class: this.editableInputCssClasses(), part: "editable-input-wrapper" }, this.handleType({
       single: () => this.renderSingleInput(),
@@ -470,14 +470,14 @@ const WppSlider = class {
               ...getDefaultMaskOptions(this.step),
               ...this.maskOptions[0],
             }
-            : getDefaultMaskOptions(this.step),
+            : undefined,
         } }), index.h("wpp-divider-v3-3-0", { class: { 'wpp-disabled': this.disabled }, part: "divider" }), index.h("wpp-input-v3-3-0", { ref: inputRef => (this.inputMaxRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-max", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'max-input': true, [`size-${this.size}`]: true }, maskOptions: {
           decimalPatternOptions: this.maskOptions && this.maskOptions[1]
             ? {
               ...getDefaultMaskOptions(this.step),
               ...this.maskOptions[1],
             }
-            : getDefaultMaskOptions(this.step),
+            : undefined,
         } }))),
       'middle-range': () => this.renderSingleInput(),
     })));

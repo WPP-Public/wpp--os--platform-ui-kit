@@ -6,7 +6,7 @@ const index = require('./index-ecf423ba.js');
 const isEqual = require('./isEqual-0b0240b4.js');
 const menuListConfig = require('./menuListConfig-c4aadb34.js');
 const consts = require('./consts-779fd4ec.js');
-const utils = require('./utils-15478fd5.js');
+const utils = require('./utils-2b192dec.js');
 require('./_commonjsHelpers-bcc1208a.js');
 
 const DEFAULT_POPOVER_LOCALES = {

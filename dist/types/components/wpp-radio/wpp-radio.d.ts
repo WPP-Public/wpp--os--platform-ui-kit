@@ -96,7 +96,6 @@ export declare class WppRadio implements BaseComponent, BooleanFormControl<Radio
    */
   setFocus(): Promise<void>;
   private onClick;
-  private onInput;
   private onFocus;
   private onBlur;
   private onKeyDown;

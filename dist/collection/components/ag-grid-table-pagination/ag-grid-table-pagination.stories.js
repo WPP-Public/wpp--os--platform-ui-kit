@@ -15,5 +15,5 @@ export const Pagination = () =>
 html `<iframe
     width="100%"
     height="800px"
-    src="https://sweet-stroopwafel-02c65d.netlify.app/ag-grid-table-pagination?storybook-demo"
+    src="https://statuesque-longma-ba5133.netlify.app/ag-grid-table-pagination?storybook-demo"
   ></iframe>`;

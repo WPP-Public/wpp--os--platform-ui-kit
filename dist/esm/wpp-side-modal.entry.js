@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { w as getHighestContainerInDOM, g as getSlotEmptyStates, k as transformToVersionedTag, m as applyBodyStylesIfNeeded, b as isEventTargetContained } from './utils-90721dcb.js';
+import { w as getHighestContainerInDOM, g as getSlotEmptyStates, k as transformToVersionedTag, m as applyBodyStylesIfNeeded, b as isEventTargetContained } from './utils-d423b01f.js';
 import { W as WrappedSlot } from './WrappedSlot-2ee5325a.js';
 import { S as SideModalCloseReason } from './types-945bd5da.js';
 import { Z as Z_INDEX } from './consts-5bf9c29f.js';
@@ -252,7 +252,7 @@ const WppSideModal = class {
     }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, side-modal, header-container, button, icon-cross, header, body, actions, header-wrapper, body-wrapper, actions-wrapper, back-button, icon-chevron, header-with-back-button", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-side-modal-top-offset': `${this.topOffset}px` }, onClick: (event) => event.stopPropagation() }, this.backdropVisible && (h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-3-0", { isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), this.renderBody())), !this.backdropVisible && this.renderBody()));
+    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, side-modal, header-container, button, icon-cross, header, body, actions, header-wrapper, body-wrapper, actions-wrapper, back-button, icon-chevron, header-with-back-button", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-side-modal-top-offset': `${this.topOffset}px` } }, this.backdropVisible && (h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-3-0", { isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), this.renderBody())), !this.backdropVisible && this.renderBody()));
   }
   static get registryIs() { return "wpp-side-modal-v3-3-0"; }
   get host() { return getElement(this); }

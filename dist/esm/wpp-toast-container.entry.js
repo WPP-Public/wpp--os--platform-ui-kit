@@ -1,5 +1,5 @@
 import { r as registerInstance, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { u as uuidv4 } from './utils-90721dcb.js';
+import { u as uuidv4 } from './utils-d423b01f.js';
 import { A as ANIMATION_DURATION } from './const-8c738d5b.js';
 import { Z as Z_INDEX } from './consts-5bf9c29f.js';
 

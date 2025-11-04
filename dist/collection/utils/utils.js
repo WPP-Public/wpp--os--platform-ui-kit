@@ -1,6 +1,5 @@
 import { DEFAULT_HIDE_DURATION_ANIMATION, DEFAULT_SHOW_DURATION_ANIMATION } from '../common/consts';
-// @ts-ignore - extension is needed for vite to correctly recognize.
-import version from '../../versioned-components/version.ts';
+import version from '../../versioned-components/version';
 export function format(first, middle, last) {
   return (first || '') + (middle ? ` ${middle}` : '') + (last ? ` ${last}` : '');
 }
