@@ -197,7 +197,7 @@
         "color": {
           "default": "color.grey.1000",
           "whiteInfo": "color.grey.200",
-          "disabled": "color.grey.500",
+          "disabled": "color.grey.600",
           "danger": "color.danger.500",
           "warning": "color.warning.500",
           "success": "color.success.500",

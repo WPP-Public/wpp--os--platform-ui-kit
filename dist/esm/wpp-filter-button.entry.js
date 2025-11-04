@@ -1,5 +1,5 @@
 import { r as registerInstance, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { x as getAriaProps } from './utils-90721dcb.js';
+import { x as getAriaProps } from './utils-d423b01f.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
 import './consts-5bf9c29f.js';
 

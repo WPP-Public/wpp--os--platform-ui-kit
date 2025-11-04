@@ -1,6 +1,6 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
-import { k as transformToVersionedTag } from './utils-90721dcb.js';
+import { k as transformToVersionedTag } from './utils-d423b01f.js';
 import './consts-5bf9c29f.js';
 
 const DEFAULT_INPUT_WIDTH = '68px';
@@ -456,7 +456,7 @@ const WppSlider = class {
             ...getDefaultMaskOptions(this.step),
             ...this.maskOptions,
           }
-          : getDefaultMaskOptions(this.step),
+          : undefined,
       } }));
     this.renderEditableInput = () => (h("div", { class: this.editableInputCssClasses(), part: "editable-input-wrapper" }, this.handleType({
       single: () => this.renderSingleInput(),
@@ -466,14 +466,14 @@ const WppSlider = class {
               ...getDefaultMaskOptions(this.step),
               ...this.maskOptions[0],
             }
-            : getDefaultMaskOptions(this.step),
+            : undefined,
         } }), h("wpp-divider-v3-3-0", { class: { 'wpp-disabled': this.disabled }, part: "divider" }), h("wpp-input-v3-3-0", { ref: inputRef => (this.inputMaxRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-max", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'max-input': true, [`size-${this.size}`]: true }, maskOptions: {
           decimalPatternOptions: this.maskOptions && this.maskOptions[1]
             ? {
               ...getDefaultMaskOptions(this.step),
               ...this.maskOptions[1],
             }
-            : getDefaultMaskOptions(this.step),
+            : undefined,
         } }))),
       'middle-range': () => this.renderSingleInput(),
     })));

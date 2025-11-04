@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { k as transformToVersionedTag, u as uuidv4, d as debounce } from './utils-90721dcb.js';
+import { k as transformToVersionedTag, u as uuidv4, d as debounce } from './utils-d423b01f.js';
 import { L as LOCALES_DEFAULTS, r as recalculateIndeterminateTreeState, u as updateTreeByIds, f as findSelectedItems, c as convertToOriginalItems, a as updateTreeById, m as markChildrenAs, i as isHaveFoundChildren, e as extractExtraProps } from './utils-f066e4cf.js';
 import './consts-5bf9c29f.js';
 

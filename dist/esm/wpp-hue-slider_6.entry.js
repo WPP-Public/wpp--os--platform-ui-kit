@@ -1,7 +1,7 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement, F as Fragment } from './index-9177bb6d.js';
 import { l as lodash } from './lodash-66b76943.js';
 import { b as hexToRgb } from './utils-d87468f5.js';
-import { k as transformToVersionedTag } from './utils-90721dcb.js';
+import { k as transformToVersionedTag } from './utils-d423b01f.js';
 import { W as WrappedSlot } from './WrappedSlot-2ee5325a.js';
 import './_commonjsHelpers-ba3f0406.js';
 import './consts-5bf9c29f.js';

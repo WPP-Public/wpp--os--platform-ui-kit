@@ -29,7 +29,7 @@ const handleTypographyType = (size) => {
 };
 const handleDisabledText = (disabled) => {
   if (disabled === true)
-    return 'color: var(--wpp-grey-color-500)';
+    return 'color: var(--wpp-text-color-disabled)';
   else
     return 'color: var(--wpp-grey-color-1000)';
 };

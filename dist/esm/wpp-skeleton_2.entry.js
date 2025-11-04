@@ -1,7 +1,7 @@
 import { r as registerInstance, h, H as Host, c as createEvent, g as getElement } from './index-9177bb6d.js';
 import { h as highlightWords } from './highlight-words-e56d0d41.js';
 import { W as WrappedSlot } from './WrappedSlot-2ee5325a.js';
-import { k as transformToVersionedTag, g as getSlotEmptyStates } from './utils-90721dcb.js';
+import { k as transformToVersionedTag, g as getSlotEmptyStates } from './utils-d423b01f.js';
 import { b as areAnyChildrenDisabled } from './utils-f066e4cf.js';
 import './consts-5bf9c29f.js';
 

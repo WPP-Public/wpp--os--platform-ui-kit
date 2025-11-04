@@ -1,6 +1,6 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
 import { A as ANIMATION_PROPERTY_NAME, Z as Z_INDEX } from './consts-5bf9c29f.js';
-import { g as getSlotEmptyStates, m as applyBodyStylesIfNeeded } from './utils-90721dcb.js';
+import { g as getSlotEmptyStates, m as applyBodyStylesIfNeeded } from './utils-d423b01f.js';
 import { W as WrappedSlot } from './WrappedSlot-2ee5325a.js';
 import { M as ModalCloseReason } from './types-9a70ac4e.js';
 

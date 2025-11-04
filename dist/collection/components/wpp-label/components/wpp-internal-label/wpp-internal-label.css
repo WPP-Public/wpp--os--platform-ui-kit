@@ -49,10 +49,10 @@
 :host .icon.slot-hidden {
   display: none;
 }
-:host .icon.tab-focus {
+:host .icon.tab-focus.tab-focus {
   border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--checkbox-first-border-color-focus), 0 0 0 3px var(--checkbox-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--icon-first-border-color-focus), 0 0 0 3px var(--icon-second-border-color-focus);
 }
 :host:host(.s-strong) .info-wrapper .text {
   color: var(--label-s-strong-text-color);
@@ -60,6 +60,7 @@
 :host:host(.disabled) {
   pointer-events: none;
 }
-:host:host(.disabled) .info-wrapper .text, :host:host(.disabled) .info-wrapper .optional {
+:host:host(.disabled) .info-wrapper .text,
+:host:host(.disabled) .info-wrapper .optional {
   color: var(--label-text-color-disabled);
 }

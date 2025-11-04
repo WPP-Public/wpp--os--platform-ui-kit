@@ -42,9 +42,6 @@
   --wpp-typography-color: var(--wpp-grey-color-800);
 }
 
-:host(.wpp-disabled) .anchor {
-  --wpp-typography-color: var(--wpp-grey-color-500);
-}
 :host(.wpp-disabled) .anchor:hover {
   cursor: not-allowed;
   background-color: transparent;
@@ -54,9 +51,6 @@
 }
 :host(.wpp-disabled) .anchor .color-container .color-preview {
   opacity: 0.4;
-}
-:host(.wpp-disabled) .anchor .hex-opacity {
-  --wpp-typography-color: var(--wpp-grey-color-500);
 }
 
 :host(.wpp-active) .anchor {

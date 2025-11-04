@@ -473,7 +473,7 @@ const WppSlider$1 = /*@__PURE__*/ proxyCustomElement(class WppSlider extends HTM
             ...getDefaultMaskOptions(this.step),
             ...this.maskOptions,
           }
-          : getDefaultMaskOptions(this.step),
+          : undefined,
       } }));
     this.renderEditableInput = () => (h("div", { class: this.editableInputCssClasses(), part: "editable-input-wrapper" }, this.handleType({
       single: () => this.renderSingleInput(),
@@ -483,14 +483,14 @@ const WppSlider$1 = /*@__PURE__*/ proxyCustomElement(class WppSlider extends HTM
               ...getDefaultMaskOptions(this.step),
               ...this.maskOptions[0],
             }
-            : getDefaultMaskOptions(this.step),
+            : undefined,
         } }), h("wpp-divider-v3-3-0", { class: { 'wpp-disabled': this.disabled }, part: "divider" }), h("wpp-input-v3-3-0", { ref: inputRef => (this.inputMaxRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-max", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'max-input': true, [`size-${this.size}`]: true }, maskOptions: {
           decimalPatternOptions: this.maskOptions && this.maskOptions[1]
             ? {
               ...getDefaultMaskOptions(this.step),
               ...this.maskOptions[1],
             }
-            : getDefaultMaskOptions(this.step),
+            : undefined,
         } }))),
       'middle-range': () => this.renderSingleInput(),
     })));

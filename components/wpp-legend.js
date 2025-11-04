@@ -20,7 +20,7 @@ const WppLegend$1 = /*@__PURE__*/ proxyCustomElement(class WppLegend extends HTM
     this.color = 'var(--wpp-dataviz-color-cat-neutral-1)';
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("svg", { class: this.dotCssClasses() }, h("circle", { cx: 6, cy: 6, r: 5, fill: this.color })), this.label && (h("wpp-typography-v3-3-0", { color: this.disabled ? 'var(--wpp-grey-color-500)' : 'var(--wpp-grey-color-1000)', type: "xs-body" }, this.label))));
+    return (h(Host, { class: this.hostCssClasses() }, h("svg", { class: this.dotCssClasses() }, h("circle", { cx: 6, cy: 6, r: 5, fill: this.color })), this.label && (h("wpp-typography-v3-3-0", { color: this.disabled ? 'var(--wpp-text-color-disabled)' : 'var(--wpp-grey-color-1000)', type: "xs-body" }, this.label))));
   }
   static get registryIs() { return "wpp-legend-v3-3-0"; }
   static get style() { return wppLegendCss; }

@@ -82,10 +82,10 @@
 }
 :host(.wpp-time-picker) #anchor.disabled #time-picker {
   background-color: var(--wpp-grey-color-100);
-  color: var(--wpp-grey-color-500);
+  color: var(--wpp-text-color-disabled);
 }
 :host(.wpp-time-picker) #anchor.disabled #time-picker::placeholder {
-  color: var(--wpp-grey-color-500);
+  color: var(--wpp-text-color-disabled);
 }
 :host(.wpp-time-picker) #anchor.disabled #time-picker:hover {
   cursor: not-allowed;

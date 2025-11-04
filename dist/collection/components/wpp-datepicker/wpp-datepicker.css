@@ -248,7 +248,7 @@
 }
 :host .air-datepicker-cell.-other-month- {
   --other-month-color-in-range: var(--wpp-other-month-color-in-range, var(--datepicker-range-bg-color));
-  color: var(--wpp-grey-color-500);
+  color: var(--wpp-text-color-disabled);
 }
 :host .air-datepicker-cell.-other-month-.-in-range- {
   background-color: var(--other-month-color-in-range);
@@ -444,7 +444,7 @@
   color: var(--datepicker-cancel-button-color-active);
 }
 :host .air-datepicker-buttons .button-clear.disabled {
-  color: var(--wpp-grey-color-500);
+  color: var(--wpp-text-color-disabled);
   pointer-events: none;
 }
 :host .air-datepicker-nav--action:hover {

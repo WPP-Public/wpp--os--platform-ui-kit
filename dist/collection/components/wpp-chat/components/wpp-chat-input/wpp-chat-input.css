@@ -24,7 +24,7 @@
   --chat-text-input-min-height: var(--wpp-chat-text-input-min-height, 52px);
   --chat-text-input-padding: var(--wpp-chat-text-input-padding, 0);
   --chat-text-input-bg-color: var(--wpp-chat-text-input-bg-color, transparent);
-  --chat-text-input-color-disabled: var(--wpp-chat-text-input-color-disabled, var(--wpp-grey-color-500));
+  --chat-text-input-color-disabled: var(--wpp-chat-text-input-color-disabled, var(--wpp-text-color-disabled));
   --chat-text-input-placeholder-color: var(--wpp-chat-text-input-placeholder-color, var(--wpp-grey-color-700));
   --chat-text-input-placeholder-color-disabled: var(
     --wpp-chat-text-input-placeholder-color-disabled,

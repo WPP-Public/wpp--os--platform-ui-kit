@@ -1,6 +1,6 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
 import { I as InlineEditModeEnum } from './types-55e66228.js';
-import { b as isEventTargetContained, k as transformToVersionedTag } from './utils-90721dcb.js';
+import { b as isEventTargetContained, k as transformToVersionedTag } from './utils-d423b01f.js';
 import './consts-5bf9c29f.js';
 
 const LOCALES_DEFAULTS = {
