@@ -18,7 +18,7 @@
   --tab-padding-m: var(--wpp-tab-padding-m, 8px);
   --tab-padding-s: var(--wpp-tab-padding-s, 6px 4px);
   --tab-tab-font-weight: var(--wpp-tab-tab-font-weight, 400);
-  --tab-tab-margin: var(--wpp-tab-tab-margin, 0 0 0 4px);
+  --tab-tab-margin: var(--wpp-tab-tab-margin, 0 0 0 8px);
   --tab-text-color: var(--wpp-tab-text-color, var(--wpp-text-color-info));
   --tab-text-color-hover: var(--wpp-tab-text-color-hover, var(--wpp-brand-color-hover));
   --tab-text-color-active: var(--wpp-tab-text-color-active, var(--wpp-brand-color-active));
@@ -58,22 +58,15 @@
   outline: 0;
   cursor: pointer;
 }
-.wpp-tab-wrapper .wpp-tab-icon {
-  --wpp-icon-color: var(--wpp-grey-color-800);
-  margin-right: 8px;
-}
 .wpp-tab-wrapper.tab-focus {
   position: relative;
   color: var(--tab-text-color-hover);
   outline: none;
 }
-.wpp-tab-wrapper.tab-focus .wpp-tab-icon {
-  --wpp-icon-color: var(--tab-text-color-hover);
-}
 .wpp-tab-wrapper.tab-focus::after {
   border-radius: 5px;
   outline: none;
-  box-shadow: 0 0 0 1px var(--tab-first-border-color-focus), 0 0 0 3px var(--tab-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--tab-first-border-color-focus), 0 0 0 2px var(--tab-second-border-color-focus);
   position: absolute;
   width: calc(100% - 6px);
   height: calc(100% - 10px);
@@ -92,31 +85,15 @@
 .wpp-tab-wrapper:hover {
   color: var(--tab-text-color-hover);
 }
-.wpp-tab-wrapper:hover .wpp-tab-icon {
-  --wpp-icon-color: var(--tab-text-color-hover);
-}
 .wpp-tab-wrapper:active {
   color: var(--tab-text-color-active);
-}
-.wpp-tab-wrapper:active .wpp-tab-icon {
-  --wpp-icon-color: var(--tab-text-color-active);
-}
-
-.wpp-icon-and-counter .wpp-tab-icon {
-  margin-right: 4px;
 }
 
 :host([disabled]:not([disabled=false])) .wpp-tab-wrapper {
   color: var(--tab-text-color-disabled);
   cursor: not-allowed;
 }
-:host([disabled]:not([disabled=false])) .wpp-tab-wrapper .wpp-tab-icon {
-  --wpp-icon-color: var(--tab-text-color-disabled);
-}
 
 :host([active]:not([active=false])) .wpp-tab-wrapper {
   color: var(--tab-text-color-selected);
-}
-:host([active]:not([active=false])) .wpp-tab-wrapper .wpp-tab-icon {
-  --wpp-icon-color: var(--tab-text-color-selected);
 }

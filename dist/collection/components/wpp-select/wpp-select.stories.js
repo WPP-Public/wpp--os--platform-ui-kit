@@ -1,96 +1,6 @@
 import { html } from 'lit-html';
-const getList = (type) => [
-  {
-    value: 1,
-    label: 'Car',
-  },
-  {
-    value: 2,
-    disabled: true,
-    label: 'House',
-  },
-  {
-    value: 3,
-    label: 'Some looooooooooooooooong text in the item to test truncate',
-    slots: [{ type: 'p', props: { slot: 'caption', children: 'Text should be truncated' } }],
-  },
-  {
-    value: 4,
-    label: 'Text',
-    slots: type === 'single' ? [{ type: 'wpp-icon-plus', props: { slot: 'left' } }] : [],
-  },
-  {
-    value: 5,
-    label: 'Text',
-    slots: [{ type: 'p', props: { slot: 'caption', children: 'Creates a new element' } }],
-  },
-  {
-    value: 6,
-    label: 'Rob Adi',
-    slots: type === 'single' ? [{ type: 'wpp-avatar', props: { slot: 'left', name: 'Rob Adi' } }] : [],
-  },
-  {
-    value: 7,
-    label: 'Some looooooooooooooooong text in the item to test truncate',
-  },
-  {
-    value: 8,
-    label: 'Item without information',
-  },
-  {
-    value: 9,
-    label: 'Multiple Cars',
-  },
-  {
-    value: 10,
-    label: 'Item with Avatar and Subtitle',
-    slots: type === 'single'
-      ? [
-        {
-          type: 'wpp-avatar',
-          props: {
-            size: 's',
-            name: 'Ava Subtitle',
-            slot: 'left',
-          },
-        },
-        {
-          type: 'span',
-          props: {
-            slot: 'subtitle',
-            children: 'This is a subtitle',
-          },
-        },
-        {
-          type: 'wpp-tag',
-          props: {
-            label: 'Text',
-            variant: 'positive',
-            slot: 'right',
-            disabled: true,
-          },
-        },
-      ]
-      : [
-        {
-          type: 'span',
-          props: {
-            slot: 'subtitle',
-            children: 'This is a subtitle',
-          },
-        },
-        {
-          type: 'wpp-tag',
-          props: {
-            label: 'Text',
-            variant: 'positive',
-            slot: 'right',
-            disabled: true,
-          },
-        },
-      ],
-  },
-];
+import SingleSelectReadme from './readme.md';
+import ListItemReadme from '../wpp-list-item/readme.md';
 export default {
   title: 'Design System/Components/Selection and input/Select',
   parameters: {
@@ -99,6 +9,7 @@ export default {
         hidden: true,
       },
     },
+    notes: { Container: SingleSelectReadme, Items: ListItemReadme },
   },
   argTypes: {
     placeholder: { type: 'string' },
@@ -107,7 +18,6 @@ export default {
       options: ['null', 'warning', 'error'],
       control: { type: 'select' },
     },
-    messageInTooltip: { control: { type: 'boolean' } },
     size: {
       options: ['s', 'm'],
       control: { type: 'select' },
@@ -121,61 +31,83 @@ export default {
     withSearch: { control: { type: 'boolean' } },
     showSelectAllText: { control: { type: 'boolean' } },
     dropdownConfig: { control: 'object' },
-    consistentSearch: { control: { type: 'boolean' } },
   },
 };
-export const Single = (args) => {
-  let selectedValue = null;
-  const handleChange = (event) => {
-    selectedValue = event.detail.value;
-    console.log('Event:', event);
-    const updatedEl = document.querySelector('wpp-select-v2-21-0');
-    if (updatedEl)
-      updatedEl.value = selectedValue;
-  };
-  return html `
-    <wpp-select-v3-3-0
-      type="single"
-      name="single-select"
-      .message=${args.message}
-      .messageType=${args.messageType}
-      .placeholder=${args.placeholder}
-      .size=${args.size}
-      .messageInTooltip=${args.messageInTooltip}
-      .disabled=${args.disabled}
-      .required=${args.required}
-      .dropdownConfig=${args.dropdownConfig}
-      .labelConfig=${args.labelConfig}
-      .withSearch=${args.withSearch}
-      .consistentSearch=${args.consistentSearch}
-      .maximumSelectedItems=${args.maximumSelectedItems}
-      .dropdownWidth=${args.dropdownWidth}
-      .list=${getList('single')}
-      .value=${selectedValue}
-      @wppChange=${handleChange}
-    >
-      ${args.showIconStart
-    ? html `
-            <wpp-icon-clock-v3-3-0
-              slot="icon-start"
-              @click="${(e) => {
-      e.stopPropagation();
-      console.log('Left icon clicked');
-    }}"
-            ></wpp-icon-clock-v3-3-0>
-          `
-    : null}
-    </wpp-select-v3-3-0>
-  `;
-};
+export const Single = (args) => html `
+  <wpp-select-v2-22-0
+    type="single"
+    name="single-select"
+    .message=${args.message}
+    .messageType=${args.messageType}
+    .placeholder=${args.placeholder}
+    .size=${args.size}
+    .disabled=${args.disabled}
+    .required=${args.required}
+    .dropdownConfig=${args.dropdownConfig}
+    .labelConfig=${args.labelConfig}
+    .withSearch=${args.withSearch}
+    .maximumSelectedItems=${args.maximumSelectedItems}
+    .dropdownWidth=${args.dropdownWidth}
+  >
+    ${args.showIconStart
+  ? html `
+          <wpp-icon-clock-v2-22-0
+            slot="icon-start"
+            @click="${(e) => {
+    e.stopPropagation();
+    console.log('Left icon clicked');
+  }}"
+          ></wpp-icon-clock-v2-22-0>
+        `
+  : null}
+    <wpp-list-item-v2-22-0 .value=${1}>
+      <p slot="label">Car</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 .value=${2} .disabled="${true}">
+      <p slot="label">House</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 .value=${3}>
+      <p slot="label">Some looooooooooooooooong text in the item to test truncate</p>
+      <p slot="caption">Text should be truncated</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 .value=${4} .disabled="${true}">
+      <wpp-icon-plus-v2-22-0 slot="left"></wpp-icon-plus-v2-22-0>
+      <p slot="label">Text</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 .value=${5}>
+      <wpp-icon-plus-v2-22-0 slot="left"></wpp-icon-plus-v2-22-0>
+      <p slot="label">Text</p>
+      <p slot="caption">Creates a new element</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 .value=${6}>
+      <wpp-avatar-v2-22-0 name="Rob Adi" slot="left"></wpp-avatar-v2-22-0>
+      <p slot="label">Rob Adi</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 .value=${7}>
+      <p slot="label">Some looooooooooooooooong text in the item to test truncate</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 .value=${8}>
+      <p slot="label">Item without information</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 .value=${9}>
+      <p slot="label">Multiple Cars</p>
+    </wpp-list-item-v2-22-0>
+
+    <wpp-list-item-v2-22-0 .value=${10}>
+      <wpp-avatar-v2-22-0 size="s" name="Ava Subtitle" slot="left"></wpp-avatar-v2-22-0>
+      <span slot="subtitle">This is a subtitle</span>
+      <p slot="label">Item with Avatar and Subtitle</p>
+      <span slot="caption">Optional caption here</span>
+      <wpp-tag-v2-22-0 label="Text" variant="positive" slot="right" .disabled="${args.disabled}"> </wpp-tag-v2-22-0>
+    </wpp-list-item-v2-22-0>
+  </wpp-select-v2-22-0>
+`;
 Single.args = {
   message: '',
   placeholder: 'Placeholder',
   dropdownWidth: 'auto',
-  consistentSearch: false,
   size: 'm',
   disabled: false,
-  messageInTooltip: false,
   required: true,
   withSearch: false,
   showIconStart: true,
@@ -191,64 +123,91 @@ Single.args = {
 Single.parameters = {
   controls: { exclude: ['placeholder'] },
 };
-export const Multiple = (args) => {
-  let selectedValue = [];
-  const handleChange = (event) => {
-    selectedValue = event.detail.value;
-    console.log('Event:', event);
-    const updatedEl = document.querySelector('wpp-select-v2-21-0');
-    if (updatedEl)
-      updatedEl.value = selectedValue;
-  };
-  return html `
-    <wpp-select-v3-3-0
-      type="multiple"
-      name="multiple-select"
-      .message=${args.message}
-      .messageType=${args.messageType}
-      .placeholder=${args.placeholder}
-      .size=${args.size}
-      .messageInTooltip=${args.messageInTooltip}
-      .disabled=${args.disabled}
-      .required=${args.required}
-      .dropdownConfig=${args.dropdownConfig}
-      .labelConfig=${args.labelConfig}
-      .withSearch=${args.withSearch}
-      .withFolder=${args.withFolder}
-      .showSelectAllText=${args.showSelectAllText}
-      .consistentSearch=${args.consistentSearch}
-      .dropdownWidth=${args.dropdownWidth}
-      .value=${selectedValue}
-      .maximumSelectedItems="${args.maximumSelectedItems}"
-      .list=${getList('multiple')}
-      @wppChange=${handleChange}
-    >
-      ${args.showIconStart
-    ? html `
-            <wpp-icon-clock-v3-3-0
-              slot="icon-start"
-              @click="${(e) => {
-      e.stopPropagation();
-      console.log('Left icon clicked');
-    }}"
-            ></wpp-icon-clock-v3-3-0>
-          `
-    : null}
-    </wpp-select-v3-3-0>
-  `;
-};
+export const Multiple = (args) => html `
+  <wpp-select-v2-22-0
+    type="multiple"
+    name="multiple-select"
+    .message=${args.message}
+    .messageType=${args.messageType}
+    .placeholder=${args.placeholder}
+    .size=${args.size}
+    .disabled=${args.disabled}
+    .required=${args.required}
+    .dropdownConfig=${args.dropdownConfig}
+    .labelConfig=${args.labelConfig}
+    .withSearch=${args.withSearch}
+    .withFolder=${args.withFolder}
+    .showSelectAllText=${args.showSelectAllText}
+    .dropdownWidth=${args.dropdownWidth}
+    .value=${args.value}
+    .maximumSelectedItems="${args.maximumSelectedItems}"
+  >
+    ${args.showIconStart
+  ? html `
+          <wpp-icon-clock-v2-22-0
+            slot="icon-start"
+            @click="${(e) => {
+    e.stopPropagation();
+    console.log('Left icon clicked');
+  }}"
+          ></wpp-icon-clock-v2-22-0>
+        `
+  : null}
+    <wpp-list-item-v2-22-0 .value=${1} checkboxName="checkbox-name-1">
+      <p slot="label">Car</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 .value=${2} checkboxName="checkbox-name-2" .disabled="${true}">
+      <p slot="label">House</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 .value=${3} checkboxName="checkbox-name-3">
+      <p slot="label">Some looooooooooooooooong text in the item to test truncate.</p>
+      <p slot="caption">Text should be truncated</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 .value=${4} checkboxName="checkbox-name-4" .disabled="${true}">
+      <wpp-icon-plus-v2-22-0 slot="left"></wpp-icon-plus-v2-22-0>
+      <p slot="label">Text</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 .value=${5} checkboxName="checkbox-name-5">
+      <wpp-icon-plus-v2-22-0 slot="left"></wpp-icon-plus-v2-22-0>
+      <p slot="label">Text</p>
+      <p slot="caption">Creates a new element</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 .value=${6} checkboxName="checkbox-name-6">
+      <wpp-avatar-v2-22-0 name="Rob Adi" slot="left"></wpp-avatar-v2-22-0>
+      <p slot="label">Rob Adi</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 .value=${7} checkboxName="checkbox-name-7">
+      <p slot="label">Some looooooooooooooooong text in the item to test truncate</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 .value=${8} checkboxName="checkbox-name-8">
+      <p slot="label">Item without info</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 .value=${9} checkboxName="checkbox-name-9">
+      <p slot="label">Multiple Cars</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 .value=${10} checkboxName="checkbox-name-10">
+      <p slot="label">Update information</p>
+    </wpp-list-item-v2-22-0>
+
+    <wpp-list-item-v2-22-0 .value=${11} checkboxName="checkbox-name-11">
+      <span slot="subtitle">Subtitle in Multiple</span>
+      <p slot="label">Item with Avatar and Subtitle (Multiple)</p>
+      <span slot="caption">Optional caption in multiple</span>
+      <wpp-tag-v2-22-0 label="Text" variant="positive" slot="right" .disabled="${args.disabled}"> </wpp-tag-v2-22-0>
+    </wpp-list-item-v2-22-0>
+  </wpp-select-v2-22-0>
+`;
 Multiple.args = {
   message: '',
   placeholder: 'Placeholder',
   dropdownWidth: 'auto',
   size: 'm',
-  messageInTooltip: false,
   disabled: false,
   required: true,
   withSearch: false,
   withFolder: true,
   showSelectAllText: true,
-  consistentSearch: false,
+  value: [],
   showIconStart: true,
   labelConfig: {
     icon: '',
@@ -262,71 +221,48 @@ Multiple.args = {
 Multiple.parameters = {
   controls: { exclude: ['placeholder'] },
 };
-const LIST_TEXT = [
-  {
-    value: 'cars',
-    label: 'Cars',
-  },
-  {
-    value: 'houses',
-    label: 'Houses',
-    disabled: true,
-  },
-  {
-    value: 'trains',
-    label: 'Trains',
-  },
-  {
-    value: 'long-text',
-    label: 'A Bit Longer Text',
-  },
-  {
-    value: 'food',
-    label: 'Food',
-  },
-  {
-    value: 'drinks',
-    label: 'Drinks',
-  },
-  {
-    value: 'fruits',
-    label: 'Fruits',
-  },
-];
-export const Text = (args) => {
-  let selectedValue = '';
-  const handleChange = (event) => {
-    selectedValue = event.detail.value;
-    console.log('Event:', event);
-    const updatedEl = document.querySelector('wpp-select-v2-21-0');
-    if (updatedEl)
-      updatedEl.value = selectedValue;
-  };
-  return html ` <wpp-select-v3-3-0
-    .disabled="${args.disabled}"
-    .placeholder="${args.placeholder}"
-    .dropdownWidth="${args.dropdownWidth}"
-    value="long-text"
-    type="text"
-    name="text-select"
-    .valie=${selectedValue}
-    .dropdownConfig=${args.dropdownConfig}
-    .list=${LIST_TEXT}
-    @wppChange=${handleChange}
-  >
-    ${args.showIconStart
-    ? html `
-          <wpp-icon-clock-v3-3-0
-            slot="icon-start"
-            @click="${(e) => {
-      e.stopPropagation();
-      console.log('Left icon clicked');
-    }}"
-          ></wpp-icon-clock-v3-3-0>
-        `
-    : null}
-  </wpp-select-v3-3-0>`;
-};
+export const Text = (args) => html ` <wpp-select-v2-22-0
+  .disabled="${args.disabled}"
+  .placeholder="${args.placeholder}"
+  .dropdownWidth="${args.dropdownWidth}"
+  value="long-text"
+  type="text"
+  name="text-select"
+  .dropdownConfig=${args.dropdownConfig}
+>
+  ${args.showIconStart
+  ? html `
+        <wpp-icon-clock-v2-22-0
+          slot="icon-start"
+          @click="${(e) => {
+    e.stopPropagation();
+    console.log('Left icon clicked');
+  }}"
+        ></wpp-icon-clock-v2-22-0>
+      `
+  : null}
+  <wpp-list-item-v2-22-0 value="cars">
+    <p slot="label">Cars</p>
+  </wpp-list-item-v2-22-0>
+  <wpp-list-item-v2-22-0 value="houses" .disabled="${true}">
+    <p slot="label">Houses</p>
+  </wpp-list-item-v2-22-0>
+  <wpp-list-item-v2-22-0 value="trains">
+    <p slot="label">Trains</p>
+  </wpp-list-item-v2-22-0>
+  <wpp-list-item-v2-22-0 value="long-text">
+    <p slot="label">A Bit Longer Text</p>
+  </wpp-list-item-v2-22-0>
+  <wpp-list-item-v2-22-0 value="food">
+    <p slot="label">Food</p>
+  </wpp-list-item-v2-22-0>
+  <wpp-list-item-v2-22-0 value="drinks">
+    <p slot="label">Drinks</p>
+  </wpp-list-item-v2-22-0>
+  <wpp-list-item-v2-22-0 value="fruits">
+    <p slot="label">Fruits</p>
+  </wpp-list-item-v2-22-0>
+</wpp-select-v2-22-0>`;
 Text.args = {
   placeholder: 'Select option',
   dropdownWidth: 'auto',
@@ -335,105 +271,4 @@ Text.args = {
 };
 Text.parameters = {
   controls: { exclude: ['message', 'messageType', 'size', 'withSearch'] },
-};
-export const ButtonAnchor = (args) => {
-  let selectedValue = null;
-  const handleChange = (event) => {
-    selectedValue = event.detail.value;
-    const updatedEl = document.querySelector('#button-anchor-select');
-    if (updatedEl)
-      updatedEl.value = selectedValue;
-  };
-  const renderAnchor = () => {
-    switch (args.anchorComponent) {
-      case 'WppActionButton':
-        return html ` <wpp-action-button-v3-3-0 slot="anchor-button"> ${args.anchorLabel} </wpp-action-button-v3-3-0> `;
-      case 'WppActionButtonWithIcon':
-        return html `
-          <wpp-action-button-v3-3-0 slot="anchor-button">
-            <wpp-icon-plus-v3-3-0 slot="icon-start"></wpp-icon-plus-v3-3-0>
-            ${args.anchorLabel}
-          </wpp-action-button-v3-3-0>
-        `;
-      case 'WppButton':
-      default:
-        return html ` <wpp-button-v3-3-0 slot="anchor-button"> ${args.anchorLabel} </wpp-button-v3-3-0> `;
-    }
-  };
-  return html `
-    <wpp-select-v3-3-0
-      id="button-anchor-select"
-      type="single"
-      name="button-anchor-select"
-      .message=${args.message}
-      .messageType=${args.messageType}
-      .placeholder=${args.placeholder}
-      .size=${args.size}
-      .messageInTooltip=${args.messageInTooltip}
-      .disabled=${args.disabled}
-      .required=${args.required}
-      .dropdownConfig=${args.dropdownConfig}
-      .labelConfig=${args.labelConfig}
-      .withSearch=${args.withSearch}
-      .consistentSearch=${args.consistentSearch}
-      .dropdownWidth=${args.dropdownWidth}
-      .list=${getList('single')}
-      .value=${selectedValue}
-      anchor="custom"
-      @wppChange=${handleChange}
-    >
-      ${renderAnchor()}
-      ${args.showIconStart
-    ? html `
-            <wpp-icon-clock-v3-3-0
-              slot="icon-start"
-              @click="${(e) => {
-      e.stopPropagation();
-    }}"
-            ></wpp-icon-clock-v3-3-0>
-          `
-    : null}
-    </wpp-select-v3-3-0>
-  `;
-};
-ButtonAnchor.args = {
-  message: '',
-  messageType: undefined,
-  placeholder: 'Select option',
-  size: 'm',
-  dropdownWidth: 'auto',
-  disabled: false,
-  required: false,
-  withSearch: false,
-  consistentSearch: false,
-  showIconStart: false,
-  anchorComponent: 'WppButton',
-  anchorLabel: 'Open Select',
-  labelConfig: {
-    icon: '',
-    text: '',
-    description: '',
-    locales: { optional: 'Optional' },
-  },
-};
-ButtonAnchor.argTypes = {
-  anchorComponent: {
-    options: ['WppButton', 'WppActionButton', 'WppActionButtonWithIcon'],
-    control: { type: 'select' },
-  },
-  anchorLabel: { control: { type: 'text' } },
-};
-ButtonAnchor.parameters = {
-  controls: {
-    exclude: [
-      'maximumSelectedItems',
-      'withFolder',
-      'showSelectAllText',
-      'placeholder',
-      'size',
-      'disabled',
-      'showIconStart',
-    ],
-  },
-  docs: { description: { story: 'Select anchored to a customizable button component.' } },
 };

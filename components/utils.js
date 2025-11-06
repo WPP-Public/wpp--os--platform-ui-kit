@@ -1,6 +1,6 @@
 import { D as DEFAULT_SHOW_DURATION_ANIMATION, a as DEFAULT_HIDE_DURATION_ANIMATION } from './consts.js';
 
-const version = 'v3-3-0';
+const version = "v2-22-0";
 
 function format(first, middle, last) {
   return (first || '') + (middle ? ` ${middle}` : '') + (last ? ` ${last}` : '');
@@ -119,16 +119,6 @@ const isEventTargetContained = (containerEl, event) => {
   }
   return isPathNodeContained;
 };
-const hasParentWithId = (target, id) => {
-  let current = target;
-  while (current) {
-    if (current.id.includes(id)) {
-      return true;
-    }
-    current = current.parentElement;
-  }
-  return false;
-};
 const truncate = (value = '', maxLength, evenly = false) => {
   if (value.length > maxLength) {
     if (evenly) {
@@ -177,23 +167,18 @@ function closestElement(selector, base) {
     if (!el || isDocument(el) || isWindow(el)) {
       return null;
     }
-    const found = el.closest(selector);
-    if (found)
-      return found;
-    if ('assignedSlot' in el && el.assignedSlot) {
-      return __closestFrom(el.assignedSlot);
+    let found = el.closest(selector);
+    if (!found) {
+      if (el.assignedSlot) {
+        found = el.assignedSlot.closest(selector) || __closestFrom(el.assignedSlot.getRootNode().host);
+      }
+      else {
+        if (el.parentElement) {
+          found = __closestFrom(el.parentElement);
+        }
+      }
     }
-    // Traverse regular DOM - when button placed inside another Wpp element,
-    // the traverse will stop at the shadow-root
-    if ('parentElement' in el && el.parentElement) {
-      return __closestFrom(el.parentElement);
-    }
-    // Traverse shadow DOM boundary
-    const root = el.getRootNode();
-    if (root && root.host) {
-      return __closestFrom(root.host);
-    }
-    return null;
+    return found;
   }
   return __closestFrom(base);
 }
@@ -223,15 +208,7 @@ const applyBodyStylesIfNeeded = (action) => {
 const autoFocusElement = (shouldFocus, el) => {
   if (shouldFocus) {
     setTimeout(() => {
-      if (!el)
-        return;
-      el.focus();
-      if (el.tagName.toLowerCase() === 'input' || el.tagName.toLowerCase() === 'textarea') {
-        const inputEl = el;
-        if (inputEl.value.length) {
-          inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length);
-        }
-      }
+      el?.focus();
     }, 0);
   }
 };
@@ -278,17 +255,5 @@ function setHasFocused(value) {
 function getHighestContainerInDOM() {
   return document.querySelector('#root') || document.querySelector('#app') || document.body;
 }
-const getAriaProps = (ariaProps) => {
-  const result = {};
-  Object.entries(ariaProps).forEach(([key, val]) => {
-    if (key === 'tabIndex')
-      return;
-    if (val !== undefined && val !== null) {
-      result[`aria-${key}`] = typeof val === 'boolean' ? String(val) : val;
-    }
-  });
-  return result;
-};
-const isWppElement = (element) => element.tagName.toLowerCase().includes('wpp-') && element.tagName.toLowerCase().includes('-v');
 
-export { areSetsEqual as a, isEventTargetContained as b, hasParentWithId as c, debounce as d, truncate as e, format as f, getSlotEmptyStates as g, hasShadowDom as h, isObject as i, getHighlightData as j, transformToVersionedTag as k, closestElement as l, applyBodyStylesIfNeeded as m, autoFocusElement as n, form2object as o, getDurationValues as p, getHasFocused as q, recursiveObjectMap as r, selectDropdownWidth as s, toKebabCase as t, uuidv4 as u, setHasFocused as v, getHighestContainerInDOM as w, getAriaProps as x, isWppElement as y, version as z };
+export { areSetsEqual as a, isEventTargetContained as b, truncate as c, debounce as d, getHighlightData as e, format as f, getSlotEmptyStates as g, hasShadowDom as h, isObject as i, transformToVersionedTag as j, closestElement as k, applyBodyStylesIfNeeded as l, autoFocusElement as m, form2object as n, getDurationValues as o, getHasFocused as p, setHasFocused as q, recursiveObjectMap as r, selectDropdownWidth as s, toKebabCase as t, uuidv4 as u, getHighestContainerInDOM as v };

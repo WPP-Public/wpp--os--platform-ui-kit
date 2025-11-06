@@ -5,14 +5,14 @@ describe('wpp-sticky-bar', () => {
   it('render one-line sticky bar', async () => {
     const page = await newSpecPage({
       components: [WppStickyBar],
-      template: () => h("wpp-sticky-bar-v3-3-0", { variant: "one-line", barTitle: "Page Title" }),
+      template: () => h("wpp-sticky-bar-v2-22-0", { variant: "one-line", barTitle: "Page Title" }),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('render two-lines sticky bar with custom content', async () => {
     const page = await newSpecPage({
       components: [WppStickyBar],
-      template: () => (h("wpp-sticky-bar-v3-3-0", { variant: "two-lines", barTitle: "Page Title", buttons: [
+      template: () => (h("wpp-sticky-bar-v2-22-0", { variant: "two-lines", barTitle: "Page Title", buttons: [
           {
             variant: 'primary',
             text: 'Primary',
@@ -29,14 +29,14 @@ describe('wpp-sticky-bar', () => {
             variant: 'action-button',
             text: 'Action Btn',
           },
-        ] }, h("div", { slot: "content" }, h("wpp-typography-v3-3-0", { type: "m-body" }, "Body Content")))),
+        ] }, h("div", { slot: "content" }, h("wpp-typography-v2-22-0", { type: "m-body" }, "Body Content")))),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('render two-lines-with-tabs sticky bar', async () => {
     const page = await newSpecPage({
       components: [WppStickyBar],
-      template: () => (h("wpp-sticky-bar-v3-3-0", { variant: "two-lines-with-tabs", barTitle: "Page Title", buttons: [
+      template: () => (h("wpp-sticky-bar-v2-22-0", { variant: "two-lines-with-tabs", barTitle: "Page Title", buttons: [
           {
             variant: 'primary',
             text: 'Primary',

@@ -38,13 +38,9 @@ export declare class WppRichtextView implements ComponentDidLoad {
    * Use `pre` HTML element as a container to preserve white space, or regular `div` element
    */
   preserveWhitespace: boolean;
-  /**
-   * Name of the editor instance
-   */
-  readonly name?: string;
   quill: QuillInstance;
   containerElement?: HTMLDivElement | HTMLPreElement | null;
-  setValue(value: RichtextValue, isInitialLoad?: boolean): void;
+  setValue(value: RichtextValue): void;
   getValue(): RichtextValue;
   componentDidLoad(): void;
   updateStyle(newValue: string, oldValue: string): void;

@@ -20,7 +20,6 @@ export const OPACITY_INPUT_CONFIG = {
 };
 export const defaultDropdownConfig = {
   trigger: 'manual',
-  hideOnClick: false,
   placement: 'bottom-start',
   maxWidth: '378px',
   offset: [0, 4],

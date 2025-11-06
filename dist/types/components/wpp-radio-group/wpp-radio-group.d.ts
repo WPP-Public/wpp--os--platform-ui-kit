@@ -3,7 +3,7 @@ import { BaseFormControl } from '../../interfaces/base-form-control';
 import { BaseComponent } from '../../interfaces/base-component';
 import { RadioChangeEvent } from '../wpp-radio/types';
 import { RadioGroupChangeEvent, RadioGroupValue } from './types';
-import { AriaProps, DropdownConfig, InputMessageTypes } from '../../types/common';
+import { DropdownConfig, InputMessageTypes } from '../../types/common';
 import { LabelConfig } from '../wpp-label/types';
 /**
  * @slot - Can contain only the `wpp-radio` components that are displayed in `radio-group`. The default slot, without the name attribute. A maximum of 5 radio elements are allowed in this component and a minimum of 2.
@@ -32,11 +32,6 @@ export declare class WppRadioGroup implements BaseComponent, BaseFormControl<Rad
    */
   readonly messageType?: InputMessageTypes;
   /**
-   * Defines the direction in which the checkbox items are displayed.
-   * By default, the items are displayed vertically (in a column).
-   */
-  readonly direction: 'column' | 'row';
-  /**
    * Defines the message's maximum length. If the length of the message is greater than the value of this property,
    * the message will be truncated and a tooltip will display the whole text upon hover.
    */
@@ -51,10 +46,6 @@ export declare class WppRadioGroup implements BaseComponent, BaseFormControl<Rad
    */
   readonly labelTooltipConfig: DropdownConfig;
   /**
-   * Contains the checkbox group `aria-` props.
-   */
-  readonly ariaProps: AriaProps;
-  /**
    * Emitted when the radio group value changes.
    */
   wppChange: EventEmitter<RadioGroupChangeEvent>;
@@ -66,18 +57,12 @@ export declare class WppRadioGroup implements BaseComponent, BaseFormControl<Rad
    * Emitted when the group loses focus
    */
   readonly wppBlur: EventEmitter<FocusEvent>;
+  componentDidLoad(): void;
   updateValue(value: RadioGroupValue): void;
   onClickRadioButton(event: CustomEvent<RadioChangeEvent>): void;
-  componentDidLoad(): void;
-  private syncTabIndexes;
   private checkRadioElements;
-  private getEnabledItems;
-  private getCurrentNdx;
-  private focusAndSelect;
-  private onKeyDown;
   private onFocus;
   private onBlur;
   private hostCssClasses;
-  private contentCssClasses;
   render(): any;
 }

@@ -1,76 +1,19 @@
-import { r as registerInstance, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { x as getAriaProps } from './utils-d423b01f.js';
-import { F as FOCUS_TYPE } from './common-69c8ea89.js';
-import './consts-5bf9c29f.js';
+import { r as registerInstance, h, H as Host } from './index-9177bb6d.js';
 
-const wppBackToTopButtonCss = ":host{--bttb-width:var(--wpp-back-to-top-button-width, 40px);--bttb-height:var(--wpp-back-to-top-button-height, 40px);--bttb-border-radius:var(--wpp-back-to-top-button-border-radius, var(--wpp-border-radius-round));--bttb-box-shadow:var(--wpp-back-to-top-button-box-shadow, var(--wpp-box-shadow-m));--bttb-border-width:var(--wpp-back-to-top-button-border-width, var(--wpp-border-width-s));--bttb-border-style:var(--wpp-back-to-top-button-border-style, solid);--bttb-border-color:var(--wpp-back-to-top-button-border-color, var(--wpp-grey-color-500));--bttb-border-color-hover:var(--wpp-back-to-top-button-border-color-hover, var(--wpp-grey-color-700));--bttb-border-color-active:var(--wpp-back-to-top-button-border-color-active, var(--wpp-grey-color-800));--bttb-first-border-color-focus:var(--wpp-back-to-top-button-first-border-color-focus, var(--wpp-grey-color-000));--bttb-second-border-color-focus:var(--wpp-back-to-top-button-second-border-color-focus, var(--wpp-brand-color));--bttb-bg-color:var(--wpp--back-to-top-button-bg-color, var(--wpp-grey-color-000));--bttb-bg-color-hover:var(--wpp--back-to-top-button-bg-color-hover, var(--wpp-grey-color-200));--bttb-bg-color-active:var(--wpp--wpp--back-to-top-button-bg-color-active, var(--wpp-grey-color-300));--bttb-icon-color:var(--wpp--back-to-top-button-icon-color, var(--wpp-primary-color-800));--bttb-icon-color-hover:var(--wpp--back-to-top-button-icon-color-hover, var(--wpp-primary-color-800));--bttb-icon-color-active:var(--wpp--back-to-top-button-icon-color-active, var(--wpp-primary-color-800));display:-ms-inline-flexbox;display:inline-flex;outline:none}:host button{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:var(--bttb-width);height:var(--bttb-height);margin:0;border-radius:var(--bttb-border-radius);text-decoration:none;border:var(--bttb-border-width) var(--bttb-border-style) var(--bttb-border-color);outline:0;cursor:pointer;-webkit-box-shadow:var(--bttb-box-shadow);box-shadow:var(--bttb-box-shadow);background-color:var(--bttb-bg-color)}:host button.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--bttb-first-border-color-focus), 0 0 0 3px var(--bttb-second-border-color-focus);box-shadow:0 0 0 1px var(--bttb-first-border-color-focus), 0 0 0 3px var(--bttb-second-border-color-focus);border-color:var(--bttb-border-color-hover);background-color:var(--bttb-bg-color-hover)}:host button .icon{color:var(--bttb-icon-color)}:host button:hover{background-color:var(--bttb-bg-color-hover);border-color:var(--bttb-border-color-hover)}:host button:hover .icon{color:var(--bttb-icon-color-hover)}:host button:active,:host button.pressed{background-color:var(--bttb-bg-color-active);border-color:var(--bttb-border-color-active)}:host button:active .icon,:host button.pressed .icon{color:var(--bttb-icon-color-active)}";
+const wppBackToTopButtonCss = ":host{--bttb-width:var(--wpp-back-to-top-button-width, 40px);--bttb-height:var(--wpp-back-to-top-button-height, 40px);--bttb-border-radius:var(--wpp-back-to-top-button-border-radius, var(--wpp-border-radius-round));--bttb-box-shadow:var(--wpp-back-to-top-button-box-shadow, var(--wpp-box-shadow-brand));--bttb-border-width:var(--wpp-back-to-top-button-border-width, var(--wpp-border-width-s));--bttb-border-style:var(--wpp-back-to-top-button-border-style, solid);--bttb-border-color:var(--wpp-back-to-top-button-border-color, var(--wpp-brand-color));--bttb-border-color-hover:var(--wpp-back-to-top-button-border-color-hover, var(--wpp-brand-color));--bttb-border-color-active:var(--wpp-back-to-top-button-border-color-active, var(--wpp-brand-color-active));--bttb-first-border-color-focus:var(--wpp-back-to-top-button-first-border-color-focus, var(--wpp-grey-color-000));--bttb-second-border-color-focus:var(--wpp-back-to-top-button-second-border-color-focus, var(--wpp-brand-color));--bttb-bg-color:var(--wpp--back-to-top-button-bg-color, transparent);--bttb-bg-color-hover:var(--wpp--back-to-top-button-bg-color-hover, var(--wpp-primary-color-100));--bttb-bg-color-active:var(--wpp--wpp--back-to-top-button-bg-color-active, var(--wpp-primary-color-200));--bttb-icon-color:var(--wpp--back-to-top-button-icon-color, var(--wpp-brand-color));--bttb-icon-color-hover:var(--wpp--back-to-top-button-icon-color-hover, var(--wpp-brand-color));--bttb-icon-color-active:var(--wpp--back-to-top-button-icon-color-active, var(--wpp-brand-color-active));display:-ms-inline-flexbox;display:inline-flex;outline:none}:host button{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:var(--bttb-width);height:var(--bttb-height);margin:0;border-radius:var(--bttb-border-radius);text-decoration:none;border:var(--bttb-border-width) var(--bttb-border-style) var(--bttb-border-color);outline:0;cursor:pointer;-webkit-box-shadow:var(--bttb-box-shadow);box-shadow:var(--bttb-box-shadow);background-color:var(--bttb-bg-color)}:host button .icon{color:var(--bttb-icon-color)}:host button:hover{background-color:var(--bttb-bg-color-hover);border-color:var(--bttb-border-color-hover)}:host button:hover .icon{color:var(--bttb-icon-color-hover)}:host button:active{background-color:var(--bttb-bg-color-active);border-color:var(--bttb-border-color-active)}:host button:active .icon{color:var(--bttb-icon-color-active)}:host(:focus-visible) button{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--bttb-first-border-color-focus), 0 0 0 2px var(--bttb-second-border-color-focus);box-shadow:0 0 0 1px var(--bttb-first-border-color-focus), 0 0 0 2px var(--bttb-second-border-color-focus);border-color:var(--bttb-border-color-hover);background-color:var(--bttb-bg-color-hover)}";
 
 const WppBackToTopButton = class {
   constructor(hostRef) {
     registerInstance(this, hostRef);
-    this.onKeyDown = (event) => {
-      if (this.focusType === FOCUS_TYPE.NONE)
-        return;
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        const clickEvent = new MouseEvent('click', { bubbles: true, composed: true });
-        this.host.dispatchEvent(clickEvent);
-        this.isPressed = true;
-      }
-    };
-    this.onKeyUp = (event) => {
-      if (event.key === 'Tab')
-        this.focusType = FOCUS_TYPE.TAB;
-      if (event.key === 'Enter' || event.key === ' ') {
-        this.isPressed = false;
-      }
-    };
-    this.onBlur = () => {
-      this.focusType = FOCUS_TYPE.NONE;
-      this.isPressed = false;
-    };
-    this.onMouseDown = () => {
-      this.focusType = FOCUS_TYPE.MOUSE;
-    };
     this.hostCssClasses = () => ({
       'wpp-back-to-top-button': true,
     });
-    this.buttonCssClasses = () => ({
-      'tab-focus': this.focusType === 'tab-focus',
-      pressed: this.isPressed,
-    });
-    this.focusType = undefined;
-    this.isPressed = false;
-    this.validAriaProps = {};
-    this.ariaProps = {
-      label: 'Back to top',
-    };
-  }
-  /**
-   * Method that sets focus on the native button.
-   */
-  async setFocus() {
-    setTimeout(() => {
-      if (this.buttonRef) {
-        this.buttonRef.focus();
-        this.focusType = FOCUS_TYPE.TAB;
-      }
-    }, 0);
-  }
-  onUpdateAriaProps() {
-    this.validAriaProps = getAriaProps(this.ariaProps);
-  }
-  componentWillLoad() {
-    this.validAriaProps = getAriaProps(this.ariaProps);
+    this.ariaProps = {};
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "button, icon", onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { ref: el => (this.buttonRef = el), onBlur: this.onBlur, class: this.buttonCssClasses(), type: "button", part: "button", "data-testid": "wppBackToTopButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps }, h("wpp-icon-arrow-v3-3-0", { direction: "top", class: "icon", part: "icon" }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "button, icon", tabIndex: 0 }, h("button", { type: "button", part: "button", "data-testid": "wppBackToTopButton", "aria-label": this.ariaProps.label }, h("wpp-icon-arrow-v2-22-0", { direction: "top", class: "icon", part: "icon" }))));
   }
-  static get registryIs() { return "wpp-back-to-top-button-v3-3-0"; }
-  get host() { return getElement(this); }
-  static get watchers() { return {
-    "ariaProps": ["onUpdateAriaProps"]
-  }; }
+  static get registryIs() { return "wpp-back-to-top-button-v2-22-0"; }
 };
 WppBackToTopButton.style = wppBackToTopButtonCss;
 

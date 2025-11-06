@@ -14,11 +14,11 @@ const WppIconSend = /*@__PURE__*/ proxyCustomElement(class WppIconSend extends H
     this.color = 'var(--wpp-icon-color)';
   }
   render() {
-    return (h(WppIcon, { name: "wpp-icon-send", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M4.82799 10L2.04367 2.84033C1.84989 2.34203 2.33578 1.86549 2.81645 2.03488L2.8922 2.06708L17.6575 9.44973C18.0826 9.66228 18.1092 10.2443 17.7372 10.503L17.6575 10.5503L2.8922 17.9329C2.41398 18.172 1.89449 17.7324 2.01862 17.2381L2.04367 17.1597L4.82799 10L2.04367 2.84033L4.82799 10ZM3.76856 3.88094L5.9087 9.38429L11.3453 9.38478C11.6567 9.38478 11.9141 9.61623 11.9549 9.91652L11.9605 10C11.9605 10.3115 11.729 10.5689 11.4287 10.6096L11.3453 10.6152L5.9087 10.6147L3.76856 16.1191L16.0067 10L3.76856 3.88094Z", fill: "currentColor" })));
+    return (h(WppIcon, { name: "wpp-icon-send", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M4.82799 9L2.04367 1.84033C1.84989 1.34203 2.33578 0.865489 2.81645 1.03488L2.8922 1.06708L17.6575 8.44973C18.0826 8.66228 18.1092 9.2443 17.7372 9.50304L17.6575 9.55027L2.8922 16.9329C2.41398 17.172 1.89449 16.7324 2.01862 16.2381L2.04367 16.1597L4.82799 9L2.04367 1.84033L4.82799 9ZM3.76856 2.88094L5.9087 8.38429L11.3453 8.38478C11.6567 8.38478 11.9141 8.61623 11.9549 8.91652L11.9605 9C11.9605 9.31146 11.729 9.56887 11.4287 9.6096L11.3453 9.61522L5.9087 9.61473L3.76856 15.1191L16.0067 9L3.76856 2.88094Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-send-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-send-v2-22-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-send", "wpp-icon-send-v3-3-0", {
+}, [1, "wpp-icon-send", "wpp-icon-send-v2-22-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -28,9 +28,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-send-v3-3-0"];
+  const components = ["wpp-icon-send-v2-22-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-send-v3-3-0":
+    case "wpp-icon-send-v2-22-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconSend);
       }

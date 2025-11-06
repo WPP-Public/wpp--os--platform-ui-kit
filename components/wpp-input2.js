@@ -1,6 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { F as FOCUS_TYPE } from './common.js';
-import { g as getSlotEmptyStates, d as debounce, n as autoFocusElement } from './utils.js';
+import { g as getSlotEmptyStates, d as debounce, m as autoFocusElement } from './utils.js';
 import { W as WrappedSlot } from './WrappedSlot.js';
 import { d as defineCustomElement$e } from './wpp-action-button2.js';
 import { d as defineCustomElement$d } from './wpp-icon-cross2.js';
@@ -86,9 +86,7 @@ function applyOverwriteMode({ value, selection }, newCharacters, mode) {
     const computedMode = typeof mode === 'function' ? mode({ value, selection }) : mode;
     return {
         value,
-        selection: computedMode === 'replace'
-            ? [from, Math.max(from + newCharacters.length, to)]
-            : [from, to],
+        selection: computedMode === 'replace' ? [from, from + newCharacters.length] : [from, to],
     };
 }
 
@@ -96,11 +94,10 @@ function isFixedCharacter(char) {
     return typeof char === 'string';
 }
 
-// eslint-disable-next-line @typescript-eslint/max-params
 function getLeadingFixedCharacters(mask, validatedValuePart, newCharacter, initialElementState) {
     let leadingFixedCharacters = '';
     for (let i = validatedValuePart.length; i < mask.length; i++) {
-        const charConstraint = mask[i] || '';
+        const charConstraint = mask[i];
         const isInitiallyExisted = (initialElementState === null || initialElementState === void 0 ? void 0 : initialElementState.value[i]) === charConstraint;
         if (!isFixedCharacter(charConstraint) ||
             (charConstraint === newCharacter && !isInitiallyExisted)) {
@@ -115,7 +112,7 @@ function validateValueWithMask(value, maskExpression) {
     if (Array.isArray(maskExpression)) {
         return (value.length === maskExpression.length &&
             Array.from(value).every((char, i) => {
-                const charConstraint = maskExpression[i] || '';
+                const charConstraint = maskExpression[i];
                 return isFixedCharacter(charConstraint)
                     ? char === charConstraint
                     : char.match(charConstraint);
@@ -130,22 +127,20 @@ function guessValidValueByPattern(elementState, mask, initialElementState) {
     const maskedValue = Array.from(elementState.value).reduce((validatedCharacters, char, charIndex) => {
         const leadingCharacters = getLeadingFixedCharacters(mask, validatedCharacters, char, initialElementState);
         const newValidatedChars = validatedCharacters + leadingCharacters;
-        const charConstraint = mask[newValidatedChars.length] || '';
+        const charConstraint = mask[newValidatedChars.length];
+        if (isFixedCharacter(charConstraint)) {
+            return newValidatedChars + charConstraint;
+        }
+        if (!char.match(charConstraint)) {
+            return newValidatedChars;
+        }
         if (maskedFrom === null && charIndex >= elementState.selection[0]) {
             maskedFrom = newValidatedChars.length;
         }
         if (maskedTo === null && charIndex >= elementState.selection[1]) {
             maskedTo = newValidatedChars.length;
         }
-        if (isFixedCharacter(charConstraint)) {
-            return newValidatedChars + charConstraint;
-        }
-        if (char.match(charConstraint)) {
-            return newValidatedChars + char;
-        }
-        return leadingCharacters.startsWith(char)
-            ? newValidatedChars
-            : validatedCharacters;
+        return newValidatedChars + char;
     }, '');
     const trailingFixedCharacters = getLeadingFixedCharacters(mask, maskedValue, '', initialElementState);
     return {
@@ -170,13 +165,7 @@ function guessValidValueByRegExp({ value, selection }, maskRegExp) {
         }
         return newPossibleValue.match(maskRegExp) ? newPossibleValue : validatedValuePart;
     }, '');
-    return {
-        value: validatedValue,
-        selection: [
-            Math.min(newFrom, validatedValue.length),
-            Math.min(newTo, validatedValue.length),
-        ],
-    };
+    return { value: validatedValue, selection: [newFrom, newTo] };
 }
 
 function calibrateValueByMask(elementState, mask, initialElementState = null) {
@@ -199,7 +188,7 @@ function removeFixedMaskCharacters(initialElementState, mask) {
     const [from, to] = initialElementState.selection;
     const selection = [];
     const unmaskedValue = Array.from(initialElementState.value).reduce((rawValue, char, i) => {
-        const charConstraint = mask[i] || '';
+        const charConstraint = mask[i];
         if (i === from) {
             selection.push(rawValue.length);
         }
@@ -221,41 +210,37 @@ function removeFixedMaskCharacters(initialElementState, mask) {
 
 class MaskModel {
     constructor(initialElementState, maskOptions) {
+        this.initialElementState = initialElementState;
         this.maskOptions = maskOptions;
-        this.unmaskInitialState = { value: '', selection: [0, 0] };
         this.value = '';
         this.selection = [0, 0];
-        const expression = this.getMaskExpression(initialElementState);
-        const { value, selection } = calibrateValueByMask(initialElementState, expression);
-        this.unmaskInitialState = removeFixedMaskCharacters({ value, selection }, expression);
+        const { value, selection } = calibrateValueByMask(initialElementState, this.getMaskExpression(initialElementState));
         this.value = value;
         this.selection = selection;
     }
-    addCharacters(newCharacters) {
-        const { value, selection, maskOptions } = this;
-        const initialElementState = { value, selection };
-        const { selection: [from, to], } = applyOverwriteMode(initialElementState, newCharacters, maskOptions.overwriteMode);
+    addCharacters([from, to], newCharacters) {
+        const { value } = this;
         const maskExpression = this.getMaskExpression({
             value: value.slice(0, from) + newCharacters + value.slice(to),
             selection: [from + newCharacters.length, from + newCharacters.length],
         });
-        const [unmaskedFrom, unmaskedTo] = applyOverwriteMode(this.unmaskInitialState, newCharacters, maskOptions.overwriteMode).selection;
-        const newUnmaskedLeadingValuePart = this.unmaskInitialState.value.slice(0, unmaskedFrom) + newCharacters;
+        const initialElementState = { value, selection: [from, to] };
+        const unmaskedElementState = removeFixedMaskCharacters(initialElementState, maskExpression);
+        const [unmaskedFrom, unmaskedTo] = applyOverwriteMode(unmaskedElementState, newCharacters, this.maskOptions.overwriteMode).selection;
+        const newUnmaskedLeadingValuePart = unmaskedElementState.value.slice(0, unmaskedFrom) + newCharacters;
         const newCaretIndex = newUnmaskedLeadingValuePart.length;
         const maskedElementState = calibrateValueByMask({
             value: newUnmaskedLeadingValuePart +
-                this.unmaskInitialState.value.slice(unmaskedTo),
+                unmaskedElementState.value.slice(unmaskedTo),
             selection: [newCaretIndex, newCaretIndex],
         }, maskExpression, initialElementState);
-        const prevLeadingPart = value.slice(0, from);
-        const newLeadingPartState = calibrateValueByMask({
-            value: newUnmaskedLeadingValuePart,
-            selection: [newCaretIndex, newCaretIndex],
-        }, maskExpression, initialElementState);
-        const isInvalidCharsInsertion = newLeadingPartState.value === prevLeadingPart ||
-            (newLeadingPartState.value.length < prevLeadingPart.length &&
-                removeFixedMaskCharacters(newLeadingPartState, maskExpression).value ===
-                    this.unmaskInitialState.value.slice(0, unmaskedFrom));
+        const isInvalidCharsInsertion = 
+        // eslint-disable-next-line @typescript-eslint/prefer-string-starts-ends-with
+        value.slice(0, unmaskedFrom) ===
+            calibrateValueByMask({
+                value: newUnmaskedLeadingValuePart,
+                selection: [newCaretIndex, newCaretIndex],
+            }, maskExpression, initialElementState).value;
         if (isInvalidCharsInsertion ||
             areElementStatesEqual(this, maskedElementState) // If typing new characters does not change value
         ) {
@@ -264,8 +249,7 @@ class MaskModel {
         this.value = maskedElementState.value;
         this.selection = maskedElementState.selection;
     }
-    deleteCharacters() {
-        const [from, to] = this.selection;
+    deleteCharacters([from, to]) {
         if (from === to || !to) {
             return;
         }
@@ -274,10 +258,11 @@ class MaskModel {
             value: value.slice(0, from) + value.slice(to),
             selection: [from, from],
         });
-        const initialElementState = { value};
-        const [unmaskedFrom, unmaskedTo] = this.unmaskInitialState.selection;
-        const newUnmaskedValue = this.unmaskInitialState.value.slice(0, unmaskedFrom) +
-            this.unmaskInitialState.value.slice(unmaskedTo);
+        const initialElementState = { value, selection: [from, to] };
+        const unmaskedElementState = removeFixedMaskCharacters(initialElementState, maskExpression);
+        const [unmaskedFrom, unmaskedTo] = unmaskedElementState.selection;
+        const newUnmaskedValue = unmaskedElementState.value.slice(0, unmaskedFrom) +
+            unmaskedElementState.value.slice(unmaskedTo);
         const maskedElementState = calibrateValueByMask({ value: newUnmaskedValue, selection: [unmaskedFrom, unmaskedFrom] }, maskExpression, initialElementState);
         this.value = maskedElementState.value;
         this.selection = maskedElementState.selection;
@@ -296,10 +281,10 @@ class EventListener {
     listen(eventType, fn, options) {
         const untypedFn = fn;
         this.element.addEventListener(eventType, untypedFn, options);
-        this.listeners.push(() => this.element.removeEventListener(eventType, untypedFn, options));
+        this.listeners.push(() => this.element.removeEventListener(eventType, untypedFn));
     }
     destroy() {
-        this.listeners.forEach((stopListen) => stopListen());
+        this.listeners.forEach(stopListen => stopListen());
     }
 }
 
@@ -337,6 +322,7 @@ function isHotkey(event, modifiers, hotkeyCode) {
          * "keyboard-layout"-independent than {@link KeyboardEvent#key `key`} or {@link KeyboardEvent#code `code`} properties.
          * @see {@link https://github.com/taiga-family/maskito/issues/315 `KeyboardEvent#code` issue}
          */
+        // eslint-disable-next-line sonar/deprecation
         event.keyCode === hotkeyCode);
 }
 
@@ -366,27 +352,22 @@ function isUndo(event) {
  */
 function maskitoUpdateElement(element, valueOrElementState) {
     var _a;
-    const initialValue = element.value;
     if (typeof valueOrElementState === 'string') {
         element.value = valueOrElementState;
     }
     else {
         const [from, to] = valueOrElementState.selection;
         element.value = valueOrElementState.value;
-        if (element.matches(':focus')) {
-            (_a = element.setSelectionRange) === null || _a === void 0 ? void 0 : _a.call(element, from, to);
-        }
+        (_a = element.setSelectionRange) === null || _a === void 0 ? void 0 : _a.call(element, from, to);
     }
-    if (element.value !== initialValue) {
-        element.dispatchEvent(new Event('input', 
-        /**
-         * React handles this event only on bubbling phase
-         *
-         * here is the list of events that are processed in the capture stage, others are processed in the bubbling stage
-         * https://github.com/facebook/react/blob/cb2439624f43c510007f65aea5c50a8bb97917e4/packages/react-dom-bindings/src/events/DOMPluginEventSystem.js#L222
-         */
-        { bubbles: true }));
-    }
+    element.dispatchEvent(new Event('input', 
+    /**
+     * React handles this event only on bubbling phase
+     *
+     * here is the list of events that are processed in the capture stage, others are processed in the bubbling stage
+     * https://github.com/facebook/react/blob/cb2439624f43c510007f65aea5c50a8bb97917e4/packages/react-dom-bindings/src/events/DOMPluginEventSystem.js#L222
+     */
+    { bubbles: true }));
 }
 
 function getLineSelection({ value, selection }, isForward) {
@@ -408,7 +389,7 @@ function getNotEmptySelection({ value, selection }, isForward) {
         return [from, to];
     }
     const notEmptySelection = isForward ? [from, to + 1] : [from - 1, to];
-    return notEmptySelection.map((x) => Math.min(Math.max(x, 0), value.length));
+    return notEmptySelection.map(x => Math.min(Math.max(x, 0), value.length));
 }
 
 const TRAILING_SPACES_REG = /\s+$/g;
@@ -440,14 +421,14 @@ function getWordSelection({ value, selection }, isForward) {
         .trimEnd()
         .split('')
         .reverse()
-        .findIndex((char) => SPACE_REG.exec(char));
+        .findIndex(char => char.match(SPACE_REG));
     return [
         selectedWordLength !== -1 ? to - trailingSpaces.length - selectedWordLength : 0,
         to,
     ];
 }
 
-/* eslint-disable @typescript-eslint/no-restricted-types */
+/* eslint-disable @typescript-eslint/ban-types */
 /**
  * @internal
  */
@@ -468,103 +449,6 @@ function maskitoTransform(valueOrState, maskitoOptions) {
     return typeof valueOrState === 'string' ? value : { value, selection };
 }
 
-/**
- * All `input` events with `inputType=deleteContentBackward` always follows `beforeinput` event with the same `inputType`.
- * If `beforeinput[inputType=deleteContentBackward]` is prevented, subsequent `input[inputType=deleteContentBackward]` is prevented too.
- * There is an exception – Android devices with Microsoft SwiftKey Keyboard in Mobile Chrome.
- * These devices ignores `preventDefault` for `beforeinput` event if Backspace is pressed.
- * @see https://github.com/taiga-family/maskito/issues/2135#issuecomment-2980729647
- * ___
- * TODO: track Chromium bug report and delete this plugin after bug fix
- * https://issues.chromium.org/issues/40885402
- */
-function createBrokenDefaultPlugin() {
-    return (element) => {
-        const eventListener = new EventListener(element);
-        let isVirtualAndroidKeyboard = false;
-        let beforeinputEvent;
-        let value = element.value;
-        eventListener.listen('keydown', ({ key }) => {
-            isVirtualAndroidKeyboard = key === 'Unidentified';
-        });
-        eventListener.listen('beforeinput', (event) => {
-            beforeinputEvent = event;
-            value = element.value;
-        });
-        eventListener.listen('input', (event) => {
-            if (isVirtualAndroidKeyboard &&
-                beforeinputEvent.defaultPrevented &&
-                beforeinputEvent.inputType === 'deleteContentBackward' &&
-                event.inputType === 'deleteContentBackward') {
-                element.value = value;
-            }
-        }, { capture: true });
-        return () => eventListener.destroy();
-    };
-}
-
-const SPACE = ' ';
-/**
- * 1. Android user (with G-board keyboard or similar) presses 1st space
- * ```
- * {type: "beforeinput", data: " ", inputType: "insertText"}
- * ```
- * 2. User presses 2nd space
- * ```
- * // Android tries to delete previously inserted space
- * {type: "beforeinput", inputType: "deleteContentBackward"}
- * {type: "beforeinput", data: ". ", inputType: "insertText"}
- * ```
- * ---------
- * 1. MacOS user presses 1st space
- * ```
- * {type: "beforeinput", data: " ", inputType: "insertText"}
- * ```
- * 2. User presses 2nd space
- * ```
- * // MacOS automatically run `element.setSelectionRange(indexBeforeSpace, indexAfterSpace)` and then
- * {type: "beforeinput", data: ". ", inputType: "insertText"}
- * ```
- * ---------
- * @see https://github.com/taiga-family/maskito/issues/2023
- */
-function createDoubleSpacePlugin() {
-    let prevValue = '';
-    let prevCaretIndex = 0;
-    let prevEvent = null;
-    let prevRejectedSpace = false;
-    return (element) => {
-        const eventListener = new EventListener(element);
-        eventListener.listen('beforeinput', (event) => {
-            var _a, _b;
-            const { value, selectionStart, selectionEnd } = element;
-            const rejectedSpace = (prevEvent === null || prevEvent === void 0 ? void 0 : prevEvent.inputType) === 'insertText' &&
-                (prevEvent === null || prevEvent === void 0 ? void 0 : prevEvent.data) === SPACE &&
-                !value.slice(0, Number(selectionEnd)).endsWith(SPACE);
-            if (event.inputType === 'insertText' && event.data === `.${SPACE}`) {
-                if ((prevEvent === null || prevEvent === void 0 ? void 0 : prevEvent.inputType) === 'deleteContentBackward' &&
-                    prevRejectedSpace) {
-                    // Android
-                    element.value = prevValue;
-                    (_a = element.setSelectionRange) === null || _a === void 0 ? void 0 : _a.call(element, prevCaretIndex, prevCaretIndex);
-                }
-                else if (rejectedSpace) {
-                    // Mac OS
-                    (_b = element.setSelectionRange) === null || _b === void 0 ? void 0 : _b.call(element, selectionStart, selectionStart);
-                }
-            }
-            prevRejectedSpace = rejectedSpace;
-            prevEvent = event;
-            prevValue = value;
-            prevCaretIndex = Number((rejectedSpace ? prevCaretIndex : selectionEnd) === value.length
-                ? selectionEnd
-                : selectionStart);
-        });
-        return () => eventListener.destroy();
-    };
-}
-
-const BUILT_IN_PLUGINS = [createDoubleSpacePlugin(), createBrokenDefaultPlugin()];
 class Maskito extends MaskHistory {
     constructor(element, maskitoOptions) {
         super();
@@ -573,14 +457,11 @@ class Maskito extends MaskHistory {
         this.isTextArea = this.element.nodeName === 'TEXTAREA';
         this.eventListener = new EventListener(this.element);
         this.options = Object.assign(Object.assign({}, MASKITO_DEFAULT_OPTIONS), this.maskitoOptions);
-        this.upcomingElementState = null;
         this.preprocessor = maskitoPipe(this.options.preprocessors);
         this.postprocessor = maskitoPipe(this.options.postprocessors);
-        this.teardowns = this.options.plugins
-            .concat(BUILT_IN_PLUGINS)
-            .map((plugin) => plugin(this.element, this.options));
+        this.teardowns = this.options.plugins.map(plugin => plugin(this.element, this.options));
         this.updateHistory(this.elementState);
-        this.eventListener.listen('keydown', (event) => {
+        this.eventListener.listen('keydown', event => {
             if (isRedo(event)) {
                 event.preventDefault();
                 return this.redo();
@@ -590,11 +471,17 @@ class Maskito extends MaskHistory {
                 return this.undo();
             }
         });
-        this.eventListener.listen('beforeinput', (event) => {
-            var _a, _b, _c;
+        this.eventListener.listen('beforeinput', event => {
             const isForward = event.inputType.includes('Forward');
             this.updateHistory(this.elementState);
             switch (event.inputType) {
+                // historyUndo/historyRedo will not be triggered if value was modified programmatically
+                case 'historyUndo':
+                    event.preventDefault();
+                    return this.undo();
+                case 'historyRedo':
+                    event.preventDefault();
+                    return this.redo();
                 case 'deleteByCut':
                 case 'deleteContentBackward':
                 case 'deleteContentForward':
@@ -603,67 +490,35 @@ class Maskito extends MaskHistory {
                         isForward,
                         selection: getNotEmptySelection(this.elementState, isForward),
                     });
-                case 'deleteHardLineBackward':
-                case 'deleteHardLineForward':
+                case 'deleteWordForward':
+                case 'deleteWordBackward':
+                    return this.handleDelete({
+                        event,
+                        isForward,
+                        selection: getWordSelection(this.elementState, isForward),
+                        force: true,
+                    });
                 case 'deleteSoftLineBackward':
                 case 'deleteSoftLineForward':
+                case 'deleteHardLineBackward':
+                case 'deleteHardLineForward':
                     return this.handleDelete({
                         event,
                         isForward,
                         selection: getLineSelection(this.elementState, isForward),
                         force: true,
                     });
-                case 'deleteWordBackward':
-                case 'deleteWordForward':
-                    return this.handleDelete({
-                        event,
-                        isForward,
-                        selection: getWordSelection(this.elementState, isForward),
-                    });
-                case 'historyRedo':
-                    event.preventDefault();
-                    return this.redo();
-                // historyUndo/historyRedo will not be triggered if value was modified programmatically
-                case 'historyUndo':
-                    event.preventDefault();
-                    return this.undo();
                 case 'insertCompositionText':
                     return; // will be handled inside `compositionend` event
                 case 'insertLineBreak':
-                case 'insertParagraph':
                     return this.handleEnter(event);
-                case 'insertReplacementText':
-                    /**
-                     * According {@link https://www.w3.org/TR/input-events-2 W3C specification}:
-                     * > `insertReplacementText` – insert or replace existing text by means of a spell checker,
-                     * > auto-correct, writing suggestions or similar.
-                     * ___
-                     * Firefox emits `insertReplacementText` event for its suggestion/autofill and for spell checker.
-                     * However, it is impossible to detect which part of the textfield value is going to be replaced
-                     * (`selectionStart` and `selectionEnd` just equal to the last caret position).
-                     * ___
-                     * Chrome does not fire `beforeinput` event for its suggestion/autofill.
-                     * It emits only `input` event with `inputType` and `data` set to `undefined`.
-                     * ___
-                     * All these browser limitations make us to validate the result value later in `input` event.
-                     */
-                    return;
-                case 'insertFromDrop':
                 case 'insertFromPaste':
                 case 'insertText':
+                case 'insertFromDrop':
                 default:
-                    return this.handleInsert(event, (_c = (_a = event.data) !== null && _a !== void 0 ? _a : 
-                    // `event.data` for `contentEditable` is always `null` for paste/drop events
-                    (_b = event.dataTransfer) === null || _b === void 0 ? void 0 : _b.getData('text/plain')) !== null && _c !== void 0 ? _c : '');
+                    return this.handleInsert(event, event.data || '');
             }
         });
-        this.eventListener.listen('input', () => {
-            if (this.upcomingElementState &&
-                !areElementStatesEqual(this.upcomingElementState, this.elementState)) {
-                this.updateElementState(this.upcomingElementState);
-            }
-            this.upcomingElementState = null;
-        }, { capture: true });
         this.eventListener.listen('input', ({ inputType }) => {
             if (inputType === 'insertCompositionText') {
                 return; // will be handled inside `compositionend` event
@@ -676,51 +531,43 @@ class Maskito extends MaskHistory {
             this.updateHistory(this.elementState);
         });
     }
-    destroy() {
-        this.eventListener.destroy();
-        this.teardowns.forEach((teardown) => teardown === null || teardown === void 0 ? void 0 : teardown());
-    }
-    updateElementState({ value, selection }, eventInit) {
-        const initialValue = this.elementState.value;
-        this.updateValue(value);
-        this.updateSelectionRange(selection);
-        if (eventInit && initialValue !== value) {
-            this.dispatchInputEvent(eventInit);
-        }
-    }
     get elementState() {
         const { value, selectionStart, selectionEnd } = this.element;
         return {
             value,
-            selection: [selectionStart !== null && selectionStart !== void 0 ? selectionStart : 0, selectionEnd !== null && selectionEnd !== void 0 ? selectionEnd : 0],
+            selection: [selectionStart || 0, selectionEnd || 0],
         };
     }
     get maxLength() {
         const { maxLength } = this.element;
         return maxLength === -1 ? Infinity : maxLength;
     }
+    destroy() {
+        this.eventListener.destroy();
+        this.teardowns.forEach(teardown => teardown === null || teardown === void 0 ? void 0 : teardown());
+    }
+    updateElementState({ value, selection }, eventInit = {
+        inputType: 'insertText',
+        data: null,
+    }) {
+        const initialValue = this.elementState.value;
+        this.updateValue(value);
+        this.updateSelectionRange(selection);
+        if (initialValue !== value) {
+            this.dispatchInputEvent(eventInit);
+        }
+    }
     updateSelectionRange([from, to]) {
-        var _a;
-        const { element } = this;
-        if (element.matches(':focus') &&
-            (element.selectionStart !== from || element.selectionEnd !== to)) {
-            (_a = element.setSelectionRange) === null || _a === void 0 ? void 0 : _a.call(element, from, to);
+        var _a, _b;
+        if (this.element.selectionStart !== from || this.element.selectionEnd !== to) {
+            (_b = (_a = this.element).setSelectionRange) === null || _b === void 0 ? void 0 : _b.call(_a, from, to);
         }
     }
     updateValue(value) {
-        /**
-         * Don't "disturb" unnecessarily `value`-setter
-         * (i.e. it breaks React controlled input behavior)
-         */
-        if (this.element.value !== value || this.element.isContentEditable) {
-            this.element.value = value;
-        }
+        this.element.value = value;
     }
     ensureValueFitsMask() {
-        this.updateElementState(maskitoTransform(this.elementState, this.options), {
-            inputType: 'insertText',
-            data: null,
-        });
+        this.updateElementState(maskitoTransform(this.elementState, this.options));
     }
     dispatchInputEvent(eventInit = {
         inputType: 'insertText',
@@ -730,75 +577,70 @@ class Maskito extends MaskHistory {
             this.element.dispatchEvent(new InputEvent('input', Object.assign(Object.assign({}, eventInit), { bubbles: true, cancelable: false })));
         }
     }
-    handleDelete({ event, selection, isForward, }) {
+    handleDelete({ event, selection, isForward, force = false, }) {
         const initialState = {
             value: this.elementState.value,
             selection,
         };
+        const [initialFrom, initialTo] = initialState.selection;
         const { elementState } = this.preprocessor({
             elementState: initialState,
             data: '',
         }, isForward ? 'deleteForward' : 'deleteBackward');
         const maskModel = new MaskModel(elementState, this.options);
-        maskModel.deleteCharacters();
+        const [from, to] = elementState.selection;
+        maskModel.deleteCharacters([from, to]);
         const newElementState = this.postprocessor(maskModel, initialState);
+        const newPossibleValue = initialState.value.slice(0, initialFrom) +
+            initialState.value.slice(initialTo);
+        if (newPossibleValue === newElementState.value && !force) {
+            return;
+        }
+        event.preventDefault();
         if (areElementValuesEqual(initialState, elementState, maskModel, newElementState)) {
-            const [from, to] = elementState.selection;
-            event.preventDefault();
             // User presses Backspace/Delete for the fixed value
             return this.updateSelectionRange(isForward ? [to, to] : [from, from]);
         }
-        this.upcomingElementState = newElementState;
+        this.updateElementState(newElementState, {
+            inputType: event.inputType,
+            data: null,
+        });
+        this.updateHistory(newElementState);
     }
     handleInsert(event, data) {
-        const { options, maxLength, elementState: initialElementState } = this;
-        const [from, to] = initialElementState.selection;
+        const initialElementState = this.elementState;
         const { elementState, data: insertedText = data } = this.preprocessor({
             data,
             elementState: initialElementState,
         }, 'insert');
-        const maskModel = new MaskModel(elementState, options);
+        const maskModel = new MaskModel(elementState, this.options);
         try {
-            maskModel.addCharacters(insertedText);
+            maskModel.addCharacters(elementState.selection, insertedText);
         }
         catch (_a) {
             return event.preventDefault();
         }
-        this.upcomingElementState = this.clampState(this.postprocessor(maskModel, initialElementState));
-        /**
-         * When textfield value length is already equal to attribute `maxlength`,
-         * pressing any key (even with valid value) does not emit `input` event
-         * (except to the case when user replaces some characters by selection).
-         */
-        const noInputEventDispatch = initialElementState.value.length >= maxLength && from === to;
-        if (noInputEventDispatch) {
-            if (options.overwriteMode === 'replace' &&
-                !areElementStatesEqual(this.upcomingElementState, initialElementState)) {
-                this.dispatchInputEvent({ inputType: 'insertText', data });
-            }
-            else {
-                /**
-                 * This `beforeinput` event will not be followed by `input` event –
-                 * clear computed state to avoid any possible side effect
-                 * for new possible `input` event without preceding `beforeinput` event
-                 * (e.g. browser autofill, `document.execCommand('delete')` etc.)
-                 */
-                this.upcomingElementState = null;
-            }
+        const [from, to] = elementState.selection;
+        const newPossibleValue = initialElementState.value.slice(0, from) +
+            data +
+            initialElementState.value.slice(to);
+        const newElementState = this.postprocessor(maskModel, initialElementState);
+        if (newElementState.value.length > this.maxLength) {
+            return event.preventDefault();
+        }
+        if (newPossibleValue !== newElementState.value) {
+            event.preventDefault();
+            this.updateElementState(newElementState, {
+                data,
+                inputType: event.inputType,
+            });
+            this.updateHistory(newElementState);
         }
     }
     handleEnter(event) {
-        if (this.isTextArea || this.element.isContentEditable) {
+        if (this.isTextArea) {
             this.handleInsert(event, '\n');
         }
-    }
-    clampState({ value, selection }) {
-        const [from, to] = selection;
-        const max = this.maxLength;
-        return {
-            value: value.slice(0, max),
-            selection: [Math.min(from, max), Math.min(to, max)],
-        };
     }
 }
 
@@ -6440,19 +6282,6 @@ var AsYouType = /*#__PURE__*/function () {
   return AsYouType;
 }();
 
-/**
- * Clamps a value between two inclusive limits
- *
- * @param value
- * @param min lower limit
- * @param max upper limit
- */
-function clamp(value, min, max) {
-    const clampedValue = Math.min(Number(max), Math.max(Number(min), Number(value)));
-    return (value instanceof Date ? new Date(clampedValue) : clampedValue);
-}
-
-// eslint-disable-next-line i18n/no-russian-character
 const DEFAULT_DECIMAL_PSEUDO_SEPARATORS = ['.', ',', 'б', 'ю'];
 
 /**
@@ -6500,11 +6329,17 @@ const CHAR_JP_HYPHEN = '\u30FC';
 
 const TIME_FIXED_CHARACTERS = [':', '.'];
 
-function identity(x) {
-    return x;
+/**
+ * Clamps a value between two inclusive limits
+ *
+ * @param value
+ * @param min lower limit
+ * @param max upper limit
+ */
+function clamp(value, min, max) {
+    const clampedValue = Math.min(Number(max), Math.max(Number(min), Number(value)));
+    return (value instanceof Date ? new Date(clampedValue) : clampedValue);
 }
-// eslint-disable-next-line  @typescript-eslint/no-empty-function
-function noop() { }
 
 /**
  * Copy-pasted solution from lodash
@@ -6513,9 +6348,7 @@ function noop() { }
 const reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
 const reHasRegExpChar = new RegExp(reRegExpChar.source);
 function escapeRegExp(str) {
-    return str && reHasRegExpChar.test(str)
-        ? str.replaceAll(reRegExpChar, String.raw `\$&`)
-        : str;
+    return str && reHasRegExpChar.test(str) ? str.replace(reRegExpChar, '\\$&') : str;
 }
 
 function extractAffixes(value, { prefix, postfix }) {
@@ -6524,13 +6357,8 @@ function extractAffixes(value, { prefix, postfix }) {
     const postfixRegExp = new RegExp(`${escapeRegExp(postfix)}$`);
     const [extractedPrefix = ''] = (_a = value.match(prefixRegExp)) !== null && _a !== void 0 ? _a : [];
     const [extractedPostfix = ''] = (_b = value.match(postfixRegExp)) !== null && _b !== void 0 ? _b : [];
-    return {
-        extractedPrefix,
-        extractedPostfix,
-        cleanValue: extractedPrefix || extractedPostfix
-            ? value.slice(extractedPrefix.length, extractedPostfix.length ? -extractedPostfix.length : Infinity)
-            : value,
-    };
+    const cleanValue = value.replace(prefixRegExp, '').replace(postfixRegExp, '');
+    return { extractedPrefix, extractedPostfix, cleanValue };
 }
 
 function findCommonBeginningSubstr(a, b) {
@@ -6545,31 +6373,24 @@ function findCommonBeginningSubstr(a, b) {
 }
 
 /**
- * Replace fullwidth numbers with half width number
- * @param fullWidthNumber full width number
- * @returns processed half width number
+ * Returns current active element, including shadow dom
+ *
+ * @return element or null
  */
-function toHalfWidthNumber(fullWidthNumber) {
-    return fullWidthNumber.replaceAll(/[０-９]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 0xfee0));
+function getFocused({ activeElement }) {
+    if (!(activeElement === null || activeElement === void 0 ? void 0 : activeElement.shadowRoot)) {
+        return activeElement;
+    }
+    let element = activeElement.shadowRoot.activeElement;
+    while (element === null || element === void 0 ? void 0 : element.shadowRoot) {
+        element = element.shadowRoot.activeElement;
+    }
+    return element;
 }
 
-/**
- * Convert full width numbers like １, ２ to half width numbers 1, 2
- */
-function createFullWidthToHalfWidthPreprocessor() {
-    return ({ elementState, data }) => {
-        const { value, selection } = elementState;
-        return {
-            elementState: {
-                selection,
-                value: toHalfWidthNumber(value),
-            },
-            data: toHalfWidthNumber(data),
-        };
-    };
+function identity(x) {
+    return x;
 }
-
-new RegExp(`[${TIME_FIXED_CHARACTERS.map(escapeRegExp).join('')}]$`);
 
 function maskitoPostfixPostprocessorGenerator(postfix) {
     const postfixRE = new RegExp(`${escapeRegExp(postfix)}$`);
@@ -6584,7 +6405,7 @@ function maskitoPostfixPostprocessorGenerator(postfix) {
                 return { selection, value: value + postfix };
             }
             const initialValueBeforePostfix = initialElementState.value.replace(postfixRE, '');
-            const postfixWasModified = initialElementState.selection[1] > initialValueBeforePostfix.length;
+            const postfixWasModified = initialElementState.selection[1] >= initialValueBeforePostfix.length;
             const alreadyExistedValueBeforePostfix = findCommonBeginningSubstr(initialValueBeforePostfix, value);
             return {
                 selection,
@@ -6632,8 +6453,16 @@ function maskitoEventHandler(name, handler, eventListenerOptions) {
     };
 }
 
-function maskitoSelectionChangeHandler(handler) {
-    return (element, options) => {
+function maskitoAddOnFocusPlugin(value) {
+    return maskitoEventHandler('focus', element => {
+        if (!element.value) {
+            maskitoUpdateElement(element, value);
+        }
+    });
+}
+
+function maskitoCaretGuard(guard) {
+    return element => {
         const document = element.ownerDocument;
         let isPointerDown = 0;
         const onPointerDown = () => isPointerDown++;
@@ -6641,7 +6470,7 @@ function maskitoSelectionChangeHandler(handler) {
             isPointerDown = Math.max(--isPointerDown, 0);
         };
         const listener = () => {
-            if (!element.matches(':focus')) {
+            if (getFocused(document) !== element) {
                 return;
             }
             if (isPointerDown) {
@@ -6650,53 +6479,49 @@ function maskitoSelectionChangeHandler(handler) {
                     passive: true,
                 });
             }
-            handler(element, options);
+            const start = element.selectionStart || 0;
+            const end = element.selectionEnd || 0;
+            const [fromLimit, toLimit] = guard(element.value, [start, end]);
+            if (fromLimit > start || toLimit < end) {
+                element.setSelectionRange(clamp(start, fromLimit, toLimit), clamp(end, fromLimit, toLimit));
+            }
         };
         document.addEventListener('selectionchange', listener, { passive: true });
-        // Safari does not fire `selectionchange` on focus after programmatic update of textfield value
-        element.addEventListener('focus', listener, { passive: true });
         element.addEventListener('mousedown', onPointerDown, { passive: true });
         document.addEventListener('mouseup', onPointerUp, { passive: true });
         return () => {
             document.removeEventListener('selectionchange', listener);
-            element.removeEventListener('focus', listener);
-            element.removeEventListener('mousedown', onPointerDown);
+            document.removeEventListener('mousedown', onPointerDown);
             document.removeEventListener('mouseup', onPointerUp);
         };
     };
 }
 
-function maskitoCaretGuard(guard) {
-    return maskitoSelectionChangeHandler((element) => {
-        var _a, _b;
-        const start = (_a = element.selectionStart) !== null && _a !== void 0 ? _a : 0;
-        const end = (_b = element.selectionEnd) !== null && _b !== void 0 ? _b : 0;
-        const [fromLimit, toLimit] = guard(element.value, [start, end]);
-        if (fromLimit > start || toLimit < end) {
-            element.setSelectionRange(clamp(start, fromLimit, toLimit), clamp(end, fromLimit, toLimit));
+function maskitoRemoveOnBlurPlugin(value) {
+    return maskitoEventHandler('blur', element => {
+        if (element.value === value) {
+            maskitoUpdateElement(element, '');
         }
     });
 }
 
 function maskitoWithPlaceholder(placeholder, focusedOnly = false) {
-    let lastClearValue = '';
-    let action = 'validation';
     const removePlaceholder = (value) => {
-        for (let i = value.length - 1; i >= lastClearValue.length; i--) {
+        for (let i = value.length - 1; i >= 0; i--) {
             if (value[i] !== placeholder[i]) {
                 return value.slice(0, i + 1);
             }
         }
-        return value.slice(0, lastClearValue.length);
+        return '';
     };
-    const plugins = [maskitoCaretGuard((value) => [0, removePlaceholder(value).length])];
+    const plugins = [maskitoCaretGuard(value => [0, removePlaceholder(value).length])];
     let focused = false;
     if (focusedOnly) {
-        const focus = maskitoEventHandler('focus', (element) => {
+        const focus = maskitoEventHandler('focus', element => {
             focused = true;
             maskitoUpdateElement(element, element.value + placeholder.slice(element.value.length));
         }, { capture: true });
-        const blur = maskitoEventHandler('blur', (element) => {
+        const blur = maskitoEventHandler('blur', element => {
             focused = false;
             maskitoUpdateElement(element, removePlaceholder(element.value));
         }, { capture: true });
@@ -6706,8 +6531,7 @@ function maskitoWithPlaceholder(placeholder, focusedOnly = false) {
         plugins,
         removePlaceholder,
         preprocessors: [
-            ({ elementState, data }, actionType) => {
-                action = actionType;
+            ({ elementState, data }) => {
                 const { value, selection } = elementState;
                 return {
                     elementState: {
@@ -6719,38 +6543,26 @@ function maskitoWithPlaceholder(placeholder, focusedOnly = false) {
             },
         ],
         postprocessors: [
-            ({ value, selection }, initialElementState) => {
-                lastClearValue = value;
-                const justPlaceholderRemoval = value +
-                    placeholder.slice(value.length, initialElementState.value.length) ===
-                    initialElementState.value;
-                if (action === 'validation' && justPlaceholderRemoval) {
-                    /**
-                     * If `value` still equals to `initialElementState.value`,
-                     * then it means that value is patched programmatically (from Maskito's plugin or externally).
-                     * In this case, we don't want to mutate value and automatically add/remove placeholder.
-                     * ___
-                     * For example, developer wants to remove manually placeholder (+ do something else with value) on blur.
-                     * Without this condition, placeholder will be unexpectedly added again.
-                     */
-                    return { selection, value: initialElementState.value };
+            ({ value, selection }, initialElementState) => 
+            /**
+             * If `value` still equals to `initialElementState.value`,
+             * then it means that value is patched programmatically (from Maskito's plugin or externally).
+             * In this case, we don't want to mutate value and automatically add placeholder.
+             * ___
+             * For example, developer wants to remove manually placeholder (+ do something else with value) on blur.
+             * Without this condition, placeholder will be unexpectedly added again.
+             */
+            value !== initialElementState.value && (focused || !focusedOnly)
+                ? {
+                    value: value + placeholder.slice(value.length),
+                    selection,
                 }
-                const newValue = focused || !focusedOnly
-                    ? value + placeholder.slice(value.length)
-                    : value;
-                if (newValue === initialElementState.value &&
-                    action === 'deleteBackward') {
-                    const [caretIndex] = initialElementState.selection;
-                    return {
-                        value: newValue,
-                        selection: [caretIndex, caretIndex],
-                    };
-                }
-                return { value: newValue, selection };
-            },
+                : { value, selection },
         ],
     };
 }
+
+new RegExp(`[${TIME_FIXED_CHARACTERS.map(escapeRegExp).join('')}]$`);
 
 /**
  * It drops prefix and postfix from data
@@ -6770,22 +6582,19 @@ function createAffixesFilterPreprocessor({ prefix, postfix, }) {
     };
 }
 
-function generateMaskExpression({ decimalPseudoSeparators, decimalSeparator, maximumFractionDigits, min, minusSign, postfix, prefix, pseudoMinuses, thousandSeparator, }) {
-    const computedPrefix = min < 0 && [minusSign, ...pseudoMinuses].includes(prefix)
-        ? ''
-        : computeAllOptionalCharsRegExp(prefix);
-    const digit = String.raw `\d`;
-    const optionalMinus = min < 0 ? `[${minusSign}${pseudoMinuses.map((x) => `\\${x}`).join('')}]?` : '';
-    const integerPart = thousandSeparator
-        ? `[${digit}${escapeRegExp(thousandSeparator).replaceAll(/\s/g, String.raw `\s`)}]*`
-        : `[${digit}]*`;
-    const precisionPart = Number.isFinite(maximumFractionDigits)
-        ? maximumFractionDigits
+function generateMaskExpression({ decimalSeparator, isNegativeAllowed, precision, thousandSeparator, prefix, postfix, decimalPseudoSeparators = [], pseudoMinuses = [], }) {
+    const computedPrefix = computeAllOptionalCharsRegExp(prefix);
+    const digit = '\\d';
+    const optionalMinus = isNegativeAllowed
+        ? `[${CHAR_MINUS}${pseudoMinuses.map(x => `\\${x}`).join('')}]?`
         : '';
-    const decimalPart = maximumFractionDigits > 0
+    const integerPart = thousandSeparator
+        ? `[${digit}${escapeRegExp(thousandSeparator).replace(/\s/g, '\\s')}]*`
+        : `[${digit}]*`;
+    const decimalPart = precision > 0
         ? `([${escapeRegExp(decimalSeparator)}${decimalPseudoSeparators
             .map(escapeRegExp)
-            .join('')}]${digit}{0,${precisionPart}})?`
+            .join('')}]${digit}{0,${Number.isFinite(precision) ? precision : ''}})?`
         : '';
     const computedPostfix = computeAllOptionalCharsRegExp(postfix);
     return new RegExp(`^${computedPrefix}${optionalMinus}${integerPart}${decimalPart}${computedPostfix}$`);
@@ -6794,30 +6603,23 @@ function computeAllOptionalCharsRegExp(str) {
     return str
         ? `${str
             .split('')
-            .map((char) => `${escapeRegExp(char)}?`)
+            .map(char => `${escapeRegExp(char)}?`)
             .join('')}`
         : '';
 }
 
-function maskitoParseNumber(maskedNumber, 
-// TODO(v4): decimalSeparatorOrParams: MaskitoNumberParams | string => params: MaskitoNumberParams = {}
-decimalSeparatorOrParams = {}) {
-    const { decimalSeparator = '.', minusSign = '' } = typeof decimalSeparatorOrParams === 'string'
-        ? { decimalSeparator: decimalSeparatorOrParams }
-        : decimalSeparatorOrParams;
-    const hasNegativeSign = !!new RegExp(`^\\D*[${escapeRegExp(minusSign)}\\${DEFAULT_PSEUDO_MINUSES.join('\\')}]`).exec(maskedNumber);
+function maskitoParseNumber(maskedNumber, decimalSeparator = '.') {
+    const hasNegativeSign = !!maskedNumber.match(new RegExp(`^\\D*[${CHAR_MINUS}\\${CHAR_HYPHEN}${CHAR_EN_DASH}${CHAR_EM_DASH}]`));
     const escapedDecimalSeparator = escapeRegExp(decimalSeparator);
     const unmaskedNumber = maskedNumber
         // drop all decimal separators not followed by a digit
-        .replaceAll(new RegExp(`${escapedDecimalSeparator}(?!\\d)`, 'g'), '')
+        .replace(new RegExp(`${escapedDecimalSeparator}(?!\\d)`, 'g'), '')
         // drop all non-digit characters except decimal separator
-        .replaceAll(new RegExp(`[^\\d${escapedDecimalSeparator}]`, 'g'), '')
-        .replace(decimalSeparator, decimalSeparator && '.');
-    if (unmaskedNumber) {
-        const sign = hasNegativeSign ? CHAR_HYPHEN : '';
-        return Number(`${sign}${unmaskedNumber}`);
-    }
-    return NaN;
+        .replace(new RegExp(`[^\\d${escapedDecimalSeparator}]`, 'g'), '')
+        .replace(decimalSeparator, '.');
+    return unmaskedNumber
+        ? Number((hasNegativeSign ? CHAR_HYPHEN : '') + unmaskedNumber)
+        : NaN;
 }
 
 /**
@@ -6827,38 +6629,28 @@ decimalSeparatorOrParams = {}) {
  * @return string representation of a number
  */
 function stringifyNumberWithoutExp(value) {
-    var _a;
     const valueAsString = String(value);
-    const [numberPart = '', expPart] = valueAsString.split('e-');
+    const [numberPart, expPart] = valueAsString.split('e-');
     let valueWithoutExp = valueAsString;
     if (expPart) {
         const [, fractionalPart] = numberPart.split('.');
-        const decimalDigits = Number(expPart) + ((_a = fractionalPart === null || fractionalPart === void 0 ? void 0 : fractionalPart.length) !== null && _a !== void 0 ? _a : 0);
+        const decimalDigits = Number(expPart) + ((fractionalPart === null || fractionalPart === void 0 ? void 0 : fractionalPart.length) || 0);
         valueWithoutExp = value.toFixed(decimalDigits);
     }
     return valueWithoutExp;
 }
 
-function toNumberParts(value, { decimalSeparator, minusSign }) {
-    const [integerWithMinus = '', decimalPart = ''] = decimalSeparator
-        ? value.split(decimalSeparator)
-        : [value];
-    const escapedMinus = escapeRegExp(minusSign);
-    const [, minus = '', integerPart = ''] = new RegExp(`^(?:[^\\d${escapedMinus}])?(${escapedMinus})?(.*)`).exec(integerWithMinus) || [];
-    return { minus, integerPart, decimalPart };
-}
-
 function validateDecimalPseudoSeparators({ decimalSeparator, thousandSeparator, decimalPseudoSeparators = DEFAULT_DECIMAL_PSEUDO_SEPARATORS, }) {
-    return decimalPseudoSeparators.filter((char) => char !== thousandSeparator && char !== decimalSeparator);
+    return decimalPseudoSeparators.filter(char => char !== thousandSeparator && char !== decimalSeparator);
 }
 
 /**
- * If `minimumFractionDigits` is `>0`, it pads decimal part with zeroes
- * (until number of digits after decimalSeparator is equal to the `minimumFractionDigits`).
- * @example 1,42 => (`minimumFractionDigits` is equal to 4) => 1,4200.
+ * If `decimalZeroPadding` is `true`, it pads decimal part with zeroes
+ * (until number of digits after decimalSeparator is equal to the `precision`).
+ * @example 1,42 => (`precision` is equal to 4) => 1,4200.
  */
-function createDecimalZeroPaddingPostprocessor({ decimalSeparator, minimumFractionDigits, prefix, postfix, minusSign, }) {
-    if (!minimumFractionDigits) {
+function createDecimalZeroPaddingPostprocessor({ decimalSeparator, precision, decimalZeroPadding, prefix, postfix, }) {
+    if (precision <= 0 || !decimalZeroPadding) {
         return identity;
     }
     return ({ value, selection }) => {
@@ -6866,7 +6658,7 @@ function createDecimalZeroPaddingPostprocessor({ decimalSeparator, minimumFracti
             prefix,
             postfix,
         });
-        if (Number.isNaN(maskitoParseNumber(cleanValue, { decimalSeparator, minusSign }))) {
+        if (Number.isNaN(maskitoParseNumber(cleanValue, decimalSeparator))) {
             return { value, selection };
         }
         const [integerPart, decimalPart = ''] = cleanValue.split(decimalSeparator);
@@ -6874,7 +6666,7 @@ function createDecimalZeroPaddingPostprocessor({ decimalSeparator, minimumFracti
             value: extractedPrefix +
                 integerPart +
                 decimalSeparator +
-                decimalPart.padEnd(minimumFractionDigits, '0') +
+                decimalPart.padEnd(precision, '0') +
                 extractedPostfix,
             selection,
         };
@@ -6882,36 +6674,27 @@ function createDecimalZeroPaddingPostprocessor({ decimalSeparator, minimumFracti
 }
 
 /**
- * Make textfield empty if there is no integer part and all decimal digits are zeroes.
- * @example 0|,00 => Backspace => Empty.
- * @example -0|,00 => Backspace => -.
- * @example ,42| => Backspace x2 => ,|00 => Backspace => Empty
+ * Replace fullwidth numbers with half width number
+ * @param fullWidthNumber full width number
+ * @returns processed half width number
  */
-function emptyPostprocessor({ prefix, postfix, decimalSeparator, minusSign, }) {
-    return ({ value, selection }) => {
-        const [caretIndex] = selection;
-        const { cleanValue, extractedPrefix, extractedPostfix } = extractAffixes(value, {
-            prefix,
-            postfix,
-        });
-        const { minus, integerPart, decimalPart } = toNumberParts(cleanValue, {
-            decimalSeparator,
-            minusSign,
-        });
-        const aloneDecimalSeparator = !integerPart &&
-            !decimalPart &&
-            Boolean(decimalSeparator) &&
-            cleanValue.includes(decimalSeparator);
-        if ((!integerPart &&
-            !Number(decimalPart) &&
-            caretIndex === (minus + extractedPrefix).length) ||
-            aloneDecimalSeparator) {
-            return {
+function toHalfWidthNumber(fullWidthNumber) {
+    return fullWidthNumber.replace(/[０-９]/g, s => String.fromCharCode(s.charCodeAt(0) - 0xfee0));
+}
+
+/**
+ * Convert full width numbers like １, ２ to half width numbers 1, 2
+ */
+function createFullWidthToHalfWidthPreprocessor() {
+    return ({ elementState, data }) => {
+        const { value, selection } = elementState;
+        return {
+            elementState: {
                 selection,
-                value: extractedPrefix + minus + extractedPostfix,
-            };
-        }
-        return { value, selection };
+                value: toHalfWidthNumber(value),
+            },
+            data: toHalfWidthNumber(data),
+        };
     };
 }
 
@@ -6925,7 +6708,7 @@ function emptyPostprocessor({ prefix, postfix, decimalSeparator, minusSign, }) {
  * maskitoOptions = maskitoNumberOptionsGenerator({postfix: ' years'});
  * ```
  */
-function createInitializationOnlyPreprocessor({ decimalPseudoSeparators, decimalSeparator, minusSign, postfix, prefix, pseudoMinuses, }) {
+function createInitializationOnlyPreprocessor({ decimalSeparator, decimalPseudoSeparators, pseudoMinuses, prefix, postfix, }) {
     let isInitializationPhase = true;
     const cleanNumberMask = generateMaskExpression({
         decimalSeparator,
@@ -6934,39 +6717,19 @@ function createInitializationOnlyPreprocessor({ decimalPseudoSeparators, decimal
         prefix: '',
         postfix: '',
         thousandSeparator: '',
-        maximumFractionDigits: Infinity,
-        min: Number.MIN_SAFE_INTEGER,
-        minusSign,
+        precision: Infinity,
+        isNegativeAllowed: true,
     });
     return ({ elementState, data }) => {
         if (!isInitializationPhase) {
             return { elementState, data };
         }
         isInitializationPhase = false;
-        const { value, selection } = elementState;
-        const [from, to] = selection;
-        const { extractedPrefix, cleanValue, extractedPostfix } = extractAffixes(value, {
-            prefix,
-            postfix,
-        });
-        const cleanState = maskitoTransform({
-            selection: [
-                Math.max(from - extractedPrefix.length, 0),
-                clamp(to - extractedPrefix.length, 0, cleanValue.length),
-            ],
-            value: cleanValue,
-        }, {
-            mask: cleanNumberMask,
-        });
-        const [cleanFrom, cleanTo] = cleanState.selection;
+        const { cleanValue } = extractAffixes(elementState.value, { prefix, postfix });
         return {
-            elementState: {
-                selection: [
-                    cleanFrom + extractedPrefix.length,
-                    cleanTo + extractedPrefix.length,
-                ],
-                value: extractedPrefix + cleanState.value + extractedPostfix,
-            },
+            elementState: maskitoTransform(Object.assign(Object.assign({}, elementState), { value: cleanValue }), {
+                mask: cleanNumberMask,
+            }),
             data,
         };
     };
@@ -7003,10 +6766,8 @@ function createLeadingZeroesValidationPostprocessor({ decimalSeparator, thousand
             prefix,
             postfix,
         });
-        const hasDecimalSeparator = Boolean(decimalSeparator) && cleanValue.includes(decimalSeparator);
-        const [integerPart = '', decimalPart = ''] = decimalSeparator
-            ? cleanValue.split(decimalSeparator)
-            : [cleanValue];
+        const hasDecimalSeparator = cleanValue.includes(decimalSeparator);
+        const [integerPart, decimalPart = ''] = cleanValue.split(decimalSeparator);
         const zeroTrimmedIntegerPart = trimLeadingZeroes(integerPart);
         if (integerPart === zeroTrimmedIntegerPart) {
             return { value, selection };
@@ -7028,9 +6789,9 @@ function createLeadingZeroesValidationPostprocessor({ decimalSeparator, thousand
  * This postprocessor is connected with {@link createMinMaxPlugin}:
  * both validate `min`/`max` bounds of entered value (but at the different point of time).
  */
-function createMinMaxPostprocessor({ min, max, decimalSeparator, minusSign, }) {
+function createMinMaxPostprocessor({ min, max, decimalSeparator, }) {
     return ({ value, selection }) => {
-        const parsedNumber = maskitoParseNumber(value, { decimalSeparator, minusSign });
+        const parsedNumber = maskitoParseNumber(value, decimalSeparator);
         const limitedValue = 
         /**
          * We cannot limit lower bound if user enters positive number.
@@ -7043,10 +6804,10 @@ function createMinMaxPostprocessor({ min, max, decimalSeparator, minusSign, }) {
          * Value is -10 => Without this condition user cannot delete 0 to enter another digit
          */
         parsedNumber > 0 ? Math.min(parsedNumber, max) : Math.max(parsedNumber, min);
-        if (parsedNumber && limitedValue !== parsedNumber) {
+        if (!Number.isNaN(parsedNumber) && limitedValue !== parsedNumber) {
             const newValue = `${limitedValue}`
                 .replace('.', decimalSeparator)
-                .replace(CHAR_HYPHEN, minusSign);
+                .replace(CHAR_HYPHEN, CHAR_MINUS);
             return {
                 value: newValue,
                 selection: [newValue.length, newValue.length],
@@ -7061,20 +6822,20 @@ function createMinMaxPostprocessor({ min, max, decimalSeparator, minusSign, }) {
 
 /**
  * Manage caret-navigation when user "deletes" non-removable digits or separators
- * @example 1,|42 => Backspace => 1|,42 (only if `minimumFractionDigits` is `>0`)
- * @example 1|,42 => Delete => 1,|42 (only if `minimumFractionDigits` is `>0`)
- * @example 0,|00 => Delete => 0,0|0 (only if `minimumFractionDigits` is `>0`)
+ * @example 1,|42 => Backspace => 1|,42 (only if `decimalZeroPadding` is `true`)
+ * @example 1|,42 => Delete => 1,|42 (only if `decimalZeroPadding` is `true`)
+ * @example 0,|00 => Delete => 0,0|0 (only if `decimalZeroPadding` is `true`)
  * @example 1 |000 => Backspace => 1| 000 (always)
  */
-function createNonRemovableCharsDeletionPreprocessor({ decimalSeparator, thousandSeparator, minimumFractionDigits, }) {
+function createNonRemovableCharsDeletionPreprocessor({ decimalSeparator, thousandSeparator, decimalZeroPadding, }) {
     return ({ elementState, data }, actionType) => {
         const { value, selection } = elementState;
         const [from, to] = selection;
         const selectedCharacters = value.slice(from, to);
-        const nonRemovableSeparators = minimumFractionDigits
+        const nonRemovableSeparators = decimalZeroPadding
             ? [decimalSeparator, thousandSeparator]
             : [thousandSeparator];
-        const areNonRemovableZeroesSelected = Boolean(minimumFractionDigits) &&
+        const areNonRemovableZeroesSelected = decimalZeroPadding &&
             from > value.indexOf(decimalSeparator) &&
             Boolean(selectedCharacters.match(/^0+$/gi));
         if ((actionType !== 'deleteBackward' && actionType !== 'deleteForward') ||
@@ -7099,24 +6860,21 @@ function createNonRemovableCharsDeletionPreprocessor({ decimalSeparator, thousan
  * It pads integer part with zero if user types decimal separator (for empty input).
  * @example Empty input => User types "," (decimal separator) => 0,|
  */
-function createNotEmptyIntegerPartPreprocessor({ decimalSeparator, maximumFractionDigits, prefix, postfix, }) {
+function createNotEmptyIntegerPartPreprocessor({ decimalSeparator, precision, prefix, postfix, }) {
     const startWithDecimalSepRegExp = new RegExp(`^\\D*${escapeRegExp(decimalSeparator)}`);
     return ({ elementState, data }) => {
         const { value, selection } = elementState;
-        const { cleanValue, extractedPrefix } = extractAffixes(value, {
+        const { cleanValue } = extractAffixes(value, {
             prefix,
             postfix,
         });
-        const [from, to] = selection;
-        const cleanFrom = clamp(from - extractedPrefix.length, 0, cleanValue.length);
-        const cleanTo = clamp(to - extractedPrefix.length, 0, cleanValue.length);
-        if (maximumFractionDigits <= 0 ||
-            cleanValue.slice(0, cleanFrom).includes(decimalSeparator) ||
-            cleanValue.slice(cleanTo).includes(decimalSeparator) ||
+        const [from] = selection;
+        if (precision <= 0 ||
+            cleanValue.includes(decimalSeparator) ||
             !data.match(startWithDecimalSepRegExp)) {
             return { elementState, data };
         }
-        const digitsBeforeCursor = /\d+/.exec(cleanValue.slice(0, cleanFrom));
+        const digitsBeforeCursor = cleanValue.slice(0, from).match(/\d+/);
         return {
             elementState,
             data: digitsBeforeCursor ? data : `0${data}`,
@@ -7155,9 +6913,6 @@ function createPseudoCharactersPreprocessor({ validCharacter, pseudoCharacters, 
  * @example 1|23,45 => Press comma (decimal separator) => 1|23,45 (do nothing).
  */
 function createRepeatedDecimalSeparatorPreprocessor({ decimalSeparator, prefix, postfix, }) {
-    if (!decimalSeparator) {
-        return identity;
-    }
     return ({ elementState, data }) => {
         const { value, selection } = elementState;
         const [from, to] = selection;
@@ -7167,7 +6922,7 @@ function createRepeatedDecimalSeparatorPreprocessor({ decimalSeparator, prefix, 
             data: !cleanValue.includes(decimalSeparator) ||
                 value.slice(from, to + 1).includes(decimalSeparator)
                 ? data
-                : data.replaceAll(new RegExp(escapeRegExp(decimalSeparator), 'gi'), ''),
+                : data.replace(new RegExp(escapeRegExp(decimalSeparator), 'gi'), ''),
         };
     };
 }
@@ -7176,43 +6931,31 @@ function createRepeatedDecimalSeparatorPreprocessor({ decimalSeparator, prefix, 
  * It adds symbol for separating thousands.
  * @example 1000000 => (thousandSeparator is equal to space) => 1 000 000.
  */
-function createThousandSeparatorPostprocessor({ thousandSeparator, decimalSeparator, prefix, postfix, minusSign, }) {
+function createThousandSeparatorPostprocessor({ thousandSeparator, decimalSeparator, prefix, postfix, }) {
     if (!thousandSeparator) {
         return identity;
     }
-    const isAllSpaces = (...chars) => chars.every((x) => /\s/.test(x));
+    const isAllSpaces = (...chars) => chars.every(x => /\s/.test(x));
     return ({ value, selection }) => {
-        const [initialFrom, initialTo] = selection;
-        let [from, to] = selection;
         const { cleanValue, extractedPostfix, extractedPrefix } = extractAffixes(value, {
             prefix,
             postfix,
         });
-        const { minus, integerPart, decimalPart } = toNumberParts(cleanValue, {
-            decimalSeparator,
-            minusSign,
-        });
-        const hasDecimalSeparator = decimalSeparator && cleanValue.includes(decimalSeparator);
-        const deletedChars = cleanValue.length -
-            (minus +
-                integerPart +
-                (hasDecimalSeparator ? decimalSeparator + decimalPart : '')).length;
-        if (deletedChars > 0 && initialFrom && initialFrom <= deletedChars) {
-            from -= deletedChars;
-        }
-        if (deletedChars > 0 && initialTo && initialTo <= deletedChars) {
-            to -= deletedChars;
-        }
+        const [integerPart, decimalPart = ''] = cleanValue
+            .replace(CHAR_MINUS, '')
+            .split(decimalSeparator);
+        const [initialFrom, initialTo] = selection;
+        let [from, to] = selection;
         const processedIntegerPart = Array.from(integerPart).reduceRight((formattedValuePart, char, i) => {
             const isLeadingThousandSeparator = !i && char === thousandSeparator;
             const isPositionForSeparator = !isLeadingThousandSeparator &&
-                Boolean(formattedValuePart.length) &&
+                formattedValuePart.length &&
                 (formattedValuePart.length + 1) % 4 === 0;
-            const isSeparator = char === thousandSeparator || isAllSpaces(char, thousandSeparator);
-            if (isPositionForSeparator && isSeparator) {
+            if (isPositionForSeparator &&
+                (char === thousandSeparator || isAllSpaces(char, thousandSeparator))) {
                 return thousandSeparator + formattedValuePart;
             }
-            if (!isPositionForSeparator && isSeparator) {
+            if (char === thousandSeparator && !isPositionForSeparator) {
                 if (i && i <= initialFrom) {
                     from--;
                 }
@@ -7224,19 +6967,19 @@ function createThousandSeparatorPostprocessor({ thousandSeparator, decimalSepara
             if (!isPositionForSeparator) {
                 return char + formattedValuePart;
             }
-            if (i < initialFrom) {
+            if (i <= initialFrom) {
                 from++;
             }
-            if (i < initialTo) {
+            if (i <= initialTo) {
                 to++;
             }
             return char + thousandSeparator + formattedValuePart;
         }, '');
         return {
             value: extractedPrefix +
-                minus +
+                (cleanValue.includes(CHAR_MINUS) ? CHAR_MINUS : '') +
                 processedIntegerPart +
-                (hasDecimalSeparator ? decimalSeparator : '') +
+                (cleanValue.includes(decimalSeparator) ? decimalSeparator : '') +
                 decimalPart +
                 extractedPostfix,
             selection: [from, to],
@@ -7245,13 +6988,11 @@ function createThousandSeparatorPostprocessor({ thousandSeparator, decimalSepara
 }
 
 /**
- * It drops decimal part if `maximumFractionDigits` is zero.
- * @example User pastes '123.45' (but `maximumFractionDigits` is zero) => 123
+ * It drops decimal part if precision is zero.
+ * @example User pastes '123.45' (but precision is zero) => 123
  */
-function createZeroPrecisionPreprocessor({ maximumFractionDigits, decimalSeparator, prefix, postfix, }) {
-    if (maximumFractionDigits > 0 ||
-        !decimalSeparator // all separators should be treated only as thousand separators
-    ) {
+function createZeroPrecisionPreprocessor({ precision, decimalSeparator, prefix, postfix, }) {
+    if (precision > 0) {
         return identity;
     }
     const decimalPartRegExp = new RegExp(`${escapeRegExp(decimalSeparator)}.*$`, 'g');
@@ -7291,12 +7032,14 @@ function createLeadingZeroesValidationPlugin({ decimalSeparator, thousandSeparat
         prefix,
         postfix,
     });
-    return maskitoEventHandler('blur', (element) => {
+    return maskitoEventHandler('blur', element => {
         const newValue = dropRepeatedLeadingZeroes({
             value: element.value,
             selection: DUMMY_SELECTION,
         }, { value: '', selection: DUMMY_SELECTION }).value;
-        maskitoUpdateElement(element, newValue);
+        if (element.value !== newValue) {
+            maskitoUpdateElement(element, newValue);
+        }
     }, { capture: true });
 }
 
@@ -7304,12 +7047,9 @@ function createLeadingZeroesValidationPlugin({ decimalSeparator, thousandSeparat
  * This plugin is connected with {@link createMinMaxPostprocessor}:
  * both validate `min`/`max` bounds of entered value (but at the different point of time).
  */
-function createMinMaxPlugin({ min, max, decimalSeparator, minusSign, }) {
+function createMinMaxPlugin({ min, max, decimalSeparator, }) {
     return maskitoEventHandler('blur', (element, options) => {
-        const parsedNumber = maskitoParseNumber(element.value, {
-            decimalSeparator,
-            minusSign,
-        });
+        const parsedNumber = maskitoParseNumber(element.value, decimalSeparator);
         const clampedNumber = clamp(parsedNumber, min, max);
         if (!Number.isNaN(parsedNumber) && parsedNumber !== clampedNumber) {
             maskitoUpdateElement(element, maskitoTransform(stringifyNumberWithoutExp(clampedNumber), options));
@@ -7323,63 +7063,51 @@ function createMinMaxPlugin({ min, max, decimalSeparator, minusSign, }) {
  * @example 1|,23 => Backspace => Blur => 0,23
  */
 function createNotEmptyIntegerPlugin({ decimalSeparator, prefix, postfix, }) {
-    if (!decimalSeparator) {
-        return noop;
-    }
-    return maskitoEventHandler('blur', (element) => {
+    return maskitoEventHandler('blur', element => {
         const { cleanValue, extractedPostfix, extractedPrefix } = extractAffixes(element.value, { prefix, postfix });
         const newValue = extractedPrefix +
             cleanValue.replace(new RegExp(`^(\\D+)?${escapeRegExp(decimalSeparator)}`), `$10${decimalSeparator}`) +
             extractedPostfix;
-        maskitoUpdateElement(element, newValue);
+        if (newValue !== element.value) {
+            maskitoUpdateElement(element, newValue);
+        }
     }, { capture: true });
 }
 
-const DEFAULT_PSEUDO_MINUSES = [
-    CHAR_HYPHEN,
-    CHAR_EN_DASH,
-    CHAR_EM_DASH,
-    CHAR_JP_HYPHEN,
-    CHAR_MINUS,
-];
-function maskitoNumberOptionsGenerator({ max = Number.MAX_SAFE_INTEGER, min = Number.MIN_SAFE_INTEGER, precision = 0, thousandSeparator = CHAR_NO_BREAK_SPACE, decimalSeparator = '.', decimalPseudoSeparators, decimalZeroPadding = false, prefix: unsafePrefix = '', postfix = '', minusSign = CHAR_MINUS, maximumFractionDigits = precision, minimumFractionDigits = decimalZeroPadding ? maximumFractionDigits : 0, } = {}) {
-    const pseudoMinuses = DEFAULT_PSEUDO_MINUSES.filter((char) => char !== thousandSeparator && char !== decimalSeparator && char !== minusSign);
+function maskitoNumberOptionsGenerator({ max = Number.MAX_SAFE_INTEGER, min = Number.MIN_SAFE_INTEGER, precision = 0, thousandSeparator = CHAR_NO_BREAK_SPACE, decimalSeparator = '.', decimalPseudoSeparators, decimalZeroPadding = false, prefix: unsafePrefix = '', postfix = '', } = {}) {
+    const pseudoMinuses = [
+        CHAR_HYPHEN,
+        CHAR_EN_DASH,
+        CHAR_EM_DASH,
+        CHAR_JP_HYPHEN,
+    ].filter(char => char !== thousandSeparator && char !== decimalSeparator);
     const validatedDecimalPseudoSeparators = validateDecimalPseudoSeparators({
         decimalSeparator,
         thousandSeparator,
         decimalPseudoSeparators,
     });
-    const prefix = unsafePrefix.endsWith(decimalSeparator) && maximumFractionDigits > 0
+    const prefix = unsafePrefix.endsWith(decimalSeparator) && precision > 0
         ? `${unsafePrefix}${CHAR_ZERO_WIDTH_SPACE}`
         : unsafePrefix;
-    const initializationOnlyPreprocessor = createInitializationOnlyPreprocessor({
-        decimalSeparator,
-        decimalPseudoSeparators: validatedDecimalPseudoSeparators,
-        pseudoMinuses,
-        prefix,
-        postfix,
-        minusSign,
-    });
-    decimalSeparator =
-        maximumFractionDigits <= 0 && decimalSeparator === thousandSeparator
-            ? ''
-            : decimalSeparator;
     return Object.assign(Object.assign({}, MASKITO_DEFAULT_OPTIONS), { mask: generateMaskExpression({
             decimalSeparator,
-            maximumFractionDigits,
-            min,
-            minusSign,
-            postfix,
-            prefix,
-            pseudoMinuses,
+            precision,
             thousandSeparator,
-            decimalPseudoSeparators: validatedDecimalPseudoSeparators,
+            prefix,
+            postfix,
+            isNegativeAllowed: min < 0,
         }), preprocessors: [
-            createFullWidthToHalfWidthPreprocessor(),
-            initializationOnlyPreprocessor,
+            createInitializationOnlyPreprocessor({
+                decimalSeparator,
+                decimalPseudoSeparators: validatedDecimalPseudoSeparators,
+                pseudoMinuses,
+                prefix,
+                postfix,
+            }),
             createAffixesFilterPreprocessor({ prefix, postfix }),
+            createFullWidthToHalfWidthPreprocessor(),
             createPseudoCharactersPreprocessor({
-                validCharacter: minusSign,
+                validCharacter: CHAR_MINUS,
                 pseudoCharacters: pseudoMinuses,
                 prefix,
                 postfix,
@@ -7392,17 +7120,17 @@ function maskitoNumberOptionsGenerator({ max = Number.MAX_SAFE_INTEGER, min = Nu
             }),
             createNotEmptyIntegerPartPreprocessor({
                 decimalSeparator,
-                maximumFractionDigits,
+                precision,
                 prefix,
                 postfix,
             }),
             createNonRemovableCharsDeletionPreprocessor({
                 decimalSeparator,
-                minimumFractionDigits,
+                decimalZeroPadding,
                 thousandSeparator,
             }),
             createZeroPrecisionPreprocessor({
-                maximumFractionDigits,
+                precision,
                 decimalSeparator,
                 prefix,
                 postfix,
@@ -7413,7 +7141,7 @@ function maskitoNumberOptionsGenerator({ max = Number.MAX_SAFE_INTEGER, min = Nu
                 postfix,
             }),
         ], postprocessors: [
-            createMinMaxPostprocessor({ decimalSeparator, min, max, minusSign }),
+            createMinMaxPostprocessor({ decimalSeparator, min, max }),
             maskitoPrefixPostprocessorGenerator(prefix),
             maskitoPostfixPostprocessorGenerator(postfix),
             createThousandSeparatorPostprocessor({
@@ -7421,20 +7149,13 @@ function maskitoNumberOptionsGenerator({ max = Number.MAX_SAFE_INTEGER, min = Nu
                 thousandSeparator,
                 prefix,
                 postfix,
-                minusSign,
             }),
             createDecimalZeroPaddingPostprocessor({
                 decimalSeparator,
+                decimalZeroPadding,
+                precision,
                 prefix,
                 postfix,
-                minusSign,
-                minimumFractionDigits: Math.min(minimumFractionDigits, maximumFractionDigits),
-            }),
-            emptyPostprocessor({
-                prefix,
-                postfix,
-                decimalSeparator,
-                minusSign,
             }),
         ], plugins: [
             createLeadingZeroesValidationPlugin({
@@ -7448,8 +7169,8 @@ function maskitoNumberOptionsGenerator({ max = Number.MAX_SAFE_INTEGER, min = Nu
                 prefix,
                 postfix,
             }),
-            createMinMaxPlugin({ min, max, decimalSeparator, minusSign }),
-        ], overwriteMode: minimumFractionDigits > 0
+            createMinMaxPlugin({ min, max, decimalSeparator }),
+        ], overwriteMode: decimalZeroPadding
             ? ({ value, selection: [from] }) => from <= value.indexOf(decimalSeparator) ? 'shift' : 'replace'
             : 'shift' });
 }
@@ -7505,13 +7226,13 @@ function generatePhoneMask({ value, template, prefix, }) {
             ? template
                 .slice(prefix.length)
                 .split('')
-                .map((сhar) => сhar === TEMPLATE_FILLER || /\d/.test(сhar) ? /\d/ : сhar)
+                .map(сhar => сhar === TEMPLATE_FILLER || /\d/.test(сhar) ? /\d/ : сhar)
             : new Array(Math.max(value.length - prefix.length, prefix.length)).fill(/\d/)),
     ];
 }
 
 function getPhoneTemplate(formatter, value, separator) {
-    formatter.input(value.replaceAll(/[^\d+]/g, ''));
+    formatter.input(value.replace(/[^\d+]/g, ''));
     const initialTemplate = formatter.getTemplate();
     const split = initialTemplate.split(' ');
     const template = split.length > 1
@@ -7540,7 +7261,6 @@ function phoneLengthPostprocessorGenerator(metadata) {
 
 function validatePhonePreprocessorGenerator({ prefix, countryIsoCode, metadata, }) {
     return ({ elementState, data }) => {
-        var _a;
         const { selection, value } = elementState;
         const [from] = selection;
         const selectionIncludesPrefix = from < prefix.length;
@@ -7549,13 +7269,13 @@ function validatePhonePreprocessorGenerator({ prefix, countryIsoCode, metadata, 
         if (value && !value.startsWith(cleanCode) && !data) {
             const formatter = new AsYouType({ defaultCountry: countryIsoCode }, metadata);
             formatter.input(value);
-            const numberValue = (_a = formatter.getNumberValue()) !== null && _a !== void 0 ? _a : '';
+            const numberValue = formatter.getNumberValue() || '';
             formatter.reset();
             return { elementState: { value: formatter.input(numberValue), selection } };
         }
         try {
             const validationError = validatePhoneNumberLength(data, { defaultCountry: countryIsoCode }, metadata);
-            if (!validationError || validationError === 'TOO_SHORT') {
+            if (!validationError) {
                 // handle paste-event with different code, for example for 8 / +7
                 const phone = countryIsoCode
                     ? parsePhoneNumberWithError(data, countryIsoCode, metadata)
@@ -7572,7 +7292,7 @@ function validatePhonePreprocessorGenerator({ prefix, countryIsoCode, metadata, 
                 };
             }
         }
-        catch (_b) {
+        catch (_a) {
             return { elementState };
         }
         return { elementState };
@@ -7586,7 +7306,7 @@ function maskitoPhoneNonStrictOptionsGenerator({ defaultIsoCode, metadata, separ
     let currentPhoneLength = 0;
     return Object.assign(Object.assign({}, MASKITO_DEFAULT_OPTIONS), { mask: ({ value }) => {
             const newTemplate = getPhoneTemplate(formatter, value, separator);
-            const newPhoneLength = value.replaceAll(/\D/g, '').length;
+            const newPhoneLength = value.replace(/\D/g, '').length;
             currentTemplate = selectTemplate({
                 currentTemplate,
                 newTemplate,
@@ -7597,13 +7317,13 @@ function maskitoPhoneNonStrictOptionsGenerator({ defaultIsoCode, metadata, separ
             return currentTemplate.length === 1
                 ? ['+', /\d/]
                 : generatePhoneMask({ value, template: currentTemplate, prefix });
-        }, preprocessors: [
+        }, postprocessors: [phoneLengthPostprocessorGenerator(metadata)], preprocessors: [
             validatePhonePreprocessorGenerator({
                 prefix,
                 countryIsoCode: defaultIsoCode,
                 metadata,
             }),
-        ], postprocessors: [phoneLengthPostprocessorGenerator(metadata)] });
+        ] });
 }
 
 function maskitoPhoneStrictOptionsGenerator({ countryIsoCode, metadata, separator = '-', }) {
@@ -7614,7 +7334,7 @@ function maskitoPhoneStrictOptionsGenerator({ countryIsoCode, metadata, separato
     let currentPhoneLength = 0;
     return Object.assign(Object.assign({}, MASKITO_DEFAULT_OPTIONS), { mask: ({ value }) => {
             const newTemplate = getPhoneTemplate(formatter, value, separator);
-            const newPhoneLength = value.replaceAll(/\D/g, '').length;
+            const newPhoneLength = value.replace(/\D/g, '').length;
             currentTemplate = selectTemplate({
                 currentTemplate,
                 newTemplate,
@@ -7628,12 +7348,14 @@ function maskitoPhoneStrictOptionsGenerator({ countryIsoCode, metadata, separato
                 from === to ? prefix.length : 0,
                 value.length,
             ]),
-        ], preprocessors: [
-            cutInitCountryCodePreprocessor({ countryIsoCode, metadata }),
-            validatePhonePreprocessorGenerator({ prefix, countryIsoCode, metadata }),
+            maskitoRemoveOnBlurPlugin(prefix),
+            maskitoAddOnFocusPlugin(prefix),
         ], postprocessors: [
             maskitoPrefixPostprocessorGenerator(prefix),
             phoneLengthPostprocessorGenerator(metadata),
+        ], preprocessors: [
+            cutInitCountryCodePreprocessor({ countryIsoCode, metadata }),
+            validatePhonePreprocessorGenerator({ prefix, countryIsoCode, metadata }),
         ] });
 }
 
@@ -7710,84 +7432,15 @@ const getRawValueForExtra = (maskedValue, type, maskOptions) => {
   if (maskOptions?.customPatternOptions) {
     return maskedValue.replace(/\D/g, '');
   }
-  // 4) For text type, return as-is (preserve spaces)
-  if (type === 'text') {
-    return maskedValue;
-  }
-  // 5) For other types, remove whitespace.
+  // 4) For other types, remove whitespace.
   return maskedValue.replace(/\s/g, '');
 };
-const getValidAutocomplete = (autocomplete) => {
-  const validValues = [
-    'off',
-    'on',
-    'name',
-    'honorific-prefix',
-    'given-name',
-    'additional-name',
-    'family-name',
-    'honorific-suffix',
-    'nickname',
-    'email',
-    'username',
-    'new-password',
-    'current-password',
-    'one-time-code',
-    'organization-title',
-    'organization',
-    'street-address',
-    'address-line1',
-    'address-line2',
-    'address-line3',
-    'address-level4',
-    'address-level3',
-    'address-level2',
-    'address-level1',
-    'country',
-    'country-name',
-    'postal-code',
-    'cc-name',
-    'cc-given-name',
-    'cc-additional-name',
-    'cc-family-name',
-    'cc-number',
-    'cc-exp',
-    'cc-exp-month',
-    'cc-exp-year',
-    'cc-csc',
-    'cc-type',
-    'transaction-currency',
-    'transaction-amount',
-    'language',
-    'bday',
-    'bday-day',
-    'bday-month',
-    'bday-year',
-    'sex',
-    'tel',
-    'tel-country-code',
-    'tel-national',
-    'tel-area-code',
-    'tel-local',
-    'tel-extension',
-    'impp',
-    'url',
-    'photo',
-  ];
-  return validValues.includes(autocomplete) ? autocomplete : 'off';
-};
 
-const LOCALES_DEFAULTS = {
-  minLengthErrorMessage: minLength => `The input must have at least ${minLength} characters`,
-  maxLengthErrorMessage: maxLength => `The input can have a maximum of ${maxLength} characters`,
-};
-
-const wppInputCss = ":host{--text-input-height-m:var(--wpp-input-height-m, 40px);--text-input-height-s:var(--wpp-input-height-s, 32px);--text-input-padding-m:var(--wpp-input-padding-m, calc(9px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width)));--text-input-padding-s:var(--wpp-input-padding-s, calc(5px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width)));--text-input-with-icons-padding-m:var(--wpp-input-with-icons-padding-m, 38px);--text-input-with-icons-padding-s:var(--wpp-input-with-icons-padding-s, 36px);--text-input-label-color:var(--wpp-input-label-color, var(--wpp-text-color-info));--text-input-label-margin:var(--wpp-input-label-margin, 0 0 8px 0);--text-input-inline-message-margin:var(--wpp-input-inline-message-margin, 4px 0 0 0);--text-input-placeholder-color:var(--wpp-input-placeholder-color, var(--wpp-grey-color-700));--text-input-text-color-disabled:var(--wpp-input-text-color-disabled, var(--wpp-text-color-disabled));--text-input-bg-color:var(--wpp-input-bg-color, transparent);--text-input-bg-color-hover:var(--wpp-input-bg-color-hover, var(--wpp-grey-color-200));--text-input-bg-color-active:var(--wpp-input-bg-color-active, var(--wpp-grey-color-000));--text-input-bg-color-disabled:var(--wpp-input-bg-color-disabled, var(--wpp-grey-color-100));--text-input-border-color:var(--wpp-input-border-color, var(--wpp-grey-color-500));--text-input-border-color-hover:var(--wpp-input-border-color-hover, var(--wpp-grey-color-700));--text-input-border-color-active:var(--wpp-input-border-color-active, var(--wpp-grey-color-800));--text-input-border-color-disabled:var(--wpp-input-border-color-disabled, var(--wpp-grey-color-400));--text-input-first-border-color-focus:var(--wpp-input-first-border-color-focus, var(--wpp-grey-color-000));--text-input-second-border-color-focus:var(--wpp-input-second-border-color-focus, var(--wpp-brand-color));--text-input-warning-border-color:var(--wpp-input-warning-border-color, var(--wpp-warning-color-400));--text-input-warning-border-color-hover:var(--wpp-input-warning-border-color-hover, var(--wpp-warning-color-500));--text-input-error-border-color:var(--wpp-input-error-border-color, var(--wpp-danger-color-400));--text-input-error-border-color-hover:var(--wpp-input-error-border-color-hover, var(--wpp-danger-color-500));--text-input-icon-start-margin-m:var(--wpp-input-icon-start-margin-m, 0 0 0 10px);--text-input-icon-end-margin-m:var(--wpp-input-icon-end-margin-m, 0 12px 0 0);--text-input-icon-start-margin-s:var(--wpp-input-icon-start-margin-s, 0 0 0 8px);--text-input-icon-end-margin-s:var(--wpp-input-icon-end-margin-s, 0 10px 0 0);--text-input-icon-end-color-hover:var(--wpp-input-icon-end-color-hover, var(--wpp-icon-color-hover));--text-input-icon-end-color-active:var(--wpp-input-icon-end-color-active, var(--wpp-icon-color-active));--text-input-icon-end-first-border-color-focus:var(--wpp-input-icon-end-first-border-color-focus, var(--wpp-grey-color-000));--text-input-icon-end-second-border-color-focus:var(--wpp-input-icon-end-second-border-color-focus, var(--wpp-brand-color));--text-input-icon-color:var(--wpp-input-icon-color, var(--wpp-icon-color));--text-input-icon-color-disabled:var(--wpp-input-icon-color-disabled, var(--wpp-icon-color-disabled));--text-input-border-width:var(--wpp-input-border-width, var(--wpp-border-width-s));--text-input-border-style:var(--wpp-input-border-style, solid);position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column}.with-tooltip{width:100%}.with-tooltip::part(anchor){width:100%}.label-wrapper{color:var(--text-input-label-color)}.label{margin:var(--text-input-label-margin)}.icon-start,.icon-end{position:absolute;top:50%;display:-ms-flexbox;display:flex;max-width:20px;overflow:hidden;color:var(--text-input-icon-color);-webkit-transform:translateY(-50%);transform:translateY(-50%)}.icon-start ::slotted(*),.icon-end ::slotted(*){color:var(--text-input-icon-color)}.icon-start{color:var(--wpp-grey-color-600)}.icon-start ::slotted(*){color:var(--wpp-grey-color-600)}.icon-end{right:0;cursor:pointer}.icon-end:hover{color:var(--text-input-icon-end-color-hover)}.icon-end:hover ::slotted([slot=icon-end]){color:var(--text-input-icon-end-color-hover)}.icon-end:active{color:var(--text-input-icon-end-color-active)}.icon-end:active ::slotted([slot=icon-end]){color:var(--text-input-icon-end-color-active)}.input-with-icons{position:relative;display:-ms-flexbox;display:flex;width:100%}.input-with-icons .disabled-icon{cursor:not-allowed;color:var(--text-input-icon-color-disabled)}.input-with-icons .disabled-icon ::slotted([slot=icon-start]),.input-with-icons .disabled-icon ::slotted([slot=icon-end]){color:var(--text-input-icon-color-disabled)}.input-with-icons .icon-end{outline:none}.input-with-icons .icon-end:focus-visible{border-radius:3px;outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-icon-end-first-border-color-focus), 0 0 0 3px var(--text-input-icon-end-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-icon-end-first-border-color-focus), 0 0 0 3px var(--text-input-icon-end-second-border-color-focus);color:var(--text-input-icon-end-color-hover)}.input-with-icons:hover .icon-start{color:var(--wpp-grey-color-800)}.input-with-icons:hover .icon-start ::slotted(*){color:var(--wpp-grey-color-800)}.wpp-inline-message{margin:var(--text-input-inline-message-margin)}:host(.wpp-size-m) .input-with-icons .with-icon-start{padding-left:var(--text-input-with-icons-padding-m)}:host(.wpp-size-m) .input-with-icons .with-icon-end{padding-right:var(--text-input-with-icons-padding-m)}:host(.wpp-size-m) .input-with-icons .icon-start{margin:var(--text-input-icon-start-margin-m)}:host(.wpp-size-m) .input-with-icons .icon-end{margin:var(--text-input-icon-end-margin-m)}:host(.wpp-size-s) .input-with-icons .with-icon-start{padding-left:var(--text-input-with-icons-padding-s)}:host(.wpp-size-s) .input-with-icons .with-icon-end{padding-right:var(--text-input-with-icons-padding-s)}:host(.wpp-size-s) .input-with-icons .icon-start{margin:var(--text-input-icon-start-margin-s)}:host(.wpp-size-s) .input-with-icons .icon-end{margin:var(--text-input-icon-end-margin-s)}:host([disabled]:not([disabled=false])){cursor:not-allowed}:host([disabled]:not([disabled=false])) .input-with-icons{pointer-events:none}:host(.with-value) .icon-start:not(.disabled-icon){color:var(--wpp-grey-color-800)}:host(.with-value) .icon-start:not(.disabled-icon) ::slotted(*){color:var(--wpp-grey-color-800)}input{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;height:var(--text-input-height-m);background-color:var(--text-input-bg-color);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color);border-radius:var(--wpp-border-radius-m);outline:none;text-overflow:ellipsis}input[type=search]::-webkit-search-cancel-button{display:none}input .loading{pointer-events:none}input .loading ::part(info-wrapper){height:inherit}input .loading .wpp-spinner{margin-right:7px}input[type=number]{-moz-appearance:textfield}input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}input:hover{background:var(--text-input-bg-color-hover);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-hover)}input:active{border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-active)}input::-webkit-input-placeholder{color:var(--text-input-placeholder-color)}input::-moz-placeholder{color:var(--text-input-placeholder-color)}input:-ms-input-placeholder{color:var(--text-input-placeholder-color)}input::-ms-input-placeholder{color:var(--text-input-placeholder-color)}input::placeholder{color:var(--text-input-placeholder-color)}input:focus{background:var(--text-input-bg-color-active);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-active)}input:disabled{color:var(--text-input-text-color-disabled);background:var(--text-input-bg-color-disabled);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-disabled);cursor:not-allowed}input:disabled::-webkit-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::-moz-placeholder{color:var(--text-input-text-color-disabled)}input:disabled:-ms-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::-ms-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::placeholder{color:var(--text-input-text-color-disabled)}input.size-m{padding:var(--text-input-padding-m)}input.size-m.tab-focus{border-radius:var(--wpp-border-radius-m);outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus)}input.size-s{height:var(--text-input-height-s);padding:var(--text-input-padding-s);border-radius:var(--wpp-border-radius-s)}input.size-s.tab-focus{border-radius:var(--wpp-border-radius-s);outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus)}input.warning,input.warning:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-400)}input.error,input.error:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-400)}input.warning{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-400)}input.warning:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-500)}input.error,input.with-validation-error{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-400)}input.error:hover,input.with-validation-error:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-500)}input:-webkit-autofill{-webkit-animation-name:onAutoFillStart;animation-name:onAutoFillStart;-webkit-transition:background-color 50000s ease-in-out 0s;transition:background-color 50000s ease-in-out 0s}input:autofill,input:-webkit-autofill{-webkit-animation-name:onAutoFillStart;animation-name:onAutoFillStart;-webkit-transition:background-color 50000s ease-in-out 0s;transition:background-color 50000s ease-in-out 0s}";
+const wppInputCss = ":host{--text-input-height-m:var(--wpp-input-height-m, 40px);--text-input-height-s:var(--wpp-input-height-s, 32px);--text-input-padding-m:var(--wpp-input-padding-m, calc(9px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width)));--text-input-padding-s:var(--wpp-input-padding-s, calc(5px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width)));--text-input-with-icons-padding-m:var(--wpp-input-with-icons-padding-m, 38px);--text-input-with-icons-padding-s:var(--wpp-input-with-icons-padding-s, 36px);--text-input-label-color:var(--wpp-input-label-color, var(--wpp-text-color-info));--text-input-label-margin:var(--wpp-input-label-margin, 0 0 8px 0);--text-input-inline-message-margin:var(--wpp-input-inline-message-margin, 4px 0 0 0);--text-input-placeholder-color:var(--wpp-input-placeholder-color, var(--wpp-grey-color-700));--text-input-text-color-disabled:var(--wpp-input-text-color-disabled, var(--wpp-text-color-disabled));--text-input-bg-color:var(--wpp-input-bg-color, transparent);--text-input-bg-color-hover:var(--wpp-input-bg-color-hover, var(--wpp-grey-color-200));--text-input-bg-color-active:var(--wpp-input-bg-color-active, var(--wpp-grey-color-000));--text-input-bg-color-disabled:var(--wpp-input-bg-color-disabled, var(--wpp-grey-color-100));--text-input-border-color:var(--wpp-input-border-color, var(--wpp-grey-color-500));--text-input-border-color-hover:var(--wpp-input-border-color-hover, var(--wpp-grey-color-700));--text-input-border-color-active:var(--wpp-input-border-color-active, var(--wpp-grey-color-800));--text-input-border-color-disabled:var(--wpp-input-border-color-disabled, var(--wpp-grey-color-400));--text-input-first-border-color-focus:var(--wpp-input-first-border-color-focus, var(--wpp-grey-color-000));--text-input-second-border-color-focus:var(--wpp-input-second-border-color-focus, var(--wpp-brand-color));--text-input-warning-border-color:var(--wpp-input-warning-border-color, var(--wpp-warning-color-400));--text-input-warning-border-color-hover:var(--wpp-input-warning-border-color-hover, var(--wpp-warning-color-500));--text-input-error-border-color:var(--wpp-input-error-border-color, var(--wpp-danger-color-400));--text-input-error-border-color-hover:var(--wpp-input-error-border-color-hover, var(--wpp-danger-color-500));--text-input-icon-start-margin-m:var(--wpp-input-icon-start-margin-m, 0 0 0 10px);--text-input-icon-end-margin-m:var(--wpp-input-icon-end-margin-m, 0 12px 0 0);--text-input-icon-start-margin-s:var(--wpp-input-icon-start-margin-s, 0 0 0 8px);--text-input-icon-end-margin-s:var(--wpp-input-icon-end-margin-s, 0 10px 0 0);--text-input-icon-end-color-hover:var(--wpp-input-icon-end-color-hover, var(--wpp-icon-color-hover));--text-input-icon-end-color-active:var(--wpp-input-icon-end-color-active, var(--wpp-icon-color-active));--text-input-icon-end-first-border-color-focus:var(--wpp-input-icon-end-first-border-color-focus, var(--wpp-grey-color-000));--text-input-icon-end-second-border-color-focus:var(--wpp-input-icon-end-second-border-color-focus, var(--wpp-brand-color));--text-input-icon-color:var(--wpp-input-icon-color, var(--wpp-icon-color));--text-input-icon-color-disabled:var(--wpp-input-icon-color-disabled, var(--wpp-icon-color-disabled));--text-input-border-width:var(--wpp-input-border-width, var(--wpp-border-width-s));--text-input-border-style:var(--wpp-input-border-style, solid);position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column}.with-tooltip{width:100%}.with-tooltip::part(anchor){width:100%}.label-wrapper{color:var(--text-input-label-color)}.label{margin:var(--text-input-label-margin)}.icon-start,.icon-end{position:absolute;top:50%;display:-ms-flexbox;display:flex;max-width:20px;overflow:hidden;color:var(--text-input-icon-color);-webkit-transform:translateY(-50%);transform:translateY(-50%)}.icon-start ::slotted(*),.icon-end ::slotted(*){color:var(--text-input-icon-color)}.icon-start{color:var(--wpp-grey-color-600)}.icon-start ::slotted(*){color:var(--wpp-grey-color-600)}.icon-end{right:0;cursor:pointer}.icon-end:hover{color:var(--text-input-icon-end-color-hover)}.icon-end:hover ::slotted([slot=icon-end]){color:var(--text-input-icon-end-color-hover)}.icon-end:active{color:var(--text-input-icon-end-color-active)}.icon-end:active ::slotted([slot=icon-end]){color:var(--text-input-icon-end-color-active)}.input-with-icons{position:relative;display:-ms-flexbox;display:flex;width:100%}.input-with-icons .disabled-icon{cursor:not-allowed;color:var(--text-input-icon-color-disabled)}.input-with-icons .disabled-icon ::slotted([slot=icon-start]),.input-with-icons .disabled-icon ::slotted([slot=icon-end]){color:var(--text-input-icon-color-disabled)}.input-with-icons .icon-end{outline:none}.input-with-icons .icon-end:focus-visible{border-radius:3px;outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-icon-end-first-border-color-focus), 0 0 0 2px var(--text-input-icon-end-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-icon-end-first-border-color-focus), 0 0 0 2px var(--text-input-icon-end-second-border-color-focus);color:var(--text-input-icon-end-color-hover)}.input-with-icons:hover .icon-start{color:var(--wpp-grey-color-800)}.input-with-icons:hover .icon-start ::slotted(*){color:var(--wpp-grey-color-800)}.wpp-inline-message{margin:var(--text-input-inline-message-margin)}:host(.wpp-size-m) .input-with-icons .with-icon-start{padding-left:var(--text-input-with-icons-padding-m)}:host(.wpp-size-m) .input-with-icons .with-icon-end{padding-right:var(--text-input-with-icons-padding-m)}:host(.wpp-size-m) .input-with-icons .icon-start{margin:var(--text-input-icon-start-margin-m)}:host(.wpp-size-m) .input-with-icons .icon-end{margin:var(--text-input-icon-end-margin-m)}:host(.wpp-size-s) .input-with-icons .with-icon-start{padding-left:var(--text-input-with-icons-padding-s)}:host(.wpp-size-s) .input-with-icons .with-icon-end{padding-right:var(--text-input-with-icons-padding-s)}:host(.wpp-size-s) .input-with-icons .icon-start{margin:var(--text-input-icon-start-margin-s)}:host(.wpp-size-s) .input-with-icons .icon-end{margin:var(--text-input-icon-end-margin-s)}:host([disabled]:not([disabled=false])){cursor:not-allowed}:host([disabled]:not([disabled=false])) .input-with-icons{pointer-events:none}:host(.with-value) .icon-start:not(.disabled-icon){color:var(--wpp-grey-color-800)}:host(.with-value) .icon-start:not(.disabled-icon) ::slotted(*){color:var(--wpp-grey-color-800)}input{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;height:var(--text-input-height-m);background-color:var(--text-input-bg-color);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color);border-radius:var(--wpp-border-radius-m);outline:none;text-overflow:ellipsis}input[type=search]::-webkit-search-cancel-button{display:none}input .loading{pointer-events:none}input .loading ::part(info-wrapper){height:inherit}input .loading .wpp-spinner{margin-right:7px}input[type=number]{-moz-appearance:textfield}input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}input:hover{background:var(--text-input-bg-color-hover);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-hover)}input:active{border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-active)}input::-webkit-input-placeholder{color:var(--text-input-placeholder-color)}input::-moz-placeholder{color:var(--text-input-placeholder-color)}input:-ms-input-placeholder{color:var(--text-input-placeholder-color)}input::-ms-input-placeholder{color:var(--text-input-placeholder-color)}input::placeholder{color:var(--text-input-placeholder-color)}input:focus{background:var(--text-input-bg-color-active);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-active)}input:disabled{color:var(--text-input-text-color-disabled);background:var(--text-input-bg-color-disabled);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-disabled);cursor:not-allowed}input:disabled::-webkit-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::-moz-placeholder{color:var(--text-input-text-color-disabled)}input:disabled:-ms-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::-ms-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::placeholder{color:var(--text-input-text-color-disabled)}input.size-m{padding:var(--text-input-padding-m)}input.size-m.tab-focus{border-radius:var(--wpp-border-radius-m);outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 2px var(--text-input-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 2px var(--text-input-second-border-color-focus)}input.size-s{height:var(--text-input-height-s);padding:var(--text-input-padding-s);border-radius:var(--wpp-border-radius-s)}input.size-s.tab-focus{border-radius:var(--wpp-border-radius-s);outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 2px var(--text-input-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 2px var(--text-input-second-border-color-focus)}input.warning,input.warning:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-400)}input.warning.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-warning-color-400);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-warning-color-400)}input.error,input.error:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-400)}input.error.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-danger-color-400);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-danger-color-400)}input.warning{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-400)}input.warning:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-500)}input.warning.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-warning-color-400);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-warning-color-400)}input.error,input.with-validation-error{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-400)}input.error:hover,input.with-validation-error:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-500)}input.error.tab-focus,input.with-validation-error.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-danger-color-400);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-danger-color-400)}input:-webkit-autofill{-webkit-animation-name:onAutoFillStart;animation-name:onAutoFillStart;-webkit-transition:background-color 50000s ease-in-out 0s;transition:background-color 50000s ease-in-out 0s}input:autofill,input:-webkit-autofill{-webkit-animation-name:onAutoFillStart;animation-name:onAutoFillStart;-webkit-transition:background-color 50000s ease-in-out 0s;transition:background-color 50000s ease-in-out 0s}";
 
 const getInitFocusInfo = () => ({
   input: FOCUS_TYPE.NONE,
   icon: FOCUS_TYPE.NONE,
-  inlineMessage: FOCUS_TYPE.NONE,
 });
 const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLElement {
   constructor() {
@@ -7800,7 +7453,6 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
     this.wppChangeExtra = createEvent(this, "wppChangeExtra", 1);
     this.hadChangesInTooltip = false;
     this.suppressInputEvent = false;
-    this._locales = LOCALES_DEFAULTS;
     this.updateInputRef = (inputRef) => {
       if (inputRef)
         this.inputRef = inputRef;
@@ -7906,10 +7558,10 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
       if (!this.maxLength && !this.minLength)
         return;
       if (this.maxLength && this.value.length > this.maxLength) {
-        this.lengthValidationError = this._locales.maxLengthErrorMessage(this.maxLength);
+        this.lengthValidationError = this.locales.maxLengthErrorMessage(this.maxLength);
       }
       else if (this.minLength && this.value.length < this.minLength) {
-        this.lengthValidationError = this._locales.minLengthErrorMessage(this.minLength);
+        this.lengthValidationError = this.locales.minLengthErrorMessage(this.minLength);
       }
       else {
         this.lengthValidationError = undefined;
@@ -7966,13 +7618,11 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
       this.checkForEllipsis();
       this.focusType = this.getUpdatedFocusInfo('input', FOCUS_TYPE.NONE);
       this.focusType = this.getUpdatedFocusInfo('icon', FOCUS_TYPE.NONE);
-      this.focusType = this.getUpdatedFocusInfo('inlineMessage', FOCUS_TYPE.NONE);
       this.wppBlur.emit(event);
     };
     this.onMouseDown = () => {
       this.focusType = this.getUpdatedFocusInfo('icon', FOCUS_TYPE.MOUSE);
       this.focusType = this.getUpdatedFocusInfo('input', FOCUS_TYPE.MOUSE);
-      this.focusType = this.getUpdatedFocusInfo('inlineMessage', FOCUS_TYPE.MOUSE);
     };
     this.onKeyUp = (event, type) => {
       if (event.key === 'Tab') {
@@ -7991,9 +7641,7 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
       [`${this.messageType}`]: !!this.messageType,
       [`with-icon-start`]: this.hasIconStartSlot || (this.type === 'search' && this.loading && !this.disabled) || this.type === 'search',
       [`with-icon-end`]: this.hasIconEndSlot || this.type === 'search',
-      'tab-focus': this.focusType.input === FOCUS_TYPE.TAB &&
-        this.focusType.icon !== FOCUS_TYPE.TAB &&
-        this.focusType.inlineMessage !== FOCUS_TYPE.TAB,
+      'tab-focus': this.focusType.input === FOCUS_TYPE.TAB && this.focusType.icon !== FOCUS_TYPE.TAB,
       'with-validation-error': !!this.lengthValidationError,
     });
     this.wrapperCssClasses = () => ({
@@ -8014,16 +7662,14 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
       'disabled-icon': this.disabled,
       'slot-hidden': !this.hasIconEndSlot && !(this.type === 'search' && this.loading && !this.disabled),
     });
-    this.inputId = this.name || `wpp-input-${Math.random().toString(36).substr(2, 9)}`;
-    this.labelId = `${this.inputId}-label`;
-    this.renderInput = () => (h("input", { id: this.inputId, class: this.inputCssClasses(), name: this.name, type: this.type, value: this.value, required: this.required, disabled: this.disabled, onInput: this.onInput, onKeyPress: this.onKeyPress, onBlur: this.onBlur, readOnly: this.readOnly, ref: inputRef => this.updateInputRef(inputRef), "aria-label": this.ariaProps.label, defaultValue: this.defaultValue, part: "input", title: "", placeholder: this.placeholder, autocomplete: getValidAutocomplete(this.autocomplete), "aria-disabled": this.disabled || this.loading ? 'true' : 'false', "aria-required": this.required ? 'true' : undefined, "aria-labelledby": this.labelConfig?.text ? this.labelId : undefined, "aria-invalid": this.lengthValidationError || this.messageType === 'error' ? 'true' : undefined, "data-testid": "input" }));
+    this.renderInput = () => (h("input", { id: this.name, class: this.inputCssClasses(), name: this.name, type: this.type, value: this.value, required: this.required, disabled: this.disabled, onInput: this.onInput, onKeyPress: this.onKeyPress, readOnly: this.readOnly, ref: inputRef => this.updateInputRef(inputRef), "aria-label": this.ariaProps.label, part: "input", title: "", placeholder: this.placeholder, autocomplete: this.autocomplete }));
     this.renderSearchIconOrSpinner = () => {
       if (this.type !== 'search')
         return null;
       if (this.loading && !this.disabled) {
-        return h("wpp-spinner-v3-3-0", { class: this.iconStartCssClasses(), slot: "left", "aria-label": "Loading" });
+        return h("wpp-spinner-v2-22-0", { class: this.iconStartCssClasses(), slot: "left", "aria-label": "Loading" });
       }
-      return h("wpp-icon-search-v3-3-0", { class: this.iconStartCssClasses(), part: "icon-search" });
+      return h("wpp-icon-search-v2-22-0", { class: this.iconStartCssClasses(), "aria-label": "Search icon", part: "icon-search" });
     };
     this.hasActiveEllipses = false;
     this.hasIconStartSlot = false;
@@ -8033,7 +7679,6 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
     this.name = undefined;
     this.type = 'text';
     this.value = undefined;
-    this.defaultValue = undefined;
     this.placeholder = undefined;
     this.required = false;
     this.readOnly = false;
@@ -8045,7 +7690,6 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
     this.maxMessageLength = undefined;
     this.ariaProps = {};
     this.tooltipConfig = {};
-    this.truncationTooltipConfig = {};
     this.labelTooltipConfig = {
       popperOptions: { strategy: 'fixed' },
     };
@@ -8053,7 +7697,10 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
     this.labelConfig = undefined;
     this.maxLength = undefined;
     this.minLength = undefined;
-    this.locales = {};
+    this.locales = {
+      minLengthErrorMessage: minLength => `The input must have at least ${minLength} characters`,
+      maxLengthErrorMessage: maxLength => `The input can have a maximum of ${maxLength} characters`,
+    };
     this.loading = false;
     this.autocomplete = 'off';
   }
@@ -8081,8 +7728,6 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
    * Method that sets the input value programmatically.
    */
   async setValue(value) {
-    if (value === this.value)
-      return;
     this.value = value;
     if (this.inputRef) {
       this.inputRef.value = value;
@@ -8090,13 +7735,6 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
       this.suppressInputEvent = true;
       const inputEvent = new InputEvent('input', { bubbles: true, composed: true });
       this.inputRef.dispatchEvent(inputEvent);
-    }
-    if (!this.maskOptions || Object.entries(this.maskOptions).length === 0) {
-      this.wppChange.emit({
-        value,
-        name: this.name,
-      });
-      return;
     }
     setTimeout(() => {
       const formattedValue = this.inputRef ? this.inputRef.value : value;
@@ -8128,11 +7766,7 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
       this.debouncedCheckForEllipsis();
     }
   }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
-  }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
     this.updateSlotData();
     this.debouncedCheckForEllipsis = debounce(() => {
       this.checkForEllipsis();
@@ -8177,20 +7811,18 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
     }
   }
   render() {
-    return (h(Host, { class: this.wrapperCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'input'), exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v3-3-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v3-3-0", { part: "anchor", text: this.value, class: "with-tooltip", disabled: !this.hasActiveEllipses, anchorTabIndex: -1, config: this.truncationTooltipConfig }, this.renderInput()), (this.type === 'search' || this.loading) && !!this.value && (h("wpp-icon-cross-v3-3-0", { class: this.iconEndCssClasses(), "aria-label": "Erase input text", tabIndex: 0, part: "icon-cross", onClick: event => this.onClear(event), onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData, tabIndex: this.hasIconEndSlot ? 0 : -1, "aria-label": "Clear input", role: "button" })), this.lengthValidationError && (h("wpp-inline-message-v3-3-0", { message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') })), this.message && (h("wpp-inline-message-v3-3-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') }))));
+    return (h(Host, { class: this.wrapperCssClasses(), "aria-disabled": this.disabled, "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'input'), exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v2-22-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v2-22-0", { part: "anchor", text: this.value, class: "with-tooltip", disabled: !this.hasActiveEllipses }, this.renderInput()), (this.type === 'search' || this.loading) && !!this.value && (h("wpp-icon-cross-v2-22-0", { class: this.iconEndCssClasses(), "aria-label": "Erase input text", tabIndex: 0, part: "icon-cross", onClick: event => this.onClear(event), onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData })), this.lengthValidationError && (h("wpp-inline-message-v2-22-0", { message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })), this.message && (h("wpp-inline-message-v2-22-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" }))));
   }
-  static get registryIs() { return "wpp-input-v3-3-0"; }
+  static get registryIs() { return "wpp-input-v2-22-0"; }
   get host() { return this; }
   static get watchers() { return {
-    "value": ["onUpdateValue"],
-    "locales": ["onUpdateLocales"]
+    "value": ["onUpdateValue"]
   }; }
   static get style() { return wppInputCss; }
-}, [1, "wpp-input", "wpp-input-v3-3-0", {
+}, [1, "wpp-input", "wpp-input-v2-22-0", {
     "name": [1],
     "type": [1],
     "value": [1025],
-    "defaultValue": [1, "default-value"],
     "placeholder": [1],
     "required": [516],
     "readOnly": [516, "read-only"],
@@ -8202,7 +7834,6 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
     "maxMessageLength": [8, "max-message-length"],
     "ariaProps": [16],
     "tooltipConfig": [1040],
-    "truncationTooltipConfig": [16],
     "labelTooltipConfig": [16],
     "maskOptions": [16],
     "labelConfig": [1040],
@@ -8225,79 +7856,79 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-input-v3-3-0", "wpp-action-button-v3-3-0", "wpp-icon-cross-v3-3-0", "wpp-icon-error-v3-3-0", "wpp-icon-info-message-v3-3-0", "wpp-icon-search-v3-3-0", "wpp-icon-success-v3-3-0", "wpp-icon-warning-v3-3-0", "wpp-inline-message-v3-3-0", "wpp-internal-label-v3-3-0", "wpp-internal-tooltip-v3-3-0", "wpp-label-v3-3-0", "wpp-spinner-v3-3-0", "wpp-tooltip-v3-3-0", "wpp-typography-v3-3-0"];
+  const components = ["wpp-input-v2-22-0", "wpp-action-button-v2-22-0", "wpp-icon-cross-v2-22-0", "wpp-icon-error-v2-22-0", "wpp-icon-info-message-v2-22-0", "wpp-icon-search-v2-22-0", "wpp-icon-success-v2-22-0", "wpp-icon-warning-v2-22-0", "wpp-inline-message-v2-22-0", "wpp-internal-label-v2-22-0", "wpp-internal-tooltip-v2-22-0", "wpp-label-v2-22-0", "wpp-spinner-v2-22-0", "wpp-tooltip-v2-22-0", "wpp-typography-v2-22-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-input-v3-3-0":
+    case "wpp-input-v2-22-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppInput);
       }
       break;
-    case "wpp-action-button-v3-3-0":
+    case "wpp-action-button-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-cross-v3-3-0":
+    case "wpp-icon-cross-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-error-v3-3-0":
+    case "wpp-icon-error-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-info-message-v3-3-0":
+    case "wpp-icon-info-message-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-search-v3-3-0":
+    case "wpp-icon-search-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-success-v3-3-0":
+    case "wpp-icon-success-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-warning-v3-3-0":
+    case "wpp-icon-warning-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-inline-message-v3-3-0":
+    case "wpp-inline-message-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-label-v3-3-0":
+    case "wpp-internal-label-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-0":
+    case "wpp-internal-tooltip-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-label-v3-3-0":
+    case "wpp-label-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v3-3-0":
+    case "wpp-spinner-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v3-3-0":
+    case "wpp-tooltip-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v3-3-0":
+    case "wpp-typography-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

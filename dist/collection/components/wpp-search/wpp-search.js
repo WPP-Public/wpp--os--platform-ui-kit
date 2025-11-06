@@ -4,7 +4,7 @@ import { autoFocusElement, isEventTargetContained, selectDropdownWidth, transfor
 import { menuListConfig } from '../../common/menuListConfig';
 import { FOCUS_TYPE } from '../../types/common';
 import { Z_INDEX } from '../../common/consts';
-import { BLUR_TIME, DROPDOWN_ANIMATION_TIME, LOCALES_DEFAULTS } from './const';
+import { BLUR_TIME, DROPDOWN_ANIMATION_TIME } from './consts';
 // Load more will be triggered 15px before scroll ends
 const INFINITE_SCROLL_THRESHOLD = 15;
 /**
@@ -19,7 +19,6 @@ const INFINITE_SCROLL_THRESHOLD = 15;
 export class WppSearch {
   constructor() {
     this.hasActiveEllipses = false;
-    this._locales = LOCALES_DEFAULTS;
     // Used instead of Tippy's `state.isShown`, which is not updated when transitioning
     this.isDropdownShown = false;
     this.valueResizeObserver = () => {
@@ -39,7 +38,7 @@ export class WppSearch {
         this.tippyInstance = menuListConfig({
           anchor: this.triggerEl,
           content: this.dropdownEl,
-          zIndex: Z_INDEX.SEARCH,
+          zIndex: Z_INDEX.CONTEXT_MENU,
           ...this.dropdownConfig,
           duration: DROPDOWN_ANIMATION_TIME,
           trigger: 'manual',
@@ -61,9 +60,6 @@ export class WppSearch {
             if (!isEventTargetContained(this.host, event)) {
               this.hideDropdown();
             }
-          },
-          onHidden: () => {
-            this.isInComponent = false;
           },
         });
       }
@@ -185,7 +181,6 @@ export class WppSearch {
       }
     };
     this.handleFocus = (event) => {
-      this.isInComponent = true;
       if (!this.isFocused) {
         this.isFocused = true;
         if (this.value.length) {
@@ -208,9 +203,7 @@ export class WppSearch {
     };
     // We allow input blur only when the dropdown is hidden or the component got disabled.
     // Outside clicks will close the dropdown first.
-    this.handleBlur = () => {
-      if (this.isInComponent)
-        return;
+    this.handleBlur = (event) => {
       this.focusType = FOCUS_TYPE.NONE;
       if (this.disabled) {
         this.hideDropdown();
@@ -225,7 +218,7 @@ export class WppSearch {
       else {
         this.focusInput();
       }
-      this.wppBlur.emit();
+      this.wppBlur.emit(event);
     };
     this.isEllipsisActive = (e) => e.offsetWidth < e.scrollWidth;
     // For some reason this handler is not triggered by the browser
@@ -289,7 +282,7 @@ export class WppSearch {
     this.renderInputPlaceholder = () => {
       if ((this.isFocused && !this.searchValue) || this.isDropdownShown || !this.value.length)
         return null;
-      return (h("wpp-typography-v3-3-0", { type: "s-body", class: "input-placeholder", ref: placeholderEl => (this.placeholderEl = placeholderEl) }, this.getOptionLabel(this.value[0])));
+      return (h("wpp-typography-v2-22-0", { type: "s-body", class: "input-placeholder", ref: placeholderEl => (this.placeholderEl = placeholderEl) }, this.getOptionLabel(this.value[0])));
     };
     this.getDropdownWidth = () => {
       if (this.dropdownWidth === 'auto') {
@@ -305,19 +298,18 @@ export class WppSearch {
       if (this.value.length && !this.isFocused)
         return null;
       if (this.loading) {
-        return (h("div", { class: "loading" }, h("wpp-spinner-v3-3-0", { slot: "left" }), h("wpp-typography-v3-3-0", { type: "s-body", slot: "label" }, this._locales.loading)));
+        return (h("div", { class: "loading" }, h("wpp-spinner-v2-22-0", { slot: "left" }), h("wpp-typography-v2-22-0", { type: "s-body", slot: "label" }, this.locales.loading)));
       }
       if (this.isEmptyOptions) {
-        return (h(Fragment, null, h("wpp-list-item-v3-3-0", { class: "nothing-found-wrapper" }, h("wpp-typography-v3-3-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound))));
+        return (h(Fragment, null, h("wpp-list-item-v2-22-0", { class: "nothing-found-wrapper" }, h("wpp-typography-v2-22-0", { type: "s-body", class: "nothing-found", slot: "label" }, this.locales.nothingFound))));
       }
-      return (h(Fragment, null, !!this._locales.dropdownHeader && (h("wpp-list-item-v3-3-0", { class: "dropdown-header", part: "dropdown-header" }, h("wpp-typography-v3-3-0", { type: "s-strong", slot: "label" }, this._locales.dropdownHeader))), h("slot", null), h("div", null, this.isInfiniteLoading && (h("div", { class: "infinite-loader" }, h("wpp-spinner-v3-3-0", null))))));
+      return (h(Fragment, null, !!this.locales.dropdownHeader && (h("wpp-list-item-v2-22-0", { class: "dropdown-header", part: "dropdown-header" }, h("wpp-typography-v2-22-0", { type: "s-strong", slot: "label" }, this.locales.dropdownHeader))), h("slot", null), h("div", null, this.isInfiniteLoading && (h("div", { class: "infinite-loader" }, h("wpp-spinner-v2-22-0", null))))));
     };
     this.isFocused = false;
     this.searchValue = '';
     this.isEmptyOptions = true;
     this.isInfiniteLoading = false;
     this.focusType = undefined;
-    this.isInComponent = false;
     this.name = undefined;
     this.loading = false;
     this.disabled = false;
@@ -332,7 +324,11 @@ export class WppSearch {
     this.maxMessageLength = undefined;
     this.dropdownConfig = {};
     this.size = 'm';
-    this.locales = {};
+    this.locales = {
+      nothingFound: 'Nothing found',
+      loading: 'Loading...',
+      dropdownHeader: '',
+    };
     this.labelTooltipConfig = {
       popperOptions: { strategy: 'fixed' },
     };
@@ -420,13 +416,6 @@ export class WppSearch {
       }
     }
   }
-  updateIsInComponent(value) {
-    if (!value)
-      this.handleBlur();
-  }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
-  }
   /**
    * Sets focus on native input
    */
@@ -434,7 +423,6 @@ export class WppSearch {
     this.inputEl?.focus();
   }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
     this.optionElements = this.getOptionElements();
     this.updateOptions();
   }
@@ -471,10 +459,10 @@ export class WppSearch {
     const style = {
       '--custom-dropdown-width': this.getDropdownWidth(),
     };
-    return (h(Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, dropdown-header, options" }, h("div", { class: this.searchWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (h("wpp-label-v3-3-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.hasSearchButton() && h("wpp-icon-search-v3-3-0", null), this.hasActiveEllipses ? (h("wpp-tooltip-v3-3-0", { part: "anchor", value: this.value.length ? this.getOptionLabel(this.value[0]) : undefined, class: this.tooltipCSSClasses() }, this.renderInputPlaceholder())) : (this.renderInputPlaceholder()), h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, onClick: this.handleInputMouseDown, tabIndex: this.disabled ? -1 : 0, title: "" })), h("div", { class: "trigger-actions" }, this.hasClearButton() && h("wpp-icon-cross-v3-3-0", { onClick: this.handleClearClick }))), !!this.message && (h("wpp-inline-message-v3-3-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderDropdownContent()))));
+    return (h(Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, dropdown-header, options" }, h("div", { class: this.searchWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (h("wpp-label-v2-22-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.hasSearchButton() && h("wpp-icon-search-v2-22-0", null), this.hasActiveEllipses ? (h("wpp-tooltip-v2-22-0", { part: "anchor", value: this.value.length ? this.getOptionLabel(this.value[0]) : undefined, class: this.tooltipCSSClasses() }, this.renderInputPlaceholder())) : (this.renderInputPlaceholder()), h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, onClick: this.handleInputMouseDown, tabIndex: this.disabled ? -1 : 0, title: "" })), h("div", { class: "trigger-actions" }, this.hasClearButton() && h("wpp-icon-cross-v2-22-0", { onClick: this.handleClearClick }))), !!this.message && (h("wpp-inline-message-v2-22-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderDropdownContent()))));
   }
   static get is() { return "wpp-search"; }
-  static get registryIs() { return "wpp-search-v3-3-0"; }
+  static get registryIs() { return "wpp-search-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -771,13 +759,9 @@ export class WppSearch {
         "type": "unknown",
         "mutable": false,
         "complexType": {
-          "original": "Partial<SearchLocales>",
-          "resolved": "{ nothingFound?: string | undefined; loading?: string | undefined; dropdownHeader?: string | undefined; }",
+          "original": "SearchLocales",
+          "resolved": "SearchLocales",
           "references": {
-            "Partial": {
-              "location": "global",
-              "id": "global::Partial"
-            },
             "SearchLocales": {
               "location": "import",
               "path": "./types",
@@ -791,7 +775,7 @@ export class WppSearch {
           "tags": [],
           "text": "Indicates locales for search component"
         },
-        "defaultValue": "{}"
+        "defaultValue": "{\n    nothingFound: 'Nothing found',\n    loading: 'Loading...',\n    dropdownHeader: '',\n  }"
       },
       "labelTooltipConfig": {
         "type": "unknown",
@@ -991,8 +975,7 @@ export class WppSearch {
       "searchValue": {},
       "isEmptyOptions": {},
       "isInfiniteLoading": {},
-      "focusType": {},
-      "isInComponent": {}
+      "focusType": {}
     };
   }
   static get events() {
@@ -1048,9 +1031,14 @@ export class WppSearch {
           "text": "Emitted when the search loses focus"
         },
         "complexType": {
-          "original": "void",
-          "resolved": "void",
-          "references": {}
+          "original": "FocusEvent",
+          "resolved": "FocusEvent",
+          "references": {
+            "FocusEvent": {
+              "location": "global",
+              "id": "global::FocusEvent"
+            }
+          }
         }
       }, {
         "method": "wppSearchValueChange",
@@ -1104,12 +1092,6 @@ export class WppSearch {
       }, {
         "propName": "loading",
         "methodName": "onLoadingChange"
-      }, {
-        "propName": "isInComponent",
-        "methodName": "updateIsInComponent"
-      }, {
-        "propName": "locales",
-        "methodName": "onUpdateLocales"
       }];
   }
   static get listeners() {

@@ -9,6 +9,9 @@ declare const _default: {
     options: {
       showPanel: boolean;
     };
+    notes: {
+      readme: any;
+    };
   };
 };
 export default _default;

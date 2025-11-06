@@ -1,7 +1,11 @@
-import { Fragment, h, Host } from '@stencil/core';
+import { h, Host, Fragment } from '@stencil/core';
 import { getSlotEmptyStates, isEventTargetContained } from '../../../../utils/utils';
 import { WrappedSlot } from '../../../common/WrappedSlot/WrappedSlot';
 import { FOCUS_TYPE } from '../../../../types/common';
+const getInitFocusInfo = () => ({
+  card: FOCUS_TYPE.NONE,
+  icon: FOCUS_TYPE.NONE,
+});
 /**
  * @slot - Content that is placed inside the card. The default slot, without the name attribute.
  * @slot header - Content that is placed inside the header section.
@@ -17,6 +21,10 @@ import { FOCUS_TYPE } from '../../../../types/common';
  */
 export class WppCard {
   constructor() {
+    this.getUpdatedFocusInfo = (type, updateValue) => ({
+      ...this.focusType,
+      [type]: updateValue,
+    });
     this.updateSlotData = () => {
       const emptyStates = getSlotEmptyStates(this.host.childNodes, {
         actions: '[slot="actions"]',
@@ -41,39 +49,27 @@ export class WppCard {
       this.wppFocus.emit(event);
     };
     this.onBlur = (event) => {
-      this.focusType = FOCUS_TYPE.NONE;
-      this.isPressed = false;
+      this.focusType = this.getUpdatedFocusInfo('card', FOCUS_TYPE.NONE);
+      this.focusType = this.getUpdatedFocusInfo('icon', FOCUS_TYPE.NONE);
       this.wppBlur.emit(event);
     };
     this.onMouseDown = () => {
-      this.focusType = FOCUS_TYPE.MOUSE;
+      this.focusType = this.getUpdatedFocusInfo('card', FOCUS_TYPE.MOUSE);
+      this.focusType = this.getUpdatedFocusInfo('icon', FOCUS_TYPE.MOUSE);
       this.updateComponentState({ active: true });
     };
-    this.onKeyUp = (event) => {
-      if (event.key === 'Tab' && document.activeElement === this.host) {
-        this.focusType = FOCUS_TYPE.TAB;
-      }
-      if (event.key === 'Enter' || event.key === ' ') {
-        this.isPressed = false;
-      }
-    };
-    this.onKeyDown = (event) => {
-      if (this.disabled || document.activeElement !== this.host)
-        return;
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        this.isPressed = true;
-        this.wppClick.emit({
-          checked: !this.checked,
-          value: this.value,
-        });
+    this.onKeyUp = (event, type) => {
+      if (event.key === 'Tab') {
+        this.focusType = this.getUpdatedFocusInfo(type, FOCUS_TYPE.TAB);
       }
     };
     this.checkTabIndex = () => {
-      if (!!this.type || this.interactive) {
+      if (this.hasActionsSlot && !this.interactive) {
+        return null;
+      }
+      else if ((this.interactive && !this.hasActionsSlot) || !!this.type) {
         return 0;
       }
-      return null;
     };
     this.updateComponentState = (updateData) => {
       this.componentState = {
@@ -89,9 +85,8 @@ export class WppCard {
       disabled: !!this.type && this.disabled,
       checked: this.checked,
       interactive: this.interactive,
-      'tab-focus': this.focusType === FOCUS_TYPE.TAB,
+      'tab-focus': this.focusType.card === FOCUS_TYPE.TAB && this.focusType.icon !== FOCUS_TYPE.TAB,
       'with-actions': this.hasActionsSlot,
-      pressed: this.isPressed,
     });
     this.headerCssClasses = () => ({
       header: true,
@@ -114,8 +109,7 @@ export class WppCard {
       hover: false,
       active: false,
     };
-    this.isPressed = false;
-    this.focusType = undefined;
+    this.focusType = getInitFocusInfo();
     this.variant = 'primary';
     this.value = undefined;
     this.size = 'm';
@@ -123,44 +117,19 @@ export class WppCard {
     this.disabled = false;
     this.checked = false;
     this.nested = false;
-    this.index = -1;
     this.withRadioOrCheckbox = undefined;
     this.name = undefined;
     this.interactive = false;
-    this.background = undefined;
-    this.ariaProps = {};
-  }
-  /**
-   * Method that sets focus on the card element.
-   */
-  async setFocus() {
-    this.host?.focus({ preventScroll: true });
-    this.focusType = FOCUS_TYPE.TAB;
   }
   componentWillLoad() {
     this.updateSlotData();
   }
   render() {
     const displayState = this.componentState.active ? 'active' : this.componentState.hover ? 'hover' : '';
-    const isInteractive = !!this.type || this.interactive;
-    const role = this.ariaProps.role ??
-      (this.type === 'single'
-        ? 'radio'
-        : this.type === 'multiple'
-          ? 'checkbox'
-          : this.interactive
-            ? 'button'
-            : undefined);
-    const tabIndex = this.disabled
-      ? -1
-      : (this.ariaProps.tabIndex ??
-        (this.type === 'single' ? this.index : this.type === 'multiple' ? 0 : this.checkTabIndex()));
-    return (h(Host, { onMouseEnter: () => this.updateComponentState({ hover: true }), onMouseLeave: () => this.updateComponentState({ hover: false }), onMouseUp: () => this.updateComponentState({ active: false }), ...(isInteractive ? { onMouseDown: this.onMouseDown } : {}), ...(isInteractive ? { onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp } : {}), ...(isInteractive ? { onClick: this.onClick } : {}), onFocus: this.onFocus, onBlur: this.onBlur, htmlFor: this.name, exportparts: "card, header-outer-wrapper, header-wrapper radio, checkbox, actions-wrapper", class: this.hostCssClasses(), tabIndex: tabIndex, role: role, "aria-disabled": this.withRadioOrCheckbox && this.disabled ? 'true' : undefined, "aria-labelledby": this.ariaProps?.labelledby, ...((this.interactive || this.type) && role !== 'button'
-        ? { ariaChecked: this.checked ? 'true' : 'false' }
-        : {}), ...(role === 'button' ? { 'aria-pressed': this.checked ? 'true' : 'false' } : {}) }, h("div", { class: this.cardCssClasses(), part: "card", ...(this.background ? { style: { background: this.background } } : {}) }, h("div", { class: this.headerWrapperCssClasses(), part: "header-outer-wrapper" }, h(WrappedSlot, { name: "header", wrapperClass: this.headerCssClasses(), onSlotchange: this.updateSlotData, part: "header" }), this.withRadioOrCheckbox && (h(Fragment, null, this.type === 'single' && (h("wpp-radio-v3-3-0", { class: "radio", internalState: displayState, name: this.name, checked: this.checked, disabled: this.disabled, index: -1, part: "radio", decorative: true })), this.type === 'multiple' && (h("wpp-checkbox-v3-3-0", { class: "checkbox", internalState: displayState, name: this.name, checked: this.checked, disabled: this.disabled, index: -1, part: "checkbox", decorative: true })))), h(WrappedSlot, { name: "actions", part: "actions", wrapperClass: this.actionsCssClasses(), onSlotchange: this.updateSlotData })), h("slot", null))));
+    return (h(Host, { onMouseEnter: () => this.updateComponentState({ hover: true }), onMouseLeave: () => this.updateComponentState({ hover: false }), onMouseUp: () => this.updateComponentState({ active: false }), onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'card'), onClick: this.onClick, onFocus: this.onFocus, onBlur: this.onBlur, "aria-disabled": this.disabled, "aria-checked": this.checked, "aria-hidden": this.disabled ? 'true' : null, htmlFor: this.name, exportparts: "card, header-outer-wrapper, header-wrapper radio, checkbox, actions-wrapper", class: this.hostCssClasses(), tabIndex: this.disabled ? -1 : this.checkTabIndex() }, h("div", { class: this.cardCssClasses(), part: "card" }, h("div", { class: this.headerWrapperCssClasses(), part: "header-outer-wrapper" }, h(WrappedSlot, { name: "header", wrapperClass: this.headerCssClasses(), onSlotchange: this.updateSlotData, part: "header" }), this.withRadioOrCheckbox && (h(Fragment, null, this.type === 'single' && (h("wpp-radio-v2-22-0", { class: "radio", internalState: displayState, name: this.name, checked: this.checked, disabled: this.disabled, index: -1, part: "radio" })), this.type === 'multiple' && (h("wpp-checkbox-v2-22-0", { class: "checkbox", internalState: displayState, name: this.name, checked: this.checked, disabled: this.disabled, index: -1, part: "checkbox" })))), h(WrappedSlot, { name: "actions", part: "actions", wrapperClass: this.actionsCssClasses(), onSlotchange: this.updateSlotData, onBlur: this.onBlur, tabIndex: 0, onKeyUp: (event) => this.onKeyUp(event, 'icon') })), h("slot", null))));
   }
   static get is() { return "wpp-card"; }
-  static get registryIs() { return "wpp-card-v3-3-0"; }
+  static get registryIs() { return "wpp-card-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -319,27 +288,6 @@ export class WppCard {
         "reflect": true,
         "defaultValue": "false"
       },
-      "index": {
-        "type": "number",
-        "mutable": true,
-        "complexType": {
-          "original": "number",
-          "resolved": "number",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [{
-              "name": "internal",
-              "text": "- This.prop is controlled by WppCardGroup component"
-            }],
-          "text": "Used be remove tab navigation from the card in case when the component has WppRadio inside."
-        },
-        "attribute": "index",
-        "reflect": false,
-        "defaultValue": "-1"
-      },
       "withRadioOrCheckbox": {
         "type": "boolean",
         "mutable": true,
@@ -394,45 +342,6 @@ export class WppCard {
         "attribute": "interactive",
         "reflect": false,
         "defaultValue": "false"
-      },
-      "background": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string | undefined",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": "Accepts CSS background property values to control the component's background appearance. This can include colors, images, gradients, and positioning parameters."
-        },
-        "attribute": "background",
-        "reflect": false
-      },
-      "ariaProps": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "AriaProps",
-          "resolved": "AriaProps",
-          "references": {
-            "AriaProps": {
-              "location": "import",
-              "path": "../../../../types/common",
-              "id": "src/types/common.ts::AriaProps"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Contains the card `aria-` props."
-        },
-        "defaultValue": "{}"
       }
     };
   }
@@ -441,7 +350,6 @@ export class WppCard {
       "hasHeaderSlot": {},
       "hasActionsSlot": {},
       "componentState": {},
-      "isPressed": {},
       "focusType": {}
     };
   }
@@ -508,27 +416,6 @@ export class WppCard {
           }
         }
       }];
-  }
-  static get methods() {
-    return {
-      "setFocus": {
-        "complexType": {
-          "signature": "() => Promise<void>",
-          "parameters": [],
-          "references": {
-            "Promise": {
-              "location": "global",
-              "id": "global::Promise"
-            }
-          },
-          "return": "Promise<void>"
-        },
-        "docs": {
-          "text": "Method that sets focus on the card element.",
-          "tags": []
-        }
-      }
-    };
   }
   static get elementRef() { return "host"; }
 }

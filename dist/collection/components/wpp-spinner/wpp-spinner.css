@@ -103,8 +103,3 @@
     transform: rotate(1080deg);
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  :host .spinner {
-    animation: none !important; /* stop rotation/shimmer */
-  }
-}

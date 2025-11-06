@@ -1,4 +1,3 @@
-import { AriaProps } from '../components';
 export declare function format(first?: string, middle?: string, last?: string): string;
 export declare const hasShadowDom: (el: HTMLElement) => boolean;
 export declare const getSlotEmptyStates: <T extends string>(nodes?: Node[] | NodeListOf<Node>, slotSelectors?: Record<T, string> | undefined) => Record<T | "main", boolean>;
@@ -6,7 +5,6 @@ export declare const debounce: <T extends (...args: any[]) => ReturnType<T>>(cal
 export declare const uuidv4: () => string;
 export declare const areSetsEqual: <T = any>(a: Set<T>, b: Set<T>) => boolean;
 export declare const isEventTargetContained: (containerEl: HTMLElement, event: Event) => boolean;
-export declare const hasParentWithId: (target: HTMLElement, id: string) => boolean;
 export declare const truncate: (value: string | undefined, maxLength: number, evenly?: boolean) => string;
 export declare const toKebabCase: (str: string) => string;
 export declare const isObject: (val: any) => boolean;
@@ -27,6 +25,4 @@ export declare const selectDropdownWidth: (dropdownWidth: string, triggerEl: HTM
 export declare function getHasFocused(): boolean;
 export declare function setHasFocused(value: boolean): void;
 export declare function getHighestContainerInDOM(): HTMLElement;
-export declare const getAriaProps: (ariaProps: AriaProps) => Record<string, string>;
-export declare const isWppElement: (element: HTMLElement) => boolean;
 export {};

@@ -1,5 +1,5 @@
 import { h, Host } from '@stencil/core';
-import { getSlotEmptyStates, closestElement, getAriaProps } from '../../utils/utils';
+import { getSlotEmptyStates, closestElement } from '../../utils/utils';
 import { FOCUS_TYPE } from '../../types/common';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 /**
@@ -42,7 +42,6 @@ export class WppActionButton {
         event.preventDefault();
         const clickEvent = new MouseEvent('click', { bubbles: true, composed: true });
         this.host.dispatchEvent(clickEvent);
-        this.isPressed = true;
       }
     };
     this.handleClick = (e) => {
@@ -71,7 +70,6 @@ export class WppActionButton {
     };
     this.onBlur = () => {
       this.focusType = FOCUS_TYPE.NONE;
-      this.isPressed = false;
     };
     this.onMouseDown = () => {
       this.focusType = FOCUS_TYPE.MOUSE;
@@ -79,9 +77,6 @@ export class WppActionButton {
     this.onKeyUp = (event) => {
       if (event.key === 'Tab')
         this.focusType = FOCUS_TYPE.TAB;
-      if (event.key === 'Enter' || event.key === ' ') {
-        this.isPressed = false;
-      }
     };
     this.hostCssClasses = () => ({
       'wpp-action-button': true,
@@ -96,7 +91,6 @@ export class WppActionButton {
       'with-icon-only': this.isIconOnly,
       'with-icon-start': this.hasIconStartSlot,
       'with-icon-end': this.hasIconEndSlot,
-      pressed: this.isPressed,
     });
     this.loadingColor = () => {
       switch (this.variant) {
@@ -133,8 +127,6 @@ export class WppActionButton {
     this.hasIconEndSlot = false;
     this.isIconOnly = false;
     this.focusType = undefined;
-    this.isPressed = false;
-    this.validAriaProps = {};
     this.disabled = false;
     this.loading = false;
     this.variant = 'primary';
@@ -145,29 +137,14 @@ export class WppActionButton {
     this.value = undefined;
     this.ariaProps = {};
   }
-  /**
-   * Method that sets focus on the native button.
-   */
-  async setFocus() {
-    setTimeout(() => {
-      if (this.buttonRef) {
-        this.buttonRef.focus();
-        this.focusType = FOCUS_TYPE.TAB;
-      }
-    }, 0);
-  }
-  onUpdateAriaProps() {
-    this.validAriaProps = getAriaProps(this.ariaProps);
-  }
   componentWillLoad() {
     this.updateSlotData();
-    this.validAriaProps = getAriaProps(this.ariaProps);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, exportparts: "button, spinner-wrapper, spinner, body, icon-start-wrapper, icon-start, icon-end-wrapper, icon-end, inner, overlay" }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, value: this.value, name: this.name, type: this.type, part: "button", "data-testid": "wppActionButton", "aria-pressed": this.isPressed ? 'true' : 'false', tabindex: this.ariaProps?.tabIndex, ...this.validAriaProps }, this.loading && (h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, h("wpp-spinner-v3-3-0", { color: this.loadingColor(), part: "spinner" }))), h("div", { class: this.contentCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("slot", { part: "inner", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData }))), h("div", { class: "overlay", part: "overlay" })));
+    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, exportparts: "button, spinner-wrapper, spinner, body, icon-start-wrapper, icon-start, icon-end-wrapper, icon-end, inner, overlay", "aria-disabled": this.disabled || this.loading, tabIndex: this.disabled || this.loading ? -1 : 0 }, h("button", { class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, value: this.value, name: this.name, type: this.type, part: "button", "data-testid": "wppActionButton", "aria-label": this.ariaProps.label, tabIndex: -1 }, this.loading && (h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, h("wpp-spinner-v2-22-0", { color: this.loadingColor(), part: "spinner" }))), h("div", { class: this.contentCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("slot", { part: "inner", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData }))), h("div", { class: "overlay", part: "overlay" })));
   }
   static get is() { return "wpp-action-button"; }
-  static get registryIs() { return "wpp-action-button-v3-3-0"; }
+  static get registryIs() { return "wpp-action-button-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -356,37 +333,8 @@ export class WppActionButton {
       "hasIconStartSlot": {},
       "hasIconEndSlot": {},
       "isIconOnly": {},
-      "focusType": {},
-      "isPressed": {},
-      "validAriaProps": {}
-    };
-  }
-  static get methods() {
-    return {
-      "setFocus": {
-        "complexType": {
-          "signature": "() => Promise<void>",
-          "parameters": [],
-          "references": {
-            "Promise": {
-              "location": "global",
-              "id": "global::Promise"
-            }
-          },
-          "return": "Promise<void>"
-        },
-        "docs": {
-          "text": "Method that sets focus on the native button.",
-          "tags": []
-        }
-      }
+      "focusType": {}
     };
   }
   static get elementRef() { return "host"; }
-  static get watchers() {
-    return [{
-        "propName": "ariaProps",
-        "methodName": "onUpdateAriaProps"
-      }];
-  }
 }

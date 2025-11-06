@@ -1,6 +1,7 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppProgressIndicator>;
+import { WppProgressIndicator } from './wpp-progress-indicator';
+declare const _default: Meta<typeof WppProgressIndicator>;
 export default _default;
-export declare const Bar: StoryObj<Components.WppProgressIndicator>;
-export declare const Circle: StoryObj<Components.WppProgressIndicator>;
+export declare const Bar: Story<Components.WppProgressIndicator>;
+export declare const Circle: Story<Components.WppProgressIndicator>;

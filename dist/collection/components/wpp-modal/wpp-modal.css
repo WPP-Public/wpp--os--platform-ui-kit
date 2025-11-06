@@ -9,8 +9,13 @@
   * @prop --wpp-modal-actions-paddings:
   * @prop --wpp-modal-header-padding:
   * @prop --wpp-modal-bg-color:
+  * @prop --wpp-modal-z-index:
 */
 :host {
+  --modal-overlay-bg-color: var(
+    --wpp-modal-overlay-bg-color,
+    color-mix(in srgb, var(--wpp-grey-color-500) 60%, transparent)
+  );
   --modal-width-s: var(--wpp-modal-width-s, 440px);
   --modal-width-m: var(--wpp-modal-width-m, 600px);
   --modal-box-shadow: var(--wpp-modal-box-shadow, var(--wpp-box-shadow-l));
@@ -20,6 +25,7 @@
   --modal-actions-paddings: var(--wpp-modal-actions-paddings, 24px);
   --modal-header-padding: var(--wpp-modal-header-padding, 20px 24px 16px 24px);
   --modal-transition: visibility 0.15s linear 0.2s, opacity 0.2s 0.2s;
+  --modal-z-index: var(--wpp-modal-z-index, 1100);
   --modal-bg-color: var(--wpp-modal-bg-color, var(--wpp-grey-color-000));
 }
 
@@ -29,6 +35,7 @@
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: var(--modal-z-index);
   display: block;
   font-family: var(--wpp-font-family);
   visibility: hidden;
@@ -72,8 +79,6 @@
 }
 
 .body {
-  scrollbar-width: thin;
-  scrollbar-color: var(--wpp-grey-color-400) transparent;
   font-size: var(--wpp-typography-s-body-font-size, 14px);
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
@@ -81,15 +86,6 @@
   font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
   padding: var(--modal-body-paddings);
-}
-.body::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-.body::-webkit-scrollbar-thumb {
-  border: 2px solid transparent;
-  border-radius: 4px;
-  box-shadow: inset 0 0 0 2px var(--wpp-grey-color-400);
 }
 
 .actions {
@@ -106,6 +102,13 @@
   position: absolute;
   width: 100%;
   height: 100%;
+}
+
+.overlay-color {
+  width: 100%;
+  height: 100%;
+  background-color: var(--modal-overlay-bg-color);
+  will-change: opacity;
 }
 
 .modal {

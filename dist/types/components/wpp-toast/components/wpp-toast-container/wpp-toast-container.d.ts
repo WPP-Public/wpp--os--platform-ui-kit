@@ -15,10 +15,6 @@ export declare class WppToastContainer {
    */
   readonly maxToastsToDisplay: number;
   /**
-   * Defines the z-index of the WppToastContainer.
-   */
-  readonly zIndex: number;
-  /**
    * Method for adding toasts to `toast-container`.
    */
   addToast(data: ToastState): Promise<string>;

@@ -142,7 +142,7 @@
 .wpp-richtext .ql-form-control.tab-focus.tab-focus {
   border-radius: var(--wpp-border-radius-m);
   outline: none;
-  box-shadow: 0 0 0 1px var(--richtext-first-border-color-focus), 0 0 0 3px var(--richtext-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--richtext-first-border-color-focus), 0 0 0 2px var(--richtext-second-border-color-focus);
 }
 .wpp-richtext .ql-form-control.tab-focus .ql-toolbar *:focus {
   outline-color: var(--richtext-toolbar-outline-color);
@@ -186,8 +186,18 @@
 .wpp-richtext .ql-form-control.warning, .wpp-richtext .ql-form-control.warning:hover {
   border: var(--richtext-border-width) var(--richtext-border-style) var(--wpp-warning-color-400);
 }
+.wpp-richtext .ql-form-control.warning.tab-focus {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-warning-color-400);
+}
 .wpp-richtext .ql-form-control.error, .wpp-richtext .ql-form-control.error:hover {
   border: var(--richtext-border-width) var(--richtext-border-style) var(--wpp-danger-color-400);
+}
+.wpp-richtext .ql-form-control.error.tab-focus {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-danger-color-400);
 }
 .wpp-richtext .ql-form-control.disabled *,
 .wpp-richtext .ql-form-control.disabled .ql-editor.ql-blank:before, .wpp-richtext .ql-form-control.disabled:hover *,
@@ -303,10 +313,4 @@
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
   font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
-}
-
-.preserve-whitespace,
-.preserve-whitespace .ql-editor {
-  white-space: pre-wrap;
-  word-break: break-word;
 }

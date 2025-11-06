@@ -4,7 +4,7 @@ import { SideModalCloseDetails, SideModalFormConfig, SideModalCloseReason, Actio
  * @slot header - Content that is displayed within the `.side-modal` element. To add header content, pass `slot="header"` – can contain the modal title.
  * @slot body - Content that is displayed within the `.side-modal` element. To add body content, pass `slot="body"` – can contain any text that describes the modal actions.
  * @slot actions - Content that is displayed within the `.side-modal` element. To add actions, pass `slot="actions"` – can contain any action buttons.
- * @deprecated The `actions` slot is deprecated and will be removed in the next major release (v3.0.0). Use the `actionsConfig` property instead.
+ * @deprecated The `actions` slot is deprecated and will be removed in a future release (v2.x.x). Use the `actionsConfig` property instead.
  *
  * @part content - modal content element
  * @part wrapper - component wrapper element
@@ -21,8 +21,6 @@ import { SideModalCloseDetails, SideModalFormConfig, SideModalCloseReason, Actio
 export declare class WppSideModal {
   private leftButtonConfig;
   private rightButtonsConfig;
-  private topOffset;
-  private ignoreOutsideClicks;
   host: HTMLWppSideModalElement;
   isShowContent: boolean;
   isReady: boolean;
@@ -66,14 +64,6 @@ export declare class WppSideModal {
    */
   readonly backdropVisible: boolean;
   /**
-   * Defines the z-index of the WppSideModal.
-   */
-  readonly zIndex: number;
-  /**
-   * If `true` - the side modal will be rendered below the OS bar.
-   */
-  readonly osBarCompatible: boolean;
-  /**
    * Handles the side modal closing actions.
    */
   wppSideModalClose: EventEmitter<SideModalCloseDetails>;
@@ -95,7 +85,7 @@ export declare class WppSideModal {
   wppSideModalCloseComplete: EventEmitter<SideModalCloseDetails>;
   /**
    * Handles the side modal click actions.
-   * @deprecated - this prop will be deleted in version 4.0.0 . Use `wppSideModalOpenStart`/`wppSideModalOpenComplete` instead
+   * @deprecated - this prop will be deleted in version 3.0.0 . Use `wppSideModalOpenStart`/`wppSideModalOpenComplete` instead
    */
   wppSideModalOpen: EventEmitter<void>;
   /**
@@ -113,13 +103,11 @@ export declare class WppSideModal {
    * Method for opening the modal.
    */
   openModal(): Promise<void>;
-  handleClickOutside(event: MouseEvent): void;
   private updateButtons;
   private onOverlayClick;
   componentWillLoad(): void;
   componentDidLoad(): void;
   disconnectedCallback(): void;
-  private getTopOffset;
   private handleScroll;
   private updateSlotData;
   private handleCloseModal;

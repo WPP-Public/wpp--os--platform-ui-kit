@@ -91,22 +91,13 @@
   --button-primary-bg-color-disabled: var(--wpp-button-primary-bg-color-disabled, var(--wpp-brand-color-disabled));
   --button-primary-text-color: var(--wpp-button-primary-text-color, var(--wpp-grey-color-000));
   --button-primary-icon-color: var(--wpp-button-primary-icon-color, var(--wpp-grey-color-000));
-  --button-secondary-padding-m: var(
-    --wpp-button-secondary-padding-m,
-    calc(9px - var(--button-border-width)) calc(20px - var(--button-border-width))
-  );
-  --button-secondary-padding-s: var(
-    --wpp-button-secondary-padding-s,
-    calc(5px - var(--button-border-width)) calc(16px - var(--button-border-width))
-  );
+  --button-secondary-padding-m: var(--wpp-button-secondary-padding-m, calc(9px - var(--button-border-width)) calc(20px - var(--button-border-width)));
+  --button-secondary-padding-s: var(--wpp-button-secondary-padding-s, calc(5px - var(--button-border-width)) calc(16px - var(--button-border-width)));
   --button-secondary-bg-color-hover: var(--wpp-button-secondary-bg-color-hover, var(--wpp-primary-color-100));
   --button-secondary-bg-color-active: var(--wpp-button-secondary-bg-color-active, var(--wpp-primary-color-200));
   --button-secondary-bg-color-disabled: var(--wpp-button-secondary-bg-color-disabled, transparent);
   --button-secondary-border-color: var(--wpp-button-secondary-border-color, var(--wpp-brand-color));
-  --button-secondary-border-color-active: var(
-    --wpp-button-secondary-border-color-active,
-    var(--wpp-brand-color-active)
-  );
+  --button-secondary-border-color-active: var(--wpp-button-secondary-border-color-active, var(--wpp-brand-color-active));
   --button-secondary-border-color-disabled: var(
     --wpp-button-secondary-border-color-disabled,
     var(--wpp-brand-color-disabled)
@@ -123,115 +114,41 @@
     --wpp-button-secondary-icon-color-disabled,
     var(--wpp-brand-color-disabled)
   );
-  --button-destructive-secondary-padding-m: var(
-    --wpp-button-destructive-secondary-padding-m,
-    calc(9px - var(--button-border-width)) calc(20px - var(--button-border-width))
-  );
-  --button-destructive-secondary-padding-s: var(
-    --wpp-button-destructive-secondary-padding-s,
-    calc(5px - var(--button-border-width)) calc(16px - var(--button-border-width))
-  );
+  --button-destructive-secondary-padding-m: var(--wpp-button-destructive-secondary-padding-m, calc(9px - var(--button-border-width)) calc(20px - var(--button-border-width)));
+  --button-destructive-secondary-padding-s: var(--wpp-button-destructive-secondary-padding-s, calc(5px - var(--button-border-width)) calc(16px - var(--button-border-width)));
   --button-destructive-secondary-bg-color: var(--wpp-button-destructive-secondary-bg-color, transparent);
-  --button-destructive-secondary-bg-color-hover: var(
-    --wpp-button-destructive-secondary-bg-color-hover,
-    var(--wpp-danger-color-200)
-  );
-  --button-destructive-secondary-bg-color-active: var(
-    --wpp-button-destructive-secondary-bg-color-active,
-    var(--wpp-danger-color-300)
-  );
-  --button-destructive-secondary-bg-color-disabled: var(
-    --wpp-button-destructive-secondary-bg-color-disabled,
-    transparent
-  );
-  --button-destructive-secondary-bg-color-loading: var(
-    --wpp-button-destructive-secondary-bg-color-loading,
-    transparent
-  );
-  --button-destructive-secondary-border-color: var(
-    --wpp-button-destructive-secondary-border-color,
-    var(--wpp-danger-color-500)
-  );
-  --button-destructive-secondary-border-color-hover: var(
-    --wpp-button-destructive-secondary-border-color-hover,
-    var(--wpp-danger-color-500)
-  );
-  --button-destructive-secondary-border-color-active: var(
-    --wpp-button-destructive-secondary-border-color-active,
-    var(--wpp-danger-color-600)
-  );
-  --button-destructive-secondary-border-color-disabled: var(
-    --wpp-button-destructive-secondary-border-color-disabled,
-    var(--wpp-danger-color-300)
-  );
-  --button-destructive-secondary-border-color-loading: var(
-    --wpp-button-destructive-secondary-border-color-loading,
-    var(--wpp-danger-color-500)
-  );
-  --button-destructive-secondary-text-color: var(
-    --wpp-button-destructive-secondary-text-color,
-    var(--wpp-danger-color-500)
-  );
-  --button-destructive-secondary-text-color-disabled: var(
-    --wpp-button-destructive-secondary-text-color-disabled,
-    var(--wpp-danger-color-300)
-  );
-  --button-destructive-secondary-icon-color: var(
-    --wpp-button-destructive-secondary-icon-color,
-    var(--wpp-danger-color-500)
-  );
+  --button-destructive-secondary-bg-color-hover: var(--wpp-button-destructive-secondary-bg-color-hover, var(--wpp-danger-color-100));
+  --button-destructive-secondary-bg-color-active: var(--wpp-button-destructive-secondary-bg-color-active, var(--wpp-danger-color-200));
+  --button-destructive-secondary-bg-color-disabled: var(--wpp-button-destructive-secondary-bg-color-disabled, transparent);
+  --button-destructive-secondary-bg-color-loading: var(--wpp-button-destructive-secondary-bg-color-loading, transparent);
+  --button-destructive-secondary-border-color: var(--wpp-button-destructive-secondary-border-color, var(--wpp-danger-color-500));
+  --button-destructive-secondary-border-color-hover: var(--wpp-button-destructive-secondary-border-color-hover, var(--wpp-danger-color-500));
+  --button-destructive-secondary-border-color-active: var(--wpp-button-destructive-secondary-border-color-active, var(--wpp-danger-color-600));
+  --button-destructive-secondary-border-color-disabled: var(--wpp-button-destructive-secondary-border-color-disabled, var(--wpp-danger-color-300));
+  --button-destructive-secondary-border-color-loading: var(--wpp-button-destructive-secondary-border-color-loading, var(--wpp-danger-color-500));
+  --button-destructive-secondary-text-color: var(--wpp-button-destructive-secondary-text-color, var(--wpp-danger-color-500));
+  --button-destructive-secondary-text-color-disabled: var(--wpp-button-destructive-secondary-text-color-disabled, var(--wpp-danger-color-300));
+  --button-destructive-secondary-icon-color: var(--wpp-button-destructive-secondary-icon-color, var(--wpp-danger-color-500));
   --button-inverted-primary-bg-color: var(--wpp-button-inverted-primary-bg-color, var(--wpp-grey-color-000));
-  --button-inverted-primary-disabled-bg-color: var(
-    --wpp-button-inverted-primary-disabled-bg-color,
-    var(--wpp-grey-color-000)
-  );
+  --button-inverted-primary-disabled-bg-color: var(--wpp-button-inverted-primary-disabled-bg-color, var(--wpp-grey-color-000));
   --button-inverted-primary-hover-opacity: var(--wpp-button-inverted-primary-hover-opacity, 88%);
   --button-inverted-primary-active-opacity: var(--wpp-button-inverted-primary-active-opacity, 80%);
   --button-inverted-primary-loading-opacity: var(--wpp-button-inverted-primary-loading-opacity, 80%);
   --button-inverted-primary-text-color: var(--wpp-button-inverted-primary-text-color, var(--wpp-grey-color-1000));
-  --button-inverted-primary-text-color-disabled: var(
-    --wpp-button-inverted-primary-text-color-disabled,
-    var(--wpp-grey-color-500)
-  );
+  --button-inverted-primary-text-color-disabled: var(--wpp-button-inverted-primary-text-color-disabled, var(--wpp-grey-color-500));
   --button-inverted-primary-icon-color: var(--wpp-button-inverted-primary-icon-color, var(--wpp-grey-color-1000));
-  --button-inverted-primary-icon-color-disabled: var(
-    --wpp-button-inverted-primary-icon-color-disabled,
-    var(--wpp-grey-color-500)
-  );
-  --button-inverted-first-border-color-focus: var(
-    --wpp-button-inverted-first-border-color-focus,
-    var(--wpp-grey-color-000)
-  );
-  --button-inverted-second-border-color-focus: var(
-    --wpp-button-inverted-second-border-color-focus,
-    var(--wpp-grey-color-000)
-  );
+  --button-inverted-primary-icon-color-disabled: var(--wpp-button-inverted-primary-icon-color-disabled, var(--wpp-grey-color-500));
   --button-inverted-secondary-bg-color: var(--wpp-button-inverted-secondary-bg-color, var(--wpp-grey-color-900));
-  --button-inverted-secondary-bg-color-disabled: var(
-    --wpp-button-inverted-secondary-bg-color-disabled,
-    var(--wpp-grey-color-900)
-  );
+  --button-inverted-secondary-bg-color-disabled: var(--wpp-button-inverted-secondary-bg-color-disabled, var(--wpp-grey-color-900));
   --button-inverted-secondary-hover-opacity: var(--wpp-button-inverted-secondary-hover-opacity, 12%);
   --button-inverted-secondary-active-opacity: var(--wpp-button-inverted-secondary-active-opacity, 18%);
   --button-inverted-secondary-loading-opacity: var(--wpp-button-inverted-secondary-loading-opacity, 18%);
   --button-inverted-secondary-text-color: var(--wpp-button-inverted-secondary-text-color, var(--wpp-grey-color-000));
-  --button-inverted-secondary-text-color-disabled: var(
-    --wpp-button-inverted-secondary-text-color-disabled,
-    var(--wpp-grey-color-500)
-  );
+  --button-inverted-secondary-text-color-disabled: var(--wpp-button-inverted-secondary-text-color-disabled, var(--wpp-grey-color-500));
   --button-inverted-secondary-icon-color: var(--wpp-button-inverted-secondary-icon-color, var(--wpp-grey-color-000));
-  --button-inverted-secondary-icon-color-disabled: var(
-    --wpp-button-inverted-secondary-icon-color-disabled,
-    var(--wpp-grey-color-500)
-  );
-  --button-inverted-secondary-border-color: var(
-    --wpp-button-inverted-secondary-border-color,
-    var(--wpp-grey-color-000)
-  );
-  --button-inverted-secondary-border-color-disabled: var(
-    --wpp-button-inverted-secondary-border-color-disabled,
-    var(--wpp-grey-color-500)
-  );
+  --button-inverted-secondary-icon-color-disabled: var(--wpp-button-inverted-secondary-icon-color-disabled, var(--wpp-grey-color-500));
+  --button-inverted-secondary-border-color: var(--wpp-button-inverted-secondary-border-color, var(--wpp-grey-color-000));
+  --button-inverted-secondary-border-color-disabled: var(--wpp-button-inverted-secondary-border-color-disabled, var(--wpp-grey-color-500));
   display: inline-flex;
   outline: none;
   vertical-align: top;
@@ -313,7 +230,7 @@
 .button.tab-focus {
   border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--button-first-border-color-focus), 0 0 0 3px var(--button-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--button-first-border-color-focus), 0 0 0 2px var(--button-second-border-color-focus);
 }
 .button.disabled {
   cursor: not-allowed;
@@ -330,17 +247,14 @@
   cursor: not-allowed;
 }
 .button.with-icon-only.secondary .icon-start,
-.button.with-icon-only.secondary .icon-end,
-.button.with-icon-only .destructive-secondary .icon-start,
+.button.with-icon-only.secondary .icon-end, .button.with-icon-only .destructive-secondary .icon-start,
 .button.with-icon-only .destructive-secondary .icon-end {
   margin: 0;
 }
-.button.with-icon-only.secondary.size-m,
-.button.with-icon-only .destructive-secondary.size-m {
+.button.with-icon-only.secondary.size-m, .button.with-icon-only .destructive-secondary.size-m {
   padding: var(--button-icon-padding-m);
 }
-.button.with-icon-only.secondary.size-s,
-.button.with-icon-only .destructive-secondary.size-s {
+.button.with-icon-only.secondary.size-s, .button.with-icon-only .destructive-secondary.size-s {
   padding: var(--button-icon-padding-s);
 }
 .button.with-icon-start:not(.with-icon-only).size-m {
@@ -366,7 +280,7 @@
 .button.primary:hover, .button.primary.tab-focus {
   background-color: var(--button-primary-bg-color-hover);
 }
-.button.primary:active, .button.primary.pressed {
+.button.primary:active {
   background-color: var(--button-primary-bg-color-active);
 }
 .button.primary:disabled {
@@ -386,7 +300,7 @@
 .button.destructive:hover, .button.destructive.tab-focus {
   background-color: var(--wpp-danger-color-400);
 }
-.button.destructive:active, .button.destructive.pressed {
+.button.destructive:active {
   background-color: var(--wpp-danger-color-600);
 }
 .button.destructive:disabled {
@@ -414,7 +328,7 @@
   background-color: var(--button-destructive-secondary-bg-color-hover);
   border-color: var(--button-destructive-secondary-border-color-hover);
 }
-.button.destructive-secondary:active, .button.destructive-secondary.pressed {
+.button.destructive-secondary:active, .button.destructive-secondary.tab-focus {
   background-color: var(--button-destructive-secondary-bg-color-active);
   border-color: var(--button-destructive-secondary-border-color-active);
 }
@@ -449,14 +363,13 @@
 .button.secondary:hover, .button.secondary.tab-focus {
   background-color: var(--button-secondary-bg-color-hover);
 }
-.button.secondary:active, .button.secondary.pressed {
+.button.secondary:active {
   background-color: var(--button-secondary-bg-color-active);
   border-color: var(--button-secondary-border-color-active);
   color: var(--button-secondary-text-color-active);
 }
 .button.secondary:active .icon-start ::slotted(*),
-.button.secondary:active .icon-end ::slotted(*), .button.secondary.pressed .icon-start ::slotted(*),
-.button.secondary.pressed .icon-end ::slotted(*) {
+.button.secondary:active .icon-end ::slotted(*) {
   color: var(--button-secondary-icon-color-active);
 }
 .button.secondary:disabled {
@@ -476,11 +389,6 @@
   color: var(--button-inverted-primary-text-color);
   background-color: var(--button-inverted-primary-bg-color);
 }
-.button.inverted.primary.tab-focus {
-  border-radius: "";
-  outline: none;
-  box-shadow: 0 0 0 1px var(--button-inverted-primary-text-color), 0 0 0 3px var(--button-inverted-second-border-color-focus);
-}
 .button.inverted.primary .icon-start ::slotted(*),
 .button.inverted.primary .icon-end ::slotted(*) {
   color: var(--button-inverted-primary-icon-color);
@@ -488,7 +396,7 @@
 .button.inverted.primary:hover, .button.inverted.primary.tab-focus {
   background-color: rgba(255, 255, 255, var(--button-inverted-primary-hover-opacity));
 }
-.button.inverted.primary:active, .button.inverted.primary.pressed {
+.button.inverted.primary:active {
   background-color: rgba(255, 255, 255, var(--button-inverted-primary-active-opacity));
 }
 .button.inverted.primary:disabled {
@@ -508,11 +416,6 @@
   background-color: var(--button-inverted-secondary-bg-color);
   border: var(--button-border-width) var(--button-border-style) var(--button-inverted-secondary-border-color);
 }
-.button.inverted.secondary.tab-focus {
-  border-radius: "";
-  outline: none;
-  box-shadow: 0 0 0 1px var(--button-inverted-secondary-bg-color), 0 0 0 3px var(--button-inverted-second-border-color-focus);
-}
 .button.inverted.secondary .icon-start ::slotted(*),
 .button.inverted.secondary .icon-end ::slotted(*) {
   color: var(--button-inverted-secondary-icon-color);
@@ -520,7 +423,7 @@
 .button.inverted.secondary:hover, .button.inverted.secondary.tab-focus {
   background-color: rgba(248, 249, 251, var(--button-inverted-secondary-hover-opacity));
 }
-.button.inverted.secondary:active, .button.inverted.secondary.pressed {
+.button.inverted.secondary:active {
   background-color: rgba(248, 249, 251, var(--button-inverted-secondary-active-opacity));
 }
 .button.inverted.secondary:disabled {

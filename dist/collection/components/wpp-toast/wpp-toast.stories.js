@@ -1,4 +1,6 @@
 import { html } from 'lit-html';
+import ToastReadme from './readme.md';
+import ToastContainerReadme from './components/wpp-toast-container/readme.md';
 export default {
   title: 'Design System/Components/Feedback/Toast',
   parameters: {
@@ -7,6 +9,7 @@ export default {
         hidden: true,
       },
     },
+    notes: { Container: ToastContainerReadme, Items: ToastReadme },
   },
   argTypes: {
     message: { type: 'string' },
@@ -25,7 +28,7 @@ const primaryBtn = {
   onClick: () => alert('Some action'),
 };
 export const ActionOff = (args) => html `
-  <wpp-toast-v3-3-0
+  <wpp-toast-v2-22-0
     .message="${args.message}"
     .icon="${args.icon}"
     .maxMessageLines="${args.maxMessageLines}"
@@ -46,7 +49,7 @@ ActionOff.args = {
   type: 'success',
 };
 export const ActionOn = (args) => html `
-  <wpp-toast-v3-3-0
+  <wpp-toast-v2-22-0
     .message="${args.message}"
     .icon="${args.icon}"
     .maxMessageLines="${args.maxMessageLines}"
@@ -54,9 +57,8 @@ export const ActionOn = (args) => html `
     .type="${args.type}"
     .primaryBtn="${primaryBtn}"
     .duration="${30000}"
-    .ariaProps="${args.ariaProps}"
   >
-  </wpp-toast-v3-3-0>
+  </wpp-toast-v2-22-0>
 `;
 ActionOn.args = {
   message: 'Warning message',
@@ -68,7 +70,4 @@ ActionOn.args = {
   maxMessageLines: 2,
   header: 'Title',
   type: 'warning',
-  ariaProps: {
-    label: 'Button',
-  },
 };

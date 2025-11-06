@@ -1,9 +1,8 @@
 import { Host, h } from '@stencil/core';
 import isEqual from 'lodash/isEqual';
 import { menuListConfig as tooltipConfig } from '../../common/menuListConfig';
-import { cssStyles } from './const';
+import { cssStyles } from './consts';
 import { defaultTooltipConfig } from './config';
-import { isWppElement } from '../../utils/utils';
 /**
  * @slot - Can contain the tooltip anchor content. The default slot, without the name attribute.
  * @slot tooltip-content - Contains the custom content the user gives to the tooltip. To use this slot, you also have to pass `allowHTML: true` to the `config` property. Do not use WPP components (except WppTypography) in this slot.
@@ -13,14 +12,6 @@ export class WppTooltip {
     this.arrowColor = {};
     this.FORBIDDEN_PREFIX = 'wpp-';
     this.ALLOWED_TAGS = ['wpp-typography'];
-    this.handleSlotChange = () => {
-      if (this.slotRef) {
-        // Get all assigned elements from the slot
-        const slot = this.slotRef;
-        const assignedElements = slot.assignedElements();
-        this.anchorRef = assignedElements[0];
-      }
-    };
     this.transformAllowedTags = () => this.ALLOWED_TAGS.map(el => el
       .split('-')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -42,44 +33,14 @@ export class WppTooltip {
         return;
       }
       const content = this.config.allowHTML ? this.customContentEl : this.contentEl;
-      if (this.anchorRef && content) {
+      if (this.anchorEl && content) {
         this.tippyInstance = tooltipConfig({
-          anchor: this.anchorRef,
+          anchor: this.anchorEl,
           content,
           triggerElementWidth: false,
           arrow: this.arrowSVG(),
-          hideOnEsc: true,
-          aria: {
-            expanded: undefined,
-          },
           ...defaultTooltipConfig,
           ...this.config,
-          onMount(instance) {
-            const referenceElement = instance.reference;
-            if (!referenceElement)
-              return;
-            if (isWppElement(referenceElement)) {
-              referenceElement.ariaProps = {
-                ...referenceElement.ariaProps,
-                describedby: `tippy-${instance.id}`,
-              };
-            }
-            else {
-              referenceElement.setAttribute('aria-describedby', `tippy-${instance.id}`);
-            }
-          },
-          onHide(instance) {
-            const referenceElement = instance.reference;
-            if (!referenceElement)
-              return;
-            if (isWppElement(referenceElement)) {
-              const { describedby, ...restProps } = referenceElement.ariaProps;
-              referenceElement.ariaProps = restProps;
-            }
-            else {
-              referenceElement.removeAttribute('aria-describedby');
-            }
-          },
           onShow: (instance) => {
             if (this.dropdownWidth !== 'auto') {
               instance.popper.style.width = this.dropdownWidth;
@@ -93,7 +54,6 @@ export class WppTooltip {
             }
           },
           popperOptions: {
-            strategy: 'fixed',
             ...(this.config.popperOptions || {}),
             modifiers: [
               {
@@ -146,8 +106,6 @@ export class WppTooltip {
     this.config = {};
     this.externalClass = '';
     this.dropdownWidth = 'auto';
-    this.ariaProps = {};
-    this.anchorTabIndex = 0;
   }
   updateConfig(newConfig, oldConfig) {
     if (!isEqual(newConfig, oldConfig)) {
@@ -159,7 +117,6 @@ export class WppTooltip {
     this.tippyInstance?.setProps({
       arrow: this.arrowSVG(),
     });
-    this.tippyInstance?.popperInstance?.update();
   }
   textChanged(newText, oldText) {
     if (newText !== oldText && this.contentEl) {
@@ -187,7 +144,7 @@ export class WppTooltip {
   }
   componentWillLoad() {
     if (this.config.allowHTML) {
-      const content = this.host?.querySelector('[slot="tooltip-content"]');
+      const content = this.host.querySelector('[slot="tooltip-content"]');
       if (content) {
         const validateElement = (element) => {
           element.childNodes.forEach(node => {
@@ -230,10 +187,10 @@ export class WppTooltip {
     }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v3-3-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { part: "anchor", class: "anchor", ref: anchorEl => (this.anchorEl = anchorEl) }, h("slot", { part: "inner" })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v2-22-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}` })))));
   }
   static get is() { return "wpp-tooltip"; }
-  static get registryIs() { return "wpp-tooltip-v3-3-0"; }
+  static get registryIs() { return "wpp-tooltip-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -454,49 +411,6 @@ export class WppTooltip {
         "attribute": "dropdown-width",
         "reflect": true,
         "defaultValue": "'auto'"
-      },
-      "ariaProps": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "AriaProps",
-          "resolved": "AriaProps",
-          "references": {
-            "AriaProps": {
-              "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::AriaProps"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Contains the button `aria-` props."
-        },
-        "defaultValue": "{}"
-      },
-      "anchorTabIndex": {
-        "type": "number",
-        "mutable": false,
-        "complexType": {
-          "original": "number",
-          "resolved": "number",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [{
-              "name": "internal",
-              "text": "- This prop is for internal use only."
-            }],
-          "text": "If set, makes the tooltip anchor focusable. Default is false."
-        },
-        "attribute": "anchor-tab-index",
-        "reflect": false,
-        "defaultValue": "0"
       }
     };
   }
@@ -513,12 +427,6 @@ export class WppTooltip {
         "methodName": "updateConfig"
       }, {
         "propName": "theme",
-        "methodName": "updateTheme"
-      }, {
-        "propName": "error",
-        "methodName": "updateTheme"
-      }, {
-        "propName": "warning",
         "methodName": "updateTheme"
       }, {
         "propName": "text",

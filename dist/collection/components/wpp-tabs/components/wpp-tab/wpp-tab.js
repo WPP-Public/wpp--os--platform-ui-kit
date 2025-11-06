@@ -1,6 +1,5 @@
 import { Host, h } from '@stencil/core';
 import { FOCUS_TYPE } from '../../../../types/common';
-import { transformToVersionedTag } from '../../../../utils/utils';
 /**
  * @part wrapper - component wrapper element
  * @part inner - Content slot element
@@ -42,7 +41,6 @@ export class WppTab {
       'wpp-tab': true,
       'tab-focus': this.focusType === 'tab-focus',
       [`size-${this.size}`]: true,
-      'wpp-icon-and-counter': !!this.icon && this.counter > 0,
     });
     this.hostCssClasses = () => ({
       'wpp-tab': true,
@@ -53,7 +51,6 @@ export class WppTab {
     this.value = undefined;
     this.counter = 0;
     this.size = 'm';
-    this.icon = undefined;
   }
   componentDidLoad() {
     document.addEventListener('visibilitychange', this.handleVisibilityChange);
@@ -65,10 +62,10 @@ export class WppTab {
     return this.disabled ? -1 : 0;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), tabIndex: this.tabIndex, exportparts: "wrapper, inner, counter", onClick: this.handleClickTab, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onBlur: this.onBlur }, h("div", { class: this.cssClasses(), role: "option", "aria-selected": this.active ? 'true' : 'false', id: this.value, part: "wrapper" }, this.icon && h(transformToVersionedTag(this.icon), { className: 'wpp-tab-icon' }), h("slot", { part: "inner" }), this.counter > 0 && h("div", { class: "counter", part: "counter" }, `(${this.counter})`))));
+    return (h(Host, { class: this.hostCssClasses(), tabIndex: this.tabIndex, exportparts: "wrapper, inner, counter", onClick: this.handleClickTab, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onBlur: this.onBlur }, h("div", { class: this.cssClasses(), role: "option", "aria-selected": this.active ? 'true' : 'false', id: this.value, part: "wrapper" }, h("slot", { part: "inner" }), this.counter > 0 && h("div", { class: "counter", part: "counter" }, `(${this.counter})`))));
   }
   static get is() { return "wpp-tab"; }
-  static get registryIs() { return "wpp-tab-v3-3-0"; }
+  static get registryIs() { return "wpp-tab-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -170,23 +167,6 @@ export class WppTab {
         "attribute": "size",
         "reflect": false,
         "defaultValue": "'m'"
-      },
-      "icon": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "`wpp-icon-${string}`",
-          "resolved": "`wpp-icon-${string}`",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the icon that will be displayed in the tab. Must be an icon from the WPP library.\nExample: `wpp-icon-pie-chart`."
-        },
-        "attribute": "icon",
-        "reflect": false
       }
     };
   }

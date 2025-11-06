@@ -12,7 +12,6 @@ export class WppStepper {
   constructor() {
     this.prevStep = 0;
     this.componentHasLoaded = false;
-    this.stepMainNdx = 0;
     this.setTextCSSVariables = () => {
       this.host.style.setProperty('--wpp-vertical-stepper-width', this.stepperWidth);
       if (this.stepperWidth.includes('%')) {
@@ -32,15 +31,7 @@ export class WppStepper {
       const lastStep = stepList.length - 1;
       const stepWidth = stepperWidth / stepListLength;
       const isHorizontalOrientation = this.orientation === 'horizontal';
-      return {
-        stepperWidth,
-        stepList,
-        stepListLength,
-        lastStep,
-        stepWidth,
-        isHorizontalOrientation,
-        listLength,
-      };
+      return { stepperWidth, stepList, stepListLength, lastStep, stepWidth, isHorizontalOrientation, listLength };
     };
     this.calculateStepperPosition = () => {
       const { listLength, stepWidth } = this.getStepperProps();
@@ -106,8 +97,6 @@ export class WppStepper {
       const { stepList, lastStep, stepWidth, isHorizontalOrientation } = this.getStepperProps();
       let parentStep;
       stepList.forEach((step, index) => {
-        if (this.stepMainNdx === index + 1)
-          step.classList.add('wpp-last-step');
         if (!step.substep) {
           parentStep?.setAttribute('lastSubstepStepIndex', `${index}`);
           parentStep = step;
@@ -399,8 +388,6 @@ export class WppStepper {
     setTimeout(() => {
       this.setStepAttribute();
       this.componentHasLoaded = true;
-      const stepMainList = this.host.querySelectorAll(`:scope > ${transformToVersionedTag('wpp-step')}`);
-      this.stepMainNdx = Number(stepMainList[stepMainList.length - 1]?.getAttribute('index'));
     }, 0);
     if (this.orientation === 'horizontal' && this.useResizeObserver) {
       this.resizeObserver = new ResizeObserver(this.onResize);
@@ -422,7 +409,7 @@ export class WppStepper {
     return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, indicator" }, h("div", { class: this.stepperWrapperCssClasses(), part: "wrapper" }, h("slot", { part: "inner" })), isHorizontalOrientation && this.stepAmount ? (h("div", { class: { 'step-indicator': true, hide: this.stepIndicator <= 0 }, part: "indicator" }, "+", this.stepIndicator || 1)) : null));
   }
   static get is() { return "wpp-stepper"; }
-  static get registryIs() { return "wpp-stepper-v3-3-0"; }
+  static get registryIs() { return "wpp-stepper-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

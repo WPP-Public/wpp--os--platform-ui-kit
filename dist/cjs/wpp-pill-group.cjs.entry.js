@@ -3,8 +3,8 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const utils = require('./utils-2b192dec.js');
-require('./consts-779fd4ec.js');
+const utils = require('./utils-9c925efe.js');
+require('./consts-255c1066.js');
 
 const wppPillGroupCss = ":host{--pill-group-item-margin:var(--wpp-pill-group-item-margin, 0 8px 0 0);--pill-group-label-margin:var(--wpp-pill-group-label-margin, 0 0 8px 0);display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column}:host .label{margin:var(--pill-group-label-margin)}:host .pills-wrapper{display:-ms-inline-flexbox;display:inline-flex}:host .pills-wrapper ::slotted(.wpp-pill:not(:last-child)){margin:var(--pill-group-item-margin)}";
 
@@ -73,9 +73,9 @@ const WppPillGroup = class {
     }
   }
   render() {
-    return (index.h(index.Host, { "aria-multiselectable": this.type === 'multiple', "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, class: this.hostCssClasses(), exportparts: "label, content, inner" }, this.labelConfig?.text && (index.h("wpp-label-v3-3-0", { class: "label", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), index.h("div", { class: "pills-wrapper", part: "content" }, index.h("slot", { part: "inner" }))));
+    return (index.h(index.Host, { "aria-multiselectable": this.type === 'multiple', "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, class: this.hostCssClasses(), exportparts: "label, content, inner" }, this.labelConfig?.text && (index.h("wpp-label-v2-22-0", { class: "label", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), index.h("div", { class: "pills-wrapper", part: "content" }, index.h("slot", { part: "inner" }))));
   }
-  static get registryIs() { return "wpp-pill-group-v3-3-0"; }
+  static get registryIs() { return "wpp-pill-group-v2-22-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "value": ["onValueChange"],

@@ -25,7 +25,7 @@ describe('wpp-search', () => {
     };
     const page = await newSpecPage({
       components: [WppSearch, WppLabel, WppInternalLabel],
-      template: () => h("wpp-search-v3-3-0", { labelConfig: labelConfig }),
+      template: () => h("wpp-search-v2-22-0", { labelConfig: labelConfig }),
     });
     await new Promise(resolve => setTimeout(resolve, 100));
     await page.waitForChanges();
@@ -34,7 +34,7 @@ describe('wpp-search', () => {
   it('should render with options and form elements', async () => {
     const page = await newSpecPage({
       components: [WppSearch, WppListItem],
-      template: () => (h("wpp-search-v3-3-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message" }, h("wpp-list-item-v3-3-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v3-3-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v3-3-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v3-3-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
+      template: () => (h("wpp-search-v2-22-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message" }, h("wpp-list-item-v2-22-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v2-22-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v2-22-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v2-22-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
     });
     await new Promise(resolve => setTimeout(resolve, 100));
     await page.waitForChanges();
@@ -43,10 +43,10 @@ describe('wpp-search', () => {
   it('should render with selected values', async () => {
     const page = await newSpecPage({
       components: [WppSearch, WppListItem],
-      template: () => (h("wpp-search-v3-3-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message", value: [
+      template: () => (h("wpp-search-v2-22-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message", value: [
           { id: 1, label: 'Item 1' },
           { id: 2, label: 'Item 2' },
-        ] }, h("wpp-list-item-v3-3-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v3-3-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v3-3-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v3-3-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
+        ] }, h("wpp-list-item-v2-22-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v2-22-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v2-22-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v2-22-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
     });
     await new Promise(resolve => setTimeout(resolve, 100));
     await page.waitForChanges();
@@ -55,10 +55,10 @@ describe('wpp-search', () => {
   it('should render opened in loading state', async () => {
     const page = await newSpecPage({
       components: [WppSearch, WppListItem],
-      template: () => (h("wpp-search-v3-3-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message", value: [
+      template: () => (h("wpp-search-v2-22-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message", value: [
           { id: 1, label: 'Item 1' },
           { id: 2, label: 'Item 2' },
-        ], loading: true }, h("wpp-list-item-v3-3-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v3-3-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v3-3-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v3-3-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
+        ], loading: true }, h("wpp-list-item-v2-22-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v2-22-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v2-22-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v2-22-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
     });
     page.root?.querySelector('wpp-search')?.click();
     await page.waitForChanges();

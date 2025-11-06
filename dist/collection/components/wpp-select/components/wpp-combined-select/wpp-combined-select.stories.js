@@ -19,7 +19,6 @@ export default {
       options: ['null', 'warning', 'error'],
       control: { type: 'select' },
     },
-    messageInTooltip: { control: { type: 'boolean' } },
     size: {
       options: ['s', 'm'],
       control: { type: 'select' },
@@ -29,60 +28,41 @@ export default {
     dropdownConfig: { control: 'object' },
   },
 };
-const SAMPLE_LIST_COMBINED = [
-  {
-    id: 1,
-    label: 'None',
-    value: '',
-  },
-  {
-    id: 2,
-    label: 'UAH',
-    value: 'uah',
-  },
-  {
-    id: 3,
-    label: 'USD',
-    value: 'usd',
-  },
-  {
-    id: 4,
-    label: 'EUR',
-    value: 'eur',
-  },
-];
-export const CombinedInput = (args) => {
-  const handleChange = (event) => {
-    console.log('Event:', event);
-  };
-  return html `
-    <wpp-select-v3-3-0
-      type="combined"
-      name="combined-select"
-      .message=${args.message}
-      .messageType=${args.messageType}
-      .size=${args.size}
-      .messageInTooltip=${args.messageInTooltip}
-      .placeholder=${args.placeholder}
-      .disabled=${args.disabled}
-      .dropdownConfig=${args.dropdownConfig}
-      .value=${args.value}
-      .inputValue=${args.inputValue}
-      .required=${args.required}
-      .labelConfig=${args.labelConfig}
-      .dropdownWidth=${args.dropdownWidth}
-      .list=${SAMPLE_LIST_COMBINED}
-      @wppChange=${handleChange}
-    >
-    </wpp-select-v3-3-0>
-  `;
-};
+export const CombinedInput = (args) => html `
+  <wpp-select-v2-22-0
+    type="combined"
+    name="combined-select"
+    .message=${args.message}
+    .messageType=${args.messageType}
+    .size=${args.size}
+    .placeholder=${args.placeholder}
+    .disabled=${args.disabled}
+    .dropdownConfig=${args.dropdownConfig}
+    .value=${args.value}
+    .inputValue=${args.inputValue}
+    .required=${args.required}
+    .labelConfig="${args.labelConfig}"
+    .dropdownWidth="${args.dropdownWidth}"
+  >
+    <wpp-list-item-v2-22-0 .value=${''}>
+      <p slot="label">None</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 value="uah">
+      <p slot="label">UAH</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 value="usd">
+      <p slot="label">USD</p>
+    </wpp-list-item-v2-22-0>
+    <wpp-list-item-v2-22-0 value="eur">
+      <p slot="label">EUR</p>
+    </wpp-list-item-v2-22-0>
+  </wpp-select-v2-22-0>
+`;
 CombinedInput.args = {
   value: 'usd',
   inputValue: '100',
   message: '',
   size: 'm',
-  messageInTooltip: false,
   placeholder: 'Placeholder',
   dropdownWidth: 'auto',
   disabled: false,

@@ -1,4 +1,4 @@
-import { AriaProps, FOCUS_TYPE } from '../../types/common';
+import { AriaProps } from '../../types/common';
 /**
  * @slot - Icon slot, contains `wpp-icon-plus` by default. The default slot, without the name attribute.
  *
@@ -8,11 +8,7 @@ import { AriaProps, FOCUS_TYPE } from '../../types/common';
  * @part icon-plus - icon plus element
  */
 export declare class WppFloatingButton {
-  private buttonRef?;
   host: HTMLWppFloatingButtonElement;
-  focusType: FOCUS_TYPE;
-  isPressed: boolean;
-  validAriaProps: Record<string, string>;
   /**
    * If the component is disabled.
    */
@@ -65,16 +61,7 @@ export declare class WppFloatingButton {
    * Contains the button `aria-` props.
    */
   readonly ariaProps: AriaProps;
-  /**
-   * Method that sets focus on the native button.
-   */
-  setFocus(): Promise<void>;
-  onUpdateAriaProps(): void;
-  componentWillLoad(): void;
   private onKeyDown;
-  private onKeyUp;
-  private onBlur;
-  private onMouseDown;
   private handleClick;
   private hostCssClasses;
   private buttonCssClasses;

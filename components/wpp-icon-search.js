@@ -1,6 +1,6 @@
-import { W as WppIconSearch$1, d as defineCustomElement$1 } from './wpp-icon-search2.js';
+import { W as WppIconCross, d as defineCustomElement$1 } from './wpp-icon-search2.js';
 
-const WppIconSearch = WppIconSearch$1;
+const WppIconSearch = WppIconCross;
 const defineCustomElement = defineCustomElement$1;
 
 export { WppIconSearch, defineCustomElement };

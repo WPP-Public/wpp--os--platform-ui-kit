@@ -2,6 +2,7 @@
   * @prop --wpp-banner-animation-duration:
   * @prop --wpp-banner-padding:
   * @prop --wpp-banner-top-position:
+  * @prop --wpp-banner-z-index:
   * @prop --wpp-banner-min-height:
   * @prop --wpp-banner-content-wrapper-padding:
   * @prop --wpp-banner-content-wrapper-max-width:
@@ -19,6 +20,7 @@
   --banner-animation-duration: var(--wpp-banner-animation-duration, 0.5s);
   --banner-padding: var(--wpp-banner-padding, 8px 28px);
   --banner-top-position: var(--wpp-banner-top-position, 0);
+  --banner-z-index: var(--wpp-banner-z-index, 1);
   --banner-min-height: var(--wpp-banner-min-height, 48px);
   --banner-content-wrapper-padding: var(--wpp-banner-content-wrapper-padding, 5px 0);
   --banner-content-wrapper-icon-margin: var(--wpp-banner-content-wrapper-icon-margin, 0 12px 0 0);
@@ -26,7 +28,6 @@
   --banner-actions-wrapper-icon-margin: var(--wpp-banner-actions-wrapper-icon-margin, 0 0 0 4px);
   --banner-max-width: var(--wpp-banner-max-width, 1812px);
   --banner-information-bg-color: var(--wpp-banner-information-bg-color, var(--wpp-grey-color-700));
-  --banner-information-icon-color: var(--wpp-banner-information-icon-color, var(--wpp-grey-color-400));
   --banner-information-box-shadow: var(
     --wpp-banner-information-box-shadow,
     0px 1px 2px rgba(52, 58, 63, 0.05),
@@ -42,6 +43,7 @@
   --banner-warning-icon-message-color: var(--wpp-banner-warning-icon-message-color, var(--wpp-text-color));
   position: sticky;
   top: var(--banner-top-position);
+  z-index: var(--banner-z-index);
 }
 :host .hidden-banner-wrapper {
   position: relative;
@@ -111,11 +113,9 @@
 :host .hidden-banner-wrapper .banner-wrapper .actions-wrapper .actions.slot-hidden {
   display: none;
 }
+:host .hidden-banner-wrapper .banner-wrapper.information .content-wrapper .left-icon,
 :host .hidden-banner-wrapper .banner-wrapper.information .content-wrapper .message {
   color: var(--banner-information-icon-message-color);
-}
-:host .hidden-banner-wrapper .banner-wrapper.information .content-wrapper .left-icon {
-  color: var(--banner-information-icon-color);
 }
 :host .hidden-banner-wrapper .banner-wrapper.information .actions-wrapper .actions {
   color: var(--banner-information-icon-message-color);

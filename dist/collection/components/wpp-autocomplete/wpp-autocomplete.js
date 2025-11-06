@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual';
 import { menuListConfig } from '../../common/menuListConfig';
 import { FOCUS_TYPE } from '../../types/common';
 import { Z_INDEX } from '../../common/consts';
-import { DROPDOWN_ANIMATION_TIME, LOCALES_DEFAULTS, PILL_MARGIN } from './const';
+import { DROPDOWN_ANIMATION_TIME, PILL_MARGIN } from './consts';
 import { getTempNodeWidthBasedOnLabel } from './utils';
 // Load more will be triggered 15px before scroll ends
 const INFINITE_SCROLL_THRESHOLD = 15;
@@ -22,10 +22,9 @@ export class WppAutocomplete {
     this.hasChecked = false;
     // Used instead of Tippy's `state.isShown`, which is not updated when transitioning
     this.isDropdownShown = false;
-    this.resizeInProgress = false;
+    this.resizeInPogress = false;
     this.withPills = false;
     this.LIB_COMPONENTS_PREFIX = 'wpp-';
-    this._locales = LOCALES_DEFAULTS;
     this.addHandleOptionsChangeTimer = (shouldUpdate = false) => {
       if (this.handleOptionsTimer) {
         clearTimeout(this.handleOptionsTimer);
@@ -35,27 +34,13 @@ export class WppAutocomplete {
         this.handleOptionsTimer = null;
       }, 0);
     };
-    this.checkSuggestions = () => {
-      if (this.suggestions && !!this.suggestions.length) {
-        //Need to be reassigned due to props from WppListItem `checked`, need to be removed
-        this.componentSuggestions = this.suggestions.map(suggestion => {
-          const { checked, ...restProps } = suggestion;
-          if (checked)
-            this.value.push(suggestion);
-          return restProps;
-        });
-      }
-      if (this.suggestions?.length === 0) {
-        this.componentSuggestions = [];
-      }
-    };
     this.valueResizeObserver = () => {
       if (this.valuesContainerEl) {
         this.valuesResizeObserver = new ResizeObserver(debounce(() => {
-          if (this.resizeInProgress)
+          if (this.resizeInPogress)
             return;
           try {
-            this.resizeInProgress = true;
+            this.resizeInPogress = true;
             if (this.type === 'regular') {
               this.countHiddenElements();
             }
@@ -67,7 +52,7 @@ export class WppAutocomplete {
             console.error('Error in ResizeObserver callback:', error);
           }
           finally {
-            this.resizeInProgress = false;
+            this.resizeInPogress = false;
           }
         }, 100));
         if (this.valuesResizeObserver) {
@@ -80,7 +65,7 @@ export class WppAutocomplete {
         this.tippyInstance = menuListConfig({
           anchor: this.triggerEl,
           content: this.dropdownEl,
-          zIndex: Z_INDEX.AUTOCOMPLETE,
+          zIndex: Z_INDEX.CONTEXT_MENU,
           ...this.dropdownConfig,
           duration: DROPDOWN_ANIMATION_TIME,
           trigger: 'manual',
@@ -111,7 +96,6 @@ export class WppAutocomplete {
           },
           onHide: () => {
             this.isShowMore = true;
-            this.isInComponent = false;
             requestAnimationFrame(this.validateTruncatedPills);
           },
           onClickOutside: (_, event) => {
@@ -276,7 +260,6 @@ export class WppAutocomplete {
       }
     };
     this.handleFocus = (event) => {
-      this.isInComponent = true;
       if (!this.isFocused) {
         this.isScrollToInputRequested = true;
         this.isFocused = true;
@@ -293,11 +276,9 @@ export class WppAutocomplete {
     };
     // We allow input blur only when the dropdown is hidden or the component got disabled.
     // Outside clicks will close the dropdown first.
-    this.handleBlur = () => {
-      if (this.isInComponent)
-        return;
+    this.handleBlur = (event) => {
       this.focusType = FOCUS_TYPE.NONE;
-      if (this.host.shadowRoot?.activeElement !== this.inputEl) {
+      if (!event.relatedTarget) {
         this.hideDropdown();
       }
       if (!this.isDropdownShown) {
@@ -312,7 +293,7 @@ export class WppAutocomplete {
       else {
         this.focusInput();
       }
-      this.wppBlur.emit();
+      this.wppBlur.emit(event);
     };
     this.handleOptionsScroll = (event) => {
       if (this.canLoadMore()) {
@@ -338,7 +319,6 @@ export class WppAutocomplete {
       event.stopPropagation();
       this.value = [];
       this.hiddenSelectedOptionsNumber = 0;
-      this.updateOptions();
       this.wppChange.emit({ value: this.value, reason: 'removeOption', name: this.name });
     };
     this.hostCssClasses = () => ({
@@ -389,7 +369,7 @@ export class WppAutocomplete {
     this.getInputValue = () => this.searchValue;
     this.renderInputPlaceholder = () => {
       if (!this.multiple && this.value.length && !this.isFocused) {
-        return (h("wpp-typography-v3-3-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this.getOptionLabel(this.value[0])));
+        return (h("wpp-typography-v2-22-0", { type: "s-body", class: "input-placeholder" }, this.getOptionLabel(this.value[0])));
       }
       if (this.isFocused && !this.searchValue)
         return null;
@@ -400,10 +380,10 @@ export class WppAutocomplete {
         if (!itemsToDisplay.length)
           return null;
         const placeholder = itemsToDisplay.map(this.getOptionLabel).filter(Boolean).join(', ');
-        return (h("wpp-typography-v3-3-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, placeholder));
+        return (h("wpp-typography-v2-22-0", { type: "s-body", class: "input-placeholder" }, placeholder));
       }
       if (this.type === 'extended' && this.value.length && !this.isFocused) {
-        return (h("wpp-typography-v3-3-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this._locales.selected(this.value.length)));
+        return (h("wpp-typography-v2-22-0", { type: "s-body", class: "input-placeholder" }, this.locales.selected(this.value.length)));
       }
     };
     this.countHiddenElements = () => {
@@ -472,19 +452,19 @@ export class WppAutocomplete {
       const isLoading = this.loading || (this.isInfiniteLoading && this.isEmptyOptions);
       const isEmptyStringEntered = this.searchValue.trim().length === 0;
       if (isLoading) {
-        return (h("div", { class: "loading-wrapper" }, h("wpp-spinner-v3-3-0", { slot: "left" }), h("wpp-typography-v3-3-0", { type: "s-body", slot: "label" }, this._locales.loading)));
+        return (h("div", { class: "loading-wrapper" }, h("wpp-spinner-v2-22-0", { slot: "left" }), h("wpp-typography-v2-22-0", { type: "s-body", slot: "label" }, this.locales.loading)));
       }
       if (isEmptyStringEntered && this.componentSuggestions?.length > 0) {
-        return (h(Fragment, null, h("wpp-typography-v3-3-0", { type: "s-strong", class: "suggestions-heading" }, this.suggestionsTitle), this.componentSuggestions?.map((suggestion, index) => {
+        return (h(Fragment, null, h("wpp-typography-v2-22-0", { type: "s-strong", class: "suggestions-heading" }, this.suggestionsTitle), this.componentSuggestions?.map((suggestion, index) => {
           const { slots, checked, label, ...restProps } = suggestion;
           const isChecked = checked || this.isItemSelected(suggestion);
-          return (h("wpp-list-item-v3-3-0", { key: this.getOptionId(suggestion), selectable: true, checked: isChecked, value: suggestion, onWppChangeListItem: this.handleSuggestionClick, class: { 'suggestion-item': true, 'last-item': index === this.componentSuggestions?.length - 1 }, ...restProps }, label && h("span", { slot: "label" }, this.getOptionLabel(suggestion)), slots && this.renderSlotsListItem(slots, Boolean(label)).map(slotNode => slotNode)));
+          return (h("wpp-list-item-v2-22-0", { selectable: true, checked: isChecked, value: suggestion, onWppChangeListItem: this.handleSuggestionClick, class: { 'suggestion-item': true, 'last-item': index === this.componentSuggestions?.length - 1 }, ...restProps }, label && h("span", { slot: "label" }, this.getOptionLabel(suggestion)), slots && this.renderSlotsListItem(slots, Boolean(label)).map(slotNode => slotNode)));
         })));
       }
       if (this.isEmptyOptions) {
-        return (h(Fragment, null, h("wpp-list-item-v3-3-0", { class: "nothing-found-wrapper" }, h("wpp-typography-v3-3-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound))));
+        return (h(Fragment, null, h("wpp-list-item-v2-22-0", { class: "nothing-found-wrapper" }, h("wpp-typography-v2-22-0", { type: "s-body", class: "nothing-found", slot: "label" }, this.locales.nothingFound))));
       }
-      return (h(Fragment, null, !this.searchValue && !this.withPills ? (h("div", { class: this.selectedValuesCssClasses(), part: "selected-values" }, h("slot", { name: "selected-values" }))) : (h("slot", null)), h("div", null, this.isInfiniteLoading && (h("div", { class: "infinite-loader" }, h("wpp-spinner-v3-3-0", null))))));
+      return (h(Fragment, null, !this.searchValue && !this.withPills ? (h("div", { class: this.selectedValuesCssClasses(), part: "selected-values" }, h("slot", { name: "selected-values" }))) : (h("slot", null)), h("div", null, this.isInfiniteLoading && (h("div", { class: "infinite-loader" }, h("wpp-spinner-v2-22-0", null))))));
     };
     this.renderSlotsListItem = (slots, isLabelExists) => slots
       .map(slotElement => {
@@ -511,13 +491,13 @@ export class WppAutocomplete {
       const labelText = option.label ||
         option.slots?.find((slot) => slot.type === 'span' && slot.props.slot === 'label')?.props.children;
       if (isTooltip) {
-        return (h("wpp-tooltip-v3-3-0", { class: {
+        return (h("wpp-tooltip-v2-22-0", { class: {
             'in-dropdown': true,
             transparent: isTransparentTooltip,
-          }, text: labelText, part: "tooltip", config: { ...this.pillTooltipConfig } }, h("wpp-pill-v3-3-0", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) })));
+          }, text: labelText, part: "tooltip", config: { ...this.pillTooltipConfig } }, h("wpp-pill-v2-22-0", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) })));
       }
       else {
-        return (h("wpp-pill-v3-3-0", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) }));
+        return (h("wpp-pill-v2-22-0", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) }));
       }
     };
     /**
@@ -589,7 +569,7 @@ export class WppAutocomplete {
       }
     };
     // Render Show More/Show Less button only in cases when we have truncated WppPill (not .label inside)
-    this.showMoreLessRender = (label) => (h("wpp-action-button-v3-3-0", { "data-testid": "wpp-autocomplete-show-btn", class: "nowrap", variant: "secondary", onClick: this.handleShowMoreLessClick }, label));
+    this.showMoreLessRender = (label) => (h("wpp-action-button-v2-22-0", { class: "nowrap", variant: "secondary", onClick: this.handleShowMoreLessClick }, label));
     this.handleShowMoreLessClick = () => {
       this.isShowMore = !this.isShowMore;
     };
@@ -605,7 +585,6 @@ export class WppAutocomplete {
     this.suggestionListTruncationState = [];
     this.componentSuggestions = [];
     this.lastSelectedElement = null;
-    this.isInComponent = false;
     this.name = undefined;
     this.loading = false;
     this.disabled = false;
@@ -627,7 +606,16 @@ export class WppAutocomplete {
     this.dropdownConfig = {};
     this.type = 'regular';
     this.size = 'm';
-    this.locales = {};
+    this.locales = {
+      nothingFound: 'Nothing found',
+      beginTyping: 'Begin typing',
+      more: 'more',
+      showMore: 'more',
+      showLess: 'Show less',
+      selected: count => `${count} selected`,
+      loading: 'Loading...',
+      createNewElement: 'Create new element',
+    };
     this.labelTooltipConfig = {
       popperOptions: { strategy: 'fixed' },
     };
@@ -725,19 +713,6 @@ export class WppAutocomplete {
       : this.selectedPillsWrapperRef?.classList.remove('overflow');
     requestAnimationFrame(this.validateTruncatedPills);
   }
-  onUpdateSuggestions() {
-    if (this.searchValue !== '')
-      return;
-    this.checkSuggestions();
-    this.updateOptions();
-  }
-  updateIsInComponent(value) {
-    if (!value)
-      this.handleBlur();
-  }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
-  }
   /**
    * Sets focus on native input
    */
@@ -745,7 +720,6 @@ export class WppAutocomplete {
     this.inputEl?.focus();
   }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
     this.withPills = this.type === 'regular' && this.multiple;
     if (this.limitSelectedItems > 0 && !this.multiple) {
       throw new Error('There could be only one selected item in single mode, otherwise, use multiple mode.');
@@ -768,8 +742,15 @@ export class WppAutocomplete {
     this.mutationObserver.observe(this.host, { childList: true, subtree: true });
     this.createTippyInstance();
     autoFocusElement(this.autoFocus, this.inputEl);
-    this.checkSuggestions();
-    document.addEventListener('click', this.handleClickOutside.bind(this));
+    if (this.suggestions && !!this.suggestions.length) {
+      //Need to be reassigned due to props from WppListItem `checked`, need to be removed
+      this.componentSuggestions = this.suggestions.map(suggestion => {
+        const { checked, ...restProps } = suggestion;
+        if (checked)
+          this.value.push(suggestion);
+        return restProps;
+      });
+    }
   }
   disconnectedCallback() {
     if (this.valuesResizeObserver) {
@@ -779,17 +760,12 @@ export class WppAutocomplete {
       this.mutationObserver.disconnect();
     }
     this.tippyInstance?.destroy();
-    document.removeEventListener('click', this.handleClickOutside);
   }
   connectedCallback() {
     this.valueResizeObserver();
     if (this.tippyInstance?.state.isDestroyed) {
       this.createTippyInstance();
     }
-  }
-  handleClickOutside(event) {
-    if (!isEventTargetContained(this.host, event) && this.isInComponent)
-      this.isInComponent = false;
   }
   renderSelectedOptions() {
     if (!this.withPills)
@@ -810,7 +786,7 @@ export class WppAutocomplete {
     return (h(Fragment, null, this.value.length > 0 && (h("div", { class: {
         'header-wrapper': true,
         visible: this.activePillsTruncationState.includes(true) && this.isShowMore,
-      }, ref: ref => (this.headerWrapperRef = ref) }, h("div", { "data-testid": "wpp-autocomplete-selected-pills-wrapper", class: this.selectedPillsWrapperCssClasses(), ref: ref => (this.selectedPillsWrapperRef = ref) }, this.value.map((option, ndx) => {
+      }, ref: ref => (this.headerWrapperRef = ref) }, h("div", { class: this.selectedPillsWrapperCssClasses(), ref: ref => (this.selectedPillsWrapperRef = ref) }, this.value.map((option, ndx) => {
       if (this.isShowMore) {
         const isHideElement = this.activePillsTruncationState[ndx];
         return this.activePillsTruncationLabelState[ndx]
@@ -822,16 +798,16 @@ export class WppAutocomplete {
           ? this.renderPillComponent(option, true)
           : this.renderPillComponent(option, false);
       }
-    })), h("div", { class: "show-more-action" }, this.showMoreLessRender(`+${this.activePillsTruncationState.filter(x => x).length} ${this._locales.showMore}`)))), !this.isShowMore && h("div", { class: "show-less-action" }, this.showMoreLessRender(this._locales.showLess)), isNeedDivider && h("wpp-divider-v3-3-0", { class: "nothing-found-divider" })));
+    })), h("div", { class: "show-more-action" }, this.showMoreLessRender(`+${this.activePillsTruncationState.filter(x => x).length} ${this.locales.showMore}`)))), !this.isShowMore && h("div", { class: "show-less-action" }, this.showMoreLessRender(this.locales.showLess)), isNeedDivider && h("wpp-divider-v2-22-0", { class: "nothing-found-divider" })));
   }
   render() {
     const style = { '--custom-dropdown-width': this.getDropdownWidth() };
-    return (h(Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, options, selected-values" }, h("div", { class: this.autocompleteWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (h("wpp-label-v3-3-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.hasSearchButton() && h("wpp-icon-search-v3-3-0", null), this.renderInputPlaceholder(), this.hiddenSelectedOptionsNumber > 0 && !this.isDropdownShown && (h("div", { class: "hidden-count", style: { '--hidden-number': this.getNearestPowForRowsNumber() + '' } }, h("wpp-typography-v3-3-0", { type: "s-body" }, ", + ", this.hiddenSelectedOptionsNumber))), h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, tabIndex: this.disabled ? -1 : 0, title: "" })), h("div", { class: "trigger-actions" }, this.hasClearButton() && h("wpp-icon-cross-v3-3-0", { onClick: this.handleClearClick }))), !!this.message && (h("wpp-inline-message-v3-3-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderSelectedOptions(), this.renderDropdownContent(), this.showCreateNewElement &&
+    return (h(Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, options, selected-values" }, h("div", { class: this.autocompleteWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (h("wpp-label-v2-22-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.hasSearchButton() && h("wpp-icon-search-v2-22-0", null), this.renderInputPlaceholder(), this.hiddenSelectedOptionsNumber > 0 && !this.isDropdownShown && (h("div", { class: "hidden-count", style: { '--hidden-number': this.getNearestPowForRowsNumber() + '' } }, h("wpp-typography-v2-22-0", { type: "s-body" }, ", + ", this.hiddenSelectedOptionsNumber))), h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, tabIndex: this.disabled ? -1 : 0, title: "" })), h("div", { class: "trigger-actions" }, this.hasClearButton() && h("wpp-icon-cross-v2-22-0", { onClick: this.handleClearClick }))), !!this.message && (h("wpp-inline-message-v2-22-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderSelectedOptions(), this.renderDropdownContent(), this.showCreateNewElement &&
       this.searchValue !== '' &&
-      ((this.displayBtnWhenListEmpty && this.isEmptyOptions) || !this.displayBtnWhenListEmpty) && (h("div", { class: "actions" }, h("wpp-divider-v3-3-0", { class: "nothing-found-divider" }), h("div", { class: "actions-container" }, h("wpp-list-item-v3-3-0", { onClick: this.handleCreateNewOptionClick }, h("wpp-typography-v3-3-0", { type: "s-strong", class: "create-new-option", slot: "label" }, this._locales.createNewElement))))))), this.type === 'extended' && this.multiple ? h("slot", { name: "selected-values" }) : null));
+      ((this.displayBtnWhenListEmpty && this.isEmptyOptions) || !this.displayBtnWhenListEmpty) && (h("div", { class: "actions" }, h("wpp-divider-v2-22-0", { class: "nothing-found-divider" }), h("div", { class: "actions-container" }, h("wpp-list-item-v2-22-0", { onClick: this.handleCreateNewOptionClick }, h("wpp-typography-v2-22-0", { type: "s-strong", class: "create-new-option", slot: "label" }, this.locales.createNewElement))))))), this.type === 'extended' && this.multiple ? h("slot", { name: "selected-values" }) : null));
   }
   static get is() { return "wpp-autocomplete"; }
-  static get registryIs() { return "wpp-autocomplete-v3-3-0"; }
+  static get registryIs() { return "wpp-autocomplete-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -1272,13 +1248,9 @@ export class WppAutocomplete {
         "type": "unknown",
         "mutable": false,
         "complexType": {
-          "original": "Partial<AutocompleteLocales>",
-          "resolved": "{ nothingFound?: string | undefined; beginTyping?: string | undefined; more?: string | undefined; showMore?: string | undefined; showLess?: string | undefined; selected?: ((count: number) => string) | undefined; loading?: string | undefined; createNewElement?: string | undefined; }",
+          "original": "AutocompleteLocales",
+          "resolved": "AutocompleteLocales",
           "references": {
-            "Partial": {
-              "location": "global",
-              "id": "global::Partial"
-            },
             "AutocompleteLocales": {
               "location": "import",
               "path": "./types",
@@ -1292,7 +1264,7 @@ export class WppAutocomplete {
           "tags": [],
           "text": "Indicates locales for autocomplete component"
         },
-        "defaultValue": "{}"
+        "defaultValue": "{\n    nothingFound: 'Nothing found',\n    beginTyping: 'Begin typing',\n    more: 'more',\n    showMore: 'more',\n    showLess: 'Show less',\n    selected: count => `${count} selected`,\n    loading: 'Loading...',\n    createNewElement: 'Create new element',\n  }"
       },
       "labelTooltipConfig": {
         "type": "unknown",
@@ -1482,8 +1454,7 @@ export class WppAutocomplete {
       "activePillsTruncationLabelState": {},
       "suggestionListTruncationState": {},
       "componentSuggestions": {},
-      "lastSelectedElement": {},
-      "isInComponent": {}
+      "lastSelectedElement": {}
     };
   }
   static get events() {
@@ -1539,9 +1510,14 @@ export class WppAutocomplete {
           "text": "Emitted when the autocomplete loses focus"
         },
         "complexType": {
-          "original": "void",
-          "resolved": "void",
-          "references": {}
+          "original": "FocusEvent",
+          "resolved": "FocusEvent",
+          "references": {
+            "FocusEvent": {
+              "location": "global",
+              "id": "global::FocusEvent"
+            }
+          }
         }
       }, {
         "method": "wppSearchValueChange",
@@ -1613,15 +1589,6 @@ export class WppAutocomplete {
       }, {
         "propName": "isShowMore",
         "methodName": "onShowMoreChange"
-      }, {
-        "propName": "suggestions",
-        "methodName": "onUpdateSuggestions"
-      }, {
-        "propName": "isInComponent",
-        "methodName": "updateIsInComponent"
-      }, {
-        "propName": "locales",
-        "methodName": "onUpdateLocales"
       }];
   }
   static get listeners() {

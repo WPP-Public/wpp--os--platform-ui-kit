@@ -5,9 +5,8 @@ const wppIconCss = ":host{display:-ms-inline-flexbox;display:inline-flex;color:v
 
 var ArrowDirectionIconPath;
 (function (ArrowDirectionIconPath) {
-  // @deprecated: top should be removed in 4.0.0 release
+  // @deprecated: top should be removed in 3.0.0 release
   ArrowDirectionIconPath["top"] = "M10.3233 2.59467C10.0305 2.30185 9.55574 2.30177 9.26282 2.59449L3.42688 8.42653C3.13389 8.71932 3.13373 9.1942 3.42652 9.48719C3.71932 9.78018 4.19419 9.78034 4.48718 9.48754L9.04297 4.93481V16.875C9.04297 17.2892 9.37876 17.625 9.79297 17.625C10.2072 17.625 10.543 17.2892 10.543 16.875V4.93566L15.0947 9.48737C15.3876 9.78026 15.8624 9.78026 16.1553 9.48737C16.4482 9.19447 16.4482 8.7196 16.1553 8.42671L10.3233 2.59467Z";
-  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
   ArrowDirectionIconPath["up"] = "M10.3233 2.59467C10.0305 2.30185 9.55574 2.30177 9.26282 2.59449L3.42688 8.42653C3.13389 8.71932 3.13373 9.1942 3.42652 9.48719C3.71932 9.78018 4.19419 9.78034 4.48718 9.48754L9.04297 4.93481V16.875C9.04297 17.2892 9.37876 17.625 9.79297 17.625C10.2072 17.625 10.543 17.2892 10.543 16.875V4.93566L15.0947 9.48737C15.3876 9.78026 15.8624 9.78026 16.1553 9.48737C16.4482 9.19447 16.4482 8.7196 16.1553 8.42671L10.3233 2.59467Z";
   ArrowDirectionIconPath["right"] = "M11.5733 3.84467C11.2804 3.55178 10.8055 3.55178 10.5126 3.84467C10.2197 4.13756 10.2197 4.61244 10.5126 4.90533L15.0643 9.45703H3.95703C3.54282 9.45703 3.20703 9.79282 3.20703 10.207C3.20703 10.6212 3.54282 10.957 3.95703 10.957H15.0652L10.5125 15.5128C10.2197 15.8058 10.2198 16.2807 10.5128 16.5735C10.8058 16.8663 11.2807 16.8661 11.5735 16.5731L17.4046 10.7381L17.4055 10.7372C17.4082 10.7345 17.4109 10.7318 17.4136 10.729C17.6299 10.5059 17.6802 10.1817 17.5645 9.9115C17.5318 9.83498 17.4857 9.76281 17.4263 9.69851C17.4837 9.76069 17.5307 9.8326 17.5645 9.9115M11.5733 3.84467L17.4029 9.67432L11.5733 3.84467Z";
   ArrowDirectionIconPath["down"] = "M10.582 3C10.582 2.58579 10.2462 2.25 9.83203 2.25C9.41782 2.25 9.08203 2.58579 9.08203 3V14.9393L4.53033 10.3876C4.23744 10.0947 3.76256 10.0947 3.46967 10.3876C3.17678 10.6805 3.17678 11.1554 3.46967 11.4483L9.30171 17.2803C9.59453 17.5732 10.0693 17.5732 10.3622 17.2805L16.1981 11.4485C16.4911 11.1557 16.4913 10.6808 16.1985 10.3878C15.9057 10.0948 15.4308 10.0947 15.1378 10.3875L10.582 14.9402V3Z";
@@ -27,9 +26,9 @@ const WppIconArrow = /*@__PURE__*/ proxyCustomElement(class WppIconArrow extends
   render() {
     return (h(WppIcon, { name: "wpp-icon-arrow", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: ArrowDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-arrow-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-arrow-v2-22-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-arrow", "wpp-icon-arrow-v3-3-0", {
+}, [1, "wpp-icon-arrow", "wpp-icon-arrow-v2-22-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -40,9 +39,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-arrow-v3-3-0"];
+  const components = ["wpp-icon-arrow-v2-22-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-arrow-v3-3-0":
+    case "wpp-icon-arrow-v2-22-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconArrow);
       }

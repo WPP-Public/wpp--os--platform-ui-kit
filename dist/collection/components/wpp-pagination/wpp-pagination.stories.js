@@ -1,4 +1,6 @@
 import { html } from 'lit-html';
+import WppPaginationReadme from './readme.md';
+import WppPaginationSelectReadme from './components/wpp-pagination-select/readme.md';
 export default {
   title: 'Design System/Components/Navigation/Pagination',
   parameters: {
@@ -7,6 +9,7 @@ export default {
         hidden: true,
       },
     },
+    notes: { Container: WppPaginationReadme, Items: WppPaginationSelectReadme },
   },
   argTypes: {
     count: { type: 'number' },
@@ -16,15 +19,16 @@ export default {
     selectedItemPerPage: { type: 'number' },
   },
 };
-export const PaginationControl = (args) => html `<wpp-pagination-v3-3-0
-    .selectedItemPerPage="${args.selectedItemPerPage}"
-    .count="${args.count}"
-    .itemsPerPage="${args.itemsPerPage}"
-    .pageSelectThreshold="${args.pageSelectThreshold}"
-    .activePageNumber="${args.activePageNumber}"
-    .locales="${args.locales}"
-    locales="${args.locales}"
-  />`;
+export const PaginationControl = (args) => html `<wpp-pagination-v2-22-0
+  .selectedItemPerPage="${args.selectedItemPerPage}"
+  .count="${args.count}"
+  .itemsPerPage="${args.itemsPerPage}"
+  .pageSelectThreshold="${args.pageSelectThreshold}"
+  .activePageNumber="${args.activePageNumber}"
+  .selectedItemPerPage="${args.selectedItemPerPage}"
+  .locales="${args.locales}"
+  locales="${args.locales}"
+/>`;
 PaginationControl.args = {
   count: 78,
   itemsPerPage: [5, 10, 20, 50],

@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+import readme from './readme.md';
 export default {
   title: 'Design System/Components/Selection and input/Counter',
   parameters: {
@@ -7,6 +8,7 @@ export default {
         hidden: true,
       },
     },
+    notes: readme,
   },
   argTypes: {
     name: { type: 'string' },
@@ -36,38 +38,36 @@ export default {
     },
   },
 };
-export const Counter = {
-  render: args => html ` <wpp-counter-v3-3-0
-      .name="${args.name}"
-      .value="${args.value}"
-      .disabled="${args.disabled}"
-      .required="${args.required}"
-      .messageType="${args.messageType}"
-      .size="${args.size}"
-      .message="${args.message}"
-      .min="${args.min}"
-      .max="${args.max}"
-      .labelConfig="${args.labelConfig}"
-      .withButtons="${args.withButtons}"
-    >
-    </wpp-counter-v3-3-0>`,
-  args: {
-    name: 'counter',
-    value: 1,
-    message: '',
-    min: 1,
-    max: 100,
-    size: 'm',
-    disabled: false,
-    withButtons: true,
-    required: true,
-    labelConfig: {
-      icon: '',
-      text: '',
-      description: '',
-      locales: {
-        optional: 'Optional',
-      },
+export const Counter = (args) => html ` <wpp-counter-v2-22-0
+  .name="${args.name}"
+  .value="${args.value}"
+  .disabled="${args.disabled}"
+  .required="${args.required}"
+  .messageType="${args.messageType}"
+  .size="${args.size}"
+  .message="${args.message}"
+  .min="${args.min}"
+  .max="${args.max}"
+  .labelConfig="${args.labelConfig}"
+  .withButtons="${args.withButtons}"
+>
+</wpp-counter-v2-22-0>`;
+Counter.args = {
+  name: 'counter',
+  value: 1,
+  message: '',
+  min: 1,
+  max: 100,
+  size: 'm',
+  disabled: false,
+  withButtons: true,
+  required: true,
+  labelConfig: {
+    icon: '',
+    text: '',
+    description: '',
+    locales: {
+      optional: 'Optional',
     },
   },
 };

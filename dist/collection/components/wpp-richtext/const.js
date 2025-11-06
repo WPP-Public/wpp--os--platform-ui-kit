@@ -31,6 +31,3 @@ export const quillUploadFormats = [
   'attachmentUploading',
 ];
 export const DRAG_THUMBNAIL_MAX_SIZE = 100;
-export const LOCALES_DEFAULTS = {
-  charactersEntered: 'Characters',
-};

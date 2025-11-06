@@ -20,7 +20,6 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   private previewPresetTimer;
   private hasClickedPreset;
   private isDatePickerInitialized;
-  private _locales;
   host: HTMLWppDatepickerElement;
   datePickerInstance: AirDatepicker;
   lastValidDate: string | string[];
@@ -28,8 +27,6 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   focusType: FOCUS_TYPE;
   hidden: boolean;
   tippyInstance: Instance;
-  isInComponent: boolean;
-  isValueExists: boolean;
   /**
    * If the range mode is enabled.
    */
@@ -112,19 +109,11 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   readonly labelTooltipConfig: DropdownConfig;
   /**
    * Defines the datepicker locale, uses English by default.
-   * @deprecated Use `locales` property instead.
    * @remarks
    * - `firstDay` determines the starting day of the week and acts as a fallback if `dateLocale` is not provided.
    * - `dateLocale` is used to automatically infer date-related properties, like `firstDay`.
    */
-  readonly locale: Partial<LocaleTypes>;
-  /**
-   * Defines the datepicker locale, uses English by default.
-   * @remarks
-   * - `firstDay` determines the starting day of the week and acts as a fallback if `dateLocale` is not provided.
-   * - `dateLocale` is used to automatically infer date-related properties, like `firstDay`.
-   */
-  readonly locales: Partial<LocaleTypes>;
+  readonly locale: LocaleTypes;
   /**
    * Indicates label config
    */
@@ -147,7 +136,7 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   /**
    * Emitted when the input loses focus
    */
-  wppBlur: EventEmitter<void>;
+  wppBlur: EventEmitter<FocusEvent>;
   /**
    * Emitted when the input receives focus
    */
@@ -171,8 +160,6 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   updateMinDate(): void;
   updateMaxDate(): void;
   updateDropdownConfig(newConfig: DropdownConfig, oldConfig: DropdownConfig): void;
-  updateIsInComponent(value: boolean): void;
-  onUpdateLocales(newLocales: Partial<LocaleTypes>): void;
   private setInitialDate;
   private setMinMaxDate;
   private clearIfDateNotInInterval;

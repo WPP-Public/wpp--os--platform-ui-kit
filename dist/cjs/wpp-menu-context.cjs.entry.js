@@ -3,11 +3,11 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const isEqual = require('./isEqual-0b0240b4.js');
-const utils = require('./utils-2b192dec.js');
+const isEqual = require('./isEqual-aa155630.js');
+const utils = require('./utils-9c925efe.js');
 const constants = require('./constants-6680c2a7.js');
-const menuListConfig = require('./menuListConfig-c4aadb34.js');
-const consts = require('./consts-779fd4ec.js');
+const menuListConfig = require('./menuListConfig-9ebb9bbd.js');
+const consts = require('./consts-255c1066.js');
 require('./_commonjsHelpers-bcc1208a.js');
 
 const defaultDropdownConfig = {
@@ -50,8 +50,6 @@ const wppMenuContextCss = ".sc-wpp-menu-context-h{--mc-wrapper-width:var(--wpp-m
 const WppMenuContext = class {
   constructor(hostRef) {
     index.registerInstance(this, hostRef);
-    this.wppBlur = index.createEvent(this, "wppBlur", 1);
-    this.wppFocus = index.createEvent(this, "wppFocus", 1);
     this.isTriggerDisabled = false;
     this.getContentRef = (node) => {
       this.contentRef = node;
@@ -80,7 +78,6 @@ const WppMenuContext = class {
         content: this.contentRef,
         triggerElementWidth: false,
         maxWidth: '350px',
-        hideOnPopperBlur: true,
         appendTo: this.appendToListWrapper ? this.wppListWrapperRef : () => utils.getHighestContainerInDOM(),
         ...setDefaultDropdownConfig(this.isNestedContext),
         ...this.dropdownConfig,
@@ -93,20 +90,15 @@ const WppMenuContext = class {
           Array.from(listItems || []).forEach(item => {
             item.setAttribute('container-state', 'tooltipTrigger');
           });
-          if (this.dropdownConfig?.onShow) {
+          if (this.dropdownConfig.onShow) {
             return this.dropdownConfig.onShow(instance);
           }
         },
         onHide: (instance) => {
           this.handleAriaExpandedOnTrigger('hide');
-          if (this.dropdownConfig?.onHide) {
+          if (this.dropdownConfig.onHide) {
             return this.dropdownConfig.onHide(instance);
           }
-        },
-        onHidden: () => {
-          if (document.activeElement === this.triggerElement)
-            return;
-          this.isInComponent = false;
         },
       });
     };
@@ -117,23 +109,6 @@ const WppMenuContext = class {
       if (!ariaExpandedValue || ariaExpandedValue === (type === 'show' ? 'false' : 'true')) {
         this.triggerRef.setAttribute('aria-expanded', type === 'show' ? 'true' : 'false');
       }
-    };
-    this.onBlur = () => {
-      if (this.isInComponent)
-        return;
-      this.wppBlur.emit();
-    };
-    this.onFocus = (event) => {
-      if (!this.isInComponent)
-        this.wppFocus.emit(event);
-      this.isInComponent = true;
-    };
-    this.onFocusout = (event) => {
-      if (this.host.contains(event.relatedTarget) ||
-        this.tippyInstance.popper.contains(event.relatedTarget))
-        return;
-      this.isInComponent = false;
-      this.tippyInstance.hide();
     };
     this.menuCssClasses = () => ({
       'wpp-menu-context': true,
@@ -152,12 +127,10 @@ const WppMenuContext = class {
     this.tippyInstance = undefined;
     this.isNestedContext = undefined;
     this.hidden = true;
-    this.isInComponent = false;
     this.listWidth = 'auto';
     this.dropdownConfig = {};
     this.appendToListWrapper = false;
     this.externalClass = '';
-    this.ariaProps = {};
   }
   handleClick(event) {
     // NOTE: our wppChangeListItem listener is called when ListItems are used in Select or Autocomplete.
@@ -167,8 +140,10 @@ const WppMenuContext = class {
       return;
     if (event.detail?.isAutocompleteBasedEvent)
       return;
-    this.isTriggerDisabled = !!((this.triggerElement?.hasAttribute('disabled') && this.triggerElement?.getAttribute('disabled') !== 'false') ||
-      this.triggerElement?.classList.contains('disabled'));
+    const triggerEl = this.triggerRef?.querySelector('[slot="trigger-element"]');
+    this.isTriggerDisabled =
+      (triggerEl?.hasAttribute('disabled') && triggerEl?.getAttribute('disabled') !== 'false') ||
+        triggerEl?.classList.contains('disabled');
     if (this.isTriggerDisabled && utils.isEventTargetContained(this.host, event)) {
       event.stopPropagation();
       return;
@@ -193,13 +168,10 @@ const WppMenuContext = class {
       this.tippyInstance?.setProps(newConfig);
     }
   }
-  updateIsInComponent(value) {
-    if (!value)
-      this.onBlur();
-  }
   componentWillLoad() {
-    this.isNestedContext =
-      this.host?.children[0]?.tagName === utils.transformToVersionedTag(constants.CONTEXT_ITEM_TAG).toUpperCase();
+    const anchor = this.host?.children[0];
+    anchor?.addEventListener('click', this.handleClick);
+    this.isNestedContext = anchor?.tagName === utils.transformToVersionedTag(constants.CONTEXT_ITEM_TAG).toUpperCase();
   }
   componentDidLoad() {
     this.createTippyInstance();
@@ -208,16 +180,6 @@ const WppMenuContext = class {
       this.removeDisabledTag();
     });
     this.startObserving();
-    if (this.triggerRef) {
-      this.triggerElement = this.triggerRef?.querySelector('[slot="trigger-element"]');
-      if (this.triggerElement) {
-        this.triggerElement.addEventListener('blur', this.onBlur);
-        this.triggerElement.addEventListener('focus', this.onFocus);
-      }
-      if (this.triggerElement && this.triggerElement.getAttribute('role')) {
-        this.triggerElement.setAttribute('role', 'presentation');
-      }
-    }
   }
   connectedCallback() {
     // Reinitialize tippy and mutation observer if disconnectedCallback was called and
@@ -233,10 +195,6 @@ const WppMenuContext = class {
     if (!this.isNestedContext) {
       this.tippyInstance?.destroy();
     }
-    if (this.triggerElement) {
-      this.triggerElement.removeEventListener('blur', this.onBlur);
-      this.triggerElement.removeEventListener('focus', this.onFocus);
-    }
     this.mutationObserver?.disconnect();
   }
   startObserving() {
@@ -246,13 +204,12 @@ const WppMenuContext = class {
     const style = {
       '--custom-menu-context-width': this.listWidth === 'auto' ? '' : this.listWidth,
     };
-    return (index.h(index.Host, { class: this.menuCssClasses(), exportparts: "trigger, list-wrapper, list, inner", onFocusout: this.onFocusout }, index.h("div", { ref: this.getTriggerRef, class: this.triggerWrapperCssClasses() }, index.h("slot", { name: "trigger-element", part: "trigger" })), index.h("div", { class: "wpp-list-wrapper", part: "list-wrapper", ref: ref => (this.wppListWrapperRef = ref) }, index.h("ul", { class: this.listWrapperCssClasses(), style: style, ref: this.getContentRef, role: constants.MENU_ROLE, part: "list" }, index.h("slot", { part: "inner" })))));
+    return (index.h(index.Host, { class: this.menuCssClasses(), exportparts: "trigger, list-wrapper, list, inner" }, index.h("div", { ref: this.getTriggerRef, class: this.triggerWrapperCssClasses() }, index.h("slot", { name: "trigger-element", part: "trigger" })), index.h("div", { class: "wpp-list-wrapper", part: "list-wrapper", ref: ref => (this.wppListWrapperRef = ref) }, index.h("ul", { class: this.listWrapperCssClasses(), style: style, ref: this.getContentRef, role: constants.MENU_ROLE, part: "list" }, index.h("slot", { part: "inner" })))));
   }
-  static get registryIs() { return "wpp-menu-context-v3-3-0"; }
+  static get registryIs() { return "wpp-menu-context-v2-22-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
-    "dropdownConfig": ["updateDropdownConfig"],
-    "isInComponent": ["updateIsInComponent"]
+    "dropdownConfig": ["updateDropdownConfig"]
   }; }
 };
 WppMenuContext.style = wppMenuContextCss;

@@ -17,9 +17,9 @@ const WppDivider = class {
     this.resizable = false;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), role: "separator", "aria-orientation": this.vertical ? 'vertical' : 'horizontal', exportparts: "body" }, h("div", { class: this.dividerCssClasses(), part: "body" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "body" }, h("div", { class: this.dividerCssClasses(), part: "body" })));
   }
-  static get registryIs() { return "wpp-divider-v3-3-0"; }
+  static get registryIs() { return "wpp-divider-v2-22-0"; }
   get host() { return getElement(this); }
 };
 WppDivider.style = wppDividerCss;

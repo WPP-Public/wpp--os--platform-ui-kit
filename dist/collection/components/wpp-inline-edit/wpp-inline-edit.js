@@ -1,79 +1,18 @@
 import { Host, h } from '@stencil/core';
-import { InlineEditModeEnum, } from './types';
-import { isEventTargetContained, transformToVersionedTag } from '../../utils/utils';
-import { LOCALES_DEFAULTS } from './const';
 export class WppInlineEdit {
   constructor() {
-    this.lastValueWithError = undefined;
-    this._locales = LOCALES_DEFAULTS;
-    this.getFormElement = () => this.host?.querySelector('[slot="form-element"]');
+    this.getFormElement = () => this.wrapperRef?.querySelector('slot[name="form-element"]')?.assignedNodes()[0];
     this.emitModeChange = (mode, reason) => {
       this.wppModeChange.emit({ mode, closePopover: () => this.popoverRef?.closePopover(), reason });
     };
-    this.handleAccept = async () => {
-      const formEl = this.getFormElement();
-      if (!formEl)
-        return;
-      this.isPendingRequest = true;
-      const waits = [];
-      // Emit the confirm event and collect any promises to wait for.
-      // The developers will pass a promise to the waitUntil function, which represents the async operation (e.g., server validation).
-      const confirmEvent = this.wppConfirm.emit({
-        value: this.value,
-        waitUntil: (p) => waits.push(p),
-      });
-      try {
-        if (confirmEvent.defaultPrevented || waits.length > 0) {
-          // If the developer does server validations, wait for it to complete and get the result.
-          const results = await Promise.allSettled(waits);
-          // If the component unmounts before the request finishes, don't process it.
-          if (!this.host.isConnected)
-            return;
-          // Search for any rejected promise and throw error if it exists.
-          const rejected = results.find(r => r.status === 'rejected');
-          if (rejected) {
-            throw rejected.reason ?? new Error(this._locales.defaultErrorMessage);
-          }
-        }
-        // Successful validation, close the popover, clear errors.
-        this.setErrorState('clear', formEl);
-        this.emitModeChange('read', 'apply');
-        this.popoverRef?.closePopover();
-        this.lastValueWithError = undefined;
-      }
-      catch (error) {
-        // If the component unmounts before the request finishes, don't process it.
-        if (!this.host.isConnected)
-          return;
-        this.lastValueWithError = this.value;
-        // Put input / textarea in error state to display appropiate border-color.
-        this.setErrorState('error', formEl, error);
-        formEl.setFocus();
-        // If error already exists and just the message has changed, display the tooltip again.
-        if (this.tooltipInstance) {
-          this.tooltipInstance.show();
-        }
-      }
-      finally {
-        if (this.host.isConnected) {
-          // Validation done. Buttons no longer need to be disabled.
-          this.isPendingRequest = false;
-        }
-      }
-    };
-    this.setErrorState = (
-    // If type === 'error', the `error` should be provided.
-    type, formEl, error) => {
-      this.errorMessage = type === 'clear' ? undefined : error.message || this._locales.defaultErrorMessage;
-      formEl.messageType = type === 'clear' ? undefined : 'error';
+    this.handleAccept = (reason) => {
+      this.emitModeChange('read', reason);
+      this.popoverRef?.closePopover();
     };
     this.handleClose = (event, reason) => {
-      if (this.isPendingRequest || isEventTargetContained(this.host, event))
-        return;
-      this.lastValueWithError = undefined;
       this.popoverRef?.closePopover();
       if (!(event?.target).closest('[slot="form-element"]')) {
-        if (reason === 'cancel' || reason === 'outsideClick') {
+        if (reason === 'cancel') {
           this.getFormElement()?.setValue(this.initialValue);
         }
         this.emitModeChange('read', reason);
@@ -82,30 +21,20 @@ export class WppInlineEdit {
     };
     this.inlineEditCssClasses = () => ({
       'wpp-inline-edit': true,
-      'wpp-inline-edit-error': !!this.errorMessage && this.mode === InlineEditModeEnum.EDIT,
     });
     this.inlineEditPopoverCssClasses = () => ({
       popover: true,
-      'full-width': this.mode === InlineEditModeEnum.EDIT && this.inputWidth !== 'auto' && this.inputWidth !== undefined,
+      'full-width': this.mode === 'edit' && this.inputWidth !== 'auto' && this.inputWidth !== undefined,
     });
-    this.onKeyDownFormEl = (event) => {
-      if (event.key === 'Enter') {
-        this.handleAccept();
-      }
-    };
     this.placeholderCssClasses = () => ({ placeholder: !this.value });
-    this.renderTriggerElement = () => (h("div", { tabIndex: 0, role: "button", class: "trigger" }, this.mode === InlineEditModeEnum.EDIT ? (h("div", { class: "wrapper", part: "wrapper" }, h("div", { class: "form-element", onKeyDown: this.onKeyDownFormEl }, h("slot", { name: "form-element" })))) : (h("div", { class: "content", onClick: () => this.emitModeChange(InlineEditModeEnum.EDIT), part: "content" }, h("div", { class: "content-bg", part: "content-bg" }), h("wpp-typography-v3-3-0", { class: this.placeholderCssClasses(), type: "s-body", part: "inline-edit-typography" }, this.value || this.placeholder), h("wpp-icon-edit-v3-3-0", null)))));
     this.initialValue = undefined;
     this.inputValue = undefined;
-    this.formType = 'input';
-    this.isPendingRequest = false;
-    this.errorMessage = undefined;
+    this.isEdit = undefined;
     this.mode = 'read';
     this.value = undefined;
     this.placeholder = 'placeholder';
     this.dropdownConfig = {};
     this.inputWidth = 'auto';
-    this.locales = {};
   }
   /**
    * Method for closing inline-edit
@@ -121,34 +50,15 @@ export class WppInlineEdit {
   }
   editModeChangeHandler() {
     requestAnimationFrame(() => {
-      if (this.mode === InlineEditModeEnum.EDIT) {
-        const formElement = this.getFormElement();
-        if (this.formType === 'input' && formElement) {
-          const inputEl = formElement;
-          inputEl.truncationTooltipConfig = {
-            onShow: () => {
-              if (this.errorMessage)
-                return false;
-            },
-          };
-        }
-      }
+      if (this.mode === 'edit')
+        this.getFormElement()?.setFocus();
     });
   }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
-  }
-  componentWillLoad() {
-    this.formType =
-      this.getFormElement()?.tagName.toLowerCase() === transformToVersionedTag('wpp-textarea-input')
-        ? 'textarea'
-        : 'input';
-    this._locales = { ...this._locales, ...this.locales };
-  }
   render() {
-    const inlineWidth = this.mode === InlineEditModeEnum.EDIT && this.inputWidth !== 'auto' && this.inputWidth !== undefined;
-    return (h(Host, { class: this.inlineEditCssClasses(), exportparts: "label, wrapper, input, textarea, buttons, inline-edit-typography, content, content-bg" }, h("wpp-popover-v3-3-0", { ref: ref => (this.popoverRef = ref), externalClass: "inline-edit-popover", exportparts: "content", class: this.inlineEditPopoverCssClasses(), style: { width: inlineWidth ? this.inputWidth : '' }, config: {
-        placement: this.formType === 'input' ? 'right-start' : 'bottom-start',
+    const isEdit = this.mode === 'edit';
+    const inlineWidth = isEdit && this.inputWidth !== 'auto' && this.inputWidth !== undefined;
+    return (h(Host, { class: this.inlineEditCssClasses(), exportparts: "label, wrapper, input, textarea, buttons, inline-edit-typography, content, content-bg" }, h("wpp-popover-v2-22-0", { ref: ref => (this.popoverRef = ref), externalClass: "inline-edit-popover", exportparts: "content", class: this.inlineEditPopoverCssClasses(), style: { width: inlineWidth ? this.inputWidth : '' }, config: {
+        placement: 'right-start',
         offset: [0, 4],
         hideOnClick: false,
         animation: false,
@@ -159,27 +69,11 @@ export class WppInlineEdit {
             this.getFormElement()?.setFocus();
           }, 50);
         },
-        onHidden: () => {
-          const formEl = this.getFormElement();
-          if (!formEl)
-            return;
-          this.setErrorState('clear', formEl);
-        },
         onClickOutside: (_, e) => this.handleClose(e, 'outsideClick'),
-      } }, h("div", { slot: "trigger-element", class: "trigger-element" }, this.errorMessage && this.mode === InlineEditModeEnum.EDIT ? (h("wpp-tooltip-v3-3-0", { class: 'wpp-anchor-toolip', error: true, text: this.errorMessage, config: {
-        showOnCreate: true,
-        onCreate: instance => {
-          this.tooltipInstance = instance;
-        },
-        onShow: (instance) => {
-          setTimeout(() => {
-            instance.popperInstance?.update();
-          }, 20);
-        },
-      } }, this.renderTriggerElement())) : (this.renderTriggerElement())), h("div", { class: "buttons", part: "buttons" }, h("wpp-action-button-v3-3-0", { disabled: this.isPendingRequest || this.value === this.lastValueWithError, variant: "inverted", onClick: this.handleAccept }, h("wpp-icon-done-v3-3-0", { slot: "icon-start" })), h("wpp-action-button-v3-3-0", { disabled: this.isPendingRequest, variant: "inverted", onClick: e => this.handleClose(e, 'cancel') }, h("wpp-icon-cross-v3-3-0", { slot: "icon-start" }))))));
+      } }, h("div", { slot: "trigger-element", class: "trigger-element" }, h("div", { tabIndex: 0, role: "button", class: "trigger", ref: ref => (this.wrapperRef = ref) }, isEdit ? (h("div", { class: "wrapper", part: "wrapper" }, h("div", { class: "form-element", ref: ref => (this.formElementRef = ref) }, h("slot", { name: "form-element" })))) : (h("div", { class: "content", onClick: () => this.emitModeChange('edit'), part: "content" }, h("div", { class: "content-bg", part: "content-bg" }), h("wpp-typography-v2-22-0", { class: this.placeholderCssClasses(), type: "s-body", part: "inline-edit-typography" }, this.value || this.placeholder), h("wpp-icon-edit-v2-22-0", null))))), h("div", { class: "buttons", part: "buttons" }, h("wpp-action-button-v2-22-0", { variant: "inverted", onClick: () => this.handleAccept('apply') }, h("wpp-icon-done-v2-22-0", { slot: "icon-start" })), h("wpp-action-button-v2-22-0", { variant: "inverted", onClick: e => this.handleClose(e, 'cancel') }, h("wpp-icon-cross-v2-22-0", { slot: "icon-start" }))))));
   }
   static get is() { return "wpp-inline-edit"; }
-  static get registryIs() { return "wpp-inline-edit-v3-3-0"; }
+  static get registryIs() { return "wpp-inline-edit-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -291,32 +185,6 @@ export class WppInlineEdit {
         "attribute": "input-width",
         "reflect": true,
         "defaultValue": "'auto'"
-      },
-      "locales": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "Partial<InlineEditLocales>",
-          "resolved": "{ defaultErrorMessage?: string | undefined; }",
-          "references": {
-            "Partial": {
-              "location": "global",
-              "id": "global::Partial"
-            },
-            "InlineEditLocales": {
-              "location": "import",
-              "path": "./types",
-              "id": "src/components/wpp-inline-edit/types.ts::InlineEditLocales"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Indicates locales for the inline-edit component"
-        },
-        "defaultValue": "{}"
       }
     };
   }
@@ -324,9 +192,7 @@ export class WppInlineEdit {
     return {
       "initialValue": {},
       "inputValue": {},
-      "formType": {},
-      "isPendingRequest": {},
-      "errorMessage": {}
+      "isEdit": {}
     };
   }
   static get events() {
@@ -348,27 +214,6 @@ export class WppInlineEdit {
               "location": "import",
               "path": "./types",
               "id": "src/components/wpp-inline-edit/types.ts::InlineEditChangeModeEventDetail"
-            }
-          }
-        }
-      }, {
-        "method": "wppConfirm",
-        "name": "wppConfirm",
-        "bubbles": true,
-        "cancelable": true,
-        "composed": true,
-        "docs": {
-          "tags": [],
-          "text": "Emitted when user clicks \"Confirm\" button."
-        },
-        "complexType": {
-          "original": "InlineEditConfirmDetail",
-          "resolved": "{ value: string; waitUntil: (p: Promise<unknown>) => void; }",
-          "references": {
-            "InlineEditConfirmDetail": {
-              "location": "import",
-              "path": "./types",
-              "id": "src/components/wpp-inline-edit/types.ts::InlineEditConfirmDetail"
             }
           }
         }
@@ -417,9 +262,6 @@ export class WppInlineEdit {
     return [{
         "propName": "mode",
         "methodName": "editModeChangeHandler"
-      }, {
-        "propName": "locales",
-        "methodName": "onUpdateLocales"
       }];
   }
 }

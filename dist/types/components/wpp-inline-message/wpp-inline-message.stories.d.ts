@@ -1,11 +1,12 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppInlineMessage>;
+import { WppInlineMessage } from './wpp-inline-message';
+declare const _default: Meta<typeof WppInlineMessage>;
 export default _default;
-export declare const Warning: StoryObj<Components.WppInlineMessage>;
-export declare const Error: StoryObj<Components.WppInlineMessage>;
-export declare const Informational: StoryObj<Components.WppInlineMessage>;
-export declare const Success: StoryObj<Components.WppInlineMessage>;
+export declare const Warning: Story<Components.WppInlineMessage>;
+export declare const Error: Story<Components.WppInlineMessage>;
+export declare const Informational: Story<Components.WppInlineMessage>;
+export declare const Success: Story<Components.WppInlineMessage>;
 export declare const WithInput: {
   (args: Components.WppInput): import("lit-html").TemplateResult<1>;
   args: {
@@ -13,14 +14,6 @@ export declare const WithInput: {
     message: string;
     type: string;
     maxMessageLength: string;
-    labelConfig: {
-      text: string;
-    };
     tooltipConfig: {};
-  };
-  parameters: {
-    controls: {
-      exclude: string[];
-    };
   };
 };

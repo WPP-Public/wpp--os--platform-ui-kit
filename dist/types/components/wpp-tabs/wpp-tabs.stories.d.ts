@@ -1,5 +1,6 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppTabs>;
+import { WppTabs } from './wpp-tabs';
+declare const _default: Meta<typeof WppTabs>;
 export default _default;
-export declare const Tabs: StoryObj<Components.WppTab>;
+export declare const Tabs: Story<Components.WppTab>;

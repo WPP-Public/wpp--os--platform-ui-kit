@@ -2,9 +2,8 @@ import { h } from '@stencil/core';
 import { WppIcon } from '../../../../WppIcon';
 var ChevronDirectionIconPath;
 (function (ChevronDirectionIconPath) {
-  // @deprecated: top should be removed in 4.0.0 release
+  // @deprecated: top should be removed in 3.0.0 release
   ChevronDirectionIconPath["top"] = "M4 13L10 7L16 13";
-  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
   ChevronDirectionIconPath["up"] = "M4 13L10 7L16 13";
   ChevronDirectionIconPath["right"] = "M8 4L14 10L8 16";
   ChevronDirectionIconPath["down"] = "M16 8L10 14L4 8";
@@ -22,7 +21,7 @@ export class WppIconChevron {
     return (h(WppIcon, { name: "wpp-icon-chevron", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: ChevronDirectionIconPath[this.direction], stroke: "currentColor", "stroke-width": "2", "stroke-miterlimit": "10", "stroke-linecap": "round", "stroke-linejoin": "round" })));
   }
   static get is() { return "wpp-icon-chevron"; }
-  static get registryIs() { return "wpp-icon-chevron-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-chevron-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

@@ -1,4 +1,3 @@
-import { StoryObj } from '@storybook/web-components';
 import { Components } from '../../../../components';
 declare const _default: {
   title: string;
@@ -7,6 +6,10 @@ declare const _default: {
       'storybook/docs/panel': {
         hidden: boolean;
       };
+    };
+    notes: {
+      Container: any;
+      Items: any;
     };
   };
   argTypes: {
@@ -19,5 +22,17 @@ declare const _default: {
   };
 };
 export default _default;
-export declare const Select: StoryObj<Components.WppPaginationSelect>;
-export declare const Input: StoryObj<Components.WppPaginationSelect>;
+export declare const PageNumberSelect: {
+  (args: Components.WppPaginationSelect): import("lit-html").TemplateResult<1>;
+  args: {
+    count: number;
+    activePageNumber: number;
+  };
+};
+export declare const PageNumberInput: {
+  (args: Components.WppPaginationSelect): import("lit-html").TemplateResult<1>;
+  args: {
+    count: number;
+    activePageNumber: number;
+  };
+};

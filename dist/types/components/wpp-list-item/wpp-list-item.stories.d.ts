@@ -1,6 +1,7 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppListItem>;
+import { WppListItem } from './wpp-list-item';
+declare const _default: Meta<typeof WppListItem>;
 export default _default;
 type ListItemStoryArgsTypes = Components.WppListItem & {
   singleLineOptions: string;
@@ -10,6 +11,6 @@ type ListItemStoryArgsTypes = Components.WppListItem & {
   width: string;
   subtitleText: string;
 };
-export declare const SingleLine: StoryObj<ListItemStoryArgsTypes>;
-export declare const TwoLine: StoryObj<ListItemStoryArgsTypes>;
-export declare const DynamicWidth: StoryObj<ListItemStoryArgsTypes>;
+export declare const SingleLine: Story<ListItemStoryArgsTypes>;
+export declare const TwoLine: Story<ListItemStoryArgsTypes>;
+export declare const DynamicWidth: Story<ListItemStoryArgsTypes>;

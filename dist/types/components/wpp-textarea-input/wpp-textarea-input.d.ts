@@ -15,7 +15,6 @@ import { TextareaInputChangeEventDetail, TextareaInputValue, TextareaInputLocale
  */
 export declare class WppTextareaInput implements BaseComponent, BaseFormControl<TextareaInputValue>, InlineMessage {
   private inputRef?;
-  private _locales;
   focusType: FOCUS_TYPE;
   readonly host: HTMLWppTextareaInputElement;
   /**
@@ -86,7 +85,7 @@ export declare class WppTextareaInput implements BaseComponent, BaseFormControl<
   /**
    * Indicates locales for textarea component
    */
-  readonly locales: Partial<TextareaInputLocales>;
+  readonly locales: TextareaInputLocales;
   /**
    * Emitted when the textarea value changes.
    */
@@ -120,7 +119,6 @@ export declare class WppTextareaInput implements BaseComponent, BaseFormControl<
   componentDidLoad(): void;
   private updateEnteredCharacters;
   onValueChange(): void;
-  onUpdateLocales(newLocales: Partial<TextareaInputLocales>): void;
   private onFocus;
   private onBlur;
   private onMouseDown;

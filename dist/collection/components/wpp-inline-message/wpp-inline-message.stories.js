@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+import readme from './readme.md';
 export default {
   title: 'Design System/Components/Feedback/Inline Message',
   parameters: {
@@ -7,6 +8,7 @@ export default {
         hidden: true,
       },
     },
+    notes: readme,
   },
   argTypes: {
     size: {
@@ -17,11 +19,6 @@ export default {
       options: ['warning', 'error', 'information', 'success'],
       control: { type: 'select' },
     },
-    showTooltipFrom: {
-      control: { type: 'select' },
-      options: [50, 120, '"auto"'],
-      defaultValue: 50,
-    },
     maxMessageLength: {
       control: { type: 'select' },
       options: [50, 120, 'auto'],
@@ -30,103 +27,86 @@ export default {
     },
   },
 };
-export const Warning = {
-  render: args => html ` <wpp-inline-message-v3-3-0
-      .titleText="${args.titleText}"
-      .actionBtnText="${args.actionBtnText}"
-      .size="${args.size}"
-      .message="${args.message}"
-      .type="${args.type}"
-      .showTooltipFrom="${args.showTooltipFrom}"
-    />`,
-  args: {
-    size: 'l',
-    message: 'Warning message',
-    type: 'warning',
-    titleText: 'Title',
-    actionBtnText: 'Action',
-    showTooltipFrom: 50,
-  },
+export const Warning = (args) => html ` <wpp-inline-message-v2-22-0
+    .titleText="${args.titleText}"
+    .actionBtnText="${args.actionBtnText}"
+    .size="${args.size}"
+    .message="${args.message}"
+    .type="${args.type}"
+  />`;
+Warning.args = {
+  size: 'l',
+  message: 'Warning message',
+  type: 'warning',
+  titleText: 'Title',
+  actionBtnText: 'Action',
 };
 Warning.parameters = {
   controls: {
-    exclude: ['maxMessageLength'],
+    exclude: ['showTooltipFrom'],
   },
 };
-export const Error = {
-  render: args => html ` <wpp-inline-message-v3-3-0
-      .titleText="${args.titleText}"
-      .actionBtnText="${args.actionBtnText}"
-      .size="${args.size}"
-      .message="${args.message}"
-      .type="${args.type}"
-      .showTooltipFrom="${args.showTooltipFrom}"
-    />`,
-  args: {
-    size: 'l',
-    message: 'Error message',
-    type: 'error',
-    titleText: 'Title',
-    actionBtnText: 'Action',
-    showTooltipFrom: 50,
-  },
+export const Error = (args) => html ` <wpp-inline-message-v2-22-0
+    .titleText="${args.titleText}"
+    .actionBtnText="${args.actionBtnText}"
+    .size="${args.size}"
+    .message="${args.message}"
+    .type="${args.type}"
+  />`;
+Error.args = {
+  size: 'l',
+  message: 'Error message',
+  type: 'error',
+  titleText: 'Title',
+  actionBtnText: 'Action',
 };
 Error.parameters = {
   controls: {
-    exclude: ['maxMessageLength'],
+    exclude: ['showTooltipFrom'],
   },
 };
-export const Informational = {
-  render: args => html ` <wpp-inline-message-v3-3-0
-      .titleText="${args.titleText}"
-      .actionBtnText="${args.actionBtnText}"
-      .size="${args.size}"
-      .message="${args.message}"
-      .type="${args.type}"
-      .showTooltipFrom="${args.showTooltipFrom}"
-    />`,
-  args: {
-    size: 'l',
-    message: 'Info message',
-    type: 'information',
-    titleText: 'Title',
-    actionBtnText: 'Action',
-    showTooltipFrom: 50,
-  },
+export const Informational = (args) => html ` <wpp-inline-message-v2-22-0
+    .titleText="${args.titleText}"
+    .actionBtnText="${args.actionBtnText}"
+    .size="${args.size}"
+    .message="${args.message}"
+    .type="${args.type}"
+  />`;
+Informational.args = {
+  size: 'l',
+  message: 'Info message',
+  type: 'information',
+  titleText: 'Title',
+  actionBtnText: 'Action',
 };
 Informational.parameters = {
   controls: {
-    exclude: ['maxMessageLength'],
+    exclude: ['showTooltipFrom'],
   },
 };
-export const Success = {
-  render: args => html ` <wpp-inline-message-v3-3-0
-      .titleText="${args.titleText}"
-      .actionBtnText="${args.actionBtnText}"
-      .size="${args.size}"
-      .message="${args.message}"
-      .type="${args.type}"
-      .showTooltipFrom="${args.showTooltipFrom}"
-    />`,
-  args: {
-    size: 'l',
-    message: 'Success message',
-    type: 'success',
-    titleText: 'Title',
-    actionBtnText: 'Action',
-    showTooltipFrom: 50,
-  },
+export const Success = (args) => html ` <wpp-inline-message-v2-22-0
+    .titleText="${args.titleText}"
+    .actionBtnText="${args.actionBtnText}"
+    .size="${args.size}"
+    .message="${args.message}"
+    .type="${args.type}"
+  />`;
+Success.args = {
+  size: 'l',
+  message: 'Success message',
+  type: 'success',
+  titleText: 'Title',
+  actionBtnText: 'Action',
 };
 Success.parameters = {
   controls: {
-    exclude: ['maxMessageLength'],
+    exclude: ['showTooltipFrom'],
   },
 };
 export const WithInput = (args) => html `
   <div style="max-width: 500px; width: 100%;">
-    <wpp-input-v3-3-0
+    <wpp-input-v2-22-0
       .size="${args.size}"
-      .labelConfig="${args.labelConfig}"
       .message="${args.message}"
       .messageType="${args.type}"
       .maxMessageLength="${args.maxMessageLength}"
@@ -139,11 +119,5 @@ WithInput.args = {
   message: 'Probably, one of the longest and detailed warning messages ever met in the User Interface.',
   type: 'warning',
   maxMessageLength: 'auto',
-  labelConfig: { text: 'Input Label' },
   tooltipConfig: {},
-};
-WithInput.parameters = {
-  controls: {
-    exclude: ['showTooltipFrom'],
-  },
 };

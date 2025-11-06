@@ -7,14 +7,14 @@ describe('wpp-toggle', () => {
   it('renders component', async () => {
     const page = await newSpecPage({
       components: [WppToggle],
-      html: `<wpp-toggle name="toggle" />`,
+      html: `<wpp-toggle />`,
     });
     expect(page.root).toMatchSnapshot();
   });
   it('renders component with disabled state', async () => {
     const page = await newSpecPage({
       components: [WppToggle],
-      html: `<wpp-toggle name="toggle" disabled/>`,
+      html: `<wpp-toggle disabled/>`,
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -29,7 +29,7 @@ describe('wpp-toggle', () => {
     };
     const page = await newSpecPage({
       components: [WppToggle, WppLabel, WppInternalLabel],
-      template: () => h("wpp-toggle-v3-3-0", { labelConfig: labelConfig, required: true, name: "toggle" }),
+      template: () => h("wpp-toggle-v2-22-0", { labelConfig: labelConfig, required: true }),
     });
     expect(page.root).toMatchSnapshot();
   });

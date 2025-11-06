@@ -16,6 +16,7 @@
   * @prop --wpp-side-modal-bg-color:
   * @prop --wpp-side-modal-actions-bg-color:
   * @prop --wpp-side-modal-actions-border-color:
+  * @prop --wpp-side-modal-z-index:
 */
 :host {
   --side-modal-width-s: var(--wpp-side-modal-width-s, 440px);
@@ -23,6 +24,10 @@
   --side-modal-width-l: var(--wpp-side-modal-width-l, 760px);
   --side-modal-width-xl: var(--wpp-side-modal-width-xl, 920px);
   --side-modal-width-2xl: var(--wpp-side-modal-width-2xl, 1080px);
+  --side-modal-overlay-bg-color: var(
+    --wpp-side-modal-overlay-background-color,
+    color-mix(in srgb, var(--wpp-grey-color-500) 60%, transparent)
+  );
   --side-modal-box-shadow: var(--wpp-side-modal-box-shadow, var(--wpp-box-shadow-l));
   --side-modal-vertical-position-animation-minus-number: var(
     --wpp-side-modal-vertical-position-animation-minus-number,
@@ -38,6 +43,7 @@
   --side-modal-close-button-margin-left: var(--wpp-side-modal-close-button-margin-left, auto);
   --side-modal-back-button-margin-right: var(--wpp-side-modal-close-button-margin-left, 8px);
   --side-modal-transition: 0.2s ease-in-out;
+  --side-modal-z-index: var(--wpp-side-modal-z-index, 1000);
   --side-modal-bg-color: var(--wpp-side-modal-bg-color, var(--wpp-grey-color-000));
   --side-modal-actions-bg-color: var(--wpp-side-modal-actions-bg-color, var(--wpp-grey-color-000));
   --side-modal-actions-border-color: var(--wpp-side-modal-actions-border-color, var(--wpp-grey-color-300));
@@ -45,10 +51,11 @@
 
 :host(.wpp-side-modal-wrapper) {
   position: fixed;
-  top: var(--wpp-side-modal-top-offset);
+  top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: var(--side-modal-z-index);
   display: block;
   font-family: var(--wpp-font-family);
   visibility: hidden;
@@ -63,6 +70,9 @@
   visibility: visible;
   opacity: 1;
 }
+:host(.wpp-component-ready.wpp-visible) .overlay-color {
+  opacity: 1;
+}
 
 :host(.wpp-component-ready.wpp-visible.wpp-overlay-hidden) {
   width: fit-content;
@@ -72,6 +82,9 @@
 
 :host(.wpp-hidden) {
   visibility: hidden;
+  opacity: 0;
+}
+:host(.wpp-hidden) .overlay-color {
   opacity: 0;
 }
 
@@ -88,12 +101,9 @@
   color: var(--wpp-typography-2xl-heading-color, var(--wpp-text-color));
   font-family: var(--wpp-typography-2xl-heading-font-family, var(--wpp-font-family));
   letter-spacing: var(--wpp-typography-2xl-heading-letter-spacing, 0);
-  width: 100%;
 }
 
 .body {
-  scrollbar-width: thin;
-  scrollbar-color: var(--wpp-grey-color-400) transparent;
   font-size: var(--wpp-typography-s-body-font-size, 14px);
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
@@ -104,15 +114,6 @@
   padding: var(--side-modal-body-paddings);
   overflow-y: auto;
 }
-.body::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-.body::-webkit-scrollbar-thumb {
-  border: 2px solid transparent;
-  border-radius: 4px;
-  box-shadow: inset 0 0 0 2px var(--wpp-grey-color-400);
-}
 
 .actions {
   font-size: var(--wpp-typography-s-strong-font-size, 14px);
@@ -121,6 +122,10 @@
   color: var(--wpp-typography-s-strong-color, var(--wpp-text-color));
   font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family));
   letter-spacing: var(--wpp-typography-s-strong-letter-spacing, 0);
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
   right: 0;
   bottom: 0;
   left: 0;
@@ -136,17 +141,20 @@
 .actions .left-button-container {
   margin-left: -8px;
 }
-.actions.with-actions-config {
-  display: flex;
-  gap: 10px;
-  justify-content: space-between;
-  align-items: center;
-}
 
 .modal-overlay {
   position: absolute;
   width: 100%;
   height: 100%;
+}
+
+.overlay-color {
+  width: 100%;
+  height: 100%;
+  background-color: var(--side-modal-overlay-bg-color);
+  will-change: opacity;
+  opacity: 0;
+  transition: var(--side-modal-transition);
 }
 
 .side-modal {

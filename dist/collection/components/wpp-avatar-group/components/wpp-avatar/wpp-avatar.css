@@ -35,25 +35,21 @@
   --avatar-size-l: var(--wpp-avatar-size-l, 56px);
   --avatar-size-xl: var(--wpp-avatar-size-xl, 72px);
   --avatar-size-2xl: var(--wpp-avatar-size-2xl, 120px);
-  --avatar-size-3xl: var(--wpp-avatar-size-2xl, 176px);
-  --avatar-size-4xl: var(--wpp-avatar-size-2xl, 240px);
   --avatar-size-xs-square-border-radius: var(--wpp-avatar-size-xs-square-border-radius, var(--wpp-border-radius-xs));
   --avatar-size-s-square-border-radius: var(--wpp-avatar-size-s-square-border-radius, var(--wpp-border-radius-s));
   --avatar-size-m-square-border-radius: var(--wpp-avatar-size-m-square-border-radius, var(--wpp-border-radius-m));
   --avatar-size-l-square-border-radius: var(--wpp-avatar-size-l-square-border-radius, var(--wpp-border-radius-m));
   --avatar-size-xl-square-border-radius: var(--wpp-avatar-size-xl-square-border-radius, var(--wpp-border-radius-m));
   --avatar-size-2xl-square-border-radius: var(--wpp-avatar-size-2xl-square-border-radius, var(--wpp-border-radius-l));
-  --avatar-size-3xl-square-border-radius: var(--wpp-avatar-size-3xl-square-border-radius, var(--wpp-border-radius-l));
-  --avatar-size-4xl-square-border-radius: var(--wpp-avatar-size-4xl-square-border-radius, var(--wpp-border-radius-l));
-  --avatar-circle-border-radius: var(--wpp-avatar-circle-border-radius, 120px);
-  --avatar-icon-border-radius: var(--wpp-avatar-icon-border-radius, 120px);
+  --avatar-circle-border-radius: var(--wpp-avatar-circle-border-radius, var(--wpp-border-radius-round));
+  --avatar-icon-border-radius: var(--wpp-avatar-icon-border-radius, var(--wpp-border-radius-round));
   --avatar-icon-bg-color: var(--wpp-avatar-icon-bg-color, var(--wpp-grey-color-200));
   --avatar-icon-bg-color-hover: var(--wpp-avatar-icon-bg-color-hover, var(--wpp-grey-color-300));
   --avatar-icon-color: var(--wpp-avatar-icon-color, var(--wpp-grey-color-800));
-  --avatar-without-image-border-radius: var(--wpp-avatar-without-image-border-radius, 120px);
+  --avatar-without-image-border-radius: var(--wpp-avatar-without-image-border-radius, var(--wpp-border-radius-round));
   --avatar-without-image-text-color: var(--wpp-avatar-without-image-text-color, var(--wpp-grey-color-000));
-  --avatar-circle-counter-border-radius: var(--wpp-avatar-circle-counter-border-radius, 120px);
-  --avatar-square-counter-border-radius: var(--wpp-avatar-square-counter-border-radius, 120px);
+  --avatar-circle-counter-border-radius: var(--wpp-avatar-circle-counter-border-radius, var(--wpp-border-radius-round));
+  --avatar-square-counter-border-radius: var(--wpp-avatar-square-counter-border-radius, var(--wpp-border-radius-round));
   --avatar-counter-text-color: var(--wpp-avatar-counter-text-color, var(--wpp-grey-color-800));
   --avatar-counter-text-color-hover: var(--wpp-avatar-counter-text-color-hover, var(--wpp-grey-color-900));
   --avatar-counter-text-color-active: var(--wpp-avatar-counter-text-color-active, var(--wpp-grey-color-900));
@@ -62,10 +58,7 @@
   --avatar-counter-bg-color-active: var(--wpp-avatar-counter-bg-color-active, var(--wpp-grey-color-300));
   --avatar-first-border-color-focus: var(--wpp-avatar-first-border-color-focus, var(--wpp-grey-color-000));
   --avatar-second-border-color-focus: var(--wpp-avatar-second-border-color-focus, var(--wpp-brand-color));
-  --avatar-interactable-hover-background-color: var(
-    --wpp-avatar-interactable-hover-background-color,
-    rgba(255, 255, 255, 0.4)
-  );
+  --avatar-interactable-hover-background-color: var(--wpp-avatar-interactable-hover-background-color, rgba(255, 255, 255, 0.4));
   display: inline-flex;
   user-select: none;
   outline: none;
@@ -112,10 +105,6 @@
 }
 :host .icon-wrapper .wpp-icon {
   color: var(--avatar-icon-color);
-}
-:host:host(.tab-focus).with-amount-of-hidden-avatars {
-  background-color: var(--avatar-counter-bg-color-hover);
-  color: var(--avatar-counter-text-color-hover);
 }
 :host:host(.size-xs) {
   width: var(--avatar-size-xs);
@@ -255,54 +244,15 @@
 :host:host(.size-2xl) .square {
   border-radius: var(--avatar-size-2xl-square-border-radius);
 }
-:host:host(.size-3xl) {
-  width: var(--avatar-size-3xl);
-  height: var(--avatar-size-3xl);
-}
-:host:host(.size-3xl) .without-image {
-  font-size: var(--wpp-typography-5xl-display-font-size, 48px);
-  line-height: var(--wpp-typography-5xl-display-line-height, 62px);
-  font-weight: var(--wpp-typography-5xl-display-font-weight, 400);
-  color: var(--wpp-typography-5xl-display-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-5xl-display-font-family, var(--wpp-font-family));
-  letter-spacing: var(--wpp-typography-5xl-display-letter-spacing, 0);
-  color: var(--avatar-counter-text-color);
-}
-:host:host(.size-3xl) .without-image:not(.with-amount-of-hidden-avatars) {
-  color: var(--avatar-without-image-text-color);
-}
-:host:host(.size-3xl) .square {
-  border-radius: var(--avatar-size-3xl-square-border-radius);
-}
-:host:host(.size-4xl) {
-  width: var(--avatar-size-4xl);
-  height: var(--avatar-size-4xl);
-}
-:host:host(.size-4xl) .without-image {
-  font-size: var(--wpp-typography-5xl-display-font-size, 48px);
-  line-height: var(--wpp-typography-5xl-display-line-height, 62px);
-  font-weight: var(--wpp-typography-5xl-display-font-weight, 400);
-  color: var(--wpp-typography-5xl-display-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-5xl-display-font-family, var(--wpp-font-family));
-  letter-spacing: var(--wpp-typography-5xl-display-letter-spacing, 0);
-  color: var(--avatar-counter-text-color);
-}
-:host:host(.size-4xl) .without-image:not(.with-amount-of-hidden-avatars) {
-  color: var(--avatar-without-image-text-color);
-}
-:host:host(.size-4xl) .square {
-  border-radius: var(--avatar-size-4xl-square-border-radius);
-}
 :host:host(.with-tooltip) .wpp-tooltip,
 :host:host(.with-tooltip) .wpp-tooltip::part(anchor) {
   width: 100%;
-  outline: none;
 }
 :host:host(.tab-focus) .image,
 :host:host(.tab-focus) .without-image {
   border-radius: var(--avatar-border-radius);
   outline: none;
-  box-shadow: 0 0 0 1px var(--avatar-first-border-color-focus), 0 0 0 3px var(--avatar-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--avatar-first-border-color-focus), 0 0 0 2px var(--avatar-second-border-color-focus);
 }
 :host:host(.tab-focus) .with-amount-of-hidden-avatars {
   background-color: var(--avatar-counter-bg-color-hover);
@@ -334,12 +284,6 @@
 :host(.interactable) .interactable-wrapper.without-image:before {
   border-radius: var(--avatar-without-image-border-radius);
 }
-:host(.interactable):host(.tab-focus) .interactable-wrapper {
-  z-index: 1;
-}
-:host(.interactable):host(.tab-focus) .interactable-wrapper:before {
-  background-color: var(--avatar-interactable-hover-background-color);
-}
 :host(.interactable):host(.size-xs) .square:before {
   border-radius: var(--avatar-size-xs-square-border-radius);
 }
@@ -357,12 +301,6 @@
 }
 :host(.interactable):host(.size-2xl) .square:before {
   border-radius: var(--avatar-size-2xl-square-border-radius);
-}
-:host(.interactable):host(.size-3xl) .square:before {
-  border-radius: var(--avatar-size-3xl-square-border-radius);
-}
-:host(.interactable):host(.size-4xl) .square:before {
-  border-radius: var(--avatar-size-4xl-square-border-radius);
 }
 :host(.interactable) .with-amount-of-hidden-avatars:before {
   content: none;

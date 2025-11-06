@@ -1,5 +1,5 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
-import { d as debounce, k as transformToVersionedTag } from './utils.js';
+import { d as debounce, j as transformToVersionedTag } from './utils.js';
 
 const TAB_MARGIN_RIGHT = 20;
 
@@ -91,14 +91,14 @@ const WppTabs = /*@__PURE__*/ proxyCustomElement(class WppTabs extends HTMLEleme
   render() {
     return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, slider" }, h("div", { class: "wpp-tab-control-wrapper", role: "listbox", "aria-multiselectable": "false", part: "wrapper" }, h("slot", { part: "inner" })), h("div", { class: "slider", part: "slider" })));
   }
-  static get registryIs() { return "wpp-tabs-v3-3-0"; }
+  static get registryIs() { return "wpp-tabs-v2-22-0"; }
   get host() { return this; }
   static get watchers() { return {
     "size": ["sizeChanged"],
     "value": ["valueChanged"]
   }; }
   static get style() { return wppTabsCss; }
-}, [1, "wpp-tabs", "wpp-tabs-v3-3-0", {
+}, [1, "wpp-tabs", "wpp-tabs-v2-22-0", {
     "value": [1537],
     "size": [1],
     "position": [32],
@@ -108,9 +108,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tabs-v3-3-0"];
+  const components = ["wpp-tabs-v2-22-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tabs-v3-3-0":
+    case "wpp-tabs-v2-22-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTabs);
       }

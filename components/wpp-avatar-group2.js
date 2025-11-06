@@ -1,4 +1,4 @@
-import { proxyCustomElement, HTMLElement, createEvent, h, Host, Fragment } from '@stencil/core/internal/client';
+import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { A as AVATAR_COLORS_VARIANTS, d as defineCustomElement$j } from './wpp-avatar2.js';
 import { d as defineCustomElement$k } from './wpp-action-button2.js';
 import { d as defineCustomElement$i } from './wpp-checkbox2.js';
@@ -46,19 +46,11 @@ const WppAvatarGroup = /*@__PURE__*/ proxyCustomElement(class WppAvatarGroup ext
     this.handleAvatarClick = (event, avatarIndex, fromDropdown) => {
       this.wppSelectItem.emit({ value: event.detail.value, avatarIndex, fromDropdown });
     };
-    this.onKeyDown = (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        if (this.menuContextTippyRef) {
-          this.menuContextTippyRef.show();
-        }
-      }
-    };
     this.handleListItemClick = (event, avatarIndex) => {
       const listItem = event.currentTarget;
       this.wppSelectItem.emit({ value: listItem, fromDropdown: true, avatarIndex });
     };
     this.getAvatarsList = () => (this.avatars.length ? this.avatars : this.users);
-    this.menuContextTippyRef = undefined;
     this.users = [];
     this.avatars = [];
     this.maxAvatarsToDisplay = 6;
@@ -74,31 +66,14 @@ const WppAvatarGroup = /*@__PURE__*/ proxyCustomElement(class WppAvatarGroup ext
     const avatarsWithColors = this.getAvatarsWithColors(this.getAvatarsList());
     const avatarsToDisplay = avatarsWithColors.slice(0, this.maxAvatarsToDisplay);
     const avatarsInHiddenList = avatarsWithColors.slice(this.maxAvatarsToDisplay);
-    return (h(Host, { class: this.avatarGroupWrapperCssClasses(), role: "group", exportparts: "list, item, menu, avatar, hidden-item, hidden-item-with-avatar, hidden-item-avatar, hidden-item-name" }, h("ul", { class: "avatars-list", part: "list" }, avatarsToDisplay.map((avatar, avatarIndex) => (h("li", { class: {
+    return (h(Host, { class: this.avatarGroupWrapperCssClasses(), exportparts: "list, item, menu, avatar, hidden-item, hidden-item-with-avatar, hidden-item-avatar, hidden-item-name" }, h("ul", { class: "avatars-list", part: "list" }, avatarsToDisplay.map((avatar, avatarIndex) => (h("li", { class: {
         'avatar-item': true,
         interactable: avatar.interactable ?? false,
-      }, part: "item" }, h("wpp-avatar-v3-3-0", { size: this.size, variant: this.variant, name: avatar.name, src: avatar.src, withTooltip: this.withTooltip, tooltipConfig: this.tooltipConfig, interactable: avatar.interactable, color: avatar.color, onWppClick: (event) => this.handleAvatarClick(event, avatarIndex, false) })))), this.getAvatarsList().length > this.maxAvatarsToDisplay && (h("li", { class: "avatar-item", part: "item" }, h("wpp-menu-context-v3-3-0", { externalClass: "avatar-group", listWidth: "240px", dropdownConfig: {
-        ...this.dropdownConfig,
-        onShow: (instance) => {
-          const firstListItem = instance.popper.querySelector('.wpp-list-item');
-          if (firstListItem) {
-            firstListItem.setFocus();
-          }
-          if (this.dropdownConfig.onShow) {
-            this.dropdownConfig.onShow(instance);
-          }
-        },
-        onCreate: (instance) => {
-          this.menuContextTippyRef = instance;
-        },
-        onDestroy: () => {
-          this.menuContextTippyRef = undefined;
-        },
-      }, part: "menu", onKeyDown: this.onKeyDown, ariaProps: { label: `+${avatarsInHiddenList.length} more list items with avatars` } }, h("wpp-avatar-v3-3-0", { amountOfHiddenAvatars: avatarsInHiddenList.length, size: this.size, variant: this.variant, slot: "trigger-element", part: "avatar" }), h(Fragment, null, avatarsInHiddenList.map((avatar, avatarIndex) => (h("wpp-list-item-v3-3-0", { key: avatar.name, onWppChangeListItem: (event) => this.handleListItemClick(event, avatarIndex), value: avatar.name, part: "hidden-item" }, h("wpp-avatar-v3-3-0", { name: avatar.name, src: avatar.src, color: avatar.color, variant: this.variant, interactable: avatar.interactable, role: "presentation", slot: "left", part: "hidden-item-avatar" }), h("span", { slot: "label", class: "name", part: "hidden-item-name" }, avatar.name)))))))))));
+      }, part: "item" }, h("wpp-avatar-v2-22-0", { size: this.size, variant: this.variant, name: avatar.name, src: avatar.src, withTooltip: this.withTooltip, tooltipConfig: this.tooltipConfig, interactable: avatar.interactable, color: avatar.color, onWppClick: (event) => this.handleAvatarClick(event, avatarIndex, false) })))), this.getAvatarsList().length > this.maxAvatarsToDisplay && (h("li", { class: "avatar-item", part: "item" }, h("wpp-menu-context-v2-22-0", { externalClass: "avatar-group", listWidth: "240px", dropdownConfig: this.dropdownConfig, part: "menu" }, h("wpp-avatar-v2-22-0", { amountOfHiddenAvatars: avatarsInHiddenList.length, size: this.size, variant: this.variant, slot: "trigger-element", part: "avatar" }), h("div", null, avatarsInHiddenList.map((avatar, avatarIndex) => (h("wpp-list-item-v2-22-0", { key: avatar.name, onWppChangeListItem: (event) => this.handleListItemClick(event, avatarIndex), value: avatar.name, part: "hidden-item" }, h("wpp-avatar-v2-22-0", { name: avatar.name, src: avatar.src, color: avatar.color, variant: this.variant, interactable: avatar.interactable, index: -1, slot: "left", part: "hidden-item-avatar" }), h("span", { slot: "label", class: "name", part: "hidden-item-name" }, avatar.name)))))))))));
   }
-  static get registryIs() { return "wpp-avatar-group-v3-3-0"; }
+  static get registryIs() { return "wpp-avatar-group-v2-22-0"; }
   static get style() { return wppAvatarGroupCss; }
-}, [1, "wpp-avatar-group", "wpp-avatar-group-v3-3-0", {
+}, [1, "wpp-avatar-group", "wpp-avatar-group-v2-22-0", {
     "users": [16],
     "avatars": [16],
     "maxAvatarsToDisplay": [2, "max-avatars-to-display"],
@@ -106,116 +81,115 @@ const WppAvatarGroup = /*@__PURE__*/ proxyCustomElement(class WppAvatarGroup ext
     "variant": [1],
     "withTooltip": [4, "with-tooltip"],
     "tooltipConfig": [1040],
-    "dropdownConfig": [1040],
-    "menuContextTippyRef": [32]
+    "dropdownConfig": [1040]
   }]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-avatar-group-v3-3-0", "wpp-action-button-v3-3-0", "wpp-avatar-v3-3-0", "wpp-checkbox-v3-3-0", "wpp-icon-chevron-v3-3-0", "wpp-icon-cross-v3-3-0", "wpp-icon-dash-v3-3-0", "wpp-icon-error-v3-3-0", "wpp-icon-info-message-v3-3-0", "wpp-icon-success-v3-3-0", "wpp-icon-tick-v3-3-0", "wpp-icon-warning-v3-3-0", "wpp-inline-message-v3-3-0", "wpp-internal-label-v3-3-0", "wpp-internal-tooltip-v3-3-0", "wpp-label-v3-3-0", "wpp-list-item-v3-3-0", "wpp-menu-context-v3-3-0", "wpp-spinner-v3-3-0", "wpp-tooltip-v3-3-0", "wpp-typography-v3-3-0"];
+  const components = ["wpp-avatar-group-v2-22-0", "wpp-action-button-v2-22-0", "wpp-avatar-v2-22-0", "wpp-checkbox-v2-22-0", "wpp-icon-chevron-v2-22-0", "wpp-icon-cross-v2-22-0", "wpp-icon-dash-v2-22-0", "wpp-icon-error-v2-22-0", "wpp-icon-info-message-v2-22-0", "wpp-icon-success-v2-22-0", "wpp-icon-tick-v2-22-0", "wpp-icon-warning-v2-22-0", "wpp-inline-message-v2-22-0", "wpp-internal-label-v2-22-0", "wpp-internal-tooltip-v2-22-0", "wpp-label-v2-22-0", "wpp-list-item-v2-22-0", "wpp-menu-context-v2-22-0", "wpp-spinner-v2-22-0", "wpp-tooltip-v2-22-0", "wpp-typography-v2-22-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-avatar-group-v3-3-0":
+    case "wpp-avatar-group-v2-22-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppAvatarGroup);
       }
       break;
-    case "wpp-action-button-v3-3-0":
+    case "wpp-action-button-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-avatar-v3-3-0":
+    case "wpp-avatar-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-checkbox-v3-3-0":
+    case "wpp-checkbox-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-chevron-v3-3-0":
+    case "wpp-icon-chevron-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-cross-v3-3-0":
+    case "wpp-icon-cross-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-dash-v3-3-0":
+    case "wpp-icon-dash-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-error-v3-3-0":
+    case "wpp-icon-error-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-info-message-v3-3-0":
+    case "wpp-icon-info-message-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-success-v3-3-0":
+    case "wpp-icon-success-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-tick-v3-3-0":
+    case "wpp-icon-tick-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-warning-v3-3-0":
+    case "wpp-icon-warning-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-inline-message-v3-3-0":
+    case "wpp-inline-message-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-label-v3-3-0":
+    case "wpp-internal-label-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-0":
+    case "wpp-internal-tooltip-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-label-v3-3-0":
+    case "wpp-label-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-list-item-v3-3-0":
+    case "wpp-list-item-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-menu-context-v3-3-0":
+    case "wpp-menu-context-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v3-3-0":
+    case "wpp-spinner-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v3-3-0":
+    case "wpp-tooltip-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v3-3-0":
+    case "wpp-typography-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

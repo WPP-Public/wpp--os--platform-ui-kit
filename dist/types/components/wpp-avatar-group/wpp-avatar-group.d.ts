@@ -1,7 +1,6 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { DropdownConfig } from '../../types/common';
 import { AvatarVariant, AvatarState, AvatarGroupChangeEventDetail } from './types';
-import { Instance } from 'tippy.js';
 /**
  * @part list - Avatar group list element
  * @part item - Avatar group item element
@@ -13,11 +12,10 @@ import { Instance } from 'tippy.js';
  * @part hidden-item-name - hidden-item name element
  */
 export declare class WppAvatarGroup {
-  menuContextTippyRef?: Instance;
   /**
    * Defines a list of users with specific attributes, such as name, src, color, and so on: `users={[{name: '', src: ''}]}`
    *
-   * @deprecated - this prop will be deleted in version 4.0.0. If you want to use this prop, use avatars prop instead
+   * @deprecated - this prop will be deleted in version 3.0.0. If you want to use this prop, use avatars prop instead
    */
   readonly users: AvatarState[];
   /**
@@ -57,7 +55,6 @@ export declare class WppAvatarGroup {
   private avatarGroupWrapperCssClasses;
   private getAvatarsWithColors;
   private handleAvatarClick;
-  private onKeyDown;
   private handleListItemClick;
   private getAvatarsList;
   render(): any;

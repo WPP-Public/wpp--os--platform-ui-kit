@@ -1,5 +1,5 @@
 import { EventEmitter } from '../../stencil-public-runtime';
-import { AriaProps, BannerTypes } from '../../types/common';
+import { BannerTypes } from '../../types/common';
 import { BannerChangeEventDetail } from './types';
 /**
  * @slot - Contains the main text content. This is the default slot, without the name attribute. Use only plain text or a `<span>` with plain text to maintain consistent styling and functionality.
@@ -24,14 +24,6 @@ export declare class WppBanner {
   heightBanner: number;
   isOverflowing: boolean;
   /**
-   * Contains the button `aria-` props.
-   */
-  readonly ariaProps: AriaProps;
-  /**
-   * Role of the banner component.
-   */
-  readonly role: string;
-  /**
    * If the banner is displayed.
    */
   show: boolean;
@@ -43,10 +35,6 @@ export declare class WppBanner {
    * Defines the banner style based on the available types.
    */
   readonly type: BannerTypes;
-  /**
-   * Defines the z-index of the WppBanner.
-   */
-  readonly zIndex: number;
   /**
    * Emitted when the banner state changes.
    */

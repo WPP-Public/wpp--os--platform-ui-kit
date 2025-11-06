@@ -1,31 +1,11 @@
-/* eslint-disable @typescript-eslint/no-duplicate-enum-values */
-// Z-INDEX HIERARCHY
-// 900: Header (OS Bar)
-// 890: Sticky Bar (Top Bar)
-// 880: Overlays (dropdowns, pickers, popovers, etc.)
-// 1150: Context Menu (as we have these in the header)
-// 1200: Tooltips
-export var Z_INDEX;
-(function (Z_INDEX) {
-  Z_INDEX[Z_INDEX["TOOLTIP"] = 1200] = "TOOLTIP";
-  Z_INDEX[Z_INDEX["CONTEXT_MENU"] = 1150] = "CONTEXT_MENU";
-  Z_INDEX[Z_INDEX["TOAST"] = 1050] = "TOAST";
-  Z_INDEX[Z_INDEX["OVERLAY"] = 900] = "OVERLAY";
-  Z_INDEX[Z_INDEX["NAV_SIDEBAR"] = 899] = "NAV_SIDEBAR";
-  Z_INDEX[Z_INDEX["STICKY_BAR"] = 890] = "STICKY_BAR";
-  Z_INDEX[Z_INDEX["COLOR_PICKER"] = 880] = "COLOR_PICKER";
-  Z_INDEX[Z_INDEX["TIME_PICKER"] = 880] = "TIME_PICKER";
-  Z_INDEX[Z_INDEX["DATE_PICKER"] = 880] = "DATE_PICKER";
-  Z_INDEX[Z_INDEX["AUTOCOMPLETE"] = 880] = "AUTOCOMPLETE";
-  Z_INDEX[Z_INDEX["MENU_LIST"] = 880] = "MENU_LIST";
-  Z_INDEX[Z_INDEX["SEARCH"] = 880] = "SEARCH";
-  Z_INDEX[Z_INDEX["POPOVER"] = 880] = "POPOVER";
-  Z_INDEX[Z_INDEX["MODAL"] = 875] = "MODAL";
-  Z_INDEX[Z_INDEX["SIDE_MODAL"] = 870] = "SIDE_MODAL";
-  Z_INDEX[Z_INDEX["TOPBAR"] = 860] = "TOPBAR";
-  Z_INDEX[Z_INDEX["CHAT"] = 100] = "CHAT";
-  Z_INDEX[Z_INDEX["BANNER"] = 1] = "BANNER";
-})(Z_INDEX || (Z_INDEX = {}));
+export const Z_INDEX = {
+  CONTEXT_MENU: 1150,
+  COLOR_PICKER: 1150,
+  TIME_PICKER: 1150,
+  TOOLTIP: 1200,
+  POPOVER: 1200,
+  STICKY_BAR: 890,
+};
 export const ANIMATION_PROPERTY_NAME = 'opacity';
 export const DEFAULT_SHOW_DURATION_ANIMATION = 275;
 export const DEFAULT_HIDE_DURATION_ANIMATION = 250;

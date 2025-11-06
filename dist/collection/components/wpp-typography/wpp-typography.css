@@ -16,9 +16,9 @@
   --typography-font-family: var(--wpp-default-type-font-family, var(--wpp-font-family));
   --typography-font-style: var(--wpp-default-type-font-style, normal);
   --typography-line-height: var(--wpp-default-type-line-height, normal);
-  --typography-letter-spacing: var(--wpp-default-type-letter-spacing, normal);
-  --typography-text-transform: var(--wpp-default-type-text-transform, none);
-  --typography-text-decoration: var(--wpp-default-type-text-decoration, none);
+  --typography-letter-spacing: var(--wpp-default-letter-spacing, normal);
+  --typography-text-transform: var(--wpp-default-text-transform, none);
+  --typography-text-decoration: var(--wpp-default-text-decoration, none);
   --typography-italic-padding-right: var(--wpp-typography-italic-padding-right, 0.12em);
   display: inline-flex;
   color: var(--typography-color);

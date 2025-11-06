@@ -5,15 +5,13 @@ export class WppIconTableSortPressed {
     this.size = 'm';
     this.width = undefined;
     this.height = undefined;
-    this.color = 'var(--wpp-grey-color-900)';
-    this.upArrowColor = 'var(--wpp-grey-color-900)';
-    this.downArrowColor = 'var(--wpp-grey-color-900)';
+    this.color = 'var(--wpp-icon-color)';
   }
   render() {
-    return (h(WppIcon, { name: "wpp-icon-table-sort-pressed", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M10 4L13.4641 8.5H6.5359L10 4Z", fill: this.upArrowColor }), h("path", { d: "M10 16L13.4641 11.5H6.5359L10 16Z", fill: this.downArrowColor })));
+    return (h(WppIcon, { name: "wpp-icon-table-sort-pressed", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M10 4L13.4641 8.5H6.5359L10 4Z", fill: "#343A3F" }), h("path", { d: "M10 16L13.4641 11.5H6.5359L10 16Z", fill: "#343A3F" })));
   }
   static get is() { return "wpp-icon-table-sort-pressed"; }
-  static get registryIs() { return "wpp-icon-table-sort-pressed-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-table-sort-pressed-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -95,43 +93,7 @@ export class WppIconTableSortPressed {
         },
         "attribute": "color",
         "reflect": false,
-        "defaultValue": "'var(--wpp-grey-color-900)'"
-      },
-      "upArrowColor": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the up arrow color."
-        },
-        "attribute": "up-arrow-color",
-        "reflect": false,
-        "defaultValue": "'var(--wpp-grey-color-900)'"
-      },
-      "downArrowColor": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the down arrow color."
-        },
-        "attribute": "down-arrow-color",
-        "reflect": false,
-        "defaultValue": "'var(--wpp-grey-color-900)'"
+        "defaultValue": "'var(--wpp-icon-color)'"
       }
     };
   }

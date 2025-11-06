@@ -1,8 +1,9 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppSegmentedControl>;
+import { WppSegmentedControl } from './wpp-segmented-control';
+declare const _default: Meta<typeof WppSegmentedControl>;
 export default _default;
-export declare const Text: StoryObj<Components.WppSegmentedControl & Components.WppSegmentedControlItem & {
+export declare const Text: Story<Components.WppSegmentedControl & Components.WppSegmentedControlItem & {
   text: string;
 }>;
-export declare const Icon: StoryObj<Components.WppSegmentedControlItem>;
+export declare const Icon: Story<Components.WppSegmentedControlItem>;

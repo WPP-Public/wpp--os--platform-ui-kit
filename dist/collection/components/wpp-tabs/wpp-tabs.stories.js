@@ -1,4 +1,6 @@
 import { html } from 'lit-html';
+import TabsReadme from './readme.md';
+import TabReadme from './components/wpp-tab/readme.md';
 export default {
   title: 'Design System/Components/Navigation/Tabs',
   parameters: {
@@ -7,6 +9,7 @@ export default {
         hidden: true,
       },
     },
+    notes: { Container: TabsReadme, Items: TabReadme },
   },
   argTypes: {
     size: {
@@ -16,14 +19,17 @@ export default {
   },
 };
 export const Tabs = (args) => html `
-  <wpp-tabs-v3-3-0 value="houses" .size="${args.size}">
-    <wpp-tab-v3-3-0 value="houses" icon="wpp-icon-pie-chart" .counter="${args.counter}">Houses</wpp-tab-v3-3-0>
-    <wpp-tab-v3-3-0 icon="wpp-icon-bar-chart" .counter="${args.counter}" value="cars">A Bit Longer Text</wpp-tab-v3-3-0>
-    <wpp-tab-v3-3-0 value="food" .counter="${args.counter}">Food</wpp-tab-v3-3-0>
-    <wpp-tab-v3-3-0 value="drinks" .counter="${args.counter}">Drinks</wpp-tab-v3-3-0>
-  </wpp-tabs-v3-3-0>
+  <wpp-tabs-v2-22-0 value="houses" .size="${args.size}">
+    <wpp-tab-v2-22-0 value="houses">Houses</wpp-tab-v2-22-0>
+    <wpp-tab-v2-22-0 .disabled="${args.disabled}" .counter="${args.counter}" value="cars"
+      >A Bit Longer Text</wpp-tab-v2-22-0
+    >
+    <wpp-tab-v2-22-0 value="food">Food</wpp-tab-v2-22-0>
+    <wpp-tab-v2-22-0 value="drinks">Drinks</wpp-tab-v2-22-0>
+  </wpp-tabs-v2-22-0>
 `;
 Tabs.args = {
+  disabled: false,
   counter: 0,
   size: 'm',
 };

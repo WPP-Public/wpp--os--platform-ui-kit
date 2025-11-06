@@ -1,14 +1,13 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { BaseFormControl } from '../../interfaces/base-form-control';
 import { FOCUS_TYPE, DropdownConfig } from '../../types/common';
-import { FileItemType, FileUploadEventDetail, FileUploadResultFormaType, FileUploadLocales, ScrollState, FileUploadMessageType, FileUploadItemEventDetail, AcceptConfig, FileValidatorHandler, FileUploadErrorEventDetails } from './types';
-import { LabelConfig } from '../wpp-label/types';
+import { FileItemType, FileUploadEventDetail, FileUploadResultFormaType, FileUploadLocales, ScrollState, FileUploadMessageType, FileUploadItemEventDetail, AcceptConfig, FileValidatorHandler } from './types';
 interface FocusType {
   wrapper: FOCUS_TYPE;
   item: FOCUS_TYPE;
 }
 /**
- * @slot - Should contain label and description of file upload.
+ * @slot - Should contain label and description of file upload. The default slot, without the name attribute.
  *
  * @part list-wrapper - file list wrapper
  * @part file-list - file list element.
@@ -26,18 +25,12 @@ interface FocusType {
  */
 export declare class WppFileUpload implements BaseFormControl<FileItemType[], FileUploadEventDetail> {
   private inputRef?;
-  private _locales;
-  private inputId;
-  private labelId;
-  private lastKeyWasTab;
   host: HTMLWppFileUploadElement;
-  private hasTabFocus;
   scrollState: ScrollState | false;
   focusType: FocusType;
   isFileDrag: boolean;
   errorList: FileItemType[];
   successList: FileItemType[];
-  isLimitReached: boolean;
   /**
    * Defines the input name.
    */
@@ -61,7 +54,7 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
   /**
    * Accept file format, you can pass any format you want download, by default is `.jpg, .jpeg, .png`
    *
-   * @deprecated - this prop will be deleted in 4.0.0 version as it is not flexible enough to handle different
+   * @deprecated - this prop will be deleted in 3.0.0 version as it is not flexible enough to handle different
    * cases with files validations, for example based on mimetype and extension at the same time.
    * This property handle only a few extensions: ['.jpg', '.jpeg', '.png', '.txt', '.text', '.doc', '.docx', '.mov'],
    * and list will NOT be extended.
@@ -109,14 +102,12 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
   readonly size: number;
   /**
    * Maximum label length (in characters) of single item
-   *
-   * @deprecated - this prop will be removed in 4.0.0 version. Truncation will be calculated based on available space.
    */
-  readonly maxLabelLength?: number;
+  readonly maxLabelLength: number;
   /**
    * Indicates locales for file upload component
    */
-  readonly locales: Partial<FileUploadLocales>;
+  readonly locales: FileUploadLocales;
   /**
    * Defines custom validation function. It must return null if there's no errors, and string in case of any error
    */
@@ -129,19 +120,6 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
    * Maximum accepted number of files The default value is 0 which means there is no limitation to how many files are accepted.
    */
   readonly maxFiles: number;
-  /**
-   * If the input is required.
-   */
-  readonly required: boolean;
-  /**
-   * Indicates label config
-   */
-  labelConfig?: LabelConfig;
-  /**
-   * Defines the dropdown configuration. Under the hood dropdown using tippy.js,
-   * all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
-   */
-  readonly labelTooltipConfig: DropdownConfig;
   /**
    * If `true`, the new errors (from a new unsuccessful upload) will replace the already existing ones in the list
    * By default, the new errors will be added to the error list
@@ -168,23 +146,12 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
    */
   readonly wppFileUploadItemClick: EventEmitter<FileUploadItemEventDetail>;
   /**
-   * Emitted when the file upload enters an error state. Triggered when the maximum number of files is exceeded.
-   */
-  readonly wppError: EventEmitter<FileUploadErrorEventDetails>;
-  /**
    * Method to reset FileUpload
    */
   reset(): Promise<void>;
   private reInitValue;
-  protected onDisabledChange(disabled: boolean): void;
   onValueChange(newValue: FileItemType[]): void;
-  onUpdateLocales(newLocales: Partial<FileUploadLocales>): void;
-  componentWillLoad(): void;
   componentDidLoad(): void;
-  private onGlobalKeyDown;
-  private onPointerDown;
-  private onInputFocus;
-  private onInputBlur;
   private onFocus;
   private onBlur;
   private onMouseDown;
@@ -209,7 +176,6 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
   private getAcceptExtensions;
   private isMaximumFilesSet;
   private isMaximumFilesReached;
-  private getMessageText;
   private uploadWrapperCssClasses;
   private listWrapperCssClasses;
   private hostCssClasses;

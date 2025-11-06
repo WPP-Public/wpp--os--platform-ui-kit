@@ -16,7 +16,6 @@ export declare class WppCounter {
   host: HTMLWppCounterElement;
   formattedValue: string;
   focusType: FOCUS_TYPE;
-  currentFocused: 'decrease' | 'input' | 'increase' | null;
   /**
    * Defines the counter name.
    */
@@ -113,10 +112,11 @@ export declare class WppCounter {
   private handleValidate;
   private formatValue;
   private onInput;
+  private onFocus;
   private onMouseDown;
+  private onKeyUp;
   private onBlur;
   private roundToDecimal;
-  private isInputEmpty;
   private addStepToValue;
   private increaseValue;
   private decreaseValue;
@@ -125,10 +125,5 @@ export declare class WppCounter {
   private increaseWrapperCssClasses;
   private inputCssClasses;
   private hostCssClasses;
-  private onFocus;
-  private onElementFocus;
-  private onElementBlur;
-  private onKeyDownButton;
-  private onKeyUp;
   render(): any;
 }

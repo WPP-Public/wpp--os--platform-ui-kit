@@ -10,10 +10,7 @@ import { RadioChangeEvent, RadioValue, RadioLabelConfig } from './types';
  */
 export declare class WppRadio implements BaseComponent, BooleanFormControl<RadioValue> {
   readonly host: HTMLWppRadioElement;
-  private inputRef?;
-  private tippyInstance?;
   focusType: FOCUS_TYPE;
-  isPressed: boolean;
   /**
    * Defines the radio name.
    */
@@ -68,12 +65,6 @@ export declare class WppRadio implements BaseComponent, BooleanFormControl<Radio
    */
   readonly index: number;
   /**
-   * Create a component with role presentation
-   *
-   * @internal - This prop is controlled by WppCard component
-   */
-  readonly decorative?: boolean;
-  /**
    * Emitted when the selected state changes.
    */
   readonly wppChange: EventEmitter<RadioChangeEvent>;
@@ -95,14 +86,15 @@ export declare class WppRadio implements BaseComponent, BooleanFormControl<Radio
    * Method that sets focus on the native input.
    */
   setFocus(): Promise<void>;
+  private inputRef?;
   private onClick;
+  private onInput;
   private onFocus;
   private onBlur;
-  private onKeyDown;
+  private onMouseDown;
   private onKeyUp;
   private hostCssClasses;
   private labelCssClasses;
-  private inputCssClasses;
   componentWillLoad(): void;
   render(): any;
 }

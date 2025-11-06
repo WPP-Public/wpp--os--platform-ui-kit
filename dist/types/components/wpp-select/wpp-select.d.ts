@@ -1,97 +1,214 @@
-import { EventEmitter } from '../../stencil-public-runtime';
+import { Event, EventEmitter } from '../../stencil-public-runtime';
+import { DropdownConfig, FOCUS_TYPE, InputMessageTypes } from '../../types/common';
+import { ListPosition, AriaProps } from '../../types/common';
 import { BaseComponent } from '../../interfaces/base-component';
-import { Instance, Props } from 'tippy.js';
-import { SelectLabelConfig, SelectLocaleInterface, SelectSize, SelectTypes, SelectValue } from '../wpp-select/types';
-import { AriaProps, DropdownConfig, FOCUS_TYPE, InputMessageTypes } from '../../types/common';
-import { ListItemChangeEventDetail, ListValue } from '../wpp-list-item/types';
-import { InputChangeEventDetail, InputTypes, MaskOptions, WppInputCustomEvent, WppListItemCustomEvent } from '../../components';
-import { ListItemInterface, SelectChangeEventDetails } from './types';
 import { BaseFormControl } from '../../interfaces/base-form-control';
 import { InlineMessage } from '../../interfaces/inline-message';
+import { InputChangeEventDetail } from '../wpp-input/types';
+import { SelectChangeEventDetail, SelectValue, SelectTypes, SelectOptionChangeEventDetail, SelectLabelConfig, SelectLocaleInterface, SelectTabElements, SelectSize, SelectOption, GetSelectOptionIdHandler, GetSelectOptionLabelHandler } from './types';
+import { LoadMoreHandler } from '../wpp-autocomplete/types';
+import { Instance } from 'tippy.js';
+interface FocusType {
+  input: FOCUS_TYPE;
+  listItem: FOCUS_TYPE;
+}
 /**
+ * @slot wpp-list-item - contains list items. List items must have distinct value properties, and value should not be `undefined` or `null` to ensure proper functionality. The default slot, without the name attribute.
  * @slot icon-start - can contain an icon that will be placed before the main content, e.g. a search icon.
+ *
+ * @part single-select-input - Single-select input element
+ * @part multiple-select-input - Multiple-select input element
+ * @part text-select-wrapper - Text-select input element
+ *
+ * @part label - Label text element
+ * @part input-wrapper - input wrapper element
+ * @part input - input element
+ * @part message - message element
+ *
+ * @part wrapper - component wrapper element
+ * @part body - Main content wrapper
+ * @part text - Main text content
+ * @part icon-chevron - icon chevron element
+ *
+ * @part placeholder-wrap - placeholder wrapper element
+ * @part placeholder - placeholder text element
+
+ * @part options-list - options list element
  */
 export declare class WppSelect implements BaseComponent, BaseFormControl<SelectValue[] | SelectValue>, InlineMessage {
-  private resizeObserver;
-  private hasReachedLimit;
-  protected canSelectAll: boolean;
-  protected canClearAll: boolean;
-  protected listRef?: HTMLDivElement;
-  private LIB_COMPONENTS_PREFIX;
-  protected versionToCompare: string;
-  protected tippyInstance?: Instance<Props>;
-  protected anchorRef?: HTMLDivElement;
-  protected portalRef?: HTMLDivElement;
+  protected triggerEl?: HTMLElement;
   protected inputRef?: HTMLDivElement;
-  protected overflowContainerRef?: HTMLDivElement;
-  protected _locales: SelectLocaleInterface;
+  protected menuRef?: HTMLDivElement;
+  protected inputSearchRef?: HTMLWppInputElement;
+  protected totalItems: number;
+  protected multipleSelectDropdownHeight: number;
+  protected singleSelectDropdownHeight: number;
+  protected enabledElements: HTMLWppListItemElement[];
+  protected listWrapperRef?: HTMLDivElement;
+  private observers;
+  private infiniteLoadingPromise?;
   host: HTMLWppSelectElement;
-  isOpen: boolean;
-  searchText: string;
-  internalList: ListItemInterface[];
-  renderedText: string;
-  emittedValue: SelectValue | null;
   hasIconStartSlot: boolean;
-  anchorButton: boolean;
-  shouldShowSearch: boolean;
-  focusType: FOCUS_TYPE;
-  isRenderMessageInTooltip: boolean;
+  isEmpty: boolean;
+  isOnSearch: boolean;
+  searchText: string;
+  isAllSelected: boolean;
+  isInputFilled: boolean;
+  activeItem: HTMLElement | null;
+  activeItems: HTMLWppListItemElement[];
+  textToDisplay: string;
+  selectedItemsTextList: string[];
+  isFocused: boolean;
+  focusType: FocusType;
   withScroll: boolean;
-  checkedItems: number;
-  disabledItems: number;
-  textOverflows: boolean;
-  isContainerFocused: boolean;
+  isInfiniteLoading: boolean;
+  hasClickedBtn: boolean;
+  isHiddenDropdown: boolean;
   shouldTruncate: boolean;
+  displayedItemsCount: number;
+  isInModal: boolean;
+  modalRef?: HTMLElement | null;
   /**
-   * If `true`, the search input should retain its value when the dropdown is closed.
-   * This is useful for cases where the user might want to continue searching
+   * If the component is loading.
    */
-  readonly consistentSearch: boolean;
+  readonly loading: boolean;
   /**
-   * Defines the input value.
+   * If the autocomplete options list has infinite scroll.
+   * This prop shouldn't change after the component is rendered.
    */
-  value: SelectValue | SelectValue[];
+  readonly infinite: boolean;
   /**
-   * List of items in the dropdown.
+   * If infinite scroll can request more pages to load.
    */
-  readonly list: ListItemInterface[];
+  readonly infiniteLastPage: boolean;
   /**
-   * Defines the WppSelect component type.
-   * * Valid values: 'single' | 'multiple' | 'combined'
-   * * Note: The value 'text' is deprecated and will be removed in version 4.0.0. Use WppActionButton with WppMenuContext to achieve the same result.
+   * Helper that requests to load more options on infinite scroll.
+   * This request is considered done when the returned `Promise` is settled.
+   * This prop is required when `infinite` is set to `true`.
+   */
+  readonly loadMore?: LoadMoreHandler;
+  /**
+   * Defines the input name.
+   */
+  readonly name?: string;
+  /**
+   * Defines the input type.
    */
   readonly type: SelectTypes;
   /**
-   * This is property for internal use only. It is used to render text variant of the WppSelect component (used in WppPagination component)
-   * @internal
+   * Defines the input value.
    */
-  readonly isTextSelect: boolean;
+  value: SelectValue[] | SelectValue | SelectOption[];
+  /**
+   * If `true`, the component can accept custom value objects.
+   * Additionally, the `getOptionId` and `getOptionLabel` property may be overwritten to retrieve the necessary property for object identification.
+   */
+  readonly withCustomValue: boolean;
+  /**
+   * Helper that gets ID values from the select options.
+   */
+  readonly getOptionId: GetSelectOptionIdHandler;
+  /**
+   * Helper that gets a label for the select options.
+   */
+  readonly getOptionLabel: GetSelectOptionLabelHandler;
+  /**
+   * Defines the combined input value.
+   */
+  inputValue: string;
+  /**
+   * Defines the displayed input value. If provided overrides the existing displayed value
+   */
+  displayValue: string;
+  /**
+   * Defines the input placeholder.
+   */
+  readonly placeholder?: string;
+  /**
+   * If the input is required.
+   */
+  readonly required: boolean;
+  /**
+   * If the input is disabled.
+   */
+  readonly disabled: boolean;
   /**
    * If `true` the search field will appear. The default value 'auto' displays the search
    * only when the number of items displayed is >= 10.
    */
   readonly withSearch: boolean | 'auto';
   /**
-   * If the input is disabled.
+   * If `true` the dropdown has controls folder.
    */
-  readonly disabled: boolean;
-  /**
-   * If the input is required.
-   */
-  readonly required: boolean;
+  readonly withFolder: boolean;
   /**
    * If `true`, the input should be focused on page load
    */
   readonly autoFocus: boolean;
   /**
-   * If the component is loading.
+   * Defines the input size.
    */
-  readonly loading: boolean;
+  readonly size: SelectSize;
   /**
-   * If `true` the dropdown has controls folder, meaning that the "Select All" and "Clear All" button will appear at the bottom of the dropdown.
-   * This property works just for the multiple select.
+   * Defines the input message.
    */
-  readonly withFolder: boolean;
+  readonly message?: string;
+  /**
+   * Defines the input message type.
+   */
+  readonly messageType?: InputMessageTypes;
+  /**
+   * Defines the input message maximum length.
+   */
+  readonly maxMessageLength?: number;
+  /**
+   * Defines multiple select, maximum selected items to show.
+   */
+  readonly maxItemsToDisplay: number;
+  /**
+   * Defines the dropdown CSS position. If you want to overlay `overflow: hidden`, use `fixed`.
+   */
+  readonly dropdownPosition: ListPosition;
+  /**
+   * Contains the component `aria-` props.
+   */
+  readonly ariaProps: AriaProps;
+  /**
+   * Defines the dropdown configuration. Under the hood dropdown using tippy.js,
+   * all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
+   */
+  readonly dropdownConfig: DropdownConfig;
+  /**
+   * Defines the dropdown configuration. Under the hood dropdown using tippy.js,
+   * all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
+   */
+  tooltipConfig: DropdownConfig;
+  /**
+   * Indicates label config
+   */
+  labelConfig?: SelectLabelConfig;
+  /**
+   * If true, wouldn't update `select` on `options` change
+   */
+  readonly enableStaticOptions: boolean;
+  /**
+   * Tooltip config for label, under the hood tooltip using tippy.js,
+   * all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
+   */
+  readonly labelTooltipConfig: DropdownConfig;
+  /**
+   * Defines the component locale types.
+   */
+  readonly locales: SelectLocaleInterface;
+  /**
+   * Defines the dropdown width. The width of the dropdown cannot be smaller than the width of the trigger element.
+   */
+  readonly dropdownWidth: 'auto' | string;
+  /**
+   * If 'true', instead of displaying comma-separated values, the input should show the text "All selected"
+   * when all options in the multi-select are selected.
+   */
+  readonly showSelectAllText: boolean;
   /**
    * Used to control whether or not the selected value from a text-select should be truncated with an ellipsis (three dots)
    * to fit within a specified width. If set to false, the selected value from the text-select may appear on
@@ -100,116 +217,12 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
   readonly truncate: boolean;
   /**
    * Defines the maximum number of items the user can select in a dropdown. If the maximum number is reached, the other items are disabled.
-   * This property can be used only on the "multiple" select.
    */
   readonly maximumSelectedItems?: number;
   /**
-   * Helper function to return the key of the list-item in the list.
-   * Should be used when the value of the list item is an object.
-   */
-  readonly getItemKey: (value: ListValue) => string | number | undefined;
-  /**
-   * Defines the input placeholder.
-   */
-  readonly placeholder?: string;
-  /**
-   * Defines the input name.
-   */
-  readonly name?: string;
-  /**
-   * Indicates the configuration of the label.
-   */
-  labelConfig?: SelectLabelConfig;
-  /**
-   * Tooltip config for label, under the hood tooltip using tippy.js,
-   * all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
-   */
-  readonly labelTooltipConfig: DropdownConfig;
-  /**
-   * Defines the input size.
-   */
-  readonly size: SelectSize;
-  /**
-   * If true, wouldn't update `select` when the list changes.
-   */
-  readonly enableStaticOptions: boolean;
-  /**
-   * Defines multiple select, maximum selected items to show.
-   */
-  readonly maxItemsToDisplay: number;
-  /**
-   * Defines the dropdown width. The width of the dropdown cannot be smaller than the width of the trigger element.
-   */
-  readonly dropdownWidth: 'auto' | string;
-  /**
-   * Defines the displayed input value. If provided overrides the existing displayed value.
-   * This property should be used only in custom single selects.
-   */
-  displayValue: string;
-  /**
-   * Defines if the dropdown of the select is opened or not. This property is used to control the direction of chevron icon (opened / closed).
-   * This property should be used only in custom single selects.
-   */
-  readonly isDropdownOpen: boolean;
-  /**
-   * Contains the component `aria-` props.
-   */
-  readonly ariaProps: AriaProps;
-  /**
-   * Defines the input message. The message is placed right below the select.
-   */
-  readonly message?: string;
-  /**
-   * Defines the input message type, which can be "error" or "warning". This property
-   * has to be used together with "message".
-   */
-  readonly messageType?: InputMessageTypes;
-  /**
-   * Defines the input message maximum length. The message will get truncated after
-   * limit is reached. This property has to be used together with "message".
-   */
-  readonly maxMessageLength?: number;
-  /**
-   * Defines the dropdown configuration. Under the hood dropdown using tippy.js,
-   * all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
-   */
-  dropdownConfig: DropdownConfig;
-  /**
-   * Defines the component locale types.
-   */
-  readonly locales: Partial<SelectLocaleInterface>;
-  /**
-   * If 'true', instead of displaying comma-separated values, the input should show the text "All selected"
-   * when all options in the multi-select are selected.
-   */
-  readonly showSelectAllText: boolean;
-  /**
-   * Defines the combined input value.
-   */
-  inputValue: string;
-  /**
-   * Defines the custom mask options. Currently, it can be used with the following types: 'decimal', 'text', 'tel'
-   * NOTE: Used only in `WppCombinedSelect`
-   */
-  readonly maskOptions?: MaskOptions;
-  /**
-   * Defines the type of input
-   * NOTE: Used only in `WppCombinedSelect`
-   */
-  readonly inputType: InputTypes;
-  /**
-   * Defines the dropdown configuration of the tooltip of the select's message. Under the hood dropdown using tippy.js,
-   * all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
-   */
-  tooltipConfig: DropdownConfig;
-  /**
-   * Render error/warning/info message in tooltip instead of an inline message below a select element
-   */
-  readonly messageInTooltip: boolean;
-  /**
    * Emitted when an input value changes.
    */
-  readonly wppChange: EventEmitter<SelectChangeEventDetails>;
+  readonly wppChange: EventEmitter<SelectChangeEventDetail>;
   /**
    * Emitted when the input is in focus.
    */
@@ -218,68 +231,81 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
    * Emitted when the input loses focus.
    */
   readonly wppBlur: EventEmitter<FocusEvent>;
-  onUpdateDisplayValue(): void;
-  onUpdateValue(): void;
-  onUpdateEmittedValue(): void;
-  private getSelectedItems;
-  onUpdateList(): void;
-  onUpdateSearchText(): void;
-  onUpdateLoading(): void;
-  onUpdateMaximumSelectedItems(): void;
-  onUpdateMessage(): void;
-  onUpdateLocales(newLocales: Partial<SelectLocaleInterface>): void;
   /**
-   * Sets focus on the select and opens the dropdown.
+   * Emitted when the search value changes
+   */
+  wppSearchValueChange: EventEmitter<string>;
+  handleSelectOptionClick(params: CustomEvent<SelectOptionChangeEventDetail>): void;
+  componentWillLoad(): void;
+  protected updateSlotData: () => void;
+  private getEnabledItems;
+  private disableNonSelectedItems;
+  private enableListItems;
+  private validateMaxSelected;
+  private isOptionsValueEqual;
+  protected getUpdatedFocusInfo: (type: SelectTabElements, updateValue: FOCUS_TYPE) => FocusType;
+  private updateValue;
+  protected handleInputChange: (event: CustomEvent<InputChangeEventDetail>) => void;
+  private countDisplayedItems;
+  protected hasSimpleSearch: () => boolean;
+  protected handleSearch: (initSearchText: string) => void;
+  protected updateScrollState: () => void;
+  onUpdateValue(newValue: SelectValue, oldValue: SelectValue): void;
+  onLoadingChange(loading: boolean): void;
+  /**
+   * Sets focus on native input
    */
   setFocus(): Promise<void>;
-  componentWillLoad(): void;
+  /**
+   * Update options list programmatically
+   */
+  updateOptions(): Promise<void>;
+  private findParentModal;
+  private updateDropdownHeight;
+  private onWindowResize;
   componentDidLoad(): void;
-  connectedCallback(): void;
+  private customDropdownConfig;
+  protected shouldShowSearch: () => boolean;
+  private changeSlotsAttribute;
+  protected handleMenuListShow: (instance: Instance) => boolean | void;
+  protected handleMenuListHide: (instance: Instance) => false | void;
   disconnectedCallback(): void;
-  private checkMessageInTooltip;
-  private checkTruncationInTextSelect;
-  private onUpdateListSingle;
-  private onUpdateListMultiple;
-  private updateItemsAfterChangeMultiple;
-  private checkListAgainstValueSingle;
-  private checkListAgainstValueMultiple;
-  private convertValueToKey;
-  protected renderList: () => HTMLElement;
-  private renderSlotsInListItem;
-  private setHasBeenInternallyDisabled;
-  private disableOtherElements;
-  private enablePreviousElements;
-  protected checkIfTextOverflows: () => void;
-  private setRenderedTextMultiple;
-  protected onShowDropdown: (instance: Instance<Props>) => false | void;
-  private onShowDropdownText;
-  protected onHiddenDropdown: (instance: Instance<Props>) => void;
-  protected createTippyInstance: () => void;
-  private focusFirstListItem;
-  private focusSearchInput;
-  protected handleSearch: (event: WppInputCustomEvent<InputChangeEventDetail>) => void;
-  protected handleClickListItem: (event: WppListItemCustomEvent<ListItemChangeEventDetail>) => void;
-  private onClickListItemSingle;
-  private onClickListItemMultiple;
-  private updateScrollState;
+  private getValueFromDOM;
+  private updateIsFilled;
+  private setMultipleTextToDisplay;
+  protected anyClearable: () => boolean;
+  protected handleClearAll: (e?: Event | undefined) => void;
+  protected canSelectAll: () => boolean;
   protected handleSelectAll: () => void;
-  protected handleClearAll: () => void;
-  protected setShouldShowSearch: () => false | undefined;
-  protected handleClick: (shouldFocus?: boolean) => void;
-  protected updateSlotData: () => void;
-  protected onKeyUp: (event: KeyboardEvent) => void;
-  protected onKeyDown: (event: KeyboardEvent) => void;
-  protected onKeyDownPortal: (event: KeyboardEvent) => void;
+  protected handleShouldCloseOnOutsideClick: (event: Event) => boolean;
+  protected canLoadMore: () => boolean | undefined;
+  protected requestLoadMore: () => void;
+  protected scrollOptionsToTop: () => void;
+  protected handleOptionsScroll: (event: UIEvent) => void;
+  protected handleLabelClick: () => void;
   protected onFocus: (event: FocusEvent) => void;
-  protected onBlur: (event?: FocusEvent) => void;
-  protected hasErrorsOrWarnings: (type: 'error' | 'warning') => boolean;
+  protected onMouseDown: () => void;
+  private handleBlurCall;
+  protected onBlur: (event: FocusEvent) => void;
+  protected onKeyUp: (event: KeyboardEvent, type: SelectTabElements) => void;
+  protected areOptionsProvided: () => boolean;
+  private countItems;
+  protected handleSlotChange: () => void;
+  protected getDropdownWidth: (instance: Instance) => void;
+  protected labelCssClasses: () => {
+    label: boolean;
+    focused: boolean;
+    disabled: boolean;
+  };
   protected iconStartCssClasses: () => {
+    [x: string]: boolean;
     'icon-start': boolean;
     'slot-hidden': boolean;
     disabled: boolean;
-  };
-  protected labelCssClasses: () => {
-    disabled: boolean;
+    filled: boolean;
+    'filled-active': boolean;
+    'filled-pressed': boolean;
   };
   render(): any;
 }
+export {};

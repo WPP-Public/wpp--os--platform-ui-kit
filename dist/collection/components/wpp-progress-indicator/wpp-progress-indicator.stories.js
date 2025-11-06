@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+import readme from './readme.md';
 export default {
   title: 'Design System/Components/Feedback/Progress Indicator',
   parameters: {
@@ -7,6 +8,7 @@ export default {
         hidden: true,
       },
     },
+    notes: readme,
   },
   argTypes: {
     value: {
@@ -17,42 +19,41 @@ export default {
       type: 'number',
     },
     isShowPercentage: { control: { type: 'boolean' } },
+    label: {
+      type: 'string',
+    },
     forceIntermediateEmptyState: { control: { type: 'boolean' } },
   },
 };
 export const Bar = (args) => html `
-  <wpp-progress-indicator-v3-3-0
-    .value=${args.value}
-    .isShowPercentage=${args.isShowPercentage}
-    .width=${args.width}
-    .forceIntermediateEmptyState=${args.forceIntermediateEmptyState}
-    .ariaProps=${args.ariaProps}
-    style="margin-right: 50px"
-  />
-`;
+    <wpp-progress-indicator-v2-22-0
+      .value=${args.value}
+      .isShowPercentage=${args.isShowPercentage}
+      .width=${args.width}
+      .label=${args.label}
+      .forceIntermediateEmptyState=${args.forceIntermediateEmptyState}
+      style="margin-right: 50px"
+    />
+  `;
 Bar.args = {
   value: 0,
   width: 0,
   isShowPercentage: false,
+  label: '',
   forceIntermediateEmptyState: false,
-  ariaProps: {
-    label: 'Default Progress Indicator',
-  },
 };
-export const Circle = (args) => html ` <wpp-progress-indicator-v3-3-0
+export const Circle = (args) => html ` <wpp-progress-indicator-v2-22-0
     variant="circle"
     .isShowPercentage=${args.isShowPercentage}
     .width=${args.width}
     .value=${args.value}
     .forceIntermediateEmptyState=${args.forceIntermediateEmptyState}
-    .ariaProps=${args.ariaProps}
+    .label=${args.label}
   />`;
 Circle.args = {
   value: 0,
   width: 0,
   isShowPercentage: false,
+  label: '',
   forceIntermediateEmptyState: false,
-  ariaProps: {
-    label: 'Circle Progress Indicator',
-  },
 };

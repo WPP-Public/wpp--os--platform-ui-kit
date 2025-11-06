@@ -36,7 +36,7 @@ describe.skip('wpp-datepicker', () => {
     };
     const page = await newSpecPage({
       components: [WppDatepicker, WppLabel, WppInternalLabel],
-      template: () => h("wpp-datepicker-v3-3-0", { range: true, labelConfig: labelConfig }),
+      template: () => h("wpp-datepicker-v2-22-0", { range: true, labelConfig: labelConfig }),
     });
     expect(page.root).toMatchSnapshot();
   });

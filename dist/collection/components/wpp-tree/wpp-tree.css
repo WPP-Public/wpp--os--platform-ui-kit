@@ -22,15 +22,13 @@
 }
 
 .container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   width: 100%;
   overflow: hidden;
 }
 
 .content-container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   overflow: hidden;
   transition: height 500ms ease;
 }

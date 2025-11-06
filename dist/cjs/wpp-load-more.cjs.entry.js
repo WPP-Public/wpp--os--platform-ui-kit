@@ -15,7 +15,6 @@ const WppLoadMore = class {
   constructor(hostRef) {
     index.registerInstance(this, hostRef);
     this.wppClickLoadMore = index.createEvent(this, "wppClickLoadMore", 7);
-    this.hasToggledBtn = false;
     this.handleClick = (e) => {
       if (this.isDisabled()) {
         e.stopPropagation();
@@ -23,11 +22,6 @@ const WppLoadMore = class {
       }
       const newItemsLoaded = Math.min(this.itemsLoaded + this.incrementBy, this.totalItems);
       this.wppClickLoadMore.emit({ newItemsLoaded, incrementBy: this.incrementBy });
-    };
-    this.onKeyDown = (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        this.hasToggledBtn = true;
-      }
     };
     this.hostCssClasses = () => ({
       'wpp-load-more': true,
@@ -48,25 +42,10 @@ const WppLoadMore = class {
     this.loading = false;
     this.disabled = false;
     this.incrementBy = INCREASE_BY;
-    this.ariaProps = {};
   }
   updateProgress() {
     this.progressPercentage =
       (Math.max(0, Math.min(this.itemsLoaded, this.totalItems)) / Math.max(0, this.totalItems)) * 100;
-  }
-  /**
-   * Method that sets focus on the load button.
-   */
-  async setFocus() {
-    if (this.loadBtnRef) {
-      this.loadBtnRef.setFocus();
-    }
-  }
-  componentDidRender() {
-    if (!this.loading && this.hasToggledBtn && !this.isDisabled()) {
-      this.hasToggledBtn = false;
-      this.setFocus();
-    }
   }
   componentWillLoad() {
     this.updateProgress();
@@ -75,9 +54,9 @@ const WppLoadMore = class {
     return this.disabled || this.itemsLoaded >= this.totalItems;
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), onKeyDown: this.onKeyDown, exportparts: "container, progress-text, button" }, this.showProgressBar && (index.h("div", { class: this.progressContainerCssClasses(), part: "container" }, index.h("span", { id: "wpp-progress-indicator-label", class: this.progressTextCssClasses(), part: "progress-text" }, Math.max(0, Math.min(this.itemsLoaded, this.totalItems)), " of ", Math.max(0, this.totalItems), " items"), index.h("wpp-progress-indicator-v3-3-0", { class: "progress-indicator", value: this.progressPercentage, width: PROGRESS_WIDTH, ariaProps: { labelledby: 'wpp-progress-indicator-label' } }))), index.h("wpp-button-v3-3-0", { ref: refEl => (this.loadBtnRef = refEl), class: "load-more-button", variant: "secondary", loading: this.loading && !this.isDisabled(), part: "button", disabled: this.isDisabled(), size: "s", onClick: this.handleClick, ariaProps: this.ariaProps }, "Load more")));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "container, progress-text, button", "aria-disabled": this.isDisabled() }, this.showProgressBar && (index.h("div", { class: this.progressContainerCssClasses(), part: "container" }, index.h("span", { class: this.progressTextCssClasses(), part: "progress-text" }, Math.max(0, Math.min(this.itemsLoaded, this.totalItems)), " of ", Math.max(0, this.totalItems), " items"), index.h("wpp-progress-indicator-v2-22-0", { class: "progress-indicator", value: this.progressPercentage, width: PROGRESS_WIDTH }))), index.h("wpp-button-v2-22-0", { class: "load-more-button", variant: "secondary", loading: this.loading && !this.isDisabled(), part: "button", disabled: this.isDisabled(), size: "s", onClick: this.handleClick }, "Load more")));
   }
-  static get registryIs() { return "wpp-load-more-v3-3-0"; }
+  static get registryIs() { return "wpp-load-more-v2-22-0"; }
   static get watchers() { return {
     "itemsLoaded": ["updateProgress"],
     "totalItems": ["updateProgress"],

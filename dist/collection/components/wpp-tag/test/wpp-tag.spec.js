@@ -109,7 +109,8 @@ describe('wpp-tag', () => {
         components: [WppTag],
         html: `<wpp-tag categorical-color-index="${cateIndex}"></wpp-tag>`,
       });
-      expect(page?.root?.style.getPropertyValue('--tag-bg-color')).toBe(`var(--wpp-dataviz-color-cat-light-${cateIndex})`);
+      expect(page?.root?.style.getPropertyValue('--tag-color')).toBe(`var(--wpp-dataviz-color-cat-dark-${cateIndex})`);
+      expect(page?.root?.style.getPropertyValue('--tag-bg-color')).toBe(`var(--wpp-dataviz-color-cat-neutral-${cateIndex})`);
     });
     it('calls updateCategoricalIndex when categoricalColorIndex changes', async () => {
       const cateIndex = 4;
@@ -120,7 +121,8 @@ describe('wpp-tag', () => {
       // Update the attribute dynamically
       page?.root?.setAttribute('categorical-color-index', '5');
       await page.waitForChanges();
-      expect(page?.root?.style.getPropertyValue('--tag-bg-color')).toBe(`var(--wpp-dataviz-color-cat-light-5)`);
+      expect(page?.root?.style.getPropertyValue('--tag-color')).toBe(`var(--wpp-dataviz-color-cat-dark-5)`);
+      expect(page?.root?.style.getPropertyValue('--tag-bg-color')).toBe(`var(--wpp-dataviz-color-cat-neutral-5)`);
     });
     it('does not update CSS custom properties when categoricalColorIndex is invalid', async () => {
       const cateIndex = 'invalid';
@@ -131,7 +133,8 @@ describe('wpp-tag', () => {
       // Update the attribute dynamically
       page?.root?.setAttribute('categorical-color-index', 'invalid');
       await page.waitForChanges();
-      expect(page?.root?.style.getPropertyValue('--tag-bg-color')).toBe('var(--wpp-dataviz-color-cat-light-invalid)');
+      expect(page?.root?.style.getPropertyValue('--tag-color')).toBe('var(--wpp-dataviz-color-cat-dark-invalid)');
+      expect(page?.root?.style.getPropertyValue('--tag-bg-color')).toBe('var(--wpp-dataviz-color-cat-neutral-invalid)');
     });
   });
   describe('snapshots', () => {

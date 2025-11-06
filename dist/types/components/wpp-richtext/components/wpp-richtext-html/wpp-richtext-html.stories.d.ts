@@ -1,5 +1,6 @@
-import { Meta, StoryObj } from '@storybook/web-components';
+import { Meta, Story } from '@storybook/web-components';
 import { Components } from '../../../../components';
-declare const _default: Meta<Components.WppRichtextHtml>;
+import { WppRichtextHtml } from './wpp-richtext-html';
+declare const _default: Meta<typeof WppRichtextHtml>;
 export default _default;
-export declare const HTMLView: StoryObj<Components.WppRichtextHtml>;
+export declare const HTMLView: Story<Components.WppRichtextHtml>;

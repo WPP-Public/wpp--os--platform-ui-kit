@@ -1,0 +1,1 @@
+export{W as wpp_icon_text_alignment_right}from"./p-181780af.js";import"./p-000a6ed6.js";import"./p-2ae085b0.js";

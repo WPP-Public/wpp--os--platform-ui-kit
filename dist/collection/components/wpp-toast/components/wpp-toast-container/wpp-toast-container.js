@@ -1,7 +1,6 @@
 import { Host, h } from '@stencil/core';
 import { uuidv4 } from '../../../../utils/utils';
-import { ANIMATION_DURATION } from '../../const';
-import { Z_INDEX } from '../../../../common/consts';
+import { ANIMATION_DURATION } from '../../consts';
 /**
  * @part item - toast item
  */
@@ -22,7 +21,6 @@ export class WppToastContainer {
     this.toasts = [];
     this.toastsQueue = [];
     this.maxToastsToDisplay = 4;
-    this.zIndex = Z_INDEX.TOAST;
   }
   /**
    * Method for adding toasts to `toast-container`.
@@ -59,10 +57,10 @@ export class WppToastContainer {
   }
   render() {
     const { toasts } = this;
-    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "item" }, toasts.map(toast => (h("wpp-toast-v3-3-0", { key: toast.id, index: toast.id, message: toast.message, type: toast.type, header: toast.header, duration: toast.duration, primaryBtn: toast.primaryBtn, maxMessageLines: toast.maxMessageLines, icon: toast.icon, part: "item", onWppToastComplete: this.handleToastComplete })))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "item" }, toasts.map(toast => (h("wpp-toast-v2-22-0", { key: toast.id, index: toast.id, message: toast.message, type: toast.type, header: toast.header, duration: toast.duration, primaryBtn: toast.primaryBtn, maxMessageLines: toast.maxMessageLines, icon: toast.icon, part: "item", onWppToastComplete: this.handleToastComplete })))));
   }
   static get is() { return "wpp-toast-container"; }
-  static get registryIs() { return "wpp-toast-container-v3-3-0"; }
+  static get registryIs() { return "wpp-toast-container-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -93,24 +91,6 @@ export class WppToastContainer {
         "attribute": "max-toasts-to-display",
         "reflect": false,
         "defaultValue": "4"
-      },
-      "zIndex": {
-        "type": "number",
-        "mutable": false,
-        "complexType": {
-          "original": "number",
-          "resolved": "number",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the z-index of the WppToastContainer."
-        },
-        "attribute": "z-index",
-        "reflect": false,
-        "defaultValue": "Z_INDEX.TOAST"
       }
     };
   }

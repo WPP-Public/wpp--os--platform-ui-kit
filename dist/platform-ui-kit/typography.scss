@@ -1,6 +1,18 @@
 @mixin typographyDisplay($size, $type) {
   // Set font-size and line-height based on size
-  @if $size == '5xl' {
+  @if $size == '9xl' {
+    font-size: var(--wpp-typography-9xl-#{$type}-font-size, 80px);
+    line-height: var(--wpp-typography-9xl-#{$type}-line-height, 88px);
+  } @else if $size == '8xl' {
+    font-size: var(--wpp-typography-8xl-#{$type}-font-size, 72px);
+    line-height: var(--wpp-typography-8xl-#{$type}-line-height, 80px);
+  } @else if $size == '7xl' {
+    font-size: var(--wpp-typography-7xl-#{$type}-font-size, 64px);
+    line-height: var(--wpp-typography-7xl-#{$type}-line-height, 72px);
+  } @else if $size == '6xl' {
+    font-size: var(--wpp-typography-6xl-#{$type}-font-size, 56px);
+    line-height: var(--wpp-typography-6xl-#{$type}-line-height, 68px);
+  } @else if $size == '5xl' {
     font-size: var(--wpp-typography-5xl-#{$type}-font-size, 48px);
     line-height: var(--wpp-typography-5xl-#{$type}-line-height, 62px);
   } @else if $size == '4xl' {
@@ -55,6 +67,74 @@
     text-transform: var(--wpp-typography-#{$size}-#{$type}-text-transform, initial);
     font-style: var(--wpp-typography-#{$size}-#{$type}-font-style, italic);
   }
+}
+
+// 9XL
+@mixin typography9XLDisplay {
+  @include typographyDisplay('9xl', 'display');
+}
+
+@mixin typography9XLDisplayStrong {
+  @include typographyDisplay('9xl', 'display-strong');
+}
+
+@mixin typography9XLDisplayLight {
+  @include typographyDisplay('9xl', 'display-light');
+}
+
+@mixin typography9XLEmphasis {
+  @include typographyDisplay('9xl', 'display-emphasis');
+}
+
+// 8XL
+@mixin typography8XLDisplay {
+  @include typographyDisplay('8xl', 'display');
+}
+
+@mixin typography8XLDisplayStrong {
+  @include typographyDisplay('8xl', 'display-strong');
+}
+
+@mixin typography8XLDisplayLight {
+  @include typographyDisplay('8xl', 'display-light');
+}
+
+@mixin typography8XLEmphasis {
+  @include typographyDisplay('8xl', 'display-emphasis');
+}
+
+// 7XL
+@mixin typography7XLDisplay {
+  @include typographyDisplay('7xl', 'display');
+}
+
+@mixin typography7XLDisplayStrong {
+  @include typographyDisplay('7xl', 'display-strong');
+}
+
+@mixin typography7XLDisplayLight {
+  @include typographyDisplay('7xl', 'display-light');
+}
+
+@mixin typography7XLEmphasis {
+  @include typographyDisplay('7xl', 'display-emphasis');
+}
+
+// 6XL
+@mixin typography6XLDisplay {
+  @include typographyDisplay('6xl', 'display');
+}
+
+@mixin typography6XLDisplayStrong {
+  @include typographyDisplay('6xl', 'display-strong');
+}
+
+@mixin typography6XLDisplayLight {
+  @include typographyDisplay('6xl', 'display-light');
+}
+
+@mixin typography6XLEmphasis {
+  @include typographyDisplay('6xl', 'display-emphasis');
 }
 
 // 5XL

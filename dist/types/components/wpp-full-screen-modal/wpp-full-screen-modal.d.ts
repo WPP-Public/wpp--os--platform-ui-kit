@@ -36,10 +36,6 @@ export declare class WppFullScreenModal {
    */
   readonly formConfig?: FullScreenModalFormConfig;
   /**
-   * Defines the z-index of the WppFullScreenModal.
-   */
-  readonly zIndex: number;
-  /**
    * Handles the modal closing actions.
    */
   wppFullScreenModalClose: EventEmitter<FullScreenModalCloseDetails>;

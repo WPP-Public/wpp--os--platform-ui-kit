@@ -117,16 +117,6 @@ export const isEventTargetContained = (containerEl, event) => {
   }
   return isPathNodeContained;
 };
-export const hasParentWithId = (target, id) => {
-  let current = target;
-  while (current) {
-    if (current.id.includes(id)) {
-      return true;
-    }
-    current = current.parentElement;
-  }
-  return false;
-};
 export const truncate = (value = '', maxLength, evenly = false) => {
   if (value.length > maxLength) {
     if (evenly) {
@@ -175,23 +165,18 @@ export function closestElement(selector, base) {
     if (!el || isDocument(el) || isWindow(el)) {
       return null;
     }
-    const found = el.closest(selector);
-    if (found)
-      return found;
-    if ('assignedSlot' in el && el.assignedSlot) {
-      return __closestFrom(el.assignedSlot);
+    let found = el.closest(selector);
+    if (!found) {
+      if (el.assignedSlot) {
+        found = el.assignedSlot.closest(selector) || __closestFrom(el.assignedSlot.getRootNode().host);
+      }
+      else {
+        if (el.parentElement) {
+          found = __closestFrom(el.parentElement);
+        }
+      }
     }
-    // Traverse regular DOM - when button placed inside another Wpp element,
-    // the traverse will stop at the shadow-root
-    if ('parentElement' in el && el.parentElement) {
-      return __closestFrom(el.parentElement);
-    }
-    // Traverse shadow DOM boundary
-    const root = el.getRootNode();
-    if (root && root.host) {
-      return __closestFrom(root.host);
-    }
-    return null;
+    return found;
   }
   return __closestFrom(base);
 }
@@ -221,15 +206,7 @@ export const applyBodyStylesIfNeeded = (action) => {
 export const autoFocusElement = (shouldFocus, el) => {
   if (shouldFocus) {
     setTimeout(() => {
-      if (!el)
-        return;
-      el.focus();
-      if (el.tagName.toLowerCase() === 'input' || el.tagName.toLowerCase() === 'textarea') {
-        const inputEl = el;
-        if (inputEl.value.length) {
-          inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length);
-        }
-      }
+      el?.focus();
     }, 0);
   }
 };
@@ -276,15 +253,3 @@ export function setHasFocused(value) {
 export function getHighestContainerInDOM() {
   return document.querySelector('#root') || document.querySelector('#app') || document.body;
 }
-export const getAriaProps = (ariaProps) => {
-  const result = {};
-  Object.entries(ariaProps).forEach(([key, val]) => {
-    if (key === 'tabIndex')
-      return;
-    if (val !== undefined && val !== null) {
-      result[`aria-${key}`] = typeof val === 'boolean' ? String(val) : val;
-    }
-  });
-  return result;
-};
-export const isWppElement = (element) => element.tagName.toLowerCase().includes('wpp-') && element.tagName.toLowerCase().includes('-v');

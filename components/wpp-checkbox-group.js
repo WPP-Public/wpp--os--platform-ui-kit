@@ -13,7 +13,7 @@ import { d as defineCustomElement$4 } from './wpp-spinner2.js';
 import { d as defineCustomElement$3 } from './wpp-tooltip2.js';
 import { d as defineCustomElement$2 } from './wpp-typography2.js';
 
-const wppCheckboxGroupCss = ":host .group-container{display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column;gap:8px}:host .group-container .content{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:8px}:host .group-container .content.direction-row{gap:20px;-ms-flex-direction:row;flex-direction:row}:host .label .wpp-internal-label::part(info-wrapper){cursor:default}";
+const wppCheckboxGroupCss = ":host{display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column;gap:8px}:host .label .wpp-internal-label::part(info-wrapper){cursor:default}";
 
 const WppCheckboxGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCheckboxGroup extends HTMLElement {
   constructor() {
@@ -42,23 +42,14 @@ const WppCheckboxGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCheckboxGro
     this.hostCssClasses = () => ({
       'wpp-checkbox-group': true,
     });
-    this.contentCssClasses = () => ({
-      content: true,
-      [`direction-${this.direction}`]: true,
-    });
     this.value = [];
     this.required = false;
     this.message = undefined;
     this.messageType = undefined;
-    this.direction = 'column';
     this.maxMessageLength = undefined;
     this.labelConfig = undefined;
     this.labelTooltipConfig = {
       popperOptions: { strategy: 'fixed' },
-    };
-    this.ariaProps = {
-      labelledby: 'label-id',
-      describedby: 'description-id',
     };
   }
   componentDidLoad() {
@@ -80,97 +71,95 @@ const WppCheckboxGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCheckboxGro
     this.wppChange.emit({ value: this.value });
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "inner" }, h("div", { class: "group-container", role: "group", "aria-labelledby": this.ariaProps.labelledby, ...(!!this.message && this.ariaProps.describedby ? { 'aria-describedby': this.ariaProps.describedby } : {}) }, this.labelConfig?.text && (h("wpp-label-v3-3-0", { class: "label", tag: "legend", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, id: this.ariaProps.labelledby })), h("div", { class: this.contentCssClasses() }, h("slot", { onSlotchange: this.getCheckboxElements, part: "inner" })), !!this.message && (h("wpp-inline-message-v3-3-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, id: this.ariaProps.describedby })))));
+    return (h(Host, { class: this.hostCssClasses(), "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "inner" }, this.labelConfig?.text && (h("wpp-label-v2-22-0", { class: "label", typography: "s-body", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), h("slot", { onSlotchange: this.getCheckboxElements, part: "inner" }), !!this.message && (h("wpp-inline-message-v2-22-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))));
   }
-  static get registryIs() { return "wpp-checkbox-group-v3-3-0"; }
+  static get registryIs() { return "wpp-checkbox-group-v2-22-0"; }
   get host() { return this; }
   static get watchers() { return {
     "value": ["updateValue"]
   }; }
   static get style() { return wppCheckboxGroupCss; }
-}, [1, "wpp-checkbox-group", "wpp-checkbox-group-v3-3-0", {
+}, [1, "wpp-checkbox-group", "wpp-checkbox-group-v2-22-0", {
     "value": [1040],
     "required": [516],
     "message": [1],
     "messageType": [1, "message-type"],
-    "direction": [513],
     "maxMessageLength": [2, "max-message-length"],
     "labelConfig": [1040],
-    "labelTooltipConfig": [16],
-    "ariaProps": [16]
+    "labelTooltipConfig": [16]
   }, [[2, "wppClickCheckbox", "onClickCheckbox"]]]);
 function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-checkbox-group-v3-3-0", "wpp-action-button-v3-3-0", "wpp-icon-cross-v3-3-0", "wpp-icon-error-v3-3-0", "wpp-icon-info-message-v3-3-0", "wpp-icon-success-v3-3-0", "wpp-icon-warning-v3-3-0", "wpp-inline-message-v3-3-0", "wpp-internal-label-v3-3-0", "wpp-internal-tooltip-v3-3-0", "wpp-label-v3-3-0", "wpp-spinner-v3-3-0", "wpp-tooltip-v3-3-0", "wpp-typography-v3-3-0"];
+  const components = ["wpp-checkbox-group-v2-22-0", "wpp-action-button-v2-22-0", "wpp-icon-cross-v2-22-0", "wpp-icon-error-v2-22-0", "wpp-icon-info-message-v2-22-0", "wpp-icon-success-v2-22-0", "wpp-icon-warning-v2-22-0", "wpp-inline-message-v2-22-0", "wpp-internal-label-v2-22-0", "wpp-internal-tooltip-v2-22-0", "wpp-label-v2-22-0", "wpp-spinner-v2-22-0", "wpp-tooltip-v2-22-0", "wpp-typography-v2-22-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-checkbox-group-v3-3-0":
+    case "wpp-checkbox-group-v2-22-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppCheckboxGroup$1);
       }
       break;
-    case "wpp-action-button-v3-3-0":
+    case "wpp-action-button-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-cross-v3-3-0":
+    case "wpp-icon-cross-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-error-v3-3-0":
+    case "wpp-icon-error-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-info-message-v3-3-0":
+    case "wpp-icon-info-message-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-success-v3-3-0":
+    case "wpp-icon-success-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-warning-v3-3-0":
+    case "wpp-icon-warning-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-inline-message-v3-3-0":
+    case "wpp-inline-message-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-internal-label-v3-3-0":
+    case "wpp-internal-label-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-0":
+    case "wpp-internal-tooltip-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-label-v3-3-0":
+    case "wpp-label-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v3-3-0":
+    case "wpp-spinner-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v3-3-0":
+    case "wpp-tooltip-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v3-3-0":
+    case "wpp-typography-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

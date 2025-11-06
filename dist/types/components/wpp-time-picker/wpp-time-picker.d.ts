@@ -22,7 +22,6 @@ export declare class WppTimePicker {
     hoursIndex: number;
     minutesIndex: number;
   };
-  isInComponent: boolean;
   /**
    * Defines the time picker size, which differs in terms of paddings.
    */
@@ -95,7 +94,7 @@ export declare class WppTimePicker {
   /**
    * Emitted when the input loses focus
    */
-  readonly wppBlur: EventEmitter<void>;
+  readonly wppBlur: EventEmitter<FocusEvent>;
   /**
    * Emitted when the dropdown of the time picker closes. Contains details about the current value of the datepicker.
    */
@@ -106,7 +105,6 @@ export declare class WppTimePicker {
   readonly wppClear: EventEmitter<TimePickerChangeEventDetails>;
   onUpdateMinutesInterval(): void;
   onUpdateValue(): void;
-  updateIsInComponent(value: boolean): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
   private highlightItem;

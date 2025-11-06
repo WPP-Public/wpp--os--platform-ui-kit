@@ -36,21 +36,10 @@ export declare class WppLabel {
    */
   config?: LabelConfig;
   /**
-   * Define html tag for a text
-   * @internal - for group components (wpp-checkbox-group, wpp-radio-group)
-   */
-  readonly tag: 'label' | 'legend' | string;
-  /**
    * Defines the dropdown configuration. Under the hood dropdown using tippy.js,
    * all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
    */
   readonly tooltipConfig: DropdownConfig;
-  /**
-   * Optional unique identifier for the label element.
-   * Useful for associating the label with form controls or for accessibility purposes.
-   */
-  readonly labelId?: string;
   private hostCssClasses;
-  private renderContent;
   render(): any;
 }

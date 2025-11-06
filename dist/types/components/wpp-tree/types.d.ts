@@ -61,7 +61,7 @@ export type TreeChangeEventDetail = {
   currentItem?: TreeType;
   selectedItems?: (TreeType | null)[];
   selectedOriginalItems?: Partial<TreeType>[];
-  reason: 'open' | 'select' | 'search' | 'clear';
+  reason: 'open' | 'select' | 'search';
 };
 export type TreeActionClickEventDetail = {
   id: string | number;

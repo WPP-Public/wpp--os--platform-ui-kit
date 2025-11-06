@@ -1,5 +1,6 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppExpandableCard>;
+import { WppExpandableCard } from './wpp-expandable-card';
+declare const _default: Meta<typeof WppExpandableCard>;
 export default _default;
-export declare const Expandable: StoryObj<Components.WppExpandableCard>;
+export declare const Expandable: Story<Components.WppExpandableCard>;

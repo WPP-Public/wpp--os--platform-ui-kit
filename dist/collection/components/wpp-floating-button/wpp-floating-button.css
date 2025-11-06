@@ -52,12 +52,6 @@
   position: relative;
   box-shadow: var(--fb-box-shadow);
 }
-.button.tab-focus {
-  border-radius: var(--fb-border-radius);
-  outline: none;
-  box-shadow: 0 0 0 1px var(--fb-first-border-color-focus), 0 0 0 3px var(--fb-second-border-color-focus);
-  background-color: var(--fb-primary-bg-color-hover);
-}
 .button .content {
   overflow: hidden;
 }
@@ -100,10 +94,10 @@
 .button.primary .icon-end ::slotted(*) {
   color: var(--fb-primary-icon-color);
 }
-.button.primary.tab-focus, .button.primary:hover {
+.button.primary:hover {
   background-color: var(--fb-primary-bg-color-hover);
 }
-.button.primary:active, .button.primary.pressed {
+.button.primary:active {
   background-color: var(--fb-primary-bg-color-active);
 }
 .button.primary:disabled {
@@ -111,4 +105,11 @@
 }
 .button.primary.loading {
   background-color: var(--fb-primary-bg-color);
+}
+
+:host(:focus-visible) .button {
+  border-radius: var(--fb-border-radius);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--fb-first-border-color-focus), 0 0 0 2px var(--fb-second-border-color-focus);
+  background-color: var(--fb-primary-bg-color-hover);
 }

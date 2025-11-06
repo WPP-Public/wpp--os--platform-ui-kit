@@ -25,23 +25,14 @@ export class WppCheckboxGroup {
     this.hostCssClasses = () => ({
       'wpp-checkbox-group': true,
     });
-    this.contentCssClasses = () => ({
-      content: true,
-      [`direction-${this.direction}`]: true,
-    });
     this.value = [];
     this.required = false;
     this.message = undefined;
     this.messageType = undefined;
-    this.direction = 'column';
     this.maxMessageLength = undefined;
     this.labelConfig = undefined;
     this.labelTooltipConfig = {
       popperOptions: { strategy: 'fixed' },
-    };
-    this.ariaProps = {
-      labelledby: 'label-id',
-      describedby: 'description-id',
     };
   }
   componentDidLoad() {
@@ -63,10 +54,10 @@ export class WppCheckboxGroup {
     this.wppChange.emit({ value: this.value });
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "inner" }, h("div", { class: "group-container", role: "group", "aria-labelledby": this.ariaProps.labelledby, ...(!!this.message && this.ariaProps.describedby ? { 'aria-describedby': this.ariaProps.describedby } : {}) }, this.labelConfig?.text && (h("wpp-label-v3-3-0", { class: "label", tag: "legend", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, id: this.ariaProps.labelledby })), h("div", { class: this.contentCssClasses() }, h("slot", { onSlotchange: this.getCheckboxElements, part: "inner" })), !!this.message && (h("wpp-inline-message-v3-3-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, id: this.ariaProps.describedby })))));
+    return (h(Host, { class: this.hostCssClasses(), "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "inner" }, this.labelConfig?.text && (h("wpp-label-v2-22-0", { class: "label", typography: "s-body", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), h("slot", { onSlotchange: this.getCheckboxElements, part: "inner" }), !!this.message && (h("wpp-inline-message-v2-22-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))));
   }
   static get is() { return "wpp-checkbox-group"; }
-  static get registryIs() { return "wpp-checkbox-group-v3-3-0"; }
+  static get registryIs() { return "wpp-checkbox-group-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -160,24 +151,6 @@ export class WppCheckboxGroup {
         "attribute": "message-type",
         "reflect": false
       },
-      "direction": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "'column' | 'row'",
-          "resolved": "\"column\" | \"row\"",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the direction in which the checkbox items are displayed.\nBy default, the items are displayed vertically (in a column)."
-        },
-        "attribute": "direction",
-        "reflect": true,
-        "defaultValue": "'column'"
-      },
       "maxMessageLength": {
         "type": "number",
         "mutable": false,
@@ -237,28 +210,6 @@ export class WppCheckboxGroup {
           "text": "Tooltip config for label, under the hood tooltip using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
         },
         "defaultValue": "{\n    popperOptions: { strategy: 'fixed' },\n  }"
-      },
-      "ariaProps": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "AriaProps",
-          "resolved": "AriaProps",
-          "references": {
-            "AriaProps": {
-              "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::AriaProps"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Contains the checkbox group `aria-` props."
-        },
-        "defaultValue": "{\n    labelledby: 'label-id',\n    describedby: 'description-id',\n  }"
       }
     };
   }

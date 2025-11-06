@@ -3,7 +3,7 @@ const version = require('../version')
 const suffix = typeof version === 'string' ? `-${version}` : `-${version.default}`;
 
 module.exports = function (source) {
-  const templateRegExp = new RegExp(/(domElement|element)(Start|End)?\(.*/g)
+  const templateRegExp = new RegExp(/element(Start|End)?\(.*/g)
   const isTemplate = templateRegExp.test(source);
 
   if(isTemplate) {

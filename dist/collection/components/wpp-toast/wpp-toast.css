@@ -32,6 +32,7 @@
   --toast-padding: var(--wpp-toast-padding, 12px 8px 12px 16px);
   --toast-with-header-message-color: var(--wpp-toast-with-header-message-color, var(--wpp-grey-color-200));
   --toast-actions-block-margin: var(--wpp-toast-actions-block-margin, 0 0 0 8px);
+  --toast-z-index: var(--wpp-toast-z-index, 1050);
   --toast-icon-wrapper-bg-color: var(--wpp-toast-icon-wrapper-bg-color, transparent);
   --toast-icon-wrapper-margin: var(--wpp-toast-icon-wrapper-margin, 0 8px 0 0);
   --toast-icon-wrapper-padding: var(--wpp-toast-icon-wrapper-padding, 4px);
@@ -67,6 +68,7 @@
   transform: translate(calc(100% + 16px), 0);
   opacity: 0;
   max-height: var(--mt-height);
+  z-index: var(--toast-z-index);
   transition-timing-function: ease;
   transition-duration: var(--mt-show-animation-duration);
   transition-property: opacity, transform;
@@ -231,6 +233,7 @@
   left: 50%;
   transform: translateX(-50%);
   opacity: 1;
+  z-index: var(--toast-z-index);
   animation: chatSlideFromTop 0.3s ease-in-out;
   transition: opacity var(--mt-show-animation-duration) ease, transform var(--mt-show-animation-duration) ease;
 }

@@ -1,7 +1,13 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppTooltip>;
+import { WppTooltip } from './wpp-tooltip';
+declare const _default: Meta<typeof WppTooltip>;
 export default _default;
-export declare const TitleAndText: StoryObj<Components.WppTooltip>;
-export declare const Value: StoryObj<Components.WppTooltip>;
-export declare const CustomContent: StoryObj<Components.WppTooltip>;
+export declare const Text: Story<Components.WppTooltip>;
+export declare const TitleAndText: Story<Components.WppTooltip>;
+export declare const Value: Story<Components.WppTooltip>;
+export declare const Error: Story<Components.WppTooltip>;
+export declare const Placement: Story<Components.WppTooltip>;
+export declare const Warning: Story<Components.WppTooltip>;
+export declare const CustomContent: Story<Components.WppTooltip>;
+export declare const MultilineText: Story<Components.WppTooltip>;

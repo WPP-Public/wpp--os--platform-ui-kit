@@ -1,6 +1,6 @@
 import { Host, h } from '@stencil/core';
 import { FOCUS_TYPE } from '../../types/common';
-import { DEFAULT_INPUT_WIDTH, formatDecimalWithMask, getDefaultMaskOptions, getMaskOptionsForInput, parseMaskedInput, } from './const';
+import { DEFAULT_INPUT_WIDTH, formatDecimalWithMask, getDefaultMaskOptions, getMaskOptionsForInput, parseMaskedInput, } from './consts';
 import { transformToVersionedTag } from '../../utils/utils';
 const getInitFocusInfo = () => ({
   min: FOCUS_TYPE.NONE,
@@ -30,16 +30,6 @@ export class WppSlider {
   constructor() {
     this.segmentWidth = 0;
     this.totalWidth = 0;
-    /* For slider with type="middle-range" */
-    this.middleValue = 0;
-    this.getMidValueRespectingStep = () => {
-      const range = this.max - this.min;
-      const half = range / 2;
-      // Round to the nearest valid step increment
-      const stepsFromMin = Math.round(half / this.step);
-      const middle = this.min + stepsFromMin * this.step;
-      return Math.min(this.max, Math.max(this.min, Number(middle.toFixed(2))));
-    };
     this.computeSegmentWidth = () => {
       if (!this.clickableAreaRef)
         return;
@@ -60,18 +50,11 @@ export class WppSlider {
             this.value = [value[0], Math.min(newValue, value[1])];
           }
         },
-        'middle-range': () => {
-          this.value = newValue;
-          this.middleValue = this.getMidValueRespectingStep();
-        },
       });
       this.computeSegmentWidth();
       this.getDisplayMarks();
     };
     this.handleType = (handlers) => {
-      if (this.type === 'middle-range') {
-        return handlers['middle-range'](this.value);
-      }
       if (this.type === 'range' && Array.isArray(this.value)) {
         return handlers.range(this.value);
       }
@@ -141,21 +124,7 @@ export class WppSlider {
         this.tooltipTexts = newTooltipTexts;
       });
     };
-    this.updateSingleSliderValue = (nearestLowerValue) => {
-      // This function is called only for single and middle-range sliders,
-      // when the input value changes (after onBlur).
-      const newValue = Math.max(Math.min(nearestLowerValue, this.max), this.min);
-      if (this.value === newValue) {
-        this.onUpdateInputValue(this.inputValue);
-      }
-      else {
-        this.value = newValue;
-      }
-    };
-    // Function used to get the nearest lower value based on step
-    this.getNearestLowerValue = (value) => Math.floor((value - this.min) / this.step) * this.step + this.min;
     this.handleInputChange = (type) => (event) => {
-      // We validate the value of the input only onBlur
       const target = event.target;
       const inputMaskOptions = getMaskOptionsForInput(this.type, type, this.maskOptions);
       const inputValue = parseMaskedInput(target.value, inputMaskOptions);
@@ -163,21 +132,22 @@ export class WppSlider {
         target.value === inputMaskOptions?.postfix ||
         target.value === inputMaskOptions?.prefix) {
         this.handleType({
-          single: value => {
-            this.onUpdateInputValue(String(value));
+          single: () => {
+            this.onUpdateInputValue(String(this.value));
           },
           range: value => {
             this.value = value;
-          },
-          'middle-range': value => {
-            this.onUpdateInputValue(String(value));
+            this.inputValue = this.getSliderInputValue();
           },
         });
         return;
       }
-      const nearestLowerValue = this.getNearestLowerValue(inputValue);
+      const nearestLowerValue = Math.floor((inputValue - this.min) / this.step) * this.step + this.min;
       this.handleType({
-        single: () => this.updateSingleSliderValue(nearestLowerValue),
+        single: () => {
+          const newValue = Math.max(Math.min(nearestLowerValue, this.max), this.min);
+          this.value = newValue;
+        },
         range: value => {
           if (type === 'min') {
             const newValue = Math.min(Math.max(nearestLowerValue, this.min), value[1] - this.step);
@@ -188,31 +158,31 @@ export class WppSlider {
             this.value = [value[0], newValue];
           }
         },
-        'middle-range': () => this.updateSingleSliderValue(nearestLowerValue),
       });
+      const newInputValue = this.getSliderInputValue();
+      if (this.inputValue === newInputValue) {
+        this.onUpdateInputValue(newInputValue);
+      }
+      else {
+        this.inputValue = this.getSliderInputValue();
+      }
       this.wppChange.emit({
         value: this.value,
         name: this.name,
-        ...(this.type === 'middle-range' ? { middleValue: this.middleValue } : {}),
       });
     };
     this.getUpdatedFocusInfo = (type, updateValue) => ({
       ...this.focusType,
       [type]: updateValue,
     });
-    this.getSliderType = (target) => {
-      if (target.classList.contains('min-input')) {
-        return 'min';
-      }
-      if (target.classList.contains('max-input')) {
-        return 'max';
-      }
-      return null;
-    };
     this.handleBlur = (event) => {
       this.focusType = getInitFocusInfo();
       const target = event.target;
-      const type = this.getSliderType(target);
+      const type = target.classList.contains('min-input')
+        ? 'min'
+        : target.classList.contains('max-input')
+          ? 'max'
+          : null;
       if (type) {
         this.handleInputChange(type)(event);
       }
@@ -238,7 +208,7 @@ export class WppSlider {
       event.stopPropagation();
       this.handleType({
         single: () => {
-          this.value = this.getNearestLowerValue(mark.value);
+          this.value = mark.value;
         },
         range: value => {
           const distanceToTheStart = Math.abs(value[0] - mark.value);
@@ -250,14 +220,11 @@ export class WppSlider {
             this.value = [value[0], mark.value];
           }
         },
-        'middle-range': () => {
-          this.value = this.getNearestLowerValue(mark.value);
-        },
       });
+      this.inputValue = this.getSliderInputValue();
       this.wppChange.emit({
         value: this.value,
         name: this.name,
-        ...(this.type === 'middle-range' ? { middleValue: this.middleValue } : {}),
       });
     };
     this.handleSliderWrapperClick = (event) => {
@@ -267,7 +234,7 @@ export class WppSlider {
       const clickedSegmentNumber = Math.trunc(clickedSegmentPosition);
       // This value determines which half of the segment was clicked. -1 means that the first half was clicked and that the clicked segment
       // is placed on the right of the mark, so we should approximate to the starting mark of the segment (left one).
-      const halfOfSegment = clickedSegmentPosition >= Math.round(clickedSegmentPosition) ? -1 : 0;
+      const halfOfSegment = clickedSegmentPosition > Math.round(clickedSegmentPosition) ? -1 : 0;
       const clickedValue = this.min + (clickedSegmentNumber + halfOfSegment) * this.step;
       this.handleType({
         single: () => {
@@ -293,15 +260,10 @@ export class WppSlider {
           }
           this.inputValue = this.value.map(String);
         },
-        'middle-range': () => {
-          this.value = Math.round(clickedValue);
-          this.inputValue = String(this.value);
-        },
       });
       this.wppChange.emit({
         value: this.value,
         name: this.name,
-        ...(this.type === 'middle-range' ? { middleValue: this.middleValue } : {}),
       });
     };
     this.handleSingleSliderChange = (event) => {
@@ -310,7 +272,6 @@ export class WppSlider {
       this.wppChange.emit({
         value: this.value,
         name: this.name,
-        ...(this.type === 'middle-range' ? { middleValue: this.middleValue } : {}),
       });
     };
     this.handleRangeSliderChange = (type) => (event) => {
@@ -329,44 +290,30 @@ export class WppSlider {
             target.value = String(Math.max(this.value[0] + this.step, Number(target.value)));
           }
         },
-        'middle-range': () => {
-          this.value = Number(event.target.value);
-        },
       });
+      this.inputValue = this.getSliderInputValue();
       this.wppChange.emit({
         value: this.value,
         name: this.name,
-        ...(this.type === 'middle-range' ? { middleValue: this.middleValue } : {}),
       });
-    };
-    this.isMarkInRange = (markValue) => {
-      if (this.type === 'middle-range') {
-        if (this.isMiddlePointHigher()) {
-          return this.value <= markValue && this.middleValue >= markValue;
-        }
-        return this.value >= markValue && this.middleValue <= markValue;
-      }
-      return this.value[0] <= markValue && this.value[1] >= markValue;
     };
     this.markCssClasses = (markValue) => ({
       'mark-item': true,
-      active: this.type === 'single' ? this.value >= markValue : this.isMarkInRange(markValue),
+      active: this.value >= markValue ||
+        (Array.isArray(this.value) && this.value[0] <= markValue && this.value[1] >= markValue),
       disabled: this.disabled,
-      'middle-mark-active': this.type === 'middle-range' && markValue === this.middleValue && markValue !== this.value,
       first: markValue === this.min,
       last: markValue === this.max,
     });
     this.singleSliderWrapperCssClasses = () => ({
       'single-slider-wrapper': true,
       disabled: this.disabled,
-      'middle-range-wrapper': this.type === 'middle-range',
     });
     this.rangeSliderWrapperCssClasses = () => ({
       'range-slider-wrapper': true,
       disabled: this.disabled,
     });
     this.controlCssClasses = () => ({
-      'slider-control': true,
       'with-value': this.withValue,
       'without-label': !this.labelConfig?.text,
       disabled: this.disabled,
@@ -395,42 +342,39 @@ export class WppSlider {
     });
     this.calculateProgressBar = (value) => (value - this.min) * (1 / (this.max - this.min)) * 100 + '%';
     this.renderControl = () => {
-      const label = this.labelConfig?.text && (h("wpp-label-v3-3-0", { htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" }));
+      const label = this.labelConfig?.text && (h("wpp-label-v2-22-0", { htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" }));
       if (this.withValue && !this.withInput) {
-        return (h("div", { class: this.controlCssClasses(), part: "control-wrapper" }, label || h("div", null), this.handleType({
-          single: value => (h("wpp-typography-v3-3-0", { type: "s-midi", part: "value" }, value)),
-          range: value => (h("div", { class: "range-value-wrapper", part: "value-wrapper" }, h("wpp-typography-v3-3-0", { type: "s-midi", part: "value" }, value[0]), h("wpp-divider-v3-3-0", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), h("wpp-typography-v3-3-0", { type: "s-midi", part: "value" }, value[1]))),
-          'middle-range': value => (h("div", { class: "range-value-wrapper", part: "value-wrapper" }, h("wpp-typography-v3-3-0", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? value : this.middleValue), h("wpp-divider-v3-3-0", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), h("wpp-typography-v3-3-0", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? this.middleValue : value))),
+        return (h("div", { class: this.controlCssClasses(), part: "control-wrapper" }, label, this.handleType({
+          single: value => (h("wpp-typography-v2-22-0", { type: "s-midi", part: "value" }, value)),
+          range: value => (h("div", { class: "range-value-wrapper", part: "value-wrapper" }, h("wpp-typography-v2-22-0", { type: "s-midi", part: "value" }, value[0]), h("wpp-divider-v2-22-0", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), h("wpp-typography-v2-22-0", { type: "s-midi", part: "value" }, value[1]))),
         })));
       }
       return label;
     };
-    this.renderSingleInput = () => (h("wpp-input-v3-3-0", { ref: inputRef => (this.inputRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-number", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { [`size-${this.size}`]: true }, maskOptions: {
-        decimalPatternOptions: this.maskOptions
-          ? {
-            ...getDefaultMaskOptions(this.step),
-            ...this.maskOptions,
-          }
-          : undefined,
-      } }));
     this.renderEditableInput = () => (h("div", { class: this.editableInputCssClasses(), part: "editable-input-wrapper" }, this.handleType({
-      single: () => this.renderSingleInput(),
-      range: () => (h("div", { class: "range-input-wrapper", part: "input-wrapper" }, h("wpp-input-v3-3-0", { ref: inputRef => (this.inputRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-min", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'min-input': true, [`size-${this.size}`]: true }, maskOptions: {
+      single: () => (h("wpp-input-v2-22-0", { ref: inputRef => (this.inputRef = inputRef), type: "decimal", disabled: this.disabled, part: "input-number", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { [`size-${this.size}`]: true }, maskOptions: {
+          decimalPatternOptions: this.maskOptions
+            ? {
+              ...getDefaultMaskOptions(this.step),
+              ...this.maskOptions,
+            }
+            : getDefaultMaskOptions(this.step),
+        } })),
+      range: () => (h("div", { class: "range-input-wrapper", part: "input-wrapper" }, h("wpp-input-v2-22-0", { ref: inputRef => (this.inputRef = inputRef), type: "decimal", disabled: this.disabled, part: "input-min", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'min-input': true, [`size-${this.size}`]: true }, maskOptions: {
           decimalPatternOptions: this.maskOptions && this.maskOptions[0]
             ? {
               ...getDefaultMaskOptions(this.step),
               ...this.maskOptions[0],
             }
-            : undefined,
-        } }), h("wpp-divider-v3-3-0", { class: { 'wpp-disabled': this.disabled }, part: "divider" }), h("wpp-input-v3-3-0", { ref: inputRef => (this.inputMaxRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-max", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'max-input': true, [`size-${this.size}`]: true }, maskOptions: {
+            : getDefaultMaskOptions(this.step),
+        } }), h("wpp-divider-v2-22-0", { class: { 'wpp-disabled': this.disabled }, part: "divider" }), h("wpp-input-v2-22-0", { ref: inputRef => (this.inputMaxRef = inputRef), type: "decimal", disabled: this.disabled, part: "input-max", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'max-input': true, [`size-${this.size}`]: true }, maskOptions: {
           decimalPatternOptions: this.maskOptions && this.maskOptions[1]
             ? {
               ...getDefaultMaskOptions(this.step),
               ...this.maskOptions[1],
             }
-            : undefined,
+            : getDefaultMaskOptions(this.step),
         } }))),
-      'middle-range': () => this.renderSingleInput(),
     })));
     this.renderMarks = () => {
       if (this.displayMarks.length > 0) {
@@ -453,24 +397,11 @@ export class WppSlider {
           const isTruncated = !!this.tooltipTexts[mark.value];
           const labelText = mark.label !== null && mark.label !== undefined ? String(mark.label) : '';
           const tooltipPlacement = 'bottom';
-          const labelContent = (h("wpp-typography-v3-3-0", { id: `mark-label-${mark.value}`, class: this.labelCssClasses(), type: "xs-body", part: "label" }, labelText));
-          return (h("div", { onClick: event => this.handleMarkClick(event, mark), class: this.markCssClasses(mark.value), style: style, part: "mark" }, !this.continuous && (h("div", { class: "circle", part: "mark-circle" }, h("div", { class: "mark", part: "mark-inner" }))), h("div", { class: "label-container" }, isTruncated ? (h("wpp-tooltip-v3-3-0", { config: { placement: tooltipPlacement }, text: this.tooltipTexts[mark.value] }, labelContent)) : (labelContent))));
+          const labelContent = (h("wpp-typography-v2-22-0", { id: `mark-label-${mark.value}`, class: this.labelCssClasses(), type: "xs-body", part: "label" }, labelText));
+          return (h("div", { onClick: event => this.handleMarkClick(event, mark), class: this.markCssClasses(mark.value), style: style, part: "mark" }, !this.continuous && (h("div", { class: "circle", part: "mark-circle" }, h("div", { class: "mark", part: "mark-inner" }))), h("div", { class: "label-container" }, isTruncated ? (h("wpp-tooltip-v2-22-0", { config: { placement: tooltipPlacement }, text: this.tooltipTexts[mark.value] }, labelContent)) : (labelContent))));
         });
       }
     };
-    this.renderRangeSliders = (style, value) => (h("div", { class: this.rangeSliderWrapperCssClasses(), part: "slider" }, h("div", { ref: elRef => (this.clickableAreaRef = elRef), class: "slider-clickable-wrapper", onClick: this.handleSliderWrapperClick }), h("input", { class: { slider: true, [`min-range-${this.focusType.min}`]: true }, type: "range", name: this.name, min: this.min, max: this.max, step: this.step, value: value[0], required: this.required, disabled: this.disabled, "aria-label": this.ariaProps.label, part: "input-slider-min", style: style, onInput: this.handleRangeSliderChange('min'), onBlur: () => this.handleInputBlur('min'), onMouseDown: () => this.handleInputMouseDown('min'), onKeyUp: (event) => this.handleInputKeyUp(event, 'min'), onClick: event => {
-        event.preventDefault();
-        event.stopPropagation();
-      }, title: "" }), h("input", { class: {
-        slider: true,
-        [`max-range-${this.focusType.max}`]: true,
-      }, type: "range", name: this.name, min: this.min, max: this.max, step: this.step, value: value[1], required: this.required, disabled: this.disabled, "aria-label": this.ariaProps.label, part: "input-slider-max", onInput: this.handleRangeSliderChange('max'), onBlur: () => this.handleInputBlur('max'), onMouseDown: () => this.handleInputMouseDown('max'), onKeyUp: (event) => this.handleInputKeyUp(event, 'max'), onClick: event => {
-        event.preventDefault();
-        event.stopPropagation();
-      }, title: "" })));
-    this.renderSingleSlider = (style, value) => (h("div", { class: this.singleSliderWrapperCssClasses(), part: "slider" }, h("div", { ref: elRef => (this.clickableAreaRef = elRef), class: "slider-clickable-wrapper", onClick: this.handleSliderWrapperClick }), h("input", { class: { slider: true, [`max-range-${this.focusType.max}`]: true }, type: "range", name: this.name, id: this.name, min: this.min, max: this.max, step: this.step, value: value, required: this.required, disabled: this.disabled, "aria-label": this.ariaProps.label, part: "input-slider-max", onInput: this.handleSingleSliderChange, onBlur: () => this.handleInputBlur('max'), onKeyUp: (event) => this.handleInputKeyUp(event, 'max'), onMouseDown: () => this.handleInputMouseDown('max'), style: style, title: "" })));
-    // This function is used only in the middle-range slider type
-    this.isMiddlePointHigher = () => this.middleValue > this.value;
     this.tooltipTexts = {};
     this.displayMarks = [];
     this.inputValue = undefined;
@@ -496,9 +427,6 @@ export class WppSlider {
     this.size = 'm';
     this.maskOptions = undefined;
   }
-  onUpdateValue() {
-    this.inputValue = this.getSliderInputValue();
-  }
   onUpdateMinValue(newValue) {
     this.onUpdateMinMaxValues('min', newValue);
   }
@@ -513,16 +441,12 @@ export class WppSlider {
       range: () => {
         this.value = [this.min, this.min + newStepValue];
       },
-      'middle-range': () => {
-        this.value = this.min;
-        this.middleValue = this.getMidValueRespectingStep();
-      },
     });
     this.computeSegmentWidth();
     this.getDisplayMarks();
   }
   onUpdateInputValue(newInputValue) {
-    if (this.type === 'single' || this.type === 'middle-range') {
+    if (this.type === 'single') {
       const inputMaskOptions = getMaskOptionsForInput(this.type, undefined, this.maskOptions);
       if (this.inputRef) {
         this.inputRef.value = formatDecimalWithMask(Number(newInputValue), inputMaskOptions);
@@ -548,9 +472,6 @@ export class WppSlider {
   }
   componentWillLoad() {
     this.getDisplayMarks();
-    if (this.type === 'middle-range') {
-      this.middleValue = this.getMidValueRespectingStep();
-    }
   }
   componentDidLoad() {
     this.handleType({
@@ -559,9 +480,6 @@ export class WppSlider {
       },
       range: value => {
         this.inputValue = value.map(String);
-      },
-      'middle-range': value => {
-        this.inputValue = String(value);
       },
     });
     this.computeSegmentWidth();
@@ -591,19 +509,20 @@ export class WppSlider {
         '--active-range-from-progress-bar': this.calculateProgressBar(value[0]),
         '--active-range-to-progress-bar': this.calculateProgressBar(value[1]),
       }),
-      'middle-range': value => ({
-        '--active-range-from-progress-bar': this.calculateProgressBar(this.isMiddlePointHigher() ? value : this.middleValue),
-        '--active-range-to-progress-bar': this.calculateProgressBar(this.isMiddlePointHigher() ? this.middleValue : value),
-      }),
     });
     return (h(Host, { class: this.hostCssClasses(), exportparts: "label, input-number, input-wrapper, input-min, divider, input-max, control-wrapper, editable-input-wrapper, value, value-wrapper, value-divider, mark, mark-circle, mark-inner, slider, input-slider-min, input-slider-max, marks-list" }, this.renderControl(), h("div", { class: "slider-container" }, h("div", { class: "slider-column" }, this.handleType({
-      single: value => this.renderSingleSlider(style, value),
-      range: value => this.renderRangeSliders(style, value),
-      'middle-range': value => this.renderSingleSlider(style, value),
+      single: value => (h("div", { class: this.singleSliderWrapperCssClasses(), part: "slider" }, h("div", { ref: elRef => (this.clickableAreaRef = elRef), class: "slider-clickable-wrapper", onClick: this.handleSliderWrapperClick }), h("input", { class: { slider: true, [`max-range-${this.focusType.max}`]: true }, type: "range", name: this.name, id: this.name, min: this.min, max: this.max, step: this.step, value: value, required: this.required, disabled: this.disabled, "aria-label": this.ariaProps.label, part: "input-slider-max", onInput: this.handleSingleSliderChange, onBlur: () => this.handleInputBlur('max'), onKeyUp: (event) => this.handleInputKeyUp(event, 'max'), onMouseDown: () => this.handleInputMouseDown('max'), style: style, title: "" }))),
+      range: value => (h("div", { class: this.rangeSliderWrapperCssClasses(), part: "slider" }, h("div", { ref: elRef => (this.clickableAreaRef = elRef), class: "slider-clickable-wrapper", onClick: this.handleSliderWrapperClick }), h("input", { class: { slider: true, [`min-range-${this.focusType.min}`]: true }, type: "range", name: this.name, min: this.min, max: this.max, step: this.step, value: value[0], required: this.required, disabled: this.disabled, "aria-label": this.ariaProps.label, part: "input-slider-min", style: style, onInput: this.handleRangeSliderChange('min'), onBlur: () => this.handleInputBlur('min'), onMouseDown: () => this.handleInputMouseDown('min'), onKeyUp: (event) => this.handleInputKeyUp(event, 'min'), onClick: event => {
+          event.preventDefault();
+          event.stopPropagation();
+        }, title: "" }), h("input", { class: { slider: true, [`max-range-${this.focusType.max}`]: true }, type: "range", name: this.name, min: this.min, max: this.max, step: this.step, value: value[1], required: this.required, disabled: this.disabled, "aria-label": this.ariaProps.label, part: "input-slider-max", onInput: this.handleRangeSliderChange('max'), onBlur: () => this.handleInputBlur('max'), onMouseDown: () => this.handleInputMouseDown('max'), onKeyUp: (event) => this.handleInputKeyUp(event, 'max'), onClick: event => {
+          event.preventDefault();
+          event.stopPropagation();
+        }, title: "" }))),
     }), this.marks && (h("div", { ref: el => (this.marksListRef = el), class: this.marksListCssClasses(), part: "marks-list" }, this.renderMarks()))), this.withInput && this.continuous && (h("div", { class: this.inputColumnCssClasses() }, this.renderEditableInput())))));
   }
   static get is() { return "wpp-slider"; }
-  static get registryIs() { return "wpp-slider-v3-3-0"; }
+  static get registryIs() { return "wpp-slider-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -710,7 +629,7 @@ export class WppSlider {
         "mutable": false,
         "complexType": {
           "original": "SliderTypes",
-          "resolved": "\"middle-range\" | \"range\" | \"single\" | undefined",
+          "resolved": "\"range\" | \"single\" | undefined",
           "references": {
             "SliderTypes": {
               "location": "import",
@@ -960,13 +879,13 @@ export class WppSlider {
         "type": "unknown",
         "mutable": false,
         "complexType": {
-          "original": "MaskitoNumberParams | MaskitoNumberParams[]",
-          "resolved": "MaskitoNumberParams | MaskitoNumberParams[] | undefined",
+          "original": "DecimalMaskOptions | DecimalMaskOptions[]",
+          "resolved": "DecimalMaskOptions | DecimalMaskOptions[] | undefined",
           "references": {
-            "MaskitoNumberParams": {
+            "DecimalMaskOptions": {
               "location": "import",
-              "path": "@maskito/kit/src/lib/masks/number/number-params",
-              "id": ""
+              "path": "../wpp-input/types",
+              "id": "src/components/wpp-input/types.ts::DecimalMaskOptions"
             }
           }
         },
@@ -1001,7 +920,7 @@ export class WppSlider {
         },
         "complexType": {
           "original": "SliderChangeEventDetail",
-          "resolved": "BaseFormControlEventDetail<SliderValue> & { name?: string | undefined; middleValue?: number | undefined; }",
+          "resolved": "BaseFormControlEventDetail<SliderValue> & { name?: string | undefined; }",
           "references": {
             "SliderChangeEventDetail": {
               "location": "import",
@@ -1076,9 +995,6 @@ export class WppSlider {
   static get elementRef() { return "host"; }
   static get watchers() {
     return [{
-        "propName": "value",
-        "methodName": "onUpdateValue"
-      }, {
         "propName": "min",
         "methodName": "onUpdateMinValue"
       }, {

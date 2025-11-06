@@ -1,6 +1,5 @@
 import { EventEmitter } from '../../stencil-public-runtime';
-import { DropdownConfig, FOCUS_TYPE, MessageTypes } from '../../types/common';
-import { InlineMessageLocalesType } from './types';
+import { MessageTypes, DropdownConfig } from '../../types/common';
 /**
  * @part message-block - Wrapper around the icon and message.
  *
@@ -13,11 +12,7 @@ import { InlineMessageLocalesType } from './types';
 export declare class WppInlineMessage {
   host: HTMLWppInlineMessageElement;
   isTruncated: boolean;
-  hasTitle: boolean;
-  focusType: FOCUS_TYPE;
-  private messageRef?;
   private resizeObserver;
-  private _locales;
   /**
    * Defines the title of the component. This prop is available only for inline-messages with size="l".
    */
@@ -53,10 +48,6 @@ export declare class WppInlineMessage {
    */
   readonly hideCloseBtn: boolean;
   /**
-   * Defines the component locale types.
-   */
-  readonly locales: Partial<InlineMessageLocalesType>;
-  /**
    * Emitted when the action button is clicked. This event is emitted only for the inline-messages with size="l".
    */
   wppClickActionBtn: EventEmitter<void>;
@@ -64,26 +55,18 @@ export declare class WppInlineMessage {
    * Emitted when the close button is clicked. This event is emitted only for the inline-messages with size="l".
    */
   wppClickCloseBtn: EventEmitter<void>;
-  onUpdateTitleText(): void;
-  onUpdateLocales(newLocales: Partial<InlineMessageLocalesType>): void;
-  componentWillLoad(): void;
   componentDidLoad(): void;
   disconnectedCallback(): void;
   private setupResizeObserver;
   private checkTruncation;
   private getMessage;
-  private onBlur;
-  private onMouseDown;
-  private onKeyUp;
   private inlineMessageWrapperCssClasses;
   private messageBlockCssClasses;
   private hostCssClasses;
-  private messageCssClasses;
   private titleCssClasses;
   private getMessageTypesIcons;
   private handleClickClose;
   private handleClickActionBtn;
-  private getContainerContentCssClasses;
   private renderContent;
   private getExportParts;
   render(): any;

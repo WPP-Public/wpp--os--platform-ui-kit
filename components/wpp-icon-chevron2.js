@@ -5,9 +5,8 @@ const wppIconCss = ":host{display:-ms-inline-flexbox;display:inline-flex;color:v
 
 var ChevronDirectionIconPath;
 (function (ChevronDirectionIconPath) {
-  // @deprecated: top should be removed in 4.0.0 release
+  // @deprecated: top should be removed in 3.0.0 release
   ChevronDirectionIconPath["top"] = "M4 13L10 7L16 13";
-  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
   ChevronDirectionIconPath["up"] = "M4 13L10 7L16 13";
   ChevronDirectionIconPath["right"] = "M8 4L14 10L8 16";
   ChevronDirectionIconPath["down"] = "M16 8L10 14L4 8";
@@ -27,9 +26,9 @@ const WppIconChevron = /*@__PURE__*/ proxyCustomElement(class WppIconChevron ext
   render() {
     return (h(WppIcon, { name: "wpp-icon-chevron", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: ChevronDirectionIconPath[this.direction], stroke: "currentColor", "stroke-width": "2", "stroke-miterlimit": "10", "stroke-linecap": "round", "stroke-linejoin": "round" })));
   }
-  static get registryIs() { return "wpp-icon-chevron-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-chevron-v2-22-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-chevron", "wpp-icon-chevron-v3-3-0", {
+}, [1, "wpp-icon-chevron", "wpp-icon-chevron-v2-22-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -40,9 +39,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-chevron-v3-3-0"];
+  const components = ["wpp-icon-chevron-v2-22-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-chevron-v3-3-0":
+    case "wpp-icon-chevron-v2-22-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconChevron);
       }

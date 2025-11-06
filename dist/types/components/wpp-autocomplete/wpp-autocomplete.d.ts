@@ -28,12 +28,11 @@ export declare class WppAutocomplete implements BaseComponent, InlineMessage {
   private mutationObserver;
   private handleOptionsTimer;
   private isDropdownShown;
-  private resizeInProgress;
+  private resizeInPogress;
   private selectedPillsWrapperRef?;
   private headerWrapperRef?;
   private withPills;
   private LIB_COMPONENTS_PREFIX;
-  private _locales;
   host: HTMLWppAutocompleteElement;
   isFocused: boolean;
   searchValue: string;
@@ -47,7 +46,6 @@ export declare class WppAutocomplete implements BaseComponent, InlineMessage {
   suggestionListTruncationState: boolean[];
   componentSuggestions: AutocompleteOption[] | AutocompleteExtendedOption[];
   lastSelectedElement: HTMLWppListItemElement | null;
-  isInComponent: boolean;
   /**
    * Defines the autocomplete name.
    */
@@ -141,7 +139,7 @@ export declare class WppAutocomplete implements BaseComponent, InlineMessage {
   /**
    * Indicates locales for autocomplete component
    */
-  readonly locales: Partial<AutocompleteLocales>;
+  readonly locales: AutocompleteLocales;
   /**
    * Tooltip config for label, under the hood tooltip using tippy.js,
    * all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
@@ -193,7 +191,7 @@ export declare class WppAutocomplete implements BaseComponent, InlineMessage {
   /**
    * Emitted when the autocomplete loses focus
    */
-  readonly wppBlur: EventEmitter<void>;
+  readonly wppBlur: EventEmitter<FocusEvent>;
   /**
    * Emitted when the autocomplete search value changes
    */
@@ -208,9 +206,6 @@ export declare class WppAutocomplete implements BaseComponent, InlineMessage {
   onSearchValueChange(initSearchValue: string): never[] | undefined;
   updateDropdownConfig(newConfig: DropdownConfig, oldConfig: DropdownConfig): void;
   onShowMoreChange(isShowMore: boolean): void;
-  onUpdateSuggestions(): void;
-  updateIsInComponent(value: boolean): void;
-  onUpdateLocales(newLocales: Partial<AutocompleteLocales>): void;
   /**
    * Sets focus on native input
    */
@@ -220,8 +215,6 @@ export declare class WppAutocomplete implements BaseComponent, InlineMessage {
   componentDidLoad(): void;
   disconnectedCallback(): void;
   connectedCallback(): void;
-  private handleClickOutside;
-  private checkSuggestions;
   private valueResizeObserver;
   private createTippyInstance;
   private triggerTooltipCalculation;

@@ -41,7 +41,6 @@ const WppProgressIndicator = /*@__PURE__*/ proxyCustomElement(class WppProgressI
     this.value = undefined;
     this.isShowPercentage = false;
     this.label = undefined;
-    this.ariaProps = {};
     this.forceIntermediateEmptyState = false;
   }
   setComponentWidth(updateWidth) {
@@ -79,33 +78,32 @@ const WppProgressIndicator = /*@__PURE__*/ proxyCustomElement(class WppProgressI
     const shouldShowPercentage = this.isShowPercentage &&
       typeof this.value === 'number' &&
       (this.value > 0 || (this.value === 0 && !!this.forceIntermediateEmptyState));
-    const renderLine = () => (h("div", { class: this.lineCssClasses(isShowCircleInfinityLoading, isShowLinearInfinityLoading, shouldShowPercentage), part: "line" }));
+    const renderLine = () => (h("div", { class: this.lineCssClasses(isShowCircleInfinityLoading, isShowLinearInfinityLoading, shouldShowPercentage), role: "progressbar", "aria-valuenow": this.value, "aria-valuemin": "0", "aria-valuemax": "100", part: "line" }));
     const renderCircle = () => (h("svg", { class: this.circleWrapperCssClasses(isShowCircleInfinityLoading), viewBox: "0 0 120 120", part: "circle" }, h("circle", { class: "circle", cx: "60", cy: "60", r: "54", fill: "none" }), h("circle", { class: this.circleCssClasses(isShowCircleInfinityLoading, shouldShowPercentage), cx: "60", cy: "60", r: "54", fill: "none", pathLength: "100" })));
-    return (h(Host, { class: this.hostCssClasses(isLinearDontHaveWidth), role: "progressbar", "aria-valuenow": this.value, "aria-valuemin": "0", "aria-valuemax": "100", "aria-label": this.ariaProps?.label, "aria-labelledby": this.ariaProps?.labelledby, exportparts: "label, content, inner" }, h("div", { class: this.progressBarCssClasses(isLinearDontHaveProgress, shouldShowPercentage), part: "body" }, isCircle ? renderCircle() : renderLine()), !!this.label && (h("p", { class: "progress-text", part: "label" }, this.label))));
+    return (h(Host, { class: this.hostCssClasses(isLinearDontHaveWidth), role: "progressbar", "aria-valuenow": this.value, "aria-valuemin": "0", "aria-valuemax": "100", exportparts: "label, content, inner" }, h("div", { class: this.progressBarCssClasses(isLinearDontHaveProgress, shouldShowPercentage), part: "body" }, isCircle ? renderCircle() : renderLine()), !!this.label && (h("p", { class: "progress-text", part: "label" }, this.label))));
   }
-  static get registryIs() { return "wpp-progress-indicator-v3-3-0"; }
+  static get registryIs() { return "wpp-progress-indicator-v2-22-0"; }
   get host() { return this; }
   static get watchers() { return {
     "value": ["progressChange"],
     "width": ["widthChange"]
   }; }
   static get style() { return wppProgressIndicatorCss; }
-}, [1, "wpp-progress-indicator", "wpp-progress-indicator-v3-3-0", {
+}, [1, "wpp-progress-indicator", "wpp-progress-indicator-v2-22-0", {
     "width": [2],
     "variant": [1],
     "value": [2],
     "isShowPercentage": [4, "is-show-percentage"],
     "label": [1],
-    "ariaProps": [16],
     "forceIntermediateEmptyState": [4, "force-intermediate-empty-state"]
   }]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-progress-indicator-v3-3-0"];
+  const components = ["wpp-progress-indicator-v2-22-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-progress-indicator-v3-3-0":
+    case "wpp-progress-indicator-v2-22-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppProgressIndicator);
       }

@@ -1,5 +1,4 @@
 import { Host, h } from '@stencil/core';
-import { LOCALES_DEFAULTS } from './const';
 /**
  * @part body - Main content wrapper
  * @part per-page-label - per-page label text element
@@ -11,7 +10,6 @@ import { LOCALES_DEFAULTS } from './const';
  */
 export class WppPagination {
   constructor() {
-    this._locales = LOCALES_DEFAULTS;
     this.handleItemsPerPageNumberChange = (e) => {
       this.activePageNumber = 1;
       this.selectedItemPerPage = Number(e.detail.value);
@@ -32,7 +30,7 @@ export class WppPagination {
         const min = (this.activePageNumber - 1) * this.selectedItemPerPage + 1;
         const max = Math.min(this.activePageNumber * this.selectedItemPerPage, this.count);
         const totalPages = this.count;
-        return `${min}-${max} ${this._locales.of} ${totalPages} ${this._locales.items}`;
+        return `${min}-${max} ${this.locales.of} ${totalPages} ${this.locales.items}`;
       }
     };
     this.hostCssClasses = () => ({
@@ -45,13 +43,13 @@ export class WppPagination {
     this.pageSelectThreshold = 8;
     this.activePageNumber = 1;
     this.dropdownConfig = {};
-    this.locales = {};
-  }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
+    this.locales = {
+      itemsPerPage: 'Items per page',
+      of: 'of',
+      items: 'items',
+    };
   }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
     if (!this.selectedItemPerPage) {
       this.selectedItemPerPage = this.itemsPerPage[0];
       this.wppChange.emit({ page: this.activePageNumber, itemsPerPage: this.selectedItemPerPage });
@@ -62,14 +60,10 @@ export class WppPagination {
     if (this.count === 0) {
       return null;
     }
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, h("div", { class: "control-pagination-wrapper", part: "body" }, h("wpp-typography-v3-3-0", { type: "s-body", part: "per-page-label" }, this._locales.itemsPerPage, ":"), h("wpp-select-v3-3-0", { type: "single", isTextSelect: true, onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig }, dropdownWidth: "100px", part: "pre-page-select", list: this.itemsPerPage.map(item => ({
-        value: item,
-        label: `${item}`,
-        part: 'per-page-item',
-      })) }), h("wpp-divider-v3-3-0", { part: "divider" }), h("wpp-typography-v3-3-0", { type: "s-body", part: "range" }, this.getPageRange())), countPagesToDisplay && (h("wpp-pagination-select-v3-3-0", { count: countPagesToDisplay, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, part: "page-select" }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, h("div", { class: "control-pagination-wrapper", part: "body" }, h("wpp-typography-v2-22-0", { type: "s-body", part: "per-page-label" }, this.locales.itemsPerPage, ":"), h("wpp-select-v2-22-0", { type: "text", onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig, appendTo: 'parent' }, part: "pre-page-select" }, this.itemsPerPage.map(item => (h("wpp-list-item-v2-22-0", { value: item, part: "per-page-item" }, h("span", { slot: "label" }, item))))), h("wpp-divider-v2-22-0", { part: "divider" }), h("wpp-typography-v2-22-0", { type: "s-body", part: "range" }, this.getPageRange())), countPagesToDisplay && (h("wpp-pagination-select-v2-22-0", { count: countPagesToDisplay, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, part: "page-select" }))));
   }
   static get is() { return "wpp-pagination"; }
-  static get registryIs() { return "wpp-pagination-v3-3-0"; }
+  static get registryIs() { return "wpp-pagination-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -195,13 +189,9 @@ export class WppPagination {
         "type": "unknown",
         "mutable": false,
         "complexType": {
-          "original": "Partial<PaginationLocales>",
-          "resolved": "{ itemsPerPage?: string | undefined; of?: string | undefined; items?: string | undefined; }",
+          "original": "PaginationLocales",
+          "resolved": "PaginationLocales",
           "references": {
-            "Partial": {
-              "location": "global",
-              "id": "global::Partial"
-            },
             "PaginationLocales": {
               "location": "import",
               "path": "./types",
@@ -215,7 +205,7 @@ export class WppPagination {
           "tags": [],
           "text": "Indicates locales for pagination component"
         },
-        "defaultValue": "{}"
+        "defaultValue": "{\n    itemsPerPage: 'Items per page',\n    of: 'of',\n    items: 'items',\n  }"
       }
     };
   }
@@ -241,12 +231,6 @@ export class WppPagination {
             }
           }
         }
-      }];
-  }
-  static get watchers() {
-    return [{
-        "propName": "locales",
-        "methodName": "onUpdateLocales"
       }];
   }
 }

@@ -1,10 +1,11 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
+import { WppStepper } from './wpp-stepper';
+declare const _default: Meta<typeof WppStepper>;
+export default _default;
 interface Props extends Components.WppStepper, Components.WppStep {
 }
-declare const _default: Meta<Props>;
-export default _default;
-export declare const VerticalDecimalStepper: StoryObj<Props>;
-export declare const Vertical: StoryObj<Props>;
-export declare const VerticalStepperWithWidth: StoryObj<Props>;
-export declare const Horizontal: StoryObj<Props>;
+export declare const VerticalDecimalStepper: Story<Props>;
+export declare const Vertical: Story<Props>;
+export declare const VerticalStepperWithWidth: Story<Props>;
+export declare const Horizontal: Story<Props>;

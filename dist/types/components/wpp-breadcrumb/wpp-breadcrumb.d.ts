@@ -35,13 +35,7 @@ export declare class WppBreadcrumb {
    */
   dropdownConfig: DropdownConfig;
   /**
-   * If provided, renders a back button with the specified label instead of the breadcrumb.
-   * If undefined, renders the default breadcrumb.
-   */
-  readonly backBtnLabel?: string;
-  /**
    * Emitted when route changes, return object like { path: '/home', label: 'Home' }
-   * For back variant, emits { path: 'back', label: backBtnLabel }
    */
   readonly wppChange: EventEmitter<BreadcrumbItemEventDetails>;
   private get rootItem();
@@ -51,8 +45,6 @@ export declare class WppBreadcrumb {
   private createRouteChangeTrigger;
   private createItemElement;
   private createMenuElement;
-  private handleBackClick;
-  private handleBackKeyDown;
   private hostCssClasses;
   render(): any;
 }

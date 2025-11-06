@@ -1,4 +1,5 @@
-import { Components } from '../../components';
+import { WppActionButton } from '../wpp-action-button/wpp-action-button';
+import { WppButton } from '../wpp-button/wpp-button';
 export declare enum SideModalCloseReason {
   outsideClick = "outsideClick",
   cancelClick = "cancelClick",
@@ -21,16 +22,16 @@ export type FirstActionConfig = {
   label: string;
   variant: 'primary' | 'destructive';
   onClick: () => void;
-} & Partial<Omit<Components.WppButton, 'autoFocus' | 'variant' | 'inverted' | 'size'>>;
+} & Partial<Omit<WppButton, 'autoFocus' | 'variant' | 'inverted' | 'size'>>;
 export type SecondActionConfig = {
   label: string;
   variant: 'secondary' | 'destructive-secondary';
   onClick: () => void;
-} & Partial<Omit<Components.WppButton, 'autoFocus' | 'variant' | 'inverted' | 'size'>>;
+} & Partial<Omit<WppButton, 'autoFocus' | 'variant' | 'inverted' | 'size'>>;
 export type ThirdActionConfig = {
   label: string;
   variant: 'destructive' | 'primary';
   icon: string;
   onClick: () => void;
-} & Partial<Omit<Components.WppActionButton, 'autoFocus' | 'variant'>>;
+} & Partial<Omit<WppActionButton, 'autoFocus' | 'variant'>>;
 export type ActionConfig = [] | [FirstActionConfig] | [SecondActionConfig] | [ThirdActionConfig] | [FirstActionConfig, SecondActionConfig] | [SecondActionConfig, FirstActionConfig] | [FirstActionConfig, ThirdActionConfig] | [ThirdActionConfig, FirstActionConfig] | [SecondActionConfig, ThirdActionConfig] | [ThirdActionConfig, SecondActionConfig] | [FirstActionConfig, SecondActionConfig, ThirdActionConfig] | [SecondActionConfig, FirstActionConfig, ThirdActionConfig] | [FirstActionConfig, ThirdActionConfig, SecondActionConfig] | [ThirdActionConfig, FirstActionConfig, SecondActionConfig] | [SecondActionConfig, ThirdActionConfig, FirstActionConfig] | [ThirdActionConfig, SecondActionConfig, FirstActionConfig];

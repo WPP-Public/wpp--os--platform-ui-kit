@@ -1,13 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/web-components';
-import type { Components } from '../../components';
+import { Story, Meta } from '@storybook/web-components';
+import { Components } from '../../components';
+import { WppActionButton } from './wpp-action-button';
+declare const _default: Meta<typeof WppActionButton>;
+export default _default;
 type WppActionButtonTypes = Components.WppActionButton & {
   showIconStart: boolean;
   showIconEnd: boolean;
   text: string;
 };
-declare const meta: Meta<WppActionButtonTypes>;
-export default meta;
-export declare const Primary: StoryObj<WppActionButtonTypes>;
-export declare const Secondary: StoryObj<WppActionButtonTypes>;
-export declare const Inverted: StoryObj<WppActionButtonTypes>;
-export declare const Destructive: StoryObj<WppActionButtonTypes>;
+export declare const Primary: Story<WppActionButtonTypes>;
+export declare const Secondary: Story<WppActionButtonTypes>;
+export declare const Inverted: Story<WppActionButtonTypes>;
+export declare const Destructive: Story<WppActionButtonTypes>;

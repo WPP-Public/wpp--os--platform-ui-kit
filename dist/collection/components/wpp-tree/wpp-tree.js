@@ -1,22 +1,9 @@
 import { h, Host } from '@stencil/core';
 import { debounce, transformToVersionedTag, uuidv4 } from '../../utils/utils';
-import { findSelectedItems, isHaveFoundChildren, markChildrenAs, recalculateIndeterminateTreeState, convertToOriginalItems, updateTreeById, updateTreeByIds, extractExtraProps, } from './utils';
-import { LOCALES_DEFAULTS } from './const';
+import { findSelectedItems, isHaveFoundChildren, markChildrenAs, recalculateIndeterminateTreeState, convertToOriginalItems, updateTreeById, updateTreeByIds, } from './utils';
 export class WppTree {
   constructor() {
-    this.resizeInProgress = false;
-    this._locales = LOCALES_DEFAULTS;
-    this.toggleItemSelection = (toggleFunction, reason) => {
-      // Get the IDs of all first-level items in the tree.
-      const allItemsIDs = this.currentTreeData.map(item => item.id);
-      const finalTree = recalculateIndeterminateTreeState(updateTreeByIds(this.currentTreeData, allItemsIDs, toggleFunction));
-      this.wppChange.emit({
-        treeState: finalTree,
-        selectedItems: findSelectedItems(finalTree),
-        selectedOriginalItems: convertToOriginalItems(findSelectedItems(finalTree)),
-        reason,
-      });
-    };
+    this.resizeInPogress = false;
     this.isSearchResultFound = true;
     this.isMatchSearch = (item, search) => {
       if (this.searchConfig?.isMatchingSearch)
@@ -45,7 +32,7 @@ export class WppTree {
       this.wppChange.emit({
         treeState,
         currentItem: item,
-        selectedItems,
+        selectedItems: findSelectedItems(treeState),
         selectedOriginalItems: convertToOriginalItems(selectedItems),
         reason: 'select',
       });
@@ -121,19 +108,19 @@ export class WppTree {
     this.hostCssClasses = () => ({
       'wpp-tree': true,
     });
-    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v3-3-0", { dropdownConfig: {
+    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v2-22-0", { appendToListWrapper: true, dropdownConfig: {
+        popperOptions: { strategy: 'fixed' },
         trigger: 'click',
         interactiveDebounce: 15,
         interactiveBorder: 25,
         offset: [0, 0],
-      } }, h("wpp-icon-more-v3-3-0", { class: {
+      } }, h("wpp-icon-more-v2-22-0", { class: {
         'menu-trigger': true,
         disabled: !!item.disabled,
-      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v3-3-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
+      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v2-22-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("p", { slot: "label" }, name))))))));
     this.renderTree = (treeData, level = 1) => treeData.map(item => {
-      const extraProps = extractExtraProps(item);
       if (item.children) {
-        return (h("wpp-tree-item-v3-3-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
+        return (h("wpp-tree-item-v2-22-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent }, item.iconStart?.icon &&
           h(transformToVersionedTag(item.iconStart.icon), {
             slot: 'icon-start',
             part: 'icon-start',
@@ -146,7 +133,7 @@ export class WppTree {
             onclick: this.handleActionClick({ item, name: item.iconEnd.name, place: 'end' }),
           }), h("div", { slot: "content", class: "content-container", part: "content" }, item.open && this.renderTree(item.children, level + 1))));
       }
-      return (h("wpp-tree-item-v3-3-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
+      return (h("wpp-tree-item-v2-22-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent }, item.iconStart?.icon &&
         h(transformToVersionedTag(item.iconStart.icon), {
           slot: 'icon-start',
           part: 'icon-start',
@@ -159,14 +146,16 @@ export class WppTree {
           onclick: this.handleActionClick({ item, name: item.iconEnd.name, place: 'end' }),
         })));
     });
-    this.renderSkeletonLoading = () => [...Array(this.skeletonNumberItems)].map(_ => (h("div", { class: "skeleton-item" }, h("wpp-skeleton-v3-3-0", { variant: "rectangle", width: "100%", animation: true }))));
+    this.renderSkeletonLoading = () => [...Array(this.skeletonNumberItems)].map(_ => (h("div", { class: "skeleton-item" }, h("wpp-skeleton-v2-22-0", { variant: "rectangle", width: "100%", animation: true }))));
     this.currentTreeData = undefined;
     this.selectedIds = [];
     this.data = undefined;
     this.search = '';
     this.multiple = false;
     this.defaultSelectedIds = [];
-    this.locales = {};
+    this.locales = {
+      nothingFound: 'No result',
+    };
     this.searchConfig = {
       isMatchSearch: undefined,
       highlightOptions: {},
@@ -215,9 +204,6 @@ export class WppTree {
   updateDate(newData) {
     this.currentTreeData = newData;
   }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
-  }
   handleOpenItem(event) {
     event.stopPropagation();
     const item = event.detail;
@@ -242,27 +228,6 @@ export class WppTree {
       this.singleSelectionUpdate(updatedTreeWithCurrentItem, newItemState);
     }
   }
-  async recalculateTreeWidth() {
-    if (this.host) {
-      const contentRect = this.host.getBoundingClientRect();
-      this.host.style.setProperty('--wpp-tree-item-width', `${contentRect.width - 8}px`);
-    }
-  }
-  async selectAll() {
-    if (!this.multiple)
-      return;
-    this.toggleItemSelection(({ isNotSelectable, disabled }) => ({
-      ...(!isNotSelectable && !disabled && { selected: true }),
-    }), 'select');
-  }
-  async clearAll() {
-    if (!this.multiple)
-      return;
-    this.toggleItemSelection(() => ({
-      selected: false,
-      indeterminate: false,
-    }), 'clear');
-  }
   componentDidLoad() {
     // NOTE: defaultSelectedIds should be provided only when default selection logic is applied. Recalculating tree state
     // here may break your custom selection logic
@@ -275,10 +240,10 @@ export class WppTree {
       this.host.style.setProperty('--wpp-tree-item-switcher-transition-duration', '50ms');
     }
     this.resizeObserver = new ResizeObserver(debounce(entries => {
-      if (this.resizeInProgress)
+      if (this.resizeInPogress)
         return;
       try {
-        this.resizeInProgress = true;
+        this.resizeInPogress = true;
         for (const entry of entries) {
           if (entry.target === this.host.parentElement) {
             this.host.style.setProperty('--wpp-tree-item-width', `${entry.contentRect.width - 8}px`);
@@ -289,7 +254,7 @@ export class WppTree {
         console.error('Error in ResizeObserver callback:', error);
       }
       finally {
-        this.resizeInProgress = false;
+        this.resizeInPogress = false;
       }
     }, 50));
     if (this.host.parentElement && this.resizeObserver) {
@@ -315,14 +280,13 @@ export class WppTree {
     };
   }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
     this.currentTreeData = this.checkData(this.data);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text" }, !this.loading && (h("div", { class: "container", part: "tree-container" }, this.currentTreeData && this.isSearchResultFound ? (this.renderTree(this.currentTreeData)) : (h("p", { class: "empty-tree-text", part: "tree-empty-text" }, this._locales.nothingFound)))), this.loading && h("div", { class: "skeleton-wrapper" }, this.renderSkeletonLoading())));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text" }, !this.loading && (h("div", { class: "container", part: "tree-container" }, this.currentTreeData && this.isSearchResultFound ? (this.renderTree(this.currentTreeData)) : (h("p", { class: "empty-tree-text", part: "tree-empty-text" }, this.locales.nothingFound)))), this.loading && h("div", { class: "skeleton-wrapper" }, this.renderSkeletonLoading())));
   }
   static get is() { return "wpp-tree"; }
-  static get registryIs() { return "wpp-tree-v3-3-0"; }
+  static get registryIs() { return "wpp-tree-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -413,13 +377,9 @@ export class WppTree {
         "type": "unknown",
         "mutable": false,
         "complexType": {
-          "original": "Partial<TreeLocaleType>",
-          "resolved": "{ nothingFound?: string | undefined; }",
+          "original": "TreeLocaleType",
+          "resolved": "TreeLocaleType",
           "references": {
-            "Partial": {
-              "location": "global",
-              "id": "global::Partial"
-            },
             "TreeLocaleType": {
               "location": "import",
               "path": "./types",
@@ -433,7 +393,7 @@ export class WppTree {
           "tags": [],
           "text": "Defines the component locale types."
         },
-        "defaultValue": "{}"
+        "defaultValue": "{\n    nothingFound: 'No result',\n  }"
       },
       "searchConfig": {
         "type": "unknown",
@@ -568,7 +528,7 @@ export class WppTree {
         },
         "complexType": {
           "original": "TreeChangeEventDetail",
-          "resolved": "{ treeState: TreeType[]; currentItem?: TreeType | undefined; selectedItems?: (TreeType | null)[] | undefined; selectedOriginalItems?: Partial<TreeType>[] | undefined; reason: \"clear\" | \"search\" | \"select\" | \"open\"; }",
+          "resolved": "{ treeState: TreeType[]; currentItem?: TreeType | undefined; selectedItems?: (TreeType | null)[] | undefined; selectedOriginalItems?: Partial<TreeType>[] | undefined; reason: \"search\" | \"select\" | \"open\"; }",
           "references": {
             "TreeChangeEventDetail": {
               "location": "import",
@@ -600,61 +560,6 @@ export class WppTree {
         }
       }];
   }
-  static get methods() {
-    return {
-      "recalculateTreeWidth": {
-        "complexType": {
-          "signature": "() => Promise<void>",
-          "parameters": [],
-          "references": {
-            "Promise": {
-              "location": "global",
-              "id": "global::Promise"
-            }
-          },
-          "return": "Promise<void>"
-        },
-        "docs": {
-          "text": "",
-          "tags": []
-        }
-      },
-      "selectAll": {
-        "complexType": {
-          "signature": "() => Promise<void>",
-          "parameters": [],
-          "references": {
-            "Promise": {
-              "location": "global",
-              "id": "global::Promise"
-            }
-          },
-          "return": "Promise<void>"
-        },
-        "docs": {
-          "text": "",
-          "tags": []
-        }
-      },
-      "clearAll": {
-        "complexType": {
-          "signature": "() => Promise<void>",
-          "parameters": [],
-          "references": {
-            "Promise": {
-              "location": "global",
-              "id": "global::Promise"
-            }
-          },
-          "return": "Promise<void>"
-        },
-        "docs": {
-          "text": "",
-          "tags": []
-        }
-      }
-    };
-  }
   static get elementRef() { return "host"; }
   static get watchers() {
     return [{
@@ -663,9 +568,6 @@ export class WppTree {
       }, {
         "propName": "data",
         "methodName": "updateDate"
-      }, {
-        "propName": "locales",
-        "methodName": "onUpdateLocales"
       }];
   }
   static get listeners() {

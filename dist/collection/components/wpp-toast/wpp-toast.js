@@ -1,7 +1,6 @@
 import { Host, h, Fragment } from '@stencil/core';
-import { ANIMATION_DURATION } from './const';
+import { ANIMATION_DURATION } from './consts';
 import { transformToVersionedTag } from '../../utils/utils';
-import { Z_INDEX } from '../../common/consts';
 /**
  * @part body - Main content wrapper
  * @part actions - Action buttons wrapper
@@ -24,13 +23,13 @@ export class WppToast {
     };
     this.getIconType = (iconType) => {
       if (iconType === 'warning')
-        return h("wpp-icon-warning-v3-3-0", { width: 16, height: 16, class: "icon" });
+        return h("wpp-icon-warning-v2-22-0", { width: 16, height: 16, class: "icon" });
       if (iconType === 'error')
-        return h("wpp-icon-error-v3-3-0", { width: 16, height: 16, class: "icon" });
+        return h("wpp-icon-error-v2-22-0", { width: 16, height: 16, class: "icon" });
       if (iconType === 'information')
-        return h("wpp-icon-info-message-v3-3-0", { color: "var(--wpp-grey-color-700)", width: 16, height: 16, class: "icon" });
+        return h("wpp-icon-info-message-v2-22-0", { width: 16, height: 16, class: "icon" });
       if (iconType === 'success')
-        return h("wpp-icon-success-v3-3-0", { width: 16, height: 16, class: "icon" });
+        return h("wpp-icon-success-v2-22-0", { width: 16, height: 16, class: "icon" });
       return null;
     };
     this.handleCloseClick = () => {
@@ -108,8 +107,6 @@ export class WppToast {
     this.primaryBtn = undefined;
     this.maxMessageLines = 3;
     this.icon = undefined;
-    this.ariaProps = {};
-    this.zIndex = Z_INDEX.TOAST;
   }
   onContentChange() {
     this.checkIfTextHasOneLine();
@@ -160,12 +157,11 @@ export class WppToast {
       '--mt-show-animation-duration': ANIMATION_DURATION / 1000 + 's',
       '--mt-hide-animation-duration': ANIMATION_DURATION / 1500 + 's',
       '--mt-max-message-lines': this.maxMessageLines + '',
-      zIndex: this.zIndex.toString(),
     };
-    return (h(Host, { class: this.hostCssClasses(), style: style, exportparts: "body, message, body, info-wrapper, header, message, actions, action-button, icon-start, icon-wrapper", onMouseEnter: this.handleMouseEnter, onMouseLeave: this.handleMouseLeave, role: "alert" }, this.variant === 'chat' ? (h("div", { class: this.chatToastWrapper() }, h("wpp-typography-v3-3-0", { class: "chat-toast-message", type: "2xs-strong" }, this.message))) : (h(Fragment, null, this.message && !this.header && (h("div", { class: "body", part: "body" }, h("div", { class: this.iconWrapperCssClasses(), style: this.icon?.styles, part: "icon-wrapper" }, this.isIconProvided() ? this.renderIcon() : this.getIconType(this.type)), h("wpp-typography-v3-3-0", { type: "s-body", class: "message", part: "message" }, this.message))), this.header && (h("div", { class: "body", part: "body" }, h("div", { class: this.iconWrapperCssClasses(), style: this.icon?.styles, part: "icon-wrapper" }, this.isIconProvided() ? this.renderIcon() : this.getIconType(this.type)), h("div", { class: "info", part: "info-wrapper" }, h("wpp-typography-v3-3-0", { type: "s-strong", class: "header", part: "header" }, this.header), h("wpp-typography-v3-3-0", { type: "s-body", class: "message", part: "message" }, this.message)))), !!this.primaryBtn && (h("div", { class: "actions", part: "actions" }, this.primaryBtn && (h("wpp-action-button-v3-3-0", { onClick: () => this.primaryBtn?.onClick(this.index || ''), disabled: this.primaryBtn.disabled, loading: this.primaryBtn.loading, variant: this.primaryBtn.variant, ariaProps: this.ariaProps, part: "action-button" }, this.primaryBtn.label)), h("wpp-action-button-v3-3-0", { ariaProps: { label: 'Remove message' }, variant: "inverted", part: "action-button", onClick: this.handleCloseClick }, h("wpp-icon-cross-v3-3-0", { slot: "icon-start", part: "icon-start" })))), !this.primaryBtn && (h("div", { class: "actions", part: "actions" }, h("wpp-action-button-v3-3-0", { ariaProps: { label: 'Remove message' }, variant: "inverted", part: "action-button", onClick: this.handleCloseClick }, h("wpp-icon-cross-v3-3-0", { slot: "icon-start", part: "icon-start" }))))))));
+    return (h(Host, { class: this.hostCssClasses(), style: style, exportparts: "body, message, body, info-wrapper, header, message, actions, action-button, icon-start, icon-wrapper", onMouseEnter: this.handleMouseEnter, onMouseLeave: this.handleMouseLeave }, this.variant === 'chat' ? (h("div", { class: this.chatToastWrapper() }, h("wpp-typography-v2-22-0", { class: "chat-toast-message", type: "2xs-strong" }, this.message))) : (h(Fragment, null, this.message && !this.header && (h("div", { class: "body", part: "body" }, h("div", { class: this.iconWrapperCssClasses(), style: this.icon?.styles, part: "icon-wrapper" }, this.isIconProvided() ? this.renderIcon() : this.getIconType(this.type)), h("wpp-typography-v2-22-0", { type: "s-body", class: "message", part: "message" }, this.message))), this.header && (h("div", { class: "body", part: "body" }, h("div", { class: this.iconWrapperCssClasses(), style: this.icon?.styles, part: "icon-wrapper" }, this.isIconProvided() ? this.renderIcon() : this.getIconType(this.type)), h("div", { class: "info", part: "info-wrapper" }, h("wpp-typography-v2-22-0", { type: "s-strong", class: "header", part: "header" }, this.header), h("wpp-typography-v2-22-0", { type: "s-body", class: "message", part: "message" }, this.message)))), !!this.primaryBtn && (h("div", { class: "actions", part: "actions" }, this.primaryBtn && (h("wpp-action-button-v2-22-0", { onClick: () => this.primaryBtn?.onClick(this.index || ''), disabled: this.primaryBtn.disabled, loading: this.primaryBtn.loading, variant: this.primaryBtn.variant, part: "action-button" }, this.primaryBtn.label)), h("wpp-action-button-v2-22-0", { variant: "inverted", part: "action-button", onClick: this.handleCloseClick }, h("wpp-icon-cross-v2-22-0", { slot: "icon-start", part: "icon-start" })))), !this.primaryBtn && (h("div", { class: "actions", part: "actions" }, h("wpp-action-button-v2-22-0", { variant: "inverted", part: "action-button", onClick: this.handleCloseClick }, h("wpp-icon-cross-v2-22-0", { slot: "icon-start", part: "icon-start" }))))))));
   }
   static get is() { return "wpp-toast"; }
-  static get registryIs() { return "wpp-toast-v3-3-0"; }
+  static get registryIs() { return "wpp-toast-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -353,46 +349,6 @@ export class WppToast {
           "tags": [],
           "text": "If you only provide the \u2018name\u2019 key, you should use an icon from the CL (e.g., \u2018wpp-icon-user\u2019).\nAlternatively, if you provide the \u2018URL\u2019 key, you can pass an icon using a URL (e.g., \u2018https://avatar/1.jpg\u2019)"
         }
-      },
-      "ariaProps": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "AriaProps",
-          "resolved": "AriaProps",
-          "references": {
-            "AriaProps": {
-              "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::AriaProps"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Contains the `aria-` props of the wpp-action-button."
-        },
-        "defaultValue": "{}"
-      },
-      "zIndex": {
-        "type": "number",
-        "mutable": false,
-        "complexType": {
-          "original": "number",
-          "resolved": "number",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the z-index of the WppToast."
-        },
-        "attribute": "z-index",
-        "reflect": false,
-        "defaultValue": "Z_INDEX.TOAST"
       }
     };
   }

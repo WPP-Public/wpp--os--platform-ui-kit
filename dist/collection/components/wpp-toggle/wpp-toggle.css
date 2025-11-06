@@ -63,7 +63,7 @@
 :host(.wpp-toggle-wrapper) .label.tab-focus::before {
   border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--counter-first-border-color-focus), 0 0 0 3px var(--counter-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--counter-first-border-color-focus), 0 0 0 2px var(--counter-second-border-color-focus);
   background-color: var(--toggle-bg-color-hover);
 }
 :host(.wpp-toggle-wrapper) .label::before {
@@ -128,7 +128,7 @@
 :host(.wpp-checked) .label.tab-focus::before {
   border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--counter-first-border-color-focus), 0 0 0 3px var(--counter-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--counter-first-border-color-focus), 0 0 0 2px var(--counter-second-border-color-focus);
   background-color: var(--toggle-bg-color-checked-hover);
 }
 :host(.wpp-checked) .label::before {

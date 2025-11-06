@@ -1,5 +1,6 @@
 import { html } from 'lit-html';
-import { useState } from 'storybook/internal/preview-api';
+import useState from 'storybook-addon-state';
+import readme from './readme.md';
 export default {
   title: 'Design System/Components/Navigation/Top Bar',
   parameters: {
@@ -9,6 +10,7 @@ export default {
         hidden: true,
       },
     },
+    notes: readme,
   },
   argTypes: {
     navigation: {
@@ -94,32 +96,32 @@ const initNavigation = [
   },
 ];
 export const NoLogo = (args) => {
-  const [value, setValue] = useState(initNavigation[0].value);
+  const [value, setValue] = useState('value', initNavigation[0].value);
   const handleTopbarItemChange = (event) => {
     setValue(event.detail.value);
   };
-  return html ` <wpp-topbar-v3-3-0
+  return html ` <wpp-topbar-v2-22-0
     .navigation="${args.navigation}"
     .value="${value}"
     @wppChange="${handleTopbarItemChange}"
     .nativeLink=${args.nativeLink}
   >
     <div slot="app" style="display: flex; margin-right: 32px">
-      <wpp-typography-v3-3-0 style="white-space: nowrap" type="m-strong" tag="h3"> APP Name</wpp-typography-v3-3-0>
+      <wpp-typography-v2-22-0 style="white-space: nowrap" type="m-strong" tag="h3"> APP Name</wpp-typography-v2-22-0>
     </div>
-  </wpp-topbar-v3-3-0>`;
+  </wpp-topbar-v2-22-0>`;
 };
 NoLogo.args = {
   navigation: initNavigation,
   nativeLink: false,
 };
 export const WithLogo = (args) => {
-  const [value, setValue] = useState(initNavigation[0].value);
+  const [value, setValue] = useState('value', initNavigation[0].value);
   const handleTopbarItemChange = (event) => {
     console.log('event.detail :>> ', event.detail);
     setValue(event.detail.value);
   };
-  return html ` <wpp-topbar-v3-3-0
+  return html ` <wpp-topbar-v2-22-0
     .navigation="${args.navigation}"
     .value="${value}"
     @wppChange="${handleTopbarItemChange}"
@@ -130,11 +132,11 @@ export const WithLogo = (args) => {
         src="https://easydrawingguides.com/wp-content/uploads/2018/09/Impossible-Triangle-09.png"
         style="display: flex; width: 40px; height: 40px; max-width: 40px; margin-right: 12px"
       />
-      <wpp-typography-v3-3-0 class="application-name" style="white-space: nowrap" type="m-strong" tag="h3">
+      <wpp-typography-v2-22-0 class="application-name" style="white-space: nowrap" type="m-strong" tag="h3">
         APP Name
-      </wpp-typography-v3-3-0>
+      </wpp-typography-v2-22-0>
     </div>
-  </wpp-topbar-v3-3-0>`;
+  </wpp-topbar-v2-22-0>`;
 };
 WithLogo.args = {
   navigation: initNavigation,

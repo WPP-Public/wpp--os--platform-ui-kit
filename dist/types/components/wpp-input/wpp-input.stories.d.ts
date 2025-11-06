@@ -1,13 +1,14 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppInput>;
+import { WppInput } from './wpp-input';
+declare const _default: Meta<typeof WppInput>;
 export default _default;
-export declare const Regular: StoryObj<Components.WppInput & {
+export declare const Regular: Story<Components.WppInput & {
   showIconStart: boolean;
   showIconEnd: boolean;
 }>;
-export declare const Search: StoryObj<Components.WppInput>;
-export declare const DecimalWithLimits: StoryObj<Components.WppInput>;
-export declare const DecimalWithMask: StoryObj<Components.WppInput>;
-export declare const TextWithMask: StoryObj<Components.WppInput>;
-export declare const TelWithMask: StoryObj<Components.WppInput>;
+export declare const Search: Story<Components.WppInput>;
+export declare const DecimalWithLimits: Story<Components.WppInput>;
+export declare const DecimalWithMask: Story<Components.WppInput>;
+export declare const TextWithMask: Story<Components.WppInput>;
+export declare const TelWithMask: Story<Components.WppInput>;

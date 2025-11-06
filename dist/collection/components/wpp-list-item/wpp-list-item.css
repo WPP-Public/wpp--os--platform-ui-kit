@@ -41,14 +41,8 @@
   --li-right-wrapper-margin-right: var(--wpp-list-item-right-wrapper-margin-right, -8px);
   --li-label-text-line-height: var(--wpp-list-item-label-text-line-height, 24px);
   --li-label-text-color-selected: var(--wpp-list-item-label-text-color-selected, var(--wpp-brand-color));
-  --li-label-text-color-selected-hover: var(
-    --wpp-list-item-label-text-color-selected-hover,
-    var(--wpp-brand-color-hover)
-  );
-  --li-label-text-color-selected-active: var(
-    --wpp-list-item-label-text-color-selected-active,
-    var(--wpp-brand-color-active)
-  );
+  --li-label-text-color-selected-hover: var(--wpp-list-item-label-text-color-selected-hover, var(--wpp-brand-color-hover));
+  --li-label-text-color-selected-active: var(--wpp-list-item-label-text-color-selected-active, var(--wpp-brand-color-active));
   --li-bg-color: var(--wpp-list-item-bg-color, transparent);
   --li-bg-color-hover: var(--wpp-list-item-bg-color-hover, var(--wpp-grey-color-200));
   --li-bg-color-active: var(--wpp-list-item-bg-color-active, var(--wpp-grey-color-300));
@@ -106,10 +100,10 @@
 :host .item .info-wrapper {
   min-width: 0;
   padding: var(--li-info-wrapper-padding);
+  overflow: hidden;
 }
 :host .item .info-wrapper .body-wrapper {
   min-width: 0;
-  overflow: hidden;
 }
 :host .item .info-wrapper .body-wrapper .highlight-text-wrapper {
   width: 100%;
@@ -120,25 +114,19 @@
 :host .item .info-wrapper .tooltip::part(anchor) {
   overflow: hidden;
 }
-:host .item .info-wrapper .label.slot-hidden,
-:host .item .info-wrapper .caption.slot-hidden {
+:host .item .info-wrapper .label.slot-hidden, :host .item .info-wrapper .caption.slot-hidden {
   display: none;
 }
-:host .item .info-wrapper .label .highlight-text,
-:host .item .info-wrapper .label ::slotted(*),
-:host .item .info-wrapper .caption .highlight-text,
-:host .item .info-wrapper .caption ::slotted(*) {
+:host .item .info-wrapper .label .highlight-text, :host .item .info-wrapper .label ::slotted(*), :host .item .info-wrapper .caption .highlight-text, :host .item .info-wrapper .caption ::slotted(*) {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-:host .item .info-wrapper .label .highlight-wrapper,
-:host .item .info-wrapper .caption .highlight-wrapper {
+:host .item .info-wrapper .label .highlight-wrapper, :host .item .info-wrapper .caption .highlight-wrapper {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
-:host .item .info-wrapper .label .highlight-wrapper .highlight,
-:host .item .info-wrapper .caption .highlight-wrapper .highlight {
+:host .item .info-wrapper .label .highlight-wrapper .highlight, :host .item .info-wrapper .caption .highlight-wrapper .highlight {
   font-size: var(--wpp-typography-s-strong-font-size, 14px);
   line-height: var(--wpp-typography-s-strong-line-height, 22px);
   font-weight: var(--wpp-typography-s-strong-font-weight, 700);
@@ -159,9 +147,7 @@
 :host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) {
   background-color: var(--li-bg-color-hover);
 }
-:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),
-:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=right]),
-:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) .fallback-icon {
+:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=left]), :host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=right]), :host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) .fallback-icon {
   color: var(--li-icon-color-hover);
 }
 :host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted(.wpp-icon[slot=left]) {
@@ -174,11 +160,7 @@
   background-color: var(--li-bg-color-active);
   outline: none;
 }
-:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),
-:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=right]),
-:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) .fallback-icon, :host .item:focus-visible ::slotted([slot=left]),
-:host .item:focus-visible ::slotted([slot=right]),
-:host .item:focus-visible .fallback-icon {
+:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=left]), :host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=right]), :host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) .fallback-icon, :host .item:focus-visible ::slotted([slot=left]), :host .item:focus-visible ::slotted([slot=right]), :host .item:focus-visible .fallback-icon {
   color: var(--li-icon-color-active);
 }
 :host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted(.wpp-icon[slot=left]), :host .item:focus-visible ::slotted(.wpp-icon[slot=left]) {
@@ -211,8 +193,7 @@
 :host .item .active:not(.non-interactive):not(.has-toggle) .info-wrapper .label .highlight-wrapper .highlight {
   color: var(--li-label-text-color-selected);
 }
-:host .item.checked:not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),
-:host .item.checked:not(.non-interactive):not(.has-toggle) .fallback-icon,
+:host .item.checked:not(.non-interactive):not(.has-toggle) ::slotted([slot=left]), :host .item.checked:not(.non-interactive):not(.has-toggle) .fallback-icon,
 :host .item .multiple:not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),
 :host .item .multiple:not(.non-interactive):not(.has-toggle) .fallback-icon,
 :host .item .active:not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),
@@ -246,7 +227,7 @@
   align-items: flex-start;
 }
 :host .item.with-caption.multiple .info-wrapper .wpp-checkbox {
-  margin-top: 5px;
+  margin-top: 1px;
 }
 :host .item.with-caption.multiple .right {
   height: 100%;
@@ -263,13 +244,10 @@
   background-color: transparent;
   pointer-events: none;
 }
-:host .item.disabled .info-wrapper .label,
-:host .item.disabled .info-wrapper .caption {
+:host .item.disabled .info-wrapper .label, :host .item.disabled .info-wrapper .caption {
   color: var(--li-text-color-disabled);
 }
-:host .item.disabled ::slotted([slot=left]),
-:host .item.disabled ::slotted([slot=right]),
-:host .item.disabled .fallback-icon {
+:host .item.disabled ::slotted([slot=left]), :host .item.disabled ::slotted([slot=right]), :host .item.disabled .fallback-icon {
   color: var(--li-icons-color-disabled);
 }
 :host .item.disabled ::slotted(.wpp-avatar[slot=left]) {
@@ -301,8 +279,7 @@
 :host .item .info-wrapper .body-wrapper {
   min-width: 0;
 }
-:host .item .info-wrapper .label,
-:host .item .info-wrapper .caption {
+:host .item .info-wrapper .label, :host .item .info-wrapper .caption {
   font-size: var(--wpp-typography-s-body-font-size, 14px);
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
@@ -310,17 +287,13 @@
   font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
 }
-:host .item .wpp-checkbox,
-:host .item .left {
+:host .item .wpp-checkbox, :host .item .left {
   margin-right: var(--li-left-wrapper-margin-right);
 }
-:host .item ::slotted(.wpp-action-button),
-:host .item ::slotted(.wpp-menu-context) {
+:host .item ::slotted(.wpp-action-button), :host .item ::slotted(.wpp-menu-context) {
   margin-right: var(--li-right-wrapper-margin-right);
 }
-:host .item .label,
-:host .item .right,
-:host .item .left {
+:host .item .label, :host .item .right, :host .item .left {
   display: flex;
 }
 :host .item .left.slot-hidden,
@@ -339,17 +312,15 @@
   --checkbox-bg-color: var(--checkbox-bg-color-active);
   --checkbox-border-color: var(--checkbox-border-color-active);
 }
-:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item ::slotted([slot=left]),
-:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item ::slotted([slot=right]),
-:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item .fallback-icon {
+:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item ::slotted([slot=left]), :host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item ::slotted([slot=right]), :host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item .fallback-icon {
   color: var(--li-icon-color-active);
 }
 :host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item.checked {
-  background-color: var(--wpp-primary-color-200);
+  background-color: var(--wpp-primary-color-300);
 }
 :host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item.checked .wpp-checkbox {
   --checkbox-bg-color-checked: var(--checkbox-bg-color-checked-active);
-  --checkbox-border-color-checked: var(--checkbox-border-color-checked-active);
+  --checkbox-border-color-checked: var(--checkbox-border-color-checked-active) ;
 }
 :host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item.checked .info-wrapper .label {
   color: var(--li-label-text-color-selected-active);
@@ -359,10 +330,7 @@
   display: none;
 }
 
-:host(.wpp-mounted) .label .highlight-text,
-:host(.wpp-mounted) .label ::slotted(*),
-:host(.wpp-mounted) .caption .highlight-text,
-:host(.wpp-mounted) .caption ::slotted(*) {
+:host(.wpp-mounted) .label .highlight-text, :host(.wpp-mounted) .label ::slotted(*), :host(.wpp-mounted) .caption .highlight-text, :host(.wpp-mounted) .caption ::slotted(*) {
   overflow: hidden;
 }
 
@@ -375,35 +343,4 @@
 
 :host(.wpp-loading) {
   opacity: 0;
-}
-
-.ul-wrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-}
-
-:host .label.custom-typography ::slotted([slot=label]) {
-  font-size: var(--wpp-list-item-label-font-size) !important;
-  font-weight: var(--wpp-list-item-label-font-weight) !important;
-  font-family: var(--wpp-list-item-label-font-family) !important;
-  font-style: var(--wpp-list-item-label-font-style) !important;
-  line-height: var(--wpp-list-item-label-line-height) !important;
-  letter-spacing: var(--wpp-list-item-label-letter-spacing) !important;
-  text-transform: var(--wpp-list-item-label-text-transform) !important;
-  text-decoration: var(--wpp-list-item-label-text-decoration) !important;
-  color: var(--wpp-list-item-label-color) !important;
-}
-:host .caption.custom-typography ::slotted([slot=caption]) {
-  font-size: var(--wpp-list-item-caption-font-size) !important;
-  font-weight: var(--wpp-list-item-caption-font-weight) !important;
-  font-family: var(--wpp-list-item-caption-font-family) !important;
-  font-style: var(--wpp-list-item-caption-font-style) !important;
-  line-height: var(--wpp-list-item-caption-line-height) !important;
-  letter-spacing: var(--wpp-list-item-caption-letter-spacing) !important;
-  text-transform: var(--wpp-list-item-caption-text-transform) !important;
-  text-decoration: var(--wpp-list-item-caption-text-decoration) !important;
-  color: var(--wpp-list-item-caption-color) !important;
 }

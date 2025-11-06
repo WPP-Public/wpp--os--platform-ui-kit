@@ -11,19 +11,6 @@ import { getSlotEmptyStates, truncate } from '../../utils/utils';
  */
 export class WppTag {
   constructor() {
-    this.updateTagColor = () => {
-      this.variantClass = '';
-      if (!this.variant) {
-        this.updateCategoricalColor(this.categoricalColorIndex);
-        return;
-      }
-      if (this.variant.includes('Cat-')) {
-        const categoricalIndex = this.variant.split('-')[1];
-        this.updateCategoricalColor(parseInt(categoricalIndex, 10));
-        return;
-      }
-      this.variantClass = this.variant;
-    };
     this.updateSlotData = () => {
       const emptyStates = getSlotEmptyStates(this.host.childNodes, {
         icon: '[slot="icon-start"]',
@@ -31,11 +18,12 @@ export class WppTag {
       this.hasIconStartSlot = !emptyStates.icon;
     };
     this.updateCategoricalColor = (index) => {
-      this.host.style.setProperty('--tag-bg-color', index ? `var(--wpp-dataviz-color-cat-light-${index})` : '');
+      this.host.style.setProperty('--tag-color', index ? `var(--wpp-dataviz-color-cat-dark-${index})` : '');
+      this.host.style.setProperty('--tag-bg-color', index ? `var(--wpp-dataviz-color-cat-neutral-${index})` : '');
     };
     this.hostCssClasses = () => ({
       'wpp-tag': true,
-      ...(this.variantClass && { [`wpp-${this.variantClass}`]: true }),
+      ...(this.variant && { [`wpp-${this.variant}`]: true }),
       'wpp-with-icon': Boolean(this.hasIconStartSlot),
       'wpp-disabled': this.disabled,
     });
@@ -52,25 +40,18 @@ export class WppTag {
     this.withIcon = false;
     this.disabled = false;
   }
-  onUpdateVariant() {
-    this.updateTagColor();
+  componentWillLoad() {
+    this.updateCategoricalColor(this.categoricalColorIndex);
+    this.updateSlotData();
   }
   updateCategoricalIndex(index) {
     this.updateCategoricalColor(index);
   }
-  componentWillLoad() {
-    this.updateCategoricalColor(this.categoricalColorIndex);
-    this.updateSlotData();
-    this.updateTagColor();
-    if (this.categoricalColorIndex) {
-      console.warn('%cThe `categoricalColorIndex` property is deprecated. Please, use `variant` instead', 'color: black; font-size: 12px;');
-    }
-  }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("wpp-typography-v3-3-0", { type: "xs-midi", tag: "span", part: "label" }, Number(this.label?.length) > this.maxLabelLength ? (h("wpp-tooltip-v3-3-0", { text: this.label, config: this.tooltipConfig, part: "tooltip" }, h("span", { part: "tooltip-text" }, truncate(this.label, this.maxLabelLength, false)))) : (this.label)), this.variant?.includes('Cat-'), h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("wpp-typography-v2-22-0", { type: "xs-midi", tag: "span", part: "label" }, Number(this.label?.length) > this.maxLabelLength ? (h("wpp-tooltip-v2-22-0", { text: this.label, config: this.tooltipConfig, part: "tooltip" }, h("span", { part: "tooltip-text" }, truncate(this.label, this.maxLabelLength, false)))) : (this.label)), h("div", { class: "overlay", part: "overlay" })));
   }
   static get is() { return "wpp-tag"; }
-  static get registryIs() { return "wpp-tag-v3-3-0"; }
+  static get registryIs() { return "wpp-tag-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -88,25 +69,15 @@ export class WppTag {
         "type": "string",
         "mutable": false,
         "complexType": {
-          "original": "'neutral' | 'warning' | 'positive' | 'negative' | `Cat-${Exclude<RangeOf<9>, 0>}`",
-          "resolved": "\"Cat-1\" | \"Cat-2\" | \"Cat-3\" | \"Cat-4\" | \"Cat-5\" | \"Cat-6\" | \"Cat-7\" | \"Cat-8\" | \"Cat-9\" | \"negative\" | \"neutral\" | \"positive\" | \"warning\" | undefined",
-          "references": {
-            "Exclude": {
-              "location": "global",
-              "id": "global::Exclude"
-            },
-            "RangeOf": {
-              "location": "import",
-              "path": "../../types/numberRange",
-              "id": "src/types/numberRange.ts::RangeOf"
-            }
-          }
+          "original": "'neutral' | 'warning' | 'positive' | 'negative'",
+          "resolved": "\"negative\" | \"neutral\" | \"positive\" | \"warning\" | undefined",
+          "references": {}
         },
         "required": false,
         "optional": true,
         "docs": {
           "tags": [],
-          "text": "Defines the tag style.\nThis property has higher priority than `categoricalColorIndex`. If `variant` is set, the `categoricalColorIndex` will be ignored."
+          "text": "Defines the tag style."
         },
         "attribute": "variant",
         "reflect": false
@@ -189,11 +160,8 @@ export class WppTag {
         "required": false,
         "optional": true,
         "docs": {
-          "tags": [{
-              "name": "deprecated",
-              "text": "- This property will be removed in v4.0.0. Use `variant` instead."
-            }],
-          "text": "Selects the tag color from categorical palette.\nThis property has lower priority than `variant`. If `variant` is set, the `categoricalColorIndex` will be ignored."
+          "tags": [],
+          "text": "Selects the tag color from categorical."
         },
         "attribute": "categorical-color-index",
         "reflect": false
@@ -211,7 +179,7 @@ export class WppTag {
         "docs": {
           "tags": [{
               "name": "deprecated",
-              "text": "- this prop will be deleted in version 4.0.0. If you want tag with icon, you can add slot with some icon inside tag component"
+              "text": "- this prop will be deleted in version ***. If you want tag with icon, you can add slot with some icon inside tag component"
             }],
           "text": "Defines the if the tag icon displayed."
         },
@@ -250,9 +218,6 @@ export class WppTag {
   static get elementRef() { return "host"; }
   static get watchers() {
     return [{
-        "propName": "variant",
-        "methodName": "onUpdateVariant"
-      }, {
         "propName": "categoricalColorIndex",
         "methodName": "updateCategoricalIndex"
       }];

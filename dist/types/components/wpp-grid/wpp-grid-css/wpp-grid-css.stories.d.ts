@@ -6,6 +6,7 @@ declare const _default: {
         hidden: boolean;
       };
     };
+    notes: any;
     options: {
       showPanel: boolean;
     };

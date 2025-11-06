@@ -1,5 +1,5 @@
 import { Host, h } from '@stencil/core';
-import { ANIMATION_PROPERTY_NAME, Z_INDEX } from '../../common/consts';
+import { ANIMATION_PROPERTY_NAME } from '../../common/consts';
 import { applyBodyStylesIfNeeded, getSlotEmptyStates } from '../../utils/utils';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { ModalCloseReason } from './types';
@@ -99,7 +99,6 @@ export class WppModal {
     this.withTransparentOverlay = undefined;
     this.disableOutsideClick = false;
     this.formConfig = undefined;
-    this.zIndex = Z_INDEX.MODAL;
   }
   handleCloseOnEsc(event) {
     if (event.key === 'Escape' && this.open) {
@@ -140,10 +139,10 @@ export class WppModal {
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() } }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-3-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h(Tag, { role: "dialog", class: this.modalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-modal-content" }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })))));
+    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, overlay, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd }, h("div", { class: "modal-overlay", part: "wrapper" }, h("div", { class: "overlay-color", ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), onClick: this.onOverlayClick, part: "overlay" }), h(Tag, { role: "dialog", class: this.modalCssClasses(), part: "content", ...this.formConfig }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })))));
   }
   static get is() { return "wpp-modal"; }
-  static get registryIs() { return "wpp-modal-v3-3-0"; }
+  static get registryIs() { return "wpp-modal-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -248,24 +247,6 @@ export class WppModal {
           "tags": [],
           "text": "If you pass this prop wrapper of dialog will be rendered as form."
         }
-      },
-      "zIndex": {
-        "type": "number",
-        "mutable": false,
-        "complexType": {
-          "original": "number",
-          "resolved": "number",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the z-index of the WppModal."
-        },
-        "attribute": "z-index",
-        "reflect": false,
-        "defaultValue": "Z_INDEX.MODAL"
       }
     };
   }
@@ -380,7 +361,7 @@ export class WppModal {
         "docs": {
           "tags": [{
               "name": "deprecated",
-              "text": "- this prop will be deleted in version 4.0.0 . Use `wppModalOpenStart`/`wppModalOpenComplete` instead"
+              "text": "- this prop will be deleted in version 3.0.0 . Use `wppModalOpenStart`/`wppModalOpenComplete` instead"
             }],
           "text": "Handles the modal click actions."
         },

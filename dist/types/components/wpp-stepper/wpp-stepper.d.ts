@@ -10,7 +10,6 @@ import { OrientationType, StepChangeEventDetail } from './types';
 export declare class WppStepper {
   private prevStep;
   private componentHasLoaded;
-  private stepMainNdx;
   private resizeObserver;
   host: HTMLWppStepperElement;
   stepIndicator: number;

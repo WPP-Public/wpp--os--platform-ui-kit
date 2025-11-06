@@ -1,8 +1,6 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { ContainerStateType, TooltipConfig, ListItemChangeEventDetail, ListItemState, ListValue } from './types';
 import { DropdownConfig } from '../../types/common';
-import { TypographyType } from '../wpp-typography/types';
-import { ThemeColorValue } from '../../../src/types/theme-tokens';
 /**
  * @slot left - May contain an icon or avatar that will be placed before the label, e.g. a plus icon, avatar
  * @slot right - May contain an icon, text or tag, action button that will be placed after the label, e.g. a plus icon, action button
@@ -21,8 +19,7 @@ export declare class WppListItem {
   private eventSource;
   private hasRightSlotIcon;
   private debouncedResizeHandler;
-  private previousLabelText;
-  private labelObserver;
+  private slotLabelRef?;
   protected wrapperRef?: HTMLDivElement;
   protected highlightRef?: HTMLDivElement;
   host: HTMLWppListItemElement;
@@ -36,24 +33,6 @@ export declare class WppListItem {
   hasToggle: boolean;
   hasSubtitleSlot: boolean;
   componentState: ListItemState;
-  /**
-   * Custom Typography for label text
-   * @example
-   * labelTypography={{ color: var(--wpp-brand-color), type: 's-midi' }}
-   */
-  readonly labelTypography?: {
-    color?: ThemeColorValue;
-    type?: TypographyType;
-  };
-  /**
-   * Custom Typography for caption text
-   * @example
-   * captionTypography={{ color: var(--wpp-warning-color-500), type: 's-caption' }}
-   */
-  readonly captionTypography?: {
-    color?: ThemeColorValue;
-    type?: TypographyType;
-  };
   /**
    * Indicates the value of list item
    */
@@ -136,25 +115,15 @@ export declare class WppListItem {
    * Emitted when the list item was clicked
    */
   wppChangeListItem: EventEmitter<ListItemChangeEventDetail>;
-  /**
-   * Sets focus on the list-item element.
-   */
-  setFocus(): Promise<void>;
   onResize(): void;
-  typographyLabel(): void;
-  typographyCaption(): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
-  private applyTypographyVariables;
-  private removeTriggerWrapperAttributes;
   disconnectedCallback(): void;
   highlightUpdate(newValue: string): void;
   handleViewChange(newContainerState: ContainerStateType): void;
-  disabledChanged(): void;
-  private setupLabelContentObserver;
   private checkHasTooltip;
   protected handleComponentMount: () => void;
-  private getHighlightedText;
+  private getHightlightedText;
   private getSlotText;
   private subtitleSlotCssClasses;
   componentWillRender(): void;
@@ -168,14 +137,8 @@ export declare class WppListItem {
   private leftSlotCssClasses;
   private rightSlotCssClasses;
   private captionSlotCssClasses;
-  private ulWrapperCssClasses;
   private renderBody;
   private renderRightSlot;
   private renderLeftSlot;
-  private handleMouseEnter;
-  private handleMouseLeave;
-  private handleMouseDown;
-  private handleMouseUp;
-  private handleKeyDown;
   render(): any;
 }

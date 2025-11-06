@@ -227,10 +227,10 @@
   box-shadow: var(--card-interactive-box-shadow-color);
   cursor: pointer;
 }
-.card.interactive:not(.choosable):hover, .card.interactive:not(.choosable).tab-focus {
+.card.interactive:not(.choosable):hover {
   box-shadow: var(--card-interactive-box-shadow-color-hover);
 }
-.card.interactive:not(.choosable):active, .card.interactive:not(.choosable).pressed {
+.card.interactive:not(.choosable):active {
   box-shadow: var(--card-interactive-box-shadow-color-active);
 }
 .card.choosable {
@@ -238,10 +238,10 @@
   border: var(--card-choosable-border-width) var(--card-choosable-border-style) var(--card-choosable-border-color);
   cursor: pointer;
 }
-.card.choosable:hover, .card.choosable.tab-focus {
+.card.choosable:hover {
   border-color: var(--card-choosable-border-color-hover);
 }
-.card.choosable:active, .card.choosable.pressed {
+.card.choosable:active {
   border-color: var(--card-choosable-border-color-active);
 }
 .card.choosable.disabled {
@@ -255,10 +255,10 @@
   border-color: var(--card-choosable-selected-border-color);
   border-width: var(--card-choosable-selected-border-width);
 }
-.card.choosable.checked:hover, .card.choosable.checked.tab-focus {
+.card.choosable.checked:hover {
   border-color: var(--card-choosable-selected-border-color-hover);
 }
-.card.choosable.checked:active, .card.choosable.checked.pressed {
+.card.choosable.checked:active {
   border-color: var(--card-choosable-selected-border-color-active);
 }
 .card.choosable.checked.disabled {
@@ -320,12 +320,12 @@
 .card.tab-focus.interactive:not(.choosable):not(:hover), .card.tab-focus.interactive:not(.choosable):not(:active) {
   border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--card-interactive-first-border-color-focus), 0 0 0 3px var(--card-interactive-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--card-interactive-first-border-color-focus), 0 0 0 2px var(--card-interactive-second-border-color-focus);
 }
 .card.tab-focus.choosable {
   border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--card-choosable-first-border-color-focus), 0 0 0 3px var(--card-choosable-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--card-choosable-first-border-color-focus), 0 0 0 2px var(--card-choosable-second-border-color-focus);
 }
 .card.tab-focus.choosable:not(.checked) {
   border-color: var(--card-choosable-border-color-hover);

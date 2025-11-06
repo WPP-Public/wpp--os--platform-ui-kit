@@ -12,16 +12,6 @@ import { truncate, uuidv4 } from '../../utils/utils';
 export class WppBreadcrumb {
   constructor() {
     this.maxItems = 5;
-    this.handleBackClick = (event) => {
-      event.preventDefault();
-      this.wppChange.emit({ path: 'back', label: this.backBtnLabel });
-    };
-    this.handleBackKeyDown = (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        this.handleBackClick(event);
-      }
-    };
     this.hostCssClasses = () => ({
       'wpp-breadcrumb': true,
     });
@@ -30,7 +20,6 @@ export class WppBreadcrumb {
     this.middleTruncation = false;
     this.nativeLink = false;
     this.dropdownConfig = {};
-    this.backBtnLabel = undefined;
   }
   get rootItem() {
     return this.items[0] ?? null;
@@ -58,20 +47,14 @@ export class WppBreadcrumb {
     };
   }
   createItemElement(item, isActive = false) {
-    const truncatedLabel = truncate(item.label, this.maxLabelLength, this.middleTruncation);
     if (isActive) {
-      return (h("wpp-tooltip-v3-3-0", { text: item.label, part: "item-tooltip", config: {
-          onShow: () => {
-            if (item.label.length < this.maxLabelLength)
-              return false;
-          },
-        } }, h("span", { class: "active item", tabIndex: -1, part: "item-text" }, truncatedLabel)));
+      return (h("span", { class: "active item", tabIndex: -1, part: "item-text" }, item.label));
     }
     else if (item.label.length > this.maxLabelLength && !this.nativeLink) {
-      return (h("wpp-tooltip-v3-3-0", { text: item.label, part: "item-tooltip" }, h("span", { class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, truncatedLabel)));
+      return (h("wpp-tooltip-v2-22-0", { text: item.label, part: "item-tooltip" }, h("span", { class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, truncate(item.label, this.maxLabelLength, this.middleTruncation))));
     }
     else if (item.label.length > this.maxLabelLength) {
-      return (h("wpp-tooltip-v3-3-0", { text: item.label, part: "item-tooltip" }, h("a", { href: item.path, class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, truncatedLabel)));
+      return (h("wpp-tooltip-v2-22-0", { text: item.label, part: "item-tooltip" }, h("a", { href: item.path, class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, truncate(item.label, this.maxLabelLength, this.middleTruncation))));
     }
     else if (!this.nativeLink) {
       return (h("span", { class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, item.label));
@@ -82,23 +65,20 @@ export class WppBreadcrumb {
   }
   createMenuElement(item) {
     if (this.nativeLink) {
-      return (h("wpp-list-item-v3-3-0", { key: uuidv4(), class: "link", linkConfig: { href: item.path }, part: "menu-item" }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
+      return (h("wpp-list-item-v2-22-0", { key: uuidv4(), class: "link", linkConfig: { href: item.path }, part: "menu-item" }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
     }
     else {
-      return (h("wpp-list-item-v3-3-0", { key: uuidv4(), class: "link", part: "menu-item", onClick: this.createRouteChangeTrigger(item) }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
+      return (h("wpp-list-item-v2-22-0", { key: uuidv4(), class: "link", part: "menu-item", onClick: this.createRouteChangeTrigger(item) }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
     }
   }
   render() {
-    if (this.backBtnLabel) {
-      return (h(Host, { class: this.hostCssClasses(), exportparts: "icon" }, h("button", { class: "back", onClick: this.handleBackClick, onKeyDown: this.handleBackKeyDown, type: "button", tabIndex: 0 }, h("wpp-icon-chevron-v3-3-0", { class: "back-icon-chevron", part: "icon", direction: "left", size: "s" }), h("span", { class: "back-label" }, this.backBtnLabel))));
-    }
     if (!this.rootItem) {
       return;
     }
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "item-tooltip, item-text, menu-item, menu-item-label, slash, menu, icon-more, slash" }, this.createItemElement(this.rootItem), this.hiddenItems.length > 0 && (h(Fragment, null, h("div", { class: "slash", part: "slash" }, "/"), h("wpp-menu-context-v3-3-0", { key: this.hiddenItemsSnapshot, class: "menu", dropdownConfig: { triggerElementWidth: false, ...this.dropdownConfig }, tabIndex: 0, part: "menu" }, h("wpp-icon-more-v3-3-0", { class: "menu-trigger", direction: "horizontal", slot: "trigger-element", part: "icon-more" }), h("div", { key: this.hiddenItemsSnapshot }, this.hiddenItems.map(item => this.createMenuElement(item)))))), this.visibleItems.map((item, index, items) => (h(Fragment, null, h("div", { class: "slash", tabIndex: -1, part: "slash" }, "/"), this.createItemElement(item, index === items.length - 1))))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "item-tooltip, item-text, menu-item, menu-item-label, slash, menu, icon-more, slash" }, this.createItemElement(this.rootItem), this.hiddenItems.length > 0 && (h(Fragment, null, h("div", { class: "slash", part: "slash" }, "/"), h("wpp-menu-context-v2-22-0", { key: this.hiddenItemsSnapshot, class: "menu", dropdownConfig: { triggerElementWidth: false, ...this.dropdownConfig }, tabIndex: 0, part: "menu" }, h("wpp-icon-more-v2-22-0", { class: "menu-trigger", direction: "horizontal", slot: "trigger-element", part: "icon-more" }), h("div", { key: this.hiddenItemsSnapshot }, this.hiddenItems.map(item => this.createMenuElement(item)))))), this.visibleItems.map((item, index, items) => (h(Fragment, null, h("div", { class: "slash", tabIndex: -1, part: "slash" }, "/"), this.createItemElement(item, index === items.length - 1))))));
   }
   static get is() { return "wpp-breadcrumb"; }
-  static get registryIs() { return "wpp-breadcrumb-v3-3-0"; }
+  static get registryIs() { return "wpp-breadcrumb-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -209,23 +189,6 @@ export class WppBreadcrumb {
           "text": "Defines the dropdown configuration. Under the hood dropdown using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
         },
         "defaultValue": "{}"
-      },
-      "backBtnLabel": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string | undefined",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": "If provided, renders a back button with the specified label instead of the breadcrumb.\nIf undefined, renders the default breadcrumb."
-        },
-        "attribute": "back-btn-label",
-        "reflect": false
       }
     };
   }
@@ -238,7 +201,7 @@ export class WppBreadcrumb {
         "composed": false,
         "docs": {
           "tags": [],
-          "text": "Emitted when route changes, return object like { path: '/home', label: 'Home' }\nFor back variant, emits { path: 'back', label: backBtnLabel }"
+          "text": "Emitted when route changes, return object like { path: '/home', label: 'Home' }"
         },
         "complexType": {
           "original": "BreadcrumbItemEventDetails",

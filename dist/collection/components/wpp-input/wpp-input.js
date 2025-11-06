@@ -2,16 +2,14 @@ import { h, Host } from '@stencil/core';
 import { Maskito } from '@maskito/core';
 import { maskitoPhoneOptionsGenerator } from '@maskito/phone';
 import metadata from 'libphonenumber-js/min/metadata';
-import { maskitoNumberOptionsGenerator, maskitoPrefixPostprocessorGenerator, maskitoWithPlaceholder, } from '@maskito/kit';
+import { maskitoPrefixPostprocessorGenerator, maskitoWithPlaceholder, maskitoNumberOptionsGenerator, } from '@maskito/kit';
 import { FOCUS_TYPE } from '../../types/common';
 import { autoFocusElement, debounce, getSlotEmptyStates } from '../../utils/utils';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
-import { getRawValueForExtra, getValidAutocomplete } from './utils';
-import { LOCALES_DEFAULTS } from './const';
+import { getRawValueForExtra } from './utils';
 const getInitFocusInfo = () => ({
   input: FOCUS_TYPE.NONE,
   icon: FOCUS_TYPE.NONE,
-  inlineMessage: FOCUS_TYPE.NONE,
 });
 /**
  * @part input - Input element
@@ -28,7 +26,6 @@ export class WppInput {
   constructor() {
     this.hadChangesInTooltip = false;
     this.suppressInputEvent = false;
-    this._locales = LOCALES_DEFAULTS;
     this.updateInputRef = (inputRef) => {
       if (inputRef)
         this.inputRef = inputRef;
@@ -134,10 +131,10 @@ export class WppInput {
       if (!this.maxLength && !this.minLength)
         return;
       if (this.maxLength && this.value.length > this.maxLength) {
-        this.lengthValidationError = this._locales.maxLengthErrorMessage(this.maxLength);
+        this.lengthValidationError = this.locales.maxLengthErrorMessage(this.maxLength);
       }
       else if (this.minLength && this.value.length < this.minLength) {
-        this.lengthValidationError = this._locales.minLengthErrorMessage(this.minLength);
+        this.lengthValidationError = this.locales.minLengthErrorMessage(this.minLength);
       }
       else {
         this.lengthValidationError = undefined;
@@ -194,13 +191,11 @@ export class WppInput {
       this.checkForEllipsis();
       this.focusType = this.getUpdatedFocusInfo('input', FOCUS_TYPE.NONE);
       this.focusType = this.getUpdatedFocusInfo('icon', FOCUS_TYPE.NONE);
-      this.focusType = this.getUpdatedFocusInfo('inlineMessage', FOCUS_TYPE.NONE);
       this.wppBlur.emit(event);
     };
     this.onMouseDown = () => {
       this.focusType = this.getUpdatedFocusInfo('icon', FOCUS_TYPE.MOUSE);
       this.focusType = this.getUpdatedFocusInfo('input', FOCUS_TYPE.MOUSE);
-      this.focusType = this.getUpdatedFocusInfo('inlineMessage', FOCUS_TYPE.MOUSE);
     };
     this.onKeyUp = (event, type) => {
       if (event.key === 'Tab') {
@@ -219,9 +214,7 @@ export class WppInput {
       [`${this.messageType}`]: !!this.messageType,
       [`with-icon-start`]: this.hasIconStartSlot || (this.type === 'search' && this.loading && !this.disabled) || this.type === 'search',
       [`with-icon-end`]: this.hasIconEndSlot || this.type === 'search',
-      'tab-focus': this.focusType.input === FOCUS_TYPE.TAB &&
-        this.focusType.icon !== FOCUS_TYPE.TAB &&
-        this.focusType.inlineMessage !== FOCUS_TYPE.TAB,
+      'tab-focus': this.focusType.input === FOCUS_TYPE.TAB && this.focusType.icon !== FOCUS_TYPE.TAB,
       'with-validation-error': !!this.lengthValidationError,
     });
     this.wrapperCssClasses = () => ({
@@ -242,16 +235,14 @@ export class WppInput {
       'disabled-icon': this.disabled,
       'slot-hidden': !this.hasIconEndSlot && !(this.type === 'search' && this.loading && !this.disabled),
     });
-    this.inputId = this.name || `wpp-input-${Math.random().toString(36).substr(2, 9)}`;
-    this.labelId = `${this.inputId}-label`;
-    this.renderInput = () => (h("input", { id: this.inputId, class: this.inputCssClasses(), name: this.name, type: this.type, value: this.value, required: this.required, disabled: this.disabled, onInput: this.onInput, onKeyPress: this.onKeyPress, onBlur: this.onBlur, readOnly: this.readOnly, ref: inputRef => this.updateInputRef(inputRef), "aria-label": this.ariaProps.label, defaultValue: this.defaultValue, part: "input", title: "", placeholder: this.placeholder, autocomplete: getValidAutocomplete(this.autocomplete), "aria-disabled": this.disabled || this.loading ? 'true' : 'false', "aria-required": this.required ? 'true' : undefined, "aria-labelledby": this.labelConfig?.text ? this.labelId : undefined, "aria-invalid": this.lengthValidationError || this.messageType === 'error' ? 'true' : undefined, "data-testid": "input" }));
+    this.renderInput = () => (h("input", { id: this.name, class: this.inputCssClasses(), name: this.name, type: this.type, value: this.value, required: this.required, disabled: this.disabled, onInput: this.onInput, onKeyPress: this.onKeyPress, readOnly: this.readOnly, ref: inputRef => this.updateInputRef(inputRef), "aria-label": this.ariaProps.label, part: "input", title: "", placeholder: this.placeholder, autocomplete: this.autocomplete }));
     this.renderSearchIconOrSpinner = () => {
       if (this.type !== 'search')
         return null;
       if (this.loading && !this.disabled) {
-        return h("wpp-spinner-v3-3-0", { class: this.iconStartCssClasses(), slot: "left", "aria-label": "Loading" });
+        return h("wpp-spinner-v2-22-0", { class: this.iconStartCssClasses(), slot: "left", "aria-label": "Loading" });
       }
-      return h("wpp-icon-search-v3-3-0", { class: this.iconStartCssClasses(), part: "icon-search" });
+      return h("wpp-icon-search-v2-22-0", { class: this.iconStartCssClasses(), "aria-label": "Search icon", part: "icon-search" });
     };
     this.hasActiveEllipses = false;
     this.hasIconStartSlot = false;
@@ -261,7 +252,6 @@ export class WppInput {
     this.name = undefined;
     this.type = 'text';
     this.value = undefined;
-    this.defaultValue = undefined;
     this.placeholder = undefined;
     this.required = false;
     this.readOnly = false;
@@ -273,7 +263,6 @@ export class WppInput {
     this.maxMessageLength = undefined;
     this.ariaProps = {};
     this.tooltipConfig = {};
-    this.truncationTooltipConfig = {};
     this.labelTooltipConfig = {
       popperOptions: { strategy: 'fixed' },
     };
@@ -281,7 +270,10 @@ export class WppInput {
     this.labelConfig = undefined;
     this.maxLength = undefined;
     this.minLength = undefined;
-    this.locales = {};
+    this.locales = {
+      minLengthErrorMessage: minLength => `The input must have at least ${minLength} characters`,
+      maxLengthErrorMessage: maxLength => `The input can have a maximum of ${maxLength} characters`,
+    };
     this.loading = false;
     this.autocomplete = 'off';
   }
@@ -309,8 +301,6 @@ export class WppInput {
    * Method that sets the input value programmatically.
    */
   async setValue(value) {
-    if (value === this.value)
-      return;
     this.value = value;
     if (this.inputRef) {
       this.inputRef.value = value;
@@ -318,13 +308,6 @@ export class WppInput {
       this.suppressInputEvent = true;
       const inputEvent = new InputEvent('input', { bubbles: true, composed: true });
       this.inputRef.dispatchEvent(inputEvent);
-    }
-    if (!this.maskOptions || Object.entries(this.maskOptions).length === 0) {
-      this.wppChange.emit({
-        value,
-        name: this.name,
-      });
-      return;
     }
     setTimeout(() => {
       const formattedValue = this.inputRef ? this.inputRef.value : value;
@@ -356,11 +339,7 @@ export class WppInput {
       this.debouncedCheckForEllipsis();
     }
   }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
-  }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
     this.updateSlotData();
     this.debouncedCheckForEllipsis = debounce(() => {
       this.checkForEllipsis();
@@ -405,10 +384,10 @@ export class WppInput {
     }
   }
   render() {
-    return (h(Host, { class: this.wrapperCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'input'), exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v3-3-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v3-3-0", { part: "anchor", text: this.value, class: "with-tooltip", disabled: !this.hasActiveEllipses, anchorTabIndex: -1, config: this.truncationTooltipConfig }, this.renderInput()), (this.type === 'search' || this.loading) && !!this.value && (h("wpp-icon-cross-v3-3-0", { class: this.iconEndCssClasses(), "aria-label": "Erase input text", tabIndex: 0, part: "icon-cross", onClick: event => this.onClear(event), onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData, tabIndex: this.hasIconEndSlot ? 0 : -1, "aria-label": "Clear input", role: "button" })), this.lengthValidationError && (h("wpp-inline-message-v3-3-0", { message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') })), this.message && (h("wpp-inline-message-v3-3-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') }))));
+    return (h(Host, { class: this.wrapperCssClasses(), "aria-disabled": this.disabled, "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'input'), exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v2-22-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v2-22-0", { part: "anchor", text: this.value, class: "with-tooltip", disabled: !this.hasActiveEllipses }, this.renderInput()), (this.type === 'search' || this.loading) && !!this.value && (h("wpp-icon-cross-v2-22-0", { class: this.iconEndCssClasses(), "aria-label": "Erase input text", tabIndex: 0, part: "icon-cross", onClick: event => this.onClear(event), onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData })), this.lengthValidationError && (h("wpp-inline-message-v2-22-0", { message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })), this.message && (h("wpp-inline-message-v2-22-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" }))));
   }
   static get is() { return "wpp-input"; }
-  static get registryIs() { return "wpp-input-v3-3-0"; }
+  static get registryIs() { return "wpp-input-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -484,29 +463,6 @@ export class WppInput {
           "text": "Defines the input value."
         },
         "attribute": "value",
-        "reflect": false
-      },
-      "defaultValue": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "InputValue",
-          "resolved": "string | undefined",
-          "references": {
-            "InputValue": {
-              "location": "import",
-              "path": "./types",
-              "id": "src/components/wpp-input/types.ts::InputValue"
-            }
-          }
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": "Defines the default value of the input.\nNote: This value is used only when the component is uncontrolled."
-        },
-        "attribute": "default-value",
         "reflect": false
       },
       "placeholder": {
@@ -717,31 +673,6 @@ export class WppInput {
         },
         "defaultValue": "{}"
       },
-      "truncationTooltipConfig": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "DropdownConfig",
-          "resolved": "DropdownConfig",
-          "references": {
-            "DropdownConfig": {
-              "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::DropdownConfig"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [{
-              "name": "internal",
-              "text": "- this property is used internally. Controlled by the inline-edit. When the inline edit enters error state, the tooltip for truncation should not display."
-            }],
-          "text": "The configuration for the tooltip displayed when the input is truncated."
-        },
-        "defaultValue": "{}"
-      },
       "labelTooltipConfig": {
         "type": "unknown",
         "mutable": false,
@@ -769,7 +700,7 @@ export class WppInput {
         "mutable": false,
         "complexType": {
           "original": "MaskOptions",
-          "resolved": "undefined | { decimalPatternOptions?: MaskitoNumberParams | undefined; maskPlaceholder?: string | undefined; customPatternOptions?: MaskitoOptions | undefined; telPatternOptions?: { mask?: MaskitoMask | undefined; countryCode?: CountryCode | undefined; countryPhoneCode?: string | undefined; } | undefined; }",
+          "resolved": "undefined | { decimalPatternOptions?: DecimalMaskOptions | undefined; maskPlaceholder?: string | undefined; customPatternOptions?: MaskitoOptions | undefined; telPatternOptions?: { mask?: MaskitoMask | undefined; countryCode?: CountryCode | undefined; countryPhoneCode?: string | undefined; } | undefined; }",
           "references": {
             "MaskOptions": {
               "location": "import",
@@ -844,13 +775,9 @@ export class WppInput {
         "type": "unknown",
         "mutable": false,
         "complexType": {
-          "original": "Partial<InputLocaleInterface>",
-          "resolved": "{ minLengthErrorMessage?: ((minLength: number) => string) | undefined; maxLengthErrorMessage?: ((maxLength: number) => string) | undefined; }",
+          "original": "InputLocaleInterface",
+          "resolved": "{ minLengthErrorMessage: (minLength: number) => string; maxLengthErrorMessage: (maxLength: number) => string; }",
           "references": {
-            "Partial": {
-              "location": "global",
-              "id": "global::Partial"
-            },
             "InputLocaleInterface": {
               "location": "import",
               "path": "./types",
@@ -864,7 +791,7 @@ export class WppInput {
           "tags": [],
           "text": "Defines the component locale types."
         },
-        "defaultValue": "{}"
+        "defaultValue": "{\n    minLengthErrorMessage: minLength => `The input must have at least ${minLength} characters`,\n    maxLengthErrorMessage: maxLength => `The input can have a maximum of ${maxLength} characters`,\n  }"
       },
       "loading": {
         "type": "boolean",
@@ -1088,9 +1015,6 @@ export class WppInput {
     return [{
         "propName": "value",
         "methodName": "onUpdateValue"
-      }, {
-        "propName": "locales",
-        "methodName": "onUpdateLocales"
       }];
   }
   static get listeners() {

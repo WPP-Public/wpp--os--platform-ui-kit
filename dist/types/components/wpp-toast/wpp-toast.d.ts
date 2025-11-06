@@ -1,5 +1,5 @@
 import { EventEmitter } from '../../stencil-public-runtime';
-import { AriaProps, MessageTypes } from '../../types/common';
+import { MessageTypes } from '../../types/common';
 import { ButtonState, ToastCompleteDetail, ToastIcon } from './types';
 /**
  * @part body - Main content wrapper
@@ -59,14 +59,6 @@ export declare class WppToast {
    * Alternatively, if you provide the ‘URL’ key, you can pass an icon using a URL (e.g., ‘https://avatar/1.jpg’)
    */
   readonly icon?: ToastIcon;
-  /**
-   * Contains the `aria-` props of the wpp-action-button.
-   */
-  readonly ariaProps: AriaProps;
-  /**
-   * Defines the z-index of the WppToast.
-   */
-  readonly zIndex: number;
   /**
    * Emitted when the toast index is displayed.
    */

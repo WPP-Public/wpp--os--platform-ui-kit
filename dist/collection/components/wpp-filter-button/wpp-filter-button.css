@@ -31,11 +31,7 @@
 */
 :host {
   --filter-button-height: var(--wpp-filter-button-height, 32px);
-  --filter-button-padding: var(
-    --wpp-filter-button-padding,
-    calc(5px - var(--filter-button-border-width)) calc(16px - var(--filter-button-border-width))
-      calc(5px - var(--filter-button-border-width)) calc(12px - var(--filter-button-border-width))
-  );
+  --filter-button-padding: var(--wpp-filter-button-padding, calc(5px - var(--filter-button-border-width)) calc(16px - var(--filter-button-border-width)) calc(5px - var(--filter-button-border-width)) calc(12px - var(--filter-button-border-width)));
   --filter-button-bg-color: var(--wpp-filter-button-bg-color, transparent);
   --filter-button-bg-color-hover: var(--wpp-filter-button-bg-color-hover, var(--wpp-grey-color-200));
   --filter-button-bg-color-active: var(--wpp-filter-button-bg-color-active, var(--wpp-grey-color-300));
@@ -44,10 +40,7 @@
   --filter-button-border-color-hover: var(--wpp-filter-button-border-color-hover, var(--wpp-grey-color-700));
   --filter-button-border-color-active: var(--wpp-filter-button-border-color-active, var(--wpp-grey-color-800));
   --filter-button-border-color-disabled: var(--wpp-filter-button-border-color-disabled, var(--wpp-grey-color-400));
-  --filter-button-first-border-color-focus: var(
-    --wpp-filter-button-first-border-color-focus,
-    var(--wpp-grey-color-000)
-  );
+  --filter-button-first-border-color-focus: var(--wpp-filter-button-first-border-color-focus, var(--wpp-grey-color-000));
   --filter-button-second-border-color-focus: var(--wpp-filter-button-second-border-color-focus, var(--wpp-brand-color));
   --filter-button-text-margin: var(--wpp-filter-button-text-margin, 0 0 0 8px);
   --filter-button-text-color: var(--wpp-filter-button-text-color, var(--wpp-grey-color-900));
@@ -58,10 +51,7 @@
   --filter-button-counter-color: var(--wpp-filter-button-counter-color, var(--wpp-grey-color-900));
   --filter-button-counter-color-hover: var(--wpp-filter-button-counter-color-hover, var(--wpp-text-color-info));
   --filter-button-counter-color-active: var(--wpp-filter-button-counter-color-active, var(--wpp-text-color));
-  --filter-button-counter-color-disabled: var(
-    --wpp-filter-button-counter-color-disabled,
-    var(--wpp-text-color-disabled)
-  );
+  --filter-button-counter-color-disabled: var(--wpp-filter-button-counter-color-disabled, var(--wpp-text-color-disabled));
   --filter-button-icon-color: var(--wpp-filter-button-icon-color, var(--wpp-grey-color-800));
   --filter-button-icon-color-hover: var(--wpp-filter-button-icon-color-hover, var(--wpp-icon-color-hover));
   --filter-button-icon-color-active: var(--wpp-filter-button-icon-color-active, var(--wpp-icon-color-active));
@@ -94,22 +84,6 @@
   border: var(--filter-button-border-width) var(--filter-button-border-style) var(--filter-button-border-color);
   outline: none;
   cursor: pointer;
-}
-.button.tab-focus {
-  border-radius: "";
-  outline: none;
-  box-shadow: 0 0 0 1px var(--filter-button-first-border-color-focus), 0 0 0 3px var(--filter-button-second-border-color-focus);
-  background-color: var(--filter-button-bg-color-hover);
-  border-color: var(--filter-button-border-color-hover);
-}
-.button.tab-focus .icon {
-  color: var(--filter-button-icon-color-hover);
-}
-.button.tab-focus .text {
-  color: var(--filter-button-text-color-hover);
-}
-.button.tab-focus .counter {
-  color: var(--filter-button-counter-color-hover);
 }
 .button .icon {
   color: var(--filter-button-icon-color);
@@ -144,17 +118,17 @@
 .button:hover .counter {
   color: var(--filter-button-counter-color-hover);
 }
-.button:active, .button.pressed {
+.button:active {
   background-color: var(--filter-button-bg-color-active);
   border-color: var(--filter-button-border-color-active);
 }
-.button:active .icon, .button.pressed .icon {
+.button:active .icon {
   color: var(--filter-button-icon-color-active);
 }
-.button:active .text, .button.pressed .text {
+.button:active .text {
   color: var(--filter-button-text-color-active);
 }
-.button:active .counter, .button.pressed .counter {
+.button:active .counter {
   color: var(--filter-button-counter-color-active);
 }
 .button:disabled {
@@ -170,4 +144,21 @@
 }
 .button:disabled .counter {
   color: var(--filter-button-counter-color-disabled);
+}
+
+:host(:focus-visible) .button {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--filter-button-first-border-color-focus), 0 0 0 2px var(--filter-button-second-border-color-focus);
+  background-color: var(--filter-button-bg-color-hover);
+  border-color: var(--filter-button-border-color-hover);
+}
+:host(:focus-visible) .button .icon {
+  color: var(--filter-button-icon-color-hover);
+}
+:host(:focus-visible) .button .text {
+  color: var(--filter-button-text-color-hover);
+}
+:host(:focus-visible) .button .counter {
+  color: var(--filter-button-counter-color-hover);
 }

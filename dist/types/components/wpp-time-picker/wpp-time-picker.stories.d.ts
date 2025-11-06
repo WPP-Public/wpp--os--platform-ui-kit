@@ -1,5 +1,5 @@
-import { StoryObj, Meta } from '@storybook/web-components';
-import { Components } from '../../components';
-declare const _default: Meta<Components.WppTimePicker>;
+import { Story, Meta } from '@storybook/web-components';
+import { WppTimePicker } from './wpp-time-picker';
+declare const _default: Meta<typeof WppTimePicker>;
 export default _default;
-export declare const TimePicker: StoryObj<Components.WppTimePicker>;
+export declare const TimePicker: Story<WppTimePicker>;

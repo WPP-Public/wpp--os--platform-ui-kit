@@ -1,5 +1,6 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppLoadMore>;
+import { WppLoadMore } from './wpp-load-more';
+declare const _default: Meta<typeof WppLoadMore>;
 export default _default;
-export declare const LoadMore: StoryObj<Components.WppLoadMore>;
+export declare const LoadMore: Story<Components.WppLoadMore>;

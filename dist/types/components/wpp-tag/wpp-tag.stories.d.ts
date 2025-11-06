@@ -1,9 +1,9 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppTag>;
+import { WppTag } from './wpp-tag';
+declare const _default: Meta<typeof WppTag>;
 export default _default;
 type WppTagTypes = Components.WppTag & {
   showIconStart: boolean;
-  color?: string;
 };
-export declare const Tag: StoryObj<WppTagTypes>;
+export declare const Tag: Story<WppTagTypes>;

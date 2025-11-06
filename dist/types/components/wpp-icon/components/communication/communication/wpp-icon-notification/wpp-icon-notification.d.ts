@@ -15,6 +15,5 @@ export declare class WppIconNotification {
    Defines the icon color.
    */
   readonly color: string;
-  componentWillLoad(): void;
   render(): any;
 }

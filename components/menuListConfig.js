@@ -2357,57 +2357,38 @@ var max = Math.max;
 var min = Math.min;
 var round = Math.round;
 
-function getUAString() {
-  var uaData = navigator.userAgentData;
-
-  if (uaData != null && uaData.brands && Array.isArray(uaData.brands)) {
-    return uaData.brands.map(function (item) {
-      return item.brand + "/" + item.version;
-    }).join(' ');
-  }
-
-  return navigator.userAgent;
-}
-
-function isLayoutViewport() {
-  return !/^((?!chrome|android).)*safari/i.test(getUAString());
-}
-
-function getBoundingClientRect(element, includeScale, isFixedStrategy) {
+function getBoundingClientRect(element, includeScale) {
   if (includeScale === void 0) {
     includeScale = false;
   }
 
-  if (isFixedStrategy === void 0) {
-    isFixedStrategy = false;
-  }
-
-  var clientRect = element.getBoundingClientRect();
+  var rect = element.getBoundingClientRect();
   var scaleX = 1;
   var scaleY = 1;
 
-  if (includeScale && isHTMLElement(element)) {
-    scaleX = element.offsetWidth > 0 ? round(clientRect.width) / element.offsetWidth || 1 : 1;
-    scaleY = element.offsetHeight > 0 ? round(clientRect.height) / element.offsetHeight || 1 : 1;
+  if (isHTMLElement(element) && includeScale) {
+    var offsetHeight = element.offsetHeight;
+    var offsetWidth = element.offsetWidth; // Do not attempt to divide by 0, otherwise we get `Infinity` as scale
+    // Fallback to 1 in case both values are `0`
+
+    if (offsetWidth > 0) {
+      scaleX = round(rect.width) / offsetWidth || 1;
+    }
+
+    if (offsetHeight > 0) {
+      scaleY = round(rect.height) / offsetHeight || 1;
+    }
   }
 
-  var _ref = isElement$1(element) ? getWindow(element) : window,
-      visualViewport = _ref.visualViewport;
-
-  var addVisualOffsets = !isLayoutViewport() && isFixedStrategy;
-  var x = (clientRect.left + (addVisualOffsets && visualViewport ? visualViewport.offsetLeft : 0)) / scaleX;
-  var y = (clientRect.top + (addVisualOffsets && visualViewport ? visualViewport.offsetTop : 0)) / scaleY;
-  var width = clientRect.width / scaleX;
-  var height = clientRect.height / scaleY;
   return {
-    width: width,
-    height: height,
-    top: y,
-    right: x + width,
-    bottom: y + height,
-    left: x,
-    x: x,
-    y: y
+    width: rect.width / scaleX,
+    height: rect.height / scaleY,
+    top: rect.top / scaleY,
+    right: rect.right / scaleX,
+    bottom: rect.bottom / scaleY,
+    left: rect.left / scaleX,
+    x: rect.left / scaleX,
+    y: rect.top / scaleY
   };
 }
 
@@ -2502,8 +2483,8 @@ function getTrueOffsetParent(element) {
 
 
 function getContainingBlock(element) {
-  var isFirefox = /firefox/i.test(getUAString());
-  var isIE = /Trident/i.test(getUAString());
+  var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') !== -1;
+  var isIE = navigator.userAgent.indexOf('Trident') !== -1;
 
   if (isIE && isHTMLElement(element)) {
     // In IE 9, 10 and 11 fixed elements containing block is always established by the viewport
@@ -2648,6 +2629,7 @@ function effect$1(_ref2) {
   }
 
   if (!contains(state.elements.popper, arrowElement)) {
+
     return;
   }
 
@@ -2678,9 +2660,10 @@ var unsetSides = {
 // Zooming can change the DPR, but it seems to report a value that will
 // cleanly divide the values into the appropriate subpixels.
 
-function roundOffsetsByDPR(_ref, win) {
+function roundOffsetsByDPR(_ref) {
   var x = _ref.x,
       y = _ref.y;
+  var win = window;
   var dpr = win.devicePixelRatio || 1;
   return {
     x: round(x * dpr) / dpr || 0,
@@ -2763,7 +2746,7 @@ function mapToStyles(_ref2) {
   var _ref4 = roundOffsets === true ? roundOffsetsByDPR({
     x: x,
     y: y
-  }, getWindow(popper)) : {
+  }) : {
     x: x,
     y: y
   };
@@ -2789,6 +2772,7 @@ function computeStyles(_ref5) {
       adaptive = _options$adaptive === void 0 ? true : _options$adaptive,
       _options$roundOffsets = options.roundOffsets,
       roundOffsets = _options$roundOffsets === void 0 ? true : _options$roundOffsets;
+
   var commonStyles = {
     placement: getBasePlacement$1(state.placement),
     variation: getVariation(state.placement),
@@ -2921,21 +2905,31 @@ function getWindowScrollBarX(element) {
   return getBoundingClientRect(getDocumentElement(element)).left + getWindowScroll(element).scrollLeft;
 }
 
-function getViewportRect(element, strategy) {
+function getViewportRect(element) {
   var win = getWindow(element);
   var html = getDocumentElement(element);
   var visualViewport = win.visualViewport;
   var width = html.clientWidth;
   var height = html.clientHeight;
   var x = 0;
-  var y = 0;
+  var y = 0; // NB: This isn't supported on iOS <= 12. If the keyboard is open, the popper
+  // can be obscured underneath it.
+  // Also, `html.clientHeight` adds the bottom bar height in Safari iOS, even
+  // if it isn't open, so if this isn't available, the popper will be detected
+  // to overflow the bottom of the screen too early.
 
   if (visualViewport) {
     width = visualViewport.width;
-    height = visualViewport.height;
-    var layoutViewport = isLayoutViewport();
+    height = visualViewport.height; // Uses Layout Viewport (like Chrome; Safari does not currently)
+    // In Chrome, it returns a value very close to 0 (+/-) but contains rounding
+    // errors due to floating point numbers, so we need to check precision.
+    // Safari returns a number <= 0, usually < -1 when pinch-zoomed
+    // Feature detection fails in mobile emulation mode in Chrome.
+    // Math.abs(win.innerWidth / visualViewport.scale - visualViewport.width) <
+    // 0.001
+    // Fallback here: "Not Safari" userAgent
 
-    if (layoutViewport || !layoutViewport && strategy === 'fixed') {
+    if (!/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
       x = visualViewport.offsetLeft;
       y = visualViewport.offsetTop;
     }
@@ -3029,8 +3023,8 @@ function rectToClientRect(rect) {
   });
 }
 
-function getInnerBoundingClientRect(element, strategy) {
-  var rect = getBoundingClientRect(element, false, strategy === 'fixed');
+function getInnerBoundingClientRect(element) {
+  var rect = getBoundingClientRect(element);
   rect.top = rect.top + element.clientTop;
   rect.left = rect.left + element.clientLeft;
   rect.bottom = rect.top + element.clientHeight;
@@ -3042,8 +3036,8 @@ function getInnerBoundingClientRect(element, strategy) {
   return rect;
 }
 
-function getClientRectFromMixedType(element, clippingParent, strategy) {
-  return clippingParent === viewport ? rectToClientRect(getViewportRect(element, strategy)) : isElement$1(clippingParent) ? getInnerBoundingClientRect(clippingParent, strategy) : rectToClientRect(getDocumentRect(getDocumentElement(element)));
+function getClientRectFromMixedType(element, clippingParent) {
+  return clippingParent === viewport ? rectToClientRect(getViewportRect(element)) : isElement$1(clippingParent) ? getInnerBoundingClientRect(clippingParent) : rectToClientRect(getDocumentRect(getDocumentElement(element)));
 } // A "clipping parent" is an overflowable container with the characteristic of
 // clipping (or hiding) overflowing elements with a position different from
 // `initial`
@@ -3066,18 +3060,18 @@ function getClippingParents(element) {
 // clipping parents
 
 
-function getClippingRect(element, boundary, rootBoundary, strategy) {
+function getClippingRect(element, boundary, rootBoundary) {
   var mainClippingParents = boundary === 'clippingParents' ? getClippingParents(element) : [].concat(boundary);
   var clippingParents = [].concat(mainClippingParents, [rootBoundary]);
   var firstClippingParent = clippingParents[0];
   var clippingRect = clippingParents.reduce(function (accRect, clippingParent) {
-    var rect = getClientRectFromMixedType(element, clippingParent, strategy);
+    var rect = getClientRectFromMixedType(element, clippingParent);
     accRect.top = max(rect.top, accRect.top);
     accRect.right = min(rect.right, accRect.right);
     accRect.bottom = min(rect.bottom, accRect.bottom);
     accRect.left = max(rect.left, accRect.left);
     return accRect;
-  }, getClientRectFromMixedType(element, firstClippingParent, strategy));
+  }, getClientRectFromMixedType(element, firstClippingParent));
   clippingRect.width = clippingRect.right - clippingRect.left;
   clippingRect.height = clippingRect.bottom - clippingRect.top;
   clippingRect.x = clippingRect.left;
@@ -3158,8 +3152,6 @@ function detectOverflow(state, options) {
   var _options = options,
       _options$placement = _options.placement,
       placement = _options$placement === void 0 ? state.placement : _options$placement,
-      _options$strategy = _options.strategy,
-      strategy = _options$strategy === void 0 ? state.strategy : _options$strategy,
       _options$boundary = _options.boundary,
       boundary = _options$boundary === void 0 ? clippingParents : _options$boundary,
       _options$rootBoundary = _options.rootBoundary,
@@ -3174,7 +3166,7 @@ function detectOverflow(state, options) {
   var altContext = elementContext === popper ? reference : popper;
   var popperRect = state.rects.popper;
   var element = state.elements[altBoundary ? altContext : elementContext];
-  var clippingClientRect = getClippingRect(isElement$1(element) ? element : element.contextElement || getDocumentElement(state.elements.popper), boundary, rootBoundary, strategy);
+  var clippingClientRect = getClippingRect(isElement$1(element) ? element : element.contextElement || getDocumentElement(state.elements.popper), boundary, rootBoundary);
   var referenceClientRect = getBoundingClientRect(state.elements.reference);
   var popperOffsets = computeOffsets({
     reference: referenceClientRect,
@@ -3688,7 +3680,7 @@ function getCompositeRect(elementOrVirtualElement, offsetParent, isFixed) {
   var isOffsetParentAnElement = isHTMLElement(offsetParent);
   var offsetParentIsScaled = isHTMLElement(offsetParent) && isElementScaled(offsetParent);
   var documentElement = getDocumentElement(offsetParent);
-  var rect = getBoundingClientRect(elementOrVirtualElement, offsetParentIsScaled, isFixed);
+  var rect = getBoundingClientRect(elementOrVirtualElement, offsetParentIsScaled);
   var scroll = {
     scrollLeft: 0,
     scrollTop: 0
@@ -3856,7 +3848,8 @@ function popperGenerator(generatorOptions) {
 
         state.orderedModifiers = orderedModifiers.filter(function (m) {
           return m.enabled;
-        });
+        }); // Validate the provided modifiers so that the consumer will get warned
+
         runModifierEffects();
         return instance.update();
       },
@@ -3876,6 +3869,7 @@ function popperGenerator(generatorOptions) {
         // anymore
 
         if (!areValidElements(reference, popper)) {
+
           return;
         } // Store the reference and popper rects to be read by modifiers
 
@@ -3900,6 +3894,7 @@ function popperGenerator(generatorOptions) {
         });
 
         for (var index = 0; index < state.orderedModifiers.length; index++) {
+
           if (state.reset === true) {
             state.reset = false;
             index = -1;
@@ -3937,6 +3932,7 @@ function popperGenerator(generatorOptions) {
     };
 
     if (!areValidElements(reference, popper)) {
+
       return instance;
     }
 
@@ -3951,11 +3947,11 @@ function popperGenerator(generatorOptions) {
     // one.
 
     function runModifierEffects() {
-      state.orderedModifiers.forEach(function (_ref) {
-        var name = _ref.name,
-            _ref$options = _ref.options,
-            options = _ref$options === void 0 ? {} : _ref$options,
-            effect = _ref.effect;
+      state.orderedModifiers.forEach(function (_ref3) {
+        var name = _ref3.name,
+            _ref3$options = _ref3.options,
+            options = _ref3$options === void 0 ? {} : _ref3$options,
+            effect = _ref3.effect;
 
         if (typeof effect === 'function') {
           var cleanupFn = effect({
@@ -5520,97 +5516,6 @@ tippy.setDefaultProps({
   render: render
 });
 
-const hideOnEsc = {
-  name: 'hideOnEsc',
-  defaultValue: false,
-  fn(instance) {
-    function onKeyDown(event) {
-      if (event.code === 'Escape' && instance.state.isVisible) {
-        instance.hide();
-      }
-    }
-    return {
-      onShow() {
-        document.addEventListener('keydown', onKeyDown);
-      },
-      onHide() {
-        document.removeEventListener('keydown', onKeyDown);
-      },
-      onDestroy() {
-        document.removeEventListener('keydown', onKeyDown);
-      },
-    };
-  },
-};
-const hideOnPopperBlur = {
-  name: 'hideOnPopperBlur',
-  defaultValue: false,
-  fn(instance) {
-    return {
-      onCreate() {
-        instance.popper.addEventListener('focusout', (event) => {
-          if (instance.props.hideOnPopperBlur &&
-            event.relatedTarget &&
-            !instance.popper.contains(event.relatedTarget)) {
-            instance.hide();
-          }
-        });
-      },
-    };
-  },
-};
-// Adds an attribute to the popper root so it is treated as inside the modal.
-// Usage option: portalInside: boolean | string
-//  - true - adds data-wpp-portal-inside
-//  - false - removes attribute
-//  - string (e.g., 'data-foo') -> uses custom attribute name
-const portalInside = {
-  name: 'portalInside',
-  defaultValue: true,
-  fn(instance) {
-    let lastAttrName = null;
-    const toAttrName = (value) => {
-      if (value === false)
-        return null;
-      if (typeof value === 'string') {
-        // Accept either full data-* or just a token (we’ll prefix data-)
-        return value.startsWith('data-') ? value : `data-${value}`;
-      }
-      return 'data-wpp-portal-inside';
-    };
-    const apply = () => {
-      const popper = instance.popper;
-      if (!popper)
-        return;
-      // Clean previous
-      if (lastAttrName) {
-        popper.removeAttribute(lastAttrName);
-      }
-      const nextAttr = toAttrName(instance.props.portalInside);
-      if (nextAttr) {
-        popper.setAttribute(nextAttr, '');
-      }
-      lastAttrName = nextAttr;
-    };
-    return {
-      onCreate() {
-        apply();
-      },
-      onAfterUpdate(_, partial) {
-        if (Object.prototype.hasOwnProperty.call(partial, 'portalInside')) {
-          apply();
-        }
-      },
-      onDestroy() {
-        const popper = instance.popper;
-        if (popper && lastAttrName) {
-          popper.removeAttribute(lastAttrName);
-        }
-      },
-    };
-  },
-};
-
 const defaultTippyProps = {
   trigger: 'click',
   placement: 'bottom-start',
@@ -5622,9 +5527,6 @@ const defaultTippyProps = {
   interactive: true,
   animation: 'fadein',
   duration: [200, 100],
-  aria: {
-    expanded: undefined,
-  },
   popperOptions: {
     strategy: 'absolute',
   },
@@ -5633,10 +5535,6 @@ const menuListConfig = ({ anchor, popperOptions, triggerElementWidth, ...tippyPr
   const { popperOptions: defaultPopperOptions, ...defaultTippyPropsWithoutOptions } = defaultTippyProps;
   const { modifiers: defaultModifiers = [], ...defaultPopperOptionsWithoutModifiers } = defaultPopperOptions || {};
   const { modifiers = [], ...popperOptionsWithoutModifiers } = popperOptions || {};
-  tippy.setDefaultProps({
-    plugins: [hideOnEsc, hideOnPopperBlur, portalInside],
-    portalInside: true,
-  });
   return tippy(anchor, {
     ...defaultTippyPropsWithoutOptions,
     ...tippyPropsWithoutOptions,
@@ -5663,4 +5561,4 @@ const menuListConfig = ({ anchor, popperOptions, triggerElementWidth, ...tippyPr
   });
 };
 
-export { _baseGetTag as _, isObjectLike_1 as a, _baseUnary as b, _nodeUtil as c, hideAll as h, isEqual_1 as i, menuListConfig as m };
+export { _baseGetTag as _, isObjectLike_1 as a, _baseUnary as b, _nodeUtil as c, isArrayLike_1 as d, isArray_1 as e, isBuffer_1 as f, isTypedArray_1 as g, hideAll as h, isEqual_1 as i, isArguments_1 as j, _getTag as k, _isPrototype as l, menuListConfig as m, _baseKeys as n };

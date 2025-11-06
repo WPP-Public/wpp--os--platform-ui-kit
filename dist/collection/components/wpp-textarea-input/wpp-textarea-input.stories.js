@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+import readme from './readme.md';
 export default {
   title: 'Design System/Components/Selection and input/Text Area',
   parameters: {
@@ -7,6 +8,7 @@ export default {
         hidden: true,
       },
     },
+    notes: readme,
   },
   argTypes: {
     name: { type: 'string' },
@@ -24,22 +26,22 @@ export default {
     required: { control: { type: 'boolean' } },
   },
 };
-export const WithinLimit = (args) => html ` <wpp-textarea-input-v3-3-0
-    @click="${() => console.log('textarea clicked')}"
-    .name="${args.name}"
-    .placeholder="${args.placeholder}"
-    .charactersLimit="${args.charactersLimit}"
-    .warningThreshold="${args.warningThreshold}"
-    .required="${args.required}"
-    .disabled="${args.disabled}"
-    .messageType="${args.messageType}"
-    .maxMessageLength="${args.maxMessageLength}"
-    .message="${args.message}"
-    .rows="${args.rows}"
-    .value="${args.value}"
-    .locales="${args.locales}"
-    .labelConfig="${args.labelConfig}"
-  />`;
+export const WithinLimit = (args) => html ` <wpp-textarea-input-v2-22-0
+  @click="${() => console.log('textarea clicked')}"
+  .name="${args.name}"
+  .placeholder="${args.placeholder}"
+  .charactersLimit="${args.charactersLimit}"
+  .warningThreshold="${args.warningThreshold}"
+  .required="${args.required}"
+  .disabled="${args.disabled}"
+  .messageType="${args.messageType}"
+  .maxMessageLength="${args.maxMessageLength}"
+  .message="${args.message}"
+  .rows="${args.rows}"
+  .value="${args.value}"
+  .locales="${args.locales}"
+  .labelConfig="${args.labelConfig}"
+/>`;
 WithinLimit.args = {
   name: 'textarea-input',
   placeholder: 'Textarea',
@@ -66,19 +68,19 @@ WithinLimit.args = {
 WithinLimit.parameters = {
   controls: { exclude: ['value'] },
 };
-export const LimitExceeded = (args) => html ` <wpp-textarea-input-v3-3-0
-    @click="${() => console.log('textarea clicked')}"
-    .name="${args.name}"
-    .placeholder="${args.placeholder}"
-    .required="${args.required}"
-    .value="${args.value}"
-    .rows="${args.rows}"
-    .charactersLimit="${args.charactersLimit}"
-    .warningThreshold="${args.warningThreshold}"
-    .disabled="${args.disabled}"
-    .locales="${args.locales}"
-    .labelConfig="${args.labelConfig}"
-  />`;
+export const LimitExceeded = (args) => html ` <wpp-textarea-input-v2-22-0
+  @click="${() => console.log('textarea clicked')}"
+  .name="${args.name}"
+  .placeholder="${args.placeholder}"
+  .required="${args.required}"
+  .value="${args.value}"
+  .rows="${args.rows}"
+  .charactersLimit="${args.charactersLimit}"
+  .warningThreshold="${args.warningThreshold}"
+  .disabled="${args.disabled}"
+  .locales="${args.locales}"
+  .labelConfig="${args.labelConfig}"
+/>`;
 LimitExceeded.args = {
   name: 'textarea-input',
   placeholder: 'Textarea',
@@ -103,19 +105,19 @@ LimitExceeded.args = {
 LimitExceeded.parameters = {
   controls: { exclude: ['value', 'message', 'messageType', 'maxMessageLength'] },
 };
-export const NoneLimit = (args) => html ` <wpp-textarea-input-v3-3-0
-    @click="${() => console.log('textarea clicked')}"
-    .name="${args.name}"
-    .placeholder="${args.placeholder}"
-    .disabled="${args.disabled}"
-    .required="${args.required}"
-    .messageType="${args.messageType}"
-    .maxMessageLength="${args.maxMessageLength}"
-    .message="${args.message}"
-    .value="${args.value}"
-    .rows="${args.rows}"
-    .labelConfig="${args.labelConfig}"
-  />`;
+export const NoneLimit = (args) => html ` <wpp-textarea-input-v2-22-0
+  @click="${() => console.log('textarea clicked')}"
+  .name="${args.name}"
+  .placeholder="${args.placeholder}"
+  .disabled="${args.disabled}"
+  .required="${args.required}"
+  .messageType="${args.messageType}"
+  .maxMessageLength="${args.maxMessageLength}"
+  .message="${args.message}"
+  .value="${args.value}"
+  .rows="${args.rows}"
+  .labelConfig="${args.labelConfig}"
+/>`;
 NoneLimit.args = {
   name: 'textarea',
   placeholder: 'Textarea',

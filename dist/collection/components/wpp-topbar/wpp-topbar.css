@@ -15,6 +15,7 @@
   justify-content: space-between;
   position: sticky;
   top: var(--topbar-offset-top);
+  z-index: 3;
   background-color: var(--wpp-grey-color-000);
 }
 :host .wrapper {

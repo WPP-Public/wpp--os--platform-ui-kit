@@ -1,5 +1,5 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
-import { k as transformToVersionedTag } from './utils.js';
+import { j as transformToVersionedTag } from './utils.js';
 
 const wppCardGroupCss = ":host{display:-ms-flexbox;display:flex}";
 
@@ -50,54 +50,6 @@ const WppCardGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCardGroup exten
         }
       });
     };
-    this.getEnabledCards = () => this.directCardChildren.filter(card => !card.disabled);
-    this.getCurrentNdx = (enabled) => {
-      const checkedNdx = enabled.findIndex(card => card.checked);
-      return checkedNdx !== -1 ? checkedNdx : 0;
-    };
-    this.onKeyDown = (event) => {
-      // Only for radiogroup variant (single select)
-      if (this.multiple)
-        return;
-      const enabledItems = this.getEnabledCards();
-      if (enabledItems.length === 0)
-        return;
-      const currentNdx = this.getCurrentNdx(enabledItems);
-      let nextNdx = currentNdx;
-      const isNextKey = event.key === 'ArrowRight' || event.key === 'ArrowDown';
-      const isPrevKey = event.key === 'ArrowLeft' || event.key === 'ArrowUp';
-      if (!isNextKey && !isPrevKey)
-        return;
-      event.preventDefault();
-      const onFirst = currentNdx === 0;
-      const onLast = currentNdx === enabledItems.length - 1;
-      if (onLast && isNextKey) {
-        nextNdx = 0;
-      }
-      else if (onFirst && isPrevKey) {
-        nextNdx = enabledItems.length - 1;
-      }
-      else if (isNextKey) {
-        nextNdx = Math.min(currentNdx + 1, enabledItems.length - 1);
-      }
-      else if (isPrevKey) {
-        nextNdx = Math.max(currentNdx - 1, 0);
-      }
-      const target = enabledItems[nextNdx];
-      this.focusAndSelect(target);
-    };
-    this.focusAndSelect = (target) => {
-      if (!target)
-        return;
-      const nextValue = target.value;
-      if (this.value !== nextValue) {
-        this.value = nextValue;
-        this.wppChange.emit({ value: this.value, name: this.name });
-      }
-      this.setActiveCard(this.value);
-      this.syncTabIndexes();
-      target.setFocus();
-    };
     this.onFocus = (event) => {
       this.wppFocus.emit(event);
     };
@@ -114,7 +66,6 @@ const WppCardGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCardGroup exten
     this.required = false;
     this.withRadioOrCheckbox = true;
     this.allowEmptySelection = false;
-    this.ariaProps = {};
   }
   handleClick(event) {
     if (event.target.getAttribute('nested'))
@@ -141,7 +92,6 @@ const WppCardGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCardGroup exten
   }
   onValueChange(newValue) {
     this.setActiveCard(newValue);
-    this.syncTabIndexes();
   }
   onUpdateSize() {
     this.setCardsProps([['size', this.size]]);
@@ -156,7 +106,6 @@ const WppCardGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCardGroup exten
     this.getDirectCardChildren();
     this.updateCardProperties();
     this.updateSlotContent();
-    this.syncTabIndexes();
     this.observer = new MutationObserver(() => {
       this.updateSlotContent();
     });
@@ -174,26 +123,11 @@ const WppCardGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCardGroup exten
   updateSlotContent() {
     this.getDirectCardChildren();
     this.updateCardProperties();
-    this.syncTabIndexes();
-  }
-  syncTabIndexes() {
-    // Only manage for radiogroup
-    if (this.multiple)
-      return;
-    const enabled = this.getEnabledCards();
-    if (enabled.length === 0)
-      return;
-    let activeIndex = enabled.findIndex(c => c.checked);
-    if (activeIndex === -1)
-      activeIndex = 0;
-    enabled.forEach((c, i) => {
-      c.index = i === activeIndex ? 0 : -1;
-    });
   }
   render() {
-    return (h(Host, { "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, class: this.hostCssClasses(), exportparts: "inner", role: this.multiple ? 'group' : 'radiogroup', "aria-labelledby": this.ariaProps.labelledby }, h("slot", { part: "inner" })));
+    return (h(Host, { "aria-multiselectable": this.multiple, "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, class: this.hostCssClasses(), exportparts: "inner" }, h("slot", { part: "inner" })));
   }
-  static get registryIs() { return "wpp-card-group-v3-3-0"; }
+  static get registryIs() { return "wpp-card-group-v2-22-0"; }
   get host() { return this; }
   static get watchers() { return {
     "value": ["onValueChange"],
@@ -202,23 +136,22 @@ const WppCardGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCardGroup exten
     "multiple": ["onUpdateMultiple"]
   }; }
   static get style() { return wppCardGroupCss; }
-}, [1, "wpp-card-group", "wpp-card-group-v3-3-0", {
+}, [1, "wpp-card-group", "wpp-card-group-v2-22-0", {
     "name": [1],
     "size": [1],
     "value": [1032],
     "multiple": [4],
     "required": [516],
     "withRadioOrCheckbox": [516, "with-radio-or-checkbox"],
-    "allowEmptySelection": [516, "allow-empty-selection"],
-    "ariaProps": [16]
+    "allowEmptySelection": [516, "allow-empty-selection"]
   }, [[2, "wppClick", "handleClick"]]]);
 function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-card-group-v3-3-0"];
+  const components = ["wpp-card-group-v2-22-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-card-group-v3-3-0":
+    case "wpp-card-group-v2-22-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppCardGroup$1);
       }

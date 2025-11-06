@@ -14,6 +14,6 @@ declare module '@stencil/core/internal/stencil-public-runtime' {
     interface IntrinsicElements {
       slot: JSXBase.SlotAttributes
     }
-    export type SlotAttributes = Omit<StencilJSXBase.HTMLAttributes<HTMLSlotElement>, 'ref'>
+    export interface SlotAttributes extends Omit<StencilJSXBase.HTMLAttributes<HTMLSlotElement>, 'ref'> {}
   }
 }

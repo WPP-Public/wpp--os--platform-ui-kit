@@ -1,5 +1,4 @@
-import { EventEmitter } from '../../stencil-public-runtime';
-import { AriaProps, DropdownConfig } from '../../types/common';
+import { DropdownConfig } from '../../types/common';
 import { Instance } from 'tippy.js';
 /**
  * @part list-wrapper -list wrapper element
@@ -13,13 +12,11 @@ export declare class WppMenuContext {
   private wppListWrapperRef;
   private mutationObserver;
   private isTriggerDisabled;
-  private triggerElement;
   host: HTMLWppMenuContextElement;
   contextList: HTMLElement;
   tippyInstance: Instance;
   isNestedContext: boolean;
   hidden: boolean;
-  isInComponent: boolean;
   /**
    * Defines the context menu width. The maximum width of the menu is 350px.
    */
@@ -41,21 +38,8 @@ export declare class WppMenuContext {
    * }
    */
   readonly externalClass: string;
-  /**
-   * Contains the button `aria-` props.
-   */
-  readonly ariaProps: AriaProps;
-  /**
-   * Emitted when the input loses focus
-   */
-  wppBlur: EventEmitter<void>;
-  /**
-   * Emitted when the input receives focus
-   */
-  readonly wppFocus: EventEmitter<FocusEvent>;
   private handleClick;
   updateDropdownConfig(newConfig: DropdownConfig, oldConfig: DropdownConfig): void;
-  updateIsInComponent(value: boolean): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
   connectedCallback(): void;
@@ -67,9 +51,6 @@ export declare class WppMenuContext {
   private createTippyInstance;
   private handleAriaExpandedOnTrigger;
   private startObserving;
-  private onBlur;
-  private onFocus;
-  private onFocusout;
   private menuCssClasses;
   private triggerWrapperCssClasses;
   private listWrapperCssClasses;

@@ -2,6 +2,10 @@ import { Host, h, Fragment } from '@stencil/core';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { FOCUS_TYPE } from '../../types/common';
 import { getSlotEmptyStates, transformToVersionedTag } from '../../utils/utils';
+const getInitFocusInfo = () => ({
+  wrapper: FOCUS_TYPE.NONE,
+  slot: FOCUS_TYPE.NONE,
+});
 /**
  * @slot header - content that is placed inside the header section
  * @slot actions - Content is placed inside the `.actions` element and add content to actions.
@@ -36,6 +40,10 @@ export class WppAccordion {
       }
       this.getContentHeight();
     };
+    this.getUpdatedFocusInfo = (type, updateValue) => ({
+      ...this.focusType,
+      [type]: updateValue,
+    });
     this.getContentHeight = () => {
       requestAnimationFrame(() => {
         this.actionsWrapperWidth = this.host.shadowRoot.querySelector('.actions')?.clientWidth || 0;
@@ -84,7 +92,12 @@ export class WppAccordion {
       if (this.size === '2xl')
         return '2xl-heading';
     };
-    this.toggleExpand = () => {
+    this.onClick = (event) => {
+      if (this.disabled) {
+        event.preventDefault();
+        return;
+      }
+      event.preventDefault();
       this.expanded = !this.expanded;
       if (!this.isExpandedTouched)
         this.isExpandedTouched = true;
@@ -92,31 +105,21 @@ export class WppAccordion {
         expanded: this.expanded,
       });
     };
-    this.onClick = (event) => {
-      if (this.disabled || event.target.getAttribute('slot') === 'actions') {
-        event.preventDefault();
-        return;
-      }
-      event.preventDefault();
-      this.toggleExpand();
-    };
     this.onFocus = (event) => {
       this.wppFocus.emit(event);
     };
     this.onBlur = (event) => {
+      this.focusType = this.getUpdatedFocusInfo('wrapper', FOCUS_TYPE.NONE);
+      this.focusType = this.getUpdatedFocusInfo('slot', FOCUS_TYPE.NONE);
       this.wppBlur.emit(event);
-      this.focusType = FOCUS_TYPE.NONE;
     };
-    this.onKeyUp = (event) => {
-      if (event.key === 'Tab' && this.host?.shadowRoot?.activeElement === this.titleTagsWrapperButtonRef)
-        this.focusType = FOCUS_TYPE.TAB;
+    this.onMouseDown = () => {
+      this.focusType = this.getUpdatedFocusInfo('wrapper', FOCUS_TYPE.MOUSE);
+      this.focusType = this.getUpdatedFocusInfo('slot', FOCUS_TYPE.MOUSE);
     };
-    this.onKeyDown = (event) => {
-      if (this.disabled || this.focusType === FOCUS_TYPE.NONE)
-        return;
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        this.toggleExpand();
+    this.onKeyUp = (event, type) => {
+      if (event.key === 'Tab') {
+        this.focusType = this.getUpdatedFocusInfo(type, FOCUS_TYPE.TAB);
       }
     };
     this.hostCssClasses = (isInternal) => ({
@@ -124,11 +127,11 @@ export class WppAccordion {
       'wpp-section-wrapper': true,
       'wpp-disabled': this.disabled,
       'wpp-internal': isInternal,
-      'wpp-expanded': this.expanded,
     });
-    this.cssSectionClasses = () => ({
+    this.cssClasses = () => ({
       'wpp-section': true,
       disabled: this.disabled,
+      'tab-focus': this.focusType.wrapper === FOCUS_TYPE.TAB && this.focusType.slot !== FOCUS_TYPE.TAB,
       [`size-${this.size}`]: true,
     });
     this.contentCssClasses = () => ({
@@ -187,12 +190,9 @@ export class WppAccordion {
         }
       });
     };
-    this.cssTagWrapperClasses = () => ({
-      'title-tags-wrapper': true,
-      'tab-focus': this.focusType === FOCUS_TYPE.TAB,
-    });
     this.maxHeight = undefined;
     this.toggleOverflow = undefined;
+    this.focusType = getInitFocusInfo();
     this.hasHeaderSlot = false;
     this.hasActionsSlot = false;
     this.actionsWrapperWidth = undefined;
@@ -201,7 +201,6 @@ export class WppAccordion {
     this.hasTagSlot = false;
     this.isTitleOverflowing = false;
     this.titleMaxWidth = undefined;
-    this.focusType = undefined;
     this.expandedByDefault = false;
     this.expanded = false;
     this.disabled = false;
@@ -210,7 +209,6 @@ export class WppAccordion {
     this.size = 'l';
     this.text = undefined;
     this.withTag = false;
-    this.ariaProps = {};
   }
   updateOverflow(expanded) {
     if (expanded) {
@@ -255,6 +253,9 @@ export class WppAccordion {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
+  }
+  get tabIndex() {
+    return this.disabled ? -1 : 0;
   }
   getTextWidth(text, font) {
     const canvas = this.textWidthCanvas || (this.textWidthCanvas = document.createElement('canvas'));
@@ -307,11 +308,11 @@ export class WppAccordion {
     const internal = !!this.host.children[0]?.assignedElements;
     const style = this.getAnimationStyles();
     const tooltipText = this.counter > 0 ? `${this.text || headerTitle} (${this.counter})` : this.text || headerTitle || '';
-    const titleContent = (h(Fragment, null, this.hasHeaderSlot ? (h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", role: "presentation", onSlotchange: this.updateSlotData })) : (h("wpp-typography-v3-3-0", { type: this.typographyType(), part: "title", role: "presentation", class: "title-text" }, this.text))));
-    return (h(Host, { class: this.hostCssClasses(internal), exportparts: "section, title, icon, counter, divider, title-wrapper, content", style: style, onBlur: this.onBlur, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown }, h("div", { class: this.cssSectionClasses(), part: "section" }, h("button", { ref: ref => (this.titleTagsWrapperButtonRef = ref), class: this.cssTagWrapperClasses(), "aria-expanded": this.expanded.toString(), "aria-controls": this.ariaProps?.controls ?? 'expandable-panel', id: this.ariaProps?.labelledby ?? 'expandable-button', onFocus: this.onFocus, onClick: this.onClick, disabled: this.disabled }, h("div", { class: "title-wrapper", part: "title-wrapper", role: "none" }, h("wpp-icon-chevron-v3-3-0", { role: "presentation", part: "icon" }), this.isTitleOverflowing ? (h("wpp-tooltip-v3-3-0", { config: { triggerTarget: this.titleTagsWrapperButtonRef }, text: tooltipText }, titleContent)) : (titleContent), this.counter > 0 && (h("wpp-typography-v3-3-0", { type: this.counterType(), class: "counter", part: "counter" }, `(${this.counter})`))), this.withTag && (h(WrappedSlot, { wrapperClass: this.tagGroupCssClasses(), name: "tags", onSlotchange: this.updateSlotData }))), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), h("div", { class: this.contentCssClasses(), part: "content", role: "region", id: this.ariaProps?.controls ?? 'expandable-panel', "aria-labelledby": this.ariaProps?.labelledby ?? 'expandable-button', ...(!this.expanded ? { inert: true, 'aria-hidden': true } : {}) }, h("slot", { class: "slot-content" })), this.withDivider && h("wpp-divider-v3-3-0", { part: "divider" })));
+    const titleContent = (h(Fragment, null, h("wpp-typography-v2-22-0", { type: this.typographyType(), part: "title", class: "title-text" }, this.text), h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData })));
+    return (h(Host, { class: this.hostCssClasses(internal), "aria-expanded": this.expanded, role: "treeitem", exportparts: "section, title, icon, counter, divider, title-wrapper, content", onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, "aria-disabled": this.disabled, onKeyUp: (event) => this.onKeyUp(event, 'wrapper'), style: style, tabIndex: this.tabIndex }, h("div", { class: this.cssClasses(), part: "section" }, h("div", { class: "title-tags-wrapper", onClick: this.onClick }, h("div", { class: "title-wrapper", part: "title-wrapper" }, h("wpp-icon-chevron-v2-22-0", { part: "icon" }), this.isTitleOverflowing ? h("wpp-tooltip-v2-22-0", { text: tooltipText }, titleContent) : titleContent, this.counter > 0 && (h("wpp-typography-v2-22-0", { type: this.counterType(), class: "counter", part: "counter" }, `(${this.counter})`))), this.withTag && (h(WrappedSlot, { wrapperClass: this.tagGroupCssClasses(), name: "tags", onSlotchange: this.updateSlotData }))), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), h("div", { class: this.contentCssClasses(), part: "content", onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'slot') }, h("slot", { class: "slot-content" })), this.withDivider && h("wpp-divider-v2-22-0", { part: "divider" })));
   }
   static get is() { return "wpp-accordion"; }
-  static get registryIs() { return "wpp-accordion-v3-3-0"; }
+  static get registryIs() { return "wpp-accordion-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -410,7 +411,7 @@ export class WppAccordion {
         "docs": {
           "tags": [{
               "name": "deprecated",
-              "text": "- this prop will be deleted in version 4.0.0."
+              "text": "- this prop will be deleted in version ***"
             }],
           "text": "Defines the number of elements within a specific section."
         },
@@ -449,7 +450,7 @@ export class WppAccordion {
         "docs": {
           "tags": [{
               "name": "deprecated",
-              "text": "- this prop will be deleted in version 4.0.0. If you want to use this prop, use \"header\" slot instead"
+              "text": "- this prop will be deleted in version ***. If you want to use this prop, use \"header\" slot instead"
             }],
           "text": "If set, adds text next to the section."
         },
@@ -473,28 +474,6 @@ export class WppAccordion {
         "attribute": "with-tag",
         "reflect": true,
         "defaultValue": "false"
-      },
-      "ariaProps": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "AriaProps",
-          "resolved": "AriaProps",
-          "references": {
-            "AriaProps": {
-              "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::AriaProps"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Contains the accordion `aria-` props."
-        },
-        "defaultValue": "{}"
       }
     };
   }
@@ -502,6 +481,7 @@ export class WppAccordion {
     return {
       "maxHeight": {},
       "toggleOverflow": {},
+      "focusType": {},
       "hasHeaderSlot": {},
       "hasActionsSlot": {},
       "actionsWrapperWidth": {},
@@ -509,8 +489,7 @@ export class WppAccordion {
       "isExpandedTouched": {},
       "hasTagSlot": {},
       "isTitleOverflowing": {},
-      "titleMaxWidth": {},
-      "focusType": {}
+      "titleMaxWidth": {}
     };
   }
   static get events() {
@@ -563,7 +542,7 @@ export class WppAccordion {
         "composed": false,
         "docs": {
           "tags": [],
-          "text": ""
+          "text": "Emitted when a section loses focus."
         },
         "complexType": {
           "original": "FocusEvent",

@@ -3,11 +3,11 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const utils = require('./utils-2b192dec.js');
-const _const = require('./const-cfc205bf.js');
-const consts = require('./consts-779fd4ec.js');
+const utils = require('./utils-9c925efe.js');
+const consts = require('./consts-bb489dca.js');
+require('./consts-255c1066.js');
 
-const wppToastContainerCss = ":host(.wpp-toast-container){--toast-margin-bottom:var(--wpp-toast-margin-bottom, 8px);display:-ms-inline-flexbox;display:inline-flex;position:fixed;top:16px;right:16px;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start}:host(.wpp-toast-container) .wpp-toast:not(:last-child){margin-bottom:var(--toast-margin-bottom)}";
+const wppToastContainerCss = ":host(.wpp-toast-container){--toast-margin-bottom:var(--wpp-toast-margin-bottom, 8px);display:-ms-inline-flexbox;display:inline-flex;position:fixed;top:16px;right:16px;z-index:10000;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start}:host(.wpp-toast-container) .wpp-toast:not(:last-child){margin-bottom:var(--toast-margin-bottom)}";
 
 const WppToastContainer = class {
   constructor(hostRef) {
@@ -27,7 +27,6 @@ const WppToastContainer = class {
     this.toasts = [];
     this.toastsQueue = [];
     this.maxToastsToDisplay = 4;
-    this.zIndex = consts.Z_INDEX.TOAST;
   }
   /**
    * Method for adding toasts to `toast-container`.
@@ -48,7 +47,7 @@ const WppToastContainer = class {
         toastsInShadowDom[i].classList.add('hide');
       }
     }
-    setTimeout(() => this.removeToastById(id), _const.ANIMATION_DURATION);
+    setTimeout(() => this.removeToastById(id), consts.ANIMATION_DURATION);
   }
   /**
    * Method for updating toast from `toast-container`.
@@ -64,9 +63,9 @@ const WppToastContainer = class {
   }
   render() {
     const { toasts } = this;
-    return (index.h(index.Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "item" }, toasts.map(toast => (index.h("wpp-toast-v3-3-0", { key: toast.id, index: toast.id, message: toast.message, type: toast.type, header: toast.header, duration: toast.duration, primaryBtn: toast.primaryBtn, maxMessageLines: toast.maxMessageLines, icon: toast.icon, part: "item", onWppToastComplete: this.handleToastComplete })))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "item" }, toasts.map(toast => (index.h("wpp-toast-v2-22-0", { key: toast.id, index: toast.id, message: toast.message, type: toast.type, header: toast.header, duration: toast.duration, primaryBtn: toast.primaryBtn, maxMessageLines: toast.maxMessageLines, icon: toast.icon, part: "item", onWppToastComplete: this.handleToastComplete })))));
   }
-  static get registryIs() { return "wpp-toast-container-v3-3-0"; }
+  static get registryIs() { return "wpp-toast-container-v2-22-0"; }
   get host() { return index.getElement(this); }
 };
 WppToastContainer.style = wppToastContainerCss;

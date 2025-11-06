@@ -1,6 +1,6 @@
 import { h, Host } from '@stencil/core';
 import { debounce, transformToVersionedTag } from '../../utils/utils';
-import { TAB_MARGIN_RIGHT } from './const';
+import { TAB_MARGIN_RIGHT } from './consts';
 /**
  * @slot - Should contain only the tab control elements. The default slot, without the name attribute.
  *
@@ -91,7 +91,7 @@ export class WppTabs {
     return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, slider" }, h("div", { class: "wpp-tab-control-wrapper", role: "listbox", "aria-multiselectable": "false", part: "wrapper" }, h("slot", { part: "inner" })), h("div", { class: "slider", part: "slider" })));
   }
   static get is() { return "wpp-tabs"; }
-  static get registryIs() { return "wpp-tabs-v3-3-0"; }
+  static get registryIs() { return "wpp-tabs-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

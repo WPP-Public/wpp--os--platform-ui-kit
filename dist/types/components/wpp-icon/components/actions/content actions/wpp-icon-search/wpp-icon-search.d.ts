@@ -1,4 +1,4 @@
-export declare class WppIconSearch {
+export declare class WppIconCross {
   /**
    Defines the icon size, where `s` is **16px** and `m` is **20px**.
    */

@@ -10,6 +10,7 @@
   * @prop --wpp-segmented-control-item-border-style:
   * @prop --wpp-segmented-control-item-border-color:
   * @prop --wpp-segmented-control-item-bg-color:
+  * @prop --wpp-segmented-control-item-text-box-shadow:
   * @prop --wpp-segmented-control-item-text-padding-m:
   * @prop --wpp-segmented-control-item-text-padding-s:
   * @prop --wpp-segmented-control-item-text-border-color:
@@ -53,25 +54,14 @@
   --sc-item-border-style: var(--wpp-segmented-control-item-border-style, solid);
   --sc-item-border-color: var(--wpp-segmented-control-item-border-color, var(--wpp-grey-color-500));
   --sc-item-bg-color: var(--wpp-segmented-control-item-bg-color, transparent);
+  --sc-item-text-box-shadow: var(--wpp-segmented-control-item-text-box-shadow, var(--wpp-box-shadow-xs));
   --sc-item-text-padding-m: var(--wpp-segmented-control-item-text-padding-m, 9px 16px);
   --sc-item-text-padding-s: var(--wpp-segmented-control-item-text-padding-s, 5px 12px);
   --sc-item-text-border-color: var(--wpp-segmented-control-item-text-border-color, var(--wpp-grey-color-500));
-  --sc-item-text-border-color-hover: var(
-    --wpp-segmented-control-item-text-border-color-hover,
-    var(--wpp-grey-color-500)
-  );
-  --sc-item-text-border-color-active: var(
-    --wpp-segmented-control-item-text-border-color-active,
-    var(--wpp-grey-color-500)
-  );
-  --sc-item-text-border-color-selected: var(
-    --wpp-segmented-control-item-text-border-color-selected,
-    var(--wpp-brand-color)
-  );
-  --sc-item-text-border-color-disabled: var(
-    --wpp-segmented-control-item-text-border-color-disabled,
-    var(--wpp-grey-color-400)
-  );
+  --sc-item-text-border-color-hover: var(--wpp-segmented-control-item-text-border-color-hover, var(--wpp-grey-color-500));
+  --sc-item-text-border-color-active: var(--wpp-segmented-control-item-text-border-color-active, var(--wpp-grey-color-500));
+  --sc-item-text-border-color-selected: var(--wpp-segmented-control-item-text-border-color-selected, var(--wpp-brand-color));
+  --sc-item-text-border-color-disabled: var(--wpp-segmented-control-item-text-border-color-disabled, var(--wpp-grey-color-400));
   --sc-item-text-color: var(--wpp-segmented-control-item-text-color, var(--wpp-text-color-info));
   --sc-item-text-color-hover: var(--wpp-segmented-control-item-text-color-hover, var(--wpp-text-color));
   --sc-item-text-color-active: var(--wpp-segmented-control-item-text-color-active, var(--wpp-text-color));
@@ -79,28 +69,13 @@
   --sc-item-text-color-disabled: var(--wpp-segmented-control-item-text-color-disabled, var(--wpp-text-color-disabled));
   --sc-item-text-bg-color-hover: var(--wpp-segmented-control-item-text-bg-color-hover, var(--wpp-grey-color-200));
   --sc-item-text-bg-color-active: var(--wpp-segmented-control-item-text-bg-color-active, var(--wpp-grey-color-300));
-  --sc-item-text-bg-color-selected: var(
-    --wpp-segmented-control-item-text-bg-color-selected,
-    var(--wpp-primary-color-100)
-  );
+  --sc-item-text-bg-color-selected: var(--wpp-segmented-control-item-text-bg-color-selected, var(--wpp-primary-color-100));
   --sc-item-text-bg-color-disabled: var(--wpp-segmented-control-item-text-bg-color-disabled, transparent);
   --sc-item-icon-border-color: var(--wpp-segmented-control-item-icon-border-color, var(--wpp-grey-color-500));
-  --sc-item-icon-border-color-hover: var(
-    --wpp-segmented-control-item-icon-border-color-hover,
-    var(--wpp-grey-color-500)
-  );
-  --sc-item-icon-border-color-active: var(
-    --wpp-segmented-control-item-icon-border-color-active,
-    var(--wpp-grey-color-500)
-  );
-  --sc-item-icon-border-color-selected: var(
-    --wpp-segmented-control-item-icon-border-color-selected,
-    var(--wpp-brand-color)
-  );
-  --sc-item-icon-border-color-disabled: var(
-    --wpp-segmented-control-item-icon-border-color-disabled,
-    var(--wpp-grey-color-400)
-  );
+  --sc-item-icon-border-color-hover: var(--wpp-segmented-control-item-icon-border-color-hover, var(--wpp-grey-color-500));
+  --sc-item-icon-border-color-active: var(--wpp-segmented-control-item-icon-border-color-active, var(--wpp-grey-color-500));
+  --sc-item-icon-border-color-selected: var(--wpp-segmented-control-item-icon-border-color-selected, var(--wpp-brand-color));
+  --sc-item-icon-border-color-disabled: var(--wpp-segmented-control-item-icon-border-color-disabled, var(--wpp-grey-color-400));
   --sc-item-icon-color: var(--wpp-segmented-control-item-icon-color, var(--wpp-icon-color));
   --sc-item-icon-color-hover: var(--wpp-segmented-control-item-icon-color-hover, var(--wpp-icon-color-hover));
   --sc-item-icon-color-active: var(--wpp-segmented-control-item-icon-color-active, var(--wpp-icon-color-active));
@@ -108,35 +83,14 @@
   --sc-item-icon-color-disabled: var(--wpp-segmented-control-item-icon-color-disabled, var(--wpp-grey-color-400));
   --sc-item-icon-bg-color-hover: var(--wpp-segmented-control-item-icon-bg-color-hover, var(--wpp-grey-color-200));
   --sc-item-icon-bg-color-active: var(--wpp-segmented-control-item-icon-bg-color-active, var(--wpp-grey-color-300));
-  --sc-item-icon-bg-color-selected: var(
-    --wpp-segmented-control-item-icon-bg-color-selected,
-    var(--wpp-primary-color-100)
-  );
+  --sc-item-icon-bg-color-selected: var(--wpp-segmented-control-item-icon-bg-color-selected, var(--wpp-primary-color-100));
   --sc-item-icon-bg-color-disabled: var(--wpp-segmented-control-item-icon-bg-color-disabled, transparent);
-  --sc-item-text-border-color-selected-disabled: var(
-    --wpp-segmented-control-item-text-border-color-selected-disabled,
-    var(--wpp-primary-color-300)
-  );
-  --sc-item-text-bg-color-selected-disabled: var(
-    --wpp-segmented-control-item-text-bg-color-selected-disabled,
-    var(--wpp-primary-color-100)
-  );
-  --sc-item-text-color-selected-disabled: var(
-    --wpp-segmented-control-item-text-color-selected-disabled,
-    var(--wpp-primary-color-300)
-  );
-  --sc-item-icon-border-color-selected-disabled: var(
-    --wpp-segmented-control-item-icon-border-color-selected-disabled,
-    var(--wpp-primary-color-300)
-  );
-  --sc-item-icon-bg-color-selected-disabled: var(
-    --wpp-segmented-control-item-icon-bg-color-selected-disabled,
-    var(--wpp-primary-color-100)
-  );
-  --sc-item-icon-color-selected-disabled: var(
-    --wpp-segmented-control-item-icon-color-selected-disabled,
-    var(--wpp-primary-color-300)
-  );
+  --sc-item-text-border-color-selected-disabled: var(--wpp-segmented-control-item-text-border-color-selected-disabled, var(--wpp-primary-color-300));
+  --sc-item-text-bg-color-selected-disabled: var(--wpp-segmented-control-item-text-bg-color-selected-disabled, var(--wpp-primary-color-100));
+  --sc-item-text-color-selected-disabled: var(--wpp-segmented-control-item-text-color-selected-disabled, var(--wpp-primary-color-300));
+  --sc-item-icon-border-color-selected-disabled: var(--wpp-segmented-control-item-icon-border-color-selected-disabled, var(--wpp-primary-color-300));
+  --sc-item-icon-bg-color-selected-disabled: var(--wpp-segmented-control-item-icon-bg-color-selected-disabled, var(--wpp-primary-color-100));
+  --sc-item-icon-color-selected-disabled: var(--wpp-segmented-control-item-icon-color-selected-disabled, var(--wpp-primary-color-300));
   display: flex;
   align-items: center;
   outline: none;
@@ -147,38 +101,90 @@
   pointer-events: none;
 }
 
+:host(:first-child):not(:last-child) .segmented-control-item::before, :host(:first-child):not(:last-child) .segmented-control-item::after,
+:host(:last-child):not(:first-child) .segmented-control-item::before,
+:host(:last-child):not(:first-child) .segmented-control-item::after {
+  display: none;
+}
+
 :host(:first-child) .segmented-control-item.size-m {
   border-top-left-radius: var(--sc-item-border-radius-m);
   border-bottom-left-radius: var(--sc-item-border-radius-m);
   border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-border-color);
-  border-right: none;
+  border-right: var(--sc-item-border-width) var(--sc-item-border-style) transparent;
 }
 :host(:first-child) .segmented-control-item.size-s {
   border-top-left-radius: var(--sc-item-border-radius-s);
   border-bottom-left-radius: var(--sc-item-border-radius-s);
   border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-border-color);
-  border-right: none;
+  border-right: var(--sc-item-border-width) var(--sc-item-border-style) transparent;
+}
+:host(:first-child) .segmented-control-item::after {
+  position: absolute;
+  content: "";
+  top: -1px;
+  left: 100%;
+  width: 1px;
+  z-index: 1;
+  height: 1px;
+  background: var(--sc-item-border-color);
+}
+:host(:first-child) .segmented-control-item::before {
+  position: absolute;
+  content: "";
+  bottom: -1px;
+  left: 100%;
+  width: 1px;
+  z-index: 1;
+  height: 1px;
+  background: var(--sc-item-border-color);
+}
+:host(:first-child) .segmented-control-item.active::after, :host(:first-child) .segmented-control-item.active::before {
+  z-index: -1;
 }
 :host(:first-child) .segmented-control-item.disabled {
   border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-text-border-color-disabled);
-  border-right: none;
+  border-right: var(--sc-item-border-width) var(--sc-item-border-style) transparent;
 }
 
 :host(:last-child) .segmented-control-item.size-m {
   border-top-right-radius: var(--sc-item-border-radius-m);
   border-bottom-right-radius: var(--sc-item-border-radius-m);
   border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-border-color);
-  border-left: none;
+  border-left: var(--sc-item-border-width) var(--sc-item-border-style) transparent;
 }
 :host(:last-child) .segmented-control-item.size-s {
   border-top-right-radius: var(--sc-item-border-radius-s);
   border-bottom-right-radius: var(--sc-item-border-radius-s);
   border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-border-color);
-  border-left: none;
+  border-left: var(--sc-item-border-width) var(--sc-item-border-style) transparent;
+}
+:host(:last-child) .segmented-control-item::after {
+  position: absolute;
+  content: "";
+  top: -1px;
+  left: -1px;
+  width: 1px;
+  z-index: 1;
+  height: 1px;
+  background: var(--sc-item-border-color);
+}
+:host(:last-child) .segmented-control-item::before {
+  position: absolute;
+  content: "";
+  bottom: -1px;
+  left: -1px;
+  width: 1px;
+  z-index: 1;
+  height: 1px;
+  background: var(--sc-item-border-color);
+}
+:host(:last-child) .segmented-control-item.active::after, :host(:last-child) .segmented-control-item.active::before {
+  z-index: -1;
 }
 :host(:last-child) .segmented-control-item.disabled {
   border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-text-border-color-disabled);
-  border-left: none;
+  border-left: var(--sc-item-border-width) var(--sc-item-border-style) transparent;
 }
 
 :host(:first-child:last-child) .segmented-control-item.size-m {
@@ -189,10 +195,13 @@
   border-radius: var(--sc-item-border-radius-s);
   border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-border-color);
 }
+:host(:first-child:last-child) .segmented-control-item::after, :host(:first-child:last-child) .segmented-control-item::before {
+  display: none;
+}
 
 :host(:not(:first-child):not(:last-child)) .segmented-control-item {
-  border-left: none;
-  border-right: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
 }
 
 .content-wrapper {
@@ -225,9 +234,32 @@
 .segmented-control-item.size-m {
   height: var(--sc-item-height-m);
 }
+.segmented-control-item::after {
+  position: absolute;
+  content: "";
+  top: -1px;
+  left: -1px;
+  width: calc(100% + 2px);
+  z-index: 1;
+  height: 1px;
+  background: var(--sc-item-border-color);
+}
+.segmented-control-item::before {
+  position: absolute;
+  content: "";
+  bottom: -1px;
+  left: -1px;
+  width: calc(100% + 2px);
+  z-index: 1;
+  height: 1px;
+  background: var(--sc-item-border-color);
+}
 .segmented-control-item .counter {
   padding-left: 4px;
   font-weight: var(--sc-item-counter-font-weight);
+}
+.segmented-control-item.active::after, .segmented-control-item.active::before {
+  z-index: -1;
 }
 .segmented-control-item.icon {
   display: flex;
@@ -290,22 +322,25 @@
 }
 
 :host([active]:not([active=false])) .segmented-control-item.icon {
-  outline-offset: calc(var(--sc-item-border-width) * -1);
-  outline: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-icon-border-color-selected);
+  border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-icon-border-color-selected);
   background-color: var(--sc-item-icon-bg-color-selected);
-  transition: background-color 500ms ease, color 500ms ease;
+  box-shadow: var(--sc-item-text-box-shadow);
+  transition: all 500ms ease;
 }
 :host([active]:not([active=false])) .segmented-control-item.icon .content-wrapper ::slotted(*) {
   color: var(--sc-item-icon-color-selected);
 }
 :host([active]:not([active=false])) .segmented-control-item.text {
-  outline-offset: calc(var(--sc-item-border-width) * -1);
-  outline: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-text-border-color-selected);
+  border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-text-border-color-selected);
   color: var(--sc-item-text-color-selected);
   background-color: var(--sc-item-text-bg-color-selected);
-  transition: background-color 500ms ease, color 500ms ease;
+  box-shadow: var(--sc-item-text-box-shadow);
+  transition: all 500ms ease;
 }
 
+:host([disabled]:not([disabled=false])) .segmented-control-item::before, :host([disabled]:not([disabled=false])) .segmented-control-item::after {
+  background: var(--sc-item-text-border-color-disabled);
+}
 :host([disabled]:not([disabled=false])) .segmented-control-item.icon {
   background-color: var(--sc-item-icon-bg-color-disabled);
   cursor: not-allowed;
@@ -332,7 +367,7 @@
 :host(:focus-visible) .segmented-control-item:not(.active).size-m {
   border-radius: var(--sc-item-border-radius-m);
   outline: none;
-  box-shadow: 0 0 0 1px var(--wpp-grey-color-300), 0 0 0 3px var(--wpp-brand-color);
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-300), 0 0 0 2px var(--wpp-brand-color);
 }
 
 /* Styles for the Selected-Disabled state */
@@ -341,7 +376,7 @@
 }
 :host([active]:not([active=false])[disabled]:not([disabled=false])) .segmented-control-item.icon {
   cursor: not-allowed;
-  outline: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-text-border-color-selected-disabled);
+  border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-text-border-color-selected-disabled);
   background-color: var(--sc-item-icon-bg-color-selected-disabled);
 }
 :host([active]:not([active=false])[disabled]:not([disabled=false])) .segmented-control-item.icon .content-wrapper ::slotted(*) {
@@ -349,7 +384,7 @@
 }
 :host([active]:not([active=false])[disabled]:not([disabled=false])) .segmented-control-item.text {
   cursor: not-allowed;
-  outline: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-icon-border-color-selected-disabled);
+  border: var(--sc-item-border-width) var(--sc-item-border-style) var(--sc-item-icon-border-color-selected-disabled);
   color: var(--sc-item-text-color-selected-disabled);
   background-color: var(--sc-item-text-bg-color-selected-disabled);
 }

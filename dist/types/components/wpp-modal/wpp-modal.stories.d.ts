@@ -1,9 +1,10 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppModal>;
+import { WppModal } from './wpp-modal';
+declare const _default: Meta<typeof WppModal>;
 export default _default;
 type ModalWithBackButton = Components.WppModal & {
   withCrossButton: boolean;
 };
-export declare const Regular: StoryObj<ModalWithBackButton>;
-export declare const Destructive: StoryObj<ModalWithBackButton>;
+export declare const Regular: Story<ModalWithBackButton>;
+export declare const Destructive: Story<ModalWithBackButton>;

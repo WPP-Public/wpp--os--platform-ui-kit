@@ -1,4 +1,3 @@
-import { KNOWN_KEYS_OF_TREE_TYPE } from './const';
 export const areAllChildrenSelected = (treeData) => treeData.every(item => {
   if (item.children) {
     return areAllChildrenSelected(item.children);
@@ -91,12 +90,3 @@ export const recalculateIndeterminateTreeState = (treeData) => treeData.reduce((
   }
   return [...acc, item];
 }, []);
-export const extractExtraProps = (tree) => {
-  const extras = {};
-  for (const key in tree) {
-    if (!KNOWN_KEYS_OF_TREE_TYPE[key] && key.startsWith('data-')) {
-      extras[key] = tree[key];
-    }
-  }
-  return extras;
-};

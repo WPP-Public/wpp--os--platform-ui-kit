@@ -1,5 +1,6 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppFileUpload>;
+import { WppFileUpload } from './wpp-file-upload';
+declare const _default: Meta<typeof WppFileUpload>;
 export default _default;
-export declare const FileUpload: StoryObj<Components.WppFileUpload>;
+export declare const FileUpload: Story<Components.WppFileUpload>;

@@ -2,7 +2,6 @@ import { EventEmitter } from '../../stencil-public-runtime';
 import { BaseComponent } from '../../interfaces/base-component';
 import { CardSize, CardValue, CardChangeEventDetail } from './components/wpp-card/types';
 import { CardGroupChangeEventDetail, CardGroupValue } from './types';
-import { AriaProps } from '../../types/common';
 /**
  * @slot - Content is placed inside the card-group component. It can be only <wpp-card>. The default slot, without the name attribute.
  *
@@ -41,10 +40,6 @@ export declare class WppCardGroup implements BaseComponent {
    */
   readonly allowEmptySelection: boolean;
   /**
-   * Contains the `aria-` props for component
-   */
-  readonly ariaProps: AriaProps;
-  /**
    * Emitted when the card group value changes
    */
   readonly wppChange: EventEmitter<CardGroupChangeEventDetail>;
@@ -68,11 +63,6 @@ export declare class WppCardGroup implements BaseComponent {
   private getDirectCardChildren;
   private setCardsProps;
   private setActiveCard;
-  private syncTabIndexes;
-  private getEnabledCards;
-  private getCurrentNdx;
-  private onKeyDown;
-  private focusAndSelect;
   private onFocus;
   private onBlur;
   private hostCssClasses;

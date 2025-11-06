@@ -3,10 +3,13 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const _const = require('./const-5a4461e1.js');
-const WrappedSlot = require('./WrappedSlot-ab2104d8.js');
-const utils = require('./utils-2b192dec.js');
-const consts = require('./consts-779fd4ec.js');
+const utils$1 = require('./utils-6c851455.js');
+const constants = require('./constants-c4275dc7.js');
+const WrappedSlot = require('./WrappedSlot-736c2736.js');
+const utils = require('./utils-9c925efe.js');
+const lodash = require('./lodash-04cddce7.js');
+require('./consts-255c1066.js');
+require('./_commonjsHelpers-bcc1208a.js');
 
 const TOAST_DURATION = 5000;
 
@@ -14,20 +17,17 @@ const DEFAULT_FILE_UPLOAD_CONFIG = {
   acceptConfig: {},
   accept: [],
   size: 50,
-  maxFiles: 0,
+  maxFiles: 5,
   multiple: true,
   showOnlyNewErrors: false,
   controlled: false,
   locales: {
     sizeError: 'File exceeds the allowed size limit',
     formatError: 'Invalid file format',
-    limitError: 'Files limit reached',
   },
 };
-const MAX_INPUT_AREA_HEIGHT = 240;
-const MIN_TEXTAREA_HEIGHT = 52;
 
-const wppChatInputCss = ":host{--chat-input-container-min-width:var(--wpp-chat-input-container-min-width, 320px);--chat-input-container-bg-color:var(--wpp-chat-input-container-bg-color, var(--wpp-grey-color-000));--chat-input-container-outline-width:var(--wpp-chat-input-container-outline-width, 1px);--chat-input-container-outline-style:var(--wpp-chat-input-container-outline-style, solid);--chat-input-container-outline-color:var(--wpp-chat-input-container-outline-color, var(--wpp-grey-color-500));--chat-input-container-outline-color-hover:var(\n    --wpp-chat-input-container-outline-color-hover,\n    var(--wpp-grey-color-700)\n  );--chat-input-container-outline-color-active:var(\n    --wpp-chat-input-container-outline-color-active,\n    var(--wpp-grey-color-800)\n  );--chat-input-container-outline-color-disabled:var(\n    --wpp-chat-input-container-outline-color-disabled,\n    var(--wpp-grey-color-400)\n  );--chat-input-container-border-radius:var(--wpp-chat-input-container-border-radius, 8px);--chat-input-area-min-height:var(--wpp-chat-input-area-min-height, 52px);--chat-input-area-max-height:var(--wpp-chat-input-area-max-height, 240px);--chat-input-area-padding:var(--wpp-chat-input-area-padding, 12px 6px 0 12px);--chat-input-area-placeholder-color:var(--wpp-chat-input-area-placeholder-color, var(--wpp-grey-color-700));--chat-text-input-min-height:var(--wpp-chat-text-input-min-height, 52px);--chat-text-input-padding:var(--wpp-chat-text-input-padding, 0);--chat-text-input-bg-color:var(--wpp-chat-text-input-bg-color, transparent);--chat-text-input-color-disabled:var(--wpp-chat-text-input-color-disabled, var(--wpp-text-color-disabled));--chat-text-input-placeholder-color:var(--wpp-chat-text-input-placeholder-color, var(--wpp-grey-color-700));--chat-text-input-placeholder-color-disabled:var(\n    --wpp-chat-text-input-placeholder-color-disabled,\n    var(--wpp-text-color-disabled)\n  );--chat-actions-bar-padding:var(--wpp-chat-actions-bar-padding, 0 10px 8px 10px);--chat-actions-bar-color:var(--wpp-chat-actions-bar-color, var(--wpp-grey-color-500));--chat-actions-bar-color-disabled:var(--wpp-chat-actions-bar-color-disabled, var(--wpp-grey-color-400));--chat-actions-bar-char-counter-color:var(--wpp-chat-actions-bar-char-counter-color, var(--wpp-danger-color-500));--chat-actions-bar-char-counter-color-disabled:var(\n    --wpp-chat-actions-bar-char-counter-color-disabled,\n    var(--wpp-danger-color-300)\n  );--chat-text-input-minimized-width:var(--wpp-chat-text-input-minimized-width, 264px);--chat-text-input-minimized-height:var(--wpp-chat-text-input-minimized-height, 22px);--chat-text-input-minimized-padding:var(--wpp-chat-text-input-minimized-padding, 8px 10px);--chat-input-transition-timing:0.3s cubic-bezier(0.4, 0, 0.2, 1);display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-box-sizing:border-box;box-sizing:border-box;position:relative;-ms-flex-align:center;align-items:center;width:100%}.chat-input-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;position:absolute;bottom:100%;background-color:var(--chat-input-container-bg-color);gap:8px;outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color);border-radius:var(--chat-input-container-border-radius);min-width:var(--chat-input-container-min-width);width:100%;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);will-change:width, height;cursor:text}.chat-input-container:hover{outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-hover)}.chat-input-container:active{outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-active)}.chat-input-container.disabled{pointer-events:none;cursor:not-allowed;outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-disabled)}.chat-file-upload-toast{position:absolute;top:8px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);cursor:pointer}.input-area{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);display:-ms-flexbox;display:flex;-ms-flex-direction:column-reverse;flex-direction:column-reverse;-ms-flex-align:stretch;align-items:stretch;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-box-sizing:border-box;box-sizing:border-box;color:var(--wpp-grey-color-1000);min-height:var(--chat-input-area-min-height);max-height:var(--chat-input-area-max-height);overflow-y:hidden;-ms-flex:1;flex:1;padding:var(--chat-input-area-padding);gap:12px;box-sizing:border-box;border-radius:8px 8px 0 0;-webkit-transition:height var(--chat-input-transition-timing);transition:height var(--chat-input-transition-timing);will-change:height;-webkit-transform-origin:bottom;transform-origin:bottom}.input-area .attachments{-ms-flex-order:2;order:2}.input-area .text-input{-ms-flex-order:1;order:1}.input-area:not(.minimized){scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.input-area::-webkit-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-moz-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area:-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-webkit-scrollbar{width:4px;height:4px}.input-area::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400);border-radius:4px;margin:6px}.input-area::-webkit-scrollbar-track{background:transparent}.input-area textarea{width:100%;min-height:var(--chat-text-input-min-height);resize:none;border:none;outline:none;padding:var(--chat-text-input-padding);font-family:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;background-color:var(--chat-text-input-bg-color);overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;color:inherit;-webkit-transition:min-height var(--chat-input-transition-timing);transition:min-height var(--chat-input-transition-timing);will-change:min-height;-webkit-transform-origin:bottom;transform-origin:bottom;margin:0}.input-area textarea::-webkit-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-moz-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:disabled{cursor:not-allowed;color:var(--chat-text-input-color-disabled)}.input-area textarea:disabled::-webkit-input-placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area textarea:disabled::-moz-placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area textarea:disabled:-ms-input-placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area textarea:disabled::-ms-input-placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area textarea:disabled::placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area.minimized{min-height:0;padding:var(--chat-text-input-minimized-padding)}.input-area.minimized .input-area-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;gap:4px}.input-area.minimized .minimized-input{-ms-flex-align:center;align-items:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:var(--chat-text-input-minimized-width)}.input-area.minimized .minimized-input .input-value{width:100%}.input-area.minimized .minimized-input .input-value.disabled{color:var(--chat-text-input-color-disabled)}.input-area.minimized .minimized-input .input-value-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area.minimized .minimized-input .input-value-placeholder.disabled{color:var(--chat-text-input-placeholder-color-disabled)}.actions-bar{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;-ms-flex-align:end;align-items:flex-end;padding:var(--chat-actions-bar-padding);border-radius:0 0 8px 8px}.actions-bar .left-actions{display:-ms-flexbox;display:flex;gap:4px;-ms-flex-align:center;align-items:center}.actions-bar .left-actions .select{display:-ms-flexbox;display:flex;width:100%}.actions-bar .left-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.actions-bar .left-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.actions-bar .right-actions{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}.actions-bar .right-actions .char-counter{color:var(--chat-actions-bar-char-counter-color)}.actions-bar .right-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.actions-bar .right-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.actions-bar .right-actions.disabled .char-counter{color:var(--chat-actions-bar-char-counter-color-disabled)}.attachments{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:4px;width:100%}.attachments .wpp-file-upload-item{width:100%}.attachments .wpp-file-upload-item::part(file-item){margin-top:0}.attachments .wpp-file-upload-item::part(controls){-ms-flex-pack:end;justify-content:flex-end}";
+const wppChatInputCss = ":host{--chat-input-container-min-width:var(--wpp-chat-input-container-min-width, 320px);--chat-input-container-max-width:var(--wpp-chat-input-container-max-width, 720px);--chat-input-container-bg-color:var(--wpp-chat-input-container-bg-color, var(--wpp-grey-color-000));--chat-input-container-outline-width:var(--wpp-chat-input-container-outline-width, 1px);--chat-input-container-outline-style:var(--wpp-chat-input-container-outline-style, solid);--chat-input-container-outline-color:var(--wpp-chat-input-container-outline-color, var(--wpp-grey-color-500));--chat-input-container-outline-color-hover:var(--wpp-chat-input-container-outline-color-hover, var(--wpp-grey-color-700));--chat-input-container-outline-color-active:var(--wpp-chat-input-container-outline-color-active, var(--wpp-grey-color-800));--chat-input-container-outline-color-disabled:var(--wpp-chat-input-container-outline-color-disabled, var(--wpp-grey-color-400));--chat-input-container-border-radius:var(--wpp-chat-input-container-border-radius, 8px);--chat-input-area-min-height:var(--wpp-chat-input-area-min-height, 52px);--chat-input-area-max-height:var(--wpp-chat-input-area-max-height, 240px);--chat-input-area-padding:var(--wpp-chat-input-area-padding, 12px 6px 0 12px);--chat-input-area-placeholder-color:var(--wpp-chat-input-area-placeholder-color, var(--wpp-grey-color-700));--chat-text-input-min-height:var(--wpp-chat-text-input-min-height, 52px);--chat-text-input-padding:var(--wpp-chat-text-input-padding, 0);--chat-text-input-bg-color:var(--wpp-chat-text-input-bg-color, transparent);--chat-text-input-color-disabled:var(--wpp-chat-text-input-color-disabled, var(--wpp-grey-color-500));--chat-text-input-placeholder-color:var(--wpp-chat-text-input-placeholder-color, var(--wpp-grey-color-700));--chat-text-input-placeholder-color-disabled:var(--wpp-chat-text-input-placeholder-color-disabled, var(--wpp-text-color-disabled));--chat-actions-bar-padding:var(--wpp-chat-actions-bar-padding, 0 10px 8px 10px);--chat-actions-bar-color:var(--wpp-chat-actions-bar-color, var(--wpp-grey-color-500));--chat-actions-bar-color-disabled:var(--wpp-chat-actions-bar-color-disabled, var(--wpp-grey-color-400));--chat-actions-bar-char-counter-color:var(--wpp-chat-actions-bar-char-counter-color, var(--wpp-danger-color-500));--chat-actions-bar-char-counter-color-disabled:var(--wpp-chat-actions-bar-char-counter-color-disabled, var(--wpp-danger-color-300));display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-box-sizing:border-box;box-sizing:border-box;position:relative;-ms-flex-align:center;align-items:center;width:100%;z-index:100}.chat-input-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;position:absolute;bottom:100%;background-color:var(--chat-input-container-bg-color);gap:8px;outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color);border-radius:var(--chat-input-container-border-radius);min-width:var(--chat-input-container-min-width);max-width:var(--chat-input-container-max-width);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:width 0.2s ease, height 0.2s ease;transition:width 0.2s ease, height 0.2s ease;cursor:text}.chat-input-container:hover{outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-hover)}.chat-input-container:active{outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-active)}.chat-input-container.disabled{pointer-events:none;cursor:not-allowed;outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-disabled)}.chat-file-upload-toast{position:absolute;top:8px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);cursor:pointer;z-index:2000}.input-area{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:stretch;align-items:stretch;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-box-sizing:border-box;box-sizing:border-box;color:var(--wpp-grey-color-1000);min-height:var(--chat-input-area-min-height);max-height:var(--chat-input-area-max-height);overflow-y:hidden;-ms-flex:1;flex:1;padding:var(--chat-input-area-padding);gap:12px;box-sizing:border-box;border-radius:8px 8px 0 0;scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.input-area::-webkit-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-moz-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area:-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-webkit-scrollbar{width:4px;height:4px}.input-area::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400);border-radius:4px;margin:6px}.input-area::-webkit-scrollbar-track{background:transparent}.input-area textarea{width:100%;min-height:var(--chat-text-input-min-height);resize:none;border:none;outline:none;padding:var(--chat-text-input-padding);font-family:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;background-color:var(--chat-text-input-bg-color);overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;color:inherit}.input-area textarea::-webkit-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-moz-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:disabled{cursor:not-allowed;color:var(--chat-text-input-color-disabled)}.input-area textarea:disabled::-webkit-input-placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area textarea:disabled::-moz-placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area textarea:disabled:-ms-input-placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area textarea:disabled::-ms-input-placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area textarea:disabled::placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.actions-bar{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;-ms-flex-align:end;align-items:flex-end;padding:var(--chat-actions-bar-padding);border-radius:0 0 8px 8px}.actions-bar .left-actions{display:-ms-flexbox;display:flex;gap:4px;-ms-flex-align:center;align-items:center}.actions-bar .left-actions .select{display:-ms-flexbox;display:flex;width:100%}.actions-bar .left-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.actions-bar .left-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.actions-bar .right-actions{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}.actions-bar .right-actions .char-counter{color:var(--chat-actions-bar-char-counter-color)}.actions-bar .right-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.actions-bar .right-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.actions-bar .right-actions.disabled .char-counter{color:var(--chat-actions-bar-char-counter-color-disabled)}.attachments{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:4px;width:100%;-webkit-transition:all 0.2s ease;transition:all 0.2s ease}.attachments .wpp-file-upload-item{width:100%}.attachments .wpp-file-upload-item::part(file-item){margin-top:0}";
 
 const WppChatInput = class {
   constructor(hostRef) {
@@ -37,34 +37,12 @@ const WppChatInput = class {
     this.wppChange = index.createEvent(this, "wppChange", 1);
     this.wppFileUploadItemDelete = index.createEvent(this, "wppFileUploadItemDelete", 1);
     this.wppFileUploadItemClick = index.createEvent(this, "wppFileUploadItemClick", 1);
-    this.wppMessageChanged = index.createEvent(this, "wppMessageChanged", 1);
     this.scrollTimeout = null;
+    this.MIN_TEXTAREA_HEIGHT = 52;
+    this.MAX_INPUT_AREA_HEIGHT = 240;
     this.reInitValue = (list) => {
       this.successAttachmentsList = list.filter(file => !this.isFileWithError(file));
       this.errorAttachmentsList = list.filter(this.isFileWithError);
-    };
-    this.handleDocumentClick = (event) => {
-      if (this.size === 's' && this.isChatInputExpanded && this.host && !this.host.contains(event.target)) {
-        // For cases when the user click item from select.
-        // The dropdown of the select is rendered outside of the component.
-        if (!utils.hasParentWithId(event.target, 'tippy-')) {
-          this.handleSimpleBlur();
-        }
-      }
-    };
-    this.handleFileLoaded = (event) => {
-      const { name, size } = event.detail;
-      // Find the file in your state and set uploaded = true
-      const updateUploadedFlag = (file) => {
-        if (file.name === name && file.size === size) {
-          const fileCopy = file;
-          fileCopy.uploaded = true;
-        }
-        return file;
-      };
-      this.successAttachmentsList = this.successAttachmentsList.map(updateUploadedFlag);
-      this.errorAttachmentsList = this.errorAttachmentsList.map(updateUploadedFlag);
-      this.attachments = [...this.successAttachmentsList, ...this.errorAttachmentsList];
     };
     this.updateSlotData = () => {
       const emptyStates = utils.getSlotEmptyStates(this.host.childNodes, {
@@ -79,111 +57,19 @@ const WppChatInput = class {
         this.checkAttachmentsVisibility();
       }, 100);
     };
-    this.handlePaste = async (event) => {
-      if (this.disabled)
+    this.adjustTextareaHeight = (reset = false) => {
+      if (!this.textareaRef || !this.inputAreaRef)
         return;
-      this.textareaRef?.focus();
-      const items = event.clipboardData?.items;
-      if (!items) {
-        await this.adjustTextareaHeight(false);
-        return;
-      }
-      const handled = await this.handleFilePaste(event, items);
-      if (handled)
-        return;
-      // Adjust textarea height after paste for non-image content
-      await this.adjustTextareaHeight(false);
-    };
-    /**
-     * Handles image file pasting from clipboard items.
-     * Returns true if files were handled, false otherwise.
-     */
-    this.handleFilePaste = async (event, items) => {
-      const files = Array.from(items)
-        .filter(item => item.kind === 'file' && item.type.startsWith('image/'))
-        .map(item => item.getAsFile())
-        .filter((file) => !!file);
-      if (files.length > 0) {
-        event.preventDefault();
-        await this.handleFileLoad(files);
-        await this.adjustTextareaHeight();
-        return true;
-      }
-      return false;
-    };
-    this.handleInput = (event) => {
-      if (this.disabled)
-        return;
-      const target = event.target;
-      const inputValue = target.value;
-      if (this.debounceEnabled && this.debouncedHandleInput) {
-        this.debouncedHandleInput(inputValue);
-      }
-      else {
-        this.internalValue = inputValue;
-        this.wppMessageChanged.emit({ value: inputValue });
-      }
-      if (!inputValue.trim() && this.textareaRef) {
-        this.textareaRef.style.minHeight = `${MIN_TEXTAREA_HEIGHT}px`;
-      }
-      this.adjustTextareaHeight(false, inputValue);
-    };
-    this.debouncedAdjustTextareaHeight = utils.debounce(() => this.adjustTextareaHeight(), 50);
-    this.adjustTextareaHeight = (reset = false, value, waitForInputArea = false) => new Promise(resolve => {
-      if (!this.textareaRef || !this.inputAreaRef) {
-        resolve();
-        return;
-      }
       if (reset) {
-        this.textareaRef.style.minHeight = `${MIN_TEXTAREA_HEIGHT}px`;
-        resolve();
+        this.textareaRef.style.minHeight = `${this.MIN_TEXTAREA_HEIGHT}px`;
         return;
       }
-      const attachmentsElement = this.inputAreaRef.querySelector('.attachments');
-      const attachmentsHeight = attachmentsElement?.scrollHeight || 0;
-      const gap = attachmentsElement ? parseFloat(getComputedStyle(attachmentsElement).gap) || 0 : 0;
-      const messageText = value !== undefined ? value : this.textareaRef.value;
-      const textAreaContentHeight = Math.max(this.calculateTextHeight(messageText), MIN_TEXTAREA_HEIGHT);
-      const totalHeight = attachmentsHeight + textAreaContentHeight + gap;
-      const reachMaxHeight = totalHeight > MAX_INPUT_AREA_HEIGHT;
-      this.inputAreaRef.style.overflowY = reachMaxHeight ? 'auto' : 'hidden';
-      this.textareaRef.style.minHeight = `${textAreaContentHeight}px`;
-      // --- Wait for the correct transition ---
-      if (waitForInputArea) {
-        // Used for expand/collapse: listen for height transition on input-area
-        const computedStyle = window.getComputedStyle(this.inputAreaRef);
-        const transitionDuration = parseFloat(computedStyle.transitionDuration) || 0;
-        if (transitionDuration > 0) {
-          const handler = (e) => {
-            if (e.propertyName === 'height') {
-              this.inputAreaRef?.removeEventListener('transitionend', handler);
-              resolve();
-            }
-          };
-          this.inputAreaRef.addEventListener('transitionend', handler);
-        }
-        else {
-          resolve();
-        }
-      }
-      else {
-        // Used for textarea min-height (typing/paste)
-        const computedStyle = window.getComputedStyle(this.textareaRef);
-        const transitionDuration = parseFloat(computedStyle.transitionDuration) || 0;
-        if (transitionDuration > 0) {
-          const handler = (e) => {
-            if (e.propertyName === 'min-height') {
-              this.textareaRef?.removeEventListener('transitionend', handler);
-              resolve();
-            }
-          };
-          this.textareaRef.addEventListener('transitionend', handler);
-        }
-        else {
-          resolve();
-        }
-      }
-    });
+      const attachmentsHeight = this.inputAreaRef.querySelector('.attachments')?.scrollHeight || 0;
+      const textAreaContentHeight = this.calculateTextHeight(this.message) || this.MIN_TEXTAREA_HEIGHT;
+      const totalHeight = attachmentsHeight + textAreaContentHeight;
+      this.inputAreaRef.style.overflowY = totalHeight > this.MAX_INPUT_AREA_HEIGHT ? 'auto' : 'hidden';
+      this.textareaRef.style.minHeight = `${Math.max(textAreaContentHeight, this.MIN_TEXTAREA_HEIGHT)}px`;
+    };
     this.isFileWithError = (file) => !!(file.formatError || file.sizeError || file.validatorError);
     this.handleDeleteItem = (event) => {
       const { name, size } = event.detail;
@@ -205,21 +91,16 @@ const WppChatInput = class {
       const files = this.inputRef?.files;
       if (!files?.length)
         return;
-      if (this.isMaximumFilesSet() && this.successAttachmentsList.length === this.mergedFileUploadConfig.maxFiles) {
-        this.displayToast(this.mergedFileUploadConfig.locales.limitError, 'error');
-        return;
-      }
+      this.displayToast('Uploading...', 'information');
       const filesToLoad = this.mergedFileUploadConfig.multiple ? Array.from(files) : [files[0]];
       await this.handleFileLoad(filesToLoad);
-      if (this.debouncedAdjustTextareaHeight) {
-        requestAnimationFrame(() => this.debouncedAdjustTextareaHeight());
-      }
+      requestAnimationFrame(() => this.adjustTextareaHeight());
       if (this.inputRef)
         this.inputRef.value = '';
     };
-    this.isMaximumFilesSet = () => this.mergedFileUploadConfig.maxFiles > 0;
+    this.isMaximumFilesSet = () => (this.mergedFileUploadConfig.maxFiles ?? 0) > 0;
     this.validateFileSize = (file) => {
-      if (file.size > _const.convertMBToBytes(this.mergedFileUploadConfig.size ?? 0)) {
+      if (file.size > utils$1.convertMBToBytes(this.mergedFileUploadConfig.size ?? 0)) {
         file.sizeError = true;
       }
       else {
@@ -230,7 +111,7 @@ const WppChatInput = class {
     this.isAcceptConfigFilled = () => !!this.mergedFileUploadConfig.acceptConfig && Object.keys(this.mergedFileUploadConfig.acceptConfig).length > 0;
     this.getAcceptExtensions = () => {
       if (this.isAcceptConfigFilled()) {
-        return _const.getExtensionsList(this.mergedFileUploadConfig.acceptConfig || {});
+        return utils$1.getExtensionsList(this.mergedFileUploadConfig.acceptConfig || {});
       }
       return this.mergedFileUploadConfig.accept || [];
     };
@@ -239,13 +120,13 @@ const WppChatInput = class {
         const allowedExtensions = file.type
           ? this.mergedFileUploadConfig.acceptConfig?.[file.type] || []
           : this.getAcceptExtensions();
-        file.formatError = allowedExtensions.length > 0 ? !allowedExtensions.includes(_const.getExtension(file.name)) : true;
+        file.formatError = allowedExtensions.length > 0 ? !allowedExtensions.includes(utils$1.getExtension(file.name)) : true;
         return file;
       }
       if (!this.mergedFileUploadConfig.accept?.length) {
         if (!file.type) {
-          const typeFromExtension = _const.EXTENSION_TO_TYPE[_const.getExtension(file.name)];
-          return _const.modifyPropertiesOnFile(file, { type: typeFromExtension });
+          const typeFromExtension = constants.EXTENSION_TO_TYPE[utils$1.getExtension(file.name)];
+          return utils$1.modifyPropertiesOnFile(file, { type: typeFromExtension });
         }
         return file;
       }
@@ -267,8 +148,8 @@ const WppChatInput = class {
       ? newFilesWithErrors
       : [...this.errorAttachmentsList, ...newFilesWithErrors];
     this.generateUniqueName = (fileName, fileList) => {
-      const baseName = _const.getBaseName(fileName);
-      const extension = _const.getExtension(fileName);
+      const baseName = utils$1.getBaseName(fileName);
+      const extension = utils$1.getExtension(fileName);
       let counter = 1;
       const isNameTaken = (file) => {
         const currentCounter = counter;
@@ -284,16 +165,6 @@ const WppChatInput = class {
         this.textareaRef?.focus();
       }
     };
-    this.onKeyDown = (event) => {
-      if (event.key === 'Enter') {
-        // When "Shift" + "Enter" are pressed, keep default behaviour (new line)
-        if (event.shiftKey)
-          return;
-        // Pressing "Enter" is equivalent to pressing "Send" icon
-        event.preventDefault();
-        this.handleSend();
-      }
-    };
     this.hostCssClasses = () => ({
       'wpp-chat-input': true,
     });
@@ -305,7 +176,6 @@ const WppChatInput = class {
       disabled: this.disabled,
     });
     this.inputAreaClasses = () => ({
-      ...(this.size === 's' && { [this.isChatInputExpanded ? 'expanded' : 'minimized']: true }),
       'input-area': true,
     });
     this.attachmentsWrapperClasses = () => ({
@@ -313,17 +183,6 @@ const WppChatInput = class {
     });
     this.textInputClasses = () => ({
       'text-input': true,
-    });
-    this.inputAreaWrapperClasses = () => ({
-      'input-area-wrapper': true,
-    });
-    this.minimizedInput = () => ({
-      'minimized-input': true,
-    });
-    this.inputValue = () => ({
-      'input-value': true,
-      disabled: this.disabled,
-      'input-value-placeholder': !this.internalValue,
     });
     this.actionsBarClasses = () => ({
       'actions-bar': true,
@@ -341,7 +200,6 @@ const WppChatInput = class {
       'right-actions': true,
       disabled: this.disabled,
     });
-    this.size = 'm';
     this.placeholder = 'Type your message...';
     this.enableAttach = false;
     this.enableMic = false;
@@ -371,7 +229,7 @@ const WppChatInput = class {
       /**
        * Accept file format, you can pass any format you want download, by default is `.jpg, .jpeg, .png`
        *
-       * @deprecated - this prop will be deleted in 4.0.0 version as it is not flexible enough to handle different
+       * @deprecated - this prop will be deleted in 3.0.0 version as it is not flexible enough to handle different
        * cases with files validations, for example based on mimetype and extension at the same time.
        * This property handle only a few extensions: ['.jpg', '.jpeg', '.png', '.txt', '.text', '.doc', '.docx', '.mov'],
        * and list will NOT be extended.
@@ -406,48 +264,28 @@ const WppChatInput = class {
       locales: {
         sizeError: 'File exceeds size limit',
         formatError: 'Wrong format',
-        limitError: 'Files limit reached',
       },
     };
     this.charactersLimit = undefined;
     this.attachments = [];
     this.withSelect = false;
-    this.textValue = '';
-    this.debounceEnabled = true;
-    this.debounceDelay = 300;
-    this.zIndex = consts.Z_INDEX.CHAT;
+    this.message = '';
     this.successAttachmentsList = [];
     this.errorAttachmentsList = [];
     this.toastMessage = '';
     this.toastType = 'information';
     this.showToast = false;
+    this.isAnyFileUploading = false;
     this.areAttachmentsVisible = true;
     this.hasSelectSlot = false;
-    this.isChatInputExpanded = false;
-    this.internalValue = '';
   }
   onAttachmentsChange(newValue) {
     if (this.mergedFileUploadConfig.controlled) {
       this.reInitValue(newValue);
     }
-    if (this.debouncedAdjustTextareaHeight) {
-      requestAnimationFrame(() => this.debouncedAdjustTextareaHeight());
-    }
-  }
-  onTextValueChange(value) {
-    if (value !== this.internalValue) {
-      this.internalValue = value;
-      this.adjustTextareaHeight(false, value);
-    }
+    requestAnimationFrame(() => this.adjustTextareaHeight());
   }
   componentWillLoad() {
-    if (!this.textValue?.trim() && this.textValue !== this.internalValue) {
-      this.internalValue = this.textValue;
-    }
-    this.debouncedHandleInput = utils.debounce((value) => {
-      this.internalValue = value;
-      this.wppMessageChanged.emit({ value });
-    }, this.debounceDelay);
     const list = [...this.attachments, ...(this.successAttachmentsList || []), ...(this.errorAttachmentsList || [])];
     this.reInitValue(list);
   }
@@ -455,13 +293,11 @@ const WppChatInput = class {
     requestAnimationFrame(() => {
       this.initializeObserver();
     });
-    const debouncedResizeHandler = utils.debounce(() => {
+    const debouncedResizeHandler = lodash.lodash.debounce(() => {
       if (this.textareaRef) {
         this.textareaRef.style.height = 'auto';
         this.forceRecalculateHeight();
-        if (this.debouncedAdjustTextareaHeight) {
-          this.debouncedAdjustTextareaHeight();
-        }
+        this.adjustTextareaHeight();
       }
     }, 150);
     const resizeObserver = new ResizeObserver(() => {
@@ -471,40 +307,11 @@ const WppChatInput = class {
       resizeObserver.observe(this.inputAreaRef);
     }
     this.resizeObserver = resizeObserver;
-    document.addEventListener('mousedown', this.handleDocumentClick, true);
   }
   disconnectedCallback() {
     this.disconnectObserver();
     if (this.resizeObserver && this.inputAreaRef) {
       this.resizeObserver.unobserve(this.inputAreaRef);
-    }
-    document.removeEventListener('mousedown', this.handleDocumentClick, true);
-  }
-  onSizeChange(newValue, oldValue) {
-    if (newValue !== oldValue && this.size === 's') {
-      this.handleSizeToggle();
-    }
-  }
-  /**
-   * Maximize the input area when the user clicks on it.
-   */
-  handleSizeToggle() {
-    if (this.size === 's' && !this.disabled) {
-      this.isChatInputExpanded = true;
-      requestAnimationFrame(() => {
-        if (this.debouncedAdjustTextareaHeight) {
-          this.debouncedAdjustTextareaHeight();
-        }
-        this.handleClick();
-      });
-    }
-  }
-  /**
-   * Minimize the input area when it loses focus.
-   */
-  handleSimpleBlur() {
-    if (this.size === 's' && this.isChatInputExpanded) {
-      this.isChatInputExpanded = false;
     }
   }
   forceRecalculateHeight() {
@@ -515,8 +322,8 @@ const WppChatInput = class {
     }
   }
   calculateTextHeight(text) {
-    if (!this.textareaRef || !text)
-      return MIN_TEXTAREA_HEIGHT;
+    if (!this.textareaRef)
+      return this.MIN_TEXTAREA_HEIGHT;
     const mirrorDiv = document.createElement('div');
     const computedStyle = window.getComputedStyle(this.textareaRef);
     mirrorDiv.style.position = 'absolute';
@@ -529,8 +336,7 @@ const WppChatInput = class {
     mirrorDiv.style.fontSize = computedStyle.fontSize;
     mirrorDiv.style.lineHeight = computedStyle.lineHeight;
     mirrorDiv.style.boxSizing = computedStyle.boxSizing;
-    mirrorDiv.style.letterSpacing = computedStyle.letterSpacing;
-    mirrorDiv.textContent = (text || ' ') + '\u200b';
+    mirrorDiv.textContent = text || ' ';
     document.body.appendChild(mirrorDiv);
     const height = mirrorDiv.offsetHeight;
     document.body.removeChild(mirrorDiv);
@@ -564,27 +370,23 @@ const WppChatInput = class {
     this.inputAreaRef.addEventListener('scroll', this.handleScroll);
     this.checkAttachmentsVisibility();
   }
-  /**
-   * Scrolls the attachments list to the specified file type.
-   * @param fileType 'error' for error files, 'success' for success files (or '' for any file)
-   */
-  scrollToAttachment(type = '') {
+  scrollToTopOfAttachments() {
+    if (this.inputAreaRef) {
+      this.inputAreaRef.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+  scrollToBottomOfAttachments() {
     const attachmentsElement = this.inputAreaRef?.querySelector('.attachments');
-    if (!attachmentsElement)
-      return;
-    let selector = '.wpp-file-upload-item';
-    if (type === 'error')
-      selector += '.error';
-    if (type === 'success')
-      selector += ':not(.error)';
-    const attachment = attachmentsElement.querySelector(selector);
-    if (attachment) {
-      // Use block: 'nearest' to minimize page scroll issues
-      attachment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    if (!attachmentsElement) {
+      console.error('🚀 Attachments container not found.');
       return;
     }
-    // Fallback: scroll to top (visual top in column-reverse is scrollTop = 0)
-    attachmentsElement.scrollTo({ top: 0, behavior: 'smooth' });
+    const failedAttachment = attachmentsElement.querySelector('.wpp-file-upload-item.error');
+    if (failedAttachment) {
+      failedAttachment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return;
+    }
+    attachmentsElement.scrollTo({ top: attachmentsElement.scrollHeight, behavior: 'smooth' });
   }
   displayToast(message, type) {
     this.checkAttachmentsVisibility();
@@ -598,24 +400,53 @@ const WppChatInput = class {
   }
   handleSend() {
     if (this.disabled ||
-      this.isSendDisabled ||
-      (!this.internalValue.trim() && !this.successAttachmentsList.length) ||
+      (!this.message.trim() && !this.successAttachmentsList.length) ||
       this.errorAttachmentsList.length)
       return;
     this.wppSend.emit({
-      message: this.internalValue.trim(),
+      message: this.message.trim(),
       attachments: this.successAttachmentsList,
     });
     Object.assign(this, {
-      internalValue: '',
+      message: '',
       successAttachmentsList: [],
       errorAttachmentsList: [],
     });
     this.wppChange.emit({ value: [], hasError: false, errorFiles: [] });
     this.adjustTextareaHeight(true);
-    if (this.size === 's') {
-      this.isChatInputExpanded = false;
+  }
+  scrollInputAreaToBottom() {
+    if (!this.inputAreaRef)
+      return;
+    // Use a nested RAF and setTimeout fallback to let the DOM update.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        this.inputAreaRef.scrollTo({
+          top: this.inputAreaRef.scrollHeight,
+          behavior: 'smooth',
+        });
+        // Fallback in case the nested RAF doesn't work as expected.
+        setTimeout(() => {
+          this.inputAreaRef.scrollTo({
+            top: this.inputAreaRef.scrollHeight,
+            behavior: 'smooth',
+          });
+        }, 50);
+      });
+    });
+  }
+  handleInput(event) {
+    if (this.disabled)
+      return;
+    const target = event.target;
+    this.message = target.value;
+    if (!this.message.trim() && this.textareaRef) {
+      this.textareaRef.style.minHeight = `${this.MIN_TEXTAREA_HEIGHT}px`;
     }
+    requestAnimationFrame(() => {
+      this.adjustTextareaHeight();
+      this.scrollInputAreaToBottom();
+    });
   }
   handleFileSelection() {
     if (this.inputRef) {
@@ -629,17 +460,14 @@ const WppChatInput = class {
     const filteredFiles = filesList
       .filter(Boolean)
       .map(file => existingAttachments.some(item => item.name === file.name)
-      ? _const.renameFile(file, this.generateUniqueName(file.name, existingAttachments))
+      ? utils$1.renameFile(file, this.generateUniqueName(file.name, existingAttachments))
       : file);
-    const filteredFilesInitLength = filteredFiles.length;
     if (this.isMaximumFilesSet()) {
-      const maxFiles = this.mergedFileUploadConfig.maxFiles;
-      const remainingSlots = Math.max(0, maxFiles - existingAttachments.length);
-      filteredFiles.length = Math.min(filteredFiles.length, remainingSlots);
-      if (remainingSlots === 0)
-        return;
-      this.displayToast('Uploading...', 'information');
+      const remainingSlots = Math.max(0, (this.mergedFileUploadConfig.maxFiles ?? 0) - existingAttachments.length);
+      filteredFiles.length = this.mergedFileUploadConfig.multiple ? Math.min(filteredFiles.length, remainingSlots) : 1;
     }
+    if (!filteredFiles.length)
+      return;
     const validatedFiles = filteredFiles.map(file => {
       if ('url' in file)
         return file;
@@ -661,56 +489,39 @@ const WppChatInput = class {
       errorFiles: this.errorAttachmentsList,
     });
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        this.checkAttachmentsVisibility();
-        const label = batchErrorFiles.length > 0 ? 'Upload FAILED' : 'Uploaded Successfully';
-        const fileCount = batchErrorFiles.length || batchSuccessFiles.length;
-        const fileLabel = fileCount === 1 ? 'File' : 'Files';
-        if (batchErrorFiles.length === 0 &&
-          this.isMaximumFilesSet() &&
-          this.mergedFileUploadConfig.maxFiles < filteredFilesInitLength) {
-          this.displayToast(this.mergedFileUploadConfig.locales.limitError, 'error');
-        }
-        else if (fileCount > 0) {
-          this.displayToast(`${fileCount} ${fileLabel} ${label}`, batchErrorFiles.length > 0 ? 'error' : 'success');
-        }
-        if (this.debouncedAdjustTextareaHeight) {
-          this.debouncedAdjustTextareaHeight();
-        }
-      });
+      this.checkAttachmentsVisibility();
+      const label = batchErrorFiles.length > 0 ? 'Upload FAILED' : 'Uploaded Successfully';
+      const fileCount = batchErrorFiles.length || batchSuccessFiles.length;
+      const fileLabel = fileCount === 1 ? 'File' : 'Files';
+      if (fileCount > 0) {
+        this.displayToast(`${fileCount} ${fileLabel} ${label}`, batchErrorFiles.length > 0 ? 'error' : 'success');
+      }
+      this.adjustTextareaHeight();
     });
   }
   handleToastClick(event) {
     event.stopPropagation();
-    this.scrollToAttachment(this.toastType === 'error' ? 'error' : 'success');
+    this.toastType === 'error' ? this.scrollToBottomOfAttachments() : this.scrollToTopOfAttachments();
   }
   get isSendDisabled() {
-    const charExceeded = this.charactersLimit !== undefined && this.internalValue.length > this.charactersLimit;
+    const charExceeded = this.charactersLimit !== undefined && this.message.length > this.charactersLimit;
     return (this.disabled ||
-      (!this.internalValue.trim() && this.successAttachmentsList.length === 0) ||
+      (!this.message.trim() && this.successAttachmentsList.length === 0) ||
       this.errorAttachmentsList.length > 0 ||
       charExceeded);
   }
   render() {
     const allFiles = [...this.successAttachmentsList, ...this.errorAttachmentsList];
-    const charExceeded = this.charactersLimit && this.internalValue.length > this.charactersLimit;
-    const isMaximizedS = this.isChatInputExpanded && this.size === 's';
-    const maximizedSorSizeM = isMaximizedS || this.size === 'm';
-    const isMinimizedS = this.size === 's' && !this.isChatInputExpanded;
-    return (index.h(index.Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, toast, input-area, attachments, text-input, actions-bar, left-actions, right-actions, file-item", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick }, index.h("div", { class: this.chatInputContainerClasses(), part: "chat-input-container" }, this.showToast && (index.h("wpp-toast-v3-3-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), index.h("div", { class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (index.h(index.Fragment, null, allFiles?.length > 0 && (index.h("div", { class: this.attachmentsWrapperClasses(), part: "attachments" }, allFiles.map((file, index$1) => (index.h("wpp-file-upload-item-v3-3-0", { key: index$1, file: file, format: this.mergedFileUploadConfig.format, maxLabelLength: this.mergedFileUploadConfig.maxLabelLength, currentIndex: index$1, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
-        sizeError: this.mergedFileUploadConfig.locales.sizeError,
-        formatError: this.mergedFileUploadConfig.locales.formatError,
-      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded }))))), index.h("textarea", { class: this.textInputClasses(), placeholder: this.placeholder, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input" }))) : (index.h("div", { class: this.inputAreaWrapperClasses() }, index.h("div", { class: this.minimizedInput(), part: "minimized-input", onClick: this.handleSizeToggle }, index.h("wpp-typography-v3-3-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || this.placeholder)), index.h("wpp-action-button-v3-3-0", { "data-testid": "send-icon-only-button", variant: "secondary", onClick: e => {
-        e.stopPropagation();
-        this.handleSend();
-      }, disabled: this.isSendDisabled }, index.h("wpp-icon-send-v3-3-0", { slot: "icon-start" }))))), maximizedSorSizeM && (index.h("div", { class: this.actionsBarClasses(), part: "actions-bar" }, index.h("div", { class: this.leftActionsClasses(), part: "left-actions" }, this.enableAttach && (index.h(index.Fragment, null, index.h("wpp-action-button-v3-3-0", { "data-testid": "attach-icon-only-button", disabled: this.disabled, variant: "secondary", onClick: () => this.handleFileSelection() }, index.h("wpp-icon-attach-v3-3-0", { slot: "icon-start" })), index.h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.getAcceptExtensions().join(), title: "" }))), this.withSelect && (index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })), this.enableMic && (index.h("wpp-action-button-v3-3-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled }, index.h("wpp-icon-mic-on-v3-3-0", { slot: "icon-start" })))), index.h("div", { class: this.rightActionsClasses(), part: "right-actions" }, charExceeded && (index.h("wpp-typography-v3-3-0", { class: "char-counter", type: "xs-midi" }, this.internalValue.length, "/", this.charactersLimit)), index.h("wpp-action-button-v3-3-0", { "data-testid": "send-icon-only-button", variant: "secondary", onClick: () => this.handleSend(), disabled: this.isSendDisabled }, index.h("wpp-icon-send-v3-3-0", { slot: "icon-start" }))))))));
+    const charExceeded = this.charactersLimit && this.message.length > this.charactersLimit;
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "chat-input-container, toast, input-area, attachments, text-input, actions-bar, left-actions, right-actions, file-item", onClick: this.handleClick }, index.h("div", { class: this.chatInputContainerClasses(), part: "chat-input-container" }, this.showToast && (index.h("wpp-toast-v2-22-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), index.h("div", { class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, allFiles?.length > 0 && (index.h("div", { class: this.attachmentsWrapperClasses(), part: "attachments" }, allFiles.map((file, index$1) => (index.h("wpp-file-upload-item-v2-22-0", { key: index$1, file: file, format: this.mergedFileUploadConfig.format, maxLabelLength: this.mergedFileUploadConfig.maxLabelLength, currentIndex: index$1, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
+        sizeError: this.mergedFileUploadConfig.locales?.sizeError || 'File exceeds size limit',
+        formatError: this.mergedFileUploadConfig.locales?.formatError || 'Wrong format',
+      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '' }))))), index.h("textarea", { class: this.textInputClasses(), placeholder: this.placeholder, value: this.message, ref: el => (this.textareaRef = el), onInput: event => this.handleInput(event), disabled: this.disabled, part: "text-input" })), index.h("div", { class: this.actionsBarClasses(), part: "actions-bar" }, index.h("div", { class: this.leftActionsClasses(), part: "left-actions" }, this.enableAttach && (index.h(index.Fragment, null, index.h("wpp-action-button-v2-22-0", { "data-testid": "attach-icon-only-button", disabled: this.disabled, variant: "secondary", onClick: () => this.handleFileSelection() }, index.h("wpp-icon-attach-v2-22-0", { slot: "icon-start" })), index.h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.getAcceptExtensions().join(), title: "" }))), this.withSelect && (index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })), this.enableMic && (index.h("wpp-action-button-v2-22-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled }, index.h("wpp-icon-mic-on-v2-22-0", { slot: "icon-start" })))), index.h("div", { class: this.rightActionsClasses(), part: "right-actions" }, charExceeded && (index.h("wpp-typography-v2-22-0", { class: "char-counter", type: "xs-midi" }, this.message.length, "/", this.charactersLimit)), index.h("wpp-action-button-v2-22-0", { "data-testid": "send-icon-only-button", variant: "secondary", onClick: () => this.handleSend(), disabled: this.isSendDisabled }, index.h("wpp-icon-send-v2-22-0", { slot: "icon-start" })))))));
   }
-  static get registryIs() { return "wpp-chat-input-v3-3-0"; }
+  static get registryIs() { return "wpp-chat-input-v2-22-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
-    "attachments": ["onAttachmentsChange"],
-    "textValue": ["onTextValueChange"],
-    "size": ["onSizeChange"]
+    "attachments": ["onAttachmentsChange"]
   }; }
 };
 WppChatInput.style = wppChatInputCss;

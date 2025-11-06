@@ -19,4 +19,3 @@ import { MaskOptions } from './types';
  * @returns The raw value string.
  */
 export declare const getRawValueForExtra: (maskedValue: string, type: string, maskOptions?: MaskOptions) => string;
-export declare const getValidAutocomplete: (autocomplete: string) => string;

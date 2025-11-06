@@ -1,9 +1,10 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppSideModal>;
+import { WppSideModal } from './wpp-side-modal';
+declare const _default: Meta<typeof WppSideModal>;
 export default _default;
 type SideModalStoryArgs = Components.WppSideModal & {
   withActions: boolean;
 };
-export declare const SideModal: StoryObj<SideModalStoryArgs>;
-export declare const SideModalWithActionsConfig: StoryObj<Components.WppSideModal>;
+export declare const SideModal: Story<SideModalStoryArgs>;
+export declare const SideModalWithActionsConfig: Story<Components.WppSideModal>;

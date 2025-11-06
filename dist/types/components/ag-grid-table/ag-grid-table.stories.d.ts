@@ -9,7 +9,12 @@ declare const _default: {
     options: {
       showPanel: boolean;
     };
+    notes: {
+      readme: any;
+    };
   };
 };
 export default _default;
-export declare const Documentation: () => import("lit-html").TemplateResult<1>;
+export declare const Pagination: () => import("lit-html").TemplateResult<1>;
+export declare const InfiniteScroll: () => import("lit-html").TemplateResult<1>;
+export declare const LoadMore: () => import("lit-html").TemplateResult<1>;

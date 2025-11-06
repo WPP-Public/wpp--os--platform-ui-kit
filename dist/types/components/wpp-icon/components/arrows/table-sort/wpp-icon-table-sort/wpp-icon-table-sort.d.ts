@@ -15,13 +15,5 @@ export declare class WppIconTableSort {
    Defines the icon color.
    */
   readonly color: string;
-  /**
-   * Defines the up arrow color.
-   */
-  readonly upArrowColor: string;
-  /**
-   * Defines the down arrow color.
-   */
-  readonly downArrowColor: string;
   render(): any;
 }

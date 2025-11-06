@@ -31,11 +31,6 @@ export declare class WppTab {
    */
   readonly size: 'm' | 's';
   /**
-   * Defines the icon that will be displayed in the tab. Must be an icon from the WPP library.
-   * Example: `wpp-icon-pie-chart`.
-   */
-  readonly icon: `wpp-icon-${string}`;
-  /**
    * Emitted when an item is clicked.
    */
   wppChangeTabControlItem: EventEmitter<TabChangeEventDetail>;

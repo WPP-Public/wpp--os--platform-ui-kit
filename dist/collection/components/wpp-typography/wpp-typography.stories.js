@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+import readme from './readme.md';
 export default {
   title: 'Design System/Foundations/Typography',
   parameters: {
@@ -7,6 +8,7 @@ export default {
         hidden: true,
       },
     },
+    notes: readme,
   },
   argTypes: {
     type: {
@@ -36,18 +38,10 @@ export default {
       options: ['span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
       control: { type: 'select' },
     },
-    color: {
-      control: { type: 'text' },
-      description: 'The color of the text',
-      defaultValue: 'var(--wpp-text-color)',
-    },
   },
 };
-export const Typography = (args) => html ` <wpp-typography-v3-3-0 .type="${args.type}" .tag="${args.tag}" .color="${args.color}"
-    >Preview Heading</wpp-typography-v3-3-0
-  >`;
+export const Typography = (args) => html ` <wpp-typography-v2-22-0 .type="${args.type}" .tag="${args.tag}">Preview Heading</wpp-typography-v2-22-0>`;
 Typography.args = {
   type: '3xl-heading',
   tag: 'span',
-  color: 'var(--wpp-text-color)',
 };

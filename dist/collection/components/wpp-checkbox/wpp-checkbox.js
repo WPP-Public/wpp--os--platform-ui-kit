@@ -1,5 +1,4 @@
 import { h, Host } from '@stencil/core';
-import { FOCUS_TYPE } from '../../types/common';
 /**
  * @part body - Main content wrapper
  * @part input - Input element
@@ -12,6 +11,7 @@ export class WppCheckbox {
   constructor() {
     this.onClick = (event) => {
       event.preventDefault();
+      this.setFocus();
       if (this.controlled)
         return this.wppChange.emit({
           value: this.value,
@@ -39,29 +39,7 @@ export class WppCheckbox {
       this.wppFocus.emit(event);
     };
     this.onBlur = (event) => {
-      this.focusType = FOCUS_TYPE.NONE;
       this.wppBlur.emit(event);
-      this.isPressed = false;
-    };
-    this.onKeyUp = (event) => {
-      // Need to check if input got focus, because label can have icon with tooltip which also can be focused.
-      if (event.key === 'Tab' && this.host?.shadowRoot?.activeElement === this.inputRef)
-        this.focusType = FOCUS_TYPE.TAB;
-      if (event.key === 'Enter' || event.key === ' ') {
-        this.isPressed = false;
-      }
-    };
-    this.onKeyDown = (event) => {
-      if (this.disabled)
-        return;
-      // Need to check if input got focus, because label can have icon with tooltip which also can be focused.
-      if ((event.key === 'Enter' || event.key === ' ') && this.host?.shadowRoot?.activeElement === this.inputRef) {
-        event.preventDefault();
-        const clickEvent = new MouseEvent('click', { bubbles: true, composed: true });
-        this.host.dispatchEvent(clickEvent);
-        this.isPressed = true;
-        this.checked = !this.checked;
-      }
     };
     this.hostCssClasses = () => ({
       'wpp-checkbox': true,
@@ -74,15 +52,7 @@ export class WppCheckbox {
       label: true,
       'with-text': !!this.labelConfig?.text,
       [this.internalState]: true,
-      'tab-focus': this.focusType === FOCUS_TYPE.TAB,
-      pressed: this.isPressed,
     });
-    this.inputCssClasses = () => ({
-      'checkbox-input': true,
-      'tab-focus': this.focusType === FOCUS_TYPE.TAB,
-    });
-    this.focusType = undefined;
-    this.isPressed = false;
     this.name = undefined;
     this.value = undefined;
     this.checked = false;
@@ -101,24 +71,18 @@ export class WppCheckbox {
     this.labelConfig = undefined;
     this.internalState = '';
     this.index = 0;
-    this.decorative = false;
   }
   /**
    * Method that sets focus on the native input.
    */
   async setFocus() {
-    if (!this.inputRef)
-      return;
-    this.inputRef.focus();
-    this.focusType = FOCUS_TYPE.TAB;
+    this.inputRef?.focus();
   }
   render() {
-    if (this.decorative)
-      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name }, h("wpp-label-v3-3-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v3-3-0", { part: "icon-tick" }), h("wpp-icon-dash-v3-3-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v3-3-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
-    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name }, h("wpp-label-v3-3-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, htmlFor: this.name, disabled: this.disabled, onClick: this.onClick, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("input", { class: this.inputCssClasses(), type: "checkbox", id: this.name, name: this.name, disabled: this.disabled, checked: this.checked || this.indeterminate, required: this.required, onFocus: this.onFocus, onBlur: this.onBlur, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-hidden": this.disabled ? 'true' : null, "aria-required": this.required.toString(), tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v3-3-0", { part: "icon-tick" }), h("wpp-icon-dash-v3-3-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v3-3-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
+    return (h(Host, { "aria-checked": this.checked, "aria-disabled": this.disabled, "aria-hidden": this.disabled ? 'true' : null, "aria-required": this.required, role: "checkbox", class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, tabIndex: this.index, exportparts: "body, input, square, icon-tick, icon-dash, message" }, h("wpp-label-v2-22-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, htmlFor: this.name, disabled: this.disabled, onClick: this.onClick, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("input", { class: "checkbox-input", type: "checkbox", id: this.name, name: this.name, disabled: this.disabled, checked: this.checked || this.indeterminate, required: this.required, onFocus: this.onFocus, onBlur: this.onBlur, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, tabIndex: -1, part: "input", title: "" }), h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v2-22-0", { part: "icon-tick" }), h("wpp-icon-dash-v2-22-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v2-22-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
   }
   static get is() { return "wpp-checkbox"; }
-  static get registryIs() { return "wpp-checkbox-v3-3-0"; }
+  static get registryIs() { return "wpp-checkbox-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -443,34 +407,7 @@ export class WppCheckbox {
         "attribute": "index",
         "reflect": false,
         "defaultValue": "0"
-      },
-      "decorative": {
-        "type": "boolean",
-        "mutable": false,
-        "complexType": {
-          "original": "boolean",
-          "resolved": "boolean | undefined",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [{
-              "name": "internal",
-              "text": "- This prop is controlled by WppCard component"
-            }],
-          "text": "Create a component with role presentation"
-        },
-        "attribute": "decorative",
-        "reflect": false,
-        "defaultValue": "false"
       }
-    };
-  }
-  static get states() {
-    return {
-      "focusType": {},
-      "isPressed": {}
     };
   }
   static get events() {

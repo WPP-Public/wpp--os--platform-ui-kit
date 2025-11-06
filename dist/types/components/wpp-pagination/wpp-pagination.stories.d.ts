@@ -1,6 +1,6 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
 import { WppPagination } from './wpp-pagination';
 declare const _default: Meta<typeof WppPagination>;
 export default _default;
-export declare const PaginationControl: StoryObj<Components.WppPagination>;
+export declare const PaginationControl: Story<Components.WppPagination>;

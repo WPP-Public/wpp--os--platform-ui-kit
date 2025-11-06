@@ -1,0 +1,21 @@
+import { r as registerInstance, h } from './index-9177bb6d.js';
+import { W as WppIcon } from './WppIcon-d0aab502.js';
+
+const wppIconCss = ":host{display:-ms-inline-flexbox;display:inline-flex;color:var(--wpp-prop-icon-color)}";
+
+const WppIconItalic = class {
+  constructor(hostRef) {
+    registerInstance(this, hostRef);
+    this.size = 'm';
+    this.width = undefined;
+    this.height = undefined;
+    this.color = 'var(--wpp-icon-color)';
+  }
+  render() {
+    return (h(WppIcon, { name: "wpp-icon-italic", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M8 3.25C8 2.83579 8.33579 2.5 8.75 2.5H16.25C16.6642 2.5 17 2.83579 17 3.25C17 3.66421 16.6642 4 16.25 4H13.0151L8.59202 15.5H11.25C11.6642 15.5 12 15.8358 12 16.25C12 16.6642 11.6642 17 11.25 17H3.75C3.33579 17 3 16.6642 3 16.25C3 15.8358 3.33579 15.5 3.75 15.5H6.9849L11.408 4H8.75C8.33579 4 8 3.66421 8 3.25Z", fill: "currentColor" })));
+  }
+  static get registryIs() { return "wpp-icon-italic-v2-22-0"; }
+};
+WppIconItalic.style = wppIconCss;
+
+export { WppIconItalic as W };

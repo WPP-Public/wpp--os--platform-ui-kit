@@ -21,9 +21,9 @@ const WppIconMaximise$1 = /*@__PURE__*/ proxyCustomElement(class WppIconMaximise
   render() {
     return (h(WppIcon, { name: "wpp-icon-maximise", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: MaximiseDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-maximise-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-maximise-v2-22-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-maximise", "wpp-icon-maximise-v3-3-0", {
+}, [1, "wpp-icon-maximise", "wpp-icon-maximise-v2-22-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -34,9 +34,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-maximise-v3-3-0"];
+  const components = ["wpp-icon-maximise-v2-22-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-maximise-v3-3-0":
+    case "wpp-icon-maximise-v2-22-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconMaximise$1);
       }

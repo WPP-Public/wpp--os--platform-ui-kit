@@ -1,5 +1,6 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppLabel>;
+import { WppLabel } from './wpp-label';
+declare const _default: Meta<typeof WppLabel>;
 export default _default;
-export declare const Label: StoryObj<Components.WppLabel>;
+export declare const Label: Story<Components.WppLabel>;

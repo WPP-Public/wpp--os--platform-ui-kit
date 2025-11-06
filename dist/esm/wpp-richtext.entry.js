@@ -1,21 +1,44 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { L as LOCALES_DEFAULTS, e as embedBlotInnerHtmlRegexp, c as createDragThumbnail, K as KEYBOARD_FOCUS_CLASS, p as processMarkdownValue, a as exportHtml, t as turndownService, b as cjs, q as quillMarkdownOptions, d as KEYBOARD_FOCUS_EVENT } from './config-5578eb3c.js';
+import { e as embedBlotInnerHtmlRegexp, c as createDragThumbnail, K as KEYBOARD_FOCUS_CLASS, m as marked_umd, a as exportHtml, t as turndownService, d as deepmerge_1, q as quillMarkdownOptions, b as KEYBOARD_FOCUS_EVENT } from './marked.umd-2f5023bc.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
-import { n as autoFocusElement } from './utils-d423b01f.js';
+import { m as autoFocusElement } from './utils-f3870f15.js';
 import { s as sources, f as formats, d as debugLevels, Q as Quill, U as UPLOAD_REQUEST_EVENT } from './types-112bed55.js';
 import { c as createCommonjsModule } from './_commonjsHelpers-ba3f0406.js';
-import './wpp-icon-unordered-list-1985dd37.js';
-import './WppIcon-f4802cc9.js';
-import './wpp-icon-video-clip-b134a3cd.js';
-import './wpp-progress-indicator-1470c3b6.js';
-import './wpp-icon-chevron-3780b470.js';
-import './wpp-icon-gallery-64c20319.js';
+import { d as renderIcons } from './utils-d8896618.js';
+import './wpp-icon-attach-ab8b7b8e.js';
+import './WppIcon-d0aab502.js';
+import './wpp-icon-blockquote-e23da51b.js';
+import './wpp-icon-bold-dfebe5db.js';
+import './wpp-icon-code-view-354ec303.js';
+import './wpp-icon-float-center-c44367d6.js';
+import './wpp-icon-float-left-5837d66e.js';
+import './wpp-icon-float-right-d24356e9.js';
+import './wpp-icon-h1-72b1c973.js';
+import './wpp-icon-h2-60de8d2b.js';
+import './wpp-icon-video-clip-9526562d.js';
+import './wpp-icon-indent-decrease-ca6662f3.js';
+import './wpp-icon-indent-increase-632fb35e.js';
+import './wpp-icon-italic-03fb8f41.js';
+import './wpp-icon-link-a3db6929.js';
+import './wpp-icon-ordered-list-6c165c5e.js';
+import './wpp-icon-redo-87eac29f.js';
+import './wpp-icon-strike-through-a5f63a7d.js';
+import './wpp-icon-text-alignment-center-9c95e8c5.js';
+import './wpp-icon-text-alignment-justify-d3ea8e91.js';
+import './wpp-icon-text-alignment-left-682862b4.js';
+import './wpp-icon-text-alignment-right-8f616d52.js';
+import './wpp-icon-underline-9b2e6d1b.js';
+import './wpp-icon-undo-59ed85c2.js';
+import './wpp-icon-unordered-list-83325b10.js';
+import './wpp-progress-indicator-83078fdc.js';
+import './wpp-icon-chevron-987d4c5e.js';
+import './wpp-icon-gallery-abc3646e.js';
 import './lodash-66b76943.js';
-import './wpp-action-button-40484a42.js';
-import './WrappedSlot-2ee5325a.js';
-import './wpp-input-9437c445.js';
-import './turndown.browser.es-9f6d9c98.js';
-import './consts-5bf9c29f.js';
+import './wpp-action-button-eea7b2ce.js';
+import './WrappedSlot-a49aa0dd.js';
+import './wpp-input-f4d242af.js';
+import './turndown.browser.es-8ae0014d.js';
+import './consts-4b0f734e.js';
 
 createCommonjsModule(function (module) {
 /**
@@ -29,7 +52,6 @@ var runtime = (function (exports) {
 
   var Op = Object.prototype;
   var hasOwn = Op.hasOwnProperty;
-  var defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; };
   var undefined$1; // More compressible than void 0.
   var $Symbol = typeof Symbol === "function" ? Symbol : {};
   var iteratorSymbol = $Symbol.iterator || "@@iterator";
@@ -62,7 +84,7 @@ var runtime = (function (exports) {
 
     // The ._invoke method unifies the implementations of the .next,
     // .throw, and .return methods.
-    defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) });
+    generator._invoke = makeInvokeMethod(innerFn, self, context);
 
     return generator;
   }
@@ -123,12 +145,8 @@ var runtime = (function (exports) {
   var Gp = GeneratorFunctionPrototype.prototype =
     Generator.prototype = Object.create(IteratorPrototype);
   GeneratorFunction.prototype = GeneratorFunctionPrototype;
-  defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: true });
-  defineProperty(
-    GeneratorFunctionPrototype,
-    "constructor",
-    { value: GeneratorFunction, configurable: true }
-  );
+  define(Gp, "constructor", GeneratorFunctionPrototype);
+  define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);
   GeneratorFunction.displayName = define(
     GeneratorFunctionPrototype,
     toStringTagSymbol,
@@ -238,7 +256,7 @@ var runtime = (function (exports) {
 
     // Define the unified helper method that is used to implement .next,
     // .throw, and .return (see defineIteratorMethods).
-    defineProperty(this, "_invoke", { value: enqueue });
+    this._invoke = enqueue;
   }
 
   defineIteratorMethods(AsyncIterator.prototype);
@@ -348,32 +366,31 @@ var runtime = (function (exports) {
   // delegate iterator, or by modifying context.method and context.arg,
   // setting context.delegate to null, and returning the ContinueSentinel.
   function maybeInvokeDelegate(delegate, context) {
-    var methodName = context.method;
-    var method = delegate.iterator[methodName];
+    var method = delegate.iterator[context.method];
     if (method === undefined$1) {
       // A .throw or .return when the delegate iterator has no .throw
-      // method, or a missing .next mehtod, always terminate the
-      // yield* loop.
+      // method always terminates the yield* loop.
       context.delegate = null;
 
-      // Note: ["return"] must be used for ES3 parsing compatibility.
-      if (methodName === "throw" && delegate.iterator["return"]) {
-        // If the delegate iterator has a return method, give it a
-        // chance to clean up.
-        context.method = "return";
-        context.arg = undefined$1;
-        maybeInvokeDelegate(delegate, context);
+      if (context.method === "throw") {
+        // Note: ["return"] must be used for ES3 parsing compatibility.
+        if (delegate.iterator["return"]) {
+          // If the delegate iterator has a return method, give it a
+          // chance to clean up.
+          context.method = "return";
+          context.arg = undefined$1;
+          maybeInvokeDelegate(delegate, context);
 
-        if (context.method === "throw") {
-          // If maybeInvokeDelegate(context) changed context.method from
-          // "return" to "throw", let that override the TypeError below.
-          return ContinueSentinel;
+          if (context.method === "throw") {
+            // If maybeInvokeDelegate(context) changed context.method from
+            // "return" to "throw", let that override the TypeError below.
+            return ContinueSentinel;
+          }
         }
-      }
-      if (methodName !== "return") {
+
         context.method = "throw";
         context.arg = new TypeError(
-          "The iterator does not provide a '" + methodName + "' method");
+          "The iterator does not provide a 'throw' method");
       }
 
       return ContinueSentinel;
@@ -477,8 +494,7 @@ var runtime = (function (exports) {
     this.reset(true);
   }
 
-  exports.keys = function(val) {
-    var object = Object(val);
+  exports.keys = function(object) {
     var keys = [];
     for (var key in object) {
       keys.push(key);
@@ -1723,7 +1739,7 @@ if (typeof window !== 'undefined') {
   window.QuillMarkdown = MarkdownActivity;
 }
 
-const wppRichtextCss = ".ql-image-actions__overlay{position:absolute;-webkit-box-sizing:border-box;box-sizing:border-box;border:1px dashed var(--richtext-border-color-hover)}.ql-image-actions__toolbar{position:absolute;-webkit-box-sizing:border-box;box-sizing:border-box;top:-26px;margin-left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);padding:0 6px;z-index:1;display:-ms-flexbox;display:flex;gap:4px;border:1px solid var(--richtext-border-color);background:white;cursor:default;border-radius:var(--wpp-border-radius-s)}.ql-image-actions__toolbar:hover{border:1px solid var(--richtext-border-color-active)}.ql-image-actions__toolbar-button{display:inline-block;width:24px;height:24px;padding:2px;vertical-align:middle;color:var(--richtext-button-inactive-color);background-color:var(--richtext-button-background-color);cursor:pointer}.ql-image-actions__toolbar-button:hover{color:var(--richtext-button-inactive-hover-color)}.ql-image-actions__toolbar-button:active{color:var(--richtext-button-inactive-click-color)}.ql-image-actions__toolbar-button.is-selected{color:var(--richtext-button-active-color)}.ql-image-actions__toolbar-button.is-selected:hover{color:var(--richtext-button-active-hover-color)}.ql-image-actions__toolbar-button.is-selected:active{color:var(--richtext-button-active-click-color)}.ql-image-actions__toolbar-button svg{display:inline-block;width:20px;height:20px;vertical-align:middle;fill:currentColor}.ql-image-actions__resize-handle{position:absolute;background-color:white;border:1px solid var(--richtext-border-color);-webkit-box-sizing:border-box;box-sizing:border-box;opacity:0.8}.image-actions__proxy-image{position:absolute;display:block;max-width:none}.ql-editor .ql-attachment-uploading .wpp-progress-indicator{--pi-width:.8em !important;--pi-circle-stroke-width:12;margin-right:7px}.ql-container>.ql-uploading-progress-indicator{--pi-width:20px;--pi-circle-stroke-width:8;position:absolute;pointer-events:none}.wpp-richtext{--richtext-padding:var(--wpp-richtext-padding, 9px 12px);--richtext-label-color:var(--wpp-richtext-label-color, var(--wpp-text-color-info));--richtext-characters-limit-label-color:var(--wpp-richtext-characters-limit-label-color, var(--wpp-grey-color-800));--richtext-label-margin:var(--wpp-richtext-label-margin, 0 0 8px 0);--richtext-inline-message-margin:var(--wpp-richtext-inline-message-margin, 4px 0 0 0);--richtext-placeholder-color:var(--wpp-richtext-placeholder-color, var(--wpp-grey-color-700));--richtext-text-color-disabled:var(--wpp-richtext-text-color-disabled, var(--wpp-text-color-disabled));--richtext-characters-limit-font-weight:var(--wpp-richtext-characters-limit-font-weight, 400);--richtext-warning-charecters-limit-color:var(--wpp-richtext-border-radius, var(--wpp-warning-color-500));--richtext-error-charecters-limit-color:var(--wpp-richtext-border-radius, var(--wpp-danger-color-500));--richtext-bg-color:var(--wpp-richtext-bg-color, transparent);--richtext-bg-color-hover:var(--wpp-richtext-bg-color-hover, var(--wpp-grey-color-200));--richtext-bg-color-active:var(--wpp-richtext-bg-color-active, transparent);--richtext-bg-color-disabled:var(--wpp-richtext-bg-color-disabled, var(--wpp-grey-color-100));--counter-first-border-color-focus:var(--wpp-counter-first-border-color-focus, var(--wpp-grey-color-000));--counter-second-border-color-focus:var(--wpp-counter-second-border-color-focus, var(--wpp-brand-color));--richtext-border-width:var(--wpp-richtext-border-width, var(--wpp-border-width-s));--richtext-border-style:var(--wpp-richtext-border-style, solid);--richtext-border-radius:var(--wpp-richtext-border-radius, var(--wpp-border-radius-m));--richtext-border-color:var(--wpp-richtext-border-color, var(--wpp-grey-color-500));--richtext-border-color-hover:var(--wpp-richtext-border-color-hover, var(--wpp-grey-color-700));--richtext-border-color-active:var(--wpp-richtext-border-color-active, var(--wpp-grey-color-800));--richtext-border-color-disabled:var(--wpp-richtext-border-color-disabled, var(--wpp-grey-color-400));--richtext-first-border-color-focus:var(--wpp-richtext-first-border-color-focus, var(--wpp-grey-color-000));--richtext-second-border-color-focus:var(--wpp-richtext-second-border-color-focus, var(--wpp-brand-color));--richtext-toolbar-outline-color:var(--wpp-richtext-toolbar-outline-color, var(--wpp-brand-color));--richtext-warning-border-color:var(--wpp-richtext-warning-border-color, var(--wpp-warning-color-400));--richtext-error-border-color:var(--wpp-richtext-error-border-color, var(--wpp-danger-color-400));--richtext-tooltip-padding:var(--wpp-richtext-tooltip-padding, 5px 12px);--richtext-tooltip-color:var(--wpp-richtext-tooltip-color, var(--wpp-typography-color));--richtext-tooltip-bg-color:var(--wpp-richtext-tooltip-bg-color, var(--wpp-grey-color-000));--richtext-button-inactive-color:var(--wpp-grey-color-600);--richtext-button-inactive-hover-color:var(--wpp-grey-color-700);--richtext-button-inactive-click-color:var(--wpp-grey-color-800);--richtext-button-active-color:var(--wpp-primary-color-500);--richtext-button-active-hover-color:var(--wpp-primary-color-400);--richtext-button-active-click-color:var(--wpp-primary-color-600);--richtext-button-background-color:var(--wpp-grey-color-000);--richtext-editor-min-width:var(--wpp-richtext-editor-min-width, 376px);--richtext-float-gap:1em;--richtext-editor-min-height:var(--wpp-richtext-editor-min-height, 136px);display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;min-width:var(--richtext-editor-min-width)}.wpp-richtext .label{margin:var(--richtext-label-margin)}.wpp-richtext .ql-form-control{position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;min-height:0;min-width:var(--richtext-editor-min-width)}.wpp-richtext .ql-form-control.tab-focus.tab-focus{border-radius:var(--wpp-border-radius-m);outline:none;-webkit-box-shadow:0 0 0 1px var(--richtext-first-border-color-focus), 0 0 0 3px var(--richtext-second-border-color-focus);box-shadow:0 0 0 1px var(--richtext-first-border-color-focus), 0 0 0 3px var(--richtext-second-border-color-focus)}.wpp-richtext .ql-form-control.tab-focus .ql-toolbar *:focus{outline-color:var(--richtext-toolbar-outline-color)}.wpp-richtext .ql-form-control,.wpp-richtext .ql-form-control .ql-toolbar,.wpp-richtext .ql-form-control .ql-container{border:var(--richtext-border-width) var(--richtext-border-style) var(--richtext-border-color);border-radius:var(--richtext-border-radius)}.wpp-richtext .ql-form-control .ql-container{height:100%;min-height:var(--richtext-editor-min-height)}.wpp-richtext .ql-form-control .ql-toolbar,.wpp-richtext .ql-form-control .ql-container{border-left:none;border-right:none;border-top-width:0;border-bottom-width:0}.wpp-richtext .ql-form-control .ql-toolbar+.ql-container,.wpp-richtext .ql-form-control .ql-container+.ql-toolbar{border-top-left-radius:0;border-top-right-radius:0;border-top-width:var(--richtext-border-width)}.wpp-richtext .ql-form-control:hover:not(.active),.wpp-richtext .ql-form-control:hover:not(.active) .ql-toolbar,.wpp-richtext .ql-form-control:hover:not(.active) .ql-container{border-color:var(--richtext-border-color-hover)}.wpp-richtext .ql-form-control:hover:not(.active) .ql-container{background-color:var(--wpp-grey-color-200)}.wpp-richtext .ql-form-control.active,.wpp-richtext .ql-form-control.active .ql-toolbar,.wpp-richtext .ql-form-control.active .ql-container{border-color:var(--richtext-border-color-active)}.wpp-richtext .ql-form-control.warning,.wpp-richtext .ql-form-control.warning:hover{border:var(--richtext-border-width) var(--richtext-border-style) var(--wpp-warning-color-400)}.wpp-richtext .ql-form-control.error,.wpp-richtext .ql-form-control.error:hover{border:var(--richtext-border-width) var(--richtext-border-style) var(--wpp-danger-color-400)}.wpp-richtext .ql-form-control.disabled *,.wpp-richtext .ql-form-control.disabled .ql-editor.ql-blank:before,.wpp-richtext .ql-form-control.disabled:hover *,.wpp-richtext .ql-form-control.disabled:hover .ql-editor.ql-blank:before{cursor:not-allowed;color:var(--richtext-text-color-disabled)}.wpp-richtext .ql-form-control.disabled,.wpp-richtext .ql-form-control.disabled .ql-toolbar,.wpp-richtext .ql-form-control.disabled .ql-container,.wpp-richtext .ql-form-control.disabled:hover,.wpp-richtext .ql-form-control.disabled:hover .ql-toolbar,.wpp-richtext .ql-form-control.disabled:hover .ql-container{border-color:var(--richtext-border-color-disabled)}.wpp-richtext .ql-form-control.disabled .ql-toolbar,.wpp-richtext .ql-form-control.disabled:hover .ql-toolbar{pointer-events:none}.wpp-richtext .ql-form-control.disabled .ql-container,.wpp-richtext .ql-form-control.disabled:hover .ql-container{background-color:var(--richtext-bg-color-disabled)}.wpp-richtext .ql-form-control.warning,.wpp-richtext .ql-form-control.warning:hover{border-color:var(--richtext-warning-border-color)}.wpp-richtext .ql-form-control.error,.wpp-richtext .ql-form-control.error:hover{border-color:var(--richtext-error-border-color)}.wpp-richtext .ql-form-control .form-control-input{position:absolute;left:0;bottom:0;z-index:0;opacity:0;pointer-events:none}.wpp-richtext .ql-toolbar{display:-ms-flexbox;display:flex;padding:2px 12px;-ms-flex-wrap:wrap;flex-wrap:wrap;font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}.wpp-richtext .ql-toolbar *:focus{outline-color:transparent}.wpp-richtext .ql-toolbar .ql-picker-label .wpp-icon-chevron{-webkit-transition:-webkit-transform 0.15s ease-out;transition:-webkit-transform 0.15s ease-out;transition:transform 0.15s ease-out;transition:transform 0.15s ease-out, -webkit-transform 0.15s ease-out}.wpp-richtext .ql-toolbar .ql-picker-label[aria-expanded=true] .wpp-icon-chevron{-webkit-transform:rotate(180deg);transform:rotate(180deg)}.wpp-richtext .ql-editor{height:100%}.wpp-richtext .ql-editor.ql-blank:before{color:var(--richtext-placeholder-color)}.wpp-richtext .messages-wrapper{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;margin:var(--richtext-inline-message-margin)}.wpp-richtext .messages-wrapper.without-text-message{-ms-flex-pack:end;justify-content:flex-end}.wpp-richtext .characters-limit{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;margin-left:32px}.wpp-richtext .characters-limit.warning .wpp-typography{color:var(--richtext-warning-charecters-limit-color)}.wpp-richtext .characters-limit.warning .wpp-typography:first-child::part(typography){color:var(--richtext-warning-charecters-limit-color)}.wpp-richtext .characters-limit.error .wpp-typography{color:var(--richtext-error-charecters-limit-color)}.wpp-richtext .characters-limit.error .wpp-typography:first-child::part(typography){color:var(--richtext-error-charecters-limit-color)}.wpp-richtext .characters-limit .wpp-typography:first-child{--wpp-typography-color:$labelColor;white-space:nowrap}.wpp-richtext .characters-limit .wpp-typography:first-child::part(typography){color:var(--richtext-characters-limit-label-color);font-weight:var(--richtext-characters-limit-font-weight)}.wpp-richtext .characters-limit .entered-characters{margin-left:2px;white-space:nowrap}.ql-toolbar[hidden],.ql-container[hidden]{display:block}.ql-tooltip{padding:var(--richtext-tooltip-padding);-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m);border-radius:var(--wpp-border-radius-s);color:var(--richtext-tooltip-color);background-color:var(--richtext-tooltip-bg-color);font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}.preserve-whitespace,.preserve-whitespace .ql-editor{white-space:pre-wrap;word-break:break-word}";
+const wppRichtextCss = ".ql-image-actions__overlay{position:absolute;-webkit-box-sizing:border-box;box-sizing:border-box;border:1px dashed var(--richtext-border-color-hover)}.ql-image-actions__toolbar{position:absolute;-webkit-box-sizing:border-box;box-sizing:border-box;top:-26px;margin-left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);padding:0 6px;z-index:1;display:-ms-flexbox;display:flex;gap:4px;border:1px solid var(--richtext-border-color);background:white;cursor:default;border-radius:var(--wpp-border-radius-s)}.ql-image-actions__toolbar:hover{border:1px solid var(--richtext-border-color-active)}.ql-image-actions__toolbar-button{display:inline-block;width:24px;height:24px;padding:2px;vertical-align:middle;color:var(--richtext-button-inactive-color);background-color:var(--richtext-button-background-color);cursor:pointer}.ql-image-actions__toolbar-button:hover{color:var(--richtext-button-inactive-hover-color)}.ql-image-actions__toolbar-button:active{color:var(--richtext-button-inactive-click-color)}.ql-image-actions__toolbar-button.is-selected{color:var(--richtext-button-active-color)}.ql-image-actions__toolbar-button.is-selected:hover{color:var(--richtext-button-active-hover-color)}.ql-image-actions__toolbar-button.is-selected:active{color:var(--richtext-button-active-click-color)}.ql-image-actions__toolbar-button svg{display:inline-block;width:20px;height:20px;vertical-align:middle;fill:currentColor}.ql-image-actions__resize-handle{position:absolute;background-color:white;border:1px solid var(--richtext-border-color);-webkit-box-sizing:border-box;box-sizing:border-box;opacity:0.8}.image-actions__proxy-image{position:absolute;display:block;max-width:none}.ql-editor .ql-attachment-uploading .wpp-progress-indicator{--pi-width:.8em !important;--pi-circle-stroke-width:12;margin-right:7px}.ql-container>.ql-uploading-progress-indicator{--pi-width:20px;--pi-circle-stroke-width:8;position:absolute;pointer-events:none}.wpp-richtext{--richtext-padding:var(--wpp-richtext-padding, 9px 12px);--richtext-label-color:var(--wpp-richtext-label-color, var(--wpp-text-color-info));--richtext-characters-limit-label-color:var(--wpp-richtext-characters-limit-label-color, var(--wpp-grey-color-800));--richtext-label-margin:var(--wpp-richtext-label-margin, 0 0 8px 0);--richtext-inline-message-margin:var(--wpp-richtext-inline-message-margin, 4px 0 0 0);--richtext-placeholder-color:var(--wpp-richtext-placeholder-color, var(--wpp-grey-color-700));--richtext-text-color-disabled:var(--wpp-richtext-text-color-disabled, var(--wpp-text-color-disabled));--richtext-characters-limit-font-weight:var(--wpp-richtext-characters-limit-font-weight, 400);--richtext-warning-charecters-limit-color:var(--wpp-richtext-border-radius, var(--wpp-warning-color-500));--richtext-error-charecters-limit-color:var(--wpp-richtext-border-radius, var(--wpp-danger-color-500));--richtext-bg-color:var(--wpp-richtext-bg-color, transparent);--richtext-bg-color-hover:var(--wpp-richtext-bg-color-hover, var(--wpp-grey-color-200));--richtext-bg-color-active:var(--wpp-richtext-bg-color-active, transparent);--richtext-bg-color-disabled:var(--wpp-richtext-bg-color-disabled, var(--wpp-grey-color-100));--counter-first-border-color-focus:var(--wpp-counter-first-border-color-focus, var(--wpp-grey-color-000));--counter-second-border-color-focus:var(--wpp-counter-second-border-color-focus, var(--wpp-brand-color));--richtext-border-width:var(--wpp-richtext-border-width, var(--wpp-border-width-s));--richtext-border-style:var(--wpp-richtext-border-style, solid);--richtext-border-radius:var(--wpp-richtext-border-radius, var(--wpp-border-radius-m));--richtext-border-color:var(--wpp-richtext-border-color, var(--wpp-grey-color-500));--richtext-border-color-hover:var(--wpp-richtext-border-color-hover, var(--wpp-grey-color-700));--richtext-border-color-active:var(--wpp-richtext-border-color-active, var(--wpp-grey-color-800));--richtext-border-color-disabled:var(--wpp-richtext-border-color-disabled, var(--wpp-grey-color-400));--richtext-first-border-color-focus:var(--wpp-richtext-first-border-color-focus, var(--wpp-grey-color-000));--richtext-second-border-color-focus:var(--wpp-richtext-second-border-color-focus, var(--wpp-brand-color));--richtext-toolbar-outline-color:var(--wpp-richtext-toolbar-outline-color, var(--wpp-brand-color));--richtext-warning-border-color:var(--wpp-richtext-warning-border-color, var(--wpp-warning-color-400));--richtext-error-border-color:var(--wpp-richtext-error-border-color, var(--wpp-danger-color-400));--richtext-tooltip-padding:var(--wpp-richtext-tooltip-padding, 5px 12px);--richtext-tooltip-color:var(--wpp-richtext-tooltip-color, var(--wpp-typography-color));--richtext-tooltip-bg-color:var(--wpp-richtext-tooltip-bg-color, var(--wpp-grey-color-000));--richtext-button-inactive-color:var(--wpp-grey-color-600);--richtext-button-inactive-hover-color:var(--wpp-grey-color-700);--richtext-button-inactive-click-color:var(--wpp-grey-color-800);--richtext-button-active-color:var(--wpp-primary-color-500);--richtext-button-active-hover-color:var(--wpp-primary-color-400);--richtext-button-active-click-color:var(--wpp-primary-color-600);--richtext-button-background-color:var(--wpp-grey-color-000);--richtext-editor-min-width:var(--wpp-richtext-editor-min-width, 376px);--richtext-float-gap:1em;--richtext-editor-min-height:var(--wpp-richtext-editor-min-height, 136px);display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;min-width:var(--richtext-editor-min-width)}.wpp-richtext .label{margin:var(--richtext-label-margin)}.wpp-richtext .ql-form-control{position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;min-height:0;min-width:var(--richtext-editor-min-width)}.wpp-richtext .ql-form-control.tab-focus.tab-focus{border-radius:var(--wpp-border-radius-m);outline:none;-webkit-box-shadow:0 0 0 1px var(--richtext-first-border-color-focus), 0 0 0 2px var(--richtext-second-border-color-focus);box-shadow:0 0 0 1px var(--richtext-first-border-color-focus), 0 0 0 2px var(--richtext-second-border-color-focus)}.wpp-richtext .ql-form-control.tab-focus .ql-toolbar *:focus{outline-color:var(--richtext-toolbar-outline-color)}.wpp-richtext .ql-form-control,.wpp-richtext .ql-form-control .ql-toolbar,.wpp-richtext .ql-form-control .ql-container{border:var(--richtext-border-width) var(--richtext-border-style) var(--richtext-border-color);border-radius:var(--richtext-border-radius)}.wpp-richtext .ql-form-control .ql-container{height:100%;min-height:var(--richtext-editor-min-height)}.wpp-richtext .ql-form-control .ql-toolbar,.wpp-richtext .ql-form-control .ql-container{border-left:none;border-right:none;border-top-width:0;border-bottom-width:0}.wpp-richtext .ql-form-control .ql-toolbar+.ql-container,.wpp-richtext .ql-form-control .ql-container+.ql-toolbar{border-top-left-radius:0;border-top-right-radius:0;border-top-width:var(--richtext-border-width)}.wpp-richtext .ql-form-control:hover:not(.active),.wpp-richtext .ql-form-control:hover:not(.active) .ql-toolbar,.wpp-richtext .ql-form-control:hover:not(.active) .ql-container{border-color:var(--richtext-border-color-hover)}.wpp-richtext .ql-form-control:hover:not(.active) .ql-container{background-color:var(--wpp-grey-color-200)}.wpp-richtext .ql-form-control.active,.wpp-richtext .ql-form-control.active .ql-toolbar,.wpp-richtext .ql-form-control.active .ql-container{border-color:var(--richtext-border-color-active)}.wpp-richtext .ql-form-control.warning,.wpp-richtext .ql-form-control.warning:hover{border:var(--richtext-border-width) var(--richtext-border-style) var(--wpp-warning-color-400)}.wpp-richtext .ql-form-control.warning.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-warning-color-400);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-warning-color-400)}.wpp-richtext .ql-form-control.error,.wpp-richtext .ql-form-control.error:hover{border:var(--richtext-border-width) var(--richtext-border-style) var(--wpp-danger-color-400)}.wpp-richtext .ql-form-control.error.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-danger-color-400);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-danger-color-400)}.wpp-richtext .ql-form-control.disabled *,.wpp-richtext .ql-form-control.disabled .ql-editor.ql-blank:before,.wpp-richtext .ql-form-control.disabled:hover *,.wpp-richtext .ql-form-control.disabled:hover .ql-editor.ql-blank:before{cursor:not-allowed;color:var(--richtext-text-color-disabled)}.wpp-richtext .ql-form-control.disabled,.wpp-richtext .ql-form-control.disabled .ql-toolbar,.wpp-richtext .ql-form-control.disabled .ql-container,.wpp-richtext .ql-form-control.disabled:hover,.wpp-richtext .ql-form-control.disabled:hover .ql-toolbar,.wpp-richtext .ql-form-control.disabled:hover .ql-container{border-color:var(--richtext-border-color-disabled)}.wpp-richtext .ql-form-control.disabled .ql-toolbar,.wpp-richtext .ql-form-control.disabled:hover .ql-toolbar{pointer-events:none}.wpp-richtext .ql-form-control.disabled .ql-container,.wpp-richtext .ql-form-control.disabled:hover .ql-container{background-color:var(--richtext-bg-color-disabled)}.wpp-richtext .ql-form-control.warning,.wpp-richtext .ql-form-control.warning:hover{border-color:var(--richtext-warning-border-color)}.wpp-richtext .ql-form-control.error,.wpp-richtext .ql-form-control.error:hover{border-color:var(--richtext-error-border-color)}.wpp-richtext .ql-form-control .form-control-input{position:absolute;left:0;bottom:0;z-index:0;opacity:0;pointer-events:none}.wpp-richtext .ql-toolbar{display:-ms-flexbox;display:flex;padding:2px 12px;-ms-flex-wrap:wrap;flex-wrap:wrap;font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}.wpp-richtext .ql-toolbar *:focus{outline-color:transparent}.wpp-richtext .ql-toolbar .ql-picker-label .wpp-icon-chevron{-webkit-transition:-webkit-transform 0.15s ease-out;transition:-webkit-transform 0.15s ease-out;transition:transform 0.15s ease-out;transition:transform 0.15s ease-out, -webkit-transform 0.15s ease-out}.wpp-richtext .ql-toolbar .ql-picker-label[aria-expanded=true] .wpp-icon-chevron{-webkit-transform:rotate(180deg);transform:rotate(180deg)}.wpp-richtext .ql-editor{height:100%}.wpp-richtext .ql-editor.ql-blank:before{color:var(--richtext-placeholder-color)}.wpp-richtext .messages-wrapper{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;margin:var(--richtext-inline-message-margin)}.wpp-richtext .messages-wrapper.without-text-message{-ms-flex-pack:end;justify-content:flex-end}.wpp-richtext .characters-limit{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;margin-left:32px}.wpp-richtext .characters-limit.warning .wpp-typography{color:var(--richtext-warning-charecters-limit-color)}.wpp-richtext .characters-limit.warning .wpp-typography:first-child::part(typography){color:var(--richtext-warning-charecters-limit-color)}.wpp-richtext .characters-limit.error .wpp-typography{color:var(--richtext-error-charecters-limit-color)}.wpp-richtext .characters-limit.error .wpp-typography:first-child::part(typography){color:var(--richtext-error-charecters-limit-color)}.wpp-richtext .characters-limit .wpp-typography:first-child{--wpp-typography-color:$labelColor;white-space:nowrap}.wpp-richtext .characters-limit .wpp-typography:first-child::part(typography){color:var(--richtext-characters-limit-label-color);font-weight:var(--richtext-characters-limit-font-weight)}.wpp-richtext .characters-limit .entered-characters{margin-left:2px;white-space:nowrap}.ql-toolbar[hidden],.ql-container[hidden]{display:block}.ql-tooltip{padding:var(--richtext-tooltip-padding);-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m);border-radius:var(--wpp-border-radius-s);color:var(--richtext-tooltip-color);background-color:var(--richtext-tooltip-bg-color);font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}";
 
 const overwriteMerge = (destination, source) => source;
 const WppRichtext = class {
@@ -1735,7 +1751,6 @@ const WppRichtext = class {
     this.wppFocus = createEvent(this, "wppFocus", 1);
     this.wppBlur = createEvent(this, "wppBlur", 1);
     this.wppUploadRequest = createEvent(this, "wppUploadRequest", 5);
-    this._locales = LOCALES_DEFAULTS;
     this.onFocusIn = (event) => {
       if (!this.active) {
         this.active = true;
@@ -1851,7 +1866,9 @@ const WppRichtext = class {
     this.messageType = undefined;
     this.maxMessageLength = undefined;
     this.charactersLimit = undefined;
-    this.locales = {};
+    this.locales = {
+      charactersEntered: 'Characters',
+    };
     this.warningThreshold = 20;
     this.active = false;
     this.format = formats.html;
@@ -1866,70 +1883,40 @@ const WppRichtext = class {
     this.styles = '{}';
     this.preserveWhitespace = false;
   }
-  handlePreserveWhitespaceChange(newVal, oldVal) {
-    if (newVal !== oldVal && this.format === formats.markdown && this.value != null) {
-      this.setValue(this.value, true);
-      this.quill?.history?.clear?.();
-    }
+  /**
+   * Processes a Markdown input by normalizing underscore-delimited emphasis,
+   * converting it to HTML using marked, and extracting its plain text.
+   *
+   * @param value The raw markdown string.
+   * @returns An object containing:
+   *   - html: The generated HTML string.
+   *   - plainText: The extracted plain text (with formatting markers removed).
+   */
+  processMarkdownValue(value) {
+    // Normalize: Convert any underscore-delimited emphasis to asterisk-delimited.
+    const preprocessedValue = value.replace(/_(\w+)_/g, '*$1*');
+    marked_umd.marked.setOptions({
+      gfm: true,
+      breaks: true,
+      smartLists: true,
+      tables: true,
+    });
+    const html = marked_umd.marked(preprocessedValue);
+    const tempEl = document.createElement('div');
+    tempEl.innerHTML = html;
+    const plainText = (tempEl.textContent || '').trim();
+    return { html, plainText };
   }
-  syncValueAndEmit(source) {
-    const newValue = this.getValue();
-    if (newValue !== this.value) {
-      this.value = newValue;
-      if (this.formControlInput) {
-        this.formControlInput.value = this.value;
-      }
-      if (this.format === formats.markdown) {
-        const { plainText } = processMarkdownValue(this.value, this.preserveWhitespace, false);
-        this.plainText = plainText;
-      }
-      else {
-        this.plainText = this.value || '';
-      }
-      this.wppChange.emit({
-        value: this.value,
-        plainText: this.plainText,
-        editor: this.quill,
-        source,
-        name: this.name,
-      });
-    }
-  }
-  setValue(value, isInitialLoad = false) {
+  setValue(value) {
     if (this.format === formats.html) {
       const contents = this.quill.clipboard.convert(value);
       this.quill.setContents(contents, sources.api);
     }
     else if (this.format === formats.markdown) {
-      const str = String(value || '');
-      const looksLikeHtml = /<\/?[a-z][\s\S]*>/i.test(str);
-      let html;
-      let plainText;
-      if (isInitialLoad || !looksLikeHtml) {
-        ({ html, plainText } = processMarkdownValue(str, this.preserveWhitespace, isInitialLoad));
-      }
-      else {
-        // Internal updates — already HTML (from the live DOM)
-        html = str;
-        plainText = this.quill?.getText().trim() || '';
-      }
+      const { html, plainText } = this.processMarkdownValue(value);
       this.plainText = plainText;
       const contents = this.quill.clipboard.convert(html);
       this.quill.setContents(contents, sources.api);
-      // Optional cleanup of empty <li>
-      const editorEl = this.quill.root;
-      const emptyListItems = editorEl.querySelectorAll('li');
-      let removedCount = 0;
-      emptyListItems.forEach(li => {
-        const trimmedContent = li.innerHTML.trim();
-        if (trimmedContent === '<br>' || trimmedContent === '') {
-          li.remove();
-          removedCount++;
-        }
-      });
-      if (removedCount > 0) {
-        this.quill.update(sources.api);
-      }
     }
     else if (this.format === formats.text) {
       this.quill.setText(value, sources.api);
@@ -1938,7 +1925,7 @@ const WppRichtext = class {
       try {
         this.quill.setContents(JSON.parse(value), sources.api);
       }
-      catch (_) {
+      catch (e) {
         this.quill.setText(value, sources.api);
       }
     }
@@ -1966,7 +1953,7 @@ const WppRichtext = class {
       try {
         return JSON.stringify(content);
       }
-      catch (_) {
+      catch (e) {
         return text;
       }
     }
@@ -1981,17 +1968,17 @@ const WppRichtext = class {
         modules = JSON.parse(this.modules);
       }
     }
-    catch (_) {
+    catch (e) {
       throw new Error('Cannot parse "modules" attribute');
     }
-    modules = cjs(Quill.DEFAULTS.modules, modules, { arrayMerge: overwriteMerge });
+    modules = deepmerge_1(Quill.DEFAULTS.modules, modules, { arrayMerge: overwriteMerge });
     const customToolbarElem = this.host.querySelector('[slot="quill-toolbar"]');
     if (customToolbarElem) {
       modules['toolbar'] = customToolbarElem;
     }
     // *** Markdown Integration ***
-    Quill.register('modules/QuillMarkdown', MarkdownActivity, true);
     if (this.format === formats.markdown) {
+      Quill.register('modules/QuillMarkdown', MarkdownActivity, true);
       modules.QuillMarkdown = quillMarkdownOptions;
     }
     this.quill = new Quill(this.containerElement, {
@@ -2007,10 +1994,6 @@ const WppRichtext = class {
         scrollingContainer: this.scrollingContainer,
       },
     });
-    const el = this.host;
-    el.quill = this.quill;
-    el.format = this.format;
-    el.name = this.name;
     // Used in quill-upload plugin
     this.quill.editor.scroll.quill = this.quill;
     this.quill.wppRichtext = this;
@@ -2023,9 +2006,8 @@ const WppRichtext = class {
         this.containerElement.style.setProperty(key, styles[key]);
       });
     }
-    // Initial load — mark empty lines only once
     if (this.value) {
-      this.setValue(this.value, true); // true = initial load
+      this.setValue(this.value);
       this.quill.history.clear();
     }
     this.updateEnteredCharacters();
@@ -2061,7 +2043,6 @@ const WppRichtext = class {
     setTimeout(() => {
       this.wppInit.emit(this.quill);
     });
-    // --- TEXT CHANGE HANDLER ---
     this.quill.on('text-change', (_delta, _oldDelta, source) => {
       if (source !== 'user')
         return;
@@ -2079,7 +2060,6 @@ const WppRichtext = class {
         this.quill.deleteText(docLineStart, text.length, 'user');
         this.quill.insertText(docLineStart, newText, 'user');
         this.quill.formatLine(docLineStart, newText.length, 'header', level, 'user');
-        this.syncValueAndEmit(source);
         return;
       }
       // --- Intra -word emphasis Logic (asterisk-based only) ---
@@ -2112,10 +2092,26 @@ const WppRichtext = class {
         this.quill.format('italic', false, 'user');
         // Optionally, set the cursor at the end of the line.
         this.quill.setSelection(docLineStart + text.length, 0, 'user');
-        this.syncValueAndEmit(source);
         return;
       }
-      this.syncValueAndEmit(source);
+      this.value = this.getValue();
+      if (this.formControlInput) {
+        this.formControlInput.value = this.value;
+      }
+      if (this.format === formats.markdown) {
+        const { plainText } = this.processMarkdownValue(this.value);
+        this.plainText = plainText;
+      }
+      else {
+        this.plainText = this.value;
+      }
+      this.wppChange.emit({
+        value: this.value,
+        plainText: this.plainText,
+        editor: this.quill,
+        source,
+        name: this.name,
+      });
     });
   }
   disconnectedCallback() {
@@ -2186,31 +2182,17 @@ const WppRichtext = class {
   updateCharacterLimit() {
     this.updateEnteredCharacters();
   }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
-  }
-  componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
-    const rawFormat = this.host.getAttribute('format');
-    if (rawFormat)
-      this.format = rawFormat.replace(/^['"]|['"]$/g, '');
-    if (this.host.hasAttribute('preserve-whitespace')) {
-      this.preserveWhitespace = true;
-    }
-  }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-required": this.required, "data-testid": "wpp-rich-text" }, h("wpp-richtext-icon-loader-v3-3-0", null), h("wpp-quill-styles-v3-3-0", null), h("wpp-richtext-common-styles-v3-3-0", null), this.labelConfig?.text && (h("wpp-label-v3-3-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.formControlCssClasses(), "data-testid": "rich-text-form" }, h("slot", { name: "quill-toolbar", "quill-toolbar": "" }), h("div", { ref: el => (this.containerElement = el), "data-testid": "richtext-editor", class: this.preserveWhitespace ? 'preserve-whitespace' : '' }), Boolean(this.name) && (h("input", { ref: el => (this.formControlInput = el), tabindex: "-1", id: this.name, class: "form-control-input", "data-testid": "rich-text-input", disabled: this.disabled }))), (Boolean(this.message) || Boolean(this.charactersLimit)) && (h("div", { class: this.messageCssClasses(), part: "message-wrapper" }, Boolean(this.message) && (h("wpp-inline-message-v3-3-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", class: "message", "data-testid": "message" })), Boolean(this.charactersLimit) && (h("div", { class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, h("wpp-typography-v3-3-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":\u00A0"), h("wpp-typography-v3-3-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit)))))));
+    return (h(Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-required": this.required }, h("div", { style: { display: 'none' } }, renderIcons()), h("wpp-quill-styles-v2-22-0", null), h("wpp-richtext-common-styles-v2-22-0", null), this.labelConfig?.text && (h("wpp-label-v2-22-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.formControlCssClasses() }, h("slot", { name: "quill-toolbar", "quill-toolbar": "" }), this.preserveWhitespace ? (h("pre", { ref: el => (this.containerElement = el) })) : (h("div", { ref: el => (this.containerElement = el) })), Boolean(this.name) && (h("input", { ref: el => (this.formControlInput = el), tabindex: "-1", id: this.name, class: "form-control-input", disabled: this.disabled }))), (Boolean(this.message) || Boolean(this.charactersLimit)) && (h("div", { class: this.messageCssClasses(), part: "message-wrapper" }, Boolean(this.message) && (h("wpp-inline-message-v2-22-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })), Boolean(this.charactersLimit) && (h("div", { class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, h("wpp-typography-v2-22-0", { type: "xs-body", tag: "span", part: "limit-label" }, this.locales.charactersEntered, ":\u00A0"), h("wpp-typography-v2-22-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit)))))));
   }
-  static get registryIs() { return "wpp-richtext-v3-3-0"; }
+  static get registryIs() { return "wpp-richtext-v2-22-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
-    "preserveWhitespace": ["handlePreserveWhitespaceChange"],
     "value": ["updateContent"],
     "disabled": ["updateDisabled"],
     "placeholder": ["updatePlaceholder"],
     "styles": ["updateStyle"],
-    "charactersLimit": ["updateCharacterLimit"],
-    "locales": ["onUpdateLocales"]
+    "charactersLimit": ["updateCharacterLimit"]
   }; }
 };
 WppRichtext.style = wppRichtextCss;

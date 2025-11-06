@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+import readme from './readme.md';
 export default {
   title: 'Design System/Components/Selection and input/Pill',
   parameters: {
@@ -7,6 +8,7 @@ export default {
         hidden: true,
       },
     },
+    notes: readme,
   },
   argTypes: {
     size: {
@@ -20,16 +22,16 @@ export const Display = (args) => {
     console.log('event.detail :>> ', event.detail);
   };
   return html `
-    <wpp-pill-group-v3-3-0
+    <wpp-pill-group-v2-22-0
       type="display"
       .size="${args.size}"
       .required="${args.required}"
       .labelConfig="${args.labelConfig}"
       @wppChange="${handlePillGroupChange}"
     >
-      <wpp-pill-v3-3-0 label="Item A" value="item-a" .removable="${args.removable}"></wpp-pill-v3-3-0>
-      <wpp-pill-v3-3-0 label="Item B" value="item-b" .disabled="${args.disabled}" .removable="${args.removable}">
-        <wpp-avatar-v3-3-0
+      <wpp-pill-v2-22-0 label="Item A" value="item-a" .removable="${args.removable}"></wpp-pill-v2-22-0>
+      <wpp-pill-v2-22-0 label="Item B" value="item-b" .disabled="${args.disabled}" .removable="${args.removable}">
+        <wpp-avatar-v2-22-0
           name="Name"
           size="xs"
           src="https://mui.com/static/images/avatar/1.jpg"
@@ -37,20 +39,20 @@ export const Display = (args) => {
           .removable="${args.removable}"
           index="-1"
         />
-      </wpp-pill-v3-3-0>
-      <wpp-pill-v3-3-0 label="Item C" value="item-c" .removable="${args.removable}">
-        <wpp-icon-smile-v3-3-0 slot="icon-start" />
-      </wpp-pill-v3-3-0>
-      <wpp-pill-v3-3-0 label="Item D" value="item-d" .disabled="${args.disabled}" .removable="${args.removable}">
-        <wpp-avatar-v3-3-0
+      </wpp-pill-v2-22-0>
+      <wpp-pill-v2-22-0 label="Item C" value="item-c" .removable="${args.removable}">
+        <wpp-icon-smile-v2-22-0 slot="icon-start" />
+      </wpp-pill-v2-22-0>
+      <wpp-pill-v2-22-0 label="Item D" value="item-d" .disabled="${args.disabled}" .removable="${args.removable}">
+        <wpp-avatar-v2-22-0
           variant="square"
           name="Linkedin"
           size="xs"
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJizK-O7rjmwzro2mvul2xv-Uw1AuPEQajqA&usqp=CAU"
           slot="icon-start"
         />
-      </wpp-pill-v3-3-0>
-    </wpp-pill-group-v3-3-0>
+      </wpp-pill-v2-22-0>
+    </wpp-pill-group-v2-22-0>
   `;
 };
 Display.args = {
@@ -72,21 +74,21 @@ export const Draggable = (args) => {
     console.log('event.detail :>> ', event.detail);
   };
   return html `
-    <wpp-pill-group-v3-3-0
+    <wpp-pill-group-v2-22-0
       type="draggable"
       .size="${args.size}"
       .required="${args.required}"
       .labelConfig="${args.labelConfig}"
       @wppChange="${handlePillGroupChange}"
     >
-      <wpp-pill-v3-3-0
+      <wpp-pill-v2-22-0
         label="Item A"
         value="item-a"
         .disabled="${args.disabled}"
         .removable="${args.removable}"
-      ></wpp-pill-v3-3-0>
-      <wpp-pill-v3-3-0 label="Item B" value="item-b" removable></wpp-pill-v3-3-0>
-    </wpp-pill-group-v3-3-0>
+      ></wpp-pill-v2-22-0>
+      <wpp-pill-v2-22-0 label="Item B" value="item-b" removable></wpp-pill-v2-22-0>
+    </wpp-pill-group-v2-22-0>
   `;
 };
 Draggable.args = {
@@ -108,36 +110,36 @@ export const SingleSelectGroup = (args) => {
     console.log('event.detail :>> ', event.detail);
   };
   return html `
-    <wpp-pill-group-v3-3-0
+    <wpp-pill-group-v2-22-0
       type="single"
       .size="${args.size}"
       .required="${args.required}"
       .labelConfig="${args.labelConfig}"
       @wppChange="${handlePillGroupChange}"
     >
-      <wpp-pill-v3-3-0 label="Item A" value="item-a"></wpp-pill-v3-3-0>
-      <wpp-pill-v3-3-0 label="Item B" value="item-b" .disabled="${args.disabled}">
-        <wpp-avatar-v3-3-0
+      <wpp-pill-v2-22-0 label="Item A" value="item-a"></wpp-pill-v2-22-0>
+      <wpp-pill-v2-22-0 label="Item B" value="item-b" .disabled="${args.disabled}">
+        <wpp-avatar-v2-22-0
           name="Name"
           size="xs"
           src="https://mui.com/static/images/avatar/1.jpg"
           slot="icon-start"
           index="-1"
         />
-      </wpp-pill-v3-3-0>
-      <wpp-pill-v3-3-0 label="Item C" value="item-c">
-        <wpp-avatar-v3-3-0
+      </wpp-pill-v2-22-0>
+      <wpp-pill-v2-22-0 label="Item C" value="item-c">
+        <wpp-avatar-v2-22-0
           variant="square"
           name="Linkedin"
           size="xs"
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJizK-O7rjmwzro2mvul2xv-Uw1AuPEQajqA&usqp=CAU"
           slot="icon-start"
         />
-      </wpp-pill-v3-3-0>
-      <wpp-pill-v3-3-0 label="Item D" value="item-d">
-        <wpp-icon-smile-v3-3-0 slot="icon-start" />
-      </wpp-pill-v3-3-0>
-    </wpp-pill-group-v3-3-0>
+      </wpp-pill-v2-22-0>
+      <wpp-pill-v2-22-0 label="Item D" value="item-d">
+        <wpp-icon-smile-v2-22-0 slot="icon-start" />
+      </wpp-pill-v2-22-0>
+    </wpp-pill-group-v2-22-0>
   `;
 };
 SingleSelectGroup.args = {
@@ -159,7 +161,7 @@ export const MultipleSelectGroup = (args) => {
     console.log('event.detail :>> ', event.detail);
   };
   return html `
-    <wpp-pill-group-v3-3-0
+    <wpp-pill-group-v2-22-0
       type="multiple"
       .value="${pillGroupValue}"
       .size="${args.size}"
@@ -167,36 +169,36 @@ export const MultipleSelectGroup = (args) => {
       .labelConfig="${args.labelConfig}"
       @wppChange="${handlePillGroupChange}"
     >
-      <wpp-pill-v3-3-0 label="Item A" value="item-a"></wpp-pill-v3-3-0>
-      <wpp-pill-v3-3-0 label="Item B" value="item-b" .disabled="${args.disabled}">
-        <wpp-avatar-v3-3-0
+      <wpp-pill-v2-22-0 label="Item A" value="item-a"></wpp-pill-v2-22-0>
+      <wpp-pill-v2-22-0 label="Item B" value="item-b" .disabled="${args.disabled}">
+        <wpp-avatar-v2-22-0
           name="Name"
           size="xs"
           src="https://mui.com/static/images/avatar/1.jpg"
           slot="icon-start"
           index="-1"
         />
-      </wpp-pill-v3-3-0>
-      <wpp-pill-v3-3-0 label="Item C" value="item-c">
-        <wpp-avatar-v3-3-0
+      </wpp-pill-v2-22-0>
+      <wpp-pill-v2-22-0 label="Item C" value="item-c">
+        <wpp-avatar-v2-22-0
           variant="square"
           name="Linkedin"
           size="xs"
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJizK-O7rjmwzro2mvul2xv-Uw1AuPEQajqA&usqp=CAU"
           slot="icon-start"
         />
-      </wpp-pill-v3-3-0>
-      <wpp-pill-v3-3-0 label="Item D" value="item-d">
-        <wpp-icon-smile-v3-3-0 slot="icon-start" />
-      </wpp-pill-v3-3-0>
-      <wpp-pill-v3-3-0 label="Item E" value="item-e">
+      </wpp-pill-v2-22-0>
+      <wpp-pill-v2-22-0 label="Item D" value="item-d">
+        <wpp-icon-smile-v2-22-0 slot="icon-start" />
+      </wpp-pill-v2-22-0>
+      <wpp-pill-v2-22-0 label="Item E" value="item-e">
         <img
           src="https://easydrawingguides.com/wp-content/uploads/2018/09/Impossible-Triangle-09.png"
           style="display: flex; width: 20px; height: 20px;"
           slot="icon-start"
         />
-      </wpp-pill-v3-3-0>
-    </wpp-pill-group-v3-3-0>
+      </wpp-pill-v2-22-0>
+    </wpp-pill-group-v2-22-0>
   `;
 };
 MultipleSelectGroup.args = {

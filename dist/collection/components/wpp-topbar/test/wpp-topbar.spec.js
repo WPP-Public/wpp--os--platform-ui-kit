@@ -49,7 +49,7 @@ describe('wpp-topbar', () => {
   it('renders component', async () => {
     const page = await newSpecPage({
       components: [WppTopbar, WppTopbarItem],
-      template: () => h("wpp-topbar-v3-3-0", { navigation: navigation, value: "community" }),
+      template: () => h("wpp-topbar-v2-22-0", { navigation: navigation, value: "community" }),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await new Promise(resolve => requestAnimationFrame(resolve));
@@ -59,7 +59,7 @@ describe('wpp-topbar', () => {
   it('renders component with application', async () => {
     const page = await newSpecPage({
       components: [WppTopbar, WppTopbarItem],
-      template: () => (h("wpp-topbar-v3-3-0", { navigation: navigation, value: "community" }, h("div", { slot: "app" }, h("img", { src: "https://easydrawingguides.com/wp-content/uploads/2018/09/Impossible-Triangle-09.png", alt: "app-logo" }), h("wpp-typography-v3-3-0", { type: "m-strong", tag: "h3" }, "APP Name")))),
+      template: () => (h("wpp-topbar-v2-22-0", { navigation: navigation, value: "community" }, h("div", { slot: "app" }, h("img", { src: "https://easydrawingguides.com/wp-content/uploads/2018/09/Impossible-Triangle-09.png", alt: "app-logo" }), h("wpp-typography-v2-22-0", { type: "m-strong", tag: "h3" }, "APP Name")))),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await new Promise(resolve => requestAnimationFrame(resolve));

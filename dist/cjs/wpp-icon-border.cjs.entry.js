@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const WppIcon = require('./WppIcon-55327707.js');
+const WppIcon = require('./WppIcon-be5823e9.js');
 
 const wppIconCss = ":host{display:-ms-inline-flexbox;display:inline-flex;color:var(--wpp-prop-icon-color)}";
 
@@ -26,7 +26,7 @@ const WppIconBorder = class {
   render() {
     return (index.h(WppIcon.WppIcon, { name: "wpp-icon-border", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: BorderDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-border-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-border-v2-22-0"; }
 };
 WppIconBorder.style = wppIconCss;
 

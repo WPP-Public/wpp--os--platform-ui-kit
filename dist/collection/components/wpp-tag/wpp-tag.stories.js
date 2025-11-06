@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+import readme from './readme.md';
 export default {
   title: 'Design System/Components/Data display/Tag',
   parameters: {
@@ -7,54 +8,54 @@ export default {
         hidden: true,
       },
     },
+    notes: readme,
   },
   argTypes: {
     label: {
       type: 'string',
     },
     variant: {
-      options: [
-        'neutral',
-        'warning',
-        'positive',
-        'negative',
-        'Cat-1',
-        'Cat-2',
-        'Cat-3',
-        'Cat-4',
-        'Cat-5',
-        'Cat-6',
-        'Cat-7',
-        'Cat-8',
-        'Cat-9',
-      ],
+      options: [undefined, 'neutral', 'warning', 'positive', 'negative'],
+      control: { type: 'select' },
+    },
+    categoricalColorIndex: {
+      options: [undefined, 1, 2, 3, 4, 5, 6, 7, 8, 9],
       control: { type: 'select' },
     },
   },
 };
 export const Tag = (args) => html `
-  <style>
-    .wrapper {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-    }
+    <style>
+      .wrapper {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+      }
 
-    .wrapper > * {
-      margin-right: 8px;
-      margin-bottom: 8px;
-    }
-  </style>
+      .wrapper > * {
+        margin-right: 8px;
+        margin-bottom: 8px;
+      }
+    </style>
 
-  <div class="wrapper">
-    <wpp-tag-v3-3-0 .label="${args.label}" .variant=${args.variant}></wpp-tag-v3-3-0>
-    <wpp-tag-v3-3-0 .label="${args.label}" .variant=${args.variant}>
-      ${args.showIconStart ? html ` <wpp-icon-premium-v3-3-0 slot="icon-start"></wpp-icon-premium-v3-3-0> ` : null}
-    </wpp-tag-v3-3-0>
-  </div>
-`;
+    <div class="wrapper">
+      <wpp-tag-v2-22-0
+        .label="${args.label}"
+        variant=${args.variant}
+        .categoricalColorIndex="${args.categoricalColorIndex}"
+      ></wpp-tag-v2-22-0>
+      <wpp-tag-v2-22-0
+        .label="${args.label}"
+        variant=${args.variant}
+        .categoricalColorIndex="${args.categoricalColorIndex}"
+      >
+        ${args.showIconStart ? html ` <wpp-icon-premium-v2-22-0 slot="icon-start"></wpp-icon-premium-v2-22-0> ` : null}
+      </wpp-tag-v2-22-0>
+    </div>
+  `;
 Tag.args = {
   label: 'Title',
-  variant: 'neutral',
+  variant: undefined,
+  categoricalColorIndex: undefined,
   showIconStart: true,
 };

@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+import readme from './readme.md';
 export default {
   title: 'Design System/Components/Feedback/Spinner',
   parameters: {
@@ -7,10 +8,11 @@ export default {
         hidden: true,
       },
     },
+    notes: readme,
   },
   argTypes: {
     color: {
-      options: ['var(--wpp-primary-color-500)', 'var(--wpp-grey-color-800)', 'var(--wpp-grey-color-000)'],
+      options: ['var(--wpp-grey-color-800)', 'var(--wpp-primary-color-500)', 'var(--wpp-primary-color-100)'],
       control: { type: 'select' },
     },
     size: {
@@ -19,13 +21,8 @@ export default {
     },
   },
 };
-export const Spinner = (args) => html ` <div
-    style="padding: 10px; background-color: ${args.color === 'var(--wpp-grey-color-000)' ? '#697077' : 'white'}"
-  >
-    <wpp-spinner-v3-3-0 .color="${args.color}" .size="${args.size}" .ariaProps="${args.ariaProps}" />
-  </div>`;
+export const Spinner = (args) => html ` <wpp-spinner-v2-22-0 .color="${args.color}" .size="${args.size}" />`;
 Spinner.args = {
   color: 'var(--wpp-primary-color-500)',
   size: 's',
-  ariaProps: { label: 'Loading...' },
 };

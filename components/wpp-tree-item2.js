@@ -1,7 +1,7 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
-import { h as highlightWords, d as defineCustomElement$6 } from './wpp-list-item2.js';
+import { h as highlightWords } from './highlight-words.js';
 import { W as WrappedSlot } from './WrappedSlot.js';
-import { k as transformToVersionedTag, g as getSlotEmptyStates } from './utils.js';
+import { j as transformToVersionedTag, g as getSlotEmptyStates } from './utils.js';
 import { d as defineCustomElement$n } from './wpp-action-button2.js';
 import { d as defineCustomElement$m } from './wpp-avatar2.js';
 import { d as defineCustomElement$l } from './wpp-avatar-group2.js';
@@ -19,34 +19,12 @@ import { d as defineCustomElement$a } from './wpp-inline-message2.js';
 import { d as defineCustomElement$9 } from './wpp-internal-label2.js';
 import { d as defineCustomElement$8 } from './wpp-internal-tooltip2.js';
 import { d as defineCustomElement$7 } from './wpp-label2.js';
+import { d as defineCustomElement$6 } from './wpp-list-item2.js';
 import { d as defineCustomElement$5 } from './wpp-menu-context2.js';
 import { d as defineCustomElement$4 } from './wpp-spinner2.js';
 import { d as defineCustomElement$3 } from './wpp-tag2.js';
 import { d as defineCustomElement$2 } from './wpp-tooltip2.js';
 import { d as defineCustomElement$1 } from './wpp-typography2.js';
-
-const LOCALES_DEFAULTS = {
-  nothingFound: 'No result',
-};
-const KNOWN_KEYS_OF_TREE_TYPE = {
-  search: true,
-  id: true,
-  selected: true,
-  isNotSelectable: true,
-  loadingActions: true,
-  disabled: true,
-  checked: true,
-  indeterminate: true,
-  hidden: true,
-  open: true,
-  title: true,
-  children: true,
-  iconStart: true,
-  iconEnd: true,
-  iconsStart: true,
-  iconsEnd: true,
-  endContent: true,
-};
 
 const areAllChildrenSelected = (treeData) => treeData.every(item => {
   if (item.children) {
@@ -134,15 +112,6 @@ const recalculateIndeterminateTreeState = (treeData) => treeData.reduce((acc, it
   }
   return [...acc, item];
 }, []);
-const extractExtraProps = (tree) => {
-  const extras = {};
-  for (const key in tree) {
-    if (!KNOWN_KEYS_OF_TREE_TYPE[key] && key.startsWith('data-')) {
-      extras[key] = tree[key];
-    }
-  }
-  return extras;
-};
 
 const clickOnElementsWithHandlers = (e) => {
   const innerElementsWithHandlers = ['wpp-checkbox', 'wpp-menu-context', 'wpp-icon', 'wpp-action-button'];
@@ -327,19 +296,19 @@ const WppTreeItem = /*@__PURE__*/ proxyCustomElement(class WppTreeItem extends H
       const { className } = props;
       switch (contentType) {
         case 'text':
-          return (h("wpp-typography-v3-3-0", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
+          return (h("wpp-typography-v2-22-0", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
         case 'tag': {
           const { icon } = props;
-          return (h("wpp-tag-v3-3-0", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
+          return (h("wpp-tag-v2-22-0", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
             h(transformToVersionedTag(icon), {
               slot: 'icon-start',
               part: 'icon-start',
             })));
         }
         case 'avatar':
-          return (h("wpp-avatar-v3-3-0", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar" }));
+          return (h("wpp-avatar-v2-22-0", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar" }));
         case 'avatarGroup':
-          return (h("wpp-avatar-group-v3-3-0", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group" }));
+          return (h("wpp-avatar-group-v2-22-0", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group" }));
         default:
           return null;
       }
@@ -398,15 +367,15 @@ const WppTreeItem = /*@__PURE__*/ proxyCustomElement(class WppTreeItem extends H
   }
   render() {
     const isParent = !!this.item?.children?.length;
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeItem", ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (h("div", { class: "switcher", onClick: this.handleSwitcherClick, part: "tree-item-switcher" }, h("wpp-icon-triangle-fill-v3-3-0", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (h("wpp-checkbox-v3-3-0", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox" })), h(WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (h("wpp-tooltip-v3-3-0", { text: this.item.title, config: { placement: 'right' }, class: "tooltip" }, this.renderTitle())) : (this.renderTitle()), h("wpp-action-button-v3-3-0", { variant: "secondary", disabled: this.item.disabled, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button" }, h("slot", { name: "icon-end", onSlotchange: this.updateSlotData })), this.renderEndContent()), ((this.item.children && this.item.open) || !this.isCollapseTransitionEnd) && (h(WrappedSlot, { name: "content", onSlotchange: this.updateSlotData }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeItem", ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (h("div", { class: "switcher", onClick: this.handleSwitcherClick, part: "tree-item-switcher" }, h("wpp-icon-triangle-fill-v2-22-0", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (h("wpp-checkbox-v2-22-0", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox" })), h(WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (h("wpp-tooltip-v2-22-0", { text: this.item.title, config: { placement: 'right' }, class: "tooltip" }, this.renderTitle())) : (this.renderTitle()), h("wpp-action-button-v2-22-0", { variant: "secondary", disabled: this.item.disabled, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button" }, h("slot", { name: "icon-end", onSlotchange: this.updateSlotData })), this.renderEndContent()), ((this.item.children && this.item.open) || !this.isCollapseTransitionEnd) && (h(WrappedSlot, { name: "content", onSlotchange: this.updateSlotData }))));
   }
-  static get registryIs() { return "wpp-tree-item-v3-3-0"; }
+  static get registryIs() { return "wpp-tree-item-v2-22-0"; }
   get host() { return this; }
   static get watchers() { return {
     "item": ["onItemChange"]
   }; }
   static get style() { return wppTreeItemCss; }
-}, [1, "wpp-tree-item", "wpp-tree-item-v3-3-0", {
+}, [1, "wpp-tree-item", "wpp-tree-item-v2-22-0", {
     "text": [513],
     "multiple": [516],
     "search": [1],
@@ -429,124 +398,124 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tree-item-v3-3-0", "wpp-action-button-v3-3-0", "wpp-avatar-v3-3-0", "wpp-avatar-group-v3-3-0", "wpp-checkbox-v3-3-0", "wpp-icon-chevron-v3-3-0", "wpp-icon-cross-v3-3-0", "wpp-icon-dash-v3-3-0", "wpp-icon-error-v3-3-0", "wpp-icon-info-message-v3-3-0", "wpp-icon-success-v3-3-0", "wpp-icon-tick-v3-3-0", "wpp-icon-triangle-fill-v3-3-0", "wpp-icon-warning-v3-3-0", "wpp-inline-message-v3-3-0", "wpp-internal-label-v3-3-0", "wpp-internal-tooltip-v3-3-0", "wpp-label-v3-3-0", "wpp-list-item-v3-3-0", "wpp-menu-context-v3-3-0", "wpp-spinner-v3-3-0", "wpp-tag-v3-3-0", "wpp-tooltip-v3-3-0", "wpp-typography-v3-3-0"];
+  const components = ["wpp-tree-item-v2-22-0", "wpp-action-button-v2-22-0", "wpp-avatar-v2-22-0", "wpp-avatar-group-v2-22-0", "wpp-checkbox-v2-22-0", "wpp-icon-chevron-v2-22-0", "wpp-icon-cross-v2-22-0", "wpp-icon-dash-v2-22-0", "wpp-icon-error-v2-22-0", "wpp-icon-info-message-v2-22-0", "wpp-icon-success-v2-22-0", "wpp-icon-tick-v2-22-0", "wpp-icon-triangle-fill-v2-22-0", "wpp-icon-warning-v2-22-0", "wpp-inline-message-v2-22-0", "wpp-internal-label-v2-22-0", "wpp-internal-tooltip-v2-22-0", "wpp-label-v2-22-0", "wpp-list-item-v2-22-0", "wpp-menu-context-v2-22-0", "wpp-spinner-v2-22-0", "wpp-tag-v2-22-0", "wpp-tooltip-v2-22-0", "wpp-typography-v2-22-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tree-item-v3-3-0":
+    case "wpp-tree-item-v2-22-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTreeItem);
       }
       break;
-    case "wpp-action-button-v3-3-0":
+    case "wpp-action-button-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-avatar-v3-3-0":
+    case "wpp-avatar-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-avatar-group-v3-3-0":
+    case "wpp-avatar-group-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-checkbox-v3-3-0":
+    case "wpp-checkbox-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-chevron-v3-3-0":
+    case "wpp-icon-chevron-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-cross-v3-3-0":
+    case "wpp-icon-cross-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-dash-v3-3-0":
+    case "wpp-icon-dash-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-error-v3-3-0":
+    case "wpp-icon-error-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-info-message-v3-3-0":
+    case "wpp-icon-info-message-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-success-v3-3-0":
+    case "wpp-icon-success-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-tick-v3-3-0":
+    case "wpp-icon-tick-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-triangle-fill-v3-3-0":
+    case "wpp-icon-triangle-fill-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-warning-v3-3-0":
+    case "wpp-icon-warning-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-inline-message-v3-3-0":
+    case "wpp-inline-message-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-internal-label-v3-3-0":
+    case "wpp-internal-label-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-0":
+    case "wpp-internal-tooltip-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-label-v3-3-0":
+    case "wpp-label-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-list-item-v3-3-0":
+    case "wpp-list-item-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-menu-context-v3-3-0":
+    case "wpp-menu-context-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v3-3-0":
+    case "wpp-spinner-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tag-v3-3-0":
+    case "wpp-tag-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v3-3-0":
+    case "wpp-tooltip-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v3-3-0":
+    case "wpp-typography-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }
@@ -554,4 +523,4 @@ function defineCustomElement() {
   } });
 }
 
-export { LOCALES_DEFAULTS as L, WppTreeItem as W, updateTreeById as a, convertToOriginalItems as c, defineCustomElement as d, extractExtraProps as e, findSelectedItems as f, isHaveFoundChildren as i, markChildrenAs as m, recalculateIndeterminateTreeState as r, updateTreeByIds as u };
+export { WppTreeItem as W, updateTreeByIds as a, convertToOriginalItems as c, defineCustomElement as d, findSelectedItems as f, isHaveFoundChildren as i, markChildrenAs as m, recalculateIndeterminateTreeState as r, updateTreeById as u };

@@ -79,6 +79,5 @@ export declare class WppToggle implements BaseComponent, BooleanFormControl<Togg
   private onKeyUp;
   private hostCssClasses;
   private labelCssClasses;
-  private onKeyDown;
   render(): any;
 }

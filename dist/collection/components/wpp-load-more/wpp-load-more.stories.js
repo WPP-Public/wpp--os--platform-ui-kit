@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+import readme from './readme.md';
 export default {
   title: 'Design System/Components/Navigation/Load More',
   parameters: {
@@ -7,6 +8,7 @@ export default {
         hidden: true,
       },
     },
+    notes: readme,
   },
   argTypes: {
     totalItems: {
@@ -56,7 +58,7 @@ export const LoadMore = (args) => {
     }
   };
   return html `
-    <wpp-load-more-v3-3-0
+    <wpp-load-more-v2-22-0
       id="load-more-component"
       .totalItems="${args.totalItems}"
       .itemsLoaded="${currentItemsLoaded}"
@@ -65,7 +67,7 @@ export const LoadMore = (args) => {
       .disabled="${args.disabled}"
       .incrementBy="${args.incrementBy}"
       @wppClickLoadMore="${handleLoadMoreClicked}"
-    ></wpp-load-more-v3-3-0>
+    ></wpp-load-more-v2-22-0>
   `;
 };
 LoadMore.args = {

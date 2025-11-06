@@ -1,13 +1,6 @@
 const componentList = require('../components-list')
 const version = require('../version')
-const suffix = typeof version === 'string' ? `-${version}` : `-${version.default}`
+const suffix = `-${version}`;
 
-const componentsMapperList = componentList.map(component => {
-  return {
-    search: component,
-    replace: `${component}${suffix}`,
-    flags: 'g',
-  }
-})
-
+const componentsMapperList = componentList.map(component => ({search: component, replace: component + suffix, flags: 'g'}))
 module.exports = componentsMapperList

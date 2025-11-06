@@ -1,14 +1,11 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { LoadMoreChangeEventDetail } from './types';
-import { AriaProps } from '../../types/common';
 /**
  * @part container - Container element
  * @part progress-text - Progress text element
  * @part button - Load more button element
  */
 export declare class WppLoadMore {
-  private hasToggledBtn;
-  private loadBtnRef?;
   progressPercentage: number;
   /**
    * The total number of items.
@@ -35,23 +32,13 @@ export declare class WppLoadMore {
    */
   readonly incrementBy: number;
   /**
-   * Aria properties that will be applied on the button only.
-   */
-  readonly ariaProps: AriaProps;
-  /**
    * Emitted when the "Load more" button is clicked.
    */
   wppClickLoadMore: EventEmitter<LoadMoreChangeEventDetail>;
   updateProgress(): void;
-  /**
-   * Method that sets focus on the load button.
-   */
-  setFocus(): Promise<void>;
-  componentDidRender(): void;
   componentWillLoad(): void;
   private handleClick;
   private isDisabled;
-  private onKeyDown;
   private hostCssClasses;
   private progressTextCssClasses;
   private progressContainerCssClasses;

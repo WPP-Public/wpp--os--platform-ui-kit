@@ -20,14 +20,11 @@ import { AriaProps, FOCUS_TYPE } from '../../types/common';
  * @part icon-end - icon-end slot element
  */
 export declare class WppActionButton {
-  private buttonRef?;
   host: HTMLWppActionButtonElement;
   hasIconStartSlot: boolean;
   hasIconEndSlot: boolean;
   isIconOnly: boolean;
   focusType: FOCUS_TYPE;
-  isPressed: boolean;
-  validAriaProps: Record<string, string>;
   /**
    * If the component is disabled.
    */
@@ -65,11 +62,6 @@ export declare class WppActionButton {
    * Contains the button `aria-` props.
    */
   readonly ariaProps: AriaProps;
-  /**
-   * Method that sets focus on the native button.
-   */
-  setFocus(): Promise<void>;
-  onUpdateAriaProps(): void;
   componentWillLoad(): void;
   private updateSlotData;
   private onKeyDown;

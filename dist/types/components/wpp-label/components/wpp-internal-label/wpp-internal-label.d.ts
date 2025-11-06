@@ -1,4 +1,4 @@
-import { DropdownConfig, FOCUS_TYPE } from '../../../../types/common';
+import { DropdownConfig } from '../../../../types/common';
 import { TypographyType } from '../../../wpp-typography/types';
 import { LabelLocales } from '../../types';
 /**
@@ -12,10 +12,8 @@ import { LabelLocales } from '../../types';
  * @slot icon - may contain an icon that will be placed after text wrapper, e.g. a info icon
  */
 export declare class WppInternalLabel {
-  private _locales;
   hasIconSlot: boolean;
   host: HTMLWppInternalLabelElement;
-  focusType: FOCUS_TYPE;
   /**
    * Indicates text of the label
    */
@@ -39,21 +37,14 @@ export declare class WppInternalLabel {
   /**
    * Indicates locales for label component
    */
-  readonly locales: Partial<LabelLocales>;
+  readonly locales: LabelLocales;
   /**
    * Defines the dropdown configuration. Under the hood dropdown using tippy.js,
    * all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
    */
   readonly tooltipConfig: DropdownConfig;
-  /**
-   * Indicates the role attribute for the component
-   */
-  readonly role: string;
-  onUpdateLocales(newLocales: Partial<LabelLocales>): void;
   componentWillLoad(): void;
   private updateSlotData;
-  private onBlur;
-  private onKeyUp;
   private iconCssClasses;
   private hostCssClasses;
   private infoWrapperCssClasses;

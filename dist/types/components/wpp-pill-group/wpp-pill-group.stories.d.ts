@@ -1,9 +1,10 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppPillGroup>;
+import { WppPillGroup } from './wpp-pill-group';
+declare const _default: Meta<typeof WppPillGroup>;
 export default _default;
 type PillTypes = Components.WppPillGroup & Components.WppPill;
-export declare const Display: StoryObj<PillTypes>;
-export declare const Draggable: StoryObj<PillTypes>;
-export declare const SingleSelectGroup: StoryObj<PillTypes>;
-export declare const MultipleSelectGroup: StoryObj<PillTypes>;
+export declare const Display: Story<PillTypes>;
+export declare const Draggable: Story<PillTypes>;
+export declare const SingleSelectGroup: Story<PillTypes>;
+export declare const MultipleSelectGroup: Story<PillTypes>;

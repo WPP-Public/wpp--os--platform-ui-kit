@@ -1,6 +1,7 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppTopbar>;
+import { WppTopbar } from './wpp-topbar';
+declare const _default: Meta<typeof WppTopbar>;
 export default _default;
-export declare const NoLogo: StoryObj<Components.WppTopbar>;
-export declare const WithLogo: StoryObj<Components.WppTopbar>;
+export declare const NoLogo: Story<Components.WppTopbar>;
+export declare const WithLogo: Story<Components.WppTopbar>;

@@ -21,7 +21,6 @@ export declare class WppIconButton {
    * Defines the button name.
    * */
   readonly name?: string;
-  componentWillLoad(): void;
   private hostCssClasses;
   render(): any;
 }

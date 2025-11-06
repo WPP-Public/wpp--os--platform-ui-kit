@@ -6,7 +6,7 @@ describe('wpp-pagination', () => {
     const itemsPerPage = [10, 11, 12, 13];
     const page = await newSpecPage({
       components: [WppPagination],
-      template: () => h("wpp-pagination-v3-3-0", { count: 78, itemsPerPage: itemsPerPage }),
+      template: () => h("wpp-pagination-v2-22-0", { count: 78, itemsPerPage: itemsPerPage }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -14,14 +14,14 @@ describe('wpp-pagination', () => {
     const itemsPerPage = [10, 11, 12, 13];
     const page = await newSpecPage({
       components: [WppPagination],
-      template: () => h("wpp-pagination-v3-3-0", { count: 100, itemsPerPage: itemsPerPage, selectedItemPerPage: 13 }),
+      template: () => h("wpp-pagination-v2-22-0", { count: 100, itemsPerPage: itemsPerPage, selectedItemPerPage: 13 }),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('renders component with 100 pages and with 5 active page number', async () => {
     const page = await newSpecPage({
       components: [WppPagination],
-      template: () => h("wpp-pagination-v3-3-0", { count: 100, activePageNumber: 5 }),
+      template: () => h("wpp-pagination-v2-22-0", { count: 100, activePageNumber: 5 }),
     });
     expect(page.root).toMatchSnapshot();
   });

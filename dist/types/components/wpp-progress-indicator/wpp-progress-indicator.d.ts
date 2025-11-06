@@ -1,4 +1,3 @@
-import { AriaProps } from '../../types/common';
 /**
  * @part line - progress line element
  * @part circle - progress circle element
@@ -25,13 +24,8 @@ export declare class WppProgressIndicator {
   readonly isShowPercentage: boolean;
   /**
    * Defines the loading label.
-   * @deprecated This property will be removed in version 5.0.0.
    */
   readonly label?: string;
-  /**
-   * Contains the `aria-` props of the progess-indicator component.
-   */
-  readonly ariaProps: AriaProps;
   /**
    * If set to `true` and `value` is `0`, the component will show a 0% empty state
    * instead of the indeterminate loading animation.

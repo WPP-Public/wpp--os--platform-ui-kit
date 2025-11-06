@@ -1,13 +1,12 @@
 import { EventEmitter } from '../../stencil-public-runtime';
-import { AriaProps, DropdownConfig, FOCUS_TYPE, InputMessageTypes } from '../../types/common';
+import { AriaProps, InputMessageTypes, FOCUS_TYPE, DropdownConfig } from '../../types/common';
 import { BaseComponent } from '../../interfaces/base-component';
 import { BaseFormControl } from '../../interfaces/base-form-control';
 import { InlineMessage } from '../../interfaces/inline-message';
-import { InputChangeEventDetail, InputLabelConfig, InputLocaleInterface, InputTypes, InputValue, MaskOptions, WppChangeExtraEventDetail } from './types';
+import { InputChangeEventDetail, InputValue, InputTypes, InputLabelConfig, InputLocaleInterface, MaskOptions, WppChangeExtraEventDetail } from './types';
 interface FocusType {
   input: FOCUS_TYPE;
   icon: FOCUS_TYPE;
-  inlineMessage: FOCUS_TYPE;
 }
 /**
  * @part input - Input element
@@ -27,7 +26,6 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
   private lengthValidationError?;
   private maskedElement?;
   private suppressInputEvent;
-  private _locales;
   private hasActiveEllipses;
   private hasIconStartSlot;
   private hasIconEndSlot;
@@ -46,11 +44,6 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
    * Defines the input value.
    */
   value: InputValue;
-  /**
-   * Defines the default value of the input.
-   * Note: This value is used only when the component is uncontrolled.
-   */
-  readonly defaultValue?: InputValue;
   /**
    * Defines the input placeholder.
    */
@@ -97,11 +90,6 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
    */
   tooltipConfig: DropdownConfig;
   /**
-   * The configuration for the tooltip displayed when the input is truncated.
-   * @internal - this property is used internally. Controlled by the inline-edit. When the inline edit enters error state, the tooltip for truncation should not display.
-   */
-  readonly truncationTooltipConfig: DropdownConfig;
-  /**
    * Defines the dropdown configuration. Under the hood dropdown using tippy.js,
    * all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
    */
@@ -127,7 +115,7 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
   /**
    * Defines the component locale types.
    */
-  readonly locales: Partial<InputLocaleInterface>;
+  readonly locales: InputLocaleInterface;
   /**
    * If the component is loading.
    */
@@ -186,7 +174,6 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
    */
   getValue(): Promise<InputValue>;
   onUpdateValue(): void;
-  onUpdateLocales(newLocales: Partial<InputLocaleInterface>): void;
   componentWillLoad(): void;
   componentDidRender(): void;
   componentDidLoad(): Promise<void>;
@@ -211,8 +198,6 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
   private inputWithIconsCssClasses;
   private iconStartCssClasses;
   private iconEndCssClasses;
-  private inputId;
-  private labelId;
   private renderInput;
   private renderSearchIconOrSpinner;
   render(): any;

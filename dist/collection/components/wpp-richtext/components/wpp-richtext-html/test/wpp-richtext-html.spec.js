@@ -13,8 +13,8 @@ describe('QuillViewHTMLComponent', () => {
       <wpp-richtext-html>
         <wpp-quill-styles></wpp-quill-styles>
         <wpp-richtext-common-styles></wpp-richtext-common-styles>
-        <div class="ql-container ql-wpp quill-view-html" data-testid="richtext-editor-container">
-          <div class="ql-editor" data-testid="richtext-editor"></div>
+        <div class="ql-container ql-wpp quill-view-html">
+          <div class="ql-editor"></div>
         </div>
       </wpp-richtext-html>
     `);
@@ -26,8 +26,8 @@ describe('QuillViewHTMLComponent', () => {
       <wpp-richtext-html value="<p>Hallo</p>">
         <wpp-quill-styles></wpp-quill-styles>
         <wpp-richtext-common-styles></wpp-richtext-common-styles>
-        <div class="ql-container ql-wpp quill-view-html" data-testid="richtext-editor-container">
-          <div class="ql-editor" data-testid="richtext-editor">
+        <div class="ql-container ql-wpp quill-view-html">
+          <div class="ql-editor">
             <p>
               Hallo
             </p>
@@ -46,8 +46,8 @@ describe('QuillViewHTMLComponent', () => {
       <wpp-richtext-html value="<p>Hallo</p>">
         <wpp-quill-styles></wpp-quill-styles>
         <wpp-richtext-common-styles></wpp-richtext-common-styles>
-        <div class="ql-container ql-wpp quill-view-html" data-testid="richtext-editor-container">
-          <div class="ql-editor" data-testid="richtext-editor">
+        <div class="ql-container ql-wpp quill-view-html">
+          <div class="ql-editor">
             <p>
               test
             </p>

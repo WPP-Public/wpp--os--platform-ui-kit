@@ -64,7 +64,7 @@
 :host(.wpp-radio-wrapper) .label.tab-focus .circle {
   border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--radio-first-border-color-focus), 0 0 0 3px var(--radio-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--radio-first-border-color-focus), 0 0 0 2px var(--radio-second-border-color-focus);
   background-color: var(--radio-bg-color-hover);
   border-color: var(--radio-border-color-hover);
 }
@@ -72,14 +72,6 @@
   position: absolute;
   cursor: pointer;
   opacity: 0;
-  appearance: none;
-  outline: none;
-  border-radius: var(--checkbox-border-radius);
-}
-:host(.wpp-radio-wrapper) .label .radio-input.tab-focus {
-  border-radius: "";
-  outline: none;
-  box-shadow: 0 0 0 1px var(--radio-first-border-color-focus), 0 0 0 3px var(--radio-second-border-color-focus);
 }
 :host(.wpp-radio-wrapper) .label .circle {
   position: relative;
@@ -103,11 +95,11 @@
   transform: translate(-50%, -50%);
   content: "";
 }
-:host(.wpp-radio-wrapper) .label:hover .circle, :host(.wpp-radio-wrapper) .label.hover .circle, :host(.wpp-radio-wrapper) .label.tab-focus .circle {
+:host(.wpp-radio-wrapper) .label:hover .circle, :host(.wpp-radio-wrapper) .label.hover .circle {
   background-color: var(--radio-bg-color-hover);
   border-color: var(--radio-border-color-hover);
 }
-:host(.wpp-radio-wrapper) .label:active .circle, :host(.wpp-radio-wrapper) .label.active .circle, :host(.wpp-radio-wrapper) .label.pressed .circle {
+:host(.wpp-radio-wrapper) .label:active .circle, :host(.wpp-radio-wrapper) .label.active .circle {
   background-color: var(--radio-bg-color-active);
   border-color: var(--radio-border-color-active);
 }
@@ -131,7 +123,7 @@
 :host(.wpp-radio-wrapper):host(.wpp-checked) .label.tab-focus .circle {
   border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--radio-first-border-color-focus), 0 0 0 3px var(--radio-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--radio-first-border-color-focus), 0 0 0 2px var(--radio-second-border-color-focus);
 }
 :host(.wpp-radio-wrapper):host(.wpp-checked):host(.wpp-disabled) .label .wpp-internal-label {
   --label-text-color-disabled: var(--radio-label-text-color-checked-disabled);

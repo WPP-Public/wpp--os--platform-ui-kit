@@ -14,24 +14,21 @@ export class WppLabel {
     this.hostCssClasses = () => ({
       'wpp-label': true,
     });
-    this.renderContent = () => (h("wpp-internal-label-v3-3-0", { labelText: this.config?.text, description: this.config?.description, optional: this.optional, typography: this.typography, disabled: this.disabled, locales: this.config?.locales, tooltipConfig: this.tooltipConfig, part: "content", id: this.labelId }, this.config?.icon && h(transformToVersionedTag(this.config?.icon), { slot: 'icon', part: 'icon' })));
     this.description = undefined;
     this.htmlFor = undefined;
     this.optional = false;
     this.typography = 's-strong';
     this.disabled = false;
     this.config = undefined;
-    this.tag = 'label';
     this.tooltipConfig = {
       popperOptions: { strategy: 'fixed' },
     };
-    this.labelId = undefined;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, content, icon" }, h(this.tag, { class: "internal-label-wrapper", part: "wrapper", ...(this.tag === 'label' && { htmlFor: this.htmlFor, 'aria-label': this.htmlFor }) }, this.renderContent())));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, content, icon" }, h("label", { class: "internal-label-wrapper", htmlFor: this.htmlFor, part: "wrapper" }, h("wpp-internal-label-v2-22-0", { labelText: this.config?.text, description: this.config?.description, optional: this.optional, typography: this.typography, disabled: this.disabled, locales: this.config?.locales, tooltipConfig: this.tooltipConfig, part: "content" }, this.config?.icon && h(transformToVersionedTag(this.config?.icon), { slot: 'icon', part: 'icon' })))));
   }
   static get is() { return "wpp-label"; }
-  static get registryIs() { return "wpp-label-v3-3-0"; }
+  static get registryIs() { return "wpp-label-v2-22-0"; }
   static get encapsulation() { return "scoped"; }
   static get originalStyleUrls() {
     return {
@@ -164,27 +161,6 @@ export class WppLabel {
           "text": "Indicates label config"
         }
       },
-      "tag": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "'label' | 'legend' | string",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [{
-              "name": "internal",
-              "text": "- for group components (wpp-checkbox-group, wpp-radio-group)"
-            }],
-          "text": "Define html tag for a text"
-        },
-        "attribute": "tag",
-        "reflect": false,
-        "defaultValue": "'label'"
-      },
       "tooltipConfig": {
         "type": "unknown",
         "mutable": false,
@@ -206,23 +182,6 @@ export class WppLabel {
           "text": "Defines the dropdown configuration. Under the hood dropdown using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
         },
         "defaultValue": "{\n    popperOptions: { strategy: 'fixed' },\n  }"
-      },
-      "labelId": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string | undefined",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": "Optional unique identifier for the label element.\nUseful for associating the label with form controls or for accessibility purposes."
-        },
-        "attribute": "label-id",
-        "reflect": false
       }
     };
   }

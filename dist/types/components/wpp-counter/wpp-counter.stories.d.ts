@@ -1,5 +1,6 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppCounter>;
+import { WppCounter } from './wpp-counter';
+declare const _default: Meta<typeof WppCounter>;
 export default _default;
-export declare const Counter: StoryObj<Components.WppCounter>;
+export declare const Counter: Story<Components.WppCounter>;

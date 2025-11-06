@@ -66,7 +66,7 @@ export declare class WppStep {
   /**
    * If a step is optional.
    *
-   * @deprecated this prop will be deleted in version 4.0.0
+   * @deprecated this prop will be deleted in version 3.0.0
    */
   readonly optional?: boolean;
   /**
@@ -102,7 +102,7 @@ export declare class WppStep {
   /**
    * Indicates locales for step component
    *
-   * @deprecated this prop will be deleted in version 4.0.0
+   * @deprecated this prop will be deleted in version 3.0.0
    */
   readonly locales: StepLocales;
   componentDidLoad(): void;

@@ -147,7 +147,7 @@
 .input-with-icons .icon-end:focus-visible {
   border-radius: 3px;
   outline: none;
-  box-shadow: 0 0 0 1px var(--text-input-icon-end-first-border-color-focus), 0 0 0 3px var(--text-input-icon-end-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--text-input-icon-end-first-border-color-focus), 0 0 0 2px var(--text-input-icon-end-second-border-color-focus);
   color: var(--text-input-icon-end-color-hover);
 }
 .input-with-icons:hover .icon-start {
@@ -264,7 +264,7 @@ input.size-m {
 input.size-m.tab-focus {
   border-radius: var(--wpp-border-radius-m);
   outline: none;
-  box-shadow: 0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 2px var(--text-input-second-border-color-focus);
 }
 input.size-s {
   height: var(--text-input-height-s);
@@ -274,13 +274,23 @@ input.size-s {
 input.size-s.tab-focus {
   border-radius: var(--wpp-border-radius-s);
   outline: none;
-  box-shadow: 0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 2px var(--text-input-second-border-color-focus);
 }
 input.warning, input.warning:hover {
   border: var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-400);
 }
+input.warning.tab-focus {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-warning-color-400);
+}
 input.error, input.error:hover {
   border: var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-400);
+}
+input.error.tab-focus {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-danger-color-400);
 }
 input.warning {
   border: var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-400);
@@ -288,11 +298,21 @@ input.warning {
 input.warning:hover {
   border: var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-500);
 }
+input.warning.tab-focus {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-warning-color-400);
+}
 input.error, input.with-validation-error {
   border: var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-400);
 }
 input.error:hover, input.with-validation-error:hover {
   border: var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-500);
+}
+input.error.tab-focus, input.with-validation-error.tab-focus {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-danger-color-400);
 }
 
 @keyframes onAutoFillStart {}

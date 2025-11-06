@@ -14,52 +14,7 @@ export class WppRadioGroup {
           radio.checked = this.value === radio.value;
           radio.required = true;
         });
-        this.syncTabIndexes();
       }, 0);
-    };
-    this.getEnabledItems = () => this.items.filter(item => !item.disabled);
-    this.getCurrentNdx = (enabled) => {
-      const checkedNdx = enabled.findIndex(item => item.checked);
-      return checkedNdx !== -1 ? checkedNdx : 0;
-    };
-    this.focusAndSelect = (target) => {
-      if (!target)
-        return;
-      const nextValue = target.value;
-      if (this.value !== nextValue) {
-        this.value = nextValue;
-        this.wppChange.emit({ value: this.value });
-      }
-      this.syncTabIndexes();
-      target.setFocus?.();
-    };
-    this.onKeyDown = (event) => {
-      const enabledItems = this.getEnabledItems();
-      if (enabledItems.length === 0)
-        return;
-      const currentNdx = this.getCurrentNdx(enabledItems);
-      let nextNdx = currentNdx;
-      const isNextKey = event.key === 'ArrowRight' || event.key === 'ArrowDown';
-      const isPrevKey = event.key === 'ArrowLeft' || event.key === 'ArrowUp';
-      if (!isNextKey && !isPrevKey)
-        return;
-      event.preventDefault();
-      const onFirst = currentNdx === 0;
-      const onLast = currentNdx === enabledItems.length - 1;
-      if (onLast && isNextKey) {
-        nextNdx = 0;
-      }
-      else if (onFirst && isPrevKey) {
-        nextNdx = enabledItems.length - 1;
-      }
-      else if (isNextKey) {
-        nextNdx = Math.min(currentNdx + 1, enabledItems.length - 1);
-      }
-      else if (isPrevKey) {
-        nextNdx = Math.max(currentNdx - 1, 0);
-      }
-      const target = enabledItems[nextNdx];
-      this.focusAndSelect(target);
     };
     this.onFocus = (event) => {
       this.wppFocus.emit(event);
@@ -70,30 +25,23 @@ export class WppRadioGroup {
     this.hostCssClasses = () => ({
       'wpp-radio-group': true,
     });
-    this.contentCssClasses = () => ({
-      content: true,
-      [`direction-${this.direction}`]: true,
-    });
     this.value = undefined;
     this.required = false;
     this.message = undefined;
     this.messageType = undefined;
-    this.direction = 'column';
     this.maxMessageLength = undefined;
     this.labelConfig = undefined;
     this.labelTooltipConfig = {
       popperOptions: { strategy: 'fixed' },
     };
-    this.ariaProps = {
-      labelledby: 'label-id',
-      describedby: 'description-id',
-    };
+  }
+  componentDidLoad() {
+    this.checkRadioElements();
   }
   updateValue(value) {
     this.items.forEach(item => {
       item.checked = item.value === value;
     });
-    this.syncTabIndexes();
   }
   onClickRadioButton(event) {
     const value = event.detail.value;
@@ -101,27 +49,12 @@ export class WppRadioGroup {
       this.value = value;
       this.wppChange.emit({ value });
     }
-    this.syncTabIndexes();
-  }
-  componentDidLoad() {
-    this.checkRadioElements();
-  }
-  syncTabIndexes() {
-    const enabled = this.getEnabledItems();
-    if (enabled.length === 0)
-      return;
-    let activeIndex = enabled.findIndex(r => r.checked);
-    if (activeIndex === -1)
-      activeIndex = 0;
-    enabled.forEach((r, i) => {
-      r.index = i === activeIndex ? 0 : -1;
-    });
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onKeyDown: this.onKeyDown, onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "inner" }, h("div", { class: "group-container", role: "radiogroup", "aria-labelledby": this.ariaProps.labelledby, ...(!!this.message && this.ariaProps.describedby ? { 'aria-describedby': this.ariaProps.describedby } : {}) }, this.labelConfig?.text && (h("wpp-label-v3-3-0", { class: "label", tag: "h3", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, id: this.ariaProps.labelledby })), h("div", { class: this.contentCssClasses() }, h("slot", { onSlotchange: this.checkRadioElements, part: "inner" })), !!this.message && (h("wpp-inline-message-v3-3-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, id: this.ariaProps.describedby })))));
+    return (h(Host, { class: this.hostCssClasses(), "aria-multiselectable": "false", "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "inner" }, this.labelConfig?.text && (h("wpp-label-v2-22-0", { class: "label", typography: "s-body", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), h("slot", { onSlotchange: this.checkRadioElements, part: "inner" }), !!this.message && (h("wpp-inline-message-v2-22-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))));
   }
   static get is() { return "wpp-radio-group"; }
-  static get registryIs() { return "wpp-radio-group-v3-3-0"; }
+  static get registryIs() { return "wpp-radio-group-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -216,24 +149,6 @@ export class WppRadioGroup {
         "attribute": "message-type",
         "reflect": false
       },
-      "direction": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "'column' | 'row'",
-          "resolved": "\"column\" | \"row\"",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the direction in which the checkbox items are displayed.\nBy default, the items are displayed vertically (in a column)."
-        },
-        "attribute": "direction",
-        "reflect": true,
-        "defaultValue": "'column'"
-      },
       "maxMessageLength": {
         "type": "number",
         "mutable": false,
@@ -293,28 +208,6 @@ export class WppRadioGroup {
           "text": "Tooltip config for label, under the hood tooltip using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
         },
         "defaultValue": "{\n    popperOptions: { strategy: 'fixed' },\n  }"
-      },
-      "ariaProps": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "AriaProps",
-          "resolved": "AriaProps",
-          "references": {
-            "AriaProps": {
-              "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::AriaProps"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Contains the checkbox group `aria-` props."
-        },
-        "defaultValue": "{\n    labelledby: 'label-id',\n    describedby: 'description-id',\n  }"
       }
     };
   }

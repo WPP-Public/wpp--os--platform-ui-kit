@@ -6,5 +6,4 @@ export interface LabelConfig {
   text: string;
   description?: string;
   locales?: LabelLocales;
-  labelId?: string;
 }

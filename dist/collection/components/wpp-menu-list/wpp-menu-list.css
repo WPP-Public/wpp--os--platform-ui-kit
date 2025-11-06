@@ -1,0 +1,17 @@
+.wpp-menu-list-wrapper {
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+:host .inner-wrapper {
+  display: block;
+  overflow-y: scroll;
+  width: 100%;
+}
+:host .inner-wrapper.hidden {
+  position: absolute;
+  z-index: 1;
+  opacity: 0;
+}

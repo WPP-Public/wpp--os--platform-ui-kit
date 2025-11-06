@@ -1,5 +1,6 @@
 import { html } from 'lit-html';
-import { useState } from 'storybook/internal/preview-api';
+import useState from 'storybook-addon-state';
+import readme from './readme.md';
 export default {
   title: 'Design System/Components/Data display/Tree',
   parameters: {
@@ -8,6 +9,7 @@ export default {
         hidden: true,
       },
     },
+    notes: readme,
   },
   argTypes: {
     loading: { control: { type: 'boolean' } },
@@ -20,7 +22,6 @@ const data = [
     title: 'Cars',
     id: '0',
     open: true,
-    'data-testid': 'tree-item-cars',
     children: [
       {
         title: 'Toyota',
@@ -29,19 +30,16 @@ const data = [
           { icon: `wpp-icon-info`, name: 'remove' },
           { icon: 'wpp-icon-cross', name: 'save' },
         ],
-        'data-testid': 'tree-item-toyota',
         children: [
           {
             title: 'Avalon',
             id: '0-0-0',
             disabled: true,
-            'data-testid': 'tree-item-avalon',
           },
           {
             title: 'Prius',
             id: '0-0-1',
             disabled: true,
-            'data-testid': 'tree-item-prius',
             iconsEnd: [
               { icon: `wpp-icon-arrow`, name: 'remove' },
               { icon: 'wpp-icon-cross', name: 'save' },
@@ -184,11 +182,11 @@ const locales = {
   nothingFound: 'No result',
 };
 export const Tree = (args) => {
-  const [treeState, setTreeState] = useState(data);
+  const [treeState, setTreeState] = useState('treeState', data);
   const handleTreeChange = ({ detail }) => {
     setTreeState(detail.treeState);
   };
-  return html `<wpp-tree-v3-3-0
+  return html `<wpp-tree-v2-22-0
     .multiple=${args.multiple}
     .data=${treeState}
     .search="${args.search}"
@@ -197,7 +195,7 @@ export const Tree = (args) => {
     .skeletonNumberItems=${args.skeletonNumberItems}
     .withItemsTruncation=${args.withItemsTruncation}
     @wppChange="${handleTreeChange}"
-  ></wpp-tree-v3-3-0>`;
+  ></wpp-tree-v2-22-0>`;
 };
 Tree.args = {
   multiple: false,
@@ -208,17 +206,17 @@ Tree.args = {
   search: '',
 };
 export const TreeWithCustomSearch = (args) => {
-  const [treeState, setTreeState] = useState(data);
+  const [treeState, setTreeState] = useState('treeState', data);
   const handleTreeChange = ({ detail }) => {
     setTreeState(detail.treeState);
   };
   return html `
     <Fragment>
-      <wpp-typography-v3-3-0 .type=${'l-strong'}>
+      <wpp-typography-v2-22-0 .type=${'l-strong'}>
         Single tree with custom search: the search string should match exactly the title of the tree-item (case
         sensitive).
-      </wpp-typography-v3-3-0>
-      <wpp-tree-v3-3-0
+      </wpp-typography-v2-22-0>
+      <wpp-tree-v2-22-0
         .multiple=${args.multiple}
         .data=${treeState}
         .search="${args.search}"
@@ -226,7 +224,7 @@ export const TreeWithCustomSearch = (args) => {
         .withItemsTruncation=${args.withItemsTruncation}
         .searchConfig=${args.searchConfig}
         @wppChange="${handleTreeChange}"
-      ></wpp-tree-v3-3-0>
+      ></wpp-tree-v2-22-0>
     </Fragment>
   `;
 };

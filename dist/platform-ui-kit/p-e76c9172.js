@@ -1,0 +1,1 @@
+import{h as r}from"./p-000a6ed6.js";const s=({wrapperClass:s,...p},a)=>r("div",{class:s,part:`${p.name||"ws"}-wrapper`},r("slot",{part:p.name||"ws-inner",...p},a));export{s as W}

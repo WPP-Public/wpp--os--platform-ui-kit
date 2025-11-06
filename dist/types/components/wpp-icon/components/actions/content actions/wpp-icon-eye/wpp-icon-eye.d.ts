@@ -1,6 +1,6 @@
 /**
  * @deprecated - Use `wpp-icon-eye-on` instead.
- * This component will be deleted in 4.0.0.
+ * This component will be deleted in 3.0.0.
  */
 export declare class WppIconEye {
   /**

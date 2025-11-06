@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const WppIcon = require('./WppIcon-55327707.js');
+const WppIcon = require('./WppIcon-be5823e9.js');
 
 const wppIconCss = ":host{display:-ms-inline-flexbox;display:inline-flex;color:var(--wpp-prop-icon-color)}";
 
@@ -23,7 +23,7 @@ const WppIconMinimise = class {
   render() {
     return (index.h(WppIcon.WppIcon, { name: "wpp-icon-minimise", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { d: MinimiseDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-minimise-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-minimise-v2-22-0"; }
 };
 WppIconMinimise.style = wppIconCss;
 

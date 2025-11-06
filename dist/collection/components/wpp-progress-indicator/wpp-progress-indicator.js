@@ -41,7 +41,6 @@ export class WppProgressIndicator {
     this.value = undefined;
     this.isShowPercentage = false;
     this.label = undefined;
-    this.ariaProps = {};
     this.forceIntermediateEmptyState = false;
   }
   setComponentWidth(updateWidth) {
@@ -79,12 +78,12 @@ export class WppProgressIndicator {
     const shouldShowPercentage = this.isShowPercentage &&
       typeof this.value === 'number' &&
       (this.value > 0 || (this.value === 0 && !!this.forceIntermediateEmptyState));
-    const renderLine = () => (h("div", { class: this.lineCssClasses(isShowCircleInfinityLoading, isShowLinearInfinityLoading, shouldShowPercentage), part: "line" }));
+    const renderLine = () => (h("div", { class: this.lineCssClasses(isShowCircleInfinityLoading, isShowLinearInfinityLoading, shouldShowPercentage), role: "progressbar", "aria-valuenow": this.value, "aria-valuemin": "0", "aria-valuemax": "100", part: "line" }));
     const renderCircle = () => (h("svg", { class: this.circleWrapperCssClasses(isShowCircleInfinityLoading), viewBox: "0 0 120 120", part: "circle" }, h("circle", { class: "circle", cx: "60", cy: "60", r: "54", fill: "none" }), h("circle", { class: this.circleCssClasses(isShowCircleInfinityLoading, shouldShowPercentage), cx: "60", cy: "60", r: "54", fill: "none", pathLength: "100" })));
-    return (h(Host, { class: this.hostCssClasses(isLinearDontHaveWidth), role: "progressbar", "aria-valuenow": this.value, "aria-valuemin": "0", "aria-valuemax": "100", "aria-label": this.ariaProps?.label, "aria-labelledby": this.ariaProps?.labelledby, exportparts: "label, content, inner" }, h("div", { class: this.progressBarCssClasses(isLinearDontHaveProgress, shouldShowPercentage), part: "body" }, isCircle ? renderCircle() : renderLine()), !!this.label && (h("p", { class: "progress-text", part: "label" }, this.label))));
+    return (h(Host, { class: this.hostCssClasses(isLinearDontHaveWidth), role: "progressbar", "aria-valuenow": this.value, "aria-valuemin": "0", "aria-valuemax": "100", exportparts: "label, content, inner" }, h("div", { class: this.progressBarCssClasses(isLinearDontHaveProgress, shouldShowPercentage), part: "body" }, isCircle ? renderCircle() : renderLine()), !!this.label && (h("p", { class: "progress-text", part: "label" }, this.label))));
   }
   static get is() { return "wpp-progress-indicator"; }
-  static get registryIs() { return "wpp-progress-indicator-v3-3-0"; }
+  static get registryIs() { return "wpp-progress-indicator-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -179,36 +178,11 @@ export class WppProgressIndicator {
         "required": false,
         "optional": true,
         "docs": {
-          "tags": [{
-              "name": "deprecated",
-              "text": "This property will be removed in version 5.0.0."
-            }],
+          "tags": [],
           "text": "Defines the loading label."
         },
         "attribute": "label",
         "reflect": false
-      },
-      "ariaProps": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "AriaProps",
-          "resolved": "AriaProps",
-          "references": {
-            "AriaProps": {
-              "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::AriaProps"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Contains the `aria-` props of the progess-indicator component."
-        },
-        "defaultValue": "{}"
       },
       "forceIntermediateEmptyState": {
         "type": "boolean",

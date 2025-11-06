@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+import readme from './readme.md';
 const customViewports = {
   xxLarge: {
     name: 'XXLarge',
@@ -50,13 +51,14 @@ const getItemClassName = (breakpoint, size) => {
   return itemClassStr;
 };
 export default {
-  title: 'Design System/Foundations/Grid/CSS',
+  title: 'Design System/Foundations/Grid',
   parameters: {
     previewTabs: {
       'storybook/docs/panel': {
         hidden: true,
       },
     },
+    notes: readme,
     options: { showPanel: false },
     viewport: {
       //👇 The viewports for grid
@@ -117,10 +119,7 @@ export const CSSGrid = (args) => {
         text-align: center;
         line-height: 25px;
         background: #fff;
-        box-shadow:
-          0 2px 1px -1px rgb(0 0 0 / 20%),
-          0 1px 1px 0 rgb(0 0 0 / 14%),
-          0 1px 3px 0 rgb(0 0 0 / 12%);
+        box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%);
       }
 
       .grid-item-title {

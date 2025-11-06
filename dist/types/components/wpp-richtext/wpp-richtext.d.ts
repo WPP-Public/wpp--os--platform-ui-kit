@@ -5,7 +5,6 @@ import { BaseComponent } from '../../interfaces/base-component';
 import { DebugLevels, Formats, QuillInstance, RichtextChangeEventDetail, RichtextLocales, RichtextSelectionChangeEventDetail, RichtextUploadRequestEventDetail, RichtextValue } from './types';
 import 'quilljs-markdown/dist/quilljs-markdown-common-style.css';
 export declare class WppRichtext implements BaseComponent {
-  private _locales;
   host: HTMLWppRichtextElement;
   focusType: FOCUS_TYPE;
   private enteredCharacters;
@@ -59,7 +58,7 @@ export declare class WppRichtext implements BaseComponent {
   /**
    * Indicates locales for the component
    */
-  readonly locales: Partial<RichtextLocales>;
+  readonly locales: RichtextLocales;
   /**
    * Defines a char threshold after which users are notified that they are about to exceed `charactersLimit`.
    */
@@ -145,7 +144,6 @@ export declare class WppRichtext implements BaseComponent {
    * Emitted when user requests uploading of files
    */
   readonly wppUploadRequest: EventEmitter<RichtextUploadRequestEventDetail>;
-  handlePreserveWhitespaceChange(newVal: boolean, oldVal: boolean): void;
   quill: QuillInstance;
   containerElement?: HTMLDivElement | HTMLPreElement;
   selectionChangeEvent: any;
@@ -164,8 +162,17 @@ export declare class WppRichtext implements BaseComponent {
   private onDragend;
   private onDrop;
   private updateEnteredCharacters;
-  private syncValueAndEmit;
-  setValue(value: RichtextValue, isInitialLoad?: boolean): void;
+  /**
+   * Processes a Markdown input by normalizing underscore-delimited emphasis,
+   * converting it to HTML using marked, and extracting its plain text.
+   *
+   * @param value The raw markdown string.
+   * @returns An object containing:
+   *   - html: The generated HTML string.
+   *   - plainText: The extracted plain text (with formatting markers removed).
+   */
+  private processMarkdownValue;
+  setValue(value: RichtextValue): void;
   getValue(): RichtextValue;
   componentDidLoad(): void;
   disconnectedCallback(): void;
@@ -174,8 +181,6 @@ export declare class WppRichtext implements BaseComponent {
   updatePlaceholder(newValue: string, oldValue: string): void;
   updateStyle(newValue: string, oldValue: string): void;
   updateCharacterLimit(): void;
-  onUpdateLocales(newLocales: Partial<RichtextLocales>): void;
-  componentWillLoad(): void;
   private hostCssClasses;
   private formControlCssClasses;
   private charLimitCssClasses;

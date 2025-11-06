@@ -11,7 +11,7 @@ export class WppIconTriangleFill {
     return (h(WppIcon, { name: "wpp-icon-triangle-fill", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M13.1271 9.24407C13.5876 9.64284 13.5876 10.3572 13.1271 10.7559L9.65465 13.7632C9.00701 14.3241 8 13.864 8 13.0073L8 6.99275C8 6.136 9.00701 5.67594 9.65465 6.23682L13.1271 9.24407Z", fill: "currentColor" })));
   }
   static get is() { return "wpp-icon-triangle-fill"; }
-  static get registryIs() { return "wpp-icon-triangle-fill-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-triangle-fill-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

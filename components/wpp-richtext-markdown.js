@@ -7,43 +7,43 @@ const WppRichtextMarkdown$1 = /*@__PURE__*/ proxyCustomElement(class WppRichtext
   constructor() {
     super();
     this.__registerHost();
+    this.turndownService = new TurndownService();
     this.markdown = '';
-    this.turndown = new TurndownService();
     this.value = undefined;
   }
   handleValueChange(newValue) {
-    this.markdown = newValue ? this.turndown.turndown(newValue) : '';
+    this.markdown = newValue ? this.turndownService.turndown(newValue) : '';
   }
   connectedCallback() {
     this.handleValueChange(this.value);
   }
   render() {
-    return (h(Host, null, h("wpp-quill-styles-v3-3-0", null), h("wpp-richtext-common-styles-v3-3-0", null), h("pre", { class: "richtext-markdown" }, this.markdown)));
+    return (h(Host, null, h("wpp-quill-styles-v2-22-0", null), h("wpp-richtext-common-styles-v2-22-0", null), h("pre", { class: "richtext-markdown" }, this.markdown)));
   }
-  static get registryIs() { return "wpp-richtext-markdown-v3-3-0"; }
+  static get registryIs() { return "wpp-richtext-markdown-v2-22-0"; }
   static get watchers() { return {
     "value": ["handleValueChange"]
   }; }
-}, [0, "wpp-richtext-markdown", "wpp-richtext-markdown-v3-3-0", {
+}, [0, "wpp-richtext-markdown", "wpp-richtext-markdown-v2-22-0", {
     "value": [1537]
   }]);
 function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-richtext-markdown-v3-3-0", "wpp-quill-styles-v3-3-0", "wpp-richtext-common-styles-v3-3-0"];
+  const components = ["wpp-richtext-markdown-v2-22-0", "wpp-quill-styles-v2-22-0", "wpp-richtext-common-styles-v2-22-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-richtext-markdown-v3-3-0":
+    case "wpp-richtext-markdown-v2-22-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppRichtextMarkdown$1);
       }
       break;
-    case "wpp-quill-styles-v3-3-0":
+    case "wpp-quill-styles-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-richtext-common-styles-v3-3-0":
+    case "wpp-richtext-common-styles-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

@@ -1,7 +1,6 @@
 import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
 import { u as uuidv4 } from './utils.js';
 import { A as ANIMATION_DURATION, d as defineCustomElement$3 } from './wpp-toast2.js';
-import { Z as Z_INDEX } from './consts.js';
 import { d as defineCustomElement$a } from './wpp-action-button2.js';
 import { d as defineCustomElement$9 } from './wpp-icon-cross2.js';
 import { d as defineCustomElement$8 } from './wpp-icon-error2.js';
@@ -11,7 +10,7 @@ import { d as defineCustomElement$5 } from './wpp-icon-warning2.js';
 import { d as defineCustomElement$4 } from './wpp-spinner2.js';
 import { d as defineCustomElement$2 } from './wpp-typography2.js';
 
-const wppToastContainerCss = ":host(.wpp-toast-container){--toast-margin-bottom:var(--wpp-toast-margin-bottom, 8px);display:-ms-inline-flexbox;display:inline-flex;position:fixed;top:16px;right:16px;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start}:host(.wpp-toast-container) .wpp-toast:not(:last-child){margin-bottom:var(--toast-margin-bottom)}";
+const wppToastContainerCss = ":host(.wpp-toast-container){--toast-margin-bottom:var(--wpp-toast-margin-bottom, 8px);display:-ms-inline-flexbox;display:inline-flex;position:fixed;top:16px;right:16px;z-index:10000;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start}:host(.wpp-toast-container) .wpp-toast:not(:last-child){margin-bottom:var(--toast-margin-bottom)}";
 
 const WppToastContainer$1 = /*@__PURE__*/ proxyCustomElement(class WppToastContainer extends HTMLElement {
   constructor() {
@@ -33,7 +32,6 @@ const WppToastContainer$1 = /*@__PURE__*/ proxyCustomElement(class WppToastConta
     this.toasts = [];
     this.toastsQueue = [];
     this.maxToastsToDisplay = 4;
-    this.zIndex = Z_INDEX.TOAST;
   }
   /**
    * Method for adding toasts to `toast-container`.
@@ -70,14 +68,13 @@ const WppToastContainer$1 = /*@__PURE__*/ proxyCustomElement(class WppToastConta
   }
   render() {
     const { toasts } = this;
-    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "item" }, toasts.map(toast => (h("wpp-toast-v3-3-0", { key: toast.id, index: toast.id, message: toast.message, type: toast.type, header: toast.header, duration: toast.duration, primaryBtn: toast.primaryBtn, maxMessageLines: toast.maxMessageLines, icon: toast.icon, part: "item", onWppToastComplete: this.handleToastComplete })))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "item" }, toasts.map(toast => (h("wpp-toast-v2-22-0", { key: toast.id, index: toast.id, message: toast.message, type: toast.type, header: toast.header, duration: toast.duration, primaryBtn: toast.primaryBtn, maxMessageLines: toast.maxMessageLines, icon: toast.icon, part: "item", onWppToastComplete: this.handleToastComplete })))));
   }
-  static get registryIs() { return "wpp-toast-container-v3-3-0"; }
+  static get registryIs() { return "wpp-toast-container-v2-22-0"; }
   get host() { return this; }
   static get style() { return wppToastContainerCss; }
-}, [1, "wpp-toast-container", "wpp-toast-container-v3-3-0", {
+}, [1, "wpp-toast-container", "wpp-toast-container-v2-22-0", {
     "maxToastsToDisplay": [2, "max-toasts-to-display"],
-    "zIndex": [2, "z-index"],
     "toasts": [32],
     "toastsQueue": [32],
     "addToast": [64],
@@ -88,54 +85,54 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-toast-container-v3-3-0", "wpp-action-button-v3-3-0", "wpp-icon-cross-v3-3-0", "wpp-icon-error-v3-3-0", "wpp-icon-info-message-v3-3-0", "wpp-icon-success-v3-3-0", "wpp-icon-warning-v3-3-0", "wpp-spinner-v3-3-0", "wpp-toast-v3-3-0", "wpp-typography-v3-3-0"];
+  const components = ["wpp-toast-container-v2-22-0", "wpp-action-button-v2-22-0", "wpp-icon-cross-v2-22-0", "wpp-icon-error-v2-22-0", "wpp-icon-info-message-v2-22-0", "wpp-icon-success-v2-22-0", "wpp-icon-warning-v2-22-0", "wpp-spinner-v2-22-0", "wpp-toast-v2-22-0", "wpp-typography-v2-22-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-toast-container-v3-3-0":
+    case "wpp-toast-container-v2-22-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppToastContainer$1);
       }
       break;
-    case "wpp-action-button-v3-3-0":
+    case "wpp-action-button-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-cross-v3-3-0":
+    case "wpp-icon-cross-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-error-v3-3-0":
+    case "wpp-icon-error-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-icon-info-message-v3-3-0":
+    case "wpp-icon-info-message-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-success-v3-3-0":
+    case "wpp-icon-success-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-icon-warning-v3-3-0":
+    case "wpp-icon-warning-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v3-3-0":
+    case "wpp-spinner-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-toast-v3-3-0":
+    case "wpp-toast-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v3-3-0":
+    case "wpp-typography-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

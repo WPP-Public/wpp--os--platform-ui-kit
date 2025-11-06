@@ -1,4 +1,6 @@
-import { iconsList } from '../wpp-icon/const';
+import { h } from '@stencil/core';
+import { iconsList } from '../wpp-icon/consts';
+import { transformToVersionedTag } from '../../utils/utils';
 export const convertMBToBytes = (size) => size * 1024 ** 2;
 export const getExtension = (filename = '') => `.${filename.split('.').pop()}`;
 export const getExtensionsList = (acceptConfig) => Object.entries(acceptConfig).reduce((acc, [_, extensions]) => [...acc, ...extensions], []);
@@ -17,4 +19,12 @@ export const getIconNames = () => {
     });
   });
   return iconNames;
+};
+// Render all icons dynamically using transformToVersionedTag
+export const renderIcons = () => {
+  const iconNames = getIconNames();
+  return iconNames.map(iconName => {
+    const versionedTag = transformToVersionedTag(iconName);
+    return h(versionedTag, { 'data-fake': 'prevent-tree-shaking' }); // Dynamically create each icon component
+  });
 };

@@ -1,6 +1,7 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppSearch>;
+import { WppSearch } from './wpp-search';
+declare const _default: Meta<typeof WppSearch>;
 export default _default;
 type SearchStoryArgs = Components.WppSearch;
-export declare const Search: StoryObj<SearchStoryArgs>;
+export declare const Search: Story<SearchStoryArgs>;

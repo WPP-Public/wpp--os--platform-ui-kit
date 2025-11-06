@@ -215,6 +215,9 @@ describe('given theme', () => {
           actionButton: {
             bgColor: 'red',
           },
+          sideModal: {
+            zIndex: '1000',
+          },
         },
       },
     },
@@ -367,6 +370,7 @@ describe('given theme', () => {
         '--wpp-surface-bg-color': '#f8f9fb',
         '--wpp-overlay-bg-color': 'rgba(77, 83, 88, 0.6)',
         '--wpp-action-button-bg-color': 'red',
+        '--wpp-side-modal-z-index': '1000',
       });
     });
     it('returns flat theme and supports font family as array', () => {
@@ -1115,6 +1119,9 @@ describe('given theme', () => {
             components: {
               actionButton: {
                 bgColor: 'red',
+              },
+              sideModal: {
+                zIndex: '1000',
               },
             },
           },

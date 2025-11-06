@@ -265,7 +265,7 @@
 :host:host(:not([aria-expanded=true])):host(:focus-visible:not(.wpp-list-item-wrapper)) .navigation-item-wrapper {
   border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--topbar-menu-item-first-border-color-focus), 0 0 0 3px var(--topbar-menu-item-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--topbar-menu-item-first-border-color-focus), 0 0 0 2px var(--topbar-menu-item-second-border-color-focus);
   background-color: var(--navigation-item-bg-color-hover);
 }
 :host:host(:not([aria-expanded=true])):host(:focus-visible:not(.wpp-list-item-wrapper)) .navigation-item-wrapper .label-text {

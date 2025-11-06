@@ -29,9 +29,9 @@ const WppIconScaleBottom$1 = /*@__PURE__*/ proxyCustomElement(class WppIconScale
   render() {
     return (h(WppIcon, { name: "wpp-icon-scale-bottom", width: this.width, height: this.height, size: this.size, color: this.color }, ScaleBottomDirectionIconPath[this.direction].map(path => (h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: path, fill: "currentColor" })))));
   }
-  static get registryIs() { return "wpp-icon-scale-bottom-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-scale-bottom-v2-22-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-scale-bottom", "wpp-icon-scale-bottom-v3-3-0", {
+}, [1, "wpp-icon-scale-bottom", "wpp-icon-scale-bottom-v2-22-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -42,9 +42,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-scale-bottom-v3-3-0"];
+  const components = ["wpp-icon-scale-bottom-v2-22-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-scale-bottom-v3-3-0":
+    case "wpp-icon-scale-bottom-v2-22-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconScaleBottom$1);
       }

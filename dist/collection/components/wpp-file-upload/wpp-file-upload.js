@@ -2,13 +2,13 @@ import { h, Host } from '@stencil/core';
 import { FOCUS_TYPE } from '../../types/common';
 import { convertMBToBytes, getExtension, getExtensionsList, getBaseName, renameFile, modifyPropertiesOnFile, } from './utils';
 import { ScrollState, } from './types';
-import { EXTENSION_TO_TYPE, LOCALES_DEFAULTS } from './const';
+import { EXTENSION_TO_TYPE } from './constants';
 const getInitFocusInfo = () => ({
   wrapper: FOCUS_TYPE.NONE,
   item: FOCUS_TYPE.NONE,
 });
 /**
- * @slot - Should contain label and description of file upload.
+ * @slot - Should contain label and description of file upload. The default slot, without the name attribute.
  *
  * @part list-wrapper - file list wrapper
  * @part file-list - file list element.
@@ -26,30 +26,9 @@ const getInitFocusInfo = () => ({
  */
 export class WppFileUpload {
   constructor() {
-    this._locales = LOCALES_DEFAULTS;
-    this.inputId = this.name || `wpp-file-upload-${Math.random().toString(36).substr(2, 9)}`;
-    this.labelId = `${this.inputId}-label`;
-    this.lastKeyWasTab = false; // Track keyboard modality and wrapper focus state
     this.reInitValue = (list) => {
       this.successList = list.filter(file => !this.isFileWithError(file));
       this.errorList = list.filter(this.isFileWithError);
-    };
-    this.onGlobalKeyDown = (e) => {
-      this.lastKeyWasTab = e.key === 'Tab';
-    };
-    this.onPointerDown = () => {
-      // Any pointer interaction cancels keyboard modality
-      this.lastKeyWasTab = false;
-    };
-    this.onInputFocus = () => {
-      if (this.disabled)
-        return;
-      // Prefer :focus-visible if available; fall back to lastKeyWasTab
-      const focusVisible = typeof this.inputRef?.matches === 'function' && this.inputRef.matches(':focus-visible');
-      this.hasTabFocus = !!focusVisible || this.lastKeyWasTab;
-    };
-    this.onInputBlur = () => {
-      this.hasTabFocus = false;
     };
     this.onFocus = (event) => {
       this.wppFocus.emit(event);
@@ -64,8 +43,6 @@ export class WppFileUpload {
       this.focusType = this.getUpdatedFocusInfo('item', FOCUS_TYPE.MOUSE);
     };
     this.onKeyUp = (event, type) => {
-      if (this.disabled)
-        return;
       if (event.key === 'Tab') {
         this.focusType = this.getUpdatedFocusInfo(type, FOCUS_TYPE.TAB);
       }
@@ -81,16 +58,16 @@ export class WppFileUpload {
       if (this.inputRef?.value) {
         this.inputRef.value = '';
       }
-      this.value = updatedFilesList;
-      this.errorList = errorFileList;
-      this.successList = successList;
       this.wppChange.emit({
         value: successList,
-        hasError: !!errorFileList?.length || this.isLimitReached,
+        hasError: !!errorFileList?.length,
         errorFiles: errorFileList,
         name: this.name,
       });
       this.wppFileUploadItemDelete.emit(event.detail);
+      this.value = updatedFilesList;
+      this.errorList = errorFileList;
+      this.successList = successList;
     };
     this.handleClickItem = (event) => this.wppFileUploadItemClick.emit(event.detail);
     this.validateFileSize = (file) => {
@@ -106,7 +83,12 @@ export class WppFileUpload {
       }
       return file;
     };
-    this.isAcceptConfigFilled = () => !this.acceptConfig ? false : Object.keys(this.acceptConfig)?.length > 0;
+    this.isAcceptConfigFilled = () => {
+      if (!this.acceptConfig) {
+        return false;
+      }
+      return Object.keys(this.acceptConfig).length > 0;
+    };
     this.validateFileType = (file) => {
       if (this.isAcceptConfigFilled()) {
         let allowedExtensions = [];
@@ -167,7 +149,7 @@ export class WppFileUpload {
       }
       return uniqueName;
     };
-    this.displayErrorListByShowingOption = (newFilesWithErrors) => this.showOnlyNewErrors ? newFilesWithErrors : [...new Set([...this.errorList, ...newFilesWithErrors])];
+    this.displayErrorListByShowingOption = (newFilesWithErrors) => this.showOnlyNewErrors ? newFilesWithErrors : [...this.errorList, ...newFilesWithErrors];
     this.handleFileLoad = async (filesList) => {
       const list = [...(this.successList || []), ...(this.errorList || [])];
       const filteredFileList = filesList.filter(Boolean).map(newFile => {
@@ -177,6 +159,11 @@ export class WppFileUpload {
         const uniqueName = this.generateUniqueName(newFile.name, list);
         return renameFile(newFile, uniqueName);
       });
+      if (this.isMaximumFilesSet()) {
+        filteredFileList.length = this.multiple
+          ? Math.min(filteredFileList?.length, Math.max(0, this.maxFiles - list?.length))
+          : 1;
+      }
       if (!filteredFileList?.length)
         return;
       const validatedFileList = filteredFileList.map((file) => {
@@ -189,7 +176,7 @@ export class WppFileUpload {
         return file;
       });
       if (!this.multiple && this.value?.length) {
-        this.value = validatedFileList.some(this.isFileWithError) ? this.value : [...this.value, ...filteredFileList];
+        this.value = validatedFileList.some(this.isFileWithError) ? this.value : filteredFileList;
       }
       else {
         this.value = [...(this.successList || []), ...(this.errorList || []), ...validatedFileList];
@@ -201,7 +188,7 @@ export class WppFileUpload {
       this.successList = successFileList;
       this.wppChange.emit({
         value: successFileList,
-        hasError: !!errorFileList?.length || this.isLimitReached,
+        hasError: !!errorFileList?.length,
         errorFiles: errorFileList,
         name: this.name,
       });
@@ -260,30 +247,20 @@ export class WppFileUpload {
     this.isMaximumFilesSet = () => this.maxFiles > 0;
     this.isMaximumFilesReached = () => {
       if (!this.multiple) {
-        this.isLimitReached = this.value?.length > 1;
-        return this.isLimitReached;
+        return this.value?.length >= 1;
       }
       if (this.isMaximumFilesSet()) {
-        this.isLimitReached = this.value?.length > this.maxFiles;
-        return this.isLimitReached;
+        return this.value?.length >= this.maxFiles;
       }
-      this.isLimitReached = false;
       return false;
-    };
-    this.getMessageText = () => {
-      if (this.isLimitReached) {
-        return this.multiple ? this._locales.multipleFileLimitError : this._locales.singleFileLimitError;
-      }
-      return this.message;
     };
     this.uploadWrapperCssClasses = () => ({
       'upload-wrapper': true,
       message: !!this.message,
       [`${this.messageType}`]: !!this.messageType,
-      'tab-focus': !this.disabled && this.hasTabFocus,
-      disabled: this.disabled,
+      'tab-focus': this.focusType.wrapper === FOCUS_TYPE.TAB && this.focusType.item !== FOCUS_TYPE.TAB,
+      disabled: this.disabled || this.isMaximumFilesReached(),
       'file-drag': this.isFileDrag,
-      ...(!this.messageType && this.isLimitReached ? { error: true } : {}),
     });
     this.listWrapperCssClasses = () => ({
       'file-list-wrapper': true,
@@ -292,13 +269,11 @@ export class WppFileUpload {
     this.hostCssClasses = () => ({
       'wpp-file-upload': true,
     });
-    this.hasTabFocus = false;
     this.scrollState = false;
     this.focusType = getInitFocusInfo();
     this.isFileDrag = false;
     this.errorList = undefined;
     this.successList = undefined;
-    this.isLimitReached = false;
     this.name = undefined;
     this.value = [];
     this.disabled = false;
@@ -311,16 +286,17 @@ export class WppFileUpload {
     this.maxMessageLength = undefined;
     this.tooltipConfig = {};
     this.size = 50;
-    this.maxLabelLength = undefined;
-    this.locales = {};
+    this.maxLabelLength = 30;
+    this.locales = {
+      label: 'Choose a file',
+      text: 'to upload or drag it here',
+      info: (accept, size) => `Only ${accept} file at ${size} MB or less`,
+      sizeError: 'File exceeds size limit',
+      formatError: 'Wrong format',
+    };
     this.validator = () => null;
     this.controlled = false;
     this.maxFiles = 0;
-    this.required = false;
-    this.labelConfig = undefined;
-    this.labelTooltipConfig = {
-      popperOptions: { strategy: 'absolute' },
-    };
     this.showOnlyNewErrors = false;
   }
   /**
@@ -330,27 +306,10 @@ export class WppFileUpload {
     this.successList = [];
     this.errorList = [];
   }
-  onDisabledChange(disabled) {
-    if (disabled)
-      this.hasTabFocus = false;
-  }
   onValueChange(newValue) {
     if (this.controlled) {
       this.reInitValue(newValue);
     }
-    if (this.isMaximumFilesReached()) {
-      this.wppError.emit({
-        errorFiles: this.value.slice(this.maxFiles),
-        errorMessage: this.multiple ? this._locales.multipleFileLimitError : this._locales.singleFileLimitError,
-        name: this.name,
-      });
-    }
-  }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
-  }
-  componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
   }
   componentDidLoad() {
     const list = [...this.value, ...(this.successList || []), ...(this.errorList || [])];
@@ -358,13 +317,13 @@ export class WppFileUpload {
   }
   render() {
     const allFiles = [...(this.successList || []), ...(this.errorList || [])];
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, wrapper, content, file-name, tooltip, loading, percentage, cross-icon", onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onGlobalKeyDown, onPointerDown: this.onPointerDown, onMouseDown: this.onMouseDown, "aria-disabled": this.disabled ? 'true' : undefined }, h("slot", { name: "label", part: "slot-label" }), this.labelConfig?.text && (h("wpp-label-v3-3-0", { class: "file-upload-label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("slot", { name: "description", part: "slot-description" }), h("div", { class: this.uploadWrapperCssClasses(), onDrop: this.handleDrop, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onDragOver: this.handleDragOver, part: "file-upload-container" }, h("wpp-avatar-v3-3-0", { class: "icon-file", icon: "wpp-icon-file", size: "l", role: "presentation", tabindex: "-1", "aria-hidden": "true" }), h("div", { class: "content", part: "content" }, h("p", null, h("span", { class: "label", part: "label" }, this._locales.label), h("span", { class: "text", part: "text" }, this._locales.text))), h("p", { class: "text-info", part: "text-info" }, this._locales.info(this.getAcceptExtensions().join(', '), this.size)), h("input", { class: "file-loader", type: "file", name: this.name, onChange: this.handleChange, onFocus: this.onInputFocus, onBlur: this.onInputBlur, ref: inputRef => (this.inputRef = inputRef), multiple: this.multiple, accept: this.getAcceptExtensions().join(), part: "input", title: "", "aria-label": this.locales.label || 'Upload file', disabled: this.disabled })), (this.message || this.isLimitReached) && (h("wpp-inline-message-v3-3-0", { message: this.getMessageText(), type: this.isLimitReached ? 'error' : this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })), allFiles?.length ? (h("div", { class: this.listWrapperCssClasses(), part: "list-wrapper" }, h("ul", { role: "list", class: "file-list", part: "file-list", onScroll: this.handleListScroll }, allFiles.map((file, index) => (h("wpp-file-upload-item-v3-3-0", { key: file.lastModified, format: this.format, parentDisabled: this.disabled, maxLabelLength: this.maxLabelLength, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, file: file, locales: {
-        sizeError: this._locales.sizeError,
-        formatError: this._locales.formatError,
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, wrapper, content, file-name, tooltip, loading, percentage, cross-icon", onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'wrapper') }, h("slot", { name: "label", part: "slot-label" }), h("slot", { name: "description", part: "slot-description" }), h("div", { class: this.uploadWrapperCssClasses(), onDrop: this.handleDrop, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onDragOver: this.handleDragOver, part: "file-upload-container" }, h("wpp-avatar-v2-22-0", { class: "icon-file", icon: "wpp-icon-file", size: "l" }), h("div", { class: "content", part: "content" }, h("p", null, h("span", { class: "label", part: "label" }, this.locales.label), h("span", { class: "text", part: "text" }, this.locales.text))), h("p", { class: "text-info", part: "text-info" }, this.locales.info(this.getAcceptExtensions().join(', '), this.size)), h("input", { class: "file-loader", type: "file", name: this.name, onChange: this.handleChange, ref: inputRef => (this.inputRef = inputRef), multiple: this.multiple, accept: this.getAcceptExtensions().join(), part: "input", title: "" })), this.message && (h("wpp-inline-message-v2-22-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })), allFiles?.length ? (h("div", { class: this.listWrapperCssClasses(), part: "list-wrapper" }, h("ul", { class: "file-list", part: "file-list", onScroll: this.handleListScroll }, allFiles.map((file, index) => (h("wpp-file-upload-item-v2-22-0", { key: file.lastModified, format: this.format, maxLabelLength: this.maxLabelLength, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, file: file, tabIndex: 0, locales: {
+        sizeError: this.locales.sizeError,
+        formatError: this.locales.formatError,
       }, part: "file-item", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'item') })))))) : null));
   }
   static get is() { return "wpp-file-upload"; }
-  static get registryIs() { return "wpp-file-upload-v3-3-0"; }
+  static get registryIs() { return "wpp-file-upload-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -490,7 +449,7 @@ export class WppFileUpload {
         "docs": {
           "tags": [{
               "name": "deprecated",
-              "text": "- this prop will be deleted in 4.0.0 version as it is not flexible enough to handle different\ncases with files validations, for example based on mimetype and extension at the same time.\nThis property handle only a few extensions: ['.jpg', '.jpeg', '.png', '.txt', '.text', '.doc', '.docx', '.mov'],\nand list will NOT be extended.\n\nIf you want to use this prop, use \"acceptConfig\" property instead.\nNote: \"acceptConfig\" property will have a higher priority in case if both \"acceptConfig\" and \"accept\" props will be provided"
+              "text": "- this prop will be deleted in 3.0.0 version as it is not flexible enough to handle different\ncases with files validations, for example based on mimetype and extension at the same time.\nThis property handle only a few extensions: ['.jpg', '.jpeg', '.png', '.txt', '.text', '.doc', '.docx', '.mov'],\nand list will NOT be extended.\n\nIf you want to use this prop, use \"acceptConfig\" property instead.\nNote: \"acceptConfig\" property will have a higher priority in case if both \"acceptConfig\" and \"accept\" props will be provided"
             }],
           "text": "Accept file format, you can pass any format you want download, by default is `.jpg, .jpeg, .png`"
         },
@@ -619,32 +578,26 @@ export class WppFileUpload {
         "mutable": false,
         "complexType": {
           "original": "number",
-          "resolved": "number | undefined",
+          "resolved": "number",
           "references": {}
         },
         "required": false,
-        "optional": true,
+        "optional": false,
         "docs": {
-          "tags": [{
-              "name": "deprecated",
-              "text": "- this prop will be removed in 4.0.0 version. Truncation will be calculated based on available space."
-            }],
+          "tags": [],
           "text": "Maximum label length (in characters) of single item"
         },
         "attribute": "max-label-length",
-        "reflect": false
+        "reflect": false,
+        "defaultValue": "30"
       },
       "locales": {
         "type": "unknown",
         "mutable": false,
         "complexType": {
-          "original": "Partial<FileUploadLocales>",
-          "resolved": "{ label?: string | undefined; text?: string | undefined; info?: ((accept: string, size: number) => string) | undefined; sizeError?: string | undefined; formatError?: string | undefined; singleFileLimitError?: string | undefined; multipleFileLimitError?: string | undefined; }",
+          "original": "FileUploadLocales",
+          "resolved": "FileUploadLocales",
           "references": {
-            "Partial": {
-              "location": "global",
-              "id": "global::Partial"
-            },
             "FileUploadLocales": {
               "location": "import",
               "path": "./types",
@@ -658,7 +611,7 @@ export class WppFileUpload {
           "tags": [],
           "text": "Indicates locales for file upload component"
         },
-        "defaultValue": "{}"
+        "defaultValue": "{\n    label: 'Choose a file',\n    text: 'to upload or drag it here',\n    info: (accept: string, size: number) => `Only ${accept} file at ${size} MB or less`,\n    sizeError: 'File exceeds size limit',\n    formatError: 'Wrong format',\n  }"
       },
       "validator": {
         "type": "unknown",
@@ -718,67 +671,6 @@ export class WppFileUpload {
         "reflect": false,
         "defaultValue": "0"
       },
-      "required": {
-        "type": "boolean",
-        "mutable": false,
-        "complexType": {
-          "original": "boolean",
-          "resolved": "boolean",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "If the input is required."
-        },
-        "attribute": "required",
-        "reflect": true,
-        "defaultValue": "false"
-      },
-      "labelConfig": {
-        "type": "unknown",
-        "mutable": true,
-        "complexType": {
-          "original": "LabelConfig",
-          "resolved": "LabelConfig | undefined",
-          "references": {
-            "LabelConfig": {
-              "location": "import",
-              "path": "../wpp-label/types",
-              "id": "src/components/wpp-label/types.ts::LabelConfig"
-            }
-          }
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": "Indicates label config"
-        }
-      },
-      "labelTooltipConfig": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "DropdownConfig",
-          "resolved": "DropdownConfig",
-          "references": {
-            "DropdownConfig": {
-              "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::DropdownConfig"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the dropdown configuration. Under the hood dropdown using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
-        },
-        "defaultValue": "{\n    popperOptions: { strategy: 'absolute' },\n  }"
-      },
       "showOnlyNewErrors": {
         "type": "boolean",
         "mutable": false,
@@ -801,13 +693,11 @@ export class WppFileUpload {
   }
   static get states() {
     return {
-      "hasTabFocus": {},
       "scrollState": {},
       "focusType": {},
       "isFileDrag": {},
       "errorList": {},
-      "successList": {},
-      "isLimitReached": {}
+      "successList": {}
     };
   }
   static get events() {
@@ -914,27 +804,6 @@ export class WppFileUpload {
             }
           }
         }
-      }, {
-        "method": "wppError",
-        "name": "wppError",
-        "bubbles": false,
-        "cancelable": true,
-        "composed": false,
-        "docs": {
-          "tags": [],
-          "text": "Emitted when the file upload enters an error state. Triggered when the maximum number of files is exceeded."
-        },
-        "complexType": {
-          "original": "FileUploadErrorEventDetails",
-          "resolved": "FileUploadErrorEventDetails",
-          "references": {
-            "FileUploadErrorEventDetails": {
-              "location": "import",
-              "path": "./types",
-              "id": "src/components/wpp-file-upload/types.ts::FileUploadErrorEventDetails"
-            }
-          }
-        }
       }];
   }
   static get methods() {
@@ -961,14 +830,8 @@ export class WppFileUpload {
   static get elementRef() { return "host"; }
   static get watchers() {
     return [{
-        "propName": "disabled",
-        "methodName": "onDisabledChange"
-      }, {
         "propName": "value",
         "methodName": "onValueChange"
-      }, {
-        "propName": "locales",
-        "methodName": "onUpdateLocales"
       }];
   }
 }

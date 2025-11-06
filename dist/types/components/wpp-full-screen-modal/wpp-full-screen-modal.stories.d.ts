@@ -1,10 +1,11 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppFullScreenModal>;
+import { WppFullScreenModal } from './wpp-full-screen-modal';
+declare const _default: Meta<typeof WppFullScreenModal>;
 export default _default;
 type FullScreenModalStoryArgs = Components.WppFullScreenModal & {
   withTitle: boolean;
 } & {
   withActionBar: boolean;
 };
-export declare const FullScreenModal: StoryObj<FullScreenModalStoryArgs>;
+export declare const FullScreenModal: Story<FullScreenModalStoryArgs>;

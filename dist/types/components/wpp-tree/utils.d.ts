@@ -10,4 +10,3 @@ export declare const convertToOriginalItems: (treeArr: (TreeType | null)[]) => a
 export declare const markChildrenAs: (tree: TreeType[], treeItemCb: (item: TreeType) => Partial<TreeType>) => TreeType[];
 export declare const isHaveFoundChildren: (tree: TreeType[], search: string, matcherFn: (item: TreeType, search: string) => boolean) => boolean;
 export declare const recalculateIndeterminateTreeState: (treeData: TreeType[]) => TreeType[];
-export declare const extractExtraProps: (tree: TreeType) => Record<string, any>;

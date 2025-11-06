@@ -1,80 +1,68 @@
 import { r as registerInstance, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { p as processMarkdownValue, t as turndownService } from './config-5578eb3c.js';
+import { m as marked_umd } from './marked.umd-2f5023bc.js';
 import { f as formats, s as sources, Q as Quill } from './types-112bed55.js';
-import { k as transformToVersionedTag } from './utils-d423b01f.js';
-import './wpp-icon-unordered-list-1985dd37.js';
-import './WppIcon-f4802cc9.js';
-import './wpp-icon-video-clip-b134a3cd.js';
+import { T as TurndownService } from './turndown.browser.es-8ae0014d.js';
+import './utils-f3870f15.js';
+import './consts-4b0f734e.js';
+import './wpp-icon-attach-ab8b7b8e.js';
+import './WppIcon-d0aab502.js';
+import './wpp-icon-blockquote-e23da51b.js';
+import './wpp-icon-bold-dfebe5db.js';
+import './wpp-icon-code-view-354ec303.js';
+import './wpp-icon-float-center-c44367d6.js';
+import './wpp-icon-float-left-5837d66e.js';
+import './wpp-icon-float-right-d24356e9.js';
+import './wpp-icon-h1-72b1c973.js';
+import './wpp-icon-h2-60de8d2b.js';
+import './wpp-icon-video-clip-9526562d.js';
+import './wpp-icon-indent-decrease-ca6662f3.js';
+import './wpp-icon-indent-increase-632fb35e.js';
+import './wpp-icon-italic-03fb8f41.js';
+import './wpp-icon-link-a3db6929.js';
+import './wpp-icon-ordered-list-6c165c5e.js';
+import './wpp-icon-redo-87eac29f.js';
+import './wpp-icon-strike-through-a5f63a7d.js';
+import './wpp-icon-text-alignment-center-9c95e8c5.js';
+import './wpp-icon-text-alignment-justify-d3ea8e91.js';
+import './wpp-icon-text-alignment-left-682862b4.js';
+import './wpp-icon-text-alignment-right-8f616d52.js';
+import './wpp-icon-underline-9b2e6d1b.js';
+import './wpp-icon-undo-59ed85c2.js';
+import './wpp-icon-unordered-list-83325b10.js';
+import './wpp-progress-indicator-83078fdc.js';
 import './_commonjsHelpers-ba3f0406.js';
-import './wpp-progress-indicator-1470c3b6.js';
-import './wpp-icon-chevron-3780b470.js';
-import './wpp-icon-gallery-64c20319.js';
+import './wpp-icon-chevron-987d4c5e.js';
+import './wpp-icon-gallery-abc3646e.js';
 import './lodash-66b76943.js';
-import './wpp-action-button-40484a42.js';
+import './wpp-action-button-eea7b2ce.js';
 import './common-69c8ea89.js';
-import './WrappedSlot-2ee5325a.js';
-import './wpp-input-9437c445.js';
-import './turndown.browser.es-9f6d9c98.js';
-import './consts-5bf9c29f.js';
+import './WrappedSlot-a49aa0dd.js';
+import './wpp-input-f4d242af.js';
 
+/* eslint-disable @stencil/own-props-must-be-private, @stencil/own-methods-must-be-private */
+const turndownService = new TurndownService();
 const WppRichtextView = class {
   constructor(hostRef) {
     registerInstance(this, hostRef);
     this.value = undefined;
-    this.format = formats.html;
+    this.format = 'html';
     this.debug = 'warn';
     this.formats = undefined;
     this.modules = undefined;
     this.strict = true;
     this.styles = '{}';
     this.preserveWhitespace = false;
-    this.name = undefined;
   }
-  setValue(value, isInitialLoad = false) {
-    if (this.format === formats.markdown) {
-      const editorTag = transformToVersionedTag('wpp-richtext');
-      let editorEl;
-      if (this.name) {
-        editorEl = document.querySelector(`${editorTag}[name="${this.name}"]`);
-      }
-      else {
-        editorEl = document.querySelector(editorTag);
-      }
-      if (editorEl && editorEl.quill && editorEl.format === this.format) {
-        const editorHtml = editorEl.quill.root.innerHTML;
-        this.quill.root.innerHTML = editorHtml;
-        return;
-      }
-    }
-    // Fallback: process markdown into HTML for the view
+  setValue(value) {
     if (this.format === formats.html) {
       const contents = this.quill.clipboard.convert(value);
       this.quill.setContents(contents, sources.api);
     }
     else if (this.format === formats.markdown) {
-      const { html } = processMarkdownValue(value, this.preserveWhitespace, isInitialLoad);
+      // Convert Markdown to HTML, then convert that HTML to Delta.
+      const html = marked_umd.marked(value);
       const contents = this.quill.clipboard.convert(html);
       this.quill.setContents(contents, sources.api);
-      // normalize empty blocks when parsing stored value
-      const normalizeNode = (node) => {
-        const html = node.innerHTML.trim().toLowerCase();
-        if (html === '' || html === '<br>' || html === '<br/>' || html === '<br />' || html === '&nbsp;') {
-          node.innerHTML = '&nbsp;';
-        }
-      };
-      const blocks = Array.from(this.quill.root.querySelectorAll('p, blockquote'));
-      blocks.forEach(b => normalizeNode(b));
-      const emptyListItems = this.quill.root.querySelectorAll('li');
-      let removedCount = 0;
-      emptyListItems.forEach(li => {
-        const liContent = li.innerHTML.trim();
-        if (liContent === '<br>' || liContent === '') {
-          li.remove();
-          removedCount++;
-        }
-      });
-      if (removedCount > 0)
-        this.quill.update(sources.api);
     }
     else if (this.format === formats.text) {
       this.quill.setText(value, sources.api);
@@ -83,7 +71,7 @@ const WppRichtextView = class {
       try {
         this.quill.setContents(JSON.parse(value), sources.api);
       }
-      catch (_) {
+      catch (e) {
         this.quill.setText(value, sources.api);
       }
     }
@@ -112,7 +100,7 @@ const WppRichtextView = class {
       try {
         return JSON.stringify(content);
       }
-      catch (_) {
+      catch (e) {
         return text;
       }
     }
@@ -121,9 +109,14 @@ const WppRichtextView = class {
     }
   }
   componentDidLoad() {
-    const modules = this.modules ? JSON.parse(this.modules) : { toolbar: false };
-    if (modules.toolbar)
+    const modules = this.modules
+      ? JSON.parse(this.modules)
+      : {
+        toolbar: false,
+      };
+    if (modules.toolbar) {
       modules.toolbar = false;
+    }
     this.quill = new Quill(this.containerElement, {
       debug: this.debug,
       modules,
@@ -140,7 +133,7 @@ const WppRichtextView = class {
     }
     this.containerElement?.classList.add('quill-view');
     if (this.value) {
-      this.setValue(this.value, true);
+      this.setValue(this.value);
       this.quill['history'].clear();
     }
   }
@@ -182,9 +175,9 @@ const WppRichtextView = class {
     this.setValue(newValue);
   }
   render() {
-    return (h(Host, null, h("wpp-quill-styles-v3-3-0", null), h("wpp-richtext-common-styles-v3-3-0", null), h("div", { ref: (el) => (this.containerElement = el), class: this.preserveWhitespace ? 'preserve-whitespace' : '' })));
+    return (h(Host, null, h("wpp-quill-styles-v2-22-0", null), h("wpp-richtext-common-styles-v2-22-0", null), this.preserveWhitespace ? (h("pre", { ref: (el) => (this.containerElement = el) })) : (h("div", { ref: (el) => (this.containerElement = el) }))));
   }
-  static get registryIs() { return "wpp-richtext-view-v3-3-0"; }
+  static get registryIs() { return "wpp-richtext-view-v2-22-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "styles": ["updateStyle"],

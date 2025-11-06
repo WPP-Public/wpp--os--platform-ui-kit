@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+import readme from './readme.md';
 export default {
   title: 'Design System/Components/Data display/Avatar/Avatar Group',
   parameters: {
@@ -7,6 +8,7 @@ export default {
         hidden: true,
       },
     },
+    notes: readme,
   },
   argTypes: {
     size: {
@@ -340,67 +342,57 @@ const interactableLogos = [
     interactable: true,
   },
 ];
-export const AvatarGroup = {
-  render: args => {
-    console.log('Args', args);
-    const getData = () => {
-      if (args.variant === 'circle') {
-        console.log('Users', users);
-        return users;
-      }
-      if (args.variant === 'square') {
-        console.log('Logos', logos);
-        return logos;
-      }
-      return [];
-    };
-    return html ` <wpp-avatar-group-v3-3-0
-      .size="${args.size}"
-      .variant="${args.variant}"
-      .avatars="${getData()}"
-      .maxAvatarsToDisplay="${args.maxAvatarsToDisplay}"
-      .withTooltip="${args.withTooltip}"
-      .tooltipConfig="${args.tooltipConfig}"
-      @wppSelectItem="${(e) => console.log('onWppSelectItem', e)}"
-    />`;
-  },
-  args: {
-    size: 'xs',
-    variant: 'circle',
-    tooltipConfig: {
-      placement: 'bottom',
-    },
-    maxAvatarsToDisplay: 6,
-    withTooltip: true,
-    avatars: users,
-  },
+export const AvatarGroup = (args) => {
+  const getData = () => {
+    if (args.variant === 'circle')
+      return users;
+    if (args.variant === 'square')
+      return logos;
+  };
+  return html ` <wpp-avatar-group-v2-22-0
+    .size="${args.size}"
+    .variant="${args.variant}"
+    .avatars="${getData()}"
+    .maxAvatarsToDisplay="${args.maxAvatarsToDisplay}"
+    .withTooltip="${args.withTooltip}"
+    .tooltipConfig="${args.tooltipConfig}"
+    @wppSelectItem="${(e) => console.log('onWppSelectItem', e)}"
+  />`;
 };
-export const AvatarGroupInteractable = {
-  render: args => {
-    const getData = () => {
-      if (args.variant === 'circle')
-        return interactableUsers;
-      if (args.variant === 'square')
-        return interactableLogos;
-    };
-    return html ` <wpp-avatar-group-v3-3-0
-      .size="${args.size}"
-      .variant="${args.variant}"
-      .avatars="${getData()}"
-      .maxAvatarsToDisplay="${args.maxAvatarsToDisplay}"
-      .withTooltip="${args.withTooltip}"
-      .tooltipConfig="${args.tooltipConfig}"
-      @wppSelectItem="${(e) => console.log('onWppSelectItem', e)}"
-    />`;
+AvatarGroup.args = {
+  size: 'xs',
+  variant: 'circle',
+  tooltipConfig: {
+    placement: 'bottom',
   },
-  args: {
-    size: 'xs',
-    variant: 'circle',
-    tooltipConfig: {
-      placement: 'bottom',
-    },
-    maxAvatarsToDisplay: 6,
-    withTooltip: true,
-    avatars: interactableUsers,
+  maxAvatarsToDisplay: 6,
+  withTooltip: true,
+  avatars: users,
+};
+export const AvatarGroupInteractable = (args) => {
+  const getData = () => {
+    if (args.variant === 'circle')
+      return interactableUsers;
+    if (args.variant === 'square')
+      return interactableLogos;
+  };
+  return html ` <wpp-avatar-group-v2-22-0
+    .size="${args.size}"
+    .variant="${args.variant}"
+    .avatars="${getData()}"
+    .maxAvatarsToDisplay="${args.maxAvatarsToDisplay}"
+    .withTooltip="${args.withTooltip}"
+    .tooltipConfig="${args.tooltipConfig}"
+    @wppSelectItem="${(e) => console.log('onWppSelectItem', e)}"
+  />`;
+};
+AvatarGroupInteractable.args = {
+  size: 'xs',
+  variant: 'circle',
+  tooltipConfig: {
+    placement: 'bottom',
   },
+  maxAvatarsToDisplay: 6,
+  withTooltip: true,
+  avatars: interactableUsers,
 };

@@ -1,6 +1,10 @@
 import { EventEmitter } from '../../stencil-public-runtime';
-import { AriaProps, FOCUS_TYPE } from '../../types/common';
+import { FOCUS_TYPE } from '../../types/common';
 import { AccordionSectionChangeEventDetail } from './types';
+interface FocusType {
+  wrapper: FOCUS_TYPE;
+  slot: FOCUS_TYPE;
+}
 /**
  * @slot header - content that is placed inside the header section
  * @slot actions - Content is placed inside the `.actions` element and add content to actions.
@@ -22,10 +26,10 @@ export declare class WppAccordion {
   private prevTextContent;
   private prevFont;
   private cachedTextWidth;
-  private titleTagsWrapperButtonRef?;
   host: HTMLWppAccordionElement;
   maxHeight: number;
   toggleOverflow: boolean;
+  focusType: FocusType;
   hasHeaderSlot: boolean;
   hasActionsSlot: boolean;
   actionsWrapperWidth?: number;
@@ -34,7 +38,6 @@ export declare class WppAccordion {
   hasTagSlot: boolean;
   isTitleOverflowing: boolean;
   titleMaxWidth: number;
-  focusType: FOCUS_TYPE;
   /**
    * If the component is expanded by default. Enabling this prop prevents users from expanding the accordion and removes the initial expansion animation.
    */
@@ -54,7 +57,7 @@ export declare class WppAccordion {
   /**
    * Defines the number of elements within a specific section.
    *
-   * @deprecated - this prop will be deleted in version 4.0.0.
+   * @deprecated - this prop will be deleted in version ***
    */
   readonly counter: number;
   /**
@@ -64,17 +67,13 @@ export declare class WppAccordion {
   /**
    * If set, adds text next to the section.
    *
-   * @deprecated - this prop will be deleted in version 4.0.0. If you want to use this prop, use "header" slot instead
+   * @deprecated - this prop will be deleted in version ***. If you want to use this prop, use "header" slot instead
    */
   readonly text?: string;
   /**
    * If set to true, displays `Tag` next to the section. The tag must placed in the `.tags` slot.
    */
   readonly withTag: boolean;
-  /**
-   * Contains the accordion `aria-` props.
-   */
-  readonly ariaProps: AriaProps;
   /**
    * Emitted when the expanded state changes.
    */
@@ -84,6 +83,7 @@ export declare class WppAccordion {
    */
   wppFocus: EventEmitter<FocusEvent>;
   /**
+   * Emitted when a section loses focus.
    */
   wppBlur: EventEmitter<FocusEvent>;
   updateOverflow(expanded: boolean): void;
@@ -96,28 +96,29 @@ export declare class WppAccordion {
   componentDidUpdate(): void;
   disconnectedCallback(): void;
   private updateSlotData;
+  private getUpdatedFocusInfo;
   private getContentHeight;
   private typographyType;
   private counterType;
-  private toggleExpand;
   private onClick;
   private onFocus;
   private onBlur;
+  private onMouseDown;
   private onKeyUp;
-  private onKeyDown;
   private hostCssClasses;
-  private cssSectionClasses;
+  private cssClasses;
   private contentCssClasses;
   private headerCssClasses;
   private actionsCssClasses;
   private calcAnimationTime;
   private getAnimationStyles;
+  private get tabIndex();
   private tagGroupCssClasses;
   private getTextWidth;
   private getElementFontStyle;
   private getHeaderSlotText;
   private getTextTitleFont;
   private checkTitleOverflow;
-  private cssTagWrapperClasses;
   render(): any;
 }
+export {};

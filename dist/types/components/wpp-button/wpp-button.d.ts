@@ -1,4 +1,3 @@
-import { EventEmitter } from '../../stencil-public-runtime';
 import { AriaProps, FOCUS_TYPE } from '../../types/common';
 /**
  * @slot icon-start - Can contain an icon that will be placed before the main content, e.g. a plus icon.
@@ -12,14 +11,11 @@ import { AriaProps, FOCUS_TYPE } from '../../types/common';
  * @part inner - Content slot element
  */
 export declare class WppButton {
-  private buttonRef?;
   host: HTMLWppButtonElement;
   hasIconStartSlot: boolean;
   hasIconEndSlot: boolean;
   isIconOnly: boolean;
   focusType: FOCUS_TYPE;
-  isPressed: boolean;
-  validAriaProps: Record<string, string>;
   /**
    * Defines the button size. Setting this attribute changes the button height and padding.
    */
@@ -87,23 +83,9 @@ export declare class WppButton {
    * Contains the button `aria-` props.
    */
   readonly ariaProps: AriaProps;
-  /**
-   * Emitted when the button loses focus.
-   */
-  readonly wppBlur: EventEmitter<FocusEvent>;
-  /**
-   * Emitted when the button receives focus.
-   */
-  readonly wppFocus: EventEmitter<FocusEvent>;
-  /**
-   * Method that sets focus on the native button.
-   */
-  setFocus(): Promise<void>;
-  onUpdateAriaProps(): void;
   componentWillLoad(): void;
   private updateSlotData;
   private onBlur;
-  private onFocus;
   private onMouseDown;
   private onKeyUp;
   private onKeyDown;

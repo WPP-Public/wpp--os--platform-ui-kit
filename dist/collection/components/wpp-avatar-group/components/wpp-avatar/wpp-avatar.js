@@ -1,6 +1,6 @@
 import { h, Host, Fragment } from '@stencil/core';
 import { FOCUS_TYPE } from '../../../../types/common';
-import { AVATAR_COLORS_VARIANTS } from '../../const';
+import { AVATAR_COLORS_VARIANTS } from '../../consts';
 import { transformToVersionedTag } from '../../../../utils/utils';
 /**
  * @part image - Image element
@@ -29,12 +29,6 @@ export class WppAvatar {
       if (event.key === 'Tab')
         this.focusType = FOCUS_TYPE.TAB;
     };
-    this.onKeyDown = (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        this.handleClick();
-      }
-    };
     this.getIconSize = () => {
       if (this.size === 'xs')
         return 16;
@@ -48,10 +42,6 @@ export class WppAvatar {
         return 32;
       if (this.size === '2xl')
         return 48;
-      if (this.size === '3xl')
-        return 56;
-      if (this.size === '4xl')
-        return 64;
     };
     this.renderIcon = () => {
       if (!this.icon)
@@ -102,8 +92,6 @@ export class WppAvatar {
     this.withTooltip = false;
     this.interactable = false;
     this.index = 0;
-    this.role = 'button';
-    this.ariaProps = {};
     this.tooltipConfig = {
       placement: 'bottom',
     };
@@ -119,22 +107,13 @@ export class WppAvatar {
     if (!this.isAvatarIcon()) {
       this.colorChange(this.color || AVATAR_COLORS_VARIANTS[Math.floor(Math.random() * AVATAR_COLORS_VARIANTS.length)]);
     }
-    if (this.variant === 'circle') {
-      this.host.style.setProperty('--avatar-border-radius', 'var(--wpp-border-radius-round)');
-    }
-    else {
-      const size = ['xl', 'l'].includes(this.size) ? 'm' : this.size === '2xl' ? 'l' : this.size;
-      this.host.style.setProperty('--avatar-border-radius', `var(--wpp-border-radius-${size})`);
-    }
   }
   render() {
-    const content = this.src && !this.isImageFailedToLoad ? (h("div", { class: this.imageWrapperCssClasses(), part: "content" }, h("img", { src: this.src, alt: `${this.name} - avatar`, class: this.imageCssClasses(), onError: this.handleImageLoadFailure, part: "image" }))) : (h(Fragment, null, h("div", { class: this.contentWrapperCssClasses(), part: "content" }, this.amountOfHiddenAvatars ? `+${this.amountOfHiddenAvatars}` : this.getUserAbbreviation(this.name), this.renderIcon())));
-    return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onClick: this.handleClick, exportparts: "image, content, tooltip", ...((this.withTooltip && !this.isAvatarIcon()) || this.role === 'presentation'
-        ? { role: 'presentation' }
-        : { role: this.role, tabIndex: this.index, ariaLabel: this.ariaProps.label }) }, this.withTooltip && !this.isAvatarIcon() ? (h("wpp-tooltip-v3-3-0", { text: this.name, config: this.tooltipConfig, part: "tooltip", ariaProps: { label: `User: ${this.name}`, role: 'button' } }, content)) : (content)));
+    const content = this.src && !this.isImageFailedToLoad ? (h("div", { class: this.imageWrapperCssClasses(), part: "content" }, h("img", { src: this.src, alt: this.name, class: this.imageCssClasses(), onError: this.handleImageLoadFailure, part: "image" }))) : (h(Fragment, null, h("div", { class: this.contentWrapperCssClasses(), part: "content" }, this.amountOfHiddenAvatars ? `+${this.amountOfHiddenAvatars}` : this.getUserAbbreviation(this.name), this.renderIcon())));
+    return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onClick: this.handleClick, exportparts: "image, content, tooltip", tabIndex: this.index }, this.withTooltip && !this.isAvatarIcon() ? (h("wpp-tooltip-v2-22-0", { text: this.name, config: this.tooltipConfig, part: "tooltip" }, content)) : (content)));
   }
   static get is() { return "wpp-avatar"; }
-  static get registryIs() { return "wpp-avatar-v3-3-0"; }
+  static get registryIs() { return "wpp-avatar-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -171,7 +150,7 @@ export class WppAvatar {
         "mutable": false,
         "complexType": {
           "original": "AvatarSize",
-          "resolved": "\"2xl\" | \"3xl\" | \"4xl\" | \"l\" | \"m\" | \"s\" | \"xl\" | \"xs\"",
+          "resolved": "\"2xl\" | \"l\" | \"m\" | \"s\" | \"xl\" | \"xs\"",
           "references": {
             "AvatarSize": {
               "location": "import",
@@ -338,46 +317,6 @@ export class WppAvatar {
         "attribute": "index",
         "reflect": false,
         "defaultValue": "0"
-      },
-      "role": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Role of the avatar component."
-        },
-        "attribute": "role",
-        "reflect": false,
-        "defaultValue": "'button'"
-      },
-      "ariaProps": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "AriaProps",
-          "resolved": "AriaProps",
-          "references": {
-            "AriaProps": {
-              "location": "import",
-              "path": "../../../../types/common",
-              "id": "src/types/common.ts::AriaProps"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Contains the button `aria-` props."
-        },
-        "defaultValue": "{}"
       },
       "tooltipConfig": {
         "type": "unknown",

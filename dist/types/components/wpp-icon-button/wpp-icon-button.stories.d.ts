@@ -1,5 +1,6 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppIconButton>;
+import { WppIconButton } from './wpp-icon-button';
+declare const _default: Meta<typeof WppIconButton>;
 export default _default;
-export declare const Icon: StoryObj<Components.WppIconButton>;
+export declare const Icon: Story<Components.WppIconButton>;

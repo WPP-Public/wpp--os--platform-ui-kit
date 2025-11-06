@@ -92,11 +92,11 @@
 :host(.wpp-textarea-wrapper) textarea.tab-focus {
   border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--counter-first-border-color-focus), 0 0 0 3px var(--counter-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--counter-first-border-color-focus), 0 0 0 2px var(--counter-second-border-color-focus);
 }
 :host(.wpp-textarea-wrapper) textarea::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 8px;
+  height: 8px;
 }
 :host(.wpp-textarea-wrapper) textarea::-webkit-scrollbar-thumb {
   border: 2px solid transparent;
@@ -130,8 +130,18 @@
 :host(.wpp-textarea-wrapper) textarea.warning, :host(.wpp-textarea-wrapper) textarea.warning:hover {
   border: var(--textarea-border-width) var(--textarea-border-style) var(--wpp-warning-color-400);
 }
+:host(.wpp-textarea-wrapper) textarea.warning.tab-focus {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-warning-color-400);
+}
 :host(.wpp-textarea-wrapper) textarea.error, :host(.wpp-textarea-wrapper) textarea.error:hover {
   border: var(--textarea-border-width) var(--textarea-border-style) var(--wpp-danger-color-400);
+}
+:host(.wpp-textarea-wrapper) textarea.error.tab-focus {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-danger-color-400);
 }
 :host(.wpp-textarea-wrapper) .characters-limit {
   display: flex;

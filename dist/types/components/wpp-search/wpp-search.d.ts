@@ -28,7 +28,6 @@ export declare class WppSearch implements BaseComponent, InlineMessage {
   private placeholderEl?;
   private hasActiveEllipses?;
   private observer;
-  private _locales;
   private isDropdownShown;
   host: HTMLWppSearchElement;
   isFocused: boolean;
@@ -36,7 +35,6 @@ export declare class WppSearch implements BaseComponent, InlineMessage {
   isEmptyOptions: boolean;
   isInfiniteLoading: boolean;
   focusType: FOCUS_TYPE;
-  isInComponent: boolean;
   /**
    * Defines the search name.
    */
@@ -97,7 +95,7 @@ export declare class WppSearch implements BaseComponent, InlineMessage {
   /**
    * Indicates locales for search component
    */
-  readonly locales: Partial<SearchLocales>;
+  readonly locales: SearchLocales;
   /**
    * Defines the dropdown configuration. Under the hood dropdown using tippy.js,
    * all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
@@ -155,7 +153,7 @@ export declare class WppSearch implements BaseComponent, InlineMessage {
   /**
    * Emitted when the search loses focus
    */
-  readonly wppBlur: EventEmitter<void>;
+  readonly wppBlur: EventEmitter<FocusEvent>;
   /**
    * Emitted when the search value changes
    */
@@ -165,8 +163,6 @@ export declare class WppSearch implements BaseComponent, InlineMessage {
   onSearchValueChange(initSearchValue: string): never[] | undefined;
   updateDropdownConfig(newConfig: DropdownConfig, oldConfig: DropdownConfig): void;
   onLoadingChange(loading: boolean): void;
-  updateIsInComponent(value: boolean): void;
-  onUpdateLocales(newLocales: Partial<SearchLocales>): void;
   /**
    * Sets focus on native input
    */

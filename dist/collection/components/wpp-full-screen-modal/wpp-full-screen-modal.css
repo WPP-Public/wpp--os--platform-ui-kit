@@ -7,15 +7,21 @@
   * @prop --wpp-full-screen-modal-actions-paddings:
   * @prop --wpp-full-screen-modal-header-padding:
   * @prop --wpp-full-screen-modal-bg-color:
+  * @prop --wpp-full-screen-modal-z-index:
 */
 :host {
-  --full-screen-modal-width: var(--wpp-full-screen-modal-width, 95%);
+  --full-screen-modal-overlay-bg-color: var(
+    --wpp-full-screen-modal-overlay-bg-color,
+    color-mix(in srgb, var(--wpp-grey-color-500) 60%, transparent)
+  );
+  --full-screen-modal-width: var(--wpp-full-screen-modal-width, 90%);
   --full-screen-modal-height: var(--wpp-full-screen-modal-height, 90%);
   --full-screen-modal-box-shadow: var(--wpp-full-screen-modal-box-shadow, var(--wpp-box-shadow-l));
   --full-screen-modal-body-paddings: var(--wpp-full-screen-modal-body-paddings, 0 32px);
   --full-screen-modal-actions-paddings: var(--wpp-full-screen-modal-actions-paddings, 32px);
   --full-screen-modal-header-padding: var(--wpp-full-screen-modal-header-padding, 24px 24px 20px 32px);
   --full-screen-modal-transition: visibility 0.15s linear 0.2s, opacity 0.2s 0.2s;
+  --full-screen-modal-z-index: var(--wpp-full-screen-modal-z-index, 1100);
   --full-screen-modal-bg-color: var(--wpp-full-screen-modal-bg-color, var(--wpp-grey-color-000));
   --full-screen-modal-close-button-margin-left: var(--wpp-full-screen-modal-close-button-margin-left, auto);
 }
@@ -26,6 +32,7 @@
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: var(--full-screen-modal-z-index);
   display: block;
   font-family: var(--wpp-font-family);
   visibility: hidden;
@@ -59,9 +66,6 @@
 .header-container .close-button {
   margin-left: var(--full-screen-modal-close-button-margin-left);
 }
-.header-container .header {
-  width: 100%;
-}
 
 .header.slot-hidden,
 .body.slot-hidden,
@@ -79,8 +83,6 @@
 }
 
 .body {
-  scrollbar-width: thin;
-  scrollbar-color: var(--wpp-grey-color-400) transparent;
   font-size: var(--wpp-typography-s-body-font-size, 14px);
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
@@ -90,15 +92,6 @@
   height: 100%;
   padding: var(--full-screen-modal-body-paddings);
   overflow-y: auto;
-}
-.body::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-.body::-webkit-scrollbar-thumb {
-  border: 2px solid transparent;
-  border-radius: 4px;
-  box-shadow: inset 0 0 0 2px var(--wpp-grey-color-400);
 }
 
 .actions {
@@ -115,6 +108,13 @@
   position: absolute;
   width: 100%;
   height: 100%;
+}
+
+.overlay-color {
+  width: 100%;
+  height: 100%;
+  background-color: var(--full-screen-modal-overlay-bg-color);
+  will-change: opacity;
 }
 
 .full-screen-modal {

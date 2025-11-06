@@ -1,6 +1,7 @@
 import { html } from 'lit-html';
 import { styleMap } from 'lit-html/directives/style-map.js';
 import { transformToVersionedTag } from '../../utils/utils';
+import readme from './readme.md';
 export default {
   title: 'Design System/Components/Surfaces/Full Screen Modal',
   parameters: {
@@ -9,6 +10,7 @@ export default {
         hidden: true,
       },
     },
+    notes: readme,
   },
   argTypes: {
     open: { control: { type: 'boolean' } },
@@ -55,44 +57,42 @@ const getModalHandlers = () => {
   };
   return { handleFullScreenModalOpen, handleFullScreenModalClose, handleFullScreenModalAction };
 };
-export const FullScreenModal = {
-  render: args => {
-    const { handleFullScreenModalOpen, handleFullScreenModalClose, handleFullScreenModalAction } = getModalHandlers();
-    return html ` <wpp-button-v3-3-0 @click=${handleFullScreenModalOpen}>Open Full Screen Modal</wpp-button-v3-3-0>
-      <wpp-full-screen-modal-v3-3-0
-        @wppFullScreenModalClose=${() => {
-      console.log('Called wppFullScreenModalClose');
-      handleFullScreenModalClose();
-    }}
-        @wppFullScreenModalOpenStart=${() => console.log('Open start')}
-        @wppFullScreenModalOpenComplete=${() => console.log('Open complete')}
-        @wppFullScreenModalCloseStart=${() => console.log('Close start')}
-        @wppFullScreenModalCloseComplete=${() => console.log('Close complete')}
-        .open=${args.open}
-        .disableOutsideClick=${args.disableOutsideClick}
-      >
-        <div slot="header" style=${styleMap(styles.header)}>
-          ${args.withTitle
-      ? html ` <wpp-typography-v3-3-0 type="2xl-heading" style=${styleMap(styles.title)}
-                >Title</wpp-typography-v3-3-0
-              >`
-      : null}
-        </div>
-        <p slot="body" style=${styleMap(styles.body)}></p>
-        ${args.withActionBar
-      ? html `<div slot="actions" style=${styleMap(styles.actions)}>
-              <wpp-button-v3-3-0 variant="secondary" style="margin-right: 12px" @click=${handleFullScreenModalClose}>
-                Cancel
-              </wpp-button-v3-3-0>
-              <wpp-button-v3-3-0 variant="primary" @click=${handleFullScreenModalAction}>Action</wpp-button-v3-3-0>
-            </div>`
-      : null}
-      </wpp-full-screen-modal-v3-3-0>`;
-  },
-  args: {
-    open: false,
-    disableOutsideClick: false,
-    withTitle: true,
-    withActionBar: true,
-  },
+export const FullScreenModal = (args) => {
+  const { handleFullScreenModalOpen, handleFullScreenModalClose, handleFullScreenModalAction } = getModalHandlers();
+  return html ` <wpp-button-v2-22-0 @click=${handleFullScreenModalOpen}>Open Full Screen Modal</wpp-button-v2-22-0>
+    <wpp-full-screen-modal-v2-22-0
+      @wppFullScreenModalClose=${() => {
+    console.log('Called wppFullScreenModalClose');
+    handleFullScreenModalClose();
+  }}
+      @wppFullScreenModalOpenStart=${() => console.log('Open start')}
+      @wppFullScreenModalOpenComplete=${() => console.log('Open complete')}
+      @wppFullScreenModalCloseStart=${() => console.log('Close start')}
+      @wppFullScreenModalCloseComplete=${() => console.log('Close complete')}
+      .open=${args.open}
+      .disableOutsideClick=${args.disableOutsideClick}
+    >
+      <div slot="header" style=${styleMap(styles.header)}>
+        ${args.withTitle
+    ? html ` <wpp-typography-v2-22-0 type="2xl-heading" style=${styleMap(styles.title)}
+              >Title</wpp-typography-v2-22-0
+            >`
+    : null}
+      </div>
+      <p slot="body" style=${styleMap(styles.body)}></p>
+      ${args.withActionBar
+    ? html `<div slot="actions" style=${styleMap(styles.actions)}>
+            <wpp-button-v2-22-0 variant="secondary" style="margin-right: 12px" @click=${handleFullScreenModalClose}>
+              Cancel
+            </wpp-button-v2-22-0>
+            <wpp-button-v2-22-0 variant="primary" @click=${handleFullScreenModalAction}>Action</wpp-button-v2-22-0>
+          </div>`
+    : null}
+    </wpp-full-screen-modal-v2-22-0>`;
+};
+FullScreenModal.args = {
+  open: false,
+  disableOutsideClick: false,
+  withTitle: true,
+  withActionBar: true,
 };

@@ -1,5 +1,5 @@
 import AirDatepicker, { AirDatepickerLocale } from 'air-datepicker';
-import { DATE_FORMAT } from './const';
+import { DATE_FORMAT } from './consts';
 import { LabelConfig } from '../wpp-label/types';
 export type DatePickerView = 'days' | 'months' | 'years';
 export interface DatePickerEventDetail {

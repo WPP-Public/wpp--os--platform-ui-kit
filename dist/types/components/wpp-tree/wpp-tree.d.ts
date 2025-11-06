@@ -5,8 +5,7 @@ export declare class WppTree {
   currentTreeData: TreeType[];
   selectedIds: (TreeType | null | string | number)[];
   private resizeObserver;
-  private resizeInProgress;
-  private _locales;
+  private resizeInPogress;
   /**
    * Defines the tree data.
    */
@@ -26,7 +25,7 @@ export declare class WppTree {
   /**
    * Defines the component locale types.
    */
-  readonly locales: Partial<TreeLocaleType>;
+  readonly locales: TreeLocaleType;
   /**
    * Defines the component locale types.
    * Note: "isMatchSearch" is deprecated, use "isMatchingSearch" instead, which uses
@@ -63,13 +62,8 @@ export declare class WppTree {
   wppActionClick: EventEmitter<TreeActionClickEventDetail>;
   onInputChange(searchText: string): void;
   updateDate(newData: TreeType[]): void;
-  onUpdateLocales(newLocales: Partial<TreeLocaleType>): void;
   handleOpenItem(event: CustomEvent<TreeType>): void;
   handleSelectedItem(event: CustomEvent<TreeType>): void;
-  recalculateTreeWidth(): Promise<void>;
-  selectAll(): Promise<void>;
-  clearAll(): Promise<void>;
-  private toggleItemSelection;
   componentDidLoad(): void;
   disconnectedCallback(): void;
   private isSearchResultFound;

@@ -35,6 +35,7 @@
   top: var(--ns-top-position);
   bottom: 0;
   left: 0;
+  z-index: 899;
   box-sizing: border-box;
   width: var(--wpp-nav-sidebar-min-width);
   min-width: var(--wpp-nav-sidebar-min-width);

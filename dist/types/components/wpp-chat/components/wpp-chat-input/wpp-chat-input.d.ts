@@ -1,6 +1,6 @@
 import { EventEmitter } from '../../../../stencil-public-runtime';
 import { FileItemType, FileUploadEventDetail, FileUploadItemEventDetail } from '../../../wpp-file-upload/types';
-import { ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from './types';
+import { FileUploadConfig, SendEventDetail } from './types';
 import { MessageTypes } from '../../../../types/common';
 export declare class WppChatInput {
   host: HTMLWppChatInputElement;
@@ -9,11 +9,8 @@ export declare class WppChatInput {
   private textareaRef?;
   private inputAreaRef?;
   private scrollTimeout;
-  private debouncedHandleInput;
-  /**
-   * Size of the component.
-   */
-  readonly size: ChatInputSize;
+  private MIN_TEXTAREA_HEIGHT;
+  private MAX_INPUT_AREA_HEIGHT;
   /**
    * Placeholder text for the input field.
    */
@@ -47,32 +44,15 @@ export declare class WppChatInput {
    * If set to true, displays `Select` in left actions. The Select must placed in the `.select` slot.
    */
   readonly withSelect: boolean;
-  /**
-   * Text value used to set the input message content.
-   * When user input occurs, a `wppMessageChanged` event is emitted. The new value should be assigned to this property
-   * to maintain synchronization with the input field.
-   */
-  readonly textValue: string;
-  /**
-   * If set to `true`, enable debounce for onInput event.
-   */
-  readonly debounceEnabled: boolean;
-  /**
-   * Debounce delay in milliseconds.
-   */
-  readonly debounceDelay: number;
-  /**
-   * Defines the z-index of the WppChatInput.
-   */
-  readonly zIndex: number;
+  message: string;
   successAttachmentsList: FileItemType[];
   errorAttachmentsList: FileItemType[];
   toastMessage: string;
   toastType: MessageTypes;
   showToast: boolean;
+  isAnyFileUploading: boolean;
   areAttachmentsVisible: boolean;
   hasSelectSlot: boolean;
-  isChatInputExpanded: boolean;
   /**
    * Emitted when the user clicks the "Send" button.
    */
@@ -96,28 +76,11 @@ export declare class WppChatInput {
    * @internal
    */
   readonly wppFileUploadItemClick: EventEmitter<FileUploadItemEventDetail>;
-  /**
-   * Emitted when the message in the input message changes.
-   */
-  readonly wppMessageChanged: EventEmitter<MessageChangeEventDetail>;
-  internalValue: string;
   private reInitValue;
   onAttachmentsChange(newValue: FileItemType[]): void;
-  onTextValueChange(value: string): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
   disconnectedCallback(): void;
-  private handleDocumentClick;
-  onSizeChange(newValue: ChatInputSize, oldValue: ChatInputSize): void;
-  private handleFileLoaded;
-  /**
-   * Maximize the input area when the user clicks on it.
-   */
-  private handleSizeToggle;
-  /**
-   * Minimize the input area when it loses focus.
-   */
-  private handleSimpleBlur;
   private forceRecalculateHeight;
   private calculateTextHeight;
   private get mergedFileUploadConfig();
@@ -126,21 +89,12 @@ export declare class WppChatInput {
   private handleScroll;
   private disconnectObserver;
   private initializeObserver;
-  /**
-   * Scrolls the attachments list to the specified file type.
-   * @param fileType 'error' for error files, 'success' for success files (or '' for any file)
-   */
-  private scrollToAttachment;
+  private scrollToTopOfAttachments;
+  private scrollToBottomOfAttachments;
   private displayToast;
   private handleSend;
-  private handlePaste;
-  /**
-   * Handles image file pasting from clipboard items.
-   * Returns true if files were handled, false otherwise.
-   */
-  private handleFilePaste;
+  private scrollInputAreaToBottom;
   private handleInput;
-  private debouncedAdjustTextareaHeight;
   private adjustTextareaHeight;
   private isFileWithError;
   private handleDeleteItem;
@@ -158,7 +112,6 @@ export declare class WppChatInput {
   private generateUniqueName;
   private handleClick;
   private handleToastClick;
-  private onKeyDown;
   private get isSendDisabled();
   private hostCssClasses;
   private chatToastClasses;
@@ -166,9 +119,6 @@ export declare class WppChatInput {
   private inputAreaClasses;
   private attachmentsWrapperClasses;
   private textInputClasses;
-  private inputAreaWrapperClasses;
-  private minimizedInput;
-  private inputValue;
   private actionsBarClasses;
   private leftActionsClasses;
   private selectClasses;

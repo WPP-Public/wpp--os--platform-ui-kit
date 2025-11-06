@@ -1,7 +1,6 @@
 import { h, Host } from '@stencil/core';
 import { transformToVersionedTag } from '../../utils/utils';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
-import { Z_INDEX } from '../../common/consts';
 /**
  * @slot - May contain only the `wpp-nav-sidebar-item` component. The default slot, without the name attribute.
  *
@@ -65,7 +64,6 @@ export class WppNavSidebar {
     this.initialPath = undefined;
     this.activePath = undefined;
     this.nativeLink = false;
-    this.zIndex = Z_INDEX.NAV_SIDEBAR;
   }
   handleActivePathChange(newValue) {
     this.setActiveItem(newValue);
@@ -86,10 +84,10 @@ export class WppNavSidebar {
     this.calculateOsBarHeight();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "nav-sidebar, body, header-wrapper, header, ws-wrapper, ws-inner" }, h("aside", { class: this.asideCssClasses(), part: "nav-sidebar" }, h("div", { class: "nav-wrapper", part: "body" }, h(WrappedSlot, { wrapperClass: "title-wrapper", name: "header" }), h(WrappedSlot, { wrapperClass: "items-wrapper" })))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "nav-sidebar, body, header-wrapper, header, ws-wrapper, ws-inner" }, h("aside", { class: this.asideCssClasses(), part: "nav-sidebar" }, h("div", { class: "nav-wrapper", part: "body" }, h(WrappedSlot, { wrapperClass: "title-wrapper", name: "header" }), h(WrappedSlot, { wrapperClass: "items-wrapper" })))));
   }
   static get is() { return "wpp-nav-sidebar"; }
-  static get registryIs() { return "wpp-nav-sidebar-v3-3-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -116,7 +114,7 @@ export class WppNavSidebar {
         "docs": {
           "tags": [{
               "name": "deprecated",
-              "text": "initialPath is being deprecated and will be deleted in v4.0.0. Use `activePath` instead."
+              "text": "initialPath is being deprecated, use `activePath` instead."
             }],
           "text": "Defines the initial current path."
         },
@@ -160,24 +158,6 @@ export class WppNavSidebar {
         "attribute": "native-link",
         "reflect": false,
         "defaultValue": "false"
-      },
-      "zIndex": {
-        "type": "number",
-        "mutable": false,
-        "complexType": {
-          "original": "number",
-          "resolved": "number",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the z-index of the WppNavSidebar."
-        },
-        "attribute": "z-index",
-        "reflect": false,
-        "defaultValue": "Z_INDEX.NAV_SIDEBAR"
       }
     };
   }

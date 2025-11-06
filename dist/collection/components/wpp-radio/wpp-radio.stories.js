@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+import readme from './readme.md';
 export default {
   title: 'Design System/Components/Selection and input/Radio',
   parameters: {
@@ -7,6 +8,7 @@ export default {
         hidden: true,
       },
     },
+    notes: readme,
   },
   disabled: {
     options: [true, false],
@@ -17,28 +19,28 @@ export default {
     control: { type: 'boolean' },
   },
 };
-export const NoLabel = (args) => html ` <wpp-radio-v3-3-0
-    @wppChange="${(event) => console.log('wppChange => ', event.detail.value)}"
-    .name="${args.name}"
-    .value="${args.value}"
-    .disabled="${args.disabled}"
-    .checked="${args.checked}"
-  />`;
+export const NoLabel = (args) => html ` <wpp-radio-v2-22-0
+  @wppChange="${(event) => console.log('wppChange => ', event.detail.value)}"
+  .name="${args.name}"
+  .value="${args.value}"
+  .disabled="${args.disabled}"
+  .checked="${args.checked}"
+/>`;
 NoLabel.args = {
   name: 'contact',
   value: 'email',
   disabled: false,
   checked: false,
 };
-export const WithLabel = (args) => html ` <wpp-radio-v3-3-0
-    @wppChange="${(event) => console.log('wppChange => ', event.detail.value)}"
-    .name="${args.name}"
-    .value="${args.value}"
-    .disabled="${args.disabled}"
-    .checked="${args.checked}"
-    .required="${args.required}"
-    .labelConfig="${args.labelConfig}"
-  />`;
+export const WithLabel = (args) => html ` <wpp-radio-v2-22-0
+  @wppChange="${(event) => console.log('wppChange => ', event.detail.value)}"
+  .name="${args.name}"
+  .value="${args.value}"
+  .disabled="${args.disabled}"
+  .checked="${args.checked}"
+  .required="${args.required}"
+  .labelConfig="${args.labelConfig}"
+/>`;
 WithLabel.args = {
   name: 'contact',
   value: 'email',

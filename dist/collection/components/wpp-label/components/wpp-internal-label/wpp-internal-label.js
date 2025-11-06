@@ -1,8 +1,6 @@
 import { h, Host } from '@stencil/core';
 import { getSlotEmptyStates } from '../../../../utils/utils';
-import { FOCUS_TYPE } from '../../../../types/common';
 import { WrappedSlot } from '../../../common/WrappedSlot/WrappedSlot';
-import { LOCALES_DEFAULTS } from './const';
 /**
  * @part info-wrapper - wrapper around text and optional text
  * @part text - label text
@@ -15,24 +13,15 @@ import { LOCALES_DEFAULTS } from './const';
  */
 export class WppInternalLabel {
   constructor() {
-    this._locales = LOCALES_DEFAULTS;
     this.updateSlotData = () => {
       const emptyStates = getSlotEmptyStates(this.host.childNodes, {
         icon: '[slot="icon"]',
       });
       this.hasIconSlot = !emptyStates.icon;
     };
-    this.onBlur = () => {
-      this.focusType = FOCUS_TYPE.NONE;
-    };
-    this.onKeyUp = (event) => {
-      if (event.key === 'Tab')
-        this.focusType = FOCUS_TYPE.TAB;
-    };
     this.iconCssClasses = () => ({
       icon: true,
       'slot-hidden': !this.hasIconSlot,
-      'tab-focus': this.focusType === FOCUS_TYPE.TAB,
     });
     this.hostCssClasses = () => ({
       'wpp-internal-label': true,
@@ -44,28 +33,24 @@ export class WppInternalLabel {
       'with-icon': this.hasIconSlot,
     });
     this.hasIconSlot = true;
-    this.focusType = undefined;
     this.labelText = undefined;
     this.description = undefined;
     this.optional = false;
     this.typography = 's-body';
     this.disabled = false;
-    this.locales = {};
+    this.locales = {
+      optional: 'Optional',
+    };
     this.tooltipConfig = {};
-    this.role = 'presentation';
-  }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
   }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
     this.updateSlotData();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onBlur: this.onBlur, exportparts: "info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" }, !!this.labelText && (h("div", { class: this.infoWrapperCssClasses(), part: "info-wrapper", role: this.role }, h("wpp-typography-v3-3-0", { type: this.typography, class: "text", part: "text" }, this.labelText), this.optional && (h("wpp-typography-v3-3-0", { type: "s-body", class: "optional", part: "optional-text" }, "(", this._locales.optional, ")")))), !!this.description && this.hasIconSlot ? (h("wpp-tooltip-v3-3-0", { class: "tooltip", text: this.description, config: this.tooltipConfig, part: "tooltip" }, h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: this.tooltipConfig.tabIndex === -1 ? 'none' : 'button', tabIndex: this.tooltipConfig.tabIndex ?? 0, "aria-label": this.tooltipConfig.tabIndex !== -1 ? 'Show info' : undefined }))) : (h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: "button", tabIndex: 0, "aria-label": "Show info" }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" }, !!this.labelText && (h("div", { class: this.infoWrapperCssClasses(), part: "info-wrapper" }, h("wpp-typography-v2-22-0", { type: this.typography, class: "text", part: "text" }, this.labelText), this.optional && (h("wpp-typography-v2-22-0", { type: "s-body", class: "optional", part: "optional-text" }, "(", this.locales.optional, ")")))), !!this.description && this.hasIconSlot ? (h("wpp-tooltip-v2-22-0", { class: "tooltip", text: this.description, config: this.tooltipConfig, part: "tooltip" }, h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData }))) : (h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData }))));
   }
   static get is() { return "wpp-internal-label"; }
-  static get registryIs() { return "wpp-internal-label-v3-3-0"; }
+  static get registryIs() { return "wpp-internal-label-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -181,13 +166,9 @@ export class WppInternalLabel {
         "type": "unknown",
         "mutable": false,
         "complexType": {
-          "original": "Partial<LabelLocales>",
-          "resolved": "{ optional?: string | undefined; }",
+          "original": "LabelLocales",
+          "resolved": "LabelLocales",
           "references": {
-            "Partial": {
-              "location": "global",
-              "id": "global::Partial"
-            },
             "LabelLocales": {
               "location": "import",
               "path": "../../types",
@@ -201,7 +182,7 @@ export class WppInternalLabel {
           "tags": [],
           "text": "Indicates locales for label component"
         },
-        "defaultValue": "{}"
+        "defaultValue": "{\n    optional: 'Optional',\n  }"
       },
       "tooltipConfig": {
         "type": "unknown",
@@ -224,38 +205,13 @@ export class WppInternalLabel {
           "text": "Defines the dropdown configuration. Under the hood dropdown using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
         },
         "defaultValue": "{}"
-      },
-      "role": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Indicates the role attribute for the component"
-        },
-        "attribute": "role",
-        "reflect": false,
-        "defaultValue": "'presentation'"
       }
     };
   }
   static get states() {
     return {
-      "hasIconSlot": {},
-      "focusType": {}
+      "hasIconSlot": {}
     };
   }
   static get elementRef() { return "host"; }
-  static get watchers() {
-    return [{
-        "propName": "locales",
-        "methodName": "onUpdateLocales"
-      }];
-  }
 }

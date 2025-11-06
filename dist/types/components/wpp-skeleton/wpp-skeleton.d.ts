@@ -5,8 +5,6 @@ export declare class WppSkeleton {
   readonly variant: 'rectangle' | 'circle';
   /**
    * If `true`, the skeleton has animation
-   *
-   * @deprecated - this prop will be deleted in version 4.0.0. The skeleton component will always have animation.
    */
   readonly animation: boolean;
   /**

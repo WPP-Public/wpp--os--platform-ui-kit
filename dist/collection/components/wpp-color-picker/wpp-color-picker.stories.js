@@ -1,4 +1,5 @@
 import { html, render } from 'lit-html';
+import readme from './readme.md';
 export default {
   title: 'Design System/Components/Selection and input/Color Picker',
   parameters: {
@@ -7,6 +8,7 @@ export default {
         hidden: true,
       },
     },
+    notes: readme,
   },
   argTypes: {
     hexOpacity: { control: { type: 'text' } },
@@ -27,8 +29,8 @@ export default {
     },
   },
 };
-const createColorPickerStory = (mode) => ({
-  render: args => {
+const createColorPickerStory = (mode) => {
+  const Template = args => {
     let savedColors = [...args.savedColors];
     let renderColorPicker = (colors) => {
       console.log(colors);
@@ -50,7 +52,7 @@ const createColorPickerStory = (mode) => ({
       if (container) {
         render(html `
             <div style=${'display: flex; flex-direction: column'}>
-              <wpp-color-picker-v3-3-0
+              <wpp-color-picker-v2-22-0
                 .type=${args.type}
                 .mode=${mode}
                 .hexOpacity=${args.hexOpacity}
@@ -60,7 +62,7 @@ const createColorPickerStory = (mode) => ({
                 @wppSaveColor=${handleColorSave}
                 @wppRemoveSavedColor=${handleRemoveColor}
               >
-              </wpp-color-picker-v3-3-0>
+              </wpp-color-picker-v2-22-0>
             </div>
           `, container);
       }
@@ -72,8 +74,9 @@ const createColorPickerStory = (mode) => ({
       renderColorPicker(savedColors);
     }, 0);
     return html `<div id="color-picker-story"></div>`;
-  },
-});
+  };
+  return Template;
+};
 export const Theme = createColorPickerStory('theme');
 export const Custom = createColorPickerStory('custom');
 export const ThemeAndCustom = createColorPickerStory('theme and custom');

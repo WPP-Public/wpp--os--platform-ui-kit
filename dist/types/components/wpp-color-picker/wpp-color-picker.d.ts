@@ -10,7 +10,6 @@ export declare class WppColorPicker {
   private isSavedColorPopoverOpen;
   private anchorEl?;
   private contentEl?;
-  private selectTippyInstance?;
   private currentPopoverInstance?;
   host: HTMLWppColorPickerElement;
   isDropdownVisible: boolean;
@@ -28,7 +27,6 @@ export declare class WppColorPicker {
   activeSegment: SegmentedControlValue;
   displayValue: string;
   internalType: ColorPickerType;
-  isInComponent: boolean;
   /**
    * Used to display the initial color of the color-picker component. The color format must respect the type of the component!
    */
@@ -86,7 +84,7 @@ export declare class WppColorPicker {
   /**
    * Emitted when the color-picker loses focus.
    */
-  readonly wppBlur: EventEmitter<void>;
+  readonly wppBlur: EventEmitter<FocusEvent>;
   /**
    * Emitted when the color-picker selects a color to display. This happens when the dropdown of the color-picker
    * is closed.
@@ -97,8 +95,7 @@ export declare class WppColorPicker {
   handleOpacityChange(event: CustomEvent<number>): void;
   handleHexColorChange(): void;
   handleHexOpacityChange(): void;
-  handleTypeChange(): void;
-  updateIsInComponent(value: boolean): void;
+  handleTypeCahnge(): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
   private checkInitialColorInList;

@@ -49,8 +49,3 @@
     transform: translateX(100%);
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  :host(.wpp-animated) {
-    animation: none !important;
-  }
-}

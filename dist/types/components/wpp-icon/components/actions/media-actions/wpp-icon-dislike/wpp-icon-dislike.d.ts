@@ -15,6 +15,5 @@ export declare class WppIconDislike {
    Defines the icon color.
    */
   readonly color: string;
-  componentWillLoad(): void;
   render(): any;
 }

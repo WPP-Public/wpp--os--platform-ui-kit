@@ -1,5 +1,5 @@
 import { EventEmitter } from '../../stencil-public-runtime';
-import { AriaProps, InputMessageTypes, DropdownConfig, FOCUS_TYPE } from '../../types/common';
+import { AriaProps, InputMessageTypes, DropdownConfig } from '../../types/common';
 import { BooleanFormControl } from '../../interfaces/boolean-form-control';
 import { BaseComponent } from '../../interfaces/base-component';
 import { CheckboxChangeEvent, CheckboxValue, CheckboxLabelConfig } from './types';
@@ -13,8 +13,6 @@ import { CheckboxChangeEvent, CheckboxValue, CheckboxLabelConfig } from './types
  */
 export declare class WppCheckbox implements BaseComponent, BooleanFormControl<CheckboxValue> {
   host: HTMLWppCheckboxElement;
-  focusType: FOCUS_TYPE;
-  isPressed: boolean;
   /**
    * Defines the checkbox name.
    */
@@ -85,12 +83,6 @@ export declare class WppCheckbox implements BaseComponent, BooleanFormControl<Ch
    */
   readonly index: number;
   /**
-   * Create a component with role presentation
-   *
-   * @internal - This prop is controlled by WppCard component
-   */
-  readonly decorative?: boolean;
-  /**
    * Emitted when the selected state changes.
    */
   readonly wppChange: EventEmitter<CheckboxChangeEvent>;
@@ -116,10 +108,7 @@ export declare class WppCheckbox implements BaseComponent, BooleanFormControl<Ch
   private onClick;
   private onFocus;
   private onBlur;
-  private onKeyUp;
-  private onKeyDown;
   private hostCssClasses;
   private labelCssClasses;
-  private inputCssClasses;
   render(): any;
 }

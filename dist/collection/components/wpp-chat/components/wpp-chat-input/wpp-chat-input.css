@@ -1,21 +1,13 @@
 :host {
   --chat-input-container-min-width: var(--wpp-chat-input-container-min-width, 320px);
+  --chat-input-container-max-width: var(--wpp-chat-input-container-max-width, 720px);
   --chat-input-container-bg-color: var(--wpp-chat-input-container-bg-color, var(--wpp-grey-color-000));
   --chat-input-container-outline-width: var(--wpp-chat-input-container-outline-width, 1px);
   --chat-input-container-outline-style: var(--wpp-chat-input-container-outline-style, solid);
   --chat-input-container-outline-color: var(--wpp-chat-input-container-outline-color, var(--wpp-grey-color-500));
-  --chat-input-container-outline-color-hover: var(
-    --wpp-chat-input-container-outline-color-hover,
-    var(--wpp-grey-color-700)
-  );
-  --chat-input-container-outline-color-active: var(
-    --wpp-chat-input-container-outline-color-active,
-    var(--wpp-grey-color-800)
-  );
-  --chat-input-container-outline-color-disabled: var(
-    --wpp-chat-input-container-outline-color-disabled,
-    var(--wpp-grey-color-400)
-  );
+  --chat-input-container-outline-color-hover: var(--wpp-chat-input-container-outline-color-hover, var(--wpp-grey-color-700));
+  --chat-input-container-outline-color-active: var(--wpp-chat-input-container-outline-color-active, var(--wpp-grey-color-800));
+  --chat-input-container-outline-color-disabled: var(--wpp-chat-input-container-outline-color-disabled, var(--wpp-grey-color-400));
   --chat-input-container-border-radius: var(--wpp-chat-input-container-border-radius, 8px);
   --chat-input-area-min-height: var(--wpp-chat-input-area-min-height, 52px);
   --chat-input-area-max-height: var(--wpp-chat-input-area-max-height, 240px);
@@ -24,30 +16,21 @@
   --chat-text-input-min-height: var(--wpp-chat-text-input-min-height, 52px);
   --chat-text-input-padding: var(--wpp-chat-text-input-padding, 0);
   --chat-text-input-bg-color: var(--wpp-chat-text-input-bg-color, transparent);
-  --chat-text-input-color-disabled: var(--wpp-chat-text-input-color-disabled, var(--wpp-text-color-disabled));
+  --chat-text-input-color-disabled: var(--wpp-chat-text-input-color-disabled, var(--wpp-grey-color-500));
   --chat-text-input-placeholder-color: var(--wpp-chat-text-input-placeholder-color, var(--wpp-grey-color-700));
-  --chat-text-input-placeholder-color-disabled: var(
-    --wpp-chat-text-input-placeholder-color-disabled,
-    var(--wpp-text-color-disabled)
-  );
+  --chat-text-input-placeholder-color-disabled: var(--wpp-chat-text-input-placeholder-color-disabled, var(--wpp-text-color-disabled));
   --chat-actions-bar-padding: var(--wpp-chat-actions-bar-padding, 0 10px 8px 10px);
   --chat-actions-bar-color: var(--wpp-chat-actions-bar-color, var(--wpp-grey-color-500));
   --chat-actions-bar-color-disabled: var(--wpp-chat-actions-bar-color-disabled, var(--wpp-grey-color-400));
   --chat-actions-bar-char-counter-color: var(--wpp-chat-actions-bar-char-counter-color, var(--wpp-danger-color-500));
-  --chat-actions-bar-char-counter-color-disabled: var(
-    --wpp-chat-actions-bar-char-counter-color-disabled,
-    var(--wpp-danger-color-300)
-  );
-  --chat-text-input-minimized-width: var(--wpp-chat-text-input-minimized-width, 264px);
-  --chat-text-input-minimized-height: var(--wpp-chat-text-input-minimized-height, 22px);
-  --chat-text-input-minimized-padding: var(--wpp-chat-text-input-minimized-padding, 8px 10px);
-  --chat-input-transition-timing: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --chat-actions-bar-char-counter-color-disabled: var(--wpp-chat-actions-bar-char-counter-color-disabled, var(--wpp-danger-color-300));
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   position: relative;
   align-items: center;
   width: 100%;
+  z-index: 100;
 }
 
 /* Chat Input Container */
@@ -61,10 +44,9 @@
   outline: var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color);
   border-radius: var(--chat-input-container-border-radius);
   min-width: var(--chat-input-container-min-width);
-  width: 100%;
+  max-width: var(--chat-input-container-max-width);
   box-sizing: border-box;
-  transition: width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);
-  will-change: width, height;
+  transition: width 0.2s ease, height 0.2s ease;
   cursor: text;
 }
 .chat-input-container:hover {
@@ -86,23 +68,10 @@
   left: 50%;
   transform: translateX(-50%);
   cursor: pointer;
+  z-index: 2000;
 }
 
 /* Input Area */
-/**
- * Flexbox Column-Reverse Pattern for Chat Input
- * ---------------------------------------------
- * The `.input-area` uses `display: flex; flex-direction: column-reverse;` to keep the textarea visually anchored at the bottom,
- * ensuring smooth caret and scroll behavior as the user types or pastes large content.
- *
- * To maintain the correct visual order (attachments above textarea), we use the CSS `order` property:
- *   .attachments { order: 2; }
- *   .text-input  { order: 1; }
- *
- * This approach avoids manual scroll-to-bottom logic and provides a native, flicker-free experience.
- * If you add more elements to `.input-area`, assign their `order` as needed to preserve the intended layout.
- *
- */
 .input-area {
   font-size: var(--wpp-typography-s-body-font-size, 14px);
   line-height: var(--wpp-typography-s-body-line-height, 22px);
@@ -111,7 +80,7 @@
   font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   align-items: stretch;
   flex: 1 1 auto;
   box-sizing: border-box;
@@ -124,17 +93,6 @@
   gap: 12px;
   box-sizing: border-box;
   border-radius: 8px 8px 0 0;
-  transition: height var(--chat-input-transition-timing);
-  will-change: height;
-  transform-origin: bottom;
-}
-.input-area .attachments {
-  order: 2;
-}
-.input-area .text-input {
-  order: 1;
-}
-.input-area:not(.minimized) {
   scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: var(--wpp-grey-color-400) transparent;
@@ -169,10 +127,6 @@
   overflow: hidden;
   box-sizing: border-box;
   color: inherit;
-  transition: min-height var(--chat-input-transition-timing);
-  will-change: min-height;
-  transform-origin: bottom;
-  margin: 0;
 }
 .input-area textarea::placeholder {
   color: var(--chat-text-input-placeholder-color);
@@ -182,36 +136,6 @@
   color: var(--chat-text-input-color-disabled);
 }
 .input-area textarea:disabled::placeholder {
-  color: var(--chat-text-input-placeholder-color-disabled);
-}
-
-.input-area.minimized {
-  min-height: 0;
-  padding: var(--chat-text-input-minimized-padding);
-}
-.input-area.minimized .input-area-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 4px;
-}
-.input-area.minimized .minimized-input {
-  align-items: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: var(--chat-text-input-minimized-width);
-}
-.input-area.minimized .minimized-input .input-value {
-  width: 100%;
-}
-.input-area.minimized .minimized-input .input-value.disabled {
-  color: var(--chat-text-input-color-disabled);
-}
-.input-area.minimized .minimized-input .input-value-placeholder {
-  color: var(--chat-text-input-placeholder-color);
-}
-.input-area.minimized .minimized-input .input-value-placeholder.disabled {
   color: var(--chat-text-input-placeholder-color-disabled);
 }
 
@@ -263,13 +187,11 @@
   flex-direction: column;
   gap: 4px;
   width: 100%;
+  transition: all 0.2s ease;
 }
 .attachments .wpp-file-upload-item {
   width: 100%;
 }
 .attachments .wpp-file-upload-item::part(file-item) {
   margin-top: 0;
-}
-.attachments .wpp-file-upload-item::part(controls) {
-  justify-content: flex-end;
 }

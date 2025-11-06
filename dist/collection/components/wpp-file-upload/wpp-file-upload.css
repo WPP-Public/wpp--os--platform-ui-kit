@@ -65,10 +65,6 @@
   cursor: not-allowed;
 }
 
-:host .file-upload-label {
-  margin-bottom: 8px;
-}
-
 .upload-wrapper {
   position: relative;
   display: flex;
@@ -82,10 +78,10 @@
   transition: 0.2s ease-in-out;
   padding: var(--fu-upload-wrapper-padding);
 }
-.upload-wrapper.tab-focus.tab-focus {
+.upload-wrapper.tab-focus {
   border-radius: var(--fu-border-radius);
   outline: none;
-  box-shadow: 0 0 0 1px var(--fu-first-border-color-focus), 0 0 0 3px var(--fu-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--fu-first-border-color-focus), 0 0 0 2px var(--fu-second-border-color-focus);
 }
 .upload-wrapper .icon-file {
   margin: var(--fu-icon-margin);
@@ -93,11 +89,11 @@
 .upload-wrapper .icon-file::part(content) {
   transition: 0.2s ease-in-out;
 }
-.upload-wrapper:hover, .upload-wrapper.tab-focus {
+.upload-wrapper:hover {
   background-color: var(--fu-bg-color-hover);
   border-color: var(--fu-border-color-hover);
 }
-.upload-wrapper:hover .icon-file::part(content), .upload-wrapper.tab-focus .icon-file::part(content) {
+.upload-wrapper:hover .icon-file::part(content) {
   background-color: var(--fu-icon-bg-color-hover);
 }
 .upload-wrapper.message {
@@ -106,10 +102,10 @@
 .upload-wrapper.error {
   border: var(--fu-border-width) var(--fu-border-error-style) var(--fu-border-error-color);
 }
-.upload-wrapper.error.tab-focus.tab-focus {
-  border-radius: var(--fu-border-radius);
+.upload-wrapper.error.tab-focus {
+  border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--fu-first-border-color-focus), 0 0 0 3px var(--fu-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--fu-first-border-color-focus), 0 0 0 2px var(--fu-border-error-color);
 }
 .upload-wrapper.disabled {
   pointer-events: none;
@@ -137,11 +133,6 @@
 }
 .upload-wrapper.file-drag:not(.error) {
   border-color: var(--fu-border-color-hover);
-}
-
-.wpp-inline-message {
-  margin-top: 8px;
-  display: block;
 }
 
 .label {
@@ -197,15 +188,12 @@
   max-height: 400px;
   overflow-x: hidden;
   overflow-y: auto;
-  margin: 8px 0 0 0;
+  margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
 }
 .file-list::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 8px;
+  height: 8px;
 }
 .file-list::-webkit-scrollbar-thumb {
   border: 2px solid transparent;

@@ -1,8 +1,9 @@
+import WppImageReadme from './readme.md';
 import { styleMap } from 'lit-html/directives/style-map.js';
 import { html } from 'lit-html';
-import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { transformToVersionedTag } from '../../utils/utils';
-import { imageList } from './const';
+import { imageList } from './consts';
 export default {
   title: 'Design System/Icons & Images/Images',
   parameters: {
@@ -12,6 +13,7 @@ export default {
       },
     },
     options: { showPanel: false },
+    notes: WppImageReadme,
   },
   argTypes: {
     width: {
@@ -58,23 +60,21 @@ const labelStyle = {
 const getEmptyStates = () => imageList.groups[0].images.map(image => html `
       <div style=${styleMap(itemWrapper)}>
         ${unsafeHTML(`<${transformToVersionedTag(`wpp-empty-${image.name}`)}></${transformToVersionedTag(`wpp-empty-${image.name}`)}>`)}
-        <wpp-typography-v3-3-0 type="xs-body" style=${styleMap(labelStyle)}>${image.label}</wpp-typography-v3-3-0>
+        <wpp-typography-v2-22-0 type="xs-body" style=${styleMap(labelStyle)}>${image.label}</wpp-typography-v2-22-0>
       </div>
     `);
-export const EmptyStates = {
-  render: () => html `
-    <div style=${styleMap(pageStyle)}>
-      <div style=${styleMap(pageWrapper)}>
-        <wpp-typography-v3-3-0 type="3xl-heading" tag="h3" style=${styleMap(headerStyle)}>
-          Empty States
-        </wpp-typography-v3-3-0>
-        <hr />
-        <section style=${styleMap(contentWrapper)}>${getEmptyStates()}</section>
-      </div>
+export const EmptyStates = () => html `
+  <div style=${styleMap(pageStyle)}>
+    <div style=${styleMap(pageWrapper)}>
+      <wpp-typography-v2-22-0 type="3xl-heading" tag="h3" style=${styleMap(headerStyle)}>
+        Empty States
+      </wpp-typography-v2-22-0>
+      <hr />
+      <section style=${styleMap(contentWrapper)}>${getEmptyStates()}</section>
     </div>
-  `,
-  args: {
-    width: 160,
-    height: 160,
-  },
+  </div>
+`;
+EmptyStates.args = {
+  width: 160,
+  height: 160,
 };

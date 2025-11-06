@@ -1,5 +1,4 @@
 import tippy from 'tippy.js';
-import { hideOnEsc, hideOnPopperBlur, portalInside } from './tippy-plugins';
 const defaultTippyProps = {
   trigger: 'click',
   placement: 'bottom-start',
@@ -11,9 +10,6 @@ const defaultTippyProps = {
   interactive: true,
   animation: 'fadein',
   duration: [200, 100],
-  aria: {
-    expanded: undefined,
-  },
   popperOptions: {
     strategy: 'absolute',
   },
@@ -22,10 +18,6 @@ export const menuListConfig = ({ anchor, popperOptions, triggerElementWidth, ...
   const { popperOptions: defaultPopperOptions, ...defaultTippyPropsWithoutOptions } = defaultTippyProps;
   const { modifiers: defaultModifiers = [], ...defaultPopperOptionsWithoutModifiers } = defaultPopperOptions || {};
   const { modifiers = [], ...popperOptionsWithoutModifiers } = popperOptions || {};
-  tippy.setDefaultProps({
-    plugins: [hideOnEsc, hideOnPopperBlur, portalInside],
-    portalInside: true,
-  });
   return tippy(anchor, {
     ...defaultTippyPropsWithoutOptions,
     ...tippyPropsWithoutOptions,

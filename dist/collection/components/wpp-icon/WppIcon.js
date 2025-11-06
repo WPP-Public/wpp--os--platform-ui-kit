@@ -12,5 +12,5 @@ export const WppIcon = ({ width, height, size, initialViewBoxNumber = 20, color,
   if (color) {
     style['--wpp-prop-icon-color'] = color;
   }
-  return (h(Host, { style: style, class: { 'wpp-icon': true, [name]: true }, "data-testid": name }, h("svg", { width: iconWidth, height: iconHeight, viewBox: `${viewBoxX} ${viewBoxY} ${initialViewBoxNumber} ${initialViewBoxNumber}`, fill: "none", role: !ariaLabel ? 'presentation' : 'img', "aria-hidden": !ariaLabel ? 'true' : undefined, "aria-label": !ariaLabel ? undefined : ariaLabel }, children)));
+  return (h(Host, { style: style, class: { 'wpp-icon': true, [name]: true } }, h("svg", { width: iconWidth, height: iconHeight, viewBox: `${viewBoxX} ${viewBoxY} ${initialViewBoxNumber} ${initialViewBoxNumber}`, fill: "none", role: "img" }, h("title", null, ariaLabel || name), children)));
 };

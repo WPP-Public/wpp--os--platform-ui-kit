@@ -1,6 +1,4 @@
 import { h, Host } from '@stencil/core';
-import { getAriaProps } from '../../utils/utils';
-import { FOCUS_TYPE } from '../../types/common';
 /**
  * @slot - Contains the main text content. The default slot, without the name attribute.
  *
@@ -12,30 +10,6 @@ import { FOCUS_TYPE } from '../../types/common';
  */
 export class WppFilterButton {
   constructor() {
-    this.onKeyDown = (event) => {
-      if (this.disabled)
-        return;
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        const clickEvent = new MouseEvent('click', { bubbles: true, composed: true });
-        this.host.dispatchEvent(clickEvent);
-        this.isPressed = true;
-      }
-    };
-    this.onKeyUp = (event) => {
-      if (event.key === 'Tab')
-        this.focusType = FOCUS_TYPE.TAB;
-      if (event.key === 'Enter' || event.key === ' ') {
-        this.isPressed = false;
-      }
-    };
-    this.onBlur = () => {
-      this.focusType = FOCUS_TYPE.NONE;
-      this.isPressed = false;
-    };
-    this.onMouseDown = () => {
-      this.focusType = FOCUS_TYPE.MOUSE;
-    };
     this.hostCssClasses = () => ({
       'wpp-filter-button': true,
       'wpp-disabled': this.disabled,
@@ -44,40 +18,18 @@ export class WppFilterButton {
       button: true,
       disabled: this.disabled,
       primary: true,
-      'tab-focus': this.focusType === 'tab-focus',
-      pressed: this.isPressed,
     });
-    this.focusType = undefined;
-    this.isPressed = false;
-    this.validAriaProps = {};
     this.counter = 0;
     this.name = undefined;
     this.ariaProps = {};
     this.disabled = false;
     this.autoFocus = false;
   }
-  /**
-   * Method that sets focus on the native button.
-   */
-  async setFocus() {
-    setTimeout(() => {
-      if (this.buttonRef) {
-        this.buttonRef.focus();
-        this.focusType = FOCUS_TYPE.TAB;
-      }
-    }, 0);
-  }
-  onUpdateAriaProps() {
-    this.validAriaProps = getAriaProps(this.ariaProps);
-  }
-  componentWillLoad() {
-    this.validAriaProps = getAriaProps(this.ariaProps);
-  }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "button, icon, text, inner, counter", onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled, name: this.name, type: "button", "data-testid": "wppFilterButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps, part: "button" }, h("wpp-icon-tune-v3-3-0", { class: "icon", part: "icon" }), h("span", { class: "text", part: "text" }, h("slot", { part: "inner" })), this.counter > 0 && (h("wpp-typography-v3-3-0", { class: "counter", type: "s-body", part: "counter" }, `(${this.counter})`)))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "button, icon, text, inner, counter", "aria-disabled": this.disabled, tabIndex: this.disabled ? -1 : 0 }, h("button", { class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled, name: this.name, type: "button", "data-testid": "wppFilterButton", "aria-label": this.ariaProps.label, tabIndex: -1, part: "button" }, h("wpp-icon-tune-v2-22-0", { class: "icon", part: "icon" }), h("span", { class: "text", part: "text" }, h("slot", { part: "inner" })), this.counter > 0 && (h("wpp-typography-v2-22-0", { class: "counter", type: "s-body", part: "counter" }, `(${this.counter})`)))));
   }
   static get is() { return "wpp-filter-button"; }
-  static get registryIs() { return "wpp-filter-button-v3-3-0"; }
+  static get registryIs() { return "wpp-filter-button-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -185,40 +137,5 @@ export class WppFilterButton {
         "defaultValue": "false"
       }
     };
-  }
-  static get states() {
-    return {
-      "focusType": {},
-      "isPressed": {},
-      "validAriaProps": {}
-    };
-  }
-  static get methods() {
-    return {
-      "setFocus": {
-        "complexType": {
-          "signature": "() => Promise<void>",
-          "parameters": [],
-          "references": {
-            "Promise": {
-              "location": "global",
-              "id": "global::Promise"
-            }
-          },
-          "return": "Promise<void>"
-        },
-        "docs": {
-          "text": "Method that sets focus on the native button.",
-          "tags": []
-        }
-      }
-    };
-  }
-  static get elementRef() { return "host"; }
-  static get watchers() {
-    return [{
-        "propName": "ariaProps",
-        "methodName": "onUpdateAriaProps"
-      }];
   }
 }

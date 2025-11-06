@@ -32,15 +32,6 @@
 :host .popover.full-width::part(trigger-element) {
   width: 100%;
 }
-:host .popover .trigger-element .wpp-anchor-toolip {
-  width: 100%;
-}
-:host .popover .trigger-element .wpp-anchor-toolip::part(anchor) {
-  width: 100%;
-}
-:host .popover .trigger-element .wpp-anchor-toolip .trigger {
-  width: 100%;
-}
 :host .trigger {
   cursor: pointer;
 }
@@ -96,9 +87,4 @@
 }
 :host .wpp-menu-context {
   --mc-list-padding: 0;
-}
-
-:host(.wpp-inline-edit-error) ::slotted([slot=form-element]) {
-  --wpp-input-border-color-active: var(--wpp-danger-color-400);
-  --wpp-text-area-border-color-active: var(--wpp-danger-color-400);
 }

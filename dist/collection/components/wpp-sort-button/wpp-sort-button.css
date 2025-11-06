@@ -26,11 +26,7 @@
 */
 :host {
   --sort-button-height: var(--wpp-sort-button-height, 32px);
-  --sort-button-padding: var(
-    --wpp-sort-button-padding,
-    calc(5px - var(--sort-button-border-width)) calc(16px - var(--sort-button-border-width))
-      calc(5px - var(--sort-button-border-width)) calc(12px - var(--sort-button-border-width))
-  );
+  --sort-button-padding: var(--wpp-sort-button-padding, calc(5px - var(--sort-button-border-width)) calc(16px - var(--sort-button-border-width)) calc(5px - var(--sort-button-border-width)) calc(12px - var(--sort-button-border-width)));
   --sort-button-bg-color: var(--wpp-sort-button-bg-color, transparent);
   --sort-button-bg-color-hover: var(--wpp-sort-button-bg-color-hover, var(--wpp-grey-color-200));
   --sort-button-bg-color-active: var(--wpp-sort-button-bg-color-active, var(--wpp-grey-color-300));
@@ -79,19 +75,6 @@
   outline: none;
   cursor: pointer;
 }
-.button.tab-focus {
-  border-radius: "";
-  outline: none;
-  box-shadow: 0 0 0 1px var(--sort-button-first-border-color-focus), 0 0 0 3px var(--sort-button-second-border-color-focus);
-  background-color: var(--sort-button-bg-color-hover);
-  border-color: var(--sort-button-border-color-hover);
-}
-.button.tab-focus .icon {
-  color: var(--sort-button-icon-color-hover);
-}
-.button.tab-focus .text {
-  color: var(--sort-button-text-color-hover);
-}
 .button .icon {
   color: var(--sort-button-icon-color);
 }
@@ -118,14 +101,14 @@
 .button:hover .text {
   color: var(--sort-button-text-color-hover);
 }
-.button:active, .button.pressed {
+.button:active {
   background-color: var(--sort-button-bg-color-active);
   border-color: var(--sort-button-border-color-active);
 }
-.button:active .icon, .button.pressed .icon {
+.button:active .icon {
   color: var(--sort-button-icon-color-active);
 }
-.button:active .text, .button.pressed .text {
+.button:active .text {
   color: var(--sort-button-text-color-active);
 }
 .button:disabled {
@@ -138,4 +121,18 @@
 }
 .button:disabled .text {
   color: var(--sort-button-text-color-disabled);
+}
+
+:host(:focus-visible) .button {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--sort-button-first-border-color-focus), 0 0 0 2px var(--sort-button-second-border-color-focus);
+  background-color: var(--sort-button-bg-color-hover);
+  border-color: var(--sort-button-border-color-hover);
+}
+:host(:focus-visible) .button .icon {
+  color: var(--sort-button-icon-color-hover);
+}
+:host(:focus-visible) .button .text {
+  color: var(--sort-button-text-color-hover);
 }

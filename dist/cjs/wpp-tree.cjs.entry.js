@@ -3,30 +3,18 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const utils$1 = require('./utils-2b192dec.js');
-const utils = require('./utils-4c977459.js');
-require('./consts-779fd4ec.js');
+const utils$1 = require('./utils-9c925efe.js');
+const utils = require('./utils-a82778a7.js');
+require('./consts-255c1066.js');
 
-const wppTreeCss = ":host{--tree-item-padding:var(--wpp-tree-item-padding, 6px 4px 0 4px);--tree-container-width:var(--wpp-tree-container-width, 100%);--tree-container-height:var(--wpp-tree-container-height, 100%);--tree-container-bg-color:var(--wpp-tree-container-bg-color, var(--wpp-grey-color-000));--tree-input-trigger-area:var(--wpp-tree-trigger-area, 32px);--tree-item-icon-end-color:var(--wpp-tree-icon-end-color, var(--wpp-grey-color-800));--tree-skeleton-height:var(--wpp-tree-skeleton-height, 22px);--tree-skeleton-padding:var(--wpp-tree-skeleton-padding, 3px 0 3px 36px);--tree-skeleton-width:var(--wpp-tree-skeleton-width, 100%);display:-ms-flexbox;display:flex;padding:var(--tree-item-padding)}.container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%;overflow:hidden}.content-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;overflow:hidden;-webkit-transition:height 500ms ease;transition:height 500ms ease}.skeleton-wrapper{width:var(--tree-skeleton-width)}.skeleton-wrapper .skeleton-item{padding:var(--tree-skeleton-padding)}.skeleton-wrapper .wpp-skeleton{--skeleton-height:var(--tree-skeleton-height)}.empty-tree-text{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);margin:0;text-align:center}";
+const wppTreeCss = ":host{--tree-item-padding:var(--wpp-tree-item-padding, 6px 4px 0 4px);--tree-container-width:var(--wpp-tree-container-width, 100%);--tree-container-height:var(--wpp-tree-container-height, 100%);--tree-container-bg-color:var(--wpp-tree-container-bg-color, var(--wpp-grey-color-000));--tree-input-trigger-area:var(--wpp-tree-trigger-area, 32px);--tree-item-icon-end-color:var(--wpp-tree-icon-end-color, var(--wpp-grey-color-800));--tree-skeleton-height:var(--wpp-tree-skeleton-height, 22px);--tree-skeleton-padding:var(--wpp-tree-skeleton-padding, 3px 0 3px 36px);--tree-skeleton-width:var(--wpp-tree-skeleton-width, 100%);display:-ms-flexbox;display:flex;padding:var(--tree-item-padding)}.container{display:grid;width:100%;overflow:hidden}.content-container{display:grid;overflow:hidden;-webkit-transition:height 500ms ease;transition:height 500ms ease}.skeleton-wrapper{width:var(--tree-skeleton-width)}.skeleton-wrapper .skeleton-item{padding:var(--tree-skeleton-padding)}.skeleton-wrapper .wpp-skeleton{--skeleton-height:var(--tree-skeleton-height)}.empty-tree-text{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);margin:0;text-align:center}";
 
 const WppTree = class {
   constructor(hostRef) {
     index.registerInstance(this, hostRef);
     this.wppChange = index.createEvent(this, "wppChange", 1);
     this.wppActionClick = index.createEvent(this, "wppActionClick", 1);
-    this.resizeInProgress = false;
-    this._locales = utils.LOCALES_DEFAULTS;
-    this.toggleItemSelection = (toggleFunction, reason) => {
-      // Get the IDs of all first-level items in the tree.
-      const allItemsIDs = this.currentTreeData.map(item => item.id);
-      const finalTree = utils.recalculateIndeterminateTreeState(utils.updateTreeByIds(this.currentTreeData, allItemsIDs, toggleFunction));
-      this.wppChange.emit({
-        treeState: finalTree,
-        selectedItems: utils.findSelectedItems(finalTree),
-        selectedOriginalItems: utils.convertToOriginalItems(utils.findSelectedItems(finalTree)),
-        reason,
-      });
-    };
+    this.resizeInPogress = false;
     this.isSearchResultFound = true;
     this.isMatchSearch = (item, search) => {
       if (this.searchConfig?.isMatchingSearch)
@@ -55,7 +43,7 @@ const WppTree = class {
       this.wppChange.emit({
         treeState,
         currentItem: item,
-        selectedItems,
+        selectedItems: utils.findSelectedItems(treeState),
         selectedOriginalItems: utils.convertToOriginalItems(selectedItems),
         reason: 'select',
       });
@@ -131,19 +119,19 @@ const WppTree = class {
     this.hostCssClasses = () => ({
       'wpp-tree': true,
     });
-    this.renderIconsList = (item, icons, place = 'end') => (index.h("div", { slot: `icon-${place}`, key: utils$1.uuidv4() }, index.h("wpp-menu-context-v3-3-0", { dropdownConfig: {
+    this.renderIconsList = (item, icons, place = 'end') => (index.h("div", { slot: `icon-${place}`, key: utils$1.uuidv4() }, index.h("wpp-menu-context-v2-22-0", { appendToListWrapper: true, dropdownConfig: {
+        popperOptions: { strategy: 'fixed' },
         trigger: 'click',
         interactiveDebounce: 15,
         interactiveBorder: 25,
         offset: [0, 0],
-      } }, index.h("wpp-icon-more-v3-3-0", { class: {
+      } }, index.h("wpp-icon-more-v2-22-0", { class: {
         'menu-trigger': true,
         disabled: !!item.disabled,
-      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), index.h("div", null, icons.map(({ icon, name }) => (index.h("wpp-list-item-v3-3-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, index.h(utils$1.transformToVersionedTag(icon), { slot: 'left' }), index.h("span", { slot: "label" }, name))))))));
+      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), index.h("div", null, icons.map(({ icon, name }) => (index.h("wpp-list-item-v2-22-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, index.h(utils$1.transformToVersionedTag(icon), { slot: 'left' }), index.h("p", { slot: "label" }, name))))))));
     this.renderTree = (treeData, level = 1) => treeData.map(item => {
-      const extraProps = utils.extractExtraProps(item);
       if (item.children) {
-        return (index.h("wpp-tree-item-v3-3-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
+        return (index.h("wpp-tree-item-v2-22-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent }, item.iconStart?.icon &&
           index.h(utils$1.transformToVersionedTag(item.iconStart.icon), {
             slot: 'icon-start',
             part: 'icon-start',
@@ -156,7 +144,7 @@ const WppTree = class {
             onclick: this.handleActionClick({ item, name: item.iconEnd.name, place: 'end' }),
           }), index.h("div", { slot: "content", class: "content-container", part: "content" }, item.open && this.renderTree(item.children, level + 1))));
       }
-      return (index.h("wpp-tree-item-v3-3-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
+      return (index.h("wpp-tree-item-v2-22-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent }, item.iconStart?.icon &&
         index.h(utils$1.transformToVersionedTag(item.iconStart.icon), {
           slot: 'icon-start',
           part: 'icon-start',
@@ -169,14 +157,16 @@ const WppTree = class {
           onclick: this.handleActionClick({ item, name: item.iconEnd.name, place: 'end' }),
         })));
     });
-    this.renderSkeletonLoading = () => [...Array(this.skeletonNumberItems)].map(_ => (index.h("div", { class: "skeleton-item" }, index.h("wpp-skeleton-v3-3-0", { variant: "rectangle", width: "100%", animation: true }))));
+    this.renderSkeletonLoading = () => [...Array(this.skeletonNumberItems)].map(_ => (index.h("div", { class: "skeleton-item" }, index.h("wpp-skeleton-v2-22-0", { variant: "rectangle", width: "100%", animation: true }))));
     this.currentTreeData = undefined;
     this.selectedIds = [];
     this.data = undefined;
     this.search = '';
     this.multiple = false;
     this.defaultSelectedIds = [];
-    this.locales = {};
+    this.locales = {
+      nothingFound: 'No result',
+    };
     this.searchConfig = {
       isMatchSearch: undefined,
       highlightOptions: {},
@@ -225,9 +215,6 @@ const WppTree = class {
   updateDate(newData) {
     this.currentTreeData = newData;
   }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
-  }
   handleOpenItem(event) {
     event.stopPropagation();
     const item = event.detail;
@@ -252,27 +239,6 @@ const WppTree = class {
       this.singleSelectionUpdate(updatedTreeWithCurrentItem, newItemState);
     }
   }
-  async recalculateTreeWidth() {
-    if (this.host) {
-      const contentRect = this.host.getBoundingClientRect();
-      this.host.style.setProperty('--wpp-tree-item-width', `${contentRect.width - 8}px`);
-    }
-  }
-  async selectAll() {
-    if (!this.multiple)
-      return;
-    this.toggleItemSelection(({ isNotSelectable, disabled }) => ({
-      ...(!isNotSelectable && !disabled && { selected: true }),
-    }), 'select');
-  }
-  async clearAll() {
-    if (!this.multiple)
-      return;
-    this.toggleItemSelection(() => ({
-      selected: false,
-      indeterminate: false,
-    }), 'clear');
-  }
   componentDidLoad() {
     // NOTE: defaultSelectedIds should be provided only when default selection logic is applied. Recalculating tree state
     // here may break your custom selection logic
@@ -285,10 +251,10 @@ const WppTree = class {
       this.host.style.setProperty('--wpp-tree-item-switcher-transition-duration', '50ms');
     }
     this.resizeObserver = new ResizeObserver(utils$1.debounce(entries => {
-      if (this.resizeInProgress)
+      if (this.resizeInPogress)
         return;
       try {
-        this.resizeInProgress = true;
+        this.resizeInPogress = true;
         for (const entry of entries) {
           if (entry.target === this.host.parentElement) {
             this.host.style.setProperty('--wpp-tree-item-width', `${entry.contentRect.width - 8}px`);
@@ -299,7 +265,7 @@ const WppTree = class {
         console.error('Error in ResizeObserver callback:', error);
       }
       finally {
-        this.resizeInProgress = false;
+        this.resizeInPogress = false;
       }
     }, 50));
     if (this.host.parentElement && this.resizeObserver) {
@@ -325,18 +291,16 @@ const WppTree = class {
     };
   }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
     this.currentTreeData = this.checkData(this.data);
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text" }, !this.loading && (index.h("div", { class: "container", part: "tree-container" }, this.currentTreeData && this.isSearchResultFound ? (this.renderTree(this.currentTreeData)) : (index.h("p", { class: "empty-tree-text", part: "tree-empty-text" }, this._locales.nothingFound)))), this.loading && index.h("div", { class: "skeleton-wrapper" }, this.renderSkeletonLoading())));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text" }, !this.loading && (index.h("div", { class: "container", part: "tree-container" }, this.currentTreeData && this.isSearchResultFound ? (this.renderTree(this.currentTreeData)) : (index.h("p", { class: "empty-tree-text", part: "tree-empty-text" }, this.locales.nothingFound)))), this.loading && index.h("div", { class: "skeleton-wrapper" }, this.renderSkeletonLoading())));
   }
-  static get registryIs() { return "wpp-tree-v3-3-0"; }
+  static get registryIs() { return "wpp-tree-v2-22-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "search": ["onInputChange"],
-    "data": ["updateDate"],
-    "locales": ["onUpdateLocales"]
+    "data": ["updateDate"]
   }; }
 };
 WppTree.style = wppTreeCss;

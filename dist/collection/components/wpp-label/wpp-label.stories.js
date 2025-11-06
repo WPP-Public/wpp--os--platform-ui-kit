@@ -1,4 +1,6 @@
 import { html } from 'lit-html';
+import readme from './readme.md';
+import internalLabel from './components/wpp-internal-label/readme.md';
 export default {
   title: 'Design System/Components/Data display/Label',
   parameters: {
@@ -7,6 +9,7 @@ export default {
         hidden: true,
       },
     },
+    notes: { 'wpp-label': readme, 'wpp-internal-label': internalLabel },
   },
   argTypes: {
     optional: { control: { type: 'boolean' } },
@@ -16,13 +19,13 @@ export default {
     },
   },
 };
-export const Label = (args) => html ` <wpp-label-v3-3-0
-    .optional="${args.optional}"
-    .typography="${args.typography}"
-    .config="${args.config}"
-    .tooltipConfig="${args.tooltipConfig}"
-  >
-  </wpp-label-v3-3-0>`;
+export const Label = (args) => html ` <wpp-label-v2-22-0
+  .optional="${args.optional}"
+  .typography="${args.typography}"
+  .config="${args.config}"
+  .tooltipConfig="${args.tooltipConfig}"
+>
+</wpp-label-v2-22-0>`;
 Label.args = {
   typography: 's-strong',
   config: {

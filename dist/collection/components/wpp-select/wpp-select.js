@@ -1,795 +1,901 @@
-import { h, Fragment } from '@stencil/core';
-import { menuListConfig } from '../../common/menuListConfig';
+import highlightWords from 'highlight-words';
+import isEqual from 'lodash/isEqual';
+import isEmpty from 'lodash/isEmpty';
+import { getSlotEmptyStates, isEventTargetContained, setHasFocused, transformToVersionedTag, autoFocusElement, } from '../../utils/utils';
 import { FOCUS_TYPE } from '../../types/common';
-import { DEFAULT_DROPDOWN_CONFIG, LOCALES_DEFAULTS, MULTIPLE_SELECT_SINGLE_VALUE_ERROR } from './config';
-import { isEqual } from 'lodash';
-import version from '../../../versioned-components/version';
-import { getSlotEmptyStates, isEventTargetContained, transformToVersionedTag } from '../../utils/utils';
-import { renderSingleSelect } from './components/wpp-single-select/wpp-single-select';
-import { renderMultipleSelect } from './components/wpp-multiple-select/wpp-multiple-select';
-import { renderTextSelect } from './components/wpp-text-select/wpp-text-select';
 import { renderCombinedSelect } from './components/wpp-combined-select/wpp-combined-select';
+import { renderMultipleSelect } from './components/wpp-multiple-select/wpp-multiple-select';
+import { renderSingleSelect } from './components/wpp-single-select/wpp-single-select';
+import { renderTextSelect } from './components/wpp-text-select/wpp-text-select';
+// Load more will be triggered 15px before scroll ends
+const INFINITE_SCROLL_THRESHOLD = 15;
 const MINIMUM_ITEMS_COUNT_TO_DISPLAY_SEARCH = 10;
 const TRUNCATION_DELAY = 100;
+const SELECT_OPTION_TAG_NAME = 'wpp-list-item';
+const MULTIPLE_SELECT_SINGLE_VALUE_ERROR = 'Value should be an Array in the multiple select.';
+const getInitFocusInfo = () => ({
+  input: FOCUS_TYPE.NONE,
+  listItem: FOCUS_TYPE.NONE,
+});
 /**
+ * @slot wpp-list-item - contains list items. List items must have distinct value properties, and value should not be `undefined` or `null` to ensure proper functionality. The default slot, without the name attribute.
  * @slot icon-start - can contain an icon that will be placed before the main content, e.g. a search icon.
+ *
+ * @part single-select-input - Single-select input element
+ * @part multiple-select-input - Multiple-select input element
+ * @part text-select-wrapper - Text-select input element
+ *
+ * @part label - Label text element
+ * @part input-wrapper - input wrapper element
+ * @part input - input element
+ * @part message - message element
+ *
+ * @part wrapper - component wrapper element
+ * @part body - Main content wrapper
+ * @part text - Main text content
+ * @part icon-chevron - icon chevron element
+ *
+ * @part placeholder-wrap - placeholder wrapper element
+ * @part placeholder - placeholder text element
+
+ * @part options-list - options list element
  */
 export class WppSelect {
   constructor() {
-    this.hasReachedLimit = false;
-    this.canSelectAll = false;
-    this.canClearAll = false;
-    // ************************************
-    this.LIB_COMPONENTS_PREFIX = 'wpp-';
-    this._locales = LOCALES_DEFAULTS;
-    this.getSelectedItems = () => {
-      if (this.type === 'multiple') {
-        const selectedItems = this.internalList?.filter((item) => this.emittedValue.some((emittedValueItem) => isEqual(emittedValueItem, item.value)));
-        return selectedItems;
-      }
-      else {
-        const selectedItem = this.internalList?.find((listItem) => isEqual(listItem.value, this.emittedValue));
-        return [selectedItem];
-      }
-    };
-    this.checkMessageInTooltip = () => {
-      const shouldRenderInTooltip = !!(this.messageInTooltip &&
-        this.message &&
-        (this.messageType === 'error' || this.messageType === 'warning'));
-      if (this.isRenderMessageInTooltip !== shouldRenderInTooltip) {
-        this.isRenderMessageInTooltip = shouldRenderInTooltip;
-        if (this.tippyInstance)
-          this.tippyInstance.destroy();
-        setTimeout(() => {
-          if (this.portalRef && this.anchorRef) {
-            this.createTippyInstance();
-          }
-        }, 100);
-      }
-      else {
-        this.isRenderMessageInTooltip = shouldRenderInTooltip;
-      }
-    };
-    this.checkTruncationInTextSelect = () => {
-      this.shouldTruncate = false;
-      setTimeout(() => {
-        const textEl = this.host.shadowRoot?.querySelector('#select-text');
-        if (textEl) {
-          this.shouldTruncate = textEl.clientWidth > this.host.clientWidth;
-        }
-      }, TRUNCATION_DELAY);
-    };
-    this.onUpdateListSingle = () => {
-      // This function is called when "this.list" has been updated in the single select.
-      this.internalList = [
-        ...this.list.map((listItem) => {
-          const hidden = !listItem.label.includes(this.searchText);
-          const checked = isEqual(listItem.value, this.value);
-          if (checked) {
-            this.renderedText = listItem.label;
-          }
-          return {
-            ...listItem,
-            checked,
-            hidden,
-          };
-        }),
-      ];
-    };
-    this.onUpdateListMultiple = () => {
-      // This function is called when "this.list" has been updated in the multiple select.
-      // We count again all checked and visible items and all disabled or hidden items.
-      let checkedItems = 0;
-      let disabledItems = 0;
-      this.internalList = [
-        ...this.list.map((listItem) => {
-          const hidden = !listItem.label.includes(this.searchText);
-          const checked = !!this.value?.find((valueItem) => isEqual(listItem.value, valueItem));
-          if (listItem.disabled) {
-            disabledItems++;
-          }
-          else if (checked) {
-            checkedItems++;
-          }
-          return {
-            ...listItem,
-            hidden,
-            checked,
-            selectable: true,
-            multiple: true,
-          };
-        }),
-      ];
-      this.updateItemsAfterChangeMultiple(checkedItems, disabledItems);
-    };
-    this.updateItemsAfterChangeMultiple = (checkedItems, disabledItems) => {
-      this.checkedItems = checkedItems;
-      this.disabledItems = disabledItems;
-      this.setRenderedTextMultiple();
-      if (this.maximumSelectedItems) {
-        if (this.checkedItems >= this.maximumSelectedItems) {
-          this.disableOtherElements();
-        }
-        else {
-          this.enablePreviousElements();
-        }
-      }
-      if (this.internalList?.length === 0) {
-        this.canSelectAll = false;
-        this.canClearAll = false;
-      }
-      else {
-        this.canSelectAll = this.maximumSelectedItems
-          ? false
-          : this.checkedItems < this.internalList?.length - this.disabledItems;
-        this.canClearAll = this.checkedItems >= 1;
-      }
-    };
-    this.checkListAgainstValueSingle = () => {
-      // Check items against value provided to component and set renderedText in input. This function is called for single-select.
-      this.internalList?.forEach((listItem) => {
-        const checked = isEqual(listItem.value, this.value);
-        if (checked) {
-          this.renderedText = listItem.label;
-        }
-        listItem.checked = checked;
-      });
-    };
-    this.checkListAgainstValueMultiple = () => {
-      // Every time value changes, we make updates to the list and count again
-      // the "checked and visible" items and "disabled or hidden" ones.
-      let checkedItems = 0;
-      let disabledItems = 0;
-      this.internalList?.forEach((listItem) => {
-        const checked = !!this.value?.find((item) => isEqual(listItem.value, item));
-        if (listItem.disabled) {
-          disabledItems++;
-        }
-        else if (checked) {
-          checkedItems++;
-        }
-        listItem.checked = checked;
-      });
-      this.updateItemsAfterChangeMultiple(checkedItems, disabledItems);
-    };
-    this.convertValueToKey = (value) => {
-      if (typeof value === 'object') {
-        return this.getItemKey ? this.getItemKey(value) : undefined;
-      }
-      return value;
-    };
-    this.renderList = () => {
-      if (!this.isOpen) {
-        return h(Fragment, null);
-      }
-      if (this.loading) {
-        return (h("div", { class: "loading-container" }, h("wpp-spinner-v3-3-0", null), h("wpp-typography-v3-3-0", { type: "s-body" }, this._locales.loadingText)));
-      }
-      if (this.internalList?.length === 0) {
-        return (h("wpp-typography-v3-3-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
-      }
-      let hiddeItemsCount = 0;
-      return (h(Fragment, null, this.internalList?.map((item) => {
-        const { label, hidden, ...rest } = item;
-        if (hidden) {
-          hiddeItemsCount++;
-          if (hiddeItemsCount === this.internalList?.length) {
-            return (h("wpp-typography-v3-3-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
-          }
-          return null;
-        }
-        return (h("wpp-list-item-v3-3-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
-      })));
-    };
-    this.renderSlotsInListItem = (slots, isLabelExists) => slots
-      .map(slotElement => {
-      if (!slotElement)
-        return null;
-      const { type, props, slot, children } = slotElement;
-      if (props.slot === 'label' && isLabelExists)
-        return null;
-      if (!type.startsWith(this.LIB_COMPONENTS_PREFIX)) {
-        const { children: text, ...restProps } = props;
-        const Tag = type;
-        return (h(Tag, { ...restProps }, text));
-      }
-      if (!children)
-        return h(transformToVersionedTag(type), { slot, ...props });
-      const slotNode = h(transformToVersionedTag(type), { slot, ...props });
-      slotNode.$children$ = Array.isArray(children)
-        ? this.renderSlotsInListItem(Array.from(children), isLabelExists)
-        : this.renderSlotsInListItem([children], isLabelExists);
-      return slotNode;
-    })
-      .filter(item => item !== null);
-    this.setHasBeenInternallyDisabled = (listItem) => {
-      if (listItem.hasBeenInternallyDisabled)
-        return true;
-      if (listItem.disabled || listItem.checked)
-        return null;
-      return true;
-    };
-    this.disableOtherElements = () => {
-      if (this.hasReachedLimit)
-        return;
-      let disabledItems = 0;
-      // This function is called when items in the list are checked
-      // and "maximumSelectedItems" property is defined.
-      this.internalList?.forEach((listItem) => {
-        if (listItem.hasBeenInternallyDisabled || listItem.disabled || !(listItem.disabled || listItem.checked)) {
-          disabledItems++;
-        }
-        listItem.hasBeenInternallyDisabled = this.setHasBeenInternallyDisabled(listItem);
-        listItem.disabled = listItem.disabled ? listItem.disabled : !listItem.checked;
-      });
-      this.disabledItems = disabledItems;
-      this.hasReachedLimit = true;
-    };
-    this.enablePreviousElements = () => {
-      if (!this.hasReachedLimit)
-        return;
-      let disabledItems = 0;
-      // This function is called to revert the effects of "this.disableOtherElements"
-      this.internalList?.forEach((listItem) => {
-        if (listItem.hasBeenInternallyDisabled) {
-          listItem.disabled = false;
-          listItem.hasBeenInternallyDisabled = null;
-        }
-        if (this.disabled) {
-          disabledItems++;
-        }
-      });
-      this.disabledItems = disabledItems;
-      this.hasReachedLimit = false;
-    };
-    this.checkIfTextOverflows = () => {
-      if (this.inputRef) {
-        this.inputRef.style.width = this.overflowContainerRef ? `${this.overflowContainerRef.clientWidth}px` : 'auto';
-        this.textOverflows = this.inputRef.scrollWidth > this.inputRef.clientWidth;
-      }
-    };
-    this.setRenderedTextMultiple = () => {
-      const labels = [];
-      let numberOfExtraItems = 0;
-      // We need to parse this.value in order to get the labels in the exact order they
-      // were selected.
-      this.value?.forEach((valueItem) => {
-        const listItem = this.internalList?.find((listItem) => isEqual(valueItem, listItem.value));
-        if (listItem) {
-          if (labels.length >= this.maxItemsToDisplay) {
-            numberOfExtraItems++;
-          }
-          else {
-            labels.push(listItem.label);
-          }
-        }
-      });
-      if (numberOfExtraItems > 0) {
-        this.renderedText = `${labels.join(', ')}, +${numberOfExtraItems}`;
-      }
-      else {
-        this.renderedText = labels.join(', ');
-      }
-    };
-    this.onShowDropdown = (instance) => {
-      if (!this.anchorRef)
-        return false;
-      if (this.type === 'text' || this.isTextSelect) {
-        this.onShowDropdownText(instance);
-      }
-      else {
-        // Set width of dropdown based on "dropdownWidth" property and "this.anchorRef"
-        if (this.dropdownWidth !== 'auto') {
-          instance.popper.style.width = `${Math.max(this.anchorRef.clientWidth, parseInt(this.dropdownWidth, 10))}px`;
-        }
-        else {
-          instance.popper.style.width = `${this.anchorRef.clientWidth}px`;
-        }
-      }
-      if (this.dropdownConfig?.onShow) {
-        if (this.dropdownConfig.onShow(instance) === false) {
-          return false;
-        }
-        this.dropdownConfig?.onShow(instance);
-      }
-      this.isOpen = true;
-    };
-    this.onShowDropdownText = (instance) => {
-      if (!this.anchorRef)
-        return;
-      if (this.dropdownWidth === 'auto') {
-        if (this.anchorRef.clientWidth < 350) {
-          instance.setProps({ maxWidth: '350px' });
-          instance.popper.style.width = 'auto';
-        }
-        else {
-          instance.setProps({ maxWidth: `${this.anchorRef.clientWidth}px` });
-          instance.popper.style.width = `${this.anchorRef.clientWidth}px`;
-        }
-      }
-      else {
-        const widthValue = Math.max(this.anchorRef.clientWidth, parseInt(this.dropdownWidth));
-        instance.setProps({ maxWidth: `${widthValue}px` });
-        instance.popper.style.width = `${widthValue}px`;
-      }
-    };
-    this.onHiddenDropdown = (instance) => {
-      this.isOpen = false;
-      if (!this.consistentSearch) {
-        this.searchText = '';
-      }
-      if (this.dropdownConfig?.onHidden) {
-        this.dropdownConfig?.onHidden(instance);
-      }
-    };
-    this.createTippyInstance = () => {
-      if (!this.anchorRef || !this.portalRef)
-        return;
-      this.tippyInstance = menuListConfig({
-        anchor: this.anchorRef,
-        content: this.portalRef,
-        ...DEFAULT_DROPDOWN_CONFIG,
-        ...this.dropdownConfig,
-        onShow: (instance) => {
-          if (this.disabled)
-            return false;
-          this.setShouldShowSearch();
-          // Re-position in case it was not position correctly initially.
-          setTimeout(() => {
-            instance.popperInstance?.update();
-          }, 0);
-          return this.onShowDropdown(instance);
-        },
-        onShown: (instance) => {
-          this.updateScrollState();
-          if (['single', 'multiple'].includes(this.type)) {
-            this.focusSearchInput();
-          }
-          else {
-            this.focusFirstListItem();
-          }
-          if (this.dropdownConfig?.onShown) {
-            this.dropdownConfig?.onShown(instance);
-          }
-        },
-        onHide: (instance) => {
-          this.onBlur();
-          if (this.dropdownConfig?.onHide) {
-            return this.dropdownConfig.onHide(instance);
-          }
-        },
-        onHidden: this.onHiddenDropdown,
-        onClickOutside: (instance, event) => {
-          if (this.tippyInstance && !isEventTargetContained(this.host, event)) {
-            this.tippyInstance.hide();
-          }
-          if (this.dropdownConfig?.onClickOutside) {
-            this.dropdownConfig.onClickOutside(instance, event);
-          }
-        },
-      });
-    };
-    this.focusFirstListItem = () => {
-      if (!this.portalRef)
-        return;
-      const listItem = this.portalRef.querySelector('.wpp-list-item');
-      if (!listItem)
-        return;
-      listItem.setFocus();
-    };
-    this.focusSearchInput = () => {
-      if (!this.portalRef)
-        return;
-      const inputEl = this.portalRef.querySelector('.select-portal-search-input');
-      setTimeout(() => {
-        if (!inputEl)
-          return;
-        inputEl.setFocus();
-      }, 0);
-    };
-    this.handleSearch = (event) => {
-      const searchValue = event.detail.value;
-      if (searchValue === undefined) {
-        this.searchText = '';
-        return;
-      }
-      this.searchText = searchValue;
-    };
-    this.handleClickListItem = (event) => {
-      const listItemValue = event.detail.value;
-      if (listItemValue === undefined)
-        return;
-      if (this.type === 'multiple') {
-        this.onClickListItemMultiple(listItemValue);
-      }
-      else {
-        this.onClickListItemSingle(listItemValue);
-      }
-    };
-    this.onClickListItemSingle = (listItemValue) => {
-      if (isEqual(this.value, listItemValue)) {
-        this.tippyInstance?.hide();
-        return;
-      }
-      else {
-        this.emittedValue = listItemValue;
-        // Hide dropdown only when user clicked a new item.
-        this.tippyInstance?.hide();
-      }
-    };
-    this.onClickListItemMultiple = (listItemValue) => {
-      const valueItem = this.value?.find((item) => isEqual(item, listItemValue));
-      if (valueItem) {
-        this.emittedValue = this.value
-          ? [...this.value.filter((item) => !isEqual(item, listItemValue))]
-          : [];
-      }
-      else {
-        this.emittedValue = [...this.value, listItemValue];
-      }
-    };
-    this.updateScrollState = () => {
-      if (!this.listRef)
-        return;
-      this.withScroll = this.listRef.scrollHeight > this.listRef.clientHeight;
-    };
-    this.handleSelectAll = () => {
-      // We select all the items that are not disabled. Even hidden ones.
-      const valueOfItems = [];
-      this.internalList?.forEach((listItem) => {
-        if (!listItem.disabled) {
-          valueOfItems.push(listItem.value);
-        }
-        listItem.checked = listItem.disabled ? listItem.checked : true;
-      });
-      this.emittedValue = [...valueOfItems];
-    };
-    this.handleClearAll = () => {
-      // We un-check all items that are not disabled. Even hidden ones.
-      const valueOfItems = [];
-      this.internalList?.forEach((listItem) => {
-        if (listItem.checked && listItem.disabled) {
-          valueOfItems.push(listItem.value);
-        }
-        listItem.checked = listItem.disabled ? listItem.checked : false;
-      });
-      this.emittedValue = [...valueOfItems];
-    };
-    this.setShouldShowSearch = () => {
-      if (!this.host)
-        return false;
-      if (this.type === 'text' || this.isTextSelect) {
-        this.shouldShowSearch = false;
-        return;
-      }
-      this.shouldShowSearch =
-        (this.host?.getAttributeNames().includes('with-search') && !['auto', false].includes(this.withSearch)) ||
-          (this.withSearch === 'auto' && this.list.length >= MINIMUM_ITEMS_COUNT_TO_DISPLAY_SEARCH);
-    };
-    this.handleClick = (shouldFocus) => {
-      if (!this.tippyInstance || this.disabled || this.displayValue !== undefined)
-        return;
-      if (shouldFocus) {
-        this.focusType = FOCUS_TYPE.TAB;
-        this.anchorRef?.focus();
-      }
-      if (this.tippyInstance.state.isVisible) {
-        this.tippyInstance.hide();
-      }
-      else {
-        this.tippyInstance.show();
-      }
-    };
+    this.totalItems = 0;
+    this.multipleSelectDropdownHeight = 412;
+    this.singleSelectDropdownHeight = 372;
+    this.enabledElements = [];
+    this.observers = [];
     this.updateSlotData = () => {
       const emptyStates = getSlotEmptyStates(this.host.childNodes, {
         icon: '[slot="icon-start"]',
-        anchorButton: '[slot="anchor-button"]',
       });
       this.hasIconStartSlot = !emptyStates.icon;
-      this.anchorButton = !emptyStates.anchorButton;
     };
-    this.onKeyUp = (event) => {
-      if (event.key === 'Tab') {
-        this.focusType = FOCUS_TYPE.TAB;
+    this.getEnabledItems = () => {
+      this.host.childNodes.forEach(el => {
+        const item = el;
+        if (item.tagName === transformToVersionedTag(SELECT_OPTION_TAG_NAME).toUpperCase() && !item.disabled) {
+          this.enabledElements.push(item);
+        }
+      });
+    };
+    this.disableNonSelectedItems = () => {
+      this.enabledElements.forEach(el => {
+        if (el.tagName === transformToVersionedTag(SELECT_OPTION_TAG_NAME).toUpperCase() && !el.checked) {
+          el.disabled = true;
+        }
+      });
+    };
+    this.enableListItems = () => {
+      this.enabledElements.forEach(el => {
+        el.removeAttribute('disabled');
+      });
+    };
+    this.validateMaxSelected = () => {
+      if (!this.maximumSelectedItems)
+        return;
+      this.activeItems.length === this.maximumSelectedItems ? this.disableNonSelectedItems() : this.enableListItems();
+    };
+    this.isOptionsValueEqual = (leftValue, rightValue) => {
+      if (this.withCustomValue) {
+        const leftValueArray = Array.isArray(leftValue) ? leftValue : [leftValue];
+        const rightValueArray = Array.isArray(rightValue) ? rightValue : [rightValue];
+        return isEqual(leftValueArray.map(this.getOptionId), rightValueArray.map(this.getOptionId));
+      }
+      return isEqual(leftValue, rightValue);
+    };
+    this.getUpdatedFocusInfo = (type, updateValue) => ({
+      ...this.focusType,
+      [type]: updateValue,
+    });
+    this.handleInputChange = (event) => {
+      this.inputValue = String(event.detail.value);
+      this.wppChange.emit({
+        value: this.value,
+        inputValue: this.inputValue,
+        name: this.name,
+      });
+    };
+    this.countDisplayedItems = () => {
+      this.displayedItemsCount = Array.from(this.host.querySelectorAll(`.${SELECT_OPTION_TAG_NAME}`)).filter((item) => !item.hidden).length;
+    };
+    this.hasSimpleSearch = () => !this.infinite;
+    this.handleSearch = (initSearchText) => {
+      setTimeout(() => {
+        this.updateScrollState();
+      }, 0);
+      const searchText = initSearchText.trim();
+      this.searchText = searchText;
+      const isOnSearch = Boolean(searchText.length);
+      this.isOnSearch = isOnSearch;
+      if (!this.hasSimpleSearch()) {
+        this.wppSearchValueChange.emit(searchText);
+      }
+      let isEveryItemHidden = true;
+      const hasRedundantSpace = new RegExp(/^\s\s+|\s\s+$/, 'g').test(searchText);
+      this.host.childNodes.forEach(el => {
+        const element = el;
+        if (element.tagName === transformToVersionedTag(SELECT_OPTION_TAG_NAME).toUpperCase()) {
+          element.setAttribute('highlight', searchText);
+          const chunks = highlightWords({
+            text: element.textContent || '',
+            query: searchText,
+            matchExactly: true,
+          });
+          if (!isOnSearch || (!hasRedundantSpace && chunks.some(el => el.match))) {
+            isEveryItemHidden = false;
+            element.removeAttribute('hidden');
+          }
+          else {
+            element.setAttribute('hidden', 'true');
+          }
+        }
+      });
+      this.isEmpty = isOnSearch && isEveryItemHidden && !this.isInfiniteLoading && !this.loading;
+    };
+    this.updateScrollState = () => {
+      const scrollHeight = this.menuRef?.scrollHeight || 0;
+      const maxHeight = this.type === 'multiple' ? this.multipleSelectDropdownHeight : this.singleSelectDropdownHeight;
+      this.withScroll = scrollHeight > maxHeight;
+    };
+    this.findParentModal = () => {
+      // Set current to the host element as default value
+      let current = this.host;
+      while (current) {
+        // Check if current element is one of the modals
+        if (current.tagName &&
+          [
+            transformToVersionedTag('wpp-modal').toUpperCase(),
+            transformToVersionedTag('wpp-side-modal').toUpperCase(),
+            transformToVersionedTag('wpp-full-screen-modal').toUpperCase(),
+          ].includes(current.tagName)) {
+          const dialog = current.shadowRoot?.querySelector('[role="dialog"]');
+          return dialog || current;
+        }
+        current = current?.parentElement;
+        // If there is no parent element, break the loop and return null (not in modal)
+        if (!current)
+          break;
+      }
+      return null;
+    };
+    this.updateDropdownHeight = () => {
+      const isSmallWindowHeight = window.innerHeight < 800;
+      if (!this.menuRef)
+        return;
+      if (this.isInModal) {
+        Object.assign(this.menuRef?.style, {
+          '--input-select-dropdown-max-height': 'none',
+          width: '100%',
+        });
+        return;
+      }
+      if (this.type === 'single') {
+        this.singleSelectDropdownHeight = isSmallWindowHeight ? window.innerHeight * 0.6 : 372;
+        this.menuRef?.style.setProperty('--input-select-dropdown-max-height', `${this.singleSelectDropdownHeight}px`);
+      }
+      if (this.type === 'multiple') {
+        this.multipleSelectDropdownHeight = isSmallWindowHeight ? window.innerHeight * 0.7 : 412;
+        this.menuRef?.style.setProperty('--input-select-dropdown-max-height', `${this.multipleSelectDropdownHeight}px`);
       }
     };
-    this.onKeyDown = (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        this.tippyInstance?.show();
+    this.onWindowResize = () => {
+      if (['multiple', 'single'].includes(this.type)) {
+        this.updateDropdownHeight();
       }
     };
-    this.onKeyDownPortal = (event) => {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        this.tippyInstance?.hide();
-        this.anchorRef?.focus();
-        this.focusType = FOCUS_TYPE.TAB;
+    this.customDropdownConfig = () => ({
+      popperOptions: {
+        strategy: 'fixed',
+        modifiers: [
+          {
+            name: 'computeStyles',
+            options: {
+              adaptive: false,
+              gpuAcceleration: false,
+            },
+          },
+          {
+            name: 'applyStyles',
+            fn: ({ state }) => {
+              // Get the reference element (trigger element)
+              const referenceRect = state.elements.reference.getBoundingClientRect();
+              // Get the modal element
+              const modalRect = this.modalRef?.getBoundingClientRect();
+              if (!modalRect)
+                return;
+              // Get the modal's scroll position
+              const modalScrollTop = this.modalRef?.scrollTop || 0;
+              const modalScrollLeft = this.modalRef?.scrollLeft || 0;
+              // Calculate position relative to modal
+              const left = referenceRect.left - modalRect.left + modalScrollLeft;
+              const modalHeight = modalRect.height;
+              const actualDropdownHeight = state.elements.popper.getBoundingClientRect().height;
+              let top = 0;
+              let maxDropdownHeight = 0;
+              const isSmallWindowHeight = window.innerHeight < 800;
+              if (this.type === 'single') {
+                maxDropdownHeight = isSmallWindowHeight ? window.innerHeight * 0.4 : this.singleSelectDropdownHeight;
+              }
+              if (this.type === 'multiple') {
+                maxDropdownHeight = isSmallWindowHeight ? window.innerHeight * 0.4 : this.multipleSelectDropdownHeight;
+              }
+              // If the dropdown height is less than the predefined max height, set the dropdown height to the actual height
+              let dropdownHeight = maxDropdownHeight > actualDropdownHeight ? actualDropdownHeight : maxDropdownHeight;
+              // Calculate available space above and below the reference element
+              const availableSpaceAbove = referenceRect.top - modalRect.top + modalScrollTop;
+              const availableSpaceBelow = modalHeight - (referenceRect.bottom - modalRect.top + modalScrollTop);
+              if (availableSpaceBelow > dropdownHeight) {
+                // If there is enough space below, position the dropdown below the reference element and update the top position
+                top = referenceRect.bottom - modalRect.top + modalScrollTop;
+              }
+              else if (availableSpaceAbove >= dropdownHeight) {
+                // If there is enough space above, position the dropdown above the reference element and update the top position
+                top = referenceRect.top - modalRect.top + modalScrollTop - dropdownHeight;
+              }
+              else if (availableSpaceAbove < dropdownHeight && availableSpaceBelow <= dropdownHeight) {
+                // If there is not enough space above and below, checking where there is more space
+                if (availableSpaceAbove <= availableSpaceBelow) {
+                  dropdownHeight = availableSpaceBelow;
+                }
+                else {
+                  dropdownHeight = availableSpaceAbove;
+                  // Update the top position to be above the reference element
+                  top = referenceRect.top - modalRect.top + modalScrollTop - dropdownHeight;
+                }
+              }
+              /**
+               * We need to set tippyBox and tippyContent to display flex and width 100% to make the dropdown a correct size
+               */
+              const tippyBoxEl = state.elements.popper.querySelector('.tippy-box');
+              if (tippyBoxEl) {
+                tippyBoxEl.style.width = '100%';
+              }
+              const tippyContentEl = state.elements.popper.querySelector('.tippy-content');
+              if (tippyContentEl) {
+                tippyContentEl.style.width = '100%';
+              }
+              const maxHeight = Math.min(modalRect.height, this.type === 'multiple' ? 412 : 372);
+              this.menuRef?.style.setProperty('--input-select-dropdown-max-height', `${maxHeight}px`);
+              // Update the dropdown position
+              Object.assign(state.elements.popper.style, {
+                display: 'flex',
+                position: 'fixed',
+                left: `${left}px`,
+                top: `${top}px`,
+                maxHeight: `${maxHeight}px`,
+              });
+            },
+          },
+        ],
+      },
+    });
+    this.shouldShowSearch = () => {
+      if (!this.host || typeof this.host.getAttributeNames !== 'function')
+        return false;
+      return ((this.host?.getAttributeNames().includes('with-search') && !['auto', false].includes(this.withSearch)) ||
+        (this.withSearch === 'auto' && this.displayedItemsCount >= MINIMUM_ITEMS_COUNT_TO_DISPLAY_SEARCH));
+    };
+    this.changeSlotsAttribute = (attributeValue) => {
+      const contentSlots = this.host?.querySelectorAll(`.${SELECT_OPTION_TAG_NAME}`);
+      contentSlots.forEach(el => {
+        const element = el;
+        if (element.tagName === transformToVersionedTag(SELECT_OPTION_TAG_NAME).toUpperCase()) {
+          element.setAttribute('container-state', attributeValue);
+        }
+      });
+    };
+    this.handleMenuListShow = (instance) => {
+      this.triggerEl?.setAttribute('aria-expanded', 'true');
+      if (['multiple', 'single'].includes(this.type)) {
+        this.updateDropdownHeight();
+        this.updateScrollState();
+        this.isFocused = true;
+      }
+      this.changeSlotsAttribute('shown');
+      if (this.dropdownConfig?.onShow) {
+        return this.dropdownConfig.onShow(instance);
+      }
+    };
+    this.handleMenuListHide = (instance) => {
+      this.focusType = this.getUpdatedFocusInfo('listItem', FOCUS_TYPE.NONE);
+      this.triggerEl?.setAttribute('aria-expanded', 'false');
+      this.changeSlotsAttribute('hidden');
+      if (['multiple', 'single'].includes(this.type) && this.shouldShowSearch()) {
+        setTimeout(() => {
+          this.isOnSearch = false;
+          this.handleSearch('');
+        }, 300);
+      }
+      if (this.dropdownConfig?.onHide) {
+        return this.dropdownConfig.onHide(instance);
+      }
+    };
+    this.getValueFromDOM = () => Array.from(this.host.childNodes).reduce((acc, el) => {
+      const element = el;
+      if (element.tagName === transformToVersionedTag(SELECT_OPTION_TAG_NAME).toUpperCase() &&
+        !element.disabled &&
+        element.checked) {
+        if (this.type === 'multiple') {
+          acc.push(element.value);
+        }
+        else {
+          acc = element.value;
+        }
+      }
+      return acc;
+    }, (this.type === 'multiple' ? [] : ''));
+    this.updateIsFilled = () => {
+      const selectedItems = Array.from(this.inputRef.querySelectorAll('.selected-item-text-wrapper') || []);
+      this.isInputFilled = selectedItems.some(el => el.clientWidth < el.scrollWidth);
+    };
+    this.setMultipleTextToDisplay = () => {
+      this.selectedItemsTextList = Array.from(this.activeItems)
+        .filter(el => el.multiple)
+        .slice(0, this.maxItemsToDisplay)
+        .map(el => {
+        if (this.withCustomValue) {
+          return this.getOptionLabel(el.value);
+        }
+        return el.querySelector('[slot="label"]')?.textContent || el.textContent || '';
+      });
+      this.textToDisplay =
+        this.activeItems.length > this.maxItemsToDisplay ? String(this.activeItems.length - this.maxItemsToDisplay) : '';
+    };
+    this.anyClearable = () => {
+      let anyClearable = false;
+      this.activeItems.forEach(el => {
+        const element = el;
+        if (element.tagName === transformToVersionedTag(SELECT_OPTION_TAG_NAME).toUpperCase() &&
+          element.checked &&
+          !element.disabled) {
+          anyClearable = true;
+        }
+      });
+      return anyClearable;
+    };
+    this.handleClearAll = (e) => {
+      if (e) {
+        this.hasClickedBtn = true;
+      }
+      const oldValue = this.value;
+      const selectionList = [];
+      this.activeItems.forEach(el => {
+        const element = el;
+        if (element.disabled) {
+          selectionList.push(element.value);
+        }
+      });
+      this.value = [...new Set([...selectionList])];
+      if (!this.isOptionsValueEqual(oldValue, this.value)) {
+        this.wppChange.emit({
+          value: this.value,
+          name: this.name,
+        });
+      }
+    };
+    this.canSelectAll = () => {
+      let selectableCount = 0;
+      if (this.maximumSelectedItems)
+        return false;
+      this.host.childNodes.forEach(el => {
+        const element = el;
+        if (element.tagName === transformToVersionedTag(SELECT_OPTION_TAG_NAME).toUpperCase() &&
+          !element.checked &&
+          !element.hidden &&
+          !element.disabled) {
+          selectableCount++;
+        }
+      });
+      return (selectableCount > 0 &&
+        (!this.maximumSelectedItems || this.activeItems.length + selectableCount <= this.maximumSelectedItems));
+    };
+    this.handleSelectAll = () => {
+      this.hasClickedBtn = true;
+      const oldValue = this.value;
+      const selectionList = [];
+      this.host.childNodes.forEach(el => {
+        const element = el;
+        if (element.tagName === transformToVersionedTag(SELECT_OPTION_TAG_NAME).toUpperCase() &&
+          (element.checked || !element.disabled)) {
+          selectionList.push(element.value);
+        }
+      });
+      this.value = [...new Set([...selectionList])];
+      if (!this.isOptionsValueEqual(oldValue, this.value)) {
+        this.wppChange.emit({
+          value: this.value,
+          name: this.name,
+        });
+      }
+    };
+    this.handleShouldCloseOnOutsideClick = (event) => event.target !== this.host && !isEventTargetContained(this.host, event);
+    this.canLoadMore = () => this.infinite && !this.infiniteLastPage && this.loadMore && !this.isInfiniteLoading;
+    this.requestLoadMore = () => {
+      if (this.loadMore) {
+        this.isInfiniteLoading = true;
+        const promise = this.loadMore().finally(() => {
+          if (!promise.cancelled) {
+            this.isInfiniteLoading = false;
+            this.infiniteLoadingPromise = undefined;
+          }
+        });
+        this.infiniteLoadingPromise = promise;
+      }
+    };
+    this.scrollOptionsToTop = () => {
+      if (this.menuRef) {
+        this.menuRef.scrollTop = 0;
+      }
+    };
+    this.handleOptionsScroll = (event) => {
+      if (this.canLoadMore()) {
+        const container = event.target;
+        const scrolledToBottom = container.scrollHeight - container.clientHeight - container.scrollTop;
+        if (scrolledToBottom < INFINITE_SCROLL_THRESHOLD) {
+          this.requestLoadMore();
+        }
+      }
+    };
+    this.handleLabelClick = () => {
+      const host = this.host.shadowRoot;
+      if (['multiple', 'single', 'text'].includes(this.type)) {
+        const triggerElement = host.querySelector('.trigger-element');
+        triggerElement.click();
+        if (this.type === 'text') {
+          triggerElement.focus();
+        }
+        else {
+          const input = host.querySelector('.input');
+          input.focus();
+        }
+      }
+      if (this.type === 'combined') {
+        const input = host.querySelector('.wpp-input')?.shadowRoot?.querySelector('input');
+        input.select();
       }
     };
     this.onFocus = (event) => {
+      this.isFocused = true;
       this.wppFocus.emit(event);
     };
-    this.onBlur = (event) => {
-      if (event?.relatedTarget && this.portalRef && this.portalRef.contains(event.relatedTarget)) {
+    this.onMouseDown = () => {
+      this.focusType = this.getUpdatedFocusInfo('listItem', FOCUS_TYPE.MOUSE);
+      this.focusType = this.getUpdatedFocusInfo('input', FOCUS_TYPE.MOUSE);
+    };
+    this.handleBlurCall = (event) => {
+      if (event.relatedTarget || this.hasClickedBtn) {
+        this.hasClickedBtn = false;
         return;
       }
-      this.focusType = FOCUS_TYPE.NONE;
+      const host = this.host.shadowRoot;
+      const triggerElement = host.querySelector('.trigger-element');
+      if (triggerElement.getAttribute('aria-expanded') === 'true') {
+        triggerElement.click();
+      }
+    };
+    this.onBlur = (event) => {
+      // Handle ref?.current?.blur() on any Select component
+      this.handleBlurCall(event);
+      this.focusType = this.getUpdatedFocusInfo('input', FOCUS_TYPE.NONE);
+      this.focusType = this.getUpdatedFocusInfo('listItem', FOCUS_TYPE.NONE);
+      this.isFocused = false;
       this.wppBlur.emit(event);
     };
-    this.hasErrorsOrWarnings = (type) => this.message ? this.message.length > 0 && this.messageType === type : false;
+    this.onKeyUp = (event, type) => {
+      if (event.key === 'Tab') {
+        this.focusType = this.getUpdatedFocusInfo(type, FOCUS_TYPE.TAB);
+        if (this.focusType.listItem === FOCUS_TYPE.TAB) {
+          this.focusType = this.getUpdatedFocusInfo('input', FOCUS_TYPE.NONE);
+        }
+      }
+    };
+    this.areOptionsProvided = () => {
+      if (this.infinite || this.loading || this.isInfiniteLoading || this.isOnSearch) {
+        return true;
+      }
+      let result = false;
+      this.host.childNodes.forEach(el => {
+        const element = el;
+        if (element.tagName === transformToVersionedTag(SELECT_OPTION_TAG_NAME).toUpperCase()) {
+          result = true;
+        }
+      });
+      return result;
+    };
+    this.countItems = () => {
+      this.totalItems = 0;
+      this.host.childNodes.forEach(el => {
+        const element = el;
+        if (element.tagName === transformToVersionedTag(SELECT_OPTION_TAG_NAME).toUpperCase()) {
+          if (!element.hasAttribute('multiple')) {
+            element.setAttribute('multiple', 'true');
+          }
+          if (!element.hasAttribute('selectable')) {
+            element.setAttribute('selectable', 'true');
+          }
+          const isItemChecked = this.value.some((valueItem) => this.isOptionsValueEqual(valueItem, element.value));
+          if (this.enabledElements.includes(element) || (element.disabled && isItemChecked)) {
+            this.totalItems = this.totalItems + 1;
+          }
+          element.checked = isItemChecked;
+        }
+      });
+      this.isAllSelected = this.totalItems !== 0 && this.activeItems.length === this.totalItems;
+    };
+    this.handleSlotChange = () => {
+      if (this.type === 'multiple' || this.type === 'single') {
+        requestAnimationFrame(() => {
+          this.countDisplayedItems();
+        });
+      }
+      this.updateScrollState();
+      if (this.type === 'multiple') {
+        if (!Array.isArray(this.value)) {
+          throw new Error(MULTIPLE_SELECT_SINGLE_VALUE_ERROR);
+        }
+        this.countItems();
+        this.setMultipleTextToDisplay();
+      }
+      else {
+        this.host.childNodes.forEach(el => {
+          const element = el;
+          element.checked = isEqual(this.value, element.value);
+        });
+      }
+    };
+    this.getDropdownWidth = (instance) => {
+      if (!this.triggerEl)
+        return;
+      if (this.dropdownWidth !== 'auto') {
+        instance.popper.style.width = `${Math.max(this.triggerEl.clientWidth, parseInt(this.dropdownWidth, 10))}px`;
+      }
+      else {
+        instance.popper.style.width = `${this.triggerEl.clientWidth}px`;
+      }
+    };
+    this.labelCssClasses = () => ({
+      label: true,
+      focused: this.isFocused,
+      disabled: this.disabled,
+    });
     this.iconStartCssClasses = () => ({
       'icon-start': true,
       'slot-hidden': !this.hasIconStartSlot,
       disabled: this.disabled,
+      [`size-${this.size}`]: true,
+      filled: !!this.textToDisplay || this.selectedItemsTextList.length > 0,
+      'filled-active': (!!this.textToDisplay || this.selectedItemsTextList.length > 0) && !this.isHiddenDropdown,
+      'filled-pressed': (!!this.textToDisplay || this.selectedItemsTextList.length > 0) && !!this.isHiddenDropdown && !!this.isFocused,
     });
-    this.labelCssClasses = () => ({
-      disabled: this.disabled,
-    });
-    this.isOpen = false;
-    this.searchText = '';
-    this.internalList = undefined;
-    this.renderedText = undefined;
-    this.emittedValue = undefined;
     this.hasIconStartSlot = false;
-    this.anchorButton = false;
-    this.shouldShowSearch = false;
-    this.focusType = undefined;
-    this.isRenderMessageInTooltip = false;
+    this.isEmpty = false;
+    this.isOnSearch = false;
+    this.searchText = '';
+    this.isAllSelected = false;
+    this.isInputFilled = false;
+    this.activeItem = undefined;
+    this.activeItems = [];
+    this.textToDisplay = undefined;
+    this.selectedItemsTextList = [];
+    this.isFocused = false;
+    this.focusType = getInitFocusInfo();
     this.withScroll = false;
-    this.checkedItems = 0;
-    this.disabledItems = 0;
-    this.textOverflows = false;
-    this.isContainerFocused = false;
+    this.isInfiniteLoading = false;
+    this.hasClickedBtn = false;
+    this.isHiddenDropdown = true;
     this.shouldTruncate = false;
-    this.consistentSearch = false;
-    this.value = undefined;
-    this.list = [];
-    this.type = 'single';
-    this.isTextSelect = false;
-    this.withSearch = 'auto';
-    this.disabled = false;
-    this.required = false;
-    this.autoFocus = false;
+    this.displayedItemsCount = 0;
+    this.isInModal = false;
+    this.modalRef = undefined;
     this.loading = false;
-    this.withFolder = false;
-    this.truncate = true;
-    this.maximumSelectedItems = undefined;
-    this.getItemKey = undefined;
-    this.placeholder = undefined;
+    this.infinite = false;
+    this.infiniteLastPage = true;
+    this.loadMore = undefined;
     this.name = undefined;
-    this.labelConfig = undefined;
-    this.labelTooltipConfig = {
-      popperOptions: { strategy: 'fixed' },
-    };
-    this.size = 'm';
-    this.enableStaticOptions = false;
-    this.maxItemsToDisplay = 2;
-    this.dropdownWidth = 'auto';
+    this.type = 'single';
+    this.value = undefined;
+    this.withCustomValue = false;
+    this.getOptionId = item => item.id;
+    this.getOptionLabel = item => item.label;
+    this.inputValue = undefined;
     this.displayValue = undefined;
-    this.isDropdownOpen = false;
-    this.ariaProps = {};
+    this.placeholder = undefined;
+    this.required = false;
+    this.disabled = false;
+    this.withSearch = 'auto';
+    this.withFolder = false;
+    this.autoFocus = false;
+    this.size = 'm';
     this.message = undefined;
     this.messageType = undefined;
     this.maxMessageLength = undefined;
+    this.maxItemsToDisplay = 2;
+    this.dropdownPosition = 'absolute';
+    this.ariaProps = {};
     this.dropdownConfig = {};
-    this.locales = {};
-    this.showSelectAllText = true;
-    this.inputValue = undefined;
-    this.maskOptions = undefined;
-    this.inputType = 'text';
     this.tooltipConfig = {};
-    this.messageInTooltip = false;
+    this.labelConfig = undefined;
+    this.enableStaticOptions = false;
+    this.labelTooltipConfig = {
+      popperOptions: { strategy: 'fixed' },
+    };
+    this.locales = {
+      emptyText: 'Nothing Found',
+      clearAllText: 'Clear All',
+      selectAllText: 'Select All',
+      searchInputPlaceholder: 'Search',
+      allSelectedText: 'All selected',
+      selectLabel: 'selected',
+    };
+    this.dropdownWidth = 'auto';
+    this.showSelectAllText = true;
+    this.truncate = true;
+    this.maximumSelectedItems = undefined;
   }
-  onUpdateDisplayValue() {
-    if (this.type === 'single' && this.displayValue !== undefined) {
-      setTimeout(() => {
-        this.checkIfTextOverflows();
-      }, 50);
+  handleSelectOptionClick(params) {
+    const oldValue = this.value;
+    const { target, value } = params.detail;
+    if (this.type === 'multiple') {
+      const list = (this.value || []);
+      if (list.some(val => this.isOptionsValueEqual(val, value))) {
+        target.removeAttribute('checked');
+        this.isAllSelected = false;
+        this.value = list.filter(val => !this.isOptionsValueEqual(val, value));
+        this.activeItems = this.activeItems.filter(el => !this.isOptionsValueEqual(el.value, value));
+      }
+      else {
+        target.setAttribute('checked', 'true');
+        this.value = [...list, value];
+        this.activeItems = [...new Set([...this.activeItems, target])];
+      }
+      this.setMultipleTextToDisplay();
+      this.countItems();
+    }
+    else {
+      this.value = value;
+      if (this.type === 'text' && this.truncate) {
+        this.shouldTruncate = false;
+        setTimeout(() => {
+          const textEl = this.host.shadowRoot?.querySelector('[part="text"]');
+          if (textEl) {
+            this.shouldTruncate = textEl.clientWidth > this.host.clientWidth;
+          }
+        }, TRUNCATION_DELAY);
+      }
+    }
+    this.inputRef?.focus();
+    if (!this.isOptionsValueEqual(oldValue, this.value)) {
+      this.type === 'combined'
+        ? this.wppChange.emit({
+          value: this.value,
+          inputValue: this.inputValue,
+          name: this.name,
+        })
+        : this.wppChange.emit({
+          value: this.value,
+          name: this.name,
+        });
     }
   }
-  onUpdateValue() {
+  componentWillLoad() {
+    this.updateSlotData();
+    if (this.type === 'multiple')
+      this.getEnabledItems();
+  }
+  updateValue(newValue) {
+    const stringifiedNewValue = String(newValue);
+    if (this.type !== 'multiple' && (!stringifiedNewValue || newValue === undefined)) {
+      this.value = '';
+      this.activeItem = null;
+      this.textToDisplay = '';
+    }
+    if (this.type === 'multiple' && isEmpty(newValue) && !isEmpty(this.value)) {
+      this.handleClearAll();
+      return;
+    }
+    this.totalItems = 0;
+    const activeItemsValues = this.activeItems.map(({ value }) => value);
+    this.host.childNodes.forEach(el => {
+      const element = el;
+      if (element.tagName === transformToVersionedTag(SELECT_OPTION_TAG_NAME).toUpperCase()) {
+        if (this.type === 'multiple') {
+          const isItemChecked = this.value.some((valueItem) => this.isOptionsValueEqual(valueItem, element.value));
+          if (!element.disabled || (element.disabled && isItemChecked)) {
+            this.totalItems = this.totalItems + 1;
+          }
+          const list = (this.value || []);
+          if (list.some(val => this.isOptionsValueEqual(val, element.value))) {
+            element.setAttribute('checked', 'true');
+            if (!activeItemsValues.some(val => this.isOptionsValueEqual(val, element.value))) {
+              this.activeItems = [...new Set([...this.activeItems, element])];
+            }
+          }
+          else {
+            element.removeAttribute('checked');
+            this.activeItems = this.activeItems.filter(el => !this.isOptionsValueEqual(el.value, element.value));
+          }
+        }
+        else {
+          if (this.isOptionsValueEqual(element.value, newValue)) {
+            element.setAttribute('checked', 'true');
+            this.activeItem = element;
+            const textContent = this.withCustomValue
+              ? this.getOptionLabel(this.activeItem.value)
+              : this.activeItem.querySelector('[slot="label"]')?.textContent || this.activeItem.textContent || '';
+            this.textToDisplay = textContent;
+          }
+          else {
+            element.removeAttribute('checked');
+          }
+        }
+      }
+    });
+    if (this.type === 'multiple') {
+      this.setMultipleTextToDisplay();
+      this.validateMaxSelected();
+      this.isAllSelected = this.totalItems !== 0 && this.activeItems.length === this.totalItems;
+    }
+  }
+  onUpdateValue(newValue, oldValue) {
+    if (this.type === 'multiple' && !Array.isArray(newValue)) {
+      throw new Error(MULTIPLE_SELECT_SINGLE_VALUE_ERROR);
+    }
+    if (this.isOptionsValueEqual(oldValue, newValue) && !isEmpty(newValue) && !this.isAllSelected) {
+      return;
+    }
+    this.updateValue(newValue);
+  }
+  onLoadingChange(loading) {
+    setTimeout(() => {
+      this.updateOptions();
+    }, 0);
+    if (loading) {
+      this.scrollOptionsToTop();
+      if (this.isInfiniteLoading) {
+        this.isInfiniteLoading = false;
+        if (this.infiniteLoadingPromise) {
+          this.infiniteLoadingPromise.cancelled = true;
+        }
+      }
+    }
+    else {
+      this.handleSearch(this.searchText);
+    }
+  }
+  /**
+   * Sets focus on native input
+   */
+  async setFocus() {
+    setTimeout(() => {
+      this.handleLabelClick();
+    }, 0);
+  }
+  /**
+   * Update options list programmatically
+   */
+  async updateOptions() {
+    setTimeout(() => {
+      this.handleSlotChange();
+      this.updateValue(this.value);
+    }, 0);
+  }
+  componentDidLoad() {
+    const parentModal = this.findParentModal();
+    if (parentModal) {
+      this.isInModal = true;
+      this.modalRef = parentModal;
+      // Apply custom dropdown config for modal only for the case with modal
+      Object.assign(this.dropdownConfig, this.customDropdownConfig());
+    }
     if (this.type === 'multiple' && !Array.isArray(this.value)) {
       throw new Error(MULTIPLE_SELECT_SINGLE_VALUE_ERROR);
     }
-    // Every time this.value changes the text in the anchor is changed.
-    this.renderedText = '';
-    this.emittedValue = this.value;
-    // We filter the whole list passed to the component, not just the renderedList,
-    // because we can select items programatically that are not currently visible
-    if (this.type === 'multiple') {
-      this.checkListAgainstValueMultiple();
-    }
-    else {
-      this.checkListAgainstValueSingle();
-    }
-    if (this.type === 'text' || this.isTextSelect) {
-      if (this.truncate) {
-        this.checkTruncationInTextSelect();
-      }
-    }
-    else {
-      requestAnimationFrame(() => {
-        this.checkIfTextOverflows();
-      });
-    }
-  }
-  onUpdateEmittedValue() {
-    // Every time this.emittedValue is changed, we emit it, except when it is equal to this.value. The user will change
-    // the value of the component on his side and this.onUpdateValue is triggered.
-    if (isEqual(this.value, this.emittedValue))
-      return;
-    this.value = this.type === 'multiple' ? [...this.emittedValue] : this.emittedValue;
-    this.wppChange.emit({
-      value: this.value,
-      selectedItems: this.getSelectedItems(),
-      ...(this.name !== undefined && { name: this.name }),
-      ...(this.type === 'combined'
-        ? { inputValue: this.inputValue || '' }
-        : this.shouldShowSearch && { inputValue: this.searchText }),
-    });
-  }
-  onUpdateList() {
-    // When "enableStaticOptions=true", only the initial list is taken into consideration.
-    if (this.enableStaticOptions)
-      return;
-    this.renderedText = '';
-    if (this.type === 'multiple') {
-      this.onUpdateListMultiple();
-    }
-    else {
-      this.onUpdateListSingle();
-    }
-    // Every time "this.list" changes, we check if we can still render search input.
-    this.setShouldShowSearch();
-  }
-  onUpdateSearchText() {
-    if (this.searchText === '') {
-      this.internalList?.forEach((listItem) => {
-        listItem.highlight = '';
-        listItem.hidden = false;
-      });
-      return;
-    }
-    // When search changes, we also set "highlight=this.searchText" in order to
-    // highlight characters in each label.
-    const searchTextLowerCase = this.searchText.toLowerCase().trim();
-    this.internalList?.forEach((listItem) => {
-      listItem.highlight = this.searchText;
-      listItem.hidden = !listItem.label.toLowerCase().includes(searchTextLowerCase);
-    });
-  }
-  onUpdateLoading() {
-    if (!this.loading) {
-      setTimeout(() => {
-        this.updateScrollState();
-      }, 50);
-    }
-  }
-  onUpdateMaximumSelectedItems() {
-    this.canSelectAll = this.maximumSelectedItems ? false : true;
-    if (this.maximumSelectedItems) {
-      if (this.checkedItems === this.maximumSelectedItems) {
-        this.hasReachedLimit = false;
-        this.disableOtherElements();
-        this.setRenderedTextMultiple();
-        return;
-      }
-      else if (this.checkedItems > this.maximumSelectedItems) {
-        this.hasReachedLimit = false;
-        const values = this.value.slice(0, this.maximumSelectedItems);
-        this.emittedValue = values;
-        return;
-      }
-    }
-    this.enablePreviousElements();
-    this.setRenderedTextMultiple();
-  }
-  onUpdateMessage() {
-    this.checkMessageInTooltip();
-  }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
-  }
-  /**
-   * Sets focus on the select and opens the dropdown.
-   */
-  async setFocus() {
-    this.handleClick(true);
-  }
-  componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
-    if (this.type === 'text')
-      console.warn('The value "text" for the type property is deprecated and will be removed in version 4.0.0.');
-    this.versionToCompare = version.slice(1).split('-').join('');
-    this.updateSlotData();
-    this.checkMessageInTooltip();
-    // Specific "componentWillLoad()" behaviour based on type of component.
-    if (this.type === 'multiple') {
-      if (!Array.isArray(this.value)) {
-        throw new Error(MULTIPLE_SELECT_SINGLE_VALUE_ERROR);
-      }
-      // Search is controlled by the component, so initially all items should have "hidden: false"
-      this.internalList = [
-        ...this.list.map((item) => ({
-          ...item,
-          selectable: true,
-          multiple: true,
-          hidden: false,
-          checked: false,
-        })),
-      ];
-      if (this.value?.length > 0) {
-        this.checkListAgainstValueMultiple();
-      }
-      else {
-        this.canClearAll = false;
-        this.canSelectAll = true;
-      }
-    }
-    else {
-      this.internalList = [
-        ...this.list.map((listItem) => ({ ...listItem, hidden: false, checked: false })),
-      ];
-      if (this.value === undefined)
-        return;
-      this.checkListAgainstValueSingle();
-    }
-  }
-  componentDidLoad() {
     setTimeout(() => {
-      if (this.displayValue === undefined) {
-        this.createTippyInstance();
+      if (['multiple', 'single'].includes(this.type)) {
+        this.updateDropdownHeight();
       }
-      if (this.anchorRef &&
-        this.autoFocus &&
-        document.activeElement?.tagName.toLowerCase() !== transformToVersionedTag(`${this.LIB_COMPONENTS_PREFIX}select`)) {
-        // If multiple select elements on a page have the "this.autoFocus=true" property,
-        // we should open only the first select with this property.
-        this.handleClick(true);
-      }
-      if (this.type !== 'text' || !this.isTextSelect) {
-        this.resizeObserver = new ResizeObserver(this.checkIfTextOverflows);
-        if (this.resizeObserver && this.anchorRef) {
-          this.resizeObserver.observe(this.anchorRef);
+    }, 0);
+    window.addEventListener('resize', this.onWindowResize);
+    if (!this.enableStaticOptions && this.host) {
+      const observer = new MutationObserver(mutationsList => {
+        const addedValues = mutationsList
+          .flatMap(el => Array.from(el.addedNodes))
+          .filter(el => el.tagName === transformToVersionedTag(SELECT_OPTION_TAG_NAME).toUpperCase())
+          .map(el => el.value);
+        const removedValues = mutationsList
+          .flatMap(el => Array.from(el.removedNodes))
+          .filter(el => el.tagName === transformToVersionedTag(SELECT_OPTION_TAG_NAME).toUpperCase() &&
+          !addedValues.find(addedValue => addedValue === el.value))
+          .map(el => {
+          if (this.type === 'multiple') {
+            const htmlEl = el;
+            htmlEl.removeAttribute('checked');
+          }
+          return el.value;
+        });
+        if (typeof this.value === 'object' && isEmpty(this.value))
+          return;
+        if (this.canLoadMore())
+          return;
+        if (this.type === 'multiple') {
+          const remainValues = (this.value || []).filter((val) => !removedValues.some(removedVal => removedVal === val));
+          this.activeItems = this.activeItems.filter(activeItem => remainValues.find((remainValueItem) => activeItem.value === remainValueItem));
+          this.updateValue(remainValues);
+          if (!this.isOptionsValueEqual(this.value, remainValues)) {
+            this.value = remainValues;
+            this.wppChange.emit({
+              value: this.value,
+              name: this.name,
+            });
+          }
         }
-      }
-      else {
-        if (this.truncate) {
-          this.checkTruncationInTextSelect();
+        else {
+          if (removedValues.some(removedVal => removedVal === this.value)) {
+            this.updateValue('');
+          }
         }
+        this.handleSlotChange();
+      });
+      observer.observe(this.host, { childList: true, subtree: true });
+      this.observers.push(observer);
+    }
+    if (this.type === 'multiple') {
+      const placeholderElement = this.inputRef.querySelector('.input-text');
+      const mutationObserver = new MutationObserver(this.updateIsFilled);
+      const resizeObserver = new ResizeObserver(this.updateIsFilled);
+      mutationObserver.observe(placeholderElement, { childList: true });
+      this.observers.push(mutationObserver);
+      if (resizeObserver) {
+        resizeObserver.observe(placeholderElement);
+      }
+      this.observers.push(resizeObserver);
+    }
+    if (typeof this.value === 'object' && isEmpty(this.value))
+      return;
+    this.value = this.value || this.getValueFromDOM();
+    this.updateValue(this.value);
+    if (this.type === 'multiple') {
+      this.countItems();
+    }
+    requestAnimationFrame(() => {
+      if (this.type === 'single' || this.type === 'multiple') {
+        this.countDisplayedItems();
+      }
+      if (this.type === 'text' && this.truncate) {
+        const textEl = this.host.shadowRoot?.querySelector('[part="text"]');
+        const triggerEl = this.host.shadowRoot?.querySelector('.trigger-element');
+        this.shouldTruncate = (triggerEl?.clientWidth || 0) < (textEl?.clientWidth || 0);
       }
     });
-  }
-  connectedCallback() {
-    // Reinitialize tippy and mutation observer if disconnectedCallback was called and
-    // the same instance of component was deattached and attached to DOM again
-    if (this.tippyInstance?.state.isDestroyed) {
-      this.createTippyInstance();
-    }
+    autoFocusElement(this.autoFocus, this.inputRef);
   }
   disconnectedCallback() {
-    if (this.tippyInstance) {
-      this.tippyInstance.destroy();
-    }
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect();
-    }
+    setHasFocused(false);
+    this.observers.forEach((observer, i) => {
+      if (observer) {
+        observer.disconnect();
+        delete this.observers[i];
+      }
+    });
+    window.removeEventListener('resize', this.onWindowResize);
   }
   render() {
-    if (this.type === 'single' && !this.isTextSelect) {
-      return renderSingleSelect.call(this, true, this.size, this.isRenderMessageInTooltip);
+    if (this.type === 'single') {
+      return renderSingleSelect.call(this);
     }
     if (this.type === 'multiple') {
       return renderMultipleSelect.call(this);
     }
-    if (this.type === 'text' || (this.type === 'single' && this.isTextSelect)) {
-      return renderTextSelect.call(this);
+    if (this.type === 'combined') {
+      return renderCombinedSelect.call(this);
     }
-    return renderCombinedSelect.call(this);
+    return renderTextSelect.call(this);
   }
   static get is() { return "wpp-select"; }
-  static get registryIs() { return "wpp-select-v3-3-0"; }
+  static get registryIs() { return "wpp-select-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -803,7 +909,7 @@ export class WppSelect {
   }
   static get properties() {
     return {
-      "consistentSearch": {
+      "loading": {
         "type": "boolean",
         "mutable": false,
         "complexType": {
@@ -815,23 +921,126 @@ export class WppSelect {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "If `true`, the search input should retain its value when the dropdown is closed.\nThis is useful for cases where the user might want to continue searching"
+          "text": "If the component is loading."
         },
-        "attribute": "consistent-search",
+        "attribute": "loading",
+        "reflect": true,
+        "defaultValue": "false"
+      },
+      "infinite": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "If the autocomplete options list has infinite scroll.\nThis prop shouldn't change after the component is rendered."
+        },
+        "attribute": "infinite",
         "reflect": false,
         "defaultValue": "false"
+      },
+      "infiniteLastPage": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "If infinite scroll can request more pages to load."
+        },
+        "attribute": "infinite-last-page",
+        "reflect": false,
+        "defaultValue": "true"
+      },
+      "loadMore": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "LoadMoreHandler",
+          "resolved": "(() => Promise<void>) | undefined",
+          "references": {
+            "LoadMoreHandler": {
+              "location": "import",
+              "path": "../wpp-autocomplete/types",
+              "id": "src/components/wpp-autocomplete/types.ts::LoadMoreHandler"
+            }
+          }
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Helper that requests to load more options on infinite scroll.\nThis request is considered done when the returned `Promise` is settled.\nThis prop is required when `infinite` is set to `true`."
+        }
+      },
+      "name": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Defines the input name."
+        },
+        "attribute": "name",
+        "reflect": false
+      },
+      "type": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "SelectTypes",
+          "resolved": "\"combined\" | \"multiple\" | \"single\" | \"text\"",
+          "references": {
+            "SelectTypes": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-select/types.ts::SelectTypes"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the input type."
+        },
+        "attribute": "type",
+        "reflect": true,
+        "defaultValue": "'single'"
       },
       "value": {
         "type": "any",
         "mutable": true,
         "complexType": {
-          "original": "SelectValue | SelectValue[]",
+          "original": "SelectValue[] | SelectValue | SelectOption[]",
           "resolved": "any",
           "references": {
             "SelectValue": {
               "location": "import",
-              "path": "../wpp-select/types",
+              "path": "./types",
               "id": "src/components/wpp-select/types.ts::SelectValue"
+            },
+            "SelectOption": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-select/types.ts::SelectOption"
             }
           }
         },
@@ -844,53 +1053,7 @@ export class WppSelect {
         "attribute": "value",
         "reflect": false
       },
-      "list": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "ListItemInterface[]",
-          "resolved": "ListItemInterface[]",
-          "references": {
-            "ListItemInterface": {
-              "location": "import",
-              "path": "./types",
-              "id": "src/components/wpp-select/types.ts::ListItemInterface"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "List of items in the dropdown."
-        },
-        "defaultValue": "[]"
-      },
-      "type": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "SelectTypes",
-          "resolved": "\"combined\" | \"multiple\" | \"single\" | \"text\"",
-          "references": {
-            "SelectTypes": {
-              "location": "import",
-              "path": "../wpp-select/types",
-              "id": "src/components/wpp-select/types.ts::SelectTypes"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the WppSelect component type.\n* Valid values: 'single' | 'multiple' | 'combined'\n* Note: The value 'text' is deprecated and will be removed in version 4.0.0. Use WppActionButton with WppMenuContext to achieve the same result."
-        },
-        "attribute": "type",
-        "reflect": true,
-        "defaultValue": "'single'"
-      },
-      "isTextSelect": {
+      "withCustomValue": {
         "type": "boolean",
         "mutable": false,
         "complexType": {
@@ -901,14 +1064,152 @@ export class WppSelect {
         "required": false,
         "optional": false,
         "docs": {
-          "tags": [{
-              "name": "internal",
-              "text": undefined
-            }],
-          "text": "This is property for internal use only. It is used to render text variant of the WppSelect component (used in WppPagination component)"
+          "tags": [],
+          "text": "If `true`, the component can accept custom value objects.\nAdditionally, the `getOptionId` and `getOptionLabel` property may be overwritten to retrieve the necessary property for object identification."
         },
-        "attribute": "is-text-select",
+        "attribute": "with-custom-value",
         "reflect": false,
+        "defaultValue": "false"
+      },
+      "getOptionId": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "GetSelectOptionIdHandler",
+          "resolved": "(item: SelectOption) => SelectOptionId",
+          "references": {
+            "GetSelectOptionIdHandler": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-select/types.ts::GetSelectOptionIdHandler"
+            },
+            "SelectDefaultOption": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-select/types.ts::SelectDefaultOption"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Helper that gets ID values from the select options."
+        },
+        "defaultValue": "item => (item as SelectDefaultOption).id"
+      },
+      "getOptionLabel": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "GetSelectOptionLabelHandler",
+          "resolved": "(item: SelectOption) => string",
+          "references": {
+            "GetSelectOptionLabelHandler": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-select/types.ts::GetSelectOptionLabelHandler"
+            },
+            "SelectDefaultOption": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-select/types.ts::SelectDefaultOption"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Helper that gets a label for the select options."
+        },
+        "defaultValue": "item => (item as SelectDefaultOption).label"
+      },
+      "inputValue": {
+        "type": "string",
+        "mutable": true,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the combined input value."
+        },
+        "attribute": "input-value",
+        "reflect": false
+      },
+      "displayValue": {
+        "type": "string",
+        "mutable": true,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the displayed input value. If provided overrides the existing displayed value"
+        },
+        "attribute": "display-value",
+        "reflect": false
+      },
+      "placeholder": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Defines the input placeholder."
+        },
+        "attribute": "placeholder",
+        "reflect": false
+      },
+      "required": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "If the input is required."
+        },
+        "attribute": "required",
+        "reflect": true,
+        "defaultValue": "false"
+      },
+      "disabled": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "If the input is disabled."
+        },
+        "attribute": "disabled",
+        "reflect": true,
         "defaultValue": "false"
       },
       "withSearch": {
@@ -929,7 +1230,7 @@ export class WppSelect {
         "reflect": true,
         "defaultValue": "'auto'"
       },
-      "disabled": {
+      "withFolder": {
         "type": "boolean",
         "mutable": false,
         "complexType": {
@@ -941,27 +1242,9 @@ export class WppSelect {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "If the input is disabled."
+          "text": "If `true` the dropdown has controls folder."
         },
-        "attribute": "disabled",
-        "reflect": true,
-        "defaultValue": "false"
-      },
-      "required": {
-        "type": "boolean",
-        "mutable": false,
-        "complexType": {
-          "original": "boolean",
-          "resolved": "boolean",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "If the input is required."
-        },
-        "attribute": "required",
+        "attribute": "with-folder",
         "reflect": true,
         "defaultValue": "false"
       },
@@ -980,28 +1263,220 @@ export class WppSelect {
           "text": "If `true`, the input should be focused on page load"
         },
         "attribute": "auto-focus",
-        "reflect": true,
-        "defaultValue": "false"
-      },
-      "loading": {
-        "type": "boolean",
-        "mutable": false,
-        "complexType": {
-          "original": "boolean",
-          "resolved": "boolean",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "If the component is loading."
-        },
-        "attribute": "loading",
         "reflect": false,
         "defaultValue": "false"
       },
-      "withFolder": {
+      "size": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "SelectSize",
+          "resolved": "\"m\" | \"s\"",
+          "references": {
+            "SelectSize": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-select/types.ts::SelectSize"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the input size."
+        },
+        "attribute": "size",
+        "reflect": false,
+        "defaultValue": "'m'"
+      },
+      "message": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Defines the input message."
+        },
+        "attribute": "message",
+        "reflect": false
+      },
+      "messageType": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "InputMessageTypes",
+          "resolved": "\"error\" | \"warning\" | undefined",
+          "references": {
+            "InputMessageTypes": {
+              "location": "import",
+              "path": "../../types/common",
+              "id": "src/types/common.ts::InputMessageTypes"
+            }
+          }
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Defines the input message type."
+        },
+        "attribute": "message-type",
+        "reflect": false
+      },
+      "maxMessageLength": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Defines the input message maximum length."
+        },
+        "attribute": "max-message-length",
+        "reflect": false
+      },
+      "maxItemsToDisplay": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines multiple select, maximum selected items to show."
+        },
+        "attribute": "max-items-to-display",
+        "reflect": false,
+        "defaultValue": "2"
+      },
+      "dropdownPosition": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "ListPosition",
+          "resolved": "\"absolute\" | \"fixed\"",
+          "references": {
+            "ListPosition": {
+              "location": "import",
+              "path": "../../types/common",
+              "id": "src/types/common.ts::ListPosition"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the dropdown CSS position. If you want to overlay `overflow: hidden`, use `fixed`."
+        },
+        "attribute": "dropdown-position",
+        "reflect": false,
+        "defaultValue": "'absolute'"
+      },
+      "ariaProps": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "AriaProps",
+          "resolved": "AriaProps",
+          "references": {
+            "AriaProps": {
+              "location": "import",
+              "path": "../../types/common",
+              "id": "src/types/common.ts::AriaProps"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Contains the component `aria-` props."
+        },
+        "defaultValue": "{}"
+      },
+      "dropdownConfig": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "DropdownConfig",
+          "resolved": "DropdownConfig",
+          "references": {
+            "DropdownConfig": {
+              "location": "import",
+              "path": "../../types/common",
+              "id": "src/types/common.ts::DropdownConfig"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the dropdown configuration. Under the hood dropdown using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
+        },
+        "defaultValue": "{}"
+      },
+      "tooltipConfig": {
+        "type": "unknown",
+        "mutable": true,
+        "complexType": {
+          "original": "DropdownConfig",
+          "resolved": "DropdownConfig",
+          "references": {
+            "DropdownConfig": {
+              "location": "import",
+              "path": "../../types/common",
+              "id": "src/types/common.ts::DropdownConfig"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the dropdown configuration. Under the hood dropdown using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
+        },
+        "defaultValue": "{}"
+      },
+      "labelConfig": {
+        "type": "unknown",
+        "mutable": true,
+        "complexType": {
+          "original": "SelectLabelConfig",
+          "resolved": "LabelConfig | undefined",
+          "references": {
+            "SelectLabelConfig": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-select/types.ts::SelectLabelConfig"
+            }
+          }
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Indicates label config"
+        }
+      },
+      "enableStaticOptions": {
         "type": "boolean",
         "mutable": false,
         "complexType": {
@@ -1013,11 +1488,91 @@ export class WppSelect {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "If `true` the dropdown has controls folder, meaning that the \"Select All\" and \"Clear All\" button will appear at the bottom of the dropdown.\nThis property works just for the multiple select."
+          "text": "If true, wouldn't update `select` on `options` change"
         },
-        "attribute": "with-folder",
-        "reflect": true,
+        "attribute": "enable-static-options",
+        "reflect": false,
         "defaultValue": "false"
+      },
+      "labelTooltipConfig": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "DropdownConfig",
+          "resolved": "DropdownConfig",
+          "references": {
+            "DropdownConfig": {
+              "location": "import",
+              "path": "../../types/common",
+              "id": "src/types/common.ts::DropdownConfig"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Tooltip config for label, under the hood tooltip using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
+        },
+        "defaultValue": "{\n    popperOptions: { strategy: 'fixed' },\n  }"
+      },
+      "locales": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "SelectLocaleInterface",
+          "resolved": "SelectLocaleInterface",
+          "references": {
+            "SelectLocaleInterface": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-select/types.ts::SelectLocaleInterface"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the component locale types."
+        },
+        "defaultValue": "{\n    emptyText: 'Nothing Found',\n    clearAllText: 'Clear All',\n    selectAllText: 'Select All',\n    searchInputPlaceholder: 'Search',\n    allSelectedText: 'All selected',\n    selectLabel: 'selected',\n  }"
+      },
+      "dropdownWidth": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "'auto' | string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the dropdown width. The width of the dropdown cannot be smaller than the width of the trigger element."
+        },
+        "attribute": "dropdown-width",
+        "reflect": false,
+        "defaultValue": "'auto'"
+      },
+      "showSelectAllText": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "If 'true', instead of displaying comma-separated values, the input should show the text \"All selected\"\nwhen all options in the multi-select are selected."
+        },
+        "attribute": "show-select-all-text",
+        "reflect": false,
+        "defaultValue": "true"
       },
       "truncate": {
         "type": "boolean",
@@ -1049,489 +1604,35 @@ export class WppSelect {
         "optional": true,
         "docs": {
           "tags": [],
-          "text": "Defines the maximum number of items the user can select in a dropdown. If the maximum number is reached, the other items are disabled.\nThis property can be used only on the \"multiple\" select."
+          "text": "Defines the maximum number of items the user can select in a dropdown. If the maximum number is reached, the other items are disabled."
         },
         "attribute": "maximum-selected-items",
         "reflect": false
-      },
-      "getItemKey": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "(value: ListValue) => string | number | undefined",
-          "resolved": "(value: ListValue) => string | number | undefined",
-          "references": {
-            "ListValue": {
-              "location": "import",
-              "path": "../wpp-list-item/types",
-              "id": "src/components/wpp-list-item/types.ts::ListValue"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Helper function to return the key of the list-item in the list.\nShould be used when the value of the list item is an object."
-        }
-      },
-      "placeholder": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string | undefined",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": "Defines the input placeholder."
-        },
-        "attribute": "placeholder",
-        "reflect": false
-      },
-      "name": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string | undefined",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": "Defines the input name."
-        },
-        "attribute": "name",
-        "reflect": false
-      },
-      "labelConfig": {
-        "type": "unknown",
-        "mutable": true,
-        "complexType": {
-          "original": "SelectLabelConfig",
-          "resolved": "LabelConfig | undefined",
-          "references": {
-            "SelectLabelConfig": {
-              "location": "import",
-              "path": "../wpp-select/types",
-              "id": "src/components/wpp-select/types.ts::SelectLabelConfig"
-            }
-          }
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": "Indicates the configuration of the label."
-        }
-      },
-      "labelTooltipConfig": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "DropdownConfig",
-          "resolved": "DropdownConfig",
-          "references": {
-            "DropdownConfig": {
-              "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::DropdownConfig"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Tooltip config for label, under the hood tooltip using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
-        },
-        "defaultValue": "{\n    popperOptions: { strategy: 'fixed' },\n  }"
-      },
-      "size": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "SelectSize",
-          "resolved": "\"m\" | \"s\"",
-          "references": {
-            "SelectSize": {
-              "location": "import",
-              "path": "../wpp-select/types",
-              "id": "src/components/wpp-select/types.ts::SelectSize"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the input size."
-        },
-        "attribute": "size",
-        "reflect": false,
-        "defaultValue": "'m'"
-      },
-      "enableStaticOptions": {
-        "type": "boolean",
-        "mutable": false,
-        "complexType": {
-          "original": "boolean",
-          "resolved": "boolean",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "If true, wouldn't update `select` when the list changes."
-        },
-        "attribute": "enable-static-options",
-        "reflect": false,
-        "defaultValue": "false"
-      },
-      "maxItemsToDisplay": {
-        "type": "number",
-        "mutable": false,
-        "complexType": {
-          "original": "number",
-          "resolved": "number",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines multiple select, maximum selected items to show."
-        },
-        "attribute": "max-items-to-display",
-        "reflect": false,
-        "defaultValue": "2"
-      },
-      "dropdownWidth": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "'auto' | string",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the dropdown width. The width of the dropdown cannot be smaller than the width of the trigger element."
-        },
-        "attribute": "dropdown-width",
-        "reflect": false,
-        "defaultValue": "'auto'"
-      },
-      "displayValue": {
-        "type": "string",
-        "mutable": true,
-        "complexType": {
-          "original": "string",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the displayed input value. If provided overrides the existing displayed value.\nThis property should be used only in custom single selects."
-        },
-        "attribute": "display-value",
-        "reflect": false
-      },
-      "isDropdownOpen": {
-        "type": "boolean",
-        "mutable": false,
-        "complexType": {
-          "original": "boolean",
-          "resolved": "boolean",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines if the dropdown of the select is opened or not. This property is used to control the direction of chevron icon (opened / closed).\nThis property should be used only in custom single selects."
-        },
-        "attribute": "is-dropdown-open",
-        "reflect": false,
-        "defaultValue": "false"
-      },
-      "ariaProps": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "AriaProps",
-          "resolved": "AriaProps",
-          "references": {
-            "AriaProps": {
-              "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::AriaProps"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Contains the component `aria-` props."
-        },
-        "defaultValue": "{}"
-      },
-      "message": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string | undefined",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": "Defines the input message. The message is placed right below the select."
-        },
-        "attribute": "message",
-        "reflect": false
-      },
-      "messageType": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "InputMessageTypes",
-          "resolved": "\"error\" | \"warning\" | undefined",
-          "references": {
-            "InputMessageTypes": {
-              "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::InputMessageTypes"
-            }
-          }
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": "Defines the input message type, which can be \"error\" or \"warning\". This property\nhas to be used together with \"message\"."
-        },
-        "attribute": "message-type",
-        "reflect": false
-      },
-      "maxMessageLength": {
-        "type": "number",
-        "mutable": false,
-        "complexType": {
-          "original": "number",
-          "resolved": "number | undefined",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": "Defines the input message maximum length. The message will get truncated after\nlimit is reached. This property has to be used together with \"message\"."
-        },
-        "attribute": "max-message-length",
-        "reflect": false
-      },
-      "dropdownConfig": {
-        "type": "unknown",
-        "mutable": true,
-        "complexType": {
-          "original": "DropdownConfig",
-          "resolved": "DropdownConfig",
-          "references": {
-            "DropdownConfig": {
-              "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::DropdownConfig"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the dropdown configuration. Under the hood dropdown using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
-        },
-        "defaultValue": "{}"
-      },
-      "locales": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "Partial<SelectLocaleInterface>",
-          "resolved": "{ emptyText?: string | undefined; clearAllText?: string | undefined; selectAllText?: string | undefined; searchInputPlaceholder?: string | undefined; allSelectedText?: string | undefined; selectLabel?: string | undefined; loadingText?: string | undefined; }",
-          "references": {
-            "Partial": {
-              "location": "global",
-              "id": "global::Partial"
-            },
-            "SelectLocaleInterface": {
-              "location": "import",
-              "path": "../wpp-select/types",
-              "id": "src/components/wpp-select/types.ts::SelectLocaleInterface"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the component locale types."
-        },
-        "defaultValue": "{}"
-      },
-      "showSelectAllText": {
-        "type": "boolean",
-        "mutable": false,
-        "complexType": {
-          "original": "boolean",
-          "resolved": "boolean",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "If 'true', instead of displaying comma-separated values, the input should show the text \"All selected\"\nwhen all options in the multi-select are selected."
-        },
-        "attribute": "show-select-all-text",
-        "reflect": false,
-        "defaultValue": "true"
-      },
-      "inputValue": {
-        "type": "string",
-        "mutable": true,
-        "complexType": {
-          "original": "string",
-          "resolved": "string",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the combined input value."
-        },
-        "attribute": "input-value",
-        "reflect": false
-      },
-      "maskOptions": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "MaskOptions",
-          "resolved": "undefined | { decimalPatternOptions?: MaskitoNumberParams | undefined; maskPlaceholder?: string | undefined; customPatternOptions?: MaskitoOptions | undefined; telPatternOptions?: { mask?: MaskitoMask | undefined; countryCode?: CountryCode | undefined; countryPhoneCode?: string | undefined; } | undefined; }",
-          "references": {
-            "MaskOptions": {
-              "location": "import",
-              "path": "../../components",
-              "id": "src/components.d.ts::MaskOptions"
-            }
-          }
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": "Defines the custom mask options. Currently, it can be used with the following types: 'decimal', 'text', 'tel'\nNOTE: Used only in `WppCombinedSelect`"
-        }
-      },
-      "inputType": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "InputTypes",
-          "resolved": "\"decimal\" | \"email\" | \"number\" | \"password\" | \"search\" | \"tel\" | \"text\" | \"url\"",
-          "references": {
-            "InputTypes": {
-              "location": "import",
-              "path": "../../components",
-              "id": "src/components.d.ts::InputTypes"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the type of input\nNOTE: Used only in `WppCombinedSelect`"
-        },
-        "attribute": "input-type",
-        "reflect": false,
-        "defaultValue": "'text'"
-      },
-      "tooltipConfig": {
-        "type": "unknown",
-        "mutable": true,
-        "complexType": {
-          "original": "DropdownConfig",
-          "resolved": "DropdownConfig",
-          "references": {
-            "DropdownConfig": {
-              "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::DropdownConfig"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the dropdown configuration of the tooltip of the select's message. Under the hood dropdown using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
-        },
-        "defaultValue": "{}"
-      },
-      "messageInTooltip": {
-        "type": "boolean",
-        "mutable": false,
-        "complexType": {
-          "original": "boolean",
-          "resolved": "boolean",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Render error/warning/info message in tooltip instead of an inline message below a select element"
-        },
-        "attribute": "message-in-tooltip",
-        "reflect": false,
-        "defaultValue": "false"
       }
     };
   }
   static get states() {
     return {
-      "isOpen": {},
-      "searchText": {},
-      "internalList": {},
-      "renderedText": {},
-      "emittedValue": {},
       "hasIconStartSlot": {},
-      "anchorButton": {},
-      "shouldShowSearch": {},
+      "isEmpty": {},
+      "isOnSearch": {},
+      "searchText": {},
+      "isAllSelected": {},
+      "isInputFilled": {},
+      "activeItem": {},
+      "activeItems": {},
+      "textToDisplay": {},
+      "selectedItemsTextList": {},
+      "isFocused": {},
       "focusType": {},
-      "isRenderMessageInTooltip": {},
       "withScroll": {},
-      "checkedItems": {},
-      "disabledItems": {},
-      "textOverflows": {},
-      "isContainerFocused": {},
-      "shouldTruncate": {}
+      "isInfiniteLoading": {},
+      "hasClickedBtn": {},
+      "isHiddenDropdown": {},
+      "shouldTruncate": {},
+      "displayedItemsCount": {},
+      "isInModal": {},
+      "modalRef": {}
     };
   }
   static get events() {
@@ -1546,13 +1647,13 @@ export class WppSelect {
           "text": "Emitted when an input value changes."
         },
         "complexType": {
-          "original": "SelectChangeEventDetails",
-          "resolved": "SelectChangeEventDetails",
+          "original": "SelectChangeEventDetail",
+          "resolved": "BaseFormControlEventDetail<any> & { name?: string | undefined; } | CombinedSelectControl<any> & { name?: string | undefined; }",
           "references": {
-            "SelectChangeEventDetails": {
+            "SelectChangeEventDetail": {
               "location": "import",
               "path": "./types",
-              "id": "src/components/wpp-select/types.ts::SelectChangeEventDetails"
+              "id": "src/components/wpp-select/types.ts::SelectChangeEventDetail"
             }
           }
         }
@@ -1596,6 +1697,21 @@ export class WppSelect {
             }
           }
         }
+      }, {
+        "method": "wppSearchValueChange",
+        "name": "wppSearchValueChange",
+        "bubbles": false,
+        "cancelable": true,
+        "composed": false,
+        "docs": {
+          "tags": [],
+          "text": "Emitted when the search value changes"
+        },
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        }
       }];
   }
   static get methods() {
@@ -1613,7 +1729,24 @@ export class WppSelect {
           "return": "Promise<void>"
         },
         "docs": {
-          "text": "Sets focus on the select and opens the dropdown.",
+          "text": "Sets focus on native input",
+          "tags": []
+        }
+      },
+      "updateOptions": {
+        "complexType": {
+          "signature": "() => Promise<void>",
+          "parameters": [],
+          "references": {
+            "Promise": {
+              "location": "global",
+              "id": "global::Promise"
+            }
+          },
+          "return": "Promise<void>"
+        },
+        "docs": {
+          "text": "Update options list programmatically",
           "tags": []
         }
       }
@@ -1622,38 +1755,20 @@ export class WppSelect {
   static get elementRef() { return "host"; }
   static get watchers() {
     return [{
-        "propName": "displayValue",
-        "methodName": "onUpdateDisplayValue"
-      }, {
         "propName": "value",
         "methodName": "onUpdateValue"
       }, {
-        "propName": "emittedValue",
-        "methodName": "onUpdateEmittedValue"
-      }, {
-        "propName": "list",
-        "methodName": "onUpdateList"
-      }, {
-        "propName": "searchText",
-        "methodName": "onUpdateSearchText"
-      }, {
         "propName": "loading",
-        "methodName": "onUpdateLoading"
-      }, {
-        "propName": "maximumSelectedItems",
-        "methodName": "onUpdateMaximumSelectedItems"
-      }, {
-        "propName": "messageInTooltip",
-        "methodName": "onUpdateMessage"
-      }, {
-        "propName": "message",
-        "methodName": "onUpdateMessage"
-      }, {
-        "propName": "messageType",
-        "methodName": "onUpdateMessage"
-      }, {
-        "propName": "locales",
-        "methodName": "onUpdateLocales"
+        "methodName": "onLoadingChange"
+      }];
+  }
+  static get listeners() {
+    return [{
+        "name": "wppChangeListItem",
+        "method": "handleSelectOptionClick",
+        "target": undefined,
+        "capture": true,
+        "passive": false
       }];
   }
 }

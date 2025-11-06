@@ -1,6 +1,10 @@
 import { EventEmitter } from '../../../../stencil-public-runtime';
-import { AriaProps, FOCUS_TYPE } from '../../../../types/common';
-import { CardChangeEventDetail, CardSize, CardState, CardType, CardValue } from './types';
+import { FOCUS_TYPE } from '../../../../types/common';
+import { CardSize, CardType, CardValue, CardState, CardChangeEventDetail } from './types';
+interface FocusType {
+  card: FOCUS_TYPE;
+  icon: FOCUS_TYPE;
+}
 /**
  * @slot - Content that is placed inside the card. The default slot, without the name attribute.
  * @slot header - Content that is placed inside the header section.
@@ -19,8 +23,7 @@ export declare class WppCard {
   hasHeaderSlot: boolean;
   hasActionsSlot: boolean;
   componentState: CardState;
-  isPressed: boolean;
-  focusType: FOCUS_TYPE;
+  focusType: FocusType;
   /**
    * Indicates the variant of the card.
    */
@@ -53,12 +56,6 @@ export declare class WppCard {
    */
   readonly nested: boolean;
   /**
-   * Used be remove tab navigation from the card in case when the component has WppRadio inside.
-   *
-   * @internal - This.prop is controlled by WppCardGroup component
-   */
-  index: number;
-  /**
    * If `true`, the card group has radio or checkbox button on the right-top-side of the card
    *
    * @internal - This prop is controlled by card group component, do not set it manually
@@ -73,14 +70,6 @@ export declare class WppCard {
    */
   readonly interactive: boolean;
   /**
-   * Accepts CSS background property values to control the component's background appearance. This can include colors, images, gradients, and positioning parameters.
-   */
-  readonly background?: string;
-  /**
-   * Contains the card `aria-` props.
-   */
-  readonly ariaProps: AriaProps;
-  /**
    * Emitted when the checked state changes
    */
   wppClick: EventEmitter<CardChangeEventDetail>;
@@ -92,18 +81,14 @@ export declare class WppCard {
    * Emitted when the card loses focus
    */
   wppBlur: EventEmitter<FocusEvent>;
-  /**
-   * Method that sets focus on the card element.
-   */
-  setFocus(): Promise<void>;
   componentWillLoad(): void;
+  private getUpdatedFocusInfo;
   private updateSlotData;
   private onClick;
   private onFocus;
   private onBlur;
   private onMouseDown;
   private onKeyUp;
-  private onKeyDown;
   private checkTabIndex;
   private updateComponentState;
   private cardCssClasses;
@@ -113,3 +98,4 @@ export declare class WppCard {
   private hostCssClasses;
   render(): any;
 }
+export {};

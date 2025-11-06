@@ -22,40 +22,24 @@ export class WppRadio {
         checked: this.checked,
       });
     };
-    // private onInput = () => {
-    //   if (this.disabled) return
-    //
-    //   this.setFocus()
-    // }
+    this.onInput = () => {
+      if (this.disabled)
+        return;
+      this.setFocus();
+    };
     this.onFocus = (event) => {
       this.wppFocus.emit(event);
     };
     this.onBlur = (event) => {
       this.focusType = FOCUS_TYPE.NONE;
-      this.tippyInstance?.hide();
       this.wppBlur.emit(event);
-      this.isPressed = false;
     };
-    this.onKeyDown = (event) => {
-      if (this.disabled)
-        return;
-      // Need to check if input got focus, because label can have icon with tooltip which also can be focused.
-      if ((event.key === 'Enter' || event.key === ' ') && this.host?.shadowRoot?.activeElement === this.inputRef) {
-        event.preventDefault();
-        const clickEvent = new MouseEvent('click', { bubbles: true, composed: true });
-        this.host.dispatchEvent(clickEvent);
-        this.isPressed = true;
-        this.checked = true;
-      }
+    this.onMouseDown = () => {
+      this.focusType = FOCUS_TYPE.MOUSE;
     };
     this.onKeyUp = (event) => {
-      if (event.key === 'Tab') {
+      if (event.key === 'Tab')
         this.focusType = FOCUS_TYPE.TAB;
-        this.tippyInstance?.show();
-      }
-      if (event.key === 'Enter' || event.key === ' ') {
-        this.isPressed = false;
-      }
     };
     this.hostCssClasses = () => ({
       'wpp-radio': true,
@@ -68,14 +52,8 @@ export class WppRadio {
       'tab-focus': this.focusType === FOCUS_TYPE.TAB,
       'with-text': !!this.labelConfig?.text,
       [this.internalState]: true,
-      pressed: this.isPressed,
-    });
-    this.inputCssClasses = () => ({
-      'radio-input': true,
-      'tab-focus': this.focusType === FOCUS_TYPE.TAB,
     });
     this.focusType = undefined;
-    this.isPressed = false;
     this.name = undefined;
     this.value = undefined;
     this.checked = false;
@@ -90,15 +68,12 @@ export class WppRadio {
     };
     this.internalState = '';
     this.index = 0;
-    this.decorative = false;
   }
   /**
    * Method that sets focus on the native input.
    */
   async setFocus() {
     this.inputRef?.focus();
-    this.focusType = FOCUS_TYPE.TAB;
-    this.tippyInstance?.show();
   }
   componentWillLoad() {
     const radioGroup = this.host.closest(transformToVersionedTag('wpp-radio-group'));
@@ -107,21 +82,10 @@ export class WppRadio {
     }
   }
   render() {
-    if (this.decorative) {
-      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "label, content, inner", name: this.name }, h("wpp-label-v3-3-0", { class: this.labelCssClasses(), part: "label" }, h("div", { class: "circle", part: "circle" }))));
-    }
-    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "label, content, inner", name: this.name }, h("wpp-label-v3-3-0", { class: this.labelCssClasses(), typography: "s-body", htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, onClick: this.onClick, tooltipConfig: {
-        ...{
-          onCreate: (instance) => {
-            this.tippyInstance = instance;
-          },
-          tabIndex: -1,
-        },
-        ...this.labelTooltipConfig,
-      }, part: "label" }, h("input", { class: this.inputCssClasses(), type: "radio", name: this.name, id: this.name, value: this.value, disabled: this.disabled, checked: this.checked, required: this.required, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-hidden": this.disabled ? 'true' : null, "aria-required": this.required.toString(), tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "circle", part: "circle" }))));
+    return (h(Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-checked": this.checked, "aria-required": this.required, onClick: this.onClick, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, tabIndex: this.disabled ? -1 : this.index, exportparts: "label, content, inner" }, h("wpp-label-v2-22-0", { class: this.labelCssClasses(), typography: "s-body", htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" }, h("input", { type: "radio", name: this.name, id: this.name, value: this.value, disabled: this.disabled, checked: this.checked, required: this.required, onInput: this.onInput, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, class: "radio-input", tabIndex: -1, part: "input", title: "" }), h("div", { class: "circle", part: "circle" }))));
   }
   static get is() { return "wpp-radio"; }
-  static get registryIs() { return "wpp-radio-v3-3-0"; }
+  static get registryIs() { return "wpp-radio-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -371,34 +335,12 @@ export class WppRadio {
         "attribute": "index",
         "reflect": false,
         "defaultValue": "0"
-      },
-      "decorative": {
-        "type": "boolean",
-        "mutable": false,
-        "complexType": {
-          "original": "boolean",
-          "resolved": "boolean | undefined",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [{
-              "name": "internal",
-              "text": "- This prop is controlled by WppCard component"
-            }],
-          "text": "Create a component with role presentation"
-        },
-        "attribute": "decorative",
-        "reflect": false,
-        "defaultValue": "false"
       }
     };
   }
   static get states() {
     return {
-      "focusType": {},
-      "isPressed": {}
+      "focusType": {}
     };
   }
   static get events() {

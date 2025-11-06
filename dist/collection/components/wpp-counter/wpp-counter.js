@@ -14,11 +14,6 @@ import { autoFocusElement } from '../../utils/utils';
 export class WppCounter {
   constructor() {
     this.handleValidate = (event) => {
-      // Any non-Tab keyboard interaction should exit the "tab highlight" mode
-      if (event.key !== 'Tab') {
-        this.inputRef?.classList.remove('tab-focus');
-        this.focusType = FOCUS_TYPE.NONE;
-      }
       if (event.key === 'ArrowUp') {
         if (this.value !== this.max)
           return this.addStepToValue(this.step);
@@ -37,47 +32,57 @@ export class WppCounter {
     };
     this.onInput = (event) => {
       this.focusType = FOCUS_TYPE.NONE;
-      this.inputRef?.classList.remove('tab-focus');
       const target = event.target;
-      const cleaned = target.value.replace(' ', '').replace(/[^0-9.]/g, '');
-      // If empty, keep view empty and don’t emit a stale value
-      if (cleaned === '') {
-        this.formattedValue = '';
-        target.value = '';
-        return;
-      }
+      const targetValue = target.value.replace(' ', '').replace(/[^0-9.]/g, '');
       if (Number.isInteger(this.step)) {
-        const inputValue = Number(cleaned) || 0;
-        // Removed the inputValue === 0 special-case that cleared the field and set formattedValue to ''. That logic conflated zero with “empty,” prevented users from entering a valid 0 when min = 0, and left this.value unchanged (stale). As a result, after clearing/typing 0 the increment used the previous value (e.g., 123 → clear → + => 124). Now we only treat the field as empty when the string is actually empty, don’t emit wppChange on empty, and baseline +/-/arrow actions from min when empty. If the user types 0: clamp to min when min > 0, or accept 0 when min = 0. This fixes the stale increment bug and aligns with the test “previously entered value is not saved when clearing the input.”
-        this.value = Math.max(this.min, Math.min(this.max, inputValue));
-        target.value = this.formatValue();
+        const inputValue = Number(targetValue) || 0;
+        if (inputValue === 0) {
+          target.value = '';
+          this.formattedValue = '';
+        }
+        else {
+          this.value = Math.max(this.min, Math.min(this.max, inputValue));
+          target.value = this.formatValue();
+        }
       }
       else {
-        if (!/^-?\d*(?:[.,]\d*)?$/.test(cleaned)) {
+        if (!/^-?\d*(?:[.,]\d*)?$/.test(targetValue)) {
           target.value = this.formatValue();
           return;
         }
-        if (cleaned.includes('.') && cleaned.split('.')[1].length === 0) {
-          target.value = this.formatValue(cleaned);
+        if (targetValue.includes('.') && targetValue.split('.')[1].length === 0) {
+          target.value = this.formatValue(targetValue);
         }
         else {
-          this.value = Number(cleaned);
+          this.value = Number(targetValue);
           target.value = this.formatValue();
         }
       }
-      this.wppChange.emit({ value: this.value, name: this.name });
+      this.wppChange.emit({
+        value: this.value,
+        name: this.name,
+      });
+    };
+    this.onFocus = (event) => {
+      this.inputRef?.select();
+      this.wppFocus.emit(event);
     };
     this.onMouseDown = () => {
       this.focusType = FOCUS_TYPE.MOUSE;
-      // Clear keyboard focus styling when switching to mouse modality
-      this.host?.shadowRoot?.querySelectorAll('.tab-focus').forEach(el => el.classList.remove('tab-focus'));
+    };
+    this.onKeyUp = (event) => {
+      if (event.key === 'Tab')
+        this.focusType = FOCUS_TYPE.TAB;
     };
     this.onBlur = (event) => {
       this.focusType = FOCUS_TYPE.NONE;
-      if (this.formattedValue === '' || isNaN(this.value)) {
+      if (this.formattedValue === '') {
         this.formattedValue = String(this.min);
         this.value = this.min;
-        this.wppChange.emit({ value: this.value, name: this.name });
+        this.wppChange.emit({
+          value: this.value,
+          name: this.name,
+        });
       }
       this.wppBlur.emit(event);
     };
@@ -85,56 +90,46 @@ export class WppCounter {
       const factor = Math.pow(10, decimals);
       return Math.round(value * factor) / factor;
     };
-    this.isInputEmpty = () => this.formattedValue === '' || this.inputRef?.value === '';
     this.addStepToValue = (valueOfStep) => {
-      const inputIsEmpty = this.inputRef?.value === '' || this.formattedValue === '' || isNaN(this.value);
-      const base = inputIsEmpty ? this.min : this.value;
       if (Number.isInteger(this.step)) {
-        let next = base + valueOfStep;
-        next = Math.min(this.max, Math.max(this.min, next));
-        this.value = next;
+        this.value += valueOfStep;
       }
       else {
-        const decimals = (this.step + '').split('.')[1]?.length || 0;
-        let next = this.roundToDecimal(base + valueOfStep, decimals);
-        next = Math.min(this.max, Math.max(this.min, next));
-        this.value = next;
+        const numberOfDecimalsFromStep = (this.step + '').split('.')[1].length;
+        this.value = this.roundToDecimal(this.value + valueOfStep, numberOfDecimalsFromStep);
       }
     };
     this.increaseValue = () => {
-      this.focusType = FOCUS_TYPE.MOUSE;
       if (this.value === this.max)
         return;
       this.addStepToValue(this.step);
-      if (this.value === this.max) {
-        const btn = this.host.shadowRoot?.querySelector('.increase-wrapper');
-        btn?.classList.remove('pressed');
-      }
-      this.wppChange.emit({ value: this.value, name: this.name });
+      this.wppChange.emit({
+        value: this.value,
+        name: this.name,
+      });
     };
     this.decreaseValue = () => {
-      this.focusType = FOCUS_TYPE.MOUSE;
       if (this.value === this.min)
         return;
       this.addStepToValue(-this.step);
-      if (this.value === this.min) {
-        const btn = this.host.shadowRoot?.querySelector('.decrease-wrapper');
-        btn?.classList.remove('pressed');
-      }
-      this.wppChange.emit({ value: this.value, name: this.name });
+      this.wppChange.emit({
+        value: this.value,
+        name: this.name,
+      });
     };
     this.counterWrapperCssClasses = () => ({
       'counter-wrapper': true,
       [`${this.messageType}`]: !!this.messageType,
       [`size-${this.size}`]: true,
+      'tab-focus': this.focusType === FOCUS_TYPE.TAB,
     });
     this.decreaseWrapperCssClasses = () => ({
       'decrease-wrapper': true,
-      disabled: !this.isInputEmpty() && this.value === this.min,
+      disabled: this.value === this.min,
     });
     this.increaseWrapperCssClasses = () => ({
       'increase-wrapper': true,
-      disabled: !this.isInputEmpty() && this.value === this.max,
+      disabled: this.value === this.max,
     });
     this.inputCssClasses = () => ({
       'counter-input': true,
@@ -144,45 +139,8 @@ export class WppCounter {
     this.hostCssClasses = () => ({
       'wpp-counter': true,
     });
-    this.onFocus = (event) => {
-      this.wppFocus.emit(event);
-    };
-    this.onElementFocus = (event) => {
-      if (this.focusType === FOCUS_TYPE.TAB) {
-        const target = event.currentTarget;
-        target.classList.add('tab-focus');
-      }
-    };
-    this.onElementBlur = (event) => {
-      const target = event.currentTarget;
-      target.classList.remove('tab-focus');
-      this.focusType = FOCUS_TYPE.NONE;
-    };
-    this.onKeyDownButton = (event, action) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        const target = event.currentTarget;
-        target.classList.add('pressed');
-        if (action === 'increase')
-          this.increaseValue();
-        else
-          this.decreaseValue();
-      }
-    };
-    this.onKeyUp = (event) => {
-      if (event.key === 'Tab') {
-        this.focusType = FOCUS_TYPE.TAB;
-        const target = event.currentTarget;
-        target.classList.add('tab-focus');
-      }
-      if (event.key === 'Enter' || event.key === ' ') {
-        const target = event.currentTarget;
-        target.classList.remove('pressed');
-      }
-    };
     this.formattedValue = undefined;
     this.focusType = undefined;
-    this.currentFocused = null;
     this.name = undefined;
     this.value = 1;
     this.min = 1;
@@ -221,14 +179,10 @@ export class WppCounter {
     autoFocusElement(this.autoFocus, this.inputRef);
   }
   render() {
-    const messageId = this.message ? `${this.name}-message` : undefined;
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, body, decrease-button, decrease-icon, input, increase-button, increase-icon, message", onMouseDown: this.onMouseDown, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v3-3-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.counterWrapperCssClasses(), part: "body" }, this.withButtons && (h("button", { type: "button", class: this.decreaseWrapperCssClasses(), onClick: this.decreaseValue, part: "decrease-button", "aria-label": "Decrease value", disabled: (!this.isInputEmpty() && this.value === this.min) || this.disabled, tabIndex: (!this.isInputEmpty() && this.value === this.min) || this.disabled ? -1 : 0, onFocus: this.onElementFocus, onBlur: this.onElementBlur, onKeyUp: this.onKeyUp, onKeyDown: e => this.onKeyDownButton(e, 'decrease') }, h("wpp-icon-remove-v3-3-0", { class: "icon-minus", part: "decrease-icon" }))), h("input", { id: this.name, type: this.withButtons ? 'text' : 'decimal', class: this.inputCssClasses(), name: this.name, onKeyDown: this.handleValidate, value: this.formattedValue, required: this.required, disabled: this.disabled, onInput: this.onInput, onKeyUp: this.onKeyUp, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label || (!this.labelConfig?.text ? 'Counter value' : undefined), "aria-labelledby": this.labelConfig?.labelId || undefined, "aria-describedby": messageId, autocomplete: this.ariaProps.autocomplete || 'off', part: "input", title: "", onFocus: e => {
-        this.onElementFocus(e);
-        this.onFocus(e);
-      }, onBlur: this.onElementBlur }), this.withButtons && (h("button", { type: "button", class: this.increaseWrapperCssClasses(), onClick: this.increaseValue, part: "increase-button", "aria-label": "Increase value", disabled: (!this.isInputEmpty() && this.value === this.max) || this.disabled, tabIndex: (!this.isInputEmpty() && this.value === this.max) || this.disabled ? -1 : 0, onFocus: this.onElementFocus, onBlur: this.onElementBlur, onKeyUp: this.onKeyUp, onKeyDown: e => this.onKeyDownButton(e, 'increase') }, h("wpp-icon-plus-v3-3-0", { class: "icon-plus", part: "increase-icon" })))), this.message && (h("wpp-inline-message-v3-3-0", { id: messageId, message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" }))));
+    return (h(Host, { "aria-disabled": this.disabled, class: this.hostCssClasses(), exportparts: "label, body, decrease-button, decrease-icon, input, increase-button, increase-icon, message", onFocus: this.onFocus, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v2-22-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.counterWrapperCssClasses(), part: "body" }, this.withButtons && (h("div", { class: this.decreaseWrapperCssClasses(), onClick: this.decreaseValue, part: "decrease-button" }, h("wpp-icon-remove-v2-22-0", { class: "icon-minus", part: "decrease-icon" }))), h("input", { id: this.name, type: this.withButtons ? 'text' : 'decimal', class: this.inputCssClasses(), name: this.name, onKeyDown: this.handleValidate, value: this.formattedValue, required: this.required, disabled: this.disabled, onInput: this.onInput, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, part: "input", title: "" }), this.withButtons && (h("div", { class: this.increaseWrapperCssClasses(), onClick: this.increaseValue, part: "increase-button" }, h("wpp-icon-plus-v2-22-0", { class: "icon-plus", part: "increase-icon" })))), this.message && (h("wpp-inline-message-v2-22-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" }))));
   }
   static get is() { return "wpp-counter"; }
-  static get registryIs() { return "wpp-counter-v3-3-0"; }
+  static get registryIs() { return "wpp-counter-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -591,8 +545,7 @@ export class WppCounter {
   static get states() {
     return {
       "formattedValue": {},
-      "focusType": {},
-      "currentFocused": {}
+      "focusType": {}
     };
   }
   static get events() {

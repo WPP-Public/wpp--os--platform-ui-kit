@@ -50,7 +50,7 @@
 :host(.pagination-item-wrapper):host(:focus-visible) {
   border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--pagination-item-first-border-color-focus), 0 0 0 3px var(--pagination-item-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--pagination-item-first-border-color-focus), 0 0 0 2px var(--pagination-item-second-border-color-focus);
   position: relative;
   z-index: 1;
 }

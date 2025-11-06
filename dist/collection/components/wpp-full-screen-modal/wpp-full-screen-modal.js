@@ -1,5 +1,5 @@
 import { Host, h } from '@stencil/core';
-import { ANIMATION_PROPERTY_NAME, Z_INDEX } from '../../common/consts';
+import { ANIMATION_PROPERTY_NAME } from '../../common/consts';
 import { applyBodyStylesIfNeeded, getSlotEmptyStates } from '../../utils/utils';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { FullScreenModalCloseReason } from './types';
@@ -104,7 +104,6 @@ export class WppFullScreenModal {
     this.withTransparentOverlay = undefined;
     this.disableOutsideClick = false;
     this.formConfig = undefined;
-    this.zIndex = Z_INDEX.MODAL;
   }
   handleCloseOnEsc(event) {
     if (event.key === 'Escape' && this.open) {
@@ -145,10 +144,10 @@ export class WppFullScreenModal {
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() } }, h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-3-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h(Tag, { role: "dialog", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-fullscreen-modal-content" }, h("div", { class: this.headerContainerCssClasses() }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h("wpp-action-button-v3-3-0", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button" }, h("wpp-icon-cross-v3-3-0", { slot: "icon-start" }))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })))));
+    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, overlay,full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd }, h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, h("div", { class: "overlay-color", ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), onClick: this.onOverlayClick, part: "overlay" }), h(Tag, { role: "dialog", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig }, h("div", { class: this.headerContainerCssClasses() }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h("wpp-action-button-v2-22-0", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button" }, h("wpp-icon-cross-v2-22-0", { slot: "icon-start" }))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })))));
   }
   static get is() { return "wpp-full-screen-modal"; }
-  static get registryIs() { return "wpp-full-screen-modal-v3-3-0"; }
+  static get registryIs() { return "wpp-full-screen-modal-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -235,24 +234,6 @@ export class WppFullScreenModal {
           "tags": [],
           "text": "If you pass this prop wrapper of dialog will be rendered as form."
         }
-      },
-      "zIndex": {
-        "type": "number",
-        "mutable": false,
-        "complexType": {
-          "original": "number",
-          "resolved": "number",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the z-index of the WppFullScreenModal."
-        },
-        "attribute": "z-index",
-        "reflect": false,
-        "defaultValue": "Z_INDEX.MODAL"
       }
     };
   }

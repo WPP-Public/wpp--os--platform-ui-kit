@@ -31,19 +31,12 @@ export interface FileUploadItemEventDetail {
   size: number;
   index: number;
 }
-export interface FileUploadErrorEventDetails {
-  errorFiles: FileItemType[];
-  errorMessage: string;
-  name?: string;
-}
 export interface FileUploadLocales {
   label: string;
   text: string;
   info: (accept: string, size: number) => string;
   sizeError: string;
   formatError: string;
-  singleFileLimitError: string;
-  multipleFileLimitError: string;
 }
 export type FileUploadItemLocales = Pick<FileUploadLocales, 'sizeError' | 'formatError'>;
 export declare enum ScrollState {

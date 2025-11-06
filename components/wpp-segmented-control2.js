@@ -1,5 +1,5 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
-import { k as transformToVersionedTag } from './utils.js';
+import { j as transformToVersionedTag } from './utils.js';
 import { d as defineCustomElement$7 } from './wpp-icon-error2.js';
 import { d as defineCustomElement$6 } from './wpp-icon-warning2.js';
 import { d as defineCustomElement$5 } from './wpp-internal-label2.js';
@@ -82,9 +82,9 @@ const WppSegmentedControl = /*@__PURE__*/ proxyCustomElement(class WppSegmentedC
     });
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v3-3-0", { class: "label", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.cssClasses(), role: "listbox", "aria-multiselectable": "false", "aria-required": this.required, part: "wrapper" }, h("slot", { part: "inner" }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v2-22-0", { class: "label", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.cssClasses(), role: "listbox", "aria-multiselectable": "false", "aria-required": this.required, part: "wrapper" }, h("slot", { part: "inner" }))));
   }
-  static get registryIs() { return "wpp-segmented-control-v3-3-0"; }
+  static get registryIs() { return "wpp-segmented-control-v2-22-0"; }
   get host() { return this; }
   static get watchers() { return {
     "value": ["valueChanged"],
@@ -92,7 +92,7 @@ const WppSegmentedControl = /*@__PURE__*/ proxyCustomElement(class WppSegmentedC
     "size": ["onUpdateSize"]
   }; }
   static get style() { return wppSegmentedControlCss; }
-}, [1, "wpp-segmented-control", "wpp-segmented-control-v3-3-0", {
+}, [1, "wpp-segmented-control", "wpp-segmented-control-v2-22-0", {
     "size": [1],
     "hugContentOff": [516, "hug-content-off"],
     "width": [1],
@@ -107,44 +107,44 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-segmented-control-v3-3-0", "wpp-icon-error-v3-3-0", "wpp-icon-warning-v3-3-0", "wpp-internal-label-v3-3-0", "wpp-internal-tooltip-v3-3-0", "wpp-label-v3-3-0", "wpp-tooltip-v3-3-0", "wpp-typography-v3-3-0"];
+  const components = ["wpp-segmented-control-v2-22-0", "wpp-icon-error-v2-22-0", "wpp-icon-warning-v2-22-0", "wpp-internal-label-v2-22-0", "wpp-internal-tooltip-v2-22-0", "wpp-label-v2-22-0", "wpp-tooltip-v2-22-0", "wpp-typography-v2-22-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-segmented-control-v3-3-0":
+    case "wpp-segmented-control-v2-22-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppSegmentedControl);
       }
       break;
-    case "wpp-icon-error-v3-3-0":
+    case "wpp-icon-error-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-warning-v3-3-0":
+    case "wpp-icon-warning-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-internal-label-v3-3-0":
+    case "wpp-internal-label-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-0":
+    case "wpp-internal-tooltip-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-label-v3-3-0":
+    case "wpp-label-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v3-3-0":
+    case "wpp-tooltip-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v3-3-0":
+    case "wpp-typography-v2-22-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

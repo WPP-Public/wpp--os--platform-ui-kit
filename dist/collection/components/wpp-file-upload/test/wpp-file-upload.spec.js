@@ -36,7 +36,7 @@ describe('wpp-file-upload', () => {
   it('should render file uploader with file items based on url', async () => {
     const page = await newSpecPage({
       components: [WppFileUpload, WppFileUploadItem],
-      template: () => h("wpp-file-upload-v3-3-0", { value: value }),
+      template: () => h("wpp-file-upload-v2-22-0", { value: value }),
     });
     expect(page.root).toMatchSnapshot();
   });

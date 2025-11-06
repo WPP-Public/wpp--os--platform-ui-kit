@@ -44,7 +44,7 @@
 */
 :host {
   --autocomplete-border-radius: var(--wpp-autocomplete-border-radius, var(--wpp-border-radius-m));
-  --autocomplete-placeholder-color: var(--wpp-autocomplete-placeholder-color, var(--wpp-grey-color-700));
+  --autocomplete-placeholder-color: var(--wpp-autocomplete-placeholder-color, var(--wpp-grey-color-500));
   --autocomplete-placeholder-color-disabled: var(--wpp-autocomplete-placeholder-color-disabled, var(--wpp-text-color-disabled));
   --autocomplete-hidden-count-text-color-disabled: var(--wpp-autocomplete-hidden-count-text-color-disabled, var(--wpp-text-color-disabled));
   --autocomplete-trigger-icon-right-position: var(--wpp-autocomplete-trigger-actions-right-position, 10px);
@@ -149,8 +149,8 @@
   overflow-y: auto;
 }
 .values::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 8px;
+  height: 8px;
 }
 .values::-webkit-scrollbar-thumb {
   border: 2px solid transparent;
@@ -263,13 +263,23 @@
 .trigger.warning, .trigger.warning:hover {
   border: var(--autocomplete-border-width) var(--autocomplete-border-style) var(--wpp-warning-color-400);
 }
+.trigger.warning.tab-focus {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-warning-color-400);
+}
 .trigger.error, .trigger.error:hover {
   border: var(--autocomplete-border-width) var(--autocomplete-border-style) var(--wpp-danger-color-400);
+}
+.trigger.error.tab-focus {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 2px var(--wpp-danger-color-400);
 }
 .trigger.tab-focus {
   border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--autocomplete-first-border-color-focus), 0 0 0 3px var(--autocomplete-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--autocomplete-first-border-color-focus), 0 0 0 2px var(--autocomplete-second-border-color-focus);
 }
 .trigger.disabled {
   background-color: var(--autocomplete-bg-color-disabled);
@@ -374,8 +384,8 @@
   overflow-y: auto;
 }
 .dropdown .dropdown-list::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 8px;
+  height: 8px;
 }
 .dropdown .dropdown-list::-webkit-scrollbar-thumb {
   border: 2px solid transparent;

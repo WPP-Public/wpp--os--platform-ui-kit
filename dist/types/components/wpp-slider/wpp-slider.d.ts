@@ -3,7 +3,7 @@ import { AriaProps, DropdownConfig, FOCUS_TYPE } from '../../types/common';
 import { BaseFormControl } from '../../interfaces/base-form-control';
 import { BaseComponent } from '../../interfaces/base-component';
 import { DisplayMarkState, MarkState, SliderInputValue, SliderChangeEventDetail, SliderLabelConfig, SliderTypes, SliderValue, InputWidth } from './types';
-import { MaskitoNumberParams } from '@maskito/kit/src/lib/masks/number/number-params';
+import { DecimalMaskOptions } from '../wpp-input/types';
 interface FocusType {
   min: FOCUS_TYPE;
   max: FOCUS_TYPE;
@@ -35,7 +35,6 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
   private marksListRef?;
   private segmentWidth;
   private totalWidth;
-  private middleValue;
   host: HTMLWppSliderElement;
   tooltipTexts: Record<number, string>;
   displayMarks: DisplayMarkState[];
@@ -114,7 +113,7 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
   /**
    * Defines the mask options for the inputs.
    */
-  readonly maskOptions?: MaskitoNumberParams | MaskitoNumberParams[];
+  readonly maskOptions?: DecimalMaskOptions | DecimalMaskOptions[];
   /**
    * Emitted when the slider value changes.
    */
@@ -127,7 +126,6 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
    * Emitted when the slider loses focus.
    */
   readonly wppBlur: EventEmitter<FocusEvent>;
-  onUpdateValue(): void;
   onUpdateMinValue(newValue: number): void;
   onUpdateMaxValue(newValue: number): void;
   onUpdateStepValue(newStepValue: number): void;
@@ -139,7 +137,6 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
   componentWillLoad(): void;
   componentDidLoad(): void;
   disconnectedCallback(): void;
-  private getMidValueRespectingStep;
   private computeSegmentWidth;
   private onUpdateMinMaxValues;
   private handleType;
@@ -151,11 +148,8 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
    * Sets tooltipTexts accordingly to enable tooltips for truncated labels.
    */
   private applyTruncationToMarks;
-  private updateSingleSliderValue;
-  private getNearestLowerValue;
   private handleInputChange;
   private getUpdatedFocusInfo;
-  private getSliderType;
   private handleBlur;
   private handleFocus;
   private handleInputBlur;
@@ -165,7 +159,6 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
   private handleSliderWrapperClick;
   private handleSingleSliderChange;
   private handleRangeSliderChange;
-  private isMarkInRange;
   private markCssClasses;
   private singleSliderWrapperCssClasses;
   private rangeSliderWrapperCssClasses;
@@ -177,12 +170,8 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
   private editableInputCssClasses;
   private calculateProgressBar;
   private renderControl;
-  private renderSingleInput;
   private renderEditableInput;
   private renderMarks;
-  private renderRangeSliders;
-  private renderSingleSlider;
-  private isMiddlePointHigher;
   render(): any;
 }
 export {};

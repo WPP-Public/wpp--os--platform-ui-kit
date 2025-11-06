@@ -3,22 +3,17 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const isEqual = require('./isEqual-0b0240b4.js');
-const menuListConfig = require('./menuListConfig-c4aadb34.js');
-const consts = require('./consts-779fd4ec.js');
-const utils = require('./utils-2b192dec.js');
+const isEqual = require('./isEqual-aa155630.js');
+const menuListConfig = require('./menuListConfig-9ebb9bbd.js');
+const consts = require('./consts-255c1066.js');
+const utils = require('./utils-9c925efe.js');
 require('./_commonjsHelpers-bcc1208a.js');
 
-const DEFAULT_POPOVER_LOCALES = {
-  searchInputPlaceholder: 'Search',
-};
-
-const wppPopoverCss = ":host{display:-ms-inline-flexbox;display:inline-flex}:host .anchor{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;display:-ms-inline-flexbox;display:inline-flex}:host .wpp-popover-content.wpp-hidden{position:absolute;z-index:-1;opacity:0}:host .wpp-popover-content.inline-edit-popover{display:-ms-inline-flexbox;display:inline-flex;width:100%;height:100%;-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m);background-color:var(--wpp-grey-color-800);border-radius:var(--wpp-border-radius-s);scrollbar-width:thin;position:relative;overflow:hidden}:host slot{display:block}";
+const wppPopoverCss = ":host{display:-ms-inline-flexbox;display:inline-flex}:host .anchor{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;display:-ms-inline-flexbox;display:inline-flex}:host .wpp-popover-content.wpp-hidden{position:absolute;z-index:-1;opacity:0}:host slot{display:block}";
 
 const WppPopover = class {
   constructor(hostRef) {
     index.registerInstance(this, hostRef);
-    this.wppSearchChange = index.createEvent(this, "wppSearchChange", 1);
     this.isTriggerEnabled = () => {
       // Checks if the trigger element is enabled or disabled.
       const triggerEl = this.host?.querySelector('[slot="trigger-element"]');
@@ -35,9 +30,9 @@ const WppPopover = class {
       if (slotContent) {
         this.contentEl?.append(slotContent);
       }
-      if (this.contentEl && this.anchorRef) {
+      if (this.anchorEl && this.contentEl) {
         this.tippyInstance = menuListConfig.menuListConfig({
-          anchor: this.anchorRef,
+          anchor: this.anchorEl,
           content: this.contentEl,
           zIndex: consts.Z_INDEX.POPOVER,
           duration: [300, 300],
@@ -47,18 +42,25 @@ const WppPopover = class {
           hideOnClick: 'toggle',
           popperOptions: {
             ...this.config?.popperOptions,
-            modifiers: [...(this.config?.popperOptions?.modifiers || [])],
+            modifiers: [
+              ...(this.config?.popperOptions?.modifiers || []),
+              {
+                name: 'flip',
+                options: {
+                  fallbackPlacements: ['top'],
+                },
+              },
+            ],
           },
           appendTo: () => utils.getHighestContainerInDOM(),
           ...this.config,
           onClickOutside: (instance, event) => {
-            if (utils.isEventTargetContained(this.host, event) ||
-              (event.target && utils.hasParentWithId(event.target, 'tippy-')))
+            if (utils.isEventTargetContained(this.host, event))
               return;
             if (this.shouldCloseOnOutsideClick(event)) {
               this.tippyInstance.hide();
             }
-            if (this.config?.onClickOutside) {
+            if (this.config.onClickOutside) {
               this.config.onClickOutside(instance, event);
             }
           },
@@ -68,39 +70,19 @@ const WppPopover = class {
             if (this.dropdownWidth !== 'auto') {
               instance.popper.style.width = this.dropdownWidth;
             }
-            if (this.config?.onShow) {
+            if (this.config.onShow) {
               return this.config.onShow(instance);
-            }
-          },
-          onShown: (instance) => {
-            if (this.searchInputEl) {
-              this.searchInputEl.setFocus();
-            }
-            if (this.config?.onShown) {
-              this.config.onShown(instance);
-            }
-          },
-          onHidden: (instance) => {
-            if (!this.persistantSearch && this.withSearch) {
-              this.wppSearchChange.emit({ name: this.internalSearchName, value: '' });
-            }
-            if (this.config?.onHidden) {
-              this.config.onHidden(instance);
             }
           },
         });
       }
     };
     this.removeDisabledTag = () => {
-      if (this.anchorRef?.getAttribute('disabled') === 'false') {
-        this.anchorRef.removeAttribute('disabled');
+      if (this.anchorEl?.getAttribute('disabled') === 'false') {
+        this.anchorEl.removeAttribute('disabled');
       }
     };
     this.handleCrossButtonClick = () => this.tippyInstance.hide();
-    this.handleSearchChange = (e) => {
-      const { value } = e.detail;
-      this.wppSearchChange.emit({ name: this.internalSearchName, value });
-    };
     this.hostCssClasses = () => ({
       'wpp-popover': true,
     });
@@ -108,22 +90,13 @@ const WppPopover = class {
       'wpp-popover-content': true,
       'wpp-hidden': this.hidden,
       [`${this.externalClass}`]: true,
-      'wpp-with-search': this.withSearch,
     });
     this.hidden = true;
     this.config = {};
     this.shouldCloseOnOutsideClick = () => true;
     this.closable = false;
-    this.withSearch = false;
-    this.searchValue = '';
-    this.searchName = '';
-    this.persistantSearch = false;
     this.externalClass = '';
     this.dropdownWidth = 'auto';
-    this.ariaProps = {
-      role: 'dialog',
-    };
-    this.locales = DEFAULT_POPOVER_LOCALES;
   }
   /**
    * Method for closing the popover programatically
@@ -144,9 +117,6 @@ const WppPopover = class {
       this.config = newConfig;
       this.tippyInstance?.setProps(newConfig);
     }
-  }
-  componentWillLoad() {
-    this.internalSearchName = this.searchName || 'wpp-popover-search';
   }
   componentDidLoad() {
     setTimeout(() => {
@@ -174,9 +144,9 @@ const WppPopover = class {
     this.mutationObserver.observe(this.host?.children[0], { attributes: true });
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "anchor, trigger-element" }, index.h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref) }, index.h("slot", { name: "trigger-element", part: "trigger-element" })), index.h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-label": this.ariaProps.label, "aria-modal": "true" }, this.withSearch && (index.h("wpp-input-v3-3-0", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: this.locales.searchInputPlaceholder || DEFAULT_POPOVER_LOCALES.searchInputPlaceholder, type: "search", size: "m" })), !this.withSearch && this.closable && (index.h("wpp-action-button-v3-3-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, index.h("wpp-icon-cross-v3-3-0", { slot: "icon-end" }))), index.h("slot", null))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "anchor, trigger-element" }, index.h("div", { class: "anchor", part: "anchor", ref: anchorEl => (this.anchorEl = anchorEl) }, index.h("slot", { name: "trigger-element", part: "trigger-element" })), index.h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl) }, this.closable && (index.h("wpp-action-button-v2-22-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, index.h("wpp-icon-cross-v2-22-0", { slot: "icon-end" }))), index.h("slot", null))));
   }
-  static get registryIs() { return "wpp-popover-v3-3-0"; }
+  static get registryIs() { return "wpp-popover-v2-22-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "config": ["updateConfig"]

@@ -1,6 +1,7 @@
 import { html } from 'lit-html';
 import { styleMap } from 'lit-html/directives/style-map.js';
-import { useState } from 'storybook/internal/preview-api';
+import useState from 'storybook-addon-state';
+import readme from './readme.md';
 export default {
   title: 'Design System/Components/Feedback/Banner',
   parameters: {
@@ -9,6 +10,7 @@ export default {
         hidden: true,
       },
     },
+    notes: readme,
   },
   argTypes: {
     type: {
@@ -114,92 +116,92 @@ const styles = {
     alignItems: 'center',
   },
 };
-export const NoTopBar = {
-  render: args => html ` <wpp-banner-v3-3-0 .show="${true}" .closable="${args.closable}" .type="${args.type}">
-      Warning message
-      ${args.withActions
-    ? html `
+export const NoTopBar = (args) => html ` <wpp-banner-v2-22-0
+  .show="${true}"
+  .closable="${args.closable}"
+  .type="${args.type}"
+>
+  Warning message
+  ${args.withActions
+  ? html `
         ${args.type === 'warning'
-      ? html ` <wpp-action-button-v3-3-0 variant="secondary" slot="actions">Action</wpp-action-button-v3-3-0>`
-      : null}
+    ? html ` <wpp-action-button-v2-22-0 variant="secondary" slot="actions">Action</wpp-action-button-v2-22-0>`
+    : null}
         ${args.type === 'information'
-      ? html ` <wpp-action-button-v3-3-0 variant="inverted" slot="actions">Action</wpp-action-button-v3-3-0>`
-      : null}
+    ? html ` <wpp-action-button-v2-22-0 variant="inverted" slot="actions">Action</wpp-action-button-v2-22-0>`
+    : null}
         </div>
       `
-    : null}
-    </wpp-banner-v3-3-0>`,
-  args: {
-    type: 'warning',
-    closable: false,
-    withActions: false,
-  },
+  : null}
+</wpp-banner-v2-22-0>`;
+NoTopBar.args = {
+  type: 'warning',
+  closable: false,
+  withActions: false,
 };
-export const WithTopBar = {
-  render: args => {
-    const [isToShowBanner, setIsToShowBanner] = useState(false);
-    const [value, setValue] = useState(initNavigation[0].value);
-    const handleTopbarItemChange = (event) => {
-      setValue(event.detail.value);
-    };
-    const handleBannerShowStateChange = (event) => {
-      setIsToShowBanner(event.detail.show);
-    };
-    const handleShowBanner = () => {
-      setIsToShowBanner(true);
-    };
-    const handleCloseBanner = () => {
-      setIsToShowBanner(false);
-    };
-    return html ` <div style=${styleMap(styles.page)}>
-      <div style=${styleMap(styles.header)}>
-        <wpp-topbar-v3-3-0 .navigation="${initNavigation}" .value="${value}" @wppChange="${handleTopbarItemChange}">
-          <div slot="app" style=${styleMap(styles.app)}>
-            <wpp-typography-v3-3-0 type="m-strong" tag="h3" style=${styleMap(styles.appName)}>
-              APP Name
-            </wpp-typography-v3-3-0>
-          </div>
-        </wpp-topbar-v3-3-0>
-      </div>
-      <div style=${styleMap(styles.container)}>
-        <wpp-banner-v3-3-0
-          .type="${args.type}"
-          .show="${isToShowBanner}"
-          .closable="${args.closable}"
-          @wppClose="${handleBannerShowStateChange}"
-          style=${styleMap(styles.banner)}
-        >
-          Banners should be used thoughtfully for only the most important information and can contain maximum 1 line of
-          text.
-          ${args.withActions
-      ? html `
-                ${args.type === 'warning'
-        ? html `<wpp-action-button-v3-3-0 variant="secondary" slot="actions">
-                      Action
-                    </wpp-action-button-v3-3-0>`
-        : null}
-                ${args.type === 'information'
-        ? html ` <wpp-action-button-v3-3-0 variant="inverted" slot="actions">Action</wpp-action-button-v3-3-0>`
-        : null}
-              `
-      : null}
-        </wpp-banner-v3-3-0>
-        <div style=${styleMap(styles.body)}>
-          <div style=${styleMap(styles.section)}>
-            <wpp-typography-v3-3-0 type="3xl-heading">Scrollable section</wpp-typography-v3-3-0>
-            <div style=${styleMap(styles.actions)}>
-              <wpp-button-v3-3-0 variant="secondary" @click="${handleShowBanner}"> Show Banner</wpp-button-v3-3-0>
-              <wpp-button-v3-3-0 variant="primary" @click="${handleCloseBanner}"> Close Banner</wpp-button-v3-3-0>
-            </div>
-          </div>
-          <div style=${styleMap(styles.scrollWrapper)} />
+export const WithTopBar = (args) => {
+  const [isToShowBanner, setIsToShowBanner] = useState('showBanner', false);
+  const [value, setValue] = useState('value', initNavigation[0].value);
+  const handleTopbarItemChange = (event) => {
+    setValue(event.detail.value);
+  };
+  const handleBannerShowStateChange = (event) => {
+    setIsToShowBanner(event.detail.show);
+  };
+  const handleShowBanner = () => {
+    setIsToShowBanner(true);
+  };
+  const handleCloseBanner = () => {
+    setIsToShowBanner(false);
+  };
+  return html ` <div style=${styleMap(styles.page)}>
+    <div style=${styleMap(styles.header)}>
+      <wpp-topbar-v2-22-0 .navigation="${initNavigation}" .value="${value}" @wppChange="${handleTopbarItemChange}">
+        <div slot="app" style=${styleMap(styles.app)}>
+          <wpp-typography-v2-22-0 type="m-strong" tag="h3" style=${styleMap(styles.appName)}>
+            APP Name
+          </wpp-typography-v2-22-0>
         </div>
+      </wpp-topbar-v2-22-0>
+    </div>
+    <div style=${styleMap(styles.container)}>
+      <wpp-banner-v2-22-0
+        .type="${args.type}"
+        .show="${isToShowBanner}"
+        .closable="${args.closable}"
+        @wppClose="${handleBannerShowStateChange}"
+        style=${styleMap(styles.banner)}
+      >
+        Banners should be used thoughtfully for only the most important information and can contain maximum 1 line of
+        text.
+        ${args.withActions
+    ? html `
+              ${args.type === 'warning'
+      ? html `<wpp-action-button-v2-22-0 variant="secondary" slot="actions">
+                    Action
+                  </wpp-action-button-v2-22-0>`
+      : null}
+              ${args.type === 'information'
+      ? html ` <wpp-action-button-v2-22-0 variant="inverted" slot="actions">Action</wpp-action-button-v2-22-0>`
+      : null}
+            `
+    : null}
+      </wpp-banner-v2-22-0>
+      <div style=${styleMap(styles.body)}>
+        <div style=${styleMap(styles.section)}>
+          <wpp-typography-v2-22-0 type="3xl-heading">Scrollable section</wpp-typography-v2-22-0>
+          <div style=${styleMap(styles.actions)}>
+            <wpp-button-v2-22-0 variant="secondary" @click="${handleShowBanner}"> Show Banner</wpp-button-v2-22-0>
+            <wpp-button-v2-22-0 variant="primary" @click="${handleCloseBanner}"> Close Banner</wpp-button-v2-22-0>
+          </div>
+        </div>
+        <div style=${styleMap(styles.scrollWrapper)} />
       </div>
-    </div>`;
-  },
-  args: {
-    type: 'information',
-    closable: false,
-    withActions: false,
-  },
+    </div>
+  </div>`;
+};
+WithTopBar.args = {
+  type: 'information',
+  closable: false,
+  withActions: false,
 };

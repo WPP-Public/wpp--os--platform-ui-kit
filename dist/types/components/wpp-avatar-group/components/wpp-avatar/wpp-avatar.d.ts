@@ -1,5 +1,5 @@
 import { EventEmitter } from '../../../../stencil-public-runtime';
-import { FOCUS_TYPE, DropdownConfig, AriaProps } from '../../../../types/common';
+import { FOCUS_TYPE, DropdownConfig } from '../../../../types/common';
 import { AvatarChangeEventDetail, AvatarSize, AvatarVariant } from '../../types';
 /**
  * @part image - Image element
@@ -54,14 +54,6 @@ export declare class WppAvatar {
    */
   readonly index: number;
   /**
-   * Role of the avatar component.
-   */
-  readonly role: string;
-  /**
-   * Contains the button `aria-` props.
-   */
-  readonly ariaProps: AriaProps;
-  /**
    * Defines the dropdown configuration. Under the hood dropdown using tippy.js,
    * all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`.
    */
@@ -79,7 +71,6 @@ export declare class WppAvatar {
   private onBlur;
   private onMouseDown;
   private onKeyUp;
-  private onKeyDown;
   private getIconSize;
   private renderIcon;
   private handleClick;

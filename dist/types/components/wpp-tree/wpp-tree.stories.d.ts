@@ -1,6 +1,7 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppTree>;
+import { WppTree } from './wpp-tree';
+declare const _default: Meta<typeof WppTree>;
 export default _default;
-export declare const Tree: StoryObj<Components.WppTree>;
-export declare const TreeWithCustomSearch: StoryObj<Components.WppTree>;
+export declare const Tree: Story<Components.WppTree>;
+export declare const TreeWithCustomSearch: Story<Components.WppTree>;

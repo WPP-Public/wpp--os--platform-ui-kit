@@ -5,16 +5,16 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "./stencil-public-runtime";
-import { AriaProps, BannerTypes, DropdownConfig, InputMessageTypes, MessageTypes } from "./types/common";
 import { AccordionSectionChangeEventDetail } from "./components/wpp-accordion/types";
+import { AriaProps, BannerTypes, DropdownConfig, InputMessageTypes, ListPosition, MessageTypes } from "./types/common";
 import { AutocompleteChangeEventDetail, AutocompleteDefaultOption, AutocompleteExtendedOption, AutocompleteLabelConfig, AutocompleteLocales, AutocompleteOption, AutocompleteTypes, GetOptionIdHandler, GetOptionLabelHandler, LoadMoreHandler } from "./components/wpp-autocomplete/types";
 import { AvatarChangeEventDetail, AvatarGroupChangeEventDetail, AvatarSize, AvatarState, AvatarVariant } from "./components/wpp-avatar-group/types";
 import { BannerChangeEventDetail } from "./components/wpp-banner/types";
 import { BreadcrumbItemEventDetails, BreadcrumbItemState } from "./components/wpp-breadcrumb/types";
 import { CardChangeEventDetail, CardSize, CardType, CardValue } from "./components/wpp-card-group/components/wpp-card/types";
 import { CardGroupChangeEventDetail, CardGroupValue } from "./components/wpp-card-group/types";
-import { ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
-import { AcceptConfig, FileItemType, FileUploadErrorEventDetails, FileUploadEventDetail, FileUploadItemEventDetail, FileUploadItemLocales, FileUploadLocales, FileUploadMessageType, FileUploadResultFormaType, FileValidatorHandler } from "./components/wpp-file-upload/types";
+import { FileUploadConfig, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
+import { AcceptConfig, FileItemType, FileUploadEventDetail, FileUploadItemEventDetail, FileUploadItemLocales, FileUploadLocales, FileUploadMessageType, FileUploadResultFormaType, FileValidatorHandler } from "./components/wpp-file-upload/types";
 import { CheckboxChangeEvent, CheckboxLabelConfig, CheckboxValue } from "./components/wpp-checkbox/types";
 import { CheckboxGroupChangeEvent, CheckboxGroupValue } from "./components/wpp-checkbox-group/types";
 import { LabelConfig, LabelLocales } from "./components/wpp-label/types";
@@ -23,56 +23,51 @@ import { Theme } from "./types/theme";
 import { CounterChangeEventDetail, CounterFormat, CounterLabelConfig } from "./components/wpp-counter/types";
 import { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes } from "./components/wpp-datepicker/types";
 import { ExpandableCardSectionChangeEventDetail } from "./components/wpp-expandable-card/types";
-import { ActionButtonData } from "./components/wpp-floating-toolbar/types";
 import { FullScreenModalCloseDetails, FullScreenModalFormConfig } from "./components/wpp-full-screen-modal/types";
 import { AlignItemsType, DirectionType, JustifyContentType } from "./components/wpp-grid/types";
 import { RangeOf } from "./types/numberRange";
-import { SortDirection } from "./components/wpp-icon/components/arrows/table-sort/wpp-icon-table-sort-wrapper/wpp-icon-table-sort-wrapper";
-import { InlineEditChangeModeEventDetail, InlineEditConfirmDetail, InlineEditLocales, InlineEditMode } from "./components/wpp-inline-edit/types";
-import { InlineMessageLocalesType } from "./components/wpp-inline-message/types";
-import { InputChangeEventDetail, InputLabelConfig, InputLocaleInterface, InputTypes, InputValue, MaskOptions, WppChangeExtraEventDetail } from "./components/wpp-input/types";
-import { Color, TypographyType } from "./components/wpp-typography/types";
+import { InlineEditChangeModeEventDetail, InlineEditMode } from "./components/wpp-inline-edit/types";
+import { DecimalMaskOptions, InputChangeEventDetail, InputLabelConfig, InputLocaleInterface, InputTypes, InputValue, MaskOptions, WppChangeExtraEventDetail } from "./components/wpp-input/types";
+import { TypographyType } from "./components/wpp-typography/types";
 import { TooltipThemeTypes } from "./components/wpp-tooltip/types";
-import { ThemeColorValue } from "./types/theme-tokens";
 import { ContainerStateType, ListItemChangeEventDetail, ListValue, TooltipConfig } from "./components/wpp-list-item/types";
 import { LoadMoreChangeEventDetail } from "./components/wpp-load-more/types";
+import { ShouldCloseOnOutsideClickHandler } from "./components/wpp-menu-list/types";
 import { ModalCloseDetails, ModalFormConfig } from "./components/wpp-modal/types";
 import { NavSidebarItemEventDetail } from "./components/wpp-nav-sidebar/types";
 import { NavigationItemEventDetail, NavigationState, TopbarChangeEventDetail } from "./components/wpp-topbar/types";
 import { PaginationChangeEventDetail, PaginationLocales, PaginationPageChangeEventDetail } from "./components/wpp-pagination/types";
 import { PillChangeEventDetail, PillSize, PillType, PillValue } from "./components/wpp-pill-group/components/wpp-pill/types";
 import { PillGroupChangeEvent, PillGroupLabelConfig, PillGroupValue } from "./components/wpp-pill-group/types";
-import { PopoverInputChangeEventDetail, PopoverLocalesInterface, PopoverShouldCloseOnOutsideClickHandler } from "./components/wpp-popover/types";
+import { PopoverShouldCloseOnOutsideClickHandler } from "./components/wpp-popover/types";
 import { RadioChangeEvent, RadioLabelConfig, RadioValue } from "./components/wpp-radio/types";
 import { RadioGroupChangeEvent, RadioGroupValue } from "./components/wpp-radio-group/types";
 import { DebugLevels, Formats, QuillInstance, RichtextChangeEventDetail, RichtextLocales, RichtextSelectionChangeEventDetail, RichtextUploadRequestEventDetail, RichtextValue } from "./components/wpp-richtext/types";
 import { SearchChangeEventDetail, SearchDefaultOption, SearchGetOptionIdHandler, SearchGetOptionLabelHandler, SearchLabelConfig, SearchLocales, SearchOption } from "./components/wpp-search/types";
 import { SegmentedControlChangeEventDetail, SegmentedControlItemChangeEventDetail, SegmentedControlItemSize, SegmentedControlLabelConfig, SegmentedControlValue } from "./components/wpp-segmented-control/types";
-import { ListItemInterface, SelectChangeEventDetails, SelectLabelConfig, SelectLocaleInterface, SelectSize, SelectTypes, SelectValue } from "./components/wpp-select/types";
-import { DropdownConfig as DropdownConfig1, InputTypes as InputTypes1, LabelConfig as LabelConfig1, MaskOptions as MaskOptions1 } from "./components";
+import { GetSelectOptionIdHandler, GetSelectOptionLabelHandler, SelectChangeEventDetail, SelectDefaultOption, SelectLabelConfig, SelectLocaleInterface, SelectOption, SelectSize, SelectTypes, SelectValue } from "./components/wpp-select/types";
 import { ActionConfig, SideModalCloseDetails, SideModalFormConfig } from "./components/wpp-side-modal/types";
 import { InputWidth, MarkState, SliderChangeEventDetail, SliderLabelConfig, SliderTypes, SliderValue } from "./components/wpp-slider/types";
-import { MaskitoNumberParams } from "@maskito/kit/src/lib/masks/number/number-params";
 import { OrientationType, StepChangeEventDetail, StepLocales } from "./components/wpp-stepper/types";
 import { StickyBarButtonItem, StickyBarTabItem, StickyBarVariants } from "./components/wpp-sticky-bar/types";
 import { TabChangeEventDetail, TabsChangeEventDetail } from "./components/wpp-tabs/types";
 import { TextareaInputChangeEventDetail, TextareaInputLocales, TextareaInputValue, TextareaLabelConfig } from "./components/wpp-textarea-input/types";
+import { DropdownConfig as DropdownConfig1, LabelConfig as LabelConfig1 } from "./components";
 import { TimePickerChangeEventDetails } from "./components/wpp-time-picker/types";
 import { ButtonState, ToastCompleteDetail, ToastIcon } from "./components/wpp-toast/types";
 import { ToastState } from "./components/wpp-toast/components/wpp-toast-container/types";
 import { ToggleChangeEvent, ToggleLabelConfig, ToggleValue } from "./components/wpp-toggle/types";
 import { TransformSearchQuery, TreeActionClickEventDetail, TreeChangeEventDetail, TreeItemEndContentProps, TreeItemHighlightOptions, TreeItemSearchConfig, TreeLocaleType, TreeType } from "./components/wpp-tree/types";
-import { CaptionValue, ControlPanelConfig, JumpValues, VideoPlayerLocales, VideoSizeDimensions, VideoSourceType } from "./components/wpp-video-player/types";
-export { AriaProps, BannerTypes, DropdownConfig, InputMessageTypes, MessageTypes } from "./types/common";
 export { AccordionSectionChangeEventDetail } from "./components/wpp-accordion/types";
+export { AriaProps, BannerTypes, DropdownConfig, InputMessageTypes, ListPosition, MessageTypes } from "./types/common";
 export { AutocompleteChangeEventDetail, AutocompleteDefaultOption, AutocompleteExtendedOption, AutocompleteLabelConfig, AutocompleteLocales, AutocompleteOption, AutocompleteTypes, GetOptionIdHandler, GetOptionLabelHandler, LoadMoreHandler } from "./components/wpp-autocomplete/types";
 export { AvatarChangeEventDetail, AvatarGroupChangeEventDetail, AvatarSize, AvatarState, AvatarVariant } from "./components/wpp-avatar-group/types";
 export { BannerChangeEventDetail } from "./components/wpp-banner/types";
 export { BreadcrumbItemEventDetails, BreadcrumbItemState } from "./components/wpp-breadcrumb/types";
 export { CardChangeEventDetail, CardSize, CardType, CardValue } from "./components/wpp-card-group/components/wpp-card/types";
 export { CardGroupChangeEventDetail, CardGroupValue } from "./components/wpp-card-group/types";
-export { ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
-export { AcceptConfig, FileItemType, FileUploadErrorEventDetails, FileUploadEventDetail, FileUploadItemEventDetail, FileUploadItemLocales, FileUploadLocales, FileUploadMessageType, FileUploadResultFormaType, FileValidatorHandler } from "./components/wpp-file-upload/types";
+export { FileUploadConfig, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
+export { AcceptConfig, FileItemType, FileUploadEventDetail, FileUploadItemEventDetail, FileUploadItemLocales, FileUploadLocales, FileUploadMessageType, FileUploadResultFormaType, FileValidatorHandler } from "./components/wpp-file-upload/types";
 export { CheckboxChangeEvent, CheckboxLabelConfig, CheckboxValue } from "./components/wpp-checkbox/types";
 export { CheckboxGroupChangeEvent, CheckboxGroupValue } from "./components/wpp-checkbox-group/types";
 export { LabelConfig, LabelLocales } from "./components/wpp-label/types";
@@ -81,55 +76,46 @@ export { Theme } from "./types/theme";
 export { CounterChangeEventDetail, CounterFormat, CounterLabelConfig } from "./components/wpp-counter/types";
 export { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes } from "./components/wpp-datepicker/types";
 export { ExpandableCardSectionChangeEventDetail } from "./components/wpp-expandable-card/types";
-export { ActionButtonData } from "./components/wpp-floating-toolbar/types";
 export { FullScreenModalCloseDetails, FullScreenModalFormConfig } from "./components/wpp-full-screen-modal/types";
 export { AlignItemsType, DirectionType, JustifyContentType } from "./components/wpp-grid/types";
 export { RangeOf } from "./types/numberRange";
-export { SortDirection } from "./components/wpp-icon/components/arrows/table-sort/wpp-icon-table-sort-wrapper/wpp-icon-table-sort-wrapper";
-export { InlineEditChangeModeEventDetail, InlineEditConfirmDetail, InlineEditLocales, InlineEditMode } from "./components/wpp-inline-edit/types";
-export { InlineMessageLocalesType } from "./components/wpp-inline-message/types";
-export { InputChangeEventDetail, InputLabelConfig, InputLocaleInterface, InputTypes, InputValue, MaskOptions, WppChangeExtraEventDetail } from "./components/wpp-input/types";
-export { Color, TypographyType } from "./components/wpp-typography/types";
+export { InlineEditChangeModeEventDetail, InlineEditMode } from "./components/wpp-inline-edit/types";
+export { DecimalMaskOptions, InputChangeEventDetail, InputLabelConfig, InputLocaleInterface, InputTypes, InputValue, MaskOptions, WppChangeExtraEventDetail } from "./components/wpp-input/types";
+export { TypographyType } from "./components/wpp-typography/types";
 export { TooltipThemeTypes } from "./components/wpp-tooltip/types";
-export { ThemeColorValue } from "./types/theme-tokens";
 export { ContainerStateType, ListItemChangeEventDetail, ListValue, TooltipConfig } from "./components/wpp-list-item/types";
 export { LoadMoreChangeEventDetail } from "./components/wpp-load-more/types";
+export { ShouldCloseOnOutsideClickHandler } from "./components/wpp-menu-list/types";
 export { ModalCloseDetails, ModalFormConfig } from "./components/wpp-modal/types";
 export { NavSidebarItemEventDetail } from "./components/wpp-nav-sidebar/types";
 export { NavigationItemEventDetail, NavigationState, TopbarChangeEventDetail } from "./components/wpp-topbar/types";
 export { PaginationChangeEventDetail, PaginationLocales, PaginationPageChangeEventDetail } from "./components/wpp-pagination/types";
 export { PillChangeEventDetail, PillSize, PillType, PillValue } from "./components/wpp-pill-group/components/wpp-pill/types";
 export { PillGroupChangeEvent, PillGroupLabelConfig, PillGroupValue } from "./components/wpp-pill-group/types";
-export { PopoverInputChangeEventDetail, PopoverLocalesInterface, PopoverShouldCloseOnOutsideClickHandler } from "./components/wpp-popover/types";
+export { PopoverShouldCloseOnOutsideClickHandler } from "./components/wpp-popover/types";
 export { RadioChangeEvent, RadioLabelConfig, RadioValue } from "./components/wpp-radio/types";
 export { RadioGroupChangeEvent, RadioGroupValue } from "./components/wpp-radio-group/types";
 export { DebugLevels, Formats, QuillInstance, RichtextChangeEventDetail, RichtextLocales, RichtextSelectionChangeEventDetail, RichtextUploadRequestEventDetail, RichtextValue } from "./components/wpp-richtext/types";
 export { SearchChangeEventDetail, SearchDefaultOption, SearchGetOptionIdHandler, SearchGetOptionLabelHandler, SearchLabelConfig, SearchLocales, SearchOption } from "./components/wpp-search/types";
 export { SegmentedControlChangeEventDetail, SegmentedControlItemChangeEventDetail, SegmentedControlItemSize, SegmentedControlLabelConfig, SegmentedControlValue } from "./components/wpp-segmented-control/types";
-export { ListItemInterface, SelectChangeEventDetails, SelectLabelConfig, SelectLocaleInterface, SelectSize, SelectTypes, SelectValue } from "./components/wpp-select/types";
-export { DropdownConfig as DropdownConfig1, InputTypes as InputTypes1, LabelConfig as LabelConfig1, MaskOptions as MaskOptions1 } from "./components";
+export { GetSelectOptionIdHandler, GetSelectOptionLabelHandler, SelectChangeEventDetail, SelectDefaultOption, SelectLabelConfig, SelectLocaleInterface, SelectOption, SelectSize, SelectTypes, SelectValue } from "./components/wpp-select/types";
 export { ActionConfig, SideModalCloseDetails, SideModalFormConfig } from "./components/wpp-side-modal/types";
 export { InputWidth, MarkState, SliderChangeEventDetail, SliderLabelConfig, SliderTypes, SliderValue } from "./components/wpp-slider/types";
-export { MaskitoNumberParams } from "@maskito/kit/src/lib/masks/number/number-params";
 export { OrientationType, StepChangeEventDetail, StepLocales } from "./components/wpp-stepper/types";
 export { StickyBarButtonItem, StickyBarTabItem, StickyBarVariants } from "./components/wpp-sticky-bar/types";
 export { TabChangeEventDetail, TabsChangeEventDetail } from "./components/wpp-tabs/types";
 export { TextareaInputChangeEventDetail, TextareaInputLocales, TextareaInputValue, TextareaLabelConfig } from "./components/wpp-textarea-input/types";
+export { DropdownConfig as DropdownConfig1, LabelConfig as LabelConfig1 } from "./components";
 export { TimePickerChangeEventDetails } from "./components/wpp-time-picker/types";
 export { ButtonState, ToastCompleteDetail, ToastIcon } from "./components/wpp-toast/types";
 export { ToastState } from "./components/wpp-toast/components/wpp-toast-container/types";
 export { ToggleChangeEvent, ToggleLabelConfig, ToggleValue } from "./components/wpp-toggle/types";
 export { TransformSearchQuery, TreeActionClickEventDetail, TreeChangeEventDetail, TreeItemEndContentProps, TreeItemHighlightOptions, TreeItemSearchConfig, TreeLocaleType, TreeType } from "./components/wpp-tree/types";
-export { CaptionValue, ControlPanelConfig, JumpValues, VideoPlayerLocales, VideoSizeDimensions, VideoSourceType } from "./components/wpp-video-player/types";
 export namespace Components {
     interface WppAccordion {
         /**
-          * Contains the accordion `aria-` props.
-         */
-        "ariaProps": AriaProps;
-        /**
           * Defines the number of elements within a specific section.
-          * @deprecated - this prop will be deleted in version 4.0.0.
+          * @deprecated - this prop will be deleted in version ***
          */
         "counter": number;
         /**
@@ -150,7 +136,7 @@ export namespace Components {
         "size": 's' | 'm' | 'l' | 'xl' | '2xl';
         /**
           * If set, adds text next to the section.
-          * @deprecated - this prop will be deleted in version 4.0.0. If you want to use this prop, use "header" slot instead
+          * @deprecated - this prop will be deleted in version ***. If you want to use this prop, use "header" slot instead
          */
         "text"?: string;
         /**
@@ -191,10 +177,6 @@ export namespace Components {
           * Defines the button name.
          */
         "name"?: string;
-        /**
-          * Method that sets focus on the native button.
-         */
-        "setFocus": () => Promise<void>;
         /**
           * Defines the button type.
          */
@@ -268,7 +250,7 @@ export namespace Components {
         /**
           * Indicates locales for autocomplete component
          */
-        "locales": Partial<AutocompleteLocales>;
+        "locales": AutocompleteLocales;
         /**
           * Defines the input message maximum length.
          */
@@ -344,10 +326,6 @@ export namespace Components {
          */
         "amountOfHiddenAvatars"?: number;
         /**
-          * Contains the button `aria-` props.
-         */
-        "ariaProps": AriaProps;
-        /**
           * Defines the avatar background color.
          */
         "color"?: string;
@@ -367,10 +345,6 @@ export namespace Components {
           * Defines a username that is abbreviated if the image source is not provided.
          */
         "name": string;
-        /**
-          * Role of the avatar component.
-         */
-        "role": string;
         /**
           * Defines the avatar size.
          */
@@ -415,7 +389,7 @@ export namespace Components {
         "tooltipConfig": DropdownConfig;
         /**
           * Defines a list of users with specific attributes, such as name, src, color, and so on: `users={[{name: '', src: ''}]}`
-          * @deprecated - this prop will be deleted in version 4.0.0. If you want to use this prop, use avatars prop instead
+          * @deprecated - this prop will be deleted in version 3.0.0. If you want to use this prop, use avatars prop instead
          */
         "users": AvatarState[];
         /**
@@ -432,24 +406,12 @@ export namespace Components {
           * Contains the button `aria-` props.
          */
         "ariaProps": AriaProps;
-        /**
-          * Method that sets focus on the native button.
-         */
-        "setFocus": () => Promise<void>;
     }
     interface WppBanner {
-        /**
-          * Contains the button `aria-` props.
-         */
-        "ariaProps": AriaProps;
         /**
           * If the banner can be closed.
          */
         "closable": boolean;
-        /**
-          * Role of the banner component.
-         */
-        "role": string;
         /**
           * If the banner is displayed.
          */
@@ -458,16 +420,8 @@ export namespace Components {
           * Defines the banner style based on the available types.
          */
         "type": BannerTypes;
-        /**
-          * Defines the z-index of the WppBanner.
-         */
-        "zIndex": number;
     }
     interface WppBreadcrumb {
-        /**
-          * If provided, renders a back button with the specified label instead of the breadcrumb. If undefined, renders the default breadcrumb.
-         */
-        "backBtnLabel"?: string;
         /**
           * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
@@ -539,10 +493,6 @@ export namespace Components {
          */
         "name"?: string;
         /**
-          * Method that sets focus on the native button.
-         */
-        "setFocus": () => Promise<void>;
-        /**
           * Defines the button size. Setting this attribute changes the button height and padding.
          */
         "size": 'm' | 's';
@@ -561,14 +511,6 @@ export namespace Components {
     }
     interface WppCard {
         /**
-          * Contains the card `aria-` props.
-         */
-        "ariaProps": AriaProps;
-        /**
-          * Accepts CSS background property values to control the component's background appearance. This can include colors, images, gradients, and positioning parameters.
-         */
-        "background"?: string;
-        /**
           * If `true`, the card is checked
          */
         "checked": boolean;
@@ -576,10 +518,6 @@ export namespace Components {
           * If `true`, the card is disabled
          */
         "disabled": boolean;
-        /**
-          * Used be remove tab navigation from the card in case when the component has WppRadio inside.
-         */
-        "index": number;
         /**
           * If `true`, then on hover and on pressed card appropriate styles will be applied
          */
@@ -592,10 +530,6 @@ export namespace Components {
           * If `true`, it means that the card is nested inside another card, and clicking it will prevent the value from card-group to change.
          */
         "nested": boolean;
-        /**
-          * Method that sets focus on the card element.
-         */
-        "setFocus": () => Promise<void>;
         /**
           * Indicates the size of the card
          */
@@ -622,10 +556,6 @@ export namespace Components {
           * If `true`, single card group require no card selection and can be empty. Users can deselect a card by clicking it again.
          */
         "allowEmptySelection": boolean;
-        /**
-          * Contains the `aria-` props for component
-         */
-        "ariaProps": AriaProps;
         /**
           * If `true`, the card group will give possibility to select multiple cards
          */
@@ -661,14 +591,6 @@ export namespace Components {
          */
         "charactersLimit"?: number;
         /**
-          * Debounce delay in milliseconds.
-         */
-        "debounceDelay": number;
-        /**
-          * If set to `true`, enable debounce for onInput event.
-         */
-        "debounceEnabled": boolean;
-        /**
           * If `true`, the chat input is disabled.
          */
         "disabled": boolean;
@@ -689,21 +611,9 @@ export namespace Components {
          */
         "placeholder": string;
         /**
-          * Size of the component.
-         */
-        "size": ChatInputSize;
-        /**
-          * Text value used to set the input message content. When user input occurs, a `wppMessageChanged` event is emitted. The new value should be assigned to this property to maintain synchronization with the input field.
-         */
-        "textValue": string;
-        /**
           * If set to true, displays `Select` in left actions. The Select must placed in the `.select` slot.
          */
         "withSelect": boolean;
-        /**
-          * Defines the z-index of the WppChatInput.
-         */
-        "zIndex": number;
     }
     interface WppCheckbox {
         /**
@@ -722,10 +632,6 @@ export namespace Components {
           * If the checkbox is work as controlled component.
          */
         "controlled": boolean;
-        /**
-          * Create a component with role presentation
-         */
-        "decorative"?: boolean;
         /**
           * If the checkbox is disabled.
          */
@@ -780,14 +686,6 @@ export namespace Components {
         "value": CheckboxValue;
     }
     interface WppCheckboxGroup {
-        /**
-          * Contains the checkbox group `aria-` props.
-         */
-        "ariaProps": AriaProps;
-        /**
-          * Defines the direction in which the checkbox items are displayed. By default, the items are displayed vertically (in a column).
-         */
-        "direction": 'column' | 'row';
         /**
           * Indicates the label configuration for the checkbox group.
          */
@@ -960,15 +858,9 @@ export namespace Components {
         "labelTooltipConfig": DropdownConfig;
         /**
           * Defines the datepicker locale, uses English by default.
-          * @deprecated Use `locales` property instead.
           * @remarks - `firstDay` determines the starting day of the week and acts as a fallback if `dateLocale` is not provided. - `dateLocale` is used to automatically infer date-related properties, like `firstDay`.
          */
-        "locale": Partial<LocaleTypes>;
-        /**
-          * Defines the datepicker locale, uses English by default.
-          * @remarks - `firstDay` determines the starting day of the week and acts as a fallback if `dateLocale` is not provided. - `dateLocale` is used to automatically infer date-related properties, like `firstDay`.
-         */
-        "locales": Partial<LocaleTypes>;
+        "locale": LocaleTypes;
         /**
           * Defines the maximal datepicker date.
          */
@@ -1161,7 +1053,6 @@ export namespace Components {
     interface WppExpandableCard {
         /**
           * If `true`, the component is expanded
-          * @deprecated - this prop will be deleted in version 4.0.0. Use "isExpanded" prop instead
          */
         "expanded": boolean;
         /**
@@ -1170,13 +1061,9 @@ export namespace Components {
         "expandedByDefault": boolean;
         /**
           * Indicates accordion header in expandable card
-          * @deprecated - this prop will be deleted in version 4.0.0. If you want to use this prop, use "header" slot instead
+          * @deprecated - this prop will be deleted in version ***. If you want to use this prop, use "header" slot instead
          */
         "header": string;
-        /**
-          * If `true`, the component is expanded
-         */
-        "isExpanded": boolean;
         /**
           * Indicates expandable card size
          */
@@ -1189,7 +1076,7 @@ export namespace Components {
     interface WppFileUpload {
         /**
           * Accept file format, you can pass any format you want download, by default is `.jpg, .jpeg, .png`
-          * @deprecated - this prop will be deleted in 4.0.0 version as it is not flexible enough to handle different cases with files validations, for example based on mimetype and extension at the same time. This property handle only a few extensions: ['.jpg', '.jpeg', '.png', '.txt', '.text', '.doc', '.docx', '.mov'], and list will NOT be extended.  If you want to use this prop, use "acceptConfig" property instead. Note: "acceptConfig" property will have a higher priority in case if both "acceptConfig" and "accept" props will be provided
+          * @deprecated - this prop will be deleted in 3.0.0 version as it is not flexible enough to handle different cases with files validations, for example based on mimetype and extension at the same time. This property handle only a few extensions: ['.jpg', '.jpeg', '.png', '.txt', '.text', '.doc', '.docx', '.mov'], and list will NOT be extended.  If you want to use this prop, use "acceptConfig" property instead. Note: "acceptConfig" property will have a higher priority in case if both "acceptConfig" and "accept" props will be provided
          */
         "accept": string[];
         /**
@@ -1209,26 +1096,17 @@ export namespace Components {
          */
         "format": FileUploadResultFormaType;
         /**
-          * Indicates label config
-         */
-        "labelConfig"?: LabelConfig;
-        /**
-          * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
-         */
-        "labelTooltipConfig": DropdownConfig;
-        /**
           * Indicates locales for file upload component
          */
-        "locales": Partial<FileUploadLocales>;
+        "locales": FileUploadLocales;
         /**
           * Maximum accepted number of files The default value is 0 which means there is no limitation to how many files are accepted.
          */
         "maxFiles": number;
         /**
           * Maximum label length (in characters) of single item
-          * @deprecated - this prop will be removed in 4.0.0 version. Truncation will be calculated based on available space.
          */
-        "maxLabelLength"?: number;
+        "maxLabelLength": number;
         /**
           * Indicates file upload message maximum length
          */
@@ -1249,10 +1127,6 @@ export namespace Components {
           * Defines the input name.
          */
         "name"?: string;
-        /**
-          * If the input is required.
-         */
-        "required": boolean;
         /**
           * Method to reset FileUpload
          */
@@ -1287,7 +1161,6 @@ export namespace Components {
           * Current file
          */
         "file": FileItemType;
-        "fileName": string;
         /**
           * Represent what result format datepicker return, it can be base64, arrayBuffer, binaryString, by default it returns base64
          */
@@ -1298,17 +1171,8 @@ export namespace Components {
         "locales": FileUploadItemLocales;
         /**
           * Maximum label length (in characters) of single loading item
-          * @deprecated - this prop will be removed in 4.0.0 version. Truncation will be calculated based on available space.
          */
-        "maxLabelLength"?: number;
-        /**
-          * When true, this item inherits the parent uploader’s disabled state. Interactive controls inside the item (e.g., the delete icon) must be non-interactive: - removed from the tab order (tabindex = -1) - marked as aria-disabled="true" - click/keyboard handlers should no-op
-         */
-        "parentDisabled"?: boolean;
-        /**
-          * Indicates if the file has been uploaded.
-         */
-        "uploaded"?: boolean;
+        "maxLabelLength": number;
     }
     interface WppFilterButton {
         /**
@@ -1331,10 +1195,6 @@ export namespace Components {
           * Defines the button name.
          */
         "name"?: string;
-        /**
-          * Method that sets focus on the native button.
-         */
-        "setFocus": () => Promise<void>;
     }
     interface WppFloatingButton {
         /**
@@ -1382,10 +1242,6 @@ export namespace Components {
          */
         "name"?: string;
         /**
-          * Method that sets focus on the native button.
-         */
-        "setFocus": () => Promise<void>;
-        /**
           * Defines the button type.
          */
         "type": 'button' | 'reset' | 'submit';
@@ -1393,20 +1249,6 @@ export namespace Components {
           * Defines the button value.
          */
         "value"?: string;
-    }
-    interface WppFloatingToolbar {
-        /**
-          * Defines the action buttons configuration. Must contain between 2 and 7 items.
-         */
-        "actionButtonsConfig": ActionButtonData[];
-        /**
-          * Contains the floating toolbar `aria-` props.
-         */
-        "ariaProps": AriaProps;
-        /**
-          * Defines the orientation of the floating toolbar.
-         */
-        "orientation": 'horizontal' | 'vertical';
     }
     interface WppFullScreenModal {
         /**
@@ -1433,10 +1275,6 @@ export namespace Components {
           * Makes overlay transparent
          */
         "withTransparentOverlay": boolean;
-        /**
-          * Defines the z-index of the WppFullScreenModal.
-         */
-        "zIndex": number;
     }
     interface WppGrid {
         /**
@@ -3268,24 +3106,6 @@ export namespace Components {
          */
         "width"?: number;
     }
-    interface WppIconChatMessageNew {
-        /**
-          * Defines the icon color.
-         */
-        "color": string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size": 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
     interface WppIconChatMessageOff {
         /**
           * Defines the icon color.
@@ -4320,24 +4140,6 @@ export namespace Components {
          */
         "width"?: number;
     }
-    interface WppIconDislikeFilled {
-        /**
-          * Defines the icon color.
-         */
-        "color": string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size": 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
     interface WppIconDiversity {
         /**
           * Defines the icon color.
@@ -4938,7 +4740,7 @@ export namespace Components {
     }
     /**
      * @deprecated - Use `wpp-icon-eye-on` instead.
-     * This component will be deleted in 4.0.0.
+     * This component will be deleted in 3.0.0.
      */
     interface WppIconEye {
         /**
@@ -6532,24 +6334,6 @@ export namespace Components {
          */
         "width"?: number;
     }
-    interface WppIconLikeFilled {
-        /**
-          * Defines the icon color.
-         */
-        "color": string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size": 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
     interface WppIconLikeOff {
         /**
           * Defines the icon color.
@@ -7286,24 +7070,6 @@ export namespace Components {
          */
         "width"?: number;
     }
-    interface WppIconNextFilled {
-        /**
-          * Defines the icon color.
-         */
-        "color": string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size": 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
     interface WppIconNightLife {
         /**
           * Defines the icon color.
@@ -7712,24 +7478,6 @@ export namespace Components {
          */
         "width"?: number;
     }
-    interface WppIconPauseFilled {
-        /**
-          * Defines the icon color.
-         */
-        "color": string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size": 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
     interface WppIconPen {
         /**
           * Defines the icon color.
@@ -7928,24 +7676,6 @@ export namespace Components {
          */
         "width"?: number;
     }
-    interface WppIconPlayFilled {
-        /**
-          * Defines the icon color.
-         */
-        "color": string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size": 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
     interface WppIconPlus {
         /**
           * Defines the icon color.
@@ -8055,24 +7785,6 @@ export namespace Components {
         "width"?: number;
     }
     interface WppIconPrevious {
-        /**
-          * Defines the icon color.
-         */
-        "color": string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size": 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
-    interface WppIconPreviousFilled {
         /**
           * Defines the icon color.
          */
@@ -9528,24 +9240,6 @@ export namespace Components {
          */
         "width"?: number;
     }
-    interface WppIconStopFilled {
-        /**
-          * Defines the icon color.
-         */
-        "color": string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size": 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
     interface WppIconStrikeThrough {
         /**
           * Defines the icon color.
@@ -9846,10 +9540,6 @@ export namespace Components {
          */
         "color": string;
         /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor": string;
-        /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
         "height"?: number;
@@ -9857,10 +9547,6 @@ export namespace Components {
           * Defines the icon size, where `s` is **16px** and `m` is **20px**.
          */
         "size": 's' | 'm';
-        /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor": string;
         /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
          */
@@ -9869,13 +9555,8 @@ export namespace Components {
     interface WppIconTableSortAsc {
         /**
           * Defines the icon color.
-          * @deprecated This prop is maintained for backward compatibility but won't affect the icon since arrows have different colors.
          */
         "color": string;
-        /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor": string;
         /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
@@ -9884,10 +9565,6 @@ export namespace Components {
           * Defines the icon size, where `s` is **16px** and `m` is **20px**.
          */
         "size": 's' | 'm';
-        /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor": string;
         /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
          */
@@ -9896,13 +9573,8 @@ export namespace Components {
     interface WppIconTableSortAscHover {
         /**
           * Defines the icon color.
-          * @deprecated This prop is maintained for backward compatibility but won't affect the icon since arrows have different colors.
          */
         "color": string;
-        /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor": string;
         /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
@@ -9911,10 +9583,6 @@ export namespace Components {
           * Defines the icon size, where `s` is **16px** and `m` is **20px**.
          */
         "size": 's' | 'm';
-        /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor": string;
         /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
          */
@@ -9923,13 +9591,8 @@ export namespace Components {
     interface WppIconTableSortAscPressed {
         /**
           * Defines the icon color.
-          * @deprecated This prop is maintained for backward compatibility but won't affect the icon since arrows have different colors.
          */
         "color": string;
-        /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor": string;
         /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
@@ -9938,10 +9601,6 @@ export namespace Components {
           * Defines the icon size, where `s` is **16px** and `m` is **20px**.
          */
         "size": 's' | 'm';
-        /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor": string;
         /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
          */
@@ -9950,13 +9609,8 @@ export namespace Components {
     interface WppIconTableSortDesc {
         /**
           * Defines the icon color.
-          * @deprecated This prop is maintained for backward compatibility but won't affect the icon since arrows have different colors.
          */
         "color": string;
-        /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor": string;
         /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
@@ -9965,10 +9619,6 @@ export namespace Components {
           * Defines the icon size, where `s` is **16px** and `m` is **20px**.
          */
         "size": 's' | 'm';
-        /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor": string;
         /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
          */
@@ -9977,13 +9627,8 @@ export namespace Components {
     interface WppIconTableSortDescHover {
         /**
           * Defines the icon color.
-          * @deprecated This prop is maintained for backward compatibility but won't affect the icon since arrows have different colors.
          */
         "color": string;
-        /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor": string;
         /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
@@ -9992,10 +9637,6 @@ export namespace Components {
           * Defines the icon size, where `s` is **16px** and `m` is **20px**.
          */
         "size": 's' | 'm';
-        /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor": string;
         /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
          */
@@ -10004,13 +9645,8 @@ export namespace Components {
     interface WppIconTableSortDescPressed {
         /**
           * Defines the icon color.
-          * @deprecated This prop is maintained for backward compatibility but won't affect the icon since arrows have different colors.
          */
         "color": string;
-        /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor": string;
         /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
@@ -10019,10 +9655,6 @@ export namespace Components {
           * Defines the icon size, where `s` is **16px** and `m` is **20px**.
          */
         "size": 's' | 'm';
-        /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor": string;
         /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
          */
@@ -10034,10 +9666,6 @@ export namespace Components {
          */
         "color": string;
         /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor": string;
-        /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
         "height"?: number;
@@ -10045,10 +9673,6 @@ export namespace Components {
           * Defines the icon size, where `s` is **16px** and `m` is **20px**.
          */
         "size": 's' | 'm';
-        /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor": string;
         /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
          */
@@ -10060,10 +9684,6 @@ export namespace Components {
          */
         "color": string;
         /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor": string;
-        /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
         "height"?: number;
@@ -10072,79 +9692,11 @@ export namespace Components {
          */
         "size": 's' | 'm';
         /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor": string;
-        /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
-    interface WppIconTableSortWrapper {
-        /**
-          * Color configuration for all states and directions. colorUnsorted - Base color for unsorted state (both arrows) colorUnsortedHover - Base color for unsorted hover state (both arrows) colorUnsortedPressed - Base color for unsorted pressed state (both arrows) colorAscendingUp - Up arrow color for ascending state colorAscendingDown - Down arrow color for ascending state colorAscendingDownHover - Down arrow color for ascending hover state colorAscendingDownPressed - Down arrow color for ascending pressed state colorDescendingUp - Up arrow color for descending state colorDescendingUpHover - Up arrow color for descending hover state colorDescendingUpPressed - Up arrow color for descending pressed state colorDescendingDown - Down arrow color for descending state
-         */
-        "colors"?: {
-    unsorted?: string
-    unsortedHover?: string
-    unsortedPressed?: string
-    ascendingUp?: string
-    ascendingDown?: string
-    ascendingDownHover?: string
-    ascendingDownPressed?: string
-    descendingUp?: string
-    descendingUpHover?: string
-    descendingUpPressed?: string
-    descendingDown?: string
-  };
-        /**
-          * The current sort direction
-         */
-        "direction": SortDirection;
-        /**
-          * Defines the icon height and changes its default size.
-         */
-        "height"?: number;
-        /**
-          * Whether the icon should respond to interactions
-         */
-        "interactive": boolean;
-        /**
-          * Is the icon currently hovered This is used to apply hover styles when the icon is interactive.
-         */
-        "isHovered"?: boolean;
-        /**
-          * Is the icon currently pressed This is used to apply pressed styles when the icon is interactive.
-         */
-        "isPressed"?: boolean;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size": 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size.
          */
         "width"?: number;
     }
     interface WppIconTablet {
-        /**
-          * Defines the icon color.
-         */
-        "color": string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size": 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
-    interface WppIconTag {
         /**
           * Defines the icon color.
          */
@@ -10361,78 +9913,6 @@ export namespace Components {
         "width"?: number;
     }
     interface WppIconTheatre {
-        /**
-          * Defines the icon color.
-         */
-        "color": string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size": 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
-    interface WppIconThumbsDown {
-        /**
-          * Defines the icon color.
-         */
-        "color": string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size": 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
-    interface WppIconThumbsDownFilled {
-        /**
-          * Defines the icon color.
-         */
-        "color": string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size": 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
-    interface WppIconThumbsUp {
-        /**
-          * Defines the icon color.
-         */
-        "color": string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size": 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
-    interface WppIconThumbsUpFilled {
         /**
           * Defines the icon color.
          */
@@ -11240,10 +10720,6 @@ export namespace Components {
          */
         "inputWidth"?: string;
         /**
-          * Indicates locales for the inline-edit component
-         */
-        "locales": Partial<InlineEditLocales>;
-        /**
           * Defines the inline edit mode.
          */
         "mode": InlineEditMode;
@@ -11269,10 +10745,6 @@ export namespace Components {
           * If `true`, the close button on the right of the container for the inline-message with size='l' will not be displayed.
          */
         "hideCloseBtn": boolean;
-        /**
-          * Defines the component locale types.
-         */
-        "locales": Partial<InlineMessageLocalesType>;
         /**
           * Defines the inline message.
          */
@@ -11312,10 +10784,6 @@ export namespace Components {
          */
         "autocomplete": string;
         /**
-          * Defines the default value of the input. Note: This value is used only when the component is uncontrolled.
-         */
-        "defaultValue"?: InputValue;
-        /**
           * If the input is disabled.
          */
         "disabled": boolean;
@@ -11338,7 +10806,7 @@ export namespace Components {
         /**
           * Defines the component locale types.
          */
-        "locales": Partial<InputLocaleInterface>;
+        "locales": InputLocaleInterface;
         /**
           * Defines the custom mask options. Currently, it can be used with the following types: 'decimal', 'text', 'tel'
          */
@@ -11400,10 +10868,6 @@ export namespace Components {
          */
         "tooltipConfig": DropdownConfig;
         /**
-          * The configuration for the tooltip displayed when the input is truncated.
-         */
-        "truncationTooltipConfig": DropdownConfig;
-        /**
           * Defines the input type.
          */
         "type": InputTypes;
@@ -11428,15 +10892,11 @@ export namespace Components {
         /**
           * Indicates locales for label component
          */
-        "locales": Partial<LabelLocales>;
+        "locales": LabelLocales;
         /**
           * Indicates optional field to fill with (Optional) text after label
          */
         "optional": boolean;
-        /**
-          * Indicates the role attribute for the component
-         */
-        "role": string;
         /**
           * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
@@ -11449,13 +10909,9 @@ export namespace Components {
     interface WppInternalTooltip {
         /**
           * When set, allow to pass string represented HTML in text property
-          * @deprecated - This prop is no longer used by the component and will be deleted in v4.0.0.
+          * @deprecated - This prop is no longer used by the component
          */
         "allowHTML"?: boolean;
-        /**
-          * Contains the tooltip `aria-` props.
-         */
-        "ariaProp": AriaProps;
         /**
           * Indicates tooltip style
          */
@@ -11511,17 +10967,9 @@ export namespace Components {
          */
         "htmlFor"?: string;
         /**
-          * Optional unique identifier for the label element. Useful for associating the label with form controls or for accessibility purposes.
-         */
-        "labelId"?: string;
-        /**
           * If **(Optional)** is displayed after the label.
          */
         "optional": boolean;
-        /**
-          * Define html tag for a text
-         */
-        "tag": 'label' | 'legend' | string;
         /**
           * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
@@ -11531,24 +10979,11 @@ export namespace Components {
          */
         "typography": Extract<TypographyType, 's-strong' | 's-body'>;
     }
-    interface WppLegend {
-        "color"?: `var(--wpp-${string})`;
-        "disabled": boolean;
-        "label"?: string;
-    }
     interface WppListItem {
         /**
           * If the component is active.
          */
         "active": boolean;
-        /**
-          * Custom Typography for caption text
-          * @example captionTypography={{ color: var(--wpp-warning-color-500), type: 's-caption' }}
-         */
-        "captionTypography"?: {
-    color?: ThemeColorValue
-    type?: TypographyType
-  };
         /**
           * Value for a name attribute on checkbox input Used in WppSelect component
          */
@@ -11590,14 +11025,6 @@ export namespace Components {
          */
         "labelTooltipConfig": DropdownConfig;
         /**
-          * Custom Typography for label text
-          * @example labelTypography={{ color: var(--wpp-brand-color), type: 's-midi' }}
-         */
-        "labelTypography"?: {
-    color?: ThemeColorValue
-    type?: TypographyType
-  };
-        /**
           * If you pass a href here menu-item will be rendered as a tag. This config allow you to customize link
          */
         "linkConfig": {
@@ -11619,10 +11046,6 @@ export namespace Components {
          */
         "selectable": boolean;
         /**
-          * Sets focus on the list-item element.
-         */
-        "setFocus": () => Promise<void>;
-        /**
           * Tooltip config for the slots.
          */
         "tooltipConfig": TooltipConfig;
@@ -11632,10 +11055,6 @@ export namespace Components {
         "value"?: ListValue;
     }
     interface WppLoadMore {
-        /**
-          * Aria properties that will be applied on the button only.
-         */
-        "ariaProps": AriaProps;
         /**
           * Determines whether the component is disabled.
          */
@@ -11653,10 +11072,6 @@ export namespace Components {
          */
         "loading": boolean;
         /**
-          * Method that sets focus on the load button.
-         */
-        "setFocus": () => Promise<void>;
-        /**
           * Determines whether to show the progress bar.
          */
         "showProgressBar": boolean;
@@ -11670,10 +11085,6 @@ export namespace Components {
           * If `true`, menu-context content will be appended to the `.wpp-list-wrapper`
          */
         "appendToListWrapper": boolean;
-        /**
-          * Contains the button `aria-` props.
-         */
-        "ariaProps": AriaProps;
         /**
           * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
@@ -11696,6 +11107,16 @@ export namespace Components {
           * If a divider is displayed.
          */
         "withDivider"?: boolean;
+    }
+    interface WppMenuList {
+        /**
+          * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
+         */
+        "dropdownConfig": DropdownConfig;
+        /**
+          * Helper that defines If the menu can be closed by clicking outside of it.
+         */
+        "shouldCloseOnOutsideClick": ShouldCloseOnOutsideClickHandler;
     }
     interface WppModal {
         /**
@@ -11726,36 +11147,6 @@ export namespace Components {
           * Makes overlay transparent
          */
         "withTransparentOverlay": boolean;
-        /**
-          * Defines the z-index of the WppModal.
-         */
-        "zIndex": number;
-    }
-    interface WppMoreButton {
-        /**
-          * Contains the button `aria-` props.
-         */
-        "ariaProps": AriaProps;
-        /**
-          * If the button is disabled.
-         */
-        "disabled": boolean;
-        /**
-          * If the component is in loading state.
-         */
-        "loading": boolean;
-        /**
-          * Defines the button name.
-         */
-        "name"?: string;
-        /**
-          * Method that sets focus on the native button.
-         */
-        "setFocus": () => Promise<void>;
-        /**
-          * Indicates the size of the button. Different sizes have different paddings.
-         */
-        "size": 's' | 'm';
     }
     interface WppNavSidebar {
         /**
@@ -11765,17 +11156,13 @@ export namespace Components {
         "activePath"?: string;
         /**
           * Defines the initial current path.
-          * @deprecated initialPath is being deprecated and will be deleted in v4.0.0. Use `activePath` instead.
+          * @deprecated initialPath is being deprecated, use `activePath` instead.
          */
         "initialPath"?: string;
         /**
           * If the navigation link behaves as an `a` tag. If the app uses `client side render`, leave as `false`, and if the app uses `server side render`, change to `true`. This prop is not dynamic, so, when changing its value in Storybook, refresh the page to see the change reflected.
          */
         "nativeLink": boolean;
-        /**
-          * Defines the z-index of the WppNavSidebar.
-         */
-        "zIndex": number;
     }
     interface WppNavSidebarItem {
         /**
@@ -11879,16 +11266,6 @@ export namespace Components {
          */
         "opacity": number;
     }
-    interface WppOverlay {
-        /**
-          * Controls the visibility of the overlay.
-         */
-        "isVisible": boolean;
-        /**
-          * Defines the z-index of the WppOverlay.
-         */
-        "zIndex": number;
-    }
     interface WppPagination {
         /**
           * Defines the active page number.
@@ -11909,7 +11286,7 @@ export namespace Components {
         /**
           * Indicates locales for pagination component
          */
-        "locales": Partial<PaginationLocales>;
+        "locales": PaginationLocales;
         /**
           * Defines a threshold for pages to display. When the number of pages to display exceeds this value, the component displays a numeric selector instead of the page list.
          */
@@ -12017,10 +11394,6 @@ export namespace Components {
     }
     interface WppPopover {
         /**
-          * Contains the button `aria-` props.
-         */
-        "ariaProps": AriaProps;
-        /**
           * If the popover has cross button on the right-top side.
          */
         "closable": boolean;
@@ -12041,39 +11414,15 @@ export namespace Components {
          */
         "externalClass": string;
         /**
-          * Defines the component locale types.
-         */
-        "locales": PopoverLocalesInterface;
-        /**
           * Method for opening the popover programatically
          */
         "openPopover": () => Promise<void>;
         /**
-          * By default, the search value in the input is cleared once the dropdown is closed. Set to `true` if you need the search value to not be cleared after closing the dropdown. This property should be used together with `this.withSearch` property.
-         */
-        "persistantSearch": boolean;
-        /**
-          * The name for the input component inside the popover's dropdown. This property should be used together with `this.withSearch` property.
-         */
-        "searchName": string;
-        /**
-          * Value of the search inside the popover's dropdown. This property should be used together with `this.withSearch` property.
-         */
-        "searchValue": string;
-        /**
           * Helper that defines If the popover can be closed by clicking outside of it.
          */
         "shouldCloseOnOutsideClick": PopoverShouldCloseOnOutsideClickHandler;
-        /**
-          * If the popover has search inside of the dropdown.
-         */
-        "withSearch": boolean;
     }
     interface WppProgressIndicator {
-        /**
-          * Contains the `aria-` props of the progess-indicator component.
-         */
-        "ariaProps": AriaProps;
         /**
           * If set to `true` and `value` is `0`, the component will show a 0% empty state instead of the indeterminate loading animation.
          */
@@ -12084,7 +11433,6 @@ export namespace Components {
         "isShowPercentage": boolean;
         /**
           * Defines the loading label.
-          * @deprecated This property will be removed in version 5.0.0.
          */
         "label"?: string;
         /**
@@ -12119,10 +11467,6 @@ export namespace Components {
           * If the radio is selected.
          */
         "checked": boolean;
-        /**
-          * Create a component with role presentation
-         */
-        "decorative"?: boolean;
         /**
           * If the radio is disabled.
          */
@@ -12165,14 +11509,6 @@ export namespace Components {
         "value": RadioValue;
     }
     interface WppRadioGroup {
-        /**
-          * Contains the checkbox group `aria-` props.
-         */
-        "ariaProps": AriaProps;
-        /**
-          * Defines the direction in which the checkbox items are displayed. By default, the items are displayed vertically (in a column).
-         */
-        "direction": 'column' | 'row';
         /**
           * Indicates the label configuration for the radio group.
          */
@@ -12246,7 +11582,7 @@ export namespace Components {
         /**
           * Indicates locales for the component
          */
-        "locales": Partial<RichtextLocales>;
+        "locales": RichtextLocales;
         /**
           * Defines a maximum length threshold warning/error messages. Once a message exceeds `maxMessageLength`, it will be truncated, with the full message shown in a tooltip.
          */
@@ -12316,8 +11652,6 @@ export namespace Components {
          */
         "value": string;
     }
-    interface WppRichtextIconLoader {
-    }
     interface WppRichtextMarkdown {
         /**
           * Editor value
@@ -12341,10 +11675,6 @@ export namespace Components {
           * Collection of modules to include and respective options. The only configurable modules are the following: imageUpload, videoUpload, attachmentUpload and toolbar.aliases.embed (See "Usage" section of Notes) See [Modules](https://quilljs.com/docs/modules/) for more information about the library's modules.
          */
         "modules"?: string;
-        /**
-          * Name of the editor instance
-         */
-        "name"?: string;
         /**
           * Use `pre` HTML element as a container to preserve white space, or regular `div` element
          */
@@ -12432,7 +11762,7 @@ export namespace Components {
         /**
           * Indicates locales for search component
          */
-        "locales": Partial<SearchLocales>;
+        "locales": SearchLocales;
         /**
           * Defines the input message maximum length.
          */
@@ -12556,15 +11886,11 @@ export namespace Components {
          */
         "autoFocus": boolean;
         /**
-          * If `true`, the search input should retain its value when the dropdown is closed. This is useful for cases where the user might want to continue searching
-         */
-        "consistentSearch": boolean;
-        /**
           * If the input is disabled.
          */
         "disabled": boolean;
         /**
-          * Defines the displayed input value. If provided overrides the existing displayed value. This property should be used only in custom single selects.
+          * Defines the displayed input value. If provided overrides the existing displayed value
          */
         "displayValue": string;
         /**
@@ -12572,35 +11898,39 @@ export namespace Components {
          */
         "dropdownConfig": DropdownConfig;
         /**
+          * Defines the dropdown CSS position. If you want to overlay `overflow: hidden`, use `fixed`.
+         */
+        "dropdownPosition": ListPosition;
+        /**
           * Defines the dropdown width. The width of the dropdown cannot be smaller than the width of the trigger element.
          */
         "dropdownWidth": 'auto' | string;
         /**
-          * If true, wouldn't update `select` when the list changes.
+          * If true, wouldn't update `select` on `options` change
          */
         "enableStaticOptions": boolean;
         /**
-          * Helper function to return the key of the list-item in the list. Should be used when the value of the list item is an object.
+          * Helper that gets ID values from the select options.
          */
-        "getItemKey": (value: ListValue) => string | number | undefined;
+        "getOptionId": GetSelectOptionIdHandler;
         /**
-          * Defines the type of input NOTE: Used only in `WppCombinedSelect`
+          * Helper that gets a label for the select options.
          */
-        "inputType": InputTypes1;
+        "getOptionLabel": GetSelectOptionLabelHandler;
+        /**
+          * If the autocomplete options list has infinite scroll. This prop shouldn't change after the component is rendered.
+         */
+        "infinite": boolean;
+        /**
+          * If infinite scroll can request more pages to load.
+         */
+        "infiniteLastPage": boolean;
         /**
           * Defines the combined input value.
          */
         "inputValue": string;
         /**
-          * Defines if the dropdown of the select is opened or not. This property is used to control the direction of chevron icon (opened / closed). This property should be used only in custom single selects.
-         */
-        "isDropdownOpen": boolean;
-        /**
-          * This is property for internal use only. It is used to render text variant of the WppSelect component (used in WppPagination component)
-         */
-        "isTextSelect": boolean;
-        /**
-          * Indicates the configuration of the label.
+          * Indicates label config
          */
         "labelConfig"?: SelectLabelConfig;
         /**
@@ -12608,9 +11938,9 @@ export namespace Components {
          */
         "labelTooltipConfig": DropdownConfig;
         /**
-          * List of items in the dropdown.
+          * Helper that requests to load more options on infinite scroll. This request is considered done when the returned `Promise` is settled. This prop is required when `infinite` is set to `true`.
          */
-        "list": ListItemInterface[];
+        "loadMore"?: LoadMoreHandler;
         /**
           * If the component is loading.
          */
@@ -12618,33 +11948,25 @@ export namespace Components {
         /**
           * Defines the component locale types.
          */
-        "locales": Partial<SelectLocaleInterface>;
-        /**
-          * Defines the custom mask options. Currently, it can be used with the following types: 'decimal', 'text', 'tel' NOTE: Used only in `WppCombinedSelect`
-         */
-        "maskOptions"?: MaskOptions1;
+        "locales": SelectLocaleInterface;
         /**
           * Defines multiple select, maximum selected items to show.
          */
         "maxItemsToDisplay": number;
         /**
-          * Defines the input message maximum length. The message will get truncated after limit is reached. This property has to be used together with "message".
+          * Defines the input message maximum length.
          */
         "maxMessageLength"?: number;
         /**
-          * Defines the maximum number of items the user can select in a dropdown. If the maximum number is reached, the other items are disabled. This property can be used only on the "multiple" select.
+          * Defines the maximum number of items the user can select in a dropdown. If the maximum number is reached, the other items are disabled.
          */
         "maximumSelectedItems"?: number;
         /**
-          * Defines the input message. The message is placed right below the select.
+          * Defines the input message.
          */
         "message"?: string;
         /**
-          * Render error/warning/info message in tooltip instead of an inline message below a select element
-         */
-        "messageInTooltip": boolean;
-        /**
-          * Defines the input message type, which can be "error" or "warning". This property has to be used together with "message".
+          * Defines the input message type.
          */
         "messageType"?: InputMessageTypes;
         /**
@@ -12660,7 +11982,7 @@ export namespace Components {
          */
         "required": boolean;
         /**
-          * Sets focus on the select and opens the dropdown.
+          * Sets focus on native input
          */
         "setFocus": () => Promise<void>;
         /**
@@ -12672,7 +11994,7 @@ export namespace Components {
          */
         "size": SelectSize;
         /**
-          * Defines the dropdown configuration of the tooltip of the select's message. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
+          * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
         "tooltipConfig": DropdownConfig;
         /**
@@ -12680,15 +12002,23 @@ export namespace Components {
          */
         "truncate": boolean;
         /**
-          * Defines the WppSelect component type. * Valid values: 'single' | 'multiple' | 'combined' * Note: The value 'text' is deprecated and will be removed in version 4.0.0. Use WppActionButton with WppMenuContext to achieve the same result.
+          * Defines the input type.
          */
         "type": SelectTypes;
         /**
+          * Update options list programmatically
+         */
+        "updateOptions": () => Promise<void>;
+        /**
           * Defines the input value.
          */
-        "value": SelectValue | SelectValue[];
+        "value": SelectValue[] | SelectValue | SelectOption[];
         /**
-          * If `true` the dropdown has controls folder, meaning that the "Select All" and "Clear All" button will appear at the bottom of the dropdown. This property works just for the multiple select.
+          * If `true`, the component can accept custom value objects. Additionally, the `getOptionId` and `getOptionLabel` property may be overwritten to retrieve the necessary property for object identification.
+         */
+        "withCustomValue": boolean;
+        /**
+          * If `true` the dropdown has controls folder.
          */
         "withFolder": boolean;
         /**
@@ -12697,7 +12027,7 @@ export namespace Components {
         "withSearch": boolean | 'auto';
     }
     /**
-     * @deprecated The `actions` slot is deprecated and will be removed in the next major release (v3.0.0). Use the `actionsConfig` property instead.
+     * @deprecated The `actions` slot is deprecated and will be removed in a future release (v2.x.x). Use the `actionsConfig` property instead.
      */
     interface WppSideModal {
         /**
@@ -12729,10 +12059,6 @@ export namespace Components {
          */
         "openModal": () => Promise<void>;
         /**
-          * If `true` - the side modal will be rendered below the OS bar.
-         */
-        "osBarCompatible": boolean;
-        /**
           * Indicates the side modal size
          */
         "size"?: 's' | 'm' | 'l' | 'xl' | '2xl';
@@ -12740,15 +12066,10 @@ export namespace Components {
           * If the side modal has back button in the header.
          */
         "withBackButton": boolean;
-        /**
-          * Defines the z-index of the WppSideModal.
-         */
-        "zIndex": number;
     }
     interface WppSkeleton {
         /**
           * If `true`, the skeleton has animation
-          * @deprecated - this prop will be deleted in version 4.0.0. The skeleton component will always have animation.
          */
         "animation": boolean;
         /**
@@ -12796,7 +12117,7 @@ export namespace Components {
         /**
           * Defines the mask options for the inputs.
          */
-        "maskOptions"?: MaskitoNumberParams | MaskitoNumberParams[];
+        "maskOptions"?: DecimalMaskOptions | DecimalMaskOptions[];
         /**
           * Defines the the maximum allowed slider value.
          */
@@ -12859,16 +12180,8 @@ export namespace Components {
           * Defines the button name.
          */
         "name"?: string;
-        /**
-          * Method that sets focus on the native button.
-         */
-        "setFocus": () => Promise<void>;
     }
     interface WppSpinner {
-        /**
-          * Defines the spinner `aria-` props.
-         */
-        "ariaProps"?: AriaProps;
         /**
           * Defines the spinner color.
          */
@@ -12913,12 +12226,12 @@ export namespace Components {
         "lastSubstepStepIndex"?: number;
         /**
           * Indicates locales for step component
-          * @deprecated this prop will be deleted in version 4.0.0
+          * @deprecated this prop will be deleted in version 3.0.0
          */
         "locales": StepLocales;
         /**
           * If a step is optional.
-          * @deprecated this prop will be deleted in version 4.0.0
+          * @deprecated this prop will be deleted in version 3.0.0
          */
         "optional"?: boolean;
         /**
@@ -13020,10 +12333,6 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Defines the icon that will be displayed in the tab. Must be an icon from the WPP library. Example: `wpp-icon-pie-chart`.
-         */
-        "icon": `wpp-icon-${string}`;
-        /**
           * Indicates tabs size
          */
         "size": 'm' | 's';
@@ -13044,8 +12353,7 @@ export namespace Components {
     }
     interface WppTag {
         /**
-          * Selects the tag color from categorical palette. This property has lower priority than `variant`. If `variant` is set, the `categoricalColorIndex` will be ignored.
-          * @deprecated - This property will be removed in v4.0.0. Use `variant` instead.
+          * Selects the tag color from categorical.
          */
         "categoricalColorIndex"?: Exclude<RangeOf<9>, 0>;
         /**
@@ -13065,12 +12373,12 @@ export namespace Components {
          */
         "tooltipConfig": DropdownConfig;
         /**
-          * Defines the tag style. This property has higher priority than `categoricalColorIndex`. If `variant` is set, the `categoricalColorIndex` will be ignored.
+          * Defines the tag style.
          */
-        "variant"?: 'neutral' | 'warning' | 'positive' | 'negative' | `Cat-${Exclude<RangeOf<9>, 0>}`;
+        "variant"?: 'neutral' | 'warning' | 'positive' | 'negative';
         /**
           * Defines the if the tag icon displayed.
-          * @deprecated - this prop will be deleted in version 4.0.0. If you want tag with icon, you can add slot with some icon inside tag component
+          * @deprecated - this prop will be deleted in version ***. If you want tag with icon, you can add slot with some icon inside tag component
          */
         "withIcon"?: boolean;
     }
@@ -13106,7 +12414,7 @@ export namespace Components {
         /**
           * Indicates locales for textarea component
          */
-        "locales": Partial<TextareaInputLocales>;
+        "locales": TextareaInputLocales;
         /**
           * Defines a maximum length for the textarea threshold warning/error messages. Once a message exceeds `maxMessageLength`, it will be truncated, with the full message shown in a tooltip.
          */
@@ -13224,10 +12532,6 @@ export namespace Components {
     }
     interface WppToast {
         /**
-          * Contains the `aria-` props of the wpp-action-button.
-         */
-        "ariaProps": AriaProps;
-        /**
           * Defines for how long the toast is displayed.
          */
         "duration": number;
@@ -13263,10 +12567,6 @@ export namespace Components {
           * Defines the toast style variant. This property is primarily intended for internal use in the chat component.
          */
         "variant"?: 'default' | 'chat';
-        /**
-          * Defines the z-index of the WppToast.
-         */
-        "zIndex": number;
     }
     interface WppToastContainer {
         /**
@@ -13285,10 +12585,6 @@ export namespace Components {
           * Method for updating toast from `toast-container`.
          */
         "updateToast": (id: string, updatedData: Partial<Omit<ToastState, 'duration'>>) => Promise<void>;
-        /**
-          * Defines the z-index of the WppToastContainer.
-         */
-        "zIndex": number;
     }
     interface WppToggle {
         /**
@@ -13341,14 +12637,6 @@ export namespace Components {
         "value": ToggleValue;
     }
     interface WppTooltip {
-        /**
-          * If set, makes the tooltip anchor focusable. Default is false.
-         */
-        "anchorTabIndex": number;
-        /**
-          * Contains the button `aria-` props.
-         */
-        "ariaProps": AriaProps;
         /**
           * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
@@ -13407,10 +12695,6 @@ export namespace Components {
           * Defines the initially active topbar item.
          */
         "value": string;
-        /**
-          * Defines the z-index of the WppTopbar.
-         */
-        "zIndex": number;
     }
     interface WppTopbarItem {
         /**
@@ -13439,7 +12723,6 @@ export namespace Components {
         "navigation": NavigationState;
     }
     interface WppTree {
-        "clearAll": () => Promise<void>;
         /**
           * Defines the tree data.
          */
@@ -13463,12 +12746,11 @@ export namespace Components {
         /**
           * Defines the component locale types.
          */
-        "locales": Partial<TreeLocaleType>;
+        "locales": TreeLocaleType;
         /**
           * If several items could be selected.
          */
         "multiple": boolean;
-        "recalculateTreeWidth": () => Promise<void>;
         /**
           * Indicates search value
          */
@@ -13477,7 +12759,6 @@ export namespace Components {
           * Defines the component locale types. Note: "isMatchSearch" is deprecated, use "isMatchingSearch" instead, which uses the tree-item object.
          */
         "searchConfig": TreeItemSearchConfig;
-        "selectAll": () => Promise<void>;
         /**
           * Defines number of loading skeleton items
          */
@@ -13535,10 +12816,6 @@ export namespace Components {
     }
     interface WppTypography {
         /**
-          * Defines the text color.
-         */
-        "color": Color;
-        /**
           * Defines the typography semantic tag.
          */
         "tag": 'span' | 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -13546,55 +12823,6 @@ export namespace Components {
           * Defines the typography style.
          */
         "type": TypographyType;
-    }
-    interface WppVideoPlayer {
-        /**
-          * Contains the WppVideo `aria-` props.
-         */
-        "ariaProps": AriaProps;
-        /**
-          * Represents the text or content displayed as the caption.
-         */
-        "caption"?: CaptionValue;
-        /**
-          * Configuration object for the control panel settings.  If set autoplay to `true`, the control bar will not be visible. `muted` and `loop` property on <video> tag will be set to true as default.
-         */
-        "controlPanelConfig": ControlPanelConfig;
-        /**
-          * Defines the jump values for the video progress bar and volume bar.
-         */
-        "jumpValues": JumpValues;
-        /**
-          * Defines the component locale types.
-         */
-        "locales": Partial<VideoPlayerLocales>;
-        /**
-          * Pauses the video playback.
-          * @return A promise that resolves when the video is successfully paused.
-         */
-        "pause": () => Promise<void>;
-        /**
-          * Plays the current video using the video player reference if it is available.
-          * @return A promise that resolves when the video begins playback.
-         */
-        "play": () => Promise<void>;
-        /**
-          * Specifies the preferred loading behavior.  - `'auto'`: Indicates that the browser should load the entire media content when the page loads, if possible. - `'metadata'`: Indicates that only the metadata (e.g., length, track list) should be preloaded.
-         */
-        "preload": 'auto' | 'metadata';
-        "size": VideoSizeDimensions;
-        /**
-          * Represents the source of a resource.
-         */
-        "src": string | string[];
-        /**
-          * Represents the thumbnail of the video.
-         */
-        "thumbnail"?: string;
-        /**
-          * Represents the type of video source.
-         */
-        "type": VideoSourceType | VideoSourceType[];
     }
 }
 export interface WppAccordionCustomEvent<T> extends CustomEvent<T> {
@@ -13620,10 +12848,6 @@ export interface WppBannerCustomEvent<T> extends CustomEvent<T> {
 export interface WppBreadcrumbCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppBreadcrumbElement;
-}
-export interface WppButtonCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLWppButtonElement;
 }
 export interface WppCardCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -13697,10 +12921,6 @@ export interface WppLoadMoreCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppLoadMoreElement;
 }
-export interface WppMenuContextCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLWppMenuContextElement;
-}
 export interface WppModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppModalElement;
@@ -13721,10 +12941,6 @@ export interface WppOpacitySliderCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppOpacitySliderElement;
 }
-export interface WppOverlayCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLWppOverlayElement;
-}
 export interface WppPaginationCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppPaginationElement;
@@ -13744,10 +12960,6 @@ export interface WppPillCustomEvent<T> extends CustomEvent<T> {
 export interface WppPillGroupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppPillGroupElement;
-}
-export interface WppPopoverCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLWppPopoverElement;
 }
 export interface WppRadioCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -14045,12 +13257,6 @@ declare global {
     var HTMLWppFloatingButtonElement: {
         prototype: HTMLWppFloatingButtonElement;
         new (): HTMLWppFloatingButtonElement;
-    };
-    interface HTMLWppFloatingToolbarElement extends Components.WppFloatingToolbar, HTMLStencilElement {
-    }
-    var HTMLWppFloatingToolbarElement: {
-        prototype: HTMLWppFloatingToolbarElement;
-        new (): HTMLWppFloatingToolbarElement;
     };
     interface HTMLWppFullScreenModalElement extends Components.WppFullScreenModal, HTMLStencilElement {
     }
@@ -14652,12 +13858,6 @@ declare global {
         prototype: HTMLWppIconChatMessageElement;
         new (): HTMLWppIconChatMessageElement;
     };
-    interface HTMLWppIconChatMessageNewElement extends Components.WppIconChatMessageNew, HTMLStencilElement {
-    }
-    var HTMLWppIconChatMessageNewElement: {
-        prototype: HTMLWppIconChatMessageNewElement;
-        new (): HTMLWppIconChatMessageNewElement;
-    };
     interface HTMLWppIconChatMessageOffElement extends Components.WppIconChatMessageOff, HTMLStencilElement {
     }
     var HTMLWppIconChatMessageOffElement: {
@@ -15000,12 +14200,6 @@ declare global {
         prototype: HTMLWppIconDislikeElement;
         new (): HTMLWppIconDislikeElement;
     };
-    interface HTMLWppIconDislikeFilledElement extends Components.WppIconDislikeFilled, HTMLStencilElement {
-    }
-    var HTMLWppIconDislikeFilledElement: {
-        prototype: HTMLWppIconDislikeFilledElement;
-        new (): HTMLWppIconDislikeFilledElement;
-    };
     interface HTMLWppIconDiversityElement extends Components.WppIconDiversity, HTMLStencilElement {
     }
     var HTMLWppIconDiversityElement: {
@@ -15206,7 +14400,7 @@ declare global {
     };
     /**
      * @deprecated - Use `wpp-icon-eye-on` instead.
-     * This component will be deleted in 4.0.0.
+     * This component will be deleted in 3.0.0.
      */
     interface HTMLWppIconEyeElement extends Components.WppIconEye, HTMLStencilElement {
     }
@@ -15736,12 +14930,6 @@ declare global {
         prototype: HTMLWppIconLikeElement;
         new (): HTMLWppIconLikeElement;
     };
-    interface HTMLWppIconLikeFilledElement extends Components.WppIconLikeFilled, HTMLStencilElement {
-    }
-    var HTMLWppIconLikeFilledElement: {
-        prototype: HTMLWppIconLikeFilledElement;
-        new (): HTMLWppIconLikeFilledElement;
-    };
     interface HTMLWppIconLikeOffElement extends Components.WppIconLikeOff, HTMLStencilElement {
     }
     var HTMLWppIconLikeOffElement: {
@@ -15982,12 +15170,6 @@ declare global {
         prototype: HTMLWppIconNextElement;
         new (): HTMLWppIconNextElement;
     };
-    interface HTMLWppIconNextFilledElement extends Components.WppIconNextFilled, HTMLStencilElement {
-    }
-    var HTMLWppIconNextFilledElement: {
-        prototype: HTMLWppIconNextFilledElement;
-        new (): HTMLWppIconNextFilledElement;
-    };
     interface HTMLWppIconNightLifeElement extends Components.WppIconNightLife, HTMLStencilElement {
     }
     var HTMLWppIconNightLifeElement: {
@@ -16120,12 +15302,6 @@ declare global {
         prototype: HTMLWppIconPauseElement;
         new (): HTMLWppIconPauseElement;
     };
-    interface HTMLWppIconPauseFilledElement extends Components.WppIconPauseFilled, HTMLStencilElement {
-    }
-    var HTMLWppIconPauseFilledElement: {
-        prototype: HTMLWppIconPauseFilledElement;
-        new (): HTMLWppIconPauseFilledElement;
-    };
     interface HTMLWppIconPenElement extends Components.WppIconPen, HTMLStencilElement {
     }
     var HTMLWppIconPenElement: {
@@ -16192,12 +15368,6 @@ declare global {
         prototype: HTMLWppIconPlayElement;
         new (): HTMLWppIconPlayElement;
     };
-    interface HTMLWppIconPlayFilledElement extends Components.WppIconPlayFilled, HTMLStencilElement {
-    }
-    var HTMLWppIconPlayFilledElement: {
-        prototype: HTMLWppIconPlayFilledElement;
-        new (): HTMLWppIconPlayFilledElement;
-    };
     interface HTMLWppIconPlusElement extends Components.WppIconPlus, HTMLStencilElement {
     }
     var HTMLWppIconPlusElement: {
@@ -16239,12 +15409,6 @@ declare global {
     var HTMLWppIconPreviousElement: {
         prototype: HTMLWppIconPreviousElement;
         new (): HTMLWppIconPreviousElement;
-    };
-    interface HTMLWppIconPreviousFilledElement extends Components.WppIconPreviousFilled, HTMLStencilElement {
-    }
-    var HTMLWppIconPreviousFilledElement: {
-        prototype: HTMLWppIconPreviousFilledElement;
-        new (): HTMLWppIconPreviousFilledElement;
     };
     interface HTMLWppIconPrintElement extends Components.WppIconPrint, HTMLStencilElement {
     }
@@ -16720,12 +15884,6 @@ declare global {
         prototype: HTMLWppIconStopElement;
         new (): HTMLWppIconStopElement;
     };
-    interface HTMLWppIconStopFilledElement extends Components.WppIconStopFilled, HTMLStencilElement {
-    }
-    var HTMLWppIconStopFilledElement: {
-        prototype: HTMLWppIconStopFilledElement;
-        new (): HTMLWppIconStopFilledElement;
-    };
     interface HTMLWppIconStrikeThroughElement extends Components.WppIconStrikeThrough, HTMLStencilElement {
     }
     var HTMLWppIconStrikeThroughElement: {
@@ -16882,23 +16040,11 @@ declare global {
         prototype: HTMLWppIconTableSortPressedElement;
         new (): HTMLWppIconTableSortPressedElement;
     };
-    interface HTMLWppIconTableSortWrapperElement extends Components.WppIconTableSortWrapper, HTMLStencilElement {
-    }
-    var HTMLWppIconTableSortWrapperElement: {
-        prototype: HTMLWppIconTableSortWrapperElement;
-        new (): HTMLWppIconTableSortWrapperElement;
-    };
     interface HTMLWppIconTabletElement extends Components.WppIconTablet, HTMLStencilElement {
     }
     var HTMLWppIconTabletElement: {
         prototype: HTMLWppIconTabletElement;
         new (): HTMLWppIconTabletElement;
-    };
-    interface HTMLWppIconTagElement extends Components.WppIconTag, HTMLStencilElement {
-    }
-    var HTMLWppIconTagElement: {
-        prototype: HTMLWppIconTagElement;
-        new (): HTMLWppIconTagElement;
     };
     interface HTMLWppIconTargetElement extends Components.WppIconTarget, HTMLStencilElement {
     }
@@ -16971,30 +16117,6 @@ declare global {
     var HTMLWppIconTheatreElement: {
         prototype: HTMLWppIconTheatreElement;
         new (): HTMLWppIconTheatreElement;
-    };
-    interface HTMLWppIconThumbsDownElement extends Components.WppIconThumbsDown, HTMLStencilElement {
-    }
-    var HTMLWppIconThumbsDownElement: {
-        prototype: HTMLWppIconThumbsDownElement;
-        new (): HTMLWppIconThumbsDownElement;
-    };
-    interface HTMLWppIconThumbsDownFilledElement extends Components.WppIconThumbsDownFilled, HTMLStencilElement {
-    }
-    var HTMLWppIconThumbsDownFilledElement: {
-        prototype: HTMLWppIconThumbsDownFilledElement;
-        new (): HTMLWppIconThumbsDownFilledElement;
-    };
-    interface HTMLWppIconThumbsUpElement extends Components.WppIconThumbsUp, HTMLStencilElement {
-    }
-    var HTMLWppIconThumbsUpElement: {
-        prototype: HTMLWppIconThumbsUpElement;
-        new (): HTMLWppIconThumbsUpElement;
-    };
-    interface HTMLWppIconThumbsUpFilledElement extends Components.WppIconThumbsUpFilled, HTMLStencilElement {
-    }
-    var HTMLWppIconThumbsUpFilledElement: {
-        prototype: HTMLWppIconThumbsUpFilledElement;
-        new (): HTMLWppIconThumbsUpFilledElement;
     };
     interface HTMLWppIconTickElement extends Components.WppIconTick, HTMLStencilElement {
     }
@@ -17296,12 +16418,6 @@ declare global {
         prototype: HTMLWppLabelElement;
         new (): HTMLWppLabelElement;
     };
-    interface HTMLWppLegendElement extends Components.WppLegend, HTMLStencilElement {
-    }
-    var HTMLWppLegendElement: {
-        prototype: HTMLWppLegendElement;
-        new (): HTMLWppLegendElement;
-    };
     interface HTMLWppListItemElement extends Components.WppListItem, HTMLStencilElement {
     }
     var HTMLWppListItemElement: {
@@ -17326,17 +16442,17 @@ declare global {
         prototype: HTMLWppMenuGroupElement;
         new (): HTMLWppMenuGroupElement;
     };
+    interface HTMLWppMenuListElement extends Components.WppMenuList, HTMLStencilElement {
+    }
+    var HTMLWppMenuListElement: {
+        prototype: HTMLWppMenuListElement;
+        new (): HTMLWppMenuListElement;
+    };
     interface HTMLWppModalElement extends Components.WppModal, HTMLStencilElement {
     }
     var HTMLWppModalElement: {
         prototype: HTMLWppModalElement;
         new (): HTMLWppModalElement;
-    };
-    interface HTMLWppMoreButtonElement extends Components.WppMoreButton, HTMLStencilElement {
-    }
-    var HTMLWppMoreButtonElement: {
-        prototype: HTMLWppMoreButtonElement;
-        new (): HTMLWppMoreButtonElement;
     };
     interface HTMLWppNavSidebarElement extends Components.WppNavSidebar, HTMLStencilElement {
     }
@@ -17361,12 +16477,6 @@ declare global {
     var HTMLWppOpacitySliderElement: {
         prototype: HTMLWppOpacitySliderElement;
         new (): HTMLWppOpacitySliderElement;
-    };
-    interface HTMLWppOverlayElement extends Components.WppOverlay, HTMLStencilElement {
-    }
-    var HTMLWppOverlayElement: {
-        prototype: HTMLWppOverlayElement;
-        new (): HTMLWppOverlayElement;
     };
     interface HTMLWppPaginationElement extends Components.WppPagination, HTMLStencilElement {
     }
@@ -17454,12 +16564,6 @@ declare global {
         prototype: HTMLWppRichtextHtmlElement;
         new (): HTMLWppRichtextHtmlElement;
     };
-    interface HTMLWppRichtextIconLoaderElement extends Components.WppRichtextIconLoader, HTMLStencilElement {
-    }
-    var HTMLWppRichtextIconLoaderElement: {
-        prototype: HTMLWppRichtextIconLoaderElement;
-        new (): HTMLWppRichtextIconLoaderElement;
-    };
     interface HTMLWppRichtextMarkdownElement extends Components.WppRichtextMarkdown, HTMLStencilElement {
     }
     var HTMLWppRichtextMarkdownElement: {
@@ -17503,7 +16607,7 @@ declare global {
         new (): HTMLWppSelectElement;
     };
     /**
-     * @deprecated The `actions` slot is deprecated and will be removed in the next major release (v3.0.0). Use the `actionsConfig` property instead.
+     * @deprecated The `actions` slot is deprecated and will be removed in a future release (v2.x.x). Use the `actionsConfig` property instead.
      */
     interface HTMLWppSideModalElement extends Components.WppSideModal, HTMLStencilElement {
     }
@@ -17637,12 +16741,6 @@ declare global {
         prototype: HTMLWppTypographyElement;
         new (): HTMLWppTypographyElement;
     };
-    interface HTMLWppVideoPlayerElement extends Components.WppVideoPlayer, HTMLStencilElement {
-    }
-    var HTMLWppVideoPlayerElement: {
-        prototype: HTMLWppVideoPlayerElement;
-        new (): HTMLWppVideoPlayerElement;
-    };
     interface HTMLElementTagNameMap {
         "wpp-accordion": HTMLWppAccordionElement;
         "wpp-action-button": HTMLWppActionButtonElement;
@@ -17678,7 +16776,6 @@ declare global {
         "wpp-file-upload-item": HTMLWppFileUploadItemElement;
         "wpp-filter-button": HTMLWppFilterButtonElement;
         "wpp-floating-button": HTMLWppFloatingButtonElement;
-        "wpp-floating-toolbar": HTMLWppFloatingToolbarElement;
         "wpp-full-screen-modal": HTMLWppFullScreenModalElement;
         "wpp-grid": HTMLWppGridElement;
         "wpp-hue-slider": HTMLWppHueSliderElement;
@@ -17779,7 +16876,6 @@ declare global {
         "wpp-icon-cellular-data-on": HTMLWppIconCellularDataOnElement;
         "wpp-icon-channel": HTMLWppIconChannelElement;
         "wpp-icon-chat-message": HTMLWppIconChatMessageElement;
-        "wpp-icon-chat-message-new": HTMLWppIconChatMessageNewElement;
         "wpp-icon-chat-message-off": HTMLWppIconChatMessageOffElement;
         "wpp-icon-chat-video": HTMLWppIconChatVideoElement;
         "wpp-icon-chevron": HTMLWppIconChevronElement;
@@ -17837,7 +16933,6 @@ declare global {
         "wpp-icon-diamond": HTMLWppIconDiamondElement;
         "wpp-icon-directions": HTMLWppIconDirectionsElement;
         "wpp-icon-dislike": HTMLWppIconDislikeElement;
-        "wpp-icon-dislike-filled": HTMLWppIconDislikeFilledElement;
         "wpp-icon-diversity": HTMLWppIconDiversityElement;
         "wpp-icon-document": HTMLWppIconDocumentElement;
         "wpp-icon-document-blocked": HTMLWppIconDocumentBlockedElement;
@@ -17959,7 +17054,6 @@ declare global {
         "wpp-icon-library": HTMLWppIconLibraryElement;
         "wpp-icon-library-building": HTMLWppIconLibraryBuildingElement;
         "wpp-icon-like": HTMLWppIconLikeElement;
-        "wpp-icon-like-filled": HTMLWppIconLikeFilledElement;
         "wpp-icon-like-off": HTMLWppIconLikeOffElement;
         "wpp-icon-like-on": HTMLWppIconLikeOnElement;
         "wpp-icon-link": HTMLWppIconLinkElement;
@@ -18000,7 +17094,6 @@ declare global {
         "wpp-icon-neutral-trading": HTMLWppIconNeutralTradingElement;
         "wpp-icon-newspaper": HTMLWppIconNewspaperElement;
         "wpp-icon-next": HTMLWppIconNextElement;
-        "wpp-icon-next-filled": HTMLWppIconNextFilledElement;
         "wpp-icon-night-life": HTMLWppIconNightLifeElement;
         "wpp-icon-note": HTMLWppIconNoteElement;
         "wpp-icon-notification": HTMLWppIconNotificationElement;
@@ -18023,7 +17116,6 @@ declare global {
         "wpp-icon-parking": HTMLWppIconParkingElement;
         "wpp-icon-paste": HTMLWppIconPasteElement;
         "wpp-icon-pause": HTMLWppIconPauseElement;
-        "wpp-icon-pause-filled": HTMLWppIconPauseFilledElement;
         "wpp-icon-pen": HTMLWppIconPenElement;
         "wpp-icon-pending": HTMLWppIconPendingElement;
         "wpp-icon-pentagon": HTMLWppIconPentagonElement;
@@ -18035,7 +17127,6 @@ declare global {
         "wpp-icon-pinned": HTMLWppIconPinnedElement;
         "wpp-icon-pitch": HTMLWppIconPitchElement;
         "wpp-icon-play": HTMLWppIconPlayElement;
-        "wpp-icon-play-filled": HTMLWppIconPlayFilledElement;
         "wpp-icon-plus": HTMLWppIconPlusElement;
         "wpp-icon-plus-circle": HTMLWppIconPlusCircleElement;
         "wpp-icon-police": HTMLWppIconPoliceElement;
@@ -18043,7 +17134,6 @@ declare global {
         "wpp-icon-pound": HTMLWppIconPoundElement;
         "wpp-icon-premium": HTMLWppIconPremiumElement;
         "wpp-icon-previous": HTMLWppIconPreviousElement;
-        "wpp-icon-previous-filled": HTMLWppIconPreviousFilledElement;
         "wpp-icon-print": HTMLWppIconPrintElement;
         "wpp-icon-private-account": HTMLWppIconPrivateAccountElement;
         "wpp-icon-qa": HTMLWppIconQaElement;
@@ -18123,7 +17213,6 @@ declare global {
         "wpp-icon-statistic-document": HTMLWppIconStatisticDocumentElement;
         "wpp-icon-sticker": HTMLWppIconStickerElement;
         "wpp-icon-stop": HTMLWppIconStopElement;
-        "wpp-icon-stop-filled": HTMLWppIconStopFilledElement;
         "wpp-icon-strike-through": HTMLWppIconStrikeThroughElement;
         "wpp-icon-styleguide": HTMLWppIconStyleguideElement;
         "wpp-icon-sub-items": HTMLWppIconSubItemsElement;
@@ -18150,9 +17239,7 @@ declare global {
         "wpp-icon-table-sort-desc-pressed": HTMLWppIconTableSortDescPressedElement;
         "wpp-icon-table-sort-hover": HTMLWppIconTableSortHoverElement;
         "wpp-icon-table-sort-pressed": HTMLWppIconTableSortPressedElement;
-        "wpp-icon-table-sort-wrapper": HTMLWppIconTableSortWrapperElement;
         "wpp-icon-tablet": HTMLWppIconTabletElement;
-        "wpp-icon-tag": HTMLWppIconTagElement;
         "wpp-icon-target": HTMLWppIconTargetElement;
         "wpp-icon-task-list": HTMLWppIconTaskListElement;
         "wpp-icon-task-list-square": HTMLWppIconTaskListSquareElement;
@@ -18165,10 +17252,6 @@ declare global {
         "wpp-icon-text-alignment-left": HTMLWppIconTextAlignmentLeftElement;
         "wpp-icon-text-alignment-right": HTMLWppIconTextAlignmentRightElement;
         "wpp-icon-theatre": HTMLWppIconTheatreElement;
-        "wpp-icon-thumbs-down": HTMLWppIconThumbsDownElement;
-        "wpp-icon-thumbs-down-filled": HTMLWppIconThumbsDownFilledElement;
-        "wpp-icon-thumbs-up": HTMLWppIconThumbsUpElement;
-        "wpp-icon-thumbs-up-filled": HTMLWppIconThumbsUpFilledElement;
         "wpp-icon-tick": HTMLWppIconTickElement;
         "wpp-icon-tourism": HTMLWppIconTourismElement;
         "wpp-icon-train": HTMLWppIconTrainElement;
@@ -18219,18 +17302,16 @@ declare global {
         "wpp-internal-label": HTMLWppInternalLabelElement;
         "wpp-internal-tooltip": HTMLWppInternalTooltipElement;
         "wpp-label": HTMLWppLabelElement;
-        "wpp-legend": HTMLWppLegendElement;
         "wpp-list-item": HTMLWppListItemElement;
         "wpp-load-more": HTMLWppLoadMoreElement;
         "wpp-menu-context": HTMLWppMenuContextElement;
         "wpp-menu-group": HTMLWppMenuGroupElement;
+        "wpp-menu-list": HTMLWppMenuListElement;
         "wpp-modal": HTMLWppModalElement;
-        "wpp-more-button": HTMLWppMoreButtonElement;
         "wpp-nav-sidebar": HTMLWppNavSidebarElement;
         "wpp-nav-sidebar-item": HTMLWppNavSidebarItemElement;
         "wpp-navigation-item": HTMLWppNavigationItemElement;
         "wpp-opacity-slider": HTMLWppOpacitySliderElement;
-        "wpp-overlay": HTMLWppOverlayElement;
         "wpp-pagination": HTMLWppPaginationElement;
         "wpp-pagination-item": HTMLWppPaginationItemElement;
         "wpp-pagination-select": HTMLWppPaginationSelectElement;
@@ -18244,7 +17325,6 @@ declare global {
         "wpp-richtext": HTMLWppRichtextElement;
         "wpp-richtext-common-styles": HTMLWppRichtextCommonStylesElement;
         "wpp-richtext-html": HTMLWppRichtextHtmlElement;
-        "wpp-richtext-icon-loader": HTMLWppRichtextIconLoaderElement;
         "wpp-richtext-markdown": HTMLWppRichtextMarkdownElement;
         "wpp-richtext-view": HTMLWppRichtextViewElement;
         "wpp-saturation-picker": HTMLWppSaturationPickerElement;
@@ -18274,18 +17354,13 @@ declare global {
         "wpp-tree": HTMLWppTreeElement;
         "wpp-tree-item": HTMLWppTreeItemElement;
         "wpp-typography": HTMLWppTypographyElement;
-        "wpp-video-player": HTMLWppVideoPlayerElement;
     }
 }
 declare namespace LocalJSX {
     interface WppAccordion {
         /**
-          * Contains the accordion `aria-` props.
-         */
-        "ariaProps"?: AriaProps;
-        /**
           * Defines the number of elements within a specific section.
-          * @deprecated - this prop will be deleted in version 4.0.0.
+          * @deprecated - this prop will be deleted in version ***
          */
         "counter"?: number;
         /**
@@ -18300,6 +17375,9 @@ declare namespace LocalJSX {
           * If the component is expanded by default. Enabling this prop prevents users from expanding the accordion and removes the initial expansion animation.
          */
         "expandedByDefault"?: boolean;
+        /**
+          * Emitted when a section loses focus.
+         */
         "onWppBlur"?: (event: WppAccordionCustomEvent<FocusEvent>) => void;
         /**
           * Emitted when the expanded state changes.
@@ -18315,7 +17393,7 @@ declare namespace LocalJSX {
         "size"?: 's' | 'm' | 'l' | 'xl' | '2xl';
         /**
           * If set, adds text next to the section.
-          * @deprecated - this prop will be deleted in version 4.0.0. If you want to use this prop, use "header" slot instead
+          * @deprecated - this prop will be deleted in version ***. If you want to use this prop, use "header" slot instead
          */
         "text"?: string;
         /**
@@ -18425,7 +17503,7 @@ declare namespace LocalJSX {
         /**
           * Indicates locales for autocomplete component
          */
-        "locales"?: Partial<AutocompleteLocales>;
+        "locales"?: AutocompleteLocales;
         /**
           * Defines the input message maximum length.
          */
@@ -18449,7 +17527,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when the autocomplete loses focus
          */
-        "onWppBlur"?: (event: WppAutocompleteCustomEvent<void>) => void;
+        "onWppBlur"?: (event: WppAutocompleteCustomEvent<FocusEvent>) => void;
         /**
           * Emitted when the autocomplete value changes
          */
@@ -18517,10 +17595,6 @@ declare namespace LocalJSX {
          */
         "amountOfHiddenAvatars"?: number;
         /**
-          * Contains the button `aria-` props.
-         */
-        "ariaProps"?: AriaProps;
-        /**
           * Defines the avatar background color.
          */
         "color"?: string;
@@ -18540,10 +17614,6 @@ declare namespace LocalJSX {
           * Emitted when the avatar item is clicked.
          */
         "onWppClick"?: (event: WppAvatarCustomEvent<AvatarChangeEventDetail>) => void;
-        /**
-          * Role of the avatar component.
-         */
-        "role"?: string;
         /**
           * Defines the avatar size.
          */
@@ -18592,7 +17662,7 @@ declare namespace LocalJSX {
         "tooltipConfig"?: DropdownConfig;
         /**
           * Defines a list of users with specific attributes, such as name, src, color, and so on: `users={[{name: '', src: ''}]}`
-          * @deprecated - this prop will be deleted in version 4.0.0. If you want to use this prop, use avatars prop instead
+          * @deprecated - this prop will be deleted in version 3.0.0. If you want to use this prop, use avatars prop instead
          */
         "users"?: AvatarState[];
         /**
@@ -18612,10 +17682,6 @@ declare namespace LocalJSX {
     }
     interface WppBanner {
         /**
-          * Contains the button `aria-` props.
-         */
-        "ariaProps"?: AriaProps;
-        /**
           * If the banner can be closed.
          */
         "closable"?: boolean;
@@ -18624,10 +17690,6 @@ declare namespace LocalJSX {
          */
         "onWppClose"?: (event: WppBannerCustomEvent<BannerChangeEventDetail>) => void;
         /**
-          * Role of the banner component.
-         */
-        "role"?: string;
-        /**
           * If the banner is displayed.
          */
         "show"?: boolean;
@@ -18635,16 +17697,8 @@ declare namespace LocalJSX {
           * Defines the banner style based on the available types.
          */
         "type"?: BannerTypes;
-        /**
-          * Defines the z-index of the WppBanner.
-         */
-        "zIndex"?: number;
     }
     interface WppBreadcrumb {
-        /**
-          * If provided, renders a back button with the specified label instead of the breadcrumb. If undefined, renders the default breadcrumb.
-         */
-        "backBtnLabel"?: string;
         /**
           * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
@@ -18666,7 +17720,7 @@ declare namespace LocalJSX {
          */
         "nativeLink"?: boolean;
         /**
-          * Emitted when route changes, return object like { path: '/home', label: 'Home' } For back variant, emits { path: 'back', label: backBtnLabel }
+          * Emitted when route changes, return object like { path: '/home', label: 'Home' }
          */
         "onWppChange"?: (event: WppBreadcrumbCustomEvent<BreadcrumbItemEventDetails>) => void;
     }
@@ -18720,14 +17774,6 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emitted when the button loses focus.
-         */
-        "onWppBlur"?: (event: WppButtonCustomEvent<FocusEvent>) => void;
-        /**
-          * Emitted when the button receives focus.
-         */
-        "onWppFocus"?: (event: WppButtonCustomEvent<FocusEvent>) => void;
-        /**
           * Defines the button size. Setting this attribute changes the button height and padding.
          */
         "size"?: 'm' | 's';
@@ -18745,14 +17791,6 @@ declare namespace LocalJSX {
         "variant"?: 'primary' | 'secondary' | 'destructive' | 'destructive-secondary';
     }
     interface WppCard {
-        /**
-          * Contains the card `aria-` props.
-         */
-        "ariaProps"?: AriaProps;
-        /**
-          * Accepts CSS background property values to control the component's background appearance. This can include colors, images, gradients, and positioning parameters.
-         */
-        "background"?: string;
         /**
           * If `true`, the card is checked
          */
@@ -18804,10 +17842,6 @@ declare namespace LocalJSX {
          */
         "allowEmptySelection"?: boolean;
         /**
-          * Contains the `aria-` props for component
-         */
-        "ariaProps"?: AriaProps;
-        /**
           * If `true`, the card group will give possibility to select multiple cards
          */
         "multiple"?: boolean;
@@ -18854,14 +17888,6 @@ declare namespace LocalJSX {
          */
         "charactersLimit"?: number;
         /**
-          * Debounce delay in milliseconds.
-         */
-        "debounceDelay"?: number;
-        /**
-          * If set to `true`, enable debounce for onInput event.
-         */
-        "debounceEnabled"?: boolean;
-        /**
           * If `true`, the chat input is disabled.
          */
         "disabled"?: boolean;
@@ -18878,10 +17904,6 @@ declare namespace LocalJSX {
          */
         "onWppChange"?: (event: WppChatInputCustomEvent<FileUploadEventDetail>) => void;
         /**
-          * Emitted when the message in the input message changes.
-         */
-        "onWppMessageChanged"?: (event: WppChatInputCustomEvent<MessageChangeEventDetail>) => void;
-        /**
           * Emitted when the user clicks the "Send" button.
          */
         "onWppSend"?: (event: WppChatInputCustomEvent<SendEventDetail>) => void;
@@ -18890,21 +17912,9 @@ declare namespace LocalJSX {
          */
         "placeholder"?: string;
         /**
-          * Size of the component.
-         */
-        "size"?: ChatInputSize;
-        /**
-          * Text value used to set the input message content. When user input occurs, a `wppMessageChanged` event is emitted. The new value should be assigned to this property to maintain synchronization with the input field.
-         */
-        "textValue"?: string;
-        /**
           * If set to true, displays `Select` in left actions. The Select must placed in the `.select` slot.
          */
         "withSelect"?: boolean;
-        /**
-          * Defines the z-index of the WppChatInput.
-         */
-        "zIndex"?: number;
     }
     interface WppCheckbox {
         /**
@@ -18978,14 +17988,6 @@ declare namespace LocalJSX {
     }
     interface WppCheckboxGroup {
         /**
-          * Contains the checkbox group `aria-` props.
-         */
-        "ariaProps"?: AriaProps;
-        /**
-          * Defines the direction in which the checkbox items are displayed. By default, the items are displayed vertically (in a column).
-         */
-        "direction"?: 'column' | 'row';
-        /**
           * Indicates the label configuration for the checkbox group.
          */
         "labelConfig"?: LabelConfig;
@@ -19050,7 +18052,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when the color-picker loses focus.
          */
-        "onWppBlur"?: (event: WppColorPickerCustomEvent<void>) => void;
+        "onWppBlur"?: (event: WppColorPickerCustomEvent<FocusEvent>) => void;
         /**
           * Emitted when the color-picker selects a color to display. This happens when the dropdown of the color-picker is closed.
          */
@@ -19193,15 +18195,9 @@ declare namespace LocalJSX {
         "labelTooltipConfig"?: DropdownConfig;
         /**
           * Defines the datepicker locale, uses English by default.
-          * @deprecated Use `locales` property instead.
           * @remarks - `firstDay` determines the starting day of the week and acts as a fallback if `dateLocale` is not provided. - `dateLocale` is used to automatically infer date-related properties, like `firstDay`.
          */
-        "locale"?: Partial<LocaleTypes>;
-        /**
-          * Defines the datepicker locale, uses English by default.
-          * @remarks - `firstDay` determines the starting day of the week and acts as a fallback if `dateLocale` is not provided. - `dateLocale` is used to automatically infer date-related properties, like `firstDay`.
-         */
-        "locales"?: Partial<LocaleTypes>;
+        "locale"?: LocaleTypes;
         /**
           * Defines the maximal datepicker date.
          */
@@ -19229,7 +18225,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when the input loses focus
          */
-        "onWppBlur"?: (event: WppDatepickerCustomEvent<void>) => void;
+        "onWppBlur"?: (event: WppDatepickerCustomEvent<FocusEvent>) => void;
         /**
           * Emitted when a date is chosen.
          */
@@ -19406,7 +18402,6 @@ declare namespace LocalJSX {
     interface WppExpandableCard {
         /**
           * If `true`, the component is expanded
-          * @deprecated - this prop will be deleted in version 4.0.0. Use "isExpanded" prop instead
          */
         "expanded"?: boolean;
         /**
@@ -19415,13 +18410,9 @@ declare namespace LocalJSX {
         "expandedByDefault"?: boolean;
         /**
           * Indicates accordion header in expandable card
-          * @deprecated - this prop will be deleted in version 4.0.0. If you want to use this prop, use "header" slot instead
+          * @deprecated - this prop will be deleted in version ***. If you want to use this prop, use "header" slot instead
          */
         "header"?: string;
-        /**
-          * If `true`, the component is expanded
-         */
-        "isExpanded"?: boolean;
         /**
           * Emitted when the section loses focus
          */
@@ -19446,7 +18437,7 @@ declare namespace LocalJSX {
     interface WppFileUpload {
         /**
           * Accept file format, you can pass any format you want download, by default is `.jpg, .jpeg, .png`
-          * @deprecated - this prop will be deleted in 4.0.0 version as it is not flexible enough to handle different cases with files validations, for example based on mimetype and extension at the same time. This property handle only a few extensions: ['.jpg', '.jpeg', '.png', '.txt', '.text', '.doc', '.docx', '.mov'], and list will NOT be extended.  If you want to use this prop, use "acceptConfig" property instead. Note: "acceptConfig" property will have a higher priority in case if both "acceptConfig" and "accept" props will be provided
+          * @deprecated - this prop will be deleted in 3.0.0 version as it is not flexible enough to handle different cases with files validations, for example based on mimetype and extension at the same time. This property handle only a few extensions: ['.jpg', '.jpeg', '.png', '.txt', '.text', '.doc', '.docx', '.mov'], and list will NOT be extended.  If you want to use this prop, use "acceptConfig" property instead. Note: "acceptConfig" property will have a higher priority in case if both "acceptConfig" and "accept" props will be provided
          */
         "accept"?: string[];
         /**
@@ -19466,24 +18457,15 @@ declare namespace LocalJSX {
          */
         "format"?: FileUploadResultFormaType;
         /**
-          * Indicates label config
-         */
-        "labelConfig"?: LabelConfig;
-        /**
-          * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
-         */
-        "labelTooltipConfig"?: DropdownConfig;
-        /**
           * Indicates locales for file upload component
          */
-        "locales"?: Partial<FileUploadLocales>;
+        "locales"?: FileUploadLocales;
         /**
           * Maximum accepted number of files The default value is 0 which means there is no limitation to how many files are accepted.
          */
         "maxFiles"?: number;
         /**
           * Maximum label length (in characters) of single item
-          * @deprecated - this prop will be removed in 4.0.0 version. Truncation will be calculated based on available space.
          */
         "maxLabelLength"?: number;
         /**
@@ -19515,10 +18497,6 @@ declare namespace LocalJSX {
          */
         "onWppChange"?: (event: WppFileUploadCustomEvent<FileUploadEventDetail>) => void;
         /**
-          * Emitted when the file upload enters an error state. Triggered when the maximum number of files is exceeded.
-         */
-        "onWppError"?: (event: WppFileUploadCustomEvent<FileUploadErrorEventDetails>) => void;
-        /**
           * Emitted when the file-upload item was clicked.
          */
         "onWppFileUploadItemClick"?: (event: WppFileUploadCustomEvent<FileUploadItemEventDetail>) => void;
@@ -19530,10 +18508,6 @@ declare namespace LocalJSX {
           * Emitted when the input is in focus.
          */
         "onWppFocus"?: (event: WppFileUploadCustomEvent<FocusEvent>) => void;
-        /**
-          * If the input is required.
-         */
-        "required"?: boolean;
         /**
           * If `true`, the new errors (from a new unsuccessful upload) will replace the already existing ones in the list By default, the new errors will be added to the error list
          */
@@ -19564,7 +18538,6 @@ declare namespace LocalJSX {
           * Current file
          */
         "file"?: FileItemType;
-        "fileName"?: string;
         /**
           * Represent what result format datepicker return, it can be base64, arrayBuffer, binaryString, by default it returns base64
          */
@@ -19575,13 +18548,8 @@ declare namespace LocalJSX {
         "locales"?: FileUploadItemLocales;
         /**
           * Maximum label length (in characters) of single loading item
-          * @deprecated - this prop will be removed in 4.0.0 version. Truncation will be calculated based on available space.
          */
         "maxLabelLength"?: number;
-        /**
-          * When true, this item inherits the parent uploader’s disabled state. Interactive controls inside the item (e.g., the delete icon) must be non-interactive: - removed from the tab order (tabindex = -1) - marked as aria-disabled="true" - click/keyboard handlers should no-op
-         */
-        "parentDisabled"?: boolean;
     }
     interface WppFilterButton {
         /**
@@ -19659,20 +18627,6 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
-    interface WppFloatingToolbar {
-        /**
-          * Defines the action buttons configuration. Must contain between 2 and 7 items.
-         */
-        "actionButtonsConfig"?: ActionButtonData[];
-        /**
-          * Contains the floating toolbar `aria-` props.
-         */
-        "ariaProps"?: AriaProps;
-        /**
-          * Defines the orientation of the floating toolbar.
-         */
-        "orientation"?: 'horizontal' | 'vertical';
-    }
     interface WppFullScreenModal {
         /**
           * If the modal can be closed by clicking outside of it.
@@ -19715,10 +18669,6 @@ declare namespace LocalJSX {
           * Makes overlay transparent
          */
         "withTransparentOverlay"?: boolean;
-        /**
-          * Defines the z-index of the WppFullScreenModal.
-         */
-        "zIndex"?: number;
     }
     interface WppGrid {
         /**
@@ -21554,24 +20504,6 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
-    interface WppIconChatMessageNew {
-        /**
-          * Defines the icon color.
-         */
-        "color"?: string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size"?: 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
     interface WppIconChatMessageOff {
         /**
           * Defines the icon color.
@@ -22606,24 +21538,6 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
-    interface WppIconDislikeFilled {
-        /**
-          * Defines the icon color.
-         */
-        "color"?: string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size"?: 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
     interface WppIconDiversity {
         /**
           * Defines the icon color.
@@ -23224,7 +22138,7 @@ declare namespace LocalJSX {
     }
     /**
      * @deprecated - Use `wpp-icon-eye-on` instead.
-     * This component will be deleted in 4.0.0.
+     * This component will be deleted in 3.0.0.
      */
     interface WppIconEye {
         /**
@@ -24818,24 +23732,6 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
-    interface WppIconLikeFilled {
-        /**
-          * Defines the icon color.
-         */
-        "color"?: string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size"?: 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
     interface WppIconLikeOff {
         /**
           * Defines the icon color.
@@ -25572,24 +24468,6 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
-    interface WppIconNextFilled {
-        /**
-          * Defines the icon color.
-         */
-        "color"?: string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size"?: 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
     interface WppIconNightLife {
         /**
           * Defines the icon color.
@@ -25998,24 +24876,6 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
-    interface WppIconPauseFilled {
-        /**
-          * Defines the icon color.
-         */
-        "color"?: string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size"?: 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
     interface WppIconPen {
         /**
           * Defines the icon color.
@@ -26214,24 +25074,6 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
-    interface WppIconPlayFilled {
-        /**
-          * Defines the icon color.
-         */
-        "color"?: string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size"?: 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
     interface WppIconPlus {
         /**
           * Defines the icon color.
@@ -26341,24 +25183,6 @@ declare namespace LocalJSX {
         "width"?: number;
     }
     interface WppIconPrevious {
-        /**
-          * Defines the icon color.
-         */
-        "color"?: string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size"?: 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
-    interface WppIconPreviousFilled {
         /**
           * Defines the icon color.
          */
@@ -27814,24 +26638,6 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
-    interface WppIconStopFilled {
-        /**
-          * Defines the icon color.
-         */
-        "color"?: string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size"?: 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
     interface WppIconStrikeThrough {
         /**
           * Defines the icon color.
@@ -28132,10 +26938,6 @@ declare namespace LocalJSX {
          */
         "color"?: string;
         /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor"?: string;
-        /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
         "height"?: number;
@@ -28143,10 +26945,6 @@ declare namespace LocalJSX {
           * Defines the icon size, where `s` is **16px** and `m` is **20px**.
          */
         "size"?: 's' | 'm';
-        /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor"?: string;
         /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
          */
@@ -28155,13 +26953,8 @@ declare namespace LocalJSX {
     interface WppIconTableSortAsc {
         /**
           * Defines the icon color.
-          * @deprecated This prop is maintained for backward compatibility but won't affect the icon since arrows have different colors.
          */
         "color"?: string;
-        /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor"?: string;
         /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
@@ -28170,10 +26963,6 @@ declare namespace LocalJSX {
           * Defines the icon size, where `s` is **16px** and `m` is **20px**.
          */
         "size"?: 's' | 'm';
-        /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor"?: string;
         /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
          */
@@ -28182,13 +26971,8 @@ declare namespace LocalJSX {
     interface WppIconTableSortAscHover {
         /**
           * Defines the icon color.
-          * @deprecated This prop is maintained for backward compatibility but won't affect the icon since arrows have different colors.
          */
         "color"?: string;
-        /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor"?: string;
         /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
@@ -28197,10 +26981,6 @@ declare namespace LocalJSX {
           * Defines the icon size, where `s` is **16px** and `m` is **20px**.
          */
         "size"?: 's' | 'm';
-        /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor"?: string;
         /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
          */
@@ -28209,13 +26989,8 @@ declare namespace LocalJSX {
     interface WppIconTableSortAscPressed {
         /**
           * Defines the icon color.
-          * @deprecated This prop is maintained for backward compatibility but won't affect the icon since arrows have different colors.
          */
         "color"?: string;
-        /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor"?: string;
         /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
@@ -28224,10 +26999,6 @@ declare namespace LocalJSX {
           * Defines the icon size, where `s` is **16px** and `m` is **20px**.
          */
         "size"?: 's' | 'm';
-        /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor"?: string;
         /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
          */
@@ -28236,13 +27007,8 @@ declare namespace LocalJSX {
     interface WppIconTableSortDesc {
         /**
           * Defines the icon color.
-          * @deprecated This prop is maintained for backward compatibility but won't affect the icon since arrows have different colors.
          */
         "color"?: string;
-        /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor"?: string;
         /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
@@ -28251,10 +27017,6 @@ declare namespace LocalJSX {
           * Defines the icon size, where `s` is **16px** and `m` is **20px**.
          */
         "size"?: 's' | 'm';
-        /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor"?: string;
         /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
          */
@@ -28263,13 +27025,8 @@ declare namespace LocalJSX {
     interface WppIconTableSortDescHover {
         /**
           * Defines the icon color.
-          * @deprecated This prop is maintained for backward compatibility but won't affect the icon since arrows have different colors.
          */
         "color"?: string;
-        /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor"?: string;
         /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
@@ -28278,10 +27035,6 @@ declare namespace LocalJSX {
           * Defines the icon size, where `s` is **16px** and `m` is **20px**.
          */
         "size"?: 's' | 'm';
-        /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor"?: string;
         /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
          */
@@ -28290,13 +27043,8 @@ declare namespace LocalJSX {
     interface WppIconTableSortDescPressed {
         /**
           * Defines the icon color.
-          * @deprecated This prop is maintained for backward compatibility but won't affect the icon since arrows have different colors.
          */
         "color"?: string;
-        /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor"?: string;
         /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
@@ -28305,10 +27053,6 @@ declare namespace LocalJSX {
           * Defines the icon size, where `s` is **16px** and `m` is **20px**.
          */
         "size"?: 's' | 'm';
-        /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor"?: string;
         /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
          */
@@ -28320,10 +27064,6 @@ declare namespace LocalJSX {
          */
         "color"?: string;
         /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor"?: string;
-        /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
         "height"?: number;
@@ -28331,10 +27071,6 @@ declare namespace LocalJSX {
           * Defines the icon size, where `s` is **16px** and `m` is **20px**.
          */
         "size"?: 's' | 'm';
-        /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor"?: string;
         /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
          */
@@ -28346,10 +27082,6 @@ declare namespace LocalJSX {
          */
         "color"?: string;
         /**
-          * Defines the down arrow color.
-         */
-        "downArrowColor"?: string;
-        /**
           * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
          */
         "height"?: number;
@@ -28358,79 +27090,11 @@ declare namespace LocalJSX {
          */
         "size"?: 's' | 'm';
         /**
-          * Defines the up arrow color.
-         */
-        "upArrowColor"?: string;
-        /**
           * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
-    interface WppIconTableSortWrapper {
-        /**
-          * Color configuration for all states and directions. colorUnsorted - Base color for unsorted state (both arrows) colorUnsortedHover - Base color for unsorted hover state (both arrows) colorUnsortedPressed - Base color for unsorted pressed state (both arrows) colorAscendingUp - Up arrow color for ascending state colorAscendingDown - Down arrow color for ascending state colorAscendingDownHover - Down arrow color for ascending hover state colorAscendingDownPressed - Down arrow color for ascending pressed state colorDescendingUp - Up arrow color for descending state colorDescendingUpHover - Up arrow color for descending hover state colorDescendingUpPressed - Up arrow color for descending pressed state colorDescendingDown - Down arrow color for descending state
-         */
-        "colors"?: {
-    unsorted?: string
-    unsortedHover?: string
-    unsortedPressed?: string
-    ascendingUp?: string
-    ascendingDown?: string
-    ascendingDownHover?: string
-    ascendingDownPressed?: string
-    descendingUp?: string
-    descendingUpHover?: string
-    descendingUpPressed?: string
-    descendingDown?: string
-  };
-        /**
-          * The current sort direction
-         */
-        "direction"?: SortDirection;
-        /**
-          * Defines the icon height and changes its default size.
-         */
-        "height"?: number;
-        /**
-          * Whether the icon should respond to interactions
-         */
-        "interactive"?: boolean;
-        /**
-          * Is the icon currently hovered This is used to apply hover styles when the icon is interactive.
-         */
-        "isHovered"?: boolean;
-        /**
-          * Is the icon currently pressed This is used to apply pressed styles when the icon is interactive.
-         */
-        "isPressed"?: boolean;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size"?: 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size.
          */
         "width"?: number;
     }
     interface WppIconTablet {
-        /**
-          * Defines the icon color.
-         */
-        "color"?: string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size"?: 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
-    interface WppIconTag {
         /**
           * Defines the icon color.
          */
@@ -28647,78 +27311,6 @@ declare namespace LocalJSX {
         "width"?: number;
     }
     interface WppIconTheatre {
-        /**
-          * Defines the icon color.
-         */
-        "color"?: string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size"?: 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
-    interface WppIconThumbsDown {
-        /**
-          * Defines the icon color.
-         */
-        "color"?: string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size"?: 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
-    interface WppIconThumbsDownFilled {
-        /**
-          * Defines the icon color.
-         */
-        "color"?: string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size"?: 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
-    interface WppIconThumbsUp {
-        /**
-          * Defines the icon color.
-         */
-        "color"?: string;
-        /**
-          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
-         */
-        "height"?: number;
-        /**
-          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
-         */
-        "size"?: 's' | 'm';
-        /**
-          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
-         */
-        "width"?: number;
-    }
-    interface WppIconThumbsUpFilled {
         /**
           * Defines the icon color.
          */
@@ -29522,17 +28114,9 @@ declare namespace LocalJSX {
          */
         "inputWidth"?: string;
         /**
-          * Indicates locales for the inline-edit component
-         */
-        "locales"?: Partial<InlineEditLocales>;
-        /**
           * Defines the inline edit mode.
          */
         "mode"?: InlineEditMode;
-        /**
-          * Emitted when user clicks "Confirm" button.
-         */
-        "onWppConfirm"?: (event: WppInlineEditCustomEvent<InlineEditConfirmDetail>) => void;
         /**
           * Emitted when the inline edit mode changes
          */
@@ -29555,10 +28139,6 @@ declare namespace LocalJSX {
           * If `true`, the close button on the right of the container for the inline-message with size='l' will not be displayed.
          */
         "hideCloseBtn"?: boolean;
-        /**
-          * Defines the component locale types.
-         */
-        "locales"?: Partial<InlineMessageLocalesType>;
         /**
           * Defines the inline message.
          */
@@ -29606,10 +28186,6 @@ declare namespace LocalJSX {
          */
         "autocomplete"?: string;
         /**
-          * Defines the default value of the input. Note: This value is used only when the component is uncontrolled.
-         */
-        "defaultValue"?: InputValue;
-        /**
           * If the input is disabled.
          */
         "disabled"?: boolean;
@@ -29628,7 +28204,7 @@ declare namespace LocalJSX {
         /**
           * Defines the component locale types.
          */
-        "locales"?: Partial<InputLocaleInterface>;
+        "locales"?: InputLocaleInterface;
         /**
           * Defines the custom mask options. Currently, it can be used with the following types: 'decimal', 'text', 'tel'
          */
@@ -29718,15 +28294,11 @@ declare namespace LocalJSX {
         /**
           * Indicates locales for label component
          */
-        "locales"?: Partial<LabelLocales>;
+        "locales"?: LabelLocales;
         /**
           * Indicates optional field to fill with (Optional) text after label
          */
         "optional"?: boolean;
-        /**
-          * Indicates the role attribute for the component
-         */
-        "role"?: string;
         /**
           * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
@@ -29739,13 +28311,9 @@ declare namespace LocalJSX {
     interface WppInternalTooltip {
         /**
           * When set, allow to pass string represented HTML in text property
-          * @deprecated - This prop is no longer used by the component and will be deleted in v4.0.0.
+          * @deprecated - This prop is no longer used by the component
          */
         "allowHTML"?: boolean;
-        /**
-          * Contains the tooltip `aria-` props.
-         */
-        "ariaProp"?: AriaProps;
         /**
           * If `true`, the tooltip is displayed in an error state
          */
@@ -29797,10 +28365,6 @@ declare namespace LocalJSX {
          */
         "htmlFor"?: string;
         /**
-          * Optional unique identifier for the label element. Useful for associating the label with form controls or for accessibility purposes.
-         */
-        "labelId"?: string;
-        /**
           * If **(Optional)** is displayed after the label.
          */
         "optional"?: boolean;
@@ -29813,24 +28377,11 @@ declare namespace LocalJSX {
          */
         "typography"?: Extract<TypographyType, 's-strong' | 's-body'>;
     }
-    interface WppLegend {
-        "color"?: `var(--wpp-${string})`;
-        "disabled"?: boolean;
-        "label"?: string;
-    }
     interface WppListItem {
         /**
           * If the component is active.
          */
         "active"?: boolean;
-        /**
-          * Custom Typography for caption text
-          * @example captionTypography={{ color: var(--wpp-warning-color-500), type: 's-caption' }}
-         */
-        "captionTypography"?: {
-    color?: ThemeColorValue
-    type?: TypographyType
-  };
         /**
           * Value for a name attribute on checkbox input Used in WppSelect component
          */
@@ -29863,14 +28414,6 @@ declare namespace LocalJSX {
           * Configuration of tooltip's dropdown.
          */
         "labelTooltipConfig"?: DropdownConfig;
-        /**
-          * Custom Typography for label text
-          * @example labelTypography={{ color: var(--wpp-brand-color), type: 's-midi' }}
-         */
-        "labelTypography"?: {
-    color?: ThemeColorValue
-    type?: TypographyType
-  };
         /**
           * If you pass a href here menu-item will be rendered as a tag. This config allow you to customize link
          */
@@ -29907,10 +28450,6 @@ declare namespace LocalJSX {
     }
     interface WppLoadMore {
         /**
-          * Aria properties that will be applied on the button only.
-         */
-        "ariaProps"?: AriaProps;
-        /**
           * Determines whether the component is disabled.
          */
         "disabled"?: boolean;
@@ -29945,10 +28484,6 @@ declare namespace LocalJSX {
          */
         "appendToListWrapper"?: boolean;
         /**
-          * Contains the button `aria-` props.
-         */
-        "ariaProps"?: AriaProps;
-        /**
           * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
         "dropdownConfig"?: DropdownConfig;
@@ -29960,14 +28495,6 @@ declare namespace LocalJSX {
           * Defines the context menu width. The maximum width of the menu is 350px.
          */
         "listWidth"?: 'auto' | string;
-        /**
-          * Emitted when the input loses focus
-         */
-        "onWppBlur"?: (event: WppMenuContextCustomEvent<void>) => void;
-        /**
-          * Emitted when the input receives focus
-         */
-        "onWppFocus"?: (event: WppMenuContextCustomEvent<FocusEvent>) => void;
     }
     interface WppMenuGroup {
         /**
@@ -29978,6 +28505,16 @@ declare namespace LocalJSX {
           * If a divider is displayed.
          */
         "withDivider"?: boolean;
+    }
+    interface WppMenuList {
+        /**
+          * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
+         */
+        "dropdownConfig"?: DropdownConfig;
+        /**
+          * Helper that defines If the menu can be closed by clicking outside of it.
+         */
+        "shouldCloseOnOutsideClick"?: ShouldCloseOnOutsideClickHandler;
     }
     interface WppModal {
         /**
@@ -30002,7 +28539,7 @@ declare namespace LocalJSX {
         "onWppModalCloseStart"?: (event: WppModalCustomEvent<ModalCloseDetails>) => void;
         /**
           * Handles the modal click actions.
-          * @deprecated - this prop will be deleted in version 4.0.0 . Use `wppModalOpenStart`/`wppModalOpenComplete` instead
+          * @deprecated - this prop will be deleted in version 3.0.0 . Use `wppModalOpenStart`/`wppModalOpenComplete` instead
          */
         "onWppModalOpen"?: (event: WppModalCustomEvent<void>) => void;
         /**
@@ -30025,32 +28562,6 @@ declare namespace LocalJSX {
           * Makes overlay transparent
          */
         "withTransparentOverlay"?: boolean;
-        /**
-          * Defines the z-index of the WppModal.
-         */
-        "zIndex"?: number;
-    }
-    interface WppMoreButton {
-        /**
-          * Contains the button `aria-` props.
-         */
-        "ariaProps"?: AriaProps;
-        /**
-          * If the button is disabled.
-         */
-        "disabled"?: boolean;
-        /**
-          * If the component is in loading state.
-         */
-        "loading"?: boolean;
-        /**
-          * Defines the button name.
-         */
-        "name"?: string;
-        /**
-          * Indicates the size of the button. Different sizes have different paddings.
-         */
-        "size"?: 's' | 'm';
     }
     interface WppNavSidebar {
         /**
@@ -30060,7 +28571,7 @@ declare namespace LocalJSX {
         "activePath"?: string;
         /**
           * Defines the initial current path.
-          * @deprecated initialPath is being deprecated and will be deleted in v4.0.0. Use `activePath` instead.
+          * @deprecated initialPath is being deprecated, use `activePath` instead.
          */
         "initialPath"?: string;
         /**
@@ -30071,10 +28582,6 @@ declare namespace LocalJSX {
           * Emitted when app routes change, return object like { path: '/home', label: 'Home' }
          */
         "onWppChange"?: (event: WppNavSidebarCustomEvent<NavSidebarItemEventDetail>) => void;
-        /**
-          * Defines the z-index of the WppNavSidebar.
-         */
-        "zIndex"?: number;
     }
     interface WppNavSidebarItem {
         /**
@@ -30190,20 +28697,6 @@ declare namespace LocalJSX {
          */
         "opacity"?: number;
     }
-    interface WppOverlay {
-        /**
-          * Controls the visibility of the overlay.
-         */
-        "isVisible"?: boolean;
-        /**
-          * Emitted when the overlay is clicked.
-         */
-        "onWppClick"?: (event: WppOverlayCustomEvent<void>) => void;
-        /**
-          * Defines the z-index of the WppOverlay.
-         */
-        "zIndex"?: number;
-    }
     interface WppPagination {
         /**
           * Defines the active page number.
@@ -30224,7 +28717,7 @@ declare namespace LocalJSX {
         /**
           * Indicates locales for pagination component
          */
-        "locales"?: Partial<PaginationLocales>;
+        "locales"?: PaginationLocales;
         /**
           * Emitted when selected page or number of items per page changes
          */
@@ -30376,10 +28869,6 @@ declare namespace LocalJSX {
     }
     interface WppPopover {
         /**
-          * Contains the button `aria-` props.
-         */
-        "ariaProps"?: AriaProps;
-        /**
           * If the popover has cross button on the right-top side.
          */
         "closable"?: boolean;
@@ -30396,39 +28885,11 @@ declare namespace LocalJSX {
          */
         "externalClass"?: string;
         /**
-          * Defines the component locale types.
-         */
-        "locales"?: PopoverLocalesInterface;
-        /**
-          * Emitted when the value of the search input inside the dropdown changes.
-         */
-        "onWppSearchChange"?: (event: WppPopoverCustomEvent<PopoverInputChangeEventDetail>) => void;
-        /**
-          * By default, the search value in the input is cleared once the dropdown is closed. Set to `true` if you need the search value to not be cleared after closing the dropdown. This property should be used together with `this.withSearch` property.
-         */
-        "persistantSearch"?: boolean;
-        /**
-          * The name for the input component inside the popover's dropdown. This property should be used together with `this.withSearch` property.
-         */
-        "searchName"?: string;
-        /**
-          * Value of the search inside the popover's dropdown. This property should be used together with `this.withSearch` property.
-         */
-        "searchValue"?: string;
-        /**
           * Helper that defines If the popover can be closed by clicking outside of it.
          */
         "shouldCloseOnOutsideClick"?: PopoverShouldCloseOnOutsideClickHandler;
-        /**
-          * If the popover has search inside of the dropdown.
-         */
-        "withSearch"?: boolean;
     }
     interface WppProgressIndicator {
-        /**
-          * Contains the `aria-` props of the progess-indicator component.
-         */
-        "ariaProps"?: AriaProps;
         /**
           * If set to `true` and `value` is `0`, the component will show a 0% empty state instead of the indeterminate loading animation.
          */
@@ -30439,7 +28900,6 @@ declare namespace LocalJSX {
         "isShowPercentage"?: boolean;
         /**
           * Defines the loading label.
-          * @deprecated This property will be removed in version 5.0.0.
          */
         "label"?: string;
         /**
@@ -30516,14 +28976,6 @@ declare namespace LocalJSX {
         "value"?: RadioValue;
     }
     interface WppRadioGroup {
-        /**
-          * Contains the checkbox group `aria-` props.
-         */
-        "ariaProps"?: AriaProps;
-        /**
-          * Defines the direction in which the checkbox items are displayed. By default, the items are displayed vertically (in a column).
-         */
-        "direction"?: 'column' | 'row';
         /**
           * Indicates the label configuration for the radio group.
          */
@@ -30609,7 +29061,7 @@ declare namespace LocalJSX {
         /**
           * Indicates locales for the component
          */
-        "locales"?: Partial<RichtextLocales>;
+        "locales"?: RichtextLocales;
         /**
           * Defines a maximum length threshold warning/error messages. Once a message exceeds `maxMessageLength`, it will be truncated, with the full message shown in a tooltip.
          */
@@ -30703,8 +29155,6 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
-    interface WppRichtextIconLoader {
-    }
     interface WppRichtextMarkdown {
         /**
           * Editor value
@@ -30728,10 +29178,6 @@ declare namespace LocalJSX {
           * Collection of modules to include and respective options. The only configurable modules are the following: imageUpload, videoUpload, attachmentUpload and toolbar.aliases.embed (See "Usage" section of Notes) See [Modules](https://quilljs.com/docs/modules/) for more information about the library's modules.
          */
         "modules"?: string;
-        /**
-          * Name of the editor instance
-         */
-        "name"?: string;
         /**
           * Use `pre` HTML element as a container to preserve white space, or regular `div` element
          */
@@ -30823,7 +29269,7 @@ declare namespace LocalJSX {
         /**
           * Indicates locales for search component
          */
-        "locales"?: Partial<SearchLocales>;
+        "locales"?: SearchLocales;
         /**
           * Defines the input message maximum length.
          */
@@ -30843,7 +29289,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when the search loses focus
          */
-        "onWppBlur"?: (event: WppSearchCustomEvent<void>) => void;
+        "onWppBlur"?: (event: WppSearchCustomEvent<FocusEvent>) => void;
         /**
           * Emitted when the search value changes
          */
@@ -30979,15 +29425,11 @@ declare namespace LocalJSX {
          */
         "autoFocus"?: boolean;
         /**
-          * If `true`, the search input should retain its value when the dropdown is closed. This is useful for cases where the user might want to continue searching
-         */
-        "consistentSearch"?: boolean;
-        /**
           * If the input is disabled.
          */
         "disabled"?: boolean;
         /**
-          * Defines the displayed input value. If provided overrides the existing displayed value. This property should be used only in custom single selects.
+          * Defines the displayed input value. If provided overrides the existing displayed value
          */
         "displayValue"?: string;
         /**
@@ -30995,31 +29437,39 @@ declare namespace LocalJSX {
          */
         "dropdownConfig"?: DropdownConfig;
         /**
+          * Defines the dropdown CSS position. If you want to overlay `overflow: hidden`, use `fixed`.
+         */
+        "dropdownPosition"?: ListPosition;
+        /**
           * Defines the dropdown width. The width of the dropdown cannot be smaller than the width of the trigger element.
          */
         "dropdownWidth"?: 'auto' | string;
         /**
-          * If true, wouldn't update `select` when the list changes.
+          * If true, wouldn't update `select` on `options` change
          */
         "enableStaticOptions"?: boolean;
         /**
-          * Helper function to return the key of the list-item in the list. Should be used when the value of the list item is an object.
+          * Helper that gets ID values from the select options.
          */
-        "getItemKey"?: (value: ListValue) => string | number | undefined;
+        "getOptionId"?: GetSelectOptionIdHandler;
         /**
-          * Defines the type of input NOTE: Used only in `WppCombinedSelect`
+          * Helper that gets a label for the select options.
          */
-        "inputType"?: InputTypes1;
+        "getOptionLabel"?: GetSelectOptionLabelHandler;
+        /**
+          * If the autocomplete options list has infinite scroll. This prop shouldn't change after the component is rendered.
+         */
+        "infinite"?: boolean;
+        /**
+          * If infinite scroll can request more pages to load.
+         */
+        "infiniteLastPage"?: boolean;
         /**
           * Defines the combined input value.
          */
         "inputValue"?: string;
         /**
-          * Defines if the dropdown of the select is opened or not. This property is used to control the direction of chevron icon (opened / closed). This property should be used only in custom single selects.
-         */
-        "isDropdownOpen"?: boolean;
-        /**
-          * Indicates the configuration of the label.
+          * Indicates label config
          */
         "labelConfig"?: SelectLabelConfig;
         /**
@@ -31027,9 +29477,9 @@ declare namespace LocalJSX {
          */
         "labelTooltipConfig"?: DropdownConfig;
         /**
-          * List of items in the dropdown.
+          * Helper that requests to load more options on infinite scroll. This request is considered done when the returned `Promise` is settled. This prop is required when `infinite` is set to `true`.
          */
-        "list"?: ListItemInterface[];
+        "loadMore"?: LoadMoreHandler;
         /**
           * If the component is loading.
          */
@@ -31037,33 +29487,25 @@ declare namespace LocalJSX {
         /**
           * Defines the component locale types.
          */
-        "locales"?: Partial<SelectLocaleInterface>;
-        /**
-          * Defines the custom mask options. Currently, it can be used with the following types: 'decimal', 'text', 'tel' NOTE: Used only in `WppCombinedSelect`
-         */
-        "maskOptions"?: MaskOptions1;
+        "locales"?: SelectLocaleInterface;
         /**
           * Defines multiple select, maximum selected items to show.
          */
         "maxItemsToDisplay"?: number;
         /**
-          * Defines the input message maximum length. The message will get truncated after limit is reached. This property has to be used together with "message".
+          * Defines the input message maximum length.
          */
         "maxMessageLength"?: number;
         /**
-          * Defines the maximum number of items the user can select in a dropdown. If the maximum number is reached, the other items are disabled. This property can be used only on the "multiple" select.
+          * Defines the maximum number of items the user can select in a dropdown. If the maximum number is reached, the other items are disabled.
          */
         "maximumSelectedItems"?: number;
         /**
-          * Defines the input message. The message is placed right below the select.
+          * Defines the input message.
          */
         "message"?: string;
         /**
-          * Render error/warning/info message in tooltip instead of an inline message below a select element
-         */
-        "messageInTooltip"?: boolean;
-        /**
-          * Defines the input message type, which can be "error" or "warning". This property has to be used together with "message".
+          * Defines the input message type.
          */
         "messageType"?: InputMessageTypes;
         /**
@@ -31077,11 +29519,15 @@ declare namespace LocalJSX {
         /**
           * Emitted when an input value changes.
          */
-        "onWppChange"?: (event: WppSelectCustomEvent<SelectChangeEventDetails>) => void;
+        "onWppChange"?: (event: WppSelectCustomEvent<SelectChangeEventDetail>) => void;
         /**
           * Emitted when the input is in focus.
          */
         "onWppFocus"?: (event: WppSelectCustomEvent<FocusEvent>) => void;
+        /**
+          * Emitted when the search value changes
+         */
+        "onWppSearchValueChange"?: (event: WppSelectCustomEvent<string>) => void;
         /**
           * Defines the input placeholder.
          */
@@ -31099,7 +29545,7 @@ declare namespace LocalJSX {
          */
         "size"?: SelectSize;
         /**
-          * Defines the dropdown configuration of the tooltip of the select's message. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
+          * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
         "tooltipConfig"?: DropdownConfig;
         /**
@@ -31107,15 +29553,19 @@ declare namespace LocalJSX {
          */
         "truncate"?: boolean;
         /**
-          * Defines the WppSelect component type. * Valid values: 'single' | 'multiple' | 'combined' * Note: The value 'text' is deprecated and will be removed in version 4.0.0. Use WppActionButton with WppMenuContext to achieve the same result.
+          * Defines the input type.
          */
         "type"?: SelectTypes;
         /**
           * Defines the input value.
          */
-        "value"?: SelectValue | SelectValue[];
+        "value"?: SelectValue[] | SelectValue | SelectOption[];
         /**
-          * If `true` the dropdown has controls folder, meaning that the "Select All" and "Clear All" button will appear at the bottom of the dropdown. This property works just for the multiple select.
+          * If `true`, the component can accept custom value objects. Additionally, the `getOptionId` and `getOptionLabel` property may be overwritten to retrieve the necessary property for object identification.
+         */
+        "withCustomValue"?: boolean;
+        /**
+          * If `true` the dropdown has controls folder.
          */
         "withFolder"?: boolean;
         /**
@@ -31124,7 +29574,7 @@ declare namespace LocalJSX {
         "withSearch"?: boolean | 'auto';
     }
     /**
-     * @deprecated The `actions` slot is deprecated and will be removed in the next major release (v3.0.0). Use the `actionsConfig` property instead.
+     * @deprecated The `actions` slot is deprecated and will be removed in a future release (v2.x.x). Use the `actionsConfig` property instead.
      */
     interface WppSideModal {
         /**
@@ -31161,7 +29611,7 @@ declare namespace LocalJSX {
         "onWppSideModalCloseStart"?: (event: WppSideModalCustomEvent<SideModalCloseDetails>) => void;
         /**
           * Handles the side modal click actions.
-          * @deprecated - this prop will be deleted in version 4.0.0 . Use `wppSideModalOpenStart`/`wppSideModalOpenComplete` instead
+          * @deprecated - this prop will be deleted in version 3.0.0 . Use `wppSideModalOpenStart`/`wppSideModalOpenComplete` instead
          */
         "onWppSideModalOpen"?: (event: WppSideModalCustomEvent<void>) => void;
         /**
@@ -31177,10 +29627,6 @@ declare namespace LocalJSX {
          */
         "open"?: boolean;
         /**
-          * If `true` - the side modal will be rendered below the OS bar.
-         */
-        "osBarCompatible"?: boolean;
-        /**
           * Indicates the side modal size
          */
         "size"?: 's' | 'm' | 'l' | 'xl' | '2xl';
@@ -31188,15 +29634,10 @@ declare namespace LocalJSX {
           * If the side modal has back button in the header.
          */
         "withBackButton"?: boolean;
-        /**
-          * Defines the z-index of the WppSideModal.
-         */
-        "zIndex"?: number;
     }
     interface WppSkeleton {
         /**
           * If `true`, the skeleton has animation
-          * @deprecated - this prop will be deleted in version 4.0.0. The skeleton component will always have animation.
          */
         "animation"?: boolean;
         /**
@@ -31244,7 +29685,7 @@ declare namespace LocalJSX {
         /**
           * Defines the mask options for the inputs.
          */
-        "maskOptions"?: MaskitoNumberParams | MaskitoNumberParams[];
+        "maskOptions"?: DecimalMaskOptions | DecimalMaskOptions[];
         /**
           * Defines the the maximum allowed slider value.
          */
@@ -31318,10 +29759,6 @@ declare namespace LocalJSX {
     }
     interface WppSpinner {
         /**
-          * Defines the spinner `aria-` props.
-         */
-        "ariaProps"?: AriaProps;
-        /**
           * Defines the spinner color.
          */
         "color"?: string;
@@ -31361,7 +29798,7 @@ declare namespace LocalJSX {
         "lastStep"?: boolean;
         /**
           * Indicates locales for step component
-          * @deprecated this prop will be deleted in version 4.0.0
+          * @deprecated this prop will be deleted in version 3.0.0
          */
         "locales"?: StepLocales;
         /**
@@ -31370,7 +29807,7 @@ declare namespace LocalJSX {
         "onWppStepChange"?: (event: WppStepCustomEvent<StepChangeEventDetail>) => void;
         /**
           * If a step is optional.
-          * @deprecated this prop will be deleted in version 4.0.0
+          * @deprecated this prop will be deleted in version 3.0.0
          */
         "optional"?: boolean;
         /**
@@ -31488,10 +29925,6 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Defines the icon that will be displayed in the tab. Must be an icon from the WPP library. Example: `wpp-icon-pie-chart`.
-         */
-        "icon"?: `wpp-icon-${string}`;
-        /**
           * Emitted when an item loses focus.
          */
         "onWppBlur"?: (event: WppTabCustomEvent<FocusEvent>) => void;
@@ -31528,8 +29961,7 @@ declare namespace LocalJSX {
     }
     interface WppTag {
         /**
-          * Selects the tag color from categorical palette. This property has lower priority than `variant`. If `variant` is set, the `categoricalColorIndex` will be ignored.
-          * @deprecated - This property will be removed in v4.0.0. Use `variant` instead.
+          * Selects the tag color from categorical.
          */
         "categoricalColorIndex"?: Exclude<RangeOf<9>, 0>;
         /**
@@ -31545,12 +29977,12 @@ declare namespace LocalJSX {
          */
         "tooltipConfig"?: DropdownConfig;
         /**
-          * Defines the tag style. This property has higher priority than `categoricalColorIndex`. If `variant` is set, the `categoricalColorIndex` will be ignored.
+          * Defines the tag style.
          */
-        "variant"?: 'neutral' | 'warning' | 'positive' | 'negative' | `Cat-${Exclude<RangeOf<9>, 0>}`;
+        "variant"?: 'neutral' | 'warning' | 'positive' | 'negative';
         /**
           * Defines the if the tag icon displayed.
-          * @deprecated - this prop will be deleted in version 4.0.0. If you want tag with icon, you can add slot with some icon inside tag component
+          * @deprecated - this prop will be deleted in version ***. If you want tag with icon, you can add slot with some icon inside tag component
          */
         "withIcon"?: boolean;
     }
@@ -31582,7 +30014,7 @@ declare namespace LocalJSX {
         /**
           * Indicates locales for textarea component
          */
-        "locales"?: Partial<TextareaInputLocales>;
+        "locales"?: TextareaInputLocales;
         /**
           * Defines a maximum length for the textarea threshold warning/error messages. Once a message exceeds `maxMessageLength`, it will be truncated, with the full message shown in a tooltip.
          */
@@ -31676,7 +30108,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when the input loses focus
          */
-        "onWppBlur"?: (event: WppTimePickerCustomEvent<void>) => void;
+        "onWppBlur"?: (event: WppTimePickerCustomEvent<FocusEvent>) => void;
         /**
           * Emitted when the dropdown of the time picker closes. Contains details about the current value of the datepicker.
          */
@@ -31715,10 +30147,6 @@ declare namespace LocalJSX {
         "width"?: string;
     }
     interface WppToast {
-        /**
-          * Contains the `aria-` props of the wpp-action-button.
-         */
-        "ariaProps"?: AriaProps;
         /**
           * Defines for how long the toast is displayed.
          */
@@ -31759,20 +30187,12 @@ declare namespace LocalJSX {
           * Defines the toast style variant. This property is primarily intended for internal use in the chat component.
          */
         "variant"?: 'default' | 'chat';
-        /**
-          * Defines the z-index of the WppToast.
-         */
-        "zIndex"?: number;
     }
     interface WppToastContainer {
         /**
           * Defines the maximum number of toasts to display at once.
          */
         "maxToastsToDisplay"?: number;
-        /**
-          * Defines the z-index of the WppToastContainer.
-         */
-        "zIndex"?: number;
     }
     interface WppToggle {
         /**
@@ -31834,10 +30254,6 @@ declare namespace LocalJSX {
     }
     interface WppTooltip {
         /**
-          * Contains the button `aria-` props.
-         */
-        "ariaProps"?: AriaProps;
-        /**
           * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
         "config"?: DropdownConfig;
@@ -31895,10 +30311,6 @@ declare namespace LocalJSX {
           * Defines the initially active topbar item.
          */
         "value"?: string;
-        /**
-          * Defines the z-index of the WppTopbar.
-         */
-        "zIndex"?: number;
     }
     interface WppTopbarItem {
         /**
@@ -31954,7 +30366,7 @@ declare namespace LocalJSX {
         /**
           * Defines the component locale types.
          */
-        "locales"?: Partial<TreeLocaleType>;
+        "locales"?: TreeLocaleType;
         /**
           * If several items could be selected.
          */
@@ -32040,10 +30452,6 @@ declare namespace LocalJSX {
     }
     interface WppTypography {
         /**
-          * Defines the text color.
-         */
-        "color"?: Color;
-        /**
           * Defines the typography semantic tag.
          */
         "tag"?: 'span' | 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -32051,45 +30459,6 @@ declare namespace LocalJSX {
           * Defines the typography style.
          */
         "type"?: TypographyType;
-    }
-    interface WppVideoPlayer {
-        /**
-          * Contains the WppVideo `aria-` props.
-         */
-        "ariaProps"?: AriaProps;
-        /**
-          * Represents the text or content displayed as the caption.
-         */
-        "caption"?: CaptionValue;
-        /**
-          * Configuration object for the control panel settings.  If set autoplay to `true`, the control bar will not be visible. `muted` and `loop` property on <video> tag will be set to true as default.
-         */
-        "controlPanelConfig"?: ControlPanelConfig;
-        /**
-          * Defines the jump values for the video progress bar and volume bar.
-         */
-        "jumpValues"?: JumpValues;
-        /**
-          * Defines the component locale types.
-         */
-        "locales"?: Partial<VideoPlayerLocales>;
-        /**
-          * Specifies the preferred loading behavior.  - `'auto'`: Indicates that the browser should load the entire media content when the page loads, if possible. - `'metadata'`: Indicates that only the metadata (e.g., length, track list) should be preloaded.
-         */
-        "preload"?: 'auto' | 'metadata';
-        "size"?: VideoSizeDimensions;
-        /**
-          * Represents the source of a resource.
-         */
-        "src"?: string | string[];
-        /**
-          * Represents the thumbnail of the video.
-         */
-        "thumbnail"?: string;
-        /**
-          * Represents the type of video source.
-         */
-        "type"?: VideoSourceType | VideoSourceType[];
     }
     interface IntrinsicElements {
         "wpp-accordion": WppAccordion;
@@ -32126,7 +30495,6 @@ declare namespace LocalJSX {
         "wpp-file-upload-item": WppFileUploadItem;
         "wpp-filter-button": WppFilterButton;
         "wpp-floating-button": WppFloatingButton;
-        "wpp-floating-toolbar": WppFloatingToolbar;
         "wpp-full-screen-modal": WppFullScreenModal;
         "wpp-grid": WppGrid;
         "wpp-hue-slider": WppHueSlider;
@@ -32227,7 +30595,6 @@ declare namespace LocalJSX {
         "wpp-icon-cellular-data-on": WppIconCellularDataOn;
         "wpp-icon-channel": WppIconChannel;
         "wpp-icon-chat-message": WppIconChatMessage;
-        "wpp-icon-chat-message-new": WppIconChatMessageNew;
         "wpp-icon-chat-message-off": WppIconChatMessageOff;
         "wpp-icon-chat-video": WppIconChatVideo;
         "wpp-icon-chevron": WppIconChevron;
@@ -32285,7 +30652,6 @@ declare namespace LocalJSX {
         "wpp-icon-diamond": WppIconDiamond;
         "wpp-icon-directions": WppIconDirections;
         "wpp-icon-dislike": WppIconDislike;
-        "wpp-icon-dislike-filled": WppIconDislikeFilled;
         "wpp-icon-diversity": WppIconDiversity;
         "wpp-icon-document": WppIconDocument;
         "wpp-icon-document-blocked": WppIconDocumentBlocked;
@@ -32407,7 +30773,6 @@ declare namespace LocalJSX {
         "wpp-icon-library": WppIconLibrary;
         "wpp-icon-library-building": WppIconLibraryBuilding;
         "wpp-icon-like": WppIconLike;
-        "wpp-icon-like-filled": WppIconLikeFilled;
         "wpp-icon-like-off": WppIconLikeOff;
         "wpp-icon-like-on": WppIconLikeOn;
         "wpp-icon-link": WppIconLink;
@@ -32448,7 +30813,6 @@ declare namespace LocalJSX {
         "wpp-icon-neutral-trading": WppIconNeutralTrading;
         "wpp-icon-newspaper": WppIconNewspaper;
         "wpp-icon-next": WppIconNext;
-        "wpp-icon-next-filled": WppIconNextFilled;
         "wpp-icon-night-life": WppIconNightLife;
         "wpp-icon-note": WppIconNote;
         "wpp-icon-notification": WppIconNotification;
@@ -32471,7 +30835,6 @@ declare namespace LocalJSX {
         "wpp-icon-parking": WppIconParking;
         "wpp-icon-paste": WppIconPaste;
         "wpp-icon-pause": WppIconPause;
-        "wpp-icon-pause-filled": WppIconPauseFilled;
         "wpp-icon-pen": WppIconPen;
         "wpp-icon-pending": WppIconPending;
         "wpp-icon-pentagon": WppIconPentagon;
@@ -32483,7 +30846,6 @@ declare namespace LocalJSX {
         "wpp-icon-pinned": WppIconPinned;
         "wpp-icon-pitch": WppIconPitch;
         "wpp-icon-play": WppIconPlay;
-        "wpp-icon-play-filled": WppIconPlayFilled;
         "wpp-icon-plus": WppIconPlus;
         "wpp-icon-plus-circle": WppIconPlusCircle;
         "wpp-icon-police": WppIconPolice;
@@ -32491,7 +30853,6 @@ declare namespace LocalJSX {
         "wpp-icon-pound": WppIconPound;
         "wpp-icon-premium": WppIconPremium;
         "wpp-icon-previous": WppIconPrevious;
-        "wpp-icon-previous-filled": WppIconPreviousFilled;
         "wpp-icon-print": WppIconPrint;
         "wpp-icon-private-account": WppIconPrivateAccount;
         "wpp-icon-qa": WppIconQa;
@@ -32571,7 +30932,6 @@ declare namespace LocalJSX {
         "wpp-icon-statistic-document": WppIconStatisticDocument;
         "wpp-icon-sticker": WppIconSticker;
         "wpp-icon-stop": WppIconStop;
-        "wpp-icon-stop-filled": WppIconStopFilled;
         "wpp-icon-strike-through": WppIconStrikeThrough;
         "wpp-icon-styleguide": WppIconStyleguide;
         "wpp-icon-sub-items": WppIconSubItems;
@@ -32598,9 +30958,7 @@ declare namespace LocalJSX {
         "wpp-icon-table-sort-desc-pressed": WppIconTableSortDescPressed;
         "wpp-icon-table-sort-hover": WppIconTableSortHover;
         "wpp-icon-table-sort-pressed": WppIconTableSortPressed;
-        "wpp-icon-table-sort-wrapper": WppIconTableSortWrapper;
         "wpp-icon-tablet": WppIconTablet;
-        "wpp-icon-tag": WppIconTag;
         "wpp-icon-target": WppIconTarget;
         "wpp-icon-task-list": WppIconTaskList;
         "wpp-icon-task-list-square": WppIconTaskListSquare;
@@ -32613,10 +30971,6 @@ declare namespace LocalJSX {
         "wpp-icon-text-alignment-left": WppIconTextAlignmentLeft;
         "wpp-icon-text-alignment-right": WppIconTextAlignmentRight;
         "wpp-icon-theatre": WppIconTheatre;
-        "wpp-icon-thumbs-down": WppIconThumbsDown;
-        "wpp-icon-thumbs-down-filled": WppIconThumbsDownFilled;
-        "wpp-icon-thumbs-up": WppIconThumbsUp;
-        "wpp-icon-thumbs-up-filled": WppIconThumbsUpFilled;
         "wpp-icon-tick": WppIconTick;
         "wpp-icon-tourism": WppIconTourism;
         "wpp-icon-train": WppIconTrain;
@@ -32667,18 +31021,16 @@ declare namespace LocalJSX {
         "wpp-internal-label": WppInternalLabel;
         "wpp-internal-tooltip": WppInternalTooltip;
         "wpp-label": WppLabel;
-        "wpp-legend": WppLegend;
         "wpp-list-item": WppListItem;
         "wpp-load-more": WppLoadMore;
         "wpp-menu-context": WppMenuContext;
         "wpp-menu-group": WppMenuGroup;
+        "wpp-menu-list": WppMenuList;
         "wpp-modal": WppModal;
-        "wpp-more-button": WppMoreButton;
         "wpp-nav-sidebar": WppNavSidebar;
         "wpp-nav-sidebar-item": WppNavSidebarItem;
         "wpp-navigation-item": WppNavigationItem;
         "wpp-opacity-slider": WppOpacitySlider;
-        "wpp-overlay": WppOverlay;
         "wpp-pagination": WppPagination;
         "wpp-pagination-item": WppPaginationItem;
         "wpp-pagination-select": WppPaginationSelect;
@@ -32692,7 +31044,6 @@ declare namespace LocalJSX {
         "wpp-richtext": WppRichtext;
         "wpp-richtext-common-styles": WppRichtextCommonStyles;
         "wpp-richtext-html": WppRichtextHtml;
-        "wpp-richtext-icon-loader": WppRichtextIconLoader;
         "wpp-richtext-markdown": WppRichtextMarkdown;
         "wpp-richtext-view": WppRichtextView;
         "wpp-saturation-picker": WppSaturationPicker;
@@ -32722,7 +31073,6 @@ declare namespace LocalJSX {
         "wpp-tree": WppTree;
         "wpp-tree-item": WppTreeItem;
         "wpp-typography": WppTypography;
-        "wpp-video-player": WppVideoPlayer;
     }
 }
 export { LocalJSX as JSX };
@@ -32763,7 +31113,6 @@ declare module "@stencil/core" {
             "wpp-file-upload-item": LocalJSX.WppFileUploadItem & JSXBase.HTMLAttributes<HTMLWppFileUploadItemElement>;
             "wpp-filter-button": LocalJSX.WppFilterButton & JSXBase.HTMLAttributes<HTMLWppFilterButtonElement>;
             "wpp-floating-button": LocalJSX.WppFloatingButton & JSXBase.HTMLAttributes<HTMLWppFloatingButtonElement>;
-            "wpp-floating-toolbar": LocalJSX.WppFloatingToolbar & JSXBase.HTMLAttributes<HTMLWppFloatingToolbarElement>;
             "wpp-full-screen-modal": LocalJSX.WppFullScreenModal & JSXBase.HTMLAttributes<HTMLWppFullScreenModalElement>;
             "wpp-grid": LocalJSX.WppGrid & JSXBase.HTMLAttributes<HTMLWppGridElement>;
             "wpp-hue-slider": LocalJSX.WppHueSlider & JSXBase.HTMLAttributes<HTMLWppHueSliderElement>;
@@ -32864,7 +31213,6 @@ declare module "@stencil/core" {
             "wpp-icon-cellular-data-on": LocalJSX.WppIconCellularDataOn & JSXBase.HTMLAttributes<HTMLWppIconCellularDataOnElement>;
             "wpp-icon-channel": LocalJSX.WppIconChannel & JSXBase.HTMLAttributes<HTMLWppIconChannelElement>;
             "wpp-icon-chat-message": LocalJSX.WppIconChatMessage & JSXBase.HTMLAttributes<HTMLWppIconChatMessageElement>;
-            "wpp-icon-chat-message-new": LocalJSX.WppIconChatMessageNew & JSXBase.HTMLAttributes<HTMLWppIconChatMessageNewElement>;
             "wpp-icon-chat-message-off": LocalJSX.WppIconChatMessageOff & JSXBase.HTMLAttributes<HTMLWppIconChatMessageOffElement>;
             "wpp-icon-chat-video": LocalJSX.WppIconChatVideo & JSXBase.HTMLAttributes<HTMLWppIconChatVideoElement>;
             "wpp-icon-chevron": LocalJSX.WppIconChevron & JSXBase.HTMLAttributes<HTMLWppIconChevronElement>;
@@ -32922,7 +31270,6 @@ declare module "@stencil/core" {
             "wpp-icon-diamond": LocalJSX.WppIconDiamond & JSXBase.HTMLAttributes<HTMLWppIconDiamondElement>;
             "wpp-icon-directions": LocalJSX.WppIconDirections & JSXBase.HTMLAttributes<HTMLWppIconDirectionsElement>;
             "wpp-icon-dislike": LocalJSX.WppIconDislike & JSXBase.HTMLAttributes<HTMLWppIconDislikeElement>;
-            "wpp-icon-dislike-filled": LocalJSX.WppIconDislikeFilled & JSXBase.HTMLAttributes<HTMLWppIconDislikeFilledElement>;
             "wpp-icon-diversity": LocalJSX.WppIconDiversity & JSXBase.HTMLAttributes<HTMLWppIconDiversityElement>;
             "wpp-icon-document": LocalJSX.WppIconDocument & JSXBase.HTMLAttributes<HTMLWppIconDocumentElement>;
             "wpp-icon-document-blocked": LocalJSX.WppIconDocumentBlocked & JSXBase.HTMLAttributes<HTMLWppIconDocumentBlockedElement>;
@@ -32958,7 +31305,7 @@ declare module "@stencil/core" {
             "wpp-icon-external-link": LocalJSX.WppIconExternalLink & JSXBase.HTMLAttributes<HTMLWppIconExternalLinkElement>;
             /**
              * @deprecated - Use `wpp-icon-eye-on` instead.
-             * This component will be deleted in 4.0.0.
+             * This component will be deleted in 3.0.0.
              */
             "wpp-icon-eye": LocalJSX.WppIconEye & JSXBase.HTMLAttributes<HTMLWppIconEyeElement>;
             "wpp-icon-eye-off": LocalJSX.WppIconEyeOff & JSXBase.HTMLAttributes<HTMLWppIconEyeOffElement>;
@@ -33048,7 +31395,6 @@ declare module "@stencil/core" {
             "wpp-icon-library": LocalJSX.WppIconLibrary & JSXBase.HTMLAttributes<HTMLWppIconLibraryElement>;
             "wpp-icon-library-building": LocalJSX.WppIconLibraryBuilding & JSXBase.HTMLAttributes<HTMLWppIconLibraryBuildingElement>;
             "wpp-icon-like": LocalJSX.WppIconLike & JSXBase.HTMLAttributes<HTMLWppIconLikeElement>;
-            "wpp-icon-like-filled": LocalJSX.WppIconLikeFilled & JSXBase.HTMLAttributes<HTMLWppIconLikeFilledElement>;
             "wpp-icon-like-off": LocalJSX.WppIconLikeOff & JSXBase.HTMLAttributes<HTMLWppIconLikeOffElement>;
             "wpp-icon-like-on": LocalJSX.WppIconLikeOn & JSXBase.HTMLAttributes<HTMLWppIconLikeOnElement>;
             "wpp-icon-link": LocalJSX.WppIconLink & JSXBase.HTMLAttributes<HTMLWppIconLinkElement>;
@@ -33089,7 +31435,6 @@ declare module "@stencil/core" {
             "wpp-icon-neutral-trading": LocalJSX.WppIconNeutralTrading & JSXBase.HTMLAttributes<HTMLWppIconNeutralTradingElement>;
             "wpp-icon-newspaper": LocalJSX.WppIconNewspaper & JSXBase.HTMLAttributes<HTMLWppIconNewspaperElement>;
             "wpp-icon-next": LocalJSX.WppIconNext & JSXBase.HTMLAttributes<HTMLWppIconNextElement>;
-            "wpp-icon-next-filled": LocalJSX.WppIconNextFilled & JSXBase.HTMLAttributes<HTMLWppIconNextFilledElement>;
             "wpp-icon-night-life": LocalJSX.WppIconNightLife & JSXBase.HTMLAttributes<HTMLWppIconNightLifeElement>;
             "wpp-icon-note": LocalJSX.WppIconNote & JSXBase.HTMLAttributes<HTMLWppIconNoteElement>;
             "wpp-icon-notification": LocalJSX.WppIconNotification & JSXBase.HTMLAttributes<HTMLWppIconNotificationElement>;
@@ -33112,7 +31457,6 @@ declare module "@stencil/core" {
             "wpp-icon-parking": LocalJSX.WppIconParking & JSXBase.HTMLAttributes<HTMLWppIconParkingElement>;
             "wpp-icon-paste": LocalJSX.WppIconPaste & JSXBase.HTMLAttributes<HTMLWppIconPasteElement>;
             "wpp-icon-pause": LocalJSX.WppIconPause & JSXBase.HTMLAttributes<HTMLWppIconPauseElement>;
-            "wpp-icon-pause-filled": LocalJSX.WppIconPauseFilled & JSXBase.HTMLAttributes<HTMLWppIconPauseFilledElement>;
             "wpp-icon-pen": LocalJSX.WppIconPen & JSXBase.HTMLAttributes<HTMLWppIconPenElement>;
             "wpp-icon-pending": LocalJSX.WppIconPending & JSXBase.HTMLAttributes<HTMLWppIconPendingElement>;
             "wpp-icon-pentagon": LocalJSX.WppIconPentagon & JSXBase.HTMLAttributes<HTMLWppIconPentagonElement>;
@@ -33124,7 +31468,6 @@ declare module "@stencil/core" {
             "wpp-icon-pinned": LocalJSX.WppIconPinned & JSXBase.HTMLAttributes<HTMLWppIconPinnedElement>;
             "wpp-icon-pitch": LocalJSX.WppIconPitch & JSXBase.HTMLAttributes<HTMLWppIconPitchElement>;
             "wpp-icon-play": LocalJSX.WppIconPlay & JSXBase.HTMLAttributes<HTMLWppIconPlayElement>;
-            "wpp-icon-play-filled": LocalJSX.WppIconPlayFilled & JSXBase.HTMLAttributes<HTMLWppIconPlayFilledElement>;
             "wpp-icon-plus": LocalJSX.WppIconPlus & JSXBase.HTMLAttributes<HTMLWppIconPlusElement>;
             "wpp-icon-plus-circle": LocalJSX.WppIconPlusCircle & JSXBase.HTMLAttributes<HTMLWppIconPlusCircleElement>;
             "wpp-icon-police": LocalJSX.WppIconPolice & JSXBase.HTMLAttributes<HTMLWppIconPoliceElement>;
@@ -33132,7 +31475,6 @@ declare module "@stencil/core" {
             "wpp-icon-pound": LocalJSX.WppIconPound & JSXBase.HTMLAttributes<HTMLWppIconPoundElement>;
             "wpp-icon-premium": LocalJSX.WppIconPremium & JSXBase.HTMLAttributes<HTMLWppIconPremiumElement>;
             "wpp-icon-previous": LocalJSX.WppIconPrevious & JSXBase.HTMLAttributes<HTMLWppIconPreviousElement>;
-            "wpp-icon-previous-filled": LocalJSX.WppIconPreviousFilled & JSXBase.HTMLAttributes<HTMLWppIconPreviousFilledElement>;
             "wpp-icon-print": LocalJSX.WppIconPrint & JSXBase.HTMLAttributes<HTMLWppIconPrintElement>;
             "wpp-icon-private-account": LocalJSX.WppIconPrivateAccount & JSXBase.HTMLAttributes<HTMLWppIconPrivateAccountElement>;
             "wpp-icon-qa": LocalJSX.WppIconQa & JSXBase.HTMLAttributes<HTMLWppIconQaElement>;
@@ -33212,7 +31554,6 @@ declare module "@stencil/core" {
             "wpp-icon-statistic-document": LocalJSX.WppIconStatisticDocument & JSXBase.HTMLAttributes<HTMLWppIconStatisticDocumentElement>;
             "wpp-icon-sticker": LocalJSX.WppIconSticker & JSXBase.HTMLAttributes<HTMLWppIconStickerElement>;
             "wpp-icon-stop": LocalJSX.WppIconStop & JSXBase.HTMLAttributes<HTMLWppIconStopElement>;
-            "wpp-icon-stop-filled": LocalJSX.WppIconStopFilled & JSXBase.HTMLAttributes<HTMLWppIconStopFilledElement>;
             "wpp-icon-strike-through": LocalJSX.WppIconStrikeThrough & JSXBase.HTMLAttributes<HTMLWppIconStrikeThroughElement>;
             "wpp-icon-styleguide": LocalJSX.WppIconStyleguide & JSXBase.HTMLAttributes<HTMLWppIconStyleguideElement>;
             "wpp-icon-sub-items": LocalJSX.WppIconSubItems & JSXBase.HTMLAttributes<HTMLWppIconSubItemsElement>;
@@ -33239,9 +31580,7 @@ declare module "@stencil/core" {
             "wpp-icon-table-sort-desc-pressed": LocalJSX.WppIconTableSortDescPressed & JSXBase.HTMLAttributes<HTMLWppIconTableSortDescPressedElement>;
             "wpp-icon-table-sort-hover": LocalJSX.WppIconTableSortHover & JSXBase.HTMLAttributes<HTMLWppIconTableSortHoverElement>;
             "wpp-icon-table-sort-pressed": LocalJSX.WppIconTableSortPressed & JSXBase.HTMLAttributes<HTMLWppIconTableSortPressedElement>;
-            "wpp-icon-table-sort-wrapper": LocalJSX.WppIconTableSortWrapper & JSXBase.HTMLAttributes<HTMLWppIconTableSortWrapperElement>;
             "wpp-icon-tablet": LocalJSX.WppIconTablet & JSXBase.HTMLAttributes<HTMLWppIconTabletElement>;
-            "wpp-icon-tag": LocalJSX.WppIconTag & JSXBase.HTMLAttributes<HTMLWppIconTagElement>;
             "wpp-icon-target": LocalJSX.WppIconTarget & JSXBase.HTMLAttributes<HTMLWppIconTargetElement>;
             "wpp-icon-task-list": LocalJSX.WppIconTaskList & JSXBase.HTMLAttributes<HTMLWppIconTaskListElement>;
             "wpp-icon-task-list-square": LocalJSX.WppIconTaskListSquare & JSXBase.HTMLAttributes<HTMLWppIconTaskListSquareElement>;
@@ -33254,10 +31593,6 @@ declare module "@stencil/core" {
             "wpp-icon-text-alignment-left": LocalJSX.WppIconTextAlignmentLeft & JSXBase.HTMLAttributes<HTMLWppIconTextAlignmentLeftElement>;
             "wpp-icon-text-alignment-right": LocalJSX.WppIconTextAlignmentRight & JSXBase.HTMLAttributes<HTMLWppIconTextAlignmentRightElement>;
             "wpp-icon-theatre": LocalJSX.WppIconTheatre & JSXBase.HTMLAttributes<HTMLWppIconTheatreElement>;
-            "wpp-icon-thumbs-down": LocalJSX.WppIconThumbsDown & JSXBase.HTMLAttributes<HTMLWppIconThumbsDownElement>;
-            "wpp-icon-thumbs-down-filled": LocalJSX.WppIconThumbsDownFilled & JSXBase.HTMLAttributes<HTMLWppIconThumbsDownFilledElement>;
-            "wpp-icon-thumbs-up": LocalJSX.WppIconThumbsUp & JSXBase.HTMLAttributes<HTMLWppIconThumbsUpElement>;
-            "wpp-icon-thumbs-up-filled": LocalJSX.WppIconThumbsUpFilled & JSXBase.HTMLAttributes<HTMLWppIconThumbsUpFilledElement>;
             "wpp-icon-tick": LocalJSX.WppIconTick & JSXBase.HTMLAttributes<HTMLWppIconTickElement>;
             "wpp-icon-tourism": LocalJSX.WppIconTourism & JSXBase.HTMLAttributes<HTMLWppIconTourismElement>;
             "wpp-icon-train": LocalJSX.WppIconTrain & JSXBase.HTMLAttributes<HTMLWppIconTrainElement>;
@@ -33308,18 +31643,16 @@ declare module "@stencil/core" {
             "wpp-internal-label": LocalJSX.WppInternalLabel & JSXBase.HTMLAttributes<HTMLWppInternalLabelElement>;
             "wpp-internal-tooltip": LocalJSX.WppInternalTooltip & JSXBase.HTMLAttributes<HTMLWppInternalTooltipElement>;
             "wpp-label": LocalJSX.WppLabel & JSXBase.HTMLAttributes<HTMLWppLabelElement>;
-            "wpp-legend": LocalJSX.WppLegend & JSXBase.HTMLAttributes<HTMLWppLegendElement>;
             "wpp-list-item": LocalJSX.WppListItem & JSXBase.HTMLAttributes<HTMLWppListItemElement>;
             "wpp-load-more": LocalJSX.WppLoadMore & JSXBase.HTMLAttributes<HTMLWppLoadMoreElement>;
             "wpp-menu-context": LocalJSX.WppMenuContext & JSXBase.HTMLAttributes<HTMLWppMenuContextElement>;
             "wpp-menu-group": LocalJSX.WppMenuGroup & JSXBase.HTMLAttributes<HTMLWppMenuGroupElement>;
+            "wpp-menu-list": LocalJSX.WppMenuList & JSXBase.HTMLAttributes<HTMLWppMenuListElement>;
             "wpp-modal": LocalJSX.WppModal & JSXBase.HTMLAttributes<HTMLWppModalElement>;
-            "wpp-more-button": LocalJSX.WppMoreButton & JSXBase.HTMLAttributes<HTMLWppMoreButtonElement>;
             "wpp-nav-sidebar": LocalJSX.WppNavSidebar & JSXBase.HTMLAttributes<HTMLWppNavSidebarElement>;
             "wpp-nav-sidebar-item": LocalJSX.WppNavSidebarItem & JSXBase.HTMLAttributes<HTMLWppNavSidebarItemElement>;
             "wpp-navigation-item": LocalJSX.WppNavigationItem & JSXBase.HTMLAttributes<HTMLWppNavigationItemElement>;
             "wpp-opacity-slider": LocalJSX.WppOpacitySlider & JSXBase.HTMLAttributes<HTMLWppOpacitySliderElement>;
-            "wpp-overlay": LocalJSX.WppOverlay & JSXBase.HTMLAttributes<HTMLWppOverlayElement>;
             "wpp-pagination": LocalJSX.WppPagination & JSXBase.HTMLAttributes<HTMLWppPaginationElement>;
             "wpp-pagination-item": LocalJSX.WppPaginationItem & JSXBase.HTMLAttributes<HTMLWppPaginationItemElement>;
             "wpp-pagination-select": LocalJSX.WppPaginationSelect & JSXBase.HTMLAttributes<HTMLWppPaginationSelectElement>;
@@ -33341,7 +31674,6 @@ declare module "@stencil/core" {
              */
             "wpp-richtext-common-styles": LocalJSX.WppRichtextCommonStyles & JSXBase.HTMLAttributes<HTMLWppRichtextCommonStylesElement>;
             "wpp-richtext-html": LocalJSX.WppRichtextHtml & JSXBase.HTMLAttributes<HTMLWppRichtextHtmlElement>;
-            "wpp-richtext-icon-loader": LocalJSX.WppRichtextIconLoader & JSXBase.HTMLAttributes<HTMLWppRichtextIconLoaderElement>;
             "wpp-richtext-markdown": LocalJSX.WppRichtextMarkdown & JSXBase.HTMLAttributes<HTMLWppRichtextMarkdownElement>;
             "wpp-richtext-view": LocalJSX.WppRichtextView & JSXBase.HTMLAttributes<HTMLWppRichtextViewElement>;
             "wpp-saturation-picker": LocalJSX.WppSaturationPicker & JSXBase.HTMLAttributes<HTMLWppSaturationPickerElement>;
@@ -33350,7 +31682,7 @@ declare module "@stencil/core" {
             "wpp-segmented-control-item": LocalJSX.WppSegmentedControlItem & JSXBase.HTMLAttributes<HTMLWppSegmentedControlItemElement>;
             "wpp-select": LocalJSX.WppSelect & JSXBase.HTMLAttributes<HTMLWppSelectElement>;
             /**
-             * @deprecated The `actions` slot is deprecated and will be removed in the next major release (v3.0.0). Use the `actionsConfig` property instead.
+             * @deprecated The `actions` slot is deprecated and will be removed in a future release (v2.x.x). Use the `actionsConfig` property instead.
              */
             "wpp-side-modal": LocalJSX.WppSideModal & JSXBase.HTMLAttributes<HTMLWppSideModalElement>;
             "wpp-skeleton": LocalJSX.WppSkeleton & JSXBase.HTMLAttributes<HTMLWppSkeletonElement>;
@@ -33374,7 +31706,6 @@ declare module "@stencil/core" {
             "wpp-tree": LocalJSX.WppTree & JSXBase.HTMLAttributes<HTMLWppTreeElement>;
             "wpp-tree-item": LocalJSX.WppTreeItem & JSXBase.HTMLAttributes<HTMLWppTreeItemElement>;
             "wpp-typography": LocalJSX.WppTypography & JSXBase.HTMLAttributes<HTMLWppTypographyElement>;
-            "wpp-video-player": LocalJSX.WppVideoPlayer & JSXBase.HTMLAttributes<HTMLWppVideoPlayerElement>;
         }
     }
 }

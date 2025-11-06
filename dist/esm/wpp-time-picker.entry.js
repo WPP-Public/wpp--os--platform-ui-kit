@@ -1,7 +1,7 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { m as menuListConfig } from './menuListConfig-200865d3.js';
-import { Z as Z_INDEX } from './consts-5bf9c29f.js';
-import { w as getHighestContainerInDOM } from './utils-d423b01f.js';
+import { m as menuListConfig } from './menuListConfig-1b46213e.js';
+import { Z as Z_INDEX } from './consts-4b0f734e.js';
+import { v as getHighestContainerInDOM } from './utils-f3870f15.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
 
 const PLACEHOLDER = 'hh:mm';
@@ -40,7 +40,7 @@ const DEFAULT_WIDTH_VALUE = '198px';
 const isValidHour = (value) => /^(0\d|1\d|2[0-3])$/.test(value);
 const isValidMinutes = (value) => /^[0-5]\d$/.test(value);
 
-const wppTimePickerCss = ":host(.wpp-time-picker){display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start;min-width:124px}:host(.wpp-time-picker) .label{margin-bottom:8px}:host(.wpp-time-picker) #anchor{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;border-radius:var(--wpp-border-radius-m);border:var(--wpp-border-width-s) solid;border-color:var(--wpp-grey-color-500);-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;gap:8px}:host(.wpp-time-picker) #anchor .anchor-time{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}:host(.wpp-time-picker) #anchor .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor .cross-icon-container{width:20px;height:20px}:host(.wpp-time-picker) #anchor .cross-icon:hover{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor .cross-icon:active{--wpp-icon-color:var(--wpp-grey-color-900)}:host(.wpp-time-picker) #anchor #time-picker{border:none;padding:0;width:100%;outline:none;color:var(--wpp-grey-color-1000);background-color:transparent}:host(.wpp-time-picker) #anchor #time-picker::-webkit-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor #time-picker::-moz-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor #time-picker:-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor #time-picker::-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor #time-picker::placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor #time-picker::-moz-selection{background-color:var(--wpp-primary-color-200)}:host(.wpp-time-picker) #anchor #time-picker::selection{background-color:var(--wpp-primary-color-200)}:host(.wpp-time-picker) #anchor #time-picker:hover{cursor:pointer}:host(.wpp-time-picker) #anchor.no-value .clock-icon{--wpp-icon-color:var(--wpp-grey-color-600)}:host(.wpp-time-picker) #anchor:hover{background-color:var(--wpp-grey-color-200);border-color:var(--wpp-grey-color-700);cursor:pointer}:host(.wpp-time-picker) #anchor:hover .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor:hover #time-picker{background-color:var(--wpp-grey-color-200)}:host(.wpp-time-picker) #anchor.focus{border-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor.focus .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor.disabled{background-color:var(--wpp-grey-color-100);border-color:var(--wpp-grey-color-400)}:host(.wpp-time-picker) #anchor.disabled:hover{cursor:not-allowed}:host(.wpp-time-picker) #anchor.disabled #time-picker{background-color:var(--wpp-grey-color-100);color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled #time-picker::-webkit-input-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled #time-picker::-moz-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled #time-picker:-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled #time-picker::-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled #time-picker::placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled #time-picker:hover{cursor:not-allowed}:host(.wpp-time-picker) #anchor.disabled .clock-icon{--wpp-icon-color:var(--wpp-grey-color-400)}:host(.wpp-time-picker) #anchor.disabled .cross-icon{--wpp-icon-color:var(--wpp-grey-color-400)}:host(.wpp-time-picker) #anchor.error{border-color:var(--wpp-danger-color-500)}:host(.wpp-time-picker) #anchor.warning{border-color:var(--wpp-warning-color-400)}:host(.wpp-time-picker) #anchor.size-s{padding:5px 10px}:host(.wpp-time-picker) #anchor.size-m{padding:9px 10px}:host(.wpp-time-picker) .wpp-inline-message{margin-top:4px}:host(.wpp-time-picker) .wpp-inline-message.helper-text{--wpp-typography-xs-midi-color:var(--wpp-grey-color-800)}";
+const wppTimePickerCss = ":host(.wpp-time-picker){display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start;min-width:124px}:host(.wpp-time-picker) .label{margin-bottom:8px}:host(.wpp-time-picker) #anchor{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;border-radius:var(--wpp-border-radius-m);border:var(--wpp-border-width-s) solid;border-color:var(--wpp-grey-color-500);-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;gap:8px}:host(.wpp-time-picker) #anchor .anchor-time{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}:host(.wpp-time-picker) #anchor .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor .cross-icon-container{width:20px;height:20px}:host(.wpp-time-picker) #anchor .cross-icon:hover{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor .cross-icon:active{--wpp-icon-color:var(--wpp-grey-color-900)}:host(.wpp-time-picker) #anchor #time-picker{border:none;padding:0;width:100%;outline:none;color:var(--wpp-grey-color-1000)}:host(.wpp-time-picker) #anchor #time-picker::-webkit-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor #time-picker::-moz-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor #time-picker:-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor #time-picker::-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor #time-picker::placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor #time-picker::-moz-selection{background-color:var(--wpp-primary-color-200)}:host(.wpp-time-picker) #anchor #time-picker::selection{background-color:var(--wpp-primary-color-200)}:host(.wpp-time-picker) #anchor #time-picker:hover{cursor:pointer}:host(.wpp-time-picker) #anchor.no-value .clock-icon{--wpp-icon-color:var(--wpp-grey-color-600)}:host(.wpp-time-picker) #anchor:hover{background-color:var(--wpp-grey-color-200);border-color:var(--wpp-grey-color-700);cursor:pointer}:host(.wpp-time-picker) #anchor:hover .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor:hover #time-picker{background-color:var(--wpp-grey-color-200)}:host(.wpp-time-picker) #anchor.focus{border-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor.focus .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor.disabled{background-color:var(--wpp-grey-color-100);border-color:var(--wpp-grey-color-400)}:host(.wpp-time-picker) #anchor.disabled:hover{cursor:not-allowed}:host(.wpp-time-picker) #anchor.disabled #time-picker{background-color:var(--wpp-grey-color-100);color:var(--wpp-grey-color-500)}:host(.wpp-time-picker) #anchor.disabled #time-picker::-webkit-input-placeholder{color:var(--wpp-grey-color-500)}:host(.wpp-time-picker) #anchor.disabled #time-picker::-moz-placeholder{color:var(--wpp-grey-color-500)}:host(.wpp-time-picker) #anchor.disabled #time-picker:-ms-input-placeholder{color:var(--wpp-grey-color-500)}:host(.wpp-time-picker) #anchor.disabled #time-picker::-ms-input-placeholder{color:var(--wpp-grey-color-500)}:host(.wpp-time-picker) #anchor.disabled #time-picker::placeholder{color:var(--wpp-grey-color-500)}:host(.wpp-time-picker) #anchor.disabled #time-picker:hover{cursor:not-allowed}:host(.wpp-time-picker) #anchor.disabled .clock-icon{--wpp-icon-color:var(--wpp-grey-color-400)}:host(.wpp-time-picker) #anchor.disabled .cross-icon{--wpp-icon-color:var(--wpp-grey-color-400)}:host(.wpp-time-picker) #anchor.error{border-color:var(--wpp-danger-color-500)}:host(.wpp-time-picker) #anchor.warning{border-color:var(--wpp-warning-color-400)}:host(.wpp-time-picker) #anchor.size-s{padding:5px 10px}:host(.wpp-time-picker) #anchor.size-m{padding:9px 10px}:host(.wpp-time-picker) .wpp-inline-message{margin-top:4px}:host(.wpp-time-picker) .wpp-inline-message.helper-text{--wpp-typography-xs-midi-color:var(--wpp-grey-color-800)}";
 
 const WppTimePicker = class {
   constructor(hostRef) {
@@ -174,9 +174,6 @@ const WppTimePicker = class {
           if (this.dropdownConfig.onClickOutside) {
             this.dropdownConfig.onClickOutside(instance, event);
           }
-        },
-        onHidden: () => {
-          this.isInComponent = false;
         },
       });
     };
@@ -401,9 +398,6 @@ const WppTimePicker = class {
       }
     };
     this.onFocus = (event) => {
-      if (this.isInComponent)
-        return;
-      this.isInComponent = true;
       this.focusType = FOCUS_TYPE.MOUSE;
       if (this.value === '') {
         this.value = PLACEHOLDER;
@@ -411,11 +405,9 @@ const WppTimePicker = class {
       }
       this.wppFocus.emit(event);
     };
-    this.onBlur = () => {
-      if (this.isInComponent)
-        return;
+    this.onBlur = (event) => {
       this.focusType = FOCUS_TYPE.NONE;
-      this.wppBlur.emit();
+      this.wppBlur.emit(event);
     };
     this.onKeyUp = (event) => {
       if (event.key === 'Tab') {
@@ -433,7 +425,6 @@ const WppTimePicker = class {
     this.showDisplayCross = true;
     this.generatedMinutes = [];
     this.checkedTimeValues = DEFAULT_CHECKED_TIME_VALUES;
-    this.isInComponent = false;
     this.size = 'm';
     this.disabled = false;
     this.dropdownConfig = {};
@@ -467,10 +458,6 @@ const WppTimePicker = class {
     this.showDisplayCross = true;
     this.highlightItem();
   }
-  updateIsInComponent(value) {
-    if (!value)
-      this.onBlur();
-  }
   componentWillLoad() {
     this.generateMinutes();
     if (this.value) {
@@ -482,14 +469,13 @@ const WppTimePicker = class {
     this.createTippyInstance();
   }
   render() {
-    return (h(Host, { class: "wpp-time-picker", "aria-disabled": this.disabled, style: { width: !this.width ? DEFAULT_WIDTH_VALUE : this.width } }, this.labelConfig?.text && (h("wpp-label-v3-3-0", { typography: "s-strong", class: "label", htmlFor: this.name, optional: !this.required, config: this.labelConfig, disabled: this.disabled, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: el => (this.anchorRef = el), id: "anchor", class: this.getAnchorCssClasses() }, h("div", { class: "anchor-time" }, h("wpp-icon-clock-v3-3-0", { class: "clock-icon" }), h("input", { ref: el => (this.inputRef = el), onFocus: this.onFocus, onBlur: this.onBlur, onKeyUp: this.onKeyUp, onKeyPress: this.onKeyPress, onPaste: this.onPaste, disabled: this.disabled, onInput: this.onUpdateInput, id: "time-picker", type: "text", placeholder: this.placeholder, value: this.value })), h("div", { class: "cross-icon-container" }, this.showDisplayCross && (h("wpp-icon-cross-v3-3-0", { class: "cross-icon", "aria-label": "Erase time", onClick: this.handleClickCrossIcon })))), h("div", { ref: el => (this.portalRef = el), class: "wpp-time-picker-portal" }, h("div", { ref: refEl => (this.hoursSectionRef = refEl), class: "hours section" }, HOURS.map((hour, hourIndex) => (h("wpp-list-item-v3-3-0", { id: `hour-${hour}`, key: hour, checked: this.checkedTimeValues.hoursIndex === hourIndex, onWppChangeListItem: () => this.handleClickListItem(hour, 'hour') }, h("span", { slot: "label" }, hour))))), h("wpp-divider-v3-3-0", { vertical: true }), h("div", { ref: refEl => (this.minutesSectionRef = refEl), class: "minutes section" }, this.generatedMinutes.map((minutes, minutesIndex) => (h("wpp-list-item-v3-3-0", { id: `minutes-${minutes}`, key: minutes, checked: this.checkedTimeValues.minutesIndex === minutesIndex, onWppChangeListItem: () => this.handleClickListItem(minutes, 'minutes') }, h("span", { slot: "label" }, minutes)))))), this.message && (h("wpp-inline-message-v3-3-0", { class: !this.messageType ? 'helper-text' : '', message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
+    return (h(Host, { class: "wpp-time-picker", "aria-disabled": this.disabled, style: { width: !this.width ? DEFAULT_WIDTH_VALUE : this.width } }, this.labelConfig?.text && (h("wpp-label-v2-22-0", { typography: "s-strong", class: "label", htmlFor: this.name, optional: !this.required, config: this.labelConfig, disabled: this.disabled, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: el => (this.anchorRef = el), id: "anchor", class: this.getAnchorCssClasses() }, h("div", { class: "anchor-time" }, h("wpp-icon-clock-v2-22-0", { class: "clock-icon" }), h("input", { ref: el => (this.inputRef = el), onFocus: this.onFocus, onBlur: this.onBlur, onKeyUp: this.onKeyUp, onKeyPress: this.onKeyPress, onPaste: this.onPaste, disabled: this.disabled, onInput: this.onUpdateInput, id: "time-picker", type: "text", placeholder: this.placeholder, value: this.value })), h("div", { class: "cross-icon-container" }, this.showDisplayCross && (h("wpp-icon-cross-v2-22-0", { class: "cross-icon", "aria-label": "Erase time", onClick: this.handleClickCrossIcon })))), h("div", { ref: el => (this.portalRef = el), class: "wpp-time-picker-portal" }, h("div", { ref: refEl => (this.hoursSectionRef = refEl), class: "hours section" }, HOURS.map((hour, hourIndex) => (h("wpp-list-item-v2-22-0", { id: `hour-${hour}`, key: hour, checked: this.checkedTimeValues.hoursIndex === hourIndex, onWppChangeListItem: () => this.handleClickListItem(hour, 'hour') }, h("span", { slot: "label" }, hour))))), h("wpp-divider-v2-22-0", { vertical: true }), h("div", { ref: refEl => (this.minutesSectionRef = refEl), class: "minutes section" }, this.generatedMinutes.map((minutes, minutesIndex) => (h("wpp-list-item-v2-22-0", { id: `minutes-${minutes}`, key: minutes, checked: this.checkedTimeValues.minutesIndex === minutesIndex, onWppChangeListItem: () => this.handleClickListItem(minutes, 'minutes') }, h("span", { slot: "label" }, minutes)))))), this.message && (h("wpp-inline-message-v2-22-0", { class: !this.messageType ? 'helper-text' : '', message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
   }
-  static get registryIs() { return "wpp-time-picker-v3-3-0"; }
+  static get registryIs() { return "wpp-time-picker-v2-22-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "minutesInterval": ["onUpdateMinutesInterval"],
-    "value": ["onUpdateValue"],
-    "isInComponent": ["updateIsInComponent"]
+    "value": ["onUpdateValue"]
   }; }
 };
 WppTimePicker.style = wppTimePickerCss;

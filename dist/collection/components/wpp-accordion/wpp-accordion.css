@@ -38,10 +38,10 @@
   --accordion-margin-xl: var(--wpp-accordion-margin-xl, 23px 0);
   --accordion-margin-2xl: var(--wpp-accordion-margin-2xl, 23px 0);
   --accordion-icon-margin: var(--wpp-accordion-icon-margin, 0 8px 0 0);
-  --accordion-icon-color: var(--wpp-accordion-icon-color, var(--wpp-grey-color-600));
-  --accordion-icon-color-hover: var(--wpp-accordion-icon-color-hover, var(--wpp-grey-color-800));
-  --accordion-icon-color-active: var(--wpp-accordion-icon-color-active, var(--wpp-grey-color-900));
-  --accordion-icon-color-disabled: var(--wpp-accordion-icon-color-disabled, var(--wpp-grey-color-500));
+  --accordion-icon-color: var(--wpp-accordion-icon-color, var(--wpp-icon-color));
+  --accordion-icon-color-hover: var(--wpp-accordion-icon-color-hover, var(--wpp-icon-color-hover));
+  --accordion-icon-color-active: var(--wpp-accordion-icon-color-active, var(--wpp-icon-color-active));
+  --accordion-icon-color-disabled: var(--wpp-accordion-icon-color-disabled, var(--wpp-icon-color-disabled));
   --accordion-text-color-disabled: var(--wpp-accordion-text-color-disabled, var(--wpp-text-color-disabled));
   --accordion-counter-color: var(--wpp-accordion-counter-color, var(--wpp-text-color-info));
   --accordion-first-border-color-focus: var(--wpp-accordion-first-border-color-focus, var(--wpp-grey-color-000));
@@ -73,24 +73,24 @@
   --accordion-margin-xl-internal: var(--wpp-accordion-margin-xl-internal, 0);
   --accordion-margin-2xl-internal: var(--wpp-accordion-margin-2xl-internal, 0);
   --accordion-expandable-section-margin-s-internal: var(
-    --wpp-accordion-expandable-section-margin-s-internal,
-    -1px 0 0 var(--accordion-expandable-section-margin-left)
+      --wpp-accordion-expandable-section-margin-s-internal,
+      -1px 0 0 var(--accordion-expandable-section-margin-left)
   );
   --accordion-expandable-section-margin-m-internal: var(
-    --wpp-accordion-expandable-section-margin-m-internal,
-    8px 0 0 var(--accordion-expandable-section-margin-left)
+      --wpp-accordion-expandable-section-margin-m-internal,
+      8px 0 0 var(--accordion-expandable-section-margin-left)
   );
   --accordion-expandable-section-margin-l-internal: var(
-    --wpp-accordion-expandable-section-margin-l-internal,
-    12px 0 0 var(--accordion-expandable-section-margin-left)
+      --wpp-accordion-expandable-section-margin-l-internal,
+      12px 0 0 var(--accordion-expandable-section-margin-left)
   );
   --accordion-expandable-section-margin-xl-internal: var(
-    --wpp-accordion-expandable-section-margin-xl-internal,
-    16px 0 0 var(--accordion-expandable-section-margin-left)
+      --wpp-accordion-expandable-section-margin-xl-internal,
+      16px 0 0 var(--accordion-expandable-section-margin-left)
   );
   --accordion-expandable-section-margin-2xl-internal: var(
-    --wpp-accordion-expandable-section-margin-2xl-internal,
-    16px 0 0 var(--accordion-expandable-section-margin-left)
+      --wpp-accordion-expandable-section-margin-2xl-internal,
+      16px 0 0 var(--accordion-expandable-section-margin-left)
   );
 }
 
@@ -123,6 +123,11 @@
 :host(.wpp-section-wrapper) .wpp-section.size-2xl {
   margin: var(--accordion-margin-2xl);
 }
+:host(.wpp-section-wrapper) .wpp-section.tab-focus {
+  border-radius: 3px;
+  outline: none;
+  box-shadow: 0 0 0 1px var(--accordion-first-border-color-focus), 0 0 0 2px var(--accordion-second-border-color-focus);
+}
 :host(.wpp-section-wrapper) .wpp-section .wpp-icon-chevron {
   transition: transform var(--accordion-hide-animation-duration) ease-out;
 }
@@ -132,20 +137,6 @@
   gap: 8px;
   flex-wrap: nowrap;
   position: relative;
-  border: none;
-  background: none;
-  padding: 0;
-  outline: none;
-  flex-grow: 1;
-}
-:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper.tab-focus {
-  border-radius: 3px;
-  outline: none;
-  box-shadow: 0 0 0 1px var(--accordion-first-border-color-focus), 0 0 0 3px var(--accordion-second-border-color-focus);
-}
-:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper:focus-visible .title-wrapper .wpp-icon-chevron,
-:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .tab-focus .title-wrapper .wpp-icon-chevron {
-  color: var(--accordion-icon-color-hover) !important;
 }
 :host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper {
   display: flex;
@@ -170,6 +161,10 @@
   cursor: not-allowed;
   color: var(--wpp-text-color-disabled);
 }
+:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper.disabled {
+  cursor: not-allowed;
+  color: var(--wpp-text-color-disabled);
+}
 :host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper .wpp-icon-chevron {
   margin: var(--accordion-icon-margin);
   color: var(--accordion-icon-color);
@@ -177,11 +172,14 @@
 :host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper .wpp-icon-chevron.disabled {
   color: var(--wpp-text-color-disabled);
 }
-:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper:hover .wpp-icon-chevron {
+:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper:hover .wpp-icon-chevron:not(.disabled) {
   color: var(--accordion-icon-color-hover);
 }
 :host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper:active .wpp-icon-chevron {
   color: var(--accordion-icon-color-active);
+}
+:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper.disabled .wpp-icon-chevron {
+  color: var(--accordion-icon-color-disabled);
 }
 :host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper .wpp-typography {
   overflow: hidden;
@@ -201,6 +199,10 @@
   display: none;
 }
 :host(.wpp-section-wrapper) .wpp-section .actions {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   text-wrap: nowrap;
 }
 :host(.wpp-section-wrapper) .wpp-section .actions.slot-hidden {
@@ -227,6 +229,13 @@
 :host(.wpp-section-wrapper) .wpp-section .counter {
   padding-left: 4px;
   color: var(--accordion-counter-color);
+}
+:host(.wpp-section-wrapper) .wpp-section.tab-focus .title-wrapper .wpp-icon-chevron {
+  color: var(--accordion-icon-color-hover);
+}
+:host(.wpp-section-wrapper) .wpp-section.disabled {
+  cursor: not-allowed;
+  color: var(--wpp-text-color-disabled);
 }
 :host(.wpp-section-wrapper) .closed {
   overflow: hidden;
@@ -262,14 +271,13 @@
 :host([disabled]:not([disabled=false])) .wpp-section {
   cursor: not-allowed;
 }
-:host([disabled]:not([disabled=false])) .wpp-section .title-tags-wrapper .title-wrapper {
+:host([disabled]:not([disabled=false])) .wpp-section .title-wrapper {
   cursor: not-allowed;
-  color: var(--wpp-text-color-disabled);
 }
-:host([disabled]:not([disabled=false])) .wpp-section .title-tags-wrapper .title-wrapper:hover .wpp-icon-chevron {
+:host([disabled]:not([disabled=false])) .wpp-section .title-wrapper:hover .wpp-icon-chevron {
   color: var(--accordion-icon-color-disabled);
 }
-:host([disabled]:not([disabled=false])) .wpp-section .title-tags-wrapper .title-wrapper .wpp-icon-chevron {
+:host([disabled]:not([disabled=false])) .wpp-section .title-wrapper:active .wpp-icon-chevron {
   color: var(--accordion-icon-color-disabled);
 }
 :host([disabled]:not([disabled=false])) .wpp-section .header ::slotted([slot=header]) {
@@ -288,43 +296,43 @@
   color: var(--accordion-text-color-disabled);
 }
 
-:host(.wpp-section-wrapper.wpp-expanded) .wpp-section .wpp-icon-chevron {
+:host(.wpp-section-wrapper[aria-expanded]) .wpp-section .wpp-icon-chevron {
   transform: rotate(90deg);
 }
-:host(.wpp-section-wrapper.wpp-expanded) .wpp-section .wpp-icon-chevron {
+:host(.wpp-section-wrapper[aria-expanded]) .wpp-section .wpp-icon-chevron {
   transition: transform var(--accordion-show-animation-duration) ease-out;
 }
-:host(.wpp-section-wrapper.wpp-expanded) .wpp-section.size-s ~ .content {
+:host(.wpp-section-wrapper[aria-expanded]) .wpp-section.size-s ~ .content {
   margin: var(--accordion-expandable-section-margin-s);
 }
-:host(.wpp-section-wrapper.wpp-expanded) .wpp-section.size-m ~ .content {
+:host(.wpp-section-wrapper[aria-expanded]) .wpp-section.size-m ~ .content {
   margin: var(--accordion-expandable-section-margin-m);
 }
-:host(.wpp-section-wrapper.wpp-expanded) .wpp-section.size-l ~ .content {
+:host(.wpp-section-wrapper[aria-expanded]) .wpp-section.size-l ~ .content {
   margin: var(--accordion-expandable-section-margin-l);
 }
-:host(.wpp-section-wrapper.wpp-expanded) .wpp-section.size-xl ~ .content {
+:host(.wpp-section-wrapper[aria-expanded]) .wpp-section.size-xl ~ .content {
   margin: var(--accordion-expandable-section-margin-xl);
 }
-:host(.wpp-section-wrapper.wpp-expanded) .wpp-section.size-2xl ~ .content {
+:host(.wpp-section-wrapper[aria-expanded]) .wpp-section.size-2xl ~ .content {
   margin: var(--accordion-expandable-section-margin-2xl);
 }
-:host(.wpp-section-wrapper.wpp-expanded):host(.wpp-internal) .wpp-section.size-s ~ .content {
+:host(.wpp-section-wrapper[aria-expanded]):host(.wpp-internal) .wpp-section.size-s ~ .content {
   margin: var(--accordion-expandable-section-margin-s-internal);
 }
-:host(.wpp-section-wrapper.wpp-expanded):host(.wpp-internal) .wpp-section.size-m ~ .content {
+:host(.wpp-section-wrapper[aria-expanded]):host(.wpp-internal) .wpp-section.size-m ~ .content {
   margin: var(--accordion-expandable-section-margin-m-internal);
 }
-:host(.wpp-section-wrapper.wpp-expanded):host(.wpp-internal) .wpp-section.size-l ~ .content {
+:host(.wpp-section-wrapper[aria-expanded]):host(.wpp-internal) .wpp-section.size-l ~ .content {
   margin: var(--accordion-expandable-section-margin-l-internal);
 }
-:host(.wpp-section-wrapper.wpp-expanded):host(.wpp-internal) .wpp-section.size-xl ~ .content {
+:host(.wpp-section-wrapper[aria-expanded]):host(.wpp-internal) .wpp-section.size-xl ~ .content {
   margin: var(--accordion-expandable-section-margin-xl-internal);
 }
-:host(.wpp-section-wrapper.wpp-expanded):host(.wpp-internal) .wpp-section.size-2xl ~ .content {
+:host(.wpp-section-wrapper[aria-expanded]):host(.wpp-internal) .wpp-section.size-2xl ~ .content {
   margin: var(--accordion-expandable-section-margin-2xl-internal);
 }
-:host(.wpp-section-wrapper.wpp-expanded) .content {
+:host(.wpp-section-wrapper[aria-expanded]) .content {
   max-height: var(--accordion-max-height);
   transition: max-height var(--accordion-show-animation-duration) ease;
 }

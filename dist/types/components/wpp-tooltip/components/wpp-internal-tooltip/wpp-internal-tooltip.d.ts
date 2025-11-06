@@ -1,5 +1,4 @@
 import { TooltipThemeTypes } from '../../types';
-import { AriaProps } from '../../../../types/common';
 /**
  * @part tooltip-content - tooltip content wrapper element
  * @part header - header component
@@ -49,7 +48,7 @@ export declare class WppTooltip {
   readonly theme: TooltipThemeTypes;
   /**
    * When set, allow to pass string represented HTML in text property
-   * @deprecated - This prop is no longer used by the component and will be deleted in v4.0.0.
+   * @deprecated - This prop is no longer used by the component
    */
   readonly allowHTML?: boolean;
   /**
@@ -60,10 +59,6 @@ export declare class WppTooltip {
    * }
    */
   readonly externalClass: string;
-  /**
-   * Contains the tooltip `aria-` props.
-   */
-  readonly ariaProp: AriaProps;
   private cssClasses;
   private hostCssClasses;
   private headerCssClasses;

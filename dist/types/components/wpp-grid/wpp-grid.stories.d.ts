@@ -1,5 +1,6 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppGrid>;
+import { WppGrid } from './wpp-grid';
+declare const _default: Meta<typeof WppGrid>;
 export default _default;
-export declare const Regular: StoryObj<Components.WppGrid>;
+export declare const Regular: Story<Components.WppGrid>;

@@ -4,12 +4,12 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
 const highlightWords = require('./highlight-words-25672f7c.js');
-const WrappedSlot = require('./WrappedSlot-ab2104d8.js');
-const utils = require('./utils-2b192dec.js');
-const utils$1 = require('./utils-4c977459.js');
-require('./consts-779fd4ec.js');
+const WrappedSlot = require('./WrappedSlot-736c2736.js');
+const utils = require('./utils-9c925efe.js');
+const utils$1 = require('./utils-a82778a7.js');
+require('./consts-255c1066.js');
 
-const wppSkeletonCss = ":host{--skeleton-bg-color:var(--wpp-skeleton-bg-color, var(--wpp-grey-color-300));--skeleton-circle-border-radius:var(--wpp-skeleton-rectangle-border-radius, var(--wpp-border-radius-round));--skeleton-circle-width:var(--wpp-skeleton-circle-width, 80px);--skeleton-circle-height:var(--wpp-skeleton-circle-height, 80px);--skeleton-rectangle-border-radius:var(--wpp-skeleton-rectangle-border-radius, var(--wpp-border-radius-s));--skeleton-rectangle-width:var(--wpp-skeleton-rectangle-width, 100%);--skeleton-rectangle-height:var(--wpp-skeleton-rectangle-height, 80px);--skeleton-animation-duration:var(--wpp-skeleton-animation-duration, 2s);display:-ms-inline-flexbox;display:inline-flex;position:relative;overflow:hidden;background-color:var(--skeleton-bg-color)}:host:host(.wpp-animated)::after{position:absolute;top:0;right:0;bottom:0;left:0;-webkit-transform:translateX(-100%);transform:translateX(-100%);background-image:-webkit-gradient(linear, left top, right top, color-stop(0, rgba(255, 255, 255, 0)), color-stop(20%, rgba(255, 255, 255, 0.2)), color-stop(60%, rgba(255, 255, 255, 0.5)), to(rgba(255, 255, 255, 0)));background-image:linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.2) 20%, rgba(255, 255, 255, 0.5) 60%, rgba(255, 255, 255, 0));-webkit-animation:shimmer var(--skeleton-animation-duration) infinite;animation:shimmer var(--skeleton-animation-duration) infinite;content:\"\"}:host:host(.wpp-rectangle){border-radius:var(--skeleton-rectangle-border-radius);width:var(--skeleton-width, var(--skeleton-rectangle-width));height:var(--skeleton-height, var(--skeleton-rectangle-height))}:host:host(.wpp-circle){border-radius:var(--skeleton-circle-border-radius);width:var(--skeleton-width, var(--skeleton-circle-width));height:var(--skeleton-height, var(--skeleton-circle-height))}@-webkit-keyframes shimmer{100%{-webkit-transform:translateX(100%);transform:translateX(100%)}}@keyframes shimmer{100%{-webkit-transform:translateX(100%);transform:translateX(100%)}}@media (prefers-reduced-motion: reduce){:host(.wpp-animated){-webkit-animation:none !important;animation:none !important}}";
+const wppSkeletonCss = ":host{--skeleton-bg-color:var(--wpp-skeleton-bg-color, var(--wpp-grey-color-300));--skeleton-circle-border-radius:var(--wpp-skeleton-rectangle-border-radius, var(--wpp-border-radius-round));--skeleton-circle-width:var(--wpp-skeleton-circle-width, 80px);--skeleton-circle-height:var(--wpp-skeleton-circle-height, 80px);--skeleton-rectangle-border-radius:var(--wpp-skeleton-rectangle-border-radius, var(--wpp-border-radius-s));--skeleton-rectangle-width:var(--wpp-skeleton-rectangle-width, 100%);--skeleton-rectangle-height:var(--wpp-skeleton-rectangle-height, 80px);--skeleton-animation-duration:var(--wpp-skeleton-animation-duration, 2s);display:-ms-inline-flexbox;display:inline-flex;position:relative;overflow:hidden;background-color:var(--skeleton-bg-color)}:host:host(.wpp-animated)::after{position:absolute;top:0;right:0;bottom:0;left:0;-webkit-transform:translateX(-100%);transform:translateX(-100%);background-image:-webkit-gradient(linear, left top, right top, color-stop(0, rgba(255, 255, 255, 0)), color-stop(20%, rgba(255, 255, 255, 0.2)), color-stop(60%, rgba(255, 255, 255, 0.5)), to(rgba(255, 255, 255, 0)));background-image:linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.2) 20%, rgba(255, 255, 255, 0.5) 60%, rgba(255, 255, 255, 0));-webkit-animation:shimmer var(--skeleton-animation-duration) infinite;animation:shimmer var(--skeleton-animation-duration) infinite;content:\"\"}:host:host(.wpp-rectangle){border-radius:var(--skeleton-rectangle-border-radius);width:var(--skeleton-width, var(--skeleton-rectangle-width));height:var(--skeleton-height, var(--skeleton-rectangle-height))}:host:host(.wpp-circle){border-radius:var(--skeleton-circle-border-radius);width:var(--skeleton-width, var(--skeleton-circle-width));height:var(--skeleton-height, var(--skeleton-circle-height))}@-webkit-keyframes shimmer{100%{-webkit-transform:translateX(100%);transform:translateX(100%)}}@keyframes shimmer{100%{-webkit-transform:translateX(100%);transform:translateX(100%)}}";
 
 const WppSkeleton = class {
   constructor(hostRef) {
@@ -30,9 +30,9 @@ const WppSkeleton = class {
       '--skeleton-width': this.getSizeWithDimension(this.width),
       '--skeleton-height': this.getSizeWithDimension(this.height),
     };
-    return index.h(index.Host, { class: this.hostCssClasses(), style: style, "aria-hidden": "true" });
+    return index.h(index.Host, { class: this.hostCssClasses(), style: style });
   }
-  static get registryIs() { return "wpp-skeleton-v3-3-0"; }
+  static get registryIs() { return "wpp-skeleton-v2-22-0"; }
 };
 WppSkeleton.style = wppSkeletonCss;
 
@@ -217,19 +217,19 @@ const WppTreeItem = class {
       const { className } = props;
       switch (contentType) {
         case 'text':
-          return (index.h("wpp-typography-v3-3-0", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
+          return (index.h("wpp-typography-v2-22-0", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
         case 'tag': {
           const { icon } = props;
-          return (index.h("wpp-tag-v3-3-0", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
+          return (index.h("wpp-tag-v2-22-0", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
             index.h(utils.transformToVersionedTag(icon), {
               slot: 'icon-start',
               part: 'icon-start',
             })));
         }
         case 'avatar':
-          return (index.h("wpp-avatar-v3-3-0", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar" }));
+          return (index.h("wpp-avatar-v2-22-0", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar" }));
         case 'avatarGroup':
-          return (index.h("wpp-avatar-group-v3-3-0", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group" }));
+          return (index.h("wpp-avatar-group-v2-22-0", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group" }));
         default:
           return null;
       }
@@ -288,9 +288,9 @@ const WppTreeItem = class {
   }
   render() {
     const isParent = !!this.item?.children?.length;
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeItem", ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, index.h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (index.h("div", { class: "switcher", onClick: this.handleSwitcherClick, part: "tree-item-switcher" }, index.h("wpp-icon-triangle-fill-v3-3-0", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (index.h("wpp-checkbox-v3-3-0", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox" })), index.h(WrappedSlot.WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (index.h("wpp-tooltip-v3-3-0", { text: this.item.title, config: { placement: 'right' }, class: "tooltip" }, this.renderTitle())) : (this.renderTitle()), index.h("wpp-action-button-v3-3-0", { variant: "secondary", disabled: this.item.disabled, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button" }, index.h("slot", { name: "icon-end", onSlotchange: this.updateSlotData })), this.renderEndContent()), ((this.item.children && this.item.open) || !this.isCollapseTransitionEnd) && (index.h(WrappedSlot.WrappedSlot, { name: "content", onSlotchange: this.updateSlotData }))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeItem", ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, index.h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (index.h("div", { class: "switcher", onClick: this.handleSwitcherClick, part: "tree-item-switcher" }, index.h("wpp-icon-triangle-fill-v2-22-0", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (index.h("wpp-checkbox-v2-22-0", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox" })), index.h(WrappedSlot.WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (index.h("wpp-tooltip-v2-22-0", { text: this.item.title, config: { placement: 'right' }, class: "tooltip" }, this.renderTitle())) : (this.renderTitle()), index.h("wpp-action-button-v2-22-0", { variant: "secondary", disabled: this.item.disabled, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button" }, index.h("slot", { name: "icon-end", onSlotchange: this.updateSlotData })), this.renderEndContent()), ((this.item.children && this.item.open) || !this.isCollapseTransitionEnd) && (index.h(WrappedSlot.WrappedSlot, { name: "content", onSlotchange: this.updateSlotData }))));
   }
-  static get registryIs() { return "wpp-tree-item-v3-3-0"; }
+  static get registryIs() { return "wpp-tree-item-v2-22-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "item": ["onItemChange"]

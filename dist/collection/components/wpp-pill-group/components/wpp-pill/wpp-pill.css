@@ -138,30 +138,30 @@
 :host .pill-wrapper.tab-focus {
   border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--pill-first-border-color-focus), 0 0 0 3px var(--pill-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--pill-first-border-color-focus), 0 0 0 2px var(--pill-second-border-color-focus);
   background-color: var(--pill-bg-color-hover);
   border-color: var(--pill-border-color-hover);
 }
 :host .pill-wrapper.tab-focus.checked {
   background-color: var(--pill-checked-bg-color);
 }
-:host .pill-wrapper:not(.display, .draggable, .checked.single) {
+:host .pill-wrapper:not(.display.removable, .draggable, .checked.single) {
   cursor: pointer;
 }
-:host .pill-wrapper:hover:not(.display, .draggable, .checked) {
+:host .pill-wrapper:hover:not(.display.removable, .draggable, .checked) {
   background-color: var(--pill-bg-color-hover);
   border-color: var(--pill-border-color-hover);
 }
-:host .pill-wrapper:hover:not(.display, .draggable, .checked) ::slotted([slot=icon-start]),
-:host .pill-wrapper:hover:not(.display, .draggable, .checked) .wpp-icon-drag-indicator {
+:host .pill-wrapper:hover:not(.display.removable, .draggable, .checked) ::slotted([slot=icon-start]),
+:host .pill-wrapper:hover:not(.display.removable, .draggable, .checked) .wpp-icon-drag-indicator {
   color: var(--pill-start-icon-color-hover);
 }
-:host .pill-wrapper:active:not(.display, .draggable, .checked) {
+:host .pill-wrapper:active:not(.display.removable, .draggable, .checked) {
   background-color: var(--pill-bg-color-active);
   border-color: var(--pill-border-color-active);
 }
-:host .pill-wrapper:active:not(.display, .draggable, .checked) ::slotted([slot=icon-start]),
-:host .pill-wrapper:active:not(.display, .draggable, .checked) .wpp-icon-drag-indicator {
+:host .pill-wrapper:active:not(.display.removable, .draggable, .checked) ::slotted([slot=icon-start]),
+:host .pill-wrapper:active:not(.display.removable, .draggable, .checked) .wpp-icon-drag-indicator {
   color: var(--pill-start-icon-color-active);
 }
 :host .pill-wrapper .icon-start {
@@ -201,7 +201,7 @@
 :host .pill-wrapper .wpp-icon-drag-indicator.tab-focus {
   border-radius: 3px;
   outline: none;
-  box-shadow: 0 0 0 1px var(--pill-first-border-color-focus), 0 0 0 3px var(--pill-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--pill-first-border-color-focus), 0 0 0 2px var(--pill-second-border-color-focus);
   color: var(--pill-cross-icon-color-hover);
 }
 :host .pill-wrapper.size-m {

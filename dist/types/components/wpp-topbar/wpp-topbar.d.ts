@@ -31,10 +31,6 @@ export declare class WppTopbar {
    */
   readonly nativeLink: boolean;
   /**
-   * Defines the z-index of the WppTopbar.
-   */
-  readonly zIndex: number;
-  /**
    * Emitted when topbar item was changed, return object like { value: 'home', path: '/home', label: 'Home' }
    */
   wppChange: EventEmitter<TopbarChangeEventDetail>;

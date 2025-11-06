@@ -1,5 +1,5 @@
 import isDate from 'lodash/isDate';
-import { DATES_SEPARATOR, DATE_FORMAT_REG_EXP, INVALID_DATE, MONTHS, MONTHS_SHORT } from './const';
+import { DATES_SEPARATOR, DATE_FORMAT_REG_EXP, INVALID_DATE, MONTHS, MONTHS_SHORT } from './consts';
 export function isValidDate(date) {
   if (Array.isArray(date)) {
     return date.every(currentDate => isDate(currentDate) && currentDate.toString() !== 'Invalid Date');

@@ -10,7 +10,7 @@ export declare class WppNavSidebar {
   host: HTMLWppNavSidebarElement;
   /**
    * Defines the initial current path.
-   * @deprecated initialPath is being deprecated and will be deleted in v4.0.0. Use `activePath` instead.
+   * @deprecated initialPath is being deprecated, use `activePath` instead.
    */
   readonly initialPath?: string;
   /**
@@ -22,10 +22,6 @@ export declare class WppNavSidebar {
    * If the navigation link behaves as an `a` tag. If the app uses `client side render`, leave as `false`, and if the app uses `server side render`, change to `true`. This prop is not dynamic, so, when changing its value in Storybook, refresh the page to see the change reflected.
    */
   readonly nativeLink: boolean;
-  /**
-   * Defines the z-index of the WppNavSidebar.
-   */
-  readonly zIndex: number;
   /**
    * Emitted when app routes change, return object like { path: '/home', label: 'Home' }
    */

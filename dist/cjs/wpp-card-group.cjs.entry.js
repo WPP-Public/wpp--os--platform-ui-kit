@@ -3,8 +3,8 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const utils = require('./utils-2b192dec.js');
-require('./consts-779fd4ec.js');
+const utils = require('./utils-9c925efe.js');
+require('./consts-255c1066.js');
 
 const wppCardGroupCss = ":host{display:-ms-flexbox;display:flex}";
 
@@ -53,54 +53,6 @@ const WppCardGroup = class {
         }
       });
     };
-    this.getEnabledCards = () => this.directCardChildren.filter(card => !card.disabled);
-    this.getCurrentNdx = (enabled) => {
-      const checkedNdx = enabled.findIndex(card => card.checked);
-      return checkedNdx !== -1 ? checkedNdx : 0;
-    };
-    this.onKeyDown = (event) => {
-      // Only for radiogroup variant (single select)
-      if (this.multiple)
-        return;
-      const enabledItems = this.getEnabledCards();
-      if (enabledItems.length === 0)
-        return;
-      const currentNdx = this.getCurrentNdx(enabledItems);
-      let nextNdx = currentNdx;
-      const isNextKey = event.key === 'ArrowRight' || event.key === 'ArrowDown';
-      const isPrevKey = event.key === 'ArrowLeft' || event.key === 'ArrowUp';
-      if (!isNextKey && !isPrevKey)
-        return;
-      event.preventDefault();
-      const onFirst = currentNdx === 0;
-      const onLast = currentNdx === enabledItems.length - 1;
-      if (onLast && isNextKey) {
-        nextNdx = 0;
-      }
-      else if (onFirst && isPrevKey) {
-        nextNdx = enabledItems.length - 1;
-      }
-      else if (isNextKey) {
-        nextNdx = Math.min(currentNdx + 1, enabledItems.length - 1);
-      }
-      else if (isPrevKey) {
-        nextNdx = Math.max(currentNdx - 1, 0);
-      }
-      const target = enabledItems[nextNdx];
-      this.focusAndSelect(target);
-    };
-    this.focusAndSelect = (target) => {
-      if (!target)
-        return;
-      const nextValue = target.value;
-      if (this.value !== nextValue) {
-        this.value = nextValue;
-        this.wppChange.emit({ value: this.value, name: this.name });
-      }
-      this.setActiveCard(this.value);
-      this.syncTabIndexes();
-      target.setFocus();
-    };
     this.onFocus = (event) => {
       this.wppFocus.emit(event);
     };
@@ -117,7 +69,6 @@ const WppCardGroup = class {
     this.required = false;
     this.withRadioOrCheckbox = true;
     this.allowEmptySelection = false;
-    this.ariaProps = {};
   }
   handleClick(event) {
     if (event.target.getAttribute('nested'))
@@ -144,7 +95,6 @@ const WppCardGroup = class {
   }
   onValueChange(newValue) {
     this.setActiveCard(newValue);
-    this.syncTabIndexes();
   }
   onUpdateSize() {
     this.setCardsProps([['size', this.size]]);
@@ -159,7 +109,6 @@ const WppCardGroup = class {
     this.getDirectCardChildren();
     this.updateCardProperties();
     this.updateSlotContent();
-    this.syncTabIndexes();
     this.observer = new MutationObserver(() => {
       this.updateSlotContent();
     });
@@ -177,26 +126,11 @@ const WppCardGroup = class {
   updateSlotContent() {
     this.getDirectCardChildren();
     this.updateCardProperties();
-    this.syncTabIndexes();
-  }
-  syncTabIndexes() {
-    // Only manage for radiogroup
-    if (this.multiple)
-      return;
-    const enabled = this.getEnabledCards();
-    if (enabled.length === 0)
-      return;
-    let activeIndex = enabled.findIndex(c => c.checked);
-    if (activeIndex === -1)
-      activeIndex = 0;
-    enabled.forEach((c, i) => {
-      c.index = i === activeIndex ? 0 : -1;
-    });
   }
   render() {
-    return (index.h(index.Host, { "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, class: this.hostCssClasses(), exportparts: "inner", role: this.multiple ? 'group' : 'radiogroup', "aria-labelledby": this.ariaProps.labelledby }, index.h("slot", { part: "inner" })));
+    return (index.h(index.Host, { "aria-multiselectable": this.multiple, "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, class: this.hostCssClasses(), exportparts: "inner" }, index.h("slot", { part: "inner" })));
   }
-  static get registryIs() { return "wpp-card-group-v3-3-0"; }
+  static get registryIs() { return "wpp-card-group-v2-22-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "value": ["onValueChange"],

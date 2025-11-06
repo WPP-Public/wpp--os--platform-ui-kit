@@ -20,13 +20,8 @@ export declare class WppExpandableCard {
   expandedByDefault: boolean;
   /**
    * If `true`, the component is expanded
-   * @deprecated - this prop will be deleted in version 4.0.0. Use "isExpanded" prop instead
    */
   expanded: boolean;
-  /**
-   * If `true`, the component is expanded
-   */
-  isExpanded: boolean;
   /**
    * Indicates expandable card size
    */
@@ -34,7 +29,7 @@ export declare class WppExpandableCard {
   /**
    * Indicates accordion header in expandable card
    *
-   * @deprecated - this prop will be deleted in version 4.0.0. If you want to use this prop, use "header" slot instead
+   * @deprecated - this prop will be deleted in version ***. If you want to use this prop, use "header" slot instead
    */
   readonly header: string;
   /**
@@ -53,7 +48,6 @@ export declare class WppExpandableCard {
    * Emitted when the section loses focus
    */
   wppBlur: EventEmitter<FocusEvent>;
-  onExpandedChange(newValue: boolean): void;
   componentWillLoad(): void;
   private updateSlotData;
   private onChange;

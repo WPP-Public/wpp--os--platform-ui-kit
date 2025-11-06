@@ -61,10 +61,7 @@
 */
 :host {
   --ab-padding: var(--wpp-action-button-padding, 5px 8px);
-  --ab-border-radius: var(
-    --wpp-border-radius-fully-rounded,
-    var(--wpp-action-border-radius, var(--wpp-border-radius-s))
-  );
+  --ab-border-radius: var(--wpp-border-radius-fully-rounded, var(--wpp-action-border-radius, var(--wpp-border-radius-s)));
   --ab-font-weight: var(--wpp-action-button-font-weight, 600);
   --ab-font-size: var(--wpp-action-button-font-size, 14px);
   --ab-line-height: var(--wpp-action-button-line-height, 22px);
@@ -84,10 +81,7 @@
   --ab-primary-text-color: var(--wpp-action-button-primary-text-color, var(--wpp-brand-color));
   --ab-primary-text-color-hover: var(--wpp-action-button-primary-text-color-hover, var(--wpp-brand-color));
   --ab-primary-text-color-active: var(--wpp-action-button-primary-text-color-active, var(--wpp-brand-color-active));
-  --ab-primary-text-color-disabled: var(
-    --wpp-action-button-primary-text-color-disabled,
-    var(--wpp-brand-color-disabled)
-  );
+  --ab-primary-text-color-disabled: var(--wpp-action-button-primary-text-color-disabled, var(--wpp-brand-color-disabled));
   --ab-primary-icon-color: var(--wpp-action-button-primary-icon-color, var(--wpp-brand-color));
   --ab-primary-icon-color-hover: var(--wpp-action-button-primary-icon-color-hover, var(--wpp-brand-color));
   --ab-primary-icon-color-active: var(--wpp-action-button-primary-icon-color-active, var(--wpp-brand-color-active));
@@ -104,7 +98,10 @@
   );
   --ab-secondary-icon-color: var(--wpp-action-button-secondary-icon-color, var(--wpp-grey-color-800));
   --ab-secondary-icon-color-hover: var(--wpp-action-button-secondary-icon-color-hover, var(--wpp-icon-color-hover));
-  --ab-secondary-icon-color-active: var(--wpp-action-button-secondary-icon-color-active, var(--wpp-icon-color-active));
+  --ab-secondary-icon-color-active: var(
+    --wpp-action-button-secondary-icon-color-active,
+    var(--wpp-icon-color-active)
+  );
   --ab-secondary-icon-color-disabled: var(
     --wpp-action-button-secondary-icon-color-disabled,
     var(--wpp-icon-color-disabled)
@@ -122,34 +119,16 @@
   --ab-inverted-bg-color-active: var(--wpp-action-button-inverted-bg-color-active, var(--wpp-grey-color-100));
   --ab-inverted-bg-color-disabled: var(--wpp-action-button-inverted-bg-color-disabled, transparent);
   --ab-inverted-bg-color-loading: var(--wpp-action-button-inverted-bg-color-loading, var(--wpp-grey-color-100));
-  --ab-inverted-first-border-color-focus: var(
-    --wpp-action-button-inverted-first-border-color-focus,
-    var(--wpp-grey-color-000)
-  );
-  --ab-inverted-second-border-color-focus: var(
-    --wpp-action-button-inverted-second-border-color-focus,
-    var(--wpp-grey-color-000)
-  );
+  --ab-inverted-first-border-color-focus: var(--wpp-action-button-inverted-first-border-color-focus, var(--wpp-grey-color-000));
+  --ab-inverted-second-border-color-focus: var(--wpp-action-button-inverted-second-border-color-focus, var(--wpp-grey-color-000));
   --ab-destructive-text-color: var(--wpp-action-button-destructive-txt-color, var(--wpp-danger-color-500));
   --ab-destructive-text-color-hover: var(--wpp-action-button-destructive-txt-color-hover, var(--wpp-danger-color-500));
-  --ab-destructive-text-color-active: var(
-    --wpp-action-button-destructive-txt-color-active,
-    var(--wpp-danger-color-600)
-  );
-  --ab-destructive-text-color-disabled: var(
-    --wpp-action-button-destructive-txt-color-disabled,
-    var(--wpp-danger-color-300)
-  );
+  --ab-destructive-text-color-active: var(--wpp-action-button-destructive-txt-color-active, var(--wpp-danger-color-600));
+  --ab-destructive-text-color-disabled: var(--wpp-action-button-destructive-txt-color-disabled, var(--wpp-danger-color-300));
   --ab-destructive-icon-color: var(--wpp-action-button-destructive-icon-color, var(--wpp-danger-color-500));
   --ab-destructive-icon-color-hover: var(--wpp-action-button-destructive-icon-color-hover, var(--wpp-danger-color-500));
-  --ab-destructive-icon-color-active: var(
-    --wpp-action-button-destructive-icon-color-active,
-    var(--wpp-danger-color-600)
-  );
-  --ab-destructive-icon-color-disabled: var(
-    --wpp-action-button-destructive-icon-color-disabled,
-    var(--wpp-danger-color-300)
-  );
+  --ab-destructive-icon-color-active: var(--wpp-action-button-destructive-icon-color-active, var(--wpp-danger-color-600));
+  --ab-destructive-icon-color-disabled: var(--wpp-action-button-destructive-icon-color-disabled, var(--wpp-danger-color-300));
   --ab-destructive-bg-color: var(--wpp-action-button-destructive-bg-color, transparent);
   --ab-destructive-bg-color-hover: var(--wpp-action-button-destructive-bg-color-hover, var(--wpp-grey-color-700));
   --ab-destructive-bg-color-active: var(--wpp-action-button-destructive-bg-color-active, var(--wpp-grey-color-800));
@@ -229,13 +208,13 @@ button .content.hide {
 button.tab-focus {
   border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--ab-first-border-color-focus), 0 0 0 3px var(--ab-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--ab-first-border-color-focus), 0 0 0 2px var(--ab-second-border-color-focus);
 }
 button:hover ~ .overlay, button.tab-focus ~ .overlay {
   background-color: var(--ab-bg-color-hover);
   opacity: var(--ab-bg-opacity-hover);
 }
-button:active ~ .overlay, button.pressed ~ .overlay {
+button:active ~ .overlay {
   background-color: var(--ab-bg-color-active);
   opacity: var(--ab-bg-opacity-active);
 }
@@ -281,12 +260,11 @@ button.primary:hover .icon-end ::slotted(*), button.primary.tab-focus .icon-star
 button.primary.tab-focus .icon-end ::slotted(*) {
   color: var(--ab-primary-icon-color-hover);
 }
-button.primary:active, button.primary.pressed {
+button.primary:active {
   color: var(--ab-primary-text-color-active);
 }
 button.primary:active .icon-start ::slotted(*),
-button.primary:active .icon-end ::slotted(*), button.primary.pressed .icon-start ::slotted(*),
-button.primary.pressed .icon-end ::slotted(*) {
+button.primary:active .icon-end ::slotted(*) {
   color: var(--ab-primary-icon-color-active);
 }
 button.primary.disabled {
@@ -311,12 +289,11 @@ button.secondary:hover .icon-end ::slotted(*), button.secondary.tab-focus .icon-
 button.secondary.tab-focus .icon-end ::slotted(*) {
   color: var(--ab-secondary-icon-color-hover);
 }
-button.secondary:active, button.secondary.pressed {
+button.secondary:active {
   color: var(--ab-secondary-text-color-active);
 }
 button.secondary:active .icon-start ::slotted(*),
-button.secondary:active .icon-end ::slotted(*), button.secondary.pressed .icon-start ::slotted(*),
-button.secondary.pressed .icon-end ::slotted(*) {
+button.secondary:active .icon-end ::slotted(*) {
   color: var(--ab-secondary-icon-color-active);
 }
 button.secondary.disabled {
@@ -332,7 +309,7 @@ button.inverted {
 button.inverted.tab-focus {
   border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--ab-inverted-first-border-color-focus), 0 0 0 3px var(--ab-inverted-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--ab-inverted-first-border-color-focus), 0 0 0 2px var(--ab-inverted-second-border-color-focus);
 }
 button.inverted ~ .overlay {
   background-color: var(--ab-inverted-bg-color);
@@ -352,15 +329,14 @@ button.inverted:hover:not(.disabled):not(.loading):not(:active) .icon-end ::slot
 button.inverted.tab-focus:not(.disabled):not(.loading):not(:active) .icon-end ::slotted(*) {
   color: var(--ab-inverted-icon-color-hover);
 }
-button.inverted:active, button.inverted.pressed {
+button.inverted:active {
   color: var(--ab-inverted-text-color-active);
 }
-button.inverted:active ~ .overlay, button.inverted.pressed ~ .overlay {
+button.inverted:active ~ .overlay {
   background-color: var(--ab-inverted-bg-color-active);
 }
 button.inverted:active .icon-start ::slotted(*),
-button.inverted:active .icon-end ::slotted(*), button.inverted.pressed .icon-start ::slotted(*),
-button.inverted.pressed .icon-end ::slotted(*) {
+button.inverted:active .icon-end ::slotted(*) {
   color: var(--ab-inverted-icon-color-active);
 }
 button.inverted.loading ~ .overlay {
@@ -386,26 +362,25 @@ button.destructive .icon-start ::slotted(*),
 button.destructive .icon-end ::slotted(*) {
   color: var(--ab-destructive-icon-color);
 }
-button.destructive:hover:not(.disabled):not(.loading):not(:active):not(.pressed), button.destructive.tab-focus:not(.disabled):not(.loading):not(:active):not(.pressed) {
+button.destructive:hover:not(.disabled):not(.loading):not(:active), button.destructive.tab-focus:not(.disabled):not(.loading):not(:active) {
   color: var(--ab-destructive-text-color-hover);
 }
-button.destructive:hover:not(.disabled):not(.loading):not(:active):not(.pressed) ~ .overlay, button.destructive.tab-focus:not(.disabled):not(.loading):not(:active):not(.pressed) ~ .overlay {
+button.destructive:hover:not(.disabled):not(.loading):not(:active) ~ .overlay, button.destructive.tab-focus:not(.disabled):not(.loading):not(:active) ~ .overlay {
   background-color: var(--ab-destructive-bg-color-hover);
 }
-button.destructive:hover:not(.disabled):not(.loading):not(:active):not(.pressed) .icon-start ::slotted(*),
-button.destructive:hover:not(.disabled):not(.loading):not(:active):not(.pressed) .icon-end ::slotted(*), button.destructive.tab-focus:not(.disabled):not(.loading):not(:active):not(.pressed) .icon-start ::slotted(*),
-button.destructive.tab-focus:not(.disabled):not(.loading):not(:active):not(.pressed) .icon-end ::slotted(*) {
+button.destructive:hover:not(.disabled):not(.loading):not(:active) .icon-start ::slotted(*),
+button.destructive:hover:not(.disabled):not(.loading):not(:active) .icon-end ::slotted(*), button.destructive.tab-focus:not(.disabled):not(.loading):not(:active) .icon-start ::slotted(*),
+button.destructive.tab-focus:not(.disabled):not(.loading):not(:active) .icon-end ::slotted(*) {
   color: var(--ab-destructive-icon-color-hover);
 }
-button.destructive:active, button.destructive.pressed {
+button.destructive:active {
   color: var(--ab-destructive-text-color-active);
 }
-button.destructive:active ~ .overlay, button.destructive.pressed ~ .overlay {
+button.destructive:active ~ .overlay {
   background-color: var(--ab-destructive-bg-color-active);
 }
 button.destructive:active .icon-start ::slotted(*),
-button.destructive:active .icon-end ::slotted(*), button.destructive.pressed .icon-start ::slotted(*),
-button.destructive.pressed .icon-end ::slotted(*) {
+button.destructive:active .icon-end ::slotted(*) {
   color: var(--ab-destructive-icon-color-active);
 }
 button.destructive.loading ~ .overlay {

@@ -2,14 +2,13 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const utils = require('./utils-2b192dec.js');
+const utils = require('./utils-9c925efe.js');
 const types = require('./types-332b969c.js');
 const types$1 = require('./types-05f8f988.js');
-const types$2 = require('./types-7010056a.js');
-const types$3 = require('./types-18fdc89e.js');
-const types$4 = require('./types-3dbf006d.js');
-const types$5 = require('./types-2185a602.js');
-require('./consts-779fd4ec.js');
+const types$2 = require('./types-18fdc89e.js');
+const types$3 = require('./types-3dbf006d.js');
+const types$4 = require('./types-2185a602.js');
+require('./consts-255c1066.js');
 require('./_commonjsHelpers-bcc1208a.js');
 
 const dsPrefix = '--wpp';
@@ -109,17 +108,14 @@ exports.closestElement = utils.closestElement;
 exports.debounce = utils.debounce;
 exports.form2object = utils.form2object;
 exports.format = utils.format;
-exports.getAriaProps = utils.getAriaProps;
 exports.getDurationValues = utils.getDurationValues;
 exports.getHasFocused = utils.getHasFocused;
 exports.getHighestContainerInDOM = utils.getHighestContainerInDOM;
 exports.getHighlightData = utils.getHighlightData;
 exports.getSlotEmptyStates = utils.getSlotEmptyStates;
-exports.hasParentWithId = utils.hasParentWithId;
 exports.hasShadowDom = utils.hasShadowDom;
 exports.isEventTargetContained = utils.isEventTargetContained;
 exports.isObject = utils.isObject;
-exports.isWppElement = utils.isWppElement;
 exports.recursiveObjectMap = utils.recursiveObjectMap;
 exports.selectDropdownWidth = utils.selectDropdownWidth;
 exports.setHasFocused = utils.setHasFocused;
@@ -139,28 +135,22 @@ Object.defineProperty(exports, 'FullScreenModalCloseReason', {
     return types$1.FullScreenModalCloseReason;
   }
 });
-Object.defineProperty(exports, 'InlineEditModeEnum', {
-  enumerable: true,
-  get: function () {
-    return types$2.InlineEditModeEnum;
-  }
-});
 Object.defineProperty(exports, 'ModalCloseReason', {
   enumerable: true,
   get: function () {
-    return types$3.ModalCloseReason;
+    return types$2.ModalCloseReason;
   }
 });
-exports.Quill = types$4.Quill;
-exports.RICHTEXT_UPLOAD_REQUEST_EVENT = types$4.UPLOAD_REQUEST_EVENT;
-exports.debugLevels = types$4.debugLevels;
-exports.formats = types$4.formats;
-exports.richtextUploadTypes = types$4.uploadTypes;
-exports.sources = types$4.sources;
+exports.Quill = types$3.Quill;
+exports.RICHTEXT_UPLOAD_REQUEST_EVENT = types$3.UPLOAD_REQUEST_EVENT;
+exports.debugLevels = types$3.debugLevels;
+exports.formats = types$3.formats;
+exports.richtextUploadTypes = types$3.uploadTypes;
+exports.sources = types$3.sources;
 Object.defineProperty(exports, 'SideModalCloseReason', {
   enumerable: true,
   get: function () {
-    return types$5.SideModalCloseReason;
+    return types$4.SideModalCloseReason;
   }
 });
 exports.createTheme = createTheme;

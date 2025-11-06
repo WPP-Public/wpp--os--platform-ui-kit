@@ -11,7 +11,6 @@ import { PaginationChangeEventDetail, PaginationLocales } from './types';
  * @part page-select - page select element
  */
 export declare class WppPagination {
-  private _locales;
   /**
    * Defines the total number of items.
    */
@@ -40,12 +39,11 @@ export declare class WppPagination {
   /**
    * Indicates locales for pagination component
    */
-  readonly locales: Partial<PaginationLocales>;
+  readonly locales: PaginationLocales;
   /**
    * Emitted when selected page or number of items per page changes
    */
   wppChange: EventEmitter<PaginationChangeEventDetail>;
-  onUpdateLocales(newLocales: Partial<PaginationLocales>): void;
   componentWillLoad(): void;
   private handleItemsPerPageNumberChange;
   private handleSelectedPageChange;

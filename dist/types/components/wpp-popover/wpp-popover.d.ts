@@ -1,6 +1,5 @@
-import { EventEmitter } from '../../stencil-public-runtime';
-import { AriaProps, DropdownConfig } from '../../types/common';
-import { PopoverInputChangeEventDetail, PopoverLocalesInterface, PopoverShouldCloseOnOutsideClickHandler } from './types';
+import { DropdownConfig } from '../../types/common';
+import { PopoverShouldCloseOnOutsideClickHandler } from './types';
 /**
  * @slot trigger-element - Can contain the popover anchor element.
  * @slot - Can contain the popover content. The default slot, without the name attribute.
@@ -9,12 +8,10 @@ import { PopoverInputChangeEventDetail, PopoverLocalesInterface, PopoverShouldCl
  * @part content - Popover content wrapper
  */
 export declare class WppPopover {
-  private anchorRef;
+  private anchorEl?;
   private contentEl?;
   private mutationObserver;
   private tippyInstance;
-  private internalSearchName;
-  private searchInputEl?;
   hidden: boolean;
   host: HTMLWppPopoverElement;
   /**
@@ -31,26 +28,6 @@ export declare class WppPopover {
    */
   readonly closable: boolean;
   /**
-   * If the popover has search inside of the dropdown.
-   */
-  readonly withSearch: boolean;
-  /**
-   * Value of the search inside the popover's dropdown.
-   * This property should be used together with `this.withSearch` property.
-   */
-  readonly searchValue: string;
-  /**
-   * The name for the input component inside the popover's dropdown.
-   * This property should be used together with `this.withSearch` property.
-   */
-  readonly searchName: string;
-  /**
-   * By default, the search value in the input is cleared once the dropdown is closed.
-   * Set to `true` if you need the search value to not be cleared after closing the dropdown.
-   * This property should be used together with `this.withSearch` property.
-   */
-  readonly persistantSearch: boolean;
-  /**
    * Add an external class to the popover. This class will be applied to the list wrapper that placed in tippy box that appended to the body.
    * To add some properties to this class you have to add this class to global styles, for example
    * .wpp-popover.external-class-name {
@@ -63,18 +40,6 @@ export declare class WppPopover {
    */
   readonly dropdownWidth: 'auto' | string;
   /**
-   * Contains the button `aria-` props.
-   */
-  readonly ariaProps: AriaProps;
-  /**
-   * Defines the component locale types.
-   */
-  readonly locales: PopoverLocalesInterface;
-  /**
-   * Emitted when the value of the search input inside the dropdown changes.
-   */
-  readonly wppSearchChange: EventEmitter<PopoverInputChangeEventDetail>;
-  /**
    * Method for closing the popover programatically
    */
   closePopover(): Promise<void>;
@@ -84,7 +49,6 @@ export declare class WppPopover {
   openPopover(): Promise<void>;
   updateConfig(newConfig: DropdownConfig, oldConfig: DropdownConfig): void;
   private isTriggerEnabled;
-  componentWillLoad(): void;
   componentDidLoad(): void;
   disconnectedCallback(): void;
   connectedCallback(): void;
@@ -92,7 +56,6 @@ export declare class WppPopover {
   private removeDisabledTag;
   private startObserving;
   private handleCrossButtonClick;
-  private handleSearchChange;
   private hostCssClasses;
   private contentCssClasses;
   render(): any;

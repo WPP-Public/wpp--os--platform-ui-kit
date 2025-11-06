@@ -1,4 +1,4 @@
-import { AriaProps, DropdownConfig } from '../../types/common';
+import { DropdownConfig } from '../../types/common';
 export type TooltipThemeTypes = 'light' | 'dark';
 export interface TooltipProps {
   header?: string;
@@ -15,6 +15,3 @@ export interface ArrowBgColor {
   error?: string;
   warning?: string;
 }
-export type ReferenceComponentElement = HTMLElement & {
-  ariaProps: AriaProps;
-};

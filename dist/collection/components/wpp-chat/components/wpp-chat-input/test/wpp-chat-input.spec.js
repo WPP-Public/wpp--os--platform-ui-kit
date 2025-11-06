@@ -24,7 +24,7 @@ describe('wpp-chat-input', () => {
     const chatInput = page.rootInstance;
     const sendSpy = jest.fn();
     chatInput.wppSend = { emit: sendSpy };
-    chatInput.textValue = 'Hello, World!';
+    chatInput.message = 'Hello, World!';
     chatInput.handleSend();
     expect(sendSpy).toHaveBeenCalledWith({
       message: 'Hello, World!',

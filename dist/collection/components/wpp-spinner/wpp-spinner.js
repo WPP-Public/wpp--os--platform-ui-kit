@@ -21,14 +21,12 @@ export class WppSpinner {
     });
     this.color = 'var(--wpp-primary-color-500)';
     this.size = 's';
-    this.ariaProps = undefined;
   }
   render() {
-    const isAnnounced = this.ariaProps?.label && this.ariaProps?.label !== '';
-    return (h(Host, { class: this.hostCssClasses(), role: isAnnounced ? 'status' : null, "aria-hidden": isAnnounced ? null : 'true', "aria-live": isAnnounced ? 'polite' : null, "aria-label": isAnnounced ? this.ariaProps?.label : null }, h("svg", { class: this.spinnerCssClasses(), "aria-hidden": "true", focusable: "false" }, h("circle", { cx: SPINNER_SIZES[this.size], cy: SPINNER_SIZES[this.size], r: SPINNER_RADIUS[this.size], fill: "transparent", stroke: this.color, "stroke-linecap": "round" }))));
+    return (h(Host, { class: this.hostCssClasses() }, h("svg", { class: this.spinnerCssClasses(), role: "alert", "aria-busy": "true" }, h("circle", { cx: SPINNER_SIZES[this.size], cy: SPINNER_SIZES[this.size], r: SPINNER_RADIUS[this.size], fill: "transparent", stroke: this.color, "stroke-linecap": "round" }))));
   }
   static get is() { return "wpp-spinner"; }
-  static get registryIs() { return "wpp-spinner-v3-3-0"; }
+  static get registryIs() { return "wpp-spinner-v2-22-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -77,27 +75,6 @@ export class WppSpinner {
         "attribute": "size",
         "reflect": false,
         "defaultValue": "'s'"
-      },
-      "ariaProps": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "AriaProps",
-          "resolved": "AriaProps | undefined",
-          "references": {
-            "AriaProps": {
-              "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::AriaProps"
-            }
-          }
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": "Defines the spinner `aria-` props."
-        }
       }
     };
   }

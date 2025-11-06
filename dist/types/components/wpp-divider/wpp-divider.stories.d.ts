@@ -1,6 +1,7 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppDivider>;
+import { WppDivider } from './wpp-divider';
+declare const _default: Meta<typeof WppDivider>;
 export default _default;
 type DividerStoryArgs = Components.WppDivider;
-export declare const Divider: StoryObj<DividerStoryArgs>;
+export declare const Divider: Story<DividerStoryArgs>;

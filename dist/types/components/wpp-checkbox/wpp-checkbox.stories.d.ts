@@ -1,6 +1,7 @@
-import { StoryObj, Meta } from '@storybook/web-components';
+import { Story, Meta } from '@storybook/web-components';
 import { Components } from '../../components';
-declare const _default: Meta<Components.WppCheckbox>;
+import { WppCheckbox } from './wpp-checkbox';
+declare const _default: Meta<typeof WppCheckbox>;
 export default _default;
-export declare const NoLabel: StoryObj<Components.WppCheckbox>;
-export declare const WithLabel: StoryObj<Components.WppCheckbox>;
+export declare const NoLabel: Story<Components.WppCheckbox>;
+export declare const WithLabel: Story<Components.WppCheckbox>;

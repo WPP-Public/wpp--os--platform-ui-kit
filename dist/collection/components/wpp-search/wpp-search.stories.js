@@ -1,5 +1,7 @@
 import { html } from 'lit-html';
-import { useState } from 'storybook/internal/preview-api';
+import useState from 'storybook-addon-state';
+import SearchReadme from './readme.md';
+import ListItemReadme from '../wpp-list-item/readme.md';
 export default {
   title: 'Design System/Components/Selection and input/Search',
   parameters: {
@@ -8,6 +10,7 @@ export default {
         hidden: true,
       },
     },
+    notes: { Search: SearchReadme, Options: ListItemReadme },
   },
   argTypes: {
     messageType: {
@@ -43,8 +46,8 @@ const heroes = [
   ...Array.from(Array(20)).map((_, index) => createHero(`No Name ${index}`)),
 ];
 export const Search = (args) => {
-  const [value, setValue] = useState([]);
-  return html ` <wpp-search-v3-3-0
+  const [value, setValue] = useState('value', []);
+  return html ` <wpp-search-v2-22-0
     .loading="${args.loading}"
     .disabled="${args.disabled}"
     .required="${args.required}"
@@ -67,19 +70,19 @@ export const Search = (args) => {
     @wppCreateNewOption="${(e) => console.log('onWppCreateNewOption', e.detail)}"
   >
     ${heroes.map(hero => html `
-        <wpp-list-item-v3-3-0 .value="${hero}">
-          <wpp-avatar-v3-3-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-3-0>
+        <wpp-list-item-v2-22-0 .value="${hero}">
+          <wpp-avatar-v2-22-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v2-22-0>
           <p slot="label">${hero.label}</p>
-        </wpp-list-item-v3-3-0>
+        </wpp-list-item-v2-22-0>
       `)}
-  </wpp-search-v3-3-0>`;
+  </wpp-search-v2-22-0>`;
 };
 Search.args = {
   loading: false,
   disabled: false,
   required: true,
   highlight: true,
-  placeholder: 'Search',
+  placeholder: 'Search to add',
   dropdownWidth: 'auto',
   message: '',
   size: 'm',

@@ -1,12 +1,11 @@
-import { AriaProps, DropdownConfig } from '../../types/common';
+import { DropdownConfig } from '../../types/common';
 import { TooltipThemeTypes } from './types';
 /**
  * @slot - Can contain the tooltip anchor content. The default slot, without the name attribute.
  * @slot tooltip-content - Contains the custom content the user gives to the tooltip. To use this slot, you also have to pass `allowHTML: true` to the `config` property. Do not use WPP components (except WppTypography) in this slot.
  */
 export declare class WppTooltip {
-  private anchorRef?;
-  private slotRef?;
+  private anchorEl?;
   private contentEl?;
   private customContentEl?;
   private tippyInstance?;
@@ -68,21 +67,11 @@ export declare class WppTooltip {
    * Defines the dropdown's width. The maximum width of the dropdown is 350px.
    */
   readonly dropdownWidth: 'auto' | string;
-  /**
-   * Contains the button `aria-` props.
-   */
-  readonly ariaProps: AriaProps;
-  /**
-   * If set, makes the tooltip anchor focusable. Default is false.
-   * @internal - This prop is for internal use only.
-   */
-  readonly anchorTabIndex: number;
   updateConfig(newConfig: DropdownConfig, oldConfig: DropdownConfig): void;
   updateTheme(): void;
   textChanged(newText: string, oldText: string): void;
   handleDisabledChange(newDisabled: boolean): void;
   componentWillLoad(): void;
-  private handleSlotChange;
   componentDidLoad(): void;
   disconnectedCallback(): void;
   connectedCallback(): void;

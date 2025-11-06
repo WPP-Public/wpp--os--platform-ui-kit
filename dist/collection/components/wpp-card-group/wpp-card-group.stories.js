@@ -1,12 +1,14 @@
 import { html } from 'lit-html';
+import readme from './readme.md';
 export default {
-  title: 'Design System/Components/Surfaces/Card Group',
+  title: 'Design System/Components/Surfaces/Card',
   parameters: {
     previewTabs: {
       'storybook/docs/panel': {
         hidden: true,
       },
     },
+    notes: readme,
   },
   argTypes: {
     size: {
@@ -29,7 +31,7 @@ const handleTypographyType = (size) => {
 };
 const handleDisabledText = (disabled) => {
   if (disabled === true)
-    return 'color: var(--wpp-text-color-disabled)';
+    return 'color: var(--wpp-grey-color-500)';
   else
     return 'color: var(--wpp-grey-color-1000)';
 };
@@ -38,7 +40,7 @@ export const SingleSelectGroup = (args) => {
     console.log('event.detail :>> ', event.detail);
   };
   return html `
-    <wpp-card-group-v3-3-0
+    <wpp-card-group-v2-22-0
       .size="${args.size}"
       .required="${args.required}"
       .withRadioOrCheckbox="${args.withRadioOrCheckbox}"
@@ -46,26 +48,26 @@ export const SingleSelectGroup = (args) => {
       @wppChange="${handleCardGroupChange}"
       style="width: 1000px; justify-content: space-between"
     >
-      <wpp-card-v3-3-0 name="item-a" value="item-a">
+      <wpp-card-v2-22-0 name="item-a" value="item-a">
         <div style="width: 238px; height: 200px"></div>
-        <wpp-typography-v3-3-0 type=${handleTypographyType(args.size)} slot="header">Item A</wpp-typography-v3-3-0>
-      </wpp-card-v3-3-0>
-      <wpp-card-v3-3-0 name="item-b" value="item-b">
+        <wpp-typography-v2-22-0 type=${handleTypographyType(args.size)} slot="header">Item A</wpp-typography-v2-22-0>
+      </wpp-card-v2-22-0>
+      <wpp-card-v2-22-0 name="item-b" value="item-b">
         <div style="width: 238px; height: 200px"></div>
-        <wpp-typography-v3-3-0 type=${handleTypographyType(args.size)} slot="header">Item B</wpp-typography-v3-3-0>
-      </wpp-card-v3-3-0>
-      <wpp-card-v3-3-0 value="item-c" .disabled="${args.disabled}">
+        <wpp-typography-v2-22-0 type=${handleTypographyType(args.size)} slot="header">Item B</wpp-typography-v2-22-0>
+      </wpp-card-v2-22-0>
+      <wpp-card-v2-22-0 value="item-c" .disabled="${args.disabled}">
         <div style="width: 238px; height: 200px"></div>
         <div slot="header" style="display: flex; align-items: center">
-          <wpp-icon-user-v3-3-0 style="margin-right: 8px"></wpp-icon-user-v3-3-0>
-          <wpp-typography-v3-3-0
+          <wpp-icon-user-v2-22-0 style="margin-right: 8px"></wpp-icon-user-v2-22-0>
+          <wpp-typography-v2-22-0
             type=${handleTypographyType(args.size)}
             style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; ${handleDisabledText(args.disabled)}"
-            >${args.header}</wpp-typography-v3-3-0
+            >${args.header}</wpp-typography-v2-22-0
           >
         </div>
-      </wpp-card-v3-3-0>
-    </wpp-card-group-v3-3-0>
+      </wpp-card-v2-22-0>
+    </wpp-card-group-v2-22-0>
   `;
 };
 SingleSelectGroup.args = {
@@ -75,43 +77,41 @@ SingleSelectGroup.args = {
   allowEmptySelection: false,
   header: 'Item C',
 };
-export const MultipleSelectGroup = {
-  render: args => {
-    const cardGroupValue = ['item-a', 'item-c'];
-    const handleCardGroupChange = (event) => {
-      console.log('event.detail :>> ', event.detail);
-    };
-    return html `
-      <wpp-card-group-v3-3-0
-        multiple
-        .value="${cardGroupValue}"
-        .size="${args.size}"
-        .required="${args.required}"
-        .withRadioOrCheckbox="${args.withRadioOrCheckbox}"
-        @wppChange="${handleCardGroupChange}"
-        style="width: 1000px; justify-content: space-between"
-      >
-        <wpp-card-v3-3-0 header="Item A" value="item-a">
-          <div style="width: 238px; height: 200px"></div>
-          <wpp-typography-v3-3-0 type=${handleTypographyType(args.size)} slot="header">Item A</wpp-typography-v3-3-0>
-        </wpp-card-v3-3-0>
-        <wpp-card-v3-3-0 header="Item B" value="item-b">
-          <div style="width: 238px; height: 200px"></div>
-          <wpp-typography-v3-3-0 type=${handleTypographyType(args.size)} slot="header">Item B</wpp-typography-v3-3-0>
-        </wpp-card-v3-3-0>
-        <wpp-card-v3-3-0 value="item-c" .disabled="${args.disabled}">
-          <div style="width: 238px; height: 200px"></div>
-          <wpp-typography-v3-3-0 type=${handleTypographyType(args.size)} slot="header"
-            >${args.header}
-          </wpp-typography-v3-3-0>
-        </wpp-card-v3-3-0>
-      </wpp-card-group-v3-3-0>
-    `;
-  },
-  args: {
-    size: 'm',
-    disabled: false,
-    withRadioOrCheckbox: true,
-    header: 'Item C',
-  },
+export const MultipleSelectGroup = (args) => {
+  const cardGroupValue = ['item-a', 'item-c'];
+  const handleCardGroupChange = (event) => {
+    console.log('event.detail :>> ', event.detail);
+  };
+  return html `
+    <wpp-card-group-v2-22-0
+      multiple
+      .value="${cardGroupValue}"
+      .size="${args.size}"
+      .required="${args.required}"
+      .withRadioOrCheckbox="${args.withRadioOrCheckbox}"
+      @wppChange="${handleCardGroupChange}"
+      style="width: 1000px; justify-content: space-between"
+    >
+      <wpp-card-v2-22-0 header="Item A" value="item-a">
+        <div style="width: 238px; height: 200px"></div>
+        <wpp-typography-v2-22-0 type=${handleTypographyType(args.size)} slot="header">Item A</wpp-typography-v2-22-0>
+      </wpp-card-v2-22-0>
+      <wpp-card-v2-22-0 header="Item B" value="item-b">
+        <div style="width: 238px; height: 200px"></div>
+        <wpp-typography-v2-22-0 type=${handleTypographyType(args.size)} slot="header">Item B</wpp-typography-v2-22-0>
+      </wpp-card-v2-22-0>
+      <wpp-card-v2-22-0 value="item-c" .disabled="${args.disabled}">
+        <div style="width: 238px; height: 200px"></div>
+        <wpp-typography-v2-22-0 type=${handleTypographyType(args.size)} slot="header"
+          >${args.header}
+        </wpp-typography-v2-22-0>
+      </wpp-card-v2-22-0>
+    </wpp-card-group-v2-22-0>
+  `;
+};
+MultipleSelectGroup.args = {
+  size: 'm',
+  disabled: false,
+  withRadioOrCheckbox: true,
+  header: 'Item C',
 };

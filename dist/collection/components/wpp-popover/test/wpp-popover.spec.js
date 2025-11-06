@@ -12,8 +12,6 @@ describe('wpp-popover', () => {
                </div>
              </wpp-popover>`,
     });
-    await new Promise(resolve => setTimeout(resolve, 0));
-    await page.waitForChanges();
     expect(page.root).toMatchSnapshot();
   });
 });

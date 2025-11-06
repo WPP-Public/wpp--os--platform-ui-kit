@@ -1,19 +1,46 @@
+import { ALLOWED_COMPONENTS_LEFT_MULTIPLE_SELECTION, ALLOWED_COMPONENTS_LEFT_SINGLE_SELECTION, ALLOWED_COMPONENTS_RIGHT_SINGLE_SELECTION, ALLOWED_COMPONENTS_RIGHT_MULTIPLE_SELECTION, } from './consts';
 /**
- * Type guard to validate theme color usage
+ * Normalizes a tag name by removing any versioning information (e.g., "-v2-20-0").
+ * @param tagName - The original tag name.
+ * @returns The normalized tag name.
  */
-export const isValidThemeColor = (color) => color.startsWith('var(--wpp-') && color.endsWith(')');
+const normalizeTagName = (tagName) => tagName.split('-v')[0];
 /**
- * Helper to get color value with proper CSS variable syntax
+ * Validates the content of a slot.
+ * Removes any disallowed components and logs warnings for invalid elements.
+ *
+ * @param host - The host element of the list item.
+ * @param slotName - The name of the slot to validate ("left" or "right").
+ * @param allowedComponents - The list of allowed components for this slot.
+ * @param multiple - Indicates whether the list item’s multiple prop is true.
  */
-export const getThemeColor = (color) => {
-  // If already a CSS variable, return as is
-  if (color.startsWith('var(')) {
-    return color;
-  }
-  // If it's a raw token, wrap it
-  if (color.startsWith('--wpp-')) {
-    return `var(${color})`;
-  }
-  // Otherwise return as is (for edge cases)
-  return color;
+const validateSlotContent = (host, slotName, allowedComponents, multiple) => {
+  const slotElements = Array.from(host.querySelectorAll(`[slot="${slotName}"]`));
+  slotElements.forEach(element => {
+    const tagName = normalizeTagName(element.tagName.toLowerCase());
+    // For the right slot, "wpp-menu-context" is allowed only if multiple is true.
+    if (slotName === 'right' && tagName === 'wpp-menu-context' && !multiple) {
+      console.warn(`[WppListItem] "wpp-menu-context" is not allowed in single selection mode (multiple is false).`);
+      element.remove();
+      return;
+    }
+    // Additionally, allow any Icon when it's not multiple
+    const isAllowed = allowedComponents.has(tagName) || (tagName.startsWith('wpp-icon') && !multiple);
+    if (!isAllowed) {
+      console.warn(`[WppListItem] Invalid component "${tagName}" found in the "${slotName}" slot. Only these components are allowed: ${Array.from(allowedComponents).join(', ')}`);
+      element.remove();
+    }
+  });
+};
+export const validateRightSlotContent = (host, multiple) => {
+  const allowedComponents = multiple
+    ? ALLOWED_COMPONENTS_RIGHT_MULTIPLE_SELECTION
+    : ALLOWED_COMPONENTS_RIGHT_SINGLE_SELECTION;
+  validateSlotContent(host, 'right', allowedComponents, multiple);
+};
+export const validateLeftSlotContent = (host, multiple) => {
+  const allowedComponents = multiple
+    ? ALLOWED_COMPONENTS_LEFT_MULTIPLE_SELECTION
+    : ALLOWED_COMPONENTS_LEFT_SINGLE_SELECTION;
+  validateSlotContent(host, 'left', allowedComponents, multiple);
 };

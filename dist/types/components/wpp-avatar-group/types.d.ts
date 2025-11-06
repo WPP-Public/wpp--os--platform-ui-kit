@@ -17,5 +17,5 @@ export interface AvatarGroupChangeEventDetail {
   avatarIndex: number;
   fromDropdown: boolean;
 }
-export type AvatarSize = 'xs' | 's' | 'm' | 'l' | 'xl' | '2xl' | '3xl' | '4xl';
+export type AvatarSize = 'xs' | 's' | 'm' | 'l' | 'xl' | '2xl';
 export type AvatarVariant = 'square' | 'circle';

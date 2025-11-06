@@ -40,10 +40,6 @@ export declare class WppModal {
    */
   readonly formConfig?: ModalFormConfig;
   /**
-   * Defines the z-index of the WppModal.
-   */
-  readonly zIndex: number;
-  /**
    * Handles the modal closing actions.
    */
   wppModalClose: EventEmitter<ModalCloseDetails>;
@@ -65,7 +61,7 @@ export declare class WppModal {
   wppModalCloseComplete: EventEmitter<ModalCloseDetails>;
   /**
    * Handles the modal click actions.
-   * @deprecated - this prop will be deleted in version 4.0.0 . Use `wppModalOpenStart`/`wppModalOpenComplete` instead
+   * @deprecated - this prop will be deleted in version 3.0.0 . Use `wppModalOpenStart`/`wppModalOpenComplete` instead
    */
   wppModalOpen: EventEmitter<void>;
   protected handleCloseOnEsc(event: KeyboardEvent): void;
