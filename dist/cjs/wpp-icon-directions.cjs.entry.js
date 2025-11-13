@@ -29,7 +29,7 @@ const WppIconDirections = class {
   render() {
     return (index.h(WppIcon.WppIcon, { name: "wpp-icon-directions", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: DirectionsIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-directions-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-directions-v3-3-1"; }
 };
 WppIconDirections.style = wppIconCss;
 

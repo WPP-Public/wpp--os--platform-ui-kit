@@ -11,31 +11,16 @@ import { getSlotEmptyStates, truncate } from '../../utils/utils';
  */
 export class WppTag {
   constructor() {
-    this.updateTagColor = () => {
-      this.variantClass = '';
-      if (!this.variant) {
-        this.updateCategoricalColor(this.categoricalColorIndex);
-        return;
-      }
-      if (this.variant.includes('Cat-')) {
-        const categoricalIndex = this.variant.split('-')[1];
-        this.updateCategoricalColor(parseInt(categoricalIndex, 10));
-        return;
-      }
-      this.variantClass = this.variant;
-    };
     this.updateSlotData = () => {
       const emptyStates = getSlotEmptyStates(this.host.childNodes, {
         icon: '[slot="icon-start"]',
       });
       this.hasIconStartSlot = !emptyStates.icon;
     };
-    this.updateCategoricalColor = (index) => {
-      this.host.style.setProperty('--tag-bg-color', index ? `var(--wpp-dataviz-color-cat-light-${index})` : '');
-    };
     this.hostCssClasses = () => ({
       'wpp-tag': true,
-      ...(this.variantClass && { [`wpp-${this.variantClass}`]: true }),
+      ...(this.variant && { [`wpp-${this.variant}`]: true }),
+      ...(this.categoricalColorIndex && !this.variant ? { [`wpp-Cat-${this.categoricalColorIndex}`]: true } : {}),
       'wpp-with-icon': Boolean(this.hasIconStartSlot),
       'wpp-disabled': this.disabled,
     });
@@ -52,25 +37,17 @@ export class WppTag {
     this.withIcon = false;
     this.disabled = false;
   }
-  onUpdateVariant() {
-    this.updateTagColor();
-  }
-  updateCategoricalIndex(index) {
-    this.updateCategoricalColor(index);
-  }
   componentWillLoad() {
-    this.updateCategoricalColor(this.categoricalColorIndex);
     this.updateSlotData();
-    this.updateTagColor();
     if (this.categoricalColorIndex) {
       console.warn('%cThe `categoricalColorIndex` property is deprecated. Please, use `variant` instead', 'color: black; font-size: 12px;');
     }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("wpp-typography-v3-3-0", { type: "xs-midi", tag: "span", part: "label" }, Number(this.label?.length) > this.maxLabelLength ? (h("wpp-tooltip-v3-3-0", { text: this.label, config: this.tooltipConfig, part: "tooltip" }, h("span", { part: "tooltip-text" }, truncate(this.label, this.maxLabelLength, false)))) : (this.label)), this.variant?.includes('Cat-'), h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("wpp-typography-v3-3-1", { type: "xs-midi", tag: "span", part: "label" }, Number(this.label?.length) > this.maxLabelLength ? (h("wpp-tooltip-v3-3-1", { text: this.label, config: this.tooltipConfig, part: "tooltip" }, h("span", { part: "tooltip-text" }, truncate(this.label, this.maxLabelLength, false)))) : (this.label)), h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
   }
   static get is() { return "wpp-tag"; }
-  static get registryIs() { return "wpp-tag-v3-3-0"; }
+  static get registryIs() { return "wpp-tag-v3-3-1"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -248,13 +225,4 @@ export class WppTag {
     };
   }
   static get elementRef() { return "host"; }
-  static get watchers() {
-    return [{
-        "propName": "variant",
-        "methodName": "onUpdateVariant"
-      }, {
-        "propName": "categoricalColorIndex",
-        "methodName": "updateCategoricalIndex"
-      }];
-  }
 }

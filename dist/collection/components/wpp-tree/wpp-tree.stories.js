@@ -188,7 +188,7 @@ export const Tree = (args) => {
   const handleTreeChange = ({ detail }) => {
     setTreeState(detail.treeState);
   };
-  return html `<wpp-tree-v3-3-0
+  return html `<wpp-tree-v3-3-1
     .multiple=${args.multiple}
     .data=${treeState}
     .search="${args.search}"
@@ -197,7 +197,7 @@ export const Tree = (args) => {
     .skeletonNumberItems=${args.skeletonNumberItems}
     .withItemsTruncation=${args.withItemsTruncation}
     @wppChange="${handleTreeChange}"
-  ></wpp-tree-v3-3-0>`;
+  ></wpp-tree-v3-3-1>`;
 };
 Tree.args = {
   multiple: false,
@@ -214,11 +214,11 @@ export const TreeWithCustomSearch = (args) => {
   };
   return html `
     <Fragment>
-      <wpp-typography-v3-3-0 .type=${'l-strong'}>
+      <wpp-typography-v3-3-1 .type=${'l-strong'}>
         Single tree with custom search: the search string should match exactly the title of the tree-item (case
         sensitive).
-      </wpp-typography-v3-3-0>
-      <wpp-tree-v3-3-0
+      </wpp-typography-v3-3-1>
+      <wpp-tree-v3-3-1
         .multiple=${args.multiple}
         .data=${treeState}
         .search="${args.search}"
@@ -226,7 +226,7 @@ export const TreeWithCustomSearch = (args) => {
         .withItemsTruncation=${args.withItemsTruncation}
         .searchConfig=${args.searchConfig}
         @wppChange="${handleTreeChange}"
-      ></wpp-tree-v3-3-0>
+      ></wpp-tree-v3-3-1>
     </Fragment>
   `;
 };

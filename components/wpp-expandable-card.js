@@ -58,15 +58,15 @@ const WppExpandableCard$1 = /*@__PURE__*/ proxyCustomElement(class WppExpandable
     this.updateSlotData();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "expandable-card-body, accordion, section, title, icon, counter, divider, title-wrapper" }, h("div", { class: "body-container", part: "expandable-card-body" }, h("wpp-accordion-v3-3-0", { size: this.size, text: this.header, expanded: this.isExpanded, expandedByDefault: this.expandedByDefault, withDivider: false, onWppChange: this.onChange, part: "accordion" }, h("slot", null), h("slot", { name: "header", slot: "header", class: "header" }), h("slot", { name: "actions", slot: "actions", class: "actions" })))));
+    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "expandable-card-body, accordion, section, title, icon, counter, divider, title-wrapper" }, h("div", { class: "body-container", part: "expandable-card-body" }, h("wpp-accordion-v3-3-1", { size: this.size, text: this.header, expanded: this.isExpanded, expandedByDefault: this.expandedByDefault, withDivider: false, onWppChange: this.onChange, part: "accordion" }, h("slot", null), h("slot", { name: "header", slot: "header", class: "header" }), h("slot", { name: "actions", slot: "actions", class: "actions" })))));
   }
-  static get registryIs() { return "wpp-expandable-card-v3-3-0"; }
+  static get registryIs() { return "wpp-expandable-card-v3-3-1"; }
   get host() { return this; }
   static get watchers() { return {
     "expanded": ["onExpandedChange"]
   }; }
   static get style() { return wppExpandableCardCss; }
-}, [1, "wpp-expandable-card", "wpp-expandable-card-v3-3-0", {
+}, [1, "wpp-expandable-card", "wpp-expandable-card-v3-3-1", {
     "expandedByDefault": [1540, "expanded-by-default"],
     "expanded": [1028],
     "isExpanded": [1028, "is-expanded"],
@@ -80,49 +80,49 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-expandable-card-v3-3-0", "wpp-accordion-v3-3-0", "wpp-divider-v3-3-0", "wpp-icon-chevron-v3-3-0", "wpp-icon-error-v3-3-0", "wpp-icon-warning-v3-3-0", "wpp-internal-tooltip-v3-3-0", "wpp-tooltip-v3-3-0", "wpp-typography-v3-3-0"];
+  const components = ["wpp-expandable-card-v3-3-1", "wpp-accordion-v3-3-1", "wpp-divider-v3-3-1", "wpp-icon-chevron-v3-3-1", "wpp-icon-error-v3-3-1", "wpp-icon-warning-v3-3-1", "wpp-internal-tooltip-v3-3-1", "wpp-tooltip-v3-3-1", "wpp-typography-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-expandable-card-v3-3-0":
+    case "wpp-expandable-card-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppExpandableCard$1);
       }
       break;
-    case "wpp-accordion-v3-3-0":
+    case "wpp-accordion-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-divider-v3-3-0":
+    case "wpp-divider-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-icon-chevron-v3-3-0":
+    case "wpp-icon-chevron-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-error-v3-3-0":
+    case "wpp-icon-error-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-icon-warning-v3-3-0":
+    case "wpp-icon-warning-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-0":
+    case "wpp-internal-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v3-3-0":
+    case "wpp-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v3-3-0":
+    case "wpp-typography-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

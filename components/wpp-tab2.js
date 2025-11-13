@@ -71,10 +71,10 @@ const WppTab = /*@__PURE__*/ proxyCustomElement(class WppTab extends HTMLElement
   render() {
     return (h(Host, { class: this.hostCssClasses(), tabIndex: this.tabIndex, exportparts: "wrapper, inner, counter", onClick: this.handleClickTab, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onBlur: this.onBlur }, h("div", { class: this.cssClasses(), role: "option", "aria-selected": this.active ? 'true' : 'false', id: this.value, part: "wrapper" }, this.icon && h(transformToVersionedTag(this.icon), { className: 'wpp-tab-icon' }), h("slot", { part: "inner" }), this.counter > 0 && h("div", { class: "counter", part: "counter" }, `(${this.counter})`))));
   }
-  static get registryIs() { return "wpp-tab-v3-3-0"; }
+  static get registryIs() { return "wpp-tab-v3-3-1"; }
   get host() { return this; }
   static get style() { return wppTabCss; }
-}, [1, "wpp-tab", "wpp-tab-v3-3-0", {
+}, [1, "wpp-tab", "wpp-tab-v3-3-1", {
     "active": [516],
     "disabled": [516],
     "value": [513],
@@ -87,9 +87,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tab-v3-3-0"];
+  const components = ["wpp-tab-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tab-v3-3-0":
+    case "wpp-tab-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTab);
       }

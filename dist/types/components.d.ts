@@ -12552,7 +12552,7 @@ export namespace Components {
          */
         "ariaProps": AriaProps;
         /**
-          * If `true`, the input should be focused on page load
+          * If `true`, the input should be focused on page load.
          */
         "autoFocus": boolean;
         /**
@@ -30975,7 +30975,7 @@ declare namespace LocalJSX {
          */
         "ariaProps"?: AriaProps;
         /**
-          * If `true`, the input should be focused on page load
+          * If `true`, the input should be focused on page load.
          */
         "autoFocus"?: boolean;
         /**

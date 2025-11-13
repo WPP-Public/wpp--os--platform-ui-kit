@@ -4,9 +4,9 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
 const isEqual = require('./isEqual-0b0240b4.js');
-const menuListConfig = require('./menuListConfig-c4aadb34.js');
+const menuListConfig = require('./menuListConfig-c172e0b1.js');
 const consts = require('./consts-779fd4ec.js');
-const utils = require('./utils-2b192dec.js');
+const utils = require('./utils-6189d8be.js');
 require('./_commonjsHelpers-bcc1208a.js');
 
 const DEFAULT_POPOVER_LOCALES = {
@@ -174,9 +174,9 @@ const WppPopover = class {
     this.mutationObserver.observe(this.host?.children[0], { attributes: true });
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "anchor, trigger-element" }, index.h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref) }, index.h("slot", { name: "trigger-element", part: "trigger-element" })), index.h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-label": this.ariaProps.label, "aria-modal": "true" }, this.withSearch && (index.h("wpp-input-v3-3-0", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: this.locales.searchInputPlaceholder || DEFAULT_POPOVER_LOCALES.searchInputPlaceholder, type: "search", size: "m" })), !this.withSearch && this.closable && (index.h("wpp-action-button-v3-3-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, index.h("wpp-icon-cross-v3-3-0", { slot: "icon-end" }))), index.h("slot", null))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "anchor, trigger-element" }, index.h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref) }, index.h("slot", { name: "trigger-element", part: "trigger-element" })), index.h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-label": this.ariaProps.label, "aria-modal": "true" }, this.withSearch && (index.h("wpp-input-v3-3-1", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: this.locales.searchInputPlaceholder || DEFAULT_POPOVER_LOCALES.searchInputPlaceholder, type: "search", size: "m" })), !this.withSearch && this.closable && (index.h("wpp-action-button-v3-3-1", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, index.h("wpp-icon-cross-v3-3-1", { slot: "icon-end" }))), index.h("slot", null))));
   }
-  static get registryIs() { return "wpp-popover-v3-3-0"; }
+  static get registryIs() { return "wpp-popover-v3-3-1"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "config": ["updateConfig"]

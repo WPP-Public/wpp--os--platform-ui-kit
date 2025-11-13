@@ -719,15 +719,15 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
     const isMaximizedS = this.isChatInputExpanded && this.size === 's';
     const maximizedSorSizeM = isMaximizedS || this.size === 'm';
     const isMinimizedS = this.size === 's' && !this.isChatInputExpanded;
-    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, toast, input-area, attachments, text-input, actions-bar, left-actions, right-actions, file-item", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick }, h("div", { class: this.chatInputContainerClasses(), part: "chat-input-container" }, this.showToast && (h("wpp-toast-v3-3-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments" }, allFiles.map((file, index) => (h("wpp-file-upload-item-v3-3-0", { key: index, file: file, format: this.mergedFileUploadConfig.format, maxLabelLength: this.mergedFileUploadConfig.maxLabelLength, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
+    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, toast, input-area, attachments, text-input, actions-bar, left-actions, right-actions, file-item", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick }, h("div", { class: this.chatInputContainerClasses(), part: "chat-input-container" }, this.showToast && (h("wpp-toast-v3-3-1", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments" }, allFiles.map((file, index) => (h("wpp-file-upload-item-v3-3-1", { key: index, file: file, format: this.mergedFileUploadConfig.format, maxLabelLength: this.mergedFileUploadConfig.maxLabelLength, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
         sizeError: this.mergedFileUploadConfig.locales.sizeError,
         formatError: this.mergedFileUploadConfig.locales.formatError,
-      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded }))))), h("textarea", { class: this.textInputClasses(), placeholder: this.placeholder, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, h("div", { class: this.minimizedInput(), part: "minimized-input", onClick: this.handleSizeToggle }, h("wpp-typography-v3-3-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || this.placeholder)), h("wpp-action-button-v3-3-0", { "data-testid": "send-icon-only-button", variant: "secondary", onClick: e => {
+      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded }))))), h("textarea", { class: this.textInputClasses(), placeholder: this.placeholder, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, h("div", { class: this.minimizedInput(), part: "minimized-input", onClick: this.handleSizeToggle }, h("wpp-typography-v3-3-1", { class: this.inputValue(), type: "s-body" }, this.internalValue || this.placeholder)), h("wpp-action-button-v3-3-1", { "data-testid": "send-icon-only-button", variant: "secondary", onClick: e => {
         e.stopPropagation();
         this.handleSend();
-      }, disabled: this.isSendDisabled }, h("wpp-icon-send-v3-3-0", { slot: "icon-start" }))))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar" }, h("div", { class: this.leftActionsClasses(), part: "left-actions" }, this.enableAttach && (h(Fragment, null, h("wpp-action-button-v3-3-0", { "data-testid": "attach-icon-only-button", disabled: this.disabled, variant: "secondary", onClick: () => this.handleFileSelection() }, h("wpp-icon-attach-v3-3-0", { slot: "icon-start" })), h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.getAcceptExtensions().join(), title: "" }))), this.withSelect && (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })), this.enableMic && (h("wpp-action-button-v3-3-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled }, h("wpp-icon-mic-on-v3-3-0", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions" }, charExceeded && (h("wpp-typography-v3-3-0", { class: "char-counter", type: "xs-midi" }, this.internalValue.length, "/", this.charactersLimit)), h("wpp-action-button-v3-3-0", { "data-testid": "send-icon-only-button", variant: "secondary", onClick: () => this.handleSend(), disabled: this.isSendDisabled }, h("wpp-icon-send-v3-3-0", { slot: "icon-start" }))))))));
+      }, disabled: this.isSendDisabled }, h("wpp-icon-send-v3-3-1", { slot: "icon-start" }))))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar" }, h("div", { class: this.leftActionsClasses(), part: "left-actions" }, this.enableAttach && (h(Fragment, null, h("wpp-action-button-v3-3-1", { "data-testid": "attach-icon-only-button", disabled: this.disabled, variant: "secondary", onClick: () => this.handleFileSelection() }, h("wpp-icon-attach-v3-3-1", { slot: "icon-start" })), h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.getAcceptExtensions().join(), title: "" }))), this.withSelect && (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })), this.enableMic && (h("wpp-action-button-v3-3-1", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled }, h("wpp-icon-mic-on-v3-3-1", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions" }, charExceeded && (h("wpp-typography-v3-3-1", { class: "char-counter", type: "xs-midi" }, this.internalValue.length, "/", this.charactersLimit)), h("wpp-action-button-v3-3-1", { "data-testid": "send-icon-only-button", variant: "secondary", onClick: () => this.handleSend(), disabled: this.isSendDisabled }, h("wpp-icon-send-v3-3-1", { slot: "icon-start" }))))))));
   }
-  static get registryIs() { return "wpp-chat-input-v3-3-0"; }
+  static get registryIs() { return "wpp-chat-input-v3-3-1"; }
   get host() { return this; }
   static get watchers() { return {
     "attachments": ["onAttachmentsChange"],
@@ -735,7 +735,7 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
     "size": ["onSizeChange"]
   }; }
   static get style() { return wppChatInputCss; }
-}, [1, "wpp-chat-input", "wpp-chat-input-v3-3-0", {
+}, [1, "wpp-chat-input", "wpp-chat-input-v3-3-1", {
     "size": [1],
     "placeholder": [1],
     "enableAttach": [4, "enable-attach"],
@@ -763,134 +763,134 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-chat-input-v3-3-0", "wpp-action-button-v3-3-0", "wpp-file-upload-item-v3-3-0", "wpp-icon-attach-v3-3-0", "wpp-icon-cross-v3-3-0", "wpp-icon-database-v3-3-0", "wpp-icon-document-v3-3-0", "wpp-icon-error-v3-3-0", "wpp-icon-file-v3-3-0", "wpp-icon-file-zip-v3-3-0", "wpp-icon-image-v3-3-0", "wpp-icon-info-message-v3-3-0", "wpp-icon-mic-on-v3-3-0", "wpp-icon-music-v3-3-0", "wpp-icon-pitch-v3-3-0", "wpp-icon-send-v3-3-0", "wpp-icon-spreadsheet-v3-3-0", "wpp-icon-success-v3-3-0", "wpp-icon-video-clip-v3-3-0", "wpp-icon-warning-v3-3-0", "wpp-inline-message-v3-3-0", "wpp-internal-tooltip-v3-3-0", "wpp-spinner-v3-3-0", "wpp-toast-v3-3-0", "wpp-tooltip-v3-3-0", "wpp-typography-v3-3-0"];
+  const components = ["wpp-chat-input-v3-3-1", "wpp-action-button-v3-3-1", "wpp-file-upload-item-v3-3-1", "wpp-icon-attach-v3-3-1", "wpp-icon-cross-v3-3-1", "wpp-icon-database-v3-3-1", "wpp-icon-document-v3-3-1", "wpp-icon-error-v3-3-1", "wpp-icon-file-v3-3-1", "wpp-icon-file-zip-v3-3-1", "wpp-icon-image-v3-3-1", "wpp-icon-info-message-v3-3-1", "wpp-icon-mic-on-v3-3-1", "wpp-icon-music-v3-3-1", "wpp-icon-pitch-v3-3-1", "wpp-icon-send-v3-3-1", "wpp-icon-spreadsheet-v3-3-1", "wpp-icon-success-v3-3-1", "wpp-icon-video-clip-v3-3-1", "wpp-icon-warning-v3-3-1", "wpp-inline-message-v3-3-1", "wpp-internal-tooltip-v3-3-1", "wpp-spinner-v3-3-1", "wpp-toast-v3-3-1", "wpp-tooltip-v3-3-1", "wpp-typography-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-chat-input-v3-3-0":
+    case "wpp-chat-input-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppChatInput$1);
       }
       break;
-    case "wpp-action-button-v3-3-0":
+    case "wpp-action-button-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$q();
       }
       break;
-    case "wpp-file-upload-item-v3-3-0":
+    case "wpp-file-upload-item-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$p();
       }
       break;
-    case "wpp-icon-attach-v3-3-0":
+    case "wpp-icon-attach-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$o();
       }
       break;
-    case "wpp-icon-cross-v3-3-0":
+    case "wpp-icon-cross-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-icon-database-v3-3-0":
+    case "wpp-icon-database-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-icon-document-v3-3-0":
+    case "wpp-icon-document-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-error-v3-3-0":
+    case "wpp-icon-error-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-file-v3-3-0":
+    case "wpp-icon-file-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-file-zip-v3-3-0":
+    case "wpp-icon-file-zip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-image-v3-3-0":
+    case "wpp-icon-image-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-info-message-v3-3-0":
+    case "wpp-icon-info-message-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-mic-on-v3-3-0":
+    case "wpp-icon-mic-on-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-music-v3-3-0":
+    case "wpp-icon-music-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-pitch-v3-3-0":
+    case "wpp-icon-pitch-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-send-v3-3-0":
+    case "wpp-icon-send-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-spreadsheet-v3-3-0":
+    case "wpp-icon-spreadsheet-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-success-v3-3-0":
+    case "wpp-icon-success-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-video-clip-v3-3-0":
+    case "wpp-icon-video-clip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-warning-v3-3-0":
+    case "wpp-icon-warning-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-inline-message-v3-3-0":
+    case "wpp-inline-message-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-0":
+    case "wpp-internal-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-spinner-v3-3-0":
+    case "wpp-spinner-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-toast-v3-3-0":
+    case "wpp-toast-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v3-3-0":
+    case "wpp-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v3-3-0":
+    case "wpp-typography-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

@@ -22,9 +22,9 @@ const WppIconFlip$1 = /*@__PURE__*/ proxyCustomElement(class WppIconFlip extends
   render() {
     return (h(WppIcon, { name: "wpp-icon-flip", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: FlipDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-flip-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-flip-v3-3-1"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-flip", "wpp-icon-flip-v3-3-0", {
+}, [1, "wpp-icon-flip", "wpp-icon-flip-v3-3-1", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -35,9 +35,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-flip-v3-3-0"];
+  const components = ["wpp-icon-flip-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-flip-v3-3-0":
+    case "wpp-icon-flip-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconFlip$1);
       }

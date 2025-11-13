@@ -17,11 +17,6 @@ export declare class WppTypography {
    Defines the text color.
    */
   readonly color: Color;
-  handleTypeChange(): void;
-  componentWillLoad(): void;
-  private updateTypographyClasses;
-  private getAvailableTypeFromTheme;
-  private getTypographyStylesFromTheme;
   private typographyCssClasses;
   render(): any;
 }

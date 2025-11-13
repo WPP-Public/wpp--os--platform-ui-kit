@@ -148,16 +148,16 @@ const WppAvatar = /*@__PURE__*/ proxyCustomElement(class WppAvatar extends HTMLE
     const content = this.src && !this.isImageFailedToLoad ? (h("div", { class: this.imageWrapperCssClasses(), part: "content" }, h("img", { src: this.src, alt: `${this.name} - avatar`, class: this.imageCssClasses(), onError: this.handleImageLoadFailure, part: "image" }))) : (h(Fragment, null, h("div", { class: this.contentWrapperCssClasses(), part: "content" }, this.amountOfHiddenAvatars ? `+${this.amountOfHiddenAvatars}` : this.getUserAbbreviation(this.name), this.renderIcon())));
     return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onClick: this.handleClick, exportparts: "image, content, tooltip", ...((this.withTooltip && !this.isAvatarIcon()) || this.role === 'presentation'
         ? { role: 'presentation' }
-        : { role: this.role, tabIndex: this.index, ariaLabel: this.ariaProps.label }) }, this.withTooltip && !this.isAvatarIcon() ? (h("wpp-tooltip-v3-3-0", { text: this.name, config: this.tooltipConfig, part: "tooltip", ariaProps: { label: `User: ${this.name}`, role: 'button' } }, content)) : (content)));
+        : { role: this.role, tabIndex: this.index, ariaLabel: this.ariaProps.label }) }, this.withTooltip && !this.isAvatarIcon() ? (h("wpp-tooltip-v3-3-1", { text: this.name, config: this.tooltipConfig, part: "tooltip", ariaProps: { label: `User: ${this.name}`, role: 'button' } }, content)) : (content)));
   }
-  static get registryIs() { return "wpp-avatar-v3-3-0"; }
+  static get registryIs() { return "wpp-avatar-v3-3-1"; }
   get host() { return this; }
   static get watchers() { return {
     "color": ["colorChange"],
     "src": ["srcChange"]
   }; }
   static get style() { return wppAvatarCss; }
-}, [1, "wpp-avatar", "wpp-avatar-v3-3-0", {
+}, [1, "wpp-avatar", "wpp-avatar-v3-3-1", {
     "name": [1],
     "size": [1],
     "variant": [1],
@@ -178,29 +178,29 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-avatar-v3-3-0", "wpp-icon-error-v3-3-0", "wpp-icon-warning-v3-3-0", "wpp-internal-tooltip-v3-3-0", "wpp-tooltip-v3-3-0"];
+  const components = ["wpp-avatar-v3-3-1", "wpp-icon-error-v3-3-1", "wpp-icon-warning-v3-3-1", "wpp-internal-tooltip-v3-3-1", "wpp-tooltip-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-avatar-v3-3-0":
+    case "wpp-avatar-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppAvatar);
       }
       break;
-    case "wpp-icon-error-v3-3-0":
+    case "wpp-icon-error-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-icon-warning-v3-3-0":
+    case "wpp-icon-warning-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-0":
+    case "wpp-internal-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-tooltip-v3-3-0":
+    case "wpp-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

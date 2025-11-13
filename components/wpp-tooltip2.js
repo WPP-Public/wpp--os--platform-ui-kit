@@ -6,39 +6,11 @@ import { d as defineCustomElement$3 } from './wpp-icon-error2.js';
 import { d as defineCustomElement$2 } from './wpp-icon-warning2.js';
 import { d as defineCustomElement$1 } from './wpp-internal-tooltip2.js';
 
-const cssStyles = {
-  '--tooltip-padding': '',
-  '--tooltip-border-radius': '',
-  '--tooltip-with-header-padding': '',
-  '--tooltip-with-value-padding': '',
-  '--tooltip-icon-margin-right': '',
-  '--tooltip-text-margin-bottom': '',
-  '--tooltip-error-text-color': '',
-  '--tooltip-error-header-text-color': '',
-  '--tooltip-error-bg-color': '',
-  '--tooltip-error-with-header-header-color': '',
-  '--tooltip-error-with-header-text-color': '',
-  '--tooltip-error-with-value-text-color': '',
-  '--tooltip-error-with-value-value-color': '',
-  '--tooltip-dark-bg-color': '',
-  '--tooltip-dark-value-color': '',
-  '--tooltip-dark-text-color': '',
-  '--tooltip-dark-with-header-header-color': '',
-  '--tooltip-dark-with-header-text-color': '',
-  '--tooltip-dark-with-value-text-color': '',
-  '--tooltip-dark-with-value-value-color': '',
-  '--tooltip-dark-header-text-color': '',
-  '--tooltip-light-bg-color': '',
-  '--tooltip-light-value-color': '',
-  '--tooltip-light-text-color': '',
-  '--tooltip-light-with-header-header-color': '',
-  '--tooltip-light-with-header-text-color': '',
-  '--tooltip-light-with-value-text-color': '',
-  '--tooltip-light-with-value-value-color': '',
-  '--tooltip-light-header-text-color': '',
-  '--tooltip-light-box-shadow': '',
-  '--tooltip-warning-bg-color': '',
-  '--tooltip-variant-box-shadow': '',
+const ARROW_COLORS = {
+  dark: 'var(--wpp-text-color-info)',
+  light: 'var(--wpp-grey-color-000)',
+  error: 'var(--wpp-danger-color-200)',
+  warning: 'var(--wpp-warning-color-200)',
 };
 
 const defaultTooltipConfig = {
@@ -60,14 +32,13 @@ const defaultTooltipConfig = {
   appendTo: () => getHighestContainerInDOM(),
 };
 
-const wppTooltipCss = ":host{--tooltip-padding:var(--wpp-tooltip-padding, 6px 8px);--tooltip-border-radius:var(--wpp-tooltip-border-radius, var(--wpp-border-radius-s));--tooltip-with-header-padding:var(--wpp-tooltip-with-header-padding, 8px 12px);--tooltip-with-value-padding:var(--wpp-tooltip-with-value-padding, 6px 12px);--tooltip-icon-margin-right:var(--wpp-tooltip-icon-margin-right, 4px);--tooltip-text-margin-bottom:var(--wpp-tooltip-text-margin-bottom, 2px);--tooltip-error-text-color:var(--wpp-tooltip-error-text-color, var(--wpp-grey-color-1000));--tooltip-error-header-text-color:var(--wpp-tooltip-error-header-text-color, var(--wpp-grey-color-1000));--tooltip-error-bg-color:var(--wpp-tooltip-error-bg-color, var(--wpp-danger-color-200));--tooltip-error-with-header-header-color:var(\n    --wpp-tooltip-error-with-header-header-color,\n    var(--wpp-grey-color-1000)\n  );--tooltip-error-with-header-text-color:var(--wpp-tooltip-error-with-header-text-color, var(--wpp-grey-color-800));--tooltip-error-with-value-text-color:var(--wpp-tooltip-error-with-value-text-color, var(--wpp-grey-color-800));--tooltip-error-with-value-value-color:var(--wpp-tooltip-error-with-value-value-color, var(--wpp-grey-color-1000));--tooltip-dark-bg-color:var(--wpp-tooltip-dark-bg-color, var(--wpp-text-color-info));--tooltip-dark-value-color:var(--wpp-tooltip-dark-value-color, var(--wpp-grey-color-000));--tooltip-dark-text-color:var(--wpp-tooltip-dark-text-color, var(--wpp-grey-color-000));--tooltip-dark-with-header-header-color:var(--wpp-tooltip-dark-with-header-header-color, var(--wpp-grey-color-000));--tooltip-dark-with-header-text-color:var(--wpp-tooltip-dark-with-header-text-color, var(--wpp-grey-color-100));--tooltip-dark-with-value-text-color:var(--wpp-tooltip-dark-with-value-text-color, var(--wpp-grey-color-200));--tooltip-dark-with-value-value-color:var(--wpp-tooltip-dark-with-value-value-color, var(--wpp-grey-color-000));--tooltip-dark-header-text-color:var(--wpp-tooltip-dark-header-text-color, var(--wpp-grey-color-000));--tooltip-light-bg-color:var(--wpp-tooltip-light-bg-color, var(--wpp-grey-color-000));--tooltip-light-value-color:var(--wpp-tooltip-light-value-color, var(--wpp-text-color));--tooltip-light-text-color:var(--wpp-tooltip-light-text-color, var(--wpp-grey-color-1000));--tooltip-light-with-header-header-color:var(\n    --wpp-tooltip-light-with-header-header-color,\n    var(--wpp-grey-color-1000)\n  );--tooltip-light-with-header-text-color:var(--wpp-tooltip-light-with-header-text-color, var(--wpp-grey-color-800));--tooltip-light-with-value-text-color:var(--wpp-tooltip-light-with-value-text-color, var(--wpp-grey-color-800));--tooltip-light-with-value-value-color:var(--wpp-tooltip-light-with-value-value-color, var(--wpp-grey-color-1000));--tooltip-light-header-text-color:var(--wpp-tooltip-light-header-text-color, var(--wpp-text-color));--tooltip-light-box-shadow:var(--wpp-tooltip-light-box-shadow, var(--wpp-box-shadow-m));--tooltip-warning-bg-color:var(--wpp-tooltip-warning-bg-color, var(--wpp-warning-color-200));--tooltip-variant-box-shadow:var(--wpp-tooltip-variant-box-shadow, var(--wpp-box-shadow-m));display:-ms-inline-flexbox;display:inline-flex;width:-webkit-fit-content}:host .anchor{display:-ms-inline-flexbox;display:inline-flex}:host .content-wrapper.hidden{position:absolute;display:none}:host .tooltip-custom-content{width:100%;background-color:var(--tooltip-dark-bg-color);padding:var(--tooltip-padding);border-radius:var(--tooltip-border-radius);overflow-wrap:break-word}:host .tooltip-custom-content.light{-webkit-box-shadow:var(--tooltip-light-box-shadow);box-shadow:var(--tooltip-light-box-shadow);background-color:var(--tooltip-light-bg-color)}:host(.in-dropdown){max-width:100%}:host(.in-dropdown) .anchor{max-width:100%}:host(.transparent){opacity:0;pointer-events:none}";
+const wppTooltipCss = ":host{display:-ms-inline-flexbox;display:inline-flex;width:-webkit-fit-content}:host .anchor{display:-ms-inline-flexbox;display:inline-flex}:host .content-wrapper.hidden{position:absolute;display:none}:host .tooltip-custom-content{width:100%;background-color:var(--wpp-text-color-info);padding:6px 8px;border-radius:var(--wpp-border-radius-s);overflow-wrap:break-word}:host .tooltip-custom-content.light{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m);background-color:var(--wpp-grey-color-000)}:host(.in-dropdown){max-width:100%}:host(.in-dropdown) .anchor{max-width:100%}:host(.transparent){opacity:0;pointer-events:none}";
 
 const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTMLElement {
   constructor() {
     super();
     this.__registerHost();
     this.__attachShadow();
-    this.arrowColor = {};
     this.FORBIDDEN_PREFIX = 'wpp-';
     this.ALLOWED_TAGS = ['wpp-typography'];
     this.handleSlotChange = () => {
@@ -165,23 +136,7 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
     };
     this.getArrowBgColor = () => {
       const currColor = this.error ? 'error' : this.warning ? 'warning' : this.theme;
-      const colorKeys = ['dark', 'light', 'error', 'warning'];
-      for (const colorKey of colorKeys) {
-        if (!this.arrowColor[colorKey]) {
-          this.arrowColor[colorKey] = getComputedStyle(this.host).getPropertyValue(`--tooltip-${colorKey}-bg-color`);
-        }
-      }
-      return getComputedStyle(this.host).getPropertyValue(`--tooltip-${currColor}-bg-color`) || this.arrowColor[currColor];
-    };
-    this.getCssValues = () => {
-      const cssVariableNames = Object.keys(cssStyles);
-      const updatedCssStyles = {};
-      cssVariableNames.forEach(cssVariable => {
-        const computedValue = getComputedStyle(this.host).getPropertyValue(cssVariable);
-        const internalKey = `--internal-${cssVariable.substring(2)}`;
-        updatedCssStyles[internalKey] = computedValue;
-      });
-      this.style = updatedCssStyles;
+      return ARROW_COLORS[currColor];
     };
     this.hostCssClasses = () => ({
       'wpp-tooltip': true,
@@ -238,7 +193,6 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
       }
     }
     else {
-      this.getCssValues();
       this.createTippyInstance();
     }
   }
@@ -263,7 +217,6 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
   }
   componentDidLoad() {
     setTimeout(() => {
-      this.getCssValues();
       this.createTippyInstance();
       this.hidden = false;
     }, 0);
@@ -278,7 +231,6 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
     this.tippyInstance?.destroy();
   }
   connectedCallback() {
-    this.getCssValues();
     this.tippyInstance?.setProps({
       arrow: this.arrowSVG(),
     });
@@ -287,9 +239,9 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
     }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v3-3-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
+    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v3-3-1", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
   }
-  static get registryIs() { return "wpp-tooltip-v3-3-0"; }
+  static get registryIs() { return "wpp-tooltip-v3-3-1"; }
   get host() { return this; }
   static get watchers() { return {
     "config": ["updateConfig"],
@@ -300,7 +252,7 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
     "disabled": ["handleDisabledChange"]
   }; }
   static get style() { return wppTooltipCss; }
-}, [1, "wpp-tooltip", "wpp-tooltip-v3-3-0", {
+}, [1, "wpp-tooltip", "wpp-tooltip-v3-3-1", {
     "disabled": [4],
     "header": [1],
     "text": [1],
@@ -321,24 +273,24 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tooltip-v3-3-0", "wpp-icon-error-v3-3-0", "wpp-icon-warning-v3-3-0", "wpp-internal-tooltip-v3-3-0"];
+  const components = ["wpp-tooltip-v3-3-1", "wpp-icon-error-v3-3-1", "wpp-icon-warning-v3-3-1", "wpp-internal-tooltip-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tooltip-v3-3-0":
+    case "wpp-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTooltip);
       }
       break;
-    case "wpp-icon-error-v3-3-0":
+    case "wpp-icon-error-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-icon-warning-v3-3-0":
+    case "wpp-icon-warning-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-0":
+    case "wpp-internal-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

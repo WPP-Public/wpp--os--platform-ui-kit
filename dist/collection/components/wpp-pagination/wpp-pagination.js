@@ -62,14 +62,14 @@ export class WppPagination {
     if (this.count === 0) {
       return null;
     }
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, h("div", { class: "control-pagination-wrapper", part: "body" }, h("wpp-typography-v3-3-0", { type: "s-body", part: "per-page-label" }, this._locales.itemsPerPage, ":"), h("wpp-select-v3-3-0", { type: "single", isTextSelect: true, onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig }, dropdownWidth: "100px", part: "pre-page-select", list: this.itemsPerPage.map(item => ({
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, h("div", { class: "control-pagination-wrapper", part: "body" }, h("wpp-typography-v3-3-1", { type: "s-body", part: "per-page-label" }, this._locales.itemsPerPage, ":"), h("wpp-select-v3-3-1", { type: "single", isTextSelect: true, onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig }, dropdownWidth: "100px", part: "pre-page-select", list: this.itemsPerPage.map(item => ({
         value: item,
         label: `${item}`,
         part: 'per-page-item',
-      })) }), h("wpp-divider-v3-3-0", { part: "divider" }), h("wpp-typography-v3-3-0", { type: "s-body", part: "range" }, this.getPageRange())), countPagesToDisplay && (h("wpp-pagination-select-v3-3-0", { count: countPagesToDisplay, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, part: "page-select" }))));
+      })) }), h("wpp-divider-v3-3-1", { part: "divider" }), h("wpp-typography-v3-3-1", { type: "s-body", part: "range" }, this.getPageRange())), countPagesToDisplay && (h("wpp-pagination-select-v3-3-1", { count: countPagesToDisplay, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, part: "page-select" }))));
   }
   static get is() { return "wpp-pagination"; }
-  static get registryIs() { return "wpp-pagination-v3-3-0"; }
+  static get registryIs() { return "wpp-pagination-v3-3-1"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

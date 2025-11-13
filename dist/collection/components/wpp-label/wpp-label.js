@@ -14,7 +14,7 @@ export class WppLabel {
     this.hostCssClasses = () => ({
       'wpp-label': true,
     });
-    this.renderContent = () => (h("wpp-internal-label-v3-3-0", { labelText: this.config?.text, description: this.config?.description, optional: this.optional, typography: this.typography, disabled: this.disabled, locales: this.config?.locales, tooltipConfig: this.tooltipConfig, part: "content", id: this.labelId }, this.config?.icon && h(transformToVersionedTag(this.config?.icon), { slot: 'icon', part: 'icon' })));
+    this.renderContent = () => (h("wpp-internal-label-v3-3-1", { labelText: this.config?.text, description: this.config?.description, optional: this.optional, typography: this.typography, disabled: this.disabled, locales: this.config?.locales, tooltipConfig: this.tooltipConfig, part: "content", id: this.labelId }, this.config?.icon && h(transformToVersionedTag(this.config?.icon), { slot: 'icon', part: 'icon' })));
     this.description = undefined;
     this.htmlFor = undefined;
     this.optional = false;
@@ -31,7 +31,7 @@ export class WppLabel {
     return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, content, icon" }, h(this.tag, { class: "internal-label-wrapper", part: "wrapper", ...(this.tag === 'label' && { htmlFor: this.htmlFor, 'aria-label': this.htmlFor }) }, this.renderContent())));
   }
   static get is() { return "wpp-label"; }
-  static get registryIs() { return "wpp-label-v3-3-0"; }
+  static get registryIs() { return "wpp-label-v3-3-1"; }
   static get encapsulation() { return "scoped"; }
   static get originalStyleUrls() {
     return {

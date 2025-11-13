@@ -16,13 +16,13 @@ export default {
     },
   },
 };
-export const Label = (args) => html ` <wpp-label-v3-3-0
+export const Label = (args) => html ` <wpp-label-v3-3-1
     .optional="${args.optional}"
     .typography="${args.typography}"
     .config="${args.config}"
     .tooltipConfig="${args.tooltipConfig}"
   >
-  </wpp-label-v3-3-0>`;
+  </wpp-label-v3-3-1>`;
 Label.args = {
   typography: 's-strong',
   config: {

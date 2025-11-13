@@ -163,10 +163,10 @@ export class WppSelect {
         return h(Fragment, null);
       }
       if (this.loading) {
-        return (h("div", { class: "loading-container" }, h("wpp-spinner-v3-3-0", null), h("wpp-typography-v3-3-0", { type: "s-body" }, this._locales.loadingText)));
+        return (h("div", { class: "loading-container" }, h("wpp-spinner-v3-3-1", null), h("wpp-typography-v3-3-1", { type: "s-body" }, this._locales.loadingText)));
       }
       if (this.internalList?.length === 0) {
-        return (h("wpp-typography-v3-3-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+        return (h("wpp-typography-v3-3-1", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
       }
       let hiddeItemsCount = 0;
       return (h(Fragment, null, this.internalList?.map((item) => {
@@ -174,11 +174,11 @@ export class WppSelect {
         if (hidden) {
           hiddeItemsCount++;
           if (hiddeItemsCount === this.internalList?.length) {
-            return (h("wpp-typography-v3-3-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+            return (h("wpp-typography-v3-3-1", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
           }
           return null;
         }
-        return (h("wpp-list-item-v3-3-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
+        return (h("wpp-list-item-v3-3-1", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
     };
     this.renderSlotsInListItem = (slots, isLabelExists) => slots
@@ -789,7 +789,7 @@ export class WppSelect {
     return renderCombinedSelect.call(this);
   }
   static get is() { return "wpp-select"; }
-  static get registryIs() { return "wpp-select-v3-3-0"; }
+  static get registryIs() { return "wpp-select-v3-3-1"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -977,7 +977,7 @@ export class WppSelect {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "If `true`, the input should be focused on page load"
+          "text": "If `true`, the input should be focused on page load."
         },
         "attribute": "auto-focus",
         "reflect": true,

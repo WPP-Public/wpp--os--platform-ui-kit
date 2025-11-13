@@ -1,6 +1,6 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
 import { A as ANIMATION_PROPERTY_NAME, Z as Z_INDEX } from './consts-5bf9c29f.js';
-import { g as getSlotEmptyStates, m as applyBodyStylesIfNeeded } from './utils-d423b01f.js';
+import { g as getSlotEmptyStates, m as applyBodyStylesIfNeeded } from './utils-b49ad9c8.js';
 import { W as WrappedSlot } from './WrappedSlot-2ee5325a.js';
 import { F as FullScreenModalCloseReason } from './types-b5cf2c7a.js';
 
@@ -142,9 +142,9 @@ const WppFullScreenModal = class {
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() } }, h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-3-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h(Tag, { role: "dialog", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-fullscreen-modal-content" }, h("div", { class: this.headerContainerCssClasses() }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h("wpp-action-button-v3-3-0", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button" }, h("wpp-icon-cross-v3-3-0", { slot: "icon-start" }))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })))));
+    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() } }, h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-3-1", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h(Tag, { role: "dialog", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-fullscreen-modal-content" }, h("div", { class: this.headerContainerCssClasses() }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h("wpp-action-button-v3-3-1", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button" }, h("wpp-icon-cross-v3-3-1", { slot: "icon-start" }))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })))));
   }
-  static get registryIs() { return "wpp-full-screen-modal-v3-3-0"; }
+  static get registryIs() { return "wpp-full-screen-modal-v3-3-1"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "open": ["handleChangeFullScreenModalStatus"]

@@ -3,21 +3,21 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const config = require('./config-afea566c.js');
+const config = require('./config-88d8235a.js');
 const types = require('./types-3dbf006d.js');
-const utils = require('./utils-2b192dec.js');
-require('./wpp-icon-unordered-list-f619af28.js');
+const utils = require('./utils-6189d8be.js');
+require('./wpp-icon-unordered-list-d88615db.js');
 require('./WppIcon-55327707.js');
-require('./wpp-icon-video-clip-86ee96a7.js');
+require('./wpp-icon-video-clip-c867b9de.js');
 require('./_commonjsHelpers-bcc1208a.js');
-require('./wpp-progress-indicator-c3d169fc.js');
-require('./wpp-icon-chevron-92588571.js');
-require('./wpp-icon-gallery-2e9c2077.js');
+require('./wpp-progress-indicator-17949837.js');
+require('./wpp-icon-chevron-0bed1a07.js');
+require('./wpp-icon-gallery-3e90751b.js');
 require('./lodash-04cddce7.js');
-require('./wpp-action-button-c9c2966a.js');
+require('./wpp-action-button-4dfab84a.js');
 require('./common-ee802540.js');
 require('./WrappedSlot-ab2104d8.js');
-require('./wpp-input-18c173f1.js');
+require('./wpp-input-4b51eee5.js');
 require('./turndown.browser.es-40bb3069.js');
 require('./consts-779fd4ec.js');
 
@@ -186,9 +186,9 @@ const WppRichtextView = class {
     this.setValue(newValue);
   }
   render() {
-    return (index.h(index.Host, null, index.h("wpp-quill-styles-v3-3-0", null), index.h("wpp-richtext-common-styles-v3-3-0", null), index.h("div", { ref: (el) => (this.containerElement = el), class: this.preserveWhitespace ? 'preserve-whitespace' : '' })));
+    return (index.h(index.Host, null, index.h("wpp-quill-styles-v3-3-1", null), index.h("wpp-richtext-common-styles-v3-3-1", null), index.h("div", { ref: (el) => (this.containerElement = el), class: this.preserveWhitespace ? 'preserve-whitespace' : '' })));
   }
-  static get registryIs() { return "wpp-richtext-view-v3-3-0"; }
+  static get registryIs() { return "wpp-richtext-view-v3-3-1"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "styles": ["updateStyle"],

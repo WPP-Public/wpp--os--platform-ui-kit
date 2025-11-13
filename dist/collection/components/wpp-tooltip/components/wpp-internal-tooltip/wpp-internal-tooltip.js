@@ -33,10 +33,10 @@ export class WppTooltip {
     });
     this.getIconBasedOnProps = () => {
       if (this.error) {
-        return h("wpp-icon-error-v3-3-0", { class: "left-icon", part: "icon-error" });
+        return h("wpp-icon-error-v3-3-1", { class: "left-icon", part: "icon-error" });
       }
       if (this.warning) {
-        return h("wpp-icon-warning-v3-3-0", { color: "var(--wpp-warning-color-400)", class: "left-icon" });
+        return h("wpp-icon-warning-v3-3-1", { color: "var(--wpp-warning-color-400)", class: "left-icon" });
       }
       return null;
     };
@@ -64,7 +64,7 @@ export class WppTooltip {
     return (h(Host, { class: this.hostCssClasses(), style: this.cssStyle, exportparts: "tooltip-content" }, h("div", { class: this.cssClasses(), style: { wordBreak: this.wordBreak }, part: "tooltip-content" }, h("div", { class: "content-with-icon", id: this.ariaProp.describedby }, this.getIconBasedOnProps() && h("div", { class: "icon-wrapper" }, this.getIconBasedOnProps()), h("div", { class: "content-wrapper" }, !!this.header && (h("span", { class: this.headerCssClasses(), part: "header" }, this.header)), !!this.text && (h("span", { class: this.textCssClasses(), part: "text" }, this.getTextLines())), !!this.value && (h("span", { class: this.valueCssClasses(), part: "value" }, this.value)))))));
   }
   static get is() { return "wpp-internal-tooltip"; }
-  static get registryIs() { return "wpp-internal-tooltip-v3-3-0"; }
+  static get registryIs() { return "wpp-internal-tooltip-v3-3-1"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

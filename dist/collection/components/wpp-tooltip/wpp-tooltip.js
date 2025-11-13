@@ -1,7 +1,7 @@
 import { Host, h } from '@stencil/core';
 import isEqual from 'lodash/isEqual';
 import { menuListConfig as tooltipConfig } from '../../common/menuListConfig';
-import { cssStyles } from './const';
+import { ARROW_COLORS } from './const';
 import { defaultTooltipConfig } from './config';
 import { isWppElement } from '../../utils/utils';
 /**
@@ -10,7 +10,6 @@ import { isWppElement } from '../../utils/utils';
  */
 export class WppTooltip {
   constructor() {
-    this.arrowColor = {};
     this.FORBIDDEN_PREFIX = 'wpp-';
     this.ALLOWED_TAGS = ['wpp-typography'];
     this.handleSlotChange = () => {
@@ -108,23 +107,7 @@ export class WppTooltip {
     };
     this.getArrowBgColor = () => {
       const currColor = this.error ? 'error' : this.warning ? 'warning' : this.theme;
-      const colorKeys = ['dark', 'light', 'error', 'warning'];
-      for (const colorKey of colorKeys) {
-        if (!this.arrowColor[colorKey]) {
-          this.arrowColor[colorKey] = getComputedStyle(this.host).getPropertyValue(`--tooltip-${colorKey}-bg-color`);
-        }
-      }
-      return getComputedStyle(this.host).getPropertyValue(`--tooltip-${currColor}-bg-color`) || this.arrowColor[currColor];
-    };
-    this.getCssValues = () => {
-      const cssVariableNames = Object.keys(cssStyles);
-      const updatedCssStyles = {};
-      cssVariableNames.forEach(cssVariable => {
-        const computedValue = getComputedStyle(this.host).getPropertyValue(cssVariable);
-        const internalKey = `--internal-${cssVariable.substring(2)}`;
-        updatedCssStyles[internalKey] = computedValue;
-      });
-      this.style = updatedCssStyles;
+      return ARROW_COLORS[currColor];
     };
     this.hostCssClasses = () => ({
       'wpp-tooltip': true,
@@ -181,7 +164,6 @@ export class WppTooltip {
       }
     }
     else {
-      this.getCssValues();
       this.createTippyInstance();
     }
   }
@@ -206,7 +188,6 @@ export class WppTooltip {
   }
   componentDidLoad() {
     setTimeout(() => {
-      this.getCssValues();
       this.createTippyInstance();
       this.hidden = false;
     }, 0);
@@ -221,7 +202,6 @@ export class WppTooltip {
     this.tippyInstance?.destroy();
   }
   connectedCallback() {
-    this.getCssValues();
     this.tippyInstance?.setProps({
       arrow: this.arrowSVG(),
     });
@@ -230,10 +210,10 @@ export class WppTooltip {
     }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v3-3-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
+    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v3-3-1", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
   }
   static get is() { return "wpp-tooltip"; }
-  static get registryIs() { return "wpp-tooltip-v3-3-0"; }
+  static get registryIs() { return "wpp-tooltip-v3-3-1"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

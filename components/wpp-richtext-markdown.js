@@ -18,32 +18,32 @@ const WppRichtextMarkdown$1 = /*@__PURE__*/ proxyCustomElement(class WppRichtext
     this.handleValueChange(this.value);
   }
   render() {
-    return (h(Host, null, h("wpp-quill-styles-v3-3-0", null), h("wpp-richtext-common-styles-v3-3-0", null), h("pre", { class: "richtext-markdown" }, this.markdown)));
+    return (h(Host, null, h("wpp-quill-styles-v3-3-1", null), h("wpp-richtext-common-styles-v3-3-1", null), h("pre", { class: "richtext-markdown" }, this.markdown)));
   }
-  static get registryIs() { return "wpp-richtext-markdown-v3-3-0"; }
+  static get registryIs() { return "wpp-richtext-markdown-v3-3-1"; }
   static get watchers() { return {
     "value": ["handleValueChange"]
   }; }
-}, [0, "wpp-richtext-markdown", "wpp-richtext-markdown-v3-3-0", {
+}, [0, "wpp-richtext-markdown", "wpp-richtext-markdown-v3-3-1", {
     "value": [1537]
   }]);
 function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-richtext-markdown-v3-3-0", "wpp-quill-styles-v3-3-0", "wpp-richtext-common-styles-v3-3-0"];
+  const components = ["wpp-richtext-markdown-v3-3-1", "wpp-quill-styles-v3-3-1", "wpp-richtext-common-styles-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-richtext-markdown-v3-3-0":
+    case "wpp-richtext-markdown-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppRichtextMarkdown$1);
       }
       break;
-    case "wpp-quill-styles-v3-3-0":
+    case "wpp-quill-styles-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-richtext-common-styles-v3-3-0":
+    case "wpp-richtext-common-styles-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

@@ -56,9 +56,6 @@
   background-color: var(--wpp-white-color);
   position: relative;
 }
-:host .overlay {
-  background-color: var(--tag-bg-color);
-}
 :host .icon-start ::slotted(*) {
   color: var(--tag-icon-color);
   mix-blend-mode: plus-darker;
@@ -74,6 +71,42 @@
 
 :host(.wpp-negative) .overlay {
   background-color: var(--tag-negative-bg-color);
+}
+
+:host(.wpp-Cat-1) .overlay {
+  background-color: var(--wpp-dataviz-color-cat-light-1);
+}
+
+:host(.wpp-Cat-2) .overlay {
+  background-color: var(--wpp-dataviz-color-cat-light-2);
+}
+
+:host(.wpp-Cat-3) .overlay {
+  background-color: var(--wpp-dataviz-color-cat-light-3);
+}
+
+:host(.wpp-Cat-4) .overlay {
+  background-color: var(--wpp-dataviz-color-cat-light-4);
+}
+
+:host(.wpp-Cat-5) .overlay {
+  background-color: var(--wpp-dataviz-color-cat-light-5);
+}
+
+:host(.wpp-Cat-6) .overlay {
+  background-color: var(--wpp-dataviz-color-cat-light-6);
+}
+
+:host(.wpp-Cat-7) .overlay {
+  background-color: var(--wpp-dataviz-color-cat-light-7);
+}
+
+:host(.wpp-Cat-8) .overlay {
+  background-color: var(--wpp-dataviz-color-cat-light-8);
+}
+
+:host(.wpp-Cat-9) .overlay {
+  background-color: var(--wpp-dataviz-color-cat-light-9);
 }
 
 :host(.wpp-with-icon) {

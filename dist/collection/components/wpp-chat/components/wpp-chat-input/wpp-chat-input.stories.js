@@ -59,14 +59,14 @@ export const DefaultChatInput = {
               style=${'display: flex; flex-direction: column; height: 100vh; padding: 20px; box-sizing: border-box;'}
             >
               <div style=${'display: flex;'}>
-                <wpp-typography-v3-3-0>Message History:</wpp-typography-v3-3-0>
+                <wpp-typography-v3-3-1>Message History:</wpp-typography-v3-3-1>
                 <ul>
-                  ${updatedMessages.map(msg => html `<li><wpp-typography-v3-3-0>${msg}</wpp-typography-v3-3-0></li>`)}
+                  ${updatedMessages.map(msg => html `<li><wpp-typography-v3-3-1>${msg}</wpp-typography-v3-3-1></li>`)}
                 </ul>
               </div>
 
               <div style=${'display: flex; align-items: flex-end; height: 100vh;'}>
-                <wpp-chat-input-v3-3-0
+                <wpp-chat-input-v3-3-1
                   .placeholder=${args.placeholder}
                   .enableAttach=${args.enableAttach}
                   .disabled=${args.disabled}
@@ -79,7 +79,7 @@ export const DefaultChatInput = {
                   @wppSend=${handleSendMessage}
                   @wppMessageChanged=${handleMessageChanged}
                 >
-                </wpp-chat-input-v3-3-0>
+                </wpp-chat-input-v3-3-1>
               </div>
             </div>
           `, container);

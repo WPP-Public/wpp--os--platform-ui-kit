@@ -4,7 +4,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
 const common = require('./common-ee802540.js');
-const utils = require('./utils-2b192dec.js');
+const utils = require('./utils-6189d8be.js');
 require('./consts-779fd4ec.js');
 
 const DEFAULT_INPUT_WIDTH = '68px';
@@ -444,17 +444,17 @@ const WppSlider = class {
     });
     this.calculateProgressBar = (value) => (value - this.min) * (1 / (this.max - this.min)) * 100 + '%';
     this.renderControl = () => {
-      const label = this.labelConfig?.text && (index.h("wpp-label-v3-3-0", { htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" }));
+      const label = this.labelConfig?.text && (index.h("wpp-label-v3-3-1", { htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" }));
       if (this.withValue && !this.withInput) {
         return (index.h("div", { class: this.controlCssClasses(), part: "control-wrapper" }, label || index.h("div", null), this.handleType({
-          single: value => (index.h("wpp-typography-v3-3-0", { type: "s-midi", part: "value" }, value)),
-          range: value => (index.h("div", { class: "range-value-wrapper", part: "value-wrapper" }, index.h("wpp-typography-v3-3-0", { type: "s-midi", part: "value" }, value[0]), index.h("wpp-divider-v3-3-0", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), index.h("wpp-typography-v3-3-0", { type: "s-midi", part: "value" }, value[1]))),
-          'middle-range': value => (index.h("div", { class: "range-value-wrapper", part: "value-wrapper" }, index.h("wpp-typography-v3-3-0", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? value : this.middleValue), index.h("wpp-divider-v3-3-0", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), index.h("wpp-typography-v3-3-0", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? this.middleValue : value))),
+          single: value => (index.h("wpp-typography-v3-3-1", { type: "s-midi", part: "value" }, value)),
+          range: value => (index.h("div", { class: "range-value-wrapper", part: "value-wrapper" }, index.h("wpp-typography-v3-3-1", { type: "s-midi", part: "value" }, value[0]), index.h("wpp-divider-v3-3-1", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), index.h("wpp-typography-v3-3-1", { type: "s-midi", part: "value" }, value[1]))),
+          'middle-range': value => (index.h("div", { class: "range-value-wrapper", part: "value-wrapper" }, index.h("wpp-typography-v3-3-1", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? value : this.middleValue), index.h("wpp-divider-v3-3-1", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), index.h("wpp-typography-v3-3-1", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? this.middleValue : value))),
         })));
       }
       return label;
     };
-    this.renderSingleInput = () => (index.h("wpp-input-v3-3-0", { ref: inputRef => (this.inputRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-number", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { [`size-${this.size}`]: true }, maskOptions: {
+    this.renderSingleInput = () => (index.h("wpp-input-v3-3-1", { ref: inputRef => (this.inputRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-number", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { [`size-${this.size}`]: true }, maskOptions: {
         decimalPatternOptions: this.maskOptions
           ? {
             ...getDefaultMaskOptions(this.step),
@@ -464,14 +464,14 @@ const WppSlider = class {
       } }));
     this.renderEditableInput = () => (index.h("div", { class: this.editableInputCssClasses(), part: "editable-input-wrapper" }, this.handleType({
       single: () => this.renderSingleInput(),
-      range: () => (index.h("div", { class: "range-input-wrapper", part: "input-wrapper" }, index.h("wpp-input-v3-3-0", { ref: inputRef => (this.inputRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-min", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'min-input': true, [`size-${this.size}`]: true }, maskOptions: {
+      range: () => (index.h("div", { class: "range-input-wrapper", part: "input-wrapper" }, index.h("wpp-input-v3-3-1", { ref: inputRef => (this.inputRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-min", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'min-input': true, [`size-${this.size}`]: true }, maskOptions: {
           decimalPatternOptions: this.maskOptions && this.maskOptions[0]
             ? {
               ...getDefaultMaskOptions(this.step),
               ...this.maskOptions[0],
             }
             : undefined,
-        } }), index.h("wpp-divider-v3-3-0", { class: { 'wpp-disabled': this.disabled }, part: "divider" }), index.h("wpp-input-v3-3-0", { ref: inputRef => (this.inputMaxRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-max", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'max-input': true, [`size-${this.size}`]: true }, maskOptions: {
+        } }), index.h("wpp-divider-v3-3-1", { class: { 'wpp-disabled': this.disabled }, part: "divider" }), index.h("wpp-input-v3-3-1", { ref: inputRef => (this.inputMaxRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-max", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'max-input': true, [`size-${this.size}`]: true }, maskOptions: {
           decimalPatternOptions: this.maskOptions && this.maskOptions[1]
             ? {
               ...getDefaultMaskOptions(this.step),
@@ -502,8 +502,8 @@ const WppSlider = class {
           const isTruncated = !!this.tooltipTexts[mark.value];
           const labelText = mark.label !== null && mark.label !== undefined ? String(mark.label) : '';
           const tooltipPlacement = 'bottom';
-          const labelContent = (index.h("wpp-typography-v3-3-0", { id: `mark-label-${mark.value}`, class: this.labelCssClasses(), type: "xs-body", part: "label" }, labelText));
-          return (index.h("div", { onClick: event => this.handleMarkClick(event, mark), class: this.markCssClasses(mark.value), style: style, part: "mark" }, !this.continuous && (index.h("div", { class: "circle", part: "mark-circle" }, index.h("div", { class: "mark", part: "mark-inner" }))), index.h("div", { class: "label-container" }, isTruncated ? (index.h("wpp-tooltip-v3-3-0", { config: { placement: tooltipPlacement }, text: this.tooltipTexts[mark.value] }, labelContent)) : (labelContent))));
+          const labelContent = (index.h("wpp-typography-v3-3-1", { id: `mark-label-${mark.value}`, class: this.labelCssClasses(), type: "xs-body", part: "label" }, labelText));
+          return (index.h("div", { onClick: event => this.handleMarkClick(event, mark), class: this.markCssClasses(mark.value), style: style, part: "mark" }, !this.continuous && (index.h("div", { class: "circle", part: "mark-circle" }, index.h("div", { class: "mark", part: "mark-inner" }))), index.h("div", { class: "label-container" }, isTruncated ? (index.h("wpp-tooltip-v3-3-1", { config: { placement: tooltipPlacement }, text: this.tooltipTexts[mark.value] }, labelContent)) : (labelContent))));
         });
       }
     };
@@ -651,7 +651,7 @@ const WppSlider = class {
       'middle-range': value => this.renderSingleSlider(style, value),
     }), this.marks && (index.h("div", { ref: el => (this.marksListRef = el), class: this.marksListCssClasses(), part: "marks-list" }, this.renderMarks()))), this.withInput && this.continuous && (index.h("div", { class: this.inputColumnCssClasses() }, this.renderEditableInput())))));
   }
-  static get registryIs() { return "wpp-slider-v3-3-0"; }
+  static get registryIs() { return "wpp-slider-v3-3-1"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "value": ["onUpdateValue"],

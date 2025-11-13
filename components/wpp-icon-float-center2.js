@@ -16,9 +16,9 @@ const WppIconFloatCenter = /*@__PURE__*/ proxyCustomElement(class WppIconFloatCe
   render() {
     return (h(WppIcon, { name: "wpp-icon-float-center", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M7.5 5.833h5v5H7.5V5.833M2.5 2.5h15v1.667H2.5V2.5m0 10h15v1.667H2.5v-1.667m0 3.333h11.667v1.667H2.5v-1.667z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-float-center-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-float-center-v3-3-1"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-float-center", "wpp-icon-float-center-v3-3-0", {
+}, [1, "wpp-icon-float-center", "wpp-icon-float-center-v3-3-1", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -28,9 +28,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-float-center-v3-3-0"];
+  const components = ["wpp-icon-float-center-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-float-center-v3-3-0":
+    case "wpp-icon-float-center-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconFloatCenter);
       }

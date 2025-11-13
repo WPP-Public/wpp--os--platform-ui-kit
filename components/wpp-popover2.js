@@ -185,15 +185,15 @@ const WppPopover = /*@__PURE__*/ proxyCustomElement(class WppPopover extends HTM
     this.mutationObserver.observe(this.host?.children[0], { attributes: true });
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "anchor, trigger-element" }, h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref) }, h("slot", { name: "trigger-element", part: "trigger-element" })), h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-label": this.ariaProps.label, "aria-modal": "true" }, this.withSearch && (h("wpp-input-v3-3-0", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: this.locales.searchInputPlaceholder || DEFAULT_POPOVER_LOCALES.searchInputPlaceholder, type: "search", size: "m" })), !this.withSearch && this.closable && (h("wpp-action-button-v3-3-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, h("wpp-icon-cross-v3-3-0", { slot: "icon-end" }))), h("slot", null))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "anchor, trigger-element" }, h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref) }, h("slot", { name: "trigger-element", part: "trigger-element" })), h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-label": this.ariaProps.label, "aria-modal": "true" }, this.withSearch && (h("wpp-input-v3-3-1", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: this.locales.searchInputPlaceholder || DEFAULT_POPOVER_LOCALES.searchInputPlaceholder, type: "search", size: "m" })), !this.withSearch && this.closable && (h("wpp-action-button-v3-3-1", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, h("wpp-icon-cross-v3-3-1", { slot: "icon-end" }))), h("slot", null))));
   }
-  static get registryIs() { return "wpp-popover-v3-3-0"; }
+  static get registryIs() { return "wpp-popover-v3-3-1"; }
   get host() { return this; }
   static get watchers() { return {
     "config": ["updateConfig"]
   }; }
   static get style() { return wppPopoverCss; }
-}, [1, "wpp-popover", "wpp-popover-v3-3-0", {
+}, [1, "wpp-popover", "wpp-popover-v3-3-1", {
     "config": [1040],
     "shouldCloseOnOutsideClick": [16],
     "closable": [4],
@@ -213,84 +213,84 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-popover-v3-3-0", "wpp-action-button-v3-3-0", "wpp-icon-cross-v3-3-0", "wpp-icon-error-v3-3-0", "wpp-icon-info-message-v3-3-0", "wpp-icon-search-v3-3-0", "wpp-icon-success-v3-3-0", "wpp-icon-warning-v3-3-0", "wpp-inline-message-v3-3-0", "wpp-input-v3-3-0", "wpp-internal-label-v3-3-0", "wpp-internal-tooltip-v3-3-0", "wpp-label-v3-3-0", "wpp-spinner-v3-3-0", "wpp-tooltip-v3-3-0", "wpp-typography-v3-3-0"];
+  const components = ["wpp-popover-v3-3-1", "wpp-action-button-v3-3-1", "wpp-icon-cross-v3-3-1", "wpp-icon-error-v3-3-1", "wpp-icon-info-message-v3-3-1", "wpp-icon-search-v3-3-1", "wpp-icon-success-v3-3-1", "wpp-icon-warning-v3-3-1", "wpp-inline-message-v3-3-1", "wpp-input-v3-3-1", "wpp-internal-label-v3-3-1", "wpp-internal-tooltip-v3-3-1", "wpp-label-v3-3-1", "wpp-spinner-v3-3-1", "wpp-tooltip-v3-3-1", "wpp-typography-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-popover-v3-3-0":
+    case "wpp-popover-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppPopover);
       }
       break;
-    case "wpp-action-button-v3-3-0":
+    case "wpp-action-button-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-cross-v3-3-0":
+    case "wpp-icon-cross-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-error-v3-3-0":
+    case "wpp-icon-error-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-info-message-v3-3-0":
+    case "wpp-icon-info-message-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-search-v3-3-0":
+    case "wpp-icon-search-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-success-v3-3-0":
+    case "wpp-icon-success-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-warning-v3-3-0":
+    case "wpp-icon-warning-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-inline-message-v3-3-0":
+    case "wpp-inline-message-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-input-v3-3-0":
+    case "wpp-input-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-label-v3-3-0":
+    case "wpp-internal-label-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-0":
+    case "wpp-internal-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-label-v3-3-0":
+    case "wpp-label-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v3-3-0":
+    case "wpp-spinner-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v3-3-0":
+    case "wpp-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v3-3-0":
+    case "wpp-typography-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

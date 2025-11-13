@@ -19,9 +19,9 @@ const WppRichtextMarkdown = class {
     this.handleValueChange(this.value);
   }
   render() {
-    return (index.h(index.Host, null, index.h("wpp-quill-styles-v3-3-0", null), index.h("wpp-richtext-common-styles-v3-3-0", null), index.h("pre", { class: "richtext-markdown" }, this.markdown)));
+    return (index.h(index.Host, null, index.h("wpp-quill-styles-v3-3-1", null), index.h("wpp-richtext-common-styles-v3-3-1", null), index.h("pre", { class: "richtext-markdown" }, this.markdown)));
   }
-  static get registryIs() { return "wpp-richtext-markdown-v3-3-0"; }
+  static get registryIs() { return "wpp-richtext-markdown-v3-3-1"; }
   static get watchers() { return {
     "value": ["handleValueChange"]
   }; }

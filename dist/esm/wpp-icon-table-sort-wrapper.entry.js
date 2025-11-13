@@ -1,5 +1,5 @@
 import { r as registerInstance, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { k as transformToVersionedTag } from './utils-d423b01f.js';
+import { k as transformToVersionedTag } from './utils-b49ad9c8.js';
 import './consts-5bf9c29f.js';
 
 const wppIconCss = ":host{display:-ms-inline-flexbox;display:inline-flex;color:var(--wpp-prop-icon-color)}";
@@ -135,7 +135,7 @@ const WppIconTableSortWrapper = class {
   render() {
     return h(Host, null, this.getIconComponent());
   }
-  static get registryIs() { return "wpp-icon-table-sort-wrapper-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-table-sort-wrapper-v3-3-1"; }
   get host() { return getElement(this); }
 };
 WppIconTableSortWrapper.style = wppIconCss;

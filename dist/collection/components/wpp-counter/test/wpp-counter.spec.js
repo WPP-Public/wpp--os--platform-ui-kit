@@ -36,7 +36,7 @@ describe('wpp-counter', () => {
     };
     const page = await newSpecPage({
       components: [WppCounter, WppLabel, WppInternalLabel],
-      template: () => h("wpp-counter-v3-3-0", { labelConfig: labelConfig }),
+      template: () => h("wpp-counter-v3-3-1", { labelConfig: labelConfig }),
     });
     expect(page.root).toMatchSnapshot();
   });

@@ -12,7 +12,6 @@ export declare class WppMenuContext {
   private contentRef?;
   private wppListWrapperRef;
   private mutationObserver;
-  private isTriggerDisabled;
   private triggerElement;
   host: HTMLWppMenuContextElement;
   contextList: HTMLElement;
@@ -70,6 +69,7 @@ export declare class WppMenuContext {
   private onBlur;
   private onFocus;
   private onFocusout;
+  private handleClickTrigger;
   private menuCssClasses;
   private triggerWrapperCssClasses;
   private listWrapperCssClasses;

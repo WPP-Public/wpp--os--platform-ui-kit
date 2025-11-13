@@ -50,7 +50,7 @@ const createColorPickerStory = (mode) => ({
       if (container) {
         render(html `
             <div style=${'display: flex; flex-direction: column'}>
-              <wpp-color-picker-v3-3-0
+              <wpp-color-picker-v3-3-1
                 .type=${args.type}
                 .mode=${mode}
                 .hexOpacity=${args.hexOpacity}
@@ -60,7 +60,7 @@ const createColorPickerStory = (mode) => ({
                 @wppSaveColor=${handleColorSave}
                 @wppRemoveSavedColor=${handleRemoveColor}
               >
-              </wpp-color-picker-v3-3-0>
+              </wpp-color-picker-v3-3-1>
             </div>
           `, container);
       }

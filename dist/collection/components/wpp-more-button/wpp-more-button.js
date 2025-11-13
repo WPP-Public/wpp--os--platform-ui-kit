@@ -66,10 +66,10 @@ export class WppMoreButton {
     this.validAriaProps = getAriaProps(this.ariaProps);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { class: this.buttonCssClasses(), disabled: this.disabled || this.loading, name: this.name, type: "button", "data-testid": "wpp-more-button", "aria-pressed": this.isPressed, ...this.validAriaProps }, this.loading && !this.disabled ? (h("wpp-spinner-v3-3-0", { size: "s" })) : (h("wpp-icon-more-v3-3-0", { direction: 'horizontal' })))));
+    return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { class: this.buttonCssClasses(), disabled: this.disabled || this.loading, name: this.name, type: "button", "data-testid": "wpp-more-button", "aria-pressed": this.isPressed, ...this.validAriaProps }, this.loading && !this.disabled ? (h("wpp-spinner-v3-3-1", { size: "s" })) : (h("wpp-icon-more-v3-3-1", { direction: 'horizontal' })))));
   }
   static get is() { return "wpp-more-button"; }
-  static get registryIs() { return "wpp-more-button-v3-3-0"; }
+  static get registryIs() { return "wpp-more-button-v3-3-1"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

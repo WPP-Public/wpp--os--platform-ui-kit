@@ -32,7 +32,7 @@ export const Primary = {
       : { padding: '24px' };
     return html `
       <div style=${styleMap(divStyles)}>
-        <wpp-button-v3-3-0
+        <wpp-button-v3-3-1
           .size=${args.size}
           .text=${args.text}
           .disabled=${args.disabled}
@@ -42,26 +42,26 @@ export const Primary = {
           @click=${() => console.log('Button clicked')}
         >
           ${args.showIconStart
-      ? html `<wpp-icon-plus-v3-3-0
+      ? html `<wpp-icon-plus-v3-3-1
                 slot="icon-start"
                 @click=${(e) => {
         e.stopPropagation();
         console.log('Left icon clicked');
       }}
-              ></wpp-icon-plus-v3-3-0>`
+              ></wpp-icon-plus-v3-3-1>`
       : null}
           ${args.text}
           ${args.showIconEnd
-      ? html `<wpp-icon-chevron-v3-3-0
+      ? html `<wpp-icon-chevron-v3-3-1
                 slot="icon-end"
                 direction="down"
                 @click=${(e) => {
         e.stopPropagation();
         console.log('Right icon clicked');
       }}
-              ></wpp-icon-chevron-v3-3-0>`
+              ></wpp-icon-chevron-v3-3-1>`
       : null}
-        </wpp-button-v3-3-0>
+        </wpp-button-v3-3-1>
       </div>
     `;
   },
@@ -75,7 +75,7 @@ export const Secondary = {
       : { padding: '24px' };
     return html `
       <div style=${styleMap(divStyles)}>
-        <wpp-button-v3-3-0
+        <wpp-button-v3-3-1
           .size=${args.size}
           .disabled=${args.disabled}
           .inverted=${args.inverted}
@@ -84,26 +84,26 @@ export const Secondary = {
           @click=${() => console.log('Button clicked')}
         >
           ${args.showIconStart
-      ? html `<wpp-icon-plus-v3-3-0
+      ? html `<wpp-icon-plus-v3-3-1
                 slot="icon-start"
                 @click=${(e) => {
         e.stopPropagation();
         console.log('Left icon clicked');
       }}
-              ></wpp-icon-plus-v3-3-0>`
+              ></wpp-icon-plus-v3-3-1>`
       : null}
           ${args.text}
           ${args.showIconEnd
-      ? html `<wpp-icon-chevron-v3-3-0
+      ? html `<wpp-icon-chevron-v3-3-1
                 slot="icon-end"
                 direction="down"
                 @click=${(e) => {
         e.stopPropagation();
         console.log('Right icon clicked');
       }}
-              ></wpp-icon-chevron-v3-3-0>`
+              ></wpp-icon-chevron-v3-3-1>`
       : null}
-        </wpp-button-v3-3-0>
+        </wpp-button-v3-3-1>
       </div>
     `;
   },
@@ -119,7 +119,7 @@ export const Destructive = {
   render: args => {
     const variant = args.secondary ? 'destructive-secondary' : 'destructive';
     return html `
-      <wpp-button-v3-3-0
+      <wpp-button-v3-3-1
         .size=${args.size}
         .disabled=${args.disabled}
         .loading=${args.loading}
@@ -127,7 +127,7 @@ export const Destructive = {
         @click=${() => console.log('Button clicked')}
       >
         ${args.text}
-      </wpp-button-v3-3-0>
+      </wpp-button-v3-3-1>
     `;
   },
 };

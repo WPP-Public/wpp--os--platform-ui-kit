@@ -56,7 +56,7 @@ export const LoadMore = (args) => {
     }
   };
   return html `
-    <wpp-load-more-v3-3-0
+    <wpp-load-more-v3-3-1
       id="load-more-component"
       .totalItems="${args.totalItems}"
       .itemsLoaded="${currentItemsLoaded}"
@@ -65,7 +65,7 @@ export const LoadMore = (args) => {
       .disabled="${args.disabled}"
       .incrementBy="${args.incrementBy}"
       @wppClickLoadMore="${handleLoadMoreClicked}"
-    ></wpp-load-more-v3-3-0>
+    ></wpp-load-more-v3-3-1>
   `;
 };
 LoadMore.args = {

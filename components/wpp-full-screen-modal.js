@@ -154,15 +154,15 @@ const WppFullScreenModal$1 = /*@__PURE__*/ proxyCustomElement(class WppFullScree
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() } }, h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-3-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h(Tag, { role: "dialog", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-fullscreen-modal-content" }, h("div", { class: this.headerContainerCssClasses() }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h("wpp-action-button-v3-3-0", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button" }, h("wpp-icon-cross-v3-3-0", { slot: "icon-start" }))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })))));
+    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() } }, h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-3-1", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h(Tag, { role: "dialog", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-fullscreen-modal-content" }, h("div", { class: this.headerContainerCssClasses() }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h("wpp-action-button-v3-3-1", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button" }, h("wpp-icon-cross-v3-3-1", { slot: "icon-start" }))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })))));
   }
-  static get registryIs() { return "wpp-full-screen-modal-v3-3-0"; }
+  static get registryIs() { return "wpp-full-screen-modal-v3-3-1"; }
   get host() { return this; }
   static get watchers() { return {
     "open": ["handleChangeFullScreenModalStatus"]
   }; }
   static get style() { return wppFullScreenModalCss; }
-}, [1, "wpp-full-screen-modal", "wpp-full-screen-modal-v3-3-0", {
+}, [1, "wpp-full-screen-modal", "wpp-full-screen-modal-v3-3-1", {
     "open": [1540],
     "withTransparentOverlay": [4, "with-transparent-overlay"],
     "disableOutsideClick": [4, "disable-outside-click"],
@@ -179,29 +179,29 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-full-screen-modal-v3-3-0", "wpp-action-button-v3-3-0", "wpp-icon-cross-v3-3-0", "wpp-overlay-v3-3-0", "wpp-spinner-v3-3-0"];
+  const components = ["wpp-full-screen-modal-v3-3-1", "wpp-action-button-v3-3-1", "wpp-icon-cross-v3-3-1", "wpp-overlay-v3-3-1", "wpp-spinner-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-full-screen-modal-v3-3-0":
+    case "wpp-full-screen-modal-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppFullScreenModal$1);
       }
       break;
-    case "wpp-action-button-v3-3-0":
+    case "wpp-action-button-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-cross-v3-3-0":
+    case "wpp-icon-cross-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-overlay-v3-3-0":
+    case "wpp-overlay-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-spinner-v3-3-0":
+    case "wpp-spinner-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

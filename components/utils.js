@@ -1,6 +1,6 @@
 import { D as DEFAULT_SHOW_DURATION_ANIMATION, a as DEFAULT_HIDE_DURATION_ANIMATION } from './consts.js';
 
-const version = 'v3-3-0';
+const version = 'v3-3-1';
 
 function format(first, middle, last) {
   return (first || '') + (middle ? ` ${middle}` : '') + (last ? ` ${last}` : '');

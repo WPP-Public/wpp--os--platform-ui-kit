@@ -35,9 +35,9 @@ export const Spacing = (args) => {
     .map(multiplier => `
         <div style= "margin: 10px;">
           <div>
-            <wpp-typography-v3-3-0 tag='h1' type='s-midi'>
+            <wpp-typography-v3-3-1 tag='h1' type='s-midi'>
               wpp-spacing-${baseUnit * multiplier}-${direction}
-            </wpp-typography-v3-3-0>
+            </wpp-typography-v3-3-1>
           </div>
           <div style="display: flex; flex-direction: ${['top', 'bottom'].includes(direction) ? 'column' : 'row'};">
             <div

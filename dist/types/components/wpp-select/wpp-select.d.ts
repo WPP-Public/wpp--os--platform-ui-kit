@@ -80,7 +80,7 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
    */
   readonly required: boolean;
   /**
-   * If `true`, the input should be focused on page load
+   * If `true`, the input should be focused on page load.
    */
   readonly autoFocus: boolean;
   /**

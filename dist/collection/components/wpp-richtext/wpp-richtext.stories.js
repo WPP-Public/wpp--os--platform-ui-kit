@@ -86,7 +86,7 @@ const uploadRequestHandler = {
  */
 export const Editor = {
   render: (args) => html `
-    <wpp-richtext-v3-3-0
+    <wpp-richtext-v3-3-1
       @wppChange="${changeHandler}"
       @wppSelectionChange="${selectionChangeHandler}"
       @wppUploadRequest="${uploadRequestHandler}"
@@ -107,7 +107,7 @@ export const Editor = {
       warning-threshold="${args.warningThreshold}"
       style="width: 900px; height: 600px"
       class="custom-class-1"
-    ></wpp-richtext-v3-3-0>
+    ></wpp-richtext-v3-3-1>
   `,
   args: {
     name: 'content',
@@ -166,7 +166,7 @@ export const View = {
       },
     };
     return html `
-      <wpp-richtext-v3-3-0
+      <wpp-richtext-v3-3-1
         @wppChange="${liveChangeHandler}"
         @wppSelectionChange="${selectionChangeHandler}"
         @wppUploadRequest="${uploadRequestHandler}"
@@ -187,16 +187,16 @@ export const View = {
         warning-threshold="${args.warningThreshold}"
         style="width: 900px; height: 300px"
         class="custom-class-1"
-      ></wpp-richtext-v3-3-0>
+      ></wpp-richtext-v3-3-1>
 
-      <wpp-typography-v3-3-0 type="m-strong">Markdown view with preserve whitespace</wpp-typography-v3-3-0>
+      <wpp-typography-v3-3-1 type="m-strong">Markdown view with preserve whitespace</wpp-typography-v3-3-1>
 
-      <wpp-richtext-view-v3-3-0
+      <wpp-richtext-view-v3-3-1
         .value=${value}
         .format=${args.format}
         .name="markdownContent"
         .preserve-whitespace=${args.preserveWhitespace}
-      ></wpp-richtext-view-v3-3-0>
+      ></wpp-richtext-view-v3-3-1>
     `;
   },
   args: {

@@ -91,7 +91,7 @@ export class WppTabs {
     return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, slider" }, h("div", { class: "wpp-tab-control-wrapper", role: "listbox", "aria-multiselectable": "false", part: "wrapper" }, h("slot", { part: "inner" })), h("div", { class: "slider", part: "slider" })));
   }
   static get is() { return "wpp-tabs"; }
-  static get registryIs() { return "wpp-tabs-v3-3-0"; }
+  static get registryIs() { return "wpp-tabs-v3-3-1"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

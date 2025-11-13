@@ -131,7 +131,7 @@ export class WppIconTableSortWrapper {
     return h(Host, null, this.getIconComponent());
   }
   static get is() { return "wpp-icon-table-sort-wrapper"; }
-  static get registryIs() { return "wpp-icon-table-sort-wrapper-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-table-sort-wrapper-v3-3-1"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
