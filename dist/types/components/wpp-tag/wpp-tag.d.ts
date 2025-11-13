@@ -9,7 +9,6 @@ import { RangeOf } from '../../types/numberRange';
  * @slot icon-start - Can contain an icon that will be placed before the main content, e.g. a user icon.
  */
 export declare class WppTag {
-  private variantClass;
   host: HTMLWppTagElement;
   hasIconStartSlot: boolean;
   /**
@@ -47,12 +46,8 @@ export declare class WppTag {
    * @internal - This prop is controlled by Accordion, and Tree components.
    */
   readonly disabled: boolean;
-  onUpdateVariant(): void;
-  updateCategoricalIndex(index: number): void;
   componentWillLoad(): void;
-  private updateTagColor;
   private updateSlotData;
-  protected updateCategoricalColor: (index?: number) => void;
   private hostCssClasses;
   private iconStartCssClasses;
   render(): any;

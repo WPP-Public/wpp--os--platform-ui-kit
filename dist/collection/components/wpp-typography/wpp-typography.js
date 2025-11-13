@@ -1,77 +1,26 @@
 import { h, Host } from '@stencil/core';
-import { CSS_ATTRIBUTES, PREFIX_FOR_TYPE, VARIABLE_PREFIX } from './const';
 /**
  * @part typography - Main content wrapper element
  * @part inner - Content slot element
  */
 export class WppTypography {
   constructor() {
-    this.updateTypographyClasses = () => {
-      const fontStyle = getComputedStyle(this.host).getPropertyValue('--wpp-typography-font-style').trim();
-      if (fontStyle === 'italic') {
-        this.host.classList.add('italic');
-      }
-      else {
-        this.host.classList.remove('italic');
-      }
-    };
-    this.getAvailableTypeFromTheme = () => {
-      const typeParts = this.type.split('-');
-      const CSSVariable = `${VARIABLE_PREFIX}-${this.type}-font-size`;
-      if (getComputedStyle(this.host).getPropertyValue(CSSVariable) ||
-        getComputedStyle(document.body).getPropertyValue(CSSVariable)) {
-        return this.type;
-      }
-      if (typeParts.length === 3) {
-        return `${typeParts[0]}-${typeParts[1]}`;
-      }
-      if (typeParts.length === 2 && ['light', 'emphasis'].includes(typeParts[1])) {
-        return `${typeParts[0]}-body`;
-      }
-      return this.type;
-    };
-    this.getTypographyStylesFromTheme = () => {
-      const typographyStyles = {};
-      const availableType = this.getAvailableTypeFromTheme();
-      CSS_ATTRIBUTES.forEach((attribute) => {
-        const cssVariableName = `${VARIABLE_PREFIX}-${availableType}-${attribute}`;
-        let propertyValue;
-        if (getComputedStyle(this.host).getPropertyValue(cssVariableName).trim()) {
-          propertyValue = getComputedStyle(this.host).getPropertyValue(cssVariableName).trim();
-        }
-        else {
-          propertyValue = getComputedStyle(document.body).getPropertyValue(cssVariableName).trim();
-        }
-        typographyStyles[`${PREFIX_FOR_TYPE}-${attribute}`] = propertyValue;
-      });
-      if (this.type === '2xs-strong')
-        typographyStyles[`${PREFIX_FOR_TYPE}-text-transform`] = 'uppercase';
-      Object.entries(typographyStyles).forEach(([property, value]) => {
-        this.host.style.setProperty(property, value);
-      });
-    };
     this.typographyCssClasses = () => ({
       typography: true,
-      italic: this.host.classList.contains('italic'),
+      italic: this.type.includes('emphasis'),
+      [`type-${this.type.split('-')[0]}`]: true,
+      [`wpp-typography-${this.type}`]: true,
     });
     this.type = 'm-body';
     this.tag = 'span';
     this.color = 'var(--wpp-text-color)';
-  }
-  handleTypeChange() {
-    this.getTypographyStylesFromTheme();
-    this.updateTypographyClasses();
-  }
-  componentWillLoad() {
-    this.getTypographyStylesFromTheme();
-    this.updateTypographyClasses();
   }
   render() {
     const TypographyTag = this.tag;
     return (h(Host, { class: "wpp-typography", exportparts: "typography, inner", style: { '--typography-color': this.color } }, h(TypographyTag, { class: this.typographyCssClasses(), part: "typography", exportparts: "typography" }, h("slot", { part: "inner" }))));
   }
   static get is() { return "wpp-typography"; }
-  static get registryIs() { return "wpp-typography-v3-3-0"; }
+  static get registryIs() { return "wpp-typography-v3-3-1"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -154,10 +103,4 @@ export class WppTypography {
     };
   }
   static get elementRef() { return "host"; }
-  static get watchers() {
-    return [{
-        "propName": "type",
-        "methodName": "handleTypeChange"
-      }];
-  }
 }

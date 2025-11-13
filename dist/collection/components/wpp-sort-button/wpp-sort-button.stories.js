@@ -9,9 +9,9 @@ export default {
     },
   },
 };
-export const Sort = (args) => html ` <wpp-sort-button-v3-3-0 .disabled="${args.disabled}" @click="${() => console.log('Button clicked')}">
+export const Sort = (args) => html ` <wpp-sort-button-v3-3-1 .disabled="${args.disabled}" @click="${() => console.log('Button clicked')}">
     ${args.text}
-  </wpp-sort-button-v3-3-0>`;
+  </wpp-sort-button-v3-3-1>`;
 Sort.args = {
   text: 'Sort',
   disabled: false,

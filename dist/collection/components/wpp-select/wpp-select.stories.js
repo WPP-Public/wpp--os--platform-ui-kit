@@ -134,7 +134,7 @@ export const Single = (args) => {
       updatedEl.value = selectedValue;
   };
   return html `
-    <wpp-select-v3-3-0
+    <wpp-select-v3-3-1
       type="single"
       name="single-select"
       .message=${args.message}
@@ -156,16 +156,16 @@ export const Single = (args) => {
     >
       ${args.showIconStart
     ? html `
-            <wpp-icon-clock-v3-3-0
+            <wpp-icon-clock-v3-3-1
               slot="icon-start"
               @click="${(e) => {
       e.stopPropagation();
       console.log('Left icon clicked');
     }}"
-            ></wpp-icon-clock-v3-3-0>
+            ></wpp-icon-clock-v3-3-1>
           `
     : null}
-    </wpp-select-v3-3-0>
+    </wpp-select-v3-3-1>
   `;
 };
 Single.args = {
@@ -201,7 +201,7 @@ export const Multiple = (args) => {
       updatedEl.value = selectedValue;
   };
   return html `
-    <wpp-select-v3-3-0
+    <wpp-select-v3-3-1
       type="multiple"
       name="multiple-select"
       .message=${args.message}
@@ -225,16 +225,16 @@ export const Multiple = (args) => {
     >
       ${args.showIconStart
     ? html `
-            <wpp-icon-clock-v3-3-0
+            <wpp-icon-clock-v3-3-1
               slot="icon-start"
               @click="${(e) => {
       e.stopPropagation();
       console.log('Left icon clicked');
     }}"
-            ></wpp-icon-clock-v3-3-0>
+            ></wpp-icon-clock-v3-3-1>
           `
     : null}
-    </wpp-select-v3-3-0>
+    </wpp-select-v3-3-1>
   `;
 };
 Multiple.args = {
@@ -302,7 +302,7 @@ export const Text = (args) => {
     if (updatedEl)
       updatedEl.value = selectedValue;
   };
-  return html ` <wpp-select-v3-3-0
+  return html ` <wpp-select-v3-3-1
     .disabled="${args.disabled}"
     .placeholder="${args.placeholder}"
     .dropdownWidth="${args.dropdownWidth}"
@@ -316,16 +316,16 @@ export const Text = (args) => {
   >
     ${args.showIconStart
     ? html `
-          <wpp-icon-clock-v3-3-0
+          <wpp-icon-clock-v3-3-1
             slot="icon-start"
             @click="${(e) => {
       e.stopPropagation();
       console.log('Left icon clicked');
     }}"
-          ></wpp-icon-clock-v3-3-0>
+          ></wpp-icon-clock-v3-3-1>
         `
     : null}
-  </wpp-select-v3-3-0>`;
+  </wpp-select-v3-3-1>`;
 };
 Text.args = {
   placeholder: 'Select option',
@@ -347,21 +347,21 @@ export const ButtonAnchor = (args) => {
   const renderAnchor = () => {
     switch (args.anchorComponent) {
       case 'WppActionButton':
-        return html ` <wpp-action-button-v3-3-0 slot="anchor-button"> ${args.anchorLabel} </wpp-action-button-v3-3-0> `;
+        return html ` <wpp-action-button-v3-3-1 slot="anchor-button"> ${args.anchorLabel} </wpp-action-button-v3-3-1> `;
       case 'WppActionButtonWithIcon':
         return html `
-          <wpp-action-button-v3-3-0 slot="anchor-button">
-            <wpp-icon-plus-v3-3-0 slot="icon-start"></wpp-icon-plus-v3-3-0>
+          <wpp-action-button-v3-3-1 slot="anchor-button">
+            <wpp-icon-plus-v3-3-1 slot="icon-start"></wpp-icon-plus-v3-3-1>
             ${args.anchorLabel}
-          </wpp-action-button-v3-3-0>
+          </wpp-action-button-v3-3-1>
         `;
       case 'WppButton':
       default:
-        return html ` <wpp-button-v3-3-0 slot="anchor-button"> ${args.anchorLabel} </wpp-button-v3-3-0> `;
+        return html ` <wpp-button-v3-3-1 slot="anchor-button"> ${args.anchorLabel} </wpp-button-v3-3-1> `;
     }
   };
   return html `
-    <wpp-select-v3-3-0
+    <wpp-select-v3-3-1
       id="button-anchor-select"
       type="single"
       name="button-anchor-select"
@@ -385,15 +385,15 @@ export const ButtonAnchor = (args) => {
       ${renderAnchor()}
       ${args.showIconStart
     ? html `
-            <wpp-icon-clock-v3-3-0
+            <wpp-icon-clock-v3-3-1
               slot="icon-start"
               @click="${(e) => {
       e.stopPropagation();
     }}"
-            ></wpp-icon-clock-v3-3-0>
+            ></wpp-icon-clock-v3-3-1>
           `
     : null}
-    </wpp-select-v3-3-0>
+    </wpp-select-v3-3-1>
   `;
 };
 ButtonAnchor.args = {

@@ -8021,9 +8021,9 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
       if (this.type !== 'search')
         return null;
       if (this.loading && !this.disabled) {
-        return h("wpp-spinner-v3-3-0", { class: this.iconStartCssClasses(), slot: "left", "aria-label": "Loading" });
+        return h("wpp-spinner-v3-3-1", { class: this.iconStartCssClasses(), slot: "left", "aria-label": "Loading" });
       }
-      return h("wpp-icon-search-v3-3-0", { class: this.iconStartCssClasses(), part: "icon-search" });
+      return h("wpp-icon-search-v3-3-1", { class: this.iconStartCssClasses(), part: "icon-search" });
     };
     this.hasActiveEllipses = false;
     this.hasIconStartSlot = false;
@@ -8177,16 +8177,16 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
     }
   }
   render() {
-    return (h(Host, { class: this.wrapperCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'input'), exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v3-3-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v3-3-0", { part: "anchor", text: this.value, class: "with-tooltip", disabled: !this.hasActiveEllipses, anchorTabIndex: -1, config: this.truncationTooltipConfig }, this.renderInput()), (this.type === 'search' || this.loading) && !!this.value && (h("wpp-icon-cross-v3-3-0", { class: this.iconEndCssClasses(), "aria-label": "Erase input text", tabIndex: 0, part: "icon-cross", onClick: event => this.onClear(event), onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData, tabIndex: this.hasIconEndSlot ? 0 : -1, "aria-label": "Clear input", role: "button" })), this.lengthValidationError && (h("wpp-inline-message-v3-3-0", { message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') })), this.message && (h("wpp-inline-message-v3-3-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') }))));
+    return (h(Host, { class: this.wrapperCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'input'), exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v3-3-1", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v3-3-1", { part: "anchor", text: this.value, class: "with-tooltip", disabled: !this.hasActiveEllipses, anchorTabIndex: -1, config: this.truncationTooltipConfig }, this.renderInput()), (this.type === 'search' || this.loading) && !!this.value && (h("wpp-icon-cross-v3-3-1", { class: this.iconEndCssClasses(), "aria-label": "Erase input text", tabIndex: 0, part: "icon-cross", onClick: event => this.onClear(event), onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData, tabIndex: this.hasIconEndSlot ? 0 : -1, "aria-label": "Clear input", role: "button" })), this.lengthValidationError && (h("wpp-inline-message-v3-3-1", { message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') })), this.message && (h("wpp-inline-message-v3-3-1", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') }))));
   }
-  static get registryIs() { return "wpp-input-v3-3-0"; }
+  static get registryIs() { return "wpp-input-v3-3-1"; }
   get host() { return this; }
   static get watchers() { return {
     "value": ["onUpdateValue"],
     "locales": ["onUpdateLocales"]
   }; }
   static get style() { return wppInputCss; }
-}, [1, "wpp-input", "wpp-input-v3-3-0", {
+}, [1, "wpp-input", "wpp-input-v3-3-1", {
     "name": [1],
     "type": [1],
     "value": [1025],
@@ -8225,79 +8225,79 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-input-v3-3-0", "wpp-action-button-v3-3-0", "wpp-icon-cross-v3-3-0", "wpp-icon-error-v3-3-0", "wpp-icon-info-message-v3-3-0", "wpp-icon-search-v3-3-0", "wpp-icon-success-v3-3-0", "wpp-icon-warning-v3-3-0", "wpp-inline-message-v3-3-0", "wpp-internal-label-v3-3-0", "wpp-internal-tooltip-v3-3-0", "wpp-label-v3-3-0", "wpp-spinner-v3-3-0", "wpp-tooltip-v3-3-0", "wpp-typography-v3-3-0"];
+  const components = ["wpp-input-v3-3-1", "wpp-action-button-v3-3-1", "wpp-icon-cross-v3-3-1", "wpp-icon-error-v3-3-1", "wpp-icon-info-message-v3-3-1", "wpp-icon-search-v3-3-1", "wpp-icon-success-v3-3-1", "wpp-icon-warning-v3-3-1", "wpp-inline-message-v3-3-1", "wpp-internal-label-v3-3-1", "wpp-internal-tooltip-v3-3-1", "wpp-label-v3-3-1", "wpp-spinner-v3-3-1", "wpp-tooltip-v3-3-1", "wpp-typography-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-input-v3-3-0":
+    case "wpp-input-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppInput);
       }
       break;
-    case "wpp-action-button-v3-3-0":
+    case "wpp-action-button-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-cross-v3-3-0":
+    case "wpp-icon-cross-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-error-v3-3-0":
+    case "wpp-icon-error-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-info-message-v3-3-0":
+    case "wpp-icon-info-message-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-search-v3-3-0":
+    case "wpp-icon-search-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-success-v3-3-0":
+    case "wpp-icon-success-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-warning-v3-3-0":
+    case "wpp-icon-warning-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-inline-message-v3-3-0":
+    case "wpp-inline-message-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-label-v3-3-0":
+    case "wpp-internal-label-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-0":
+    case "wpp-internal-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-label-v3-3-0":
+    case "wpp-label-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v3-3-0":
+    case "wpp-spinner-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v3-3-0":
+    case "wpp-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v3-3-0":
+    case "wpp-typography-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

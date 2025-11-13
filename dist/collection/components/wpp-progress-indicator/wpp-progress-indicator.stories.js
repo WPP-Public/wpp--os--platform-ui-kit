@@ -21,7 +21,7 @@ export default {
   },
 };
 export const Bar = (args) => html `
-  <wpp-progress-indicator-v3-3-0
+  <wpp-progress-indicator-v3-3-1
     .value=${args.value}
     .isShowPercentage=${args.isShowPercentage}
     .width=${args.width}
@@ -39,7 +39,7 @@ Bar.args = {
     label: 'Default Progress Indicator',
   },
 };
-export const Circle = (args) => html ` <wpp-progress-indicator-v3-3-0
+export const Circle = (args) => html ` <wpp-progress-indicator-v3-3-1
     variant="circle"
     .isShowPercentage=${args.isShowPercentage}
     .width=${args.width}

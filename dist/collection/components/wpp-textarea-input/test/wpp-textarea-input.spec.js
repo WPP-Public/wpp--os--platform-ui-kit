@@ -23,7 +23,7 @@ describe('wpp-textarea-input', () => {
     };
     const page = await newSpecPage({
       components: [WppTextareaInput, WppInlineMessage, WppLabel, WppInternalLabel],
-      template: () => h("wpp-textarea-input-v3-3-0", { "message-type": "warning", message: "warning message", labelConfig: labelConfig }),
+      template: () => h("wpp-textarea-input-v3-3-1", { "message-type": "warning", message: "warning message", labelConfig: labelConfig }),
     });
     expect(page.root).toMatchSnapshot();
   });

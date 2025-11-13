@@ -11,7 +11,7 @@ export class WppIconFloatRight {
     return (h(WppIcon, { name: "wpp-icon-float-right", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M12.5 5.833h5v5h-5V5.833M2.5 2.5h15v1.667H2.5V2.5m8.333 3.333v1.667H2.5V5.833h8.333m-3.333 3.333v1.667H2.5v-1.667h5m-5 3.333h11.667v1.667H2.5v-1.667m0 3.333h15v1.667H2.5v-1.667z", fill: "currentColor" })));
   }
   static get is() { return "wpp-icon-float-right"; }
-  static get registryIs() { return "wpp-icon-float-right-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-float-right-v3-3-1"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

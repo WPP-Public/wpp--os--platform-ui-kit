@@ -81,7 +81,7 @@ export class HueSlider {
       } }))));
   }
   static get is() { return "wpp-hue-slider"; }
-  static get registryIs() { return "wpp-hue-slider-v3-3-0"; }
+  static get registryIs() { return "wpp-hue-slider-v3-3-1"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

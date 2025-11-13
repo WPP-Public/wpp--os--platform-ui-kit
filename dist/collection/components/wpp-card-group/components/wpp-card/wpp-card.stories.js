@@ -45,7 +45,7 @@ export const Regular = (args) => html `
   <div
     style="position: fixed; inset: 0; background-color: ${handleBackgroundColor(args.interactive)}; display: flex; align-items: center; justify-content: center"
   >
-    <wpp-card-v3-3-0
+    <wpp-card-v3-3-1
       .variant="${args.variant}"
       .size="${args.size}"
       .interactive="${args.interactive}"
@@ -57,28 +57,28 @@ export const Regular = (args) => html `
         style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding-right: 32px"
         slot="header"
       >
-        <wpp-typography-v3-3-0
+        <wpp-typography-v3-3-1
           type=${handleTypographyType(args.size)}
           style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
-          >${args.header}</wpp-typography-v3-3-0
+          >${args.header}</wpp-typography-v3-3-1
         >
         ${args.extendedHeaderExample
   ? html `
               <div style="display: flex; align-items: center; margin-right: 32px">
-                <wpp-typography-v3-3-0 type="s-body" style="margin-right: 18px"> 35% Complete</wpp-typography-v3-3-0>
-                <wpp-progress-indicator-v3-3-0 progress="35" width="173px" />
+                <wpp-typography-v3-3-1 type="s-body" style="margin-right: 18px"> 35% Complete</wpp-typography-v3-3-1>
+                <wpp-progress-indicator-v3-3-1 progress="35" width="173px" />
               </div>
             `
   : null}
       </div>
       ${args.withActions
   ? html `
-          <wpp-action-button-v3-3-0 variant="secondary" .ariaProps=${{ label: 'Context menu' }} slot="actions">
-            <wpp-icon-more-v3-3-0 slot="icon-start" direction='horizontal'></wpp-icon-plus>
-          </wpp-action-button-v3-3-0>
+          <wpp-action-button-v3-3-1 variant="secondary" .ariaProps=${{ label: 'Context menu' }} slot="actions">
+            <wpp-icon-more-v3-3-1 slot="icon-start" direction='horizontal'></wpp-icon-plus>
+          </wpp-action-button-v3-3-1>
         `
   : null}
-    </wpp-card-v3-3-0>
+    </wpp-card-v3-3-1>
   </div>
 `;
 Regular.args = {
@@ -96,7 +96,7 @@ export const Clickable = (args) => html `
   <div
     style="position: fixed; inset: 0; background-color: ${handleBackgroundColor(args.interactive)}; display: flex; align-items: center; justify-content: center"
   >
-    <wpp-card-v3-3-0
+    <wpp-card-v3-3-1
       .variant="${args.variant}"
       .size="${args.size}"
       .interactive="${args.interactive}"
@@ -108,28 +108,28 @@ export const Clickable = (args) => html `
         style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding-right: 32px"
         slot="header"
       >
-        <wpp-typography-v3-3-0
+        <wpp-typography-v3-3-1
           type=${handleTypographyType(args.size)}
           style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
-          >${args.header}</wpp-typography-v3-3-0
+          >${args.header}</wpp-typography-v3-3-1
         >
         ${args.extendedHeaderExample
   ? html `
               <div style="display: flex; align-items: center; margin-right: 32px">
-                <wpp-typography-v3-3-0 type="s-body" style="margin-right: 18px"> 35% Complete</wpp-typography-v3-3-0>
-                <wpp-progress-indicator-v3-3-0 progress="35" width="173px" />
+                <wpp-typography-v3-3-1 type="s-body" style="margin-right: 18px"> 35% Complete</wpp-typography-v3-3-1>
+                <wpp-progress-indicator-v3-3-1 progress="35" width="173px" />
               </div>
             `
   : null}
       </div>
       ${args.withActions
   ? html `
-          <wpp-action-button-v3-3-0 variant="secondary" .ariaProps=${{ label: 'Context menu' }} slot="actions">
-            <wpp-icon-more-v3-3-0 slot="icon-start" direction='horizontal'></wpp-icon-plus>
-          </wpp-action-button-v3-3-0>
+          <wpp-action-button-v3-3-1 variant="secondary" .ariaProps=${{ label: 'Context menu' }} slot="actions">
+            <wpp-icon-more-v3-3-1 slot="icon-start" direction='horizontal'></wpp-icon-plus>
+          </wpp-action-button-v3-3-1>
         `
   : null}
-    </wpp-card-v3-3-0>
+    </wpp-card-v3-3-1>
   </div>
 `;
 Clickable.args = {

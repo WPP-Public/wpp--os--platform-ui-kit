@@ -59,7 +59,7 @@ const actionButtonsConfigConst = [
   },
 ];
 export const FloatingToolbar = {
-  render: args => html `<wpp-floating-toolbar-v3-3-0
+  render: args => html `<wpp-floating-toolbar-v3-3-1
       .actionButtonsConfig="${args.actionButtonsConfig.slice(0, args.length)}"
       .orientation="${args.orientation}"
     />`,

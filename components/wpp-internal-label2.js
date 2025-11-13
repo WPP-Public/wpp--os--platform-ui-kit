@@ -66,15 +66,15 @@ const WppInternalLabel = /*@__PURE__*/ proxyCustomElement(class WppInternalLabel
     this.updateSlotData();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onBlur: this.onBlur, exportparts: "info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" }, !!this.labelText && (h("div", { class: this.infoWrapperCssClasses(), part: "info-wrapper", role: this.role }, h("wpp-typography-v3-3-0", { type: this.typography, class: "text", part: "text" }, this.labelText), this.optional && (h("wpp-typography-v3-3-0", { type: "s-body", class: "optional", part: "optional-text" }, "(", this._locales.optional, ")")))), !!this.description && this.hasIconSlot ? (h("wpp-tooltip-v3-3-0", { class: "tooltip", text: this.description, config: this.tooltipConfig, part: "tooltip" }, h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: this.tooltipConfig.tabIndex === -1 ? 'none' : 'button', tabIndex: this.tooltipConfig.tabIndex ?? 0, "aria-label": this.tooltipConfig.tabIndex !== -1 ? 'Show info' : undefined }))) : (h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: "button", tabIndex: 0, "aria-label": "Show info" }))));
+    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onBlur: this.onBlur, exportparts: "info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" }, !!this.labelText && (h("div", { class: this.infoWrapperCssClasses(), part: "info-wrapper", role: this.role }, h("wpp-typography-v3-3-1", { type: this.typography, class: "text", part: "text" }, this.labelText), this.optional && (h("wpp-typography-v3-3-1", { type: "s-body", class: "optional", part: "optional-text" }, "(", this._locales.optional, ")")))), !!this.description && this.hasIconSlot ? (h("wpp-tooltip-v3-3-1", { class: "tooltip", text: this.description, config: this.tooltipConfig, part: "tooltip" }, h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: this.tooltipConfig.tabIndex === -1 ? 'none' : 'button', tabIndex: this.tooltipConfig.tabIndex ?? 0, "aria-label": this.tooltipConfig.tabIndex !== -1 ? 'Show info' : undefined }))) : (h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: "button", tabIndex: 0, "aria-label": "Show info" }))));
   }
-  static get registryIs() { return "wpp-internal-label-v3-3-0"; }
+  static get registryIs() { return "wpp-internal-label-v3-3-1"; }
   get host() { return this; }
   static get watchers() { return {
     "locales": ["onUpdateLocales"]
   }; }
   static get style() { return wppInternalLabelCss; }
-}, [1, "wpp-internal-label", "wpp-internal-label-v3-3-0", {
+}, [1, "wpp-internal-label", "wpp-internal-label-v3-3-1", {
     "labelText": [1, "label-text"],
     "description": [1],
     "optional": [4],
@@ -90,34 +90,34 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-internal-label-v3-3-0", "wpp-icon-error-v3-3-0", "wpp-icon-warning-v3-3-0", "wpp-internal-tooltip-v3-3-0", "wpp-tooltip-v3-3-0", "wpp-typography-v3-3-0"];
+  const components = ["wpp-internal-label-v3-3-1", "wpp-icon-error-v3-3-1", "wpp-icon-warning-v3-3-1", "wpp-internal-tooltip-v3-3-1", "wpp-tooltip-v3-3-1", "wpp-typography-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-internal-label-v3-3-0":
+    case "wpp-internal-label-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppInternalLabel);
       }
       break;
-    case "wpp-icon-error-v3-3-0":
+    case "wpp-icon-error-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-warning-v3-3-0":
+    case "wpp-icon-warning-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-0":
+    case "wpp-internal-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v3-3-0":
+    case "wpp-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v3-3-0":
+    case "wpp-typography-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

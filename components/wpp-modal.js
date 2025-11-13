@@ -146,15 +146,15 @@ const WppModal$1 = /*@__PURE__*/ proxyCustomElement(class WppModal extends HTMLE
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() } }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-3-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h(Tag, { role: "dialog", class: this.modalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-modal-content" }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })))));
+    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() } }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-3-1", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h(Tag, { role: "dialog", class: this.modalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-modal-content" }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })))));
   }
-  static get registryIs() { return "wpp-modal-v3-3-0"; }
+  static get registryIs() { return "wpp-modal-v3-3-1"; }
   get host() { return this; }
   static get watchers() { return {
     "open": ["handleChangeModalStatus"]
   }; }
   static get style() { return wppModalCss; }
-}, [1, "wpp-modal", "wpp-modal-v3-3-0", {
+}, [1, "wpp-modal", "wpp-modal-v3-3-1", {
     "open": [1540],
     "size": [1],
     "withTransparentOverlay": [4, "with-transparent-overlay"],
@@ -172,14 +172,14 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-modal-v3-3-0", "wpp-overlay-v3-3-0"];
+  const components = ["wpp-modal-v3-3-1", "wpp-overlay-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-modal-v3-3-0":
+    case "wpp-modal-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppModal$1);
       }
       break;
-    case "wpp-overlay-v3-3-0":
+    case "wpp-overlay-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

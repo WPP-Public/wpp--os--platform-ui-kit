@@ -50,10 +50,10 @@ export class WppExpandableCard {
     this.updateSlotData();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "expandable-card-body, accordion, section, title, icon, counter, divider, title-wrapper" }, h("div", { class: "body-container", part: "expandable-card-body" }, h("wpp-accordion-v3-3-0", { size: this.size, text: this.header, expanded: this.isExpanded, expandedByDefault: this.expandedByDefault, withDivider: false, onWppChange: this.onChange, part: "accordion" }, h("slot", null), h("slot", { name: "header", slot: "header", class: "header" }), h("slot", { name: "actions", slot: "actions", class: "actions" })))));
+    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "expandable-card-body, accordion, section, title, icon, counter, divider, title-wrapper" }, h("div", { class: "body-container", part: "expandable-card-body" }, h("wpp-accordion-v3-3-1", { size: this.size, text: this.header, expanded: this.isExpanded, expandedByDefault: this.expandedByDefault, withDivider: false, onWppChange: this.onChange, part: "accordion" }, h("slot", null), h("slot", { name: "header", slot: "header", class: "header" }), h("slot", { name: "actions", slot: "actions", class: "actions" })))));
   }
   static get is() { return "wpp-expandable-card"; }
-  static get registryIs() { return "wpp-expandable-card-v3-3-0"; }
+  static get registryIs() { return "wpp-expandable-card-v3-3-1"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

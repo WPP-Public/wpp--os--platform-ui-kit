@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const utils = require('./utils-2b192dec.js');
+const utils = require('./utils-6189d8be.js');
 const WrappedSlot = require('./WrappedSlot-ab2104d8.js');
 const consts = require('./consts-779fd4ec.js');
 
@@ -140,9 +140,9 @@ const WppTopbar = class {
       children: this.navigation.slice(this.itemsToShow),
     };
     const isMenuActive = !!hiddenNavigation.children?.find(item => this.activeItems.includes(item.value));
-    return (index.h(index.Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "wrapper, body, navigation, topbar-item, divider, app, right, app-wrapper, right-wrapper" }, index.h("div", { class: this.wrapperCssClasses(), part: "wrapper" }, index.h("wpp-grid-v3-3-0", { container: true }, index.h("wpp-grid-v3-3-0", { item: true, all: 24 }, index.h("div", { class: this.headerCssClasses(), part: "body" }, index.h(WrappedSlot.WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasAppSlot }, name: "app", onSlotchange: this.updateSlotData }), index.h("nav", { class: this.navigationCssClasses(), key: this.itemsToShow, part: "navigation" }, this.navigation.slice(0, this.itemsToShow).map(navigation => (index.h("wpp-topbar-item-v3-3-0", { navigation: navigation, firstLevel: true, active: navigation.active, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, part: "topbar-item" }))), this.truncated && (index.h("wpp-topbar-item-v3-3-0", { key: this.value, navigation: hiddenNavigation, firstLevel: true, menu: true, active: isMenuActive, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, part: "topbar-item" }))), index.h(WrappedSlot.WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasRightSlot }, name: "right", onSlotchange: this.updateSlotData }))))), index.h("wpp-divider-v3-3-0", { part: "divider" })));
+    return (index.h(index.Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "wrapper, body, navigation, topbar-item, divider, app, right, app-wrapper, right-wrapper" }, index.h("div", { class: this.wrapperCssClasses(), part: "wrapper" }, index.h("wpp-grid-v3-3-1", { container: true }, index.h("wpp-grid-v3-3-1", { item: true, all: 24 }, index.h("div", { class: this.headerCssClasses(), part: "body" }, index.h(WrappedSlot.WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasAppSlot }, name: "app", onSlotchange: this.updateSlotData }), index.h("nav", { class: this.navigationCssClasses(), key: this.itemsToShow, part: "navigation" }, this.navigation.slice(0, this.itemsToShow).map(navigation => (index.h("wpp-topbar-item-v3-3-1", { navigation: navigation, firstLevel: true, active: navigation.active, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, part: "topbar-item" }))), this.truncated && (index.h("wpp-topbar-item-v3-3-1", { key: this.value, navigation: hiddenNavigation, firstLevel: true, menu: true, active: isMenuActive, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, part: "topbar-item" }))), index.h(WrappedSlot.WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasRightSlot }, name: "right", onSlotchange: this.updateSlotData }))))), index.h("wpp-divider-v3-3-1", { part: "divider" })));
   }
-  static get registryIs() { return "wpp-topbar-v3-3-0"; }
+  static get registryIs() { return "wpp-topbar-v3-3-1"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "navigation": ["navigationChanged"],

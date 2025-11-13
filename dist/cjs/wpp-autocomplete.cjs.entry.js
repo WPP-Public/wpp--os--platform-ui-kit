@@ -3,9 +3,9 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const utils = require('./utils-2b192dec.js');
+const utils = require('./utils-6189d8be.js');
 const isEqual = require('./isEqual-0b0240b4.js');
-const menuListConfig = require('./menuListConfig-c4aadb34.js');
+const menuListConfig = require('./menuListConfig-c172e0b1.js');
 const common = require('./common-ee802540.js');
 const consts = require('./consts-779fd4ec.js');
 require('./_commonjsHelpers-bcc1208a.js');
@@ -423,7 +423,7 @@ const WppAutocomplete = class {
     this.getInputValue = () => this.searchValue;
     this.renderInputPlaceholder = () => {
       if (!this.multiple && this.value.length && !this.isFocused) {
-        return (index.h("wpp-typography-v3-3-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this.getOptionLabel(this.value[0])));
+        return (index.h("wpp-typography-v3-3-1", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this.getOptionLabel(this.value[0])));
       }
       if (this.isFocused && !this.searchValue)
         return null;
@@ -434,10 +434,10 @@ const WppAutocomplete = class {
         if (!itemsToDisplay.length)
           return null;
         const placeholder = itemsToDisplay.map(this.getOptionLabel).filter(Boolean).join(', ');
-        return (index.h("wpp-typography-v3-3-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, placeholder));
+        return (index.h("wpp-typography-v3-3-1", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, placeholder));
       }
       if (this.type === 'extended' && this.value.length && !this.isFocused) {
-        return (index.h("wpp-typography-v3-3-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this._locales.selected(this.value.length)));
+        return (index.h("wpp-typography-v3-3-1", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this._locales.selected(this.value.length)));
       }
     };
     this.countHiddenElements = () => {
@@ -506,19 +506,19 @@ const WppAutocomplete = class {
       const isLoading = this.loading || (this.isInfiniteLoading && this.isEmptyOptions);
       const isEmptyStringEntered = this.searchValue.trim().length === 0;
       if (isLoading) {
-        return (index.h("div", { class: "loading-wrapper" }, index.h("wpp-spinner-v3-3-0", { slot: "left" }), index.h("wpp-typography-v3-3-0", { type: "s-body", slot: "label" }, this._locales.loading)));
+        return (index.h("div", { class: "loading-wrapper" }, index.h("wpp-spinner-v3-3-1", { slot: "left" }), index.h("wpp-typography-v3-3-1", { type: "s-body", slot: "label" }, this._locales.loading)));
       }
       if (isEmptyStringEntered && this.componentSuggestions?.length > 0) {
-        return (index.h(index.Fragment, null, index.h("wpp-typography-v3-3-0", { type: "s-strong", class: "suggestions-heading" }, this.suggestionsTitle), this.componentSuggestions?.map((suggestion, index$1) => {
+        return (index.h(index.Fragment, null, index.h("wpp-typography-v3-3-1", { type: "s-strong", class: "suggestions-heading" }, this.suggestionsTitle), this.componentSuggestions?.map((suggestion, index$1) => {
           const { slots, checked, label, ...restProps } = suggestion;
           const isChecked = checked || this.isItemSelected(suggestion);
-          return (index.h("wpp-list-item-v3-3-0", { key: this.getOptionId(suggestion), selectable: true, checked: isChecked, value: suggestion, onWppChangeListItem: this.handleSuggestionClick, class: { 'suggestion-item': true, 'last-item': index$1 === this.componentSuggestions?.length - 1 }, ...restProps }, label && index.h("span", { slot: "label" }, this.getOptionLabel(suggestion)), slots && this.renderSlotsListItem(slots, Boolean(label)).map(slotNode => slotNode)));
+          return (index.h("wpp-list-item-v3-3-1", { key: this.getOptionId(suggestion), selectable: true, checked: isChecked, value: suggestion, onWppChangeListItem: this.handleSuggestionClick, class: { 'suggestion-item': true, 'last-item': index$1 === this.componentSuggestions?.length - 1 }, ...restProps }, label && index.h("span", { slot: "label" }, this.getOptionLabel(suggestion)), slots && this.renderSlotsListItem(slots, Boolean(label)).map(slotNode => slotNode)));
         })));
       }
       if (this.isEmptyOptions) {
-        return (index.h(index.Fragment, null, index.h("wpp-list-item-v3-3-0", { class: "nothing-found-wrapper" }, index.h("wpp-typography-v3-3-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound))));
+        return (index.h(index.Fragment, null, index.h("wpp-list-item-v3-3-1", { class: "nothing-found-wrapper" }, index.h("wpp-typography-v3-3-1", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound))));
       }
-      return (index.h(index.Fragment, null, !this.searchValue && !this.withPills ? (index.h("div", { class: this.selectedValuesCssClasses(), part: "selected-values" }, index.h("slot", { name: "selected-values" }))) : (index.h("slot", null)), index.h("div", null, this.isInfiniteLoading && (index.h("div", { class: "infinite-loader" }, index.h("wpp-spinner-v3-3-0", null))))));
+      return (index.h(index.Fragment, null, !this.searchValue && !this.withPills ? (index.h("div", { class: this.selectedValuesCssClasses(), part: "selected-values" }, index.h("slot", { name: "selected-values" }))) : (index.h("slot", null)), index.h("div", null, this.isInfiniteLoading && (index.h("div", { class: "infinite-loader" }, index.h("wpp-spinner-v3-3-1", null))))));
     };
     this.renderSlotsListItem = (slots, isLabelExists) => slots
       .map(slotElement => {
@@ -545,13 +545,13 @@ const WppAutocomplete = class {
       const labelText = option.label ||
         option.slots?.find((slot) => slot.type === 'span' && slot.props.slot === 'label')?.props.children;
       if (isTooltip) {
-        return (index.h("wpp-tooltip-v3-3-0", { class: {
+        return (index.h("wpp-tooltip-v3-3-1", { class: {
             'in-dropdown': true,
             transparent: isTransparentTooltip,
-          }, text: labelText, part: "tooltip", config: { ...this.pillTooltipConfig } }, index.h("wpp-pill-v3-3-0", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) })));
+          }, text: labelText, part: "tooltip", config: { ...this.pillTooltipConfig } }, index.h("wpp-pill-v3-3-1", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) })));
       }
       else {
-        return (index.h("wpp-pill-v3-3-0", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) }));
+        return (index.h("wpp-pill-v3-3-1", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) }));
       }
     };
     /**
@@ -623,7 +623,7 @@ const WppAutocomplete = class {
       }
     };
     // Render Show More/Show Less button only in cases when we have truncated WppPill (not .label inside)
-    this.showMoreLessRender = (label) => (index.h("wpp-action-button-v3-3-0", { "data-testid": "wpp-autocomplete-show-btn", class: "nowrap", variant: "secondary", onClick: this.handleShowMoreLessClick }, label));
+    this.showMoreLessRender = (label) => (index.h("wpp-action-button-v3-3-1", { "data-testid": "wpp-autocomplete-show-btn", class: "nowrap", variant: "secondary", onClick: this.handleShowMoreLessClick }, label));
     this.handleShowMoreLessClick = () => {
       this.isShowMore = !this.isShowMore;
     };
@@ -856,15 +856,15 @@ const WppAutocomplete = class {
           ? this.renderPillComponent(option, true)
           : this.renderPillComponent(option, false);
       }
-    })), index.h("div", { class: "show-more-action" }, this.showMoreLessRender(`+${this.activePillsTruncationState.filter(x => x).length} ${this._locales.showMore}`)))), !this.isShowMore && index.h("div", { class: "show-less-action" }, this.showMoreLessRender(this._locales.showLess)), isNeedDivider && index.h("wpp-divider-v3-3-0", { class: "nothing-found-divider" })));
+    })), index.h("div", { class: "show-more-action" }, this.showMoreLessRender(`+${this.activePillsTruncationState.filter(x => x).length} ${this._locales.showMore}`)))), !this.isShowMore && index.h("div", { class: "show-less-action" }, this.showMoreLessRender(this._locales.showLess)), isNeedDivider && index.h("wpp-divider-v3-3-1", { class: "nothing-found-divider" })));
   }
   render() {
     const style = { '--custom-dropdown-width': this.getDropdownWidth() };
-    return (index.h(index.Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, options, selected-values" }, index.h("div", { class: this.autocompleteWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (index.h("wpp-label-v3-3-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), index.h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, index.h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.hasSearchButton() && index.h("wpp-icon-search-v3-3-0", null), this.renderInputPlaceholder(), this.hiddenSelectedOptionsNumber > 0 && !this.isDropdownShown && (index.h("div", { class: "hidden-count", style: { '--hidden-number': this.getNearestPowForRowsNumber() + '' } }, index.h("wpp-typography-v3-3-0", { type: "s-body" }, ", + ", this.hiddenSelectedOptionsNumber))), index.h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, tabIndex: this.disabled ? -1 : 0, title: "" })), index.h("div", { class: "trigger-actions" }, this.hasClearButton() && index.h("wpp-icon-cross-v3-3-0", { onClick: this.handleClearClick }))), !!this.message && (index.h("wpp-inline-message-v3-3-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), index.h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, index.h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderSelectedOptions(), this.renderDropdownContent(), this.showCreateNewElement &&
+    return (index.h(index.Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, options, selected-values" }, index.h("div", { class: this.autocompleteWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (index.h("wpp-label-v3-3-1", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), index.h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, index.h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.hasSearchButton() && index.h("wpp-icon-search-v3-3-1", null), this.renderInputPlaceholder(), this.hiddenSelectedOptionsNumber > 0 && !this.isDropdownShown && (index.h("div", { class: "hidden-count", style: { '--hidden-number': this.getNearestPowForRowsNumber() + '' } }, index.h("wpp-typography-v3-3-1", { type: "s-body" }, ", + ", this.hiddenSelectedOptionsNumber))), index.h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, tabIndex: this.disabled ? -1 : 0, title: "" })), index.h("div", { class: "trigger-actions" }, this.hasClearButton() && index.h("wpp-icon-cross-v3-3-1", { onClick: this.handleClearClick }))), !!this.message && (index.h("wpp-inline-message-v3-3-1", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), index.h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, index.h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderSelectedOptions(), this.renderDropdownContent(), this.showCreateNewElement &&
       this.searchValue !== '' &&
-      ((this.displayBtnWhenListEmpty && this.isEmptyOptions) || !this.displayBtnWhenListEmpty) && (index.h("div", { class: "actions" }, index.h("wpp-divider-v3-3-0", { class: "nothing-found-divider" }), index.h("div", { class: "actions-container" }, index.h("wpp-list-item-v3-3-0", { onClick: this.handleCreateNewOptionClick }, index.h("wpp-typography-v3-3-0", { type: "s-strong", class: "create-new-option", slot: "label" }, this._locales.createNewElement))))))), this.type === 'extended' && this.multiple ? index.h("slot", { name: "selected-values" }) : null));
+      ((this.displayBtnWhenListEmpty && this.isEmptyOptions) || !this.displayBtnWhenListEmpty) && (index.h("div", { class: "actions" }, index.h("wpp-divider-v3-3-1", { class: "nothing-found-divider" }), index.h("div", { class: "actions-container" }, index.h("wpp-list-item-v3-3-1", { onClick: this.handleCreateNewOptionClick }, index.h("wpp-typography-v3-3-1", { type: "s-strong", class: "create-new-option", slot: "label" }, this._locales.createNewElement))))))), this.type === 'extended' && this.multiple ? index.h("slot", { name: "selected-values" }) : null));
   }
-  static get registryIs() { return "wpp-autocomplete-v3-3-0"; }
+  static get registryIs() { return "wpp-autocomplete-v3-3-1"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "loading": ["onLoadingChange"],

@@ -37,7 +37,7 @@ export default {
   },
 };
 export const Counter = {
-  render: args => html ` <wpp-counter-v3-3-0
+  render: args => html ` <wpp-counter-v3-3-1
       .name="${args.name}"
       .value="${args.value}"
       .disabled="${args.disabled}"
@@ -50,7 +50,7 @@ export const Counter = {
       .labelConfig="${args.labelConfig}"
       .withButtons="${args.withButtons}"
     >
-    </wpp-counter-v3-3-0>`,
+    </wpp-counter-v3-3-1>`,
   args: {
     name: 'counter',
     value: 1,

@@ -1,7 +1,7 @@
 {
   "name": "@wppopen/components-library",
   "description": "WPP Platform Open Components Library",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "files": [
     "components",
     "dist",

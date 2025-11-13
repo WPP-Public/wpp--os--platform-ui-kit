@@ -42,7 +42,7 @@ export class WppSegmentedControlItem {
     return (h(Host, { tabIndex: this.tabIndex, onClick: this.handleClickSegmentedControl, onFocus: this.onFocus, onBlur: this.onBlur, class: this.hostCssClasses(), exportparts: "item" }, h("div", { class: this.cssClasses(), part: "item", id: String(this.value), role: "option", "aria-selected": this.active ? 'true' : 'false' }, h(WrappedSlot, { wrapperClass: "content-wrapper" }), this.variant === 'text' && this.counter > 0 && h("div", { class: "counter" }, `(${this.counter})`))));
   }
   static get is() { return "wpp-segmented-control-item"; }
-  static get registryIs() { return "wpp-segmented-control-item-v3-3-0"; }
+  static get registryIs() { return "wpp-segmented-control-item-v3-3-1"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

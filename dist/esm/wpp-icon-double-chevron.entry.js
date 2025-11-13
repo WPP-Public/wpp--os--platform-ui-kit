@@ -25,7 +25,7 @@ const WppIconDoubleChevron = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-double-chevron", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: DoubleChevronDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-double-chevron-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-double-chevron-v3-3-1"; }
 };
 WppIconDoubleChevron.style = wppIconCss;
 

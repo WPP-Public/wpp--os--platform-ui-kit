@@ -5894,12 +5894,12 @@ const WppDatepicker$1 = /*@__PURE__*/ proxyCustomElement(class WppDatepicker ext
     return this._locales.firstDay ?? 1; // Default to Monday (ISO 8601) if no valid value is found
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, datepicker-container, icon-calendar, datepicker-input, icon-cross, message" }, this.labelConfig?.text && (h("wpp-label-v3-3-0", { class: "label", htmlFor: this.name, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.containerClasses(), id: "container", part: "datepicker-container" }, h("input", { id: "datepicker", type: "text", class: this.inputCssClasses(), onInput: this.onInput, onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, disabled: this.disabled, readOnly: !this.range && !this.isDefaultDateFormat(), placeholder: this.placeholder ||
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, datepicker-container, icon-calendar, datepicker-input, icon-cross, message" }, this.labelConfig?.text && (h("wpp-label-v3-3-1", { class: "label", htmlFor: this.name, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.containerClasses(), id: "container", part: "datepicker-container" }, h("input", { id: "datepicker", type: "text", class: this.inputCssClasses(), onInput: this.onInput, onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, disabled: this.disabled, readOnly: !this.range && !this.isDefaultDateFormat(), placeholder: this.placeholder ||
         (this.range
           ? `${this._locales.dateFormat}${DATES_SEPARATOR}${this._locales.dateFormat}`
-          : `${this._locales.dateFormat}`), ref: inputRef => (this.inputRef = inputRef), autocomplete: "off", part: "datepicker-input", title: "" }), h("wpp-icon-calendar-v3-3-0", { onClick: this.handleClickCalendarIcon, class: this.iconCalendarCssClasses(), part: "icon-calendar", color: "inherit" }), h("div", { onBlur: this.handleBlurPortal, onFocus: () => clearTimeout(this.hideTimer), ...(this.hasPresets() ? { tabIndex: 0 } : {}), ref: ref => (this.portalRef = ref), class: this.portalClasses() }, this.hasPresets() && (h("div", { class: "wpp-presets-container" }, h("div", { class: "wpp-presets-list" }, this.presets.map((preset) => (h("wpp-list-item-v3-3-0", { onMouseEnter: () => this.handlePreviewPreset(preset.value), onMouseLeave: this.handleMouseLeavePreset, onWppChangeListItem: () => this.handleClickPreset(preset), class: "wpp-presets-item" }, h("wpp-typography-v3-3-0", { type: "s-body", slot: "label" }, preset.label))))), h("div", { class: "wpp-presets-footer" })))), !!this.lastValidDate && (h("wpp-icon-cross-v3-3-0", { class: this.iconCrossCssClasses(), "aria-label": "Erase date", onClick: this.handleClickIconCross, part: "icon-cross" })), this.message && (h("wpp-inline-message-v3-3-0", { class: "inline-message", message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })))));
+          : `${this._locales.dateFormat}`), ref: inputRef => (this.inputRef = inputRef), autocomplete: "off", part: "datepicker-input", title: "" }), h("wpp-icon-calendar-v3-3-1", { onClick: this.handleClickCalendarIcon, class: this.iconCalendarCssClasses(), part: "icon-calendar", color: "inherit" }), h("div", { onBlur: this.handleBlurPortal, onFocus: () => clearTimeout(this.hideTimer), ...(this.hasPresets() ? { tabIndex: 0 } : {}), ref: ref => (this.portalRef = ref), class: this.portalClasses() }, this.hasPresets() && (h("div", { class: "wpp-presets-container" }, h("div", { class: "wpp-presets-list" }, this.presets.map((preset) => (h("wpp-list-item-v3-3-1", { onMouseEnter: () => this.handlePreviewPreset(preset.value), onMouseLeave: this.handleMouseLeavePreset, onWppChangeListItem: () => this.handleClickPreset(preset), class: "wpp-presets-item" }, h("wpp-typography-v3-3-1", { type: "s-body", slot: "label" }, preset.label))))), h("div", { class: "wpp-presets-footer" })))), !!this.lastValidDate && (h("wpp-icon-cross-v3-3-1", { class: this.iconCrossCssClasses(), "aria-label": "Erase date", onClick: this.handleClickIconCross, part: "icon-cross" })), this.message && (h("wpp-inline-message-v3-3-1", { class: "inline-message", message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })))));
   }
-  static get registryIs() { return "wpp-datepicker-v3-3-0"; }
+  static get registryIs() { return "wpp-datepicker-v3-3-1"; }
   get host() { return this; }
   static get watchers() { return {
     "lastValidDate": ["updateDatepickerClearButton"],
@@ -5912,7 +5912,7 @@ const WppDatepicker$1 = /*@__PURE__*/ proxyCustomElement(class WppDatepicker ext
     "locales": ["onUpdateLocales"]
   }; }
   static get style() { return wppDatepickerCss; }
-}, [1, "wpp-datepicker", "wpp-datepicker-v3-3-0", {
+}, [1, "wpp-datepicker", "wpp-datepicker-v3-3-1", {
     "range": [4],
     "toggleSelected": [4, "toggle-selected"],
     "value": [1025],
@@ -5952,104 +5952,104 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-datepicker-v3-3-0", "wpp-action-button-v3-3-0", "wpp-checkbox-v3-3-0", "wpp-icon-calendar-v3-3-0", "wpp-icon-chevron-v3-3-0", "wpp-icon-cross-v3-3-0", "wpp-icon-dash-v3-3-0", "wpp-icon-error-v3-3-0", "wpp-icon-info-message-v3-3-0", "wpp-icon-success-v3-3-0", "wpp-icon-tick-v3-3-0", "wpp-icon-warning-v3-3-0", "wpp-inline-message-v3-3-0", "wpp-internal-label-v3-3-0", "wpp-internal-tooltip-v3-3-0", "wpp-label-v3-3-0", "wpp-list-item-v3-3-0", "wpp-spinner-v3-3-0", "wpp-tooltip-v3-3-0", "wpp-typography-v3-3-0"];
+  const components = ["wpp-datepicker-v3-3-1", "wpp-action-button-v3-3-1", "wpp-checkbox-v3-3-1", "wpp-icon-calendar-v3-3-1", "wpp-icon-chevron-v3-3-1", "wpp-icon-cross-v3-3-1", "wpp-icon-dash-v3-3-1", "wpp-icon-error-v3-3-1", "wpp-icon-info-message-v3-3-1", "wpp-icon-success-v3-3-1", "wpp-icon-tick-v3-3-1", "wpp-icon-warning-v3-3-1", "wpp-inline-message-v3-3-1", "wpp-internal-label-v3-3-1", "wpp-internal-tooltip-v3-3-1", "wpp-label-v3-3-1", "wpp-list-item-v3-3-1", "wpp-spinner-v3-3-1", "wpp-tooltip-v3-3-1", "wpp-typography-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-datepicker-v3-3-0":
+    case "wpp-datepicker-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppDatepicker$1);
       }
       break;
-    case "wpp-action-button-v3-3-0":
+    case "wpp-action-button-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-checkbox-v3-3-0":
+    case "wpp-checkbox-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-calendar-v3-3-0":
+    case "wpp-icon-calendar-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-chevron-v3-3-0":
+    case "wpp-icon-chevron-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-cross-v3-3-0":
+    case "wpp-icon-cross-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-dash-v3-3-0":
+    case "wpp-icon-dash-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-error-v3-3-0":
+    case "wpp-icon-error-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-info-message-v3-3-0":
+    case "wpp-icon-info-message-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-success-v3-3-0":
+    case "wpp-icon-success-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-tick-v3-3-0":
+    case "wpp-icon-tick-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-warning-v3-3-0":
+    case "wpp-icon-warning-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-inline-message-v3-3-0":
+    case "wpp-inline-message-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-label-v3-3-0":
+    case "wpp-internal-label-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-0":
+    case "wpp-internal-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-label-v3-3-0":
+    case "wpp-label-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-list-item-v3-3-0":
+    case "wpp-list-item-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v3-3-0":
+    case "wpp-spinner-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v3-3-0":
+    case "wpp-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v3-3-0":
+    case "wpp-typography-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

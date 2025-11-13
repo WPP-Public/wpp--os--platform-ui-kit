@@ -38,8 +38,8 @@ export const SideModal = (args) => {
   const { handleOpenModal, handleCloseModal, handleActionModal } = getModalHandlers();
   return html `
     <div style="height: 1200px">
-      <wpp-button-v3-3-0 @click=${handleOpenModal}>Open Side Modal</wpp-button-v3-3-0>
-      <wpp-side-modal-v3-3-0
+      <wpp-button-v3-3-1 @click=${handleOpenModal}>Open Side Modal</wpp-button-v3-3-1>
+      <wpp-side-modal-v3-3-1
         @wppSideModalClose=${() => {
     console.log('Called wppSideModalClose');
     handleCloseModal();
@@ -60,19 +60,19 @@ export const SideModal = (args) => {
         <div slot="header">Title</div>
         ${args.withActions
     ? html ` <div slot="actions" style="display:flex; justify-content: flex-end;">
-              <wpp-button-v3-3-0
+              <wpp-button-v3-3-1
                 variant="secondary"
                 style="margin-right: 12px;"
                 .width=${'86px'}
                 @click=${handleCloseModal}
                 >Close
-              </wpp-button-v3-3-0>
-              <wpp-button-v3-3-0 variant="primary" .width=${'86px'} @click=${handleActionModal}>
+              </wpp-button-v3-3-1>
+              <wpp-button-v3-3-1 variant="primary" .width=${'86px'} @click=${handleActionModal}>
                 Action
-              </wpp-button-v3-3-0>
+              </wpp-button-v3-3-1>
             </div>`
     : null}
-      </wpp-side-modal-v3-3-0>
+      </wpp-side-modal-v3-3-1>
     </div>
   `;
 };
@@ -88,8 +88,8 @@ export const SideModalWithActionsConfig = (args) => {
   const { handleOpenModal, handleCloseModal } = getModalHandlers();
   return html `
     <div style="height: 1200px">
-      <wpp-button-v3-3-0 @click=${handleOpenModal}>Open Side Modal with Actions Config</wpp-button-v3-3-0>
-      <wpp-side-modal-v3-3-0
+      <wpp-button-v3-3-1 @click=${handleOpenModal}>Open Side Modal with Actions Config</wpp-button-v3-3-1>
+      <wpp-side-modal-v3-3-1
         @wppSideModalClose=${() => {
     console.log('Called wppSideModalClose');
     handleCloseModal();
@@ -106,7 +106,7 @@ export const SideModalWithActionsConfig = (args) => {
       >
         <div slot="header">Title</div>
         <p slot="body">This side modal demonstrates the use of actionsConfig to dynamically render buttons.</p>
-      </wpp-side-modal-v3-3-0>
+      </wpp-side-modal-v3-3-1>
     </div>
   `;
 };

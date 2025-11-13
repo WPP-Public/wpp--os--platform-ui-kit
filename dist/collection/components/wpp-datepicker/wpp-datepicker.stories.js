@@ -35,7 +35,7 @@ export const Single = {
     if (!args.view) {
       args.view = 'days';
     }
-    return html `<wpp-datepicker-v3-3-0
+    return html `<wpp-datepicker-v3-3-1
       .range=${args.range}
       .messageType="${args.messageType}"
       .message="${args.message}"
@@ -51,7 +51,7 @@ export const Single = {
       .view="${args.view}"
       @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
       @wppChange="${(e) => console.log('wppChange', e.detail)}"
-    ></wpp-datepicker-v3-3-0>`;
+    ></wpp-datepicker-v3-3-1>`;
   },
   args: {
     range: false,
@@ -91,7 +91,7 @@ Single.parameters = {
   controls: { exclude: ['range'] },
 };
 export const Range = {
-  render: args => html `<wpp-datepicker-v3-3-0
+  render: args => html `<wpp-datepicker-v3-3-1
       .range=${args.range}
       .messageType="${args.messageType}"
       .message="${args.message}"
@@ -106,7 +106,7 @@ export const Range = {
       .toggleSelected="${args.toggleSelected}"
       @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
       @wppChange="${(e) => console.log('wppChange', e.detail)}"
-    ></wpp-datepicker-v3-3-0>`,
+    ></wpp-datepicker-v3-3-1>`,
   args: {
     range: true,
     static: false,
@@ -144,7 +144,7 @@ Range.parameters = {
   controls: { exclude: ['range'] },
 };
 export const RangeWithPresets = {
-  render: args => html `<wpp-datepicker-v3-3-0
+  render: args => html `<wpp-datepicker-v3-3-1
       .range=${args.range}
       .messageType="${args.messageType}"
       .message="${args.message}"
@@ -161,7 +161,7 @@ export const RangeWithPresets = {
       .toggleSelected="${args.toggleSelected}"
       @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
       @wppChange="${(e) => console.log('wppChange', e.detail)}"
-    ></wpp-datepicker-v3-3-0>`,
+    ></wpp-datepicker-v3-3-1>`,
   args: {
     range: true,
     static: false,
@@ -215,7 +215,7 @@ export const DependableDatepickers = {
     };
     return html `
       <div>
-        <wpp-datepicker-v3-3-0
+        <wpp-datepicker-v3-3-1
           style="margin-right: 40px;"
           .range=${args.range}
           .messageType="${args.messageType}"
@@ -232,9 +232,9 @@ export const DependableDatepickers = {
           .view="${args.view}"
           @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
           @wppChange="${handleDateChange}"
-        ></wpp-datepicker-v3-3-0>
+        ></wpp-datepicker-v3-3-1>
 
-        <wpp-datepicker-v3-3-0
+        <wpp-datepicker-v3-3-1
           id="second-datepicker"
           .range=${args.range}
           .messageType="${args.messageType}"
@@ -249,7 +249,7 @@ export const DependableDatepickers = {
           .locale="${args.locale}"
           .toggleSelected="${args.toggleSelected}"
           .view="${args.view}"
-        ></wpp-datepicker-v3-3-0>
+        ></wpp-datepicker-v3-3-1>
       </div>
     `;
   },

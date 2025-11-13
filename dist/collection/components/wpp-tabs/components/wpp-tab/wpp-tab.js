@@ -68,7 +68,7 @@ export class WppTab {
     return (h(Host, { class: this.hostCssClasses(), tabIndex: this.tabIndex, exportparts: "wrapper, inner, counter", onClick: this.handleClickTab, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onBlur: this.onBlur }, h("div", { class: this.cssClasses(), role: "option", "aria-selected": this.active ? 'true' : 'false', id: this.value, part: "wrapper" }, this.icon && h(transformToVersionedTag(this.icon), { className: 'wpp-tab-icon' }), h("slot", { part: "inner" }), this.counter > 0 && h("div", { class: "counter", part: "counter" }, `(${this.counter})`))));
   }
   static get is() { return "wpp-tab"; }
-  static get registryIs() { return "wpp-tab-v3-3-0"; }
+  static get registryIs() { return "wpp-tab-v3-3-1"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

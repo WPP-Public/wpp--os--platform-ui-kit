@@ -19,7 +19,7 @@ const WppDivider = class {
   render() {
     return (h(Host, { class: this.hostCssClasses(), role: "separator", "aria-orientation": this.vertical ? 'vertical' : 'horizontal', exportparts: "body" }, h("div", { class: this.dividerCssClasses(), part: "body" })));
   }
-  static get registryIs() { return "wpp-divider-v3-3-0"; }
+  static get registryIs() { return "wpp-divider-v3-3-1"; }
   get host() { return getElement(this); }
 };
 WppDivider.style = wppDividerCss;

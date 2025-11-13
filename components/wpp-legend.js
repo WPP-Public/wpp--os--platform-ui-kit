@@ -20,11 +20,11 @@ const WppLegend$1 = /*@__PURE__*/ proxyCustomElement(class WppLegend extends HTM
     this.color = 'var(--wpp-dataviz-color-cat-neutral-1)';
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("svg", { class: this.dotCssClasses() }, h("circle", { cx: 6, cy: 6, r: 5, fill: this.color })), this.label && (h("wpp-typography-v3-3-0", { color: this.disabled ? 'var(--wpp-text-color-disabled)' : 'var(--wpp-grey-color-1000)', type: "xs-body" }, this.label))));
+    return (h(Host, { class: this.hostCssClasses() }, h("svg", { class: this.dotCssClasses() }, h("circle", { cx: 6, cy: 6, r: 5, fill: this.color })), this.label && (h("wpp-typography-v3-3-1", { color: this.disabled ? 'var(--wpp-text-color-disabled)' : 'var(--wpp-grey-color-1000)', type: "xs-body" }, this.label))));
   }
-  static get registryIs() { return "wpp-legend-v3-3-0"; }
+  static get registryIs() { return "wpp-legend-v3-3-1"; }
   static get style() { return wppLegendCss; }
-}, [1, "wpp-legend", "wpp-legend-v3-3-0", {
+}, [1, "wpp-legend", "wpp-legend-v3-3-1", {
     "label": [1],
     "disabled": [4],
     "color": [1]
@@ -33,14 +33,14 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-legend-v3-3-0", "wpp-typography-v3-3-0"];
+  const components = ["wpp-legend-v3-3-1", "wpp-typography-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-legend-v3-3-0":
+    case "wpp-legend-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppLegend$1);
       }
       break;
-    case "wpp-typography-v3-3-0":
+    case "wpp-typography-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

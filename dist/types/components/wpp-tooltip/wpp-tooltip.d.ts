@@ -10,7 +10,6 @@ export declare class WppTooltip {
   private contentEl?;
   private customContentEl?;
   private tippyInstance?;
-  private arrowColor;
   private readonly FORBIDDEN_PREFIX;
   private readonly ALLOWED_TAGS;
   host: HTMLWppTooltipElement;
@@ -90,7 +89,6 @@ export declare class WppTooltip {
   private arrowSVG;
   private createTippyInstance;
   private getArrowBgColor;
-  private getCssValues;
   private hostCssClasses;
   private contentWrapperCssClasses;
   render(): any;

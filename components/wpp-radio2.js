@@ -120,9 +120,9 @@ const WppRadio = /*@__PURE__*/ proxyCustomElement(class WppRadio extends HTMLEle
   }
   render() {
     if (this.decorative) {
-      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "label, content, inner", name: this.name }, h("wpp-label-v3-3-0", { class: this.labelCssClasses(), part: "label" }, h("div", { class: "circle", part: "circle" }))));
+      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "label, content, inner", name: this.name }, h("wpp-label-v3-3-1", { class: this.labelCssClasses(), part: "label" }, h("div", { class: "circle", part: "circle" }))));
     }
-    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "label, content, inner", name: this.name }, h("wpp-label-v3-3-0", { class: this.labelCssClasses(), typography: "s-body", htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, onClick: this.onClick, tooltipConfig: {
+    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "label, content, inner", name: this.name }, h("wpp-label-v3-3-1", { class: this.labelCssClasses(), typography: "s-body", htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, onClick: this.onClick, tooltipConfig: {
         ...{
           onCreate: (instance) => {
             this.tippyInstance = instance;
@@ -132,10 +132,10 @@ const WppRadio = /*@__PURE__*/ proxyCustomElement(class WppRadio extends HTMLEle
         ...this.labelTooltipConfig,
       }, part: "label" }, h("input", { class: this.inputCssClasses(), type: "radio", name: this.name, id: this.name, value: this.value, disabled: this.disabled, checked: this.checked, required: this.required, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-hidden": this.disabled ? 'true' : null, "aria-required": this.required.toString(), tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "circle", part: "circle" }))));
   }
-  static get registryIs() { return "wpp-radio-v3-3-0"; }
+  static get registryIs() { return "wpp-radio-v3-3-1"; }
   get host() { return this; }
   static get style() { return wppRadioCss; }
-}, [1, "wpp-radio", "wpp-radio-v3-3-0", {
+}, [1, "wpp-radio", "wpp-radio-v3-3-1", {
     "name": [1],
     "value": [1032],
     "checked": [1540],
@@ -157,44 +157,44 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-radio-v3-3-0", "wpp-icon-error-v3-3-0", "wpp-icon-warning-v3-3-0", "wpp-internal-label-v3-3-0", "wpp-internal-tooltip-v3-3-0", "wpp-label-v3-3-0", "wpp-tooltip-v3-3-0", "wpp-typography-v3-3-0"];
+  const components = ["wpp-radio-v3-3-1", "wpp-icon-error-v3-3-1", "wpp-icon-warning-v3-3-1", "wpp-internal-label-v3-3-1", "wpp-internal-tooltip-v3-3-1", "wpp-label-v3-3-1", "wpp-tooltip-v3-3-1", "wpp-typography-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-radio-v3-3-0":
+    case "wpp-radio-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppRadio);
       }
       break;
-    case "wpp-icon-error-v3-3-0":
+    case "wpp-icon-error-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-warning-v3-3-0":
+    case "wpp-icon-warning-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-internal-label-v3-3-0":
+    case "wpp-internal-label-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-0":
+    case "wpp-internal-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-label-v3-3-0":
+    case "wpp-label-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v3-3-0":
+    case "wpp-tooltip-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v3-3-0":
+    case "wpp-typography-v3-3-1":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

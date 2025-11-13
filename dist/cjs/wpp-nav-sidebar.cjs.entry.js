@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const utils = require('./utils-2b192dec.js');
+const utils = require('./utils-6189d8be.js');
 const WrappedSlot = require('./WrappedSlot-ab2104d8.js');
 const consts = require('./consts-779fd4ec.js');
 
@@ -91,7 +91,7 @@ const WppNavSidebar = class {
   render() {
     return (index.h(index.Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "nav-sidebar, body, header-wrapper, header, ws-wrapper, ws-inner" }, index.h("aside", { class: this.asideCssClasses(), part: "nav-sidebar" }, index.h("div", { class: "nav-wrapper", part: "body" }, index.h(WrappedSlot.WrappedSlot, { wrapperClass: "title-wrapper", name: "header" }), index.h(WrappedSlot.WrappedSlot, { wrapperClass: "items-wrapper" })))));
   }
-  static get registryIs() { return "wpp-nav-sidebar-v3-3-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-v3-3-1"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "activePath": ["handleActivePathChange"]

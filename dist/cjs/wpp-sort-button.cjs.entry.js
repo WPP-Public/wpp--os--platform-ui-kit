@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const utils = require('./utils-2b192dec.js');
+const utils = require('./utils-6189d8be.js');
 const common = require('./common-ee802540.js');
 require('./consts-779fd4ec.js');
 
@@ -72,9 +72,9 @@ const WppSortButton = class {
     this.validAriaProps = utils.getAriaProps(this.ariaProps);
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "button, icon, text, inner", onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, index.h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled, name: this.name, type: "button", "data-testid": "wppSortButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps, part: "button" }, index.h("wpp-icon-sort-v3-3-0", { class: "icon", part: "icon" }), index.h("span", { class: "text", part: "text" }, index.h("slot", { part: "inner" })))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "button, icon, text, inner", onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, index.h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled, name: this.name, type: "button", "data-testid": "wppSortButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps, part: "button" }, index.h("wpp-icon-sort-v3-3-1", { class: "icon", part: "icon" }), index.h("span", { class: "text", part: "text" }, index.h("slot", { part: "inner" })))));
   }
-  static get registryIs() { return "wpp-sort-button-v3-3-0"; }
+  static get registryIs() { return "wpp-sort-button-v3-3-1"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "ariaProps": ["onUpdateAriaProps"]

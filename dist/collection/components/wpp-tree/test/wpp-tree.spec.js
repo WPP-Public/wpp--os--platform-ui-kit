@@ -118,21 +118,21 @@ describe('wpp-tree', () => {
   it('should render tree component', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v3-3-0", { data: treeData }),
+      template: () => h("wpp-tree-v3-3-1", { data: treeData }),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('should render multiple tree component', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v3-3-0", { data: treeData, multiple: true }),
+      template: () => h("wpp-tree-v3-3-1", { data: treeData, multiple: true }),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('should render tree component with filtered data', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v3-3-0", { data: treeData, search: "cars" }),
+      template: () => h("wpp-tree-v3-3-1", { data: treeData, search: "cars" }),
     });
     expect(page.root).toMatchSnapshot();
   });

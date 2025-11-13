@@ -36,14 +36,14 @@ export const Input = {
     return html `
       <div style="display: flex; gap: 20px;">
         <!-- Inline Edit with inputWidth -->
-        <wpp-inline-edit-v3-3-0
+        <wpp-inline-edit-v3-3-1
           .value="${value}"
           .placeholder="${args.placeholder}"
           .mode="${mode}"
           .inputWidth="${args.inputWidth}"
           @wppModeChange="${handleInputModeChange}"
         >
-          <wpp-input-v3-3-0
+          <wpp-input-v3-3-1
             size="s"
             slot="form-element"
             .value="${value}"
@@ -52,22 +52,22 @@ export const Input = {
             .inputWidth="${args.inputWidth}"
             @wppChange="${handleInputValueChange}"
           >
-        </wpp-inline-edit-v3-3-0>
+        </wpp-inline-edit-v3-3-1>
 
         <!-- Inline Edit without inputWidth (default width) -->
-        <wpp-inline-edit-v3-3-0
+        <wpp-inline-edit-v3-3-1
           .value="${valueDefault}"
           .placeholder="${args.placeholder}"
           .mode="${modeDefault}"
           @wppModeChange="${handleInputModeChangeDefault}"
         >
-          <wpp-input-v3-3-0
+          <wpp-input-v3-3-1
             size="s"
             slot="form-element"
             .value="${valueDefault}"
             .placeholder="${args.placeholder}"
-          ></wpp-input-v3-3-0>
-        </wpp-inline-edit-v3-3-0>
+          ></wpp-input-v3-3-1>
+        </wpp-inline-edit-v3-3-1>
       </div>
     `;
   },
@@ -103,7 +103,7 @@ export const TextArea = {
     return html `
       <div style="display: flex; gap: 20px;">
         <!-- TextArea with inputWidth -->
-        <wpp-inline-edit-v3-3-0
+        <wpp-inline-edit-v3-3-1
           .value="${value}"
           .placeholder="${args.placeholder}"
           .mode="${mode}"
@@ -111,29 +111,29 @@ export const TextArea = {
           .dropdownConfig="${{ placement: 'bottom-start' }}"
           @wppModeChange="${handleTextareaModeChange}"
         >
-          <wpp-textarea-input-v3-3-0
+          <wpp-textarea-input-v3-3-1
             slot="form-element"
             .value="${value}"
             .placeholder="${args.placeholder}"
             @wppChange="${handleTextareaValueChange}"
-          ></wpp-textarea-input-v3-3-0>
-        </wpp-inline-edit-v3-3-0>
+          ></wpp-textarea-input-v3-3-1>
+        </wpp-inline-edit-v3-3-1>
 
         <!-- TextArea without inputWidth (default width) -->
-        <wpp-inline-edit-v3-3-0
+        <wpp-inline-edit-v3-3-1
           .value="${valueDefault}"
           .placeholder="${args.placeholder}"
           .mode="${modeDefault}"
           .dropdownConfig="${{ placement: 'bottom-start' }}"
           @wppModeChange="${handleTextareaModeChangeDefault}"
         >
-          <wpp-textarea-input-v3-3-0
+          <wpp-textarea-input-v3-3-1
             slot="form-element"
             .value="${valueDefault}"
             .placeholder="${args.placeholder}"
             @wppChange="${handleTextareaValueChangeDefault}"
-          ></wpp-textarea-input-v3-3-0>
-        </wpp-inline-edit-v3-3-0>
+          ></wpp-textarea-input-v3-3-1>
+        </wpp-inline-edit-v3-3-1>
       </div>
     `;
   },
@@ -172,12 +172,12 @@ export const WithServerValidations = {
     };
     return html `
     <div>
-      <wpp-typography-v3-3-0 style="margin-bottom: 20px;">
+      <wpp-typography-v3-3-1 style="margin-bottom: 20px;">
         The example simulates server validations for the input when the "Confirm" button is clicked. The text needs to be at least 5 characters long.
-      </wpp-typography-v3-3-0>
+      </wpp-typography-v3-3-1>
       <div style="display: flex; gap: 20px;">
         <!-- Inline Edit with inputWidth -->
-        <wpp-inline-edit-v3-3-0
+        <wpp-inline-edit-v3-3-1
           .value="${value}"
           .placeholder="${args.placeholder}"
           .mode="${mode}"
@@ -185,7 +185,7 @@ export const WithServerValidations = {
           @wppModeChange="${handleInputModeChange}"
           @wppConfirm=${onConfirm}
         >
-          <wpp-input-v3-3-0
+          <wpp-input-v3-3-1
             size="s"
             slot="form-element"
             .value="${value}"
@@ -194,7 +194,7 @@ export const WithServerValidations = {
             .inputWidth="${args.inputWidth}"
             @wppChange="${handleInputValueChange}"
           >
-        </wpp-inline-edit-v3-3-0>
+        </wpp-inline-edit-v3-3-1>
       </div>
     </div>
     `;

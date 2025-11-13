@@ -1,12 +1,13 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
-import { m as menuListConfig, h as hideAll, i as isEqual_1 } from './menuListConfig.js';
-import { b as isEventTargetContained, k as transformToVersionedTag, w as getHighestContainerInDOM } from './utils.js';
+import { m as menuListConfig, i as isEqual_1 } from './menuListConfig.js';
+import { k as transformToVersionedTag, w as getHighestContainerInDOM } from './utils.js';
 import { W as WPP_LIST_CLASSNAME, C as CONTEXT_ITEM_TAG, T as TOPBAR_NAVIGATION_ITEM_TAG, M as MENU_BAR_ROLE, a as MENU_ROLE } from './constants.js';
 import { Z as Z_INDEX } from './consts.js';
 
 const defaultDropdownConfig = {
-  trigger: 'click',
+  trigger: 'manual',
   placement: 'bottom-start',
+  hideOnClick: false,
   offset: [0, 4],
   zIndex: Z_INDEX.CONTEXT_MENU,
   popperOptions: {
@@ -47,7 +48,6 @@ const WppMenuContext = /*@__PURE__*/ proxyCustomElement(class WppMenuContext ext
     this.__registerHost();
     this.wppBlur = createEvent(this, "wppBlur", 1);
     this.wppFocus = createEvent(this, "wppFocus", 1);
-    this.isTriggerDisabled = false;
     this.getContentRef = (node) => {
       this.contentRef = node;
     };
@@ -103,6 +103,12 @@ const WppMenuContext = /*@__PURE__*/ proxyCustomElement(class WppMenuContext ext
             return;
           this.isInComponent = false;
         },
+        onClickOutside: instance => {
+          // This function handles cases when the user clicks anywhere else but on
+          // the trigger element or on the dropdowns. Since the nested menu-contexts
+          // are appended to the parent, they are considered part of the main dropdown
+          instance.hide();
+        },
       });
     };
     this.handleAriaExpandedOnTrigger = (type) => {
@@ -128,7 +134,19 @@ const WppMenuContext = /*@__PURE__*/ proxyCustomElement(class WppMenuContext ext
         this.tippyInstance.popper.contains(event.relatedTarget))
         return;
       this.isInComponent = false;
-      this.tippyInstance.hide();
+    };
+    this.handleClickTrigger = (event) => {
+      event.stopPropagation();
+      const isTriggerDisabled = !!((this.triggerElement?.hasAttribute('disabled') && this.triggerElement?.getAttribute('disabled') !== 'false') ||
+        this.triggerElement?.classList.contains('disabled'));
+      if (this.isNestedContext || isTriggerDisabled)
+        return;
+      if (!this.tippyInstance.state.isShown) {
+        this.tippyInstance.show();
+      }
+      else {
+        this.tippyInstance.hide();
+      }
     };
     this.menuCssClasses = () => ({
       'wpp-menu-context': true,
@@ -162,12 +180,6 @@ const WppMenuContext = /*@__PURE__*/ proxyCustomElement(class WppMenuContext ext
       return;
     if (event.detail?.isAutocompleteBasedEvent)
       return;
-    this.isTriggerDisabled = !!((this.triggerElement?.hasAttribute('disabled') && this.triggerElement?.getAttribute('disabled') !== 'false') ||
-      this.triggerElement?.classList.contains('disabled'));
-    if (this.isTriggerDisabled && isEventTargetContained(this.host, event)) {
-      event.stopPropagation();
-      return;
-    }
     const listItem = event
       .composedPath()
       .find(el => el.tagName?.includes(CONTEXT_ITEM_TAG) ||
@@ -180,7 +192,13 @@ const WppMenuContext = /*@__PURE__*/ proxyCustomElement(class WppMenuContext ext
       [MENU_BAR_ROLE, MENU_ROLE].includes(currentRole || '') ||
       (disabled !== null && disabled !== 'false'))
       return;
-    hideAll();
+    const target = event.target;
+    if (target.isExtended) {
+      return;
+    }
+    if (this.tippyInstance && this.tippyInstance?.state.isVisible) {
+      this.tippyInstance.hide();
+    }
   }
   updateDropdownConfig(newConfig, oldConfig) {
     if (!isEqual_1(newConfig, oldConfig)) {
@@ -241,16 +259,16 @@ const WppMenuContext = /*@__PURE__*/ proxyCustomElement(class WppMenuContext ext
     const style = {
       '--custom-menu-context-width': this.listWidth === 'auto' ? '' : this.listWidth,
     };
-    return (h(Host, { class: this.menuCssClasses(), exportparts: "trigger, list-wrapper, list, inner", onFocusout: this.onFocusout }, h("div", { ref: this.getTriggerRef, class: this.triggerWrapperCssClasses() }, h("slot", { name: "trigger-element", part: "trigger" })), h("div", { class: "wpp-list-wrapper", part: "list-wrapper", ref: ref => (this.wppListWrapperRef = ref) }, h("ul", { class: this.listWrapperCssClasses(), style: style, ref: this.getContentRef, role: MENU_ROLE, part: "list" }, h("slot", { part: "inner" })))));
+    return (h(Host, { class: this.menuCssClasses(), exportparts: "trigger, list-wrapper, list, inner", onFocusout: this.onFocusout }, h("div", { ref: this.getTriggerRef, onClick: this.handleClickTrigger, class: this.triggerWrapperCssClasses() }, h("slot", { name: "trigger-element", part: "trigger" })), h("div", { class: "wpp-list-wrapper", part: "list-wrapper", ref: ref => (this.wppListWrapperRef = ref) }, h("ul", { class: this.listWrapperCssClasses(), style: style, ref: this.getContentRef, role: MENU_ROLE, part: "list" }, h("slot", { part: "inner" })))));
   }
-  static get registryIs() { return "wpp-menu-context-v3-3-0"; }
+  static get registryIs() { return "wpp-menu-context-v3-3-1"; }
   get host() { return this; }
   static get watchers() { return {
     "dropdownConfig": ["updateDropdownConfig"],
     "isInComponent": ["updateIsInComponent"]
   }; }
   static get style() { return wppMenuContextCss; }
-}, [6, "wpp-menu-context", "wpp-menu-context-v3-3-0", {
+}, [6, "wpp-menu-context", "wpp-menu-context-v3-3-1", {
     "listWidth": [513, "list-width"],
     "dropdownConfig": [1040],
     "appendToListWrapper": [4, "append-to-list-wrapper"],
@@ -261,14 +279,14 @@ const WppMenuContext = /*@__PURE__*/ proxyCustomElement(class WppMenuContext ext
     "isNestedContext": [32],
     "hidden": [32],
     "isInComponent": [32]
-  }, [[10, "wppChangeListItem", "handleClick"], [10, "wppActiveTopbarItemChange", "handleClick"], [10, "wppActiveNavItemChanged", "handleClick"], [2, "click", "handleClick"]]]);
+  }, [[10, "wppChangeListItem", "handleClick"], [10, "wppActiveTopbarItemChange", "handleClick"], [10, "wppActiveNavItemChanged", "handleClick"]]]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-menu-context-v3-3-0"];
+  const components = ["wpp-menu-context-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-menu-context-v3-3-0":
+    case "wpp-menu-context-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppMenuContext);
       }

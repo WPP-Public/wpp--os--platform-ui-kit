@@ -25,7 +25,7 @@ export default {
 };
 export const CheckboxGroup = {
   render: args => html `
-    <wpp-checkbox-group-v3-3-0
+    <wpp-checkbox-group-v3-3-1
       .value="${args.value}"
       .required=${args.required}
       .labelConfig=${args.labelConfig}
@@ -34,31 +34,31 @@ export const CheckboxGroup = {
       .messageType="${args.messageType}"
       .direction="${args.direction}"
     >
-      <wpp-checkbox-v3-3-0
+      <wpp-checkbox-v3-3-1
         .required=${true}
         .value="${'option-1'}"
         .labelConfig=${{ text: 'Option-1' }}
         .name=${'option 1'}
-      ></wpp-checkbox-v3-3-0>
-      <wpp-checkbox-v3-3-0
+      ></wpp-checkbox-v3-3-1>
+      <wpp-checkbox-v3-3-1
         .required=${true}
         .value="${'option-2'}"
         .labelConfig=${{ text: 'Option-2' }}
         .name=${'option 2'}
-      ></wpp-checkbox-v3-3-0>
-      <wpp-checkbox-v3-3-0
+      ></wpp-checkbox-v3-3-1>
+      <wpp-checkbox-v3-3-1
         .required=${true}
         .value="${'option-3'}"
         .labelConfig=${{ text: 'Option-3' }}
         .name=${'option 3'}
-      ></wpp-checkbox-v3-3-0>
-      <wpp-checkbox-v3-3-0
+      ></wpp-checkbox-v3-3-1>
+      <wpp-checkbox-v3-3-1
         .required=${true}
         .value="${'option-4'}"
         .labelConfig=${{ text: 'Option-4' }}
         .name=${'option 4'}
-      ></wpp-checkbox-v3-3-0>
-    </wpp-checkbox-group-v3-3-0>
+      ></wpp-checkbox-v3-3-1>
+    </wpp-checkbox-group-v3-3-1>
   `,
   args: {
     value: ['option-1', 'option-2'],

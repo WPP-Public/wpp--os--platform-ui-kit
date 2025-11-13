@@ -1,19 +1,19 @@
 import { r as registerInstance, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { p as processMarkdownValue, t as turndownService } from './config-5578eb3c.js';
+import { p as processMarkdownValue, t as turndownService } from './config-fe6cf217.js';
 import { f as formats, s as sources, Q as Quill } from './types-112bed55.js';
-import { k as transformToVersionedTag } from './utils-d423b01f.js';
-import './wpp-icon-unordered-list-1985dd37.js';
+import { k as transformToVersionedTag } from './utils-b49ad9c8.js';
+import './wpp-icon-unordered-list-23629619.js';
 import './WppIcon-f4802cc9.js';
-import './wpp-icon-video-clip-b134a3cd.js';
+import './wpp-icon-video-clip-1be5f4c1.js';
 import './_commonjsHelpers-ba3f0406.js';
-import './wpp-progress-indicator-1470c3b6.js';
-import './wpp-icon-chevron-3780b470.js';
-import './wpp-icon-gallery-64c20319.js';
+import './wpp-progress-indicator-83bf9602.js';
+import './wpp-icon-chevron-d5e8c4f1.js';
+import './wpp-icon-gallery-e33b249b.js';
 import './lodash-66b76943.js';
-import './wpp-action-button-40484a42.js';
+import './wpp-action-button-aefa3ba5.js';
 import './common-69c8ea89.js';
 import './WrappedSlot-2ee5325a.js';
-import './wpp-input-9437c445.js';
+import './wpp-input-90dc8d43.js';
 import './turndown.browser.es-9f6d9c98.js';
 import './consts-5bf9c29f.js';
 
@@ -182,9 +182,9 @@ const WppRichtextView = class {
     this.setValue(newValue);
   }
   render() {
-    return (h(Host, null, h("wpp-quill-styles-v3-3-0", null), h("wpp-richtext-common-styles-v3-3-0", null), h("div", { ref: (el) => (this.containerElement = el), class: this.preserveWhitespace ? 'preserve-whitespace' : '' })));
+    return (h(Host, null, h("wpp-quill-styles-v3-3-1", null), h("wpp-richtext-common-styles-v3-3-1", null), h("div", { ref: (el) => (this.containerElement = el), class: this.preserveWhitespace ? 'preserve-whitespace' : '' })));
   }
-  static get registryIs() { return "wpp-richtext-view-v3-3-0"; }
+  static get registryIs() { return "wpp-richtext-view-v3-3-1"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "styles": ["updateStyle"],

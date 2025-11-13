@@ -22,7 +22,7 @@ export class WppIconChevron {
     return (h(WppIcon, { name: "wpp-icon-chevron", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: ChevronDirectionIconPath[this.direction], stroke: "currentColor", "stroke-width": "2", "stroke-miterlimit": "10", "stroke-linecap": "round", "stroke-linejoin": "round" })));
   }
   static get is() { return "wpp-icon-chevron"; }
-  static get registryIs() { return "wpp-icon-chevron-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-chevron-v3-3-1"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

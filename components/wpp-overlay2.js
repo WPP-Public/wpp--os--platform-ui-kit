@@ -40,13 +40,13 @@ const WppOverlay = /*@__PURE__*/ proxyCustomElement(class WppOverlay extends HTM
   render() {
     return (h(Host, null, h("div", { class: this.getOverlayCssClasses(), style: { zIndex: this.zIndex.toString() }, onClick: this.handleClick })));
   }
-  static get registryIs() { return "wpp-overlay-v3-3-0"; }
+  static get registryIs() { return "wpp-overlay-v3-3-1"; }
   get host() { return this; }
   static get watchers() { return {
     "isVisible": ["handleVisibleChange"]
   }; }
   static get style() { return wppOverlayCss; }
-}, [1, "wpp-overlay", "wpp-overlay-v3-3-0", {
+}, [1, "wpp-overlay", "wpp-overlay-v3-3-1", {
     "isVisible": [4, "is-visible"],
     "zIndex": [2, "z-index"],
     "isHidden": [32]
@@ -55,9 +55,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-overlay-v3-3-0"];
+  const components = ["wpp-overlay-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-overlay-v3-3-0":
+    case "wpp-overlay-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppOverlay);
       }

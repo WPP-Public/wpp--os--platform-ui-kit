@@ -5458,33 +5458,6 @@ function tippy(targets, optionalProps) {
 tippy.defaultProps = defaultProps;
 tippy.setDefaultProps = setDefaultProps;
 tippy.currentInput = currentInput;
-var hideAll = function hideAll(_temp) {
-  var _ref = _temp === void 0 ? {} : _temp,
-      excludedReferenceOrInstance = _ref.exclude,
-      duration = _ref.duration;
-
-  mountedInstances.forEach(function (instance) {
-    var isExcluded = false;
-
-    if (excludedReferenceOrInstance) {
-      isExcluded = isReferenceElement(excludedReferenceOrInstance) ? instance.reference === excludedReferenceOrInstance : instance.popper === excludedReferenceOrInstance.popper;
-    }
-
-    if (!isExcluded) {
-      var originalDuration = instance.props.duration;
-      instance.setProps({
-        duration: duration
-      });
-      instance.hide();
-
-      if (!instance.state.isDestroyed) {
-        instance.setProps({
-          duration: originalDuration
-        });
-      }
-    }
-  });
-};
 
 // every time the popper is destroyed (i.e. a new target), removing the styles
 // and causing transitions to break for singletons when the console is open, but
@@ -5663,4 +5636,4 @@ const menuListConfig = ({ anchor, popperOptions, triggerElementWidth, ...tippyPr
   });
 };
 
-export { _baseGetTag as _, isObjectLike_1 as a, _baseUnary as b, _nodeUtil as c, hideAll as h, isEqual_1 as i, menuListConfig as m };
+export { _baseGetTag as _, isObjectLike_1 as a, _baseUnary as b, _nodeUtil as c, isEqual_1 as i, menuListConfig as m };

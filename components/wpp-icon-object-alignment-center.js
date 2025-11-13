@@ -22,9 +22,9 @@ const WppIconObjectAlignmentCenter$1 = /*@__PURE__*/ proxyCustomElement(class Wp
   render() {
     return (h(WppIcon, { name: "wpp-icon-object-alignment-center", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: ObjectAlignmentCenterDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-object-alignment-center-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-object-alignment-center-v3-3-1"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-object-alignment-center", "wpp-icon-object-alignment-center-v3-3-0", {
+}, [1, "wpp-icon-object-alignment-center", "wpp-icon-object-alignment-center-v3-3-1", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -35,9 +35,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-object-alignment-center-v3-3-0"];
+  const components = ["wpp-icon-object-alignment-center-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-object-alignment-center-v3-3-0":
+    case "wpp-icon-object-alignment-center-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconObjectAlignmentCenter$1);
       }

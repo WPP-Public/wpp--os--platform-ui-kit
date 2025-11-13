@@ -1,7 +1,7 @@
 import { r as registerInstance, h, H as Host, c as createEvent, g as getElement } from './index-9177bb6d.js';
 import { h as highlightWords } from './highlight-words-e56d0d41.js';
 import { W as WrappedSlot } from './WrappedSlot-2ee5325a.js';
-import { k as transformToVersionedTag, g as getSlotEmptyStates } from './utils-d423b01f.js';
+import { k as transformToVersionedTag, g as getSlotEmptyStates } from './utils-b49ad9c8.js';
 import { b as areAnyChildrenDisabled } from './utils-f066e4cf.js';
 import './consts-5bf9c29f.js';
 
@@ -28,7 +28,7 @@ const WppSkeleton = class {
     };
     return h(Host, { class: this.hostCssClasses(), style: style, "aria-hidden": "true" });
   }
-  static get registryIs() { return "wpp-skeleton-v3-3-0"; }
+  static get registryIs() { return "wpp-skeleton-v3-3-1"; }
 };
 WppSkeleton.style = wppSkeletonCss;
 
@@ -213,19 +213,19 @@ const WppTreeItem = class {
       const { className } = props;
       switch (contentType) {
         case 'text':
-          return (h("wpp-typography-v3-3-0", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
+          return (h("wpp-typography-v3-3-1", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
         case 'tag': {
           const { icon } = props;
-          return (h("wpp-tag-v3-3-0", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
+          return (h("wpp-tag-v3-3-1", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
             h(transformToVersionedTag(icon), {
               slot: 'icon-start',
               part: 'icon-start',
             })));
         }
         case 'avatar':
-          return (h("wpp-avatar-v3-3-0", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar" }));
+          return (h("wpp-avatar-v3-3-1", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar" }));
         case 'avatarGroup':
-          return (h("wpp-avatar-group-v3-3-0", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group" }));
+          return (h("wpp-avatar-group-v3-3-1", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group" }));
         default:
           return null;
       }
@@ -284,9 +284,9 @@ const WppTreeItem = class {
   }
   render() {
     const isParent = !!this.item?.children?.length;
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeItem", ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (h("div", { class: "switcher", onClick: this.handleSwitcherClick, part: "tree-item-switcher" }, h("wpp-icon-triangle-fill-v3-3-0", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (h("wpp-checkbox-v3-3-0", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox" })), h(WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (h("wpp-tooltip-v3-3-0", { text: this.item.title, config: { placement: 'right' }, class: "tooltip" }, this.renderTitle())) : (this.renderTitle()), h("wpp-action-button-v3-3-0", { variant: "secondary", disabled: this.item.disabled, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button" }, h("slot", { name: "icon-end", onSlotchange: this.updateSlotData })), this.renderEndContent()), ((this.item.children && this.item.open) || !this.isCollapseTransitionEnd) && (h(WrappedSlot, { name: "content", onSlotchange: this.updateSlotData }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeItem", ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (h("div", { class: "switcher", onClick: this.handleSwitcherClick, part: "tree-item-switcher" }, h("wpp-icon-triangle-fill-v3-3-1", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (h("wpp-checkbox-v3-3-1", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox" })), h(WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (h("wpp-tooltip-v3-3-1", { text: this.item.title, config: { placement: 'right' }, class: "tooltip" }, this.renderTitle())) : (this.renderTitle()), h("wpp-action-button-v3-3-1", { variant: "secondary", disabled: this.item.disabled, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button" }, h("slot", { name: "icon-end", onSlotchange: this.updateSlotData })), this.renderEndContent()), ((this.item.children && this.item.open) || !this.isCollapseTransitionEnd) && (h(WrappedSlot, { name: "content", onSlotchange: this.updateSlotData }))));
   }
-  static get registryIs() { return "wpp-tree-item-v3-3-0"; }
+  static get registryIs() { return "wpp-tree-item-v3-3-1"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "item": ["onItemChange"]

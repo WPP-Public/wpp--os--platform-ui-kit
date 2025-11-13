@@ -193,7 +193,7 @@ const WppCardGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCardGroup exten
   render() {
     return (h(Host, { "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, class: this.hostCssClasses(), exportparts: "inner", role: this.multiple ? 'group' : 'radiogroup', "aria-labelledby": this.ariaProps.labelledby }, h("slot", { part: "inner" })));
   }
-  static get registryIs() { return "wpp-card-group-v3-3-0"; }
+  static get registryIs() { return "wpp-card-group-v3-3-1"; }
   get host() { return this; }
   static get watchers() { return {
     "value": ["onValueChange"],
@@ -202,7 +202,7 @@ const WppCardGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCardGroup exten
     "multiple": ["onUpdateMultiple"]
   }; }
   static get style() { return wppCardGroupCss; }
-}, [1, "wpp-card-group", "wpp-card-group-v3-3-0", {
+}, [1, "wpp-card-group", "wpp-card-group-v3-3-1", {
     "name": [1],
     "size": [1],
     "value": [1032],
@@ -216,9 +216,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-card-group-v3-3-0"];
+  const components = ["wpp-card-group-v3-3-1"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-card-group-v3-3-0":
+    case "wpp-card-group-v3-3-1":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppCardGroup$1);
       }

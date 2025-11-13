@@ -10,7 +10,7 @@ const WppQuillStyles = class {
   constructor(hostRef) {
     index.registerInstance(this, hostRef);
   }
-  static get registryIs() { return "wpp-quill-styles-v3-3-0"; }
+  static get registryIs() { return "wpp-quill-styles-v3-3-1"; }
 };
 WppQuillStyles.style = wppCss;
 
@@ -20,7 +20,7 @@ const WppRichtextCommonStyles = class {
   constructor(hostRef) {
     index.registerInstance(this, hostRef);
   }
-  static get registryIs() { return "wpp-richtext-common-styles-v3-3-0"; }
+  static get registryIs() { return "wpp-richtext-common-styles-v3-3-1"; }
 };
 WppRichtextCommonStyles.style = wppRichtextCommonStylesCss;
 

@@ -1,92 +1,26 @@
 import { r as registerInstance, h, H as Host, g as getElement } from './index-9177bb6d.js';
 
-const CSS_ATTRIBUTES = [
-  'font-weight',
-  'font-size',
-  'font-family',
-  'font-style',
-  'line-height',
-  'letter-spacing',
-  'text-transform',
-  'text-decoration',
-];
-const VARIABLE_PREFIX = '--wpp-typography';
-const PREFIX_FOR_TYPE = '--wpp-default-type';
-
-const wppTypographyCss = ":host{--typography-color:var(--wpp-typography-color, var(--wpp-text-color));--typography-font-weight:var(--wpp-default-type-font-weight, 400);--typography-font-size:var(--wpp-default-type-font-size, 16px);--typography-font-family:var(--wpp-default-type-font-family, var(--wpp-font-family));--typography-font-style:var(--wpp-default-type-font-style, normal);--typography-line-height:var(--wpp-default-type-line-height, normal);--typography-letter-spacing:var(--wpp-default-type-letter-spacing, normal);--typography-text-transform:var(--wpp-default-type-text-transform, none);--typography-text-decoration:var(--wpp-default-type-text-decoration, none);--typography-italic-padding-right:var(--wpp-typography-italic-padding-right, 0.12em);display:-ms-inline-flexbox;display:inline-flex;color:var(--typography-color)}.typography{margin:0;overflow:hidden;text-overflow:ellipsis;color:currentcolor;font-weight:var(--wpp-typography-font-weight, var(--typography-font-weight));font-size:var(--wpp-typography-font-size, var(--typography-font-size));font-family:var(--wpp-typography-font-family, var(--typography-font-family));font-style:var(--wpp-typography-font-style, var(--typography-font-style));line-height:var(--wpp-typography-line-height, var(--typography-line-height));letter-spacing:var(--wpp-typography-letter-spacing, var(--typography-letter-spacing));text-transform:var(--wpp-typography-text-transform, var(--typography-text-transform));-webkit-text-decoration:var(--wpp-typography-text-decoration, var(--typography-text-decoration));text-decoration:var(--wpp-typography-text-decoration, var(--typography-text-decoration))}.typography.italic{padding-right:var(--typography-italic-padding-right)}";
+const wppTypographyCss = ":host{display:-ms-inline-flexbox;display:inline-flex;color:var(--typography-color)}:host .type-5xl{font-weight:var(--wpp-typography-5xl-display-font-weight);font-size:var(--wpp-typography-5xl-display-font-size);line-height:var(--wpp-typography-5xl-display-line-height);letter-spacing:var(--wpp-typography-5xl-display-letter-spacing);font-family:var(--wpp-typography-5xl-display-font-family)}:host .wpp-typography-5xl-display-light{font-weight:400}:host .wpp-typography-5xl-display-strong{font-weight:700}:host .wpp-typography-5xl-display-emphasis{font-style:italic}:host .type-4xl{font-weight:var(--wpp-typography-4xl-display-font-weight);font-size:var(--wpp-typography-4xl-display-font-size);line-height:var(--wpp-typography-4xl-display-line-height);letter-spacing:var(--wpp-typography-4xl-display-letter-spacing);font-family:var(--wpp-typography-4xl-display-font-family)}:host .wpp-typography-4xl-display-light{font-weight:400}:host .wpp-typography-4xl-display-strong{font-weight:700}:host .wpp-typography-4xl-display-emphasis{font-style:italic}:host .type-3xl{font-weight:var(--wpp-typography-3xl-heading-font-weight);font-size:var(--wpp-typography-3xl-heading-font-size);line-height:var(--wpp-typography-3xl-heading-line-height);letter-spacing:var(--wpp-typography-3xl-heading-letter-spacing);font-family:var(--wpp-typography-3xl-heading-font-family, var(--wpp-font-family))}:host .wpp-typography-3xl-display-light{font-weight:400}:host .wpp-typography-3xl-display-strong{font-weight:700}:host .wpp-typography-3xl-display-emphasis{font-style:italic}:host .type-2xl{font-weight:var(--wpp-typography-2xl-heading-font-weight);font-size:var(--wpp-typography-2xl-heading-font-size);line-height:var(--wpp-typography-2xl-heading-line-height);letter-spacing:var(--wpp-typography-2xl-heading-letter-spacing);font-family:var(--wpp-typography-2xl-heading-font-family, var(--wpp-font-family))}:host .wpp-typography-2xl-display-light{font-weight:400}:host .wpp-typography-2xl-display-strong{font-weight:700}:host .wpp-typography-2xl-display-emphasis{font-style:italic}:host .type-xl{font-weight:var(--wpp-typography-xl-heading-font-weight);font-size:var(--wpp-typography-xl-heading-font-size);line-height:var(--wpp-typography-xl-heading-line-height);letter-spacing:var(--wpp-typography-xl-heading-letter-spacing);font-family:var(--wpp-typography-xl-heading-font-family, var(--wpp-font-family))}:host .wpp-typography-xl-display-light{font-weight:400}:host .wpp-typography-xl-display-strong{font-weight:700}:host .wpp-typography-xl-display-emphasis{font-style:italic}:host .type-l{font-weight:var(--wpp-typography-l-body-font-weight);font-size:var(--wpp-typography-l-body-font-size);line-height:var(--wpp-typography-l-body-line-height);letter-spacing:var(--wpp-typography-l-body-letter-spacing);font-family:var(--wpp-typography-l-body-font-family, var(--wpp-font-family))}:host .wpp-typography-l-body{font-weight:400}:host .wpp-typography-l-midi{font-weight:500}:host .wpp-typography-l-strong{font-weight:600}:host .wpp-typography-l-emphasis{font-style:italic}:host .type-m{font-weight:var(--wpp-typography-m-body-font-weight);font-size:var(--wpp-typography-m-body-font-size);line-height:var(--wpp-typography-m-body-line-height);letter-spacing:var(--wpp-typography-m-body-letter-spacing);font-family:var(--wpp-typography-m-body-font-family, var(--wpp-font-family))}:host .wpp-typography-m-body{font-weight:400}:host .wpp-typography-m-midi{font-weight:500}:host .wpp-typography-m-strong{font-weight:600}:host .wpp-typography-m-emphasis{font-style:italic}:host .type-s{font-weight:var(--wpp-typography-s-body-font-weight);font-size:var(--wpp-typography-s-body-font-size);line-height:var(--wpp-typography-s-body-line-height);letter-spacing:var(--wpp-typography-s-body-letter-spacing);font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family))}:host .wpp-typography-s-body{font-weight:400}:host .wpp-typography-s-midi{font-weight:500}:host .wpp-typography-s-strong{font-weight:600}:host .wpp-typography-s-emphasis{font-style:italic}:host .type-xs{font-weight:var(--wpp-typography-xs-body-font-weight);font-size:var(--wpp-typography-xs-body-font-size);line-height:var(--wpp-typography-xs-body-line-height);letter-spacing:var(--wpp-typography-xs-body-letter-spacing);font-family:var(--wpp-typography-xs-body-font-family, var(--wpp-font-family))}:host .wpp-typography-xs-body{font-weight:400}:host .wpp-typography-xs-midi{font-weight:500}:host .wpp-typography-xs-strong{font-weight:600}:host .wpp-typography-xs-emphasis{font-style:italic}:host .type-2xs{font-weight:var(--wpp-typography-2xs-strong-font-weight);font-size:var(--wpp-typography-2xs-strong-font-size);line-height:var(--wpp-typography-2xs-strong-line-height);letter-spacing:var(--wpp-typography-2xs-strong-letter-spacing);font-family:var(--wpp-typography-2xs-strong-font-family, var(--wpp-font-family));text-transform:uppercase}:host .italic{padding-right:0.12em}.typography{margin:0;overflow:hidden;text-overflow:ellipsis;color:currentcolor}";
 
 const WppTypography = class {
   constructor(hostRef) {
     registerInstance(this, hostRef);
-    this.updateTypographyClasses = () => {
-      const fontStyle = getComputedStyle(this.host).getPropertyValue('--wpp-typography-font-style').trim();
-      if (fontStyle === 'italic') {
-        this.host.classList.add('italic');
-      }
-      else {
-        this.host.classList.remove('italic');
-      }
-    };
-    this.getAvailableTypeFromTheme = () => {
-      const typeParts = this.type.split('-');
-      const CSSVariable = `${VARIABLE_PREFIX}-${this.type}-font-size`;
-      if (getComputedStyle(this.host).getPropertyValue(CSSVariable) ||
-        getComputedStyle(document.body).getPropertyValue(CSSVariable)) {
-        return this.type;
-      }
-      if (typeParts.length === 3) {
-        return `${typeParts[0]}-${typeParts[1]}`;
-      }
-      if (typeParts.length === 2 && ['light', 'emphasis'].includes(typeParts[1])) {
-        return `${typeParts[0]}-body`;
-      }
-      return this.type;
-    };
-    this.getTypographyStylesFromTheme = () => {
-      const typographyStyles = {};
-      const availableType = this.getAvailableTypeFromTheme();
-      CSS_ATTRIBUTES.forEach((attribute) => {
-        const cssVariableName = `${VARIABLE_PREFIX}-${availableType}-${attribute}`;
-        let propertyValue;
-        if (getComputedStyle(this.host).getPropertyValue(cssVariableName).trim()) {
-          propertyValue = getComputedStyle(this.host).getPropertyValue(cssVariableName).trim();
-        }
-        else {
-          propertyValue = getComputedStyle(document.body).getPropertyValue(cssVariableName).trim();
-        }
-        typographyStyles[`${PREFIX_FOR_TYPE}-${attribute}`] = propertyValue;
-      });
-      if (this.type === '2xs-strong')
-        typographyStyles[`${PREFIX_FOR_TYPE}-text-transform`] = 'uppercase';
-      Object.entries(typographyStyles).forEach(([property, value]) => {
-        this.host.style.setProperty(property, value);
-      });
-    };
     this.typographyCssClasses = () => ({
       typography: true,
-      italic: this.host.classList.contains('italic'),
+      italic: this.type.includes('emphasis'),
+      [`type-${this.type.split('-')[0]}`]: true,
+      [`wpp-typography-${this.type}`]: true,
     });
     this.type = 'm-body';
     this.tag = 'span';
     this.color = 'var(--wpp-text-color)';
   }
-  handleTypeChange() {
-    this.getTypographyStylesFromTheme();
-    this.updateTypographyClasses();
-  }
-  componentWillLoad() {
-    this.getTypographyStylesFromTheme();
-    this.updateTypographyClasses();
-  }
   render() {
     const TypographyTag = this.tag;
     return (h(Host, { class: "wpp-typography", exportparts: "typography, inner", style: { '--typography-color': this.color } }, h(TypographyTag, { class: this.typographyCssClasses(), part: "typography", exportparts: "typography" }, h("slot", { part: "inner" }))));
   }
-  static get registryIs() { return "wpp-typography-v3-3-0"; }
+  static get registryIs() { return "wpp-typography-v3-3-1"; }
   get host() { return getElement(this); }
-  static get watchers() { return {
-    "type": ["handleTypeChange"]
-  }; }
 };
 WppTypography.style = wppTypographyCss;
 

@@ -23,7 +23,7 @@ export default {
   },
 };
 export const FileUpload = {
-  render: args => html ` <wpp-file-upload-v3-3-0
+  render: args => html ` <wpp-file-upload-v3-3-1
       .disabled=${args.disabled}
       .acceptConfig=${args.acceptConfig}
       .size=${args.size}

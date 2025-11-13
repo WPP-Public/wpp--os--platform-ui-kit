@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { k as transformToVersionedTag } from './utils-d423b01f.js';
+import { k as transformToVersionedTag } from './utils-b49ad9c8.js';
 import { W as WrappedSlot } from './WrappedSlot-2ee5325a.js';
 import { Z as Z_INDEX } from './consts-5bf9c29f.js';
 
@@ -87,7 +87,7 @@ const WppNavSidebar = class {
   render() {
     return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "nav-sidebar, body, header-wrapper, header, ws-wrapper, ws-inner" }, h("aside", { class: this.asideCssClasses(), part: "nav-sidebar" }, h("div", { class: "nav-wrapper", part: "body" }, h(WrappedSlot, { wrapperClass: "title-wrapper", name: "header" }), h(WrappedSlot, { wrapperClass: "items-wrapper" })))));
   }
-  static get registryIs() { return "wpp-nav-sidebar-v3-3-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-v3-3-1"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "activePath": ["handleActivePathChange"]

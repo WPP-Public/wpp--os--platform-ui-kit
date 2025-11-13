@@ -11,7 +11,7 @@ export class WppIconTick {
     return (h(WppIcon, { name: "wpp-icon-tick", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M6.25 10L8.5747 12.1794C8.76703 12.3597 9.06631 12.3597 9.25864 12.1794L14.25 7.5", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round" })));
   }
   static get is() { return "wpp-icon-tick"; }
-  static get registryIs() { return "wpp-icon-tick-v3-3-0"; }
+  static get registryIs() { return "wpp-icon-tick-v3-3-1"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

@@ -19,64 +19,64 @@ export const Primary = {
     showIconEnd: false,
   },
   render: args => html `
-    <wpp-action-button-v3-3-0
+    <wpp-action-button-v3-3-1
       .disabled=${args.disabled}
       .loading=${args.loading}
       variant="primary"
       @click=${() => console.log('Button clicked')}
     >
       ${args.showIconStart
-    ? html `<wpp-icon-plus-v3-3-0
+    ? html `<wpp-icon-plus-v3-3-1
             slot="icon-start"
             @click=${(e) => {
       e.stopPropagation();
       console.log('Left icon clicked');
     }}
-          ></wpp-icon-plus-v3-3-0>`
+          ></wpp-icon-plus-v3-3-1>`
     : null}
       ${args.text}
       ${args.showIconEnd
-    ? html `<wpp-icon-plus-v3-3-0
+    ? html `<wpp-icon-plus-v3-3-1
             slot="icon-end"
             @click=${(e) => {
       e.stopPropagation();
       console.log('Right icon clicked');
     }}
-          ></wpp-icon-plus-v3-3-0>`
+          ></wpp-icon-plus-v3-3-1>`
     : null}
-    </wpp-action-button-v3-3-0>
+    </wpp-action-button-v3-3-1>
   `,
 };
 // === Secondary ===
 export const Secondary = {
   ...Primary,
   render: args => html `
-    <wpp-action-button-v3-3-0
+    <wpp-action-button-v3-3-1
       .disabled=${args.disabled}
       .loading=${args.loading}
       variant="secondary"
       @click=${() => console.log('Button clicked')}
     >
       ${args.showIconStart
-    ? html `<wpp-icon-plus-v3-3-0
+    ? html `<wpp-icon-plus-v3-3-1
             slot="icon-start"
             @click=${(e) => {
       e.stopPropagation();
       console.log('Left icon clicked');
     }}
-          ></wpp-icon-plus-v3-3-0>`
+          ></wpp-icon-plus-v3-3-1>`
     : null}
       ${args.text}
       ${args.showIconEnd
-    ? html `<wpp-icon-plus-v3-3-0
+    ? html `<wpp-icon-plus-v3-3-1
             slot="icon-end"
             @click=${(e) => {
       e.stopPropagation();
       console.log('Right icon clicked');
     }}
-          ></wpp-icon-plus-v3-3-0>`
+          ></wpp-icon-plus-v3-3-1>`
     : null}
-    </wpp-action-button-v3-3-0>
+    </wpp-action-button-v3-3-1>
   `,
 };
 // === Inverted ===
@@ -84,32 +84,32 @@ export const Inverted = {
   ...Primary,
   render: args => html `
     <div style=${styleMap({ backgroundColor: 'var(--wpp-grey-color-800)', padding: '24px' })}>
-      <wpp-action-button-v3-3-0
+      <wpp-action-button-v3-3-1
         .disabled=${args.disabled}
         .loading=${args.loading}
         variant="inverted"
         @click=${() => console.log('Button clicked')}
       >
         ${args.showIconStart
-    ? html `<wpp-icon-plus-v3-3-0
+    ? html `<wpp-icon-plus-v3-3-1
               slot="icon-start"
               @click=${(e) => {
       e.stopPropagation();
       console.log('Left icon clicked');
     }}
-            ></wpp-icon-plus-v3-3-0>`
+            ></wpp-icon-plus-v3-3-1>`
     : null}
         ${args.text}
         ${args.showIconEnd
-    ? html `<wpp-icon-plus-v3-3-0
+    ? html `<wpp-icon-plus-v3-3-1
               slot="icon-end"
               @click=${(e) => {
       e.stopPropagation();
       console.log('Right icon clicked');
     }}
-            ></wpp-icon-plus-v3-3-0>`
+            ></wpp-icon-plus-v3-3-1>`
     : null}
-      </wpp-action-button-v3-3-0>
+      </wpp-action-button-v3-3-1>
     </div>
   `,
 };
@@ -117,31 +117,31 @@ export const Inverted = {
 export const Destructive = {
   ...Primary,
   render: args => html `
-    <wpp-action-button-v3-3-0
+    <wpp-action-button-v3-3-1
       .disabled=${args.disabled}
       .loading=${args.loading}
       variant="destructive"
       @click=${() => console.log('Button clicked')}
     >
       ${args.showIconStart
-    ? html `<wpp-icon-plus-v3-3-0
+    ? html `<wpp-icon-plus-v3-3-1
             slot="icon-start"
             @click=${(e) => {
       e.stopPropagation();
       console.log('Left icon clicked');
     }}
-          ></wpp-icon-plus-v3-3-0>`
+          ></wpp-icon-plus-v3-3-1>`
     : null}
       ${args.text}
       ${args.showIconEnd
-    ? html `<wpp-icon-plus-v3-3-0
+    ? html `<wpp-icon-plus-v3-3-1
             slot="icon-end"
             @click=${(e) => {
       e.stopPropagation();
       console.log('Right icon clicked');
     }}
-          ></wpp-icon-plus-v3-3-0>`
+          ></wpp-icon-plus-v3-3-1>`
     : null}
-    </wpp-action-button-v3-3-0>
+    </wpp-action-button-v3-3-1>
   `,
 };
