@@ -172,7 +172,7 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
    */
   readonly wppError: EventEmitter<FileUploadErrorEventDetails>;
   /**
-   * Method to reset FileUpload
+   * Method to reset FileUpload. Should be called only when the component is uncontrolled.
    */
   reset(): Promise<void>;
   private reInitValue;

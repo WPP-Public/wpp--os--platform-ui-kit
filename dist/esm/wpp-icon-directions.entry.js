@@ -25,7 +25,7 @@ const WppIconDirections = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-directions", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: DirectionsIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-directions-v3-3-1"; }
+  static get registryIs() { return "wpp-icon-directions-v3-4-0"; }
 };
 WppIconDirections.style = wppIconCss;
 

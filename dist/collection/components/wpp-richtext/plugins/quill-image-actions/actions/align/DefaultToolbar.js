@@ -27,7 +27,7 @@ export default class DefaultToolbar {
     if (formatter.options.align.toolbar.buttonStyle) {
       Object.assign(button.style, formatter.options.align.toolbar.buttonStyle);
       if (index > 0) {
-        button.style.borderLeftWidth = '0'; // eslint-disable-line no-param-reassign
+        button.style.borderLeftWidth = '0';
       }
     }
     if (formatter.options.align.toolbar.svgStyle) {

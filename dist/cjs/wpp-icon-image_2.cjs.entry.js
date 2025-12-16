@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const wppIconVideoClip = require('./wpp-icon-video-clip-c867b9de.js');
+const wppIconVideoClip = require('./wpp-icon-video-clip-bbc57dff.js');
 require('./index-ecf423ba.js');
 require('./WppIcon-55327707.js');
 

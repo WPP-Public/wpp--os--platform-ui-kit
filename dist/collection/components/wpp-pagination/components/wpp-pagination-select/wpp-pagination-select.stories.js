@@ -13,12 +13,12 @@ export default {
     activePageNumber: { type: 'number' },
   },
 };
-export const Select = (args) => html ` <wpp-pagination-select-v3-3-1 .count="${args.count}" .activePageNumber="${args.activePageNumber}" />`;
+export const Select = (args) => html ` <wpp-pagination-select-v3-4-0 .count="${args.count}" .activePageNumber="${args.activePageNumber}" />`;
 Select.args = {
   count: 8,
   activePageNumber: 2,
 };
-export const Input = (args) => html ` <wpp-pagination-select-v3-3-1 .count="${args.count}" .activePageNumber="${args.activePageNumber}" />`;
+export const Input = (args) => html ` <wpp-pagination-select-v3-4-0 .count="${args.count}" .activePageNumber="${args.activePageNumber}" />`;
 Input.args = {
   count: 10,
   activePageNumber: 2,

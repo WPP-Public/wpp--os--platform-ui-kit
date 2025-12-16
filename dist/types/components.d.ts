@@ -13,7 +13,7 @@ import { BannerChangeEventDetail } from "./components/wpp-banner/types";
 import { BreadcrumbItemEventDetails, BreadcrumbItemState } from "./components/wpp-breadcrumb/types";
 import { CardChangeEventDetail, CardSize, CardType, CardValue } from "./components/wpp-card-group/components/wpp-card/types";
 import { CardGroupChangeEventDetail, CardGroupValue } from "./components/wpp-card-group/types";
-import { ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
+import { ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
 import { AcceptConfig, FileItemType, FileUploadErrorEventDetails, FileUploadEventDetail, FileUploadItemEventDetail, FileUploadItemLocales, FileUploadLocales, FileUploadMessageType, FileUploadResultFormaType, FileValidatorHandler } from "./components/wpp-file-upload/types";
 import { CheckboxChangeEvent, CheckboxLabelConfig, CheckboxValue } from "./components/wpp-checkbox/types";
 import { CheckboxGroupChangeEvent, CheckboxGroupValue } from "./components/wpp-checkbox-group/types";
@@ -50,18 +50,18 @@ import { SearchChangeEventDetail, SearchDefaultOption, SearchGetOptionIdHandler,
 import { SegmentedControlChangeEventDetail, SegmentedControlItemChangeEventDetail, SegmentedControlItemSize, SegmentedControlLabelConfig, SegmentedControlValue } from "./components/wpp-segmented-control/types";
 import { ListItemInterface, SelectChangeEventDetails, SelectLabelConfig, SelectLocaleInterface, SelectSize, SelectTypes, SelectValue } from "./components/wpp-select/types";
 import { DropdownConfig as DropdownConfig1, InputTypes as InputTypes1, LabelConfig as LabelConfig1, MaskOptions as MaskOptions1 } from "./components";
-import { ActionConfig, SideModalCloseDetails, SideModalFormConfig } from "./components/wpp-side-modal/types";
+import { ActionConfig, HeaderActionsConfig, SideModalCloseDetails, SideModalFormConfig } from "./components/wpp-side-modal/types";
 import { InputWidth, MarkState, SliderChangeEventDetail, SliderLabelConfig, SliderTypes, SliderValue } from "./components/wpp-slider/types";
 import { MaskitoNumberParams } from "@maskito/kit/src/lib/masks/number/number-params";
 import { OrientationType, StepChangeEventDetail, StepLocales } from "./components/wpp-stepper/types";
 import { StickyBarButtonItem, StickyBarTabItem, StickyBarVariants } from "./components/wpp-sticky-bar/types";
-import { TabChangeEventDetail, TabsChangeEventDetail } from "./components/wpp-tabs/types";
+import { TabChangeEventDetail, TabsChangeEventDetail, TabsLocaleInterface, WppTabAriaProps, WppTabsAriaProps } from "./components/wpp-tabs/types";
 import { TextareaInputChangeEventDetail, TextareaInputLocales, TextareaInputValue, TextareaLabelConfig } from "./components/wpp-textarea-input/types";
 import { TimePickerChangeEventDetails } from "./components/wpp-time-picker/types";
 import { ButtonState, ToastCompleteDetail, ToastIcon } from "./components/wpp-toast/types";
 import { ToastState } from "./components/wpp-toast/components/wpp-toast-container/types";
 import { ToggleChangeEvent, ToggleLabelConfig, ToggleValue } from "./components/wpp-toggle/types";
-import { TransformSearchQuery, TreeActionClickEventDetail, TreeChangeEventDetail, TreeItemEndContentProps, TreeItemHighlightOptions, TreeItemSearchConfig, TreeLocaleType, TreeType } from "./components/wpp-tree/types";
+import { TransformSearchQuery, TreeActionClickEventDetail, TreeChangeEventDetail, TreeItemEndContentProps, TreeItemHighlightOptions, TreeItemSearchConfig, TreeLazyConfig, TreeLocaleType, TreeType } from "./components/wpp-tree/types";
 import { CaptionValue, ControlPanelConfig, JumpValues, VideoPlayerLocales, VideoSizeDimensions, VideoSourceType } from "./components/wpp-video-player/types";
 export { AriaProps, BannerTypes, DropdownConfig, InputMessageTypes, MessageTypes } from "./types/common";
 export { AccordionSectionChangeEventDetail } from "./components/wpp-accordion/types";
@@ -71,7 +71,7 @@ export { BannerChangeEventDetail } from "./components/wpp-banner/types";
 export { BreadcrumbItemEventDetails, BreadcrumbItemState } from "./components/wpp-breadcrumb/types";
 export { CardChangeEventDetail, CardSize, CardType, CardValue } from "./components/wpp-card-group/components/wpp-card/types";
 export { CardGroupChangeEventDetail, CardGroupValue } from "./components/wpp-card-group/types";
-export { ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
+export { ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
 export { AcceptConfig, FileItemType, FileUploadErrorEventDetails, FileUploadEventDetail, FileUploadItemEventDetail, FileUploadItemLocales, FileUploadLocales, FileUploadMessageType, FileUploadResultFormaType, FileValidatorHandler } from "./components/wpp-file-upload/types";
 export { CheckboxChangeEvent, CheckboxLabelConfig, CheckboxValue } from "./components/wpp-checkbox/types";
 export { CheckboxGroupChangeEvent, CheckboxGroupValue } from "./components/wpp-checkbox-group/types";
@@ -108,18 +108,18 @@ export { SearchChangeEventDetail, SearchDefaultOption, SearchGetOptionIdHandler,
 export { SegmentedControlChangeEventDetail, SegmentedControlItemChangeEventDetail, SegmentedControlItemSize, SegmentedControlLabelConfig, SegmentedControlValue } from "./components/wpp-segmented-control/types";
 export { ListItemInterface, SelectChangeEventDetails, SelectLabelConfig, SelectLocaleInterface, SelectSize, SelectTypes, SelectValue } from "./components/wpp-select/types";
 export { DropdownConfig as DropdownConfig1, InputTypes as InputTypes1, LabelConfig as LabelConfig1, MaskOptions as MaskOptions1 } from "./components";
-export { ActionConfig, SideModalCloseDetails, SideModalFormConfig } from "./components/wpp-side-modal/types";
+export { ActionConfig, HeaderActionsConfig, SideModalCloseDetails, SideModalFormConfig } from "./components/wpp-side-modal/types";
 export { InputWidth, MarkState, SliderChangeEventDetail, SliderLabelConfig, SliderTypes, SliderValue } from "./components/wpp-slider/types";
 export { MaskitoNumberParams } from "@maskito/kit/src/lib/masks/number/number-params";
 export { OrientationType, StepChangeEventDetail, StepLocales } from "./components/wpp-stepper/types";
 export { StickyBarButtonItem, StickyBarTabItem, StickyBarVariants } from "./components/wpp-sticky-bar/types";
-export { TabChangeEventDetail, TabsChangeEventDetail } from "./components/wpp-tabs/types";
+export { TabChangeEventDetail, TabsChangeEventDetail, TabsLocaleInterface, WppTabAriaProps, WppTabsAriaProps } from "./components/wpp-tabs/types";
 export { TextareaInputChangeEventDetail, TextareaInputLocales, TextareaInputValue, TextareaLabelConfig } from "./components/wpp-textarea-input/types";
 export { TimePickerChangeEventDetails } from "./components/wpp-time-picker/types";
 export { ButtonState, ToastCompleteDetail, ToastIcon } from "./components/wpp-toast/types";
 export { ToastState } from "./components/wpp-toast/components/wpp-toast-container/types";
 export { ToggleChangeEvent, ToggleLabelConfig, ToggleValue } from "./components/wpp-toggle/types";
-export { TransformSearchQuery, TreeActionClickEventDetail, TreeChangeEventDetail, TreeItemEndContentProps, TreeItemHighlightOptions, TreeItemSearchConfig, TreeLocaleType, TreeType } from "./components/wpp-tree/types";
+export { TransformSearchQuery, TreeActionClickEventDetail, TreeChangeEventDetail, TreeItemEndContentProps, TreeItemHighlightOptions, TreeItemSearchConfig, TreeLazyConfig, TreeLocaleType, TreeType } from "./components/wpp-tree/types";
 export { CaptionValue, ControlPanelConfig, JumpValues, VideoPlayerLocales, VideoSizeDimensions, VideoSourceType } from "./components/wpp-video-player/types";
 export namespace Components {
     interface WppAccordion {
@@ -653,6 +653,10 @@ export namespace Components {
     }
     interface WppChatInput {
         /**
+          * Typed ARIA overrides. Only supported htmlAttributes exposed.
+         */
+        "ariaProps"?: ChatInputAriaProps;
+        /**
           * Defines the files list
          */
         "attachments": FileItemType[];
@@ -685,7 +689,16 @@ export namespace Components {
          */
         "fileUploadConfig"?: Partial<FileUploadConfig>;
         /**
+          * Grouped element htmlAttributes (textarea + file input). New API — replaces textareaId/textareaName.
+         */
+        "htmlAttributes"?: ChatInputAttributes;
+        /**
+          * Locales (visual strings). Will be merged into _locales.
+         */
+        "locales": Partial<ChatInputLocaleInterface>;
+        /**
           * Placeholder text for the input field.
+          * @deprecated : Prefer locales.placeholder.
          */
         "placeholder": string;
         /**
@@ -696,6 +709,21 @@ export namespace Components {
           * Text value used to set the input message content. When user input occurs, a `wppMessageChanged` event is emitted. The new value should be assigned to this property to maintain synchronization with the input field.
          */
         "textValue": string;
+        /**
+          * Defines the aria-label of the text area.
+          * @deprecated : Prefer ariaProps.textarea.label
+         */
+        "textareaAriaLabel"?: string;
+        /**
+          * Defines the Id of the text area.
+          * @deprecated : Prefer htmlAttributes.textarea.id
+         */
+        "textareaId"?: string;
+        /**
+          * Defines the name of the text area.
+          * @deprecated : Prefer htmlAttributes.textarea.name
+         */
+        "textareaName"?: string;
         /**
           * If set to true, displays `Select` in left actions. The Select must placed in the `.select` slot.
          */
@@ -788,6 +816,10 @@ export namespace Components {
           * Defines the direction in which the checkbox items are displayed. By default, the items are displayed vertically (in a column).
          */
         "direction": 'column' | 'row';
+        /**
+          * Gap between checkbox buttons in pixels
+         */
+        "gap"?: number;
         /**
           * Indicates the label configuration for the checkbox group.
          */
@@ -1010,6 +1042,10 @@ export namespace Components {
          */
         "required": boolean;
         /**
+          * Reverse layout for the range datepicker with a preset list
+         */
+        "reverseLayout": boolean;
+        /**
           * Method that sets focus on the input.
          */
         "setFocus": () => Promise<void>;
@@ -1037,6 +1073,10 @@ export namespace Components {
           * Defines datepicker view
          */
         "view": DatePickerView;
+        /**
+          * Defines the width of the datepicker. If it is undefined, the datepicker will take the default value (200px single datepicker, 260px range datepicker).
+         */
+        "width"?: string;
     }
     interface WppDivider {
         /**
@@ -1079,6 +1119,16 @@ export namespace Components {
         "width"?: number;
     }
     interface WppEmptyDataviz {
+        /**
+          * Defines the image height and changes its default size. If you use `height` only, the image width will not be affected.
+         */
+        "height"?: number;
+        /**
+          * Defines the image width and changes its default size. If you use `width` only, the image width and height will be the same.
+         */
+        "width"?: number;
+    }
+    interface WppEmptyDowntime {
         /**
           * Defines the image height and changes its default size. If you use `height` only, the image width will not be affected.
          */
@@ -1254,7 +1304,7 @@ export namespace Components {
          */
         "required": boolean;
         /**
-          * Method to reset FileUpload
+          * Method to reset FileUpload. Should be called only when the component is uncontrolled.
          */
         "reset": () => Promise<void>;
         /**
@@ -5030,6 +5080,10 @@ export namespace Components {
          */
         "width"?: number;
     }
+    /**
+     * @deprecated - Use `wpp-icon-favourites-filled` instead.
+     * This component will be deleted in 4.0.0.
+     */
     interface WppIconFavorites {
         /**
           * Defines the icon color.
@@ -5048,6 +5102,10 @@ export namespace Components {
          */
         "width"?: number;
     }
+    /**
+     * @deprecated - Use `wpp-icon-favourites-filled` instead.
+     * This component will be deleted in 4.0.0.
+     */
     interface WppIconFavoritesFilled {
         /**
           * Defines the icon color.
@@ -11411,6 +11469,10 @@ export namespace Components {
           * Defines the input value.
          */
         "value": InputValue;
+        /**
+          * If the input displays a cross icon on the right side. Clicking the icon will reset the value of the input. Note: The cross icon will appear only on inputs that have a min-width of 160px.
+         */
+        "withCrossIcon": boolean;
     }
     interface WppInternalLabel {
         /**
@@ -12174,6 +12236,10 @@ export namespace Components {
          */
         "direction": 'column' | 'row';
         /**
+          * Gap between radio buttons in pixels
+         */
+        "gap"?: number;
+        /**
           * Indicates the label configuration for the radio group.
          */
         "labelConfig"?: LabelConfig;
@@ -12212,7 +12278,7 @@ export namespace Components {
          */
         "autoFocus": boolean;
         /**
-          * DOM Element or a CSS selector for a DOM Element, within which the editor’s ui elements (i.e. tooltips, etc.) should be confined. Currently, it only considers left and right boundaries.
+          * DOM Element or a CSS selector for a DOM Element, within which the editor's ui elements (i.e. tooltips, etc.) should be confined. Currently, it only considers left and right boundaries.
          */
         "bounds": HTMLElement | string;
         /**
@@ -12272,7 +12338,7 @@ export namespace Components {
          */
         "placeholder": string;
         /**
-          * Use `pre` HTML element as a container to preserve white space, or regular `div` element
+          * @deprecated This property is no longer needed. Whitespace preservation is now the default behavior for markdown format. This prop will be removed in a future major version.
          */
         "preserveWhitespace": boolean;
         /**
@@ -12346,7 +12412,7 @@ export namespace Components {
          */
         "name"?: string;
         /**
-          * Use `pre` HTML element as a container to preserve white space, or regular `div` element
+          * @deprecated This property is no longer needed. Whitespace preservation is now the default behavior for markdown format. This prop will be removed in a future major version.
          */
         "preserveWhitespace": boolean;
         /**
@@ -12608,7 +12674,7 @@ export namespace Components {
          */
         "labelTooltipConfig": DropdownConfig;
         /**
-          * List of items in the dropdown.
+          * List of items in the dropdown. The items should have at least a `label` and a `value`.
          */
         "list": ListItemInterface[];
         /**
@@ -12720,6 +12786,10 @@ export namespace Components {
           * If you pass this prop wrapper of dialog will be rendered as form.
          */
         "formConfig"?: SideModalFormConfig;
+        /**
+          * The list of actions that will be added in the header of the side-modal, on the left of the "X" icon. It can have a maximum length of 4 items.
+         */
+        "headerActionsConfig": HeaderActionsConfig;
         /**
           * If the side modal is open.
          */
@@ -13012,6 +13082,10 @@ export namespace Components {
          */
         "active": boolean;
         /**
+          * Grouped ARIA props (explicit picks only). tab: { label?, describedby?, controls? }
+         */
+        "ariaProps"?: WppTabAriaProps;
+        /**
           * Defines the number of elements within a specific item.
          */
         "counter": number;
@@ -13033,6 +13107,14 @@ export namespace Components {
         "value": string;
     }
     interface WppTabs {
+        /**
+          * Grouped ARIA props for the tablist: { label?, labelledby? } Precedence: ariaProps > locales > defaults
+         */
+        "ariaProps"?: WppTabsAriaProps;
+        /**
+          * Locales for accessible strings. Only tablistLabel currently.
+         */
+        "locales"?: Partial<TabsLocaleInterface>;
         /**
           * Indicates tabs size
          */
@@ -13456,6 +13538,10 @@ export namespace Components {
           * Defines words highlight in tree-item's title after search.
          */
         "disableSearchHighlight": boolean;
+        /**
+          * Lazy loading configuration for dynamically loading children. When a node with `hasChildren: true` is expanded, skeleton loaders are shown while children are fetched, then all children render at once.
+         */
+        "lazyConfig"?: TreeLazyConfig;
         /**
           * Defines loading state
          */
@@ -13973,6 +14059,12 @@ declare global {
     var HTMLWppEmptyDatavizElement: {
         prototype: HTMLWppEmptyDatavizElement;
         new (): HTMLWppEmptyDatavizElement;
+    };
+    interface HTMLWppEmptyDowntimeElement extends Components.WppEmptyDowntime, HTMLStencilElement {
+    }
+    var HTMLWppEmptyDowntimeElement: {
+        prototype: HTMLWppEmptyDowntimeElement;
+        new (): HTMLWppEmptyDowntimeElement;
     };
     interface HTMLWppEmptyErrorElement extends Components.WppEmptyError, HTMLStencilElement {
     }
@@ -15238,12 +15330,20 @@ declare global {
         prototype: HTMLWppIconFactoryElement;
         new (): HTMLWppIconFactoryElement;
     };
+    /**
+     * @deprecated - Use `wpp-icon-favourites-filled` instead.
+     * This component will be deleted in 4.0.0.
+     */
     interface HTMLWppIconFavoritesElement extends Components.WppIconFavorites, HTMLStencilElement {
     }
     var HTMLWppIconFavoritesElement: {
         prototype: HTMLWppIconFavoritesElement;
         new (): HTMLWppIconFavoritesElement;
     };
+    /**
+     * @deprecated - Use `wpp-icon-favourites-filled` instead.
+     * This component will be deleted in 4.0.0.
+     */
     interface HTMLWppIconFavoritesFilledElement extends Components.WppIconFavoritesFilled, HTMLStencilElement {
     }
     var HTMLWppIconFavoritesFilledElement: {
@@ -17666,6 +17766,7 @@ declare global {
         "wpp-empty-cards": HTMLWppEmptyCardsElement;
         "wpp-empty-content": HTMLWppEmptyContentElement;
         "wpp-empty-dataviz": HTMLWppEmptyDatavizElement;
+        "wpp-empty-downtime": HTMLWppEmptyDowntimeElement;
         "wpp-empty-error": HTMLWppEmptyErrorElement;
         "wpp-empty-folder": HTMLWppEmptyFolderElement;
         "wpp-empty-no-access": HTMLWppEmptyNoAccessElement;
@@ -18846,6 +18947,10 @@ declare namespace LocalJSX {
     }
     interface WppChatInput {
         /**
+          * Typed ARIA overrides. Only supported htmlAttributes exposed.
+         */
+        "ariaProps"?: ChatInputAriaProps;
+        /**
           * Defines the files list
          */
         "attachments"?: FileItemType[];
@@ -18874,6 +18979,14 @@ declare namespace LocalJSX {
          */
         "fileUploadConfig"?: Partial<FileUploadConfig>;
         /**
+          * Grouped element htmlAttributes (textarea + file input). New API — replaces textareaId/textareaName.
+         */
+        "htmlAttributes"?: ChatInputAttributes;
+        /**
+          * Locales (visual strings). Will be merged into _locales.
+         */
+        "locales"?: Partial<ChatInputLocaleInterface>;
+        /**
           * Emitted when the value of the input changes.
          */
         "onWppChange"?: (event: WppChatInputCustomEvent<FileUploadEventDetail>) => void;
@@ -18887,6 +19000,7 @@ declare namespace LocalJSX {
         "onWppSend"?: (event: WppChatInputCustomEvent<SendEventDetail>) => void;
         /**
           * Placeholder text for the input field.
+          * @deprecated : Prefer locales.placeholder.
          */
         "placeholder"?: string;
         /**
@@ -18897,6 +19011,21 @@ declare namespace LocalJSX {
           * Text value used to set the input message content. When user input occurs, a `wppMessageChanged` event is emitted. The new value should be assigned to this property to maintain synchronization with the input field.
          */
         "textValue"?: string;
+        /**
+          * Defines the aria-label of the text area.
+          * @deprecated : Prefer ariaProps.textarea.label
+         */
+        "textareaAriaLabel"?: string;
+        /**
+          * Defines the Id of the text area.
+          * @deprecated : Prefer htmlAttributes.textarea.id
+         */
+        "textareaId"?: string;
+        /**
+          * Defines the name of the text area.
+          * @deprecated : Prefer htmlAttributes.textarea.name
+         */
+        "textareaName"?: string;
         /**
           * If set to true, displays `Select` in left actions. The Select must placed in the `.select` slot.
          */
@@ -18985,6 +19114,10 @@ declare namespace LocalJSX {
           * Defines the direction in which the checkbox items are displayed. By default, the items are displayed vertically (in a column).
          */
         "direction"?: 'column' | 'row';
+        /**
+          * Gap between checkbox buttons in pixels
+         */
+        "gap"?: number;
         /**
           * Indicates the label configuration for the checkbox group.
          */
@@ -19259,6 +19392,10 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
+          * Reverse layout for the range datepicker with a preset list
+         */
+        "reverseLayout"?: boolean;
+        /**
           * Defines the datepicker size.
          */
         "size"?: 's' | 'm';
@@ -19282,6 +19419,10 @@ declare namespace LocalJSX {
           * Defines datepicker view
          */
         "view"?: DatePickerView;
+        /**
+          * Defines the width of the datepicker. If it is undefined, the datepicker will take the default value (200px single datepicker, 260px range datepicker).
+         */
+        "width"?: string;
     }
     interface WppDivider {
         /**
@@ -19324,6 +19465,16 @@ declare namespace LocalJSX {
         "width"?: number;
     }
     interface WppEmptyDataviz {
+        /**
+          * Defines the image height and changes its default size. If you use `height` only, the image width will not be affected.
+         */
+        "height"?: number;
+        /**
+          * Defines the image width and changes its default size. If you use `width` only, the image width and height will be the same.
+         */
+        "width"?: number;
+    }
+    interface WppEmptyDowntime {
         /**
           * Defines the image height and changes its default size. If you use `height` only, the image width will not be affected.
          */
@@ -23316,6 +23467,10 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
+    /**
+     * @deprecated - Use `wpp-icon-favourites-filled` instead.
+     * This component will be deleted in 4.0.0.
+     */
     interface WppIconFavorites {
         /**
           * Defines the icon color.
@@ -23334,6 +23489,10 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
+    /**
+     * @deprecated - Use `wpp-icon-favourites-filled` instead.
+     * This component will be deleted in 4.0.0.
+     */
     interface WppIconFavoritesFilled {
         /**
           * Defines the icon color.
@@ -29701,6 +29860,10 @@ declare namespace LocalJSX {
           * Defines the input value.
          */
         "value"?: InputValue;
+        /**
+          * If the input displays a cross icon on the right side. Clicking the icon will reset the value of the input. Note: The cross icon will appear only on inputs that have a min-width of 160px.
+         */
+        "withCrossIcon"?: boolean;
     }
     interface WppInternalLabel {
         /**
@@ -30525,6 +30688,10 @@ declare namespace LocalJSX {
          */
         "direction"?: 'column' | 'row';
         /**
+          * Gap between radio buttons in pixels
+         */
+        "gap"?: number;
+        /**
           * Indicates the label configuration for the radio group.
          */
         "labelConfig"?: LabelConfig;
@@ -30575,7 +30742,7 @@ declare namespace LocalJSX {
          */
         "autoFocus"?: boolean;
         /**
-          * DOM Element or a CSS selector for a DOM Element, within which the editor’s ui elements (i.e. tooltips, etc.) should be confined. Currently, it only considers left and right boundaries.
+          * DOM Element or a CSS selector for a DOM Element, within which the editor's ui elements (i.e. tooltips, etc.) should be confined. Currently, it only considers left and right boundaries.
          */
         "bounds"?: HTMLElement | string;
         /**
@@ -30659,7 +30826,7 @@ declare namespace LocalJSX {
          */
         "placeholder"?: string;
         /**
-          * Use `pre` HTML element as a container to preserve white space, or regular `div` element
+          * @deprecated This property is no longer needed. Whitespace preservation is now the default behavior for markdown format. This prop will be removed in a future major version.
          */
         "preserveWhitespace"?: boolean;
         /**
@@ -30733,7 +30900,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Use `pre` HTML element as a container to preserve white space, or regular `div` element
+          * @deprecated This property is no longer needed. Whitespace preservation is now the default behavior for markdown format. This prop will be removed in a future major version.
          */
         "preserveWhitespace"?: boolean;
         /**
@@ -31027,7 +31194,7 @@ declare namespace LocalJSX {
          */
         "labelTooltipConfig"?: DropdownConfig;
         /**
-          * List of items in the dropdown.
+          * List of items in the dropdown. The items should have at least a `label` and a `value`.
          */
         "list"?: ListItemInterface[];
         /**
@@ -31143,6 +31310,10 @@ declare namespace LocalJSX {
           * If you pass this prop wrapper of dialog will be rendered as form.
          */
         "formConfig"?: SideModalFormConfig;
+        /**
+          * The list of actions that will be added in the header of the side-modal, on the left of the "X" icon. It can have a maximum length of 4 items.
+         */
+        "headerActionsConfig"?: HeaderActionsConfig;
         /**
           * Handles the side modal back button click.
          */
@@ -31480,6 +31651,10 @@ declare namespace LocalJSX {
          */
         "active"?: boolean;
         /**
+          * Grouped ARIA props (explicit picks only). tab: { label?, describedby?, controls? }
+         */
+        "ariaProps"?: WppTabAriaProps;
+        /**
           * Defines the number of elements within a specific item.
          */
         "counter"?: number;
@@ -31513,6 +31688,14 @@ declare namespace LocalJSX {
         "value": string;
     }
     interface WppTabs {
+        /**
+          * Grouped ARIA props for the tablist: { label?, labelledby? } Precedence: ariaProps > locales > defaults
+         */
+        "ariaProps"?: WppTabsAriaProps;
+        /**
+          * Locales for accessible strings. Only tablistLabel currently.
+         */
+        "locales"?: Partial<TabsLocaleInterface>;
         /**
           * Emitted when the active tab has changed, emits index of the active tab
          */
@@ -31948,6 +32131,10 @@ declare namespace LocalJSX {
          */
         "disableSearchHighlight"?: boolean;
         /**
+          * Lazy loading configuration for dynamically loading children. When a node with `hasChildren: true` is expanded, skeleton loaders are shown while children are fetched, then all children render at once.
+         */
+        "lazyConfig"?: TreeLazyConfig;
+        /**
           * Defines loading state
          */
         "loading"?: boolean;
@@ -32114,6 +32301,7 @@ declare namespace LocalJSX {
         "wpp-empty-cards": WppEmptyCards;
         "wpp-empty-content": WppEmptyContent;
         "wpp-empty-dataviz": WppEmptyDataviz;
+        "wpp-empty-downtime": WppEmptyDowntime;
         "wpp-empty-error": WppEmptyError;
         "wpp-empty-folder": WppEmptyFolder;
         "wpp-empty-no-access": WppEmptyNoAccess;
@@ -32751,6 +32939,7 @@ declare module "@stencil/core" {
             "wpp-empty-cards": LocalJSX.WppEmptyCards & JSXBase.HTMLAttributes<HTMLWppEmptyCardsElement>;
             "wpp-empty-content": LocalJSX.WppEmptyContent & JSXBase.HTMLAttributes<HTMLWppEmptyContentElement>;
             "wpp-empty-dataviz": LocalJSX.WppEmptyDataviz & JSXBase.HTMLAttributes<HTMLWppEmptyDatavizElement>;
+            "wpp-empty-downtime": LocalJSX.WppEmptyDowntime & JSXBase.HTMLAttributes<HTMLWppEmptyDowntimeElement>;
             "wpp-empty-error": LocalJSX.WppEmptyError & JSXBase.HTMLAttributes<HTMLWppEmptyErrorElement>;
             "wpp-empty-folder": LocalJSX.WppEmptyFolder & JSXBase.HTMLAttributes<HTMLWppEmptyFolderElement>;
             "wpp-empty-no-access": LocalJSX.WppEmptyNoAccess & JSXBase.HTMLAttributes<HTMLWppEmptyNoAccessElement>;
@@ -32965,7 +33154,15 @@ declare module "@stencil/core" {
             "wpp-icon-eye-on": LocalJSX.WppIconEyeOn & JSXBase.HTMLAttributes<HTMLWppIconEyeOnElement>;
             "wpp-icon-eyedropper": LocalJSX.WppIconEyedropper & JSXBase.HTMLAttributes<HTMLWppIconEyedropperElement>;
             "wpp-icon-factory": LocalJSX.WppIconFactory & JSXBase.HTMLAttributes<HTMLWppIconFactoryElement>;
+            /**
+             * @deprecated - Use `wpp-icon-favourites-filled` instead.
+             * This component will be deleted in 4.0.0.
+             */
             "wpp-icon-favorites": LocalJSX.WppIconFavorites & JSXBase.HTMLAttributes<HTMLWppIconFavoritesElement>;
+            /**
+             * @deprecated - Use `wpp-icon-favourites-filled` instead.
+             * This component will be deleted in 4.0.0.
+             */
             "wpp-icon-favorites-filled": LocalJSX.WppIconFavoritesFilled & JSXBase.HTMLAttributes<HTMLWppIconFavoritesFilledElement>;
             "wpp-icon-favourites": LocalJSX.WppIconFavourites & JSXBase.HTMLAttributes<HTMLWppIconFavouritesElement>;
             "wpp-icon-favourites-filled": LocalJSX.WppIconFavouritesFilled & JSXBase.HTMLAttributes<HTMLWppIconFavouritesFilledElement>;

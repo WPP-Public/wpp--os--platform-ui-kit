@@ -61,9 +61,10 @@ export class WppSelect {
     };
     this.onUpdateListSingle = () => {
       // This function is called when "this.list" has been updated in the single select.
+      const searchTextLowerCase = this.searchText.toLowerCase().trim();
       this.internalList = [
         ...this.list.map((listItem) => {
-          const hidden = !listItem.label.includes(this.searchText);
+          const hidden = !listItem.label.toLowerCase().includes(searchTextLowerCase);
           const checked = isEqual(listItem.value, this.value);
           if (checked) {
             this.renderedText = listItem.label;
@@ -72,6 +73,7 @@ export class WppSelect {
             ...listItem,
             checked,
             hidden,
+            highlight: this.searchText,
           };
         }),
       ];
@@ -81,9 +83,10 @@ export class WppSelect {
       // We count again all checked and visible items and all disabled or hidden items.
       let checkedItems = 0;
       let disabledItems = 0;
+      const searchTextLowerCase = this.searchText.toLowerCase().trim();
       this.internalList = [
         ...this.list.map((listItem) => {
-          const hidden = !listItem.label.includes(this.searchText);
+          const hidden = !listItem.label.toLowerCase().includes(searchTextLowerCase);
           const checked = !!this.value?.find((valueItem) => isEqual(listItem.value, valueItem));
           if (listItem.disabled) {
             disabledItems++;
@@ -97,6 +100,7 @@ export class WppSelect {
             checked,
             selectable: true,
             multiple: true,
+            highlight: this.searchText,
           };
         }),
       ];
@@ -163,10 +167,10 @@ export class WppSelect {
         return h(Fragment, null);
       }
       if (this.loading) {
-        return (h("div", { class: "loading-container" }, h("wpp-spinner-v3-3-1", null), h("wpp-typography-v3-3-1", { type: "s-body" }, this._locales.loadingText)));
+        return (h("div", { class: "loading-container" }, h("wpp-spinner-v3-4-0", null), h("wpp-typography-v3-4-0", { type: "s-body" }, this._locales.loadingText)));
       }
       if (this.internalList?.length === 0) {
-        return (h("wpp-typography-v3-3-1", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+        return (h("wpp-typography-v3-4-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
       }
       let hiddeItemsCount = 0;
       return (h(Fragment, null, this.internalList?.map((item) => {
@@ -174,11 +178,11 @@ export class WppSelect {
         if (hidden) {
           hiddeItemsCount++;
           if (hiddeItemsCount === this.internalList?.length) {
-            return (h("wpp-typography-v3-3-1", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+            return (h("wpp-typography-v3-4-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
           }
           return null;
         }
-        return (h("wpp-list-item-v3-3-1", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
+        return (h("wpp-list-item-v3-4-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
     };
     this.renderSlotsInListItem = (slots, isLabelExists) => slots
@@ -789,7 +793,7 @@ export class WppSelect {
     return renderCombinedSelect.call(this);
   }
   static get is() { return "wpp-select"; }
-  static get registryIs() { return "wpp-select-v3-3-1"; }
+  static get registryIs() { return "wpp-select-v3-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -862,7 +866,7 @@ export class WppSelect {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "List of items in the dropdown."
+          "text": "List of items in the dropdown. The items should have at least a `label` and a `value`."
         },
         "defaultValue": "[]"
       },

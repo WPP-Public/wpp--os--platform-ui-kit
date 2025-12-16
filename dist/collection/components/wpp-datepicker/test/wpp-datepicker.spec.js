@@ -36,8 +36,38 @@ describe.skip('wpp-datepicker', () => {
     };
     const page = await newSpecPage({
       components: [WppDatepicker, WppLabel, WppInternalLabel],
-      template: () => h("wpp-datepicker-v3-3-1", { range: true, labelConfig: labelConfig }),
+      template: () => h("wpp-datepicker-v3-4-0", { range: true, labelConfig: labelConfig }),
     });
     expect(page.root).toMatchSnapshot();
+  });
+  it('should render datepicker with button trigger variant', async () => {
+    const page = await newSpecPage({
+      components: [WppDatepicker],
+      template: () => (h("wpp-datepicker-v3-4-0", null, h("button", { slot: "trigger" }, "Select Date"))),
+    });
+    expect(page.root).toMatchSnapshot();
+  });
+  it('should have wpp-button-trigger class when trigger slot is used', async () => {
+    const page = await newSpecPage({
+      components: [WppDatepicker],
+      template: () => (h("wpp-datepicker-v3-4-0", null, h("button", { slot: "trigger" }, "Select Date"))),
+    });
+    expect(page.root).toHaveClass('wpp-button-trigger');
+  });
+  it('should render trigger-wrapper part when trigger slot is used', async () => {
+    const page = await newSpecPage({
+      components: [WppDatepicker],
+      template: () => (h("wpp-datepicker-v3-4-0", null, h("button", { slot: "trigger" }, "Select Date"))),
+    });
+    const triggerWrapper = page.root?.shadowRoot?.querySelector('[part="trigger-wrapper"]');
+    expect(triggerWrapper).not.toBeNull();
+  });
+  it('should not render input when trigger slot is used', async () => {
+    const page = await newSpecPage({
+      components: [WppDatepicker],
+      template: () => (h("wpp-datepicker-v3-4-0", null, h("button", { slot: "trigger" }, "Select Date"))),
+    });
+    const input = page.root?.shadowRoot?.querySelector('input#datepicker');
+    expect(input).toBeNull();
   });
 });

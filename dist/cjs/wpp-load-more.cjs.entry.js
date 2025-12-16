@@ -75,9 +75,9 @@ const WppLoadMore = class {
     return this.disabled || this.itemsLoaded >= this.totalItems;
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), onKeyDown: this.onKeyDown, exportparts: "container, progress-text, button" }, this.showProgressBar && (index.h("div", { class: this.progressContainerCssClasses(), part: "container" }, index.h("span", { id: "wpp-progress-indicator-label", class: this.progressTextCssClasses(), part: "progress-text" }, Math.max(0, Math.min(this.itemsLoaded, this.totalItems)), " of ", Math.max(0, this.totalItems), " items"), index.h("wpp-progress-indicator-v3-3-1", { class: "progress-indicator", value: this.progressPercentage, width: PROGRESS_WIDTH, ariaProps: { labelledby: 'wpp-progress-indicator-label' } }))), index.h("wpp-button-v3-3-1", { ref: refEl => (this.loadBtnRef = refEl), class: "load-more-button", variant: "secondary", loading: this.loading && !this.isDisabled(), part: "button", disabled: this.isDisabled(), size: "s", onClick: this.handleClick, ariaProps: this.ariaProps }, "Load more")));
+    return (index.h(index.Host, { class: this.hostCssClasses(), onKeyDown: this.onKeyDown, exportparts: "container, progress-text, button" }, this.showProgressBar && (index.h("div", { class: this.progressContainerCssClasses(), part: "container" }, index.h("span", { id: "wpp-progress-indicator-label", class: this.progressTextCssClasses(), part: "progress-text" }, Math.max(0, Math.min(this.itemsLoaded, this.totalItems)), " of ", Math.max(0, this.totalItems), " items"), index.h("wpp-progress-indicator-v3-4-0", { class: "progress-indicator", value: this.progressPercentage, width: PROGRESS_WIDTH, ariaProps: { labelledby: 'wpp-progress-indicator-label' } }))), index.h("wpp-button-v3-4-0", { ref: refEl => (this.loadBtnRef = refEl), class: "load-more-button", variant: "secondary", loading: this.loading && !this.isDisabled(), part: "button", disabled: this.isDisabled(), size: "s", onClick: this.handleClick, ariaProps: this.ariaProps }, "Load more")));
   }
-  static get registryIs() { return "wpp-load-more-v3-3-1"; }
+  static get registryIs() { return "wpp-load-more-v3-4-0"; }
   static get watchers() { return {
     "itemsLoaded": ["updateProgress"],
     "totalItems": ["updateProgress"],

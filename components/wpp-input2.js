@@ -1,6 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { F as FOCUS_TYPE } from './common.js';
-import { g as getSlotEmptyStates, d as debounce, n as autoFocusElement } from './utils.js';
+import { g as getSlotEmptyStates, n as autoFocusElement } from './utils.js';
 import { W as WrappedSlot } from './WrappedSlot.js';
 import { d as defineCustomElement$e } from './wpp-action-button2.js';
 import { d as defineCustomElement$d } from './wpp-icon-cross2.js';
@@ -7782,7 +7782,7 @@ const LOCALES_DEFAULTS = {
   maxLengthErrorMessage: maxLength => `The input can have a maximum of ${maxLength} characters`,
 };
 
-const wppInputCss = ":host{--text-input-height-m:var(--wpp-input-height-m, 40px);--text-input-height-s:var(--wpp-input-height-s, 32px);--text-input-padding-m:var(--wpp-input-padding-m, calc(9px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width)));--text-input-padding-s:var(--wpp-input-padding-s, calc(5px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width)));--text-input-with-icons-padding-m:var(--wpp-input-with-icons-padding-m, 38px);--text-input-with-icons-padding-s:var(--wpp-input-with-icons-padding-s, 36px);--text-input-label-color:var(--wpp-input-label-color, var(--wpp-text-color-info));--text-input-label-margin:var(--wpp-input-label-margin, 0 0 8px 0);--text-input-inline-message-margin:var(--wpp-input-inline-message-margin, 4px 0 0 0);--text-input-placeholder-color:var(--wpp-input-placeholder-color, var(--wpp-grey-color-700));--text-input-text-color-disabled:var(--wpp-input-text-color-disabled, var(--wpp-text-color-disabled));--text-input-bg-color:var(--wpp-input-bg-color, transparent);--text-input-bg-color-hover:var(--wpp-input-bg-color-hover, var(--wpp-grey-color-200));--text-input-bg-color-active:var(--wpp-input-bg-color-active, var(--wpp-grey-color-000));--text-input-bg-color-disabled:var(--wpp-input-bg-color-disabled, var(--wpp-grey-color-100));--text-input-border-color:var(--wpp-input-border-color, var(--wpp-grey-color-500));--text-input-border-color-hover:var(--wpp-input-border-color-hover, var(--wpp-grey-color-700));--text-input-border-color-active:var(--wpp-input-border-color-active, var(--wpp-grey-color-800));--text-input-border-color-disabled:var(--wpp-input-border-color-disabled, var(--wpp-grey-color-400));--text-input-first-border-color-focus:var(--wpp-input-first-border-color-focus, var(--wpp-grey-color-000));--text-input-second-border-color-focus:var(--wpp-input-second-border-color-focus, var(--wpp-brand-color));--text-input-warning-border-color:var(--wpp-input-warning-border-color, var(--wpp-warning-color-400));--text-input-warning-border-color-hover:var(--wpp-input-warning-border-color-hover, var(--wpp-warning-color-500));--text-input-error-border-color:var(--wpp-input-error-border-color, var(--wpp-danger-color-400));--text-input-error-border-color-hover:var(--wpp-input-error-border-color-hover, var(--wpp-danger-color-500));--text-input-icon-start-margin-m:var(--wpp-input-icon-start-margin-m, 0 0 0 10px);--text-input-icon-end-margin-m:var(--wpp-input-icon-end-margin-m, 0 12px 0 0);--text-input-icon-start-margin-s:var(--wpp-input-icon-start-margin-s, 0 0 0 8px);--text-input-icon-end-margin-s:var(--wpp-input-icon-end-margin-s, 0 10px 0 0);--text-input-icon-end-color-hover:var(--wpp-input-icon-end-color-hover, var(--wpp-icon-color-hover));--text-input-icon-end-color-active:var(--wpp-input-icon-end-color-active, var(--wpp-icon-color-active));--text-input-icon-end-first-border-color-focus:var(--wpp-input-icon-end-first-border-color-focus, var(--wpp-grey-color-000));--text-input-icon-end-second-border-color-focus:var(--wpp-input-icon-end-second-border-color-focus, var(--wpp-brand-color));--text-input-icon-color:var(--wpp-input-icon-color, var(--wpp-icon-color));--text-input-icon-color-disabled:var(--wpp-input-icon-color-disabled, var(--wpp-icon-color-disabled));--text-input-border-width:var(--wpp-input-border-width, var(--wpp-border-width-s));--text-input-border-style:var(--wpp-input-border-style, solid);position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column}.with-tooltip{width:100%}.with-tooltip::part(anchor){width:100%}.label-wrapper{color:var(--text-input-label-color)}.label{margin:var(--text-input-label-margin)}.icon-start,.icon-end{position:absolute;top:50%;display:-ms-flexbox;display:flex;max-width:20px;overflow:hidden;color:var(--text-input-icon-color);-webkit-transform:translateY(-50%);transform:translateY(-50%)}.icon-start ::slotted(*),.icon-end ::slotted(*){color:var(--text-input-icon-color)}.icon-start{color:var(--wpp-grey-color-600)}.icon-start ::slotted(*){color:var(--wpp-grey-color-600)}.icon-end{right:0;cursor:pointer}.icon-end:hover{color:var(--text-input-icon-end-color-hover)}.icon-end:hover ::slotted([slot=icon-end]){color:var(--text-input-icon-end-color-hover)}.icon-end:active{color:var(--text-input-icon-end-color-active)}.icon-end:active ::slotted([slot=icon-end]){color:var(--text-input-icon-end-color-active)}.input-with-icons{position:relative;display:-ms-flexbox;display:flex;width:100%}.input-with-icons .disabled-icon{cursor:not-allowed;color:var(--text-input-icon-color-disabled)}.input-with-icons .disabled-icon ::slotted([slot=icon-start]),.input-with-icons .disabled-icon ::slotted([slot=icon-end]){color:var(--text-input-icon-color-disabled)}.input-with-icons .icon-end{outline:none}.input-with-icons .icon-end:focus-visible{border-radius:3px;outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-icon-end-first-border-color-focus), 0 0 0 3px var(--text-input-icon-end-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-icon-end-first-border-color-focus), 0 0 0 3px var(--text-input-icon-end-second-border-color-focus);color:var(--text-input-icon-end-color-hover)}.input-with-icons:hover .icon-start{color:var(--wpp-grey-color-800)}.input-with-icons:hover .icon-start ::slotted(*){color:var(--wpp-grey-color-800)}.wpp-inline-message{margin:var(--text-input-inline-message-margin)}:host(.wpp-size-m) .input-with-icons .with-icon-start{padding-left:var(--text-input-with-icons-padding-m)}:host(.wpp-size-m) .input-with-icons .with-icon-end{padding-right:var(--text-input-with-icons-padding-m)}:host(.wpp-size-m) .input-with-icons .icon-start{margin:var(--text-input-icon-start-margin-m)}:host(.wpp-size-m) .input-with-icons .icon-end{margin:var(--text-input-icon-end-margin-m)}:host(.wpp-size-s) .input-with-icons .with-icon-start{padding-left:var(--text-input-with-icons-padding-s)}:host(.wpp-size-s) .input-with-icons .with-icon-end{padding-right:var(--text-input-with-icons-padding-s)}:host(.wpp-size-s) .input-with-icons .icon-start{margin:var(--text-input-icon-start-margin-s)}:host(.wpp-size-s) .input-with-icons .icon-end{margin:var(--text-input-icon-end-margin-s)}:host([disabled]:not([disabled=false])){cursor:not-allowed}:host([disabled]:not([disabled=false])) .input-with-icons{pointer-events:none}:host(.with-value) .icon-start:not(.disabled-icon){color:var(--wpp-grey-color-800)}:host(.with-value) .icon-start:not(.disabled-icon) ::slotted(*){color:var(--wpp-grey-color-800)}input{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;height:var(--text-input-height-m);background-color:var(--text-input-bg-color);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color);border-radius:var(--wpp-border-radius-m);outline:none;text-overflow:ellipsis}input[type=search]::-webkit-search-cancel-button{display:none}input .loading{pointer-events:none}input .loading ::part(info-wrapper){height:inherit}input .loading .wpp-spinner{margin-right:7px}input[type=number]{-moz-appearance:textfield}input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}input:hover{background:var(--text-input-bg-color-hover);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-hover)}input:active{border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-active)}input::-webkit-input-placeholder{color:var(--text-input-placeholder-color)}input::-moz-placeholder{color:var(--text-input-placeholder-color)}input:-ms-input-placeholder{color:var(--text-input-placeholder-color)}input::-ms-input-placeholder{color:var(--text-input-placeholder-color)}input::placeholder{color:var(--text-input-placeholder-color)}input:focus{background:var(--text-input-bg-color-active);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-active)}input:disabled{color:var(--text-input-text-color-disabled);background:var(--text-input-bg-color-disabled);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-disabled);cursor:not-allowed}input:disabled::-webkit-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::-moz-placeholder{color:var(--text-input-text-color-disabled)}input:disabled:-ms-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::-ms-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::placeholder{color:var(--text-input-text-color-disabled)}input.size-m{padding:var(--text-input-padding-m)}input.size-m.tab-focus{border-radius:var(--wpp-border-radius-m);outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus)}input.size-s{height:var(--text-input-height-s);padding:var(--text-input-padding-s);border-radius:var(--wpp-border-radius-s)}input.size-s.tab-focus{border-radius:var(--wpp-border-radius-s);outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus)}input.warning,input.warning:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-400)}input.error,input.error:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-400)}input.warning{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-400)}input.warning:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-500)}input.error,input.with-validation-error{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-400)}input.error:hover,input.with-validation-error:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-500)}input:-webkit-autofill{-webkit-animation-name:onAutoFillStart;animation-name:onAutoFillStart;-webkit-transition:background-color 50000s ease-in-out 0s;transition:background-color 50000s ease-in-out 0s}input:autofill,input:-webkit-autofill{-webkit-animation-name:onAutoFillStart;animation-name:onAutoFillStart;-webkit-transition:background-color 50000s ease-in-out 0s;transition:background-color 50000s ease-in-out 0s}";
+const wppInputCss = ":host{--text-input-height-m:var(--wpp-input-height-m, 40px);--text-input-height-s:var(--wpp-input-height-s, 32px);--text-input-padding-m:var(\n    --wpp-input-padding-m,\n    calc(9px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width))\n  );--text-input-padding-s:var(\n    --wpp-input-padding-s,\n    calc(5px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width))\n  );--text-input-with-icons-padding-m:var(--wpp-input-with-icons-padding-m, 38px);--text-input-with-icons-padding-s:var(--wpp-input-with-icons-padding-s, 36px);--text-input-label-color:var(--wpp-input-label-color, var(--wpp-text-color-info));--text-input-label-margin:var(--wpp-input-label-margin, 0 0 8px 0);--text-input-inline-message-margin:var(--wpp-input-inline-message-margin, 4px 0 0 0);--text-input-placeholder-color:var(--wpp-input-placeholder-color, var(--wpp-grey-color-700));--text-input-text-color-disabled:var(--wpp-input-text-color-disabled, var(--wpp-text-color-disabled));--text-input-bg-color:var(--wpp-input-bg-color, transparent);--text-input-bg-color-hover:var(--wpp-input-bg-color-hover, var(--wpp-grey-color-200));--text-input-bg-color-active:var(--wpp-input-bg-color-active, var(--wpp-grey-color-000));--text-input-bg-color-disabled:var(--wpp-input-bg-color-disabled, var(--wpp-grey-color-100));--text-input-border-color:var(--wpp-input-border-color, var(--wpp-grey-color-500));--text-input-border-color-hover:var(--wpp-input-border-color-hover, var(--wpp-grey-color-700));--text-input-border-color-active:var(--wpp-input-border-color-active, var(--wpp-grey-color-800));--text-input-border-color-disabled:var(--wpp-input-border-color-disabled, var(--wpp-grey-color-400));--text-input-first-border-color-focus:var(--wpp-input-first-border-color-focus, var(--wpp-grey-color-000));--text-input-second-border-color-focus:var(--wpp-input-second-border-color-focus, var(--wpp-brand-color));--text-input-warning-border-color:var(--wpp-input-warning-border-color, var(--wpp-warning-color-400));--text-input-warning-border-color-hover:var(--wpp-input-warning-border-color-hover, var(--wpp-warning-color-500));--text-input-error-border-color:var(--wpp-input-error-border-color, var(--wpp-danger-color-400));--text-input-error-border-color-hover:var(--wpp-input-error-border-color-hover, var(--wpp-danger-color-500));--text-input-icon-start-margin-m:var(--wpp-input-icon-start-margin-m, 0 0 0 10px);--text-input-icon-end-margin-m:var(--wpp-input-icon-end-margin-m, 0 12px 0 0);--text-input-icon-start-margin-s:var(--wpp-input-icon-start-margin-s, 0 0 0 8px);--text-input-icon-end-margin-s:var(--wpp-input-icon-end-margin-s, 0 10px 0 0);--text-input-icon-end-color-hover:var(--wpp-input-icon-end-color-hover, var(--wpp-icon-color-hover));--text-input-icon-end-color-active:var(--wpp-input-icon-end-color-active, var(--wpp-icon-color-active));--text-input-icon-end-first-border-color-focus:var(\n    --wpp-input-icon-end-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--text-input-icon-end-second-border-color-focus:var(\n    --wpp-input-icon-end-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--text-input-icon-color:var(--wpp-input-icon-color, var(--wpp-icon-color));--text-input-icon-color-disabled:var(--wpp-input-icon-color-disabled, var(--wpp-icon-color-disabled));--text-input-border-width:var(--wpp-input-border-width, var(--wpp-border-width-s));--text-input-border-style:var(--wpp-input-border-style, solid);position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column}.with-tooltip{width:100%}.with-tooltip::part(anchor){width:100%}.label-wrapper{color:var(--text-input-label-color)}.label{margin:var(--text-input-label-margin)}.icon-start,.icon-end{position:absolute;top:50%;display:-ms-flexbox;display:flex;max-width:20px;overflow:hidden;color:var(--text-input-icon-color);-webkit-transform:translateY(-50%);transform:translateY(-50%)}.icon-start ::slotted(*),.icon-end ::slotted(*){color:var(--text-input-icon-color)}.icon-start{color:var(--wpp-grey-color-600)}.icon-start ::slotted(*){color:var(--wpp-grey-color-600)}.icon-end{right:0;cursor:pointer}.icon-end:hover{color:var(--text-input-icon-end-color-hover)}.icon-end:hover ::slotted([slot=icon-end]){color:var(--text-input-icon-end-color-hover)}.icon-end:active{color:var(--text-input-icon-end-color-active)}.icon-end:active ::slotted([slot=icon-end]){color:var(--text-input-icon-end-color-active)}.input-with-icons{position:relative;display:-ms-flexbox;display:flex;width:100%}.input-with-icons .disabled-icon{cursor:not-allowed;color:var(--text-input-icon-color-disabled)}.input-with-icons .disabled-icon ::slotted([slot=icon-start]),.input-with-icons .disabled-icon ::slotted([slot=icon-end]){color:var(--text-input-icon-color-disabled)}.input-with-icons .icon-end{outline:none}.input-with-icons .icon-end:focus-visible{border-radius:3px;outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-icon-end-first-border-color-focus), 0 0 0 3px var(--text-input-icon-end-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-icon-end-first-border-color-focus), 0 0 0 3px var(--text-input-icon-end-second-border-color-focus);color:var(--text-input-icon-end-color-hover)}.input-with-icons:hover .icon-start{color:var(--wpp-grey-color-800)}.input-with-icons:hover .icon-start ::slotted(*){color:var(--wpp-grey-color-800)}.wpp-inline-message{margin:var(--text-input-inline-message-margin)}:host(.wpp-size-m) .input-with-icons .with-icon-start{padding-left:var(--text-input-with-icons-padding-m)}:host(.wpp-size-m) .input-with-icons .with-icon-end{padding-right:var(--text-input-with-icons-padding-m)}:host(.wpp-size-m) .input-with-icons .with-double-icon-end{padding-right:60px}:host(.wpp-size-m) .input-with-icons .icon-start{margin:var(--text-input-icon-start-margin-m)}:host(.wpp-size-m) .input-with-icons .icon-end{margin:var(--text-input-icon-end-margin-m)}:host(.wpp-size-m) .input-with-icons .double-icon-end{margin-right:38px}:host(.wpp-size-s) .input-with-icons .with-icon-start{padding-left:var(--text-input-with-icons-padding-s)}:host(.wpp-size-s) .input-with-icons .with-icon-end{padding-right:var(--text-input-with-icons-padding-s)}:host(.wpp-size-s) .input-with-icons .with-double-icon-end{padding-right:60px}:host(.wpp-size-s) .input-with-icons .icon-start{margin:var(--text-input-icon-start-margin-s)}:host(.wpp-size-s) .input-with-icons .icon-end{margin:var(--text-input-icon-end-margin-s)}:host(.wpp-size-s) .input-with-icons .double-icon-end{margin-right:38px}:host([disabled]:not([disabled=false])){cursor:not-allowed}:host([disabled]:not([disabled=false])) .input-with-icons{pointer-events:none}:host(.with-value) .icon-start:not(.disabled-icon){color:var(--wpp-grey-color-800)}:host(.with-value) .icon-start:not(.disabled-icon) ::slotted(*){color:var(--wpp-grey-color-800)}input{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;height:var(--text-input-height-m);background-color:var(--text-input-bg-color);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color);border-radius:var(--wpp-border-radius-m);outline:none;text-overflow:ellipsis}input[type=search]::-webkit-search-cancel-button{display:none}input .loading{pointer-events:none}input .loading ::part(info-wrapper){height:inherit}input .loading .wpp-spinner{margin-right:7px}input[type=number]{-moz-appearance:textfield}input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}input:hover{background:var(--text-input-bg-color-hover);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-hover)}input:active{border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-active)}input::-webkit-input-placeholder{color:var(--text-input-placeholder-color)}input::-moz-placeholder{color:var(--text-input-placeholder-color)}input:-ms-input-placeholder{color:var(--text-input-placeholder-color)}input::-ms-input-placeholder{color:var(--text-input-placeholder-color)}input::placeholder{color:var(--text-input-placeholder-color)}input:focus{background:var(--text-input-bg-color-active);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-active)}input:disabled{color:var(--text-input-text-color-disabled);background:var(--text-input-bg-color-disabled);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-disabled);cursor:not-allowed}input:disabled::-webkit-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::-moz-placeholder{color:var(--text-input-text-color-disabled)}input:disabled:-ms-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::-ms-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::placeholder{color:var(--text-input-text-color-disabled)}input.size-m{padding:var(--text-input-padding-m)}input.size-m.tab-focus{border-radius:var(--wpp-border-radius-m);outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus)}input.size-s{height:var(--text-input-height-s);padding:var(--text-input-padding-s);border-radius:var(--wpp-border-radius-s)}input.size-s.tab-focus{border-radius:var(--wpp-border-radius-s);outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus)}input.warning,input.warning:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-400)}input.error,input.error:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-400)}input.warning{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-400)}input.warning:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-500)}input.error,input.with-validation-error{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-400)}input.error:hover,input.with-validation-error:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-500)}input:-webkit-autofill{-webkit-animation-name:onAutoFillStart;animation-name:onAutoFillStart;-webkit-transition:background-color 50000s ease-in-out 0s;transition:background-color 50000s ease-in-out 0s}input:autofill,input:-webkit-autofill{-webkit-animation-name:onAutoFillStart;animation-name:onAutoFillStart;-webkit-transition:background-color 50000s ease-in-out 0s;transition:background-color 50000s ease-in-out 0s}";
 
 const getInitFocusInfo = () => ({
   input: FOCUS_TYPE.NONE,
@@ -7801,6 +7801,53 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
     this.hadChangesInTooltip = false;
     this.suppressInputEvent = false;
     this._locales = LOCALES_DEFAULTS;
+    // This function is needed in order to check the rendered value in the input and validate the layout (check for truncation, cross icon visibility)
+    this.checkInputAfterRender = () => {
+      // Very similar to Watch('value'), but we need to ensure the component actually rendered the new value to avoid setTimeout() in watcher.
+      if (this.previouslyRenderedValue !== this.value) {
+        if (this.focusType.input === FOCUS_TYPE.NONE) {
+          // This covers cases when the value is changed programatically while the input is not focused (e.g: in the slider, when moving the thumbs).
+          this.checkForEllipsis();
+        }
+        if (this.withCrossIcon &&
+          // The only cases when we need to check for the cross icon is either when the value becomes empty or the previous value was empty.
+          ((!this.value && this.previouslyRenderedValue) || (this.value && !this.previouslyRenderedValue))) {
+          this.updateCrossIcon();
+        }
+        this.previouslyRenderedValue = this.value;
+      }
+    };
+    // We need to setup a resize observer so we can check when to render the cross icon (based on the input width)
+    // and check for truncation.
+    this.setupResizeObserver = () => {
+      if (!this.inputRef)
+        return;
+      this.resizeObserver = new ResizeObserver(this.handleResize);
+      this.resizeObserver.observe(this.inputRef);
+    };
+    this.handleResize = (entries) => {
+      for (const entry of entries) {
+        if (entry.target === this.inputRef) {
+          if (this.withCrossIcon) {
+            this.updateCrossIcon();
+          }
+          this.checkForEllipsis();
+        }
+      }
+    };
+    this.updateCrossIcon = () => {
+      if (!this.value && !this.internalDefaultValue) {
+        this.shouldRenderCrossIcon = false;
+        // Cross icon is displayed on inputs with min-width >= 160px.
+        // We take away the width of the border (2px) from 160px (min-width to display the icon) = 158px
+      }
+      else if (!this.inputRef || this.inputRef.clientWidth < 158) {
+        this.shouldRenderCrossIcon = false;
+      }
+      else {
+        this.shouldRenderCrossIcon = true;
+      }
+    };
     this.updateInputRef = (inputRef) => {
       if (inputRef)
         this.inputRef = inputRef;
@@ -7821,16 +7868,7 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
         if (!this.inputRef)
           return;
         if (this.value && this.value.length > 0) {
-          const inputComputedStyles = window.getComputedStyle(this.inputRef);
-          let inputContentWidth = this.inputRef.clientWidth;
-          let inputScrollWidth = this.inputRef.scrollWidth;
-          const paddingLeft = inputComputedStyles.paddingLeft;
-          const paddingRight = inputComputedStyles.paddingRight;
-          if (paddingLeft?.endsWith('px') && paddingRight?.endsWith('px')) {
-            inputContentWidth -= parseFloat(paddingLeft) + parseFloat(paddingRight);
-            inputScrollWidth -= parseFloat(paddingLeft) + parseFloat(paddingRight);
-          }
-          const hasScroll = inputContentWidth < inputScrollWidth;
+          const hasScroll = this.inputRef.clientWidth < this.inputRef.scrollWidth;
           this.hadChangesInTooltip = this.hasActiveEllipses !== hasScroll;
           this.hasActiveEllipses = hasScroll;
         }
@@ -7920,6 +7958,7 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
         this.suppressInputEvent = false;
         return;
       }
+      this.internalDefaultValue = undefined;
       const eventValue = event.target.value;
       const rawValue = getRawValueForExtra(eventValue, this.type, this.maskOptions);
       this.value = eventValue;
@@ -7943,6 +7982,7 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
     this.onClear = (event) => {
       event.preventDefault();
       event.stopPropagation();
+      this.internalDefaultValue = undefined;
       this.value = '';
       this.hasActiveEllipses = false;
       requestAnimationFrame(() => this.setFocus());
@@ -7990,7 +8030,8 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
       [`size-${this.size}`]: true,
       [`${this.messageType}`]: !!this.messageType,
       [`with-icon-start`]: this.hasIconStartSlot || (this.type === 'search' && this.loading && !this.disabled) || this.type === 'search',
-      [`with-icon-end`]: this.hasIconEndSlot || this.type === 'search',
+      [`with-icon-end`]: (this.hasIconEndSlot && !this.shouldRenderCrossIcon) || (!this.hasIconEndSlot && this.shouldRenderCrossIcon),
+      'with-double-icon-end': this.hasIconEndSlot && this.shouldRenderCrossIcon,
       'tab-focus': this.focusType.input === FOCUS_TYPE.TAB &&
         this.focusType.icon !== FOCUS_TYPE.TAB &&
         this.focusType.inlineMessage !== FOCUS_TYPE.TAB,
@@ -8009,10 +8050,11 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
       'disabled-icon': this.disabled,
       'slot-hidden': !this.hasIconStartSlot && !(this.type === 'search' && this.loading && !this.disabled),
     });
-    this.iconEndCssClasses = () => ({
+    this.iconEndCssClasses = (iconType) => ({
       'icon-end': true,
       'disabled-icon': this.disabled,
       'slot-hidden': !this.hasIconEndSlot && !(this.type === 'search' && this.loading && !this.disabled),
+      ...(iconType === 'native' && this.shouldRenderCrossIcon && this.hasIconEndSlot ? { 'double-icon-end': true } : {}),
     });
     this.inputId = this.name || `wpp-input-${Math.random().toString(36).substr(2, 9)}`;
     this.labelId = `${this.inputId}-label`;
@@ -8021,10 +8063,11 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
       if (this.type !== 'search')
         return null;
       if (this.loading && !this.disabled) {
-        return h("wpp-spinner-v3-3-1", { class: this.iconStartCssClasses(), slot: "left", "aria-label": "Loading" });
+        return h("wpp-spinner-v3-4-0", { class: this.iconStartCssClasses(), slot: "left", "aria-label": "Loading" });
       }
-      return h("wpp-icon-search-v3-3-1", { class: this.iconStartCssClasses(), part: "icon-search" });
+      return h("wpp-icon-search-v3-4-0", { class: this.iconStartCssClasses(), part: "icon-search" });
     };
+    this.shouldRenderCrossIcon = false;
     this.hasActiveEllipses = false;
     this.hasIconStartSlot = false;
     this.hasIconEndSlot = false;
@@ -8056,14 +8099,7 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
     this.locales = {};
     this.loading = false;
     this.autocomplete = 'off';
-  }
-  /**
-   * Method that listens to the window resize event.
-   */
-  onResize() {
-    if (this.debouncedCheckForEllipsis) {
-      this.debouncedCheckForEllipsis();
-    }
+    this.withCrossIcon = true;
   }
   /**
    * Method that selects all the text in an element
@@ -8122,27 +8158,26 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
   async getValue() {
     return this.value;
   }
-  onUpdateValue() {
-    if (this.focusType.input === FOCUS_TYPE.NONE && this.debouncedCheckForEllipsis) {
-      // This will be called when the value changes when moving the slider's thumbs.
-      this.debouncedCheckForEllipsis();
-    }
-  }
   onUpdateLocales(newLocales) {
     this._locales = { ...this._locales, ...newLocales };
+  }
+  connectedCallback() {
+    if (this.withCrossIcon) {
+      this.updateCrossIcon();
+    }
+    this.checkForEllipsis();
+    this.internalDefaultValue = this.defaultValue;
   }
   componentWillLoad() {
     this._locales = { ...this._locales, ...this.locales };
     this.updateSlotData();
-    this.debouncedCheckForEllipsis = debounce(() => {
-      this.checkForEllipsis();
-    }, 50);
   }
   componentDidRender() {
     if (this.hadChangesInTooltip && this.inputRef) {
       this.updateInputWithMask();
       this.hadChangesInTooltip = false;
     }
+    this.checkInputAfterRender();
   }
   async componentDidLoad() {
     autoFocusElement(this.autoFocus, this.inputRef);
@@ -8170,23 +8205,27 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
       this.initialProcessed = true;
       this.suppressInputEvent = false;
     }
+    this.setupResizeObserver();
   }
   disconnectedCallback() {
     if (this.maskedElement) {
       this.maskedElement.destroy();
     }
+    if (this.resizeObserver && this.inputRef) {
+      this.resizeObserver.unobserve(this.inputRef);
+      this.resizeObserver.disconnect();
+    }
   }
   render() {
-    return (h(Host, { class: this.wrapperCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'input'), exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v3-3-1", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v3-3-1", { part: "anchor", text: this.value, class: "with-tooltip", disabled: !this.hasActiveEllipses, anchorTabIndex: -1, config: this.truncationTooltipConfig }, this.renderInput()), (this.type === 'search' || this.loading) && !!this.value && (h("wpp-icon-cross-v3-3-1", { class: this.iconEndCssClasses(), "aria-label": "Erase input text", tabIndex: 0, part: "icon-cross", onClick: event => this.onClear(event), onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData, tabIndex: this.hasIconEndSlot ? 0 : -1, "aria-label": "Clear input", role: "button" })), this.lengthValidationError && (h("wpp-inline-message-v3-3-1", { message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') })), this.message && (h("wpp-inline-message-v3-3-1", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') }))));
+    return (h(Host, { class: this.wrapperCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'input'), exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v3-4-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v3-4-0", { part: "anchor", text: this.value, class: "with-tooltip", disabled: !this.hasActiveEllipses || this.type === 'password', anchorTabIndex: -1, config: this.truncationTooltipConfig }, this.renderInput()), this.shouldRenderCrossIcon && this.withCrossIcon && (h("wpp-icon-cross-v3-4-0", { class: this.iconEndCssClasses('native'), "aria-label": "Erase input text", role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: 0, part: "icon-cross", onClick: event => this.onClear(event), onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses('slot'), name: "icon-end", onSlotchange: this.updateSlotData, tabIndex: this.hasIconEndSlot ? 0 : -1, "aria-label": "Clear input", role: "button" })), this.lengthValidationError && (h("wpp-inline-message-v3-4-0", { message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') })), this.message && (h("wpp-inline-message-v3-4-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') }))));
   }
-  static get registryIs() { return "wpp-input-v3-3-1"; }
+  static get registryIs() { return "wpp-input-v3-4-0"; }
   get host() { return this; }
   static get watchers() { return {
-    "value": ["onUpdateValue"],
     "locales": ["onUpdateLocales"]
   }; }
   static get style() { return wppInputCss; }
-}, [1, "wpp-input", "wpp-input-v3-3-1", {
+}, [1, "wpp-input", "wpp-input-v3-4-0", {
     "name": [1],
     "type": [1],
     "value": [1025],
@@ -8211,6 +8250,8 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
     "locales": [16],
     "loading": [516],
     "autocomplete": [1],
+    "withCrossIcon": [4, "with-cross-icon"],
+    "shouldRenderCrossIcon": [32],
     "hasActiveEllipses": [32],
     "hasIconStartSlot": [32],
     "hasIconEndSlot": [32],
@@ -8220,84 +8261,84 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
     "setFocus": [64],
     "setValue": [64],
     "getValue": [64]
-  }, [[9, "resize", "onResize"]]]);
+  }]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-input-v3-3-1", "wpp-action-button-v3-3-1", "wpp-icon-cross-v3-3-1", "wpp-icon-error-v3-3-1", "wpp-icon-info-message-v3-3-1", "wpp-icon-search-v3-3-1", "wpp-icon-success-v3-3-1", "wpp-icon-warning-v3-3-1", "wpp-inline-message-v3-3-1", "wpp-internal-label-v3-3-1", "wpp-internal-tooltip-v3-3-1", "wpp-label-v3-3-1", "wpp-spinner-v3-3-1", "wpp-tooltip-v3-3-1", "wpp-typography-v3-3-1"];
+  const components = ["wpp-input-v3-4-0", "wpp-action-button-v3-4-0", "wpp-icon-cross-v3-4-0", "wpp-icon-error-v3-4-0", "wpp-icon-info-message-v3-4-0", "wpp-icon-search-v3-4-0", "wpp-icon-success-v3-4-0", "wpp-icon-warning-v3-4-0", "wpp-inline-message-v3-4-0", "wpp-internal-label-v3-4-0", "wpp-internal-tooltip-v3-4-0", "wpp-label-v3-4-0", "wpp-spinner-v3-4-0", "wpp-tooltip-v3-4-0", "wpp-typography-v3-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-input-v3-3-1":
+    case "wpp-input-v3-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppInput);
       }
       break;
-    case "wpp-action-button-v3-3-1":
+    case "wpp-action-button-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-cross-v3-3-1":
+    case "wpp-icon-cross-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-error-v3-3-1":
+    case "wpp-icon-error-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-info-message-v3-3-1":
+    case "wpp-icon-info-message-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-search-v3-3-1":
+    case "wpp-icon-search-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-success-v3-3-1":
+    case "wpp-icon-success-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-warning-v3-3-1":
+    case "wpp-icon-warning-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-inline-message-v3-3-1":
+    case "wpp-inline-message-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-label-v3-3-1":
+    case "wpp-internal-label-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-1":
+    case "wpp-internal-tooltip-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-label-v3-3-1":
+    case "wpp-label-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v3-3-1":
+    case "wpp-spinner-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v3-3-1":
+    case "wpp-tooltip-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v3-3-1":
+    case "wpp-typography-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

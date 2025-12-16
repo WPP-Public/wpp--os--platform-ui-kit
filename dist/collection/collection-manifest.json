@@ -567,6 +567,7 @@
     "components/wpp-image/components/empty states/wpp-empty-cards/wpp-empty-cards.js",
     "components/wpp-image/components/empty states/wpp-empty-content/wpp-empty-content.js",
     "components/wpp-image/components/empty states/wpp-empty-dataviz/wpp-empty-dataviz.js",
+    "components/wpp-image/components/empty states/wpp-empty-downtime/wpp-empty-downtime.js",
     "components/wpp-image/components/empty states/wpp-empty-error/wpp-empty-error.js",
     "components/wpp-image/components/empty states/wpp-empty-folder/wpp-empty-folder.js",
     "components/wpp-image/components/empty states/wpp-empty-no-access/wpp-empty-no-access.js",

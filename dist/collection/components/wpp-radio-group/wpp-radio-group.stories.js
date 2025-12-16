@@ -17,32 +17,34 @@ export default {
       options: ['column', 'row'],
       control: { type: 'select' },
     },
+    gap: 20,
   },
 };
 export const RadioGroup = (args) => html `
-  <wpp-radio-group-v3-3-1
+  <wpp-radio-group-v3-4-0
     .required=${args.required}
     .labelConfig=${args.labelConfig}
     .maxMessageLength="${args.maxMessageLength}"
     .direction="${args.direction}"
     .message="${args.message}"
     .messageType="${args.messageType}"
+    .gap="${args.gap}"
     style="display: inline-flex; flex-direction: column; height: 80px; justify-content: space-between"
   >
-    <wpp-radio-v3-3-1
+    <wpp-radio-v3-4-0
       .required=${true}
       name="contact"
       value="email"
       .labelConfig=${{ text: 'Email' }}
-    ></wpp-radio-v3-3-1>
-    <wpp-radio-v3-3-1 .required=${true} name="contact" value="mail" .labelConfig=${{ text: 'Mail' }}></wpp-radio-v3-3-1>
-    <wpp-radio-v3-3-1
+    ></wpp-radio-v3-4-0>
+    <wpp-radio-v3-4-0 .required=${true} name="contact" value="mail" .labelConfig=${{ text: 'Mail' }}></wpp-radio-v3-4-0>
+    <wpp-radio-v3-4-0
       .required=${true}
       name="contact"
       value="phone"
       .labelConfig=${{ text: 'Phone' }}
-    ></wpp-radio-v3-3-1>
-  </wpp-radio-group-v3-3-1>
+    ></wpp-radio-v3-4-0>
+  </wpp-radio-group-v3-4-0>
 `;
 RadioGroup.args = {
   required: true,
@@ -50,5 +52,6 @@ RadioGroup.args = {
   messageType: 'error',
   maxMessageLength: 10,
   direction: 'column',
+  gap: 20,
   labelConfig: { text: 'Radio Group', description: 'Radio Group description', icon: 'wpp-icon-info' },
 };

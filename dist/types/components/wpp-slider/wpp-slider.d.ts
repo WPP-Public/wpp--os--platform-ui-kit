@@ -35,6 +35,7 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
   private marksListRef?;
   private segmentWidth;
   private totalWidth;
+  private maskPrecisions;
   private middleValue;
   host: HTMLWppSliderElement;
   tooltipTexts: Record<number, string>;
@@ -127,6 +128,7 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
    * Emitted when the slider loses focus.
    */
   readonly wppBlur: EventEmitter<FocusEvent>;
+  onUpdateMaskOptions(): void;
   onUpdateValue(): void;
   onUpdateMinValue(newValue: number): void;
   onUpdateMaxValue(newValue: number): void;
@@ -139,6 +141,7 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
   componentWillLoad(): void;
   componentDidLoad(): void;
   disconnectedCallback(): void;
+  private setPrecision;
   private getMidValueRespectingStep;
   private computeSegmentWidth;
   private onUpdateMinMaxValues;

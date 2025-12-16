@@ -4,7 +4,7 @@ import { maskitoPhoneOptionsGenerator } from '@maskito/phone';
 import metadata from 'libphonenumber-js/min/metadata';
 import { maskitoNumberOptionsGenerator, maskitoPrefixPostprocessorGenerator, maskitoWithPlaceholder, } from '@maskito/kit';
 import { FOCUS_TYPE } from '../../types/common';
-import { autoFocusElement, debounce, getSlotEmptyStates } from '../../utils/utils';
+import { autoFocusElement, getSlotEmptyStates } from '../../utils/utils';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { getRawValueForExtra, getValidAutocomplete } from './utils';
 import { LOCALES_DEFAULTS } from './const';
@@ -29,6 +29,53 @@ export class WppInput {
     this.hadChangesInTooltip = false;
     this.suppressInputEvent = false;
     this._locales = LOCALES_DEFAULTS;
+    // This function is needed in order to check the rendered value in the input and validate the layout (check for truncation, cross icon visibility)
+    this.checkInputAfterRender = () => {
+      // Very similar to Watch('value'), but we need to ensure the component actually rendered the new value to avoid setTimeout() in watcher.
+      if (this.previouslyRenderedValue !== this.value) {
+        if (this.focusType.input === FOCUS_TYPE.NONE) {
+          // This covers cases when the value is changed programatically while the input is not focused (e.g: in the slider, when moving the thumbs).
+          this.checkForEllipsis();
+        }
+        if (this.withCrossIcon &&
+          // The only cases when we need to check for the cross icon is either when the value becomes empty or the previous value was empty.
+          ((!this.value && this.previouslyRenderedValue) || (this.value && !this.previouslyRenderedValue))) {
+          this.updateCrossIcon();
+        }
+        this.previouslyRenderedValue = this.value;
+      }
+    };
+    // We need to setup a resize observer so we can check when to render the cross icon (based on the input width)
+    // and check for truncation.
+    this.setupResizeObserver = () => {
+      if (!this.inputRef)
+        return;
+      this.resizeObserver = new ResizeObserver(this.handleResize);
+      this.resizeObserver.observe(this.inputRef);
+    };
+    this.handleResize = (entries) => {
+      for (const entry of entries) {
+        if (entry.target === this.inputRef) {
+          if (this.withCrossIcon) {
+            this.updateCrossIcon();
+          }
+          this.checkForEllipsis();
+        }
+      }
+    };
+    this.updateCrossIcon = () => {
+      if (!this.value && !this.internalDefaultValue) {
+        this.shouldRenderCrossIcon = false;
+        // Cross icon is displayed on inputs with min-width >= 160px.
+        // We take away the width of the border (2px) from 160px (min-width to display the icon) = 158px
+      }
+      else if (!this.inputRef || this.inputRef.clientWidth < 158) {
+        this.shouldRenderCrossIcon = false;
+      }
+      else {
+        this.shouldRenderCrossIcon = true;
+      }
+    };
     this.updateInputRef = (inputRef) => {
       if (inputRef)
         this.inputRef = inputRef;
@@ -49,16 +96,7 @@ export class WppInput {
         if (!this.inputRef)
           return;
         if (this.value && this.value.length > 0) {
-          const inputComputedStyles = window.getComputedStyle(this.inputRef);
-          let inputContentWidth = this.inputRef.clientWidth;
-          let inputScrollWidth = this.inputRef.scrollWidth;
-          const paddingLeft = inputComputedStyles.paddingLeft;
-          const paddingRight = inputComputedStyles.paddingRight;
-          if (paddingLeft?.endsWith('px') && paddingRight?.endsWith('px')) {
-            inputContentWidth -= parseFloat(paddingLeft) + parseFloat(paddingRight);
-            inputScrollWidth -= parseFloat(paddingLeft) + parseFloat(paddingRight);
-          }
-          const hasScroll = inputContentWidth < inputScrollWidth;
+          const hasScroll = this.inputRef.clientWidth < this.inputRef.scrollWidth;
           this.hadChangesInTooltip = this.hasActiveEllipses !== hasScroll;
           this.hasActiveEllipses = hasScroll;
         }
@@ -148,6 +186,7 @@ export class WppInput {
         this.suppressInputEvent = false;
         return;
       }
+      this.internalDefaultValue = undefined;
       const eventValue = event.target.value;
       const rawValue = getRawValueForExtra(eventValue, this.type, this.maskOptions);
       this.value = eventValue;
@@ -171,6 +210,7 @@ export class WppInput {
     this.onClear = (event) => {
       event.preventDefault();
       event.stopPropagation();
+      this.internalDefaultValue = undefined;
       this.value = '';
       this.hasActiveEllipses = false;
       requestAnimationFrame(() => this.setFocus());
@@ -218,7 +258,8 @@ export class WppInput {
       [`size-${this.size}`]: true,
       [`${this.messageType}`]: !!this.messageType,
       [`with-icon-start`]: this.hasIconStartSlot || (this.type === 'search' && this.loading && !this.disabled) || this.type === 'search',
-      [`with-icon-end`]: this.hasIconEndSlot || this.type === 'search',
+      [`with-icon-end`]: (this.hasIconEndSlot && !this.shouldRenderCrossIcon) || (!this.hasIconEndSlot && this.shouldRenderCrossIcon),
+      'with-double-icon-end': this.hasIconEndSlot && this.shouldRenderCrossIcon,
       'tab-focus': this.focusType.input === FOCUS_TYPE.TAB &&
         this.focusType.icon !== FOCUS_TYPE.TAB &&
         this.focusType.inlineMessage !== FOCUS_TYPE.TAB,
@@ -237,10 +278,11 @@ export class WppInput {
       'disabled-icon': this.disabled,
       'slot-hidden': !this.hasIconStartSlot && !(this.type === 'search' && this.loading && !this.disabled),
     });
-    this.iconEndCssClasses = () => ({
+    this.iconEndCssClasses = (iconType) => ({
       'icon-end': true,
       'disabled-icon': this.disabled,
       'slot-hidden': !this.hasIconEndSlot && !(this.type === 'search' && this.loading && !this.disabled),
+      ...(iconType === 'native' && this.shouldRenderCrossIcon && this.hasIconEndSlot ? { 'double-icon-end': true } : {}),
     });
     this.inputId = this.name || `wpp-input-${Math.random().toString(36).substr(2, 9)}`;
     this.labelId = `${this.inputId}-label`;
@@ -249,10 +291,11 @@ export class WppInput {
       if (this.type !== 'search')
         return null;
       if (this.loading && !this.disabled) {
-        return h("wpp-spinner-v3-3-1", { class: this.iconStartCssClasses(), slot: "left", "aria-label": "Loading" });
+        return h("wpp-spinner-v3-4-0", { class: this.iconStartCssClasses(), slot: "left", "aria-label": "Loading" });
       }
-      return h("wpp-icon-search-v3-3-1", { class: this.iconStartCssClasses(), part: "icon-search" });
+      return h("wpp-icon-search-v3-4-0", { class: this.iconStartCssClasses(), part: "icon-search" });
     };
+    this.shouldRenderCrossIcon = false;
     this.hasActiveEllipses = false;
     this.hasIconStartSlot = false;
     this.hasIconEndSlot = false;
@@ -284,14 +327,7 @@ export class WppInput {
     this.locales = {};
     this.loading = false;
     this.autocomplete = 'off';
-  }
-  /**
-   * Method that listens to the window resize event.
-   */
-  onResize() {
-    if (this.debouncedCheckForEllipsis) {
-      this.debouncedCheckForEllipsis();
-    }
+    this.withCrossIcon = true;
   }
   /**
    * Method that selects all the text in an element
@@ -350,27 +386,26 @@ export class WppInput {
   async getValue() {
     return this.value;
   }
-  onUpdateValue() {
-    if (this.focusType.input === FOCUS_TYPE.NONE && this.debouncedCheckForEllipsis) {
-      // This will be called when the value changes when moving the slider's thumbs.
-      this.debouncedCheckForEllipsis();
-    }
-  }
   onUpdateLocales(newLocales) {
     this._locales = { ...this._locales, ...newLocales };
+  }
+  connectedCallback() {
+    if (this.withCrossIcon) {
+      this.updateCrossIcon();
+    }
+    this.checkForEllipsis();
+    this.internalDefaultValue = this.defaultValue;
   }
   componentWillLoad() {
     this._locales = { ...this._locales, ...this.locales };
     this.updateSlotData();
-    this.debouncedCheckForEllipsis = debounce(() => {
-      this.checkForEllipsis();
-    }, 50);
   }
   componentDidRender() {
     if (this.hadChangesInTooltip && this.inputRef) {
       this.updateInputWithMask();
       this.hadChangesInTooltip = false;
     }
+    this.checkInputAfterRender();
   }
   async componentDidLoad() {
     autoFocusElement(this.autoFocus, this.inputRef);
@@ -398,17 +433,22 @@ export class WppInput {
       this.initialProcessed = true;
       this.suppressInputEvent = false;
     }
+    this.setupResizeObserver();
   }
   disconnectedCallback() {
     if (this.maskedElement) {
       this.maskedElement.destroy();
     }
+    if (this.resizeObserver && this.inputRef) {
+      this.resizeObserver.unobserve(this.inputRef);
+      this.resizeObserver.disconnect();
+    }
   }
   render() {
-    return (h(Host, { class: this.wrapperCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'input'), exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v3-3-1", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v3-3-1", { part: "anchor", text: this.value, class: "with-tooltip", disabled: !this.hasActiveEllipses, anchorTabIndex: -1, config: this.truncationTooltipConfig }, this.renderInput()), (this.type === 'search' || this.loading) && !!this.value && (h("wpp-icon-cross-v3-3-1", { class: this.iconEndCssClasses(), "aria-label": "Erase input text", tabIndex: 0, part: "icon-cross", onClick: event => this.onClear(event), onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData, tabIndex: this.hasIconEndSlot ? 0 : -1, "aria-label": "Clear input", role: "button" })), this.lengthValidationError && (h("wpp-inline-message-v3-3-1", { message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') })), this.message && (h("wpp-inline-message-v3-3-1", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') }))));
+    return (h(Host, { class: this.wrapperCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'input'), exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v3-4-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v3-4-0", { part: "anchor", text: this.value, class: "with-tooltip", disabled: !this.hasActiveEllipses || this.type === 'password', anchorTabIndex: -1, config: this.truncationTooltipConfig }, this.renderInput()), this.shouldRenderCrossIcon && this.withCrossIcon && (h("wpp-icon-cross-v3-4-0", { class: this.iconEndCssClasses('native'), "aria-label": "Erase input text", role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: 0, part: "icon-cross", onClick: event => this.onClear(event), onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses('slot'), name: "icon-end", onSlotchange: this.updateSlotData, tabIndex: this.hasIconEndSlot ? 0 : -1, "aria-label": "Clear input", role: "button" })), this.lengthValidationError && (h("wpp-inline-message-v3-4-0", { message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') })), this.message && (h("wpp-inline-message-v3-4-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') }))));
   }
   static get is() { return "wpp-input"; }
-  static get registryIs() { return "wpp-input-v3-3-1"; }
+  static get registryIs() { return "wpp-input-v3-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -901,11 +941,30 @@ export class WppInput {
         "attribute": "autocomplete",
         "reflect": false,
         "defaultValue": "'off'"
+      },
+      "withCrossIcon": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "If the input displays a cross icon on the right side. Clicking the icon will reset the value of the input.\nNote: The cross icon will appear only on inputs that have a min-width of 160px."
+        },
+        "attribute": "with-cross-icon",
+        "reflect": false,
+        "defaultValue": "true"
       }
     };
   }
   static get states() {
     return {
+      "shouldRenderCrossIcon": {},
       "hasActiveEllipses": {},
       "hasIconStartSlot": {},
       "hasIconEndSlot": {},
@@ -1086,20 +1145,8 @@ export class WppInput {
   static get elementRef() { return "host"; }
   static get watchers() {
     return [{
-        "propName": "value",
-        "methodName": "onUpdateValue"
-      }, {
         "propName": "locales",
         "methodName": "onUpdateLocales"
-      }];
-  }
-  static get listeners() {
-    return [{
-        "name": "resize",
-        "method": "onResize",
-        "target": "window",
-        "capture": false,
-        "passive": true
       }];
   }
 }

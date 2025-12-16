@@ -16,9 +16,9 @@ const WppMenuGroup = class {
     this.withDivider = false;
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "header, divider" }, this.header && (index.h("wpp-typography-v3-3-1", { type: "2xs-strong", part: "header" }, this.header)), index.h("slot", null), this.withDivider && index.h("wpp-divider-v3-3-1", { class: "slot-divider", part: "divider" })));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "header, divider" }, this.header && (index.h("wpp-typography-v3-4-0", { type: "2xs-strong", part: "header" }, this.header)), index.h("slot", null), this.withDivider && index.h("wpp-divider-v3-4-0", { class: "slot-divider", part: "divider" })));
   }
-  static get registryIs() { return "wpp-menu-group-v3-3-1"; }
+  static get registryIs() { return "wpp-menu-group-v3-4-0"; }
 };
 WppMenuGroup.style = wppMenuGroupCss;
 

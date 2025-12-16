@@ -1,6 +1,6 @@
 import { EventEmitter } from '../../../../stencil-public-runtime';
 import { FileItemType, FileUploadEventDetail, FileUploadItemEventDetail } from '../../../wpp-file-upload/types';
-import { ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from './types';
+import { ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from './types';
 import { MessageTypes } from '../../../../types/common';
 export declare class WppChatInput {
   host: HTMLWppChatInputElement;
@@ -10,12 +10,20 @@ export declare class WppChatInput {
   private inputAreaRef?;
   private scrollTimeout;
   private debouncedHandleInput;
+  private readonly inputAreaId;
+  private readonly charCounterId;
+  private readonly textareaAutoId;
+  private readonly minimizedDescId;
+  private minimizedTriggerRef?;
+  private expandedListenersAbort?;
+  private _locales;
   /**
    * Size of the component.
    */
   readonly size: ChatInputSize;
   /**
    * Placeholder text for the input field.
+   * @deprecated: Prefer locales.placeholder.
    */
   readonly placeholder: string;
   /**
@@ -65,6 +73,34 @@ export declare class WppChatInput {
    * Defines the z-index of the WppChatInput.
    */
   readonly zIndex: number;
+  /**
+   * Defines the aria-label of the text area.
+   * @deprecated: Prefer ariaProps.textarea.label
+   */
+  readonly textareaAriaLabel?: string;
+  /**
+   * Defines the Id of the text area.
+   * @deprecated: Prefer htmlAttributes.textarea.id
+   */
+  readonly textareaId?: string;
+  /**
+   * Defines the name of the text area.
+   * @deprecated: Prefer htmlAttributes.textarea.name
+   */
+  readonly textareaName?: string;
+  /**
+   * Grouped element htmlAttributes (textarea + file input).
+   * New API — replaces textareaId/textareaName.
+   */
+  readonly htmlAttributes?: ChatInputAttributes;
+  /**
+   * Typed ARIA overrides. Only supported htmlAttributes exposed.
+   */
+  readonly ariaProps?: ChatInputAriaProps;
+  /**
+   * Locales (visual strings). Will be merged into _locales.
+   */
+  readonly locales: Partial<ChatInputLocaleInterface>;
   successAttachmentsList: FileItemType[];
   errorAttachmentsList: FileItemType[];
   toastMessage: string;
@@ -73,6 +109,10 @@ export declare class WppChatInput {
   areAttachmentsVisible: boolean;
   hasSelectSlot: boolean;
   isChatInputExpanded: boolean;
+  attachPressed: boolean;
+  minimizedPressed: boolean;
+  isFileDialogOpen: boolean;
+  internalValue: string;
   /**
    * Emitted when the user clicks the "Send" button.
    */
@@ -100,14 +140,19 @@ export declare class WppChatInput {
    * Emitted when the message in the input message changes.
    */
   readonly wppMessageChanged: EventEmitter<MessageChangeEventDetail>;
-  internalValue: string;
   private reInitValue;
   onAttachmentsChange(newValue: FileItemType[]): void;
   onTextValueChange(value: string): void;
+  onUpdateLocales(newLocales: Partial<ChatInputLocaleInterface>): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  private addExpandedListeners;
+  private removeExpandedListeners;
+  private onAttachClick;
   disconnectedCallback(): void;
+  private handleDocumentFocusIn;
   private handleDocumentClick;
+  private onExpandedKeyDown;
   onSizeChange(newValue: ChatInputSize, oldValue: ChatInputSize): void;
   private handleFileLoaded;
   /**
@@ -121,6 +166,15 @@ export declare class WppChatInput {
   private forceRecalculateHeight;
   private calculateTextHeight;
   private get mergedFileUploadConfig();
+  private getPlaceholderText;
+  private getMinimizedAriaLabel;
+  private getMinimizedDescriptionText;
+  private getTextareaLabel;
+  private getActionsToolbarLabel;
+  private getLeftActionsLabel;
+  private getRightActionsLabel;
+  private getSendButtonLabel;
+  private getAttachButtonLabel;
   private checkAttachmentsVisibility;
   private updateSlotData;
   private handleScroll;
@@ -160,6 +214,11 @@ export declare class WppChatInput {
   private handleToastClick;
   private onKeyDown;
   private get isSendDisabled();
+  private onMinimizedKeyDown;
+  private onMinimizedKeyUp;
+  private onAttachKeyDown;
+  private onWindowFocus;
+  private clearDialogState;
   private hostCssClasses;
   private chatToastClasses;
   private chatInputContainerClasses;

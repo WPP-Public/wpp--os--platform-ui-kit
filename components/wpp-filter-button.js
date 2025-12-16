@@ -73,15 +73,15 @@ const WppFilterButton$1 = /*@__PURE__*/ proxyCustomElement(class WppFilterButton
     this.validAriaProps = getAriaProps(this.ariaProps);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "button, icon, text, inner, counter", onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled, name: this.name, type: "button", "data-testid": "wppFilterButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps, part: "button" }, h("wpp-icon-tune-v3-3-1", { class: "icon", part: "icon" }), h("span", { class: "text", part: "text" }, h("slot", { part: "inner" })), this.counter > 0 && (h("wpp-typography-v3-3-1", { class: "counter", type: "s-body", part: "counter" }, `(${this.counter})`)))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "button, icon, text, inner, counter", onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled, name: this.name, type: "button", "data-testid": "wppFilterButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps, part: "button" }, h("wpp-icon-tune-v3-4-0", { class: "icon", part: "icon" }), h("span", { class: "text", part: "text" }, h("slot", { part: "inner" })), this.counter > 0 && (h("wpp-typography-v3-4-0", { class: "counter", type: "s-body", part: "counter" }, `(${this.counter})`)))));
   }
-  static get registryIs() { return "wpp-filter-button-v3-3-1"; }
+  static get registryIs() { return "wpp-filter-button-v3-4-0"; }
   get host() { return this; }
   static get watchers() { return {
     "ariaProps": ["onUpdateAriaProps"]
   }; }
   static get style() { return wppFilterButtonCss; }
-}, [1, "wpp-filter-button", "wpp-filter-button-v3-3-1", {
+}, [1, "wpp-filter-button", "wpp-filter-button-v3-4-0", {
     "counter": [2],
     "name": [1],
     "ariaProps": [16],
@@ -96,19 +96,19 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-filter-button-v3-3-1", "wpp-icon-tune-v3-3-1", "wpp-typography-v3-3-1"];
+  const components = ["wpp-filter-button-v3-4-0", "wpp-icon-tune-v3-4-0", "wpp-typography-v3-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-filter-button-v3-3-1":
+    case "wpp-filter-button-v3-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppFilterButton$1);
       }
       break;
-    case "wpp-icon-tune-v3-3-1":
+    case "wpp-icon-tune-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v3-3-1":
+    case "wpp-typography-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

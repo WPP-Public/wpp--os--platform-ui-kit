@@ -46,8 +46,20 @@ const DEFAULT_FILE_UPLOAD_CONFIG = {
 };
 const MAX_INPUT_AREA_HEIGHT = 240;
 const MIN_TEXTAREA_HEIGHT = 52;
+const LOCALES_DEFAULTS = {
+  placeholder: 'Type your message...',
+  minimizedDescription: 'Expand message input',
+  actionsToolbarLabel: 'Message actions',
+  leftActionsGroupLabel: 'Attachments and tools',
+  rightActionsGroupLabel: 'Send and character counter',
+  sendLabel: 'Send message',
+  attachLabel: 'Attach file',
+  voiceLabel: 'Record voice message',
+  attachmentsLabel: 'Attachments',
+  messageInputLabel: 'Message input',
+};
 
-const wppChatInputCss = ":host{--chat-input-container-min-width:var(--wpp-chat-input-container-min-width, 320px);--chat-input-container-bg-color:var(--wpp-chat-input-container-bg-color, var(--wpp-grey-color-000));--chat-input-container-outline-width:var(--wpp-chat-input-container-outline-width, 1px);--chat-input-container-outline-style:var(--wpp-chat-input-container-outline-style, solid);--chat-input-container-outline-color:var(--wpp-chat-input-container-outline-color, var(--wpp-grey-color-500));--chat-input-container-outline-color-hover:var(\n    --wpp-chat-input-container-outline-color-hover,\n    var(--wpp-grey-color-700)\n  );--chat-input-container-outline-color-active:var(\n    --wpp-chat-input-container-outline-color-active,\n    var(--wpp-grey-color-800)\n  );--chat-input-container-outline-color-disabled:var(\n    --wpp-chat-input-container-outline-color-disabled,\n    var(--wpp-grey-color-400)\n  );--chat-input-container-border-radius:var(--wpp-chat-input-container-border-radius, 8px);--chat-input-area-min-height:var(--wpp-chat-input-area-min-height, 52px);--chat-input-area-max-height:var(--wpp-chat-input-area-max-height, 240px);--chat-input-area-padding:var(--wpp-chat-input-area-padding, 12px 6px 0 12px);--chat-input-area-placeholder-color:var(--wpp-chat-input-area-placeholder-color, var(--wpp-grey-color-700));--chat-text-input-min-height:var(--wpp-chat-text-input-min-height, 52px);--chat-text-input-padding:var(--wpp-chat-text-input-padding, 0);--chat-text-input-bg-color:var(--wpp-chat-text-input-bg-color, transparent);--chat-text-input-color-disabled:var(--wpp-chat-text-input-color-disabled, var(--wpp-text-color-disabled));--chat-text-input-placeholder-color:var(--wpp-chat-text-input-placeholder-color, var(--wpp-grey-color-700));--chat-text-input-placeholder-color-disabled:var(\n    --wpp-chat-text-input-placeholder-color-disabled,\n    var(--wpp-text-color-disabled)\n  );--chat-actions-bar-padding:var(--wpp-chat-actions-bar-padding, 0 10px 8px 10px);--chat-actions-bar-color:var(--wpp-chat-actions-bar-color, var(--wpp-grey-color-500));--chat-actions-bar-color-disabled:var(--wpp-chat-actions-bar-color-disabled, var(--wpp-grey-color-400));--chat-actions-bar-char-counter-color:var(--wpp-chat-actions-bar-char-counter-color, var(--wpp-danger-color-500));--chat-actions-bar-char-counter-color-disabled:var(\n    --wpp-chat-actions-bar-char-counter-color-disabled,\n    var(--wpp-danger-color-300)\n  );--chat-text-input-minimized-width:var(--wpp-chat-text-input-minimized-width, 264px);--chat-text-input-minimized-height:var(--wpp-chat-text-input-minimized-height, 22px);--chat-text-input-minimized-padding:var(--wpp-chat-text-input-minimized-padding, 8px 10px);--chat-input-transition-timing:0.3s cubic-bezier(0.4, 0, 0.2, 1);display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-box-sizing:border-box;box-sizing:border-box;position:relative;-ms-flex-align:center;align-items:center;width:100%}.chat-input-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;position:absolute;bottom:100%;background-color:var(--chat-input-container-bg-color);gap:8px;outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color);border-radius:var(--chat-input-container-border-radius);min-width:var(--chat-input-container-min-width);width:100%;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);will-change:width, height;cursor:text}.chat-input-container:hover{outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-hover)}.chat-input-container:active{outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-active)}.chat-input-container.disabled{pointer-events:none;cursor:not-allowed;outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-disabled)}.chat-file-upload-toast{position:absolute;top:8px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);cursor:pointer}.input-area{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);display:-ms-flexbox;display:flex;-ms-flex-direction:column-reverse;flex-direction:column-reverse;-ms-flex-align:stretch;align-items:stretch;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-box-sizing:border-box;box-sizing:border-box;color:var(--wpp-grey-color-1000);min-height:var(--chat-input-area-min-height);max-height:var(--chat-input-area-max-height);overflow-y:hidden;-ms-flex:1;flex:1;padding:var(--chat-input-area-padding);gap:12px;box-sizing:border-box;border-radius:8px 8px 0 0;-webkit-transition:height var(--chat-input-transition-timing);transition:height var(--chat-input-transition-timing);will-change:height;-webkit-transform-origin:bottom;transform-origin:bottom}.input-area .attachments{-ms-flex-order:2;order:2}.input-area .text-input{-ms-flex-order:1;order:1}.input-area:not(.minimized){scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.input-area::-webkit-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-moz-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area:-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-webkit-scrollbar{width:4px;height:4px}.input-area::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400);border-radius:4px;margin:6px}.input-area::-webkit-scrollbar-track{background:transparent}.input-area textarea{width:100%;min-height:var(--chat-text-input-min-height);resize:none;border:none;outline:none;padding:var(--chat-text-input-padding);font-family:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;background-color:var(--chat-text-input-bg-color);overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;color:inherit;-webkit-transition:min-height var(--chat-input-transition-timing);transition:min-height var(--chat-input-transition-timing);will-change:min-height;-webkit-transform-origin:bottom;transform-origin:bottom;margin:0}.input-area textarea::-webkit-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-moz-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:disabled{cursor:not-allowed;color:var(--chat-text-input-color-disabled)}.input-area textarea:disabled::-webkit-input-placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area textarea:disabled::-moz-placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area textarea:disabled:-ms-input-placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area textarea:disabled::-ms-input-placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area textarea:disabled::placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area.minimized{min-height:0;padding:var(--chat-text-input-minimized-padding)}.input-area.minimized .input-area-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;gap:4px}.input-area.minimized .minimized-input{-ms-flex-align:center;align-items:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:var(--chat-text-input-minimized-width)}.input-area.minimized .minimized-input .input-value{width:100%}.input-area.minimized .minimized-input .input-value.disabled{color:var(--chat-text-input-color-disabled)}.input-area.minimized .minimized-input .input-value-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area.minimized .minimized-input .input-value-placeholder.disabled{color:var(--chat-text-input-placeholder-color-disabled)}.actions-bar{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;-ms-flex-align:end;align-items:flex-end;padding:var(--chat-actions-bar-padding);border-radius:0 0 8px 8px}.actions-bar .left-actions{display:-ms-flexbox;display:flex;gap:4px;-ms-flex-align:center;align-items:center}.actions-bar .left-actions .select{display:-ms-flexbox;display:flex;width:100%}.actions-bar .left-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.actions-bar .left-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.actions-bar .right-actions{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}.actions-bar .right-actions .char-counter{color:var(--chat-actions-bar-char-counter-color)}.actions-bar .right-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.actions-bar .right-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.actions-bar .right-actions.disabled .char-counter{color:var(--chat-actions-bar-char-counter-color-disabled)}.attachments{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:4px;width:100%}.attachments .wpp-file-upload-item{width:100%}.attachments .wpp-file-upload-item::part(file-item){margin-top:0}.attachments .wpp-file-upload-item::part(controls){-ms-flex-pack:end;justify-content:flex-end}";
+const wppChatInputCss = ":host{--chat-input-container-min-width:var(--wpp-chat-input-container-min-width, 320px);--chat-input-container-bg-color:var(--wpp-chat-input-container-bg-color, var(--wpp-grey-color-000));--chat-input-container-outline-width:var(--wpp-chat-input-container-outline-width, 1px);--chat-input-container-outline-style:var(--wpp-chat-input-container-outline-style, solid);--chat-input-container-outline-color:var(--wpp-chat-input-container-outline-color, var(--wpp-grey-color-500));--chat-input-container-outline-color-hover:var(\n    --wpp-chat-input-container-outline-color-hover,\n    var(--wpp-grey-color-700)\n  );--chat-input-container-outline-color-active:var(\n    --wpp-chat-input-container-outline-color-active,\n    var(--wpp-grey-color-800)\n  );--chat-input-container-outline-color-disabled:var(\n    --wpp-chat-input-container-outline-color-disabled,\n    var(--wpp-grey-color-400)\n  );--chat-input-container-border-radius:var(--wpp-chat-input-container-border-radius, 8px);--chat-input-area-min-height:var(--wpp-chat-input-area-min-height, 52px);--chat-input-area-max-height:var(--wpp-chat-input-area-max-height, 240px);--chat-input-area-padding:var(--wpp-chat-input-area-padding, 12px 6px 0 12px);--chat-input-area-placeholder-color:var(--wpp-chat-input-area-placeholder-color, var(--wpp-grey-color-700));--chat-text-input-min-height:var(--wpp-chat-text-input-min-height, 52px);--chat-text-input-padding:var(--wpp-chat-text-input-padding, 0);--chat-text-input-bg-color:var(--wpp-chat-text-input-bg-color, transparent);--chat-text-input-color-disabled:var(--wpp-chat-text-input-color-disabled, var(--wpp-text-color-disabled));--chat-text-input-placeholder-color:var(--wpp-chat-text-input-placeholder-color, var(--wpp-grey-color-700));--chat-text-input-placeholder-color-disabled:var(\n    --wpp-chat-text-input-placeholder-color-disabled,\n    var(--wpp-text-color-disabled)\n  );--chat-actions-bar-padding:var(--wpp-chat-actions-bar-padding, 0 10px 8px 10px);--chat-actions-bar-color:var(--wpp-chat-actions-bar-color, var(--wpp-grey-color-500));--chat-actions-bar-color-disabled:var(--wpp-chat-actions-bar-color-disabled, var(--wpp-grey-color-400));--chat-actions-bar-char-counter-color:var(--wpp-chat-actions-bar-char-counter-color, var(--wpp-danger-color-500));--chat-actions-bar-char-counter-color-disabled:var(\n    --wpp-chat-actions-bar-char-counter-color-disabled,\n    var(--wpp-danger-color-300)\n  );--chat-text-input-minimized-width:var(--wpp-chat-text-input-minimized-width, 264px);--chat-text-input-minimized-height:var(--wpp-chat-text-input-minimized-height, 22px);--chat-text-input-minimized-padding:var(--wpp-chat-text-input-minimized-padding, 8px 10px);--chat-input-transition-timing:0.3s cubic-bezier(0.4, 0, 0.2, 1);--chat-minimized-focus-ring-color:var(--wpp-focus-ring-color, var(--wpp-primary-color-600));--chat-minimized-focus-ring-width:var(--wpp-focus-ring-width, 2px);--chat-minimized-focus-ring-radius:var(--wpp-chat-input-container-border-radius, 8px);--chat-minimized-first-border-color-focus:var(\n    --wpp-chat-minimized-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--chat-minimized-second-border-color-focus:var(\n    --wpp-chat-minimized-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--chat-minimized-border-radius-focus:var(--wpp-chat-minimized-border-radius-focus, var(--wpp-border-radius-xs));display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-box-sizing:border-box;box-sizing:border-box;position:relative;-ms-flex-align:center;align-items:center;width:100%}.chat-input-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;position:absolute;bottom:100%;background-color:var(--chat-input-container-bg-color);gap:8px;outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color);border-radius:var(--chat-input-container-border-radius);min-width:var(--chat-input-container-min-width);width:100%;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);will-change:width, height;cursor:text}.chat-input-container:hover,.chat-input-container:focus-within{outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-hover)}.chat-input-container:active{outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-active)}.chat-input-container.disabled{pointer-events:none;cursor:not-allowed;outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-disabled)}.chat-file-upload-toast{position:absolute;top:8px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);cursor:pointer}.input-area{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);display:-ms-flexbox;display:flex;-ms-flex-direction:column-reverse;flex-direction:column-reverse;-ms-flex-align:stretch;align-items:stretch;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-box-sizing:border-box;box-sizing:border-box;color:var(--wpp-grey-color-1000);min-height:var(--chat-input-area-min-height);max-height:var(--chat-input-area-max-height);overflow-y:hidden;-ms-flex:1;flex:1;padding:var(--chat-input-area-padding);gap:12px;box-sizing:border-box;border-radius:8px 8px 0 0;-webkit-transition:height var(--chat-input-transition-timing);transition:height var(--chat-input-transition-timing);will-change:height;-webkit-transform-origin:bottom;transform-origin:bottom}.input-area .attachments{-ms-flex-order:2;order:2}.input-area .text-input{-ms-flex-order:1;order:1}.input-area:not(.minimized){scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.input-area::-webkit-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-moz-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area:-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-webkit-scrollbar{width:4px;height:4px}.input-area::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400);border-radius:4px;margin:6px}.input-area::-webkit-scrollbar-track{background:transparent}.input-area textarea{width:100%;min-height:var(--chat-text-input-min-height);resize:none;border:none;outline:none;padding:var(--chat-text-input-padding);font-family:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;background-color:var(--chat-text-input-bg-color);overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;color:inherit;-webkit-transition:min-height var(--chat-input-transition-timing);transition:min-height var(--chat-input-transition-timing);will-change:min-height;-webkit-transform-origin:bottom;transform-origin:bottom;margin:0}.input-area textarea::-webkit-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-moz-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:disabled{cursor:not-allowed;color:var(--chat-text-input-color-disabled)}.input-area textarea:disabled::-webkit-input-placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area textarea:disabled::-moz-placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area textarea:disabled:-ms-input-placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area textarea:disabled::-ms-input-placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area textarea:disabled::placeholder{color:var(--chat-text-input-placeholder-color-disabled)}.input-area.minimized{min-height:0;padding:var(--chat-text-input-minimized-padding)}.input-area.minimized .input-area-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;gap:4px}.input-area.minimized .input-area-wrapper .sr-only{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0, 0, 0, 0) !important;-webkit-clip-path:inset(50%) !important;clip-path:inset(50%) !important;border:0 !important;white-space:nowrap !important}.input-area.minimized .minimized-input{-ms-flex-align:center;align-items:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:var(--chat-text-input-minimized-width);outline:none}.input-area.minimized .minimized-input .input-value{width:100%}.input-area.minimized .minimized-input .input-value.disabled{color:var(--chat-text-input-color-disabled)}.input-area.minimized .minimized-input .input-value-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area.minimized .minimized-input .input-value-placeholder.disabled{color:var(--chat-text-input-placeholder-color-disabled)}.actions-bar{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;-ms-flex-align:end;align-items:flex-end;padding:var(--chat-actions-bar-padding);border-radius:0 0 8px 8px}.actions-bar .left-actions{display:-ms-flexbox;display:flex;gap:4px;-ms-flex-align:center;align-items:center}.actions-bar .left-actions .select{display:-ms-flexbox;display:flex;width:100%}.actions-bar .left-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.actions-bar .left-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.actions-bar .right-actions{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}.actions-bar .right-actions .char-counter{color:var(--chat-actions-bar-char-counter-color)}.actions-bar .right-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.actions-bar .right-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.actions-bar .right-actions.disabled .char-counter{color:var(--chat-actions-bar-char-counter-color-disabled)}.attachments{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:4px;width:100%}.attachments .wpp-file-upload-item{width:100%}.attachments .wpp-file-upload-item::part(file-item){margin-top:0}.attachments .wpp-file-upload-item::part(controls){-ms-flex-pack:end;justify-content:flex-end}.input-area.minimized .minimized-input:focus-visible{border-radius:var(--chat-minimized-border-radius-focus);outline:none;-webkit-box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus);box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus)}";
 
 const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends HTMLElement {
   constructor() {
@@ -61,9 +73,32 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
     this.wppFileUploadItemClick = createEvent(this, "wppFileUploadItemClick", 1);
     this.wppMessageChanged = createEvent(this, "wppMessageChanged", 1);
     this.scrollTimeout = null;
+    this.inputAreaId = `wpp-ci-area`;
+    this.charCounterId = `wpp-ci-cc`;
+    this.textareaAutoId = `wpp-ci-ta`;
+    this.minimizedDescId = `wpp-ci-min-desc`;
+    this._locales = LOCALES_DEFAULTS; // Locales state holder (merged default + user overrides)
     this.reInitValue = (list) => {
       this.successAttachmentsList = list.filter(file => !this.isFileWithError(file));
       this.errorAttachmentsList = list.filter(this.isFileWithError);
+    };
+    // Handler to block click during dialog
+    this.onAttachClick = (e) => {
+      // Space/Enter on buttons can still synthesize click; block if dialog is open
+      if (this.isFileDialogOpen) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      this.handleFileSelection();
+    };
+    this.handleDocumentFocusIn = (event) => {
+      const target = event.target;
+      if (this.size === 's' && this.isChatInputExpanded && this.host && !this.host.contains(target)) {
+        if (!hasParentWithId(target, 'tippy-')) {
+          this.handleSimpleBlur();
+        }
+      }
     };
     this.handleDocumentClick = (event) => {
       if (this.size === 's' && this.isChatInputExpanded && this.host && !this.host.contains(event.target)) {
@@ -72,6 +107,13 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
         if (!hasParentWithId(event.target, 'tippy-')) {
           this.handleSimpleBlur();
         }
+      }
+    };
+    this.onExpandedKeyDown = (e) => {
+      if (e.key === 'Escape' && this.size === 's' && this.isChatInputExpanded) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.handleSimpleBlur();
       }
     };
     this.handleFileLoaded = (event) => {
@@ -224,6 +266,7 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
     };
     this.handleClickItem = (event) => this.wppFileUploadItemClick.emit(event.detail);
     this.handleChange = async () => {
+      this.clearDialogState();
       const files = this.inputRef?.files;
       if (!files?.length)
         return;
@@ -315,6 +358,39 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
         event.preventDefault();
         this.handleSend();
       }
+    };
+    this.onMinimizedKeyDown = (e) => {
+      if (this.disabled)
+        return;
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.minimizedPressed = true;
+        this.handleSizeToggle();
+      }
+    };
+    this.onMinimizedKeyUp = (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.minimizedPressed = false;
+      }
+    };
+    this.onAttachKeyDown = (e) => {
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        this.attachPressed = true;
+        this.handleFileSelection();
+        // Clear immediately to avoid sticky state when dialog steals focus
+        this.attachPressed = false;
+      }
+    };
+    this.onWindowFocus = () => {
+      if (this.isFileDialogOpen) {
+        this.clearDialogState();
+      }
+    };
+    this.clearDialogState = () => {
+      this.isFileDialogOpen = false;
+      this.attachPressed = false;
     };
     this.hostCssClasses = () => ({
       'wpp-chat-input': true,
@@ -438,6 +514,12 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
     this.debounceEnabled = true;
     this.debounceDelay = 300;
     this.zIndex = Z_INDEX.CHAT;
+    this.textareaAriaLabel = undefined;
+    this.textareaId = undefined;
+    this.textareaName = undefined;
+    this.htmlAttributes = undefined;
+    this.ariaProps = undefined;
+    this.locales = {};
     this.successAttachmentsList = [];
     this.errorAttachmentsList = [];
     this.toastMessage = '';
@@ -446,6 +528,9 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
     this.areAttachmentsVisible = true;
     this.hasSelectSlot = false;
     this.isChatInputExpanded = false;
+    this.attachPressed = false;
+    this.minimizedPressed = false;
+    this.isFileDialogOpen = false;
     this.internalValue = '';
   }
   onAttachmentsChange(newValue) {
@@ -462,6 +547,10 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
       this.adjustTextareaHeight(false, value);
     }
   }
+  onUpdateLocales(newLocales) {
+    // Merge into private _locales, not the readonly @Prop
+    this._locales = { ...this._locales, ...newLocales };
+  }
   componentWillLoad() {
     if (!this.textValue?.trim() && this.textValue !== this.internalValue) {
       this.internalValue = this.textValue;
@@ -472,6 +561,8 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
     }, this.debounceDelay);
     const list = [...this.attachments, ...(this.successAttachmentsList || []), ...(this.errorAttachmentsList || [])];
     this.reInitValue(list);
+    // Merge initial locales once at load
+    this._locales = { ...this._locales, ...this.locales };
   }
   componentDidLoad() {
     requestAnimationFrame(() => {
@@ -493,14 +584,26 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
       resizeObserver.observe(this.inputAreaRef);
     }
     this.resizeObserver = resizeObserver;
-    document.addEventListener('mousedown', this.handleDocumentClick, true);
+    window.addEventListener('focus', this.onWindowFocus, true);
+  }
+  addExpandedListeners() {
+    this.expandedListenersAbort?.abort();
+    this.expandedListenersAbort = new AbortController();
+    const signal = this.expandedListenersAbort.signal;
+    document.addEventListener('mousedown', this.handleDocumentClick, { capture: true, signal });
+    document.addEventListener('focusin', this.handleDocumentFocusIn, { capture: true, signal });
+  }
+  removeExpandedListeners() {
+    this.expandedListenersAbort?.abort();
+    this.expandedListenersAbort = undefined;
   }
   disconnectedCallback() {
     this.disconnectObserver();
     if (this.resizeObserver && this.inputAreaRef) {
       this.resizeObserver.unobserve(this.inputAreaRef);
     }
-    document.removeEventListener('mousedown', this.handleDocumentClick, true);
+    this.removeExpandedListeners();
+    window.removeEventListener('focus', this.onWindowFocus, true);
   }
   onSizeChange(newValue, oldValue) {
     if (newValue !== oldValue && this.size === 's') {
@@ -513,6 +616,7 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
   handleSizeToggle() {
     if (this.size === 's' && !this.disabled) {
       this.isChatInputExpanded = true;
+      this.addExpandedListeners();
       requestAnimationFrame(() => {
         if (this.debouncedAdjustTextareaHeight) {
           this.debouncedAdjustTextareaHeight();
@@ -527,6 +631,8 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
   handleSimpleBlur() {
     if (this.size === 's' && this.isChatInputExpanded) {
       this.isChatInputExpanded = false;
+      this.removeExpandedListeners();
+      requestAnimationFrame(() => this.minimizedTriggerRef?.focus());
     }
   }
   forceRecalculateHeight() {
@@ -562,8 +668,36 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
   get mergedFileUploadConfig() {
     return {
       ...DEFAULT_FILE_UPLOAD_CONFIG,
-      ...this.fileUploadConfig, // Merge with any provided config
+      ...this.fileUploadConfig,
     };
+  }
+  // Precedence helpers: ariaProps > locales > internal defaults
+  getPlaceholderText() {
+    return this._locales.placeholder ?? this.placeholder;
+  }
+  getMinimizedAriaLabel() {
+    return this.ariaProps?.minimizedTrigger?.label ?? (this.internalValue || this.getPlaceholderText());
+  }
+  getMinimizedDescriptionText() {
+    return this._locales.minimizedDescription;
+  }
+  getTextareaLabel() {
+    return (this.ariaProps?.textarea?.label ?? this.textareaAriaLabel ?? this._locales.messageInputLabel ?? 'Message input');
+  }
+  getActionsToolbarLabel() {
+    return this.ariaProps?.actionsToolbar?.label ?? this._locales.actionsToolbarLabel;
+  }
+  getLeftActionsLabel() {
+    return this.ariaProps?.leftActionsGroup?.label ?? this._locales.leftActionsGroupLabel;
+  }
+  getRightActionsLabel() {
+    return this.ariaProps?.rightActionsGroup?.label ?? this._locales.rightActionsGroupLabel;
+  }
+  getSendButtonLabel() {
+    return this.ariaProps?.sendButton?.label ?? this._locales.sendLabel;
+  }
+  getAttachButtonLabel() {
+    return this.ariaProps?.attachButton?.label ?? this._locales.attachLabel;
   }
   checkAttachmentsVisibility() {
     const attachmentsElement = this.inputAreaRef?.querySelector('.attachments');
@@ -640,9 +774,10 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
     }
   }
   handleFileSelection() {
-    if (this.inputRef) {
-      this.inputRef.click();
-    }
+    if (!this.inputRef || this.isFileDialogOpen)
+      return;
+    this.isFileDialogOpen = true;
+    this.inputRef.click();
   }
   async handleFileLoad(filesList) {
     if (!filesList.length)
@@ -719,23 +854,30 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
     const isMaximizedS = this.isChatInputExpanded && this.size === 's';
     const maximizedSorSizeM = isMaximizedS || this.size === 'm';
     const isMinimizedS = this.size === 's' && !this.isChatInputExpanded;
-    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, toast, input-area, attachments, text-input, actions-bar, left-actions, right-actions, file-item", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick }, h("div", { class: this.chatInputContainerClasses(), part: "chat-input-container" }, this.showToast && (h("wpp-toast-v3-3-1", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments" }, allFiles.map((file, index) => (h("wpp-file-upload-item-v3-3-1", { key: index, file: file, format: this.mergedFileUploadConfig.format, maxLabelLength: this.mergedFileUploadConfig.maxLabelLength, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
+    const placeholderText = this.getPlaceholderText();
+    const ariaInvalid = this.ariaProps?.textarea?.invalid !== undefined
+      ? this.ariaProps.textarea.invalid
+      : charExceeded
+        ? 'true'
+        : undefined;
+    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, toast, input-area, attachments, text-input, actions-bar, left-actions, right-actions, file-item", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick }, h("div", { class: this.chatInputContainerClasses(), onKeyDown: this.onExpandedKeyDown, part: "chat-input-container" }, this.showToast && (h("wpp-toast-v3-4-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { id: this.inputAreaId, class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments", role: "list", "aria-label": this._locales.attachmentsLabel }, allFiles.map((file, index) => (h("wpp-file-upload-item-v3-4-0", { key: index, file: file, format: this.mergedFileUploadConfig.format, maxLabelLength: this.mergedFileUploadConfig.maxLabelLength, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
         sizeError: this.mergedFileUploadConfig.locales.sizeError,
         formatError: this.mergedFileUploadConfig.locales.formatError,
-      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded }))))), h("textarea", { class: this.textInputClasses(), placeholder: this.placeholder, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, h("div", { class: this.minimizedInput(), part: "minimized-input", onClick: this.handleSizeToggle }, h("wpp-typography-v3-3-1", { class: this.inputValue(), type: "s-body" }, this.internalValue || this.placeholder)), h("wpp-action-button-v3-3-1", { "data-testid": "send-icon-only-button", variant: "secondary", onClick: e => {
+      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded, "aria-posinset": (index + 1).toString(), "aria-setsize": allFiles.length.toString() }))))), h("textarea", { id: (this.htmlAttributes?.textarea?.id ?? this.textareaId) || this.textareaAutoId, name: this.htmlAttributes?.textarea?.name ?? this.textareaName ?? 'message', class: this.textInputClasses(), placeholder: placeholderText, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input", "aria-label": this.getTextareaLabel(), "aria-invalid": ariaInvalid, "aria-describedby": charExceeded ? this.charCounterId : undefined, autocomplete: this.htmlAttributes?.textarea?.autocomplete, maxLength: this.htmlAttributes?.textarea?.maxLength, "data-gramm": "false", "data-gramm_editor": "false" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, h("div", { class: this.minimizedInput(), part: "minimized-input", ref: el => (this.minimizedTriggerRef = el), "data-pressed": this.minimizedPressed ? 'true' : null, role: "button", tabindex: this.disabled ? -1 : 0, "aria-expanded": this.isChatInputExpanded ? 'true' : 'false', "aria-controls": this.inputAreaId, "aria-label": this.getMinimizedAriaLabel(), "aria-describedby": this.minimizedDescId, onKeyDown: this.onMinimizedKeyDown, onKeyUp: this.onMinimizedKeyUp }, h("wpp-typography-v3-4-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || placeholderText)), h("span", { id: this.minimizedDescId, class: "sr-only" }, this.getMinimizedDescriptionText()), h("wpp-action-button-v3-4-0", { "data-testid": "send-icon-only-button", variant: "secondary", onClick: e => {
         e.stopPropagation();
         this.handleSend();
-      }, disabled: this.isSendDisabled }, h("wpp-icon-send-v3-3-1", { slot: "icon-start" }))))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar" }, h("div", { class: this.leftActionsClasses(), part: "left-actions" }, this.enableAttach && (h(Fragment, null, h("wpp-action-button-v3-3-1", { "data-testid": "attach-icon-only-button", disabled: this.disabled, variant: "secondary", onClick: () => this.handleFileSelection() }, h("wpp-icon-attach-v3-3-1", { slot: "icon-start" })), h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.getAcceptExtensions().join(), title: "" }))), this.withSelect && (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })), this.enableMic && (h("wpp-action-button-v3-3-1", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled }, h("wpp-icon-mic-on-v3-3-1", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions" }, charExceeded && (h("wpp-typography-v3-3-1", { class: "char-counter", type: "xs-midi" }, this.internalValue.length, "/", this.charactersLimit)), h("wpp-action-button-v3-3-1", { "data-testid": "send-icon-only-button", variant: "secondary", onClick: () => this.handleSend(), disabled: this.isSendDisabled }, h("wpp-icon-send-v3-3-1", { slot: "icon-start" }))))))));
+      }, disabled: this.isSendDisabled, ariaProps: { label: this.getSendButtonLabel() } }, h("wpp-icon-send-v3-4-0", { slot: "icon-start" }))))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar", role: "toolbar", "aria-label": this.getActionsToolbarLabel() }, h("div", { class: this.leftActionsClasses(), part: "left-actions", role: "group", "aria-label": this.getLeftActionsLabel() }, this.enableAttach && (h(Fragment, null, h("wpp-action-button-v3-4-0", { "data-testid": "attach-icon-only-button", disabled: this.disabled || this.isFileDialogOpen, variant: "secondary", onClick: this.onAttachClick, onKeyDown: this.onAttachKeyDown, "data-pressed": this.attachPressed ? 'true' : null, ariaProps: { label: this.getAttachButtonLabel() } }, h("wpp-icon-attach-v3-4-0", { slot: "icon-start" })), h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.htmlAttributes?.attachmentsInput?.multiple ?? this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.htmlAttributes?.attachmentsInput?.accept ?? this.getAcceptExtensions().join(), title: "", id: this.htmlAttributes?.attachmentsInput?.id ?? 'wpp-ci-file', name: this.htmlAttributes?.attachmentsInput?.name ?? 'attachments', "aria-hidden": "true" }))), this.withSelect && (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })), this.enableMic && (h("wpp-action-button-v3-4-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled, ariaProps: { label: this._locales.voiceLabel } }, h("wpp-icon-mic-on-v3-4-0", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions", role: "group", "aria-label": this.getRightActionsLabel() }, charExceeded && (h("wpp-typography-v3-4-0", { class: "char-counter", type: "xs-midi", id: this.charCounterId, "aria-live": "polite" }, this.internalValue.length, "/", this.charactersLimit)), h("wpp-action-button-v3-4-0", { "data-testid": "send-icon-only-button", variant: "secondary", onClick: () => this.handleSend(), disabled: this.isSendDisabled, ariaProps: { label: this.getSendButtonLabel() } }, h("wpp-icon-send-v3-4-0", { slot: "icon-start" }))))))));
   }
-  static get registryIs() { return "wpp-chat-input-v3-3-1"; }
+  static get registryIs() { return "wpp-chat-input-v3-4-0"; }
   get host() { return this; }
   static get watchers() { return {
     "attachments": ["onAttachmentsChange"],
     "textValue": ["onTextValueChange"],
+    "locales": ["onUpdateLocales"],
     "size": ["onSizeChange"]
   }; }
   static get style() { return wppChatInputCss; }
-}, [1, "wpp-chat-input", "wpp-chat-input-v3-3-1", {
+}, [1, "wpp-chat-input", "wpp-chat-input-v3-4-0", {
     "size": [1],
     "placeholder": [1],
     "enableAttach": [4, "enable-attach"],
@@ -749,6 +891,12 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
     "debounceEnabled": [4, "debounce-enabled"],
     "debounceDelay": [2, "debounce-delay"],
     "zIndex": [2, "z-index"],
+    "textareaAriaLabel": [1, "textarea-aria-label"],
+    "textareaId": [1, "textarea-id"],
+    "textareaName": [1, "textarea-name"],
+    "htmlAttributes": [16],
+    "ariaProps": [16],
+    "locales": [16],
     "successAttachmentsList": [32],
     "errorAttachmentsList": [32],
     "toastMessage": [32],
@@ -757,140 +905,143 @@ const WppChatInput$1 = /*@__PURE__*/ proxyCustomElement(class WppChatInput exten
     "areAttachmentsVisible": [32],
     "hasSelectSlot": [32],
     "isChatInputExpanded": [32],
+    "attachPressed": [32],
+    "minimizedPressed": [32],
+    "isFileDialogOpen": [32],
     "internalValue": [32]
   }]);
 function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-chat-input-v3-3-1", "wpp-action-button-v3-3-1", "wpp-file-upload-item-v3-3-1", "wpp-icon-attach-v3-3-1", "wpp-icon-cross-v3-3-1", "wpp-icon-database-v3-3-1", "wpp-icon-document-v3-3-1", "wpp-icon-error-v3-3-1", "wpp-icon-file-v3-3-1", "wpp-icon-file-zip-v3-3-1", "wpp-icon-image-v3-3-1", "wpp-icon-info-message-v3-3-1", "wpp-icon-mic-on-v3-3-1", "wpp-icon-music-v3-3-1", "wpp-icon-pitch-v3-3-1", "wpp-icon-send-v3-3-1", "wpp-icon-spreadsheet-v3-3-1", "wpp-icon-success-v3-3-1", "wpp-icon-video-clip-v3-3-1", "wpp-icon-warning-v3-3-1", "wpp-inline-message-v3-3-1", "wpp-internal-tooltip-v3-3-1", "wpp-spinner-v3-3-1", "wpp-toast-v3-3-1", "wpp-tooltip-v3-3-1", "wpp-typography-v3-3-1"];
+  const components = ["wpp-chat-input-v3-4-0", "wpp-action-button-v3-4-0", "wpp-file-upload-item-v3-4-0", "wpp-icon-attach-v3-4-0", "wpp-icon-cross-v3-4-0", "wpp-icon-database-v3-4-0", "wpp-icon-document-v3-4-0", "wpp-icon-error-v3-4-0", "wpp-icon-file-v3-4-0", "wpp-icon-file-zip-v3-4-0", "wpp-icon-image-v3-4-0", "wpp-icon-info-message-v3-4-0", "wpp-icon-mic-on-v3-4-0", "wpp-icon-music-v3-4-0", "wpp-icon-pitch-v3-4-0", "wpp-icon-send-v3-4-0", "wpp-icon-spreadsheet-v3-4-0", "wpp-icon-success-v3-4-0", "wpp-icon-video-clip-v3-4-0", "wpp-icon-warning-v3-4-0", "wpp-inline-message-v3-4-0", "wpp-internal-tooltip-v3-4-0", "wpp-spinner-v3-4-0", "wpp-toast-v3-4-0", "wpp-tooltip-v3-4-0", "wpp-typography-v3-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-chat-input-v3-3-1":
+    case "wpp-chat-input-v3-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppChatInput$1);
       }
       break;
-    case "wpp-action-button-v3-3-1":
+    case "wpp-action-button-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$q();
       }
       break;
-    case "wpp-file-upload-item-v3-3-1":
+    case "wpp-file-upload-item-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$p();
       }
       break;
-    case "wpp-icon-attach-v3-3-1":
+    case "wpp-icon-attach-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$o();
       }
       break;
-    case "wpp-icon-cross-v3-3-1":
+    case "wpp-icon-cross-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-icon-database-v3-3-1":
+    case "wpp-icon-database-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-icon-document-v3-3-1":
+    case "wpp-icon-document-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-error-v3-3-1":
+    case "wpp-icon-error-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-file-v3-3-1":
+    case "wpp-icon-file-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-file-zip-v3-3-1":
+    case "wpp-icon-file-zip-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-image-v3-3-1":
+    case "wpp-icon-image-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-info-message-v3-3-1":
+    case "wpp-icon-info-message-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-mic-on-v3-3-1":
+    case "wpp-icon-mic-on-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-music-v3-3-1":
+    case "wpp-icon-music-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-pitch-v3-3-1":
+    case "wpp-icon-pitch-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-send-v3-3-1":
+    case "wpp-icon-send-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-spreadsheet-v3-3-1":
+    case "wpp-icon-spreadsheet-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-success-v3-3-1":
+    case "wpp-icon-success-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-video-clip-v3-3-1":
+    case "wpp-icon-video-clip-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-warning-v3-3-1":
+    case "wpp-icon-warning-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-inline-message-v3-3-1":
+    case "wpp-inline-message-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-1":
+    case "wpp-internal-tooltip-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-spinner-v3-3-1":
+    case "wpp-spinner-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-toast-v3-3-1":
+    case "wpp-toast-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v3-3-1":
+    case "wpp-tooltip-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v3-3-1":
+    case "wpp-typography-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

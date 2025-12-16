@@ -17,9 +17,9 @@ const WppLegend = class {
     this.color = 'var(--wpp-dataviz-color-cat-neutral-1)';
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("svg", { class: this.dotCssClasses() }, h("circle", { cx: 6, cy: 6, r: 5, fill: this.color })), this.label && (h("wpp-typography-v3-3-1", { color: this.disabled ? 'var(--wpp-text-color-disabled)' : 'var(--wpp-grey-color-1000)', type: "xs-body" }, this.label))));
+    return (h(Host, { class: this.hostCssClasses() }, h("svg", { class: this.dotCssClasses() }, h("circle", { cx: 6, cy: 6, r: 5, fill: this.color })), this.label && (h("wpp-typography-v3-4-0", { color: this.disabled ? 'var(--wpp-text-color-disabled)' : 'var(--wpp-grey-color-1000)', type: "xs-body" }, this.label))));
   }
-  static get registryIs() { return "wpp-legend-v3-3-1"; }
+  static get registryIs() { return "wpp-legend-v3-4-0"; }
 };
 WppLegend.style = wppLegendCss;
 

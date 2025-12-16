@@ -4,18 +4,21 @@ import AirDatepicker from 'air-datepicker';
 import defaultLocale from 'air-datepicker/locale/en';
 import isEqual from 'lodash/isEqual';
 import { FOCUS_TYPE } from '../../types/common';
-import { autoFocusElement, getHighestContainerInDOM, transformToVersionedTag } from '../../utils/utils';
+import { autoFocusElement, getHighestContainerInDOM, getSlotEmptyStates, transformToVersionedTag, } from '../../utils/utils';
 import { getCurrentFormatDate, getFormattedDateString, getNextCursorPosition, isValidDate, localeToFirstDayMap, } from './utils';
-import { ANIMATION_DURATION, DATE_FORMAT, DATE_FORMAT_SEPARATOR_PATTERN, DATES_SEPARATOR, LOCALES_DEFAULTS, } from './const';
+import { ANIMATION_DURATION, DATE_FORMAT_SEPARATOR_PATTERN, DATES_SEPARATOR, LOCALES_DEFAULTS } from './const';
 import { Z_INDEX } from '../../common/consts';
 import { menuListConfig } from '../../common/menuListConfig';
 /**
+ * @slot trigger - Slot for a custom trigger element (button). When a button is placed in this slot, it replaces the default input field as the datepicker trigger.
+ *
  * @part label - Label text element
  * @part datepicker-container - datepicker container element
  * @part icon-calendar - icon calendar element
  * @part datepicker-input - datepicker input element
  * @part icon-cross - icon cross wrapper
  * @part message - message element
+ * @part trigger-wrapper - trigger wrapper element for button trigger variant
  */
 export class WppDatepicker {
   constructor() {
@@ -83,8 +86,13 @@ export class WppDatepicker {
         this.clearDatePicker();
       }
     };
+    this.updateSlotData = () => {
+      const emptyStates = getSlotEmptyStates(this.host.childNodes, {
+        trigger: '[slot="trigger"]',
+      });
+      this.hasTriggerSlot = !emptyStates.trigger;
+    };
     this.hasPresets = () => this.range && this.presets.length > 0;
-    this.getDatepickerView = () => (this.range ? 'days' : this.view);
     this.getDateFormatSeparator = (dateFormat) => {
       const match = dateFormat.match(DATE_FORMAT_SEPARATOR_PATTERN);
       return match ? match[0] : '/';
@@ -99,14 +107,10 @@ export class WppDatepicker {
       }
       return false;
     };
-    this.getDateFormat = () => {
-      if (this.range) {
-        return this.isDefaultDateFormat() ? this._locales.dateFormat : DATE_FORMAT.DAY_MONTH_YEAR;
-      }
-      return this._locales.dateFormat;
-    };
+    this.getDateFormat = () => this._locales.dateFormat;
     this.createDateInstance = () => {
-      if (!this.inputRef || this.isDatePickerInitialized)
+      const datepickerInputRef = this.hasTriggerSlot ? this.hiddenInputRef : this.inputRef;
+      if (!datepickerInputRef || this.isDatePickerInitialized)
         return;
       const buttonApply = {
         content: 'Apply',
@@ -142,7 +146,7 @@ export class WppDatepicker {
       };
       const IconChevron = transformToVersionedTag('wpp-icon-chevron');
       const firstDay = this.determineFirstDay();
-      this.datePickerInstance = new AirDatepicker(this.inputRef, {
+      this.datePickerInstance = new AirDatepicker(datepickerInputRef, {
         container: this.portalRef,
         range: this.range,
         toggleSelected: this.toggleSelected
@@ -155,8 +159,8 @@ export class WppDatepicker {
         showOtherMonths: true,
         fixedHeight: true,
         selectOtherMonths: true,
-        view: this.getDatepickerView(),
-        minView: this.getDatepickerView(),
+        view: this.view,
+        minView: this.view,
         dateFormat: this.getDateFormat(),
         position({ done }) {
           return function completeHide() {
@@ -229,19 +233,20 @@ export class WppDatepicker {
       if (!this.portalRef)
         return;
       const dropdownConfig = this.dropdownConfig;
-      const anchor = this.inputRef;
+      const anchor = this.hasTriggerSlot ? this.triggerWrapperRef : this.inputRef;
       if (!anchor)
         return;
       this.portalRef.classList.add('portal-datepicker');
+      const dropdownOffset = this.hasTriggerSlot ? 4 : 8;
       this.tippyInstance = menuListConfig({
         anchor,
         content: this.portalRef,
         maxWidth: 'none',
         zIndex: Z_INDEX.DATE_PICKER,
         hideOnClick: false,
-        trigger: 'click',
+        trigger: this.hasTriggerSlot ? 'manual' : 'click',
         appendTo: getHighestContainerInDOM(),
-        showOnCreate: this.autoFocus,
+        showOnCreate: this.autoFocus && !this.hasTriggerSlot,
         popperOptions: {
           strategy: 'fixed',
           modifiers: [
@@ -266,7 +271,7 @@ export class WppDatepicker {
             {
               name: 'offset',
               options: {
-                offset: [0, 8],
+                offset: [0, dropdownOffset],
               },
             },
           ],
@@ -288,7 +293,18 @@ export class WppDatepicker {
           }
         },
         onClickOutside: (instance, event) => {
-          if (event.target === this.host) {
+          // For trigger slot, check if click is on trigger wrapper or its children
+          if (this.hasTriggerSlot && this.triggerWrapperRef) {
+            const isClickOnTrigger = this.triggerWrapperRef.contains(event.target) ||
+              event.composedPath().some(el => el === this.triggerWrapperRef);
+            if (isClickOnTrigger) {
+              event.preventDefault();
+              event.stopPropagation();
+              return;
+            }
+          }
+          // For regular input datepicker, check if click is on the host element
+          if (!this.hasTriggerSlot && event.target === this.host) {
             event.preventDefault();
             event.stopPropagation();
             return;
@@ -463,11 +479,26 @@ export class WppDatepicker {
     this.handleClickIconCross = () => {
       this.clearDatePicker();
     };
+    this.handleTriggerClick = (event) => {
+      if (this.disabled)
+        return;
+      // Prevent the click from bubbling to tippy's click handler
+      event.stopPropagation();
+      if (this.tippyInstance) {
+        if (this.tippyInstance.state.isShown) {
+          this.tippyInstance.hide();
+        }
+        else {
+          this.tippyInstance.show();
+        }
+      }
+    };
     this.hostCssClasses = () => ({
       'wpp-datepicker': true,
       'wpp-disabled': this.disabled,
       [`wpp-size-${this.size}`]: true,
       'wpp-has-value': this.isValueExists,
+      'wpp-button-trigger': this.hasTriggerSlot,
     });
     this.inputCssClasses = () => ({
       'datepicker-input': true,
@@ -491,11 +522,13 @@ export class WppDatepicker {
       'has-default-format': this.isDefaultDateFormat(),
       'static-datepicker': this.static,
       'with-presets': this.hasPresets(),
+      'button-trigger': this.hasTriggerSlot,
     });
     this.portalClasses = () => ({
       'wpp-datepicker-portal': true,
       'wpp-static-portal': this.static,
       'wpp-with-presets': this.hasPresets(),
+      'wpp-reverse-layout': this.reverseLayout,
     });
     this.datePickerInstance = undefined;
     this.lastValidDate = undefined;
@@ -505,6 +538,7 @@ export class WppDatepicker {
     this.tippyInstance = undefined;
     this.isInComponent = false;
     this.isValueExists = false;
+    this.hasTriggerSlot = false;
     this.range = false;
     this.toggleSelected = true;
     this.value = undefined;
@@ -522,6 +556,7 @@ export class WppDatepicker {
     this.disabled = false;
     this.name = undefined;
     this.size = 'm';
+    this.width = undefined;
     this.presets = [];
     this.labelTooltipConfig = {
       popperOptions: { strategy: 'fixed' },
@@ -531,6 +566,7 @@ export class WppDatepicker {
     this.labelConfig = undefined;
     this.appendToListWrapper = false;
     this.dropdownConfig = {};
+    this.reverseLayout = false;
   }
   /**
    * Method that returns a datepicker instance which allows manipulating all props and changing them as necessary. [Read more](https://air-datepicker.com/docs).
@@ -583,6 +619,11 @@ export class WppDatepicker {
       this.isValueExists = Boolean((this.value ?? '').trim());
     }
   }
+  onUpdateWidth() {
+    if (this.width) {
+      this.host.style.setProperty('--wpp-datepicker-container-width', this.width);
+    }
+  }
   updateRange() {
     this.clearDatePicker();
     this.datePickerInstance.destroy();
@@ -606,20 +647,18 @@ export class WppDatepicker {
   }
   onUpdateLocales(newLocales) {
     this._locales = { ...this._locales, ...newLocales };
+    const firstDay = this.determineFirstDay();
     this.datePickerInstance?.update({
-      locale: { ...defaultLocale, ...this._locales },
+      locale: { ...defaultLocale, ...this._locales, firstDay },
     });
   }
   componentWillLoad() {
+    this.updateSlotData();
     if (!this.isDefaultDateFormat()) {
-      if (this.range) {
-        console.warn(`Warning: When using the range datepicker, only default date formats can be applied. For example, ` +
-          `MM/dd/yyyy, dd/MM/yyyy, and other variations using only MM, dd, yyyy with '/' or '.' separators. ` +
-          `Default format ${DATE_FORMAT.DAY_MONTH_YEAR} will be used instead.`);
-      }
-      else {
-        console.warn(`Warning: When using the datepicker with a different format than the default one, the input becomes read-only. Our default formats are: MM/dd/yyyy, dd/MM/yyyy, and other variations using only MM, dd, yyyy with '/' or '.' separators.`);
-      }
+      console.warn(`Warning: When using the datepicker with a different format than the default one, the input becomes read-only. Our default formats are: MM/dd/yyyy, dd/MM/yyyy, and other variations using only MM, dd, yyyy with '/' or '.' separators.`);
+    }
+    if (this.width) {
+      this.host.style.setProperty('--wpp-datepicker-container-width', this.width);
     }
   }
   componentDidLoad() {
@@ -657,13 +696,21 @@ export class WppDatepicker {
     return this._locales.firstDay ?? 1; // Default to Monday (ISO 8601) if no valid value is found
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, datepicker-container, icon-calendar, datepicker-input, icon-cross, message" }, this.labelConfig?.text && (h("wpp-label-v3-3-1", { class: "label", htmlFor: this.name, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.containerClasses(), id: "container", part: "datepicker-container" }, h("input", { id: "datepicker", type: "text", class: this.inputCssClasses(), onInput: this.onInput, onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, disabled: this.disabled, readOnly: !this.range && !this.isDefaultDateFormat(), placeholder: this.placeholder ||
-        (this.range
-          ? `${this._locales.dateFormat}${DATES_SEPARATOR}${this._locales.dateFormat}`
-          : `${this._locales.dateFormat}`), ref: inputRef => (this.inputRef = inputRef), autocomplete: "off", part: "datepicker-input", title: "" }), h("wpp-icon-calendar-v3-3-1", { onClick: this.handleClickCalendarIcon, class: this.iconCalendarCssClasses(), part: "icon-calendar", color: "inherit" }), h("div", { onBlur: this.handleBlurPortal, onFocus: () => clearTimeout(this.hideTimer), ...(this.hasPresets() ? { tabIndex: 0 } : {}), ref: ref => (this.portalRef = ref), class: this.portalClasses() }, this.hasPresets() && (h("div", { class: "wpp-presets-container" }, h("div", { class: "wpp-presets-list" }, this.presets.map((preset) => (h("wpp-list-item-v3-3-1", { onMouseEnter: () => this.handlePreviewPreset(preset.value), onMouseLeave: this.handleMouseLeavePreset, onWppChangeListItem: () => this.handleClickPreset(preset), class: "wpp-presets-item" }, h("wpp-typography-v3-3-1", { type: "s-body", slot: "label" }, preset.label))))), h("div", { class: "wpp-presets-footer" })))), !!this.lastValidDate && (h("wpp-icon-cross-v3-3-1", { class: this.iconCrossCssClasses(), "aria-label": "Erase date", onClick: this.handleClickIconCross, part: "icon-cross" })), this.message && (h("wpp-inline-message-v3-3-1", { class: "inline-message", message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, datepicker-container, icon-calendar, datepicker-input, icon-cross, message, trigger-wrapper" }, this.labelConfig?.text && !this.hasTriggerSlot && (h("wpp-label-v3-4-0", { class: "label", htmlFor: this.name, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.containerClasses(), id: "container", part: "datepicker-container" }, this.hasTriggerSlot
+      ? [
+        h("input", { type: "hidden", ref: el => (this.hiddenInputRef = el), "aria-hidden": "true" }),
+        h("div", { class: "trigger-wrapper", ref: el => (this.triggerWrapperRef = el), onClick: (e) => this.handleTriggerClick(e), role: "presentation", part: "trigger-wrapper" }, h("slot", { name: "trigger", onSlotchange: () => this.updateSlotData() })),
+      ]
+      : [
+        h("input", { id: "datepicker", type: "text", class: this.inputCssClasses(), onInput: this.onInput, onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, disabled: this.disabled, readOnly: !this.isDefaultDateFormat(), placeholder: this.placeholder ||
+            (this.range
+              ? `${this._locales.dateFormat}${DATES_SEPARATOR}${this._locales.dateFormat}`
+              : `${this._locales.dateFormat}`), ref: inputRef => (this.inputRef = inputRef), autocomplete: "off", part: "datepicker-input", title: "" }),
+        h("wpp-icon-calendar-v3-4-0", { onClick: this.handleClickCalendarIcon, class: this.iconCalendarCssClasses(), part: "icon-calendar", color: "inherit" }),
+      ], h("div", { onBlur: this.handleBlurPortal, onFocus: () => clearTimeout(this.hideTimer), ...(this.hasPresets() ? { tabIndex: 0 } : {}), ref: ref => (this.portalRef = ref), class: this.portalClasses() }, this.hasPresets() && (h("div", { class: "wpp-presets-container" }, h("div", { class: "wpp-presets-list" }, this.presets.map((preset) => (h("wpp-list-item-v3-4-0", { onMouseEnter: () => this.handlePreviewPreset(preset.value), onMouseLeave: this.handleMouseLeavePreset, onWppChangeListItem: () => this.handleClickPreset(preset), class: "wpp-presets-item" }, h("wpp-typography-v3-4-0", { type: "s-body", slot: "label" }, preset.label))))), h("div", { class: "wpp-presets-footer" })))), !!this.lastValidDate && !this.hasTriggerSlot && (h("wpp-icon-cross-v3-4-0", { class: this.iconCrossCssClasses(), "aria-label": "Erase date", onClick: this.handleClickIconCross, part: "icon-cross" })), this.message && (h("wpp-inline-message-v3-4-0", { class: "inline-message", message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })))));
   }
   static get is() { return "wpp-datepicker"; }
-  static get registryIs() { return "wpp-datepicker-v3-3-1"; }
+  static get registryIs() { return "wpp-datepicker-v3-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -991,6 +1038,24 @@ export class WppDatepicker {
         "reflect": false,
         "defaultValue": "'m'"
       },
+      "width": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Defines the width of the datepicker. If it is undefined, the datepicker will take the default value (200px single datepicker, 260px range datepicker)."
+        },
+        "attribute": "width",
+        "reflect": false,
+        "defaultValue": "undefined"
+      },
       "presets": {
         "type": "unknown",
         "mutable": false,
@@ -1156,6 +1221,24 @@ export class WppDatepicker {
           "text": "Defines the dropdown configuration. Under the hood dropdown using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
         },
         "defaultValue": "{}"
+      },
+      "reverseLayout": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Reverse layout for the range datepicker with a preset list"
+        },
+        "attribute": "reverse-layout",
+        "reflect": false,
+        "defaultValue": "false"
       }
     };
   }
@@ -1168,7 +1251,8 @@ export class WppDatepicker {
       "hidden": {},
       "tippyInstance": {},
       "isInComponent": {},
-      "isValueExists": {}
+      "isValueExists": {},
+      "hasTriggerSlot": {}
     };
   }
   static get events() {
@@ -1302,6 +1386,9 @@ export class WppDatepicker {
       }, {
         "propName": "value",
         "methodName": "updateValue"
+      }, {
+        "propName": "width",
+        "methodName": "onUpdateWidth"
       }, {
         "propName": "range",
         "methodName": "updateRange"

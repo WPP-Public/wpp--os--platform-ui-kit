@@ -18,36 +18,49 @@ const WppCardGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCardGroup exten
         ['withRadioOrCheckbox', this.withRadioOrCheckbox],
         ['type', this.multiple ? 'multiple' : 'single'],
       ]);
-      if (this.value) {
-        this.setActiveCard(this.value);
-      }
+      this.setActiveCard(this.value);
     };
+    // Normalize values so number 0 and string '0' compare equal
+    this.toKey = (v) => {
+      if (v === undefined || v === null)
+        return undefined;
+      return String(v);
+    };
+    this.isEqualValue = (a, b) => {
+      const ka = this.toKey(a), kb = this.toKey(b);
+      return ka !== undefined && kb !== undefined && ka === kb;
+    };
+    this.CARD_SELECTOR = `${transformToVersionedTag('wpp-card')}, wpp-card`;
+    this.GROUP_SELECTOR = `${transformToVersionedTag('wpp-card-group')}, wpp-card-group`;
     this.getDirectCardChildren = () => {
-      const cards = Array.from(this.host.querySelectorAll(transformToVersionedTag('wpp-card')));
+      // collect both versioned and unversioned tags
+      const cards = Array.from(this.host.querySelectorAll(this.CARD_SELECTOR));
       this.directCardChildren = cards.filter((card) => {
-        const closestCardEl = card.parentElement?.closest(`${transformToVersionedTag('wpp-card')}, ${transformToVersionedTag('wpp-card-group')}`);
-        if (closestCardEl && closestCardEl.tagName.toLowerCase() === transformToVersionedTag('wpp-card')) {
+        // Find the nearest ancestor that is either a card or a card-group
+        const nearestAncestor = card.parentElement?.closest(`${this.CARD_SELECTOR}, ${this.GROUP_SELECTOR}`);
+        // If nearest ancestor is a card, mark as nested and exclude from direct children.
+        if (nearestAncestor && nearestAncestor.matches(this.CARD_SELECTOR)) {
           card.setAttribute('nested', 'true');
           return false;
         }
-        else {
-          return card;
-        }
+        // If nearest ancestor is a card-group (or none), this card is a direct child of the group.
+        card.removeAttribute('nested');
+        return true;
       });
     };
     this.setCardsProps = (updates) => {
       this.directCardChildren?.forEach((card) => {
-        if (card.tagName === transformToVersionedTag('wpp-card').toUpperCase()) {
-          updates.forEach(update => (card[update[0]] = update[1]));
-        }
+        updates.forEach(update => (card[update[0]] = update[1]));
       });
     };
     this.setActiveCard = (initValue) => {
-      const value = Array.isArray(initValue) ? initValue : [initValue];
+      const values = Array.isArray(initValue) ? initValue : [initValue];
+      const normalized = values.filter(v => v !== undefined && v !== null && v !== '').map(v => String(v));
       this.directCardChildren?.forEach((card) => {
-        if (card.tagName === transformToVersionedTag('wpp-card').toUpperCase()) {
-          card.setAttribute('checked', value.includes(card.value) ? 'true' : 'false');
-        }
+        const cardVal = card.value;
+        const isChecked = normalized.includes(String(cardVal));
+        card.checked = isChecked; // Stencil will reflect as checked="" when true
+        // Do NOT set the attribute manually; reflection will handle removal when false.
       });
     };
     this.getEnabledCards = () => this.directCardChildren.filter(card => !card.disabled);
@@ -90,9 +103,9 @@ const WppCardGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCardGroup exten
       if (!target)
         return;
       const nextValue = target.value;
-      if (this.value !== nextValue) {
+      if (!this.isEqualValue(this.value, nextValue)) {
         this.value = nextValue;
-        this.wppChange.emit({ value: this.value, name: this.name });
+        this.emitChange();
       }
       this.setActiveCard(this.value);
       this.syncTabIndexes();
@@ -120,24 +133,22 @@ const WppCardGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCardGroup exten
     if (event.target.getAttribute('nested'))
       return;
     if (this.multiple) {
-      const currentValue = this.value || [];
+      const currentValue = Array.isArray(this.value) ? this.value : [];
       this.value = event.detail.checked
         ? [...currentValue, event.detail.value]
-        : currentValue.filter(element => element !== event.detail.value);
+        : currentValue.filter(element => !this.isEqualValue(element, event.detail.value));
     }
     else {
-      if (this.value === event.detail.value) {
-        if (this.allowEmptySelection)
-          this.value = '';
+      if (this.isEqualValue(this.value, event.detail.value)) {
+        if (this.allowEmptySelection) {
+          this.value = ''; // empty selection is represented by ''
+        }
       }
       else {
         this.value = event.detail.value;
       }
     }
-    this.wppChange.emit({
-      value: this.value,
-      name: this.name,
-    });
+    this.emitChange();
   }
   onValueChange(newValue) {
     this.setActiveCard(newValue);
@@ -151,6 +162,12 @@ const WppCardGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCardGroup exten
   }
   onUpdateMultiple() {
     this.setCardsProps([['type', this.multiple ? 'multiple' : 'single']]);
+  }
+  emitChange() {
+    this.wppChange.emit({
+      value: this.value,
+      name: this.name,
+    });
   }
   componentDidLoad() {
     this.getDirectCardChildren();
@@ -193,7 +210,7 @@ const WppCardGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCardGroup exten
   render() {
     return (h(Host, { "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, class: this.hostCssClasses(), exportparts: "inner", role: this.multiple ? 'group' : 'radiogroup', "aria-labelledby": this.ariaProps.labelledby }, h("slot", { part: "inner" })));
   }
-  static get registryIs() { return "wpp-card-group-v3-3-1"; }
+  static get registryIs() { return "wpp-card-group-v3-4-0"; }
   get host() { return this; }
   static get watchers() { return {
     "value": ["onValueChange"],
@@ -202,7 +219,7 @@ const WppCardGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCardGroup exten
     "multiple": ["onUpdateMultiple"]
   }; }
   static get style() { return wppCardGroupCss; }
-}, [1, "wpp-card-group", "wpp-card-group-v3-3-1", {
+}, [1, "wpp-card-group", "wpp-card-group-v3-4-0", {
     "name": [1],
     "size": [1],
     "value": [1032],
@@ -216,9 +233,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-card-group-v3-3-1"];
+  const components = ["wpp-card-group-v3-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-card-group-v3-3-1":
+    case "wpp-card-group-v3-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppCardGroup$1);
       }

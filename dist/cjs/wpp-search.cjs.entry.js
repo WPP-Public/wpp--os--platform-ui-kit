@@ -4,11 +4,12 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
 const isEqual = require('./isEqual-0b0240b4.js');
-const utils = require('./utils-6189d8be.js');
-const menuListConfig = require('./menuListConfig-c172e0b1.js');
+const utils = require('./utils-99b83069.js');
+const menuListConfig = require('./menuListConfig-bbde46c0.js');
 const common = require('./common-ee802540.js');
 const consts = require('./consts-779fd4ec.js');
 require('./_commonjsHelpers-bcc1208a.js');
+require('./tippy.esm-9d703cd4.js');
 
 const BLUR_TIME = 250;
 const DROPDOWN_ANIMATION_TIME = [300, BLUR_TIME];
@@ -300,7 +301,7 @@ const WppSearch = class {
     this.renderInputPlaceholder = () => {
       if ((this.isFocused && !this.searchValue) || this.isDropdownShown || !this.value.length)
         return null;
-      return (index.h("wpp-typography-v3-3-1", { type: "s-body", class: "input-placeholder", ref: placeholderEl => (this.placeholderEl = placeholderEl) }, this.getOptionLabel(this.value[0])));
+      return (index.h("wpp-typography-v3-4-0", { type: "s-body", class: "input-placeholder", ref: placeholderEl => (this.placeholderEl = placeholderEl) }, this.getOptionLabel(this.value[0])));
     };
     this.getDropdownWidth = () => {
       if (this.dropdownWidth === 'auto') {
@@ -316,12 +317,12 @@ const WppSearch = class {
       if (this.value.length && !this.isFocused)
         return null;
       if (this.loading) {
-        return (index.h("div", { class: "loading" }, index.h("wpp-spinner-v3-3-1", { slot: "left" }), index.h("wpp-typography-v3-3-1", { type: "s-body", slot: "label" }, this._locales.loading)));
+        return (index.h("div", { class: "loading" }, index.h("wpp-spinner-v3-4-0", { slot: "left" }), index.h("wpp-typography-v3-4-0", { type: "s-body", slot: "label" }, this._locales.loading)));
       }
       if (this.isEmptyOptions) {
-        return (index.h(index.Fragment, null, index.h("wpp-list-item-v3-3-1", { class: "nothing-found-wrapper" }, index.h("wpp-typography-v3-3-1", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound))));
+        return (index.h(index.Fragment, null, index.h("wpp-list-item-v3-4-0", { class: "nothing-found-wrapper" }, index.h("wpp-typography-v3-4-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound))));
       }
-      return (index.h(index.Fragment, null, !!this._locales.dropdownHeader && (index.h("wpp-list-item-v3-3-1", { class: "dropdown-header", part: "dropdown-header" }, index.h("wpp-typography-v3-3-1", { type: "s-strong", slot: "label" }, this._locales.dropdownHeader))), index.h("slot", null), index.h("div", null, this.isInfiniteLoading && (index.h("div", { class: "infinite-loader" }, index.h("wpp-spinner-v3-3-1", null))))));
+      return (index.h(index.Fragment, null, !!this._locales.dropdownHeader && (index.h("wpp-list-item-v3-4-0", { class: "dropdown-header", part: "dropdown-header" }, index.h("wpp-typography-v3-4-0", { type: "s-strong", slot: "label" }, this._locales.dropdownHeader))), index.h("slot", null), index.h("div", null, this.isInfiniteLoading && (index.h("div", { class: "infinite-loader" }, index.h("wpp-spinner-v3-4-0", null))))));
     };
     this.isFocused = false;
     this.searchValue = '';
@@ -482,9 +483,9 @@ const WppSearch = class {
     const style = {
       '--custom-dropdown-width': this.getDropdownWidth(),
     };
-    return (index.h(index.Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, dropdown-header, options" }, index.h("div", { class: this.searchWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (index.h("wpp-label-v3-3-1", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), index.h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, index.h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.hasSearchButton() && index.h("wpp-icon-search-v3-3-1", null), this.hasActiveEllipses ? (index.h("wpp-tooltip-v3-3-1", { part: "anchor", value: this.value.length ? this.getOptionLabel(this.value[0]) : undefined, class: this.tooltipCSSClasses() }, this.renderInputPlaceholder())) : (this.renderInputPlaceholder()), index.h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, onClick: this.handleInputMouseDown, tabIndex: this.disabled ? -1 : 0, title: "" })), index.h("div", { class: "trigger-actions" }, this.hasClearButton() && index.h("wpp-icon-cross-v3-3-1", { onClick: this.handleClearClick }))), !!this.message && (index.h("wpp-inline-message-v3-3-1", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), index.h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, index.h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderDropdownContent()))));
+    return (index.h(index.Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, dropdown-header, options" }, index.h("div", { class: this.searchWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (index.h("wpp-label-v3-4-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), index.h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, index.h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.hasSearchButton() && index.h("wpp-icon-search-v3-4-0", null), this.hasActiveEllipses ? (index.h("wpp-tooltip-v3-4-0", { part: "anchor", value: this.value.length ? this.getOptionLabel(this.value[0]) : undefined, class: this.tooltipCSSClasses() }, this.renderInputPlaceholder())) : (this.renderInputPlaceholder()), index.h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, onClick: this.handleInputMouseDown, tabIndex: this.disabled ? -1 : 0, title: "" })), index.h("div", { class: "trigger-actions" }, this.hasClearButton() && index.h("wpp-icon-cross-v3-4-0", { onClick: this.handleClearClick }))), !!this.message && (index.h("wpp-inline-message-v3-4-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), index.h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, index.h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderDropdownContent()))));
   }
-  static get registryIs() { return "wpp-search-v3-3-1"; }
+  static get registryIs() { return "wpp-search-v3-4-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "value": ["onNextValueChange"],

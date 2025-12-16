@@ -10,7 +10,7 @@ describe('wpp-nav-sidebar', () => {
                     <wpp-icon-globe slot="icon-start"></wpp-icon-globe>
                   </wpp-nav-sidebar-item>
                   <wpp-nav-sidebar-item label=${'Projects'} extended=${true}>
-                    <wpp-icon-favorites slot="icon-start"></wpp-icon-favorites>
+                    <wpp-icon-favourites slot="icon-start"></wpp-icon-favourites>
                     <wpp-nav-sidebar-item label=${'Projects 01'} path=${'/project1'}></wpp-nav-sidebar-item>
                     <wpp-nav-sidebar-item label=${'Projects 02'} path=${'/project2'}></wpp-nav-sidebar-item>
                     <wpp-nav-sidebar-item label=${'Projects 03'} path=${'/project3'}></wpp-nav-sidebar-item>
@@ -28,7 +28,7 @@ describe('wpp-nav-sidebar', () => {
                     <wpp-icon-globe slot="icon-start"></wpp-icon-globe>
                   </wpp-nav-sidebar-item>
                   <wpp-nav-sidebar-item label=${'Projects'} extended=${true}>
-                    <wpp-icon-favorites slot="icon-start"></wpp-icon-favorites>
+                    <wpp-icon-favourites slot="icon-start"></wpp-icon-favourites>
                     <wpp-nav-sidebar-item label=${'Projects 01'} path=${'/project1'}></wpp-nav-sidebar-item>
                     <wpp-nav-sidebar-item label=${'Projects 02'} path=${'/project2'}></wpp-nav-sidebar-item>
                     <wpp-nav-sidebar-item label=${'Projects 03'} path=${'/project3'}></wpp-nav-sidebar-item>

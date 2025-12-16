@@ -1105,7 +1105,7 @@
   --datepicker-active-date-color: var(--wpp-datepicker-active-date-color, var(--wpp-grey-color-000));
   --datepicker-years-range-color: var(--wpp-datepicker-years-range-color, var(--wpp-grey-color-1000));
   --datepicker-day-active-color: var(--wpp-datepicker-day-active-color, var(--wpp-grey-color-1000));
-  --datepicker-single-container-width: var(--wpp-datepicker-container-width, 196px);
+  --datepicker-single-container-width: var(--wpp-datepicker-container-width, 200px);
   --datepicker-range-container-width: var(--wpp-datepicker-container-width, 264px);
   --datepicker-inline-message-margin: var(--wpp-datepicker-inline-message-margin, 4px 0 0 0);
   --datepicker-range-bg-color: var(--wpp-datepicker-range-bg-color, var(--wpp-grey-color-200));
@@ -1530,6 +1530,45 @@
   left: 0;
   border-top: 1px solid var(--wpp-grey-color-300);
   content: "";
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-with-presets.wpp-reverse-layout {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  width: 100%;
+  justify-content: space-between;
+  background: var(--wpp-grey-color-000);
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-with-presets.wpp-reverse-layout:after {
+  content: "";
+  position: relative;
+  flex-basis: 100%;
+  height: var(--datepicker-buttons-height);
+  order: 3;
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-with-presets.wpp-reverse-layout .wpp-presets-footer {
+  display: none;
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-with-presets.wpp-reverse-layout .wpp-presets-container {
+  padding: var(--datepicker-padding) 0 0 var(--datepicker-padding);
+  order: 2;
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-with-presets.wpp-reverse-layout .wpp-presets-container:before {
+  right: initial;
+  left: 0;
+  border-left: 1px solid var(--wpp-grey-color-300);
+  border-right: none;
+  bottom: 0;
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-with-presets.wpp-reverse-layout .air-datepicker {
+  position: initial;
+  order: 1;
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-with-presets.wpp-reverse-layout .air-datepicker--buttons {
+  position: absolute;
+  top: calc(100% - var(--datepicker-buttons-height));
+  right: var(--datepicker-padding);
+  width: calc(100% - var(--datepicker-padding) * 3);
 }
 .wpp-datepicker-portal.portal-datepicker.wpp-range-selected {
   --wpp-datepicker-range-bg-color: var(--wpp-primary-color-100);

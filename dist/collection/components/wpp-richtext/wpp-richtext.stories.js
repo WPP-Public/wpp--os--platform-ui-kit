@@ -86,14 +86,13 @@ const uploadRequestHandler = {
  */
 export const Editor = {
   render: (args) => html `
-    <wpp-richtext-v3-3-1
+    <wpp-richtext-v3-4-0
       @wppChange="${changeHandler}"
       @wppSelectionChange="${selectionChangeHandler}"
       @wppUploadRequest="${uploadRequestHandler}"
       .name=${args.name}
       .value=${value}
       .placeholder=${args.placeholder}
-      .preserve-whitespace=${args.preserveWhitespace}
       .modules=${args.modules}
       .format=${args.format}
       .debug=${args.debug}
@@ -107,12 +106,11 @@ export const Editor = {
       warning-threshold="${args.warningThreshold}"
       style="width: 900px; height: 600px"
       class="custom-class-1"
-    ></wpp-richtext-v3-3-1>
+    ></wpp-richtext-v3-4-0>
   `,
   args: {
     name: 'content',
     placeholder: 'Insert text here...',
-    preserveWhitespace: false,
     format: formats.markdown,
     debug: debugLevels.warn,
     modules,
@@ -166,14 +164,13 @@ export const View = {
       },
     };
     return html `
-      <wpp-richtext-v3-3-1
+      <wpp-richtext-v3-4-0
         @wppChange="${liveChangeHandler}"
         @wppSelectionChange="${selectionChangeHandler}"
         @wppUploadRequest="${uploadRequestHandler}"
         .name="markdownContent"
         .value=${value}
         .placeholder=${args.placeholder}
-        .preserve-whitespace=${args.preserveWhitespace}
         .modules=${args.modules}
         .format=${args.format}
         .debug=${args.debug}
@@ -187,22 +184,20 @@ export const View = {
         warning-threshold="${args.warningThreshold}"
         style="width: 900px; height: 300px"
         class="custom-class-1"
-      ></wpp-richtext-v3-3-1>
+      ></wpp-richtext-v3-4-0>
 
-      <wpp-typography-v3-3-1 type="m-strong">Markdown view with preserve whitespace</wpp-typography-v3-3-1>
+      <wpp-typography-v3-4-0 type="m-strong">Markdown view with preserve whitespace</wpp-typography-v3-4-0>
 
-      <wpp-richtext-view-v3-3-1
+      <wpp-richtext-view-v3-4-0
         .value=${value}
         .format=${args.format}
         .name="markdownContent"
-        .preserve-whitespace=${args.preserveWhitespace}
-      ></wpp-richtext-view-v3-3-1>
+      ></wpp-richtext-view-v3-4-0>
     `;
   },
   args: {
     name: 'markdownContent',
     placeholder: 'Insert text here...',
-    preserveWhitespace: true,
     format: formats.markdown,
     debug: debugLevels.warn,
     modules,

@@ -228,7 +228,6 @@ export declare class WppAutocomplete implements BaseComponent, InlineMessage {
   private isSelectedItemsLimitReached;
   private canLoadMore;
   private hasClearButton;
-  private hasSearchButton;
   private hasSimpleSearch;
   private isOptionHidden;
   private isOptionNodesChanged;

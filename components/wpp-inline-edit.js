@@ -1,4 +1,5 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
+import { s as sticky } from './menuListConfig.js';
 import { b as isEventTargetContained, k as transformToVersionedTag } from './utils.js';
 import { d as defineCustomElement$j } from './wpp-action-button2.js';
 import { d as defineCustomElement$i } from './wpp-icon-cross2.js';
@@ -40,6 +41,13 @@ const WppInlineEdit$1 = /*@__PURE__*/ proxyCustomElement(class WppInlineEdit ext
     this.wppConfirm = createEvent(this, "wppConfirm", 7);
     this.lastValueWithError = undefined;
     this._locales = LOCALES_DEFAULTS;
+    this.handleAnchorResize = (entries) => {
+      for (const entry of entries) {
+        if (entry.target === this.triggerContainerRef) {
+          this.popoverInstance?.popperInstance?.update();
+        }
+      }
+    };
     this.getFormElement = () => this.host?.querySelector('[slot="form-element"]');
     this.emitModeChange = (mode, reason) => {
       this.wppModeChange.emit({ mode, closePopover: () => this.popoverRef?.closePopover(), reason });
@@ -128,7 +136,7 @@ const WppInlineEdit$1 = /*@__PURE__*/ proxyCustomElement(class WppInlineEdit ext
       }
     };
     this.placeholderCssClasses = () => ({ placeholder: !this.value });
-    this.renderTriggerElement = () => (h("div", { tabIndex: 0, role: "button", class: "trigger" }, this.mode === InlineEditModeEnum.EDIT ? (h("div", { class: "wrapper", part: "wrapper" }, h("div", { class: "form-element", onKeyDown: this.onKeyDownFormEl }, h("slot", { name: "form-element" })))) : (h("div", { class: "content", onClick: () => this.emitModeChange(InlineEditModeEnum.EDIT), part: "content" }, h("div", { class: "content-bg", part: "content-bg" }), h("wpp-typography-v3-3-1", { class: this.placeholderCssClasses(), type: "s-body", part: "inline-edit-typography" }, this.value || this.placeholder), h("wpp-icon-edit-v3-3-1", null)))));
+    this.renderTriggerElement = () => (h("div", { tabIndex: 0, role: "button", class: "trigger" }, this.mode === InlineEditModeEnum.EDIT ? (h("div", { class: "wrapper", part: "wrapper" }, h("div", { class: "form-element", onKeyDown: this.onKeyDownFormEl }, h("slot", { name: "form-element" })))) : (h("div", { class: "content", onClick: () => this.emitModeChange(InlineEditModeEnum.EDIT), part: "content" }, h("div", { class: "content-bg", part: "content-bg" }), h("wpp-typography-v3-4-0", { class: this.placeholderCssClasses(), type: "s-body", part: "inline-edit-typography" }, this.value || this.placeholder), h("wpp-icon-edit-v3-4-0", null)))));
     this.initialValue = undefined;
     this.inputValue = undefined;
     this.formType = 'input';
@@ -179,28 +187,58 @@ const WppInlineEdit$1 = /*@__PURE__*/ proxyCustomElement(class WppInlineEdit ext
         : 'input';
     this._locales = { ...this._locales, ...this.locales };
   }
+  componentDidLoad() {
+    if (!this.triggerContainerRef)
+      return;
+    this.resizeObserver = new ResizeObserver(this.handleAnchorResize);
+    this.resizeObserver.observe(this.triggerContainerRef);
+  }
+  disconnectedCallback() {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+  }
   render() {
     const inlineWidth = this.mode === InlineEditModeEnum.EDIT && this.inputWidth !== 'auto' && this.inputWidth !== undefined;
-    return (h(Host, { class: this.inlineEditCssClasses(), exportparts: "label, wrapper, input, textarea, buttons, inline-edit-typography, content, content-bg" }, h("wpp-popover-v3-3-1", { ref: ref => (this.popoverRef = ref), externalClass: "inline-edit-popover", exportparts: "content", class: this.inlineEditPopoverCssClasses(), style: { width: inlineWidth ? this.inputWidth : '' }, config: {
+    return (h(Host, { class: this.inlineEditCssClasses(), exportparts: "label, wrapper, input, textarea, buttons, inline-edit-typography, content, content-bg" }, h("wpp-popover-v3-4-0", { ref: ref => (this.popoverRef = ref), externalClass: "inline-edit-popover", exportparts: "content", class: this.inlineEditPopoverCssClasses(), style: { width: inlineWidth ? this.inputWidth : '' }, config: {
         placement: this.formType === 'input' ? 'right-start' : 'bottom-start',
         offset: [0, 4],
         hideOnClick: false,
         animation: false,
         ...this.dropdownConfig,
-        onShow: () => {
+        plugins: [sticky],
+        onCreate: (instance) => {
+          this.popoverInstance = instance;
+          if (this.dropdownConfig?.onCreate) {
+            this.dropdownConfig.onCreate(instance);
+          }
+        },
+        onDestroy: (instance) => {
+          this.popoverInstance = undefined;
+          if (this.dropdownConfig?.onDestroy) {
+            this.dropdownConfig.onDestroy(instance);
+          }
+        },
+        onShow: (instance) => {
           this.initialValue = this.value;
           setTimeout(() => {
             this.getFormElement()?.setFocus();
-          }, 50);
+          }, 100);
+          if (this.dropdownConfig?.onShow) {
+            this.dropdownConfig.onShow(instance);
+          }
         },
-        onHidden: () => {
+        onHidden: (instance) => {
           const formEl = this.getFormElement();
           if (!formEl)
             return;
           this.setErrorState('clear', formEl);
+          if (this.dropdownConfig?.onHidden) {
+            this.dropdownConfig.onHidden(instance);
+          }
         },
         onClickOutside: (_, e) => this.handleClose(e, 'outsideClick'),
-      } }, h("div", { slot: "trigger-element", class: "trigger-element" }, this.errorMessage && this.mode === InlineEditModeEnum.EDIT ? (h("wpp-tooltip-v3-3-1", { class: 'wpp-anchor-toolip', error: true, text: this.errorMessage, config: {
+      } }, h("div", { slot: "trigger-element", ref: elRef => (this.triggerContainerRef = elRef), class: "trigger-element" }, this.errorMessage && this.mode === InlineEditModeEnum.EDIT ? (h("wpp-tooltip-v3-4-0", { class: 'wpp-anchor-toolip', error: true, text: this.errorMessage, config: {
         showOnCreate: true,
         onCreate: instance => {
           this.tooltipInstance = instance;
@@ -210,16 +248,16 @@ const WppInlineEdit$1 = /*@__PURE__*/ proxyCustomElement(class WppInlineEdit ext
             instance.popperInstance?.update();
           }, 20);
         },
-      } }, this.renderTriggerElement())) : (this.renderTriggerElement())), h("div", { class: "buttons", part: "buttons" }, h("wpp-action-button-v3-3-1", { disabled: this.isPendingRequest || this.value === this.lastValueWithError, variant: "inverted", onClick: this.handleAccept }, h("wpp-icon-done-v3-3-1", { slot: "icon-start" })), h("wpp-action-button-v3-3-1", { disabled: this.isPendingRequest, variant: "inverted", onClick: e => this.handleClose(e, 'cancel') }, h("wpp-icon-cross-v3-3-1", { slot: "icon-start" }))))));
+      } }, this.renderTriggerElement())) : (this.renderTriggerElement())), h("div", { class: "buttons", part: "buttons" }, h("wpp-action-button-v3-4-0", { disabled: this.isPendingRequest || this.value === this.lastValueWithError, variant: "inverted", onClick: this.handleAccept }, h("wpp-icon-done-v3-4-0", { slot: "icon-start" })), h("wpp-action-button-v3-4-0", { disabled: this.isPendingRequest, variant: "inverted", onClick: e => this.handleClose(e, 'cancel') }, h("wpp-icon-cross-v3-4-0", { slot: "icon-start" }))))));
   }
-  static get registryIs() { return "wpp-inline-edit-v3-3-1"; }
+  static get registryIs() { return "wpp-inline-edit-v3-4-0"; }
   get host() { return this; }
   static get watchers() { return {
     "mode": ["editModeChangeHandler"],
     "locales": ["onUpdateLocales"]
   }; }
   static get style() { return wppInlineEditCss; }
-}, [1, "wpp-inline-edit", "wpp-inline-edit-v3-3-1", {
+}, [1, "wpp-inline-edit", "wpp-inline-edit-v3-4-0", {
     "mode": [1],
     "value": [1],
     "placeholder": [1],
@@ -238,99 +276,99 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-inline-edit-v3-3-1", "wpp-action-button-v3-3-1", "wpp-icon-cross-v3-3-1", "wpp-icon-done-v3-3-1", "wpp-icon-edit-v3-3-1", "wpp-icon-error-v3-3-1", "wpp-icon-info-message-v3-3-1", "wpp-icon-search-v3-3-1", "wpp-icon-success-v3-3-1", "wpp-icon-warning-v3-3-1", "wpp-inline-message-v3-3-1", "wpp-input-v3-3-1", "wpp-internal-label-v3-3-1", "wpp-internal-tooltip-v3-3-1", "wpp-label-v3-3-1", "wpp-popover-v3-3-1", "wpp-spinner-v3-3-1", "wpp-tooltip-v3-3-1", "wpp-typography-v3-3-1"];
+  const components = ["wpp-inline-edit-v3-4-0", "wpp-action-button-v3-4-0", "wpp-icon-cross-v3-4-0", "wpp-icon-done-v3-4-0", "wpp-icon-edit-v3-4-0", "wpp-icon-error-v3-4-0", "wpp-icon-info-message-v3-4-0", "wpp-icon-search-v3-4-0", "wpp-icon-success-v3-4-0", "wpp-icon-warning-v3-4-0", "wpp-inline-message-v3-4-0", "wpp-input-v3-4-0", "wpp-internal-label-v3-4-0", "wpp-internal-tooltip-v3-4-0", "wpp-label-v3-4-0", "wpp-popover-v3-4-0", "wpp-spinner-v3-4-0", "wpp-tooltip-v3-4-0", "wpp-typography-v3-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-inline-edit-v3-3-1":
+    case "wpp-inline-edit-v3-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppInlineEdit$1);
       }
       break;
-    case "wpp-action-button-v3-3-1":
+    case "wpp-action-button-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-cross-v3-3-1":
+    case "wpp-icon-cross-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-done-v3-3-1":
+    case "wpp-icon-done-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-edit-v3-3-1":
+    case "wpp-icon-edit-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-error-v3-3-1":
+    case "wpp-icon-error-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-info-message-v3-3-1":
+    case "wpp-icon-info-message-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-search-v3-3-1":
+    case "wpp-icon-search-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-success-v3-3-1":
+    case "wpp-icon-success-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-warning-v3-3-1":
+    case "wpp-icon-warning-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-inline-message-v3-3-1":
+    case "wpp-inline-message-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-input-v3-3-1":
+    case "wpp-input-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-label-v3-3-1":
+    case "wpp-internal-label-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-1":
+    case "wpp-internal-tooltip-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-label-v3-3-1":
+    case "wpp-label-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-popover-v3-3-1":
+    case "wpp-popover-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v3-3-1":
+    case "wpp-spinner-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v3-3-1":
+    case "wpp-tooltip-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v3-3-1":
+    case "wpp-typography-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

@@ -132,6 +132,7 @@ export class WppRichtext {
     this.warningThreshold = 20;
     this.active = false;
     this.format = formats.html;
+    this.preserveWhitespace = true;
     this.bounds = undefined;
     this.value = undefined;
     this.debug = debugLevels.warn;
@@ -141,13 +142,6 @@ export class WppRichtext {
     this.scrollingContainer = undefined;
     this.strict = true;
     this.styles = '{}';
-    this.preserveWhitespace = false;
-  }
-  handlePreserveWhitespaceChange(newVal, oldVal) {
-    if (newVal !== oldVal && this.format === formats.markdown && this.value != null) {
-      this.setValue(this.value, true);
-      this.quill?.history?.clear?.();
-    }
   }
   syncValueAndEmit(source) {
     const newValue = this.getValue();
@@ -157,7 +151,7 @@ export class WppRichtext {
         this.formControlInput.value = this.value;
       }
       if (this.format === formats.markdown) {
-        const { plainText } = processMarkdownValue(this.value, this.preserveWhitespace, false);
+        const { plainText } = processMarkdownValue(this.value);
         this.plainText = plainText;
       }
       else {
@@ -172,30 +166,19 @@ export class WppRichtext {
       });
     }
   }
-  setValue(value, isInitialLoad = false) {
+  setValue(value) {
     if (this.format === formats.html) {
       const contents = this.quill.clipboard.convert(value);
       this.quill.setContents(contents, sources.api);
     }
     else if (this.format === formats.markdown) {
       const str = String(value || '');
-      const looksLikeHtml = /<\/?[a-z][\s\S]*>/i.test(str);
-      let html;
-      let plainText;
-      if (isInitialLoad || !looksLikeHtml) {
-        // Treat as Markdown on initial load OR when not clearly HTML
-        ;
-        ({ html, plainText } = processMarkdownValue(str, this.preserveWhitespace, isInitialLoad));
-      }
-      else {
-        // Internal updates — already HTML (from the live DOM)
-        html = str;
-        plainText = this.quill?.getText().trim() || '';
-      }
+      // Process markdown: blank lines (\n\n) are preserved as visible empty paragraphs via &nbsp; markers
+      const { html, plainText } = processMarkdownValue(str);
       this.plainText = plainText;
       const contents = this.quill.clipboard.convert(html);
       this.quill.setContents(contents, sources.api);
-      // Optional cleanup of empty <li>
+      // cleanup of empty <li>
       const editorEl = this.quill.root;
       const emptyListItems = editorEl.querySelectorAll('li');
       let removedCount = 0;
@@ -236,7 +219,10 @@ export class WppRichtext {
       return exportHtml(html);
     }
     else if (this.format === formats.markdown) {
-      return turndownService.turndown(html);
+      let markdown = turndownService.turndown(html);
+      // Trim leading/trailing whitespace only - preserve internal blank lines
+      markdown = markdown.trim();
+      return markdown;
     }
     else if (this.format === formats.text) {
       return text;
@@ -302,9 +288,8 @@ export class WppRichtext {
         this.containerElement.style.setProperty(key, styles[key]);
       });
     }
-    // Initial load — mark empty lines only once
     if (this.value) {
-      this.setValue(this.value, true); // true = initial load
+      this.setValue(this.value);
       this.quill.history.clear();
     }
     this.updateEnteredCharacters();
@@ -345,8 +330,12 @@ export class WppRichtext {
       if (source !== 'user')
         return;
       const range = this.quill.getSelection();
-      if (!range)
+      if (!range) {
+        // Need to sync and emit value change on any user interaction
+        // to ensure the editor is in a consistent state
+        this.syncValueAndEmit(source);
         return;
+      }
       const [line, offset] = this.quill.getLine(range.index);
       const text = line.domNode.textContent || '';
       // --- Heading Logic ---
@@ -473,15 +462,12 @@ export class WppRichtext {
     const rawFormat = this.host.getAttribute('format');
     if (rawFormat)
       this.format = rawFormat.replace(/^['"]|['"]$/g, '');
-    if (this.host.hasAttribute('preserve-whitespace')) {
-      this.preserveWhitespace = true;
-    }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-required": this.required, "data-testid": "wpp-rich-text" }, h("wpp-richtext-icon-loader-v3-3-1", null), h("wpp-quill-styles-v3-3-1", null), h("wpp-richtext-common-styles-v3-3-1", null), this.labelConfig?.text && (h("wpp-label-v3-3-1", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.formControlCssClasses(), "data-testid": "rich-text-form" }, h("slot", { name: "quill-toolbar", "quill-toolbar": "" }), h("div", { ref: el => (this.containerElement = el), "data-testid": "richtext-editor", class: this.preserveWhitespace ? 'preserve-whitespace' : '' }), Boolean(this.name) && (h("input", { ref: el => (this.formControlInput = el), tabindex: "-1", id: this.name, class: "form-control-input", "data-testid": "rich-text-input", disabled: this.disabled }))), (Boolean(this.message) || Boolean(this.charactersLimit)) && (h("div", { class: this.messageCssClasses(), part: "message-wrapper" }, Boolean(this.message) && (h("wpp-inline-message-v3-3-1", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", class: "message", "data-testid": "message" })), Boolean(this.charactersLimit) && (h("div", { class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, h("wpp-typography-v3-3-1", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":\u00A0"), h("wpp-typography-v3-3-1", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit)))))));
+    return (h(Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-required": this.required, "data-testid": "wpp-rich-text" }, h("wpp-richtext-icon-loader-v3-4-0", null), h("wpp-quill-styles-v3-4-0", null), h("wpp-richtext-common-styles-v3-4-0", null), this.labelConfig?.text && (h("wpp-label-v3-4-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.formControlCssClasses(), "data-testid": "rich-text-form" }, h("slot", { name: "quill-toolbar", "quill-toolbar": "" }), h("div", { ref: el => (this.containerElement = el), "data-testid": "richtext-editor" }), Boolean(this.name) && (h("input", { ref: el => (this.formControlInput = el), tabindex: "-1", id: this.name, class: "form-control-input", "data-testid": "rich-text-input", disabled: this.disabled }))), (Boolean(this.message) || Boolean(this.charactersLimit)) && (h("div", { class: this.messageCssClasses(), part: "message-wrapper" }, Boolean(this.message) && (h("wpp-inline-message-v3-4-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", class: "message", "data-testid": "message" })), Boolean(this.charactersLimit) && (h("div", { class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, h("wpp-typography-v3-4-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":\u00A0"), h("wpp-typography-v3-4-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit)))))));
   }
   static get is() { return "wpp-richtext"; }
-  static get registryIs() { return "wpp-richtext-v3-3-1"; }
+  static get registryIs() { return "wpp-richtext-v3-4-0"; }
   static get originalStyleUrls() {
     return {
       "$": ["wpp-richtext.scss"]
@@ -790,6 +776,27 @@ export class WppRichtext {
         "reflect": true,
         "defaultValue": "formats.html"
       },
+      "preserveWhitespace": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [{
+              "name": "deprecated",
+              "text": "This property is no longer needed. Whitespace preservation is now the default behavior\nfor markdown format. This prop will be removed in a future major version."
+            }],
+          "text": ""
+        },
+        "attribute": "preserve-whitespace",
+        "reflect": false,
+        "defaultValue": "true"
+      },
       "bounds": {
         "type": "string",
         "mutable": true,
@@ -807,7 +814,7 @@ export class WppRichtext {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "DOM Element or a CSS selector for a DOM Element, within which the editor\u2019s ui elements (i.e. tooltips, etc.)\nshould be confined. Currently, it only considers left and right boundaries."
+          "text": "DOM Element or a CSS selector for a DOM Element, within which the editor's ui elements (i.e. tooltips, etc.)\nshould be confined. Currently, it only considers left and right boundaries."
         },
         "attribute": "bounds",
         "reflect": true
@@ -967,24 +974,6 @@ export class WppRichtext {
         "attribute": "styles",
         "reflect": false,
         "defaultValue": "'{}'"
-      },
-      "preserveWhitespace": {
-        "type": "boolean",
-        "mutable": true,
-        "complexType": {
-          "original": "boolean",
-          "resolved": "boolean",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Use `pre` HTML element as a container to preserve white space, or regular `div` element"
-        },
-        "attribute": "preserve-whitespace",
-        "reflect": true,
-        "defaultValue": "false"
       }
     };
   }
@@ -1125,9 +1114,6 @@ export class WppRichtext {
   static get elementRef() { return "host"; }
   static get watchers() {
     return [{
-        "propName": "preserveWhitespace",
-        "methodName": "handlePreserveWhitespaceChange"
-      }, {
         "propName": "value",
         "methodName": "updateContent"
       }, {

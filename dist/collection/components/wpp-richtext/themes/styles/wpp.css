@@ -98,6 +98,7 @@
   display: inline-block;
   white-space: nowrap;
   width: 1.2em;
+  vertical-align: top;
 }
 .ql-editor li:not(.ql-direction-rtl)::before {
   margin-left: calc(-1 * calc(0.3em + 1.2em));
@@ -706,7 +707,7 @@
 }
 .ql-wpp .ql-editor ol,
 .ql-wpp .ql-editor ul {
-  display: inline-block;
+  display: block;
 }
 .ql-wpp.ql-toolbar .ql-picker {
   font-size: 14px;

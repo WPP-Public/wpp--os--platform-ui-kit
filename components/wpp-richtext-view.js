@@ -1,6 +1,5 @@
 import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
 import { f as formats, s as sources, p as processMarkdownValue, t as turndownService, Q as Quill } from './config.js';
-import { k as transformToVersionedTag } from './utils.js';
 import { d as defineCustomElement$3 } from './wpp-quill-styles2.js';
 import { d as defineCustomElement$2 } from './wpp-richtext-common-styles2.js';
 
@@ -15,43 +14,31 @@ const WppRichtextView$1 = /*@__PURE__*/ proxyCustomElement(class WppRichtextView
     this.modules = undefined;
     this.strict = true;
     this.styles = '{}';
-    this.preserveWhitespace = false;
+    this.preserveWhitespace = true;
     this.name = undefined;
   }
-  setValue(value, isInitialLoad = false) {
-    if (this.format === formats.markdown) {
-      const editorTag = transformToVersionedTag('wpp-richtext');
-      let editorEl;
-      if (this.name) {
-        editorEl = document.querySelector(`${editorTag}[name="${this.name}"]`);
-      }
-      else {
-        editorEl = document.querySelector(editorTag);
-      }
-      if (editorEl && editorEl.quill && editorEl.format === this.format) {
-        const editorHtml = editorEl.quill.root.innerHTML;
-        this.quill.root.innerHTML = editorHtml;
-        return;
-      }
-    }
-    // Fallback: process markdown into HTML for the view
+  setValue(value) {
     if (this.format === formats.html) {
       const contents = this.quill.clipboard.convert(value);
       this.quill.setContents(contents, sources.api);
     }
     else if (this.format === formats.markdown) {
-      const { html } = processMarkdownValue(value, this.preserveWhitespace, isInitialLoad);
+      const { html } = processMarkdownValue(value);
       const contents = this.quill.clipboard.convert(html);
       this.quill.setContents(contents, sources.api);
-      // normalize empty blocks when parsing stored value
-      const normalizeNode = (node) => {
-        const html = node.innerHTML.trim().toLowerCase();
-        if (html === '' || html === '<br>' || html === '<br/>' || html === '<br />' || html === '&nbsp;') {
-          node.innerHTML = '&nbsp;';
+      // Quill's clipboard.convert adds extra empty <p><br></p> before lists when preceded by a <p> tag
+      // We need to remove these, but KEEP <p>&nbsp;</p> which are intentional blank lines
+      const lists = this.quill.root.querySelectorAll('ol, ul');
+      lists.forEach(list => {
+        const prevElement = list.previousElementSibling;
+        if (prevElement && prevElement.tagName === 'P') {
+          const content = prevElement.innerHTML.trim();
+          if (content === '<br>' || content === '') {
+            prevElement.remove();
+          }
         }
-      };
-      const blocks = Array.from(this.quill.root.querySelectorAll('p, blockquote'));
-      blocks.forEach(b => normalizeNode(b));
+      });
+      // Clean up empty list items that may have been created
       const emptyListItems = this.quill.root.querySelectorAll('li');
       let removedCount = 0;
       emptyListItems.forEach(li => {
@@ -61,8 +48,9 @@ const WppRichtextView$1 = /*@__PURE__*/ proxyCustomElement(class WppRichtextView
           removedCount++;
         }
       });
-      if (removedCount > 0)
+      if (removedCount > 0) {
         this.quill.update(sources.api);
+      }
     }
     else if (this.format === formats.text) {
       this.quill.setText(value, sources.api);
@@ -128,7 +116,7 @@ const WppRichtextView$1 = /*@__PURE__*/ proxyCustomElement(class WppRichtextView
     }
     this.containerElement?.classList.add('quill-view');
     if (this.value) {
-      this.setValue(this.value, true);
+      this.setValue(this.value);
       this.quill['history'].clear();
     }
   }
@@ -170,15 +158,15 @@ const WppRichtextView$1 = /*@__PURE__*/ proxyCustomElement(class WppRichtextView
     this.setValue(newValue);
   }
   render() {
-    return (h(Host, null, h("wpp-quill-styles-v3-3-1", null), h("wpp-richtext-common-styles-v3-3-1", null), h("div", { ref: (el) => (this.containerElement = el), class: this.preserveWhitespace ? 'preserve-whitespace' : '' })));
+    return (h(Host, null, h("wpp-quill-styles-v3-4-0", null), h("wpp-richtext-common-styles-v3-4-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
   }
-  static get registryIs() { return "wpp-richtext-view-v3-3-1"; }
+  static get registryIs() { return "wpp-richtext-view-v3-4-0"; }
   get host() { return this; }
   static get watchers() { return {
     "styles": ["updateStyle"],
     "value": ["updateContent"]
   }; }
-}, [0, "wpp-richtext-view", "wpp-richtext-view-v3-3-1", {
+}, [0, "wpp-richtext-view", "wpp-richtext-view-v3-4-0", {
     "value": [1537],
     "format": [1537],
     "debug": [1],
@@ -193,19 +181,19 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-richtext-view-v3-3-1", "wpp-quill-styles-v3-3-1", "wpp-richtext-common-styles-v3-3-1"];
+  const components = ["wpp-richtext-view-v3-4-0", "wpp-quill-styles-v3-4-0", "wpp-richtext-common-styles-v3-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-richtext-view-v3-3-1":
+    case "wpp-richtext-view-v3-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppRichtextView$1);
       }
       break;
-    case "wpp-quill-styles-v3-3-1":
+    case "wpp-quill-styles-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-richtext-common-styles-v3-3-1":
+    case "wpp-richtext-common-styles-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

@@ -7,3 +7,4 @@ type SideModalStoryArgs = Components.WppSideModal & {
 };
 export declare const SideModal: StoryObj<SideModalStoryArgs>;
 export declare const SideModalWithActionsConfig: StoryObj<Components.WppSideModal>;
+export declare const SideModalWithHeaderActionsConfig: StoryObj<Components.WppSideModal>;

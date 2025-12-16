@@ -3,7 +3,6 @@ import { Quill } from '../..';
 import { formats, sources } from '../../types';
 import turndownService from '../../config';
 import { processMarkdownValue } from '../../utils';
-import { transformToVersionedTag } from '../../../../utils/utils';
 export class WppRichtextView {
   constructor() {
     this.value = undefined;
@@ -13,43 +12,31 @@ export class WppRichtextView {
     this.modules = undefined;
     this.strict = true;
     this.styles = '{}';
-    this.preserveWhitespace = false;
+    this.preserveWhitespace = true;
     this.name = undefined;
   }
-  setValue(value, isInitialLoad = false) {
-    if (this.format === formats.markdown) {
-      const editorTag = transformToVersionedTag('wpp-richtext');
-      let editorEl;
-      if (this.name) {
-        editorEl = document.querySelector(`${editorTag}[name="${this.name}"]`);
-      }
-      else {
-        editorEl = document.querySelector(editorTag);
-      }
-      if (editorEl && editorEl.quill && editorEl.format === this.format) {
-        const editorHtml = editorEl.quill.root.innerHTML;
-        this.quill.root.innerHTML = editorHtml;
-        return;
-      }
-    }
-    // Fallback: process markdown into HTML for the view
+  setValue(value) {
     if (this.format === formats.html) {
       const contents = this.quill.clipboard.convert(value);
       this.quill.setContents(contents, sources.api);
     }
     else if (this.format === formats.markdown) {
-      const { html } = processMarkdownValue(value, this.preserveWhitespace, isInitialLoad);
+      const { html } = processMarkdownValue(value);
       const contents = this.quill.clipboard.convert(html);
       this.quill.setContents(contents, sources.api);
-      // normalize empty blocks when parsing stored value
-      const normalizeNode = (node) => {
-        const html = node.innerHTML.trim().toLowerCase();
-        if (html === '' || html === '<br>' || html === '<br/>' || html === '<br />' || html === '&nbsp;') {
-          node.innerHTML = '&nbsp;';
+      // Quill's clipboard.convert adds extra empty <p><br></p> before lists when preceded by a <p> tag
+      // We need to remove these, but KEEP <p>&nbsp;</p> which are intentional blank lines
+      const lists = this.quill.root.querySelectorAll('ol, ul');
+      lists.forEach(list => {
+        const prevElement = list.previousElementSibling;
+        if (prevElement && prevElement.tagName === 'P') {
+          const content = prevElement.innerHTML.trim();
+          if (content === '<br>' || content === '') {
+            prevElement.remove();
+          }
         }
-      };
-      const blocks = Array.from(this.quill.root.querySelectorAll('p, blockquote'));
-      blocks.forEach(b => normalizeNode(b));
+      });
+      // Clean up empty list items that may have been created
       const emptyListItems = this.quill.root.querySelectorAll('li');
       let removedCount = 0;
       emptyListItems.forEach(li => {
@@ -59,8 +46,9 @@ export class WppRichtextView {
           removedCount++;
         }
       });
-      if (removedCount > 0)
+      if (removedCount > 0) {
         this.quill.update(sources.api);
+      }
     }
     else if (this.format === formats.text) {
       this.quill.setText(value, sources.api);
@@ -126,7 +114,7 @@ export class WppRichtextView {
     }
     this.containerElement?.classList.add('quill-view');
     if (this.value) {
-      this.setValue(this.value, true);
+      this.setValue(this.value);
       this.quill['history'].clear();
     }
   }
@@ -168,10 +156,10 @@ export class WppRichtextView {
     this.setValue(newValue);
   }
   render() {
-    return (h(Host, null, h("wpp-quill-styles-v3-3-1", null), h("wpp-richtext-common-styles-v3-3-1", null), h("div", { ref: (el) => (this.containerElement = el), class: this.preserveWhitespace ? 'preserve-whitespace' : '' })));
+    return (h(Host, null, h("wpp-quill-styles-v3-4-0", null), h("wpp-richtext-common-styles-v3-4-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
   }
   static get is() { return "wpp-richtext-view"; }
-  static get registryIs() { return "wpp-richtext-view-v3-3-1"; }
+  static get registryIs() { return "wpp-richtext-view-v3-4-0"; }
   static get properties() {
     return {
       "value": {
@@ -324,12 +312,15 @@ export class WppRichtextView {
         "required": false,
         "optional": false,
         "docs": {
-          "tags": [],
-          "text": "Use `pre` HTML element as a container to preserve white space, or regular `div` element"
+          "tags": [{
+              "name": "deprecated",
+              "text": "This property is no longer needed. Whitespace preservation is now the default behavior\nfor markdown format. This prop will be removed in a future major version."
+            }],
+          "text": ""
         },
         "attribute": "preserve-whitespace",
         "reflect": true,
-        "defaultValue": "false"
+        "defaultValue": "true"
       },
       "name": {
         "type": "string",

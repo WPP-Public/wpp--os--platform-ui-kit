@@ -21,13 +21,16 @@ interface FocusType {
  * @slot icon-end - Can contain an icon that will be placed after the main content, e.g. a cross icon.
  */
 export declare class WppInput implements BaseComponent, BaseFormControl<InputValue>, InlineMessage {
-  private debouncedCheckForEllipsis;
   private hadChangesInTooltip?;
   private inputRef?;
   private lengthValidationError?;
   private maskedElement?;
   private suppressInputEvent;
   private _locales;
+  private previouslyRenderedValue?;
+  private internalDefaultValue?;
+  private resizeObserver?;
+  private shouldRenderCrossIcon;
   private hasActiveEllipses;
   private hasIconStartSlot;
   private hasIconEndSlot;
@@ -142,6 +145,11 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
    */
   readonly autocomplete: string;
   /**
+   * If the input displays a cross icon on the right side. Clicking the icon will reset the value of the input.
+   * Note: The cross icon will appear only on inputs that have a min-width of 160px.
+   */
+  readonly withCrossIcon: boolean;
+  /**
    * Emitted when the input value changes.
    */
   readonly wppChange: EventEmitter<InputChangeEventDetail>;
@@ -166,10 +174,6 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
    */
   readonly wppChangeExtra: EventEmitter<WppChangeExtraEventDetail>;
   /**
-   * Method that listens to the window resize event.
-   */
-  onResize(): void;
-  /**
    * Method that selects all the text in an element
    */
   select(): Promise<void>;
@@ -185,11 +189,15 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
    * Method that returns current input value.
    */
   getValue(): Promise<InputValue>;
-  onUpdateValue(): void;
   onUpdateLocales(newLocales: Partial<InputLocaleInterface>): void;
+  connectedCallback(): void;
   componentWillLoad(): void;
   componentDidRender(): void;
+  private checkInputAfterRender;
   componentDidLoad(): Promise<void>;
+  private setupResizeObserver;
+  private handleResize;
+  private updateCrossIcon;
   private updateInputRef;
   private updateInputWithMask;
   disconnectedCallback(): void;

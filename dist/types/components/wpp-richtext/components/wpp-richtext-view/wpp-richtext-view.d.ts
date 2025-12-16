@@ -35,7 +35,8 @@ export declare class WppRichtextView implements ComponentDidLoad {
    */
   styles?: string;
   /**
-   * Use `pre` HTML element as a container to preserve white space, or regular `div` element
+   * @deprecated This property is no longer needed. Whitespace preservation is now the default behavior
+   * for markdown format. This prop will be removed in a future major version.
    */
   preserveWhitespace: boolean;
   /**
@@ -44,7 +45,7 @@ export declare class WppRichtextView implements ComponentDidLoad {
   readonly name?: string;
   quill: QuillInstance;
   containerElement?: HTMLDivElement | HTMLPreElement | null;
-  setValue(value: RichtextValue, isInitialLoad?: boolean): void;
+  setValue(value: RichtextValue): void;
   getValue(): RichtextValue;
   componentDidLoad(): void;
   updateStyle(newValue: string, oldValue: string): void;

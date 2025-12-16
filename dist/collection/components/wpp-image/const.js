@@ -28,6 +28,10 @@ export const imageList = {
           label: 'DataViz',
         },
         {
+          name: 'downtime',
+          label: 'Downtime',
+        },
+        {
           name: 'nothing-found',
           label: 'Nothing Found',
         },

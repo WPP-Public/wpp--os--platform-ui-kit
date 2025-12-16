@@ -92,14 +92,28 @@ const WppSlider$1 = /*@__PURE__*/ proxyCustomElement(class WppSlider extends HTM
     this.wppBlur = createEvent(this, "wppBlur", 1);
     this.segmentWidth = 0;
     this.totalWidth = 0;
+    this.maskPrecisions = [2, 2];
     /* For slider with type="middle-range" */
     this.middleValue = 0;
+    this.setPrecision = () => {
+      if (this.maskOptions) {
+        if (Array.isArray(this.maskOptions)) {
+          this.maskPrecisions = [this.maskOptions[0]?.precision ?? 2, this.maskOptions[1]?.precision ?? 2];
+        }
+        else {
+          this.maskPrecisions = [this.maskOptions.precision ?? 2, this.maskOptions.precision ?? 2];
+        }
+      }
+      else {
+        this.maskPrecisions = [2, 2];
+      }
+    };
     this.getMidValueRespectingStep = () => {
       const range = this.max - this.min;
       const half = range / 2;
       // Round to the nearest valid step increment
       const stepsFromMin = Math.round(half / this.step);
-      const middle = this.min + stepsFromMin * this.step;
+      const middle = parseFloat((this.min + stepsFromMin * this.step).toFixed(this.maskPrecisions[0]));
       return Math.min(this.max, Math.max(this.min, Number(middle.toFixed(2))));
     };
     this.computeSegmentWidth = () => {
@@ -330,13 +344,14 @@ const WppSlider$1 = /*@__PURE__*/ proxyCustomElement(class WppSlider extends HTM
       // This value determines which half of the segment was clicked. -1 means that the first half was clicked and that the clicked segment
       // is placed on the right of the mark, so we should approximate to the starting mark of the segment (left one).
       const halfOfSegment = clickedSegmentPosition >= Math.round(clickedSegmentPosition) ? -1 : 0;
-      const clickedValue = this.min + (clickedSegmentNumber + halfOfSegment) * this.step;
+      const notValidateClickedValue = this.min + (clickedSegmentNumber + halfOfSegment) * this.step;
       this.handleType({
         single: () => {
-          this.value = Math.round(clickedValue);
+          this.value = parseFloat(notValidateClickedValue.toFixed(this.maskPrecisions[0]));
           this.inputValue = String(this.value);
         },
         range: value => {
+          const clickedValue = parseFloat(notValidateClickedValue.toFixed(this.maskPrecisions[0]));
           const distanceFromEndThumb = Math.abs(clickedValue - value[1]);
           const distanceFromStartThumb = Math.abs(clickedValue - value[0]);
           if (distanceFromEndThumb === distanceFromStartThumb) {
@@ -356,7 +371,7 @@ const WppSlider$1 = /*@__PURE__*/ proxyCustomElement(class WppSlider extends HTM
           this.inputValue = this.value.map(String);
         },
         'middle-range': () => {
-          this.value = Math.round(clickedValue);
+          this.value = parseFloat(notValidateClickedValue.toFixed(this.maskPrecisions[0]));
           this.inputValue = String(this.value);
         },
       });
@@ -457,17 +472,17 @@ const WppSlider$1 = /*@__PURE__*/ proxyCustomElement(class WppSlider extends HTM
     });
     this.calculateProgressBar = (value) => (value - this.min) * (1 / (this.max - this.min)) * 100 + '%';
     this.renderControl = () => {
-      const label = this.labelConfig?.text && (h("wpp-label-v3-3-1", { htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" }));
+      const label = this.labelConfig?.text && (h("wpp-label-v3-4-0", { htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" }));
       if (this.withValue && !this.withInput) {
         return (h("div", { class: this.controlCssClasses(), part: "control-wrapper" }, label || h("div", null), this.handleType({
-          single: value => (h("wpp-typography-v3-3-1", { type: "s-midi", part: "value" }, value)),
-          range: value => (h("div", { class: "range-value-wrapper", part: "value-wrapper" }, h("wpp-typography-v3-3-1", { type: "s-midi", part: "value" }, value[0]), h("wpp-divider-v3-3-1", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), h("wpp-typography-v3-3-1", { type: "s-midi", part: "value" }, value[1]))),
-          'middle-range': value => (h("div", { class: "range-value-wrapper", part: "value-wrapper" }, h("wpp-typography-v3-3-1", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? value : this.middleValue), h("wpp-divider-v3-3-1", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), h("wpp-typography-v3-3-1", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? this.middleValue : value))),
+          single: value => (h("wpp-typography-v3-4-0", { type: "s-midi", part: "value" }, value)),
+          range: value => (h("div", { class: "range-value-wrapper", part: "value-wrapper" }, h("wpp-typography-v3-4-0", { type: "s-midi", part: "value" }, value[0]), h("wpp-divider-v3-4-0", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), h("wpp-typography-v3-4-0", { type: "s-midi", part: "value" }, value[1]))),
+          'middle-range': value => (h("div", { class: "range-value-wrapper", part: "value-wrapper" }, h("wpp-typography-v3-4-0", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? value : this.middleValue), h("wpp-divider-v3-4-0", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), h("wpp-typography-v3-4-0", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? this.middleValue : value))),
         })));
       }
       return label;
     };
-    this.renderSingleInput = () => (h("wpp-input-v3-3-1", { ref: inputRef => (this.inputRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-number", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { [`size-${this.size}`]: true }, maskOptions: {
+    this.renderSingleInput = () => (h("wpp-input-v3-4-0", { ref: inputRef => (this.inputRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-number", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { [`size-${this.size}`]: true }, maskOptions: {
         decimalPatternOptions: this.maskOptions
           ? {
             ...getDefaultMaskOptions(this.step),
@@ -477,14 +492,14 @@ const WppSlider$1 = /*@__PURE__*/ proxyCustomElement(class WppSlider extends HTM
       } }));
     this.renderEditableInput = () => (h("div", { class: this.editableInputCssClasses(), part: "editable-input-wrapper" }, this.handleType({
       single: () => this.renderSingleInput(),
-      range: () => (h("div", { class: "range-input-wrapper", part: "input-wrapper" }, h("wpp-input-v3-3-1", { ref: inputRef => (this.inputRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-min", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'min-input': true, [`size-${this.size}`]: true }, maskOptions: {
+      range: () => (h("div", { class: "range-input-wrapper", part: "input-wrapper" }, h("wpp-input-v3-4-0", { ref: inputRef => (this.inputRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-min", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'min-input': true, [`size-${this.size}`]: true }, maskOptions: {
           decimalPatternOptions: this.maskOptions && this.maskOptions[0]
             ? {
               ...getDefaultMaskOptions(this.step),
               ...this.maskOptions[0],
             }
             : undefined,
-        } }), h("wpp-divider-v3-3-1", { class: { 'wpp-disabled': this.disabled }, part: "divider" }), h("wpp-input-v3-3-1", { ref: inputRef => (this.inputMaxRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-max", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'max-input': true, [`size-${this.size}`]: true }, maskOptions: {
+        } }), h("wpp-divider-v3-4-0", { class: { 'wpp-disabled': this.disabled }, part: "divider" }), h("wpp-input-v3-4-0", { ref: inputRef => (this.inputMaxRef = inputRef), type: "decimal", size: this.size, disabled: this.disabled, part: "input-max", onBlur: this.handleBlur, onFocus: this.handleFocus, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'max-input': true, [`size-${this.size}`]: true }, maskOptions: {
           decimalPatternOptions: this.maskOptions && this.maskOptions[1]
             ? {
               ...getDefaultMaskOptions(this.step),
@@ -515,8 +530,8 @@ const WppSlider$1 = /*@__PURE__*/ proxyCustomElement(class WppSlider extends HTM
           const isTruncated = !!this.tooltipTexts[mark.value];
           const labelText = mark.label !== null && mark.label !== undefined ? String(mark.label) : '';
           const tooltipPlacement = 'bottom';
-          const labelContent = (h("wpp-typography-v3-3-1", { id: `mark-label-${mark.value}`, class: this.labelCssClasses(), type: "xs-body", part: "label" }, labelText));
-          return (h("div", { onClick: event => this.handleMarkClick(event, mark), class: this.markCssClasses(mark.value), style: style, part: "mark" }, !this.continuous && (h("div", { class: "circle", part: "mark-circle" }, h("div", { class: "mark", part: "mark-inner" }))), h("div", { class: "label-container" }, isTruncated ? (h("wpp-tooltip-v3-3-1", { config: { placement: tooltipPlacement }, text: this.tooltipTexts[mark.value] }, labelContent)) : (labelContent))));
+          const labelContent = (h("wpp-typography-v3-4-0", { id: `mark-label-${mark.value}`, class: this.labelCssClasses(), type: "xs-body", part: "label" }, labelText));
+          return (h("div", { onClick: event => this.handleMarkClick(event, mark), class: this.markCssClasses(mark.value), style: style, part: "mark" }, !this.continuous && (h("div", { class: "circle", part: "mark-circle" }, h("div", { class: "mark", part: "mark-inner" }))), h("div", { class: "label-container" }, isTruncated ? (h("wpp-tooltip-v3-4-0", { config: { placement: tooltipPlacement }, text: this.tooltipTexts[mark.value] }, labelContent)) : (labelContent))));
         });
       }
     };
@@ -557,6 +572,9 @@ const WppSlider$1 = /*@__PURE__*/ proxyCustomElement(class WppSlider extends HTM
     this.labelConfig = undefined;
     this.size = 'm';
     this.maskOptions = undefined;
+  }
+  onUpdateMaskOptions() {
+    this.setPrecision();
   }
   onUpdateValue() {
     this.inputValue = this.getSliderInputValue();
@@ -610,9 +628,11 @@ const WppSlider$1 = /*@__PURE__*/ proxyCustomElement(class WppSlider extends HTM
   }
   componentWillLoad() {
     this.getDisplayMarks();
+    this.computeSegmentWidth();
     if (this.type === 'middle-range') {
       this.middleValue = this.getMidValueRespectingStep();
     }
+    this.setPrecision();
   }
   componentDidLoad() {
     this.handleType({
@@ -626,7 +646,6 @@ const WppSlider$1 = /*@__PURE__*/ proxyCustomElement(class WppSlider extends HTM
         this.inputValue = String(value);
       },
     });
-    this.computeSegmentWidth();
     this.getDisplayMarks();
     this.applyTruncationToMarks();
     window.addEventListener('load', () => {
@@ -664,9 +683,10 @@ const WppSlider$1 = /*@__PURE__*/ proxyCustomElement(class WppSlider extends HTM
       'middle-range': value => this.renderSingleSlider(style, value),
     }), this.marks && (h("div", { ref: el => (this.marksListRef = el), class: this.marksListCssClasses(), part: "marks-list" }, this.renderMarks()))), this.withInput && this.continuous && (h("div", { class: this.inputColumnCssClasses() }, this.renderEditableInput())))));
   }
-  static get registryIs() { return "wpp-slider-v3-3-1"; }
+  static get registryIs() { return "wpp-slider-v3-4-0"; }
   get host() { return this; }
   static get watchers() { return {
+    "maskOptions": ["onUpdateMaskOptions"],
     "value": ["onUpdateValue"],
     "min": ["onUpdateMinValue"],
     "max": ["onUpdateMaxValue"],
@@ -674,7 +694,7 @@ const WppSlider$1 = /*@__PURE__*/ proxyCustomElement(class WppSlider extends HTM
     "inputValue": ["onUpdateInputValue"]
   }; }
   static get style() { return wppSliderCss; }
-}, [1, "wpp-slider", "wpp-slider-v3-3-1", {
+}, [1, "wpp-slider", "wpp-slider-v3-4-0", {
     "name": [1],
     "inputWidth": [1, "input-width"],
     "value": [1538],
@@ -703,89 +723,89 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-slider-v3-3-1", "wpp-action-button-v3-3-1", "wpp-divider-v3-3-1", "wpp-icon-cross-v3-3-1", "wpp-icon-error-v3-3-1", "wpp-icon-info-message-v3-3-1", "wpp-icon-search-v3-3-1", "wpp-icon-success-v3-3-1", "wpp-icon-warning-v3-3-1", "wpp-inline-message-v3-3-1", "wpp-input-v3-3-1", "wpp-internal-label-v3-3-1", "wpp-internal-tooltip-v3-3-1", "wpp-label-v3-3-1", "wpp-spinner-v3-3-1", "wpp-tooltip-v3-3-1", "wpp-typography-v3-3-1"];
+  const components = ["wpp-slider-v3-4-0", "wpp-action-button-v3-4-0", "wpp-divider-v3-4-0", "wpp-icon-cross-v3-4-0", "wpp-icon-error-v3-4-0", "wpp-icon-info-message-v3-4-0", "wpp-icon-search-v3-4-0", "wpp-icon-success-v3-4-0", "wpp-icon-warning-v3-4-0", "wpp-inline-message-v3-4-0", "wpp-input-v3-4-0", "wpp-internal-label-v3-4-0", "wpp-internal-tooltip-v3-4-0", "wpp-label-v3-4-0", "wpp-spinner-v3-4-0", "wpp-tooltip-v3-4-0", "wpp-typography-v3-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-slider-v3-3-1":
+    case "wpp-slider-v3-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppSlider$1);
       }
       break;
-    case "wpp-action-button-v3-3-1":
+    case "wpp-action-button-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-divider-v3-3-1":
+    case "wpp-divider-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-cross-v3-3-1":
+    case "wpp-icon-cross-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-error-v3-3-1":
+    case "wpp-icon-error-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-info-message-v3-3-1":
+    case "wpp-icon-info-message-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-search-v3-3-1":
+    case "wpp-icon-search-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-success-v3-3-1":
+    case "wpp-icon-success-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-warning-v3-3-1":
+    case "wpp-icon-warning-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-inline-message-v3-3-1":
+    case "wpp-inline-message-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-input-v3-3-1":
+    case "wpp-input-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-internal-label-v3-3-1":
+    case "wpp-internal-label-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-1":
+    case "wpp-internal-tooltip-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-label-v3-3-1":
+    case "wpp-label-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v3-3-1":
+    case "wpp-spinner-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v3-3-1":
+    case "wpp-tooltip-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v3-3-1":
+    case "wpp-typography-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

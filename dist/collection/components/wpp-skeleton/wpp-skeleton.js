@@ -20,7 +20,7 @@ export class WppSkeleton {
     return h(Host, { class: this.hostCssClasses(), style: style, "aria-hidden": "true" });
   }
   static get is() { return "wpp-skeleton"; }
-  static get registryIs() { return "wpp-skeleton-v3-3-1"; }
+  static get registryIs() { return "wpp-skeleton-v3-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

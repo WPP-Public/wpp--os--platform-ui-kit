@@ -74,7 +74,12 @@ export declare class WppRichtext implements BaseComponent {
    */
   format: Formats;
   /**
-   * DOM Element or a CSS selector for a DOM Element, within which the editor’s ui elements (i.e. tooltips, etc.)
+   * @deprecated This property is no longer needed. Whitespace preservation is now the default behavior
+   * for markdown format. This prop will be removed in a future major version.
+   */
+  readonly preserveWhitespace: boolean;
+  /**
+   * DOM Element or a CSS selector for a DOM Element, within which the editor's ui elements (i.e. tooltips, etc.)
    * should be confined. Currently, it only considers left and right boundaries.
    */
   bounds: HTMLElement | string;
@@ -118,10 +123,6 @@ export declare class WppRichtext implements BaseComponent {
    */
   styles?: string;
   /**
-   * Use `pre` HTML element as a container to preserve white space, or regular `div` element
-   */
-  preserveWhitespace: boolean;
-  /**
    * Editor init event
    */
   readonly wppInit: EventEmitter<QuillInstance>;
@@ -145,7 +146,6 @@ export declare class WppRichtext implements BaseComponent {
    * Emitted when user requests uploading of files
    */
   readonly wppUploadRequest: EventEmitter<RichtextUploadRequestEventDetail>;
-  handlePreserveWhitespaceChange(newVal: boolean, oldVal: boolean): void;
   quill: QuillInstance;
   containerElement?: HTMLDivElement | HTMLPreElement;
   selectionChangeEvent: any;
@@ -165,7 +165,7 @@ export declare class WppRichtext implements BaseComponent {
   private onDrop;
   private updateEnteredCharacters;
   private syncValueAndEmit;
-  setValue(value: RichtextValue, isInitialLoad?: boolean): void;
+  setValue(value: RichtextValue): void;
   getValue(): RichtextValue;
   componentDidLoad(): void;
   disconnectedCallback(): void;

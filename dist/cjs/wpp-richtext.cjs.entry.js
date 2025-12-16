@@ -3,21 +3,21 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const config = require('./config-88d8235a.js');
+const config = require('./config-a2876089.js');
 const common = require('./common-ee802540.js');
-const utils = require('./utils-6189d8be.js');
+const utils = require('./utils-99b83069.js');
 const types = require('./types-3dbf006d.js');
 const _commonjsHelpers = require('./_commonjsHelpers-bcc1208a.js');
-require('./wpp-icon-unordered-list-d88615db.js');
+require('./wpp-icon-unordered-list-992bb5a0.js');
 require('./WppIcon-55327707.js');
-require('./wpp-icon-video-clip-c867b9de.js');
-require('./wpp-progress-indicator-17949837.js');
-require('./wpp-icon-chevron-0bed1a07.js');
-require('./wpp-icon-gallery-3e90751b.js');
+require('./wpp-icon-video-clip-bbc57dff.js');
+require('./wpp-progress-indicator-5d71d7fc.js');
+require('./wpp-icon-chevron-774fdceb.js');
+require('./wpp-icon-gallery-344b7155.js');
 require('./lodash-04cddce7.js');
-require('./wpp-action-button-4dfab84a.js');
+require('./wpp-action-button-c97a6a66.js');
 require('./WrappedSlot-ab2104d8.js');
-require('./wpp-input-4b51eee5.js');
+require('./wpp-input-6f28cea8.js');
 require('./turndown.browser.es-40bb3069.js');
 require('./consts-779fd4ec.js');
 
@@ -1859,6 +1859,7 @@ const WppRichtext = class {
     this.warningThreshold = 20;
     this.active = false;
     this.format = types.formats.html;
+    this.preserveWhitespace = true;
     this.bounds = undefined;
     this.value = undefined;
     this.debug = types.debugLevels.warn;
@@ -1868,13 +1869,6 @@ const WppRichtext = class {
     this.scrollingContainer = undefined;
     this.strict = true;
     this.styles = '{}';
-    this.preserveWhitespace = false;
-  }
-  handlePreserveWhitespaceChange(newVal, oldVal) {
-    if (newVal !== oldVal && this.format === types.formats.markdown && this.value != null) {
-      this.setValue(this.value, true);
-      this.quill?.history?.clear?.();
-    }
   }
   syncValueAndEmit(source) {
     const newValue = this.getValue();
@@ -1884,7 +1878,7 @@ const WppRichtext = class {
         this.formControlInput.value = this.value;
       }
       if (this.format === types.formats.markdown) {
-        const { plainText } = config.processMarkdownValue(this.value, this.preserveWhitespace, false);
+        const { plainText } = config.processMarkdownValue(this.value);
         this.plainText = plainText;
       }
       else {
@@ -1899,28 +1893,19 @@ const WppRichtext = class {
       });
     }
   }
-  setValue(value, isInitialLoad = false) {
+  setValue(value) {
     if (this.format === types.formats.html) {
       const contents = this.quill.clipboard.convert(value);
       this.quill.setContents(contents, types.sources.api);
     }
     else if (this.format === types.formats.markdown) {
       const str = String(value || '');
-      const looksLikeHtml = /<\/?[a-z][\s\S]*>/i.test(str);
-      let html;
-      let plainText;
-      if (isInitialLoad || !looksLikeHtml) {
-        ({ html, plainText } = config.processMarkdownValue(str, this.preserveWhitespace, isInitialLoad));
-      }
-      else {
-        // Internal updates — already HTML (from the live DOM)
-        html = str;
-        plainText = this.quill?.getText().trim() || '';
-      }
+      // Process markdown: blank lines (\n\n) are preserved as visible empty paragraphs via &nbsp; markers
+      const { html, plainText } = config.processMarkdownValue(str);
       this.plainText = plainText;
       const contents = this.quill.clipboard.convert(html);
       this.quill.setContents(contents, types.sources.api);
-      // Optional cleanup of empty <li>
+      // cleanup of empty <li>
       const editorEl = this.quill.root;
       const emptyListItems = editorEl.querySelectorAll('li');
       let removedCount = 0;
@@ -1961,7 +1946,10 @@ const WppRichtext = class {
       return config.exportHtml(html);
     }
     else if (this.format === types.formats.markdown) {
-      return config.turndownService.turndown(html);
+      let markdown = config.turndownService.turndown(html);
+      // Trim leading/trailing whitespace only - preserve internal blank lines
+      markdown = markdown.trim();
+      return markdown;
     }
     else if (this.format === types.formats.text) {
       return text;
@@ -2027,9 +2015,8 @@ const WppRichtext = class {
         this.containerElement.style.setProperty(key, styles[key]);
       });
     }
-    // Initial load — mark empty lines only once
     if (this.value) {
-      this.setValue(this.value, true); // true = initial load
+      this.setValue(this.value);
       this.quill.history.clear();
     }
     this.updateEnteredCharacters();
@@ -2070,8 +2057,12 @@ const WppRichtext = class {
       if (source !== 'user')
         return;
       const range = this.quill.getSelection();
-      if (!range)
+      if (!range) {
+        // Need to sync and emit value change on any user interaction
+        // to ensure the editor is in a consistent state
+        this.syncValueAndEmit(source);
         return;
+      }
       const [line, offset] = this.quill.getLine(range.index);
       const text = line.domNode.textContent || '';
       // --- Heading Logic ---
@@ -2198,17 +2189,13 @@ const WppRichtext = class {
     const rawFormat = this.host.getAttribute('format');
     if (rawFormat)
       this.format = rawFormat.replace(/^['"]|['"]$/g, '');
-    if (this.host.hasAttribute('preserve-whitespace')) {
-      this.preserveWhitespace = true;
-    }
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-required": this.required, "data-testid": "wpp-rich-text" }, index.h("wpp-richtext-icon-loader-v3-3-1", null), index.h("wpp-quill-styles-v3-3-1", null), index.h("wpp-richtext-common-styles-v3-3-1", null), this.labelConfig?.text && (index.h("wpp-label-v3-3-1", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), index.h("div", { class: this.formControlCssClasses(), "data-testid": "rich-text-form" }, index.h("slot", { name: "quill-toolbar", "quill-toolbar": "" }), index.h("div", { ref: el => (this.containerElement = el), "data-testid": "richtext-editor", class: this.preserveWhitespace ? 'preserve-whitespace' : '' }), Boolean(this.name) && (index.h("input", { ref: el => (this.formControlInput = el), tabindex: "-1", id: this.name, class: "form-control-input", "data-testid": "rich-text-input", disabled: this.disabled }))), (Boolean(this.message) || Boolean(this.charactersLimit)) && (index.h("div", { class: this.messageCssClasses(), part: "message-wrapper" }, Boolean(this.message) && (index.h("wpp-inline-message-v3-3-1", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", class: "message", "data-testid": "message" })), Boolean(this.charactersLimit) && (index.h("div", { class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, index.h("wpp-typography-v3-3-1", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":\u00A0"), index.h("wpp-typography-v3-3-1", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit)))))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-required": this.required, "data-testid": "wpp-rich-text" }, index.h("wpp-richtext-icon-loader-v3-4-0", null), index.h("wpp-quill-styles-v3-4-0", null), index.h("wpp-richtext-common-styles-v3-4-0", null), this.labelConfig?.text && (index.h("wpp-label-v3-4-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), index.h("div", { class: this.formControlCssClasses(), "data-testid": "rich-text-form" }, index.h("slot", { name: "quill-toolbar", "quill-toolbar": "" }), index.h("div", { ref: el => (this.containerElement = el), "data-testid": "richtext-editor" }), Boolean(this.name) && (index.h("input", { ref: el => (this.formControlInput = el), tabindex: "-1", id: this.name, class: "form-control-input", "data-testid": "rich-text-input", disabled: this.disabled }))), (Boolean(this.message) || Boolean(this.charactersLimit)) && (index.h("div", { class: this.messageCssClasses(), part: "message-wrapper" }, Boolean(this.message) && (index.h("wpp-inline-message-v3-4-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", class: "message", "data-testid": "message" })), Boolean(this.charactersLimit) && (index.h("div", { class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, index.h("wpp-typography-v3-4-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":\u00A0"), index.h("wpp-typography-v3-4-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit)))))));
   }
-  static get registryIs() { return "wpp-richtext-v3-3-1"; }
+  static get registryIs() { return "wpp-richtext-v3-4-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
-    "preserveWhitespace": ["handlePreserveWhitespaceChange"],
     "value": ["updateContent"],
     "disabled": ["updateDisabled"],
     "placeholder": ["updatePlaceholder"],

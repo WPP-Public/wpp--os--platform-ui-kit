@@ -43,6 +43,8 @@ export { WppEmptyContent as WppEmptyContent } from '../dist/types/components/wpp
 export { defineCustomElement as defineCustomElementWppEmptyContent } from './wpp-empty-content';
 export { WppEmptyDataviz as WppEmptyDataviz } from '../dist/types/components/wpp-image/components/empty states/wpp-empty-dataviz/wpp-empty-dataviz';
 export { defineCustomElement as defineCustomElementWppEmptyDataviz } from './wpp-empty-dataviz';
+export { WppEmptyDowntime as WppEmptyDowntime } from '../dist/types/components/wpp-image/components/empty states/wpp-empty-downtime/wpp-empty-downtime';
+export { defineCustomElement as defineCustomElementWppEmptyDowntime } from './wpp-empty-downtime';
 export { WppEmptyError as WppEmptyError } from '../dist/types/components/wpp-image/components/empty states/wpp-empty-error/wpp-empty-error';
 export { defineCustomElement as defineCustomElementWppEmptyError } from './wpp-empty-error';
 export { WppEmptyFolder as WppEmptyFolder } from '../dist/types/components/wpp-image/components/empty states/wpp-empty-folder/wpp-empty-folder';

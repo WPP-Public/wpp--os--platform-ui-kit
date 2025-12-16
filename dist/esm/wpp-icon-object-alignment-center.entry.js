@@ -20,7 +20,7 @@ const WppIconObjectAlignmentCenter = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-object-alignment-center", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: ObjectAlignmentCenterDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-object-alignment-center-v3-3-1"; }
+  static get registryIs() { return "wpp-icon-object-alignment-center-v3-4-0"; }
 };
 WppIconObjectAlignmentCenter.style = wppIconCss;
 

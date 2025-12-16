@@ -29,6 +29,10 @@ export function getCurrentFormatDate(dateFormat, separator = '/') {
     const day = dayFormat ? dateItems[formatItems.indexOf(dayFormat)] : undefined;
     const yearFormat = formatItems.find(item => item.includes('yy'));
     const year = yearFormat ? dateItems[formatItems.indexOf(yearFormat)] : undefined;
+    if (monthFormat?.includes('mmm') && !dayFormat && year && month !== undefined) {
+      const formattedYear = yearFormat === 'yy' ? parseInt(`${year >= 50 ? '19' : '20'}` + year, 10) : year;
+      return new Date(formattedYear, month, 1);
+    }
     if (year && month !== undefined && day) {
       const formattedYear = yearFormat === 'yy' ? parseInt(`${year >= 50 ? '19' : '20'}` + year, 10) : year;
       return new Date(formattedYear, month, day);

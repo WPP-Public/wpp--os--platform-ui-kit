@@ -22,4 +22,4 @@ export interface HandleType<T> {
   'middle-range': (value: number) => T;
 }
 export type SliderLabelConfig = LabelConfig;
-export type InputWidth = `${number}px`;
+export type InputWidth = `${number}px` | `${number}ch`;

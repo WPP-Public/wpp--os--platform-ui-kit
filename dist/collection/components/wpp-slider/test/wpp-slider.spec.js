@@ -8,7 +8,7 @@ describe('wpp-slider', () => {
     const value = 1;
     const page = await newSpecPage({
       components: [WppSlider],
-      template: () => h("wpp-slider-v3-3-1", { value: value }),
+      template: () => h("wpp-slider-v3-4-0", { value: value }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -43,7 +43,7 @@ describe('wpp-slider', () => {
     ];
     const page = await newSpecPage({
       components: [WppSlider],
-      template: () => h("wpp-slider-v3-3-1", { value: 2, marks: marks, max: 3 }),
+      template: () => h("wpp-slider-v3-4-0", { value: 2, marks: marks, max: 3 }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -51,7 +51,7 @@ describe('wpp-slider', () => {
     const value = [4, 75];
     const page = await newSpecPage({
       components: [WppSlider],
-      template: () => h("wpp-slider-v3-3-1", { type: "range", value: value }),
+      template: () => h("wpp-slider-v3-4-0", { type: "range", value: value }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -59,7 +59,7 @@ describe('wpp-slider', () => {
     const value = [1, 3];
     const page = await newSpecPage({
       components: [WppSlider],
-      template: () => h("wpp-slider-v3-3-1", { type: "range", max: 5, step: 2, value: value, "with-value": true }),
+      template: () => h("wpp-slider-v3-4-0", { type: "range", max: 5, step: 2, value: value, "with-value": true }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -75,7 +75,21 @@ describe('wpp-slider', () => {
     };
     const page = await newSpecPage({
       components: [WppSlider, WppLabel, WppInternalLabel],
-      template: () => h("wpp-slider-v3-3-1", { type: "range", max: 5, step: 2, value: value, labelConfig: labelConfig }),
+      template: () => h("wpp-slider-v3-4-0", { type: "range", max: 5, step: 2, value: value, labelConfig: labelConfig }),
+    });
+    expect(page.root).toMatchSnapshot();
+  });
+  it('should render range slider with input width in px', async () => {
+    const page = await newSpecPage({
+      components: [WppSlider],
+      template: () => h("wpp-slider-v3-4-0", { type: "range", max: 5, step: 2, value: [1, 3], "input-width": "200px" }),
+    });
+    expect(page.root).toMatchSnapshot();
+  });
+  it('should render range slider with input width in ch', async () => {
+    const page = await newSpecPage({
+      components: [WppSlider],
+      template: () => h("wpp-slider-v3-4-0", { type: "range", max: 5, step: 2, value: [1, 3], "input-width": "20ch" }),
     });
     expect(page.root).toMatchSnapshot();
   });

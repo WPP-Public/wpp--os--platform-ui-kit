@@ -1,10 +1,11 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
 import { i as isEqual_1 } from './isEqual-9c20096c.js';
-import { k as transformToVersionedTag, w as getHighestContainerInDOM } from './utils-b49ad9c8.js';
+import { k as transformToVersionedTag, w as getHighestContainerInDOM } from './utils-fb733700.js';
 import { W as WPP_LIST_CLASSNAME, C as CONTEXT_ITEM_TAG, T as TOPBAR_NAVIGATION_ITEM_TAG, M as MENU_BAR_ROLE, a as MENU_ROLE } from './constants-f59668a0.js';
-import { m as menuListConfig } from './menuListConfig-bcc0f2a9.js';
+import { m as menuListConfig } from './menuListConfig-4d091d14.js';
 import { Z as Z_INDEX } from './consts-5bf9c29f.js';
 import './_commonjsHelpers-ba3f0406.js';
+import './tippy.esm-c5fe8087.js';
 
 const defaultDropdownConfig = {
   trigger: 'manual',
@@ -262,7 +263,7 @@ const WppMenuContext = class {
     };
     return (h(Host, { class: this.menuCssClasses(), exportparts: "trigger, list-wrapper, list, inner", onFocusout: this.onFocusout }, h("div", { ref: this.getTriggerRef, onClick: this.handleClickTrigger, class: this.triggerWrapperCssClasses() }, h("slot", { name: "trigger-element", part: "trigger" })), h("div", { class: "wpp-list-wrapper", part: "list-wrapper", ref: ref => (this.wppListWrapperRef = ref) }, h("ul", { class: this.listWrapperCssClasses(), style: style, ref: this.getContentRef, role: MENU_ROLE, part: "list" }, h("slot", { part: "inner" })))));
   }
-  static get registryIs() { return "wpp-menu-context-v3-3-1"; }
+  static get registryIs() { return "wpp-menu-context-v3-4-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "dropdownConfig": ["updateDropdownConfig"],

@@ -124,7 +124,7 @@ export const Regular = {
         }
       </style>
 
-      <wpp-grid-v3-3-1
+      <wpp-grid-v3-4-0
         .container="${true}"
         .fluid="${args.fluid}"
         .fullWidth="${args.fullWidth}"
@@ -135,7 +135,7 @@ export const Regular = {
         .alignItems="${args.alignItems}"
         .direction="${args.direction}"
       >
-        ${innerList.map((_, i) => html ` <wpp-grid-v3-3-1
+        ${innerList.map((_, i) => html ` <wpp-grid-v3-4-0
               .item="${true}"
               .all="${args.all}"
               .sm="${args.sm}"
@@ -145,8 +145,8 @@ export const Regular = {
               .xxl="${args.xxl}"
             >
               <p class="grid-item">${i + 1}</p>
-            </wpp-grid-v3-3-1>`)}
-      </wpp-grid-v3-3-1>
+            </wpp-grid-v3-4-0>`)}
+      </wpp-grid-v3-4-0>
     `;
   },
   args: {

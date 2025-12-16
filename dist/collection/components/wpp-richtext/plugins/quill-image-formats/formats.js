@@ -1,5 +1,4 @@
 // Must rely on return type inference due to bizarre Parchment typings (right?)
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function createFormats(Quill) {
   const parchment = Quill.import('parchment');
   const Float = new parchment.Attributor.Class('float', 'ql-float', {

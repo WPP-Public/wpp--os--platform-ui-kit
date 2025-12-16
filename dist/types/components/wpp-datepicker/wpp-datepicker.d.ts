@@ -6,15 +6,20 @@ import { BaseComponent } from '../../interfaces/base-component';
 import { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes } from './types';
 import { Instance } from 'tippy.js';
 /**
+ * @slot trigger - Slot for a custom trigger element (button). When a button is placed in this slot, it replaces the default input field as the datepicker trigger.
+ *
  * @part label - Label text element
  * @part datepicker-container - datepicker container element
  * @part icon-calendar - icon calendar element
  * @part datepicker-input - datepicker input element
  * @part icon-cross - icon cross wrapper
  * @part message - message element
+ * @part trigger-wrapper - trigger wrapper element for button trigger variant
  */
 export declare class WppDatepicker implements BaseComponent, InlineMessage {
   private inputRef?;
+  private hiddenInputRef?;
+  private triggerWrapperRef?;
   private portalRef;
   private hideTimer;
   private previewPresetTimer;
@@ -30,6 +35,7 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   tippyInstance: Instance;
   isInComponent: boolean;
   isValueExists: boolean;
+  hasTriggerSlot: boolean;
   /**
    * If the range mode is enabled.
    */
@@ -100,6 +106,10 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
    */
   readonly size: 's' | 'm';
   /**
+   * Defines the width of the datepicker. If it is undefined, the datepicker will take the default value (200px single datepicker, 260px range datepicker).
+   */
+  readonly width?: string;
+  /**
    * An array of preset date ranges that the user can quickly select from the datepicker. This
    * prop is available only for the range-datepicker. The format of the dates within each preset item
    * should match the dateFormat provided to the component.
@@ -141,6 +151,10 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
    */
   dropdownConfig: DropdownConfig;
   /**
+   * Reverse layout for the range datepicker with a preset list
+   */
+  readonly reverseLayout: boolean;
+  /**
    * Emitted when a date is chosen.
    */
   wppChange: EventEmitter<DatePickerEventDetail>;
@@ -167,6 +181,7 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   updateDatepickerClearButton(newValidDate: string): Promise<void>;
   private isStringDateValid;
   updateValue(): void;
+  onUpdateWidth(): void;
   updateRange(): void;
   updateMinDate(): void;
   updateMaxDate(): void;
@@ -176,6 +191,7 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   private setInitialDate;
   private setMinMaxDate;
   private clearIfDateNotInInterval;
+  private updateSlotData;
   componentWillLoad(): void;
   componentDidLoad(): void;
   disconnectedCallback(): void;
@@ -185,7 +201,6 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
    */
   private determineFirstDay;
   private hasPresets;
-  private getDatepickerView;
   private getDateFormatSeparator;
   private isDefaultDateFormatSeparator;
   private isDefaultDateFormat;
@@ -207,6 +222,7 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   private handleClickPreset;
   private handleMouseLeavePreset;
   private handleClickIconCross;
+  private handleTriggerClick;
   private hostCssClasses;
   private inputCssClasses;
   private iconCrossCssClasses;

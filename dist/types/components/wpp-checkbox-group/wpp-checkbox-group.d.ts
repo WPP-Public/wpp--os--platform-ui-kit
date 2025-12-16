@@ -55,6 +55,10 @@ export declare class WppCheckboxGroup implements BaseComponent, BaseFormControl<
    */
   readonly ariaProps: AriaProps;
   /**
+   * Gap between checkbox buttons in pixels
+   */
+  readonly gap?: number;
+  /**
    * Emitted when the checkbox group value changes.
    */
   wppChange: EventEmitter<CheckboxGroupChangeEvent>;

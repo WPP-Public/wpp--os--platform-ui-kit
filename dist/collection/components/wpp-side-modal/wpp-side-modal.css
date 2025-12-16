@@ -35,7 +35,7 @@
   );
   --side-modal-body-paddings: var(--wpp-side-modal-body-paddings, 0 32px);
   --side-modal-actions-paddings: var(--wpp-side-modal-actions-paddings, 24px 32px 24px 32px);
-  --side-modal-close-button-margin-left: var(--wpp-side-modal-close-button-margin-left, auto);
+  --side-modal-close-button-margin-left: var(--wpp-side-modal-close-button-margin-left, 8px);
   --side-modal-back-button-margin-right: var(--wpp-side-modal-close-button-margin-left, 8px);
   --side-modal-transition: 0.2s ease-in-out;
   --side-modal-bg-color: var(--wpp-side-modal-bg-color, var(--wpp-grey-color-000));
@@ -141,6 +141,16 @@
   gap: 10px;
   justify-content: space-between;
   align-items: center;
+}
+
+.header-action-buttons-container {
+  display: flex;
+  gap: 8px;
+}
+
+.header-action-button {
+  width: 16px;
+  height: 16px;
 }
 
 .modal-overlay {
@@ -282,6 +292,7 @@
 .header-container {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   padding: var(--side-modal-header-paddings);
 }
 .header-container .header-with-back-button {

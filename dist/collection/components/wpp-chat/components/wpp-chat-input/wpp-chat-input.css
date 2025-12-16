@@ -42,6 +42,18 @@
   --chat-text-input-minimized-height: var(--wpp-chat-text-input-minimized-height, 22px);
   --chat-text-input-minimized-padding: var(--wpp-chat-text-input-minimized-padding, 8px 10px);
   --chat-input-transition-timing: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --chat-minimized-focus-ring-color: var(--wpp-focus-ring-color, var(--wpp-primary-color-600));
+  --chat-minimized-focus-ring-width: var(--wpp-focus-ring-width, 2px);
+  --chat-minimized-focus-ring-radius: var(--wpp-chat-input-container-border-radius, 8px);
+  --chat-minimized-first-border-color-focus: var(
+    --wpp-chat-minimized-first-border-color-focus,
+    var(--wpp-grey-color-000)
+  );
+  --chat-minimized-second-border-color-focus: var(
+    --wpp-chat-minimized-second-border-color-focus,
+    var(--wpp-brand-color)
+  );
+  --chat-minimized-border-radius-focus: var(--wpp-chat-minimized-border-radius-focus, var(--wpp-border-radius-xs));
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -67,7 +79,7 @@
   will-change: width, height;
   cursor: text;
 }
-.chat-input-container:hover {
+.chat-input-container:hover, .chat-input-container:focus-within {
   outline: var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-hover);
 }
 .chat-input-container:active {
@@ -195,12 +207,25 @@
   justify-content: space-between;
   gap: 4px;
 }
+.input-area.minimized .input-area-wrapper .sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
 .input-area.minimized .minimized-input {
   align-items: center;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   min-width: var(--chat-text-input-minimized-width);
+  outline: none;
 }
 .input-area.minimized .minimized-input .input-value {
   width: 100%;
@@ -272,4 +297,11 @@
 }
 .attachments .wpp-file-upload-item::part(controls) {
   justify-content: flex-end;
+}
+
+/* Keyboard-only focus ring for minimized trigger */
+.input-area.minimized .minimized-input:focus-visible {
+  border-radius: var(--chat-minimized-border-radius-focus);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus);
 }

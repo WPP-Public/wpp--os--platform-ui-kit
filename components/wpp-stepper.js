@@ -421,13 +421,13 @@ const WppStepper$1 = /*@__PURE__*/ proxyCustomElement(class WppStepper extends H
     const isHorizontalOrientation = this.orientation === 'horizontal';
     return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, indicator" }, h("div", { class: this.stepperWrapperCssClasses(), part: "wrapper" }, h("slot", { part: "inner" })), isHorizontalOrientation && this.stepAmount ? (h("div", { class: { 'step-indicator': true, hide: this.stepIndicator <= 0 }, part: "indicator" }, "+", this.stepIndicator || 1)) : null));
   }
-  static get registryIs() { return "wpp-stepper-v3-3-1"; }
+  static get registryIs() { return "wpp-stepper-v3-4-0"; }
   get host() { return this; }
   static get watchers() { return {
     "activeStep": ["watchActiveStep"]
   }; }
   static get style() { return wppStepperCss; }
-}, [1, "wpp-stepper", "wpp-stepper-v3-3-1", {
+}, [1, "wpp-stepper", "wpp-stepper-v3-4-0", {
     "activeStep": [514, "active-step"],
     "stepAmount": [2, "step-amount"],
     "completedSteps": [514, "completed-steps"],
@@ -444,9 +444,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-stepper-v3-3-1"];
+  const components = ["wpp-stepper-v3-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-stepper-v3-3-1":
+    case "wpp-stepper-v3-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppStepper$1);
       }

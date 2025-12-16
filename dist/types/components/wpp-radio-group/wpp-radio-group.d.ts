@@ -55,6 +55,10 @@ export declare class WppRadioGroup implements BaseComponent, BaseFormControl<Rad
    */
   readonly ariaProps: AriaProps;
   /**
+   * Gap between radio buttons in pixels
+   */
+  readonly gap?: number;
+  /**
    * Emitted when the radio group value changes.
    */
   wppChange: EventEmitter<RadioGroupChangeEvent>;

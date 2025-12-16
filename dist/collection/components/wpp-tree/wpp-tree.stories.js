@@ -13,6 +13,7 @@ export default {
     loading: { control: { type: 'boolean' } },
     skeletonNumberItems: { control: { type: 'number' } },
     multiple: { control: { type: 'boolean' } },
+    lazyConfig: { control: { type: 'object' } },
   },
 };
 const data = [
@@ -55,18 +56,9 @@ const data = [
               { icon: 'wpp-icon-cross', name: 'save' },
             ],
             children: [
-              {
-                title: 'Camry 3.5',
-                id: '0-0-2-1',
-              },
-              {
-                title: 'Camry Hybrid',
-                id: '0-0-2-2',
-              },
-              {
-                title: 'Camry Hybrid Camry Hybrid Camry Hybrid Camry Hybrid Camry Hybrid',
-                id: '0-0-2-3',
-              },
+              { title: 'Camry 3.5', id: '0-0-2-1' },
+              { title: 'Camry Hybrid', id: '0-0-2-2' },
+              { title: 'Camry Hybrid Camry Hybrid Camry Hybrid Camry Hybrid Camry Hybrid', id: '0-0-2-3' },
             ],
           },
         ],
@@ -79,19 +71,10 @@ const data = [
             title: 'Kodiaq',
             id: '0-1-0',
             someProps: true,
-            iconEnd: {
-              icon: 'wpp-icon-sad',
-              name: 'edit',
-            },
+            iconEnd: { icon: 'wpp-icon-sad', name: 'edit' },
           },
-          {
-            title: 'Superb',
-            id: '0-1-1',
-          },
-          {
-            title: 'Octavia',
-            id: '0-1-2',
-          },
+          { title: 'Superb', id: '0-1-1' },
+          { title: 'Octavia', id: '0-1-2' },
         ],
       },
       {
@@ -151,10 +134,7 @@ const data = [
       },
     ],
   },
-  {
-    title: 'Motorcycle',
-    id: '1',
-  },
+  { title: 'Motorcycle', id: '1' },
   {
     title: 'Planes',
     id: '2',
@@ -169,65 +149,117 @@ const data = [
       },
     },
     children: [
-      {
-        title: 'B-52',
-        id: '2-0',
-      },
-      {
-        title: 'MIG-21',
-        id: '2-1',
-      },
+      { title: 'B-52', id: '2-0' },
+      { title: 'MIG-21', id: '2-1' },
     ],
   },
 ];
 const locales = {
   nothingFound: 'No result',
 };
+// Lazy loader function - shared across stories
+// Each node with hasChildren: true can trigger lazy loading
+const lazyLoader = async (item) => {
+  // Simulate network delay
+  await new Promise(r => setTimeout(r, 800));
+  switch (String(item.id)) {
+    case '0': // Cars
+      return {
+        items: [
+          { title: 'Toyota', id: '0-0', hasChildren: true },
+          { title: 'Skoda', id: '0-1' },
+          { title: 'Volkswagen', id: '0-2' },
+        ],
+      };
+    case '0-0': // Toyota
+      return {
+        items: [
+          { title: 'Avalon', id: '0-0-0' },
+          { title: 'Prius', id: '0-0-1' },
+          { title: 'Camry', id: '0-0-2' },
+        ],
+      };
+    case '2': // Planes
+      return {
+        items: [
+          { title: 'B-52', id: '2-0' },
+          { title: 'MIG-21', id: '2-1' },
+        ],
+      };
+    default:
+      return { items: [] };
+  }
+};
+// Lazy data (hasChildren but no children loaded yet)
+const lazyData = [
+  { title: 'Cars', id: '0', hasChildren: true },
+  { title: 'Motorcycle', id: '1' },
+  { title: 'Planes', id: '2', hasChildren: true },
+];
 export const Tree = (args) => {
-  const [treeState, setTreeState] = useState(data);
+  const hasLazyConfig = !!args.lazyConfig;
+  const [treeState, setTreeState] = useState(hasLazyConfig ? lazyData : data);
   const handleTreeChange = ({ detail }) => {
     setTreeState(detail.treeState);
   };
-  return html `<wpp-tree-v3-3-1
+  // Build lazyConfig with the loadChildren function if lazyConfig is provided
+  const finalLazyConfig = hasLazyConfig
+    ? {
+      ...args.lazyConfig,
+      loadChildren: lazyLoader,
+    }
+    : undefined;
+  return html `<wpp-tree-v3-4-0
     .multiple=${args.multiple}
     .data=${treeState}
     .search="${args.search}"
     .locales=${args.locales}
-    .loading=${args.loading}
-    .skeletonNumberItems=${args.skeletonNumberItems}
     .withItemsTruncation=${args.withItemsTruncation}
+    .lazyConfig=${finalLazyConfig}
     @wppChange="${handleTreeChange}"
-  ></wpp-tree-v3-3-1>`;
+  ></wpp-tree-v3-4-0>`;
 };
 Tree.args = {
   multiple: false,
   withItemsTruncation: false,
   locales,
-  loading: false,
-  skeletonNumberItems: 5,
   search: '',
+  lazyConfig: undefined,
+};
+Tree.argTypes = {
+  skeletonNumberItems: { table: { disable: true } },
+  loading: { table: { disable: true } },
 };
 export const TreeWithCustomSearch = (args) => {
-  const [treeState, setTreeState] = useState(data);
+  const hasLazyConfig = !!args.lazyConfig;
+  const [treeState, setTreeState] = useState(hasLazyConfig ? lazyData : data);
   const handleTreeChange = ({ detail }) => {
     setTreeState(detail.treeState);
   };
+  // Build lazyConfig with the loadChildren function if lazyConfig is provided
+  const finalLazyConfig = hasLazyConfig
+    ? {
+      ...args.lazyConfig,
+      loadChildren: lazyLoader,
+    }
+    : undefined;
   return html `
-    <Fragment>
-      <wpp-typography-v3-3-1 .type=${'l-strong'}>
+    <div>
+      <wpp-typography-v3-4-0 .type=${'l-strong'}>
         Single tree with custom search: the search string should match exactly the title of the tree-item (case
         sensitive).
-      </wpp-typography-v3-3-1>
-      <wpp-tree-v3-3-1
+      </wpp-typography-v3-4-0>
+      <wpp-tree-v3-4-0
         .multiple=${args.multiple}
         .data=${treeState}
         .search="${args.search}"
         .locales=${args.locales}
         .withItemsTruncation=${args.withItemsTruncation}
         .searchConfig=${args.searchConfig}
+        .lazyConfig=${finalLazyConfig}
         @wppChange="${handleTreeChange}"
-      ></wpp-tree-v3-3-1>
-    </Fragment>
+      ></wpp-tree-v3-4-0>
+    </div>
   `;
 };
 TreeWithCustomSearch.args = {
@@ -238,4 +270,39 @@ TreeWithCustomSearch.args = {
   searchConfig: {
     isMatchingSearch: (item, search) => item.title === search,
   },
+  lazyConfig: undefined,
+};
+TreeWithCustomSearch.argTypes = {
+  skeletonNumberItems: { table: { disable: true } },
+  loading: { table: { disable: true } },
+};
+export const TreeLoading = (args) => {
+  const [treeState, setTreeState] = useState(data);
+  const handleTreeChange = ({ detail }) => {
+    setTreeState(detail.treeState);
+  };
+  return html `
+    <div>
+      <wpp-typography-v3-4-0 .type=${'l-strong'}>
+        Tree in loading state: Use this to show a skeleton placeholder while the tree data is being fetched initially.
+      </wpp-typography-v3-4-0>
+      <wpp-tree-v3-4-0
+        .data=${treeState}
+        .loading=${args.loading}
+        .skeletonNumberItems=${args.skeletonNumberItems}
+        @wppChange="${handleTreeChange}"
+      ></wpp-tree-v3-4-0>
+    </div>
+  `;
+};
+TreeLoading.args = {
+  loading: true,
+  skeletonNumberItems: 5,
+};
+TreeLoading.argTypes = {
+  multiple: { table: { disable: true } },
+  withItemsTruncation: { table: { disable: true } },
+  search: { table: { disable: true } },
+  locales: { table: { disable: true } },
+  lazyConfig: { table: { disable: true } },
 };
