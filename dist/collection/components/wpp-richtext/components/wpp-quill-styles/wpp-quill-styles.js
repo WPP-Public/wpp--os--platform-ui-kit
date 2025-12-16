@@ -4,7 +4,7 @@
  */
 export class WppQuillStyles {
   static get is() { return "wpp-quill-styles"; }
-  static get registryIs() { return "wpp-quill-styles-v3-3-1"; }
+  static get registryIs() { return "wpp-quill-styles-v3-4-0"; }
   static get originalStyleUrls() {
     return {
       "$": ["../../themes/styles/wpp.scss"]

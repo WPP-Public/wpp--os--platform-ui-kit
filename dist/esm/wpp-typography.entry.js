@@ -19,7 +19,7 @@ const WppTypography = class {
     const TypographyTag = this.tag;
     return (h(Host, { class: "wpp-typography", exportparts: "typography, inner", style: { '--typography-color': this.color } }, h(TypographyTag, { class: this.typographyCssClasses(), part: "typography", exportparts: "typography" }, h("slot", { part: "inner" }))));
   }
-  static get registryIs() { return "wpp-typography-v3-3-1"; }
+  static get registryIs() { return "wpp-typography-v3-4-0"; }
   get host() { return getElement(this); }
 };
 WppTypography.style = wppTypographyCss;

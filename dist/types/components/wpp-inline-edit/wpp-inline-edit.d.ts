@@ -2,9 +2,12 @@ import { EventEmitter } from '../../stencil-public-runtime';
 import { DropdownConfig } from '../../types/common';
 import { InlineEditChangeModeEventDetail, InlineEditConfirmDetail, InlineEditLocales, InlineEditMode } from './types';
 export declare class WppInlineEdit {
+  private resizeObserver;
+  private popoverInstance;
   private tooltipInstance;
   private inputRef?;
   private popoverRef?;
+  private triggerContainerRef?;
   private lastValueWithError?;
   private _locales;
   host: HTMLWppInlineEditElement;
@@ -63,6 +66,9 @@ export declare class WppInlineEdit {
   editModeChangeHandler(): void;
   onUpdateLocales(newLocales: Partial<InlineEditLocales>): void;
   componentWillLoad(): void;
+  componentDidLoad(): void;
+  private handleAnchorResize;
+  disconnectedCallback(): void;
   private getFormElement;
   private emitModeChange;
   private handleAccept;

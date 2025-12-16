@@ -76,12 +76,12 @@ export class OpacitySlider {
     window.addEventListener('mousemove', this.handleMouseMove);
   }
   render() {
-    return (h(Host, { class: "wpp-opacity-slider" }, h("div", { class: "slider-container" }, h("wpp-icon-transparent-v3-3-1", { class: "checkerboard" }), h("canvas", null), h("div", { class: "marker", style: {
+    return (h(Host, { class: "wpp-opacity-slider" }, h("div", { class: "slider-container" }, h("wpp-icon-transparent-v3-4-0", { class: "checkerboard" }), h("canvas", null), h("div", { class: "marker", style: {
         left: `${this.markerPosition}px`,
       } }))));
   }
   static get is() { return "wpp-opacity-slider"; }
-  static get registryIs() { return "wpp-opacity-slider-v3-3-1"; }
+  static get registryIs() { return "wpp-opacity-slider-v3-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

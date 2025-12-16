@@ -43,8 +43,8 @@ export default {
     },
   },
 };
-export const Typography = (args) => html ` <wpp-typography-v3-3-1 .type="${args.type}" .tag="${args.tag}" .color="${args.color}"
-    >Preview Heading</wpp-typography-v3-3-1
+export const Typography = (args) => html ` <wpp-typography-v3-4-0 .type="${args.type}" .tag="${args.tag}" .color="${args.color}"
+    >Preview Heading</wpp-typography-v3-4-0
   >`;
 Typography.args = {
   type: '3xl-heading',

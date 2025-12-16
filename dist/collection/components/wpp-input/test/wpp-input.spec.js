@@ -33,7 +33,7 @@ describe('wpp-input', () => {
     };
     const page = await newSpecPage({
       components: [WppInput, WppLabel, WppInternalLabel],
-      template: () => h("wpp-input-v3-3-1", { labelConfig: labelConfig, name: "text-input" }),
+      template: () => h("wpp-input-v3-4-0", { labelConfig: labelConfig, name: "text-input" }),
     });
     await new Promise(resolve => setTimeout(resolve, 100));
     await page.waitForChanges();

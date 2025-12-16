@@ -67,13 +67,13 @@ const WppPagination = class {
     if (this.count === 0) {
       return null;
     }
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, index.h("div", { class: "control-pagination-wrapper", part: "body" }, index.h("wpp-typography-v3-3-1", { type: "s-body", part: "per-page-label" }, this._locales.itemsPerPage, ":"), index.h("wpp-select-v3-3-1", { type: "single", isTextSelect: true, onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig }, dropdownWidth: "100px", part: "pre-page-select", list: this.itemsPerPage.map(item => ({
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, index.h("div", { class: "control-pagination-wrapper", part: "body" }, index.h("wpp-typography-v3-4-0", { type: "s-body", part: "per-page-label" }, this._locales.itemsPerPage, ":"), index.h("wpp-select-v3-4-0", { type: "single", isTextSelect: true, onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig }, dropdownWidth: "100px", part: "pre-page-select", list: this.itemsPerPage.map(item => ({
         value: item,
         label: `${item}`,
         part: 'per-page-item',
-      })) }), index.h("wpp-divider-v3-3-1", { part: "divider" }), index.h("wpp-typography-v3-3-1", { type: "s-body", part: "range" }, this.getPageRange())), countPagesToDisplay && (index.h("wpp-pagination-select-v3-3-1", { count: countPagesToDisplay, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, part: "page-select" }))));
+      })) }), index.h("wpp-divider-v3-4-0", { part: "divider" }), index.h("wpp-typography-v3-4-0", { type: "s-body", part: "range" }, this.getPageRange())), countPagesToDisplay && (index.h("wpp-pagination-select-v3-4-0", { count: countPagesToDisplay, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, part: "page-select" }))));
   }
-  static get registryIs() { return "wpp-pagination-v3-3-1"; }
+  static get registryIs() { return "wpp-pagination-v3-4-0"; }
   static get watchers() { return {
     "locales": ["onUpdateLocales"]
   }; }

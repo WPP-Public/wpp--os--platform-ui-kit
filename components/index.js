@@ -29,6 +29,7 @@ export { WppEmpty404, defineCustomElement as defineCustomElementWppEmpty404 } fr
 export { WppEmptyCards, defineCustomElement as defineCustomElementWppEmptyCards } from './wpp-empty-cards.js';
 export { WppEmptyContent, defineCustomElement as defineCustomElementWppEmptyContent } from './wpp-empty-content.js';
 export { WppEmptyDataviz, defineCustomElement as defineCustomElementWppEmptyDataviz } from './wpp-empty-dataviz.js';
+export { WppEmptyDowntime, defineCustomElement as defineCustomElementWppEmptyDowntime } from './wpp-empty-downtime.js';
 export { WppEmptyError, defineCustomElement as defineCustomElementWppEmptyError } from './wpp-empty-error.js';
 export { WppEmptyFolder, defineCustomElement as defineCustomElementWppEmptyFolder } from './wpp-empty-folder.js';
 export { WppEmptyNoAccess, defineCustomElement as defineCustomElementWppEmptyNoAccess } from './wpp-empty-no-access.js';

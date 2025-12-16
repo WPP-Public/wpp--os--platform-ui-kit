@@ -21,7 +21,20 @@ export class WppTab {
     };
     this.onBlur = (event) => {
       this.focusType = FOCUS_TYPE.NONE;
+      this.pressed = false;
       this.wppBlur.emit(event);
+    };
+    this.onKeyDown = (e) => {
+      if (this.disabled)
+        return;
+      if (e.key === ' ' || e.key === 'Enter') {
+        this.pressed = true;
+      }
+    };
+    this.onKeyUp = (e) => {
+      if (e.key === ' ' || e.key === 'Enter') {
+        this.pressed = false;
+      }
     };
     this.onMouseDown = () => {
       if (this.focusType === FOCUS_TYPE.TAB) {
@@ -29,6 +42,12 @@ export class WppTab {
       }
       else {
         this.isMouseClicked = true;
+      }
+      if (!this.disabled) {
+        this.pressed = true;
+        window.addEventListener('mouseup', () => {
+          this.pressed = false;
+        }, { once: true });
       }
     };
     this.handleClickTab = () => {
@@ -48,12 +67,14 @@ export class WppTab {
       'wpp-tab': true,
     });
     this.focusType = undefined;
+    this.pressed = false;
     this.active = false;
     this.disabled = false;
     this.value = undefined;
     this.counter = 0;
     this.size = 'm';
     this.icon = undefined;
+    this.ariaProps = undefined;
   }
   componentDidLoad() {
     document.addEventListener('visibilitychange', this.handleVisibilityChange);
@@ -61,14 +82,17 @@ export class WppTab {
   disconnectedCallback() {
     document.removeEventListener('visibilitychange', this.handleVisibilityChange);
   }
+  // Roving tabindex: only the active, enabled tab is tabbable
   get tabIndex() {
-    return this.disabled ? -1 : 0;
+    if (this.disabled)
+      return -1;
+    return this.active ? 0 : -1;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), tabIndex: this.tabIndex, exportparts: "wrapper, inner, counter", onClick: this.handleClickTab, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onBlur: this.onBlur }, h("div", { class: this.cssClasses(), role: "option", "aria-selected": this.active ? 'true' : 'false', id: this.value, part: "wrapper" }, this.icon && h(transformToVersionedTag(this.icon), { className: 'wpp-tab-icon' }), h("slot", { part: "inner" }), this.counter > 0 && h("div", { class: "counter", part: "counter" }, `(${this.counter})`))));
+    return (h(Host, { id: this.value, role: "tab", "aria-selected": this.active ? 'true' : 'false', "aria-disabled": this.disabled ? 'true' : null, "aria-controls": this.ariaProps?.tab?.controls, "aria-label": this.ariaProps?.tab?.label, "aria-describedby": this.ariaProps?.tab?.describedby, "data-pressed": this.pressed ? 'true' : null, class: this.hostCssClasses(), tabIndex: this.tabIndex, exportparts: "wrapper, inner, counter", onClick: this.handleClickTab, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onBlur: this.onBlur, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("div", { class: this.cssClasses(), part: "wrapper" }, this.icon && h(transformToVersionedTag(this.icon), { className: 'wpp-tab-icon' }), h("slot", { part: "inner" }), this.counter > 0 && h("div", { class: "counter", part: "counter" }, `(${this.counter})`))));
   }
   static get is() { return "wpp-tab"; }
-  static get registryIs() { return "wpp-tab-v3-3-1"; }
+  static get registryIs() { return "wpp-tab-v3-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -187,12 +211,34 @@ export class WppTab {
         },
         "attribute": "icon",
         "reflect": false
+      },
+      "ariaProps": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "WppTabAriaProps",
+          "resolved": "undefined | { tab?: Pick<AriaProps, \"label\" | \"describedby\" | \"controls\"> | undefined; }",
+          "references": {
+            "WppTabAriaProps": {
+              "location": "import",
+              "path": "../../types",
+              "id": "src/components/wpp-tabs/types.ts::WppTabAriaProps"
+            }
+          }
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Grouped ARIA props (explicit picks only).\ntab: { label?, describedby?, controls? }"
+        }
       }
     };
   }
   static get states() {
     return {
-      "focusType": {}
+      "focusType": {},
+      "pressed": {}
     };
   }
   static get events() {

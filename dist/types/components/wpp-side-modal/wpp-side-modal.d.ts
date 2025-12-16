@@ -1,5 +1,5 @@
 import { EventEmitter } from '../../stencil-public-runtime';
-import { SideModalCloseDetails, SideModalFormConfig, SideModalCloseReason, ActionConfig } from './types';
+import { SideModalCloseDetails, SideModalFormConfig, SideModalCloseReason, ActionConfig, HeaderActionsConfig } from './types';
 /**
  * @slot header - Content that is displayed within the `.side-modal` element. To add header content, pass `slot="header"` – can contain the modal title.
  * @slot body - Content that is displayed within the `.side-modal` element. To add body content, pass `slot="body"` – can contain any text that describes the modal actions.
@@ -74,6 +74,10 @@ export declare class WppSideModal {
    */
   readonly osBarCompatible: boolean;
   /**
+   * The list of actions that will be added in the header of the side-modal, on the left of the "X" icon. It can have a maximum length of 4 items.
+   */
+  readonly headerActionsConfig: HeaderActionsConfig;
+  /**
    * Handles the side modal closing actions.
    */
   wppSideModalClose: EventEmitter<SideModalCloseDetails>;
@@ -134,6 +138,7 @@ export declare class WppSideModal {
   private hostCssClasses;
   private sideModalCssClasses;
   private headerContainerCssClasses;
+  private renderHeaderActionButtons;
   private renderBody;
   render(): any;
 }

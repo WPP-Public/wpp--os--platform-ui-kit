@@ -2,30 +2,50 @@ import { Host, h } from '@stencil/core';
 import highlightWords from 'highlight-words';
 import { WrappedSlot } from '../../../common/WrappedSlot/WrappedSlot';
 import { getSlotEmptyStates, transformToVersionedTag } from '../../../../utils/utils';
-import { clickOnElementsWithHandlers, clickOnSwitcher } from './utils';
+import { clickOnElementsWithHandlers } from './utils';
 import { areAnyChildrenDisabled } from '../../utils';
 export class WppTreeItem {
   constructor() {
     this.shouldRecalculateItemHeight = false;
     this.defaultItemHeight = '32px';
     this.itemHeight = null;
+    this.lastSwitcherClickTs = 0;
+    this.SWITCHER_CLICK_GUARD_MS = 80;
     this.getItemHeight = () => this.itemHeight || this.defaultItemHeight;
-    this.addHeightToHost = (el) => {
-      function traverse(node) {
-        if (node.hidden === true)
-          return 0;
-        if (!node.open)
-          return 1;
-        let count = node.hidden === false || node.open ? 1 : 0;
-        if (node.children) {
-          for (const child of node.children) {
-            count += traverse(child);
+    // Measure actual content height to avoid clipping (rows/skeleton may vary)
+    this.addHeightToHost = () => {
+      const targetPx = `${this.host.scrollHeight}px`;
+      this.host.style.height = targetPx;
+    };
+    // Release heights on ancestor wpp-tree-item hosts to avoid clipping
+    this.releaseAncestorHeights = () => {
+      let el = this.host.parentElement;
+      const TAG = transformToVersionedTag('wpp-tree-item').toUpperCase();
+      while (el) {
+        if (el.tagName === TAG) {
+          if (el.style.height && el.style.height.includes('px')) {
+            el.style.height = 'auto';
           }
         }
-        return count;
+        el = el.parentElement;
       }
-      const visibleItems = traverse(el);
-      this.host.style.height = `${visibleItems * parseInt(this.getItemHeight())}px`;
+    };
+    // Stop bubbling so row click doesn’t also fire and toggle selection
+    this.onSwitcherClick = (e) => {
+      e.stopPropagation();
+      this.lastSwitcherClickTs = typeof performance !== 'undefined' ? performance.now() : Date.now();
+      this.handleSwitcherClick();
+    };
+    // was this click inside the switcher chevron area?
+    this.isSwitcherTarget = (e) => {
+      const path = (e.composedPath && e.composedPath()) || [];
+      for (const el of path) {
+        if (!el || !el.classList)
+          continue;
+        if (el.classList.contains('switcher'))
+          return true;
+      }
+      return false;
     };
     this.updateParentHeight = (el) => {
       if (el.tagName !== transformToVersionedTag('wpp-tree-item').toUpperCase() && el.slot !== 'content') {
@@ -95,15 +115,19 @@ export class WppTreeItem {
       if (clickOnElementsWithHandlers(e)) {
         return;
       }
-      if (!clickOnSwitcher(e)) {
-        if (this.item.children?.length)
+      // If the chevron area was clicked, don’t toggle selection
+      if (this.isSwitcherTarget(e)) {
+        return;
+      }
+      if (!this.isSwitcherTarget(e)) {
+        if (this.item.hasChildren || this.item.children?.length)
           this.handleSwitcherClick();
       }
       if (!this.multiple && !this.item.isNotSelectable) {
         this.wppTreeItemSelectChange.emit({
           ...this.item,
           selected: !this.item.selected,
-          ...(this.item.children?.length && { open: !this.item.open }),
+          ...((this.item.hasChildren || this.item.children?.length) && { open: !this.item.open }),
         });
       }
     };
@@ -131,7 +155,7 @@ export class WppTreeItem {
       multiple: this.multiple,
       selected: !!this.item.selected,
       disabled: !!this.item.disabled,
-      parent: !!this.item?.children?.length,
+      parent: !!this.item?.hasChildren || !!this.item?.children?.length,
       'with-truncation': this.withItemsTruncation,
       'with-text-wrap': this.isTextWrappable,
     });
@@ -170,19 +194,19 @@ export class WppTreeItem {
       const { className } = props;
       switch (contentType) {
         case 'text':
-          return (h("wpp-typography-v3-3-1", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
+          return (h("wpp-typography-v3-4-0", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
         case 'tag': {
           const { icon } = props;
-          return (h("wpp-tag-v3-3-1", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
+          return (h("wpp-tag-v3-4-0", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
             h(transformToVersionedTag(icon), {
               slot: 'icon-start',
               part: 'icon-start',
             })));
         }
         case 'avatar':
-          return (h("wpp-avatar-v3-3-1", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar" }));
+          return (h("wpp-avatar-v3-4-0", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar" }));
         case 'avatarGroup':
-          return (h("wpp-avatar-group-v3-3-1", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group" }));
+          return (h("wpp-avatar-group-v3-4-0", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group" }));
         default:
           return null;
       }
@@ -206,8 +230,30 @@ export class WppTreeItem {
     this.endContent = undefined;
   }
   onItemChange(next, prev) {
-    if (prev.open !== next.open) {
+    const openChanged = prev.open !== next.open;
+    const loadingChanged = prev.loadingChildren !== next.loadingChildren;
+    const childrenChanged = (prev.children?.length || 0) !== (next.children?.length || 0);
+    if (openChanged || loadingChanged || childrenChanged) {
       this.shouldRecalculateItemHeight = true;
+      if (!this.disableOpenCloseAnimation) {
+        // Release ancestor heights so parent containers can grow with this subtree change
+        this.releaseAncestorHeights();
+        if (next.open) {
+          // While loading children, let the host grow with the skeleton/content
+          if (next.loadingChildren) {
+            this.host.style.height = 'auto';
+          }
+          else {
+            // Children present: recalc full height based on actual content
+            setTimeout(() => this.addHeightToHost(), 0);
+          }
+        }
+        else {
+          // Collapsing: set single-row height for animation
+          this.isCollapseTransitionEnd = false;
+          this.host.style.height = this.getItemHeight();
+        }
+      }
     }
     if (prev.hidden !== next.hidden && next.hidden) {
       // When item is hidden, we need to update height of parent element
@@ -215,36 +261,46 @@ export class WppTreeItem {
     }
   }
   componentDidLoad() {
-    setTimeout(() => {
-      const title = this.host.shadowRoot.querySelector('.title');
+    this.titleMeasureTimeout = window.setTimeout(() => {
+      if (!this.host?.isConnected)
+        return;
+      const title = this.host.shadowRoot?.querySelector('.title');
       if (title) {
         this.isTextWrappable = title.scrollWidth > title.clientWidth;
       }
     }, 0);
   }
+  disconnectedCallback() {
+    if (this.titleMeasureTimeout != null) {
+      clearTimeout(this.titleMeasureTimeout);
+      this.titleMeasureTimeout = undefined;
+    }
+  }
   componentDidUpdate() {
     if (this.shouldRecalculateItemHeight && !this.disableOpenCloseAnimation) {
-      if (!this.item.open) {
+      // Ensure ancestors are not constraining height after this update
+      this.releaseAncestorHeights();
+      if (this.item.open && this.item.loadingChildren) {
+        this.host.style.height = 'auto';
+      }
+      else if (!this.item.open) {
         this.isCollapseTransitionEnd = false;
         this.host.style.height = this.getItemHeight();
       }
       else {
-        // TODO: fix that approach. Currently 50 ms delay makes it possible to see animation open/close on filtering by search.
-        // delay in 0 ms makes it work without animation. Possible solution: may be recalculated based on number of
-        // open children in tree, but that will cost us some performance
-        setTimeout(() => {
-          this.addHeightToHost(this.item);
-        }, 50);
+        setTimeout(() => this.addHeightToHost(), 0);
       }
       this.shouldRecalculateItemHeight = false;
     }
   }
   render() {
-    const isParent = !!this.item?.children?.length;
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeItem", ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (h("div", { class: "switcher", onClick: this.handleSwitcherClick, part: "tree-item-switcher" }, h("wpp-icon-triangle-fill-v3-3-1", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (h("wpp-checkbox-v3-3-1", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox" })), h(WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (h("wpp-tooltip-v3-3-1", { text: this.item.title, config: { placement: 'right' }, class: "tooltip" }, this.renderTitle())) : (this.renderTitle()), h("wpp-action-button-v3-3-1", { variant: "secondary", disabled: this.item.disabled, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button" }, h("slot", { name: "icon-end", onSlotchange: this.updateSlotData })), this.renderEndContent()), ((this.item.children && this.item.open) || !this.isCollapseTransitionEnd) && (h(WrappedSlot, { name: "content", onSlotchange: this.updateSlotData }))));
+    const isParent = !!this.item?.hasChildren || !!this.item?.children?.length;
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeitem", "aria-busy": this.item.loadingChildren ? 'true' : undefined, ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (h("div", { class: "switcher", onClick: this.onSwitcherClick, part: "tree-item-switcher", "data-switcher": "true" }, h("wpp-icon-triangle-fill-v3-4-0", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (h("wpp-checkbox-v3-4-0", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox" })), h(WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (h("wpp-tooltip-v3-4-0", { text: this.item.title, config: { placement: 'right' }, class: "tooltip" }, this.renderTitle())) : (this.renderTitle()), h("wpp-action-button-v3-4-0", { variant: "secondary", disabled: this.item.disabled || this.item.loadingChildren, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button" }, h("slot", { name: "icon-end", onSlotchange: this.updateSlotData })), this.renderEndContent()), ((this.item.open &&
+      (this.item.loadingChildren || (Array.isArray(this.item.children) && this.item.children.length > 0))) ||
+      !this.isCollapseTransitionEnd) && h(WrappedSlot, { name: "content", onSlotchange: this.updateSlotData })));
   }
   static get is() { return "wpp-tree-item"; }
-  static get registryIs() { return "wpp-tree-item-v3-3-1"; }
+  static get registryIs() { return "wpp-tree-item-v3-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

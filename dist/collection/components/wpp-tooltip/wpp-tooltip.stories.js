@@ -24,7 +24,7 @@ export default {
   },
 };
 export const TitleAndText = (args) => html `
-  <wpp-tooltip-v3-3-1
+  <wpp-tooltip-v3-4-0
     .dropdownWidth="${args.dropdownWidth}"
     .header="${args.header}"
     .text="${args.text}"
@@ -34,10 +34,10 @@ export const TitleAndText = (args) => html `
     .warning="${args.warning}"
     .error="${args.error}"
   >
-    <wpp-button-v3-3-1 variant="${args.error ? 'destructive' : 'primary'}">
+    <wpp-button-v3-4-0 variant="${args.error ? 'destructive' : 'primary'}">
       ${args.error ? 'Error tooltip' : args.warning ? 'Warning tooltip' : 'Tooltip'}
-    </wpp-button-v3-3-1>
-  </wpp-tooltip-v3-3-1>
+    </wpp-button-v3-4-0>
+  </wpp-tooltip-v3-4-0>
 `;
 TitleAndText.args = {
   header: 'Title',
@@ -52,7 +52,7 @@ TitleAndText.args = {
 TitleAndText.parameters = {
   layout: 'centered',
 };
-export const Value = (args) => html ` <wpp-tooltip-v3-3-1
+export const Value = (args) => html ` <wpp-tooltip-v3-4-0
     .text="${args.text}"
     .value="${args.value}"
     .theme="${args.theme}"
@@ -60,8 +60,8 @@ export const Value = (args) => html ` <wpp-tooltip-v3-3-1
     .dropdownWidth="${args.dropdownWidth}"
     .wordBreak="${args.wordBreak}"
   >
-    <wpp-button-v3-3-1 variant="primary">Button</wpp-button-v3-3-1>
-  </wpp-tooltip-v3-3-1>`;
+    <wpp-button-v3-4-0 variant="primary">Button</wpp-button-v3-4-0>
+  </wpp-tooltip-v3-4-0>`;
 Value.args = {
   text: 'Label',
   value: '$100,000',
@@ -82,30 +82,30 @@ const styles = {
   },
 };
 export const CustomContent = (args) => html `
-  <wpp-tooltip-v3-3-1
+  <wpp-tooltip-v3-4-0
     .dropdownWidth="${args.dropdownWidth}"
     .text="${args.text}"
     .config="${args.config}"
     .theme="${args.theme}"
     .wordBreak="${args.wordBreak}"
   >
-    <wpp-button-v3-3-1 data-testid="allow-html-tooltip-button">Tooltip with Custom Content</wpp-button-v3-3-1>
+    <wpp-button-v3-4-0 data-testid="allow-html-tooltip-button">Tooltip with Custom Content</wpp-button-v3-4-0>
     <div slot="tooltip-content">
-      <wpp-typography-v3-3-1
+      <wpp-typography-v3-4-0
         tag="h2"
         type="m-strong"
         style=${args.theme === 'dark' ? styleMap(styles.typographyDark) : styleMap(styles.typographyLight)}
         >Bold Content
-      </wpp-typography-v3-3-1>
-      <wpp-typography-v3-3-1
+      </wpp-typography-v3-4-0>
+      <wpp-typography-v3-4-0
         tag="p"
         type="s-body"
         style=${args.theme === 'dark' ? styleMap(styles.typographyDark) : styleMap(styles.typographyLight)}
       >
         Body content
-      </wpp-typography-v3-3-1>
+      </wpp-typography-v3-4-0>
     </div>
-  </wpp-tooltip-v3-3-1>
+  </wpp-tooltip-v3-4-0>
 `;
 CustomContent.args = {
   text: 'Tooltip Text',

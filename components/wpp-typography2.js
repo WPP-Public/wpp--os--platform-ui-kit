@@ -21,10 +21,10 @@ const WppTypography = /*@__PURE__*/ proxyCustomElement(class WppTypography exten
     const TypographyTag = this.tag;
     return (h(Host, { class: "wpp-typography", exportparts: "typography, inner", style: { '--typography-color': this.color } }, h(TypographyTag, { class: this.typographyCssClasses(), part: "typography", exportparts: "typography" }, h("slot", { part: "inner" }))));
   }
-  static get registryIs() { return "wpp-typography-v3-3-1"; }
+  static get registryIs() { return "wpp-typography-v3-4-0"; }
   get host() { return this; }
   static get style() { return wppTypographyCss; }
-}, [1, "wpp-typography", "wpp-typography-v3-3-1", {
+}, [1, "wpp-typography", "wpp-typography-v3-4-0", {
     "type": [513],
     "tag": [1],
     "color": [1]
@@ -33,9 +33,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-typography-v3-3-1"];
+  const components = ["wpp-typography-v3-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-typography-v3-3-1":
+    case "wpp-typography-v3-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTypography);
       }

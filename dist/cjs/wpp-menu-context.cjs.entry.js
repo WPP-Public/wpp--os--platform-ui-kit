@@ -4,11 +4,12 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
 const isEqual = require('./isEqual-0b0240b4.js');
-const utils = require('./utils-6189d8be.js');
+const utils = require('./utils-99b83069.js');
 const constants = require('./constants-6680c2a7.js');
-const menuListConfig = require('./menuListConfig-c172e0b1.js');
+const menuListConfig = require('./menuListConfig-bbde46c0.js');
 const consts = require('./consts-779fd4ec.js');
 require('./_commonjsHelpers-bcc1208a.js');
+require('./tippy.esm-9d703cd4.js');
 
 const defaultDropdownConfig = {
   trigger: 'manual',
@@ -266,7 +267,7 @@ const WppMenuContext = class {
     };
     return (index.h(index.Host, { class: this.menuCssClasses(), exportparts: "trigger, list-wrapper, list, inner", onFocusout: this.onFocusout }, index.h("div", { ref: this.getTriggerRef, onClick: this.handleClickTrigger, class: this.triggerWrapperCssClasses() }, index.h("slot", { name: "trigger-element", part: "trigger" })), index.h("div", { class: "wpp-list-wrapper", part: "list-wrapper", ref: ref => (this.wppListWrapperRef = ref) }, index.h("ul", { class: this.listWrapperCssClasses(), style: style, ref: this.getContentRef, role: constants.MENU_ROLE, part: "list" }, index.h("slot", { part: "inner" })))));
   }
-  static get registryIs() { return "wpp-menu-context-v3-3-1"; }
+  static get registryIs() { return "wpp-menu-context-v3-4-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "dropdownConfig": ["updateDropdownConfig"],

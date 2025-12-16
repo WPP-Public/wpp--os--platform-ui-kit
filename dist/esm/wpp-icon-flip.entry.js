@@ -20,7 +20,7 @@ const WppIconFlip = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-flip", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: FlipDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-flip-v3-3-1"; }
+  static get registryIs() { return "wpp-icon-flip-v3-4-0"; }
 };
 WppIconFlip.style = wppIconCss;
 

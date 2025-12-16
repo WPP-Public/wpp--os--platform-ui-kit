@@ -34,8 +34,14 @@
 :host {
   --text-input-height-m: var(--wpp-input-height-m, 40px);
   --text-input-height-s: var(--wpp-input-height-s, 32px);
-  --text-input-padding-m: var(--wpp-input-padding-m, calc(9px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width)));
-  --text-input-padding-s: var(--wpp-input-padding-s, calc(5px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width)));
+  --text-input-padding-m: var(
+    --wpp-input-padding-m,
+    calc(9px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width))
+  );
+  --text-input-padding-s: var(
+    --wpp-input-padding-s,
+    calc(5px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width))
+  );
   --text-input-with-icons-padding-m: var(--wpp-input-with-icons-padding-m, 38px);
   --text-input-with-icons-padding-s: var(--wpp-input-with-icons-padding-s, 36px);
   --text-input-label-color: var(--wpp-input-label-color, var(--wpp-text-color-info));
@@ -63,8 +69,14 @@
   --text-input-icon-end-margin-s: var(--wpp-input-icon-end-margin-s, 0 10px 0 0);
   --text-input-icon-end-color-hover: var(--wpp-input-icon-end-color-hover, var(--wpp-icon-color-hover));
   --text-input-icon-end-color-active: var(--wpp-input-icon-end-color-active, var(--wpp-icon-color-active));
-  --text-input-icon-end-first-border-color-focus: var(--wpp-input-icon-end-first-border-color-focus, var(--wpp-grey-color-000));
-  --text-input-icon-end-second-border-color-focus: var(--wpp-input-icon-end-second-border-color-focus, var(--wpp-brand-color));
+  --text-input-icon-end-first-border-color-focus: var(
+    --wpp-input-icon-end-first-border-color-focus,
+    var(--wpp-grey-color-000)
+  );
+  --text-input-icon-end-second-border-color-focus: var(
+    --wpp-input-icon-end-second-border-color-focus,
+    var(--wpp-brand-color)
+  );
   --text-input-icon-color: var(--wpp-input-icon-color, var(--wpp-icon-color));
   --text-input-icon-color-disabled: var(--wpp-input-icon-color-disabled, var(--wpp-icon-color-disabled));
   --text-input-border-width: var(--wpp-input-border-width, var(--wpp-border-width-s));
@@ -167,11 +179,17 @@
 :host(.wpp-size-m) .input-with-icons .with-icon-end {
   padding-right: var(--text-input-with-icons-padding-m);
 }
+:host(.wpp-size-m) .input-with-icons .with-double-icon-end {
+  padding-right: 60px;
+}
 :host(.wpp-size-m) .input-with-icons .icon-start {
   margin: var(--text-input-icon-start-margin-m);
 }
 :host(.wpp-size-m) .input-with-icons .icon-end {
   margin: var(--text-input-icon-end-margin-m);
+}
+:host(.wpp-size-m) .input-with-icons .double-icon-end {
+  margin-right: 38px;
 }
 
 :host(.wpp-size-s) .input-with-icons .with-icon-start {
@@ -180,11 +198,17 @@
 :host(.wpp-size-s) .input-with-icons .with-icon-end {
   padding-right: var(--text-input-with-icons-padding-s);
 }
+:host(.wpp-size-s) .input-with-icons .with-double-icon-end {
+  padding-right: 60px;
+}
 :host(.wpp-size-s) .input-with-icons .icon-start {
   margin: var(--text-input-icon-start-margin-s);
 }
 :host(.wpp-size-s) .input-with-icons .icon-end {
   margin: var(--text-input-icon-end-margin-s);
+}
+:host(.wpp-size-s) .input-with-icons .double-icon-end {
+  margin-right: 38px;
 }
 
 :host([disabled]:not([disabled=false])) {

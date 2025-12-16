@@ -24,7 +24,7 @@ const WppFloatingToolbar$1 = /*@__PURE__*/ proxyCustomElement(class WppFloatingT
         variant: 'secondary',
       }));
     };
-    this.renderActionButton = (data) => (h("wpp-action-button-v3-3-1", { key: `${data.icon}`, ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
+    this.renderActionButton = (data) => (h("wpp-action-button-v3-4-0", { key: `${data.icon}`, ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
     this.setActionButtons = () => {
       this.items = Array.from(this.host.shadowRoot?.querySelectorAll(transformToVersionedTag('wpp-action-button')) || []);
       this.syncTabIndexes();
@@ -87,13 +87,13 @@ const WppFloatingToolbar$1 = /*@__PURE__*/ proxyCustomElement(class WppFloatingT
   render() {
     return (h(Host, { class: this.hostCssClasses(), role: "toolbar", "aria-orientation": this.orientation, "aria-label": this.ariaProps?.label, "aria-labelledby": this.ariaProps?.labelledby, onKeyDown: this.onKeyDown }, h("div", { class: this.wrapperCssClasses() }, this._actionButtonsConfig.map(this.renderActionButton))));
   }
-  static get registryIs() { return "wpp-floating-toolbar-v3-3-1"; }
+  static get registryIs() { return "wpp-floating-toolbar-v3-4-0"; }
   get host() { return this; }
   static get watchers() { return {
     "actionButtonsConfig": ["onUpdateActionButtonsConfig"]
   }; }
   static get style() { return wppFloatingToolbarCss; }
-}, [1, "wpp-floating-toolbar", "wpp-floating-toolbar-v3-3-1", {
+}, [1, "wpp-floating-toolbar", "wpp-floating-toolbar-v3-4-0", {
     "actionButtonsConfig": [16],
     "orientation": [1],
     "ariaProps": [16]
@@ -102,19 +102,19 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-floating-toolbar-v3-3-1", "wpp-action-button-v3-3-1", "wpp-spinner-v3-3-1"];
+  const components = ["wpp-floating-toolbar-v3-4-0", "wpp-action-button-v3-4-0", "wpp-spinner-v3-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-floating-toolbar-v3-3-1":
+    case "wpp-floating-toolbar-v3-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppFloatingToolbar$1);
       }
       break;
-    case "wpp-action-button-v3-3-1":
+    case "wpp-action-button-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-spinner-v3-3-1":
+    case "wpp-spinner-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

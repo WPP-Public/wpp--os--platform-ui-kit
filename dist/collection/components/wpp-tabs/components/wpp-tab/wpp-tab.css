@@ -120,3 +120,19 @@
 :host([active]:not([active=false])) .wpp-tab-wrapper .wpp-tab-icon {
   --wpp-icon-color: var(--tab-text-color-selected);
 }
+
+:host([data-pressed=true]) .wpp-tab-wrapper,
+:host([active]:not([active=false])[data-pressed=true]) .wpp-tab-wrapper {
+  color: var(--tab-text-color-active);
+}
+:host([data-pressed=true]) .wpp-tab-wrapper .wpp-tab-icon,
+:host([active]:not([active=false])[data-pressed=true]) .wpp-tab-wrapper .wpp-tab-icon {
+  --wpp-icon-color: var(--tab-text-color-active);
+}
+
+:host([disabled]:not([disabled=false])[data-pressed=true]) .wpp-tab-wrapper {
+  color: var(--tab-text-color-disabled);
+}
+:host([disabled]:not([disabled=false])[data-pressed=true]) .wpp-tab-wrapper .wpp-tab-icon {
+  --wpp-icon-color: var(--tab-text-color-disabled);
+}

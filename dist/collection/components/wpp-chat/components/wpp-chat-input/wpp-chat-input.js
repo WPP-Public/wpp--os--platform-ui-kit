@@ -4,14 +4,37 @@ import { EXTENSION_TO_TYPE } from '../../../wpp-file-upload/const';
 import { WrappedSlot } from '../../../common/WrappedSlot/WrappedSlot';
 import { debounce, getSlotEmptyStates, hasParentWithId } from '../../../../utils/utils';
 import { TOAST_DURATION } from './utils';
-import { DEFAULT_FILE_UPLOAD_CONFIG, MAX_INPUT_AREA_HEIGHT, MIN_TEXTAREA_HEIGHT } from './consts';
+import { DEFAULT_FILE_UPLOAD_CONFIG, MAX_INPUT_AREA_HEIGHT, MIN_TEXTAREA_HEIGHT, LOCALES_DEFAULTS } from './consts';
 import { Z_INDEX } from '../../../../common/consts';
 export class WppChatInput {
   constructor() {
     this.scrollTimeout = null;
+    this.inputAreaId = `wpp-ci-area`;
+    this.charCounterId = `wpp-ci-cc`;
+    this.textareaAutoId = `wpp-ci-ta`;
+    this.minimizedDescId = `wpp-ci-min-desc`;
+    this._locales = LOCALES_DEFAULTS; // Locales state holder (merged default + user overrides)
     this.reInitValue = (list) => {
       this.successAttachmentsList = list.filter(file => !this.isFileWithError(file));
       this.errorAttachmentsList = list.filter(this.isFileWithError);
+    };
+    // Handler to block click during dialog
+    this.onAttachClick = (e) => {
+      // Space/Enter on buttons can still synthesize click; block if dialog is open
+      if (this.isFileDialogOpen) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      this.handleFileSelection();
+    };
+    this.handleDocumentFocusIn = (event) => {
+      const target = event.target;
+      if (this.size === 's' && this.isChatInputExpanded && this.host && !this.host.contains(target)) {
+        if (!hasParentWithId(target, 'tippy-')) {
+          this.handleSimpleBlur();
+        }
+      }
     };
     this.handleDocumentClick = (event) => {
       if (this.size === 's' && this.isChatInputExpanded && this.host && !this.host.contains(event.target)) {
@@ -20,6 +43,13 @@ export class WppChatInput {
         if (!hasParentWithId(event.target, 'tippy-')) {
           this.handleSimpleBlur();
         }
+      }
+    };
+    this.onExpandedKeyDown = (e) => {
+      if (e.key === 'Escape' && this.size === 's' && this.isChatInputExpanded) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.handleSimpleBlur();
       }
     };
     this.handleFileLoaded = (event) => {
@@ -172,6 +202,7 @@ export class WppChatInput {
     };
     this.handleClickItem = (event) => this.wppFileUploadItemClick.emit(event.detail);
     this.handleChange = async () => {
+      this.clearDialogState();
       const files = this.inputRef?.files;
       if (!files?.length)
         return;
@@ -263,6 +294,39 @@ export class WppChatInput {
         event.preventDefault();
         this.handleSend();
       }
+    };
+    this.onMinimizedKeyDown = (e) => {
+      if (this.disabled)
+        return;
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.minimizedPressed = true;
+        this.handleSizeToggle();
+      }
+    };
+    this.onMinimizedKeyUp = (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.minimizedPressed = false;
+      }
+    };
+    this.onAttachKeyDown = (e) => {
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        this.attachPressed = true;
+        this.handleFileSelection();
+        // Clear immediately to avoid sticky state when dialog steals focus
+        this.attachPressed = false;
+      }
+    };
+    this.onWindowFocus = () => {
+      if (this.isFileDialogOpen) {
+        this.clearDialogState();
+      }
+    };
+    this.clearDialogState = () => {
+      this.isFileDialogOpen = false;
+      this.attachPressed = false;
     };
     this.hostCssClasses = () => ({
       'wpp-chat-input': true,
@@ -386,6 +450,12 @@ export class WppChatInput {
     this.debounceEnabled = true;
     this.debounceDelay = 300;
     this.zIndex = Z_INDEX.CHAT;
+    this.textareaAriaLabel = undefined;
+    this.textareaId = undefined;
+    this.textareaName = undefined;
+    this.htmlAttributes = undefined;
+    this.ariaProps = undefined;
+    this.locales = {};
     this.successAttachmentsList = [];
     this.errorAttachmentsList = [];
     this.toastMessage = '';
@@ -394,6 +464,9 @@ export class WppChatInput {
     this.areAttachmentsVisible = true;
     this.hasSelectSlot = false;
     this.isChatInputExpanded = false;
+    this.attachPressed = false;
+    this.minimizedPressed = false;
+    this.isFileDialogOpen = false;
     this.internalValue = '';
   }
   onAttachmentsChange(newValue) {
@@ -410,6 +483,10 @@ export class WppChatInput {
       this.adjustTextareaHeight(false, value);
     }
   }
+  onUpdateLocales(newLocales) {
+    // Merge into private _locales, not the readonly @Prop
+    this._locales = { ...this._locales, ...newLocales };
+  }
   componentWillLoad() {
     if (!this.textValue?.trim() && this.textValue !== this.internalValue) {
       this.internalValue = this.textValue;
@@ -420,6 +497,8 @@ export class WppChatInput {
     }, this.debounceDelay);
     const list = [...this.attachments, ...(this.successAttachmentsList || []), ...(this.errorAttachmentsList || [])];
     this.reInitValue(list);
+    // Merge initial locales once at load
+    this._locales = { ...this._locales, ...this.locales };
   }
   componentDidLoad() {
     requestAnimationFrame(() => {
@@ -441,14 +520,26 @@ export class WppChatInput {
       resizeObserver.observe(this.inputAreaRef);
     }
     this.resizeObserver = resizeObserver;
-    document.addEventListener('mousedown', this.handleDocumentClick, true);
+    window.addEventListener('focus', this.onWindowFocus, true);
+  }
+  addExpandedListeners() {
+    this.expandedListenersAbort?.abort();
+    this.expandedListenersAbort = new AbortController();
+    const signal = this.expandedListenersAbort.signal;
+    document.addEventListener('mousedown', this.handleDocumentClick, { capture: true, signal });
+    document.addEventListener('focusin', this.handleDocumentFocusIn, { capture: true, signal });
+  }
+  removeExpandedListeners() {
+    this.expandedListenersAbort?.abort();
+    this.expandedListenersAbort = undefined;
   }
   disconnectedCallback() {
     this.disconnectObserver();
     if (this.resizeObserver && this.inputAreaRef) {
       this.resizeObserver.unobserve(this.inputAreaRef);
     }
-    document.removeEventListener('mousedown', this.handleDocumentClick, true);
+    this.removeExpandedListeners();
+    window.removeEventListener('focus', this.onWindowFocus, true);
   }
   onSizeChange(newValue, oldValue) {
     if (newValue !== oldValue && this.size === 's') {
@@ -461,6 +552,7 @@ export class WppChatInput {
   handleSizeToggle() {
     if (this.size === 's' && !this.disabled) {
       this.isChatInputExpanded = true;
+      this.addExpandedListeners();
       requestAnimationFrame(() => {
         if (this.debouncedAdjustTextareaHeight) {
           this.debouncedAdjustTextareaHeight();
@@ -475,6 +567,8 @@ export class WppChatInput {
   handleSimpleBlur() {
     if (this.size === 's' && this.isChatInputExpanded) {
       this.isChatInputExpanded = false;
+      this.removeExpandedListeners();
+      requestAnimationFrame(() => this.minimizedTriggerRef?.focus());
     }
   }
   forceRecalculateHeight() {
@@ -511,8 +605,36 @@ export class WppChatInput {
   get mergedFileUploadConfig() {
     return {
       ...DEFAULT_FILE_UPLOAD_CONFIG,
-      ...this.fileUploadConfig, // Merge with any provided config
+      ...this.fileUploadConfig,
     };
+  }
+  // Precedence helpers: ariaProps > locales > internal defaults
+  getPlaceholderText() {
+    return this._locales.placeholder ?? this.placeholder;
+  }
+  getMinimizedAriaLabel() {
+    return this.ariaProps?.minimizedTrigger?.label ?? (this.internalValue || this.getPlaceholderText());
+  }
+  getMinimizedDescriptionText() {
+    return this._locales.minimizedDescription;
+  }
+  getTextareaLabel() {
+    return (this.ariaProps?.textarea?.label ?? this.textareaAriaLabel ?? this._locales.messageInputLabel ?? 'Message input');
+  }
+  getActionsToolbarLabel() {
+    return this.ariaProps?.actionsToolbar?.label ?? this._locales.actionsToolbarLabel;
+  }
+  getLeftActionsLabel() {
+    return this.ariaProps?.leftActionsGroup?.label ?? this._locales.leftActionsGroupLabel;
+  }
+  getRightActionsLabel() {
+    return this.ariaProps?.rightActionsGroup?.label ?? this._locales.rightActionsGroupLabel;
+  }
+  getSendButtonLabel() {
+    return this.ariaProps?.sendButton?.label ?? this._locales.sendLabel;
+  }
+  getAttachButtonLabel() {
+    return this.ariaProps?.attachButton?.label ?? this._locales.attachLabel;
   }
   checkAttachmentsVisibility() {
     const attachmentsElement = this.inputAreaRef?.querySelector('.attachments');
@@ -589,9 +711,10 @@ export class WppChatInput {
     }
   }
   handleFileSelection() {
-    if (this.inputRef) {
-      this.inputRef.click();
-    }
+    if (!this.inputRef || this.isFileDialogOpen)
+      return;
+    this.isFileDialogOpen = true;
+    this.inputRef.click();
   }
   async handleFileLoad(filesList) {
     if (!filesList.length)
@@ -668,16 +791,22 @@ export class WppChatInput {
     const isMaximizedS = this.isChatInputExpanded && this.size === 's';
     const maximizedSorSizeM = isMaximizedS || this.size === 'm';
     const isMinimizedS = this.size === 's' && !this.isChatInputExpanded;
-    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, toast, input-area, attachments, text-input, actions-bar, left-actions, right-actions, file-item", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick }, h("div", { class: this.chatInputContainerClasses(), part: "chat-input-container" }, this.showToast && (h("wpp-toast-v3-3-1", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments" }, allFiles.map((file, index) => (h("wpp-file-upload-item-v3-3-1", { key: index, file: file, format: this.mergedFileUploadConfig.format, maxLabelLength: this.mergedFileUploadConfig.maxLabelLength, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
+    const placeholderText = this.getPlaceholderText();
+    const ariaInvalid = this.ariaProps?.textarea?.invalid !== undefined
+      ? this.ariaProps.textarea.invalid
+      : charExceeded
+        ? 'true'
+        : undefined;
+    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, toast, input-area, attachments, text-input, actions-bar, left-actions, right-actions, file-item", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick }, h("div", { class: this.chatInputContainerClasses(), onKeyDown: this.onExpandedKeyDown, part: "chat-input-container" }, this.showToast && (h("wpp-toast-v3-4-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { id: this.inputAreaId, class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments", role: "list", "aria-label": this._locales.attachmentsLabel }, allFiles.map((file, index) => (h("wpp-file-upload-item-v3-4-0", { key: index, file: file, format: this.mergedFileUploadConfig.format, maxLabelLength: this.mergedFileUploadConfig.maxLabelLength, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
         sizeError: this.mergedFileUploadConfig.locales.sizeError,
         formatError: this.mergedFileUploadConfig.locales.formatError,
-      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded }))))), h("textarea", { class: this.textInputClasses(), placeholder: this.placeholder, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, h("div", { class: this.minimizedInput(), part: "minimized-input", onClick: this.handleSizeToggle }, h("wpp-typography-v3-3-1", { class: this.inputValue(), type: "s-body" }, this.internalValue || this.placeholder)), h("wpp-action-button-v3-3-1", { "data-testid": "send-icon-only-button", variant: "secondary", onClick: e => {
+      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded, "aria-posinset": (index + 1).toString(), "aria-setsize": allFiles.length.toString() }))))), h("textarea", { id: (this.htmlAttributes?.textarea?.id ?? this.textareaId) || this.textareaAutoId, name: this.htmlAttributes?.textarea?.name ?? this.textareaName ?? 'message', class: this.textInputClasses(), placeholder: placeholderText, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input", "aria-label": this.getTextareaLabel(), "aria-invalid": ariaInvalid, "aria-describedby": charExceeded ? this.charCounterId : undefined, autocomplete: this.htmlAttributes?.textarea?.autocomplete, maxLength: this.htmlAttributes?.textarea?.maxLength, "data-gramm": "false", "data-gramm_editor": "false" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, h("div", { class: this.minimizedInput(), part: "minimized-input", ref: el => (this.minimizedTriggerRef = el), "data-pressed": this.minimizedPressed ? 'true' : null, role: "button", tabindex: this.disabled ? -1 : 0, "aria-expanded": this.isChatInputExpanded ? 'true' : 'false', "aria-controls": this.inputAreaId, "aria-label": this.getMinimizedAriaLabel(), "aria-describedby": this.minimizedDescId, onKeyDown: this.onMinimizedKeyDown, onKeyUp: this.onMinimizedKeyUp }, h("wpp-typography-v3-4-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || placeholderText)), h("span", { id: this.minimizedDescId, class: "sr-only" }, this.getMinimizedDescriptionText()), h("wpp-action-button-v3-4-0", { "data-testid": "send-icon-only-button", variant: "secondary", onClick: e => {
         e.stopPropagation();
         this.handleSend();
-      }, disabled: this.isSendDisabled }, h("wpp-icon-send-v3-3-1", { slot: "icon-start" }))))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar" }, h("div", { class: this.leftActionsClasses(), part: "left-actions" }, this.enableAttach && (h(Fragment, null, h("wpp-action-button-v3-3-1", { "data-testid": "attach-icon-only-button", disabled: this.disabled, variant: "secondary", onClick: () => this.handleFileSelection() }, h("wpp-icon-attach-v3-3-1", { slot: "icon-start" })), h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.getAcceptExtensions().join(), title: "" }))), this.withSelect && (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })), this.enableMic && (h("wpp-action-button-v3-3-1", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled }, h("wpp-icon-mic-on-v3-3-1", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions" }, charExceeded && (h("wpp-typography-v3-3-1", { class: "char-counter", type: "xs-midi" }, this.internalValue.length, "/", this.charactersLimit)), h("wpp-action-button-v3-3-1", { "data-testid": "send-icon-only-button", variant: "secondary", onClick: () => this.handleSend(), disabled: this.isSendDisabled }, h("wpp-icon-send-v3-3-1", { slot: "icon-start" }))))))));
+      }, disabled: this.isSendDisabled, ariaProps: { label: this.getSendButtonLabel() } }, h("wpp-icon-send-v3-4-0", { slot: "icon-start" }))))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar", role: "toolbar", "aria-label": this.getActionsToolbarLabel() }, h("div", { class: this.leftActionsClasses(), part: "left-actions", role: "group", "aria-label": this.getLeftActionsLabel() }, this.enableAttach && (h(Fragment, null, h("wpp-action-button-v3-4-0", { "data-testid": "attach-icon-only-button", disabled: this.disabled || this.isFileDialogOpen, variant: "secondary", onClick: this.onAttachClick, onKeyDown: this.onAttachKeyDown, "data-pressed": this.attachPressed ? 'true' : null, ariaProps: { label: this.getAttachButtonLabel() } }, h("wpp-icon-attach-v3-4-0", { slot: "icon-start" })), h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.htmlAttributes?.attachmentsInput?.multiple ?? this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.htmlAttributes?.attachmentsInput?.accept ?? this.getAcceptExtensions().join(), title: "", id: this.htmlAttributes?.attachmentsInput?.id ?? 'wpp-ci-file', name: this.htmlAttributes?.attachmentsInput?.name ?? 'attachments', "aria-hidden": "true" }))), this.withSelect && (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })), this.enableMic && (h("wpp-action-button-v3-4-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled, ariaProps: { label: this._locales.voiceLabel } }, h("wpp-icon-mic-on-v3-4-0", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions", role: "group", "aria-label": this.getRightActionsLabel() }, charExceeded && (h("wpp-typography-v3-4-0", { class: "char-counter", type: "xs-midi", id: this.charCounterId, "aria-live": "polite" }, this.internalValue.length, "/", this.charactersLimit)), h("wpp-action-button-v3-4-0", { "data-testid": "send-icon-only-button", variant: "secondary", onClick: () => this.handleSend(), disabled: this.isSendDisabled, ariaProps: { label: this.getSendButtonLabel() } }, h("wpp-icon-send-v3-4-0", { slot: "icon-start" }))))))));
   }
   static get is() { return "wpp-chat-input"; }
-  static get registryIs() { return "wpp-chat-input-v3-3-1"; }
+  static get registryIs() { return "wpp-chat-input-v3-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -726,7 +855,10 @@ export class WppChatInput {
         "required": false,
         "optional": false,
         "docs": {
-          "tags": [],
+          "tags": [{
+              "name": "deprecated",
+              "text": ": Prefer locales.placeholder."
+            }],
           "text": "Placeholder text for the input field."
         },
         "attribute": "placeholder",
@@ -944,6 +1076,134 @@ export class WppChatInput {
         "attribute": "z-index",
         "reflect": false,
         "defaultValue": "Z_INDEX.CHAT"
+      },
+      "textareaAriaLabel": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [{
+              "name": "deprecated",
+              "text": ": Prefer ariaProps.textarea.label"
+            }],
+          "text": "Defines the aria-label of the text area."
+        },
+        "attribute": "textarea-aria-label",
+        "reflect": false
+      },
+      "textareaId": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [{
+              "name": "deprecated",
+              "text": ": Prefer htmlAttributes.textarea.id"
+            }],
+          "text": "Defines the Id of the text area."
+        },
+        "attribute": "textarea-id",
+        "reflect": false
+      },
+      "textareaName": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [{
+              "name": "deprecated",
+              "text": ": Prefer htmlAttributes.textarea.name"
+            }],
+          "text": "Defines the name of the text area."
+        },
+        "attribute": "textarea-name",
+        "reflect": false
+      },
+      "htmlAttributes": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "ChatInputAttributes",
+          "resolved": "ChatInputAttributes | undefined",
+          "references": {
+            "ChatInputAttributes": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-chat/components/wpp-chat-input/types.ts::ChatInputAttributes"
+            }
+          }
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Grouped element htmlAttributes (textarea + file input).\nNew API \u2014 replaces textareaId/textareaName."
+        }
+      },
+      "ariaProps": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "ChatInputAriaProps",
+          "resolved": "undefined | { minimizedTrigger?: Pick<AriaProps, \"label\" | \"describedby\" | \"controls\" | \"expanded\"> | undefined; textarea?: (Pick<AriaProps, \"label\" | \"describedby\"> & { invalid?: \"true\" | \"false\" | undefined; }) | undefined; sendButton?: Pick<AriaProps, \"label\"> | undefined; attachButton?: Pick<AriaProps, \"label\" | \"pressed\"> | undefined; actionsToolbar?: { label?: string | undefined; } | undefined; leftActionsGroup?: { label?: string | undefined; } | undefined; rightActionsGroup?: { label?: string | undefined; } | undefined; }",
+          "references": {
+            "ChatInputAriaProps": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-chat/components/wpp-chat-input/types.ts::ChatInputAriaProps"
+            }
+          }
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Typed ARIA overrides. Only supported htmlAttributes exposed."
+        }
+      },
+      "locales": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "Partial<ChatInputLocaleInterface>",
+          "resolved": "{ placeholder?: string | undefined; minimizedDescription?: string | undefined; actionsToolbarLabel?: string | undefined; leftActionsGroupLabel?: string | undefined; rightActionsGroupLabel?: string | undefined; sendLabel?: string | undefined; attachLabel?: string | undefined; voiceLabel?: string | undefined; attachmentsLabel?: string | undefined; messageInputLabel?: string | undefined; }",
+          "references": {
+            "Partial": {
+              "location": "global",
+              "id": "global::Partial"
+            },
+            "ChatInputLocaleInterface": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-chat/components/wpp-chat-input/types.ts::ChatInputLocaleInterface"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Locales (visual strings). Will be merged into _locales."
+        },
+        "defaultValue": "{}"
       }
     };
   }
@@ -957,6 +1217,9 @@ export class WppChatInput {
       "areAttachmentsVisible": {},
       "hasSelectSlot": {},
       "isChatInputExpanded": {},
+      "attachPressed": {},
+      "minimizedPressed": {},
+      "isFileDialogOpen": {},
       "internalValue": {}
     };
   }
@@ -1100,6 +1363,9 @@ export class WppChatInput {
       }, {
         "propName": "textValue",
         "methodName": "onTextValueChange"
+      }, {
+        "propName": "locales",
+        "methodName": "onUpdateLocales"
       }, {
         "propName": "size",
         "methodName": "onSizeChange"

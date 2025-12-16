@@ -1,13 +1,14 @@
-export { W as wpp_action_button } from './wpp-action-button-aefa3ba5.js';
+export { W as wpp_action_button } from './wpp-action-button-e6133c68.js';
 import { r as registerInstance, h, c as createEvent, H as Host, g as getElement, F as Fragment } from './index-9177bb6d.js';
 import { W as WppIcon } from './WppIcon-f4802cc9.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
-import { d as debounce, g as getSlotEmptyStates, k as transformToVersionedTag, w as getHighestContainerInDOM, y as isWppElement } from './utils-b49ad9c8.js';
+import { d as debounce, g as getSlotEmptyStates, k as transformToVersionedTag, w as getHighestContainerInDOM, y as isWppElement } from './utils-fb733700.js';
 import { W as WrappedSlot } from './WrappedSlot-2ee5325a.js';
 import { i as isEqual_1 } from './isEqual-9c20096c.js';
-import { m as menuListConfig } from './menuListConfig-bcc0f2a9.js';
+import { m as menuListConfig } from './menuListConfig-4d091d14.js';
 import { Z as Z_INDEX } from './consts-5bf9c29f.js';
 import './_commonjsHelpers-ba3f0406.js';
+import './tippy.esm-c5fe8087.js';
 
 const wppIconCss$4 = ":host{display:-ms-inline-flexbox;display:inline-flex;color:var(--wpp-prop-icon-color)}";
 
@@ -22,7 +23,7 @@ const WppIconCross = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-cross", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M5.70711 4.29289C5.31658 3.90237 4.68342 3.90237 4.29289 4.29289C3.90237 4.68342 3.90237 5.31658 4.29289 5.70711L8.58579 10L4.29289 14.2929C3.90237 14.6834 3.90237 15.3166 4.29289 15.7071C4.68342 16.0976 5.31658 16.0976 5.70711 15.7071L10 11.4142L14.2929 15.7071C14.6834 16.0976 15.3166 16.0976 15.7071 15.7071C16.0976 15.3166 16.0976 14.6834 15.7071 14.2929L11.4142 10L15.7071 5.70711C16.0976 5.31658 16.0976 4.68342 15.7071 4.29289C15.3166 3.90237 14.6834 3.90237 14.2929 4.29289L10 8.58579L5.70711 4.29289Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-cross-v3-3-1"; }
+  static get registryIs() { return "wpp-icon-cross-v3-4-0"; }
 };
 WppIconCross.style = wppIconCss$4;
 
@@ -39,7 +40,7 @@ const WppIconError = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-error", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: "M11.6205 2.68236L17.2903 8.25996C18.2258 9.18045 18.2377 10.6847 17.3183 11.6203L11.7398 17.2904C10.8194 18.2258 9.3149 18.238 8.37946 17.3176L2.70966 11.7396C1.77419 10.8192 1.76202 9.31476 2.68236 8.37933L8.26011 2.70963C9.18053 1.77418 10.6851 1.76203 11.6205 2.68236ZM10 5.33295C10.5198 5.33295 10.9412 5.75433 10.9412 6.27413V10.98C10.9412 11.4998 10.5198 11.9212 10 11.9212C9.4802 11.9212 9.05882 11.4998 9.05882 10.98V6.27413C9.05882 5.75433 9.4802 5.33295 10 5.33295ZM10.9412 13.7647C10.9412 14.2845 10.5198 14.7059 10 14.7059C9.4802 14.7059 9.05882 14.2845 9.05882 13.7647C9.05882 13.2449 9.4802 12.8235 10 12.8235C10.5198 12.8235 10.9412 13.2449 10.9412 13.7647Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-error-v3-3-1"; }
+  static get registryIs() { return "wpp-icon-error-v3-4-0"; }
 };
 WppIconError.style = wppIconCss$3;
 
@@ -56,7 +57,7 @@ const WppIconInfoMessage = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-info-message", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M13.073 15L12.6891 16.6051C12.5048 17.3763 11.8236 17.935 11.0181 17.9947L10.8748 18H9.12546C8.30655 18 7.59 17.4839 7.34866 16.7385L7.31108 16.6047L6.928 15H13.073ZM10 2C13.3137 2 16 4.59693 16 7.80041C16 9.47737 15.2546 11.0164 13.7961 12.3942C13.7324 12.4544 13.6831 12.5269 13.6512 12.6065L13.6251 12.6883L13.311 14H10.5002V9.49707C10.5002 9.22093 10.2764 8.99707 10.0002 8.99707C9.7241 8.99707 9.50024 9.22093 9.50024 9.49707V14H6.689L6.37626 12.6886C6.34955 12.5766 6.29016 12.4745 6.20516 12.3942C4.8153 11.0819 4.07265 9.62354 4.00507 8.03903L4 7.80041L4.00321 7.60894C4.1077 4.49409 6.75257 2 10 2ZM9.5 6.50238V7.50391C9.5 7.78005 9.72386 8.00391 10 8.00391C10.2761 8.00391 10.5 7.78005 10.5 7.50391V6.50238C10.5 6.22624 10.2761 6.00238 10 6.00238C9.72386 6.00238 9.5 6.22624 9.5 6.50238ZM12.8506 7.44332C12.6553 7.24806 12.3388 7.24806 12.1435 7.44332L11.4353 8.15151C11.2401 8.34677 11.2401 8.66335 11.4353 8.85861C11.6306 9.05388 11.9472 9.05388 12.1424 8.85861L12.8506 8.15043C13.0459 7.95517 13.0459 7.63858 12.8506 7.44332ZM7.8521 7.44332C7.65684 7.24806 7.34026 7.24806 7.145 7.44332C6.94973 7.63858 6.94973 7.95517 7.145 8.15043L7.85318 8.85861C8.04844 9.05388 8.36503 9.05388 8.56029 8.85861C8.75555 8.66335 8.75555 8.34677 8.56029 8.15151L7.8521 7.44332Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-info-message-v3-3-1"; }
+  static get registryIs() { return "wpp-icon-info-message-v3-4-0"; }
 };
 WppIconInfoMessage.style = wppIconCss$2;
 
@@ -73,7 +74,7 @@ const WppIconSuccess = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-success", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: "M2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10ZM13.6067 8.89925C13.9742 8.5317 13.9742 7.93578 13.6067 7.56823C13.2391 7.20068 12.6432 7.20068 12.2757 7.56823L9.01961 10.8243L7.72433 9.52901C7.35678 9.16146 6.76086 9.16146 6.39331 9.52901C6.02576 9.89657 6.02576 10.4925 6.39331 10.86L8.35409 12.8208C8.72165 13.1884 9.31757 13.1884 9.68512 12.8208L13.6067 8.89925Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-success-v3-3-1"; }
+  static get registryIs() { return "wpp-icon-success-v3-4-0"; }
 };
 WppIconSuccess.style = wppIconCss$1;
 
@@ -90,7 +91,7 @@ const WppIconWarning = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-warning", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: "M8.83422 2.68592L1.77378 15.024C1.26617 15.9112 1.92884 17 2.97644 17H17.0978C18.1454 17 18.808 15.9112 18.3004 15.024L11.2395 2.68592C10.716 1.77136 9.35779 1.77136 8.83422 2.68592ZM10.0374 5.75C10.5552 5.74994 10.9749 6.16963 10.975 6.68739L10.9751 11.3746L9.10014 11.3749L9.09999 6.68761C9.09993 6.16984 9.51962 5.75006 10.0374 5.75ZM10.9751 11.3746C10.9751 11.8923 10.5554 12.3125 10.0376 12.3125C9.51985 12.3125 9.10013 11.8927 9.10014 11.3749L10.9751 11.3746ZM10.9746 14.1875C10.9746 14.7053 10.5549 15.125 10.0371 15.125C9.51934 15.125 9.09961 14.7053 9.09961 14.1875C9.09961 13.6697 9.51934 13.25 10.0371 13.25C10.5549 13.25 10.9746 13.6697 10.9746 14.1875Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-warning-v3-3-1"; }
+  static get registryIs() { return "wpp-icon-warning-v3-4-0"; }
 };
 WppIconWarning.style = wppIconCss;
 
@@ -147,13 +148,13 @@ const WppInlineMessage = class {
     });
     this.getMessageTypesIcons = () => {
       if (this.type === 'warning')
-        return h("wpp-icon-warning-v3-3-1", { class: "left-icon", part: "message-icon", role: "presentation" });
+        return h("wpp-icon-warning-v3-4-0", { class: "left-icon", part: "message-icon", role: "presentation" });
       if (this.type === 'error')
-        return h("wpp-icon-error-v3-3-1", { class: "left-icon", part: "message-icon", role: "presentation" });
+        return h("wpp-icon-error-v3-4-0", { class: "left-icon", part: "message-icon", role: "presentation" });
       if (this.type === 'information')
-        return (h("wpp-icon-info-message-v3-3-1", { color: "var(--wpp-grey-color-700)", class: "left-icon", part: "message-icon", role: "presentation" }));
+        return (h("wpp-icon-info-message-v3-4-0", { color: "var(--wpp-grey-color-700)", class: "left-icon", part: "message-icon", role: "presentation" }));
       if (this.type === 'success')
-        return h("wpp-icon-success-v3-3-1", { class: "left-icon", part: "message-icon", role: "presentation" });
+        return h("wpp-icon-success-v3-4-0", { class: "left-icon", part: "message-icon", role: "presentation" });
       return null;
     };
     this.handleClickClose = () => {
@@ -173,7 +174,7 @@ const WppInlineMessage = class {
     });
     this.renderContent = () => {
       const message = this.getMessage();
-      return this.size === 'l' ? (h("div", { class: "container", part: "container" }, h("div", { class: this.getContainerContentCssClasses() }, this.getMessageTypesIcons(), h("div", { class: "content-wrapper" }, h("wpp-typography-v3-3-1", { class: this.titleCssClasses(), tag: "h4", type: "m-strong", part: "title" }, this.titleText), h("div", { class: "container-body" }, this.isTruncated ? (h("wpp-tooltip-v3-3-1", { class: "tooltip", text: this.message, config: { placement: 'bottom', triggerTarget: this.messageRef, ...this.tooltipConfig }, part: "tooltip" }, h("span", { ref: ref => (this.messageRef = ref), class: this.messageCssClasses(), tabIndex: 0, part: "message", onBlur: this.onBlur }, message))) : (h("span", { class: "message", part: "message" }, message))))), h("div", { class: "container-actions" }, this.actionBtnText.length > 0 && (h("wpp-action-button-v3-3-1", { part: "action-btn", class: "action-btn", variant: "secondary", onClick: this.handleClickActionBtn }, this.actionBtnText)), !this.hideCloseBtn && (h("wpp-action-button-v3-3-1", { class: "close-btn", ariaProps: { label: this._locales.close }, variant: "secondary", onClick: this.handleClickClose }, h("wpp-icon-cross-v3-3-1", { color: "var(--ab-secondary-text-color)", size: "m" })))))) : this.isTruncated ? (h("wpp-tooltip-v3-3-1", { text: this.message, config: { placement: 'bottom', ...this.tooltipConfig }, part: "tooltip" }, h("div", { class: this.messageBlockCssClasses(), part: "message-block", ref: ref => (this.messageRef = ref), onBlur: this.onBlur, tabIndex: 0 }, this.getMessageTypesIcons(), h("span", { class: "message", part: "message" }, message)))) : (h("div", { class: this.messageBlockCssClasses(), part: "message-block" }, this.getMessageTypesIcons(), h("span", { class: "message", part: "message" }, message)));
+      return this.size === 'l' ? (h("div", { class: "container", part: "container" }, h("div", { class: this.getContainerContentCssClasses() }, this.getMessageTypesIcons(), h("div", { class: "content-wrapper" }, h("wpp-typography-v3-4-0", { class: this.titleCssClasses(), tag: "h4", type: "m-strong", part: "title" }, this.titleText), h("div", { class: "container-body" }, this.isTruncated ? (h("wpp-tooltip-v3-4-0", { class: "tooltip", text: this.message, config: { placement: 'bottom', triggerTarget: this.messageRef, ...this.tooltipConfig }, part: "tooltip" }, h("span", { ref: ref => (this.messageRef = ref), class: this.messageCssClasses(), tabIndex: 0, part: "message", onBlur: this.onBlur }, message))) : (h("span", { class: "message", part: "message" }, message))))), this.actionBtnText || !this.hideCloseBtn ? (h("div", { class: "container-actions" }, this.actionBtnText?.length > 0 && (h("wpp-action-button-v3-4-0", { part: "action-btn", class: "action-btn", variant: "secondary", onClick: this.handleClickActionBtn }, this.actionBtnText)), !this.hideCloseBtn && (h("wpp-action-button-v3-4-0", { class: "close-btn", ariaProps: { label: this._locales.close }, variant: "secondary", onClick: this.handleClickClose }, h("wpp-icon-cross-v3-4-0", { color: "var(--ab-secondary-text-color)", size: "m" }))))) : null)) : this.isTruncated ? (h("wpp-tooltip-v3-4-0", { text: this.message, config: { placement: 'bottom', ...this.tooltipConfig }, part: "tooltip" }, h("div", { class: this.messageBlockCssClasses(), part: "message-block", ref: ref => (this.messageRef = ref), onBlur: this.onBlur, tabIndex: 0 }, this.getMessageTypesIcons(), h("span", { class: "message", part: "message" }, message)))) : (h("div", { class: this.messageBlockCssClasses(), part: "message-block" }, this.getMessageTypesIcons(), h("span", { class: "message", part: "message" }, message)));
     };
     this.getExportParts = () => {
       let defaultParts = 'wrapper, message-icon, message';
@@ -235,7 +236,7 @@ const WppInlineMessage = class {
   render() {
     return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onKeyUp: this.onKeyUp, exportparts: this.getExportParts() }, h("div", { class: this.inlineMessageWrapperCssClasses(), part: "wrapper" }, this.renderContent())));
   }
-  static get registryIs() { return "wpp-inline-message-v3-3-1"; }
+  static get registryIs() { return "wpp-inline-message-v3-4-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "titleText": ["onUpdateTitleText"],
@@ -300,9 +301,9 @@ const WppInternalLabel = class {
     this.updateSlotData();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onBlur: this.onBlur, exportparts: "info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" }, !!this.labelText && (h("div", { class: this.infoWrapperCssClasses(), part: "info-wrapper", role: this.role }, h("wpp-typography-v3-3-1", { type: this.typography, class: "text", part: "text" }, this.labelText), this.optional && (h("wpp-typography-v3-3-1", { type: "s-body", class: "optional", part: "optional-text" }, "(", this._locales.optional, ")")))), !!this.description && this.hasIconSlot ? (h("wpp-tooltip-v3-3-1", { class: "tooltip", text: this.description, config: this.tooltipConfig, part: "tooltip" }, h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: this.tooltipConfig.tabIndex === -1 ? 'none' : 'button', tabIndex: this.tooltipConfig.tabIndex ?? 0, "aria-label": this.tooltipConfig.tabIndex !== -1 ? 'Show info' : undefined }))) : (h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: "button", tabIndex: 0, "aria-label": "Show info" }))));
+    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onBlur: this.onBlur, exportparts: "info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" }, !!this.labelText && (h("div", { class: this.infoWrapperCssClasses(), part: "info-wrapper", role: this.role }, h("wpp-typography-v3-4-0", { type: this.typography, class: "text", part: "text" }, this.labelText), this.optional && (h("wpp-typography-v3-4-0", { type: "s-body", class: "optional", part: "optional-text" }, "(", this._locales.optional, ")")))), !!this.description && this.hasIconSlot ? (h("wpp-tooltip-v3-4-0", { class: "tooltip", text: this.description, config: this.tooltipConfig, part: "tooltip" }, h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: this.tooltipConfig.tabIndex === -1 ? 'none' : 'button', tabIndex: this.tooltipConfig.tabIndex ?? 0, "aria-label": this.tooltipConfig.tabIndex !== -1 ? 'Show info' : undefined }))) : (h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: "button", tabIndex: 0, "aria-label": "Show info" }))));
   }
-  static get registryIs() { return "wpp-internal-label-v3-3-1"; }
+  static get registryIs() { return "wpp-internal-label-v3-4-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "locales": ["onUpdateLocales"]
@@ -338,10 +339,10 @@ const WppTooltip$1 = class {
     });
     this.getIconBasedOnProps = () => {
       if (this.error) {
-        return h("wpp-icon-error-v3-3-1", { class: "left-icon", part: "icon-error" });
+        return h("wpp-icon-error-v3-4-0", { class: "left-icon", part: "icon-error" });
       }
       if (this.warning) {
-        return h("wpp-icon-warning-v3-3-1", { color: "var(--wpp-warning-color-400)", class: "left-icon" });
+        return h("wpp-icon-warning-v3-4-0", { color: "var(--wpp-warning-color-400)", class: "left-icon" });
       }
       return null;
     };
@@ -368,7 +369,7 @@ const WppTooltip$1 = class {
   render() {
     return (h(Host, { class: this.hostCssClasses(), style: this.cssStyle, exportparts: "tooltip-content" }, h("div", { class: this.cssClasses(), style: { wordBreak: this.wordBreak }, part: "tooltip-content" }, h("div", { class: "content-with-icon", id: this.ariaProp.describedby }, this.getIconBasedOnProps() && h("div", { class: "icon-wrapper" }, this.getIconBasedOnProps()), h("div", { class: "content-wrapper" }, !!this.header && (h("span", { class: this.headerCssClasses(), part: "header" }, this.header)), !!this.text && (h("span", { class: this.textCssClasses(), part: "text" }, this.getTextLines())), !!this.value && (h("span", { class: this.valueCssClasses(), part: "value" }, this.value)))))));
   }
-  static get registryIs() { return "wpp-internal-tooltip-v3-3-1"; }
+  static get registryIs() { return "wpp-internal-tooltip-v3-4-0"; }
   get host() { return getElement(this); }
 };
 WppTooltip$1.style = wppInternalTooltipCss;
@@ -381,7 +382,7 @@ const WppLabel = class {
     this.hostCssClasses = () => ({
       'wpp-label': true,
     });
-    this.renderContent = () => (h("wpp-internal-label-v3-3-1", { labelText: this.config?.text, description: this.config?.description, optional: this.optional, typography: this.typography, disabled: this.disabled, locales: this.config?.locales, tooltipConfig: this.tooltipConfig, part: "content", id: this.labelId }, this.config?.icon && h(transformToVersionedTag(this.config?.icon), { slot: 'icon', part: 'icon' })));
+    this.renderContent = () => (h("wpp-internal-label-v3-4-0", { labelText: this.config?.text, description: this.config?.description, optional: this.optional, typography: this.typography, disabled: this.disabled, locales: this.config?.locales, tooltipConfig: this.tooltipConfig, part: "content", id: this.labelId }, this.config?.icon && h(transformToVersionedTag(this.config?.icon), { slot: 'icon', part: 'icon' })));
     this.description = undefined;
     this.htmlFor = undefined;
     this.optional = false;
@@ -397,7 +398,7 @@ const WppLabel = class {
   render() {
     return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, content, icon" }, h(this.tag, { class: "internal-label-wrapper", part: "wrapper", ...(this.tag === 'label' && { htmlFor: this.htmlFor, 'aria-label': this.htmlFor }) }, this.renderContent())));
   }
-  static get registryIs() { return "wpp-label-v3-3-1"; }
+  static get registryIs() { return "wpp-label-v3-4-0"; }
 };
 WppLabel.style = wppLabelCss;
 
@@ -432,7 +433,7 @@ const WppSpinner = class {
     const isAnnounced = this.ariaProps?.label && this.ariaProps?.label !== '';
     return (h(Host, { class: this.hostCssClasses(), role: isAnnounced ? 'status' : null, "aria-hidden": isAnnounced ? null : 'true', "aria-live": isAnnounced ? 'polite' : null, "aria-label": isAnnounced ? this.ariaProps?.label : null }, h("svg", { class: this.spinnerCssClasses(), "aria-hidden": "true", focusable: "false" }, h("circle", { cx: SPINNER_SIZES[this.size], cy: SPINNER_SIZES[this.size], r: SPINNER_RADIUS[this.size], fill: "transparent", stroke: this.color, "stroke-linecap": "round" }))));
   }
-  static get registryIs() { return "wpp-spinner-v3-3-1"; }
+  static get registryIs() { return "wpp-spinner-v3-4-0"; }
 };
 WppSpinner.style = wppSpinnerCss;
 
@@ -447,7 +448,6 @@ const defaultTooltipConfig = {
   placement: 'top',
   offset: [0, 7.2],
   trigger: 'mouseenter focus',
-  duration: [500, 500],
   zIndex: Z_INDEX.TOOLTIP,
   popperOptions: {
     modifiers: [
@@ -462,7 +462,7 @@ const defaultTooltipConfig = {
   appendTo: () => getHighestContainerInDOM(),
 };
 
-const wppTooltipCss = ":host{display:-ms-inline-flexbox;display:inline-flex;width:-webkit-fit-content}:host .anchor{display:-ms-inline-flexbox;display:inline-flex}:host .content-wrapper.hidden{position:absolute;display:none}:host .tooltip-custom-content{width:100%;background-color:var(--wpp-text-color-info);padding:6px 8px;border-radius:var(--wpp-border-radius-s);overflow-wrap:break-word}:host .tooltip-custom-content.light{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m);background-color:var(--wpp-grey-color-000)}:host(.in-dropdown){max-width:100%}:host(.in-dropdown) .anchor{max-width:100%}:host(.transparent){opacity:0;pointer-events:none}";
+const wppTooltipCss = ":host{display:-ms-inline-flexbox;display:inline-flex;width:-webkit-fit-content}:host .anchor{display:-ms-inline-flexbox;display:inline-flex;max-width:100%}:host .content-wrapper.hidden{position:absolute;display:none}:host .tooltip-custom-content{width:100%;background-color:var(--wpp-text-color-info);padding:6px 8px;border-radius:var(--wpp-border-radius-s);overflow-wrap:break-word}:host .tooltip-custom-content.light{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m);background-color:var(--wpp-grey-color-000)}:host(.in-dropdown){max-width:100%}:host(.in-dropdown) .anchor{max-width:100%}:host(.transparent){opacity:0;pointer-events:none}";
 
 const WppTooltip = class {
   constructor(hostRef) {
@@ -510,6 +510,9 @@ const WppTooltip = class {
           },
           ...defaultTooltipConfig,
           ...this.config,
+          // Duration and Delay are not configurable,
+          duration: [150, 100],
+          delay: [500, 30],
           onMount(instance) {
             const referenceElement = instance.reference;
             if (!referenceElement)
@@ -667,9 +670,9 @@ const WppTooltip = class {
     }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v3-3-1", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
+    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v3-4-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
   }
-  static get registryIs() { return "wpp-tooltip-v3-3-1"; }
+  static get registryIs() { return "wpp-tooltip-v3-4-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "config": ["updateConfig"],

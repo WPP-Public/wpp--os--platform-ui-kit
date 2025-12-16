@@ -11,7 +11,7 @@ export class WppIconFloatCenter {
     return (h(WppIcon, { name: "wpp-icon-float-center", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M7.5 5.833h5v5H7.5V5.833M2.5 2.5h15v1.667H2.5V2.5m0 10h15v1.667H2.5v-1.667m0 3.333h11.667v1.667H2.5v-1.667z", fill: "currentColor" })));
   }
   static get is() { return "wpp-icon-float-center"; }
-  static get registryIs() { return "wpp-icon-float-center-v3-3-1"; }
+  static get registryIs() { return "wpp-icon-float-center-v3-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

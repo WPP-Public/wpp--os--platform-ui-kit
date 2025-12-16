@@ -1,5 +1,5 @@
 import { r as registerInstance, h, H as Host, g as getElement, c as createEvent } from './index-9177bb6d.js';
-import { e as truncate } from './utils-b49ad9c8.js';
+import { e as truncate } from './utils-fb733700.js';
 import { C as CONTEXT_ITEM_TAG } from './constants-f59668a0.js';
 import './consts-5bf9c29f.js';
 
@@ -70,7 +70,7 @@ const WppGrid = class {
   render() {
     return (h(Host, { class: this.hostCssClasses(), exportparts: "inner" }, h("slot", { part: "inner" })));
   }
-  static get registryIs() { return "wpp-grid-v3-3-1"; }
+  static get registryIs() { return "wpp-grid-v3-4-0"; }
   get host() { return getElement(this); }
 };
 WppGrid.style = wppGridCss;
@@ -104,7 +104,7 @@ const WppTopbarItem = class {
     this.getMenuLevelData = (navigationData, firstLevel) => {
       const truncatedLabel = truncate(navigationData.label, 30);
       if (navigationData.children?.length) {
-        return (h("wpp-menu-context-v3-3-1", { listWidth: "224px", externalClass: "topbar", appendToListWrapper: !firstLevel, dropdownConfig: {
+        return (h("wpp-menu-context-v3-4-0", { listWidth: "224px", externalClass: "topbar", appendToListWrapper: !firstLevel, dropdownConfig: {
             aria: {
               content: 'labelledby',
             },
@@ -114,9 +114,9 @@ const WppTopbarItem = class {
             onShow: () => {
               this.isMenuExpanded = true;
             },
-          } }, firstLevel ? (h("wpp-navigation-item-v3-3-1", { value: navigationData.value, label: truncatedLabel, slot: "trigger-element", extended: true, nativeLink: this.nativeLink, menu: this.menu, menuExpanded: this.isMenuExpanded, chevronOnly: navigationData.chevronOnly, active: this.menu ? this.active : this.activeItems.includes(navigationData.value) })) : (h("wpp-list-item-v3-3-1", { value: navigationData.value, slot: "trigger-element", isExtended: true, checked: this.activeItems.includes(navigationData.value), style: listItemNavStyle }, h("p", { slot: "label" }, navigationData.label))), h("div", null, navigationData.children?.map(navigationItem => navigationItem.children ? (this.getMenuLevelData(navigationItem, false)) : (h("wpp-navigation-item-v3-3-1", { value: navigationItem.value, path: navigationItem.path, label: navigationItem.label, nativeLink: this.nativeLink, nestedItem: true, active: this.activeItems.includes(navigationItem.value), chevronOnly: navigationData.chevronOnly, onWppActiveNavItemChanged: () => this.menuItemClick(this.getEmittedNavigationData(navigationItem)) }))))));
+          } }, firstLevel ? (h("wpp-navigation-item-v3-4-0", { value: navigationData.value, label: truncatedLabel, slot: "trigger-element", extended: true, nativeLink: this.nativeLink, menu: this.menu, menuExpanded: this.isMenuExpanded, chevronOnly: navigationData.chevronOnly, active: this.menu ? this.active : this.activeItems.includes(navigationData.value) })) : (h("wpp-list-item-v3-4-0", { value: navigationData.value, slot: "trigger-element", isExtended: true, checked: this.activeItems.includes(navigationData.value), style: listItemNavStyle }, h("p", { slot: "label" }, navigationData.label))), h("div", null, navigationData.children?.map(navigationItem => navigationItem.children ? (this.getMenuLevelData(navigationItem, false)) : (h("wpp-navigation-item-v3-4-0", { value: navigationItem.value, path: navigationItem.path, label: navigationItem.label, nativeLink: this.nativeLink, nestedItem: true, active: this.activeItems.includes(navigationItem.value), chevronOnly: navigationData.chevronOnly, onWppActiveNavItemChanged: () => this.menuItemClick(this.getEmittedNavigationData(navigationItem)) }))))));
       }
-      return firstLevel ? (h("wpp-navigation-item-v3-3-1", { value: navigationData.value, path: navigationData.path, label: truncatedLabel, nativeLink: this.nativeLink, active: this.activeItems.includes(navigationData.value), chevronOnly: navigationData.chevronOnly, onWppActiveNavItemChanged: this.topbarItemClick })) : (h("wpp-list-item-v3-3-1", { value: navigationData.value, checked: this.activeItems.includes(navigationData.value), style: listItemNavStyle }, h("p", { slot: "label" }, navigationData.label)));
+      return firstLevel ? (h("wpp-navigation-item-v3-4-0", { value: navigationData.value, path: navigationData.path, label: truncatedLabel, nativeLink: this.nativeLink, active: this.activeItems.includes(navigationData.value), chevronOnly: navigationData.chevronOnly, onWppActiveNavItemChanged: this.topbarItemClick })) : (h("wpp-list-item-v3-4-0", { value: navigationData.value, checked: this.activeItems.includes(navigationData.value), style: listItemNavStyle }, h("p", { slot: "label" }, navigationData.label)));
     };
     this.hostCssClasses = () => ({
       'wpp-topbar-item': true,
@@ -132,7 +132,7 @@ const WppTopbarItem = class {
   render() {
     return (h(Host, { class: this.hostCssClasses(), role: CONTEXT_ITEM_TAG }, this.getMenuLevelData(this.navigation, true)));
   }
-  static get registryIs() { return "wpp-topbar-item-v3-3-1"; }
+  static get registryIs() { return "wpp-topbar-item-v3-4-0"; }
 };
 WppTopbarItem.style = wppTopbarItemCss;
 

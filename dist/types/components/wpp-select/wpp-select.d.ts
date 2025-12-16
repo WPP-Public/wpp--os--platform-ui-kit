@@ -52,7 +52,7 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
    */
   value: SelectValue | SelectValue[];
   /**
-   * List of items in the dropdown.
+   * List of items in the dropdown. The items should have at least a `label` and a `value`.
    */
   readonly list: ListItemInterface[];
   /**

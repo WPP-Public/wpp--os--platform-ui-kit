@@ -6,8 +6,9 @@ export class WppTree {
   constructor() {
     this.resizeInProgress = false;
     this._locales = LOCALES_DEFAULTS;
+    this.pendingLoads = new Set();
+    this.isSearchResultFound = true;
     this.toggleItemSelection = (toggleFunction, reason) => {
-      // Get the IDs of all first-level items in the tree.
       const allItemsIDs = this.currentTreeData.map(item => item.id);
       const finalTree = recalculateIndeterminateTreeState(updateTreeByIds(this.currentTreeData, allItemsIDs, toggleFunction));
       this.wppChange.emit({
@@ -17,7 +18,6 @@ export class WppTree {
         reason,
       });
     };
-    this.isSearchResultFound = true;
     this.isMatchSearch = (item, search) => {
       if (this.searchConfig?.isMatchingSearch)
         return this.searchConfig?.isMatchingSearch(item, search);
@@ -42,6 +42,7 @@ export class WppTree {
       }
       const treeState = recalculateIndeterminateTreeState(updatedTree || tree);
       const selectedItems = findSelectedItems(treeState);
+      this.currentTreeData = treeState;
       this.wppChange.emit({
         treeState,
         currentItem: item,
@@ -52,23 +53,22 @@ export class WppTree {
     };
     this.singleSelectionUpdate = (tree, item) => {
       const { id, selected } = item;
-      let treeWithUnselectedPreviousItem;
-      const updatedTree = updateTreeById(tree, id, {
-        selected,
-      });
+      let nextTree;
       if (selected) {
-        treeWithUnselectedPreviousItem = updateTreeById(updatedTree, this.selectedIds[0], {
-          selected: false,
-        });
+        const cleared = this.clearSelectionExcept(tree, id);
+        nextTree = updateTreeById(cleared, id, { selected: true });
         this.selectedIds = [id];
       }
       else {
+        nextTree = this.clearSelectionExcept(tree);
         this.selectedIds = [];
       }
-      const treeState = treeWithUnselectedPreviousItem || updatedTree;
-      const selectedItems = findSelectedItems(treeState);
+      let finalTree = recalculateIndeterminateTreeState(nextTree);
+      finalTree = updateTreeById(finalTree, id, { selected, indeterminate: false });
+      const selectedItems = findSelectedItems(finalTree);
+      this.currentTreeData = finalTree;
       this.wppChange.emit({
-        treeState,
+        treeState: finalTree,
         currentItem: item,
         selectedItems,
         selectedOriginalItems: convertToOriginalItems(selectedItems),
@@ -80,9 +80,6 @@ export class WppTree {
       if (!this.isSearchResultFound && isMatch)
         this.isSearchResultFound = true;
       if (item.children?.length) {
-        // If found parent item has match, we don't need to recursive call this.updateTreeWithSearch function anymore.
-        // Instead we should mark all of his children as visible( hidden: false)
-        // and if some children items has match - mark their parents as open.
         if (isMatch) {
           const haveMatchedChildrenHost = isHaveFoundChildren(item.children, search, this.isMatchSearch);
           const children = markChildrenAs(item.children, item => {
@@ -103,9 +100,7 @@ export class WppTree {
           hidden: !haveMatchedChildren && !isMatch,
         };
       }
-      else {
-        return { ...item, hidden: !isMatch };
-      }
+      return { ...item, hidden: !isMatch };
     });
     this.checkData = (treeData) => {
       if (!this.multiple) {
@@ -113,7 +108,7 @@ export class WppTree {
           throw new Error('Several selected items found in provided data. There is could be only one selected item in single mode, otherwise, use multiple mode.');
         }
         if (this.defaultSelectedIds.length > 1) {
-          throw new Error('Several items found in provided defaultSelectedIds prop. There is could be only one selected item in single mode, otherwise, use multiple mode. ');
+          throw new Error('Several items found in provided defaultSelectedIds prop. There is could be only one selected item in single mode, otherwise, use multiple mode.');
         }
       }
       return treeData;
@@ -121,19 +116,20 @@ export class WppTree {
     this.hostCssClasses = () => ({
       'wpp-tree': true,
     });
-    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v3-3-1", { dropdownConfig: {
+    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v3-4-0", { dropdownConfig: {
         trigger: 'click',
         interactiveDebounce: 15,
         interactiveBorder: 25,
         offset: [0, 0],
-      } }, h("wpp-icon-more-v3-3-1", { class: {
+      } }, h("wpp-icon-more-v3-4-0", { class: {
         'menu-trigger': true,
         disabled: !!item.disabled,
-      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v3-3-1", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
+      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v3-4-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
     this.renderTree = (treeData, level = 1) => treeData.map(item => {
       const extraProps = extractExtraProps(item);
-      if (item.children) {
-        return (h("wpp-tree-item-v3-3-1", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
+      const isParent = !!item.hasChildren || !!(item.children && item.children.length);
+      if (isParent) {
+        return (h("wpp-tree-item-v3-4-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
           h(transformToVersionedTag(item.iconStart.icon), {
             slot: 'icon-start',
             part: 'icon-start',
@@ -144,9 +140,14 @@ export class WppTree {
             slot: 'icon-end',
             part: 'icon-end',
             onclick: this.handleActionClick({ item, name: item.iconEnd.name, place: 'end' }),
-          }), h("div", { slot: "content", class: "content-container", part: "content" }, item.open && this.renderTree(item.children, level + 1))));
+          }), h("div", { slot: "content", class: "content-container", part: "content" }, item.open &&
+          (item.loadingChildren
+            ? this.renderSkeletonRows(this.lazyConfig?.skeleton?.count || 1)
+            : Array.isArray(item.children) && item.children.length > 0
+              ? this.renderTree(item.children, level + 1)
+              : null))));
       }
-      return (h("wpp-tree-item-v3-3-1", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
+      return (h("wpp-tree-item-v3-4-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
         h(transformToVersionedTag(item.iconStart.icon), {
           slot: 'icon-start',
           part: 'icon-start',
@@ -159,7 +160,6 @@ export class WppTree {
           onclick: this.handleActionClick({ item, name: item.iconEnd.name, place: 'end' }),
         })));
     });
-    this.renderSkeletonLoading = () => [...Array(this.skeletonNumberItems)].map(_ => (h("div", { class: "skeleton-item" }, h("wpp-skeleton-v3-3-1", { variant: "rectangle", width: "100%", animation: true }))));
     this.currentTreeData = undefined;
     this.selectedIds = [];
     this.data = undefined;
@@ -178,6 +178,11 @@ export class WppTree {
     this.withItemsTruncation = false;
     this.loading = false;
     this.skeletonNumberItems = 5;
+    this.lazyConfig = undefined;
+  }
+  renderSkeletonRows(count = 1, paddingLeft) {
+    const { height = 32 } = this.lazyConfig?.skeleton || {};
+    return Array.from({ length: count }, (_, idx) => (h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, h("wpp-skeleton-v3-4-0", { variant: "rectangle", width: "100%", height: height, animation: true }))));
   }
   onInputChange(searchText) {
     if (!searchText.trim()) {
@@ -218,18 +223,75 @@ export class WppTree {
   onUpdateLocales(newLocales) {
     this._locales = { ...this._locales, ...newLocales };
   }
-  handleOpenItem(event) {
+  async handleOpenItem(event) {
     event.stopPropagation();
     const item = event.detail;
-    const treeState = updateTreeById(this.currentTreeData, item.id, item);
-    const selectedItems = findSelectedItems(treeState);
-    this.wppChange.emit({
-      treeState,
-      currentItem: item,
-      selectedItems,
-      selectedOriginalItems: convertToOriginalItems(selectedItems),
-      reason: 'open',
-    });
+    const loader = this.lazyConfig?.loadChildren;
+    const needsLoad = !!loader && !!item.open && item.hasChildren === true && (!item.children || item.children.length === 0);
+    if (!needsLoad) {
+      const baseState = updateTreeById(this.currentTreeData, item.id, item);
+      const selectedItems = findSelectedItems(baseState);
+      this.wppChange.emit({
+        treeState: baseState,
+        currentItem: item,
+        selectedItems,
+        selectedOriginalItems: convertToOriginalItems(selectedItems),
+        reason: 'open',
+      });
+      return;
+    }
+    if (this.pendingLoads.has(item.id))
+      return;
+    this.pendingLoads.add(item.id);
+    const loadingState = updateTreeById(this.currentTreeData, item.id, { loadingChildren: true, open: true });
+    this.currentTreeData = loadingState;
+    try {
+      const response = await loader(item);
+      const children = Array.isArray(response.items) ? response.items : [];
+      const empty = children.length === 0;
+      const nextState = empty
+        ? { children: undefined, loadingChildren: false, open: false, hasChildren: false }
+        : { children, loadingChildren: false, open: true, hasChildren: true };
+      const merged = updateTreeById(this.currentTreeData, item.id, nextState);
+      // Recalculate indeterminate/parent states
+      let finalTree = recalculateIndeterminateTreeState(merged);
+      // Preserve explicit user selection in single mode
+      if (!this.multiple) {
+        const keepId = this.selectedIds?.[0];
+        if (keepId != null) {
+          finalTree = updateTreeById(finalTree, keepId, { selected: true, indeterminate: false });
+        }
+      }
+      this.currentTreeData = finalTree;
+      const selectedItems = findSelectedItems(finalTree);
+      this.wppChange.emit({
+        treeState: finalTree,
+        currentItem: { ...item, open: !empty },
+        selectedItems,
+        selectedOriginalItems: convertToOriginalItems(selectedItems),
+        reason: 'open',
+      });
+    }
+    catch {
+      const reverted = updateTreeById(this.currentTreeData, item.id, {
+        loadingChildren: false,
+        open: false,
+        hasChildren: true,
+        children: undefined,
+      });
+      this.currentTreeData = reverted;
+      const selectedItems = findSelectedItems(reverted);
+      this.wppChange.emit({
+        treeState: reverted,
+        currentItem: { ...item, open: false },
+        selectedItems,
+        selectedOriginalItems: convertToOriginalItems(selectedItems),
+        reason: 'open',
+      });
+    }
+    finally {
+      this.pendingLoads.delete(item.id);
+    }
   }
   handleSelectedItem(event) {
     event.stopPropagation();
@@ -263,9 +325,15 @@ export class WppTree {
       indeterminate: false,
     }), 'clear');
   }
+  clearSelectionExcept(tree, keepId) {
+    const walk = (nodes) => nodes.map(n => {
+      const isTarget = keepId != null && n.id === keepId;
+      const children = n.children ? walk(n.children) : undefined;
+      return { ...n, selected: !!isTarget && !!n.selected, indeterminate: false, ...(children ? { children } : {}) };
+    });
+    return walk(tree);
+  }
   componentDidLoad() {
-    // NOTE: defaultSelectedIds should be provided only when default selection logic is applied. Recalculating tree state
-    // here may break your custom selection logic
     if (this.defaultSelectedIds.length > 0) {
       this.currentTreeData = recalculateIndeterminateTreeState(updateTreeByIds(this.currentTreeData, this.defaultSelectedIds, ({ isNotSelectable, disabled }) => ({
         ...(!isNotSelectable && !disabled && { selected: true }),
@@ -319,10 +387,10 @@ export class WppTree {
     this.currentTreeData = this.checkData(this.data);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text" }, !this.loading && (h("div", { class: "container", part: "tree-container" }, this.currentTreeData && this.isSearchResultFound ? (this.renderTree(this.currentTreeData)) : (h("p", { class: "empty-tree-text", part: "tree-empty-text" }, this._locales.nothingFound)))), this.loading && h("div", { class: "skeleton-wrapper" }, this.renderSkeletonLoading())));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text" }, !this.loading && (h("div", { class: "container", part: "tree-container" }, this.currentTreeData && this.isSearchResultFound ? (this.renderTree(this.currentTreeData)) : (h("p", { class: "empty-tree-text", part: "tree-empty-text" }, this._locales.nothingFound)))), this.loading && h("div", { class: "skeleton-wrapper" }, this.renderSkeletonRows(this.skeletonNumberItems))));
   }
   static get is() { return "wpp-tree"; }
-  static get registryIs() { return "wpp-tree-v3-3-1"; }
+  static get registryIs() { return "wpp-tree-v3-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -546,6 +614,27 @@ export class WppTree {
         "attribute": "skeleton-number-items",
         "reflect": false,
         "defaultValue": "5"
+      },
+      "lazyConfig": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "TreeLazyConfig",
+          "resolved": "TreeLazyConfig | undefined",
+          "references": {
+            "TreeLazyConfig": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-tree/types.ts::TreeLazyConfig"
+            }
+          }
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Lazy loading configuration for dynamically loading children.\nWhen a node with `hasChildren: true` is expanded, skeleton loaders\nare shown while children are fetched, then all children render at once."
+        }
       }
     };
   }

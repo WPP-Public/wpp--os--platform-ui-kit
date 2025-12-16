@@ -70,6 +70,7 @@ export declare class WppActionButton {
    */
   setFocus(): Promise<void>;
   onUpdateAriaProps(): void;
+  onDisabledChange(newVal: boolean): void;
   componentWillLoad(): void;
   private updateSlotData;
   private onKeyDown;

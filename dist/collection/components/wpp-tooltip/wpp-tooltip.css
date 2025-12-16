@@ -4,6 +4,7 @@
 }
 :host .anchor {
   display: inline-flex;
+  max-width: 100%;
 }
 :host .content-wrapper.hidden {
   position: absolute;

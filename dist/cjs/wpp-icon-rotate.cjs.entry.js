@@ -24,7 +24,7 @@ const WppIconRotate = class {
   render() {
     return (index.h(WppIcon.WppIcon, { name: "wpp-icon-rotate", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { d: RotateDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-rotate-v3-3-1"; }
+  static get registryIs() { return "wpp-icon-rotate-v3-4-0"; }
 };
 WppIconRotate.style = wppIconCss;
 

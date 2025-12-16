@@ -17,17 +17,17 @@ export default {
 };
 export const Icon = {
   render: args => html `
-    <wpp-typography-v3-3-1 style="display: block; margin-bottom: 10px;" type="xl-heading"
-      >WppIconButton is deprecated. Use WppActionButton instead.</wpp-typography-v3-3-1
+    <wpp-typography-v3-4-0 style="display: block; margin-bottom: 10px;" type="xl-heading"
+      >WppIconButton is deprecated. Use WppActionButton instead.</wpp-typography-v3-4-0
     >
-    <wpp-icon-button-v3-3-1
+    <wpp-icon-button-v3-4-0
       @click="${() => console.log('button clicked')}"
       .size="${args.size}"
       .disabled="${args.disabled}"
       .loading="${args.loading}"
     >
-      <wpp-icon-more-v3-3-1 direction="horizontal" />
-    </wpp-icon-button-v3-3-1>
+      <wpp-icon-more-v3-4-0 direction="horizontal" />
+    </wpp-icon-button-v3-4-0>
   `,
   args: {
     size: 'm',

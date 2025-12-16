@@ -4,13 +4,10 @@ export default {
   title: 'Design System/Components/Communication/Chat Input',
   parameters: {
     previewTabs: {
-      'storybook/docs/panel': {
-        hidden: true,
-      },
+      'storybook/docs/panel': { hidden: true },
     },
   },
   argTypes: {
-    placeholder: { control: { type: 'text' }, defaultValue: 'Type your message...' },
     enableAttach: { control: { type: 'boolean' }, defaultValue: false },
     // enableMic: { control: { type: 'boolean' }, defaultValue: false },
     disabled: { control: { type: 'boolean' }, defaultValue: false },
@@ -24,6 +21,9 @@ export default {
     textValue: { control: { type: 'text' }, defaultValue: '' },
     debounceEnabled: { control: { type: 'boolean' }, defaultValue: true },
     debounceDelay: { control: { type: 'number' }, defaultValue: 300 },
+    locales: { control: { type: 'object' } },
+    ariaProps: { control: { type: 'object' } },
+    htmlAttributes: { control: { type: 'object' } },
   },
 };
 export const DefaultChatInput = {
@@ -39,54 +39,53 @@ export const DefaultChatInput = {
       messageHistory = [...messageHistory, message];
       renderChatInput(messageHistory);
       const chatHtmlTag = transformToVersionedTag('wpp-chat-input');
-      const updatedEl = document.querySelector(chatHtmlTag);
+      const el = document.querySelector(chatHtmlTag);
       textValue = '';
-      if (updatedEl)
-        updatedEl.textValue = '';
+      if (el)
+        el.textValue = '';
     };
     const handleMessageChanged = (event) => {
       const chatHtmlTag = transformToVersionedTag('wpp-chat-input');
-      const updatedEl = document.querySelector(chatHtmlTag);
+      const el = document.querySelector(chatHtmlTag);
       textValue = event.detail.value;
-      if (updatedEl)
-        updatedEl.textValue = event.detail.value;
+      if (el)
+        el.textValue = event.detail.value;
     };
     renderChatInput = (updatedMessages) => {
       const container = document.getElementById('chat-input-story');
-      if (container) {
-        render(html `
-            <div
-              style=${'display: flex; flex-direction: column; height: 100vh; padding: 20px; box-sizing: border-box;'}
-            >
-              <div style=${'display: flex;'}>
-                <wpp-typography-v3-3-1>Message History:</wpp-typography-v3-3-1>
-                <ul>
-                  ${updatedMessages.map(msg => html `<li><wpp-typography-v3-3-1>${msg}</wpp-typography-v3-3-1></li>`)}
-                </ul>
-              </div>
-
-              <div style=${'display: flex; align-items: flex-end; height: 100vh;'}>
-                <wpp-chat-input-v3-3-1
-                  .placeholder=${args.placeholder}
-                  .enableAttach=${args.enableAttach}
-                  .disabled=${args.disabled}
-                  .charactersLimit=${args.charactersLimit}
-                  .fileUploadConfig=${args.fileUploadConfig}
-                  .size=${args.size}
-                  .textValue=${textValue}
-                  .debounceEnabled=${args.debounceEnabled}
-                  .debounceDelay=${args.debounceDelay}
-                  @wppSend=${handleSendMessage}
-                  @wppMessageChanged=${handleMessageChanged}
-                >
-                </wpp-chat-input-v3-3-1>
-              </div>
-            </div>
-          `, container);
-      }
-      else {
+      if (!container) {
         console.error('Could not find container element with id "chat-input-story"');
+        return;
       }
+      render(html `
+          <div style=${'display: flex; flex-direction: column; height: 100vh; padding: 20px; box-sizing: border-box;'}>
+            <div style=${'display: flex;'}>
+              <wpp-typography-v3-4-0>Message History:</wpp-typography-v3-4-0>
+              <ul style="margin:0;">
+                ${updatedMessages.map(msg => html `<li><wpp-typography-v3-4-0>${msg}</wpp-typography-v3-4-0></li>`)}
+              </ul>
+            </div>
+
+            <div style=${'display: flex; align-items: flex-end; height: 100vh;'}>
+              <wpp-chat-input-v3-4-0
+                .enableAttach=${args.enableAttach}
+                .disabled=${args.disabled}
+                .charactersLimit=${args.charactersLimit}
+                .fileUploadConfig=${args.fileUploadConfig}
+                .size=${args.size}
+                .textValue=${textValue}
+                .debounceEnabled=${args.debounceEnabled}
+                .debounceDelay=${args.debounceDelay}
+                .locales=${args.locales}
+                .ariaProps=${args.ariaProps}
+                .htmlAttributes=${args.htmlAttributes}
+                @wppSend=${handleSendMessage}
+                @wppMessageChanged=${handleMessageChanged}
+              >
+              </wpp-chat-input-v3-4-0>
+            </div>
+          </div>
+        `, container);
     };
     setTimeout(() => {
       renderChatInput(messageHistory);
@@ -94,12 +93,39 @@ export const DefaultChatInput = {
     return html `<div id="chat-input-story"></div>`;
   },
   args: {
-    placeholder: 'Type your message...',
     enableAttach: true,
     size: 's',
-    //   enableMic: false,
     disabled: false,
     charactersLimit: 280,
+    debounceEnabled: true,
+    debounceDelay: 300,
+    // Use locales for visible strings (including placeholder)
+    locales: {
+      placeholder: 'Type your message...',
+      minimizedDescription: 'Expand message input',
+      actionsToolbarLabel: 'Message actions',
+      attachmentsLabel: 'Attachments',
+      sendLabel: 'Send message',
+      attachLabel: 'Attach file',
+      rightActionsGroupLabel: 'Send and character counter',
+      leftActionsGroupLabel: 'Attachments and tools',
+      messageInputLabel: 'Message input',
+    },
+    // ARIA overrides (scoped Pick of AriaProps in the component)
+    ariaProps: {
+      minimizedTrigger: { label: 'Type your message...' },
+      textarea: { label: 'Message input' },
+      actionsToolbar: { label: 'Message actions' },
+      leftActionsGroup: { label: 'Attachments and tools' },
+      rightActionsGroup: { label: 'Send and character counter' },
+      sendButton: { label: 'Send message' },
+      attachButton: { label: 'Attach file' },
+    },
+    // Grouped native attributes; DO NOT set maxLength here to allow typing beyond charactersLimit
+    htmlAttributes: {
+      textarea: { id: 'message', name: 'message', autocomplete: 'off' },
+      attachmentsInput: { id: 'ci-files', name: 'attachments', accept: '.jpg,.png,.pdf', multiple: true },
+    },
     fileUploadConfig: {
       format: 'base64',
       multiple: true,

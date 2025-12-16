@@ -1,5 +1,5 @@
 import { EventEmitter } from '../../stencil-public-runtime';
-import { TreeActionClickEventDetail, TreeChangeEventDetail, TreeItemSearchConfig, TreeLocaleType, TreeType } from './types';
+import { TreeActionClickEventDetail, TreeChangeEventDetail, TreeItemSearchConfig, TreeLazyConfig, TreeLocaleType, TreeType } from './types';
 export declare class WppTree {
   host: HTMLWppTreeElement;
   currentTreeData: TreeType[];
@@ -7,6 +7,8 @@ export declare class WppTree {
   private resizeObserver;
   private resizeInProgress;
   private _locales;
+  private pendingLoads;
+  private isSearchResultFound;
   /**
    * Defines the tree data.
    */
@@ -54,6 +56,12 @@ export declare class WppTree {
    */
   readonly skeletonNumberItems?: number;
   /**
+   * Lazy loading configuration for dynamically loading children.
+   * When a node with `hasChildren: true` is expanded, skeleton loaders
+   * are shown while children are fetched, then all children render at once.
+   */
+  readonly lazyConfig?: TreeLazyConfig;
+  /**
    * Emitted when tree have changed it's state
    */
   wppChange: EventEmitter<TreeChangeEventDetail>;
@@ -61,18 +69,19 @@ export declare class WppTree {
    * Emitted when click on item actions(icons) was occurred
    */
   wppActionClick: EventEmitter<TreeActionClickEventDetail>;
+  private renderSkeletonRows;
   onInputChange(searchText: string): void;
   updateDate(newData: TreeType[]): void;
   onUpdateLocales(newLocales: Partial<TreeLocaleType>): void;
-  handleOpenItem(event: CustomEvent<TreeType>): void;
+  handleOpenItem(event: CustomEvent<TreeType>): Promise<void>;
   handleSelectedItem(event: CustomEvent<TreeType>): void;
   recalculateTreeWidth(): Promise<void>;
   selectAll(): Promise<void>;
   clearAll(): Promise<void>;
   private toggleItemSelection;
+  private clearSelectionExcept;
   componentDidLoad(): void;
   disconnectedCallback(): void;
-  private isSearchResultFound;
   private isMatchSearch;
   private multipleSelectionUpdate;
   private singleSelectionUpdate;
@@ -83,6 +92,5 @@ export declare class WppTree {
   private hostCssClasses;
   private renderIconsList;
   private renderTree;
-  private renderSkeletonLoading;
   render(): any;
 }

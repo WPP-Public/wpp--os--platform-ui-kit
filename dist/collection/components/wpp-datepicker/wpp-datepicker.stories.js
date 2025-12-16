@@ -28,6 +28,8 @@ export default {
     },
     message: { type: 'string' },
     toggleSelected: { type: 'boolean' },
+    maxDate: { options: ['November 2025', 'December 2025', 'May 2026'], control: { type: 'select' } },
+    minDate: { options: ['November 2024', 'March 2025', 'June 2025'], control: { type: 'select' } },
   },
 };
 export const Single = {
@@ -35,7 +37,7 @@ export const Single = {
     if (!args.view) {
       args.view = 'days';
     }
-    return html `<wpp-datepicker-v3-3-1
+    return html `<wpp-datepicker-v3-4-0
       .range=${args.range}
       .messageType="${args.messageType}"
       .message="${args.message}"
@@ -46,12 +48,12 @@ export const Single = {
       .required="${args.required}"
       .disabled="${args.disabled}"
       .labelConfig="${args.labelConfig}"
-      .locale="${args.locale}"
+      .locales="${args.locales}"
       .toggleSelected="${args.toggleSelected}"
       .view="${args.view}"
       @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
       @wppChange="${(e) => console.log('wppChange', e.detail)}"
-    ></wpp-datepicker-v3-3-1>`;
+    ></wpp-datepicker-v3-4-0>`;
   },
   args: {
     range: false,
@@ -63,7 +65,7 @@ export const Single = {
     placeholder: '',
     message: '',
     name: 'datepicker',
-    locale: {
+    locales: {
       days: DAYS,
       daysShort: DAYS_SHORT,
       daysMin: DAYS_MIN,
@@ -88,10 +90,10 @@ export const Single = {
   },
 };
 Single.parameters = {
-  controls: { exclude: ['range'] },
+  controls: { exclude: ['range', 'minDate', 'maxDate'] },
 };
 export const Range = {
-  render: args => html `<wpp-datepicker-v3-3-1
+  render: args => html `<wpp-datepicker-v3-4-0
       .range=${args.range}
       .messageType="${args.messageType}"
       .message="${args.message}"
@@ -102,11 +104,11 @@ export const Range = {
       .required="${args.required}"
       .disabled="${args.disabled}"
       .labelConfig="${args.labelConfig}"
-      .locale="${args.locale}"
+      .locales="${args.locales}"
       .toggleSelected="${args.toggleSelected}"
       @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
       @wppChange="${(e) => console.log('wppChange', e.detail)}"
-    ></wpp-datepicker-v3-3-1>`,
+    ></wpp-datepicker-v3-4-0>`,
   args: {
     range: true,
     static: false,
@@ -116,7 +118,7 @@ export const Range = {
     placeholder: '',
     message: '',
     name: 'datepicker',
-    locale: {
+    locales: {
       days: DAYS,
       daysShort: DAYS_SHORT,
       daysMin: DAYS_MIN,
@@ -141,10 +143,10 @@ export const Range = {
   },
 };
 Range.parameters = {
-  controls: { exclude: ['range'] },
+  controls: { exclude: ['range', 'minDate', 'maxDate'] },
 };
 export const RangeWithPresets = {
-  render: args => html `<wpp-datepicker-v3-3-1
+  render: args => html `<wpp-datepicker-v3-4-0
       .range=${args.range}
       .messageType="${args.messageType}"
       .message="${args.message}"
@@ -156,12 +158,12 @@ export const RangeWithPresets = {
       .disabled="${args.disabled}"
       .labelConfig="${args.labelConfig}"
       .presets="${args.presets}"
-      .locale="${args.locale}"
+      .locales="${args.locales}"
       .value="${args.value}"
       .toggleSelected="${args.toggleSelected}"
       @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
       @wppChange="${(e) => console.log('wppChange', e.detail)}"
-    ></wpp-datepicker-v3-3-1>`,
+    ></wpp-datepicker-v3-4-0>`,
   args: {
     range: true,
     static: false,
@@ -171,7 +173,7 @@ export const RangeWithPresets = {
     placeholder: '',
     message: '',
     name: 'datepicker',
-    locale: {
+    locales: {
       days: DAYS,
       daysShort: DAYS_SHORT,
       daysMin: DAYS_MIN,
@@ -198,7 +200,7 @@ export const RangeWithPresets = {
   },
 };
 RangeWithPresets.parameters = {
-  controls: { exclude: ['range'] },
+  controls: { exclude: ['range', 'minDate', 'maxDate'] },
 };
 export const DependableDatepickers = {
   render: args => {
@@ -215,7 +217,7 @@ export const DependableDatepickers = {
     };
     return html `
       <div>
-        <wpp-datepicker-v3-3-1
+        <wpp-datepicker-v3-4-0
           style="margin-right: 40px;"
           .range=${args.range}
           .messageType="${args.messageType}"
@@ -232,9 +234,9 @@ export const DependableDatepickers = {
           .view="${args.view}"
           @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
           @wppChange="${handleDateChange}"
-        ></wpp-datepicker-v3-3-1>
+        ></wpp-datepicker-v3-4-0>
 
-        <wpp-datepicker-v3-3-1
+        <wpp-datepicker-v3-4-0
           id="second-datepicker"
           .range=${args.range}
           .messageType="${args.messageType}"
@@ -246,10 +248,10 @@ export const DependableDatepickers = {
           .required="${args.required}"
           .disabled="${args.disabled}"
           .labelConfig="${args.labelConfig}"
-          .locale="${args.locale}"
+          .locales="${args.locales}"
           .toggleSelected="${args.toggleSelected}"
           .view="${args.view}"
-        ></wpp-datepicker-v3-3-1>
+        ></wpp-datepicker-v3-4-0>
       </div>
     `;
   },
@@ -263,7 +265,7 @@ export const DependableDatepickers = {
     placeholder: '',
     message: '',
     name: 'datepicker',
-    locale: {
+    locales: {
       days: DAYS,
       daysShort: DAYS_SHORT,
       daysMin: DAYS_MIN,
@@ -288,5 +290,173 @@ export const DependableDatepickers = {
   },
 };
 DependableDatepickers.parameters = {
-  controls: { exclude: ['range', 'locale'] },
+  controls: { exclude: ['range', 'locale', 'minDate', 'maxDate'] },
+};
+export const MonthsView = {
+  render: args => html `<wpp-datepicker-v3-4-0
+      .range=${args.range}
+      .messageType=${args.messageType}
+      .size="${args.size}"
+      .message="${args.message}"
+      .view="${'months'}"
+      .placeholder=${args.placeholder}
+      .name="${args.name}"
+      .required="${args.required}"
+      .disabled="${args.disabled}"
+      .labelConfig="${args.labelConfig}"
+      .value="${args.value}"
+      .toggleSelected="${args.toggleSelected}"
+      .locales="${args.locales}"
+      .minDate="${args.minDate}"
+      .maxDate="${args.maxDate}"
+      .width=${args.width}
+      @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
+      @wppChange="${(e) => console.log('wppChange', e.detail)}"
+    ></wpp-datepicker-v3-4-0>`,
+  args: {
+    range: true,
+    size: 'm',
+    required: true,
+    disabled: false,
+    placeholder: '',
+    message: '',
+    name: 'datepicker',
+    value: ['May 2025', 'June 2025'],
+    locales: {
+      dateFormat: 'MMMM yyyy',
+    },
+    labelConfig: {
+      icon: '',
+      text: 'Range datepicker in `months` view, with custom `dateFormat`, limits and width="320px"',
+      description: '',
+      locales: {
+        optional: 'Optional',
+      },
+    },
+    maxDate: 'November 2025',
+    minDate: 'November 2024',
+    toggleSelected: true,
+    width: '320px',
+  },
+};
+MonthsView.parameters = {
+  controls: { exclude: ['range', 'view', 'static'] },
+};
+export const ButtonTrigger = {
+  render: args => {
+    if (!args.view) {
+      args.view = 'days';
+    }
+    return html `<wpp-datepicker-v3-4-0
+      .range=${args.range}
+      .size="${args.size}"
+      .name="${args.name}"
+      .disabled="${args.disabled}"
+      .locale="${args.locale}"
+      .toggleSelected="${args.toggleSelected}"
+      .view="${args.view}"
+      .minDate="${args.minDate}"
+      .maxDate="${args.maxDate}"
+      @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
+      @wppChange="${(e) => console.log('wppChange', e.detail)}"
+    >
+      <wpp-button-v3-4-0 slot="trigger" ?disabled="${args.disabled}">Button</wpp-button-v3-4-0>
+    </wpp-datepicker-v3-4-0>`;
+  },
+  args: {
+    range: false,
+    size: 'm',
+    view: 'days',
+    disabled: false,
+    name: 'datepicker',
+    locale: {
+      days: DAYS,
+      daysShort: DAYS_SHORT,
+      daysMin: DAYS_MIN,
+      months: MONTHS,
+      monthsShort: MONTHS_SHORT,
+      today: 'Today',
+      clear: 'Clear',
+      dateFormat: 'dd/MM/yyyy',
+      timeFormat: 'hh:mm aa',
+      firstDay: 0,
+      dateLocale: 'en-US',
+    },
+    toggleSelected: true,
+  },
+};
+ButtonTrigger.parameters = {
+  controls: {
+    exclude: [
+      'minDate',
+      'maxDate',
+      'range',
+      'static',
+      'message',
+      'messageType',
+      'placeholder',
+      'required',
+      'labelConfig',
+    ],
+  },
+};
+export const ButtonTriggerWithActionButton = {
+  render: args => {
+    if (!args.view) {
+      args.view = 'days';
+    }
+    return html `<wpp-datepicker-v3-4-0
+      .range=${args.range}
+      .size="${args.size}"
+      .name="${args.name}"
+      .disabled="${args.disabled}"
+      .locale="${args.locale}"
+      .toggleSelected="${args.toggleSelected}"
+      .view="${args.view}"
+      .minDate="${args.minDate}"
+      .maxDate="${args.maxDate}"
+      @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
+      @wppChange="${(e) => console.log('wppChange', e.detail)}"
+    >
+      <wpp-action-button-v3-4-0 slot="trigger" ?disabled="${args.disabled}">
+        <wpp-icon-calendar-v3-4-0 slot="icon-start"></wpp-icon-calendar-v3-4-0>
+      </wpp-action-button-v3-4-0>
+    </wpp-datepicker-v3-4-0>`;
+  },
+  args: {
+    range: false,
+    size: 'm',
+    view: 'days',
+    disabled: false,
+    name: 'datepicker',
+    locale: {
+      days: DAYS,
+      daysShort: DAYS_SHORT,
+      daysMin: DAYS_MIN,
+      months: MONTHS,
+      monthsShort: MONTHS_SHORT,
+      today: 'Today',
+      clear: 'Clear',
+      dateFormat: 'dd/MM/yyyy',
+      timeFormat: 'hh:mm aa',
+      firstDay: 0,
+      dateLocale: 'en-US',
+    },
+    toggleSelected: true,
+  },
+};
+ButtonTriggerWithActionButton.parameters = {
+  controls: {
+    exclude: [
+      'minDate',
+      'maxDate',
+      'range',
+      'static',
+      'message',
+      'messageType',
+      'placeholder',
+      'required',
+      'labelConfig',
+    ],
+  },
 };

@@ -70,12 +70,12 @@ const WppToastContainer$1 = /*@__PURE__*/ proxyCustomElement(class WppToastConta
   }
   render() {
     const { toasts } = this;
-    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "item" }, toasts.map(toast => (h("wpp-toast-v3-3-1", { key: toast.id, index: toast.id, message: toast.message, type: toast.type, header: toast.header, duration: toast.duration, primaryBtn: toast.primaryBtn, maxMessageLines: toast.maxMessageLines, icon: toast.icon, part: "item", onWppToastComplete: this.handleToastComplete })))));
+    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "item" }, toasts.map(toast => (h("wpp-toast-v3-4-0", { key: toast.id, index: toast.id, message: toast.message, type: toast.type, header: toast.header, duration: toast.duration, primaryBtn: toast.primaryBtn, maxMessageLines: toast.maxMessageLines, icon: toast.icon, part: "item", onWppToastComplete: this.handleToastComplete })))));
   }
-  static get registryIs() { return "wpp-toast-container-v3-3-1"; }
+  static get registryIs() { return "wpp-toast-container-v3-4-0"; }
   get host() { return this; }
   static get style() { return wppToastContainerCss; }
-}, [1, "wpp-toast-container", "wpp-toast-container-v3-3-1", {
+}, [1, "wpp-toast-container", "wpp-toast-container-v3-4-0", {
     "maxToastsToDisplay": [2, "max-toasts-to-display"],
     "zIndex": [2, "z-index"],
     "toasts": [32],
@@ -88,54 +88,54 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-toast-container-v3-3-1", "wpp-action-button-v3-3-1", "wpp-icon-cross-v3-3-1", "wpp-icon-error-v3-3-1", "wpp-icon-info-message-v3-3-1", "wpp-icon-success-v3-3-1", "wpp-icon-warning-v3-3-1", "wpp-spinner-v3-3-1", "wpp-toast-v3-3-1", "wpp-typography-v3-3-1"];
+  const components = ["wpp-toast-container-v3-4-0", "wpp-action-button-v3-4-0", "wpp-icon-cross-v3-4-0", "wpp-icon-error-v3-4-0", "wpp-icon-info-message-v3-4-0", "wpp-icon-success-v3-4-0", "wpp-icon-warning-v3-4-0", "wpp-spinner-v3-4-0", "wpp-toast-v3-4-0", "wpp-typography-v3-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-toast-container-v3-3-1":
+    case "wpp-toast-container-v3-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppToastContainer$1);
       }
       break;
-    case "wpp-action-button-v3-3-1":
+    case "wpp-action-button-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-cross-v3-3-1":
+    case "wpp-icon-cross-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-error-v3-3-1":
+    case "wpp-icon-error-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-icon-info-message-v3-3-1":
+    case "wpp-icon-info-message-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-success-v3-3-1":
+    case "wpp-icon-success-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-icon-warning-v3-3-1":
+    case "wpp-icon-warning-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v3-3-1":
+    case "wpp-spinner-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-toast-v3-3-1":
+    case "wpp-toast-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v3-3-1":
+    case "wpp-typography-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

@@ -1,6 +1,6 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { BaseComponent } from '../../interfaces/base-component';
-import { CardSize, CardValue, CardChangeEventDetail } from './components/wpp-card/types';
+import { CardSize, CardChangeEventDetail } from './components/wpp-card/types';
 import { CardGroupChangeEventDetail, CardGroupValue } from './types';
 import { AriaProps } from '../../types/common';
 /**
@@ -57,14 +57,19 @@ export declare class WppCardGroup implements BaseComponent {
    */
   readonly wppBlur: EventEmitter<FocusEvent>;
   handleClick(event: CustomEvent<CardChangeEventDetail>): void;
-  onValueChange(newValue: CardValue): void;
+  onValueChange(newValue: CardGroupValue): void;
   onUpdateSize(): void;
   onUpdateWithRadioOrCheckbox(): void;
   onUpdateMultiple(): void;
+  private emitChange;
   private updateCardProperties;
   componentDidLoad(): void;
   disconnectedCallback(): void;
+  private toKey;
+  private isEqualValue;
   private updateSlotContent;
+  private CARD_SELECTOR;
+  private GROUP_SELECTOR;
   private getDirectCardChildren;
   private setCardsProps;
   private setActiveCard;

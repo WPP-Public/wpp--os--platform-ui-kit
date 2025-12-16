@@ -4,13 +4,11 @@ type WppButtonTypes = Components.WppButton & {
   showIconStart: boolean;
   showIconEnd: boolean;
   text: string;
+  buttonWidth: string | undefined;
 };
 declare const meta: Meta<WppButtonTypes>;
 export default meta;
 export declare const Primary: StoryObj<WppButtonTypes>;
 export declare const Secondary: StoryObj<WppButtonTypes>;
-type DestructiveArgs = Components.WppButton & {
-  text: string;
-  secondary: boolean;
-};
-export declare const Destructive: StoryObj<DestructiveArgs>;
+export declare const Destructive: StoryObj<WppButtonTypes>;
+export declare const DestructiveSecondary: StoryObj<WppButtonTypes>;

@@ -74,10 +74,17 @@ export declare class WppTreeItem {
   private shouldRecalculateItemHeight;
   private defaultItemHeight;
   private itemHeight;
+  private lastSwitcherClickTs;
+  private readonly SWITCHER_CLICK_GUARD_MS;
   private getItemHeight;
+  private titleMeasureTimeout?;
   componentDidLoad(): void;
+  disconnectedCallback(): void;
   componentDidUpdate(): void;
   private addHeightToHost;
+  private releaseAncestorHeights;
+  private onSwitcherClick;
+  private isSwitcherTarget;
   private updateParentHeight;
   private updateSlotData;
   private handleMouseDown;

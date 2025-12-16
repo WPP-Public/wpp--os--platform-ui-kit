@@ -3,16 +3,15 @@ import { d as debounce, k as transformToVersionedTag, s as selectDropdownWidth, 
 import { m as menuListConfig, i as isEqual_1 } from './menuListConfig.js';
 import { F as FOCUS_TYPE } from './common.js';
 import { Z as Z_INDEX } from './consts.js';
-import { d as defineCustomElement$n } from './wpp-action-button2.js';
-import { d as defineCustomElement$m } from './wpp-checkbox2.js';
-import { d as defineCustomElement$l } from './wpp-divider2.js';
-import { d as defineCustomElement$k } from './wpp-icon-chevron2.js';
-import { d as defineCustomElement$j } from './wpp-icon-cross2.js';
-import { d as defineCustomElement$i } from './wpp-icon-dash2.js';
-import { d as defineCustomElement$h } from './wpp-icon-drag2.js';
-import { d as defineCustomElement$g } from './wpp-icon-error2.js';
-import { d as defineCustomElement$f } from './wpp-icon-info-message2.js';
-import { d as defineCustomElement$e } from './wpp-icon-search2.js';
+import { d as defineCustomElement$m } from './wpp-action-button2.js';
+import { d as defineCustomElement$l } from './wpp-checkbox2.js';
+import { d as defineCustomElement$k } from './wpp-divider2.js';
+import { d as defineCustomElement$j } from './wpp-icon-chevron2.js';
+import { d as defineCustomElement$i } from './wpp-icon-cross2.js';
+import { d as defineCustomElement$h } from './wpp-icon-dash2.js';
+import { d as defineCustomElement$g } from './wpp-icon-drag2.js';
+import { d as defineCustomElement$f } from './wpp-icon-error2.js';
+import { d as defineCustomElement$e } from './wpp-icon-info-message2.js';
 import { d as defineCustomElement$d } from './wpp-icon-success2.js';
 import { d as defineCustomElement$c } from './wpp-icon-tick2.js';
 import { d as defineCustomElement$b } from './wpp-icon-warning2.js';
@@ -194,7 +193,6 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
     };
     this.canLoadMore = () => this.infinite && !this.infiniteLastPage && this.loadMore && !this.isInfiniteLoading;
     this.hasClearButton = () => !!this.value.length && !this.isDropdownShown && this.multiple;
-    this.hasSearchButton = () => true;
     this.hasSimpleSearch = () => this.simpleSearch && !this.infinite;
     this.isOptionHidden = (option) => {
       if (!this.hasSimpleSearch()) {
@@ -323,8 +321,10 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
       if (this.componentSuggestions?.length > 0 || (this.searchValue?.length ?? 0) > 0) {
         this.showDropdown();
       }
-      else if (!this.value.length) {
-        this.hideDropdown();
+      else {
+        if (!this.multiple || (this.multiple && !this.value.length)) {
+          this.hideDropdown();
+        }
       }
     };
     this.handleFocus = (event) => {
@@ -441,7 +441,7 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
     this.getInputValue = () => this.searchValue;
     this.renderInputPlaceholder = () => {
       if (!this.multiple && this.value.length && !this.isFocused) {
-        return (h("wpp-typography-v3-3-1", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this.getOptionLabel(this.value[0])));
+        return (h("wpp-typography-v3-4-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this.getOptionLabel(this.value[0])));
       }
       if (this.isFocused && !this.searchValue)
         return null;
@@ -452,10 +452,10 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
         if (!itemsToDisplay.length)
           return null;
         const placeholder = itemsToDisplay.map(this.getOptionLabel).filter(Boolean).join(', ');
-        return (h("wpp-typography-v3-3-1", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, placeholder));
+        return (h("wpp-typography-v3-4-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, placeholder));
       }
       if (this.type === 'extended' && this.value.length && !this.isFocused) {
-        return (h("wpp-typography-v3-3-1", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this._locales.selected(this.value.length)));
+        return (h("wpp-typography-v3-4-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this._locales.selected(this.value.length)));
       }
     };
     this.countHiddenElements = () => {
@@ -524,19 +524,19 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
       const isLoading = this.loading || (this.isInfiniteLoading && this.isEmptyOptions);
       const isEmptyStringEntered = this.searchValue.trim().length === 0;
       if (isLoading) {
-        return (h("div", { class: "loading-wrapper" }, h("wpp-spinner-v3-3-1", { slot: "left" }), h("wpp-typography-v3-3-1", { type: "s-body", slot: "label" }, this._locales.loading)));
+        return (h("div", { class: "loading-wrapper" }, h("wpp-spinner-v3-4-0", { slot: "left" }), h("wpp-typography-v3-4-0", { type: "s-body", slot: "label" }, this._locales.loading)));
       }
       if (isEmptyStringEntered && this.componentSuggestions?.length > 0) {
-        return (h(Fragment, null, h("wpp-typography-v3-3-1", { type: "s-strong", class: "suggestions-heading" }, this.suggestionsTitle), this.componentSuggestions?.map((suggestion, index) => {
+        return (h(Fragment, null, h("wpp-typography-v3-4-0", { type: "s-strong", class: "suggestions-heading" }, this.suggestionsTitle), this.componentSuggestions?.map((suggestion, index) => {
           const { slots, checked, label, ...restProps } = suggestion;
           const isChecked = checked || this.isItemSelected(suggestion);
-          return (h("wpp-list-item-v3-3-1", { key: this.getOptionId(suggestion), selectable: true, checked: isChecked, value: suggestion, onWppChangeListItem: this.handleSuggestionClick, class: { 'suggestion-item': true, 'last-item': index === this.componentSuggestions?.length - 1 }, ...restProps }, label && h("span", { slot: "label" }, this.getOptionLabel(suggestion)), slots && this.renderSlotsListItem(slots, Boolean(label)).map(slotNode => slotNode)));
+          return (h("wpp-list-item-v3-4-0", { key: this.getOptionId(suggestion), selectable: true, checked: isChecked, value: suggestion, onWppChangeListItem: this.handleSuggestionClick, class: { 'suggestion-item': true, 'last-item': index === this.componentSuggestions?.length - 1 }, ...restProps }, label && h("span", { slot: "label" }, this.getOptionLabel(suggestion)), slots && this.renderSlotsListItem(slots, Boolean(label)).map(slotNode => slotNode)));
         })));
       }
       if (this.isEmptyOptions) {
-        return (h(Fragment, null, h("wpp-list-item-v3-3-1", { class: "nothing-found-wrapper" }, h("wpp-typography-v3-3-1", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound))));
+        return (h(Fragment, null, h("wpp-list-item-v3-4-0", { class: "nothing-found-wrapper" }, h("wpp-typography-v3-4-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound))));
       }
-      return (h(Fragment, null, !this.searchValue && !this.withPills ? (h("div", { class: this.selectedValuesCssClasses(), part: "selected-values" }, h("slot", { name: "selected-values" }))) : (h("slot", null)), h("div", null, this.isInfiniteLoading && (h("div", { class: "infinite-loader" }, h("wpp-spinner-v3-3-1", null))))));
+      return (h(Fragment, null, !this.searchValue ? (!this.withPills ? (h("div", { class: this.selectedValuesCssClasses(), part: "selected-values" }, h("slot", { name: "selected-values" }))) : null) : (h("slot", null)), h("div", null, this.isInfiniteLoading && (h("div", { class: "infinite-loader" }, h("wpp-spinner-v3-4-0", null))))));
     };
     this.renderSlotsListItem = (slots, isLabelExists) => slots
       .map(slotElement => {
@@ -563,13 +563,13 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
       const labelText = option.label ||
         option.slots?.find((slot) => slot.type === 'span' && slot.props.slot === 'label')?.props.children;
       if (isTooltip) {
-        return (h("wpp-tooltip-v3-3-1", { class: {
+        return (h("wpp-tooltip-v3-4-0", { class: {
             'in-dropdown': true,
             transparent: isTransparentTooltip,
-          }, text: labelText, part: "tooltip", config: { ...this.pillTooltipConfig } }, h("wpp-pill-v3-3-1", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) })));
+          }, text: labelText, part: "tooltip", config: { ...this.pillTooltipConfig } }, h("wpp-pill-v3-4-0", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) })));
       }
       else {
-        return (h("wpp-pill-v3-3-1", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) }));
+        return (h("wpp-pill-v3-4-0", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) }));
       }
     };
     /**
@@ -641,7 +641,7 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
       }
     };
     // Render Show More/Show Less button only in cases when we have truncated WppPill (not .label inside)
-    this.showMoreLessRender = (label) => (h("wpp-action-button-v3-3-1", { "data-testid": "wpp-autocomplete-show-btn", class: "nowrap", variant: "secondary", onClick: this.handleShowMoreLessClick }, label));
+    this.showMoreLessRender = (label) => (h("wpp-action-button-v3-4-0", { "data-testid": "wpp-autocomplete-show-btn", class: "nowrap", variant: "secondary", onClick: this.handleShowMoreLessClick }, label));
     this.handleShowMoreLessClick = () => {
       this.isShowMore = !this.isShowMore;
     };
@@ -731,7 +731,7 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
     if (newValue.length && this.withPills) {
       requestAnimationFrame(this.validateTruncatedPills);
     }
-    if (!newValue.length && this.isDropdownShown && !this.componentSuggestions.length) {
+    if (!newValue.length && this.isDropdownShown && !this.componentSuggestions.length && !this.searchValue) {
       this.hideDropdown();
     }
     if (this.isSelectedItemsLimitReached()) {
@@ -857,8 +857,13 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
      *    - If `true` wrap WppPill with WppTooltip
      *    - If `false` render WppPill
      */
-    const isNeedDivider = !!this.value.length &&
-      (!!this.componentSuggestions?.length || !!this.shownOptionElements?.length || !!this.shownOptionElements?.length);
+    const isNeedDivider = (!!this.value.length &&
+      this.searchValue !== '' &&
+      (!!this.componentSuggestions?.length ||
+        !!this.shownOptionElements?.length ||
+        !!this.shownOptionElements?.length)) ||
+      this.loading ||
+      this.isInfiniteLoading;
     return (h(Fragment, null, this.value.length > 0 && (h("div", { class: {
         'header-wrapper': true,
         visible: this.activePillsTruncationState.includes(true) && this.isShowMore,
@@ -874,15 +879,15 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
           ? this.renderPillComponent(option, true)
           : this.renderPillComponent(option, false);
       }
-    })), h("div", { class: "show-more-action" }, this.showMoreLessRender(`+${this.activePillsTruncationState.filter(x => x).length} ${this._locales.showMore}`)))), !this.isShowMore && h("div", { class: "show-less-action" }, this.showMoreLessRender(this._locales.showLess)), isNeedDivider && h("wpp-divider-v3-3-1", { class: "nothing-found-divider" })));
+    })), h("div", { class: "show-more-action" }, this.showMoreLessRender(`+${this.activePillsTruncationState.filter(x => x).length} ${this._locales.showMore}`)))), !this.isShowMore && h("div", { class: "show-less-action" }, this.showMoreLessRender(this._locales.showLess)), isNeedDivider && h("wpp-divider-v3-4-0", { class: "nothing-found-divider" })));
   }
   render() {
     const style = { '--custom-dropdown-width': this.getDropdownWidth() };
-    return (h(Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, options, selected-values" }, h("div", { class: this.autocompleteWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (h("wpp-label-v3-3-1", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.hasSearchButton() && h("wpp-icon-search-v3-3-1", null), this.renderInputPlaceholder(), this.hiddenSelectedOptionsNumber > 0 && !this.isDropdownShown && (h("div", { class: "hidden-count", style: { '--hidden-number': this.getNearestPowForRowsNumber() + '' } }, h("wpp-typography-v3-3-1", { type: "s-body" }, ", + ", this.hiddenSelectedOptionsNumber))), h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, tabIndex: this.disabled ? -1 : 0, title: "" })), h("div", { class: "trigger-actions" }, this.hasClearButton() && h("wpp-icon-cross-v3-3-1", { onClick: this.handleClearClick }))), !!this.message && (h("wpp-inline-message-v3-3-1", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderSelectedOptions(), this.renderDropdownContent(), this.showCreateNewElement &&
+    return (h(Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, options, selected-values" }, h("div", { class: this.autocompleteWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (h("wpp-label-v3-4-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.renderInputPlaceholder(), this.hiddenSelectedOptionsNumber > 0 && !this.isDropdownShown && (h("div", { class: "hidden-count", style: { '--hidden-number': this.getNearestPowForRowsNumber() + '' } }, h("wpp-typography-v3-4-0", { type: "s-body" }, ", + ", this.hiddenSelectedOptionsNumber))), h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, tabIndex: this.disabled ? -1 : 0, title: "" })), h("div", { class: "trigger-actions" }, this.hasClearButton() && h("wpp-icon-cross-v3-4-0", { onClick: this.handleClearClick }))), !!this.message && (h("wpp-inline-message-v3-4-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderSelectedOptions(), this.renderDropdownContent(), this.showCreateNewElement &&
       this.searchValue !== '' &&
-      ((this.displayBtnWhenListEmpty && this.isEmptyOptions) || !this.displayBtnWhenListEmpty) && (h("div", { class: "actions" }, h("wpp-divider-v3-3-1", { class: "nothing-found-divider" }), h("div", { class: "actions-container" }, h("wpp-list-item-v3-3-1", { onClick: this.handleCreateNewOptionClick }, h("wpp-typography-v3-3-1", { type: "s-strong", class: "create-new-option", slot: "label" }, this._locales.createNewElement))))))), this.type === 'extended' && this.multiple ? h("slot", { name: "selected-values" }) : null));
+      ((this.displayBtnWhenListEmpty && this.isEmptyOptions) || !this.displayBtnWhenListEmpty) && (h("div", { class: "actions" }, h("wpp-divider-v3-4-0", { class: "nothing-found-divider" }), h("div", { class: "actions-container" }, h("wpp-list-item-v3-4-0", { onClick: this.handleCreateNewOptionClick }, h("wpp-typography-v3-4-0", { type: "s-strong", class: "create-new-option", slot: "label" }, this._locales.createNewElement))))))), this.type === 'extended' && this.multiple ? h("slot", { name: "selected-values" }) : null));
   }
-  static get registryIs() { return "wpp-autocomplete-v3-3-1"; }
+  static get registryIs() { return "wpp-autocomplete-v3-4-0"; }
   get host() { return this; }
   static get watchers() { return {
     "loading": ["onLoadingChange"],
@@ -895,7 +900,7 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
     "locales": ["onUpdateLocales"]
   }; }
   static get style() { return wppAutocompleteCss; }
-}, [1, "wpp-autocomplete", "wpp-autocomplete-v3-3-1", {
+}, [1, "wpp-autocomplete", "wpp-autocomplete-v3-4-0", {
     "name": [1],
     "loading": [516],
     "disabled": [516],
@@ -946,119 +951,114 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-autocomplete-v3-3-1", "wpp-action-button-v3-3-1", "wpp-checkbox-v3-3-1", "wpp-divider-v3-3-1", "wpp-icon-chevron-v3-3-1", "wpp-icon-cross-v3-3-1", "wpp-icon-dash-v3-3-1", "wpp-icon-drag-v3-3-1", "wpp-icon-error-v3-3-1", "wpp-icon-info-message-v3-3-1", "wpp-icon-search-v3-3-1", "wpp-icon-success-v3-3-1", "wpp-icon-tick-v3-3-1", "wpp-icon-warning-v3-3-1", "wpp-inline-message-v3-3-1", "wpp-internal-label-v3-3-1", "wpp-internal-tooltip-v3-3-1", "wpp-label-v3-3-1", "wpp-list-item-v3-3-1", "wpp-pill-v3-3-1", "wpp-spinner-v3-3-1", "wpp-tooltip-v3-3-1", "wpp-typography-v3-3-1"];
+  const components = ["wpp-autocomplete-v3-4-0", "wpp-action-button-v3-4-0", "wpp-checkbox-v3-4-0", "wpp-divider-v3-4-0", "wpp-icon-chevron-v3-4-0", "wpp-icon-cross-v3-4-0", "wpp-icon-dash-v3-4-0", "wpp-icon-drag-v3-4-0", "wpp-icon-error-v3-4-0", "wpp-icon-info-message-v3-4-0", "wpp-icon-success-v3-4-0", "wpp-icon-tick-v3-4-0", "wpp-icon-warning-v3-4-0", "wpp-inline-message-v3-4-0", "wpp-internal-label-v3-4-0", "wpp-internal-tooltip-v3-4-0", "wpp-label-v3-4-0", "wpp-list-item-v3-4-0", "wpp-pill-v3-4-0", "wpp-spinner-v3-4-0", "wpp-tooltip-v3-4-0", "wpp-typography-v3-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-autocomplete-v3-3-1":
+    case "wpp-autocomplete-v3-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppAutocomplete$1);
       }
       break;
-    case "wpp-action-button-v3-3-1":
-      if (!customElements.get(tagName)) {
-        defineCustomElement$n();
-      }
-      break;
-    case "wpp-checkbox-v3-3-1":
+    case "wpp-action-button-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-divider-v3-3-1":
+    case "wpp-checkbox-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-chevron-v3-3-1":
+    case "wpp-divider-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-cross-v3-3-1":
+    case "wpp-icon-chevron-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-dash-v3-3-1":
+    case "wpp-icon-cross-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-drag-v3-3-1":
+    case "wpp-icon-dash-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-error-v3-3-1":
+    case "wpp-icon-drag-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-info-message-v3-3-1":
+    case "wpp-icon-error-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-search-v3-3-1":
+    case "wpp-icon-info-message-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-success-v3-3-1":
+    case "wpp-icon-success-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-tick-v3-3-1":
+    case "wpp-icon-tick-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-warning-v3-3-1":
+    case "wpp-icon-warning-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-inline-message-v3-3-1":
+    case "wpp-inline-message-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-internal-label-v3-3-1":
+    case "wpp-internal-label-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-1":
+    case "wpp-internal-tooltip-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-label-v3-3-1":
+    case "wpp-label-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-list-item-v3-3-1":
+    case "wpp-list-item-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-pill-v3-3-1":
+    case "wpp-pill-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v3-3-1":
+    case "wpp-spinner-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v3-3-1":
+    case "wpp-tooltip-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v3-3-1":
+    case "wpp-typography-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

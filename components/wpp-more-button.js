@@ -74,15 +74,15 @@ const WppMoreButton$1 = /*@__PURE__*/ proxyCustomElement(class WppMoreButton ext
     this.validAriaProps = getAriaProps(this.ariaProps);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { class: this.buttonCssClasses(), disabled: this.disabled || this.loading, name: this.name, type: "button", "data-testid": "wpp-more-button", "aria-pressed": this.isPressed, ...this.validAriaProps }, this.loading && !this.disabled ? (h("wpp-spinner-v3-3-1", { size: "s" })) : (h("wpp-icon-more-v3-3-1", { direction: 'horizontal' })))));
+    return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { class: this.buttonCssClasses(), disabled: this.disabled || this.loading, name: this.name, type: "button", "data-testid": "wpp-more-button", "aria-pressed": this.isPressed, ...this.validAriaProps }, this.loading && !this.disabled ? (h("wpp-spinner-v3-4-0", { size: "s" })) : (h("wpp-icon-more-v3-4-0", { direction: 'horizontal' })))));
   }
-  static get registryIs() { return "wpp-more-button-v3-3-1"; }
+  static get registryIs() { return "wpp-more-button-v3-4-0"; }
   get host() { return this; }
   static get watchers() { return {
     "ariaProps": ["onUpdateAriaProps"]
   }; }
   static get style() { return wppMoreButtonCss; }
-}, [1, "wpp-more-button", "wpp-more-button-v3-3-1", {
+}, [1, "wpp-more-button", "wpp-more-button-v3-4-0", {
     "name": [1],
     "size": [513],
     "disabled": [516],
@@ -97,19 +97,19 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-more-button-v3-3-1", "wpp-icon-more-v3-3-1", "wpp-spinner-v3-3-1"];
+  const components = ["wpp-more-button-v3-4-0", "wpp-icon-more-v3-4-0", "wpp-spinner-v3-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-more-button-v3-3-1":
+    case "wpp-more-button-v3-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppMoreButton$1);
       }
       break;
-    case "wpp-icon-more-v3-3-1":
+    case "wpp-icon-more-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-spinner-v3-3-1":
+    case "wpp-spinner-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

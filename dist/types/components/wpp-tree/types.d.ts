@@ -12,6 +12,8 @@ export interface TreeType {
   search?: string;
   id: number | string;
   children?: TreeType[];
+  hasChildren?: boolean;
+  loadingChildren?: boolean;
   selected?: boolean;
   isNotSelectable?: boolean;
   loadingActions?: boolean;
@@ -26,6 +28,46 @@ export interface TreeType {
   open?: boolean;
   endContent?: TreeItemEndContentProps;
   [key: string]: any;
+}
+export interface SkeletonProps {
+  variant?: 'rectangle' | 'circle';
+  width?: string | number;
+  height?: string | number;
+  animation?: boolean;
+  /** Number of skeleton rows to show while loading children */
+  count?: number;
+}
+/**
+ * Response from the loadChildren function.
+ * Returns all children for a node at once.
+ */
+export interface TreeLoadChildrenResponse {
+  items: TreeType[];
+}
+/**
+ * Configuration for lazy loading tree nodes.
+ *
+ * When a node with `hasChildren: true` is expanded:
+ * 1. Skeleton loading indicators are shown
+ * 2. `loadChildren` is called to fetch the children
+ * 3. All children are rendered at once when the data arrives
+ *
+ * Note: This is NOT for infinite scroll/pagination.
+ * Tree is meant for structured navigation, not large datasets.
+ * If you have 100s of items, use autocomplete with backend search instead.
+ */
+export interface TreeLazyConfig {
+  /**
+   * Async function to load children for a node.
+   * Called when a node with `hasChildren: true` is expanded.
+   * Should return all children at once.
+   */
+  loadChildren: (item: TreeType) => Promise<TreeLoadChildrenResponse>;
+  /**
+   * Skeleton configuration for loading state.
+   * Shows skeleton rows while children are being fetched.
+   */
+  skeleton?: SkeletonProps;
 }
 export interface TreeLocaleType {
   nothingFound: string;

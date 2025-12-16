@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const utils = require('./utils-6189d8be.js');
+const utils = require('./utils-99b83069.js');
 const _const = require('./const-cfc205bf.js');
 const consts = require('./consts-779fd4ec.js');
 
@@ -64,9 +64,9 @@ const WppToastContainer = class {
   }
   render() {
     const { toasts } = this;
-    return (index.h(index.Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "item" }, toasts.map(toast => (index.h("wpp-toast-v3-3-1", { key: toast.id, index: toast.id, message: toast.message, type: toast.type, header: toast.header, duration: toast.duration, primaryBtn: toast.primaryBtn, maxMessageLines: toast.maxMessageLines, icon: toast.icon, part: "item", onWppToastComplete: this.handleToastComplete })))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "item" }, toasts.map(toast => (index.h("wpp-toast-v3-4-0", { key: toast.id, index: toast.id, message: toast.message, type: toast.type, header: toast.header, duration: toast.duration, primaryBtn: toast.primaryBtn, maxMessageLines: toast.maxMessageLines, icon: toast.icon, part: "item", onWppToastComplete: this.handleToastComplete })))));
   }
-  static get registryIs() { return "wpp-toast-container-v3-3-1"; }
+  static get registryIs() { return "wpp-toast-container-v3-4-0"; }
   get host() { return index.getElement(this); }
 };
 WppToastContainer.style = wppToastContainerCss;

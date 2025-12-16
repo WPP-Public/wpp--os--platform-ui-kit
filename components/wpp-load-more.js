@@ -76,16 +76,16 @@ const WppLoadMore$1 = /*@__PURE__*/ proxyCustomElement(class WppLoadMore extends
     return this.disabled || this.itemsLoaded >= this.totalItems;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onKeyDown: this.onKeyDown, exportparts: "container, progress-text, button" }, this.showProgressBar && (h("div", { class: this.progressContainerCssClasses(), part: "container" }, h("span", { id: "wpp-progress-indicator-label", class: this.progressTextCssClasses(), part: "progress-text" }, Math.max(0, Math.min(this.itemsLoaded, this.totalItems)), " of ", Math.max(0, this.totalItems), " items"), h("wpp-progress-indicator-v3-3-1", { class: "progress-indicator", value: this.progressPercentage, width: PROGRESS_WIDTH, ariaProps: { labelledby: 'wpp-progress-indicator-label' } }))), h("wpp-button-v3-3-1", { ref: refEl => (this.loadBtnRef = refEl), class: "load-more-button", variant: "secondary", loading: this.loading && !this.isDisabled(), part: "button", disabled: this.isDisabled(), size: "s", onClick: this.handleClick, ariaProps: this.ariaProps }, "Load more")));
+    return (h(Host, { class: this.hostCssClasses(), onKeyDown: this.onKeyDown, exportparts: "container, progress-text, button" }, this.showProgressBar && (h("div", { class: this.progressContainerCssClasses(), part: "container" }, h("span", { id: "wpp-progress-indicator-label", class: this.progressTextCssClasses(), part: "progress-text" }, Math.max(0, Math.min(this.itemsLoaded, this.totalItems)), " of ", Math.max(0, this.totalItems), " items"), h("wpp-progress-indicator-v3-4-0", { class: "progress-indicator", value: this.progressPercentage, width: PROGRESS_WIDTH, ariaProps: { labelledby: 'wpp-progress-indicator-label' } }))), h("wpp-button-v3-4-0", { ref: refEl => (this.loadBtnRef = refEl), class: "load-more-button", variant: "secondary", loading: this.loading && !this.isDisabled(), part: "button", disabled: this.isDisabled(), size: "s", onClick: this.handleClick, ariaProps: this.ariaProps }, "Load more")));
   }
-  static get registryIs() { return "wpp-load-more-v3-3-1"; }
+  static get registryIs() { return "wpp-load-more-v3-4-0"; }
   static get watchers() { return {
     "itemsLoaded": ["updateProgress"],
     "totalItems": ["updateProgress"],
     "incrementBy": ["updateProgress"]
   }; }
   static get style() { return wppLoadMoreCss; }
-}, [1, "wpp-load-more", "wpp-load-more-v3-3-1", {
+}, [1, "wpp-load-more", "wpp-load-more-v3-4-0", {
     "totalItems": [2, "total-items"],
     "itemsLoaded": [2, "items-loaded"],
     "showProgressBar": [4, "show-progress-bar"],
@@ -100,24 +100,24 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-load-more-v3-3-1", "wpp-button-v3-3-1", "wpp-progress-indicator-v3-3-1", "wpp-spinner-v3-3-1"];
+  const components = ["wpp-load-more-v3-4-0", "wpp-button-v3-4-0", "wpp-progress-indicator-v3-4-0", "wpp-spinner-v3-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-load-more-v3-3-1":
+    case "wpp-load-more-v3-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppLoadMore$1);
       }
       break;
-    case "wpp-button-v3-3-1":
+    case "wpp-button-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-progress-indicator-v3-3-1":
+    case "wpp-progress-indicator-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-spinner-v3-3-1":
+    case "wpp-spinner-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

@@ -13,9 +13,7 @@ export default {
 };
 export const View = {
   render: (args) => html `
-    <wpp-richtext-view-v3-3-1 .value=${value} preserve-whitespace=${args.preserveWhitespace} debug=${args.debug} />
+    <wpp-richtext-view-v3-4-0 .value=${value} debug=${args.debug} />
   `,
-  args: {
-    preserveWhitespace: false,
-  },
+  args: {},
 };

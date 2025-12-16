@@ -1,6 +1,6 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
 import { A as ANIMATION_PROPERTY_NAME, Z as Z_INDEX } from './consts-5bf9c29f.js';
-import { g as getSlotEmptyStates, m as applyBodyStylesIfNeeded } from './utils-b49ad9c8.js';
+import { g as getSlotEmptyStates, m as applyBodyStylesIfNeeded } from './utils-fb733700.js';
 import { W as WrappedSlot } from './WrappedSlot-2ee5325a.js';
 import { M as ModalCloseReason } from './types-9a70ac4e.js';
 
@@ -137,9 +137,9 @@ const WppModal = class {
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() } }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-3-1", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h(Tag, { role: "dialog", class: this.modalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-modal-content" }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })))));
+    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() } }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-4-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h(Tag, { role: "dialog", class: this.modalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-modal-content" }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })))));
   }
-  static get registryIs() { return "wpp-modal-v3-3-1"; }
+  static get registryIs() { return "wpp-modal-v3-4-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "open": ["handleChangeModalStatus"]

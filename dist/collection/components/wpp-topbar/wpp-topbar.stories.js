@@ -98,16 +98,16 @@ export const NoLogo = (args) => {
   const handleTopbarItemChange = (event) => {
     setValue(event.detail.value);
   };
-  return html ` <wpp-topbar-v3-3-1
+  return html ` <wpp-topbar-v3-4-0
     .navigation="${args.navigation}"
     .value="${value}"
     @wppChange="${handleTopbarItemChange}"
     .nativeLink=${args.nativeLink}
   >
     <div slot="app" style="display: flex; margin-right: 32px">
-      <wpp-typography-v3-3-1 style="white-space: nowrap" type="m-strong" tag="h3"> APP Name</wpp-typography-v3-3-1>
+      <wpp-typography-v3-4-0 style="white-space: nowrap" type="m-strong" tag="h3"> APP Name</wpp-typography-v3-4-0>
     </div>
-  </wpp-topbar-v3-3-1>`;
+  </wpp-topbar-v3-4-0>`;
 };
 NoLogo.args = {
   navigation: initNavigation,
@@ -119,7 +119,7 @@ export const WithLogo = (args) => {
     console.log('event.detail :>> ', event.detail);
     setValue(event.detail.value);
   };
-  return html ` <wpp-topbar-v3-3-1
+  return html ` <wpp-topbar-v3-4-0
     .navigation="${args.navigation}"
     .value="${value}"
     @wppChange="${handleTopbarItemChange}"
@@ -130,11 +130,11 @@ export const WithLogo = (args) => {
         src="https://easydrawingguides.com/wp-content/uploads/2018/09/Impossible-Triangle-09.png"
         style="display: flex; width: 40px; height: 40px; max-width: 40px; margin-right: 12px"
       />
-      <wpp-typography-v3-3-1 class="application-name" style="white-space: nowrap" type="m-strong" tag="h3">
+      <wpp-typography-v3-4-0 class="application-name" style="white-space: nowrap" type="m-strong" tag="h3">
         APP Name
-      </wpp-typography-v3-3-1>
+      </wpp-typography-v3-4-0>
     </div>
-  </wpp-topbar-v3-3-1>`;
+  </wpp-topbar-v3-4-0>`;
 };
 WithLogo.args = {
   navigation: initNavigation,

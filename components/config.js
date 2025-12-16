@@ -11588,7 +11588,6 @@ var deepmerge_1 = deepmerge;
 var cjs = deepmerge_1;
 
 // Must rely on return type inference due to bizarre Parchment typings (right?)
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function createFormats(Quill) {
   const parchment = Quill.import('parchment');
   const Float = new parchment.Attributor.Class('float', 'ql-float', {
@@ -11823,7 +11822,7 @@ class DefaultToolbar {
     if (formatter.options.align.toolbar.buttonStyle) {
       Object.assign(button.style, formatter.options.align.toolbar.buttonStyle);
       if (index > 0) {
-        button.style.borderLeftWidth = '0'; // eslint-disable-line no-param-reassign
+        button.style.borderLeftWidth = '0';
       }
     }
     if (formatter.options.align.toolbar.svgStyle) {
@@ -14866,63 +14865,44 @@ function createDragThumbnail(node) {
   return dragThumbnail;
 }
 /**
- * Converts markdown to HTML and preserves empty lines if requested.
- * @param value - The markdown string
- * @param preserveWhitespace - Whether to preserve empty lines
- * @param isInitialLoad - Whether this is the first load (only mark empty lines then)
+ * Converts markdown to HTML using standard GFM, preserving formatting and blank lines.
+ * Uses marked with breaks: true to preserve single newlines as <br>.
+ *
+ * Handles two different input sources:
+ * - Direct markdown input: Adds &nbsp; markers for all blank lines (double newlines) to preserve empty paragraphs.
+ * - Turndown output: Already has &nbsp; markers, so only normalizes excessive newlines.
+ *
+ * Also preserves list indentation by converting 2-space indents to ql-indent-N classes for nested lists.
+ *
+ * @param value - The markdown string to convert.
+ * @returns An object containing:
+ *   - html: The converted HTML string.
+ *   - plainText: The extracted plain text.
  */
-function processMarkdownValue(value, preserveWhitespace, isInitialLoad = false) {
-  // Normalize underscores to asterisks for italics
-  let preprocessedValue = value.replace(/_(\\w+)_/g, '*$1*');
-  if (preserveWhitespace) {
-    // Mark regular empty lines only on initial load
-    if (isInitialLoad) {
-      preprocessedValue = preprocessedValue.replace(/\n\s*\n/g, '\n\n[[[EMPTY_LINE_MARKER]]]\n\n');
-    }
-    // Always mark blank lines between block elements (only if truly blank line present)
-    const gapPatterns = [
-      // Heading → Heading
-      /(^|\n)(#{1,6} .+)\n\s*\n\s*(#{1,6} .+)/g,
-      // Heading → Paragraph/List/Blockquote
-      /(^|\n)(#{1,6} .+)\n\s*\n\s*([^#])/g,
-      // Paragraph → Heading
-      /(^|\n)([^>\n#]+)\n\s*\n\s*(#{1,6} .+)/g,
-      // List → Heading
-      /(^|\n)([-*+] .+)\n\s*\n\s*(#{1,6} .+)/g,
-      // List → Paragraph (but not another list item)
-      /(^|\n)([-*+] .+)\n\s*\n\s*(?![-*+])([^>\n#]+)/g,
-      // Ordered List → Heading
-      /(^|\n)(\d+\.\s.+)\n\s*\n\s*(#{1,6} .+)/g,
-      // Ordered List → Paragraph (but not another list item)
-      /(^|\n)(\d+\.\s.+)\n\s*\n\s*(?!\d+\.)([^>\n#]+)/g,
-      // Paragraph → List (only if real blank line)
-      /(^|\n)([^>\n#]+)\n\s*\n\s*([-*+] .+)/g,
-      // Paragraph → Ordered List (only if real blank line)
-      /(^|\n)([^>\n#]+)\n\s*\n\s*(\d+\.\s.+)/g,
-    ];
-    gapPatterns.forEach(pattern => {
-      preprocessedValue = preprocessedValue.replace(pattern, `$1$2\n\n[[[EMPTY_LINE_MARKER]]]\n\n$3`);
-    });
-    // 🚀 NEW: Handle blockquotes separately - don't insert markers inside them
-    // First, temporarily replace blockquote sections to protect them
-    const blockquoteBlocks = [];
-    let blockquoteIndex = 0;
-    // Match entire blockquote blocks (multiple consecutive lines starting with >)
-    preprocessedValue = preprocessedValue.replace(/((?:^|\n)(?:>.+\n?)+)/g, match => {
-      blockquoteBlocks.push(match);
-      return `[[[BLOCKQUOTE_${blockquoteIndex++}]]]`;
-    });
-    // Now add markers around blockquotes if there's a blank line
-    preprocessedValue = preprocessedValue.replace(/(^|\n)([^[\n]+)\n\s*\n\s*(\[\[\[BLOCKQUOTE_\d+\]\]\])/g, `$1$2\n\n[[[EMPTY_LINE_MARKER]]]\n\n$3`);
-    preprocessedValue = preprocessedValue.replace(/(\[\[\[BLOCKQUOTE_\d+\]\]\])\n\s*\n\s*([^[\n]+)/g, `$1\n\n[[[EMPTY_LINE_MARKER]]]\n\n$2`);
-    // Restore blockquotes
-    blockquoteBlocks.forEach((block, index) => {
-      preprocessedValue = preprocessedValue.replace(`[[[BLOCKQUOTE_${index}]]]`, block.trim());
-    });
-    // Deduplicate consecutive markers
-    preprocessedValue = preprocessedValue.replace(/(\[\[\[EMPTY_LINE_MARKER\]\]\]\n+){2,}/g, '[[[EMPTY_LINE_MARKER]]]\n\n');
+function processMarkdownValue(value) {
+  let preprocessedValue = String(value || '');
+  // Check if the value already contains &nbsp; markers (from Turndown emptyParagraph rule)
+  // If so, don't add more markers - just normalize excessive newlines
+  const hasExistingMarkers = preprocessedValue.includes('&nbsp;');
+  if (hasExistingMarkers) {
+    // Value comes from Turndown with &nbsp; markers already in place
+    // Just normalize excessive newlines around existing markers
+    preprocessedValue = preprocessedValue.replace(/\n{3,}/g, '\n\n');
   }
-  // Configure marked
+  else {
+    // Value comes from direct markdown input (no &nbsp; markers)
+    // Add markers for blank lines to make them visible
+    // First, normalize any 3+ newlines to exactly 2 newlines + marker
+    preprocessedValue = preprocessedValue.replace(/\n{3,}/g, '\n\n&nbsp;\n\n');
+    // Then, insert empty paragraph markers between all double-newline separated blocks
+    preprocessedValue = preprocessedValue.replace(/\n\n/g, '\n\n&nbsp;\n\n');
+  }
+  // Preserve list indentation: Convert indented ordered ('  N. item') and unordered ('  - item', '  * item', '  + item') list formats to nested structure
+  // This handles the Turndown output format where indentation uses 2 spaces per level
+  preprocessedValue = preprocessedValue.replace(/^( {2,})(\d+\.|[-*+])\s+(.+)$/gm, (match, spaces, marker, content) => {
+    const indentLevel = Math.floor(spaces.length / 2);
+    return `${spaces}${marker} [[[INDENT:${indentLevel}]]]${content}`;
+  });
   marked_umd.marked.setOptions({
     gfm: true,
     breaks: true,
@@ -14931,12 +14911,14 @@ function processMarkdownValue(value, preserveWhitespace, isInitialLoad = false) 
   });
   // Convert markdown to HTML
   let html = marked_umd.marked(preprocessedValue);
-  // Restore markers if preserveWhitespace is enabled
-  if (preserveWhitespace) {
-    html = html.replace(/<p>\[\[\[EMPTY_LINE_MARKER\]\]\]<\/p>/g, '<p>&nbsp;</p>');
-    html = html.replace(/\[\[\[EMPTY_LINE_MARKER\]\]\]/g, '');
-  }
-  // Always normalize empty paragraphs (with or without <br>)
+  // Restore list item indentation classes
+  html = html.replace(/<li>(\[{3}INDENT:(\d+)\]{3})?([^<]*)/g, (_match, _fullMarker, indentLevel, content) => {
+    if (indentLevel) {
+      return `<li class="ql-indent-${indentLevel}">${content}`;
+    }
+    return `<li>${content}`;
+  });
+  // Normalize empty paragraphs to &nbsp; for Quill
   html = html.replace(/<p>(\s|<br\s*\/?>)*<\/p>/gi, '<p>&nbsp;</p>');
   // Extract plain text
   const tempEl = document.createElement('div');
@@ -23891,9 +23873,43 @@ const quillMarkdownOptions = {
   },
 };
 // Configure Turndown to use GitHub Flavored Markdown (GFM)
-const turndownService = new TurndownService({ headingStyle: 'atx' });
+const turndownService = new TurndownService({ headingStyle: 'atx', br: '\n' });
 turndownService.use(gfm);
 turndownService.escape = (text) => text.replace(/([\\`{}[\]()#+\-.!])/g, '\\$1');
+// **Line break handling - preserve <br> as single newlines**
+turndownService.addRule('lineBreak', {
+  filter: 'br',
+  replacement: () => '\n',
+});
+// **List item handling with indent support**
+turndownService.addRule('listItem', {
+  filter: 'li',
+  replacement: (content, node) => {
+    const element = node;
+    const parent = element.parentElement;
+    const isOrdered = parent?.nodeName === 'OL';
+    const indent = Array.from(element.classList)
+      .find(cls => cls.startsWith('ql-indent-'))
+      ?.replace('ql-indent-', '');
+    const indentLevel = indent ? parseInt(indent, 10) : 0;
+    const indentation = '  '.repeat(indentLevel);
+    // Determine the prefix based on list type
+    let prefix = '- ';
+    const siblings = Array.from(parent?.children || []);
+    if (isOrdered) {
+      // For ordered lists, calculate the index
+      const index = siblings.indexOf(element) + 1;
+      prefix = `${index}. `;
+    }
+    // Clean content: trim and ensure proper line breaks
+    const cleanContent = content.trim();
+    // Check if this is the last item in the list
+    const isLastItem = siblings.indexOf(element) === siblings.length - 1;
+    // Return formatted list item
+    // Add extra newline after last item to force list termination in GFM
+    return indentation + prefix + cleanContent + '\n' + (isLastItem && indentLevel === 0 ? '\n' : '');
+  },
+});
 turndownService.addRule('strikethrough', {
   filter: ['del', 's', 'strike'],
   replacement(content) {
@@ -23923,21 +23939,25 @@ turndownService.addRule('codeBlock', {
 });
 turndownService.addRule('customHeading', {
   filter(node) {
-    return !!node.nodeName && /^H[1-6]$/.test(node.nodeName) && Boolean(node.textContent?.trim());
+    return !!node.nodeName && /^H[1-6]$/.test(node.nodeName);
   },
   replacement(_content, node) {
     const element = node;
     let rawText = element.textContent || '';
     rawText = rawText.trim();
+    if (!rawText) {
+      const hLevel = Number(element.nodeName.slice(1));
+      return '\n\n' + '#'.repeat(hLevel) + ' ';
+    }
     rawText = rawText.replace(/^\\/, '');
     const headerMatch = rawText.match(/^(#+)\s+(.*)/);
     if (headerMatch) {
       const headerLevel = headerMatch[1].length;
       const headerText = headerMatch[2].trim();
-      return `${'#'.repeat(headerLevel)} ${headerText}`;
+      return '\n\n' + '#'.repeat(headerLevel) + ' ' + headerText + '\n\n';
     }
     const hLevel = Number(element.nodeName.slice(1));
-    return `${'#'.repeat(hLevel)} ${rawText}`;
+    return '\n\n' + '#'.repeat(hLevel) + ' ' + rawText + '\n\n';
   },
 });
 turndownService.addRule('fencedCodeBlock', {
@@ -23956,8 +23976,21 @@ turndownService.addRule('fencedCodeBlock', {
 turndownService.addRule('emphasis', {
   filter: ['em', 'i'],
   replacement: (content) => 
-  // For HTML to Markdown conversion, add italics markdown
-  `_${content}_`,
+  // Use asterisks for italics - underscores don't work when surrounded by word chars in GFM
+  `*${content}*`,
+});
+// Handle intentional blank lines (empty paragraphs from Quill)
+// Convert to a special marker that will be preserved through markdown processing
+// Using &nbsp; on its own line creates a visible empty paragraph when parsed by marked
+turndownService.addRule('emptyParagraph', {
+  filter: (node) => {
+    if (node.nodeName !== 'P')
+      return false;
+    const content = node.innerHTML.trim();
+    // Match empty paragraphs: <p><br></p>, <p></p>, <p>&nbsp;</p>
+    return content === '' || content === '<br>' || content === '&nbsp;';
+  },
+  replacement: () => '\n\n&nbsp;\n\n',
 });
 
 export { KEYBOARD_FOCUS_CLASS as K, LOCALES_DEFAULTS as L, Quill$1 as Q, UPLOAD_REQUEST_EVENT as U, exportHtml as a, cjs as b, createDragThumbnail as c, debugLevels as d, embedBlotInnerHtmlRegexp as e, formats as f, KEYBOARD_FOCUS_EVENT as g, processMarkdownValue as p, quillMarkdownOptions as q, sources as s, turndownService as t, uploadTypes as u };

@@ -73,11 +73,6 @@
 .ql-editor li {
   position: relative;
 }
-.ql-editor li::before {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-}
 .ql-editor li:has(*.ql-size-2xs)::before {
   font-size: var(--wpp-typography-2xs-strong-font-size, 10px);
   line-height: var(--wpp-typography-2xs-strong-line-height, 20px);

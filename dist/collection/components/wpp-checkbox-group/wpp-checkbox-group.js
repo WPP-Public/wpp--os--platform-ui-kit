@@ -43,6 +43,7 @@ export class WppCheckboxGroup {
       labelledby: 'label-id',
       describedby: 'description-id',
     };
+    this.gap = undefined;
   }
   componentDidLoad() {
     this.getCheckboxElements();
@@ -63,10 +64,10 @@ export class WppCheckboxGroup {
     this.wppChange.emit({ value: this.value });
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "inner" }, h("div", { class: "group-container", role: "group", "aria-labelledby": this.ariaProps.labelledby, ...(!!this.message && this.ariaProps.describedby ? { 'aria-describedby': this.ariaProps.describedby } : {}) }, this.labelConfig?.text && (h("wpp-label-v3-3-1", { class: "label", tag: "legend", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, id: this.ariaProps.labelledby })), h("div", { class: this.contentCssClasses() }, h("slot", { onSlotchange: this.getCheckboxElements, part: "inner" })), !!this.message && (h("wpp-inline-message-v3-3-1", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, id: this.ariaProps.describedby })))));
+    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "inner" }, h("div", { class: "group-container", role: "group", "aria-labelledby": this.ariaProps.labelledby, ...(!!this.message && this.ariaProps.describedby ? { 'aria-describedby': this.ariaProps.describedby } : {}) }, this.labelConfig?.text && (h("wpp-label-v3-4-0", { class: "label", tag: "legend", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, id: this.ariaProps.labelledby })), h("div", { class: this.contentCssClasses(), style: this.gap ? { gap: `${this.gap}px` } : {} }, h("slot", { onSlotchange: this.getCheckboxElements, part: "inner" })), !!this.message && (h("wpp-inline-message-v3-4-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, id: this.ariaProps.describedby })))));
   }
   static get is() { return "wpp-checkbox-group"; }
-  static get registryIs() { return "wpp-checkbox-group-v3-3-1"; }
+  static get registryIs() { return "wpp-checkbox-group-v3-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -259,6 +260,23 @@ export class WppCheckboxGroup {
           "text": "Contains the checkbox group `aria-` props."
         },
         "defaultValue": "{\n    labelledby: 'label-id',\n    describedby: 'description-id',\n  }"
+      },
+      "gap": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Gap between checkbox buttons in pixels"
+        },
+        "attribute": "gap",
+        "reflect": false
       }
     };
   }

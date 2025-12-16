@@ -24,7 +24,7 @@ export default {
     required: { control: { type: 'boolean' } },
   },
 };
-export const WithinLimit = (args) => html ` <wpp-textarea-input-v3-3-1
+export const WithinLimit = (args) => html ` <wpp-textarea-input-v3-4-0
     @click="${() => console.log('textarea clicked')}"
     .name="${args.name}"
     .placeholder="${args.placeholder}"
@@ -66,7 +66,7 @@ WithinLimit.args = {
 WithinLimit.parameters = {
   controls: { exclude: ['value'] },
 };
-export const LimitExceeded = (args) => html ` <wpp-textarea-input-v3-3-1
+export const LimitExceeded = (args) => html ` <wpp-textarea-input-v3-4-0
     @click="${() => console.log('textarea clicked')}"
     .name="${args.name}"
     .placeholder="${args.placeholder}"
@@ -103,7 +103,7 @@ LimitExceeded.args = {
 LimitExceeded.parameters = {
   controls: { exclude: ['value', 'message', 'messageType', 'maxMessageLength'] },
 };
-export const NoneLimit = (args) => html ` <wpp-textarea-input-v3-3-1
+export const NoneLimit = (args) => html ` <wpp-textarea-input-v3-4-0
     @click="${() => console.log('textarea clicked')}"
     .name="${args.name}"
     .placeholder="${args.placeholder}"

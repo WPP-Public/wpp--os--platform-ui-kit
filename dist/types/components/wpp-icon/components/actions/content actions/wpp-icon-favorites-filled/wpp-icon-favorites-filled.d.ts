@@ -1,3 +1,7 @@
+/**
+ * @deprecated - Use `wpp-icon-favourites-filled` instead.
+ * This component will be deleted in 4.0.0.
+ */
 export declare class WppIconFavoritesFilled {
   /**
    Defines the icon size, where `s` is **16px** and `m` is **20px**.

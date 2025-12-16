@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const utils = require('./utils-6189d8be.js');
+const utils = require('./utils-99b83069.js');
 const common = require('./common-ee802540.js');
 const WrappedSlot = require('./WrappedSlot-ab2104d8.js');
 require('./consts-779fd4ec.js');
@@ -160,13 +160,13 @@ const WppPill = class {
     }
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-checked": this.checked, "aria-hidden": this.disabled ? 'true' : null, onClick: this.onClick, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'wrapper'), role: "checkbox", exportparts: "input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper", tabIndex: this.checkTabIndex() }, index.h("input", { class: "pill-input", type: "checkbox", name: this.name, disabled: this.disabled, ref: focusEl => (this.inputEl = focusEl), "aria-label": this.ariaProps.label, part: "input", title: "", tabIndex: -1 }), index.h("div", { class: this.cssClasses(), part: "pill-wrapper" }, this.type === 'draggable' ? (index.h("div", { class: this.slotCssClasses(), part: "drag-wrapper" }, index.h("wpp-icon-drag-v3-3-1", { class: { [`${this.focusType['icon-draggable']}`]: true }, part: "drag-icon", onMouseEnter: () => this.updateComponentState('hover'), onMouseLeave: () => this.updateComponentState(null), onMouseDown: ev => {
+    return (index.h(index.Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-checked": this.checked, "aria-hidden": this.disabled ? 'true' : null, onClick: this.onClick, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'wrapper'), role: "checkbox", exportparts: "input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper", tabIndex: this.checkTabIndex() }, index.h("input", { class: "pill-input", type: "checkbox", name: this.name, disabled: this.disabled, ref: focusEl => (this.inputEl = focusEl), "aria-label": this.ariaProps.label, part: "input", title: "", tabIndex: -1 }), index.h("div", { class: this.cssClasses(), part: "pill-wrapper" }, this.type === 'draggable' ? (index.h("div", { class: this.slotCssClasses(), part: "drag-wrapper" }, index.h("wpp-icon-drag-v3-4-0", { class: { [`${this.focusType['icon-draggable']}`]: true }, part: "drag-icon", onMouseEnter: () => this.updateComponentState('hover'), onMouseLeave: () => this.updateComponentState(null), onMouseDown: ev => {
         this.updateComponentState('active');
         this.onDragPress(ev);
         this.onMouseDown();
-      }, onMouseUp: () => this.updateComponentState(null), tabIndex: this.disabled ? -1 : 0, onKeyUp: (event) => this.onKeyUp(event, 'icon-draggable') }))) : (index.h(WrappedSlot.WrappedSlot, { name: "icon-start", wrapperClass: this.slotCssClasses(), onSlotchange: this.updateSlotData })), index.h("div", { class: "label", part: "label" }, this.getLabelText() || index.h("slot", { part: "inner" })), this.checked && this.type === 'multiple' && index.h("wpp-icon-tick-v3-3-1", { class: "active-icon", part: "active-icon" }), this.removable && (this.type === 'display' || this.type === 'draggable') && (index.h("wpp-icon-cross-v3-3-1", { class: { [`${this.focusType['icon-close']}`]: true }, part: "remove-icon", onClick: this.onClose, tabIndex: this.disabled ? -1 : 0, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'icon-close') })))));
+      }, onMouseUp: () => this.updateComponentState(null), tabIndex: this.disabled ? -1 : 0, onKeyUp: (event) => this.onKeyUp(event, 'icon-draggable') }))) : (index.h(WrappedSlot.WrappedSlot, { name: "icon-start", wrapperClass: this.slotCssClasses(), onSlotchange: this.updateSlotData })), index.h("div", { class: "label", part: "label" }, this.getLabelText() || index.h("slot", { part: "inner" })), this.checked && this.type === 'multiple' && index.h("wpp-icon-tick-v3-4-0", { class: "active-icon", part: "active-icon" }), this.removable && (this.type === 'display' || this.type === 'draggable') && (index.h("wpp-icon-cross-v3-4-0", { class: { [`${this.focusType['icon-close']}`]: true }, part: "remove-icon", onClick: this.onClose, tabIndex: this.disabled ? -1 : 0, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'icon-close') })))));
   }
-  static get registryIs() { return "wpp-pill-v3-3-1"; }
+  static get registryIs() { return "wpp-pill-v3-4-0"; }
   get host() { return index.getElement(this); }
 };
 WppPill.style = wppPillCss;

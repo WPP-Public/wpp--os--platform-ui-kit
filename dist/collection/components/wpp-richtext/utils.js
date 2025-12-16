@@ -29,63 +29,44 @@ export function createDragThumbnail(node) {
   return dragThumbnail;
 }
 /**
- * Converts markdown to HTML and preserves empty lines if requested.
- * @param value - The markdown string
- * @param preserveWhitespace - Whether to preserve empty lines
- * @param isInitialLoad - Whether this is the first load (only mark empty lines then)
+ * Converts markdown to HTML using standard GFM, preserving formatting and blank lines.
+ * Uses marked with breaks: true to preserve single newlines as <br>.
+ *
+ * Handles two different input sources:
+ * - Direct markdown input: Adds &nbsp; markers for all blank lines (double newlines) to preserve empty paragraphs.
+ * - Turndown output: Already has &nbsp; markers, so only normalizes excessive newlines.
+ *
+ * Also preserves list indentation by converting 2-space indents to ql-indent-N classes for nested lists.
+ *
+ * @param value - The markdown string to convert.
+ * @returns An object containing:
+ *   - html: The converted HTML string.
+ *   - plainText: The extracted plain text.
  */
-export function processMarkdownValue(value, preserveWhitespace, isInitialLoad = false) {
-  // Normalize underscores to asterisks for italics
-  let preprocessedValue = value.replace(/_(\\w+)_/g, '*$1*');
-  if (preserveWhitespace) {
-    // Mark regular empty lines only on initial load
-    if (isInitialLoad) {
-      preprocessedValue = preprocessedValue.replace(/\n\s*\n/g, '\n\n[[[EMPTY_LINE_MARKER]]]\n\n');
-    }
-    // Always mark blank lines between block elements (only if truly blank line present)
-    const gapPatterns = [
-      // Heading → Heading
-      /(^|\n)(#{1,6} .+)\n\s*\n\s*(#{1,6} .+)/g,
-      // Heading → Paragraph/List/Blockquote
-      /(^|\n)(#{1,6} .+)\n\s*\n\s*([^#])/g,
-      // Paragraph → Heading
-      /(^|\n)([^>\n#]+)\n\s*\n\s*(#{1,6} .+)/g,
-      // List → Heading
-      /(^|\n)([-*+] .+)\n\s*\n\s*(#{1,6} .+)/g,
-      // List → Paragraph (but not another list item)
-      /(^|\n)([-*+] .+)\n\s*\n\s*(?![-*+])([^>\n#]+)/g,
-      // Ordered List → Heading
-      /(^|\n)(\d+\.\s.+)\n\s*\n\s*(#{1,6} .+)/g,
-      // Ordered List → Paragraph (but not another list item)
-      /(^|\n)(\d+\.\s.+)\n\s*\n\s*(?!\d+\.)([^>\n#]+)/g,
-      // Paragraph → List (only if real blank line)
-      /(^|\n)([^>\n#]+)\n\s*\n\s*([-*+] .+)/g,
-      // Paragraph → Ordered List (only if real blank line)
-      /(^|\n)([^>\n#]+)\n\s*\n\s*(\d+\.\s.+)/g,
-    ];
-    gapPatterns.forEach(pattern => {
-      preprocessedValue = preprocessedValue.replace(pattern, `$1$2\n\n[[[EMPTY_LINE_MARKER]]]\n\n$3`);
-    });
-    // 🚀 NEW: Handle blockquotes separately - don't insert markers inside them
-    // First, temporarily replace blockquote sections to protect them
-    const blockquoteBlocks = [];
-    let blockquoteIndex = 0;
-    // Match entire blockquote blocks (multiple consecutive lines starting with >)
-    preprocessedValue = preprocessedValue.replace(/((?:^|\n)(?:>.+\n?)+)/g, match => {
-      blockquoteBlocks.push(match);
-      return `[[[BLOCKQUOTE_${blockquoteIndex++}]]]`;
-    });
-    // Now add markers around blockquotes if there's a blank line
-    preprocessedValue = preprocessedValue.replace(/(^|\n)([^[\n]+)\n\s*\n\s*(\[\[\[BLOCKQUOTE_\d+\]\]\])/g, `$1$2\n\n[[[EMPTY_LINE_MARKER]]]\n\n$3`);
-    preprocessedValue = preprocessedValue.replace(/(\[\[\[BLOCKQUOTE_\d+\]\]\])\n\s*\n\s*([^[\n]+)/g, `$1\n\n[[[EMPTY_LINE_MARKER]]]\n\n$2`);
-    // Restore blockquotes
-    blockquoteBlocks.forEach((block, index) => {
-      preprocessedValue = preprocessedValue.replace(`[[[BLOCKQUOTE_${index}]]]`, block.trim());
-    });
-    // Deduplicate consecutive markers
-    preprocessedValue = preprocessedValue.replace(/(\[\[\[EMPTY_LINE_MARKER\]\]\]\n+){2,}/g, '[[[EMPTY_LINE_MARKER]]]\n\n');
+export function processMarkdownValue(value) {
+  let preprocessedValue = String(value || '');
+  // Check if the value already contains &nbsp; markers (from Turndown emptyParagraph rule)
+  // If so, don't add more markers - just normalize excessive newlines
+  const hasExistingMarkers = preprocessedValue.includes('&nbsp;');
+  if (hasExistingMarkers) {
+    // Value comes from Turndown with &nbsp; markers already in place
+    // Just normalize excessive newlines around existing markers
+    preprocessedValue = preprocessedValue.replace(/\n{3,}/g, '\n\n');
   }
-  // Configure marked
+  else {
+    // Value comes from direct markdown input (no &nbsp; markers)
+    // Add markers for blank lines to make them visible
+    // First, normalize any 3+ newlines to exactly 2 newlines + marker
+    preprocessedValue = preprocessedValue.replace(/\n{3,}/g, '\n\n&nbsp;\n\n');
+    // Then, insert empty paragraph markers between all double-newline separated blocks
+    preprocessedValue = preprocessedValue.replace(/\n\n/g, '\n\n&nbsp;\n\n');
+  }
+  // Preserve list indentation: Convert indented ordered ('  N. item') and unordered ('  - item', '  * item', '  + item') list formats to nested structure
+  // This handles the Turndown output format where indentation uses 2 spaces per level
+  preprocessedValue = preprocessedValue.replace(/^( {2,})(\d+\.|[-*+])\s+(.+)$/gm, (match, spaces, marker, content) => {
+    const indentLevel = Math.floor(spaces.length / 2);
+    return `${spaces}${marker} [[[INDENT:${indentLevel}]]]${content}`;
+  });
   marked.setOptions({
     gfm: true,
     breaks: true,
@@ -94,12 +75,14 @@ export function processMarkdownValue(value, preserveWhitespace, isInitialLoad = 
   });
   // Convert markdown to HTML
   let html = marked(preprocessedValue);
-  // Restore markers if preserveWhitespace is enabled
-  if (preserveWhitespace) {
-    html = html.replace(/<p>\[\[\[EMPTY_LINE_MARKER\]\]\]<\/p>/g, '<p>&nbsp;</p>');
-    html = html.replace(/\[\[\[EMPTY_LINE_MARKER\]\]\]/g, '');
-  }
-  // Always normalize empty paragraphs (with or without <br>)
+  // Restore list item indentation classes
+  html = html.replace(/<li>(\[{3}INDENT:(\d+)\]{3})?([^<]*)/g, (_match, _fullMarker, indentLevel, content) => {
+    if (indentLevel) {
+      return `<li class="ql-indent-${indentLevel}">${content}`;
+    }
+    return `<li>${content}`;
+  });
+  // Normalize empty paragraphs to &nbsp; for Quill
   html = html.replace(/<p>(\s|<br\s*\/?>)*<\/p>/gi, '<p>&nbsp;</p>');
   // Extract plain text
   const tempEl = document.createElement('div');

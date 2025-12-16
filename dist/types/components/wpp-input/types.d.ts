@@ -13,8 +13,8 @@ export type InputLocaleInterface = {
   minLengthErrorMessage: (minLength: number) => string;
   maxLengthErrorMessage: (maxLength: number) => string;
 };
-declare const CountryCodes: import("libphonenumber-js/types").CountryCode[];
-export type CountryCode = (typeof CountryCodes)[number];
+declare const _CountryCodes: import("libphonenumber-js/types").CountryCode[];
+export type CountryCode = (typeof _CountryCodes)[number];
 export type MaskOptions = {
   decimalPatternOptions?: MaskitoNumberParams;
   maskPlaceholder?: string;

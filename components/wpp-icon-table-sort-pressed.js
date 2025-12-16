@@ -18,9 +18,9 @@ const WppIconTableSortPressed$1 = /*@__PURE__*/ proxyCustomElement(class WppIcon
   render() {
     return (h(WppIcon, { name: "wpp-icon-table-sort-pressed", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M10 4L13.4641 8.5H6.5359L10 4Z", fill: this.upArrowColor }), h("path", { d: "M10 16L13.4641 11.5H6.5359L10 16Z", fill: this.downArrowColor })));
   }
-  static get registryIs() { return "wpp-icon-table-sort-pressed-v3-3-1"; }
+  static get registryIs() { return "wpp-icon-table-sort-pressed-v3-4-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-table-sort-pressed", "wpp-icon-table-sort-pressed-v3-3-1", {
+}, [1, "wpp-icon-table-sort-pressed", "wpp-icon-table-sort-pressed-v3-4-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -32,9 +32,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-table-sort-pressed-v3-3-1"];
+  const components = ["wpp-icon-table-sort-pressed-v3-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-table-sort-pressed-v3-3-1":
+    case "wpp-icon-table-sort-pressed-v3-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconTableSortPressed$1);
       }

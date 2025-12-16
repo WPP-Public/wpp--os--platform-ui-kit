@@ -1,6 +1,6 @@
 import { EventEmitter } from '../../../../stencil-public-runtime';
 import { FOCUS_TYPE } from '../../../../types/common';
-import { TabChangeEventDetail } from '../../types';
+import { TabChangeEventDetail, WppTabAriaProps } from '../../types';
 /**
  * @part wrapper - component wrapper element
  * @part inner - Content slot element
@@ -10,6 +10,7 @@ export declare class WppTab {
   private isMouseClicked;
   host: HTMLWppTabElement;
   focusType: FOCUS_TYPE;
+  pressed: boolean;
   /**
    * If the component is active.
    */
@@ -36,6 +37,11 @@ export declare class WppTab {
    */
   readonly icon: `wpp-icon-${string}`;
   /**
+   * Grouped ARIA props (explicit picks only).
+   * tab: { label?, describedby?, controls? }
+   */
+  readonly ariaProps?: WppTabAriaProps;
+  /**
    * Emitted when an item is clicked.
    */
   wppChangeTabControlItem: EventEmitter<TabChangeEventDetail>;
@@ -52,6 +58,8 @@ export declare class WppTab {
   private handleVisibilityChange;
   private onFocus;
   private onBlur;
+  private onKeyDown;
+  private onKeyUp;
   private onMouseDown;
   private handleClickTab;
   private cssClasses;

@@ -38,8 +38,9 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     this.wppActionClick = createEvent(this, "wppActionClick", 1);
     this.resizeInProgress = false;
     this._locales = LOCALES_DEFAULTS;
+    this.pendingLoads = new Set();
+    this.isSearchResultFound = true;
     this.toggleItemSelection = (toggleFunction, reason) => {
-      // Get the IDs of all first-level items in the tree.
       const allItemsIDs = this.currentTreeData.map(item => item.id);
       const finalTree = recalculateIndeterminateTreeState(updateTreeByIds(this.currentTreeData, allItemsIDs, toggleFunction));
       this.wppChange.emit({
@@ -49,7 +50,6 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
         reason,
       });
     };
-    this.isSearchResultFound = true;
     this.isMatchSearch = (item, search) => {
       if (this.searchConfig?.isMatchingSearch)
         return this.searchConfig?.isMatchingSearch(item, search);
@@ -74,6 +74,7 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
       }
       const treeState = recalculateIndeterminateTreeState(updatedTree || tree);
       const selectedItems = findSelectedItems(treeState);
+      this.currentTreeData = treeState;
       this.wppChange.emit({
         treeState,
         currentItem: item,
@@ -84,23 +85,22 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     };
     this.singleSelectionUpdate = (tree, item) => {
       const { id, selected } = item;
-      let treeWithUnselectedPreviousItem;
-      const updatedTree = updateTreeById(tree, id, {
-        selected,
-      });
+      let nextTree;
       if (selected) {
-        treeWithUnselectedPreviousItem = updateTreeById(updatedTree, this.selectedIds[0], {
-          selected: false,
-        });
+        const cleared = this.clearSelectionExcept(tree, id);
+        nextTree = updateTreeById(cleared, id, { selected: true });
         this.selectedIds = [id];
       }
       else {
+        nextTree = this.clearSelectionExcept(tree);
         this.selectedIds = [];
       }
-      const treeState = treeWithUnselectedPreviousItem || updatedTree;
-      const selectedItems = findSelectedItems(treeState);
+      let finalTree = recalculateIndeterminateTreeState(nextTree);
+      finalTree = updateTreeById(finalTree, id, { selected, indeterminate: false });
+      const selectedItems = findSelectedItems(finalTree);
+      this.currentTreeData = finalTree;
       this.wppChange.emit({
-        treeState,
+        treeState: finalTree,
         currentItem: item,
         selectedItems,
         selectedOriginalItems: convertToOriginalItems(selectedItems),
@@ -112,9 +112,6 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
       if (!this.isSearchResultFound && isMatch)
         this.isSearchResultFound = true;
       if (item.children?.length) {
-        // If found parent item has match, we don't need to recursive call this.updateTreeWithSearch function anymore.
-        // Instead we should mark all of his children as visible( hidden: false)
-        // and if some children items has match - mark their parents as open.
         if (isMatch) {
           const haveMatchedChildrenHost = isHaveFoundChildren(item.children, search, this.isMatchSearch);
           const children = markChildrenAs(item.children, item => {
@@ -135,9 +132,7 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
           hidden: !haveMatchedChildren && !isMatch,
         };
       }
-      else {
-        return { ...item, hidden: !isMatch };
-      }
+      return { ...item, hidden: !isMatch };
     });
     this.checkData = (treeData) => {
       if (!this.multiple) {
@@ -145,7 +140,7 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
           throw new Error('Several selected items found in provided data. There is could be only one selected item in single mode, otherwise, use multiple mode.');
         }
         if (this.defaultSelectedIds.length > 1) {
-          throw new Error('Several items found in provided defaultSelectedIds prop. There is could be only one selected item in single mode, otherwise, use multiple mode. ');
+          throw new Error('Several items found in provided defaultSelectedIds prop. There is could be only one selected item in single mode, otherwise, use multiple mode.');
         }
       }
       return treeData;
@@ -153,19 +148,20 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     this.hostCssClasses = () => ({
       'wpp-tree': true,
     });
-    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v3-3-1", { dropdownConfig: {
+    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v3-4-0", { dropdownConfig: {
         trigger: 'click',
         interactiveDebounce: 15,
         interactiveBorder: 25,
         offset: [0, 0],
-      } }, h("wpp-icon-more-v3-3-1", { class: {
+      } }, h("wpp-icon-more-v3-4-0", { class: {
         'menu-trigger': true,
         disabled: !!item.disabled,
-      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v3-3-1", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
+      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v3-4-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
     this.renderTree = (treeData, level = 1) => treeData.map(item => {
       const extraProps = extractExtraProps(item);
-      if (item.children) {
-        return (h("wpp-tree-item-v3-3-1", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
+      const isParent = !!item.hasChildren || !!(item.children && item.children.length);
+      if (isParent) {
+        return (h("wpp-tree-item-v3-4-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
           h(transformToVersionedTag(item.iconStart.icon), {
             slot: 'icon-start',
             part: 'icon-start',
@@ -176,9 +172,14 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
             slot: 'icon-end',
             part: 'icon-end',
             onclick: this.handleActionClick({ item, name: item.iconEnd.name, place: 'end' }),
-          }), h("div", { slot: "content", class: "content-container", part: "content" }, item.open && this.renderTree(item.children, level + 1))));
+          }), h("div", { slot: "content", class: "content-container", part: "content" }, item.open &&
+          (item.loadingChildren
+            ? this.renderSkeletonRows(this.lazyConfig?.skeleton?.count || 1)
+            : Array.isArray(item.children) && item.children.length > 0
+              ? this.renderTree(item.children, level + 1)
+              : null))));
       }
-      return (h("wpp-tree-item-v3-3-1", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
+      return (h("wpp-tree-item-v3-4-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
         h(transformToVersionedTag(item.iconStart.icon), {
           slot: 'icon-start',
           part: 'icon-start',
@@ -191,7 +192,6 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
           onclick: this.handleActionClick({ item, name: item.iconEnd.name, place: 'end' }),
         })));
     });
-    this.renderSkeletonLoading = () => [...Array(this.skeletonNumberItems)].map(_ => (h("div", { class: "skeleton-item" }, h("wpp-skeleton-v3-3-1", { variant: "rectangle", width: "100%", animation: true }))));
     this.currentTreeData = undefined;
     this.selectedIds = [];
     this.data = undefined;
@@ -210,6 +210,11 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     this.withItemsTruncation = false;
     this.loading = false;
     this.skeletonNumberItems = 5;
+    this.lazyConfig = undefined;
+  }
+  renderSkeletonRows(count = 1, paddingLeft) {
+    const { height = 32 } = this.lazyConfig?.skeleton || {};
+    return Array.from({ length: count }, (_, idx) => (h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, h("wpp-skeleton-v3-4-0", { variant: "rectangle", width: "100%", height: height, animation: true }))));
   }
   onInputChange(searchText) {
     if (!searchText.trim()) {
@@ -250,18 +255,75 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
   onUpdateLocales(newLocales) {
     this._locales = { ...this._locales, ...newLocales };
   }
-  handleOpenItem(event) {
+  async handleOpenItem(event) {
     event.stopPropagation();
     const item = event.detail;
-    const treeState = updateTreeById(this.currentTreeData, item.id, item);
-    const selectedItems = findSelectedItems(treeState);
-    this.wppChange.emit({
-      treeState,
-      currentItem: item,
-      selectedItems,
-      selectedOriginalItems: convertToOriginalItems(selectedItems),
-      reason: 'open',
-    });
+    const loader = this.lazyConfig?.loadChildren;
+    const needsLoad = !!loader && !!item.open && item.hasChildren === true && (!item.children || item.children.length === 0);
+    if (!needsLoad) {
+      const baseState = updateTreeById(this.currentTreeData, item.id, item);
+      const selectedItems = findSelectedItems(baseState);
+      this.wppChange.emit({
+        treeState: baseState,
+        currentItem: item,
+        selectedItems,
+        selectedOriginalItems: convertToOriginalItems(selectedItems),
+        reason: 'open',
+      });
+      return;
+    }
+    if (this.pendingLoads.has(item.id))
+      return;
+    this.pendingLoads.add(item.id);
+    const loadingState = updateTreeById(this.currentTreeData, item.id, { loadingChildren: true, open: true });
+    this.currentTreeData = loadingState;
+    try {
+      const response = await loader(item);
+      const children = Array.isArray(response.items) ? response.items : [];
+      const empty = children.length === 0;
+      const nextState = empty
+        ? { children: undefined, loadingChildren: false, open: false, hasChildren: false }
+        : { children, loadingChildren: false, open: true, hasChildren: true };
+      const merged = updateTreeById(this.currentTreeData, item.id, nextState);
+      // Recalculate indeterminate/parent states
+      let finalTree = recalculateIndeterminateTreeState(merged);
+      // Preserve explicit user selection in single mode
+      if (!this.multiple) {
+        const keepId = this.selectedIds?.[0];
+        if (keepId != null) {
+          finalTree = updateTreeById(finalTree, keepId, { selected: true, indeterminate: false });
+        }
+      }
+      this.currentTreeData = finalTree;
+      const selectedItems = findSelectedItems(finalTree);
+      this.wppChange.emit({
+        treeState: finalTree,
+        currentItem: { ...item, open: !empty },
+        selectedItems,
+        selectedOriginalItems: convertToOriginalItems(selectedItems),
+        reason: 'open',
+      });
+    }
+    catch {
+      const reverted = updateTreeById(this.currentTreeData, item.id, {
+        loadingChildren: false,
+        open: false,
+        hasChildren: true,
+        children: undefined,
+      });
+      this.currentTreeData = reverted;
+      const selectedItems = findSelectedItems(reverted);
+      this.wppChange.emit({
+        treeState: reverted,
+        currentItem: { ...item, open: false },
+        selectedItems,
+        selectedOriginalItems: convertToOriginalItems(selectedItems),
+        reason: 'open',
+      });
+    }
+    finally {
+      this.pendingLoads.delete(item.id);
+    }
   }
   handleSelectedItem(event) {
     event.stopPropagation();
@@ -295,9 +357,15 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
       indeterminate: false,
     }), 'clear');
   }
+  clearSelectionExcept(tree, keepId) {
+    const walk = (nodes) => nodes.map(n => {
+      const isTarget = keepId != null && n.id === keepId;
+      const children = n.children ? walk(n.children) : undefined;
+      return { ...n, selected: !!isTarget && !!n.selected, indeterminate: false, ...(children ? { children } : {}) };
+    });
+    return walk(tree);
+  }
   componentDidLoad() {
-    // NOTE: defaultSelectedIds should be provided only when default selection logic is applied. Recalculating tree state
-    // here may break your custom selection logic
     if (this.defaultSelectedIds.length > 0) {
       this.currentTreeData = recalculateIndeterminateTreeState(updateTreeByIds(this.currentTreeData, this.defaultSelectedIds, ({ isNotSelectable, disabled }) => ({
         ...(!isNotSelectable && !disabled && { selected: true }),
@@ -351,9 +419,9 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     this.currentTreeData = this.checkData(this.data);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text" }, !this.loading && (h("div", { class: "container", part: "tree-container" }, this.currentTreeData && this.isSearchResultFound ? (this.renderTree(this.currentTreeData)) : (h("p", { class: "empty-tree-text", part: "tree-empty-text" }, this._locales.nothingFound)))), this.loading && h("div", { class: "skeleton-wrapper" }, this.renderSkeletonLoading())));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text" }, !this.loading && (h("div", { class: "container", part: "tree-container" }, this.currentTreeData && this.isSearchResultFound ? (this.renderTree(this.currentTreeData)) : (h("p", { class: "empty-tree-text", part: "tree-empty-text" }, this._locales.nothingFound)))), this.loading && h("div", { class: "skeleton-wrapper" }, this.renderSkeletonRows(this.skeletonNumberItems))));
   }
-  static get registryIs() { return "wpp-tree-v3-3-1"; }
+  static get registryIs() { return "wpp-tree-v3-4-0"; }
   get host() { return this; }
   static get watchers() { return {
     "search": ["onInputChange"],
@@ -361,7 +429,7 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     "locales": ["onUpdateLocales"]
   }; }
   static get style() { return wppTreeCss; }
-}, [1, "wpp-tree", "wpp-tree-v3-3-1", {
+}, [1, "wpp-tree", "wpp-tree-v3-4-0", {
     "data": [16],
     "search": [1],
     "multiple": [516],
@@ -373,6 +441,7 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     "withItemsTruncation": [4, "with-items-truncation"],
     "loading": [4],
     "skeletonNumberItems": [2, "skeleton-number-items"],
+    "lazyConfig": [16],
     "currentTreeData": [32],
     "selectedIds": [32],
     "recalculateTreeWidth": [64],
@@ -383,139 +452,139 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tree-v3-3-1", "wpp-action-button-v3-3-1", "wpp-avatar-v3-3-1", "wpp-avatar-group-v3-3-1", "wpp-checkbox-v3-3-1", "wpp-icon-chevron-v3-3-1", "wpp-icon-cross-v3-3-1", "wpp-icon-dash-v3-3-1", "wpp-icon-error-v3-3-1", "wpp-icon-info-message-v3-3-1", "wpp-icon-more-v3-3-1", "wpp-icon-success-v3-3-1", "wpp-icon-tick-v3-3-1", "wpp-icon-triangle-fill-v3-3-1", "wpp-icon-warning-v3-3-1", "wpp-inline-message-v3-3-1", "wpp-internal-label-v3-3-1", "wpp-internal-tooltip-v3-3-1", "wpp-label-v3-3-1", "wpp-list-item-v3-3-1", "wpp-menu-context-v3-3-1", "wpp-skeleton-v3-3-1", "wpp-spinner-v3-3-1", "wpp-tag-v3-3-1", "wpp-tooltip-v3-3-1", "wpp-tree-item-v3-3-1", "wpp-typography-v3-3-1"];
+  const components = ["wpp-tree-v3-4-0", "wpp-action-button-v3-4-0", "wpp-avatar-v3-4-0", "wpp-avatar-group-v3-4-0", "wpp-checkbox-v3-4-0", "wpp-icon-chevron-v3-4-0", "wpp-icon-cross-v3-4-0", "wpp-icon-dash-v3-4-0", "wpp-icon-error-v3-4-0", "wpp-icon-info-message-v3-4-0", "wpp-icon-more-v3-4-0", "wpp-icon-success-v3-4-0", "wpp-icon-tick-v3-4-0", "wpp-icon-triangle-fill-v3-4-0", "wpp-icon-warning-v3-4-0", "wpp-inline-message-v3-4-0", "wpp-internal-label-v3-4-0", "wpp-internal-tooltip-v3-4-0", "wpp-label-v3-4-0", "wpp-list-item-v3-4-0", "wpp-menu-context-v3-4-0", "wpp-skeleton-v3-4-0", "wpp-spinner-v3-4-0", "wpp-tag-v3-4-0", "wpp-tooltip-v3-4-0", "wpp-tree-item-v3-4-0", "wpp-typography-v3-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tree-v3-3-1":
+    case "wpp-tree-v3-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTree$1);
       }
       break;
-    case "wpp-action-button-v3-3-1":
+    case "wpp-action-button-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$r();
       }
       break;
-    case "wpp-avatar-v3-3-1":
+    case "wpp-avatar-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$q();
       }
       break;
-    case "wpp-avatar-group-v3-3-1":
+    case "wpp-avatar-group-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$p();
       }
       break;
-    case "wpp-checkbox-v3-3-1":
+    case "wpp-checkbox-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$o();
       }
       break;
-    case "wpp-icon-chevron-v3-3-1":
+    case "wpp-icon-chevron-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-icon-cross-v3-3-1":
+    case "wpp-icon-cross-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-icon-dash-v3-3-1":
+    case "wpp-icon-dash-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-error-v3-3-1":
+    case "wpp-icon-error-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-info-message-v3-3-1":
+    case "wpp-icon-info-message-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-more-v3-3-1":
+    case "wpp-icon-more-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-success-v3-3-1":
+    case "wpp-icon-success-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-tick-v3-3-1":
+    case "wpp-icon-tick-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-triangle-fill-v3-3-1":
+    case "wpp-icon-triangle-fill-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-warning-v3-3-1":
+    case "wpp-icon-warning-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-inline-message-v3-3-1":
+    case "wpp-inline-message-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-internal-label-v3-3-1":
+    case "wpp-internal-label-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-internal-tooltip-v3-3-1":
+    case "wpp-internal-tooltip-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-label-v3-3-1":
+    case "wpp-label-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-list-item-v3-3-1":
+    case "wpp-list-item-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-menu-context-v3-3-1":
+    case "wpp-menu-context-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-skeleton-v3-3-1":
+    case "wpp-skeleton-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-spinner-v3-3-1":
+    case "wpp-spinner-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-tag-v3-3-1":
+    case "wpp-tag-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-tooltip-v3-3-1":
+    case "wpp-tooltip-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tree-item-v3-3-1":
+    case "wpp-tree-item-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v3-3-1":
+    case "wpp-typography-v3-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
