@@ -29,6 +29,7 @@ export default {
     withButtons: {
       options: [true, false],
       control: { type: 'boolean' },
+      description: 'Deprecated: This prop will be removed in v5.0.0',
     },
     required: {
       options: [true, false],
@@ -37,7 +38,7 @@ export default {
   },
 };
 export const Counter = {
-  render: args => html ` <wpp-counter-v3-4-0
+  render: args => html ` <wpp-counter-v4-0-0
       .name="${args.name}"
       .value="${args.value}"
       .disabled="${args.disabled}"
@@ -50,12 +51,12 @@ export const Counter = {
       .labelConfig="${args.labelConfig}"
       .withButtons="${args.withButtons}"
     >
-    </wpp-counter-v3-4-0>`,
+    </wpp-counter-v4-0-0>`,
   args: {
     name: 'counter',
-    value: 1,
+    value: 0,
     message: '',
-    min: 1,
+    min: 0,
     max: 100,
     size: 'm',
     disabled: false,

@@ -238,3 +238,83 @@
 .ag-row.ag-row-focus {
   z-index: 1;
 }
+
+/* Error State Cell Styles */
+.ag-cell-error {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ag-cell-error .ag-cell-error-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Avatar within error cell should have 12px gap to the text */
+.ag-cell-error .ag-cell-error-content .wpp-avatar,
+.ag-cell-error .ag-cell-error-content .wpp-avatar-group {
+  margin-right: 4px; /* 4px extra + 8px gap = 12px total */
+}
+
+.ag-cell-error .ag-cell-error-content.ag-cell-error-content-right {
+  justify-content: flex-end;
+  flex: 1;
+}
+
+.ag-cell-error .ag-cell-error-content .ag-cell-error-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ag-cell-error .ag-cell-error-content .ag-cell-error-text.ag-cell-error-text-right {
+  align-items: flex-end;
+  flex-shrink: 1;
+}
+
+.ag-cell-error .ag-cell-error-content .ag-cell-error-text wpp-typography {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.ag-cell-error .ag-cell-error-content .ag-cell-error-subtext {
+  color: var(--wpp-grey-color-800);
+}
+
+.ag-cell-error wpp-icon-error {
+  flex-shrink: 0;
+}
+
+/* Error Row Indicator */
+.ag-row-error {
+  position: relative;
+}
+
+.ag-row-error::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--wpp-danger-color-400);
+  z-index: 1;
+}

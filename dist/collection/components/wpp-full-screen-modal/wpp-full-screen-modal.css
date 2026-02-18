@@ -135,6 +135,13 @@
   animation-delay: 0.15s;
 }
 
+.focus-sentinel {
+  position: fixed;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
 @media (max-height: 800px) {
   .full-screen-modal {
     transform: translate(-50%, -50%);

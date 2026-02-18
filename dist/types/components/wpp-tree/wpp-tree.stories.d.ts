@@ -5,3 +5,4 @@ export default _default;
 export declare const Tree: StoryObj<Components.WppTree>;
 export declare const TreeWithCustomSearch: StoryObj<Components.WppTree>;
 export declare const TreeLoading: StoryObj<Components.WppTree>;
+export declare const TreeOpenOnLoad: StoryObj<Components.WppTree>;

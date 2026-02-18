@@ -4,9 +4,7 @@ export default {
   title: 'Design System/Components/Data display/Tree',
   parameters: {
     previewTabs: {
-      'storybook/docs/panel': {
-        hidden: true,
-      },
+      'storybook/docs/panel': { hidden: true },
     },
   },
   argTypes: {
@@ -14,6 +12,11 @@ export default {
     skeletonNumberItems: { control: { type: 'number' } },
     multiple: { control: { type: 'boolean' } },
     lazyConfig: { control: { type: 'object' } },
+    defaultSelectedIds: { control: { type: 'object' } },
+    disableOpenCloseAnimation: { control: { type: 'boolean' } },
+    withItemsTruncation: { control: { type: 'boolean' } },
+    search: { control: { type: 'text' } },
+    locales: { control: { type: 'object' } },
   },
 };
 const data = [
@@ -209,7 +212,7 @@ export const Tree = (args) => {
       loadChildren: lazyLoader,
     }
     : undefined;
-  return html `<wpp-tree-v3-4-0
+  return html `<wpp-tree-v4-0-0
     .multiple=${args.multiple}
     .data=${treeState}
     .search="${args.search}"
@@ -217,14 +220,16 @@ export const Tree = (args) => {
     .withItemsTruncation=${args.withItemsTruncation}
     .lazyConfig=${finalLazyConfig}
     @wppChange="${handleTreeChange}"
-  ></wpp-tree-v3-4-0>`;
+  ></wpp-tree-v4-0-0>`;
 };
 Tree.args = {
   multiple: false,
-  withItemsTruncation: false,
+  withItemsTruncation: true,
   locales,
   search: '',
   lazyConfig: undefined,
+  disableOpenCloseAnimation: false,
+  defaultSelectedIds: [],
 };
 Tree.argTypes = {
   skeletonNumberItems: { table: { disable: true } },
@@ -245,11 +250,11 @@ export const TreeWithCustomSearch = (args) => {
     : undefined;
   return html `
     <div>
-      <wpp-typography-v3-4-0 .type=${'l-strong'}>
+      <wpp-typography-v4-0-0 .type=${'l-strong'}>
         Single tree with custom search: the search string should match exactly the title of the tree-item (case
         sensitive).
-      </wpp-typography-v3-4-0>
-      <wpp-tree-v3-4-0
+      </wpp-typography-v4-0-0>
+      <wpp-tree-v4-0-0
         .multiple=${args.multiple}
         .data=${treeState}
         .search="${args.search}"
@@ -258,15 +263,16 @@ export const TreeWithCustomSearch = (args) => {
         .searchConfig=${args.searchConfig}
         .lazyConfig=${finalLazyConfig}
         @wppChange="${handleTreeChange}"
-      ></wpp-tree-v3-4-0>
+      ></wpp-tree-v4-0-0>
     </div>
   `;
 };
 TreeWithCustomSearch.args = {
   multiple: false,
-  withItemsTruncation: false,
+  withItemsTruncation: true,
   locales,
   search: '',
+  disableOpenCloseAnimation: false,
   searchConfig: {
     isMatchingSearch: (item, search) => item.title === search,
   },
@@ -283,15 +289,15 @@ export const TreeLoading = (args) => {
   };
   return html `
     <div>
-      <wpp-typography-v3-4-0 .type=${'l-strong'}>
+      <wpp-typography-v4-0-0 .type=${'l-strong'}>
         Tree in loading state: Use this to show a skeleton placeholder while the tree data is being fetched initially.
-      </wpp-typography-v3-4-0>
-      <wpp-tree-v3-4-0
+      </wpp-typography-v4-0-0>
+      <wpp-tree-v4-0-0
         .data=${treeState}
         .loading=${args.loading}
         .skeletonNumberItems=${args.skeletonNumberItems}
         @wppChange="${handleTreeChange}"
-      ></wpp-tree-v3-4-0>
+      ></wpp-tree-v4-0-0>
     </div>
   `;
 };
@@ -305,4 +311,80 @@ TreeLoading.argTypes = {
   search: { table: { disable: true } },
   locales: { table: { disable: true } },
   lazyConfig: { table: { disable: true } },
+};
+// Data with some nodes already open on load
+const dataWithOpenNodes = [
+  {
+    title: 'Cars',
+    id: '0',
+    open: true,
+    children: [
+      {
+        title: 'Toyota',
+        id: '0-0',
+        open: true,
+        children: [
+          { title: 'Avalon', id: '0-0-0' },
+          { title: 'Prius', id: '0-0-1' },
+          {
+            title: 'Camry Variants',
+            id: '0-0-2',
+            children: [
+              { title: 'Camry 3.5', id: '0-0-2-1' },
+              { title: 'Camry Hybrid', id: '0-0-2-2' },
+            ],
+          },
+        ],
+      },
+      { title: 'Skoda', id: '0-1' },
+      { title: 'Volkswagen', id: '0-2' },
+    ],
+  },
+  { title: 'Motorcycle', id: '1' },
+  {
+    title: 'Planes',
+    id: '2',
+    children: [
+      { title: 'B-52', id: '2-0' },
+      { title: 'MIG-21', id: '2-1' },
+    ],
+  },
+];
+export const TreeOpenOnLoad = () => {
+  const [treeState, setTreeState] = useState(dataWithOpenNodes);
+  const handleTreeChange = ({ detail }) => {
+    setTreeState(detail.treeState);
+  };
+  const handleExpandAll = () => {
+    const treeEl = document.querySelector('#tree-open-on-load');
+    treeEl?.expandAll();
+  };
+  const handleCollapseAll = () => {
+    const treeEl = document.querySelector('#tree-open-on-load');
+    treeEl?.collapseAll();
+  };
+  return html `
+    <div>
+      <wpp-typography-v4-0-0 .type=${'l-strong'}>
+        Open on Load: Set <code>open: true</code> on items in your data to have them expanded initially. Use
+        <code>expandAll()</code> / <code>collapseAll()</code> methods for global control.
+      </wpp-typography-v4-0-0>
+      <div style="display: flex; gap: 8px; margin: 12px 0;">
+        <wpp-button-v4-0-0 @click=${handleExpandAll}>Expand All</wpp-button-v4-0-0>
+        <wpp-button-v4-0-0 variant="secondary" @click=${handleCollapseAll}>Collapse All</wpp-button-v4-0-0>
+      </div>
+      <wpp-tree-v4-0-0 id="tree-open-on-load" .data=${treeState} @wppChange="${handleTreeChange}"></wpp-tree-v4-0-0>
+    </div>
+  `;
+};
+TreeOpenOnLoad.argTypes = {
+  multiple: { table: { disable: true } },
+  withItemsTruncation: { table: { disable: true } },
+  search: { table: { disable: true } },
+  locales: { table: { disable: true } },
+  lazyConfig: { table: { disable: true } },
+  loading: { table: { disable: true } },
+  skeletonNumberItems: { table: { disable: true } },
+  defaultSelectedIds: { table: { disable: true } },
+  disableOpenCloseAnimation: { table: { disable: true } },
 };

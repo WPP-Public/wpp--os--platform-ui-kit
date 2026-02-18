@@ -1,7 +1,7 @@
 import { html, render } from 'lit-html';
 import { transformToVersionedTag } from '../../../../utils/utils';
 export default {
-  title: 'Design System/Components/Communication/Chat Input',
+  title: 'Design System/Components/Selection and input/Chat Input',
   parameters: {
     previewTabs: {
       'storybook/docs/panel': { hidden: true },
@@ -30,8 +30,29 @@ export const DefaultChatInput = {
   render: args => {
     let textValue = args.textValue || '';
     let messageHistory = [];
+    let isSelectOpen = false;
+    let selectedModel = 'Select models';
     let renderChatInput = (messages) => {
       console.log(messages);
+    };
+    const modelOptions = [
+      { label: 'GPT-4.1', value: 'gpt-4.1' },
+      { label: 'Claude sonnet 3.5', value: 'claude-sonnet-3.5' },
+      { label: 'GPT-4o', value: 'gpt-4o' },
+    ];
+    const dropdownConfig = {
+      onShow: () => {
+        isSelectOpen = true;
+        renderChatInput(messageHistory);
+      },
+      onHide: () => {
+        isSelectOpen = false;
+        renderChatInput(messageHistory);
+      },
+    };
+    const handleModelSelect = (model) => {
+      selectedModel = model.label;
+      renderChatInput(messageHistory);
     };
     const handleSendMessage = (event) => {
       const { message, attachments } = event.detail;
@@ -60,14 +81,14 @@ export const DefaultChatInput = {
       render(html `
           <div style=${'display: flex; flex-direction: column; height: 100vh; padding: 20px; box-sizing: border-box;'}>
             <div style=${'display: flex;'}>
-              <wpp-typography-v3-4-0>Message History:</wpp-typography-v3-4-0>
+              <wpp-typography-v4-0-0>Message History:</wpp-typography-v4-0-0>
               <ul style="margin:0;">
-                ${updatedMessages.map(msg => html `<li><wpp-typography-v3-4-0>${msg}</wpp-typography-v3-4-0></li>`)}
+                ${updatedMessages.map(msg => html `<li><wpp-typography-v4-0-0>${msg}</wpp-typography-v4-0-0></li>`)}
               </ul>
             </div>
 
             <div style=${'display: flex; align-items: flex-end; height: 100vh;'}>
-              <wpp-chat-input-v3-4-0
+              <wpp-chat-input-v4-0-0
                 .enableAttach=${args.enableAttach}
                 .disabled=${args.disabled}
                 .charactersLimit=${args.charactersLimit}
@@ -79,10 +100,35 @@ export const DefaultChatInput = {
                 .locales=${args.locales}
                 .ariaProps=${args.ariaProps}
                 .htmlAttributes=${args.htmlAttributes}
+                .withSelect=${args.withSelect}
                 @wppSend=${handleSendMessage}
                 @wppMessageChanged=${handleMessageChanged}
               >
-              </wpp-chat-input-v3-4-0>
+                <wpp-menu-context-v4-0-0 .slot=${'select'} .dropdownConfig=${dropdownConfig}>
+                  <wpp-action-button-v4-0-0
+                    slot="trigger-element"
+                    variant="secondary"
+                    .disabled=${args.disabled}
+                    style="--wpp-action-button-font-weight: 400; --wpp-action-button-secondary-icon-color: var(--wpp-grey-color-600);"
+                  >
+                    ${selectedModel}
+                    <wpp-icon-chevron-v4-0-0
+                      slot="icon-end"
+                      direction=${isSelectOpen ? 'up' : 'down'}
+                    ></wpp-icon-chevron-v4-0-0>
+                  </wpp-action-button-v4-0-0>
+                  <div>
+                    ${modelOptions.map(model => html `
+                        <wpp-list-item-v4-0-0
+                          .checked=${selectedModel === model.label}
+                          @wppChangeListItem=${() => handleModelSelect(model)}
+                        >
+                          <span slot="label">${model.label}</span>
+                        </wpp-list-item-v4-0-0>
+                      `)}
+                  </div>
+                </wpp-menu-context-v4-0-0>
+              </wpp-chat-input-v4-0-0>
             </div>
           </div>
         `, container);
@@ -131,9 +177,9 @@ export const DefaultChatInput = {
       multiple: true,
       maxFiles: 5,
       size: 50,
-      accept: ['.jpg', '.jpeg', '.png', '.pdf'],
       acceptConfig: {
         'image/png': ['.png'],
+        'image/jpeg': ['.jpg', '.jpeg'],
         'application/pdf': ['.pdf'],
       },
       locales: {
@@ -142,5 +188,6 @@ export const DefaultChatInput = {
         limitError: 'Files limit reached',
       },
     },
+    withSelect: false,
   },
 };

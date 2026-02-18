@@ -5,6 +5,7 @@ export interface TooltipProps {
   text?: string;
   value?: string;
   error?: boolean;
+  warning?: boolean;
   theme?: TooltipThemeTypes;
   config?: DropdownConfig;
   externalClass?: string;

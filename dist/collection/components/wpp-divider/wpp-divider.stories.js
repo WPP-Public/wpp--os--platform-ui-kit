@@ -16,11 +16,11 @@ export default {
 export const Divider = {
   render: args => {
     const style = args.vertical ? 'height: 150px;' : '';
-    return html ` <wpp-divider-v3-4-0
+    return html ` <wpp-divider-v4-0-0
       .vertical="${args.vertical}"
       .resizable="${args.resizable}"
       style="${style}"
-    ></wpp-divider-v3-4-0>`;
+    ></wpp-divider-v4-0-0>`;
   },
   args: {
     vertical: false,

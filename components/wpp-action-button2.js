@@ -157,16 +157,16 @@ const WppActionButton = /*@__PURE__*/ proxyCustomElement(class WppActionButton e
     this.validAriaProps = getAriaProps(this.ariaProps);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, exportparts: "button, spinner-wrapper, spinner, body, icon-start-wrapper, icon-start, icon-end-wrapper, icon-end, inner, overlay" }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, value: this.value, name: this.name, type: this.type, part: "button", "data-testid": "wppActionButton", "aria-pressed": this.isPressed ? 'true' : 'false', tabindex: this.ariaProps?.tabIndex, ...this.validAriaProps }, this.loading && (h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, h("wpp-spinner-v3-4-0", { color: this.loadingColor(), part: "spinner" }))), h("div", { class: this.contentCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("slot", { part: "inner", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData }))), h("div", { class: "overlay", part: "overlay" })));
+    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, exportparts: "button, spinner-wrapper, spinner, body, icon-start-wrapper, icon-start, icon-end-wrapper, icon-end, inner, overlay" }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, value: this.value, name: this.name, type: this.type, part: "button", "data-testid": "wppActionButton", "aria-pressed": this.isPressed ? 'true' : 'false', tabindex: this.ariaProps?.tabIndex, ...this.validAriaProps }, this.loading && (h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, h("wpp-spinner-v4-0-0", { color: this.loadingColor(), part: "spinner" }))), h("div", { class: this.contentCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("slot", { part: "inner", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData }))), h("div", { class: "overlay", part: "overlay" })));
   }
-  static get registryIs() { return "wpp-action-button-v3-4-0"; }
+  static get registryIs() { return "wpp-action-button-v4-0-0"; }
   get host() { return this; }
   static get watchers() { return {
     "ariaProps": ["onUpdateAriaProps"],
     "disabled": ["onDisabledChange"]
   }; }
   static get style() { return wppActionButtonCss; }
-}, [1, "wpp-action-button", "wpp-action-button-v3-4-0", {
+}, [1, "wpp-action-button", "wpp-action-button-v4-0-0", {
     "disabled": [516],
     "loading": [516],
     "variant": [1],
@@ -188,14 +188,14 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-action-button-v3-4-0", "wpp-spinner-v3-4-0"];
+  const components = ["wpp-action-button-v4-0-0", "wpp-spinner-v4-0-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-action-button-v3-4-0":
+    case "wpp-action-button-v4-0-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppActionButton);
       }
       break;
-    case "wpp-spinner-v3-4-0":
+    case "wpp-spinner-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

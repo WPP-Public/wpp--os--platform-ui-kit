@@ -101,7 +101,7 @@ function getLeadingFixedCharacters(mask, validatedValuePart, newCharacter, initi
     let leadingFixedCharacters = '';
     for (let i = validatedValuePart.length; i < mask.length; i++) {
         const charConstraint = mask[i] || '';
-        const isInitiallyExisted = (initialElementState === null || initialElementState === void 0 ? void 0 : initialElementState.value[i]) === charConstraint;
+        const isInitiallyExisted = initialElementState?.value[i] === charConstraint;
         if (!isFixedCharacter(charConstraint) ||
             (charConstraint === newCharacter && !isInitiallyExisted)) {
             return leadingFixedCharacters;
@@ -152,7 +152,7 @@ function guessValidValueByPattern(elementState, mask, initialElementState) {
         value: validateValueWithMask(maskedValue + trailingFixedCharacters, mask)
             ? maskedValue + trailingFixedCharacters
             : maskedValue,
-        selection: [maskedFrom !== null && maskedFrom !== void 0 ? maskedFrom : maskedValue.length, maskedTo !== null && maskedTo !== void 0 ? maskedTo : maskedValue.length],
+        selection: [maskedFrom ?? maskedValue.length, maskedTo ?? maskedValue.length],
     };
 }
 
@@ -365,7 +365,6 @@ function isUndo(event) {
  * @return void
  */
 function maskitoUpdateElement(element, valueOrElementState) {
-    var _a;
     const initialValue = element.value;
     if (typeof valueOrElementState === 'string') {
         element.value = valueOrElementState;
@@ -374,7 +373,7 @@ function maskitoUpdateElement(element, valueOrElementState) {
         const [from, to] = valueOrElementState.selection;
         element.value = valueOrElementState.value;
         if (element.matches(':focus')) {
-            (_a = element.setSelectionRange) === null || _a === void 0 ? void 0 : _a.call(element, from, to);
+            element.setSelectionRange?.(from, to);
         }
     }
     if (element.value !== initialValue) {
@@ -452,11 +451,14 @@ function getWordSelection({ value, selection }, isForward) {
  * @internal
  */
 function maskitoPipe(processors = []) {
-    return (initialData, ...readonlyArgs) => processors.reduce((data, fn) => (Object.assign(Object.assign({}, data), fn(data, ...readonlyArgs))), initialData);
+    return (initialData, ...readonlyArgs) => processors.reduce((data, fn) => ({ ...data, ...fn(data, ...readonlyArgs) }), initialData);
 }
 
 function maskitoTransform(valueOrState, maskitoOptions) {
-    const options = Object.assign(Object.assign({}, MASKITO_DEFAULT_OPTIONS), maskitoOptions);
+    const options = {
+        ...MASKITO_DEFAULT_OPTIONS,
+        ...maskitoOptions,
+    };
     const preprocessor = maskitoPipe(options.preprocessors);
     const postprocessor = maskitoPipe(options.postprocessors);
     const initialElementState = typeof valueOrState === 'string'
@@ -536,21 +538,20 @@ function createDoubleSpacePlugin() {
     return (element) => {
         const eventListener = new EventListener(element);
         eventListener.listen('beforeinput', (event) => {
-            var _a, _b;
             const { value, selectionStart, selectionEnd } = element;
-            const rejectedSpace = (prevEvent === null || prevEvent === void 0 ? void 0 : prevEvent.inputType) === 'insertText' &&
-                (prevEvent === null || prevEvent === void 0 ? void 0 : prevEvent.data) === SPACE &&
+            const rejectedSpace = prevEvent?.inputType === 'insertText' &&
+                prevEvent?.data === SPACE &&
                 !value.slice(0, Number(selectionEnd)).endsWith(SPACE);
             if (event.inputType === 'insertText' && event.data === `.${SPACE}`) {
-                if ((prevEvent === null || prevEvent === void 0 ? void 0 : prevEvent.inputType) === 'deleteContentBackward' &&
+                if (prevEvent?.inputType === 'deleteContentBackward' &&
                     prevRejectedSpace) {
                     // Android
                     element.value = prevValue;
-                    (_a = element.setSelectionRange) === null || _a === void 0 ? void 0 : _a.call(element, prevCaretIndex, prevCaretIndex);
+                    element.setSelectionRange?.(prevCaretIndex, prevCaretIndex);
                 }
                 else if (rejectedSpace) {
                     // Mac OS
-                    (_b = element.setSelectionRange) === null || _b === void 0 ? void 0 : _b.call(element, selectionStart, selectionStart);
+                    element.setSelectionRange?.(selectionStart, selectionStart);
                 }
             }
             prevRejectedSpace = rejectedSpace;
@@ -564,6 +565,17 @@ function createDoubleSpacePlugin() {
     };
 }
 
+function maskitoInitialCalibrationPlugin(customOptions) {
+    return (element, options) => {
+        const from = element.selectionStart ?? 0;
+        const to = element.selectionEnd ?? 0;
+        maskitoUpdateElement(element, {
+            value: maskitoTransform(element.value, customOptions || options),
+            selection: [from, to],
+        });
+    };
+}
+
 const BUILT_IN_PLUGINS = [createDoubleSpacePlugin(), createBrokenDefaultPlugin()];
 class Maskito extends MaskHistory {
     constructor(element, maskitoOptions) {
@@ -572,7 +584,10 @@ class Maskito extends MaskHistory {
         this.maskitoOptions = maskitoOptions;
         this.isTextArea = this.element.nodeName === 'TEXTAREA';
         this.eventListener = new EventListener(this.element);
-        this.options = Object.assign(Object.assign({}, MASKITO_DEFAULT_OPTIONS), this.maskitoOptions);
+        this.options = {
+            ...MASKITO_DEFAULT_OPTIONS,
+            ...this.maskitoOptions,
+        };
         this.upcomingElementState = null;
         this.preprocessor = maskitoPipe(this.options.preprocessors);
         this.postprocessor = maskitoPipe(this.options.postprocessors);
@@ -591,7 +606,6 @@ class Maskito extends MaskHistory {
             }
         });
         this.eventListener.listen('beforeinput', (event) => {
-            var _a, _b, _c;
             const isForward = event.inputType.includes('Forward');
             this.updateHistory(this.elementState);
             switch (event.inputType) {
@@ -652,9 +666,10 @@ class Maskito extends MaskHistory {
                 case 'insertFromPaste':
                 case 'insertText':
                 default:
-                    return this.handleInsert(event, (_c = (_a = event.data) !== null && _a !== void 0 ? _a : 
-                    // `event.data` for `contentEditable` is always `null` for paste/drop events
-                    (_b = event.dataTransfer) === null || _b === void 0 ? void 0 : _b.getData('text/plain')) !== null && _c !== void 0 ? _c : '');
+                    return this.handleInsert(event, event.data ??
+                        // `event.data` for `contentEditable` is always `null` for paste/drop events
+                        event.dataTransfer?.getData('text/plain') ??
+                        '');
             }
         });
         this.eventListener.listen('input', () => {
@@ -678,7 +693,7 @@ class Maskito extends MaskHistory {
     }
     destroy() {
         this.eventListener.destroy();
-        this.teardowns.forEach((teardown) => teardown === null || teardown === void 0 ? void 0 : teardown());
+        this.teardowns.forEach((teardown) => teardown?.());
     }
     updateElementState({ value, selection }, eventInit) {
         const initialValue = this.elementState.value;
@@ -692,7 +707,7 @@ class Maskito extends MaskHistory {
         const { value, selectionStart, selectionEnd } = this.element;
         return {
             value,
-            selection: [selectionStart !== null && selectionStart !== void 0 ? selectionStart : 0, selectionEnd !== null && selectionEnd !== void 0 ? selectionEnd : 0],
+            selection: [selectionStart ?? 0, selectionEnd ?? 0],
         };
     }
     get maxLength() {
@@ -700,11 +715,10 @@ class Maskito extends MaskHistory {
         return maxLength === -1 ? Infinity : maxLength;
     }
     updateSelectionRange([from, to]) {
-        var _a;
         const { element } = this;
         if (element.matches(':focus') &&
             (element.selectionStart !== from || element.selectionEnd !== to)) {
-            (_a = element.setSelectionRange) === null || _a === void 0 ? void 0 : _a.call(element, from, to);
+            element.setSelectionRange?.(from, to);
         }
     }
     updateValue(value) {
@@ -727,7 +741,11 @@ class Maskito extends MaskHistory {
         data: null,
     }) {
         if (globalThis.InputEvent) {
-            this.element.dispatchEvent(new InputEvent('input', Object.assign(Object.assign({}, eventInit), { bubbles: true, cancelable: false })));
+            this.element.dispatchEvent(new InputEvent('input', {
+                ...eventInit,
+                bubbles: true,
+                cancelable: false,
+            }));
         }
     }
     handleDelete({ event, selection, isForward, }) {
@@ -761,7 +779,7 @@ class Maskito extends MaskHistory {
         try {
             maskModel.addCharacters(insertedText);
         }
-        catch (_a) {
+        catch {
             return event.preventDefault();
         }
         this.upcomingElementState = this.clampState(this.postprocessor(maskModel, initialElementState));
@@ -6442,14 +6460,16 @@ var AsYouType = /*#__PURE__*/function () {
 
 /**
  * Clamps a value between two inclusive limits
- *
- * @param value
- * @param min lower limit
- * @param max upper limit
  */
-function clamp(value, min, max) {
-    const clampedValue = Math.min(Number(max), Math.max(Number(min), Number(value)));
-    return (value instanceof Date ? new Date(clampedValue) : clampedValue);
+function clamp(value, minimum, maximum) {
+    const minClamped = max(minimum ?? value, value);
+    return min(maximum ?? minClamped, minClamped);
+}
+function min(x, ...values) {
+    return values.reduce((a, b) => (a < b ? a : b), x);
+}
+function max(x, ...values) {
+    return values.reduce((a, b) => (a > b ? a : b), x);
 }
 
 // eslint-disable-next-line i18n/no-russian-character
@@ -6498,6 +6518,14 @@ const CHAR_MINUS = '\u2212';
  */
 const CHAR_JP_HYPHEN = '\u30FC';
 
+const DEFAULT_PSEUDO_MINUSES = [
+    CHAR_HYPHEN,
+    CHAR_EN_DASH,
+    CHAR_EM_DASH,
+    CHAR_JP_HYPHEN,
+    CHAR_MINUS,
+];
+
 const TIME_FIXED_CHARACTERS = [':', '.'];
 
 function identity(x) {
@@ -6516,21 +6544,6 @@ function escapeRegExp(str) {
     return str && reHasRegExpChar.test(str)
         ? str.replaceAll(reRegExpChar, String.raw `\$&`)
         : str;
-}
-
-function extractAffixes(value, { prefix, postfix }) {
-    var _a, _b;
-    const prefixRegExp = new RegExp(`^${escapeRegExp(prefix)}`);
-    const postfixRegExp = new RegExp(`${escapeRegExp(postfix)}$`);
-    const [extractedPrefix = ''] = (_a = value.match(prefixRegExp)) !== null && _a !== void 0 ? _a : [];
-    const [extractedPostfix = ''] = (_b = value.match(postfixRegExp)) !== null && _b !== void 0 ? _b : [];
-    return {
-        extractedPrefix,
-        extractedPostfix,
-        cleanValue: extractedPrefix || extractedPostfix
-            ? value.slice(extractedPrefix.length, extractedPostfix.length ? -extractedPostfix.length : Infinity)
-            : value,
-    };
 }
 
 function findCommonBeginningSubstr(a, b) {
@@ -6572,18 +6585,24 @@ function createFullWidthToHalfWidthPreprocessor() {
 new RegExp(`[${TIME_FIXED_CHARACTERS.map(escapeRegExp).join('')}]$`);
 
 function maskitoPostfixPostprocessorGenerator(postfix) {
-    const postfixRE = new RegExp(`${escapeRegExp(postfix)}$`);
+    const completedPostfixRE = new RegExp(`${escapeRegExp(postfix)}$`);
+    const incompletePostfixRE = new RegExp(postfix &&
+        `(${postfix
+            .split('')
+            .map(escapeRegExp)
+            // eslint-disable-next-line
+            .reduce((acc, _, i, arr) => `${acc}|${arr.slice(0, i + 1).join('')}`)})$`);
     return postfix
         ? ({ value, selection }, initialElementState) => {
             if (!value && !initialElementState.value.endsWith(postfix)) {
                 // cases when developer wants input to be empty (programmatically)
                 return { value, selection };
             }
-            if (!value.endsWith(postfix) &&
+            if (!value.match(incompletePostfixRE) &&
                 !initialElementState.value.endsWith(postfix)) {
                 return { selection, value: value + postfix };
             }
-            const initialValueBeforePostfix = initialElementState.value.replace(postfixRE, '');
+            const initialValueBeforePostfix = initialElementState.value.replace(completedPostfixRE, '');
             const postfixWasModified = initialElementState.selection[1] > initialValueBeforePostfix.length;
             const alreadyExistedValueBeforePostfix = findCommonBeginningSubstr(initialValueBeforePostfix, value);
             return {
@@ -6668,9 +6687,8 @@ function maskitoSelectionChangeHandler(handler) {
 
 function maskitoCaretGuard(guard) {
     return maskitoSelectionChangeHandler((element) => {
-        var _a, _b;
-        const start = (_a = element.selectionStart) !== null && _a !== void 0 ? _a : 0;
-        const end = (_b = element.selectionEnd) !== null && _b !== void 0 ? _b : 0;
+        const start = element.selectionStart ?? 0;
+        const end = element.selectionEnd ?? 0;
         const [fromLimit, toLimit] = guard(element.value, [start, end]);
         if (fromLimit > start || toLimit < end) {
             element.setSelectionRange(clamp(start, fromLimit, toLimit), clamp(end, fromLimit, toLimit));
@@ -6752,30 +6770,44 @@ function maskitoWithPlaceholder(placeholder, focusedOnly = false) {
     };
 }
 
-/**
- * It drops prefix and postfix from data
- * Needed for case, when prefix or postfix contain decimalSeparator, to ignore it in resulting number
- * @example User pastes '{prefix}123.45{postfix}' => 123.45
- */
-function createAffixesFilterPreprocessor({ prefix, postfix, }) {
-    return ({ elementState, data }) => {
-        const { cleanValue: cleanData } = extractAffixes(data, {
-            prefix,
-            postfix,
-        });
-        return {
-            elementState,
-            data: cleanData,
-        };
+function extractAffixes(value, { prefix, postfix, decimalSeparator, decimalPseudoSeparators, minusSign, minusPseudoSigns, maximumFractionDigits, }) {
+    const decimalSeparators = [...decimalPseudoSeparators, decimalSeparator]
+        .map((x) => `\\${x}`)
+        .join('');
+    const minuses = [...minusPseudoSigns, minusSign].map((x) => `\\${x}`).join('');
+    const prefixRegExp = prefix &&
+        new RegExp(`^([${minuses}])?(${prefix.split('').map(escapeRegExp).join('?')}?)`);
+    const postfixRegExp = postfix && new RegExp(`${postfix.split('').map(escapeRegExp).join('?')}?$`);
+    const [, , extractedPrefix = ''] = value.match(prefixRegExp) ?? [];
+    const [extractedPostfix = ''] = value.match(postfixRegExp) ?? [];
+    const cleanValue = value
+        .replace(prefixRegExp, prefix && '$1')
+        .replace(postfixRegExp, '');
+    const leadingDecimalSeparatorRE = new RegExp(decimalSeparator && maximumFractionDigits > 0 ? `^[${decimalSeparators}]` : '');
+    const leadingDigitsRE = new RegExp(value.endsWith(postfix) ? '' : String.raw `^\d+`);
+    const trailingDecimalSeparatorRE = new RegExp(decimalSeparator && maximumFractionDigits > 0 ? `[${decimalSeparators}]$` : '');
+    const trailingDigitsRE = new RegExp(value.startsWith(prefix) ? '' : String.raw `\d+$`);
+    return {
+        extractedPrefix: extractedPrefix
+            .replace(trailingDecimalSeparatorRE, '')
+            .replace(trailingDigitsRE, ''),
+        extractedPostfix: extractedPostfix
+            .replace(leadingDecimalSeparatorRE, '')
+            .replace(leadingDigitsRE, ''),
+        cleanValue: (trailingDigitsRE.exec(extractedPrefix)?.[0] ?? '') +
+            (trailingDecimalSeparatorRE.exec(extractedPrefix)?.[0] ?? '') +
+            cleanValue +
+            (leadingDigitsRE.exec(extractedPostfix)?.[0] ?? '') +
+            (leadingDecimalSeparatorRE.exec(extractedPostfix)?.[0] ?? ''),
     };
 }
 
-function generateMaskExpression({ decimalPseudoSeparators, decimalSeparator, maximumFractionDigits, min, minusSign, postfix, prefix, pseudoMinuses, thousandSeparator, }) {
-    const computedPrefix = min < 0 && [minusSign, ...pseudoMinuses].includes(prefix)
+function generateMaskExpression({ decimalPseudoSeparators, decimalSeparator, maximumFractionDigits, min, minusSign, minusPseudoSigns, postfix, prefix, thousandSeparator, }) {
+    const computedPrefix = min < 0 && [minusSign, ...minusPseudoSigns].includes(prefix)
         ? ''
         : computeAllOptionalCharsRegExp(prefix);
     const digit = String.raw `\d`;
-    const optionalMinus = min < 0 ? `[${minusSign}${pseudoMinuses.map((x) => `\\${x}`).join('')}]?` : '';
+    const optionalMinus = min < 0 ? `[${minusSign}${minusPseudoSigns.map((x) => `\\${x}`).join('')}]?` : '';
     const integerPart = thousandSeparator
         ? `[${digit}${escapeRegExp(thousandSeparator).replaceAll(/\s/g, String.raw `\s`)}]*`
         : `[${digit}]*`;
@@ -6788,7 +6820,8 @@ function generateMaskExpression({ decimalPseudoSeparators, decimalSeparator, max
             .join('')}]${digit}{0,${precisionPart}})?`
         : '';
     const computedPostfix = computeAllOptionalCharsRegExp(postfix);
-    return new RegExp(`^${computedPrefix}${optionalMinus}${integerPart}${decimalPart}${computedPostfix}$`);
+    const beginning = `(${optionalMinus + computedPrefix}|${computedPrefix + optionalMinus})`;
+    return new RegExp(`^${beginning}${integerPart}${decimalPart}${computedPostfix}$`);
 }
 function computeAllOptionalCharsRegExp(str) {
     return str
@@ -6799,25 +6832,47 @@ function computeAllOptionalCharsRegExp(str) {
         : '';
 }
 
-function maskitoParseNumber(maskedNumber, 
-// TODO(v4): decimalSeparatorOrParams: MaskitoNumberParams | string => params: MaskitoNumberParams = {}
-decimalSeparatorOrParams = {}) {
-    const { decimalSeparator = '.', minusSign = '' } = typeof decimalSeparatorOrParams === 'string'
-        ? { decimalSeparator: decimalSeparatorOrParams }
-        : decimalSeparatorOrParams;
-    const hasNegativeSign = !!new RegExp(`^\\D*[${escapeRegExp(minusSign)}\\${DEFAULT_PSEUDO_MINUSES.join('\\')}]`).exec(maskedNumber);
+function toNumberParts(value, params) {
+    const { extractedPrefix, cleanValue, extractedPostfix } = extractAffixes(value, params);
+    const { decimalSeparator, minusSign, minusPseudoSigns, decimalPseudoSeparators, maximumFractionDigits, } = params;
+    const [integerWithMinus = '', decimalPart = ''] = decimalSeparator
+        ? cleanValue.split(decimalSeparator)
+        : [cleanValue];
+    const minuses = [minusSign, ...minusPseudoSigns].map((x) => `\\${x}`).join('');
+    const [, minus = '', integerPart = ''] = new RegExp(`^([${minuses}])?(.*)`).exec(integerWithMinus) || [];
+    return {
+        prefix: extractedPrefix,
+        minus,
+        integerPart,
+        decimalPart,
+        decimalSeparator: decimalSeparator && maximumFractionDigits > 0
+            ? (new RegExp(`[${[decimalSeparator, ...decimalPseudoSeparators].map(escapeRegExp).join('')}]`, 'i').exec(cleanValue)?.[0] ?? '')
+            : '',
+        postfix: extractedPostfix,
+    };
+}
+function fromNumberParts({ minus = '', integerPart = '', decimalPart = '', prefix = '', postfix = '', decimalSeparator = '', }, params) {
+    const separator = decimalPart ? params.decimalSeparator : decimalSeparator;
+    const beginning = params.negativePattern === 'minusFirst' ? minus + prefix : prefix + minus;
+    return `${beginning}${integerPart}${separator}${decimalPart}${postfix}`;
+}
+
+function maskitoParseNumber(maskedNumber, { bigint = false, decimalSeparator = '.', maximumFractionDigits = 0, minusPseudoSigns = DEFAULT_PSEUDO_MINUSES, minusSign = CHAR_MINUS, thousandSeparator = CHAR_NO_BREAK_SPACE, } = {}) {
+    const hasNegativeSign = !!new RegExp(`^\\D*[${escapeRegExp(minusSign)}\\${minusPseudoSigns.join('\\')}]`).exec(maskedNumber);
     const escapedDecimalSeparator = escapeRegExp(decimalSeparator);
     const unmaskedNumber = maskedNumber
         // drop all decimal separators not followed by a digit
         .replaceAll(new RegExp(`${escapedDecimalSeparator}(?!\\d)`, 'g'), '')
         // drop all non-digit characters except decimal separator
-        .replaceAll(new RegExp(`[^\\d${escapedDecimalSeparator}]`, 'g'), '')
+        .replaceAll(new RegExp(`[^\\d${maximumFractionDigits <= 0 && decimalSeparator === thousandSeparator ? '' : escapedDecimalSeparator}]`, 'g'), '')
         .replace(decimalSeparator, decimalSeparator && '.');
     if (unmaskedNumber) {
         const sign = hasNegativeSign ? CHAR_HYPHEN : '';
-        return Number(`${sign}${unmaskedNumber}`);
+        return bigint
+            ? BigInt(`${sign}${unmaskedNumber}`)
+            : Number(`${sign}${unmaskedNumber}`);
     }
-    return NaN;
+    return bigint ? null : NaN;
 }
 
 /**
@@ -6827,25 +6882,15 @@ decimalSeparatorOrParams = {}) {
  * @return string representation of a number
  */
 function stringifyNumberWithoutExp(value) {
-    var _a;
     const valueAsString = String(value);
     const [numberPart = '', expPart] = valueAsString.split('e-');
     let valueWithoutExp = valueAsString;
-    if (expPart) {
+    if (expPart && typeof value === 'number') {
         const [, fractionalPart] = numberPart.split('.');
-        const decimalDigits = Number(expPart) + ((_a = fractionalPart === null || fractionalPart === void 0 ? void 0 : fractionalPart.length) !== null && _a !== void 0 ? _a : 0);
+        const decimalDigits = Number(expPart) + (fractionalPart?.length ?? 0);
         valueWithoutExp = value.toFixed(decimalDigits);
     }
     return valueWithoutExp;
-}
-
-function toNumberParts(value, { decimalSeparator, minusSign }) {
-    const [integerWithMinus = '', decimalPart = ''] = decimalSeparator
-        ? value.split(decimalSeparator)
-        : [value];
-    const escapedMinus = escapeRegExp(minusSign);
-    const [, minus = '', integerPart = ''] = new RegExp(`^(?:[^\\d${escapedMinus}])?(${escapedMinus})?(.*)`).exec(integerWithMinus) || [];
-    return { minus, integerPart, decimalPart };
 }
 
 function validateDecimalPseudoSeparators({ decimalSeparator, thousandSeparator, decimalPseudoSeparators = DEFAULT_DECIMAL_PSEUDO_SEPARATORS, }) {
@@ -6853,29 +6898,45 @@ function validateDecimalPseudoSeparators({ decimalSeparator, thousandSeparator, 
 }
 
 /**
+ * It drops prefix and postfix from data
+ * Needed for case, when prefix or postfix contain decimalSeparator, to ignore it in resulting number
+ * @example User pastes '{prefix}123.45{postfix}' => 123.45
+ */
+function createAffixesFilterPreprocessor(params) {
+    return ({ elementState, data }) => {
+        const { value } = elementState;
+        const { prefix, postfix, ...numberParts } = toNumberParts(data, params);
+        return {
+            elementState,
+            data: fromNumberParts({
+                ...numberParts,
+                prefix: value.startsWith(prefix) ? '' : prefix,
+                postfix: value.endsWith(postfix) ? '' : postfix,
+            }, params),
+        };
+    };
+}
+
+/**
  * If `minimumFractionDigits` is `>0`, it pads decimal part with zeroes
  * (until number of digits after decimalSeparator is equal to the `minimumFractionDigits`).
  * @example 1,42 => (`minimumFractionDigits` is equal to 4) => 1,4200.
  */
-function createDecimalZeroPaddingPostprocessor({ decimalSeparator, minimumFractionDigits, prefix, postfix, minusSign, }) {
+function createDecimalZeroPaddingPostprocessor(params) {
+    const { minimumFractionDigits } = params;
     if (!minimumFractionDigits) {
         return identity;
     }
     return ({ value, selection }) => {
-        const { cleanValue, extractedPrefix, extractedPostfix } = extractAffixes(value, {
-            prefix,
-            postfix,
-        });
-        if (Number.isNaN(maskitoParseNumber(cleanValue, { decimalSeparator, minusSign }))) {
+        if (Number.isNaN(maskitoParseNumber(value, params))) {
             return { value, selection };
         }
-        const [integerPart, decimalPart = ''] = cleanValue.split(decimalSeparator);
+        const { decimalPart, ...numberParts } = toNumberParts(value, params);
         return {
-            value: extractedPrefix +
-                integerPart +
-                decimalSeparator +
-                decimalPart.padEnd(minimumFractionDigits, '0') +
-                extractedPostfix,
+            value: fromNumberParts({
+                ...numberParts,
+                decimalPart: decimalPart.padEnd(minimumFractionDigits, '0'),
+            }, params),
             selection,
         };
     };
@@ -6887,28 +6948,18 @@ function createDecimalZeroPaddingPostprocessor({ decimalSeparator, minimumFracti
  * @example -0|,00 => Backspace => -.
  * @example ,42| => Backspace x2 => ,|00 => Backspace => Empty
  */
-function emptyPostprocessor({ prefix, postfix, decimalSeparator, minusSign, }) {
+function emptyPostprocessor(params) {
     return ({ value, selection }) => {
         const [caretIndex] = selection;
-        const { cleanValue, extractedPrefix, extractedPostfix } = extractAffixes(value, {
-            prefix,
-            postfix,
-        });
-        const { minus, integerPart, decimalPart } = toNumberParts(cleanValue, {
-            decimalSeparator,
-            minusSign,
-        });
-        const aloneDecimalSeparator = !integerPart &&
-            !decimalPart &&
-            Boolean(decimalSeparator) &&
-            cleanValue.includes(decimalSeparator);
+        const { prefix, minus, integerPart, decimalSeparator, decimalPart, postfix } = toNumberParts(value, params);
+        const aloneDecimalSeparator = !integerPart && !decimalPart && decimalSeparator;
         if ((!integerPart &&
             !Number(decimalPart) &&
-            caretIndex === (minus + extractedPrefix).length) ||
+            caretIndex === (minus + prefix).length) ||
             aloneDecimalSeparator) {
             return {
                 selection,
-                value: extractedPrefix + minus + extractedPostfix,
+                value: fromNumberParts({ prefix, minus, postfix }, params),
             };
         }
         return { value, selection };
@@ -6925,18 +6976,15 @@ function emptyPostprocessor({ prefix, postfix, decimalSeparator, minusSign, }) {
  * maskitoOptions = maskitoNumberOptionsGenerator({postfix: ' years'});
  * ```
  */
-function createInitializationOnlyPreprocessor({ decimalPseudoSeparators, decimalSeparator, minusSign, postfix, prefix, pseudoMinuses, }) {
+function createInitializationOnlyPreprocessor(params) {
     let isInitializationPhase = true;
     const cleanNumberMask = generateMaskExpression({
-        decimalSeparator,
-        decimalPseudoSeparators,
-        pseudoMinuses,
+        ...params,
         prefix: '',
         postfix: '',
         thousandSeparator: '',
         maximumFractionDigits: Infinity,
-        min: Number.MIN_SAFE_INTEGER,
-        minusSign,
+        min: -Infinity,
     });
     return ({ elementState, data }) => {
         if (!isInitializationPhase) {
@@ -6945,29 +6993,58 @@ function createInitializationOnlyPreprocessor({ decimalPseudoSeparators, decimal
         isInitializationPhase = false;
         const { value, selection } = elementState;
         const [from, to] = selection;
-        const { extractedPrefix, cleanValue, extractedPostfix } = extractAffixes(value, {
-            prefix,
-            postfix,
-        });
+        const { prefix, postfix, ...numberParts } = toNumberParts(value, params);
+        const onlyNumber = fromNumberParts(numberParts, params);
         const cleanState = maskitoTransform({
             selection: [
-                Math.max(from - extractedPrefix.length, 0),
-                clamp(to - extractedPrefix.length, 0, cleanValue.length),
+                Math.max(from - prefix.length, 0),
+                Math.max(to - prefix.length, 0),
             ],
-            value: cleanValue,
+            value: onlyNumber,
         }, {
             mask: cleanNumberMask,
         });
-        const [cleanFrom, cleanTo] = cleanState.selection;
+        const deleted = onlyNumber.slice(0, Math.max(to - prefix.length, 0)).length -
+            cleanState.value.slice(0, cleanState.selection[1]).length;
         return {
             elementState: {
-                selection: [
-                    cleanFrom + extractedPrefix.length,
-                    cleanTo + extractedPrefix.length,
-                ],
-                value: extractedPrefix + cleanState.value + extractedPostfix,
+                selection: [Math.max(from - deleted, 0), Math.max(to - deleted, 0)],
+                value: fromNumberParts({
+                    ...toNumberParts(cleanState.value, params),
+                    prefix,
+                    postfix,
+                }, params),
             },
             data,
+        };
+    };
+}
+
+/**
+ * If minus sign is positioned before prefix,
+ * any attempt to erase prefix deletes minus (without deletion of non-removable prefix)
+ * @example -$|42 => Backspace => $|42
+ */
+function createLeadingMinusDeletionPreprocessor(params) {
+    return ({ elementState }, inputType) => {
+        const { value, selection } = elementState;
+        const [from, to] = selection;
+        const { prefix, minusSign, negativePattern } = params;
+        const beginning = negativePattern === 'prefixFirst' ? prefix : minusSign + prefix;
+        const newValue = fromNumberParts({ ...toNumberParts(value, params), minus: '' }, params);
+        const diff = value.length - newValue.length;
+        return {
+            elementState: inputType.includes('delete') &&
+                value.includes(minusSign) &&
+                from < beginning.length
+                ? {
+                    value: newValue,
+                    selection: [
+                        Math.max(from - diff, beginning.length - 1),
+                        Math.max(to - diff, beginning.length - 1),
+                    ],
+                }
+                : elementState,
         };
     };
 }
@@ -6979,7 +7056,8 @@ function createInitializationOnlyPreprocessor({ decimalPseudoSeparators, decimal
  * @example User types "000000" => 0|
  * @example 0| => User types "5" => 5|
  */
-function createLeadingZeroesValidationPostprocessor({ decimalSeparator, thousandSeparator, prefix, postfix, }) {
+function createLeadingZeroesValidationPostprocessor(params) {
+    const { thousandSeparator } = params;
     const trimLeadingZeroes = (value) => {
         const escapedThousandSeparator = escapeRegExp(thousandSeparator);
         return value
@@ -6999,14 +7077,7 @@ function createLeadingZeroesValidationPostprocessor({ decimalSeparator, thousand
     };
     return ({ value, selection }) => {
         const [from, to] = selection;
-        const { cleanValue, extractedPrefix, extractedPostfix } = extractAffixes(value, {
-            prefix,
-            postfix,
-        });
-        const hasDecimalSeparator = Boolean(decimalSeparator) && cleanValue.includes(decimalSeparator);
-        const [integerPart = '', decimalPart = ''] = decimalSeparator
-            ? cleanValue.split(decimalSeparator)
-            : [cleanValue];
+        const { integerPart, ...numberParts } = toNumberParts(value, params);
         const zeroTrimmedIntegerPart = trimLeadingZeroes(integerPart);
         if (integerPart === zeroTrimmedIntegerPart) {
             return { value, selection };
@@ -7014,11 +7085,7 @@ function createLeadingZeroesValidationPostprocessor({ decimalSeparator, thousand
         const newFrom = from - countTrimmedZeroesBefore(value, from);
         const newTo = to - countTrimmedZeroesBefore(value, to);
         return {
-            value: extractedPrefix +
-                zeroTrimmedIntegerPart +
-                (hasDecimalSeparator ? decimalSeparator : '') +
-                decimalPart +
-                extractedPostfix,
+            value: fromNumberParts({ ...numberParts, integerPart: zeroTrimmedIntegerPart }, params),
             selection: [Math.max(newFrom, 0), Math.max(newTo, 0)],
         };
     };
@@ -7028,9 +7095,13 @@ function createLeadingZeroesValidationPostprocessor({ decimalSeparator, thousand
  * This postprocessor is connected with {@link createMinMaxPlugin}:
  * both validate `min`/`max` bounds of entered value (but at the different point of time).
  */
-function createMinMaxPostprocessor({ min, max, decimalSeparator, minusSign, }) {
+function createMinMaxPostprocessor({ min, max, decimalSeparator, minusSign, maximumFractionDigits, }) {
     return ({ value, selection }) => {
-        const parsedNumber = maskitoParseNumber(value, { decimalSeparator, minusSign });
+        const parsedNumber = maskitoParseNumber(value, {
+            decimalSeparator,
+            minusSign,
+            bigint: !(maximumFractionDigits && value.includes(decimalSeparator)),
+        }) ?? NaN;
         const limitedValue = 
         /**
          * We cannot limit lower bound if user enters positive number.
@@ -7042,7 +7113,7 @@ function createMinMaxPostprocessor({ min, max, decimalSeparator, minusSign, }) {
          * @example (max = -10)
          * Value is -10 => Without this condition user cannot delete 0 to enter another digit
          */
-        parsedNumber > 0 ? Math.min(parsedNumber, max) : Math.max(parsedNumber, min);
+        parsedNumber > 0 ? clamp(parsedNumber, null, max) : clamp(parsedNumber, min);
         if (parsedNumber && limitedValue !== parsedNumber) {
             const newValue = `${limitedValue}`
                 .replace('.', decimalSeparator)
@@ -7099,24 +7170,24 @@ function createNonRemovableCharsDeletionPreprocessor({ decimalSeparator, thousan
  * It pads integer part with zero if user types decimal separator (for empty input).
  * @example Empty input => User types "," (decimal separator) => 0,|
  */
-function createNotEmptyIntegerPartPreprocessor({ decimalSeparator, maximumFractionDigits, prefix, postfix, }) {
+function createNotEmptyIntegerPartPreprocessor(params) {
+    const { maximumFractionDigits, decimalSeparator } = params;
     const startWithDecimalSepRegExp = new RegExp(`^\\D*${escapeRegExp(decimalSeparator)}`);
     return ({ elementState, data }) => {
         const { value, selection } = elementState;
-        const { cleanValue, extractedPrefix } = extractAffixes(value, {
-            prefix,
-            postfix,
-        });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { prefix, postfix, ...numberParts } = toNumberParts(value, params);
+        const onlyNumber = fromNumberParts(numberParts, params);
         const [from, to] = selection;
-        const cleanFrom = clamp(from - extractedPrefix.length, 0, cleanValue.length);
-        const cleanTo = clamp(to - extractedPrefix.length, 0, cleanValue.length);
+        const cleanFrom = clamp(from - prefix.length, 0, onlyNumber.length);
+        const cleanTo = clamp(to - prefix.length, 0, onlyNumber.length);
         if (maximumFractionDigits <= 0 ||
-            cleanValue.slice(0, cleanFrom).includes(decimalSeparator) ||
-            cleanValue.slice(cleanTo).includes(decimalSeparator) ||
+            onlyNumber.slice(0, cleanFrom).includes(decimalSeparator) ||
+            onlyNumber.slice(cleanTo).includes(decimalSeparator) ||
             !data.match(startWithDecimalSepRegExp)) {
             return { elementState, data };
         }
-        const digitsBeforeCursor = /\d+/.exec(cleanValue.slice(0, cleanFrom));
+        const digitsBeforeCursor = /\d+/.exec(onlyNumber.slice(0, cleanFrom));
         return {
             elementState,
             data: digitsBeforeCursor ? data : `0${data}`,
@@ -7124,25 +7195,31 @@ function createNotEmptyIntegerPartPreprocessor({ decimalSeparator, maximumFracti
     };
 }
 
+function createNumberPrefixPostprocessor({ prefix, minusSign, negativePattern, }) {
+    return ({ value, selection }, initialElementState) => maskitoPrefixPostprocessorGenerator(value.includes(minusSign) && negativePattern === 'minusFirst'
+        ? minusSign + prefix
+        : prefix)({ value, selection }, initialElementState);
+}
+
 /**
  * It replaces pseudo characters with valid one.
  * @example User types '.' (but separator is equal to comma) => dot is replaced with comma.
  * @example User types hyphen / en-dash / em-dash => it is replaced with minus.
  */
-function createPseudoCharactersPreprocessor({ validCharacter, pseudoCharacters, prefix, postfix, }) {
+function createPseudoCharactersPreprocessor({ validCharacter, pseudoCharacters, ...params }) {
     const pseudoCharactersRegExp = new RegExp(`[${pseudoCharacters.join('')}]`, 'gi');
     return ({ elementState, data }) => {
         const { value, selection } = elementState;
-        const { cleanValue, extractedPostfix, extractedPrefix } = extractAffixes(value, {
-            prefix,
-            postfix,
-        });
+        const { prefix, postfix, ...numberParts } = toNumberParts(value, params);
+        const onlyNumber = fromNumberParts(numberParts, params).replace(pseudoCharactersRegExp, validCharacter);
         return {
             elementState: {
                 selection,
-                value: extractedPrefix +
-                    cleanValue.replace(pseudoCharactersRegExp, validCharacter) +
-                    extractedPostfix,
+                value: fromNumberParts({
+                    ...toNumberParts(onlyNumber, params),
+                    prefix,
+                    postfix,
+                }, params),
             },
             data: data.replace(pseudoCharactersRegExp, validCharacter),
         };
@@ -7154,17 +7231,17 @@ function createPseudoCharactersPreprocessor({ validCharacter, pseudoCharacters, 
  * Behaviour is similar to native <input type="number"> (Chrome).
  * @example 1|23,45 => Press comma (decimal separator) => 1|23,45 (do nothing).
  */
-function createRepeatedDecimalSeparatorPreprocessor({ decimalSeparator, prefix, postfix, }) {
+function createRepeatedDecimalSeparatorPreprocessor(params) {
+    const { decimalSeparator } = params;
     if (!decimalSeparator) {
         return identity;
     }
     return ({ elementState, data }) => {
         const { value, selection } = elementState;
         const [from, to] = selection;
-        const { cleanValue } = extractAffixes(value, { prefix, postfix });
         return {
             elementState,
-            data: !cleanValue.includes(decimalSeparator) ||
+            data: !toNumberParts(value, params).decimalSeparator ||
                 value.slice(from, to + 1).includes(decimalSeparator)
                 ? data
                 : data.replaceAll(new RegExp(escapeRegExp(decimalSeparator), 'gi'), ''),
@@ -7176,7 +7253,8 @@ function createRepeatedDecimalSeparatorPreprocessor({ decimalSeparator, prefix, 
  * It adds symbol for separating thousands.
  * @example 1000000 => (thousandSeparator is equal to space) => 1 000 000.
  */
-function createThousandSeparatorPostprocessor({ thousandSeparator, decimalSeparator, prefix, postfix, minusSign, }) {
+function createThousandSeparatorPostprocessor(params) {
+    const { thousandSeparator } = params;
     if (!thousandSeparator) {
         return identity;
     }
@@ -7184,19 +7262,12 @@ function createThousandSeparatorPostprocessor({ thousandSeparator, decimalSepara
     return ({ value, selection }) => {
         const [initialFrom, initialTo] = selection;
         let [from, to] = selection;
-        const { cleanValue, extractedPostfix, extractedPrefix } = extractAffixes(value, {
-            prefix,
-            postfix,
-        });
-        const { minus, integerPart, decimalPart } = toNumberParts(cleanValue, {
-            decimalSeparator,
-            minusSign,
-        });
-        const hasDecimalSeparator = decimalSeparator && cleanValue.includes(decimalSeparator);
-        const deletedChars = cleanValue.length -
+        const { prefix, minus, integerPart, decimalSeparator, decimalPart, postfix } = toNumberParts(value, params);
+        const deletedChars = fromNumberParts({ minus, integerPart, decimalSeparator, decimalPart }, params)
+            .length -
             (minus +
                 integerPart +
-                (hasDecimalSeparator ? decimalSeparator + decimalPart : '')).length;
+                (decimalSeparator ? decimalSeparator + decimalPart : '')).length;
         if (deletedChars > 0 && initialFrom && initialFrom <= deletedChars) {
             from -= deletedChars;
         }
@@ -7213,10 +7284,10 @@ function createThousandSeparatorPostprocessor({ thousandSeparator, decimalSepara
                 return thousandSeparator + formattedValuePart;
             }
             if (!isPositionForSeparator && isSeparator) {
-                if (i && i <= initialFrom) {
+                if (from && i <= initialFrom) {
                     from--;
                 }
-                if (i && i <= initialTo) {
+                if (to && i <= initialTo) {
                     to--;
                 }
                 return formattedValuePart;
@@ -7233,12 +7304,14 @@ function createThousandSeparatorPostprocessor({ thousandSeparator, decimalSepara
             return char + thousandSeparator + formattedValuePart;
         }, '');
         return {
-            value: extractedPrefix +
-                minus +
-                processedIntegerPart +
-                (hasDecimalSeparator ? decimalSeparator : '') +
-                decimalPart +
-                extractedPostfix,
+            value: fromNumberParts({
+                prefix,
+                minus,
+                integerPart: processedIntegerPart,
+                decimalSeparator,
+                decimalPart,
+                postfix,
+            }, params),
             selection: [from, to],
         };
     };
@@ -7248,7 +7321,8 @@ function createThousandSeparatorPostprocessor({ thousandSeparator, decimalSepara
  * It drops decimal part if `maximumFractionDigits` is zero.
  * @example User pastes '123.45' (but `maximumFractionDigits` is zero) => 123
  */
-function createZeroPrecisionPreprocessor({ maximumFractionDigits, decimalSeparator, prefix, postfix, }) {
+function createZeroPrecisionPreprocessor(params) {
+    const { maximumFractionDigits, decimalSeparator } = params;
     if (maximumFractionDigits > 0 ||
         !decimalSeparator // all separators should be treated only as thousand separators
     ) {
@@ -7257,14 +7331,10 @@ function createZeroPrecisionPreprocessor({ maximumFractionDigits, decimalSeparat
     const decimalPartRegExp = new RegExp(`${escapeRegExp(decimalSeparator)}.*$`, 'g');
     return ({ elementState, data }) => {
         const { value, selection } = elementState;
-        const { cleanValue, extractedPrefix, extractedPostfix } = extractAffixes(value, {
-            prefix,
-            postfix,
-        });
+        const { prefix, postfix, ...numberParts } = toNumberParts(value, params);
         const [from, to] = selection;
-        const newValue = extractedPrefix +
-            cleanValue.replace(decimalPartRegExp, '') +
-            extractedPostfix;
+        const onlyNumber = fromNumberParts(numberParts, params).replace(decimalPartRegExp, '');
+        const newValue = fromNumberParts({ ...toNumberParts(onlyNumber, params), prefix, postfix }, params);
         return {
             elementState: {
                 selection: [
@@ -7284,13 +7354,8 @@ const DUMMY_SELECTION = [0, 0];
  * @example 000000 => blur => 0
  * @example 00005 => blur => 5
  */
-function createLeadingZeroesValidationPlugin({ decimalSeparator, thousandSeparator, prefix, postfix, }) {
-    const dropRepeatedLeadingZeroes = createLeadingZeroesValidationPostprocessor({
-        decimalSeparator,
-        thousandSeparator,
-        prefix,
-        postfix,
-    });
+function createLeadingZeroesValidationPlugin(params) {
+    const dropRepeatedLeadingZeroes = createLeadingZeroesValidationPostprocessor(params);
     return maskitoEventHandler('blur', (element) => {
         const newValue = dropRepeatedLeadingZeroes({
             value: element.value,
@@ -7304,12 +7369,13 @@ function createLeadingZeroesValidationPlugin({ decimalSeparator, thousandSeparat
  * This plugin is connected with {@link createMinMaxPostprocessor}:
  * both validate `min`/`max` bounds of entered value (but at the different point of time).
  */
-function createMinMaxPlugin({ min, max, decimalSeparator, minusSign, }) {
+function createMinMaxPlugin({ min, max, decimalSeparator, minusSign, maximumFractionDigits, }) {
     return maskitoEventHandler('blur', (element, options) => {
         const parsedNumber = maskitoParseNumber(element.value, {
             decimalSeparator,
             minusSign,
-        });
+            bigint: !(maximumFractionDigits && element.value.includes(decimalSeparator)),
+        }) ?? NaN;
         const clampedNumber = clamp(parsedNumber, min, max);
         if (!Number.isNaN(parsedNumber) && parsedNumber !== clampedNumber) {
             maskitoUpdateElement(element, maskitoTransform(stringifyNumberWithoutExp(clampedNumber), options));
@@ -7322,136 +7388,87 @@ function createMinMaxPlugin({ min, max, decimalSeparator, minusSign, }) {
  * It works on blur event only!
  * @example 1|,23 => Backspace => Blur => 0,23
  */
-function createNotEmptyIntegerPlugin({ decimalSeparator, prefix, postfix, }) {
+function createNotEmptyIntegerPlugin(params) {
+    const { decimalSeparator } = params;
     if (!decimalSeparator) {
         return noop;
     }
     return maskitoEventHandler('blur', (element) => {
-        const { cleanValue, extractedPostfix, extractedPrefix } = extractAffixes(element.value, { prefix, postfix });
-        const newValue = extractedPrefix +
-            cleanValue.replace(new RegExp(`^(\\D+)?${escapeRegExp(decimalSeparator)}`), `$10${decimalSeparator}`) +
-            extractedPostfix;
+        const { prefix, postfix, ...numberParts } = toNumberParts(element.value, params);
+        const onlyNumber = fromNumberParts(numberParts, params).replace(new RegExp(`^(\\D+)?${escapeRegExp(decimalSeparator)}`), `$10${decimalSeparator}`);
+        const newValue = fromNumberParts({
+            ...toNumberParts(onlyNumber, params),
+            prefix,
+            postfix,
+        }, params);
         maskitoUpdateElement(element, newValue);
     }, { capture: true });
 }
 
-const DEFAULT_PSEUDO_MINUSES = [
-    CHAR_HYPHEN,
-    CHAR_EN_DASH,
-    CHAR_EM_DASH,
-    CHAR_JP_HYPHEN,
-    CHAR_MINUS,
-];
-function maskitoNumberOptionsGenerator({ max = Number.MAX_SAFE_INTEGER, min = Number.MIN_SAFE_INTEGER, precision = 0, thousandSeparator = CHAR_NO_BREAK_SPACE, decimalSeparator = '.', decimalPseudoSeparators, decimalZeroPadding = false, prefix: unsafePrefix = '', postfix = '', minusSign = CHAR_MINUS, maximumFractionDigits = precision, minimumFractionDigits = decimalZeroPadding ? maximumFractionDigits : 0, } = {}) {
-    const pseudoMinuses = DEFAULT_PSEUDO_MINUSES.filter((char) => char !== thousandSeparator && char !== decimalSeparator && char !== minusSign);
-    const validatedDecimalPseudoSeparators = validateDecimalPseudoSeparators({
+function maskitoNumberOptionsGenerator({ max = Infinity, min = -Infinity, thousandSeparator = CHAR_NO_BREAK_SPACE, decimalSeparator = '.', decimalPseudoSeparators: unsafeDecimalPseudoSeparators, prefix = '', postfix = '', minusSign = CHAR_MINUS, minusPseudoSigns = DEFAULT_PSEUDO_MINUSES.filter((char) => char !== thousandSeparator && char !== decimalSeparator && char !== minusSign), maximumFractionDigits = 0, minimumFractionDigits = 0, negativePattern = 'prefixFirst', } = {}) {
+    const decimalPseudoSeparators = validateDecimalPseudoSeparators({
         decimalSeparator,
         thousandSeparator,
-        decimalPseudoSeparators,
+        decimalPseudoSeparators: unsafeDecimalPseudoSeparators,
     });
-    const prefix = unsafePrefix.endsWith(decimalSeparator) && maximumFractionDigits > 0
-        ? `${unsafePrefix}${CHAR_ZERO_WIDTH_SPACE}`
-        : unsafePrefix;
-    const initializationOnlyPreprocessor = createInitializationOnlyPreprocessor({
-        decimalSeparator,
-        decimalPseudoSeparators: validatedDecimalPseudoSeparators,
-        pseudoMinuses,
-        prefix,
+    const params = {
+        max,
+        min,
+        thousandSeparator,
         postfix,
         minusSign,
-    });
-    decimalSeparator =
-        maximumFractionDigits <= 0 && decimalSeparator === thousandSeparator
+        minusPseudoSigns,
+        maximumFractionDigits,
+        decimalPseudoSeparators,
+        negativePattern,
+        decimalSeparator: maximumFractionDigits <= 0 && decimalSeparator === thousandSeparator
             ? ''
-            : decimalSeparator;
-    return Object.assign(Object.assign({}, MASKITO_DEFAULT_OPTIONS), { mask: generateMaskExpression({
-            decimalSeparator,
-            maximumFractionDigits,
-            min,
-            minusSign,
-            postfix,
-            prefix,
-            pseudoMinuses,
-            thousandSeparator,
-            decimalPseudoSeparators: validatedDecimalPseudoSeparators,
-        }), preprocessors: [
+            : decimalSeparator,
+        prefix: prefix.endsWith(decimalSeparator) && maximumFractionDigits > 0
+            ? `${prefix}${CHAR_ZERO_WIDTH_SPACE}`
+            : prefix,
+        minimumFractionDigits: Math.min(minimumFractionDigits, maximumFractionDigits),
+    };
+    return {
+        ...MASKITO_DEFAULT_OPTIONS,
+        mask: generateMaskExpression(params),
+        preprocessors: [
             createFullWidthToHalfWidthPreprocessor(),
-            initializationOnlyPreprocessor,
-            createAffixesFilterPreprocessor({ prefix, postfix }),
+            createInitializationOnlyPreprocessor(params),
+            createAffixesFilterPreprocessor(params),
             createPseudoCharactersPreprocessor({
+                ...params,
                 validCharacter: minusSign,
-                pseudoCharacters: pseudoMinuses,
-                prefix,
-                postfix,
+                pseudoCharacters: minusPseudoSigns,
             }),
             createPseudoCharactersPreprocessor({
+                ...params,
                 validCharacter: decimalSeparator,
-                pseudoCharacters: validatedDecimalPseudoSeparators,
-                prefix,
-                postfix,
+                pseudoCharacters: decimalPseudoSeparators,
             }),
-            createNotEmptyIntegerPartPreprocessor({
-                decimalSeparator,
-                maximumFractionDigits,
-                prefix,
-                postfix,
-            }),
-            createNonRemovableCharsDeletionPreprocessor({
-                decimalSeparator,
-                minimumFractionDigits,
-                thousandSeparator,
-            }),
-            createZeroPrecisionPreprocessor({
-                maximumFractionDigits,
-                decimalSeparator,
-                prefix,
-                postfix,
-            }),
-            createRepeatedDecimalSeparatorPreprocessor({
-                decimalSeparator,
-                prefix,
-                postfix,
-            }),
-        ], postprocessors: [
-            createMinMaxPostprocessor({ decimalSeparator, min, max, minusSign }),
-            maskitoPrefixPostprocessorGenerator(prefix),
+            createNotEmptyIntegerPartPreprocessor(params),
+            createNonRemovableCharsDeletionPreprocessor(params),
+            createZeroPrecisionPreprocessor(params),
+            createRepeatedDecimalSeparatorPreprocessor(params),
+            createLeadingMinusDeletionPreprocessor(params),
+        ],
+        postprocessors: [
+            createMinMaxPostprocessor(params),
+            createNumberPrefixPostprocessor(params),
             maskitoPostfixPostprocessorGenerator(postfix),
-            createThousandSeparatorPostprocessor({
-                decimalSeparator,
-                thousandSeparator,
-                prefix,
-                postfix,
-                minusSign,
-            }),
-            createDecimalZeroPaddingPostprocessor({
-                decimalSeparator,
-                prefix,
-                postfix,
-                minusSign,
-                minimumFractionDigits: Math.min(minimumFractionDigits, maximumFractionDigits),
-            }),
-            emptyPostprocessor({
-                prefix,
-                postfix,
-                decimalSeparator,
-                minusSign,
-            }),
-        ], plugins: [
-            createLeadingZeroesValidationPlugin({
-                decimalSeparator,
-                thousandSeparator,
-                prefix,
-                postfix,
-            }),
-            createNotEmptyIntegerPlugin({
-                decimalSeparator,
-                prefix,
-                postfix,
-            }),
-            createMinMaxPlugin({ min, max, decimalSeparator, minusSign }),
-        ], overwriteMode: minimumFractionDigits > 0
+            createThousandSeparatorPostprocessor(params),
+            createDecimalZeroPaddingPostprocessor(params),
+            emptyPostprocessor(params),
+        ],
+        plugins: [
+            createLeadingZeroesValidationPlugin(params),
+            createNotEmptyIntegerPlugin(params),
+            createMinMaxPlugin(params),
+        ],
+        overwriteMode: minimumFractionDigits > 0
             ? ({ value, selection: [from] }) => from <= value.indexOf(decimalSeparator) ? 'shift' : 'replace'
-            : 'shift' });
+            : 'shift',
+    };
 }
 
 const TEMPLATE_FILLER = 'x';
@@ -7479,7 +7496,7 @@ function cutInitCountryCodePreprocessor({ countryIsoCode, metadata, }) {
                 },
             };
         }
-        catch (_a) {
+        catch {
             return {
                 elementState,
             };
@@ -7540,7 +7557,6 @@ function phoneLengthPostprocessorGenerator(metadata) {
 
 function validatePhonePreprocessorGenerator({ prefix, countryIsoCode, metadata, }) {
     return ({ elementState, data }) => {
-        var _a;
         const { selection, value } = elementState;
         const [from] = selection;
         const selectionIncludesPrefix = from < prefix.length;
@@ -7549,7 +7565,7 @@ function validatePhonePreprocessorGenerator({ prefix, countryIsoCode, metadata, 
         if (value && !value.startsWith(cleanCode) && !data) {
             const formatter = new AsYouType({ defaultCountry: countryIsoCode }, metadata);
             formatter.input(value);
-            const numberValue = (_a = formatter.getNumberValue()) !== null && _a !== void 0 ? _a : '';
+            const numberValue = formatter.getNumberValue() ?? '';
             formatter.reset();
             return { elementState: { value: formatter.input(numberValue), selection } };
         }
@@ -7572,7 +7588,7 @@ function validatePhonePreprocessorGenerator({ prefix, countryIsoCode, metadata, 
                 };
             }
         }
-        catch (_b) {
+        catch {
             return { elementState };
         }
         return { elementState };
@@ -7584,7 +7600,9 @@ function maskitoPhoneNonStrictOptionsGenerator({ defaultIsoCode, metadata, separ
     const prefix = '+';
     let currentTemplate = '';
     let currentPhoneLength = 0;
-    return Object.assign(Object.assign({}, MASKITO_DEFAULT_OPTIONS), { mask: ({ value }) => {
+    return {
+        ...MASKITO_DEFAULT_OPTIONS,
+        mask: ({ value }) => {
             const newTemplate = getPhoneTemplate(formatter, value, separator);
             const newPhoneLength = value.replaceAll(/\D/g, '').length;
             currentTemplate = selectTemplate({
@@ -7597,13 +7615,16 @@ function maskitoPhoneNonStrictOptionsGenerator({ defaultIsoCode, metadata, separ
             return currentTemplate.length === 1
                 ? ['+', /\d/]
                 : generatePhoneMask({ value, template: currentTemplate, prefix });
-        }, preprocessors: [
+        },
+        preprocessors: [
             validatePhonePreprocessorGenerator({
                 prefix,
                 countryIsoCode: defaultIsoCode,
                 metadata,
             }),
-        ], postprocessors: [phoneLengthPostprocessorGenerator(metadata)] });
+        ],
+        postprocessors: [phoneLengthPostprocessorGenerator(metadata)],
+    };
 }
 
 function maskitoPhoneStrictOptionsGenerator({ countryIsoCode, metadata, separator = '-', }) {
@@ -7612,7 +7633,9 @@ function maskitoPhoneStrictOptionsGenerator({ countryIsoCode, metadata, separato
     const prefix = `+${code} `;
     let currentTemplate = '';
     let currentPhoneLength = 0;
-    return Object.assign(Object.assign({}, MASKITO_DEFAULT_OPTIONS), { mask: ({ value }) => {
+    return {
+        ...MASKITO_DEFAULT_OPTIONS,
+        mask: ({ value }) => {
             const newTemplate = getPhoneTemplate(formatter, value, separator);
             const newPhoneLength = value.replaceAll(/\D/g, '').length;
             currentTemplate = selectTemplate({
@@ -7623,18 +7646,22 @@ function maskitoPhoneStrictOptionsGenerator({ countryIsoCode, metadata, separato
             });
             currentPhoneLength = newPhoneLength;
             return generatePhoneMask({ value, template: currentTemplate, prefix });
-        }, plugins: [
+        },
+        plugins: [
             maskitoCaretGuard((value, [from, to]) => [
                 from === to ? prefix.length : 0,
                 value.length,
             ]),
-        ], preprocessors: [
+        ],
+        preprocessors: [
             cutInitCountryCodePreprocessor({ countryIsoCode, metadata }),
             validatePhonePreprocessorGenerator({ prefix, countryIsoCode, metadata }),
-        ], postprocessors: [
+        ],
+        postprocessors: [
             maskitoPrefixPostprocessorGenerator(prefix),
             phoneLengthPostprocessorGenerator(metadata),
-        ] });
+        ],
+    };
 }
 
 function maskitoPhoneOptionsGenerator({ countryIsoCode, metadata, strict = true, separator = '-', }) {
@@ -7647,10 +7674,6 @@ function maskitoPhoneOptionsGenerator({ countryIsoCode, metadata, strict = true,
         });
 }
 
-/**
- * Escapes special regex characters in a string (like '.' or '*').
- */
-const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 /**
  * Returns a "raw" version of a masked value.
  *
@@ -7671,36 +7694,13 @@ const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
  * @returns The raw value string.
  */
 const getRawValueForExtra = (maskedValue, type, maskOptions) => {
-  // 1) Handle decimal/number types
-  if (type === 'decimal' || type === 'number') {
-    let raw = maskedValue;
-    if (maskOptions?.decimalPatternOptions) {
-      const { prefix, postfix, thousandSeparator, decimalSeparator } = maskOptions.decimalPatternOptions;
-      // Remove prefix
-      if (prefix && raw.startsWith(prefix)) {
-        raw = raw.slice(prefix.length);
-      }
-      // Remove postfix
-      if (postfix && raw.endsWith(postfix)) {
-        raw = raw.slice(0, raw.length - postfix.length);
-      }
-      // Remove thousand separators if provided; otherwise, remove whitespace.
-      if (thousandSeparator) {
-        const regex = new RegExp(escapeRegex(thousandSeparator), 'g');
-        raw = raw.replace(regex, '');
-      }
-      else {
-        raw = raw.replace(/\s/g, '');
-      }
-      // Replace the custom decimal separator with '.'
-      if (decimalSeparator && decimalSeparator !== '.') {
-        const regex = new RegExp(escapeRegex(decimalSeparator), 'g');
-        raw = raw.replace(regex, '.');
-      }
-      return raw;
+  if (maskOptions?.decimalPatternOptions) {
+    // 1) Handle number inputs: remove prefix/postfix, thousand separators, and convert decimal separator.
+    const parsedNumber = maskitoParseNumber(maskedValue, maskOptions.decimalPatternOptions);
+    if (isNaN(parsedNumber)) {
+      return '';
     }
-    // Fallback: remove everything except digits, minus sign, and period.
-    return raw.replace(/[^\d.-]/g, '');
+    return String(parsedNumber);
   }
   // 2) Handle telephone inputs: remove dashes, parentheses, and whitespace.
   if (type === 'tel') {
@@ -7710,12 +7710,7 @@ const getRawValueForExtra = (maskedValue, type, maskOptions) => {
   if (maskOptions?.customPatternOptions) {
     return maskedValue.replace(/\D/g, '');
   }
-  // 4) For text type, return as-is (preserve spaces)
-  if (type === 'text') {
-    return maskedValue;
-  }
-  // 5) For other types, remove whitespace.
-  return maskedValue.replace(/\s/g, '');
+  return maskedValue;
 };
 const getValidAutocomplete = (autocomplete) => {
   const validValues = [
@@ -7777,12 +7772,13 @@ const getValidAutocomplete = (autocomplete) => {
   return validValues.includes(autocomplete) ? autocomplete : 'off';
 };
 
+const SUPPORTED_INPUT_TYPES_FOR_MASK = ['text', 'tel', 'search', 'url', 'password'];
 const LOCALES_DEFAULTS = {
   minLengthErrorMessage: minLength => `The input must have at least ${minLength} characters`,
   maxLengthErrorMessage: maxLength => `The input can have a maximum of ${maxLength} characters`,
 };
 
-const wppInputCss = ":host{--text-input-height-m:var(--wpp-input-height-m, 40px);--text-input-height-s:var(--wpp-input-height-s, 32px);--text-input-padding-m:var(\n    --wpp-input-padding-m,\n    calc(9px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width))\n  );--text-input-padding-s:var(\n    --wpp-input-padding-s,\n    calc(5px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width))\n  );--text-input-with-icons-padding-m:var(--wpp-input-with-icons-padding-m, 38px);--text-input-with-icons-padding-s:var(--wpp-input-with-icons-padding-s, 36px);--text-input-label-color:var(--wpp-input-label-color, var(--wpp-text-color-info));--text-input-label-margin:var(--wpp-input-label-margin, 0 0 8px 0);--text-input-inline-message-margin:var(--wpp-input-inline-message-margin, 4px 0 0 0);--text-input-placeholder-color:var(--wpp-input-placeholder-color, var(--wpp-grey-color-700));--text-input-text-color-disabled:var(--wpp-input-text-color-disabled, var(--wpp-text-color-disabled));--text-input-bg-color:var(--wpp-input-bg-color, transparent);--text-input-bg-color-hover:var(--wpp-input-bg-color-hover, var(--wpp-grey-color-200));--text-input-bg-color-active:var(--wpp-input-bg-color-active, var(--wpp-grey-color-000));--text-input-bg-color-disabled:var(--wpp-input-bg-color-disabled, var(--wpp-grey-color-100));--text-input-border-color:var(--wpp-input-border-color, var(--wpp-grey-color-500));--text-input-border-color-hover:var(--wpp-input-border-color-hover, var(--wpp-grey-color-700));--text-input-border-color-active:var(--wpp-input-border-color-active, var(--wpp-grey-color-800));--text-input-border-color-disabled:var(--wpp-input-border-color-disabled, var(--wpp-grey-color-400));--text-input-first-border-color-focus:var(--wpp-input-first-border-color-focus, var(--wpp-grey-color-000));--text-input-second-border-color-focus:var(--wpp-input-second-border-color-focus, var(--wpp-brand-color));--text-input-warning-border-color:var(--wpp-input-warning-border-color, var(--wpp-warning-color-400));--text-input-warning-border-color-hover:var(--wpp-input-warning-border-color-hover, var(--wpp-warning-color-500));--text-input-error-border-color:var(--wpp-input-error-border-color, var(--wpp-danger-color-400));--text-input-error-border-color-hover:var(--wpp-input-error-border-color-hover, var(--wpp-danger-color-500));--text-input-icon-start-margin-m:var(--wpp-input-icon-start-margin-m, 0 0 0 10px);--text-input-icon-end-margin-m:var(--wpp-input-icon-end-margin-m, 0 12px 0 0);--text-input-icon-start-margin-s:var(--wpp-input-icon-start-margin-s, 0 0 0 8px);--text-input-icon-end-margin-s:var(--wpp-input-icon-end-margin-s, 0 10px 0 0);--text-input-icon-end-color-hover:var(--wpp-input-icon-end-color-hover, var(--wpp-icon-color-hover));--text-input-icon-end-color-active:var(--wpp-input-icon-end-color-active, var(--wpp-icon-color-active));--text-input-icon-end-first-border-color-focus:var(\n    --wpp-input-icon-end-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--text-input-icon-end-second-border-color-focus:var(\n    --wpp-input-icon-end-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--text-input-icon-color:var(--wpp-input-icon-color, var(--wpp-icon-color));--text-input-icon-color-disabled:var(--wpp-input-icon-color-disabled, var(--wpp-icon-color-disabled));--text-input-border-width:var(--wpp-input-border-width, var(--wpp-border-width-s));--text-input-border-style:var(--wpp-input-border-style, solid);position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column}.with-tooltip{width:100%}.with-tooltip::part(anchor){width:100%}.label-wrapper{color:var(--text-input-label-color)}.label{margin:var(--text-input-label-margin)}.icon-start,.icon-end{position:absolute;top:50%;display:-ms-flexbox;display:flex;max-width:20px;overflow:hidden;color:var(--text-input-icon-color);-webkit-transform:translateY(-50%);transform:translateY(-50%)}.icon-start ::slotted(*),.icon-end ::slotted(*){color:var(--text-input-icon-color)}.icon-start{color:var(--wpp-grey-color-600)}.icon-start ::slotted(*){color:var(--wpp-grey-color-600)}.icon-end{right:0;cursor:pointer}.icon-end:hover{color:var(--text-input-icon-end-color-hover)}.icon-end:hover ::slotted([slot=icon-end]){color:var(--text-input-icon-end-color-hover)}.icon-end:active{color:var(--text-input-icon-end-color-active)}.icon-end:active ::slotted([slot=icon-end]){color:var(--text-input-icon-end-color-active)}.input-with-icons{position:relative;display:-ms-flexbox;display:flex;width:100%}.input-with-icons .disabled-icon{cursor:not-allowed;color:var(--text-input-icon-color-disabled)}.input-with-icons .disabled-icon ::slotted([slot=icon-start]),.input-with-icons .disabled-icon ::slotted([slot=icon-end]){color:var(--text-input-icon-color-disabled)}.input-with-icons .icon-end{outline:none}.input-with-icons .icon-end:focus-visible{border-radius:3px;outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-icon-end-first-border-color-focus), 0 0 0 3px var(--text-input-icon-end-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-icon-end-first-border-color-focus), 0 0 0 3px var(--text-input-icon-end-second-border-color-focus);color:var(--text-input-icon-end-color-hover)}.input-with-icons:hover .icon-start{color:var(--wpp-grey-color-800)}.input-with-icons:hover .icon-start ::slotted(*){color:var(--wpp-grey-color-800)}.wpp-inline-message{margin:var(--text-input-inline-message-margin)}:host(.wpp-size-m) .input-with-icons .with-icon-start{padding-left:var(--text-input-with-icons-padding-m)}:host(.wpp-size-m) .input-with-icons .with-icon-end{padding-right:var(--text-input-with-icons-padding-m)}:host(.wpp-size-m) .input-with-icons .with-double-icon-end{padding-right:60px}:host(.wpp-size-m) .input-with-icons .icon-start{margin:var(--text-input-icon-start-margin-m)}:host(.wpp-size-m) .input-with-icons .icon-end{margin:var(--text-input-icon-end-margin-m)}:host(.wpp-size-m) .input-with-icons .double-icon-end{margin-right:38px}:host(.wpp-size-s) .input-with-icons .with-icon-start{padding-left:var(--text-input-with-icons-padding-s)}:host(.wpp-size-s) .input-with-icons .with-icon-end{padding-right:var(--text-input-with-icons-padding-s)}:host(.wpp-size-s) .input-with-icons .with-double-icon-end{padding-right:60px}:host(.wpp-size-s) .input-with-icons .icon-start{margin:var(--text-input-icon-start-margin-s)}:host(.wpp-size-s) .input-with-icons .icon-end{margin:var(--text-input-icon-end-margin-s)}:host(.wpp-size-s) .input-with-icons .double-icon-end{margin-right:38px}:host([disabled]:not([disabled=false])){cursor:not-allowed}:host([disabled]:not([disabled=false])) .input-with-icons{pointer-events:none}:host(.with-value) .icon-start:not(.disabled-icon){color:var(--wpp-grey-color-800)}:host(.with-value) .icon-start:not(.disabled-icon) ::slotted(*){color:var(--wpp-grey-color-800)}input{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;height:var(--text-input-height-m);background-color:var(--text-input-bg-color);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color);border-radius:var(--wpp-border-radius-m);outline:none;text-overflow:ellipsis}input[type=search]::-webkit-search-cancel-button{display:none}input .loading{pointer-events:none}input .loading ::part(info-wrapper){height:inherit}input .loading .wpp-spinner{margin-right:7px}input[type=number]{-moz-appearance:textfield}input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}input:hover{background:var(--text-input-bg-color-hover);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-hover)}input:active{border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-active)}input::-webkit-input-placeholder{color:var(--text-input-placeholder-color)}input::-moz-placeholder{color:var(--text-input-placeholder-color)}input:-ms-input-placeholder{color:var(--text-input-placeholder-color)}input::-ms-input-placeholder{color:var(--text-input-placeholder-color)}input::placeholder{color:var(--text-input-placeholder-color)}input:focus{background:var(--text-input-bg-color-active);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-active)}input:disabled{color:var(--text-input-text-color-disabled);background:var(--text-input-bg-color-disabled);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-disabled);cursor:not-allowed}input:disabled::-webkit-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::-moz-placeholder{color:var(--text-input-text-color-disabled)}input:disabled:-ms-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::-ms-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::placeholder{color:var(--text-input-text-color-disabled)}input.size-m{padding:var(--text-input-padding-m)}input.size-m.tab-focus{border-radius:var(--wpp-border-radius-m);outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus)}input.size-s{height:var(--text-input-height-s);padding:var(--text-input-padding-s);border-radius:var(--wpp-border-radius-s)}input.size-s.tab-focus{border-radius:var(--wpp-border-radius-s);outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus)}input.warning,input.warning:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-400)}input.error,input.error:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-400)}input.warning{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-400)}input.warning:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-500)}input.error,input.with-validation-error{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-400)}input.error:hover,input.with-validation-error:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-500)}input:-webkit-autofill{-webkit-animation-name:onAutoFillStart;animation-name:onAutoFillStart;-webkit-transition:background-color 50000s ease-in-out 0s;transition:background-color 50000s ease-in-out 0s}input:autofill,input:-webkit-autofill{-webkit-animation-name:onAutoFillStart;animation-name:onAutoFillStart;-webkit-transition:background-color 50000s ease-in-out 0s;transition:background-color 50000s ease-in-out 0s}";
+const wppInputCss = ":host{--text-input-height-m:var(--wpp-input-height-m, 40px);--text-input-height-s:var(--wpp-input-height-s, 32px);--text-input-padding-m:var(\n    --wpp-input-padding-m,\n    calc(9px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width))\n  );--text-input-padding-s:var(\n    --wpp-input-padding-s,\n    calc(5px - var(--text-input-border-width)) calc(12px - var(--text-input-border-width))\n  );--text-input-with-icons-padding-m:var(--wpp-input-with-icons-padding-m, 38px);--text-input-with-icons-padding-s:var(--wpp-input-with-icons-padding-s, 36px);--text-input-label-color:var(--wpp-input-label-color, var(--wpp-text-color-info));--text-input-label-margin:var(--wpp-input-label-margin, 0 0 8px 0);--text-input-inline-message-margin:var(--wpp-input-inline-message-margin, 4px 0 0 0);--text-input-placeholder-color:var(--wpp-input-placeholder-color, var(--wpp-grey-color-700));--text-input-text-color-disabled:var(--wpp-input-text-color-disabled, var(--wpp-text-color-disabled));--text-input-bg-color:var(--wpp-input-bg-color, transparent);--text-input-bg-color-hover:var(--wpp-input-bg-color-hover, var(--wpp-grey-color-200));--text-input-bg-color-active:var(--wpp-input-bg-color-active, var(--wpp-grey-color-000));--text-input-bg-color-disabled:var(--wpp-input-bg-color-disabled, var(--wpp-grey-color-100));--text-input-border-color:var(--wpp-input-border-color, var(--wpp-grey-color-500));--text-input-border-color-hover:var(--wpp-input-border-color-hover, var(--wpp-grey-color-700));--text-input-border-color-active:var(--wpp-input-border-color-active, var(--wpp-grey-color-800));--text-input-border-color-disabled:var(--wpp-input-border-color-disabled, var(--wpp-grey-color-400));--text-input-first-border-color-focus:var(--wpp-input-first-border-color-focus, var(--wpp-grey-color-000));--text-input-second-border-color-focus:var(--wpp-input-second-border-color-focus, var(--wpp-brand-color));--text-input-warning-border-color:var(--wpp-input-warning-border-color, var(--wpp-warning-color-400));--text-input-warning-border-color-hover:var(--wpp-input-warning-border-color-hover, var(--wpp-warning-color-500));--text-input-error-border-color:var(--wpp-input-error-border-color, var(--wpp-danger-color-400));--text-input-error-border-color-hover:var(--wpp-input-error-border-color-hover, var(--wpp-danger-color-500));--text-input-icon-start-margin-m:var(--wpp-input-icon-start-margin-m, 0 0 0 10px);--text-input-icon-end-margin-m:var(--wpp-input-icon-end-margin-m, 0 12px 0 0);--text-input-icon-start-margin-s:var(--wpp-input-icon-start-margin-s, 0 0 0 8px);--text-input-icon-end-margin-s:var(--wpp-input-icon-end-margin-s, 0 10px 0 0);--text-input-icon-end-color-hover:var(--wpp-input-icon-end-color-hover, var(--wpp-icon-color-hover));--text-input-icon-end-color-active:var(--wpp-input-icon-end-color-active, var(--wpp-icon-color-active));--text-input-icon-end-first-border-color-focus:var(\n    --wpp-input-icon-end-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--text-input-icon-end-second-border-color-focus:var(\n    --wpp-input-icon-end-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--text-input-icon-color:var(--wpp-input-icon-color, var(--wpp-icon-color));--text-input-icon-color-disabled:var(--wpp-input-icon-color-disabled, var(--wpp-icon-color-disabled));--text-input-border-width:var(--wpp-input-border-width, var(--wpp-border-width-s));--text-input-border-style:var(--wpp-input-border-style, solid);position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column}.with-tooltip{width:100%}.with-tooltip::part(anchor){width:100%}.label-wrapper{color:var(--text-input-label-color)}.label{margin:var(--text-input-label-margin)}.icon-start,.icon-end{position:absolute;top:50%;display:-ms-flexbox;display:flex;max-width:20px;overflow:hidden;color:var(--text-input-icon-color);-webkit-transform:translateY(-50%);transform:translateY(-50%)}.icon-start ::slotted(*),.icon-end ::slotted(*){color:var(--text-input-icon-color)}.icon-start{color:var(--wpp-grey-color-600)}.icon-start ::slotted(*){color:var(--wpp-grey-color-600)}.icon-end{right:0;cursor:pointer}.icon-end:hover{color:var(--text-input-icon-end-color-hover)}.icon-end:hover ::slotted([slot=icon-end]){color:var(--text-input-icon-end-color-hover)}.icon-end:active{color:var(--text-input-icon-end-color-active)}.icon-end:active ::slotted([slot=icon-end]){color:var(--text-input-icon-end-color-active)}.input-with-icons{position:relative;display:-ms-flexbox;display:flex;width:100%}.input-with-icons .disabled-icon{cursor:not-allowed;color:var(--text-input-icon-color-disabled)}.input-with-icons .disabled-icon ::slotted([slot=icon-start]),.input-with-icons .disabled-icon ::slotted([slot=icon-end]){color:var(--text-input-icon-color-disabled)}.input-with-icons .icon-end{outline:none}.input-with-icons .icon-end:focus-visible{border-radius:3px;outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-icon-end-first-border-color-focus), 0 0 0 3px var(--text-input-icon-end-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-icon-end-first-border-color-focus), 0 0 0 3px var(--text-input-icon-end-second-border-color-focus);color:var(--text-input-icon-end-color-hover)}.input-with-icons:hover .icon-start{color:var(--wpp-grey-color-800)}.input-with-icons:hover .icon-start ::slotted(*){color:var(--wpp-grey-color-800)}.wpp-inline-message{margin:var(--text-input-inline-message-margin)}:host(.wpp-size-m) .input-with-icons .with-icon-start{padding-left:var(--text-input-with-icons-padding-m)}:host(.wpp-size-m) .input-with-icons .input-element{padding-right:var(--text-input-with-icons-padding-m)}:host(.wpp-size-m) .input-with-icons .with-double-icon-end{padding-right:60px}:host(.wpp-size-m) .input-with-icons .icon-start{margin:var(--text-input-icon-start-margin-m)}:host(.wpp-size-m) .input-with-icons .icon-end{margin:var(--text-input-icon-end-margin-m)}:host(.wpp-size-m) .input-with-icons .double-icon-end{margin-right:38px}:host(.wpp-size-s) .input-with-icons .with-icon-start{padding-left:var(--text-input-with-icons-padding-s)}:host(.wpp-size-s) .input-with-icons .input-element{padding-right:var(--text-input-with-icons-padding-s)}:host(.wpp-size-s) .input-with-icons .with-double-icon-end{padding-right:60px}:host(.wpp-size-s) .input-with-icons .icon-start{margin:var(--text-input-icon-start-margin-s)}:host(.wpp-size-s) .input-with-icons .icon-end{margin:var(--text-input-icon-end-margin-s)}:host(.wpp-size-s) .input-with-icons .double-icon-end{margin-right:38px}:host([disabled]:not([disabled=false])){cursor:not-allowed}:host([disabled]:not([disabled=false])) .input-with-icons{pointer-events:none}:host(.with-value) .icon-start:not(.disabled-icon){color:var(--wpp-grey-color-800)}:host(.with-value) .icon-start:not(.disabled-icon) ::slotted(*){color:var(--wpp-grey-color-800)}input{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;height:var(--text-input-height-m);background-color:var(--text-input-bg-color);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color);border-radius:var(--wpp-border-radius-m);outline:none;text-overflow:ellipsis}input[type=search]::-webkit-search-cancel-button{display:none}input .loading{pointer-events:none}input .loading ::part(info-wrapper){height:inherit}input .loading .wpp-spinner{margin-right:7px}input[type=number]{-moz-appearance:textfield}input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}input:hover{background:var(--text-input-bg-color-hover);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-hover)}input:active{border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-active)}input::-webkit-input-placeholder{color:var(--text-input-placeholder-color)}input::-moz-placeholder{color:var(--text-input-placeholder-color)}input:-ms-input-placeholder{color:var(--text-input-placeholder-color)}input::-ms-input-placeholder{color:var(--text-input-placeholder-color)}input::placeholder{color:var(--text-input-placeholder-color)}input:focus{background:var(--text-input-bg-color-active);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-active)}input:disabled{color:var(--text-input-text-color-disabled);background:var(--text-input-bg-color-disabled);border:var(--text-input-border-width) var(--text-input-border-style) var(--text-input-border-color-disabled);cursor:not-allowed}input:disabled::-webkit-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::-moz-placeholder{color:var(--text-input-text-color-disabled)}input:disabled:-ms-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::-ms-input-placeholder{color:var(--text-input-text-color-disabled)}input:disabled::placeholder{color:var(--text-input-text-color-disabled)}input.size-m{padding:var(--text-input-padding-m)}input.size-m.tab-focus{border-radius:var(--wpp-border-radius-m);outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus)}input.size-s{height:var(--text-input-height-s);padding:var(--text-input-padding-s);border-radius:var(--wpp-border-radius-s)}input.size-s.tab-focus{border-radius:var(--wpp-border-radius-s);outline:none;-webkit-box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus);box-shadow:0 0 0 1px var(--text-input-first-border-color-focus), 0 0 0 3px var(--text-input-second-border-color-focus)}input.warning,input.warning:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-400)}input.error,input.error:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-400)}input.warning{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-400)}input.warning:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-warning-color-500)}input.error,input.with-validation-error{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-400)}input.error:hover,input.with-validation-error:hover{border:var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-500)}input:-webkit-autofill{-webkit-animation-name:onAutoFillStart;animation-name:onAutoFillStart;-webkit-transition:background-color 50000s ease-in-out 0s;transition:background-color 50000s ease-in-out 0s}input:autofill,input:-webkit-autofill{-webkit-animation-name:onAutoFillStart;animation-name:onAutoFillStart;-webkit-transition:background-color 50000s ease-in-out 0s;transition:background-color 50000s ease-in-out 0s}";
 
 const getInitFocusInfo = () => ({
   input: FOCUS_TYPE.NONE,
@@ -7798,23 +7794,25 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
     this.wppFocus = createEvent(this, "wppFocus", 1);
     this.wppBlur = createEvent(this, "wppBlur", 1);
     this.wppChangeExtra = createEvent(this, "wppChangeExtra", 1);
-    this.hadChangesInTooltip = false;
-    this.suppressInputEvent = false;
     this._locales = LOCALES_DEFAULTS;
+    // We need to track the generated mask in order to transform the value when it is set programmatically
+    this.generatedMask = undefined;
     // This function is needed in order to check the rendered value in the input and validate the layout (check for truncation, cross icon visibility)
     this.checkInputAfterRender = () => {
       // Very similar to Watch('value'), but we need to ensure the component actually rendered the new value to avoid setTimeout() in watcher.
-      if (this.previouslyRenderedValue !== this.value) {
+      // Also performs a dirty check to avoid infinite loops.
+      if (this.previouslyRenderedValue !== this.renderedValue) {
         if (this.focusType.input === FOCUS_TYPE.NONE) {
           // This covers cases when the value is changed programatically while the input is not focused (e.g: in the slider, when moving the thumbs).
+          // The other cases are handled by onBlur method & resize observer.
           this.checkForEllipsis();
         }
         if (this.withCrossIcon &&
           // The only cases when we need to check for the cross icon is either when the value becomes empty or the previous value was empty.
-          ((!this.value && this.previouslyRenderedValue) || (this.value && !this.previouslyRenderedValue))) {
+          ((!this.renderedValue && this.previouslyRenderedValue) || (this.renderedValue && !this.previouslyRenderedValue))) {
           this.updateCrossIcon();
         }
-        this.previouslyRenderedValue = this.value;
+        this.previouslyRenderedValue = this.renderedValue;
       }
     };
     // We need to setup a resize observer so we can check when to render the cross icon (based on the input width)
@@ -7836,7 +7834,12 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
       }
     };
     this.updateCrossIcon = () => {
-      if (!this.value && !this.internalDefaultValue) {
+      const isActive = this.isInputFocused || this.isHovered;
+      if (!isActive) {
+        this.shouldRenderCrossIcon = false;
+        return;
+      }
+      if (!this.renderedValue && !this.internalDefaultValue) {
         this.shouldRenderCrossIcon = false;
         // Cross icon is displayed on inputs with min-width >= 160px.
         // We take away the width of the border (2px) from 160px (min-width to display the icon) = 158px
@@ -7852,58 +7855,74 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
       if (inputRef)
         this.inputRef = inputRef;
     };
-    this.updateInputWithMask = () => {
-      // Masks currently work only for these types
-      if (this.inputRef && ['decimal', 'text', 'tel'].includes(this.type)) {
-        const maskOptions = this.createMaskOptions();
-        if (!maskOptions)
+    this.createMaskForInput = () => {
+      if (this.inputRef) {
+        if (this.type === 'decimal') {
+          // When type is decimal and no mask is provided, we provide a default mask to support decimal numbers only.
+          // The type="decimal" input is actually a text input with a mask that supports decimal numbers only.
+          this.generatedMask = this.maskOptions?.decimalPatternOptions
+            ? maskitoNumberOptionsGenerator(this.maskOptions.decimalPatternOptions)
+            : { mask: /^-?\d*(?:[.,]\d*)?$/ };
+        }
+        else if (SUPPORTED_INPUT_TYPES_FOR_MASK.includes(this.type)) {
+          // Generate the mask options based on the provided `maskOptions` prop
+          this.generatedMask = this.getMaskOptions();
+        }
+        else {
+          this.generatedMask = undefined;
+        }
+        if (!this.generatedMask)
           return;
-        this.maskedElement = new Maskito(this.inputRef, { overwriteMode: 'shift', ...maskOptions });
+        this.maskedElement = new Maskito(this.inputRef, {
+          overwriteMode: 'shift',
+          ...this.generatedMask,
+          // The `maskitoInitialCalibrationPlugin` is used to ensure the initial value is properly formatted
+          plugins: [maskitoInitialCalibrationPlugin(), ...(this.generatedMask?.plugins || [])],
+        });
+      }
+    };
+    this.destroyMask = () => {
+      if (this.maskedElement) {
+        this.maskedElement.destroy();
+      }
+      if (this.generatedMask) {
+        this.generatedMask = undefined;
       }
     };
     this.checkForEllipsis = () => {
-      // This requestAnimationFrame is needed here because Maskito applies validations directly in the input
-      // and the text you type might change after first render.
-      requestAnimationFrame(() => {
-        if (!this.inputRef)
-          return;
-        if (this.value && this.value.length > 0) {
-          const hasScroll = this.inputRef.clientWidth < this.inputRef.scrollWidth;
-          this.hadChangesInTooltip = this.hasActiveEllipses !== hasScroll;
-          this.hasActiveEllipses = hasScroll;
-        }
-        else {
-          this.hadChangesInTooltip = this.hasActiveEllipses !== false;
-          this.hasActiveEllipses = false;
-        }
-      });
-    };
-    this.createMaskOptions = () => {
-      if (this.maskOptions?.customPatternOptions) {
-        if (this.type === 'text') {
-          return {
-            ...(this.maskOptions?.maskPlaceholder ? maskitoWithPlaceholder(this.maskOptions.maskPlaceholder) : {}),
-            ...this.maskOptions?.customPatternOptions,
-          };
-        }
-        return this.maskOptions?.customPatternOptions;
+      if (!this.inputRef)
+        return;
+      if (this.renderedValue && this.renderedValue.length > 0) {
+        const hasScroll = this.inputRef.clientWidth < this.inputRef.scrollWidth;
+        this.hasActiveEllipses = hasScroll;
       }
+      else {
+        this.hasActiveEllipses = false;
+      }
+    };
+    this.getMaskOptions = () => {
       if (this.type === 'tel') {
+        // We should apply the telephone mask when type is 'tel'
         return this.createTelPatternOptions();
       }
-      if (this.type === 'decimal') {
-        return this.maskOptions?.decimalPatternOptions
-          ? maskitoNumberOptionsGenerator(this.maskOptions.decimalPatternOptions)
-          : { mask: /^-?\d*(?:[.,]\d*)?$/ }; // Apply default
+      if (this.maskOptions?.decimalPatternOptions) {
+        return maskitoNumberOptionsGenerator(this.maskOptions.decimalPatternOptions);
+      }
+      if (this.maskOptions?.customPatternOptions) {
+        if (this.maskOptions.maskPlaceholder) {
+          return {
+            ...maskitoWithPlaceholder(this.maskOptions.maskPlaceholder),
+            ...this.maskOptions.customPatternOptions,
+          };
+        }
+        return this.maskOptions.customPatternOptions;
       }
       return undefined;
     };
     this.createTelPatternOptions = () => {
       if (!this.maskOptions?.telPatternOptions) {
-        // Apply default
-        return {
-          mask: /^[()+\-\s\d]+$/,
-        };
+        // If no mask options for telephone are provided, return undefined
+        return undefined;
       }
       if (this.maskOptions.telPatternOptions.mask && this.maskOptions.telPatternOptions.countryPhoneCode) {
         if (this.maskOptions.maskPlaceholder) {
@@ -7943,10 +7962,10 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
     this.validateInputLength = () => {
       if (!this.maxLength && !this.minLength)
         return;
-      if (this.maxLength && this.value.length > this.maxLength) {
+      if (this.maxLength && this.renderedValue.length > this.maxLength) {
         this.lengthValidationError = this._locales.maxLengthErrorMessage(this.maxLength);
       }
-      else if (this.minLength && this.value.length < this.minLength) {
+      else if (this.minLength && this.renderedValue.length < this.minLength) {
         this.lengthValidationError = this._locales.minLengthErrorMessage(this.minLength);
       }
       else {
@@ -7954,23 +7973,15 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
       }
     };
     this.onInput = (event) => {
-      if (this.suppressInputEvent) {
-        this.suppressInputEvent = false;
-        return;
-      }
       this.internalDefaultValue = undefined;
       const eventValue = event.target.value;
       const rawValue = getRawValueForExtra(eventValue, this.type, this.maskOptions);
       this.value = eventValue;
-      if (!rawValue) {
-        this.hadChangesInTooltip = this.hasActiveEllipses !== false;
-        this.hasActiveEllipses = false;
-        requestAnimationFrame(() => this.setFocus());
-      }
       if (this.type === 'number' || this.type === 'decimal')
         this.validateInputLength();
       this.wppChange.emit({
-        value: this.value,
+        value: this.renderedValue,
+        ...(this.generatedMask ? { rawValue } : {}),
         name: this.name,
       });
       this.wppChangeExtra.emit({
@@ -7983,11 +7994,12 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
       event.preventDefault();
       event.stopPropagation();
       this.internalDefaultValue = undefined;
-      this.value = '';
+      this.renderedValue = '';
       this.hasActiveEllipses = false;
-      requestAnimationFrame(() => this.setFocus());
+      this.setFocus();
       this.wppChange.emit({
-        value: this.value,
+        value: '',
+        ...(this.generatedMask ? { rawValue: '' } : {}),
         name: this.name,
       });
       this.wppChangeExtra.emit({
@@ -7997,12 +8009,18 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
       });
     };
     this.onFocus = (event) => {
+      this.isInputFocused = true;
+      if (this.withCrossIcon) {
+        this.updateCrossIcon(); // ✅ mandatory
+      }
       if (this.type === 'search') {
         this.inputRef?.select();
       }
       this.wppFocus.emit(event);
     };
     this.onBlur = (event) => {
+      this.isInputFocused = false;
+      this.shouldRenderCrossIcon = false;
       this.checkForEllipsis();
       this.focusType = this.getUpdatedFocusInfo('input', FOCUS_TYPE.NONE);
       this.focusType = this.getUpdatedFocusInfo('icon', FOCUS_TYPE.NONE);
@@ -8039,7 +8057,7 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
     });
     this.wrapperCssClasses = () => ({
       'wpp-input': true,
-      'with-value': !!this.value?.length,
+      'with-value': !!this.renderedValue?.length,
       [`wpp-size-${this.size}`]: true,
     });
     this.inputWithIconsCssClasses = () => ({
@@ -8056,23 +8074,32 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
       'slot-hidden': !this.hasIconEndSlot && !(this.type === 'search' && this.loading && !this.disabled),
       ...(iconType === 'native' && this.shouldRenderCrossIcon && this.hasIconEndSlot ? { 'double-icon-end': true } : {}),
     });
-    this.inputId = this.name || `wpp-input-${Math.random().toString(36).substr(2, 9)}`;
+    this.inputId = this.name || 'wpp-input';
     this.labelId = `${this.inputId}-label`;
-    this.renderInput = () => (h("input", { id: this.inputId, class: this.inputCssClasses(), name: this.name, type: this.type, value: this.value, required: this.required, disabled: this.disabled, onInput: this.onInput, onKeyPress: this.onKeyPress, onBlur: this.onBlur, readOnly: this.readOnly, ref: inputRef => this.updateInputRef(inputRef), "aria-label": this.ariaProps.label, defaultValue: this.defaultValue, part: "input", title: "", placeholder: this.placeholder, autocomplete: getValidAutocomplete(this.autocomplete), "aria-disabled": this.disabled || this.loading ? 'true' : 'false', "aria-required": this.required ? 'true' : undefined, "aria-labelledby": this.labelConfig?.text ? this.labelId : undefined, "aria-invalid": this.lengthValidationError || this.messageType === 'error' ? 'true' : undefined, "data-testid": "input" }));
+    this.getInputType = () => {
+      if (this.maskOptions) {
+        // When mask options are provided, we need to ensure the input type is supported for masking
+        return SUPPORTED_INPUT_TYPES_FOR_MASK.includes(this.type) ? this.type : 'text';
+      }
+      return this.type === 'decimal' ? 'text' : this.type;
+    };
+    this.renderInput = () => (h("input", { id: this.inputId, class: this.inputCssClasses(), name: this.name, type: this.getInputType(), value: this.renderedValue, required: this.required, disabled: this.disabled, onInput: this.onInput, onKeyPress: this.onKeyPress, onBlur: this.onBlur, readOnly: this.readOnly, ref: inputRef => this.updateInputRef(inputRef), "aria-label": this.ariaProps.label, defaultValue: this.defaultValue, part: "input", title: "", placeholder: this.placeholder, autocomplete: getValidAutocomplete(this.autocomplete), "aria-disabled": this.disabled || this.loading ? 'true' : 'false', "aria-required": this.required ? 'true' : undefined, "aria-labelledby": this.labelConfig?.text ? this.labelId : undefined, "aria-invalid": this.lengthValidationError || this.messageType === 'error' ? 'true' : undefined, "aria-activedescendant": this.ariaProps.activedescendant ?? undefined, "data-testid": "input" }));
     this.renderSearchIconOrSpinner = () => {
       if (this.type !== 'search')
         return null;
       if (this.loading && !this.disabled) {
-        return h("wpp-spinner-v3-4-0", { class: this.iconStartCssClasses(), slot: "left", "aria-label": "Loading" });
+        return h("wpp-spinner-v4-0-0", { class: this.iconStartCssClasses(), slot: "left", "aria-label": "Loading" });
       }
-      return h("wpp-icon-search-v3-4-0", { class: this.iconStartCssClasses(), part: "icon-search" });
+      return h("wpp-icon-search-v4-0-0", { class: this.iconStartCssClasses(), part: "icon-search" });
     };
     this.shouldRenderCrossIcon = false;
     this.hasActiveEllipses = false;
     this.hasIconStartSlot = false;
     this.hasIconEndSlot = false;
+    this.isInputFocused = false;
+    this.isHovered = false;
     this.focusType = getInitFocusInfo();
-    this.initialProcessed = false;
+    this.renderedValue = '';
     this.name = undefined;
     this.type = 'text';
     this.value = undefined;
@@ -8110,56 +8137,60 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
   /**
    * Method that sets focus on the native input.
    */
-  async setFocus() {
-    this.inputRef?.focus();
+  async setFocus(isOutlined) {
+    requestAnimationFrame(() => {
+      this.inputRef?.focus();
+      if (isOutlined)
+        this.focusType = this.getUpdatedFocusInfo('input', FOCUS_TYPE.TAB);
+    });
   }
   /**
    * Method that sets the input value programmatically.
    */
   async setValue(value) {
-    if (value === this.value)
+    if (value === this.renderedValue)
       return;
-    this.value = value;
+    let rawValue = undefined;
+    if (this.generatedMask) {
+      // In case the input has a generated mask internally, we align the value with the mask
+      this.renderedValue = maskitoTransform(value, this.generatedMask);
+      // We need to compute the raw values as well because this function can be called with formatted values.
+      rawValue = getRawValueForExtra(this.renderedValue, this.type, this.maskOptions);
+    }
+    else {
+      this.renderedValue = value;
+    }
     if (this.inputRef) {
       this.inputRef.value = value;
-      this.updateInputWithMask();
-      this.suppressInputEvent = true;
-      const inputEvent = new InputEvent('input', { bubbles: true, composed: true });
-      this.inputRef.dispatchEvent(inputEvent);
     }
-    if (!this.maskOptions || Object.entries(this.maskOptions).length === 0) {
-      this.wppChange.emit({
-        value,
-        name: this.name,
-      });
-      return;
-    }
-    setTimeout(() => {
-      const formattedValue = this.inputRef ? this.inputRef.value : value;
-      this.value = formattedValue;
-      const rawValue = getRawValueForExtra(formattedValue, this.type, this.maskOptions);
-      if (this.suppressInputEvent) {
-        this.suppressInputEvent = false;
-        this.wppChangeExtra.emit({
-          raw: rawValue,
-          formatted: formattedValue,
-          name: this.name,
-        });
-        this.wppChange.emit({
-          value: formattedValue,
-          name: this.name,
-        });
-      }
-    }, 100);
+    this.wppChange.emit({
+      value: this.renderedValue,
+      ...(rawValue !== undefined ? { rawValue } : {}),
+      name: this.name,
+    });
   }
   /**
    * Method that returns current input value.
    */
   async getValue() {
-    return this.value;
+    return this.renderedValue;
+  }
+  onUpdateMaskOptions() {
+    this.destroyMask();
+    this.createMaskForInput();
   }
   onUpdateLocales(newLocales) {
     this._locales = { ...this._locales, ...newLocales };
+  }
+  onUpdateValue(newValue) {
+    if (this.maskOptions) {
+      if (!this.generatedMask)
+        return;
+      this.renderedValue = maskitoTransform(newValue, this.generatedMask);
+    }
+    else {
+      this.renderedValue = newValue;
+    }
   }
   connectedCallback() {
     if (this.withCrossIcon) {
@@ -8171,61 +8202,41 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
   componentWillLoad() {
     this._locales = { ...this._locales, ...this.locales };
     this.updateSlotData();
+    this.renderedValue = this.value || this.internalDefaultValue || '';
   }
   componentDidRender() {
-    if (this.hadChangesInTooltip && this.inputRef) {
-      this.updateInputWithMask();
-      this.hadChangesInTooltip = false;
-    }
     this.checkInputAfterRender();
   }
-  async componentDidLoad() {
+  componentDidLoad() {
     autoFocusElement(this.autoFocus, this.inputRef);
-    // Need to wait on fonts load and after that measure the size of text and input available space for the content
-    try {
-      await document.fonts.ready;
-      requestAnimationFrame(() => {
-        this.checkForEllipsis();
-      });
-    }
-    catch (_) {
-      setTimeout(() => {
-        this.checkForEllipsis();
-      }, 100);
-    }
-    this.updateInputWithMask();
-    if (this.value && this.maskOptions && this.inputRef && !this.initialProcessed) {
-      this.suppressInputEvent = true;
-      const inputEvent = new InputEvent('input', { bubbles: true, composed: true });
-      this.inputRef.dispatchEvent(inputEvent);
-      const newFormatted = this.inputRef ? this.inputRef.value : this.value;
-      if (newFormatted !== this.value) {
-        this.setValue(newFormatted);
-      }
-      this.initialProcessed = true;
-      this.suppressInputEvent = false;
-    }
+    this.createMaskForInput();
     this.setupResizeObserver();
   }
   disconnectedCallback() {
-    if (this.maskedElement) {
-      this.maskedElement.destroy();
-    }
+    this.destroyMask();
     if (this.resizeObserver && this.inputRef) {
       this.resizeObserver.unobserve(this.inputRef);
       this.resizeObserver.disconnect();
     }
   }
   render() {
-    return (h(Host, { class: this.wrapperCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'input'), exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v3-4-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v3-4-0", { part: "anchor", text: this.value, class: "with-tooltip", disabled: !this.hasActiveEllipses || this.type === 'password', anchorTabIndex: -1, config: this.truncationTooltipConfig }, this.renderInput()), this.shouldRenderCrossIcon && this.withCrossIcon && (h("wpp-icon-cross-v3-4-0", { class: this.iconEndCssClasses('native'), "aria-label": "Erase input text", role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: 0, part: "icon-cross", onClick: event => this.onClear(event), onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses('slot'), name: "icon-end", onSlotchange: this.updateSlotData, tabIndex: this.hasIconEndSlot ? 0 : -1, "aria-label": "Clear input", role: "button" })), this.lengthValidationError && (h("wpp-inline-message-v3-4-0", { message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') })), this.message && (h("wpp-inline-message-v3-4-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') }))));
+    return (h(Host, { class: this.wrapperCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onMouseEnter: () => {
+        this.isHovered = true;
+        this.updateCrossIcon();
+      }, onMouseLeave: () => {
+        this.isHovered = false;
+        this.updateCrossIcon();
+      }, onKeyUp: (event) => this.onKeyUp(event, 'input'), exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v4-0-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v4-0-0", { part: "anchor", text: this.renderedValue, class: "with-tooltip", disabled: !this.hasActiveEllipses || this.type === 'password', anchorTabIndex: -1, config: this.truncationTooltipConfig }, this.renderInput()), this.shouldRenderCrossIcon && this.withCrossIcon && (h("wpp-icon-cross-v4-0-0", { class: this.iconEndCssClasses('native'), "aria-label": "Erase input text", role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: 0, part: "icon-cross", onMouseDown: event => event.preventDefault(), onClick: event => this.onClear(event), onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses('slot'), name: "icon-end", onSlotchange: this.updateSlotData, tabIndex: this.hasIconEndSlot ? 0 : -1, "aria-label": "Clear input", role: "button" })), this.lengthValidationError && (h("wpp-inline-message-v4-0-0", { message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') })), this.message && (h("wpp-inline-message-v4-0-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') }))));
   }
-  static get registryIs() { return "wpp-input-v3-4-0"; }
+  static get registryIs() { return "wpp-input-v4-0-0"; }
   get host() { return this; }
   static get watchers() { return {
-    "locales": ["onUpdateLocales"]
+    "maskOptions": ["onUpdateMaskOptions"],
+    "locales": ["onUpdateLocales"],
+    "value": ["onUpdateValue"]
   }; }
   static get style() { return wppInputCss; }
-}, [1, "wpp-input", "wpp-input-v3-4-0", {
+}, [1, "wpp-input", "wpp-input-v4-0-0", {
     "name": [1],
     "type": [1],
     "value": [1025],
@@ -8255,8 +8266,10 @@ const WppInput = /*@__PURE__*/ proxyCustomElement(class WppInput extends HTMLEle
     "hasActiveEllipses": [32],
     "hasIconStartSlot": [32],
     "hasIconEndSlot": [32],
+    "isInputFocused": [32],
+    "isHovered": [32],
     "focusType": [32],
-    "initialProcessed": [32],
+    "renderedValue": [32],
     "select": [64],
     "setFocus": [64],
     "setValue": [64],
@@ -8266,79 +8279,79 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-input-v3-4-0", "wpp-action-button-v3-4-0", "wpp-icon-cross-v3-4-0", "wpp-icon-error-v3-4-0", "wpp-icon-info-message-v3-4-0", "wpp-icon-search-v3-4-0", "wpp-icon-success-v3-4-0", "wpp-icon-warning-v3-4-0", "wpp-inline-message-v3-4-0", "wpp-internal-label-v3-4-0", "wpp-internal-tooltip-v3-4-0", "wpp-label-v3-4-0", "wpp-spinner-v3-4-0", "wpp-tooltip-v3-4-0", "wpp-typography-v3-4-0"];
+  const components = ["wpp-input-v4-0-0", "wpp-action-button-v4-0-0", "wpp-icon-cross-v4-0-0", "wpp-icon-error-v4-0-0", "wpp-icon-info-message-v4-0-0", "wpp-icon-search-v4-0-0", "wpp-icon-success-v4-0-0", "wpp-icon-warning-v4-0-0", "wpp-inline-message-v4-0-0", "wpp-internal-label-v4-0-0", "wpp-internal-tooltip-v4-0-0", "wpp-label-v4-0-0", "wpp-spinner-v4-0-0", "wpp-tooltip-v4-0-0", "wpp-typography-v4-0-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-input-v3-4-0":
+    case "wpp-input-v4-0-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppInput);
       }
       break;
-    case "wpp-action-button-v3-4-0":
+    case "wpp-action-button-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-cross-v3-4-0":
+    case "wpp-icon-cross-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-error-v3-4-0":
+    case "wpp-icon-error-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-info-message-v3-4-0":
+    case "wpp-icon-info-message-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-search-v3-4-0":
+    case "wpp-icon-search-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-success-v3-4-0":
+    case "wpp-icon-success-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-warning-v3-4-0":
+    case "wpp-icon-warning-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-inline-message-v3-4-0":
+    case "wpp-inline-message-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-label-v3-4-0":
+    case "wpp-internal-label-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-internal-tooltip-v3-4-0":
+    case "wpp-internal-tooltip-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-label-v3-4-0":
+    case "wpp-label-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v3-4-0":
+    case "wpp-spinner-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v3-4-0":
+    case "wpp-tooltip-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v3-4-0":
+    case "wpp-typography-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

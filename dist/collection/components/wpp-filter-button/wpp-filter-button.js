@@ -74,10 +74,10 @@ export class WppFilterButton {
     this.validAriaProps = getAriaProps(this.ariaProps);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "button, icon, text, inner, counter", onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled, name: this.name, type: "button", "data-testid": "wppFilterButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps, part: "button" }, h("wpp-icon-tune-v3-4-0", { class: "icon", part: "icon" }), h("span", { class: "text", part: "text" }, h("slot", { part: "inner" })), this.counter > 0 && (h("wpp-typography-v3-4-0", { class: "counter", type: "s-body", part: "counter" }, `(${this.counter})`)))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "button, icon, text, inner, counter", onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled, name: this.name, type: "button", "data-testid": "wppFilterButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps, part: "button" }, h("wpp-icon-tune-v4-0-0", { class: "icon", part: "icon" }), h("span", { class: "text", part: "text" }, h("slot", { part: "inner" })), this.counter > 0 && (h("wpp-typography-v4-0-0", { class: "counter", type: "s-body", part: "counter" }, `(${this.counter})`)))));
   }
   static get is() { return "wpp-filter-button"; }
-  static get registryIs() { return "wpp-filter-button-v3-4-0"; }
+  static get registryIs() { return "wpp-filter-button-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

@@ -17,7 +17,7 @@ export class WppIconResize {
     return (h(WppIcon, { name: "wpp-icon-resize", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: ResizeDirectionIconPath[this.direction], fill: "currentColor" })));
   }
   static get is() { return "wpp-icon-resize"; }
-  static get registryIs() { return "wpp-icon-resize-v3-4-0"; }
+  static get registryIs() { return "wpp-icon-resize-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

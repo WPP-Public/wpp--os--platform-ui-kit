@@ -25,7 +25,7 @@ const primaryBtn = {
   onClick: () => alert('Some action'),
 };
 export const ActionOff = (args) => html `
-  <wpp-toast-v3-4-0
+  <wpp-toast-v4-0-0
     .message="${args.message}"
     .icon="${args.icon}"
     .maxMessageLines="${args.maxMessageLines}"
@@ -46,7 +46,7 @@ ActionOff.args = {
   type: 'success',
 };
 export const ActionOn = (args) => html `
-  <wpp-toast-v3-4-0
+  <wpp-toast-v4-0-0
     .message="${args.message}"
     .icon="${args.icon}"
     .maxMessageLines="${args.maxMessageLines}"
@@ -56,7 +56,7 @@ export const ActionOn = (args) => html `
     .duration="${30000}"
     .ariaProps="${args.ariaProps}"
   >
-  </wpp-toast-v3-4-0>
+  </wpp-toast-v4-0-0>
 `;
 ActionOn.args = {
   message: 'Warning message',

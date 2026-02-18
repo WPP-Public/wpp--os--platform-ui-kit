@@ -34,7 +34,7 @@ export class WppOverlay {
     return (h(Host, null, h("div", { class: this.getOverlayCssClasses(), style: { zIndex: this.zIndex.toString() }, onClick: this.handleClick })));
   }
   static get is() { return "wpp-overlay"; }
-  static get registryIs() { return "wpp-overlay-v3-4-0"; }
+  static get registryIs() { return "wpp-overlay-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

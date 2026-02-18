@@ -34,11 +34,11 @@ const WppPaginationItem = /*@__PURE__*/ proxyCustomElement(class WppPaginationIt
     this.selected = false;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, tabIndex: 0, exportparts: "number" }, h("wpp-typography-v3-4-0", { type: "s-body", part: "number" }, this.number)));
+    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, tabIndex: 0, exportparts: "number" }, h("wpp-typography-v4-0-0", { type: "s-body", part: "number" }, this.number)));
   }
-  static get registryIs() { return "wpp-pagination-item-v3-4-0"; }
+  static get registryIs() { return "wpp-pagination-item-v4-0-0"; }
   static get style() { return wppPaginationItemCss; }
-}, [1, "wpp-pagination-item", "wpp-pagination-item-v3-4-0", {
+}, [1, "wpp-pagination-item", "wpp-pagination-item-v4-0-0", {
     "number": [2],
     "selected": [4],
     "focusType": [32]
@@ -47,14 +47,14 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-pagination-item-v3-4-0", "wpp-typography-v3-4-0"];
+  const components = ["wpp-pagination-item-v4-0-0", "wpp-typography-v4-0-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-pagination-item-v3-4-0":
+    case "wpp-pagination-item-v4-0-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppPaginationItem);
       }
       break;
-    case "wpp-typography-v3-4-0":
+    case "wpp-typography-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

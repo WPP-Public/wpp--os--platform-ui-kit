@@ -17,6 +17,12 @@
 :host > .wpp-tooltip::part(anchor) {
   width: 100%;
 }
+:host .anchor-container .wpp-tooltip {
+  width: 100%;
+}
+:host .anchor-container .wpp-tooltip::part(anchor) {
+  width: 100%;
+}
 :host .anchor {
   display: flex;
   align-items: center;
@@ -303,6 +309,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  width: 100%;
 }
 :host(.wpp-combined-select) .inputs-container .anchor {
   width: auto;
@@ -318,6 +325,7 @@
   border: 1px solid var(--wpp-grey-color-500);
   border-radius: 0 var(--wpp-border-radius-m) var(--wpp-border-radius-m) 0;
   border-left: none;
+  width: 100%;
   --wpp-input-height-m: 38px;
   --wpp-input-height-s: 30px;
 }

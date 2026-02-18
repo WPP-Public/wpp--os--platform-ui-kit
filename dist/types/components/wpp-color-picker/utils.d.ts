@@ -9,14 +9,16 @@ export declare const RGB_INPUT_CONFIG: {
   decimalPatternOptions: {
     min: number;
     max: number;
-    precision: number;
+    minimumFractionDigits: number;
+    maximumFractionDigits: number;
   };
 };
 export declare const OPACITY_INPUT_CONFIG: {
   decimalPatternOptions: {
     min: number;
     max: number;
-    precision: number;
+    minimumFractionDigits: number;
+    maximumFractionDigits: number;
     postfix: string;
   };
 };

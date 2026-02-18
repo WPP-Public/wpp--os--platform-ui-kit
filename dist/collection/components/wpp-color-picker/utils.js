@@ -7,14 +7,16 @@ export const RGB_INPUT_CONFIG = {
   decimalPatternOptions: {
     min: 0,
     max: 255,
-    precision: 0,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   },
 };
 export const OPACITY_INPUT_CONFIG = {
   decimalPatternOptions: {
     min: 0,
     max: 100,
-    precision: 0,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
     postfix: '%',
   },
 };

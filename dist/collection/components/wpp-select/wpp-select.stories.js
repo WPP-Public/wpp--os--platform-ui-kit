@@ -134,7 +134,7 @@ export const Single = (args) => {
       updatedEl.value = selectedValue;
   };
   return html `
-    <wpp-select-v3-4-0
+    <wpp-select-v4-0-0
       type="single"
       name="single-select"
       .message=${args.message}
@@ -156,16 +156,16 @@ export const Single = (args) => {
     >
       ${args.showIconStart
     ? html `
-            <wpp-icon-clock-v3-4-0
+            <wpp-icon-clock-v4-0-0
               slot="icon-start"
               @click="${(e) => {
       e.stopPropagation();
       console.log('Left icon clicked');
     }}"
-            ></wpp-icon-clock-v3-4-0>
+            ></wpp-icon-clock-v4-0-0>
           `
     : null}
-    </wpp-select-v3-4-0>
+    </wpp-select-v4-0-0>
   `;
 };
 Single.args = {
@@ -201,7 +201,7 @@ export const Multiple = (args) => {
       updatedEl.value = selectedValue;
   };
   return html `
-    <wpp-select-v3-4-0
+    <wpp-select-v4-0-0
       type="multiple"
       name="multiple-select"
       .message=${args.message}
@@ -225,16 +225,16 @@ export const Multiple = (args) => {
     >
       ${args.showIconStart
     ? html `
-            <wpp-icon-clock-v3-4-0
+            <wpp-icon-clock-v4-0-0
               slot="icon-start"
               @click="${(e) => {
       e.stopPropagation();
       console.log('Left icon clicked');
     }}"
-            ></wpp-icon-clock-v3-4-0>
+            ></wpp-icon-clock-v4-0-0>
           `
     : null}
-    </wpp-select-v3-4-0>
+    </wpp-select-v4-0-0>
   `;
 };
 Multiple.args = {
@@ -294,47 +294,96 @@ const LIST_TEXT = [
   },
 ];
 export const Text = (args) => {
-  let selectedValue = '';
-  const handleChange = (event) => {
-    selectedValue = event.detail.value;
-    console.log('Event:', event);
-    const updatedEl = document.querySelector('wpp-select-v2-21-0');
-    if (updatedEl)
-      updatedEl.value = selectedValue;
+  let selectedValue = 'Houses';
+  const updateChevronState = (isOpen) => {
+    const chevron = document.querySelector('#text-select-chevron');
+    if (chevron) {
+      if (isOpen) {
+        chevron.classList.add('isOpen');
+      }
+      else {
+        chevron.classList.remove('isOpen');
+      }
+    }
   };
-  return html ` <wpp-select-v3-4-0
-    .disabled="${args.disabled}"
-    .placeholder="${args.placeholder}"
-    .dropdownWidth="${args.dropdownWidth}"
-    value="long-text"
-    type="text"
-    name="text-select"
-    .valie=${selectedValue}
-    .dropdownConfig=${args.dropdownConfig}
-    .list=${LIST_TEXT}
-    @wppChange=${handleChange}
-  >
-    ${args.showIconStart
-    ? html `
-          <wpp-icon-clock-v3-4-0
-            slot="icon-start"
-            @click="${(e) => {
-      e.stopPropagation();
-      console.log('Left icon clicked');
-    }}"
-          ></wpp-icon-clock-v3-4-0>
-        `
-    : null}
-  </wpp-select-v3-4-0>`;
+  const dropdownConfig = {
+    onShow: () => {
+      updateChevronState(true);
+    },
+    onHide: () => {
+      updateChevronState(false);
+    },
+  };
+  const handleListItemChange = (item) => {
+    selectedValue = item.label;
+    // Update the trigger button text - find and replace only the text content
+    const triggerButton = document.querySelector('#text-select-trigger');
+    if (triggerButton) {
+      // Find the text node (not inside wpp-icon-chevron)
+      const childNodes = Array.from(triggerButton.childNodes);
+      const textNode = childNodes.find(node => node.nodeType === Node.TEXT_NODE && node.textContent?.trim());
+      if (textNode) {
+        textNode.textContent = ` ${selectedValue} `;
+      }
+    }
+    // Update all list items checked state
+    const listItems = document.querySelectorAll('.text-select-item');
+    listItems.forEach((listItem) => {
+      const label = listItem.querySelector('[slot="label"]')?.textContent;
+      listItem.checked = label === selectedValue;
+    });
+  };
+  return html `
+    <style>
+      #text-select-chevron {
+        transition: transform 0.2s;
+      }
+      #text-select-chevron.isOpen {
+        transform: rotateZ(180deg);
+      }
+      #text-select-trigger {
+        /* Match original select text styling (s-body font weight) */
+        --wpp-action-button-font-weight: 400;
+        /* Match select chevron icon states (default: Grey/600, hover: Grey/800, pressed: Grey/900) */
+        --wpp-action-button-secondary-icon-color: var(--wpp-grey-color-600);
+        --wpp-action-button-secondary-icon-color-hover: var(--wpp-grey-color-800);
+        --wpp-action-button-secondary-icon-color-active: var(--wpp-grey-color-900);
+      }
+    </style>
+    <div style="width: 300px;">
+      <wpp-menu-context-v4-0-0 .dropdownConfig=${dropdownConfig}>
+        <wpp-action-button-v4-0-0
+          id="text-select-trigger"
+          slot="trigger-element"
+          variant="secondary"
+          .disabled="${args.disabled}"
+        >
+          ${selectedValue || args.placeholder}
+          <wpp-icon-chevron-v4-0-0 id="text-select-chevron" slot="icon-end" direction="down"></wpp-icon-chevron-v4-0-0>
+        </wpp-action-button-v4-0-0>
+        <div>
+          ${LIST_TEXT.map(item => html `
+              <wpp-list-item-v4-0-0
+                class="text-select-item"
+                .checked=${item.label === selectedValue}
+                @wppChangeListItem=${() => handleListItemChange(item)}
+              >
+                <span slot="label">${item.label}</span>
+              </wpp-list-item-v4-0-0>
+            `)}
+        </div>
+      </wpp-menu-context-v4-0-0>
+    </div>
+  `;
 };
 Text.args = {
-  placeholder: 'Select option',
-  dropdownWidth: 'auto',
+  placeholder: 'Choose options',
   disabled: false,
-  showIconStart: true,
 };
 Text.parameters = {
-  controls: { exclude: ['message', 'messageType', 'size', 'withSearch'] },
+  controls: {
+    exclude: ['message', 'messageType', 'size', 'withSearch', 'dropdownWidth', 'dropdownConfig', 'showIconStart'],
+  },
 };
 export const ButtonAnchor = (args) => {
   let selectedValue = null;
@@ -347,21 +396,21 @@ export const ButtonAnchor = (args) => {
   const renderAnchor = () => {
     switch (args.anchorComponent) {
       case 'WppActionButton':
-        return html ` <wpp-action-button-v3-4-0 slot="anchor-button"> ${args.anchorLabel} </wpp-action-button-v3-4-0> `;
+        return html ` <wpp-action-button-v4-0-0 slot="anchor-button"> ${args.anchorLabel} </wpp-action-button-v4-0-0> `;
       case 'WppActionButtonWithIcon':
         return html `
-          <wpp-action-button-v3-4-0 slot="anchor-button">
-            <wpp-icon-plus-v3-4-0 slot="icon-start"></wpp-icon-plus-v3-4-0>
+          <wpp-action-button-v4-0-0 slot="anchor-button">
+            <wpp-icon-plus-v4-0-0 slot="icon-start"></wpp-icon-plus-v4-0-0>
             ${args.anchorLabel}
-          </wpp-action-button-v3-4-0>
+          </wpp-action-button-v4-0-0>
         `;
       case 'WppButton':
       default:
-        return html ` <wpp-button-v3-4-0 slot="anchor-button"> ${args.anchorLabel} </wpp-button-v3-4-0> `;
+        return html ` <wpp-button-v4-0-0 slot="anchor-button"> ${args.anchorLabel} </wpp-button-v4-0-0> `;
     }
   };
   return html `
-    <wpp-select-v3-4-0
+    <wpp-select-v4-0-0
       id="button-anchor-select"
       type="single"
       name="button-anchor-select"
@@ -385,15 +434,15 @@ export const ButtonAnchor = (args) => {
       ${renderAnchor()}
       ${args.showIconStart
     ? html `
-            <wpp-icon-clock-v3-4-0
+            <wpp-icon-clock-v4-0-0
               slot="icon-start"
               @click="${(e) => {
       e.stopPropagation();
     }}"
-            ></wpp-icon-clock-v3-4-0>
+            ></wpp-icon-clock-v4-0-0>
           `
     : null}
-    </wpp-select-v3-4-0>
+    </wpp-select-v4-0-0>
   `;
 };
 ButtonAnchor.args = {

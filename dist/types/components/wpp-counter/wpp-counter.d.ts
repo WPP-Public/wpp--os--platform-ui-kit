@@ -35,6 +35,8 @@ export declare class WppCounter {
   readonly max: number;
   /**
    * If `true`, the counter will show increment/decrement(+/-) buttons
+   * @deprecated The `withButtons` prop is deprecated and will be removed in v5.0.0.
+   * The counter will always display with buttons. Use a standard input component for cases without buttons.
    */
   readonly withButtons: boolean;
   /**

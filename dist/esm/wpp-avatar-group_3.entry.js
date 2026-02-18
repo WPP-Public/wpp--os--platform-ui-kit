@@ -1,9 +1,9 @@
 import { r as registerInstance, c as createEvent, h, F as Fragment, H as Host, g as getElement } from './index-9177bb6d.js';
 import { A as AVATAR_COLORS_VARIANTS } from './const-271ccb95.js';
 import { W as WppIcon } from './WppIcon-f4802cc9.js';
-import { W as WrappedSlot } from './WrappedSlot-2ee5325a.js';
-import { g as getSlotEmptyStates, e as truncate } from './utils-fb733700.js';
-import './consts-5bf9c29f.js';
+import { W as WrappedSlot } from './WrappedSlot-629d3e4f.js';
+import { g as getSlotEmptyStates, e as truncate } from './utils-cc81a41b.js';
+import './consts-9fc0a13a.js';
 
 const wppAvatarGroupCss = ":host{--avatar-stroke-color:var(--wpp-avatar-stroke-color, var(--wpp-grey-color-000));--avatar-stroke-width:var(--wpp-avatar-stroke-width, 2px);--avatar-circle-group-margin-left-size-xs:var(--wpp-avatar-circle-group-margin-left-size-xs, -4px);--avatar-circle-group-margin-left-size-s:var(--wpp-avatar-circle-group-margin-left-size-s, -12px);--avatar-square-group-margin-left-size-xs:var(--wpp-avatar-square-group-margin-left-size-xs, -4px);--avatar-square-group-margin-left-size-s:var(--wpp-avatar-square-group-margin-left-size-s, -12px);display:-ms-inline-flexbox;display:inline-flex}:host .avatar-item{display:-ms-inline-flexbox;display:inline-flex;position:relative}:host .avatar-item.interactable:hover{z-index:1}:host .avatars-list{display:-ms-flexbox;display:flex;margin:0;padding:0;list-style-type:none}:host:host(.wpp-circle) .avatar-item{border-radius:var(--wpp-border-radius-round);-webkit-box-shadow:0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color);box-shadow:0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color)}:host:host(.wpp-circle):host(.wpp-size-xs) .avatar-item:not(:first-child){margin-left:var(--avatar-circle-group-margin-left-size-xs)}:host:host(.wpp-circle):host(.wpp-size-s) .avatar-item:not(:first-child){margin-left:var(--avatar-circle-group-margin-left-size-s)}:host:host(.wpp-square) .avatar-item{-webkit-box-shadow:0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color);box-shadow:0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color)}:host:host(.wpp-square):host(.wpp-size-xs) .avatar-item{border-radius:var(--wpp-border-radius-xs)}:host:host(.wpp-square):host(.wpp-size-xs) .avatar-item:not(:first-child){margin-left:var(--avatar-square-group-margin-left-size-xs)}:host:host(.wpp-square):host(.wpp-size-s) .avatar-item{border-radius:var(--wpp-border-radius-s)}:host:host(.wpp-square):host(.wpp-size-s) .avatar-item:not(:first-child){margin-left:var(--avatar-square-group-margin-left-size-s)}";
 
@@ -21,7 +21,7 @@ const WppAvatarGroup = class {
       return avatars.map(avatar => {
         if (!avatar.src && !avatar.color) {
           avatar.color = AVATAR_COLORS_VARIANTS[colorIndex];
-          colorIndex = colorIndex === AVATAR_COLORS_VARIANTS.length ? 0 : colorIndex + 1;
+          colorIndex = colorIndex === AVATAR_COLORS_VARIANTS.length - 1 ? 0 : colorIndex + 1;
         }
         return avatar;
       });
@@ -40,9 +40,7 @@ const WppAvatarGroup = class {
       const listItem = event.currentTarget;
       this.wppSelectItem.emit({ value: listItem, fromDropdown: true, avatarIndex });
     };
-    this.getAvatarsList = () => (this.avatars.length ? this.avatars : this.users);
     this.menuContextTippyRef = undefined;
-    this.users = [];
     this.avatars = [];
     this.maxAvatarsToDisplay = 6;
     this.size = 'xs';
@@ -54,13 +52,13 @@ const WppAvatarGroup = class {
     this.dropdownConfig = {};
   }
   render() {
-    const avatarsWithColors = this.getAvatarsWithColors(this.getAvatarsList());
+    const avatarsWithColors = this.getAvatarsWithColors(this.avatars);
     const avatarsToDisplay = avatarsWithColors.slice(0, this.maxAvatarsToDisplay);
     const avatarsInHiddenList = avatarsWithColors.slice(this.maxAvatarsToDisplay);
     return (h(Host, { class: this.avatarGroupWrapperCssClasses(), role: "group", exportparts: "list, item, menu, avatar, hidden-item, hidden-item-with-avatar, hidden-item-avatar, hidden-item-name" }, h("ul", { class: "avatars-list", part: "list" }, avatarsToDisplay.map((avatar, avatarIndex) => (h("li", { class: {
         'avatar-item': true,
-        interactable: avatar.interactable ?? false,
-      }, part: "item" }, h("wpp-avatar-v3-4-0", { size: this.size, variant: this.variant, name: avatar.name, src: avatar.src, withTooltip: this.withTooltip, tooltipConfig: this.tooltipConfig, interactable: avatar.interactable, color: avatar.color, onWppClick: (event) => this.handleAvatarClick(event, avatarIndex, false) })))), this.getAvatarsList().length > this.maxAvatarsToDisplay && (h("li", { class: "avatar-item", part: "item" }, h("wpp-menu-context-v3-4-0", { externalClass: "avatar-group", listWidth: "240px", dropdownConfig: {
+        interactable: avatar.interactable ?? true,
+      }, part: "item" }, h("wpp-avatar-v4-0-0", { size: this.size, variant: this.variant, name: avatar.name, src: avatar.src, withTooltip: this.withTooltip, tooltipConfig: this.tooltipConfig, interactable: avatar.interactable ?? true, color: avatar.color, onWppClick: (event) => this.handleAvatarClick(event, avatarIndex, false) })))), this.avatars.length > this.maxAvatarsToDisplay && (h("li", { class: "avatar-item", part: "item" }, h("wpp-menu-context-v4-0-0", { externalClass: "avatar-group", listWidth: "240px", dropdownConfig: {
         ...this.dropdownConfig,
         onShow: (instance) => {
           const firstListItem = instance.popper.querySelector('.wpp-list-item');
@@ -77,9 +75,9 @@ const WppAvatarGroup = class {
         onDestroy: () => {
           this.menuContextTippyRef = undefined;
         },
-      }, part: "menu", onKeyDown: this.onKeyDown, ariaProps: { label: `+${avatarsInHiddenList.length} more list items with avatars` } }, h("wpp-avatar-v3-4-0", { amountOfHiddenAvatars: avatarsInHiddenList.length, size: this.size, variant: this.variant, slot: "trigger-element", part: "avatar" }), h(Fragment, null, avatarsInHiddenList.map((avatar, avatarIndex) => (h("wpp-list-item-v3-4-0", { key: avatar.name, onWppChangeListItem: (event) => this.handleListItemClick(event, avatarIndex), value: avatar.name, part: "hidden-item" }, h("wpp-avatar-v3-4-0", { name: avatar.name, src: avatar.src, color: avatar.color, variant: this.variant, interactable: avatar.interactable, role: "presentation", slot: "left", part: "hidden-item-avatar" }), h("span", { slot: "label", class: "name", part: "hidden-item-name" }, avatar.name)))))))))));
+      }, part: "menu", onKeyDown: this.onKeyDown, ariaProps: { label: `+${avatarsInHiddenList.length} more list items with avatars` } }, h("wpp-avatar-v4-0-0", { amountOfHiddenAvatars: avatarsInHiddenList.length, size: this.size, variant: this.variant, slot: "trigger-element", part: "avatar" }), h(Fragment, null, avatarsInHiddenList.map((avatar, avatarIndex) => (h("wpp-list-item-v4-0-0", { key: avatar.name, onWppChangeListItem: (event) => this.handleListItemClick(event, avatarIndex + this.maxAvatarsToDisplay), value: avatar.name, nonInteractive: avatar.interactable === false, part: "hidden-item" }, h("wpp-avatar-v4-0-0", { name: avatar.name, src: avatar.src, color: avatar.color, variant: this.variant, interactable: false, role: "presentation", slot: "left", part: "hidden-item-avatar" }), h("span", { slot: "label", class: "name", part: "hidden-item-name" }, avatar.name)))))))))));
   }
-  static get registryIs() { return "wpp-avatar-group-v3-4-0"; }
+  static get registryIs() { return "wpp-avatar-group-v4-0-0"; }
 };
 WppAvatarGroup.style = wppAvatarGroupCss;
 
@@ -96,7 +94,7 @@ const WppIconTriangleFill = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-triangle-fill", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M13.1271 9.24407C13.5876 9.64284 13.5876 10.3572 13.1271 10.7559L9.65465 13.7632C9.00701 14.3241 8 13.864 8 13.0073L8 6.99275C8 6.136 9.00701 5.67594 9.65465 6.23682L13.1271 9.24407Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-triangle-fill-v3-4-0"; }
+  static get registryIs() { return "wpp-icon-triangle-fill-v4-0-0"; }
 };
 WppIconTriangleFill.style = wppIconCss;
 
@@ -114,7 +112,6 @@ const WppTag = class {
     this.hostCssClasses = () => ({
       'wpp-tag': true,
       ...(this.variant && { [`wpp-${this.variant}`]: true }),
-      ...(this.categoricalColorIndex && !this.variant ? { [`wpp-Cat-${this.categoricalColorIndex}`]: true } : {}),
       'wpp-with-icon': Boolean(this.hasIconStartSlot),
       'wpp-disabled': this.disabled,
     });
@@ -127,20 +124,15 @@ const WppTag = class {
     this.maxLabelLength = 30;
     this.tooltipConfig = {};
     this.label = undefined;
-    this.categoricalColorIndex = undefined;
-    this.withIcon = false;
     this.disabled = false;
   }
   componentWillLoad() {
     this.updateSlotData();
-    if (this.categoricalColorIndex) {
-      console.warn('%cThe `categoricalColorIndex` property is deprecated. Please, use `variant` instead', 'color: black; font-size: 12px;');
-    }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("wpp-typography-v3-4-0", { type: "xs-midi", tag: "span", part: "label" }, Number(this.label?.length) > this.maxLabelLength ? (h("wpp-tooltip-v3-4-0", { text: this.label, config: this.tooltipConfig, part: "tooltip" }, h("span", { part: "tooltip-text" }, truncate(this.label, this.maxLabelLength, false)))) : (this.label)), h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("wpp-typography-v4-0-0", { type: "xs-midi", tag: "span", part: "label" }, Number(this.label?.length) > this.maxLabelLength ? (h("wpp-tooltip-v4-0-0", { text: this.label, config: this.tooltipConfig, part: "tooltip" }, h("span", { part: "tooltip-text" }, truncate(this.label, this.maxLabelLength, false)))) : (this.label)), h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
   }
-  static get registryIs() { return "wpp-tag-v3-4-0"; }
+  static get registryIs() { return "wpp-tag-v4-0-0"; }
   get host() { return getElement(this); }
 };
 WppTag.style = wppTagCss;

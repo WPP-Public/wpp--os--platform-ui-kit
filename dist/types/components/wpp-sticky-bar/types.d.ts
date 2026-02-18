@@ -5,6 +5,8 @@ export interface StickyBarButtonItem {
 export interface StickyBarTabItem {
   text: string;
   value: string;
+  counter?: number;
+  icon?: `wpp-icon-${string}`;
 }
-export type StickyBarVariants = 'blank' | 'one-line' | 'two-lines' | 'two-lines-with-tabs';
+export type StickyBarVariants = 'small' | 'medium' | 'with-tabs';
 export type VisibilityClasses = `visible` | `invisible` | '';

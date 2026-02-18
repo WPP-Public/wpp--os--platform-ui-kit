@@ -16,7 +16,7 @@ export default {
     selectedItemPerPage: { type: 'number' },
   },
 };
-export const PaginationControl = (args) => html `<wpp-pagination-v3-4-0
+export const Pagination = (args) => html `<wpp-pagination-v4-0-0
     .selectedItemPerPage="${args.selectedItemPerPage}"
     .count="${args.count}"
     .itemsPerPage="${args.itemsPerPage}"
@@ -25,7 +25,7 @@ export const PaginationControl = (args) => html `<wpp-pagination-v3-4-0
     .locales="${args.locales}"
     locales="${args.locales}"
   />`;
-PaginationControl.args = {
+Pagination.args = {
   count: 78,
   itemsPerPage: [5, 10, 20, 50],
   pageSelectThreshold: 8,

@@ -1,7 +1,4 @@
-/**
- * Escapes special regex characters in a string (like '.' or '*').
- */
-const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+import { maskitoParseNumber } from '@maskito/kit';
 /**
  * Returns a "raw" version of a masked value.
  *
@@ -22,36 +19,13 @@ const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
  * @returns The raw value string.
  */
 export const getRawValueForExtra = (maskedValue, type, maskOptions) => {
-  // 1) Handle decimal/number types
-  if (type === 'decimal' || type === 'number') {
-    let raw = maskedValue;
-    if (maskOptions?.decimalPatternOptions) {
-      const { prefix, postfix, thousandSeparator, decimalSeparator } = maskOptions.decimalPatternOptions;
-      // Remove prefix
-      if (prefix && raw.startsWith(prefix)) {
-        raw = raw.slice(prefix.length);
-      }
-      // Remove postfix
-      if (postfix && raw.endsWith(postfix)) {
-        raw = raw.slice(0, raw.length - postfix.length);
-      }
-      // Remove thousand separators if provided; otherwise, remove whitespace.
-      if (thousandSeparator) {
-        const regex = new RegExp(escapeRegex(thousandSeparator), 'g');
-        raw = raw.replace(regex, '');
-      }
-      else {
-        raw = raw.replace(/\s/g, '');
-      }
-      // Replace the custom decimal separator with '.'
-      if (decimalSeparator && decimalSeparator !== '.') {
-        const regex = new RegExp(escapeRegex(decimalSeparator), 'g');
-        raw = raw.replace(regex, '.');
-      }
-      return raw;
+  if (maskOptions?.decimalPatternOptions) {
+    // 1) Handle number inputs: remove prefix/postfix, thousand separators, and convert decimal separator.
+    const parsedNumber = maskitoParseNumber(maskedValue, maskOptions.decimalPatternOptions);
+    if (isNaN(parsedNumber)) {
+      return '';
     }
-    // Fallback: remove everything except digits, minus sign, and period.
-    return raw.replace(/[^\d.-]/g, '');
+    return String(parsedNumber);
   }
   // 2) Handle telephone inputs: remove dashes, parentheses, and whitespace.
   if (type === 'tel') {
@@ -61,12 +35,7 @@ export const getRawValueForExtra = (maskedValue, type, maskOptions) => {
   if (maskOptions?.customPatternOptions) {
     return maskedValue.replace(/\D/g, '');
   }
-  // 4) For text type, return as-is (preserve spaces)
-  if (type === 'text') {
-    return maskedValue;
-  }
-  // 5) For other types, remove whitespace.
-  return maskedValue.replace(/\s/g, '');
+  return maskedValue;
 };
 export const getValidAutocomplete = (autocomplete) => {
   const validValues = [

@@ -3,22 +3,22 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const config = require('./config-a2876089.js');
+const config = require('./config-ecfb0ad8.js');
 const types = require('./types-3dbf006d.js');
-require('./utils-99b83069.js');
-require('./consts-779fd4ec.js');
-require('./wpp-icon-unordered-list-992bb5a0.js');
+require('./utils-ce5c8ac5.js');
+require('./consts-dba6e6dd.js');
+require('./wpp-icon-unordered-list-6af7b1bc.js');
 require('./WppIcon-55327707.js');
-require('./wpp-icon-video-clip-bbc57dff.js');
+require('./wpp-icon-video-clip-3b426623.js');
 require('./_commonjsHelpers-bcc1208a.js');
-require('./wpp-progress-indicator-5d71d7fc.js');
-require('./wpp-icon-chevron-774fdceb.js');
-require('./wpp-icon-gallery-344b7155.js');
+require('./wpp-progress-indicator-b1e1c428.js');
+require('./wpp-icon-chevron-6381b608.js');
+require('./wpp-icon-gallery-031016ae.js');
 require('./lodash-04cddce7.js');
-require('./wpp-action-button-c97a6a66.js');
+require('./wpp-action-button-116d7a60.js');
 require('./common-ee802540.js');
-require('./WrappedSlot-ab2104d8.js');
-require('./wpp-input-6f28cea8.js');
+require('./WrappedSlot-4a4ef805.js');
+require('./wpp-input-36e87608.js');
 require('./turndown.browser.es-40bb3069.js');
 
 const WppRichtextView = class {
@@ -175,9 +175,9 @@ const WppRichtextView = class {
     this.setValue(newValue);
   }
   render() {
-    return (index.h(index.Host, null, index.h("wpp-quill-styles-v3-4-0", null), index.h("wpp-richtext-common-styles-v3-4-0", null), index.h("div", { ref: (el) => (this.containerElement = el) })));
+    return (index.h(index.Host, null, index.h("wpp-quill-styles-v4-0-0", null), index.h("wpp-richtext-common-styles-v4-0-0", null), index.h("div", { ref: (el) => (this.containerElement = el) })));
   }
-  static get registryIs() { return "wpp-richtext-view-v3-4-0"; }
+  static get registryIs() { return "wpp-richtext-view-v4-0-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "styles": ["updateStyle"],

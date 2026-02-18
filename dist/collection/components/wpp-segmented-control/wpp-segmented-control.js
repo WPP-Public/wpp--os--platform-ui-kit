@@ -73,10 +73,10 @@ export class WppSegmentedControl {
     });
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v3-4-0", { class: "label", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.cssClasses(), role: "listbox", "aria-multiselectable": "false", "aria-required": this.required, part: "wrapper" }, h("slot", { part: "inner" }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-0-0", { class: "label", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.cssClasses(), role: "listbox", "aria-multiselectable": "false", "aria-required": this.required, part: "wrapper" }, h("slot", { part: "inner" }))));
   }
   static get is() { return "wpp-segmented-control"; }
-  static get registryIs() { return "wpp-segmented-control-v3-4-0"; }
+  static get registryIs() { return "wpp-segmented-control-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -144,7 +144,7 @@ export class WppSegmentedControl {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "Defines the control bar width, with the leftover space distributed evenly between the items. Must be in pixels, e.g. **800px**."
+          "text": "Defines the control bar width, with the leftover space distributed evenly between the items. Must be in pixels, e.g. **800px**.\nRequires hugContentOff to be set to true for the width to take effect."
         },
         "attribute": "width",
         "reflect": false,

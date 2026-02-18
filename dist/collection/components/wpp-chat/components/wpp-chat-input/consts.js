@@ -1,6 +1,5 @@
 export const DEFAULT_FILE_UPLOAD_CONFIG = {
   acceptConfig: {},
-  accept: [],
   size: 50,
   maxFiles: 0,
   multiple: true,

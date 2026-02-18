@@ -24,7 +24,7 @@ export * from './components/wpp-list-item/types';
 export * from './components/wpp-modal/types';
 export * from './components/wpp-nav-sidebar/types';
 export * from './components/wpp-pagination/types';
-export * from './components/wpp-pill-group/components/wpp-pill/types';
+export * from './components/wpp-pill/types';
 export * from './components/wpp-pill-group/types';
 export * from './components/wpp-popover/types';
 export * from './components/wpp-radio-group/types';

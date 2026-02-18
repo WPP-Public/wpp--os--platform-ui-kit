@@ -1,21 +1,24 @@
-import { proxyCustomElement, HTMLElement, createEvent, h, Fragment, Host } from '@stencil/core/internal/client';
-import { d as debounce, k as transformToVersionedTag, s as selectDropdownWidth, n as autoFocusElement, b as isEventTargetContained } from './utils.js';
-import { m as menuListConfig, i as isEqual_1 } from './menuListConfig.js';
+import { h, Fragment, proxyCustomElement, HTMLElement, createEvent, Host } from '@stencil/core/internal/client';
+import { l as lodash } from './lodash.js';
 import { F as FOCUS_TYPE } from './common.js';
+import { m as menuListConfig } from './menuListConfig.js';
+import { w as getHighestContainerInDOM, k as transformToVersionedTag, d as debounce, s as selectDropdownWidth, b as isEventTargetContained } from './utils.js';
 import { Z as Z_INDEX } from './consts.js';
-import { d as defineCustomElement$m } from './wpp-action-button2.js';
-import { d as defineCustomElement$l } from './wpp-checkbox2.js';
-import { d as defineCustomElement$k } from './wpp-divider2.js';
-import { d as defineCustomElement$j } from './wpp-icon-chevron2.js';
-import { d as defineCustomElement$i } from './wpp-icon-cross2.js';
-import { d as defineCustomElement$h } from './wpp-icon-dash2.js';
-import { d as defineCustomElement$g } from './wpp-icon-drag2.js';
-import { d as defineCustomElement$f } from './wpp-icon-error2.js';
-import { d as defineCustomElement$e } from './wpp-icon-info-message2.js';
-import { d as defineCustomElement$d } from './wpp-icon-success2.js';
-import { d as defineCustomElement$c } from './wpp-icon-tick2.js';
-import { d as defineCustomElement$b } from './wpp-icon-warning2.js';
-import { d as defineCustomElement$a } from './wpp-inline-message2.js';
+import { d as defineCustomElement$o } from './wpp-action-button2.js';
+import { d as defineCustomElement$n } from './wpp-checkbox2.js';
+import { d as defineCustomElement$m } from './wpp-divider2.js';
+import { d as defineCustomElement$l } from './wpp-icon-chevron2.js';
+import { d as defineCustomElement$k } from './wpp-icon-cross2.js';
+import { d as defineCustomElement$j } from './wpp-icon-dash2.js';
+import { d as defineCustomElement$i } from './wpp-icon-drag2.js';
+import { d as defineCustomElement$h } from './wpp-icon-error2.js';
+import { d as defineCustomElement$g } from './wpp-icon-info-message2.js';
+import { d as defineCustomElement$f } from './wpp-icon-search2.js';
+import { d as defineCustomElement$e } from './wpp-icon-success2.js';
+import { d as defineCustomElement$d } from './wpp-icon-tick2.js';
+import { d as defineCustomElement$c } from './wpp-icon-warning2.js';
+import { d as defineCustomElement$b } from './wpp-inline-message2.js';
+import { d as defineCustomElement$a } from './wpp-input2.js';
 import { d as defineCustomElement$9 } from './wpp-internal-label2.js';
 import { d as defineCustomElement$8 } from './wpp-internal-tooltip2.js';
 import { d as defineCustomElement$7 } from './wpp-label2.js';
@@ -25,40 +28,224 @@ import { d as defineCustomElement$4 } from './wpp-spinner2.js';
 import { d as defineCustomElement$3 } from './wpp-tooltip2.js';
 import { d as defineCustomElement$2 } from './wpp-typography2.js';
 
-const DROPDOWN_ANIMATION_TIME = [0, 0];
-const PILL_MARGIN = 8;
-const LOCALES_DEFAULTS = {
-  nothingFound: 'Nothing found',
-  beginTyping: 'Begin typing',
-  more: 'more',
-  showMore: 'more',
-  showLess: 'Show less',
-  selected: count => `${count} selected`,
-  loading: 'Loading...',
-  createNewElement: 'Create new element',
-};
-
-const getTempNodeWidthBasedOnLabel = (textStyles, label) => {
-  const tmp = document.createElement('span');
-  const textNode = document.createTextNode('');
-  tmp.appendChild(textNode);
-  document.body.appendChild(tmp);
-  tmp.style.cssText = textStyles;
-  tmp.style.opacity = '0';
-  tmp.style.position = 'absolute';
-  tmp.style.width = 'auto';
-  tmp.style.overflow = 'scroll';
-  tmp.style.whiteSpace = 'no-wrap';
-  tmp.innerText = label;
-  const nodeWidth = tmp.getBoundingClientRect().width;
-  document.body.removeChild(tmp);
-  return nodeWidth;
-};
-
-const wppAutocompleteCss = ":host{--autocomplete-border-radius:var(--wpp-autocomplete-border-radius, var(--wpp-border-radius-m));--autocomplete-placeholder-color:var(--wpp-autocomplete-placeholder-color, var(--wpp-grey-color-700));--autocomplete-placeholder-color-disabled:var(--wpp-autocomplete-placeholder-color-disabled, var(--wpp-text-color-disabled));--autocomplete-hidden-count-text-color-disabled:var(--wpp-autocomplete-hidden-count-text-color-disabled, var(--wpp-text-color-disabled));--autocomplete-trigger-icon-right-position:var(--wpp-autocomplete-trigger-actions-right-position, 10px);--autocomplete-inline-message-margin:var(--wpp-autocomplete-inline-message-margin, 4px 0 0 0);--autocomplete-label-margin:var(--wpp-autocomplete-label-margin, 0 0 8px 0);--autocomplete-limit-lines:var(--wpp-autocomplete-limit-lines, 10000);--autocomplete-line-height:var(--wpp-autocomplete-line-height, 34px);--autocomplete-box-shadow:var(--wpp-autocomplete-box-shadow, var(--wpp-box-shadow-m));--autocomplete-first-border-color-focus:var(--wpp-autocomplete-first-border-color-focus, var(--wpp-grey-color-000));--autocomplete-second-border-color-focus:var(--wpp-autocomplete-second-border-color-focus, var(--wpp-brand-color));--autocomplete-height-m:var(--wpp-autocomplete-height-m, 40px);--autocomplete-height-s:var(--wpp-autocomplete-height-s, 32px);--autocomplete-padding-s:var(--wpp-autocomplete-padding-s, 5px 0 5px 12px);--autocomplete-padding-m:var(--wpp-autocomplete-padding-m, 9px 0 9px 12px);--autocomplete-bg-color:var(--wpp-autocomplete-bg-color, transparent);--autocomplete-bg-color-hover:var(--wpp-autocomplete-bg-color-hover, var(--wpp-grey-color-200));--autocomplete-bg-color-active:var(--wpp-autocomplete-bg-color-active, transparent);--autocomplete-bg-color-focused:var(--wpp-autocomplete-bg-color-focused, var(--wpp-grey-color-000));--autocomplete-bg-color-disabled:var(--wpp-autocomplete-bg-color-disabled, var(--wpp-grey-color-100));--autocomplete-trigger-icon-color:var(--wpp-autocomplete-trigger-actions-right-position, var(--wpp-icon-color));--autocomplete-trigger-icon-color-hover:var(--wpp-autocomplete-trigger-icon-color-hover, var(--wpp-icon-color-hover));--autocomplete-trigger-icon-color-active:var(--wpp-autocomplete-trigger-icon-color-active, var(--wpp-icon-color-active));--autocomplete-trigger-icon-color-disabled:var(--wpp-autocomplete-trigger-icon-color-disabled, var(--wpp-icon-color-disabled));--autocomplete-border-color:var(--wpp-autocomplete-border-color, var(--wpp-grey-color-500));--autocomplete-border-color-hover:var(--wpp-autocomplete-border-color-hover, var(--wpp-grey-color-700));--autocomplete-border-color-active:var(--wpp-autocomplete-border-color-active, var(--wpp-grey-color-800));--autocomplete-border-color-focused:var(--wpp-autocomplete-border-color-focused, var(--wpp-grey-color-800));--autocomplete-border-color-disabled:var(--wpp-autocomplete-border-color-disabled, var(--wpp-grey-color-400));--autocomplete-border-width:var(--wpp-autocomplete-border-width, var(--wpp-border-width-s));--autocomplete-border-style:var(--wpp-autocomplete-border-style, solid);--autocomplete-single-border-color-disabled:var(--wpp-autocomplete-single-border-color-disabled, var(--wpp-grey-color-400));--autocomplete-dropdown-max-height:var(--wpp-autocomplete-dropdown-max-height, 372px);--autocomplete-dropdown-checkbox-margin:var(--wpp-autocomplete-dropdown-checkbox-margin, 1px 8px 1px 0);--autocomplete-dropdown-bg-color:var(--wpp-autocomplete-dropdown-bg-color, var(--wpp-grey-color-000));--autocomplete-dropdown-border-radius:var(--wpp-autocomplete-dropdown-border-radius, var(--wpp-border-radius-s));--autocomplete-dropdown-padding:var(--wpp-autocomplete-dropdown-padding, 8px);--autocomplete-dropdown-actions-border-radius:0 0 var(--autocomplete-dropdown-border-radius) var(--autocomplete-dropdown-border-radius);--autocomplete-dropdown-actions-bg-color:var(--wpp-autocomplete-bg-color, var(--wpp-grey-color-000));--autocomplete-create-new-element-color:var(--wpp-autocomplete-create-new-element-color, var(--wpp-primary-color-500));--autocomplete-nothing-found-message-color:var(--wpp-autocomplete-nothing-found-message-color, var(--wpp-grey-color-700));--autocomplete-search-icon-margin-right:var(--wpp-autocomplete-search-icon-margin-right, 8px);--autocomplete-item-margin-bottom:var(--wpp-autocomplete-item-margin-bottom, 4px);--autocomplete-regular-selected-values-wrapper-padding:var(--wpp-autocomplete-regular-selected-values-wrapper-padding, 0 8px 8px 8px);--autocomplete-extended-selected-values-wrapper-padding:var(--wpp-autocomplete-extended-selected-values-wrapper-padding, 0 8px 8px 8px);--autocomplete-suggestion-title-padding:var(--wpp-autocomplete-suggestion-title-padding, 5px 0);--autocomplete-suggestion-title-margin-left:var(--wpp-autocomplete-suggestion-title-margin-left, 8px);--autocomplete-min-width:var(--wpp-autocomplete-min-width, 184px);position:relative;display:block;outline:none;min-width:var(--autocomplete-min-width)}:host ::slotted([slot=selected-values]){margin-top:8px !important;gap:8px;display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap}:host .label:not(.focused):hover+.trigger{background-color:var(--autocomplete-bg-color-hover);border-color:var(--autocomplete-border-color-hover)}:host .label:not(.focused):hover+.trigger .trigger-actions .wpp-icon-chevron,:host .label:not(.focused):hover+.trigger .wpp-icon-cross{color:var(--autocomplete-trigger-icon-color-hover)}:host .label:not(.focused):hover+.trigger.warning{border-color:var(--wpp-warning-color-500)}:host .label:not(.focused):hover+.trigger.error{border-color:var(--wpp-danger-color-500)}:host(.wpp-disabled){cursor:not-allowed}:host(.wpp-disabled) .label{pointer-events:none}.trigger-actions{position:absolute;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);right:var(--autocomplete-trigger-icon-right-position);display:-ms-flexbox;display:flex}.trigger-actions .wpp-icon-chevron,.trigger-actions .wpp-icon-cross{color:var(--autocomplete-trigger-icon-color);cursor:pointer;-webkit-transition:all 0.15s ease-out 0s;transition:all 0.15s ease-out 0s}.values{scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent;display:-ms-flexbox;display:flex;-ms-flex:1 1 auto;flex:1 1 auto;-ms-flex-align:center;align-items:center;min-width:0;max-height:calc(var(--autocomplete-limit-lines) * var(--autocomplete-line-height));padding-right:36px;overflow-y:auto}.values::-webkit-scrollbar{width:4px;height:4px}.values::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.values .hidden-count{-ms-flex:0 1 auto;flex:0 1 auto;margin:3px 2px;min-width:calc(25px + (var(--hidden-number) - 1) * 7.5px)}.values .hidden-count .wpp-typography{white-space:nowrap}.values .hidden-count{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0)}.values .autocomplete-input{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);-ms-flex:1 1 70px;flex:1 1 70px;min-width:70px;padding:0;background:var(--autocomplete-bg-color);border:none;outline:none;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.values .autocomplete-input.hidden{position:absolute;right:0;bottom:0;z-index:-1;width:1px;min-width:1px;height:1px;opacity:0}.values .autocomplete-input::-moz-placeholder{color:var(--autocomplete-placeholder-color);opacity:1}.values .autocomplete-input::-webkit-input-placeholder{color:var(--autocomplete-placeholder-color)}.values .autocomplete-input:-ms-input-placeholder{color:var(--autocomplete-placeholder-color)}.values .autocomplete-input::-ms-input-placeholder{color:var(--autocomplete-placeholder-color)}.values .autocomplete-input::placeholder{color:var(--autocomplete-placeholder-color)}.values .input-placeholder{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;width:100%}.values .wpp-chip+.autocomplete-input{margin-left:6px}.count-block{display:none}.trigger{position:relative;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-webkit-box-sizing:border-box;box-sizing:border-box;background-color:transparent;border:var(--autocomplete-border-width) var(--autocomplete-border-style) var(--autocomplete-border-color);border-radius:var(--autocomplete-border-radius);cursor:text}.trigger.size-s{height:var(--autocomplete-height-s);padding:var(--autocomplete-padding-s)}.trigger.size-m{height:var(--autocomplete-height-m);padding:var(--autocomplete-padding-m)}.trigger:hover{background-color:var(--autocomplete-bg-color-hover);border-color:var(--autocomplete-border-color-hover)}.trigger:hover .trigger-actions .wpp-icon-chevron,.trigger:hover .wpp-icon-cross{color:var(--autocomplete-trigger-icon-color-hover)}.trigger:active{background-color:var(--autocomplete-bg-color-active);border-color:var(--autocomplete-border-color-active)}.trigger:active .trigger-actions .wpp-icon-chevron,.trigger:active .wpp-icon-cross{color:var(--autocomplete-trigger-icon-color-active)}.trigger.focused{background-color:var(--autocomplete-bg-color-focused);border-color:var(--autocomplete-border-color-focused)}.trigger.focused .values{padding-right:35px}.trigger.warning,.trigger.warning:hover{border:var(--autocomplete-border-width) var(--autocomplete-border-style) var(--wpp-warning-color-400)}.trigger.error,.trigger.error:hover{border:var(--autocomplete-border-width) var(--autocomplete-border-style) var(--wpp-danger-color-400)}.trigger.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--autocomplete-first-border-color-focus), 0 0 0 3px var(--autocomplete-second-border-color-focus);box-shadow:0 0 0 1px var(--autocomplete-first-border-color-focus), 0 0 0 3px var(--autocomplete-second-border-color-focus)}.trigger.disabled{background-color:var(--autocomplete-bg-color-disabled);border-color:var(--autocomplete-border-color-disabled);pointer-events:none}.trigger.disabled .values .autocomplete-input{color:var(--wpp-grey-color-500)}.trigger.disabled .values .autocomplete-input::-webkit-input-placeholder{color:var(--autocomplete-placeholder-color-disabled)}.trigger.disabled .values .autocomplete-input::-moz-placeholder{color:var(--autocomplete-placeholder-color-disabled)}.trigger.disabled .values .autocomplete-input:-ms-input-placeholder{color:var(--autocomplete-placeholder-color-disabled)}.trigger.disabled .values .autocomplete-input::-ms-input-placeholder{color:var(--autocomplete-placeholder-color-disabled)}.trigger.disabled .values .autocomplete-input::placeholder{color:var(--autocomplete-placeholder-color-disabled)}.trigger.disabled .values .hidden-count .wpp-typography{color:var(--autocomplete-hidden-count-text-color-disabled)}.trigger.disabled .values .input-placeholder{color:var(--autocomplete-placeholder-color-disabled)}.trigger.disabled .trigger-actions .wpp-icon-chevron,.trigger.disabled .wpp-icon-cross,.trigger.disabled .wpp-icon-search{color:var(--autocomplete-trigger-icon-color-disabled)}.trigger.disabled{border-color:var(--autocomplete-single-border-color-disabled)}.trigger.error{border-color:var(--wpp-danger-color-400)}.trigger.warning{border-color:var(--wpp-warning-color-400)}.trigger[aria-expanded=true]>.trigger-actions .wpp-icon-chevron{-webkit-transform:rotate(180deg);transform:rotate(180deg)}.trigger .wpp-icon-search{margin-right:var(--autocomplete-search-icon-margin-right)}.wpp-inline-message::part(message-block){margin:var(--autocomplete-inline-message-margin)}.dropdown{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-box-sizing:border-box;box-sizing:border-box;max-height:var(--autocomplete-dropdown-max-height);overflow:hidden;background:var(--autocomplete-dropdown-bg-color);border-radius:var(--autocomplete-dropdown-border-radius);-webkit-box-shadow:var(--autocomplete-box-shadow);box-shadow:var(--autocomplete-box-shadow);width:var(--custom-dropdown-width)}.dropdown .selected-pills-wrapper{display:-ms-flexbox;display:flex;overflow:hidden;-ms-flex-wrap:wrap;flex-wrap:wrap;padding:8px 0 0;gap:8px;max-width:100%;width:auto}.dropdown .selected-pills-wrapper .wpp-pill{max-width:100%}.dropdown .selected-pills-wrapper.overflow{-ms-flex-wrap:nowrap;flex-wrap:nowrap}.dropdown .selected-pills-wrapper.not-empty{padding-bottom:8px}.dropdown .selected-pills-wrapper.show-action{cursor:pointer}.dropdown .header-wrapper{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;-ms-flex-align:center;align-items:center}.dropdown .header-wrapper .show-more-action{padding-left:8px;position:absolute;opacity:0;pointer-events:none}.dropdown .header-wrapper.visible .show-more-action{position:relative;opacity:1;pointer-events:auto}.dropdown .show-less-action{margin-bottom:8px}.dropdown .suggestions-divider{margin:8px 0}.dropdown .dropdown-list{scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent;min-height:0;padding:var(--autocomplete-dropdown-padding);overflow-x:hidden;overflow-y:auto}.dropdown .dropdown-list::-webkit-scrollbar{width:4px;height:4px}.dropdown .dropdown-list::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.dropdown .dropdown-list.hidden{display:none}.dropdown .dropdown-list:empty{display:none}.dropdown .dropdown-list.with-create-new{padding-bottom:53px}.dropdown .dropdown-list.empty-with-create-new{padding-bottom:57px}.dropdown .dropdown-list .actions{position:absolute;bottom:0;left:0;right:0;background-color:var(--autocomplete-dropdown-actions-bg-color);border-radius:var(--autocomplete-dropdown-actions-border-radius)}.dropdown .dropdown-list .actions .actions-container{padding:var(--autocomplete-dropdown-padding);padding-top:0}.dropdown .dropdown-list .infinite-loader{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;height:32px}.dropdown .dropdown-list .nothing-found-wrapper{pointer-events:none}.dropdown .dropdown-list .nothing-found-wrapper .nothing-found{color:var(--autocomplete-nothing-found-message-color)}.dropdown .dropdown-list .nothing-found-divider{margin-bottom:8px}.dropdown .dropdown-list .create-new-option{color:var(--autocomplete-create-new-element-color)}.dropdown .dropdown-list .selected-values{display:-ms-flexbox;display:flex;-webkit-transition-delay:300ms;transition-delay:300ms;-webkit-transition-property:padding-top;transition-property:padding-top}.dropdown .dropdown-list .selected-values.focused{-webkit-transition-delay:0s;transition-delay:0s;-webkit-transition-property:padding-top;transition-property:padding-top}.dropdown .dropdown-list .selected-values.regular{padding:var(--autocomplete-regular-selected-values-wrapper-padding)}.dropdown .dropdown-list .selected-values.regular.focused{--autocomplete-regular-selected-values-wrapper-padding:0 8px 8px 8px}.dropdown .dropdown-list .selected-values.extended{padding:var(--autocomplete-extended-selected-values-wrapper-padding)}.dropdown .dropdown-list .selected-values.extended.focused{--autocomplete-extended-selected-values-wrapper-padding:0 8px 8px 8px}.dropdown .dropdown-list ::slotted(.wpp-list-item){width:100%}.dropdown .dropdown-list ::slotted(.wpp-list-item:not(:last-child)){margin-bottom:var(--autocomplete-item-margin-bottom)}.dropdown .suggestion-item{width:100%}.dropdown .suggestion-item:not(.last-item){margin-bottom:var(--autocomplete-item-margin-bottom)}.dropdown .suggestions-heading,.dropdown .show-action{padding:var(--autocomplete-suggestion-title-padding);margin-left:var(--autocomplete-suggestion-title-margin-left)}.label{margin:var(--autocomplete-label-margin)}.loading-wrapper{display:-ms-flexbox;display:flex;gap:4px;padding:5px 8px}";
-
 // Load more will be triggered 15px before scroll ends
 const INFINITE_SCROLL_THRESHOLD = 15;
+const DEFAULT_DROPDOWN_CONFIG = {
+  maxWidth: 'none',
+  hideOnClick: false,
+  trigger: 'manual',
+  placement: 'bottom-start',
+  offset: [0, 4],
+  zIndex: Z_INDEX.AUTOCOMPLETE,
+  appendTo: () => getHighestContainerInDOM(),
+};
+const LOCALES_DEFAULTS = {
+  nothingFound: 'Nothing found',
+  loading: 'Loading...',
+  selected: count => `${count} selected`,
+  showMore: 'Show More',
+  showLess: 'Show Less',
+  suggestionTitle: 'Suggestions',
+  createNewElement: query => `Create "${query}"`,
+  clearMultiple: 'Clear selections',
+  clearSingle: 'Clear selection',
+};
+const PILL_MARGIN = 8;
+
+const LIB_COMPONENTS_PREFIX = 'wpp-';
+const renderSlotsInListItem = (slots, isLabelExists) => slots
+  .map(slotElement => {
+  if (!slotElement)
+    return null;
+  const { type, props, slot, children } = slotElement;
+  if (props.slot === 'label' && isLabelExists)
+    return null;
+  if (!type.startsWith(LIB_COMPONENTS_PREFIX)) {
+    const { children: text, ...restProps } = props;
+    const Tag = type;
+    return (h(Tag, { ...restProps }, text));
+  }
+  if (!children)
+    return h(transformToVersionedTag(type), { slot, ...props });
+  const slotNode = h(transformToVersionedTag(type), { slot, ...props });
+  slotNode.$children$ = Array.isArray(children)
+    ? renderSlotsInListItem(Array.from(children), isLabelExists)
+    : renderSlotsInListItem([children], isLabelExists);
+  return slotNode;
+})
+  .filter(item => item !== null);
+const isSelected = (value, item, getItemKey) => {
+  if (!value?.length)
+    return false;
+  const itemValue = item.value ?? item;
+  const itemKey = typeof itemValue === 'object' ? getItemKey?.(itemValue) : itemValue;
+  return value.some(selected => {
+    const selectedValue = selected.value ?? selected;
+    const selectedKey = typeof selectedValue === 'object' ? getItemKey?.(selectedValue) : selectedValue;
+    if (itemKey !== undefined && selectedKey !== undefined) {
+      return itemKey === selectedKey;
+    }
+    return lodash.isEqual(itemValue, selectedValue);
+  });
+};
+// Select in order
+const selectedOptionsByOrder = (internalList, value, getItemKey) => {
+  const mapByKey = new Map();
+  for (const it of internalList ?? []) {
+    const itValue = it.value ?? it;
+    const k = typeof itValue === 'object' ? getItemKey?.(itValue) : itValue;
+    if (k !== undefined)
+      mapByKey.set(k, it);
+  }
+  const selectedInOrder = [];
+  for (const v of value ?? []) {
+    const vValue = v.value ?? v;
+    const k = typeof vValue === 'object' ? getItemKey?.(vValue) : vValue;
+    let match;
+    if (k !== undefined && mapByKey.has(k)) {
+      match = mapByKey.get(k);
+    }
+    else {
+      match = (internalList ?? []).find(it => lodash.isEqual(it.value ?? it, vValue));
+    }
+    if (match)
+      selectedInOrder.push(match);
+  }
+  return selectedInOrder;
+};
+
+function renderDropdownPillsComponent() {
+  if (!this.withPills)
+    return null;
+  this.selectedPillRefs = [];
+  /**
+   * When isShowMore is `true`:
+   * - Checks if child elements (WppPill/WppTooltip) have text truncation:
+   *   If truncated, need to add `transparent` class to WppPill/WppTooltip
+   * When isShowMore is `false`:
+   * - Checks if child elements (WppPill) have text truncation:
+   *    - If `true` wrap WppPill with WppTooltip
+   *    - If `false` render WppPill
+   */
+  const isNeedDivider = !!this.selectedOptions.length;
+  // Render Show More/Show Less button only in cases when we have truncated WppPill (not .label inside)
+  const showMoreLessRender = (label) => (h("wpp-action-button-v4-0-0", { "data-testid": "wpp-autocomplete-show-btn", class: "nowrap", variant: "secondary", onClick: this.handleShowMoreLessClick }, label));
+  const renderPillComponent = (option, ndx, isTransparentPill = false) => (h("wpp-pill-v4-0-0", { ref: ref => {
+      if (ref)
+        this.selectedPillRefs[ndx] = ref;
+    }, class: { transparent: this.isShowMore && isTransparentPill }, label: option.label, type: "display", onWppClose: event => {
+      this.handleClickListItem({
+        ...event,
+        ...{ detail: { value: option.value } },
+      });
+      this.setFocus();
+    }, removable: true }));
+  const selectedPillsWrapperCssClasses = () => ({
+    'selected-pills-wrapper': true,
+    'not-empty': !!this.searchText.length || !!this.value.length,
+  });
+  return (h(Fragment, null,
+    this.value.length > 0 && (h("div", { ref: ref => (this.headerWrapperRef = ref), class: {
+        'header-wrapper': true,
+        overflow: this.isShowMore,
+        visible: this.isShowMore && this.activePillsTruncationState.includes(true),
+      }, tabindex: "-1", onClick: () => this.setFocus() },
+      h("div", { ref: ref => (this.selectedPillsWrapperRef = ref), class: selectedPillsWrapperCssClasses() }, this.selectedOptions.map((option, ndx) => renderPillComponent(option, ndx, this.activePillsTruncationState[ndx]))),
+      h("div", { ref: ref => (this.showMoreElementRef = ref), class: "show-more-action" }, showMoreLessRender(`+${this.activePillsTruncationState.filter(x => x).length} ${this._locales.showMore}`)))),
+    !this.isShowMore && h("div", { class: "show-less-action" }, showMoreLessRender(this._locales.showLess)),
+    isNeedDivider && h("wpp-divider-v4-0-0", { class: "nothing-found-divider" })));
+}
+
+function renderPlaceholderTextComponent() {
+  const inputPlaceholderCssClasses = () => ({
+    'input-placeholder': true,
+    'with-hidden-count': this.hiddenSelectedOptionsNumber > 0 && this.value.length > 1,
+    hidden: this.isFocused && this.searchText.length > 0,
+    disabled: this.disabled,
+  });
+  const hiddenCountCssClasses = () => ({
+    'hidden-count': true,
+    computed: this.hiddenSelectedOptionsNumber > 0 && this.value.length > 1,
+  });
+  return (h(Fragment, null,
+    h("wpp-typography-v4-0-0", { ref: ref => (this.inputPlaceholderRef = ref), type: "s-body", class: inputPlaceholderCssClasses() }, this.placeholderText),
+    h("wpp-typography-v4-0-0", { ref: ref => (this.hiddenInputPlaceholderRef = ref), role: "presentation", type: "s-body", class: "hidden-input-placeholder" }),
+    this.value.length > 1 && (h("wpp-typography-v4-0-0", { class: hiddenCountCssClasses(), type: "s-body" },
+      "+ ",
+      this.hiddenSelectedOptionsNumber))));
+}
+
+function renderDropdownListComponent() {
+  const convertValueToKey = (value) => {
+    if (typeof value === 'object') {
+      return this.getItemKey ? this.getItemKey(value) : undefined;
+    }
+    return value;
+  };
+  const renderListOptions = () => {
+    this.listItemsRefs = [];
+    return (h(Fragment, null,
+      this.internalList.map((item, ndx) => {
+        const { label, slots, ...rest } = item;
+        return (h("wpp-list-item-v4-0-0", { ref: el => (this.listItemsRefs[ndx] = el), onWppChangeListItem: this.handleClickListItem, key: convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" },
+          h("span", { slot: "label" }, label),
+          slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+      }),
+      this.isInfiniteLoading && (h("div", { class: "wpp-dropdown-infinite-loader" },
+        h("wpp-spinner-v4-0-0", null)))));
+  };
+  const renderSuggestionOptions = () => {
+    this.suggestionsItemsRefs = [];
+    return (h(Fragment, null,
+      h("wpp-typography-v4-0-0", { role: "presentation", type: "s-strong", class: "suggestions-heading" }, this._locales.suggestionTitle),
+      this.componentSuggestions?.map((suggestion, ndx) => {
+        const { slots, checked, label, ...restProps } = suggestion;
+        const isChecked = checked || isSelected(this.value, suggestion, this.getItemKey);
+        return (h("wpp-list-item-v4-0-0", { ref: el => (this.suggestionsItemsRefs[ndx] = el), onWppChangeListItem: this.handleClickListItem, key: convertValueToKey(suggestion.value), ...restProps, id: suggestion.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${suggestion.id}` : undefined, checked: isChecked, class: { 'suggestion-item': true, 'last-item': ndx === this.componentSuggestions.length - 1 }, role: "option" },
+          h("span", { slot: "label" }, label),
+          slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+      })));
+  };
+  if (this.loading) {
+    return (h("wpp-list-item-v4-0-0", { role: "status", "non-interactive": true },
+      h("wpp-spinner-v4-0-0", { slot: "left" }),
+      h("span", { slot: "label" }, this._locales.loading)));
+  }
+  if (!this.visibleOptionsLength && this.searchText.length > 0) {
+    return (h("wpp-list-item-v4-0-0", { labelTypography: { color: 'var(--wpp-grey-color-700)', type: 's-body' }, nonInteractive: true },
+      h("wpp-typography-v4-0-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound)));
+  }
+  if (!this.searchText.trim().length && !!this.componentSuggestions?.length) {
+    return renderSuggestionOptions();
+  }
+  return renderListOptions();
+}
+
+function renderExtendedSelectedValuesComponent() {
+  return (h("div", { class: "selected-values" }, this.extendedSelectedValues?.map(el => (h("wpp-pill-v4-0-0", { label: el.label, type: "display", onWppClose: event => this.handleClickListItem({
+      ...event,
+      ...{ detail: { value: el.value } },
+    }), removable: true })))));
+}
+
+function renderCreateNewOptionComponent() {
+  if (this.loading ||
+    !this.showCreateNewElement ||
+    this.searchText.length === 0 ||
+    (this.displayBtnWhenListEmpty && this.visibleOptionsLength))
+    return;
+  const handleCreateNewOptionClick = () => {
+    this.wppCreateNewOption.emit(this.searchText);
+    this.handleBlur(undefined, { force: true });
+  };
+  return (h("div", { class: "wpp-dropdown-actions" },
+    h("wpp-divider-v4-0-0", null),
+    h("wpp-list-item-v4-0-0", { onClick: handleCreateNewOptionClick },
+      h("wpp-typography-v4-0-0", { type: "s-strong", class: "wpp-create-new-option", slot: "label" }, this._locales.createNewElement(this.searchText)))));
+}
+
+const wppAutocompleteCss = ":host{--autocomplete-min-width:var(--wpp-autocomplete-min-width, 184px);position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;outline:none;min-width:var(--autocomplete-min-width)}.trigger{position:relative;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-webkit-box-sizing:border-box;box-sizing:border-box;background-color:transparent;border:var(--wpp-border-width-s) solid var(--wpp-grey-color-500);border-radius:var(--wpp-border-radius-m);cursor:text;outline:none}.trigger.size-s{height:32px}.trigger.size-m{height:40px}.trigger:hover{background-color:var(--wpp-grey-color-200);border-color:var(--wpp-grey-color-700)}.trigger:active{background-color:transparent;border-color:var(--wpp-grey-color-800)}.trigger:active .trigger-actions .wpp-icon-chevron,.trigger:active .wpp-icon-cross{color:var(--wpp-icon-color-active)}.trigger.focused{background-color:var(--wpp-grey-color-000);border-color:var(--wpp-grey-color-800)}.trigger.focused .input-placeholder,.trigger.focused .hidden-count{position:absolute;opacity:0;pointer-events:none;visibility:hidden}.trigger.warning,.trigger.warning:hover{border:var(--wpp-border-width-s) solid var(--wpp-warning-color-400)}.trigger.error,.trigger.error:hover{border:var(--wpp-border-width-s) solid var(--wpp-danger-color-400)}.trigger.disabled{background-color:var(--wpp-grey-color-100);border-color:var(--wpp-grey-color-400);pointer-events:none}.trigger.disabled .input-placeholder{--wpp-typography-color:var(--wpp-text-color-disabled)}.trigger.single .hidden-count{right:10px}.label{margin-bottom:8px}.wpp-input{min-width:70px;padding:0;background:transparent;border:none;outline:none;width:calc(100% + 2px);left:-1px;-ms-flex:1 0 auto;flex:1 0 auto;--wpp-input-border-width:0;--wpp-input-bg-color-hover:transparent;--wpp-input-bg-color-active:transparent;--wpp-input-bg-color-disabled:transparent}.wpp-input::-moz-placeholder{color:var(--wpp-grey-color-700);opacity:1}.wpp-input::-webkit-input-placeholder{color:var(--wpp-grey-color-700)}.wpp-input:-ms-input-placeholder{color:var(--wpp-grey-color-700)}.wpp-input::-ms-input-placeholder{color:var(--wpp-grey-color-700)}.wpp-input::placeholder{color:var(--wpp-grey-color-700)}.wpp-input.wpp-size-m{--wpp-input-padding-m:9px 10px 9px 12px}.wpp-input.wpp-size-s{--wpp-input-padding-s:5px 10px 5px 12px}.wpp-input.transparent::part(input){color:transparent}.input-placeholder{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;-webkit-box-sizing:border-box;box-sizing:border-box;position:absolute;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);left:11px;width:calc(100% - 50px - var(--hidden-count-width, -26px));-ms-flex:1 1 auto;flex:1 1 auto;min-width:0}.input-placeholder.hidden{opacity:0;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;pointer-events:none}.input-placeholder.disabled{color:var(--wpp-text-color-disabled)}.hidden-input-placeholder{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;visibility:hidden;position:absolute;z-index:-1}.wpp-icon-cross{position:absolute;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);right:10px;display:-ms-flexbox;display:flex;cursor:pointer}.wpp-icon-cross:hover{color:var(--wpp-icon-color-hover)}.hidden-count{position:absolute;top:50%;right:38px;-webkit-transform:translateY(-50%);transform:translateY(-50%);max-width:0;opacity:0}.hidden-count.computed{max-width:100px;opacity:1}.wpp-icon-cross.wpp-hidden{opacity:0;pointer-events:none}.selected-values{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;gap:8px;margin-top:12px}.selected-values .wpp-pill{max-width:100%}.empty-focus-anchor{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0;outline:none}.inline-message{margin-top:4px}";
+
 const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete extends HTMLElement {
   constructor() {
     super();
@@ -69,336 +256,635 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
     this.wppBlur = createEvent(this, "wppBlur", 1);
     this.wppSearchValueChange = createEvent(this, "wppSearchValueChange", 1);
     this.wppCreateNewOption = createEvent(this, "wppCreateNewOption", 1);
-    this.isScrollToInputRequested = false;
-    this.hasChecked = false;
-    // Used instead of Tippy's `state.isShown`, which is not updated when transitioning
-    this.isDropdownShown = false;
-    this.resizeInProgress = false;
-    this.withPills = false;
-    this.LIB_COMPONENTS_PREFIX = 'wpp-';
     this._locales = LOCALES_DEFAULTS;
-    this.addHandleOptionsChangeTimer = (shouldUpdate = false) => {
-      if (this.handleOptionsTimer) {
-        clearTimeout(this.handleOptionsTimer);
-      }
-      this.handleOptionsTimer = setTimeout(() => {
-        this.handleOptionsChange(shouldUpdate);
-        this.handleOptionsTimer = null;
-      }, 0);
+    this.selectedPillRefs = [];
+    this.withPills = false;
+    this.activeListNdx = null;
+    this.activeSuggestionNdx = null;
+    this.listItemsRefs = [];
+    this.suggestionsItemsRefs = [];
+    this.preventBlur = false;
+    /**
+     * Observers
+     */
+    this.setupResizeObserver = () => {
+      this.resizeObserver = new ResizeObserver(debounce(() => {
+        this.countHiddenElements();
+        this.tippyInstance?.popper.style.setProperty('--custom-dropdown-width', this.getDropdownWidth());
+      }, 100));
+      this.resizeObserver?.observe(this.host);
     };
-    this.checkSuggestions = () => {
-      if (this.suggestions && !!this.suggestions.length) {
-        //Need to be reassigned due to props from WppListItem `checked`, need to be removed
-        this.componentSuggestions = this.suggestions.map(suggestion => {
-          const { checked, ...restProps } = suggestion;
-          if (checked)
-            this.value.push(suggestion);
-          return restProps;
-        });
-      }
-      if (this.suggestions?.length === 0) {
-        this.componentSuggestions = [];
-      }
-    };
-    this.valueResizeObserver = () => {
-      if (this.valuesContainerEl) {
-        this.valuesResizeObserver = new ResizeObserver(debounce(() => {
-          if (this.resizeInProgress)
-            return;
-          try {
-            this.resizeInProgress = true;
-            if (this.type === 'regular') {
-              this.countHiddenElements();
-            }
-            if (this.isDropdownShown) {
-              this.tippyInstance?.popperInstance?.forceUpdate();
-            }
-          }
-          catch (error) {
-            console.error('Error in ResizeObserver callback:', error);
-          }
-          finally {
-            this.resizeInProgress = false;
-          }
-        }, 100));
-        if (this.valuesResizeObserver) {
-          this.valuesResizeObserver.observe(this.valuesContainerEl);
-        }
-      }
-    };
+    /**
+     * Dropdown methods
+     */
     this.createTippyInstance = () => {
-      if (this.triggerEl && this.dropdownEl) {
-        this.tippyInstance = menuListConfig({
-          anchor: this.triggerEl,
-          content: this.dropdownEl,
-          zIndex: Z_INDEX.AUTOCOMPLETE,
-          ...this.dropdownConfig,
-          duration: DROPDOWN_ANIMATION_TIME,
-          trigger: 'manual',
-          maxWidth: 'none',
-          hideOnClick: false,
-          popperOptions: {
-            ...this.dropdownConfig?.popperOptions,
-            modifiers: [
-              ...(this.dropdownConfig?.popperOptions?.modifiers || []),
-              {
-                name: 'flip',
-                options: {
-                  fallbackPlacements: ['top'],
-                },
-              },
-            ],
-          },
-          onShow: () => {
+      if (!this.triggerRef || !this.dropdownRef)
+        return;
+      this.tippyInstance = menuListConfig({
+        anchor: this.triggerRef,
+        content: this.dropdownRef,
+        ...DEFAULT_DROPDOWN_CONFIG,
+        ...this.dropdownConfig,
+        onShow: (instance) => {
+          instance.popper.style.setProperty('--custom-dropdown-width', this.getDropdownWidth());
+          if (this.value.length && this.withPills)
             requestAnimationFrame(this.validateTruncatedPills);
-            requestAnimationFrame(this.triggerTooltipCalculation);
-            if (this.componentSuggestions && this.componentSuggestions.length > 0)
-              requestAnimationFrame(() => {
-                const listItems = this.optionsListEl?.querySelectorAll(transformToVersionedTag('wpp-list-item'));
-                Array.from(listItems || []).forEach(item => {
-                  item.setAttribute('container-state', 'tooltipTrigger');
-                });
-              });
-          },
-          onHide: () => {
+          // Re-position in case it was not position correctly initially.
+          setTimeout(() => {
+            instance.popperInstance?.update();
+          }, 0);
+          if (this.dropdownConfig?.onShow) {
+            this.dropdownConfig?.onShow(instance);
+          }
+        },
+        onShown: (instance) => {
+          if (this.dropdownConfig?.onShown) {
+            this.dropdownConfig?.onShown(instance);
+          }
+        },
+        onHide: (instance) => {
+          if (!this.isShowMore)
             this.isShowMore = true;
-            this.isInComponent = false;
-            requestAnimationFrame(this.validateTruncatedPills);
-          },
-          onClickOutside: (_, event) => {
-            if (!isEventTargetContained(this.host, event)) {
-              this.hideDropdown();
-            }
-          },
-        });
-      }
-    };
-    this.triggerTooltipCalculation = () => {
-      this.optionElements?.forEach(option => {
-        if (!option.hidden) {
-          if (option.containerState === 'tooltipTrigger' && this.isDropdownShown) {
-            option.setAttribute('container-state', '');
-            option.setAttribute('container-state', 'tooltipTrigger');
+          this.updatePlaceholderText();
+          if (this.dropdownConfig?.onHide) {
+            return this.dropdownConfig.onHide(instance);
           }
-          else {
-            option.setAttribute('container-state', 'tooltipTrigger');
+        },
+        onHidden: () => {
+          if (this.multiple && this.value.length && !this.persistentSearch && !this.simpleSearch) {
+            this.handleListChange(this.internalList.map(item => ({ ...item, hidden: true })));
+            this.visibleOptionsLength = 0;
           }
-        }
+        },
+        onClickOutside: (instance, event) => {
+          if (isEventTargetContained(this.host, event))
+            return;
+          instance.hide();
+          this.isDropdownShown = false;
+          if (this.dropdownConfig?.onClickOutside) {
+            this.dropdownConfig.onClickOutside(instance, event);
+          }
+        },
       });
     };
-    this.isSelectedItemsLimitReached = () => {
-      if (this.limitSelectedItems <= 0)
-        return false;
-      return this.value.length >= this.limitSelectedItems;
+    this.showDropdown = () => {
+      if (!this.tippyInstance)
+        return;
+      /**
+       * Need to show dropdown only in cases:
+       * 1. When we have selected option(s) and multiple props are `true` or have searchText
+       * 2. When we have searchText with: extended autocomplete type or single autocomplete type
+       */
+      const hasSearch = this.searchText.length > 0;
+      const hasSelection = this.value.length > 0;
+      const shouldShow = (this.multiple && (hasSelection || hasSearch)) ||
+        ((this.type === 'extended' || !this.multiple) && hasSearch) ||
+        (!!this.componentSuggestions.length && !this.searchText.trim().length);
+      this.isDropdownShown = shouldShow;
+      shouldShow ? this.tippyInstance.show() : this.hideDropdown();
     };
-    this.canLoadMore = () => this.infinite && !this.infiniteLastPage && this.loadMore && !this.isInfiniteLoading;
-    this.hasClearButton = () => !!this.value.length && !this.isDropdownShown && this.multiple;
-    this.hasSimpleSearch = () => this.simpleSearch && !this.infinite;
-    this.isOptionHidden = (option) => {
-      if (!this.hasSimpleSearch()) {
-        return false;
-      }
-      const trimmedSearch = this.searchValue.trim().toLocaleLowerCase();
-      if (trimmedSearch.length > 0) {
-        const optionValue = option.value;
-        if (!optionValue) {
-          return false;
-        }
-        const optionLabel = (this.getOptionLabel(optionValue) || '').toLocaleLowerCase();
-        return !optionLabel.includes(trimmedSearch);
-      }
-      return false;
-    };
-    this.isOptionNodesChanged = (nextOptions) => nextOptions.length !== this.optionElements?.length ||
-      !nextOptions.every((el, index) => this.optionElements?.[index] === el);
-    this.getOptionElements = () => Array.from(this.host.querySelectorAll(transformToVersionedTag('wpp-list-item')));
-    this.scrollOptionsToTop = () => {
-      if (this.optionsListEl) {
-        this.optionsListEl.scrollTop = 0;
+    this.hideDropdown = () => {
+      if (!this.tippyInstance)
+        return;
+      if (this.isDropdownShown)
+        this.isDropdownShown = false;
+      if (this.tippyInstance.state.isShown) {
+        this.tippyInstance.hide();
+        this.clearActive();
       }
     };
     /**
-     * If return `true`, need to interrupt function
-     * for the cases, when user have Single WppAutocomplete and clicking into already selected WppListItem
-     * @param event
+     * List items click handlers
      */
-    this.toggleSingleAutocompleteListItem = (event) => {
-      const suggestion = event.detail.target;
-      if (this.lastSelectedElement)
-        this.lastSelectedElement.checked = false;
-      this.lastSelectedElement = suggestion;
-      if (isEqual_1(this.value[0], suggestion.value)) {
-        event.stopPropagation();
-        suggestion.checked = true;
-        this.hideDropdown();
-        this.blurInput();
-        return true;
-      }
-      return;
+    this.handleClickListItem = (event) => {
+      const clickedValue = event.detail.value;
+      if (clickedValue === undefined)
+        return;
+      this.multiple ? this.onClickListItemMultiple(clickedValue) : this.onClickListItemSingle(clickedValue);
+      this.checkListAgainstValue();
     };
-    this.focusInput = () => {
-      this.inputEl?.focus();
-    };
-    this.blurInput = () => {
-      this.inputEl?.blur();
-    };
-    this.showDropdown = () => {
-      if (!this.isDropdownShown) {
-        this.isDropdownShown = true;
-        this.tippyInstance?.show();
-      }
-    };
-    this.hideDropdown = () => {
-      if (this.isDropdownShown) {
-        if (this.type === 'regular') {
-          this.countHiddenElements();
-        }
-        this.tippyInstance?.hide();
-        this.isDropdownShown = false;
-      }
-    };
-    this.isItemSelected = (item) => {
-      const itemId = this.getOptionId(item);
-      return (this.value.some(selectedOption => this.getOptionId(selectedOption) === itemId) ||
-        this.componentSuggestions.some(suggestion => this.getOptionId(suggestion) === itemId && this.isOptionSelected(suggestion)));
-    };
-    this.updateOptions = () => {
-      this.shownOptionElements = [];
-      this.optionElements?.forEach(option => {
-        const optionValue = option.value;
-        option.selectable = true;
-        option.hidden = this.isOptionHidden(option);
-        option.checked = this.isItemSelected(optionValue);
-        option.highlight = this.searchValue;
-        if (!option.hidden) {
-          if (this.isDropdownShown) {
-            option.setAttribute('container-state', '');
-            option.setAttribute('container-state', 'tooltipTrigger');
-          }
-          this.shownOptionElements.push(option);
-        }
-      });
-      this.isEmptyOptions = !this.shownOptionElements.length;
-    };
-    this.requestLoadMore = () => {
-      if (this.loadMore) {
-        this.isInfiniteLoading = true;
-        const promise = this.loadMore().finally(() => {
-          if (!promise.cancelled) {
-            this.isInfiniteLoading = false;
-            this.infiniteLoadingPromise = undefined;
-          }
-        });
-        this.infiniteLoadingPromise = promise;
-      }
-    };
-    this.handleTriggerContainerMouseDown = (event) => {
-      if (!this.disabled) {
-        // Prevent input blur when the component is used
-        if (event.target !== this.inputEl) {
-          event.preventDefault();
-        }
-      }
-    };
-    this.handleCreateNewOptionClick = () => {
-      this.wppCreateNewOption.emit(this.searchValue);
-    };
-    this.handleTriggerClick = () => {
-      if (!this.isFocused) {
-        this.focusInput();
-      }
-    };
-    this.handleMouseDown = () => {
-      this.focusType = FOCUS_TYPE.MOUSE;
-    };
-    this.handleKeyUp = (event) => {
-      if (event.key === 'Tab')
-        this.focusType = FOCUS_TYPE.TAB;
-    };
-    this.handleInput = () => {
-      this.focusType = FOCUS_TYPE.NONE;
-      this.searchValue = this.inputEl?.value || '';
-      if (this.componentSuggestions?.length > 0 || (this.searchValue?.length ?? 0) > 0) {
-        this.showDropdown();
+    this.onClickListItemSingle = (listItemValue) => {
+      const current = this.value?.[0];
+      let isSame = false;
+      if (this.getItemKey && typeof current === 'object' && typeof listItemValue === 'object') {
+        isSame = this.getItemKey(current) === this.getItemKey(listItemValue);
       }
       else {
-        if (!this.multiple || (this.multiple && !this.value.length)) {
-          this.hideDropdown();
-        }
+        isSame = lodash.isEqual(current, listItemValue);
       }
+      if (!isSame) {
+        this.value = [listItemValue];
+        this.wppChange.emit({
+          value: this.value,
+          selectedOptions: listItemValue.length > 0 ? this.internalList.filter(e => e.checked) : [],
+          reason: 'selectOption',
+          name: this.name,
+        });
+      }
+      if (!this.persistentSearch) {
+        this.searchText = '';
+      }
+      else {
+        this.isInputValueTransparent = true;
+        this.onSearchTextChange(this.searchText);
+      }
+      this.isFocused = false;
+      this.preventBlur = true;
+      this.inputRef?.blur();
+      this.hideDropdown();
+    };
+    this.onClickListItemMultiple = (listItemValue) => {
+      const already = isSelected(this.value, listItemValue, this.getItemKey);
+      let next;
+      if (already) {
+        next = this.value.filter(v => {
+          if (this.getItemKey) {
+            const vKey = typeof v === 'object' ? this.getItemKey(v) : v;
+            const itemKey = typeof listItemValue === 'object' ? this.getItemKey(listItemValue) : listItemValue;
+            return vKey !== itemKey;
+          }
+          return !lodash.isEqual(v, listItemValue);
+        });
+      }
+      else {
+        next = [...this.value, listItemValue];
+      }
+      if (!already && this.isSelectedItemsLimitReached(this.value))
+        return;
+      if (!lodash.isEqual(this.value, next)) {
+        this.value = next;
+        this.wppChange.emit({
+          value: next,
+          selectedOptions: next.length > 0 ? this.internalList.filter(e => e.checked) : [],
+          reason: already ? 'removeOption' : 'selectOption',
+          name: this.name,
+        });
+      }
+    };
+    /**
+     * Component handlers
+     */
+    this.handleInput = () => {
+      this.showDropdown();
     };
     this.handleFocus = (event) => {
-      this.isInComponent = true;
+      this.isInputValueTransparent = false;
       if (!this.isFocused) {
-        this.isScrollToInputRequested = true;
         this.isFocused = true;
-        if ((this.componentSuggestions?.length ?? 0) > 0 ||
-          (this.searchValue?.length ?? 0) > 0 ||
-          (this.withPills && !!this.value.length)) {
-          this.showDropdown();
-        }
-        if (this.canLoadMore() && this.isEmptyOptions && !this.loading) {
+        if (this.canLoadMore() && !this.selectedOptions.length && !this.loading && this.searchText.length > 0) {
           this.requestLoadMore();
         }
       }
-      this.wppFocus.emit(event);
+      this.showDropdown();
+      if (event)
+        this.wppFocus.emit(event);
     };
-    // We allow input blur only when the dropdown is hidden or the component got disabled.
-    // Outside clicks will close the dropdown first.
-    this.handleBlur = () => {
-      if (this.isInComponent)
+    this.handleBlur = (event, options) => {
+      if (this.preventBlur) {
+        this.triggerRef?.focus();
+        this.preventBlur = false;
         return;
+      }
+      const nextTarget = event?.relatedTarget ??
+        event?.composedPath?.()?.[0] ??
+        document.activeElement;
+      // If focus remains inside the component (host or dropdown) and this isn’t forced, skip blur
+      if (!options?.force && nextTarget && (this.host?.contains(nextTarget) || this.dropdownRef?.contains(nextTarget)))
+        return;
+      this.isInputValueTransparent = !!this.value.length;
       this.focusType = FOCUS_TYPE.NONE;
-      if (this.host.shadowRoot?.activeElement !== this.inputEl) {
-        this.hideDropdown();
-      }
-      if (!this.isDropdownShown) {
-        this.isFocused = false;
-        if (this.persistentSearch) {
-          this.onSearchValueChange(this.searchValue);
-        }
-        else {
-          this.searchValue = '';
-        }
-      }
-      else {
-        this.focusInput();
-      }
+      this.isFocused = false;
+      !this.persistentSearch ? (this.searchText = '') : this.onSearchTextChange(this.searchText);
+      this.hideDropdown();
       this.wppBlur.emit();
     };
-    this.handleOptionsScroll = (event) => {
-      if (this.canLoadMore()) {
-        const container = event.target;
-        const scrolledToBottom = container.scrollHeight - container.clientHeight - container.scrollTop;
-        if (scrolledToBottom < INFINITE_SCROLL_THRESHOLD) {
-          this.requestLoadMore();
-        }
+    this.handleCrossIconFocus = () => {
+      this.isInputValueTransparent = true;
+      this.isFocused = false;
+      this.hideDropdown();
+    };
+    this.handleCrossIconKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        this.handleClearClick(event);
+        this.setFocus();
       }
     };
-    // For some reason this handler is not triggered by the browser
-    // while Tippy instance is being created. Though it is covered
-    // after the dropdown is opened, since Tippy moves the dropdown node.
-    this.handleOptionsChange = (shouldUpdate = false) => {
-      const currentNodes = this.getOptionElements();
-      const isNodesChanged = this.isOptionNodesChanged(currentNodes);
-      if (isNodesChanged || shouldUpdate) {
-        this.optionElements = currentNodes;
-        this.updateOptions();
+    this.handleTriggerClick = () => {
+      if (this.disabled)
+        return;
+      if (!this.isFocused)
+        this.isFocused = true;
+      this.setFocus();
+    };
+    this.handleSearch = (event) => {
+      const searchValue = event.detail.value;
+      if (searchValue === undefined) {
+        this.searchText = '';
+        return;
       }
+      this.searchText = searchValue;
+    };
+    this.handleListChange = (list) => {
+      if (!list) {
+        this.checkListAgainstValue();
+        return;
+      }
+      this.internalList = list;
+      this.checkListAgainstValue();
+      this.checkVisibleOptionsLength(list);
     };
     this.handleClearClick = (event) => {
       event.stopPropagation();
       this.value = [];
+      this.placeholderText = undefined;
       this.hiddenSelectedOptionsNumber = 0;
-      this.updateOptions();
-      this.wppChange.emit({ value: this.value, reason: 'removeOption', name: this.name });
+      this.checkListAgainstValue();
+      this.setFocus();
+      this.wppChange.emit({
+        value: this.value,
+        selectedOptions: [],
+        reason: 'removeOption',
+        name: this.name,
+      });
     };
+    this.handleOptionsScroll = (event) => {
+      if (!this.canLoadMore())
+        return;
+      const container = event.target;
+      const scrolledToBottom = container.scrollHeight - container.clientHeight - container.scrollTop;
+      if (scrolledToBottom < INFINITE_SCROLL_THRESHOLD)
+        this.requestLoadMore();
+    };
+    this.onKeyUp = (event) => {
+      if (event.key === 'Tab') {
+        this.focusType = FOCUS_TYPE.TAB;
+      }
+    };
+    this.onKeyDown = (event) => {
+      if (!this.isFocused)
+        return;
+      switch (event.key) {
+        case 'Escape': {
+          this.handleBlur();
+          return;
+        }
+        case 'ArrowDown': {
+          event.preventDefault();
+          const src = this.getVisibleSource();
+          if (!src)
+            return;
+          const prev = src === 'list' ? this.activeListNdx : this.activeSuggestionNdx;
+          const next = this.findNextActiveNdx(prev, 1, src);
+          if (src === 'list')
+            this.activeListNdx = next;
+          else
+            this.activeSuggestionNdx = next;
+          this.setActiveClass(src, prev, next);
+          return;
+        }
+        case 'ArrowUp': {
+          event.preventDefault();
+          const src = this.getVisibleSource();
+          if (!src)
+            return;
+          const prev = src === 'list' ? this.activeListNdx : this.activeSuggestionNdx;
+          const next = this.findNextActiveNdx(prev, -1, src);
+          if (src === 'list')
+            this.activeListNdx = next;
+          else
+            this.activeSuggestionNdx = next;
+          this.setActiveClass(src, prev, next);
+          return;
+        }
+        case 'Enter': {
+          const src = this.getVisibleSource();
+          const ndx = src === 'list' ? this.clampListNdx(this.activeListNdx) : this.clampListNdx(this.activeSuggestionNdx);
+          if (src == null || ndx == null)
+            return;
+          const item = src === 'list' ? this.internalList[ndx] : this.componentSuggestions[ndx];
+          if (item && this.isListItemVisible(item)) {
+            event.preventDefault();
+            const val = item.value;
+            if (!val)
+              return;
+            this.multiple ? this.onClickListItemMultiple(val) : this.onClickListItemSingle(val);
+            this.checkListAgainstValue();
+          }
+        }
+      }
+    };
+    /**
+     * Validators
+     */
+    this.checkListAgainstValue = () => {
+      const next = this.internalList?.map(item => ({
+        ...item,
+        checked: isSelected(this.value, item, this.getItemKey),
+      }));
+      if (next && !lodash.isEqual(next, this.internalList))
+        this.internalList = next;
+      const mergeByKey = (arr = []) => {
+        const map = new Map();
+        arr.forEach(it => {
+          const key = typeof it.value === 'object' ? this.getItemKey?.(it.value) : it.value;
+          map.set(key, it);
+        });
+        return map;
+      };
+      // merge internalList first, then suggestions (list should win on collisions)
+      const listMap = mergeByKey(this.internalList);
+      const sugMap = mergeByKey(this.componentSuggestions);
+      const mergedMap = new Map(listMap);
+      sugMap.forEach((val, key) => {
+        if (!mergedMap.has(key))
+          mergedMap.set(key, val);
+      });
+      const mergedSource = Array.from(mergedMap.values());
+      const _selectedOptions = selectedOptionsByOrder(mergedSource, this.value, this.getItemKey);
+      this.selectedOptions = _selectedOptions;
+      if (this.type === 'extended') {
+        this.extendedSelectedValues = _selectedOptions;
+      }
+      else {
+        this.updatePlaceholderText();
+      }
+      if (this.withPills && !!_selectedOptions.length)
+        requestAnimationFrame(this.validateTruncatedPills);
+    };
+    this.checkVisibleOptionsLength = (source) => {
+      if (this.searchText.trim().length > 0) {
+        this.visibleOptionsLength = source?.filter(item => !item.hidden).length;
+      }
+      else {
+        this.visibleOptionsLength = 0;
+      }
+    };
+    /**
+     * Render methods
+     */
+    this.renderPlaceholderText = () => renderPlaceholderTextComponent.call(this);
+    this.renderDropdownPills = () => renderDropdownPillsComponent.call(this);
+    this.renderDropdownList = () => renderDropdownListComponent.call(this);
+    this.renderExtendedSelectedValues = () => renderExtendedSelectedValuesComponent.call(this);
+    this.renderCreateNewElement = () => renderCreateNewOptionComponent.call(this);
+    /**
+     * Infinity Loading methods
+     */
+    this.requestLoadMore = () => {
+      if (!this.loadMore)
+        return;
+      this.isInfiniteLoading = true;
+      const promise = this.loadMore().finally(() => {
+        if (!promise.cancelled) {
+          this.isInfiniteLoading = false;
+          this.infiniteLoadingPromise = undefined;
+        }
+      });
+      this.infiniteLoadingPromise = promise;
+    };
+    /**
+     * Helper methods
+     */
+    this.getDropdownWidth = () => {
+      if (this.dropdownWidth === 'auto') {
+        return this.triggerRef ? `${this.triggerRef.offsetWidth}px` : `${this.host.offsetWidth}px`;
+      }
+      return selectDropdownWidth(this.dropdownWidth, this.triggerRef, this.host);
+    };
+    this.canLoadMore = () => this.infinite && !this.infiniteLastPage && this.loadMore && !this.isInfiniteLoading;
+    this.isSelectedItemsLimitReached = (value) => !(this.limitSelectedItems <= 0 || value.length < this.limitSelectedItems);
+    /**
+     * Placeholder methods
+     */
+    this.getHiddenCountElWidth = (num) => {
+      if (!this.hiddenInputPlaceholderRef)
+        return 0;
+      this.hiddenInputPlaceholderRef.textContent = `, +${num}`;
+      return this.hiddenInputPlaceholderRef.clientWidth;
+    };
+    this.countHiddenElements = () => {
+      if (!this.multiple)
+        return;
+      if (!this.value.length || !this.triggerRef || !this.inputPlaceholderRef || !this.hiddenInputPlaceholderRef)
+        return;
+      // Reset to get an accurate base measurement
+      this.triggerRef.style.setProperty('--hidden-count-width', '0px');
+      const baseMaxWidth = this.inputPlaceholderRef.clientWidth;
+      // Buffer to account for CSS ellipsis
+      const TRUNCATION_BUFFER = 14;
+      let displayedElements = 0;
+      let currentLabel = '';
+      for (let i = 0; i < this.selectedOptions.length; i++) {
+        const nextLabel = currentLabel
+          ? `${currentLabel}, ${this.selectedOptions[i].label}`
+          : this.selectedOptions[i].label;
+        this.hiddenInputPlaceholderRef.textContent = nextLabel;
+        const nextLabelWidth = this.hiddenInputPlaceholderRef.clientWidth;
+        const remainingItems = this.selectedOptions.length - (i + 1);
+        // All items fit without truncation
+        if (remainingItems === 0) {
+          if (nextLabelWidth + TRUNCATION_BUFFER <= baseMaxWidth) {
+            this.hiddenSelectedOptionsNumber = 0;
+            this.triggerRef.style.setProperty('--hidden-count-width', '0px');
+            return;
+          }
+          // The last item doesn't fit, use previous displayed count
+          break;
+        }
+        if (remainingItems === 1) {
+          // Try to fit all items without a hidden count
+          this.hiddenInputPlaceholderRef.textContent = `${nextLabel}, ${this.selectedOptions[i + 1].label}`;
+          const allLabelWidth = this.hiddenInputPlaceholderRef.clientWidth;
+          if (allLabelWidth + TRUNCATION_BUFFER <= baseMaxWidth) {
+            this.hiddenSelectedOptionsNumber = 0;
+            this.triggerRef.style.setProperty('--hidden-count-width', '0px');
+            return;
+          }
+          // Try with hidden count "+1"
+          const hiddenCountWidth = this.getHiddenCountElWidth(1);
+          if (nextLabelWidth + TRUNCATION_BUFFER <= baseMaxWidth - hiddenCountWidth) {
+            this.triggerRef.style.setProperty('--hidden-count-width', `${hiddenCountWidth}px`);
+            this.hiddenSelectedOptionsNumber = 1;
+            return;
+          }
+          // Doesn't fit, use previous state
+          break;
+        }
+        // Check if the next item fits with space for hidden count
+        const hiddenCountWidth = this.getHiddenCountElWidth(remainingItems);
+        if (nextLabelWidth + TRUNCATION_BUFFER <= baseMaxWidth - hiddenCountWidth) {
+          currentLabel = nextLabel;
+          displayedElements = i + 1;
+        }
+        else {
+          // overflow - stop here
+          break;
+        }
+      }
+      const finalHiddenCount = this.selectedOptions.length - displayedElements;
+      if (finalHiddenCount > 0) {
+        const finalHiddenCountWidth = this.getHiddenCountElWidth(finalHiddenCount);
+        this.triggerRef.style.setProperty('--hidden-count-width', `${finalHiddenCountWidth}px`);
+        this.hiddenSelectedOptionsNumber = finalHiddenCount;
+      }
+      else {
+        this.triggerRef.style.setProperty('--hidden-count-width', '0px');
+        this.hiddenSelectedOptionsNumber = 0;
+      }
+    };
+    this.updatePlaceholderText = () => {
+      /**
+       * Do not set the placeholder in cases:
+       * - when input is focused
+       * - when input has no value
+       * - when dropdown is shown
+       */
+      if (!this.value.length) {
+        this.placeholderText = undefined;
+        return;
+      }
+      this.placeholderText =
+        this.type === 'extended'
+          ? this._locales.selected(this.value.length)
+          : this.selectedOptions
+            .map(el => el.label)
+            .filter(Boolean)
+            .join(', ');
+    };
+    /**
+     * Dropdown Pills methods
+     */
+    /**
+     * Validate each WppPill if it has a truncated text label inside or WppPill got truncated when it's in `showMore` mode
+     */
+    this.validateTruncatedPills = () => {
+      if (!this.tippyInstance ||
+        !this.dropdownRef ||
+        !this.selectedPillsWrapperRef ||
+        !this.headerWrapperRef ||
+        !this.showMoreElementRef ||
+        !this.isDropdownShown)
+        return;
+      const pillsElements = (this.selectedPillRefs || []).filter(Boolean);
+      if (!pillsElements.length)
+        return;
+      // When Show more is active, we need to check if we have one or multi-line pills
+      // in single-line mode, we need to toggle Show More value and hide Show Less button
+      if (!this.isShowMore) {
+        const wrapperHeight = parseFloat(getComputedStyle(this.selectedPillsWrapperRef).height);
+        const firstChildHeight = pillsElements[0].getBoundingClientRect().height;
+        if (wrapperHeight !== firstChildHeight)
+          return;
+        this.isShowMore = true;
+      }
+      this.headerWrapperRef.style.setProperty('--pills-wrapper-width', '100%');
+      const dropdownRight = this.dropdownRef.getBoundingClientRect().right;
+      const showMoreWidth = this.showMoreElementRef.clientWidth;
+      const thresholdWithLabel = dropdownRight - showMoreWidth - PILL_MARGIN;
+      let firstTruncationFound = false;
+      // Single pass measurement
+      const truncationData = pillsElements.map((pill, ndx) => {
+        if (firstTruncationFound) {
+          return {
+            base: true,
+            withLabel: true,
+          };
+        }
+        const pillRight = pill.getBoundingClientRect().right;
+        const base = pillRight >= dropdownRight;
+        const withLabel = pillRight >= thresholdWithLabel;
+        // If met truncation, the next pills will go outside of dropdown width and next calculations is not needed.
+        if (base || withLabel) {
+          firstTruncationFound = true;
+          if (ndx === 0)
+            return { base: false, withLabel: false };
+        }
+        return { base, withLabel };
+      });
+      const isPillsTruncated = truncationData.some(d => d.base);
+      if (!isPillsTruncated) {
+        this.activePillsTruncationState = truncationData.map(d => d.base);
+        return;
+      }
+      this.activePillsTruncationState = truncationData.map(d => d.withLabel);
+      // Adjust width for "+n more" positioning (single-line mode only)
+      const visibleCount = truncationData.filter(d => !d.withLabel).length;
+      const visiblePills = pillsElements.slice(0, visibleCount);
+      const totalWidth = visiblePills.reduce((acc, pill) => acc + pill.getBoundingClientRect().width, 0) +
+        Math.max(0, visibleCount - 1) * PILL_MARGIN;
+      this.headerWrapperRef.style.setProperty('--pills-wrapper-width', `${totalWidth}px`);
+    };
+    this.handleShowMoreLessClick = () => {
+      this.isShowMore = !this.isShowMore;
+      this.setFocus();
+    };
+    /**
+     * Accessibility Methods
+     */
+    this.getVisibleSource = () => {
+      if (this.loading)
+        return;
+      const search = !!this.searchText.trim().length;
+      if (!search && this.componentSuggestions.length)
+        return 'suggestions';
+      return 'list';
+    };
+    this.isListItemVisible = (item) => !item.hidden && !item.disabled;
+    this.clampListNdx = (ndx) => {
+      if (ndx == null)
+        return null;
+      const n = this.internalList.length ?? 0;
+      if (!n)
+        return null;
+      if (ndx < 0)
+        return null;
+      if (ndx >= n)
+        return n - 1;
+      return ndx;
+    };
+    this.findNextActiveNdx = (from, step, source) => {
+      const list = source === 'list' ? this.internalList : this.componentSuggestions;
+      const n = list.length;
+      if (!n)
+        return null;
+      let i = from == null ? (step === 1 ? 0 : n - 1) : from + step;
+      while (i >= 0 && i < n) {
+        const item = list[i];
+        if (item && !item.hidden && !item.disabled)
+          return i;
+        i += step;
+      }
+      return from;
+    };
+    this.setActiveClass = (source, prev, next) => {
+      const arr = source === 'list' ? this.listItemsRefs : this.suggestionsItemsRefs;
+      if (prev != null && arr[prev]) {
+        arr[prev].classList.remove('tab-focus');
+        arr[prev].removeAttribute('aria-selected');
+      }
+      if (next != null && arr[next]) {
+        arr[next].classList.add('tab-focus');
+        arr[next].setAttribute('aria-selected', 'true');
+        arr[next].scrollIntoView({ block: 'nearest' });
+      }
+    };
+    this.clearActive = () => {
+      if (this.activeListNdx != null)
+        this.listItemsRefs[this.activeListNdx]?.classList.remove('tab-focus');
+      if (this.activeSuggestionNdx != null)
+        this.suggestionsItemsRefs[this.activeSuggestionNdx]?.classList.remove('tab-focus');
+      this.activeListNdx = null;
+      this.activeSuggestionNdx = null;
+    };
+    /**
+     * CSS Classes Methods
+     */
     this.hostCssClasses = () => ({
       'wpp-autocomplete': true,
-      'wpp-disabled': this.disabled,
     });
-    this.autocompleteWrapperCssClasses = () => ({
-      'autocomplete-wrapper': true,
+    this.labelCssClasses = () => ({
+      label: true,
     });
     this.triggerCssClasses = () => ({
       trigger: true,
@@ -406,659 +892,399 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
       focused: this.isFocused,
       [`${this.messageType}`]: !!this.messageType,
       [`size-${this.size}`]: !!this.size,
-      'tab-focus': this.focusType === FOCUS_TYPE.TAB,
+      single: !this.multiple,
     });
     this.inputCssClasses = () => ({
-      'autocomplete-input': true,
-      hidden: !this.isFocused && this.value.length > 0,
+      hidden: !this.isFocused && !!this.value.length,
+      transparent: this.isInputValueTransparent,
     });
-    this.labelCssClasses = () => ({
-      label: true,
-      focused: this.isFocused,
+    this.dropdownCssClasses = () => ({
+      'wpp-autocomplete-dropdown': true,
+      'wpp-empty-list': !this.visibleOptionsLength && this.searchText.length === 0 && !this.componentSuggestions.length,
     });
-    this.dropdownListCssClasses = () => ({
-      'dropdown-list': true,
-      hidden: this.searchValue.length !== this.searchValue.trim().length && !this.searchValue.trim().length,
-      'with-create-new': this.showCreateNewElement && this.searchValue !== '' && !this.displayBtnWhenListEmpty && !this.isEmptyOptions,
-      'empty-with-create-new': this.showCreateNewElement && this.searchValue !== '' && this.isEmptyOptions,
+    this.iconCrossCssClasses = () => ({
+      'wpp-hidden': this.value.length === 0 || this.isDropdownShown || this.isFocused || !this.multiple,
     });
-    this.selectedValuesCssClasses = () => ({
-      'selected-values': true,
-      focused: this.isFocused,
-      [`${this.type}`]: true,
-    });
-    this.hostStyle = () => {
-      const style = {
-        '--wpp-list-item-width': '100%',
-      };
-      return style;
-    };
-    this.selectedPillsWrapperCssClasses = () => ({
-      'selected-pills-wrapper': true,
-      overflow: this.isShowMore,
-      'not-empty': !!this.searchValue.length || !!this.value.length || !!this.shownOptionElements?.length,
-    });
-    this.getInputValue = () => this.searchValue;
-    this.renderInputPlaceholder = () => {
-      if (!this.multiple && this.value.length && !this.isFocused) {
-        return (h("wpp-typography-v3-4-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this.getOptionLabel(this.value[0])));
-      }
-      if (this.isFocused && !this.searchValue)
-        return null;
-      if (this.isDropdownShown)
-        return null;
-      if (this.type === 'regular') {
-        const itemsToDisplay = this.value;
-        if (!itemsToDisplay.length)
-          return null;
-        const placeholder = itemsToDisplay.map(this.getOptionLabel).filter(Boolean).join(', ');
-        return (h("wpp-typography-v3-4-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, placeholder));
-      }
-      if (this.type === 'extended' && this.value.length && !this.isFocused) {
-        return (h("wpp-typography-v3-4-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this._locales.selected(this.value.length)));
-      }
-    };
-    this.countHiddenElements = () => {
-      const el = this.host.shadowRoot.querySelector('.input-placeholder');
-      if (!el) {
-        this.hiddenSelectedOptionsNumber = 0;
-        return 0;
-      }
-      const shownItems = this.value;
-      const maxWidth = el.clientWidth;
-      const textStyles = getComputedStyle(el, null).cssText;
-      let displayedElements = 1;
-      let label = this.getOptionLabel(shownItems[0]);
-      for (let i = 1; i < shownItems.length; i++) {
-        label += this.getOptionLabel(shownItems[i]);
-        const currWidth = getTempNodeWidthBasedOnLabel(textStyles, label);
-        if (currWidth > maxWidth) {
-          this.hiddenSelectedOptionsNumber = this.value.length - displayedElements;
-          return;
-        }
-        else {
-          displayedElements++;
-        }
-      }
-      this.hiddenSelectedOptionsNumber = this.value.length - displayedElements;
-    };
-    this.getNearestPowForRowsNumber = () => Math.ceil(Math.log10(this.hiddenSelectedOptionsNumber + 1));
-    this.getDropdownWidth = () => {
-      if (this.dropdownWidth === 'auto') {
-        return this.triggerEl ? `${this.triggerEl.offsetWidth}px` : `${this.host.offsetWidth}px`;
-      }
-      return selectDropdownWidth(this.dropdownWidth, this.triggerEl, this.host);
-    };
-    this.isOptionSelected = (option) => this.value.some(selectedOption => this.getOptionId(selectedOption) === this.getOptionId(option));
-    this.handleSuggestionClick = (event) => {
-      const option = event.detail.value;
-      if (option.disabled)
-        return;
-      if (!this.multiple && this.toggleSingleAutocompleteListItem(event))
-        return;
-      const isAlreadySelected = this.isOptionSelected(option);
-      if (this.multiple) {
-        if (isAlreadySelected) {
-          this.value = this.value.filter(selectedOption => this.getOptionId(selectedOption) !== this.getOptionId(option));
-          this.wppChange.emit({ value: this.value, reason: 'removeOption', name: this.name });
-        }
-        else {
-          if (this.isSelectedItemsLimitReached())
-            return;
-          this.value = [...this.value, option];
-          this.wppChange.emit({ value: this.value, reason: 'selectOption', name: this.name });
-        }
-        this.updateOptions();
-      }
-      else {
-        if (isAlreadySelected)
-          return;
-        this.value = [option];
-        this.wppChange.emit({ value: this.value, reason: 'selectOption', name: this.name });
-        this.hideDropdown();
-        this.blurInput();
-        this.updateOptions();
-      }
-    };
-    this.renderDropdownContent = () => {
-      const isLoading = this.loading || (this.isInfiniteLoading && this.isEmptyOptions);
-      const isEmptyStringEntered = this.searchValue.trim().length === 0;
-      if (isLoading) {
-        return (h("div", { class: "loading-wrapper" }, h("wpp-spinner-v3-4-0", { slot: "left" }), h("wpp-typography-v3-4-0", { type: "s-body", slot: "label" }, this._locales.loading)));
-      }
-      if (isEmptyStringEntered && this.componentSuggestions?.length > 0) {
-        return (h(Fragment, null, h("wpp-typography-v3-4-0", { type: "s-strong", class: "suggestions-heading" }, this.suggestionsTitle), this.componentSuggestions?.map((suggestion, index) => {
-          const { slots, checked, label, ...restProps } = suggestion;
-          const isChecked = checked || this.isItemSelected(suggestion);
-          return (h("wpp-list-item-v3-4-0", { key: this.getOptionId(suggestion), selectable: true, checked: isChecked, value: suggestion, onWppChangeListItem: this.handleSuggestionClick, class: { 'suggestion-item': true, 'last-item': index === this.componentSuggestions?.length - 1 }, ...restProps }, label && h("span", { slot: "label" }, this.getOptionLabel(suggestion)), slots && this.renderSlotsListItem(slots, Boolean(label)).map(slotNode => slotNode)));
-        })));
-      }
-      if (this.isEmptyOptions) {
-        return (h(Fragment, null, h("wpp-list-item-v3-4-0", { class: "nothing-found-wrapper" }, h("wpp-typography-v3-4-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound))));
-      }
-      return (h(Fragment, null, !this.searchValue ? (!this.withPills ? (h("div", { class: this.selectedValuesCssClasses(), part: "selected-values" }, h("slot", { name: "selected-values" }))) : null) : (h("slot", null)), h("div", null, this.isInfiniteLoading && (h("div", { class: "infinite-loader" }, h("wpp-spinner-v3-4-0", null))))));
-    };
-    this.renderSlotsListItem = (slots, isLabelExists) => slots
-      .map(slotElement => {
-      if (!slotElement)
-        return null;
-      const { type, props, slot, children } = slotElement;
-      if (props.slot === 'label' && isLabelExists)
-        return null;
-      if (!type.startsWith(this.LIB_COMPONENTS_PREFIX)) {
-        const { children: text, ...restProps } = props;
-        const Tag = type;
-        return (h(Tag, { ...restProps }, text));
-      }
-      if (!children)
-        return h(transformToVersionedTag(type), { slot, ...props });
-      const slotNode = h(transformToVersionedTag(type), { slot, ...props });
-      slotNode.$children$ = Array.isArray(children)
-        ? this.renderSlotsListItem(Array.from(children), isLabelExists)
-        : this.renderSlotsListItem([children], isLabelExists);
-      return slotNode;
-    })
-      .filter(item => item !== null);
-    this.renderPillComponent = (option, isTooltip, isTransparentTooltip = false, isTransparentPill = false) => {
-      const labelText = option.label ||
-        option.slots?.find((slot) => slot.type === 'span' && slot.props.slot === 'label')?.props.children;
-      if (isTooltip) {
-        return (h("wpp-tooltip-v3-4-0", { class: {
-            'in-dropdown': true,
-            transparent: isTransparentTooltip,
-          }, text: labelText, part: "tooltip", config: { ...this.pillTooltipConfig } }, h("wpp-pill-v3-4-0", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) })));
-      }
-      else {
-        return (h("wpp-pill-v3-4-0", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) }));
-      }
-    };
-    /**
-     * Validate each WppPill if it has truncated text label inside or WppPill got truncated when it's in `showMore` mode
-     */
-    this.validateTruncatedPills = () => {
-      this.selectedPillsWrapperRef?.style.removeProperty('width');
-      // remove transparent class for a case when we have truncated WppPill and need to check which elements are not visible
-      this.selectedPillsWrapperRef
-        ?.querySelectorAll('.wpp-pill.transparent')
-        .forEach(el => el.classList.remove('transparent'));
-      // Need to toggle class for re-calculation which elements are not visible
-      if (!this.isShowMore) {
-        this.selectedPillsWrapperRef?.classList.toggle('overflow');
-        this.headerWrapperRef?.classList.toggle('visible');
-      }
-      const pillsWrapperElement = this.host?.shadowRoot?.querySelector('.selected-pills-wrapper');
-      const headerPillsWrapperElement = this.host?.shadowRoot?.querySelector('.header-wrapper');
-      const showMoreElement = this.host?.shadowRoot?.querySelector('.show-more-action');
-      if (!pillsWrapperElement || !showMoreElement || !headerPillsWrapperElement)
-        return;
-      const pillsWrapperRight = headerPillsWrapperElement.getBoundingClientRect().right;
-      const pillWrapperWithLabel = pillsWrapperRight - showMoreElement.getBoundingClientRect().width;
-      const pillsElements = Array.from(pillsWrapperElement.querySelectorAll(transformToVersionedTag('wpp-pill')));
-      const activePillsTruncationStateTmp = [];
-      const activePillsTruncationStateWithMoreLabelTmp = [];
-      const activePillsTruncationLabelStateTmp = [];
-      if (!pillsElements || !pillsElements.length)
-        return;
-      pillsElements.forEach((pillElement, ndx) => {
-        const pillElementRect = pillElement.getBoundingClientRect();
-        const labelEl = pillElement.shadowRoot?.querySelector('.label');
-        // Check right corner of .selected-pills-wrapper and each .wpp-pill
-        activePillsTruncationStateTmp.push(pillElementRect.right > pillsWrapperRight);
-        // first item must be `false`, because it can't be truncated by `+n more` label
-        activePillsTruncationStateWithMoreLabelTmp.push(ndx === 0 ? false : pillElementRect.right > pillWrapperWithLabel);
-        if (!labelEl) {
-          activePillsTruncationLabelStateTmp.push(false);
-          return;
-        }
-        // Check if WppPill .label has text truncation
-        activePillsTruncationLabelStateTmp.push(labelEl.scrollWidth > labelEl.clientWidth);
-      });
-      const isPillsTruncated = activePillsTruncationStateTmp.includes(true);
-      // If at least one WppPill got truncated, we need to include `+n more` in truncated list items
-      this.activePillsTruncationState = isPillsTruncated
-        ? activePillsTruncationStateWithMoreLabelTmp
-        : activePillsTruncationStateTmp;
-      this.activePillsTruncationLabelState = activePillsTruncationLabelStateTmp;
-      // Need to toggle class for re-calculation which elements are not visible (revert changes)
-      if (!this.isShowMore) {
-        this.selectedPillsWrapperRef?.classList.toggle('overflow');
-        this.headerWrapperRef?.classList.toggle('visible');
-        if (!this.selectedPillsWrapperRef)
-          return;
-        // If we have situation when after removing WppPill we have one line, we need to toggle isShowMore (reset the value)
-        if (Number.parseFloat(window.getComputedStyle(this.selectedPillsWrapperRef).height) ===
-          this.selectedPillsWrapperRef?.children[0].getBoundingClientRect().height)
-          this.handleShowMoreLessClick();
-      }
-      // Need to adjust width of selectedPillsWrapperRef to adjust placement for a `+n more` CTA
-      if (this.isShowMore && isPillsTruncated) {
-        const visiblePills = pillsElements.slice(0, activePillsTruncationStateWithMoreLabelTmp.filter(x => !x).length);
-        let visiblePillsWidth = visiblePills.reduce((acc, pill) => acc + pill.getBoundingClientRect().width, 0);
-        if (visiblePills.length > 1)
-          visiblePillsWidth += (visiblePills.length - 1) * PILL_MARGIN;
-        // Set width eq to all visible WppPills and N-1 margins
-        this.selectedPillsWrapperRef?.style.setProperty('width', `${visiblePillsWidth}px`);
-      }
-    };
-    // Render Show More/Show Less button only in cases when we have truncated WppPill (not .label inside)
-    this.showMoreLessRender = (label) => (h("wpp-action-button-v3-4-0", { "data-testid": "wpp-autocomplete-show-btn", class: "nowrap", variant: "secondary", onClick: this.handleShowMoreLessClick }, label));
-    this.handleShowMoreLessClick = () => {
-      this.isShowMore = !this.isShowMore;
-    };
     this.isFocused = false;
-    this.searchValue = '';
-    this.isEmptyOptions = true;
+    this.isDropdownShown = false;
     this.isInfiniteLoading = false;
-    this.focusType = undefined;
+    this.internalList = undefined;
+    this.placeholderText = undefined;
+    this.searchText = '';
+    this.visibleOptionsLength = 0;
+    this.selectedOptions = [];
+    this.extendedSelectedValues = [];
     this.hiddenSelectedOptionsNumber = 0;
-    this.isShowMore = true;
+    this.hiddenCountElWidth = 0;
     this.activePillsTruncationState = [];
-    this.activePillsTruncationLabelState = [];
-    this.suggestionListTruncationState = [];
+    this.isShowMore = true;
     this.componentSuggestions = [];
-    this.lastSelectedElement = null;
-    this.isInComponent = false;
+    this.activeNdx = -1;
+    this.activeSourceList = 'list';
+    this.focusType = undefined;
+    this.isInputValueTransparent = false;
+    this.labelConfig = undefined;
     this.name = undefined;
-    this.loading = false;
-    this.disabled = false;
     this.autoFocus = false;
-    this.infinite = false;
-    this.suggestionsTitle = 'Suggestions';
-    this.suggestions = [];
-    this.infiniteLastPage = true;
-    this.limitSelectedItems = 0;
-    this.placeholder = undefined;
-    this.value = [];
-    this.getOptionId = item => item.id;
-    this.getOptionLabel = item => item.label;
-    this.loadMore = undefined;
+    this.disabled = false;
     this.required = false;
+    this.loading = false;
+    this.infinite = false;
+    this.infiniteLastPage = true;
+    this.loadMore = undefined;
+    this.labelTooltipConfig = {};
+    this.placeholder = undefined;
+    this.size = 'm';
+    this.multiple = false;
+    this.type = 'regular';
     this.message = undefined;
     this.messageType = undefined;
     this.maxMessageLength = undefined;
+    this.simpleSearch = false;
+    this.persistentSearch = false;
+    this.showCreateNewElement = false;
+    this.displayBtnWhenListEmpty = true;
     this.dropdownConfig = {};
-    this.type = 'regular';
-    this.size = 'm';
-    this.locales = {};
-    this.labelTooltipConfig = {
-      popperOptions: { strategy: 'fixed' },
-    };
     this.pillTooltipConfig = {
       popperOptions: { strategy: 'fixed' },
       placement: 'right',
     };
-    this.labelConfig = undefined;
-    this.multiple = false;
-    this.showCreateNewElement = false;
-    this.displayBtnWhenListEmpty = true;
-    this.simpleSearch = false;
-    this.persistentSearch = false;
     this.dropdownWidth = 'auto';
+    this.list = [];
+    this.suggestions = [];
+    this.value = [];
+    this.limitSelectedItems = 0;
+    this.locales = {};
+    this.getItemKey = undefined;
+    this.ariaProps = {};
   }
-  handleOptionToggle(event) {
-    if (!this.multiple && this.toggleSingleAutocompleteListItem(event))
-      return;
-    const isCurrValueAlreadySelected = this.value.find(option => this.getOptionId(option) === this.getOptionId(event.detail.value));
-    if (this.isSelectedItemsLimitReached() && !isCurrValueAlreadySelected) {
-      const listItem = event.target;
-      listItem.checked = false;
-      return;
-    }
-    this.value = event.detail.checked
-      ? [...(this.multiple ? this.value : []), event.detail.value]
-      : this.value.filter(option => this.getOptionId(option) !== this.getOptionId(event.detail.value));
-    this.wppChange.emit({
-      value: this.value,
-      reason: event.detail.checked ? 'selectOption' : 'removeOption',
-      name: this.name,
-    });
-  }
-  onLoadingChange(loading) {
-    if (loading) {
-      this.scrollOptionsToTop();
-      if (this.isInfiniteLoading) {
-        this.isInfiniteLoading = false;
-        if (this.infiniteLoadingPromise) {
-          this.infiniteLoadingPromise.cancelled = true;
-        }
-      }
-    }
-    else {
-      this.addHandleOptionsChangeTimer(true);
-    }
-  }
-  onNextValueChange(newValue) {
-    if (newValue.length && this.withPills) {
-      requestAnimationFrame(this.validateTruncatedPills);
-    }
-    if (!newValue.length && this.isDropdownShown && !this.componentSuggestions.length && !this.searchValue) {
-      this.hideDropdown();
-    }
-    if (this.isSelectedItemsLimitReached()) {
-      this.hideDropdown();
-      this.blurInput();
-      this.searchValue = '';
-    }
-    if (!this.multiple) {
-      this.hideDropdown();
-      this.blurInput();
-    }
-  }
-  onSearchValueChange(initSearchValue) {
-    const searchValue = initSearchValue.trim();
-    if (!this.hasSimpleSearch()) {
-      this.wppSearchValueChange.emit(searchValue);
-      this.addHandleOptionsChangeTimer(true);
-      return;
-    }
-    if (!searchValue) {
-      if (!(this.componentSuggestions?.length > 0)) {
-        this.optionElements?.forEach(option => {
-          option.hidden = true;
+  onValueChange(nextValue) {
+    if (this.limitSelectedItems > 0 && nextValue.length > this.limitSelectedItems) {
+      const slicedValue = nextValue.slice(0, this.limitSelectedItems);
+      if (!lodash.isEqual(this.value, slicedValue)) {
+        this.value = slicedValue;
+        this.wppChange.emit({
+          value: this.value,
+          selectedOptions: this.selectedOptions.slice(0, this.limitSelectedItems),
+          reason: 'removeOption',
+          name: this.name,
         });
+        return;
       }
-      this.shownOptionElements = [];
-      this.isEmptyOptions = false;
-      this.hideDropdown();
-      return [];
     }
-    this.updateOptions();
-    this.wppSearchValueChange.emit(searchValue);
+    if (this.isSelectedItemsLimitReached(nextValue) && this.isFocused) {
+      this.handleBlur(undefined, { force: true });
+    }
+    this.checkListAgainstValue();
   }
-  updateDropdownConfig(newConfig, oldConfig) {
-    if (!isEqual_1(newConfig, oldConfig)) {
-      this.dropdownConfig = newConfig;
-      this.tippyInstance?.setProps(newConfig);
-    }
+  onSearchTextChange(searchText) {
+    this.clearActive();
+    const trimmed = searchText.trim();
+    const query = trimmed.toLowerCase();
+    let countVisibleOptions = searchText.length === 0 ? 0 : this.simpleSearch ? 0 : this.internalList.length;
+    this.wppSearchValueChange.emit(trimmed);
+    const next = this.internalList?.map(item => {
+      const labelStr = (item.label ?? (typeof item.value === 'string' ? item.value : '')).toString();
+      const match = query !== '' ? labelStr.toLowerCase().includes(query) : !this.simpleSearch;
+      if (this.simpleSearch)
+        countVisibleOptions += match ? 1 : 0;
+      return {
+        ...item,
+        hidden: this.simpleSearch ? !match : searchText.length === 0,
+        highlight: trimmed,
+      };
+    });
+    this.visibleOptionsLength = countVisibleOptions;
+    if (lodash.isEqual(next, this.internalList))
+      return;
+    this.internalList = next;
+    if (this.isFocused)
+      this.showDropdown();
+  }
+  onListChange(nextList) {
+    const trimmedSearch = this.searchText.trim();
+    const normalized = (nextList ?? []).map(item => ({
+      ...item,
+      hidden: this.simpleSearch || trimmedSearch.length === 0,
+      checked: isSelected(this.value, item, this.getItemKey),
+      highlight: trimmedSearch,
+    }));
+    this.handleListChange(normalized);
+  }
+  onPlaceholderTextChange() {
+    if (this.type !== 'regular')
+      return;
+    this.countHiddenElements();
   }
   onShowMoreChange(isShowMore) {
-    isShowMore
-      ? this.selectedPillsWrapperRef?.classList.add('overflow')
-      : this.selectedPillsWrapperRef?.classList.remove('overflow');
-    requestAnimationFrame(this.validateTruncatedPills);
+    if (isShowMore) {
+      setTimeout(this.validateTruncatedPills, 0);
+    }
+    else {
+      this.selectedPillRefs?.forEach(el => el?.classList.remove('transparent'));
+    }
   }
-  onUpdateSuggestions() {
-    if (this.searchValue !== '')
+  onExtendedSelectedValuesChange() {
+    this.updatePlaceholderText();
+  }
+  onSuggestionsChange(nextSuggestions) {
+    if (this.searchText !== '')
       return;
-    this.checkSuggestions();
-    this.updateOptions();
+    this.componentSuggestions = (nextSuggestions ?? []).map(({ checked: _ignore, ...rest }) => ({
+      ...rest,
+      hidden: false,
+    }));
+    this.handleListChange();
+    if (this.isFocused)
+      this.showDropdown();
   }
-  updateIsInComponent(value) {
-    if (!value)
-      this.handleBlur();
-  }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
+  onLoadingChange(loading) {
+    if (!loading || !this.isInfiniteLoading)
+      return;
+    this.isInfiniteLoading = false;
+    if (!this.infiniteLoadingPromise)
+      return;
+    this.infiniteLoadingPromise.cancelled = true;
   }
   /**
    * Sets focus on native input
    */
-  async setFocus() {
-    this.inputEl?.focus();
+  async setFocus(isOutlined) {
+    if (!this.isFocused)
+      this.isFocused = true;
+    requestAnimationFrame(() => {
+      this.inputRef?.setFocus(isOutlined);
+      this.handleFocus();
+    });
   }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
-    this.withPills = this.type === 'regular' && this.multiple;
     if (this.limitSelectedItems > 0 && !this.multiple) {
       throw new Error('There could be only one selected item in single mode, otherwise, use multiple mode.');
     }
-    this.optionElements = this.getOptionElements();
-    if (!this.multiple && this.value.length > 0) {
-      this.lastSelectedElement = this.optionElements.filter((el) => el.value?.id === this.value[0]?.id)[0];
-    }
-    this.updateOptions();
+    this._locales = { ...this._locales, ...this.locales };
+    this.withPills = this.type === 'regular' && this.multiple;
+    const normalized = (this.list ?? []).map(item => ({
+      ...item,
+      hidden: this.simpleSearch || this.searchText.length === 0,
+      checked: isSelected(this.value, item, this.getItemKey),
+    }));
+    this.componentSuggestions = (this.suggestions ?? []).map(({ checked: _ignore, ...rest }) => ({
+      ...rest,
+      hidden: false,
+    }));
+    this.handleListChange(normalized);
   }
   componentDidLoad() {
-    // Watches the size of values container, which changes when
-    // autocomplete is focused and `limitLines` prop is set
-    this.valueResizeObserver();
-    this.mutationObserver = new MutationObserver(() => {
-      if (!this.loading && !this.isInfiniteLoading) {
-        this.addHandleOptionsChangeTimer();
-      }
-    });
-    this.mutationObserver.observe(this.host, { childList: true, subtree: true });
     this.createTippyInstance();
-    autoFocusElement(this.autoFocus, this.inputEl);
-    this.checkSuggestions();
-    document.addEventListener('click', this.handleClickOutside.bind(this));
-  }
-  disconnectedCallback() {
-    if (this.valuesResizeObserver) {
-      this.valuesResizeObserver.disconnect();
-    }
-    if (this.mutationObserver) {
-      this.mutationObserver.disconnect();
-    }
-    this.tippyInstance?.destroy();
-    document.removeEventListener('click', this.handleClickOutside);
+    if (this.type === 'regular')
+      this.setupResizeObserver();
+    this.checkListAgainstValue();
+    if (this.autoFocus)
+      this.setFocus(true);
   }
   connectedCallback() {
-    this.valueResizeObserver();
     if (this.tippyInstance?.state.isDestroyed) {
       this.createTippyInstance();
     }
   }
-  handleClickOutside(event) {
-    if (!isEventTargetContained(this.host, event) && this.isInComponent)
-      this.isInComponent = false;
-  }
-  renderSelectedOptions() {
-    if (!this.withPills)
-      return;
-    if (!this.value.length)
-      return;
-    /**
-     * When isShowMore is `true`:
-     * - Checks if child elements (WppPill/WppTooltip) have text truncation:
-     *   If truncated, need to add `transparent` class to WppPill/WppTooltip
-     * When isShowMore is `false`:
-     * - Checks if child elements (WppPill) have text truncation:
-     *    - If `true` wrap WppPill with WppTooltip
-     *    - If `false` render WppPill
-     */
-    const isNeedDivider = (!!this.value.length &&
-      this.searchValue !== '' &&
-      (!!this.componentSuggestions?.length ||
-        !!this.shownOptionElements?.length ||
-        !!this.shownOptionElements?.length)) ||
-      this.loading ||
-      this.isInfiniteLoading;
-    return (h(Fragment, null, this.value.length > 0 && (h("div", { class: {
-        'header-wrapper': true,
-        visible: this.activePillsTruncationState.includes(true) && this.isShowMore,
-      }, ref: ref => (this.headerWrapperRef = ref) }, h("div", { "data-testid": "wpp-autocomplete-selected-pills-wrapper", class: this.selectedPillsWrapperCssClasses(), ref: ref => (this.selectedPillsWrapperRef = ref) }, this.value.map((option, ndx) => {
-      if (this.isShowMore) {
-        const isHideElement = this.activePillsTruncationState[ndx];
-        return this.activePillsTruncationLabelState[ndx]
-          ? this.renderPillComponent(option, true, isHideElement)
-          : this.renderPillComponent(option, false, false, isHideElement);
-      }
-      else {
-        return this.activePillsTruncationLabelState[ndx]
-          ? this.renderPillComponent(option, true)
-          : this.renderPillComponent(option, false);
-      }
-    })), h("div", { class: "show-more-action" }, this.showMoreLessRender(`+${this.activePillsTruncationState.filter(x => x).length} ${this._locales.showMore}`)))), !this.isShowMore && h("div", { class: "show-less-action" }, this.showMoreLessRender(this._locales.showLess)), isNeedDivider && h("wpp-divider-v3-4-0", { class: "nothing-found-divider" })));
+  disconnectedCallback() {
+    this.tippyInstance?.destroy();
+    this.resizeObserver?.disconnect();
   }
   render() {
-    const style = { '--custom-dropdown-width': this.getDropdownWidth() };
-    return (h(Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, options, selected-values" }, h("div", { class: this.autocompleteWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (h("wpp-label-v3-4-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.renderInputPlaceholder(), this.hiddenSelectedOptionsNumber > 0 && !this.isDropdownShown && (h("div", { class: "hidden-count", style: { '--hidden-number': this.getNearestPowForRowsNumber() + '' } }, h("wpp-typography-v3-4-0", { type: "s-body" }, ", + ", this.hiddenSelectedOptionsNumber))), h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, tabIndex: this.disabled ? -1 : 0, title: "" })), h("div", { class: "trigger-actions" }, this.hasClearButton() && h("wpp-icon-cross-v3-4-0", { onClick: this.handleClearClick }))), !!this.message && (h("wpp-inline-message-v3-4-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderSelectedOptions(), this.renderDropdownContent(), this.showCreateNewElement &&
-      this.searchValue !== '' &&
-      ((this.displayBtnWhenListEmpty && this.isEmptyOptions) || !this.displayBtnWhenListEmpty) && (h("div", { class: "actions" }, h("wpp-divider-v3-4-0", { class: "nothing-found-divider" }), h("div", { class: "actions-container" }, h("wpp-list-item-v3-4-0", { onClick: this.handleCreateNewOptionClick }, h("wpp-typography-v3-4-0", { type: "s-strong", class: "create-new-option", slot: "label" }, this._locales.createNewElement))))))), this.type === 'extended' && this.multiple ? h("slot", { name: "selected-values" }) : null));
+    return (h(Host, { class: this.hostCssClasses(), onBlur: this.handleBlur, onKeyUp: this.onKeyUp, exportparts: "input, dropdown, trigger, label" }, this.labelConfig?.text && (h("wpp-label-v4-0-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: this.handleTriggerClick })), h("div", { ref: ref => (this.triggerRef = ref), tabindex: -1, class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, this.renderPlaceholderText(), h("wpp-input-v4-0-0", { ref: ref => (this.inputRef = ref), part: "input", type: "text", role: "combobox", "aria-autocomplete": "list", "aria-expanded": this.isDropdownShown.toString(), "aria-controls": `${this.name}-listbox`, autocomplete: "off", class: this.inputCssClasses(), id: this.name, name: this.name, value: this.searchText, onWppChange: this.handleSearch, disabled: this.disabled, required: this.required, placeholder: this.isFocused || this.isDropdownShown || this.value.length > 0 || this.searchText.trim().length > 0
+        ? undefined
+        : this.placeholder, onInput: this.handleInput, onFocus: this.handleFocus, onKeyDown: this.onKeyDown, size: this.size, withCrossIcon: false, ariaProps: {
+        activedescendant: true,
+      } }), this.multiple && (h("wpp-icon-cross-v4-0-0", { class: this.iconCrossCssClasses(), role: "button", "aria-label": this.multiple ? this._locales.clearMultiple : this._locales.clearSingle, tabindex: this.value.length > 0 && this.multiple ? 0 : -1, onClick: this.handleClearClick, onFocus: this.handleCrossIconFocus, onKeyDown: this.handleCrossIconKeyDown }))), h("div", { ref: ref => (this.dropdownRef = ref), class: this.dropdownCssClasses(), part: "dropdown" }, this.isDropdownShown ? (h(Fragment, null, this.type === 'regular' && this.multiple ? this.renderDropdownPills() : null, h("div", { class: "wpp-autocomplete-dropdown-list", onMouseDown: e => e.preventDefault(), onScroll: this.handleOptionsScroll, id: `${this.name}-listbox`, role: "listbox", "aria-label": this.ariaProps?.label, "aria-busy": this.isInfiniteLoading || this.loading }, this.renderDropdownList()), this.renderCreateNewElement())) : null), !!this.message && (h("wpp-inline-message-v4-0-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType })), this.type === 'extended' && this.multiple ? this.renderExtendedSelectedValues() : null));
   }
-  static get registryIs() { return "wpp-autocomplete-v3-4-0"; }
+  static get registryIs() { return "wpp-autocomplete-v4-0-0"; }
   get host() { return this; }
   static get watchers() { return {
-    "loading": ["onLoadingChange"],
-    "value": ["onNextValueChange"],
-    "searchValue": ["onSearchValueChange"],
-    "dropdownConfig": ["updateDropdownConfig"],
+    "value": ["onValueChange"],
+    "searchText": ["onSearchTextChange"],
+    "list": ["onListChange"],
+    "placeholderText": ["onPlaceholderTextChange"],
     "isShowMore": ["onShowMoreChange"],
-    "suggestions": ["onUpdateSuggestions"],
-    "isInComponent": ["updateIsInComponent"],
-    "locales": ["onUpdateLocales"]
+    "extendedSelectedValues": ["onExtendedSelectedValuesChange"],
+    "suggestions": ["onSuggestionsChange"],
+    "loading": ["onLoadingChange"]
   }; }
   static get style() { return wppAutocompleteCss; }
-}, [1, "wpp-autocomplete", "wpp-autocomplete-v3-4-0", {
+}, [1, "wpp-autocomplete", "wpp-autocomplete-v4-0-0", {
+    "labelConfig": [16],
     "name": [1],
-    "loading": [516],
-    "disabled": [516],
     "autoFocus": [4, "auto-focus"],
-    "infinite": [4],
-    "suggestionsTitle": [1, "suggestions-title"],
-    "suggestions": [16],
-    "infiniteLastPage": [4, "infinite-last-page"],
-    "limitSelectedItems": [2, "limit-selected-items"],
-    "placeholder": [1],
-    "value": [1040],
-    "getOptionId": [16],
-    "getOptionLabel": [16],
-    "loadMore": [16],
+    "disabled": [516],
     "required": [516],
+    "loading": [516],
+    "infinite": [4],
+    "infiniteLastPage": [4, "infinite-last-page"],
+    "loadMore": [16],
+    "labelTooltipConfig": [16],
+    "placeholder": [1],
+    "size": [1],
+    "multiple": [4],
+    "type": [1],
     "message": [1],
     "messageType": [1, "message-type"],
     "maxMessageLength": [2, "max-message-length"],
-    "dropdownConfig": [1040],
-    "type": [1],
-    "size": [1],
-    "locales": [16],
-    "labelTooltipConfig": [16],
-    "pillTooltipConfig": [16],
-    "labelConfig": [1040],
-    "multiple": [4],
-    "showCreateNewElement": [4, "show-create-new-element"],
-    "displayBtnWhenListEmpty": [4, "display-btn-when-list-empty"],
     "simpleSearch": [4, "simple-search"],
     "persistentSearch": [4, "persistent-search"],
+    "showCreateNewElement": [4, "show-create-new-element"],
+    "displayBtnWhenListEmpty": [4, "display-btn-when-list-empty"],
+    "dropdownConfig": [16],
+    "pillTooltipConfig": [16],
     "dropdownWidth": [1, "dropdown-width"],
+    "list": [16],
+    "suggestions": [16],
+    "value": [1040],
+    "limitSelectedItems": [2, "limit-selected-items"],
+    "locales": [16],
+    "getItemKey": [16],
+    "ariaProps": [16],
     "isFocused": [32],
-    "searchValue": [32],
-    "isEmptyOptions": [32],
+    "isDropdownShown": [32],
     "isInfiniteLoading": [32],
-    "focusType": [32],
+    "internalList": [32],
+    "placeholderText": [32],
+    "searchText": [32],
+    "visibleOptionsLength": [32],
+    "selectedOptions": [32],
+    "extendedSelectedValues": [32],
     "hiddenSelectedOptionsNumber": [32],
-    "isShowMore": [32],
+    "hiddenCountElWidth": [32],
     "activePillsTruncationState": [32],
-    "activePillsTruncationLabelState": [32],
-    "suggestionListTruncationState": [32],
+    "isShowMore": [32],
     "componentSuggestions": [32],
-    "lastSelectedElement": [32],
-    "isInComponent": [32],
+    "activeNdx": [32],
+    "activeSourceList": [32],
+    "focusType": [32],
+    "isInputValueTransparent": [32],
     "setFocus": [64]
-  }, [[2, "wppChangeListItem", "handleOptionToggle"]]]);
+  }]);
 function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-autocomplete-v3-4-0", "wpp-action-button-v3-4-0", "wpp-checkbox-v3-4-0", "wpp-divider-v3-4-0", "wpp-icon-chevron-v3-4-0", "wpp-icon-cross-v3-4-0", "wpp-icon-dash-v3-4-0", "wpp-icon-drag-v3-4-0", "wpp-icon-error-v3-4-0", "wpp-icon-info-message-v3-4-0", "wpp-icon-success-v3-4-0", "wpp-icon-tick-v3-4-0", "wpp-icon-warning-v3-4-0", "wpp-inline-message-v3-4-0", "wpp-internal-label-v3-4-0", "wpp-internal-tooltip-v3-4-0", "wpp-label-v3-4-0", "wpp-list-item-v3-4-0", "wpp-pill-v3-4-0", "wpp-spinner-v3-4-0", "wpp-tooltip-v3-4-0", "wpp-typography-v3-4-0"];
+  const components = ["wpp-autocomplete-v4-0-0", "wpp-action-button-v4-0-0", "wpp-checkbox-v4-0-0", "wpp-divider-v4-0-0", "wpp-icon-chevron-v4-0-0", "wpp-icon-cross-v4-0-0", "wpp-icon-dash-v4-0-0", "wpp-icon-drag-v4-0-0", "wpp-icon-error-v4-0-0", "wpp-icon-info-message-v4-0-0", "wpp-icon-search-v4-0-0", "wpp-icon-success-v4-0-0", "wpp-icon-tick-v4-0-0", "wpp-icon-warning-v4-0-0", "wpp-inline-message-v4-0-0", "wpp-input-v4-0-0", "wpp-internal-label-v4-0-0", "wpp-internal-tooltip-v4-0-0", "wpp-label-v4-0-0", "wpp-list-item-v4-0-0", "wpp-pill-v4-0-0", "wpp-spinner-v4-0-0", "wpp-tooltip-v4-0-0", "wpp-typography-v4-0-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-autocomplete-v3-4-0":
+    case "wpp-autocomplete-v4-0-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppAutocomplete$1);
       }
       break;
-    case "wpp-action-button-v3-4-0":
+    case "wpp-action-button-v4-0-0":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$o();
+      }
+      break;
+    case "wpp-checkbox-v4-0-0":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$n();
+      }
+      break;
+    case "wpp-divider-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-checkbox-v3-4-0":
+    case "wpp-icon-chevron-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-divider-v3-4-0":
+    case "wpp-icon-cross-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-chevron-v3-4-0":
+    case "wpp-icon-dash-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-cross-v3-4-0":
+    case "wpp-icon-drag-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-dash-v3-4-0":
+    case "wpp-icon-error-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-drag-v3-4-0":
+    case "wpp-icon-info-message-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-error-v3-4-0":
+    case "wpp-icon-search-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-info-message-v3-4-0":
+    case "wpp-icon-success-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-success-v3-4-0":
+    case "wpp-icon-tick-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-tick-v3-4-0":
+    case "wpp-icon-warning-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-warning-v3-4-0":
+    case "wpp-inline-message-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-inline-message-v3-4-0":
+    case "wpp-input-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-internal-label-v3-4-0":
+    case "wpp-internal-label-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-tooltip-v3-4-0":
+    case "wpp-internal-tooltip-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-label-v3-4-0":
+    case "wpp-label-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-list-item-v3-4-0":
+    case "wpp-list-item-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-pill-v3-4-0":
+    case "wpp-pill-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v3-4-0":
+    case "wpp-spinner-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v3-4-0":
+    case "wpp-tooltip-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v3-4-0":
+    case "wpp-typography-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

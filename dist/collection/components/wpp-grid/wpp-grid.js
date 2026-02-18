@@ -67,7 +67,7 @@ export class WppGrid {
     return (h(Host, { class: this.hostCssClasses(), exportparts: "inner" }, h("slot", { part: "inner" })));
   }
   static get is() { return "wpp-grid"; }
-  static get registryIs() { return "wpp-grid-v3-4-0"; }
+  static get registryIs() { return "wpp-grid-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

@@ -4,6 +4,7 @@ import { LabelConfig } from '../wpp-label/types';
 import { MaskitoNumberParams } from '@maskito/kit/src/lib/masks/number/number-params';
 export type InputValue = string;
 export interface InputChangeEventDetail extends BaseFormControlEventDetail<InputValue> {
+  rawValue?: string;
   name?: string;
 }
 export type InputTypes = 'text' | 'password' | 'search' | 'number' | 'email' | 'tel' | 'url' | 'decimal';
@@ -19,11 +20,12 @@ export type MaskOptions = {
   decimalPatternOptions?: MaskitoNumberParams;
   maskPlaceholder?: string;
   customPatternOptions?: MaskitoOptions;
-  telPatternOptions?: {
-    mask?: MaskitoMask;
-    countryCode?: CountryCode;
-    countryPhoneCode?: string;
-  };
+  telPatternOptions?: MaskitoTelephoneParams;
+};
+export type MaskitoTelephoneParams = {
+  mask?: MaskitoMask;
+  countryCode?: CountryCode;
+  countryPhoneCode?: string;
 };
 export type WppChangeExtraEventDetail = {
   raw: string;

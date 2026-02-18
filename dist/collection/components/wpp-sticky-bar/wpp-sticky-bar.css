@@ -1,11 +1,8 @@
 :host {
   --sticky-bar-offset-top: var(--wpp-sticky-bar-offset-top, 63px);
-  --sticky-bar-padding: var(--wpp-sticky-bar-padding, 12px 32px);
-  --sticky-bar-header-size: var(--wpp-sticky-bar-header-size, 32px);
-  --sticky-bar-header-size-m: var(--wpp-sticky-bar-header-size-m, 40px);
-  --sticky-bar-with-tabs-body-height: var(--wpp-sticky-bar-with-tabs-body-height, 36px);
   width: 100%;
   position: fixed;
+  box-sizing: border-box;
   left: 0;
   top: 0;
   right: 0;
@@ -15,20 +12,11 @@
 :host .container {
   box-sizing: border-box;
   background-color: var(--wpp-grey-color-000);
-  padding: var(--sticky-bar-padding);
+  padding: 12px 28px;
   position: relative;
 }
-:host .container::before {
-  position: absolute;
-  content: "";
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: var(--wpp-grey-color-300);
-}
 :host .container .header {
-  height: var(--sticky-bar-header-size);
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -50,10 +38,52 @@
   margin-right: 0;
 }
 :host .container .body {
-  height: var(--sticky-bar-header-size);
   margin-top: 8px;
   --wpp-tabs-width: auto;
   --wpp-tab-width: auto;
+}
+:host .wpp-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+@media (min-width: 1280px) {
+  :host .container {
+    padding: 12px 28px;
+  }
+}
+@media (min-width: 1366px) {
+  :host .container {
+    padding: 12px 36px;
+  }
+}
+@media (min-width: 1440px) {
+  :host .container {
+    padding: 12px 38px;
+  }
+}
+@media (min-width: 1920px) {
+  :host .container {
+    padding: 12px 54px;
+  }
+}
+
+:host(.wpp-sticky-bar-medium) .container .header {
+  height: 24px;
+}
+:host(.wpp-sticky-bar-medium) .body {
+  height: 32px;
+}
+
+:host(.wpp-sticky-bar-with-tabs) .container {
+  padding-bottom: 0;
+}
+:host(.wpp-sticky-bar-with-tabs) .container .body {
+  height: 36px;
+}
+:host(.wpp-sticky-bar-with-tabs) .container .body.has-tabs {
+  height: auto;
 }
 
 :host(.wpp-visible) {
@@ -66,15 +96,4 @@
   transition: 0.3s ease;
   top: 0;
   transform: translateY(-100%);
-}
-
-:host(.wpp-blank) .container {
-  height: 96px;
-}
-
-:host(.wpp-two-lines-with-tabs) .container {
-  padding-bottom: 0;
-}
-:host(.wpp-two-lines-with-tabs) .container .body {
-  height: var(--sticky-bar-with-tabs-body-height);
 }

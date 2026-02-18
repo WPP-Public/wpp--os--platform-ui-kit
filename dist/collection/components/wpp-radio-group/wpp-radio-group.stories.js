@@ -1,6 +1,6 @@
 import { html } from 'lit-html';
 export default {
-  title: 'Design System/Components/Selection and input/Radio/Radio Group',
+  title: 'Design System/Components/Selection and input/Radio Group',
   parameters: {
     previewTabs: {
       'storybook/docs/panel': {
@@ -21,7 +21,7 @@ export default {
   },
 };
 export const RadioGroup = (args) => html `
-  <wpp-radio-group-v3-4-0
+  <wpp-radio-group-v4-0-0
     .required=${args.required}
     .labelConfig=${args.labelConfig}
     .maxMessageLength="${args.maxMessageLength}"
@@ -31,20 +31,20 @@ export const RadioGroup = (args) => html `
     .gap="${args.gap}"
     style="display: inline-flex; flex-direction: column; height: 80px; justify-content: space-between"
   >
-    <wpp-radio-v3-4-0
+    <wpp-radio-v4-0-0
       .required=${true}
       name="contact"
       value="email"
       .labelConfig=${{ text: 'Email' }}
-    ></wpp-radio-v3-4-0>
-    <wpp-radio-v3-4-0 .required=${true} name="contact" value="mail" .labelConfig=${{ text: 'Mail' }}></wpp-radio-v3-4-0>
-    <wpp-radio-v3-4-0
+    ></wpp-radio-v4-0-0>
+    <wpp-radio-v4-0-0 .required=${true} name="contact" value="mail" .labelConfig=${{ text: 'Mail' }}></wpp-radio-v4-0-0>
+    <wpp-radio-v4-0-0
       .required=${true}
       name="contact"
       value="phone"
       .labelConfig=${{ text: 'Phone' }}
-    ></wpp-radio-v3-4-0>
-  </wpp-radio-group-v3-4-0>
+    ></wpp-radio-v4-0-0>
+  </wpp-radio-group-v4-0-0>
 `;
 RadioGroup.args = {
   required: true,

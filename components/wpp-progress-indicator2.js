@@ -83,14 +83,14 @@ const WppProgressIndicator = /*@__PURE__*/ proxyCustomElement(class WppProgressI
     const renderCircle = () => (h("svg", { class: this.circleWrapperCssClasses(isShowCircleInfinityLoading), viewBox: "0 0 120 120", part: "circle" }, h("circle", { class: "circle", cx: "60", cy: "60", r: "54", fill: "none" }), h("circle", { class: this.circleCssClasses(isShowCircleInfinityLoading, shouldShowPercentage), cx: "60", cy: "60", r: "54", fill: "none", pathLength: "100" })));
     return (h(Host, { class: this.hostCssClasses(isLinearDontHaveWidth), role: "progressbar", "aria-valuenow": this.value, "aria-valuemin": "0", "aria-valuemax": "100", "aria-label": this.ariaProps?.label, "aria-labelledby": this.ariaProps?.labelledby, exportparts: "label, content, inner" }, h("div", { class: this.progressBarCssClasses(isLinearDontHaveProgress, shouldShowPercentage), part: "body" }, isCircle ? renderCircle() : renderLine()), !!this.label && (h("p", { class: "progress-text", part: "label" }, this.label))));
   }
-  static get registryIs() { return "wpp-progress-indicator-v3-4-0"; }
+  static get registryIs() { return "wpp-progress-indicator-v4-0-0"; }
   get host() { return this; }
   static get watchers() { return {
     "value": ["progressChange"],
     "width": ["widthChange"]
   }; }
   static get style() { return wppProgressIndicatorCss; }
-}, [1, "wpp-progress-indicator", "wpp-progress-indicator-v3-4-0", {
+}, [1, "wpp-progress-indicator", "wpp-progress-indicator-v4-0-0", {
     "width": [2],
     "variant": [1],
     "value": [2],
@@ -103,9 +103,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-progress-indicator-v3-4-0"];
+  const components = ["wpp-progress-indicator-v4-0-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-progress-indicator-v3-4-0":
+    case "wpp-progress-indicator-v4-0-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppProgressIndicator);
       }

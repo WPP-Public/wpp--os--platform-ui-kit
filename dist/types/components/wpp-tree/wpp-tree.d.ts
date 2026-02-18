@@ -31,8 +31,6 @@ export declare class WppTree {
   readonly locales: Partial<TreeLocaleType>;
   /**
    * Defines the component locale types.
-   * Note: "isMatchSearch" is deprecated, use "isMatchingSearch" instead, which uses
-   * the tree-item object.
    */
   readonly searchConfig: TreeItemSearchConfig;
   /**
@@ -78,6 +76,28 @@ export declare class WppTree {
   recalculateTreeWidth(): Promise<void>;
   selectAll(): Promise<void>;
   clearAll(): Promise<void>;
+  private markAllOpen;
+  private markAllClosed;
+  /**
+   * Expands all tree nodes.
+   * Disabled nodes and their descendants are skipped and remain unchanged.
+   * If lazy loading is configured, children for open nodes with `hasChildren: true` will be preloaded.
+   * Emits a `wppChange` event with the updated tree state.
+   */
+  expandAll(): Promise<void>;
+  /**
+   * Collapses all tree nodes.
+   * Disabled nodes and their descendants are skipped and remain unchanged.
+   * Emits a `wppChange` event with the updated tree state.
+   */
+  collapseAll(): Promise<void>;
+  /**
+   * Preloads children for all open nodes that require lazy loading.
+   * Called on initial load, data updates, and after expandAll().
+   * Only operates if `lazyConfig.loadChildren` is configured.
+   * Emits `wppChange` events as children are loaded.
+   */
+  private preloadInitialOpenChildren;
   private toggleItemSelection;
   private clearSelectionExcept;
   componentDidLoad(): void;

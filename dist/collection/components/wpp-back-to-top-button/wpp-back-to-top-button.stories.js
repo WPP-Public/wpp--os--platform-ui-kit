@@ -10,5 +10,5 @@ export default {
   },
 };
 export const BackToTop = {
-  render: () => html `<wpp-back-to-top-button-v3-4-0 @click="${() => console.log('Button clicked')}" />`,
+  render: () => html `<wpp-back-to-top-button-v4-0-0 @click="${() => console.log('Button clicked')}" />`,
 };

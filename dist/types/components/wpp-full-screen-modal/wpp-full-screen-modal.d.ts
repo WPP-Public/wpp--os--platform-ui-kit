@@ -1,4 +1,5 @@
 import { EventEmitter } from '../../stencil-public-runtime';
+import { AriaProps } from '../../types/common';
 import { FullScreenModalCloseDetails, FullScreenModalCloseReason, FullScreenModalFormConfig } from './types';
 /**
  * @slot header - Content that is displayed within the `.full-screen-modal` element. To add header content, pass `slot="header"` – can contain the modal title.
@@ -15,6 +16,7 @@ import { FullScreenModalCloseDetails, FullScreenModalCloseReason, FullScreenModa
  */
 export declare class WppFullScreenModal {
   host: HTMLWppFullScreenModalElement;
+  private dialogRef?;
   hasHeaderSlot: boolean;
   hasBodySlot: boolean;
   hasActionsSlot: boolean;
@@ -40,6 +42,10 @@ export declare class WppFullScreenModal {
    */
   readonly zIndex: number;
   /**
+   * Contains the modal `aria-` props.
+   */
+  readonly ariaProps: AriaProps;
+  /**
    * Handles the modal closing actions.
    */
   wppFullScreenModalClose: EventEmitter<FullScreenModalCloseDetails>;
@@ -59,11 +65,6 @@ export declare class WppFullScreenModal {
    * Event emitted when the close animation ends.
    */
   wppFullScreenModalCloseComplete: EventEmitter<FullScreenModalCloseDetails>;
-  /**
-   * Handles the modal click actions.
-   * @deprecated - this prop will be deleted in version 3.0.0 . Use `wppFullScreenModalOpenStart`/`wppFullScreenModalOpenComplete` instead
-   */
-  wppFullScreenModalOpen: EventEmitter<void>;
   protected handleCloseOnEsc(event: KeyboardEvent): void;
   protected handleChangeFullScreenModalStatus(openStatus: boolean): void;
   /**
@@ -80,6 +81,7 @@ export declare class WppFullScreenModal {
   private updateSlotData;
   private handleTransitionStart;
   private handleTransitionEnd;
+  private focusDialog;
   private handleCloseModal;
   private headerCssClasses;
   private bodyCssClasses;

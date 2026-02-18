@@ -23,6 +23,7 @@ export declare class WppSegmentedControl implements BaseComponent, BaseFormContr
   readonly hugContentOff: boolean;
   /**
    * Defines the control bar width, with the leftover space distributed evenly between the items. Must be in pixels, e.g. **800px**.
+   * Requires hugContentOff to be set to true for the width to take effect.
    */
   readonly width: string;
   /**

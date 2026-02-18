@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const wppIconGallery = require('./wpp-icon-gallery-344b7155.js');
+const wppIconGallery = require('./wpp-icon-gallery-031016ae.js');
 require('./index-ecf423ba.js');
 require('./WppIcon-55327707.js');
 
