@@ -122,6 +122,14 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   readonly labelTooltipConfig: DropdownConfig;
   /**
    * Defines the datepicker locale, uses English by default.
+   * @deprecated Use `locales` property instead.
+   * @remarks
+   * - `firstDay` determines the starting day of the week and acts as a fallback if `dateLocale` is not provided.
+   * - `dateLocale` is used to automatically infer date-related properties, like `firstDay`.
+   */
+  readonly locale: Partial<LocaleTypes>;
+  /**
+   * Defines the datepicker locale, uses English by default.
    * @remarks
    * - `firstDay` determines the starting day of the week and acts as a fallback if `dateLocale` is not provided.
    * - `dateLocale` is used to automatically infer date-related properties, like `firstDay`.

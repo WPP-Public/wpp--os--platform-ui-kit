@@ -40,7 +40,7 @@ describe('wpp-back-to-top-button', () => {
       });
       const icon = page.root?.shadowRoot?.querySelector('wpp-icon-arrow');
       expect(icon).toBeTruthy();
-      expect(icon?.getAttribute('direction')).toBe('up');
+      expect(icon?.getAttribute('direction')).toBe('top');
     });
     it('should apply aria-label from ariaProps', async () => {
       const page = await newSpecPage({

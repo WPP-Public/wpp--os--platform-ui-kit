@@ -33,9 +33,9 @@ const WppSpinner = /*@__PURE__*/ proxyCustomElement(class WppSpinner extends HTM
     const isAnnounced = this.ariaProps?.label && this.ariaProps?.label !== '';
     return (h(Host, { class: this.hostCssClasses(), role: isAnnounced ? 'status' : null, "aria-hidden": isAnnounced ? null : 'true', "aria-live": isAnnounced ? 'polite' : null, "aria-label": isAnnounced ? this.ariaProps?.label : null }, h("svg", { class: this.spinnerCssClasses(), "aria-hidden": "true", focusable: "false" }, h("circle", { cx: SPINNER_SIZES[this.size], cy: SPINNER_SIZES[this.size], r: SPINNER_RADIUS[this.size], fill: "transparent", stroke: this.color, "stroke-linecap": "round" }))));
   }
-  static get registryIs() { return "wpp-spinner-v4-0-0"; }
+  static get registryIs() { return "wpp-spinner-v3-5-0"; }
   static get style() { return wppSpinnerCss; }
-}, [1, "wpp-spinner", "wpp-spinner-v4-0-0", {
+}, [1, "wpp-spinner", "wpp-spinner-v3-5-0", {
     "color": [1],
     "size": [1],
     "ariaProps": [16]
@@ -44,9 +44,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-spinner-v4-0-0"];
+  const components = ["wpp-spinner-v3-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-spinner-v4-0-0":
+    case "wpp-spinner-v3-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppSpinner);
       }

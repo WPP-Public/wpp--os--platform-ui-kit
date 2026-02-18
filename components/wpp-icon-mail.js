@@ -16,9 +16,9 @@ const WppIconMail$1 = /*@__PURE__*/ proxyCustomElement(class WppIconMail extends
   render() {
     return (h(WppIcon, { name: "wpp-icon-mail", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: "M3.04175 6.04165C3.04175 5.30544 3.63888 4.70831 4.37508 4.70831H15.6251C16.3613 4.70831 16.9584 5.30544 16.9584 6.04165V6.42781L10 10.1891L3.04175 6.42787V6.04165ZM3.04175 8.13298V13.9583C3.04175 14.6945 3.63888 15.2916 4.37508 15.2916H15.6251C16.3613 15.2916 16.9584 14.6945 16.9584 13.9583V8.13293L10.3567 11.7014C10.1341 11.8217 9.86593 11.8217 9.64339 11.7014L3.04175 8.13298ZM4.37508 3.20831C2.81045 3.20831 1.54175 4.47702 1.54175 6.04165V13.9583C1.54175 15.5229 2.81045 16.7916 4.37508 16.7916H15.6251C17.1897 16.7916 18.4584 15.5229 18.4584 13.9583V6.04165C18.4584 4.47702 17.1897 3.20831 15.6251 3.20831H4.37508Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-mail-v4-0-0"; }
+  static get registryIs() { return "wpp-icon-mail-v3-5-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-mail", "wpp-icon-mail-v4-0-0", {
+}, [1, "wpp-icon-mail", "wpp-icon-mail-v3-5-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -28,9 +28,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-mail-v4-0-0"];
+  const components = ["wpp-icon-mail-v3-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-mail-v4-0-0":
+    case "wpp-icon-mail-v3-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconMail$1);
       }

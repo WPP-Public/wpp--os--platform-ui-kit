@@ -129,8 +129,7 @@ export class WppFileUpload {
       if (this.acceptConfig !== undefined && Object.keys(this.acceptConfig).length === 0) {
         return file;
       }
-      // If no acceptConfig specified with valid types, return the file as-is
-      if (!this.acceptConfig || Object.keys(this.acceptConfig).length === 0) {
+      if (!this.accept?.length) {
         if (!file.type) {
           const extension = file.name?.split('.').pop() || '';
           const typeFromExtension = EXTENSION_TO_TYPE[extension] || '';
@@ -139,12 +138,7 @@ export class WppFileUpload {
         }
         return file;
       }
-      // Get accepted formats from acceptConfig
-      const acceptedFormats = Object.keys(this.acceptConfig).flatMap(mimeType => {
-        const extensions = this.acceptConfig[mimeType] || [];
-        return [mimeType, ...extensions];
-      });
-      const isPassValidation = acceptedFormats.some((format) => {
+      const isPassValidation = this.accept.some((format) => {
         const currentFormat = format.replace(/[,.*]/g, '');
         // .mov format return quicktime type, that's why using this contraction for this particular case
         if (currentFormat === 'mov') {
@@ -259,6 +253,9 @@ export class WppFileUpload {
         }
         return getExtensionsList(this.acceptConfig);
       }
+      if (this.accept?.length) {
+        return this.accept;
+      }
       return [];
     };
     this.isMaximumFilesSet = () => this.maxFiles > 0;
@@ -308,12 +305,14 @@ export class WppFileUpload {
     this.disabled = false;
     this.multiple = true;
     this.format = 'base64';
+    this.accept = ['.jpg', '.jpeg', '.png'];
     this.acceptConfig = undefined;
     this.messageType = undefined;
     this.message = undefined;
     this.maxMessageLength = undefined;
     this.tooltipConfig = {};
     this.size = 50;
+    this.maxLabelLength = undefined;
     this.locales = {};
     this.validator = () => null;
     this.controlled = false;
@@ -366,13 +365,13 @@ export class WppFileUpload {
   }
   render() {
     const allFiles = [...(this.successList || []), ...(this.errorList || [])];
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, wrapper, content, file-name, tooltip, loading, percentage, cross-icon", onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onGlobalKeyDown, onPointerDown: this.onPointerDown, onMouseDown: this.onMouseDown, "aria-disabled": this.disabled ? 'true' : undefined }, h("slot", { name: "label", part: "slot-label" }), this.labelConfig?.text && (h("wpp-label-v4-0-0", { class: "file-upload-label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("slot", { name: "description", part: "slot-description" }), h("div", { class: this.uploadWrapperCssClasses(), onDrop: this.handleDrop, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onDragOver: this.handleDragOver, part: "file-upload-container" }, h("wpp-avatar-v4-0-0", { class: "icon-file", icon: "wpp-icon-file", size: "l", role: "presentation", tabindex: "-1", "aria-hidden": "true" }), h("div", { class: "content", part: "content" }, h("p", null, h("span", { class: "label", part: "label" }, this._locales.label), h("span", { class: "text", part: "text" }, this._locales.text))), h("p", { class: "text-info", part: "text-info" }, this._locales.info(this.getAcceptExtensions().join(', '), this.size)), h("input", { class: "file-loader", type: "file", name: this.name, onChange: this.handleChange, onFocus: this.onInputFocus, onBlur: this.onInputBlur, ref: inputRef => (this.inputRef = inputRef), multiple: this.multiple, accept: this.getAcceptExtensions().join(), part: "input", title: "", "aria-label": this.locales.label || 'Upload file', disabled: this.disabled })), (this.message || this.isLimitReached) && (h("wpp-inline-message-v4-0-0", { message: this.getMessageText(), type: this.isLimitReached ? 'error' : this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })), allFiles?.length ? (h("div", { class: this.listWrapperCssClasses(), part: "list-wrapper" }, h("ul", { role: "list", class: "file-list", part: "file-list", onScroll: this.handleListScroll }, allFiles.map((file, index) => (h("wpp-file-upload-item-v4-0-0", { key: file.lastModified, format: this.format, parentDisabled: this.disabled, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, file: file, locales: {
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, wrapper, content, file-name, tooltip, loading, percentage, cross-icon", onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onGlobalKeyDown, onPointerDown: this.onPointerDown, onMouseDown: this.onMouseDown, "aria-disabled": this.disabled ? 'true' : undefined }, h("slot", { name: "label", part: "slot-label" }), this.labelConfig?.text && (h("wpp-label-v3-5-0", { class: "file-upload-label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("slot", { name: "description", part: "slot-description" }), h("div", { class: this.uploadWrapperCssClasses(), onDrop: this.handleDrop, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onDragOver: this.handleDragOver, part: "file-upload-container" }, h("wpp-avatar-v3-5-0", { class: "icon-file", icon: "wpp-icon-file", size: "l", role: "presentation", tabindex: "-1", "aria-hidden": "true" }), h("div", { class: "content", part: "content" }, h("p", null, h("span", { class: "label", part: "label" }, this._locales.label), h("span", { class: "text", part: "text" }, this._locales.text))), h("p", { class: "text-info", part: "text-info" }, this._locales.info(this.getAcceptExtensions().join(', '), this.size)), h("input", { class: "file-loader", type: "file", name: this.name, onChange: this.handleChange, onFocus: this.onInputFocus, onBlur: this.onInputBlur, ref: inputRef => (this.inputRef = inputRef), multiple: this.multiple, accept: this.getAcceptExtensions().join(), part: "input", title: "", "aria-label": this.locales.label || 'Upload file', disabled: this.disabled })), (this.message || this.isLimitReached) && (h("wpp-inline-message-v3-5-0", { message: this.getMessageText(), type: this.isLimitReached ? 'error' : this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })), allFiles?.length ? (h("div", { class: this.listWrapperCssClasses(), part: "list-wrapper" }, h("ul", { role: "list", class: "file-list", part: "file-list", onScroll: this.handleListScroll }, allFiles.map((file, index) => (h("wpp-file-upload-item-v3-5-0", { key: file.lastModified, format: this.format, parentDisabled: this.disabled, maxLabelLength: this.maxLabelLength, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, file: file, locales: {
         sizeError: this._locales.sizeError,
         formatError: this._locales.formatError,
       }, part: "file-item", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'item') })))))) : null));
   }
   static get is() { return "wpp-file-upload"; }
-  static get registryIs() { return "wpp-file-upload-v4-0-0"; }
+  static get registryIs() { return "wpp-file-upload-v3-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -485,6 +484,25 @@ export class WppFileUpload {
         "reflect": false,
         "defaultValue": "'base64'"
       },
+      "accept": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "string[]",
+          "resolved": "string[]",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [{
+              "name": "deprecated",
+              "text": "- this prop will be deleted in 4.0.0 version as it is not flexible enough to handle different\ncases with files validations, for example based on mimetype and extension at the same time.\nThis property handle only a few extensions: ['.jpg', '.jpeg', '.png', '.txt', '.text', '.doc', '.docx', '.mov'],\nand list will NOT be extended.\n\nIf you want to use this prop, use \"acceptConfig\" property instead.\nNote: \"acceptConfig\" property will have a higher priority in case if both \"acceptConfig\" and \"accept\" props will be provided"
+            }],
+          "text": "Accept file format, you can pass any format you want download, by default is `.jpg, .jpeg, .png`"
+        },
+        "defaultValue": "['.jpg', '.jpeg', '.png']"
+      },
       "acceptConfig": {
         "type": "unknown",
         "mutable": false,
@@ -503,7 +521,7 @@ export class WppFileUpload {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "Configuration for accepted file formats. This property allows you to specify supported file types\nusing an object where the key is the MIME type and the value is an array of file extensions.\n\nExample:\n{\n  'image/png': ['.png'],\n  'text/html': ['.htm', '.html']\n}\n\nTo allow all file types, pass an empty object (`{}`) or leave the property undefined."
+          "text": "Configuration for accepted file formats. This property allows you to specify supported file types\nusing an object where the key is the MIME type and the value is an array of file extensions.\n\nExample:\n{\n  'image/png': ['.png'],\n  'text/html': ['.htm', '.html']\n}\n\nTo allow all file types, pass an empty object (`{}`) or leave the property undefined.\n\nNote: This property offers greater flexibility compared to the deprecated `accept` property,\nallowing validation based on MIME types and extensions simultaneously."
         }
       },
       "messageType": {
@@ -602,6 +620,26 @@ export class WppFileUpload {
         "attribute": "size",
         "reflect": false,
         "defaultValue": "50"
+      },
+      "maxLabelLength": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [{
+              "name": "deprecated",
+              "text": "- this prop will be removed in 4.0.0 version. Truncation will be calculated based on available space."
+            }],
+          "text": "Maximum label length (in characters) of single item"
+        },
+        "attribute": "max-label-length",
+        "reflect": false
       },
       "locales": {
         "type": "unknown",

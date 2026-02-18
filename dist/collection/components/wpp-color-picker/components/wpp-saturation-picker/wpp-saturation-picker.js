@@ -92,7 +92,7 @@ export class SaturationPicker {
       } }))));
   }
   static get is() { return "wpp-saturation-picker"; }
-  static get registryIs() { return "wpp-saturation-picker-v4-0-0"; }
+  static get registryIs() { return "wpp-saturation-picker-v3-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

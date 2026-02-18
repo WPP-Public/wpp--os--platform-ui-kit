@@ -14,10 +14,10 @@ export class WppMenuGroup {
     this.withDivider = false;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "header, divider" }, this.header && (h("wpp-typography-v4-0-0", { type: "2xs-strong", part: "header" }, this.header)), h("slot", null), this.withDivider && h("wpp-divider-v4-0-0", { class: "slot-divider", part: "divider" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "header, divider" }, this.header && (h("wpp-typography-v3-5-0", { type: "2xs-strong", part: "header" }, this.header)), h("slot", null), this.withDivider && h("wpp-divider-v3-5-0", { class: "slot-divider", part: "divider" })));
   }
   static get is() { return "wpp-menu-group"; }
-  static get registryIs() { return "wpp-menu-group-v4-0-0"; }
+  static get registryIs() { return "wpp-menu-group-v3-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

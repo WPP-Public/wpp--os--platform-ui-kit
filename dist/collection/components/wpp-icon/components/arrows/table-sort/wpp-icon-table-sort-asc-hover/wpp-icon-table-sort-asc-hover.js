@@ -13,7 +13,7 @@ export class WppIconTableSortAscHover {
     return (h(WppIcon, { name: "wpp-icon-table-sort-asc-hover", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M10 4L13.4641 8.5H6.5359L10 4Z", fill: this.upArrowColor }), h("path", { d: "M10 16L13.4641 11.5H6.5359L10 16Z", fill: this.downArrowColor })));
   }
   static get is() { return "wpp-icon-table-sort-asc-hover"; }
-  static get registryIs() { return "wpp-icon-table-sort-asc-hover-v4-0-0"; }
+  static get registryIs() { return "wpp-icon-table-sort-asc-hover-v3-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -92,7 +92,7 @@ export class WppIconTableSortAscHover {
         "docs": {
           "tags": [{
               "name": "deprecated",
-              "text": "This prop is maintained for backward compatibility but won't affect the icon since arrows have different colors.\nThis property will be removed in version 5.0.0."
+              "text": "This prop is maintained for backward compatibility but won't affect the icon since arrows have different colors."
             }],
           "text": "Defines the icon color."
         },

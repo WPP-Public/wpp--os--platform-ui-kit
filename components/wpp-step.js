@@ -47,7 +47,7 @@ const WppStep$1 = /*@__PURE__*/ proxyCustomElement(class WppStep extends HTMLEle
     };
     this.renderStep = () => {
       if (!this.isSubStep() && this.completed) {
-        return h("wpp-icon-tick-v4-0-0", { color: "var(--wpp-grey-color-000)" });
+        return h("wpp-icon-tick-v3-5-0", { color: "var(--wpp-grey-color-000)" });
       }
       if (this.isSubStep()) {
         return null;
@@ -109,13 +109,13 @@ const WppStep$1 = /*@__PURE__*/ proxyCustomElement(class WppStep extends HTMLEle
     this.renderStepTypeData = () => {
       let icon;
       if (this.error)
-        icon = h("wpp-icon-error-v4-0-0", null);
+        icon = h("wpp-icon-error-v3-5-0", null);
       if (this.warning)
-        icon = h("wpp-icon-warning-v4-0-0", null);
+        icon = h("wpp-icon-warning-v3-5-0", null);
       if (!icon)
         return null;
       if (this.iconDescription) {
-        return (h("wpp-tooltip-v4-0-0", { config: { placement: 'bottom' }, text: this.iconDescription }, icon));
+        return (h("wpp-tooltip-v3-5-0", { config: { placement: 'bottom' }, text: this.iconDescription }, icon));
       }
       return (h("div", { class: "icon", part: "icon" }, icon));
     };
@@ -132,11 +132,15 @@ const WppStep$1 = /*@__PURE__*/ proxyCustomElement(class WppStep extends HTMLEle
     this.error = false;
     this.warning = false;
     this.lastStep = false;
+    this.optional = false;
     this.orientation = 'vertical';
     this.expanded = false;
     this.displayedStep = false;
     this.hasDescription = false;
     this.iconDescription = undefined;
+    this.locales = {
+      optional: 'Optional',
+    };
   }
   componentDidLoad() {
     this.applyTruncationIfNeeded();
@@ -153,16 +157,16 @@ const WppStep$1 = /*@__PURE__*/ proxyCustomElement(class WppStep extends HTMLEle
     this.applyTruncationIfNeeded();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, step, step-bg, step-index, step-label, optional, icon, last-step, last-step-text, label, label-wrapper, ws-wrapper, ws-inner", onClick: this.handleStepClick }, h("div", { class: this.stepWrapperCssClasses(), part: "wrapper" }, this.orientation === 'vertical' && (h("div", { class: this.stepBgCssClasses(), part: "step-bg" }, h("div", { class: this.stepTextWrapperCssClasses(), part: "step-label" }, !this.labelTooltipText ? (h(WrappedSlot, { onSlotchange: this.handleSlotChange, name: "label" })) : (h("wpp-tooltip-v4-0-0", { class: "label-tooltip", config: { placement: 'right' }, text: this.labelTooltipText }, h(WrappedSlot, { onSlotchange: this.handleSlotChange, wrapperClass: 'label-wrapper', name: "label" }))), this.tooltipText ? (h("div", { class: "step-description" }, h("wpp-tooltip-v4-0-0", { class: "description-tooltip", config: { placement: 'right' }, text: this.tooltipText }, h(WrappedSlot, { onSlotchange: this.handleSlotChange, name: "description" })))) : (h("div", { class: "step-description" }, h("slot", { onSlotchange: this.handleSlotChange, name: "description" })))), this.renderStepTypeData())), h("div", { class: this.stepCssClasses(), part: "step" }, h("span", { class: this.stepIndexCssClasses(), part: "step-index" }, this.renderStep()), this.orientation === 'horizontal' && (h("div", { class: this.stepTextWrapperCssClasses(), part: "step-label" }, h(WrappedSlot, { name: "label" }), this.renderStepTypeData()))), !this.lastStep && (h("div", { class: this.stepConnectorCssClasses(), part: "last-step" }, h("span", { class: this.connectorLineCssClasses(), part: "last-step-text" })))), h(WrappedSlot, { wrapperClass: "steps-list-container" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, step, step-bg, step-index, step-label, optional, icon, last-step, last-step-text, label, label-wrapper, ws-wrapper, ws-inner", onClick: this.handleStepClick }, h("div", { class: this.stepWrapperCssClasses(), part: "wrapper" }, this.orientation === 'vertical' && (h("div", { class: this.stepBgCssClasses(), part: "step-bg" }, h("div", { class: this.stepTextWrapperCssClasses(), part: "step-label" }, !this.labelTooltipText ? (h(WrappedSlot, { onSlotchange: this.handleSlotChange, name: "label" })) : (h("wpp-tooltip-v3-5-0", { class: "label-tooltip", config: { placement: 'right' }, text: this.labelTooltipText }, h(WrappedSlot, { onSlotchange: this.handleSlotChange, wrapperClass: 'label-wrapper', name: "label" }))), this.tooltipText ? (h("div", { class: "step-description" }, h("wpp-tooltip-v3-5-0", { class: "description-tooltip", config: { placement: 'right' }, text: this.tooltipText }, h(WrappedSlot, { onSlotchange: this.handleSlotChange, name: "description" })))) : (h("div", { class: "step-description" }, h("slot", { onSlotchange: this.handleSlotChange, name: "description" })))), this.renderStepTypeData())), h("div", { class: this.stepCssClasses(), part: "step" }, h("span", { class: this.stepIndexCssClasses(), part: "step-index" }, this.renderStep()), this.orientation === 'horizontal' && (h("div", { class: this.stepTextWrapperCssClasses(), part: "step-label" }, h(WrappedSlot, { name: "label" }), this.renderStepTypeData()))), !this.lastStep && (h("div", { class: this.stepConnectorCssClasses(), part: "last-step" }, h("span", { class: this.connectorLineCssClasses(), part: "last-step-text" })))), h(WrappedSlot, { wrapperClass: "steps-list-container" })));
   }
-  static get registryIs() { return "wpp-step-v4-0-0"; }
+  static get registryIs() { return "wpp-step-v3-5-0"; }
   get host() { return this; }
   static get watchers() { return {
     "warning": ["watchErrorIcon"],
     "error": ["watchErrorIcon"]
   }; }
   static get style() { return wppStepCss; }
-}, [1, "wpp-step", "wpp-step-v4-0-0", {
+}, [1, "wpp-step", "wpp-step-v3-5-0", {
     "active": [4],
     "completed": [4],
     "completedLine": [4, "completed-line"],
@@ -174,11 +178,13 @@ const WppStep$1 = /*@__PURE__*/ proxyCustomElement(class WppStep extends HTMLEle
     "error": [516],
     "warning": [516],
     "lastStep": [516, "last-step"],
+    "optional": [516],
     "orientation": [513],
     "expanded": [516],
     "displayedStep": [516, "displayed-step"],
     "hasDescription": [516, "has-description"],
     "iconDescription": [513, "icon-description"],
+    "locales": [16],
     "tooltipText": [32],
     "labelTooltipText": [32]
   }]);
@@ -186,34 +192,34 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-step-v4-0-0", "wpp-icon-error-v4-0-0", "wpp-icon-tick-v4-0-0", "wpp-icon-warning-v4-0-0", "wpp-internal-tooltip-v4-0-0", "wpp-tooltip-v4-0-0"];
+  const components = ["wpp-step-v3-5-0", "wpp-icon-error-v3-5-0", "wpp-icon-tick-v3-5-0", "wpp-icon-warning-v3-5-0", "wpp-internal-tooltip-v3-5-0", "wpp-tooltip-v3-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-step-v4-0-0":
+    case "wpp-step-v3-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppStep$1);
       }
       break;
-    case "wpp-icon-error-v4-0-0":
+    case "wpp-icon-error-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-icon-tick-v4-0-0":
+    case "wpp-icon-tick-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-warning-v4-0-0":
+    case "wpp-icon-warning-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-internal-tooltip-v4-0-0":
+    case "wpp-internal-tooltip-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-0-0":
+    case "wpp-tooltip-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

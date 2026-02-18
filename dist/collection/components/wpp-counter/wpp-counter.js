@@ -184,9 +184,10 @@ export class WppCounter {
     this.focusType = undefined;
     this.currentFocused = null;
     this.name = undefined;
-    this.value = 0;
-    this.min = 0;
+    this.value = 1;
+    this.min = 1;
     this.max = 100;
+    this.placeholder = undefined;
     this.withButtons = true;
     this.required = false;
     this.disabled = false;
@@ -205,6 +206,11 @@ export class WppCounter {
     this.step = 1;
   }
   updateFormattedValue() {
+    // Handle undefined/null value for placeholder state
+    if (this.value === undefined || this.value === null) {
+      this.formattedValue = '';
+      return;
+    }
     this.formatValue();
   }
   /**
@@ -214,25 +220,28 @@ export class WppCounter {
     this.inputRef?.focus();
   }
   componentWillLoad() {
-    if (!this.withButtons) {
-      console.warn('[WppCounter] The `withButtons` prop is deprecated and will be removed in v5.0.0. ' +
-        'The counter will always display with buttons. Use a standard input component for cases without buttons.');
+    // Support placeholder state when value is explicitly set to undefined/null
+    // Note: Due to default value of 1, this only triggers when consumer explicitly passes undefined
+    if (this.value === undefined || this.value === null) {
+      this.formattedValue = '';
     }
-    this.formattedValue = String(this.value);
-    this.formatValue();
+    else {
+      this.formattedValue = String(this.value);
+      this.formatValue();
+    }
   }
   componentDidLoad() {
     autoFocusElement(this.autoFocus, this.inputRef);
   }
   render() {
     const messageId = this.message ? `${this.name}-message` : undefined;
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, body, decrease-button, decrease-icon, input, increase-button, increase-icon, message", onMouseDown: this.onMouseDown, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-0-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.counterWrapperCssClasses(), part: "body" }, this.withButtons && (h("button", { type: "button", class: this.decreaseWrapperCssClasses(), onClick: this.decreaseValue, part: "decrease-button", "aria-label": "Decrease value", disabled: (!this.isInputEmpty() && this.value === this.min) || this.disabled, tabIndex: (!this.isInputEmpty() && this.value === this.min) || this.disabled ? -1 : 0, onFocus: this.onElementFocus, onBlur: this.onElementBlur, onKeyUp: this.onKeyUp, onKeyDown: e => this.onKeyDownButton(e, 'decrease') }, h("wpp-icon-remove-v4-0-0", { class: "icon-minus", part: "decrease-icon" }))), h("input", { id: this.name, type: this.withButtons ? 'text' : 'decimal', class: this.inputCssClasses(), name: this.name, onKeyDown: this.handleValidate, value: this.formattedValue, required: this.required, disabled: this.disabled, onInput: this.onInput, onKeyUp: this.onKeyUp, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label || (!this.labelConfig?.text ? 'Counter value' : undefined), "aria-labelledby": this.labelConfig?.labelId || undefined, "aria-describedby": messageId, autocomplete: this.ariaProps.autocomplete || 'off', part: "input", title: "", onFocus: e => {
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, body, decrease-button, decrease-icon, input, increase-button, increase-icon, message", onMouseDown: this.onMouseDown, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v3-5-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.counterWrapperCssClasses(), part: "body" }, this.withButtons && (h("button", { type: "button", class: this.decreaseWrapperCssClasses(), onClick: this.decreaseValue, part: "decrease-button", "aria-label": "Decrease value", disabled: (!this.isInputEmpty() && this.value === this.min) || this.disabled, tabIndex: (!this.isInputEmpty() && this.value === this.min) || this.disabled ? -1 : 0, onFocus: this.onElementFocus, onBlur: this.onElementBlur, onKeyUp: this.onKeyUp, onKeyDown: e => this.onKeyDownButton(e, 'decrease') }, h("wpp-icon-remove-v3-5-0", { class: "icon-minus", part: "decrease-icon" }))), h("input", { id: this.name, type: this.withButtons ? 'text' : 'decimal', class: this.inputCssClasses(), name: this.name, onKeyDown: this.handleValidate, value: this.formattedValue, required: this.required, disabled: this.disabled, placeholder: this.placeholder, onInput: this.onInput, onKeyUp: this.onKeyUp, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label || (!this.labelConfig?.text ? 'Counter value' : undefined), "aria-labelledby": this.labelConfig?.labelId || undefined, "aria-describedby": messageId, autocomplete: this.ariaProps.autocomplete || 'off', part: "input", title: "", onFocus: e => {
         this.onElementFocus(e);
         this.onFocus(e);
-      }, onBlur: this.onElementBlur }), this.withButtons && (h("button", { type: "button", class: this.increaseWrapperCssClasses(), onClick: this.increaseValue, part: "increase-button", "aria-label": "Increase value", disabled: (!this.isInputEmpty() && this.value === this.max) || this.disabled, tabIndex: (!this.isInputEmpty() && this.value === this.max) || this.disabled ? -1 : 0, onFocus: this.onElementFocus, onBlur: this.onElementBlur, onKeyUp: this.onKeyUp, onKeyDown: e => this.onKeyDownButton(e, 'increase') }, h("wpp-icon-plus-v4-0-0", { class: "icon-plus", part: "increase-icon" })))), this.message && (h("wpp-inline-message-v4-0-0", { id: messageId, message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" }))));
+      }, onBlur: this.onElementBlur }), this.withButtons && (h("button", { type: "button", class: this.increaseWrapperCssClasses(), onClick: this.increaseValue, part: "increase-button", "aria-label": "Increase value", disabled: (!this.isInputEmpty() && this.value === this.max) || this.disabled, tabIndex: (!this.isInputEmpty() && this.value === this.max) || this.disabled ? -1 : 0, onFocus: this.onElementFocus, onBlur: this.onElementBlur, onKeyUp: this.onKeyUp, onKeyDown: e => this.onKeyDownButton(e, 'increase') }, h("wpp-icon-plus-v3-5-0", { class: "icon-plus", part: "increase-icon" })))), this.message && (h("wpp-inline-message-v3-5-0", { id: messageId, message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" }))));
   }
   static get is() { return "wpp-counter"; }
-  static get registryIs() { return "wpp-counter-v4-0-0"; }
+  static get registryIs() { return "wpp-counter-v3-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -274,12 +283,18 @@ export class WppCounter {
         "required": false,
         "optional": false,
         "docs": {
-          "tags": [],
+          "tags": [{
+              "name": "default",
+              "text": "1"
+            }, {
+              "name": "deprecated",
+              "text": "The default value of `1` is deprecated and will be removed in v5.0.0.\nTo show a placeholder, explicitly set `value` to `undefined` or do not bind the value prop.\nAfter v5.0.0, the counter will show the placeholder by default when no value is provided."
+            }],
           "text": "Defines the counter value."
         },
         "attribute": "value",
         "reflect": false,
-        "defaultValue": "0"
+        "defaultValue": "1"
       },
       "min": {
         "type": "number",
@@ -297,7 +312,7 @@ export class WppCounter {
         },
         "attribute": "min",
         "reflect": false,
-        "defaultValue": "0"
+        "defaultValue": "1"
       },
       "max": {
         "type": "number",
@@ -317,6 +332,23 @@ export class WppCounter {
         "reflect": false,
         "defaultValue": "100"
       },
+      "placeholder": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Defines the counter placeholder text."
+        },
+        "attribute": "placeholder",
+        "reflect": false
+      },
       "withButtons": {
         "type": "boolean",
         "mutable": false,
@@ -328,10 +360,7 @@ export class WppCounter {
         "required": false,
         "optional": false,
         "docs": {
-          "tags": [{
-              "name": "deprecated",
-              "text": "The `withButtons` prop is deprecated and will be removed in v5.0.0.\nThe counter will always display with buttons. Use a standard input component for cases without buttons."
-            }],
+          "tags": [],
           "text": "If `true`, the counter will show increment/decrement(+/-) buttons"
         },
         "attribute": "with-buttons",

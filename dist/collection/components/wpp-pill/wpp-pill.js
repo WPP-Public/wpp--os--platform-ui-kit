@@ -1,5 +1,5 @@
 import { Host, h } from '@stencil/core';
-import { debounce, getSlotEmptyStates, transformToVersionedTag, truncate } from '../../utils/utils';
+import { getSlotEmptyStates, transformToVersionedTag, truncate } from '../../utils/utils';
 import { FOCUS_TYPE } from '../../types/common';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 const getInitFocusInfo = () => ({
@@ -103,90 +103,6 @@ export class WppPill {
         return 0;
       }
     };
-    this.getLabelText = () => {
-      if (!this.maxLength || this.maxLength <= 0)
-        return this.label;
-      return truncate(this.label, this.maxLength);
-    };
-    this.checkLabelOverflow = () => {
-      if (!this.labelRef) {
-        const found = this.findLabelEl();
-        if (found)
-          this.setLabelRef(found);
-      }
-      if (!this.labelRef)
-        return;
-      const el = this.labelRef;
-      const isTruncated = el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight;
-      if (isTruncated !== this.isOverflowTruncated) {
-        this.isOverflowTruncated = isTruncated;
-      }
-    };
-    this.initResizeObserver = () => {
-      if (!this.showTooltipOnTruncate)
-        return;
-      if (!this.labelRef) {
-        const found = this.findLabelEl();
-        if (found)
-          this.setLabelRef(found);
-      }
-      if (!this.labelRef)
-        return;
-      if (!this.resizeObserverCallback) {
-        this.resizeObserverCallback = debounce(() => this.checkLabelOverflow(), 50);
-      }
-      if (!this.resizeObserver) {
-        this.resizeObserver = new ResizeObserver(() => {
-          this.resizeObserverCallback?.();
-        });
-      }
-      try {
-        this.resizeObserver.observe(this.labelRef);
-      }
-      catch {
-        console.error('Error observing labelRef');
-      }
-      requestAnimationFrame(() => this.checkLabelOverflow());
-    };
-    this.renderLabel = () => {
-      const originalLabel = this.label;
-      const displayed = this.getLabelText();
-      if (!originalLabel) {
-        return (h("div", { class: "label", part: "label", ref: this.setLabelRef }, h("slot", { part: "inner" })));
-      }
-      const wasMaxLengthTruncated = !!this.maxLength && this.maxLength > 0 && displayed !== originalLabel;
-      const shouldShowTooltip = this.showTooltipOnTruncate && (this.isOverflowTruncated || wasMaxLengthTruncated);
-      const labelNode = (h("div", { class: "label", part: "label", ref: this.setLabelRef }, displayed));
-      return shouldShowTooltip ? (h("wpp-tooltip-v4-0-0", { text: originalLabel, disabled: this.disabled }, labelNode)) : (labelNode);
-    };
-    this.setLabelRef = (el) => {
-      if (el === this.labelRef)
-        return;
-      if (this.resizeObserver && this.labelRef) {
-        try {
-          this.resizeObserver.unobserve(this.labelRef);
-        }
-        catch {
-          console.error('Error unobserving labelRef');
-        }
-      }
-      this.labelRef = el;
-      if (this.resizeObserver && this.labelRef) {
-        try {
-          this.resizeObserver.observe(this.labelRef);
-        }
-        catch {
-          console.error('Error observing labelRef');
-        }
-      }
-      requestAnimationFrame(() => this.checkLabelOverflow());
-    };
-    this.findLabelEl = () => {
-      const root = this.host.shadowRoot;
-      if (!root)
-        return undefined;
-      return root.querySelector('[part="label"]');
-    };
     this.cssClasses = () => ({
       'pill-wrapper': true,
       'icon-start': this.hasIconStartSlot,
@@ -211,11 +127,15 @@ export class WppPill {
     this.hostCssClasses = () => ({
       'wpp-pill': true,
     });
+    this.getLabelText = () => {
+      if (!this.maxLength || this.maxLength <= 0)
+        return this.label;
+      return truncate(this.label, this.maxLength);
+    };
     this.hasIconStartSlot = false;
     this.hasSquareIcon = false;
     this.componentState = undefined;
     this.focusType = getInitFocusInfo();
-    this.isOverflowTruncated = false;
     this.value = undefined;
     this.size = 'm';
     this.type = undefined;
@@ -226,7 +146,6 @@ export class WppPill {
     this.ariaProps = {};
     this.name = undefined;
     this.maxLength = undefined;
-    this.showTooltipOnTruncate = true;
   }
   componentWillLoad() {
     const pillGroup = this.host.closest(transformToVersionedTag('wpp-pill-group'));
@@ -234,26 +153,20 @@ export class WppPill {
       this.type = pillGroup.type;
     }
   }
-  componentDidLoad() {
-    this.initResizeObserver();
-  }
-  disconnectedCallback() {
-    this.resizeObserver?.disconnect();
-  }
   setFocus() {
     if (this.inputEl) {
       this.inputEl.focus();
     }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-checked": this.checked, "aria-hidden": this.disabled ? 'true' : null, onClick: this.onClick, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'wrapper'), role: "checkbox", exportparts: "input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper", tabIndex: this.checkTabIndex() }, h("input", { class: "pill-input", type: "checkbox", name: this.name, disabled: this.disabled, ref: focusEl => (this.inputEl = focusEl), "aria-label": this.ariaProps.label, part: "input", title: "", tabIndex: -1 }), h("div", { class: this.cssClasses(), part: "pill-wrapper" }, this.type === 'draggable' ? (h("div", { class: this.slotCssClasses(), part: "drag-wrapper" }, h("wpp-icon-drag-v4-0-0", { class: { [`${this.focusType['icon-draggable']}`]: true }, part: "drag-icon", onMouseEnter: () => this.updateComponentState('hover'), onMouseLeave: () => this.updateComponentState(null), onMouseDown: ev => {
+    return (h(Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-checked": this.checked, "aria-hidden": this.disabled ? 'true' : null, onClick: this.onClick, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'wrapper'), role: "checkbox", exportparts: "input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper", tabIndex: this.checkTabIndex() }, h("input", { class: "pill-input", type: "checkbox", name: this.name, disabled: this.disabled, ref: focusEl => (this.inputEl = focusEl), "aria-label": this.ariaProps.label, part: "input", title: "", tabIndex: -1 }), h("div", { class: this.cssClasses(), part: "pill-wrapper" }, this.type === 'draggable' ? (h("div", { class: this.slotCssClasses(), part: "drag-wrapper" }, h("wpp-icon-drag-v3-5-0", { class: { [`${this.focusType['icon-draggable']}`]: true }, part: "drag-icon", onMouseEnter: () => this.updateComponentState('hover'), onMouseLeave: () => this.updateComponentState(null), onMouseDown: ev => {
         this.updateComponentState('active');
         this.onDragPress(ev);
         this.onMouseDown();
-      }, onMouseUp: () => this.updateComponentState(null), tabIndex: this.disabled ? -1 : 0, onKeyUp: (event) => this.onKeyUp(event, 'icon-draggable') }))) : (h(WrappedSlot, { name: "icon-start", wrapperClass: this.slotCssClasses(), onSlotchange: this.updateSlotData })), this.renderLabel(), this.checked && this.type === 'multiple' && h("wpp-icon-tick-v4-0-0", { class: "active-icon", part: "active-icon" }), this.removable && (this.type === 'display' || this.type === 'draggable') && (h("wpp-icon-cross-v4-0-0", { class: { [`${this.focusType['icon-close']}`]: true }, part: "remove-icon", onClick: this.onClose, tabIndex: this.disabled ? -1 : 0, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'icon-close') })))));
+      }, onMouseUp: () => this.updateComponentState(null), tabIndex: this.disabled ? -1 : 0, onKeyUp: (event) => this.onKeyUp(event, 'icon-draggable') }))) : (h(WrappedSlot, { name: "icon-start", wrapperClass: this.slotCssClasses(), onSlotchange: this.updateSlotData })), h("div", { class: "label", part: "label" }, this.getLabelText() || h("slot", { part: "inner" })), this.checked && this.type === 'multiple' && h("wpp-icon-tick-v3-5-0", { class: "active-icon", part: "active-icon" }), this.removable && (this.type === 'display' || this.type === 'draggable') && (h("wpp-icon-cross-v3-5-0", { class: { [`${this.focusType['icon-close']}`]: true }, part: "remove-icon", onClick: this.onClose, tabIndex: this.disabled ? -1 : 0, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'icon-close') })))));
   }
   static get is() { return "wpp-pill"; }
-  static get registryIs() { return "wpp-pill-v4-0-0"; }
+  static get registryIs() { return "wpp-pill-v3-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -458,32 +371,11 @@ export class WppPill {
         "required": false,
         "optional": true,
         "docs": {
-          "tags": [{
-              "name": "deprecated",
-              "text": "- this prop will be deleted in version 4.0.0."
-            }],
+          "tags": [],
           "text": "Defines the maximum label length (in characters) of a single item.\nZero or fewer means there is no limit"
         },
         "attribute": "max-length",
         "reflect": false
-      },
-      "showTooltipOnTruncate": {
-        "type": "boolean",
-        "mutable": false,
-        "complexType": {
-          "original": "true",
-          "resolved": "boolean",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "If set, the tooltip will be shown when the text is truncated."
-        },
-        "attribute": "show-tooltip-on-truncate",
-        "reflect": false,
-        "defaultValue": "true"
       }
     };
   }
@@ -492,8 +384,7 @@ export class WppPill {
       "hasIconStartSlot": {},
       "hasSquareIcon": {},
       "componentState": {},
-      "focusType": {},
-      "isOverflowTruncated": {}
+      "focusType": {}
     };
   }
   static get events() {

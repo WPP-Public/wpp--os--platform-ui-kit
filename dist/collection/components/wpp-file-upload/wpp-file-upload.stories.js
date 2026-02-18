@@ -23,13 +23,14 @@ export default {
   },
 };
 export const FileUpload = {
-  render: args => html ` <wpp-file-upload-v4-0-0
+  render: args => html ` <wpp-file-upload-v3-5-0
       .disabled=${args.disabled}
       .acceptConfig=${args.acceptConfig}
       .size=${args.size}
       .maxFiles=${args.maxFiles}
       .multiple=${args.multiple}
       .messageType=${args.messageType}
+      .maxLabelLength=${args.maxLabelLength}
       .labelConfig=${args.labelConfig}
       .required=${args.required}
       .message=${args.message}
@@ -47,6 +48,7 @@ export const FileUpload = {
       'image/png': ['.png'],
       'text/html': ['.htm', '.html'],
     },
+    maxLabelLength: 30,
     message: '',
     labelConfig: {
       text: 'File Upload',

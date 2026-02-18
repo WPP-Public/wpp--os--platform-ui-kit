@@ -87,17 +87,17 @@ export const Icons = {
     const getIconsData = (args) => iconsDataList
       .map(section => `<section>
         ${section.groups?.length > 0
-      ? `<wpp-typography-v4-0-0 type="xl-heading" tag="h3" style="display: flex; margin-top: 24px">
+      ? `<wpp-typography-v3-5-0 type="xl-heading" tag="h3" style="display: flex; margin-top: 24px">
               ${section.title}
-            </wpp-typography-v4-0-0>`
+            </wpp-typography-v3-5-0>`
       : ''}
         <div style='display: flex; flex-wrap: wrap;'>
           ${section.groups?.length > 0
       ? section.groups
         .map(group => `<div style='width: 100%; background: #F8F9FB; padding:16px; border-radius: 8px'>
-               <wpp-typography-v4-0-0 type="m-midi" tag="h4" style="display: flex;">
+               <wpp-typography-v3-5-0 type="m-midi" tag="h4" style="display: flex;">
                  ${group.title}
-               </wpp-typography-v4-0-0>
+               </wpp-typography-v3-5-0>
                ${group.icons
         .map(icon => {
         if (icon.directions) {
@@ -160,13 +160,13 @@ export const Icons = {
     const emptyState = () => {
       const isNothingFound = iconsDataList.find(section => section.groups?.length > 0);
       if (!isNothingFound) {
-        return `<wpp-typography-v4-0-0 type='m-midi'>Nothing Found</wpp-typography-v4-0-0>`;
+        return `<wpp-typography-v3-5-0 type='m-midi'>Nothing Found</wpp-typography-v3-5-0>`;
       }
       return '';
     };
     return html `<div style=${styleMap(pageStyle)}>
       <div style=${styleMap(pageWrapper)}>
-        <wpp-typography-v4-0-0 type="3xl-heading" tag="h3" style=${styleMap(headerStyle)}>Icons</wpp-typography-v4-0-0>
+        <wpp-typography-v3-5-0 type="3xl-heading" tag="h3" style=${styleMap(headerStyle)}>Icons</wpp-typography-v3-5-0>
         <h3 style=${styleMap(textStyle)}>
           For icons, visual balance is the perceived size of an icon relative to other elements. The more visual balance
           there is, the easier it becomes to rely on other characteristics for establishing a visual hierarchy and flow
@@ -175,7 +175,7 @@ export const Icons = {
         <div style=${styleMap(actionsWrapper)}>
           <div style=${styleMap(actionItemStyle)}>
             <p style=${styleMap(actionItemLabelStyle)}>Filter icons by name</p>
-            <wpp-input-v4-0-0 type="search" @wppChange="${handleIconListChange}"></wpp-input-v4-0-0>
+            <wpp-input-v3-5-0 type="search" @wppChange="${handleIconListChange}"></wpp-input-v3-5-0>
           </div>
         </div>
         ${unsafeHTML(getIconsData(args))} ${unsafeHTML(emptyState())}

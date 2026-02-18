@@ -13,7 +13,7 @@ export default {
 };
 export const View = {
   render: (args) => html `
-    <wpp-richtext-view-v4-0-0 .value=${value} debug=${args.debug} />
+    <wpp-richtext-view-v3-5-0 .value=${value} debug=${args.debug} />
   `,
   args: {},
 };

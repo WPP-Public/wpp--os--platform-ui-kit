@@ -1,5 +1,5 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
-import { m as menuListConfig, c as isEqual_1 } from './menuListConfig.js';
+import { m as menuListConfig, i as isEqual_1 } from './menuListConfig.js';
 import { k as transformToVersionedTag, w as getHighestContainerInDOM } from './utils.js';
 import { W as WPP_LIST_CLASSNAME, C as CONTEXT_ITEM_TAG, T as TOPBAR_NAVIGATION_ITEM_TAG, M as MENU_BAR_ROLE, a as MENU_ROLE } from './constants.js';
 import { Z as Z_INDEX } from './consts.js';
@@ -261,14 +261,14 @@ const WppMenuContext = /*@__PURE__*/ proxyCustomElement(class WppMenuContext ext
     };
     return (h(Host, { class: this.menuCssClasses(), exportparts: "trigger, list-wrapper, list, inner", onFocusout: this.onFocusout }, h("div", { ref: this.getTriggerRef, onClick: this.handleClickTrigger, class: this.triggerWrapperCssClasses() }, h("slot", { name: "trigger-element", part: "trigger" })), h("div", { class: "wpp-list-wrapper", part: "list-wrapper", ref: ref => (this.wppListWrapperRef = ref) }, h("ul", { class: this.listWrapperCssClasses(), style: style, ref: this.getContentRef, role: MENU_ROLE, part: "list" }, h("slot", { part: "inner" })))));
   }
-  static get registryIs() { return "wpp-menu-context-v4-0-0"; }
+  static get registryIs() { return "wpp-menu-context-v3-5-0"; }
   get host() { return this; }
   static get watchers() { return {
     "dropdownConfig": ["updateDropdownConfig"],
     "isInComponent": ["updateIsInComponent"]
   }; }
   static get style() { return wppMenuContextCss; }
-}, [6, "wpp-menu-context", "wpp-menu-context-v4-0-0", {
+}, [6, "wpp-menu-context", "wpp-menu-context-v3-5-0", {
     "listWidth": [513, "list-width"],
     "dropdownConfig": [1040],
     "appendToListWrapper": [4, "append-to-list-wrapper"],
@@ -284,9 +284,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-menu-context-v4-0-0"];
+  const components = ["wpp-menu-context-v3-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-menu-context-v4-0-0":
+    case "wpp-menu-context-v3-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppMenuContext);
       }

@@ -14,7 +14,7 @@ const WppIconStopFilled = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-stop-filled", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M3 4.36111C3 3.60939 3.60939 3 4.36111 3H15.6389C16.3906 3 17 3.60939 17 4.36111V15.6389C17 16.3906 16.3906 17 15.6389 17H4.36111C3.60939 17 3 16.3906 3 15.6389V4.36111Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-stop-filled-v4-0-0"; }
+  static get registryIs() { return "wpp-icon-stop-filled-v3-5-0"; }
 };
 WppIconStopFilled.style = wppIconCss;
 

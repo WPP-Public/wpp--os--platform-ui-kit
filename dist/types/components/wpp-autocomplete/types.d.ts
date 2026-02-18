@@ -1,11 +1,16 @@
-import { ListItemInterface, SelectOptionChangeEventDetail } from '../wpp-select/types';
-import { ListValue } from '../wpp-list-item/types';
+import { SelectOptionChangeEventDetail } from '../wpp-select/types';
+import { LabelConfig } from '../wpp-label/types';
+import { ListItemProps } from '../wpp-list-item/types';
+export type AutocompleteOptionType = 'multiple' | 'single';
 export type AutocompleteOption = Record<string, any>;
-export type AutocompleteTypes = 'regular' | 'extended';
-export type AutocompleteChangeReason = 'removeOption' | 'selectOption';
+export type AutocompleteOptionList = AutocompleteOption[];
+export interface AutocompleteDefaultOption extends AutocompleteOption {
+  id: AutocompleteOptionId;
+  label: string;
+}
+export type AutocompleteExtendedOption = ListItemProps & AutocompleteOption;
 export type AutocompleteChangeEventDetail = ({
-  value: ListValue[];
-  selectedOptions: ListItemInterface[];
+  value: AutocompleteOptionList;
   reason: AutocompleteChangeReason;
 } & {
   name?: string;
@@ -19,19 +24,23 @@ export type AutocompleteChangeEventDetail = ({
 } & {
   name?: string;
 });
-export type GetItemKeyType<V = any, K = string | number> = (value: V) => K | undefined;
-export interface AutocompleteLocales {
-  nothingFound: string;
-  loading: string;
-  selected: (count: number) => string;
-  showMore: string;
-  showLess: string;
-  suggestionTitle: string;
-  createNewElement: (query: string) => string;
-  clearMultiple: string;
-  clearSingle: string;
-}
+export type AutocompleteChangeReason = 'applyOption' | 'removeOption' | 'selectOption';
+export type AutocompleteOptionId = string | number;
+export type GetOptionIdHandler = (item: AutocompleteOption) => AutocompleteOptionId;
+export type GetOptionLabelHandler = (item: AutocompleteOption) => string;
+export type LoadMoreHandler = () => Promise<void>;
 export interface CancellablePromise<T> extends Promise<T> {
   cancelled?: boolean;
 }
-export type LoadMoreHandler = () => Promise<void>;
+export interface AutocompleteLocales {
+  nothingFound: string;
+  beginTyping: string;
+  more: string;
+  showMore: string;
+  showLess: string;
+  selected: (count: number) => string;
+  loading: string;
+  createNewElement: string;
+}
+export type AutocompleteTypes = 'regular' | 'extended';
+export type AutocompleteLabelConfig = LabelConfig;

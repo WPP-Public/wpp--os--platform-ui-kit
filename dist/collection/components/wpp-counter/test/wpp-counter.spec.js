@@ -5,14 +5,14 @@ import { WppLabel } from '../../wpp-label/wpp-label';
 import { WppInternalLabel } from '../../wpp-label/components/wpp-internal-label/wpp-internal-label';
 describe('wpp-counter', () => {
   describe('rendering', () => {
-    it('should render component with default value of 0', async () => {
+    it('should render component with default value of 1', async () => {
       const page = await newSpecPage({
         components: [WppCounter],
         html: `<wpp-counter />`,
       });
       expect(page.root).toMatchSnapshot();
       const input = page.root?.shadowRoot?.querySelector('input');
-      expect(input?.value).toBe('0');
+      expect(input?.value).toBe('1');
     });
     it('should render component with warning message', async () => {
       const page = await newSpecPage({
@@ -41,39 +41,139 @@ describe('wpp-counter', () => {
       };
       const page = await newSpecPage({
         components: [WppCounter, WppLabel, WppInternalLabel],
-        template: () => h("wpp-counter-v4-0-0", { labelConfig: labelConfig }),
+        template: () => h("wpp-counter-v3-5-0", { labelConfig: labelConfig }),
       });
       expect(page.root).toMatchSnapshot();
     });
   });
-  describe('withButtons deprecation', () => {
-    it('should log deprecation warning when withButtons is false', async () => {
-      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
-      await newSpecPage({
+  describe('placeholder functionality', () => {
+    it('should display placeholder text in input element', async () => {
+      const page = await newSpecPage({
         components: [WppCounter],
-        html: `<wpp-counter with-buttons="false" />`,
+        html: `<wpp-counter placeholder="Enter quantity" />`,
       });
-      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('The `withButtons` prop is deprecated'));
-      consoleSpy.mockRestore();
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input?.getAttribute('placeholder')).toBe('Enter quantity');
     });
-    it('should not log deprecation warning when withButtons is true (default)', async () => {
-      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
-      await newSpecPage({
+    it('should not display placeholder attribute when not provided', async () => {
+      const page = await newSpecPage({
         components: [WppCounter],
         html: `<wpp-counter />`,
       });
-      expect(consoleSpy).not.toHaveBeenCalledWith(expect.stringContaining('The `withButtons` prop is deprecated'));
-      consoleSpy.mockRestore();
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input?.getAttribute('placeholder')).toBeNull();
+    });
+    it('should show placeholder when value is explicitly set to undefined via property', async () => {
+      const page = await newSpecPage({
+        components: [WppCounter],
+        html: `<wpp-counter placeholder="Enter value" />`,
+      });
+      // Explicitly set value to undefined after creation to trigger placeholder state
+      const counter = page.root;
+      counter.value = undefined;
+      await page.waitForChanges();
+      const input = page.root?.shadowRoot?.querySelector('input');
+      // After setting undefined, formattedValue should be empty showing placeholder
+      expect(input?.value).toBe('');
+      expect(input?.getAttribute('placeholder')).toBe('Enter value');
+    });
+    it('should show value instead of placeholder when value is provided', async () => {
+      const page = await newSpecPage({
+        components: [WppCounter],
+        template: () => h("wpp-counter-v3-5-0", { value: 5, placeholder: "Enter value" }),
+      });
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input?.value).toBe('5');
+      expect(input?.getAttribute('placeholder')).toBe('Enter value');
+    });
+    it('should render placeholder with label config', async () => {
+      const labelConfig = {
+        text: 'Quantity',
+      };
+      const page = await newSpecPage({
+        components: [WppCounter, WppLabel, WppInternalLabel],
+        template: () => h("wpp-counter-v3-5-0", { placeholder: "Enter amount", labelConfig: labelConfig }),
+      });
+      // Explicitly set value to undefined after creation to trigger placeholder state
+      const counter = page.root;
+      counter.value = undefined;
+      await page.waitForChanges();
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input?.getAttribute('placeholder')).toBe('Enter amount');
+      expect(input?.value).toBe('');
+      expect(page.root).toMatchSnapshot();
+    });
+    it('should render placeholder attribute on size M counter', async () => {
+      const page = await newSpecPage({
+        components: [WppCounter],
+        html: `<wpp-counter placeholder="Size M" size="m" />`,
+      });
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input?.getAttribute('placeholder')).toBe('Size M');
+    });
+    it('should render placeholder attribute on size S counter', async () => {
+      const page = await newSpecPage({
+        components: [WppCounter],
+        html: `<wpp-counter placeholder="Size S" size="s" />`,
+      });
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input?.getAttribute('placeholder')).toBe('Size S');
+    });
+    it('should show placeholder after clearing input via user interaction', async () => {
+      const page = await newSpecPage({
+        components: [WppCounter],
+        html: `<wpp-counter value="5" placeholder="Enter value" />`,
+      });
+      const input = page.root?.shadowRoot?.querySelector('input');
+      // Simulate clearing the input
+      input.value = '';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      await page.waitForChanges();
+      // After clearing, input should be empty and placeholder should be visible
+      expect(input.value).toBe('');
+      expect(input.getAttribute('placeholder')).toBe('Enter value');
+    });
+    it('should set value to min when clicking increase button with undefined value', async () => {
+      const page = await newSpecPage({
+        components: [WppCounter],
+        html: `<wpp-counter placeholder="Enter value" min="1" max="10" />`,
+      });
+      const counter = page.root;
+      counter.value = undefined;
+      await page.waitForChanges();
+      // Click increase button
+      const increaseButton = page.root?.shadowRoot?.querySelector('.increase-wrapper');
+      increaseButton?.click();
+      await page.waitForChanges();
+      // Value should be set to min + step (since it starts from empty/undefined state)
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input.value).not.toBe('');
+    });
+    it('should set value to min when clicking decrease button with undefined value', async () => {
+      const page = await newSpecPage({
+        components: [WppCounter],
+        html: `<wpp-counter placeholder="Enter value" min="1" max="10" />`,
+      });
+      const counter = page.root;
+      counter.value = undefined;
+      await page.waitForChanges();
+      // Click decrease button
+      const decreaseButton = page.root?.shadowRoot?.querySelector('.decrease-wrapper');
+      decreaseButton?.click();
+      await page.waitForChanges();
+      // Value should be set based on component logic
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input).toBeTruthy();
     });
   });
   describe('min/max constraints', () => {
-    it('should use default min value of 0', async () => {
+    it('should use default min value of 1', async () => {
       const page = await newSpecPage({
         components: [WppCounter],
         html: `<wpp-counter />`,
       });
       const counter = page.rootInstance;
-      expect(counter.min).toBe(0);
+      expect(counter.min).toBe(1);
     });
     it('should use default max value of 100', async () => {
       const page = await newSpecPage({
@@ -219,7 +319,7 @@ describe('wpp-counter', () => {
       };
       const page = await newSpecPage({
         components: [WppCounter],
-        template: () => h("wpp-counter-v4-0-0", { value: 1000, format: format }),
+        template: () => h("wpp-counter-v3-5-0", { value: 1000, format: format }),
       });
       const input = page.root?.shadowRoot?.querySelector('input');
       expect(input?.value).toBe('1 000');
@@ -269,22 +369,24 @@ describe('wpp-counter', () => {
       expect(message?.getAttribute('type')).toBe('warning');
     });
   });
-  describe('default values', () => {
-    it('should have default value of 0', async () => {
+  describe('backward compatibility', () => {
+    it('should maintain default value of 1 for backward compatibility', async () => {
       const page = await newSpecPage({
         components: [WppCounter],
         html: `<wpp-counter />`,
       });
       const counter = page.rootInstance;
-      expect(counter.value).toBe(0);
+      expect(counter.value).toBe(1);
     });
-    it('should have default min of 0', async () => {
+    it('should show default value when placeholder is provided but value is not explicitly undefined', async () => {
+      // This tests backward compatibility - placeholder alone doesn't change behavior
       const page = await newSpecPage({
         components: [WppCounter],
-        html: `<wpp-counter />`,
+        html: `<wpp-counter placeholder="Enter value" />`,
       });
-      const counter = page.rootInstance;
-      expect(counter.min).toBe(0);
+      const input = page.root?.shadowRoot?.querySelector('input');
+      // Default value should still be 1 (backward compatible)
+      expect(input?.value).toBe('1');
     });
   });
 });

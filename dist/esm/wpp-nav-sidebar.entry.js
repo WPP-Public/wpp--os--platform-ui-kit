@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { k as transformToVersionedTag } from './utils-cc81a41b.js';
+import { k as transformToVersionedTag } from './utils-3a5af594.js';
 import { W as WrappedSlot } from './WrappedSlot-629d3e4f.js';
 import { Z as Z_INDEX } from './consts-9fc0a13a.js';
 
@@ -61,6 +61,7 @@ const WppNavSidebar = class {
     this.hostCssClasses = () => ({
       'wpp-nav-sidebar': true,
     });
+    this.initialPath = undefined;
     this.activePath = undefined;
     this.nativeLink = false;
     this.zIndex = Z_INDEX.NAV_SIDEBAR;
@@ -79,13 +80,14 @@ const WppNavSidebar = class {
     this.closeInactiveExpandedItem(event.detail.label);
   }
   componentWillLoad() {
-    this.setActiveItem(this.activePath);
+    const initialPath = this.activePath || this.initialPath;
+    this.setActiveItem(initialPath);
     this.calculateOsBarHeight();
   }
   render() {
     return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "nav-sidebar, body, header-wrapper, header, ws-wrapper, ws-inner" }, h("aside", { class: this.asideCssClasses(), part: "nav-sidebar" }, h("div", { class: "nav-wrapper", part: "body" }, h(WrappedSlot, { wrapperClass: "title-wrapper", name: "header" }), h(WrappedSlot, { wrapperClass: "items-wrapper" })))));
   }
-  static get registryIs() { return "wpp-nav-sidebar-v4-0-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-v3-5-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "activePath": ["handleActivePathChange"]

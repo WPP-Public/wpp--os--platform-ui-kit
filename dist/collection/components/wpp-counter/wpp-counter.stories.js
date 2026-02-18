@@ -11,6 +11,7 @@ export default {
   argTypes: {
     name: { type: 'string' },
     value: { type: 'number' },
+    placeholder: { type: 'string' },
     message: { type: 'string' },
     messageType: {
       options: ['null', 'warning', 'error'],
@@ -29,7 +30,6 @@ export default {
     withButtons: {
       options: [true, false],
       control: { type: 'boolean' },
-      description: 'Deprecated: This prop will be removed in v5.0.0',
     },
     required: {
       options: [true, false],
@@ -38,9 +38,10 @@ export default {
   },
 };
 export const Counter = {
-  render: args => html ` <wpp-counter-v4-0-0
+  render: args => html ` <wpp-counter-v3-5-0
       .name="${args.name}"
       .value="${args.value}"
+      .placeholder="${args.placeholder}"
       .disabled="${args.disabled}"
       .required="${args.required}"
       .messageType="${args.messageType}"
@@ -51,12 +52,13 @@ export const Counter = {
       .labelConfig="${args.labelConfig}"
       .withButtons="${args.withButtons}"
     >
-    </wpp-counter-v4-0-0>`,
+    </wpp-counter-v3-5-0>`,
   args: {
     name: 'counter',
-    value: 0,
+    value: 1,
+    placeholder: '',
     message: '',
-    min: 0,
+    min: 1,
     max: 100,
     size: 'm',
     disabled: false,
@@ -70,5 +72,46 @@ export const Counter = {
         optional: 'Optional',
       },
     },
+  },
+};
+export const Placeholder = {
+  render: args => html ` <wpp-counter-v3-5-0
+      .name="${args.name}"
+      .value="${args.value}"
+      .placeholder="${args.placeholder}"
+      .disabled="${args.disabled}"
+      .required="${args.required}"
+      .messageType="${args.messageType}"
+      .size="${args.size}"
+      .message="${args.message}"
+      .min="${args.min}"
+      .max="${args.max}"
+      .labelConfig="${args.labelConfig}"
+      .withButtons="${false}"
+    >
+    </wpp-counter-v3-5-0>`,
+  args: {
+    name: 'counter-placeholder',
+    value: undefined,
+    placeholder: 'Enter value',
+    message: '',
+    min: 1,
+    max: 100,
+    size: 'm',
+    disabled: false,
+    required: false,
+    labelConfig: {
+      icon: '',
+      text: 'Counter with Placeholder',
+      description: '',
+      locales: {
+        optional: 'Optional',
+      },
+    },
+  },
+};
+Placeholder.parameters = {
+  controls: {
+    exclude: ['withButtons'],
   },
 };

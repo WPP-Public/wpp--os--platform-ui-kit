@@ -130,7 +130,7 @@ function renderSeekBarComponent() {
 function renderVideoCurrentTimeComponent(time) {
   const ariaLabel = time.hours ? `${time.hours}:${time.minutes}:${time.seconds}` : `${time.minutes}:${time.seconds}`;
   return (h(Fragment, null,
-    h("wpp-typography-v4-0-0", { class: "video-time", type: "xs-body" },
+    h("wpp-typography-v3-5-0", { class: "video-time", type: "xs-body" },
       h("span", { class: "wrapper", role: "timer", "aria-label": ariaLabel },
         time.hours && (h(Fragment, null,
           h("span", { class: "time-wrapper", role: "presentation" },
@@ -154,7 +154,7 @@ function renderVideoCurrentTimeComponent(time) {
 
 function renderVolumeBarComponent() {
   return (h("div", { ref: ref => (this.volumeContainerRef = ref), class: "volume-container", onMouseEnter: this.handleSliderShow, onMouseLeave: () => this.handleSliderHide(300) },
-    h("wpp-action-button-v4-0-0", { ref: ref => (this.volumeButtonRef = ref), class: "volume-button", variant: "inverted", onClick: this.toggleMute, onFocus: this.handleSliderShow, onFocusout: () => this.handleSliderHide(300), ariaProps: { label: this._locales.volumeButtonAriaLabel } }, this.volume === 0 ? (h("wpp-icon-speaker-mute-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-speaker-v4-0-0", { slot: "icon-start", "aria-hidden": "true" }))),
+    h("wpp-action-button-v3-5-0", { ref: ref => (this.volumeButtonRef = ref), class: "volume-button", variant: "inverted", onClick: this.toggleMute, onFocus: this.handleSliderShow, onFocusout: () => this.handleSliderHide(300), ariaProps: { label: this._locales.volumeButtonAriaLabel } }, this.volume === 0 ? (h("wpp-icon-speaker-mute-v3-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-speaker-v3-5-0", { slot: "icon-start", "aria-hidden": "true" }))),
     h("div", { ref: ref => (this.volumeBarContainerRef = ref), class: "slider-container" },
       h("label", { htmlFor: "volume-slider", class: "sr-only" }, this._locales.volumeProgressLabel),
       h("input", { ref: ref => (this.volumeBarRef = ref), style: { '--progress-bar-progress': `${this.volume * 100}%` }, class: "progress-bar", id: "volume-slider", type: "range", min: 0, max: 1, step: 0.01, value: this.volume, onInput: this.handleVolume, "aria-label": "Volume control bar", "aria-valuemin": "0", "aria-valuemax": "1", "aria-valuenow": this.volume.toString(), autocomplete: "off", onFocus: this.handleSliderShow, onFocusout: () => this.handleSliderHide(300) }))));
@@ -589,12 +589,12 @@ const WppVideoPlayer$1 = /*@__PURE__*/ proxyCustomElement(class WppVideoPlayer e
      * - autoplay=false && state = idle
      * - autoplay=true
      */
-    this.renderMainPlayButton = () => (h("wpp-action-button-v4-0-0", { ref: ref => (this.initPlayButtonRef = ref), class: this.playButtonCssClasses(), onClick: this.togglePlay, variant: "inverted", ariaProps: {
+    this.renderMainPlayButton = () => (h("wpp-action-button-v3-5-0", { ref: ref => (this.initPlayButtonRef = ref), class: this.playButtonCssClasses(), onClick: this.togglePlay, variant: "inverted", ariaProps: {
         label: this.videoPlayerState === 'playing'
           ? this._locales.playButtonAriaLabel.play
           : this._locales.playButtonAriaLabel.pause,
         pressed: this.videoPlayerState === 'playing',
-      } }, this.videoPlayerState !== 'playing' ? (h("wpp-icon-play-filled-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-pause-filled-v4-0-0", { slot: "icon-start", "aria-hidden": "true" }))));
+      } }, this.videoPlayerState !== 'playing' ? (h("wpp-icon-play-filled-v3-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-pause-filled-v3-5-0", { slot: "icon-start", "aria-hidden": "true" }))));
     this.renderVideoTag = () => (h("video", { ref: ref => (this.videoPlayerRef = ref), id: "video-element", class: "video-player", part: "video-player", controls: false, poster: this.thumbnail, autoplay: this.controlPanelConfigDefault.autoplay, muted: !this.controlPanelConfigDefault.showVolumeButton || this.controlPanelConfigDefault.autoplay, loop: this.controlPanelConfigDefault.loop, preload: this.preload, onEnded: this.handleVideoEnded, onLoadedMetaData: this.handleMetadataLoaded, ...(this.controlPanelConfigDefault.autoplay
         ? {
           onClick: this.togglePlay,
@@ -731,18 +731,18 @@ const WppVideoPlayer$1 = /*@__PURE__*/ proxyCustomElement(class WppVideoPlayer e
           role: 'region',
           'aria-label': this._locales.controlsAriaLabel,
         }
-        : {}) }, this.videoPlayerState !== 'idle' && (h(Fragment, null, this.caption && this.renderCaptions(), h("div", { class: "controls-bar", ref: ref => (this.controlsBarRef = ref) }, h("wpp-action-button-v4-0-0", { ref: ref => (this.playPauseButtonRef = ref), class: "play-pause-button", variant: "inverted", onClick: this.togglePlay, ariaProps: {
+        : {}) }, this.videoPlayerState !== 'idle' && (h(Fragment, null, this.caption && this.renderCaptions(), h("div", { class: "controls-bar", ref: ref => (this.controlsBarRef = ref) }, h("wpp-action-button-v3-5-0", { ref: ref => (this.playPauseButtonRef = ref), class: "play-pause-button", variant: "inverted", onClick: this.togglePlay, ariaProps: {
         label: this.videoPlayerState === 'playing'
           ? this._locales.playPauseButtonArealLabels.pause
           : this._locales.playPauseButtonArealLabels.play,
         pressed: this.videoPlayerState === 'playing',
-      } }, this.videoPlayerState === 'playing' ? (h("wpp-icon-pause-filled-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-play-filled-v4-0-0", { slot: "icon-start", "aria-hidden": "true" }))), this.renderVideoTime(this.splitCurrentVideoTime), this.renderSeekBar(), this.renderVideoTime(this.splitOverallVideoTime), this.caption && (h("wpp-action-button-v4-0-0", { ref: ref => (this.captionButtonRef = ref), onClick: this.toggleCaptions, variant: "inverted", ariaProps: {
+      } }, this.videoPlayerState === 'playing' ? (h("wpp-icon-pause-filled-v3-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-play-filled-v3-5-0", { slot: "icon-start", "aria-hidden": "true" }))), this.renderVideoTime(this.splitCurrentVideoTime), this.renderSeekBar(), this.renderVideoTime(this.splitOverallVideoTime), this.caption && (h("wpp-action-button-v3-5-0", { ref: ref => (this.captionButtonRef = ref), onClick: this.toggleCaptions, variant: "inverted", ariaProps: {
         label: this._locales.captionButtonAriaLabel,
-      } }, this.isCaptionEnabled ? (h("wpp-icon-caption-on-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-caption-off-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })))), this.controlPanelConfigDefault.showVolumeButton && this.renderVolumeBar(), this.controlPanelConfigDefault.showFullscreenButton && (h("wpp-action-button-v4-0-0", { ref: ref => (this.fullScreenButtonRef = ref), onClick: this.toggleFullscreen, variant: "inverted", ariaProps: {
+      } }, this.isCaptionEnabled ? (h("wpp-icon-caption-on-v3-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-caption-off-v3-5-0", { slot: "icon-start", "aria-hidden": "true" })))), this.controlPanelConfigDefault.showVolumeButton && this.renderVolumeBar(), this.controlPanelConfigDefault.showFullscreenButton && (h("wpp-action-button-v3-5-0", { ref: ref => (this.fullScreenButtonRef = ref), onClick: this.toggleFullscreen, variant: "inverted", ariaProps: {
         label: this._locales.fullscreenButtonAriaLabel,
-      } }, this.isFullscreen ? (h("wpp-icon-fullscreen-minimise-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-fullscreen-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })))), this.renderAccessibilityInstructions())))))));
+      } }, this.isFullscreen ? (h("wpp-icon-fullscreen-minimise-v3-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-fullscreen-v3-5-0", { slot: "icon-start", "aria-hidden": "true" })))), this.renderAccessibilityInstructions())))))));
   }
-  static get registryIs() { return "wpp-video-player-v4-0-0"; }
+  static get registryIs() { return "wpp-video-player-v3-5-0"; }
   get host() { return this; }
   static get watchers() { return {
     "videoPlayerState": ["onVideoPlayerState"],
@@ -752,7 +752,7 @@ const WppVideoPlayer$1 = /*@__PURE__*/ proxyCustomElement(class WppVideoPlayer e
     "locales": ["onUpdateLocales"]
   }; }
   static get style() { return wppVideoPlayerCss; }
-}, [1, "wpp-video-player", "wpp-video-player-v4-0-0", {
+}, [1, "wpp-video-player", "wpp-video-player-v3-5-0", {
     "src": [1],
     "thumbnail": [1],
     "caption": [16],
@@ -783,64 +783,64 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-video-player-v4-0-0", "wpp-action-button-v4-0-0", "wpp-icon-caption-off-v4-0-0", "wpp-icon-caption-on-v4-0-0", "wpp-icon-fullscreen-v4-0-0", "wpp-icon-fullscreen-minimise-v4-0-0", "wpp-icon-pause-filled-v4-0-0", "wpp-icon-play-filled-v4-0-0", "wpp-icon-speaker-v4-0-0", "wpp-icon-speaker-mute-v4-0-0", "wpp-spinner-v4-0-0", "wpp-typography-v4-0-0"];
+  const components = ["wpp-video-player-v3-5-0", "wpp-action-button-v3-5-0", "wpp-icon-caption-off-v3-5-0", "wpp-icon-caption-on-v3-5-0", "wpp-icon-fullscreen-v3-5-0", "wpp-icon-fullscreen-minimise-v3-5-0", "wpp-icon-pause-filled-v3-5-0", "wpp-icon-play-filled-v3-5-0", "wpp-icon-speaker-v3-5-0", "wpp-icon-speaker-mute-v3-5-0", "wpp-spinner-v3-5-0", "wpp-typography-v3-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-video-player-v4-0-0":
+    case "wpp-video-player-v3-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppVideoPlayer$1);
       }
       break;
-    case "wpp-action-button-v4-0-0":
+    case "wpp-action-button-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-caption-off-v4-0-0":
+    case "wpp-icon-caption-off-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-caption-on-v4-0-0":
+    case "wpp-icon-caption-on-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-fullscreen-v4-0-0":
+    case "wpp-icon-fullscreen-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-fullscreen-minimise-v4-0-0":
+    case "wpp-icon-fullscreen-minimise-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-icon-pause-filled-v4-0-0":
+    case "wpp-icon-pause-filled-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-play-filled-v4-0-0":
+    case "wpp-icon-play-filled-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-icon-speaker-v4-0-0":
+    case "wpp-icon-speaker-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-speaker-mute-v4-0-0":
+    case "wpp-icon-speaker-mute-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v4-0-0":
+    case "wpp-spinner-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-0-0":
+    case "wpp-typography-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

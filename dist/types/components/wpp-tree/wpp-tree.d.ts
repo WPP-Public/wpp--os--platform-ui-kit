@@ -31,6 +31,8 @@ export declare class WppTree {
   readonly locales: Partial<TreeLocaleType>;
   /**
    * Defines the component locale types.
+   * Note: "isMatchSearch" is deprecated, use "isMatchingSearch" instead, which uses
+   * the tree-item object.
    */
   readonly searchConfig: TreeItemSearchConfig;
   /**

@@ -4,10 +4,11 @@ export class WppSkeleton {
     this.hostCssClasses = () => ({
       'wpp-skeleton': true,
       [`wpp-${this.variant}`]: true,
-      'wpp-animated': true,
+      'wpp-animated': this.animation,
     });
     this.getSizeWithDimension = (initialValue) => String(initialValue || '').replace(/^(\d+)(\S+)?$/, (...match) => match[1] + (match[2] || 'px'));
     this.variant = 'rectangle';
+    this.animation = true;
     this.width = undefined;
     this.height = undefined;
   }
@@ -19,7 +20,7 @@ export class WppSkeleton {
     return h(Host, { class: this.hostCssClasses(), style: style, "aria-hidden": "true" });
   }
   static get is() { return "wpp-skeleton"; }
-  static get registryIs() { return "wpp-skeleton-v4-0-0"; }
+  static get registryIs() { return "wpp-skeleton-v3-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -50,6 +51,27 @@ export class WppSkeleton {
         "attribute": "variant",
         "reflect": false,
         "defaultValue": "'rectangle'"
+      },
+      "animation": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [{
+              "name": "deprecated",
+              "text": "- this prop will be deleted in version 4.0.0. The skeleton component will always have animation."
+            }],
+          "text": "If `true`, the skeleton has animation"
+        },
+        "attribute": "animation",
+        "reflect": false,
+        "defaultValue": "true"
       },
       "width": {
         "type": "any",

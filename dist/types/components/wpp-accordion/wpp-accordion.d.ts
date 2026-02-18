@@ -53,9 +53,21 @@ export declare class WppAccordion {
    */
   readonly withDivider: boolean;
   /**
+   * Defines the number of elements within a specific section.
+   *
+   * @deprecated - this prop will be deleted in version 4.0.0.
+   */
+  readonly counter: number;
+  /**
    * Defines the section size.
    */
   readonly size: 's' | 'm' | 'l' | 'xl' | '2xl';
+  /**
+   * If set, adds text next to the section.
+   *
+   * @deprecated - this prop will be deleted in version 4.0.0. If you want to use this prop, use "header" slot instead
+   */
+  readonly text?: string;
   /**
    * If set to true, displays `Tag` next to the section. The tag must placed in the `.tags` slot.
    */
@@ -87,6 +99,8 @@ export declare class WppAccordion {
   private updateSlotData;
   private calculateContentLayout;
   private getContentHeight;
+  private typographyType;
+  private counterType;
   private toggleExpand;
   private onClick;
   private onFocus;
@@ -108,6 +122,5 @@ export declare class WppAccordion {
   private checkTitleOverflowInternal;
   private checkTitleOverflow;
   private cssTagWrapperClasses;
-  private getHeaderTypographyType;
   render(): any;
 }

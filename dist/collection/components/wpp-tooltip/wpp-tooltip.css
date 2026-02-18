@@ -21,3 +21,15 @@
   box-shadow: var(--wpp-box-shadow-m);
   background-color: var(--wpp-grey-color-000);
 }
+
+:host(.in-dropdown) {
+  max-width: 100%;
+}
+:host(.in-dropdown) .anchor {
+  max-width: 100%;
+}
+
+:host(.transparent) {
+  opacity: 0;
+  pointer-events: none;
+}

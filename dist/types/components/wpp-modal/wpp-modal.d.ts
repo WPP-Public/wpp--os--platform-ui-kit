@@ -71,6 +71,11 @@ export declare class WppModal {
    * Event emitted when the close animation ends.
    */
   wppModalCloseComplete: EventEmitter<ModalCloseDetails>;
+  /**
+   * Handles the modal click actions.
+   * @deprecated - this prop will be deleted in version 4.0.0 . Use `wppModalOpenStart`/`wppModalOpenComplete` instead
+   */
+  wppModalOpen: EventEmitter<void>;
   protected handleCloseOnEsc(event: KeyboardEvent): void;
   protected handleChangeModalStatus(openStatus: boolean): void;
   /**

@@ -170,7 +170,7 @@ describe('wpp-more-button', () => {
     it('Testing default button with name', async () => {
       const page = await newSpecPage({
         components: [WppMoreButton],
-        template: () => h("wpp-more-button-v4-0-0", { name: "More items button", ariaProps: undefined }),
+        template: () => h("wpp-more-button-v3-5-0", { name: "More items button", ariaProps: undefined }),
       });
       await page.waitForChanges();
       expect(page.root).toMatchSnapshot();
@@ -194,7 +194,7 @@ describe('wpp-more-button', () => {
     it('Testing button with aria-label', async () => {
       const page = await newSpecPage({
         components: [WppMoreButton],
-        template: () => h("wpp-more-button-v4-0-0", { ariaProps: { label: 'More items menu' } }),
+        template: () => h("wpp-more-button-v3-5-0", { ariaProps: { label: 'More items menu' } }),
       });
       await page.waitForChanges();
       expect(page.root).toMatchSnapshot();
@@ -202,7 +202,7 @@ describe('wpp-more-button', () => {
     it('Testing button with aria-desribedby', async () => {
       const page = await newSpecPage({
         components: [WppMoreButton],
-        template: () => h("wpp-more-button-v4-0-0", { ariaProps: { describedby: 'More items menu' } }),
+        template: () => h("wpp-more-button-v3-5-0", { ariaProps: { describedby: 'More items menu' } }),
       });
       await page.waitForChanges();
       expect(page.root).toMatchSnapshot();

@@ -5690,4 +5690,4 @@ const menuListConfig = ({ anchor, popperOptions, triggerElementWidth, ...tippyPr
   });
 };
 
-export { _baseGetTag as _, _baseUnary as a, _nodeUtil as b, isEqual_1 as c, isObjectLike_1 as i, menuListConfig as m, sticky as s };
+export { _baseGetTag as _, isObjectLike_1 as a, _baseUnary as b, _nodeUtil as c, isEqual_1 as i, menuListConfig as m, sticky as s };

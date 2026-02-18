@@ -94,6 +94,7 @@ export { WppIconBookInformation, defineCustomElement as defineCustomElementWppIc
 export { WppIconBookSearch, defineCustomElement as defineCustomElementWppIconBookSearch } from './wpp-icon-book-search.js';
 export { WppIconBookmark, defineCustomElement as defineCustomElementWppIconBookmark } from './wpp-icon-bookmark.js';
 export { WppIconBookmarkAdd, defineCustomElement as defineCustomElementWppIconBookmarkAdd } from './wpp-icon-bookmark-add.js';
+export { WppIconBookmarkFilled, defineCustomElement as defineCustomElementWppIconBookmarkFilled } from './wpp-icon-bookmark-filled.js';
 export { WppIconBookmarkSelected, defineCustomElement as defineCustomElementWppIconBookmarkSelected } from './wpp-icon-bookmark-selected.js';
 export { WppIconBorder, defineCustomElement as defineCustomElementWppIconBorder } from './wpp-icon-border.js';
 export { WppIconBorderAll, defineCustomElement as defineCustomElementWppIconBorderAll } from './wpp-icon-border-all.js';
@@ -113,6 +114,7 @@ export { WppIconBranchReview, defineCustomElement as defineCustomElementWppIconB
 export { WppIconBtc, defineCustomElement as defineCustomElementWppIconBtc } from './wpp-icon-btc.js';
 export { WppIconBus, defineCustomElement as defineCustomElementWppIconBus } from './wpp-icon-bus.js';
 export { WppIconBusiness, defineCustomElement as defineCustomElementWppIconBusiness } from './wpp-icon-business.js';
+export { WppIconButton, defineCustomElement as defineCustomElementWppIconButton } from './wpp-icon-button.js';
 export { WppIconCafe, defineCustomElement as defineCustomElementWppIconCafe } from './wpp-icon-cafe.js';
 export { WppIconCalendar, defineCustomElement as defineCustomElementWppIconCalendar } from './wpp-icon-calendar.js';
 export { WppIconCalendar3Days, defineCustomElement as defineCustomElementWppIconCalendar3Days } from './wpp-icon-calendar-3-days.js';
@@ -154,6 +156,7 @@ export { WppIconCloudUpload, defineCustomElement as defineCustomElementWppIconCl
 export { WppIconCodeView, defineCustomElement as defineCustomElementWppIconCodeView } from './wpp-icon-code-view.js';
 export { WppIconCollapse, defineCustomElement as defineCustomElementWppIconCollapse } from './wpp-icon-collapse.js';
 export { WppIconCollection, defineCustomElement as defineCustomElementWppIconCollection } from './wpp-icon-collection.js';
+export { WppIconColor, defineCustomElement as defineCustomElementWppIconColor } from './wpp-icon-color.js';
 export { WppIconColour, defineCustomElement as defineCustomElementWppIconColour } from './wpp-icon-colour.js';
 export { WppIconColumnsOne, defineCustomElement as defineCustomElementWppIconColumnsOne } from './wpp-icon-columns-one.js';
 export { WppIconColumnsThree, defineCustomElement as defineCustomElementWppIconColumnsThree } from './wpp-icon-columns-three.js';
@@ -190,10 +193,13 @@ export { WppIconDataWaterfall, defineCustomElement as defineCustomElementWppIcon
 export { WppIconDataWhisker, defineCustomElement as defineCustomElementWppIconDataWhisker } from './wpp-icon-data-whisker.js';
 export { WppIconDatabase, defineCustomElement as defineCustomElementWppIconDatabase } from './wpp-icon-database.js';
 export { WppIconDecrease, defineCustomElement as defineCustomElementWppIconDecrease } from './wpp-icon-decrease.js';
+export { WppIconDescent, defineCustomElement as defineCustomElementWppIconDescent } from './wpp-icon-descent.js';
 export { WppIconDesign, defineCustomElement as defineCustomElementWppIconDesign } from './wpp-icon-design.js';
 export { WppIconDesktop, defineCustomElement as defineCustomElementWppIconDesktop } from './wpp-icon-desktop.js';
 export { WppIconDiamond, defineCustomElement as defineCustomElementWppIconDiamond } from './wpp-icon-diamond.js';
 export { WppIconDirections, defineCustomElement as defineCustomElementWppIconDirections } from './wpp-icon-directions.js';
+export { WppIconDislike, defineCustomElement as defineCustomElementWppIconDislike } from './wpp-icon-dislike.js';
+export { WppIconDislikeFilled, defineCustomElement as defineCustomElementWppIconDislikeFilled } from './wpp-icon-dislike-filled.js';
 export { WppIconDiversity, defineCustomElement as defineCustomElementWppIconDiversity } from './wpp-icon-diversity.js';
 export { WppIconDocument, defineCustomElement as defineCustomElementWppIconDocument } from './wpp-icon-document.js';
 export { WppIconDocumentBlocked, defineCustomElement as defineCustomElementWppIconDocumentBlocked } from './wpp-icon-document-blocked.js';
@@ -205,6 +211,7 @@ export { WppIconDownload, defineCustomElement as defineCustomElementWppIconDownl
 export { WppIconDraft, defineCustomElement as defineCustomElementWppIconDraft } from './wpp-icon-draft.js';
 export { WppIconDrag, defineCustomElement as defineCustomElementWppIconDrag } from './wpp-icon-drag.js';
 export { WppIconDragAndDrop, defineCustomElement as defineCustomElementWppIconDragAndDrop } from './wpp-icon-drag-and-drop.js';
+export { WppIconDragIndicator, defineCustomElement as defineCustomElementWppIconDragIndicator } from './wpp-icon-drag-indicator.js';
 export { WppIconEco, defineCustomElement as defineCustomElementWppIconEco } from './wpp-icon-eco.js';
 export { WppIconEdit, defineCustomElement as defineCustomElementWppIconEdit } from './wpp-icon-edit.js';
 export { WppIconEditText, defineCustomElement as defineCustomElementWppIconEditText } from './wpp-icon-edit-text.js';
@@ -226,10 +233,13 @@ export { WppIconExport, defineCustomElement as defineCustomElementWppIconExport 
 export { WppIconExportFile, defineCustomElement as defineCustomElementWppIconExportFile } from './wpp-icon-export-file.js';
 export { WppIconExtension, defineCustomElement as defineCustomElementWppIconExtension } from './wpp-icon-extension.js';
 export { WppIconExternalLink, defineCustomElement as defineCustomElementWppIconExternalLink } from './wpp-icon-external-link.js';
+export { WppIconEye, defineCustomElement as defineCustomElementWppIconEye } from './wpp-icon-eye.js';
 export { WppIconEyeOff, defineCustomElement as defineCustomElementWppIconEyeOff } from './wpp-icon-eye-off.js';
 export { WppIconEyeOn, defineCustomElement as defineCustomElementWppIconEyeOn } from './wpp-icon-eye-on.js';
 export { WppIconEyedropper, defineCustomElement as defineCustomElementWppIconEyedropper } from './wpp-icon-eyedropper.js';
 export { WppIconFactory, defineCustomElement as defineCustomElementWppIconFactory } from './wpp-icon-factory.js';
+export { WppIconFavorites, defineCustomElement as defineCustomElementWppIconFavorites } from './wpp-icon-favorites.js';
+export { WppIconFavoritesFilled, defineCustomElement as defineCustomElementWppIconFavoritesFilled } from './wpp-icon-favorites-filled.js';
 export { WppIconFavourites, defineCustomElement as defineCustomElementWppIconFavourites } from './wpp-icon-favourites.js';
 export { WppIconFavouritesFilled, defineCustomElement as defineCustomElementWppIconFavouritesFilled } from './wpp-icon-favourites-filled.js';
 export { WppIconFile, defineCustomElement as defineCustomElementWppIconFile } from './wpp-icon-file.js';
@@ -260,11 +270,13 @@ export { WppIconFullscreenMinimise, defineCustomElement as defineCustomElementWp
 export { WppIconGallery, defineCustomElement as defineCustomElementWppIconGallery } from './wpp-icon-gallery.js';
 export { WppIconGasStation, defineCustomElement as defineCustomElementWppIconGasStation } from './wpp-icon-gas-station.js';
 export { WppIconGear, defineCustomElement as defineCustomElementWppIconGear } from './wpp-icon-gear.js';
+export { WppIconGetSupport, defineCustomElement as defineCustomElementWppIconGetSupport } from './wpp-icon-get-support.js';
 export { WppIconGif, defineCustomElement as defineCustomElementWppIconGif } from './wpp-icon-gif.js';
 export { WppIconGlobe, defineCustomElement as defineCustomElementWppIconGlobe } from './wpp-icon-globe.js';
 export { WppIconGps, defineCustomElement as defineCustomElementWppIconGps } from './wpp-icon-gps.js';
 export { WppIconGraph, defineCustomElement as defineCustomElementWppIconGraph } from './wpp-icon-graph.js';
 export { WppIconGrid, defineCustomElement as defineCustomElementWppIconGrid } from './wpp-icon-grid.js';
+export { WppIconGridDots, defineCustomElement as defineCustomElementWppIconGridDots } from './wpp-icon-grid-dots.js';
 export { WppIconH1, defineCustomElement as defineCustomElementWppIconH1 } from './wpp-icon-h1.js';
 export { WppIconH2, defineCustomElement as defineCustomElementWppIconH2 } from './wpp-icon-h2.js';
 export { WppIconH3, defineCustomElement as defineCustomElementWppIconH3 } from './wpp-icon-h3.js';
@@ -308,6 +320,8 @@ export { WppIconLayer, defineCustomElement as defineCustomElementWppIconLayer } 
 export { WppIconLeaf, defineCustomElement as defineCustomElementWppIconLeaf } from './wpp-icon-leaf.js';
 export { WppIconLibrary, defineCustomElement as defineCustomElementWppIconLibrary } from './wpp-icon-library.js';
 export { WppIconLibraryBuilding, defineCustomElement as defineCustomElementWppIconLibraryBuilding } from './wpp-icon-library-building.js';
+export { WppIconLike, defineCustomElement as defineCustomElementWppIconLike } from './wpp-icon-like.js';
+export { WppIconLikeFilled, defineCustomElement as defineCustomElementWppIconLikeFilled } from './wpp-icon-like-filled.js';
 export { WppIconLikeOff, defineCustomElement as defineCustomElementWppIconLikeOff } from './wpp-icon-like-off.js';
 export { WppIconLikeOn, defineCustomElement as defineCustomElementWppIconLikeOn } from './wpp-icon-like-on.js';
 export { WppIconLink, defineCustomElement as defineCustomElementWppIconLink } from './wpp-icon-link.js';
@@ -351,7 +365,10 @@ export { WppIconNext, defineCustomElement as defineCustomElementWppIconNext } fr
 export { WppIconNextFilled, defineCustomElement as defineCustomElementWppIconNextFilled } from './wpp-icon-next-filled.js';
 export { WppIconNightLife, defineCustomElement as defineCustomElementWppIconNightLife } from './wpp-icon-night-life.js';
 export { WppIconNote, defineCustomElement as defineCustomElementWppIconNote } from './wpp-icon-note.js';
+export { WppIconNotification, defineCustomElement as defineCustomElementWppIconNotification } from './wpp-icon-notification.js';
 export { WppIconNotificationNew, defineCustomElement as defineCustomElementWppIconNotificationNew } from './wpp-icon-notification-new.js';
+export { WppIconNotificationOff, defineCustomElement as defineCustomElementWppIconNotificationOff } from './wpp-icon-notification-off.js';
+export { WppIconNotificationOn, defineCustomElement as defineCustomElementWppIconNotificationOn } from './wpp-icon-notification-on.js';
 export { WppIconNotificationPause, defineCustomElement as defineCustomElementWppIconNotificationPause } from './wpp-icon-notification-pause.js';
 export { WppIconNuclearDanger, defineCustomElement as defineCustomElementWppIconNuclearDanger } from './wpp-icon-nuclear-danger.js';
 export { WppIconNumber, defineCustomElement as defineCustomElementWppIconNumber } from './wpp-icon-number.js';
@@ -376,6 +393,7 @@ export { WppIconPeople, defineCustomElement as defineCustomElementWppIconPeople 
 export { WppIconPharmacy, defineCustomElement as defineCustomElementWppIconPharmacy } from './wpp-icon-pharmacy.js';
 export { WppIconPhone, defineCustomElement as defineCustomElementWppIconPhone } from './wpp-icon-phone.js';
 export { WppIconPieChart, defineCustomElement as defineCustomElementWppIconPieChart } from './wpp-icon-pie-chart.js';
+export { WppIconPin, defineCustomElement as defineCustomElementWppIconPin } from './wpp-icon-pin.js';
 export { WppIconPinned, defineCustomElement as defineCustomElementWppIconPinned } from './wpp-icon-pinned.js';
 export { WppIconPitch, defineCustomElement as defineCustomElementWppIconPitch } from './wpp-icon-pitch.js';
 export { WppIconPlay, defineCustomElement as defineCustomElementWppIconPlay } from './wpp-icon-play.js';
@@ -417,6 +435,7 @@ export { WppIconResizeLarge, defineCustomElement as defineCustomElementWppIconRe
 export { WppIconResizeSmall, defineCustomElement as defineCustomElementWppIconResizeSmall } from './wpp-icon-resize-small.js';
 export { WppIconRestaurant, defineCustomElement as defineCustomElementWppIconRestaurant } from './wpp-icon-restaurant.js';
 export { WppIconRhombus, defineCustomElement as defineCustomElementWppIconRhombus } from './wpp-icon-rhombus.js';
+export { WppIconRise, defineCustomElement as defineCustomElementWppIconRise } from './wpp-icon-rise.js';
 export { WppIconRotate, defineCustomElement as defineCustomElementWppIconRotate } from './wpp-icon-rotate.js';
 export { WppIconRotateClockwise, defineCustomElement as defineCustomElementWppIconRotateClockwise } from './wpp-icon-rotate-clockwise.js';
 export { WppIconRotateCounterclockwise, defineCustomElement as defineCustomElementWppIconRotateCounterclockwise } from './wpp-icon-rotate-counterclockwise.js';
@@ -437,6 +456,7 @@ export { WppIconService, defineCustomElement as defineCustomElementWppIconServic
 export { WppIconShapes, defineCustomElement as defineCustomElementWppIconShapes } from './wpp-icon-shapes.js';
 export { WppIconShare, defineCustomElement as defineCustomElementWppIconShare } from './wpp-icon-share.js';
 export { WppIconShield, defineCustomElement as defineCustomElementWppIconShield } from './wpp-icon-shield.js';
+export { WppIconShieldCheckmark, defineCustomElement as defineCustomElementWppIconShieldCheckmark } from './wpp-icon-shield-checkmark.js';
 export { WppIconShieldDismiss, defineCustomElement as defineCustomElementWppIconShieldDismiss } from './wpp-icon-shield-dismiss.js';
 export { WppIconShieldError, defineCustomElement as defineCustomElementWppIconShieldError } from './wpp-icon-shield-error.js';
 export { WppIconShieldSuccess, defineCustomElement as defineCustomElementWppIconShieldSuccess } from './wpp-icon-shield-success.js';
@@ -448,6 +468,8 @@ export { WppIconSmile, defineCustomElement as defineCustomElementWppIconSmile } 
 export { WppIconSmileSlightly, defineCustomElement as defineCustomElementWppIconSmileSlightly } from './wpp-icon-smile-slightly.js';
 export { WppIconSocialMedia, defineCustomElement as defineCustomElementWppIconSocialMedia } from './wpp-icon-social-media.js';
 export { WppIconSort, defineCustomElement as defineCustomElementWppIconSort } from './wpp-icon-sort.js';
+export { WppIconSortByDecrease, defineCustomElement as defineCustomElementWppIconSortByDecrease } from './wpp-icon-sort-by-decrease.js';
+export { WppIconSortByIncrease, defineCustomElement as defineCustomElementWppIconSortByIncrease } from './wpp-icon-sort-by-increase.js';
 export { WppIconSortDecrease, defineCustomElement as defineCustomElementWppIconSortDecrease } from './wpp-icon-sort-decrease.js';
 export { WppIconSortIncrease, defineCustomElement as defineCustomElementWppIconSortIncrease } from './wpp-icon-sort-increase.js';
 export { WppIconSparkle, defineCustomElement as defineCustomElementWppIconSparkle } from './wpp-icon-sparkle.js';

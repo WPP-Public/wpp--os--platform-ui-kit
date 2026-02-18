@@ -211,51 +211,51 @@ export const VerticalDecimalStepper = (args) => {
     <div>
       <div style="display: flex;">
         <div style="width: 200px; text-align: center;">
-          <wpp-stepper-v4-0-0
+          <wpp-stepper-v3-5-0
             .activeStep=${stepperState.currentStep}
             .orientation=${'vertical'}
             .useDecimalSubSteps=${true}
             @wppChange=${handleStepClick}
           >
-            <wpp-step-v4-0-0>
+            <wpp-step-v3-5-0>
               <p slot="label">Step with a long text</p>
               <span slot="description">
                 First step (this text gets truncated if it's too long and a tooltip is displayed)
               </span>
-            </wpp-step-v4-0-0>
-            <wpp-step-v4-0-0>
+            </wpp-step-v3-5-0>
+            <wpp-step-v3-5-0>
               <p slot="label">Step 2</p>
               <span slot="description">With sub-steps</span>
-              <wpp-step-v4-0-0 .substep=${true}>
+              <wpp-step-v3-5-0 .substep=${true}>
                 <p slot="label">Sub step 2.1</p>
-              </wpp-step-v4-0-0>
-              <wpp-step-v4-0-0 id="step" .substep=${true}>
+              </wpp-step-v3-5-0>
+              <wpp-step-v3-5-0 id="step" .substep=${true}>
                 <p slot="label">Sub step 2.2</p>
-              </wpp-step-v4-0-0>
-            </wpp-step-v4-0-0>
-            <wpp-step-v4-0-0>
+              </wpp-step-v3-5-0>
+            </wpp-step-v3-5-0>
+            <wpp-step-v3-5-0>
               <p slot="label">Step 3</p>
               <span slot="description">With sub-steps</span>
-              <wpp-step-v4-0-0 .substep=${true}>
+              <wpp-step-v3-5-0 .substep=${true}>
                 <p slot="label">Sub step 3.1</p>
-              </wpp-step-v4-0-0>
-              <wpp-step-v4-0-0
+              </wpp-step-v3-5-0>
+              <wpp-step-v3-5-0
                 id="step3_2"
                 .error=${args.error}
                 .substep=${true}
                 .iconDescription=${args.iconDescription}
               >
                 <p slot="label">Sub step 3.2</p>
-              </wpp-step-v4-0-0>
-              <wpp-step-v4-0-0 .substep=${true}>
+              </wpp-step-v3-5-0>
+              <wpp-step-v3-5-0 .substep=${true}>
                 <p slot="label">Sub step 3.3</p>
-              </wpp-step-v4-0-0>
-            </wpp-step-v4-0-0>
-            <wpp-step-v4-0-0>
+              </wpp-step-v3-5-0>
+            </wpp-step-v3-5-0>
+            <wpp-step-v3-5-0>
               <p slot="label">Step 4</p>
               <span slot="description">Last Step</span>
-            </wpp-step-v4-0-0>
-          </wpp-stepper-v4-0-0>
+            </wpp-step-v3-5-0>
+          </wpp-stepper-v3-5-0>
         </div>
         <div style=${styleMap(pageWrapper)}>
           <div id="page_list" style=${styleMap(pageListStyle)}>
@@ -279,7 +279,7 @@ export const VerticalDecimalStepper = (args) => {
             </div>
             <div style=${styleMap(pageStyle)}>
               <h3>Sub page 3.2</h3>
-              <wpp-checkbox-v4-0-0 style="margin-left: 16px;" @click=${handleCheckboxClick} />
+              <wpp-checkbox-v3-5-0 style="margin-left: 16px;" @click=${handleCheckboxClick} />
             </div>
             <div style=${styleMap(pageStyle)}>
               <h3>Sub page 3.3</h3>
@@ -294,8 +294,8 @@ export const VerticalDecimalStepper = (args) => {
         </div>
       </div>
       <div style=${styleMap(buttonWrapper)}>
-        <wpp-button-v4-0-0 .variant=${'secondary'} @click=${handlePreviousClick}>Previous Step</wpp-button-v4-0-0>
-        <wpp-button-v4-0-0 @click=${handleNextClick} style="margin-left: 16px;">Next Step</wpp-button-v4-0-0>
+        <wpp-button-v3-5-0 .variant=${'secondary'} @click=${handlePreviousClick}>Previous Step</wpp-button-v3-5-0>
+        <wpp-button-v3-5-0 @click=${handleNextClick} style="margin-left: 16px;">Next Step</wpp-button-v3-5-0>
       </div>
     </div>
   `;
@@ -311,52 +311,52 @@ export const Vertical = {
       <div>
         <div style="display: flex;">
           <div style="width: 200px; text-align: center;">
-            <wpp-stepper-v4-0-0
+            <wpp-stepper-v3-5-0
               .activeStep=${stepperState.currentStep}
               .orientation=${'vertical'}
               @wppChange=${handleStepClick}
             >
-              <wpp-step-v4-0-0>
+              <wpp-step-v3-5-0>
                 <p slot="label">Step with a long text</p>
                 <span slot="description">
                   First step (this text gets truncated if it's too long and a tooltip is displayed)
                 </span>
-              </wpp-step-v4-0-0>
-              <wpp-step-v4-0-0>
+              </wpp-step-v3-5-0>
+              <wpp-step-v3-5-0>
                 <p slot="label">Step 2</p>
-                <wpp-step-v4-0-0 .substep=${true}>
+                <wpp-step-v3-5-0 .substep=${true}>
                   <div slot="label">
                     <p>Sub step 2.1</p>
                   </div>
-                </wpp-step-v4-0-0>
-                <wpp-step-v4-0-0 id="step" .substep=${true}>
+                </wpp-step-v3-5-0>
+                <wpp-step-v3-5-0 id="step" .substep=${true}>
                   <p slot="label">Sub step 2.2</p>
-                </wpp-step-v4-0-0>
-              </wpp-step-v4-0-0>
-              <wpp-step-v4-0-0>
+                </wpp-step-v3-5-0>
+              </wpp-step-v3-5-0>
+              <wpp-step-v3-5-0>
                 <p slot="label">Step 3</p>
                 <span slot="description">With sub-steps</span>
-                <wpp-step-v4-0-0 .substep=${true}>
+                <wpp-step-v3-5-0 .substep=${true}>
                   <div slot="label">
                     <p>Sub step 3.1</p>
                   </div>
-                </wpp-step-v4-0-0>
-                <wpp-step-v4-0-0 id="step" .substep=${true}>
+                </wpp-step-v3-5-0>
+                <wpp-step-v3-5-0 id="step" .substep=${true}>
                   <p slot="label">Sub step 3.2</p>
-                </wpp-step-v4-0-0>
-                <wpp-step-v4-0-0 .substep=${true}>
+                </wpp-step-v3-5-0>
+                <wpp-step-v3-5-0 .substep=${true}>
                   <div slot="label">
                     <p>Sub step 3.3</p>
                   </div>
-                </wpp-step-v4-0-0>
-              </wpp-step-v4-0-0>
-              <wpp-step-v4-0-0>
+                </wpp-step-v3-5-0>
+              </wpp-step-v3-5-0>
+              <wpp-step-v3-5-0>
                 <div slot="label">
                   <p>Step 4</p>
                 </div>
                 <span slot="description">Last Step</span>
-              </wpp-step-v4-0-0>
-            </wpp-stepper-v4-0-0>
+              </wpp-step-v3-5-0>
+            </wpp-stepper-v3-5-0>
           </div>
           <div style=${styleMap(pageWrapper)}>
             <div id="page_list" style=${styleMap(pageListStyle)}>
@@ -394,8 +394,8 @@ export const Vertical = {
           </div>
         </div>
         <div style=${styleMap(buttonWrapper)}>
-          <wpp-button-v4-0-0 .variant=${'secondary'} @click=${handlePreviousClick}>Previous Step</wpp-button-v4-0-0>
-          <wpp-button-v4-0-0 @click=${handleNextClick} style="margin-left: 16px;">Next Step</wpp-button-v4-0-0>
+          <wpp-button-v3-5-0 .variant=${'secondary'} @click=${handlePreviousClick}>Previous Step</wpp-button-v3-5-0>
+          <wpp-button-v3-5-0 @click=${handleNextClick} style="margin-left: 16px;">Next Step</wpp-button-v3-5-0>
         </div>
       </div>
     `;
@@ -408,52 +408,52 @@ export const VerticalStepperWithWidth = {
       <div>
         <div style="display: flex;">
           <div style="width: 25%; text-align: center;">
-            <wpp-stepper-v4-0-0
+            <wpp-stepper-v3-5-0
               .stepperWidth=${'100%'}
               .activeStep=${stepperState.currentStep}
               .orientation=${'vertical'}
               @wppChange=${handleStepClick}
             >
-              <wpp-step-v4-0-0>
+              <wpp-step-v3-5-0>
                 <p slot="label">Step 1 with a long text</p>
                 <span slot="description">
                   First step (this text gets truncated if it's too long and a tooltip is displayed)
                 </span>
-              </wpp-step-v4-0-0>
-              <wpp-step-v4-0-0>
+              </wpp-step-v3-5-0>
+              <wpp-step-v3-5-0>
                 <p slot="label">Step 2</p>
                 <span slot="description">With substeps</span>
-                <wpp-step-v4-0-0 .substep=${true}>
+                <wpp-step-v3-5-0 .substep=${true}>
                   <p slot="label">Sub step 2.1</p>
-                </wpp-step-v4-0-0>
-                <wpp-step-v4-0-0 id="step" .substep=${true}>
+                </wpp-step-v3-5-0>
+                <wpp-step-v3-5-0 id="step" .substep=${true}>
                   <p slot="label">Sub step 2.2</p>
-                </wpp-step-v4-0-0>
-              </wpp-step-v4-0-0>
-              <wpp-step-v4-0-0>
+                </wpp-step-v3-5-0>
+              </wpp-step-v3-5-0>
+              <wpp-step-v3-5-0>
                 <p slot="label">Step 3 which also has a long text that gets truncated</p>
                 <span slot="description">With sub-steps and a long description</span>
-                <wpp-step-v4-0-0 .substep=${true}>
+                <wpp-step-v3-5-0 .substep=${true}>
                   <p slot="label">Sub step 3.1 with more details</p>
-                </wpp-step-v4-0-0>
-                <wpp-step-v4-0-0 id="step" .substep=${true}>
+                </wpp-step-v3-5-0>
+                <wpp-step-v3-5-0 id="step" .substep=${true}>
                   <p slot="label">Sub step 3.2</p>
-                </wpp-step-v4-0-0>
-                <wpp-step-v4-0-0 .substep=${true}>
+                </wpp-step-v3-5-0>
+                <wpp-step-v3-5-0 .substep=${true}>
                   <p slot="label">Sub step 3.3</p>
-                </wpp-step-v4-0-0>
-              </wpp-step-v4-0-0>
-              <wpp-step-v4-0-0>
+                </wpp-step-v3-5-0>
+              </wpp-step-v3-5-0>
+              <wpp-step-v3-5-0>
                 <p slot="label">Step 4</p>
-              </wpp-step-v4-0-0>
-              <wpp-step-v4-0-0>
+              </wpp-step-v3-5-0>
+              <wpp-step-v3-5-0>
                 <p slot="label">Step 5 with a long text that gets truncated</p>
-              </wpp-step-v4-0-0>
-              <wpp-step-v4-0-0>
+              </wpp-step-v3-5-0>
+              <wpp-step-v3-5-0>
                 <p slot="label">Step 6 and again a long text</p>
                 <span slot="description">Last Step with a really really long text</span>
-              </wpp-step-v4-0-0>
-            </wpp-stepper-v4-0-0>
+              </wpp-step-v3-5-0>
+            </wpp-stepper-v3-5-0>
           </div>
           <div style=${styleMap(pageWrapperWWidth)}>
             <div id="page_list" style=${styleMap(pageListStyle)}>
@@ -497,8 +497,8 @@ export const VerticalStepperWithWidth = {
           </div>
         </div>
         <div style=${styleMap(buttonWrapper)}>
-          <wpp-button-v4-0-0 .variant=${'secondary'} @click=${handlePreviousClick}>Previous Step</wpp-button-v4-0-0>
-          <wpp-button-v4-0-0 @click=${handleNextClick} style="margin-left: 16px;">Next Step</wpp-button-v4-0-0>
+          <wpp-button-v3-5-0 .variant=${'secondary'} @click=${handlePreviousClick}>Previous Step</wpp-button-v3-5-0>
+          <wpp-button-v3-5-0 @click=${handleNextClick} style="margin-left: 16px;">Next Step</wpp-button-v3-5-0>
         </div>
       </div>
     `;
@@ -511,35 +511,35 @@ export const Horizontal = (args) => {
     <div>
       <div style="display: flex; flex-direction: column;">
         <div style="width: 100%; height: 60px; text-align: center; margin-bottom: 20px;">
-          <wpp-stepper-v4-0-0
+          <wpp-stepper-v3-5-0
             .activeStep=${stepperState.currentStep}
             .orientation=${'horizontal'}
             @wppChange=${handleHorizontalStepClick}
           >
-            <wpp-step-v4-0-0>
+            <wpp-step-v3-5-0>
               <p slot="label">Step 1</p>
-            </wpp-step-v4-0-0>
-            <wpp-step-v4-0-0>
+            </wpp-step-v3-5-0>
+            <wpp-step-v3-5-0>
               <div slot="label">
                 <p>Step 2</p>
               </div>
-            </wpp-step-v4-0-0>
-            <wpp-step-v4-0-0>
+            </wpp-step-v3-5-0>
+            <wpp-step-v3-5-0>
               <div slot="label">
                 <p>Step 3</p>
               </div>
-            </wpp-step-v4-0-0>
-            <wpp-step-v4-0-0 id="step" .error=${args.error} .iconDescription=${args.iconDescription}>
+            </wpp-step-v3-5-0>
+            <wpp-step-v3-5-0 id="step" .error=${args.error} .iconDescription=${args.iconDescription}>
               <div slot="label">
                 <p>Step 4</p>
               </div>
-            </wpp-step-v4-0-0>
-            <wpp-step-v4-0-0>
+            </wpp-step-v3-5-0>
+            <wpp-step-v3-5-0>
               <div slot="label">
                 <p>Step 5</p>
               </div>
-            </wpp-step-v4-0-0>
-          </wpp-stepper-v4-0-0>
+            </wpp-step-v3-5-0>
+          </wpp-stepper-v3-5-0>
         </div>
         <div style=${styleMap(pageWrapper)}>
           <div id="page_list" style=${styleMap(pageListStyle)}>
@@ -565,10 +565,10 @@ export const Horizontal = (args) => {
         </div>
       </div>
       <div style=${styleMap(buttonWrapper)}>
-        <wpp-button-v4-0-0 .variant=${'secondary'} @click=${handleHorizontalPreviousClick}
-          >Previous Step</wpp-button-v4-0-0
+        <wpp-button-v3-5-0 .variant=${'secondary'} @click=${handleHorizontalPreviousClick}
+          >Previous Step</wpp-button-v3-5-0
         >
-        <wpp-button-v4-0-0 @click=${handleHorizontalNextClick} style="margin-left: 16px;">Next Step</wpp-button-v4-0-0>
+        <wpp-button-v3-5-0 @click=${handleHorizontalNextClick} style="margin-left: 16px;">Next Step</wpp-button-v3-5-0>
       </div>
     </div>
   `;

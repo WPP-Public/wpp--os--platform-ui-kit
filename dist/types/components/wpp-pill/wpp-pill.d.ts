@@ -21,15 +21,11 @@ interface FocusType {
  */
 export declare class WppPill {
   private inputEl?;
-  private labelRef?;
-  private resizeObserver?;
-  private resizeObserverCallback?;
   host: HTMLWppPillElement;
   hasIconStartSlot: boolean;
   hasSquareIcon: boolean;
   componentState?: PillState | null;
   focusType: FocusType;
-  isOverflowTruncated: boolean;
   /**
    * Defines the pill value.
    */
@@ -70,13 +66,8 @@ export declare class WppPill {
   /**
    * Defines the maximum label length (in characters) of a single item.
    * Zero or fewer means there is no limit
-   * @deprecated - this prop will be deleted in version 4.0.0.
    */
   readonly maxLength?: number;
-  /**
-   * If set, the tooltip will be shown when the text is truncated.
-   */
-  readonly showTooltipOnTruncate = true;
   /**
    * Emitted when the selected state changes.
    */
@@ -98,8 +89,6 @@ export declare class WppPill {
    */
   wppDragPress: EventEmitter<MouseEvent>;
   componentWillLoad(): void;
-  componentDidLoad(): void;
-  disconnectedCallback(): void;
   private getUpdatedFocusInfo;
   private updateSlotData;
   private onClick;
@@ -112,15 +101,10 @@ export declare class WppPill {
   private setFocus;
   private updateComponentState;
   private checkTabIndex;
-  private getLabelText;
-  private checkLabelOverflow;
-  private initResizeObserver;
-  private renderLabel;
-  private setLabelRef;
-  private findLabelEl;
   private cssClasses;
   private slotCssClasses;
   private hostCssClasses;
+  private getLabelText;
   render(): any;
 }
 export {};
