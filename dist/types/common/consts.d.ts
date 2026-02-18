@@ -1,8 +1,8 @@
 export declare enum Z_INDEX {
   TOOLTIP = 1200,
-  CONTEXT_MENU = 1150,
   TOAST = 1050,
   OVERLAY = 900,
+  TOPBAR = 899,
   NAV_SIDEBAR = 899,
   STICKY_BAR = 890,
   COLOR_PICKER = 880,
@@ -12,9 +12,9 @@ export declare enum Z_INDEX {
   MENU_LIST = 880,
   SEARCH = 880,
   POPOVER = 880,
+  CONTEXT_MENU = 880,
   MODAL = 875,
   SIDE_MODAL = 870,
-  TOPBAR = 860,
   CHAT = 100,
   BANNER = 1
 }

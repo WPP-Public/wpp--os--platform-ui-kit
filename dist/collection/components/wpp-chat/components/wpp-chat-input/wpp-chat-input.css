@@ -24,12 +24,7 @@
   --chat-text-input-min-height: var(--wpp-chat-text-input-min-height, 52px);
   --chat-text-input-padding: var(--wpp-chat-text-input-padding, 0);
   --chat-text-input-bg-color: var(--wpp-chat-text-input-bg-color, transparent);
-  --chat-text-input-color-disabled: var(--wpp-chat-text-input-color-disabled, var(--wpp-text-color-disabled));
   --chat-text-input-placeholder-color: var(--wpp-chat-text-input-placeholder-color, var(--wpp-grey-color-700));
-  --chat-text-input-placeholder-color-disabled: var(
-    --wpp-chat-text-input-placeholder-color-disabled,
-    var(--wpp-text-color-disabled)
-  );
   --chat-actions-bar-padding: var(--wpp-chat-actions-bar-padding, 0 10px 8px 10px);
   --chat-actions-bar-color: var(--wpp-chat-actions-bar-color, var(--wpp-grey-color-500));
   --chat-actions-bar-color-disabled: var(--wpp-chat-actions-bar-color-disabled, var(--wpp-grey-color-400));
@@ -189,12 +184,18 @@
 .input-area textarea::placeholder {
   color: var(--chat-text-input-placeholder-color);
 }
+.input-area textarea:hover, .input-area textarea:focus-within {
+  color: var(--wpp-grey-color-1000);
+}
+.input-area textarea:active {
+  color: var(--wpp-grey-color-1000);
+}
 .input-area textarea:disabled {
   cursor: not-allowed;
-  color: var(--chat-text-input-color-disabled);
+  color: var(--wpp-grey-color-500);
 }
 .input-area textarea:disabled::placeholder {
-  color: var(--chat-text-input-placeholder-color-disabled);
+  color: var(--wpp-grey-color-500);
 }
 
 .input-area.minimized {
@@ -231,13 +232,13 @@
   width: 100%;
 }
 .input-area.minimized .minimized-input .input-value.disabled {
-  color: var(--chat-text-input-color-disabled);
+  color: var(--wpp-grey-color-500);
 }
 .input-area.minimized .minimized-input .input-value-placeholder {
   color: var(--chat-text-input-placeholder-color);
 }
 .input-area.minimized .minimized-input .input-value-placeholder.disabled {
-  color: var(--chat-text-input-placeholder-color-disabled);
+  color: var(--wpp-grey-color-500);
 }
 
 /* Actions Bar */

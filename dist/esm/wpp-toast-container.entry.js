@@ -1,7 +1,7 @@
 import { r as registerInstance, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { u as uuidv4 } from './utils-fb733700.js';
+import { u as uuidv4 } from './utils-cc81a41b.js';
 import { A as ANIMATION_DURATION } from './const-8c738d5b.js';
-import { Z as Z_INDEX } from './consts-5bf9c29f.js';
+import { Z as Z_INDEX } from './consts-9fc0a13a.js';
 
 const wppToastContainerCss = ":host(.wpp-toast-container){--toast-margin-bottom:var(--wpp-toast-margin-bottom, 8px);display:-ms-inline-flexbox;display:inline-flex;position:fixed;top:16px;right:16px;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start}:host(.wpp-toast-container) .wpp-toast:not(:last-child){margin-bottom:var(--toast-margin-bottom)}";
 
@@ -60,9 +60,9 @@ const WppToastContainer = class {
   }
   render() {
     const { toasts } = this;
-    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "item" }, toasts.map(toast => (h("wpp-toast-v3-4-0", { key: toast.id, index: toast.id, message: toast.message, type: toast.type, header: toast.header, duration: toast.duration, primaryBtn: toast.primaryBtn, maxMessageLines: toast.maxMessageLines, icon: toast.icon, part: "item", onWppToastComplete: this.handleToastComplete })))));
+    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "item" }, toasts.map(toast => (h("wpp-toast-v4-0-0", { key: toast.id, index: toast.id, message: toast.message, type: toast.type, header: toast.header, duration: toast.duration, primaryBtn: toast.primaryBtn, maxMessageLines: toast.maxMessageLines, icon: toast.icon, part: "item", onWppToastComplete: this.handleToastComplete })))));
   }
-  static get registryIs() { return "wpp-toast-container-v3-4-0"; }
+  static get registryIs() { return "wpp-toast-container-v4-0-0"; }
   get host() { return getElement(this); }
 };
 WppToastContainer.style = wppToastContainerCss;

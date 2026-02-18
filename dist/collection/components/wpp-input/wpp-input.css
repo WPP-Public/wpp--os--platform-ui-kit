@@ -176,7 +176,7 @@
 :host(.wpp-size-m) .input-with-icons .with-icon-start {
   padding-left: var(--text-input-with-icons-padding-m);
 }
-:host(.wpp-size-m) .input-with-icons .with-icon-end {
+:host(.wpp-size-m) .input-with-icons .input-element {
   padding-right: var(--text-input-with-icons-padding-m);
 }
 :host(.wpp-size-m) .input-with-icons .with-double-icon-end {
@@ -195,7 +195,7 @@
 :host(.wpp-size-s) .input-with-icons .with-icon-start {
   padding-left: var(--text-input-with-icons-padding-s);
 }
-:host(.wpp-size-s) .input-with-icons .with-icon-end {
+:host(.wpp-size-s) .input-with-icons .input-element {
   padding-right: var(--text-input-with-icons-padding-s);
 }
 :host(.wpp-size-s) .input-with-icons .with-double-icon-end {

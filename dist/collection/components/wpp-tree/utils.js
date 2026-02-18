@@ -23,12 +23,19 @@ export const areAnyChildrenDisabled = (treeData) => treeData.some(item => {
     return !!item.disabled;
   }
 });
-export const findTreeItemById = (treeData, id) => treeData.find(item => {
-  if (item.id !== id && item.children?.length) {
-    return findTreeItemById(item.children, id);
+export const findTreeItemById = (treeData, id) => {
+  for (const item of treeData) {
+    if (String(item.id) === String(id)) {
+      return item;
+    }
+    if (item.children?.length) {
+      const found = findTreeItemById(item.children, id);
+      if (found)
+        return found;
+    }
   }
-  return item;
-});
+  return undefined;
+};
 export const updateTreeById = (tree, id, newItem) => tree.map(item => {
   if (item.id !== id) {
     if (item.children?.length) {

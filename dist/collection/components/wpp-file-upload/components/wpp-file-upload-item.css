@@ -148,6 +148,12 @@
   color: var(--fu-item-item-color);
 }
 
+.error-message {
+  margin-left: 8px;
+  white-space: nowrap;
+  color: var(--fu-item-item-color);
+}
+
 .name {
   --wpp-typography-color: var(--fu-item-item-name-color);
   width: 100%;

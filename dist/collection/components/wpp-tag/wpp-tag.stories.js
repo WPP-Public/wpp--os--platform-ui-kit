@@ -47,10 +47,10 @@ export const Tag = (args) => html `
   </style>
 
   <div class="wrapper">
-    <wpp-tag-v3-4-0 .label="${args.label}" .variant=${args.variant}></wpp-tag-v3-4-0>
-    <wpp-tag-v3-4-0 .label="${args.label}" .variant=${args.variant}>
-      ${args.showIconStart ? html ` <wpp-icon-premium-v3-4-0 slot="icon-start"></wpp-icon-premium-v3-4-0> ` : null}
-    </wpp-tag-v3-4-0>
+    <wpp-tag-v4-0-0 .label="${args.label}" .variant=${args.variant}></wpp-tag-v4-0-0>
+    <wpp-tag-v4-0-0 .label="${args.label}" .variant=${args.variant}>
+      ${args.showIconStart ? html ` <wpp-icon-premium-v4-0-0 slot="icon-start"></wpp-icon-premium-v4-0-0> ` : null}
+    </wpp-tag-v4-0-0>
   </div>
 `;
 Tag.args = {

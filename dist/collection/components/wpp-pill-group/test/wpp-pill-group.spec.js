@@ -1,6 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { WppPillGroup } from '../wpp-pill-group';
-import { WppPill } from '../components/wpp-pill/wpp-pill';
+import { WppPill } from '../../wpp-pill/wpp-pill';
 import { h } from '@stencil/core';
 describe('wpp-pill-group', () => {
   it('renders single type pill with items and attributes', async () => {
@@ -43,7 +43,7 @@ describe('wpp-pill-group', () => {
     const value = ['email', 'mail'];
     const page = await newSpecPage({
       components: [WppPillGroup, WppPill],
-      template: () => (h("wpp-pill-group-v3-4-0", { size: "m", type: "multiple", value: value }, h("wpp-pill-v3-4-0", { name: "contact", value: "email", label: "Email" }), h("wpp-pill-v3-4-0", { name: "contact", value: "mail", label: "Mail" }), h("wpp-pill-v3-4-0", { name: "contact", value: "phone", label: "Phone" }))),
+      template: () => (h("wpp-pill-group-v4-0-0", { size: "m", type: "multiple", value: value }, h("wpp-pill-v4-0-0", { name: "contact", value: "email", label: "Email" }), h("wpp-pill-v4-0-0", { name: "contact", value: "mail", label: "Mail" }), h("wpp-pill-v4-0-0", { name: "contact", value: "phone", label: "Phone" }))),
     });
     expect(page.root).toMatchSnapshot();
   });

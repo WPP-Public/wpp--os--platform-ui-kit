@@ -6,8 +6,8 @@ const index = require('./index-ecf423ba.js');
 const _commonjsHelpers = require('./_commonjsHelpers-bcc1208a.js');
 const isEqual = require('./isEqual-0b0240b4.js');
 const common = require('./common-ee802540.js');
-const utils = require('./utils-99b83069.js');
-const consts = require('./consts-779fd4ec.js');
+const utils = require('./utils-ce5c8ac5.js');
+const consts = require('./consts-dba6e6dd.js');
 const menuListConfig = require('./menuListConfig-bbde46c0.js');
 require('./tippy.esm-9d703cd4.js');
 
@@ -5784,7 +5784,6 @@ const WppDatepicker = class {
     this.labelTooltipConfig = {
       popperOptions: { strategy: 'fixed' },
     };
-    this.locale = {};
     this.locales = {};
     this.labelConfig = undefined;
     this.appendToListWrapper = false;
@@ -5885,7 +5884,7 @@ const WppDatepicker = class {
     }
   }
   componentDidLoad() {
-    this._locales = { ...this._locales, ...this.locale, ...this.locales };
+    this._locales = { ...this._locales, ...this.locales };
     this.createDateInstance();
     this.setInitialDate();
     this.setMinMaxDate();
@@ -5919,7 +5918,7 @@ const WppDatepicker = class {
     return this._locales.firstDay ?? 1; // Default to Monday (ISO 8601) if no valid value is found
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "label, datepicker-container, icon-calendar, datepicker-input, icon-cross, message, trigger-wrapper" }, this.labelConfig?.text && !this.hasTriggerSlot && (index.h("wpp-label-v3-4-0", { class: "label", htmlFor: this.name, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), index.h("div", { class: this.containerClasses(), id: "container", part: "datepicker-container" }, this.hasTriggerSlot
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "label, datepicker-container, icon-calendar, datepicker-input, icon-cross, message, trigger-wrapper" }, this.labelConfig?.text && !this.hasTriggerSlot && (index.h("wpp-label-v4-0-0", { class: "label", htmlFor: this.name, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), index.h("div", { class: this.containerClasses(), id: "container", part: "datepicker-container" }, this.hasTriggerSlot
       ? [
         index.h("input", { type: "hidden", ref: el => (this.hiddenInputRef = el), "aria-hidden": "true" }),
         index.h("div", { class: "trigger-wrapper", ref: el => (this.triggerWrapperRef = el), onClick: (e) => this.handleTriggerClick(e), role: "presentation", part: "trigger-wrapper" }, index.h("slot", { name: "trigger", onSlotchange: () => this.updateSlotData() })),
@@ -5929,10 +5928,10 @@ const WppDatepicker = class {
             (this.range
               ? `${this._locales.dateFormat}${DATES_SEPARATOR}${this._locales.dateFormat}`
               : `${this._locales.dateFormat}`), ref: inputRef => (this.inputRef = inputRef), autocomplete: "off", part: "datepicker-input", title: "" }),
-        index.h("wpp-icon-calendar-v3-4-0", { onClick: this.handleClickCalendarIcon, class: this.iconCalendarCssClasses(), part: "icon-calendar", color: "inherit" }),
-      ], index.h("div", { onBlur: this.handleBlurPortal, onFocus: () => clearTimeout(this.hideTimer), ...(this.hasPresets() ? { tabIndex: 0 } : {}), ref: ref => (this.portalRef = ref), class: this.portalClasses() }, this.hasPresets() && (index.h("div", { class: "wpp-presets-container" }, index.h("div", { class: "wpp-presets-list" }, this.presets.map((preset) => (index.h("wpp-list-item-v3-4-0", { onMouseEnter: () => this.handlePreviewPreset(preset.value), onMouseLeave: this.handleMouseLeavePreset, onWppChangeListItem: () => this.handleClickPreset(preset), class: "wpp-presets-item" }, index.h("wpp-typography-v3-4-0", { type: "s-body", slot: "label" }, preset.label))))), index.h("div", { class: "wpp-presets-footer" })))), !!this.lastValidDate && !this.hasTriggerSlot && (index.h("wpp-icon-cross-v3-4-0", { class: this.iconCrossCssClasses(), "aria-label": "Erase date", onClick: this.handleClickIconCross, part: "icon-cross" })), this.message && (index.h("wpp-inline-message-v3-4-0", { class: "inline-message", message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })))));
+        index.h("wpp-icon-calendar-v4-0-0", { onClick: this.handleClickCalendarIcon, class: this.iconCalendarCssClasses(), part: "icon-calendar", color: "inherit" }),
+      ], index.h("div", { onBlur: this.handleBlurPortal, onFocus: () => clearTimeout(this.hideTimer), ...(this.hasPresets() ? { tabIndex: 0 } : {}), ref: ref => (this.portalRef = ref), class: this.portalClasses() }, this.hasPresets() && (index.h("div", { class: "wpp-presets-container" }, index.h("div", { class: "wpp-presets-list" }, this.presets.map((preset) => (index.h("wpp-list-item-v4-0-0", { onMouseEnter: () => this.handlePreviewPreset(preset.value), onMouseLeave: this.handleMouseLeavePreset, onWppChangeListItem: () => this.handleClickPreset(preset), class: "wpp-presets-item" }, index.h("wpp-typography-v4-0-0", { type: "s-body", slot: "label" }, preset.label))))), index.h("div", { class: "wpp-presets-footer" })))), !!this.lastValidDate && !this.hasTriggerSlot && (index.h("wpp-icon-cross-v4-0-0", { class: this.iconCrossCssClasses(), "aria-label": "Erase date", onClick: this.handleClickIconCross, part: "icon-cross" })), this.message && (index.h("wpp-inline-message-v4-0-0", { class: "inline-message", message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })))));
   }
-  static get registryIs() { return "wpp-datepicker-v3-4-0"; }
+  static get registryIs() { return "wpp-datepicker-v4-0-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "lastValidDate": ["updateDatepickerClearButton"],

@@ -1,10 +1,10 @@
 import { EventEmitter } from '../../stencil-public-runtime';
-import { SideModalCloseDetails, SideModalFormConfig, SideModalCloseReason, ActionConfig, HeaderActionsConfig } from './types';
+import { AriaProps } from '../../types/common';
+import { SideModalCloseDetails, SideModalFormConfig, SideModalCloseReason, ActionConfig, HeaderActionsConfig, SideModalLocalesType } from './types';
 /**
  * @slot header - Content that is displayed within the `.side-modal` element. To add header content, pass `slot="header"` – can contain the modal title.
  * @slot body - Content that is displayed within the `.side-modal` element. To add body content, pass `slot="body"` – can contain any text that describes the modal actions.
  * @slot actions - Content that is displayed within the `.side-modal` element. To add actions, pass `slot="actions"` – can contain any action buttons.
- * @deprecated The `actions` slot is deprecated and will be removed in the next major release (v3.0.0). Use the `actionsConfig` property instead.
  *
  * @part content - modal content element
  * @part wrapper - component wrapper element
@@ -23,7 +23,9 @@ export declare class WppSideModal {
   private rightButtonsConfig;
   private topOffset;
   private ignoreOutsideClicks;
+  private _locales;
   host: HTMLWppSideModalElement;
+  private dialogRef?;
   isShowContent: boolean;
   isReady: boolean;
   isHidden: boolean;
@@ -78,6 +80,14 @@ export declare class WppSideModal {
    */
   readonly headerActionsConfig: HeaderActionsConfig;
   /**
+   * Contains the modal `aria-` props.
+   */
+  readonly ariaProps: AriaProps;
+  /**
+   * Defines the component locale types.
+   */
+  readonly locales: Partial<SideModalLocalesType>;
+  /**
    * Handles the side modal closing actions.
    */
   wppSideModalClose: EventEmitter<SideModalCloseDetails>;
@@ -97,11 +107,6 @@ export declare class WppSideModal {
    * Event emitted when the close animation ends.
    */
   wppSideModalCloseComplete: EventEmitter<SideModalCloseDetails>;
-  /**
-   * Handles the side modal click actions.
-   * @deprecated - this prop will be deleted in version 4.0.0 . Use `wppSideModalOpenStart`/`wppSideModalOpenComplete` instead
-   */
-  wppSideModalOpen: EventEmitter<void>;
   /**
    * Handles the side modal back button click.
    */
@@ -132,6 +137,7 @@ export declare class WppSideModal {
   private handleTransitionEnd;
   private renderLeftButton;
   private renderRightButtons;
+  private focusDialog;
   private headerCssClasses;
   private bodyCssClasses;
   private actionsCssClasses;

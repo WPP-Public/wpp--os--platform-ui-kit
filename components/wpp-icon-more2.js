@@ -22,9 +22,9 @@ const WppIconMore = /*@__PURE__*/ proxyCustomElement(class WppIconMore extends H
   render() {
     return (h(WppIcon, { name: "wpp-icon-more", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: MenuDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-more-v3-4-0"; }
+  static get registryIs() { return "wpp-icon-more-v4-0-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-more", "wpp-icon-more-v3-4-0", {
+}, [1, "wpp-icon-more", "wpp-icon-more-v4-0-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -35,9 +35,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-more-v3-4-0"];
+  const components = ["wpp-icon-more-v4-0-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-more-v3-4-0":
+    case "wpp-icon-more-v4-0-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconMore);
       }

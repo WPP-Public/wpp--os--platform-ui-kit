@@ -1,9 +1,9 @@
 import { r as registerInstance, c as createEvent, h, F as Fragment, H as Host, g as getElement } from './index-9177bb6d.js';
-import { i as isEqual_1 } from './isEqual-9c20096c.js';
-import { k as transformToVersionedTag, s as selectDropdownWidth, n as autoFocusElement, b as isEventTargetContained } from './utils-fb733700.js';
+import { c as isEqual_1 } from './isEqual-16870baf.js';
+import { k as transformToVersionedTag, s as selectDropdownWidth, n as autoFocusElement, b as isEventTargetContained } from './utils-cc81a41b.js';
 import { m as menuListConfig } from './menuListConfig-4d091d14.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
-import { Z as Z_INDEX } from './consts-5bf9c29f.js';
+import { Z as Z_INDEX } from './consts-9fc0a13a.js';
 import './_commonjsHelpers-ba3f0406.js';
 import './tippy.esm-c5fe8087.js';
 
@@ -297,7 +297,7 @@ const WppSearch = class {
     this.renderInputPlaceholder = () => {
       if ((this.isFocused && !this.searchValue) || this.isDropdownShown || !this.value.length)
         return null;
-      return (h("wpp-typography-v3-4-0", { type: "s-body", class: "input-placeholder", ref: placeholderEl => (this.placeholderEl = placeholderEl) }, this.getOptionLabel(this.value[0])));
+      return (h("wpp-typography-v4-0-0", { type: "s-body", class: "input-placeholder", ref: placeholderEl => (this.placeholderEl = placeholderEl) }, this.getOptionLabel(this.value[0])));
     };
     this.getDropdownWidth = () => {
       if (this.dropdownWidth === 'auto') {
@@ -313,12 +313,12 @@ const WppSearch = class {
       if (this.value.length && !this.isFocused)
         return null;
       if (this.loading) {
-        return (h("div", { class: "loading" }, h("wpp-spinner-v3-4-0", { slot: "left" }), h("wpp-typography-v3-4-0", { type: "s-body", slot: "label" }, this._locales.loading)));
+        return (h("div", { class: "loading" }, h("wpp-spinner-v4-0-0", { slot: "left" }), h("wpp-typography-v4-0-0", { type: "s-body", slot: "label" }, this._locales.loading)));
       }
       if (this.isEmptyOptions) {
-        return (h(Fragment, null, h("wpp-list-item-v3-4-0", { class: "nothing-found-wrapper" }, h("wpp-typography-v3-4-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound))));
+        return (h(Fragment, null, h("wpp-list-item-v4-0-0", { class: "nothing-found-wrapper" }, h("wpp-typography-v4-0-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound))));
       }
-      return (h(Fragment, null, !!this._locales.dropdownHeader && (h("wpp-list-item-v3-4-0", { class: "dropdown-header", part: "dropdown-header" }, h("wpp-typography-v3-4-0", { type: "s-strong", slot: "label" }, this._locales.dropdownHeader))), h("slot", null), h("div", null, this.isInfiniteLoading && (h("div", { class: "infinite-loader" }, h("wpp-spinner-v3-4-0", null))))));
+      return (h(Fragment, null, !!this._locales.dropdownHeader && (h("wpp-list-item-v4-0-0", { class: "dropdown-header", part: "dropdown-header" }, h("wpp-typography-v4-0-0", { type: "s-strong", slot: "label" }, this._locales.dropdownHeader))), h("slot", null), h("div", null, this.isInfiniteLoading && (h("div", { class: "infinite-loader" }, h("wpp-spinner-v4-0-0", null))))));
     };
     this.isFocused = false;
     this.searchValue = '';
@@ -479,9 +479,9 @@ const WppSearch = class {
     const style = {
       '--custom-dropdown-width': this.getDropdownWidth(),
     };
-    return (h(Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, dropdown-header, options" }, h("div", { class: this.searchWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (h("wpp-label-v3-4-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.hasSearchButton() && h("wpp-icon-search-v3-4-0", null), this.hasActiveEllipses ? (h("wpp-tooltip-v3-4-0", { part: "anchor", value: this.value.length ? this.getOptionLabel(this.value[0]) : undefined, class: this.tooltipCSSClasses() }, this.renderInputPlaceholder())) : (this.renderInputPlaceholder()), h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, onClick: this.handleInputMouseDown, tabIndex: this.disabled ? -1 : 0, title: "" })), h("div", { class: "trigger-actions" }, this.hasClearButton() && h("wpp-icon-cross-v3-4-0", { onClick: this.handleClearClick }))), !!this.message && (h("wpp-inline-message-v3-4-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderDropdownContent()))));
+    return (h(Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, dropdown-header, options" }, h("div", { class: this.searchWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (h("wpp-label-v4-0-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.hasSearchButton() && h("wpp-icon-search-v4-0-0", null), this.hasActiveEllipses ? (h("wpp-tooltip-v4-0-0", { part: "anchor", value: this.value.length ? this.getOptionLabel(this.value[0]) : undefined, class: this.tooltipCSSClasses() }, this.renderInputPlaceholder())) : (this.renderInputPlaceholder()), h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, onClick: this.handleInputMouseDown, tabIndex: this.disabled ? -1 : 0, title: "" })), h("div", { class: "trigger-actions" }, this.hasClearButton() && h("wpp-icon-cross-v4-0-0", { onClick: this.handleClearClick }))), !!this.message && (h("wpp-inline-message-v4-0-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderDropdownContent()))));
   }
-  static get registryIs() { return "wpp-search-v3-4-0"; }
+  static get registryIs() { return "wpp-search-v4-0-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "value": ["onNextValueChange"],

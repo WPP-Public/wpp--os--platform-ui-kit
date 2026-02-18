@@ -6,7 +6,7 @@ const WppQuillStyles = class {
   constructor(hostRef) {
     registerInstance(this, hostRef);
   }
-  static get registryIs() { return "wpp-quill-styles-v3-4-0"; }
+  static get registryIs() { return "wpp-quill-styles-v4-0-0"; }
 };
 WppQuillStyles.style = wppCss;
 
@@ -16,7 +16,7 @@ const WppRichtextCommonStyles = class {
   constructor(hostRef) {
     registerInstance(this, hostRef);
   }
-  static get registryIs() { return "wpp-richtext-common-styles-v3-4-0"; }
+  static get registryIs() { return "wpp-richtext-common-styles-v4-0-0"; }
 };
 WppRichtextCommonStyles.style = wppRichtextCommonStylesCss;
 

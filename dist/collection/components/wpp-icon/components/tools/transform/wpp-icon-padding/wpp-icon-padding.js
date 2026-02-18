@@ -19,7 +19,7 @@ export class WppIconPadding {
     return (h(WppIcon, { name: "wpp-icon-padding", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: PaddingDirectionIconPath[this.direction], fill: "currentColor" })));
   }
   static get is() { return "wpp-icon-padding"; }
-  static get registryIs() { return "wpp-icon-padding-v3-4-0"; }
+  static get registryIs() { return "wpp-icon-padding-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

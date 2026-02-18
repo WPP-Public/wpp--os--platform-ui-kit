@@ -36,7 +36,7 @@ export declare class WppRichtextView implements ComponentDidLoad {
   styles?: string;
   /**
    * @deprecated This property is no longer needed. Whitespace preservation is now the default behavior
-   * for markdown format. This prop will be removed in a future major version.
+   * for markdown format. This prop will be removed in version 5.0.0.
    */
   preserveWhitespace: boolean;
   /**

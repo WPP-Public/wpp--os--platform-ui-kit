@@ -16,9 +16,9 @@ const WppIconTwentyFourHours$1 = /*@__PURE__*/ proxyCustomElement(class WppIconT
   render() {
     return (h(WppIcon, { name: "wpp-icon-twenty-four-hours", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M6.39965 7.39541C6.67766 7.08945 7.1322 6.79995 7.79997 6.79995C8.72186 6.79995 9.31537 7.4336 9.52361 8.12894C9.72645 8.80624 9.60342 9.6451 9.02798 10.2232C8.83022 10.4219 8.59747 10.6016 8.3937 10.759L8.36112 10.7842C8.13777 10.9568 7.93829 11.1132 7.76231 11.2888C7.55751 11.493 7.39059 11.7163 7.29325 12H8.99997C9.33134 12 9.59997 12.2686 9.59997 12.6C9.59997 12.9313 9.33134 13.2 8.99997 13.2H6.59997C6.44083 13.2 6.28822 13.1367 6.1757 13.0242C6.06317 12.9117 5.99996 12.7591 5.99997 12.5999C5.99998 11.6024 6.41918 10.9335 6.91491 10.4391C7.15203 10.2026 7.40944 10.0031 7.62729 9.83469L7.62969 9.83284C7.85849 9.656 8.03602 9.5188 8.17748 9.37668C8.39533 9.1578 8.47092 8.79667 8.37405 8.47321C8.28259 8.16781 8.07807 7.99995 7.79997 7.99995C7.51774 7.99995 7.37227 8.10941 7.28778 8.2024C7.24029 8.25466 7.20781 8.3078 7.18799 8.34653C7.17834 8.36539 7.1725 8.37926 7.16996 8.38562L7.16911 8.38779C7.06593 8.69736 6.73325 8.86838 6.42057 8.77041C6.10436 8.67134 5.92834 8.33468 6.02741 8.01847L6.05516 7.94153C6.07001 7.90426 6.09112 7.85579 6.11975 7.79985C6.1765 7.68896 6.26589 7.54263 6.39965 7.39541ZM11 6.80002C11.3314 6.80002 11.6 7.06865 11.6 7.40002V9.59946H12.8V7.40002C12.8 7.06865 13.0686 6.80002 13.4 6.80002C13.7314 6.80002 14 7.06865 14 7.40002V12.5763C14 12.9077 13.7314 13.1763 13.4 13.1763C13.0686 13.1763 12.8 12.9077 12.8 12.5763V10.7995H11C10.6686 10.7995 10.4 10.5308 10.4 10.1995V7.40002C10.4 7.06865 10.6686 6.80002 11 6.80002ZM18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10ZM3.2 10C3.2 6.24446 6.24446 3.2 10 3.2C13.7555 3.2 16.8 6.24446 16.8 10C16.8 13.7555 13.7555 16.8 10 16.8C6.24446 16.8 3.2 13.7555 3.2 10Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-twenty-four-hours-v3-4-0"; }
+  static get registryIs() { return "wpp-icon-twenty-four-hours-v4-0-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-twenty-four-hours", "wpp-icon-twenty-four-hours-v3-4-0", {
+}, [1, "wpp-icon-twenty-four-hours", "wpp-icon-twenty-four-hours-v4-0-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -28,9 +28,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-twenty-four-hours-v3-4-0"];
+  const components = ["wpp-icon-twenty-four-hours-v4-0-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-twenty-four-hours-v3-4-0":
+    case "wpp-icon-twenty-four-hours-v4-0-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconTwentyFourHours$1);
       }

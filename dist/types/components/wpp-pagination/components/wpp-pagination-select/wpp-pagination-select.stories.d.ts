@@ -19,5 +19,4 @@ declare const _default: {
   };
 };
 export default _default;
-export declare const Select: StoryObj<Components.WppPaginationSelect>;
-export declare const Input: StoryObj<Components.WppPaginationSelect>;
+export declare const Default: StoryObj<Components.WppPaginationSelect>;

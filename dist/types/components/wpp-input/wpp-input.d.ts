@@ -21,22 +21,23 @@ interface FocusType {
  * @slot icon-end - Can contain an icon that will be placed after the main content, e.g. a cross icon.
  */
 export declare class WppInput implements BaseComponent, BaseFormControl<InputValue>, InlineMessage {
-  private hadChangesInTooltip?;
   private inputRef?;
   private lengthValidationError?;
   private maskedElement?;
-  private suppressInputEvent;
   private _locales;
   private previouslyRenderedValue?;
+  private generatedMask;
   private internalDefaultValue?;
   private resizeObserver?;
   private shouldRenderCrossIcon;
   private hasActiveEllipses;
   private hasIconStartSlot;
   private hasIconEndSlot;
+  private isInputFocused;
+  private isHovered;
   focusType: FocusType;
+  renderedValue: InputValue;
   readonly host: HTMLWppInputElement;
-  private initialProcessed;
   /**
    * Defines the input name.
    */
@@ -110,7 +111,9 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
    */
   readonly labelTooltipConfig: DropdownConfig;
   /**
-   * Defines the custom mask options. Currently, it can be used with the following types: 'decimal', 'text', 'tel'
+   * Defines the custom mask options. Under the hood, the masking is done using maskito library. Provides various options, such as: custom patterns, telephone and number patterns.
+   * Developers can also enable the placeholder for the mask by providing the `maskPlaceholder` property.
+   * It can be used with the following types: 'text', 'tel', 'search', 'url', 'password'.
    */
   readonly maskOptions?: MaskOptions;
   /**
@@ -150,7 +153,9 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
    */
   readonly withCrossIcon: boolean;
   /**
-   * Emitted when the input value changes.
+   * Emitted when the input value changes. If the input has a mask, the rawValue will also be provided.
+   * - `value`: The processed or masked value of the input (in case a mask is applied).
+   * - `rawValue`: The unformatted input value, typically representing the actual data entered by the user (provided only when the input has a mask).
    */
   readonly wppChange: EventEmitter<InputChangeEventDetail>;
   /**
@@ -162,6 +167,7 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
    */
   readonly wppBlur: EventEmitter<FocusEvent>;
   /**
+   * @deprecated Use `wppChange` instead.
    * New optional event that emits both raw and formatted values of the input.
    * - `raw`: The unformatted input value, typically representing the actual data entered by the user.
    * - `formatted`: The processed or masked value displayed in the input field, based on the applied mask or formatting rules.
@@ -180,7 +186,7 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
   /**
    * Method that sets focus on the native input.
    */
-  setFocus(): Promise<void>;
+  setFocus(isOutlined?: boolean): Promise<void>;
   /**
    * Method that sets the input value programmatically.
    */
@@ -189,20 +195,23 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
    * Method that returns current input value.
    */
   getValue(): Promise<InputValue>;
+  onUpdateMaskOptions(): void;
   onUpdateLocales(newLocales: Partial<InputLocaleInterface>): void;
+  onUpdateValue(newValue: InputValue): void;
   connectedCallback(): void;
   componentWillLoad(): void;
   componentDidRender(): void;
   private checkInputAfterRender;
-  componentDidLoad(): Promise<void>;
+  componentDidLoad(): void;
   private setupResizeObserver;
   private handleResize;
   private updateCrossIcon;
   private updateInputRef;
-  private updateInputWithMask;
+  private createMaskForInput;
+  private destroyMask;
   disconnectedCallback(): void;
   private checkForEllipsis;
-  private createMaskOptions;
+  private getMaskOptions;
   private createTelPatternOptions;
   private updateSlotData;
   private getUpdatedFocusInfo;
@@ -221,6 +230,7 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
   private iconEndCssClasses;
   private inputId;
   private labelId;
+  private getInputType;
   private renderInput;
   private renderSearchIconOrSpinner;
   render(): any;

@@ -57,8 +57,7 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
   readonly list: ListItemInterface[];
   /**
    * Defines the WppSelect component type.
-   * * Valid values: 'single' | 'multiple' | 'combined'
-   * * Note: The value 'text' is deprecated and will be removed in version 4.0.0. Use WppActionButton with WppMenuContext to achieve the same result.
+   * Valid values: 'single' | 'multiple' | 'combined'
    */
   readonly type: SelectTypes;
   /**
@@ -189,7 +188,7 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
   inputValue: string;
   /**
    * Defines the custom mask options. Currently, it can be used with the following types: 'decimal', 'text', 'tel'
-   * NOTE: Used only in `WppCombinedSelect`
+   * NOTE: Used only in `WppCombinedSelect`.
    */
   readonly maskOptions?: MaskOptions;
   /**

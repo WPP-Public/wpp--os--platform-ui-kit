@@ -7,6 +7,7 @@ import { AccordionSectionChangeEventDetail } from './types';
  * @slot tags - Content that is placed inside the `.tags` to display contextual tags.
  *
  * @part section - Defines the accordion top wrapper.
+ * @part button - Defines the accordion button element (title + chevron icon).
  * @part title-wrapper - Defines wrapper that contains title and chevron.
  * @part title - Defines accordion title.
  * @part icon - Defines accordion icon chevron.
@@ -52,21 +53,9 @@ export declare class WppAccordion {
    */
   readonly withDivider: boolean;
   /**
-   * Defines the number of elements within a specific section.
-   *
-   * @deprecated - this prop will be deleted in version 4.0.0.
-   */
-  readonly counter: number;
-  /**
    * Defines the section size.
    */
   readonly size: 's' | 'm' | 'l' | 'xl' | '2xl';
-  /**
-   * If set, adds text next to the section.
-   *
-   * @deprecated - this prop will be deleted in version 4.0.0. If you want to use this prop, use "header" slot instead
-   */
-  readonly text?: string;
   /**
    * If set to true, displays `Tag` next to the section. The tag must placed in the `.tags` slot.
    */
@@ -96,9 +85,8 @@ export declare class WppAccordion {
   componentDidUpdate(): void;
   disconnectedCallback(): void;
   private updateSlotData;
+  private calculateContentLayout;
   private getContentHeight;
-  private typographyType;
-  private counterType;
   private toggleExpand;
   private onClick;
   private onFocus;
@@ -117,7 +105,9 @@ export declare class WppAccordion {
   private getElementFontStyle;
   private getHeaderSlotText;
   private getTextTitleFont;
+  private checkTitleOverflowInternal;
   private checkTitleOverflow;
   private cssTagWrapperClasses;
+  private getHeaderTypographyType;
   render(): any;
 }

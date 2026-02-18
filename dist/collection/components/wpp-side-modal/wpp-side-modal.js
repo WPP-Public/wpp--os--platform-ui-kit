@@ -2,12 +2,12 @@ import { h, Host } from '@stencil/core';
 import { applyBodyStylesIfNeeded, getHighestContainerInDOM, getSlotEmptyStates, isEventTargetContained, transformToVersionedTag, } from '../../utils/utils';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { SideModalCloseReason, } from './types';
+import { LOCALES_DEFAULTS } from './const';
 import { Z_INDEX } from '../../common/consts';
 /**
  * @slot header - Content that is displayed within the `.side-modal` element. To add header content, pass `slot="header"` – can contain the modal title.
  * @slot body - Content that is displayed within the `.side-modal` element. To add body content, pass `slot="body"` – can contain any text that describes the modal actions.
  * @slot actions - Content that is displayed within the `.side-modal` element. To add actions, pass `slot="actions"` – can contain any action buttons.
- * @deprecated The `actions` slot is deprecated and will be removed in the next major release (v3.0.0). Use the `actionsConfig` property instead.
  *
  * @part content - modal content element
  * @part wrapper - component wrapper element
@@ -25,6 +25,7 @@ export class WppSideModal {
   constructor() {
     this.topOffset = 0;
     this.ignoreOutsideClicks = false;
+    this._locales = LOCALES_DEFAULTS;
     this.updateButtons = () => {
       // This function is called in componentWillLoad and when actionsConfig changes
       // We first reset button configurations.
@@ -100,8 +101,8 @@ export class WppSideModal {
         return;
       if (this.open) {
         this.wppSideModalOpenComplete.emit();
-        this.wppSideModalOpen.emit();
         this.ignoreOutsideClicks = true;
+        this.focusDialog();
       }
       else {
         this.isHidden = true;
@@ -119,7 +120,7 @@ export class WppSideModal {
       if (!this.leftButtonConfig)
         return h("div", { class: "left-button-container" });
       const { label, icon, ...rest } = this.leftButtonConfig;
-      return (h("div", { class: "left-button-container" }, h("wpp-action-button-v3-4-0", { ...rest }, h(transformToVersionedTag(icon), { slot: 'icon-start' }), label)));
+      return (h("div", { class: "left-button-container" }, h("wpp-action-button-v4-0-0", { ...rest }, h(transformToVersionedTag(icon), { slot: 'icon-start' }), label)));
     };
     this.renderRightButtons = () => {
       // Render right buttons based on config.
@@ -127,8 +128,13 @@ export class WppSideModal {
         return;
       return (h("div", { class: "right-button-container" }, this.rightButtonsConfig.map((rightButtonConfigItem) => {
         const { label, ...rest } = rightButtonConfigItem;
-        return (h("wpp-button-v3-4-0", { size: "m", ...rest }, label));
+        return (h("wpp-button-v4-0-0", { size: "m", ...rest }, label));
       })));
+    };
+    this.focusDialog = () => {
+      if (!this.dialogRef)
+        return;
+      this.dialogRef.focus();
     };
     this.headerCssClasses = () => ({
       header: true,
@@ -165,12 +171,11 @@ export class WppSideModal {
     // Add render method for header action buttons
     this.renderHeaderActionButtons = () => (h("div", { class: "header-action-buttons-container" }, this.headerActionsConfig?.map(button => {
       const { icon, ...rest } = button;
-      return (h("wpp-action-button-v3-4-0", { variant: "secondary", ...rest }, h(transformToVersionedTag(icon), { slot: 'icon-start' })));
+      return (h("wpp-action-button-v4-0-0", { variant: "secondary", ...rest }, h(transformToVersionedTag(icon), { slot: 'icon-start' })));
     })));
     this.renderBody = () => {
       const Tag = this.formConfig ? 'form' : 'div';
-      return (h(Tag, { part: "content", role: "dialog", class: this.sideModalCssClasses(), ...this.formConfig, "data-testid": "wpp-side-modal-content" }, h("div", { class: this.headerContainerCssClasses(), part: "header-container" }, this.withBackButton ? (h("div", { class: "header-with-back-button", part: "header-with-back-button" }, h("wpp-action-button-v3-4-0", { variant: "secondary", onClick: this.handleBackButtonClick, class: "back-button", part: "back-button" }, h("wpp-icon-chevron-v3-4-0", { direction: "left", slot: "icon-start", part: "icon-chevron" })), h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }))) : (h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData })), this.headerActionsConfig?.length > 0 && this.renderHeaderActionButtons(), h("wpp-action-button-v3-4-0", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button", part: "button" }, h("wpp-icon-cross-v3-4-0", { slot: "icon-start", part: "icon-cross" }))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.hasActionsSlot ? (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })) : (this.actionsConfig &&
-        this.actionsConfig.length > 0 && (h("div", { class: this.actionsCssClasses(), part: "actions" }, this.renderLeftButton(), this.renderRightButtons())))));
+      return (h(Tag, { tabindex: "-1", part: "content", class: this.sideModalCssClasses(), ...this.formConfig, "data-testid": "wpp-side-modal-content", ref: ref => (this.dialogRef = ref) }, h("div", { class: this.headerContainerCssClasses(), part: "header-container" }, h("div", null, this.withBackButton ? (h("div", { class: "header-with-back-button", part: "header-with-back-button" }, h("wpp-action-button-v4-0-0", { ariaProps: { label: this._locales.backHeaderButtonLabel }, variant: "secondary", onClick: this.handleBackButtonClick, class: "back-button", part: "back-button" }, h("wpp-icon-chevron-v4-0-0", { direction: "left", slot: "icon-start", part: "icon-chevron" })), h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }))) : (h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }))), h("div", { class: "header-action-container" }, this.headerActionsConfig?.length > 0 && this.renderHeaderActionButtons(), h("wpp-action-button-v4-0-0", { ariaProps: { label: this._locales.closeIconLabel }, variant: "secondary", onClick: this.handleCloseModal, class: "close-button", part: "button" }, h("wpp-icon-cross-v4-0-0", { slot: "icon-start", part: "icon-cross" })))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig && this.actionsConfig.length > 0 ? (h("div", { class: this.actionsCssClasses(), part: "actions" }, this.renderLeftButton(), this.renderRightButtons())) : (h(WrappedSlot, { wrapperClass: this.hasActionsSlot ? this.actionsCssClasses() : '', name: "actions", onSlotchange: this.updateSlotData }))));
     };
     this.isShowContent = undefined;
     this.isReady = undefined;
@@ -190,6 +195,11 @@ export class WppSideModal {
     this.zIndex = Z_INDEX.SIDE_MODAL;
     this.osBarCompatible = false;
     this.headerActionsConfig = [];
+    this.ariaProps = {
+      role: 'dialog',
+      labelledby: 'dialog_label',
+    };
+    this.locales = {};
   }
   handleCloseOnEsc(event) {
     if (event.key === 'Escape' && this.open) {
@@ -241,6 +251,7 @@ export class WppSideModal {
     if (this.host.querySelector('[slot="actions"]')) {
       console.warn('The `actions` slot is deprecated and will be removed in a future release. Please use the `actionsConfig` property instead.');
     }
+    this._locales = { ...this._locales, ...this.locales };
     this.topOffset = this.getTopOffset();
     this.updateSlotData();
     this.updateButtons();
@@ -265,10 +276,10 @@ export class WppSideModal {
     }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, side-modal, header-container, button, icon-cross, header, body, actions, header-wrapper, body-wrapper, actions-wrapper, back-button, icon-chevron, header-with-back-button", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-side-modal-top-offset': `${this.topOffset}px` } }, this.backdropVisible && (h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-4-0", { isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), this.renderBody())), !this.backdropVisible && this.renderBody()));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, side-modal, header-container, button, icon-cross, header, body, actions, header-wrapper, body-wrapper, actions-wrapper, back-button, icon-chevron, header-with-back-button", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-side-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, this.backdropVisible && (h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-0-0", { isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), this.renderBody(), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))), !this.backdropVisible && this.renderBody()));
   }
   static get is() { return "wpp-side-modal"; }
-  static get registryIs() { return "wpp-side-modal-v3-4-0"; }
+  static get registryIs() { return "wpp-side-modal-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -470,6 +481,54 @@ export class WppSideModal {
           "text": "The list of actions that will be added in the header of the side-modal, on the left of the \"X\" icon. It can have a maximum length of 4 items."
         },
         "defaultValue": "[]"
+      },
+      "ariaProps": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "AriaProps",
+          "resolved": "AriaProps",
+          "references": {
+            "AriaProps": {
+              "location": "import",
+              "path": "../../types/common",
+              "id": "src/types/common.ts::AriaProps"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Contains the modal `aria-` props."
+        },
+        "defaultValue": "{\n    role: 'dialog',\n    labelledby: 'dialog_label',\n  }"
+      },
+      "locales": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "Partial<SideModalLocalesType>",
+          "resolved": "{ closeIconLabel?: string | undefined; backHeaderButtonLabel?: string | undefined; }",
+          "references": {
+            "Partial": {
+              "location": "global",
+              "id": "global::Partial"
+            },
+            "SideModalLocalesType": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-side-modal/types.ts::SideModalLocalesType"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the component locale types."
+        },
+        "defaultValue": "{}"
       }
     };
   }
@@ -578,24 +637,6 @@ export class WppSideModal {
               "id": "src/components/wpp-side-modal/types.ts::SideModalCloseDetails"
             }
           }
-        }
-      }, {
-        "method": "wppSideModalOpen",
-        "name": "wppSideModalOpen",
-        "bubbles": false,
-        "cancelable": true,
-        "composed": false,
-        "docs": {
-          "tags": [{
-              "name": "deprecated",
-              "text": "- this prop will be deleted in version 4.0.0 . Use `wppSideModalOpenStart`/`wppSideModalOpenComplete` instead"
-            }],
-          "text": "Handles the side modal click actions."
-        },
-        "complexType": {
-          "original": "void",
-          "resolved": "void",
-          "references": {}
         }
       }, {
         "method": "wppSideModalBackButtonClick",

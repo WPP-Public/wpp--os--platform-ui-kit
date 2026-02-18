@@ -11,14 +11,16 @@ const RGB_INPUT_CONFIG = {
   decimalPatternOptions: {
     min: 0,
     max: 255,
-    precision: 0,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   },
 };
 const OPACITY_INPUT_CONFIG = {
   decimalPatternOptions: {
     min: 0,
     max: 100,
-    precision: 0,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
     postfix: '%',
   },
 };
@@ -498,18 +500,18 @@ const OpacitySlider = /*@__PURE__*/ proxyCustomElement(class OpacitySlider exten
     window.addEventListener('mousemove', this.handleMouseMove);
   }
   render() {
-    return (h(Host, { class: "wpp-opacity-slider" }, h("div", { class: "slider-container" }, h("wpp-icon-transparent-v3-4-0", { class: "checkerboard" }), h("canvas", null), h("div", { class: "marker", style: {
+    return (h(Host, { class: "wpp-opacity-slider" }, h("div", { class: "slider-container" }, h("wpp-icon-transparent-v4-0-0", { class: "checkerboard" }), h("canvas", null), h("div", { class: "marker", style: {
         left: `${this.markerPosition}px`,
       } }))));
   }
-  static get registryIs() { return "wpp-opacity-slider-v3-4-0"; }
+  static get registryIs() { return "wpp-opacity-slider-v4-0-0"; }
   get host() { return this; }
   static get watchers() { return {
     "hexColor": ["onPropertyChange"],
     "opacity": ["onPropertyChange"]
   }; }
   static get style() { return wppOpacitySliderCss; }
-}, [1, "wpp-opacity-slider", "wpp-opacity-slider-v3-4-0", {
+}, [1, "wpp-opacity-slider", "wpp-opacity-slider-v4-0-0", {
     "hexColor": [1, "hex-color"],
     "opacity": [2],
     "markerPosition": [32]
@@ -518,14 +520,14 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-opacity-slider-v3-4-0", "wpp-icon-transparent-v3-4-0"];
+  const components = ["wpp-opacity-slider-v4-0-0", "wpp-icon-transparent-v4-0-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-opacity-slider-v3-4-0":
+    case "wpp-opacity-slider-v4-0-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, OpacitySlider);
       }
       break;
-    case "wpp-icon-transparent-v3-4-0":
+    case "wpp-icon-transparent-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

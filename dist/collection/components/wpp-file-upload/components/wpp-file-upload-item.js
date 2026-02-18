@@ -1,5 +1,4 @@
 import { h, Host } from '@stencil/core';
-import { truncate } from '../../../utils/utils';
 import { FOCUS_TYPE } from '../../../types/common';
 import { sizeFormat, maxSize } from './types';
 import { getExtension } from '../utils';
@@ -139,7 +138,7 @@ export class WppFileUploadItem {
     this.isFileLoading = () => !this.uploaded && (this.file.isLoading || !this.isLoadingFinished);
     this.setCurrentIcon = () => {
       if (this.isFileLoading())
-        return h("wpp-spinner-v3-4-0", null);
+        return h("wpp-spinner-v4-0-0", null);
       const { name } = this.file;
       if (this.isFileWithError())
         return null;
@@ -157,7 +156,7 @@ export class WppFileUploadItem {
     this.setCurrentError = () => {
       if (this.isFileWithError()) {
         const currentError = this.getErrorMessage();
-        return (h("div", { class: "error-wrapper" }, h("wpp-inline-message-v3-4-0", { class: "inline-message-error", message: currentError, type: "error", showTooltipFrom: 140, tooltipConfig: { popperOptions: { strategy: 'fixed' } } }), this.file.deletable !== false && (h("wpp-icon-cross-v3-4-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": `Remove file ${this.file.name}`, onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onKeyUp: this.handleDeleteKeyUp, onBlur: this.handleDeleteBlur }))));
+        return (h("div", { class: "error-wrapper" }, h("wpp-inline-message-v4-0-0", { class: "inline-message-error", message: currentError, type: "error", showTooltipFrom: 140, tooltipConfig: { popperOptions: { strategy: 'fixed' } } }), this.file.deletable !== false && (h("wpp-icon-cross-v4-0-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": `Remove file ${this.file.name}`, onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onKeyUp: this.handleDeleteKeyUp, onBlur: this.handleDeleteBlur }))));
       }
       return null;
     };
@@ -228,7 +227,6 @@ export class WppFileUploadItem {
     this.fileName = undefined;
     this.file = undefined;
     this.format = 'base64';
-    this.maxLabelLength = undefined;
     this.currentIndex = undefined;
     this.locales = undefined;
     this.uploaded = undefined;
@@ -259,15 +257,11 @@ export class WppFileUploadItem {
     }
   }
   componentDidLoad() {
-    if (!this.maxLabelLength) {
-      const elementsToObserve = [this.host, this.fileNameRef, this.loadingRef].filter((el, i, arr) => el && arr.indexOf(el) === i);
-      this.observer = new ResizeObserver(() => this.scheduleTruncate());
-      elementsToObserve.forEach(el => this.observer.observe(el));
-      this.scheduleTruncate();
-    }
-    else {
-      this.isTruncated = this.file?.name?.length > this.maxLabelLength;
-    }
+    // Auto-calculate truncation using ResizeObserver
+    const elementsToObserve = [this.host, this.fileNameRef, this.loadingRef].filter((el, i, arr) => el && arr.indexOf(el) === i);
+    this.observer = new ResizeObserver(() => this.scheduleTruncate());
+    elementsToObserve.forEach(el => this.observer.observe(el));
+    this.scheduleTruncate();
   }
   disconnectedCallback() {
     this.observer?.disconnect();
@@ -326,18 +320,18 @@ export class WppFileUploadItem {
     reader.readAsDataURL(this.file);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, wrapper, content, file-name, tooltip, loading, percentage, cross-icon", onClick: this.handleClick, role: "listitem" }, h("div", { class: this.itemCssClasses(), part: "file-item" }, this.setCurrentError(), h("div", { class: "content-wrapper", part: "wrapper" }, h("div", { class: this.blockCssClasses(), part: "content" }, h("div", { class: "icon-wrapper" }, this.setCurrentIcon()), h("wpp-tooltip-v3-4-0", { class: this.maxLabelLength ? 'computed' : '', ref: ref => (this.tooltipRef = ref), text: this.file.name, config: {
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, wrapper, content, file-name, tooltip, loading, percentage, cross-icon", onClick: this.handleClick, role: "listitem" }, h("div", { class: this.itemCssClasses(), part: "file-item" }, this.setCurrentError(), h("div", { class: "content-wrapper", part: "wrapper" }, h("div", { class: this.blockCssClasses(), part: "content" }, h("div", { class: "icon-wrapper" }, this.setCurrentIcon()), h("wpp-tooltip-v4-0-0", { ref: ref => (this.tooltipRef = ref), text: this.file.name, config: {
         popperOptions: { strategy: 'fixed' },
         onShow: () => {
-          if (!this.isTruncated || (this.maxLabelLength && !(this.file?.name?.length > this.maxLabelLength)))
+          if (!this.isTruncated)
             return false;
         },
-      }, part: "tooltip" }, h("wpp-typography-v3-4-0", { ref: ref => (this.fileNameRef = ref), class: this.fileNameCssClasses(), type: "s-body", part: "file-name", title: this.file.name }, this.maxLabelLength ? truncate(this.file.name, this.maxLabelLength, true) : this.file?.name)), !this.isFileWithError() && (h("span", { ref: ref => (this.loadingRef = ref), class: "loading", part: "loading" }, this.isFileLoading()
+      }, part: "tooltip" }, h("wpp-typography-v4-0-0", { ref: ref => (this.fileNameRef = ref), class: this.fileNameCssClasses(), type: "s-body", part: "file-name", title: this.file.name }, this.file?.name)), !this.isFileWithError() ? (h("span", { ref: ref => (this.loadingRef = ref), class: "loading", part: "loading" }, this.isFileLoading()
       ? `${this.loaded}/${this.total} ${this.measurementUnit}`
-      : `${this.total} ${this.measurementUnit}`))), h("div", { class: "controls-wrapper", part: "controls" }, this.isFileLoading() && (h("span", { class: "percentage", part: "percentage" }, this.percentage, "%")), this.file.deletable !== false && !this.isFileWithError() && (h("wpp-icon-cross-v3-4-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": `Remove file ${this.file.name}`, onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onBlur: this.handleDeleteBlur, onKeyUp: this.handleDeleteKeyUp }))))), h("wpp-typography-v3-4-0", { ref: ref => (this.measureRef = ref), type: "s-body", class: "measure", "aria-hidden": "true", role: "presentation" })));
+      : `${this.total} ${this.measurementUnit}`)) : (h("span", { class: "error-message", part: "error-message" }, this.total, " ", this.measurementUnit))), h("div", { class: "controls-wrapper", part: "controls" }, this.isFileLoading() && (h("span", { class: "percentage", part: "percentage" }, this.percentage, "%")), this.file.deletable !== false && !this.isFileWithError() && (h("wpp-icon-cross-v4-0-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": `Remove file ${this.file.name}`, onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onBlur: this.handleDeleteBlur, onKeyUp: this.handleDeleteKeyUp }))))), h("wpp-typography-v4-0-0", { ref: ref => (this.measureRef = ref), type: "s-body", class: "measure", "aria-hidden": "true", role: "presentation" })));
   }
   static get is() { return "wpp-file-upload-item"; }
-  static get registryIs() { return "wpp-file-upload-item-v3-4-0"; }
+  static get registryIs() { return "wpp-file-upload-item-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -412,26 +406,6 @@ export class WppFileUploadItem {
         "attribute": "format",
         "reflect": false,
         "defaultValue": "'base64'"
-      },
-      "maxLabelLength": {
-        "type": "number",
-        "mutable": false,
-        "complexType": {
-          "original": "number",
-          "resolved": "number | undefined",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [{
-              "name": "deprecated",
-              "text": "- this prop will be removed in 4.0.0 version. Truncation will be calculated based on available space."
-            }],
-          "text": "Maximum label length (in characters) of single loading item"
-        },
-        "attribute": "max-label-length",
-        "reflect": false
       },
       "currentIndex": {
         "type": "number",

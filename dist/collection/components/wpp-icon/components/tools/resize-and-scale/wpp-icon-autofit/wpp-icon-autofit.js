@@ -17,7 +17,7 @@ export class WppIconAutofit {
     return (h(WppIcon, { name: "wpp-icon-autofit", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: AutofitDirectionIconPath[this.direction], fill: "currentColor" })));
   }
   static get is() { return "wpp-icon-autofit"; }
-  static get registryIs() { return "wpp-icon-autofit-v3-4-0"; }
+  static get registryIs() { return "wpp-icon-autofit-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

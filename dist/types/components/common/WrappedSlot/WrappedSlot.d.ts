@@ -2,6 +2,7 @@ import { FunctionalComponent } from '../../../stencil-public-runtime';
 import { JSXBase } from '../../../stencil-public-runtime';
 interface Props extends JSXBase.SlotAttributes {
   wrapperClass?: JSXBase.HTMLAttributes<HTMLDivElement>['class'];
+  id?: string;
   part?: string;
   role?: string;
   tabIndex?: number;

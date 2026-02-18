@@ -1,4 +1,5 @@
 import { EventEmitter } from '../../stencil-public-runtime';
+import { AriaProps } from '../../types/common';
 import { ModalCloseDetails, ModalCloseReason, ModalFormConfig } from './types';
 /**
  * @slot header - Content that is displayed within the `.modal` element. To add header content, pass `slot="header"` – can contain the modal title.
@@ -14,11 +15,14 @@ import { ModalCloseDetails, ModalCloseReason, ModalFormConfig } from './types';
  * @part actions - actions slot element
  */
 export declare class WppModal {
+  private resizeObserver;
   host: HTMLWppModalElement;
+  private dialogRef?;
   hasHeaderSlot: boolean;
   hasBodySlot: boolean;
   hasActionsSlot: boolean;
   closeReason: ModalCloseReason | null;
+  isBodyScrollable: boolean;
   /**
    * Indicates is the modal open.
    */
@@ -44,6 +48,10 @@ export declare class WppModal {
    */
   readonly zIndex: number;
   /**
+   * Contains the modal `aria-` props.
+   */
+  readonly ariaProps: AriaProps;
+  /**
    * Handles the modal closing actions.
    */
   wppModalClose: EventEmitter<ModalCloseDetails>;
@@ -63,11 +71,6 @@ export declare class WppModal {
    * Event emitted when the close animation ends.
    */
   wppModalCloseComplete: EventEmitter<ModalCloseDetails>;
-  /**
-   * Handles the modal click actions.
-   * @deprecated - this prop will be deleted in version 4.0.0 . Use `wppModalOpenStart`/`wppModalOpenComplete` instead
-   */
-  wppModalOpen: EventEmitter<void>;
   protected handleCloseOnEsc(event: KeyboardEvent): void;
   protected handleChangeModalStatus(openStatus: boolean): void;
   /**
@@ -79,11 +82,14 @@ export declare class WppModal {
    */
   openModal(): Promise<void>;
   private onOverlayClick;
+  private setupObserver;
+  private disconnectObserver;
   componentDidLoad(): void;
   disconnectedCallback(): void;
   private updateSlotData;
   private handleTransitionStart;
   private handleTransitionEnd;
+  private focusDialog;
   private headerCssClasses;
   private bodyCssClasses;
   private actionsCssClasses;

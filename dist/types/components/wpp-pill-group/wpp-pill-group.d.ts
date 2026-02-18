@@ -2,7 +2,7 @@ import { EventEmitter } from '../../stencil-public-runtime';
 import { DropdownConfig } from '../../types/common';
 import { BaseFormControl } from '../../interfaces/base-form-control';
 import { BaseComponent } from '../../interfaces/base-component';
-import { PillSize, PillValue, PillChangeEventDetail, PillType } from './components/wpp-pill/types';
+import { PillSize, PillValue, PillChangeEventDetail, PillType } from '../wpp-pill/types';
 import { PillGroupChangeEvent, PillGroupValue, PillGroupLabelConfig } from './types';
 /**
  * @slot - Can contain only the `wpp-pill` components that are displayed in `pill-group`. It can be only <wpp-pill>. The default slot, without the name attribute.

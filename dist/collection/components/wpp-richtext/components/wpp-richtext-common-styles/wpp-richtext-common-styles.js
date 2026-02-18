@@ -4,7 +4,7 @@
  */
 export class WppRichtextCommonStyles {
   static get is() { return "wpp-richtext-common-styles"; }
-  static get registryIs() { return "wpp-richtext-common-styles-v3-4-0"; }
+  static get registryIs() { return "wpp-richtext-common-styles-v4-0-0"; }
   static get originalStyleUrls() {
     return {
       "$": ["wpp-richtext-common-styles.scss"]

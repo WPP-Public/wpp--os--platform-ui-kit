@@ -5,7 +5,7 @@ describe('wpp-breadcrumb', () => {
   it('renders correctly with no items', async () => {
     const page = await newSpecPage({
       components: [WppBreadcrumb],
-      template: () => h("wpp-breadcrumb-v3-4-0", null),
+      template: () => h("wpp-breadcrumb-v4-0-0", null),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -42,7 +42,7 @@ describe('wpp-breadcrumb', () => {
     ];
     const page = await newSpecPage({
       components: [WppBreadcrumb],
-      template: () => h("wpp-breadcrumb-v3-4-0", { items: items }),
+      template: () => h("wpp-breadcrumb-v4-0-0", { items: items }),
     });
     expect(page.root).toMatchSnapshot();
   });

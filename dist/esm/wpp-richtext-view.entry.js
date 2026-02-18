@@ -1,20 +1,20 @@
 import { r as registerInstance, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { p as processMarkdownValue, t as turndownService } from './config-1f48e6ba.js';
+import { p as processMarkdownValue, t as turndownService } from './config-6885b9de.js';
 import { f as formats, s as sources, Q as Quill } from './types-112bed55.js';
-import './utils-fb733700.js';
-import './consts-5bf9c29f.js';
-import './wpp-icon-unordered-list-05b00965.js';
+import './utils-cc81a41b.js';
+import './consts-9fc0a13a.js';
+import './wpp-icon-unordered-list-c7c0a0cb.js';
 import './WppIcon-f4802cc9.js';
-import './wpp-icon-video-clip-78218ba4.js';
+import './wpp-icon-video-clip-b3f932b1.js';
 import './_commonjsHelpers-ba3f0406.js';
-import './wpp-progress-indicator-c80b4c04.js';
-import './wpp-icon-chevron-d46d5422.js';
-import './wpp-icon-gallery-594a6cc9.js';
+import './wpp-progress-indicator-6365b393.js';
+import './wpp-icon-chevron-1c8233f8.js';
+import './wpp-icon-gallery-264d5bd7.js';
 import './lodash-66b76943.js';
-import './wpp-action-button-e6133c68.js';
+import './wpp-action-button-5816a5b5.js';
 import './common-69c8ea89.js';
-import './WrappedSlot-2ee5325a.js';
-import './wpp-input-b3eb769e.js';
+import './WrappedSlot-629d3e4f.js';
+import './wpp-input-f92eb2b7.js';
 import './turndown.browser.es-9f6d9c98.js';
 
 const WppRichtextView = class {
@@ -171,9 +171,9 @@ const WppRichtextView = class {
     this.setValue(newValue);
   }
   render() {
-    return (h(Host, null, h("wpp-quill-styles-v3-4-0", null), h("wpp-richtext-common-styles-v3-4-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
+    return (h(Host, null, h("wpp-quill-styles-v4-0-0", null), h("wpp-richtext-common-styles-v4-0-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
   }
-  static get registryIs() { return "wpp-richtext-view-v3-4-0"; }
+  static get registryIs() { return "wpp-richtext-view-v4-0-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "styles": ["updateStyle"],

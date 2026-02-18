@@ -36,7 +36,7 @@
     calc(9px - var(--counter-border-width)) calc(12px - var(--counter-border-width))
   );
   --counter-input-width: var(--wpp-counter-input-width, 70px);
-  --counter-input-placeholder-color: var(--wpp-counter-input-placeholder-color, var(--wpp-grey-color-500));
+  --counter-input-placeholder-color: var(--wpp-counter-input-placeholder-color, var(--wpp-grey-color-700));
   --counter-input-text-color: var(--wpp-counter-input-text-color, var(--wpp-text-color));
   --counter-input-text-color-disabled: var(--wpp-counter-input-text-color-disabled, var(--wpp-text-color-disabled));
   --counter-increase-wrapper-padding: var(

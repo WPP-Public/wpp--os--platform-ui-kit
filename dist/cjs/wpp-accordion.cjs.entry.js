@@ -3,10 +3,10 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const WrappedSlot = require('./WrappedSlot-ab2104d8.js');
+const WrappedSlot = require('./WrappedSlot-4a4ef805.js');
 const common = require('./common-ee802540.js');
-const utils = require('./utils-99b83069.js');
-require('./consts-779fd4ec.js');
+const utils = require('./utils-ce5c8ac5.js');
+require('./consts-dba6e6dd.js');
 
 const wppAccordionCss = ":host{--accordion-actions-wrapper-left-margin:var(--wpp-accordion-actions-wrapper-left-margin, 8px);--accordion-counter-font-weight:var(--wpp-accordion-counter-font-weight, 400);--accordion-counter-font-size:var(--wpp-accordion-counter-font-size, 16px);--accordion-counter-height:var(--wpp-accordion-counter-height, 24px);--accordion-margin-s:var(--wpp-accordion-margin-s, 7px 0);--accordion-margin-m:var(--wpp-accordion-margin-m, 11px 0);--accordion-margin-l:var(--wpp-accordion-margin-l, 15px 0);--accordion-margin-xl:var(--wpp-accordion-margin-xl, 23px 0);--accordion-margin-2xl:var(--wpp-accordion-margin-2xl, 23px 0);--accordion-icon-margin:var(--wpp-accordion-icon-margin, 0 8px 0 0);--accordion-icon-color:var(--wpp-accordion-icon-color, var(--wpp-grey-color-600));--accordion-icon-color-hover:var(--wpp-accordion-icon-color-hover, var(--wpp-grey-color-800));--accordion-icon-color-active:var(--wpp-accordion-icon-color-active, var(--wpp-grey-color-900));--accordion-icon-color-disabled:var(--wpp-accordion-icon-color-disabled, var(--wpp-grey-color-500));--accordion-text-color-disabled:var(--wpp-accordion-text-color-disabled, var(--wpp-text-color-disabled));--accordion-counter-color:var(--wpp-accordion-counter-color, var(--wpp-text-color-info));--accordion-first-border-color-focus:var(--wpp-accordion-first-border-color-focus, var(--wpp-grey-color-000));--accordion-second-border-color-focus:var(--wpp-accordion-second-border-color-focus, var(--wpp-brand-color));--accordion-expandable-section-margin-left:var(--wpp-accordion-expandable-section-margin-left, 24px);--accordion-expandable-section-margin-s:var(\n    --wpp-accordion-expandable-section-margin-s,\n    -3px 0 11px var(--accordion-expandable-section-margin-left)\n  );--accordion-expandable-section-margin-m:var(\n    --wpp-accordion-expandable-section-margin-m,\n    -3px 0 15px var(--accordion-expandable-section-margin-left)\n  );--accordion-expandable-section-margin-l:var(\n    --wpp-accordion-expandable-section-margin-l,\n    -3px 0 19px var(--accordion-expandable-section-margin-left)\n  );--accordion-expandable-section-margin-xl:var(\n    --wpp-accordion-expandable-section-margin-xl,\n    -7px 0 23px var(--accordion-expandable-section-margin-left)\n  );--accordion-expandable-section-margin-2xl:var(\n    --wpp-accordion-expandable-section-margin-2xl,\n    -7px 0 23px var(--accordion-expandable-section-margin-left)\n  );--accordion-margin-s-internal:var(--wpp-accordion-margin-s-internal, 5px 0);--accordion-margin-m-internal:var(--wpp-accordion-margin-m-internal, 4px 0);--accordion-margin-l-internal:var(--wpp-accordion-margin-l-internal, 2px 0);--accordion-margin-xl-internal:var(--wpp-accordion-margin-xl-internal, 0);--accordion-margin-2xl-internal:var(--wpp-accordion-margin-2xl-internal, 0);--accordion-expandable-section-margin-s-internal:var(\n    --wpp-accordion-expandable-section-margin-s-internal,\n    -1px 0 0 var(--accordion-expandable-section-margin-left)\n  );--accordion-expandable-section-margin-m-internal:var(\n    --wpp-accordion-expandable-section-margin-m-internal,\n    8px 0 0 var(--accordion-expandable-section-margin-left)\n  );--accordion-expandable-section-margin-l-internal:var(\n    --wpp-accordion-expandable-section-margin-l-internal,\n    12px 0 0 var(--accordion-expandable-section-margin-left)\n  );--accordion-expandable-section-margin-xl-internal:var(\n    --wpp-accordion-expandable-section-margin-xl-internal,\n    16px 0 0 var(--accordion-expandable-section-margin-left)\n  );--accordion-expandable-section-margin-2xl-internal:var(\n    --wpp-accordion-expandable-section-margin-2xl-internal,\n    16px 0 0 var(--accordion-expandable-section-margin-left)\n  )}:host(.wpp-section-wrapper){display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column;width:100%;outline:none}:host(.wpp-section-wrapper) .wpp-section{display:-ms-inline-flexbox;display:inline-flex;-ms-flex-align:center;align-items:center;gap:8px;-ms-flex-wrap:nowrap;flex-wrap:nowrap;-ms-flex-pack:justify;justify-content:space-between;position:relative}:host(.wpp-section-wrapper) .wpp-section.size-s{margin:var(--accordion-margin-s)}:host(.wpp-section-wrapper) .wpp-section.size-m{margin:var(--accordion-margin-m)}:host(.wpp-section-wrapper) .wpp-section.size-l{margin:var(--accordion-margin-l)}:host(.wpp-section-wrapper) .wpp-section.size-xl{margin:var(--accordion-margin-xl)}:host(.wpp-section-wrapper) .wpp-section.size-2xl{margin:var(--accordion-margin-2xl)}:host(.wpp-section-wrapper) .wpp-section .wpp-icon-chevron{-webkit-transition:-webkit-transform var(--accordion-hide-animation-duration) ease-out;transition:-webkit-transform var(--accordion-hide-animation-duration) ease-out;transition:transform var(--accordion-hide-animation-duration) ease-out;transition:transform var(--accordion-hide-animation-duration) ease-out, -webkit-transform var(--accordion-hide-animation-duration) ease-out}:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px;-ms-flex-wrap:nowrap;flex-wrap:nowrap;position:relative;border:none;background:none;padding:0;outline:none;-ms-flex-positive:1;flex-grow:1}:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper.tab-focus{border-radius:3px;outline:none;-webkit-box-shadow:0 0 0 1px var(--accordion-first-border-color-focus), 0 0 0 3px var(--accordion-second-border-color-focus);box-shadow:0 0 0 1px var(--accordion-first-border-color-focus), 0 0 0 3px var(--accordion-second-border-color-focus)}:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper:focus-visible .title-wrapper .wpp-icon-chevron,:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .tab-focus .title-wrapper .wpp-icon-chevron{color:var(--accordion-icon-color-hover) !important}:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;cursor:pointer;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper .wpp-tooltip{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper .wpp-tooltip::part(anchor){width:100%}:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper .typography-title{color:var(--accordion-title-color)}:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper .typography-title.disabled{cursor:not-allowed;color:var(--wpp-text-color-disabled)}:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper .wpp-icon-chevron{margin:var(--accordion-icon-margin);color:var(--accordion-icon-color)}:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper .wpp-icon-chevron.disabled{color:var(--wpp-text-color-disabled)}:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper:hover .wpp-icon-chevron{color:var(--accordion-icon-color-hover)}:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper:active .wpp-icon-chevron{color:var(--accordion-icon-color-active)}:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper .wpp-typography{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .tags{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px;position:absolute;left:0;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%)}:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .tags.slot-hidden{display:none}:host(.wpp-section-wrapper) .wpp-section .actions{text-wrap:nowrap}:host(.wpp-section-wrapper) .wpp-section .actions.slot-hidden{display:none}:host(.wpp-section-wrapper) .wpp-section .header:not(.disabled){overflow:hidden;white-space:nowrap;text-overflow:ellipsis;display:-ms-flexbox;display:flex}:host(.wpp-section-wrapper) .wpp-section .header:not(.disabled).slot-hidden{display:none}:host(.wpp-section-wrapper) .wpp-section .header:not(.disabled) ::slotted([slot=header]){overflow:hidden;white-space:nowrap;text-overflow:ellipsis}:host(.wpp-section-wrapper) .wpp-section .header:not(.disabled).disabled{cursor:not-allowed;color:var(--wpp-text-color-disabled)}:host(.wpp-section-wrapper) .wpp-section .counter{padding-left:4px;color:var(--accordion-counter-color)}:host(.wpp-section-wrapper) .closed{overflow:hidden}:host(.wpp-section-wrapper) .content{display:block;max-height:0;margin-left:var(--accordion-expandable-section-margin-left);-webkit-transition:max-height var(--accordion-hide-animation-duration) ease-out, margin var(--accordion-hide-animation-duration) var(--accordion-hide-animation-duration);transition:max-height var(--accordion-hide-animation-duration) ease-out, margin var(--accordion-hide-animation-duration) var(--accordion-hide-animation-duration)}:host(.wpp-section-wrapper) .content slot{display:-ms-flexbox;display:flex}:host(.wpp-section-wrapper):host(.wpp-internal) .wpp-section.size-s{margin:var(--accordion-margin-s-internal)}:host(.wpp-section-wrapper):host(.wpp-internal) .wpp-section.size-m{margin:var(--accordion-margin-m-internal)}:host(.wpp-section-wrapper):host(.wpp-internal) .wpp-section.size-l{margin:var(--accordion-margin-l-internal)}:host(.wpp-section-wrapper):host(.wpp-internal) .wpp-section.size-xl{margin:var(--accordion-margin-xl-internal)}:host(.wpp-section-wrapper):host(.wpp-internal) .wpp-section.size-2xl{margin:var(--accordion-margin-2xl-internal)}:host([disabled]:not([disabled=false])){cursor:not-allowed}:host([disabled]:not([disabled=false])) .wpp-section{cursor:not-allowed}:host([disabled]:not([disabled=false])) .wpp-section .title-tags-wrapper .title-wrapper{cursor:not-allowed;color:var(--wpp-text-color-disabled)}:host([disabled]:not([disabled=false])) .wpp-section .title-tags-wrapper .title-wrapper:hover .wpp-icon-chevron{color:var(--accordion-icon-color-disabled)}:host([disabled]:not([disabled=false])) .wpp-section .title-tags-wrapper .title-wrapper .wpp-icon-chevron{color:var(--accordion-icon-color-disabled)}:host([disabled]:not([disabled=false])) .wpp-section .header ::slotted([slot=header]){color:var(--accordion-text-color-disabled)}:host([disabled]:not([disabled=false])) .wpp-section .wpp-icon-chevron{color:var(--accordion-icon-color-disabled)}:host([disabled]:not([disabled=false])) .wpp-section .actions{cursor:not-allowed}:host([disabled]:not([disabled=false])) .wpp-section .actions ::slotted([slot=actions]){color:var(--accordion-text-color-disabled)}:host([disabled]:not([disabled=false])) .content ::slotted(.wpp-typography){color:var(--accordion-text-color-disabled)}:host(.wpp-section-wrapper.wpp-expanded) .wpp-section .wpp-icon-chevron{-webkit-transform:rotate(90deg);transform:rotate(90deg)}:host(.wpp-section-wrapper.wpp-expanded) .wpp-section .wpp-icon-chevron{-webkit-transition:-webkit-transform var(--accordion-show-animation-duration) ease-out;transition:-webkit-transform var(--accordion-show-animation-duration) ease-out;transition:transform var(--accordion-show-animation-duration) ease-out;transition:transform var(--accordion-show-animation-duration) ease-out, -webkit-transform var(--accordion-show-animation-duration) ease-out}:host(.wpp-section-wrapper.wpp-expanded) .wpp-section.size-s~.content{margin:var(--accordion-expandable-section-margin-s)}:host(.wpp-section-wrapper.wpp-expanded) .wpp-section.size-m~.content{margin:var(--accordion-expandable-section-margin-m)}:host(.wpp-section-wrapper.wpp-expanded) .wpp-section.size-l~.content{margin:var(--accordion-expandable-section-margin-l)}:host(.wpp-section-wrapper.wpp-expanded) .wpp-section.size-xl~.content{margin:var(--accordion-expandable-section-margin-xl)}:host(.wpp-section-wrapper.wpp-expanded) .wpp-section.size-2xl~.content{margin:var(--accordion-expandable-section-margin-2xl)}:host(.wpp-section-wrapper.wpp-expanded):host(.wpp-internal) .wpp-section.size-s~.content{margin:var(--accordion-expandable-section-margin-s-internal)}:host(.wpp-section-wrapper.wpp-expanded):host(.wpp-internal) .wpp-section.size-m~.content{margin:var(--accordion-expandable-section-margin-m-internal)}:host(.wpp-section-wrapper.wpp-expanded):host(.wpp-internal) .wpp-section.size-l~.content{margin:var(--accordion-expandable-section-margin-l-internal)}:host(.wpp-section-wrapper.wpp-expanded):host(.wpp-internal) .wpp-section.size-xl~.content{margin:var(--accordion-expandable-section-margin-xl-internal)}:host(.wpp-section-wrapper.wpp-expanded):host(.wpp-internal) .wpp-section.size-2xl~.content{margin:var(--accordion-expandable-section-margin-2xl-internal)}:host(.wpp-section-wrapper.wpp-expanded) .content{max-height:var(--accordion-max-height);-webkit-transition:max-height var(--accordion-show-animation-duration) ease;transition:max-height var(--accordion-show-animation-duration) ease}:host([disabled]:not([disabled=false])) .content{pointer-events:none;color:var(--wpp-text-color-disabled)}";
 
@@ -36,51 +36,8 @@ const WppAccordion = class {
     };
     this.getContentHeight = () => {
       requestAnimationFrame(() => {
-        this.actionsWrapperWidth = this.host.shadowRoot.querySelector('.actions')?.clientWidth || 0;
-        const tagsWrapper = this.host.shadowRoot.querySelector('.tags');
-        this.tagGroupWrapperWidth = tagsWrapper?.clientWidth || 0;
-        const gaps = this.hasActionsSlot && this.hasTagSlot ? 16 : this.hasActionsSlot || this.hasTagSlot ? 8 : 0;
-        const usedWidth = this.actionsWrapperWidth + this.tagGroupWrapperWidth + gaps;
-        const titleWrapperMaxWidth = this.host.clientWidth - usedWidth;
-        //Removing the icon + margin width
-        this.titleMaxWidth = titleWrapperMaxWidth - 28;
-        const titleWrapper = this.host.shadowRoot.querySelector('.title-wrapper');
-        if (titleWrapper) {
-          titleWrapper.style.maxWidth = `${titleWrapperMaxWidth}px`;
-        }
-        const titleWrapperWidth = titleWrapper?.clientWidth || 0;
-        if (this.hasTagSlot && tagsWrapper) {
-          // Add an 8px gap if there's a title
-          const leftPosition = titleWrapperWidth + (this.text || this.hasHeaderSlot ? 8 : 0);
-          tagsWrapper.style.left = `${leftPosition}px`;
-        }
-        this.maxHeight = this.host.shadowRoot.querySelector('.slot-content')?.clientHeight || 0;
-        this.checkTitleOverflow();
+        this.calculateContentLayout();
       });
-    };
-    this.typographyType = () => {
-      if (this.size === 's')
-        return 's-strong';
-      if (this.size === 'm')
-        return 'm-strong';
-      if (this.size === 'l')
-        return 'l-strong';
-      if (this.size === 'xl')
-        return 'xl-heading';
-      if (this.size === '2xl')
-        return '2xl-heading';
-    };
-    this.counterType = () => {
-      if (this.size === 's')
-        return 's-body';
-      if (this.size === 'm')
-        return 'm-body';
-      if (this.size === 'l')
-        return 'l-body';
-      if (this.size === 'xl')
-        return 'xl-heading';
-      if (this.size === '2xl')
-        return '2xl-heading';
     };
     this.toggleExpand = () => {
       this.expanded = !this.expanded;
@@ -156,39 +113,49 @@ const WppAccordion = class {
       tags: true,
       'slot-hidden': !this.hasTagSlot,
     });
+    this.checkTitleOverflowInternal = () => {
+      let textContent = '';
+      let font = '';
+      let textWidth = 0;
+      if (this.hasHeaderSlot) {
+        const headerData = this.getHeaderSlotText();
+        textContent = headerData.headerTitle;
+        font = headerData.font;
+      }
+      else {
+        return;
+      }
+      if (textContent !== this.prevTextContent || font !== this.prevFont) {
+        this.prevTextContent = textContent;
+        this.prevFont = font;
+        this.cachedTextWidth = this.getTextWidth(textContent, font);
+      }
+      textWidth = this.cachedTextWidth;
+      const isOverflowing = textWidth > this.titleMaxWidth;
+      if (this.isTitleOverflowing !== isOverflowing) {
+        this.isTitleOverflowing = isOverflowing;
+      }
+    };
     this.checkTitleOverflow = () => {
-      requestAnimationFrame(() => {
-        let textContent = '';
-        let font = '';
-        let textWidth = 0;
-        if (this.text) {
-          textContent = this.text;
-          font = this.getTextTitleFont();
-        }
-        else if (this.hasHeaderSlot) {
-          const headerData = this.getHeaderSlotText();
-          textContent = headerData.headerTitle;
-          font = headerData.font;
-        }
-        else {
-          return;
-        }
-        if (textContent !== this.prevTextContent || font !== this.prevFont) {
-          this.prevTextContent = textContent;
-          this.prevFont = font;
-          this.cachedTextWidth = this.getTextWidth(textContent, font);
-        }
-        textWidth = this.cachedTextWidth;
-        const isOverflowing = textWidth > this.titleMaxWidth;
-        if (this.isTitleOverflowing !== isOverflowing) {
-          this.isTitleOverflowing = isOverflowing;
-        }
-      });
+      requestAnimationFrame(() => this.checkTitleOverflowInternal());
     };
     this.cssTagWrapperClasses = () => ({
       'title-tags-wrapper': true,
       'tab-focus': this.focusType === common.FOCUS_TYPE.TAB,
     });
+    this.getHeaderTypographyType = () => {
+      if (this.size === 's')
+        return 's-strong';
+      if (this.size === 'm')
+        return 'm-strong';
+      if (this.size === 'l')
+        return 'l-strong';
+      if (this.size === 'xl')
+        return 'xl-heading';
+      if (this.size === '2xl')
+        return '2xl-heading';
+      return undefined;
+    };
     this.maxHeight = undefined;
     this.toggleOverflow = undefined;
     this.hasHeaderSlot = false;
@@ -204,9 +171,7 @@ const WppAccordion = class {
     this.expanded = false;
     this.disabled = false;
     this.withDivider = true;
-    this.counter = 0;
     this.size = 'l';
-    this.text = undefined;
     this.withTag = false;
     this.ariaProps = {};
   }
@@ -253,6 +218,26 @@ const WppAccordion = class {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
+  }
+  calculateContentLayout() {
+    this.actionsWrapperWidth = this.host.shadowRoot.querySelector('.actions')?.clientWidth || 0;
+    const tagsWrapper = this.host.shadowRoot.querySelector('.tags');
+    this.tagGroupWrapperWidth = tagsWrapper?.clientWidth || 0;
+    const gaps = this.hasActionsSlot && this.hasTagSlot ? 16 : this.hasActionsSlot || this.hasTagSlot ? 8 : 0;
+    const usedWidth = this.actionsWrapperWidth + this.tagGroupWrapperWidth + gaps;
+    const titleWrapperMaxWidth = this.host.clientWidth - usedWidth;
+    this.titleMaxWidth = titleWrapperMaxWidth - 28;
+    const titleWrapper = this.host.shadowRoot.querySelector('.title-wrapper');
+    if (titleWrapper) {
+      titleWrapper.style.maxWidth = `${titleWrapperMaxWidth}px`;
+    }
+    const titleWrapperWidth = titleWrapper?.clientWidth || 0;
+    if (this.hasTagSlot && tagsWrapper) {
+      const leftPosition = titleWrapperWidth + (this.hasHeaderSlot ? 8 : 0);
+      tagsWrapper.style.left = `${leftPosition}px`;
+    }
+    this.maxHeight = this.host.shadowRoot.querySelector('.slot-content')?.clientHeight || 0;
+    this.checkTitleOverflow();
   }
   getTextWidth(text, font) {
     const canvas = this.textWidthCanvas || (this.textWidthCanvas = document.createElement('canvas'));
@@ -304,11 +289,11 @@ const WppAccordion = class {
     const { headerTitle } = this.getHeaderSlotText();
     const internal = !!this.host.children[0]?.assignedElements;
     const style = this.getAnimationStyles();
-    const tooltipText = this.counter > 0 ? `${this.text || headerTitle} (${this.counter})` : this.text || headerTitle || '';
-    const titleContent = (index.h(index.Fragment, null, this.hasHeaderSlot ? (index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", role: "presentation", onSlotchange: this.updateSlotData })) : (index.h("wpp-typography-v3-4-0", { type: this.typographyType(), part: "title", role: "presentation", class: "title-text" }, this.text))));
-    return (index.h(index.Host, { class: this.hostCssClasses(internal), exportparts: "section, title, icon, counter, divider, title-wrapper, content", style: style, onBlur: this.onBlur, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown }, index.h("div", { class: this.cssSectionClasses(), part: "section" }, index.h("button", { ref: ref => (this.titleTagsWrapperButtonRef = ref), class: this.cssTagWrapperClasses(), "aria-expanded": this.expanded.toString(), "aria-controls": this.ariaProps?.controls ?? 'expandable-panel', id: this.ariaProps?.labelledby ?? 'expandable-button', onFocus: this.onFocus, onClick: this.onClick, disabled: this.disabled }, index.h("div", { class: "title-wrapper", part: "title-wrapper", role: "none" }, index.h("wpp-icon-chevron-v3-4-0", { role: "presentation", part: "icon" }), this.isTitleOverflowing ? (index.h("wpp-tooltip-v3-4-0", { config: { triggerTarget: this.titleTagsWrapperButtonRef }, text: tooltipText }, titleContent)) : (titleContent), this.counter > 0 && (index.h("wpp-typography-v3-4-0", { type: this.counterType(), class: "counter", part: "counter" }, `(${this.counter})`))), this.withTag && (index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.tagGroupCssClasses(), name: "tags", onSlotchange: this.updateSlotData }))), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), index.h("div", { class: this.contentCssClasses(), part: "content", role: "region", id: this.ariaProps?.controls ?? 'expandable-panel', "aria-labelledby": this.ariaProps?.labelledby ?? 'expandable-button', ...(!this.expanded ? { inert: true, 'aria-hidden': true } : {}) }, index.h("slot", { class: "slot-content" })), this.withDivider && index.h("wpp-divider-v3-4-0", { part: "divider" })));
+    const tooltipText = headerTitle || '';
+    const titleContent = (index.h(index.Fragment, null, this.hasHeaderSlot && (index.h("wpp-typography-v4-0-0", { class: "typography-title", part: "title", type: this.getHeaderTypographyType(), style: { '--typography-color': 'var(--wpp-text-color)' } }, index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", role: "presentation", onSlotchange: this.updateSlotData })))));
+    return (index.h(index.Host, { class: this.hostCssClasses(internal), exportparts: "section, title, icon, divider, title-wrapper, content", style: style, onBlur: this.onBlur, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown }, index.h("div", { class: this.cssSectionClasses(), part: "section" }, index.h("button", { ref: ref => (this.titleTagsWrapperButtonRef = ref), class: this.cssTagWrapperClasses(), "aria-expanded": this.expanded.toString(), "aria-controls": this.ariaProps?.controls ?? 'expandable-panel', id: this.ariaProps?.labelledby ?? 'expandable-button', onFocus: this.onFocus, onClick: this.onClick, disabled: this.disabled, part: "button" }, index.h("div", { class: "title-wrapper", part: "title-wrapper", role: "none" }, index.h("wpp-icon-chevron-v4-0-0", { role: "presentation", part: "icon" }), this.isTitleOverflowing ? (index.h("wpp-tooltip-v4-0-0", { config: { triggerTarget: this.titleTagsWrapperButtonRef }, text: tooltipText }, titleContent)) : (titleContent)), this.withTag && (index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.tagGroupCssClasses(), name: "tags", onSlotchange: this.updateSlotData }))), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), index.h("div", { class: this.contentCssClasses(), part: "content", role: "region", id: this.ariaProps?.controls ?? 'expandable-panel', "aria-labelledby": this.ariaProps?.labelledby ?? 'expandable-button', ...(!this.expanded ? { inert: true, 'aria-hidden': true } : {}) }, index.h("slot", { class: "slot-content" })), this.withDivider && index.h("wpp-divider-v4-0-0", { part: "divider" })));
   }
-  static get registryIs() { return "wpp-accordion-v3-4-0"; }
+  static get registryIs() { return "wpp-accordion-v4-0-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "expanded": ["updateOverflow"]

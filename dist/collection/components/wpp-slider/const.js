@@ -2,7 +2,8 @@ export const DEFAULT_INPUT_WIDTH = '68px';
 export const getDefaultMaskOptions = (step) => ({
   decimalSeparator: '.',
   thousandSeparator: '',
-  precision: String(step).split('.')[1]?.length || 0,
+  minimumFractionDigits: 0,
+  maximumFractionDigits: String(step).split('.')[1]?.length || 0,
 });
 export const parseMaskedInput = (input, options) => {
   const { prefix = '', postfix = '', decimalSeparator = '.', thousandSeparator = '' } = options;
@@ -23,17 +24,6 @@ export const parseMaskedInput = (input, options) => {
   }
   const parsedNumber = Number(cleanedInput);
   return isNaN(parsedNumber) ? 0 : parsedNumber;
-};
-export const formatDecimalWithMask = (value, options) => {
-  const { prefix = '', postfix = '', decimalSeparator = '.', thousandSeparator = '' } = options;
-  let formattedValue = String(value);
-  if (decimalSeparator !== '.') {
-    formattedValue = formattedValue.replace('.', decimalSeparator);
-  }
-  const parts = formattedValue.split(decimalSeparator);
-  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
-  formattedValue = parts.join(decimalSeparator);
-  return `${prefix}${formattedValue}${postfix}`;
 };
 export const getMaskOptionsForInput = (sliderType, inputType, maskOptions) => {
   if (sliderType === 'single') {

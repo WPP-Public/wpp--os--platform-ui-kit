@@ -22,9 +22,9 @@ const WppIconResize$1 = /*@__PURE__*/ proxyCustomElement(class WppIconResize ext
   render() {
     return (h(WppIcon, { name: "wpp-icon-resize", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: ResizeDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-resize-v3-4-0"; }
+  static get registryIs() { return "wpp-icon-resize-v4-0-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-resize", "wpp-icon-resize-v3-4-0", {
+}, [1, "wpp-icon-resize", "wpp-icon-resize-v4-0-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -35,9 +35,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-resize-v3-4-0"];
+  const components = ["wpp-icon-resize-v4-0-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-resize-v3-4-0":
+    case "wpp-icon-resize-v4-0-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconResize$1);
       }

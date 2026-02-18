@@ -1,6 +1,6 @@
 import { html } from 'lit-html';
 export default {
-  title: 'Design System/Components/Navigation/Pagination/Pagination Type',
+  title: 'Design System/Components/Navigation/Pagination/Pagination Select',
   parameters: {
     previewTabs: {
       'storybook/docs/panel': {
@@ -13,13 +13,8 @@ export default {
     activePageNumber: { type: 'number' },
   },
 };
-export const Select = (args) => html ` <wpp-pagination-select-v3-4-0 .count="${args.count}" .activePageNumber="${args.activePageNumber}" />`;
-Select.args = {
+export const Default = (args) => html ` <wpp-pagination-select-v4-0-0 .count="${args.count}" .activePageNumber="${args.activePageNumber}" />`;
+Default.args = {
   count: 8,
-  activePageNumber: 2,
-};
-export const Input = (args) => html ` <wpp-pagination-select-v3-4-0 .count="${args.count}" .activePageNumber="${args.activePageNumber}" />`;
-Input.args = {
-  count: 10,
   activePageNumber: 2,
 };

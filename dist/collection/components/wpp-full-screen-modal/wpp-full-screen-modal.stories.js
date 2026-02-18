@@ -58,8 +58,8 @@ const getModalHandlers = () => {
 export const FullScreenModal = {
   render: args => {
     const { handleFullScreenModalOpen, handleFullScreenModalClose, handleFullScreenModalAction } = getModalHandlers();
-    return html ` <wpp-button-v3-4-0 @click=${handleFullScreenModalOpen}>Open Full Screen Modal</wpp-button-v3-4-0>
-      <wpp-full-screen-modal-v3-4-0
+    return html ` <wpp-button-v4-0-0 @click=${handleFullScreenModalOpen}>Open Full Screen Modal</wpp-button-v4-0-0>
+      <wpp-full-screen-modal-v4-0-0
         @wppFullScreenModalClose=${() => {
       console.log('Called wppFullScreenModalClose');
       handleFullScreenModalClose();
@@ -73,21 +73,21 @@ export const FullScreenModal = {
       >
         <div slot="header" style=${styleMap(styles.header)}>
           ${args.withTitle
-      ? html ` <wpp-typography-v3-4-0 type="2xl-heading" style=${styleMap(styles.title)}
-                >Title</wpp-typography-v3-4-0
+      ? html ` <wpp-typography-v4-0-0 type="2xl-heading" style=${styleMap(styles.title)}
+                >Title</wpp-typography-v4-0-0
               >`
       : null}
         </div>
         <p slot="body" style=${styleMap(styles.body)}></p>
         ${args.withActionBar
       ? html `<div slot="actions" style=${styleMap(styles.actions)}>
-              <wpp-button-v3-4-0 variant="secondary" style="margin-right: 12px" @click=${handleFullScreenModalClose}>
+              <wpp-button-v4-0-0 variant="secondary" style="margin-right: 12px" @click=${handleFullScreenModalClose}>
                 Cancel
-              </wpp-button-v3-4-0>
-              <wpp-button-v3-4-0 variant="primary" @click=${handleFullScreenModalAction}>Action</wpp-button-v3-4-0>
+              </wpp-button-v4-0-0>
+              <wpp-button-v4-0-0 variant="primary" @click=${handleFullScreenModalAction}>Action</wpp-button-v4-0-0>
             </div>`
       : null}
-      </wpp-full-screen-modal-v3-4-0>`;
+      </wpp-full-screen-modal-v4-0-0>`;
   },
   args: {
     open: false,

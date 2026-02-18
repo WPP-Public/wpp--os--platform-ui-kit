@@ -292,12 +292,15 @@
 .header-container {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: var(--side-modal-header-paddings);
 }
 .header-container .header-with-back-button {
   display: flex;
   align-items: center;
+}
+.header-container .header-action-container {
+  display: flex;
 }
 .header-container .close-button {
   margin-left: var(--side-modal-close-button-margin-left);
@@ -310,6 +313,13 @@
 }
 .header-container.with-bottom-border {
   border-bottom: 1px solid var(--side-modal-actions-border-color);
+}
+
+.focus-sentinel {
+  position: fixed;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
 }
 
 @keyframes fadeIn {

@@ -99,6 +99,10 @@
   box-sizing: border-box;
   cursor: pointer;
 }
+:host .item .right {
+  display: flex;
+  align-items: center;
+}
 :host .item .label {
   --wpp-typography-s-body-font-weight: var(--li-label-text-font-weight);
   --wpp-typography-s-body-line-height: var(--li-label-text-line-height);
@@ -147,7 +151,8 @@
   letter-spacing: var(--wpp-typography-s-strong-letter-spacing, 0);
   --wpp-typography-s-strong-font-weight: var(--li-highlight-font-weight);
 }
-:host .item ::slotted([slot=right][type=s-body]) {
+:host .item ::slotted([slot=right][type=s-body]),
+:host .item ::slotted(.wpp-icon[slot=right]:not(.wpp-icon-chevron)) {
   color: var(--li-right-text-color);
 }
 :host .item ::slotted(.wpp-icon[slot=left]) {
@@ -183,9 +188,6 @@
 }
 :host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted(.wpp-icon[slot=left]), :host .item:focus-visible ::slotted(.wpp-icon[slot=left]) {
   color: var(--li-left-icon-color-active);
-}
-:host .item.with-right-icon {
-  padding: var(--li-with-right-icon-padding);
 }
 :host .item.checked:not(.non-interactive):not(.has-toggle),
 :host .item .multiple:not(.non-interactive):not(.has-toggle),
@@ -266,6 +268,10 @@
 :host .item.disabled .info-wrapper .label,
 :host .item.disabled .info-wrapper .caption {
   color: var(--li-text-color-disabled);
+}
+:host .item.disabled ::slotted([slot=right][type=s-body]),
+:host .item.disabled ::slotted(.wpp-icon[slot=right]:not(.wpp-icon-chevron)) {
+  color: var(--li-icons-color-disabled);
 }
 :host .item.disabled ::slotted([slot=left]),
 :host .item.disabled ::slotted([slot=right]),
@@ -355,6 +361,10 @@
   color: var(--li-label-text-color-selected-active);
 }
 
+:host(.has-right-slot) .item {
+  padding: var(--li-with-right-icon-padding);
+}
+
 :host(.wpp-hidden) {
   display: none;
 }
@@ -383,6 +393,24 @@
   width: 100%;
   padding: 0;
   margin: 0;
+}
+
+:host(.tab-focus) {
+  border-radius: var(--wpp-border-radius-s);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
+}
+:host(.tab-focus) .item {
+  background-color: var(--li-bg-color-active);
+  outline: none;
+}
+:host(.tab-focus) .item ::slotted([slot=left]),
+:host(.tab-focus) .item ::slotted([slot=right]),
+:host(.tab-focus) .item .fallback-icon {
+  color: var(--li-icon-color-active);
+}
+:host(.tab-focus) .item ::slotted(.wpp-icon[slot=left]) {
+  color: var(--li-left-icon-color-active);
 }
 
 :host .label.custom-typography ::slotted([slot=label]) {

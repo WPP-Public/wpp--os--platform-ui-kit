@@ -14,6 +14,7 @@ export declare class WppIconTableSortAscPressed {
   /**
    * Defines the icon color.
    * @deprecated This prop is maintained for backward compatibility but won't affect the icon since arrows have different colors.
+   * This property will be removed in version 5.0.0.
    */
   readonly color: string;
   /**

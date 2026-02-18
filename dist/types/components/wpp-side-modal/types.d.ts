@@ -43,3 +43,7 @@ export type HeaderActionConfig = {
 };
 export type HeaderActionsConfig = [] | [HeaderActionConfig] | [HeaderActionConfig, HeaderActionConfig] | [HeaderActionConfig, HeaderActionConfig, HeaderActionConfig] | [HeaderActionConfig, HeaderActionConfig, HeaderActionConfig, HeaderActionConfig];
 export type ActionConfig = [] | [FirstActionConfig] | [SecondActionConfig] | [ThirdActionConfig] | [FirstActionConfig, SecondActionConfig] | [SecondActionConfig, FirstActionConfig] | [FirstActionConfig, ThirdActionConfig] | [ThirdActionConfig, FirstActionConfig] | [SecondActionConfig, ThirdActionConfig] | [ThirdActionConfig, SecondActionConfig] | [FirstActionConfig, SecondActionConfig, ThirdActionConfig] | [SecondActionConfig, FirstActionConfig, ThirdActionConfig] | [FirstActionConfig, ThirdActionConfig, SecondActionConfig] | [ThirdActionConfig, FirstActionConfig, SecondActionConfig] | [SecondActionConfig, ThirdActionConfig, FirstActionConfig] | [ThirdActionConfig, SecondActionConfig, FirstActionConfig];
+export type SideModalLocalesType = {
+  closeIconLabel: string;
+  backHeaderButtonLabel: string;
+};

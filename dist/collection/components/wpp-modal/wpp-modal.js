@@ -3,6 +3,7 @@ import { ANIMATION_PROPERTY_NAME, Z_INDEX } from '../../common/consts';
 import { applyBodyStylesIfNeeded, getSlotEmptyStates } from '../../utils/utils';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { ModalCloseReason } from './types';
+import { TOP_AND_BOTTOM_OFFSET } from './consts';
 /**
  * @slot header - Content that is displayed within the `.modal` element. To add header content, pass `slot="header"` – can contain the modal title.
  * @slot body - Content that is displayed within the `.modal` element. To add body content, pass `slot="body"` – can contain any text that describes the modal actions.
@@ -23,6 +24,20 @@ export class WppModal {
         return;
       this.wppModalClose.emit({ reason: ModalCloseReason.outsideClick });
       this.closeReason = ModalCloseReason.outsideClick;
+    };
+    this.setupObserver = () => {
+      if (!this.dialogRef)
+        return;
+      this.resizeObserver = new ResizeObserver(() => {
+        // If the Dialog is stretched up to the limit, it enters this scrollable mode, where the body is scrollable and dividers are displayed.
+        this.isBodyScrollable = window.innerHeight - TOP_AND_BOTTOM_OFFSET <= (this.dialogRef?.clientHeight || 0);
+      });
+      this.resizeObserver.observe(this.dialogRef);
+    };
+    this.disconnectObserver = () => {
+      if (this.resizeObserver) {
+        this.resizeObserver.disconnect();
+      }
     };
     this.updateSlotData = () => {
       const emptyStates = getSlotEmptyStates(this.host.childNodes, {
@@ -54,7 +69,7 @@ export class WppModal {
         return;
       if (this.open) {
         this.wppModalOpenComplete.emit();
-        this.wppModalOpen.emit();
+        this.focusDialog();
       }
       else {
         if (this.closeReason) {
@@ -65,6 +80,11 @@ export class WppModal {
         }
       }
       this.closeReason = null;
+    };
+    this.focusDialog = () => {
+      if (!this.dialogRef)
+        return;
+      this.dialogRef.focus();
     };
     this.headerCssClasses = () => ({
       header: true,
@@ -94,12 +114,17 @@ export class WppModal {
     this.hasBodySlot = false;
     this.hasActionsSlot = false;
     this.closeReason = null;
+    this.isBodyScrollable = false;
     this.open = false;
     this.size = 's';
     this.withTransparentOverlay = undefined;
     this.disableOutsideClick = false;
     this.formConfig = undefined;
     this.zIndex = Z_INDEX.MODAL;
+    this.ariaProps = {
+      role: 'dialog',
+      labelledby: 'dialog_label',
+    };
   }
   handleCloseOnEsc(event) {
     if (event.key === 'Escape' && this.open) {
@@ -110,6 +135,10 @@ export class WppModal {
   handleChangeModalStatus(openStatus) {
     if (openStatus) {
       this.host.classList.add('wpp-component-ready');
+      this.setupObserver();
+    }
+    else {
+      this.disconnectObserver();
     }
     setTimeout(() => {
       applyBodyStylesIfNeeded(this.open ? 'add' : 'remove');
@@ -137,13 +166,14 @@ export class WppModal {
   }
   disconnectedCallback() {
     this.closeModal();
+    this.disconnectObserver();
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (h(Host, { class: this.hostCssClasses(), "aria-modal": "true", exportparts: "wrapper, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() } }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-4-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h(Tag, { role: "dialog", class: this.modalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-modal-content" }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-0-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-0-0", null), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-0-0", null), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
   }
   static get is() { return "wpp-modal"; }
-  static get registryIs() { return "wpp-modal-v3-4-0"; }
+  static get registryIs() { return "wpp-modal-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -266,6 +296,28 @@ export class WppModal {
         "attribute": "z-index",
         "reflect": false,
         "defaultValue": "Z_INDEX.MODAL"
+      },
+      "ariaProps": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "AriaProps",
+          "resolved": "AriaProps",
+          "references": {
+            "AriaProps": {
+              "location": "import",
+              "path": "../../types/common",
+              "id": "src/types/common.ts::AriaProps"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Contains the modal `aria-` props."
+        },
+        "defaultValue": "{\n    role: 'dialog',\n    labelledby: 'dialog_label',\n  }"
       }
     };
   }
@@ -274,7 +326,8 @@ export class WppModal {
       "hasHeaderSlot": {},
       "hasBodySlot": {},
       "hasActionsSlot": {},
-      "closeReason": {}
+      "closeReason": {},
+      "isBodyScrollable": {}
     };
   }
   static get events() {
@@ -370,24 +423,6 @@ export class WppModal {
               "id": "src/components/wpp-modal/types.ts::ModalCloseDetails"
             }
           }
-        }
-      }, {
-        "method": "wppModalOpen",
-        "name": "wppModalOpen",
-        "bubbles": false,
-        "cancelable": true,
-        "composed": false,
-        "docs": {
-          "tags": [{
-              "name": "deprecated",
-              "text": "- this prop will be deleted in version 4.0.0 . Use `wppModalOpenStart`/`wppModalOpenComplete` instead"
-            }],
-          "text": "Handles the modal click actions."
-        },
-        "complexType": {
-          "original": "void",
-          "resolved": "void",
-          "references": {}
         }
       }];
   }

@@ -13,3 +13,4 @@ type ListItemStoryArgsTypes = Components.WppListItem & {
 export declare const SingleLine: StoryObj<ListItemStoryArgsTypes>;
 export declare const TwoLine: StoryObj<ListItemStoryArgsTypes>;
 export declare const DynamicWidth: StoryObj<ListItemStoryArgsTypes>;
+export declare const TooltipConfig: StoryObj<ListItemStoryArgsTypes>;

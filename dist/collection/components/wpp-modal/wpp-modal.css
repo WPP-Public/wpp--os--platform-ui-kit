@@ -14,8 +14,7 @@
   --modal-width-s: var(--wpp-modal-width-s, 440px);
   --modal-width-m: var(--wpp-modal-width-m, 600px);
   --modal-box-shadow: var(--wpp-modal-box-shadow, var(--wpp-box-shadow-l));
-  --modal-vertical-position-minus-number: var(--wpp-modal-vertical-position-minus-number, 160px);
-  --modal-vertical-position-animation-minus-number: var(--wpp-modal-vertical-position-animation-minus-number, 200px);
+  --modal-vertical-position-animation-minus-number: var(--wpp-modal-vertical-position-animation-minus-number, 40px);
   --modal-body-paddings: var(--wpp-modal-body-paddings, 0 24px);
   --modal-actions-paddings: var(--wpp-modal-actions-paddings, 24px);
   --modal-header-padding: var(--wpp-modal-header-padding, 20px 24px 16px 24px);
@@ -81,6 +80,7 @@
   font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
   padding: var(--modal-body-paddings);
+  overflow-y: auto;
 }
 .body::-webkit-scrollbar {
   width: 4px;
@@ -110,13 +110,15 @@
 
 .modal {
   position: absolute;
+  display: flex;
+  flex-direction: column;
   top: 50%;
   left: 50%;
   background-color: var(--modal-bg-color);
   border-radius: var(--wpp-border-radius-l);
   box-shadow: var(--modal-box-shadow);
-  transform: translate(-50%, calc(-50% - var(--modal-vertical-position-minus-number)));
-  max-height: 90vh;
+  transform: translate(-50%, -50%);
+  max-height: calc(100vh - 120px);
   max-width: 90vh;
   overflow-y: auto;
   overflow-x: hidden;
@@ -130,6 +132,13 @@
 }
 .modal.size-m {
   width: var(--modal-width-m);
+}
+
+.focus-sentinel {
+  position: fixed;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
 }
 
 @media (max-height: 800px) {
@@ -154,6 +163,6 @@
     transform: translate(-50%, calc(-50% - var(--modal-vertical-position-animation-minus-number)));
   }
   100% {
-    transform: translate(-50%, calc(-50% - var(--modal-vertical-position-minus-number)));
+    transform: translate(-50%, -50%);
   }
 }

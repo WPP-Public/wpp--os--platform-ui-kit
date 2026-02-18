@@ -35,13 +35,16 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
   private marksListRef?;
   private segmentWidth;
   private totalWidth;
-  private maskPrecisions;
   private middleValue;
   host: HTMLWppSliderElement;
   tooltipTexts: Record<number, string>;
   displayMarks: DisplayMarkState[];
   inputValue: SliderInputValue;
   focusType: FocusType;
+  /**
+   * Tracks whether the component currently has focus
+   */
+  private isFocused;
   /**
    * Defines the slider name.
    */
@@ -128,7 +131,6 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
    * Emitted when the slider loses focus.
    */
   readonly wppBlur: EventEmitter<FocusEvent>;
-  onUpdateMaskOptions(): void;
   onUpdateValue(): void;
   onUpdateMinValue(newValue: number): void;
   onUpdateMaxValue(newValue: number): void;
@@ -141,7 +143,6 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
   componentWillLoad(): void;
   componentDidLoad(): void;
   disconnectedCallback(): void;
-  private setPrecision;
   private getMidValueRespectingStep;
   private computeSegmentWidth;
   private onUpdateMinMaxValues;
@@ -160,7 +161,23 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
   private getUpdatedFocusInfo;
   private getSliderType;
   private handleBlur;
-  private handleFocus;
+  /**
+   * Handles focusin at the host level to properly emit wppFocus
+   * when the component receives focus for the first time
+   */
+  private handleHostFocusIn;
+  /**
+   * Handles focusout at the host level to properly emit wppBlur
+   * when focus moves outside of the entire component
+   */
+  private handleHostFocusOut;
+  /**
+   * Handles document-level mousedown to detect clicks outside the component.
+   * This is necessary because clicking on the slider track (non-focusable div)
+   * sets isFocused=true but doesn't give actual DOM focus to any element.
+   * Without this, focusout would never fire when clicking outside.
+   */
+  private handleDocumentMouseDown;
   private handleInputBlur;
   private handleInputMouseDown;
   private handleInputKeyUp;

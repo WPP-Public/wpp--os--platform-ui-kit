@@ -62,6 +62,9 @@
 :host(.wpp-menu-context-wrapper) .trigger-wrapper.nested[aria-expanded=true] {
   background-color: var(--mc-item-bg-color-active);
 }
+:host(.wpp-menu-context-wrapper) .wpp-list {
+  width: var(--custom-menu-context-width, 100%);
+}
 
 :host(.wpp-menu-nested-context-wrapper) ::slotted(*) .tippy-box[data-reference-hidden] {
   visibility: visible;
@@ -81,6 +84,7 @@
 }
 ::slotted(*) .wpp-list-item,
 ::slotted(*) .wpp-menu-context {
+  --mc-item-width: 100%;
   width: var(--mc-item-width);
   --li-width: var(--mc-item-width);
   overflow: hidden;
