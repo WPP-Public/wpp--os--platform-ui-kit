@@ -10,6 +10,10 @@ describe('wpp-skeleton', () => {
       const component = new WppSkeleton();
       expect(component.variant).toBe('rectangle');
     });
+    it('should have default animation as true', () => {
+      const component = new WppSkeleton();
+      expect(component.animation).toBe(true);
+    });
     it('should have undefined width by default', () => {
       const component = new WppSkeleton();
       expect(component.width).toBeUndefined();
@@ -43,12 +47,19 @@ describe('wpp-skeleton', () => {
       });
       expect(page.root?.classList.contains('wpp-skeleton')).toBe(true);
     });
-    it('should have wpp-animated class (skeleton is always animated)', async () => {
+    it('should have wpp-animated class when animation is true', async () => {
       const page = await newSpecPage({
         components: [WppSkeleton],
-        html: `<wpp-skeleton />`,
+        html: `<wpp-skeleton animation />`,
       });
       expect(page.root?.classList.contains('wpp-animated')).toBe(true);
+    });
+    it('should not have wpp-animated class when animation is false', async () => {
+      const page = await newSpecPage({
+        components: [WppSkeleton],
+        html: `<wpp-skeleton animation="false" />`,
+      });
+      expect(page.root?.classList.contains('wpp-animated')).toBe(false);
     });
     it('should have wpp-rectangle class for rectangle variant', async () => {
       const page = await newSpecPage({

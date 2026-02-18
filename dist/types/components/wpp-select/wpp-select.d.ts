@@ -57,7 +57,8 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
   readonly list: ListItemInterface[];
   /**
    * Defines the WppSelect component type.
-   * Valid values: 'single' | 'multiple' | 'combined'
+   * * Valid values: 'single' | 'multiple' | 'combined'
+   * * Note: The value 'text' is deprecated and will be removed in version 4.0.0. Use WppActionButton with WppMenuContext to achieve the same result.
    */
   readonly type: SelectTypes;
   /**

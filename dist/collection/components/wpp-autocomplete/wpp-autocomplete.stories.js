@@ -1,10 +1,5 @@
 import { html } from 'lit-html';
 import { useState } from 'storybook/internal/preview-api';
-const helperCreateElement = (type, props, children) => ({
-  type,
-  props: props || {},
-  ...(children && { children: Array.isArray(children) ? children : [children] }),
-});
 export default {
   title: 'Design System/Components/Selection and input/Autocomplete',
   parameters: {
@@ -22,10 +17,6 @@ export default {
     dropdownConfig: {
       control: 'object',
     },
-    type: {
-      options: ['regular', 'extended'],
-      control: { type: 'select' },
-    },
     required: { control: { type: 'boolean' } },
     multiple: { control: { type: 'boolean' } },
     simpleSearch: { control: { type: 'boolean' } },
@@ -36,33 +27,31 @@ export default {
     persistentSearch: { control: { type: 'boolean' } },
   },
 };
-const createHero = (name, src = '') => ({
+const createHero = (name, url = '') => ({
   id: name,
   label: name,
-  value: name.toLowerCase(),
-  slots: [helperCreateElement('wpp-avatar', { slot: 'left', size: 'xs', name, src })],
+  url,
 });
 const heroes = [
-  createHero('Gandalf the GreyGandalf the GreyGandalf the GreyGandalf the Grey', 'https://cdna.artstation.com/p/assets/images/images/004/966/196/large/hossein-diba-1.jpg?1487536028'),
-  createHero('Aragorn', 'https://cdna.artstation.com/p/assets/images/images/004/966/196/large/hossein-diba-1.jpg?1487536028'),
+  createHero('Gandalf the GreyGandalf the GreyGandalf the GreyGandalf the Grey', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYDcyNktWzouj_yLb_KGClIxW2_M0j6ryN-A&usqp=CAU'),
+  createHero('Aragorn', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRB_Hsd1xsxyq8L97dlCg2jv_idnNptlzYrVA&usqp=CAU'),
   createHero('Gimli'),
   createHero('Boromir'),
   createHero('Galadriel'),
   createHero('Elrond'),
-  createHero('Legolas', 'https://cdna.artstation.com/p/assets/images/images/004/966/196/large/hossein-diba-1.jpg?1487536028'),
+  createHero('Legolas', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsW08Y5TbumreAtqyc3IrMU1GHNSJjQLOw3w&usqp=CAU'),
   createHero('Arwen'),
   ...Array.from(Array(20)).map((_, index) => createHero(`No Name ${index}`)),
 ];
 const suggestions = [
-  { id: 'Aragorn', label: 'Aragorn', value: 'aragorn' },
-  { id: 'Boromir', label: 'Boromir', value: 'boromir' },
-  { id: 'Elrond', label: 'Elrond', value: 'elrond' },
+  { id: 'Aragorn', label: 'Aragorn' },
+  { id: 'Boromir', label: 'Boromir' },
+  { id: 'Elrond', label: 'Elrond' },
 ];
 export const Regular = {
   render: args => {
     const [value, setValue] = useState([]);
-    return html ` <wpp-autocomplete-v4-0-0
-      .list="${heroes}"
+    return html ` <wpp-autocomplete-v3-5-0
       .loading="${args.loading}"
       .disabled="${args.disabled}"
       .required="${args.required}"
@@ -82,12 +71,39 @@ export const Regular = {
       .dropdownWidth="${args.dropdownWidth}"
       .size="${args.size}"
       .suggestions="${args.suggestions}"
+      .suggestionsTitle="${args.suggestionsTitle}"
       .persistentSearch="${args.persistentSearch}"
       name="regular-autocomplete"
       @wppChange="${(e) => setValue(e.detail.value)}"
       @wppSearchValueChange="${(e) => console.log('onWppSearchValueChange', e.detail)}"
       @wppCreateNewOption="${(e) => console.log('onWppCreateNewOption', e.detail)}"
-    ></wpp-autocomplete-v4-0-0>`;
+    >
+      <div slot="selected-values">
+        ${value.map(selectedValue => html `
+            <wpp-pill-v3-5-0
+              label="${selectedValue.label}"
+              value="${selectedValue.id}"
+              removable="${true}"
+              type="display"
+              .maxLength="${20}"
+              @wppClose="${() => setValue(value.filter(i => i.id !== selectedValue.id))}"
+            >
+              <wpp-avatar-v3-5-0
+                name="${selectedValue.label}"
+                size="xs"
+                src="${selectedValue.url}"
+                slot="icon-start"
+              />
+            </wpp-pill-v3-5-0>
+          `)}
+      </div>
+      ${heroes.map(hero => html `
+          <wpp-list-item-v3-5-0 .value="${hero}">
+            <wpp-avatar-v3-5-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-5-0>
+            <p slot="label">${hero.label}</p>
+          </wpp-list-item-v3-5-0>
+        `)}
+    </wpp-autocomplete-v3-5-0>`;
   },
   args: {
     loading: false,
@@ -98,17 +114,17 @@ export const Regular = {
     dropdownWidth: 'auto',
     message: '',
     type: 'regular',
+    suggestionsTitle: 'Suggested fruits',
     size: 'm',
     locales: {
       nothingFound: 'Nothing found',
-      loading: 'Loading...',
+      beginTyping: 'Begin typing',
+      more: 'more',
+      showMore: 'more',
+      showLess: 'Show less',
       selected: count => `${count} selected`,
-      showMore: 'Show More',
-      showLess: 'Show Less',
-      suggestionTitle: 'Suggestions',
-      createNewElement: query => `Create "${query}"`,
-      clearMultiple: 'Clear selections',
-      clearSingle: 'Clear selection',
+      loading: 'Loading...',
+      createNewElement: 'Create new element',
     },
     labelConfig: {
       icon: '',
@@ -129,9 +145,8 @@ export const Regular = {
 export const Extended = {
   render: args => {
     const [value, setValue] = useState([]);
-    return html ` <wpp-autocomplete-v4-0-0
+    return html ` <wpp-autocomplete-v3-5-0
       style="--wpp-autocomplete-extended-selected-values-wrapper-padding: 2px 10px 10px 10px;"
-      .list="${heroes}"
       .loading="${args.loading}"
       .disabled="${args.disabled}"
       .required="${args.required}"
@@ -145,6 +160,7 @@ export const Extended = {
       .type="${args.type}"
       .value="${value}"
       .suggestions="${args.suggestions}"
+      .suggestionsTitle="${args.suggestionsTitle}"
       .multiple="${args.multiple}"
       .showCreateNewElement="${args.showCreateNewElement}"
       .displayBtnWhenListEmpty="${args.displayBtnWhenListEmpty}"
@@ -156,7 +172,33 @@ export const Extended = {
       @wppChange="${(e) => setValue(e.detail.value)}"
       @wppSearchValueChange="${(e) => console.log('onWppSearchValueChange', e.detail)}"
     >
-    </wpp-autocomplete-v4-0-0>`;
+      <div slot="selected-values">
+        ${value.map(selectedValue => html `
+            <wpp-pill-v3-5-0
+              label="${selectedValue.label}"
+              value="${selectedValue.id}"
+              disabled="${args.disabled}"
+              removable="${true}"
+              type="display"
+              .maxLength="${20}"
+              @wppClose="${() => setValue(value.filter(i => i.id !== selectedValue.id))}"
+            >
+              <wpp-avatar-v3-5-0
+                name="${selectedValue.label}"
+                size="xs"
+                src="${selectedValue.url}"
+                slot="icon-start"
+              />
+            </wpp-pill-v3-5-0>
+          `)}
+      </div>
+      ${heroes.map(hero => html `
+          <wpp-list-item-v3-5-0 .value="${hero}">
+            <wpp-avatar-v3-5-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-5-0>
+            <p slot="label">${hero.label}</p>
+          </wpp-list-item-v3-5-0>
+        `)}
+    </wpp-autocomplete-v3-5-0>`;
   },
   args: {
     loading: false,
@@ -171,15 +213,15 @@ export const Extended = {
     suggestions,
     locales: {
       nothingFound: 'Nothing found',
-      loading: 'Loading...',
+      beginTyping: 'Begin typing',
+      more: 'more',
+      showMore: 'more',
+      showLess: 'Show less',
       selected: count => `${count} selected`,
-      showMore: 'Show More',
-      showLess: 'Show Less',
-      suggestionTitle: 'Suggestions',
-      createNewElement: query => `Create "${query}"`,
-      clearMultiple: 'Clear selections',
-      clearSingle: 'Clear selection',
+      loading: 'Loading...',
+      createNewElement: 'Create new element',
     },
+    suggestionsTitle: 'Suggested fruits',
     labelConfig: {
       icon: '',
       text: 'Add heroes',
@@ -195,217 +237,24 @@ export const Extended = {
     persistentSearch: false,
   },
 };
-const fruitsList = [
-  {
-    id: 1,
-    label: 'Avocado',
-    value: 'avocado',
-  },
-  {
-    id: 2,
-    label: 'Blueberry',
-    value: 'blueberry',
-    slots: [helperCreateElement('wpp-icon-mail', { slot: 'left' })],
-  },
-  {
-    id: 3,
-    label: 'Cherry',
-    value: 'cherry',
-    slots: [
-      helperCreateElement('wpp-icon-available-checkmark', { slot: 'left' }),
-      helperCreateElement('wpp-action-button', {
-        slot: 'right',
-        variant: 'secondary',
-      }, helperCreateElement('wpp-icon-plus', { slot: 'icon-start' })),
-    ],
-  },
-  {
-    id: 4,
-    label: 'Durian',
-    value: 'durian',
-    slots: [helperCreateElement('wpp-icon-chevron', { slot: 'right' })],
-  },
-  {
-    id: 5,
-    label: 'Elderberry',
-    value: 'elderberry',
-    slots: [
-      helperCreateElement('wpp-action-button', {
-        slot: 'right',
-        variant: 'secondary',
-      }),
-    ],
-  },
-  {
-    id: 6,
-    label: 'Carambola',
-    value: 'carambola',
-    slots: [
-      helperCreateElement('wpp-avatar', {
-        slot: 'left',
-        size: 'xs',
-        src: 'https://cdna.artstation.com/p/assets/images/images/004/966/196/large/hossein-diba-1.jpg?1487536028',
-      }),
-    ],
-  },
-  {
-    id: 7,
-    label: 'Grape',
-    value: 'grape',
-    slots: [
-      helperCreateElement('wpp-avatar', {
-        slot: 'left',
-        size: 'xs',
-        src: 'https://cdna.artstation.com/p/assets/images/images/004/966/196/large/hossein-diba-1.jpg?1487536028',
-      }),
-      helperCreateElement('wpp-action-button', {
-        slot: 'right',
-        variant: 'secondary',
-      }, helperCreateElement('wpp-icon-plus', { slot: 'icon-start' })),
-    ],
-  },
-  {
-    id: 8,
-    label: 'Orange',
-    value: 'orange',
-    slots: [
-      helperCreateElement('wpp-avatar', {
-        slot: 'left',
-        size: 'xs',
-        variant: 'square',
-        src: 'https://cdna.artstation.com/p/assets/images/images/004/966/196/large/hossein-diba-1.jpg?1487536028',
-      }),
-    ],
-  },
-  {
-    id: 9,
-    label: 'Apple',
-    value: 'apple',
-    slots: [
-      helperCreateElement('wpp-avatar', {
-        slot: 'left',
-        size: 'xs',
-        src: 'https://cdna.artstation.com/p/assets/images/images/004/966/196/large/hossein-diba-1.jpg?1487536028',
-      }),
-      helperCreateElement('wpp-tag', { slot: 'right', label: 'Positive', variant: 'positive' }),
-    ],
-  },
-  {
-    id: 10,
-    label: 'Grapefruit',
-    value: 'grapefruit',
-    slots: [helperCreateElement('span', { slot: 'caption', children: 'Caption' })],
-  },
-  {
-    id: 11,
-    label: 'Watermelon',
-    value: 'watermelon',
-    slots: [
-      helperCreateElement('wpp-avatar', {
-        slot: 'left',
-        size: 's',
-        variant: 'square',
-        src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJizK-O7rjmwzro2mvul2xv-Uw1AuPEQajqA&usqp=CAU',
-      }),
-      helperCreateElement('span', { slot: 'caption', children: 'Caption' }),
-      helperCreateElement('wpp-tag', { slot: 'right', label: 'Positive', variant: 'positive' }),
-    ],
-  },
-  {
-    id: 12,
-    label: 'Pear',
-    value: 'pear',
-    slots: [
-      helperCreateElement('wpp-avatar', {
-        slot: 'left',
-        size: 's',
-        variant: 'square',
-        src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJizK-O7rjmwzro2mvul2xv-Uw1AuPEQajqA&usqp=CAU',
-      }),
-      helperCreateElement('span', { slot: 'caption', children: 'Caption' }),
-      helperCreateElement('wpp-typography', {
-        slot: 'right',
-        type: 's-body',
-      }, helperCreateElement('span', { children: 'Text' })),
-    ],
-  },
-  {
-    id: 13,
-    label: 'Mango',
-    value: 'mango',
-    slots: [
-      helperCreateElement('wpp-icon-star', { slot: 'left' }),
-      helperCreateElement('wpp-tag', { slot: 'right', label: 'Tropical', variant: 'info' }),
-    ],
-  },
-  {
-    id: 14,
-    label: 'Dragon Fruit',
-    value: 'dragon-fruit',
-    slots: [
-      helperCreateElement('wpp-avatar', {
-        slot: 'left',
-        size: 'xs',
-        variant: 'square',
-        src: 'https://cdna.artstation.com/p/assets/images/images/004/966/196/large/hossein-diba-1.jpg?1487536028',
-      }),
-      helperCreateElement('span', { slot: 'caption', children: 'Exotic fruit' }),
-      helperCreateElement('wpp-tag', { slot: 'right', label: 'Premium', variant: 'warning' }),
-    ],
-  },
-  {
-    id: 15,
-    label: 'Kiwi',
-    value: 'kiwi',
-    slots: [helperCreateElement('wpp-icon-available-checkmark', { slot: 'left' })],
-  },
-  {
-    id: 16,
-    label: 'Passion Fruit',
-    value: 'passion-fruit',
-    slots: [
-      helperCreateElement('wpp-avatar', {
-        slot: 'left',
-        size: 's',
-        src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJizK-O7rjmwzro2mvul2xv-Uw1AuPEQajqA&usqp=CAU',
-      }),
-      helperCreateElement('wpp-action-button', {
-        slot: 'right',
-        variant: 'secondary',
-      }, helperCreateElement('wpp-icon-heart', { slot: 'icon-start' })),
-    ],
-  },
-  {
-    id: 17,
-    label: 'Papaya',
-    value: 'papaya',
-  },
-  {
-    id: 18,
-    label: 'Lychee',
-    value: 'lychee',
-    slots: [
-      helperCreateElement('span', { slot: 'caption', children: 'Sweet and aromatic' }),
-      helperCreateElement('wpp-tag', { slot: 'right', label: 'Seasonal', variant: 'neutral' }),
-    ],
-  },
-];
+const helperCreateElement = (type, props, children) => ({
+  type,
+  props: props || {},
+  ...(children && { children: Array.isArray(children) ? children : [children] }),
+});
 const staticSuggestionWithSlots = [
   {
     id: 1,
     label: 'Avacado',
-    value: 'avacado',
   },
   {
     id: 2,
     label: 'Blueberry',
-    value: 'blueberry',
     slots: [helperCreateElement('wpp-icon-mail', { slot: 'left' })],
   },
   {
     id: 3,
     label: 'Cherry',
-    value: 'cherry',
     slots: [
       helperCreateElement('wpp-icon-available-checkmark', { slot: 'left' }),
       helperCreateElement('wpp-action-button', {
@@ -417,13 +266,11 @@ const staticSuggestionWithSlots = [
   {
     id: 4,
     label: 'Durian',
-    value: 'durian',
     slots: [helperCreateElement('wpp-icon-chevron', { slot: 'right' })],
   },
   {
     id: 5,
     label: 'Elderberry',
-    value: 'elderberry',
     slots: [
       helperCreateElement('wpp-action-button', {
         slot: 'right',
@@ -434,7 +281,6 @@ const staticSuggestionWithSlots = [
   {
     id: 6,
     label: 'Сarambola',
-    value: 'carambola',
     slots: [
       helperCreateElement('wpp-avatar', {
         slot: 'left',
@@ -446,7 +292,6 @@ const staticSuggestionWithSlots = [
   {
     id: 7,
     label: 'Grape',
-    value: 'grape',
     slots: [
       helperCreateElement('wpp-action-button', {
         slot: 'right',
@@ -462,7 +307,6 @@ const staticSuggestionWithSlots = [
   {
     id: 8,
     label: 'Orange',
-    value: 'orange',
     slots: [
       helperCreateElement('wpp-avatar', {
         slot: 'left',
@@ -475,7 +319,6 @@ const staticSuggestionWithSlots = [
   {
     id: 9,
     label: 'Apple',
-    value: 'apple',
     slots: [
       helperCreateElement('wpp-avatar', {
         slot: 'left',
@@ -488,13 +331,11 @@ const staticSuggestionWithSlots = [
   {
     id: 10,
     label: 'Grapefruit',
-    value: 'grapefruit',
     slots: [helperCreateElement('span', { slot: 'caption', children: 'Caption' })],
   },
   {
     id: 11,
     label: 'Watermelon',
-    value: 'watermelon',
     slots: [
       helperCreateElement('span', { slot: 'caption', children: 'Caption' }),
       helperCreateElement('wpp-avatar', {
@@ -509,7 +350,6 @@ const staticSuggestionWithSlots = [
   {
     id: 13,
     label: 'Pear',
-    value: 'pear',
     slots: [
       helperCreateElement('span', { slot: 'caption', children: 'Caption' }),
       helperCreateElement('wpp-avatar', {
@@ -528,8 +368,7 @@ const staticSuggestionWithSlots = [
 export const RegularSlotSuggestions = {
   render: args => {
     const [value, setValue] = useState([]);
-    return html ` <wpp-autocomplete-v4-0-0
-      .list="${fruitsList}"
+    return html ` <wpp-autocomplete-v3-5-0
       .loading="${args.loading}"
       .disabled="${args.disabled}"
       .required="${args.required}"
@@ -549,13 +388,39 @@ export const RegularSlotSuggestions = {
       .dropdownWidth="${args.dropdownWidth}"
       .size="${args.size}"
       .suggestions="${args.suggestions}"
+      .suggestionsTitle="${args.suggestionsTitle}"
       .persistentSearch="${args.persistentSearch}"
       name="regular-slot-autocomplete"
       @wppChange="${(e) => setValue(e.detail.value)}"
       @wppSearchValueChange="${(e) => console.log('onWppSearchValueChange', e.detail)}"
       @wppCreateNewOption="${(e) => console.log('onWppCreateNewOption', e.detail)}"
     >
-    </wpp-autocomplete-v4-0-0>`;
+      <div slot="selected-values">
+        ${value.map(selectedValue => html `
+            <wpp-pill-v3-5-0
+              label="${selectedValue.label}"
+              value="${selectedValue.id}"
+              removable="${true}"
+              type="display"
+              .maxLength="${20}"
+              @wppClose="${() => setValue(value.filter(i => i.id !== selectedValue.id))}"
+            >
+              <wpp-avatar-v3-5-0
+                name="${selectedValue.label}"
+                size="xs"
+                src="${selectedValue.url}"
+                slot="icon-start"
+              />
+            </wpp-pill-v3-5-0>
+          `)}
+      </div>
+      ${heroes.map(hero => html `
+          <wpp-list-item-v3-5-0 .value="${hero}">
+            <wpp-avatar-v3-5-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-5-0>
+            <p slot="label">${hero.label}</p>
+          </wpp-list-item-v3-5-0>
+        `)}
+    </wpp-autocomplete-v3-5-0>`;
   },
   args: {
     loading: false,
@@ -566,21 +431,21 @@ export const RegularSlotSuggestions = {
     dropdownWidth: 'auto',
     message: '',
     type: 'regular',
+    suggestionsTitle: 'Suggested fruits',
     size: 'm',
     locales: {
       nothingFound: 'Nothing found',
-      loading: 'Loading...',
+      beginTyping: 'Begin typing',
+      more: 'more',
+      showMore: 'more',
+      showLess: 'Show less',
       selected: count => `${count} selected`,
-      showMore: 'Show More',
-      showLess: 'Show Less',
-      suggestionTitle: 'Suggestions',
-      createNewElement: query => `Create "${query}"`,
-      clearMultiple: 'Clear selections',
-      clearSingle: 'Clear selection',
+      loading: 'Loading...',
+      createNewElement: 'Create new element',
     },
     labelConfig: {
       icon: '',
-      text: 'Fruits List',
+      text: 'Add heroes',
       description: '',
       locales: {
         optional: 'Optional',

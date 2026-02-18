@@ -167,10 +167,10 @@ export class WppSelect {
         return h(Fragment, null);
       }
       if (this.loading) {
-        return (h("div", { class: "loading-container" }, h("wpp-spinner-v4-0-0", null), h("wpp-typography-v4-0-0", { type: "s-body" }, this._locales.loadingText)));
+        return (h("div", { class: "loading-container" }, h("wpp-spinner-v3-5-0", null), h("wpp-typography-v3-5-0", { type: "s-body" }, this._locales.loadingText)));
       }
       if (this.internalList?.length === 0) {
-        return (h("wpp-typography-v4-0-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+        return (h("wpp-typography-v3-5-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
       }
       let hiddeItemsCount = 0;
       return (h(Fragment, null, this.internalList?.map((item) => {
@@ -178,11 +178,11 @@ export class WppSelect {
         if (hidden) {
           hiddeItemsCount++;
           if (hiddeItemsCount === this.internalList?.length) {
-            return (h("wpp-typography-v4-0-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+            return (h("wpp-typography-v3-5-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
           }
           return null;
         }
-        return (h("wpp-list-item-v4-0-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
+        return (h("wpp-list-item-v3-5-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
     };
     this.renderSlotsInListItem = (slots, isLabelExists) => slots
@@ -278,7 +278,7 @@ export class WppSelect {
     this.onShowDropdown = (instance) => {
       if (!this.anchorRef)
         return false;
-      if (this.isTextSelect) {
+      if (this.type === 'text' || this.isTextSelect) {
         this.onShowDropdownText(instance);
       }
       else {
@@ -462,7 +462,7 @@ export class WppSelect {
     this.setShouldShowSearch = () => {
       if (!this.host)
         return false;
-      if (this.isTextSelect) {
+      if (this.type === 'text' || this.isTextSelect) {
         this.shouldShowSearch = false;
         return;
       }
@@ -607,7 +607,7 @@ export class WppSelect {
     else {
       this.checkListAgainstValueSingle();
     }
-    if (this.isTextSelect) {
+    if (this.type === 'text' || this.isTextSelect) {
       if (this.truncate) {
         this.checkTruncationInTextSelect();
       }
@@ -703,6 +703,8 @@ export class WppSelect {
   }
   componentWillLoad() {
     this._locales = { ...this._locales, ...this.locales };
+    if (this.type === 'text')
+      console.warn('The value "text" for the type property is deprecated and will be removed in version 4.0.0.');
     this.versionToCompare = version.slice(1).split('-').join('');
     this.updateSlotData();
     this.checkMessageInTooltip();
@@ -750,7 +752,7 @@ export class WppSelect {
         // we should open only the first select with this property.
         this.handleClick(true);
       }
-      if (!this.isTextSelect) {
+      if (this.type !== 'text' || !this.isTextSelect) {
         this.resizeObserver = new ResizeObserver(this.checkIfTextOverflows);
         if (this.resizeObserver && this.anchorRef) {
           this.resizeObserver.observe(this.anchorRef);
@@ -785,13 +787,13 @@ export class WppSelect {
     if (this.type === 'multiple') {
       return renderMultipleSelect.call(this);
     }
-    if (this.isTextSelect) {
+    if (this.type === 'text' || (this.type === 'single' && this.isTextSelect)) {
       return renderTextSelect.call(this);
     }
     return renderCombinedSelect.call(this);
   }
   static get is() { return "wpp-select"; }
-  static get registryIs() { return "wpp-select-v4-0-0"; }
+  static get registryIs() { return "wpp-select-v3-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -873,7 +875,7 @@ export class WppSelect {
         "mutable": false,
         "complexType": {
           "original": "SelectTypes",
-          "resolved": "\"combined\" | \"multiple\" | \"single\"",
+          "resolved": "\"combined\" | \"multiple\" | \"single\" | \"text\"",
           "references": {
             "SelectTypes": {
               "location": "import",
@@ -886,7 +888,7 @@ export class WppSelect {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "Defines the WppSelect component type.\nValid values: 'single' | 'multiple' | 'combined'"
+          "text": "Defines the WppSelect component type.\n* Valid values: 'single' | 'multiple' | 'combined'\n* Note: The value 'text' is deprecated and will be removed in version 4.0.0. Use WppActionButton with WppMenuContext to achieve the same result."
         },
         "attribute": "type",
         "reflect": true,

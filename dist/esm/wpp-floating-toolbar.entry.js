@@ -1,5 +1,5 @@
 import { r as registerInstance, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { k as transformToVersionedTag } from './utils-cc81a41b.js';
+import { k as transformToVersionedTag } from './utils-3a5af594.js';
 import './consts-9fc0a13a.js';
 
 const wppFloatingToolbarCss = ":host{background-color:var(--wpp-grey-color-000);display:-ms-inline-flexbox;display:inline-flex}.wrapper{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;padding:4px;gap:8px;border-radius:8px;-webkit-box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1), 0 0 1px 0 rgba(52, 58, 63, 0.1);box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1), 0 0 1px 0 rgba(52, 58, 63, 0.1)}.wrapper.vertical{-ms-flex-direction:column;flex-direction:column}";
@@ -21,7 +21,7 @@ const WppFloatingToolbar = class {
         variant: 'secondary',
       }));
     };
-    this.renderActionButton = (data) => (h("wpp-action-button-v4-0-0", { key: `${data.icon}`, ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
+    this.renderActionButton = (data) => (h("wpp-action-button-v3-5-0", { key: `${data.icon}`, ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
     this.setActionButtons = () => {
       this.items = Array.from(this.host.shadowRoot?.querySelectorAll(transformToVersionedTag('wpp-action-button')) || []);
       this.syncTabIndexes();
@@ -84,7 +84,7 @@ const WppFloatingToolbar = class {
   render() {
     return (h(Host, { class: this.hostCssClasses(), role: "toolbar", "aria-orientation": this.orientation, "aria-label": this.ariaProps?.label, "aria-labelledby": this.ariaProps?.labelledby, onKeyDown: this.onKeyDown }, h("div", { class: this.wrapperCssClasses() }, this._actionButtonsConfig.map(this.renderActionButton))));
   }
-  static get registryIs() { return "wpp-floating-toolbar-v4-0-0"; }
+  static get registryIs() { return "wpp-floating-toolbar-v3-5-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "actionButtonsConfig": ["onUpdateActionButtonsConfig"]

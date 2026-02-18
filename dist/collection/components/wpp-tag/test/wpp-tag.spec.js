@@ -26,9 +26,17 @@ describe('wpp-tag', () => {
       const myTag = new WppTag();
       expect(myTag.label).toBeUndefined();
     });
+    it('should not set withIcon', async () => {
+      const myTag = new WppTag();
+      expect(myTag.withIcon).toBeFalsy();
+    });
     it('should not set hasIconStartSlot', async () => {
       const myTag = new WppTag();
       expect(myTag.hasIconStartSlot).toBeFalsy();
+    });
+    it('should not set categoricalColorIndex by default', async () => {
+      const myTag = new WppTag();
+      expect(myTag.categoricalColorIndex).toBeUndefined();
     });
   });
   describe('componentWillLoad', () => {
@@ -95,6 +103,36 @@ describe('wpp-tag', () => {
       expect(page?.root?.classList.contains('wpp-neutral')).toBeTruthy();
       expect(page?.root?.classList.contains('wpp-disabled')).toBeTruthy();
     });
+    it('updates CSS custom properties when categoricalColorIndex is provided', async () => {
+      const cateIndex = 4;
+      const page = await newSpecPage({
+        components: [WppTag],
+        html: `<wpp-tag categorical-color-index="${cateIndex}"></wpp-tag>`,
+      });
+      expect(page?.root?.className.includes('wpp-Cat-4')).toBeTruthy();
+    });
+    it('calls updateCategoricalIndex when categoricalColorIndex changes', async () => {
+      const cateIndex = 4;
+      const page = await newSpecPage({
+        components: [WppTag],
+        html: `<wpp-tag categorical-color-index="${cateIndex}"></wpp-tag>`,
+      });
+      // Update the attribute dynamically
+      page?.root?.setAttribute('categorical-color-index', '5');
+      await page.waitForChanges();
+      expect(page?.root?.className.includes('wpp-Cat-5')).toBeTruthy();
+    });
+    it('does not update CSS custom properties when categoricalColorIndex is invalid', async () => {
+      const cateIndex = 'invalid';
+      const page = await newSpecPage({
+        components: [WppTag],
+        html: `<wpp-tag categorical-color-index="${cateIndex}"></wpp-tag>`,
+      });
+      // Update the attribute dynamically
+      page?.root?.setAttribute('categorical-color-index', 'invalid');
+      await page.waitForChanges();
+      expect(page?.root?.className.includes('wpp-Cat-invalid')).toBeTruthy();
+    });
   });
   describe('snapshots', () => {
     it('should render tag with default props', async () => {
@@ -115,6 +153,13 @@ describe('wpp-tag', () => {
       const page = await newSpecPage({
         components: [WppTag],
         html: `<wpp-tag label='This is a very long label that exceeds the maximum allowed characters.'></wpp-tag>`,
+      });
+      expect(page.root).toMatchSnapshot();
+    });
+    it('should render tag with categorical color index', async () => {
+      const page = await newSpecPage({
+        components: [WppTag],
+        html: `<wpp-tag categorical-color-index="4"></wpp-tag>`,
       });
       expect(page.root).toMatchSnapshot();
     });

@@ -38,7 +38,7 @@ const WppOverlay = class {
   render() {
     return (h(Host, null, h("div", { class: this.getOverlayCssClasses(), style: { zIndex: this.zIndex.toString() }, onClick: this.handleClick })));
   }
-  static get registryIs() { return "wpp-overlay-v4-0-0"; }
+  static get registryIs() { return "wpp-overlay-v3-5-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "isVisible": ["handleVisibleChange"]

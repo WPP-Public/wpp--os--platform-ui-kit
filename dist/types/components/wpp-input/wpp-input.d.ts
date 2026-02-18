@@ -186,7 +186,7 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
   /**
    * Method that sets focus on the native input.
    */
-  setFocus(isOutlined?: boolean): Promise<void>;
+  setFocus(): Promise<void>;
   /**
    * Method that sets the input value programmatically.
    */

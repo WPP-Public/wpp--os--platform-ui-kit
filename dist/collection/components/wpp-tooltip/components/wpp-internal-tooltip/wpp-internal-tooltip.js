@@ -33,10 +33,10 @@ export class WppTooltip {
     });
     this.getIconBasedOnProps = () => {
       if (this.error) {
-        return h("wpp-icon-error-v4-0-0", { class: "left-icon", part: "icon-error" });
+        return h("wpp-icon-error-v3-5-0", { class: "left-icon", part: "icon-error" });
       }
       if (this.warning) {
-        return h("wpp-icon-warning-v4-0-0", { color: "var(--wpp-warning-color-400)", class: "left-icon" });
+        return h("wpp-icon-warning-v3-5-0", { color: "var(--wpp-warning-color-400)", class: "left-icon" });
       }
       return null;
     };
@@ -56,6 +56,7 @@ export class WppTooltip {
     this.error = false;
     this.warning = false;
     this.theme = 'dark';
+    this.allowHTML = undefined;
     this.externalClass = '';
     this.ariaProp = {};
   }
@@ -63,7 +64,7 @@ export class WppTooltip {
     return (h(Host, { class: this.hostCssClasses(), style: this.cssStyle, exportparts: "tooltip-content" }, h("div", { class: this.cssClasses(), style: { wordBreak: this.wordBreak }, part: "tooltip-content" }, h("div", { class: "content-with-icon", id: this.ariaProp.describedby }, this.getIconBasedOnProps() && h("div", { class: "icon-wrapper" }, this.getIconBasedOnProps()), h("div", { class: "content-wrapper" }, !!this.header && (h("span", { class: this.headerCssClasses(), part: "header" }, this.header)), !!this.text && (h("span", { class: this.textCssClasses(), part: "text" }, this.getTextLines())), !!this.value && (h("span", { class: this.valueCssClasses(), part: "value" }, this.value)))))));
   }
   static get is() { return "wpp-internal-tooltip"; }
-  static get registryIs() { return "wpp-internal-tooltip-v4-0-0"; }
+  static get registryIs() { return "wpp-internal-tooltip-v3-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -228,6 +229,26 @@ export class WppTooltip {
         "attribute": "theme",
         "reflect": false,
         "defaultValue": "'dark'"
+      },
+      "allowHTML": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [{
+              "name": "deprecated",
+              "text": "- This prop is no longer used by the component and will be deleted in v4.0.0."
+            }],
+          "text": "When set, allow to pass string represented HTML in text property"
+        },
+        "attribute": "allow-h-t-m-l",
+        "reflect": false
       },
       "externalClass": {
         "type": "string",

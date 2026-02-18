@@ -1,6 +1,5 @@
-import { DropdownConfig } from '../../types/common';
 import { AutocompleteLocales } from './types';
-export declare const INFINITE_SCROLL_THRESHOLD = 15;
-export declare const DEFAULT_DROPDOWN_CONFIG: DropdownConfig;
-export declare const LOCALES_DEFAULTS: AutocompleteLocales;
+export declare const BLUR_TIME = 250;
+export declare const DROPDOWN_ANIMATION_TIME: number | [number, number];
 export declare const PILL_MARGIN = 8;
+export declare const LOCALES_DEFAULTS: AutocompleteLocales;

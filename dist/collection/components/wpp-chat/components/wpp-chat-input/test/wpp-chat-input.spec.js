@@ -12,7 +12,7 @@ describe('wpp-chat-input', () => {
   it('should apply custom file upload configuration', async () => {
     const page = await newSpecPage({
       components: [WppChatInput],
-      html: `<wpp-chat-input fileUploadConfig='{"maxFiles": 3, "size": 100, "acceptConfig": {"image/jpeg": [".jpg"], "image/png": [".png"]}}'></wpp-chat-input>`,
+      html: `<wpp-chat-input fileUploadConfig='{"maxFiles": 3, "size": 100, "accept": [".jpg", ".png"]}'></wpp-chat-input>`,
     });
     expect(page.root).toMatchSnapshot();
   });

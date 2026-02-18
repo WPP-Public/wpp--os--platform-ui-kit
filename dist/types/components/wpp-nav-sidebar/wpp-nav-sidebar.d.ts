@@ -9,6 +9,11 @@ import { NavSidebarItemEventDetail } from './types';
 export declare class WppNavSidebar {
   host: HTMLWppNavSidebarElement;
   /**
+   * Defines the initial current path.
+   * @deprecated initialPath is being deprecated and will be deleted in v4.0.0. Use `activePath` instead.
+   */
+  readonly initialPath?: string;
+  /**
    * Defines the current active path. Input any valid path that matches the `path` property of the sidebar items. Invalid values will have no effect and will not change the active item.
    * @remarks Use this property to programmatically set the active item in the navigation sidebar.
    */

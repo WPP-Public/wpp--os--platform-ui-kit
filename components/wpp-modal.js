@@ -27,6 +27,7 @@ const WppModal$1 = /*@__PURE__*/ proxyCustomElement(class WppModal extends HTMLE
     this.wppModalOpenComplete = createEvent(this, "wppModalOpenComplete", 7);
     this.wppModalCloseStart = createEvent(this, "wppModalCloseStart", 7);
     this.wppModalCloseComplete = createEvent(this, "wppModalCloseComplete", 7);
+    this.wppModalOpen = createEvent(this, "wppModalOpen", 1);
     this.onOverlayClick = () => {
       if (this.disableOutsideClick)
         return;
@@ -77,6 +78,7 @@ const WppModal$1 = /*@__PURE__*/ proxyCustomElement(class WppModal extends HTMLE
         return;
       if (this.open) {
         this.wppModalOpenComplete.emit();
+        this.wppModalOpen.emit();
         this.focusDialog();
       }
       else {
@@ -178,15 +180,15 @@ const WppModal$1 = /*@__PURE__*/ proxyCustomElement(class WppModal extends HTMLE
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-0-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-0-0", null), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-0-0", null), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-5-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v3-5-0", null), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v3-5-0", null), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
   }
-  static get registryIs() { return "wpp-modal-v4-0-0"; }
+  static get registryIs() { return "wpp-modal-v3-5-0"; }
   get host() { return this; }
   static get watchers() { return {
     "open": ["handleChangeModalStatus"]
   }; }
   static get style() { return wppModalCss; }
-}, [1, "wpp-modal", "wpp-modal-v4-0-0", {
+}, [1, "wpp-modal", "wpp-modal-v3-5-0", {
     "open": [1540],
     "size": [1],
     "withTransparentOverlay": [4, "with-transparent-overlay"],
@@ -206,19 +208,19 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-modal-v4-0-0", "wpp-divider-v4-0-0", "wpp-overlay-v4-0-0"];
+  const components = ["wpp-modal-v3-5-0", "wpp-divider-v3-5-0", "wpp-overlay-v3-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-modal-v4-0-0":
+    case "wpp-modal-v3-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppModal$1);
       }
       break;
-    case "wpp-divider-v4-0-0":
+    case "wpp-divider-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-overlay-v4-0-0":
+    case "wpp-overlay-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

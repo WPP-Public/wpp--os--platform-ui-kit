@@ -18,7 +18,7 @@ const WppIconOutdoorMedia = class {
   render() {
     return (index.h(WppIcon.WppIcon, { name: "wpp-icon-outdoor-media", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { d: "M3.75 7C3.75 6.58579 4.08579 6.25 4.5 6.25H10C10.4142 6.25 10.75 6.58579 10.75 7C10.75 7.41421 10.4142 7.75 10 7.75H4.5C4.08579 7.75 3.75 7.41421 3.75 7Z", fill: "currentColor" }), index.h("path", { d: "M4.5 8.75C4.08579 8.75 3.75 9.08579 3.75 9.5C3.75 9.91421 4.08579 10.25 4.5 10.25H8.5C8.91421 10.25 9.25 9.91421 9.25 9.5C9.25 9.08579 8.91421 8.75 8.5 8.75H4.5Z", fill: "currentColor" }), index.h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: "M5 2.25C5 1.83579 5.33579 1.5 5.75 1.5C6.16421 1.5 6.5 1.83579 6.5 2.25V3.25H13.5V2.25C13.5 1.83579 13.8358 1.5 14.25 1.5C14.6642 1.5 15 1.83579 15 2.25V3.25H17C17.9665 3.25 18.75 4.0335 18.75 5V13C18.75 13.9665 17.9665 14.75 17 14.75H15V17.75C15 18.1642 14.6642 18.5 14.25 18.5C13.8358 18.5 13.5 18.1642 13.5 17.75V14.75H6.5V17.75C6.5 18.1642 6.16421 18.5 5.75 18.5C5.33579 18.5 5 18.1642 5 17.75V14.75H3C2.0335 14.75 1.25 13.9665 1.25 13V5C1.25 4.0335 2.0335 3.25 3 3.25H5V2.25ZM3 4.75C2.86193 4.75 2.75 4.86193 2.75 5V13C2.75 13.1381 2.86193 13.25 3 13.25H17C17.1381 13.25 17.25 13.1381 17.25 13V5C17.25 4.86193 17.1381 4.75 17 4.75H3Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-outdoor-media-v4-0-0"; }
+  static get registryIs() { return "wpp-icon-outdoor-media-v3-5-0"; }
 };
 WppIconOutdoorMedia.style = wppIconCss;
 

@@ -29,10 +29,10 @@ export class WppPaginationItem {
     this.selected = false;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, tabIndex: 0, exportparts: "number" }, h("wpp-typography-v4-0-0", { type: "s-body", part: "number" }, this.number)));
+    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, tabIndex: 0, exportparts: "number" }, h("wpp-typography-v3-5-0", { type: "s-body", part: "number" }, this.number)));
   }
   static get is() { return "wpp-pagination-item"; }
-  static get registryIs() { return "wpp-pagination-item-v4-0-0"; }
+  static get registryIs() { return "wpp-pagination-item-v3-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

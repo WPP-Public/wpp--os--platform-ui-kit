@@ -147,6 +147,13 @@ describe('wpp-accordion', () => {
     const tags = page.root?.shadowRoot?.querySelector('.tags');
     expect(tags).not.toBeNull();
   });
+  it('renders counter when counter > 0', async () => {
+    const page = await newSpecPage({
+      components: [WppAccordion],
+      html: `<wpp-accordion counter="3" text="Title"></wpp-accordion>`,
+    });
+    expect(page.root?.shadowRoot?.textContent).toContain('(3)');
+  });
   it('sets correct aria attributes', async () => {
     const page = await newSpecPage({
       components: [WppAccordion],
@@ -197,22 +204,21 @@ describe('wpp-accordion', () => {
     const result = instance.getElementFontStyle(element);
     expect(result).toBe('300 14px/20px Inter');
   });
-  it('returns font style when header slot exists', async () => {
+  it('returns font style when title-text exists', async () => {
     const page = await newSpecPage({
       components: [WppAccordion],
-      html: `<wpp-accordion><span slot="header">Title</span></wpp-accordion>`,
+      html: `<wpp-accordion text="Title"></wpp-accordion>`,
     });
     const instance = page.rootInstance;
     jest.spyOn(instance, 'getElementFontStyle').mockReturnValue('mock-font');
     const result = instance.getTextTitleFont();
-    // When using header slot, getTextTitleFont returns the font from the header slot wrapper
-    // If no .title-text element exists, it returns empty string
-    expect(typeof result).toBe('string');
+    expect(result).toBe('mock-font');
+    expect(instance.getElementFontStyle).toHaveBeenCalled();
   });
   it('returns empty string when title-text element is missing (forced)', async () => {
     const page = await newSpecPage({
       components: [WppAccordion],
-      html: `<wpp-accordion><span slot="header">Title</span></wpp-accordion>`,
+      html: `<wpp-accordion text="Title"></wpp-accordion>`,
     });
     const instance = page.rootInstance;
     // 🚨 Force querySelector to return null
@@ -318,15 +324,32 @@ describe('wpp-accordion', () => {
     });
     const instance = page.rootInstance;
     instance.size = 's';
-    expect(instance.getHeaderTypographyType()).toBe('s-strong');
+    expect(instance.typographyType()).toBe('s-strong');
     instance.size = 'm';
-    expect(instance.getHeaderTypographyType()).toBe('m-strong');
+    expect(instance.typographyType()).toBe('m-strong');
     instance.size = 'l';
-    expect(instance.getHeaderTypographyType()).toBe('l-strong');
+    expect(instance.typographyType()).toBe('l-strong');
     instance.size = 'xl';
-    expect(instance.getHeaderTypographyType()).toBe('xl-heading');
+    expect(instance.typographyType()).toBe('xl-heading');
     instance.size = '2xl';
-    expect(instance.getHeaderTypographyType()).toBe('2xl-heading');
+    expect(instance.typographyType()).toBe('2xl-heading');
+  });
+  it('returns correct counter type based on size', async () => {
+    const page = await newSpecPage({
+      components: [WppAccordion],
+      html: `<wpp-accordion></wpp-accordion>`,
+    });
+    const instance = page.rootInstance;
+    instance.size = 's';
+    expect(instance.counterType()).toBe('s-body');
+    instance.size = 'm';
+    expect(instance.counterType()).toBe('m-body');
+    instance.size = 'l';
+    expect(instance.counterType()).toBe('l-body');
+    instance.size = 'xl';
+    expect(instance.counterType()).toBe('xl-heading');
+    instance.size = '2xl';
+    expect(instance.counterType()).toBe('2xl-heading');
   });
   it('calls getContentHeight when updateHeight is invoked', async () => {
     const page = await newSpecPage({
@@ -345,8 +368,7 @@ describe('wpp-accordion', () => {
     const page = await newSpecPage({
       components: [WppAccordion],
       html: `
-        <wpp-accordion with-tag>
-          <span slot="header">Title</span>
+        <wpp-accordion text="Title" with-tag>
           <div slot="actions">Actions</div>
           <div slot="tags">Tags</div>
           <div>Content</div>
@@ -380,40 +402,38 @@ describe('wpp-accordion', () => {
     expect(instance.maxHeight).toBe(200);
     // ✅ ASSERT STYLES
     expect(titleWrapper.style.maxWidth).toBe('194px');
-    expect(tags.style.left).toBe('120px');
+    expect(tags.style.left).toBe('128px');
     // ✅ ASSERT FINAL CALL
     expect(overflowSpy).toHaveBeenCalled();
   });
   it('correctly updates isTitleOverflowing based on text width and titleMaxWidth', async () => {
     const page = await newSpecPage({
       components: [WppAccordion],
-      html: `<wpp-accordion><span slot="header">Test title</span></wpp-accordion>`,
+      html: `<wpp-accordion text="Test title"></wpp-accordion>`,
     });
     const instance = page.rootInstance;
     const host = page.root;
+    const shadow = host.shadowRoot;
     // Mock host width
     Object.defineProperty(host, 'clientWidth', { value: 200, configurable: true });
-    // Force header slot to be detected
-    instance.hasHeaderSlot = true;
-    jest.spyOn(instance, 'getHeaderSlotText').mockReturnValue({
-      headerTitle: 'Test title',
-      font: 'test-font',
-    });
+    const titleElement = shadow.querySelector('.title-text');
+    Object.defineProperty(titleElement, 'clientWidth', { value: 180, configurable: true });
     jest.spyOn(instance, 'getTextWidth').mockReturnValueOnce(300);
     instance.titleMaxWidth = 100;
     instance.isTitleOverflowing = false;
     instance.checkTitleOverflowInternal();
     expect(instance.isTitleOverflowing).toBe(true);
   });
-  it('covers hasHeaderSlot and no-slot branches in checkTitleOverflowInternal', async () => {
+  it('covers else if and else branches in checkTitleOverflowInternal', async () => {
     const page = await newSpecPage({
       components: [WppAccordion],
       html: `<wpp-accordion></wpp-accordion>`,
     });
     const instance = page.rootInstance;
     // ----------------------
-    // hasHeaderSlot true branch
+    // ELSE IF branch: hasHeaderSlot true, no text
     // ----------------------
+    instance.text = '';
     instance.hasHeaderSlot = true;
     instance.titleMaxWidth = 50;
     instance.isTitleOverflowing = false;
@@ -425,7 +445,7 @@ describe('wpp-accordion', () => {
     instance.checkTitleOverflowInternal();
     expect(instance.isTitleOverflowing).toBe(false);
     // ----------------------
-    // ELSE branch: no header slot - should return early
+    // ELSE branch: no text, no header slot
     // ----------------------
     instance.hasHeaderSlot = false;
     instance.checkTitleOverflowInternal();
@@ -435,16 +455,11 @@ describe('wpp-accordion', () => {
   it('renders wpp-tooltip when isTitleOverflowing is true', async () => {
     const page = await newSpecPage({
       components: [WppAccordion, WppTooltip],
-      html: `<wpp-accordion><span slot="header">Very long title</span></wpp-accordion>`,
+      html: `<wpp-accordion text="Very long title"></wpp-accordion>`,
     });
     const instance = page.rootInstance;
     const dummyButton = document.createElement('button');
     instance.titleTagsWrapperButtonRef = dummyButton;
-    // Mock getHeaderSlotText to return the title
-    jest.spyOn(instance, 'getHeaderSlotText').mockReturnValue({
-      headerTitle: 'Very long title',
-      font: 'test-font',
-    });
     instance.isTitleOverflowing = true;
     await page.waitForChanges();
     const tooltipEl = page.root?.shadowRoot?.querySelector('wpp-tooltip');

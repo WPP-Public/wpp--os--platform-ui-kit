@@ -3,21 +3,21 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const config = require('./config-ecfb0ad8.js');
+const config = require('./config-13b0a543.js');
 const common = require('./common-ee802540.js');
-const utils = require('./utils-ce5c8ac5.js');
+const utils = require('./utils-27884b05.js');
 const types = require('./types-3dbf006d.js');
 const _commonjsHelpers = require('./_commonjsHelpers-bcc1208a.js');
-require('./wpp-icon-unordered-list-6af7b1bc.js');
+require('./wpp-icon-unordered-list-8935c2a5.js');
 require('./WppIcon-55327707.js');
-require('./wpp-icon-video-clip-3b426623.js');
-require('./wpp-progress-indicator-b1e1c428.js');
-require('./wpp-icon-chevron-6381b608.js');
-require('./wpp-icon-gallery-031016ae.js');
+require('./wpp-icon-video-clip-58ecdee2.js');
+require('./wpp-progress-indicator-4da0c421.js');
+require('./wpp-icon-chevron-c79372d9.js');
+require('./wpp-icon-gallery-2b94503a.js');
 require('./lodash-04cddce7.js');
-require('./wpp-action-button-116d7a60.js');
+require('./wpp-action-button-da6c8ecc.js');
 require('./WrappedSlot-4a4ef805.js');
-require('./wpp-input-36e87608.js');
+require('./wpp-input-7bcf8ecb.js');
 require('./turndown.browser.es-40bb3069.js');
 require('./consts-dba6e6dd.js');
 
@@ -2191,9 +2191,9 @@ const WppRichtext = class {
       this.format = rawFormat.replace(/^['"]|['"]$/g, '');
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-required": this.required, "data-testid": "wpp-rich-text" }, index.h("wpp-richtext-icon-loader-v4-0-0", null), index.h("wpp-quill-styles-v4-0-0", null), index.h("wpp-richtext-common-styles-v4-0-0", null), this.labelConfig?.text && (index.h("wpp-label-v4-0-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), index.h("div", { class: this.formControlCssClasses(), "data-testid": "rich-text-form" }, index.h("slot", { name: "quill-toolbar", "quill-toolbar": "" }), index.h("div", { ref: el => (this.containerElement = el), "data-testid": "richtext-editor" }), Boolean(this.name) && (index.h("input", { ref: el => (this.formControlInput = el), tabindex: "-1", id: this.name, class: "form-control-input", "data-testid": "rich-text-input", disabled: this.disabled }))), (Boolean(this.message) || Boolean(this.charactersLimit)) && (index.h("div", { class: this.messageCssClasses(), part: "message-wrapper" }, Boolean(this.message) && (index.h("wpp-inline-message-v4-0-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", class: "message", "data-testid": "message" })), Boolean(this.charactersLimit) && (index.h("div", { class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, index.h("wpp-typography-v4-0-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":\u00A0"), index.h("wpp-typography-v4-0-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit)))))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-required": this.required, "data-testid": "wpp-rich-text" }, index.h("wpp-richtext-icon-loader-v3-5-0", null), index.h("wpp-quill-styles-v3-5-0", null), index.h("wpp-richtext-common-styles-v3-5-0", null), this.labelConfig?.text && (index.h("wpp-label-v3-5-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), index.h("div", { class: this.formControlCssClasses(), "data-testid": "rich-text-form" }, index.h("slot", { name: "quill-toolbar", "quill-toolbar": "" }), index.h("div", { ref: el => (this.containerElement = el), "data-testid": "richtext-editor" }), Boolean(this.name) && (index.h("input", { ref: el => (this.formControlInput = el), tabindex: "-1", id: this.name, class: "form-control-input", "data-testid": "rich-text-input", disabled: this.disabled }))), (Boolean(this.message) || Boolean(this.charactersLimit)) && (index.h("div", { class: this.messageCssClasses(), part: "message-wrapper" }, Boolean(this.message) && (index.h("wpp-inline-message-v3-5-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", class: "message", "data-testid": "message" })), Boolean(this.charactersLimit) && (index.h("div", { class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, index.h("wpp-typography-v3-5-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":\u00A0"), index.h("wpp-typography-v3-5-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit)))))));
   }
-  static get registryIs() { return "wpp-richtext-v4-0-0"; }
+  static get registryIs() { return "wpp-richtext-v3-5-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "value": ["updateContent"],

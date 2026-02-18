@@ -34,20 +34,26 @@ export class WppExpandableCard {
     this.hasActionsSlot = false;
     this.headerMaxWidth = undefined;
     this.expandedByDefault = false;
+    this.expanded = false;
     this.isExpanded = false;
     this.size = 's';
+    this.header = '';
     this.variant = 'primary';
+  }
+  onExpandedChange(newValue) {
+    // TODO: remove this in version 4.0.0
+    this.isExpanded = newValue;
   }
   componentWillLoad() {
     if (this.expandedByDefault)
-      this.isExpanded = true;
+      this.expanded = true;
     this.updateSlotData();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "expandable-card-body, accordion, section, title, icon, counter, divider, title-wrapper" }, h("div", { class: "body-container", part: "expandable-card-body" }, h("wpp-accordion-v4-0-0", { size: this.size, expanded: this.isExpanded, expandedByDefault: this.expandedByDefault, withDivider: false, onWppChange: this.onChange, part: "accordion" }, h("slot", null), h("slot", { name: "header", slot: "header", class: "header" }), h("slot", { name: "actions", slot: "actions", class: "actions" })))));
+    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "expandable-card-body, accordion, section, title, icon, counter, divider, title-wrapper" }, h("div", { class: "body-container", part: "expandable-card-body" }, h("wpp-accordion-v3-5-0", { size: this.size, text: this.header, expanded: this.isExpanded, expandedByDefault: this.expandedByDefault, withDivider: false, onWppChange: this.onChange, part: "accordion" }, h("slot", null), h("slot", { name: "header", slot: "header", class: "header" }), h("slot", { name: "actions", slot: "actions", class: "actions" })))));
   }
   static get is() { return "wpp-expandable-card"; }
-  static get registryIs() { return "wpp-expandable-card-v4-0-0"; }
+  static get registryIs() { return "wpp-expandable-card-v3-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -77,6 +83,27 @@ export class WppExpandableCard {
         },
         "attribute": "expanded-by-default",
         "reflect": true,
+        "defaultValue": "false"
+      },
+      "expanded": {
+        "type": "boolean",
+        "mutable": true,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [{
+              "name": "deprecated",
+              "text": "- this prop will be deleted in version 4.0.0. Use \"isExpanded\" prop instead"
+            }],
+          "text": "If `true`, the component is expanded"
+        },
+        "attribute": "expanded",
+        "reflect": false,
         "defaultValue": "false"
       },
       "isExpanded": {
@@ -114,6 +141,27 @@ export class WppExpandableCard {
         "attribute": "size",
         "reflect": false,
         "defaultValue": "'s'"
+      },
+      "header": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [{
+              "name": "deprecated",
+              "text": "- this prop will be deleted in version 4.0.0. If you want to use this prop, use \"header\" slot instead"
+            }],
+          "text": "Indicates accordion header in expandable card"
+        },
+        "attribute": "header",
+        "reflect": false,
+        "defaultValue": "''"
       },
       "variant": {
         "type": "string",
@@ -206,4 +254,10 @@ export class WppExpandableCard {
       }];
   }
   static get elementRef() { return "host"; }
+  static get watchers() {
+    return [{
+        "propName": "expanded",
+        "methodName": "onExpandedChange"
+      }];
+  }
 }

@@ -7,9 +7,8 @@ type SelectStoryArgs = Components.WppSelect & {
 };
 export declare const Single: StoryObj<SelectStoryArgs>;
 export declare const Multiple: StoryObj<SelectStoryArgs>;
-export declare const Text: StoryObj<{
-  disabled: boolean;
-  placeholder: string;
+export declare const Text: StoryObj<Components.WppSelect & {
+  showIconStart: boolean;
 }>;
 type ButtonAnchorStoryArgs = Components.WppSelect & {
   anchorComponent: 'WppButton' | 'WppActionButton' | 'WppActionButtonWithIcon';

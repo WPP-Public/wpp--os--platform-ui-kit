@@ -132,7 +132,7 @@ const WppSideModal$1 = /*@__PURE__*/ proxyCustomElement(class WppSideModal exten
       if (!this.leftButtonConfig)
         return h("div", { class: "left-button-container" });
       const { label, icon, ...rest } = this.leftButtonConfig;
-      return (h("div", { class: "left-button-container" }, h("wpp-action-button-v4-0-0", { ...rest }, h(transformToVersionedTag(icon), { slot: 'icon-start' }), label)));
+      return (h("div", { class: "left-button-container" }, h("wpp-action-button-v3-5-0", { ...rest }, h(transformToVersionedTag(icon), { slot: 'icon-start' }), label)));
     };
     this.renderRightButtons = () => {
       // Render right buttons based on config.
@@ -140,7 +140,7 @@ const WppSideModal$1 = /*@__PURE__*/ proxyCustomElement(class WppSideModal exten
         return;
       return (h("div", { class: "right-button-container" }, this.rightButtonsConfig.map((rightButtonConfigItem) => {
         const { label, ...rest } = rightButtonConfigItem;
-        return (h("wpp-button-v4-0-0", { size: "m", ...rest }, label));
+        return (h("wpp-button-v3-5-0", { size: "m", ...rest }, label));
       })));
     };
     this.focusDialog = () => {
@@ -183,11 +183,11 @@ const WppSideModal$1 = /*@__PURE__*/ proxyCustomElement(class WppSideModal exten
     // Add render method for header action buttons
     this.renderHeaderActionButtons = () => (h("div", { class: "header-action-buttons-container" }, this.headerActionsConfig?.map(button => {
       const { icon, ...rest } = button;
-      return (h("wpp-action-button-v4-0-0", { variant: "secondary", ...rest }, h(transformToVersionedTag(icon), { slot: 'icon-start' })));
+      return (h("wpp-action-button-v3-5-0", { variant: "secondary", ...rest }, h(transformToVersionedTag(icon), { slot: 'icon-start' })));
     })));
     this.renderBody = () => {
       const Tag = this.formConfig ? 'form' : 'div';
-      return (h(Tag, { tabindex: "-1", part: "content", class: this.sideModalCssClasses(), ...this.formConfig, "data-testid": "wpp-side-modal-content", ref: ref => (this.dialogRef = ref) }, h("div", { class: this.headerContainerCssClasses(), part: "header-container" }, h("div", null, this.withBackButton ? (h("div", { class: "header-with-back-button", part: "header-with-back-button" }, h("wpp-action-button-v4-0-0", { ariaProps: { label: this._locales.backHeaderButtonLabel }, variant: "secondary", onClick: this.handleBackButtonClick, class: "back-button", part: "back-button" }, h("wpp-icon-chevron-v4-0-0", { direction: "left", slot: "icon-start", part: "icon-chevron" })), h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }))) : (h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }))), h("div", { class: "header-action-container" }, this.headerActionsConfig?.length > 0 && this.renderHeaderActionButtons(), h("wpp-action-button-v4-0-0", { ariaProps: { label: this._locales.closeIconLabel }, variant: "secondary", onClick: this.handleCloseModal, class: "close-button", part: "button" }, h("wpp-icon-cross-v4-0-0", { slot: "icon-start", part: "icon-cross" })))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig && this.actionsConfig.length > 0 ? (h("div", { class: this.actionsCssClasses(), part: "actions" }, this.renderLeftButton(), this.renderRightButtons())) : (h(WrappedSlot, { wrapperClass: this.hasActionsSlot ? this.actionsCssClasses() : '', name: "actions", onSlotchange: this.updateSlotData }))));
+      return (h(Tag, { tabindex: "-1", part: "content", class: this.sideModalCssClasses(), ...this.formConfig, "data-testid": "wpp-side-modal-content", ref: ref => (this.dialogRef = ref) }, h("div", { class: this.headerContainerCssClasses(), part: "header-container" }, h("div", null, this.withBackButton ? (h("div", { class: "header-with-back-button", part: "header-with-back-button" }, h("wpp-action-button-v3-5-0", { ariaProps: { label: this._locales.backHeaderButtonLabel }, variant: "secondary", onClick: this.handleBackButtonClick, class: "back-button", part: "back-button" }, h("wpp-icon-chevron-v3-5-0", { direction: "left", slot: "icon-start", part: "icon-chevron" })), h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }))) : (h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }))), h("div", { class: "header-action-container" }, this.headerActionsConfig?.length > 0 && this.renderHeaderActionButtons(), h("wpp-action-button-v3-5-0", { ariaProps: { label: this._locales.closeIconLabel }, variant: "secondary", onClick: this.handleCloseModal, class: "close-button", part: "button" }, h("wpp-icon-cross-v3-5-0", { slot: "icon-start", part: "icon-cross" })))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig && this.actionsConfig.length > 0 ? (h("div", { class: this.actionsCssClasses(), part: "actions" }, this.renderLeftButton(), this.renderRightButtons())) : (h(WrappedSlot, { wrapperClass: this.hasActionsSlot ? this.actionsCssClasses() : '', name: "actions", onSlotchange: this.updateSlotData }))));
     };
     this.isShowContent = undefined;
     this.isReady = undefined;
@@ -288,16 +288,16 @@ const WppSideModal$1 = /*@__PURE__*/ proxyCustomElement(class WppSideModal exten
     }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, side-modal, header-container, button, icon-cross, header, body, actions, header-wrapper, body-wrapper, actions-wrapper, back-button, icon-chevron, header-with-back-button", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-side-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, this.backdropVisible && (h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-0-0", { isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), this.renderBody(), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))), !this.backdropVisible && this.renderBody()));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, side-modal, header-container, button, icon-cross, header, body, actions, header-wrapper, body-wrapper, actions-wrapper, back-button, icon-chevron, header-with-back-button", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-side-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, this.backdropVisible && (h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-5-0", { isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), this.renderBody(), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))), !this.backdropVisible && this.renderBody()));
   }
-  static get registryIs() { return "wpp-side-modal-v4-0-0"; }
+  static get registryIs() { return "wpp-side-modal-v3-5-0"; }
   get host() { return this; }
   static get watchers() { return {
     "open": ["handleChangeModalStatus"],
     "actionsConfig": ["onUpdateActionsConfig"]
   }; }
   static get style() { return wppSideModalCss; }
-}, [1, "wpp-side-modal", "wpp-side-modal-v4-0-0", {
+}, [1, "wpp-side-modal", "wpp-side-modal-v3-5-0", {
     "actionsConfig": [16],
     "open": [1540],
     "size": [1],
@@ -325,39 +325,39 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-side-modal-v4-0-0", "wpp-action-button-v4-0-0", "wpp-button-v4-0-0", "wpp-icon-chevron-v4-0-0", "wpp-icon-cross-v4-0-0", "wpp-overlay-v4-0-0", "wpp-spinner-v4-0-0"];
+  const components = ["wpp-side-modal-v3-5-0", "wpp-action-button-v3-5-0", "wpp-button-v3-5-0", "wpp-icon-chevron-v3-5-0", "wpp-icon-cross-v3-5-0", "wpp-overlay-v3-5-0", "wpp-spinner-v3-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-side-modal-v4-0-0":
+    case "wpp-side-modal-v3-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppSideModal$1);
       }
       break;
-    case "wpp-action-button-v4-0-0":
+    case "wpp-action-button-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-button-v4-0-0":
+    case "wpp-button-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-icon-chevron-v4-0-0":
+    case "wpp-icon-chevron-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-cross-v4-0-0":
+    case "wpp-icon-cross-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-overlay-v4-0-0":
+    case "wpp-overlay-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-spinner-v4-0-0":
+    case "wpp-spinner-v3-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

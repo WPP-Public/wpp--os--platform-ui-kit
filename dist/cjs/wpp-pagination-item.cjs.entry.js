@@ -35,9 +35,9 @@ const WppPaginationItem = class {
     this.selected = false;
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, tabIndex: 0, exportparts: "number" }, index.h("wpp-typography-v4-0-0", { type: "s-body", part: "number" }, this.number)));
+    return (index.h(index.Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, tabIndex: 0, exportparts: "number" }, index.h("wpp-typography-v3-5-0", { type: "s-body", part: "number" }, this.number)));
   }
-  static get registryIs() { return "wpp-pagination-item-v4-0-0"; }
+  static get registryIs() { return "wpp-pagination-item-v3-5-0"; }
 };
 WppPaginationItem.style = wppPaginationItemCss;
 

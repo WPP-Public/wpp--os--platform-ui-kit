@@ -131,7 +131,7 @@ export class WppIconTableSortWrapper {
     return h(Host, null, this.getIconComponent());
   }
   static get is() { return "wpp-icon-table-sort-wrapper"; }
-  static get registryIs() { return "wpp-icon-table-sort-wrapper-v4-0-0"; }
+  static get registryIs() { return "wpp-icon-table-sort-wrapper-v3-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -206,7 +206,7 @@ export class WppIconTableSortWrapper {
           "references": {
             "SortDirection": {
               "location": "local",
-              "path": "/Users/dragos.cornean/Desktop/GitHub/wpp--os--platform-ui-kit/packages/components-library/src/components/wpp-icon/components/arrows/table-sort/wpp-icon-table-sort-wrapper/wpp-icon-table-sort-wrapper.tsx",
+              "path": "/Users/nikita.ryzhov/Projects/platform-ui-kit/packages/components-library/src/components/wpp-icon/components/arrows/table-sort/wpp-icon-table-sort-wrapper/wpp-icon-table-sort-wrapper.tsx",
               "id": "src/components/wpp-icon/components/arrows/table-sort/wpp-icon-table-sort-wrapper/wpp-icon-table-sort-wrapper.tsx::SortDirection"
             }
           }

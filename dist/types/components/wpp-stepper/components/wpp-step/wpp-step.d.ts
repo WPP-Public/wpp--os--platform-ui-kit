@@ -1,5 +1,5 @@
 import { EventEmitter } from '../../../../stencil-public-runtime';
-import { OrientationType, StepChangeEventDetail } from '../../types';
+import { OrientationType, StepLocales, StepChangeEventDetail } from '../../types';
 /**
  * @slot label - Text content displayed within the cell.
  * @slot description - Text displayed as the description of the step, right below the title.
@@ -64,6 +64,12 @@ export declare class WppStep {
    */
   readonly lastStep: boolean;
   /**
+   * If a step is optional.
+   *
+   * @deprecated this prop will be deleted in version 4.0.0
+   */
+  readonly optional?: boolean;
+  /**
    * Defines the step orientation. Do not use this prop in specific steps, as it is automaticly passed from the `Stepper` component.
    */
   readonly orientation: OrientationType;
@@ -93,6 +99,12 @@ export declare class WppStep {
    * @internal - This event is controlled by Stepper, do not set it manually.
    */
   readonly wppStepUpdate: EventEmitter;
+  /**
+   * Indicates locales for step component
+   *
+   * @deprecated this prop will be deleted in version 4.0.0
+   */
+  readonly locales: StepLocales;
   componentDidLoad(): void;
   disconnectedCallback(): void;
   watchErrorIcon(): void;

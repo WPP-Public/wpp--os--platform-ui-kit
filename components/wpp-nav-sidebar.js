@@ -63,6 +63,7 @@ const WppNavSidebar$1 = /*@__PURE__*/ proxyCustomElement(class WppNavSidebar ext
     this.hostCssClasses = () => ({
       'wpp-nav-sidebar': true,
     });
+    this.initialPath = undefined;
     this.activePath = undefined;
     this.nativeLink = false;
     this.zIndex = Z_INDEX.NAV_SIDEBAR;
@@ -81,19 +82,21 @@ const WppNavSidebar$1 = /*@__PURE__*/ proxyCustomElement(class WppNavSidebar ext
     this.closeInactiveExpandedItem(event.detail.label);
   }
   componentWillLoad() {
-    this.setActiveItem(this.activePath);
+    const initialPath = this.activePath || this.initialPath;
+    this.setActiveItem(initialPath);
     this.calculateOsBarHeight();
   }
   render() {
     return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "nav-sidebar, body, header-wrapper, header, ws-wrapper, ws-inner" }, h("aside", { class: this.asideCssClasses(), part: "nav-sidebar" }, h("div", { class: "nav-wrapper", part: "body" }, h(WrappedSlot, { wrapperClass: "title-wrapper", name: "header" }), h(WrappedSlot, { wrapperClass: "items-wrapper" })))));
   }
-  static get registryIs() { return "wpp-nav-sidebar-v4-0-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-v3-5-0"; }
   get host() { return this; }
   static get watchers() { return {
     "activePath": ["handleActivePathChange"]
   }; }
   static get style() { return wppNavSidebarCss; }
-}, [1, "wpp-nav-sidebar", "wpp-nav-sidebar-v4-0-0", {
+}, [1, "wpp-nav-sidebar", "wpp-nav-sidebar-v3-5-0", {
+    "initialPath": [1, "initial-path"],
     "activePath": [1, "active-path"],
     "nativeLink": [4, "native-link"],
     "zIndex": [2, "z-index"]
@@ -102,9 +105,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-nav-sidebar-v4-0-0"];
+  const components = ["wpp-nav-sidebar-v3-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-nav-sidebar-v4-0-0":
+    case "wpp-nav-sidebar-v3-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppNavSidebar$1);
       }

@@ -41,6 +41,12 @@ export declare class WppFileUploadItem {
    */
   readonly format: FileUploadResultFormaType;
   /**
+   * Maximum label length (in characters) of single loading item
+   *
+   * @deprecated - this prop will be removed in 4.0.0 version. Truncation will be calculated based on available space.
+   */
+  readonly maxLabelLength?: number;
+  /**
    * Represent current index in files list
    */
   readonly currentIndex: number;

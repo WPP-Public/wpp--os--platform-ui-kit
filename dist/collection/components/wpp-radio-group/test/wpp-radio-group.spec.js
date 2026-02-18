@@ -33,7 +33,7 @@ describe('wpp-radio-group', () => {
   it('renders component with items and attributes', async () => {
     const page = await newSpecPage({
       components: [WppRadioGroup, WppRadio, WppLabel, WppInternalLabel],
-      template: () => (h("wpp-radio-group-v4-0-0", null, h("wpp-radio-v4-0-0", { name: "contact", value: "email", labelConfig: { text: 'Email' } }), h("wpp-radio-v4-0-0", { name: "contact", value: "mail", labelConfig: { text: 'Mail' } }), h("wpp-radio-v4-0-0", { name: "contact", value: "phone", labelConfig: { text: 'Phone' } }))),
+      template: () => (h("wpp-radio-group-v3-5-0", null, h("wpp-radio-v3-5-0", { name: "contact", value: "email", labelConfig: { text: 'Email' } }), h("wpp-radio-v3-5-0", { name: "contact", value: "mail", labelConfig: { text: 'Mail' } }), h("wpp-radio-v3-5-0", { name: "contact", value: "phone", labelConfig: { text: 'Phone' } }))),
     });
     expect(page.root).toMatchSnapshot();
   });

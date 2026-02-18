@@ -147,7 +147,7 @@ const WppTabs = /*@__PURE__*/ proxyCustomElement(class WppTabs extends HTMLEleme
     const tablistLabelledBy = this.ariaProps?.tablist?.labelledby;
     return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, slider" }, h("div", { class: "wpp-tab-control-wrapper", role: "tablist", "aria-orientation": "horizontal", "aria-label": tablistLabel, "aria-labelledby": tablistLabelledBy, part: "wrapper" }, h("slot", { part: "inner" })), h("div", { class: "slider", part: "slider" })));
   }
-  static get registryIs() { return "wpp-tabs-v4-0-0"; }
+  static get registryIs() { return "wpp-tabs-v3-5-0"; }
   get host() { return this; }
   static get watchers() { return {
     "locales": ["onLocalesChange"],
@@ -155,7 +155,7 @@ const WppTabs = /*@__PURE__*/ proxyCustomElement(class WppTabs extends HTMLEleme
     "value": ["valueChanged"]
   }; }
   static get style() { return wppTabsCss; }
-}, [1, "wpp-tabs", "wpp-tabs-v4-0-0", {
+}, [1, "wpp-tabs", "wpp-tabs-v3-5-0", {
     "value": [1537],
     "size": [1],
     "ariaProps": [16],
@@ -168,9 +168,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tabs-v4-0-0"];
+  const components = ["wpp-tabs-v3-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tabs-v4-0-0":
+    case "wpp-tabs-v3-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTabs);
       }

@@ -15,6 +15,12 @@ import { Instance } from 'tippy.js';
 export declare class WppAvatarGroup {
   menuContextTippyRef?: Instance;
   /**
+   * Defines a list of users with specific attributes, such as name, src, color, and so on: `users={[{name: '', src: ''}]}`
+   *
+   * @deprecated - this prop will be deleted in version 4.0.0. If you want to use this prop, use avatars prop instead
+   */
+  readonly users: AvatarState[];
+  /**
    * Defines a list of avatars with specific attributes, such as name, src, color, and so on: `avatars={[{name: '', src: ''}]}`
    */
   readonly avatars: AvatarState[];
@@ -53,5 +59,6 @@ export declare class WppAvatarGroup {
   private handleAvatarClick;
   private onKeyDown;
   private handleListItemClick;
+  private getAvatarsList;
   render(): any;
 }

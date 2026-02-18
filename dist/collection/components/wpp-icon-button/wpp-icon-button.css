@@ -1,0 +1,8 @@
+:host {
+  display: inline-flex;
+}
+
+:host([disabled]:not([disabled=false]):active),
+:host([loading]:not([loading=false]):active) {
+  pointer-events: none;
+}

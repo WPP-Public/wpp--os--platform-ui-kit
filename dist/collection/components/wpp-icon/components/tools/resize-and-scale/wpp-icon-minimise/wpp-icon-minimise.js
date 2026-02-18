@@ -16,7 +16,7 @@ export class WppIconMinimise {
     return (h(WppIcon, { name: "wpp-icon-minimise", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: MinimiseDirectionIconPath[this.direction], fill: "currentColor" })));
   }
   static get is() { return "wpp-icon-minimise"; }
-  static get registryIs() { return "wpp-icon-minimise-v4-0-0"; }
+  static get registryIs() { return "wpp-icon-minimise-v3-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

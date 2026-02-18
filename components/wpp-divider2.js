@@ -21,10 +21,10 @@ const WppDivider = /*@__PURE__*/ proxyCustomElement(class WppDivider extends HTM
   render() {
     return (h(Host, { class: this.hostCssClasses(), role: "separator", "aria-orientation": this.vertical ? 'vertical' : 'horizontal', exportparts: "body" }, h("div", { class: this.dividerCssClasses(), part: "body" })));
   }
-  static get registryIs() { return "wpp-divider-v4-0-0"; }
+  static get registryIs() { return "wpp-divider-v3-5-0"; }
   get host() { return this; }
   static get style() { return wppDividerCss; }
-}, [1, "wpp-divider", "wpp-divider-v4-0-0", {
+}, [1, "wpp-divider", "wpp-divider-v3-5-0", {
     "vertical": [4],
     "resizable": [4]
   }]);
@@ -32,9 +32,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-divider-v4-0-0"];
+  const components = ["wpp-divider-v3-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-divider-v4-0-0":
+    case "wpp-divider-v3-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppDivider);
       }

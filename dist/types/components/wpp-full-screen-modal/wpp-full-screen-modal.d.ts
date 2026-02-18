@@ -65,6 +65,11 @@ export declare class WppFullScreenModal {
    * Event emitted when the close animation ends.
    */
   wppFullScreenModalCloseComplete: EventEmitter<FullScreenModalCloseDetails>;
+  /**
+   * Handles the modal click actions.
+   * @deprecated - this prop will be deleted in version 3.0.0 . Use `wppFullScreenModalOpenStart`/`wppFullScreenModalOpenComplete` instead
+   */
+  wppFullScreenModalOpen: EventEmitter<void>;
   protected handleCloseOnEsc(event: KeyboardEvent): void;
   protected handleChangeFullScreenModalStatus(openStatus: boolean): void;
   /**

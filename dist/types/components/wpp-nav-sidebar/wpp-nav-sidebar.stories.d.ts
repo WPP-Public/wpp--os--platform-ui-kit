@@ -17,12 +17,14 @@ export declare const NoLogo: {
   };
   decorators?: import("storybook/internal/csf").DecoratorFunction<import("@storybook/web-components/dist/types-9976a2c9").W, {
     activePath?: string | undefined;
+    initialPath?: string | undefined;
     nativeLink: boolean;
     zIndex: number;
     withLogo: boolean;
     target: string;
   }> | import("storybook/internal/csf").DecoratorFunction<import("@storybook/web-components/dist/types-9976a2c9").W, {
     activePath?: string | undefined;
+    initialPath?: string | undefined;
     nativeLink: boolean;
     zIndex: number;
     withLogo: boolean;
@@ -92,12 +94,14 @@ export declare const WithLogo: {
   };
   decorators?: import("storybook/internal/csf").DecoratorFunction<import("@storybook/web-components/dist/types-9976a2c9").W, {
     activePath?: string | undefined;
+    initialPath?: string | undefined;
     nativeLink: boolean;
     zIndex: number;
     withLogo: boolean;
     target: string;
   }> | import("storybook/internal/csf").DecoratorFunction<import("@storybook/web-components/dist/types-9976a2c9").W, {
     activePath?: string | undefined;
+    initialPath?: string | undefined;
     nativeLink: boolean;
     zIndex: number;
     withLogo: boolean;

@@ -96,6 +96,7 @@ describe('wpp-modal minimal coverage', () => {
     const closeComplete = jest.fn();
     instance.wppModalOpenComplete.emit = openComplete;
     instance.wppModalCloseComplete.emit = closeComplete;
+    instance.wppModalOpen.emit = jest.fn();
     // OPEN END
     instance['handleTransitionEnd']({
       propertyName: ANIMATION_PROPERTY_NAME,

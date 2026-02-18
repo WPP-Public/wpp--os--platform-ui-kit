@@ -1,646 +1,353 @@
-import { Fragment, h, Host } from '@stencil/core';
-import { isEqual } from 'lodash';
-import { FOCUS_TYPE } from '../../types/common';
+import { Fragment, h, Host, } from '@stencil/core';
+import { autoFocusElement, debounce, isEventTargetContained, selectDropdownWidth, transformToVersionedTag, } from '../../utils/utils';
+import isEqual from 'lodash/isEqual';
 import { menuListConfig } from '../../common/menuListConfig';
-import { debounce, isEventTargetContained, selectDropdownWidth } from '../../utils/utils';
-import { DEFAULT_DROPDOWN_CONFIG, INFINITE_SCROLL_THRESHOLD, LOCALES_DEFAULTS, PILL_MARGIN } from './const';
-import { isSelected, selectedOptionsByOrder } from './utils';
-import { renderDropdownPillsComponent } from './components/wpp-dropdown-pills';
-import { renderPlaceholderTextComponent } from './components/wpp-placeholder-text';
-import { renderDropdownListComponent } from './components/wpp-dropdown-list';
-import { renderExtendedSelectedValuesComponent } from './components/wpp-extended-selected-values';
-import { renderCreateNewOptionComponent } from './components/wpp-create-new-option';
+import { FOCUS_TYPE } from '../../types/common';
+import { Z_INDEX } from '../../common/consts';
+import { DROPDOWN_ANIMATION_TIME, LOCALES_DEFAULTS, PILL_MARGIN } from './const';
+import { getTempNodeWidthBasedOnLabel } from './utils';
+// Load more will be triggered 15px before scroll ends
+const INFINITE_SCROLL_THRESHOLD = 15;
+/**
+ * @slot - Should contain a list of `wpp-autocomplete-option` elements that represents the current options list. The default slot, without the name attribute.
+ *
+ * @part input - Autocomplete input element
+ * @part dropdown - Dropdown container
+ * @part options - Options list container
+ * @part selected-values - Dropdown values for selected values
+ */
 export class WppAutocomplete {
   constructor() {
-    this._locales = LOCALES_DEFAULTS;
-    this.selectedPillRefs = [];
+    this.isScrollToInputRequested = false;
+    this.hasChecked = false;
+    // Used instead of Tippy's `state.isShown`, which is not updated when transitioning
+    this.isDropdownShown = false;
+    this.resizeInProgress = false;
     this.withPills = false;
-    this.activeListNdx = null;
-    this.activeSuggestionNdx = null;
-    this.listItemsRefs = [];
-    this.suggestionsItemsRefs = [];
-    this.preventBlur = false;
-    /**
-     * Observers
-     */
-    this.setupResizeObserver = () => {
-      this.resizeObserver = new ResizeObserver(debounce(() => {
-        this.countHiddenElements();
-        this.tippyInstance?.popper.style.setProperty('--custom-dropdown-width', this.getDropdownWidth());
-      }, 100));
-      this.resizeObserver?.observe(this.host);
+    this.LIB_COMPONENTS_PREFIX = 'wpp-';
+    this._locales = LOCALES_DEFAULTS;
+    this.addHandleOptionsChangeTimer = (shouldUpdate = false) => {
+      if (this.handleOptionsTimer) {
+        clearTimeout(this.handleOptionsTimer);
+      }
+      this.handleOptionsTimer = setTimeout(() => {
+        this.handleOptionsChange(shouldUpdate);
+        this.handleOptionsTimer = null;
+      }, 0);
     };
-    /**
-     * Dropdown methods
-     */
-    this.createTippyInstance = () => {
-      if (!this.triggerRef || !this.dropdownRef)
-        return;
-      this.tippyInstance = menuListConfig({
-        anchor: this.triggerRef,
-        content: this.dropdownRef,
-        ...DEFAULT_DROPDOWN_CONFIG,
-        ...this.dropdownConfig,
-        onShow: (instance) => {
-          instance.popper.style.setProperty('--custom-dropdown-width', this.getDropdownWidth());
-          if (this.value.length && this.withPills)
-            requestAnimationFrame(this.validateTruncatedPills);
-          // Re-position in case it was not position correctly initially.
-          setTimeout(() => {
-            instance.popperInstance?.update();
-          }, 0);
-          if (this.dropdownConfig?.onShow) {
-            this.dropdownConfig?.onShow(instance);
-          }
-        },
-        onShown: (instance) => {
-          if (this.dropdownConfig?.onShown) {
-            this.dropdownConfig?.onShown(instance);
-          }
-        },
-        onHide: (instance) => {
-          if (!this.isShowMore)
-            this.isShowMore = true;
-          this.updatePlaceholderText();
-          if (this.dropdownConfig?.onHide) {
-            return this.dropdownConfig.onHide(instance);
-          }
-        },
-        onHidden: () => {
-          if (this.multiple && this.value.length && !this.persistentSearch && !this.simpleSearch) {
-            this.handleListChange(this.internalList.map(item => ({ ...item, hidden: true })));
-            this.visibleOptionsLength = 0;
-          }
-        },
-        onClickOutside: (instance, event) => {
-          if (isEventTargetContained(this.host, event))
+    this.checkSuggestions = () => {
+      if (this.suggestions && !!this.suggestions.length) {
+        //Need to be reassigned due to props from WppListItem `checked`, need to be removed
+        this.componentSuggestions = this.suggestions.map(suggestion => {
+          const { checked, ...restProps } = suggestion;
+          if (checked)
+            this.value.push(suggestion);
+          return restProps;
+        });
+      }
+      if (this.suggestions?.length === 0) {
+        this.componentSuggestions = [];
+      }
+    };
+    this.valueResizeObserver = () => {
+      if (this.valuesContainerEl) {
+        this.valuesResizeObserver = new ResizeObserver(debounce(() => {
+          if (this.resizeInProgress)
             return;
-          instance.hide();
-          this.isDropdownShown = false;
-          if (this.dropdownConfig?.onClickOutside) {
-            this.dropdownConfig.onClickOutside(instance, event);
+          try {
+            this.resizeInProgress = true;
+            if (this.type === 'regular') {
+              this.countHiddenElements();
+            }
+            if (this.isDropdownShown) {
+              this.tippyInstance?.popperInstance?.forceUpdate();
+            }
           }
-        },
+          catch (error) {
+            console.error('Error in ResizeObserver callback:', error);
+          }
+          finally {
+            this.resizeInProgress = false;
+          }
+        }, 100));
+        if (this.valuesResizeObserver) {
+          this.valuesResizeObserver.observe(this.valuesContainerEl);
+        }
+      }
+    };
+    this.createTippyInstance = () => {
+      if (this.triggerEl && this.dropdownEl) {
+        this.tippyInstance = menuListConfig({
+          anchor: this.triggerEl,
+          content: this.dropdownEl,
+          zIndex: Z_INDEX.AUTOCOMPLETE,
+          ...this.dropdownConfig,
+          duration: DROPDOWN_ANIMATION_TIME,
+          trigger: 'manual',
+          maxWidth: 'none',
+          hideOnClick: false,
+          popperOptions: {
+            ...this.dropdownConfig?.popperOptions,
+            modifiers: [
+              ...(this.dropdownConfig?.popperOptions?.modifiers || []),
+              {
+                name: 'flip',
+                options: {
+                  fallbackPlacements: ['top'],
+                },
+              },
+            ],
+          },
+          onShow: () => {
+            requestAnimationFrame(this.validateTruncatedPills);
+            requestAnimationFrame(this.triggerTooltipCalculation);
+            if (this.componentSuggestions && this.componentSuggestions.length > 0)
+              requestAnimationFrame(() => {
+                const listItems = this.optionsListEl?.querySelectorAll(transformToVersionedTag('wpp-list-item'));
+                Array.from(listItems || []).forEach(item => {
+                  item.setAttribute('container-state', 'tooltipTrigger');
+                });
+              });
+          },
+          onHide: () => {
+            this.isShowMore = true;
+            this.isInComponent = false;
+            requestAnimationFrame(this.validateTruncatedPills);
+          },
+          onClickOutside: (_, event) => {
+            if (!isEventTargetContained(this.host, event)) {
+              this.hideDropdown();
+            }
+          },
+        });
+      }
+    };
+    this.triggerTooltipCalculation = () => {
+      this.optionElements?.forEach(option => {
+        if (!option.hidden) {
+          if (option.containerState === 'tooltipTrigger' && this.isDropdownShown) {
+            option.setAttribute('container-state', '');
+            option.setAttribute('container-state', 'tooltipTrigger');
+          }
+          else {
+            option.setAttribute('container-state', 'tooltipTrigger');
+          }
+        }
       });
     };
+    this.isSelectedItemsLimitReached = () => {
+      if (this.limitSelectedItems <= 0)
+        return false;
+      return this.value.length >= this.limitSelectedItems;
+    };
+    this.canLoadMore = () => this.infinite && !this.infiniteLastPage && this.loadMore && !this.isInfiniteLoading;
+    this.hasClearButton = () => !!this.value.length && !this.isDropdownShown && this.multiple;
+    this.hasSimpleSearch = () => this.simpleSearch && !this.infinite;
+    this.isOptionHidden = (option) => {
+      if (!this.hasSimpleSearch()) {
+        return false;
+      }
+      const trimmedSearch = this.searchValue.trim().toLocaleLowerCase();
+      if (trimmedSearch.length > 0) {
+        const optionValue = option.value;
+        if (!optionValue) {
+          return false;
+        }
+        const optionLabel = (this.getOptionLabel(optionValue) || '').toLocaleLowerCase();
+        return !optionLabel.includes(trimmedSearch);
+      }
+      return false;
+    };
+    this.isOptionNodesChanged = (nextOptions) => nextOptions.length !== this.optionElements?.length ||
+      !nextOptions.every((el, index) => this.optionElements?.[index] === el);
+    this.getOptionElements = () => Array.from(this.host.querySelectorAll(transformToVersionedTag('wpp-list-item')));
+    this.scrollOptionsToTop = () => {
+      if (this.optionsListEl) {
+        this.optionsListEl.scrollTop = 0;
+      }
+    };
+    /**
+     * If return `true`, need to interrupt function
+     * for the cases, when user have Single WppAutocomplete and clicking into already selected WppListItem
+     * @param event
+     */
+    this.toggleSingleAutocompleteListItem = (event) => {
+      const suggestion = event.detail.target;
+      if (this.lastSelectedElement)
+        this.lastSelectedElement.checked = false;
+      this.lastSelectedElement = suggestion;
+      if (isEqual(this.value[0], suggestion.value)) {
+        event.stopPropagation();
+        suggestion.checked = true;
+        this.hideDropdown();
+        this.blurInput();
+        return true;
+      }
+      return;
+    };
+    this.focusInput = () => {
+      this.inputEl?.focus();
+    };
+    this.blurInput = () => {
+      this.inputEl?.blur();
+    };
     this.showDropdown = () => {
-      if (!this.tippyInstance)
-        return;
-      /**
-       * Need to show dropdown only in cases:
-       * 1. When we have selected option(s) and multiple props are `true` or have searchText
-       * 2. When we have searchText with: extended autocomplete type or single autocomplete type
-       */
-      const hasSearch = this.searchText.length > 0;
-      const hasSelection = this.value.length > 0;
-      const shouldShow = (this.multiple && (hasSelection || hasSearch)) ||
-        ((this.type === 'extended' || !this.multiple) && hasSearch) ||
-        (!!this.componentSuggestions.length && !this.searchText.trim().length);
-      this.isDropdownShown = shouldShow;
-      shouldShow ? this.tippyInstance.show() : this.hideDropdown();
+      if (!this.isDropdownShown) {
+        this.isDropdownShown = true;
+        this.tippyInstance?.show();
+      }
     };
     this.hideDropdown = () => {
-      if (!this.tippyInstance)
-        return;
-      if (this.isDropdownShown)
+      if (this.isDropdownShown) {
+        if (this.type === 'regular') {
+          this.countHiddenElements();
+        }
+        this.tippyInstance?.hide();
         this.isDropdownShown = false;
-      if (this.tippyInstance.state.isShown) {
-        this.tippyInstance.hide();
-        this.clearActive();
       }
     };
-    /**
-     * List items click handlers
-     */
-    this.handleClickListItem = (event) => {
-      const clickedValue = event.detail.value;
-      if (clickedValue === undefined)
-        return;
-      this.multiple ? this.onClickListItemMultiple(clickedValue) : this.onClickListItemSingle(clickedValue);
-      this.checkListAgainstValue();
+    this.isItemSelected = (item) => {
+      const itemId = this.getOptionId(item);
+      return (this.value.some(selectedOption => this.getOptionId(selectedOption) === itemId) ||
+        this.componentSuggestions.some(suggestion => this.getOptionId(suggestion) === itemId && this.isOptionSelected(suggestion)));
     };
-    this.onClickListItemSingle = (listItemValue) => {
-      const current = this.value?.[0];
-      let isSame = false;
-      if (this.getItemKey && typeof current === 'object' && typeof listItemValue === 'object') {
-        isSame = this.getItemKey(current) === this.getItemKey(listItemValue);
-      }
-      else {
-        isSame = isEqual(current, listItemValue);
-      }
-      if (!isSame) {
-        this.value = [listItemValue];
-        this.wppChange.emit({
-          value: this.value,
-          selectedOptions: listItemValue.length > 0 ? this.internalList.filter(e => e.checked) : [],
-          reason: 'selectOption',
-          name: this.name,
-        });
-      }
-      if (!this.persistentSearch) {
-        this.searchText = '';
-      }
-      else {
-        this.isInputValueTransparent = true;
-        this.onSearchTextChange(this.searchText);
-      }
-      this.isFocused = false;
-      this.preventBlur = true;
-      this.inputRef?.blur();
-      this.hideDropdown();
-    };
-    this.onClickListItemMultiple = (listItemValue) => {
-      const already = isSelected(this.value, listItemValue, this.getItemKey);
-      let next;
-      if (already) {
-        next = this.value.filter(v => {
-          if (this.getItemKey) {
-            const vKey = typeof v === 'object' ? this.getItemKey(v) : v;
-            const itemKey = typeof listItemValue === 'object' ? this.getItemKey(listItemValue) : listItemValue;
-            return vKey !== itemKey;
+    this.updateOptions = () => {
+      this.shownOptionElements = [];
+      this.optionElements?.forEach(option => {
+        const optionValue = option.value;
+        option.selectable = true;
+        option.hidden = this.isOptionHidden(option);
+        option.checked = this.isItemSelected(optionValue);
+        option.highlight = this.searchValue;
+        if (!option.hidden) {
+          if (this.isDropdownShown) {
+            option.setAttribute('container-state', '');
+            option.setAttribute('container-state', 'tooltipTrigger');
           }
-          return !isEqual(v, listItemValue);
+          this.shownOptionElements.push(option);
+        }
+      });
+      this.isEmptyOptions = !this.shownOptionElements.length;
+    };
+    this.requestLoadMore = () => {
+      if (this.loadMore) {
+        this.isInfiniteLoading = true;
+        const promise = this.loadMore().finally(() => {
+          if (!promise.cancelled) {
+            this.isInfiniteLoading = false;
+            this.infiniteLoadingPromise = undefined;
+          }
         });
-      }
-      else {
-        next = [...this.value, listItemValue];
-      }
-      if (!already && this.isSelectedItemsLimitReached(this.value))
-        return;
-      if (!isEqual(this.value, next)) {
-        this.value = next;
-        this.wppChange.emit({
-          value: next,
-          selectedOptions: next.length > 0 ? this.internalList.filter(e => e.checked) : [],
-          reason: already ? 'removeOption' : 'selectOption',
-          name: this.name,
-        });
+        this.infiniteLoadingPromise = promise;
       }
     };
-    /**
-     * Component handlers
-     */
+    this.handleTriggerContainerMouseDown = (event) => {
+      if (!this.disabled) {
+        // Prevent input blur when the component is used
+        if (event.target !== this.inputEl) {
+          event.preventDefault();
+        }
+      }
+    };
+    this.handleCreateNewOptionClick = () => {
+      this.wppCreateNewOption.emit(this.searchValue);
+    };
+    this.handleTriggerClick = () => {
+      if (!this.isFocused) {
+        this.focusInput();
+      }
+    };
+    this.handleMouseDown = () => {
+      this.focusType = FOCUS_TYPE.MOUSE;
+    };
+    this.handleKeyUp = (event) => {
+      if (event.key === 'Tab')
+        this.focusType = FOCUS_TYPE.TAB;
+    };
     this.handleInput = () => {
-      this.showDropdown();
+      this.focusType = FOCUS_TYPE.NONE;
+      this.searchValue = this.inputEl?.value || '';
+      if (this.componentSuggestions?.length > 0 || (this.searchValue?.length ?? 0) > 0) {
+        this.showDropdown();
+      }
+      else {
+        if (!this.multiple || (this.multiple && !this.value.length)) {
+          this.hideDropdown();
+        }
+      }
     };
     this.handleFocus = (event) => {
-      this.isInputValueTransparent = false;
+      this.isInComponent = true;
       if (!this.isFocused) {
+        this.isScrollToInputRequested = true;
         this.isFocused = true;
-        if (this.canLoadMore() && !this.selectedOptions.length && !this.loading && this.searchText.length > 0) {
+        if ((this.componentSuggestions?.length ?? 0) > 0 ||
+          (this.searchValue?.length ?? 0) > 0 ||
+          (this.withPills && !!this.value.length)) {
+          this.showDropdown();
+        }
+        if (this.canLoadMore() && this.isEmptyOptions && !this.loading) {
           this.requestLoadMore();
         }
       }
-      this.showDropdown();
-      if (event)
-        this.wppFocus.emit(event);
+      this.wppFocus.emit(event);
     };
-    this.handleBlur = (event, options) => {
-      if (this.preventBlur) {
-        this.triggerRef?.focus();
-        this.preventBlur = false;
+    // We allow input blur only when the dropdown is hidden or the component got disabled.
+    // Outside clicks will close the dropdown first.
+    this.handleBlur = () => {
+      if (this.isInComponent)
         return;
-      }
-      const nextTarget = event?.relatedTarget ??
-        event?.composedPath?.()?.[0] ??
-        document.activeElement;
-      // If focus remains inside the component (host or dropdown) and this isn’t forced, skip blur
-      if (!options?.force && nextTarget && (this.host?.contains(nextTarget) || this.dropdownRef?.contains(nextTarget)))
-        return;
-      this.isInputValueTransparent = !!this.value.length;
       this.focusType = FOCUS_TYPE.NONE;
-      this.isFocused = false;
-      !this.persistentSearch ? (this.searchText = '') : this.onSearchTextChange(this.searchText);
-      this.hideDropdown();
+      if (this.host.shadowRoot?.activeElement !== this.inputEl) {
+        this.hideDropdown();
+      }
+      if (!this.isDropdownShown) {
+        this.isFocused = false;
+        if (this.persistentSearch) {
+          this.onSearchValueChange(this.searchValue);
+        }
+        else {
+          this.searchValue = '';
+        }
+      }
+      else {
+        this.focusInput();
+      }
       this.wppBlur.emit();
     };
-    this.handleCrossIconFocus = () => {
-      this.isInputValueTransparent = true;
-      this.isFocused = false;
-      this.hideDropdown();
-    };
-    this.handleCrossIconKeyDown = (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        this.handleClearClick(event);
-        this.setFocus();
+    this.handleOptionsScroll = (event) => {
+      if (this.canLoadMore()) {
+        const container = event.target;
+        const scrolledToBottom = container.scrollHeight - container.clientHeight - container.scrollTop;
+        if (scrolledToBottom < INFINITE_SCROLL_THRESHOLD) {
+          this.requestLoadMore();
+        }
       }
     };
-    this.handleTriggerClick = () => {
-      if (this.disabled)
-        return;
-      if (!this.isFocused)
-        this.isFocused = true;
-      this.setFocus();
-    };
-    this.handleSearch = (event) => {
-      const searchValue = event.detail.value;
-      if (searchValue === undefined) {
-        this.searchText = '';
-        return;
+    // For some reason this handler is not triggered by the browser
+    // while Tippy instance is being created. Though it is covered
+    // after the dropdown is opened, since Tippy moves the dropdown node.
+    this.handleOptionsChange = (shouldUpdate = false) => {
+      const currentNodes = this.getOptionElements();
+      const isNodesChanged = this.isOptionNodesChanged(currentNodes);
+      if (isNodesChanged || shouldUpdate) {
+        this.optionElements = currentNodes;
+        this.updateOptions();
       }
-      this.searchText = searchValue;
-    };
-    this.handleListChange = (list) => {
-      if (!list) {
-        this.checkListAgainstValue();
-        return;
-      }
-      this.internalList = list;
-      this.checkListAgainstValue();
-      this.checkVisibleOptionsLength(list);
     };
     this.handleClearClick = (event) => {
       event.stopPropagation();
       this.value = [];
-      this.placeholderText = undefined;
       this.hiddenSelectedOptionsNumber = 0;
-      this.checkListAgainstValue();
-      this.setFocus();
-      this.wppChange.emit({
-        value: this.value,
-        selectedOptions: [],
-        reason: 'removeOption',
-        name: this.name,
-      });
+      this.updateOptions();
+      this.wppChange.emit({ value: this.value, reason: 'removeOption', name: this.name });
     };
-    this.handleOptionsScroll = (event) => {
-      if (!this.canLoadMore())
-        return;
-      const container = event.target;
-      const scrolledToBottom = container.scrollHeight - container.clientHeight - container.scrollTop;
-      if (scrolledToBottom < INFINITE_SCROLL_THRESHOLD)
-        this.requestLoadMore();
-    };
-    this.onKeyUp = (event) => {
-      if (event.key === 'Tab') {
-        this.focusType = FOCUS_TYPE.TAB;
-      }
-    };
-    this.onKeyDown = (event) => {
-      if (!this.isFocused)
-        return;
-      switch (event.key) {
-        case 'Escape': {
-          this.handleBlur();
-          return;
-        }
-        case 'ArrowDown': {
-          event.preventDefault();
-          const src = this.getVisibleSource();
-          if (!src)
-            return;
-          const prev = src === 'list' ? this.activeListNdx : this.activeSuggestionNdx;
-          const next = this.findNextActiveNdx(prev, 1, src);
-          if (src === 'list')
-            this.activeListNdx = next;
-          else
-            this.activeSuggestionNdx = next;
-          this.setActiveClass(src, prev, next);
-          return;
-        }
-        case 'ArrowUp': {
-          event.preventDefault();
-          const src = this.getVisibleSource();
-          if (!src)
-            return;
-          const prev = src === 'list' ? this.activeListNdx : this.activeSuggestionNdx;
-          const next = this.findNextActiveNdx(prev, -1, src);
-          if (src === 'list')
-            this.activeListNdx = next;
-          else
-            this.activeSuggestionNdx = next;
-          this.setActiveClass(src, prev, next);
-          return;
-        }
-        case 'Enter': {
-          const src = this.getVisibleSource();
-          const ndx = src === 'list' ? this.clampListNdx(this.activeListNdx) : this.clampListNdx(this.activeSuggestionNdx);
-          if (src == null || ndx == null)
-            return;
-          const item = src === 'list' ? this.internalList[ndx] : this.componentSuggestions[ndx];
-          if (item && this.isListItemVisible(item)) {
-            event.preventDefault();
-            const val = item.value;
-            if (!val)
-              return;
-            this.multiple ? this.onClickListItemMultiple(val) : this.onClickListItemSingle(val);
-            this.checkListAgainstValue();
-          }
-        }
-      }
-    };
-    /**
-     * Validators
-     */
-    this.checkListAgainstValue = () => {
-      const next = this.internalList?.map(item => ({
-        ...item,
-        checked: isSelected(this.value, item, this.getItemKey),
-      }));
-      if (next && !isEqual(next, this.internalList))
-        this.internalList = next;
-      const mergeByKey = (arr = []) => {
-        const map = new Map();
-        arr.forEach(it => {
-          const key = typeof it.value === 'object' ? this.getItemKey?.(it.value) : it.value;
-          map.set(key, it);
-        });
-        return map;
-      };
-      // merge internalList first, then suggestions (list should win on collisions)
-      const listMap = mergeByKey(this.internalList);
-      const sugMap = mergeByKey(this.componentSuggestions);
-      const mergedMap = new Map(listMap);
-      sugMap.forEach((val, key) => {
-        if (!mergedMap.has(key))
-          mergedMap.set(key, val);
-      });
-      const mergedSource = Array.from(mergedMap.values());
-      const _selectedOptions = selectedOptionsByOrder(mergedSource, this.value, this.getItemKey);
-      this.selectedOptions = _selectedOptions;
-      if (this.type === 'extended') {
-        this.extendedSelectedValues = _selectedOptions;
-      }
-      else {
-        this.updatePlaceholderText();
-      }
-      if (this.withPills && !!_selectedOptions.length)
-        requestAnimationFrame(this.validateTruncatedPills);
-    };
-    this.checkVisibleOptionsLength = (source) => {
-      if (this.searchText.trim().length > 0) {
-        this.visibleOptionsLength = source?.filter(item => !item.hidden).length;
-      }
-      else {
-        this.visibleOptionsLength = 0;
-      }
-    };
-    /**
-     * Render methods
-     */
-    this.renderPlaceholderText = () => renderPlaceholderTextComponent.call(this);
-    this.renderDropdownPills = () => renderDropdownPillsComponent.call(this);
-    this.renderDropdownList = () => renderDropdownListComponent.call(this);
-    this.renderExtendedSelectedValues = () => renderExtendedSelectedValuesComponent.call(this);
-    this.renderCreateNewElement = () => renderCreateNewOptionComponent.call(this);
-    /**
-     * Infinity Loading methods
-     */
-    this.requestLoadMore = () => {
-      if (!this.loadMore)
-        return;
-      this.isInfiniteLoading = true;
-      const promise = this.loadMore().finally(() => {
-        if (!promise.cancelled) {
-          this.isInfiniteLoading = false;
-          this.infiniteLoadingPromise = undefined;
-        }
-      });
-      this.infiniteLoadingPromise = promise;
-    };
-    /**
-     * Helper methods
-     */
-    this.getDropdownWidth = () => {
-      if (this.dropdownWidth === 'auto') {
-        return this.triggerRef ? `${this.triggerRef.offsetWidth}px` : `${this.host.offsetWidth}px`;
-      }
-      return selectDropdownWidth(this.dropdownWidth, this.triggerRef, this.host);
-    };
-    this.canLoadMore = () => this.infinite && !this.infiniteLastPage && this.loadMore && !this.isInfiniteLoading;
-    this.isSelectedItemsLimitReached = (value) => !(this.limitSelectedItems <= 0 || value.length < this.limitSelectedItems);
-    /**
-     * Placeholder methods
-     */
-    this.getHiddenCountElWidth = (num) => {
-      if (!this.hiddenInputPlaceholderRef)
-        return 0;
-      this.hiddenInputPlaceholderRef.textContent = `, +${num}`;
-      return this.hiddenInputPlaceholderRef.clientWidth;
-    };
-    this.countHiddenElements = () => {
-      if (!this.multiple)
-        return;
-      if (!this.value.length || !this.triggerRef || !this.inputPlaceholderRef || !this.hiddenInputPlaceholderRef)
-        return;
-      // Reset to get an accurate base measurement
-      this.triggerRef.style.setProperty('--hidden-count-width', '0px');
-      const baseMaxWidth = this.inputPlaceholderRef.clientWidth;
-      // Buffer to account for CSS ellipsis
-      const TRUNCATION_BUFFER = 14;
-      let displayedElements = 0;
-      let currentLabel = '';
-      for (let i = 0; i < this.selectedOptions.length; i++) {
-        const nextLabel = currentLabel
-          ? `${currentLabel}, ${this.selectedOptions[i].label}`
-          : this.selectedOptions[i].label;
-        this.hiddenInputPlaceholderRef.textContent = nextLabel;
-        const nextLabelWidth = this.hiddenInputPlaceholderRef.clientWidth;
-        const remainingItems = this.selectedOptions.length - (i + 1);
-        // All items fit without truncation
-        if (remainingItems === 0) {
-          if (nextLabelWidth + TRUNCATION_BUFFER <= baseMaxWidth) {
-            this.hiddenSelectedOptionsNumber = 0;
-            this.triggerRef.style.setProperty('--hidden-count-width', '0px');
-            return;
-          }
-          // The last item doesn't fit, use previous displayed count
-          break;
-        }
-        if (remainingItems === 1) {
-          // Try to fit all items without a hidden count
-          this.hiddenInputPlaceholderRef.textContent = `${nextLabel}, ${this.selectedOptions[i + 1].label}`;
-          const allLabelWidth = this.hiddenInputPlaceholderRef.clientWidth;
-          if (allLabelWidth + TRUNCATION_BUFFER <= baseMaxWidth) {
-            this.hiddenSelectedOptionsNumber = 0;
-            this.triggerRef.style.setProperty('--hidden-count-width', '0px');
-            return;
-          }
-          // Try with hidden count "+1"
-          const hiddenCountWidth = this.getHiddenCountElWidth(1);
-          if (nextLabelWidth + TRUNCATION_BUFFER <= baseMaxWidth - hiddenCountWidth) {
-            this.triggerRef.style.setProperty('--hidden-count-width', `${hiddenCountWidth}px`);
-            this.hiddenSelectedOptionsNumber = 1;
-            return;
-          }
-          // Doesn't fit, use previous state
-          break;
-        }
-        // Check if the next item fits with space for hidden count
-        const hiddenCountWidth = this.getHiddenCountElWidth(remainingItems);
-        if (nextLabelWidth + TRUNCATION_BUFFER <= baseMaxWidth - hiddenCountWidth) {
-          currentLabel = nextLabel;
-          displayedElements = i + 1;
-        }
-        else {
-          // overflow - stop here
-          break;
-        }
-      }
-      const finalHiddenCount = this.selectedOptions.length - displayedElements;
-      if (finalHiddenCount > 0) {
-        const finalHiddenCountWidth = this.getHiddenCountElWidth(finalHiddenCount);
-        this.triggerRef.style.setProperty('--hidden-count-width', `${finalHiddenCountWidth}px`);
-        this.hiddenSelectedOptionsNumber = finalHiddenCount;
-      }
-      else {
-        this.triggerRef.style.setProperty('--hidden-count-width', '0px');
-        this.hiddenSelectedOptionsNumber = 0;
-      }
-    };
-    this.updatePlaceholderText = () => {
-      /**
-       * Do not set the placeholder in cases:
-       * - when input is focused
-       * - when input has no value
-       * - when dropdown is shown
-       */
-      if (!this.value.length) {
-        this.placeholderText = undefined;
-        return;
-      }
-      this.placeholderText =
-        this.type === 'extended'
-          ? this._locales.selected(this.value.length)
-          : this.selectedOptions
-            .map(el => el.label)
-            .filter(Boolean)
-            .join(', ');
-    };
-    /**
-     * Dropdown Pills methods
-     */
-    /**
-     * Validate each WppPill if it has a truncated text label inside or WppPill got truncated when it's in `showMore` mode
-     */
-    this.validateTruncatedPills = () => {
-      if (!this.tippyInstance ||
-        !this.dropdownRef ||
-        !this.selectedPillsWrapperRef ||
-        !this.headerWrapperRef ||
-        !this.showMoreElementRef ||
-        !this.isDropdownShown)
-        return;
-      const pillsElements = (this.selectedPillRefs || []).filter(Boolean);
-      if (!pillsElements.length)
-        return;
-      // When Show more is active, we need to check if we have one or multi-line pills
-      // in single-line mode, we need to toggle Show More value and hide Show Less button
-      if (!this.isShowMore) {
-        const wrapperHeight = parseFloat(getComputedStyle(this.selectedPillsWrapperRef).height);
-        const firstChildHeight = pillsElements[0].getBoundingClientRect().height;
-        if (wrapperHeight !== firstChildHeight)
-          return;
-        this.isShowMore = true;
-      }
-      this.headerWrapperRef.style.setProperty('--pills-wrapper-width', '100%');
-      const dropdownRight = this.dropdownRef.getBoundingClientRect().right;
-      const showMoreWidth = this.showMoreElementRef.clientWidth;
-      const thresholdWithLabel = dropdownRight - showMoreWidth - PILL_MARGIN;
-      let firstTruncationFound = false;
-      // Single pass measurement
-      const truncationData = pillsElements.map((pill, ndx) => {
-        if (firstTruncationFound) {
-          return {
-            base: true,
-            withLabel: true,
-          };
-        }
-        const pillRight = pill.getBoundingClientRect().right;
-        const base = pillRight >= dropdownRight;
-        const withLabel = pillRight >= thresholdWithLabel;
-        // If met truncation, the next pills will go outside of dropdown width and next calculations is not needed.
-        if (base || withLabel) {
-          firstTruncationFound = true;
-          if (ndx === 0)
-            return { base: false, withLabel: false };
-        }
-        return { base, withLabel };
-      });
-      const isPillsTruncated = truncationData.some(d => d.base);
-      if (!isPillsTruncated) {
-        this.activePillsTruncationState = truncationData.map(d => d.base);
-        return;
-      }
-      this.activePillsTruncationState = truncationData.map(d => d.withLabel);
-      // Adjust width for "+n more" positioning (single-line mode only)
-      const visibleCount = truncationData.filter(d => !d.withLabel).length;
-      const visiblePills = pillsElements.slice(0, visibleCount);
-      const totalWidth = visiblePills.reduce((acc, pill) => acc + pill.getBoundingClientRect().width, 0) +
-        Math.max(0, visibleCount - 1) * PILL_MARGIN;
-      this.headerWrapperRef.style.setProperty('--pills-wrapper-width', `${totalWidth}px`);
-    };
-    this.handleShowMoreLessClick = () => {
-      this.isShowMore = !this.isShowMore;
-      this.setFocus();
-    };
-    /**
-     * Accessibility Methods
-     */
-    this.getVisibleSource = () => {
-      if (this.loading)
-        return;
-      const search = !!this.searchText.trim().length;
-      if (!search && this.componentSuggestions.length)
-        return 'suggestions';
-      return 'list';
-    };
-    this.isListItemVisible = (item) => !item.hidden && !item.disabled;
-    this.clampListNdx = (ndx) => {
-      if (ndx == null)
-        return null;
-      const n = this.internalList.length ?? 0;
-      if (!n)
-        return null;
-      if (ndx < 0)
-        return null;
-      if (ndx >= n)
-        return n - 1;
-      return ndx;
-    };
-    this.findNextActiveNdx = (from, step, source) => {
-      const list = source === 'list' ? this.internalList : this.componentSuggestions;
-      const n = list.length;
-      if (!n)
-        return null;
-      let i = from == null ? (step === 1 ? 0 : n - 1) : from + step;
-      while (i >= 0 && i < n) {
-        const item = list[i];
-        if (item && !item.hidden && !item.disabled)
-          return i;
-        i += step;
-      }
-      return from;
-    };
-    this.setActiveClass = (source, prev, next) => {
-      const arr = source === 'list' ? this.listItemsRefs : this.suggestionsItemsRefs;
-      if (prev != null && arr[prev]) {
-        arr[prev].classList.remove('tab-focus');
-        arr[prev].removeAttribute('aria-selected');
-      }
-      if (next != null && arr[next]) {
-        arr[next].classList.add('tab-focus');
-        arr[next].setAttribute('aria-selected', 'true');
-        arr[next].scrollIntoView({ block: 'nearest' });
-      }
-    };
-    this.clearActive = () => {
-      if (this.activeListNdx != null)
-        this.listItemsRefs[this.activeListNdx]?.classList.remove('tab-focus');
-      if (this.activeSuggestionNdx != null)
-        this.suggestionsItemsRefs[this.activeSuggestionNdx]?.classList.remove('tab-focus');
-      this.activeListNdx = null;
-      this.activeSuggestionNdx = null;
-    };
-    /**
-     * CSS Classes Methods
-     */
     this.hostCssClasses = () => ({
       'wpp-autocomplete': true,
+      'wpp-disabled': this.disabled,
     });
-    this.labelCssClasses = () => ({
-      label: true,
+    this.autocompleteWrapperCssClasses = () => ({
+      'autocomplete-wrapper': true,
     });
     this.triggerCssClasses = () => ({
       trigger: true,
@@ -648,214 +355,489 @@ export class WppAutocomplete {
       focused: this.isFocused,
       [`${this.messageType}`]: !!this.messageType,
       [`size-${this.size}`]: !!this.size,
-      single: !this.multiple,
+      'tab-focus': this.focusType === FOCUS_TYPE.TAB,
     });
     this.inputCssClasses = () => ({
-      hidden: !this.isFocused && !!this.value.length,
-      transparent: this.isInputValueTransparent,
+      'autocomplete-input': true,
+      hidden: !this.isFocused && this.value.length > 0,
     });
-    this.dropdownCssClasses = () => ({
-      'wpp-autocomplete-dropdown': true,
-      'wpp-empty-list': !this.visibleOptionsLength && this.searchText.length === 0 && !this.componentSuggestions.length,
+    this.labelCssClasses = () => ({
+      label: true,
+      focused: this.isFocused,
     });
-    this.iconCrossCssClasses = () => ({
-      'wpp-hidden': this.value.length === 0 || this.isDropdownShown || this.isFocused || !this.multiple,
+    this.dropdownListCssClasses = () => ({
+      'dropdown-list': true,
+      hidden: this.searchValue.length !== this.searchValue.trim().length && !this.searchValue.trim().length,
+      'with-create-new': this.showCreateNewElement && this.searchValue !== '' && !this.displayBtnWhenListEmpty && !this.isEmptyOptions,
+      'empty-with-create-new': this.showCreateNewElement && this.searchValue !== '' && this.isEmptyOptions,
     });
+    this.selectedValuesCssClasses = () => ({
+      'selected-values': true,
+      focused: this.isFocused,
+      [`${this.type}`]: true,
+    });
+    this.hostStyle = () => {
+      const style = {
+        '--wpp-list-item-width': '100%',
+      };
+      return style;
+    };
+    this.selectedPillsWrapperCssClasses = () => ({
+      'selected-pills-wrapper': true,
+      overflow: this.isShowMore,
+      'not-empty': !!this.searchValue.length || !!this.value.length || !!this.shownOptionElements?.length,
+    });
+    this.getInputValue = () => this.searchValue;
+    this.renderInputPlaceholder = () => {
+      if (!this.multiple && this.value.length && !this.isFocused) {
+        return (h("wpp-typography-v3-5-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this.getOptionLabel(this.value[0])));
+      }
+      if (this.isFocused && !this.searchValue)
+        return null;
+      if (this.isDropdownShown)
+        return null;
+      if (this.type === 'regular') {
+        const itemsToDisplay = this.value;
+        if (!itemsToDisplay.length)
+          return null;
+        const placeholder = itemsToDisplay.map(this.getOptionLabel).filter(Boolean).join(', ');
+        return (h("wpp-typography-v3-5-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, placeholder));
+      }
+      if (this.type === 'extended' && this.value.length && !this.isFocused) {
+        return (h("wpp-typography-v3-5-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this._locales.selected(this.value.length)));
+      }
+    };
+    this.countHiddenElements = () => {
+      const el = this.host.shadowRoot.querySelector('.input-placeholder');
+      if (!el) {
+        this.hiddenSelectedOptionsNumber = 0;
+        return 0;
+      }
+      const shownItems = this.value;
+      const maxWidth = el.clientWidth;
+      const textStyles = getComputedStyle(el, null).cssText;
+      let displayedElements = 1;
+      let label = this.getOptionLabel(shownItems[0]);
+      for (let i = 1; i < shownItems.length; i++) {
+        label += this.getOptionLabel(shownItems[i]);
+        const currWidth = getTempNodeWidthBasedOnLabel(textStyles, label);
+        if (currWidth > maxWidth) {
+          this.hiddenSelectedOptionsNumber = this.value.length - displayedElements;
+          return;
+        }
+        else {
+          displayedElements++;
+        }
+      }
+      this.hiddenSelectedOptionsNumber = this.value.length - displayedElements;
+    };
+    this.getNearestPowForRowsNumber = () => Math.ceil(Math.log10(this.hiddenSelectedOptionsNumber + 1));
+    this.getDropdownWidth = () => {
+      if (this.dropdownWidth === 'auto') {
+        return this.triggerEl ? `${this.triggerEl.offsetWidth}px` : `${this.host.offsetWidth}px`;
+      }
+      return selectDropdownWidth(this.dropdownWidth, this.triggerEl, this.host);
+    };
+    this.isOptionSelected = (option) => this.value.some(selectedOption => this.getOptionId(selectedOption) === this.getOptionId(option));
+    this.handleSuggestionClick = (event) => {
+      const option = event.detail.value;
+      if (option.disabled)
+        return;
+      if (!this.multiple && this.toggleSingleAutocompleteListItem(event))
+        return;
+      const isAlreadySelected = this.isOptionSelected(option);
+      if (this.multiple) {
+        if (isAlreadySelected) {
+          this.value = this.value.filter(selectedOption => this.getOptionId(selectedOption) !== this.getOptionId(option));
+          this.wppChange.emit({ value: this.value, reason: 'removeOption', name: this.name });
+        }
+        else {
+          if (this.isSelectedItemsLimitReached())
+            return;
+          this.value = [...this.value, option];
+          this.wppChange.emit({ value: this.value, reason: 'selectOption', name: this.name });
+        }
+        this.updateOptions();
+      }
+      else {
+        if (isAlreadySelected)
+          return;
+        this.value = [option];
+        this.wppChange.emit({ value: this.value, reason: 'selectOption', name: this.name });
+        this.hideDropdown();
+        this.blurInput();
+        this.updateOptions();
+      }
+    };
+    this.renderDropdownContent = () => {
+      const isLoading = this.loading || (this.isInfiniteLoading && this.isEmptyOptions);
+      const isEmptyStringEntered = this.searchValue.trim().length === 0;
+      if (isLoading) {
+        return (h("div", { class: "loading-wrapper" }, h("wpp-spinner-v3-5-0", { slot: "left" }), h("wpp-typography-v3-5-0", { type: "s-body", slot: "label" }, this._locales.loading)));
+      }
+      if (isEmptyStringEntered && this.componentSuggestions?.length > 0) {
+        return (h(Fragment, null, h("wpp-typography-v3-5-0", { type: "s-strong", class: "suggestions-heading" }, this.suggestionsTitle), this.componentSuggestions?.map((suggestion, index) => {
+          const { slots, checked, label, ...restProps } = suggestion;
+          const isChecked = checked || this.isItemSelected(suggestion);
+          return (h("wpp-list-item-v3-5-0", { key: this.getOptionId(suggestion), selectable: true, checked: isChecked, value: suggestion, onWppChangeListItem: this.handleSuggestionClick, class: { 'suggestion-item': true, 'last-item': index === this.componentSuggestions?.length - 1 }, ...restProps }, label && h("span", { slot: "label" }, this.getOptionLabel(suggestion)), slots && this.renderSlotsListItem(slots, Boolean(label)).map(slotNode => slotNode)));
+        })));
+      }
+      if (this.isEmptyOptions) {
+        return (h(Fragment, null, h("wpp-list-item-v3-5-0", { class: "nothing-found-wrapper" }, h("wpp-typography-v3-5-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound))));
+      }
+      return (h(Fragment, null, !this.searchValue ? (!this.withPills ? (h("div", { class: this.selectedValuesCssClasses(), part: "selected-values" }, h("slot", { name: "selected-values" }))) : null) : (h("slot", null)), h("div", null, this.isInfiniteLoading && (h("div", { class: "infinite-loader" }, h("wpp-spinner-v3-5-0", null))))));
+    };
+    this.renderSlotsListItem = (slots, isLabelExists) => slots
+      .map(slotElement => {
+      if (!slotElement)
+        return null;
+      const { type, props, slot, children } = slotElement;
+      if (props.slot === 'label' && isLabelExists)
+        return null;
+      if (!type.startsWith(this.LIB_COMPONENTS_PREFIX)) {
+        const { children: text, ...restProps } = props;
+        const Tag = type;
+        return (h(Tag, { ...restProps }, text));
+      }
+      if (!children)
+        return h(transformToVersionedTag(type), { slot, ...props });
+      const slotNode = h(transformToVersionedTag(type), { slot, ...props });
+      slotNode.$children$ = Array.isArray(children)
+        ? this.renderSlotsListItem(Array.from(children), isLabelExists)
+        : this.renderSlotsListItem([children], isLabelExists);
+      return slotNode;
+    })
+      .filter(item => item !== null);
+    this.renderPillComponent = (option, isTooltip, isTransparentTooltip = false, isTransparentPill = false) => {
+      const labelText = option.label ||
+        option.slots?.find((slot) => slot.type === 'span' && slot.props.slot === 'label')?.props.children;
+      if (isTooltip) {
+        return (h("wpp-tooltip-v3-5-0", { class: {
+            'in-dropdown': true,
+            transparent: isTransparentTooltip,
+          }, text: labelText, part: "tooltip", config: { ...this.pillTooltipConfig } }, h("wpp-pill-v3-5-0", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) })));
+      }
+      else {
+        return (h("wpp-pill-v3-5-0", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) }));
+      }
+    };
+    /**
+     * Validate each WppPill if it has truncated text label inside or WppPill got truncated when it's in `showMore` mode
+     */
+    this.validateTruncatedPills = () => {
+      this.selectedPillsWrapperRef?.style.removeProperty('width');
+      // remove transparent class for a case when we have truncated WppPill and need to check which elements are not visible
+      this.selectedPillsWrapperRef
+        ?.querySelectorAll('.wpp-pill.transparent')
+        .forEach(el => el.classList.remove('transparent'));
+      // Need to toggle class for re-calculation which elements are not visible
+      if (!this.isShowMore) {
+        this.selectedPillsWrapperRef?.classList.toggle('overflow');
+        this.headerWrapperRef?.classList.toggle('visible');
+      }
+      const pillsWrapperElement = this.host?.shadowRoot?.querySelector('.selected-pills-wrapper');
+      const headerPillsWrapperElement = this.host?.shadowRoot?.querySelector('.header-wrapper');
+      const showMoreElement = this.host?.shadowRoot?.querySelector('.show-more-action');
+      if (!pillsWrapperElement || !showMoreElement || !headerPillsWrapperElement)
+        return;
+      const pillsWrapperRight = headerPillsWrapperElement.getBoundingClientRect().right;
+      const pillWrapperWithLabel = pillsWrapperRight - showMoreElement.getBoundingClientRect().width;
+      const pillsElements = Array.from(pillsWrapperElement.querySelectorAll(transformToVersionedTag('wpp-pill')));
+      const activePillsTruncationStateTmp = [];
+      const activePillsTruncationStateWithMoreLabelTmp = [];
+      const activePillsTruncationLabelStateTmp = [];
+      if (!pillsElements || !pillsElements.length)
+        return;
+      pillsElements.forEach((pillElement, ndx) => {
+        const pillElementRect = pillElement.getBoundingClientRect();
+        const labelEl = pillElement.shadowRoot?.querySelector('.label');
+        // Check right corner of .selected-pills-wrapper and each .wpp-pill
+        activePillsTruncationStateTmp.push(pillElementRect.right > pillsWrapperRight);
+        // first item must be `false`, because it can't be truncated by `+n more` label
+        activePillsTruncationStateWithMoreLabelTmp.push(ndx === 0 ? false : pillElementRect.right > pillWrapperWithLabel);
+        if (!labelEl) {
+          activePillsTruncationLabelStateTmp.push(false);
+          return;
+        }
+        // Check if WppPill .label has text truncation
+        activePillsTruncationLabelStateTmp.push(labelEl.scrollWidth > labelEl.clientWidth);
+      });
+      const isPillsTruncated = activePillsTruncationStateTmp.includes(true);
+      // If at least one WppPill got truncated, we need to include `+n more` in truncated list items
+      this.activePillsTruncationState = isPillsTruncated
+        ? activePillsTruncationStateWithMoreLabelTmp
+        : activePillsTruncationStateTmp;
+      this.activePillsTruncationLabelState = activePillsTruncationLabelStateTmp;
+      // Need to toggle class for re-calculation which elements are not visible (revert changes)
+      if (!this.isShowMore) {
+        this.selectedPillsWrapperRef?.classList.toggle('overflow');
+        this.headerWrapperRef?.classList.toggle('visible');
+        if (!this.selectedPillsWrapperRef)
+          return;
+        // If we have situation when after removing WppPill we have one line, we need to toggle isShowMore (reset the value)
+        if (Number.parseFloat(window.getComputedStyle(this.selectedPillsWrapperRef).height) ===
+          this.selectedPillsWrapperRef?.children[0].getBoundingClientRect().height)
+          this.handleShowMoreLessClick();
+      }
+      // Need to adjust width of selectedPillsWrapperRef to adjust placement for a `+n more` CTA
+      if (this.isShowMore && isPillsTruncated) {
+        const visiblePills = pillsElements.slice(0, activePillsTruncationStateWithMoreLabelTmp.filter(x => !x).length);
+        let visiblePillsWidth = visiblePills.reduce((acc, pill) => acc + pill.getBoundingClientRect().width, 0);
+        if (visiblePills.length > 1)
+          visiblePillsWidth += (visiblePills.length - 1) * PILL_MARGIN;
+        // Set width eq to all visible WppPills and N-1 margins
+        this.selectedPillsWrapperRef?.style.setProperty('width', `${visiblePillsWidth}px`);
+      }
+    };
+    // Render Show More/Show Less button only in cases when we have truncated WppPill (not .label inside)
+    this.showMoreLessRender = (label) => (h("wpp-action-button-v3-5-0", { "data-testid": "wpp-autocomplete-show-btn", class: "nowrap", variant: "secondary", onClick: this.handleShowMoreLessClick }, label));
+    this.handleShowMoreLessClick = () => {
+      this.isShowMore = !this.isShowMore;
+    };
     this.isFocused = false;
-    this.isDropdownShown = false;
+    this.searchValue = '';
+    this.isEmptyOptions = true;
     this.isInfiniteLoading = false;
-    this.internalList = undefined;
-    this.placeholderText = undefined;
-    this.searchText = '';
-    this.visibleOptionsLength = 0;
-    this.selectedOptions = [];
-    this.extendedSelectedValues = [];
-    this.hiddenSelectedOptionsNumber = 0;
-    this.hiddenCountElWidth = 0;
-    this.activePillsTruncationState = [];
-    this.isShowMore = true;
-    this.componentSuggestions = [];
-    this.activeNdx = -1;
-    this.activeSourceList = 'list';
     this.focusType = undefined;
-    this.isInputValueTransparent = false;
-    this.labelConfig = undefined;
+    this.hiddenSelectedOptionsNumber = 0;
+    this.isShowMore = true;
+    this.activePillsTruncationState = [];
+    this.activePillsTruncationLabelState = [];
+    this.suggestionListTruncationState = [];
+    this.componentSuggestions = [];
+    this.lastSelectedElement = null;
+    this.isInComponent = false;
     this.name = undefined;
-    this.autoFocus = false;
-    this.disabled = false;
-    this.required = false;
     this.loading = false;
+    this.disabled = false;
+    this.autoFocus = false;
     this.infinite = false;
+    this.suggestionsTitle = 'Suggestions';
+    this.suggestions = [];
     this.infiniteLastPage = true;
-    this.loadMore = undefined;
-    this.labelTooltipConfig = {};
+    this.limitSelectedItems = 0;
     this.placeholder = undefined;
-    this.size = 'm';
-    this.multiple = false;
-    this.type = 'regular';
+    this.value = [];
+    this.getOptionId = item => item.id;
+    this.getOptionLabel = item => item.label;
+    this.loadMore = undefined;
+    this.required = false;
     this.message = undefined;
     this.messageType = undefined;
     this.maxMessageLength = undefined;
-    this.simpleSearch = false;
-    this.persistentSearch = false;
-    this.showCreateNewElement = false;
-    this.displayBtnWhenListEmpty = true;
     this.dropdownConfig = {};
+    this.type = 'regular';
+    this.size = 'm';
+    this.locales = {};
+    this.labelTooltipConfig = {
+      popperOptions: { strategy: 'fixed' },
+    };
     this.pillTooltipConfig = {
       popperOptions: { strategy: 'fixed' },
       placement: 'right',
     };
+    this.labelConfig = undefined;
+    this.multiple = false;
+    this.showCreateNewElement = false;
+    this.displayBtnWhenListEmpty = true;
+    this.simpleSearch = false;
+    this.persistentSearch = false;
     this.dropdownWidth = 'auto';
-    this.list = [];
-    this.suggestions = [];
-    this.value = [];
-    this.limitSelectedItems = 0;
-    this.locales = {};
-    this.getItemKey = undefined;
-    this.ariaProps = {};
   }
-  onValueChange(nextValue) {
-    if (this.limitSelectedItems > 0 && nextValue.length > this.limitSelectedItems) {
-      const slicedValue = nextValue.slice(0, this.limitSelectedItems);
-      if (!isEqual(this.value, slicedValue)) {
-        this.value = slicedValue;
-        this.wppChange.emit({
-          value: this.value,
-          selectedOptions: this.selectedOptions.slice(0, this.limitSelectedItems),
-          reason: 'removeOption',
-          name: this.name,
-        });
-        return;
-      }
+  handleOptionToggle(event) {
+    if (!this.multiple && this.toggleSingleAutocompleteListItem(event))
+      return;
+    const isCurrValueAlreadySelected = this.value.find(option => this.getOptionId(option) === this.getOptionId(event.detail.value));
+    if (this.isSelectedItemsLimitReached() && !isCurrValueAlreadySelected) {
+      const listItem = event.target;
+      listItem.checked = false;
+      return;
     }
-    if (this.isSelectedItemsLimitReached(nextValue) && this.isFocused) {
-      this.handleBlur(undefined, { force: true });
-    }
-    this.checkListAgainstValue();
-  }
-  onSearchTextChange(searchText) {
-    this.clearActive();
-    const trimmed = searchText.trim();
-    const query = trimmed.toLowerCase();
-    let countVisibleOptions = searchText.length === 0 ? 0 : this.simpleSearch ? 0 : this.internalList.length;
-    this.wppSearchValueChange.emit(trimmed);
-    const next = this.internalList?.map(item => {
-      const labelStr = (item.label ?? (typeof item.value === 'string' ? item.value : '')).toString();
-      const match = query !== '' ? labelStr.toLowerCase().includes(query) : !this.simpleSearch;
-      if (this.simpleSearch)
-        countVisibleOptions += match ? 1 : 0;
-      return {
-        ...item,
-        hidden: this.simpleSearch ? !match : searchText.length === 0,
-        highlight: trimmed,
-      };
+    this.value = event.detail.checked
+      ? [...(this.multiple ? this.value : []), event.detail.value]
+      : this.value.filter(option => this.getOptionId(option) !== this.getOptionId(event.detail.value));
+    this.wppChange.emit({
+      value: this.value,
+      reason: event.detail.checked ? 'selectOption' : 'removeOption',
+      name: this.name,
     });
-    this.visibleOptionsLength = countVisibleOptions;
-    if (isEqual(next, this.internalList))
-      return;
-    this.internalList = next;
-    if (this.isFocused)
-      this.showDropdown();
-  }
-  onListChange(nextList) {
-    const trimmedSearch = this.searchText.trim();
-    const normalized = (nextList ?? []).map(item => ({
-      ...item,
-      hidden: this.simpleSearch || trimmedSearch.length === 0,
-      checked: isSelected(this.value, item, this.getItemKey),
-      highlight: trimmedSearch,
-    }));
-    this.handleListChange(normalized);
-  }
-  onPlaceholderTextChange() {
-    if (this.type !== 'regular')
-      return;
-    this.countHiddenElements();
-  }
-  onShowMoreChange(isShowMore) {
-    if (isShowMore) {
-      setTimeout(this.validateTruncatedPills, 0);
-    }
-    else {
-      this.selectedPillRefs?.forEach(el => el?.classList.remove('transparent'));
-    }
-  }
-  onExtendedSelectedValuesChange() {
-    this.updatePlaceholderText();
-  }
-  onSuggestionsChange(nextSuggestions) {
-    if (this.searchText !== '')
-      return;
-    this.componentSuggestions = (nextSuggestions ?? []).map(({ checked: _ignore, ...rest }) => ({
-      ...rest,
-      hidden: false,
-    }));
-    this.handleListChange();
-    if (this.isFocused)
-      this.showDropdown();
   }
   onLoadingChange(loading) {
-    if (!loading || !this.isInfiniteLoading)
+    if (loading) {
+      this.scrollOptionsToTop();
+      if (this.isInfiniteLoading) {
+        this.isInfiniteLoading = false;
+        if (this.infiniteLoadingPromise) {
+          this.infiniteLoadingPromise.cancelled = true;
+        }
+      }
+    }
+    else {
+      this.addHandleOptionsChangeTimer(true);
+    }
+  }
+  onNextValueChange(newValue) {
+    if (newValue.length && this.withPills) {
+      requestAnimationFrame(this.validateTruncatedPills);
+    }
+    if (!newValue.length && this.isDropdownShown && !this.componentSuggestions.length && !this.searchValue) {
+      this.hideDropdown();
+    }
+    if (this.isSelectedItemsLimitReached()) {
+      this.hideDropdown();
+      this.blurInput();
+      this.searchValue = '';
+    }
+    if (!this.multiple) {
+      this.hideDropdown();
+      this.blurInput();
+    }
+  }
+  onSearchValueChange(initSearchValue) {
+    const searchValue = initSearchValue.trim();
+    if (!this.hasSimpleSearch()) {
+      this.wppSearchValueChange.emit(searchValue);
+      this.addHandleOptionsChangeTimer(true);
       return;
-    this.isInfiniteLoading = false;
-    if (!this.infiniteLoadingPromise)
+    }
+    if (!searchValue) {
+      if (!(this.componentSuggestions?.length > 0)) {
+        this.optionElements?.forEach(option => {
+          option.hidden = true;
+        });
+      }
+      this.shownOptionElements = [];
+      this.isEmptyOptions = false;
+      this.hideDropdown();
+      return [];
+    }
+    this.updateOptions();
+    this.wppSearchValueChange.emit(searchValue);
+  }
+  updateDropdownConfig(newConfig, oldConfig) {
+    if (!isEqual(newConfig, oldConfig)) {
+      this.dropdownConfig = newConfig;
+      this.tippyInstance?.setProps(newConfig);
+    }
+  }
+  onShowMoreChange(isShowMore) {
+    isShowMore
+      ? this.selectedPillsWrapperRef?.classList.add('overflow')
+      : this.selectedPillsWrapperRef?.classList.remove('overflow');
+    requestAnimationFrame(this.validateTruncatedPills);
+  }
+  onUpdateSuggestions() {
+    if (this.searchValue !== '')
       return;
-    this.infiniteLoadingPromise.cancelled = true;
+    this.checkSuggestions();
+    this.updateOptions();
+  }
+  updateIsInComponent(value) {
+    if (!value)
+      this.handleBlur();
+  }
+  onUpdateLocales(newLocales) {
+    this._locales = { ...this._locales, ...newLocales };
   }
   /**
    * Sets focus on native input
    */
-  async setFocus(isOutlined) {
-    if (!this.isFocused)
-      this.isFocused = true;
-    requestAnimationFrame(() => {
-      this.inputRef?.setFocus(isOutlined);
-      this.handleFocus();
-    });
+  async setFocus() {
+    this.inputEl?.focus();
   }
   componentWillLoad() {
+    this._locales = { ...this._locales, ...this.locales };
+    this.withPills = this.type === 'regular' && this.multiple;
     if (this.limitSelectedItems > 0 && !this.multiple) {
       throw new Error('There could be only one selected item in single mode, otherwise, use multiple mode.');
     }
-    this._locales = { ...this._locales, ...this.locales };
-    this.withPills = this.type === 'regular' && this.multiple;
-    const normalized = (this.list ?? []).map(item => ({
-      ...item,
-      hidden: this.simpleSearch || this.searchText.length === 0,
-      checked: isSelected(this.value, item, this.getItemKey),
-    }));
-    this.componentSuggestions = (this.suggestions ?? []).map(({ checked: _ignore, ...rest }) => ({
-      ...rest,
-      hidden: false,
-    }));
-    this.handleListChange(normalized);
+    this.optionElements = this.getOptionElements();
+    if (!this.multiple && this.value.length > 0) {
+      this.lastSelectedElement = this.optionElements.filter((el) => el.value?.id === this.value[0]?.id)[0];
+    }
+    this.updateOptions();
   }
   componentDidLoad() {
+    // Watches the size of values container, which changes when
+    // autocomplete is focused and `limitLines` prop is set
+    this.valueResizeObserver();
+    this.mutationObserver = new MutationObserver(() => {
+      if (!this.loading && !this.isInfiniteLoading) {
+        this.addHandleOptionsChangeTimer();
+      }
+    });
+    this.mutationObserver.observe(this.host, { childList: true, subtree: true });
     this.createTippyInstance();
-    if (this.type === 'regular')
-      this.setupResizeObserver();
-    this.checkListAgainstValue();
-    if (this.autoFocus)
-      this.setFocus(true);
+    autoFocusElement(this.autoFocus, this.inputEl);
+    this.checkSuggestions();
+    document.addEventListener('click', this.handleClickOutside.bind(this));
+  }
+  disconnectedCallback() {
+    if (this.valuesResizeObserver) {
+      this.valuesResizeObserver.disconnect();
+    }
+    if (this.mutationObserver) {
+      this.mutationObserver.disconnect();
+    }
+    this.tippyInstance?.destroy();
+    document.removeEventListener('click', this.handleClickOutside);
   }
   connectedCallback() {
+    this.valueResizeObserver();
     if (this.tippyInstance?.state.isDestroyed) {
       this.createTippyInstance();
     }
   }
-  disconnectedCallback() {
-    this.tippyInstance?.destroy();
-    this.resizeObserver?.disconnect();
+  handleClickOutside(event) {
+    if (!isEventTargetContained(this.host, event) && this.isInComponent)
+      this.isInComponent = false;
+  }
+  renderSelectedOptions() {
+    if (!this.withPills)
+      return;
+    if (!this.value.length)
+      return;
+    /**
+     * When isShowMore is `true`:
+     * - Checks if child elements (WppPill/WppTooltip) have text truncation:
+     *   If truncated, need to add `transparent` class to WppPill/WppTooltip
+     * When isShowMore is `false`:
+     * - Checks if child elements (WppPill) have text truncation:
+     *    - If `true` wrap WppPill with WppTooltip
+     *    - If `false` render WppPill
+     */
+    const isNeedDivider = (!!this.value.length &&
+      this.searchValue !== '' &&
+      (!!this.componentSuggestions?.length ||
+        !!this.shownOptionElements?.length ||
+        !!this.shownOptionElements?.length)) ||
+      this.loading ||
+      this.isInfiniteLoading;
+    return (h(Fragment, null, this.value.length > 0 && (h("div", { class: {
+        'header-wrapper': true,
+        visible: this.activePillsTruncationState.includes(true) && this.isShowMore,
+      }, ref: ref => (this.headerWrapperRef = ref) }, h("div", { "data-testid": "wpp-autocomplete-selected-pills-wrapper", class: this.selectedPillsWrapperCssClasses(), ref: ref => (this.selectedPillsWrapperRef = ref) }, this.value.map((option, ndx) => {
+      if (this.isShowMore) {
+        const isHideElement = this.activePillsTruncationState[ndx];
+        return this.activePillsTruncationLabelState[ndx]
+          ? this.renderPillComponent(option, true, isHideElement)
+          : this.renderPillComponent(option, false, false, isHideElement);
+      }
+      else {
+        return this.activePillsTruncationLabelState[ndx]
+          ? this.renderPillComponent(option, true)
+          : this.renderPillComponent(option, false);
+      }
+    })), h("div", { class: "show-more-action" }, this.showMoreLessRender(`+${this.activePillsTruncationState.filter(x => x).length} ${this._locales.showMore}`)))), !this.isShowMore && h("div", { class: "show-less-action" }, this.showMoreLessRender(this._locales.showLess)), isNeedDivider && h("wpp-divider-v3-5-0", { class: "nothing-found-divider" })));
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onBlur: this.handleBlur, onKeyUp: this.onKeyUp, exportparts: "input, dropdown, trigger, label" }, this.labelConfig?.text && (h("wpp-label-v4-0-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: this.handleTriggerClick })), h("div", { ref: ref => (this.triggerRef = ref), tabindex: -1, class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, this.renderPlaceholderText(), h("wpp-input-v4-0-0", { ref: ref => (this.inputRef = ref), part: "input", type: "text", role: "combobox", "aria-autocomplete": "list", "aria-expanded": this.isDropdownShown.toString(), "aria-controls": `${this.name}-listbox`, autocomplete: "off", class: this.inputCssClasses(), id: this.name, name: this.name, value: this.searchText, onWppChange: this.handleSearch, disabled: this.disabled, required: this.required, placeholder: this.isFocused || this.isDropdownShown || this.value.length > 0 || this.searchText.trim().length > 0
-        ? undefined
-        : this.placeholder, onInput: this.handleInput, onFocus: this.handleFocus, onKeyDown: this.onKeyDown, size: this.size, withCrossIcon: false, ariaProps: {
-        activedescendant: true,
-      } }), this.multiple && (h("wpp-icon-cross-v4-0-0", { class: this.iconCrossCssClasses(), role: "button", "aria-label": this.multiple ? this._locales.clearMultiple : this._locales.clearSingle, tabindex: this.value.length > 0 && this.multiple ? 0 : -1, onClick: this.handleClearClick, onFocus: this.handleCrossIconFocus, onKeyDown: this.handleCrossIconKeyDown }))), h("div", { ref: ref => (this.dropdownRef = ref), class: this.dropdownCssClasses(), part: "dropdown" }, this.isDropdownShown ? (h(Fragment, null, this.type === 'regular' && this.multiple ? this.renderDropdownPills() : null, h("div", { class: "wpp-autocomplete-dropdown-list", onMouseDown: e => e.preventDefault(), onScroll: this.handleOptionsScroll, id: `${this.name}-listbox`, role: "listbox", "aria-label": this.ariaProps?.label, "aria-busy": this.isInfiniteLoading || this.loading }, this.renderDropdownList()), this.renderCreateNewElement())) : null), !!this.message && (h("wpp-inline-message-v4-0-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType })), this.type === 'extended' && this.multiple ? this.renderExtendedSelectedValues() : null));
+    const style = { '--custom-dropdown-width': this.getDropdownWidth() };
+    return (h(Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, options, selected-values" }, h("div", { class: this.autocompleteWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (h("wpp-label-v3-5-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.renderInputPlaceholder(), this.hiddenSelectedOptionsNumber > 0 && !this.isDropdownShown && (h("div", { class: "hidden-count", style: { '--hidden-number': this.getNearestPowForRowsNumber() + '' } }, h("wpp-typography-v3-5-0", { type: "s-body" }, ", + ", this.hiddenSelectedOptionsNumber))), h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, tabIndex: this.disabled ? -1 : 0, title: "" })), h("div", { class: "trigger-actions" }, this.hasClearButton() && h("wpp-icon-cross-v3-5-0", { onClick: this.handleClearClick }))), !!this.message && (h("wpp-inline-message-v3-5-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderSelectedOptions(), this.renderDropdownContent(), this.showCreateNewElement &&
+      this.searchValue !== '' &&
+      ((this.displayBtnWhenListEmpty && this.isEmptyOptions) || !this.displayBtnWhenListEmpty) && (h("div", { class: "actions" }, h("wpp-divider-v3-5-0", { class: "nothing-found-divider" }), h("div", { class: "actions-container" }, h("wpp-list-item-v3-5-0", { onClick: this.handleCreateNewOptionClick }, h("wpp-typography-v3-5-0", { type: "s-strong", class: "create-new-option", slot: "label" }, this._locales.createNewElement))))))), this.type === 'extended' && this.multiple ? h("slot", { name: "selected-values" }) : null));
   }
   static get is() { return "wpp-autocomplete"; }
-  static get registryIs() { return "wpp-autocomplete-v4-0-0"; }
+  static get registryIs() { return "wpp-autocomplete-v3-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -869,27 +851,6 @@ export class WppAutocomplete {
   }
   static get properties() {
     return {
-      "labelConfig": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "LabelConfig",
-          "resolved": "LabelConfig | undefined",
-          "references": {
-            "LabelConfig": {
-              "location": "import",
-              "path": "../wpp-label/types",
-              "id": "src/components/wpp-label/types.ts::LabelConfig"
-            }
-          }
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": "Indicates label config"
-        }
-      },
       "name": {
         "type": "string",
         "mutable": false,
@@ -907,7 +868,7 @@ export class WppAutocomplete {
         "attribute": "name",
         "reflect": false
       },
-      "autoFocus": {
+      "loading": {
         "type": "boolean",
         "mutable": false,
         "complexType": {
@@ -919,10 +880,10 @@ export class WppAutocomplete {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "If `true`, the component should be focused on page load"
+          "text": "If the component is loading."
         },
-        "attribute": "auto-focus",
-        "reflect": false,
+        "attribute": "loading",
+        "reflect": true,
         "defaultValue": "false"
       },
       "disabled": {
@@ -943,7 +904,7 @@ export class WppAutocomplete {
         "reflect": true,
         "defaultValue": "false"
       },
-      "required": {
+      "autoFocus": {
         "type": "boolean",
         "mutable": false,
         "complexType": {
@@ -955,28 +916,10 @@ export class WppAutocomplete {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "If `true`, the input is required"
+          "text": "If `true`, the component should be focused on page load"
         },
-        "attribute": "required",
-        "reflect": true,
-        "defaultValue": "false"
-      },
-      "loading": {
-        "type": "boolean",
-        "mutable": false,
-        "complexType": {
-          "original": "boolean",
-          "resolved": "boolean",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "If the component is loading."
-        },
-        "attribute": "loading",
-        "reflect": true,
+        "attribute": "auto-focus",
+        "reflect": false,
         "defaultValue": "false"
       },
       "infinite": {
@@ -997,6 +940,51 @@ export class WppAutocomplete {
         "reflect": false,
         "defaultValue": "false"
       },
+      "suggestionsTitle": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Title displayed above the suggestions list when the input is focused or clicked."
+        },
+        "attribute": "suggestions-title",
+        "reflect": false,
+        "defaultValue": "'Suggestions'"
+      },
+      "suggestions": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "AutocompleteOption[] | AutocompleteExtendedOption[]",
+          "resolved": "AutocompleteExtendedOption[] | AutocompleteOption[]",
+          "references": {
+            "AutocompleteOption": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-autocomplete/types.ts::AutocompleteOption"
+            },
+            "AutocompleteExtendedOption": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-autocomplete/types.ts::AutocompleteExtendedOption"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "List of suggestion options to display when the input is focused or clicked."
+        },
+        "defaultValue": "[]"
+      },
       "infiniteLastPage": {
         "type": "boolean",
         "mutable": false,
@@ -1014,6 +1002,117 @@ export class WppAutocomplete {
         "attribute": "infinite-last-page",
         "reflect": false,
         "defaultValue": "true"
+      },
+      "limitSelectedItems": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Maximum number of options that can be selected. Allowed only in case when 'multiple' prop is set to 'true'.\nZero or fewer means there is no limit on number of selected items."
+        },
+        "attribute": "limit-selected-items",
+        "reflect": false,
+        "defaultValue": "0"
+      },
+      "placeholder": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Defines the input placeholder."
+        },
+        "attribute": "placeholder",
+        "reflect": false
+      },
+      "value": {
+        "type": "unknown",
+        "mutable": true,
+        "complexType": {
+          "original": "AutocompleteOption[]",
+          "resolved": "AutocompleteOption[]",
+          "references": {
+            "AutocompleteOption": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-autocomplete/types.ts::AutocompleteOption"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the selected items."
+        },
+        "defaultValue": "[]"
+      },
+      "getOptionId": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "GetOptionIdHandler",
+          "resolved": "(item: AutocompleteOption) => AutocompleteOptionId",
+          "references": {
+            "GetOptionIdHandler": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-autocomplete/types.ts::GetOptionIdHandler"
+            },
+            "AutocompleteDefaultOption": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-autocomplete/types.ts::AutocompleteDefaultOption"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Helper that gets ID values from the autocomplete options."
+        },
+        "defaultValue": "item => (item as AutocompleteDefaultOption).id"
+      },
+      "getOptionLabel": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "GetOptionLabelHandler",
+          "resolved": "(item: AutocompleteOption) => string",
+          "references": {
+            "GetOptionLabelHandler": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-autocomplete/types.ts::GetOptionLabelHandler"
+            },
+            "AutocompleteDefaultOption": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-autocomplete/types.ts::AutocompleteDefaultOption"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Helper that gets a label from the autocomplete options."
+        },
+        "defaultValue": "item => (item as AutocompleteDefaultOption).label"
       },
       "loadMore": {
         "type": "unknown",
@@ -1036,64 +1135,7 @@ export class WppAutocomplete {
           "text": "Helper that requests to load more options on infinite scroll.\nThis request is considered done when the returned `Promise` is settled.\nThis prop is required when `infinite` is set to `true`."
         }
       },
-      "labelTooltipConfig": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "DropdownConfig",
-          "resolved": "DropdownConfig",
-          "references": {
-            "DropdownConfig": {
-              "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::DropdownConfig"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Tooltip config for label, under the hood tooltip using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
-        },
-        "defaultValue": "{}"
-      },
-      "placeholder": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string | undefined",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": "Defines the input placeholder."
-        },
-        "attribute": "placeholder",
-        "reflect": false
-      },
-      "size": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "'m' | 's'",
-          "resolved": "\"m\" | \"s\"",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the input size."
-        },
-        "attribute": "size",
-        "reflect": false,
-        "defaultValue": "'m'"
-      },
-      "multiple": {
+      "required": {
         "type": "boolean",
         "mutable": false,
         "complexType": {
@@ -1105,35 +1147,11 @@ export class WppAutocomplete {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "If `true`, the autocomplete will give the possibility to select multiple options"
+          "text": "If `true`, the input is required"
         },
-        "attribute": "multiple",
-        "reflect": false,
+        "attribute": "required",
+        "reflect": true,
         "defaultValue": "false"
-      },
-      "type": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "AutocompleteTypes",
-          "resolved": "\"extended\" | \"regular\"",
-          "references": {
-            "AutocompleteTypes": {
-              "location": "import",
-              "path": "./types",
-              "id": "src/components/wpp-autocomplete/types.ts::AutocompleteTypes"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the autocomplete type."
-        },
-        "attribute": "type",
-        "reflect": false,
-        "defaultValue": "'regular'"
       },
       "message": {
         "type": "string",
@@ -1192,25 +1210,162 @@ export class WppAutocomplete {
         "attribute": "max-message-length",
         "reflect": false
       },
-      "simpleSearch": {
-        "type": "boolean",
-        "mutable": false,
+      "dropdownConfig": {
+        "type": "unknown",
+        "mutable": true,
         "complexType": {
-          "original": "boolean",
-          "resolved": "boolean",
-          "references": {}
+          "original": "DropdownConfig",
+          "resolved": "DropdownConfig",
+          "references": {
+            "DropdownConfig": {
+              "location": "import",
+              "path": "../../types/common",
+              "id": "src/types/common.ts::DropdownConfig"
+            }
+          }
         },
         "required": false,
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "If `true`, autocomplete automatically filters options on search instead of relying on updates of the slotted options list.\nThis prop shouldn't change after the component is rendered."
+          "text": "Defines the dropdown configuration. Under the hood dropdown using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
         },
-        "attribute": "simple-search",
-        "reflect": false,
-        "defaultValue": "false"
+        "defaultValue": "{}"
       },
-      "persistentSearch": {
+      "type": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "AutocompleteTypes",
+          "resolved": "\"extended\" | \"regular\" | undefined",
+          "references": {
+            "AutocompleteTypes": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-autocomplete/types.ts::AutocompleteTypes"
+            }
+          }
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Defines the autocomplete type."
+        },
+        "attribute": "type",
+        "reflect": false,
+        "defaultValue": "'regular'"
+      },
+      "size": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "'m' | 's'",
+          "resolved": "\"m\" | \"s\"",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the input size."
+        },
+        "attribute": "size",
+        "reflect": false,
+        "defaultValue": "'m'"
+      },
+      "locales": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "Partial<AutocompleteLocales>",
+          "resolved": "{ nothingFound?: string | undefined; beginTyping?: string | undefined; more?: string | undefined; showMore?: string | undefined; showLess?: string | undefined; selected?: ((count: number) => string) | undefined; loading?: string | undefined; createNewElement?: string | undefined; }",
+          "references": {
+            "Partial": {
+              "location": "global",
+              "id": "global::Partial"
+            },
+            "AutocompleteLocales": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-autocomplete/types.ts::AutocompleteLocales"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Indicates locales for autocomplete component"
+        },
+        "defaultValue": "{}"
+      },
+      "labelTooltipConfig": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "DropdownConfig",
+          "resolved": "DropdownConfig",
+          "references": {
+            "DropdownConfig": {
+              "location": "import",
+              "path": "../../types/common",
+              "id": "src/types/common.ts::DropdownConfig"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Tooltip config for label, under the hood tooltip using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
+        },
+        "defaultValue": "{\n    popperOptions: { strategy: 'fixed' },\n  }"
+      },
+      "pillTooltipConfig": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "DropdownConfig",
+          "resolved": "DropdownConfig",
+          "references": {
+            "DropdownConfig": {
+              "location": "import",
+              "path": "../../types/common",
+              "id": "src/types/common.ts::DropdownConfig"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Tooltip config for WppPill's, under the hood tooltip using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
+        },
+        "defaultValue": "{\n    popperOptions: { strategy: 'fixed' },\n    placement: 'right',\n  }"
+      },
+      "labelConfig": {
+        "type": "unknown",
+        "mutable": true,
+        "complexType": {
+          "original": "AutocompleteLabelConfig",
+          "resolved": "LabelConfig | undefined",
+          "references": {
+            "AutocompleteLabelConfig": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-autocomplete/types.ts::AutocompleteLabelConfig"
+            }
+          }
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Indicates label config"
+        }
+      },
+      "multiple": {
         "type": "boolean",
         "mutable": false,
         "complexType": {
@@ -1222,9 +1377,9 @@ export class WppAutocomplete {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "If `true`, the search will be persistent and will not be cleared on losing the focus."
+          "text": "If `true`, the autocomplete will give possibility to select multiple options"
         },
-        "attribute": "persistent-search",
+        "attribute": "multiple",
         "reflect": false,
         "defaultValue": "false"
       },
@@ -1264,49 +1419,41 @@ export class WppAutocomplete {
         "reflect": false,
         "defaultValue": "true"
       },
-      "dropdownConfig": {
-        "type": "unknown",
+      "simpleSearch": {
+        "type": "boolean",
         "mutable": false,
         "complexType": {
-          "original": "DropdownConfig",
-          "resolved": "DropdownConfig",
-          "references": {
-            "DropdownConfig": {
-              "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::DropdownConfig"
-            }
-          }
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
         },
         "required": false,
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "Defines the dropdown configuration. Under the hood dropdown using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
+          "text": "If `true`, autocomplete automatically filters options on search instead of relying on updates of the slotted options list.\nThis prop shouldn't change after the component is rendered."
         },
-        "defaultValue": "{}"
+        "attribute": "simple-search",
+        "reflect": false,
+        "defaultValue": "false"
       },
-      "pillTooltipConfig": {
-        "type": "unknown",
+      "persistentSearch": {
+        "type": "boolean",
         "mutable": false,
         "complexType": {
-          "original": "DropdownConfig",
-          "resolved": "DropdownConfig",
-          "references": {
-            "DropdownConfig": {
-              "location": "import",
-              "path": "../../types/common",
-              "id": "src/types/common.ts::DropdownConfig"
-            }
-          }
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
         },
         "required": false,
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "Tooltip config for WppPill's, under the hood tooltip using tippy.js,\nall information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`"
+          "text": "If `true`, the search will be persistent and will not be cleared on losing the focus."
         },
-        "defaultValue": "{\n    popperOptions: { strategy: 'fixed' },\n    placement: 'right',\n  }"
+        "attribute": "persistent-search",
+        "reflect": false,
+        "defaultValue": "false"
       },
       "dropdownWidth": {
         "type": "string",
@@ -1325,182 +1472,24 @@ export class WppAutocomplete {
         "attribute": "dropdown-width",
         "reflect": false,
         "defaultValue": "'auto'"
-      },
-      "list": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "ListItemInterface[]",
-          "resolved": "ListItemInterface[]",
-          "references": {
-            "ListItemInterface": {
-              "location": "import",
-              "path": "../wpp-select/types",
-              "id": "src/components/wpp-select/types.ts::ListItemInterface"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "List of items in the dropdown."
-        },
-        "defaultValue": "[]"
-      },
-      "suggestions": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "ListItemInterface[]",
-          "resolved": "ListItemInterface[] | undefined",
-          "references": {
-            "ListItemInterface": {
-              "location": "import",
-              "path": "../wpp-select/types",
-              "id": "src/components/wpp-select/types.ts::ListItemInterface"
-            }
-          }
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [],
-          "text": "Suggestion list of items in the dropdown."
-        },
-        "defaultValue": "[]"
-      },
-      "value": {
-        "type": "unknown",
-        "mutable": true,
-        "complexType": {
-          "original": "ListValue[]",
-          "resolved": "ListValue[]",
-          "references": {
-            "ListValue": {
-              "location": "import",
-              "path": "../../components",
-              "id": "src/components.d.ts::unknown"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Defines the selected items."
-        },
-        "defaultValue": "[]"
-      },
-      "limitSelectedItems": {
-        "type": "number",
-        "mutable": false,
-        "complexType": {
-          "original": "number",
-          "resolved": "number",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Maximum number of options that can be selected. Allowed only in case when 'multiple' prop is set to 'true'.\nZero or fewer means there is no limit on number of selected items."
-        },
-        "attribute": "limit-selected-items",
-        "reflect": false,
-        "defaultValue": "0"
-      },
-      "locales": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "Partial<AutocompleteLocales>",
-          "resolved": "{ nothingFound?: string | undefined; loading?: string | undefined; selected?: ((count: number) => string) | undefined; showMore?: string | undefined; showLess?: string | undefined; suggestionTitle?: string | undefined; createNewElement?: ((query: string) => string) | undefined; clearMultiple?: string | undefined; clearSingle?: string | undefined; }",
-          "references": {
-            "Partial": {
-              "location": "global",
-              "id": "global::Partial"
-            },
-            "AutocompleteLocales": {
-              "location": "import",
-              "path": "./types",
-              "id": "src/components/wpp-autocomplete/types.ts::AutocompleteLocales"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Indicates locales for autocomplete component"
-        },
-        "defaultValue": "{}"
-      },
-      "getItemKey": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "GetItemKeyType",
-          "resolved": "(value: any) => string | number | undefined",
-          "references": {
-            "GetItemKeyType": {
-              "location": "import",
-              "path": "./types",
-              "id": "src/components/wpp-autocomplete/types.ts::GetItemKeyType"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Helper function to return the key of the list-item in the list.\nShould be used when the value of the list item is an object."
-        }
-      },
-      "ariaProps": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "AriaProps",
-          "resolved": "AriaProps",
-          "references": {
-            "AriaProps": {
-              "location": "import",
-              "path": "../../components",
-              "id": "src/components.d.ts::AriaProps"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Contains the autocomplete `aria-` props."
-        },
-        "defaultValue": "{}"
       }
     };
   }
   static get states() {
     return {
       "isFocused": {},
-      "isDropdownShown": {},
+      "searchValue": {},
+      "isEmptyOptions": {},
       "isInfiniteLoading": {},
-      "internalList": {},
-      "placeholderText": {},
-      "searchText": {},
-      "visibleOptionsLength": {},
-      "selectedOptions": {},
-      "extendedSelectedValues": {},
-      "hiddenSelectedOptionsNumber": {},
-      "hiddenCountElWidth": {},
-      "activePillsTruncationState": {},
-      "isShowMore": {},
-      "componentSuggestions": {},
-      "activeNdx": {},
-      "activeSourceList": {},
       "focusType": {},
-      "isInputValueTransparent": {}
+      "hiddenSelectedOptionsNumber": {},
+      "isShowMore": {},
+      "activePillsTruncationState": {},
+      "activePillsTruncationLabelState": {},
+      "suggestionListTruncationState": {},
+      "componentSuggestions": {},
+      "lastSelectedElement": {},
+      "isInComponent": {}
     };
   }
   static get events() {
@@ -1516,7 +1505,7 @@ export class WppAutocomplete {
         },
         "complexType": {
           "original": "AutocompleteChangeEventDetail",
-          "resolved": "SelectOptionChangeEventDetail & { reason: \"selectOption\"; } & { name?: string | undefined; } | { value: ListValue[]; selectedOptions: ListItemInterface[]; reason: AutocompleteChangeReason; } & { name?: string | undefined; } | { value: null; reason: \"removeOption\"; } & { name?: string | undefined; }",
+          "resolved": "SelectOptionChangeEventDetail & { reason: \"selectOption\"; } & { name?: string | undefined; } | { value: AutocompleteOptionList; reason: AutocompleteChangeReason; } & { name?: string | undefined; } | { value: null; reason: \"removeOption\"; } & { name?: string | undefined; }",
           "references": {
             "AutocompleteChangeEventDetail": {
               "location": "import",
@@ -1596,11 +1585,8 @@ export class WppAutocomplete {
     return {
       "setFocus": {
         "complexType": {
-          "signature": "(isOutlined?: boolean) => Promise<void>",
-          "parameters": [{
-              "tags": [],
-              "text": ""
-            }],
+          "signature": "() => Promise<void>",
+          "parameters": [],
           "references": {
             "Promise": {
               "location": "global",
@@ -1619,29 +1605,38 @@ export class WppAutocomplete {
   static get elementRef() { return "host"; }
   static get watchers() {
     return [{
+        "propName": "loading",
+        "methodName": "onLoadingChange"
+      }, {
         "propName": "value",
-        "methodName": "onValueChange"
+        "methodName": "onNextValueChange"
       }, {
-        "propName": "searchText",
-        "methodName": "onSearchTextChange"
+        "propName": "searchValue",
+        "methodName": "onSearchValueChange"
       }, {
-        "propName": "list",
-        "methodName": "onListChange"
-      }, {
-        "propName": "placeholderText",
-        "methodName": "onPlaceholderTextChange"
+        "propName": "dropdownConfig",
+        "methodName": "updateDropdownConfig"
       }, {
         "propName": "isShowMore",
         "methodName": "onShowMoreChange"
       }, {
-        "propName": "extendedSelectedValues",
-        "methodName": "onExtendedSelectedValuesChange"
-      }, {
         "propName": "suggestions",
-        "methodName": "onSuggestionsChange"
+        "methodName": "onUpdateSuggestions"
       }, {
-        "propName": "loading",
-        "methodName": "onLoadingChange"
+        "propName": "isInComponent",
+        "methodName": "updateIsInComponent"
+      }, {
+        "propName": "locales",
+        "methodName": "onUpdateLocales"
+      }];
+  }
+  static get listeners() {
+    return [{
+        "name": "wppChangeListItem",
+        "method": "handleOptionToggle",
+        "target": undefined,
+        "capture": true,
+        "passive": false
       }];
   }
 }

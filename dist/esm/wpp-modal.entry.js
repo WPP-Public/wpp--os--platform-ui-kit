@@ -1,6 +1,6 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
 import { A as ANIMATION_PROPERTY_NAME, Z as Z_INDEX } from './consts-9fc0a13a.js';
-import { g as getSlotEmptyStates, m as applyBodyStylesIfNeeded } from './utils-cc81a41b.js';
+import { g as getSlotEmptyStates, m as applyBodyStylesIfNeeded } from './utils-3a5af594.js';
 import { W as WrappedSlot } from './WrappedSlot-629d3e4f.js';
 import { M as ModalCloseReason } from './types-9a70ac4e.js';
 
@@ -17,6 +17,7 @@ const WppModal = class {
     this.wppModalOpenComplete = createEvent(this, "wppModalOpenComplete", 7);
     this.wppModalCloseStart = createEvent(this, "wppModalCloseStart", 7);
     this.wppModalCloseComplete = createEvent(this, "wppModalCloseComplete", 7);
+    this.wppModalOpen = createEvent(this, "wppModalOpen", 1);
     this.onOverlayClick = () => {
       if (this.disableOutsideClick)
         return;
@@ -67,6 +68,7 @@ const WppModal = class {
         return;
       if (this.open) {
         this.wppModalOpenComplete.emit();
+        this.wppModalOpen.emit();
         this.focusDialog();
       }
       else {
@@ -168,9 +170,9 @@ const WppModal = class {
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-0-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-0-0", null), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-0-0", null), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v3-5-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v3-5-0", null), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v3-5-0", null), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
   }
-  static get registryIs() { return "wpp-modal-v4-0-0"; }
+  static get registryIs() { return "wpp-modal-v3-5-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "open": ["handleChangeModalStatus"]

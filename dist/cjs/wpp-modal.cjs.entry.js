@@ -4,7 +4,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
 const consts = require('./consts-dba6e6dd.js');
-const utils = require('./utils-ce5c8ac5.js');
+const utils = require('./utils-27884b05.js');
 const WrappedSlot = require('./WrappedSlot-4a4ef805.js');
 const types = require('./types-18fdc89e.js');
 
@@ -21,6 +21,7 @@ const WppModal = class {
     this.wppModalOpenComplete = index.createEvent(this, "wppModalOpenComplete", 7);
     this.wppModalCloseStart = index.createEvent(this, "wppModalCloseStart", 7);
     this.wppModalCloseComplete = index.createEvent(this, "wppModalCloseComplete", 7);
+    this.wppModalOpen = index.createEvent(this, "wppModalOpen", 1);
     this.onOverlayClick = () => {
       if (this.disableOutsideClick)
         return;
@@ -71,6 +72,7 @@ const WppModal = class {
         return;
       if (this.open) {
         this.wppModalOpenComplete.emit();
+        this.wppModalOpen.emit();
         this.focusDialog();
       }
       else {
@@ -172,9 +174,9 @@ const WppModal = class {
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "wrapper, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, index.h("div", { class: "modal-overlay", part: "wrapper" }, index.h("wpp-overlay-v4-0-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), index.h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), index.h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, index.h(WrappedSlot.WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && index.h("wpp-divider-v4-0-0", null), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && index.h("wpp-divider-v4-0-0", null), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), index.h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "wrapper, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString() }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, index.h("div", { class: "modal-overlay", part: "wrapper" }, index.h("wpp-overlay-v3-5-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), index.h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), index.h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, index.h(WrappedSlot.WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && index.h("wpp-divider-v3-5-0", null), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && index.h("wpp-divider-v3-5-0", null), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), index.h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
   }
-  static get registryIs() { return "wpp-modal-v4-0-0"; }
+  static get registryIs() { return "wpp-modal-v3-5-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "open": ["handleChangeModalStatus"]
