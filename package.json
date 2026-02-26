@@ -65,7 +65,7 @@
     "jest-cli": "^27.4.5",
     "lit": "^3.3.1",
     "stencil-inline-svg": "1.1.0",
-    "storybook": "9.0.17"
+    "storybook": "9.1.19"
   },
   "publishConfig": {
     "registry": "https://github.com/WPP-Public/wpp--os--platform-ui-kit"
