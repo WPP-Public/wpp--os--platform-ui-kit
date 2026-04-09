@@ -10,14 +10,14 @@ export default {
   },
 };
 export const Single = (args) => html `
-  <wpp-pill-v3-5-0
+  <wpp-pill-v4-0-0
     label="${args.label}"
     value="${args.value}"
     size="${args.size}"
     checked="${args.checked}"
     maxLength="${args.maxLength}"
     .disabled="${args.disabled}"
-  ></wpp-pill-v3-5-0>
+  ></wpp-pill-v4-0-0>
 `;
 Single.args = {
   disabled: false,
@@ -28,7 +28,7 @@ Single.args = {
   maxLength: 10,
 };
 export const Multiple = (args) => html `
-  <wpp-pill-v3-5-0
+  <wpp-pill-v4-0-0
     label="${args.label}"
     value="${args.value}"
     type="multiple"
@@ -36,7 +36,7 @@ export const Multiple = (args) => html `
     checked="${args.checked}"
     maxLength="${args.maxLength}"
     .disabled="${args.disabled}"
-  ></wpp-pill-v3-5-0>
+  ></wpp-pill-v4-0-0>
 `;
 Multiple.args = {
   disabled: false,
@@ -47,7 +47,7 @@ Multiple.args = {
   maxLength: 10,
 };
 export const Display = (args) => html `
-  <wpp-pill-v3-5-0
+  <wpp-pill-v4-0-0
     label="${args.label}"
     value="${args.value}"
     type="display"
@@ -55,7 +55,7 @@ export const Display = (args) => html `
     removable="${args.removable}"
     maxLength="${args.maxLength}"
     .disabled="${args.disabled}"
-  ></wpp-pill-v3-5-0>
+  ></wpp-pill-v4-0-0>
 `;
 Display.args = {
   disabled: false,
@@ -66,7 +66,7 @@ Display.args = {
   maxLength: 10,
 };
 export const Draggable = (args) => html `
-  <wpp-pill-v3-5-0
+  <wpp-pill-v4-0-0
     label="${args.label}"
     value="${args.value}"
     type="draggable"
@@ -74,7 +74,7 @@ export const Draggable = (args) => html `
     removable="${args.removable}"
     maxLength="${args.maxLength}"
     .disabled="${args.disabled}"
-  ></wpp-pill-v3-5-0>
+  ></wpp-pill-v4-0-0>
 `;
 Draggable.args = {
   disabled: false,

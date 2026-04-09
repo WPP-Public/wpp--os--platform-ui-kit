@@ -50,6 +50,7 @@ export declare class WppPagination {
   private handleItemsPerPageNumberChange;
   private handleSelectedPageChange;
   private getPageRange;
+  private get hasSingleItemPerPageOption();
   private hostCssClasses;
   render(): any;
 }

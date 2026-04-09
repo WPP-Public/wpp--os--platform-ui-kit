@@ -88,9 +88,9 @@ const WppToggle = class {
         ...(this.ariaProps.labelledby ? { 'aria-labelledby': this.ariaProps.labelledby } : {}),
       }
       : {};
-    return (h(Host, { onClick: this.onClick, class: this.hostCssClasses(), exportparts: "label, input" }, h("wpp-label-v3-5-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, htmlFor: inputId, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label", labelId: labelId }, h("input", { type: "checkbox", name: this.name, id: inputId, value: this.value, disabled: this.disabled, checked: this.checked, required: this.required, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), class: "toggle-input", part: "input", ...ariaProps, title: labelText, "aria-checked": this.checked ? 'true' : 'false', "aria-hidden": this.disabled ? 'true' : null, role: "switch", tabIndex: this.disabled ? -1 : 0, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown }))));
+    return (h(Host, { onClick: this.onClick, class: this.hostCssClasses(), exportparts: "label, input" }, h("wpp-label-v4-0-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, htmlFor: inputId, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label", labelId: labelId }, h("input", { type: "checkbox", name: this.name, id: inputId, value: this.value, disabled: this.disabled, checked: this.checked, required: this.required, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), class: "toggle-input", part: "input", ...ariaProps, title: labelText, "aria-checked": this.checked ? 'true' : 'false', "aria-hidden": this.disabled ? 'true' : null, role: "switch", tabIndex: this.disabled ? -1 : 0, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown }))));
   }
-  static get registryIs() { return "wpp-toggle-v3-5-0"; }
+  static get registryIs() { return "wpp-toggle-v4-0-0"; }
   get host() { return getElement(this); }
 };
 WppToggle.style = wppToggleCss;

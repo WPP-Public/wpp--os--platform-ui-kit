@@ -1,53 +1,5 @@
-/**
-  * @prop --wpp-text-area-padding:
-  * @prop --wpp-text-area-border-radius:
-  * @prop --wpp-text-area-height:
-  * @prop --wpp-text-area-label-color:
-  * @prop --wpp-text-area-label-margin:
-  * @prop --wpp-text-area-inline-message-margin:
-  * @prop --wpp-text-area-placeholder-color:
-  * @prop --wpp-text-area-text-color-disabled:
-  * @prop --wpp-textarea-characters-limit-font-weight:
-  * @prop --wpp-text-area-border-radius:
-  * @prop --wpp-text-area-border-radius:
-  * @prop --wpp-text-area-bg-color:
-  * @prop --wpp-text-area-bg-color-hover:
-  * @prop --wpp-text-area-bg-color-active:
-  * @prop --wpp-text-area-bg-color-disabled:
-  * @prop --wpp-text-area-border-color:
-  * @prop --wpp-text-area-border-color-hover:
-  * @prop --wpp-text-area-border-color-active:
-  * @prop --wpp-text-area-border-color-disabled:
-  * @prop --wpp-counter-first-border-color-focus:
-  * @prop --wpp-counter-second-border-color-focus:
-  * @prop --wpp-text-area-border-width:
-  * @prop --wpp-text-area-border-style:
-*/
 :host {
-  --textarea-padding: var(--wpp-text-area-padding, 9px 12px);
-  --textarea-border-radius: var(--wpp-text-area-border-radius, var(--wpp-border-radius-m));
-  --textarea-height: var(--wpp-text-area-border-radius, 106px);
-  --textarea-label-color: var(--wpp-text-area-label-color, var(--wpp-text-color-info));
-  --textarea-characters-limit-label-color: var(--wpp-textarea-characters-limit-label-color, var(--wpp-grey-color-800));
-  --text-area-label-margin: var(--wpp-text-area-label-margin, 0 0 8px 0);
-  --textarea-inline-message-margin: var(--wpp-text-area-inline-message-margin, 4px 0 0 0);
-  --textarea-placeholder-color: var(--wpp-text-area-placeholder-color, var(--wpp-grey-color-700));
-  --textarea-text-color-disabled: var(--wpp-text-area-text-color-disabled, var(--wpp-text-color-disabled));
-  --textarea-characters-limit-font-weight: var(--wpp-textarea-characters-limit-font-weight, 400);
-  --textarea-warning-charecters-limit-color: var(--wpp-text-area-border-radius, var(--wpp-warning-color-500));
-  --textarea-error-charecters-limit-color: var(--wpp-text-area-border-radius, var(--wpp-danger-color-500));
-  --textarea-bg-color: var(--wpp-text-area-bg-color, transparent);
-  --textarea-bg-color-hover: var(--wpp-text-area-bg-color-hover, var(--wpp-grey-color-200));
-  --textarea-bg-color-active: var(--wpp-text-area-bg-color-active, transparent);
-  --textarea-bg-color-disabled: var(--wpp-text-area-bg-color-disabled, var(--wpp-grey-color-100));
-  --textarea-border-color: var(--wpp-text-area-border-color, var(--wpp-grey-color-600));
-  --textarea-border-color-hover: var(--wpp-text-area-border-color-hover, var(--wpp-grey-color-700));
-  --textarea-border-color-active: var(--wpp-text-area-border-color-active, var(--wpp-grey-color-800));
-  --textarea-border-color-disabled: var(--wpp-text-area-border-color-disabled, var(--wpp-grey-color-400));
-  --counter-first-border-color-focus: var(--wpp-counter-first-border-color-focus, var(--wpp-grey-color-000));
-  --counter-second-border-color-focus: var(--wpp-counter-second-border-color-focus, var(--wpp-brand-color));
-  --textarea-border-width: var(--wpp-text-area-border-width, var(--wpp-border-width-s));
-  --textarea-border-style: var(--wpp-text-area-border-style, solid);
+  --wpp-textarea-height: 128px;
 }
 
 :host([disabled]:not([disabled=false]):active) {
@@ -65,21 +17,22 @@
   letter-spacing: var(--wpp-typography-xs-body-letter-spacing, 0);
 }
 :host(.wpp-textarea-wrapper) .label .label-text {
-  color: var(--textarea-label-color);
+  color: var(--wpp-text-color-info);
 }
 :host(.wpp-textarea-wrapper) .label {
-  margin: var(--text-area-label-margin);
+  margin: 0 0 8px 0;
 }
 :host(.wpp-textarea-wrapper) textarea {
   box-sizing: border-box;
-  padding: var(--textarea-padding);
+  padding: 9px 12px;
   overflow-y: auto;
-  background-color: var(--textarea-bg-color);
-  border: var(--textarea-border-width) var(--textarea-border-style) var(--textarea-border-color);
-  border-radius: var(--textarea-border-radius);
+  background-color: transparent;
+  border: var(--wpp-border-width-s) solid var(--wpp-grey-color-600);
+  border-radius: var(--wpp-border-radius-m);
   resize: none;
   outline: none;
-  height: var(--text-area-height-by-rows, var(--textarea-height));
+  height: var(--wpp-textarea-height);
+  word-wrap: break-word;
   scrollbar-width: thin;
   scrollbar-color: var(--wpp-grey-color-400) transparent;
   font-size: var(--wpp-typography-s-body-font-size, 14px);
@@ -89,10 +42,17 @@
   font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
 }
+:host(.wpp-textarea-wrapper) textarea.stretch {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+:host(.wpp-textarea-wrapper) textarea.is-scrollable {
+  overflow-y: auto;
+}
 :host(.wpp-textarea-wrapper) textarea.tab-focus {
   border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--counter-first-border-color-focus), 0 0 0 3px var(--counter-second-border-color-focus);
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
 }
 :host(.wpp-textarea-wrapper) textarea::-webkit-scrollbar {
   width: 4px;
@@ -104,34 +64,34 @@
   box-shadow: inset 0 0 0 2px var(--wpp-grey-color-400);
 }
 :host(.wpp-textarea-wrapper) textarea:hover {
-  background: var(--textarea-bg-color-hover);
-  border: var(--textarea-border-width) var(--textarea-border-style) var(--textarea-border-color-hover);
+  background: var(--wpp-grey-color-200);
+  border: var(--wpp-border-width-s) solid var(--wpp-grey-color-700);
 }
 :host(.wpp-textarea-wrapper) textarea:active {
-  border: var(--textarea-border-width) var(--textarea-border-style) var(--textarea-border-color-active);
+  border: var(--wpp-border-width-s) solid var(--wpp-grey-color-800);
 }
 :host(.wpp-textarea-wrapper) textarea::placeholder {
-  color: var(--textarea-placeholder-color);
+  color: var(--wpp-grey-color-700);
 }
 :host(.wpp-textarea-wrapper) textarea:focus {
-  background: var(--textarea-bg-color-active);
-  border: var(--textarea-border-width) var(--textarea-border-style) var(--textarea-border-color-active);
+  background: transparent;
+  border: var(--wpp-border-width-s) solid var(--wpp-grey-color-800);
 }
 :host(.wpp-textarea-wrapper) textarea:disabled {
-  color: var(--textarea-text-color-disabled);
-  background: var(--textarea-bg-color-disabled);
-  border: var(--textarea-border-width) var(--textarea-border-style) var(--textarea-border-color-disabled);
+  color: var(--wpp-text-color-disabled);
+  background: var(--wpp-grey-color-100);
+  border: var(--wpp-border-width-s) solid var(--wpp-grey-color-400);
   cursor: not-allowed;
 }
 :host(.wpp-textarea-wrapper) textarea:disabled::placeholder {
-  color: var(--textarea-text-color-disabled);
+  color: var(--wpp-text-color-disabled);
   transition: 0.5s ease-in-out;
 }
 :host(.wpp-textarea-wrapper) textarea.warning, :host(.wpp-textarea-wrapper) textarea.warning:hover {
-  border: var(--textarea-border-width) var(--textarea-border-style) var(--wpp-warning-color-400);
+  border: var(--wpp-border-width-s) solid var(--wpp-warning-color-400);
 }
 :host(.wpp-textarea-wrapper) textarea.error, :host(.wpp-textarea-wrapper) textarea.error:hover {
-  border: var(--textarea-border-width) var(--textarea-border-style) var(--wpp-danger-color-400);
+  border: var(--wpp-border-width-s) solid var(--wpp-danger-color-400);
 }
 :host(.wpp-textarea-wrapper) .characters-limit {
   display: flex;
@@ -139,24 +99,24 @@
   margin-left: 32px;
 }
 :host(.wpp-textarea-wrapper) .characters-limit.warning .wpp-typography {
-  color: var(--textarea-warning-charecters-limit-color);
+  color: var(--wpp-warning-color-500);
 }
 :host(.wpp-textarea-wrapper) .characters-limit.warning .wpp-typography:first-child::part(typography) {
-  color: var(--textarea-warning-charecters-limit-color);
+  color: var(--wpp-warning-color-500);
 }
 :host(.wpp-textarea-wrapper) .characters-limit.error .wpp-typography {
-  color: var(--textarea-error-charecters-limit-color);
+  color: var(--wpp-danger-color-500);
 }
 :host(.wpp-textarea-wrapper) .characters-limit.error .wpp-typography:first-child::part(typography) {
-  color: var(--textarea-error-charecters-limit-color);
+  color: var(--wpp-danger-color-500);
 }
 :host(.wpp-textarea-wrapper) .characters-limit .wpp-typography:first-child {
   --wpp-typography-color: $labelColor;
   white-space: nowrap;
 }
 :host(.wpp-textarea-wrapper) .characters-limit .wpp-typography:first-child::part(typography) {
-  color: var(--textarea-characters-limit-label-color);
-  font-weight: var(--textarea-characters-limit-font-weight);
+  color: var(--wpp-grey-color-800);
+  font-weight: 400;
 }
 :host(.wpp-textarea-wrapper) .characters-limit .entered-characters {
   margin-left: 2px;
@@ -165,8 +125,20 @@
 :host(.wpp-textarea-wrapper) .messages-wrapper {
   display: flex;
   justify-content: space-between;
-  margin: var(--textarea-inline-message-margin);
+  margin: 4px 0 0 0;
 }
 :host(.wpp-textarea-wrapper) .messages-wrapper.without-text-message {
   justify-content: flex-end;
+}
+:host(.wpp-textarea-wrapper) .sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  border: 0 !important;
+  white-space: nowrap !important;
 }

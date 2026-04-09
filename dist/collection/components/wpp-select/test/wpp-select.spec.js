@@ -30,7 +30,7 @@ describe('wpp-select', () => {
     };
     const page = await newSpecPage({
       components: [WppSelect, WppListItem, WppLabel, WppInternalLabel],
-      template: () => (h("wpp-select-v3-5-0", { placeholder: "Placeholder", type: "combined", labelConfig: labelConfig }, h("wpp-list-item-v3-5-0", { value: "car", "data-id": "1" }, h("span", { slot: "label" }, "Car")), h("wpp-list-item-v3-5-0", { value: "house", "data-id": "2", disabled: true }, h("span", { slot: "label" }, "House")), h("wpp-list-item-v3-5-0", { value: "apartment", "data-id": "3" }, h("span", { slot: "label" }, "Apartment")))),
+      template: () => (h("wpp-select-v4-0-0", { placeholder: "Placeholder", type: "combined", labelConfig: labelConfig }, h("wpp-list-item-v4-0-0", { value: "car", "data-id": "1" }, h("span", { slot: "label" }, "Car")), h("wpp-list-item-v4-0-0", { value: "house", "data-id": "2", disabled: true }, h("span", { slot: "label" }, "House")), h("wpp-list-item-v4-0-0", { value: "apartment", "data-id": "3" }, h("span", { slot: "label" }, "Apartment")))),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await page.waitForChanges();

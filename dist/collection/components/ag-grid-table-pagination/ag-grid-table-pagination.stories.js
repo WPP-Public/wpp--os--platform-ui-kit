@@ -16,4 +16,5 @@ html `<iframe
     width="100%"
     height="800px"
     src="https://statuesque-longma-ba5133.netlify.app/ag-grid-table-pagination?storybook-demo"
+    allow="clipboard-write; clipboard-read"
   ></iframe>`;

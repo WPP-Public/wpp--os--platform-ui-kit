@@ -1,0 +1,328 @@
+:host {
+  display: flex;
+  width: auto;
+}
+
+/* Main Layout */
+.container {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 64px minmax(0, 80ch) 64px;
+}
+.container.no-user-avatar {
+  grid-template-columns: 64px minmax(0, 80ch);
+}
+.container.no-assistant-avatar {
+  grid-template-columns: minmax(0, 80ch) 64px;
+}
+.container.no-user-avatar.no-assistant-avatar {
+  grid-template-columns: minmax(0, 80ch);
+}
+
+.avatar-wrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-left: auto;
+}
+.content .wpp-typography {
+  display: initial;
+}
+.content.content-user {
+  width: calc(100% - clamp(10%, 56px, 56px));
+  padding: 12px;
+  background-color: var(--wpp-primary-color-100);
+  border-radius: var(--wpp-border-radius-m) 0 var(--wpp-border-radius-m) var(--wpp-border-radius-m);
+}
+.content p {
+  margin-top: 0;
+}
+
+/* Message Parts */
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 0.85em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background-color: currentColor;
+  border-radius: 1px;
+  animation: blink 1s steps(1) infinite;
+}
+
+/* Code Blocks */
+.code-block {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--wpp-grey-color-100);
+  border-radius: var(--wpp-border-radius-m);
+}
+.code-block:hover .code-block-copy-icon {
+  opacity: 1;
+}
+.code-block .code-lang {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 8px 4px;
+  color: var(--wpp-grey-color-600);
+}
+.code-block code {
+  padding: 8px;
+}
+
+.code-block-copy-icon {
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.1s linear;
+}
+.code-block-copy-icon:hover {
+  --wpp-prop-icon-color: var(--wpp-grey-color-800) !important;
+}
+
+/* Actions & Toolbars */
+.action-toolbar {
+  display: flex;
+  gap: 4px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  margin-top: 10px;
+}
+.actions .sources-action {
+  margin-left: auto;
+}
+
+/* Typography Elements */
+.chat-list {
+  padding: 0 0 0 16px;
+  margin: 0 0 0 16px;
+}
+.chat-list.chat-list-nonordered,
+.chat-list .chat-list-nonordered {
+  list-style-type: disc;
+}
+.chat-list.chat-list-ordered,
+.chat-list .chat-list-ordered {
+  list-style-type: decimal;
+}
+.chat-list.chat-list-task {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+.chat-list .chat-list-item {
+  display: list-item;
+  margin: 0;
+}
+.chat-list .chat-list-item::marker {
+  font-size: var(--wpp-typography-s-body-font-size);
+  line-height: var(--wpp-typography-s-body-line-height);
+}
+.chat-list .chat-list-item .wpp-typography {
+  display: block;
+}
+.chat-list .chat-list-item .chat-list {
+  display: block;
+}
+.chat-list .chat-list-item-task {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.chat-list .chat-list-item-task .chat-list {
+  margin-left: 8px;
+}
+.chat-list .chat-list-item-task:not(.chat-list-item-task-checked) {
+  text-decoration: line-through;
+}
+.chat-list .chat-list-item-task:not(.chat-list-item-task-checked) .wpp-icon-tick {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.chat-link {
+  font-size: var(--wpp-typography-s-body-font-size);
+  line-height: var(--wpp-typography-s-body-line-height);
+  color: var(--wpp-primary-color-500);
+  transition: color 0.2s ease-in-out;
+}
+.chat-link:hover {
+  color: var(--wpp-primary-color-400);
+}
+.chat-link:active {
+  color: var(--wpp-primary-color-600);
+}
+
+.chat-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.chat-table th,
+.chat-table td {
+  padding: 13px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--wpp-grey-color-300);
+}
+
+.chat-quote {
+  padding-left: 16px;
+  margin-left: 0;
+  border-left: 3px solid var(--wpp-grey-color-300);
+}
+
+/* Images & Media */
+.chat-image-single {
+  position: relative;
+  width: 100%;
+}
+.chat-image-single img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.chat-image-full {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border: 1px solid var(--wpp-grey-color-000);
+  border-radius: var(--wpp-border-radius-xs);
+}
+
+.chat-image-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.chat-image-grid-first {
+  position: relative;
+  width: 100%;
+}
+
+.chat-image-grid-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  overflow: visible hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--wpp-grey-color-400) transparent;
+}
+.chat-image-grid-row::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.chat-image-grid-row::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 2px var(--wpp-grey-color-400);
+}
+.chat-image-grid-row .chat-image-grid-item {
+  display: flex;
+  flex: 0 0 calc(23% - 9px);
+  aspect-ratio: 1/1;
+  min-width: 100px;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid var(--wpp-grey-color-000);
+  border-radius: var(--wpp-border-radius-xs);
+  position: relative;
+}
+.chat-image-grid-row .chat-image-grid-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-download-button {
+  --wpp-btns-action-color-fill: var(--wpp-grey-color-000);
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.chat-image-grid-item:hover .image-download-button,
+.chat-image-single:hover .image-download-button,
+.chat-image-grid-first:hover .image-download-button {
+  opacity: 1;
+}
+
+.wpp-icon-image {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.chat-image-broken {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--wpp-grey-color-200);
+}
+.chat-image-broken .wpp-icon-image {
+  display: block;
+}
+.chat-image-broken .image-download-button {
+  display: none;
+}
+.chat-image-broken img {
+  display: none;
+}
+
+/* Attachments */
+.attachments {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chat-file-attachments-column {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+.chat-file-attachments-column .wpp-file-upload-item {
+  width: 100%;
+}
+
+/* Animations */
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}

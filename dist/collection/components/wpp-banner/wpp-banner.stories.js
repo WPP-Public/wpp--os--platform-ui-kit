@@ -73,6 +73,7 @@ const styles = {
     zIndex: '100',
     position: 'sticky',
     backgroundColor: 'white',
+    height: '49px',
     top: '0',
   },
   app: {
@@ -115,20 +116,20 @@ const styles = {
   },
 };
 export const NoTopBar = {
-  render: args => html ` <wpp-banner-v3-5-0 .show="${true}" .closable="${args.closable}" .type="${args.type}">
+  render: args => html ` <wpp-banner-v4-0-0 .show="${true}" .closable="${args.closable}" .type="${args.type}">
       Warning message
       ${args.withActions
     ? html `
         ${args.type === 'warning'
-      ? html ` <wpp-action-button-v3-5-0 variant="secondary" slot="actions">Action</wpp-action-button-v3-5-0>`
+      ? html ` <wpp-action-button-v4-0-0 variant="secondary" slot="actions">Action</wpp-action-button-v4-0-0>`
       : null}
         ${args.type === 'information'
-      ? html ` <wpp-action-button-v3-5-0 variant="inverted" slot="actions">Action</wpp-action-button-v3-5-0>`
+      ? html ` <wpp-action-button-v4-0-0 variant="inverted" slot="actions">Action</wpp-action-button-v4-0-0>`
       : null}
         </div>
       `
     : null}
-    </wpp-banner-v3-5-0>`,
+    </wpp-banner-v4-0-0>`,
   args: {
     type: 'warning',
     closable: false,
@@ -153,16 +154,16 @@ export const WithTopBar = {
     };
     return html ` <div style=${styleMap(styles.page)}>
       <div style=${styleMap(styles.header)}>
-        <wpp-topbar-v3-5-0 .navigation="${initNavigation}" .value="${value}" @wppChange="${handleTopbarItemChange}">
+        <wpp-topbar-v4-0-0 .navigation="${initNavigation}" .value="${value}" @wppChange="${handleTopbarItemChange}">
           <div slot="app" style=${styleMap(styles.app)}>
-            <wpp-typography-v3-5-0 type="m-strong" tag="h3" style=${styleMap(styles.appName)}>
+            <wpp-typography-v4-0-0 type="m-strong" tag="h3" style=${styleMap(styles.appName)}>
               APP Name
-            </wpp-typography-v3-5-0>
+            </wpp-typography-v4-0-0>
           </div>
-        </wpp-topbar-v3-5-0>
+        </wpp-topbar-v4-0-0>
       </div>
       <div style=${styleMap(styles.container)}>
-        <wpp-banner-v3-5-0
+        <wpp-banner-v4-0-0
           .type="${args.type}"
           .show="${isToShowBanner}"
           .closable="${args.closable}"
@@ -174,22 +175,22 @@ export const WithTopBar = {
           ${args.withActions
       ? html `
                 ${args.type === 'warning'
-        ? html `<wpp-action-button-v3-5-0 variant="secondary" slot="actions">
+        ? html `<wpp-action-button-v4-0-0 variant="secondary" slot="actions">
                       Action
-                    </wpp-action-button-v3-5-0>`
+                    </wpp-action-button-v4-0-0>`
         : null}
                 ${args.type === 'information'
-        ? html ` <wpp-action-button-v3-5-0 variant="inverted" slot="actions">Action</wpp-action-button-v3-5-0>`
+        ? html ` <wpp-action-button-v4-0-0 variant="inverted" slot="actions">Action</wpp-action-button-v4-0-0>`
         : null}
               `
       : null}
-        </wpp-banner-v3-5-0>
+        </wpp-banner-v4-0-0>
         <div style=${styleMap(styles.body)}>
           <div style=${styleMap(styles.section)}>
-            <wpp-typography-v3-5-0 type="3xl-heading">Scrollable section</wpp-typography-v3-5-0>
+            <wpp-typography-v4-0-0 type="3xl-heading">Scrollable section</wpp-typography-v4-0-0>
             <div style=${styleMap(styles.actions)}>
-              <wpp-button-v3-5-0 variant="secondary" @click="${handleShowBanner}"> Show Banner</wpp-button-v3-5-0>
-              <wpp-button-v3-5-0 variant="primary" @click="${handleCloseBanner}"> Close Banner</wpp-button-v3-5-0>
+              <wpp-button-v4-0-0 variant="secondary" @click="${handleShowBanner}"> Show Banner</wpp-button-v4-0-0>
+              <wpp-button-v4-0-0 variant="primary" @click="${handleCloseBanner}"> Close Banner</wpp-button-v4-0-0>
             </div>
           </div>
           <div style=${styleMap(styles.scrollWrapper)} />

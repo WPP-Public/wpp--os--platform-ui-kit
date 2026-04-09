@@ -16,6 +16,8 @@ import { ModalCloseDetails, ModalCloseReason, ModalFormConfig } from './types';
  */
 export declare class WppModal {
   private resizeObserver;
+  private topOffset;
+  private pendingTimeouts;
   host: HTMLWppModalElement;
   private dialogRef?;
   hasHeaderSlot: boolean;
@@ -48,6 +50,10 @@ export declare class WppModal {
    */
   readonly zIndex: number;
   /**
+   * If `true` - the modal will be rendered below the OS bar.
+   */
+  readonly osBarCompatible: boolean;
+  /**
    * Contains the modal `aria-` props.
    */
   readonly ariaProps: AriaProps;
@@ -71,11 +77,6 @@ export declare class WppModal {
    * Event emitted when the close animation ends.
    */
   wppModalCloseComplete: EventEmitter<ModalCloseDetails>;
-  /**
-   * Handles the modal click actions.
-   * @deprecated - this prop will be deleted in version 4.0.0 . Use `wppModalOpenStart`/`wppModalOpenComplete` instead
-   */
-  wppModalOpen: EventEmitter<void>;
   protected handleCloseOnEsc(event: KeyboardEvent): void;
   protected handleChangeModalStatus(openStatus: boolean): void;
   /**
@@ -90,6 +91,7 @@ export declare class WppModal {
   private setupObserver;
   private disconnectObserver;
   componentDidLoad(): void;
+  componentWillLoad(): void;
   disconnectedCallback(): void;
   private updateSlotData;
   private handleTransitionStart;

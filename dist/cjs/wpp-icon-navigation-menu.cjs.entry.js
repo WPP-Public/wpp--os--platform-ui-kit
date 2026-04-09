@@ -18,7 +18,7 @@ const WppIconNavigationMenu = class {
   render() {
     return (index.h(WppIcon.WppIcon, { name: "wpp-icon-navigation-menu", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { d: "M2.2915 4.375H17.7082", stroke: "currentColor", "stroke-width": "1.5", "stroke-miterlimit": "10", "stroke-linecap": "round" }), index.h("path", { d: "M2.2915 15.625H17.7082", stroke: "currentColor", "stroke-width": "1.5", "stroke-miterlimit": "10", "stroke-linecap": "round" }), index.h("path", { d: "M2.2915 10H17.7082", stroke: "currentColor", "stroke-width": "1.5", "stroke-miterlimit": "10", "stroke-linecap": "round" })));
   }
-  static get registryIs() { return "wpp-icon-navigation-menu-v3-5-0"; }
+  static get registryIs() { return "wpp-icon-navigation-menu-v4-0-0"; }
 };
 WppIconNavigationMenu.style = wppIconCss;
 

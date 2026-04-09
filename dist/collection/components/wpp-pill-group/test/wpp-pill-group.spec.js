@@ -43,7 +43,7 @@ describe('wpp-pill-group', () => {
     const value = ['email', 'mail'];
     const page = await newSpecPage({
       components: [WppPillGroup, WppPill],
-      template: () => (h("wpp-pill-group-v3-5-0", { size: "m", type: "multiple", value: value }, h("wpp-pill-v3-5-0", { name: "contact", value: "email", label: "Email" }), h("wpp-pill-v3-5-0", { name: "contact", value: "mail", label: "Mail" }), h("wpp-pill-v3-5-0", { name: "contact", value: "phone", label: "Phone" }))),
+      template: () => (h("wpp-pill-group-v4-0-0", { size: "m", type: "multiple", value: value }, h("wpp-pill-v4-0-0", { name: "contact", value: "email", label: "Email" }), h("wpp-pill-v4-0-0", { name: "contact", value: "mail", label: "Mail" }), h("wpp-pill-v4-0-0", { name: "contact", value: "phone", label: "Phone" }))),
     });
     expect(page.root).toMatchSnapshot();
   });

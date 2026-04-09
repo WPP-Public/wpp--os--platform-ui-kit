@@ -36,6 +36,7 @@ export const LOCALES_DEFAULTS = {
   clear: 'Clear',
   dateFormat: DATE_FORMAT.DAY_MONTH_YEAR,
   timeFormat: 'hh:mm aa',
+  invalidDateMessage: 'Invalid date format',
   dateLocale: undefined,
   firstDay: undefined,
 };

@@ -354,7 +354,7 @@ export const AvatarGroup = {
       }
       return [];
     };
-    return html ` <wpp-avatar-group-v3-5-0
+    return html ` <wpp-avatar-group-v4-0-0
       .size="${args.size}"
       .variant="${args.variant}"
       .avatars="${getData()}"
@@ -383,7 +383,7 @@ export const AvatarGroupInteractable = {
       if (args.variant === 'square')
         return interactableLogos;
     };
-    return html ` <wpp-avatar-group-v3-5-0
+    return html ` <wpp-avatar-group-v4-0-0
       .size="${args.size}"
       .variant="${args.variant}"
       .avatars="${getData()}"

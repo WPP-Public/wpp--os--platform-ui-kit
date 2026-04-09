@@ -84,7 +84,7 @@ export class WppProgressIndicator {
     return (h(Host, { class: this.hostCssClasses(isLinearDontHaveWidth), role: "progressbar", "aria-valuenow": this.value, "aria-valuemin": "0", "aria-valuemax": "100", "aria-label": this.ariaProps?.label, "aria-labelledby": this.ariaProps?.labelledby, exportparts: "label, content, inner" }, h("div", { class: this.progressBarCssClasses(isLinearDontHaveProgress, shouldShowPercentage), part: "body" }, isCircle ? renderCircle() : renderLine()), !!this.label && (h("p", { class: "progress-text", part: "label" }, this.label))));
   }
   static get is() { return "wpp-progress-indicator"; }
-  static get registryIs() { return "wpp-progress-indicator-v3-5-0"; }
+  static get registryIs() { return "wpp-progress-indicator-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

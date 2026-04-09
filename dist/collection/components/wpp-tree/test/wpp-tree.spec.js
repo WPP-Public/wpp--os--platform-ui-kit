@@ -131,28 +131,28 @@ describe('wpp-tree', () => {
   beforeEach(async () => {
     page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v3-5-0", { data: mockTree }),
+      template: () => h("wpp-tree-v4-0-0", { data: mockTree }),
     });
     instance = page.rootInstance;
   });
   it('should render tree component', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v3-5-0", { data: treeData }),
+      template: () => h("wpp-tree-v4-0-0", { data: treeData }),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('should render multiple tree component', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v3-5-0", { data: treeData, multiple: true }),
+      template: () => h("wpp-tree-v4-0-0", { data: treeData, multiple: true }),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('should render tree component with filtered data', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v3-5-0", { data: treeData, search: "cars" }),
+      template: () => h("wpp-tree-v4-0-0", { data: treeData, search: "cars" }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -161,7 +161,7 @@ describe('wpp-tree', () => {
     const loadChildren = jest.fn().mockReturnValue(d.promise);
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: baseData, lazyConfig: {
+      template: () => (h("wpp-tree-v4-0-0", { data: baseData, lazyConfig: {
           loadChildren,
           skeleton: { height: 22, count: 1 },
         } })),
@@ -206,7 +206,7 @@ describe('wpp-tree', () => {
     const loadChildren = jest.fn();
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: data, lazyConfig: {
+      template: () => (h("wpp-tree-v4-0-0", { data: data, lazyConfig: {
           loadChildren,
           skeleton: { height: 22 },
         } })),
@@ -222,7 +222,7 @@ describe('wpp-tree', () => {
     const loadChildren = jest.fn().mockResolvedValue({ items: [] });
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: baseData, lazyConfig: {
+      template: () => (h("wpp-tree-v4-0-0", { data: baseData, lazyConfig: {
           loadChildren,
         } })),
     });
@@ -244,7 +244,7 @@ describe('wpp-tree', () => {
     });
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: baseData, lazyConfig: {
+      template: () => (h("wpp-tree-v4-0-0", { data: baseData, lazyConfig: {
           loadChildren,
           skeleton: { height: 32, count: 1 },
         } })),
@@ -268,7 +268,7 @@ describe('wpp-tree', () => {
     const changeSpy = jest.fn();
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: baseData, lazyConfig: {
+      template: () => (h("wpp-tree-v4-0-0", { data: baseData, lazyConfig: {
           loadChildren,
         } })),
     });
@@ -303,7 +303,7 @@ describe('wpp-tree', () => {
     }));
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: baseData, lazyConfig: {
+      template: () => (h("wpp-tree-v4-0-0", { data: baseData, lazyConfig: {
           loadChildren,
         } })),
     });
@@ -322,7 +322,7 @@ describe('wpp-tree', () => {
     const loadChildren = jest.fn().mockRejectedValue(new Error('Network error'));
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: baseData, lazyConfig: {
+      template: () => (h("wpp-tree-v4-0-0", { data: baseData, lazyConfig: {
           loadChildren,
         } })),
     });
@@ -364,7 +364,7 @@ describe('wpp-tree', () => {
     });
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: baseData, lazyConfig: {
+      template: () => (h("wpp-tree-v4-0-0", { data: baseData, lazyConfig: {
           loadChildren,
         } })),
     });
@@ -415,7 +415,7 @@ describe('wpp-tree', () => {
   it('handles multiple-mode selection actions without warnings', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { multiple: true, defaultSelectedIds: [], data: [
+      template: () => (h("wpp-tree-v4-0-0", { multiple: true, defaultSelectedIds: [], data: [
           {
             id: '1',
             title: 'Parent',
@@ -463,7 +463,7 @@ describe('wpp-tree', () => {
   it('handles defaultSelectedIds and disableOpenCloseAnimation', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: [
+      template: () => (h("wpp-tree-v4-0-0", { data: [
           { id: '1', title: 'One' },
           { id: '2', title: 'Two' },
         ], defaultSelectedIds: ['1'], disableOpenCloseAnimation: true })),
@@ -484,7 +484,7 @@ describe('wpp-tree', () => {
     });
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v3-5-0", { data: [{ id: '1', title: 'Test' }] }),
+      template: () => h("wpp-tree-v4-0-0", { data: [{ id: '1', title: 'Test' }] }),
     });
     const tree = page.root;
     // attach to real DOM so parentElement exists
@@ -504,7 +504,7 @@ describe('wpp-tree', () => {
   it('uses custom isMatchingSearch', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: [{ id: '1', title: 'hello' }], searchConfig: {
+      template: () => (h("wpp-tree-v4-0-0", { data: [{ id: '1', title: 'hello' }], searchConfig: {
           isMatchingSearch: (item, search) => item.title === search,
         } })),
     });
@@ -515,7 +515,7 @@ describe('wpp-tree', () => {
   it('handles multiple selection update', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: [
+      template: () => (h("wpp-tree-v4-0-0", { data: [
           {
             id: '1',
             title: 'Parent',
@@ -534,7 +534,7 @@ describe('wpp-tree', () => {
   it('updates tree with search', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: [
+      template: () => (h("wpp-tree-v4-0-0", { data: [
           {
             id: '1',
             title: 'Parent',
@@ -549,7 +549,7 @@ describe('wpp-tree', () => {
   it('handles open change without lazy loading', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v3-5-0", { data: [{ id: '1', title: 'Node', open: false }] }),
+      template: () => h("wpp-tree-v4-0-0", { data: [{ id: '1', title: 'Node', open: false }] }),
     });
     const tree = page.root;
     const instance = page.rootInstance;
@@ -563,7 +563,7 @@ describe('wpp-tree', () => {
   it('resets tree when search is empty', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: [
+      template: () => (h("wpp-tree-v4-0-0", { data: [
           {
             id: '1',
             title: 'Item',
@@ -580,7 +580,7 @@ describe('wpp-tree', () => {
   it('uses custom isMatchingSearch', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: [{ id: '1', title: 'hello' }], searchConfig: {
+      template: () => (h("wpp-tree-v4-0-0", { data: [{ id: '1', title: 'hello' }], searchConfig: {
           isMatchingSearch: (item, search) => item.title === search,
         } })),
     });
@@ -591,7 +591,7 @@ describe('wpp-tree', () => {
   it('throws error when multiple defaultSelectedIds provided in single mode', async () => {
     await expect(newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: [
+      template: () => (h("wpp-tree-v4-0-0", { data: [
           { id: '1', title: 'One' },
           { id: '2', title: 'Two' },
         ], defaultSelectedIds: ['1', '2'] })),
@@ -600,7 +600,7 @@ describe('wpp-tree', () => {
   it('sets isSearchResultFound when a match is found', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: [
+      template: () => (h("wpp-tree-v4-0-0", { data: [
           {
             id: '1',
             title: 'MatchMe',
@@ -619,7 +619,7 @@ describe('wpp-tree', () => {
   it('covers nested match logic inside updateTreeWithSearch', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: [
+      template: () => (h("wpp-tree-v4-0-0", { data: [
           {
             id: '1',
             title: 'Parent Match',
@@ -645,7 +645,7 @@ describe('wpp-tree', () => {
   it('renders icons, skeleton and empty state correctly', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { loading: true, data: [
+      template: () => (h("wpp-tree-v4-0-0", { loading: true, data: [
           {
             id: '1',
             title: 'Node',
@@ -661,7 +661,7 @@ describe('wpp-tree', () => {
   it('clears children selection when item is unselected', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { multiple: true, data: [
+      template: () => (h("wpp-tree-v4-0-0", { multiple: true, data: [
           {
             id: '1',
             title: 'Parent',
@@ -682,7 +682,7 @@ describe('wpp-tree', () => {
   it('renders parent item with start/end icons and child content', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: [
+      template: () => (h("wpp-tree-v4-0-0", { data: [
           {
             id: '1',
             title: 'Parent',
@@ -730,7 +730,7 @@ describe('wpp-tree', () => {
     });
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: dataWithOpenNodes, lazyConfig: {
+      template: () => (h("wpp-tree-v4-0-0", { data: dataWithOpenNodes, lazyConfig: {
           loadChildren,
           skeleton: { height: 22 },
         } })),
@@ -778,7 +778,7 @@ describe('wpp-tree expandAll/collapseAll', () => {
   it('expandAll opens all non-disabled nodes', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v3-5-0", { data: staticData }),
+      template: () => h("wpp-tree-v4-0-0", { data: staticData }),
     });
     const changeSpy = jest.fn();
     page.root.addEventListener('wppChange', changeSpy);
@@ -807,7 +807,7 @@ describe('wpp-tree expandAll/collapseAll', () => {
     }));
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v3-5-0", { data: openData }),
+      template: () => h("wpp-tree-v4-0-0", { data: openData }),
     });
     const changeSpy = jest.fn();
     page.root.addEventListener('wppChange', changeSpy);
@@ -843,7 +843,7 @@ describe('wpp-tree expandAll/collapseAll', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v3-5-0", { data: dataWithDisabled }),
+      template: () => h("wpp-tree-v4-0-0", { data: dataWithDisabled }),
     });
     await page.rootInstance.expandAll();
     await page.waitForChanges();
@@ -873,7 +873,7 @@ describe('wpp-tree expandAll/collapseAll', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v3-5-0", { data: dataWithDisabledOpen }),
+      template: () => h("wpp-tree-v4-0-0", { data: dataWithDisabledOpen }),
     });
     await page.rootInstance.collapseAll();
     await page.waitForChanges();
@@ -905,7 +905,7 @@ describe('wpp-tree expandAll/collapseAll', () => {
     });
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v3-5-0", { data: lazyData, lazyConfig: {
+      template: () => (h("wpp-tree-v4-0-0", { data: lazyData, lazyConfig: {
           loadChildren,
           skeleton: { height: 22 },
         } })),
@@ -955,7 +955,7 @@ describe('wpp-tree open on load', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v3-5-0", { data: dataWithOpenNodes }),
+      template: () => h("wpp-tree-v4-0-0", { data: dataWithOpenNodes }),
     });
     await page.waitForChanges();
     const instance = page.rootInstance;

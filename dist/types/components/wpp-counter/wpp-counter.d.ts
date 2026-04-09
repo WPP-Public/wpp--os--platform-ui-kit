@@ -23,10 +23,6 @@ export declare class WppCounter {
   readonly name?: string;
   /**
    * Defines the counter value.
-   * @default 1
-   * @deprecated The default value of `1` is deprecated and will be removed in v5.0.0.
-   * To show a placeholder, explicitly set `value` to `undefined` or do not bind the value prop.
-   * After v5.0.0, the counter will show the placeholder by default when no value is provided.
    */
   value: number;
   /**
@@ -38,11 +34,9 @@ export declare class WppCounter {
    */
   readonly max: number;
   /**
-   * Defines the counter placeholder text.
-   */
-  readonly placeholder?: string;
-  /**
    * If `true`, the counter will show increment/decrement(+/-) buttons
+   * @deprecated The `withButtons` prop is deprecated and will be removed in v5.0.0.
+   * The counter will always display with buttons. Use a standard input component for cases without buttons.
    */
   readonly withButtons: boolean;
   /**

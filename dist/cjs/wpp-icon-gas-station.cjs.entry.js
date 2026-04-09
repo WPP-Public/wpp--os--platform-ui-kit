@@ -18,7 +18,7 @@ const WppIconGasStation = class {
   render() {
     return (index.h(WppIcon.WppIcon, { name: "wpp-icon-gas-station", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: "M6 5.5C6 4.94772 6.44772 4.5 7 4.5H11C11.5523 4.5 12 4.94772 12 5.5V8.5C12 9.05228 11.5523 9.5 11 9.5H7C6.44772 9.5 6 9.05228 6 8.5V5.5ZM7.5 8V6H10.5V8H7.5Z", fill: "currentColor" }), index.h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: "M6.25 2C4.73122 2 3.5 3.23122 3.5 4.75V16.5H3C2.58579 16.5 2.25 16.8358 2.25 17.25C2.25 17.6642 2.58579 18 3 18H15C15.4142 18 15.75 17.6642 15.75 17.25C15.75 16.8358 15.4142 16.5 15 16.5H14.5V15.542C14.8062 15.6758 15.1444 15.75 15.5 15.75C16.8807 15.75 18 14.6307 18 13.25V8.62045C18 7.90781 17.7234 7.22299 17.2284 6.71031L16.4771 5.93218C16.1893 5.63419 15.7145 5.62586 15.4166 5.91357C15.1186 6.20129 15.1102 6.67609 15.3979 6.97407L16.1493 7.75221C16.3743 7.98524 16.5 8.29652 16.5 8.62045V13.25C16.5 13.8023 16.0523 14.25 15.5 14.25C14.9477 14.25 14.5 13.8023 14.5 13.25V4.75C14.5 3.23122 13.2688 2 11.75 2H6.25ZM11.75 3.5C12.4404 3.5 13 4.05964 13 4.75V16.5H5V4.75C5 4.05964 5.55964 3.5 6.25 3.5H11.75Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-gas-station-v3-5-0"; }
+  static get registryIs() { return "wpp-icon-gas-station-v4-0-0"; }
 };
 WppIconGasStation.style = wppIconCss;
 

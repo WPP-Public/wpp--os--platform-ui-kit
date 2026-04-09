@@ -35,7 +35,7 @@
   --sort-button-bg-color-hover: var(--wpp-sort-button-bg-color-hover, var(--wpp-grey-color-200));
   --sort-button-bg-color-active: var(--wpp-sort-button-bg-color-active, var(--wpp-grey-color-300));
   --sort-button-bg-color-disabled: var(--wpp-sort-button-bg-color-disabled, var(--wpp-grey-color-100));
-  --sort-button-border-color: var(--wpp-sort-button-border-color, var(--wpp-grey-color-600));
+  --sort-button-border-color: var(--wpp-sort-button-border-color, var(--wpp-grey-color-500));
   --sort-button-border-color-hover: var(--wpp-sort-button-border-color-hover, var(--wpp-grey-color-700));
   --sort-button-border-color-active: var(--wpp-sort-button-border-color-active, var(--wpp-grey-color-800));
   --sort-button-border-color-disabled: var(--wpp-sort-button-border-color-disabled, var(--wpp-grey-color-400));

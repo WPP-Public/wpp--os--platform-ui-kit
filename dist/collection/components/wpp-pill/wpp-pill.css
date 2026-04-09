@@ -333,6 +333,17 @@
 :host .pill-wrapper.disabled:not(.checked) .label {
   color: var(--pill-text-color-disabled);
 }
+:host .label-wrapper {
+  overflow: hidden;
+}
+:host .wpp-tooltip {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+:host .wpp-tooltip::part(anchor) {
+  width: 100%;
+}
 
 :host([disabled]:not([disabled=false])) {
   cursor: not-allowed;
@@ -341,6 +352,4 @@
 :host(.transparent) {
   opacity: 0;
   pointer-events: none;
-  position: absolute;
-  right: -1px;
 }

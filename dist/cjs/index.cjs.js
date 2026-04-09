@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const utils = require('./utils-27884b05.js');
+const utils = require('./utils-15defa44.js');
 const types = require('./types-332b969c.js');
 const types$1 = require('./types-05f8f988.js');
 const types$2 = require('./types-7010056a.js');
@@ -114,6 +114,7 @@ exports.getDurationValues = utils.getDurationValues;
 exports.getHasFocused = utils.getHasFocused;
 exports.getHighestContainerInDOM = utils.getHighestContainerInDOM;
 exports.getHighlightData = utils.getHighlightData;
+exports.getOsBarOffsetHeight = utils.getOsBarOffsetHeight;
 exports.getSlotEmptyStates = utils.getSlotEmptyStates;
 exports.hasParentWithId = utils.hasParentWithId;
 exports.hasShadowDom = utils.hasShadowDom;

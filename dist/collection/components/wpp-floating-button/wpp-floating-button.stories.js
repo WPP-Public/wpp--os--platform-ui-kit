@@ -10,7 +10,7 @@ export default {
   },
 };
 export const Floating = {
-  render: args => html ` <wpp-floating-button-v3-5-0
+  render: args => html ` <wpp-floating-button-v4-0-0
       .disabled="${args.disabled}"
       .loading="${args.loading}"
       .ariaProps="${args.ariaProps}"

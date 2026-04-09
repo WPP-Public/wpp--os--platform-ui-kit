@@ -1,4 +1,4 @@
-import { EventEmitter } from '../../stencil-public-runtime';
+import { EventEmitter, VNode } from '../../stencil-public-runtime';
 import { BaseComponent } from '../../interfaces/base-component';
 import { Instance, Props } from 'tippy.js';
 import { SelectLabelConfig, SelectLocaleInterface, SelectSize, SelectTypes, SelectValue } from '../wpp-select/types';
@@ -40,6 +40,7 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
   checkedItems: number;
   disabledItems: number;
   textOverflows: boolean;
+  pinnedItems: ListItemInterface[];
   isContainerFocused: boolean;
   shouldTruncate: boolean;
   /**
@@ -57,8 +58,7 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
   readonly list: ListItemInterface[];
   /**
    * Defines the WppSelect component type.
-   * * Valid values: 'single' | 'multiple' | 'combined'
-   * * Note: The value 'text' is deprecated and will be removed in version 4.0.0. Use WppActionButton with WppMenuContext to achieve the same result.
+   * Valid values: 'single' | 'multiple' | 'combined'
    */
   readonly type: SelectTypes;
   /**
@@ -184,6 +184,13 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
    */
   readonly showSelectAllText: boolean;
   /**
+   * If `true`, renders a "Select all (N)" checkbox at the top of the dropdown list and replaces
+   * the bottom "Select All" / "Clear All" buttons with "Clear" / "Apply" buttons.
+   * Selected items are rendered at the top of the dropdown when it is opened.
+   * This property works only for the multiple select with `withFolder` enabled.
+   */
+  readonly showSelectAllOption: boolean;
+  /**
    * Defines the combined input value.
    */
   inputValue: string;
@@ -218,6 +225,10 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
    * Emitted when the input loses focus.
    */
   readonly wppBlur: EventEmitter<FocusEvent>;
+  /**
+   * Emitted when the user clicks the Apply button in the multiple select with showSelectAllOption.
+   */
+  readonly wppApply: EventEmitter<void>;
   onUpdateDisplayValue(): void;
   onUpdateValue(): void;
   onUpdateEmittedValue(): void;
@@ -245,6 +256,8 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
   private checkListAgainstValueMultiple;
   private convertValueToKey;
   protected renderList: () => HTMLElement;
+  protected get filteredPinnedItems(): ListItemInterface[];
+  protected renderPinnedItems: () => VNode;
   private renderSlotsInListItem;
   private setHasBeenInternallyDisabled;
   private disableOtherElements;
@@ -264,6 +277,14 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
   private updateScrollState;
   protected handleSelectAll: () => void;
   protected handleClearAll: () => void;
+  protected get visibleItems(): ListItemInterface[];
+  protected get canClearVisible(): boolean;
+  protected get isSelectAllChecked(): boolean;
+  protected get isSelectAllIndeterminate(): boolean;
+  protected get selectAllCount(): number;
+  protected get isSelectAllDisabled(): boolean;
+  protected handleSelectAllToggle: () => void;
+  protected handleApply: () => void;
   protected setShouldShowSearch: () => false | undefined;
   protected handleClick: (shouldFocus?: boolean) => void;
   protected updateSlotData: () => void;

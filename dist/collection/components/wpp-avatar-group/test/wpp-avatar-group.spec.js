@@ -39,7 +39,7 @@ describe('wpp-avatar-group', () => {
     ];
     const page = await newSpecPage({
       components: [WppAvatarGroup],
-      template: () => h("wpp-avatar-group-v3-5-0", { avatars: avatars }),
+      template: () => h("wpp-avatar-group-v4-0-0", { avatars: avatars }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -139,7 +139,7 @@ describe('wpp-avatar-group', () => {
       avatarIndex: 2,
     });
   });
-  it('should assign default interactable when undefined', async () => {
+  it('should default interactable to true when undefined', async () => {
     const page = await newSpecPage({
       components: [WppAvatarGroup],
       html: `<wpp-avatar-group></wpp-avatar-group>`,
@@ -151,7 +151,7 @@ describe('wpp-avatar-group', () => {
     ];
     await page.waitForChanges();
     const result = inst['getAvatarsWithColors'](inst.avatars);
-    expect(result[0].interactable ?? false).toBe(false);
+    expect(result[0].interactable ?? true).toBe(true);
     expect(result[1].interactable).toBe(true);
   });
   it('calls handleAvatarClick when wpp-avatar dispatches wppClick', async () => {
@@ -240,7 +240,73 @@ describe('wpp-avatar-group', () => {
     expect(spy).toHaveBeenCalledWith({
       value: hiddenItem,
       fromDropdown: true,
-      avatarIndex: 0,
+      avatarIndex: 2, // "C" is at index 2 in the full avatars array (A=0, B=1, C=2)
+    });
+  });
+  describe('nonInteractive prop on dropdown list items (WPPOPENDS-1169)', () => {
+    it('should render wpp-list-item with nonInteractive attribute only when avatar.interactable is false', async () => {
+      const avatars = [
+        { name: 'A', interactable: true },
+        { name: 'B', interactable: true },
+        { name: 'C', interactable: false },
+        { name: 'D' }, // undefined interactable - should default to interactable
+      ];
+      const page = await newSpecPage({
+        components: [WppAvatarGroup],
+        template: () => h("wpp-avatar-group-v4-0-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
+      });
+      await page.waitForChanges();
+      const listItemC = page.root?.shadowRoot?.querySelector('wpp-list-item[value="C"]');
+      const listItemD = page.root?.shadowRoot?.querySelector('wpp-list-item[value="D"]');
+      expect(listItemC).not.toBeNull();
+      expect(listItemD).not.toBeNull();
+      // C has interactable: false, so nonInteractive should be true
+      expect(listItemC?.outerHTML).toContain('noninteractive');
+      // D has undefined interactable, so nonInteractive should be false (attribute absent)
+      expect(listItemD?.outerHTML).not.toContain('noninteractive');
+    });
+    it('should render wpp-list-item without nonInteractive attribute when avatar.interactable is true', async () => {
+      const avatars = [
+        { name: 'A', interactable: true },
+        { name: 'B', interactable: true },
+        { name: 'C', interactable: true },
+        { name: 'D', interactable: true },
+      ];
+      const page = await newSpecPage({
+        components: [WppAvatarGroup],
+        template: () => h("wpp-avatar-group-v4-0-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
+      });
+      await page.waitForChanges();
+      const listItemC = page.root?.shadowRoot?.querySelector('wpp-list-item[value="C"]');
+      const listItemD = page.root?.shadowRoot?.querySelector('wpp-list-item[value="D"]');
+      expect(listItemC).not.toBeNull();
+      expect(listItemD).not.toBeNull();
+      // Both have interactable: true, so nonInteractive should be false (attribute absent)
+      expect(listItemC?.outerHTML).not.toContain('noninteractive');
+      expect(listItemD?.outerHTML).not.toContain('noninteractive');
+    });
+    it('should render mixed interactable states correctly', async () => {
+      const avatars = [
+        { name: 'A', interactable: true },
+        { name: 'B', interactable: false },
+        { name: 'C', interactable: true },
+        { name: 'D', interactable: false },
+        { name: 'E' }, // undefined (defaults to interactable)
+      ];
+      const page = await newSpecPage({
+        components: [WppAvatarGroup],
+        template: () => h("wpp-avatar-group-v4-0-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
+      });
+      await page.waitForChanges();
+      const listItemC = page.root?.shadowRoot?.querySelector('wpp-list-item[value="C"]');
+      const listItemD = page.root?.shadowRoot?.querySelector('wpp-list-item[value="D"]');
+      const listItemE = page.root?.shadowRoot?.querySelector('wpp-list-item[value="E"]');
+      // C has interactable: true
+      expect(listItemC?.outerHTML).not.toContain('noninteractive');
+      // D has interactable: false
+      expect(listItemD?.outerHTML).toContain('noninteractive');
+      // E has undefined interactable (defaults to interactable)
+      expect(listItemE?.outerHTML).not.toContain('noninteractive');
     });
   });
 });

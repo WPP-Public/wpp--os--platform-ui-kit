@@ -395,6 +395,24 @@
   margin: 0;
 }
 
+:host(.tab-focus) {
+  border-radius: var(--wpp-border-radius-s);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
+}
+:host(.tab-focus) .item {
+  background-color: var(--li-bg-color-active);
+  outline: none;
+}
+:host(.tab-focus) .item ::slotted([slot=left]),
+:host(.tab-focus) .item ::slotted([slot=right]),
+:host(.tab-focus) .item .fallback-icon {
+  color: var(--li-icon-color-active);
+}
+:host(.tab-focus) .item ::slotted(.wpp-icon[slot=left]) {
+  color: var(--li-left-icon-color-active);
+}
+
 :host .label.custom-typography ::slotted([slot=label]) {
   font-size: var(--wpp-list-item-label-font-size) !important;
   font-weight: var(--wpp-list-item-label-font-weight) !important;

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const utils$1 = require('./utils-27884b05.js');
+const utils$1 = require('./utils-15defa44.js');
 const utils = require('./utils-65b21d7c.js');
 require('./consts-dba6e6dd.js');
 
@@ -31,8 +31,6 @@ const WppTree = class {
     this.isMatchSearch = (item, search) => {
       if (this.searchConfig?.isMatchingSearch)
         return this.searchConfig?.isMatchingSearch(item, search);
-      if (this.searchConfig?.isMatchSearch)
-        return this.searchConfig.isMatchSearch(item.title, search);
       const titleTerm = item.title.toLowerCase().split(' ').filter(Boolean);
       const searchTerm = search.toLowerCase().split(' ').filter(Boolean);
       return titleTerm.some(substr => searchTerm.some(search => substr.includes(search)));
@@ -126,20 +124,20 @@ const WppTree = class {
     this.hostCssClasses = () => ({
       'wpp-tree': true,
     });
-    this.renderIconsList = (item, icons, place = 'end') => (index.h("div", { slot: `icon-${place}`, key: utils$1.uuidv4() }, index.h("wpp-menu-context-v3-5-0", { dropdownConfig: {
+    this.renderIconsList = (item, icons, place = 'end') => (index.h("div", { slot: `icon-${place}`, key: utils$1.uuidv4() }, index.h("wpp-menu-context-v4-0-0", { dropdownConfig: {
         trigger: 'click',
         interactiveDebounce: 15,
         interactiveBorder: 25,
         offset: [0, 0],
-      } }, index.h("wpp-icon-more-v3-5-0", { class: {
+      } }, index.h("wpp-icon-more-v4-0-0", { class: {
         'menu-trigger': true,
         disabled: !!item.disabled,
-      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), index.h("div", null, icons.map(({ icon, name }) => (index.h("wpp-list-item-v3-5-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, index.h(utils$1.transformToVersionedTag(icon), { slot: 'left' }), index.h("span", { slot: "label" }, name))))))));
+      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), index.h("div", null, icons.map(({ icon, name }) => (index.h("wpp-list-item-v4-0-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, index.h(utils$1.transformToVersionedTag(icon), { slot: 'left' }), index.h("span", { slot: "label" }, name))))))));
     this.renderTree = (treeData, level = 1) => treeData.map(item => {
       const extraProps = utils.extractExtraProps(item);
       const isParent = !!item.hasChildren || !!(item.children && item.children.length);
       if (isParent) {
-        return (index.h("wpp-tree-item-v3-5-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
+        return (index.h("wpp-tree-item-v4-0-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
           index.h(utils$1.transformToVersionedTag(item.iconStart.icon), {
             slot: 'icon-start',
             part: 'icon-start',
@@ -157,7 +155,7 @@ const WppTree = class {
               ? this.renderTree(item.children, level + 1)
               : null))));
       }
-      return (index.h("wpp-tree-item-v3-5-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
+      return (index.h("wpp-tree-item-v4-0-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
         index.h(utils$1.transformToVersionedTag(item.iconStart.icon), {
           slot: 'icon-start',
           part: 'icon-start',
@@ -178,7 +176,6 @@ const WppTree = class {
     this.defaultSelectedIds = [];
     this.locales = {};
     this.searchConfig = {
-      isMatchSearch: undefined,
       highlightOptions: {},
       transformSearchQuery: undefined,
       isMatchingSearch: undefined,
@@ -192,7 +189,7 @@ const WppTree = class {
   }
   renderSkeletonRows(count = 1, paddingLeft) {
     const { height = 32 } = this.lazyConfig?.skeleton || {};
-    return Array.from({ length: count }, (_, idx) => (index.h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, index.h("wpp-skeleton-v3-5-0", { variant: "rectangle", width: "100%", height: height, animation: true }))));
+    return Array.from({ length: count }, (_, idx) => (index.h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, index.h("wpp-skeleton-v4-0-0", { variant: "rectangle", width: "100%", height: height }))));
   }
   onInputChange(searchText) {
     if (!searchText.trim()) {
@@ -579,7 +576,7 @@ const WppTree = class {
   render() {
     return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text" }, !this.loading && (index.h("div", { class: "container", part: "tree-container" }, this.currentTreeData && this.isSearchResultFound ? (this.renderTree(this.currentTreeData)) : (index.h("p", { class: "empty-tree-text", part: "tree-empty-text" }, this._locales.nothingFound)))), this.loading && index.h("div", { class: "skeleton-wrapper" }, this.renderSkeletonRows(this.skeletonNumberItems))));
   }
-  static get registryIs() { return "wpp-tree-v3-5-0"; }
+  static get registryIs() { return "wpp-tree-v4-0-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "search": ["onInputChange"],

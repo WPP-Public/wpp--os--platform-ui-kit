@@ -1,8 +1,8 @@
-import { Host, h, Fragment } from '@stencil/core';
+import { Host, h } from '@stencil/core';
 import { DEFAULT_SCROLL_TRESHOLD, INITIAL_BUTTONS_LIST_VALUE, MAXIMUM_ACTION_BUTTONS, MAXIMUM_PRIMARY_BUTTONS, MAXIMUM_SECONDARY_BUTTONS, MULTIPLE_ACTION_BUTTONS_ERROR, MULTIPLE_PRIMARY_BUTTONS_ERROR, TOO_MANY_SECONDARY_BUTTONS_ERROR, } from './const';
 import { Z_INDEX } from '../../common/consts';
 /**
- * @slot content - Should contain the content for the sticky bar. This slot is available only for the following variants: 'two-lines' and 'blank'
+ * @slot content - Should contain the content for the sticky bar. This slot is available only for the following variant: 'medium'
  */
 export class WppStickyBar {
   constructor() {
@@ -14,6 +14,10 @@ export class WppStickyBar {
       }
     };
     this.getButtonsList = () => {
+      if (!this.buttons) {
+        this.buttonsList = [];
+        return;
+      }
       let primaryBtns = 0;
       let secondaryBtns = 0;
       let actionBtns = 0;
@@ -52,6 +56,8 @@ export class WppStickyBar {
       this.wppClickBackIcon.emit();
     };
     this.handleButtonClick = (btnIndex) => {
+      if (!this.buttonsList[btnIndex])
+        return;
       this.wppClickBtn.emit(this.buttonsList[btnIndex] || undefined);
     };
     this.handleTabClick = (event) => {
@@ -60,15 +66,13 @@ export class WppStickyBar {
     };
     this.hostCssClasses = () => ({
       'wpp-sticky-bar': true,
-      [`wpp-${this.variant}`]: true,
+      [`wpp-sticky-bar-${this.variant}`]: true,
       [`wpp-${this.visibility}`]: true,
     });
     this.visibility = '';
-    this.scrollDirection = 'down';
     this.currentTab = '';
-    this.currentSize = 'm';
     this.buttonsList = [];
-    this.variant = 'one-line';
+    this.variant = 'small';
     this.barTitle = undefined;
     this.offsetFromTop = undefined;
     this.zIndex = Z_INDEX.STICKY_BAR;
@@ -76,12 +80,15 @@ export class WppStickyBar {
     this.scrollTreshold = DEFAULT_SCROLL_TRESHOLD;
     this.buttons = [];
     this.tabs = [];
+    this.tabSize = 's';
   }
   updateButtons() {
-    this.getButtonsList();
+    if (this.variant === 'small') {
+      this.getButtonsList();
+    }
   }
   updateTabs(newValue) {
-    if (newValue.length > 0) {
+    if (newValue?.length > 0) {
       if (!newValue.find((tabItem) => tabItem.value === this.currentTab)) {
         this.currentTab = newValue[0].value;
       }
@@ -97,10 +104,13 @@ export class WppStickyBar {
     this.visibility = window.scrollY > this.scrollTreshold ? `visible` : `invisible`;
   }
   componentWillLoad() {
-    if (this.buttons.length > 0) {
+    if (this.buttons?.length > 0 && this.variant === 'small') {
       this.getButtonsList();
     }
-    if (this.tabs.length > 0) {
+    else {
+      this.buttonsList = [];
+    }
+    if (this.tabs?.length > 0) {
       this.currentTab = this.tabs[0].value;
     }
     if (this.zIndex) {
@@ -118,17 +128,20 @@ export class WppStickyBar {
     }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, this.variant === 'blank' ? (h("slot", { name: "content" })) : (h(Fragment, null, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v3-5-0", { variant: "secondary", onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v3-5-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v3-5-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v4-0-0", { variant: "secondary", onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v4-0-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v4-0-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), this.variant === 'small' && (h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
       if (!buttonItem)
         return null;
       if (buttonItem.variant === 'action-button') {
-        return (h("wpp-action-button-v3-5-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary" }, buttonItem.text));
+        return (h("wpp-action-button-v4-0-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary" }, buttonItem.text));
       }
-      return (h("wpp-button-v3-5-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant }, buttonItem.text));
-    }))), this.variant !== 'one-line' && (h("div", { class: "body" }, this.variant === 'two-lines' ? (h("slot", { name: "content" })) : (this.tabs.length > 0 && (h("wpp-tabs-v3-5-0", { size: "s", onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => (h("wpp-tab-v3-5-0", { size: "s", key: tabItem.value, value: tabItem.value }, tabItem.text)))))))))))));
+      return (h("wpp-button-v4-0-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant }, buttonItem.text));
+    })))), this.variant !== 'small' ? (h("div", { class: `body ${this.tabs?.length > 0 ? 'has-tabs' : ''}` }, this.variant === 'medium' ? (h("slot", { name: "content" })) : (this.tabs?.length > 0 && (h("wpp-tabs-v4-0-0", { size: this.tabSize, onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => {
+      const { text, ...restProps } = tabItem;
+      return (h("wpp-tab-v4-0-0", { size: this.tabSize, key: tabItem.value, ...restProps }, tabItem.text));
+    })))))) : null), h("wpp-divider-v4-0-0", null)));
   }
   static get is() { return "wpp-sticky-bar"; }
-  static get registryIs() { return "wpp-sticky-bar-v3-5-0"; }
+  static get registryIs() { return "wpp-sticky-bar-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -147,7 +160,7 @@ export class WppStickyBar {
         "mutable": false,
         "complexType": {
           "original": "StickyBarVariants",
-          "resolved": "\"blank\" | \"one-line\" | \"two-lines\" | \"two-lines-with-tabs\"",
+          "resolved": "\"medium\" | \"small\" | \"with-tabs\"",
           "references": {
             "StickyBarVariants": {
               "location": "import",
@@ -160,11 +173,11 @@ export class WppStickyBar {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "The variant of the sticky-bar. The default value is 'one-line'"
+          "text": "The variant of the sticky-bar."
         },
         "attribute": "variant",
         "reflect": false,
-        "defaultValue": "'one-line'"
+        "defaultValue": "'small'"
       },
       "barTitle": {
         "type": "string",
@@ -295,18 +308,34 @@ export class WppStickyBar {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "The configuration of the tabs. Based on this array with config items, tabs are placed on the sticky bar.\nThis prop can only be used with the \"two-lines-with-tabs\" variant."
+          "text": "The configuration of the tabs. Based on this array with config items, tabs are placed on the sticky bar.\nThis prop can only be used for the \"with-tabs\" variant."
         },
         "defaultValue": "[]"
+      },
+      "tabSize": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "'m' | 's'",
+          "resolved": "\"m\" | \"s\"",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "The size of the tab items.\nThis prop can only be used for the \"with-tabs\" variant."
+        },
+        "attribute": "tab-size",
+        "reflect": false,
+        "defaultValue": "'s'"
       }
     };
   }
   static get states() {
     return {
       "visibility": {},
-      "scrollDirection": {},
       "currentTab": {},
-      "currentSize": {},
       "buttonsList": {}
     };
   }

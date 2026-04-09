@@ -16,8 +16,15 @@ import { TextareaInputChangeEventDetail, TextareaInputValue, TextareaInputLocale
 export declare class WppTextareaInput implements BaseComponent, BaseFormControl<TextareaInputValue>, InlineMessage {
   private inputRef?;
   private _locales;
+  private previousValue;
+  private resizeObserver?;
   focusType: FOCUS_TYPE;
+  validAriaProps: Record<string, string>;
   readonly host: HTMLWppTextareaInputElement;
+  private inputId;
+  private labelId;
+  private messageId;
+  private counterId;
   /**
    * Defines the textarea name.
    */
@@ -44,8 +51,14 @@ export declare class WppTextareaInput implements BaseComponent, BaseFormControl<
   readonly autoFocus: boolean;
   /**
    * Defines the textarea height in rows.
+   * `stretch` - textarea height will be stretched to fit content
    */
-  readonly rows: number;
+  readonly rows: number | 'stretch';
+  /**
+   * Defines the maximum height of the textarea. Accept only the number in pixels
+   * Note: working only with `rows="stretch"`
+   */
+  readonly maxHeight?: number;
   /**
    * Defines the textarea size.
    */
@@ -115,12 +128,20 @@ export declare class WppTextareaInput implements BaseComponent, BaseFormControl<
    * Method that returns current input value.
    */
   getValue(): Promise<TextareaInputValue>;
+  private isScrollable;
   private enteredCharacters;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  disconnectedCallback(): void;
   private updateEnteredCharacters;
   onValueChange(): void;
+  onRowsChange(newValue: number | 'stretch', oldValue: number | 'stretch'): void;
+  handleMaxHeightChange(): void;
   onUpdateLocales(newLocales: Partial<TextareaInputLocales>): void;
+  onUpdateAriaProps(): void;
+  private initAutosize;
+  private adjustHeight;
+  private cleanup;
   private onFocus;
   private onBlur;
   private onMouseDown;
@@ -128,7 +149,10 @@ export declare class WppTextareaInput implements BaseComponent, BaseFormControl<
   private onInput;
   private hostCssClasses;
   private textAreaCssClasses;
+  private hasWarning;
   private charLimitCssClasses;
+  private getAriaAttributes;
+  private get isOverLimit();
   private messageCssClasses;
   render(): any;
 }

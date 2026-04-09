@@ -95,7 +95,7 @@ const SaturationPicker = /*@__PURE__*/ proxyCustomElement(class SaturationPicker
         top: `${this.markerY}px`,
       } }))));
   }
-  static get registryIs() { return "wpp-saturation-picker-v3-5-0"; }
+  static get registryIs() { return "wpp-saturation-picker-v4-0-0"; }
   get host() { return this; }
   static get watchers() { return {
     "hue": ["onPropertyChange"],
@@ -103,7 +103,7 @@ const SaturationPicker = /*@__PURE__*/ proxyCustomElement(class SaturationPicker
     "value": ["onPropertyChange"]
   }; }
   static get style() { return wppSaturationPickerCss; }
-}, [1, "wpp-saturation-picker", "wpp-saturation-picker-v3-5-0", {
+}, [1, "wpp-saturation-picker", "wpp-saturation-picker-v4-0-0", {
     "saturation": [1026],
     "value": [1026],
     "hue": [2],
@@ -114,9 +114,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-saturation-picker-v3-5-0"];
+  const components = ["wpp-saturation-picker-v4-0-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-saturation-picker-v3-5-0":
+    case "wpp-saturation-picker-v4-0-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, SaturationPicker);
       }

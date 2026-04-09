@@ -87,14 +87,14 @@ describe('wpp-video-player', () => {
     it('should render default component', async () => {
       const page = await newSpecPage({
         components: [WppVideoPlayer],
-        template: () => h("wpp-video-player-v3-5-0", { src: videoSrc }),
+        template: () => h("wpp-video-player-v4-0-0", { src: videoSrc }),
       });
       expect(page.root).toMatchSnapshot();
     });
     it('should render component with autoplay and mute', async () => {
       const page = await newSpecPage({
         components: [WppVideoPlayer],
-        template: () => h("wpp-video-player-v3-5-0", { src: videoSrc, controlPanelConfig: { autoplay: true } }),
+        template: () => h("wpp-video-player-v4-0-0", { src: videoSrc, controlPanelConfig: { autoplay: true } }),
       });
       expect(page.root).toMatchSnapshot();
     });
@@ -122,7 +122,7 @@ describe('wpp-video-player', () => {
       it('should render with custom size', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v3-5-0", { src: videoSrc, size: { width: 800, height: 600 } }),
+          template: () => h("wpp-video-player-v4-0-0", { src: videoSrc, size: { width: 800, height: 600 } }),
         });
         const component = page.rootInstance;
         expect(component.videoPlayerSize.width).toBe(800);
@@ -131,7 +131,7 @@ describe('wpp-video-player', () => {
       it('should render with autoplay configuration', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v3-5-0", { src: videoSrc, controlPanelConfig: { autoplay: true } }),
+          template: () => h("wpp-video-player-v4-0-0", { src: videoSrc, controlPanelConfig: { autoplay: true } }),
         });
         const video = page.root?.shadowRoot?.querySelector('video');
         expect(video).toBeTruthy();
@@ -154,7 +154,7 @@ describe('wpp-video-player', () => {
         });
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => (h("wpp-video-player-v3-5-0", { src: [videoSrc, videoSrc], type: ['video/mp4', 'video/webm'] })),
+          template: () => (h("wpp-video-player-v4-0-0", { src: [videoSrc, videoSrc], type: ['video/mp4', 'video/webm'] })),
         });
         const sourceElements = page.root?.shadowRoot?.querySelectorAll('source');
         expect(sourceElements.length).toBe(2);
@@ -171,7 +171,7 @@ describe('wpp-video-player', () => {
         };
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v3-5-0", { src: videoSrc, caption: captionData }),
+          template: () => h("wpp-video-player-v4-0-0", { src: videoSrc, caption: captionData }),
         });
         const trackElements = page.root?.shadowRoot?.querySelectorAll('track');
         expect(trackElements.length).toBe(1);
@@ -180,7 +180,7 @@ describe('wpp-video-player', () => {
       it('should render without volume button and volume need to be set to 0', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => (h("wpp-video-player-v3-5-0", { src: videoSrc, controlPanelConfig: { showVolumeButton: false } })),
+          template: () => (h("wpp-video-player-v4-0-0", { src: videoSrc, controlPanelConfig: { showVolumeButton: false } })),
         });
         expect(page.rootInstance.controlPanelConfigDefault.showVolumeButton).toBe(false);
         expect(page.rootInstance.volume).toBe(0);
@@ -245,7 +245,7 @@ describe('wpp-video-player', () => {
         };
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v3-5-0", { src: videoSrc, caption: captionData }),
+          template: () => h("wpp-video-player-v4-0-0", { src: videoSrc, caption: captionData }),
         });
         // Set required properties for captions
         page.rootInstance.isCaptionEnabled = true;
@@ -582,7 +582,7 @@ describe('wpp-video-player', () => {
       it('should handle space key for play/pause', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v3-5-0", { src: videoSrc }),
+          template: () => h("wpp-video-player-v4-0-0", { src: videoSrc }),
         });
         const playSpy = jest.spyOn(page.rootInstance, 'play');
         // Mock the focus conditions
@@ -602,7 +602,7 @@ describe('wpp-video-player', () => {
       it('should handle arrow keys for seeking', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v3-5-0", { src: videoSrc }),
+          template: () => h("wpp-video-player-v4-0-0", { src: videoSrc }),
         });
         // Mock the focus conditions
         jest.spyOn(page.rootInstance.host, 'contains').mockReturnValue(true);
@@ -696,7 +696,7 @@ describe('wpp-video-player', () => {
       it('should toggle captions when toggleCaptions is called', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v3-5-0", { src: videoSrc, caption: captionData }),
+          template: () => h("wpp-video-player-v4-0-0", { src: videoSrc, caption: captionData }),
         });
         // Initial state
         expect(page.rootInstance.isCaptionEnabled).toBe(false);
@@ -710,7 +710,7 @@ describe('wpp-video-player', () => {
       it('should handle C key for toggling captions', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v3-5-0", { src: videoSrc, caption: captionData }),
+          template: () => h("wpp-video-player-v4-0-0", { src: videoSrc, caption: captionData }),
         });
         const toggleCaptionsSpy = jest.spyOn(page.rootInstance, 'toggleCaptions');
         // Mock the focus conditions

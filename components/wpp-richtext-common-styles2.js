@@ -7,16 +7,16 @@ const WppRichtextCommonStyles = /*@__PURE__*/ proxyCustomElement(class WppRichte
     super();
     this.__registerHost();
   }
-  static get registryIs() { return "wpp-richtext-common-styles-v3-5-0"; }
+  static get registryIs() { return "wpp-richtext-common-styles-v4-0-0"; }
   static get style() { return wppRichtextCommonStylesCss; }
-}, [0, "wpp-richtext-common-styles", "wpp-richtext-common-styles-v3-5-0"]);
+}, [0, "wpp-richtext-common-styles", "wpp-richtext-common-styles-v4-0-0"]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-richtext-common-styles-v3-5-0"];
+  const components = ["wpp-richtext-common-styles-v4-0-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-richtext-common-styles-v3-5-0":
+    case "wpp-richtext-common-styles-v4-0-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppRichtextCommonStyles);
       }

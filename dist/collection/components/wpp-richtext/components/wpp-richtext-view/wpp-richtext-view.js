@@ -156,10 +156,10 @@ export class WppRichtextView {
     this.setValue(newValue);
   }
   render() {
-    return (h(Host, null, h("wpp-quill-styles-v3-5-0", null), h("wpp-richtext-common-styles-v3-5-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
+    return (h(Host, null, h("wpp-quill-styles-v4-0-0", null), h("wpp-richtext-common-styles-v4-0-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
   }
   static get is() { return "wpp-richtext-view"; }
-  static get registryIs() { return "wpp-richtext-view-v3-5-0"; }
+  static get registryIs() { return "wpp-richtext-view-v4-0-0"; }
   static get properties() {
     return {
       "value": {
@@ -314,7 +314,7 @@ export class WppRichtextView {
         "docs": {
           "tags": [{
               "name": "deprecated",
-              "text": "This property is no longer needed. Whitespace preservation is now the default behavior\nfor markdown format. This prop will be removed in a future major version."
+              "text": "This property is no longer needed. Whitespace preservation is now the default behavior\nfor markdown format. This prop will be removed in version 5.0.0."
             }],
           "text": ""
         },

@@ -26,17 +26,20 @@ describe('wpp-file-upload', () => {
     });
     expect(page.root).toMatchSnapshot();
   });
-  it('should render file upload with different accept file format', async () => {
+  it('should render file upload with acceptConfig', async () => {
     const page = await newSpecPage({
       components: [WppFileUpload],
-      html: `<wpp-file-upload .accept=".mov, .avi"></wpp-file-upload>`,
+      template: () => (h("wpp-file-upload-v4-0-0", { acceptConfig: {
+          'video/quicktime': ['.mov'],
+          'video/x-msvideo': ['.avi'],
+        } })),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('should render file uploader with file items based on url', async () => {
     const page = await newSpecPage({
       components: [WppFileUpload, WppFileUploadItem],
-      template: () => h("wpp-file-upload-v3-5-0", { value: value }),
+      template: () => h("wpp-file-upload-v4-0-0", { value: value }),
     });
     expect(page.root).toMatchSnapshot();
   });

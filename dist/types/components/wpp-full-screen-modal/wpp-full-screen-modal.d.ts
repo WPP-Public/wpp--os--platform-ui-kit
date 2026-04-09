@@ -17,6 +17,8 @@ import { FullScreenModalCloseDetails, FullScreenModalCloseReason, FullScreenModa
 export declare class WppFullScreenModal {
   host: HTMLWppFullScreenModalElement;
   private dialogRef?;
+  private topOffset;
+  private pendingTimeouts;
   hasHeaderSlot: boolean;
   hasBodySlot: boolean;
   hasActionsSlot: boolean;
@@ -42,6 +44,10 @@ export declare class WppFullScreenModal {
    */
   readonly zIndex: number;
   /**
+   * If `true` - the full-screen modal will be rendered below the OS bar.
+   */
+  readonly osBarCompatible: boolean;
+  /**
    * Contains the modal `aria-` props.
    */
   readonly ariaProps: AriaProps;
@@ -65,11 +71,6 @@ export declare class WppFullScreenModal {
    * Event emitted when the close animation ends.
    */
   wppFullScreenModalCloseComplete: EventEmitter<FullScreenModalCloseDetails>;
-  /**
-   * Handles the modal click actions.
-   * @deprecated - this prop will be deleted in version 3.0.0 . Use `wppFullScreenModalOpenStart`/`wppFullScreenModalOpenComplete` instead
-   */
-  wppFullScreenModalOpen: EventEmitter<void>;
   protected handleCloseOnEsc(event: KeyboardEvent): void;
   protected handleChangeFullScreenModalStatus(openStatus: boolean): void;
   /**
@@ -82,6 +83,7 @@ export declare class WppFullScreenModal {
   openFullScreenModal(): Promise<void>;
   private onOverlayClick;
   componentDidLoad(): void;
+  componentWillLoad(): void;
   disconnectedCallback(): void;
   private updateSlotData;
   private handleTransitionStart;

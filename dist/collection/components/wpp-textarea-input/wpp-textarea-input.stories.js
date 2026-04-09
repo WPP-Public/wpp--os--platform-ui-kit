@@ -16,6 +16,11 @@ export default {
     charactersLimit: { type: 'number' },
     warningThreshold: { type: 'number' },
     maxMessageLength: { type: 'number' },
+    rows: {
+      options: [0, 1, 3, 5, 'stretch'],
+      control: { type: 'select' },
+      description: "Number of rows or 'stretch' for auto-height",
+    },
     messageType: {
       options: ['null', 'warning', 'error'],
       control: { type: 'select' },
@@ -24,7 +29,7 @@ export default {
     required: { control: { type: 'boolean' } },
   },
 };
-export const WithinLimit = (args) => html ` <wpp-textarea-input-v3-5-0
+export const WithinLimit = (args) => html ` <wpp-textarea-input-v4-0-0
     @click="${() => console.log('textarea clicked')}"
     .name="${args.name}"
     .placeholder="${args.placeholder}"
@@ -56,7 +61,7 @@ WithinLimit.args = {
   },
   labelConfig: {
     icon: '',
-    text: '',
+    text: 'Label',
     description: '',
     locales: {
       optional: 'Optional',
@@ -66,7 +71,7 @@ WithinLimit.args = {
 WithinLimit.parameters = {
   controls: { exclude: ['value'] },
 };
-export const LimitExceeded = (args) => html ` <wpp-textarea-input-v3-5-0
+export const LimitExceeded = (args) => html ` <wpp-textarea-input-v4-0-0
     @click="${() => console.log('textarea clicked')}"
     .name="${args.name}"
     .placeholder="${args.placeholder}"
@@ -93,7 +98,7 @@ LimitExceeded.args = {
   },
   labelConfig: {
     icon: '',
-    text: '',
+    text: 'Label',
     description: '',
     locales: {
       optional: 'Optional',
@@ -103,7 +108,7 @@ LimitExceeded.args = {
 LimitExceeded.parameters = {
   controls: { exclude: ['value', 'message', 'messageType', 'maxMessageLength'] },
 };
-export const NoneLimit = (args) => html ` <wpp-textarea-input-v3-5-0
+export const NoneLimit = (args) => html ` <wpp-textarea-input-v4-0-0
     @click="${() => console.log('textarea clicked')}"
     .name="${args.name}"
     .placeholder="${args.placeholder}"
@@ -127,7 +132,7 @@ NoneLimit.args = {
   required: true,
   labelConfig: {
     icon: '',
-    text: '',
+    text: 'Label',
     description: '',
     locales: {
       optional: 'Optional',
@@ -136,4 +141,46 @@ NoneLimit.args = {
 };
 NoneLimit.parameters = {
   controls: { exclude: ['charactersLimit', 'warningThreshold'] },
+};
+export const StretchTextarea = (args) => html ` <wpp-textarea-input-v4-0-0
+    @click="${() => console.log('textarea clicked')}"
+    .name="${args.name}"
+    .placeholder="${args.placeholder}"
+    .charactersLimit="${args.charactersLimit}"
+    .warningThreshold="${args.warningThreshold}"
+    .required="${args.required}"
+    .disabled="${args.disabled}"
+    .messageType="${args.messageType}"
+    .maxMessageLength="${args.maxMessageLength}"
+    .message="${args.message}"
+    .rows="${args.rows}"
+    .value="${args.value}"
+    .locales="${args.locales}"
+    .labelConfig="${args.labelConfig}"
+  />`;
+StretchTextarea.args = {
+  name: 'stretch-input',
+  placeholder: 'Textarea',
+  value: '',
+  message: '',
+  rows: 'stretch',
+  charactersLimit: 400,
+  warningThreshold: 5,
+  maxMessageLength: 220,
+  disabled: false,
+  required: true,
+  locales: {
+    charactersEntered: 'Characters',
+  },
+  labelConfig: {
+    icon: '',
+    text: 'Label',
+    description: '',
+    locales: {
+      optional: 'Optional',
+    },
+  },
+};
+StretchTextarea.parameters = {
+  controls: { exclude: ['value'] },
 };

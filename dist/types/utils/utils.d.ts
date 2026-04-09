@@ -27,6 +27,13 @@ export declare const selectDropdownWidth: (dropdownWidth: string, triggerEl: HTM
 export declare function getHasFocused(): boolean;
 export declare function setHasFocused(value: boolean): void;
 export declare function getHighestContainerInDOM(): HTMLElement;
+/**
+ * Returns the height of the OS bar in pixels.
+ * Queries for the first header child of the container with the `.wpp` class,
+ * which is the standard structure of the OS bar in first-party applications.
+ * Falls back to a default of 64px if the OS bar cannot be found.
+ */
+export declare function getOsBarOffsetHeight(): number;
 export declare const getAriaProps: (ariaProps: AriaProps) => Record<string, string>;
 export declare const isWppElement: (element: HTMLElement) => boolean;
 export {};

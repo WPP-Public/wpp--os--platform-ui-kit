@@ -37,11 +37,11 @@ export default {
 export const Accordion = {
   render: args => html `
     <div style="width: 600px">
-      <wpp-accordion-v3-5-0 .size="${args.size}" .withTag="${args.withTag}" .disabled="${args.disabled}">
-        <wpp-typography-v3-5-0 slot="header" type=${handleTypographyType(args.size)}>
+      <wpp-accordion-v4-0-0 .size="${args.size}" .withTag="${args.withTag}" .disabled="${args.disabled}">
+        <wpp-typography-v4-0-0 slot="header" type=${handleTypographyType(args.size)}>
           Commitments & Responsibilities
-        </wpp-typography-v3-5-0>
-        <wpp-typography-v3-5-0>
+        </wpp-typography-v4-0-0>
+        <wpp-typography-v4-0-0>
           Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
           standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to
           make a type specimen book. It has survived not only five centuries, but also the leap into electronic
@@ -76,63 +76,63 @@ export const Accordion = {
           default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various
           versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the
           like).
-        </wpp-typography-v3-5-0>
-        ${args.withTag ? html `<wpp-tag-v3-5-0 slot="tags" label="Neutral" variant="neutral"></wpp-tag-v3-5-0>` : null}
-      </wpp-accordion-v3-5-0>
+        </wpp-typography-v4-0-0>
+        ${args.withTag ? html `<wpp-tag-v4-0-0 slot="tags" label="Neutral" variant="neutral"></wpp-tag-v4-0-0>` : null}
+      </wpp-accordion-v4-0-0>
 
-      <wpp-accordion-v3-5-0
+      <wpp-accordion-v4-0-0
         .disabled="${args.disabled}"
         .withTag="${args.withTag}"
         .expanded="${args.expanded}"
         .size="${args.size}"
         key="${args.header}"
       >
-        <wpp-typography-v3-5-0 slot="header" type=${handleTypographyType(args.size)}>
+        <wpp-typography-v4-0-0 slot="header" type=${handleTypographyType(args.size)}>
           ${args.header}
-        </wpp-typography-v3-5-0>
-        <wpp-typography-v3-5-0 type="s-body">
+        </wpp-typography-v4-0-0>
+        <wpp-typography-v4-0-0 type="s-body">
           Dive into our constant search for cutting edge scientific discoveries and game-changing technologies, for more
           and more transparency and trust in our products, with no compromise on quality, efficacy and safety.
-        </wpp-typography-v3-5-0>
+        </wpp-typography-v4-0-0>
         ${args.withActions
     ? html `
               <div style="display: flex; align-items: center" slot="actions">
-                <wpp-action-button-v3-5-0 .disabled="${args.disabled}" variant="secondary" style="margin-right: 4px">
+                <wpp-action-button-v4-0-0 .disabled="${args.disabled}" variant="secondary" style="margin-right: 4px">
                   Actions 2
-                  <wpp-icon-premium-v3-5-0 slot="icon-start"></wpp-icon-premium-v3-5-0>
-                </wpp-action-button-v3-5-0>
-                <wpp-action-button-v3-5-0 .disabled="${args.disabled}" variant="secondary">
+                  <wpp-icon-premium-v4-0-0 slot="icon-start"></wpp-icon-premium-v4-0-0>
+                </wpp-action-button-v4-0-0>
+                <wpp-action-button-v4-0-0 .disabled="${args.disabled}" variant="secondary">
                   Actions 1
-                  <wpp-icon-edit-v3-5-0 slot="icon-start"></wpp-icon-edit-v3-5-0>
-                </wpp-action-button-v3-5-0>
+                  <wpp-icon-edit-v4-0-0 slot="icon-start"></wpp-icon-edit-v4-0-0>
+                </wpp-action-button-v4-0-0>
               </div>
             `
     : null}
         ${args.withTag
-    ? html `<wpp-tag-v3-5-0
+    ? html `<wpp-tag-v4-0-0
               slot="tags"
               label="Neutral"
               variant="neutral"
               .disabled="${args.disabled}"
-            ></wpp-tag-v3-5-0>`
+            ></wpp-tag-v4-0-0>`
     : null}
-      </wpp-accordion-v3-5-0>
+      </wpp-accordion-v4-0-0>
 
-      <wpp-accordion-v3-5-0
+      <wpp-accordion-v4-0-0
         .size="${args.size}"
         .withTag="${args.withTag}"
         .withDivider="${args.withDivider}"
         .disabled="${args.disabled}"
       >
-        <wpp-typography-v3-5-0 slot="header" type=${handleTypographyType(args.size)}>
+        <wpp-typography-v4-0-0 slot="header" type=${handleTypographyType(args.size)}>
           Governance & Ethics
-        </wpp-typography-v3-5-0>
-        <wpp-typography-v3-5-0 type="s-body">
+        </wpp-typography-v4-0-0>
+        <wpp-typography-v4-0-0 type="s-body">
           Having a proactive Board and strong leadership that is deeply committed to high ethical standards is a
           business imperative for ensuring sustainable success.
-        </wpp-typography-v3-5-0>
-        ${args.withTag ? html `<wpp-tag-v3-5-0 slot="tags" label="Neutral" variant="neutral"></wpp-tag-v3-5-0>` : null}
-      </wpp-accordion-v3-5-0>
+        </wpp-typography-v4-0-0>
+        ${args.withTag ? html `<wpp-tag-v4-0-0 slot="tags" label="Neutral" variant="neutral"></wpp-tag-v4-0-0>` : null}
+      </wpp-accordion-v4-0-0>
     </div>
   `,
   args: {

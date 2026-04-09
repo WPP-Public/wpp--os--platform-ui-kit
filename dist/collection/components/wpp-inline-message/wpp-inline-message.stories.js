@@ -31,7 +31,7 @@ export default {
   },
 };
 export const Warning = {
-  render: args => html ` <wpp-inline-message-v3-5-0
+  render: args => html ` <wpp-inline-message-v4-0-0
       .titleText="${args.titleText}"
       .actionBtnText="${args.actionBtnText}"
       .size="${args.size}"
@@ -54,7 +54,7 @@ Warning.parameters = {
   },
 };
 export const Error = {
-  render: args => html ` <wpp-inline-message-v3-5-0
+  render: args => html ` <wpp-inline-message-v4-0-0
       .titleText="${args.titleText}"
       .actionBtnText="${args.actionBtnText}"
       .size="${args.size}"
@@ -77,7 +77,7 @@ Error.parameters = {
   },
 };
 export const Informational = {
-  render: args => html ` <wpp-inline-message-v3-5-0
+  render: args => html ` <wpp-inline-message-v4-0-0
       .titleText="${args.titleText}"
       .actionBtnText="${args.actionBtnText}"
       .size="${args.size}"
@@ -100,7 +100,7 @@ Informational.parameters = {
   },
 };
 export const Success = {
-  render: args => html ` <wpp-inline-message-v3-5-0
+  render: args => html ` <wpp-inline-message-v4-0-0
       .titleText="${args.titleText}"
       .actionBtnText="${args.actionBtnText}"
       .size="${args.size}"
@@ -124,7 +124,7 @@ Success.parameters = {
 };
 export const WithInput = (args) => html `
   <div style="max-width: 500px; width: 100%;">
-    <wpp-input-v3-5-0
+    <wpp-input-v4-0-0
       .size="${args.size}"
       .labelConfig="${args.labelConfig}"
       .message="${args.message}"

@@ -18,6 +18,6 @@ export declare class WppIconDirections {
   /**
    Defines the icon direction.
    */
-  readonly direction: 'top' | 'up' | 'right' | 'down' | 'left';
+  readonly direction: 'up' | 'right' | 'down' | 'left';
   render(): any;
 }

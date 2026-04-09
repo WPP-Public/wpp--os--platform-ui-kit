@@ -101,6 +101,7 @@
   border-radius: var(--wpp-border-radius-s);
   outline: none;
   border: var(--pagination-input-border-width) var(--pagination-input-border-style) var(--pagination-input-border-color);
+  background-color: transparent;
 }
 .page-numeric .input-page::-webkit-outer-spin-button, .page-numeric .input-page::-webkit-inner-spin-button {
   -webkit-appearance: none;

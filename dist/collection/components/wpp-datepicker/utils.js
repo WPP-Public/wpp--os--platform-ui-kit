@@ -120,3 +120,39 @@ export const localeToFirstDayMap = {
   'he-IL': 0,
   'ar-EG': 6, // Saturday
 };
+/**
+ * Normalizes a date range for month view selection.
+ * Sets the start date to the specified day (default: first day) and
+ * end date to the specified day (default: last day) of their respective months.
+ *
+ * @param dates - Array of two dates representing the range [startDate, endDate]
+ * @param config - Configuration for normalization
+ * @returns Normalized date range [normalizedStart, normalizedEnd]
+ */
+export const normalizeMonthRangeDates = (dates, config = { enabled: true }) => {
+  if (!config.enabled || dates.length !== 2) {
+    return dates;
+  }
+  const [start, end] = dates;
+  if (!isValidDate(start) || !isValidDate(end)) {
+    return dates;
+  }
+  // Determine start day, capped to the last day of the start month
+  const startDayConfig = config.startDay ?? 'first';
+  const lastDayOfStartMonth = new Date(start.getFullYear(), start.getMonth() + 1, 0).getDate();
+  const startDay = startDayConfig === 'first' ? 1 : Math.min(startDayConfig, lastDayOfStartMonth);
+  // Determine end day - 'last' means last day of the month
+  const endDayConfig = config.endDay ?? 'last';
+  const lastDayOfEndMonth = new Date(end.getFullYear(), end.getMonth() + 1, 0).getDate();
+  let normalizedEnd;
+  if (endDayConfig === 'last') {
+    normalizedEnd = new Date(end.getFullYear(), end.getMonth(), lastDayOfEndMonth);
+  }
+  else {
+    // Cap the custom endDay to the last day of the month
+    const cappedEndDay = Math.min(endDayConfig, lastDayOfEndMonth);
+    normalizedEnd = new Date(end.getFullYear(), end.getMonth(), cappedEndDay);
+  }
+  const normalizedStart = new Date(start.getFullYear(), start.getMonth(), startDay);
+  return [normalizedStart, normalizedEnd];
+};

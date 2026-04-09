@@ -1,7 +1,7 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement, F as Fragment } from './index-9177bb6d.js';
-import { l as lodash } from './lodash-66b76943.js';
+import { l as lodash } from './lodash-cc2b04b5.js';
 import { b as hexToRgb } from './utils-3af6ab7a.js';
-import { k as transformToVersionedTag } from './utils-3a5af594.js';
+import { k as transformToVersionedTag } from './utils-45d1949f.js';
 import { W as WrappedSlot } from './WrappedSlot-629d3e4f.js';
 import './_commonjsHelpers-ba3f0406.js';
 import './consts-9fc0a13a.js';
@@ -87,7 +87,7 @@ const HueSlider = class {
         left: `${this.markerPosition}px`,
       } }))));
   }
-  static get registryIs() { return "wpp-hue-slider-v3-5-0"; }
+  static get registryIs() { return "wpp-hue-slider-v4-0-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "hue": ["updateHue"]
@@ -105,7 +105,7 @@ const WppIconSwatch = class {
   render() {
     return (h(Fragment, null, this.size === 's' ? (h("svg", { width: "26", height: "26", viewBox: "0 0 26 26", fill: "none", xmlns: "http://www.w3.org/2000/svg" }, h("rect", { width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "3.71484", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "7.42969", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "11.1445", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "14.8555", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "18.5703", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "22.2852", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { y: "3.71436", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "3.71484", y: "3.71436", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "7.42969", y: "3.71436", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "11.1445", y: "3.71436", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "14.8555", y: "3.71436", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "18.5703", y: "3.71436", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "22.2852", y: "3.71436", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { y: "7.42847", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "3.71484", y: "7.42847", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "7.42969", y: "7.42847", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "11.1445", y: "7.42847", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "14.8555", y: "7.42847", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "18.5703", y: "7.42847", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "22.2852", y: "7.42847", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { y: "11.1428", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "3.71484", y: "11.1428", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "7.42969", y: "11.1428", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "11.1445", y: "11.1428", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "14.8555", y: "11.1428", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "18.5703", y: "11.1428", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "22.2852", y: "11.1428", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { y: "14.8572", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "3.71484", y: "14.8572", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "7.42969", y: "14.8572", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "11.1445", y: "14.8572", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "14.8555", y: "14.8572", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "18.5703", y: "14.8572", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "22.2852", y: "14.8572", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { y: "18.5715", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "3.71484", y: "18.5715", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "7.42969", y: "18.5715", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "11.1445", y: "18.5715", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "14.8555", y: "18.5715", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "18.5703", y: "18.5715", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "22.2852", y: "18.5715", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { y: "22.2856", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "3.71484", y: "22.2856", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "7.42969", y: "22.2856", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "11.1445", y: "22.2856", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "14.8555", y: "22.2856", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }), h("rect", { x: "18.5703", y: "22.2856", width: "3.71429", height: "3.71429", fill: "white" }), h("rect", { x: "22.2852", y: "22.2856", width: "3.71429", height: "3.71429", fill: "#E7EAEE" }))) : (h("svg", { width: "40", height: "40", viewBox: "0 0 40 40", fill: "none", xmlns: "http://www.w3.org/2000/svg" }, h("rect", { width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "5.71429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "11.4286", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "17.1429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "22.8571", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "28.5714", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "34.2857", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { y: "5.71429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "5.71429", y: "5.71429", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "11.4286", y: "5.71429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "17.1429", y: "5.71429", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "22.8571", y: "5.71429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "28.5714", y: "5.71429", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "34.2857", y: "5.71429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { y: "11.4286", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "5.71429", y: "11.4286", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "11.4286", y: "11.4286", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "17.1429", y: "11.4286", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "22.8571", y: "11.4286", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "28.5714", y: "11.4286", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "34.2857", y: "11.4286", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { y: "17.1429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "5.71429", y: "17.1429", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "11.4286", y: "17.1429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "17.1429", y: "17.1429", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "22.8571", y: "17.1429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "28.5714", y: "17.1429", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "34.2857", y: "17.1429", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { y: "22.8571", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "5.71429", y: "22.8571", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "11.4286", y: "22.8571", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "17.1429", y: "22.8571", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "22.8571", y: "22.8571", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "28.5714", y: "22.8571", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "34.2857", y: "22.8571", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { y: "28.5714", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "5.71429", y: "28.5714", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "11.4286", y: "28.5714", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "17.1429", y: "28.5714", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "22.8571", y: "28.5714", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "28.5714", y: "28.5714", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "34.2857", y: "28.5714", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { y: "34.2857", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "5.71429", y: "34.2857", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "11.4286", y: "34.2857", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "17.1429", y: "34.2857", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "22.8571", y: "34.2857", width: "5.71429", height: "5.71429", fill: "#E7EAEE" }), h("rect", { x: "28.5714", y: "34.2857", width: "5.71429", height: "5.71429", fill: "white" }), h("rect", { x: "34.2857", y: "34.2857", width: "5.71429", height: "5.71429", fill: "#E7EAEE" })))));
   }
-  static get registryIs() { return "wpp-icon-swatch-v3-5-0"; }
+  static get registryIs() { return "wpp-icon-swatch-v4-0-0"; }
 };
 WppIconSwatch.style = wppIconCss;
 
@@ -185,11 +185,11 @@ const OpacitySlider = class {
     window.addEventListener('mousemove', this.handleMouseMove);
   }
   render() {
-    return (h(Host, { class: "wpp-opacity-slider" }, h("div", { class: "slider-container" }, h("wpp-icon-transparent-v3-5-0", { class: "checkerboard" }), h("canvas", null), h("div", { class: "marker", style: {
+    return (h(Host, { class: "wpp-opacity-slider" }, h("div", { class: "slider-container" }, h("wpp-icon-transparent-v4-0-0", { class: "checkerboard" }), h("canvas", null), h("div", { class: "marker", style: {
         left: `${this.markerPosition}px`,
       } }))));
   }
-  static get registryIs() { return "wpp-opacity-slider-v3-5-0"; }
+  static get registryIs() { return "wpp-opacity-slider-v4-0-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "hexColor": ["onPropertyChange"],
@@ -291,7 +291,7 @@ const SaturationPicker = class {
         top: `${this.markerY}px`,
       } }))));
   }
-  static get registryIs() { return "wpp-saturation-picker-v3-5-0"; }
+  static get registryIs() { return "wpp-saturation-picker-v4-0-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "hue": ["onPropertyChange"],
@@ -373,9 +373,9 @@ const WppSegmentedControl = class {
     });
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v3-5-0", { class: "label", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.cssClasses(), role: "listbox", "aria-multiselectable": "false", "aria-required": this.required, part: "wrapper" }, h("slot", { part: "inner" }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-0-0", { class: "label", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.cssClasses(), role: "listbox", "aria-multiselectable": "false", "aria-required": this.required, part: "wrapper" }, h("slot", { part: "inner" }))));
   }
-  static get registryIs() { return "wpp-segmented-control-v3-5-0"; }
+  static get registryIs() { return "wpp-segmented-control-v4-0-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "value": ["valueChanged"],
@@ -428,7 +428,7 @@ const WppSegmentedControlItem = class {
   render() {
     return (h(Host, { tabIndex: this.tabIndex, onClick: this.handleClickSegmentedControl, onFocus: this.onFocus, onBlur: this.onBlur, class: this.hostCssClasses(), exportparts: "item" }, h("div", { class: this.cssClasses(), part: "item", id: String(this.value), role: "option", "aria-selected": this.active ? 'true' : 'false' }, h(WrappedSlot, { wrapperClass: "content-wrapper" }), this.variant === 'text' && this.counter > 0 && h("div", { class: "counter" }, `(${this.counter})`))));
   }
-  static get registryIs() { return "wpp-segmented-control-item-v3-5-0"; }
+  static get registryIs() { return "wpp-segmented-control-item-v4-0-0"; }
   get host() { return getElement(this); }
 };
 WppSegmentedControlItem.style = wppSegmentedControlItemCss;

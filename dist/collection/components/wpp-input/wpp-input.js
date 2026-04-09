@@ -7,7 +7,7 @@ import { FOCUS_TYPE } from '../../types/common';
 import { autoFocusElement, getSlotEmptyStates } from '../../utils/utils';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { getRawValueForExtra, getValidAutocomplete } from './utils';
-import { LOCALES_DEFAULTS, SUPPORTED_INPUT_TYPES_FOR_MASK } from './const';
+import { INPUT_BORDER_WIDTH, LOCALES_DEFAULTS, SUPPORTED_INPUT_TYPES_FOR_MASK } from './const';
 const getInitFocusInfo = () => ({
   input: FOCUS_TYPE.NONE,
   icon: FOCUS_TYPE.NONE,
@@ -53,11 +53,11 @@ export class WppInput {
       if (!this.inputRef)
         return;
       this.resizeObserver = new ResizeObserver(this.handleResize);
-      this.resizeObserver.observe(this.inputRef);
+      this.resizeObserver.observe(this.host);
     };
     this.handleResize = (entries) => {
       for (const entry of entries) {
-        if (entry.target === this.inputRef) {
+        if (entry.target === this.host) {
           if (this.withCrossIcon) {
             this.updateCrossIcon();
           }
@@ -66,6 +66,8 @@ export class WppInput {
       }
     };
     this.updateCrossIcon = () => {
+      if (!this.withCrossIcon)
+        return;
       const isActive = this.isInputFocused || this.isHovered;
       if (!isActive) {
         this.shouldRenderCrossIcon = false;
@@ -73,10 +75,9 @@ export class WppInput {
       }
       if (!this.renderedValue && !this.internalDefaultValue) {
         this.shouldRenderCrossIcon = false;
-        // Cross icon is displayed on inputs with min-width >= 160px.
-        // We take away the width of the border (2px) from 160px (min-width to display the icon) = 158px
+        // Cross icon is displayed on inputs with min-width >= 200px.
       }
-      else if (!this.inputRef || this.inputRef.clientWidth < 158) {
+      else if (!this.inputRef || this.inputRef.offsetWidth < 200) {
         this.shouldRenderCrossIcon = false;
       }
       else {
@@ -125,8 +126,19 @@ export class WppInput {
       if (!this.inputRef)
         return;
       if (this.renderedValue && this.renderedValue.length > 0) {
-        const hasScroll = this.inputRef.clientWidth < this.inputRef.scrollWidth;
-        this.hasActiveEllipses = hasScroll;
+        /**
+         * For some reason, when the width of the input is not an integer, E.g: 328.85px,
+         * the `clientWidth` is always smaller than the `scrollWidth` by "1px".
+         * This logic seems to cover all cases:
+         * - The width is an integer: `clientWidth` and `scrollWidth` are computed as expected
+         * - The width is a float: `clientWidth` will always be by "1px" smaller than the `scrollWidth`, so we compensate.
+         */
+        if (this.inputRef.getBoundingClientRect().width - 2 * INPUT_BORDER_WIDTH === this.inputRef.clientWidth) {
+          this.hasActiveEllipses = this.inputRef.clientWidth < this.inputRef.scrollWidth;
+        }
+        else {
+          this.hasActiveEllipses = this.inputRef.clientWidth + 1 < this.inputRef.scrollWidth;
+        }
       }
       else {
         this.hasActiveEllipses = false;
@@ -269,6 +281,13 @@ export class WppInput {
         this.focusType = this.getUpdatedFocusInfo(type, FOCUS_TYPE.TAB);
       }
     };
+    this.onKeyDown = (event, type) => {
+      if (type === 'icon') {
+        if (event.key === 'Enter' || event.key === ' ') {
+          this.onClear(event);
+        }
+      }
+    };
     this.onKeyPress = (event) => {
       if (this.type !== 'number')
         return;
@@ -277,10 +296,10 @@ export class WppInput {
     };
     this.inputCssClasses = () => ({
       'input-element': true,
+      'with-cross-icon': this.shouldRenderCrossIcon,
       [`size-${this.size}`]: true,
       [`${this.messageType}`]: !!this.messageType,
       [`with-icon-start`]: this.hasIconStartSlot || (this.type === 'search' && this.loading && !this.disabled) || this.type === 'search',
-      [`with-icon-end`]: (this.hasIconEndSlot && !this.shouldRenderCrossIcon) || (!this.hasIconEndSlot && this.shouldRenderCrossIcon),
       'with-double-icon-end': this.hasIconEndSlot && this.shouldRenderCrossIcon,
       'tab-focus': this.focusType.input === FOCUS_TYPE.TAB &&
         this.focusType.icon !== FOCUS_TYPE.TAB &&
@@ -315,14 +334,14 @@ export class WppInput {
       }
       return this.type === 'decimal' ? 'text' : this.type;
     };
-    this.renderInput = () => (h("input", { id: this.inputId, class: this.inputCssClasses(), name: this.name, type: this.getInputType(), value: this.renderedValue, required: this.required, disabled: this.disabled, onInput: this.onInput, onKeyPress: this.onKeyPress, onBlur: this.onBlur, readOnly: this.readOnly, ref: inputRef => this.updateInputRef(inputRef), "aria-label": this.ariaProps.label, defaultValue: this.defaultValue, part: "input", title: "", placeholder: this.placeholder, autocomplete: getValidAutocomplete(this.autocomplete), "aria-disabled": this.disabled || this.loading ? 'true' : 'false', "aria-required": this.required ? 'true' : undefined, "aria-labelledby": this.labelConfig?.text ? this.labelId : undefined, "aria-invalid": this.lengthValidationError || this.messageType === 'error' ? 'true' : undefined, "data-testid": "input" }));
+    this.renderInput = () => (h("input", { id: this.inputId, class: this.inputCssClasses(), name: this.name, type: this.getInputType(), value: this.renderedValue, required: this.required, disabled: this.disabled, onInput: this.onInput, onKeyPress: this.onKeyPress, readOnly: this.readOnly, ref: inputRef => this.updateInputRef(inputRef), "aria-label": this.ariaProps.label, defaultValue: this.defaultValue, part: "input", title: "", placeholder: this.placeholder, autocomplete: getValidAutocomplete(this.autocomplete), "aria-disabled": this.disabled || this.loading ? 'true' : 'false', "aria-required": this.required ? 'true' : undefined, "aria-labelledby": this.labelConfig?.text ? this.labelId : undefined, "aria-invalid": this.lengthValidationError || this.messageType === 'error' ? 'true' : undefined, "aria-activedescendant": this.ariaProps.activedescendant ?? undefined, "data-testid": "input" }));
     this.renderSearchIconOrSpinner = () => {
       if (this.type !== 'search')
         return null;
       if (this.loading && !this.disabled) {
-        return h("wpp-spinner-v3-5-0", { class: this.iconStartCssClasses(), slot: "left", "aria-label": "Loading" });
+        return h("wpp-spinner-v4-0-0", { class: this.iconStartCssClasses(), slot: "left", "aria-label": "Loading" });
       }
-      return h("wpp-icon-search-v3-5-0", { class: this.iconStartCssClasses(), part: "icon-search" });
+      return h("wpp-icon-search-v4-0-0", { class: this.iconStartCssClasses(), part: "icon-search" });
     };
     this.shouldRenderCrossIcon = false;
     this.hasActiveEllipses = false;
@@ -369,10 +388,12 @@ export class WppInput {
   /**
    * Method that sets focus on the native input.
    */
-  async setFocus() {
-    setTimeout(() => {
+  async setFocus(isOutlined) {
+    requestAnimationFrame(() => {
       this.inputRef?.focus();
-    }, 0);
+      if (isOutlined)
+        this.focusType = this.getUpdatedFocusInfo('input', FOCUS_TYPE.TAB);
+    });
   }
   /**
    * Method that sets the input value programmatically.
@@ -405,9 +426,24 @@ export class WppInput {
   async getValue() {
     return this.renderedValue;
   }
-  onUpdateMaskOptions() {
+  onUpdateMaskOptions(newMaskOptions, prevMaskOptions) {
+    if (JSON.stringify(newMaskOptions) === JSON.stringify(prevMaskOptions))
+      return;
+    const rawNumericValue = getRawValueForExtra(this.renderedValue, this.type, prevMaskOptions);
     this.destroyMask();
+    /**
+     * Need to initialize a new value (if exists) before creating a new mask
+     * This is needed because createMaskForInput create a new Maskito instance with actual input value
+     */
+    if (this.inputRef && rawNumericValue !== null) {
+      this.inputRef.value = String(rawNumericValue);
+    }
     this.createMaskForInput();
+    if (this.generatedMask && rawNumericValue !== null) {
+      this.renderedValue = maskitoTransform(String(rawNumericValue), this.generatedMask);
+      if (this.inputRef)
+        this.inputRef.value = this.renderedValue;
+    }
   }
   onUpdateLocales(newLocales) {
     this._locales = { ...this._locales, ...newLocales };
@@ -456,10 +492,19 @@ export class WppInput {
       }, onMouseLeave: () => {
         this.isHovered = false;
         this.updateCrossIcon();
-      }, onKeyUp: (event) => this.onKeyUp(event, 'input'), exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v3-5-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v3-5-0", { part: "anchor", text: this.renderedValue, class: "with-tooltip", disabled: !this.hasActiveEllipses || this.type === 'password', anchorTabIndex: -1, config: this.truncationTooltipConfig }, this.renderInput()), this.shouldRenderCrossIcon && this.withCrossIcon && (h("wpp-icon-cross-v3-5-0", { class: this.iconEndCssClasses('native'), "aria-label": "Erase input text", role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: 0, part: "icon-cross", onMouseDown: event => event.preventDefault(), onClick: event => this.onClear(event), onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses('slot'), name: "icon-end", onSlotchange: this.updateSlotData, tabIndex: this.hasIconEndSlot ? 0 : -1, "aria-label": "Clear input", role: "button" })), this.lengthValidationError && (h("wpp-inline-message-v3-5-0", { message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') })), this.message && (h("wpp-inline-message-v3-5-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') }))));
+      }, onKeyUp: (event) => this.onKeyUp(event, 'input'), exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v4-0-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v4-0-0", { part: "anchor", text: this.renderedValue, class: "with-tooltip", anchorTabIndex: -1, config: {
+        ...this.truncationTooltipConfig,
+        onShow: (instance) => {
+          if (!this.hasActiveEllipses || this.type === 'password')
+            return false;
+          if (this.truncationTooltipConfig.onShow) {
+            return this.truncationTooltipConfig?.onShow(instance);
+          }
+        },
+      } }, this.renderInput()), this.shouldRenderCrossIcon && this.withCrossIcon && (h("wpp-icon-cross-v4-0-0", { class: this.iconEndCssClasses('native'), "aria-label": "Erase input text", role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: 0, part: "icon-cross", onMouseDown: event => event.preventDefault(), onClick: event => this.onClear(event), onKeyUp: (event) => this.onKeyUp(event, 'icon'), onKeyDown: (event) => this.onKeyDown(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses('slot'), name: "icon-end", onSlotchange: this.updateSlotData, tabIndex: this.hasIconEndSlot ? 0 : -1, "aria-label": "Clear input", role: "button" })), this.lengthValidationError && (h("wpp-inline-message-v4-0-0", { message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') })), this.message && (h("wpp-inline-message-v4-0-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') }))));
   }
   static get is() { return "wpp-input"; }
-  static get registryIs() { return "wpp-input-v3-5-0"; }
+  static get registryIs() { return "wpp-input-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -1094,8 +1139,11 @@ export class WppInput {
       },
       "setFocus": {
         "complexType": {
-          "signature": "() => Promise<void>",
-          "parameters": [],
+          "signature": "(isOutlined?: boolean) => Promise<void>",
+          "parameters": [{
+              "tags": [],
+              "text": ""
+            }],
           "references": {
             "Promise": {
               "location": "global",

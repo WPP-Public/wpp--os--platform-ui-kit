@@ -33,7 +33,6 @@ export interface SkeletonProps {
   variant?: 'rectangle' | 'circle';
   width?: string | number;
   height?: string | number;
-  animation?: boolean;
   /** Number of skeleton rows to show while loading children */
   count?: number;
 }
@@ -75,11 +74,6 @@ export interface TreeLocaleType {
 export type TransformSearchQuery = (search: string) => string;
 export interface TreeItemSearchConfig {
   /**
-   * @deprecated Use `isMatchingSearch` instead.
-   * Indicates whether the search query matches.
-   */
-  isMatchSearch?: (title: string, search: string) => boolean;
-  /**
    * Options for highlighting matched items.
    */
   highlightOptions?: TreeItemHighlightOptions;
@@ -89,8 +83,7 @@ export interface TreeItemSearchConfig {
   transformSearchQuery?: TransformSearchQuery;
   /**
    * A function to determine whether the search query matches.
-   * Use this instead of "isMatchSearch".
-   * This function is passing the tree item such that more advanced searches can be done.
+   * This function receives the tree item such that more advanced searches can be done.
    */
   isMatchingSearch?: (item: TreeType, search: string) => boolean;
 }

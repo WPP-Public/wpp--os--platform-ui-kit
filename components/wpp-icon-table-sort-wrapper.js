@@ -136,10 +136,10 @@ const WppIconTableSortWrapper$1 = /*@__PURE__*/ proxyCustomElement(class WppIcon
   render() {
     return h(Host, null, this.getIconComponent());
   }
-  static get registryIs() { return "wpp-icon-table-sort-wrapper-v3-5-0"; }
+  static get registryIs() { return "wpp-icon-table-sort-wrapper-v4-0-0"; }
   get host() { return this; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-table-sort-wrapper", "wpp-icon-table-sort-wrapper-v3-5-0", {
+}, [1, "wpp-icon-table-sort-wrapper", "wpp-icon-table-sort-wrapper-v4-0-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -155,9 +155,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-table-sort-wrapper-v3-5-0"];
+  const components = ["wpp-icon-table-sort-wrapper-v4-0-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-table-sort-wrapper-v3-5-0":
+    case "wpp-icon-table-sort-wrapper-v4-0-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconTableSortWrapper$1);
       }

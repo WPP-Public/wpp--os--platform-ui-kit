@@ -11,7 +11,7 @@ export class WppIconDash {
     return (h(WppIcon, { name: "wpp-icon-dash", width: this.width, height: this.height, size: this.size, color: this.color }, h("line", { x1: "7", y1: "10", x2: "13", y2: "10", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round" })));
   }
   static get is() { return "wpp-icon-dash"; }
-  static get registryIs() { return "wpp-icon-dash-v3-5-0"; }
+  static get registryIs() { return "wpp-icon-dash-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

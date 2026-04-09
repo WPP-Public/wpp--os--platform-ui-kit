@@ -132,10 +132,10 @@ describe('wpp-avatar', () => {
       expect(iconEl?.getAttribute('height')).toBe(String(expected));
     });
   }
-  it('should emit wppClick when handleClick is called', async () => {
+  it('should emit wppClick when handleClick is called and interactable is true', async () => {
     const page = await newSpecPage({
       components: [WppAvatar],
-      html: `<wpp-avatar name="Akash"></wpp-avatar>`,
+      html: `<wpp-avatar name="Akash" interactable="true"></wpp-avatar>`,
     });
     const root = page.root;
     const instance = page.rootInstance;
@@ -146,6 +146,47 @@ describe('wpp-avatar', () => {
     instance.handleClick(new MouseEvent('click'));
     await page.waitForChanges();
     expect(spy).toHaveBeenCalledTimes(1);
+  });
+  describe('wppClick event and interactable prop (WPPOPENDS-1169)', () => {
+    it('should NOT emit wppClick when interactable is false (default)', async () => {
+      const page = await newSpecPage({
+        components: [WppAvatar],
+        html: `<wpp-avatar name="Test User"></wpp-avatar>`,
+      });
+      const root = page.root;
+      const instance = page.rootInstance;
+      const spy = jest.fn();
+      root.addEventListener('wppClick', spy);
+      instance.handleClick(new MouseEvent('click'));
+      await page.waitForChanges();
+      expect(spy).not.toHaveBeenCalled();
+    });
+    it('should NOT emit wppClick when interactable is explicitly set to false', async () => {
+      const page = await newSpecPage({
+        components: [WppAvatar],
+        html: `<wpp-avatar name="Test User" interactable="false"></wpp-avatar>`,
+      });
+      const root = page.root;
+      const instance = page.rootInstance;
+      const spy = jest.fn();
+      root.addEventListener('wppClick', spy);
+      instance.handleClick(new MouseEvent('click'));
+      await page.waitForChanges();
+      expect(spy).not.toHaveBeenCalled();
+    });
+    it('should emit wppClick when interactable is true', async () => {
+      const page = await newSpecPage({
+        components: [WppAvatar],
+        html: `<wpp-avatar name="Test User" interactable="true"></wpp-avatar>`,
+      });
+      const root = page.root;
+      const instance = page.rootInstance;
+      const spy = jest.fn();
+      root.addEventListener('wppClick', spy);
+      instance.handleClick(new MouseEvent('click'));
+      await page.waitForChanges();
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
   });
   it('renders component', async () => {
     const page = await newSpecPage({
