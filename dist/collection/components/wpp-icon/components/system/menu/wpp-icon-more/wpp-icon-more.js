@@ -17,7 +17,7 @@ export class WppIconMore {
     return (h(WppIcon, { name: "wpp-icon-more", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: MenuDirectionIconPath[this.direction], fill: "currentColor" })));
   }
   static get is() { return "wpp-icon-more"; }
-  static get registryIs() { return "wpp-icon-more-v3-5-0"; }
+  static get registryIs() { return "wpp-icon-more-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

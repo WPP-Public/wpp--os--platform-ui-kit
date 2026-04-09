@@ -23,7 +23,7 @@ export declare class WppChatInput {
   readonly size: ChatInputSize;
   /**
    * Placeholder text for the input field.
-   * @deprecated: Prefer locales.placeholder.
+   * @deprecated: Prefer locales.placeholder. This property will be removed in version 5.0.0.
    */
   readonly placeholder: string;
   /**
@@ -76,16 +76,19 @@ export declare class WppChatInput {
   /**
    * Defines the aria-label of the text area.
    * @deprecated: Prefer ariaProps.textarea.label
+   * This property will be removed in version 5.0.0.
    */
   readonly textareaAriaLabel?: string;
   /**
    * Defines the Id of the text area.
    * @deprecated: Prefer htmlAttributes.textarea.id
+   * This property will be removed in version 5.0.0.
    */
   readonly textareaId?: string;
   /**
    * Defines the name of the text area.
    * @deprecated: Prefer htmlAttributes.textarea.name
+   * This property will be removed in version 5.0.0.
    */
   readonly textareaName?: string;
   /**

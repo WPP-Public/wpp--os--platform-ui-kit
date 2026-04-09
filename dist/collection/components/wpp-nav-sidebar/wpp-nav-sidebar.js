@@ -62,7 +62,6 @@ export class WppNavSidebar {
     this.hostCssClasses = () => ({
       'wpp-nav-sidebar': true,
     });
-    this.initialPath = undefined;
     this.activePath = undefined;
     this.nativeLink = false;
     this.zIndex = Z_INDEX.NAV_SIDEBAR;
@@ -81,15 +80,14 @@ export class WppNavSidebar {
     this.closeInactiveExpandedItem(event.detail.label);
   }
   componentWillLoad() {
-    const initialPath = this.activePath || this.initialPath;
-    this.setActiveItem(initialPath);
+    this.setActiveItem(this.activePath);
     this.calculateOsBarHeight();
   }
   render() {
     return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "nav-sidebar, body, header-wrapper, header, ws-wrapper, ws-inner" }, h("aside", { class: this.asideCssClasses(), part: "nav-sidebar" }, h("div", { class: "nav-wrapper", part: "body" }, h(WrappedSlot, { wrapperClass: "title-wrapper", name: "header" }), h(WrappedSlot, { wrapperClass: "items-wrapper" })))));
   }
   static get is() { return "wpp-nav-sidebar"; }
-  static get registryIs() { return "wpp-nav-sidebar-v3-5-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -103,26 +101,6 @@ export class WppNavSidebar {
   }
   static get properties() {
     return {
-      "initialPath": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string | undefined",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [{
-              "name": "deprecated",
-              "text": "initialPath is being deprecated and will be deleted in v4.0.0. Use `activePath` instead."
-            }],
-          "text": "Defines the initial current path."
-        },
-        "attribute": "initial-path",
-        "reflect": false
-      },
       "activePath": {
         "type": "string",
         "mutable": false,

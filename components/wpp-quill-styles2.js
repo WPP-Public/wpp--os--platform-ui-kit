@@ -7,16 +7,16 @@ const WppQuillStyles = /*@__PURE__*/ proxyCustomElement(class WppQuillStyles ext
     super();
     this.__registerHost();
   }
-  static get registryIs() { return "wpp-quill-styles-v3-5-0"; }
+  static get registryIs() { return "wpp-quill-styles-v4-0-0"; }
   static get style() { return wppCss; }
-}, [0, "wpp-quill-styles", "wpp-quill-styles-v3-5-0"]);
+}, [0, "wpp-quill-styles", "wpp-quill-styles-v4-0-0"]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-quill-styles-v3-5-0"];
+  const components = ["wpp-quill-styles-v4-0-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-quill-styles-v3-5-0":
+    case "wpp-quill-styles-v4-0-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppQuillStyles);
       }

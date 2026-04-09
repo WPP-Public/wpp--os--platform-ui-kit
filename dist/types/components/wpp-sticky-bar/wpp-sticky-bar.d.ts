@@ -1,17 +1,15 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { StickyBarButtonItem, StickyBarTabItem, StickyBarVariants, VisibilityClasses } from './types';
 /**
- * @slot content - Should contain the content for the sticky bar. This slot is available only for the following variants: 'two-lines' and 'blank'
+ * @slot content - Should contain the content for the sticky bar. This slot is available only for the following variant: 'medium'
  */
 export declare class WppStickyBar {
   visibility: VisibilityClasses;
-  scrollDirection: 'up' | 'down';
   currentTab: string;
-  currentSize: 'm' | 's';
   buttonsList: Array<StickyBarButtonItem | null>;
   host: HTMLWppStickyBarElement;
   /**
-   * The variant of the sticky-bar. The default value is 'one-line'
+   * The variant of the sticky-bar.
    */
   readonly variant: StickyBarVariants;
   /**
@@ -45,9 +43,14 @@ export declare class WppStickyBar {
   readonly buttons: StickyBarButtonItem[];
   /**
    * The configuration of the tabs. Based on this array with config items, tabs are placed on the sticky bar.
-   * This prop can only be used with the "two-lines-with-tabs" variant.
+   * This prop can only be used for the "with-tabs" variant.
    */
   readonly tabs: StickyBarTabItem[];
+  /**
+   * The size of the tab items.
+   * This prop can only be used for the "with-tabs" variant.
+   */
+  readonly tabSize: 'm' | 's';
   /**
    * Emitted when the back icon is clicked (icon on the left of the title).
    */

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const utils = require('./utils-27884b05.js');
+const utils = require('./utils-15defa44.js');
 const common = require('./common-ee802540.js');
 require('./consts-dba6e6dd.js');
 
@@ -68,9 +68,9 @@ const WppBackToTopButton = class {
     this.validAriaProps = utils.getAriaProps(this.ariaProps);
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "button, icon", onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, index.h("button", { ref: el => (this.buttonRef = el), onBlur: this.onBlur, class: this.buttonCssClasses(), type: "button", part: "button", "data-testid": "wppBackToTopButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps }, index.h("wpp-icon-arrow-v3-5-0", { direction: "top", class: "icon", part: "icon" }))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "button, icon", onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, index.h("button", { ref: el => (this.buttonRef = el), onBlur: this.onBlur, class: this.buttonCssClasses(), type: "button", part: "button", "data-testid": "wppBackToTopButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps }, index.h("wpp-icon-arrow-v4-0-0", { direction: "up", class: "icon", part: "icon" }))));
   }
-  static get registryIs() { return "wpp-back-to-top-button-v3-5-0"; }
+  static get registryIs() { return "wpp-back-to-top-button-v4-0-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "ariaProps": ["onUpdateAriaProps"]

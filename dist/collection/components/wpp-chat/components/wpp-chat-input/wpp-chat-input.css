@@ -61,8 +61,6 @@
 .chat-input-container {
   display: flex;
   flex-direction: column;
-  position: absolute;
-  bottom: 100%;
   background-color: var(--chat-input-container-bg-color);
   gap: 8px;
   outline: var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color);

@@ -1,5 +1,5 @@
 import { DRAG_THUMBNAIL_MAX_SIZE } from './const';
-import { marked } from 'marked';
+import { Marked } from 'marked';
 export function ignoreHistory(quill, changes) {
   quill.history?.cutoff();
   if (quill.history) {
@@ -44,7 +44,7 @@ export function createDragThumbnail(node) {
  *   - plainText: The extracted plain text.
  */
 export function processMarkdownValue(value) {
-  let preprocessedValue = String(value || '');
+  let preprocessedValue = value || '';
   // Check if the value already contains &nbsp; markers (from Turndown emptyParagraph rule)
   // If so, don't add more markers - just normalize excessive newlines
   const hasExistingMarkers = preprocessedValue.includes('&nbsp;');
@@ -67,14 +67,9 @@ export function processMarkdownValue(value) {
     const indentLevel = Math.floor(spaces.length / 2);
     return `${spaces}${marker} [[[INDENT:${indentLevel}]]]${content}`;
   });
-  marked.setOptions({
-    gfm: true,
-    breaks: true,
-    smartLists: true,
-    tables: true,
-  });
+  const md = new Marked();
   // Convert markdown to HTML
-  let html = marked(preprocessedValue);
+  let html = md.parse(preprocessedValue);
   // Restore list item indentation classes
   html = html.replace(/<li>(\[{3}INDENT:(\d+)\]{3})?([^<]*)/g, (_match, _fullMarker, indentLevel, content) => {
     if (indentLevel) {

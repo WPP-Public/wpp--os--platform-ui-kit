@@ -75,7 +75,7 @@ export declare class WppRichtext implements BaseComponent {
   format: Formats;
   /**
    * @deprecated This property is no longer needed. Whitespace preservation is now the default behavior
-   * for markdown format. This prop will be removed in a future major version.
+   * for markdown format.This property will be removed in version 5.0.0.
    */
   readonly preserveWhitespace: boolean;
   /**
@@ -178,6 +178,7 @@ export declare class WppRichtext implements BaseComponent {
   componentWillLoad(): void;
   private hostCssClasses;
   private formControlCssClasses;
+  private hasWarning;
   private charLimitCssClasses;
   private messageCssClasses;
   render(): any;

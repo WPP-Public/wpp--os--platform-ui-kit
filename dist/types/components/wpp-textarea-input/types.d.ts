@@ -6,5 +6,6 @@ export type TextareaInputChangeEventDetail = BaseFormControlEventDetail<Textarea
 };
 export interface TextareaInputLocales {
   charactersEntered: string;
+  exceededByCharacters: string;
 }
 export type TextareaLabelConfig = LabelConfig;

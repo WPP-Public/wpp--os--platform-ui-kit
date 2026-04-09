@@ -5,3 +5,4 @@ export default _default;
 export declare const WithinLimit: StoryObj<Components.WppTextareaInput>;
 export declare const LimitExceeded: StoryObj<Components.WppTextareaInput>;
 export declare const NoneLimit: StoryObj<Components.WppTextareaInput & Components.WppInlineMessage>;
+export declare const StretchTextarea: StoryObj<Components.WppTextareaInput>;

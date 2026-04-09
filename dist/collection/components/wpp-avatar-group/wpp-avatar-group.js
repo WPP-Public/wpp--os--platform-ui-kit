@@ -41,9 +41,7 @@ export class WppAvatarGroup {
       const listItem = event.currentTarget;
       this.wppSelectItem.emit({ value: listItem, fromDropdown: true, avatarIndex });
     };
-    this.getAvatarsList = () => (this.avatars.length ? this.avatars : this.users);
     this.menuContextTippyRef = undefined;
-    this.users = [];
     this.avatars = [];
     this.maxAvatarsToDisplay = 6;
     this.size = 'xs';
@@ -55,13 +53,13 @@ export class WppAvatarGroup {
     this.dropdownConfig = {};
   }
   render() {
-    const avatarsWithColors = this.getAvatarsWithColors(this.getAvatarsList());
+    const avatarsWithColors = this.getAvatarsWithColors(this.avatars);
     const avatarsToDisplay = avatarsWithColors.slice(0, this.maxAvatarsToDisplay);
     const avatarsInHiddenList = avatarsWithColors.slice(this.maxAvatarsToDisplay);
     return (h(Host, { class: this.avatarGroupWrapperCssClasses(), role: "group", exportparts: "list, item, menu, avatar, hidden-item, hidden-item-with-avatar, hidden-item-avatar, hidden-item-name" }, h("ul", { class: "avatars-list", part: "list" }, avatarsToDisplay.map((avatar, avatarIndex) => (h("li", { class: {
         'avatar-item': true,
-        interactable: avatar.interactable ?? false,
-      }, part: "item" }, h("wpp-avatar-v3-5-0", { size: this.size, variant: this.variant, name: avatar.name, src: avatar.src, withTooltip: this.withTooltip, tooltipConfig: this.tooltipConfig, interactable: avatar.interactable, color: avatar.color, onWppClick: (event) => this.handleAvatarClick(event, avatarIndex, false) })))), this.getAvatarsList().length > this.maxAvatarsToDisplay && (h("li", { class: "avatar-item", part: "item" }, h("wpp-menu-context-v3-5-0", { externalClass: "avatar-group", listWidth: "240px", dropdownConfig: {
+        interactable: avatar.interactable ?? true,
+      }, part: "item" }, h("wpp-avatar-v4-0-0", { size: this.size, variant: this.variant, name: avatar.name, src: avatar.src, withTooltip: this.withTooltip, tooltipConfig: this.tooltipConfig, interactable: avatar.interactable ?? true, color: avatar.color, onWppClick: (event) => this.handleAvatarClick(event, avatarIndex, false) })))), this.avatars.length > this.maxAvatarsToDisplay && (h("li", { class: "avatar-item", part: "item" }, h("wpp-menu-context-v4-0-0", { externalClass: "avatar-group", listWidth: "240px", dropdownConfig: {
         ...this.dropdownConfig,
         onShow: (instance) => {
           const firstListItem = instance.popper.querySelector('.wpp-list-item');
@@ -78,10 +76,10 @@ export class WppAvatarGroup {
         onDestroy: () => {
           this.menuContextTippyRef = undefined;
         },
-      }, part: "menu", onKeyDown: this.onKeyDown, ariaProps: { label: `+${avatarsInHiddenList.length} more list items with avatars` } }, h("wpp-avatar-v3-5-0", { amountOfHiddenAvatars: avatarsInHiddenList.length, size: this.size, variant: this.variant, slot: "trigger-element", part: "avatar" }), h(Fragment, null, avatarsInHiddenList.map((avatar, avatarIndex) => (h("wpp-list-item-v3-5-0", { key: avatar.name, onWppChangeListItem: (event) => this.handleListItemClick(event, avatarIndex), value: avatar.name, part: "hidden-item" }, h("wpp-avatar-v3-5-0", { name: avatar.name, src: avatar.src, color: avatar.color, variant: this.variant, interactable: avatar.interactable, role: "presentation", slot: "left", part: "hidden-item-avatar" }), h("span", { slot: "label", class: "name", part: "hidden-item-name" }, avatar.name)))))))))));
+      }, part: "menu", onKeyDown: this.onKeyDown, ariaProps: { label: `+${avatarsInHiddenList.length} more list items with avatars` } }, h("wpp-avatar-v4-0-0", { amountOfHiddenAvatars: avatarsInHiddenList.length, size: this.size, variant: this.variant, slot: "trigger-element", part: "avatar" }), h(Fragment, null, avatarsInHiddenList.map((avatar, avatarIndex) => (h("wpp-list-item-v4-0-0", { key: avatar.name, onWppChangeListItem: (event) => this.handleListItemClick(event, avatarIndex + this.maxAvatarsToDisplay), value: avatar.name, nonInteractive: avatar.interactable === false, part: "hidden-item" }, h("wpp-avatar-v4-0-0", { name: avatar.name, src: avatar.src, color: avatar.color, variant: this.variant, interactable: false, role: "presentation", slot: "left", part: "hidden-item-avatar" }), h("span", { slot: "label", class: "name", part: "hidden-item-name" }, avatar.name)))))))))));
   }
   static get is() { return "wpp-avatar-group"; }
-  static get registryIs() { return "wpp-avatar-group-v3-5-0"; }
+  static get registryIs() { return "wpp-avatar-group-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -95,31 +93,6 @@ export class WppAvatarGroup {
   }
   static get properties() {
     return {
-      "users": {
-        "type": "unknown",
-        "mutable": false,
-        "complexType": {
-          "original": "AvatarState[]",
-          "resolved": "AvatarState[]",
-          "references": {
-            "AvatarState": {
-              "location": "import",
-              "path": "./types",
-              "id": "src/components/wpp-avatar-group/types.ts::AvatarState"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [{
-              "name": "deprecated",
-              "text": "- this prop will be deleted in version 4.0.0. If you want to use this prop, use avatars prop instead"
-            }],
-          "text": "Defines a list of users with specific attributes, such as name, src, color, and so on: `users={[{name: '', src: ''}]}`"
-        },
-        "defaultValue": "[]"
-      },
       "avatars": {
         "type": "unknown",
         "mutable": false,

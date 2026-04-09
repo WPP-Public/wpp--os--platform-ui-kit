@@ -56,7 +56,7 @@ export const CombinedInput = (args) => {
     console.log('Event:', event);
   };
   return html `
-    <wpp-select-v3-5-0
+    <wpp-select-v4-0-0
       type="combined"
       name="combined-select"
       .message=${args.message}
@@ -74,7 +74,7 @@ export const CombinedInput = (args) => {
       .list=${SAMPLE_LIST_COMBINED}
       @wppChange=${handleChange}
     >
-    </wpp-select-v3-5-0>
+    </wpp-select-v4-0-0>
   `;
 };
 CombinedInput.args = {

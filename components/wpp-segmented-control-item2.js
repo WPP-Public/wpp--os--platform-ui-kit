@@ -46,10 +46,10 @@ const WppSegmentedControlItem = /*@__PURE__*/ proxyCustomElement(class WppSegmen
   render() {
     return (h(Host, { tabIndex: this.tabIndex, onClick: this.handleClickSegmentedControl, onFocus: this.onFocus, onBlur: this.onBlur, class: this.hostCssClasses(), exportparts: "item" }, h("div", { class: this.cssClasses(), part: "item", id: String(this.value), role: "option", "aria-selected": this.active ? 'true' : 'false' }, h(WrappedSlot, { wrapperClass: "content-wrapper" }), this.variant === 'text' && this.counter > 0 && h("div", { class: "counter" }, `(${this.counter})`))));
   }
-  static get registryIs() { return "wpp-segmented-control-item-v3-5-0"; }
+  static get registryIs() { return "wpp-segmented-control-item-v4-0-0"; }
   get host() { return this; }
   static get style() { return wppSegmentedControlItemCss; }
-}, [1, "wpp-segmented-control-item", "wpp-segmented-control-item-v3-5-0", {
+}, [1, "wpp-segmented-control-item", "wpp-segmented-control-item-v4-0-0", {
     "size": [1],
     "active": [516],
     "disabled": [516],
@@ -62,9 +62,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-segmented-control-item-v3-5-0"];
+  const components = ["wpp-segmented-control-item-v4-0-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-segmented-control-item-v3-5-0":
+    case "wpp-segmented-control-item-v4-0-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppSegmentedControlItem);
       }

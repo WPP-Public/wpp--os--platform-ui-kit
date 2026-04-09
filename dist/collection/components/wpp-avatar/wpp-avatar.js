@@ -65,7 +65,9 @@ export class WppAvatar {
       }
     };
     this.handleClick = () => {
-      this.wppClick.emit({ value: this.host });
+      if (this.interactable) {
+        this.wppClick.emit({ value: this.host });
+      }
     };
     this.hostCssClasses = () => ({
       'wpp-avatar': true,
@@ -131,10 +133,10 @@ export class WppAvatar {
     const content = this.src && !this.isImageFailedToLoad ? (h("div", { class: this.imageWrapperCssClasses(), part: "content" }, h("img", { src: this.src, alt: `${this.name} - avatar`, class: this.imageCssClasses(), onError: this.handleImageLoadFailure, part: "image" }))) : (h(Fragment, null, h("div", { class: this.contentWrapperCssClasses(), part: "content" }, this.amountOfHiddenAvatars ? `+${this.amountOfHiddenAvatars}` : this.getUserAbbreviation(this.name), this.renderIcon())));
     return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onClick: this.handleClick, exportparts: "image, content, tooltip", ...((this.withTooltip && !this.isAvatarIcon()) || this.role === 'presentation'
         ? { role: 'presentation' }
-        : { role: this.role, tabIndex: this.index, ariaLabel: this.ariaProps.label }) }, this.withTooltip && !this.isAvatarIcon() ? (h("wpp-tooltip-v3-5-0", { text: this.name, config: this.tooltipConfig, part: "tooltip", ariaProps: { label: `User: ${this.name}`, role: 'button' } }, content)) : (content)));
+        : { role: this.role, tabIndex: this.index, ariaLabel: this.ariaProps.label }) }, this.withTooltip && !this.isAvatarIcon() ? (h("wpp-tooltip-v4-0-0", { text: this.name, config: this.tooltipConfig, part: "tooltip", ariaProps: { label: `User: ${this.name}`, role: 'button' } }, content)) : (content)));
   }
   static get is() { return "wpp-avatar"; }
-  static get registryIs() { return "wpp-avatar-v3-5-0"; }
+  static get registryIs() { return "wpp-avatar-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

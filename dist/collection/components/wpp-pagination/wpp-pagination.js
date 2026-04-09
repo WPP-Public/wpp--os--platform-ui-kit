@@ -57,19 +57,22 @@ export class WppPagination {
       this.wppChange.emit({ page: this.activePageNumber, itemsPerPage: this.selectedItemPerPage });
     }
   }
+  get hasSingleItemPerPageOption() {
+    return this.itemsPerPage.length === 1;
+  }
   render() {
     const countPagesToDisplay = Math.ceil(this.count / this.selectedItemPerPage);
     if (this.count === 0) {
       return null;
     }
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, h("div", { class: "control-pagination-wrapper", part: "body" }, h("wpp-typography-v3-5-0", { type: "s-body", part: "per-page-label" }, this._locales.itemsPerPage, ":"), h("wpp-select-v3-5-0", { type: "single", isTextSelect: true, onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig }, dropdownWidth: "100px", part: "pre-page-select", list: this.itemsPerPage.map(item => ({
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, h("div", { class: "control-pagination-wrapper", part: "body" }, h("wpp-typography-v4-0-0", { type: "s-body", part: "per-page-label" }, this._locales.itemsPerPage, ":"), this.hasSingleItemPerPageOption ? (h("wpp-typography-v4-0-0", { type: "s-body", class: "single-item-per-page", part: "pre-page-select" }, this.selectedItemPerPage)) : (h("wpp-select-v4-0-0", { type: "single", isTextSelect: true, onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig }, dropdownWidth: "100px", part: "pre-page-select", list: this.itemsPerPage.map(item => ({
         value: item,
         label: `${item}`,
         part: 'per-page-item',
-      })) }), h("wpp-divider-v3-5-0", { part: "divider" }), h("wpp-typography-v3-5-0", { type: "s-body", part: "range" }, this.getPageRange())), countPagesToDisplay && (h("wpp-pagination-select-v3-5-0", { count: countPagesToDisplay, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, part: "page-select" }))));
+      })) })), h("wpp-divider-v4-0-0", { part: "divider" }), h("wpp-typography-v4-0-0", { type: "s-body", part: "range" }, this.getPageRange())), countPagesToDisplay && (h("wpp-pagination-select-v4-0-0", { count: countPagesToDisplay, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, part: "page-select" }))));
   }
   static get is() { return "wpp-pagination"; }
-  static get registryIs() { return "wpp-pagination-v3-5-0"; }
+  static get registryIs() { return "wpp-pagination-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

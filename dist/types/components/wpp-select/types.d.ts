@@ -16,7 +16,7 @@ export type SelectChangeEventDetail = (BaseFormControlEventDetail<SelectValue[] 
 }) | (CombinedSelectControl<SelectValue[] | SelectValue> & {
   name?: string;
 });
-export type SelectTypes = 'single' | 'multiple' | 'text' | 'combined';
+export type SelectTypes = 'single' | 'multiple' | 'combined';
 export type SelectSize = 'm' | 's';
 export type SelectTabElements = 'input' | 'listItem';
 export interface CombinedSelectControl<T> {
@@ -36,6 +36,8 @@ export interface SelectLocaleInterface {
   allSelectedText?: string;
   selectLabel?: string;
   loadingText?: string;
+  clearText?: string;
+  applyText?: string;
 }
 export type SelectLabelConfig = LabelConfig;
 export interface SelectChangeEventDetails {

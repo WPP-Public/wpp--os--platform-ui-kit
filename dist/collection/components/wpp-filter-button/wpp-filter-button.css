@@ -40,7 +40,7 @@
   --filter-button-bg-color-hover: var(--wpp-filter-button-bg-color-hover, var(--wpp-grey-color-200));
   --filter-button-bg-color-active: var(--wpp-filter-button-bg-color-active, var(--wpp-grey-color-300));
   --filter-button-bg-color-disabled: var(--wpp-filter-button-bg-color-disabled, var(--wpp-grey-color-100));
-  --filter-button-border-color: var(--wpp-filter-button-border-color, var(--wpp-grey-color-600));
+  --filter-button-border-color: var(--wpp-filter-button-border-color, var(--wpp-grey-color-500));
   --filter-button-border-color-hover: var(--wpp-filter-button-border-color-hover, var(--wpp-grey-color-700));
   --filter-button-border-color-active: var(--wpp-filter-button-border-color-active, var(--wpp-grey-color-800));
   --filter-button-border-color-disabled: var(--wpp-filter-button-border-color-disabled, var(--wpp-grey-color-400));
@@ -56,8 +56,8 @@
   --filter-button-text-color-disabled: var(--wpp-filter-button-text-color-disabled, var(--wpp-text-color-disabled));
   --filter-button-counter-margin: var(--wpp-filter-button-counter-margin, 0 0 0 4px);
   --filter-button-counter-color: var(--wpp-filter-button-counter-color, var(--wpp-grey-color-900));
-  --filter-button-counter-color-hover: var(--wpp-filter-button-counter-color-hover, var(--wpp-text-color-info));
-  --filter-button-counter-color-active: var(--wpp-filter-button-counter-color-active, var(--wpp-text-color));
+  --filter-button-counter-color-hover: var(--wpp-filter-button-counter-color-hover, var(--wpp-grey-color-900));
+  --filter-button-counter-color-active: var(--wpp-filter-button-counter-color-active, var(--wpp-grey-color-1000));
   --filter-button-counter-color-disabled: var(
     --wpp-filter-button-counter-color-disabled,
     var(--wpp-text-color-disabled)

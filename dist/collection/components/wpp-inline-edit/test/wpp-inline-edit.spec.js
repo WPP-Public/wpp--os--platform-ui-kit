@@ -26,9 +26,9 @@ describe('wpp-inline-edit', () => {
       const component = new WppInlineEdit();
       expect(component.placeholder).toBe('placeholder');
     });
-    it('should have default inputWidth as auto', () => {
+    it('should have default inputWidth as 200px', () => {
       const component = new WppInlineEdit();
-      expect(component.inputWidth).toBe('auto');
+      expect(component.inputWidth).toBe('200px');
     });
     it('should have default dropdownConfig as empty object', () => {
       const component = new WppInlineEdit();

@@ -42,30 +42,6 @@ export class WppAccordion {
         this.calculateContentLayout();
       });
     };
-    this.typographyType = () => {
-      if (this.size === 's')
-        return 's-strong';
-      if (this.size === 'm')
-        return 'm-strong';
-      if (this.size === 'l')
-        return 'l-strong';
-      if (this.size === 'xl')
-        return 'xl-heading';
-      if (this.size === '2xl')
-        return '2xl-heading';
-    };
-    this.counterType = () => {
-      if (this.size === 's')
-        return 's-body';
-      if (this.size === 'm')
-        return 'm-body';
-      if (this.size === 'l')
-        return 'l-body';
-      if (this.size === 'xl')
-        return 'xl-heading';
-      if (this.size === '2xl')
-        return '2xl-heading';
-    };
     this.toggleExpand = () => {
       this.expanded = !this.expanded;
       if (!this.isExpandedTouched)
@@ -144,11 +120,7 @@ export class WppAccordion {
       let textContent = '';
       let font = '';
       let textWidth = 0;
-      if (this.text) {
-        textContent = this.text;
-        font = this.getTextTitleFont();
-      }
-      else if (this.hasHeaderSlot) {
+      if (this.hasHeaderSlot) {
         const headerData = this.getHeaderSlotText();
         textContent = headerData.headerTitle;
         font = headerData.font;
@@ -174,6 +146,19 @@ export class WppAccordion {
       'title-tags-wrapper': true,
       'tab-focus': this.focusType === FOCUS_TYPE.TAB,
     });
+    this.getHeaderTypographyType = () => {
+      if (this.size === 's')
+        return 's-strong';
+      if (this.size === 'm')
+        return 'm-strong';
+      if (this.size === 'l')
+        return 'l-strong';
+      if (this.size === 'xl')
+        return 'xl-heading';
+      if (this.size === '2xl')
+        return '2xl-heading';
+      return undefined;
+    };
     this.maxHeight = undefined;
     this.toggleOverflow = undefined;
     this.hasHeaderSlot = false;
@@ -189,9 +174,7 @@ export class WppAccordion {
     this.expanded = false;
     this.disabled = false;
     this.withDivider = true;
-    this.counter = 0;
     this.size = 'l';
-    this.text = undefined;
     this.withTag = false;
     this.ariaProps = {};
   }
@@ -253,7 +236,7 @@ export class WppAccordion {
     }
     const titleWrapperWidth = titleWrapper?.clientWidth || 0;
     if (this.hasTagSlot && tagsWrapper) {
-      const leftPosition = titleWrapperWidth + (this.text || this.hasHeaderSlot ? 8 : 0);
+      const leftPosition = titleWrapperWidth + (this.hasHeaderSlot ? 8 : 0);
       tagsWrapper.style.left = `${leftPosition}px`;
     }
     this.maxHeight = this.host.shadowRoot.querySelector('.slot-content')?.clientHeight || 0;
@@ -309,12 +292,12 @@ export class WppAccordion {
     const { headerTitle } = this.getHeaderSlotText();
     const internal = !!this.host.children[0]?.assignedElements;
     const style = this.getAnimationStyles();
-    const tooltipText = this.counter > 0 ? `${this.text || headerTitle} (${this.counter})` : this.text || headerTitle || '';
-    const titleContent = (h(Fragment, null, this.hasHeaderSlot ? (h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", role: "presentation", onSlotchange: this.updateSlotData })) : (h("wpp-typography-v3-5-0", { type: this.typographyType(), part: "title", role: "presentation", class: "title-text" }, this.text))));
-    return (h(Host, { class: this.hostCssClasses(internal), exportparts: "section, title, icon, counter, divider, title-wrapper, content, button", style: style, onBlur: this.onBlur, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown }, h("div", { class: this.cssSectionClasses(), part: "section" }, h("button", { ref: ref => (this.titleTagsWrapperButtonRef = ref), class: this.cssTagWrapperClasses(), "aria-expanded": this.expanded.toString(), "aria-controls": this.ariaProps?.controls ?? 'expandable-panel', id: this.ariaProps?.labelledby ?? 'expandable-button', onFocus: this.onFocus, onClick: this.onClick, disabled: this.disabled, part: "button" }, h("div", { class: "title-wrapper", part: "title-wrapper", role: "none" }, h("wpp-icon-chevron-v3-5-0", { role: "presentation", part: "icon" }), this.isTitleOverflowing ? (h("wpp-tooltip-v3-5-0", { config: { triggerTarget: this.titleTagsWrapperButtonRef }, text: tooltipText }, titleContent)) : (titleContent), this.counter > 0 && (h("wpp-typography-v3-5-0", { type: this.counterType(), class: "counter", part: "counter" }, `(${this.counter})`))), this.withTag && (h(WrappedSlot, { wrapperClass: this.tagGroupCssClasses(), name: "tags", onSlotchange: this.updateSlotData }))), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), h("div", { class: this.contentCssClasses(), part: "content", role: "region", id: this.ariaProps?.controls ?? 'expandable-panel', "aria-labelledby": this.ariaProps?.labelledby ?? 'expandable-button', ...(!this.expanded ? { inert: true, 'aria-hidden': true } : {}) }, h("slot", { class: "slot-content" })), this.withDivider && h("wpp-divider-v3-5-0", { part: "divider" })));
+    const tooltipText = headerTitle || '';
+    const titleContent = (h(Fragment, null, this.hasHeaderSlot && (h("wpp-typography-v4-0-0", { class: "typography-title", part: "title", type: this.getHeaderTypographyType(), style: { '--typography-color': 'var(--wpp-text-color)' } }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", role: "presentation", onSlotchange: this.updateSlotData })))));
+    return (h(Host, { class: this.hostCssClasses(internal), exportparts: "section, title, icon, divider, title-wrapper, content", style: style, onBlur: this.onBlur, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown }, h("div", { class: this.cssSectionClasses(), part: "section" }, h("button", { ref: ref => (this.titleTagsWrapperButtonRef = ref), class: this.cssTagWrapperClasses(), "aria-expanded": this.expanded.toString(), "aria-controls": this.ariaProps?.controls ?? 'expandable-panel', id: this.ariaProps?.labelledby ?? 'expandable-button', onFocus: this.onFocus, onClick: this.onClick, disabled: this.disabled, part: "button" }, h("div", { class: "title-wrapper", part: "title-wrapper", role: "none" }, h("wpp-icon-chevron-v4-0-0", { role: "presentation", part: "icon" }), this.isTitleOverflowing ? (h("wpp-tooltip-v4-0-0", { config: { triggerTarget: this.titleTagsWrapperButtonRef }, text: tooltipText }, titleContent)) : (titleContent)), this.withTag && (h(WrappedSlot, { wrapperClass: this.tagGroupCssClasses(), name: "tags", onSlotchange: this.updateSlotData }))), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), h("div", { class: this.contentCssClasses(), part: "content", role: "region", id: this.ariaProps?.controls ?? 'expandable-panel', "aria-labelledby": this.ariaProps?.labelledby ?? 'expandable-button', ...(!this.expanded ? { inert: true, 'aria-hidden': true } : {}) }, h("slot", { class: "slot-content" })), this.withDivider && h("wpp-divider-v4-0-0", { part: "divider" })));
   }
   static get is() { return "wpp-accordion"; }
-  static get registryIs() { return "wpp-accordion-v3-5-0"; }
+  static get registryIs() { return "wpp-accordion-v4-0-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -400,27 +383,6 @@ export class WppAccordion {
         "reflect": true,
         "defaultValue": "true"
       },
-      "counter": {
-        "type": "number",
-        "mutable": false,
-        "complexType": {
-          "original": "number",
-          "resolved": "number",
-          "references": {}
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [{
-              "name": "deprecated",
-              "text": "- this prop will be deleted in version 4.0.0."
-            }],
-          "text": "Defines the number of elements within a specific section."
-        },
-        "attribute": "counter",
-        "reflect": false,
-        "defaultValue": "0"
-      },
       "size": {
         "type": "string",
         "mutable": false,
@@ -438,26 +400,6 @@ export class WppAccordion {
         "attribute": "size",
         "reflect": false,
         "defaultValue": "'l'"
-      },
-      "text": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "string",
-          "resolved": "string | undefined",
-          "references": {}
-        },
-        "required": false,
-        "optional": true,
-        "docs": {
-          "tags": [{
-              "name": "deprecated",
-              "text": "- this prop will be deleted in version 4.0.0. If you want to use this prop, use \"header\" slot instead"
-            }],
-          "text": "If set, adds text next to the section."
-        },
-        "attribute": "text",
-        "reflect": false
       },
       "withTag": {
         "type": "boolean",

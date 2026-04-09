@@ -6,7 +6,7 @@ const index = require('./index-ecf423ba.js');
 const _const = require('./const-e53f51b2.js');
 const WppIcon = require('./WppIcon-55327707.js');
 const WrappedSlot = require('./WrappedSlot-4a4ef805.js');
-const utils = require('./utils-27884b05.js');
+const utils = require('./utils-15defa44.js');
 require('./consts-dba6e6dd.js');
 
 const wppAvatarGroupCss = ":host{--avatar-stroke-color:var(--wpp-avatar-stroke-color, var(--wpp-grey-color-000));--avatar-stroke-width:var(--wpp-avatar-stroke-width, 2px);--avatar-circle-group-margin-left-size-xs:var(--wpp-avatar-circle-group-margin-left-size-xs, -4px);--avatar-circle-group-margin-left-size-s:var(--wpp-avatar-circle-group-margin-left-size-s, -12px);--avatar-square-group-margin-left-size-xs:var(--wpp-avatar-square-group-margin-left-size-xs, -4px);--avatar-square-group-margin-left-size-s:var(--wpp-avatar-square-group-margin-left-size-s, -12px);display:-ms-inline-flexbox;display:inline-flex}:host .avatar-item{display:-ms-inline-flexbox;display:inline-flex;position:relative}:host .avatar-item.interactable:hover{z-index:1}:host .avatars-list{display:-ms-flexbox;display:flex;margin:0;padding:0;list-style-type:none}:host:host(.wpp-circle) .avatar-item{border-radius:var(--wpp-border-radius-round);-webkit-box-shadow:0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color);box-shadow:0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color)}:host:host(.wpp-circle):host(.wpp-size-xs) .avatar-item:not(:first-child){margin-left:var(--avatar-circle-group-margin-left-size-xs)}:host:host(.wpp-circle):host(.wpp-size-s) .avatar-item:not(:first-child){margin-left:var(--avatar-circle-group-margin-left-size-s)}:host:host(.wpp-square) .avatar-item{-webkit-box-shadow:0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color);box-shadow:0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color)}:host:host(.wpp-square):host(.wpp-size-xs) .avatar-item{border-radius:var(--wpp-border-radius-xs)}:host:host(.wpp-square):host(.wpp-size-xs) .avatar-item:not(:first-child){margin-left:var(--avatar-square-group-margin-left-size-xs)}:host:host(.wpp-square):host(.wpp-size-s) .avatar-item{border-radius:var(--wpp-border-radius-s)}:host:host(.wpp-square):host(.wpp-size-s) .avatar-item:not(:first-child){margin-left:var(--avatar-square-group-margin-left-size-s)}";
@@ -44,9 +44,7 @@ const WppAvatarGroup = class {
       const listItem = event.currentTarget;
       this.wppSelectItem.emit({ value: listItem, fromDropdown: true, avatarIndex });
     };
-    this.getAvatarsList = () => (this.avatars.length ? this.avatars : this.users);
     this.menuContextTippyRef = undefined;
-    this.users = [];
     this.avatars = [];
     this.maxAvatarsToDisplay = 6;
     this.size = 'xs';
@@ -58,13 +56,13 @@ const WppAvatarGroup = class {
     this.dropdownConfig = {};
   }
   render() {
-    const avatarsWithColors = this.getAvatarsWithColors(this.getAvatarsList());
+    const avatarsWithColors = this.getAvatarsWithColors(this.avatars);
     const avatarsToDisplay = avatarsWithColors.slice(0, this.maxAvatarsToDisplay);
     const avatarsInHiddenList = avatarsWithColors.slice(this.maxAvatarsToDisplay);
     return (index.h(index.Host, { class: this.avatarGroupWrapperCssClasses(), role: "group", exportparts: "list, item, menu, avatar, hidden-item, hidden-item-with-avatar, hidden-item-avatar, hidden-item-name" }, index.h("ul", { class: "avatars-list", part: "list" }, avatarsToDisplay.map((avatar, avatarIndex) => (index.h("li", { class: {
         'avatar-item': true,
-        interactable: avatar.interactable ?? false,
-      }, part: "item" }, index.h("wpp-avatar-v3-5-0", { size: this.size, variant: this.variant, name: avatar.name, src: avatar.src, withTooltip: this.withTooltip, tooltipConfig: this.tooltipConfig, interactable: avatar.interactable, color: avatar.color, onWppClick: (event) => this.handleAvatarClick(event, avatarIndex, false) })))), this.getAvatarsList().length > this.maxAvatarsToDisplay && (index.h("li", { class: "avatar-item", part: "item" }, index.h("wpp-menu-context-v3-5-0", { externalClass: "avatar-group", listWidth: "240px", dropdownConfig: {
+        interactable: avatar.interactable ?? true,
+      }, part: "item" }, index.h("wpp-avatar-v4-0-0", { size: this.size, variant: this.variant, name: avatar.name, src: avatar.src, withTooltip: this.withTooltip, tooltipConfig: this.tooltipConfig, interactable: avatar.interactable ?? true, color: avatar.color, onWppClick: (event) => this.handleAvatarClick(event, avatarIndex, false) })))), this.avatars.length > this.maxAvatarsToDisplay && (index.h("li", { class: "avatar-item", part: "item" }, index.h("wpp-menu-context-v4-0-0", { externalClass: "avatar-group", listWidth: "240px", dropdownConfig: {
         ...this.dropdownConfig,
         onShow: (instance) => {
           const firstListItem = instance.popper.querySelector('.wpp-list-item');
@@ -81,9 +79,9 @@ const WppAvatarGroup = class {
         onDestroy: () => {
           this.menuContextTippyRef = undefined;
         },
-      }, part: "menu", onKeyDown: this.onKeyDown, ariaProps: { label: `+${avatarsInHiddenList.length} more list items with avatars` } }, index.h("wpp-avatar-v3-5-0", { amountOfHiddenAvatars: avatarsInHiddenList.length, size: this.size, variant: this.variant, slot: "trigger-element", part: "avatar" }), index.h(index.Fragment, null, avatarsInHiddenList.map((avatar, avatarIndex) => (index.h("wpp-list-item-v3-5-0", { key: avatar.name, onWppChangeListItem: (event) => this.handleListItemClick(event, avatarIndex), value: avatar.name, part: "hidden-item" }, index.h("wpp-avatar-v3-5-0", { name: avatar.name, src: avatar.src, color: avatar.color, variant: this.variant, interactable: avatar.interactable, role: "presentation", slot: "left", part: "hidden-item-avatar" }), index.h("span", { slot: "label", class: "name", part: "hidden-item-name" }, avatar.name)))))))))));
+      }, part: "menu", onKeyDown: this.onKeyDown, ariaProps: { label: `+${avatarsInHiddenList.length} more list items with avatars` } }, index.h("wpp-avatar-v4-0-0", { amountOfHiddenAvatars: avatarsInHiddenList.length, size: this.size, variant: this.variant, slot: "trigger-element", part: "avatar" }), index.h(index.Fragment, null, avatarsInHiddenList.map((avatar, avatarIndex) => (index.h("wpp-list-item-v4-0-0", { key: avatar.name, onWppChangeListItem: (event) => this.handleListItemClick(event, avatarIndex + this.maxAvatarsToDisplay), value: avatar.name, nonInteractive: avatar.interactable === false, part: "hidden-item" }, index.h("wpp-avatar-v4-0-0", { name: avatar.name, src: avatar.src, color: avatar.color, variant: this.variant, interactable: false, role: "presentation", slot: "left", part: "hidden-item-avatar" }), index.h("span", { slot: "label", class: "name", part: "hidden-item-name" }, avatar.name)))))))))));
   }
-  static get registryIs() { return "wpp-avatar-group-v3-5-0"; }
+  static get registryIs() { return "wpp-avatar-group-v4-0-0"; }
 };
 WppAvatarGroup.style = wppAvatarGroupCss;
 
@@ -100,7 +98,7 @@ const WppIconTriangleFill = class {
   render() {
     return (index.h(WppIcon.WppIcon, { name: "wpp-icon-triangle-fill", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { d: "M13.1271 9.24407C13.5876 9.64284 13.5876 10.3572 13.1271 10.7559L9.65465 13.7632C9.00701 14.3241 8 13.864 8 13.0073L8 6.99275C8 6.136 9.00701 5.67594 9.65465 6.23682L13.1271 9.24407Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-triangle-fill-v3-5-0"; }
+  static get registryIs() { return "wpp-icon-triangle-fill-v4-0-0"; }
 };
 WppIconTriangleFill.style = wppIconCss;
 
@@ -118,7 +116,6 @@ const WppTag = class {
     this.hostCssClasses = () => ({
       'wpp-tag': true,
       ...(this.variant && { [`wpp-${this.variant}`]: true }),
-      ...(this.categoricalColorIndex && !this.variant ? { [`wpp-Cat-${this.categoricalColorIndex}`]: true } : {}),
       'wpp-with-icon': Boolean(this.hasIconStartSlot),
       'wpp-disabled': this.disabled,
     });
@@ -131,20 +128,15 @@ const WppTag = class {
     this.maxLabelLength = 30;
     this.tooltipConfig = {};
     this.label = undefined;
-    this.categoricalColorIndex = undefined;
-    this.withIcon = false;
     this.disabled = false;
   }
   componentWillLoad() {
     this.updateSlotData();
-    if (this.categoricalColorIndex) {
-      console.warn('%cThe `categoricalColorIndex` property is deprecated. Please, use `variant` instead', 'color: black; font-size: 12px;');
-    }
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), index.h("wpp-typography-v3-5-0", { type: "xs-midi", tag: "span", part: "label" }, Number(this.label?.length) > this.maxLabelLength ? (index.h("wpp-tooltip-v3-5-0", { text: this.label, config: this.tooltipConfig, part: "tooltip" }, index.h("span", { part: "tooltip-text" }, utils.truncate(this.label, this.maxLabelLength, false)))) : (this.label)), index.h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), index.h("wpp-typography-v4-0-0", { type: "xs-midi", tag: "span", part: "label" }, Number(this.label?.length) > this.maxLabelLength ? (index.h("wpp-tooltip-v4-0-0", { text: this.label, config: this.tooltipConfig, part: "tooltip" }, index.h("span", { part: "tooltip-text" }, utils.truncate(this.label, this.maxLabelLength, false)))) : (this.label)), index.h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
   }
-  static get registryIs() { return "wpp-tag-v3-5-0"; }
+  static get registryIs() { return "wpp-tag-v4-0-0"; }
   get host() { return index.getElement(this); }
 };
 WppTag.style = wppTagCss;

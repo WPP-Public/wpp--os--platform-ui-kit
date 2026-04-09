@@ -22,7 +22,7 @@ const WppIconObjectAlignment = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-object-alignment", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: ObjectAlignmentDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-object-alignment-v3-5-0"; }
+  static get registryIs() { return "wpp-icon-object-alignment-v4-0-0"; }
 };
 WppIconObjectAlignment.style = wppIconCss;
 

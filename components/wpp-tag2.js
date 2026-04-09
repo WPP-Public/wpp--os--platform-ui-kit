@@ -23,7 +23,6 @@ const WppTag = /*@__PURE__*/ proxyCustomElement(class WppTag extends HTMLElement
     this.hostCssClasses = () => ({
       'wpp-tag': true,
       ...(this.variant && { [`wpp-${this.variant}`]: true }),
-      ...(this.categoricalColorIndex && !this.variant ? { [`wpp-Cat-${this.categoricalColorIndex}`]: true } : {}),
       'wpp-with-icon': Boolean(this.hasIconStartSlot),
       'wpp-disabled': this.disabled,
     });
@@ -36,29 +35,22 @@ const WppTag = /*@__PURE__*/ proxyCustomElement(class WppTag extends HTMLElement
     this.maxLabelLength = 30;
     this.tooltipConfig = {};
     this.label = undefined;
-    this.categoricalColorIndex = undefined;
-    this.withIcon = false;
     this.disabled = false;
   }
   componentWillLoad() {
     this.updateSlotData();
-    if (this.categoricalColorIndex) {
-      console.warn('%cThe `categoricalColorIndex` property is deprecated. Please, use `variant` instead', 'color: black; font-size: 12px;');
-    }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("wpp-typography-v3-5-0", { type: "xs-midi", tag: "span", part: "label" }, Number(this.label?.length) > this.maxLabelLength ? (h("wpp-tooltip-v3-5-0", { text: this.label, config: this.tooltipConfig, part: "tooltip" }, h("span", { part: "tooltip-text" }, truncate(this.label, this.maxLabelLength, false)))) : (this.label)), h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("wpp-typography-v4-0-0", { type: "xs-midi", tag: "span", part: "label" }, Number(this.label?.length) > this.maxLabelLength ? (h("wpp-tooltip-v4-0-0", { text: this.label, config: this.tooltipConfig, part: "tooltip" }, h("span", { part: "tooltip-text" }, truncate(this.label, this.maxLabelLength, false)))) : (this.label)), h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
   }
-  static get registryIs() { return "wpp-tag-v3-5-0"; }
+  static get registryIs() { return "wpp-tag-v4-0-0"; }
   get host() { return this; }
   static get style() { return wppTagCss; }
-}, [1, "wpp-tag", "wpp-tag-v3-5-0", {
+}, [1, "wpp-tag", "wpp-tag-v4-0-0", {
     "variant": [1],
     "maxLabelLength": [2, "max-label-length"],
     "tooltipConfig": [16],
     "label": [1],
-    "categoricalColorIndex": [2, "categorical-color-index"],
-    "withIcon": [4, "with-icon"],
     "disabled": [516],
     "hasIconStartSlot": [32]
   }]);
@@ -66,34 +58,34 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tag-v3-5-0", "wpp-icon-error-v3-5-0", "wpp-icon-warning-v3-5-0", "wpp-internal-tooltip-v3-5-0", "wpp-tooltip-v3-5-0", "wpp-typography-v3-5-0"];
+  const components = ["wpp-tag-v4-0-0", "wpp-icon-error-v4-0-0", "wpp-icon-warning-v4-0-0", "wpp-internal-tooltip-v4-0-0", "wpp-tooltip-v4-0-0", "wpp-typography-v4-0-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tag-v3-5-0":
+    case "wpp-tag-v4-0-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTag);
       }
       break;
-    case "wpp-icon-error-v3-5-0":
+    case "wpp-icon-error-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-warning-v3-5-0":
+    case "wpp-icon-warning-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-internal-tooltip-v3-5-0":
+    case "wpp-internal-tooltip-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v3-5-0":
+    case "wpp-tooltip-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v3-5-0":
+    case "wpp-typography-v4-0-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

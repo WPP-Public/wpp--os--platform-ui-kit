@@ -26,6 +26,7 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
   private maskedElement?;
   private _locales;
   private previouslyRenderedValue?;
+  private previouslyRenderedHasCrossIcon?;
   private generatedMask;
   private internalDefaultValue?;
   private resizeObserver?;
@@ -186,7 +187,7 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
   /**
    * Method that sets focus on the native input.
    */
-  setFocus(): Promise<void>;
+  setFocus(isOutlined?: boolean): Promise<void>;
   /**
    * Method that sets the input value programmatically.
    */
@@ -195,7 +196,7 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
    * Method that returns current input value.
    */
   getValue(): Promise<InputValue>;
-  onUpdateMaskOptions(): void;
+  onUpdateMaskOptions(newMaskOptions: MaskOptions, prevMaskOptions: MaskOptions): void;
   onUpdateLocales(newLocales: Partial<InputLocaleInterface>): void;
   onUpdateValue(newValue: InputValue): void;
   connectedCallback(): void;
@@ -222,6 +223,7 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
   private onBlur;
   private onMouseDown;
   private onKeyUp;
+  private onKeyDown;
   private onKeyPress;
   private inputCssClasses;
   private wrapperCssClasses;

@@ -9,7 +9,7 @@ describe('wpp-label', () => {
     };
     const page = await newSpecPage({
       components: [WppLabel, WppInternalLabel],
-      template: () => h("wpp-label-v3-5-0", { config: labelConfig, disabled: true, typography: "s-body" }),
+      template: () => h("wpp-label-v4-0-0", { config: labelConfig, disabled: true, typography: "s-body" }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -20,7 +20,7 @@ describe('wpp-label', () => {
     };
     const page = await newSpecPage({
       components: [WppLabel, WppInternalLabel],
-      template: () => h("wpp-label-v3-5-0", { config: labelConfig, typography: "s-body" }),
+      template: () => h("wpp-label-v4-0-0", { config: labelConfig, typography: "s-body" }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -35,7 +35,7 @@ describe('wpp-label', () => {
     };
     const page = await newSpecPage({
       components: [WppLabel, WppInternalLabel],
-      template: () => h("wpp-label-v3-5-0", { config: labelConfig, optional: true, typography: "s-body" }),
+      template: () => h("wpp-label-v4-0-0", { config: labelConfig, optional: true, typography: "s-body" }),
     });
     expect(page.root).toMatchSnapshot();
   });

@@ -48,11 +48,6 @@ export declare class WppTooltip {
    */
   readonly theme: TooltipThemeTypes;
   /**
-   * When set, allow to pass string represented HTML in text property
-   * @deprecated - This prop is no longer used by the component and will be deleted in v4.0.0.
-   */
-  readonly allowHTML?: boolean;
-  /**
    * Add an external class to the tooltip wrapper. This class will be applied to this wrapper that placed in tippy box that appended to the body.
    * To add some properties to this class you have to add this class to global styles, for example
    * .tooltip-wrapper.external-class-name {

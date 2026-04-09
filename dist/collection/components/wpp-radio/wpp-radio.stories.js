@@ -17,7 +17,7 @@ export default {
     control: { type: 'boolean' },
   },
 };
-export const NoLabel = (args) => html ` <wpp-radio-v3-5-0
+export const NoLabel = (args) => html ` <wpp-radio-v4-0-0
     @wppChange="${(event) => console.log('wppChange => ', event.detail.value)}"
     .name="${args.name}"
     .value="${args.value}"
@@ -30,7 +30,7 @@ NoLabel.args = {
   disabled: false,
   checked: false,
 };
-export const WithLabel = (args) => html ` <wpp-radio-v3-5-0
+export const WithLabel = (args) => html ` <wpp-radio-v4-0-0
     @wppChange="${(event) => console.log('wppChange => ', event.detail.value)}"
     .name="${args.name}"
     .value="${args.value}"

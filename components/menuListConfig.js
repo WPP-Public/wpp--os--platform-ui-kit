@@ -922,7 +922,7 @@ var _setCacheAdd = setCacheAdd;
  * @name has
  * @memberOf SetCache
  * @param {*} value The value to search for.
- * @returns {number} Returns `true` if `value` is found, else `false`.
+ * @returns {boolean} Returns `true` if `value` is found, else `false`.
  */
 function setCacheHas(value) {
   return this.__data__.has(value);
@@ -5690,4 +5690,4 @@ const menuListConfig = ({ anchor, popperOptions, triggerElementWidth, ...tippyPr
   });
 };
 
-export { _baseGetTag as _, isObjectLike_1 as a, _baseUnary as b, _nodeUtil as c, isEqual_1 as i, menuListConfig as m, sticky as s };
+export { _baseGetTag as _, _baseUnary as a, _nodeUtil as b, isEqual_1 as c, isObjectLike_1 as i, menuListConfig as m, sticky as s };

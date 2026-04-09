@@ -5,7 +5,7 @@
 :host button {
   border: 1px solid var(--wpp-primary-color-500);
   border-radius: var(--wpp-border-radius-m);
-  background-color: var(--wpp-white-color);
+  background-color: transparent;
   height: 20px;
   width: 20px;
   box-sizing: content-box;

@@ -20,7 +20,7 @@ const WppIconTableSortAscHover = class {
   render() {
     return (index.h(WppIcon.WppIcon, { name: "wpp-icon-table-sort-asc-hover", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { d: "M10 4L13.4641 8.5H6.5359L10 4Z", fill: this.upArrowColor }), index.h("path", { d: "M10 16L13.4641 11.5H6.5359L10 16Z", fill: this.downArrowColor })));
   }
-  static get registryIs() { return "wpp-icon-table-sort-asc-hover-v3-5-0"; }
+  static get registryIs() { return "wpp-icon-table-sort-asc-hover-v4-0-0"; }
 };
 WppIconTableSortAscHover.style = wppIconCss;
 

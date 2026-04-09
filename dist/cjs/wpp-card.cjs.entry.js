@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const utils = require('./utils-27884b05.js');
+const utils = require('./utils-15defa44.js');
 const WrappedSlot = require('./WrappedSlot-4a4ef805.js');
 const common = require('./common-ee802540.js');
 require('./consts-dba6e6dd.js');
@@ -156,9 +156,9 @@ const WppCard = class {
         (this.type === 'single' ? this.index : this.type === 'multiple' ? 0 : this.checkTabIndex()));
     return (index.h(index.Host, { onMouseEnter: () => this.updateComponentState({ hover: true }), onMouseLeave: () => this.updateComponentState({ hover: false }), onMouseUp: () => this.updateComponentState({ active: false }), ...(isInteractive ? { onMouseDown: this.onMouseDown } : {}), ...(isInteractive ? { onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp } : {}), ...(isInteractive ? { onClick: this.onClick } : {}), onFocus: this.onFocus, onBlur: this.onBlur, htmlFor: this.name, exportparts: "card, header-outer-wrapper, header-wrapper radio, checkbox, actions-wrapper", class: this.hostCssClasses(), tabIndex: tabIndex, role: role, "aria-disabled": this.withRadioOrCheckbox && this.disabled ? 'true' : undefined, "aria-labelledby": this.ariaProps?.labelledby, ...((this.interactive || this.type) && role !== 'button'
         ? { ariaChecked: this.checked ? 'true' : 'false' }
-        : {}), ...(role === 'button' ? { 'aria-pressed': this.checked ? 'true' : 'false' } : {}) }, index.h("div", { class: this.cardCssClasses(), part: "card", ...(this.background ? { style: { background: this.background } } : {}) }, index.h("div", { class: this.headerWrapperCssClasses(), part: "header-outer-wrapper" }, index.h(WrappedSlot.WrappedSlot, { name: "header", wrapperClass: this.headerCssClasses(), onSlotchange: this.updateSlotData, part: "header" }), this.withRadioOrCheckbox && (index.h(index.Fragment, null, this.type === 'single' && (index.h("wpp-radio-v3-5-0", { class: "radio", internalState: displayState, name: this.name, checked: this.checked, disabled: this.disabled, index: -1, part: "radio", decorative: true })), this.type === 'multiple' && (index.h("wpp-checkbox-v3-5-0", { class: "checkbox", internalState: displayState, name: this.name, checked: this.checked, disabled: this.disabled, index: -1, part: "checkbox", decorative: true })))), index.h(WrappedSlot.WrappedSlot, { name: "actions", part: "actions", wrapperClass: this.actionsCssClasses(), onSlotchange: this.updateSlotData })), index.h("slot", null))));
+        : {}), ...(role === 'button' ? { 'aria-pressed': this.checked ? 'true' : 'false' } : {}) }, index.h("div", { class: this.cardCssClasses(), part: "card", ...(this.background ? { style: { background: this.background } } : {}) }, index.h("div", { class: this.headerWrapperCssClasses(), part: "header-outer-wrapper" }, index.h(WrappedSlot.WrappedSlot, { name: "header", wrapperClass: this.headerCssClasses(), onSlotchange: this.updateSlotData, part: "header" }), this.withRadioOrCheckbox && (index.h(index.Fragment, null, this.type === 'single' && (index.h("wpp-radio-v4-0-0", { class: "radio", internalState: displayState, name: this.name, checked: this.checked, disabled: this.disabled, index: -1, part: "radio", decorative: true })), this.type === 'multiple' && (index.h("wpp-checkbox-v4-0-0", { class: "checkbox", internalState: displayState, name: this.name, checked: this.checked, disabled: this.disabled, index: -1, part: "checkbox", decorative: true })))), index.h(WrappedSlot.WrappedSlot, { name: "actions", part: "actions", wrapperClass: this.actionsCssClasses(), onSlotchange: this.updateSlotData })), index.h("slot", null))));
   }
-  static get registryIs() { return "wpp-card-v3-5-0"; }
+  static get registryIs() { return "wpp-card-v4-0-0"; }
   get host() { return index.getElement(this); }
 };
 WppCard.style = wppCardCss;

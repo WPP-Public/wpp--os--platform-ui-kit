@@ -637,9 +637,17 @@
 :host #container.has-default-format #datepicker:hover {
   cursor: text;
 }
-:host .datepicker-wrapper:hover #datepicker:not(.focus):not([disabled]) {
-  background-color: var(--datepicker-input-bg-color-hover);
+:host .datepicker-wrapper:hover #datepicker:not(.focus):not([disabled]):not(.error):not(.warning) {
+  background-color: var(--wpp-grey-color-200);
   border-color: var(--datepicker-input-border-color-hover);
+}
+:host .datepicker-wrapper:hover #datepicker.error:not([disabled]),
+:host .datepicker-wrapper:hover #datepicker.warning:not([disabled]) {
+  background-color: var(--wpp-grey-color-200);
+}
+:host .datepicker-wrapper:hover .cross-icon {
+  opacity: 1;
+  pointer-events: auto;
 }
 :host .datepicker-wrapper:hover .calendar-icon {
   color: var(--wpp-grey-color-800);
@@ -705,6 +713,9 @@
   right: 10px;
   top: 10px;
   cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
 }
 :host .cross-icon.disabled {
   pointer-events: none;
@@ -755,6 +766,17 @@
   border-color: var(--wpp-grey-color-700);
 }
 
+:host(.wpp-has-value.wpp-active) .cross-icon {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+:host(.wpp-disabled) {
+  cursor: not-allowed;
+}
+:host(.wpp-disabled) #datepicker {
+  pointer-events: none;
+}
 :host(.wpp-disabled) .datepicker-input {
   border-color: var(--wpp-grey-color-400);
 }

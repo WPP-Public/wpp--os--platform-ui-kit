@@ -24,7 +24,7 @@ const WppIconAutofit = class {
   render() {
     return (index.h(WppIcon.WppIcon, { name: "wpp-icon-autofit", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { d: AutofitDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-autofit-v3-5-0"; }
+  static get registryIs() { return "wpp-icon-autofit-v4-0-0"; }
 };
 WppIconAutofit.style = wppIconCss;
 

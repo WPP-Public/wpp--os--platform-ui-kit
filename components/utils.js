@@ -1,6 +1,6 @@
 import { D as DEFAULT_SHOW_DURATION_ANIMATION, a as DEFAULT_HIDE_DURATION_ANIMATION } from './consts.js';
 
-const version = 'v3-5-0';
+const version = 'v4-0-0';
 
 function format(first, middle, last) {
   return (first || '') + (middle ? ` ${middle}` : '') + (last ? ` ${last}` : '');
@@ -278,6 +278,19 @@ function setHasFocused(value) {
 function getHighestContainerInDOM() {
   return document.querySelector('#root') || document.querySelector('#app') || document.body;
 }
+const DEFAULT_OS_BAR_HEIGHT = 64;
+/**
+ * Returns the height of the OS bar in pixels.
+ * Queries for the first header child of the container with the `.wpp` class,
+ * which is the standard structure of the OS bar in first-party applications.
+ * Falls back to a default of 64px if the OS bar cannot be found.
+ */
+function getOsBarOffsetHeight() {
+  const highestContainer = getHighestContainerInDOM();
+  if (!highestContainer)
+    return DEFAULT_OS_BAR_HEIGHT;
+  return highestContainer.querySelector('.wpp > header')?.offsetHeight ?? DEFAULT_OS_BAR_HEIGHT;
+}
 const getAriaProps = (ariaProps) => {
   const result = {};
   Object.entries(ariaProps).forEach(([key, val]) => {
@@ -291,4 +304,4 @@ const getAriaProps = (ariaProps) => {
 };
 const isWppElement = (element) => element.tagName.toLowerCase().includes('wpp-') && element.tagName.toLowerCase().includes('-v');
 
-export { areSetsEqual as a, isEventTargetContained as b, hasParentWithId as c, debounce as d, truncate as e, format as f, getSlotEmptyStates as g, hasShadowDom as h, isObject as i, getHighlightData as j, transformToVersionedTag as k, closestElement as l, applyBodyStylesIfNeeded as m, autoFocusElement as n, form2object as o, getDurationValues as p, getHasFocused as q, recursiveObjectMap as r, selectDropdownWidth as s, toKebabCase as t, uuidv4 as u, setHasFocused as v, getHighestContainerInDOM as w, getAriaProps as x, isWppElement as y, version as z };
+export { version as A, areSetsEqual as a, isEventTargetContained as b, hasParentWithId as c, debounce as d, truncate as e, format as f, getSlotEmptyStates as g, hasShadowDom as h, isObject as i, getHighlightData as j, transformToVersionedTag as k, closestElement as l, applyBodyStylesIfNeeded as m, autoFocusElement as n, form2object as o, getDurationValues as p, getHasFocused as q, recursiveObjectMap as r, selectDropdownWidth as s, toKebabCase as t, uuidv4 as u, setHasFocused as v, getHighestContainerInDOM as w, getOsBarOffsetHeight as x, getAriaProps as y, isWppElement as z };
