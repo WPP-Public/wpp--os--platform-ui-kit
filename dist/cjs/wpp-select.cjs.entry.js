@@ -6,8 +6,8 @@ const index = require('./index-ecf423ba.js');
 const menuListConfig = require('./menuListConfig-bbde46c0.js');
 const common = require('./common-ee802540.js');
 const consts = require('./consts-dba6e6dd.js');
-const utils = require('./utils-27884b05.js');
-const lodash = require('./lodash-04cddce7.js');
+const utils = require('./utils-e1f17a8c.js');
+const lodash = require('./lodash-6b012aab.js');
 const WrappedSlot = require('./WrappedSlot-4a4ef805.js');
 require('./tippy.esm-9d703cd4.js');
 require('./_commonjsHelpers-bcc1208a.js');
@@ -29,6 +29,8 @@ const LOCALES_DEFAULTS = {
   allSelectedText: 'All selected',
   selectLabel: 'selected',
   loadingText: 'Loading...',
+  clearText: 'Clear',
+  applyText: 'Apply',
 };
 const MULTIPLE_SELECT_SINGLE_VALUE_ERROR = 'Value should be an Array in the multiple select.';
 
@@ -49,22 +51,22 @@ function renderSingleSelect(isBaseComponent = true, customSize, isRenderMessageI
     }
     return this.renderedText;
   };
-  const getInlineMessage = () => (index.h(index.Fragment, null, this.message && isBaseComponent && (index.h("wpp-inline-message-v3-5-0", { class: !this.messageType ? 'default-message' : '', showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType || 'information', tooltipConfig: this.tooltipConfig }))));
+  const getInlineMessage = () => (index.h(index.Fragment, null, this.message && isBaseComponent && (index.h("wpp-inline-message-v3-6-0", { class: !this.messageType ? 'default-message' : '', showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType || 'information', tooltipConfig: this.tooltipConfig }))));
   const renderAnchor = () => (index.h("div", { class: getAnchorCSSClasses(), ref: el => (this.anchorRef = el), tabIndex: this.disabled ? -1 : 0, onClick: () => this.handleClick() }, this.anchorButton ? (index.h("slot", { name: "anchor-button", onSlotchange: this.updateSlotData })) : (index.h(index.Fragment, null,
     index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }),
-    index.h("div", { class: "overflow-container", ref: refEl => (this.overflowContainerRef = refEl) }, this.textOverflows ? (index.h("wpp-tooltip-v3-5-0", { text: getSelectPlaceholder() },
+    index.h("div", { class: "overflow-container", ref: refEl => (this.overflowContainerRef = refEl) }, this.textOverflows ? (index.h("wpp-tooltip-v3-6-0", { text: getSelectPlaceholder() },
       index.h("p", null, getSelectPlaceholder()))) : (index.h("p", null, getSelectPlaceholder()))),
-    index.h("input", { class: "input", ref: refEl => (this.inputRef = refEl), type: "text", name: this.name, onChange: () => this.checkIfTextOverflows(), disabled: this.disabled, value: getSelectPlaceholder(), tabIndex: -1, readonly: true, "aria-label": this.ariaProps.label, title: "", style: { width: this.overflowContainerRef ? `${this.overflowContainerRef.clientWidth}px` : 'auto' }, required: this.required }),
-    index.h("wpp-icon-chevron-v3-5-0", { class: this.isOpen || this.isDropdownOpen ? 'isOpen' : '', direction: 'down' })))));
+    index.h("input", { class: "input", ref: refEl => (this.inputRef = refEl), type: "text", id: this.name, name: this.name, onChange: () => this.checkIfTextOverflows(), disabled: this.disabled, value: getSelectPlaceholder(), tabIndex: -1, readonly: true, "aria-label": this.ariaProps.label, title: "", style: { width: this.overflowContainerRef ? `${this.overflowContainerRef.clientWidth}px` : 'auto' }, required: this.required }),
+    index.h("wpp-icon-chevron-v3-6-0", { class: this.isOpen || this.isDropdownOpen ? 'isOpen' : '', direction: 'down' })))));
   const RootTag = isBaseComponent ? index.Host : index.Fragment;
   return (index.h(RootTag, { onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, class: "wpp-single-select", "aria-disabled": this.disabled, onFocus: this.onFocus, onBlur: this.onBlur },
-    this.labelConfig?.text && isBaseComponent && (index.h("wpp-label-v3-5-0", { class: this.labelCssClasses(), optional: !this.required, htmlFor: this.name, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: () => this.handleClick() })),
-    index.h("div", { class: "anchor-container" }, isRenderMessageInTooltip ? (index.h("wpp-tooltip-v3-5-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
+    this.labelConfig?.text && isBaseComponent && (index.h("wpp-label-v3-6-0", { class: this.labelCssClasses(), optional: !this.required, htmlFor: this.name, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: () => this.handleClick() })),
+    index.h("div", { class: "anchor-container" }, isRenderMessageInTooltip ? (index.h("wpp-tooltip-v3-6-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
     index.h("div", null, !isRenderMessageInTooltip && getInlineMessage()),
     index.h("div", { class: "wpp-select-portal", onKeyDown: this.onKeyDownPortal, ref: el => (this.portalRef = el) },
       this.shouldShowSearch && (index.h(index.Fragment, null,
-        index.h("wpp-input-v3-5-0", { type: "search", class: "select-portal-search-input", value: this.searchText, onWppChange: this.handleSearch, name: this.name && `${this.name}-search-input`, placeholder: this._locales.searchInputPlaceholder }),
-        index.h("wpp-divider-v3-5-0", { color: "var(--wpp-grey-color-300)" }))),
+        index.h("wpp-input-v3-6-0", { type: "search", class: "select-portal-search-input", value: this.searchText, onWppChange: this.handleSearch, name: this.name && `${this.name}-search-input`, placeholder: this._locales.searchInputPlaceholder }),
+        index.h("wpp-divider-v3-6-0", { color: "var(--wpp-grey-color-300)" }))),
       index.h("div", { class: "list" }, this.renderList()))));
 }
 
@@ -91,27 +93,43 @@ function renderMultipleSelect() {
     }
     return this.renderedText || this.placeholder;
   };
-  const getInlineMessage = () => (index.h(index.Fragment, null, this.message && (index.h("wpp-inline-message-v3-5-0", { class: !this.messageType ? 'default-message' : '', showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType || 'information', tooltipConfig: this.tooltipConfig }))));
+  const getInlineMessage = () => (index.h(index.Fragment, null, this.message && (index.h("wpp-inline-message-v3-6-0", { class: !this.messageType ? 'default-message' : '', showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType || 'information', tooltipConfig: this.tooltipConfig }))));
   const renderAnchor = () => (index.h("div", { class: getAnchorCSSClasses(), ref: el => (this.anchorRef = el), tabIndex: this.disabled ? -1 : 0, onClick: () => this.handleClick() }, this.anchorButton ? (index.h("slot", { name: "anchor-button", onSlotchange: this.updateSlotData })) : (index.h(index.Fragment, null,
     index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }),
     index.h("div", { class: "overflow-container", ref: refEl => (this.overflowContainerRef = refEl) },
       index.h("p", null, getRenderedText())),
     index.h("input", { class: "input", type: "text", ref: refEl => (this.inputRef = refEl), name: this.name, onChange: () => this.checkIfTextOverflows(), disabled: this.disabled, value: this.renderedText, tabIndex: -1, readonly: true, "aria-label": this.ariaProps.label, title: "", style: { width: this.overflowContainerRef ? `${this.overflowContainerRef.clientWidth}px` : 'auto' }, required: this.required }),
-    index.h("wpp-icon-chevron-v3-5-0", { class: this.isOpen ? 'isOpen' : '', direction: 'down' })))));
+    index.h("wpp-icon-chevron-v3-6-0", { class: this.isOpen ? 'isOpen' : '', direction: 'down' })))));
   return (index.h(index.Host, { class: "wpp-multiple-select", onKeyUp: this.onKeyUp, "aria-disabled": this.disabled, onFocus: this.onFocus, onBlur: this.onBlur },
-    this.labelConfig?.text && (index.h("wpp-label-v3-5-0", { class: this.labelCssClasses(), optional: !this.required, htmlFor: this.name, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: () => this.handleClick() })),
-    index.h("div", { class: "anchor-container" }, this.isRenderMessageInTooltip ? (index.h("wpp-tooltip-v3-5-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
+    this.labelConfig?.text && (index.h("wpp-label-v3-6-0", { class: this.labelCssClasses(), optional: !this.required, htmlFor: this.name, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: () => this.handleClick() })),
+    index.h("div", { class: "anchor-container" }, this.isRenderMessageInTooltip ? (index.h("wpp-tooltip-v3-6-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
     index.h("div", null, !this.isRenderMessageInTooltip && getInlineMessage()),
     index.h("div", { class: "wpp-select-portal", ref: el => (this.portalRef = el) },
       this.shouldShowSearch && (index.h(index.Fragment, null,
-        index.h("wpp-input-v3-5-0", { type: "search", class: "select-portal-search-input", value: this.searchText, onWppChange: this.handleSearch, name: this.name && `${this.name}-search-input`, placeholder: this._locales.searchInputPlaceholder }),
-        index.h("wpp-divider-v3-5-0", { color: "var(--wpp-grey-color-300)" }))),
-      index.h("div", { class: "list", ref: refEl => (this.listRef = refEl) }, this.renderList()),
+        index.h("wpp-input-v3-6-0", { type: "search", class: "select-portal-search-input", value: this.searchText, onWppChange: this.handleSearch, name: this.name && `${this.name}-search-input`, placeholder: this._locales.searchInputPlaceholder }),
+        index.h("wpp-divider-v3-6-0", { color: "var(--wpp-grey-color-300)" }))),
+      index.h("div", { class: "list list-with-scrollable" },
+        index.h("div", { class: "list-scrollable", ref: refEl => (this.listRef = refEl) },
+          this.withFolder && this.showSelectAllOption && this.isOpen && (index.h("div", { class: "select-all-section" },
+            !this.maximumSelectedItems && (index.h("wpp-list-item-v3-6-0", { multiple: true, checked: this.isSelectAllChecked, indeterminate: this.isSelectAllIndeterminate, disabled: this.isSelectAllDisabled, onWppChangeListItem: e => {
+                e.stopPropagation();
+                this.handleSelectAllToggle();
+              }, class: "select-all-item" },
+              index.h("p", { slot: "label" },
+                this._locales.selectAllText,
+                " (",
+                this.selectAllCount,
+                ")"))),
+            this.renderPinnedItems(),
+            this.filteredPinnedItems.length > 0 && index.h("wpp-divider-v3-6-0", { color: "var(--wpp-grey-color-300)" }))),
+          this.renderList())),
       this.withFolder && this.isOpen && (index.h("div", { class: "multiple-select-folder" },
-        this.withScroll && index.h("wpp-divider-v3-5-0", null),
-        index.h("div", { class: "multiple-select-folder-buttons" },
-          index.h("wpp-action-button-v3-5-0", { variant: "secondary", disabled: !this.canSelectAll || this.loading, onClick: this.handleSelectAll }, this._locales.selectAllText),
-          this.canClearAll && (index.h("wpp-action-button-v3-5-0", { variant: "secondary", disabled: this.loading, onClick: this.handleClearAll }, this._locales.clearAllText))))))));
+        this.withScroll && index.h("wpp-divider-v3-6-0", null),
+        this.showSelectAllOption ? (index.h("div", { class: `multiple-select-folder-buttons select-all-mode${this.withScroll ? ' with-divider' : ''}` },
+          index.h("wpp-action-button-v3-6-0", { variant: "secondary", disabled: !this.canClearVisible || this.loading, onClick: this.handleClearAll }, this._locales.clearText),
+          index.h("wpp-action-button-v3-6-0", { variant: "primary", disabled: this.loading, onClick: this.handleApply }, this._locales.applyText))) : (index.h("div", { class: `multiple-select-folder-buttons${this.withScroll ? ' with-divider' : ''}` },
+          index.h("wpp-action-button-v3-6-0", { variant: "secondary", disabled: !this.canSelectAll || this.loading, onClick: this.handleSelectAll }, this._locales.selectAllText),
+          this.canClearAll && (index.h("wpp-action-button-v3-6-0", { variant: "secondary", disabled: this.loading, onClick: this.handleClearAll }, this._locales.clearAllText)))))))));
 }
 
 /**
@@ -119,8 +137,8 @@ function renderMultipleSelect() {
  */
 function renderTextSelect() {
   const renderAnchor = () => (index.h(index.Fragment, null,
-    index.h("wpp-typography-v3-5-0", { id: "select-text", type: "s-body" }, this.renderedText || this.placeholder),
-    index.h("wpp-icon-chevron-v3-5-0", { class: this.isOpen ? 'isOpen' : '', direction: 'down' })));
+    index.h("wpp-typography-v3-6-0", { id: "select-text", type: "s-body" }, this.renderedText || this.placeholder),
+    index.h("wpp-icon-chevron-v3-6-0", { class: this.isOpen ? 'isOpen' : '', direction: 'down' })));
   const getAnchorCSSClasses = () => ({
     anchor: true,
     disabled: this.disabled,
@@ -129,7 +147,7 @@ function renderTextSelect() {
     'should-truncate': this.shouldTruncate,
     'tab-focus': this.focusType === common.FOCUS_TYPE.TAB,
   });
-  const getInlineMessage = () => (index.h(index.Fragment, null, this.message && (index.h("wpp-inline-message-v3-5-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, tooltipConfig: this.tooltipConfig }))));
+  const getInlineMessage = () => (index.h(index.Fragment, null, this.message && (index.h("wpp-inline-message-v3-6-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, tooltipConfig: this.tooltipConfig }))));
   return (index.h(index.Host, { class: "wpp-text-select", onKeyUp: this.onKeyUp, "aria-disabled": this.disabled, onFocus: this.onFocus, onBlur: this.onBlur },
     index.h("div", { class: getAnchorCSSClasses(), ref: el => (this.anchorRef = el), tabIndex: this.disabled ? -1 : 0, onClick: () => this.handleClick(), role: this.ariaProps.role || 'button', "aria-label": this.ariaProps.label ||
         (this.truncate && this.shouldTruncate
@@ -139,7 +157,7 @@ function renderTextSelect() {
           e.preventDefault();
           this.handleClick();
         }
-      } }, this.truncate && this.shouldTruncate ? (index.h("wpp-tooltip-v3-5-0", { text: this.renderedText || this.placeholder, config: { placement: 'right' }, class: "tooltip" }, renderAnchor())) : (renderAnchor())),
+      } }, this.truncate && this.shouldTruncate ? (index.h("wpp-tooltip-v3-6-0", { text: this.renderedText || this.placeholder, config: { placement: 'right' }, class: "tooltip" }, renderAnchor())) : (renderAnchor())),
     getInlineMessage(),
     index.h("div", { class: "wpp-select-portal", ref: el => (this.portalRef = el) },
       index.h("div", { class: "list" }, this.renderList()))));
@@ -167,7 +185,7 @@ function renderCombinedSelect() {
   const onBlurInput = () => {
     this.isContainerFocused = false;
   };
-  const getInlineMessage = () => (index.h(index.Fragment, null, this.message && (index.h("wpp-inline-message-v3-5-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
+  const getInlineMessage = () => (index.h(index.Fragment, null, this.message && (index.h("wpp-inline-message-v3-6-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
   const combinedInputWrapperCssClasses = () => ({
     'inputs-container': true,
     'with-errors': this.hasErrorsOrWarnings('error'),
@@ -181,14 +199,14 @@ function renderCombinedSelect() {
   });
   const renderAnchor = () => (index.h("div", { class: combinedInputWrapperCssClasses() },
     renderSingleSelect.call(this, false, this.size, false),
-    index.h("wpp-input-v3-5-0", { onWppChange: handleInputChange, value: this.inputValue, disabled: this.disabled, type: this.inputType, maskOptions: this.maskOptions, messageType: this.messageType, placeholder: this.placeholder, size: this.size, tabIndex: -1, onFocus: onFocusInput, onBlur: onBlurInput, onClick: (event) => event.stopPropagation() })));
+    index.h("wpp-input-v3-6-0", { onWppChange: handleInputChange, value: this.inputValue, disabled: this.disabled, type: this.inputType, maskOptions: this.maskOptions, messageType: this.messageType, placeholder: this.placeholder, size: this.size, tabIndex: -1, onFocus: onFocusInput, onBlur: onBlurInput, onClick: (event) => event.stopPropagation() })));
   return (index.h(index.Host, { class: getHostCssClasses(), onKeyUp: this.onKeyUp, "aria-disabled": this.disabled, onFocus: this.onFocus, onBlur: this.onBlur },
-    this.labelConfig?.text && (index.h("wpp-label-v3-5-0", { class: this.labelCssClasses(), htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: () => this.handleClick() })),
-    index.h("div", { class: "anchor-container" }, this.isRenderMessageInTooltip ? (index.h("wpp-tooltip-v3-5-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
+    this.labelConfig?.text && (index.h("wpp-label-v3-6-0", { class: this.labelCssClasses(), htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: () => this.handleClick() })),
+    index.h("div", { class: "combined-anchor-container" }, this.isRenderMessageInTooltip ? (index.h("wpp-tooltip-v3-6-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
     index.h("div", null, !this.isRenderMessageInTooltip && getInlineMessage())));
 }
 
-const wppSelectCss = ":host{--select-min-width:var(--wpp-select-min-width, 120px);display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;min-width:var(--select-min-width)}:host .wpp-label{display:-ms-inline-flexbox;display:inline-flex;margin-bottom:8px}:host .wpp-label.disabled .internal-label-wrapper:hover{cursor:not-allowed}:host>.wpp-tooltip{width:100%}:host>.wpp-tooltip::part(anchor){width:100%}:host .anchor-container .wpp-tooltip{width:100%}:host .anchor-container .wpp-tooltip::part(anchor){width:100%}:host .anchor{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;width:100%;border-radius:var(--wpp-border-radius-m);border:1px solid var(--wpp-grey-color-500);position:relative;-webkit-box-sizing:border-box;box-sizing:border-box;outline:none}:host .anchor.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}:host .anchor .icon-start{height:20px;margin-right:9px}:host .anchor.size-s{padding:4px 10px 4px 10px}:host .anchor.size-s .overflow-container{left:5px}:host .anchor.size-m{padding:8px 10px 8px 10px}:host .anchor.size-m p .overflow-container{left:9px}:host .anchor .slot-hidden{display:none}:host .anchor .input{position:absolute;pointer-events:none;outline:none;padding:0;border:none;left:0;bottom:0;opacity:0;color:var(--grey-color-1000);font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input:hover{cursor:pointer}:host .anchor .input::-webkit-input-placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input::-moz-placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input:-ms-input-placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input::-ms-input-placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input::placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .wpp-icon-chevron{-webkit-transition:-webkit-transform 0.2s;transition:-webkit-transform 0.2s;transition:transform 0.2s;transition:transform 0.2s, -webkit-transform 0.2s;-webkit-transform:rotateZ(0deg);transform:rotateZ(0deg);margin-left:4px}:host .anchor .wpp-icon-chevron.isOpen{-webkit-transform:rotateZ(180deg);transform:rotateZ(180deg)}:host .anchor .overflow-container{display:-ms-flexbox;display:flex;width:100%;min-width:32px;-ms-flex-align:center;align-items:center;color:var(--grey-color-1000);height:var(--wpp-typography-s-body-line-height, 22px);padding:0 2px}:host .anchor .overflow-container p{width:100%;margin:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .overflow-container .wpp-tooltip{width:100%}:host .anchor .overflow-container .wpp-tooltip::part(anchor){width:100%}:host .anchor.opened{border-color:var(--wpp-grey-color-800)}:host .anchor:hover{cursor:pointer;background-color:var(--wpp-grey-color-200);border-color:var(--wpp-grey-color-700);--wpp-icon-color:var(--wpp-grey-color-800)}:host .anchor:hover .input{background-color:var(--wpp-grey-color-200)}:host .anchor:hover .overflow-container{background-color:var(--wpp-grey-color-200)}:host .anchor:active{background-color:var(--wpp-grey-color-300);border-color:var(--wpp-grey-color-800);--wpp-icon-color:var(--wpp-grey-color-900)}:host .anchor:active .input{background-color:var(--wpp-grey-color-300)}:host .anchor:active .overflow-container{background-color:var(--wpp-grey-color-300)}:host .anchor.with-errors{border-color:var(--wpp-danger-color-400)}:host .anchor.with-warnings{border-color:var(--wpp-warning-color-400)}:host .anchor.disabled{background-color:var(--wpp-grey-color-100);border-color:var(--wpp-grey-color-400);--wpp-text-color:var(--wpp-text-color-disabled);--wpp-icon-color:var(--wpp-grey-color-400)}:host .anchor.disabled:hover{cursor:not-allowed}:host .anchor.disabled .input{background-color:var(--wpp-grey-color-100);color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input:hover{cursor:not-allowed}:host .anchor.disabled .input::-webkit-input-placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input::-moz-placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input:-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input::-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input::placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .overflow-container{background-color:var(--wpp-grey-color-100)}:host .anchor.disabled .overflow-container p{color:var(--wpp-text-color-disabled)}:host .anchor.anchor-button{padding:0;border:none;background:none;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content}:host .wpp-select-portal{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m);border-radius:var(--wpp-border-radius-s);display:none;-ms-flex-align:start;align-items:flex-start;-ms-flex-direction:column;flex-direction:column;width:100%;overflow:hidden;max-height:372px;background-color:var(--wpp-white-color)}:host .wpp-select-portal .wpp-input{--text-input-height-m:var(--wpp-input-select-search-input-height, 40px);--wpp-border-radius-m:0;--text-input-border-width:0;--text-input-bg-color:var(--wpp-input-select-search-bg-color, var(--wpp-grey-color-000));--text-input-second-border-color-focus:transparent;--text-input-first-border-color-focus:transparent;width:100%}:host .wpp-select-portal .nothing-found{--wpp-typography-color:var(--wpp-grey-color-700);padding:5px 8px}:host .wpp-select-portal .wpp-divider{width:100%}:host .wpp-select-portal .list{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%;gap:4px;padding:8px;-webkit-box-sizing:border-box;box-sizing:border-box;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}:host .wpp-select-portal .list::-webkit-scrollbar{width:4px;height:4px}:host .wpp-select-portal .list::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}:host .wpp-select-portal .list .wpp-list-item{--wpp-list-item-width:100%;width:100%}:host .wpp-select-portal .list .wpp-list-item p{margin:0}:host .wpp-select-portal .list .loading-container{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;height:32px;gap:4px}:host .wpp-select-portal .multiple-select-folder{width:100%}:host .wpp-select-portal .multiple-select-folder-buttons{padding:8px;-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;-ms-flex-align:center;align-items:center}:host .wpp-inline-message{display:-ms-inline-flexbox;display:inline-flex;margin-top:4px}:host .default-message::part(message-icon){display:none}:host(.wpp-text-select){width:auto;--wpp-select-min-width:auto}:host(.wpp-text-select) .anchor{border-radius:var(--wpp-border-radius-s);-ms-flex-pack:start;justify-content:flex-start;padding:1px 6px 1px 8px;border:none;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content}:host(.wpp-text-select) .truncated-text{max-width:100%;overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box}:host(.wpp-text-select) .truncated-text .tooltip{max-width:100%}:host(.wpp-text-select) .truncated-text .tooltip::part(anchor){max-width:100%}:host(.wpp-text-select) .truncated-text .wpp-typography{white-space:nowrap;text-overflow:ellipsis}:host(.wpp-text-select) .should-truncate .wpp-typography{overflow:hidden}:host(.wpp-combined-select){--combined-select-width:var(--wpp-combined-select-width, 260px);--wpp-select-min-width:80px;width:var(--combined-select-width);display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start}:host(.wpp-combined-select) .wpp-label{margin-bottom:8px}:host(.wpp-combined-select) .inputs-container{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:start;justify-content:flex-start;width:100%}:host(.wpp-combined-select) .inputs-container .anchor{width:auto;max-width:110px;min-width:var(--select-min-width);border:1px solid var(--wpp-grey-color-500);border-radius:var(--wpp-border-radius-m) 0 0 var(--wpp-border-radius-m)}:host(.wpp-combined-select) .inputs-container .anchor.size-s{padding:4px 10px 4px 12px}:host(.wpp-combined-select) .inputs-container .wpp-input{border:1px solid var(--wpp-grey-color-500);border-radius:0 var(--wpp-border-radius-m) var(--wpp-border-radius-m) 0;border-left:none;width:100%;--wpp-input-height-m:38px;--wpp-input-height-s:30px}:host(.wpp-combined-select) .inputs-container .wpp-input::part(input){border:none}:host(.wpp-combined-select) .inputs-container:hover{background-color:var(--wpp-grey-color-200)}:host(.wpp-combined-select) .inputs-container:hover .overflow-container{background-color:var(--wpp-grey-color-200)}:host(.wpp-combined-select) .inputs-container:hover .anchor,:host(.wpp-combined-select) .inputs-container:hover .wpp-input{background-color:var(--wpp-grey-color-200);border:1px solid var(--wpp-grey-color-700)}:host(.wpp-combined-select) .inputs-container:hover .wpp-input{border-left:none}:host(.wpp-combined-select) .inputs-container.is-active{background-color:transparent}:host(.wpp-combined-select) .inputs-container.is-active .anchor,:host(.wpp-combined-select) .inputs-container.is-active .wpp-input{border:1px solid var(--wpp-grey-color-800)}:host(.wpp-combined-select) .inputs-container.is-active .wpp-input{border-left:none}:host(.wpp-combined-select) .inputs-container.is-active .wpp-input::part(input):hover{background-color:transparent}:host(.wpp-combined-select) .inputs-container.is-active:hover .overflow-container{background-color:transparent}:host(.wpp-combined-select) .inputs-container.is-active:hover .anchor,:host(.wpp-combined-select) .inputs-container.is-active:hover .wpp-input{background-color:transparent}:host(.wpp-combined-select) .inputs-container.disabled{background-color:var(--wpp-grey-color-100);color:var(--wpp-text-color-disabled)}:host(.wpp-combined-select) .inputs-container.disabled .anchor,:host(.wpp-combined-select) .inputs-container.disabled .wpp-input{border-color:var(--wpp-grey-color-400)}:host(.wpp-combined-select) .inputs-container.disabled:hover .anchor,:host(.wpp-combined-select) .inputs-container.disabled:hover .wpp-input{background-color:var(--wpp-grey-color-100);border:1px solid var(--wpp-grey-color-400)}:host(.wpp-combined-select) .inputs-container.disabled:hover .wpp-input{border-left:none}:host(.wpp-combined-select) .inputs-container.disabled:hover .overflow-container{background-color:var(--wpp-grey-color-100)}:host(.wpp-combined-select) .inputs-container.with-errors .anchor,:host(.wpp-combined-select) .inputs-container.with-errors .wpp-input{border-color:var(--wpp-danger-color-400)}:host(.wpp-combined-select) .inputs-container.with-warnings .anchor,:host(.wpp-combined-select) .inputs-container.with-warnings .wpp-input{border-color:var(--wpp-warning-color-400)}";
+const wppSelectCss = ":host{--select-min-width:var(--wpp-select-min-width, 120px);display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;min-width:var(--select-min-width)}:host .wpp-label{display:-ms-inline-flexbox;display:inline-flex;margin-bottom:8px}:host .wpp-label.disabled .internal-label-wrapper:hover{cursor:not-allowed}:host>.wpp-tooltip{width:100%}:host>.wpp-tooltip::part(anchor){width:100%}:host .anchor-container .wpp-tooltip{width:100%}:host .anchor-container .wpp-tooltip::part(anchor){width:100%}:host .anchor{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;width:100%;border-radius:var(--wpp-border-radius-m);border:1px solid var(--wpp-grey-color-500);position:relative;-webkit-box-sizing:border-box;box-sizing:border-box;outline:none}:host .anchor.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}:host .anchor .icon-start{height:20px;margin-right:9px}:host .anchor.size-s{padding:4px 10px 4px 10px}:host .anchor.size-s .overflow-container{left:5px}:host .anchor.size-m{padding:8px 10px 8px 10px}:host .anchor.size-m p .overflow-container{left:9px}:host .anchor .slot-hidden{display:none}:host .anchor .input{position:absolute;pointer-events:none;outline:none;padding:0;border:none;left:0;bottom:0;opacity:0;color:var(--grey-color-1000);font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input:hover{cursor:pointer}:host .anchor .input::-webkit-input-placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input::-moz-placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input:-ms-input-placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input::-ms-input-placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input::placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .wpp-icon-chevron{-webkit-transition:-webkit-transform 0.2s;transition:-webkit-transform 0.2s;transition:transform 0.2s;transition:transform 0.2s, -webkit-transform 0.2s;-webkit-transform:rotateZ(0deg);transform:rotateZ(0deg);margin-left:4px}:host .anchor .wpp-icon-chevron.isOpen{-webkit-transform:rotateZ(180deg);transform:rotateZ(180deg)}:host .anchor .overflow-container{display:-ms-flexbox;display:flex;width:100%;min-width:32px;-ms-flex-align:center;align-items:center;color:var(--grey-color-1000);height:var(--wpp-typography-s-body-line-height, 22px);padding:0 2px}:host .anchor .overflow-container p{width:100%;margin:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .overflow-container .wpp-tooltip{width:100%}:host .anchor .overflow-container .wpp-tooltip::part(anchor){width:100%}:host .anchor.opened{border-color:var(--wpp-grey-color-800)}:host .anchor:hover{cursor:pointer;background-color:var(--wpp-grey-color-200);border-color:var(--wpp-grey-color-700);--wpp-icon-color:var(--wpp-grey-color-800)}:host .anchor:hover .input{background-color:var(--wpp-grey-color-200)}:host .anchor:hover .overflow-container{background-color:var(--wpp-grey-color-200)}:host .anchor:active{background-color:var(--wpp-grey-color-300);border-color:var(--wpp-grey-color-800);--wpp-icon-color:var(--wpp-grey-color-900)}:host .anchor:active .input{background-color:var(--wpp-grey-color-300)}:host .anchor:active .overflow-container{background-color:var(--wpp-grey-color-300)}:host .anchor.with-errors{border-color:var(--wpp-danger-color-400)}:host .anchor.with-warnings{border-color:var(--wpp-warning-color-400)}:host .anchor.disabled{background-color:var(--wpp-grey-color-100);border-color:var(--wpp-grey-color-400);--wpp-text-color:var(--wpp-text-color-disabled);--wpp-icon-color:var(--wpp-grey-color-400)}:host .anchor.disabled:hover{cursor:not-allowed}:host .anchor.disabled .input{background-color:var(--wpp-grey-color-100);color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input:hover{cursor:not-allowed}:host .anchor.disabled .input::-webkit-input-placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input::-moz-placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input:-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input::-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input::placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .overflow-container{background-color:var(--wpp-grey-color-100)}:host .anchor.disabled .overflow-container p{color:var(--wpp-text-color-disabled)}:host .anchor.anchor-button{padding:0;border:none;background:none;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content}:host .wpp-select-portal{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m);border-radius:var(--wpp-border-radius-s);display:none;-ms-flex-align:start;align-items:flex-start;-ms-flex-direction:column;flex-direction:column;width:100%;overflow:hidden;max-height:372px;background-color:var(--wpp-white-color)}:host .wpp-select-portal .wpp-input{--text-input-height-m:var(--wpp-input-select-search-input-height, 40px);--wpp-border-radius-m:0;--text-input-border-width:0;--text-input-bg-color:var(--wpp-input-select-search-bg-color, var(--wpp-grey-color-000));--text-input-second-border-color-focus:transparent;--text-input-first-border-color-focus:transparent;width:100%}:host .wpp-select-portal .nothing-found{--wpp-typography-color:var(--wpp-grey-color-700);padding:5px 8px}:host .wpp-select-portal .wpp-divider{width:100%}:host .wpp-select-portal .list{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%;gap:4px;padding:8px;-webkit-box-sizing:border-box;box-sizing:border-box;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}:host .wpp-select-portal .list::-webkit-scrollbar{width:4px;height:4px}:host .wpp-select-portal .list::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}:host .wpp-select-portal .list .wpp-list-item{--wpp-list-item-width:100%;width:100%}:host .wpp-select-portal .list .wpp-list-item p{margin:0}:host .wpp-select-portal .list.list-with-scrollable{gap:0;padding:0;overflow:hidden}:host .wpp-select-portal .list-scrollable{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:4px;width:100%;padding:4px 8px 8px 8px;-webkit-box-sizing:border-box;box-sizing:border-box;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}:host .wpp-select-portal .list-scrollable::-webkit-scrollbar{width:4px;height:4px}:host .wpp-select-portal .list-scrollable::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}:host .wpp-select-portal .list-scrollable .select-all-section{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:4px}:host .wpp-select-portal .list-scrollable .select-all-section .wpp-list-item{--wpp-list-item-width:100%;width:100%}:host .wpp-select-portal .list-scrollable .select-all-section .wpp-list-item p{margin:0}:host .wpp-select-portal .list-scrollable .wpp-list-item{--wpp-list-item-width:100%;width:100%}:host .wpp-select-portal .list-scrollable .wpp-list-item p{margin:0}:host .wpp-select-portal .list-scrollable .loading-container{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;height:32px;gap:4px}:host .wpp-select-portal .multiple-select-folder{width:100%}:host .wpp-select-portal .multiple-select-folder-buttons{padding:0 8px 8px 8px;-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;-ms-flex-align:center;align-items:center}:host .wpp-select-portal .multiple-select-folder-buttons.with-divider{padding:7px 8px 8px 8px}:host .wpp-select-portal .multiple-select-folder-buttons.select-all-mode{-ms-flex-pack:end;justify-content:flex-end}:host .wpp-inline-message{display:-ms-inline-flexbox;display:inline-flex;margin-top:4px}:host .default-message::part(message-icon){display:none}:host(.wpp-text-select){width:auto;--wpp-select-min-width:auto}:host(.wpp-text-select) .anchor{border-radius:var(--wpp-border-radius-s);-ms-flex-pack:start;justify-content:flex-start;padding:1px 6px 1px 8px;border:none;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content}:host(.wpp-text-select) .truncated-text{max-width:100%;overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box}:host(.wpp-text-select) .truncated-text .tooltip{max-width:100%}:host(.wpp-text-select) .truncated-text .tooltip::part(anchor){max-width:100%}:host(.wpp-text-select) .truncated-text .wpp-typography{white-space:nowrap;text-overflow:ellipsis}:host(.wpp-text-select) .should-truncate .wpp-typography{overflow:hidden}:host(.wpp-combined-select){--combined-select-width:var(--wpp-combined-select-width, 274px);--combined-select-element-width:var(--wpp-combined-select-element-width, 112px);--select-min-width:80px;--combined-select-min-width:250px;width:var(--combined-select-width);min-width:var(--combined-select-min-width);display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start}:host(.wpp-combined-select) .wpp-label{margin-bottom:8px}:host(.wpp-combined-select) .combined-anchor-container{width:100%}:host(.wpp-combined-select) .inputs-container{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:start;justify-content:flex-start;width:100%}:host(.wpp-combined-select) .inputs-container .anchor{width:var(--combined-select-element-width);min-width:var(---select-min-width);border:1px solid var(--wpp-grey-color-500);border-radius:var(--wpp-border-radius-m) 0 0 var(--wpp-border-radius-m)}:host(.wpp-combined-select) .inputs-container .anchor.size-s{padding:4px 10px 4px 12px}:host(.wpp-combined-select) .inputs-container .wpp-input{border:1px solid var(--wpp-grey-color-500);border-radius:0 var(--wpp-border-radius-m) var(--wpp-border-radius-m) 0;border-left:none;width:100%;--wpp-input-height-m:38px;--wpp-input-height-s:30px}:host(.wpp-combined-select) .inputs-container .wpp-input::part(input){border:none}:host(.wpp-combined-select) .inputs-container:hover{background-color:var(--wpp-grey-color-200)}:host(.wpp-combined-select) .inputs-container:hover .overflow-container{background-color:var(--wpp-grey-color-200)}:host(.wpp-combined-select) .inputs-container:hover .anchor,:host(.wpp-combined-select) .inputs-container:hover .wpp-input{background-color:var(--wpp-grey-color-200);border:1px solid var(--wpp-grey-color-700)}:host(.wpp-combined-select) .inputs-container:hover .wpp-input{border-left:none}:host(.wpp-combined-select) .inputs-container.is-active{background-color:transparent}:host(.wpp-combined-select) .inputs-container.is-active .anchor,:host(.wpp-combined-select) .inputs-container.is-active .wpp-input{border:1px solid var(--wpp-grey-color-800)}:host(.wpp-combined-select) .inputs-container.is-active .wpp-input{border-left:none}:host(.wpp-combined-select) .inputs-container.is-active .wpp-input::part(input):hover{background-color:transparent}:host(.wpp-combined-select) .inputs-container.is-active:hover .overflow-container{background-color:transparent}:host(.wpp-combined-select) .inputs-container.is-active:hover .anchor,:host(.wpp-combined-select) .inputs-container.is-active:hover .wpp-input{background-color:transparent}:host(.wpp-combined-select) .inputs-container.disabled{background-color:var(--wpp-grey-color-100);color:var(--wpp-text-color-disabled)}:host(.wpp-combined-select) .inputs-container.disabled .anchor,:host(.wpp-combined-select) .inputs-container.disabled .wpp-input{border-color:var(--wpp-grey-color-400)}:host(.wpp-combined-select) .inputs-container.disabled:hover .anchor,:host(.wpp-combined-select) .inputs-container.disabled:hover .wpp-input{background-color:var(--wpp-grey-color-100);border:1px solid var(--wpp-grey-color-400)}:host(.wpp-combined-select) .inputs-container.disabled:hover .wpp-input{border-left:none}:host(.wpp-combined-select) .inputs-container.disabled:hover .overflow-container{background-color:var(--wpp-grey-color-100)}:host(.wpp-combined-select) .inputs-container.with-errors .anchor,:host(.wpp-combined-select) .inputs-container.with-errors .wpp-input{border-color:var(--wpp-danger-color-400)}:host(.wpp-combined-select) .inputs-container.with-warnings .anchor,:host(.wpp-combined-select) .inputs-container.with-warnings .wpp-input{border-color:var(--wpp-warning-color-400)}";
 
 const MINIMUM_ITEMS_COUNT_TO_DISPLAY_SEARCH = 10;
 const TRUNCATION_DELAY = 100;
@@ -198,6 +216,7 @@ const WppSelect = class {
     this.wppChange = index.createEvent(this, "wppChange", 1);
     this.wppFocus = index.createEvent(this, "wppFocus", 1);
     this.wppBlur = index.createEvent(this, "wppBlur", 1);
+    this.wppApply = index.createEvent(this, "wppApply", 1);
     this.hasReachedLimit = false;
     this.canSelectAll = false;
     this.canClearAll = false;
@@ -349,22 +368,34 @@ const WppSelect = class {
         return index.h(index.Fragment, null);
       }
       if (this.loading) {
-        return (index.h("div", { class: "loading-container" }, index.h("wpp-spinner-v3-5-0", null), index.h("wpp-typography-v3-5-0", { type: "s-body" }, this._locales.loadingText)));
+        return (index.h("div", { class: "loading-container" }, index.h("wpp-spinner-v3-6-0", null), index.h("wpp-typography-v3-6-0", { type: "s-body" }, this._locales.loadingText)));
       }
       if (this.internalList?.length === 0) {
-        return (index.h("wpp-typography-v3-5-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+        return (index.h("wpp-typography-v3-6-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
       }
       let hiddeItemsCount = 0;
       return (index.h(index.Fragment, null, this.internalList?.map((item) => {
         const { label, hidden, ...rest } = item;
-        if (hidden) {
-          hiddeItemsCount++;
+        const isPinned = this.filteredPinnedItems.some(p => lodash.lodash.isEqual(p.value, item.value));
+        if (hidden || isPinned) {
+          if (hidden)
+            hiddeItemsCount++;
           if (hiddeItemsCount === this.internalList?.length) {
-            return (index.h("wpp-typography-v3-5-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+            return (index.h("wpp-typography-v3-6-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
           }
           return null;
         }
-        return (index.h("wpp-list-item-v3-5-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, index.h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
+        return (index.h("wpp-list-item-v3-6-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, index.h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
+      })));
+    };
+    this.renderPinnedItems = () => {
+      const items = this.filteredPinnedItems;
+      if (items.length === 0)
+        return index.h(index.Fragment, null);
+      return (index.h(index.Fragment, null, items.map((item) => {
+        const { label, value, checked, disabled, id, slots } = item;
+        const itemValueKey = this.convertValueToKey(value);
+        return (index.h("wpp-list-item-v3-6-0", { onWppChangeListItem: this.handleClickListItem, key: `pinned-${itemValueKey}`, value: value, checked: checked, disabled: disabled, multiple: true, id: id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${id}` : undefined, class: "pinned-item" }, index.h("p", { slot: "label" }, label), slots && this.renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
     };
     this.renderSlotsInListItem = (slots, isLabelExists) => slots
@@ -479,6 +510,9 @@ const WppSelect = class {
         this.dropdownConfig?.onShow(instance);
       }
       this.isOpen = true;
+      if (this.showSelectAllOption && this.type === 'multiple' && this.withFolder) {
+        this.pinnedItems = this.internalList?.filter(item => item.checked) ?? [];
+      }
     };
     this.onShowDropdownText = (instance) => {
       if (!this.anchorRef)
@@ -501,6 +535,7 @@ const WppSelect = class {
     };
     this.onHiddenDropdown = (instance) => {
       this.isOpen = false;
+      this.pinnedItems = [];
       if (!this.consistentSearch) {
         this.searchText = '';
       }
@@ -620,26 +655,48 @@ const WppSelect = class {
       this.withScroll = this.listRef.scrollHeight > this.listRef.clientHeight;
     };
     this.handleSelectAll = () => {
-      // We select all the items that are not disabled. Even hidden ones.
       const valueOfItems = [];
       this.internalList?.forEach((listItem) => {
-        if (!listItem.disabled) {
-          valueOfItems.push(listItem.value);
+        if (listItem.hidden || listItem.disabled) {
+          if (listItem.checked)
+            valueOfItems.push(listItem.value);
+          return;
         }
-        listItem.checked = listItem.disabled ? listItem.checked : true;
+        valueOfItems.push(listItem.value);
+        listItem.checked = true;
       });
       this.emittedValue = [...valueOfItems];
     };
     this.handleClearAll = () => {
-      // We un-check all items that are not disabled. Even hidden ones.
-      const valueOfItems = [];
+      const valuesToClear = new Set();
       this.internalList?.forEach((listItem) => {
-        if (listItem.checked && listItem.disabled) {
-          valueOfItems.push(listItem.value);
+        if (listItem.checked && listItem.disabled)
+          return;
+        if (this.showSelectAllOption && listItem.hidden)
+          return;
+        if (listItem.checked) {
+          valuesToClear.add(JSON.stringify(listItem.value));
+          listItem.checked = false;
         }
-        listItem.checked = listItem.disabled ? listItem.checked : false;
       });
-      this.emittedValue = [...valueOfItems];
+      const currentValue = Array.isArray(this.value) ? this.value : [];
+      this.emittedValue = currentValue.filter(v => !valuesToClear.has(JSON.stringify(v)));
+    };
+    this.handleSelectAllToggle = () => {
+      if (this.isSelectAllDisabled)
+        return;
+      if (this.isSelectAllChecked) {
+        this.handleClearAll();
+      }
+      else {
+        this.handleSelectAll();
+      }
+    };
+    this.handleApply = () => {
+      if (!this.isOpen)
+        return;
+      this.wppApply.emit();
+      this.tippyInstance?.hide();
     };
     this.setShouldShowSearch = () => {
       if (!this.host)
@@ -726,6 +783,7 @@ const WppSelect = class {
     this.checkedItems = 0;
     this.disabledItems = 0;
     this.textOverflows = false;
+    this.pinnedItems = [];
     this.isContainerFocused = false;
     this.shouldTruncate = false;
     this.consistentSearch = false;
@@ -761,6 +819,7 @@ const WppSelect = class {
     this.dropdownConfig = {};
     this.locales = {};
     this.showSelectAllText = true;
+    this.showSelectAllOption = false;
     this.inputValue = undefined;
     this.maskOptions = undefined;
     this.inputType = 'text';
@@ -835,6 +894,7 @@ const WppSelect = class {
         listItem.highlight = '';
         listItem.hidden = false;
       });
+      setTimeout(() => this.updateScrollState(), 0);
       return;
     }
     // When search changes, we also set "highlight=this.searchText" in order to
@@ -844,6 +904,7 @@ const WppSelect = class {
       listItem.highlight = this.searchText;
       listItem.hidden = !listItem.label.toLowerCase().includes(searchTextLowerCase);
     });
+    setTimeout(() => this.updateScrollState(), 0);
   }
   onUpdateLoading() {
     if (!this.loading) {
@@ -962,6 +1023,38 @@ const WppSelect = class {
       this.resizeObserver.disconnect();
     }
   }
+  get filteredPinnedItems() {
+    if (!this.searchText)
+      return this.pinnedItems;
+    const searchTextLowerCase = this.searchText.toLowerCase().trim();
+    return this.pinnedItems.filter(item => item.label.toLowerCase().includes(searchTextLowerCase));
+  }
+  get visibleItems() {
+    return this.internalList?.filter(item => !item.hidden) ?? [];
+  }
+  get canClearVisible() {
+    return this.visibleItems.some(item => item.checked && !item.disabled);
+  }
+  get isSelectAllChecked() {
+    const selectableVisible = this.visibleItems.filter(item => !item.disabled);
+    return selectableVisible.length > 0 && selectableVisible.every(item => item.checked);
+  }
+  get isSelectAllIndeterminate() {
+    const visible = this.visibleItems;
+    const selectableVisible = visible.filter(item => !item.disabled);
+    const checkedSelectable = selectableVisible.filter(item => item.checked);
+    const hasCheckedDisabled = visible.some(item => item.disabled && item.checked);
+    if (selectableVisible.length === 0)
+      return hasCheckedDisabled;
+    return ((checkedSelectable.length > 0 && checkedSelectable.length < selectableVisible.length) ||
+      (checkedSelectable.length === 0 && hasCheckedDisabled));
+  }
+  get selectAllCount() {
+    return this.visibleItems.filter(item => !item.disabled).length;
+  }
+  get isSelectAllDisabled() {
+    return this.selectAllCount === 0;
+  }
   render() {
     if (this.type === 'single' && !this.isTextSelect) {
       return renderSingleSelect.call(this, true, this.size, this.isRenderMessageInTooltip);
@@ -974,7 +1067,7 @@ const WppSelect = class {
     }
     return renderCombinedSelect.call(this);
   }
-  static get registryIs() { return "wpp-select-v3-5-0"; }
+  static get registryIs() { return "wpp-select-v3-6-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "displayValue": ["onUpdateDisplayValue"],

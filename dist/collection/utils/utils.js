@@ -276,6 +276,19 @@ export function setHasFocused(value) {
 export function getHighestContainerInDOM() {
   return document.querySelector('#root') || document.querySelector('#app') || document.body;
 }
+const DEFAULT_OS_BAR_HEIGHT = 64;
+/**
+ * Returns the height of the OS bar in pixels.
+ * Queries for the first header child of the container with the `.wpp` class,
+ * which is the standard structure of the OS bar in first-party applications.
+ * Falls back to a default of 64px if the OS bar cannot be found.
+ */
+export function getOsBarOffsetHeight() {
+  const highestContainer = getHighestContainerInDOM();
+  if (!highestContainer)
+    return DEFAULT_OS_BAR_HEIGHT;
+  return highestContainer.querySelector('.wpp > header')?.offsetHeight ?? DEFAULT_OS_BAR_HEIGHT;
+}
 export const getAriaProps = (ariaProps) => {
   const result = {};
   Object.entries(ariaProps).forEach(([key, val]) => {

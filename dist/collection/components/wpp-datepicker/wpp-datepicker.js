@@ -5,7 +5,7 @@ import defaultLocale from 'air-datepicker/locale/en';
 import isEqual from 'lodash/isEqual';
 import { FOCUS_TYPE } from '../../types/common';
 import { autoFocusElement, getHighestContainerInDOM, getSlotEmptyStates, transformToVersionedTag, } from '../../utils/utils';
-import { getCurrentFormatDate, getFormattedDateString, getNextCursorPosition, isValidDate, localeToFirstDayMap, } from './utils';
+import { getCurrentFormatDate, getFormattedDateString, getNextCursorPosition, isValidDate, localeToFirstDayMap, normalizeMonthRangeDates, } from './utils';
 import { ANIMATION_DURATION, DATE_FORMAT_SEPARATOR_PATTERN, DATES_SEPARATOR, LOCALES_DEFAULTS } from './const';
 import { Z_INDEX } from '../../common/consts';
 import { menuListConfig } from '../../common/menuListConfig';
@@ -24,7 +24,11 @@ export class WppDatepicker {
   constructor() {
     this.hasClickedPreset = false;
     this.isDatePickerInitialized = false;
+    this.isNormalizingMonthRange = false;
+    this.isDestroyed = false;
     this._locales = LOCALES_DEFAULTS;
+    this.justSelectedFromCalendar = false;
+    this.isManuallyTyping = false;
     this.isStringDateValid = (stringDateValue) => {
       const parsedDate = parse(stringDateValue, this._locales.dateFormat, new Date());
       return isValid(parsedDate) && format(parsedDate, this._locales.dateFormat) === stringDateValue;
@@ -43,6 +47,9 @@ export class WppDatepicker {
           return;
         if (isValidDate([formatDate(startDate), formatDate(endDate)])) {
           this.isValueExists = true;
+          // Clear before selecting — in range mode, selectDate appends to existing dates,
+          // which corrupts the selection if there's a partial range (1 date already selected).
+          this.datePickerInstance.clear({ silent: true });
           //@ts-ignore Due to outdated air-datepicker.d.ts
           this.datePickerInstance.selectDate([formatDate(startDate), formatDate(endDate)]);
           this.lastValidDate = this.value;
@@ -93,6 +100,11 @@ export class WppDatepicker {
       this.hasTriggerSlot = !emptyStates.trigger;
     };
     this.hasPresets = () => this.range && this.presets.length > 0;
+    /**
+     * Checks if month range normalization should be applied.
+     * Normalization is only applied when range mode is enabled, view is 'months', and normalization is enabled.
+     */
+    this.shouldNormalizeMonthRange = () => this.range && this.view === 'months' && this.monthRangeNormalization?.enabled === true;
     this.getDateFormatSeparator = (dateFormat) => {
       const match = dateFormat.match(DATE_FORMAT_SEPARATOR_PATTERN);
       return match ? match[0] : '/';
@@ -103,7 +115,7 @@ export class WppDatepicker {
       const separator = this.getDateFormatSeparator(this._locales.dateFormat);
       if (this.isDefaultDateFormatSeparator(separator)) {
         const separatedDate = this._locales.dateFormat.split(separator).sort();
-        return JSON.stringify(baseFormat) === JSON.stringify(separatedDate);
+        return isEqual(baseFormat, separatedDate);
       }
       return false;
     };
@@ -119,14 +131,20 @@ export class WppDatepicker {
           tabindex: '-1',
         },
         onClick: () => {
+          const formattedDates = this.datePickerInstance.selectedDates.map(selectedDate => this.datePickerInstance.formatDate(selectedDate, this.getDateFormat()));
           this.wppChange.emit({
             date: this.datePickerInstance.selectedDates,
-            formattedDate: this.datePickerInstance.selectedDates.map(selectedDate => this.datePickerInstance.formatDate(selectedDate, this.getDateFormat())),
+            formattedDate: formattedDates,
             name: this.name,
           });
           if (this.range && Array.isArray(this.lastValidDate)) {
-            this.lastAppliedDate = this.lastValidDate;
+            this.lastAppliedDate = formattedDates;
+            this.lastValidDate = formattedDates;
           }
+          // Update the input field to reflect the applied dates (normalized or not)
+          const inputValue = formattedDates.join(DATES_SEPARATOR);
+          this.updateInput(inputValue, inputValue.length);
+          this.value = inputValue;
           if (this.tippyInstance)
             this.tippyInstance.hide();
         },
@@ -173,8 +191,35 @@ export class WppDatepicker {
         },
         nextHtml: `<${IconChevron} class="nav-icon"></${IconChevron}>`,
         prevHtml: `<${IconChevron} class="nav-icon prev-icon"></${IconChevron}>`,
+        onBeforeSelect: ({ date, datepicker }) => {
+          // Intercept 2nd month click to normalize dates before selection
+          if (this.isNormalizingMonthRange ||
+            !this.shouldNormalizeMonthRange() ||
+            datepicker.selectedDates.length !== 1) {
+            return true;
+          }
+          const firstDate = datepicker.selectedDates[0];
+          // Sort chronologically so start is always the earlier month
+          const [startDate, endDate] = firstDate <= date ? [firstDate, date] : [date, firstDate];
+          const normalizedDates = normalizeMonthRangeDates([startDate, endDate], this.monthRangeNormalization);
+          // Prevent default selection, then select normalized dates
+          this.isNormalizingMonthRange = true;
+          datepicker.clear({ silent: true });
+          datepicker.selectDate(normalizedDates);
+          this.isNormalizingMonthRange = false;
+          return false;
+        },
         onSelect: ({ date, formattedDate }) => {
+          // Guard against async callback after component destruction (air-datepicker uses setTimeout)
+          if (this.isDestroyed)
+            return;
+          // Skip onSelect side-effects when air-datepicker auto-adjusts a manually typed invalid date
+          if (this.isManuallyTyping)
+            return;
           const formatDate = getCurrentFormatDate(this.getDateFormat(), this.getDateFormatSeparator(this.getDateFormat()));
+          // Clear validation errors when a valid date is selected from calendar
+          this.clearInternalValidation();
+          this.justSelectedFromCalendar = true;
           if (!this.range) {
             this.wppChange.emit({
               date,
@@ -216,16 +261,39 @@ export class WppDatepicker {
       this.isDatePickerInitialized = true;
     };
     this.onHideGetLastAppliedValue = () => {
-      if (this.lastAppliedDate.length === 2) {
-        if (Array.isArray(this.lastValidDate) && this.lastValidDate.length === 1) {
-          this.datePickerInstance.clear();
+      // If onBlur already detected an invalid manual input, preserve the error state
+      if (this.internalMessage)
+        return;
+      const selectedDates = this.datePickerInstance.selectedDates;
+      // Save current selection on click outside instead of reverting
+      if (selectedDates.length === 2) {
+        const formattedDates = selectedDates.map(date => this.datePickerInstance.formatDate(date, this.getDateFormat()));
+        // Only emit if selection actually changed
+        if (!isEqual(formattedDates, this.lastAppliedDate)) {
+          this.lastAppliedDate = formattedDates;
+          this.lastValidDate = formattedDates;
+          const inputValue = formattedDates.join(DATES_SEPARATOR);
+          this.updateInput(inputValue, inputValue.length);
+          this.wppChange.emit({
+            date: selectedDates,
+            formattedDate: formattedDates,
+            name: this.name,
+          });
         }
+      }
+      else if (this.lastAppliedDate.length === 2) {
+        // Partial selection (only 1 date picked) — revert to last applied
         const formatDate = getCurrentFormatDate(this.getDateFormat(), this.getDateFormatSeparator(this.getDateFormat()));
         this.lastValidDate = this.lastAppliedDate;
-        this.value = this.lastAppliedDate.join(DATES_SEPARATOR);
+        if (this.inputRef) {
+          this.inputRef.value = this.lastAppliedDate.join(DATES_SEPARATOR);
+        }
+        this.value = this.lastAppliedDate;
+        this.datePickerInstance.clear({ silent: true });
         this.datePickerInstance.selectDate([formatDate(this.lastAppliedDate[0]), formatDate(this.lastAppliedDate[1])]);
       }
-      else {
+      else if (selectedDates.length === 1) {
+        // Only one date selected and no previous applied pair — clear
         this.clearDatePicker();
       }
     };
@@ -330,25 +398,99 @@ export class WppDatepicker {
     };
     this.onInput = () => {
       this.focusType = FOCUS_TYPE.NONE;
+      this.justSelectedFromCalendar = false;
+    };
+    this.clearInternalValidation = () => {
+      this.internalMessage = '';
+      this.internalMessageType = undefined;
+    };
+    this.validateManualInput = (inputValue) => {
+      if (!inputValue || !inputValue.trim())
+        return true;
+      const errorMessage = this._locales.invalidDateMessage || LOCALES_DEFAULTS.invalidDateMessage;
+      if (this.range) {
+        const parts = inputValue.split(DATES_SEPARATOR);
+        if (parts.length === 2) {
+          const isStartValid = this.isStringDateValid(parts[0].trim());
+          const isEndValid = this.isStringDateValid(parts[1].trim());
+          if (!isStartValid || !isEndValid) {
+            this.internalMessage = errorMessage;
+            this.internalMessageType = 'error';
+            return false;
+          }
+        }
+        else {
+          // Incomplete range (single date or missing separator) is always invalid
+          this.internalMessage = errorMessage;
+          this.internalMessageType = 'error';
+          return false;
+        }
+      }
+      else {
+        if (!this.isStringDateValid(inputValue.trim())) {
+          this.internalMessage = errorMessage;
+          this.internalMessageType = 'error';
+          return false;
+        }
+      }
+      this.clearInternalValidation();
+      return true;
     };
     this.onBlur = () => {
       if (this.isInComponent)
         return;
       this.focusType = FOCUS_TYPE.NONE;
-      this.value = this.inputRef?.value ?? '';
+      const inputValue = this.inputRef?.value ?? '';
       this.wppBlur.emit();
-      if (!this.lastValidDate) {
+      // Skip re-validation if user just selected a date from the calendar
+      if (this.justSelectedFromCalendar) {
+        this.justSelectedFromCalendar = false;
+        return;
+      }
+      // Validate manual input and show error if invalid
+      if (inputValue && !this.validateManualInput(inputValue)) {
+        this.value = inputValue;
+        this.isValueExists = true;
+        return;
+      }
+      this.clearInternalValidation();
+      if (!inputValue) {
         this.value = this.lastValidDate;
+        return;
       }
-      if (!this.range && !isValidDate(new Date(this.value)) && !Array.isArray(this.lastValidDate)) {
-        return (this.value = this.lastValidDate);
+      // Update lastValidDate & isValueExists for valid manual input
+      const dateFormat = this.getDateFormat();
+      const separator = this.getDateFormatSeparator(dateFormat);
+      const toDateObject = getCurrentFormatDate(dateFormat, separator);
+      if (this.range) {
+        const parts = inputValue.split(DATES_SEPARATOR).map(p => p.trim());
+        if (parts.length === 2 && parts.every(p => this.isStringDateValid(p))) {
+          this.lastValidDate = parts;
+          this.isValueExists = true;
+          this.wppChange.emit({
+            date: parts.map(p => toDateObject(p)),
+            formattedDate: parts,
+            name: this.name,
+          });
+        }
       }
-      if (Array.isArray(this.lastValidDate)) {
-        this.value = this.lastValidDate.join(DATES_SEPARATOR);
+      else {
+        if (this.isStringDateValid(inputValue.trim())) {
+          this.lastValidDate = inputValue.trim();
+          this.isValueExists = true;
+          this.wppChange.emit({
+            date: toDateObject(inputValue.trim()),
+            formattedDate: inputValue.trim(),
+            name: this.name,
+          });
+        }
       }
+      this.value = inputValue;
     };
     this.onFocus = (event) => {
       this.isInComponent = true;
+      this.clearInternalValidation();
+      this.justSelectedFromCalendar = false;
       this.wppFocus.emit(event);
       if (this.tippyInstance && !this.tippyInstance.state.isShown) {
         this.tippyInstance.show();
@@ -361,6 +503,9 @@ export class WppDatepicker {
       if (event.key === 'Tab') {
         this.focusType = FOCUS_TYPE.TAB;
       }
+      // Skip auto-format logic for non-default formats (e.g. 'MMMM yyyy')
+      if (!this.isDefaultDateFormat())
+        return;
       const isAddedChar = event.key !== 'Backspace';
       const dateFormat = this.getDateFormat();
       const separator = this.getDateFormatSeparator(dateFormat);
@@ -384,21 +529,36 @@ export class WppDatepicker {
           .join(datesInfo[0].isAllMatchedPartsLength || dates[1] ? DATES_SEPARATOR : '')
         : datesInfo[0].formattedDate;
       cursorPosition = getNextCursorPosition(inputValue, cursorPosition, isAddedChar, separator);
-      const inputDates = datesInfo
-        .filter(info => info.isAllMatchedPartsLength)
-        .map(info => toDateObject(info.formattedDate));
-      if (!isEqual(inputDates, this.datePickerInstance.selectedDates)) {
-        // @ts-ignore Due to outdated air-datepicker.d.ts
-        this.datePickerInstance.clear({ silent: true });
-        // @ts-ignore Due to outdated air-datepicker.d.ts
-        this.datePickerInstance.selectDate(inputDates).then(() => {
-          if (!(isOnlyFirstDateFulfilled || isAllDatesFulfilled)) {
-            this.updateInput(inputValue, cursorPosition);
-          }
-          if (this.range && isOnlyFirstDateFulfilled) {
-            this.updateInput(this.inputRef.value + DATES_SEPARATOR, cursorPosition === dateFormat.length ? cursorPosition + DATES_SEPARATOR.length : cursorPosition);
-          }
-        });
+      // Only sync to air-datepicker if all fulfilled dates are strictly valid (prevents auto-adjustment)
+      const fulfilledDateStrings = datesInfo.filter(info => info.isAllMatchedPartsLength).map(info => info.formattedDate);
+      const allFulfilledDatesValid = fulfilledDateStrings.length > 0 && fulfilledDateStrings.every(d => this.isStringDateValid(d));
+      if (allFulfilledDatesValid) {
+        // Update lastValidDate as user types valid dates (enables Apply button, shows cross icon)
+        this.lastValidDate = fulfilledDateStrings.length === 1 ? fulfilledDateStrings[0] : fulfilledDateStrings;
+        this.isValueExists = true;
+        const inputDates = fulfilledDateStrings.map(d => toDateObject(d));
+        if (!isEqual(inputDates, this.datePickerInstance.selectedDates)) {
+          this.isManuallyTyping = true;
+          // @ts-ignore Due to outdated air-datepicker.d.ts
+          this.datePickerInstance.clear({ silent: true });
+          // @ts-ignore Due to outdated air-datepicker.d.ts
+          this.datePickerInstance
+            .selectDate(inputDates)
+            .then(() => {
+            if (!(isOnlyFirstDateFulfilled || isAllDatesFulfilled)) {
+              this.updateInput(inputValue, cursorPosition);
+            }
+            if (this.range && isOnlyFirstDateFulfilled) {
+              this.updateInput(this.inputRef.value + DATES_SEPARATOR, cursorPosition === dateFormat.length ? cursorPosition + DATES_SEPARATOR.length : cursorPosition);
+            }
+            // Navigate calendar to show the manually entered date
+            const lastDate = inputDates[inputDates.length - 1];
+            this.datePickerInstance.setViewDate(lastDate);
+          })
+            .finally(() => {
+            this.isManuallyTyping = false;
+          });
+        }
       }
       this.updateInput(inputValue, cursorPosition);
     };
@@ -410,14 +570,21 @@ export class WppDatepicker {
       }
     };
     this.onKeyDown = (event) => {
+      // For non-default date formats (e.g. 'MMMM yyyy'), keep input read-only
+      if (!this.isDefaultDateFormat()) {
+        if (!event.metaKey && !event.ctrlKey && event.key !== 'Tab' && event.key !== 'Escape') {
+          event.preventDefault();
+        }
+        return;
+      }
+      const separator = this.getDateFormatSeparator(this.getDateFormat());
       const allowedKeys = [
         'Backspace',
         'Delete',
         'Tab',
         'Escape',
         'Enter',
-        '/',
-        '|',
+        separator,
         ...Array.from({ length: 10 }, (_, i) => i.toString()),
       ];
       if (!allowedKeys.includes(event.key) && !event.metaKey && !event.ctrlKey) {
@@ -439,6 +606,10 @@ export class WppDatepicker {
       const formattedEndDate = formatDate(dateRange[1]);
       if (isValidDate([formattedStartDate, formattedEndDate]) &&
         (!isEqual(currentSelectedStartDate, formattedStartDate) || !isEqual(currentSelectedEndDate, formattedEndDate))) {
+        // Clear existing selection first — in range mode, selectDate appends to existing dates.
+        // If there's a partial selection (1 date), appending 2 more causes air-datepicker to
+        // complete the range then start a new one, leaving only 1 date selected.
+        this.datePickerInstance.clear({ silent: true });
         this.datePickerInstance.selectDate([formattedStartDate, formattedEndDate]);
         this.datePickerInstance.update();
       }
@@ -477,7 +648,19 @@ export class WppDatepicker {
       }, 100);
     };
     this.handleClickIconCross = () => {
-      this.clearDatePicker();
+      // Clear input even if no valid date was committed
+      if (this.inputRef) {
+        this.inputRef.value = '';
+      }
+      this.clearInternalValidation();
+      this.justSelectedFromCalendar = false;
+      this.value = '';
+      this.isValueExists = false;
+      this.lastValidDate = '';
+      this.lastAppliedDate = [];
+      this.datePickerInstance.clear();
+      this.datePickerInstance.update();
+      this.wppDateClear.emit({ clear: true });
     };
     this.handleTriggerClick = (event) => {
       if (this.disabled)
@@ -498,11 +681,13 @@ export class WppDatepicker {
       'wpp-disabled': this.disabled,
       [`wpp-size-${this.size}`]: true,
       'wpp-has-value': this.isValueExists,
+      'wpp-active': this.isInComponent,
       'wpp-button-trigger': this.hasTriggerSlot,
     });
     this.inputCssClasses = () => ({
       'datepicker-input': true,
       [`${this.messageType}`]: !!this.messageType,
+      [`${this.internalMessageType}`]: !this.messageType && !!this.internalMessageType,
       [`size-${this.size}`]: true,
       [this.focusType]: !!this.focusType,
     });
@@ -539,6 +724,8 @@ export class WppDatepicker {
     this.isInComponent = false;
     this.isValueExists = false;
     this.hasTriggerSlot = false;
+    this.internalMessage = '';
+    this.internalMessageType = undefined;
     this.range = false;
     this.toggleSelected = true;
     this.value = undefined;
@@ -548,6 +735,7 @@ export class WppDatepicker {
     this.maxDate = undefined;
     this.placeholder = undefined;
     this.view = 'days';
+    this.monthRangeNormalization = { enabled: true };
     this.message = undefined;
     this.messageType = undefined;
     this.tooltipConfig = {};
@@ -654,9 +842,6 @@ export class WppDatepicker {
   }
   componentWillLoad() {
     this.updateSlotData();
-    if (!this.isDefaultDateFormat()) {
-      console.warn(`Warning: When using the datepicker with a different format than the default one, the input becomes read-only. Our default formats are: MM/dd/yyyy, dd/MM/yyyy, and other variations using only MM, dd, yyyy with '/' or '.' separators.`);
-    }
     if (this.width) {
       this.host.style.setProperty('--wpp-datepicker-container-width', this.width);
     }
@@ -676,6 +861,7 @@ export class WppDatepicker {
     autoFocusElement(this.autoFocus, this.inputRef);
   }
   disconnectedCallback() {
+    this.isDestroyed = true;
     this.tippyInstance?.destroy();
   }
   /**
@@ -696,21 +882,22 @@ export class WppDatepicker {
     return this._locales.firstDay ?? 1; // Default to Monday (ISO 8601) if no valid value is found
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, datepicker-container, icon-calendar, datepicker-input, icon-cross, message, trigger-wrapper" }, this.labelConfig?.text && !this.hasTriggerSlot && (h("wpp-label-v3-5-0", { class: "label", htmlFor: this.name, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.containerClasses(), id: "container", part: "datepicker-container" }, this.hasTriggerSlot
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, datepicker-container, icon-calendar, datepicker-input, icon-cross, message, trigger-wrapper" }, this.labelConfig?.text && !this.hasTriggerSlot && (h("wpp-label-v3-6-0", { class: "label", htmlFor: this.name, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.containerClasses(), id: "container", part: "datepicker-container" }, this.hasTriggerSlot
       ? [
         h("input", { type: "hidden", ref: el => (this.hiddenInputRef = el), "aria-hidden": "true" }),
         h("div", { class: "trigger-wrapper", ref: el => (this.triggerWrapperRef = el), onClick: (e) => this.handleTriggerClick(e), role: "presentation", part: "trigger-wrapper" }, h("slot", { name: "trigger", onSlotchange: () => this.updateSlotData() })),
       ]
       : [
-        h("input", { id: "datepicker", type: "text", class: this.inputCssClasses(), onInput: this.onInput, onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, disabled: this.disabled, readOnly: !this.isDefaultDateFormat(), placeholder: this.placeholder ||
+        h("input", { id: "datepicker", type: "text", class: this.inputCssClasses(), onInput: this.onInput, onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, disabled: this.disabled, placeholder: this.placeholder ||
             (this.range
               ? `${this._locales.dateFormat}${DATES_SEPARATOR}${this._locales.dateFormat}`
-              : `${this._locales.dateFormat}`), ref: inputRef => (this.inputRef = inputRef), autocomplete: "off", part: "datepicker-input", title: "" }),
-        h("wpp-icon-calendar-v3-5-0", { onClick: this.handleClickCalendarIcon, class: this.iconCalendarCssClasses(), part: "icon-calendar", color: "inherit" }),
-      ], h("div", { onBlur: this.handleBlurPortal, onFocus: () => clearTimeout(this.hideTimer), ...(this.hasPresets() ? { tabIndex: 0 } : {}), ref: ref => (this.portalRef = ref), class: this.portalClasses() }, this.hasPresets() && (h("div", { class: "wpp-presets-container" }, h("div", { class: "wpp-presets-list" }, this.presets.map((preset) => (h("wpp-list-item-v3-5-0", { onMouseEnter: () => this.handlePreviewPreset(preset.value), onMouseLeave: this.handleMouseLeavePreset, onWppChangeListItem: () => this.handleClickPreset(preset), class: "wpp-presets-item" }, h("wpp-typography-v3-5-0", { type: "s-body", slot: "label" }, preset.label))))), h("div", { class: "wpp-presets-footer" })))), !!this.lastValidDate && !this.hasTriggerSlot && (h("wpp-icon-cross-v3-5-0", { class: this.iconCrossCssClasses(), "aria-label": "Erase date", onClick: this.handleClickIconCross, part: "icon-cross" })), this.message && (h("wpp-inline-message-v3-5-0", { class: "inline-message", message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })))));
+              : `${this._locales.dateFormat}`), ref: inputRef => (this.inputRef = inputRef), autocomplete: "off", part: "datepicker-input", title: "", "aria-invalid": !!((this.message || this.internalMessage) &&
+            (this.messageType || this.internalMessageType) === 'error'), "aria-describedby": this.message || this.internalMessage ? 'datepicker-message' : undefined }),
+        h("wpp-icon-calendar-v3-6-0", { onClick: this.handleClickCalendarIcon, class: this.iconCalendarCssClasses(), part: "icon-calendar", color: "inherit" }),
+      ], h("div", { onBlur: this.handleBlurPortal, onFocus: () => clearTimeout(this.hideTimer), ...(this.hasPresets() ? { tabIndex: 0 } : {}), ref: ref => (this.portalRef = ref), class: this.portalClasses() }, this.hasPresets() && (h("div", { class: "wpp-presets-container" }, h("div", { class: "wpp-presets-list" }, this.presets.map((preset) => (h("wpp-list-item-v3-6-0", { onMouseEnter: () => this.handlePreviewPreset(preset.value), onMouseLeave: this.handleMouseLeavePreset, onWppChangeListItem: () => this.handleClickPreset(preset), class: "wpp-presets-item" }, h("wpp-typography-v3-6-0", { type: "s-body", slot: "label" }, preset.label))))), h("div", { class: "wpp-presets-footer" })))), (!!this.lastValidDate || this.inputRef?.value) && !this.hasTriggerSlot && (h("wpp-icon-cross-v3-6-0", { class: this.iconCrossCssClasses(), "aria-label": "Erase date", onClick: this.handleClickIconCross, onMouseDown: (e) => e.preventDefault(), part: "icon-cross" })), (this.message || this.internalMessage) && (h("wpp-inline-message-v3-6-0", { id: "datepicker-message", class: "inline-message", message: this.message || this.internalMessage, type: this.message ? this.messageType : this.internalMessageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })))));
   }
   static get is() { return "wpp-datepicker"; }
-  static get registryIs() { return "wpp-datepicker-v3-5-0"; }
+  static get registryIs() { return "wpp-datepicker-v3-6-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -887,6 +1074,34 @@ export class WppDatepicker {
         "attribute": "view",
         "reflect": false,
         "defaultValue": "'days'"
+      },
+      "monthRangeNormalization": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "MonthRangeNormalization",
+          "resolved": "MonthRangeNormalization | undefined",
+          "references": {
+            "MonthRangeNormalization": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-datepicker/types.ts::MonthRangeNormalization"
+            }
+          }
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [{
+              "name": "example",
+              "text": "// Enable normalization with defaults (1st and last day)\nmonthRangeNormalization={{ enabled: true }}"
+            }, {
+              "name": "example",
+              "text": "// Custom days: start on 15th, end on 20th\nmonthRangeNormalization={{ enabled: true, startDay: 15, endDay: 20 }}"
+            }],
+          "text": "Configuration for normalizing month range dates. When using `view=\"months\"` with `range`,\nthis option allows automatic normalization of selected dates to specific days.\nBy default, normalizes start date to the 1st day and end date to the last day of their respective months."
+        },
+        "defaultValue": "{ enabled: true }"
       },
       "message": {
         "type": "string",
@@ -1105,7 +1320,7 @@ export class WppDatepicker {
         "mutable": false,
         "complexType": {
           "original": "Partial<LocaleTypes>",
-          "resolved": "{ dateFormat?: string | undefined; dateLocale?: \"en-US\" | \"en-GB\" | \"fr-FR\" | \"ar-SA\" | \"de-DE\" | \"es-ES\" | \"it-IT\" | \"ja-JP\" | \"ko-KR\" | \"nl-NL\" | \"pt-BR\" | \"ru-RU\" | \"tr-TR\" | \"zh-CN\" | \"zh-TW\" | undefined; days?: string[] | undefined; daysShort?: string[] | undefined; daysMin?: string[] | undefined; months?: string[] | undefined; monthsShort?: string[] | undefined; today?: string | undefined; clear?: string | undefined; timeFormat?: string | undefined; firstDay?: 0 | 2 | 1 | 3 | 4 | 5 | 6 | undefined; }",
+          "resolved": "{ dateFormat?: string | undefined; invalidDateMessage?: string | undefined; dateLocale?: \"en-US\" | \"en-GB\" | \"fr-FR\" | \"ar-SA\" | \"de-DE\" | \"es-ES\" | \"it-IT\" | \"ja-JP\" | \"ko-KR\" | \"nl-NL\" | \"pt-BR\" | \"ru-RU\" | \"tr-TR\" | \"zh-CN\" | \"zh-TW\" | undefined; days?: string[] | undefined; daysShort?: string[] | undefined; daysMin?: string[] | undefined; months?: string[] | undefined; monthsShort?: string[] | undefined; today?: string | undefined; clear?: string | undefined; timeFormat?: string | undefined; firstDay?: 0 | 2 | 1 | 3 | 4 | 5 | 6 | undefined; }",
           "references": {
             "Partial": {
               "location": "global",
@@ -1137,7 +1352,7 @@ export class WppDatepicker {
         "mutable": false,
         "complexType": {
           "original": "Partial<LocaleTypes>",
-          "resolved": "{ dateFormat?: string | undefined; dateLocale?: \"en-US\" | \"en-GB\" | \"fr-FR\" | \"ar-SA\" | \"de-DE\" | \"es-ES\" | \"it-IT\" | \"ja-JP\" | \"ko-KR\" | \"nl-NL\" | \"pt-BR\" | \"ru-RU\" | \"tr-TR\" | \"zh-CN\" | \"zh-TW\" | undefined; days?: string[] | undefined; daysShort?: string[] | undefined; daysMin?: string[] | undefined; months?: string[] | undefined; monthsShort?: string[] | undefined; today?: string | undefined; clear?: string | undefined; timeFormat?: string | undefined; firstDay?: 0 | 2 | 1 | 3 | 4 | 5 | 6 | undefined; }",
+          "resolved": "{ dateFormat?: string | undefined; invalidDateMessage?: string | undefined; dateLocale?: \"en-US\" | \"en-GB\" | \"fr-FR\" | \"ar-SA\" | \"de-DE\" | \"es-ES\" | \"it-IT\" | \"ja-JP\" | \"ko-KR\" | \"nl-NL\" | \"pt-BR\" | \"ru-RU\" | \"tr-TR\" | \"zh-CN\" | \"zh-TW\" | undefined; days?: string[] | undefined; daysShort?: string[] | undefined; daysMin?: string[] | undefined; months?: string[] | undefined; monthsShort?: string[] | undefined; today?: string | undefined; clear?: string | undefined; timeFormat?: string | undefined; firstDay?: 0 | 2 | 1 | 3 | 4 | 5 | 6 | undefined; }",
           "references": {
             "Partial": {
               "location": "global",
@@ -1252,7 +1467,9 @@ export class WppDatepicker {
       "tippyInstance": {},
       "isInComponent": {},
       "isValueExists": {},
-      "hasTriggerSlot": {}
+      "hasTriggerSlot": {},
+      "internalMessage": {},
+      "internalMessageType": {}
     };
   }
   static get events() {

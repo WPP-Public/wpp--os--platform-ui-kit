@@ -9,6 +9,7 @@ export interface AutocompleteDefaultOption extends AutocompleteOption {
   label: string;
 }
 export type AutocompleteExtendedOption = ListItemProps & AutocompleteOption;
+export type GetItemKeyType<V = any, K = string | number> = (value: V) => K | undefined;
 export type AutocompleteChangeEventDetail = ({
   value: AutocompleteOptionList;
   reason: AutocompleteChangeReason;

@@ -10,13 +10,13 @@ export default {
   },
 };
 export const Filter = {
-  render: args => html ` <wpp-filter-button-v3-5-0
+  render: args => html ` <wpp-filter-button-v3-6-0
       .disabled="${args.disabled}"
       .counter="${args.counter}"
       @click="${() => console.log('Button clicked')}"
     >
       ${args.text}
-    </wpp-filter-button-v3-5-0>`,
+    </wpp-filter-button-v3-6-0>`,
   args: {
     text: 'Filters',
     disabled: false,

@@ -3,6 +3,7 @@ import { d as debounce, k as transformToVersionedTag, s as selectDropdownWidth, 
 import { m as menuListConfig, i as isEqual_1 } from './menuListConfig.js';
 import { F as FOCUS_TYPE } from './common.js';
 import { Z as Z_INDEX } from './consts.js';
+import { g as getTempNodeWidthBasedOnLabel } from './utils2.js';
 import { d as defineCustomElement$m } from './wpp-action-button2.js';
 import { d as defineCustomElement$l } from './wpp-checkbox2.js';
 import { d as defineCustomElement$k } from './wpp-divider2.js';
@@ -36,23 +37,6 @@ const LOCALES_DEFAULTS = {
   selected: count => `${count} selected`,
   loading: 'Loading...',
   createNewElement: 'Create new element',
-};
-
-const getTempNodeWidthBasedOnLabel = (textStyles, label) => {
-  const tmp = document.createElement('span');
-  const textNode = document.createTextNode('');
-  tmp.appendChild(textNode);
-  document.body.appendChild(tmp);
-  tmp.style.cssText = textStyles;
-  tmp.style.opacity = '0';
-  tmp.style.position = 'absolute';
-  tmp.style.width = 'auto';
-  tmp.style.overflow = 'scroll';
-  tmp.style.whiteSpace = 'no-wrap';
-  tmp.innerText = label;
-  const nodeWidth = tmp.getBoundingClientRect().width;
-  document.body.removeChild(tmp);
-  return nodeWidth;
 };
 
 const wppAutocompleteCss = ":host{--autocomplete-border-radius:var(--wpp-autocomplete-border-radius, var(--wpp-border-radius-m));--autocomplete-placeholder-color:var(--wpp-autocomplete-placeholder-color, var(--wpp-grey-color-700));--autocomplete-placeholder-color-disabled:var(--wpp-autocomplete-placeholder-color-disabled, var(--wpp-text-color-disabled));--autocomplete-hidden-count-text-color-disabled:var(--wpp-autocomplete-hidden-count-text-color-disabled, var(--wpp-text-color-disabled));--autocomplete-trigger-icon-right-position:var(--wpp-autocomplete-trigger-actions-right-position, 10px);--autocomplete-inline-message-margin:var(--wpp-autocomplete-inline-message-margin, 4px 0 0 0);--autocomplete-label-margin:var(--wpp-autocomplete-label-margin, 0 0 8px 0);--autocomplete-limit-lines:var(--wpp-autocomplete-limit-lines, 10000);--autocomplete-line-height:var(--wpp-autocomplete-line-height, 34px);--autocomplete-box-shadow:var(--wpp-autocomplete-box-shadow, var(--wpp-box-shadow-m));--autocomplete-first-border-color-focus:var(--wpp-autocomplete-first-border-color-focus, var(--wpp-grey-color-000));--autocomplete-second-border-color-focus:var(--wpp-autocomplete-second-border-color-focus, var(--wpp-brand-color));--autocomplete-height-m:var(--wpp-autocomplete-height-m, 40px);--autocomplete-height-s:var(--wpp-autocomplete-height-s, 32px);--autocomplete-padding-s:var(--wpp-autocomplete-padding-s, 5px 0 5px 12px);--autocomplete-padding-m:var(--wpp-autocomplete-padding-m, 9px 0 9px 12px);--autocomplete-bg-color:var(--wpp-autocomplete-bg-color, transparent);--autocomplete-bg-color-hover:var(--wpp-autocomplete-bg-color-hover, var(--wpp-grey-color-200));--autocomplete-bg-color-active:var(--wpp-autocomplete-bg-color-active, transparent);--autocomplete-bg-color-focused:var(--wpp-autocomplete-bg-color-focused, var(--wpp-grey-color-000));--autocomplete-bg-color-disabled:var(--wpp-autocomplete-bg-color-disabled, var(--wpp-grey-color-100));--autocomplete-trigger-icon-color:var(--wpp-autocomplete-trigger-actions-right-position, var(--wpp-icon-color));--autocomplete-trigger-icon-color-hover:var(--wpp-autocomplete-trigger-icon-color-hover, var(--wpp-icon-color-hover));--autocomplete-trigger-icon-color-active:var(--wpp-autocomplete-trigger-icon-color-active, var(--wpp-icon-color-active));--autocomplete-trigger-icon-color-disabled:var(--wpp-autocomplete-trigger-icon-color-disabled, var(--wpp-icon-color-disabled));--autocomplete-border-color:var(--wpp-autocomplete-border-color, var(--wpp-grey-color-500));--autocomplete-border-color-hover:var(--wpp-autocomplete-border-color-hover, var(--wpp-grey-color-700));--autocomplete-border-color-active:var(--wpp-autocomplete-border-color-active, var(--wpp-grey-color-800));--autocomplete-border-color-focused:var(--wpp-autocomplete-border-color-focused, var(--wpp-grey-color-800));--autocomplete-border-color-disabled:var(--wpp-autocomplete-border-color-disabled, var(--wpp-grey-color-400));--autocomplete-border-width:var(--wpp-autocomplete-border-width, var(--wpp-border-width-s));--autocomplete-border-style:var(--wpp-autocomplete-border-style, solid);--autocomplete-single-border-color-disabled:var(--wpp-autocomplete-single-border-color-disabled, var(--wpp-grey-color-400));--autocomplete-dropdown-max-height:var(--wpp-autocomplete-dropdown-max-height, 372px);--autocomplete-dropdown-checkbox-margin:var(--wpp-autocomplete-dropdown-checkbox-margin, 1px 8px 1px 0);--autocomplete-dropdown-bg-color:var(--wpp-autocomplete-dropdown-bg-color, var(--wpp-grey-color-000));--autocomplete-dropdown-border-radius:var(--wpp-autocomplete-dropdown-border-radius, var(--wpp-border-radius-s));--autocomplete-dropdown-padding:var(--wpp-autocomplete-dropdown-padding, 8px);--autocomplete-dropdown-actions-border-radius:0 0 var(--autocomplete-dropdown-border-radius) var(--autocomplete-dropdown-border-radius);--autocomplete-dropdown-actions-bg-color:var(--wpp-autocomplete-bg-color, var(--wpp-grey-color-000));--autocomplete-create-new-element-color:var(--wpp-autocomplete-create-new-element-color, var(--wpp-primary-color-500));--autocomplete-nothing-found-message-color:var(--wpp-autocomplete-nothing-found-message-color, var(--wpp-grey-color-700));--autocomplete-search-icon-margin-right:var(--wpp-autocomplete-search-icon-margin-right, 8px);--autocomplete-item-margin-bottom:var(--wpp-autocomplete-item-margin-bottom, 4px);--autocomplete-regular-selected-values-wrapper-padding:var(--wpp-autocomplete-regular-selected-values-wrapper-padding, 0 8px 8px 8px);--autocomplete-extended-selected-values-wrapper-padding:var(--wpp-autocomplete-extended-selected-values-wrapper-padding, 0 8px 8px 8px);--autocomplete-suggestion-title-padding:var(--wpp-autocomplete-suggestion-title-padding, 5px 0);--autocomplete-suggestion-title-margin-left:var(--wpp-autocomplete-suggestion-title-margin-left, 8px);--autocomplete-min-width:var(--wpp-autocomplete-min-width, 184px);position:relative;display:block;outline:none;min-width:var(--autocomplete-min-width)}:host ::slotted([slot=selected-values]){margin-top:8px !important;gap:8px;display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap}:host .label:not(.focused):hover+.trigger{background-color:var(--autocomplete-bg-color-hover);border-color:var(--autocomplete-border-color-hover)}:host .label:not(.focused):hover+.trigger .trigger-actions .wpp-icon-chevron,:host .label:not(.focused):hover+.trigger .wpp-icon-cross{color:var(--autocomplete-trigger-icon-color-hover)}:host .label:not(.focused):hover+.trigger.warning{border-color:var(--wpp-warning-color-500)}:host .label:not(.focused):hover+.trigger.error{border-color:var(--wpp-danger-color-500)}:host(.wpp-disabled){cursor:not-allowed}:host(.wpp-disabled) .label{pointer-events:none}.trigger-actions{position:absolute;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);right:var(--autocomplete-trigger-icon-right-position);display:-ms-flexbox;display:flex}.trigger-actions .wpp-icon-chevron,.trigger-actions .wpp-icon-cross{color:var(--autocomplete-trigger-icon-color);cursor:pointer;-webkit-transition:all 0.15s ease-out 0s;transition:all 0.15s ease-out 0s}.values{scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent;display:-ms-flexbox;display:flex;-ms-flex:1 1 auto;flex:1 1 auto;-ms-flex-align:center;align-items:center;min-width:0;max-height:calc(var(--autocomplete-limit-lines) * var(--autocomplete-line-height));padding-right:36px;overflow-y:auto}.values::-webkit-scrollbar{width:4px;height:4px}.values::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.values .hidden-count{-ms-flex:0 1 auto;flex:0 1 auto;margin:3px 2px;min-width:calc(25px + (var(--hidden-number) - 1) * 7.5px)}.values .hidden-count .wpp-typography{white-space:nowrap}.values .hidden-count{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0)}.values .autocomplete-input{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);-ms-flex:1 1 70px;flex:1 1 70px;min-width:70px;padding:0;background:var(--autocomplete-bg-color);border:none;outline:none;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.values .autocomplete-input.hidden{position:absolute;right:0;bottom:0;z-index:-1;width:1px;min-width:1px;height:1px;opacity:0}.values .autocomplete-input::-moz-placeholder{color:var(--autocomplete-placeholder-color);opacity:1}.values .autocomplete-input::-webkit-input-placeholder{color:var(--autocomplete-placeholder-color)}.values .autocomplete-input:-ms-input-placeholder{color:var(--autocomplete-placeholder-color)}.values .autocomplete-input::-ms-input-placeholder{color:var(--autocomplete-placeholder-color)}.values .autocomplete-input::placeholder{color:var(--autocomplete-placeholder-color)}.values .input-placeholder{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;width:100%}.values .wpp-chip+.autocomplete-input{margin-left:6px}.count-block{display:none}.trigger{position:relative;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-webkit-box-sizing:border-box;box-sizing:border-box;background-color:transparent;border:var(--autocomplete-border-width) var(--autocomplete-border-style) var(--autocomplete-border-color);border-radius:var(--autocomplete-border-radius);cursor:text}.trigger.size-s{height:var(--autocomplete-height-s);padding:var(--autocomplete-padding-s)}.trigger.size-m{height:var(--autocomplete-height-m);padding:var(--autocomplete-padding-m)}.trigger:hover{background-color:var(--autocomplete-bg-color-hover);border-color:var(--autocomplete-border-color-hover)}.trigger:hover .trigger-actions .wpp-icon-chevron,.trigger:hover .wpp-icon-cross{color:var(--autocomplete-trigger-icon-color-hover)}.trigger:active{background-color:var(--autocomplete-bg-color-active);border-color:var(--autocomplete-border-color-active)}.trigger:active .trigger-actions .wpp-icon-chevron,.trigger:active .wpp-icon-cross{color:var(--autocomplete-trigger-icon-color-active)}.trigger.focused{background-color:var(--autocomplete-bg-color-focused);border-color:var(--autocomplete-border-color-focused)}.trigger.focused .values{padding-right:35px}.trigger.warning,.trigger.warning:hover{border:var(--autocomplete-border-width) var(--autocomplete-border-style) var(--wpp-warning-color-400)}.trigger.error,.trigger.error:hover{border:var(--autocomplete-border-width) var(--autocomplete-border-style) var(--wpp-danger-color-400)}.trigger.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--autocomplete-first-border-color-focus), 0 0 0 3px var(--autocomplete-second-border-color-focus);box-shadow:0 0 0 1px var(--autocomplete-first-border-color-focus), 0 0 0 3px var(--autocomplete-second-border-color-focus)}.trigger.disabled{background-color:var(--autocomplete-bg-color-disabled);border-color:var(--autocomplete-border-color-disabled);pointer-events:none}.trigger.disabled .values .autocomplete-input{color:var(--wpp-grey-color-500)}.trigger.disabled .values .autocomplete-input::-webkit-input-placeholder{color:var(--autocomplete-placeholder-color-disabled)}.trigger.disabled .values .autocomplete-input::-moz-placeholder{color:var(--autocomplete-placeholder-color-disabled)}.trigger.disabled .values .autocomplete-input:-ms-input-placeholder{color:var(--autocomplete-placeholder-color-disabled)}.trigger.disabled .values .autocomplete-input::-ms-input-placeholder{color:var(--autocomplete-placeholder-color-disabled)}.trigger.disabled .values .autocomplete-input::placeholder{color:var(--autocomplete-placeholder-color-disabled)}.trigger.disabled .values .hidden-count .wpp-typography{color:var(--autocomplete-hidden-count-text-color-disabled)}.trigger.disabled .values .input-placeholder{color:var(--autocomplete-placeholder-color-disabled)}.trigger.disabled .trigger-actions .wpp-icon-chevron,.trigger.disabled .wpp-icon-cross,.trigger.disabled .wpp-icon-search{color:var(--autocomplete-trigger-icon-color-disabled)}.trigger.disabled{border-color:var(--autocomplete-single-border-color-disabled)}.trigger.error{border-color:var(--wpp-danger-color-400)}.trigger.warning{border-color:var(--wpp-warning-color-400)}.trigger[aria-expanded=true]>.trigger-actions .wpp-icon-chevron{-webkit-transform:rotate(180deg);transform:rotate(180deg)}.trigger .wpp-icon-search{margin-right:var(--autocomplete-search-icon-margin-right)}.wpp-inline-message::part(message-block){margin:var(--autocomplete-inline-message-margin)}.dropdown{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-box-sizing:border-box;box-sizing:border-box;max-height:var(--autocomplete-dropdown-max-height);overflow:hidden;background:var(--autocomplete-dropdown-bg-color);border-radius:var(--autocomplete-dropdown-border-radius);-webkit-box-shadow:var(--autocomplete-box-shadow);box-shadow:var(--autocomplete-box-shadow);width:var(--custom-dropdown-width)}.dropdown .selected-pills-wrapper{display:-ms-flexbox;display:flex;overflow:hidden;-ms-flex-wrap:wrap;flex-wrap:wrap;padding:8px 0 0;gap:8px;max-width:100%;width:auto}.dropdown .selected-pills-wrapper .wpp-pill{max-width:100%}.dropdown .selected-pills-wrapper.overflow{-ms-flex-wrap:nowrap;flex-wrap:nowrap}.dropdown .selected-pills-wrapper.not-empty{padding-bottom:8px}.dropdown .selected-pills-wrapper.show-action{cursor:pointer}.dropdown .header-wrapper{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;-ms-flex-align:center;align-items:center}.dropdown .header-wrapper .show-more-action{padding-left:8px;position:absolute;opacity:0;pointer-events:none}.dropdown .header-wrapper.visible .show-more-action{position:relative;opacity:1;pointer-events:auto}.dropdown .show-less-action{margin-bottom:8px}.dropdown .suggestions-divider{margin:8px 0}.dropdown .dropdown-list{scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent;min-height:0;padding:var(--autocomplete-dropdown-padding);overflow-x:hidden;overflow-y:auto}.dropdown .dropdown-list::-webkit-scrollbar{width:4px;height:4px}.dropdown .dropdown-list::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.dropdown .dropdown-list.hidden{display:none}.dropdown .dropdown-list:empty{display:none}.dropdown .dropdown-list.with-create-new{padding-bottom:53px}.dropdown .dropdown-list.empty-with-create-new{padding-bottom:57px}.dropdown .dropdown-list .actions{position:absolute;bottom:0;left:0;right:0;background-color:var(--autocomplete-dropdown-actions-bg-color);border-radius:var(--autocomplete-dropdown-actions-border-radius)}.dropdown .dropdown-list .actions .actions-container{padding:var(--autocomplete-dropdown-padding);padding-top:0}.dropdown .dropdown-list .infinite-loader{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;height:32px}.dropdown .dropdown-list .nothing-found-wrapper{pointer-events:none}.dropdown .dropdown-list .nothing-found-wrapper .nothing-found{color:var(--autocomplete-nothing-found-message-color)}.dropdown .dropdown-list .nothing-found-divider{margin-bottom:8px}.dropdown .dropdown-list .create-new-option{color:var(--autocomplete-create-new-element-color)}.dropdown .dropdown-list .selected-values{display:-ms-flexbox;display:flex;-webkit-transition-delay:300ms;transition-delay:300ms;-webkit-transition-property:padding-top;transition-property:padding-top}.dropdown .dropdown-list .selected-values.focused{-webkit-transition-delay:0s;transition-delay:0s;-webkit-transition-property:padding-top;transition-property:padding-top}.dropdown .dropdown-list .selected-values.regular{padding:var(--autocomplete-regular-selected-values-wrapper-padding)}.dropdown .dropdown-list .selected-values.regular.focused{--autocomplete-regular-selected-values-wrapper-padding:0 8px 8px 8px}.dropdown .dropdown-list .selected-values.extended{padding:var(--autocomplete-extended-selected-values-wrapper-padding)}.dropdown .dropdown-list .selected-values.extended.focused{--autocomplete-extended-selected-values-wrapper-padding:0 8px 8px 8px}.dropdown .dropdown-list ::slotted(.wpp-list-item){width:100%}.dropdown .dropdown-list ::slotted(.wpp-list-item:not(:last-child)){margin-bottom:var(--autocomplete-item-margin-bottom)}.dropdown .suggestion-item{width:100%}.dropdown .suggestion-item:not(.last-item){margin-bottom:var(--autocomplete-item-margin-bottom)}.dropdown .suggestions-heading,.dropdown .show-action{padding:var(--autocomplete-suggestion-title-padding);margin-left:var(--autocomplete-suggestion-title-margin-left)}.label{margin:var(--autocomplete-label-margin)}.loading-wrapper{display:-ms-flexbox;display:flex;gap:4px;padding:5px 8px}";
@@ -441,7 +425,7 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
     this.getInputValue = () => this.searchValue;
     this.renderInputPlaceholder = () => {
       if (!this.multiple && this.value.length && !this.isFocused) {
-        return (h("wpp-typography-v3-5-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this.getOptionLabel(this.value[0])));
+        return (h("wpp-typography-v3-6-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this.getOptionLabel(this.value[0])));
       }
       if (this.isFocused && !this.searchValue)
         return null;
@@ -452,10 +436,10 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
         if (!itemsToDisplay.length)
           return null;
         const placeholder = itemsToDisplay.map(this.getOptionLabel).filter(Boolean).join(', ');
-        return (h("wpp-typography-v3-5-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, placeholder));
+        return (h("wpp-typography-v3-6-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, placeholder));
       }
       if (this.type === 'extended' && this.value.length && !this.isFocused) {
-        return (h("wpp-typography-v3-5-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this._locales.selected(this.value.length)));
+        return (h("wpp-typography-v3-6-0", { "data-testid": "wpp-autocomplete-input-placeholder", type: "s-body", class: "input-placeholder" }, this._locales.selected(this.value.length)));
       }
     };
     this.countHiddenElements = () => {
@@ -524,19 +508,19 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
       const isLoading = this.loading || (this.isInfiniteLoading && this.isEmptyOptions);
       const isEmptyStringEntered = this.searchValue.trim().length === 0;
       if (isLoading) {
-        return (h("div", { class: "loading-wrapper" }, h("wpp-spinner-v3-5-0", { slot: "left" }), h("wpp-typography-v3-5-0", { type: "s-body", slot: "label" }, this._locales.loading)));
+        return (h("div", { class: "loading-wrapper" }, h("wpp-spinner-v3-6-0", { slot: "left" }), h("wpp-typography-v3-6-0", { type: "s-body", slot: "label" }, this._locales.loading)));
       }
       if (isEmptyStringEntered && this.componentSuggestions?.length > 0) {
-        return (h(Fragment, null, h("wpp-typography-v3-5-0", { type: "s-strong", class: "suggestions-heading" }, this.suggestionsTitle), this.componentSuggestions?.map((suggestion, index) => {
+        return (h(Fragment, null, h("wpp-typography-v3-6-0", { type: "s-strong", class: "suggestions-heading" }, this.suggestionsTitle), this.componentSuggestions?.map((suggestion, index) => {
           const { slots, checked, label, ...restProps } = suggestion;
           const isChecked = checked || this.isItemSelected(suggestion);
-          return (h("wpp-list-item-v3-5-0", { key: this.getOptionId(suggestion), selectable: true, checked: isChecked, value: suggestion, onWppChangeListItem: this.handleSuggestionClick, class: { 'suggestion-item': true, 'last-item': index === this.componentSuggestions?.length - 1 }, ...restProps }, label && h("span", { slot: "label" }, this.getOptionLabel(suggestion)), slots && this.renderSlotsListItem(slots, Boolean(label)).map(slotNode => slotNode)));
+          return (h("wpp-list-item-v3-6-0", { key: this.getOptionId(suggestion), selectable: true, checked: isChecked, value: suggestion, onWppChangeListItem: this.handleSuggestionClick, class: { 'suggestion-item': true, 'last-item': index === this.componentSuggestions?.length - 1 }, ...restProps }, label && h("span", { slot: "label" }, this.getOptionLabel(suggestion)), slots && this.renderSlotsListItem(slots, Boolean(label)).map(slotNode => slotNode)));
         })));
       }
       if (this.isEmptyOptions) {
-        return (h(Fragment, null, h("wpp-list-item-v3-5-0", { class: "nothing-found-wrapper" }, h("wpp-typography-v3-5-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound))));
+        return (h(Fragment, null, h("wpp-list-item-v3-6-0", { class: "nothing-found-wrapper" }, h("wpp-typography-v3-6-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound))));
       }
-      return (h(Fragment, null, !this.searchValue ? (!this.withPills ? (h("div", { class: this.selectedValuesCssClasses(), part: "selected-values" }, h("slot", { name: "selected-values" }))) : null) : (h("slot", null)), h("div", null, this.isInfiniteLoading && (h("div", { class: "infinite-loader" }, h("wpp-spinner-v3-5-0", null))))));
+      return (h(Fragment, null, !this.searchValue ? (!this.withPills ? (h("div", { class: this.selectedValuesCssClasses(), part: "selected-values" }, h("slot", { name: "selected-values" }))) : null) : (h("slot", null)), h("div", null, this.isInfiniteLoading && (h("div", { class: "infinite-loader" }, h("wpp-spinner-v3-6-0", null))))));
     };
     this.renderSlotsListItem = (slots, isLabelExists) => slots
       .map(slotElement => {
@@ -563,13 +547,13 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
       const labelText = option.label ||
         option.slots?.find((slot) => slot.type === 'span' && slot.props.slot === 'label')?.props.children;
       if (isTooltip) {
-        return (h("wpp-tooltip-v3-5-0", { class: {
+        return (h("wpp-tooltip-v3-6-0", { class: {
             'in-dropdown': true,
             transparent: isTransparentTooltip,
-          }, text: labelText, part: "tooltip", config: { ...this.pillTooltipConfig } }, h("wpp-pill-v3-5-0", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) })));
+          }, text: labelText, part: "tooltip", config: { ...this.pillTooltipConfig } }, h("wpp-pill-v3-6-0", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) })));
       }
       else {
-        return (h("wpp-pill-v3-5-0", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) }));
+        return (h("wpp-pill-v3-6-0", { class: { transparent: isTransparentPill }, label: labelText, type: "display", removable: true, onWppClose: event => this.handleSuggestionClick({ ...event, ...{ detail: { value: option } } }) }));
       }
     };
     /**
@@ -641,7 +625,7 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
       }
     };
     // Render Show More/Show Less button only in cases when we have truncated WppPill (not .label inside)
-    this.showMoreLessRender = (label) => (h("wpp-action-button-v3-5-0", { "data-testid": "wpp-autocomplete-show-btn", class: "nowrap", variant: "secondary", onClick: this.handleShowMoreLessClick }, label));
+    this.showMoreLessRender = (label) => (h("wpp-action-button-v3-6-0", { "data-testid": "wpp-autocomplete-show-btn", class: "nowrap", variant: "secondary", onClick: this.handleShowMoreLessClick }, label));
     this.handleShowMoreLessClick = () => {
       this.isShowMore = !this.isShowMore;
     };
@@ -879,15 +863,15 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
           ? this.renderPillComponent(option, true)
           : this.renderPillComponent(option, false);
       }
-    })), h("div", { class: "show-more-action" }, this.showMoreLessRender(`+${this.activePillsTruncationState.filter(x => x).length} ${this._locales.showMore}`)))), !this.isShowMore && h("div", { class: "show-less-action" }, this.showMoreLessRender(this._locales.showLess)), isNeedDivider && h("wpp-divider-v3-5-0", { class: "nothing-found-divider" })));
+    })), h("div", { class: "show-more-action" }, this.showMoreLessRender(`+${this.activePillsTruncationState.filter(x => x).length} ${this._locales.showMore}`)))), !this.isShowMore && h("div", { class: "show-less-action" }, this.showMoreLessRender(this._locales.showLess)), isNeedDivider && h("wpp-divider-v3-6-0", { class: "nothing-found-divider" })));
   }
   render() {
     const style = { '--custom-dropdown-width': this.getDropdownWidth() };
-    return (h(Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, options, selected-values" }, h("div", { class: this.autocompleteWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (h("wpp-label-v3-5-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.renderInputPlaceholder(), this.hiddenSelectedOptionsNumber > 0 && !this.isDropdownShown && (h("div", { class: "hidden-count", style: { '--hidden-number': this.getNearestPowForRowsNumber() + '' } }, h("wpp-typography-v3-5-0", { type: "s-body" }, ", + ", this.hiddenSelectedOptionsNumber))), h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, tabIndex: this.disabled ? -1 : 0, title: "" })), h("div", { class: "trigger-actions" }, this.hasClearButton() && h("wpp-icon-cross-v3-5-0", { onClick: this.handleClearClick }))), !!this.message && (h("wpp-inline-message-v3-5-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderSelectedOptions(), this.renderDropdownContent(), this.showCreateNewElement &&
+    return (h(Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, options, selected-values" }, h("div", { class: this.autocompleteWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (h("wpp-label-v3-6-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.renderInputPlaceholder(), this.hiddenSelectedOptionsNumber > 0 && !this.isDropdownShown && (h("div", { class: "hidden-count", style: { '--hidden-number': this.getNearestPowForRowsNumber() + '' } }, h("wpp-typography-v3-6-0", { type: "s-body" }, ", + ", this.hiddenSelectedOptionsNumber))), h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, tabIndex: this.disabled ? -1 : 0, title: "" })), h("div", { class: "trigger-actions" }, this.hasClearButton() && h("wpp-icon-cross-v3-6-0", { onClick: this.handleClearClick }))), !!this.message && (h("wpp-inline-message-v3-6-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderSelectedOptions(), this.renderDropdownContent(), this.showCreateNewElement &&
       this.searchValue !== '' &&
-      ((this.displayBtnWhenListEmpty && this.isEmptyOptions) || !this.displayBtnWhenListEmpty) && (h("div", { class: "actions" }, h("wpp-divider-v3-5-0", { class: "nothing-found-divider" }), h("div", { class: "actions-container" }, h("wpp-list-item-v3-5-0", { onClick: this.handleCreateNewOptionClick }, h("wpp-typography-v3-5-0", { type: "s-strong", class: "create-new-option", slot: "label" }, this._locales.createNewElement))))))), this.type === 'extended' && this.multiple ? h("slot", { name: "selected-values" }) : null));
+      ((this.displayBtnWhenListEmpty && this.isEmptyOptions) || !this.displayBtnWhenListEmpty) && (h("div", { class: "actions" }, h("wpp-divider-v3-6-0", { class: "nothing-found-divider" }), h("div", { class: "actions-container" }, h("wpp-list-item-v3-6-0", { onClick: this.handleCreateNewOptionClick }, h("wpp-typography-v3-6-0", { type: "s-strong", class: "create-new-option", slot: "label" }, this._locales.createNewElement))))))), this.type === 'extended' && this.multiple ? h("slot", { name: "selected-values" }) : null));
   }
-  static get registryIs() { return "wpp-autocomplete-v3-5-0"; }
+  static get registryIs() { return "wpp-autocomplete-v3-6-0"; }
   get host() { return this; }
   static get watchers() { return {
     "loading": ["onLoadingChange"],
@@ -900,7 +884,7 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
     "locales": ["onUpdateLocales"]
   }; }
   static get style() { return wppAutocompleteCss; }
-}, [1, "wpp-autocomplete", "wpp-autocomplete-v3-5-0", {
+}, [1, "wpp-autocomplete", "wpp-autocomplete-v3-6-0", {
     "name": [1],
     "loading": [516],
     "disabled": [516],
@@ -951,114 +935,114 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-autocomplete-v3-5-0", "wpp-action-button-v3-5-0", "wpp-checkbox-v3-5-0", "wpp-divider-v3-5-0", "wpp-icon-chevron-v3-5-0", "wpp-icon-cross-v3-5-0", "wpp-icon-dash-v3-5-0", "wpp-icon-drag-v3-5-0", "wpp-icon-error-v3-5-0", "wpp-icon-info-message-v3-5-0", "wpp-icon-success-v3-5-0", "wpp-icon-tick-v3-5-0", "wpp-icon-warning-v3-5-0", "wpp-inline-message-v3-5-0", "wpp-internal-label-v3-5-0", "wpp-internal-tooltip-v3-5-0", "wpp-label-v3-5-0", "wpp-list-item-v3-5-0", "wpp-pill-v3-5-0", "wpp-spinner-v3-5-0", "wpp-tooltip-v3-5-0", "wpp-typography-v3-5-0"];
+  const components = ["wpp-autocomplete-v3-6-0", "wpp-action-button-v3-6-0", "wpp-checkbox-v3-6-0", "wpp-divider-v3-6-0", "wpp-icon-chevron-v3-6-0", "wpp-icon-cross-v3-6-0", "wpp-icon-dash-v3-6-0", "wpp-icon-drag-v3-6-0", "wpp-icon-error-v3-6-0", "wpp-icon-info-message-v3-6-0", "wpp-icon-success-v3-6-0", "wpp-icon-tick-v3-6-0", "wpp-icon-warning-v3-6-0", "wpp-inline-message-v3-6-0", "wpp-internal-label-v3-6-0", "wpp-internal-tooltip-v3-6-0", "wpp-label-v3-6-0", "wpp-list-item-v3-6-0", "wpp-pill-v3-6-0", "wpp-spinner-v3-6-0", "wpp-tooltip-v3-6-0", "wpp-typography-v3-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-autocomplete-v3-5-0":
+    case "wpp-autocomplete-v3-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppAutocomplete$1);
       }
       break;
-    case "wpp-action-button-v3-5-0":
+    case "wpp-action-button-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-checkbox-v3-5-0":
+    case "wpp-checkbox-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-divider-v3-5-0":
+    case "wpp-divider-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-chevron-v3-5-0":
+    case "wpp-icon-chevron-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-cross-v3-5-0":
+    case "wpp-icon-cross-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-dash-v3-5-0":
+    case "wpp-icon-dash-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-drag-v3-5-0":
+    case "wpp-icon-drag-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-error-v3-5-0":
+    case "wpp-icon-error-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-info-message-v3-5-0":
+    case "wpp-icon-info-message-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-success-v3-5-0":
+    case "wpp-icon-success-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-tick-v3-5-0":
+    case "wpp-icon-tick-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-warning-v3-5-0":
+    case "wpp-icon-warning-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-inline-message-v3-5-0":
+    case "wpp-inline-message-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-internal-label-v3-5-0":
+    case "wpp-internal-label-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-tooltip-v3-5-0":
+    case "wpp-internal-tooltip-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-label-v3-5-0":
+    case "wpp-label-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-list-item-v3-5-0":
+    case "wpp-list-item-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-pill-v3-5-0":
+    case "wpp-pill-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v3-5-0":
+    case "wpp-spinner-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v3-5-0":
+    case "wpp-tooltip-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v3-5-0":
+    case "wpp-typography-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

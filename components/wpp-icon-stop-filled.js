@@ -16,9 +16,9 @@ const WppIconStopFilled$1 = /*@__PURE__*/ proxyCustomElement(class WppIconStopFi
   render() {
     return (h(WppIcon, { name: "wpp-icon-stop-filled", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M3 4.36111C3 3.60939 3.60939 3 4.36111 3H15.6389C16.3906 3 17 3.60939 17 4.36111V15.6389C17 16.3906 16.3906 17 15.6389 17H4.36111C3.60939 17 3 16.3906 3 15.6389V4.36111Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-stop-filled-v3-5-0"; }
+  static get registryIs() { return "wpp-icon-stop-filled-v3-6-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-stop-filled", "wpp-icon-stop-filled-v3-5-0", {
+}, [1, "wpp-icon-stop-filled", "wpp-icon-stop-filled-v3-6-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -28,9 +28,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-stop-filled-v3-5-0"];
+  const components = ["wpp-icon-stop-filled-v3-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-stop-filled-v3-5-0":
+    case "wpp-icon-stop-filled-v3-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconStopFilled$1);
       }

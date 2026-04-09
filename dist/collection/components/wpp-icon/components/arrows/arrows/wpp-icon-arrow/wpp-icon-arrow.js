@@ -22,7 +22,7 @@ export class WppIconArrow {
     return (h(WppIcon, { name: "wpp-icon-arrow", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: ArrowDirectionIconPath[this.direction], fill: "currentColor" })));
   }
   static get is() { return "wpp-icon-arrow"; }
-  static get registryIs() { return "wpp-icon-arrow-v3-5-0"; }
+  static get registryIs() { return "wpp-icon-arrow-v3-6-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

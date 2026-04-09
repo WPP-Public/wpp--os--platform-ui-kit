@@ -17,5 +17,7 @@ export const LOCALES_DEFAULTS = {
   allSelectedText: 'All selected',
   selectLabel: 'selected',
   loadingText: 'Loading...',
+  clearText: 'Clear',
+  applyText: 'Apply',
 };
 export const MULTIPLE_SELECT_SINGLE_VALUE_ERROR = 'Value should be an Array in the multiple select.';

@@ -79,6 +79,11 @@ export declare class WppListItem {
    */
   readonly multiple: boolean;
   /**
+   * If `true`, the checkbox is in indeterminate state. Only applies when `multiple` is true.
+   * @internal - This prop is controlled by WppSelect when the list item is used inside the select dropdown with `showSelectAllOption` enabled
+   */
+  readonly indeterminate: boolean;
+  /**
    * If `true`, the component is disabled
    */
   readonly disabled: boolean;

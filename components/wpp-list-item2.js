@@ -348,7 +348,7 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
       const hasHighlight = Boolean(this.highlight);
       return (h("div", { ref: ref => (this.wrapperRef = ref), class: "body-wrapper", part: "body-wrapper", style: { width: 'auto' } }, h(WrappedSlot, { wrapperClass: this.labelSlotCssClasses(), name: "label", onSlotchange: this.updateSlotData }), hasHighlight && (h("div", { class: "label highlight-text-wrapper", ref: highlightRef => (this.highlightRef = highlightRef) }, h("span", { class: "highlight-text" }, this.getHighlightedText('label')))), h(WrappedSlot, { wrapperClass: this.captionSlotCssClasses(), name: "caption", onSlotchange: this.updateSlotData }), hasHighlight && (h("div", { class: "caption" }, h("span", { class: "highlight-text" }, this.getHighlightedText('caption'))))));
     };
-    this.renderRightSlot = () => (h(WrappedSlot, { wrapperClass: this.rightSlotCssClasses(), name: "right", onSlotchange: this.updateSlotData, onClick: this.handleRightWrapperClick }, this.isExtended && h("wpp-icon-chevron-v3-5-0", { class: "fallback-icon", size: "s", part: "icon-extended" }), !this.isExtended && this.active && h("wpp-icon-tick-v3-5-0", { class: "fallback-icon", part: "icon-active" })));
+    this.renderRightSlot = () => (h(WrappedSlot, { wrapperClass: this.rightSlotCssClasses(), name: "right", onSlotchange: this.updateSlotData, onClick: this.handleRightWrapperClick }, this.isExtended && h("wpp-icon-chevron-v3-6-0", { class: "fallback-icon", size: "s", part: "icon-extended" }), !this.isExtended && this.active && h("wpp-icon-tick-v3-6-0", { class: "fallback-icon", part: "icon-active" })));
     this.renderLeftSlot = () => (h(WrappedSlot, { wrapperClass: this.leftSlotCssClasses(), name: "left", onSlotchange: this.updateSlotData }));
     this.handleMouseEnter = () => {
       this.updateComponentState({ hover: true });
@@ -391,6 +391,7 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
     this.active = false;
     this.selectable = false;
     this.multiple = false;
+    this.indeterminate = false;
     this.disabled = false;
     this.highlight = '';
     this.containerState = undefined;
@@ -522,9 +523,9 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
   render() {
     const displayState = this.componentState.active ? 'active' : this.componentState.hover ? 'hover' : '';
     const tabIndex = this.disabled ? -1 : this.nonInteractive ? -1 : 0;
-    return (h(Host, { class: this.hostCssClasses(), role: PRESENTATION_ROLE, exportparts: "item, info-wrapper, checkbox, body-wrapper, left, label, caption, right, left-wrapper, label-wrapper, caption-wrapper, right-wrapper", tabIndex: tabIndex }, this.hasSubtitleSlot && (h(WrappedSlot, { wrapperClass: this.subtitleSlotCssClasses(), name: "subtitle", onSlotchange: this.updateSlotData })), h("ul", { onClick: this.handleItemClick, onKeyDown: this.handleKeyDown, onMouseEnter: this.handleMouseEnter, onMouseLeave: this.handleMouseLeave, onMouseDown: this.handleMouseDown, onMouseUp: this.handleMouseUp, class: this.ulWrapperCssClasses(), part: "ul-wrapper" }, h(this.itemWrapper, { class: this.itemWrapperCssClasses(), part: "item", ...(this.linkConfig?.href && this.linkConfig) }, h("div", { class: "info-wrapper", part: "info-wrapper" }, this.multiple ? (h("wpp-checkbox-v3-5-0", { disabled: this.disabled, checked: this.checked, internalState: displayState, part: "checkbox", name: this.checkboxName || 'wpp-list-item-checkbox' })) : (h(Fragment, null, this.tooltipConfig.leftSlot ? (h("wpp-tooltip-v3-5-0", { key: this.tooltipId, header: this.tooltipConfig.leftSlot.header, text: this.tooltipConfig.leftSlot.text, value: this.tooltipConfig.leftSlot.value, error: this.tooltipConfig.leftSlot.error, warning: this.tooltipConfig.leftSlot.warning, theme: this.tooltipConfig.leftSlot.theme, config: this.tooltipConfig.leftSlot.config, externalClass: this.tooltipConfig.leftSlot.externalClass }, this.renderLeftSlot())) : (this.renderLeftSlot()))), this.hasTooltip ? (h("wpp-tooltip-v3-5-0", { text: this.getSlotText('label'), config: { placement: 'right', ...this.labelTooltipConfig }, class: "tooltip" }, this.renderBody())) : (this.renderBody())), this.tooltipConfig.rightSlot ? (h("wpp-tooltip-v3-5-0", { key: this.tooltipId, header: this.tooltipConfig.rightSlot.header, text: this.tooltipConfig.rightSlot.text, value: this.tooltipConfig.rightSlot.value, error: this.tooltipConfig.rightSlot.error, warning: this.tooltipConfig.rightSlot.warning, theme: this.tooltipConfig.rightSlot.theme, config: this.tooltipConfig.rightSlot.config, externalClass: this.tooltipConfig.rightSlot.externalClass }, this.renderRightSlot())) : (this.renderRightSlot())))));
+    return (h(Host, { class: this.hostCssClasses(), role: PRESENTATION_ROLE, exportparts: "item, info-wrapper, checkbox, body-wrapper, left, label, caption, right, left-wrapper, label-wrapper, caption-wrapper, right-wrapper", tabIndex: tabIndex }, this.hasSubtitleSlot && (h(WrappedSlot, { wrapperClass: this.subtitleSlotCssClasses(), name: "subtitle", onSlotchange: this.updateSlotData })), h("ul", { onClick: this.handleItemClick, onKeyDown: this.handleKeyDown, onMouseEnter: this.handleMouseEnter, onMouseLeave: this.handleMouseLeave, onMouseDown: this.handleMouseDown, onMouseUp: this.handleMouseUp, class: this.ulWrapperCssClasses(), part: "ul-wrapper" }, h(this.itemWrapper, { class: this.itemWrapperCssClasses(), part: "item", ...(this.linkConfig?.href && this.linkConfig) }, h("div", { class: "info-wrapper", part: "info-wrapper" }, this.multiple ? (h("wpp-checkbox-v3-6-0", { disabled: this.disabled, checked: this.checked, indeterminate: this.indeterminate, internalState: displayState, part: "checkbox", name: this.checkboxName || 'wpp-list-item-checkbox' })) : (h(Fragment, null, this.tooltipConfig.leftSlot ? (h("wpp-tooltip-v3-6-0", { key: this.tooltipId, header: this.tooltipConfig.leftSlot.header, text: this.tooltipConfig.leftSlot.text, value: this.tooltipConfig.leftSlot.value, error: this.tooltipConfig.leftSlot.error, warning: this.tooltipConfig.leftSlot.warning, theme: this.tooltipConfig.leftSlot.theme, config: this.tooltipConfig.leftSlot.config, externalClass: this.tooltipConfig.leftSlot.externalClass }, this.renderLeftSlot())) : (this.renderLeftSlot()))), this.hasTooltip ? (h("wpp-tooltip-v3-6-0", { text: this.getSlotText('label'), config: { placement: 'right', ...this.labelTooltipConfig }, class: "tooltip" }, this.renderBody())) : (this.renderBody())), this.tooltipConfig.rightSlot ? (h("wpp-tooltip-v3-6-0", { key: this.tooltipId, header: this.tooltipConfig.rightSlot.header, text: this.tooltipConfig.rightSlot.text, value: this.tooltipConfig.rightSlot.value, error: this.tooltipConfig.rightSlot.error, warning: this.tooltipConfig.rightSlot.warning, theme: this.tooltipConfig.rightSlot.theme, config: this.tooltipConfig.rightSlot.config, externalClass: this.tooltipConfig.rightSlot.externalClass }, this.renderRightSlot())) : (this.renderRightSlot())))));
   }
-  static get registryIs() { return "wpp-list-item-v3-5-0"; }
+  static get registryIs() { return "wpp-list-item-v3-6-0"; }
   get host() { return this; }
   static get watchers() { return {
     "labelTypography": ["typographyLabel"],
@@ -534,7 +535,7 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
     "disabled": ["disabledChanged"]
   }; }
   static get style() { return wppListItemCss; }
-}, [1, "wpp-list-item", "wpp-list-item-v3-5-0", {
+}, [1, "wpp-list-item", "wpp-list-item-v3-6-0", {
     "labelTypography": [16],
     "captionTypography": [16],
     "value": [520],
@@ -543,6 +544,7 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
     "active": [516],
     "selectable": [516],
     "multiple": [516],
+    "indeterminate": [516],
     "disabled": [516],
     "highlight": [513],
     "containerState": [513, "container-state"],
@@ -570,94 +572,94 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-list-item-v3-5-0", "wpp-action-button-v3-5-0", "wpp-checkbox-v3-5-0", "wpp-icon-chevron-v3-5-0", "wpp-icon-cross-v3-5-0", "wpp-icon-dash-v3-5-0", "wpp-icon-error-v3-5-0", "wpp-icon-info-message-v3-5-0", "wpp-icon-success-v3-5-0", "wpp-icon-tick-v3-5-0", "wpp-icon-warning-v3-5-0", "wpp-inline-message-v3-5-0", "wpp-internal-label-v3-5-0", "wpp-internal-tooltip-v3-5-0", "wpp-label-v3-5-0", "wpp-spinner-v3-5-0", "wpp-tooltip-v3-5-0", "wpp-typography-v3-5-0"];
+  const components = ["wpp-list-item-v3-6-0", "wpp-action-button-v3-6-0", "wpp-checkbox-v3-6-0", "wpp-icon-chevron-v3-6-0", "wpp-icon-cross-v3-6-0", "wpp-icon-dash-v3-6-0", "wpp-icon-error-v3-6-0", "wpp-icon-info-message-v3-6-0", "wpp-icon-success-v3-6-0", "wpp-icon-tick-v3-6-0", "wpp-icon-warning-v3-6-0", "wpp-inline-message-v3-6-0", "wpp-internal-label-v3-6-0", "wpp-internal-tooltip-v3-6-0", "wpp-label-v3-6-0", "wpp-spinner-v3-6-0", "wpp-tooltip-v3-6-0", "wpp-typography-v3-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-list-item-v3-5-0":
+    case "wpp-list-item-v3-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppListItem);
       }
       break;
-    case "wpp-action-button-v3-5-0":
+    case "wpp-action-button-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-checkbox-v3-5-0":
+    case "wpp-checkbox-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-chevron-v3-5-0":
+    case "wpp-icon-chevron-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-cross-v3-5-0":
+    case "wpp-icon-cross-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-dash-v3-5-0":
+    case "wpp-icon-dash-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-error-v3-5-0":
+    case "wpp-icon-error-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-info-message-v3-5-0":
+    case "wpp-icon-info-message-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-success-v3-5-0":
+    case "wpp-icon-success-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-tick-v3-5-0":
+    case "wpp-icon-tick-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-warning-v3-5-0":
+    case "wpp-icon-warning-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-inline-message-v3-5-0":
+    case "wpp-inline-message-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-label-v3-5-0":
+    case "wpp-internal-label-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-internal-tooltip-v3-5-0":
+    case "wpp-internal-tooltip-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-label-v3-5-0":
+    case "wpp-label-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v3-5-0":
+    case "wpp-spinner-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v3-5-0":
+    case "wpp-tooltip-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v3-5-0":
+    case "wpp-typography-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

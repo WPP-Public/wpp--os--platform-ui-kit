@@ -1,6 +1,6 @@
 import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
 import { F as FOCUS_TYPE } from './common.js';
-import { x as getAriaProps } from './utils.js';
+import { y as getAriaProps } from './utils.js';
 import { d as defineCustomElement$3 } from './wpp-icon-more2.js';
 import { d as defineCustomElement$2 } from './wpp-spinner2.js';
 
@@ -74,15 +74,15 @@ const WppMoreButton$1 = /*@__PURE__*/ proxyCustomElement(class WppMoreButton ext
     this.validAriaProps = getAriaProps(this.ariaProps);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { class: this.buttonCssClasses(), disabled: this.disabled || this.loading, name: this.name, type: "button", "data-testid": "wpp-more-button", "aria-pressed": this.isPressed, ...this.validAriaProps }, this.loading && !this.disabled ? (h("wpp-spinner-v3-5-0", { size: "s" })) : (h("wpp-icon-more-v3-5-0", { direction: 'horizontal' })))));
+    return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { class: this.buttonCssClasses(), disabled: this.disabled || this.loading, name: this.name, type: "button", "data-testid": "wpp-more-button", "aria-pressed": this.isPressed, ...this.validAriaProps }, this.loading && !this.disabled ? (h("wpp-spinner-v3-6-0", { size: "s" })) : (h("wpp-icon-more-v3-6-0", { direction: 'horizontal' })))));
   }
-  static get registryIs() { return "wpp-more-button-v3-5-0"; }
+  static get registryIs() { return "wpp-more-button-v3-6-0"; }
   get host() { return this; }
   static get watchers() { return {
     "ariaProps": ["onUpdateAriaProps"]
   }; }
   static get style() { return wppMoreButtonCss; }
-}, [1, "wpp-more-button", "wpp-more-button-v3-5-0", {
+}, [1, "wpp-more-button", "wpp-more-button-v3-6-0", {
     "name": [1],
     "size": [513],
     "disabled": [516],
@@ -97,19 +97,19 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-more-button-v3-5-0", "wpp-icon-more-v3-5-0", "wpp-spinner-v3-5-0"];
+  const components = ["wpp-more-button-v3-6-0", "wpp-icon-more-v3-6-0", "wpp-spinner-v3-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-more-button-v3-5-0":
+    case "wpp-more-button-v3-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppMoreButton$1);
       }
       break;
-    case "wpp-icon-more-v3-5-0":
+    case "wpp-icon-more-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-spinner-v3-5-0":
+    case "wpp-spinner-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

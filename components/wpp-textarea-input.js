@@ -63,11 +63,18 @@ const WppTextareaInput$1 = /*@__PURE__*/ proxyCustomElement(class WppTextareaInp
       'tab-focus': this.focusType === FOCUS_TYPE.TAB,
       [`${this.messageType}`]: Boolean(this.messageType),
     });
+    this.hasWarning = () => {
+      if (!this.charactersLimit)
+        return false;
+      if (this.enteredCharacters < this.warningThreshold)
+        return false;
+      if (this.enteredCharacters > this.charactersLimit)
+        return false;
+      return true;
+    };
     this.charLimitCssClasses = () => ({
       'characters-limit': true,
-      warning: Boolean(this.charactersLimit &&
-        this.enteredCharacters >= this.warningThreshold &&
-        this.enteredCharacters <= this.charactersLimit),
+      warning: this.hasWarning(),
       error: Boolean(this.charactersLimit && this.enteredCharacters > this.charactersLimit),
     });
     this.messageCssClasses = () => ({
@@ -146,16 +153,16 @@ const WppTextareaInput$1 = /*@__PURE__*/ proxyCustomElement(class WppTextareaInp
     const style = {
       '--text-area-height-by-rows': this.rows ? 'auto' : '',
     };
-    return (h(Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "label, textarea, message-wrapper, message, limit-wrapper, limit-label, limit-text", onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp }, this.labelConfig?.text && (h("wpp-label-v3-5-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("textarea", { name: this.name, value: this.value, disabled: this.disabled, placeholder: this.placeholder, rows: this.rows, id: this.name, required: this.required, class: this.textAreaCssClasses(), onInput: this.onInput, ref: inputRef => (this.inputRef = inputRef), part: "textarea", "aria-label": this.ariaProps.label, style: style, title: "" }), (!!this.charactersLimit || !!this.message) && (h("div", { class: this.messageCssClasses(), part: "message-wrapper" }, !!this.message && (h("wpp-inline-message-v3-5-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, part: "message" })), !!this.charactersLimit && (h("div", { class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, h("wpp-typography-v3-5-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":"), h("wpp-typography-v3-5-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit)))))));
+    return (h(Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "label, textarea, message-wrapper, message, limit-wrapper, limit-label, limit-text", onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp }, this.labelConfig?.text && (h("wpp-label-v3-6-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("textarea", { name: this.name, value: this.value, disabled: this.disabled, placeholder: this.placeholder, rows: this.rows, id: this.name, required: this.required, class: this.textAreaCssClasses(), onInput: this.onInput, ref: inputRef => (this.inputRef = inputRef), part: "textarea", "aria-label": this.ariaProps.label, style: style, title: "" }), (!!this.charactersLimit || !!this.message) && (h("div", { class: this.messageCssClasses(), part: "message-wrapper" }, !!this.message && (h("wpp-inline-message-v3-6-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, part: "message" })), !!this.charactersLimit && (h("div", { class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, h("wpp-typography-v3-6-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":"), h("wpp-typography-v3-6-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit)))))));
   }
-  static get registryIs() { return "wpp-textarea-input-v3-5-0"; }
+  static get registryIs() { return "wpp-textarea-input-v3-6-0"; }
   get host() { return this; }
   static get watchers() { return {
     "value": ["onValueChange"],
     "locales": ["onUpdateLocales"]
   }; }
   static get style() { return wppTextareaInputCss; }
-}, [1, "wpp-textarea-input", "wpp-textarea-input-v3-5-0", {
+}, [1, "wpp-textarea-input", "wpp-textarea-input-v3-6-0", {
     "name": [1],
     "value": [1025],
     "placeholder": [1],
@@ -184,74 +191,74 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-textarea-input-v3-5-0", "wpp-action-button-v3-5-0", "wpp-icon-cross-v3-5-0", "wpp-icon-error-v3-5-0", "wpp-icon-info-message-v3-5-0", "wpp-icon-success-v3-5-0", "wpp-icon-warning-v3-5-0", "wpp-inline-message-v3-5-0", "wpp-internal-label-v3-5-0", "wpp-internal-tooltip-v3-5-0", "wpp-label-v3-5-0", "wpp-spinner-v3-5-0", "wpp-tooltip-v3-5-0", "wpp-typography-v3-5-0"];
+  const components = ["wpp-textarea-input-v3-6-0", "wpp-action-button-v3-6-0", "wpp-icon-cross-v3-6-0", "wpp-icon-error-v3-6-0", "wpp-icon-info-message-v3-6-0", "wpp-icon-success-v3-6-0", "wpp-icon-warning-v3-6-0", "wpp-inline-message-v3-6-0", "wpp-internal-label-v3-6-0", "wpp-internal-tooltip-v3-6-0", "wpp-label-v3-6-0", "wpp-spinner-v3-6-0", "wpp-tooltip-v3-6-0", "wpp-typography-v3-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-textarea-input-v3-5-0":
+    case "wpp-textarea-input-v3-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTextareaInput$1);
       }
       break;
-    case "wpp-action-button-v3-5-0":
+    case "wpp-action-button-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-cross-v3-5-0":
+    case "wpp-icon-cross-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-error-v3-5-0":
+    case "wpp-icon-error-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-info-message-v3-5-0":
+    case "wpp-icon-info-message-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-success-v3-5-0":
+    case "wpp-icon-success-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-warning-v3-5-0":
+    case "wpp-icon-warning-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-inline-message-v3-5-0":
+    case "wpp-inline-message-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-internal-label-v3-5-0":
+    case "wpp-internal-label-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-tooltip-v3-5-0":
+    case "wpp-internal-tooltip-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-label-v3-5-0":
+    case "wpp-label-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v3-5-0":
+    case "wpp-spinner-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v3-5-0":
+    case "wpp-tooltip-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v3-5-0":
+    case "wpp-typography-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

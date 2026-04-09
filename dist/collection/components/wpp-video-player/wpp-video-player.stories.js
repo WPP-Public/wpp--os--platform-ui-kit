@@ -40,12 +40,12 @@ const meta = {
 export default meta;
 export const Default = {
   render: args => html `
-    <wpp-video-player-v3-5-0
+    <wpp-video-player-v3-6-0
       .src=${args.src}
       .thumbnail=${args.thumbnail}
       .size=${args.size}
       .controlPanelConfig=${args.controlPanelConfig}
-    ></wpp-video-player-v3-5-0>
+    ></wpp-video-player-v3-6-0>
   `,
   args: {
     src: 'https://www.w3schools.com/html/mov_bbb.mp4',

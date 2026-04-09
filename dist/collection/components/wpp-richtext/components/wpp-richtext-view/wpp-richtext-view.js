@@ -156,10 +156,10 @@ export class WppRichtextView {
     this.setValue(newValue);
   }
   render() {
-    return (h(Host, null, h("wpp-quill-styles-v3-5-0", null), h("wpp-richtext-common-styles-v3-5-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
+    return (h(Host, null, h("wpp-quill-styles-v3-6-0", null), h("wpp-richtext-common-styles-v3-6-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
   }
   static get is() { return "wpp-richtext-view"; }
-  static get registryIs() { return "wpp-richtext-view-v3-5-0"; }
+  static get registryIs() { return "wpp-richtext-view-v3-6-0"; }
   static get properties() {
     return {
       "value": {

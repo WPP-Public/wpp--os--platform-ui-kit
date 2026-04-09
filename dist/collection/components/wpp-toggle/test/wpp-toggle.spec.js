@@ -30,7 +30,7 @@ describe('wpp-toggle', () => {
     };
     const page = await newSpecPage({
       components: [WppToggle, WppLabel, WppInternalLabel],
-      template: () => h("wpp-toggle-v3-5-0", { labelConfig: labelConfig, required: true, name: "toggle" }),
+      template: () => h("wpp-toggle-v3-6-0", { labelConfig: labelConfig, required: true, name: "toggle" }),
     });
     expect(page.root).toMatchSnapshot();
   });

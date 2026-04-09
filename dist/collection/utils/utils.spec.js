@@ -1,5 +1,6 @@
 import { format } from './utils';
 import { getHighlightData } from './utils';
+import { getOsBarOffsetHeight } from './utils';
 describe('format', () => {
   it('returns empty string for no names defined', () => {
     expect(format(undefined, undefined, undefined)).toEqual('');
@@ -51,5 +52,31 @@ describe('given getHighlightData', () => {
       highlight: 'team f',
       secondPart: 'rom devs',
     });
+  });
+});
+describe('getOsBarOffsetHeight', () => {
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
+  it('returns the OS bar header offsetHeight when .wpp > header exists', () => {
+    const root = document.createElement('div');
+    root.id = 'root';
+    const wppContainer = document.createElement('div');
+    wppContainer.className = 'wpp';
+    const header = document.createElement('header');
+    Object.defineProperty(header, 'offsetHeight', { value: 72, configurable: true });
+    wppContainer.appendChild(header);
+    root.appendChild(wppContainer);
+    document.body.appendChild(root);
+    expect(getOsBarOffsetHeight()).toBe(72);
+  });
+  it('returns default 64 when .wpp > header does not exist', () => {
+    const root = document.createElement('div');
+    root.id = 'root';
+    document.body.appendChild(root);
+    expect(getOsBarOffsetHeight()).toBe(64);
+  });
+  it('returns default 64 when no root container is found', () => {
+    expect(getOsBarOffsetHeight()).toBe(64);
   });
 });

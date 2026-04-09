@@ -3,23 +3,26 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const config = require('./config-13b0a543.js');
+const config = require('./config-6aa0b6b4.js');
 const types = require('./types-3dbf006d.js');
-require('./utils-27884b05.js');
+require('./utils-e1f17a8c.js');
 require('./consts-dba6e6dd.js');
-require('./wpp-icon-unordered-list-8935c2a5.js');
+require('./wpp-icon-attach-707b14c2.js');
 require('./WppIcon-55327707.js');
-require('./wpp-icon-video-clip-58ecdee2.js');
+require('./wpp-icon-unordered-list-0d44ce00.js');
+require('./wpp-icon-video-clip-7ac45275.js');
+require('./const-09fdf30a.js');
+require('./marked.umd-e1074c94.js');
 require('./_commonjsHelpers-bcc1208a.js');
-require('./wpp-progress-indicator-4da0c421.js');
-require('./wpp-icon-chevron-c79372d9.js');
-require('./wpp-icon-gallery-2b94503a.js');
-require('./lodash-04cddce7.js');
-require('./wpp-action-button-da6c8ecc.js');
+require('./wpp-progress-indicator-24971b5e.js');
+require('./wpp-icon-chevron-36ae3eb4.js');
+require('./wpp-icon-gallery-16651b4a.js');
+require('./lodash-6b012aab.js');
+require('./wpp-action-button-8dd2d2f8.js');
 require('./common-ee802540.js');
 require('./WrappedSlot-4a4ef805.js');
-require('./wpp-input-7bcf8ecb.js');
-require('./turndown.browser.es-40bb3069.js');
+require('./wpp-input-fe676474.js');
+require('./turndown.browser.es-eb372b89.js');
 
 const WppRichtextView = class {
   constructor(hostRef) {
@@ -175,9 +178,9 @@ const WppRichtextView = class {
     this.setValue(newValue);
   }
   render() {
-    return (index.h(index.Host, null, index.h("wpp-quill-styles-v3-5-0", null), index.h("wpp-richtext-common-styles-v3-5-0", null), index.h("div", { ref: (el) => (this.containerElement = el) })));
+    return (index.h(index.Host, null, index.h("wpp-quill-styles-v3-6-0", null), index.h("wpp-richtext-common-styles-v3-6-0", null), index.h("div", { ref: (el) => (this.containerElement = el) })));
   }
-  static get registryIs() { return "wpp-richtext-view-v3-5-0"; }
+  static get registryIs() { return "wpp-richtext-view-v3-6-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "styles": ["updateStyle"],

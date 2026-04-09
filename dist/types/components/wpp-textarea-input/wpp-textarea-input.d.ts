@@ -128,6 +128,7 @@ export declare class WppTextareaInput implements BaseComponent, BaseFormControl<
   private onInput;
   private hostCssClasses;
   private textAreaCssClasses;
+  private hasWarning;
   private charLimitCssClasses;
   private messageCssClasses;
   render(): any;

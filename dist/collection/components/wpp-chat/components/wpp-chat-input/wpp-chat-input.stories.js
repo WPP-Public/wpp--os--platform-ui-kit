@@ -81,14 +81,14 @@ export const DefaultChatInput = {
       render(html `
           <div style=${'display: flex; flex-direction: column; height: 100vh; padding: 20px; box-sizing: border-box;'}>
             <div style=${'display: flex;'}>
-              <wpp-typography-v3-5-0>Message History:</wpp-typography-v3-5-0>
+              <wpp-typography-v3-6-0>Message History:</wpp-typography-v3-6-0>
               <ul style="margin:0;">
-                ${updatedMessages.map(msg => html `<li><wpp-typography-v3-5-0>${msg}</wpp-typography-v3-5-0></li>`)}
+                ${updatedMessages.map(msg => html `<li><wpp-typography-v3-6-0>${msg}</wpp-typography-v3-6-0></li>`)}
               </ul>
             </div>
 
             <div style=${'display: flex; align-items: flex-end; height: 100vh;'}>
-              <wpp-chat-input-v3-5-0
+              <wpp-chat-input-v3-6-0
                 .enableAttach=${args.enableAttach}
                 .disabled=${args.disabled}
                 .charactersLimit=${args.charactersLimit}
@@ -104,31 +104,31 @@ export const DefaultChatInput = {
                 @wppSend=${handleSendMessage}
                 @wppMessageChanged=${handleMessageChanged}
               >
-                <wpp-menu-context-v3-5-0 .slot=${'select'} .dropdownConfig=${dropdownConfig}>
-                  <wpp-action-button-v3-5-0
+                <wpp-menu-context-v3-6-0 .slot=${'select'} .dropdownConfig=${dropdownConfig}>
+                  <wpp-action-button-v3-6-0
                     slot="trigger-element"
                     variant="secondary"
                     .disabled=${args.disabled}
                     style="--wpp-action-button-font-weight: 400; --wpp-action-button-secondary-icon-color: var(--wpp-grey-color-600);"
                   >
                     ${selectedModel}
-                    <wpp-icon-chevron-v3-5-0
+                    <wpp-icon-chevron-v3-6-0
                       slot="icon-end"
                       direction=${isSelectOpen ? 'up' : 'down'}
-                    ></wpp-icon-chevron-v3-5-0>
-                  </wpp-action-button-v3-5-0>
+                    ></wpp-icon-chevron-v3-6-0>
+                  </wpp-action-button-v3-6-0>
                   <div>
                     ${modelOptions.map(model => html `
-                        <wpp-list-item-v3-5-0
+                        <wpp-list-item-v3-6-0
                           .checked=${selectedModel === model.label}
                           @wppChangeListItem=${() => handleModelSelect(model)}
                         >
                           <span slot="label">${model.label}</span>
-                        </wpp-list-item-v3-5-0>
+                        </wpp-list-item-v3-6-0>
                       `)}
                   </div>
-                </wpp-menu-context-v3-5-0>
-              </wpp-chat-input-v3-5-0>
+                </wpp-menu-context-v3-6-0>
+              </wpp-chat-input-v3-6-0>
             </div>
           </div>
         `, container);

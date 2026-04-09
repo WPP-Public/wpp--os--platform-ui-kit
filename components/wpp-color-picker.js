@@ -339,7 +339,7 @@ const WppColorPicker$1 = /*@__PURE__*/ proxyCustomElement(class WppColorPicker e
     this.createTippyInstance();
   }
   render() {
-    return (h(Host, { "aria-disabled": this.disabled, class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, tabindex: this.disabled ? -1 : 0 }, h("div", { onClick: this.handleAnchorClick, class: "anchor", ref: anchorEl => (this.anchorEl = anchorEl) }, h("div", { class: "color-container" }, h("div", { class: "color-preview" }, h("div", { style: { backgroundColor: this.displayValue, opacity: this.type === 'hex' ? this.hexOpacity : '1' }, class: "color-preview-box" }), h("wpp-icon-swatch-v3-5-0", { size: "s" })), h("wpp-typography-v3-5-0", { type: "s-body", color: this.disabled ? 'var(--wpp-text-color-disabled)' : undefined }, this.displayValue)), this.type === 'hex' && (h("wpp-typography-v3-5-0", { class: "hex-opacity", type: "s-body", color: this.disabled ? 'var(--wpp-text-color-disabled)' : undefined }, this.hexOpacity))), h("div", { class: this.dropdownCssClasses(), ref: elRef => (this.contentEl = elRef) }, this.mode === 'theme and custom' && (h("wpp-segmented-control-v3-5-0", { width: "346px", hugContentOff: true, size: "s", value: this.activeSegment, onWppChange: this.handleSegmentChange }, h("wpp-segmented-control-item-v3-5-0", { variant: "text", value: "theme" }, "Theme"), h("wpp-segmented-control-item-v3-5-0", { variant: "text", value: "custom" }, "Custom"))), (this.mode === 'custom' || (this.mode === 'theme and custom' && this.activeSegment === 'custom')) && (h("div", { class: "wpp-custom-picker" }, h("wpp-saturation-picker-v3-5-0", { hue: this.hue, saturation: this.saturation, value: this.saturationValue }), h("div", { class: "wpp-bottom-pickers" }, h("div", { class: "wpp-sliders" }, h("wpp-hue-slider-v3-5-0", { hue: this.hue }), h("wpp-opacity-slider-v3-5-0", { hexColor: this.hexColor, opacity: parseInt(this.internalOpacity) / 100 })), h("div", { class: "wpp-color-preview" }, h("div", { class: "wpp-color", style: { backgroundColor: this.hexColor, opacity: this.internalOpacity } }), h("wpp-icon-swatch-v3-5-0", null))), h("div", { class: "wpp-controls" }, this.isDropdownVisible && (h("wpp-select-v3-5-0", { size: "s", required: true, type: "single", value: this.internalType, onWppChange: this.handleChangeTypeOfPicker, dropdownConfig: {
+    return (h(Host, { "aria-disabled": this.disabled, class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, tabindex: this.disabled ? -1 : 0 }, h("div", { onClick: this.handleAnchorClick, class: "anchor", ref: anchorEl => (this.anchorEl = anchorEl) }, h("div", { class: "color-container" }, h("div", { class: "color-preview" }, h("div", { style: { backgroundColor: this.displayValue, opacity: this.type === 'hex' ? this.hexOpacity : '1' }, class: "color-preview-box" }), h("wpp-icon-swatch-v3-6-0", { size: "s" })), h("wpp-typography-v3-6-0", { type: "s-body", color: this.disabled ? 'var(--wpp-text-color-disabled)' : undefined }, this.displayValue)), this.type === 'hex' && (h("wpp-typography-v3-6-0", { class: "hex-opacity", type: "s-body", color: this.disabled ? 'var(--wpp-text-color-disabled)' : undefined }, this.hexOpacity))), h("div", { class: this.dropdownCssClasses(), ref: elRef => (this.contentEl = elRef) }, this.mode === 'theme and custom' && (h("wpp-segmented-control-v3-6-0", { width: "346px", hugContentOff: true, size: "s", value: this.activeSegment, onWppChange: this.handleSegmentChange }, h("wpp-segmented-control-item-v3-6-0", { variant: "text", value: "theme" }, "Theme"), h("wpp-segmented-control-item-v3-6-0", { variant: "text", value: "custom" }, "Custom"))), (this.mode === 'custom' || (this.mode === 'theme and custom' && this.activeSegment === 'custom')) && (h("div", { class: "wpp-custom-picker" }, h("wpp-saturation-picker-v3-6-0", { hue: this.hue, saturation: this.saturation, value: this.saturationValue }), h("div", { class: "wpp-bottom-pickers" }, h("div", { class: "wpp-sliders" }, h("wpp-hue-slider-v3-6-0", { hue: this.hue }), h("wpp-opacity-slider-v3-6-0", { hexColor: this.hexColor, opacity: parseInt(this.internalOpacity) / 100 })), h("div", { class: "wpp-color-preview" }, h("div", { class: "wpp-color", style: { backgroundColor: this.hexColor, opacity: this.internalOpacity } }), h("wpp-icon-swatch-v3-6-0", null))), h("div", { class: "wpp-controls" }, this.isDropdownVisible && (h("wpp-select-v3-6-0", { size: "s", required: true, type: "single", value: this.internalType, onWppChange: this.handleChangeTypeOfPicker, dropdownConfig: {
         placement: 'bottom',
         onShow: (instance) => {
           this.selectTippyInstance = instance;
@@ -350,7 +350,7 @@ const WppColorPicker$1 = /*@__PURE__*/ proxyCustomElement(class WppColorPicker e
       }, list: [
         { value: 'hex', label: 'Hex' },
         { value: 'rgba', label: 'RGB' },
-      ] })), this.internalType === 'hex' ? (h("wpp-input-v3-5-0", { class: "hex-input", size: "s", name: "hexValue", value: this.hexColor.replace('#', ''), onBlur: this.handleInputHexChange })) : (h(Fragment, null, RGB_INPUTS.map((inputName) => (h("wpp-input-v3-5-0", { key: inputName, class: `${inputName}-input`, size: "s", name: inputName, type: "text", value: String(this.rgbInputValues[inputName]), maskOptions: RGB_INPUT_CONFIG, onBlur: this.handleInputRGBChange }))))), h("wpp-input-v3-5-0", { class: "opacity-input", size: "s", name: "opacity", type: "text", maskOptions: OPACITY_INPUT_CONFIG, value: this.internalOpacity, onBlur: this.handleInputOpacityChange })), h("div", { class: "wpp-saved-colors" }, h("wpp-typography-v3-5-0", { class: "title", type: "s-strong" }, "Saved colors"), h("div", { class: "wpp-colors" }, this.savedColors.map((savedColor) => (h("wpp-popover-v3-5-0", { config: {
+      ] })), this.internalType === 'hex' ? (h("wpp-input-v3-6-0", { class: "hex-input", size: "s", name: "hexValue", value: this.hexColor.replace('#', ''), onBlur: this.handleInputHexChange })) : (h(Fragment, null, RGB_INPUTS.map((inputName) => (h("wpp-input-v3-6-0", { key: inputName, class: `${inputName}-input`, size: "s", name: inputName, type: "text", value: String(this.rgbInputValues[inputName]), maskOptions: RGB_INPUT_CONFIG, onBlur: this.handleInputRGBChange }))))), h("wpp-input-v3-6-0", { class: "opacity-input", size: "s", name: "opacity", type: "text", maskOptions: OPACITY_INPUT_CONFIG, value: this.internalOpacity, onBlur: this.handleInputOpacityChange })), h("div", { class: "wpp-saved-colors" }, h("wpp-typography-v3-6-0", { class: "title", type: "s-strong" }, "Saved colors"), h("div", { class: "wpp-colors" }, this.savedColors.map((savedColor) => (h("wpp-popover-v3-6-0", { config: {
         trigger: '',
         onShow: instance => {
           this.currentPopoverInstance = instance;
@@ -360,14 +360,14 @@ const WppColorPicker$1 = /*@__PURE__*/ proxyCustomElement(class WppColorPicker e
           this.isSavedColorPopoverOpen = false;
           this.currentPopoverInstance = undefined;
         },
-      } }, h("div", { onContextMenu: event => this.handleRightClick(event), slot: "trigger-element", class: "saved-color", key: savedColor, onClick: () => this.handleClickSavedColor(savedColor) }, h("div", { class: "saved-color-preview", style: { backgroundColor: savedColor } }), this.hasColorOpacity(savedColor) && h("wpp-icon-swatch-v3-5-0", { size: "s" })), h("div", { class: "popover-content" }, h("wpp-list-item-v3-5-0", { onWppChangeListItem: () => this.handleRemoveSavedColor(savedColor) }, h("span", { slot: "label" }, "Remove color")))))), this.savedColors.length < MAXIMUM_NUMBER_OF_SAVED_COLORS && (h("wpp-icon-plus-v3-5-0", { onClick: this.handleSaveColor })))))), (this.mode === 'theme' || (this.mode === 'theme and custom' && this.activeSegment === 'theme')) &&
-      this.themeColorValues.map((colorSection) => (h("div", { key: colorSection.title, class: "wpp-color-section" }, h("wpp-typography-v3-5-0", { class: "wpp-color-section-title", type: "s-strong" }, colorSection.title), colorSection.colors.map((colorSubsection) => (h("div", { class: "wpp-color-subsection" }, colorSubsection.map((color) => (h("div", { key: color.hexValue, class: this.colorBoxCssClasses(color), onClick: () => this.handleClickThemeColor(color, colorSection.title) }, h("div", { class: "wpp-color-box-preview", style: { backgroundColor: color.hexValue, opacity: color.opacity } }), color.opacity !== '100%' && h("wpp-icon-swatch-v3-5-0", { size: "s" }), this.selectedCategory === colorSection.title &&
+      } }, h("div", { onContextMenu: event => this.handleRightClick(event), slot: "trigger-element", class: "saved-color", key: savedColor, onClick: () => this.handleClickSavedColor(savedColor) }, h("div", { class: "saved-color-preview", style: { backgroundColor: savedColor } }), this.hasColorOpacity(savedColor) && h("wpp-icon-swatch-v3-6-0", { size: "s" })), h("div", { class: "popover-content" }, h("wpp-list-item-v3-6-0", { onWppChangeListItem: () => this.handleRemoveSavedColor(savedColor) }, h("span", { slot: "label" }, "Remove color")))))), this.savedColors.length < MAXIMUM_NUMBER_OF_SAVED_COLORS && (h("wpp-icon-plus-v3-6-0", { onClick: this.handleSaveColor })))))), (this.mode === 'theme' || (this.mode === 'theme and custom' && this.activeSegment === 'theme')) &&
+      this.themeColorValues.map((colorSection) => (h("div", { key: colorSection.title, class: "wpp-color-section" }, h("wpp-typography-v3-6-0", { class: "wpp-color-section-title", type: "s-strong" }, colorSection.title), colorSection.colors.map((colorSubsection) => (h("div", { class: "wpp-color-subsection" }, colorSubsection.map((color) => (h("div", { key: color.hexValue, class: this.colorBoxCssClasses(color), onClick: () => this.handleClickThemeColor(color, colorSection.title) }, h("div", { class: "wpp-color-box-preview", style: { backgroundColor: color.hexValue, opacity: color.opacity } }), color.opacity !== '100%' && h("wpp-icon-swatch-v3-6-0", { size: "s" }), this.selectedCategory === colorSection.title &&
         this.hexColor === color.hexValue &&
-        this.internalOpacity === color.opacity && (h("wpp-icon-tick-v3-5-0", { color: contrastWithWhite(this.hexColor) < 3
+        this.internalOpacity === color.opacity && (h("wpp-icon-tick-v3-6-0", { color: contrastWithWhite(this.hexColor) < 3
           ? 'var(--wpp-grey-color-900)'
           : 'var(--wpp-white-color)' }))))))))))))));
   }
-  static get registryIs() { return "wpp-color-picker-v3-5-0"; }
+  static get registryIs() { return "wpp-color-picker-v3-6-0"; }
   get host() { return this; }
   static get watchers() { return {
     "hexColor": ["handleHexColorChange"],
@@ -376,7 +376,7 @@ const WppColorPicker$1 = /*@__PURE__*/ proxyCustomElement(class WppColorPicker e
     "isInComponent": ["updateIsInComponent"]
   }; }
   static get style() { return wppColorPickerCss; }
-}, [1, "wpp-color-picker", "wpp-color-picker-v3-5-0", {
+}, [1, "wpp-color-picker", "wpp-color-picker-v3-6-0", {
     "initialColor": [1, "initial-color"],
     "dropdownConfig": [1040],
     "type": [1537],
@@ -402,164 +402,164 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-color-picker-v3-5-0", "wpp-action-button-v3-5-0", "wpp-checkbox-v3-5-0", "wpp-divider-v3-5-0", "wpp-hue-slider-v3-5-0", "wpp-icon-chevron-v3-5-0", "wpp-icon-cross-v3-5-0", "wpp-icon-dash-v3-5-0", "wpp-icon-error-v3-5-0", "wpp-icon-info-message-v3-5-0", "wpp-icon-plus-v3-5-0", "wpp-icon-search-v3-5-0", "wpp-icon-success-v3-5-0", "wpp-icon-swatch-v3-5-0", "wpp-icon-tick-v3-5-0", "wpp-icon-transparent-v3-5-0", "wpp-icon-warning-v3-5-0", "wpp-inline-message-v3-5-0", "wpp-input-v3-5-0", "wpp-internal-label-v3-5-0", "wpp-internal-tooltip-v3-5-0", "wpp-label-v3-5-0", "wpp-list-item-v3-5-0", "wpp-opacity-slider-v3-5-0", "wpp-popover-v3-5-0", "wpp-saturation-picker-v3-5-0", "wpp-segmented-control-v3-5-0", "wpp-segmented-control-item-v3-5-0", "wpp-select-v3-5-0", "wpp-spinner-v3-5-0", "wpp-tooltip-v3-5-0", "wpp-typography-v3-5-0"];
+  const components = ["wpp-color-picker-v3-6-0", "wpp-action-button-v3-6-0", "wpp-checkbox-v3-6-0", "wpp-divider-v3-6-0", "wpp-hue-slider-v3-6-0", "wpp-icon-chevron-v3-6-0", "wpp-icon-cross-v3-6-0", "wpp-icon-dash-v3-6-0", "wpp-icon-error-v3-6-0", "wpp-icon-info-message-v3-6-0", "wpp-icon-plus-v3-6-0", "wpp-icon-search-v3-6-0", "wpp-icon-success-v3-6-0", "wpp-icon-swatch-v3-6-0", "wpp-icon-tick-v3-6-0", "wpp-icon-transparent-v3-6-0", "wpp-icon-warning-v3-6-0", "wpp-inline-message-v3-6-0", "wpp-input-v3-6-0", "wpp-internal-label-v3-6-0", "wpp-internal-tooltip-v3-6-0", "wpp-label-v3-6-0", "wpp-list-item-v3-6-0", "wpp-opacity-slider-v3-6-0", "wpp-popover-v3-6-0", "wpp-saturation-picker-v3-6-0", "wpp-segmented-control-v3-6-0", "wpp-segmented-control-item-v3-6-0", "wpp-select-v3-6-0", "wpp-spinner-v3-6-0", "wpp-tooltip-v3-6-0", "wpp-typography-v3-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-color-picker-v3-5-0":
+    case "wpp-color-picker-v3-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppColorPicker$1);
       }
       break;
-    case "wpp-action-button-v3-5-0":
+    case "wpp-action-button-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$w();
       }
       break;
-    case "wpp-checkbox-v3-5-0":
+    case "wpp-checkbox-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$v();
       }
       break;
-    case "wpp-divider-v3-5-0":
+    case "wpp-divider-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$u();
       }
       break;
-    case "wpp-hue-slider-v3-5-0":
+    case "wpp-hue-slider-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$t();
       }
       break;
-    case "wpp-icon-chevron-v3-5-0":
+    case "wpp-icon-chevron-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$s();
       }
       break;
-    case "wpp-icon-cross-v3-5-0":
+    case "wpp-icon-cross-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$r();
       }
       break;
-    case "wpp-icon-dash-v3-5-0":
+    case "wpp-icon-dash-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$q();
       }
       break;
-    case "wpp-icon-error-v3-5-0":
+    case "wpp-icon-error-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$p();
       }
       break;
-    case "wpp-icon-info-message-v3-5-0":
+    case "wpp-icon-info-message-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$o();
       }
       break;
-    case "wpp-icon-plus-v3-5-0":
+    case "wpp-icon-plus-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-icon-search-v3-5-0":
+    case "wpp-icon-search-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-icon-success-v3-5-0":
+    case "wpp-icon-success-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-swatch-v3-5-0":
+    case "wpp-icon-swatch-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-tick-v3-5-0":
+    case "wpp-icon-tick-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-transparent-v3-5-0":
+    case "wpp-icon-transparent-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-warning-v3-5-0":
+    case "wpp-icon-warning-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-inline-message-v3-5-0":
+    case "wpp-inline-message-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-input-v3-5-0":
+    case "wpp-input-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-internal-label-v3-5-0":
+    case "wpp-internal-label-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-internal-tooltip-v3-5-0":
+    case "wpp-internal-tooltip-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-label-v3-5-0":
+    case "wpp-label-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-list-item-v3-5-0":
+    case "wpp-list-item-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-opacity-slider-v3-5-0":
+    case "wpp-opacity-slider-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-popover-v3-5-0":
+    case "wpp-popover-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-saturation-picker-v3-5-0":
+    case "wpp-saturation-picker-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-segmented-control-v3-5-0":
+    case "wpp-segmented-control-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-segmented-control-item-v3-5-0":
+    case "wpp-segmented-control-item-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-select-v3-5-0":
+    case "wpp-select-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v3-5-0":
+    case "wpp-spinner-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v3-5-0":
+    case "wpp-tooltip-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v3-5-0":
+    case "wpp-typography-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

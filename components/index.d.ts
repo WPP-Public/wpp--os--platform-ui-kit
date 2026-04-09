@@ -21,6 +21,10 @@ export { WppCard as WppCard } from '../dist/types/components/wpp-card-group/comp
 export { defineCustomElement as defineCustomElementWppCard } from './wpp-card';
 export { WppCardGroup as WppCardGroup } from '../dist/types/components/wpp-card-group/wpp-card-group';
 export { defineCustomElement as defineCustomElementWppCardGroup } from './wpp-card-group';
+export { WppChatConversation as WppChatConversation } from '../dist/types/components/wpp-chat-conversation/wpp-chat-conversation';
+export { defineCustomElement as defineCustomElementWppChatConversation } from './wpp-chat-conversation';
+export { WppChatConversationMessage as WppChatConversationMessage } from '../dist/types/components/wpp-chat-conversation/components/wpp-chat-conversation-message';
+export { defineCustomElement as defineCustomElementWppChatConversationMessage } from './wpp-chat-conversation-message';
 export { WppChatInput as WppChatInput } from '../dist/types/components/wpp-chat/components/wpp-chat-input/wpp-chat-input';
 export { defineCustomElement as defineCustomElementWppChatInput } from './wpp-chat-input';
 export { WppCheckbox as WppCheckbox } from '../dist/types/components/wpp-checkbox/wpp-checkbox';

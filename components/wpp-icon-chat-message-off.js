@@ -16,9 +16,9 @@ const WppIconChatMessageOff$1 = /*@__PURE__*/ proxyCustomElement(class WppIconCh
   render() {
     return (h(WppIcon, { name: "wpp-icon-chat-message-off", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M3.02418 2.17573C2.78989 1.94143 2.41002 1.94142 2.17573 2.17572C1.94143 2.41001 1.94142 2.78987 2.17572 3.02417L3.93454 4.78303C2.72885 6.18356 2 8.00632 2 9.99932C2 11.2954 2.30907 12.5479 2.89161 13.6728L2.03756 16.7308C1.9884 16.9066 1.98837 17.0928 2.03752 17.2688C2.18605 17.8007 2.73763 18.1114 3.26952 17.9629L6.32991 17.1091C7.45379 17.6903 8.70479 17.9986 9.99931 17.9986C11.9922 17.9986 13.815 17.2698 15.2155 16.0642L16.9743 17.823C17.2086 18.0573 17.5884 18.0573 17.8227 17.823C18.057 17.5887 18.057 17.2089 17.8227 16.9746L3.02418 2.17573ZM14.3642 15.2129C13.1832 16.2028 11.6608 16.7987 9.99931 16.7987C8.82516 16.7987 7.69555 16.5013 6.69326 15.9424L6.47766 15.8222L3.28866 16.7119L4.17875 13.5248L4.05825 13.309C3.49809 12.3058 3.1999 11.1749 3.1999 9.99932C3.1999 8.33773 3.7959 6.81535 4.78579 5.6343L7.18894 8.03749C6.96148 8.12278 6.79959 8.3422 6.79959 8.59944C6.79959 8.93078 7.06819 9.19939 7.39953 9.19939H8.35081L9.95064 10.7992H7.39953L7.31813 10.8047C7.02529 10.8445 6.79959 11.0955 6.79959 11.3992C6.79959 11.7305 7.06819 11.9991 7.39953 11.9991H10.9978L11.0792 11.9937C11.0981 11.9911 11.1166 11.9877 11.1348 11.9834L14.3642 15.2129Z", fill: "currentColor" }), h("path", { d: "M12.6027 7.99949H10.5447L11.7446 9.19939H12.6027L12.6841 9.19391C12.9769 9.15418 13.2026 8.90317 13.2026 8.59944C13.2026 8.2681 12.934 7.99949 12.6027 7.99949Z", fill: "currentColor" }), h("path", { d: "M16.7987 9.99932C16.7987 11.2234 16.4753 12.3719 15.9092 13.364L16.784 14.2389C17.5537 13.0098 17.9986 11.5565 17.9986 9.99932C17.9986 5.58142 14.4172 2.00001 9.99931 2.00001C8.44219 2.00001 6.98899 2.44491 5.75988 3.21454L6.6347 4.08938C7.62683 3.52333 8.7753 3.1999 9.99931 3.1999C13.7545 3.1999 16.7987 6.2441 16.7987 9.99932Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-chat-message-off-v3-5-0"; }
+  static get registryIs() { return "wpp-icon-chat-message-off-v3-6-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-chat-message-off", "wpp-icon-chat-message-off-v3-5-0", {
+}, [1, "wpp-icon-chat-message-off", "wpp-icon-chat-message-off-v3-6-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -28,9 +28,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-chat-message-off-v3-5-0"];
+  const components = ["wpp-icon-chat-message-off-v3-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-chat-message-off-v3-5-0":
+    case "wpp-icon-chat-message-off-v3-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconChatMessageOff$1);
       }

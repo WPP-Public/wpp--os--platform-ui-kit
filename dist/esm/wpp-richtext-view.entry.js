@@ -1,21 +1,24 @@
 import { r as registerInstance, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { p as processMarkdownValue, t as turndownService } from './config-573fe805.js';
+import { p as processMarkdownValue, t as turndownService } from './config-ac544d50.js';
 import { f as formats, s as sources, Q as Quill } from './types-112bed55.js';
-import './utils-3a5af594.js';
+import './utils-f415b66e.js';
 import './consts-9fc0a13a.js';
-import './wpp-icon-unordered-list-3cc4ec10.js';
+import './wpp-icon-attach-c0cf16ee.js';
 import './WppIcon-f4802cc9.js';
-import './wpp-icon-video-clip-d0e54a38.js';
+import './wpp-icon-unordered-list-2b41cd3f.js';
+import './wpp-icon-video-clip-fa4fa1e3.js';
+import './const-ee6c5d3f.js';
+import './marked.umd-be419d39.js';
 import './_commonjsHelpers-ba3f0406.js';
-import './wpp-progress-indicator-bc27e7cc.js';
-import './wpp-icon-chevron-f52580bd.js';
-import './wpp-icon-gallery-6d24ee11.js';
-import './lodash-66b76943.js';
-import './wpp-action-button-4fca7b01.js';
+import './wpp-progress-indicator-09a53ebc.js';
+import './wpp-icon-chevron-66b9e523.js';
+import './wpp-icon-gallery-b7c3200b.js';
+import './lodash-cc2b04b5.js';
+import './wpp-action-button-e277a221.js';
 import './common-69c8ea89.js';
 import './WrappedSlot-629d3e4f.js';
-import './wpp-input-b270e4fb.js';
-import './turndown.browser.es-9f6d9c98.js';
+import './wpp-input-98ecba3c.js';
+import './turndown.browser.es-11865203.js';
 
 const WppRichtextView = class {
   constructor(hostRef) {
@@ -171,9 +174,9 @@ const WppRichtextView = class {
     this.setValue(newValue);
   }
   render() {
-    return (h(Host, null, h("wpp-quill-styles-v3-5-0", null), h("wpp-richtext-common-styles-v3-5-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
+    return (h(Host, null, h("wpp-quill-styles-v3-6-0", null), h("wpp-richtext-common-styles-v3-6-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
   }
-  static get registryIs() { return "wpp-richtext-view-v3-5-0"; }
+  static get registryIs() { return "wpp-richtext-view-v3-6-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "styles": ["updateStyle"],

@@ -120,6 +120,7 @@ export default {
     required: { control: { type: 'boolean' } },
     withSearch: { control: { type: 'boolean' } },
     showSelectAllText: { control: { type: 'boolean' } },
+    showSelectAllOption: { control: { type: 'boolean' } },
     dropdownConfig: { control: 'object' },
     consistentSearch: { control: { type: 'boolean' } },
   },
@@ -134,7 +135,7 @@ export const Single = (args) => {
       updatedEl.value = selectedValue;
   };
   return html `
-    <wpp-select-v3-5-0
+    <wpp-select-v3-6-0
       type="single"
       name="single-select"
       .message=${args.message}
@@ -156,16 +157,16 @@ export const Single = (args) => {
     >
       ${args.showIconStart
     ? html `
-            <wpp-icon-clock-v3-5-0
+            <wpp-icon-clock-v3-6-0
               slot="icon-start"
               @click="${(e) => {
       e.stopPropagation();
       console.log('Left icon clicked');
     }}"
-            ></wpp-icon-clock-v3-5-0>
+            ></wpp-icon-clock-v3-6-0>
           `
     : null}
-    </wpp-select-v3-5-0>
+    </wpp-select-v3-6-0>
   `;
 };
 Single.args = {
@@ -200,8 +201,11 @@ export const Multiple = (args) => {
     if (updatedEl)
       updatedEl.value = selectedValue;
   };
+  const handleApply = () => {
+    console.log('Apply clicked — selection confirmed');
+  };
   return html `
-    <wpp-select-v3-5-0
+    <wpp-select-v3-6-0
       type="multiple"
       name="multiple-select"
       .message=${args.message}
@@ -216,25 +220,27 @@ export const Multiple = (args) => {
       .withSearch=${args.withSearch}
       .withFolder=${args.withFolder}
       .showSelectAllText=${args.showSelectAllText}
+      .showSelectAllOption=${args.showSelectAllOption}
       .consistentSearch=${args.consistentSearch}
       .dropdownWidth=${args.dropdownWidth}
       .value=${selectedValue}
       .maximumSelectedItems="${args.maximumSelectedItems}"
       .list=${getList('multiple')}
       @wppChange=${handleChange}
+      @wppApply=${handleApply}
     >
       ${args.showIconStart
     ? html `
-            <wpp-icon-clock-v3-5-0
+            <wpp-icon-clock-v3-6-0
               slot="icon-start"
               @click="${(e) => {
       e.stopPropagation();
       console.log('Left icon clicked');
     }}"
-            ></wpp-icon-clock-v3-5-0>
+            ></wpp-icon-clock-v3-6-0>
           `
     : null}
-    </wpp-select-v3-5-0>
+    </wpp-select-v3-6-0>
   `;
 };
 Multiple.args = {
@@ -248,6 +254,7 @@ Multiple.args = {
   withSearch: false,
   withFolder: true,
   showSelectAllText: true,
+  showSelectAllOption: false,
   consistentSearch: false,
   showIconStart: true,
   labelConfig: {
@@ -302,7 +309,7 @@ export const Text = (args) => {
     if (updatedEl)
       updatedEl.value = selectedValue;
   };
-  return html ` <wpp-select-v3-5-0
+  return html ` <wpp-select-v3-6-0
     .disabled="${args.disabled}"
     .placeholder="${args.placeholder}"
     .dropdownWidth="${args.dropdownWidth}"
@@ -316,16 +323,16 @@ export const Text = (args) => {
   >
     ${args.showIconStart
     ? html `
-          <wpp-icon-clock-v3-5-0
+          <wpp-icon-clock-v3-6-0
             slot="icon-start"
             @click="${(e) => {
       e.stopPropagation();
       console.log('Left icon clicked');
     }}"
-          ></wpp-icon-clock-v3-5-0>
+          ></wpp-icon-clock-v3-6-0>
         `
     : null}
-  </wpp-select-v3-5-0>`;
+  </wpp-select-v3-6-0>`;
 };
 Text.args = {
   placeholder: 'Select option',
@@ -347,21 +354,21 @@ export const ButtonAnchor = (args) => {
   const renderAnchor = () => {
     switch (args.anchorComponent) {
       case 'WppActionButton':
-        return html ` <wpp-action-button-v3-5-0 slot="anchor-button"> ${args.anchorLabel} </wpp-action-button-v3-5-0> `;
+        return html ` <wpp-action-button-v3-6-0 slot="anchor-button"> ${args.anchorLabel} </wpp-action-button-v3-6-0> `;
       case 'WppActionButtonWithIcon':
         return html `
-          <wpp-action-button-v3-5-0 slot="anchor-button">
-            <wpp-icon-plus-v3-5-0 slot="icon-start"></wpp-icon-plus-v3-5-0>
+          <wpp-action-button-v3-6-0 slot="anchor-button">
+            <wpp-icon-plus-v3-6-0 slot="icon-start"></wpp-icon-plus-v3-6-0>
             ${args.anchorLabel}
-          </wpp-action-button-v3-5-0>
+          </wpp-action-button-v3-6-0>
         `;
       case 'WppButton':
       default:
-        return html ` <wpp-button-v3-5-0 slot="anchor-button"> ${args.anchorLabel} </wpp-button-v3-5-0> `;
+        return html ` <wpp-button-v3-6-0 slot="anchor-button"> ${args.anchorLabel} </wpp-button-v3-6-0> `;
     }
   };
   return html `
-    <wpp-select-v3-5-0
+    <wpp-select-v3-6-0
       id="button-anchor-select"
       type="single"
       name="button-anchor-select"
@@ -385,15 +392,15 @@ export const ButtonAnchor = (args) => {
       ${renderAnchor()}
       ${args.showIconStart
     ? html `
-            <wpp-icon-clock-v3-5-0
+            <wpp-icon-clock-v3-6-0
               slot="icon-start"
               @click="${(e) => {
       e.stopPropagation();
     }}"
-            ></wpp-icon-clock-v3-5-0>
+            ></wpp-icon-clock-v3-6-0>
           `
     : null}
-    </wpp-select-v3-5-0>
+    </wpp-select-v3-6-0>
   `;
 };
 ButtonAnchor.args = {

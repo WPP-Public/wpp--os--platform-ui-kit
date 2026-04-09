@@ -1,7 +1,7 @@
 import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
 import { m as menuListConfig, i as isEqual_1 } from './menuListConfig.js';
 import { Z as Z_INDEX } from './consts.js';
-import { w as getHighestContainerInDOM, y as isWppElement } from './utils.js';
+import { w as getHighestContainerInDOM, z as isWppElement } from './utils.js';
 import { d as defineCustomElement$3 } from './wpp-icon-error2.js';
 import { d as defineCustomElement$2 } from './wpp-icon-warning2.js';
 import { d as defineCustomElement$1 } from './wpp-internal-tooltip2.js';
@@ -241,9 +241,9 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
     }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v3-5-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
+    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v3-6-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
   }
-  static get registryIs() { return "wpp-tooltip-v3-5-0"; }
+  static get registryIs() { return "wpp-tooltip-v3-6-0"; }
   get host() { return this; }
   static get watchers() { return {
     "config": ["updateConfig"],
@@ -254,7 +254,7 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
     "disabled": ["handleDisabledChange"]
   }; }
   static get style() { return wppTooltipCss; }
-}, [1, "wpp-tooltip", "wpp-tooltip-v3-5-0", {
+}, [1, "wpp-tooltip", "wpp-tooltip-v3-6-0", {
     "disabled": [4],
     "header": [1],
     "text": [1],
@@ -275,24 +275,24 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tooltip-v3-5-0", "wpp-icon-error-v3-5-0", "wpp-icon-warning-v3-5-0", "wpp-internal-tooltip-v3-5-0"];
+  const components = ["wpp-tooltip-v3-6-0", "wpp-icon-error-v3-6-0", "wpp-icon-warning-v3-6-0", "wpp-internal-tooltip-v3-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tooltip-v3-5-0":
+    case "wpp-tooltip-v3-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTooltip);
       }
       break;
-    case "wpp-icon-error-v3-5-0":
+    case "wpp-icon-error-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-icon-warning-v3-5-0":
+    case "wpp-icon-warning-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-internal-tooltip-v3-5-0":
+    case "wpp-internal-tooltip-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

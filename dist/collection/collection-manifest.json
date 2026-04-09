@@ -1,9 +1,9 @@
 {
   "entries": [
-    "components/wpp-action-button/wpp-action-button.js",
     "components/wpp-icon/components/arrows/table-sort/wpp-icon-table-sort-wrapper/wpp-icon-table-sort-wrapper.js",
     "components/wpp-accordion/wpp-accordion.js",
     "components/wpp-tooltip/wpp-tooltip.js",
+    "components/wpp-action-button/wpp-action-button.js",
     "components/wpp-autocomplete/wpp-autocomplete.js",
     "components/wpp-list-item/wpp-list-item.js",
     "components/wpp-label/wpp-label.js",
@@ -17,6 +17,8 @@
     "components/wpp-card-group/wpp-card-group.js",
     "components/wpp-card-group/components/wpp-card/wpp-card.js",
     "components/wpp-chat/components/wpp-chat-input/wpp-chat-input.js",
+    "components/wpp-chat-conversation/wpp-chat-conversation.js",
+    "components/wpp-chat-conversation/components/wpp-chat-conversation-message.js",
     "components/wpp-checkbox/wpp-checkbox.js",
     "components/wpp-checkbox-group/wpp-checkbox-group.js",
     "components/wpp-color-picker/wpp-color-picker.js",

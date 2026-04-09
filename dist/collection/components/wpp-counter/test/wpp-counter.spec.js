@@ -41,7 +41,7 @@ describe('wpp-counter', () => {
       };
       const page = await newSpecPage({
         components: [WppCounter, WppLabel, WppInternalLabel],
-        template: () => h("wpp-counter-v3-5-0", { labelConfig: labelConfig }),
+        template: () => h("wpp-counter-v3-6-0", { labelConfig: labelConfig }),
       });
       expect(page.root).toMatchSnapshot();
     });
@@ -80,7 +80,7 @@ describe('wpp-counter', () => {
     it('should show value instead of placeholder when value is provided', async () => {
       const page = await newSpecPage({
         components: [WppCounter],
-        template: () => h("wpp-counter-v3-5-0", { value: 5, placeholder: "Enter value" }),
+        template: () => h("wpp-counter-v3-6-0", { value: 5, placeholder: "Enter value" }),
       });
       const input = page.root?.shadowRoot?.querySelector('input');
       expect(input?.value).toBe('5');
@@ -92,7 +92,7 @@ describe('wpp-counter', () => {
       };
       const page = await newSpecPage({
         components: [WppCounter, WppLabel, WppInternalLabel],
-        template: () => h("wpp-counter-v3-5-0", { placeholder: "Enter amount", labelConfig: labelConfig }),
+        template: () => h("wpp-counter-v3-6-0", { placeholder: "Enter amount", labelConfig: labelConfig }),
       });
       // Explicitly set value to undefined after creation to trigger placeholder state
       const counter = page.root;
@@ -319,7 +319,7 @@ describe('wpp-counter', () => {
       };
       const page = await newSpecPage({
         components: [WppCounter],
-        template: () => h("wpp-counter-v3-5-0", { value: 1000, format: format }),
+        template: () => h("wpp-counter-v3-6-0", { value: 1000, format: format }),
       });
       const input = page.root?.shadowRoot?.querySelector('input');
       expect(input?.value).toBe('1 000');

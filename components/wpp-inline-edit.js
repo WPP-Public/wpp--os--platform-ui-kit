@@ -144,7 +144,7 @@ const WppInlineEdit$1 = /*@__PURE__*/ proxyCustomElement(class WppInlineEdit ext
       }
     };
     this.placeholderCssClasses = () => ({ placeholder: !this.value });
-    this.renderTriggerElement = () => (h("div", { tabIndex: 0, role: "button", class: "trigger" }, this.mode === InlineEditModeEnum.EDIT ? (h("div", { class: "wrapper", part: "wrapper" }, h("div", { class: "form-element", onKeyDown: this.onKeyDownFormEl }, h("slot", { name: "form-element" })))) : (h("div", { class: "content", onClick: () => this.emitModeChange(InlineEditModeEnum.EDIT), part: "content" }, h("div", { class: "content-bg", part: "content-bg" }), h("wpp-typography-v3-5-0", { class: this.placeholderCssClasses(), type: "s-body", part: "inline-edit-typography" }, this.value || this.placeholder), h("wpp-icon-edit-v3-5-0", null)))));
+    this.renderTriggerElement = () => (h("div", { tabIndex: 0, role: "button", class: "trigger" }, this.mode === InlineEditModeEnum.EDIT ? (h("div", { class: "wrapper", part: "wrapper" }, h("div", { class: "form-element", onKeyDown: this.onKeyDownFormEl }, h("slot", { name: "form-element" })))) : (h("div", { class: "content", onClick: () => this.emitModeChange(InlineEditModeEnum.EDIT), part: "content" }, h("div", { class: "content-bg", part: "content-bg" }), h("wpp-typography-v3-6-0", { class: this.placeholderCssClasses(), type: "s-body", part: "inline-edit-typography" }, this.value || this.placeholder), h("wpp-icon-edit-v3-6-0", null)))));
     this.initialValue = undefined;
     this.inputValue = undefined;
     this.formType = 'input';
@@ -208,7 +208,7 @@ const WppInlineEdit$1 = /*@__PURE__*/ proxyCustomElement(class WppInlineEdit ext
   }
   render() {
     const inlineWidth = this.mode === InlineEditModeEnum.EDIT && this.inputWidth !== 'auto' && this.inputWidth !== undefined;
-    return (h(Host, { class: this.inlineEditCssClasses(), exportparts: "label, wrapper, input, textarea, buttons, inline-edit-typography, content, content-bg" }, h("wpp-popover-v3-5-0", { ref: ref => (this.popoverRef = ref), externalClass: "inline-edit-popover", exportparts: "content", class: this.inlineEditPopoverCssClasses(), style: { width: inlineWidth ? this.inputWidth : '' }, config: {
+    return (h(Host, { class: this.inlineEditCssClasses(), exportparts: "label, wrapper, input, textarea, buttons, inline-edit-typography, content, content-bg" }, h("wpp-popover-v3-6-0", { ref: ref => (this.popoverRef = ref), externalClass: "inline-edit-popover", exportparts: "content", class: this.inlineEditPopoverCssClasses(), style: { width: inlineWidth ? this.inputWidth : '' }, config: {
         placement: this.formType === 'input' ? 'right-start' : 'bottom-start',
         offset: [0, 4],
         hideOnClick: false,
@@ -246,7 +246,7 @@ const WppInlineEdit$1 = /*@__PURE__*/ proxyCustomElement(class WppInlineEdit ext
           }
         },
         onClickOutside: (_, e) => this.handleClose(e, 'outsideClick'),
-      } }, h("div", { slot: "trigger-element", ref: elRef => (this.triggerContainerRef = elRef), class: "trigger-element" }, this.errorMessage && this.mode === InlineEditModeEnum.EDIT ? (h("wpp-tooltip-v3-5-0", { class: 'wpp-anchor-toolip', error: true, text: this.errorMessage, config: {
+      } }, h("div", { slot: "trigger-element", ref: elRef => (this.triggerContainerRef = elRef), class: "trigger-element" }, this.errorMessage && this.mode === InlineEditModeEnum.EDIT ? (h("wpp-tooltip-v3-6-0", { class: 'wpp-anchor-toolip', error: true, text: this.errorMessage, config: {
         showOnCreate: true,
         onCreate: instance => {
           this.tooltipInstance = instance;
@@ -256,16 +256,16 @@ const WppInlineEdit$1 = /*@__PURE__*/ proxyCustomElement(class WppInlineEdit ext
             instance.popperInstance?.update();
           }, 20);
         },
-      } }, this.renderTriggerElement())) : (this.renderTriggerElement())), h("div", { class: "buttons", part: "buttons" }, h("wpp-action-button-v3-5-0", { disabled: this.isPendingRequest || this.value === this.lastValueWithError, variant: "inverted", onClick: this.handleAccept }, h("wpp-icon-done-v3-5-0", { slot: "icon-start" })), h("wpp-action-button-v3-5-0", { disabled: this.isPendingRequest, variant: "inverted", onClick: e => this.handleClose(e, 'cancel') }, h("wpp-icon-cross-v3-5-0", { slot: "icon-start" }))))));
+      } }, this.renderTriggerElement())) : (this.renderTriggerElement())), h("div", { class: "buttons", part: "buttons" }, h("wpp-action-button-v3-6-0", { disabled: this.isPendingRequest || this.value === this.lastValueWithError, variant: "inverted", onClick: this.handleAccept }, h("wpp-icon-done-v3-6-0", { slot: "icon-start" })), h("wpp-action-button-v3-6-0", { disabled: this.isPendingRequest, variant: "inverted", onClick: e => this.handleClose(e, 'cancel') }, h("wpp-icon-cross-v3-6-0", { slot: "icon-start" }))))));
   }
-  static get registryIs() { return "wpp-inline-edit-v3-5-0"; }
+  static get registryIs() { return "wpp-inline-edit-v3-6-0"; }
   get host() { return this; }
   static get watchers() { return {
     "mode": ["editModeChangeHandler"],
     "locales": ["onUpdateLocales"]
   }; }
   static get style() { return wppInlineEditCss; }
-}, [1, "wpp-inline-edit", "wpp-inline-edit-v3-5-0", {
+}, [1, "wpp-inline-edit", "wpp-inline-edit-v3-6-0", {
     "mode": [1],
     "value": [1],
     "placeholder": [1],
@@ -284,99 +284,99 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-inline-edit-v3-5-0", "wpp-action-button-v3-5-0", "wpp-icon-cross-v3-5-0", "wpp-icon-done-v3-5-0", "wpp-icon-edit-v3-5-0", "wpp-icon-error-v3-5-0", "wpp-icon-info-message-v3-5-0", "wpp-icon-search-v3-5-0", "wpp-icon-success-v3-5-0", "wpp-icon-warning-v3-5-0", "wpp-inline-message-v3-5-0", "wpp-input-v3-5-0", "wpp-internal-label-v3-5-0", "wpp-internal-tooltip-v3-5-0", "wpp-label-v3-5-0", "wpp-popover-v3-5-0", "wpp-spinner-v3-5-0", "wpp-tooltip-v3-5-0", "wpp-typography-v3-5-0"];
+  const components = ["wpp-inline-edit-v3-6-0", "wpp-action-button-v3-6-0", "wpp-icon-cross-v3-6-0", "wpp-icon-done-v3-6-0", "wpp-icon-edit-v3-6-0", "wpp-icon-error-v3-6-0", "wpp-icon-info-message-v3-6-0", "wpp-icon-search-v3-6-0", "wpp-icon-success-v3-6-0", "wpp-icon-warning-v3-6-0", "wpp-inline-message-v3-6-0", "wpp-input-v3-6-0", "wpp-internal-label-v3-6-0", "wpp-internal-tooltip-v3-6-0", "wpp-label-v3-6-0", "wpp-popover-v3-6-0", "wpp-spinner-v3-6-0", "wpp-tooltip-v3-6-0", "wpp-typography-v3-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-inline-edit-v3-5-0":
+    case "wpp-inline-edit-v3-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppInlineEdit$1);
       }
       break;
-    case "wpp-action-button-v3-5-0":
+    case "wpp-action-button-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-cross-v3-5-0":
+    case "wpp-icon-cross-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-done-v3-5-0":
+    case "wpp-icon-done-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-edit-v3-5-0":
+    case "wpp-icon-edit-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-error-v3-5-0":
+    case "wpp-icon-error-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-info-message-v3-5-0":
+    case "wpp-icon-info-message-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-search-v3-5-0":
+    case "wpp-icon-search-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-success-v3-5-0":
+    case "wpp-icon-success-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-warning-v3-5-0":
+    case "wpp-icon-warning-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-inline-message-v3-5-0":
+    case "wpp-inline-message-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-input-v3-5-0":
+    case "wpp-input-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-label-v3-5-0":
+    case "wpp-internal-label-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-internal-tooltip-v3-5-0":
+    case "wpp-internal-tooltip-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-label-v3-5-0":
+    case "wpp-label-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-popover-v3-5-0":
+    case "wpp-popover-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v3-5-0":
+    case "wpp-spinner-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v3-5-0":
+    case "wpp-tooltip-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v3-5-0":
+    case "wpp-typography-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

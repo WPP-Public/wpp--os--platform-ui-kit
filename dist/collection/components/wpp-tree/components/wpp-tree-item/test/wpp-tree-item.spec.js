@@ -32,7 +32,7 @@ describe('wpp-tree-item', () => {
   it('renders switcher when item.hasChildren is true (even without children)', async () => {
     const page = await newSpecPage({
       components: [WppTreeItem],
-      template: () => (h("wpp-tree-item-v3-5-0", { item: { ...baseItem, hasChildren: true, open: false }, level: 1, multiple: false, search: "", highlightOptions: {}, disableOpenCloseAnimation: true })),
+      template: () => (h("wpp-tree-item-v3-6-0", { item: { ...baseItem, hasChildren: true, open: false }, level: 1, multiple: false, search: "", highlightOptions: {}, disableOpenCloseAnimation: true })),
     });
     const switcher = page.root.shadowRoot.querySelector('.switcher');
     expect(switcher).toBeTruthy();
@@ -40,7 +40,7 @@ describe('wpp-tree-item', () => {
   it('emits wppTreeItemOpenChange with toggled open when switcher is triggered', async () => {
     const page = await newSpecPage({
       components: [WppTreeItem],
-      template: () => (h("wpp-tree-item-v3-5-0", { item: { ...baseItem, hasChildren: true, open: false }, level: 1, multiple: false, search: "", highlightOptions: {}, disableOpenCloseAnimation: true })),
+      template: () => (h("wpp-tree-item-v3-6-0", { item: { ...baseItem, hasChildren: true, open: false }, level: 1, multiple: false, search: "", highlightOptions: {}, disableOpenCloseAnimation: true })),
     });
     const spy = jest.fn();
     page.root.addEventListener('wppTreeItemOpenChange', (e) => spy(e.detail));
@@ -55,7 +55,7 @@ describe('wpp-tree-item', () => {
   it('sets aria-busy and disables action button when loadingChildren is true', async () => {
     const page = await newSpecPage({
       components: [WppTreeItem],
-      template: () => (h("wpp-tree-item-v3-5-0", { item: { ...baseItem, hasChildren: true, open: true, loadingChildren: true }, level: 1, multiple: false, search: "", highlightOptions: {}, disableOpenCloseAnimation: true })),
+      template: () => (h("wpp-tree-item-v3-6-0", { item: { ...baseItem, hasChildren: true, open: true, loadingChildren: true }, level: 1, multiple: false, search: "", highlightOptions: {}, disableOpenCloseAnimation: true })),
     });
     expect(page.root.getAttribute('aria-busy')).toBe('true');
     const btn = page.root.shadowRoot.querySelector('wpp-action-button');
@@ -64,7 +64,7 @@ describe('wpp-tree-item', () => {
   it('onItemChange – open/loading/children/hidden branches', async () => {
     const page = await newSpecPage({
       components: [WppTreeItem],
-      template: () => h("wpp-tree-item-v3-5-0", { item: baseItem, disableSearchHighlight: true }),
+      template: () => h("wpp-tree-item-v3-6-0", { item: baseItem, disableSearchHighlight: true }),
     });
     const instance = page.rootInstance;
     jest.spyOn(instance, 'releaseAncestorHeights');
@@ -78,7 +78,7 @@ describe('wpp-tree-item', () => {
   it('componentDidUpdate – recalculates height', async () => {
     const page = await newSpecPage({
       components: [WppTreeItem],
-      template: () => h("wpp-tree-item-v3-5-0", { item: baseItem, disableSearchHighlight: true }),
+      template: () => h("wpp-tree-item-v3-6-0", { item: baseItem, disableSearchHighlight: true }),
     });
     const instance = page.rootInstance;
     instance.shouldRecalculateItemHeight = true;
@@ -89,7 +89,7 @@ describe('wpp-tree-item', () => {
   it('addHeightToHost – sets px height', async () => {
     const page = await newSpecPage({
       components: [WppTreeItem],
-      template: () => h("wpp-tree-item-v3-5-0", { item: baseItem, disableSearchHighlight: true }),
+      template: () => h("wpp-tree-item-v3-6-0", { item: baseItem, disableSearchHighlight: true }),
     });
     Object.defineProperty(page.root, 'scrollHeight', { value: 150 });
     page.rootInstance.addHeightToHost();
@@ -106,7 +106,7 @@ describe('wpp-tree-item', () => {
   it('handleSwitcherClick – emits open change', async () => {
     const page = await newSpecPage({
       components: [WppTreeItem],
-      template: () => h("wpp-tree-item-v3-5-0", { item: baseItem, disableSearchHighlight: true }),
+      template: () => h("wpp-tree-item-v3-6-0", { item: baseItem, disableSearchHighlight: true }),
     });
     const instance = page.rootInstance;
     instance.wppTreeItemOpenChange = { emit: jest.fn() };
@@ -126,7 +126,7 @@ describe('wpp-tree-item', () => {
   it('handleTransitionEnd – resets height and flag', async () => {
     const page = await newSpecPage({
       components: [WppTreeItem],
-      template: () => h("wpp-tree-item-v3-5-0", { item: baseItem, disableSearchHighlight: true }),
+      template: () => h("wpp-tree-item-v3-6-0", { item: baseItem, disableSearchHighlight: true }),
     });
     const instance = page.rootInstance;
     page.root.style.height = '100px';
@@ -137,7 +137,7 @@ describe('wpp-tree-item', () => {
   it('onSwitcherClick – stops propagation, sets timestamp, calls handleSwitcherClick', async () => {
     const page = await newSpecPage({
       components: [WppTreeItem],
-      template: () => h("wpp-tree-item-v3-5-0", { item: baseItem }),
+      template: () => h("wpp-tree-item-v3-6-0", { item: baseItem }),
     });
     const instance = page.rootInstance;
     const stopPropagation = jest.fn();
@@ -181,7 +181,7 @@ describe('wpp-tree-item', () => {
   it('updateSlotData – sets icon slot flags correctly', async () => {
     const page = await newSpecPage({
       components: [WppTreeItem],
-      template: () => (h("wpp-tree-item-v3-5-0", { item: baseItem }, h("span", { slot: "icon-start" }), h("span", { slot: "icon-end" }), h("div", { class: "wpp-menu-context" }))),
+      template: () => (h("wpp-tree-item-v3-6-0", { item: baseItem }, h("span", { slot: "icon-start" }), h("span", { slot: "icon-end" }), h("div", { class: "wpp-menu-context" }))),
     });
     const instance = page.rootInstance;
     instance.updateSlotData();
@@ -251,7 +251,7 @@ describe('wpp-tree-item', () => {
     };
     const page = await newSpecPage({
       components: [WppTreeItem],
-      template: () => h("wpp-tree-item-v3-5-0", { item: baseItem }),
+      template: () => h("wpp-tree-item-v3-6-0", { item: baseItem }),
     });
     const instance = page.rootInstance;
     instance.shouldRecalculateItemHeight = true;
@@ -272,7 +272,7 @@ describe('wpp-tree-item', () => {
     };
     const page = await newSpecPage({
       components: [WppTreeItem],
-      template: () => h("wpp-tree-item-v3-5-0", { item: baseItem }),
+      template: () => h("wpp-tree-item-v3-6-0", { item: baseItem }),
     });
     const instance = page.rootInstance;
     instance.shouldRecalculateItemHeight = true;
@@ -287,7 +287,7 @@ describe('wpp-tree-item', () => {
   it('renderEndContent – renders text', async () => {
     const page = await newSpecPage({
       components: [WppTreeItem],
-      template: () => (h("wpp-tree-item-v3-5-0", { item: baseItem, endContent: {
+      template: () => (h("wpp-tree-item-v3-6-0", { item: baseItem, endContent: {
           contentType: 'text',
           props: { text: 'Hello' },
         } })),
@@ -297,7 +297,7 @@ describe('wpp-tree-item', () => {
   it('renderEndContent – renders tag with icon', async () => {
     const page = await newSpecPage({
       components: [WppTreeItem],
-      template: () => (h("wpp-tree-item-v3-5-0", { item: baseItem, endContent: {
+      template: () => (h("wpp-tree-item-v3-6-0", { item: baseItem, endContent: {
           contentType: 'tag',
           props: { label: 'Tag', icon: 'wpp-icon-check' },
         } })),
@@ -308,7 +308,7 @@ describe('wpp-tree-item', () => {
   it('renderEndContent – renders avatar', async () => {
     const page = await newSpecPage({
       components: [WppTreeItem],
-      template: () => (h("wpp-tree-item-v3-5-0", { item: baseItem, endContent: {
+      template: () => (h("wpp-tree-item-v3-6-0", { item: baseItem, endContent: {
           contentType: 'avatar',
           props: { src: 'x.png' },
         } })),
@@ -318,7 +318,7 @@ describe('wpp-tree-item', () => {
   it('renderEndContent – renders avatarGroup', async () => {
     const page = await newSpecPage({
       components: [WppTreeItem],
-      template: () => (h("wpp-tree-item-v3-5-0", { item: baseItem, endContent: {
+      template: () => (h("wpp-tree-item-v3-6-0", { item: baseItem, endContent: {
           contentType: 'avatarGroup',
           props: {},
         } })),
@@ -328,7 +328,7 @@ describe('wpp-tree-item', () => {
   it('renderEndContent – returns null for unknown contentType', async () => {
     const page = await newSpecPage({
       components: [WppTreeItem],
-      template: () => (h("wpp-tree-item-v3-5-0", { item: baseItem, endContent: {
+      template: () => (h("wpp-tree-item-v3-6-0", { item: baseItem, endContent: {
           contentType: 'unknown',
           props: {},
         } })),

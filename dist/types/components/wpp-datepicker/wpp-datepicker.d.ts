@@ -3,7 +3,7 @@ import AirDatepicker from 'air-datepicker';
 import { DropdownConfig, FOCUS_TYPE, InputMessageTypes } from '../../types/common';
 import { InlineMessage } from '../../interfaces/inline-message';
 import { BaseComponent } from '../../interfaces/base-component';
-import { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes } from './types';
+import { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes, MonthRangeNormalization } from './types';
 import { Instance } from 'tippy.js';
 /**
  * @slot trigger - Slot for a custom trigger element (button). When a button is placed in this slot, it replaces the default input field as the datepicker trigger.
@@ -25,6 +25,8 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   private previewPresetTimer;
   private hasClickedPreset;
   private isDatePickerInitialized;
+  private isNormalizingMonthRange;
+  private isDestroyed;
   private _locales;
   host: HTMLWppDatepickerElement;
   datePickerInstance: AirDatepicker;
@@ -36,6 +38,10 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   isInComponent: boolean;
   isValueExists: boolean;
   hasTriggerSlot: boolean;
+  internalMessage: string;
+  internalMessageType: InputMessageTypes | undefined;
+  private justSelectedFromCalendar;
+  private isManuallyTyping;
   /**
    * If the range mode is enabled.
    */
@@ -72,6 +78,20 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
    * Defines datepicker view
    */
   readonly view: DatePickerView;
+  /**
+   * Configuration for normalizing month range dates. When using `view="months"` with `range`,
+   * this option allows automatic normalization of selected dates to specific days.
+   * By default, normalizes start date to the 1st day and end date to the last day of their respective months.
+   *
+   * @example
+   * // Enable normalization with defaults (1st and last day)
+   * monthRangeNormalization={{ enabled: true }}
+   *
+   * @example
+   * // Custom days: start on 15th, end on 20th
+   * monthRangeNormalization={{ enabled: true, startDay: 15, endDay: 20 }}
+   */
+  readonly monthRangeNormalization?: MonthRangeNormalization;
   /**
    * Indicates datepicker message
    */
@@ -201,6 +221,11 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
    */
   private determineFirstDay;
   private hasPresets;
+  /**
+   * Checks if month range normalization should be applied.
+   * Normalization is only applied when range mode is enabled, view is 'months', and normalization is enabled.
+   */
+  private shouldNormalizeMonthRange;
   private getDateFormatSeparator;
   private isDefaultDateFormatSeparator;
   private isDefaultDateFormat;
@@ -210,6 +235,8 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   private createTippyInstance;
   private clearDatePicker;
   private onInput;
+  private clearInternalValidation;
+  private validateManualInput;
   private onBlur;
   private onFocus;
   private onMouseDown;

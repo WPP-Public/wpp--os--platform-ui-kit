@@ -20,7 +20,7 @@ describe('wpp-checkbox', () => {
     };
     const { root } = await newSpecPage({
       components: [WppCheckbox, WppLabel, WppInternalLabel],
-      template: () => h("wpp-checkbox-v3-5-0", { indeterminate: true, labelConfig: labelConfig }),
+      template: () => h("wpp-checkbox-v3-6-0", { indeterminate: true, labelConfig: labelConfig }),
     });
     expect(root).toMatchSnapshot();
   });
@@ -35,7 +35,7 @@ describe('wpp-checkbox', () => {
     };
     const { root } = await newSpecPage({
       components: [WppCheckbox, WppLabel, WppInternalLabel],
-      template: () => h("wpp-checkbox-v3-5-0", { indeterminate: true, disabled: true, name: "checkbox", labelConfig: labelConfig }),
+      template: () => h("wpp-checkbox-v3-6-0", { indeterminate: true, disabled: true, name: "checkbox", labelConfig: labelConfig }),
     });
     expect(root).toMatchSnapshot();
   });

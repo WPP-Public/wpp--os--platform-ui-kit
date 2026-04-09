@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { g as getSlotEmptyStates } from './utils-3a5af594.js';
+import { g as getSlotEmptyStates } from './utils-f415b66e.js';
 import { W as WrappedSlot } from './WrappedSlot-629d3e4f.js';
 import { Z as Z_INDEX } from './consts-9fc0a13a.js';
 
@@ -64,9 +64,9 @@ const WppBanner = class {
     });
     this.getMessageTypesIcons = () => {
       if (this.type === 'warning')
-        return h("wpp-icon-warning-v3-5-0", { class: "left-icon", part: "left-icon" });
+        return h("wpp-icon-warning-v3-6-0", { class: "left-icon", part: "left-icon" });
       if (this.type === 'information')
-        return h("wpp-icon-info-message-v3-5-0", { class: "left-icon", part: "left-icon" });
+        return h("wpp-icon-info-message-v3-6-0", { class: "left-icon", part: "left-icon" });
       return null;
     };
     this.hasActionsSlot = false;
@@ -106,9 +106,9 @@ const WppBanner = class {
       zIndex: this.zIndex.toString(),
     };
     const messageWrapper = (h(WrappedSlot, { wrapperClass: this.messageWrapperCssClasses(), part: "message", onSlotchange: this.updateMessageText }));
-    return (h(Host, { style: style, class: this.hostCssClasses(), role: this.role, "aria-label": this.ariaProps.label || 'banner', exportparts: "left-icon, wrapper, body, content-wrapper, message, actions-wrapper, close-button, close-icon, actions, actions-wrapper" }, h("div", { class: this.hiddenBannerWrapperCssClasses(), part: "wrapper" }, h("div", { class: this.bannerWrapperCssClasses(), part: "body" }, h("div", { class: "content-wrapper", part: "content-wrapper" }, this.getMessageTypesIcons(), !this.isOverflowing ? (messageWrapper) : (h("wpp-tooltip-v3-5-0", { text: this.messageText, class: this.tooltipCSSClasses() }, messageWrapper))), h("div", { class: "actions-wrapper", part: "actions-wrapper" }, h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData, role: "presentation" }), this.closable && (h("wpp-action-button-v3-5-0", { variant: this.type === 'information' ? 'inverted' : 'secondary', onClick: this.handleCloseIconClick, class: "close-button", part: "close-button", ariaProps: { label: 'close banner' }, role: "presentation" }, h("wpp-icon-cross-v3-5-0", { slot: "icon-start", part: "close-icon", "aria-hidden": "true" }))))))));
+    return (h(Host, { style: style, class: this.hostCssClasses(), role: this.role, "aria-label": this.ariaProps.label || 'banner', exportparts: "left-icon, wrapper, body, content-wrapper, message, actions-wrapper, close-button, close-icon, actions, actions-wrapper" }, h("div", { class: this.hiddenBannerWrapperCssClasses(), part: "wrapper" }, h("div", { class: this.bannerWrapperCssClasses(), part: "body" }, h("div", { class: "content-wrapper", part: "content-wrapper" }, this.getMessageTypesIcons(), !this.isOverflowing ? (messageWrapper) : (h("wpp-tooltip-v3-6-0", { text: this.messageText, class: this.tooltipCSSClasses() }, messageWrapper))), h("div", { class: "actions-wrapper", part: "actions-wrapper" }, h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData, role: "presentation" }), this.closable && (h("wpp-action-button-v3-6-0", { variant: this.type === 'information' ? 'inverted' : 'secondary', onClick: this.handleCloseIconClick, class: "close-button", part: "close-button", ariaProps: { label: 'close banner' }, role: "presentation" }, h("wpp-icon-cross-v3-6-0", { slot: "icon-start", part: "close-icon", "aria-hidden": "true" }))))))));
   }
-  static get registryIs() { return "wpp-banner-v3-5-0"; }
+  static get registryIs() { return "wpp-banner-v3-6-0"; }
   get host() { return getElement(this); }
 };
 WppBanner.style = wppBannerCss;

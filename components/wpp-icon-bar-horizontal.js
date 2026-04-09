@@ -16,9 +16,9 @@ const WppIconBarHorizontal$1 = /*@__PURE__*/ proxyCustomElement(class WppIconBar
   render() {
     return (h(WppIcon, { name: "wpp-icon-bar-horizontal", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M14 15.5547C14 14.4506 13.1049 13.5556 12.0008 13.5556H3.99918C2.89507 13.5556 2 14.4506 2 15.5547C2 16.6589 2.89507 17.5539 3.99919 17.5539H12.0008C13.1049 17.5539 14 16.6589 14 15.5547ZM18 9.77696C18 8.67284 17.1049 7.77778 16.0008 7.77778L3.99918 7.77778C2.89507 7.77778 2 8.67284 2 9.77696C2 10.8811 2.89507 11.7761 3.99918 11.7761H16.0008C17.1049 11.7761 18 10.8811 18 9.77696ZM9.88889 3.99918C9.88889 2.89507 8.99382 2 7.88971 2L3.99918 2C2.89507 2 2 2.89507 2 3.99918C2 5.1033 2.89507 5.99837 3.99918 5.99837L7.88971 5.99837C8.99382 5.99837 9.88889 5.1033 9.88889 3.99918ZM12.6667 15.5547C12.6667 15.9225 12.3686 16.2206 12.0008 16.2206H3.99919C3.63145 16.2206 3.33333 15.9225 3.33333 15.5547C3.33333 15.187 3.63145 14.8889 3.99918 14.8889H12.0008C12.3686 14.8889 12.6667 15.187 12.6667 15.5547ZM16.6667 9.77696C16.6667 10.1447 16.3686 10.4428 16.0008 10.4428H3.99918C3.63145 10.4428 3.33333 10.1447 3.33333 9.77696C3.33333 9.40922 3.63145 9.11111 3.99918 9.11111H16.0008C16.3686 9.11111 16.6667 9.40922 16.6667 9.77696ZM8.55556 3.99918C8.55556 4.36692 8.25744 4.66504 7.88971 4.66504L3.99918 4.66504C3.63145 4.66504 3.33333 4.36692 3.33333 3.99918C3.33333 3.63144 3.63145 3.33333 3.99918 3.33333L7.88971 3.33333C8.25744 3.33333 8.55556 3.63145 8.55556 3.99918Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-bar-horizontal-v3-5-0"; }
+  static get registryIs() { return "wpp-icon-bar-horizontal-v3-6-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-bar-horizontal", "wpp-icon-bar-horizontal-v3-5-0", {
+}, [1, "wpp-icon-bar-horizontal", "wpp-icon-bar-horizontal-v3-6-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -28,9 +28,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-bar-horizontal-v3-5-0"];
+  const components = ["wpp-icon-bar-horizontal-v3-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-bar-horizontal-v3-5-0":
+    case "wpp-icon-bar-horizontal-v3-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconBarHorizontal$1);
       }

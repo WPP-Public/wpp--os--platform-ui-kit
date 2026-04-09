@@ -13,15 +13,17 @@ import { BannerChangeEventDetail } from "./components/wpp-banner/types";
 import { BreadcrumbItemEventDetails, BreadcrumbItemState } from "./components/wpp-breadcrumb/types";
 import { CardChangeEventDetail, CardSize, CardType, CardValue } from "./components/wpp-card-group/components/wpp-card/types";
 import { CardGroupChangeEventDetail, CardGroupValue } from "./components/wpp-card-group/types";
+import { ActionButtonDataConfig, AvatarConfig, ChatAttachment, ChatInputConfig, ChatMessage, MessageRole, MessageStatus } from "./components/wpp-chat-conversation/types";
 import { ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
 import { AcceptConfig, FileItemType, FileUploadErrorEventDetails, FileUploadEventDetail, FileUploadItemEventDetail, FileUploadItemLocales, FileUploadLocales, FileUploadMessageType, FileUploadResultFormaType, FileValidatorHandler } from "./components/wpp-file-upload/types";
+import { ListItemInterface, SelectChangeEventDetails, SelectLabelConfig, SelectLocaleInterface, SelectSize, SelectTypes, SelectValue } from "./components/wpp-select/types";
 import { CheckboxChangeEvent, CheckboxLabelConfig, CheckboxValue } from "./components/wpp-checkbox/types";
 import { CheckboxGroupChangeEvent, CheckboxGroupValue } from "./components/wpp-checkbox-group/types";
 import { LabelConfig, LabelLocales } from "./components/wpp-label/types";
 import { ChangeColorEventDetails, ColorPickerMode, ColorPickerType, SaturationChangeDetail } from "./components/wpp-color-picker/types";
 import { Theme } from "./types/theme";
 import { CounterChangeEventDetail, CounterFormat, CounterLabelConfig } from "./components/wpp-counter/types";
-import { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes } from "./components/wpp-datepicker/types";
+import { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes, MonthRangeNormalization } from "./components/wpp-datepicker/types";
 import { ExpandableCardSectionChangeEventDetail } from "./components/wpp-expandable-card/types";
 import { ActionButtonData } from "./components/wpp-floating-toolbar/types";
 import { FullScreenModalCloseDetails, FullScreenModalFormConfig } from "./components/wpp-full-screen-modal/types";
@@ -48,7 +50,6 @@ import { RadioGroupChangeEvent, RadioGroupValue } from "./components/wpp-radio-g
 import { DebugLevels, Formats, QuillInstance, RichtextChangeEventDetail, RichtextLocales, RichtextSelectionChangeEventDetail, RichtextUploadRequestEventDetail, RichtextValue } from "./components/wpp-richtext/types";
 import { SearchChangeEventDetail, SearchDefaultOption, SearchGetOptionIdHandler, SearchGetOptionLabelHandler, SearchLabelConfig, SearchLocales, SearchOption } from "./components/wpp-search/types";
 import { SegmentedControlChangeEventDetail, SegmentedControlItemChangeEventDetail, SegmentedControlItemSize, SegmentedControlLabelConfig, SegmentedControlValue } from "./components/wpp-segmented-control/types";
-import { ListItemInterface, SelectChangeEventDetails, SelectLabelConfig, SelectLocaleInterface, SelectSize, SelectTypes, SelectValue } from "./components/wpp-select/types";
 import { DropdownConfig as DropdownConfig1, InputTypes as InputTypes1, LabelConfig as LabelConfig1, MaskOptions as MaskOptions1 } from "./components";
 import { ActionConfig, HeaderActionsConfig, SideModalCloseDetails, SideModalFormConfig, SideModalLocalesType } from "./components/wpp-side-modal/types";
 import { InputWidth, MarkState, SliderChangeEventDetail, SliderLabelConfig, SliderTypes, SliderValue } from "./components/wpp-slider/types";
@@ -71,15 +72,17 @@ export { BannerChangeEventDetail } from "./components/wpp-banner/types";
 export { BreadcrumbItemEventDetails, BreadcrumbItemState } from "./components/wpp-breadcrumb/types";
 export { CardChangeEventDetail, CardSize, CardType, CardValue } from "./components/wpp-card-group/components/wpp-card/types";
 export { CardGroupChangeEventDetail, CardGroupValue } from "./components/wpp-card-group/types";
+export { ActionButtonDataConfig, AvatarConfig, ChatAttachment, ChatInputConfig, ChatMessage, MessageRole, MessageStatus } from "./components/wpp-chat-conversation/types";
 export { ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
 export { AcceptConfig, FileItemType, FileUploadErrorEventDetails, FileUploadEventDetail, FileUploadItemEventDetail, FileUploadItemLocales, FileUploadLocales, FileUploadMessageType, FileUploadResultFormaType, FileValidatorHandler } from "./components/wpp-file-upload/types";
+export { ListItemInterface, SelectChangeEventDetails, SelectLabelConfig, SelectLocaleInterface, SelectSize, SelectTypes, SelectValue } from "./components/wpp-select/types";
 export { CheckboxChangeEvent, CheckboxLabelConfig, CheckboxValue } from "./components/wpp-checkbox/types";
 export { CheckboxGroupChangeEvent, CheckboxGroupValue } from "./components/wpp-checkbox-group/types";
 export { LabelConfig, LabelLocales } from "./components/wpp-label/types";
 export { ChangeColorEventDetails, ColorPickerMode, ColorPickerType, SaturationChangeDetail } from "./components/wpp-color-picker/types";
 export { Theme } from "./types/theme";
 export { CounterChangeEventDetail, CounterFormat, CounterLabelConfig } from "./components/wpp-counter/types";
-export { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes } from "./components/wpp-datepicker/types";
+export { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes, MonthRangeNormalization } from "./components/wpp-datepicker/types";
 export { ExpandableCardSectionChangeEventDetail } from "./components/wpp-expandable-card/types";
 export { ActionButtonData } from "./components/wpp-floating-toolbar/types";
 export { FullScreenModalCloseDetails, FullScreenModalFormConfig } from "./components/wpp-full-screen-modal/types";
@@ -106,7 +109,6 @@ export { RadioGroupChangeEvent, RadioGroupValue } from "./components/wpp-radio-g
 export { DebugLevels, Formats, QuillInstance, RichtextChangeEventDetail, RichtextLocales, RichtextSelectionChangeEventDetail, RichtextUploadRequestEventDetail, RichtextValue } from "./components/wpp-richtext/types";
 export { SearchChangeEventDetail, SearchDefaultOption, SearchGetOptionIdHandler, SearchGetOptionLabelHandler, SearchLabelConfig, SearchLocales, SearchOption } from "./components/wpp-search/types";
 export { SegmentedControlChangeEventDetail, SegmentedControlItemChangeEventDetail, SegmentedControlItemSize, SegmentedControlLabelConfig, SegmentedControlValue } from "./components/wpp-segmented-control/types";
-export { ListItemInterface, SelectChangeEventDetails, SelectLabelConfig, SelectLocaleInterface, SelectSize, SelectTypes, SelectValue } from "./components/wpp-select/types";
 export { DropdownConfig as DropdownConfig1, InputTypes as InputTypes1, LabelConfig as LabelConfig1, MaskOptions as MaskOptions1 } from "./components";
 export { ActionConfig, HeaderActionsConfig, SideModalCloseDetails, SideModalFormConfig, SideModalLocalesType } from "./components/wpp-side-modal/types";
 export { InputWidth, MarkState, SliderChangeEventDetail, SliderLabelConfig, SliderTypes, SliderValue } from "./components/wpp-slider/types";
@@ -651,6 +653,77 @@ export namespace Components {
          */
         "withRadioOrCheckbox": boolean;
     }
+    interface WppChatConversation {
+        /**
+          * Appends a chunk of text to the last message.
+         */
+        "appendChunk": (chunk: string) => Promise<void>;
+        /**
+          * Defines the avatar configuration for the assistant.
+         */
+        "assistantAvatarConfig": AvatarConfig | false;
+        /**
+          * Defines the configuration for the chat input.
+         */
+        "chatInputConfig": ChatInputConfig;
+        /**
+          * Completes the stream for the last message.
+         */
+        "completeStream": () => Promise<void>;
+        /**
+          * Defines the list of messages in the conversation.
+         */
+        "messages": ChatMessage[];
+        /**
+          * Sets the status of the last message.
+         */
+        "setStatus": (status: MessageStatus) => Promise<void>;
+        /**
+          * Defines the avatar configuration for the user.
+         */
+        "userAvatarConfig": AvatarConfig | false;
+    }
+    interface WppChatConversationMessage {
+        /**
+          * Defines the action buttons configuration.
+         */
+        "actionButtonsConfig": ActionButtonDataConfig[];
+        "appendChunk": (chunk: string) => Promise<void>;
+        /**
+          * Defines the avatar configuration for the assistant avatar.
+         */
+        "assistantAvatarConfig": AvatarConfig | false;
+        /**
+          * Defines the attachments for the message.
+         */
+        "attachments": ChatAttachment[];
+        "completeStream": () => Promise<void>;
+        /**
+          * Defines the content of the message.
+         */
+        "content": string;
+        /**
+          * Defines the list items for the context menu.
+         */
+        "menuContextListItems": ListItemInterface[];
+        /**
+          * Defines the role of the message.
+         */
+        "role": MessageRole;
+        "setStatus": (status: MessageStatus) => Promise<void>;
+        /**
+          * Defines the source action button configuration.
+         */
+        "sourcesActionConfig": ActionButtonDataConfig;
+        /**
+          * Defines the status of the message.
+         */
+        "status": MessageStatus;
+        /**
+          * Defines the avatar configuration for the user avatar.
+         */
+        "userAvatarConfig": AvatarConfig | false;
+    }
     interface WppChatInput {
         /**
           * Typed ARIA overrides. Only supported htmlAttributes exposed.
@@ -1027,6 +1100,12 @@ export namespace Components {
           * Defines the minimal datepicker date.
          */
         "minDate"?: string;
+        /**
+          * Configuration for normalizing month range dates. When using `view="months"` with `range`, this option allows automatic normalization of selected dates to specific days. By default, normalizes start date to the 1st day and end date to the last day of their respective months.
+          * @example // Enable normalization with defaults (1st and last day) monthRangeNormalization={{ enabled: true }}
+          * @example // Custom days: start on 15th, end on 20th monthRangeNormalization={{ enabled: true, startDay: 15, endDay: 20 }}
+         */
+        "monthRangeNormalization"?: MonthRangeNormalization;
         /**
           * Indicates datepicker name
          */
@@ -1489,6 +1568,10 @@ export namespace Components {
           * Method for opening the full screen modal.
          */
         "openFullScreenModal": () => Promise<void>;
+        /**
+          * If `true` - the full-screen modal will be rendered below the OS bar.
+         */
+        "osBarCompatible": boolean;
         /**
           * Makes overlay transparent
          */
@@ -11646,6 +11729,10 @@ export namespace Components {
          */
         "highlight": string;
         /**
+          * If `true`, the checkbox is in indeterminate state. Only applies when `multiple` is true.
+         */
+        "indeterminate": boolean;
+        /**
           * If the component is extended.
          */
         "isExtended": boolean;
@@ -11794,6 +11881,10 @@ export namespace Components {
           * Method for opening the modal.
          */
         "openModal": () => Promise<void>;
+        /**
+          * If `true` - the modal will be rendered below the OS bar.
+         */
+        "osBarCompatible": boolean;
         /**
           * Indicates the modal size
          */
@@ -12352,7 +12443,7 @@ export namespace Components {
          */
         "placeholder": string;
         /**
-          * @deprecated This property is no longer needed. Whitespace preservation is now the default behavior for markdown format. This prop will be removed in a future major version.
+          * @deprecated This property is no longer needed. Whitespace preservation is now the default behavior for markdown format. This property will be removed in version 5.0.0.
          */
         "preserveWhitespace": boolean;
         /**
@@ -12743,6 +12834,10 @@ export namespace Components {
           * Sets focus on the select and opens the dropdown.
          */
         "setFocus": () => Promise<void>;
+        /**
+          * If `true`, renders a "Select all (N)" checkbox at the top of the dropdown list and replaces the bottom "Select All" / "Clear All" buttons with "Clear" / "Apply" buttons. Selected items are rendered at the top of the dropdown when it is opened. This property works only for the multiple select with `withFolder` enabled.
+         */
+        "showSelectAllOption": boolean;
         /**
           * If 'true', instead of displaying comma-separated values, the input should show the text "All selected" when all options in the multi-select are selected.
          */
@@ -13746,6 +13841,10 @@ export interface WppCardGroupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppCardGroupElement;
 }
+export interface WppChatConversationCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLWppChatConversationElement;
+}
 export interface WppChatInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppChatInputElement;
@@ -14020,6 +14119,18 @@ declare global {
     var HTMLWppCardGroupElement: {
         prototype: HTMLWppCardGroupElement;
         new (): HTMLWppCardGroupElement;
+    };
+    interface HTMLWppChatConversationElement extends Components.WppChatConversation, HTMLStencilElement {
+    }
+    var HTMLWppChatConversationElement: {
+        prototype: HTMLWppChatConversationElement;
+        new (): HTMLWppChatConversationElement;
+    };
+    interface HTMLWppChatConversationMessageElement extends Components.WppChatConversationMessage, HTMLStencilElement {
+    }
+    var HTMLWppChatConversationMessageElement: {
+        prototype: HTMLWppChatConversationMessageElement;
+        new (): HTMLWppChatConversationMessageElement;
     };
     interface HTMLWppChatInputElement extends Components.WppChatInput, HTMLStencilElement {
     }
@@ -17779,6 +17890,8 @@ declare global {
         "wpp-button": HTMLWppButtonElement;
         "wpp-card": HTMLWppCardElement;
         "wpp-card-group": HTMLWppCardGroupElement;
+        "wpp-chat-conversation": HTMLWppChatConversationElement;
+        "wpp-chat-conversation-message": HTMLWppChatConversationMessageElement;
         "wpp-chat-input": HTMLWppChatInputElement;
         "wpp-checkbox": HTMLWppCheckboxElement;
         "wpp-checkbox-group": HTMLWppCheckboxGroupElement;
@@ -18969,6 +19082,74 @@ declare namespace LocalJSX {
          */
         "withRadioOrCheckbox"?: boolean;
     }
+    interface WppChatConversation {
+        /**
+          * Defines the avatar configuration for the assistant.
+         */
+        "assistantAvatarConfig"?: AvatarConfig | false;
+        /**
+          * Defines the configuration for the chat input.
+         */
+        "chatInputConfig"?: ChatInputConfig;
+        /**
+          * Defines the list of messages in the conversation.
+         */
+        "messages"?: ChatMessage[];
+        /**
+          * Emitted when the value of the input changes.
+         */
+        "onWppChange"?: (event: WppChatConversationCustomEvent<FileUploadEventDetail>) => void;
+        /**
+          * Emitted when the message in the input message changes.
+         */
+        "onWppMessageChanged"?: (event: WppChatConversationCustomEvent<MessageChangeEventDetail>) => void;
+        /**
+          * Emitted when the user clicks the "Send" button.
+         */
+        "onWppSend"?: (event: WppChatConversationCustomEvent<SendEventDetail>) => void;
+        /**
+          * Defines the avatar configuration for the user.
+         */
+        "userAvatarConfig"?: AvatarConfig | false;
+    }
+    interface WppChatConversationMessage {
+        /**
+          * Defines the action buttons configuration.
+         */
+        "actionButtonsConfig"?: ActionButtonDataConfig[];
+        /**
+          * Defines the avatar configuration for the assistant avatar.
+         */
+        "assistantAvatarConfig"?: AvatarConfig | false;
+        /**
+          * Defines the attachments for the message.
+         */
+        "attachments"?: ChatAttachment[];
+        /**
+          * Defines the content of the message.
+         */
+        "content"?: string;
+        /**
+          * Defines the list items for the context menu.
+         */
+        "menuContextListItems"?: ListItemInterface[];
+        /**
+          * Defines the role of the message.
+         */
+        "role"?: MessageRole;
+        /**
+          * Defines the source action button configuration.
+         */
+        "sourcesActionConfig"?: ActionButtonDataConfig;
+        /**
+          * Defines the status of the message.
+         */
+        "status"?: MessageStatus;
+        /**
+          * Defines the avatar configuration for the user avatar.
+         */
+        "userAvatarConfig"?: AvatarConfig | false;
+    }
     interface WppChatInput {
         /**
           * Typed ARIA overrides. Only supported htmlAttributes exposed.
@@ -19385,6 +19566,12 @@ declare namespace LocalJSX {
           * Defines the minimal datepicker date.
          */
         "minDate"?: string;
+        /**
+          * Configuration for normalizing month range dates. When using `view="months"` with `range`, this option allows automatic normalization of selected dates to specific days. By default, normalizes start date to the 1st day and end date to the last day of their respective months.
+          * @example // Enable normalization with defaults (1st and last day) monthRangeNormalization={{ enabled: true }}
+          * @example // Custom days: start on 15th, end on 20th monthRangeNormalization={{ enabled: true, startDay: 15, endDay: 20 }}
+         */
+        "monthRangeNormalization"?: MonthRangeNormalization;
         /**
           * Indicates datepicker name
          */
@@ -19896,6 +20083,10 @@ declare namespace LocalJSX {
           * Indicates is the modal open.
          */
         "open"?: boolean;
+        /**
+          * If `true` - the full-screen modal will be rendered below the OS bar.
+         */
+        "osBarCompatible"?: boolean;
         /**
           * Makes overlay transparent
          */
@@ -30219,6 +30410,10 @@ declare namespace LocalJSX {
          */
         "open"?: boolean;
         /**
+          * If `true` - the modal will be rendered below the OS bar.
+         */
+        "osBarCompatible"?: boolean;
+        /**
           * Indicates the modal size
          */
         "size"?: 's' | 'm';
@@ -30864,7 +31059,7 @@ declare namespace LocalJSX {
          */
         "placeholder"?: string;
         /**
-          * @deprecated This property is no longer needed. Whitespace preservation is now the default behavior for markdown format. This prop will be removed in a future major version.
+          * @deprecated This property is no longer needed. Whitespace preservation is now the default behavior for markdown format. This property will be removed in version 5.0.0.
          */
         "preserveWhitespace"?: boolean;
         /**
@@ -31276,6 +31471,10 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
+          * Emitted when the user clicks the Apply button in the multiple select with showSelectAllOption.
+         */
+        "onWppApply"?: (event: WppSelectCustomEvent<void>) => void;
+        /**
           * Emitted when the input loses focus.
          */
         "onWppBlur"?: (event: WppSelectCustomEvent<FocusEvent>) => void;
@@ -31295,6 +31494,10 @@ declare namespace LocalJSX {
           * If the input is required.
          */
         "required"?: boolean;
+        /**
+          * If `true`, renders a "Select all (N)" checkbox at the top of the dropdown list and replaces the bottom "Select All" / "Clear All" buttons with "Clear" / "Apply" buttons. Selected items are rendered at the top of the dropdown when it is opened. This property works only for the multiple select with `withFolder` enabled.
+         */
+        "showSelectAllOption"?: boolean;
         /**
           * If 'true', instead of displaying comma-separated values, the input should show the text "All selected" when all options in the multi-select are selected.
          */
@@ -32328,6 +32531,8 @@ declare namespace LocalJSX {
         "wpp-button": WppButton;
         "wpp-card": WppCard;
         "wpp-card-group": WppCardGroup;
+        "wpp-chat-conversation": WppChatConversation;
+        "wpp-chat-conversation-message": WppChatConversationMessage;
         "wpp-chat-input": WppChatInput;
         "wpp-checkbox": WppCheckbox;
         "wpp-checkbox-group": WppCheckboxGroup;
@@ -32966,6 +33171,8 @@ declare module "@stencil/core" {
             "wpp-button": LocalJSX.WppButton & JSXBase.HTMLAttributes<HTMLWppButtonElement>;
             "wpp-card": LocalJSX.WppCard & JSXBase.HTMLAttributes<HTMLWppCardElement>;
             "wpp-card-group": LocalJSX.WppCardGroup & JSXBase.HTMLAttributes<HTMLWppCardGroupElement>;
+            "wpp-chat-conversation": LocalJSX.WppChatConversation & JSXBase.HTMLAttributes<HTMLWppChatConversationElement>;
+            "wpp-chat-conversation-message": LocalJSX.WppChatConversationMessage & JSXBase.HTMLAttributes<HTMLWppChatConversationMessageElement>;
             "wpp-chat-input": LocalJSX.WppChatInput & JSXBase.HTMLAttributes<HTMLWppChatInputElement>;
             "wpp-checkbox": LocalJSX.WppCheckbox & JSXBase.HTMLAttributes<HTMLWppCheckboxElement>;
             "wpp-checkbox-group": LocalJSX.WppCheckboxGroup & JSXBase.HTMLAttributes<HTMLWppCheckboxGroupElement>;

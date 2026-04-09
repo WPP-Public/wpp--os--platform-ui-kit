@@ -44,7 +44,7 @@ const heroes = [
 ];
 export const Search = (args) => {
   const [value, setValue] = useState([]);
-  return html ` <wpp-search-v3-5-0
+  return html ` <wpp-search-v3-6-0
     .loading="${args.loading}"
     .disabled="${args.disabled}"
     .required="${args.required}"
@@ -67,12 +67,12 @@ export const Search = (args) => {
     @wppCreateNewOption="${(e) => console.log('onWppCreateNewOption', e.detail)}"
   >
     ${heroes.map(hero => html `
-        <wpp-list-item-v3-5-0 .value="${hero}">
-          <wpp-avatar-v3-5-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-5-0>
+        <wpp-list-item-v3-6-0 .value="${hero}">
+          <wpp-avatar-v3-6-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-6-0>
           <p slot="label">${hero.label}</p>
-        </wpp-list-item-v3-5-0>
+        </wpp-list-item-v3-6-0>
       `)}
-  </wpp-search-v3-5-0>`;
+  </wpp-search-v3-6-0>`;
 };
 Search.args = {
   loading: false,

@@ -167,22 +167,34 @@ export class WppSelect {
         return h(Fragment, null);
       }
       if (this.loading) {
-        return (h("div", { class: "loading-container" }, h("wpp-spinner-v3-5-0", null), h("wpp-typography-v3-5-0", { type: "s-body" }, this._locales.loadingText)));
+        return (h("div", { class: "loading-container" }, h("wpp-spinner-v3-6-0", null), h("wpp-typography-v3-6-0", { type: "s-body" }, this._locales.loadingText)));
       }
       if (this.internalList?.length === 0) {
-        return (h("wpp-typography-v3-5-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+        return (h("wpp-typography-v3-6-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
       }
       let hiddeItemsCount = 0;
       return (h(Fragment, null, this.internalList?.map((item) => {
         const { label, hidden, ...rest } = item;
-        if (hidden) {
-          hiddeItemsCount++;
+        const isPinned = this.filteredPinnedItems.some(p => isEqual(p.value, item.value));
+        if (hidden || isPinned) {
+          if (hidden)
+            hiddeItemsCount++;
           if (hiddeItemsCount === this.internalList?.length) {
-            return (h("wpp-typography-v3-5-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+            return (h("wpp-typography-v3-6-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
           }
           return null;
         }
-        return (h("wpp-list-item-v3-5-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
+        return (h("wpp-list-item-v3-6-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
+      })));
+    };
+    this.renderPinnedItems = () => {
+      const items = this.filteredPinnedItems;
+      if (items.length === 0)
+        return h(Fragment, null);
+      return (h(Fragment, null, items.map((item) => {
+        const { label, value, checked, disabled, id, slots } = item;
+        const itemValueKey = this.convertValueToKey(value);
+        return (h("wpp-list-item-v3-6-0", { onWppChangeListItem: this.handleClickListItem, key: `pinned-${itemValueKey}`, value: value, checked: checked, disabled: disabled, multiple: true, id: id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${id}` : undefined, class: "pinned-item" }, h("p", { slot: "label" }, label), slots && this.renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
     };
     this.renderSlotsInListItem = (slots, isLabelExists) => slots
@@ -297,6 +309,9 @@ export class WppSelect {
         this.dropdownConfig?.onShow(instance);
       }
       this.isOpen = true;
+      if (this.showSelectAllOption && this.type === 'multiple' && this.withFolder) {
+        this.pinnedItems = this.internalList?.filter(item => item.checked) ?? [];
+      }
     };
     this.onShowDropdownText = (instance) => {
       if (!this.anchorRef)
@@ -319,6 +334,7 @@ export class WppSelect {
     };
     this.onHiddenDropdown = (instance) => {
       this.isOpen = false;
+      this.pinnedItems = [];
       if (!this.consistentSearch) {
         this.searchText = '';
       }
@@ -438,26 +454,48 @@ export class WppSelect {
       this.withScroll = this.listRef.scrollHeight > this.listRef.clientHeight;
     };
     this.handleSelectAll = () => {
-      // We select all the items that are not disabled. Even hidden ones.
       const valueOfItems = [];
       this.internalList?.forEach((listItem) => {
-        if (!listItem.disabled) {
-          valueOfItems.push(listItem.value);
+        if (listItem.hidden || listItem.disabled) {
+          if (listItem.checked)
+            valueOfItems.push(listItem.value);
+          return;
         }
-        listItem.checked = listItem.disabled ? listItem.checked : true;
+        valueOfItems.push(listItem.value);
+        listItem.checked = true;
       });
       this.emittedValue = [...valueOfItems];
     };
     this.handleClearAll = () => {
-      // We un-check all items that are not disabled. Even hidden ones.
-      const valueOfItems = [];
+      const valuesToClear = new Set();
       this.internalList?.forEach((listItem) => {
-        if (listItem.checked && listItem.disabled) {
-          valueOfItems.push(listItem.value);
+        if (listItem.checked && listItem.disabled)
+          return;
+        if (this.showSelectAllOption && listItem.hidden)
+          return;
+        if (listItem.checked) {
+          valuesToClear.add(JSON.stringify(listItem.value));
+          listItem.checked = false;
         }
-        listItem.checked = listItem.disabled ? listItem.checked : false;
       });
-      this.emittedValue = [...valueOfItems];
+      const currentValue = Array.isArray(this.value) ? this.value : [];
+      this.emittedValue = currentValue.filter(v => !valuesToClear.has(JSON.stringify(v)));
+    };
+    this.handleSelectAllToggle = () => {
+      if (this.isSelectAllDisabled)
+        return;
+      if (this.isSelectAllChecked) {
+        this.handleClearAll();
+      }
+      else {
+        this.handleSelectAll();
+      }
+    };
+    this.handleApply = () => {
+      if (!this.isOpen)
+        return;
+      this.wppApply.emit();
+      this.tippyInstance?.hide();
     };
     this.setShouldShowSearch = () => {
       if (!this.host)
@@ -544,6 +582,7 @@ export class WppSelect {
     this.checkedItems = 0;
     this.disabledItems = 0;
     this.textOverflows = false;
+    this.pinnedItems = [];
     this.isContainerFocused = false;
     this.shouldTruncate = false;
     this.consistentSearch = false;
@@ -579,6 +618,7 @@ export class WppSelect {
     this.dropdownConfig = {};
     this.locales = {};
     this.showSelectAllText = true;
+    this.showSelectAllOption = false;
     this.inputValue = undefined;
     this.maskOptions = undefined;
     this.inputType = 'text';
@@ -653,6 +693,7 @@ export class WppSelect {
         listItem.highlight = '';
         listItem.hidden = false;
       });
+      setTimeout(() => this.updateScrollState(), 0);
       return;
     }
     // When search changes, we also set "highlight=this.searchText" in order to
@@ -662,6 +703,7 @@ export class WppSelect {
       listItem.highlight = this.searchText;
       listItem.hidden = !listItem.label.toLowerCase().includes(searchTextLowerCase);
     });
+    setTimeout(() => this.updateScrollState(), 0);
   }
   onUpdateLoading() {
     if (!this.loading) {
@@ -780,6 +822,38 @@ export class WppSelect {
       this.resizeObserver.disconnect();
     }
   }
+  get filteredPinnedItems() {
+    if (!this.searchText)
+      return this.pinnedItems;
+    const searchTextLowerCase = this.searchText.toLowerCase().trim();
+    return this.pinnedItems.filter(item => item.label.toLowerCase().includes(searchTextLowerCase));
+  }
+  get visibleItems() {
+    return this.internalList?.filter(item => !item.hidden) ?? [];
+  }
+  get canClearVisible() {
+    return this.visibleItems.some(item => item.checked && !item.disabled);
+  }
+  get isSelectAllChecked() {
+    const selectableVisible = this.visibleItems.filter(item => !item.disabled);
+    return selectableVisible.length > 0 && selectableVisible.every(item => item.checked);
+  }
+  get isSelectAllIndeterminate() {
+    const visible = this.visibleItems;
+    const selectableVisible = visible.filter(item => !item.disabled);
+    const checkedSelectable = selectableVisible.filter(item => item.checked);
+    const hasCheckedDisabled = visible.some(item => item.disabled && item.checked);
+    if (selectableVisible.length === 0)
+      return hasCheckedDisabled;
+    return ((checkedSelectable.length > 0 && checkedSelectable.length < selectableVisible.length) ||
+      (checkedSelectable.length === 0 && hasCheckedDisabled));
+  }
+  get selectAllCount() {
+    return this.visibleItems.filter(item => !item.disabled).length;
+  }
+  get isSelectAllDisabled() {
+    return this.selectAllCount === 0;
+  }
   render() {
     if (this.type === 'single' && !this.isTextSelect) {
       return renderSingleSelect.call(this, true, this.size, this.isRenderMessageInTooltip);
@@ -793,7 +867,7 @@ export class WppSelect {
     return renderCombinedSelect.call(this);
   }
   static get is() { return "wpp-select"; }
-  static get registryIs() { return "wpp-select-v3-5-0"; }
+  static get registryIs() { return "wpp-select-v3-6-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -1375,7 +1449,7 @@ export class WppSelect {
         "mutable": false,
         "complexType": {
           "original": "Partial<SelectLocaleInterface>",
-          "resolved": "{ emptyText?: string | undefined; clearAllText?: string | undefined; selectAllText?: string | undefined; searchInputPlaceholder?: string | undefined; allSelectedText?: string | undefined; selectLabel?: string | undefined; loadingText?: string | undefined; }",
+          "resolved": "{ emptyText?: string | undefined; clearAllText?: string | undefined; selectAllText?: string | undefined; searchInputPlaceholder?: string | undefined; allSelectedText?: string | undefined; selectLabel?: string | undefined; loadingText?: string | undefined; clearText?: string | undefined; applyText?: string | undefined; }",
           "references": {
             "Partial": {
               "location": "global",
@@ -1413,6 +1487,24 @@ export class WppSelect {
         "attribute": "show-select-all-text",
         "reflect": false,
         "defaultValue": "true"
+      },
+      "showSelectAllOption": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "If `true`, renders a \"Select all (N)\" checkbox at the top of the dropdown list and replaces\nthe bottom \"Select All\" / \"Clear All\" buttons with \"Clear\" / \"Apply\" buttons.\nSelected items are rendered at the top of the dropdown when it is opened.\nThis property works only for the multiple select with `withFolder` enabled."
+        },
+        "attribute": "show-select-all-option",
+        "reflect": true,
+        "defaultValue": "false"
       },
       "inputValue": {
         "type": "string",
@@ -1534,6 +1626,7 @@ export class WppSelect {
       "checkedItems": {},
       "disabledItems": {},
       "textOverflows": {},
+      "pinnedItems": {},
       "isContainerFocused": {},
       "shouldTruncate": {}
     };
@@ -1599,6 +1692,21 @@ export class WppSelect {
               "id": "global::FocusEvent"
             }
           }
+        }
+      }, {
+        "method": "wppApply",
+        "name": "wppApply",
+        "bubbles": false,
+        "cancelable": true,
+        "composed": false,
+        "docs": {
+          "tags": [],
+          "text": "Emitted when the user clicks the Apply button in the multiple select with showSelectAllOption."
+        },
+        "complexType": {
+          "original": "void",
+          "resolved": "void",
+          "references": {}
         }
       }];
   }

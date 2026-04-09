@@ -1,6 +1,6 @@
 export { getAssetPath, setAssetPath, setNonce, setPlatformOptions } from '@stencil/core/internal/client';
 import { i as isObject, t as toKebabCase, r as recursiveObjectMap } from './utils.js';
-export { m as applyBodyStylesIfNeeded, a as areSetsEqual, n as autoFocusElement, l as closestElement, d as debounce, o as form2object, f as format, x as getAriaProps, p as getDurationValues, q as getHasFocused, w as getHighestContainerInDOM, j as getHighlightData, g as getSlotEmptyStates, c as hasParentWithId, h as hasShadowDom, b as isEventTargetContained, i as isObject, y as isWppElement, r as recursiveObjectMap, s as selectDropdownWidth, v as setHasFocused, t as toKebabCase, k as transformToVersionedTag, e as truncate, u as uuidv4 } from './utils.js';
+export { m as applyBodyStylesIfNeeded, a as areSetsEqual, n as autoFocusElement, l as closestElement, d as debounce, o as form2object, f as format, y as getAriaProps, p as getDurationValues, q as getHasFocused, w as getHighestContainerInDOM, j as getHighlightData, x as getOsBarOffsetHeight, g as getSlotEmptyStates, c as hasParentWithId, h as hasShadowDom, b as isEventTargetContained, i as isObject, z as isWppElement, r as recursiveObjectMap, s as selectDropdownWidth, v as setHasFocused, t as toKebabCase, k as transformToVersionedTag, e as truncate, u as uuidv4 } from './utils.js';
 export { S as ScrollState, WppFileUpload, defineCustomElement as defineCustomElementWppFileUpload } from './wpp-file-upload.js';
 export { F as FullScreenModalCloseReason, WppFullScreenModal, defineCustomElement as defineCustomElementWppFullScreenModal } from './wpp-full-screen-modal.js';
 export { I as InlineEditModeEnum, WppInlineEdit, defineCustomElement as defineCustomElementWppInlineEdit } from './wpp-inline-edit.js';
@@ -18,6 +18,8 @@ export { WppBreadcrumb, defineCustomElement as defineCustomElementWppBreadcrumb 
 export { WppButton, defineCustomElement as defineCustomElementWppButton } from './wpp-button.js';
 export { WppCard, defineCustomElement as defineCustomElementWppCard } from './wpp-card.js';
 export { WppCardGroup, defineCustomElement as defineCustomElementWppCardGroup } from './wpp-card-group.js';
+export { WppChatConversation, defineCustomElement as defineCustomElementWppChatConversation } from './wpp-chat-conversation.js';
+export { WppChatConversationMessage, defineCustomElement as defineCustomElementWppChatConversationMessage } from './wpp-chat-conversation-message.js';
 export { WppChatInput, defineCustomElement as defineCustomElementWppChatInput } from './wpp-chat-input.js';
 export { WppCheckbox, defineCustomElement as defineCustomElementWppCheckbox } from './wpp-checkbox.js';
 export { WppCheckboxGroup, defineCustomElement as defineCustomElementWppCheckboxGroup } from './wpp-checkbox-group.js';

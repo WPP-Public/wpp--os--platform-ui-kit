@@ -20,10 +20,10 @@ export class WppNavigationItem {
       'wpp-navigation-item': true,
       'wpp-list-item-wrapper': this.nestedItem,
     });
-    this.linkItem = () => (h("a", { href: this.path, class: "link", onClick: this.onClick, tabIndex: -1 }, h("div", { class: this.navItemCssClasses() }, h("wpp-typography-v3-5-0", { type: this.nestedItem ? 's-body' : 's-midi', class: { 'label-text': true, 'nested-text': this.nestedItem } }, this.label))));
+    this.linkItem = () => (h("a", { href: this.path, class: "link", onClick: this.onClick, tabIndex: -1 }, h("div", { class: this.navItemCssClasses() }, h("wpp-typography-v3-6-0", { type: this.nestedItem ? 's-body' : 's-midi', class: { 'label-text': true, 'nested-text': this.nestedItem } }, this.label))));
     this.listItem = () => (h("li", { class: "list-item", part: "list-item" }, this.linkItem()));
-    this.menuItem = () => (h("div", { class: this.navItemCssClasses() }, h("wpp-icon-more-v3-5-0", { direction: "horizontal", class: "menu-icon" })));
-    this.extendedItem = () => (h("div", { class: this.navItemCssClasses() }, !this.chevronOnly && (h("wpp-typography-v3-5-0", { type: "s-midi", class: "label-text" }, this.label)), h("wpp-icon-chevron-v3-5-0", { direction: "down", color: "var(--wpp-grey-color-600)", class: "chevron-icon", part: "chevron-icon" })));
+    this.menuItem = () => (h("div", { class: this.navItemCssClasses() }, h("wpp-icon-more-v3-6-0", { direction: "horizontal", class: "menu-icon" })));
+    this.extendedItem = () => (h("div", { class: this.navItemCssClasses() }, !this.chevronOnly && (h("wpp-typography-v3-6-0", { type: "s-midi", class: "label-text" }, this.label)), h("wpp-icon-chevron-v3-6-0", { direction: "down", color: "var(--wpp-grey-color-600)", class: "chevron-icon", part: "chevron-icon" })));
     this.renderItem = () => {
       if (this.menu) {
         return this.menuItem();
@@ -51,7 +51,7 @@ export class WppNavigationItem {
     return (h(Host, { class: this.hostCssClasses(), role: this.extended ? MENU_BAR_ROLE : CONTEXT_ITEM_TAG, tabIndex: 0, exportparts: "list-item, chevron-icon" }, this.renderItem()));
   }
   static get is() { return "wpp-navigation-item"; }
-  static get registryIs() { return "wpp-navigation-item-v3-5-0"; }
+  static get registryIs() { return "wpp-navigation-item-v3-6-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -248,9 +248,9 @@ export class WppNavigationItem {
     return [{
         "method": "wppActiveNavItemChanged",
         "name": "wppActiveNavItemChanged",
-        "bubbles": false,
+        "bubbles": true,
         "cancelable": true,
-        "composed": false,
+        "composed": true,
         "docs": {
           "tags": [],
           "text": "Emitted when navigation item was clicked"

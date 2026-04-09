@@ -95,10 +95,10 @@ const WppTab = /*@__PURE__*/ proxyCustomElement(class WppTab extends HTMLElement
   render() {
     return (h(Host, { id: this.value, role: "tab", "aria-selected": this.active ? 'true' : 'false', "aria-disabled": this.disabled ? 'true' : null, "aria-controls": this.ariaProps?.tab?.controls, "aria-label": this.ariaProps?.tab?.label, "aria-describedby": this.ariaProps?.tab?.describedby, "data-pressed": this.pressed ? 'true' : null, class: this.hostCssClasses(), tabIndex: this.tabIndex, exportparts: "wrapper, inner, counter", onClick: this.handleClickTab, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onBlur: this.onBlur, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("div", { class: this.cssClasses(), part: "wrapper" }, this.icon && h(transformToVersionedTag(this.icon), { className: 'wpp-tab-icon' }), h("slot", { part: "inner" }), this.counter > 0 && h("div", { class: "counter", part: "counter" }, `(${this.counter})`))));
   }
-  static get registryIs() { return "wpp-tab-v3-5-0"; }
+  static get registryIs() { return "wpp-tab-v3-6-0"; }
   get host() { return this; }
   static get style() { return wppTabCss; }
-}, [1, "wpp-tab", "wpp-tab-v3-5-0", {
+}, [1, "wpp-tab", "wpp-tab-v3-6-0", {
     "active": [516],
     "disabled": [516],
     "value": [513],
@@ -113,9 +113,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tab-v3-5-0"];
+  const components = ["wpp-tab-v3-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tab-v3-5-0":
+    case "wpp-tab-v3-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTab);
       }

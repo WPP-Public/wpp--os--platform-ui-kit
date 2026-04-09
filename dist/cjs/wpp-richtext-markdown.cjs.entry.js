@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const turndown_browser_es = require('./turndown.browser.es-40bb3069.js');
+const turndown_browser_es = require('./turndown.browser.es-eb372b89.js');
 
 const WppRichtextMarkdown = class {
   constructor(hostRef) {
@@ -19,9 +19,9 @@ const WppRichtextMarkdown = class {
     this.handleValueChange(this.value);
   }
   render() {
-    return (index.h(index.Host, null, index.h("wpp-quill-styles-v3-5-0", null), index.h("wpp-richtext-common-styles-v3-5-0", null), index.h("pre", { class: "richtext-markdown" }, this.markdown)));
+    return (index.h(index.Host, null, index.h("wpp-quill-styles-v3-6-0", null), index.h("wpp-richtext-common-styles-v3-6-0", null), index.h("pre", { class: "richtext-markdown" }, this.markdown)));
   }
-  static get registryIs() { return "wpp-richtext-markdown-v3-5-0"; }
+  static get registryIs() { return "wpp-richtext-markdown-v3-6-0"; }
   static get watchers() { return {
     "value": ["handleValueChange"]
   }; }

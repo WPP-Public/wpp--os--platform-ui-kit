@@ -16,6 +16,8 @@ import { ModalCloseDetails, ModalCloseReason, ModalFormConfig } from './types';
  */
 export declare class WppModal {
   private resizeObserver;
+  private topOffset;
+  private pendingTimeouts;
   host: HTMLWppModalElement;
   private dialogRef?;
   hasHeaderSlot: boolean;
@@ -47,6 +49,10 @@ export declare class WppModal {
    * Defines the z-index of the WppModal.
    */
   readonly zIndex: number;
+  /**
+   * If `true` - the modal will be rendered below the OS bar.
+   */
+  readonly osBarCompatible: boolean;
   /**
    * Contains the modal `aria-` props.
    */
@@ -90,6 +96,7 @@ export declare class WppModal {
   private setupObserver;
   private disconnectObserver;
   componentDidLoad(): void;
+  componentWillLoad(): void;
   disconnectedCallback(): void;
   private updateSlotData;
   private handleTransitionStart;

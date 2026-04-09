@@ -17,6 +17,8 @@ import { FullScreenModalCloseDetails, FullScreenModalCloseReason, FullScreenModa
 export declare class WppFullScreenModal {
   host: HTMLWppFullScreenModalElement;
   private dialogRef?;
+  private topOffset;
+  private pendingTimeouts;
   hasHeaderSlot: boolean;
   hasBodySlot: boolean;
   hasActionsSlot: boolean;
@@ -41,6 +43,10 @@ export declare class WppFullScreenModal {
    * Defines the z-index of the WppFullScreenModal.
    */
   readonly zIndex: number;
+  /**
+   * If `true` - the full-screen modal will be rendered below the OS bar.
+   */
+  readonly osBarCompatible: boolean;
   /**
    * Contains the modal `aria-` props.
    */
@@ -82,6 +88,7 @@ export declare class WppFullScreenModal {
   openFullScreenModal(): Promise<void>;
   private onOverlayClick;
   componentDidLoad(): void;
+  componentWillLoad(): void;
   disconnectedCallback(): void;
   private updateSlotData;
   private handleTransitionStart;

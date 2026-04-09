@@ -51,7 +51,7 @@ const suggestions = [
 export const Regular = {
   render: args => {
     const [value, setValue] = useState([]);
-    return html ` <wpp-autocomplete-v3-5-0
+    return html ` <wpp-autocomplete-v3-6-0
       .loading="${args.loading}"
       .disabled="${args.disabled}"
       .required="${args.required}"
@@ -80,7 +80,7 @@ export const Regular = {
     >
       <div slot="selected-values">
         ${value.map(selectedValue => html `
-            <wpp-pill-v3-5-0
+            <wpp-pill-v3-6-0
               label="${selectedValue.label}"
               value="${selectedValue.id}"
               removable="${true}"
@@ -88,22 +88,22 @@ export const Regular = {
               .maxLength="${20}"
               @wppClose="${() => setValue(value.filter(i => i.id !== selectedValue.id))}"
             >
-              <wpp-avatar-v3-5-0
+              <wpp-avatar-v3-6-0
                 name="${selectedValue.label}"
                 size="xs"
                 src="${selectedValue.url}"
                 slot="icon-start"
               />
-            </wpp-pill-v3-5-0>
+            </wpp-pill-v3-6-0>
           `)}
       </div>
       ${heroes.map(hero => html `
-          <wpp-list-item-v3-5-0 .value="${hero}">
-            <wpp-avatar-v3-5-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-5-0>
+          <wpp-list-item-v3-6-0 .value="${hero}">
+            <wpp-avatar-v3-6-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-6-0>
             <p slot="label">${hero.label}</p>
-          </wpp-list-item-v3-5-0>
+          </wpp-list-item-v3-6-0>
         `)}
-    </wpp-autocomplete-v3-5-0>`;
+    </wpp-autocomplete-v3-6-0>`;
   },
   args: {
     loading: false,
@@ -145,7 +145,7 @@ export const Regular = {
 export const Extended = {
   render: args => {
     const [value, setValue] = useState([]);
-    return html ` <wpp-autocomplete-v3-5-0
+    return html ` <wpp-autocomplete-v3-6-0
       style="--wpp-autocomplete-extended-selected-values-wrapper-padding: 2px 10px 10px 10px;"
       .loading="${args.loading}"
       .disabled="${args.disabled}"
@@ -174,7 +174,7 @@ export const Extended = {
     >
       <div slot="selected-values">
         ${value.map(selectedValue => html `
-            <wpp-pill-v3-5-0
+            <wpp-pill-v3-6-0
               label="${selectedValue.label}"
               value="${selectedValue.id}"
               disabled="${args.disabled}"
@@ -183,22 +183,22 @@ export const Extended = {
               .maxLength="${20}"
               @wppClose="${() => setValue(value.filter(i => i.id !== selectedValue.id))}"
             >
-              <wpp-avatar-v3-5-0
+              <wpp-avatar-v3-6-0
                 name="${selectedValue.label}"
                 size="xs"
                 src="${selectedValue.url}"
                 slot="icon-start"
               />
-            </wpp-pill-v3-5-0>
+            </wpp-pill-v3-6-0>
           `)}
       </div>
       ${heroes.map(hero => html `
-          <wpp-list-item-v3-5-0 .value="${hero}">
-            <wpp-avatar-v3-5-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-5-0>
+          <wpp-list-item-v3-6-0 .value="${hero}">
+            <wpp-avatar-v3-6-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-6-0>
             <p slot="label">${hero.label}</p>
-          </wpp-list-item-v3-5-0>
+          </wpp-list-item-v3-6-0>
         `)}
-    </wpp-autocomplete-v3-5-0>`;
+    </wpp-autocomplete-v3-6-0>`;
   },
   args: {
     loading: false,
@@ -368,7 +368,7 @@ const staticSuggestionWithSlots = [
 export const RegularSlotSuggestions = {
   render: args => {
     const [value, setValue] = useState([]);
-    return html ` <wpp-autocomplete-v3-5-0
+    return html ` <wpp-autocomplete-v3-6-0
       .loading="${args.loading}"
       .disabled="${args.disabled}"
       .required="${args.required}"
@@ -397,7 +397,7 @@ export const RegularSlotSuggestions = {
     >
       <div slot="selected-values">
         ${value.map(selectedValue => html `
-            <wpp-pill-v3-5-0
+            <wpp-pill-v3-6-0
               label="${selectedValue.label}"
               value="${selectedValue.id}"
               removable="${true}"
@@ -405,22 +405,22 @@ export const RegularSlotSuggestions = {
               .maxLength="${20}"
               @wppClose="${() => setValue(value.filter(i => i.id !== selectedValue.id))}"
             >
-              <wpp-avatar-v3-5-0
+              <wpp-avatar-v3-6-0
                 name="${selectedValue.label}"
                 size="xs"
                 src="${selectedValue.url}"
                 slot="icon-start"
               />
-            </wpp-pill-v3-5-0>
+            </wpp-pill-v3-6-0>
           `)}
       </div>
       ${heroes.map(hero => html `
-          <wpp-list-item-v3-5-0 .value="${hero}">
-            <wpp-avatar-v3-5-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-5-0>
+          <wpp-list-item-v3-6-0 .value="${hero}">
+            <wpp-avatar-v3-6-0 size="xs" src="${hero.url}" name="${hero.label}" slot="left"></wpp-avatar-v3-6-0>
             <p slot="label">${hero.label}</p>
-          </wpp-list-item-v3-5-0>
+          </wpp-list-item-v3-6-0>
         `)}
-    </wpp-autocomplete-v3-5-0>`;
+    </wpp-autocomplete-v3-6-0>`;
   },
   args: {
     loading: false,

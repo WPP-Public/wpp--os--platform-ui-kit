@@ -36,6 +36,8 @@ export interface SelectLocaleInterface {
   allSelectedText?: string;
   selectLabel?: string;
   loadingText?: string;
+  clearText?: string;
+  applyText?: string;
 }
 export type SelectLabelConfig = LabelConfig;
 export interface SelectChangeEventDetails {

@@ -43,6 +43,12 @@
   outline: none;
   color: var(--wpp-grey-color-1000);
   background-color: transparent;
+  font-size: var(--wpp-typography-s-body-font-size, 14px);
+  line-height: var(--wpp-typography-s-body-line-height, 22px);
+  font-weight: var(--wpp-typography-s-body-font-weight, 400);
+  color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
 }
 :host(.wpp-time-picker) #anchor #time-picker::placeholder {
   color: var(--wpp-grey-color-700);
@@ -103,10 +109,10 @@
   border-color: var(--wpp-warning-color-400);
 }
 :host(.wpp-time-picker) #anchor.size-s {
-  padding: 5px 10px;
+  padding: 4px 10px;
 }
 :host(.wpp-time-picker) #anchor.size-m {
-  padding: 9px 10px;
+  padding: 8px 10px;
 }
 :host(.wpp-time-picker) .wpp-inline-message {
   margin-top: 4px;

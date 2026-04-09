@@ -1,8 +1,8 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { i as isEqual_1 } from './isEqual-9c20096c.js';
+import { i as isEqual_1 } from './isEqual-b2086be1.js';
 import { m as menuListConfig } from './menuListConfig-4d091d14.js';
 import { Z as Z_INDEX } from './consts-9fc0a13a.js';
-import { w as getHighestContainerInDOM, b as isEventTargetContained, c as hasParentWithId } from './utils-3a5af594.js';
+import { w as getHighestContainerInDOM, b as isEventTargetContained, c as hasParentWithId } from './utils-f415b66e.js';
 import './_commonjsHelpers-ba3f0406.js';
 import './tippy.esm-c5fe8087.js';
 
@@ -171,9 +171,9 @@ const WppPopover = class {
     this.mutationObserver.observe(this.host?.children[0], { attributes: true });
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "anchor, trigger-element" }, h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref) }, h("slot", { name: "trigger-element", part: "trigger-element" })), h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-label": this.ariaProps.label, "aria-modal": "true" }, this.withSearch && (h("wpp-input-v3-5-0", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: this.locales.searchInputPlaceholder || DEFAULT_POPOVER_LOCALES.searchInputPlaceholder, type: "search", size: "m" })), !this.withSearch && this.closable && (h("wpp-action-button-v3-5-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, h("wpp-icon-cross-v3-5-0", { slot: "icon-end" }))), h("slot", null))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "anchor, trigger-element" }, h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref) }, h("slot", { name: "trigger-element", part: "trigger-element" })), h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-label": this.ariaProps.label, "aria-modal": "true" }, this.withSearch && (h("wpp-input-v3-6-0", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: this.locales.searchInputPlaceholder || DEFAULT_POPOVER_LOCALES.searchInputPlaceholder, type: "search", size: "m" })), !this.withSearch && this.closable && (h("wpp-action-button-v3-6-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, h("wpp-icon-cross-v3-6-0", { slot: "icon-end" }))), h("slot", null))));
   }
-  static get registryIs() { return "wpp-popover-v3-5-0"; }
+  static get registryIs() { return "wpp-popover-v3-6-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "config": ["updateConfig"]

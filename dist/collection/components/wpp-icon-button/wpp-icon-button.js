@@ -20,10 +20,10 @@ export class WppIconButton {
     console.warn('%cwpp-icon-button component is deprecated. Please, use wpp-action-button instead', 'color: black; font-size: 12px;');
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner" }, h("wpp-button-v3-5-0", { variant: "secondary", size: this.size, disabled: this.disabled, loading: this.loading, name: this.name, "data-testid": "wppIconButton", part: "wrapper" }, h("slot", { slot: "icon-start", part: "inner" }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner" }, h("wpp-button-v3-6-0", { variant: "secondary", size: this.size, disabled: this.disabled, loading: this.loading, name: this.name, "data-testid": "wppIconButton", part: "wrapper" }, h("slot", { slot: "icon-start", part: "inner" }))));
   }
   static get is() { return "wpp-icon-button"; }
-  static get registryIs() { return "wpp-icon-button-v3-5-0"; }
+  static get registryIs() { return "wpp-icon-button-v3-6-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

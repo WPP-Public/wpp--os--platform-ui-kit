@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const utils = require('./utils-27884b05.js');
+const utils = require('./utils-e1f17a8c.js');
 require('./consts-dba6e6dd.js');
 
 const wppStepperCss = ":host{display:block;min-width:70px}:host([orientation=horizontal]){position:relative;width:100%;overflow:hidden;--stepper-translate-position:var(--wpp-stepper-translate-position, 0)}:host([orientation=vertical]){--vertical-stepper-width:var(--wpp-vertical-stepper-width, 158px);width:var(--vertical-stepper-width)}.stepper{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start}.orientation-horizontal{-ms-flex-direction:row;flex-direction:row;width:9999px;-webkit-transform:translateX(var(--stepper-translate-position));transform:translateX(var(--stepper-translate-position));-webkit-transition:0.5s ease-in-out;transition:0.5s ease-in-out}.step-indicator{position:absolute;top:0;right:0;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:32px;height:24px;color:var(--wpp-grey-color-800);background-color:var(--wpp-grey-color-300);border-radius:24px;-webkit-transition:0.5s ease-in-out;transition:0.5s ease-in-out;font-size:var(--wpp-typography-xs-strong-font-size, 12px);line-height:var(--wpp-typography-xs-strong-line-height, 20px);font-weight:var(--wpp-typography-xs-strong-font-weight, 700);color:var(--wpp-typography-xs-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-xs-strong-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-xs-strong-letter-spacing, 0)}.step-indicator.hide{visibility:hidden;opacity:0}";
@@ -424,7 +424,7 @@ const WppStepper = class {
     const isHorizontalOrientation = this.orientation === 'horizontal';
     return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, indicator" }, index.h("div", { class: this.stepperWrapperCssClasses(), part: "wrapper" }, index.h("slot", { part: "inner" })), isHorizontalOrientation && this.stepAmount ? (index.h("div", { class: { 'step-indicator': true, hide: this.stepIndicator <= 0 }, part: "indicator" }, "+", this.stepIndicator || 1)) : null));
   }
-  static get registryIs() { return "wpp-stepper-v3-5-0"; }
+  static get registryIs() { return "wpp-stepper-v3-6-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "activeStep": ["watchActiveStep"]

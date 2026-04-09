@@ -173,6 +173,8 @@ const WppMenuContext = /*@__PURE__*/ proxyCustomElement(class WppMenuContext ext
     this.ariaProps = {};
   }
   handleClick(event) {
+    if (!this.tippyInstance?.state.isVisible)
+      return;
     // NOTE: our wppChangeListItem listener is called when ListItems are used in Select or Autocomplete.
     // This should be treated as hotfix until we move all our dropdowns to the document.body
     // or find other proper solution
@@ -261,14 +263,14 @@ const WppMenuContext = /*@__PURE__*/ proxyCustomElement(class WppMenuContext ext
     };
     return (h(Host, { class: this.menuCssClasses(), exportparts: "trigger, list-wrapper, list, inner", onFocusout: this.onFocusout }, h("div", { ref: this.getTriggerRef, onClick: this.handleClickTrigger, class: this.triggerWrapperCssClasses() }, h("slot", { name: "trigger-element", part: "trigger" })), h("div", { class: "wpp-list-wrapper", part: "list-wrapper", ref: ref => (this.wppListWrapperRef = ref) }, h("ul", { class: this.listWrapperCssClasses(), style: style, ref: this.getContentRef, role: MENU_ROLE, part: "list" }, h("slot", { part: "inner" })))));
   }
-  static get registryIs() { return "wpp-menu-context-v3-5-0"; }
+  static get registryIs() { return "wpp-menu-context-v3-6-0"; }
   get host() { return this; }
   static get watchers() { return {
     "dropdownConfig": ["updateDropdownConfig"],
     "isInComponent": ["updateIsInComponent"]
   }; }
   static get style() { return wppMenuContextCss; }
-}, [6, "wpp-menu-context", "wpp-menu-context-v3-5-0", {
+}, [6, "wpp-menu-context", "wpp-menu-context-v3-6-0", {
     "listWidth": [513, "list-width"],
     "dropdownConfig": [1040],
     "appendToListWrapper": [4, "append-to-list-wrapper"],
@@ -284,9 +286,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-menu-context-v3-5-0"];
+  const components = ["wpp-menu-context-v3-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-menu-context-v3-5-0":
+    case "wpp-menu-context-v3-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppMenuContext);
       }

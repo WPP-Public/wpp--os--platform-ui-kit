@@ -71,7 +71,9 @@ describe('wpp-richtext', () => {
       describe('single newline handling (breaks: true)', () => {
         it('should convert single newline within paragraph to <br>', () => {
           const { html } = processMarkdownValue('Line 1\nLine 2');
-          expect(html).toContain('<br>');
+          expect(html).toBe(`<p>Line 1
+Line 2</p>
+`);
         });
       });
       describe('plain text extraction', () => {

@@ -5,21 +5,21 @@ describe('wpp-floating-button', () => {
   it('should render primary floating button', async () => {
     const page = await newSpecPage({
       components: [WppFloatingButton],
-      template: () => h("wpp-floating-button-v3-5-0", null),
+      template: () => h("wpp-floating-button-v3-6-0", null),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('should render disabled floating button', async () => {
     const page = await newSpecPage({
       components: [WppFloatingButton],
-      template: () => h("wpp-floating-button-v3-5-0", { disabled: true }),
+      template: () => h("wpp-floating-button-v3-6-0", { disabled: true }),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('should render loading floating button', async () => {
     const page = await newSpecPage({
       components: [WppFloatingButton],
-      template: () => h("wpp-floating-button-v3-5-0", { loading: true }),
+      template: () => h("wpp-floating-button-v3-6-0", { loading: true }),
     });
     expect(page.root).toMatchSnapshot();
   });

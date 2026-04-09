@@ -10,29 +10,29 @@ const WppRichtextHtml$1 = /*@__PURE__*/ proxyCustomElement(class WppRichtextHtml
   }
   render() {
     const classes = `ql-container ql-wpp quill-view-html`;
-    return (h(Host, null, h("wpp-quill-styles-v3-5-0", null), h("wpp-richtext-common-styles-v3-5-0", null), h("div", { class: classes, "data-testid": "richtext-editor-container" }, h("div", { class: "ql-editor", innerHTML: this.value, "data-testid": "richtext-editor" }))));
+    return (h(Host, null, h("wpp-quill-styles-v3-6-0", null), h("wpp-richtext-common-styles-v3-6-0", null), h("div", { class: classes, "data-testid": "richtext-editor-container" }, h("div", { class: "ql-editor", innerHTML: this.value, "data-testid": "richtext-editor" }))));
   }
-  static get registryIs() { return "wpp-richtext-html-v3-5-0"; }
-}, [0, "wpp-richtext-html", "wpp-richtext-html-v3-5-0", {
+  static get registryIs() { return "wpp-richtext-html-v3-6-0"; }
+}, [0, "wpp-richtext-html", "wpp-richtext-html-v3-6-0", {
     "value": [1025]
   }]);
 function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-richtext-html-v3-5-0", "wpp-quill-styles-v3-5-0", "wpp-richtext-common-styles-v3-5-0"];
+  const components = ["wpp-richtext-html-v3-6-0", "wpp-quill-styles-v3-6-0", "wpp-richtext-common-styles-v3-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-richtext-html-v3-5-0":
+    case "wpp-richtext-html-v3-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppRichtextHtml$1);
       }
       break;
-    case "wpp-quill-styles-v3-5-0":
+    case "wpp-quill-styles-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-richtext-common-styles-v3-5-0":
+    case "wpp-richtext-common-styles-v3-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

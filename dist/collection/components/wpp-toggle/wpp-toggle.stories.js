@@ -17,7 +17,7 @@ export default {
     control: { type: 'boolean' },
   },
 };
-export const NoLabel = (args) => html ` <wpp-toggle-v3-5-0
+export const NoLabel = (args) => html ` <wpp-toggle-v3-6-0
     @wppChange="${(event) => console.log('wppChange => ', event.detail.value)}"
     .name="${args.name}"
     .value="${args.value}"
@@ -32,7 +32,7 @@ NoLabel.args = {
   checked: false,
   ariaProps: { label: 'Contact method' },
 };
-export const WithLabel = (args) => html ` <wpp-toggle-v3-5-0
+export const WithLabel = (args) => html ` <wpp-toggle-v3-6-0
     @wppChange="${(event) => console.log('wppChange => ', event.detail.value)}"
     .name="${args.name}"
     .value="${args.value}"

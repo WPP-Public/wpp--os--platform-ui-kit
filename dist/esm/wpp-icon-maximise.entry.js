@@ -19,7 +19,7 @@ const WppIconMaximise = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-maximise", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: MaximiseDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-maximise-v3-5-0"; }
+  static get registryIs() { return "wpp-icon-maximise-v3-6-0"; }
 };
 WppIconMaximise.style = wppIconCss;
 

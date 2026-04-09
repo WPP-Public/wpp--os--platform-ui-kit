@@ -38,7 +38,7 @@ export default {
   },
 };
 export const Counter = {
-  render: args => html ` <wpp-counter-v3-5-0
+  render: args => html ` <wpp-counter-v3-6-0
       .name="${args.name}"
       .value="${args.value}"
       .placeholder="${args.placeholder}"
@@ -52,7 +52,7 @@ export const Counter = {
       .labelConfig="${args.labelConfig}"
       .withButtons="${args.withButtons}"
     >
-    </wpp-counter-v3-5-0>`,
+    </wpp-counter-v3-6-0>`,
   args: {
     name: 'counter',
     value: 1,
@@ -75,7 +75,7 @@ export const Counter = {
   },
 };
 export const Placeholder = {
-  render: args => html ` <wpp-counter-v3-5-0
+  render: args => html ` <wpp-counter-v3-6-0
       .name="${args.name}"
       .value="${args.value}"
       .placeholder="${args.placeholder}"
@@ -89,7 +89,7 @@ export const Placeholder = {
       .labelConfig="${args.labelConfig}"
       .withButtons="${false}"
     >
-    </wpp-counter-v3-5-0>`,
+    </wpp-counter-v3-6-0>`,
   args: {
     name: 'counter-placeholder',
     value: undefined,

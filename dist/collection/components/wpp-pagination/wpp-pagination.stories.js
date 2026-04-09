@@ -16,7 +16,7 @@ export default {
     selectedItemPerPage: { type: 'number' },
   },
 };
-export const Pagination = (args) => html `<wpp-pagination-v3-5-0
+export const Pagination = (args) => html `<wpp-pagination-v3-6-0
     .selectedItemPerPage="${args.selectedItemPerPage}"
     .count="${args.count}"
     .itemsPerPage="${args.itemsPerPage}"

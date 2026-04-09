@@ -23,10 +23,10 @@ export default {
 export const StickyBar = (args) => html `
     <div class="wpp" style="position: sticky; top: 0; z-index: 900; height: 63px; background-color: #ffffff; border-bottom: 1px solid black">
       <header style="height: 100%">
-        <wpp-typography-v3-5-0 type="2xl-heading">OS-bar</wpp-typography-v3-5-0>
+        <wpp-typography-v3-6-0 type="2xl-heading">OS-bar</wpp-typography-v3-6-0>
       </header>
     </div>
-    <wpp-sticky-bar-v3-5-0
+    <wpp-sticky-bar-v3-6-0
       .variant=${args.variant}
       .barTitle=${args.barTitle}
       .withBackButton=${args.withBackButton}
@@ -34,10 +34,10 @@ export const StickyBar = (args) => html `
       .buttons=${args.buttons}
       .tabs=${args.tabs}
       .offsetFromTop=${args.offsetFromTop}
-    ></wpp-sticky-bar-v3-5-0>
+    ></wpp-sticky-bar-v3-6-0>
     <div style="width: 100%; height: 1400px; display: flex; flex-direction: column; align-items: center; padding: 50px; box-sizing: border-box">
         <div style="width: 70%; height: 100%; display: flex; align-items: center; flex-direction: column; box-sizing: border-box; padding: 50px; background: rgb(173 216 230); border: 4px dashed gray; border-radius: 50px; opacity: 0.5">
-            <wpp-typography-v3-5-0 type="2xl-heading">Additional space on page</wpp-typography-v3-5-0>
+            <wpp-typography-v3-6-0 type="2xl-heading">Additional space on page</wpp-typography-v3-6-0>
         </div>
     </<div>
 

@@ -17,7 +17,7 @@ export default {
   },
 };
 export const NoLabel = {
-  render: args => html ` <wpp-checkbox-v3-5-0
+  render: args => html ` <wpp-checkbox-v3-6-0
       @click="${() => console.log('checkbox clicked')}"
       .disabled="${args.disabled}"
       .checked="${args.checked}"
@@ -25,7 +25,7 @@ export const NoLabel = {
       .name="${args.name}"
       .message="${args.message}"
       .messageType="${args.messageType}"
-    ></wpp-checkbox-v3-5-0>`,
+    ></wpp-checkbox-v3-6-0>`,
   args: {
     disabled: false,
     checked: false,
@@ -35,7 +35,7 @@ export const NoLabel = {
   },
 };
 export const WithLabel = {
-  render: args => html ` <wpp-checkbox-v3-5-0
+  render: args => html ` <wpp-checkbox-v3-6-0
       @click="${() => console.log('checkbox clicked')}"
       .disabled="${args.disabled}"
       .checked="${args.checked}"
@@ -45,7 +45,7 @@ export const WithLabel = {
       .message="${args.message}"
       .messageType="${args.messageType}"
       .labelConfig="${args.labelConfig}"
-    ></wpp-checkbox-v3-5-0>`,
+    ></wpp-checkbox-v3-6-0>`,
   args: {
     disabled: false,
     checked: false,

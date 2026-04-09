@@ -41,7 +41,7 @@ export const Breadcrumbs = {
       ? `Back button mode: "${args.backBtnLabel}"`
       : 'Breadcrumb mode (clear backBtnLabel to switch to back button)'}
         </p>
-        <wpp-breadcrumb-v3-5-0
+        <wpp-breadcrumb-v3-6-0
           .items="${args.backBtnLabel ? undefined : args.items}"
           .maxLabelLength="${args.backBtnLabel ? undefined : args.maxLabelLength}"
           .middleTruncation="${args.backBtnLabel ? undefined : args.middleTruncation}"

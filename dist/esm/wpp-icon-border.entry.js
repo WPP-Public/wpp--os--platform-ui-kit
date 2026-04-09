@@ -22,7 +22,7 @@ const WppIconBorder = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-border", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: BorderDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-border-v3-5-0"; }
+  static get registryIs() { return "wpp-icon-border-v3-6-0"; }
 };
 WppIconBorder.style = wppIconCss;
 

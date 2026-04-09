@@ -39,7 +39,7 @@ describe('wpp-avatar-group', () => {
     ];
     const page = await newSpecPage({
       components: [WppAvatarGroup],
-      template: () => h("wpp-avatar-group-v3-5-0", { avatars: avatars }),
+      template: () => h("wpp-avatar-group-v3-6-0", { avatars: avatars }),
     });
     expect(page.root).toMatchSnapshot();
   });
