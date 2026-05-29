@@ -516,3 +516,10 @@
 :host(.wpp-horizontal) .step-wrapper.completed.active .step-index.active.completed {
   background-color: var(--step-horizontal-text-color-active);
 }
+
+:host([data-wpp-theme=dark]) {
+  --step-horizontal-text-wrapper-bg-color-active: var(--wpp-primary-color-300);
+  --step-horizontal-text-color-active: var(--wpp-primary-color-800);
+  --step-vertical-bg-color-active: var(--wpp-primary-color-300);
+  --step-vertical-text-color-active: var(--wpp-primary-color-800);
+}

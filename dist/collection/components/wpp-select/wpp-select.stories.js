@@ -135,7 +135,7 @@ export const Single = (args) => {
       updatedEl.value = selectedValue;
   };
   return html `
-    <wpp-select-v4-0-0
+    <wpp-select-v4-1-0
       type="single"
       name="single-select"
       .message=${args.message}
@@ -157,16 +157,16 @@ export const Single = (args) => {
     >
       ${args.showIconStart
     ? html `
-            <wpp-icon-clock-v4-0-0
+            <wpp-icon-clock-v4-1-0
               slot="icon-start"
               @click="${(e) => {
       e.stopPropagation();
       console.log('Left icon clicked');
     }}"
-            ></wpp-icon-clock-v4-0-0>
+            ></wpp-icon-clock-v4-1-0>
           `
     : null}
-    </wpp-select-v4-0-0>
+    </wpp-select-v4-1-0>
   `;
 };
 Single.args = {
@@ -205,7 +205,7 @@ export const Multiple = (args) => {
     console.log('Apply clicked — selection confirmed');
   };
   return html `
-    <wpp-select-v4-0-0
+    <wpp-select-v4-1-0
       type="multiple"
       name="multiple-select"
       .message=${args.message}
@@ -231,16 +231,16 @@ export const Multiple = (args) => {
     >
       ${args.showIconStart
     ? html `
-            <wpp-icon-clock-v4-0-0
+            <wpp-icon-clock-v4-1-0
               slot="icon-start"
               @click="${(e) => {
       e.stopPropagation();
       console.log('Left icon clicked');
     }}"
-            ></wpp-icon-clock-v4-0-0>
+            ></wpp-icon-clock-v4-1-0>
           `
     : null}
-    </wpp-select-v4-0-0>
+    </wpp-select-v4-1-0>
   `;
 };
 Multiple.args = {
@@ -268,6 +268,43 @@ Multiple.args = {
 };
 Multiple.parameters = {
   controls: { exclude: ['placeholder'] },
+};
+export const BorderOnlyValidationState = () => html `
+  <div style="display: flex; flex-direction: column; gap: 24px; width: 320px;">
+    <wpp-select-v4-1-0
+      type="single"
+      name="single-border-only-warning"
+      .labelConfig=${{ text: 'Single warning border only' }}
+      .placeholder=${'Choose option'}
+      .messageType=${'warning'}
+      .list=${getList('single')}
+      .value=${null}
+    ></wpp-select-v4-1-0>
+
+    <wpp-select-v4-1-0
+      type="multiple"
+      name="multiple-border-only-error"
+      .labelConfig=${{ text: 'Multiple error border only' }}
+      .placeholder=${'Choose option'}
+      .messageType=${'error'}
+      .messageInTooltip=${true}
+      .list=${getList('multiple')}
+      .value=${[]}
+    ></wpp-select-v4-1-0>
+
+    <wpp-select-v4-1-0
+      type="combined"
+      name="combined-border-only-warning"
+      .labelConfig=${{ text: 'Combined warning border only' }}
+      .placeholder=${'Choose option'}
+      .messageType=${'warning'}
+      .list=${getList('single')}
+      .value=${null}
+    ></wpp-select-v4-1-0>
+  </div>
+`;
+BorderOnlyValidationState.parameters = {
+  controls: { hideNoControlsWarning: true },
 };
 const LIST_TEXT = [
   {
@@ -358,28 +395,28 @@ export const Text = (args) => {
       }
     </style>
     <div style="width: 300px;">
-      <wpp-menu-context-v4-0-0 .dropdownConfig=${dropdownConfig}>
-        <wpp-action-button-v4-0-0
+      <wpp-menu-context-v4-1-0 .dropdownConfig=${dropdownConfig}>
+        <wpp-action-button-v4-1-0
           id="text-select-trigger"
           slot="trigger-element"
           variant="secondary"
           .disabled="${args.disabled}"
         >
           ${selectedValue || args.placeholder}
-          <wpp-icon-chevron-v4-0-0 id="text-select-chevron" slot="icon-end" direction="down"></wpp-icon-chevron-v4-0-0>
-        </wpp-action-button-v4-0-0>
+          <wpp-icon-chevron-v4-1-0 id="text-select-chevron" slot="icon-end" direction="down"></wpp-icon-chevron-v4-1-0>
+        </wpp-action-button-v4-1-0>
         <div>
           ${LIST_TEXT.map(item => html `
-              <wpp-list-item-v4-0-0
+              <wpp-list-item-v4-1-0
                 class="text-select-item"
                 .checked=${item.label === selectedValue}
                 @wppChangeListItem=${() => handleListItemChange(item)}
               >
                 <span slot="label">${item.label}</span>
-              </wpp-list-item-v4-0-0>
+              </wpp-list-item-v4-1-0>
             `)}
         </div>
-      </wpp-menu-context-v4-0-0>
+      </wpp-menu-context-v4-1-0>
     </div>
   `;
 };
@@ -403,21 +440,21 @@ export const ButtonAnchor = (args) => {
   const renderAnchor = () => {
     switch (args.anchorComponent) {
       case 'WppActionButton':
-        return html ` <wpp-action-button-v4-0-0 slot="anchor-button"> ${args.anchorLabel} </wpp-action-button-v4-0-0> `;
+        return html ` <wpp-action-button-v4-1-0 slot="anchor-button"> ${args.anchorLabel} </wpp-action-button-v4-1-0> `;
       case 'WppActionButtonWithIcon':
         return html `
-          <wpp-action-button-v4-0-0 slot="anchor-button">
-            <wpp-icon-plus-v4-0-0 slot="icon-start"></wpp-icon-plus-v4-0-0>
+          <wpp-action-button-v4-1-0 slot="anchor-button">
+            <wpp-icon-plus-v4-1-0 slot="icon-start"></wpp-icon-plus-v4-1-0>
             ${args.anchorLabel}
-          </wpp-action-button-v4-0-0>
+          </wpp-action-button-v4-1-0>
         `;
       case 'WppButton':
       default:
-        return html ` <wpp-button-v4-0-0 slot="anchor-button"> ${args.anchorLabel} </wpp-button-v4-0-0> `;
+        return html ` <wpp-button-v4-1-0 slot="anchor-button"> ${args.anchorLabel} </wpp-button-v4-1-0> `;
     }
   };
   return html `
-    <wpp-select-v4-0-0
+    <wpp-select-v4-1-0
       id="button-anchor-select"
       type="single"
       name="button-anchor-select"
@@ -441,15 +478,15 @@ export const ButtonAnchor = (args) => {
       ${renderAnchor()}
       ${args.showIconStart
     ? html `
-            <wpp-icon-clock-v4-0-0
+            <wpp-icon-clock-v4-1-0
               slot="icon-start"
               @click="${(e) => {
       e.stopPropagation();
     }}"
-            ></wpp-icon-clock-v4-0-0>
+            ></wpp-icon-clock-v4-1-0>
           `
     : null}
-    </wpp-select-v4-0-0>
+    </wpp-select-v4-1-0>
   `;
 };
 ButtonAnchor.args = {

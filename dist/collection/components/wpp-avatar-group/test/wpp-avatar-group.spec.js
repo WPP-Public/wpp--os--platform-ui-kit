@@ -39,7 +39,7 @@ describe('wpp-avatar-group', () => {
     ];
     const page = await newSpecPage({
       components: [WppAvatarGroup],
-      template: () => h("wpp-avatar-group-v4-0-0", { avatars: avatars }),
+      template: () => h("wpp-avatar-group-v4-1-0", { avatars: avatars }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -253,7 +253,7 @@ describe('wpp-avatar-group', () => {
       ];
       const page = await newSpecPage({
         components: [WppAvatarGroup],
-        template: () => h("wpp-avatar-group-v4-0-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
+        template: () => h("wpp-avatar-group-v4-1-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
       });
       await page.waitForChanges();
       const listItemC = page.root?.shadowRoot?.querySelector('wpp-list-item[value="C"]');
@@ -274,7 +274,7 @@ describe('wpp-avatar-group', () => {
       ];
       const page = await newSpecPage({
         components: [WppAvatarGroup],
-        template: () => h("wpp-avatar-group-v4-0-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
+        template: () => h("wpp-avatar-group-v4-1-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
       });
       await page.waitForChanges();
       const listItemC = page.root?.shadowRoot?.querySelector('wpp-list-item[value="C"]');
@@ -295,7 +295,7 @@ describe('wpp-avatar-group', () => {
       ];
       const page = await newSpecPage({
         components: [WppAvatarGroup],
-        template: () => h("wpp-avatar-group-v4-0-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
+        template: () => h("wpp-avatar-group-v4-1-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
       });
       await page.waitForChanges();
       const listItemC = page.root?.shadowRoot?.querySelector('wpp-list-item[value="C"]');

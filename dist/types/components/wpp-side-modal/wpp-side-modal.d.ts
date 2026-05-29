@@ -24,7 +24,8 @@ export declare class WppSideModal {
   private topOffset;
   private ignoreOutsideClicks;
   private _locales;
-  private pendingTimeouts;
+  private timeouts;
+  private themeSubscription;
   host: HTMLWppSideModalElement;
   private dialogRef?;
   isShowContent: boolean;
@@ -128,6 +129,7 @@ export declare class WppSideModal {
   private onOverlayClick;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  connectedCallback(): void;
   disconnectedCallback(): void;
   private handleScroll;
   private updateSlotData;

@@ -1,6 +1,6 @@
 import { html } from 'lit-html';
-import { debugLevels, formats, } from './types';
-// @ts-ignore Can't find file
+import { formats } from './types';
+// @ts-ignore Vite raw import
 import value from './test/test-value.html?raw';
 export default {
   title: 'Design System/Components/Selection and input/Rich Text',
@@ -11,12 +11,7 @@ export default {
       },
     },
   },
-  argTypes: {
-    debug: {
-      options: Object.values(debugLevels),
-      control: { type: 'select' },
-    },
-  },
+  argTypes: {},
   options: {
     storySort: {
       order: ['Editor', 'View', '*'],
@@ -86,7 +81,7 @@ const uploadRequestHandler = {
  */
 export const Editor = {
   render: (args) => html `
-    <wpp-richtext-v4-0-0
+    <wpp-richtext-v4-1-0
       @wppChange="${changeHandler}"
       @wppSelectionChange="${selectionChangeHandler}"
       @wppUploadRequest="${uploadRequestHandler}"
@@ -95,7 +90,6 @@ export const Editor = {
       .placeholder=${args.placeholder}
       .modules=${args.modules}
       .format=${args.format}
-      .debug=${args.debug}
       .disabled=${args.disabled}
       .required=${args.required}
       .labelConfig="${args.labelConfig}"
@@ -106,13 +100,12 @@ export const Editor = {
       warning-threshold="${args.warningThreshold}"
       style="width: 900px; height: 600px"
       class="custom-class-1"
-    ></wpp-richtext-v4-0-0>
+    ></wpp-richtext-v4-1-0>
   `,
   args: {
     name: 'content',
     placeholder: 'Insert text here...',
     format: formats.markdown,
-    debug: debugLevels.warn,
     modules,
     disabled: false,
     required: false,
@@ -164,7 +157,7 @@ export const View = {
       },
     };
     return html `
-      <wpp-richtext-v4-0-0
+      <wpp-richtext-v4-1-0
         @wppChange="${liveChangeHandler}"
         @wppSelectionChange="${selectionChangeHandler}"
         @wppUploadRequest="${uploadRequestHandler}"
@@ -173,7 +166,6 @@ export const View = {
         .placeholder=${args.placeholder}
         .modules=${args.modules}
         .format=${args.format}
-        .debug=${args.debug}
         .disabled=${args.disabled}
         .required=${args.required}
         .labelConfig="${args.labelConfig}"
@@ -184,22 +176,21 @@ export const View = {
         warning-threshold="${args.warningThreshold}"
         style="width: 900px; height: 300px"
         class="custom-class-1"
-      ></wpp-richtext-v4-0-0>
+      ></wpp-richtext-v4-1-0>
 
-      <wpp-typography-v4-0-0 type="m-strong">Markdown view with preserve whitespace</wpp-typography-v4-0-0>
+      <wpp-typography-v4-1-0 type="m-strong">Markdown view with preserve whitespace</wpp-typography-v4-1-0>
 
-      <wpp-richtext-view-v4-0-0
+      <wpp-richtext-view-v4-1-0
         .value=${value}
         .format=${args.format}
         .name="markdownContent"
-      ></wpp-richtext-view-v4-0-0>
+      ></wpp-richtext-view-v4-1-0>
     `;
   },
   args: {
     name: 'markdownContent',
     placeholder: 'Insert text here...',
     format: formats.markdown,
-    debug: debugLevels.warn,
     modules,
     disabled: false,
     required: false,

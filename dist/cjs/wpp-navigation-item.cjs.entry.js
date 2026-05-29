@@ -29,10 +29,10 @@ const WppNavigationItem = class {
       'wpp-navigation-item': true,
       'wpp-list-item-wrapper': this.nestedItem,
     });
-    this.linkItem = () => (index.h("a", { href: this.path, class: "link", onClick: this.onClick, tabIndex: -1 }, index.h("div", { class: this.navItemCssClasses() }, index.h("wpp-typography-v4-0-0", { type: this.nestedItem ? 's-body' : 's-midi', class: { 'label-text': true, 'nested-text': this.nestedItem } }, this.label))));
+    this.linkItem = () => (index.h("a", { href: this.path, class: "link", onClick: this.onClick, tabIndex: -1 }, index.h("div", { class: this.navItemCssClasses() }, index.h("wpp-typography-v4-1-0", { type: this.nestedItem ? 's-body' : 's-midi', class: { 'label-text': true, 'nested-text': this.nestedItem } }, this.label))));
     this.listItem = () => (index.h("li", { class: "list-item", part: "list-item" }, this.linkItem()));
-    this.menuItem = () => (index.h("div", { class: this.navItemCssClasses() }, index.h("wpp-icon-more-v4-0-0", { direction: "horizontal", class: "menu-icon" })));
-    this.extendedItem = () => (index.h("div", { class: this.navItemCssClasses() }, !this.chevronOnly && (index.h("wpp-typography-v4-0-0", { type: "s-midi", class: "label-text" }, this.label)), index.h("wpp-icon-chevron-v4-0-0", { direction: "down", color: "var(--wpp-grey-color-600)", class: "chevron-icon", part: "chevron-icon" })));
+    this.menuItem = () => (index.h("div", { class: this.navItemCssClasses() }, index.h("wpp-icon-more-v4-1-0", { direction: "horizontal", class: "menu-icon" })));
+    this.extendedItem = () => (index.h("div", { class: this.navItemCssClasses() }, !this.chevronOnly && (index.h("wpp-typography-v4-1-0", { type: "s-midi", class: "label-text" }, this.label)), index.h("wpp-icon-chevron-v4-1-0", { direction: "down", color: "var(--wpp-grey-color-600)", class: "chevron-icon", part: "chevron-icon" })));
     this.renderItem = () => {
       if (this.menu) {
         return this.menuItem();
@@ -59,7 +59,7 @@ const WppNavigationItem = class {
   render() {
     return (index.h(index.Host, { class: this.hostCssClasses(), role: this.extended ? constants.MENU_BAR_ROLE : constants.CONTEXT_ITEM_TAG, tabIndex: 0, exportparts: "list-item, chevron-icon" }, this.renderItem()));
   }
-  static get registryIs() { return "wpp-navigation-item-v4-0-0"; }
+  static get registryIs() { return "wpp-navigation-item-v4-1-0"; }
 };
 WppNavigationItem.style = wppNavigationItemCss;
 

@@ -120,3 +120,7 @@
   opacity: 1;
   pointer-events: initial;
 }
+
+:host([data-wpp-theme=dark]) .nav-sidebar {
+  background-color: var(--wpp-grey-color-100);
+}

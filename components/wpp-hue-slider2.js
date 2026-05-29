@@ -84,13 +84,13 @@ const HueSlider = /*@__PURE__*/ proxyCustomElement(class HueSlider extends HTMLE
         left: `${this.markerPosition}px`,
       } }))));
   }
-  static get registryIs() { return "wpp-hue-slider-v4-0-0"; }
+  static get registryIs() { return "wpp-hue-slider-v4-1-0"; }
   get host() { return this; }
   static get watchers() { return {
     "hue": ["updateHue"]
   }; }
   static get style() { return wppHueSliderCss; }
-}, [1, "wpp-hue-slider", "wpp-hue-slider-v4-0-0", {
+}, [1, "wpp-hue-slider", "wpp-hue-slider-v4-1-0", {
     "hue": [2],
     "markerPosition": [32]
   }]);
@@ -98,9 +98,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-hue-slider-v4-0-0"];
+  const components = ["wpp-hue-slider-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-hue-slider-v4-0-0":
+    case "wpp-hue-slider-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, HueSlider);
       }

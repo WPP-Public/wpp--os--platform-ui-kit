@@ -1,4 +1,5 @@
 import { BaseFormControlEventDetail } from '../../interfaces/base-form-control-event-detail';
+import { AriaProps } from '../../types/common';
 import { LabelConfig } from '../wpp-label/types';
 export type SegmentedControlItemSize = 'm' | 's';
 export type SegmentedControlValue = string | number;
@@ -11,3 +12,12 @@ export interface SegmentedControlItemChangeEventDetail {
   value: string | number;
 }
 export type SegmentedControlLabelConfig = LabelConfig;
+export type WppSegmentedControlAriaProps = {
+  tablist?: Pick<AriaProps, 'label' | 'labelledby'>;
+};
+export type WppSegmentedControlItemAriaProps = {
+  tab?: Pick<AriaProps, 'label' | 'describedby' | 'controls'>;
+};
+export interface SegmentedControlLocaleInterface {
+  tablistLabel?: string;
+}

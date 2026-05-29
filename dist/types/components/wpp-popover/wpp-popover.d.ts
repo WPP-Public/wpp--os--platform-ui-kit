@@ -15,6 +15,7 @@ export declare class WppPopover {
   private tippyInstance;
   private internalSearchName;
   private searchInputEl?;
+  private themeSubscription;
   hidden: boolean;
   host: HTMLWppPopoverElement;
   /**

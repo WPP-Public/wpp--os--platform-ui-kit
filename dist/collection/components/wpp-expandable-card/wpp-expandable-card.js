@@ -1,5 +1,6 @@
 import { h, Host } from '@stencil/core';
 import { getSlotEmptyStates } from '../../utils/utils';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
  * @slot - Content that is placed inside the card. The default slot, without the name attribute.
  * @slot header - Content that is placed inside the header section.
@@ -11,6 +12,7 @@ import { getSlotEmptyStates } from '../../utils/utils';
  */
 export class WppExpandableCard {
   constructor() {
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.updateSlotData = () => {
       const emptyStates = getSlotEmptyStates(this.host.childNodes, {
         actions: '[slot="actions"]',
@@ -43,11 +45,17 @@ export class WppExpandableCard {
       this.isExpanded = true;
     this.updateSlotData();
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
+  disconnectedCallback() {
+    this.themeSubscription.stop();
+  }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "expandable-card-body, accordion, section, title, icon, counter, divider, title-wrapper" }, h("div", { class: "body-container", part: "expandable-card-body" }, h("wpp-accordion-v4-0-0", { size: this.size, expanded: this.isExpanded, expandedByDefault: this.expandedByDefault, withDivider: false, onWppChange: this.onChange, part: "accordion" }, h("slot", null), h("slot", { name: "header", slot: "header", class: "header" }), h("slot", { name: "actions", slot: "actions", class: "actions" })))));
+    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "expandable-card-body, accordion, section, title, icon, counter, divider, title-wrapper" }, h("div", { class: "body-container", part: "expandable-card-body" }, h("wpp-accordion-v4-1-0", { size: this.size, expanded: this.isExpanded, expandedByDefault: this.expandedByDefault, withDivider: false, onWppChange: this.onChange, part: "accordion" }, h("slot", null), h("slot", { name: "header", slot: "header", class: "header" }), h("slot", { name: "actions", slot: "actions", class: "actions" })))));
   }
   static get is() { return "wpp-expandable-card"; }
-  static get registryIs() { return "wpp-expandable-card-v4-0-0"; }
+  static get registryIs() { return "wpp-expandable-card-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

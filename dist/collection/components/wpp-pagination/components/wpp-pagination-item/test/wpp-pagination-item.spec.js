@@ -1,6 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { WppPaginationItem } from '../wpp-pagination-item';
 import { FOCUS_TYPE } from '../../../../../types/common';
+import * as themeUtils from '../../../../../utils/subscribe-to-theme';
 describe('wpp-pagination-item', () => {
   it('renders component', async () => {
     const page = await newSpecPage({
@@ -52,5 +53,35 @@ describe('wpp-pagination-item', () => {
     page.root.dispatchEvent(new FocusEvent('blur'));
     await page.waitForChanges();
     expect(instance.focusType).toBe(FOCUS_TYPE.NONE);
+  });
+  describe('subscribing to theme changes', () => {
+    let mockStart;
+    let mockStop;
+    beforeEach(() => {
+      mockStart = jest.fn();
+      mockStop = jest.fn();
+      jest.spyOn(themeUtils, 'themeSubscriptionController').mockReturnValue({
+        start: mockStart,
+        stop: mockStop,
+      });
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
+      await newSpecPage({
+        components: [WppPaginationItem],
+        html: `<wpp-pagination-item number="1"></wpp-pagination-item>`,
+      });
+      expect(mockStart).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
+      const page = await newSpecPage({
+        components: [WppPaginationItem],
+        html: `<wpp-pagination-item number="1"></wpp-pagination-item>`,
+      });
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
+    });
   });
 });

@@ -435,3 +435,29 @@
   text-decoration: var(--wpp-list-item-caption-text-decoration) !important;
   color: var(--wpp-list-item-caption-color) !important;
 }
+
+:host([data-wpp-theme=dark]) {
+  --li-label-text-color-selected: var(--wpp-primary-color-800);
+  --li-label-text-color-selected-hover: var(--wpp-primary-color-700);
+  --li-label-text-color-selected-active: var(--wpp-primary-color-800);
+}
+:host([data-wpp-theme=dark]) .item.checked:not(.non-interactive):not(.has-toggle),
+:host([data-wpp-theme=dark]) .item .multiple:not(.non-interactive):not(.has-toggle),
+:host([data-wpp-theme=dark]) .item .active:not(.non-interactive):not(.has-toggle) {
+  --li-right-text-color: var(--wpp-primary-color-700);
+  background-color: var(--wpp-primary-color-300);
+}
+:host([data-wpp-theme=dark]) .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) {
+  background-color: var(--wpp-grey-color-400);
+}
+:host([data-wpp-theme=dark]) .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle), :host([data-wpp-theme=dark]) .item:focus-visible {
+  background-color: var(--wpp-grey-color-500);
+}
+
+:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)[data-wpp-theme=dark]) .item:not(.checked) {
+  background-color: var(--wpp-grey-color-300);
+}
+
+:host(.tab-focus[data-wpp-theme=dark]) .item:not(.checked) {
+  background-color: var(--wpp-grey-color-300);
+}

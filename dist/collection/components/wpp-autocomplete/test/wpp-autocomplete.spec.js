@@ -2,6 +2,7 @@ import { h } from '@stencil/core';
 import { newSpecPage } from '@stencil/core/testing';
 import { WppAutocomplete } from '../wpp-autocomplete';
 import { isSelected, selectedOptionsByOrder } from '../utils';
+import * as themeUtils from '../../../utils/subscribe-to-theme';
 describe('wpp-autocomplete', () => {
   describe('snapshots', () => {
     it('should render autocomplete component', async () => {
@@ -285,7 +286,7 @@ describe('wpp-autocomplete', () => {
       const getItemKey = (v) => v?.id;
       const page = await newSpecPage({
         components: [WppAutocomplete],
-        template: () => h("wpp-autocomplete-v4-0-0", { type: "extended", multiple: true, getItemKey: getItemKey }),
+        template: () => h("wpp-autocomplete-v4-1-0", { type: "extended", multiple: true, getItemKey: getItemKey }),
       });
       const inst = page.rootInstance;
       const spyUpdate = (inst.updatePlaceholderText = jest.fn());
@@ -308,6 +309,36 @@ describe('wpp-autocomplete', () => {
       expect(inst.extendedSelectedValues.map((i) => i.value.id)).toEqual([3, 1]);
       // placeholder was updated
       expect(spyUpdate).toHaveBeenCalledTimes(2);
+    });
+  });
+  describe('subscribing to theme changes', () => {
+    let mockStart;
+    let mockStop;
+    beforeEach(() => {
+      mockStart = jest.fn();
+      mockStop = jest.fn();
+      jest.spyOn(themeUtils, 'themeSubscriptionController').mockReturnValue({
+        start: mockStart,
+        stop: mockStop,
+      });
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
+      await newSpecPage({
+        components: [WppAutocomplete],
+        html: `<wpp-autocomplete></wpp-autocomplete>`,
+      });
+      expect(mockStart).toHaveBeenCalledTimes(2);
+    });
+    it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
+      const page = await newSpecPage({
+        components: [WppAutocomplete],
+        html: `<wpp-autocomplete></wpp-autocomplete>`,
+      });
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
     });
   });
 });

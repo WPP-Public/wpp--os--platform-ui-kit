@@ -3,6 +3,7 @@ import { m as menuListConfig, c as isEqual_1 } from './menuListConfig.js';
 import { k as transformToVersionedTag, s as selectDropdownWidth, n as autoFocusElement, b as isEventTargetContained } from './utils.js';
 import { F as FOCUS_TYPE } from './common.js';
 import { Z as Z_INDEX } from './consts.js';
+import { t as themeSubscriptionController } from './subscribe-to-theme.js';
 import { d as defineCustomElement$k } from './wpp-action-button2.js';
 import { d as defineCustomElement$j } from './wpp-checkbox2.js';
 import { d as defineCustomElement$i } from './wpp-icon-chevron2.js';
@@ -31,7 +32,7 @@ const LOCALES_DEFAULTS = {
   dropdownHeader: '',
 };
 
-const wppSearchCss = ":host{--search-border-radius:var(--wpp-search-border-radius, var(--wpp-border-radius-m));--search-placeholder-color:var(--wpp-search-placeholder-color, var(--wpp-grey-color-700));--search-placeholder-color-disabled:var(--wpp-search-placeholder-color-disabled, var(--wpp-text-color-disabled));--search-hidden-count-text-color-disabled:var(\n    --wpp-search-hidden-count-text-color-disabled,\n    var(--wpp-text-color-disabled)\n  );--search-trigger-icon-right-position:var(--wpp-search-trigger-actions-right-position, 10px);--search-inline-message-margin:var(--wpp-search-inline-message-margin, 4px 0 0 0);--search-label-margin:var(--wpp-search-label-margin, 0 0 8px 0);--search-limit-lines:var(--wpp-search-limit-lines, 10000);--search-line-height:var(--wpp-search-line-height, 34px);--search-box-shadow:var(--wpp-search-box-shadow, var(--wpp-box-shadow-m));--search-first-border-color-focus:var(--wpp-search-first-border-color-focus, var(--wpp-grey-color-000));--search-second-border-color-focus:var(--wpp-search-second-border-color-focus, var(--wpp-brand-color));--search-height-m:var(--wpp-search-height-m, 40px);--search-height-s:var(--wpp-search-height-s, 32px);--search-padding-s:var(--wpp-search-padding-s, 5px 0 5px 12px);--search-padding-m:var(--wpp-search-padding-m, 9px 0 9px 12px);--search-bg-color:var(--wpp-search-bg-color, transparent);--search-bg-color-hover:var(--wpp-search-bg-color-hover, var(--wpp-grey-color-200));--search-bg-color-active:var(--wpp-search-bg-color-active, transparent);--search-bg-color-focused:var(--wpp-search-bg-color-focused, var(--wpp-grey-color-000));--search-bg-color-disabled:var(--wpp-search-bg-color-disabled, var(--wpp-grey-color-100));--search-trigger-icon-color:var(--wpp-search-trigger-actions-right-position, var(--wpp-grey-color-800));--search-trigger-icon-color-hover:var(--wpp-search-trigger-icon-color-hover, var(--wpp-grey-color-800));--search-trigger-icon-color-active:var(--wpp-search-trigger-icon-color-active, var(--wpp-grey-color-800));--search-trigger-icon-color-disabled:var(--wpp-search-trigger-icon-color-disabled, var(--wpp-icon-color-disabled));--search-border-color:var(--wpp-search-border-color, var(--wpp-grey-color-500));--search-border-color-hover:var(--wpp-search-border-color-hover, var(--wpp-grey-color-700));--search-border-color-active:var(--wpp-search-border-color-active, var(--wpp-grey-color-800));--search-border-color-focused:var(--wpp-search-border-color-focused, var(--wpp-grey-color-800));--search-border-color-disabled:var(--wpp-search-border-color-disabled, var(--wpp-grey-color-400));--search-border-width:var(--wpp-search-border-width, var(--wpp-border-width-s));--search-border-style:var(--wpp-search-border-style, solid);--search-single-border-color-disabled:var(--wpp-search-single-border-color-disabled, var(--wpp-grey-color-400));--search-dropdown-max-height:var(--wpp-search-dropdown-max-height, 372px);--search-dropdown-checkbox-margin:var(--wpp-search-dropdown-checkbox-margin, 1px 8px 1px 0);--search-dropdown-bg-color:var(--wpp-search-dropdown-bg-color, var(--wpp-grey-color-000));--search-dropdown-border-radius:var(--wpp-search-dropdown-border-radius, var(--wpp-border-radius-s));--search-dropdown-padding:var(--wpp-search-dropdown-padding, 8px);--search-dropdown-header-margin:var(--wpp-search-dropdown-header-margin, 0);--search-create-new-element-color:var(--wpp-search-create-new-element-color, var(--wpp-primary-color-500));--search-nothing-found-message-color:var(--wpp-search-nothing-found-message-color, var(--wpp-grey-color-700));--search-search-icon-margin-right:var(--wpp-search-search-icon-margin-right, 8px);--search-item-margin-bottom:var(--wpp-search-item-margin-bottom, 4px);--search-regular-selected-values-wrapper-padding:var(\n    --wpp-search-regular-selected-values-wrapper-padding,\n    10px 10px 2px 10px\n  );--search-extended-selected-values-wrapper-padding:var(\n    --wpp-search-extended-selected-values-wrapper-padding,\n    10px 10px 2px 10px\n  );--search-min-width:var(--wpp-search-min-width, 184px);position:relative;display:block;outline:none;min-width:var(--search-min-width)}:host ::slotted([slot=selected-values]){display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap}:host .label:not(.focused):hover+.trigger{background-color:var(--search-bg-color-hover);border-color:var(--search-border-color-hover)}:host .label:not(.focused):hover+.trigger .trigger-actions .wpp-icon-chevron,:host .label:not(.focused):hover+.trigger .wpp-icon-cross{color:var(--search-trigger-icon-color-hover)}:host .label:not(.focused):hover+.trigger.warning{border-color:var(--wpp-warning-color-500)}:host .label:not(.focused):hover+.trigger.error{border-color:var(--wpp-danger-color-500)}:host(.wpp-disabled){cursor:not-allowed}:host(.wpp-disabled) .label{pointer-events:none}.infinite-loader{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;height:32px}.trigger-actions{position:absolute;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);right:var(--search-trigger-icon-right-position);display:-ms-flexbox;display:flex}.trigger-actions .wpp-icon-chevron,.trigger-actions .wpp-icon-cross{color:var(--search-trigger-icon-color);cursor:pointer;-webkit-transition:all 0.15s ease-out 0s;transition:all 0.15s ease-out 0s}.values{scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent;display:-ms-flexbox;display:flex;-ms-flex:1 1 auto;flex:1 1 auto;-ms-flex-align:center;align-items:center;min-width:0;max-height:calc(var(--search-limit-lines) * var(--search-line-height));padding-right:36px;overflow-y:auto}.values::-webkit-scrollbar{width:4px;height:4px}.values::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.values .hidden-count{-ms-flex:0 1 auto;flex:0 1 auto;margin:3px 2px;min-width:calc(25px + (var(--hidden-number) - 1) * 7.5px)}.values .hidden-count{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0)}.values .search-input{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);-ms-flex:1 1 70px;flex:1 1 70px;min-width:70px;padding:0;background:var(--search-bg-color);border:none;outline:none;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.values .search-input.hidden{position:absolute;right:0;bottom:0;z-index:-1;width:1px;min-width:1px;height:1px;opacity:0}.values .search-input::-moz-placeholder{color:var(--search-placeholder-color);opacity:1}.values .search-input::-webkit-input-placeholder{color:var(--search-placeholder-color)}.values .search-input:-ms-input-placeholder{color:var(--search-placeholder-color)}.values .search-input::-ms-input-placeholder{color:var(--search-placeholder-color)}.values .search-input::placeholder{color:var(--search-placeholder-color)}.values .input-placeholder{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;width:100%}.values .wpp-chip+.search-input{margin-left:6px}.count-block{display:none}.with-tooltip{display:none}.with-tooltip.visible{display:-ms-flexbox;display:flex;width:100%;overflow:hidden}.with-tooltip.visible::part(anchor){width:100%}.trigger{position:relative;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-webkit-box-sizing:border-box;box-sizing:border-box;background-color:transparent;border:var(--search-border-width) var(--search-border-style) var(--search-border-color);border-radius:var(--search-border-radius);cursor:text}.trigger.size-s{height:var(--search-height-s);padding:var(--search-padding-s)}.trigger.size-m{height:var(--search-height-m);padding:var(--search-padding-m)}.trigger:hover{background-color:var(--search-bg-color-hover);border-color:var(--search-border-color-hover)}.trigger:hover .trigger-actions .wpp-icon-chevron,.trigger:hover .wpp-icon-cross,.trigger:hover .wpp-icon-search{color:var(--search-trigger-icon-color-hover)}.trigger:active{background-color:var(--search-bg-color-active);border-color:var(--search-border-color-active)}.trigger:active .trigger-actions .wpp-icon-chevron,.trigger:active .wpp-icon-cross{color:var(--search-trigger-icon-color-active)}.trigger.focused{background-color:var(--search-bg-color-focused);border-color:var(--search-border-color-focused)}.trigger.focused .values{padding-right:35px}.trigger.warning,.trigger.warning:hover{border:var(--search-border-width) var(--search-border-style) var(--wpp-warning-color-400)}.trigger.error,.trigger.error:hover{border:var(--search-border-width) var(--search-border-style) var(--wpp-danger-color-400)}.trigger.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--search-first-border-color-focus), 0 0 0 3px var(--search-second-border-color-focus);box-shadow:0 0 0 1px var(--search-first-border-color-focus), 0 0 0 3px var(--search-second-border-color-focus)}.trigger.disabled{background-color:var(--search-bg-color-disabled);border-color:var(--search-border-color-disabled);pointer-events:none}.trigger.disabled .values .search-input{color:var(--wpp-grey-color-500)}.trigger.disabled .values .search-input::-webkit-input-placeholder{color:var(--search-placeholder-color-disabled)}.trigger.disabled .values .search-input::-moz-placeholder{color:var(--search-placeholder-color-disabled)}.trigger.disabled .values .search-input:-ms-input-placeholder{color:var(--search-placeholder-color-disabled)}.trigger.disabled .values .search-input::-ms-input-placeholder{color:var(--search-placeholder-color-disabled)}.trigger.disabled .values .search-input::placeholder{color:var(--search-placeholder-color-disabled)}.trigger.disabled .values .hidden-count .wpp-typography{color:var(--search-hidden-count-text-color-disabled)}.trigger.disabled .values .input-placeholder{color:var(--search-placeholder-color-disabled)}.trigger.disabled .trigger-actions .wpp-icon-chevron,.trigger.disabled .wpp-icon-cross,.trigger.disabled .wpp-icon-search{color:var(--search-trigger-icon-color-disabled)}.trigger.disabled{border-color:var(--search-single-border-color-disabled)}.trigger.error{border-color:var(--wpp-danger-color-400)}.trigger.warning{border-color:var(--wpp-warning-color-400)}.trigger[aria-expanded=true]>.trigger-actions .wpp-icon-chevron{-webkit-transform:rotate(180deg);transform:rotate(180deg)}.trigger .wpp-icon-search{color:var(--wpp-grey-color-600);margin-right:var(--search-search-icon-margin-right)}.trigger.with-value:not(.disabled) .wpp-icon-search{color:var(--wpp-grey-color-800)}.wpp-inline-message::part(message-block){margin:var(--search-inline-message-margin)}.dropdown{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-box-sizing:border-box;box-sizing:border-box;max-height:var(--search-dropdown-max-height);overflow:hidden;background:var(--search-dropdown-bg-color);border-radius:var(--search-dropdown-border-radius);-webkit-box-shadow:var(--search-box-shadow);box-shadow:var(--search-box-shadow);width:var(--custom-dropdown-width)}.dropdown .dropdown-header{pointer-events:none;margin:var(--search-dropdown-header-margin)}.dropdown .dropdown-list{scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent;min-height:0;padding:var(--search-dropdown-padding);overflow-x:hidden;overflow-y:auto}.dropdown .dropdown-list::-webkit-scrollbar{width:4px;height:4px}.dropdown .dropdown-list::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.dropdown .dropdown-list.hidden{display:none}.dropdown .dropdown-list:empty{display:none}.dropdown .dropdown-list .infinite-loader{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;height:32px}.dropdown .dropdown-list .loading{pointer-events:none;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:start;justify-content:flex-start;height:32px;padding:0 8px}.dropdown .dropdown-list .loading ::part(info-wrapper){height:inherit}.dropdown .dropdown-list .loading .wpp-spinner{margin-right:8px}.dropdown .dropdown-list .nothing-found-wrapper{pointer-events:none}.dropdown .dropdown-list .nothing-found-wrapper .nothing-found{color:var(--search-nothing-found-message-color)}.dropdown .dropdown-list .nothing-found-divider{margin:8px 0}.dropdown .dropdown-list .create-new-option{color:var(--search-create-new-element-color)}.dropdown .dropdown-list .selected-values{display:-ms-flexbox;display:flex}.dropdown .dropdown-list .selected-values.regular{padding:var(--search-regular-selected-values-wrapper-padding)}.dropdown .dropdown-list .selected-values.extended{padding:var(--search-extended-selected-values-wrapper-padding)}.dropdown .dropdown-list ::slotted(.wpp-list-item){width:100%}.dropdown .dropdown-list ::slotted(.wpp-list-item:not(:last-child)){margin-bottom:var(--search-item-margin-bottom)}.label{margin:var(--search-label-margin)}";
+const wppSearchCss = ":host{--search-border-radius:var(--wpp-search-border-radius, var(--wpp-border-radius-m));--search-placeholder-color:var(--wpp-search-placeholder-color, var(--wpp-grey-color-700));--search-placeholder-color-disabled:var(--wpp-search-placeholder-color-disabled, var(--wpp-text-color-disabled));--search-hidden-count-text-color-disabled:var(\n    --wpp-search-hidden-count-text-color-disabled,\n    var(--wpp-text-color-disabled)\n  );--search-trigger-icon-right-position:var(--wpp-search-trigger-actions-right-position, 10px);--search-inline-message-margin:var(--wpp-search-inline-message-margin, 4px 0 0 0);--search-label-margin:var(--wpp-search-label-margin, 0 0 8px 0);--search-limit-lines:var(--wpp-search-limit-lines, 10000);--search-line-height:var(--wpp-search-line-height, 34px);--search-box-shadow:var(--wpp-search-box-shadow, var(--wpp-box-shadow-m));--search-first-border-color-focus:var(--wpp-search-first-border-color-focus, var(--wpp-grey-color-000));--search-second-border-color-focus:var(--wpp-search-second-border-color-focus, var(--wpp-brand-color));--search-height-m:var(--wpp-search-height-m, 40px);--search-height-s:var(--wpp-search-height-s, 32px);--search-padding-s:var(--wpp-search-padding-s, 5px 0 5px 12px);--search-padding-m:var(--wpp-search-padding-m, 9px 0 9px 12px);--search-bg-color:var(--wpp-search-bg-color, transparent);--search-bg-color-hover:var(--wpp-search-bg-color-hover, var(--wpp-grey-color-200));--search-bg-color-active:var(--wpp-search-bg-color-active, transparent);--search-bg-color-focused:var(--wpp-search-bg-color-focused, transparent);--search-bg-color-disabled:var(--wpp-search-bg-color-disabled, var(--wpp-grey-color-100));--search-trigger-icon-color:var(--wpp-search-trigger-actions-right-position, var(--wpp-grey-color-800));--search-trigger-icon-color-hover:var(--wpp-search-trigger-icon-color-hover, var(--wpp-grey-color-800));--search-trigger-icon-color-active:var(--wpp-search-trigger-icon-color-active, var(--wpp-grey-color-800));--search-trigger-icon-color-disabled:var(--wpp-search-trigger-icon-color-disabled, var(--wpp-icon-color-disabled));--search-border-color:var(--wpp-search-border-color, var(--wpp-grey-color-500));--search-border-color-hover:var(--wpp-search-border-color-hover, var(--wpp-grey-color-700));--search-border-color-active:var(--wpp-search-border-color-active, var(--wpp-grey-color-800));--search-border-color-focused:var(--wpp-search-border-color-focused, var(--wpp-grey-color-800));--search-border-color-disabled:var(--wpp-search-border-color-disabled, var(--wpp-grey-color-400));--search-border-width:var(--wpp-search-border-width, var(--wpp-border-width-s));--search-border-style:var(--wpp-search-border-style, solid);--search-single-border-color-disabled:var(--wpp-search-single-border-color-disabled, var(--wpp-grey-color-400));--search-dropdown-max-height:var(--wpp-search-dropdown-max-height, 372px);--search-dropdown-checkbox-margin:var(--wpp-search-dropdown-checkbox-margin, 1px 8px 1px 0);--search-dropdown-bg-color:var(--wpp-search-dropdown-bg-color, var(--wpp-grey-color-000));--search-dropdown-border-radius:var(--wpp-search-dropdown-border-radius, var(--wpp-border-radius-s));--search-dropdown-padding:var(--wpp-search-dropdown-padding, 8px);--search-dropdown-header-margin:var(--wpp-search-dropdown-header-margin, 0);--search-create-new-element-color:var(--wpp-search-create-new-element-color, var(--wpp-primary-color-500));--search-nothing-found-message-color:var(--wpp-search-nothing-found-message-color, var(--wpp-grey-color-700));--search-search-icon-margin-right:var(--wpp-search-search-icon-margin-right, 8px);--search-item-margin-bottom:var(--wpp-search-item-margin-bottom, 4px);--search-regular-selected-values-wrapper-padding:var(\n    --wpp-search-regular-selected-values-wrapper-padding,\n    10px 10px 2px 10px\n  );--search-extended-selected-values-wrapper-padding:var(\n    --wpp-search-extended-selected-values-wrapper-padding,\n    10px 10px 2px 10px\n  );--search-min-width:var(--wpp-search-min-width, 184px);position:relative;display:block;outline:none;min-width:var(--search-min-width)}:host ::slotted([slot=selected-values]){display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap}:host .label:not(.focused):hover+.trigger{background-color:var(--search-bg-color-hover);border-color:var(--search-border-color-hover)}:host .label:not(.focused):hover+.trigger .trigger-actions .wpp-icon-chevron,:host .label:not(.focused):hover+.trigger .wpp-icon-cross{color:var(--search-trigger-icon-color-hover)}:host .label:not(.focused):hover+.trigger.warning{border-color:var(--wpp-warning-color-500)}:host .label:not(.focused):hover+.trigger.error{border-color:var(--wpp-danger-color-500)}:host(.wpp-disabled){cursor:not-allowed}:host(.wpp-disabled) .label{pointer-events:none}.infinite-loader{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;height:32px}.trigger-actions{position:absolute;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);right:var(--search-trigger-icon-right-position);display:-ms-flexbox;display:flex}.trigger-actions .wpp-icon-chevron,.trigger-actions .wpp-icon-cross{color:var(--search-trigger-icon-color);cursor:pointer;-webkit-transition:all 0.15s ease-out 0s;transition:all 0.15s ease-out 0s}.values{scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent;display:-ms-flexbox;display:flex;-ms-flex:1 1 auto;flex:1 1 auto;-ms-flex-align:center;align-items:center;min-width:0;max-height:calc(var(--search-limit-lines) * var(--search-line-height));padding-right:36px;overflow-y:auto}.values::-webkit-scrollbar{width:4px;height:4px}.values::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.values .hidden-count{-ms-flex:0 1 auto;flex:0 1 auto;margin:3px 2px;min-width:calc(25px + (var(--hidden-number) - 1) * 7.5px)}.values .hidden-count{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0)}.values .search-input{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);-ms-flex:1 1 70px;flex:1 1 70px;min-width:70px;padding:0;background:var(--search-bg-color);border:none;outline:none;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.values .search-input.hidden{position:absolute;right:0;bottom:0;z-index:-1;width:1px;min-width:1px;height:1px;opacity:0}.values .search-input::-moz-placeholder{color:var(--search-placeholder-color);opacity:1}.values .search-input::-webkit-input-placeholder{color:var(--search-placeholder-color)}.values .search-input:-ms-input-placeholder{color:var(--search-placeholder-color)}.values .search-input::-ms-input-placeholder{color:var(--search-placeholder-color)}.values .search-input::placeholder{color:var(--search-placeholder-color)}.values .input-placeholder{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;width:100%}.values .wpp-chip+.search-input{margin-left:6px}.count-block{display:none}.with-tooltip{display:none}.with-tooltip.visible{display:-ms-flexbox;display:flex;width:100%;overflow:hidden}.with-tooltip.visible::part(anchor){width:100%}.trigger{position:relative;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-webkit-box-sizing:border-box;box-sizing:border-box;background-color:transparent;border:var(--search-border-width) var(--search-border-style) var(--search-border-color);border-radius:var(--search-border-radius);cursor:text}.trigger.size-s{height:var(--search-height-s);padding:var(--search-padding-s)}.trigger.size-m{height:var(--search-height-m);padding:var(--search-padding-m)}.trigger:hover{background-color:var(--search-bg-color-hover);border-color:var(--search-border-color-hover)}.trigger:hover .trigger-actions .wpp-icon-chevron,.trigger:hover .wpp-icon-cross,.trigger:hover .wpp-icon-search{color:var(--search-trigger-icon-color-hover)}.trigger:active{background-color:var(--search-bg-color-active);border-color:var(--search-border-color-active)}.trigger:active .trigger-actions .wpp-icon-chevron,.trigger:active .wpp-icon-cross{color:var(--search-trigger-icon-color-active)}.trigger.focused{background-color:var(--search-bg-color-focused);border-color:var(--search-border-color-focused)}.trigger.focused .values{padding-right:35px}.trigger.warning,.trigger.warning:hover{border:var(--search-border-width) var(--search-border-style) var(--wpp-warning-color-400)}.trigger.error,.trigger.error:hover{border:var(--search-border-width) var(--search-border-style) var(--wpp-danger-color-400)}.trigger.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--search-first-border-color-focus), 0 0 0 3px var(--search-second-border-color-focus);box-shadow:0 0 0 1px var(--search-first-border-color-focus), 0 0 0 3px var(--search-second-border-color-focus)}.trigger.disabled{background-color:var(--search-bg-color-disabled);border-color:var(--search-border-color-disabled);pointer-events:none}.trigger.disabled .values .search-input{color:var(--wpp-grey-color-500)}.trigger.disabled .values .search-input::-webkit-input-placeholder{color:var(--search-placeholder-color-disabled)}.trigger.disabled .values .search-input::-moz-placeholder{color:var(--search-placeholder-color-disabled)}.trigger.disabled .values .search-input:-ms-input-placeholder{color:var(--search-placeholder-color-disabled)}.trigger.disabled .values .search-input::-ms-input-placeholder{color:var(--search-placeholder-color-disabled)}.trigger.disabled .values .search-input::placeholder{color:var(--search-placeholder-color-disabled)}.trigger.disabled .values .hidden-count .wpp-typography{color:var(--search-hidden-count-text-color-disabled)}.trigger.disabled .values .input-placeholder{color:var(--search-placeholder-color-disabled)}.trigger.disabled .trigger-actions .wpp-icon-chevron,.trigger.disabled .wpp-icon-cross,.trigger.disabled .wpp-icon-search{color:var(--search-trigger-icon-color-disabled)}.trigger.disabled{border-color:var(--search-single-border-color-disabled)}.trigger.error{border-color:var(--wpp-danger-color-400)}.trigger.warning{border-color:var(--wpp-warning-color-400)}.trigger[aria-expanded=true]>.trigger-actions .wpp-icon-chevron{-webkit-transform:rotate(180deg);transform:rotate(180deg)}.trigger .wpp-icon-search{color:var(--wpp-grey-color-600);margin-right:var(--search-search-icon-margin-right)}.trigger.with-value:not(.disabled) .wpp-icon-search{color:var(--wpp-grey-color-800)}.wpp-inline-message::part(message-block){margin:var(--search-inline-message-margin)}.dropdown{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-box-sizing:border-box;box-sizing:border-box;max-height:var(--search-dropdown-max-height);overflow:hidden;background:var(--search-dropdown-bg-color);border-radius:var(--search-dropdown-border-radius);-webkit-box-shadow:var(--search-box-shadow);box-shadow:var(--search-box-shadow);width:var(--custom-dropdown-width)}.dropdown .dropdown-header{pointer-events:none;margin:var(--search-dropdown-header-margin)}.dropdown .dropdown-list{scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent;min-height:0;padding:var(--search-dropdown-padding);overflow-x:hidden;overflow-y:auto}.dropdown .dropdown-list::-webkit-scrollbar{width:4px;height:4px}.dropdown .dropdown-list::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.dropdown .dropdown-list.hidden{display:none}.dropdown .dropdown-list:empty{display:none}.dropdown .dropdown-list .infinite-loader{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;height:32px}.dropdown .dropdown-list .loading{pointer-events:none;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:start;justify-content:flex-start;height:32px;padding:0 8px}.dropdown .dropdown-list .loading ::part(info-wrapper){height:inherit}.dropdown .dropdown-list .loading .wpp-spinner{margin-right:8px}.dropdown .dropdown-list .nothing-found-wrapper{pointer-events:none}.dropdown .dropdown-list .nothing-found-wrapper .nothing-found{color:var(--search-nothing-found-message-color)}.dropdown .dropdown-list .nothing-found-divider{margin:8px 0}.dropdown .dropdown-list .create-new-option{color:var(--search-create-new-element-color)}.dropdown .dropdown-list .selected-values{display:-ms-flexbox;display:flex}.dropdown .dropdown-list .selected-values.regular{padding:var(--search-regular-selected-values-wrapper-padding)}.dropdown .dropdown-list .selected-values.extended{padding:var(--search-extended-selected-values-wrapper-padding)}.dropdown .dropdown-list ::slotted(.wpp-list-item){width:100%}.dropdown .dropdown-list ::slotted(.wpp-list-item:not(:last-child)){margin-bottom:var(--search-item-margin-bottom)}.label{margin:var(--search-label-margin)}.dropdown:has([data-wpp-theme=dark]){background-color:var(--wpp-grey-color-200)}";
 
 // Load more will be triggered 15px before scroll ends
 const INFINITE_SCROLL_THRESHOLD = 15;
@@ -48,6 +49,7 @@ const WppSearch$1 = /*@__PURE__*/ proxyCustomElement(class WppSearch extends HTM
     this._locales = LOCALES_DEFAULTS;
     // Used instead of Tippy's `state.isShown`, which is not updated when transitioning
     this.isDropdownShown = false;
+    this.themeSubscription = themeSubscriptionController(() => this.dropdownEl);
     this.valueResizeObserver = () => {
       if (this.valuesContainerEl) {
         this.valuesResizeObserver = new ResizeObserver(() => {
@@ -315,7 +317,7 @@ const WppSearch$1 = /*@__PURE__*/ proxyCustomElement(class WppSearch extends HTM
     this.renderInputPlaceholder = () => {
       if ((this.isFocused && !this.searchValue) || this.isDropdownShown || !this.value.length)
         return null;
-      return (h("wpp-typography-v4-0-0", { type: "s-body", class: "input-placeholder", ref: placeholderEl => (this.placeholderEl = placeholderEl) }, this.getOptionLabel(this.value[0])));
+      return (h("wpp-typography-v4-1-0", { type: "s-body", class: "input-placeholder", ref: placeholderEl => (this.placeholderEl = placeholderEl) }, this.getOptionLabel(this.value[0])));
     };
     this.getDropdownWidth = () => {
       if (this.dropdownWidth === 'auto') {
@@ -331,12 +333,12 @@ const WppSearch$1 = /*@__PURE__*/ proxyCustomElement(class WppSearch extends HTM
       if (this.value.length && !this.isFocused)
         return null;
       if (this.loading) {
-        return (h("div", { class: "loading" }, h("wpp-spinner-v4-0-0", { slot: "left" }), h("wpp-typography-v4-0-0", { type: "s-body", slot: "label" }, this._locales.loading)));
+        return (h("div", { class: "loading" }, h("wpp-spinner-v4-1-0", { slot: "left" }), h("wpp-typography-v4-1-0", { type: "s-body", slot: "label" }, this._locales.loading)));
       }
       if (this.isEmptyOptions) {
-        return (h(Fragment, null, h("wpp-list-item-v4-0-0", { class: "nothing-found-wrapper" }, h("wpp-typography-v4-0-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound))));
+        return (h(Fragment, null, h("wpp-list-item-v4-1-0", { class: "nothing-found-wrapper" }, h("wpp-typography-v4-1-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound))));
       }
-      return (h(Fragment, null, !!this._locales.dropdownHeader && (h("wpp-list-item-v4-0-0", { class: "dropdown-header", part: "dropdown-header" }, h("wpp-typography-v4-0-0", { type: "s-strong", slot: "label" }, this._locales.dropdownHeader))), h("slot", null), h("div", null, this.isInfiniteLoading && (h("div", { class: "infinite-loader" }, h("wpp-spinner-v4-0-0", null))))));
+      return (h(Fragment, null, !!this._locales.dropdownHeader && (h("wpp-list-item-v4-1-0", { class: "dropdown-header", part: "dropdown-header" }, h("wpp-typography-v4-1-0", { type: "s-strong", slot: "label" }, this._locales.dropdownHeader))), h("slot", null), h("div", null, this.isInfiniteLoading && (h("div", { class: "infinite-loader" }, h("wpp-spinner-v4-1-0", null))))));
     };
     this.isFocused = false;
     this.searchValue = '';
@@ -465,6 +467,7 @@ const WppSearch$1 = /*@__PURE__*/ proxyCustomElement(class WppSearch extends HTM
     this.updateOptions();
   }
   componentDidLoad() {
+    this.themeSubscription.start();
     // Watches the size of values container, which changes when
     // search is focused and `limitLines` prop is set
     this.valueResizeObserver();
@@ -481,6 +484,7 @@ const WppSearch$1 = /*@__PURE__*/ proxyCustomElement(class WppSearch extends HTM
     });
   }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     if (this.valuesResizeObserver)
       this.valuesResizeObserver.disconnect();
     if (this.observer)
@@ -488,6 +492,7 @@ const WppSearch$1 = /*@__PURE__*/ proxyCustomElement(class WppSearch extends HTM
     this.tippyInstance?.destroy();
   }
   connectedCallback() {
+    this.themeSubscription.start();
     this.valueResizeObserver();
     if (this.tippyInstance?.state.isDestroyed) {
       this.createTippyInstance();
@@ -497,9 +502,9 @@ const WppSearch$1 = /*@__PURE__*/ proxyCustomElement(class WppSearch extends HTM
     const style = {
       '--custom-dropdown-width': this.getDropdownWidth(),
     };
-    return (h(Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, dropdown-header, options" }, h("div", { class: this.searchWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (h("wpp-label-v4-0-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.hasSearchButton() && h("wpp-icon-search-v4-0-0", null), this.hasActiveEllipses ? (h("wpp-tooltip-v4-0-0", { part: "anchor", value: this.value.length ? this.getOptionLabel(this.value[0]) : undefined, class: this.tooltipCSSClasses() }, this.renderInputPlaceholder())) : (this.renderInputPlaceholder()), h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, onClick: this.handleInputMouseDown, tabIndex: this.disabled ? -1 : 0, title: "" })), h("div", { class: "trigger-actions" }, this.hasClearButton() && h("wpp-icon-cross-v4-0-0", { onClick: this.handleClearClick }))), !!this.message && (h("wpp-inline-message-v4-0-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderDropdownContent()))));
+    return (h(Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, "aria-disabled": this.disabled, "aria-required": this.required, exportparts: "input, dropdown, dropdown-header, options" }, h("div", { class: this.searchWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (h("wpp-label-v4-1-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.hasSearchButton() && h("wpp-icon-search-v4-1-0", null), this.hasActiveEllipses ? (h("wpp-tooltip-v4-1-0", { part: "anchor", value: this.value.length ? this.getOptionLabel(this.value[0]) : undefined, class: this.tooltipCSSClasses() }, this.renderInputPlaceholder())) : (this.renderInputPlaceholder()), h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", onInput: this.handleInput, onClick: this.handleInputMouseDown, tabIndex: this.disabled ? -1 : 0, title: "" })), h("div", { class: "trigger-actions" }, this.hasClearButton() && h("wpp-icon-cross-v4-1-0", { onClick: this.handleClearClick }))), !!this.message && (h("wpp-inline-message-v4-1-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), part: "options", class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll }, this.renderDropdownContent()))));
   }
-  static get registryIs() { return "wpp-search-v4-0-0"; }
+  static get registryIs() { return "wpp-search-v4-1-0"; }
   get host() { return this; }
   static get watchers() { return {
     "value": ["onNextValueChange"],
@@ -510,7 +515,7 @@ const WppSearch$1 = /*@__PURE__*/ proxyCustomElement(class WppSearch extends HTM
     "locales": ["onUpdateLocales"]
   }; }
   static get style() { return wppSearchCss; }
-}, [1, "wpp-search", "wpp-search-v4-0-0", {
+}, [1, "wpp-search", "wpp-search-v4-1-0", {
     "name": [1],
     "loading": [516],
     "disabled": [516],
@@ -548,104 +553,104 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-search-v4-0-0", "wpp-action-button-v4-0-0", "wpp-checkbox-v4-0-0", "wpp-icon-chevron-v4-0-0", "wpp-icon-cross-v4-0-0", "wpp-icon-dash-v4-0-0", "wpp-icon-error-v4-0-0", "wpp-icon-info-message-v4-0-0", "wpp-icon-search-v4-0-0", "wpp-icon-success-v4-0-0", "wpp-icon-tick-v4-0-0", "wpp-icon-warning-v4-0-0", "wpp-inline-message-v4-0-0", "wpp-internal-label-v4-0-0", "wpp-internal-tooltip-v4-0-0", "wpp-label-v4-0-0", "wpp-list-item-v4-0-0", "wpp-spinner-v4-0-0", "wpp-tooltip-v4-0-0", "wpp-typography-v4-0-0"];
+  const components = ["wpp-search-v4-1-0", "wpp-action-button-v4-1-0", "wpp-checkbox-v4-1-0", "wpp-icon-chevron-v4-1-0", "wpp-icon-cross-v4-1-0", "wpp-icon-dash-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-info-message-v4-1-0", "wpp-icon-search-v4-1-0", "wpp-icon-success-v4-1-0", "wpp-icon-tick-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-inline-message-v4-1-0", "wpp-internal-label-v4-1-0", "wpp-internal-tooltip-v4-1-0", "wpp-label-v4-1-0", "wpp-list-item-v4-1-0", "wpp-spinner-v4-1-0", "wpp-tooltip-v4-1-0", "wpp-typography-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-search-v4-0-0":
+    case "wpp-search-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppSearch$1);
       }
       break;
-    case "wpp-action-button-v4-0-0":
+    case "wpp-action-button-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-checkbox-v4-0-0":
+    case "wpp-checkbox-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-chevron-v4-0-0":
+    case "wpp-icon-chevron-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-cross-v4-0-0":
+    case "wpp-icon-cross-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-dash-v4-0-0":
+    case "wpp-icon-dash-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-error-v4-0-0":
+    case "wpp-icon-error-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-info-message-v4-0-0":
+    case "wpp-icon-info-message-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-search-v4-0-0":
+    case "wpp-icon-search-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-success-v4-0-0":
+    case "wpp-icon-success-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-tick-v4-0-0":
+    case "wpp-icon-tick-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-warning-v4-0-0":
+    case "wpp-icon-warning-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-inline-message-v4-0-0":
+    case "wpp-inline-message-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-label-v4-0-0":
+    case "wpp-internal-label-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-internal-tooltip-v4-0-0":
+    case "wpp-internal-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-label-v4-0-0":
+    case "wpp-label-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-list-item-v4-0-0":
+    case "wpp-list-item-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-0-0":
+    case "wpp-spinner-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-0-0":
+    case "wpp-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-0-0":
+    case "wpp-typography-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

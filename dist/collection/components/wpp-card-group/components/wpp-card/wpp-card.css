@@ -342,3 +342,16 @@
   --checkbox-bg-color-checked: var(--checkbox-bg-color-checked-hover);
   --checkbox-border-color-checked: var(--checkbox-border-color-checked-hover);
 }
+
+:host([data-wpp-theme=dark]) .card.primary:not(.choosable) {
+  background: var(--wpp-grey-color-100);
+}
+:host([data-wpp-theme=dark]) .card.interactive:not(.choosable) {
+  background: var(--wpp-grey-color-100);
+}
+:host([data-wpp-theme=dark]) .card.choosable {
+  background: var(--wpp-grey-color-100);
+}
+:host([data-wpp-theme=dark]) .card.secondary:not(.choosable) {
+  background: var(--wpp-grey-color-200);
+}

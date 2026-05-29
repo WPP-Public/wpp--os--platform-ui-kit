@@ -9,6 +9,7 @@ export default {
   },
   argTypes: {
     enableAttach: { control: { type: 'boolean' }, defaultValue: false },
+    actions: { control: { type: 'object' } },
     // enableMic: { control: { type: 'boolean' }, defaultValue: false },
     disabled: { control: { type: 'boolean' }, defaultValue: false },
     charactersLimit: { control: { type: 'number' }, defaultValue: 280 },
@@ -81,15 +82,16 @@ export const DefaultChatInput = {
       render(html `
           <div style=${'display: flex; flex-direction: column; height: 100vh; padding: 20px; box-sizing: border-box;'}>
             <div style=${'display: flex;'}>
-              <wpp-typography-v4-0-0>Message History:</wpp-typography-v4-0-0>
+              <wpp-typography-v4-1-0>Message History:</wpp-typography-v4-1-0>
               <ul style="margin:0;">
-                ${updatedMessages.map(msg => html `<li><wpp-typography-v4-0-0>${msg}</wpp-typography-v4-0-0></li>`)}
+                ${updatedMessages.map(msg => html `<li><wpp-typography-v4-1-0>${msg}</wpp-typography-v4-1-0></li>`)}
               </ul>
             </div>
 
             <div style=${'display: flex; align-items: flex-end; height: 100vh;'}>
-              <wpp-chat-input-v4-0-0
+              <wpp-chat-input-v4-1-0
                 .enableAttach=${args.enableAttach}
+                .actions=${args.actions}
                 .disabled=${args.disabled}
                 .charactersLimit=${args.charactersLimit}
                 .fileUploadConfig=${args.fileUploadConfig}
@@ -103,32 +105,34 @@ export const DefaultChatInput = {
                 .withSelect=${args.withSelect}
                 @wppSend=${handleSendMessage}
                 @wppMessageChanged=${handleMessageChanged}
+                @wppActionsMenuToggle=${(e) => console.log('actions menu toggle', e.detail)}
+                @wppActionsMenuItemClick=${(e) => console.log('actions menu item click', e.detail)}
               >
-                <wpp-menu-context-v4-0-0 .slot=${'select'} .dropdownConfig=${dropdownConfig}>
-                  <wpp-action-button-v4-0-0
+                <wpp-menu-context-v4-1-0 .slot=${'select'} .dropdownConfig=${dropdownConfig}>
+                  <wpp-action-button-v4-1-0
                     slot="trigger-element"
                     variant="secondary"
                     .disabled=${args.disabled}
                     style="--wpp-action-button-font-weight: 400; --wpp-action-button-secondary-icon-color: var(--wpp-grey-color-600);"
                   >
                     ${selectedModel}
-                    <wpp-icon-chevron-v4-0-0
+                    <wpp-icon-chevron-v4-1-0
                       slot="icon-end"
                       direction=${isSelectOpen ? 'up' : 'down'}
-                    ></wpp-icon-chevron-v4-0-0>
-                  </wpp-action-button-v4-0-0>
+                    ></wpp-icon-chevron-v4-1-0>
+                  </wpp-action-button-v4-1-0>
                   <div>
                     ${modelOptions.map(model => html `
-                        <wpp-list-item-v4-0-0
+                        <wpp-list-item-v4-1-0
                           .checked=${selectedModel === model.label}
                           @wppChangeListItem=${() => handleModelSelect(model)}
                         >
                           <span slot="label">${model.label}</span>
-                        </wpp-list-item-v4-0-0>
+                        </wpp-list-item-v4-1-0>
                       `)}
                   </div>
-                </wpp-menu-context-v4-0-0>
-              </wpp-chat-input-v4-0-0>
+                </wpp-menu-context-v4-1-0>
+              </wpp-chat-input-v4-1-0>
             </div>
           </div>
         `, container);
@@ -139,7 +143,15 @@ export const DefaultChatInput = {
     return html `<div id="chat-input-story"></div>`;
   },
   args: {
-    enableAttach: true,
+    // The default story showcases the consolidated actions menu. The reserved
+    // `upload` entry already opens the file picker, so we leave the standalone
+    // `enableAttach` button off here to avoid two controls that do the same thing.
+    enableAttach: false,
+    actions: [
+      { id: 'upload', icon: 'wpp-icon-attach', label: 'Upload file' },
+      { id: 'pinboard', icon: 'wpp-icon-pinned', label: 'Pinboard' },
+      { id: 'translate', icon: 'wpp-icon-translate', label: 'Translate' },
+    ],
     size: 's',
     disabled: false,
     charactersLimit: 280,

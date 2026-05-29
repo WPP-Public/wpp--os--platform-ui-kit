@@ -1,15 +1,27 @@
 import { EventEmitter } from '../../stencil-public-runtime';
+import { Editor } from '@tiptap/core';
 import { DropdownConfig, FOCUS_TYPE, InputMessageTypes } from '../../types/common';
 import { LabelConfig } from '../wpp-label/types';
 import { BaseComponent } from '../../interfaces/base-component';
-import { DebugLevels, Formats, QuillInstance, RichtextChangeEventDetail, RichtextLocales, RichtextSelectionChangeEventDetail, RichtextUploadRequestEventDetail, RichtextValue } from './types';
-import 'quilljs-markdown/dist/quilljs-markdown-common-style.css';
+import { Formats, RichtextLocales, RichtextValue, DebugLevels } from './types';
+import type { TiptapChangeEventDetail, TiptapSelectionChangeEventDetail, TiptapUploadRequestEventDetail } from './tiptap-types';
 export declare class WppRichtext implements BaseComponent {
   private _locales;
+  private themeSubscription;
   host: HTMLWppRichtextElement;
   focusType: FOCUS_TYPE;
   private enteredCharacters;
   plainText: string;
+  private toolbarActiveFormats;
+  private parsedToolbarItems;
+  private activeFontSize;
+  private isFontSizePickerOpen;
+  private linkPromptOpen;
+  private linkPromptMode;
+  private linkPromptValue;
+  private linkPromptPreviewHref;
+  private linkPromptPosition;
+  private linkPromptRange;
   /**
    * Defines the component name.
    */
@@ -84,23 +96,24 @@ export declare class WppRichtext implements BaseComponent {
    */
   bounds: HTMLElement | string;
   /**
+   * Debug level: `error`, `warn`, `log`, or `info`. Controls verbosity of the
+   * component's internal console output (errors, warnings, init / state logs).
+   * Defaults to `warn` to match the previous Quill-based behaviour. Setting a
+   * higher level (e.g. `info`) is useful while diagnosing integration issues.
+   */
+  debug: DebugLevels;
+  /**
    * Editor value
    */
   value: RichtextValue;
   /**
-   * Debug level: `error`, `warn`, `log`, or `info`. Passing true is equivalent to passing `log`.
-   * Passing false disables all messages.
-   */
-  debug: DebugLevels;
-  /**
    * Whitelist of formats to allow in the editor.
-   * See [Formats](https://quilljs.com/docs/formats/) for a complete list.
+   * See Tiptap extensions documentation for available formats.
    */
   readonly formats: string[];
   /**
    * Collection of modules to include and respective options.
-   * The only configurable modules are the following: imageUpload, videoUpload, attachmentUpload and toolbar.aliases.embed (See "Usage" section of Notes)
-   * See [Modules](https://quilljs.com/docs/modules/) for more information about the library's modules.
+   * The only configurable modules are the following: imageUpload, videoUpload, attachmentUpload and toolbar.aliases.embed
    */
   modules?: string;
   /**
@@ -109,9 +122,7 @@ export declare class WppRichtext implements BaseComponent {
   placeholder: string;
   /**
    * DOM Element or a CSS selector for a DOM Element, specifying which container has the scrollbars
-   * (i.e. `overflow-y: auto`), if has been changed from the default ql-editor with custom CSS.
-   * Necessary to fix scroll jumping bugs when Quill is set to auto grow its height, and another ancestor container
-   * is responsible for the scrolling.
+   * (i.e. `overflow-y: auto`), if has been changed from the default editor container with custom CSS.
    */
   readonly scrollingContainer: HTMLElement | string;
   /**
@@ -123,17 +134,18 @@ export declare class WppRichtext implements BaseComponent {
    */
   styles?: string;
   /**
-   * Editor init event
+   * Editor init event.
+   * Emits the Tiptap Editor instance (previously emitted Quill instance).
    */
-  readonly wppInit: EventEmitter<QuillInstance>;
+  readonly wppInit: EventEmitter<Editor>;
   /**
    * Emitted when editor has content changes
    */
-  readonly wppChange: EventEmitter<RichtextChangeEventDetail>;
+  readonly wppChange: EventEmitter<TiptapChangeEventDetail>;
   /**
    * Emitted when editor has selection changes
    */
-  readonly wppSelectionChange: EventEmitter<RichtextSelectionChangeEventDetail>;
+  readonly wppSelectionChange: EventEmitter<TiptapSelectionChangeEventDetail>;
   /**
    * Emitted when editor receives focus
    */
@@ -145,29 +157,41 @@ export declare class WppRichtext implements BaseComponent {
   /**
    * Emitted when user requests uploading of files
    */
-  readonly wppUploadRequest: EventEmitter<RichtextUploadRequestEventDetail>;
-  quill: QuillInstance;
+  readonly wppUploadRequest: EventEmitter<TiptapUploadRequestEventDetail>;
+  private tiptapEditor;
+  private initTimerId;
   containerElement?: HTMLDivElement | HTMLPreElement;
-  selectionChangeEvent: any;
-  textChangeEvent: any;
   formControlInput?: HTMLInputElement;
   private savedSelectionRange;
+  private previousSelectionRange;
   private onFocusIn;
   private onFocusOut;
   private onKeyUp;
   private onMouseDown;
+  /**
+   * Close the link tooltip when clicking outside the tooltip element.
+   * Mirrors original Quill behaviour where clicking anywhere outside the
+   * tooltip dismisses it.
+   */
+  private onDocumentMouseDown;
   private onEditorBlur;
   private onEditorFocus;
-  private dragThumbnail;
-  private dragElement;
-  private onDragstart;
-  private onDragend;
-  private onDrop;
   private updateEnteredCharacters;
   private syncValueAndEmit;
   setValue(value: RichtextValue): void;
   getValue(): RichtextValue;
+  /**
+   * Internal logger gated by the `debug` prop. Mirrors the verbosity ordering
+   * Quill used so consumers that previously set `debug="info"` still see the
+   * full stream of internal messages, while the default `warn` keeps the
+   * console quiet for production usage.
+   *
+   * Order (most → least verbose): `info` > `log` > `warn` > `error`. A message
+   * is printed only when its severity is at or below the configured level.
+   */
+  private debugLog;
   componentDidLoad(): void;
+  connectedCallback(): void;
   disconnectedCallback(): void;
   updateContent(newValue: RichtextValue): void | null;
   updateDisabled(newValue: boolean): void;
@@ -176,6 +200,45 @@ export declare class WppRichtext implements BaseComponent {
   updateCharacterLimit(): void;
   onUpdateLocales(newLocales: Partial<RichtextLocales>): void;
   componentWillLoad(): void;
+  private updateToolbarActiveFormats;
+  private buildToolbarConfig;
+  /**
+   * Replace an uploadingImage placeholder node with an arbitrary node (e.g. video).
+   * Used when `resolveUploadingImage` is not appropriate because the replacement
+   * is not a standard image node.
+   */
+  private replaceUploadingNode;
+  private onToolbarAction;
+  private getToolbarButtonIcon;
+  private renderToolbarIcon;
+  private onFontSizeChange;
+  private onLinkPromptInput;
+  /**
+   * Called on every selection update. Mirrors Quill's SELECTION_CHANGE handler:
+   * when the cursor (collapsed, length=0) lands on a link, show the view-mode
+   * tooltip; otherwise close it.
+   */
+  private handleSelectionLinkDetection;
+  /**
+   * Find the contiguous range around `pos` where the given mark type is active.
+   */
+  private findMarkRange;
+  /** Switch the link tooltip from view → edit mode. */
+  private onLinkPromptEdit;
+  /** Remove the link mark from the current range and close the tooltip. */
+  private onLinkPromptDelete;
+  private onLinkPromptSave;
+  private onLinkPromptCancel;
+  private onLinkPromptKeyDown;
+  private closeLinkPrompt;
+  /**
+   * Compute the screen-relative position for the link tooltip, anchoring it
+   * just below the start of the selection. Mirrors the behaviour of the
+   * production Quill `.ql-tooltip` placement logic.
+   */
+  private computeLinkPromptPosition;
+  private fontSizeDropdownConfig;
+  private renderFontSizePicker;
   private hostCssClasses;
   private formControlCssClasses;
   private hasWarning;

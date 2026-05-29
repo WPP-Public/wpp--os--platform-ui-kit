@@ -4,8 +4,10 @@ import { WrappedSlot } from '../../../common/WrappedSlot/WrappedSlot';
 import { getSlotEmptyStates, transformToVersionedTag } from '../../../../utils/utils';
 import { clickOnElementsWithHandlers } from './utils';
 import { areAnyChildrenDisabled } from '../../utils';
+import { themeSubscriptionController } from '../../../../utils/subscribe-to-theme';
 export class WppTreeItem {
   constructor() {
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.shouldRecalculateItemHeight = false;
     this.defaultItemHeight = '32px';
     this.itemHeight = null;
@@ -194,22 +196,44 @@ export class WppTreeItem {
       const { className } = props;
       switch (contentType) {
         case 'text':
-          return (h("wpp-typography-v4-0-0", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
+          return (h("wpp-typography-v4-1-0", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
         case 'tag': {
           const { icon } = props;
-          return (h("wpp-tag-v4-0-0", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
+          return (h("wpp-tag-v4-1-0", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
             h(transformToVersionedTag(icon), {
               slot: 'icon-start',
               part: 'icon-start',
             })));
         }
         case 'avatar':
-          return (h("wpp-avatar-v4-0-0", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar" }));
+          return (h("wpp-avatar-v4-1-0", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar",
+            // Remove from tab order - tree uses arrow keys per ARIA APG
+            index: -1 }));
         case 'avatarGroup':
-          return (h("wpp-avatar-group-v4-0-0", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group" }));
+          return (h("wpp-avatar-group-v4-1-0", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group",
+            // Remove avatars from tab order - tree uses arrow keys per ARIA APG
+            avatarsIndex: -1 }));
         default:
           return null;
       }
+    };
+    /**
+     * Get the appropriate selection attribute based on the mode
+     * Per W3C APG: use aria-selected for single-select, aria-checked for multi-select
+     */
+    this.getSelectionAttribute = () => {
+      if (this.item.isNotSelectable) {
+        return {};
+      }
+      if (this.multiple) {
+        // For multi-select trees with checkboxes, use aria-checked
+        if (this.item.indeterminate) {
+          return { 'aria-checked': 'mixed' };
+        }
+        return { 'aria-checked': this.item.selected ? 'true' : 'false' };
+      }
+      // For single-select trees, use aria-selected
+      return { 'aria-selected': this.item.selected ? 'true' : 'false' };
     };
     this.hasIconStartSlot = false;
     this.hasIconEndSlot = false;
@@ -222,6 +246,9 @@ export class WppTreeItem {
     this.search = undefined;
     this.item = undefined;
     this.level = 1;
+    this.setSize = undefined;
+    this.posInSet = undefined;
+    this.isFocused = false;
     this.highlightOptions = undefined;
     this.transformSearchQuery = undefined;
     this.disableSearchHighlight = false;
@@ -284,7 +311,11 @@ export class WppTreeItem {
       }
     }, 0);
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     if (this.titleMeasureTimeout != null) {
       clearTimeout(this.titleMeasureTimeout);
       this.titleMeasureTimeout = undefined;
@@ -321,12 +352,18 @@ export class WppTreeItem {
   }
   render() {
     const isParent = !!this.item?.hasChildren || !!this.item?.children?.length;
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeitem", "aria-busy": this.item.loadingChildren ? 'true' : undefined, ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (h("div", { class: "switcher", onClick: this.onSwitcherClick, part: "tree-item-switcher", "data-switcher": "true" }, h("wpp-icon-triangle-fill-v4-0-0", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (h("wpp-checkbox-v4-0-0", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox" })), h(WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (h("wpp-tooltip-v4-0-0", { text: this.item.title, config: { placement: 'right' }, class: "tooltip" }, this.renderTitle())) : (this.renderTitle()), h("wpp-action-button-v4-0-0", { variant: "secondary", disabled: this.item.disabled || this.item.loadingChildren, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button" }, h("slot", { name: "icon-end", onSlotchange: this.updateSlotData })), this.renderEndContent()), ((this.item.open &&
+    const selectionAttr = this.getSelectionAttribute();
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeitem", "aria-label": this.item.title, "aria-level": this.level, "aria-setsize": this.setSize, "aria-posinset": this.posInSet, "aria-expanded": isParent ? (this.item.open ? 'true' : 'false') : undefined, "aria-disabled": this.item.disabled ? 'true' : undefined, "aria-busy": this.item.loadingChildren ? 'true' : undefined, ...selectionAttr, ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (h("div", { class: "switcher", onClick: this.onSwitcherClick, part: "tree-item-switcher", "data-switcher": "true", "aria-hidden": "true" }, h("wpp-icon-triangle-fill-v4-1-0", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (h("wpp-checkbox-v4-1-0", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox", "aria-hidden": "true", index: -1 })), h(WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (h("wpp-tooltip-v4-1-0", { text: this.item.title, config: { placement: 'right' }, class: "tooltip", anchorTabIndex: -1 }, this.renderTitle())) : (this.renderTitle()), h("wpp-action-button-v4-1-0", { variant: "secondary", disabled: this.item.disabled || this.item.loadingChildren, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button", ariaProps: {
+        label: this.hasIconEndSlot ? `Actions for ${this.item.title}` : undefined,
+        // tabIndex=-1 removes from sequential Tab order; tree handles Tab navigation
+        // per W3C ARIA APG Treeview: Tab from tree container moves focus here programmatically
+        tabIndex: -1,
+      }, "aria-hidden": !this.hasIconEndSlot ? 'true' : undefined }, h("slot", { name: "icon-end", onSlotchange: this.updateSlotData })), this.renderEndContent()), ((this.item.open &&
       (this.item.loadingChildren || (Array.isArray(this.item.children) && this.item.children.length > 0))) ||
       !this.isCollapseTransitionEnd) && h(WrappedSlot, { name: "content", onSlotchange: this.updateSlotData })));
   }
   static get is() { return "wpp-tree-item"; }
-  static get registryIs() { return "wpp-tree-item-v4-0-0"; }
+  static get registryIs() { return "wpp-tree-item-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -430,6 +467,58 @@ export class WppTreeItem {
         "attribute": "level",
         "reflect": true,
         "defaultValue": "1"
+      },
+      "setSize": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Total number of siblings at this level (for aria-setsize)"
+        },
+        "attribute": "set-size",
+        "reflect": true
+      },
+      "posInSet": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Position within the set of siblings (for aria-posinset)"
+        },
+        "attribute": "pos-in-set",
+        "reflect": true
+      },
+      "isFocused": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Whether this item is currently focused"
+        },
+        "attribute": "is-focused",
+        "reflect": true,
+        "defaultValue": "false"
       },
       "highlightOptions": {
         "type": "unknown",

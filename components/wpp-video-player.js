@@ -1,4 +1,5 @@
 import { h, Fragment, proxyCustomElement, HTMLElement, Host } from '@stencil/core/internal/client';
+import { t as themeSubscriptionController } from './subscribe-to-theme.js';
 import { d as defineCustomElement$c } from './wpp-action-button2.js';
 import { d as defineCustomElement$b } from './wpp-icon-caption-off2.js';
 import { d as defineCustomElement$a } from './wpp-icon-caption-on2.js';
@@ -130,7 +131,7 @@ function renderSeekBarComponent() {
 function renderVideoCurrentTimeComponent(time) {
   const ariaLabel = time.hours ? `${time.hours}:${time.minutes}:${time.seconds}` : `${time.minutes}:${time.seconds}`;
   return (h(Fragment, null,
-    h("wpp-typography-v4-0-0", { class: "video-time", type: "xs-body" },
+    h("wpp-typography-v4-1-0", { class: "video-time", type: "xs-body" },
       h("span", { class: "wrapper", role: "timer", "aria-label": ariaLabel },
         time.hours && (h(Fragment, null,
           h("span", { class: "time-wrapper", role: "presentation" },
@@ -154,7 +155,7 @@ function renderVideoCurrentTimeComponent(time) {
 
 function renderVolumeBarComponent() {
   return (h("div", { ref: ref => (this.volumeContainerRef = ref), class: "volume-container", onMouseEnter: this.handleSliderShow, onMouseLeave: () => this.handleSliderHide(300) },
-    h("wpp-action-button-v4-0-0", { ref: ref => (this.volumeButtonRef = ref), class: "volume-button", variant: "inverted", onClick: this.toggleMute, onFocus: this.handleSliderShow, onFocusout: () => this.handleSliderHide(300), ariaProps: { label: this._locales.volumeButtonAriaLabel } }, this.volume === 0 ? (h("wpp-icon-speaker-mute-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-speaker-v4-0-0", { slot: "icon-start", "aria-hidden": "true" }))),
+    h("wpp-action-button-v4-1-0", { ref: ref => (this.volumeButtonRef = ref), class: "volume-button", variant: "inverted", onClick: this.toggleMute, onFocus: this.handleSliderShow, onFocusout: () => this.handleSliderHide(300), ariaProps: { label: this._locales.volumeButtonAriaLabel } }, this.volume === 0 ? (h("wpp-icon-speaker-mute-v4-1-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-speaker-v4-1-0", { slot: "icon-start", "aria-hidden": "true" }))),
     h("div", { ref: ref => (this.volumeBarContainerRef = ref), class: "slider-container" },
       h("label", { htmlFor: "volume-slider", class: "sr-only" }, this._locales.volumeProgressLabel),
       h("input", { ref: ref => (this.volumeBarRef = ref), style: { '--progress-bar-progress': `${this.volume * 100}%` }, class: "progress-bar", id: "volume-slider", type: "range", min: 0, max: 1, step: 0.01, value: this.volume, onInput: this.handleVolume, "aria-label": "Volume control bar", "aria-valuemin": "0", "aria-valuemax": "1", "aria-valuenow": this.volume.toString(), autocomplete: "off", onFocus: this.handleSliderShow, onFocusout: () => this.handleSliderHide(300) }))));
@@ -192,13 +193,14 @@ function renderAccessibilityInstructionsComponent() {
         !this.controlPanelConfigDefault.showFullscreenButton && (h("li", null, this._locales.keyboardShortcutsDescription.fullscreen)))))));
 }
 
-const wppVideoPlayerCss = ".progress-container{width:100%;position:relative;height:4px;border-radius:8px;background-color:rgba(255, 255, 255, 0.3)}.loading-progress{position:absolute;top:0;left:0;height:100%;border-radius:8px;background-color:rgba(255, 255, 255, 0.3);z-index:1;pointer-events:none;max-width:100%}.video-time{cursor:default;color:var(--wpp-grey-color-000)}.wrapper{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap}.time-wrapper{position:relative}.time-placeholder{opacity:0;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.time-value{position:absolute;top:0;left:0;width:100%;display:grid;grid-template-columns:repeat(2, 1fr);text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.volume-container{position:relative}.slider-container{position:absolute;top:-68px;left:50%;height:32px;width:80px;border-radius:6px;background-color:rgba(0, 0, 0, 0.6);-webkit-transform:translateX(-50%) rotate(270deg);transform:translateX(-50%) rotate(270deg);-webkit-transform-origin:center center;transform-origin:center center;opacity:0;pointer-events:none;-webkit-transition:opacity 0.15s ease-in-out;transition:opacity 0.15s ease-in-out}.slider-container.active{opacity:1;pointer-events:initial}.slider-container .progress-bar{width:64px;height:auto;left:50%;top:50%;-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.wpp-action-button::part(button).hover-active{color:var(--ab-inverted-text-color-hover)}.wpp-action-button::part(button).hover-active~.overlay{background-color:var(--ab-inverted-bg-color-hover)}.wpp-action-button::part(button).hover-active .icon-start ::slotted(*),.wpp-action-button::part(button).hover-active .icon-end ::slotted(*){color:var(--ab-inverted-icon-color-hover)}.progress-bar{cursor:pointer;-webkit-appearance:none;-moz-appearance:none;appearance:none;background:transparent;position:absolute;width:100%;height:100%;z-index:2;margin:0;padding:0;}.progress-bar:focus{outline:none}.progress-bar::-webkit-slider-runnable-track{width:100%;height:4px;border-radius:8px;background:-webkit-gradient(linear, left top, right top, from(#fff), to(rgba(255, 255, 255, 0.3)));background:linear-gradient(to right, #fff var(--progress-bar-progress, 0%), rgba(255, 255, 255, 0.3) var(--progress-bar-progress, 0%))}.progress-bar::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background-color:#fff;cursor:pointer;border:none;margin-top:-4px;}.progress-bar::-moz-range-track{width:100%;height:4px;background-color:rgba(255, 255, 255, 0.3);border-radius:8px;border:none}.progress-bar::-moz-range-progress{height:4px;background-color:#fff;border-radius:8px;border:none}.progress-bar::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background-color:#fff;cursor:pointer;border:none}.progress-bar::-ms-track{width:100%;height:4px;background:transparent;border-color:transparent;color:transparent;border-radius:8px}.progress-bar::-ms-fill-lower{background-color:#fff;border-radius:8px}.progress-bar::-ms-fill-upper{background-color:rgba(255, 255, 255, 0.3);border-radius:8px}.progress-bar::-ms-thumb{width:12px;height:12px;border-radius:50%;background-color:#fff;cursor:pointer;border:none}.progress-bar:focus-visible{border-radius:4px;outline:none;-webkit-box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000);box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000)}.progress-bar:focus-visible::-webkit-slider-thumb{-webkit-box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000);box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000)}.progress-bar:focus-visible::-moz-range-thumb{box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000)}@media (forced-colors: active){.progress-bar:focus-visible,.progress-bar.tab-focus{outline:2px solid CanvasText}.progress-bar:focus-visible::-webkit-slider-thumb,.progress-bar.tab-focus::-webkit-slider-thumb{outline:2px solid CanvasText}.progress-bar:focus-visible::-moz-range-thumb,.progress-bar.tab-focus::-moz-range-thumb{outline:2px solid CanvasText}}.captions-wrapper{position:absolute;bottom:60px;left:0;right:0;text-align:center;z-index:10;pointer-events:none;opacity:0;-webkit-transition:opacity 0.15s ease-in-out, bottom 0.15s ease-in-out;transition:opacity 0.15s ease-in-out, bottom 0.15s ease-in-out}.captions-wrapper.caption-enabled{opacity:1}.caption-cue{display:inline-block;font-family:\"Arial\", sans-serif;font-size:1.2rem;color:white;background-color:rgba(0, 0, 0, 0.7);padding:0.3em 0.7em;margin:0.2em;border-radius:0.2em;max-width:80%;text-shadow:1px 1px 1px black}:host{display:-ms-flexbox;display:flex;position:relative;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;background-color:#000;color:#fff;outline:none}:host:host(.wpp-full-screen) .video-player{width:100% !important;height:100% !important}:host:host(.wpp-full-screen) .controls-bar{bottom:16px;width:100%;max-width:62.5%}.video-player{aspect-ratio:var(--aspect-ratio, 16/9)}.controls{background-size:cover;background-position:center;cursor:pointer;position:absolute;width:100%;height:100%;-webkit-transition:opacity 0.15s ease-in-out;transition:opacity 0.15s ease-in-out}.controls.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-900), 0 0 0 3px var(--wpp-grey-color-000);box-shadow:0 0 0 1px var(--wpp-grey-color-900), 0 0 0 3px var(--wpp-grey-color-000)}.controls.state-idle{cursor:default;background-color:var(--wpp-grey-color-800)}.controls.state-idle .play-button{display:-ms-flexbox;display:flex}.controls.state-idle .controls-bar{opacity:0;pointer-events:none}.controls.state-playing,.controls.state-paused{background-image:none !important;background-color:transparent}.controls.state-playing .play-button,.controls.state-paused .play-button{display:none}.controls.state-playing .controls-bar,.controls.state-paused .controls-bar{opacity:1;pointer-events:initial}.controls.state-playing.invisible .controls-bar{opacity:0;pointer-events:none}.controls.state-playing.invisible .captions-wrapper{bottom:8px}.play-button{--wpp-icon-color:#fff;border:none;cursor:pointer;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%, -50%) scale(0.875);transform:translate(-50%, -50%) scale(0.875);width:66px;height:66px;padding:2px;overflow:hidden;border-radius:50%;background-color:rgba(0, 0, 0, 0.6);-webkit-transition:background-color 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out;transition:background-color 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out;transition:transform 0.15s ease-in-out, background-color 0.15s ease-in-out;transition:transform 0.15s ease-in-out, background-color 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out;z-index:1}.play-button:hover{-webkit-transform:translate(-50%, -50%) scale(1);transform:translate(-50%, -50%) scale(1);background-color:rgba(0, 0, 0, 0.72)}.play-button:active{-webkit-transform:translate(-50%, -50%) scale(0.875);transform:translate(-50%, -50%) scale(0.875);background-color:rgba(0, 0, 0, 0.78)}.play-button::part(overlay){display:none}.play-button::part(button){border-radius:50%;width:100%;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center}.play-button.invisible{visibility:hidden;z-index:-1}.controls-bar{-webkit-box-sizing:border-box;box-sizing:border-box;display:-ms-flexbox;display:flex;gap:8px;-ms-flex-align:center;align-items:center;position:absolute;bottom:8px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);background-color:rgba(0, 0, 0, 0.6);padding:6px 8px;border-radius:6px;width:calc(100% - 32px);-webkit-transition:opacity 0.15s ease-in-out;transition:opacity 0.15s ease-in-out;cursor:default;z-index:10}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0}";
+const wppVideoPlayerCss = ".progress-container{width:100%;position:relative;height:4px;border-radius:8px;background-color:rgba(255, 255, 255, 0.3)}.loading-progress{position:absolute;top:0;left:0;height:100%;border-radius:8px;background-color:rgba(255, 255, 255, 0.3);z-index:1;pointer-events:none;max-width:100%}.video-time{cursor:default;color:var(--wpp-grey-color-000)}.wrapper{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap}.time-wrapper{position:relative}.time-placeholder{opacity:0;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.time-value{position:absolute;top:0;left:0;width:100%;display:grid;grid-template-columns:repeat(2, 1fr);text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.volume-container{position:relative}.slider-container{position:absolute;top:-68px;left:50%;height:32px;width:80px;border-radius:6px;background-color:rgba(0, 0, 0, 0.6);-webkit-transform:translateX(-50%) rotate(270deg);transform:translateX(-50%) rotate(270deg);-webkit-transform-origin:center center;transform-origin:center center;opacity:0;pointer-events:none;-webkit-transition:opacity 0.15s ease-in-out;transition:opacity 0.15s ease-in-out}.slider-container.active{opacity:1;pointer-events:initial}.slider-container .progress-bar{width:64px;height:auto;left:50%;top:50%;-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.wpp-action-button::part(button).hover-active{color:var(--ab-inverted-text-color-hover)}.wpp-action-button::part(button).hover-active~.overlay{background-color:var(--ab-inverted-bg-color-hover)}.wpp-action-button::part(button).hover-active .icon-start ::slotted(*),.wpp-action-button::part(button).hover-active .icon-end ::slotted(*){color:var(--ab-inverted-icon-color-hover)}.progress-bar{cursor:pointer;-webkit-appearance:none;-moz-appearance:none;appearance:none;background:transparent;position:absolute;width:100%;height:100%;z-index:2;margin:0;padding:0;}.progress-bar:focus{outline:none}.progress-bar::-webkit-slider-runnable-track{width:100%;height:4px;border-radius:8px;background:-webkit-gradient(linear, left top, right top, from(#fff), to(rgba(255, 255, 255, 0.3)));background:linear-gradient(to right, #fff var(--progress-bar-progress, 0%), rgba(255, 255, 255, 0.3) var(--progress-bar-progress, 0%))}.progress-bar::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background-color:#fff;cursor:pointer;border:none;margin-top:-4px;}.progress-bar::-moz-range-track{width:100%;height:4px;background-color:rgba(255, 255, 255, 0.3);border-radius:8px;border:none}.progress-bar::-moz-range-progress{height:4px;background-color:#fff;border-radius:8px;border:none}.progress-bar::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background-color:#fff;cursor:pointer;border:none}.progress-bar::-ms-track{width:100%;height:4px;background:transparent;border-color:transparent;color:transparent;border-radius:8px}.progress-bar::-ms-fill-lower{background-color:#fff;border-radius:8px}.progress-bar::-ms-fill-upper{background-color:rgba(255, 255, 255, 0.3);border-radius:8px}.progress-bar::-ms-thumb{width:12px;height:12px;border-radius:50%;background-color:#fff;cursor:pointer;border:none}.progress-bar:focus-visible{border-radius:4px;outline:none;-webkit-box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000);box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000)}.progress-bar:focus-visible::-webkit-slider-thumb{-webkit-box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000);box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000)}.progress-bar:focus-visible::-moz-range-thumb{box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000)}@media (forced-colors: active){.progress-bar:focus-visible,.progress-bar.tab-focus{outline:2px solid CanvasText}.progress-bar:focus-visible::-webkit-slider-thumb,.progress-bar.tab-focus::-webkit-slider-thumb{outline:2px solid CanvasText}.progress-bar:focus-visible::-moz-range-thumb,.progress-bar.tab-focus::-moz-range-thumb{outline:2px solid CanvasText}}.captions-wrapper{position:absolute;bottom:60px;left:0;right:0;text-align:center;z-index:10;pointer-events:none;opacity:0;-webkit-transition:opacity 0.15s ease-in-out, bottom 0.15s ease-in-out;transition:opacity 0.15s ease-in-out, bottom 0.15s ease-in-out}.captions-wrapper.caption-enabled{opacity:1}.caption-cue{display:inline-block;font-family:\"Arial\", sans-serif;font-size:1.2rem;color:white;background-color:rgba(0, 0, 0, 0.7);padding:0.3em 0.7em;margin:0.2em;border-radius:0.2em;max-width:80%;text-shadow:1px 1px 1px black}:host{display:-ms-flexbox;display:flex;position:relative;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;background-color:#000;color:#fff;outline:none}:host:host(.wpp-full-screen) .video-player{width:100% !important;height:100% !important}:host:host(.wpp-full-screen) .controls-bar{bottom:16px;width:100%;max-width:62.5%}.video-player{aspect-ratio:var(--aspect-ratio, 16/9)}.controls{background-size:cover;background-position:center;cursor:pointer;position:absolute;width:100%;height:100%;-webkit-transition:opacity 0.15s ease-in-out;transition:opacity 0.15s ease-in-out}.controls.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-900), 0 0 0 3px var(--wpp-grey-color-000);box-shadow:0 0 0 1px var(--wpp-grey-color-900), 0 0 0 3px var(--wpp-grey-color-000)}.controls.state-idle{cursor:default;background-color:var(--wpp-grey-color-800)}.controls.state-idle .play-button{display:-ms-flexbox;display:flex}.controls.state-idle .controls-bar{opacity:0;pointer-events:none}.controls.state-playing,.controls.state-paused{background-image:none !important;background-color:transparent}.controls.state-playing .play-button,.controls.state-paused .play-button{display:none}.controls.state-playing .controls-bar,.controls.state-paused .controls-bar{opacity:1;pointer-events:initial}.controls.state-playing.invisible .controls-bar{opacity:0;pointer-events:none}.controls.state-playing.invisible .captions-wrapper{bottom:8px}.play-button{--wpp-icon-color:#fff;border:none;cursor:pointer;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%, -50%) scale(0.875);transform:translate(-50%, -50%) scale(0.875);width:66px;height:66px;padding:2px;overflow:hidden;border-radius:50%;background-color:rgba(0, 0, 0, 0.6);-webkit-transition:background-color 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out;transition:background-color 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out;transition:transform 0.15s ease-in-out, background-color 0.15s ease-in-out;transition:transform 0.15s ease-in-out, background-color 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out;z-index:1}.play-button:hover{-webkit-transform:translate(-50%, -50%) scale(1);transform:translate(-50%, -50%) scale(1);background-color:rgba(0, 0, 0, 0.72)}.play-button:active{-webkit-transform:translate(-50%, -50%) scale(0.875);transform:translate(-50%, -50%) scale(0.875);background-color:rgba(0, 0, 0, 0.78)}.play-button::part(overlay){display:none}.play-button::part(button){border-radius:50%;width:100%;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center}.play-button.invisible{visibility:hidden;z-index:-1}.controls-bar{-webkit-box-sizing:border-box;box-sizing:border-box;display:-ms-flexbox;display:flex;gap:8px;-ms-flex-align:center;align-items:center;position:absolute;bottom:8px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);background-color:rgba(0, 0, 0, 0.6);padding:6px 8px;border-radius:6px;width:calc(100% - 32px);-webkit-transition:opacity 0.15s ease-in-out;transition:opacity 0.15s ease-in-out;cursor:default;z-index:10}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0}:host([data-wpp-theme=dark]){--wpp-prop-icon-color:var(--wpp-grey-color-1000)}:host([data-wpp-theme=dark]) .video-time{--wpp-text-color:var(--wpp-grey-color-1000);color:var(--wpp-grey-color-1000)}:host([data-wpp-theme=dark]) .wpp-icon-play-filled,:host([data-wpp-theme=dark]) .wpp-icon-pause-filled,:host([data-wpp-theme=dark]) .wpp-icon-speaker,:host([data-wpp-theme=dark]) .wpp-icon-fullscreen{color:var(--wpp-grey-color-1000)}";
 
 const WppVideoPlayer$1 = /*@__PURE__*/ proxyCustomElement(class WppVideoPlayer extends HTMLElement {
   constructor() {
     super();
     this.__registerHost();
     this.__attachShadow();
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     // Sizing
     this.videoPlayerHostSize = {};
     this.videoPlayerSize = {};
@@ -589,12 +591,12 @@ const WppVideoPlayer$1 = /*@__PURE__*/ proxyCustomElement(class WppVideoPlayer e
      * - autoplay=false && state = idle
      * - autoplay=true
      */
-    this.renderMainPlayButton = () => (h("wpp-action-button-v4-0-0", { ref: ref => (this.initPlayButtonRef = ref), class: this.playButtonCssClasses(), onClick: this.togglePlay, variant: "inverted", ariaProps: {
+    this.renderMainPlayButton = () => (h("wpp-action-button-v4-1-0", { ref: ref => (this.initPlayButtonRef = ref), class: this.playButtonCssClasses(), onClick: this.togglePlay, variant: "inverted", ariaProps: {
         label: this.videoPlayerState === 'playing'
           ? this._locales.playButtonAriaLabel.play
           : this._locales.playButtonAriaLabel.pause,
         pressed: this.videoPlayerState === 'playing',
-      } }, this.videoPlayerState !== 'playing' ? (h("wpp-icon-play-filled-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-pause-filled-v4-0-0", { slot: "icon-start", "aria-hidden": "true" }))));
+      } }, this.videoPlayerState !== 'playing' ? (h("wpp-icon-play-filled-v4-1-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-pause-filled-v4-1-0", { slot: "icon-start", "aria-hidden": "true" }))));
     this.renderVideoTag = () => (h("video", { ref: ref => (this.videoPlayerRef = ref), id: "video-element", class: "video-player", part: "video-player", controls: false, poster: this.thumbnail, autoplay: this.controlPanelConfigDefault.autoplay, muted: !this.controlPanelConfigDefault.showVolumeButton || this.controlPanelConfigDefault.autoplay, loop: this.controlPanelConfigDefault.loop, preload: this.preload, onEnded: this.handleVideoEnded, onLoadedMetaData: this.handleMetadataLoaded, ...(this.controlPanelConfigDefault.autoplay
         ? {
           onClick: this.togglePlay,
@@ -713,7 +715,11 @@ const WppVideoPlayer$1 = /*@__PURE__*/ proxyCustomElement(class WppVideoPlayer e
       document.addEventListener('fullscreenchange', this.handleFullscreenChange);
     }
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     if (!this.controlPanelConfigDefault.autoplay) {
       this.host.removeEventListener('keydown', this.handleKeyboardInput);
       if (this.controlPanelConfigDefault.showFullscreenButton)
@@ -731,18 +737,18 @@ const WppVideoPlayer$1 = /*@__PURE__*/ proxyCustomElement(class WppVideoPlayer e
           role: 'region',
           'aria-label': this._locales.controlsAriaLabel,
         }
-        : {}) }, this.videoPlayerState !== 'idle' && (h(Fragment, null, this.caption && this.renderCaptions(), h("div", { class: "controls-bar", ref: ref => (this.controlsBarRef = ref) }, h("wpp-action-button-v4-0-0", { ref: ref => (this.playPauseButtonRef = ref), class: "play-pause-button", variant: "inverted", onClick: this.togglePlay, ariaProps: {
+        : {}) }, this.videoPlayerState !== 'idle' && (h(Fragment, null, this.caption && this.renderCaptions(), h("div", { class: "controls-bar", ref: ref => (this.controlsBarRef = ref) }, h("wpp-action-button-v4-1-0", { ref: ref => (this.playPauseButtonRef = ref), class: "play-pause-button", variant: "inverted", onClick: this.togglePlay, ariaProps: {
         label: this.videoPlayerState === 'playing'
           ? this._locales.playPauseButtonArealLabels.pause
           : this._locales.playPauseButtonArealLabels.play,
         pressed: this.videoPlayerState === 'playing',
-      } }, this.videoPlayerState === 'playing' ? (h("wpp-icon-pause-filled-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-play-filled-v4-0-0", { slot: "icon-start", "aria-hidden": "true" }))), this.renderVideoTime(this.splitCurrentVideoTime), this.renderSeekBar(), this.renderVideoTime(this.splitOverallVideoTime), this.caption && (h("wpp-action-button-v4-0-0", { ref: ref => (this.captionButtonRef = ref), onClick: this.toggleCaptions, variant: "inverted", ariaProps: {
+      } }, this.videoPlayerState === 'playing' ? (h("wpp-icon-pause-filled-v4-1-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-play-filled-v4-1-0", { slot: "icon-start", "aria-hidden": "true" }))), this.renderVideoTime(this.splitCurrentVideoTime), this.renderSeekBar(), this.renderVideoTime(this.splitOverallVideoTime), this.caption && (h("wpp-action-button-v4-1-0", { ref: ref => (this.captionButtonRef = ref), onClick: this.toggleCaptions, variant: "inverted", ariaProps: {
         label: this._locales.captionButtonAriaLabel,
-      } }, this.isCaptionEnabled ? (h("wpp-icon-caption-on-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-caption-off-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })))), this.controlPanelConfigDefault.showVolumeButton && this.renderVolumeBar(), this.controlPanelConfigDefault.showFullscreenButton && (h("wpp-action-button-v4-0-0", { ref: ref => (this.fullScreenButtonRef = ref), onClick: this.toggleFullscreen, variant: "inverted", ariaProps: {
+      } }, this.isCaptionEnabled ? (h("wpp-icon-caption-on-v4-1-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-caption-off-v4-1-0", { slot: "icon-start", "aria-hidden": "true" })))), this.controlPanelConfigDefault.showVolumeButton && this.renderVolumeBar(), this.controlPanelConfigDefault.showFullscreenButton && (h("wpp-action-button-v4-1-0", { ref: ref => (this.fullScreenButtonRef = ref), onClick: this.toggleFullscreen, variant: "inverted", ariaProps: {
         label: this._locales.fullscreenButtonAriaLabel,
-      } }, this.isFullscreen ? (h("wpp-icon-fullscreen-minimise-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-fullscreen-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })))), this.renderAccessibilityInstructions())))))));
+      } }, this.isFullscreen ? (h("wpp-icon-fullscreen-minimise-v4-1-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-fullscreen-v4-1-0", { slot: "icon-start", "aria-hidden": "true" })))), this.renderAccessibilityInstructions())))))));
   }
-  static get registryIs() { return "wpp-video-player-v4-0-0"; }
+  static get registryIs() { return "wpp-video-player-v4-1-0"; }
   get host() { return this; }
   static get watchers() { return {
     "videoPlayerState": ["onVideoPlayerState"],
@@ -752,7 +758,7 @@ const WppVideoPlayer$1 = /*@__PURE__*/ proxyCustomElement(class WppVideoPlayer e
     "locales": ["onUpdateLocales"]
   }; }
   static get style() { return wppVideoPlayerCss; }
-}, [1, "wpp-video-player", "wpp-video-player-v4-0-0", {
+}, [1, "wpp-video-player", "wpp-video-player-v4-1-0", {
     "src": [1],
     "thumbnail": [1],
     "caption": [16],
@@ -783,64 +789,64 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-video-player-v4-0-0", "wpp-action-button-v4-0-0", "wpp-icon-caption-off-v4-0-0", "wpp-icon-caption-on-v4-0-0", "wpp-icon-fullscreen-v4-0-0", "wpp-icon-fullscreen-minimise-v4-0-0", "wpp-icon-pause-filled-v4-0-0", "wpp-icon-play-filled-v4-0-0", "wpp-icon-speaker-v4-0-0", "wpp-icon-speaker-mute-v4-0-0", "wpp-spinner-v4-0-0", "wpp-typography-v4-0-0"];
+  const components = ["wpp-video-player-v4-1-0", "wpp-action-button-v4-1-0", "wpp-icon-caption-off-v4-1-0", "wpp-icon-caption-on-v4-1-0", "wpp-icon-fullscreen-v4-1-0", "wpp-icon-fullscreen-minimise-v4-1-0", "wpp-icon-pause-filled-v4-1-0", "wpp-icon-play-filled-v4-1-0", "wpp-icon-speaker-v4-1-0", "wpp-icon-speaker-mute-v4-1-0", "wpp-spinner-v4-1-0", "wpp-typography-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-video-player-v4-0-0":
+    case "wpp-video-player-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppVideoPlayer$1);
       }
       break;
-    case "wpp-action-button-v4-0-0":
+    case "wpp-action-button-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-caption-off-v4-0-0":
+    case "wpp-icon-caption-off-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-caption-on-v4-0-0":
+    case "wpp-icon-caption-on-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-fullscreen-v4-0-0":
+    case "wpp-icon-fullscreen-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-fullscreen-minimise-v4-0-0":
+    case "wpp-icon-fullscreen-minimise-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-icon-pause-filled-v4-0-0":
+    case "wpp-icon-pause-filled-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-play-filled-v4-0-0":
+    case "wpp-icon-play-filled-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-icon-speaker-v4-0-0":
+    case "wpp-icon-speaker-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-speaker-mute-v4-0-0":
+    case "wpp-icon-speaker-mute-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v4-0-0":
+    case "wpp-spinner-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-0-0":
+    case "wpp-typography-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

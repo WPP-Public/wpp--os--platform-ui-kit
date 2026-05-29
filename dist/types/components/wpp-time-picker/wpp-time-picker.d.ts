@@ -14,6 +14,7 @@ export declare class WppTimePicker {
   private inputRef?;
   private hoursSectionRef?;
   private minutesSectionRef?;
+  private themeSubscription;
   host: HTMLWppTimePickerElement;
   focusType: FOCUS_TYPE;
   showDisplayCross: boolean;
@@ -109,6 +110,8 @@ export declare class WppTimePicker {
   updateIsInComponent(value: boolean): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
   private highlightItem;
   private scrollIntoView;
   private isValidTimeValue;

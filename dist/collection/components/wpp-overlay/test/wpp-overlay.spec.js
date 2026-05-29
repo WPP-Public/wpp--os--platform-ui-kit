@@ -1,6 +1,8 @@
 import { newSpecPage } from '@stencil/core/testing';
+import { Z_INDEX } from '../../../common/consts';
 import { WppOverlay } from '../wpp-overlay';
-describe('wpp-action-button', () => {
+import * as themeUtils from '../../../utils/subscribe-to-theme';
+describe('wpp-overlay', () => {
   describe('Testing initialisation', () => {
     it('Test default init', async () => {
       const myBtn = new WppOverlay();
@@ -11,7 +13,7 @@ describe('wpp-action-button', () => {
       // Testing default property initialisation
       expect(myBtn.isHidden).toBeFalsy();
       expect(myBtn.isVisible).toBeFalsy();
-      expect(myBtn.zIndex).toEqual(900);
+      expect(myBtn.zIndex).toEqual(Z_INDEX.OVERLAY);
     });
   });
   describe('Test componentWillLoad', () => {
@@ -99,6 +101,36 @@ describe('wpp-action-button', () => {
       });
       await page.waitForChanges();
       expect(page.root).toMatchSnapshot();
+    });
+  });
+  describe('subscribing to theme changes', () => {
+    let mockStart;
+    let mockStop;
+    beforeEach(() => {
+      mockStart = jest.fn();
+      mockStop = jest.fn();
+      jest.spyOn(themeUtils, 'themeSubscriptionController').mockReturnValue({
+        start: mockStart,
+        stop: mockStop,
+      });
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
+      await newSpecPage({
+        components: [WppOverlay],
+        html: `<wpp-overlay is-visible="false"></wpp-overlay>`,
+      });
+      expect(mockStart).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
+      const page = await newSpecPage({
+        components: [WppOverlay],
+        html: `<wpp-overlay is-visible="false"></wpp-overlay>`,
+      });
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
     });
   });
 });

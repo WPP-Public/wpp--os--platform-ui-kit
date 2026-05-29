@@ -2,6 +2,7 @@ import { h } from '@stencil/core';
 import { newSpecPage } from '@stencil/core/testing';
 import { WppFullScreenModal } from '../wpp-full-screen-modal';
 import * as utils from '../../../utils/utils';
+import * as themeUtils from '../../../utils/subscribe-to-theme';
 describe('wpp-full-screen-modal', () => {
   it('Should render default modal', async () => {
     const page = await newSpecPage({
@@ -34,7 +35,7 @@ describe('wpp-full-screen-modal osBarCompatible', () => {
     const spy = jest.spyOn(utils, 'getOsBarOffsetHeight').mockReturnValue(72);
     const page = await newSpecPage({
       components: [WppFullScreenModal],
-      template: () => h("wpp-full-screen-modal-v4-0-0", { osBarCompatible: true }),
+      template: () => h("wpp-full-screen-modal-v4-1-0", { osBarCompatible: true }),
     });
     expect(page.root?.style.getPropertyValue('--wpp-full-screen-modal-top-offset')).toBe('72px');
     spy.mockRestore();
@@ -42,7 +43,7 @@ describe('wpp-full-screen-modal osBarCompatible', () => {
   it('applies wpp-os-bar-compatible CSS class when osBarCompatible is true', async () => {
     const page = await newSpecPage({
       components: [WppFullScreenModal],
-      template: () => h("wpp-full-screen-modal-v4-0-0", { osBarCompatible: true }),
+      template: () => h("wpp-full-screen-modal-v4-1-0", { osBarCompatible: true }),
     });
     expect(page.root).toHaveClass('wpp-os-bar-compatible');
   });
@@ -57,9 +58,39 @@ describe('wpp-full-screen-modal osBarCompatible', () => {
     const spy = jest.spyOn(utils, 'getOsBarOffsetHeight').mockReturnValue(64);
     const page = await newSpecPage({
       components: [WppFullScreenModal],
-      template: () => h("wpp-full-screen-modal-v4-0-0", { osBarCompatible: true }),
+      template: () => h("wpp-full-screen-modal-v4-1-0", { osBarCompatible: true }),
     });
     expect(page.root?.style.getPropertyValue('--wpp-full-screen-modal-top-offset')).toBe('64px');
     spy.mockRestore();
+  });
+  describe('subscribing to theme changes', () => {
+    let mockStart;
+    let mockStop;
+    beforeEach(() => {
+      mockStart = jest.fn();
+      mockStop = jest.fn();
+      jest.spyOn(themeUtils, 'themeSubscriptionController').mockReturnValue({
+        start: mockStart,
+        stop: mockStop,
+      });
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
+      await newSpecPage({
+        components: [WppFullScreenModal],
+        html: `<wpp-full-screen-modal></wpp-full-screen-modal>`,
+      });
+      expect(mockStart).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
+      const page = await newSpecPage({
+        components: [WppFullScreenModal],
+        html: `<wpp-full-screen-modal></wpp-full-screen-modal>`,
+      });
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
+    });
   });
 });

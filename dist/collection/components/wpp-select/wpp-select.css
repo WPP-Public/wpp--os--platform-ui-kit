@@ -309,6 +309,9 @@
 :host .wpp-select-portal .multiple-select-folder-buttons.select-all-mode {
   justify-content: flex-end;
 }
+:host .wpp-select-portal[data-wpp-theme=dark] {
+  background-color: var(--wpp-grey-color-200);
+}
 :host .wpp-inline-message {
   display: inline-flex;
   margin-top: 4px;

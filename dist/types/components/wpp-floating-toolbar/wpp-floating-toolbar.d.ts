@@ -4,6 +4,7 @@ export declare class WppFloatingToolbar {
   host: HTMLWppFloatingToolbarElement;
   private items;
   private _actionButtonsConfig;
+  private themeSubscription;
   /**
    * Defines the action buttons configuration.
    * Must contain between 2 and 7 items.
@@ -20,6 +21,8 @@ export declare class WppFloatingToolbar {
   onUpdateActionButtonsConfig(config: ActionButtonData[]): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
   private validateActionButtonConfig;
   private renderActionButton;
   private setActionButtons;

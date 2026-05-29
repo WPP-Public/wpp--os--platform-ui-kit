@@ -36,7 +36,7 @@
   color: var(--wpp-icon-color-active);
 }
 .trigger.focused {
-  background-color: var(--wpp-grey-color-000);
+  background-color: transparent;
   border-color: var(--wpp-grey-color-800);
 }
 .trigger.focused .input-placeholder,

@@ -20,12 +20,14 @@ export class WppTextareaInput {
       if (!this.inputRef || this.inputRef.scrollHeight === 0)
         return;
       const computed = window.getComputedStyle(this.inputRef);
-      const shouldShrink = this.previousValue === '' || !this.inputRef.value.startsWith(this.previousValue);
+      const shouldShrink = this.previousValue !== '' &&
+        (this.inputRef.value.length < this.previousValue.length || !this.inputRef.value.startsWith(this.previousValue));
       if (shouldShrink) {
         this.isScrollable = false;
         this.inputRef.style.setProperty('--wpp-textarea-height', 'auto');
       }
-      const newHeight = this.inputRef.scrollHeight - (parseFloat(computed.borderTopWidth) + parseFloat(computed.borderBottomWidth));
+      const borderPadding = parseFloat(computed.borderTopWidth) + parseFloat(computed.borderBottomWidth);
+      const newHeight = this.inputRef.scrollHeight - borderPadding;
       if (this.rows === 'stretch' && this.maxHeight && newHeight > this.maxHeight) {
         this.inputRef.style.setProperty('--wpp-textarea-height', `${this.maxHeight}px`);
         this.isScrollable = true;
@@ -56,7 +58,6 @@ export class WppTextareaInput {
       }
     };
     this.onInput = (event) => {
-      // this.focusType = FOCUS_TYPE.NONE
       this.value = event.target.value;
       if (this.rows === 'stretch')
         this.adjustHeight();
@@ -242,14 +243,14 @@ export class WppTextareaInput {
   }
   render() {
     const style = {
-      '--wpp-textarea-height': this.rows ? 'auto' : '',
+      ...((this.rows === 'stretch' || !!this.rows) && { '--wpp-textarea-height': 'auto' }),
     };
     const ariaAttrs = this.getAriaAttributes();
     const overLimit = this.isOverLimit;
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, textarea, message-wrapper, message, limit-wrapper, limit-label, limit-text" }, this.labelConfig?.text && (h("wpp-label-v4-0-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("textarea", { name: this.name, value: this.value, disabled: this.disabled, placeholder: this.placeholder, rows: this.rows === 'stretch' ? 1 : this.rows ? Number(this.rows) : undefined, id: this.inputId, required: this.required, class: this.textAreaCssClasses(), onInput: this.onInput, ref: inputRef => (this.inputRef = inputRef), part: "textarea", style: style, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, ...ariaAttrs, ...this.validAriaProps }), (!!this.charactersLimit || !!this.message) && (h("div", { class: this.messageCssClasses(), part: "message-wrapper", "aria-live": "polite", "aria-atomic": "true" }, !!this.message && (h("wpp-inline-message-v4-0-0", { id: this.messageId, message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, part: "message" })), !!this.charactersLimit && (h("div", { id: this.counterId, class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, h("wpp-typography-v4-0-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":"), h("wpp-typography-v4-0-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit), overLimit && (h("wpp-typography-v4-0-0", { type: "xs-body", tag: "span", class: "exceeded-characters sr-only", part: "limit-text" }, this._locales.exceededByCharacters, " ", this.enteredCharacters - (this.charactersLimit || 0)))))))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, textarea, message-wrapper, message, limit-wrapper, limit-label, limit-text", style: style }, this.labelConfig?.text && (h("wpp-label-v4-1-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("textarea", { name: this.name, value: this.value, disabled: this.disabled, placeholder: this.placeholder, rows: this.rows === 'stretch' ? 1 : this.rows ? this.rows : undefined, id: this.inputId, required: this.required, class: this.textAreaCssClasses(), onInput: this.onInput, ref: inputRef => (this.inputRef = inputRef), part: "textarea", onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, ...ariaAttrs, ...this.validAriaProps }), (!!this.charactersLimit || !!this.message) && (h("div", { class: this.messageCssClasses(), part: "message-wrapper", "aria-live": "polite", "aria-atomic": "true" }, !!this.message && (h("wpp-inline-message-v4-1-0", { id: this.messageId, message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, part: "message" })), !!this.charactersLimit && (h("div", { id: this.counterId, class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, h("wpp-typography-v4-1-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":"), h("wpp-typography-v4-1-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit), overLimit && (h("wpp-typography-v4-1-0", { type: "xs-body", tag: "span", class: "exceeded-characters sr-only", part: "limit-text" }, this._locales.exceededByCharacters, " ", this.enteredCharacters - (this.charactersLimit || 0)))))))));
   }
   static get is() { return "wpp-textarea-input"; }
-  static get registryIs() { return "wpp-textarea-input-v4-0-0"; }
+  static get registryIs() { return "wpp-textarea-input-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

@@ -140,3 +140,7 @@
   background-color: var(--radio-bg-color-checked-disabled);
   border-color: var(--radio-border-color-checked-disabled);
 }
+
+:host([data-wpp-theme=dark]) {
+  --radio-inside-circle-bg-color: var(--wpp-grey-color-100);
+}

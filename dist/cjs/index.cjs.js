@@ -2,14 +2,15 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const utils = require('./utils-15defa44.js');
+const consts = require('./consts-d8f5ef98.js');
+const utils = require('./utils-2231f97a.js');
 const types = require('./types-332b969c.js');
 const types$1 = require('./types-05f8f988.js');
 const types$2 = require('./types-7010056a.js');
 const types$3 = require('./types-18fdc89e.js');
-const types$4 = require('./types-3dbf006d.js');
-const types$5 = require('./types-2185a602.js');
-require('./consts-dba6e6dd.js');
+const index = require('./index-10e1072f.js');
+const tiptapTypes = require('./tiptap-types-03d4d5ad.js');
+const types$4 = require('./types-2185a602.js');
 require('./_commonjsHelpers-bcc1208a.js');
 
 const dsPrefix = '--wpp';
@@ -102,6 +103,12 @@ const resolveTheme = (initJson, variant = 'light') => {
   });
 };
 
+Object.defineProperty(exports, 'Z_INDEX', {
+  enumerable: true,
+  get: function () {
+    return consts.Z_INDEX;
+  }
+});
 exports.applyBodyStylesIfNeeded = utils.applyBodyStylesIfNeeded;
 exports.areSetsEqual = utils.areSetsEqual;
 exports.autoFocusElement = utils.autoFocusElement;
@@ -152,16 +159,21 @@ Object.defineProperty(exports, 'ModalCloseReason', {
     return types$3.ModalCloseReason;
   }
 });
-exports.Quill = types$4.Quill;
-exports.RICHTEXT_UPLOAD_REQUEST_EVENT = types$4.UPLOAD_REQUEST_EVENT;
-exports.debugLevels = types$4.debugLevels;
-exports.formats = types$4.formats;
-exports.richtextUploadTypes = types$4.uploadTypes;
-exports.sources = types$4.sources;
+exports.Editor = index.Editor;
+exports.Quill = index.Quill;
+exports.RICHTEXT_UPLOAD_REQUEST_EVENT = index.UPLOAD_REQUEST_EVENT;
+exports.debugLevels = index.debugLevels;
+exports.formats = index.formats;
+exports.richtextUploadTypes = index.uploadTypes;
+exports.sources = index.sources;
+exports.TIPTAP_UPLOAD_REQUEST_EVENT = tiptapTypes.TIPTAP_UPLOAD_REQUEST_EVENT;
+exports.tiptapFormats = tiptapTypes.tiptapFormats;
+exports.tiptapSources = tiptapTypes.tiptapSources;
+exports.tiptapUploadTypes = tiptapTypes.tiptapUploadTypes;
 Object.defineProperty(exports, 'SideModalCloseReason', {
   enumerable: true,
   get: function () {
-    return types$5.SideModalCloseReason;
+    return types$4.SideModalCloseReason;
   }
 });
 exports.createTheme = createTheme;

@@ -4,6 +4,8 @@ import { menuListConfig as tooltipConfig } from '../../common/menuListConfig';
 import { ARROW_COLORS } from './const';
 import { defaultTooltipConfig } from './config';
 import { isWppElement } from '../../utils/utils';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
+import { themeObserver } from '../../utils/theme-observer';
 /**
  * @slot - Can contain the tooltip anchor content. The default slot, without the name attribute.
  * @slot tooltip-content - Contains the custom content the user gives to the tooltip. To use this slot, you also have to pass `allowHTML: true` to the `config` property. Do not use WPP components (except WppTypography) in this slot.
@@ -12,6 +14,7 @@ export class WppTooltip {
   constructor() {
     this.FORBIDDEN_PREFIX = 'wpp-';
     this.ALLOWED_TAGS = ['wpp-typography'];
+    this.themeSubscription = themeSubscriptionController(() => (this.config.allowHTML ? this.customContentEl : this.contentEl), () => this.updateTippyProps({ arrow: this.arrowSVG() }));
     this.handleSlotChange = () => {
       if (this.slotRef) {
         // Get all assigned elements from the slot
@@ -19,6 +22,10 @@ export class WppTooltip {
         const assignedElements = slot.assignedElements();
         this.anchorRef = assignedElements[0];
       }
+    };
+    this.updateTippyProps = (props) => {
+      this.tippyInstance?.setProps({ ...props });
+      this.tippyInstance?.popperInstance?.update();
     };
     this.transformAllowedTags = () => this.ALLOWED_TAGS.map(el => el
       .split('-')
@@ -109,6 +116,10 @@ export class WppTooltip {
       }
     };
     this.getArrowBgColor = () => {
+      const isDarkTheme = themeObserver.getThemeAttribute() === 'dark';
+      if (isDarkTheme && !this.warning && !this.error) {
+        return 'var(--wpp-grey-color-200)';
+      }
       const currColor = this.error ? 'error' : this.warning ? 'warning' : this.theme;
       return ARROW_COLORS[currColor];
     };
@@ -142,10 +153,7 @@ export class WppTooltip {
     }
   }
   updateTheme() {
-    this.tippyInstance?.setProps({
-      arrow: this.arrowSVG(),
-    });
-    this.tippyInstance?.popperInstance?.update();
+    this.updateTippyProps({ arrow: this.arrowSVG() });
   }
   textChanged(newText, oldText) {
     if (newText !== oldText && this.contentEl) {
@@ -190,6 +198,7 @@ export class WppTooltip {
     }
   }
   componentDidLoad() {
+    this.themeSubscription.start();
     setTimeout(() => {
       this.createTippyInstance();
       this.hidden = false;
@@ -202,9 +211,11 @@ export class WppTooltip {
     }
   }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     this.tippyInstance?.destroy();
   }
   connectedCallback() {
+    this.themeSubscription.start();
     this.tippyInstance?.setProps({
       arrow: this.arrowSVG(),
     });
@@ -213,10 +224,15 @@ export class WppTooltip {
     }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v4-0-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
+    // Use ariaProps.role if provided; otherwise for elements with aria-label,
+    // use 'img' role for non-interactive content (per ARIA specs, aria-label
+    // is not well-supported on a div without a valid role)
+    const hasAriaLabel = Boolean(this.ariaProps?.label);
+    const anchorRole = this.ariaProps?.role ?? (hasAriaLabel ? 'img' : undefined);
+    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, role: anchorRole, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v4-1-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
   }
   static get is() { return "wpp-tooltip"; }
-  static get registryIs() { return "wpp-tooltip-v4-0-0"; }
+  static get registryIs() { return "wpp-tooltip-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

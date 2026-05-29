@@ -69,10 +69,10 @@ const WppGrid = /*@__PURE__*/ proxyCustomElement(class WppGrid extends HTMLEleme
   render() {
     return (h(Host, { class: this.hostCssClasses(), exportparts: "inner" }, h("slot", { part: "inner" })));
   }
-  static get registryIs() { return "wpp-grid-v4-0-0"; }
+  static get registryIs() { return "wpp-grid-v4-1-0"; }
   get host() { return this; }
   static get style() { return wppGridCss; }
-}, [1, "wpp-grid", "wpp-grid-v4-0-0", {
+}, [1, "wpp-grid", "wpp-grid-v4-1-0", {
     "container": [4],
     "item": [4],
     "direction": [1],
@@ -94,9 +94,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-grid-v4-0-0"];
+  const components = ["wpp-grid-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-grid-v4-0-0":
+    case "wpp-grid-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppGrid);
       }

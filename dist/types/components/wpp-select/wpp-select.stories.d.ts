@@ -7,6 +7,7 @@ type SelectStoryArgs = Components.WppSelect & {
 };
 export declare const Single: StoryObj<SelectStoryArgs>;
 export declare const Multiple: StoryObj<SelectStoryArgs>;
+export declare const BorderOnlyValidationState: StoryObj;
 export declare const Text: StoryObj<{
   disabled: boolean;
   placeholder: string;

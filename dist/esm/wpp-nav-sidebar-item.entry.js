@@ -1,7 +1,7 @@
 import { r as registerInstance, c as createEvent, h, F as Fragment, H as Host, g as getElement } from './index-9177bb6d.js';
 import { W as WrappedSlot } from './WrappedSlot-629d3e4f.js';
-import { g as getSlotEmptyStates, e as truncate, k as transformToVersionedTag } from './utils-45d1949f.js';
-import './consts-9fc0a13a.js';
+import { g as getSlotEmptyStates, e as truncate, k as transformToVersionedTag } from './utils-3463d13f.js';
+import './consts-744c144f.js';
 
 const tooltipConfig = {
   placement: 'right',
@@ -62,12 +62,12 @@ const WppNavSidebarItem = class {
       const isNeedTruncate = this.label.length > currentMaxLengthLabel;
       return (h(Fragment, null, h(WrappedSlot, { name: "icon-start", wrapperClass: "icon-wrapper", class: "slot-icon-start-fallback", onSlotchange: this.updateSlotData }), h("p", { class: this.labelCssClasses(), part: "label" }, isNeedTruncate
         ? truncate(this.label, this.extended ? this.maxTitleLengthWithSubItems : this.maxTitleLengthWithoutSubItems)
-        : this.label), h(WrappedSlot, { name: "icon-end", wrapperClass: this.iconEndCssClasses(), class: "slot-icon-end-fallback" }, this.extended && h("wpp-icon-chevron-v4-0-0", { class: "extended-icon", size: "m", part: "icon-chevron" }))));
+        : this.label), h(WrappedSlot, { name: "icon-end", wrapperClass: this.iconEndCssClasses(), class: "slot-icon-end-fallback" }, this.extended && h("wpp-icon-chevron-v4-1-0", { class: "extended-icon", size: "m", part: "icon-chevron" }))));
     };
     this.extendedItem = () => (h("div", { class: this.navigationWrapperCssClasses(), onClick: this.handleClickExpandedItem, part: "extended-item" }, this.item()));
     this.linkItem = () => (h("a", { class: this.navigationWrapperCssClasses(), href: this.path, onClick: this.handleClickLinkItem, target: this.target, tabIndex: -1, part: "link-item" }, this.item()));
     this.renderSubItemsWrapper = () => h(WrappedSlot, { wrapperClass: this.subItemWrapperCssClasses() });
-    this.renderItemWithTooltip = () => (h("wpp-tooltip-v4-0-0", { text: this.label, config: tooltipConfig, part: "tooltip" }, this.extended ? this.extendedItem() : this.linkItem()));
+    this.renderItemWithTooltip = () => (h("wpp-tooltip-v4-1-0", { text: this.label, config: tooltipConfig, part: "tooltip" }, this.extended ? this.extendedItem() : this.linkItem()));
     this.renderItem = () => {
       const currentMaxLengthLabel = this.extended ? this.maxTitleLengthWithSubItems : this.maxTitleLengthWithoutSubItems;
       const isNeedToTruncate = this.label.length > currentMaxLengthLabel;
@@ -110,9 +110,9 @@ const WppNavSidebarItem = class {
     if (!this.nestedItem) {
       hostProps = { ...hostProps, tabIndex: 0 };
     }
-    return (h(Host, { class: this.hostCssClasses(), ...hostProps, exportparts: "label, icon-chevron, extended-item, link-item, tooltip, title, divider, icon-start, icon-end, ws-inner, icon-start, icon-end, ws-wrapper" }, this.groupTitle && (h("p", { class: "group-title", part: "title" }, this.groupTitle)), this.renderItem(), this.divide && h("wpp-divider-v4-0-0", { class: "slot-divider-fallback", part: "divider" })));
+    return (h(Host, { class: this.hostCssClasses(), ...hostProps, exportparts: "label, icon-chevron, extended-item, link-item, tooltip, title, divider, icon-start, icon-end, ws-inner, icon-start, icon-end, ws-wrapper" }, this.groupTitle && (h("p", { class: "group-title", part: "title" }, this.groupTitle)), this.renderItem(), this.divide && h("wpp-divider-v4-1-0", { class: "slot-divider-fallback", part: "divider" })));
   }
-  static get registryIs() { return "wpp-nav-sidebar-item-v4-0-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-item-v4-1-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "expanded": ["handleExpandedChange"]

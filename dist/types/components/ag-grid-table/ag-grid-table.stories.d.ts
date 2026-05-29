@@ -13,3 +13,4 @@ declare const _default: {
 };
 export default _default;
 export declare const Documentation: () => import("lit-html").TemplateResult<1>;
+export declare const ValidationStates: () => import("lit-html").TemplateResult<1>;

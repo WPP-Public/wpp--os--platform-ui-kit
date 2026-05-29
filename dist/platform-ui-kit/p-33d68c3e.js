@@ -1,0 +1,1 @@
+class t{constructor(){this.pending=new Set}schedule(t,e=0){let s;s=setTimeout((()=>{this.pending.delete(s),t()}),e),this.pending.add(s)}clearAll(){this.pending.forEach((t=>clearTimeout(t))),this.pending.clear()}}export{t as T}

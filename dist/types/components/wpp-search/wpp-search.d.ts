@@ -30,6 +30,7 @@ export declare class WppSearch implements BaseComponent, InlineMessage {
   private observer;
   private _locales;
   private isDropdownShown;
+  private themeSubscription;
   host: HTMLWppSearchElement;
   isFocused: boolean;
   searchValue: string;

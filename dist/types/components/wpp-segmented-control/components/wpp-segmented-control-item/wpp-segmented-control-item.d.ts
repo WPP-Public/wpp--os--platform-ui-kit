@@ -1,11 +1,18 @@
 import { EventEmitter } from '../../../../stencil-public-runtime';
-import { SegmentedControlItemChangeEventDetail, SegmentedControlItemSize } from '../../types';
+import { FOCUS_TYPE } from '../../../../types/common';
+import { SegmentedControlItemChangeEventDetail, SegmentedControlItemSize, WppSegmentedControlItemAriaProps } from '../../types';
 /**
  * @slot - Can contain either plain text or an icon depending on the `variant` prop. Use icons provided with the component library or custom **.svg** files that can be styled with the CSS color attribute. The default slot, without the name attribute.
  * @part item - Wrapper that can contain label or icon
  */
 export declare class WppSegmentedControlItem {
+  private isMouseClicked;
+  private uniqueId;
+  private mouseUpHandler;
+  private themeSubscription;
   host: HTMLWppSegmentedControlItemElement;
+  focusType: FOCUS_TYPE;
+  pressed: boolean;
   /**
    * Defines the item size.
    */
@@ -40,6 +47,11 @@ export declare class WppSegmentedControlItem {
    */
   readonly hugContentOff: boolean;
   /**
+   * Grouped ARIA props (explicit picks only).
+   * tab: { label?, describedby?, controls? }
+   */
+  readonly ariaProps?: WppSegmentedControlItemAriaProps;
+  /**
    * Emitted when an item is clicked.
    */
   wppChangeSegmentedControlItem: EventEmitter<SegmentedControlItemChangeEventDetail>;
@@ -54,6 +66,11 @@ export declare class WppSegmentedControlItem {
   private handleClickSegmentedControl;
   private onFocus;
   private onBlur;
+  private onKeyDown;
+  private onKeyUp;
+  private onMouseDown;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
   private cssClasses;
   private hostCssClasses;
   private get tabIndex();

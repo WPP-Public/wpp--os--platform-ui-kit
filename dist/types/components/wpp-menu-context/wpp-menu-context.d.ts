@@ -13,6 +13,7 @@ export declare class WppMenuContext {
   private wppListWrapperRef;
   private mutationObserver;
   private triggerElement;
+  private themeSubscription;
   host: HTMLWppMenuContextElement;
   contextList: HTMLElement;
   tippyInstance: Instance;

@@ -4,6 +4,7 @@ import { StickyBarButtonItem, StickyBarTabItem, StickyBarVariants, VisibilityCla
  * @slot content - Should contain the content for the sticky bar. This slot is available only for the following variant: 'medium'
  */
 export declare class WppStickyBar {
+  private themeSubscription;
   visibility: VisibilityClasses;
   currentTab: string;
   buttonsList: Array<StickyBarButtonItem | null>;
@@ -23,7 +24,7 @@ export declare class WppStickyBar {
    */
   readonly offsetFromTop?: number;
   /**
-   * The zIndex of the sticky bar. The default value is 890 such that it hides below the os-bar.
+   * The zIndex of the sticky bar.
    */
   readonly zIndex: number;
   /**
@@ -70,6 +71,8 @@ export declare class WppStickyBar {
   updateOffset(newValue: number): void;
   handleScroll(): void;
   componentWillLoad(): void;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
   componentDidLoad(): void;
   private getHeightOfOsBar;
   private getButtonsList;

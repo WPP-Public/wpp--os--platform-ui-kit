@@ -53,7 +53,7 @@
   --checkbox-bg-color: var(--wpp-checkbox-bg-color-hover, transparent);
   --checkbox-bg-color-hover: var(--wpp-checkbox-bg-color-hover, rgb(240 242 245 / 75%));
   --checkbox-bg-color-active: var(--wpp-checkbox-bg-color-active, var(--wpp-grey-color-300));
-  --checkbox-bg-color-disabled: var(--wpp-checkbox-bg-color-disabled, var(--wpp-grey-color-000));
+  --checkbox-bg-color-disabled: var(--wpp-checkbox-bg-color-disabled, transparent);
   --checkbox-bg-color-checked: var(--wpp-checkbox-bg-color-checked, var(--wpp-brand-color));
   --checkbox-bg-color-checked-hover: var(--wpp-checkbox-bg-color-checked-hover, var(--wpp-brand-color-hover));
   --checkbox-bg-color-checked-active: var(--wpp-checkbox-bg-color-checked-active, var(--wpp-brand-color-active));
@@ -273,4 +273,8 @@
 
 :host(.wpp-indeterminate) .wpp-icon-dash {
   display: block;
+}
+
+:host([data-wpp-theme=dark]) {
+  --checkbox-icons-color: var(--wpp-grey-color-100);
 }

@@ -1,6 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { WppBackToTopButton } from '../wpp-back-to-top-button';
 import { FOCUS_TYPE } from '../../../types/common';
+import * as themeUtils from '../../../utils/subscribe-to-theme';
 describe('wpp-back-to-top-button', () => {
   describe('Initialization', () => {
     it('should create component instance', () => {
@@ -220,6 +221,36 @@ describe('wpp-back-to-top-button', () => {
       await page.waitForChanges();
       const button = page.root?.shadowRoot?.querySelector('button');
       expect(button?.getAttribute('aria-pressed')).toBe('true');
+    });
+  });
+  describe('subscribing to theme changes', () => {
+    let mockStart;
+    let mockStop;
+    beforeEach(() => {
+      mockStart = jest.fn();
+      mockStop = jest.fn();
+      jest.spyOn(themeUtils, 'themeSubscriptionController').mockReturnValue({
+        start: mockStart,
+        stop: mockStop,
+      });
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
+      await newSpecPage({
+        components: [WppBackToTopButton],
+        html: `<wpp-back-to-top-button />`,
+      });
+      expect(mockStart).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
+      const page = await newSpecPage({
+        components: [WppBackToTopButton],
+        html: `<wpp-back-to-top-button />`,
+      });
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
     });
   });
 });

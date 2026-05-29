@@ -7,29 +7,33 @@
 import { HTMLStencilElement, JSXBase } from "./stencil-public-runtime";
 import { AriaProps, BannerTypes, DropdownConfig, InputMessageTypes, MessageTypes } from "./types/common";
 import { AccordionSectionChangeEventDetail } from "./components/wpp-accordion/types";
+import { ArtefactAction, ArtefactAriaProps, ArtefactLocales, ArtefactSize } from "./components/wpp-artefact/types";
 import { LabelConfig, LabelLocales } from "./components/wpp-label/types";
 import { AutocompleteChangeEventDetail, AutocompleteLocales, AutocompleteTypes, GetItemKeyType, LoadMoreHandler } from "./components/wpp-autocomplete/types";
 import { ListItemInterface, SelectChangeEventDetails, SelectLabelConfig, SelectLocaleInterface, SelectSize, SelectTypes, SelectValue } from "./components/wpp-select/types";
 import { AriaProps as AriaProps1, DropdownConfig as DropdownConfig1, InputTypes as InputTypes1, LabelConfig as LabelConfig1, ListValue, MaskOptions as MaskOptions1 } from "./components";
 import { AvatarChangeEventDetail, AvatarGroupChangeEventDetail, AvatarSize, AvatarState, AvatarVariant } from "./components/wpp-avatar-group/types";
 import { BannerChangeEventDetail } from "./components/wpp-banner/types";
+import { BasicNodeAction, BasicNodeAriaProps, BasicNodeLocales } from "./components/wpp-basic-node/types";
 import { BreadcrumbItemEventDetails, BreadcrumbItemState } from "./components/wpp-breadcrumb/types";
 import { CardChangeEventDetail, CardSize, CardType, CardValue } from "./components/wpp-card-group/components/wpp-card/types";
 import { CardGroupChangeEventDetail, CardGroupValue } from "./components/wpp-card-group/types";
 import { ActionButtonDataConfig, AvatarConfig, ChatAttachment, ChatInputConfig, ChatMessage, MessageRole, MessageStatus } from "./components/wpp-chat-conversation/types";
-import { ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
+import { ActionsMenuToggleEventDetail, ChatInputAction, ChatInputActionItemClickEventDetail, ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
 import { AcceptConfig, FileItemType, FileUploadErrorEventDetails, FileUploadEventDetail, FileUploadItemEventDetail, FileUploadItemLocales, FileUploadLocales, FileUploadMessageType, FileUploadResultFormaType, FileValidatorHandler } from "./components/wpp-file-upload/types";
+import { ChatNodeAction, ChatNodeAvatarConfig, ChatNodeLocales, ChatNodeMessage, ChatNodeMessageAction, ChatNodeMessageActionClickDetail, ChatNodeModel, WppChatNodeSize } from "./components/wpp-chat-node/types";
 import { CheckboxChangeEvent, CheckboxLabelConfig, CheckboxValue } from "./components/wpp-checkbox/types";
 import { CheckboxGroupChangeEvent, CheckboxGroupValue } from "./components/wpp-checkbox-group/types";
 import { ChangeColorEventDetails, ColorPickerMode, ColorPickerType, SaturationChangeDetail } from "./components/wpp-color-picker/types";
 import { Theme } from "./types/theme";
 import { CounterChangeEventDetail, CounterFormat, CounterLabelConfig } from "./components/wpp-counter/types";
-import { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes, MonthRangeNormalization } from "./components/wpp-datepicker/types";
+import { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes, MonthRangeNormalization, YearRangeNormalization } from "./components/wpp-datepicker/types";
 import { ExpandableCardSectionChangeEventDetail } from "./components/wpp-expandable-card/types";
 import { ActionButtonData } from "./components/wpp-floating-toolbar/types";
 import { FullScreenModalCloseDetails, FullScreenModalFormConfig } from "./components/wpp-full-screen-modal/types";
 import { AlignItemsType, DirectionType, JustifyContentType } from "./components/wpp-grid/types";
 import { RangeOf } from "./types/numberRange";
+import { CustomHandleType } from "./components/wpp-handle/types";
 import { SortDirection } from "./components/wpp-icon/components/arrows/table-sort/wpp-icon-table-sort-wrapper/wpp-icon-table-sort-wrapper";
 import { InlineEditChangeModeEventDetail, InlineEditConfirmDetail, InlineEditLocales, InlineEditMode } from "./components/wpp-inline-edit/types";
 import { InlineMessageLocalesType } from "./components/wpp-inline-message/types";
@@ -48,9 +52,11 @@ import { PillGroupChangeEvent, PillGroupLabelConfig, PillGroupValue } from "./co
 import { PopoverInputChangeEventDetail, PopoverLocalesInterface, PopoverShouldCloseOnOutsideClickHandler } from "./components/wpp-popover/types";
 import { RadioChangeEvent, RadioLabelConfig, RadioValue } from "./components/wpp-radio/types";
 import { RadioGroupChangeEvent, RadioGroupValue } from "./components/wpp-radio-group/types";
-import { DebugLevels, Formats, QuillInstance, RichtextChangeEventDetail, RichtextLocales, RichtextSelectionChangeEventDetail, RichtextUploadRequestEventDetail, RichtextValue } from "./components/wpp-richtext/types";
+import { DebugLevels, Formats, RichtextLocales, RichtextValue } from "./components/wpp-richtext/types";
+import { Editor } from "@tiptap/core";
+import { TiptapChangeEventDetail, TiptapSelectionChangeEventDetail, TiptapUploadRequestEventDetail } from "./components/wpp-richtext/tiptap-types";
 import { SearchChangeEventDetail, SearchDefaultOption, SearchGetOptionIdHandler, SearchGetOptionLabelHandler, SearchLabelConfig, SearchLocales, SearchOption } from "./components/wpp-search/types";
-import { SegmentedControlChangeEventDetail, SegmentedControlItemChangeEventDetail, SegmentedControlItemSize, SegmentedControlLabelConfig, SegmentedControlValue } from "./components/wpp-segmented-control/types";
+import { SegmentedControlChangeEventDetail, SegmentedControlItemChangeEventDetail, SegmentedControlItemSize, SegmentedControlLabelConfig, SegmentedControlLocaleInterface, SegmentedControlValue, WppSegmentedControlAriaProps, WppSegmentedControlItemAriaProps } from "./components/wpp-segmented-control/types";
 import { ActionConfig, HeaderActionsConfig, SideModalCloseDetails, SideModalFormConfig, SideModalLocalesType } from "./components/wpp-side-modal/types";
 import { InputWidth, MarkState, SliderChangeEventDetail, SliderLabelConfig, SliderTypes, SliderValue } from "./components/wpp-slider/types";
 import { MaskitoNumberParams } from "@maskito/kit/src/lib/masks/number/number-params";
@@ -66,29 +72,33 @@ import { TransformSearchQuery, TreeActionClickEventDetail, TreeChangeEventDetail
 import { CaptionValue, ControlPanelConfig, JumpValues, VideoPlayerLocales, VideoSizeDimensions, VideoSourceType } from "./components/wpp-video-player/types";
 export { AriaProps, BannerTypes, DropdownConfig, InputMessageTypes, MessageTypes } from "./types/common";
 export { AccordionSectionChangeEventDetail } from "./components/wpp-accordion/types";
+export { ArtefactAction, ArtefactAriaProps, ArtefactLocales, ArtefactSize } from "./components/wpp-artefact/types";
 export { LabelConfig, LabelLocales } from "./components/wpp-label/types";
 export { AutocompleteChangeEventDetail, AutocompleteLocales, AutocompleteTypes, GetItemKeyType, LoadMoreHandler } from "./components/wpp-autocomplete/types";
 export { ListItemInterface, SelectChangeEventDetails, SelectLabelConfig, SelectLocaleInterface, SelectSize, SelectTypes, SelectValue } from "./components/wpp-select/types";
 export { AriaProps as AriaProps1, DropdownConfig as DropdownConfig1, InputTypes as InputTypes1, LabelConfig as LabelConfig1, ListValue, MaskOptions as MaskOptions1 } from "./components";
 export { AvatarChangeEventDetail, AvatarGroupChangeEventDetail, AvatarSize, AvatarState, AvatarVariant } from "./components/wpp-avatar-group/types";
 export { BannerChangeEventDetail } from "./components/wpp-banner/types";
+export { BasicNodeAction, BasicNodeAriaProps, BasicNodeLocales } from "./components/wpp-basic-node/types";
 export { BreadcrumbItemEventDetails, BreadcrumbItemState } from "./components/wpp-breadcrumb/types";
 export { CardChangeEventDetail, CardSize, CardType, CardValue } from "./components/wpp-card-group/components/wpp-card/types";
 export { CardGroupChangeEventDetail, CardGroupValue } from "./components/wpp-card-group/types";
 export { ActionButtonDataConfig, AvatarConfig, ChatAttachment, ChatInputConfig, ChatMessage, MessageRole, MessageStatus } from "./components/wpp-chat-conversation/types";
-export { ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
+export { ActionsMenuToggleEventDetail, ChatInputAction, ChatInputActionItemClickEventDetail, ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
 export { AcceptConfig, FileItemType, FileUploadErrorEventDetails, FileUploadEventDetail, FileUploadItemEventDetail, FileUploadItemLocales, FileUploadLocales, FileUploadMessageType, FileUploadResultFormaType, FileValidatorHandler } from "./components/wpp-file-upload/types";
+export { ChatNodeAction, ChatNodeAvatarConfig, ChatNodeLocales, ChatNodeMessage, ChatNodeMessageAction, ChatNodeMessageActionClickDetail, ChatNodeModel, WppChatNodeSize } from "./components/wpp-chat-node/types";
 export { CheckboxChangeEvent, CheckboxLabelConfig, CheckboxValue } from "./components/wpp-checkbox/types";
 export { CheckboxGroupChangeEvent, CheckboxGroupValue } from "./components/wpp-checkbox-group/types";
 export { ChangeColorEventDetails, ColorPickerMode, ColorPickerType, SaturationChangeDetail } from "./components/wpp-color-picker/types";
 export { Theme } from "./types/theme";
 export { CounterChangeEventDetail, CounterFormat, CounterLabelConfig } from "./components/wpp-counter/types";
-export { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes, MonthRangeNormalization } from "./components/wpp-datepicker/types";
+export { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes, MonthRangeNormalization, YearRangeNormalization } from "./components/wpp-datepicker/types";
 export { ExpandableCardSectionChangeEventDetail } from "./components/wpp-expandable-card/types";
 export { ActionButtonData } from "./components/wpp-floating-toolbar/types";
 export { FullScreenModalCloseDetails, FullScreenModalFormConfig } from "./components/wpp-full-screen-modal/types";
 export { AlignItemsType, DirectionType, JustifyContentType } from "./components/wpp-grid/types";
 export { RangeOf } from "./types/numberRange";
+export { CustomHandleType } from "./components/wpp-handle/types";
 export { SortDirection } from "./components/wpp-icon/components/arrows/table-sort/wpp-icon-table-sort-wrapper/wpp-icon-table-sort-wrapper";
 export { InlineEditChangeModeEventDetail, InlineEditConfirmDetail, InlineEditLocales, InlineEditMode } from "./components/wpp-inline-edit/types";
 export { InlineMessageLocalesType } from "./components/wpp-inline-message/types";
@@ -107,9 +117,11 @@ export { PillGroupChangeEvent, PillGroupLabelConfig, PillGroupValue } from "./co
 export { PopoverInputChangeEventDetail, PopoverLocalesInterface, PopoverShouldCloseOnOutsideClickHandler } from "./components/wpp-popover/types";
 export { RadioChangeEvent, RadioLabelConfig, RadioValue } from "./components/wpp-radio/types";
 export { RadioGroupChangeEvent, RadioGroupValue } from "./components/wpp-radio-group/types";
-export { DebugLevels, Formats, QuillInstance, RichtextChangeEventDetail, RichtextLocales, RichtextSelectionChangeEventDetail, RichtextUploadRequestEventDetail, RichtextValue } from "./components/wpp-richtext/types";
+export { DebugLevels, Formats, RichtextLocales, RichtextValue } from "./components/wpp-richtext/types";
+export { Editor } from "@tiptap/core";
+export { TiptapChangeEventDetail, TiptapSelectionChangeEventDetail, TiptapUploadRequestEventDetail } from "./components/wpp-richtext/tiptap-types";
 export { SearchChangeEventDetail, SearchDefaultOption, SearchGetOptionIdHandler, SearchGetOptionLabelHandler, SearchLabelConfig, SearchLocales, SearchOption } from "./components/wpp-search/types";
-export { SegmentedControlChangeEventDetail, SegmentedControlItemChangeEventDetail, SegmentedControlItemSize, SegmentedControlLabelConfig, SegmentedControlValue } from "./components/wpp-segmented-control/types";
+export { SegmentedControlChangeEventDetail, SegmentedControlItemChangeEventDetail, SegmentedControlItemSize, SegmentedControlLabelConfig, SegmentedControlLocaleInterface, SegmentedControlValue, WppSegmentedControlAriaProps, WppSegmentedControlItemAriaProps } from "./components/wpp-segmented-control/types";
 export { ActionConfig, HeaderActionsConfig, SideModalCloseDetails, SideModalFormConfig, SideModalLocalesType } from "./components/wpp-side-modal/types";
 export { InputWidth, MarkState, SliderChangeEventDetail, SliderLabelConfig, SliderTypes, SliderValue } from "./components/wpp-slider/types";
 export { MaskitoNumberParams } from "@maskito/kit/src/lib/masks/number/number-params";
@@ -199,6 +211,44 @@ export namespace Components {
           * Defines the button style.
          */
         "variant"?: 'primary' | 'secondary' | 'inverted' | 'destructive';
+    }
+    interface WppArtefact {
+        /**
+          * Defines the additional actions available for the artefact. The actions are added to the dropdown menu in the footer section. The `icon` should correspond to a valid icon name in the design system.
+         */
+        "actions": ArtefactAction[];
+        /**
+          * Defines the ARIA-label for the button of the actions menu.
+         */
+        "ariaProps": ArtefactAriaProps;
+        /**
+          * Defines the title of the artefact, which is displayed in the header section. This prop is required.
+         */
+        "artefactTitle": string;
+        /**
+          * Defines if the WppArtefact is selected. The value of this property should be available in the `props: NodeProps`, which are handled by React Flow.
+         */
+        "isSelected": boolean;
+        /**
+          * Indicates the locales for the artefact component
+         */
+        "locales": Partial<ArtefactLocales>;
+        /**
+          * Allows specifing the position in the dropdown list of the Pin action. By default, it will be rendered at the top of the list.
+         */
+        "pinActionPosition": number;
+        /**
+          * Defines the artefact size. Setting this attribute changes the width of the artefact.
+         */
+        "size": ArtefactSize;
+        /**
+          * Defines the icon that will be rendered on the left of the title. Should contain the name of a valid icon from the library.
+         */
+        "titleIcon"?: `wpp-icon-${string}`;
+        /**
+          * Allows removing the Pin action from the dropdown list, which is rendered by default.
+         */
+        "withPinAction": boolean;
     }
     interface WppAutocomplete {
         /**
@@ -390,6 +440,10 @@ export namespace Components {
          */
         "avatars": AvatarState[];
         /**
+          * Sets the tabindex for all avatars in the group. Use -1 to remove from tab order when inside composite widgets like trees where arrow keys are used for navigation.
+         */
+        "avatarsIndex": number;
+        /**
           * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
         "dropdownConfig": DropdownConfig;
@@ -449,6 +503,32 @@ export namespace Components {
           * Defines the z-index of the WppBanner.
          */
         "zIndex": number;
+    }
+    interface WppBasicNode {
+        /**
+          * Defines the additional actions available for the Basic Node. The actions are added to the dropdown menu in the footer section. The `icon` should correspond to a valid icon name in the design system.
+         */
+        "actions": BasicNodeAction[];
+        /**
+          * Defines the ARIA props for the button of the actions menu.
+         */
+        "ariaProps": BasicNodeAriaProps;
+        /**
+          * Defines whether the node is in a loading state. If true, the border of the node will be animated.
+         */
+        "isLoading": boolean;
+        /**
+          * Defines if the WppBasicNode is selected. The value of this property should be available in the `props: NodeProps`, which are handled by React Flow.
+         */
+        "isSelected": boolean;
+        /**
+          * Indicates the locales for the basic-node component
+         */
+        "locales": Partial<BasicNodeLocales>;
+        /**
+          * Defines the title of the node, which is displayed in the header section. This prop is required.
+         */
+        "nodeTitle": string;
     }
     interface WppBreadcrumb {
         /**
@@ -711,6 +791,10 @@ export namespace Components {
     }
     interface WppChatInput {
         /**
+          * Defines the entries shown in the consolidated actions menu (the `wpp-icon-plus` dropdown rendered at the start of the left toolbar). When this array is non-empty, chat-input renders a single `wpp-icon-plus` trigger that opens a `wpp-menu-context` containing one `wpp-list-item` per entry. Use this to consolidate auxiliary actions (translate, pinboard, upload, etc.) behind a single "plus" affordance.  An entry with the reserved id `'upload'` is automatically wired to the same file picker that `enableAttach` uses, so consumers do not need to imperatively open the dialog. The `wppActionsMenuItemClick` event still fires for that entry, in case the consumer wants to track the click.
+         */
+        "actions": ChatInputAction[];
+        /**
           * Typed ARIA overrides. Only supported htmlAttributes exposed.
          */
         "ariaProps"?: ChatInputAriaProps;
@@ -744,6 +828,7 @@ export namespace Components {
         "enableMic": boolean;
         /**
           * Configuration object for file upload functionality.
+          * @deprecated This top-level prop will be removed in components-library v5.0.0. The same options will be moved into a richer attachments configuration owned by the upload action entry (so consumers can scope `accept`, `size`, `maxFiles`, `validator`, etc. per-action rather than globally on the chat-input). For now keep using this prop; a migration codemod will be provided alongside the v5.0.0 release.
          */
         "fileUploadConfig"?: Partial<FileUploadConfig>;
         /**
@@ -790,6 +875,72 @@ export namespace Components {
           * Defines the z-index of the WppChatInput.
          */
         "zIndex": number;
+    }
+    /**
+     * Card-style node intended for use inside a React Flow canvas.
+     * It renders a chat bar footer, an optional messages body,
+     * and left/right handles positioned outside the card wrapper so they are never clipped.
+     * Selection is driven by an `isSelected` prop.
+     * Loading shows an animated gradient border.
+     * Resize is handled externally by React Flow's `<NodeResizer />`.
+     */
+    interface WppChatNode {
+        /**
+          * Defines the actions shown in the + menu.
+         */
+        "actions": ChatNodeAction[];
+        /**
+          * Programmatically add a message (user or assistant) to the chat body.
+         */
+        "addMessage": (message: ChatNodeMessage) => Promise<void>;
+        /**
+          * Append text to the last assistant message (for streaming).
+         */
+        "appendChunk": (chunk: string) => Promise<void>;
+        /**
+          * Defines the assistant avatar configuration. Set to `false` to hide the assistant avatar.
+         */
+        "assistantAvatarConfig": ChatNodeAvatarConfig | false;
+        /**
+          * Defines whether the node is in a loading state. If true, the border animates.
+         */
+        "isLoading": boolean;
+        /**
+          * Defines whether the node is in the selected/active state. Shows a blue border.
+         */
+        "isSelected": boolean;
+        /**
+          * Indicates the locales for the chat-node component.
+         */
+        "locales": Partial<ChatNodeLocales>;
+        /**
+          * Defines action buttons shown below assistant messages. If omitted, localized default actions are shown. Set to an empty array to hide them.
+         */
+        "messageActions"?: ChatNodeMessageAction[];
+        /**
+          * Defines the available chat models shown in the nested + menu.
+         */
+        "models": ChatNodeModel[];
+        /**
+          * Defines the title of the node, displayed in the header.
+         */
+        "nodeTitle": string;
+        /**
+          * Defines the selected chat model id. If omitted, the first model is shown as selected.
+         */
+        "selectedModelId"?: string;
+        /**
+          * Defines the chat node size. `'s'` renders the compact chat bar only.
+         */
+        "size": WppChatNodeSize;
+        /**
+          * Defines an optional title icon rendered before the node title. Use `left-icon` slot for custom icon markup.
+         */
+        "titleIcon"?: `wpp-icon-${string}`;
+        /**
+          * Defines the user avatar configuration. Set to `false` to hide the user avatar.
+         */
+        "userAvatarConfig": ChatNodeAvatarConfig | false;
     }
     interface WppCheckbox {
         /**
@@ -1136,6 +1287,12 @@ export namespace Components {
           * Defines the width of the datepicker. If it is undefined, the datepicker will take the default value (200px single datepicker, 260px range datepicker).
          */
         "width"?: string;
+        /**
+          * Configuration for normalizing year range dates. When using `view="years"` with `range`, this option allows automatic normalization of selected dates to specific month/day boundaries. By default, normalizes start date to January 1st and end date to December 31st of their respective years.
+          * @example // Enable normalization with defaults (Jan 1st and Dec 31st) yearRangeNormalization={{ enabled: true }}
+          * @example // Custom: start on Apr 1st, end on Mar 31st (fiscal year) yearRangeNormalization={{ enabled: true, startMonth: 4, startDay: 1, endMonth: 3, endDay: 31 }}
+         */
+        "yearRangeNormalization"?: YearRangeNormalization;
     }
     interface WppDivider {
         /**
@@ -1595,6 +1752,24 @@ export namespace Components {
           * Defines the grid item width for screen size - 2220px. Takes in a number between **1** and **24**, where **24** is **100%** of the item width. If no value is specified, the grid items take all the available screen width.
          */
         "xxl"?: RangeOf<24> | 'auto' | true;
+    }
+    interface WppHandle {
+        /**
+          * Defines the background color of the handle. Only colours from the theme should be used.
+         */
+        "color": string;
+        /**
+          * This property helps to position the WppHandle on the center of the board when the Node is in loading state.
+         */
+        "isLoading": boolean;
+        /**
+          * Defines if the WppHandle is selected. The value of this property should be available in the `props: NodeProps`, which are handled by React Flow. Setting this value will help positioning the Handle on the center of the border when it's selected.
+         */
+        "isSelected": boolean;
+        /**
+          * Defines the type of the WppHandle. Setting this property will help to position the handle on the center of the border. Target handles are placed on the left of the Node, while source handles are placed on the right.
+         */
+        "type": CustomHandleType;
     }
     interface WppHueSlider {
         /**
@@ -11927,7 +12102,7 @@ export namespace Components {
          */
         "charactersLimit"?: number;
         /**
-          * Debug level: `error`, `warn`, `log`, or `info`. Passing true is equivalent to passing `log`. Passing false disables all messages.
+          * Debug level: `error`, `warn`, `log`, or `info`. Controls verbosity of the component's internal console output (errors, warnings, init / state logs). Defaults to `warn` to match the previous Quill-based behaviour. Setting a higher level (e.g. `info`) is useful while diagnosing integration issues.
          */
         "debug": DebugLevels;
         /**
@@ -11939,7 +12114,7 @@ export namespace Components {
          */
         "format": Formats;
         /**
-          * Whitelist of formats to allow in the editor. See [Formats](https://quilljs.com/docs/formats/) for a complete list.
+          * Whitelist of formats to allow in the editor. See Tiptap extensions documentation for available formats.
          */
         "formats": string[];
         /**
@@ -11967,7 +12142,7 @@ export namespace Components {
          */
         "messageType"?: InputMessageTypes;
         /**
-          * Collection of modules to include and respective options. The only configurable modules are the following: imageUpload, videoUpload, attachmentUpload and toolbar.aliases.embed (See "Usage" section of Notes) See [Modules](https://quilljs.com/docs/modules/) for more information about the library's modules.
+          * Collection of modules to include and respective options. The only configurable modules are the following: imageUpload, videoUpload, attachmentUpload and toolbar.aliases.embed
          */
         "modules"?: string;
         /**
@@ -11987,7 +12162,7 @@ export namespace Components {
          */
         "required": boolean;
         /**
-          * DOM Element or a CSS selector for a DOM Element, specifying which container has the scrollbars (i.e. `overflow-y: auto`), if has been changed from the default ql-editor with custom CSS. Necessary to fix scroll jumping bugs when Quill is set to auto grow its height, and another ancestor container is responsible for the scrolling.
+          * DOM Element or a CSS selector for a DOM Element, specifying which container has the scrollbars (i.e. `overflow-y: auto`), if has been changed from the default editor container with custom CSS.
          */
         "scrollingContainer": HTMLElement | string;
         /**
@@ -12033,19 +12208,15 @@ export namespace Components {
     }
     interface WppRichtextView {
         /**
-          * Debug level: `error`, `warn`, `log`, or `info`. Passing true is equivalent to passing `log`. Passing false disables all messages.
-         */
-        "debug": DebugLevels;
-        /**
           * Format of editor value
          */
         "format": Formats;
         /**
-          * Whitelist of formats to allow in the editor. See [Formats](https://quilljs.com/docs/formats/) for a complete list.
+          * Whitelist of formats to allow in the editor.
          */
         "formats": string[];
         /**
-          * Collection of modules to include and respective options. The only configurable modules are the following: imageUpload, videoUpload, attachmentUpload and toolbar.aliases.embed (See "Usage" section of Notes) See [Modules](https://quilljs.com/docs/modules/) for more information about the library's modules.
+          * Collection of modules to include and respective options.
          */
         "modules"?: string;
         /**
@@ -12191,6 +12362,10 @@ export namespace Components {
     }
     interface WppSegmentedControl {
         /**
+          * Grouped ARIA props for the tablist: { label?, labelledby? } Precedence: ariaProps > locales > defaults
+         */
+        "ariaProps"?: WppSegmentedControlAriaProps;
+        /**
           * If the item size is relative to the control bar size.
          */
         "hugContentOff": boolean;
@@ -12202,6 +12377,10 @@ export namespace Components {
           * Defines the dropdown configuration for the label tooltip.
          */
         "labelTooltipConfig": DropdownConfig;
+        /**
+          * Locales for accessible strings. Only tablistLabel currently.
+         */
+        "locales"?: Partial<SegmentedControlLocaleInterface>;
         /**
           * If `true`, the segmented control is required
          */
@@ -12228,6 +12407,10 @@ export namespace Components {
           * If the component is active.
          */
         "active": boolean;
+        /**
+          * Grouped ARIA props (explicit picks only). tab: { label?, describedby?, controls? }
+         */
+        "ariaProps"?: WppSegmentedControlItemAriaProps;
         /**
           * Defines the number of elements within a specific item. The counter is only displayed when the `variant` is set to 'text'.
          */
@@ -12343,15 +12526,15 @@ export namespace Components {
          */
         "maximumSelectedItems"?: number;
         /**
-          * Defines the input message. The message is placed right below the select.
+          * Defines the input message. The message is placed right below the select or in a tooltip when `messageInTooltip` is enabled.
          */
         "message"?: string;
         /**
-          * Render error/warning/info message in tooltip instead of an inline message below a select element
+          * Render error/warning/info message in tooltip instead of an inline message below a select element. Only renders a tooltip when `message` is provided with an error or warning `messageType`; otherwise it has no effect.
          */
         "messageInTooltip": boolean;
         /**
-          * Defines the input message type, which can be "error" or "warning". This property has to be used together with "message".
+          * Defines the input message type, which can be "error" or "warning". This controls the visual validation state even when no message is provided.
          */
         "messageType"?: InputMessageTypes;
         /**
@@ -12711,7 +12894,7 @@ export namespace Components {
          */
         "withBackButton": boolean;
         /**
-          * The zIndex of the sticky bar. The default value is 890 such that it hides below the os-bar.
+          * The zIndex of the sticky bar.
          */
         "zIndex": number;
     }
@@ -12773,7 +12956,8 @@ export namespace Components {
          */
         "label"?: string;
         /**
-          * Maximum label length (in characters) of single item
+          * Maximum label length (in characters) of single item.
+          * @deprecated - Use CSS width constraints instead. Text will automatically truncate with ellipsis when it overflows. This prop will be removed in version 5.0.0.  Note: The default value is 30 characters for backward compatibility. If you want truncation based purely on the element's width (e.g. via CSS `max-width`), set this prop to `undefined`. Otherwise, the character-based truncation will take precedence and the label will be cut off at 30 characters before any CSS width constraint is applied.
          */
         "maxLabelLength": number;
         /**
@@ -12997,6 +13181,10 @@ export namespace Components {
          */
         "maxToastsToDisplay": number;
         /**
+          * Minimum delay (ms) between two successive toasts becoming visible. When toasts are added in rapid succession (or promoted from the queue back-to-back), this prevents them from entering and exiting in batched "waves" — instead each toast appears on its own timeline, creating a continuous, smooth flow. Set to 0 to disable staggering (toasts appear immediately as slots open up).
+         */
+        "staggerInterval": number;
+        /**
           * Method for updating toast from `toast-container`.
          */
         "updateToast": (id: string, updatedData: Partial<Omit<ToastState, 'duration'>>) => Promise<void>;
@@ -13152,6 +13340,10 @@ export namespace Components {
           * Indicates navigation items
          */
         "navigation": NavigationState;
+        /**
+          * Defines the z-index of the WppTopbarItem dropdown menus.
+         */
+        "zIndex": number;
     }
     interface WppTree {
         "clearAll": () => Promise<void>;
@@ -13179,6 +13371,10 @@ export namespace Components {
           * Expands all tree nodes. Disabled nodes and their descendants are skipped and remain unchanged. If lazy loading is configured, children for open nodes with `hasChildren: true` will be preloaded. Emits a `wppChange` event with the updated tree state.
          */
         "expandAll": () => Promise<void>;
+        /**
+          * Accessible label for the tree component. Provides a name for the tree that assistive technologies can announce.
+         */
+        "label"?: string;
         /**
           * Lazy loading configuration for dynamically loading children. When a node with `hasChildren: true` is expanded, skeleton loaders are shown while children are fetched, then all children render at once.
          */
@@ -13232,6 +13428,10 @@ export namespace Components {
          */
         "highlightOptions": TreeItemHighlightOptions;
         /**
+          * Whether this item is currently focused
+         */
+        "isFocused"?: boolean;
+        /**
           * Indicates current item props
          */
         "item": TreeType;
@@ -13244,9 +13444,17 @@ export namespace Components {
          */
         "multiple": boolean;
         /**
+          * Position within the set of siblings (for aria-posinset)
+         */
+        "posInSet"?: number;
+        /**
           * Indicates search param
          */
         "search": string;
+        /**
+          * Total number of siblings at this level (for aria-setsize)
+         */
+        "setSize"?: number;
         /**
           * Indicates current item title
          */
@@ -13328,6 +13536,10 @@ export interface WppAccordionCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppAccordionElement;
 }
+export interface WppArtefactCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLWppArtefactElement;
+}
 export interface WppAutocompleteCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppAutocompleteElement;
@@ -13343,6 +13555,10 @@ export interface WppAvatarGroupCustomEvent<T> extends CustomEvent<T> {
 export interface WppBannerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppBannerElement;
+}
+export interface WppBasicNodeCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLWppBasicNodeElement;
 }
 export interface WppBreadcrumbCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -13367,6 +13583,10 @@ export interface WppChatConversationCustomEvent<T> extends CustomEvent<T> {
 export interface WppChatInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppChatInputElement;
+}
+export interface WppChatNodeCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLWppChatNodeElement;
 }
 export interface WppCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -13585,6 +13805,12 @@ declare global {
         prototype: HTMLWppActionButtonElement;
         new (): HTMLWppActionButtonElement;
     };
+    interface HTMLWppArtefactElement extends Components.WppArtefact, HTMLStencilElement {
+    }
+    var HTMLWppArtefactElement: {
+        prototype: HTMLWppArtefactElement;
+        new (): HTMLWppArtefactElement;
+    };
     interface HTMLWppAutocompleteElement extends Components.WppAutocomplete, HTMLStencilElement {
     }
     var HTMLWppAutocompleteElement: {
@@ -13614,6 +13840,12 @@ declare global {
     var HTMLWppBannerElement: {
         prototype: HTMLWppBannerElement;
         new (): HTMLWppBannerElement;
+    };
+    interface HTMLWppBasicNodeElement extends Components.WppBasicNode, HTMLStencilElement {
+    }
+    var HTMLWppBasicNodeElement: {
+        prototype: HTMLWppBasicNodeElement;
+        new (): HTMLWppBasicNodeElement;
     };
     interface HTMLWppBreadcrumbElement extends Components.WppBreadcrumb, HTMLStencilElement {
     }
@@ -13656,6 +13888,20 @@ declare global {
     var HTMLWppChatInputElement: {
         prototype: HTMLWppChatInputElement;
         new (): HTMLWppChatInputElement;
+    };
+    /**
+     * Card-style node intended for use inside a React Flow canvas.
+     * It renders a chat bar footer, an optional messages body,
+     * and left/right handles positioned outside the card wrapper so they are never clipped.
+     * Selection is driven by an `isSelected` prop.
+     * Loading shows an animated gradient border.
+     * Resize is handled externally by React Flow's `<NodeResizer />`.
+     */
+    interface HTMLWppChatNodeElement extends Components.WppChatNode, HTMLStencilElement {
+    }
+    var HTMLWppChatNodeElement: {
+        prototype: HTMLWppChatNodeElement;
+        new (): HTMLWppChatNodeElement;
     };
     interface HTMLWppCheckboxElement extends Components.WppCheckbox, HTMLStencilElement {
     }
@@ -13812,6 +14058,12 @@ declare global {
     var HTMLWppGridElement: {
         prototype: HTMLWppGridElement;
         new (): HTMLWppGridElement;
+    };
+    interface HTMLWppHandleElement extends Components.WppHandle, HTMLStencilElement {
+    }
+    var HTMLWppHandleElement: {
+        prototype: HTMLWppHandleElement;
+        new (): HTMLWppHandleElement;
     };
     interface HTMLWppHueSliderElement extends Components.WppHueSlider, HTMLStencilElement {
     }
@@ -17256,11 +17508,13 @@ declare global {
     interface HTMLElementTagNameMap {
         "wpp-accordion": HTMLWppAccordionElement;
         "wpp-action-button": HTMLWppActionButtonElement;
+        "wpp-artefact": HTMLWppArtefactElement;
         "wpp-autocomplete": HTMLWppAutocompleteElement;
         "wpp-avatar": HTMLWppAvatarElement;
         "wpp-avatar-group": HTMLWppAvatarGroupElement;
         "wpp-back-to-top-button": HTMLWppBackToTopButtonElement;
         "wpp-banner": HTMLWppBannerElement;
+        "wpp-basic-node": HTMLWppBasicNodeElement;
         "wpp-breadcrumb": HTMLWppBreadcrumbElement;
         "wpp-button": HTMLWppButtonElement;
         "wpp-card": HTMLWppCardElement;
@@ -17268,6 +17522,7 @@ declare global {
         "wpp-chat-conversation": HTMLWppChatConversationElement;
         "wpp-chat-conversation-message": HTMLWppChatConversationMessageElement;
         "wpp-chat-input": HTMLWppChatInputElement;
+        "wpp-chat-node": HTMLWppChatNodeElement;
         "wpp-checkbox": HTMLWppCheckboxElement;
         "wpp-checkbox-group": HTMLWppCheckboxGroupElement;
         "wpp-color-picker": HTMLWppColorPickerElement;
@@ -17294,6 +17549,7 @@ declare global {
         "wpp-floating-toolbar": HTMLWppFloatingToolbarElement;
         "wpp-full-screen-modal": HTMLWppFullScreenModalElement;
         "wpp-grid": HTMLWppGridElement;
+        "wpp-handle": HTMLWppHandleElement;
         "wpp-hue-slider": HTMLWppHueSliderElement;
         "wpp-icon-about": HTMLWppIconAboutElement;
         "wpp-icon-accessibility": HTMLWppIconAccessibilityElement;
@@ -17946,6 +18202,48 @@ declare namespace LocalJSX {
          */
         "variant"?: 'primary' | 'secondary' | 'inverted' | 'destructive';
     }
+    interface WppArtefact {
+        /**
+          * Defines the additional actions available for the artefact. The actions are added to the dropdown menu in the footer section. The `icon` should correspond to a valid icon name in the design system.
+         */
+        "actions"?: ArtefactAction[];
+        /**
+          * Defines the ARIA-label for the button of the actions menu.
+         */
+        "ariaProps"?: ArtefactAriaProps;
+        /**
+          * Defines the title of the artefact, which is displayed in the header section. This prop is required.
+         */
+        "artefactTitle"?: string;
+        /**
+          * Defines if the WppArtefact is selected. The value of this property should be available in the `props: NodeProps`, which are handled by React Flow.
+         */
+        "isSelected"?: boolean;
+        /**
+          * Indicates the locales for the artefact component
+         */
+        "locales"?: Partial<ArtefactLocales>;
+        /**
+          * Emitted when an action is clicked. The event detail contains the `ArtefactAction` object corresponding to the clicked action. This event is emitted for both default actions (copy, download, delete) and additional actions provided via the `actions` prop.
+         */
+        "onWppActionClick"?: (event: WppArtefactCustomEvent<ArtefactAction>) => void;
+        /**
+          * Allows specifing the position in the dropdown list of the Pin action. By default, it will be rendered at the top of the list.
+         */
+        "pinActionPosition"?: number;
+        /**
+          * Defines the artefact size. Setting this attribute changes the width of the artefact.
+         */
+        "size"?: ArtefactSize;
+        /**
+          * Defines the icon that will be rendered on the left of the title. Should contain the name of a valid icon from the library.
+         */
+        "titleIcon"?: `wpp-icon-${string}`;
+        /**
+          * Allows removing the Pin action from the dropdown list, which is rendered by default.
+         */
+        "withPinAction"?: boolean;
+    }
     interface WppAutocomplete {
         /**
           * Contains the autocomplete `aria-` props.
@@ -18152,6 +18450,10 @@ declare namespace LocalJSX {
          */
         "avatars"?: AvatarState[];
         /**
+          * Sets the tabindex for all avatars in the group. Use -1 to remove from tab order when inside composite widgets like trees where arrow keys are used for navigation.
+         */
+        "avatarsIndex"?: number;
+        /**
           * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
         "dropdownConfig"?: DropdownConfig;
@@ -18215,6 +18517,36 @@ declare namespace LocalJSX {
           * Defines the z-index of the WppBanner.
          */
         "zIndex"?: number;
+    }
+    interface WppBasicNode {
+        /**
+          * Defines the additional actions available for the Basic Node. The actions are added to the dropdown menu in the footer section. The `icon` should correspond to a valid icon name in the design system.
+         */
+        "actions"?: BasicNodeAction[];
+        /**
+          * Defines the ARIA props for the button of the actions menu.
+         */
+        "ariaProps"?: BasicNodeAriaProps;
+        /**
+          * Defines whether the node is in a loading state. If true, the border of the node will be animated.
+         */
+        "isLoading"?: boolean;
+        /**
+          * Defines if the WppBasicNode is selected. The value of this property should be available in the `props: NodeProps`, which are handled by React Flow.
+         */
+        "isSelected"?: boolean;
+        /**
+          * Indicates the locales for the basic-node component
+         */
+        "locales"?: Partial<BasicNodeLocales>;
+        /**
+          * Defines the title of the node, which is displayed in the header section. This prop is required.
+         */
+        "nodeTitle"?: string;
+        /**
+          * Emitted when an action is clicked. The event detail contains the `BasicNodeAction` object corresponding to the clicked action.
+         */
+        "onWppActionClick"?: (event: WppBasicNodeCustomEvent<BasicNodeAction>) => void;
     }
     interface WppBreadcrumb {
         /**
@@ -18434,6 +18766,14 @@ declare namespace LocalJSX {
          */
         "messages"?: ChatMessage[];
         /**
+          * Emitted when an entry inside the consolidated actions menu is clicked. The detail is the originating `ChatInputAction` object.
+         */
+        "onWppActionsMenuItemClick"?: (event: WppChatConversationCustomEvent<ChatInputActionItemClickEventDetail>) => void;
+        /**
+          * Emitted when the consolidated actions menu (the `wpp-icon-plus` dropdown configured via `chatInputConfig.actions`) opens or closes.
+         */
+        "onWppActionsMenuToggle"?: (event: WppChatConversationCustomEvent<ActionsMenuToggleEventDetail>) => void;
+        /**
           * Emitted when the value of the input changes.
          */
         "onWppChange"?: (event: WppChatConversationCustomEvent<FileUploadEventDetail>) => void;
@@ -18490,6 +18830,10 @@ declare namespace LocalJSX {
     }
     interface WppChatInput {
         /**
+          * Defines the entries shown in the consolidated actions menu (the `wpp-icon-plus` dropdown rendered at the start of the left toolbar). When this array is non-empty, chat-input renders a single `wpp-icon-plus` trigger that opens a `wpp-menu-context` containing one `wpp-list-item` per entry. Use this to consolidate auxiliary actions (translate, pinboard, upload, etc.) behind a single "plus" affordance.  An entry with the reserved id `'upload'` is automatically wired to the same file picker that `enableAttach` uses, so consumers do not need to imperatively open the dialog. The `wppActionsMenuItemClick` event still fires for that entry, in case the consumer wants to track the click.
+         */
+        "actions"?: ChatInputAction[];
+        /**
           * Typed ARIA overrides. Only supported htmlAttributes exposed.
          */
         "ariaProps"?: ChatInputAriaProps;
@@ -18519,6 +18863,7 @@ declare namespace LocalJSX {
         "enableAttach"?: boolean;
         /**
           * Configuration object for file upload functionality.
+          * @deprecated This top-level prop will be removed in components-library v5.0.0. The same options will be moved into a richer attachments configuration owned by the upload action entry (so consumers can scope `accept`, `size`, `maxFiles`, `validator`, etc. per-action rather than globally on the chat-input). For now keep using this prop; a migration codemod will be provided alongside the v5.0.0 release.
          */
         "fileUploadConfig"?: Partial<FileUploadConfig>;
         /**
@@ -18529,6 +18874,14 @@ declare namespace LocalJSX {
           * Locales (visual strings). Will be merged into _locales.
          */
         "locales"?: Partial<ChatInputLocaleInterface>;
+        /**
+          * Emitted when the user clicks an entry in the consolidated actions menu. The detail payload is the `ChatInputAction` object that was clicked. Fires for every entry, including the reserved `'upload'` entry (which is additionally wired to open the file picker automatically).
+         */
+        "onWppActionsMenuItemClick"?: (event: WppChatInputCustomEvent<ChatInputActionItemClickEventDetail>) => void;
+        /**
+          * Emitted when the internal actions menu (triggered by the `wpp-icon-plus` button) opens or closes. Only fires when `actions` is non-empty.
+         */
+        "onWppActionsMenuToggle"?: (event: WppChatInputCustomEvent<ActionsMenuToggleEventDetail>) => void;
         /**
           * Emitted when the value of the input changes.
          */
@@ -18577,6 +18930,88 @@ declare namespace LocalJSX {
           * Defines the z-index of the WppChatInput.
          */
         "zIndex"?: number;
+    }
+    /**
+     * Card-style node intended for use inside a React Flow canvas.
+     * It renders a chat bar footer, an optional messages body,
+     * and left/right handles positioned outside the card wrapper so they are never clipped.
+     * Selection is driven by an `isSelected` prop.
+     * Loading shows an animated gradient border.
+     * Resize is handled externally by React Flow's `<NodeResizer />`.
+     */
+    interface WppChatNode {
+        /**
+          * Defines the actions shown in the + menu.
+         */
+        "actions"?: ChatNodeAction[];
+        /**
+          * Defines the assistant avatar configuration. Set to `false` to hide the assistant avatar.
+         */
+        "assistantAvatarConfig"?: ChatNodeAvatarConfig | false;
+        /**
+          * Defines whether the node is in a loading state. If true, the border animates.
+         */
+        "isLoading"?: boolean;
+        /**
+          * Defines whether the node is in the selected/active state. Shows a blue border.
+         */
+        "isSelected"?: boolean;
+        /**
+          * Indicates the locales for the chat-node component.
+         */
+        "locales"?: Partial<ChatNodeLocales>;
+        /**
+          * Defines action buttons shown below assistant messages. If omitted, localized default actions are shown. Set to an empty array to hide them.
+         */
+        "messageActions"?: ChatNodeMessageAction[];
+        /**
+          * Defines the available chat models shown in the nested + menu.
+         */
+        "models"?: ChatNodeModel[];
+        /**
+          * Defines the title of the node, displayed in the header.
+         */
+        "nodeTitle"?: string;
+        /**
+          * Emitted when an action from the + menu is selected.
+         */
+        "onWppActionClick"?: (event: WppChatNodeCustomEvent<ChatNodeAction>) => void;
+        /**
+          * Emitted when the user clicks the + (attach) button.
+         */
+        "onWppAttach"?: (event: WppChatNodeCustomEvent<void>) => void;
+        /**
+          * Emitted when a message action button is clicked.
+         */
+        "onWppMessageActionClick"?: (event: WppChatNodeCustomEvent<ChatNodeMessageActionClickDetail>) => void;
+        /**
+          * Emitted when a chat model from the nested + menu is selected.
+         */
+        "onWppModelSelect"?: (event: WppChatNodeCustomEvent<ChatNodeModel>) => void;
+        /**
+          * Emitted when the user clicks the send button or presses Enter.
+         */
+        "onWppSend"?: (event: WppChatNodeCustomEvent<{ message: string }>) => void;
+        /**
+          * Emitted when the user clicks the stop button while the node is loading.
+         */
+        "onWppStop"?: (event: WppChatNodeCustomEvent<void>) => void;
+        /**
+          * Defines the selected chat model id. If omitted, the first model is shown as selected.
+         */
+        "selectedModelId"?: string;
+        /**
+          * Defines the chat node size. `'s'` renders the compact chat bar only.
+         */
+        "size"?: WppChatNodeSize;
+        /**
+          * Defines an optional title icon rendered before the node title. Use `left-icon` slot for custom icon markup.
+         */
+        "titleIcon"?: `wpp-icon-${string}`;
+        /**
+          * Defines the user avatar configuration. Set to `false` to hide the user avatar.
+         */
+        "userAvatarConfig"?: ChatNodeAvatarConfig | false;
     }
     interface WppCheckbox {
         /**
@@ -18967,6 +19402,12 @@ declare namespace LocalJSX {
           * Defines the width of the datepicker. If it is undefined, the datepicker will take the default value (200px single datepicker, 260px range datepicker).
          */
         "width"?: string;
+        /**
+          * Configuration for normalizing year range dates. When using `view="years"` with `range`, this option allows automatic normalization of selected dates to specific month/day boundaries. By default, normalizes start date to January 1st and end date to December 31st of their respective years.
+          * @example // Enable normalization with defaults (Jan 1st and Dec 31st) yearRangeNormalization={{ enabled: true }}
+          * @example // Custom: start on Apr 1st, end on Mar 31st (fiscal year) yearRangeNormalization={{ enabled: true, startMonth: 4, startDay: 1, endMonth: 3, endDay: 31 }}
+         */
+        "yearRangeNormalization"?: YearRangeNormalization;
     }
     interface WppDivider {
         /**
@@ -19458,6 +19899,24 @@ declare namespace LocalJSX {
           * Defines the grid item width for screen size - 2220px. Takes in a number between **1** and **24**, where **24** is **100%** of the item width. If no value is specified, the grid items take all the available screen width.
          */
         "xxl"?: RangeOf<24> | 'auto' | true;
+    }
+    interface WppHandle {
+        /**
+          * Defines the background color of the handle. Only colours from the theme should be used.
+         */
+        "color"?: string;
+        /**
+          * This property helps to position the WppHandle on the center of the board when the Node is in loading state.
+         */
+        "isLoading"?: boolean;
+        /**
+          * Defines if the WppHandle is selected. The value of this property should be available in the `props: NodeProps`, which are handled by React Flow. Setting this value will help positioning the Handle on the center of the border when it's selected.
+         */
+        "isSelected": boolean;
+        /**
+          * Defines the type of the WppHandle. Setting this property will help to position the handle on the center of the border. Target handles are placed on the left of the Node, while source handles are placed on the right.
+         */
+        "type": CustomHandleType;
     }
     interface WppHueSlider {
         /**
@@ -29862,7 +30321,7 @@ declare namespace LocalJSX {
          */
         "charactersLimit"?: number;
         /**
-          * Debug level: `error`, `warn`, `log`, or `info`. Passing true is equivalent to passing `log`. Passing false disables all messages.
+          * Debug level: `error`, `warn`, `log`, or `info`. Controls verbosity of the component's internal console output (errors, warnings, init / state logs). Defaults to `warn` to match the previous Quill-based behaviour. Setting a higher level (e.g. `info`) is useful while diagnosing integration issues.
          */
         "debug"?: DebugLevels;
         /**
@@ -29874,7 +30333,7 @@ declare namespace LocalJSX {
          */
         "format"?: Formats;
         /**
-          * Whitelist of formats to allow in the editor. See [Formats](https://quilljs.com/docs/formats/) for a complete list.
+          * Whitelist of formats to allow in the editor. See Tiptap extensions documentation for available formats.
          */
         "formats"?: string[];
         /**
@@ -29902,7 +30361,7 @@ declare namespace LocalJSX {
          */
         "messageType"?: InputMessageTypes;
         /**
-          * Collection of modules to include and respective options. The only configurable modules are the following: imageUpload, videoUpload, attachmentUpload and toolbar.aliases.embed (See "Usage" section of Notes) See [Modules](https://quilljs.com/docs/modules/) for more information about the library's modules.
+          * Collection of modules to include and respective options. The only configurable modules are the following: imageUpload, videoUpload, attachmentUpload and toolbar.aliases.embed
          */
         "modules"?: string;
         /**
@@ -29916,23 +30375,23 @@ declare namespace LocalJSX {
         /**
           * Emitted when editor has content changes
          */
-        "onWppChange"?: (event: WppRichtextCustomEvent<RichtextChangeEventDetail>) => void;
+        "onWppChange"?: (event: WppRichtextCustomEvent<TiptapChangeEventDetail>) => void;
         /**
           * Emitted when editor receives focus
          */
         "onWppFocus"?: (event: WppRichtextCustomEvent<FocusEvent>) => void;
         /**
-          * Editor init event
+          * Editor init event. Emits the Tiptap Editor instance (previously emitted Quill instance).
          */
-        "onWppInit"?: (event: WppRichtextCustomEvent<QuillInstance>) => void;
+        "onWppInit"?: (event: WppRichtextCustomEvent<Editor>) => void;
         /**
           * Emitted when editor has selection changes
          */
-        "onWppSelectionChange"?: (event: WppRichtextCustomEvent<RichtextSelectionChangeEventDetail>) => void;
+        "onWppSelectionChange"?: (event: WppRichtextCustomEvent<TiptapSelectionChangeEventDetail>) => void;
         /**
           * Emitted when user requests uploading of files
          */
-        "onWppUploadRequest"?: (event: WppRichtextCustomEvent<RichtextUploadRequestEventDetail>) => void;
+        "onWppUploadRequest"?: (event: WppRichtextCustomEvent<TiptapUploadRequestEventDetail>) => void;
         /**
           * Placeholder text to show when editor is empty.
          */
@@ -29946,7 +30405,7 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
-          * DOM Element or a CSS selector for a DOM Element, specifying which container has the scrollbars (i.e. `overflow-y: auto`), if has been changed from the default ql-editor with custom CSS. Necessary to fix scroll jumping bugs when Quill is set to auto grow its height, and another ancestor container is responsible for the scrolling.
+          * DOM Element or a CSS selector for a DOM Element, specifying which container has the scrollbars (i.e. `overflow-y: auto`), if has been changed from the default editor container with custom CSS.
          */
         "scrollingContainer"?: HTMLElement | string;
         /**
@@ -29992,19 +30451,15 @@ declare namespace LocalJSX {
     }
     interface WppRichtextView {
         /**
-          * Debug level: `error`, `warn`, `log`, or `info`. Passing true is equivalent to passing `log`. Passing false disables all messages.
-         */
-        "debug"?: DebugLevels;
-        /**
           * Format of editor value
          */
         "format"?: Formats;
         /**
-          * Whitelist of formats to allow in the editor. See [Formats](https://quilljs.com/docs/formats/) for a complete list.
+          * Whitelist of formats to allow in the editor.
          */
         "formats"?: string[];
         /**
-          * Collection of modules to include and respective options. The only configurable modules are the following: imageUpload, videoUpload, attachmentUpload and toolbar.aliases.embed (See "Usage" section of Notes) See [Modules](https://quilljs.com/docs/modules/) for more information about the library's modules.
+          * Collection of modules to include and respective options.
          */
         "modules"?: string;
         /**
@@ -30166,6 +30621,10 @@ declare namespace LocalJSX {
     }
     interface WppSegmentedControl {
         /**
+          * Grouped ARIA props for the tablist: { label?, labelledby? } Precedence: ariaProps > locales > defaults
+         */
+        "ariaProps"?: WppSegmentedControlAriaProps;
+        /**
           * If the item size is relative to the control bar size.
          */
         "hugContentOff"?: boolean;
@@ -30177,6 +30636,10 @@ declare namespace LocalJSX {
           * Defines the dropdown configuration for the label tooltip.
          */
         "labelTooltipConfig"?: DropdownConfig;
+        /**
+          * Locales for accessible strings. Only tablistLabel currently.
+         */
+        "locales"?: Partial<SegmentedControlLocaleInterface>;
         /**
           * Emitted when the segmented control loses focus
          */
@@ -30211,6 +30674,10 @@ declare namespace LocalJSX {
         "width"?: string;
     }
     interface WppSegmentedControlItem {
+        /**
+          * Grouped ARIA props (explicit picks only). tab: { label?, describedby?, controls? }
+         */
+        "ariaProps"?: WppSegmentedControlItemAriaProps;
         /**
           * Defines the number of elements within a specific item. The counter is only displayed when the `variant` is set to 'text'.
          */
@@ -30334,15 +30801,15 @@ declare namespace LocalJSX {
          */
         "maximumSelectedItems"?: number;
         /**
-          * Defines the input message. The message is placed right below the select.
+          * Defines the input message. The message is placed right below the select or in a tooltip when `messageInTooltip` is enabled.
          */
         "message"?: string;
         /**
-          * Render error/warning/info message in tooltip instead of an inline message below a select element
+          * Render error/warning/info message in tooltip instead of an inline message below a select element. Only renders a tooltip when `message` is provided with an error or warning `messageType`; otherwise it has no effect.
          */
         "messageInTooltip"?: boolean;
         /**
-          * Defines the input message type, which can be "error" or "warning". This property has to be used together with "message".
+          * Defines the input message type, which can be "error" or "warning". This controls the visual validation state even when no message is provided.
          */
         "messageType"?: InputMessageTypes;
         /**
@@ -30750,7 +31217,7 @@ declare namespace LocalJSX {
          */
         "withBackButton"?: boolean;
         /**
-          * The zIndex of the sticky bar. The default value is 890 such that it hides below the os-bar.
+          * The zIndex of the sticky bar.
          */
         "zIndex"?: number;
     }
@@ -30824,7 +31291,8 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
-          * Maximum label length (in characters) of single item
+          * Maximum label length (in characters) of single item.
+          * @deprecated - Use CSS width constraints instead. Text will automatically truncate with ellipsis when it overflows. This prop will be removed in version 5.0.0.  Note: The default value is 30 characters for backward compatibility. If you want truncation based purely on the element's width (e.g. via CSS `max-width`), set this prop to `undefined`. Otherwise, the character-based truncation will take precedence and the label will be cut off at 30 characters before any CSS width constraint is applied.
          */
         "maxLabelLength"?: number;
         /**
@@ -31056,6 +31524,10 @@ declare namespace LocalJSX {
          */
         "maxToastsToDisplay"?: number;
         /**
+          * Minimum delay (ms) between two successive toasts becoming visible. When toasts are added in rapid succession (or promoted from the queue back-to-back), this prevents them from entering and exiting in batched "waves" — instead each toast appears on its own timeline, creating a continuous, smooth flow. Set to 0 to disable staggering (toasts appear immediately as slots open up).
+         */
+        "staggerInterval"?: number;
+        /**
           * Defines the z-index of the WppToastContainer.
          */
         "zIndex"?: number;
@@ -31215,6 +31687,14 @@ declare namespace LocalJSX {
           * Emitted when topbar item was changed
          */
         "onWppActiveTopbarItemChange"?: (event: WppTopbarItemCustomEvent<NavigationItemEventDetail>) => void;
+        /**
+          * Emitted when topbar item menu expanded state changes
+         */
+        "onWppTopbarItemMenuToggle"?: (event: WppTopbarItemCustomEvent<boolean>) => void;
+        /**
+          * Defines the z-index of the WppTopbarItem dropdown menus.
+         */
+        "zIndex"?: number;
     }
     interface WppTree {
         /**
@@ -31233,6 +31713,10 @@ declare namespace LocalJSX {
           * Defines words highlight in tree-item's title after search.
          */
         "disableSearchHighlight"?: boolean;
+        /**
+          * Accessible label for the tree component. Provides a name for the tree that assistive technologies can announce.
+         */
+        "label"?: string;
         /**
           * Lazy loading configuration for dynamically loading children. When a node with `hasChildren: true` is expanded, skeleton loaders are shown while children are fetched, then all children render at once.
          */
@@ -31292,6 +31776,10 @@ declare namespace LocalJSX {
          */
         "highlightOptions"?: TreeItemHighlightOptions;
         /**
+          * Whether this item is currently focused
+         */
+        "isFocused"?: boolean;
+        /**
           * Indicates current item props
          */
         "item"?: TreeType;
@@ -31312,9 +31800,17 @@ declare namespace LocalJSX {
          */
         "onWppTreeItemSelectChange"?: (event: WppTreeItemCustomEvent<TreeType>) => void;
         /**
+          * Position within the set of siblings (for aria-posinset)
+         */
+        "posInSet"?: number;
+        /**
           * Indicates search param
          */
         "search"?: string;
+        /**
+          * Total number of siblings at this level (for aria-setsize)
+         */
+        "setSize"?: number;
         /**
           * Indicates current item title
          */
@@ -31384,11 +31880,13 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "wpp-accordion": WppAccordion;
         "wpp-action-button": WppActionButton;
+        "wpp-artefact": WppArtefact;
         "wpp-autocomplete": WppAutocomplete;
         "wpp-avatar": WppAvatar;
         "wpp-avatar-group": WppAvatarGroup;
         "wpp-back-to-top-button": WppBackToTopButton;
         "wpp-banner": WppBanner;
+        "wpp-basic-node": WppBasicNode;
         "wpp-breadcrumb": WppBreadcrumb;
         "wpp-button": WppButton;
         "wpp-card": WppCard;
@@ -31396,6 +31894,7 @@ declare namespace LocalJSX {
         "wpp-chat-conversation": WppChatConversation;
         "wpp-chat-conversation-message": WppChatConversationMessage;
         "wpp-chat-input": WppChatInput;
+        "wpp-chat-node": WppChatNode;
         "wpp-checkbox": WppCheckbox;
         "wpp-checkbox-group": WppCheckboxGroup;
         "wpp-color-picker": WppColorPicker;
@@ -31422,6 +31921,7 @@ declare namespace LocalJSX {
         "wpp-floating-toolbar": WppFloatingToolbar;
         "wpp-full-screen-modal": WppFullScreenModal;
         "wpp-grid": WppGrid;
+        "wpp-handle": WppHandle;
         "wpp-hue-slider": WppHueSlider;
         "wpp-icon-about": WppIconAbout;
         "wpp-icon-accessibility": WppIconAccessibility;
@@ -32002,11 +32502,13 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "wpp-accordion": LocalJSX.WppAccordion & JSXBase.HTMLAttributes<HTMLWppAccordionElement>;
             "wpp-action-button": LocalJSX.WppActionButton & JSXBase.HTMLAttributes<HTMLWppActionButtonElement>;
+            "wpp-artefact": LocalJSX.WppArtefact & JSXBase.HTMLAttributes<HTMLWppArtefactElement>;
             "wpp-autocomplete": LocalJSX.WppAutocomplete & JSXBase.HTMLAttributes<HTMLWppAutocompleteElement>;
             "wpp-avatar": LocalJSX.WppAvatar & JSXBase.HTMLAttributes<HTMLWppAvatarElement>;
             "wpp-avatar-group": LocalJSX.WppAvatarGroup & JSXBase.HTMLAttributes<HTMLWppAvatarGroupElement>;
             "wpp-back-to-top-button": LocalJSX.WppBackToTopButton & JSXBase.HTMLAttributes<HTMLWppBackToTopButtonElement>;
             "wpp-banner": LocalJSX.WppBanner & JSXBase.HTMLAttributes<HTMLWppBannerElement>;
+            "wpp-basic-node": LocalJSX.WppBasicNode & JSXBase.HTMLAttributes<HTMLWppBasicNodeElement>;
             "wpp-breadcrumb": LocalJSX.WppBreadcrumb & JSXBase.HTMLAttributes<HTMLWppBreadcrumbElement>;
             "wpp-button": LocalJSX.WppButton & JSXBase.HTMLAttributes<HTMLWppButtonElement>;
             "wpp-card": LocalJSX.WppCard & JSXBase.HTMLAttributes<HTMLWppCardElement>;
@@ -32014,6 +32516,15 @@ declare module "@stencil/core" {
             "wpp-chat-conversation": LocalJSX.WppChatConversation & JSXBase.HTMLAttributes<HTMLWppChatConversationElement>;
             "wpp-chat-conversation-message": LocalJSX.WppChatConversationMessage & JSXBase.HTMLAttributes<HTMLWppChatConversationMessageElement>;
             "wpp-chat-input": LocalJSX.WppChatInput & JSXBase.HTMLAttributes<HTMLWppChatInputElement>;
+            /**
+             * Card-style node intended for use inside a React Flow canvas.
+             * It renders a chat bar footer, an optional messages body,
+             * and left/right handles positioned outside the card wrapper so they are never clipped.
+             * Selection is driven by an `isSelected` prop.
+             * Loading shows an animated gradient border.
+             * Resize is handled externally by React Flow's `<NodeResizer />`.
+             */
+            "wpp-chat-node": LocalJSX.WppChatNode & JSXBase.HTMLAttributes<HTMLWppChatNodeElement>;
             "wpp-checkbox": LocalJSX.WppCheckbox & JSXBase.HTMLAttributes<HTMLWppCheckboxElement>;
             "wpp-checkbox-group": LocalJSX.WppCheckboxGroup & JSXBase.HTMLAttributes<HTMLWppCheckboxGroupElement>;
             "wpp-color-picker": LocalJSX.WppColorPicker & JSXBase.HTMLAttributes<HTMLWppColorPickerElement>;
@@ -32040,6 +32551,7 @@ declare module "@stencil/core" {
             "wpp-floating-toolbar": LocalJSX.WppFloatingToolbar & JSXBase.HTMLAttributes<HTMLWppFloatingToolbarElement>;
             "wpp-full-screen-modal": LocalJSX.WppFullScreenModal & JSXBase.HTMLAttributes<HTMLWppFullScreenModalElement>;
             "wpp-grid": LocalJSX.WppGrid & JSXBase.HTMLAttributes<HTMLWppGridElement>;
+            "wpp-handle": LocalJSX.WppHandle & JSXBase.HTMLAttributes<HTMLWppHandleElement>;
             "wpp-hue-slider": LocalJSX.WppHueSlider & JSXBase.HTMLAttributes<HTMLWppHueSliderElement>;
             "wpp-icon-about": LocalJSX.WppIconAbout & JSXBase.HTMLAttributes<HTMLWppIconAboutElement>;
             "wpp-icon-accessibility": LocalJSX.WppIconAccessibility & JSXBase.HTMLAttributes<HTMLWppIconAccessibilityElement>;

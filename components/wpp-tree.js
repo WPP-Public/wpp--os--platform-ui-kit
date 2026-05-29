@@ -1,6 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
-import { u as uuidv4, k as transformToVersionedTag, d as debounce } from './utils.js';
-import { L as LOCALES_DEFAULTS, r as recalculateIndeterminateTreeState, u as updateTreeByIds, f as findSelectedItems, c as convertToOriginalItems, a as updateTreeById, m as markChildrenAs, i as isHaveFoundChildren, e as extractExtraProps, b as findTreeItemById, d as defineCustomElement$3 } from './wpp-tree-item2.js';
+import { k as transformToVersionedTag, u as uuidv4, d as debounce } from './utils.js';
+import { L as LOCALES_DEFAULTS, r as recalculateIndeterminateTreeState, u as updateTreeByIds, f as findSelectedItems, c as convertToOriginalItems, a as updateTreeById, m as markChildrenAs, i as isHaveFoundChildren, e as extractExtraProps, g as getAllVisibleItems, b as findTreeItemById, d as getSiblings, h as findParentOfItem, j as defineCustomElement$3 } from './wpp-tree-item2.js';
 import { d as defineCustomElement$r } from './wpp-action-button2.js';
 import { d as defineCustomElement$q } from './wpp-avatar2.js';
 import { d as defineCustomElement$p } from './wpp-avatar-group2.js';
@@ -27,7 +27,7 @@ import { d as defineCustomElement$5 } from './wpp-tag2.js';
 import { d as defineCustomElement$4 } from './wpp-tooltip2.js';
 import { d as defineCustomElement$2 } from './wpp-typography2.js';
 
-const wppTreeCss = ":host{--tree-item-padding:var(--wpp-tree-item-padding, 6px 4px 0 4px);--tree-container-width:var(--wpp-tree-container-width, 100%);--tree-container-height:var(--wpp-tree-container-height, 100%);--tree-container-bg-color:var(--wpp-tree-container-bg-color, var(--wpp-grey-color-000));--tree-input-trigger-area:var(--wpp-tree-trigger-area, 32px);--tree-item-icon-end-color:var(--wpp-tree-icon-end-color, var(--wpp-grey-color-800));--tree-skeleton-height:var(--wpp-tree-skeleton-height, 22px);--tree-skeleton-padding:var(--wpp-tree-skeleton-padding, 3px 0 3px 36px);--tree-skeleton-width:var(--wpp-tree-skeleton-width, 100%);display:-ms-flexbox;display:flex;padding:var(--tree-item-padding)}.container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%;overflow:hidden}.content-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;overflow:hidden;-webkit-transition:height 500ms ease;transition:height 500ms ease}.skeleton-wrapper{width:var(--tree-skeleton-width)}.skeleton-wrapper .skeleton-item{padding:var(--tree-skeleton-padding)}.skeleton-wrapper .wpp-skeleton{--skeleton-height:var(--tree-skeleton-height)}.empty-tree-text{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);margin:0;text-align:center}";
+const wppTreeCss = ":host{--tree-item-padding:var(--wpp-tree-item-padding, 6px 4px 0 4px);--tree-container-width:var(--wpp-tree-container-width, 100%);--tree-container-height:var(--wpp-tree-container-height, 100%);--tree-container-bg-color:var(--wpp-tree-container-bg-color, var(--wpp-grey-color-000));--tree-input-trigger-area:var(--wpp-tree-trigger-area, 32px);--tree-item-icon-end-color:var(--wpp-tree-icon-end-color, var(--wpp-grey-color-800));--tree-skeleton-height:var(--wpp-tree-skeleton-height, 22px);--tree-skeleton-padding:var(--wpp-tree-skeleton-padding, 3px 0 3px 36px);--tree-skeleton-width:var(--wpp-tree-skeleton-width, 100%);display:-ms-flexbox;display:flex;padding:var(--tree-item-padding)}.container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%}.container:focus{outline:none}.content-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-transition:height 500ms ease;transition:height 500ms ease}.skeleton-wrapper{width:var(--tree-skeleton-width)}.skeleton-wrapper .skeleton-item{padding:var(--tree-skeleton-padding)}.skeleton-wrapper .wpp-skeleton{--skeleton-height:var(--tree-skeleton-height)}.empty-tree-text{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);margin:0;text-align:center}";
 
 const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLElement {
   constructor() {
@@ -40,6 +40,245 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     this._locales = LOCALES_DEFAULTS;
     this.pendingLoads = new Map();
     this.isSearchResultFound = true;
+    this.isMouseInteraction = false;
+    this.focusTreeItem = (itemId) => {
+      // Use attribute-only selector — tag names are versioned at runtime (e.g. wpp-tree-item-v3-4-0)
+      const treeItemEl = this.host.shadowRoot?.querySelector(`[data-item-id="${itemId}"]`);
+      if (treeItemEl && typeof treeItemEl.scrollIntoView === 'function') {
+        treeItemEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+      // If was in action mode, return focus to the tree container
+      if (this.isFocusOnAction) {
+        this.exitActionMode(this.host.shadowRoot?.querySelector('.container'));
+      }
+    };
+    // --- Action Mode ---
+    // Per W3C ARIA APG: trees are composite widgets where Tab always exits.
+    // To interact with actionable content (buttons, menus) inside a tree item,
+    // the user presses Enter or F2 to enter "action mode", then Escape to return.
+    /**
+     * Enters action mode for the given tree item.
+     * Focuses the first actionable element (button, menu trigger, etc.) within the item.
+     * Uses `setFocus()` on wpp-action-button to ensure the visible focus ring (tab-focus class).
+     */
+    this.enterActionMode = (itemId) => {
+      const actions = this.getActionElementsInItem(itemId);
+      if (actions.length === 0) {
+        return;
+      }
+      const actionButtonTag = transformToVersionedTag('wpp-action-button').toUpperCase();
+      const firstAction = actions[0];
+      // Skip the first action if it's a disabled or loading action button
+      // — its inner <button> is disabled and cannot receive focus.
+      const isDisabledOrLoading = firstAction.tagName === actionButtonTag &&
+        (firstAction.hasAttribute('disabled') || firstAction.classList.contains('wpp-loading'));
+      if (isDisabledOrLoading) {
+        // Try the next action instead (e.g. endContent avatar/avatar-group)
+        const remaining = actions.slice(1);
+        if (remaining.length > 0) {
+          this.focusFirstAvailable(remaining);
+        }
+        return;
+      }
+      this.focusFirstAvailable(actions);
+    };
+    /**
+     * Focuses the first available action element, using the appropriate focus method.
+     * Resolves action components to their focusable DOM elements via getFocusableElements,
+     * then delegates to focusActionElement for the correct focus strategy.
+     */
+    this.focusFirstAvailable = (actions) => {
+      const focusableEls = this.getFocusableElements(actions);
+      if (focusableEls.length > 0) {
+        this.focusActionElement(focusableEls[0]);
+        this.isFocusOnAction = true;
+      }
+    };
+    /**
+     * Exits action mode and returns focus to the tree container.
+     */
+    this.exitActionMode = (treeContainer) => {
+      this.isFocusOnAction = false;
+      treeContainer?.focus();
+    };
+    /**
+     * Activates the current action element in action mode (Enter/Space).
+     * Dispatches a click on the correct trigger element:
+     * - For iconsEnd (wpp-menu-context): clicks the trigger-element slot to open the dropdown.
+     * - For simple iconEnd: clicks the icon element to fire wppActionClick.
+     */
+    this.activateCurrentAction = () => {
+      const treeItemEl = this.host.shadowRoot?.querySelector(`[data-item-id="${this.focusedItemId}"]`);
+      if (!treeItemEl)
+        return;
+      const menuContextTag = transformToVersionedTag('wpp-menu-context');
+      // iconsEnd case: the icon-end slot contains a wpp-menu-context with a trigger element
+      const trigger = treeItemEl.querySelector(`[slot="icon-end"] ${menuContextTag} [slot="trigger-element"]`);
+      if (trigger) {
+        trigger.click();
+        return;
+      }
+      // Simple iconEnd case: the icon-end slot is the icon itself with an onclick handler
+      const iconEnd = treeItemEl.querySelector('[slot="icon-end"]');
+      if (iconEnd) {
+        iconEnd.click();
+      }
+    };
+    /**
+     * Focuses a resolved focusable element using the correct strategy:
+     * - If the element is the inner <button> of a wpp-action-button (detected via
+     *   getRootNode()), calls setFocus() on the action-button host for proper focus ring.
+     * - Otherwise, calls .focus() + synthetic keyup Tab to trigger the component's
+     *   built-in tab-focus CSS class (wpp-avatar, menu triggers, etc.).
+     */
+    this.focusActionElement = (focusableEl) => {
+      const actionButtonTag = transformToVersionedTag('wpp-action-button').toUpperCase();
+      // Check if this element lives inside a wpp-action-button's shadow DOM
+      const rootNode = focusableEl.getRootNode();
+      if (rootNode instanceof ShadowRoot && rootNode.host?.tagName === actionButtonTag) {
+        const actionButton = rootNode.host;
+        if (typeof actionButton.setFocus === 'function') {
+          actionButton.setFocus();
+          return;
+        }
+      }
+      // For avatars, menu triggers, and other elements
+      focusableEl.focus();
+      focusableEl.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab', bubbles: true }));
+    };
+    /**
+     * Collects actionable elements within a tree item.
+     *
+     * Uses `transformToVersionedTag` for tag selectors because component names
+     * include version suffixes at runtime (e.g. `wpp-action-button-v3-4-0`).
+     *
+     * Returns:
+     * - The `wpp-action-button` (wraps icon-end / iconsEnd content) if visible
+     * - Any `wpp-menu-context` elements from the icon-start slot (separate from action-button)
+     */
+    this.getActionElementsInItem = (itemId) => {
+      const treeItemEl = this.host.shadowRoot?.querySelector(`[data-item-id="${itemId}"]`);
+      if (!treeItemEl) {
+        return [];
+      }
+      const actions = [];
+      const shadowRoot = treeItemEl.shadowRoot;
+      const actionButtonTag = transformToVersionedTag('wpp-action-button');
+      // 1. The wpp-action-button wraps all icon-end / iconsEnd content.
+      //    When visible (not aria-hidden), it is the primary focusable action.
+      if (shadowRoot) {
+        const actionButton = shadowRoot.querySelector(`${actionButtonTag}:not([aria-hidden="true"])`);
+        if (actionButton)
+          actions.push(actionButton);
+      }
+      // 2. icon-start menu-contexts live outside the action-button (in the slot wrapper).
+      //    These are separate interactive elements that Tab should also reach.
+      const menuContextTag = transformToVersionedTag('wpp-menu-context');
+      const startSlotMenus = Array.from(treeItemEl.querySelectorAll(`[slot="icon-start"] ${menuContextTag}`));
+      actions.push(...startSlotMenus);
+      // 3. endContent elements: avatar and avatar-group are interactive and focusable.
+      //    These are rendered inside the tree-item's shadow DOM.
+      if (shadowRoot) {
+        const avatarTag = transformToVersionedTag('wpp-avatar');
+        const avatarGroupTag = transformToVersionedTag('wpp-avatar-group');
+        const endContentAvatar = shadowRoot.querySelector(`${avatarTag}[part="tree-item-end-avatar"]`);
+        const endContentAvatarGroup = shadowRoot.querySelector(`${avatarGroupTag}[part="tree-item-end-avatar-group"]`);
+        if (endContentAvatar)
+          actions.push(endContentAvatar);
+        if (endContentAvatarGroup)
+          actions.push(endContentAvatarGroup);
+      }
+      return actions;
+    };
+    /**
+     * Resolves each action component to the actual focusable DOM element.
+     *
+     * - wpp-action-button: returns the inner <button> (tabindex=-1, programmatically focusable).
+     * - wpp-menu-context (scoped, no shadow DOM): returns the trigger element's inner button.
+     */
+    this.getFocusableElements = (actions) => {
+      const actionButtonTag = transformToVersionedTag('wpp-action-button').toUpperCase();
+      const menuContextTag = transformToVersionedTag('wpp-menu-context').toUpperCase();
+      const avatarTag = transformToVersionedTag('wpp-avatar').toUpperCase();
+      const avatarGroupTag = transformToVersionedTag('wpp-avatar-group').toUpperCase();
+      const elements = [];
+      for (const action of actions) {
+        const tag = action.tagName;
+        if (tag === actionButtonTag) {
+          const btn = action.shadowRoot?.querySelector('button');
+          if (btn) {
+            elements.push(btn);
+          }
+        }
+        else if (tag === menuContextTag) {
+          // wpp-menu-context uses scoped CSS (no shadow DOM) — query light DOM for trigger.
+          const trigger = action.querySelector('[slot="trigger-element"]');
+          if (trigger) {
+            const inner = (trigger.shadowRoot?.querySelector('button') ?? trigger);
+            if (typeof inner.focus === 'function') {
+              elements.push(inner);
+            }
+          }
+        }
+        else if (tag === avatarTag) {
+          // wpp-avatar is focusable via its Host element.
+          // It tracks focus type and applies tab-focus CSS class on keyup Tab.
+          elements.push(action);
+        }
+        else if (tag === avatarGroupTag) {
+          // wpp-avatar-group has no focus handling of its own — resolve to
+          // ALL wpp-avatar children inside its shadow DOM so Tab can cycle through them.
+          const innerAvatarTag = transformToVersionedTag('wpp-avatar');
+          const allAvatars = Array.from(action.shadowRoot?.querySelectorAll(innerAvatarTag) ?? []);
+          elements.push(...allAvatars);
+        }
+        else if (typeof action.focus === 'function') {
+          elements.push(action);
+        }
+      }
+      return elements;
+    };
+    /**
+     * Checks whether all selectable (non-disabled, non-isNotSelectable) leaf descendants
+     * are already selected. Used to determine the correct toggle direction when a parent
+     * is in indeterminate state due to disabled children that can't be toggled.
+     */
+    this.areAllSelectableChildrenSelected = (children) => children.every(child => {
+      // Disabled items can't be toggled — skip them (treat as "satisfied")
+      if (child.disabled)
+        return true;
+      if (child.children?.length) {
+        // isNotSelectable parents delegate selection to their children
+        if (child.isNotSelectable) {
+          return this.areAllSelectableChildrenSelected(child.children);
+        }
+        // Selectable parent: check own state AND children
+        return child.selected && this.areAllSelectableChildrenSelected(child.children);
+      }
+      // Leaf node
+      return !!child.selected;
+    });
+    /**
+     * Checks whether the given element is currently focused (or its host is the active element).
+     * Accounts for shadow DOM boundaries where activeElement is the host, not the inner element.
+     */
+    this.isElementFocused = (element, composedTarget) => {
+      if (element === composedTarget)
+        return true;
+      // The composedTarget may be inside element's shadow DOM
+      let current = composedTarget;
+      while (current) {
+        if (current === element)
+          return true;
+        if (typeof ShadowRoot !== 'undefined' && current instanceof ShadowRoot) {
+          current = current.host;
+        }
+        else {
+          current = current.parentNode;
+        }
+      }
+      return false;
+    };
     this.toggleItemSelection = (toggleFunction, reason) => {
       const allItemsIDs = this.currentTreeData.map(item => item.id);
       const finalTree = recalculateIndeterminateTreeState(updateTreeByIds(this.currentTreeData, allItemsIDs, toggleFunction));
@@ -49,6 +288,20 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
         selectedOriginalItems: convertToOriginalItems(findSelectedItems(finalTree)),
         reason,
       });
+    };
+    /**
+     * Handle document-level mousedown to clear focus ring when clicking outside the tree
+     */
+    this.handleDocumentMouseDown = (event) => {
+      const target = event.target;
+      const isInsideHost = this.host.contains(target);
+      const isInsideShadow = this.host.shadowRoot?.contains(target);
+      if (!isInsideHost && !isInsideShadow) {
+        // Click is outside the tree - clear focus ring
+        if (this.isKeyboardNavigating) {
+          this.isKeyboardNavigating = false;
+        }
+      }
     };
     this.isMatchSearch = (item, search) => {
       if (this.searchConfig?.isMatchingSearch)
@@ -146,20 +399,44 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     this.hostCssClasses = () => ({
       'wpp-tree': true,
     });
-    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v4-0-0", { dropdownConfig: {
+    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v4-1-0", { dropdownConfig: {
         trigger: 'click',
         interactiveDebounce: 15,
         interactiveBorder: 25,
         offset: [0, 0],
-      } }, h("wpp-icon-more-v4-0-0", { class: {
+      } }, h("wpp-icon-more-v4-1-0", { class: {
         'menu-trigger': true,
         disabled: !!item.disabled,
-      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v4-0-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
-    this.renderTree = (treeData, level = 1) => treeData.map(item => {
-      const extraProps = extractExtraProps(item);
-      const isParent = !!item.hasChildren || !!(item.children && item.children.length);
-      if (isParent) {
-        return (h("wpp-tree-item-v4-0-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
+      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v4-1-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
+    this.renderTree = (treeData, level = 1) => {
+      const visibleItems = treeData.filter(item => !item.hidden);
+      const setSize = visibleItems.length;
+      return visibleItems.map((item, index) => {
+        const extraProps = extractExtraProps(item);
+        const isParent = !!item.hasChildren || !!(item.children && item.children.length);
+        const posInSet = index + 1;
+        // Only show focus ring during keyboard navigation (suppress when action mode is active)
+        const isFocused = this.isKeyboardNavigating && this.focusedItemId === item.id && !this.isFocusOnAction;
+        if (isParent) {
+          return (h("wpp-tree-item-v4-1-0", { id: `tree-item-${item.id}`, text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isFocused: isFocused, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
+            h(transformToVersionedTag(item.iconStart.icon), {
+              slot: 'icon-start',
+              part: 'icon-start',
+              onclick: this.handleActionClick({ item, name: item.iconStart.name, place: 'start' }),
+            }), item.iconsStart && this.renderIconsList(item, item.iconsStart, 'start'), item.iconsEnd && this.renderIconsList(item, item.iconsEnd), !item.iconsEnd &&
+            item.iconEnd?.icon &&
+            h(transformToVersionedTag(item.iconEnd.icon), {
+              slot: 'icon-end',
+              part: 'icon-end',
+              onclick: this.handleActionClick({ item, name: item.iconEnd.name, place: 'end' }),
+            }), h("div", { slot: "content", class: "content-container", role: "group", part: "content" }, item.open &&
+            (item.loadingChildren
+              ? this.renderSkeletonRows(this.lazyConfig?.skeleton?.count || 1)
+              : Array.isArray(item.children) && item.children.length > 0
+                ? this.renderTree(item.children, level + 1)
+                : null))));
+        }
+        return (h("wpp-tree-item-v4-1-0", { id: `tree-item-${item.id}`, text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isFocused: isFocused, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
           h(transformToVersionedTag(item.iconStart.icon), {
             slot: 'icon-start',
             part: 'icon-start',
@@ -170,28 +447,72 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
             slot: 'icon-end',
             part: 'icon-end',
             onclick: this.handleActionClick({ item, name: item.iconEnd.name, place: 'end' }),
-          }), h("div", { slot: "content", class: "content-container", part: "content" }, item.open &&
-          (item.loadingChildren
-            ? this.renderSkeletonRows(this.lazyConfig?.skeleton?.count || 1)
-            : Array.isArray(item.children) && item.children.length > 0
-              ? this.renderTree(item.children, level + 1)
-              : null))));
+          })));
+      });
+    };
+    this.handleContainerFocus = (event) => {
+      const relatedTarget = event.relatedTarget;
+      // Check if focus is coming from OUTSIDE the tree (true entry) vs. internal focus movement
+      const comingFromHost = relatedTarget ? this.host.contains(relatedTarget) : false;
+      const comingFromShadow = relatedTarget ? this.host.shadowRoot?.contains(relatedTarget) : false;
+      const isTrueEntry = !relatedTarget || (!comingFromHost && !comingFromShadow);
+      // Only update state if focus is truly entering from outside the tree
+      if (isTrueEntry) {
+        // Only show focus ring for keyboard navigation (not mouse clicks)
+        if (!this.isMouseInteraction) {
+          this.isKeyboardNavigating = true;
+        }
+        // Reset mouse flag after focus handling
+        this.isMouseInteraction = false;
+        // Initialize focused item when tree receives focus
+        if (this.currentTreeData?.length > 0) {
+          const visibleItems = getAllVisibleItems(this.currentTreeData);
+          // Find first non-disabled item, preferring selected items
+          const selectedItem = visibleItems.find(item => item.selected && !item.disabled);
+          const firstNonDisabledItem = visibleItems.find(item => !item.disabled);
+          this.focusedItemId = selectedItem?.id ?? firstNonDisabledItem?.id ?? null;
+        }
       }
-      return (h("wpp-tree-item-v4-0-0", { text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, ...extraProps }, item.iconStart?.icon &&
-        h(transformToVersionedTag(item.iconStart.icon), {
-          slot: 'icon-start',
-          part: 'icon-start',
-          onclick: this.handleActionClick({ item, name: item.iconStart.name, place: 'start' }),
-        }), item.iconsStart && this.renderIconsList(item, item.iconsStart, 'start'), item.iconsEnd && this.renderIconsList(item, item.iconsEnd), !item.iconsEnd &&
-        item.iconEnd?.icon &&
-        h(transformToVersionedTag(item.iconEnd.icon), {
-          slot: 'icon-end',
-          part: 'icon-end',
-          onclick: this.handleActionClick({ item, name: item.iconEnd.name, place: 'end' }),
-        })));
-    });
+    };
+    this.handleContainerBlur = (event) => {
+      const relatedTarget = event.relatedTarget;
+      const hostContains = relatedTarget ? this.host.contains(relatedTarget) : false;
+      const shadowRootContains = relatedTarget ? this.host.shadowRoot?.contains(relatedTarget) : false;
+      const isWithinNestedShadow = relatedTarget ? this.isDescendantOfHost(relatedTarget) : false;
+      const isMovingOutside = !relatedTarget || (!hostContains && !shadowRootContains && !isWithinNestedShadow);
+      if (isMovingOutside) {
+        this.isKeyboardNavigating = false;
+        this.isFocusOnAction = false;
+      }
+    };
+    /**
+     * Traverses upward through shadow DOM boundaries to determine
+     * whether an element lives within this component's host.
+     */
+    this.isDescendantOfHost = (element) => {
+      let current = element;
+      while (current) {
+        if (current === this.host)
+          return true;
+        if (typeof ShadowRoot !== 'undefined' && current instanceof ShadowRoot) {
+          current = current.host;
+        }
+        else {
+          current = current.parentNode || current.assignedSlot?.parentNode || null;
+        }
+      }
+      return false;
+    };
+    this.getActiveDescendantId = () => {
+      if (this.focusedItemId === null)
+        return undefined;
+      return `tree-item-${this.focusedItemId}`;
+    };
     this.currentTreeData = undefined;
     this.selectedIds = [];
+    this.focusedItemId = null;
+    this.isKeyboardNavigating = false;
+    this.isFocusOnAction = false;
     this.data = undefined;
     this.search = '';
     this.multiple = false;
@@ -206,12 +527,13 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     this.disableOpenCloseAnimation = false;
     this.withItemsTruncation = true;
     this.loading = false;
+    this.label = undefined;
     this.skeletonNumberItems = 5;
     this.lazyConfig = undefined;
   }
   renderSkeletonRows(count = 1, paddingLeft) {
     const { height = 32 } = this.lazyConfig?.skeleton || {};
-    return Array.from({ length: count }, (_, idx) => (h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, h("wpp-skeleton-v4-0-0", { variant: "rectangle", width: "100%", height: height }))));
+    return Array.from({ length: count }, (_, idx) => (h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, h("wpp-skeleton-v4-1-0", { variant: "rectangle", width: "100%", height: height }))));
   }
   onInputChange(searchText) {
     if (!searchText.trim()) {
@@ -256,6 +578,8 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
   async handleOpenItem(event) {
     event.stopPropagation();
     const item = event.detail;
+    // Update focus to the item that was expanded/collapsed (for click events)
+    this.focusedItemId = item.id;
     const loader = this.lazyConfig?.loadChildren;
     const needsLoad = !!loader && !!item.open && item.hasChildren === true && (!item.children || item.children.length === 0);
     if (!needsLoad) {
@@ -337,9 +661,243 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
       this.pendingLoads.delete(item.id);
     }));
   }
+  handleKeyDown(event) {
+    if (this.loading)
+      return;
+    // Get the actual event target (use composedPath for shadow DOM)
+    const composedPath = event.composedPath();
+    const treeContainer = this.host.shadowRoot?.querySelector('.container');
+    // --- Action Mode Handling ---
+    // When isFocusOnAction is true, the user is interacting with actions
+    // inside a tree item (buttons, menus, etc.). Per W3C ARIA APG, Escape
+    // exits action mode and returns focus to the tree container.
+    if (this.isFocusOnAction) {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        this.exitActionMode(treeContainer);
+        return;
+      }
+      // Tab/Shift+Tab in action mode: cycle through actions within the item,
+      // then exit the tree naturally when no more actions remain
+      if (event.key === 'Tab') {
+        const actions = this.getActionElementsInItem(this.focusedItemId);
+        const focusableEls = this.getFocusableElements(actions);
+        if (focusableEls.length > 1) {
+          const currentIdx = focusableEls.findIndex(el => this.isElementFocused(el, composedPath[0]));
+          const nextIdx = event.shiftKey ? currentIdx - 1 : currentIdx + 1;
+          if (nextIdx >= 0 && nextIdx < focusableEls.length) {
+            event.preventDefault();
+            this.focusActionElement(focusableEls[nextIdx]);
+            return;
+          }
+        }
+        // No more actions in this direction — exit action mode, return focus to tree container.
+        // preventDefault so the browser doesn't move focus out of the tree entirely.
+        event.preventDefault();
+        this.exitActionMode(treeContainer);
+        return;
+      }
+      // Let all other keys pass through to the focused action element (e.g. Enter on a button)
+      // Enter/Space in action mode: activate the current action (open menu, trigger click).
+      // wpp-action-button dispatches its synthetic click on its own host, which doesn't
+      // reach the nested wpp-menu-context trigger. We dispatch directly on the trigger.
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        this.activateCurrentAction();
+        return;
+      }
+      return;
+    }
+    // --- Standard Tree Navigation (Tab always exits) ---
+    if (event.key === 'Tab')
+      return;
+    // Mark that we're using keyboard navigation
+    this.isKeyboardNavigating = true;
+    const visibleItems = getAllVisibleItems(this.currentTreeData);
+    if (visibleItems.length === 0)
+      return;
+    // Initialize focused item if not set
+    if (this.focusedItemId === null) {
+      const selectedItem = visibleItems.find(item => item.selected);
+      this.focusedItemId = selectedItem?.id ?? visibleItems[0]?.id ?? null;
+    }
+    const currentIndex = visibleItems.findIndex(item => item.id === this.focusedItemId);
+    const currentItem = currentIndex >= 0 ? visibleItems[currentIndex] : null;
+    switch (event.key) {
+      case 'ArrowDown': {
+        event.preventDefault();
+        // Find next non-disabled item
+        let nextIndex = currentIndex + 1;
+        while (nextIndex < visibleItems.length && visibleItems[nextIndex].disabled) {
+          nextIndex++;
+        }
+        if (nextIndex < visibleItems.length) {
+          this.focusedItemId = visibleItems[nextIndex].id;
+          this.focusTreeItem(this.focusedItemId);
+        }
+        break;
+      }
+      case 'ArrowUp': {
+        event.preventDefault();
+        // Find previous non-disabled item
+        let prevIndex = currentIndex - 1;
+        while (prevIndex >= 0 && visibleItems[prevIndex].disabled) {
+          prevIndex--;
+        }
+        if (prevIndex >= 0) {
+          this.focusedItemId = visibleItems[prevIndex].id;
+          this.focusTreeItem(this.focusedItemId);
+        }
+        break;
+      }
+      case 'ArrowRight': {
+        event.preventDefault();
+        if (currentItem) {
+          const isParent = !!currentItem.hasChildren || !!(currentItem.children && currentItem.children.length);
+          if (isParent && !currentItem.open && !currentItem.disabled) {
+            // Open the closed node
+            this.handleOpenItem(new CustomEvent('wppTreeItemOpenChange', { detail: { ...currentItem, open: true } }));
+          }
+          else if (isParent && currentItem.open && currentItem.children?.length) {
+            // Move to first non-disabled, non-hidden child
+            const firstChild = currentItem.children.find(c => !c.hidden && !c.disabled);
+            if (firstChild) {
+              this.focusedItemId = firstChild.id;
+              this.focusTreeItem(this.focusedItemId);
+            }
+          }
+        }
+        break;
+      }
+      case 'ArrowLeft': {
+        event.preventDefault();
+        if (currentItem) {
+          const isParent = !!currentItem.hasChildren || !!(currentItem.children && currentItem.children.length);
+          if (isParent && currentItem.open && !currentItem.disabled) {
+            // Close the open node
+            this.handleOpenItem(new CustomEvent('wppTreeItemOpenChange', { detail: { ...currentItem, open: false } }));
+          }
+          else {
+            // Move to parent
+            const parent = findParentOfItem(this.currentTreeData, currentItem.id);
+            if (parent) {
+              this.focusedItemId = parent.id;
+              this.focusTreeItem(this.focusedItemId);
+            }
+          }
+        }
+        break;
+      }
+      case 'Home': {
+        event.preventDefault();
+        // Find first non-disabled item
+        const firstNonDisabled = visibleItems.find(item => !item.disabled);
+        if (firstNonDisabled) {
+          this.focusedItemId = firstNonDisabled.id;
+          this.focusTreeItem(this.focusedItemId);
+        }
+        break;
+      }
+      case 'End': {
+        event.preventDefault();
+        // Find last non-disabled item
+        const lastNonDisabled = [...visibleItems].reverse().find(item => !item.disabled);
+        if (lastNonDisabled) {
+          this.focusedItemId = lastNonDisabled.id;
+          this.focusTreeItem(this.focusedItemId);
+        }
+        break;
+      }
+      case 'Enter':
+      case ' ': {
+        event.preventDefault();
+        if (currentItem && !currentItem.disabled) {
+          if (this.multiple && !currentItem.isNotSelectable) {
+            // Toggle selection in multiple mode.
+            // When indeterminate: if all selectable (non-disabled, non-isNotSelectable) children
+            // are already selected, deselect all; otherwise select all. This prevents the toggle
+            // from getting stuck when disabled children prevent a fully-selected state.
+            let nextSelected;
+            if (currentItem.indeterminate && currentItem.children?.length) {
+              nextSelected = !this.areAllSelectableChildrenSelected(currentItem.children);
+            }
+            else {
+              nextSelected = !currentItem.selected;
+            }
+            this.handleSelectedItem(new CustomEvent('wppTreeItemSelectChange', {
+              detail: { ...currentItem, selected: nextSelected, indeterminate: false },
+            }));
+          }
+          else if (!this.multiple) {
+            // Toggle selection and optionally expand/collapse in single mode
+            const isParent = !!currentItem.hasChildren || !!(currentItem.children && currentItem.children.length);
+            if (!currentItem.isNotSelectable) {
+              this.handleSelectedItem(new CustomEvent('wppTreeItemSelectChange', {
+                detail: {
+                  ...currentItem,
+                  selected: !currentItem.selected,
+                  ...(isParent && { open: !currentItem.open }),
+                },
+              }));
+            }
+            else if (isParent) {
+              // If not selectable, just toggle open state
+              this.handleOpenItem(new CustomEvent('wppTreeItemOpenChange', {
+                detail: { ...currentItem, open: !currentItem.open },
+              }));
+            }
+          }
+        }
+        break;
+      }
+      case '*': {
+        // Expand all siblings at the same level
+        event.preventDefault();
+        if (currentItem) {
+          const siblings = getSiblings(this.currentTreeData, currentItem.id);
+          siblings.forEach(sibling => {
+            const isParent = !!sibling.hasChildren || !!(sibling.children && sibling.children.length);
+            if (isParent && !sibling.open && !sibling.disabled) {
+              this.handleOpenItem(new CustomEvent('wppTreeItemOpenChange', { detail: { ...sibling, open: true } }));
+            }
+          });
+        }
+        break;
+      }
+      case 'F2': {
+        // Enter action mode: focus first actionable element within the tree item
+        // Per W3C ARIA APG Grid pattern "Editing and Navigating Inside a Cell"
+        event.preventDefault();
+        if (currentItem && !currentItem.disabled) {
+          this.enterActionMode(currentItem.id);
+        }
+        break;
+      }
+      default:
+        // Type-ahead: focus item starting with typed character (skip disabled)
+        if (event.key.length === 1 && /[a-zA-Z0-9]/.test(event.key)) {
+          const char = event.key.toLowerCase();
+          const startIndex = currentIndex >= 0 ? currentIndex + 1 : 0;
+          const itemsToSearch = [...visibleItems.slice(startIndex), ...visibleItems.slice(0, startIndex)];
+          const match = itemsToSearch.find(item => !item.disabled && item.title.toLowerCase().startsWith(char));
+          if (match) {
+            this.focusedItemId = match.id;
+            this.focusTreeItem(this.focusedItemId);
+          }
+        }
+        break;
+    }
+  }
+  handleMouseDown() {
+    // Track that this is a mouse interaction to prevent focus ring
+    this.isMouseInteraction = true;
+    this.isKeyboardNavigating = false;
+  }
   handleSelectedItem(event) {
     event.stopPropagation();
     const newItemState = event.detail;
+    // Update focus to the clicked/selected item
+    this.focusedItemId = newItemState.id;
     const updatedTreeWithCurrentItem = updateTreeById(this.currentTreeData, newItemState.id, newItemState);
     if (this.multiple) {
       this.multipleSelectionUpdate(updatedTreeWithCurrentItem, newItemState);
@@ -571,11 +1129,15 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     if (this.host.parentElement && this.resizeObserver) {
       this.resizeObserver.observe(this.host.parentElement);
     }
+    // Add document click listener to clear focus ring when clicking outside
+    document.addEventListener('mousedown', this.handleDocumentMouseDown);
   }
   disconnectedCallback() {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
+    // Remove document click listener
+    document.removeEventListener('mousedown', this.handleDocumentMouseDown);
   }
   handleActionClick({ item, name, place, }) {
     return (event) => {
@@ -596,9 +1158,10 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     this.preloadInitialOpenChildren();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text" }, !this.loading && (h("div", { class: "container", part: "tree-container" }, this.currentTreeData && this.isSearchResultFound ? (this.renderTree(this.currentTreeData)) : (h("p", { class: "empty-tree-text", part: "tree-empty-text" }, this._locales.nothingFound)))), this.loading && h("div", { class: "skeleton-wrapper" }, this.renderSkeletonRows(this.skeletonNumberItems))));
+    const hasVisibleContent = this.currentTreeData && this.isSearchResultFound;
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text" }, !this.loading && (h("div", { class: "container", part: "tree-container", role: "tree", "aria-label": this.label, "aria-multiselectable": this.multiple ? 'true' : undefined, "aria-activedescendant": this.getActiveDescendantId(), tabindex: hasVisibleContent ? '0' : undefined, onFocus: this.handleContainerFocus, onBlur: this.handleContainerBlur }, hasVisibleContent ? (this.renderTree(this.currentTreeData)) : (h("p", { class: "empty-tree-text", part: "tree-empty-text", role: "status" }, this._locales.nothingFound)))), this.loading && (h("div", { class: "skeleton-wrapper", role: "status", "aria-label": this._locales.loadingTree }, this.renderSkeletonRows(this.skeletonNumberItems)))));
   }
-  static get registryIs() { return "wpp-tree-v4-0-0"; }
+  static get registryIs() { return "wpp-tree-v4-1-0"; }
   get host() { return this; }
   static get watchers() { return {
     "search": ["onInputChange"],
@@ -606,7 +1169,7 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     "locales": ["onUpdateLocales"]
   }; }
   static get style() { return wppTreeCss; }
-}, [1, "wpp-tree", "wpp-tree-v4-0-0", {
+}, [1, "wpp-tree", "wpp-tree-v4-1-0", {
     "data": [16],
     "search": [1],
     "multiple": [516],
@@ -617,153 +1180,157 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     "disableOpenCloseAnimation": [4, "disable-open-close-animation"],
     "withItemsTruncation": [4, "with-items-truncation"],
     "loading": [4],
+    "label": [1],
     "skeletonNumberItems": [2, "skeleton-number-items"],
     "lazyConfig": [16],
     "currentTreeData": [32],
     "selectedIds": [32],
+    "focusedItemId": [32],
+    "isKeyboardNavigating": [32],
+    "isFocusOnAction": [32],
     "recalculateTreeWidth": [64],
     "selectAll": [64],
     "clearAll": [64],
     "expandAll": [64],
     "collapseAll": [64]
-  }, [[2, "wppTreeItemOpenChange", "handleOpenItem"], [2, "wppTreeItemSelectChange", "handleSelectedItem"]]]);
+  }, [[2, "wppTreeItemOpenChange", "handleOpenItem"], [0, "keydown", "handleKeyDown"], [1, "mousedown", "handleMouseDown"], [2, "wppTreeItemSelectChange", "handleSelectedItem"]]]);
 function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tree-v4-0-0", "wpp-action-button-v4-0-0", "wpp-avatar-v4-0-0", "wpp-avatar-group-v4-0-0", "wpp-checkbox-v4-0-0", "wpp-icon-chevron-v4-0-0", "wpp-icon-cross-v4-0-0", "wpp-icon-dash-v4-0-0", "wpp-icon-error-v4-0-0", "wpp-icon-info-message-v4-0-0", "wpp-icon-more-v4-0-0", "wpp-icon-success-v4-0-0", "wpp-icon-tick-v4-0-0", "wpp-icon-triangle-fill-v4-0-0", "wpp-icon-warning-v4-0-0", "wpp-inline-message-v4-0-0", "wpp-internal-label-v4-0-0", "wpp-internal-tooltip-v4-0-0", "wpp-label-v4-0-0", "wpp-list-item-v4-0-0", "wpp-menu-context-v4-0-0", "wpp-skeleton-v4-0-0", "wpp-spinner-v4-0-0", "wpp-tag-v4-0-0", "wpp-tooltip-v4-0-0", "wpp-tree-item-v4-0-0", "wpp-typography-v4-0-0"];
+  const components = ["wpp-tree-v4-1-0", "wpp-action-button-v4-1-0", "wpp-avatar-v4-1-0", "wpp-avatar-group-v4-1-0", "wpp-checkbox-v4-1-0", "wpp-icon-chevron-v4-1-0", "wpp-icon-cross-v4-1-0", "wpp-icon-dash-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-info-message-v4-1-0", "wpp-icon-more-v4-1-0", "wpp-icon-success-v4-1-0", "wpp-icon-tick-v4-1-0", "wpp-icon-triangle-fill-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-inline-message-v4-1-0", "wpp-internal-label-v4-1-0", "wpp-internal-tooltip-v4-1-0", "wpp-label-v4-1-0", "wpp-list-item-v4-1-0", "wpp-menu-context-v4-1-0", "wpp-skeleton-v4-1-0", "wpp-spinner-v4-1-0", "wpp-tag-v4-1-0", "wpp-tooltip-v4-1-0", "wpp-tree-item-v4-1-0", "wpp-typography-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tree-v4-0-0":
+    case "wpp-tree-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTree$1);
       }
       break;
-    case "wpp-action-button-v4-0-0":
+    case "wpp-action-button-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$r();
       }
       break;
-    case "wpp-avatar-v4-0-0":
+    case "wpp-avatar-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$q();
       }
       break;
-    case "wpp-avatar-group-v4-0-0":
+    case "wpp-avatar-group-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$p();
       }
       break;
-    case "wpp-checkbox-v4-0-0":
+    case "wpp-checkbox-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$o();
       }
       break;
-    case "wpp-icon-chevron-v4-0-0":
+    case "wpp-icon-chevron-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-icon-cross-v4-0-0":
+    case "wpp-icon-cross-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-icon-dash-v4-0-0":
+    case "wpp-icon-dash-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-error-v4-0-0":
+    case "wpp-icon-error-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-info-message-v4-0-0":
+    case "wpp-icon-info-message-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-more-v4-0-0":
+    case "wpp-icon-more-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-success-v4-0-0":
+    case "wpp-icon-success-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-tick-v4-0-0":
+    case "wpp-icon-tick-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-triangle-fill-v4-0-0":
+    case "wpp-icon-triangle-fill-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-warning-v4-0-0":
+    case "wpp-icon-warning-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-inline-message-v4-0-0":
+    case "wpp-inline-message-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-internal-label-v4-0-0":
+    case "wpp-internal-label-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-internal-tooltip-v4-0-0":
+    case "wpp-internal-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-label-v4-0-0":
+    case "wpp-label-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-list-item-v4-0-0":
+    case "wpp-list-item-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-menu-context-v4-0-0":
+    case "wpp-menu-context-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-skeleton-v4-0-0":
+    case "wpp-skeleton-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-spinner-v4-0-0":
+    case "wpp-spinner-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-tag-v4-0-0":
+    case "wpp-tag-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-tooltip-v4-0-0":
+    case "wpp-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tree-item-v4-0-0":
+    case "wpp-tree-item-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-0-0":
+    case "wpp-typography-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

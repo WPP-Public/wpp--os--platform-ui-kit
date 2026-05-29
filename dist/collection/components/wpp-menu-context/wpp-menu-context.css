@@ -65,6 +65,9 @@
 :host(.wpp-menu-context-wrapper) .wpp-list {
   width: var(--custom-menu-context-width, 100%);
 }
+:host(.wpp-menu-context-wrapper) .wpp-list[data-wpp-theme=dark] {
+  background-color: var(--wpp-grey-color-200);
+}
 
 :host(.wpp-menu-nested-context-wrapper) ::slotted(*) .tippy-box[data-reference-hidden] {
   visibility: visible;

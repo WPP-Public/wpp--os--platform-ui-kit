@@ -2,6 +2,7 @@ import { h, Host } from '@stencil/core';
 import { getSlotEmptyStates, closestElement, getAriaProps } from '../../utils/utils';
 import { FOCUS_TYPE } from '../../types/common';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
  * @slot icon-start - Can contain an icon that will be placed before the main content, e.g. a plus icon.
  * @slot icon-end - Can contain an icon that will be placed after the main content, e.g. a plus icon. For `wpp-button` with an `aria-expanded="true"` attribute: if you place an arrow icon with the `direction="down"` attribute in this slot, the icon will be rotated.
@@ -15,6 +16,7 @@ import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
  */
 export class WppButton {
   constructor() {
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.updateSlotData = () => {
       const emptyStates = getSlotEmptyStates(this.host.childNodes, {
         start: '[slot="icon-start"]',
@@ -162,15 +164,21 @@ export class WppButton {
   onUpdateAriaProps() {
     this.validAriaProps = getAriaProps(this.ariaProps);
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
+  disconnectedCallback() {
+    this.themeSubscription.stop();
+  }
   componentWillLoad() {
     this.updateSlotData();
     this.validAriaProps = getAriaProps(this.ariaProps);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, exportparts: "button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper" }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, formAction: this.formAction, formEncType: this.formEncType, formMethod: this.formMethod, formNoValidate: this.formNoValidate, formTarget: this.formTarget, value: this.value, name: this.name, type: this.type, part: "button", "data-testid": "wppButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps }, this.loading && (h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, h("wpp-spinner-v4-0-0", { color: this.getSpinnerColor(), part: "spinner" }))), h("div", { class: this.contentCssClasses() }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("span", { class: "truncate", part: "text" }, h("slot", { onSlotchange: this.updateSlotData, part: "inner" })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData })))));
+    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, exportparts: "button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper" }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, formAction: this.formAction, formEncType: this.formEncType, formMethod: this.formMethod, formNoValidate: this.formNoValidate, formTarget: this.formTarget, value: this.value, name: this.name, type: this.type, part: "button", "data-testid": "wppButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps }, this.loading && (h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, h("wpp-spinner-v4-1-0", { color: this.getSpinnerColor(), part: "spinner" }))), h("div", { class: this.contentCssClasses() }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("span", { class: "truncate", part: "text" }, h("slot", { onSlotchange: this.updateSlotData, part: "inner" })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData })))));
   }
   static get is() { return "wpp-button"; }
-  static get registryIs() { return "wpp-button-v4-0-0"; }
+  static get registryIs() { return "wpp-button-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

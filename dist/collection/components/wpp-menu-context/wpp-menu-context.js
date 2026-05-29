@@ -4,6 +4,7 @@ import { getHighestContainerInDOM, transformToVersionedTag } from '../../utils/u
 import { CONTEXT_ITEM_TAG, MENU_BAR_ROLE, MENU_ROLE, WPP_LIST_CLASSNAME, TOPBAR_NAVIGATION_ITEM_TAG } from './constants';
 import { menuListConfig } from '../../common/menuListConfig';
 import { setDefaultDropdownConfig } from './config';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
  * @part list-wrapper -list wrapper element
  * @part list - Contains the `menu-item` elements.
@@ -12,6 +13,7 @@ import { setDefaultDropdownConfig } from './config';
  */
 export class WppMenuContext {
   constructor() {
+    this.themeSubscription = themeSubscriptionController(() => this.contentRef);
     this.getContentRef = (node) => {
       this.contentRef = node;
     };
@@ -181,6 +183,7 @@ export class WppMenuContext {
       this.host?.children[0]?.tagName === transformToVersionedTag(CONTEXT_ITEM_TAG).toUpperCase();
   }
   componentDidLoad() {
+    this.themeSubscription.start();
     this.createTippyInstance();
     this.checkNestedItemIsDisabled();
     this.mutationObserver = new MutationObserver(() => {
@@ -199,6 +202,7 @@ export class WppMenuContext {
     }
   }
   connectedCallback() {
+    this.themeSubscription.start();
     // Reinitialize tippy and mutation observer if disconnectedCallback was called and
     // the same instance of component was deattached and attached to DOM again
     if (this.tippyInstance?.state.isDestroyed) {
@@ -209,6 +213,7 @@ export class WppMenuContext {
     }
   }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     if (!this.isNestedContext) {
       this.tippyInstance?.destroy();
     }
@@ -228,7 +233,7 @@ export class WppMenuContext {
     return (h(Host, { class: this.menuCssClasses(), exportparts: "trigger, list-wrapper, list, inner", onFocusout: this.onFocusout }, h("div", { ref: this.getTriggerRef, onClick: this.handleClickTrigger, class: this.triggerWrapperCssClasses() }, h("slot", { name: "trigger-element", part: "trigger" })), h("div", { class: "wpp-list-wrapper", part: "list-wrapper", ref: ref => (this.wppListWrapperRef = ref) }, h("ul", { class: this.listWrapperCssClasses(), style: style, ref: this.getContentRef, role: MENU_ROLE, part: "list" }, h("slot", { part: "inner" })))));
   }
   static get is() { return "wpp-menu-context"; }
-  static get registryIs() { return "wpp-menu-context-v4-0-0"; }
+  static get registryIs() { return "wpp-menu-context-v4-1-0"; }
   static get encapsulation() { return "scoped"; }
   static get originalStyleUrls() {
     return {

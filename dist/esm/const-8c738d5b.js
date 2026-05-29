@@ -1,3 +1,0 @@
-const ANIMATION_DURATION = 500;
-
-export { ANIMATION_DURATION as A };

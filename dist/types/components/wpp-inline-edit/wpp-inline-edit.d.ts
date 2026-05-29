@@ -4,6 +4,9 @@ import { InlineEditChangeModeEventDetail, InlineEditConfirmDetail, InlineEditLoc
 export declare class WppInlineEdit {
   private resizeObserver;
   private popoverInstance;
+  private viewTextRef?;
+  private viewResizeObserver?;
+  private viewResizeObserverCallback?;
   private tooltipInstance;
   private inputRef?;
   private popoverRef?;
@@ -20,6 +23,7 @@ export declare class WppInlineEdit {
    * The error message is displayed in a tooltip when the component is hovered.
    */
   errorMessage?: string;
+  isViewTextTruncated: boolean;
   /**
    * Defines the inline edit mode.
    */
@@ -64,11 +68,15 @@ export declare class WppInlineEdit {
    */
   setFocus(): Promise<void>;
   editModeChangeHandler(): void;
+  onValueChange(): void;
   onUpdateLocales(newLocales: Partial<InlineEditLocales>): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
   private handleAnchorResize;
   disconnectedCallback(): void;
+  private checkViewTextOverflow;
+  private initViewResizeObserver;
+  private setViewTextRef;
   private getFormElement;
   private emitModeChange;
   private handleAccept;
@@ -77,7 +85,9 @@ export declare class WppInlineEdit {
   private inlineEditCssClasses;
   private inlineEditPopoverCssClasses;
   private onKeyDownFormEl;
-  private placeholderCssClasses;
+  private viewTextCssClasses;
+  private renderViewText;
+  private renderViewContent;
   private renderTriggerElement;
   render(): any;
 }

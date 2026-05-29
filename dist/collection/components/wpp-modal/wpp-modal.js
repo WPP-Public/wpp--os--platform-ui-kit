@@ -1,9 +1,11 @@
 import { Host, h } from '@stencil/core';
 import { ANIMATION_PROPERTY_NAME, Z_INDEX } from '../../common/consts';
 import { applyBodyStylesIfNeeded, getOsBarOffsetHeight, getSlotEmptyStates } from '../../utils/utils';
+import { TimeoutManager } from '../../utils/timeout-manager';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { ModalCloseReason } from './types';
 import { TOP_AND_BOTTOM_OFFSET } from './consts';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
  * @slot header - Content that is displayed within the `.modal` element. To add header content, pass `slot="header"` – can contain the modal title.
  * @slot body - Content that is displayed within the `.modal` element. To add body content, pass `slot="body"` – can contain any text that describes the modal actions.
@@ -20,7 +22,8 @@ import { TOP_AND_BOTTOM_OFFSET } from './consts';
 export class WppModal {
   constructor() {
     this.topOffset = 0;
-    this.pendingTimeouts = [];
+    this.timeouts = new TimeoutManager();
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.onOverlayClick = () => {
       if (this.disableOutsideClick)
         return;
@@ -144,9 +147,9 @@ export class WppModal {
     else {
       this.disconnectObserver();
     }
-    this.pendingTimeouts.push(setTimeout(() => {
+    this.timeouts.schedule(() => {
       applyBodyStylesIfNeeded(this.open ? 'add' : 'remove');
-    }));
+    });
   }
   /**
    * Method for closing the modal.
@@ -164,27 +167,30 @@ export class WppModal {
   //       invisiblePrehydration:true( works for Storybook, but not for react/angular components) there is might
   //       be an option, that we need to provide our own prehydration mechanism. Temporal solution.
   componentDidLoad() {
-    this.pendingTimeouts.push(setTimeout(() => {
+    this.timeouts.schedule(() => {
       this.open && this.host.classList.add('wpp-component-ready');
-    }, 0));
+    });
   }
   // TODO: topOffset is calculated once on mount. If the OS bar height becomes dynamic
   //       (e.g., responsive resize), consider recalculating via ResizeObserver or a shared CSS variable on :root.
   componentWillLoad() {
     this.topOffset = this.osBarCompatible ? getOsBarOffsetHeight() : 0;
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
   disconnectedCallback() {
-    this.pendingTimeouts.forEach(id => clearTimeout(id));
-    this.pendingTimeouts = [];
+    this.themeSubscription.stop();
+    this.timeouts.clearAll();
     this.closeModal();
     this.disconnectObserver();
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-0-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-0-0", null), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-0-0", null), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-1-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-1-0", null), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-1-0", null), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
   }
   static get is() { return "wpp-modal"; }
-  static get registryIs() { return "wpp-modal-v4-0-0"; }
+  static get registryIs() { return "wpp-modal-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

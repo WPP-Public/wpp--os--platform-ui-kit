@@ -25,7 +25,7 @@ export default {
     },
   },
 };
-export const TimePicker = (args) => html `<wpp-time-picker-v4-0-0
+export const TimePicker = (args) => html `<wpp-time-picker-v4-1-0
     .size="${args.size}"
     .messageType="${args.messageType}"
     .minutesInterval="${args.minutesInterval}"
@@ -38,7 +38,7 @@ export const TimePicker = (args) => html `<wpp-time-picker-v4-0-0
     .name="${args.name}"
     @wppChange="${(e) => console.log('onWppClick', e)}"
     @wppClear="${(e) => console.log('onWppClear', e)}"
-    ></wpp-time-picker-v4-0-0
+    ></wpp-time-picker-v4-1-0
     `;
 TimePicker.args = {
   size: 'm',

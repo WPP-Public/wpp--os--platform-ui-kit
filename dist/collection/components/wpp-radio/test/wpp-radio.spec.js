@@ -5,6 +5,7 @@ import { WppLabel } from '../../wpp-label/wpp-label';
 import { WppInternalLabel } from '../../wpp-label/components/wpp-internal-label/wpp-internal-label';
 import { FOCUS_TYPE } from '../../../types/common';
 import { WppRadioGroup } from '../../../components/wpp-radio-group/wpp-radio-group';
+import * as themeUtils from '../../../utils/subscribe-to-theme';
 describe('wpp-radio', () => {
   let component;
   let mockInputRef;
@@ -46,7 +47,7 @@ describe('wpp-radio', () => {
   it('renders component with label text', async () => {
     const page = await newSpecPage({
       components: [WppRadio, WppLabel, WppInternalLabel],
-      template: () => h("wpp-radio-v4-0-0", { name: "contact", value: "email", labelConfig: { text: 'Email' } }),
+      template: () => h("wpp-radio-v4-1-0", { name: "contact", value: "email", labelConfig: { text: 'Email' } }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -61,7 +62,7 @@ describe('wpp-radio', () => {
     };
     const page = await newSpecPage({
       components: [WppRadio, WppLabel, WppInternalLabel],
-      template: () => h("wpp-radio-v4-0-0", { name: "contact", value: "email", labelConfig: labelConfig }),
+      template: () => h("wpp-radio-v4-1-0", { name: "contact", value: "email", labelConfig: labelConfig }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -248,6 +249,36 @@ describe('wpp-radio', () => {
         const result = component.render();
         expect(result).toMatchSnapshot();
       });
+    });
+  });
+  describe('subscribing to theme changes', () => {
+    let mockStart;
+    let mockStop;
+    beforeEach(() => {
+      mockStart = jest.fn();
+      mockStop = jest.fn();
+      jest.spyOn(themeUtils, 'themeSubscriptionController').mockReturnValue({
+        start: mockStart,
+        stop: mockStop,
+      });
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
+      await newSpecPage({
+        components: [WppRadio],
+        html: `<wpp-radio checked />`,
+      });
+      expect(mockStart).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
+      const page = await newSpecPage({
+        components: [WppRadio],
+        html: `<wpp-radio checked />`,
+      });
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -16,6 +16,7 @@ import { OrientationType, StepChangeEventDetail } from '../../types';
  * @part icon - step icon (warning, error)
  */
 export declare class WppStep {
+  private themeSubscription;
   host: HTMLWppStepElement;
   tooltipText: string | null;
   labelTooltipText: string | null;
@@ -94,6 +95,7 @@ export declare class WppStep {
    */
   readonly wppStepUpdate: EventEmitter;
   componentDidLoad(): void;
+  connectedCallback(): void;
   disconnectedCallback(): void;
   watchErrorIcon(): void;
   private applyTruncationIfNeeded;

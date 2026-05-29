@@ -1,5 +1,6 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 export declare class WppOverlay {
+  private themeSubscription;
   host: HTMLWppOverlayElement;
   isHidden: boolean;
   /**
@@ -16,6 +17,8 @@ export declare class WppOverlay {
   wppClick: EventEmitter<void>;
   handleVisibleChange(newValue: boolean): void;
   componentWillLoad(): void;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
   private handleClick;
   private getOverlayCssClasses;
   render(): any;

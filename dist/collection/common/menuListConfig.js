@@ -1,12 +1,13 @@
 import tippy from 'tippy.js';
 import { hideOnEsc, hideOnPopperBlur, portalInside } from './tippy-plugins';
+import { Z_INDEX } from './consts';
 const defaultTippyProps = {
   trigger: 'click',
   placement: 'bottom-start',
   offset: [0, 4],
   maxWidth: 350,
   hideOnClick: true,
-  zIndex: 9999,
+  zIndex: Z_INDEX.MENU_LIST,
   arrow: '',
   interactive: true,
   animation: 'fadein',

@@ -64,13 +64,13 @@ export class WppChatConversation {
     }, 100);
   }
   render() {
-    return (h(Host, null, h("div", { class: "conversation-container", ref: el => (this.conversationContainerRef = el) }, this.messages?.map(message => (h("wpp-chat-conversation-message-v4-0-0", { key: message.id, id: message.id, ref: el => {
+    return (h(Host, null, h("div", { class: "conversation-container", ref: el => (this.conversationContainerRef = el) }, this.messages?.map(message => (h("wpp-chat-conversation-message-v4-1-0", { key: message.id, id: message.id, ref: el => {
         if (el)
           this.messageElementsMap.set(message.id, el);
-      }, role: message.role, content: message.content, status: message.status, attachments: message.attachments, actionButtonsConfig: message.actionButtonsConfig, sourcesActionConfig: message.sourcesActionConfig, menuContextListItems: message.menuContextListItems, assistantAvatarConfig: this.assistantAvatarConfig, userAvatarConfig: this.userAvatarConfig })))), h("div", { class: this.inputWrapperCssClasses() }, h("wpp-chat-input-v4-0-0", { ...this.chatInputConfig, onWppSend: e => this.wppSend.emit(e.detail), onWppChange: e => this.wppChange.emit(e.detail), onWppMessageChanged: e => this.wppMessageChanged.emit(e.detail) }))));
+      }, role: message.role, content: message.content, status: message.status, attachments: message.attachments, actionButtonsConfig: message.actionButtonsConfig, sourcesActionConfig: message.sourcesActionConfig, menuContextListItems: message.menuContextListItems, assistantAvatarConfig: this.assistantAvatarConfig, userAvatarConfig: this.userAvatarConfig })))), h("div", { class: this.inputWrapperCssClasses() }, h("wpp-chat-input-v4-1-0", { ...this.chatInputConfig, onWppSend: e => this.wppSend.emit(e.detail), onWppChange: e => this.wppChange.emit(e.detail), onWppMessageChanged: e => this.wppMessageChanged.emit(e.detail), onWppActionsMenuToggle: e => this.wppActionsMenuToggle.emit(e.detail), onWppActionsMenuItemClick: e => this.wppActionsMenuItemClick.emit(e.detail) }))));
   }
   static get is() { return "wpp-chat-conversation"; }
-  static get registryIs() { return "wpp-chat-conversation-v4-0-0"; }
+  static get registryIs() { return "wpp-chat-conversation-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -159,7 +159,7 @@ export class WppChatConversation {
         "mutable": false,
         "complexType": {
           "original": "ChatInputConfig",
-          "resolved": "{ ariaProps?: ChatInputAriaProps | undefined; attachments?: FileItemType[] | undefined; charactersLimit?: number | undefined; debounceDelay?: number | undefined; debounceEnabled?: boolean | undefined; disabled?: boolean | undefined; enableAttach?: boolean | undefined; enableMic?: boolean | undefined; fileUploadConfig?: Partial<FileUploadConfig> | undefined; htmlAttributes?: ChatInputAttributes | undefined; locales?: Partial<ChatInputLocaleInterface> | undefined; placeholder?: string | undefined; size?: ChatInputSize | undefined; textValue?: string | undefined; textareaAriaLabel?: string | undefined; textareaId?: string | undefined; textareaName?: string | undefined; withSelect?: boolean | undefined; zIndex?: number | undefined; }",
+          "resolved": "{ actions?: ChatInputAction[] | undefined; ariaProps?: ChatInputAriaProps | undefined; attachments?: FileItemType[] | undefined; charactersLimit?: number | undefined; debounceDelay?: number | undefined; debounceEnabled?: boolean | undefined; disabled?: boolean | undefined; enableAttach?: boolean | undefined; enableMic?: boolean | undefined; fileUploadConfig?: Partial<FileUploadConfig> | undefined; htmlAttributes?: ChatInputAttributes | undefined; locales?: Partial<ChatInputLocaleInterface> | undefined; placeholder?: string | undefined; size?: ChatInputSize | undefined; textValue?: string | undefined; textareaAriaLabel?: string | undefined; textareaId?: string | undefined; textareaName?: string | undefined; withSelect?: boolean | undefined; zIndex?: number | undefined; }",
           "references": {
             "ChatInputConfig": {
               "location": "import",
@@ -239,6 +239,48 @@ export class WppChatConversation {
               "location": "import",
               "path": "../wpp-chat/components/wpp-chat-input/types",
               "id": "src/components/wpp-chat/components/wpp-chat-input/types.ts::MessageChangeEventDetail"
+            }
+          }
+        }
+      }, {
+        "method": "wppActionsMenuToggle",
+        "name": "wppActionsMenuToggle",
+        "bubbles": false,
+        "cancelable": true,
+        "composed": false,
+        "docs": {
+          "tags": [],
+          "text": "Emitted when the consolidated actions menu (the `wpp-icon-plus` dropdown\nconfigured via `chatInputConfig.actions`) opens or closes."
+        },
+        "complexType": {
+          "original": "ActionsMenuToggleEventDetail",
+          "resolved": "{ open: boolean; }",
+          "references": {
+            "ActionsMenuToggleEventDetail": {
+              "location": "import",
+              "path": "../wpp-chat/components/wpp-chat-input/types",
+              "id": "src/components/wpp-chat/components/wpp-chat-input/types.ts::ActionsMenuToggleEventDetail"
+            }
+          }
+        }
+      }, {
+        "method": "wppActionsMenuItemClick",
+        "name": "wppActionsMenuItemClick",
+        "bubbles": false,
+        "cancelable": true,
+        "composed": false,
+        "docs": {
+          "tags": [],
+          "text": "Emitted when an entry inside the consolidated actions menu is clicked.\nThe detail is the originating `ChatInputAction` object."
+        },
+        "complexType": {
+          "original": "ChatInputActionItemClickEventDetail",
+          "resolved": "ChatInputAction",
+          "references": {
+            "ChatInputActionItemClickEventDetail": {
+              "location": "import",
+              "path": "../wpp-chat/components/wpp-chat-input/types",
+              "id": "src/components/wpp-chat/components/wpp-chat-input/types.ts::ChatInputActionItemClickEventDetail"
             }
           }
         }

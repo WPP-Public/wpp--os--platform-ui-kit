@@ -4,6 +4,7 @@ import { FOCUS_TYPE } from '../../../types/common';
 import { WppCheckbox } from '../wpp-checkbox';
 import { WppLabel } from '../../wpp-label/wpp-label';
 import { WppInternalLabel } from '../../wpp-label/components/wpp-internal-label/wpp-internal-label';
+import * as themeUtils from '../../../utils/subscribe-to-theme';
 describe('wpp-checkbox', () => {
   const setup = async (html = `<wpp-checkbox></wpp-checkbox>`) => {
     const page = await newSpecPage({
@@ -20,7 +21,7 @@ describe('wpp-checkbox', () => {
     };
     const { root } = await newSpecPage({
       components: [WppCheckbox, WppLabel, WppInternalLabel],
-      template: () => h("wpp-checkbox-v4-0-0", { indeterminate: true, labelConfig: labelConfig }),
+      template: () => h("wpp-checkbox-v4-1-0", { indeterminate: true, labelConfig: labelConfig }),
     });
     expect(root).toMatchSnapshot();
   });
@@ -35,7 +36,7 @@ describe('wpp-checkbox', () => {
     };
     const { root } = await newSpecPage({
       components: [WppCheckbox, WppLabel, WppInternalLabel],
-      template: () => h("wpp-checkbox-v4-0-0", { indeterminate: true, disabled: true, name: "checkbox", labelConfig: labelConfig }),
+      template: () => h("wpp-checkbox-v4-1-0", { indeterminate: true, disabled: true, name: "checkbox", labelConfig: labelConfig }),
     });
     expect(root).toMatchSnapshot();
   });
@@ -179,5 +180,35 @@ describe('wpp-checkbox', () => {
     expect(host.shadowRoot?.querySelector('wpp-icon-tick')).not.toBeNull();
     expect(host.shadowRoot?.querySelector('wpp-icon-dash')).not.toBeNull();
     expect(host.shadowRoot?.querySelector('.square')).not.toBeNull();
+  });
+  describe('subscribing to theme changes', () => {
+    let mockStart;
+    let mockStop;
+    beforeEach(() => {
+      mockStart = jest.fn();
+      mockStop = jest.fn();
+      jest.spyOn(themeUtils, 'themeSubscriptionController').mockReturnValue({
+        start: mockStart,
+        stop: mockStop,
+      });
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
+      await newSpecPage({
+        components: [WppCheckbox],
+        html: `<wpp-checkbox></wpp-checkbox>`,
+      });
+      expect(mockStart).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
+      const page = await newSpecPage({
+        components: [WppCheckbox],
+        html: `<wpp-checkbox></wpp-checkbox>`,
+      });
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
+    });
   });
 });

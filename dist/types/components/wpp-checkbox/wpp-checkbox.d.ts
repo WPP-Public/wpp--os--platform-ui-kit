@@ -12,6 +12,7 @@ import { CheckboxChangeEvent, CheckboxValue, CheckboxLabelConfig } from './types
  * @part message - message element
  */
 export declare class WppCheckbox implements BaseComponent, BooleanFormControl<CheckboxValue> {
+  private themeSubscription;
   host: HTMLWppCheckboxElement;
   focusType: FOCUS_TYPE;
   isPressed: boolean;
@@ -113,6 +114,8 @@ export declare class WppCheckbox implements BaseComponent, BooleanFormControl<Ch
    */
   setFocus(): Promise<void>;
   private inputRef?;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
   private onClick;
   private onFocus;
   private onBlur;

@@ -285,3 +285,6 @@
     padding-right: 10px;
   }
 }
+:host([data-wpp-theme=dark]) .upload-wrapper {
+  background-color: var(--wpp-grey-color-100);
+}

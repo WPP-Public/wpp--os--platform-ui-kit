@@ -28,9 +28,9 @@
   --bttb-bg-color: var(--wpp--back-to-top-button-bg-color, var(--wpp-grey-color-000));
   --bttb-bg-color-hover: var(--wpp--back-to-top-button-bg-color-hover, var(--wpp-grey-color-200));
   --bttb-bg-color-active: var(--wpp--wpp--back-to-top-button-bg-color-active, var(--wpp-grey-color-300));
-  --bttb-icon-color: var(--wpp--back-to-top-button-icon-color, var(--wpp-primary-color-800));
-  --bttb-icon-color-hover: var(--wpp--back-to-top-button-icon-color-hover, var(--wpp-primary-color-800));
-  --bttb-icon-color-active: var(--wpp--back-to-top-button-icon-color-active, var(--wpp-primary-color-800));
+  --bttb-icon-color: var(--wpp--back-to-top-button-icon-color, var(--wpp-grey-color-800));
+  --bttb-icon-color-hover: var(--wpp--back-to-top-button-icon-color-hover, var(--wpp-icon-color-hover));
+  --bttb-icon-color-active: var(--wpp--back-to-top-button-icon-color-active, var(--wpp-icon-color-active));
   display: inline-flex;
   outline: none;
 }
@@ -72,4 +72,8 @@
 }
 :host button:active .icon, :host button.pressed .icon {
   color: var(--bttb-icon-color-active);
+}
+
+:host([data-wpp-theme=dark]) button {
+  background-color: var(--wpp-grey-color-100);
 }

@@ -1,0 +1,23 @@
+:host {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transform: translate(-25%, -54%);
+}
+
+:host(.wpp-selected-handle.wpp-handle-source) {
+  transform: translate(-29%, -54%);
+}
+
+:host(.wpp-selected-handle.wpp-handle-target) {
+  transform: translate(-21%, -54%);
+}
+
+:host(.wpp-loading-handle.wpp-handle-source) {
+  transform: translate(-34%, -54%);
+}
+
+:host(.wpp-loading-handle.wpp-handle-target) {
+  transform: translate(-17%, -54%);
+}

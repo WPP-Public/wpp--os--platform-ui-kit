@@ -23,6 +23,7 @@ export declare class WppListItem {
   private debouncedResizeHandler;
   private previousLabelText;
   private labelObserver;
+  private themeSubscription;
   protected wrapperRef?: HTMLDivElement;
   protected highlightRef?: HTMLDivElement;
   host: HTMLWppListItemElement;
@@ -152,6 +153,7 @@ export declare class WppListItem {
   componentDidLoad(): void;
   private applyTypographyVariables;
   private removeTriggerWrapperAttributes;
+  connectedCallback(): void;
   disconnectedCallback(): void;
   highlightUpdate(newValue: string): void;
   handleViewChange(newContainerState: ContainerStateType): void;

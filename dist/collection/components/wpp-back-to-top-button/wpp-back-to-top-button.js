@@ -1,12 +1,14 @@
 import { h, Host } from '@stencil/core';
 import { getAriaProps } from '../../utils/utils';
 import { FOCUS_TYPE } from '../../types/common';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
  * @part button - Button element
  * @part icon - Icon element
  */
 export class WppBackToTopButton {
   constructor() {
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.onKeyDown = (event) => {
       if (this.focusType === FOCUS_TYPE.NONE)
         return;
@@ -62,11 +64,17 @@ export class WppBackToTopButton {
   componentWillLoad() {
     this.validAriaProps = getAriaProps(this.ariaProps);
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
+  disconnectedCallback() {
+    this.themeSubscription.stop();
+  }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "button, icon", onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { ref: el => (this.buttonRef = el), onBlur: this.onBlur, class: this.buttonCssClasses(), type: "button", part: "button", "data-testid": "wppBackToTopButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps }, h("wpp-icon-arrow-v4-0-0", { direction: "up", class: "icon", part: "icon" }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "button, icon", onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { ref: el => (this.buttonRef = el), onBlur: this.onBlur, class: this.buttonCssClasses(), type: "button", part: "button", "data-testid": "wppBackToTopButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps }, h("wpp-icon-arrow-v4-1-0", { direction: "up", class: "icon", part: "icon" }))));
   }
   static get is() { return "wpp-back-to-top-button"; }
-  static get registryIs() { return "wpp-back-to-top-button-v4-0-0"; }
+  static get registryIs() { return "wpp-back-to-top-button-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

@@ -1,4 +1,5 @@
 import { a as commonjsGlobal, c as createCommonjsModule } from './_commonjsHelpers.js';
+import { Z as Z_INDEX } from './consts.js';
 
 /**
  * Removes all key-value entries from the list cache.
@@ -5644,7 +5645,7 @@ const defaultTippyProps = {
   offset: [0, 4],
   maxWidth: 350,
   hideOnClick: true,
-  zIndex: 9999,
+  zIndex: Z_INDEX.MENU_LIST,
   arrow: '',
   interactive: true,
   animation: 'fadein',

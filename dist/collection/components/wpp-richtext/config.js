@@ -101,39 +101,32 @@ export const quillMarkdownOptions = {
 // Configure Turndown to use GitHub Flavored Markdown (GFM)
 const turndownService = new TurndownService({ headingStyle: 'atx', br: '\n' });
 turndownService.use(gfm);
-turndownService.escape = (text) => text.replace(/([\\`{}[\]()#+\-.!])/g, '\\$1');
+// NOTE: TurndownService is no longer in the critical markdown path for the editor.
+// The editor now uses @tiptap/markdown for native markdown↔JSON round-trips.
+// These rules are kept only for backward compatibility with wpp-richtext-markdown
+// and any other HTML→markdown consumers.
 // **Line break handling - preserve <br> as single newlines**
 turndownService.addRule('lineBreak', {
   filter: 'br',
   replacement: () => '\n',
 });
-// **List item handling with indent support**
+// **List item handling**
 turndownService.addRule('listItem', {
   filter: 'li',
   replacement: (content, node) => {
     const element = node;
     const parent = element.parentElement;
     const isOrdered = parent?.nodeName === 'OL';
-    const indent = Array.from(element.classList)
-      .find(cls => cls.startsWith('ql-indent-'))
-      ?.replace('ql-indent-', '');
-    const indentLevel = indent ? parseInt(indent, 10) : 0;
-    const indentation = '  '.repeat(indentLevel);
     // Determine the prefix based on list type
     let prefix = '- ';
     const siblings = Array.from(parent?.children || []);
     if (isOrdered) {
-      // For ordered lists, calculate the index
       const index = siblings.indexOf(element) + 1;
       prefix = `${index}. `;
     }
-    // Clean content: trim and ensure proper line breaks
     const cleanContent = content.trim();
-    // Check if this is the last item in the list
     const isLastItem = siblings.indexOf(element) === siblings.length - 1;
-    // Return formatted list item
-    // Add extra newline after last item to force list termination in GFM
-    return indentation + prefix + cleanContent + '\n' + (isLastItem && indentLevel === 0 ? '\n' : '');
+    return prefix + cleanContent + '\n' + (isLastItem ? '\n' : '');
   },
 });
 turndownService.addRule('strikethrough', {
@@ -160,30 +153,7 @@ turndownService.addRule('codeBlock', {
     const language = node.firstChild instanceof HTMLElement
       ? node.firstChild.getAttribute('class')?.replace('language-', '') || ''
       : '';
-    return `\`\`\`${language}\n${content}\n\`\`\``;
-  },
-});
-turndownService.addRule('customHeading', {
-  filter(node) {
-    return !!node.nodeName && /^H[1-6]$/.test(node.nodeName);
-  },
-  replacement(_content, node) {
-    const element = node;
-    let rawText = element.textContent || '';
-    rawText = rawText.trim();
-    if (!rawText) {
-      const hLevel = Number(element.nodeName.slice(1));
-      return '\n\n' + '#'.repeat(hLevel) + ' ';
-    }
-    rawText = rawText.replace(/^\\/, '');
-    const headerMatch = rawText.match(/^(#+)\s+(.*)/);
-    if (headerMatch) {
-      const headerLevel = headerMatch[1].length;
-      const headerText = headerMatch[2].trim();
-      return '\n\n' + '#'.repeat(headerLevel) + ' ' + headerText + '\n\n';
-    }
-    const hLevel = Number(element.nodeName.slice(1));
-    return '\n\n' + '#'.repeat(hLevel) + ' ' + rawText + '\n\n';
+    return `\`\`\`${language}\n${content.replace(/\n+$/, '')}\n\`\`\``;
   },
 });
 turndownService.addRule('fencedCodeBlock', {
@@ -196,7 +166,7 @@ turndownService.addRule('fencedCodeBlock', {
         language = classAttr.replace('language-', '');
       }
     }
-    return `\`\`\`${language}\n${content}\n\`\`\``;
+    return `\`\`\`${language}\n${content.replace(/\n+$/, '')}\n\`\`\``;
   },
 });
 turndownService.addRule('emphasis', {
@@ -204,18 +174,5 @@ turndownService.addRule('emphasis', {
   replacement: (content) => 
   // Use asterisks for italics - underscores don't work when surrounded by word chars in GFM
   `*${content}*`,
-});
-// Handle intentional blank lines (empty paragraphs from Quill)
-// Convert to a special marker that will be preserved through markdown processing
-// Using &nbsp; on its own line creates a visible empty paragraph when parsed by marked
-turndownService.addRule('emptyParagraph', {
-  filter: (node) => {
-    if (node.nodeName !== 'P')
-      return false;
-    const content = node.innerHTML.trim();
-    // Match empty paragraphs: <p><br></p>, <p></p>, <p>&nbsp;</p>
-    return content === '' || content === '<br>' || content === '&nbsp;';
-  },
-  replacement: () => '\n\n&nbsp;\n\n',
 });
 export default turndownService;

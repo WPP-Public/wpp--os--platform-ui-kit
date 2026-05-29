@@ -5,6 +5,8 @@ import { PaginationPageChangeEventDetail } from '../../types';
  * @part number - number text element
  */
 export declare class WppPaginationItem {
+  private themeSubscription;
+  host: HTMLWppPaginationItemElement;
   focusType: FOCUS_TYPE;
   /**
    * Indicates current page number
@@ -18,6 +20,8 @@ export declare class WppPaginationItem {
    * Emitted active page number
    */
   wppPageChange: EventEmitter<PaginationPageChangeEventDetail>;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
   private onBlur;
   private onMouseDown;
   private onKeyUp;

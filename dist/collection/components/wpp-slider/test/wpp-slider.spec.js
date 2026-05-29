@@ -3,12 +3,13 @@ import { newSpecPage } from '@stencil/core/testing';
 import { WppSlider } from '../wpp-slider';
 import { WppLabel } from '../../wpp-label/wpp-label';
 import { WppInternalLabel } from '../../wpp-label/components/wpp-internal-label/wpp-internal-label';
+import * as themeUtils from '../../../utils/subscribe-to-theme';
 describe('wpp-slider', () => {
   it('should render slider component', async () => {
     const value = 1;
     const page = await newSpecPage({
       components: [WppSlider],
-      template: () => h("wpp-slider-v4-0-0", { value: value }),
+      template: () => h("wpp-slider-v4-1-0", { value: value }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -43,7 +44,7 @@ describe('wpp-slider', () => {
     ];
     const page = await newSpecPage({
       components: [WppSlider],
-      template: () => h("wpp-slider-v4-0-0", { value: 2, marks: marks, max: 3 }),
+      template: () => h("wpp-slider-v4-1-0", { value: 2, marks: marks, max: 3 }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -51,7 +52,7 @@ describe('wpp-slider', () => {
     const value = [4, 75];
     const page = await newSpecPage({
       components: [WppSlider],
-      template: () => h("wpp-slider-v4-0-0", { type: "range", value: value }),
+      template: () => h("wpp-slider-v4-1-0", { type: "range", value: value }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -59,7 +60,7 @@ describe('wpp-slider', () => {
     const value = [1, 3];
     const page = await newSpecPage({
       components: [WppSlider],
-      template: () => h("wpp-slider-v4-0-0", { type: "range", max: 5, step: 2, value: value, "with-value": true }),
+      template: () => h("wpp-slider-v4-1-0", { type: "range", max: 5, step: 2, value: value, "with-value": true }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -75,21 +76,21 @@ describe('wpp-slider', () => {
     };
     const page = await newSpecPage({
       components: [WppSlider, WppLabel, WppInternalLabel],
-      template: () => h("wpp-slider-v4-0-0", { type: "range", max: 5, step: 2, value: value, labelConfig: labelConfig }),
+      template: () => h("wpp-slider-v4-1-0", { type: "range", max: 5, step: 2, value: value, labelConfig: labelConfig }),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('should render range slider with input width in px', async () => {
     const page = await newSpecPage({
       components: [WppSlider],
-      template: () => h("wpp-slider-v4-0-0", { type: "range", max: 5, step: 2, value: [1, 3], "input-width": "200px" }),
+      template: () => h("wpp-slider-v4-1-0", { type: "range", max: 5, step: 2, value: [1, 3], "input-width": "200px" }),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('should render range slider with input width in ch', async () => {
     const page = await newSpecPage({
       components: [WppSlider],
-      template: () => h("wpp-slider-v4-0-0", { type: "range", max: 5, step: 2, value: [1, 3], "input-width": "20ch" }),
+      template: () => h("wpp-slider-v4-1-0", { type: "range", max: 5, step: 2, value: [1, 3], "input-width": "20ch" }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -97,7 +98,7 @@ describe('wpp-slider', () => {
     it('should emit wppBlur when focus moves outside the host component', async () => {
       const page = await newSpecPage({
         components: [WppSlider],
-        template: () => h("wpp-slider-v4-0-0", { value: 5 }),
+        template: () => h("wpp-slider-v4-1-0", { value: 5 }),
       });
       const wppBlurSpy = jest.fn();
       page.root?.addEventListener('wppBlur', wppBlurSpy);
@@ -146,7 +147,7 @@ describe('wpp-slider', () => {
     it('should emit wppBlur for range slider when focus leaves host', async () => {
       const page = await newSpecPage({
         components: [WppSlider],
-        template: () => h("wpp-slider-v4-0-0", { type: "range", value: [20, 80], "with-input": true, continuous: true }),
+        template: () => h("wpp-slider-v4-1-0", { type: "range", value: [20, 80], "with-input": true, continuous: true }),
       });
       const wppBlurSpy = jest.fn();
       page.root?.addEventListener('wppBlur', wppBlurSpy);
@@ -168,7 +169,7 @@ describe('wpp-slider', () => {
     it('should emit wppBlur for middle-range slider when focus leaves host', async () => {
       const page = await newSpecPage({
         components: [WppSlider],
-        template: () => h("wpp-slider-v4-0-0", { type: "middle-range", value: 50 }),
+        template: () => h("wpp-slider-v4-1-0", { type: "middle-range", value: 50 }),
       });
       const wppBlurSpy = jest.fn();
       page.root?.addEventListener('wppBlur', wppBlurSpy);
@@ -190,7 +191,7 @@ describe('wpp-slider', () => {
     it('should NOT emit wppBlur when focus moves between internal elements', async () => {
       const page = await newSpecPage({
         components: [WppSlider],
-        template: () => h("wpp-slider-v4-0-0", { value: 50, "with-input": true, continuous: true }),
+        template: () => h("wpp-slider-v4-1-0", { value: 50, "with-input": true, continuous: true }),
       });
       const wppBlurSpy = jest.fn();
       page.root?.addEventListener('wppBlur', wppBlurSpy);
@@ -214,7 +215,7 @@ describe('wpp-slider', () => {
     it('should emit wppBlur when clicking outside the component (document mousedown)', async () => {
       const page = await newSpecPage({
         components: [WppSlider],
-        template: () => h("wpp-slider-v4-0-0", { type: "range", value: [20, 80] }),
+        template: () => h("wpp-slider-v4-1-0", { type: "range", value: [20, 80] }),
       });
       const wppBlurSpy = jest.fn();
       const wppFocusSpy = jest.fn();
@@ -241,7 +242,7 @@ describe('wpp-slider', () => {
     it('should emit wppFocus when host component receives focus', async () => {
       const page = await newSpecPage({
         components: [WppSlider],
-        template: () => h("wpp-slider-v4-0-0", { value: 5 }),
+        template: () => h("wpp-slider-v4-1-0", { value: 5 }),
       });
       const wppFocusSpy = jest.fn();
       page.root?.addEventListener('wppFocus', wppFocusSpy);
@@ -256,7 +257,7 @@ describe('wpp-slider', () => {
     it('should emit wppFocus for range slider when host receives focus', async () => {
       const page = await newSpecPage({
         components: [WppSlider],
-        template: () => h("wpp-slider-v4-0-0", { type: "range", value: [20, 80] }),
+        template: () => h("wpp-slider-v4-1-0", { type: "range", value: [20, 80] }),
       });
       const wppFocusSpy = jest.fn();
       page.root?.addEventListener('wppFocus', wppFocusSpy);
@@ -271,7 +272,7 @@ describe('wpp-slider', () => {
     it('should emit wppFocus for middle-range slider when host receives focus', async () => {
       const page = await newSpecPage({
         components: [WppSlider],
-        template: () => h("wpp-slider-v4-0-0", { type: "middle-range", value: 50 }),
+        template: () => h("wpp-slider-v4-1-0", { type: "middle-range", value: 50 }),
       });
       const wppFocusSpy = jest.fn();
       page.root?.addEventListener('wppFocus', wppFocusSpy);
@@ -286,7 +287,7 @@ describe('wpp-slider', () => {
     it('should NOT emit multiple wppFocus events when focus moves within component', async () => {
       const page = await newSpecPage({
         components: [WppSlider],
-        template: () => h("wpp-slider-v4-0-0", { value: 50, "with-input": true, continuous: true }),
+        template: () => h("wpp-slider-v4-1-0", { value: 50, "with-input": true, continuous: true }),
       });
       const wppFocusSpy = jest.fn();
       page.root?.addEventListener('wppFocus', wppFocusSpy);
@@ -304,6 +305,36 @@ describe('wpp-slider', () => {
       await page.waitForChanges();
       // wppFocus should only be called once
       expect(wppFocusSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+  describe('subscribing to theme changes', () => {
+    let mockStart;
+    let mockStop;
+    beforeEach(() => {
+      mockStart = jest.fn();
+      mockStop = jest.fn();
+      jest.spyOn(themeUtils, 'themeSubscriptionController').mockReturnValue({
+        start: mockStart,
+        stop: mockStop,
+      });
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
+      await newSpecPage({
+        components: [WppSlider],
+        template: () => h("wpp-slider-v4-1-0", { type: "middle-range", value: 50 }),
+      });
+      expect(mockStart).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
+      const page = await newSpecPage({
+        components: [WppSlider],
+        template: () => h("wpp-slider-v4-1-0", { type: "middle-range", value: 50 }),
+      });
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
     });
   });
 });

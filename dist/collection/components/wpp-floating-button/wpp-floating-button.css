@@ -112,3 +112,10 @@
 .button.primary.loading {
   background-color: var(--fb-primary-bg-color);
 }
+
+:host([data-wpp-theme=dark]) .button .wpp-spinner::part(circle) {
+  stroke: var(--wpp-grey-color-1000);
+}
+:host([data-wpp-theme=dark]) .button .content.icon ::slotted(*) {
+  color: var(--wpp-grey-color-1000);
+}

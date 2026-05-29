@@ -2,6 +2,7 @@ import { Host, h } from '@stencil/core';
 import { FOCUS_TYPE } from '../../types/common';
 import { DEFAULT_INPUT_WIDTH, getDefaultMaskOptions, getMaskOptionsForInput, parseMaskedInput } from './const';
 import { transformToVersionedTag } from '../../utils/utils';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 const getInitFocusInfo = () => ({
   min: FOCUS_TYPE.NONE,
   max: FOCUS_TYPE.NONE,
@@ -30,6 +31,7 @@ export class WppSlider {
   constructor() {
     this.segmentWidth = 0;
     this.totalWidth = 0;
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     /* For slider with type="middle-range" */
     this.middleValue = 0;
     /**
@@ -447,17 +449,17 @@ export class WppSlider {
     });
     this.calculateProgressBar = (value) => (value - this.min) * (1 / (this.max - this.min)) * 100 + '%';
     this.renderControl = () => {
-      const label = this.labelConfig?.text && (h("wpp-label-v4-0-0", { htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" }));
+      const label = this.labelConfig?.text && (h("wpp-label-v4-1-0", { htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" }));
       if (this.withValue && !this.withInput) {
         return (h("div", { class: this.controlCssClasses(), part: "control-wrapper" }, label || h("div", null), this.handleType({
-          single: value => (h("wpp-typography-v4-0-0", { type: "s-midi", part: "value" }, value)),
-          range: value => (h("div", { class: "range-value-wrapper", part: "value-wrapper" }, h("wpp-typography-v4-0-0", { type: "s-midi", part: "value" }, value[0]), h("wpp-divider-v4-0-0", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), h("wpp-typography-v4-0-0", { type: "s-midi", part: "value" }, value[1]))),
-          'middle-range': value => (h("div", { class: "range-value-wrapper", part: "value-wrapper" }, h("wpp-typography-v4-0-0", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? value : this.middleValue), h("wpp-divider-v4-0-0", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), h("wpp-typography-v4-0-0", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? this.middleValue : value))),
+          single: value => (h("wpp-typography-v4-1-0", { type: "s-midi", part: "value" }, value)),
+          range: value => (h("div", { class: "range-value-wrapper", part: "value-wrapper" }, h("wpp-typography-v4-1-0", { type: "s-midi", part: "value" }, value[0]), h("wpp-divider-v4-1-0", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), h("wpp-typography-v4-1-0", { type: "s-midi", part: "value" }, value[1]))),
+          'middle-range': value => (h("div", { class: "range-value-wrapper", part: "value-wrapper" }, h("wpp-typography-v4-1-0", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? value : this.middleValue), h("wpp-divider-v4-1-0", { part: "value-divider", class: { divider: true, disabled: this.disabled } }), h("wpp-typography-v4-1-0", { type: "s-midi", part: "value" }, this.isMiddlePointHigher() ? this.middleValue : value))),
         })));
       }
       return label;
     };
-    this.renderSingleInput = () => (h("wpp-input-v4-0-0", { ref: inputRef => (this.inputRef = inputRef), type: "text", size: this.size, disabled: this.disabled, part: "input-number", onBlur: this.handleBlur, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { [`size-${this.size}`]: true }, maskOptions: {
+    this.renderSingleInput = () => (h("wpp-input-v4-1-0", { ref: inputRef => (this.inputRef = inputRef), type: "text", size: this.size, disabled: this.disabled, part: "input-number", onBlur: this.handleBlur, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { [`size-${this.size}`]: true }, maskOptions: {
         decimalPatternOptions: this.maskOptions
           ? {
             ...getDefaultMaskOptions(this.step),
@@ -467,14 +469,14 @@ export class WppSlider {
       } }));
     this.renderEditableInput = () => (h("div", { class: this.editableInputCssClasses(), part: "editable-input-wrapper" }, this.handleType({
       single: () => this.renderSingleInput(),
-      range: () => (h("div", { class: "range-input-wrapper", part: "input-wrapper" }, h("wpp-input-v4-0-0", { ref: inputRef => (this.inputRef = inputRef), type: "text", size: this.size, disabled: this.disabled, part: "input-min", onBlur: this.handleBlur, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'min-input': true, [`size-${this.size}`]: true }, maskOptions: {
+      range: () => (h("div", { class: "range-input-wrapper", part: "input-wrapper" }, h("wpp-input-v4-1-0", { ref: inputRef => (this.inputRef = inputRef), type: "text", size: this.size, disabled: this.disabled, part: "input-min", onBlur: this.handleBlur, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'min-input': true, [`size-${this.size}`]: true }, maskOptions: {
           decimalPatternOptions: this.maskOptions && this.maskOptions[0]
             ? {
               ...getDefaultMaskOptions(this.step),
               ...this.maskOptions[0],
             }
             : getDefaultMaskOptions(this.step),
-        } }), h("wpp-divider-v4-0-0", { class: { 'wpp-disabled': this.disabled }, part: "divider" }), h("wpp-input-v4-0-0", { ref: inputRef => (this.inputMaxRef = inputRef), type: "text", size: this.size, disabled: this.disabled, part: "input-max", onBlur: this.handleBlur, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'max-input': true, [`size-${this.size}`]: true }, maskOptions: {
+        } }), h("wpp-divider-v4-1-0", { class: { 'wpp-disabled': this.disabled }, part: "divider" }), h("wpp-input-v4-1-0", { ref: inputRef => (this.inputMaxRef = inputRef), type: "text", size: this.size, disabled: this.disabled, part: "input-max", onBlur: this.handleBlur, style: { width: this.inputWidth ? this.inputWidth : DEFAULT_INPUT_WIDTH }, class: { 'max-input': true, [`size-${this.size}`]: true }, maskOptions: {
           decimalPatternOptions: this.maskOptions && this.maskOptions[1]
             ? {
               ...getDefaultMaskOptions(this.step),
@@ -505,8 +507,8 @@ export class WppSlider {
           const isTruncated = !!this.tooltipTexts[mark.value];
           const labelText = mark.label !== null && mark.label !== undefined ? String(mark.label) : '';
           const tooltipPlacement = 'bottom';
-          const labelContent = (h("wpp-typography-v4-0-0", { id: `mark-label-${mark.value}`, class: this.labelCssClasses(), type: "xs-body", part: "label" }, labelText));
-          return (h("div", { onClick: event => this.handleMarkClick(event, mark), class: this.markCssClasses(mark.value), style: style, part: "mark" }, !this.continuous && (h("div", { class: "circle", part: "mark-circle" }, h("div", { class: "mark", part: "mark-inner" }))), h("div", { class: "label-container" }, isTruncated ? (h("wpp-tooltip-v4-0-0", { config: { placement: tooltipPlacement }, text: this.tooltipTexts[mark.value] }, labelContent)) : (labelContent))));
+          const labelContent = (h("wpp-typography-v4-1-0", { id: `mark-label-${mark.value}`, class: this.labelCssClasses(), type: "xs-body", part: "label" }, labelText));
+          return (h("div", { onClick: event => this.handleMarkClick(event, mark), class: this.markCssClasses(mark.value), style: style, part: "mark" }, !this.continuous && (h("div", { class: "circle", part: "mark-circle" }, h("div", { class: "mark", part: "mark-inner" }))), h("div", { class: "label-container" }, isTruncated ? (h("wpp-tooltip-v4-1-0", { config: { placement: tooltipPlacement }, text: this.tooltipTexts[mark.value] }, labelContent)) : (labelContent))));
         });
       }
     };
@@ -625,7 +627,11 @@ export class WppSlider {
     this.host.addEventListener('focusout', this.handleHostFocusOut);
     document.addEventListener('mousedown', this.handleDocumentMouseDown);
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     window.removeEventListener('resize', this.applyTruncationToMarks);
     window.removeEventListener('load', () => {
       this.computeSegmentWidth();
@@ -657,7 +663,7 @@ export class WppSlider {
     }), this.marks && (h("div", { ref: el => (this.marksListRef = el), class: this.marksListCssClasses(), part: "marks-list" }, this.renderMarks()))), this.withInput && this.continuous && (h("div", { class: this.inputColumnCssClasses() }, this.renderEditableInput())))));
   }
   static get is() { return "wpp-slider"; }
-  static get registryIs() { return "wpp-slider-v4-0-0"; }
+  static get registryIs() { return "wpp-slider-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

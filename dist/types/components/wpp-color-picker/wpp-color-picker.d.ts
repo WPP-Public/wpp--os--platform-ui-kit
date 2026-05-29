@@ -12,6 +12,7 @@ export declare class WppColorPicker {
   private contentEl?;
   private selectTippyInstance?;
   private currentPopoverInstance?;
+  private themeSubscription;
   host: HTMLWppColorPickerElement;
   isDropdownVisible: boolean;
   internalOpacity: string;
@@ -101,6 +102,8 @@ export declare class WppColorPicker {
   updateIsInComponent(value: boolean): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
   private checkInitialColorInList;
   private isValidInitialColor;
   private updateHexValue;

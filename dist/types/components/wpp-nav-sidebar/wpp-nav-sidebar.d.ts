@@ -7,6 +7,7 @@ import { NavSidebarItemEventDetail } from './types';
  * @part body - Main content wrapper
  */
 export declare class WppNavSidebar {
+  private themeSubscription;
   host: HTMLWppNavSidebarElement;
   /**
    * Defines the current active path. Input any valid path that matches the `path` property of the sidebar items. Invalid values will have no effect and will not change the active item.
@@ -29,6 +30,8 @@ export declare class WppNavSidebar {
   handleItemClick(event: CustomEvent<NavSidebarItemEventDetail>): void;
   handleExpandedClick(event: CustomEvent<NavSidebarItemEventDetail>): void;
   componentWillLoad(): void;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
   private calculateOsBarHeight;
   private closeExpandedItemOnItemClick;
   private closeInactiveExpandedItem;

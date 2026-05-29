@@ -9,6 +9,7 @@ import { ToggleChangeEvent, ToggleValue, ToggleLabelConfig } from './types';
  */
 export declare class WppToggle implements BaseComponent, BooleanFormControl<ToggleValue> {
   private inputRef?;
+  private themeSubscription;
   focusType: FOCUS_TYPE;
   readonly host: HTMLWppToggleElement;
   /**
@@ -73,6 +74,8 @@ export declare class WppToggle implements BaseComponent, BooleanFormControl<Togg
    */
   setFocus(): Promise<void>;
   private onClick;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
   private onFocus;
   private onBlur;
   private onMouseDown;

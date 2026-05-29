@@ -17,7 +17,8 @@ import { ModalCloseDetails, ModalCloseReason, ModalFormConfig } from './types';
 export declare class WppModal {
   private resizeObserver;
   private topOffset;
-  private pendingTimeouts;
+  private timeouts;
+  private themeSubscription;
   host: HTMLWppModalElement;
   private dialogRef?;
   hasHeaderSlot: boolean;
@@ -92,6 +93,7 @@ export declare class WppModal {
   private disconnectObserver;
   componentDidLoad(): void;
   componentWillLoad(): void;
+  connectedCallback(): void;
   disconnectedCallback(): void;
   private updateSlotData;
   private handleTransitionStart;

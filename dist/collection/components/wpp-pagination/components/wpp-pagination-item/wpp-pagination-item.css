@@ -97,3 +97,8 @@
 :host(.selected:focus-visible) {
   background-color: var(--wpp-primary-color-100);
 }
+
+:host([data-wpp-theme=dark]) {
+  --pagination-item-text-color-selected: var(--wpp-primary-color-800);
+  --pagination-item-bg-color-selected: var(--wpp-primary-color-300);
+}

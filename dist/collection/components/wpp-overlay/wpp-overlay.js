@@ -1,8 +1,10 @@
 import { Host, h } from '@stencil/core';
 import { Z_INDEX } from '../../common/consts';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 const OVERLAY_ANIMATION_DURATION = 200;
 export class WppOverlay {
   constructor() {
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.handleClick = () => {
       this.wppClick.emit();
     };
@@ -30,11 +32,17 @@ export class WppOverlay {
       this.isHidden = true;
     }
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
+  disconnectedCallback() {
+    this.themeSubscription.stop();
+  }
   render() {
     return (h(Host, null, h("div", { class: this.getOverlayCssClasses(), style: { zIndex: this.zIndex.toString() }, onClick: this.handleClick })));
   }
   static get is() { return "wpp-overlay"; }
-  static get registryIs() { return "wpp-overlay-v4-0-0"; }
+  static get registryIs() { return "wpp-overlay-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

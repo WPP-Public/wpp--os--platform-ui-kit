@@ -27,7 +27,7 @@ const WppIconScaleBottom = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-scale-bottom", width: this.width, height: this.height, size: this.size, color: this.color }, ScaleBottomDirectionIconPath[this.direction].map(path => (h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: path, fill: "currentColor" })))));
   }
-  static get registryIs() { return "wpp-icon-scale-bottom-v4-0-0"; }
+  static get registryIs() { return "wpp-icon-scale-bottom-v4-1-0"; }
 };
 WppIconScaleBottom.style = wppIconCss;
 

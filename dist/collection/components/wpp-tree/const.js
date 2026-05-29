@@ -1,5 +1,6 @@
 export const LOCALES_DEFAULTS = {
   nothingFound: 'No result',
+  loadingTree: 'Loading tree',
 };
 export const KNOWN_KEYS_OF_TREE_TYPE = {
   search: true,

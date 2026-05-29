@@ -13,7 +13,7 @@
   --label-tooltip-width: var(--wpp-label-tooltip-width, 100%);
   --label-optional-text-color: var(--wpp-label-optional-text-color, var(--wpp-text-color-info));
   --label-optional-margin: var(--wpp-label-optional-margin, 0 0 0 4px);
-  --label-text-color: var(--wpp-label-text-color, var(--wpp-text-color));
+  --label-text-color: var(--wpp-label-text-color, var(--wpp-grey-color-800));
   --label-text-color-disabled: var(--wpp-label-text-color-disabled, var(--wpp-text-color-disabled));
   --label-info-wrapper-margin: var(--wpp-label-info-wrapper-margin, 0 4px 0 0);
   --label-icon-color: var(--wpp-label-icon-color, var(--wpp-icon-color));

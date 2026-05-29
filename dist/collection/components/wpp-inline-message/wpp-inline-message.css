@@ -205,3 +205,8 @@
   background-color: white;
   border-radius: var(--im-border-radius);
 }
+
+:host(.wpp-information.wpp-size-l[data-wpp-theme=dark]) .inline-message-wrapper,
+:host(.wpp-information.wpp-size-m[data-wpp-theme=dark]) .inline-message-wrapper {
+  background: var(--wpp-grey-color-300);
+}

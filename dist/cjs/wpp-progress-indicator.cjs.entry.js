@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const wppProgressIndicator = require('./wpp-progress-indicator-b1e1c428.js');
+const wppProgressIndicator = require('./wpp-progress-indicator-5bccf9fe.js');
 require('./index-ecf423ba.js');
 
 

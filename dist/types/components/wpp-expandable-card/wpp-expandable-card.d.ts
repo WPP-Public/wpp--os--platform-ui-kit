@@ -10,6 +10,7 @@ import { ExpandableCardSectionChangeEventDetail } from './types';
  * @part wpp-accordion(*) - you can use all wpp-accordion parts (header,title and others)
  */
 export declare class WppExpandableCard {
+  private themeSubscription;
   host: HTMLWppExpandableCardElement;
   hasActionsSlot: boolean;
   headerMaxWidth?: number;
@@ -43,6 +44,8 @@ export declare class WppExpandableCard {
    */
   wppBlur: EventEmitter<FocusEvent>;
   componentWillLoad(): void;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
   private updateSlotData;
   private onChange;
   private onFocus;

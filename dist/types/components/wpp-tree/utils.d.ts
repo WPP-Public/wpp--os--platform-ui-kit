@@ -11,3 +11,26 @@ export declare const markChildrenAs: (tree: TreeType[], treeItemCb: (item: TreeT
 export declare const isHaveFoundChildren: (tree: TreeType[], search: string, matcherFn: (item: TreeType, search: string) => boolean) => boolean;
 export declare const recalculateIndeterminateTreeState: (treeData: TreeType[]) => TreeType[];
 export declare const extractExtraProps: (tree: TreeType) => Record<string, any>;
+/**
+ * Get all visible (not hidden, and parent is open) items in a flat list for keyboard navigation
+ */
+export declare const getAllVisibleItems: (tree: TreeType[]) => TreeType[];
+/**
+ * Find an item by ID in the tree
+ */
+export declare const findItemById: (tree: TreeType[], id: string | number) => TreeType | undefined;
+/**
+ * Find the parent of an item by its ID
+ */
+export declare const findParentOfItem: (tree: TreeType[], targetId: string | number, parent?: TreeType | null) => TreeType | null;
+/**
+ * Get siblings of an item
+ */
+export declare const getSiblings: (tree: TreeType[], targetId: string | number) => TreeType[];
+/**
+ * Calculate aria-setsize and aria-posinset for an item
+ */
+export declare const getPositionInfo: (tree: TreeType[], targetId: string | number) => {
+  setSize: number;
+  posInSet: number;
+} | null;

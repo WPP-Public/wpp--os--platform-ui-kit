@@ -1,0 +1,1 @@
+const t=["image","video","attachment"],a="upload-request",e={html:"html",text:"text",json:"json",markdown:"markdown"},s={api:"api",user:"user",silent:"silent"};export{a as T,e as a,s as b,t}

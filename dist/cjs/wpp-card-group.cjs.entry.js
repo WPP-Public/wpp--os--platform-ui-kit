@@ -3,8 +3,8 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const utils = require('./utils-15defa44.js');
-require('./consts-dba6e6dd.js');
+const utils = require('./utils-2231f97a.js');
+require('./consts-d8f5ef98.js');
 
 const wppCardGroupCss = ":host{display:-ms-flexbox;display:flex}";
 
@@ -213,7 +213,7 @@ const WppCardGroup = class {
   render() {
     return (index.h(index.Host, { "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, class: this.hostCssClasses(), exportparts: "inner", role: this.multiple ? 'group' : 'radiogroup', "aria-labelledby": this.ariaProps.labelledby }, index.h("slot", { part: "inner" })));
   }
-  static get registryIs() { return "wpp-card-group-v4-0-0"; }
+  static get registryIs() { return "wpp-card-group-v4-1-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "value": ["onValueChange"],

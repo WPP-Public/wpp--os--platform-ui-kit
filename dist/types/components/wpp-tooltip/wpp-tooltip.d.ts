@@ -12,6 +12,7 @@ export declare class WppTooltip {
   private tippyInstance?;
   private readonly FORBIDDEN_PREFIX;
   private readonly ALLOWED_TAGS;
+  private themeSubscription;
   host: HTMLWppTooltipElement;
   hidden: boolean;
   style: Record<string, string>;
@@ -85,6 +86,7 @@ export declare class WppTooltip {
   componentDidLoad(): void;
   disconnectedCallback(): void;
   connectedCallback(): void;
+  private updateTippyProps;
   private transformAllowedTags;
   private arrowSVG;
   private createTippyInstance;

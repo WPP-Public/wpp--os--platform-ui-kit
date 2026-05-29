@@ -156,3 +156,38 @@ export const normalizeMonthRangeDates = (dates, config = { enabled: true }) => {
   const normalizedStart = new Date(start.getFullYear(), start.getMonth(), startDay);
   return [normalizedStart, normalizedEnd];
 };
+/**
+ * Normalizes a date range for year view selection.
+ * Sets the start date to the specified month/day (default: Jan 1st) and
+ * end date to the specified month/day (default: Dec 31st) of their respective years.
+ *
+ * @param dates - Array of two dates representing the range [startDate, endDate]
+ * @param config - Configuration for normalization
+ * @returns Normalized date range [normalizedStart, normalizedEnd]
+ */
+export const normalizeYearRangeDates = (dates, config = { enabled: true }) => {
+  if (!config.enabled || dates.length !== 2) {
+    return dates;
+  }
+  const [start, end] = dates;
+  if (!isValidDate(start) || !isValidDate(end)) {
+    return dates;
+  }
+  // Determine start month (0-based for Date constructor; user-facing input is 1-12)
+  const startMonthConfig = config.startMonth ?? 'first';
+  const startMonth = startMonthConfig === 'first' ? 0 : Math.min(Math.max(startMonthConfig, 1), 12) - 1;
+  // Determine start day, capped to the last day of the start month/year
+  const startDayConfig = config.startDay ?? 'first';
+  const lastDayOfStartMonth = new Date(start.getFullYear(), startMonth + 1, 0).getDate();
+  const startDay = startDayConfig === 'first' ? 1 : Math.min(startDayConfig, lastDayOfStartMonth);
+  // Determine end month
+  const endMonthConfig = config.endMonth ?? 'last';
+  const endMonth = endMonthConfig === 'last' ? 11 : Math.min(Math.max(endMonthConfig, 1), 12) - 1;
+  // Determine end day - 'last' means last day of the end month
+  const endDayConfig = config.endDay ?? 'last';
+  const lastDayOfEndMonth = new Date(end.getFullYear(), endMonth + 1, 0).getDate();
+  const endDay = endDayConfig === 'last' ? lastDayOfEndMonth : Math.min(endDayConfig, lastDayOfEndMonth);
+  const normalizedStart = new Date(start.getFullYear(), startMonth, startDay);
+  const normalizedEnd = new Date(end.getFullYear(), endMonth, endDay);
+  return [normalizedStart, normalizedEnd];
+};

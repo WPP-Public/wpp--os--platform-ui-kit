@@ -5,10 +5,11 @@ import defaultLocale from 'air-datepicker/locale/en';
 import isEqual from 'lodash/isEqual';
 import { FOCUS_TYPE } from '../../types/common';
 import { autoFocusElement, getHighestContainerInDOM, getSlotEmptyStates, transformToVersionedTag, } from '../../utils/utils';
-import { getCurrentFormatDate, getFormattedDateString, getNextCursorPosition, isValidDate, localeToFirstDayMap, normalizeMonthRangeDates, } from './utils';
+import { getCurrentFormatDate, getFormattedDateString, getNextCursorPosition, isValidDate, localeToFirstDayMap, normalizeMonthRangeDates, normalizeYearRangeDates, } from './utils';
 import { ANIMATION_DURATION, DATE_FORMAT_SEPARATOR_PATTERN, DATES_SEPARATOR, LOCALES_DEFAULTS } from './const';
 import { Z_INDEX } from '../../common/consts';
 import { menuListConfig } from '../../common/menuListConfig';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
  * @slot trigger - Slot for a custom trigger element (button). When a button is placed in this slot, it replaces the default input field as the datepicker trigger.
  *
@@ -25,13 +26,40 @@ export class WppDatepicker {
     this.hasClickedPreset = false;
     this.isDatePickerInitialized = false;
     this.isNormalizingMonthRange = false;
+    this.isNormalizingYearRange = false;
     this.isDestroyed = false;
     this._locales = LOCALES_DEFAULTS;
+    this.themeSubscription = themeSubscriptionController(() => this.portalRef);
     this.justSelectedFromCalendar = false;
     this.isManuallyTyping = false;
     this.isStringDateValid = (stringDateValue) => {
       const parsedDate = parse(stringDateValue, this._locales.dateFormat, new Date());
       return isValid(parsedDate) && format(parsedDate, this._locales.dateFormat) === stringDateValue;
+    };
+    /**
+     * Recreates the underlying air-datepicker instance.
+     * Required when `view` or `range` changes because both are construction-time
+     * options that affect the views container layout (`minView`) and range
+     * selection state. air-datepicker's `update()` only swaps the current view
+     * and does not rebuild the views container, which leaves the picker in an
+     * inconsistent state in range mode (Apply button stops firing, view does
+     * not visually switch).
+     */
+    this.recreateDatePicker = () => {
+      this.datePickerInstance?.destroy();
+      this.isDatePickerInitialized = false;
+      this.createDateInstance();
+      this.setInitialDate();
+      this.setMinMaxDate();
+      // air-datepicker uses `inline: true` so the new $datepicker element is
+      // inserted after the input in the shadow DOM (not in portalRef). The
+      // initial mount in componentDidLoad re-parents it into portalRef so
+      // tippy can use it as popover content; we must repeat that move here,
+      // otherwise tippy's content stays empty and the popup won't open.
+      const datepickerEl = this.host.shadowRoot?.querySelector('[part="datepicker"]');
+      if (datepickerEl && this.portalRef) {
+        this.portalRef.appendChild(datepickerEl);
+      }
     };
     this.setInitialDate = () => {
       if (this.value === '' || isEqual(this.value, [])) {
@@ -105,6 +133,11 @@ export class WppDatepicker {
      * Normalization is only applied when range mode is enabled, view is 'months', and normalization is enabled.
      */
     this.shouldNormalizeMonthRange = () => this.range && this.view === 'months' && this.monthRangeNormalization?.enabled === true;
+    /**
+     * Checks if year range normalization should be applied.
+     * Normalization is only applied when range mode is enabled, view is 'years', and normalization is enabled.
+     */
+    this.shouldNormalizeYearRange = () => this.range && this.view === 'years' && this.yearRangeNormalization?.enabled === true;
     this.getDateFormatSeparator = (dateFormat) => {
       const match = dateFormat.match(DATE_FORMAT_SEPARATOR_PATTERN);
       return match ? match[0] : '/';
@@ -193,21 +226,34 @@ export class WppDatepicker {
         prevHtml: `<${IconChevron} class="nav-icon prev-icon"></${IconChevron}>`,
         onBeforeSelect: ({ date, datepicker }) => {
           // Intercept 2nd month click to normalize dates before selection
-          if (this.isNormalizingMonthRange ||
-            !this.shouldNormalizeMonthRange() ||
-            datepicker.selectedDates.length !== 1) {
-            return true;
+          if (!this.isNormalizingMonthRange &&
+            this.shouldNormalizeMonthRange() &&
+            datepicker.selectedDates.length === 1) {
+            const firstDate = datepicker.selectedDates[0];
+            // Sort chronologically so start is always the earlier month
+            const [startDate, endDate] = firstDate <= date ? [firstDate, date] : [date, firstDate];
+            const normalizedDates = normalizeMonthRangeDates([startDate, endDate], this.monthRangeNormalization);
+            // Prevent default selection, then select normalized dates
+            this.isNormalizingMonthRange = true;
+            datepicker.clear({ silent: true });
+            datepicker.selectDate(normalizedDates);
+            this.isNormalizingMonthRange = false;
+            return false;
           }
-          const firstDate = datepicker.selectedDates[0];
-          // Sort chronologically so start is always the earlier month
-          const [startDate, endDate] = firstDate <= date ? [firstDate, date] : [date, firstDate];
-          const normalizedDates = normalizeMonthRangeDates([startDate, endDate], this.monthRangeNormalization);
-          // Prevent default selection, then select normalized dates
-          this.isNormalizingMonthRange = true;
-          datepicker.clear({ silent: true });
-          datepicker.selectDate(normalizedDates);
-          this.isNormalizingMonthRange = false;
-          return false;
+          // Intercept 2nd year click to normalize dates before selection
+          if (!this.isNormalizingYearRange && this.shouldNormalizeYearRange() && datepicker.selectedDates.length === 1) {
+            const firstDate = datepicker.selectedDates[0];
+            // Sort chronologically so start is always the earlier year
+            const [startDate, endDate] = firstDate <= date ? [firstDate, date] : [date, firstDate];
+            const normalizedDates = normalizeYearRangeDates([startDate, endDate], this.yearRangeNormalization);
+            // Prevent default selection, then select normalized dates
+            this.isNormalizingYearRange = true;
+            datepicker.clear({ silent: true });
+            datepicker.selectDate(normalizedDates);
+            this.isNormalizingYearRange = false;
+            return false;
+          }
+          return true;
         },
         onSelect: ({ date, formattedDate }) => {
           // Guard against async callback after component destruction (air-datepicker uses setTimeout)
@@ -736,6 +782,7 @@ export class WppDatepicker {
     this.placeholder = undefined;
     this.view = 'days';
     this.monthRangeNormalization = { enabled: true };
+    this.yearRangeNormalization = { enabled: true };
     this.message = undefined;
     this.messageType = undefined;
     this.tooltipConfig = {};
@@ -812,9 +859,10 @@ export class WppDatepicker {
     }
   }
   updateRange() {
-    this.clearDatePicker();
-    this.datePickerInstance.destroy();
-    this.createDateInstance();
+    this.recreateDatePicker();
+  }
+  updateView() {
+    this.recreateDatePicker();
   }
   updateMinDate() {
     this.setMinMaxDate();
@@ -847,6 +895,7 @@ export class WppDatepicker {
   }
   componentDidLoad() {
     this._locales = { ...this._locales, ...this.locales };
+    this.themeSubscription.start();
     this.createDateInstance();
     this.setInitialDate();
     this.setMinMaxDate();
@@ -859,7 +908,14 @@ export class WppDatepicker {
     }
     autoFocusElement(this.autoFocus, this.inputRef);
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+    if (this.tippyInstance?.state.isDestroyed) {
+      this.createTippyInstance();
+    }
+  }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     this.isDestroyed = true;
     this.tippyInstance?.destroy();
   }
@@ -881,7 +937,7 @@ export class WppDatepicker {
     return this._locales.firstDay ?? 1; // Default to Monday (ISO 8601) if no valid value is found
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, datepicker-container, icon-calendar, datepicker-input, icon-cross, message, trigger-wrapper" }, this.labelConfig?.text && !this.hasTriggerSlot && (h("wpp-label-v4-0-0", { class: "label", htmlFor: this.name, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.containerClasses(), id: "container", part: "datepicker-container" }, this.hasTriggerSlot
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, datepicker-container, icon-calendar, datepicker-input, icon-cross, message, trigger-wrapper" }, this.labelConfig?.text && !this.hasTriggerSlot && (h("wpp-label-v4-1-0", { class: "label", htmlFor: this.name, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.containerClasses(), id: "container", part: "datepicker-container" }, this.hasTriggerSlot
       ? [
         h("input", { type: "hidden", ref: el => (this.hiddenInputRef = el), "aria-hidden": "true" }),
         h("div", { class: "trigger-wrapper", ref: el => (this.triggerWrapperRef = el), onClick: (e) => this.handleTriggerClick(e), role: "presentation", part: "trigger-wrapper" }, h("slot", { name: "trigger", onSlotchange: () => this.updateSlotData() })),
@@ -892,11 +948,11 @@ export class WppDatepicker {
               ? `${this._locales.dateFormat}${DATES_SEPARATOR}${this._locales.dateFormat}`
               : `${this._locales.dateFormat}`), ref: inputRef => (this.inputRef = inputRef), autocomplete: "off", part: "datepicker-input", title: "", "aria-invalid": !!((this.message || this.internalMessage) &&
             (this.messageType || this.internalMessageType) === 'error'), "aria-describedby": this.message || this.internalMessage ? 'datepicker-message' : undefined }),
-        h("wpp-icon-calendar-v4-0-0", { onClick: this.handleClickCalendarIcon, class: this.iconCalendarCssClasses(), part: "icon-calendar", color: "inherit" }),
-      ], h("div", { onBlur: this.handleBlurPortal, onFocus: () => clearTimeout(this.hideTimer), ...(this.hasPresets() ? { tabIndex: 0 } : {}), ref: ref => (this.portalRef = ref), class: this.portalClasses() }, this.hasPresets() && (h("div", { class: "wpp-presets-container" }, h("div", { class: "wpp-presets-list" }, this.presets.map((preset) => (h("wpp-list-item-v4-0-0", { onMouseEnter: () => this.handlePreviewPreset(preset.value), onMouseLeave: this.handleMouseLeavePreset, onWppChangeListItem: () => this.handleClickPreset(preset), class: "wpp-presets-item" }, h("wpp-typography-v4-0-0", { type: "s-body", slot: "label" }, preset.label))))), h("div", { class: "wpp-presets-footer" })))), (!!this.lastValidDate || this.inputRef?.value) && !this.hasTriggerSlot && (h("wpp-icon-cross-v4-0-0", { class: this.iconCrossCssClasses(), "aria-label": "Erase date", onClick: this.handleClickIconCross, onMouseDown: (e) => e.preventDefault(), part: "icon-cross" })), (this.message || this.internalMessage) && (h("wpp-inline-message-v4-0-0", { id: "datepicker-message", class: "inline-message", message: this.message || this.internalMessage, type: this.message ? this.messageType : this.internalMessageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })))));
+        h("wpp-icon-calendar-v4-1-0", { onClick: this.handleClickCalendarIcon, class: this.iconCalendarCssClasses(), part: "icon-calendar", color: "inherit" }),
+      ], h("div", { onBlur: this.handleBlurPortal, onFocus: () => clearTimeout(this.hideTimer), ...(this.hasPresets() ? { tabIndex: 0 } : {}), ref: ref => (this.portalRef = ref), class: this.portalClasses() }, this.hasPresets() && (h("div", { class: "wpp-presets-container" }, h("div", { class: "wpp-presets-list" }, this.presets.map((preset) => (h("wpp-list-item-v4-1-0", { onMouseEnter: () => this.handlePreviewPreset(preset.value), onMouseLeave: this.handleMouseLeavePreset, onWppChangeListItem: () => this.handleClickPreset(preset), class: "wpp-presets-item" }, h("wpp-typography-v4-1-0", { type: "s-body", slot: "label" }, preset.label))))), h("div", { class: "wpp-presets-footer" })))), (!!this.lastValidDate || this.inputRef?.value) && !this.hasTriggerSlot && (h("wpp-icon-cross-v4-1-0", { class: this.iconCrossCssClasses(), "aria-label": "Erase date", onClick: this.handleClickIconCross, onMouseDown: (e) => e.preventDefault(), part: "icon-cross" })), (this.message || this.internalMessage) && (h("wpp-inline-message-v4-1-0", { id: "datepicker-message", class: "inline-message", message: this.message || this.internalMessage, type: this.message ? this.messageType : this.internalMessageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })))));
   }
   static get is() { return "wpp-datepicker"; }
-  static get registryIs() { return "wpp-datepicker-v4-0-0"; }
+  static get registryIs() { return "wpp-datepicker-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -1099,6 +1155,34 @@ export class WppDatepicker {
               "text": "// Custom days: start on 15th, end on 20th\nmonthRangeNormalization={{ enabled: true, startDay: 15, endDay: 20 }}"
             }],
           "text": "Configuration for normalizing month range dates. When using `view=\"months\"` with `range`,\nthis option allows automatic normalization of selected dates to specific days.\nBy default, normalizes start date to the 1st day and end date to the last day of their respective months."
+        },
+        "defaultValue": "{ enabled: true }"
+      },
+      "yearRangeNormalization": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "YearRangeNormalization",
+          "resolved": "YearRangeNormalization | undefined",
+          "references": {
+            "YearRangeNormalization": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-datepicker/types.ts::YearRangeNormalization"
+            }
+          }
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [{
+              "name": "example",
+              "text": "// Enable normalization with defaults (Jan 1st and Dec 31st)\nyearRangeNormalization={{ enabled: true }}"
+            }, {
+              "name": "example",
+              "text": "// Custom: start on Apr 1st, end on Mar 31st (fiscal year)\nyearRangeNormalization={{ enabled: true, startMonth: 4, startDay: 1, endMonth: 3, endDay: 31 }}"
+            }],
+          "text": "Configuration for normalizing year range dates. When using `view=\"years\"` with `range`,\nthis option allows automatic normalization of selected dates to specific month/day boundaries.\nBy default, normalizes start date to January 1st and end date to December 31st of their respective years."
         },
         "defaultValue": "{ enabled: true }"
       },
@@ -1576,6 +1660,9 @@ export class WppDatepicker {
       }, {
         "propName": "range",
         "methodName": "updateRange"
+      }, {
+        "propName": "view",
+        "methodName": "updateView"
       }, {
         "propName": "minDate",
         "methodName": "updateMinDate"

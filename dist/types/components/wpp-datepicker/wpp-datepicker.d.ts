@@ -3,7 +3,7 @@ import AirDatepicker from 'air-datepicker';
 import { DropdownConfig, FOCUS_TYPE, InputMessageTypes } from '../../types/common';
 import { InlineMessage } from '../../interfaces/inline-message';
 import { BaseComponent } from '../../interfaces/base-component';
-import { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes, MonthRangeNormalization } from './types';
+import { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes, MonthRangeNormalization, YearRangeNormalization } from './types';
 import { Instance } from 'tippy.js';
 /**
  * @slot trigger - Slot for a custom trigger element (button). When a button is placed in this slot, it replaces the default input field as the datepicker trigger.
@@ -26,8 +26,10 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   private hasClickedPreset;
   private isDatePickerInitialized;
   private isNormalizingMonthRange;
+  private isNormalizingYearRange;
   private isDestroyed;
   private _locales;
+  private themeSubscription;
   host: HTMLWppDatepickerElement;
   datePickerInstance: AirDatepicker;
   lastValidDate: string | string[];
@@ -92,6 +94,20 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
    * monthRangeNormalization={{ enabled: true, startDay: 15, endDay: 20 }}
    */
   readonly monthRangeNormalization?: MonthRangeNormalization;
+  /**
+   * Configuration for normalizing year range dates. When using `view="years"` with `range`,
+   * this option allows automatic normalization of selected dates to specific month/day boundaries.
+   * By default, normalizes start date to January 1st and end date to December 31st of their respective years.
+   *
+   * @example
+   * // Enable normalization with defaults (Jan 1st and Dec 31st)
+   * yearRangeNormalization={{ enabled: true }}
+   *
+   * @example
+   * // Custom: start on Apr 1st, end on Mar 31st (fiscal year)
+   * yearRangeNormalization={{ enabled: true, startMonth: 4, startDay: 1, endMonth: 3, endDay: 31 }}
+   */
+  readonly yearRangeNormalization?: YearRangeNormalization;
   /**
    * Indicates datepicker message
    */
@@ -195,6 +211,17 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   updateValue(): void;
   onUpdateWidth(): void;
   updateRange(): void;
+  updateView(): void;
+  /**
+   * Recreates the underlying air-datepicker instance.
+   * Required when `view` or `range` changes because both are construction-time
+   * options that affect the views container layout (`minView`) and range
+   * selection state. air-datepicker's `update()` only swaps the current view
+   * and does not rebuild the views container, which leaves the picker in an
+   * inconsistent state in range mode (Apply button stops firing, view does
+   * not visually switch).
+   */
+  private recreateDatePicker;
   updateMinDate(): void;
   updateMaxDate(): void;
   updateDropdownConfig(newConfig: DropdownConfig, oldConfig: DropdownConfig): void;
@@ -206,6 +233,7 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   private updateSlotData;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  connectedCallback(): void;
   disconnectedCallback(): void;
   /**
    * Determines the first day of the week based on `dateLocale`, `firstDay`, or falls back to default.
@@ -218,6 +246,11 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
    * Normalization is only applied when range mode is enabled, view is 'months', and normalization is enabled.
    */
   private shouldNormalizeMonthRange;
+  /**
+   * Checks if year range normalization should be applied.
+   * Normalization is only applied when range mode is enabled, view is 'years', and normalization is enabled.
+   */
+  private shouldNormalizeYearRange;
   private getDateFormatSeparator;
   private isDefaultDateFormatSeparator;
   private isDefaultDateFormat;

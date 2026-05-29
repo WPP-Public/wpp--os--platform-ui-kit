@@ -73,7 +73,7 @@
   --pill-bg-color: var(--wpp-pill-bg-color, transparent);
   --pill-bg-color-hover: var(--wpp-pill-bg-color-hover, var(--wpp-grey-color-200));
   --pill-bg-color-active: var(--wpp-pill-bg-color-active, var(--wpp-grey-color-300));
-  --pill-checked-bg-color: var(--wpp-pill-checked-bg-color, rgb(240 242 245 / 75%));
+  --pill-checked-bg-color: var(--wpp-pill-checked-bg-color, var(--wpp-grey-color-200));
   --pill-checked-bg-color-hover: var(--wpp-pill-checked-bg-color-hover, var(--wpp-grey-color-300));
   --pill-border-radius: var(--wpp-pill-border-radius, var(--wpp-border-radius-round));
   --pill-border-width: var(--wpp-pill-border-width, var(--wpp-border-width-s));

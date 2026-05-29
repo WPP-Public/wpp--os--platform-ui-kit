@@ -4,6 +4,7 @@ import { WppSearch } from '../wpp-search';
 import { WppListItem } from '../../wpp-list-item/wpp-list-item';
 import { WppLabel } from '../../wpp-label/wpp-label';
 import { WppInternalLabel } from '../../wpp-label/components/wpp-internal-label/wpp-internal-label';
+import * as themeUtils from '../../../utils/subscribe-to-theme';
 describe('wpp-search', () => {
   it('should render empty', async () => {
     const page = await newSpecPage({
@@ -25,7 +26,7 @@ describe('wpp-search', () => {
     };
     const page = await newSpecPage({
       components: [WppSearch, WppLabel, WppInternalLabel],
-      template: () => h("wpp-search-v4-0-0", { labelConfig: labelConfig }),
+      template: () => h("wpp-search-v4-1-0", { labelConfig: labelConfig }),
     });
     await new Promise(resolve => setTimeout(resolve, 100));
     await page.waitForChanges();
@@ -34,7 +35,7 @@ describe('wpp-search', () => {
   it('should render with options and form elements', async () => {
     const page = await newSpecPage({
       components: [WppSearch, WppListItem],
-      template: () => (h("wpp-search-v4-0-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message" }, h("wpp-list-item-v4-0-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v4-0-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v4-0-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v4-0-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
+      template: () => (h("wpp-search-v4-1-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message" }, h("wpp-list-item-v4-1-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v4-1-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v4-1-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v4-1-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
     });
     await new Promise(resolve => setTimeout(resolve, 100));
     await page.waitForChanges();
@@ -43,10 +44,10 @@ describe('wpp-search', () => {
   it('should render with selected values', async () => {
     const page = await newSpecPage({
       components: [WppSearch, WppListItem],
-      template: () => (h("wpp-search-v4-0-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message", value: [
+      template: () => (h("wpp-search-v4-1-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message", value: [
           { id: 1, label: 'Item 1' },
           { id: 2, label: 'Item 2' },
-        ] }, h("wpp-list-item-v4-0-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v4-0-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v4-0-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v4-0-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
+        ] }, h("wpp-list-item-v4-1-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v4-1-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v4-1-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v4-1-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
     });
     await new Promise(resolve => setTimeout(resolve, 100));
     await page.waitForChanges();
@@ -55,15 +56,47 @@ describe('wpp-search', () => {
   it('should render opened in loading state', async () => {
     const page = await newSpecPage({
       components: [WppSearch, WppListItem],
-      template: () => (h("wpp-search-v4-0-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message", value: [
+      template: () => (h("wpp-search-v4-1-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message", value: [
           { id: 1, label: 'Item 1' },
           { id: 2, label: 'Item 2' },
-        ], loading: true }, h("wpp-list-item-v4-0-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v4-0-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v4-0-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v4-0-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
+        ], loading: true }, h("wpp-list-item-v4-1-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v4-1-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v4-1-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v4-1-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
     });
     page.root?.querySelector('wpp-search')?.click();
     await page.waitForChanges();
     await new Promise(resolve => setTimeout(resolve, 100));
     await page.waitForChanges();
     expect(page.root).toMatchSnapshot();
+  });
+  describe('subscribing to theme changes', () => {
+    let mockStart;
+    let mockStop;
+    beforeEach(() => {
+      mockStart = jest.fn();
+      mockStop = jest.fn();
+      jest.spyOn(themeUtils, 'themeSubscriptionController').mockReturnValue({
+        start: mockStart,
+        stop: mockStop,
+      });
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
+      await newSpecPage({
+        components: [WppSearch],
+        html: `<wpp-search></wpp-search>`,
+      });
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(mockStart).toHaveBeenCalledTimes(2);
+    });
+    it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
+      const page = await newSpecPage({
+        components: [WppSearch],
+        html: `<wpp-search></wpp-search>`,
+      });
+      await new Promise(resolve => setTimeout(resolve, 100));
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
+    });
   });
 });

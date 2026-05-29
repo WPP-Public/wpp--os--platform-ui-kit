@@ -49,9 +49,19 @@
   );
   --tree-item-end-content-margin-left: var(--wpp-tree-item-end-content-margin-left, 8px);
   --tree-item-end-content-avatar-size-xs: var(--wpp-tree-item-end-content-avatar-size-xs, 24px);
+  --tree-item-focus-outline-color: var(--wpp-tree-item-focus-outline-color, var(--wpp-primary-color-500));
+  --tree-item-focus-outline-width: var(--wpp-tree-item-focus-outline-width, 2px);
+  --tree-item-focus-outline-offset: var(--wpp-tree-item-focus-outline-offset, -2px);
   display: inline-block;
   transition: height 350ms ease;
   width: var(--tree-item-width);
+  outline: none;
+}
+
+:host([is-focused]) .tree-item {
+  outline: var(--tree-item-focus-outline-width) solid var(--tree-item-focus-outline-color);
+  outline-offset: var(--tree-item-focus-outline-offset);
+  border-radius: var(--tree-item-border-radius);
 }
 
 :host(.wpp-hidden) {
@@ -87,7 +97,6 @@
 }
 .tree-item.with-truncation {
   min-width: 0;
-  overflow: hidden;
 }
 .tree-item.with-truncation .tooltip {
   min-width: 0;
@@ -240,6 +249,9 @@
 .tree-item .icon-end:active {
   opacity: 1;
 }
+.tree-item .icon-end:focus-within {
+  opacity: 1;
+}
 .tree-item .end-content {
   display: flex;
   justify-content: flex-end;
@@ -294,4 +306,8 @@
   display: grid;
   overflow: hidden;
   transition: height 500ms ease;
+}
+
+:host([data-wpp-theme=dark]) .tree-item {
+  background: var(--wpp-grey-color-100);
 }

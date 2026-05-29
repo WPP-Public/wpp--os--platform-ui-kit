@@ -41,7 +41,7 @@ describe('wpp-counter', () => {
       };
       const page = await newSpecPage({
         components: [WppCounter, WppLabel, WppInternalLabel],
-        template: () => h("wpp-counter-v4-0-0", { labelConfig: labelConfig }),
+        template: () => h("wpp-counter-v4-1-0", { labelConfig: labelConfig }),
       });
       expect(page.root).toMatchSnapshot();
     });
@@ -219,7 +219,7 @@ describe('wpp-counter', () => {
       };
       const page = await newSpecPage({
         components: [WppCounter],
-        template: () => h("wpp-counter-v4-0-0", { value: 1000, format: format }),
+        template: () => h("wpp-counter-v4-1-0", { value: 1000, format: format }),
       });
       const input = page.root?.shadowRoot?.querySelector('input');
       expect(input?.value).toBe('1 000');

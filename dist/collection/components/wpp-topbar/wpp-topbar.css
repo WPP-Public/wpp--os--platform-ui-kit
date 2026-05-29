@@ -61,3 +61,7 @@
 right.slot-hidden {
   display: none;
 }
+
+:host([data-wpp-theme=dark]) {
+  background-color: var(--wpp-grey-color-100);
+}

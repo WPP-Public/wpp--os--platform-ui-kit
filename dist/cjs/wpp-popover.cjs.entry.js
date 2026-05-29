@@ -4,9 +4,10 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
 const isEqual = require('./isEqual-c003d7ce.js');
-const menuListConfig = require('./menuListConfig-bbde46c0.js');
-const consts = require('./consts-dba6e6dd.js');
-const utils = require('./utils-15defa44.js');
+const menuListConfig = require('./menuListConfig-205d098b.js');
+const consts = require('./consts-d8f5ef98.js');
+const utils = require('./utils-2231f97a.js');
+const subscribeToTheme = require('./subscribe-to-theme-fc5de7fe.js');
 require('./_commonjsHelpers-bcc1208a.js');
 require('./tippy.esm-9d703cd4.js');
 
@@ -20,6 +21,7 @@ const WppPopover = class {
   constructor(hostRef) {
     index.registerInstance(this, hostRef);
     this.wppSearchChange = index.createEvent(this, "wppSearchChange", 1);
+    this.themeSubscription = subscribeToTheme.themeSubscriptionController(() => this.contentEl);
     this.isTriggerEnabled = () => {
       // Checks if the trigger element is enabled or disabled.
       const triggerEl = this.host?.querySelector('[slot="trigger-element"]');
@@ -150,6 +152,7 @@ const WppPopover = class {
     this.internalSearchName = this.searchName || 'wpp-popover-search';
   }
   componentDidLoad() {
+    this.themeSubscription.start();
     setTimeout(() => {
       this.createTippyInstance();
       this.hidden = false;
@@ -160,10 +163,12 @@ const WppPopover = class {
     this.startObserving();
   }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     this.tippyInstance?.destroy();
     this.mutationObserver?.disconnect();
   }
   connectedCallback() {
+    this.themeSubscription.start();
     if (this.tippyInstance?.state.isDestroyed) {
       this.createTippyInstance();
     }
@@ -175,9 +180,9 @@ const WppPopover = class {
     this.mutationObserver.observe(this.host?.children[0], { attributes: true });
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "anchor, trigger-element" }, index.h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref) }, index.h("slot", { name: "trigger-element", part: "trigger-element" })), index.h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-label": this.ariaProps.label, "aria-modal": "true" }, this.withSearch && (index.h("wpp-input-v4-0-0", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: this.locales.searchInputPlaceholder || DEFAULT_POPOVER_LOCALES.searchInputPlaceholder, type: "search", size: "m" })), !this.withSearch && this.closable && (index.h("wpp-action-button-v4-0-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, index.h("wpp-icon-cross-v4-0-0", { slot: "icon-end" }))), index.h("slot", null))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "anchor, trigger-element" }, index.h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref) }, index.h("slot", { name: "trigger-element", part: "trigger-element" })), index.h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-label": this.ariaProps.label, "aria-modal": "true" }, this.withSearch && (index.h("wpp-input-v4-1-0", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: this.locales.searchInputPlaceholder || DEFAULT_POPOVER_LOCALES.searchInputPlaceholder, type: "search", size: "m" })), !this.withSearch && this.closable && (index.h("wpp-action-button-v4-1-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, index.h("wpp-icon-cross-v4-1-0", { slot: "icon-end" }))), index.h("slot", null))));
   }
-  static get registryIs() { return "wpp-popover-v4-0-0"; }
+  static get registryIs() { return "wpp-popover-v4-1-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "config": ["updateConfig"]

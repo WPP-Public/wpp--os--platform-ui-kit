@@ -6,8 +6,10 @@ import { renderVideoCurrentTimeComponent } from './components/wpp-video-time';
 import { renderVolumeBarComponent } from './components/wpp-volume-bar';
 import { renderCaptionsComponent } from './components/wpp-captions';
 import { renderAccessibilityInstructionsComponent } from './components/wpp-accessibility-instructions';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 export class WppVideoPlayer {
   constructor() {
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     // Sizing
     this.videoPlayerHostSize = {};
     this.videoPlayerSize = {};
@@ -398,12 +400,12 @@ export class WppVideoPlayer {
      * - autoplay=false && state = idle
      * - autoplay=true
      */
-    this.renderMainPlayButton = () => (h("wpp-action-button-v4-0-0", { ref: ref => (this.initPlayButtonRef = ref), class: this.playButtonCssClasses(), onClick: this.togglePlay, variant: "inverted", ariaProps: {
+    this.renderMainPlayButton = () => (h("wpp-action-button-v4-1-0", { ref: ref => (this.initPlayButtonRef = ref), class: this.playButtonCssClasses(), onClick: this.togglePlay, variant: "inverted", ariaProps: {
         label: this.videoPlayerState === 'playing'
           ? this._locales.playButtonAriaLabel.play
           : this._locales.playButtonAriaLabel.pause,
         pressed: this.videoPlayerState === 'playing',
-      } }, this.videoPlayerState !== 'playing' ? (h("wpp-icon-play-filled-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-pause-filled-v4-0-0", { slot: "icon-start", "aria-hidden": "true" }))));
+      } }, this.videoPlayerState !== 'playing' ? (h("wpp-icon-play-filled-v4-1-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-pause-filled-v4-1-0", { slot: "icon-start", "aria-hidden": "true" }))));
     this.renderVideoTag = () => (h("video", { ref: ref => (this.videoPlayerRef = ref), id: "video-element", class: "video-player", part: "video-player", controls: false, poster: this.thumbnail, autoplay: this.controlPanelConfigDefault.autoplay, muted: !this.controlPanelConfigDefault.showVolumeButton || this.controlPanelConfigDefault.autoplay, loop: this.controlPanelConfigDefault.loop, preload: this.preload, onEnded: this.handleVideoEnded, onLoadedMetaData: this.handleMetadataLoaded, ...(this.controlPanelConfigDefault.autoplay
         ? {
           onClick: this.togglePlay,
@@ -522,7 +524,11 @@ export class WppVideoPlayer {
       document.addEventListener('fullscreenchange', this.handleFullscreenChange);
     }
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     if (!this.controlPanelConfigDefault.autoplay) {
       this.host.removeEventListener('keydown', this.handleKeyboardInput);
       if (this.controlPanelConfigDefault.showFullscreenButton)
@@ -540,19 +546,19 @@ export class WppVideoPlayer {
           role: 'region',
           'aria-label': this._locales.controlsAriaLabel,
         }
-        : {}) }, this.videoPlayerState !== 'idle' && (h(Fragment, null, this.caption && this.renderCaptions(), h("div", { class: "controls-bar", ref: ref => (this.controlsBarRef = ref) }, h("wpp-action-button-v4-0-0", { ref: ref => (this.playPauseButtonRef = ref), class: "play-pause-button", variant: "inverted", onClick: this.togglePlay, ariaProps: {
+        : {}) }, this.videoPlayerState !== 'idle' && (h(Fragment, null, this.caption && this.renderCaptions(), h("div", { class: "controls-bar", ref: ref => (this.controlsBarRef = ref) }, h("wpp-action-button-v4-1-0", { ref: ref => (this.playPauseButtonRef = ref), class: "play-pause-button", variant: "inverted", onClick: this.togglePlay, ariaProps: {
         label: this.videoPlayerState === 'playing'
           ? this._locales.playPauseButtonArealLabels.pause
           : this._locales.playPauseButtonArealLabels.play,
         pressed: this.videoPlayerState === 'playing',
-      } }, this.videoPlayerState === 'playing' ? (h("wpp-icon-pause-filled-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-play-filled-v4-0-0", { slot: "icon-start", "aria-hidden": "true" }))), this.renderVideoTime(this.splitCurrentVideoTime), this.renderSeekBar(), this.renderVideoTime(this.splitOverallVideoTime), this.caption && (h("wpp-action-button-v4-0-0", { ref: ref => (this.captionButtonRef = ref), onClick: this.toggleCaptions, variant: "inverted", ariaProps: {
+      } }, this.videoPlayerState === 'playing' ? (h("wpp-icon-pause-filled-v4-1-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-play-filled-v4-1-0", { slot: "icon-start", "aria-hidden": "true" }))), this.renderVideoTime(this.splitCurrentVideoTime), this.renderSeekBar(), this.renderVideoTime(this.splitOverallVideoTime), this.caption && (h("wpp-action-button-v4-1-0", { ref: ref => (this.captionButtonRef = ref), onClick: this.toggleCaptions, variant: "inverted", ariaProps: {
         label: this._locales.captionButtonAriaLabel,
-      } }, this.isCaptionEnabled ? (h("wpp-icon-caption-on-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-caption-off-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })))), this.controlPanelConfigDefault.showVolumeButton && this.renderVolumeBar(), this.controlPanelConfigDefault.showFullscreenButton && (h("wpp-action-button-v4-0-0", { ref: ref => (this.fullScreenButtonRef = ref), onClick: this.toggleFullscreen, variant: "inverted", ariaProps: {
+      } }, this.isCaptionEnabled ? (h("wpp-icon-caption-on-v4-1-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-caption-off-v4-1-0", { slot: "icon-start", "aria-hidden": "true" })))), this.controlPanelConfigDefault.showVolumeButton && this.renderVolumeBar(), this.controlPanelConfigDefault.showFullscreenButton && (h("wpp-action-button-v4-1-0", { ref: ref => (this.fullScreenButtonRef = ref), onClick: this.toggleFullscreen, variant: "inverted", ariaProps: {
         label: this._locales.fullscreenButtonAriaLabel,
-      } }, this.isFullscreen ? (h("wpp-icon-fullscreen-minimise-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-fullscreen-v4-0-0", { slot: "icon-start", "aria-hidden": "true" })))), this.renderAccessibilityInstructions())))))));
+      } }, this.isFullscreen ? (h("wpp-icon-fullscreen-minimise-v4-1-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-fullscreen-v4-1-0", { slot: "icon-start", "aria-hidden": "true" })))), this.renderAccessibilityInstructions())))))));
   }
   static get is() { return "wpp-video-player"; }
-  static get registryIs() { return "wpp-video-player-v4-0-0"; }
+  static get registryIs() { return "wpp-video-player-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

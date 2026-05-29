@@ -14,7 +14,7 @@ export class WppIconPlayFilled {
     return (h(WppIcon, { name: "wpp-icon-play-filled", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: "M6.23868 2.26663L17.5989 8.69445C18.614 9.2688 18.614 10.7311 17.5989 11.3055L6.23868 17.7333C5.23874 18.2991 4 17.5767 4 16.4278V3.57214C4 2.42323 5.23874 1.70085 6.23868 2.26663Z", fill: "currentColor" })));
   }
   static get is() { return "wpp-icon-play-filled"; }
-  static get registryIs() { return "wpp-icon-play-filled-v4-0-0"; }
+  static get registryIs() { return "wpp-icon-play-filled-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

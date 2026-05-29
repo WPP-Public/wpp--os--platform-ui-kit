@@ -1,5 +1,6 @@
 import { Host, h } from '@stencil/core';
 import { transformToVersionedTag } from '../../utils/utils';
+import { DEFAULT_TABLIST_LABEL } from './const';
 /**
  * @slot - Should contain only the `segmented-control-item` elements. The default slot, without the name attribute.
  *
@@ -31,6 +32,7 @@ export class WppSegmentedControl {
       'wpp-segmented-control': true,
     });
     this.previousActiveElement = undefined;
+    this._locales = { tablistLabel: DEFAULT_TABLIST_LABEL };
     this.size = 'm';
     this.hugContentOff = false;
     this.width = 'auto';
@@ -41,9 +43,76 @@ export class WppSegmentedControl {
     this.labelTooltipConfig = {
       popperOptions: { strategy: 'fixed' },
     };
+    this.ariaProps = undefined;
+    this.locales = {};
   }
   handleChangeSegmentedControlItemClick(event) {
     this.value = event.detail.value;
+  }
+  onLocalesChange(newLocales) {
+    this._locales = { ...this._locales, ...(newLocales || {}) };
+  }
+  /**
+   * Resolves the keyboard event target to a segmented control item.
+   * Walks up from event.target to handle slotted content (e.g. icon elements).
+   */
+  resolveTargetItem(event) {
+    const target = event.target;
+    const items = this.getItems();
+    const item = items.find(el => el === target || el.contains(target));
+    if (!item)
+      return null;
+    const enabledItems = items.filter(i => !i.disabled);
+    const index = enabledItems.indexOf(item);
+    if (index === -1)
+      return null;
+    return { item, index, enabledItems };
+  }
+  // Keyboard navigation per WAI-ARIA Tabs pattern (manual activation on keyup)
+  handleKeydown(event) {
+    const resolved = this.resolveTargetItem(event);
+    if (!resolved)
+      return;
+    const { index, enabledItems } = resolved;
+    const lastIdx = enabledItems.length - 1;
+    const focusItem = (i) => {
+      enabledItems[i]?.focus();
+    };
+    switch (event.key) {
+      case 'ArrowRight':
+        event.preventDefault();
+        focusItem(index === lastIdx ? 0 : index + 1);
+        break;
+      case 'ArrowLeft':
+        event.preventDefault();
+        focusItem(index === 0 ? lastIdx : index - 1);
+        break;
+      case 'Home':
+        event.preventDefault();
+        focusItem(0);
+        break;
+      case 'End':
+        event.preventDefault();
+        focusItem(lastIdx);
+        break;
+      case 'Enter':
+      case ' ':
+        // Prevent default on keydown; activation happens on keyup
+        event.preventDefault();
+        break;
+      default:
+        break;
+    }
+  }
+  // Activate on key release to match mouse click behavior (press-then-release)
+  handleKeyup(event) {
+    const resolved = this.resolveTargetItem(event);
+    if (!resolved)
+      return;
+    const { item } = resolved;
+    if ((event.key === 'Enter' || event.key === ' ') && !item.disabled) {
+      this.value = item.value;
+    }
   }
   valueChanged(newValue) {
     this.previousActiveElement?.setAttribute('active', 'false');
@@ -59,6 +128,7 @@ export class WppSegmentedControl {
     this.setSegmentedControlItemsSize(newSize);
   }
   componentWillLoad() {
+    this._locales = { ...this._locales, ...(this.locales || {}) };
     this.widthChange(this.width);
     this.setSegmentedControlItemsSize(this.size);
   }
@@ -72,11 +142,19 @@ export class WppSegmentedControl {
       }
     });
   }
+  getItems() {
+    return Array.from(this.host.querySelectorAll(transformToVersionedTag('wpp-segmented-control-item')));
+  }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-0-0", { class: "label", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.cssClasses(), role: "listbox", "aria-multiselectable": "false", "aria-required": this.required, part: "wrapper" }, h("slot", { part: "inner" }))));
+    // When labelConfig provides text, use aria-labelledby to associate label with tablist
+    const labelId = 'segmented-control-label';
+    const tablistLabel = this.ariaProps?.tablist?.label ??
+      (this.ariaProps?.tablist?.labelledby || this.labelConfig?.text ? undefined : this._locales.tablistLabel);
+    const tablistLabelledBy = this.ariaProps?.tablist?.labelledby ?? (this.labelConfig?.text ? labelId : undefined);
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-1-0", { class: "label", tag: "span", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, labelId: labelId, part: "label" })), h("div", { class: this.cssClasses(), role: "tablist", "aria-orientation": "horizontal", "aria-label": tablistLabel, "aria-labelledby": tablistLabelledBy, part: "wrapper" }, h("slot", { part: "inner" }))));
   }
   static get is() { return "wpp-segmented-control"; }
-  static get registryIs() { return "wpp-segmented-control-v4-0-0"; }
+  static get registryIs() { return "wpp-segmented-control-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -251,12 +329,60 @@ export class WppSegmentedControl {
           "text": "Defines the dropdown configuration for the label tooltip."
         },
         "defaultValue": "{\n    popperOptions: { strategy: 'fixed' },\n  }"
+      },
+      "ariaProps": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "WppSegmentedControlAriaProps",
+          "resolved": "undefined | { tablist?: Pick<AriaProps, \"label\" | \"labelledby\"> | undefined; }",
+          "references": {
+            "WppSegmentedControlAriaProps": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-segmented-control/types.ts::WppSegmentedControlAriaProps"
+            }
+          }
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Grouped ARIA props for the tablist: { label?, labelledby? }\nPrecedence: ariaProps > locales > defaults"
+        }
+      },
+      "locales": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "Partial<SegmentedControlLocaleInterface>",
+          "resolved": "undefined | { tablistLabel?: string | undefined; }",
+          "references": {
+            "Partial": {
+              "location": "global",
+              "id": "global::Partial"
+            },
+            "SegmentedControlLocaleInterface": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-segmented-control/types.ts::SegmentedControlLocaleInterface"
+            }
+          }
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Locales for accessible strings. Only tablistLabel currently."
+        },
+        "defaultValue": "{}"
       }
     };
   }
   static get states() {
     return {
-      "previousActiveElement": {}
+      "previousActiveElement": {},
+      "_locales": {}
     };
   }
   static get events() {
@@ -326,6 +452,9 @@ export class WppSegmentedControl {
   static get elementRef() { return "host"; }
   static get watchers() {
     return [{
+        "propName": "locales",
+        "methodName": "onLocalesChange"
+      }, {
         "propName": "value",
         "methodName": "valueChanged"
       }, {
@@ -340,6 +469,18 @@ export class WppSegmentedControl {
     return [{
         "name": "wppChangeSegmentedControlItem",
         "method": "handleChangeSegmentedControlItemClick",
+        "target": undefined,
+        "capture": true,
+        "passive": false
+      }, {
+        "name": "keydown",
+        "method": "handleKeydown",
+        "target": undefined,
+        "capture": true,
+        "passive": false
+      }, {
+        "name": "keyup",
+        "method": "handleKeyup",
         "target": undefined,
         "capture": true,
         "passive": false

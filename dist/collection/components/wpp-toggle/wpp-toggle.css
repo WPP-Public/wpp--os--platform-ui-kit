@@ -149,3 +149,7 @@
 :host(.wpp-checked):host(.wpp-disabled) .label::before {
   background-color: var(--toggle-bg-color-checked-disabled);
 }
+
+:host([data-wpp-theme=dark]) {
+  --toggle-inside-circle-bg-color: var(--wpp-grey-color-100);
+}

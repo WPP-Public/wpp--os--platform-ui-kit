@@ -81,15 +81,15 @@ const WppCheckboxGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppCheckboxGro
     this.wppChange.emit({ value: this.value });
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "inner" }, h("div", { class: "group-container", role: "group", "aria-labelledby": this.ariaProps.labelledby, ...(!!this.message && this.ariaProps.describedby ? { 'aria-describedby': this.ariaProps.describedby } : {}) }, this.labelConfig?.text && (h("wpp-label-v4-0-0", { class: "label", tag: "legend", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, id: this.ariaProps.labelledby })), h("div", { class: this.contentCssClasses(), style: this.gap ? { gap: `${this.gap}px` } : {} }, h("slot", { onSlotchange: this.getCheckboxElements, part: "inner" })), !!this.message && (h("wpp-inline-message-v4-0-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, id: this.ariaProps.describedby })))));
+    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "inner" }, h("div", { class: "group-container", role: "group", "aria-labelledby": this.ariaProps.labelledby, ...(!!this.message && this.ariaProps.describedby ? { 'aria-describedby': this.ariaProps.describedby } : {}) }, this.labelConfig?.text && (h("wpp-label-v4-1-0", { class: "label", tag: "legend", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, id: this.ariaProps.labelledby })), h("div", { class: this.contentCssClasses(), style: this.gap ? { gap: `${this.gap}px` } : {} }, h("slot", { onSlotchange: this.getCheckboxElements, part: "inner" })), !!this.message && (h("wpp-inline-message-v4-1-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, id: this.ariaProps.describedby })))));
   }
-  static get registryIs() { return "wpp-checkbox-group-v4-0-0"; }
+  static get registryIs() { return "wpp-checkbox-group-v4-1-0"; }
   get host() { return this; }
   static get watchers() { return {
     "value": ["updateValue"]
   }; }
   static get style() { return wppCheckboxGroupCss; }
-}, [1, "wpp-checkbox-group", "wpp-checkbox-group-v4-0-0", {
+}, [1, "wpp-checkbox-group", "wpp-checkbox-group-v4-1-0", {
     "value": [1040],
     "required": [516],
     "message": [1],
@@ -105,74 +105,74 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-checkbox-group-v4-0-0", "wpp-action-button-v4-0-0", "wpp-icon-cross-v4-0-0", "wpp-icon-error-v4-0-0", "wpp-icon-info-message-v4-0-0", "wpp-icon-success-v4-0-0", "wpp-icon-warning-v4-0-0", "wpp-inline-message-v4-0-0", "wpp-internal-label-v4-0-0", "wpp-internal-tooltip-v4-0-0", "wpp-label-v4-0-0", "wpp-spinner-v4-0-0", "wpp-tooltip-v4-0-0", "wpp-typography-v4-0-0"];
+  const components = ["wpp-checkbox-group-v4-1-0", "wpp-action-button-v4-1-0", "wpp-icon-cross-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-info-message-v4-1-0", "wpp-icon-success-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-inline-message-v4-1-0", "wpp-internal-label-v4-1-0", "wpp-internal-tooltip-v4-1-0", "wpp-label-v4-1-0", "wpp-spinner-v4-1-0", "wpp-tooltip-v4-1-0", "wpp-typography-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-checkbox-group-v4-0-0":
+    case "wpp-checkbox-group-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppCheckboxGroup$1);
       }
       break;
-    case "wpp-action-button-v4-0-0":
+    case "wpp-action-button-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-cross-v4-0-0":
+    case "wpp-icon-cross-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-error-v4-0-0":
+    case "wpp-icon-error-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-info-message-v4-0-0":
+    case "wpp-icon-info-message-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-success-v4-0-0":
+    case "wpp-icon-success-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-warning-v4-0-0":
+    case "wpp-icon-warning-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-inline-message-v4-0-0":
+    case "wpp-inline-message-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-internal-label-v4-0-0":
+    case "wpp-internal-label-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-tooltip-v4-0-0":
+    case "wpp-internal-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-label-v4-0-0":
+    case "wpp-label-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-0-0":
+    case "wpp-spinner-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-0-0":
+    case "wpp-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-0-0":
+    case "wpp-typography-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

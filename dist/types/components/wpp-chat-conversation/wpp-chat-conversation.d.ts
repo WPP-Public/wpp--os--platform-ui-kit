@@ -1,6 +1,6 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { AvatarConfig, ChatInputConfig, ChatMessage, MessageStatus } from './types';
-import { MessageChangeEventDetail, SendEventDetail } from '../wpp-chat/components/wpp-chat-input/types';
+import { ActionsMenuToggleEventDetail, ChatInputActionItemClickEventDetail, MessageChangeEventDetail, SendEventDetail } from '../wpp-chat/components/wpp-chat-input/types';
 import { FileUploadEventDetail } from '../wpp-file-upload/types';
 export declare class WppChatConversation {
   host: HTMLWppChatConversationElement;
@@ -50,6 +50,16 @@ export declare class WppChatConversation {
    * Emitted when the message in the input message changes.
    */
   readonly wppMessageChanged: EventEmitter<MessageChangeEventDetail>;
+  /**
+   * Emitted when the consolidated actions menu (the `wpp-icon-plus` dropdown
+   * configured via `chatInputConfig.actions`) opens or closes.
+   */
+  readonly wppActionsMenuToggle: EventEmitter<ActionsMenuToggleEventDetail>;
+  /**
+   * Emitted when an entry inside the consolidated actions menu is clicked.
+   * The detail is the originating `ChatInputAction` object.
+   */
+  readonly wppActionsMenuItemClick: EventEmitter<ChatInputActionItemClickEventDetail>;
   private getLastMessageElement;
   private scrollToBottom;
   private inputWrapperCssClasses;
