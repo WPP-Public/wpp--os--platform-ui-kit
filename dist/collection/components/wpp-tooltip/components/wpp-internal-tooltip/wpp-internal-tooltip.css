@@ -147,3 +147,10 @@
 .tooltip-wrapper.warning {
   background-color: var(--wpp-warning-color-200);
 }
+
+:host([data-wpp-theme=dark]) .tooltip-wrapper.dark:not(.warning):not(.error) {
+  background: var(--wpp-grey-color-200);
+}
+:host([data-wpp-theme=dark]) .tooltip-wrapper.dark:not(.warning):not(.error) .text {
+  color: var(--wpp-text-color);
+}

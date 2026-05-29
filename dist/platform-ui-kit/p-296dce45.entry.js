@@ -1,0 +1,1 @@
+export{W as wpp_icon_attach}from"./p-62cc99aa.js";import"./p-000a6ed6.js";import"./p-6389c5ec.js";

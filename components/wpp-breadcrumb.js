@@ -78,7 +78,7 @@ const WppBreadcrumb$1 = /*@__PURE__*/ proxyCustomElement(class WppBreadcrumb ext
   createItemElement(item, isActive = false) {
     const truncatedLabel = truncate(item.label, this.maxLabelLength, this.middleTruncation);
     if (isActive) {
-      return (h("wpp-tooltip-v4-0-0", { text: item.label, part: "item-tooltip", config: {
+      return (h("wpp-tooltip-v4-1-0", { text: item.label, part: "item-tooltip", config: {
           onShow: () => {
             if (item.label.length < this.maxLabelLength)
               return false;
@@ -86,10 +86,10 @@ const WppBreadcrumb$1 = /*@__PURE__*/ proxyCustomElement(class WppBreadcrumb ext
         } }, h("span", { class: "active item", tabIndex: -1, part: "item-text" }, truncatedLabel)));
     }
     else if (item.label.length > this.maxLabelLength && !this.nativeLink) {
-      return (h("wpp-tooltip-v4-0-0", { text: item.label, part: "item-tooltip" }, h("span", { class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, truncatedLabel)));
+      return (h("wpp-tooltip-v4-1-0", { text: item.label, part: "item-tooltip" }, h("span", { class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, truncatedLabel)));
     }
     else if (item.label.length > this.maxLabelLength) {
-      return (h("wpp-tooltip-v4-0-0", { text: item.label, part: "item-tooltip" }, h("a", { href: item.path, class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, truncatedLabel)));
+      return (h("wpp-tooltip-v4-1-0", { text: item.label, part: "item-tooltip" }, h("a", { href: item.path, class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, truncatedLabel)));
     }
     else if (!this.nativeLink) {
       return (h("span", { class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, item.label));
@@ -100,25 +100,25 @@ const WppBreadcrumb$1 = /*@__PURE__*/ proxyCustomElement(class WppBreadcrumb ext
   }
   createMenuElement(item) {
     if (this.nativeLink) {
-      return (h("wpp-list-item-v4-0-0", { key: uuidv4(), class: "link", linkConfig: { href: item.path }, part: "menu-item" }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
+      return (h("wpp-list-item-v4-1-0", { key: uuidv4(), class: "link", linkConfig: { href: item.path }, part: "menu-item" }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
     }
     else {
-      return (h("wpp-list-item-v4-0-0", { key: uuidv4(), class: "link", part: "menu-item", onClick: this.createRouteChangeTrigger(item) }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
+      return (h("wpp-list-item-v4-1-0", { key: uuidv4(), class: "link", part: "menu-item", onClick: this.createRouteChangeTrigger(item) }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
     }
   }
   render() {
     if (this.backBtnLabel) {
-      return (h(Host, { class: this.hostCssClasses(), exportparts: "icon" }, h("button", { class: "back", onClick: this.handleBackClick, onKeyDown: this.handleBackKeyDown, type: "button", tabIndex: 0 }, h("wpp-icon-chevron-v4-0-0", { class: "back-icon-chevron", part: "icon", direction: "left", size: "s" }), h("span", { class: "back-label" }, this.backBtnLabel))));
+      return (h(Host, { class: this.hostCssClasses(), exportparts: "icon" }, h("button", { class: "back", onClick: this.handleBackClick, onKeyDown: this.handleBackKeyDown, type: "button", tabIndex: 0 }, h("wpp-icon-chevron-v4-1-0", { class: "back-icon-chevron", part: "icon", direction: "left", size: "s" }), h("span", { class: "back-label" }, this.backBtnLabel))));
     }
     if (!this.rootItem) {
       return;
     }
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "item-tooltip, item-text, menu-item, menu-item-label, slash, menu, icon-more, slash" }, this.createItemElement(this.rootItem), this.hiddenItems.length > 0 && (h(Fragment, null, h("div", { class: "slash", part: "slash" }, "/"), h("wpp-menu-context-v4-0-0", { key: this.hiddenItemsSnapshot, class: "menu", dropdownConfig: { triggerElementWidth: false, ...this.dropdownConfig }, tabIndex: 0, part: "menu" }, h("wpp-icon-more-v4-0-0", { class: "menu-trigger", direction: "horizontal", slot: "trigger-element", part: "icon-more" }), h("div", { key: this.hiddenItemsSnapshot }, this.hiddenItems.map(item => this.createMenuElement(item)))))), this.visibleItems.map((item, index, items) => (h(Fragment, null, h("div", { class: "slash", tabIndex: -1, part: "slash" }, "/"), this.createItemElement(item, index === items.length - 1))))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "item-tooltip, item-text, menu-item, menu-item-label, slash, menu, icon-more, slash" }, this.createItemElement(this.rootItem), this.hiddenItems.length > 0 && (h(Fragment, null, h("div", { class: "slash", part: "slash" }, "/"), h("wpp-menu-context-v4-1-0", { key: this.hiddenItemsSnapshot, class: "menu", dropdownConfig: { triggerElementWidth: false, ...this.dropdownConfig }, tabIndex: 0, part: "menu" }, h("wpp-icon-more-v4-1-0", { class: "menu-trigger", direction: "horizontal", slot: "trigger-element", part: "icon-more" }), h("div", { key: this.hiddenItemsSnapshot }, this.hiddenItems.map(item => this.createMenuElement(item)))))), this.visibleItems.map((item, index, items) => (h(Fragment, null, h("div", { class: "slash", tabIndex: -1, part: "slash" }, "/"), this.createItemElement(item, index === items.length - 1))))));
   }
-  static get registryIs() { return "wpp-breadcrumb-v4-0-0"; }
+  static get registryIs() { return "wpp-breadcrumb-v4-1-0"; }
   get host() { return this; }
   static get style() { return wppBreadcrumbCss; }
-}, [1, "wpp-breadcrumb", "wpp-breadcrumb-v4-0-0", {
+}, [1, "wpp-breadcrumb", "wpp-breadcrumb-v4-1-0", {
     "items": [16],
     "maxLabelLength": [2, "max-label-length"],
     "middleTruncation": [4, "middle-truncation"],
@@ -130,109 +130,109 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-breadcrumb-v4-0-0", "wpp-action-button-v4-0-0", "wpp-checkbox-v4-0-0", "wpp-icon-chevron-v4-0-0", "wpp-icon-cross-v4-0-0", "wpp-icon-dash-v4-0-0", "wpp-icon-error-v4-0-0", "wpp-icon-info-message-v4-0-0", "wpp-icon-more-v4-0-0", "wpp-icon-success-v4-0-0", "wpp-icon-tick-v4-0-0", "wpp-icon-warning-v4-0-0", "wpp-inline-message-v4-0-0", "wpp-internal-label-v4-0-0", "wpp-internal-tooltip-v4-0-0", "wpp-label-v4-0-0", "wpp-list-item-v4-0-0", "wpp-menu-context-v4-0-0", "wpp-spinner-v4-0-0", "wpp-tooltip-v4-0-0", "wpp-typography-v4-0-0"];
+  const components = ["wpp-breadcrumb-v4-1-0", "wpp-action-button-v4-1-0", "wpp-checkbox-v4-1-0", "wpp-icon-chevron-v4-1-0", "wpp-icon-cross-v4-1-0", "wpp-icon-dash-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-info-message-v4-1-0", "wpp-icon-more-v4-1-0", "wpp-icon-success-v4-1-0", "wpp-icon-tick-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-inline-message-v4-1-0", "wpp-internal-label-v4-1-0", "wpp-internal-tooltip-v4-1-0", "wpp-label-v4-1-0", "wpp-list-item-v4-1-0", "wpp-menu-context-v4-1-0", "wpp-spinner-v4-1-0", "wpp-tooltip-v4-1-0", "wpp-typography-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-breadcrumb-v4-0-0":
+    case "wpp-breadcrumb-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppBreadcrumb$1);
       }
       break;
-    case "wpp-action-button-v4-0-0":
+    case "wpp-action-button-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-checkbox-v4-0-0":
+    case "wpp-checkbox-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-chevron-v4-0-0":
+    case "wpp-icon-chevron-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-cross-v4-0-0":
+    case "wpp-icon-cross-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-dash-v4-0-0":
+    case "wpp-icon-dash-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-error-v4-0-0":
+    case "wpp-icon-error-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-info-message-v4-0-0":
+    case "wpp-icon-info-message-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-more-v4-0-0":
+    case "wpp-icon-more-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-success-v4-0-0":
+    case "wpp-icon-success-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-tick-v4-0-0":
+    case "wpp-icon-tick-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-warning-v4-0-0":
+    case "wpp-icon-warning-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-inline-message-v4-0-0":
+    case "wpp-inline-message-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-internal-label-v4-0-0":
+    case "wpp-internal-label-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-tooltip-v4-0-0":
+    case "wpp-internal-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-label-v4-0-0":
+    case "wpp-label-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-list-item-v4-0-0":
+    case "wpp-list-item-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-menu-context-v4-0-0":
+    case "wpp-menu-context-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-0-0":
+    case "wpp-spinner-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-0-0":
+    case "wpp-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-0-0":
+    case "wpp-typography-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

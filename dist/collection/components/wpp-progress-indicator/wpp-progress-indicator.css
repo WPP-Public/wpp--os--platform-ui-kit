@@ -129,7 +129,7 @@
 
 .progress {
   stroke-dasharray: 100;
-  stroke-dashoffset: calc(100 - var(--pi-value));
+  stroke-dashoffset: calc((100 - var(--pi-value)) * 1px);
   stroke: var(--pi-bar-color);
 }
 
@@ -146,7 +146,7 @@
 }
 
 .infinity-scroll-circle-progress-bar {
-  stroke-dashoffset: var(--pi-circle-infinity-width);
+  stroke-dashoffset: calc(var(--pi-circle-infinity-width) * 1px);
 }
 
 @keyframes infinityCircleLoading {

@@ -1,11 +1,13 @@
 import { h, Host } from '@stencil/core';
 import { FOCUS_TYPE } from '../../types/common';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
  * @part label - Label text element
  * @part input - input element
  */
 export class WppToggle {
   constructor() {
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.onClick = (event) => {
       if (this.disabled)
         return;
@@ -73,6 +75,12 @@ export class WppToggle {
   async setFocus() {
     this.inputRef?.focus();
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
+  disconnectedCallback() {
+    this.themeSubscription.stop();
+  }
   render() {
     const inputId = this.name || 'wpp-toggle';
     const labelId = `${inputId}-label`;
@@ -85,10 +93,10 @@ export class WppToggle {
         ...(this.ariaProps.labelledby ? { 'aria-labelledby': this.ariaProps.labelledby } : {}),
       }
       : {};
-    return (h(Host, { onClick: this.onClick, class: this.hostCssClasses(), exportparts: "label, input" }, h("wpp-label-v4-0-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, htmlFor: inputId, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label", labelId: labelId }, h("input", { type: "checkbox", name: this.name, id: inputId, value: this.value, disabled: this.disabled, checked: this.checked, required: this.required, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), class: "toggle-input", part: "input", ...ariaProps, title: labelText, "aria-checked": this.checked ? 'true' : 'false', "aria-hidden": this.disabled ? 'true' : null, role: "switch", tabIndex: this.disabled ? -1 : 0, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown }))));
+    return (h(Host, { onClick: this.onClick, class: this.hostCssClasses(), exportparts: "label, input" }, h("wpp-label-v4-1-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, htmlFor: inputId, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label", labelId: labelId }, h("input", { type: "checkbox", name: this.name, id: inputId, value: this.value, disabled: this.disabled, checked: this.checked, required: this.required, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), class: "toggle-input", part: "input", ...ariaProps, title: labelText, "aria-checked": this.checked ? 'true' : 'false', "aria-hidden": this.disabled ? 'true' : null, role: "switch", tabIndex: this.disabled ? -1 : 0, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown }))));
   }
   static get is() { return "wpp-toggle"; }
-  static get registryIs() { return "wpp-toggle-v4-0-0"; }
+  static get registryIs() { return "wpp-toggle-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

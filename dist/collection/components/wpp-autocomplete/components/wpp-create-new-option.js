@@ -9,5 +9,5 @@ export function renderCreateNewOptionComponent() {
     this.wppCreateNewOption.emit(this.searchText);
     this.handleBlur(undefined, { force: true });
   };
-  return (h("div", { class: "wpp-dropdown-actions" }, h("wpp-divider-v4-0-0", null), h("wpp-list-item-v4-0-0", { onClick: handleCreateNewOptionClick }, h("wpp-typography-v4-0-0", { type: "s-strong", class: "wpp-create-new-option", slot: "label" }, this._locales.createNewElement(this.searchText)))));
+  return (h("div", { class: "wpp-dropdown-actions" }, h("wpp-divider-v4-1-0", null), h("wpp-list-item-v4-1-0", { onClick: handleCreateNewOptionClick }, h("wpp-typography-v4-1-0", { type: "s-strong", class: "wpp-create-new-option", slot: "label" }, this._locales.createNewElement(this.searchText)))));
 }

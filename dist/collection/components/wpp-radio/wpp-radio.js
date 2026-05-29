@@ -1,6 +1,7 @@
 import { h, Host } from '@stencil/core';
 import { FOCUS_TYPE } from '../../types/common';
 import { transformToVersionedTag } from '../../utils/utils';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
  * @part label - Label text element
  * @part input - input element
@@ -8,6 +9,7 @@ import { transformToVersionedTag } from '../../utils/utils';
  */
 export class WppRadio {
   constructor() {
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.onClick = () => {
       if (this.disabled)
         return;
@@ -22,11 +24,6 @@ export class WppRadio {
         checked: this.checked,
       });
     };
-    // private onInput = () => {
-    //   if (this.disabled) return
-    //
-    //   this.setFocus()
-    // }
     this.onFocus = (event) => {
       this.wppFocus.emit(event);
     };
@@ -100,6 +97,12 @@ export class WppRadio {
     this.focusType = FOCUS_TYPE.TAB;
     this.tippyInstance?.show();
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
+  disconnectedCallback() {
+    this.themeSubscription.stop();
+  }
   componentWillLoad() {
     const radioGroup = this.host.closest(transformToVersionedTag('wpp-radio-group'));
     if (radioGroup) {
@@ -108,9 +111,9 @@ export class WppRadio {
   }
   render() {
     if (this.decorative) {
-      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "label, content, inner", name: this.name }, h("wpp-label-v4-0-0", { class: this.labelCssClasses(), part: "label" }, h("div", { class: "circle", part: "circle" }))));
+      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "label, content, inner", name: this.name }, h("wpp-label-v4-1-0", { class: this.labelCssClasses(), part: "label" }, h("div", { class: "circle", part: "circle" }))));
     }
-    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "label, content, inner", name: this.name }, h("wpp-label-v4-0-0", { class: this.labelCssClasses(), typography: "s-body", htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, onClick: this.onClick, tooltipConfig: {
+    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "label, content, inner", name: this.name }, h("wpp-label-v4-1-0", { class: this.labelCssClasses(), typography: "s-body", htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, onClick: this.onClick, tooltipConfig: {
         ...{
           onCreate: (instance) => {
             this.tippyInstance = instance;
@@ -121,7 +124,7 @@ export class WppRadio {
       }, part: "label" }, h("input", { class: this.inputCssClasses(), type: "radio", name: this.name, id: this.name, value: this.value, disabled: this.disabled, checked: this.checked, required: this.required, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-hidden": this.disabled ? 'true' : null, "aria-required": this.required.toString(), tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "circle", part: "circle" }))));
   }
   static get is() { return "wpp-radio"; }
-  static get registryIs() { return "wpp-radio-v4-0-0"; }
+  static get registryIs() { return "wpp-radio-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

@@ -13,6 +13,11 @@ import { ButtonState, ToastCompleteDetail, ToastIcon } from './types';
  */
 export declare class WppToast {
   private timer;
+  private hideTimeout;
+  private contentChangeTimeout;
+  private animationFrame;
+  private hostElement?;
+  private hasLoaded;
   host: HTMLWppToastElement;
   isShown: boolean;
   isHide: boolean;
@@ -74,7 +79,11 @@ export declare class WppToast {
   onContentChange(): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  connectedCallback(): void;
   disconnectedCallback(): void;
+  private clearAllTimers;
+  private static unrefTimer;
+  private isHostConnected;
   private startTimer;
   private handleMouseEnter;
   private handleMouseLeave;

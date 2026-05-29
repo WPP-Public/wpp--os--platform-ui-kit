@@ -10,9 +10,11 @@ import { renderPlaceholderTextComponent } from './components/wpp-placeholder-tex
 import { renderDropdownListComponent } from './components/wpp-dropdown-list';
 import { renderExtendedSelectedValuesComponent } from './components/wpp-extended-selected-values';
 import { renderCreateNewOptionComponent } from './components/wpp-create-new-option';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 export class WppAutocomplete {
   constructor() {
     this._locales = LOCALES_DEFAULTS;
+    this.themeSubscription = themeSubscriptionController(() => this.dropdownRef);
     this.selectedPillRefs = [];
     this.withPills = false;
     this.activeListNdx = null;
@@ -831,6 +833,7 @@ export class WppAutocomplete {
     this.handleListChange(normalized);
   }
   componentDidLoad() {
+    this.themeSubscription.start();
     this.createTippyInstance();
     if (this.type === 'regular')
       this.setupResizeObserver();
@@ -839,23 +842,25 @@ export class WppAutocomplete {
       this.setFocus(true);
   }
   connectedCallback() {
+    this.themeSubscription.start();
     if (this.tippyInstance?.state.isDestroyed) {
       this.createTippyInstance();
     }
   }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     this.tippyInstance?.destroy();
     this.resizeObserver?.disconnect();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onBlur: this.handleBlur, onKeyUp: this.onKeyUp, exportparts: "input, dropdown, trigger, label" }, this.labelConfig?.text && (h("wpp-label-v4-0-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: this.handleTriggerClick })), h("div", { ref: ref => (this.triggerRef = ref), tabindex: -1, class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, this.renderPlaceholderText(), h("wpp-input-v4-0-0", { ref: ref => (this.inputRef = ref), part: "input", type: "text", role: "combobox", "aria-autocomplete": "list", "aria-expanded": this.isDropdownShown.toString(), "aria-controls": `${this.name}-listbox`, autocomplete: "off", class: this.inputCssClasses(), id: this.name, name: this.name, value: this.searchText, onWppChange: this.handleSearch, disabled: this.disabled, required: this.required, placeholder: this.isFocused || this.isDropdownShown || this.value.length > 0 || this.searchText.trim().length > 0
+    return (h(Host, { class: this.hostCssClasses(), onBlur: this.handleBlur, onKeyUp: this.onKeyUp, exportparts: "input, dropdown, trigger, label" }, this.labelConfig?.text && (h("wpp-label-v4-1-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: this.handleTriggerClick })), h("div", { ref: ref => (this.triggerRef = ref), tabindex: -1, class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, this.renderPlaceholderText(), h("wpp-input-v4-1-0", { ref: ref => (this.inputRef = ref), part: "input", type: "text", role: "combobox", "aria-autocomplete": "list", "aria-expanded": this.isDropdownShown.toString(), "aria-controls": `${this.name}-listbox`, autocomplete: "off", class: this.inputCssClasses(), id: this.name, name: this.name, value: this.searchText, onWppChange: this.handleSearch, disabled: this.disabled, required: this.required, placeholder: this.isFocused || this.isDropdownShown || this.value.length > 0 || this.searchText.trim().length > 0
         ? undefined
         : this.placeholder, onInput: this.handleInput, onFocus: this.handleFocus, onKeyDown: this.onKeyDown, size: this.size, withCrossIcon: false, ariaProps: {
         activedescendant: true,
-      } }), this.multiple && (h("wpp-icon-cross-v4-0-0", { class: this.iconCrossCssClasses(), role: "button", "aria-label": this.multiple ? this._locales.clearMultiple : this._locales.clearSingle, tabindex: this.value.length > 0 && this.multiple ? 0 : -1, onClick: this.handleClearClick, onFocus: this.handleCrossIconFocus, onKeyDown: this.handleCrossIconKeyDown }))), h("div", { ref: ref => (this.dropdownRef = ref), class: this.dropdownCssClasses(), part: "dropdown" }, this.isDropdownShown ? (h(Fragment, null, this.type === 'regular' && this.multiple ? this.renderDropdownPills() : null, h("div", { class: "wpp-autocomplete-dropdown-list", onMouseDown: e => e.preventDefault(), onScroll: this.handleOptionsScroll, id: `${this.name}-listbox`, role: "listbox", "aria-label": this.ariaProps?.label, "aria-busy": this.isInfiniteLoading || this.loading }, this.renderDropdownList()), this.renderCreateNewElement())) : null), !!this.message && (h("wpp-inline-message-v4-0-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType })), this.type === 'extended' && this.multiple ? this.renderExtendedSelectedValues() : null));
+      } }), this.multiple && (h("wpp-icon-cross-v4-1-0", { class: this.iconCrossCssClasses(), role: "button", "aria-label": this.multiple ? this._locales.clearMultiple : this._locales.clearSingle, tabindex: this.value.length > 0 && this.multiple ? 0 : -1, onClick: this.handleClearClick, onFocus: this.handleCrossIconFocus, onKeyDown: this.handleCrossIconKeyDown }))), h("div", { ref: ref => (this.dropdownRef = ref), class: this.dropdownCssClasses(), part: "dropdown" }, this.isDropdownShown ? (h(Fragment, null, this.type === 'regular' && this.multiple ? this.renderDropdownPills() : null, h("div", { class: "wpp-autocomplete-dropdown-list", onMouseDown: e => e.preventDefault(), onScroll: this.handleOptionsScroll, id: `${this.name}-listbox`, role: "listbox", "aria-label": this.ariaProps?.label, "aria-busy": this.isInfiniteLoading || this.loading }, this.renderDropdownList()), this.renderCreateNewElement())) : null), !!this.message && (h("wpp-inline-message-v4-1-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType })), this.type === 'extended' && this.multiple ? this.renderExtendedSelectedValues() : null));
   }
   static get is() { return "wpp-autocomplete"; }
-  static get registryIs() { return "wpp-autocomplete-v4-0-0"; }
+  static get registryIs() { return "wpp-autocomplete-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

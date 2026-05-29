@@ -40,22 +40,22 @@ describe('wpp-inline-edit', () => {
     });
   });
   describe('Rendering', () => {
-    it('should display value in typography when value prop is set', async () => {
+    it('should display value in view-text when value prop is set', async () => {
       const page = await newSpecPage({
         components: [WppInlineEdit],
         html: `<wpp-inline-edit value="Test Value">Text</wpp-inline-edit>`,
       });
-      const typography = page.root?.shadowRoot?.querySelector('wpp-typography');
-      expect(typography?.textContent).toBe('Test Value');
+      const viewText = page.root?.shadowRoot?.querySelector('.view-text');
+      expect(viewText?.textContent).toBe('Test Value');
     });
     it('should display placeholder when no value is set', async () => {
       const page = await newSpecPage({
         components: [WppInlineEdit],
         html: `<wpp-inline-edit placeholder="Enter text">Text</wpp-inline-edit>`,
       });
-      const typography = page.root?.shadowRoot?.querySelector('wpp-typography');
-      expect(typography?.textContent).toBe('Enter text');
-      expect(typography?.classList.contains('placeholder')).toBe(true);
+      const viewText = page.root?.shadowRoot?.querySelector('.view-text');
+      expect(viewText?.textContent).toBe('Enter text');
+      expect(viewText?.classList.contains('placeholder')).toBe(true);
     });
     it('should render edit mode structure with form wrapper and action buttons', async () => {
       const page = await newSpecPage({
@@ -63,7 +63,7 @@ describe('wpp-inline-edit', () => {
         html: `<wpp-inline-edit mode="edit" value="Test"><wpp-input slot="form-element" /></wpp-inline-edit>`,
       });
       const wrapper = page.root?.shadowRoot?.querySelector('.wrapper');
-      const buttons = page.root?.shadowRoot?.querySelector('.buttons');
+      const buttons = page.root?.shadowRoot?.querySelector('.wpp-buttons-container');
       const confirmButton = page.root?.shadowRoot?.querySelector('wpp-icon-done');
       const cancelButton = page.root?.shadowRoot?.querySelector('wpp-icon-cross');
       expect(wrapper).toBeTruthy();
@@ -78,10 +78,10 @@ describe('wpp-inline-edit', () => {
       });
       const content = page.root?.shadowRoot?.querySelector('.content');
       const editIcon = page.root?.shadowRoot?.querySelector('wpp-icon-edit');
-      const typography = page.root?.shadowRoot?.querySelector('wpp-typography');
+      const viewText = page.root?.shadowRoot?.querySelector('.view-text');
       expect(content).toBeTruthy();
       expect(editIcon).toBeTruthy();
-      expect(typography?.textContent).toBe('Test Value');
+      expect(viewText?.textContent).toBe('Test Value');
     });
   });
   describe('CSS classes via snapshots', () => {
@@ -220,18 +220,18 @@ describe('wpp-inline-edit', () => {
         components: [WppInlineEdit],
         html: `<wpp-inline-edit placeholder="Click to edit">Text</wpp-inline-edit>`,
       });
-      const typography = page.root?.shadowRoot?.querySelector('wpp-typography');
-      expect(typography?.classList.contains('placeholder')).toBe(true);
-      expect(typography?.textContent).toBe('Click to edit');
+      const viewText = page.root?.shadowRoot?.querySelector('.view-text');
+      expect(viewText?.classList.contains('placeholder')).toBe(true);
+      expect(viewText?.textContent).toBe('Click to edit');
     });
     it('should not apply placeholder class and show value when value is provided', async () => {
       const page = await newSpecPage({
         components: [WppInlineEdit],
         html: `<wpp-inline-edit value="Actual Value" placeholder="Click to edit">Text</wpp-inline-edit>`,
       });
-      const typography = page.root?.shadowRoot?.querySelector('wpp-typography');
-      expect(typography?.classList.contains('placeholder')).toBe(false);
-      expect(typography?.textContent).toBe('Actual Value');
+      const viewText = page.root?.shadowRoot?.querySelector('.view-text');
+      expect(viewText?.classList.contains('placeholder')).toBe(false);
+      expect(viewText?.textContent).toBe('Actual Value');
     });
   });
   describe('Action buttons behavior', () => {
@@ -866,6 +866,77 @@ describe('wpp-inline-edit', () => {
       // Directly call the private method
       const result = page.rootInstance['getFormElement']();
       expect(result).toBeNull();
+    });
+  });
+  describe('View text truncation', () => {
+    it('should have isViewTextTruncated as false by default', () => {
+      const component = new WppInlineEdit();
+      expect(component['isViewTextTruncated']).toBe(false);
+    });
+    it('should render view-text span in read mode', async () => {
+      const page = await newSpecPage({
+        components: [WppInlineEdit],
+        html: `<wpp-inline-edit mode="read" value="Test Value">Text</wpp-inline-edit>`,
+      });
+      const viewText = page.root?.shadowRoot?.querySelector('.view-text');
+      expect(viewText).toBeTruthy();
+      expect(viewText?.textContent).toBe('Test Value');
+    });
+    it('should have aria-label on trigger for accessibility', async () => {
+      const page = await newSpecPage({
+        components: [WppInlineEdit],
+        html: `<wpp-inline-edit mode="read" value="Test Value">Text</wpp-inline-edit>`,
+      });
+      const trigger = page.root?.shadowRoot?.querySelector('.trigger');
+      expect(trigger?.getAttribute('aria-label')).toBe('Test Value');
+    });
+    it('should have checkViewTextOverflow method', () => {
+      const component = new WppInlineEdit();
+      expect(typeof component['checkViewTextOverflow']).toBe('function');
+    });
+    it('should have initViewResizeObserver method', () => {
+      const component = new WppInlineEdit();
+      expect(typeof component['initViewResizeObserver']).toBe('function');
+    });
+    it('should have setViewTextRef method', () => {
+      const component = new WppInlineEdit();
+      expect(typeof component['setViewTextRef']).toBe('function');
+    });
+    it('should not show tooltip when text is not truncated', async () => {
+      const page = await newSpecPage({
+        components: [WppInlineEdit],
+        html: `<wpp-inline-edit mode="read" value="Short">Text</wpp-inline-edit>`,
+      });
+      // isViewTextTruncated is false by default (jsdom doesn't actually truncate)
+      const viewTooltip = page.root?.shadowRoot?.querySelector('.view-tooltip');
+      expect(viewTooltip).toBeNull();
+    });
+    it('should render tooltip when isViewTextTruncated is true', async () => {
+      const page = await newSpecPage({
+        components: [WppInlineEdit],
+        html: `<wpp-inline-edit value="Long text that overflows">Text</wpp-inline-edit>`,
+      });
+      page.rootInstance.isViewTextTruncated = true;
+      await page.waitForChanges();
+      const tooltip = page.root?.shadowRoot?.querySelector('.view-tooltip');
+      expect(tooltip).toBeTruthy();
+      expect(tooltip?.getAttribute('text')).toBe('Long text that overflows');
+    });
+    it('should render view-text span with truncation styles', async () => {
+      const page = await newSpecPage({
+        components: [WppInlineEdit],
+        html: `<wpp-inline-edit mode="read" value="This is a long value">Text</wpp-inline-edit>`,
+      });
+      const viewText = page.root?.shadowRoot?.querySelector('.view-text');
+      expect(viewText).toBeTruthy();
+    });
+    it('should have view-text with part attribute for external styling', async () => {
+      const page = await newSpecPage({
+        components: [WppInlineEdit],
+        html: `<wpp-inline-edit value="Text">Text</wpp-inline-edit>`,
+      });
+      const viewText = page.root?.shadowRoot?.querySelector('[part="view-text"]');
+      expect(viewText).toBeTruthy();
     });
   });
 });

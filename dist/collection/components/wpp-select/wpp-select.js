@@ -9,6 +9,7 @@ import { renderSingleSelect } from './components/wpp-single-select/wpp-single-se
 import { renderMultipleSelect } from './components/wpp-multiple-select/wpp-multiple-select';
 import { renderTextSelect } from './components/wpp-text-select/wpp-text-select';
 import { renderCombinedSelect } from './components/wpp-combined-select/wpp-combined-select';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 const MINIMUM_ITEMS_COUNT_TO_DISPLAY_SEARCH = 10;
 const TRUNCATION_DELAY = 100;
 /**
@@ -17,6 +18,7 @@ const TRUNCATION_DELAY = 100;
 export class WppSelect {
   constructor() {
     this.hasReachedLimit = false;
+    this.themeSubscription = themeSubscriptionController(() => this.portalRef);
     this.canSelectAll = false;
     this.canClearAll = false;
     // ************************************
@@ -87,7 +89,7 @@ export class WppSelect {
       this.internalList = [
         ...this.list.map((listItem) => {
           const hidden = !listItem.label.toLowerCase().includes(searchTextLowerCase);
-          const checked = !!this.value?.find((valueItem) => isEqual(listItem.value, valueItem));
+          const checked = this.value?.some((valueItem) => isEqual(listItem.value, valueItem)) ?? false;
           if (listItem.disabled) {
             disabledItems++;
           }
@@ -145,7 +147,7 @@ export class WppSelect {
       let checkedItems = 0;
       let disabledItems = 0;
       this.internalList?.forEach((listItem) => {
-        const checked = !!this.value?.find((item) => isEqual(listItem.value, item));
+        const checked = this.value?.some((item) => isEqual(listItem.value, item)) ?? false;
         if (listItem.disabled) {
           disabledItems++;
         }
@@ -167,10 +169,10 @@ export class WppSelect {
         return h(Fragment, null);
       }
       if (this.loading) {
-        return (h("div", { class: "loading-container" }, h("wpp-spinner-v4-0-0", null), h("wpp-typography-v4-0-0", { type: "s-body" }, this._locales.loadingText)));
+        return (h("div", { class: "loading-container" }, h("wpp-spinner-v4-1-0", null), h("wpp-typography-v4-1-0", { type: "s-body" }, this._locales.loadingText)));
       }
       if (this.internalList?.length === 0) {
-        return (h("wpp-typography-v4-0-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+        return (h("wpp-typography-v4-1-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
       }
       let hiddeItemsCount = 0;
       return (h(Fragment, null, this.internalList?.map((item) => {
@@ -180,11 +182,11 @@ export class WppSelect {
           if (hidden)
             hiddeItemsCount++;
           if (hiddeItemsCount === this.internalList?.length) {
-            return (h("wpp-typography-v4-0-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+            return (h("wpp-typography-v4-1-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
           }
           return null;
         }
-        return (h("wpp-list-item-v4-0-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
+        return (h("wpp-list-item-v4-1-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
     };
     this.renderPinnedItems = () => {
@@ -194,7 +196,7 @@ export class WppSelect {
       return (h(Fragment, null, items.map((item) => {
         const { label, value, checked, disabled, id, slots } = item;
         const itemValueKey = this.convertValueToKey(value);
-        return (h("wpp-list-item-v4-0-0", { onWppChangeListItem: this.handleClickListItem, key: `pinned-${itemValueKey}`, value: value, checked: checked, disabled: disabled, multiple: true, id: id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${id}` : undefined, class: "pinned-item" }, h("p", { slot: "label" }, label), slots && this.renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+        return (h("wpp-list-item-v4-1-0", { onWppChangeListItem: this.handleClickListItem, key: `pinned-${itemValueKey}`, value: value, checked: checked, disabled: disabled, multiple: true, id: id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${id}` : undefined, class: "pinned-item" }, h("p", { slot: "label" }, label), slots && this.renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
     };
     this.renderSlotsInListItem = (slots, isLabelExists) => slots
@@ -438,14 +440,12 @@ export class WppSelect {
       }
     };
     this.onClickListItemMultiple = (listItemValue) => {
-      const valueItem = this.value?.find((item) => isEqual(item, listItemValue));
-      if (valueItem) {
-        this.emittedValue = this.value
-          ? [...this.value.filter((item) => !isEqual(item, listItemValue))]
-          : [];
+      const valueIndex = this.value?.findIndex((item) => isEqual(item, listItemValue)) ?? -1;
+      if (valueIndex >= 0) {
+        this.emittedValue = this.value ? [...this.value.filter((item) => !isEqual(item, listItemValue))] : [];
       }
       else {
-        this.emittedValue = [...this.value, listItemValue];
+        this.emittedValue = [...(this.value ?? []), listItemValue];
       }
     };
     this.updateScrollState = () => {
@@ -559,7 +559,7 @@ export class WppSelect {
       this.focusType = FOCUS_TYPE.NONE;
       this.wppBlur.emit(event);
     };
-    this.hasErrorsOrWarnings = (type) => this.message ? this.message.length > 0 && this.messageType === type : false;
+    this.hasErrorsOrWarnings = (type) => this.messageType === type;
     this.iconStartCssClasses = () => ({
       'icon-start': true,
       'slot-hidden': !this.hasIconStartSlot,
@@ -781,6 +781,7 @@ export class WppSelect {
     }
   }
   componentDidLoad() {
+    this.themeSubscription.start();
     setTimeout(() => {
       if (this.displayValue === undefined) {
         this.createTippyInstance();
@@ -806,6 +807,7 @@ export class WppSelect {
     });
   }
   connectedCallback() {
+    this.themeSubscription.start();
     // Reinitialize tippy and mutation observer if disconnectedCallback was called and
     // the same instance of component was deattached and attached to DOM again
     if (this.tippyInstance?.state.isDestroyed) {
@@ -813,6 +815,7 @@ export class WppSelect {
     }
   }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     if (this.tippyInstance) {
       this.tippyInstance.destroy();
     }
@@ -865,7 +868,7 @@ export class WppSelect {
     return renderCombinedSelect.call(this);
   }
   static get is() { return "wpp-select"; }
-  static get registryIs() { return "wpp-select-v4-0-0"; }
+  static get registryIs() { return "wpp-select-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -1375,7 +1378,7 @@ export class WppSelect {
         "optional": true,
         "docs": {
           "tags": [],
-          "text": "Defines the input message. The message is placed right below the select."
+          "text": "Defines the input message. The message is placed right below the select or in a tooltip when `messageInTooltip` is enabled."
         },
         "attribute": "message",
         "reflect": false
@@ -1398,7 +1401,7 @@ export class WppSelect {
         "optional": true,
         "docs": {
           "tags": [],
-          "text": "Defines the input message type, which can be \"error\" or \"warning\". This property\nhas to be used together with \"message\"."
+          "text": "Defines the input message type, which can be \"error\" or \"warning\". This controls the visual validation state even when no message is provided."
         },
         "attribute": "message-type",
         "reflect": false
@@ -1600,7 +1603,7 @@ export class WppSelect {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "Render error/warning/info message in tooltip instead of an inline message below a select element"
+          "text": "Render error/warning/info message in tooltip instead of an inline message below a select element.\nOnly renders a tooltip when `message` is provided with an error or warning `messageType`; otherwise it has no effect."
         },
         "attribute": "message-in-tooltip",
         "reflect": false,

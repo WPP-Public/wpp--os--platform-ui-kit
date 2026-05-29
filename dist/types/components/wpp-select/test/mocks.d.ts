@@ -7,3 +7,4 @@ export declare const MOCK_MULTIPLE_LIST: ListItemInterface[];
 export declare const MOCK_MULTIPLE_LIST_WITH_DISABLED: ListItemInterface[];
 export declare const MOCK_SINGLE_LIST: ListItemInterface[];
 export declare const MOCK_LARGE_LIST: ListItemInterface[];
+export declare const MOCK_NUMERIC_LIST: ListItemInterface[];

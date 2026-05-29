@@ -24,10 +24,6 @@
 :host(.wpp-pagination-wrapper) .wpp-typography {
   color: var(--pagination-text-color);
 }
-:host(.wpp-pagination-wrapper) .single-item-per-page {
-  margin-left: 10px;
-  color: var(--pagination-text-color);
-}
 :host(.wpp-pagination-wrapper) .wpp-text-select {
   --wpp-input-select-min-width: 46px;
   margin-left: 2px;

@@ -3,16 +3,18 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
-const utils = require('./utils-15defa44.js');
-require('./consts-dba6e6dd.js');
+const utils = require('./utils-2231f97a.js');
+const subscribeToTheme = require('./subscribe-to-theme-fc5de7fe.js');
+require('./consts-d8f5ef98.js');
 
-const wppFloatingToolbarCss = ":host{background-color:var(--wpp-grey-color-000);display:-ms-inline-flexbox;display:inline-flex}.wrapper{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;padding:4px;gap:8px;border-radius:8px;-webkit-box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1), 0 0 1px 0 rgba(52, 58, 63, 0.1);box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1), 0 0 1px 0 rgba(52, 58, 63, 0.1)}.wrapper.vertical{-ms-flex-direction:column;flex-direction:column}";
+const wppFloatingToolbarCss = ":host{background-color:var(--wpp-grey-color-000);display:-ms-inline-flexbox;display:inline-flex}.wrapper{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;padding:4px;gap:8px;border-radius:8px;-webkit-box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1), 0 0 1px 0 rgba(52, 58, 63, 0.1);box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1), 0 0 1px 0 rgba(52, 58, 63, 0.1)}.wrapper.vertical{-ms-flex-direction:column;flex-direction:column}:host([data-wpp-theme=dark]){background-color:var(--wpp-grey-color-200)}";
 
 const WppFloatingToolbar = class {
   constructor(hostRef) {
     index.registerInstance(this, hostRef);
     this.items = [];
     this._actionButtonsConfig = [];
+    this.themeSubscription = subscribeToTheme.themeSubscriptionController(() => this.host);
     this.validateActionButtonConfig = (config) => {
       if (config.length < 2) {
         console.error('The number of action buttons must be at least 2.');
@@ -25,7 +27,7 @@ const WppFloatingToolbar = class {
         variant: 'secondary',
       }));
     };
-    this.renderActionButton = (data) => (index.h("wpp-action-button-v4-0-0", { key: `${data.icon}`, ...data }, index.h(utils.transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
+    this.renderActionButton = (data) => (index.h("wpp-action-button-v4-1-0", { key: `${data.icon}`, ...data }, index.h(utils.transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
     this.setActionButtons = () => {
       this.items = Array.from(this.host.shadowRoot?.querySelectorAll(utils.transformToVersionedTag('wpp-action-button')) || []);
       this.syncTabIndexes();
@@ -85,10 +87,16 @@ const WppFloatingToolbar = class {
   componentDidLoad() {
     this.setActionButtons();
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
+  disconnectedCallback() {
+    this.themeSubscription.stop();
+  }
   render() {
     return (index.h(index.Host, { class: this.hostCssClasses(), role: "toolbar", "aria-orientation": this.orientation, "aria-label": this.ariaProps?.label, "aria-labelledby": this.ariaProps?.labelledby, onKeyDown: this.onKeyDown }, index.h("div", { class: this.wrapperCssClasses() }, this._actionButtonsConfig.map(this.renderActionButton))));
   }
-  static get registryIs() { return "wpp-floating-toolbar-v4-0-0"; }
+  static get registryIs() { return "wpp-floating-toolbar-v4-1-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "actionButtonsConfig": ["onUpdateActionButtonsConfig"]

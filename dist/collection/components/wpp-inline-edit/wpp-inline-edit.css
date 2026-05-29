@@ -19,6 +19,8 @@
     --wpp-inline-edit-content-placeholder-color-active,
     var(--wpp-grey-color-900)
   );
+  display: block;
+  max-width: 100%;
 }
 :host.input .wrapper {
   height: var(--inline-edit-input-wrapper-height);
@@ -27,10 +29,20 @@
 :host.textarea .wrapper {
   height: var(--inline-edit-textarea-wrapper-height);
 }
-:host .popover.full-width,
-:host .popover.full-width::part(anchor),
-:host .popover.full-width::part(trigger-element) {
+:host .popover {
+  display: block;
+  max-width: 100%;
+}
+:host .popover::part(anchor) {
+  display: block;
+  max-width: 100%;
+}
+:host .popover.full-width, :host .popover.full-width::part(anchor), :host .popover.full-width::part(trigger-element) {
   width: 100%;
+}
+:host .popover .trigger-element {
+  display: block;
+  max-width: 100%;
 }
 :host .popover .trigger-element .wpp-anchor-toolip {
   width: 100%;
@@ -43,6 +55,7 @@
 }
 :host .trigger {
   cursor: pointer;
+  max-width: 100%;
 }
 :host .label {
   margin: var(--inline-edit-label-margin);
@@ -50,9 +63,11 @@
 :host .content {
   display: flex;
   flex-direction: row;
+  align-items: center;
   position: relative;
   padding: var(--inline-edit-content-padding);
   overflow: hidden;
+  max-width: 100%;
 }
 :host .content:hover .content-bg {
   background-color: var(--inline-edit-content-bg-color-hover);
@@ -81,14 +96,42 @@
   bottom: 0;
   top: 0;
   border-radius: var(--inline-edit-content-border-radius);
+  pointer-events: none;
 }
 :host .content .wpp-icon {
   margin: var(--inline-edit-content-icon-margin);
+  flex-shrink: 0;
 }
 :host .content .placeholder {
   color: var(--inline-edit-content-placeholder-color);
 }
-:host .buttons {
+:host .content .view-text {
+  font-weight: var(--wpp-typography-s-body-font-weight, 400);
+  font-size: var(--wpp-typography-s-body-font-size, 14px);
+  line-height: var(--wpp-typography-s-body-line-height, 22px);
+  letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
+  font-family: var(--wpp-font-family, inherit);
+  color: var(--wpp-grey-color-1000);
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
+}
+:host .view-tooltip {
+  display: block;
+  min-width: 0;
+  flex: 1;
+  max-width: 100%;
+  overflow: hidden;
+}
+:host .view-tooltip::part(anchor) {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+:host .wpp-buttons-container {
   display: flex;
   flex-direction: row;
   align-items: center;

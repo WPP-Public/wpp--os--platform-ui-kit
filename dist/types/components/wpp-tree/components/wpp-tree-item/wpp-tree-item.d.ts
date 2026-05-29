@@ -2,6 +2,7 @@ import { EventEmitter } from '../../../../stencil-public-runtime';
 import { TransformSearchQuery, TreeItemEndContentProps, TreeType } from '../../types';
 import { TreeItemHighlightOptions } from '../../types';
 export declare class WppTreeItem {
+  private themeSubscription;
   host: HTMLWppTreeItemElement;
   hasIconStartSlot: boolean;
   hasIconEndSlot: boolean;
@@ -29,6 +30,18 @@ export declare class WppTreeItem {
    * Indicates deep level of tree
    */
   readonly level: number;
+  /**
+   * Total number of siblings at this level (for aria-setsize)
+   */
+  readonly setSize?: number;
+  /**
+   * Position within the set of siblings (for aria-posinset)
+   */
+  readonly posInSet?: number;
+  /**
+   * Whether this item is currently focused
+   */
+  readonly isFocused?: boolean;
   /**
    * Indicates highlightOptions for text highlight after search
    */
@@ -79,6 +92,7 @@ export declare class WppTreeItem {
   private getItemHeight;
   private titleMeasureTimeout?;
   componentDidLoad(): void;
+  connectedCallback(): void;
   disconnectedCallback(): void;
   componentDidUpdate(): void;
   private addHeightToHost;
@@ -102,5 +116,10 @@ export declare class WppTreeItem {
   private endContentCssClasses;
   private renderTitle;
   private renderEndContent;
+  /**
+   * Get the appropriate selection attribute based on the mode
+   * Per W3C APG: use aria-selected for single-select, aria-checked for multi-select
+   */
+  private getSelectionAttribute;
   render(): any;
 }

@@ -51,7 +51,7 @@
   --text-input-text-color-disabled: var(--wpp-input-text-color-disabled, var(--wpp-text-color-disabled));
   --text-input-bg-color: var(--wpp-input-bg-color, transparent);
   --text-input-bg-color-hover: var(--wpp-input-bg-color-hover, var(--wpp-grey-color-200));
-  --text-input-bg-color-active: var(--wpp-input-bg-color-active, var(--wpp-grey-color-000));
+  --text-input-bg-color-active: var(--wpp-input-bg-color-active, transparent);
   --text-input-bg-color-disabled: var(--wpp-input-bg-color-disabled, var(--wpp-grey-color-100));
   --text-input-border-color: var(--wpp-input-border-color, var(--wpp-grey-color-500));
   --text-input-border-color-hover: var(--wpp-input-border-color-hover, var(--wpp-grey-color-700));

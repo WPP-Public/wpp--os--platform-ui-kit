@@ -20,11 +20,11 @@ export class WppChatConversationMessage {
     this.renderActionButton = (data) => {
       if (!data.icon)
         return null;
-      return (h("wpp-action-button-v4-0-0", { variant: "secondary", ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
+      return (h("wpp-action-button-v4-1-0", { variant: "secondary", ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
     };
     this.renderMenuContextListItems = () => (h(Fragment, null, this.menuContextListItems.map(item => {
       const { label, slots, ...rest } = item;
-      return (h("wpp-list-item-v4-0-0", { ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, h("span", { slot: "label" }, label), slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+      return (h("wpp-list-item-v4-1-0", { ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, h("span", { slot: "label" }, label), slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
     })));
     this.hostCssClasses = () => ({
       'wpp-chat-conversation': true,
@@ -149,7 +149,7 @@ export class WppChatConversationMessage {
   renderComplete() {
     const tokens = getMarkdownTokens(this.finalContent);
     if (!Array.isArray(tokens)) {
-      return (h("wpp-typography-v4-0-0", { type: "s-body", tag: "p" }, DOMPurify.sanitize(this.finalContent)));
+      return (h("wpp-typography-v4-1-0", { type: "s-body", tag: "p" }, DOMPurify.sanitize(this.finalContent)));
     }
     return h("div", { class: "message-text" }, tokens.map((token) => renderToken(token, this.role)));
   }
@@ -162,7 +162,7 @@ export class WppChatConversationMessage {
         const wrap = e.target.closest('.chat-image-error-wrap');
         wrap?.classList.add('chat-image-broken');
         wrap?.setAttribute('data-error-message', 'Image unavailable');
-      } })))))), otherFiles && otherFiles.length > 0 && (h("div", { class: "chat-file-attachments-column" }, otherFiles.map(file => (h("wpp-file-upload-item-v4-0-0", { file: {
+      } })))))), otherFiles && otherFiles.length > 0 && (h("div", { class: "chat-file-attachments-column" }, otherFiles.map(file => (h("wpp-file-upload-item-v4-1-0", { file: {
         name: file.name,
         url: file.url,
         type: file.type,
@@ -172,10 +172,10 @@ export class WppChatConversationMessage {
       } })))))));
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: this.containerCssClasses() }, this.assistantAvatarConfig && (h("div", { class: "avatar-wrapper" }, this.role === 'assistant' && (h("wpp-avatar-v4-0-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), h("div", { class: this.contentCssClasses() }, h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.renderComplete(), this.currentStatus === 'complete' && this.attachments.length > 0 && this.renderAttachments()), this.role === 'assistant' && this.status === 'complete' && (h("div", { class: "actions" }, h("div", { class: "action-toolbar" }, this._actionButtonConfig.map(this.renderActionButton), this.menuContextListItems && (h("wpp-menu-context-v4-0-0", null, h("wpp-action-button-v4-0-0", { variant: "secondary", slot: "trigger-element" }, h("wpp-icon-more-v4-0-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.sourcesActionConfig && (h("div", { class: "sources-action" }, h("wpp-action-button-v4-0-0", { variant: "secondary", ...this.sourcesActionConfig }, this.sourcesActionConfig.text)))))), this.userAvatarConfig && (h("div", { class: "avatar-wrapper" }, this.role === 'user' && h("wpp-avatar-v4-0-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: this.containerCssClasses() }, this.assistantAvatarConfig && (h("div", { class: "avatar-wrapper" }, this.role === 'assistant' && (h("wpp-avatar-v4-1-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), h("div", { class: this.contentCssClasses() }, h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.renderComplete(), this.currentStatus === 'complete' && this.attachments.length > 0 && this.renderAttachments()), this.role === 'assistant' && this.status === 'complete' && (h("div", { class: "actions" }, h("div", { class: "action-toolbar" }, this._actionButtonConfig.map(this.renderActionButton), this.menuContextListItems && (h("wpp-menu-context-v4-1-0", null, h("wpp-action-button-v4-1-0", { variant: "secondary", slot: "trigger-element" }, h("wpp-icon-more-v4-1-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.sourcesActionConfig && (h("div", { class: "sources-action" }, h("wpp-action-button-v4-1-0", { variant: "secondary", ...this.sourcesActionConfig }, this.sourcesActionConfig.text)))))), this.userAvatarConfig && (h("div", { class: "avatar-wrapper" }, this.role === 'user' && h("wpp-avatar-v4-1-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
   }
   static get is() { return "wpp-chat-conversation-message"; }
-  static get registryIs() { return "wpp-chat-conversation-message-v4-0-0"; }
+  static get registryIs() { return "wpp-chat-conversation-message-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

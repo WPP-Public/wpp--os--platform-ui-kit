@@ -11,6 +11,7 @@ import { NavigationState, TopbarChangeEventDetail } from './types';
  */
 export declare class WppTopbar {
   private resizeObserver;
+  private themeSubscription;
   host: HTMLWppTopbarElement;
   truncated: boolean;
   itemsToShow: number;
@@ -18,6 +19,7 @@ export declare class WppTopbar {
   hasRightSlot: boolean;
   activeItems: string[];
   topbarItemsWidth: number[];
+  hasOpenMenu: boolean;
   /**
    * Defines the navigation items, e.g. `navigation=[{ label: 'Home', value: 'home' }]`
    */
@@ -44,9 +46,11 @@ export declare class WppTopbar {
   private findInTree;
   private getDisplayData;
   private topbarItemClick;
+  private topbarItemMenuToggle;
   private updateSlotData;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  connectedCallback(): void;
   disconnectedCallback(): void;
   private wrapperCssClasses;
   private headerCssClasses;

@@ -777,6 +777,10 @@
   transition: opacity var(--adp-overlay-transition-duration) var(--adp-overlay-transition-ease), height 0s, width 0s;
 }
 
+.wpp-datepicker-portal[data-wpp-theme=dark] {
+  --wpp-datepicker-bg-color: var(--wpp-grey-color-200);
+}
+
 :root {
   --autocomplete-dropdown-max-height: var(--wpp-autocomplete-dropdown-max-height, 372px);
 }
@@ -843,6 +847,10 @@
 }
 .wpp-autocomplete-dropdown .suggestions-divider {
   margin: 8px 0;
+}
+
+.wpp-autocomplete-dropdown[data-wpp-theme=dark] {
+  background: var(--wpp-grey-color-200);
 }
 
 .wpp-autocomplete-dropdown-list {
@@ -1034,6 +1042,10 @@
   margin-bottom: 0;
 }
 
+.wpp-list[data-wpp-theme=dark] {
+  background-color: var(--wpp-grey-color-200);
+}
+
 .tippy-content .wpp-select-portal {
   display: flex;
 }
@@ -1159,6 +1171,10 @@
   justify-content: flex-end;
 }
 
+.wpp-select-portal[data-wpp-theme=dark] {
+  background-color: var(--wpp-grey-color-200);
+}
+
 .wpp-datepicker-portal.portal-datepicker {
   /**
     * @prop --wpp-datepicker-width:
@@ -1237,7 +1253,7 @@
   --datepicker-border-style: var(--wpp-datepicker-border-style, solid);
   --datepicker-border-color: var(--wpp-datepicker-border-color, transparent);
   --datepicker-border-radius: var(--wpp-datepicker-border-radius, var(--wpp-border-radius-m));
-  --datepicker-z-index: var(--wpp-datepicker-z-index, 1000);
+  --datepicker-z-index: var(--wpp-datepicker-z-index, 940);
   --datepicker-buttons-height: var(--wpp-datepicker-buttons-height, 48px);
   --datepicker-title-margin: var(--wpp-datepicker-title-margin, 0 0 0 4px);
   --datepicker-label-margin: var(--wpp-datepicker-label-margin, 0 0 8px 0);
@@ -1777,6 +1793,13 @@
   border-bottom: 1px solid var(--wpp-grey-color-300);
 }
 
+.wpp-popover-content[data-wpp-theme=dark] {
+  background-color: var(--wpp-grey-color-200);
+}
+.wpp-popover-content[data-wpp-theme=dark] .wpp-buttons-container {
+  background: var(--wpp-grey-color-800);
+}
+
 .wpp-time-picker-portal {
   box-shadow: var(--wpp-box-shadow-m);
   height: 372px;
@@ -1817,6 +1840,10 @@
 }
 .wpp-time-picker-portal .wpp-divider {
   height: 100%;
+}
+
+.wpp-time-picker-portal[data-wpp-theme=dark] {
+  background-color: var(--wpp-grey-color-200);
 }
 
 .wpp-color-picker-dropdown {
@@ -1974,6 +2001,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.wpp-color-picker-dropdown[data-wpp-theme=dark] {
+  background-color: var(--wpp-grey-color-200);
 }
 
 /* tree horizontal scroll */

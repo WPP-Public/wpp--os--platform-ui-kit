@@ -2,6 +2,7 @@ import { newSpecPage } from '@stencil/core/testing';
 import { WppTooltip } from '../wpp-tooltip';
 import * as tooltipConfigModule from '../../../common/menuListConfig';
 import * as utils from '../../../utils/utils';
+import * as themeUtils from '../../../utils/subscribe-to-theme';
 describe('wpp-tooltip', () => {
   it('should render component', async () => {
     const page = await newSpecPage({
@@ -365,5 +366,35 @@ describe('wpp-tooltip full coverage', () => {
     });
     const anchor = page.root?.shadowRoot?.querySelector('.anchor');
     expect(anchor?.getAttribute('tabindex')).toBe('1');
+  });
+  describe('subscribing to theme changes', () => {
+    let mockStart;
+    let mockStop;
+    beforeEach(() => {
+      mockStart = jest.fn();
+      mockStop = jest.fn();
+      jest.spyOn(themeUtils, 'themeSubscriptionController').mockReturnValue({
+        start: mockStart,
+        stop: mockStop,
+      });
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
+      await newSpecPage({
+        components: [WppTooltip],
+        html: `<wpp-tooltip></wpp-tooltip>`,
+      });
+      expect(mockStart).toHaveBeenCalledTimes(2);
+    });
+    it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
+      const page = await newSpecPage({
+        components: [WppTooltip],
+        html: `<wpp-tooltip></wpp-tooltip>`,
+      });
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
+    });
   });
 });

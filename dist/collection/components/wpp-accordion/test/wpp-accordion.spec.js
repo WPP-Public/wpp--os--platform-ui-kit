@@ -3,6 +3,7 @@ import { WppAccordion } from '../wpp-accordion';
 import { FOCUS_TYPE } from '../../../types/common';
 import * as utils from '../../../utils/utils';
 import { WppTooltip } from '../../wpp-tooltip/wpp-tooltip';
+import { createMockContentElement, createMockKeydownEvent } from './wpp-accordion.mocks';
 describe('wpp-accordion', () => {
   let timeoutSpy;
   beforeAll(() => {
@@ -134,6 +135,87 @@ describe('wpp-accordion', () => {
     page.root.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
     await page.waitForChanges();
     expect(instance.expanded).toBe(true);
+  });
+  it('does not toggle when Space key originates from content area', async () => {
+    const page = await newSpecPage({
+      components: [WppAccordion],
+      html: `<wpp-accordion expanded><input type="text" /></wpp-accordion>`,
+    });
+    const instance = page.rootInstance;
+    expect(instance.expanded).toBe(true);
+    instance.focusType = FOCUS_TYPE.TAB;
+    const contentElement = createMockContentElement();
+    const { event, preventDefaultSpy } = createMockKeydownEvent(' ', [contentElement]);
+    instance.onKeyDown(event);
+    expect(instance.expanded).toBe(true);
+    expect(preventDefaultSpy).not.toHaveBeenCalled();
+  });
+  it('does not toggle when Enter key originates from content area', async () => {
+    const page = await newSpecPage({
+      components: [WppAccordion],
+      html: `<wpp-accordion expanded><input type="text" /></wpp-accordion>`,
+    });
+    const instance = page.rootInstance;
+    instance.focusType = FOCUS_TYPE.TAB;
+    const contentElement = createMockContentElement();
+    const { event, preventDefaultSpy } = createMockKeydownEvent('Enter', [contentElement]);
+    instance.onKeyDown(event);
+    await page.waitForChanges();
+    expect(instance.expanded).toBe(true);
+    expect(preventDefaultSpy).not.toHaveBeenCalled();
+  });
+  it('still toggles when Space key originates from header button', async () => {
+    const page = await newSpecPage({
+      components: [WppAccordion],
+      html: `<wpp-accordion></wpp-accordion>`,
+    });
+    const instance = page.rootInstance;
+    instance.focusType = FOCUS_TYPE.TAB;
+    const button = page.root.shadowRoot.querySelector('button');
+    const { event, preventDefaultSpy } = createMockKeydownEvent(' ', [button]);
+    instance.onKeyDown(event);
+    await page.waitForChanges();
+    expect(instance.expanded).toBe(true);
+    expect(preventDefaultSpy).toHaveBeenCalled();
+  });
+  it('does not toggle when focusType is NONE even if event is from header', async () => {
+    const page = await newSpecPage({
+      components: [WppAccordion],
+      html: `<wpp-accordion></wpp-accordion>`,
+    });
+    const instance = page.rootInstance;
+    instance.focusType = FOCUS_TYPE.NONE;
+    const button = page.root.shadowRoot.querySelector('button');
+    const { event, preventDefaultSpy } = createMockKeydownEvent(' ', [button]);
+    instance.onKeyDown(event);
+    expect(instance.expanded).toBe(false);
+    expect(preventDefaultSpy).not.toHaveBeenCalled();
+  });
+  it('does not toggle when disabled even with TAB focus from header', async () => {
+    const page = await newSpecPage({
+      components: [WppAccordion],
+      html: `<wpp-accordion disabled></wpp-accordion>`,
+    });
+    const instance = page.rootInstance;
+    instance.focusType = FOCUS_TYPE.TAB;
+    const button = page.root.shadowRoot.querySelector('button');
+    const { event, preventDefaultSpy } = createMockKeydownEvent(' ', [button]);
+    instance.onKeyDown(event);
+    expect(instance.expanded).toBe(false);
+    expect(preventDefaultSpy).not.toHaveBeenCalled();
+  });
+  it('does not toggle on non-matching key from header with TAB focus', async () => {
+    const page = await newSpecPage({
+      components: [WppAccordion],
+      html: `<wpp-accordion></wpp-accordion>`,
+    });
+    const instance = page.rootInstance;
+    instance.focusType = FOCUS_TYPE.TAB;
+    const button = page.root.shadowRoot.querySelector('button');
+    const { event, preventDefaultSpy } = createMockKeydownEvent('Escape', [button]);
+    instance.onKeyDown(event);
+    expect(instance.expanded).toBe(false);
+    expect(preventDefaultSpy).not.toHaveBeenCalled();
   });
   it('renders tags slot when withTag is true', async () => {
     const page = await newSpecPage({

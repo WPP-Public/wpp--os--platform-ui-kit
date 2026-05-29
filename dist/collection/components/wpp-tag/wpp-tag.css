@@ -120,13 +120,53 @@
 
 .wpp-typography {
   z-index: 1;
+  display: block;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   mix-blend-mode: plus-darker;
+  min-width: 0;
+  max-width: 100%;
+  flex: 1;
 }
 .wpp-typography::part(typography) {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   mix-blend-mode: plus-darker;
+  max-width: 100%;
+}
+.wpp-typography::part(inner) {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.wpp-tooltip {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.wpp-tooltip::part(anchor) {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.label-text {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .icon-start.slot-hidden {
@@ -154,4 +194,8 @@
 
 :host(.wpp-disabled) {
   opacity: var(--tag-disabled-opacity);
+}
+
+:host([data-wpp-theme=dark]) {
+  background-color: var(--wpp-grey-color-300);
 }

@@ -99,19 +99,19 @@ const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
   switch (fileExtension) {
     // Text
     case '.txt':
-      return h("wpp-icon-document-v4-0-0", null);
+      return h("wpp-icon-document-v4-1-0", null);
     // Compressed
     case '.zip':
     case '.rar':
     case '.7z':
-      return h("wpp-icon-file-zip-v4-0-0", null);
+      return h("wpp-icon-file-zip-v4-1-0", null);
     // Image
     case '.png':
     case '.jpg':
     case '.jpeg':
     case '.svg':
     case '.gif':
-      return h("wpp-icon-image-v4-0-0", null);
+      return h("wpp-icon-image-v4-1-0", null);
     // Video
     case '.mp4':
     case '.mov':
@@ -120,7 +120,7 @@ const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.mkv':
     case '.flv':
     case '.webm':
-      return h("wpp-icon-video-clip-v4-0-0", null);
+      return h("wpp-icon-video-clip-v4-1-0", null);
     // Audio
     case '.mp3':
     case '.wav':
@@ -128,7 +128,7 @@ const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.wma':
     case '.m4a':
     case '.aac':
-      return h("wpp-icon-music-v4-0-0", null);
+      return h("wpp-icon-music-v4-1-0", null);
     // Data
     case '.csv':
     case '.json':
@@ -136,7 +136,7 @@ const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.db':
     case '.sqlite':
     case '.dat':
-      return h("wpp-icon-database-v4-0-0", null);
+      return h("wpp-icon-database-v4-1-0", null);
     // Presentation
     case '.pptx':
     case '.key':
@@ -145,16 +145,16 @@ const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.pps':
     case '.sldx':
     case '.ppt':
-      return h("wpp-icon-pitch-v4-0-0", null);
+      return h("wpp-icon-pitch-v4-1-0", null);
     // Spreadsheet
     case '.xlsx':
     case '.xls':
     case '.ods':
     case '.numbers':
     case '.tsv':
-      return h("wpp-icon-spreadsheet-v4-0-0", null);
+      return h("wpp-icon-spreadsheet-v4-1-0", null);
     default:
-      return h("wpp-icon-file-v4-0-0", null);
+      return h("wpp-icon-file-v4-1-0", null);
   }
 };
 const LOCALES_DEFAULTS = {
@@ -300,7 +300,7 @@ const WppFileUploadItem = /*@__PURE__*/ proxyCustomElement(class WppFileUploadIt
     this.isFileLoading = () => !this.uploaded && (this.file.isLoading || !this.isLoadingFinished);
     this.setCurrentIcon = () => {
       if (this.isFileLoading())
-        return h("wpp-spinner-v4-0-0", null);
+        return h("wpp-spinner-v4-1-0", null);
       const { name } = this.file;
       if (this.isFileWithError())
         return null;
@@ -318,7 +318,7 @@ const WppFileUploadItem = /*@__PURE__*/ proxyCustomElement(class WppFileUploadIt
     this.setCurrentError = () => {
       if (this.isFileWithError()) {
         const currentError = this.getErrorMessage();
-        return (h("div", { class: "error-wrapper" }, h("wpp-inline-message-v4-0-0", { class: "inline-message-error", message: currentError, type: "error", showTooltipFrom: 140, tooltipConfig: { popperOptions: { strategy: 'fixed' } } }), this.file.deletable !== false && (h("wpp-icon-cross-v4-0-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": `Remove file ${this.file.name}`, onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onKeyUp: this.handleDeleteKeyUp, onBlur: this.handleDeleteBlur }))));
+        return (h("div", { class: "error-wrapper" }, h("wpp-inline-message-v4-1-0", { class: "inline-message-error", message: currentError, type: "error", showTooltipFrom: 140, tooltipConfig: { popperOptions: { strategy: 'fixed' } } }), this.file.deletable !== false && (h("wpp-icon-cross-v4-1-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": `Remove file ${this.file.name}`, onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onKeyUp: this.handleDeleteKeyUp, onBlur: this.handleDeleteBlur }))));
       }
       return null;
     };
@@ -482,23 +482,23 @@ const WppFileUploadItem = /*@__PURE__*/ proxyCustomElement(class WppFileUploadIt
     reader.readAsDataURL(this.file);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, wrapper, content, file-name, tooltip, loading, percentage, cross-icon", onClick: this.handleClick, role: "listitem" }, h("div", { class: this.itemCssClasses(), part: "file-item" }, this.setCurrentError(), h("div", { class: "content-wrapper", part: "wrapper" }, h("div", { class: this.blockCssClasses(), part: "content" }, h("div", { class: "icon-wrapper" }, this.setCurrentIcon()), h("wpp-tooltip-v4-0-0", { ref: ref => (this.tooltipRef = ref), text: this.file.name, config: {
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, wrapper, content, file-name, tooltip, loading, percentage, cross-icon", onClick: this.handleClick, role: "listitem" }, h("div", { class: this.itemCssClasses(), part: "file-item" }, this.setCurrentError(), h("div", { class: "content-wrapper", part: "wrapper" }, h("div", { class: this.blockCssClasses(), part: "content" }, h("div", { class: "icon-wrapper" }, this.setCurrentIcon()), h("wpp-tooltip-v4-1-0", { ref: ref => (this.tooltipRef = ref), text: this.file.name, config: {
         popperOptions: { strategy: 'fixed' },
         onShow: () => {
           if (!this.isTruncated)
             return false;
         },
-      }, part: "tooltip" }, h("wpp-typography-v4-0-0", { ref: ref => (this.fileNameRef = ref), class: this.fileNameCssClasses(), type: "s-body", part: "file-name", title: this.file.name }, this.file?.name)), !this.isFileWithError() ? (h("span", { ref: ref => (this.loadingRef = ref), class: "loading", part: "loading" }, this.isFileLoading()
+      }, part: "tooltip" }, h("wpp-typography-v4-1-0", { ref: ref => (this.fileNameRef = ref), class: this.fileNameCssClasses(), type: "s-body", part: "file-name", title: this.file.name }, this.file?.name)), !this.isFileWithError() ? (h("span", { ref: ref => (this.loadingRef = ref), class: "loading", part: "loading" }, this.isFileLoading()
       ? `${this.loaded}/${this.total} ${this.measurementUnit}`
-      : `${this.total} ${this.measurementUnit}`)) : (h("span", { class: "error-message", part: "error-message" }, this.total, " ", this.measurementUnit))), h("div", { class: "controls-wrapper", part: "controls" }, this.isFileLoading() && (h("span", { class: "percentage", part: "percentage" }, this.percentage, "%")), this.file.deletable !== false && !this.isFileWithError() && (h("wpp-icon-cross-v4-0-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": `Remove file ${this.file.name}`, onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onBlur: this.handleDeleteBlur, onKeyUp: this.handleDeleteKeyUp }))))), h("wpp-typography-v4-0-0", { ref: ref => (this.measureRef = ref), type: "s-body", class: "measure", "aria-hidden": "true", role: "presentation" })));
+      : `${this.total} ${this.measurementUnit}`)) : (h("span", { class: "error-message", part: "error-message" }, this.total, " ", this.measurementUnit))), h("div", { class: "controls-wrapper", part: "controls" }, this.isFileLoading() && (h("span", { class: "percentage", part: "percentage" }, this.percentage, "%")), this.file.deletable !== false && !this.isFileWithError() && (h("wpp-icon-cross-v4-1-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": `Remove file ${this.file.name}`, onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onBlur: this.handleDeleteBlur, onKeyUp: this.handleDeleteKeyUp }))))), h("wpp-typography-v4-1-0", { ref: ref => (this.measureRef = ref), type: "s-body", class: "measure", "aria-hidden": "true", role: "presentation" })));
   }
-  static get registryIs() { return "wpp-file-upload-item-v4-0-0"; }
+  static get registryIs() { return "wpp-file-upload-item-v4-1-0"; }
   get host() { return this; }
   static get watchers() { return {
     "locales": ["onUpdateLocales"]
   }; }
   static get style() { return wppFileUploadItemCss; }
-}, [1, "wpp-file-upload-item", "wpp-file-upload-item-v4-0-0", {
+}, [1, "wpp-file-upload-item", "wpp-file-upload-item-v4-1-0", {
     "fileName": [1, "file-name"],
     "file": [1040],
     "format": [1],
@@ -519,109 +519,109 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-file-upload-item-v4-0-0", "wpp-action-button-v4-0-0", "wpp-icon-cross-v4-0-0", "wpp-icon-database-v4-0-0", "wpp-icon-document-v4-0-0", "wpp-icon-error-v4-0-0", "wpp-icon-file-v4-0-0", "wpp-icon-file-zip-v4-0-0", "wpp-icon-image-v4-0-0", "wpp-icon-info-message-v4-0-0", "wpp-icon-music-v4-0-0", "wpp-icon-pitch-v4-0-0", "wpp-icon-spreadsheet-v4-0-0", "wpp-icon-success-v4-0-0", "wpp-icon-video-clip-v4-0-0", "wpp-icon-warning-v4-0-0", "wpp-inline-message-v4-0-0", "wpp-internal-tooltip-v4-0-0", "wpp-spinner-v4-0-0", "wpp-tooltip-v4-0-0", "wpp-typography-v4-0-0"];
+  const components = ["wpp-file-upload-item-v4-1-0", "wpp-action-button-v4-1-0", "wpp-icon-cross-v4-1-0", "wpp-icon-database-v4-1-0", "wpp-icon-document-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-file-v4-1-0", "wpp-icon-file-zip-v4-1-0", "wpp-icon-image-v4-1-0", "wpp-icon-info-message-v4-1-0", "wpp-icon-music-v4-1-0", "wpp-icon-pitch-v4-1-0", "wpp-icon-spreadsheet-v4-1-0", "wpp-icon-success-v4-1-0", "wpp-icon-video-clip-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-inline-message-v4-1-0", "wpp-internal-tooltip-v4-1-0", "wpp-spinner-v4-1-0", "wpp-tooltip-v4-1-0", "wpp-typography-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-file-upload-item-v4-0-0":
+    case "wpp-file-upload-item-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppFileUploadItem);
       }
       break;
-    case "wpp-action-button-v4-0-0":
+    case "wpp-action-button-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-cross-v4-0-0":
+    case "wpp-icon-cross-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-database-v4-0-0":
+    case "wpp-icon-database-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-document-v4-0-0":
+    case "wpp-icon-document-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-error-v4-0-0":
+    case "wpp-icon-error-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-file-v4-0-0":
+    case "wpp-icon-file-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-file-zip-v4-0-0":
+    case "wpp-icon-file-zip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-image-v4-0-0":
+    case "wpp-icon-image-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-info-message-v4-0-0":
+    case "wpp-icon-info-message-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-music-v4-0-0":
+    case "wpp-icon-music-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-pitch-v4-0-0":
+    case "wpp-icon-pitch-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-spreadsheet-v4-0-0":
+    case "wpp-icon-spreadsheet-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-success-v4-0-0":
+    case "wpp-icon-success-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-icon-video-clip-v4-0-0":
+    case "wpp-icon-video-clip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-warning-v4-0-0":
+    case "wpp-icon-warning-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-inline-message-v4-0-0":
+    case "wpp-inline-message-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-internal-tooltip-v4-0-0":
+    case "wpp-internal-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v4-0-0":
+    case "wpp-spinner-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-0-0":
+    case "wpp-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-0-0":
+    case "wpp-typography-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

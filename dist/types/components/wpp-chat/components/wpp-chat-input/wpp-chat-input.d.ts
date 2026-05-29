@@ -1,6 +1,6 @@
 import { EventEmitter } from '../../../../stencil-public-runtime';
 import { FileItemType, FileUploadEventDetail, FileUploadItemEventDetail } from '../../../wpp-file-upload/types';
-import { ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from './types';
+import { ActionsMenuToggleEventDetail, ChatInputAction, ChatInputActionItemClickEventDetail, ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from './types';
 import { MessageTypes } from '../../../../types/common';
 export declare class WppChatInput {
   host: HTMLWppChatInputElement;
@@ -17,6 +17,7 @@ export declare class WppChatInput {
   private minimizedTriggerRef?;
   private expandedListenersAbort?;
   private _locales;
+  private themeSubscription;
   /**
    * Size of the component.
    */
@@ -41,6 +42,13 @@ export declare class WppChatInput {
   readonly disabled: boolean;
   /**
    * Configuration object for file upload functionality.
+   *
+   * @deprecated This top-level prop will be removed in components-library v5.0.0.
+   * The same options will be moved into a richer attachments configuration owned
+   * by the upload action entry (so consumers can scope `accept`, `size`,
+   * `maxFiles`, `validator`, etc. per-action rather than globally on the
+   * chat-input). For now keep using this prop; a migration codemod will be
+   * provided alongside the v5.0.0 release.
    */
   readonly fileUploadConfig?: Partial<FileUploadConfig>;
   /**
@@ -55,6 +63,20 @@ export declare class WppChatInput {
    * If set to true, displays `Select` in left actions. The Select must placed in the `.select` slot.
    */
   readonly withSelect: boolean;
+  /**
+   * Defines the entries shown in the consolidated actions menu (the
+   * `wpp-icon-plus` dropdown rendered at the start of the left toolbar).
+   * When this array is non-empty, chat-input renders a single `wpp-icon-plus`
+   * trigger that opens a `wpp-menu-context` containing one `wpp-list-item`
+   * per entry. Use this to consolidate auxiliary actions (translate,
+   * pinboard, upload, etc.) behind a single "plus" affordance.
+   *
+   * An entry with the reserved id `'upload'` is automatically wired to the
+   * same file picker that `enableAttach` uses, so consumers do not need to
+   * imperatively open the dialog. The `wppActionsMenuItemClick` event still
+   * fires for that entry, in case the consumer wants to track the click.
+   */
+  readonly actions: ChatInputAction[];
   /**
    * Text value used to set the input message content.
    * When user input occurs, a `wppMessageChanged` event is emitted. The new value should be assigned to this property
@@ -116,6 +138,7 @@ export declare class WppChatInput {
   minimizedPressed: boolean;
   isFileDialogOpen: boolean;
   internalValue: string;
+  actionsMenuOpen: boolean;
   /**
    * Emitted when the user clicks the "Send" button.
    */
@@ -143,6 +166,18 @@ export declare class WppChatInput {
    * Emitted when the message in the input message changes.
    */
   readonly wppMessageChanged: EventEmitter<MessageChangeEventDetail>;
+  /**
+   * Emitted when the internal actions menu (triggered by the `wpp-icon-plus`
+   * button) opens or closes. Only fires when `actions` is non-empty.
+   */
+  readonly wppActionsMenuToggle: EventEmitter<ActionsMenuToggleEventDetail>;
+  /**
+   * Emitted when the user clicks an entry in the consolidated actions menu.
+   * The detail payload is the `ChatInputAction` object that was clicked.
+   * Fires for every entry, including the reserved `'upload'` entry (which is
+   * additionally wired to open the file picker automatically).
+   */
+  readonly wppActionsMenuItemClick: EventEmitter<ChatInputActionItemClickEventDetail>;
   private reInitValue;
   onAttachmentsChange(newValue: FileItemType[]): void;
   onTextValueChange(value: string): void;
@@ -152,6 +187,7 @@ export declare class WppChatInput {
   private addExpandedListeners;
   private removeExpandedListeners;
   private onAttachClick;
+  connectedCallback(): void;
   disconnectedCallback(): void;
   private handleDocumentFocusIn;
   private handleDocumentClick;
@@ -178,6 +214,9 @@ export declare class WppChatInput {
   private getRightActionsLabel;
   private getSendButtonLabel;
   private getAttachButtonLabel;
+  private getActionsMenuButtonLabel;
+  private actionsMenuDropdownConfig;
+  private handleActionsMenuItemClick;
   private checkAttachmentsVisibility;
   private updateSlotData;
   private handleScroll;

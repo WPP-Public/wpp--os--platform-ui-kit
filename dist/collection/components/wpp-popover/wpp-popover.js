@@ -4,6 +4,7 @@ import { menuListConfig } from '../../common/menuListConfig';
 import { Z_INDEX } from '../../common/consts';
 import { getHighestContainerInDOM, hasParentWithId, isEventTargetContained } from '../../utils/utils';
 import { DEFAULT_POPOVER_LOCALES } from './config';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
  * @slot trigger-element - Can contain the popover anchor element.
  * @slot - Can contain the popover content. The default slot, without the name attribute.
@@ -13,6 +14,7 @@ import { DEFAULT_POPOVER_LOCALES } from './config';
  */
 export class WppPopover {
   constructor() {
+    this.themeSubscription = themeSubscriptionController(() => this.contentEl);
     this.isTriggerEnabled = () => {
       // Checks if the trigger element is enabled or disabled.
       const triggerEl = this.host?.querySelector('[slot="trigger-element"]');
@@ -143,6 +145,7 @@ export class WppPopover {
     this.internalSearchName = this.searchName || 'wpp-popover-search';
   }
   componentDidLoad() {
+    this.themeSubscription.start();
     setTimeout(() => {
       this.createTippyInstance();
       this.hidden = false;
@@ -153,10 +156,12 @@ export class WppPopover {
     this.startObserving();
   }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     this.tippyInstance?.destroy();
     this.mutationObserver?.disconnect();
   }
   connectedCallback() {
+    this.themeSubscription.start();
     if (this.tippyInstance?.state.isDestroyed) {
       this.createTippyInstance();
     }
@@ -168,10 +173,10 @@ export class WppPopover {
     this.mutationObserver.observe(this.host?.children[0], { attributes: true });
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "anchor, trigger-element" }, h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref) }, h("slot", { name: "trigger-element", part: "trigger-element" })), h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-label": this.ariaProps.label, "aria-modal": "true" }, this.withSearch && (h("wpp-input-v4-0-0", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: this.locales.searchInputPlaceholder || DEFAULT_POPOVER_LOCALES.searchInputPlaceholder, type: "search", size: "m" })), !this.withSearch && this.closable && (h("wpp-action-button-v4-0-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, h("wpp-icon-cross-v4-0-0", { slot: "icon-end" }))), h("slot", null))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "anchor, trigger-element" }, h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref) }, h("slot", { name: "trigger-element", part: "trigger-element" })), h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-label": this.ariaProps.label, "aria-modal": "true" }, this.withSearch && (h("wpp-input-v4-1-0", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: this.locales.searchInputPlaceholder || DEFAULT_POPOVER_LOCALES.searchInputPlaceholder, type: "search", size: "m" })), !this.withSearch && this.closable && (h("wpp-action-button-v4-1-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, h("wpp-icon-cross-v4-1-0", { slot: "icon-end" }))), h("slot", null))));
   }
   static get is() { return "wpp-popover"; }
-  static get registryIs() { return "wpp-popover-v4-0-0"; }
+  static get registryIs() { return "wpp-popover-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

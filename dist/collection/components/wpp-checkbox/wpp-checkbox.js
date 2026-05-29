@@ -1,5 +1,6 @@
 import { h, Host } from '@stencil/core';
 import { FOCUS_TYPE } from '../../types/common';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
  * @part body - Main content wrapper
  * @part input - Input element
@@ -10,6 +11,7 @@ import { FOCUS_TYPE } from '../../types/common';
  */
 export class WppCheckbox {
   constructor() {
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.onClick = (event) => {
       event.preventDefault();
       if (this.controlled)
@@ -112,13 +114,19 @@ export class WppCheckbox {
     this.inputRef.focus();
     this.focusType = FOCUS_TYPE.TAB;
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
+  disconnectedCallback() {
+    this.themeSubscription.stop();
+  }
   render() {
     if (this.decorative)
-      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name }, h("wpp-label-v4-0-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v4-0-0", { part: "icon-tick" }), h("wpp-icon-dash-v4-0-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v4-0-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
-    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name }, h("wpp-label-v4-0-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, htmlFor: this.name, disabled: this.disabled, onClick: this.onClick, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("input", { class: this.inputCssClasses(), type: "checkbox", id: this.name, name: this.name, disabled: this.disabled, checked: this.checked || this.indeterminate, required: this.required, onFocus: this.onFocus, onBlur: this.onBlur, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-hidden": this.disabled ? 'true' : null, "aria-required": this.required.toString(), tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v4-0-0", { part: "icon-tick" }), h("wpp-icon-dash-v4-0-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v4-0-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
+      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name }, h("wpp-label-v4-1-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v4-1-0", { part: "icon-tick" }), h("wpp-icon-dash-v4-1-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v4-1-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
+    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name }, h("wpp-label-v4-1-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, htmlFor: this.name, disabled: this.disabled, onClick: this.onClick, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("input", { class: this.inputCssClasses(), type: "checkbox", id: this.name, name: this.name, disabled: this.disabled, checked: this.checked || this.indeterminate, required: this.required, onFocus: this.onFocus, onBlur: this.onBlur, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-hidden": this.disabled ? 'true' : null, "aria-required": this.required.toString(), tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v4-1-0", { part: "icon-tick" }), h("wpp-icon-dash-v4-1-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v4-1-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
   }
   static get is() { return "wpp-checkbox"; }
-  static get registryIs() { return "wpp-checkbox-v4-0-0"; }
+  static get registryIs() { return "wpp-checkbox-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

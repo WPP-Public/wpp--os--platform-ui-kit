@@ -422,7 +422,7 @@ export class WppStepper {
     return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, indicator" }, h("div", { class: this.stepperWrapperCssClasses(), part: "wrapper" }, h("slot", { part: "inner" })), isHorizontalOrientation && this.stepAmount ? (h("div", { class: { 'step-indicator': true, hide: this.stepIndicator <= 0 }, part: "indicator" }, "+", this.stepIndicator || 1)) : null));
   }
   static get is() { return "wpp-stepper"; }
-  static get registryIs() { return "wpp-stepper-v4-0-0"; }
+  static get registryIs() { return "wpp-stepper-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

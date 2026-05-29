@@ -16,9 +16,9 @@ const WppIconNavigationMenu$1 = /*@__PURE__*/ proxyCustomElement(class WppIconNa
   render() {
     return (h(WppIcon, { name: "wpp-icon-navigation-menu", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M2.2915 4.375H17.7082", stroke: "currentColor", "stroke-width": "1.5", "stroke-miterlimit": "10", "stroke-linecap": "round" }), h("path", { d: "M2.2915 15.625H17.7082", stroke: "currentColor", "stroke-width": "1.5", "stroke-miterlimit": "10", "stroke-linecap": "round" }), h("path", { d: "M2.2915 10H17.7082", stroke: "currentColor", "stroke-width": "1.5", "stroke-miterlimit": "10", "stroke-linecap": "round" })));
   }
-  static get registryIs() { return "wpp-icon-navigation-menu-v4-0-0"; }
+  static get registryIs() { return "wpp-icon-navigation-menu-v4-1-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-navigation-menu", "wpp-icon-navigation-menu-v4-0-0", {
+}, [1, "wpp-icon-navigation-menu", "wpp-icon-navigation-menu-v4-1-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -28,9 +28,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-navigation-menu-v4-0-0"];
+  const components = ["wpp-icon-navigation-menu-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-navigation-menu-v4-0-0":
+    case "wpp-icon-navigation-menu-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconNavigationMenu$1);
       }

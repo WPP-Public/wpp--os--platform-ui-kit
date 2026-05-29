@@ -43,7 +43,7 @@ const Sidebar = {
       <div
         style="display: flex; flex-direction: column; transition: 0.5s ease-in-out; margin-left: 240px; background-color: var(--wpp-grey-color-300); padding: 20px"
       >
-        <wpp-nav-sidebar-v4-0-0
+        <wpp-nav-sidebar-v4-1-0
           .applicationName=${'App Name'}
           .activePath=${args.activePath}
           .nativeLink=${args.nativeLink}
@@ -52,58 +52,58 @@ const Sidebar = {
             <div
               style="${`display: ${args.withLogo ? 'inline-block' : 'none'}; box-shadow: 0 2px 5px rgb(0 0 0 / 20%); width: 40px; height: 40px; border-radius: 6px;`}"
             ></div>
-            <wpp-typography-v4-0-0 type="m-strong" style="margin-top: 8px;">App Name</wpp-typography-v4-0-0>
+            <wpp-typography-v4-1-0 type="m-strong" style="margin-top: 8px;">App Name</wpp-typography-v4-1-0>
           </div>
-          <wpp-nav-sidebar-item-v4-0-0 .label=${'Dashboard'} path=${'/dashboard'} target=${args.target}>
-            <wpp-icon-globe-v4-0-0 slot="icon-start"></wpp-icon-globe-v4-0-0>
-          </wpp-nav-sidebar-item-v4-0-0>
-          <wpp-nav-sidebar-item-v4-0-0 .label=${'Projects'} path=${'/projects'} .extended=${true}>
-            <wpp-icon-favourites-v4-0-0 slot="icon-start"></wpp-icon-favourites-v4-0-0>
-            <wpp-nav-sidebar-item-v4-0-0
+          <wpp-nav-sidebar-item-v4-1-0 .label=${'Dashboard'} path=${'/dashboard'} target=${args.target}>
+            <wpp-icon-globe-v4-1-0 slot="icon-start"></wpp-icon-globe-v4-1-0>
+          </wpp-nav-sidebar-item-v4-1-0>
+          <wpp-nav-sidebar-item-v4-1-0 .label=${'Projects'} path=${'/projects'} .extended=${true}>
+            <wpp-icon-favourites-v4-1-0 slot="icon-start"></wpp-icon-favourites-v4-1-0>
+            <wpp-nav-sidebar-item-v4-1-0
               .label=${'Projects 01'}
               path=${'/project1'}
               target=${args.target}
-            ></wpp-nav-sidebar-item-v4-0-0>
-            <wpp-nav-sidebar-item-v4-0-0
+            ></wpp-nav-sidebar-item-v4-1-0>
+            <wpp-nav-sidebar-item-v4-1-0
               .label=${'Projects 02'}
               path=${'/project2'}
               target=${args.target}
-            ></wpp-nav-sidebar-item-v4-0-0>
-            <wpp-nav-sidebar-item-v4-0-0
+            ></wpp-nav-sidebar-item-v4-1-0>
+            <wpp-nav-sidebar-item-v4-1-0
               .label=${'Projects 03'}
               path=${'/project3'}
               target=${args.target}
-            ></wpp-nav-sidebar-item-v4-0-0>
-            <wpp-nav-sidebar-item-v4-0-0
+            ></wpp-nav-sidebar-item-v4-1-0>
+            <wpp-nav-sidebar-item-v4-1-0
               .label=${'Projects 04'}
               path=${'/project4'}
               target=${args.target}
-            ></wpp-nav-sidebar-item-v4-0-0>
-          </wpp-nav-sidebar-item-v4-0-0>
-          <wpp-nav-sidebar-item-v4-0-0
+            ></wpp-nav-sidebar-item-v4-1-0>
+          </wpp-nav-sidebar-item-v4-1-0>
+          <wpp-nav-sidebar-item-v4-1-0
             .label=${'Scheduled reporting'}
             .extended=${true}
             .expanded=${true}
             .groupTitle=${'Reporting'}
             path=${'/scheduled'}
           >
-            <wpp-icon-calendar-v4-0-0 slot="icon-start"></wpp-icon-calendar-v4-0-0>
-            <wpp-nav-sidebar-item-v4-0-0 .label=${'Scheduled 01'} path=${'/scheduled1'}></wpp-nav-sidebar-item-v4-0-0>
-            <wpp-nav-sidebar-item-v4-0-0 .label=${'Scheduled 02'} path=${'/scheduled2'}></wpp-nav-sidebar-item-v4-0-0>
-          </wpp-nav-sidebar-item-v4-0-0>
-          <wpp-nav-sidebar-item-v4-0-0 .label=${'Shared reports'} path=${'/shared-reports'} .divide=${true}>
-          </wpp-nav-sidebar-item-v4-0-0>
-          <wpp-nav-sidebar-item-v4-0-0 .label=${'Attachments'} path=${'/attachments'}>
-            <wpp-icon-mail-v4-0-0 slot="icon-start"></wpp-icon-mail-v4-0-0>
-          </wpp-nav-sidebar-item-v4-0-0>
-          <wpp-nav-sidebar-item-v4-0-0 .label=${'Archive'} path=${'/archive'} .divide=${true}>
-            <wpp-icon-subscribe-v4-0-0 slot="icon-start"></wpp-icon-subscribe-v4-0-0>
-          </wpp-nav-sidebar-item-v4-0-0>
-          <wpp-nav-sidebar-item-v4-0-0 .label=${'Applications'} path=${'/applications'}>
-            <wpp-icon-upload-v4-0-0 slot="icon-start"></wpp-icon-upload-v4-0-0>
-          </wpp-nav-sidebar-item-v4-0-0>
-        </wpp-nav-sidebar-v4-0-0>
-        <wpp-typography-v4-0-0>
+            <wpp-icon-calendar-v4-1-0 slot="icon-start"></wpp-icon-calendar-v4-1-0>
+            <wpp-nav-sidebar-item-v4-1-0 .label=${'Scheduled 01'} path=${'/scheduled1'}></wpp-nav-sidebar-item-v4-1-0>
+            <wpp-nav-sidebar-item-v4-1-0 .label=${'Scheduled 02'} path=${'/scheduled2'}></wpp-nav-sidebar-item-v4-1-0>
+          </wpp-nav-sidebar-item-v4-1-0>
+          <wpp-nav-sidebar-item-v4-1-0 .label=${'Shared reports'} path=${'/shared-reports'} .divide=${true}>
+          </wpp-nav-sidebar-item-v4-1-0>
+          <wpp-nav-sidebar-item-v4-1-0 .label=${'Attachments'} path=${'/attachments'}>
+            <wpp-icon-mail-v4-1-0 slot="icon-start"></wpp-icon-mail-v4-1-0>
+          </wpp-nav-sidebar-item-v4-1-0>
+          <wpp-nav-sidebar-item-v4-1-0 .label=${'Archive'} path=${'/archive'} .divide=${true}>
+            <wpp-icon-subscribe-v4-1-0 slot="icon-start"></wpp-icon-subscribe-v4-1-0>
+          </wpp-nav-sidebar-item-v4-1-0>
+          <wpp-nav-sidebar-item-v4-1-0 .label=${'Applications'} path=${'/applications'}>
+            <wpp-icon-upload-v4-1-0 slot="icon-start"></wpp-icon-upload-v4-1-0>
+          </wpp-nav-sidebar-item-v4-1-0>
+        </wpp-nav-sidebar-v4-1-0>
+        <wpp-typography-v4-1-0>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
           magna aliqua. Rhoncus dolor purus non enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
           imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
@@ -180,22 +180,22 @@ const Sidebar = {
           dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum facilisis leo vel.
           <br />
           <br />
-        </wpp-typography-v4-0-0>
+        </wpp-typography-v4-1-0>
 
-        <wpp-typography-v4-0-0>Valid paths for activePath:</wpp-typography-v4-0-0>
-        <li><wpp-typography-v4-0-0>/dashboard</wpp-typography-v4-0-0></li>
-        <li><wpp-typography-v4-0-0>/projects</wpp-typography-v4-0-0></li>
-        <li><wpp-typography-v4-0-0>/project1</wpp-typography-v4-0-0></li>
-        <li><wpp-typography-v4-0-0>/project2</wpp-typography-v4-0-0></li>
-        <li><wpp-typography-v4-0-0>/project3</wpp-typography-v4-0-0></li>
-        <li><wpp-typography-v4-0-0>/project4</wpp-typography-v4-0-0></li>
-        <li><wpp-typography-v4-0-0>/scheduled</wpp-typography-v4-0-0></li>
-        <li><wpp-typography-v4-0-0>/scheduled1</wpp-typography-v4-0-0></li>
-        <li><wpp-typography-v4-0-0>/scheduled2</wpp-typography-v4-0-0></li>
-        <li><wpp-typography-v4-0-0>/shared-reports</wpp-typography-v4-0-0></li>
-        <li><wpp-typography-v4-0-0>/attachments</wpp-typography-v4-0-0></li>
-        <li><wpp-typography-v4-0-0>/archive</wpp-typography-v4-0-0></li>
-        <li><wpp-typography-v4-0-0>/applications</wpp-typography-v4-0-0></li>
+        <wpp-typography-v4-1-0>Valid paths for activePath:</wpp-typography-v4-1-0>
+        <li><wpp-typography-v4-1-0>/dashboard</wpp-typography-v4-1-0></li>
+        <li><wpp-typography-v4-1-0>/projects</wpp-typography-v4-1-0></li>
+        <li><wpp-typography-v4-1-0>/project1</wpp-typography-v4-1-0></li>
+        <li><wpp-typography-v4-1-0>/project2</wpp-typography-v4-1-0></li>
+        <li><wpp-typography-v4-1-0>/project3</wpp-typography-v4-1-0></li>
+        <li><wpp-typography-v4-1-0>/project4</wpp-typography-v4-1-0></li>
+        <li><wpp-typography-v4-1-0>/scheduled</wpp-typography-v4-1-0></li>
+        <li><wpp-typography-v4-1-0>/scheduled1</wpp-typography-v4-1-0></li>
+        <li><wpp-typography-v4-1-0>/scheduled2</wpp-typography-v4-1-0></li>
+        <li><wpp-typography-v4-1-0>/shared-reports</wpp-typography-v4-1-0></li>
+        <li><wpp-typography-v4-1-0>/attachments</wpp-typography-v4-1-0></li>
+        <li><wpp-typography-v4-1-0>/archive</wpp-typography-v4-1-0></li>
+        <li><wpp-typography-v4-1-0>/applications</wpp-typography-v4-1-0></li>
         <br />
       </div>
     </div>

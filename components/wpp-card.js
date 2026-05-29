@@ -2,6 +2,7 @@ import { proxyCustomElement, HTMLElement, createEvent, h, Host, Fragment } from 
 import { g as getSlotEmptyStates, b as isEventTargetContained } from './utils.js';
 import { W as WrappedSlot } from './WrappedSlot.js';
 import { F as FOCUS_TYPE } from './common.js';
+import { t as themeSubscriptionController } from './subscribe-to-theme.js';
 import { d as defineCustomElement$i } from './wpp-action-button2.js';
 import { d as defineCustomElement$h } from './wpp-checkbox2.js';
 import { d as defineCustomElement$g } from './wpp-icon-cross2.js';
@@ -20,7 +21,7 @@ import { d as defineCustomElement$4 } from './wpp-spinner2.js';
 import { d as defineCustomElement$3 } from './wpp-tooltip2.js';
 import { d as defineCustomElement$2 } from './wpp-typography2.js';
 
-const wppCardCss = ":host{--card-border-radius:var(--wpp-card-border-radius, var(--wpp-border-radius-m));--card-padding-s:var(--wpp-card-padding-s, 8px 12px 12px 12px);--card-padding-m:var(--wpp-card-padding-m, 12px 16px 16px 16px);--card-padding-l:var(--wpp-card-padding-l, 20px 24px 24px 24px);--card-padding-xl:var(--wpp-card-padding-xl, 24px 32px 32px 32px);--card-padding-2xl:var(--wpp-card-padding-2xl, 32px 40px 40px 40px);--card-header-margin-s:var(--wpp-header-margin-s, 0 0 8px 0);--card-header-margin-m:var(--wpp-header-margin-m, 0 0 12px 0);--card-header-margin-l:var(--wpp-header-margin-l, 0 0 20px 0);--card-header-margin-xl:var(--wpp-header-margin-xl, 0 0 24px 0);--card-header-margin-2xl:var(--wpp-header-margin-2xl, 0 0 32px 0);--card-actions-wrapper-left-margin:var(--wpp-card-actions-wrapper-left-margin, 10px);--card-actions-first-border-color-focus:var(--wpp-card-actions-first-border-color-focus, var(--wpp-grey-color-000));--card-actions-second-border-color-focus:var(--wpp-card-actions-second-border-color-focus, var(--wpp-brand-color));--card-primary-bg-color:var(--wpp-card-primary-bg-color, var(--wpp-grey-color-000));--card-primary-box-shadow:var(--wpp-card-primary-box-shadow, var(--wpp-box-shadow-s));--card-secondary-bg-color:var(--wpp-card-secondary-bg-color, var(--wpp-grey-color-100));--card-tertiary-bg-color:var(--wpp-card-tertiary-bg-color, var(--wpp-grey-color-200));--card-interactive-bg-color:var(--wpp-card-interactive-bg-color, var(--wpp-grey-color-000));--card-interactive-box-shadow-color:var(--wpp-card-interactive-box-shadow-color, var(--wpp-box-shadow-s));--card-interactive-box-shadow-color-hover:var(\n    --wpp-card-interactive-box-shadow-color-hover,\n    var(--wpp-box-shadow-m)\n  );--card-interactive-box-shadow-color-active:var(\n    --wpp-card-interactive-box-shadow-color-active,\n    0px 8px 32px rgba(52, 58, 63, 0.05)\n  );--card-interactive-first-border-color-focus:var(\n    --wpp-card-interactive-first-border-color-focus,\n    var(--wpp-grey-color-100)\n  );--card-interactive-second-border-color-focus:var(\n    --wpp-card-interactive-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--card-choosable-bg-color:var(--wpp-card-choosable-bg-color, var(--wpp-grey-color-000));--card-choosable-border-width:var(--wpp-card-choosable-border-width, 1px);--card-choosable-border-style:var(--wpp-card-choosable-border-style, solid);--card-choosable-border-color:var(--wpp-card-choosable-border-color, var(--wpp-grey-color-500));--card-choosable-border-color-hover:var(--wpp-card-choosable-border-color-hover, var(--wpp-grey-color-700));--card-choosable-border-color-active:var(--wpp-card-choosable-border-color-active, var(--wpp-grey-color-800));--card-choosable-border-color-disabled:var(--wpp-card-choosable-border-color-disabled, var(--wpp-grey-color-300));--card-choosable-first-border-color-focus:var(\n    --wpp-card-choosable-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--card-choosable-second-border-color-focus:var(\n    --wpp-card-choosable-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--card-choosable-selected-border-width:var(--wpp-card-choosable-selected-border-width, 2px);--card-choosable-selected-border-color:var(--wpp-card-choosable-selected-border-color, var(--wpp-brand-color));--card-choosable-selected-border-color-hover:var(\n    --wpp-card-choosable-selected-border-color-hover,\n    var(--wpp-brand-color-hover)\n  );--card-choosable-selected-border-color-active:var(\n    --wpp-card-choosable-selected-border-color-active,\n    var(--wpp-brand-color-active)\n  );--card-choosable-selected-border-color-disabled:var(\n    --wpp-card-choosable-selected-border-color-disabled,\n    var(--wpp-brand-color-disabled)\n  );--card-choosable-padding-s:var(--wpp-card-choosable-padding-s, 7px 11px 11px 11px);--card-choosable-padding-m:var(--wpp-card-choosable-padding-m, 11px 15px 15px 15px);--card-choosable-padding-l:var(--wpp-card-choosable-padding-l, 19px 23px 23px 23px);--card-choosable-padding-xl:var(--wpp-card-choosable-padding-xl, 23px 31px 31px 31px);--card-choosable-padding-2xl:var(--wpp-card-choosable-padding-2xl, 31px 39px 39px 39px);--card-choosable-selected-padding-s:var(--wpp-card-choosable-selected-padding-s, 6px 10px 10px 10px);--card-choosable-selected-padding-m:var(--wpp-card-choosable-selected-padding-m, 10px 14px 14px 14px);--card-choosable-selected-padding-l:var(--wpp-card-choosable-selected-padding-l, 18px 22px 22px 22px);--card-choosable-selected-padding-xl:var(--wpp-card-choosable-selected-padding-xl, 22px 30px 30px 30px);--card-choosable-selected-padding-2xl:var(--wpp-card-choosable-selected-padding-2xl, 30px 38px 38px 38px);display:block;outline:none}.card{-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;height:inherit;overflow:hidden;border-radius:var(--card-border-radius)}.card.actions ::slotted(.wpp-action-button){top:1px;right:-8px}.card.size-s{padding:var(--card-padding-s)}.card.size-s.choosable{padding:var(--card-choosable-padding-s)}.card.size-s .radio,.card.size-s .checkbox{top:1px}.card.size-s .header{margin:var(--card-header-margin-s)}.card.size-m{padding:var(--card-padding-m)}.card.size-m.choosable{padding:var(--card-choosable-padding-m)}.card.size-m .radio,.card.size-m .checkbox{top:2px}.card.size-m .header{margin:var(--card-header-margin-m)}.card.size-l{padding:var(--card-padding-l)}.card.size-l.choosable{padding:var(--card-choosable-padding-l)}.card.size-l .radio,.card.size-l .checkbox{top:4px}.card.size-l .header{margin:var(--card-header-margin-l)}.card.size-xl{padding:var(--card-padding-xl)}.card.size-xl.choosable{padding:var(--card-choosable-padding-xl)}.card.size-xl .radio,.card.size-xl .checkbox{top:6px}.card.size-xl .header{margin:var(--card-header-margin-xl)}.card.size-2xl{padding:var(--card-padding-2xl)}.card.size-2xl.choosable{padding:var(--card-choosable-padding-2xl)}.card.size-2xl .radio,.card.size-2xl .checkbox{top:6px}.card.size-2xl .header{margin:var(--card-header-margin-2xl)}.card.size-2xl .actions ::slotted(.wpp-action-button){top:1px;right:-8px}.card.primary:not(.choosable){background:var(--card-primary-bg-color);-webkit-box-shadow:var(--card-primary-box-shadow);box-shadow:var(--card-primary-box-shadow)}.card.secondary:not(.choosable){background:var(--card-secondary-bg-color)}.card.tertiary{background:var(--card-tertiary-bg-color)}.card.interactive:not(.choosable){background:var(--card-interactive-bg-color);-webkit-box-shadow:var(--card-interactive-box-shadow-color);box-shadow:var(--card-interactive-box-shadow-color);cursor:pointer}.card.interactive:not(.choosable):hover,.card.interactive:not(.choosable).tab-focus{-webkit-box-shadow:var(--card-interactive-box-shadow-color-hover);box-shadow:var(--card-interactive-box-shadow-color-hover)}.card.interactive:not(.choosable):active,.card.interactive:not(.choosable).pressed{-webkit-box-shadow:var(--card-interactive-box-shadow-color-active);box-shadow:var(--card-interactive-box-shadow-color-active)}.card.choosable{background:var(--card-choosable-bg-color);border:var(--card-choosable-border-width) var(--card-choosable-border-style) var(--card-choosable-border-color);cursor:pointer}.card.choosable:hover,.card.choosable.tab-focus{border-color:var(--card-choosable-border-color-hover)}.card.choosable:active,.card.choosable.pressed{border-color:var(--card-choosable-border-color-active)}.card.choosable.disabled{cursor:not-allowed;border-color:var(--card-choosable-border-color-disabled)}.card.choosable.disabled .header ::slotted([slot=header]){color:var(--wpp-text-color-disabled)}.card.choosable.checked{border-color:var(--card-choosable-selected-border-color);border-width:var(--card-choosable-selected-border-width)}.card.choosable.checked:hover,.card.choosable.checked.tab-focus{border-color:var(--card-choosable-selected-border-color-hover)}.card.choosable.checked:active,.card.choosable.checked.pressed{border-color:var(--card-choosable-selected-border-color-active)}.card.choosable.checked.disabled{cursor:not-allowed;border-color:var(--card-choosable-selected-border-color-disabled)}.card.choosable.checked.size-s{padding:var(--card-choosable-selected-padding-s)}.card.choosable.checked.size-m{padding:var(--card-choosable-selected-padding-m)}.card.choosable.checked.size-l{padding:var(--card-choosable-selected-padding-l)}.card.choosable.checked.size-xl{padding:var(--card-choosable-selected-padding-xl)}.card.choosable.checked.size-2xl{padding:var(--card-choosable-selected-padding-2xl)}.card.choosable .header-wrapper .header ::slotted([slot=header]){width:calc(100% - 20px - var(--card-actions-wrapper-left-margin))}.card .header-wrapper{position:relative}.card .header-wrapper .radio,.card .header-wrapper .checkbox{position:absolute;z-index:1;right:0}.card .header-wrapper .header{display:-ms-flexbox;display:flex;color:var(--wpp-text-color);width:100%}.card .header-wrapper .header ::slotted([slot=header]){overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.card .header-wrapper.with-actions .header ::slotted([slot=header]){padding-right:32px}.card .header-wrapper .actions{position:absolute;top:-4px;right:-8px}.card .header-wrapper .actions.slot-hidden{display:none}.card .header-wrapper .header.slot-hidden{display:none}.card.tab-focus.interactive:not(.choosable):not(:hover),.card.tab-focus.interactive:not(.choosable):not(:active){border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--card-interactive-first-border-color-focus), 0 0 0 3px var(--card-interactive-second-border-color-focus);box-shadow:0 0 0 1px var(--card-interactive-first-border-color-focus), 0 0 0 3px var(--card-interactive-second-border-color-focus)}.card.tab-focus.choosable{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--card-choosable-first-border-color-focus), 0 0 0 3px var(--card-choosable-second-border-color-focus);box-shadow:0 0 0 1px var(--card-choosable-first-border-color-focus), 0 0 0 3px var(--card-choosable-second-border-color-focus)}.card.tab-focus.choosable:not(.checked){border-color:var(--card-choosable-border-color-hover)}.card.tab-focus.choosable .wpp-checkbox{--checkbox-bg-color:var(--checkbox-bg-color-hover);--checkbox-border-color:var(--checkbox-border-color-hover)}.card.tab-focus.choosable .wpp-radio{--radio-bg-color:var(--radio-bg-color-hover);--radio-border-color:var(--radio-border-color-hover)}.card.tab-focus.choosable.checked .wpp-checkbox{--checkbox-bg-color-checked:var(--checkbox-bg-color-checked-hover);--checkbox-border-color-checked:var(--checkbox-border-color-checked-hover)}";
+const wppCardCss = ":host{--card-border-radius:var(--wpp-card-border-radius, var(--wpp-border-radius-m));--card-padding-s:var(--wpp-card-padding-s, 8px 12px 12px 12px);--card-padding-m:var(--wpp-card-padding-m, 12px 16px 16px 16px);--card-padding-l:var(--wpp-card-padding-l, 20px 24px 24px 24px);--card-padding-xl:var(--wpp-card-padding-xl, 24px 32px 32px 32px);--card-padding-2xl:var(--wpp-card-padding-2xl, 32px 40px 40px 40px);--card-header-margin-s:var(--wpp-header-margin-s, 0 0 8px 0);--card-header-margin-m:var(--wpp-header-margin-m, 0 0 12px 0);--card-header-margin-l:var(--wpp-header-margin-l, 0 0 20px 0);--card-header-margin-xl:var(--wpp-header-margin-xl, 0 0 24px 0);--card-header-margin-2xl:var(--wpp-header-margin-2xl, 0 0 32px 0);--card-actions-wrapper-left-margin:var(--wpp-card-actions-wrapper-left-margin, 10px);--card-actions-first-border-color-focus:var(--wpp-card-actions-first-border-color-focus, var(--wpp-grey-color-000));--card-actions-second-border-color-focus:var(--wpp-card-actions-second-border-color-focus, var(--wpp-brand-color));--card-primary-bg-color:var(--wpp-card-primary-bg-color, var(--wpp-grey-color-000));--card-primary-box-shadow:var(--wpp-card-primary-box-shadow, var(--wpp-box-shadow-s));--card-secondary-bg-color:var(--wpp-card-secondary-bg-color, var(--wpp-grey-color-100));--card-tertiary-bg-color:var(--wpp-card-tertiary-bg-color, var(--wpp-grey-color-200));--card-interactive-bg-color:var(--wpp-card-interactive-bg-color, var(--wpp-grey-color-000));--card-interactive-box-shadow-color:var(--wpp-card-interactive-box-shadow-color, var(--wpp-box-shadow-s));--card-interactive-box-shadow-color-hover:var(\n    --wpp-card-interactive-box-shadow-color-hover,\n    var(--wpp-box-shadow-m)\n  );--card-interactive-box-shadow-color-active:var(\n    --wpp-card-interactive-box-shadow-color-active,\n    0px 8px 32px rgba(52, 58, 63, 0.05)\n  );--card-interactive-first-border-color-focus:var(\n    --wpp-card-interactive-first-border-color-focus,\n    var(--wpp-grey-color-100)\n  );--card-interactive-second-border-color-focus:var(\n    --wpp-card-interactive-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--card-choosable-bg-color:var(--wpp-card-choosable-bg-color, var(--wpp-grey-color-000));--card-choosable-border-width:var(--wpp-card-choosable-border-width, 1px);--card-choosable-border-style:var(--wpp-card-choosable-border-style, solid);--card-choosable-border-color:var(--wpp-card-choosable-border-color, var(--wpp-grey-color-500));--card-choosable-border-color-hover:var(--wpp-card-choosable-border-color-hover, var(--wpp-grey-color-700));--card-choosable-border-color-active:var(--wpp-card-choosable-border-color-active, var(--wpp-grey-color-800));--card-choosable-border-color-disabled:var(--wpp-card-choosable-border-color-disabled, var(--wpp-grey-color-300));--card-choosable-first-border-color-focus:var(\n    --wpp-card-choosable-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--card-choosable-second-border-color-focus:var(\n    --wpp-card-choosable-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--card-choosable-selected-border-width:var(--wpp-card-choosable-selected-border-width, 2px);--card-choosable-selected-border-color:var(--wpp-card-choosable-selected-border-color, var(--wpp-brand-color));--card-choosable-selected-border-color-hover:var(\n    --wpp-card-choosable-selected-border-color-hover,\n    var(--wpp-brand-color-hover)\n  );--card-choosable-selected-border-color-active:var(\n    --wpp-card-choosable-selected-border-color-active,\n    var(--wpp-brand-color-active)\n  );--card-choosable-selected-border-color-disabled:var(\n    --wpp-card-choosable-selected-border-color-disabled,\n    var(--wpp-brand-color-disabled)\n  );--card-choosable-padding-s:var(--wpp-card-choosable-padding-s, 7px 11px 11px 11px);--card-choosable-padding-m:var(--wpp-card-choosable-padding-m, 11px 15px 15px 15px);--card-choosable-padding-l:var(--wpp-card-choosable-padding-l, 19px 23px 23px 23px);--card-choosable-padding-xl:var(--wpp-card-choosable-padding-xl, 23px 31px 31px 31px);--card-choosable-padding-2xl:var(--wpp-card-choosable-padding-2xl, 31px 39px 39px 39px);--card-choosable-selected-padding-s:var(--wpp-card-choosable-selected-padding-s, 6px 10px 10px 10px);--card-choosable-selected-padding-m:var(--wpp-card-choosable-selected-padding-m, 10px 14px 14px 14px);--card-choosable-selected-padding-l:var(--wpp-card-choosable-selected-padding-l, 18px 22px 22px 22px);--card-choosable-selected-padding-xl:var(--wpp-card-choosable-selected-padding-xl, 22px 30px 30px 30px);--card-choosable-selected-padding-2xl:var(--wpp-card-choosable-selected-padding-2xl, 30px 38px 38px 38px);display:block;outline:none}.card{-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;height:inherit;overflow:hidden;border-radius:var(--card-border-radius)}.card.actions ::slotted(.wpp-action-button){top:1px;right:-8px}.card.size-s{padding:var(--card-padding-s)}.card.size-s.choosable{padding:var(--card-choosable-padding-s)}.card.size-s .radio,.card.size-s .checkbox{top:1px}.card.size-s .header{margin:var(--card-header-margin-s)}.card.size-m{padding:var(--card-padding-m)}.card.size-m.choosable{padding:var(--card-choosable-padding-m)}.card.size-m .radio,.card.size-m .checkbox{top:2px}.card.size-m .header{margin:var(--card-header-margin-m)}.card.size-l{padding:var(--card-padding-l)}.card.size-l.choosable{padding:var(--card-choosable-padding-l)}.card.size-l .radio,.card.size-l .checkbox{top:4px}.card.size-l .header{margin:var(--card-header-margin-l)}.card.size-xl{padding:var(--card-padding-xl)}.card.size-xl.choosable{padding:var(--card-choosable-padding-xl)}.card.size-xl .radio,.card.size-xl .checkbox{top:6px}.card.size-xl .header{margin:var(--card-header-margin-xl)}.card.size-2xl{padding:var(--card-padding-2xl)}.card.size-2xl.choosable{padding:var(--card-choosable-padding-2xl)}.card.size-2xl .radio,.card.size-2xl .checkbox{top:6px}.card.size-2xl .header{margin:var(--card-header-margin-2xl)}.card.size-2xl .actions ::slotted(.wpp-action-button){top:1px;right:-8px}.card.primary:not(.choosable){background:var(--card-primary-bg-color);-webkit-box-shadow:var(--card-primary-box-shadow);box-shadow:var(--card-primary-box-shadow)}.card.secondary:not(.choosable){background:var(--card-secondary-bg-color)}.card.tertiary{background:var(--card-tertiary-bg-color)}.card.interactive:not(.choosable){background:var(--card-interactive-bg-color);-webkit-box-shadow:var(--card-interactive-box-shadow-color);box-shadow:var(--card-interactive-box-shadow-color);cursor:pointer}.card.interactive:not(.choosable):hover,.card.interactive:not(.choosable).tab-focus{-webkit-box-shadow:var(--card-interactive-box-shadow-color-hover);box-shadow:var(--card-interactive-box-shadow-color-hover)}.card.interactive:not(.choosable):active,.card.interactive:not(.choosable).pressed{-webkit-box-shadow:var(--card-interactive-box-shadow-color-active);box-shadow:var(--card-interactive-box-shadow-color-active)}.card.choosable{background:var(--card-choosable-bg-color);border:var(--card-choosable-border-width) var(--card-choosable-border-style) var(--card-choosable-border-color);cursor:pointer}.card.choosable:hover,.card.choosable.tab-focus{border-color:var(--card-choosable-border-color-hover)}.card.choosable:active,.card.choosable.pressed{border-color:var(--card-choosable-border-color-active)}.card.choosable.disabled{cursor:not-allowed;border-color:var(--card-choosable-border-color-disabled)}.card.choosable.disabled .header ::slotted([slot=header]){color:var(--wpp-text-color-disabled)}.card.choosable.checked{border-color:var(--card-choosable-selected-border-color);border-width:var(--card-choosable-selected-border-width)}.card.choosable.checked:hover,.card.choosable.checked.tab-focus{border-color:var(--card-choosable-selected-border-color-hover)}.card.choosable.checked:active,.card.choosable.checked.pressed{border-color:var(--card-choosable-selected-border-color-active)}.card.choosable.checked.disabled{cursor:not-allowed;border-color:var(--card-choosable-selected-border-color-disabled)}.card.choosable.checked.size-s{padding:var(--card-choosable-selected-padding-s)}.card.choosable.checked.size-m{padding:var(--card-choosable-selected-padding-m)}.card.choosable.checked.size-l{padding:var(--card-choosable-selected-padding-l)}.card.choosable.checked.size-xl{padding:var(--card-choosable-selected-padding-xl)}.card.choosable.checked.size-2xl{padding:var(--card-choosable-selected-padding-2xl)}.card.choosable .header-wrapper .header ::slotted([slot=header]){width:calc(100% - 20px - var(--card-actions-wrapper-left-margin))}.card .header-wrapper{position:relative}.card .header-wrapper .radio,.card .header-wrapper .checkbox{position:absolute;z-index:1;right:0}.card .header-wrapper .header{display:-ms-flexbox;display:flex;color:var(--wpp-text-color);width:100%}.card .header-wrapper .header ::slotted([slot=header]){overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.card .header-wrapper.with-actions .header ::slotted([slot=header]){padding-right:32px}.card .header-wrapper .actions{position:absolute;top:-4px;right:-8px}.card .header-wrapper .actions.slot-hidden{display:none}.card .header-wrapper .header.slot-hidden{display:none}.card.tab-focus.interactive:not(.choosable):not(:hover),.card.tab-focus.interactive:not(.choosable):not(:active){border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--card-interactive-first-border-color-focus), 0 0 0 3px var(--card-interactive-second-border-color-focus);box-shadow:0 0 0 1px var(--card-interactive-first-border-color-focus), 0 0 0 3px var(--card-interactive-second-border-color-focus)}.card.tab-focus.choosable{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--card-choosable-first-border-color-focus), 0 0 0 3px var(--card-choosable-second-border-color-focus);box-shadow:0 0 0 1px var(--card-choosable-first-border-color-focus), 0 0 0 3px var(--card-choosable-second-border-color-focus)}.card.tab-focus.choosable:not(.checked){border-color:var(--card-choosable-border-color-hover)}.card.tab-focus.choosable .wpp-checkbox{--checkbox-bg-color:var(--checkbox-bg-color-hover);--checkbox-border-color:var(--checkbox-border-color-hover)}.card.tab-focus.choosable .wpp-radio{--radio-bg-color:var(--radio-bg-color-hover);--radio-border-color:var(--radio-border-color-hover)}.card.tab-focus.choosable.checked .wpp-checkbox{--checkbox-bg-color-checked:var(--checkbox-bg-color-checked-hover);--checkbox-border-color-checked:var(--checkbox-border-color-checked-hover)}:host([data-wpp-theme=dark]) .card.primary:not(.choosable){background:var(--wpp-grey-color-100)}:host([data-wpp-theme=dark]) .card.interactive:not(.choosable){background:var(--wpp-grey-color-100)}:host([data-wpp-theme=dark]) .card.choosable{background:var(--wpp-grey-color-100)}:host([data-wpp-theme=dark]) .card.secondary:not(.choosable){background:var(--wpp-grey-color-200)}";
 
 const WppCard$1 = /*@__PURE__*/ proxyCustomElement(class WppCard extends HTMLElement {
   constructor() {
@@ -30,6 +31,7 @@ const WppCard$1 = /*@__PURE__*/ proxyCustomElement(class WppCard extends HTMLEle
     this.wppClick = createEvent(this, "wppClick", 1);
     this.wppFocus = createEvent(this, "wppFocus", 1);
     this.wppBlur = createEvent(this, "wppBlur", 1);
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.updateSlotData = () => {
       const emptyStates = getSlotEmptyStates(this.host.childNodes, {
         actions: '[slot="actions"]',
@@ -153,6 +155,12 @@ const WppCard$1 = /*@__PURE__*/ proxyCustomElement(class WppCard extends HTMLEle
   componentWillLoad() {
     this.updateSlotData();
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
+  disconnectedCallback() {
+    this.themeSubscription.stop();
+  }
   render() {
     const displayState = this.componentState.active ? 'active' : this.componentState.hover ? 'hover' : '';
     const isInteractive = !!this.type || this.interactive;
@@ -170,12 +178,12 @@ const WppCard$1 = /*@__PURE__*/ proxyCustomElement(class WppCard extends HTMLEle
         (this.type === 'single' ? this.index : this.type === 'multiple' ? 0 : this.checkTabIndex()));
     return (h(Host, { onMouseEnter: () => this.updateComponentState({ hover: true }), onMouseLeave: () => this.updateComponentState({ hover: false }), onMouseUp: () => this.updateComponentState({ active: false }), ...(isInteractive ? { onMouseDown: this.onMouseDown } : {}), ...(isInteractive ? { onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp } : {}), ...(isInteractive ? { onClick: this.onClick } : {}), onFocus: this.onFocus, onBlur: this.onBlur, htmlFor: this.name, exportparts: "card, header-outer-wrapper, header-wrapper radio, checkbox, actions-wrapper", class: this.hostCssClasses(), tabIndex: tabIndex, role: role, "aria-disabled": this.withRadioOrCheckbox && this.disabled ? 'true' : undefined, "aria-labelledby": this.ariaProps?.labelledby, ...((this.interactive || this.type) && role !== 'button'
         ? { ariaChecked: this.checked ? 'true' : 'false' }
-        : {}), ...(role === 'button' ? { 'aria-pressed': this.checked ? 'true' : 'false' } : {}) }, h("div", { class: this.cardCssClasses(), part: "card", ...(this.background ? { style: { background: this.background } } : {}) }, h("div", { class: this.headerWrapperCssClasses(), part: "header-outer-wrapper" }, h(WrappedSlot, { name: "header", wrapperClass: this.headerCssClasses(), onSlotchange: this.updateSlotData, part: "header" }), this.withRadioOrCheckbox && (h(Fragment, null, this.type === 'single' && (h("wpp-radio-v4-0-0", { class: "radio", internalState: displayState, name: this.name, checked: this.checked, disabled: this.disabled, index: -1, part: "radio", decorative: true })), this.type === 'multiple' && (h("wpp-checkbox-v4-0-0", { class: "checkbox", internalState: displayState, name: this.name, checked: this.checked, disabled: this.disabled, index: -1, part: "checkbox", decorative: true })))), h(WrappedSlot, { name: "actions", part: "actions", wrapperClass: this.actionsCssClasses(), onSlotchange: this.updateSlotData })), h("slot", null))));
+        : {}), ...(role === 'button' ? { 'aria-pressed': this.checked ? 'true' : 'false' } : {}) }, h("div", { class: this.cardCssClasses(), part: "card", ...(this.background ? { style: { background: this.background } } : {}) }, h("div", { class: this.headerWrapperCssClasses(), part: "header-outer-wrapper" }, h(WrappedSlot, { name: "header", wrapperClass: this.headerCssClasses(), onSlotchange: this.updateSlotData, part: "header" }), this.withRadioOrCheckbox && (h(Fragment, null, this.type === 'single' && (h("wpp-radio-v4-1-0", { class: "radio", internalState: displayState, name: this.name, checked: this.checked, disabled: this.disabled, index: -1, part: "radio", decorative: true })), this.type === 'multiple' && (h("wpp-checkbox-v4-1-0", { class: "checkbox", internalState: displayState, name: this.name, checked: this.checked, disabled: this.disabled, index: -1, part: "checkbox", decorative: true })))), h(WrappedSlot, { name: "actions", part: "actions", wrapperClass: this.actionsCssClasses(), onSlotchange: this.updateSlotData })), h("slot", null))));
   }
-  static get registryIs() { return "wpp-card-v4-0-0"; }
+  static get registryIs() { return "wpp-card-v4-1-0"; }
   get host() { return this; }
   static get style() { return wppCardCss; }
-}, [1, "wpp-card", "wpp-card-v4-0-0", {
+}, [1, "wpp-card", "wpp-card-v4-1-0", {
     "variant": [1],
     "value": [520],
     "size": [1],
@@ -200,94 +208,94 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-card-v4-0-0", "wpp-action-button-v4-0-0", "wpp-checkbox-v4-0-0", "wpp-icon-cross-v4-0-0", "wpp-icon-dash-v4-0-0", "wpp-icon-error-v4-0-0", "wpp-icon-info-message-v4-0-0", "wpp-icon-success-v4-0-0", "wpp-icon-tick-v4-0-0", "wpp-icon-warning-v4-0-0", "wpp-inline-message-v4-0-0", "wpp-internal-label-v4-0-0", "wpp-internal-tooltip-v4-0-0", "wpp-label-v4-0-0", "wpp-radio-v4-0-0", "wpp-spinner-v4-0-0", "wpp-tooltip-v4-0-0", "wpp-typography-v4-0-0"];
+  const components = ["wpp-card-v4-1-0", "wpp-action-button-v4-1-0", "wpp-checkbox-v4-1-0", "wpp-icon-cross-v4-1-0", "wpp-icon-dash-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-info-message-v4-1-0", "wpp-icon-success-v4-1-0", "wpp-icon-tick-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-inline-message-v4-1-0", "wpp-internal-label-v4-1-0", "wpp-internal-tooltip-v4-1-0", "wpp-label-v4-1-0", "wpp-radio-v4-1-0", "wpp-spinner-v4-1-0", "wpp-tooltip-v4-1-0", "wpp-typography-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-card-v4-0-0":
+    case "wpp-card-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppCard$1);
       }
       break;
-    case "wpp-action-button-v4-0-0":
+    case "wpp-action-button-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-checkbox-v4-0-0":
+    case "wpp-checkbox-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-cross-v4-0-0":
+    case "wpp-icon-cross-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-dash-v4-0-0":
+    case "wpp-icon-dash-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-error-v4-0-0":
+    case "wpp-icon-error-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-info-message-v4-0-0":
+    case "wpp-icon-info-message-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-success-v4-0-0":
+    case "wpp-icon-success-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-tick-v4-0-0":
+    case "wpp-icon-tick-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-warning-v4-0-0":
+    case "wpp-icon-warning-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-inline-message-v4-0-0":
+    case "wpp-inline-message-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-label-v4-0-0":
+    case "wpp-internal-label-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-internal-tooltip-v4-0-0":
+    case "wpp-internal-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-label-v4-0-0":
+    case "wpp-label-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-radio-v4-0-0":
+    case "wpp-radio-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-0-0":
+    case "wpp-spinner-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-0-0":
+    case "wpp-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-0-0":
+    case "wpp-typography-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { WppListItem } from '../wpp-list-item';
+import * as themeUtils from '../../../utils/subscribe-to-theme';
 describe('wpp-list-item', () => {
   it('renders component', async () => {
     const page = await newSpecPage({
@@ -74,5 +75,41 @@ describe('wpp-list-item', () => {
     await new Promise(resolve => setTimeout(resolve, 100));
     await page.waitForChanges();
     expect(page.root).toMatchSnapshot();
+  });
+  describe('subscribing to theme changes', () => {
+    let mockStart;
+    let mockStop;
+    beforeEach(() => {
+      mockStart = jest.fn();
+      mockStop = jest.fn();
+      jest.spyOn(themeUtils, 'themeSubscriptionController').mockReturnValue({
+        start: mockStart,
+        stop: mockStop,
+      });
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
+      await newSpecPage({
+        components: [WppListItem],
+        html: `<wpp-list-item>
+               <p slot="label">Text</p>
+             </wpp-list-item>`,
+      });
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(mockStart).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
+      const page = await newSpecPage({
+        components: [WppListItem],
+        html: `<wpp-list-item>
+               <p slot="label">Text</p>
+             </wpp-list-item>`,
+      });
+      await new Promise(resolve => setTimeout(resolve, 100));
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
+    });
   });
 });

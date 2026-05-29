@@ -4,6 +4,7 @@ import { WppToggle } from '../wpp-toggle';
 import { WppLabel } from '../../wpp-label/wpp-label';
 import { WppInternalLabel } from '../../wpp-label/components/wpp-internal-label/wpp-internal-label';
 import { FOCUS_TYPE } from '../../../types/common';
+import * as themeUtils from '../../../utils/subscribe-to-theme';
 describe('wpp-toggle', () => {
   it('renders component', async () => {
     const page = await newSpecPage({
@@ -30,7 +31,7 @@ describe('wpp-toggle', () => {
     };
     const page = await newSpecPage({
       components: [WppToggle, WppLabel, WppInternalLabel],
-      template: () => h("wpp-toggle-v4-0-0", { labelConfig: labelConfig, required: true, name: "toggle" }),
+      template: () => h("wpp-toggle-v4-1-0", { labelConfig: labelConfig, required: true, name: "toggle" }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -136,5 +137,29 @@ describe('wpp-toggle', () => {
     const page = await setup({ disabled: true });
     const input = page?.root?.shadowRoot?.querySelector('input');
     expect(input.tabIndex).toBe(-1);
+  });
+  describe('subscribing to theme changes', () => {
+    let mockStart;
+    let mockStop;
+    beforeEach(() => {
+      mockStart = jest.fn();
+      mockStop = jest.fn();
+      jest.spyOn(themeUtils, 'themeSubscriptionController').mockReturnValue({
+        start: mockStart,
+        stop: mockStop,
+      });
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
+      await setup();
+      expect(mockStart).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
+      const page = await setup();
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
+    });
   });
 });

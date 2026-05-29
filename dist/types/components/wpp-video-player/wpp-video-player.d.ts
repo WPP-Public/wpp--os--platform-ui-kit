@@ -2,6 +2,7 @@
 import { AriaProps } from '../../types/common';
 import { CaptionValue, VideoPlayerLocales, ControlPanelConfig, JumpValues, SplitTimeFormat, TimeFormats, TrackLanguage, VideoPlayerStates, VideoSizeDimensions, VideoSourceType } from './types';
 export declare class WppVideoPlayer {
+  private themeSubscription;
   host: HTMLWppVideoPlayerElement;
   private videoPlayerRef;
   private initPlayButtonRef;
@@ -113,6 +114,7 @@ export declare class WppVideoPlayer {
   onUpdateLocales(newLocales: Partial<VideoPlayerLocales>): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  connectedCallback(): void;
   disconnectedCallback(): void;
   private setupKeyboardEventListeners;
   private removeKeyboardEventListeners;

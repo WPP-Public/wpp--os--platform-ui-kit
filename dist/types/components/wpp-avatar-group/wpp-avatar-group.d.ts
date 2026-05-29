@@ -45,6 +45,11 @@ export declare class WppAvatarGroup {
    */
   dropdownConfig: DropdownConfig;
   /**
+   * Sets the tabindex for all avatars in the group. Use -1 to remove from tab order
+   * when inside composite widgets like trees where arrow keys are used for navigation.
+   */
+  readonly avatarsIndex: number;
+  /**
    * Emitted when the avatar item is clicked.
    */
   wppSelectItem: EventEmitter<AvatarGroupChangeEventDetail>;

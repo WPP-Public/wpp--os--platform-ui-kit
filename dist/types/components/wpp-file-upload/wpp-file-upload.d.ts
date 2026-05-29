@@ -30,6 +30,7 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
   private inputId;
   private labelId;
   private lastKeyWasTab;
+  private themeSubscription;
   host: HTMLWppFileUploadElement;
   private hasTabFocus;
   scrollState: ScrollState | false;
@@ -154,12 +155,15 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
    * Method to reset FileUpload. Should be called only when the component is uncontrolled.
    */
   reset(): Promise<void>;
+  private clearInputValue;
   private reInitValue;
   protected onDisabledChange(disabled: boolean): void;
   onValueChange(newValue: FileItemType[]): void;
   onUpdateLocales(newLocales: Partial<FileUploadLocales>): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
   private onGlobalKeyDown;
   private onPointerDown;
   private onInputFocus;

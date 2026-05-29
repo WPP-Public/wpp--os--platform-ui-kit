@@ -16,9 +16,9 @@ const WppIconCube$1 = /*@__PURE__*/ proxyCustomElement(class WppIconCube extends
   render() {
     return (h(WppIcon, { name: "wpp-icon-cube", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M5.23898 6.78733C5.35653 6.47751 5.70298 6.32163 6.0128 6.43918L9.99997 7.95189L13.9871 6.43918C14.297 6.32163 14.6434 6.47751 14.761 6.78733C14.8785 7.09715 14.7226 7.4436 14.4128 7.56114L10.6 9.0077V13.4002C10.6 13.7316 10.3314 14.0002 10 14.0002C9.66863 14.0002 9.4 13.7316 9.4 13.4002V9.00773L5.58713 7.56114C5.27731 7.4436 5.12144 7.09715 5.23898 6.78733ZM8.87289 2.40972C9.59572 2.11668 10.4043 2.11668 11.1271 2.40972L17.126 4.8417C17.6543 5.05589 18 5.56904 18 6.13913V13.8613C18 14.4314 17.6543 14.9445 17.126 15.1587L11.1271 17.5907C10.4043 17.8838 9.59572 17.8838 8.87289 17.5907L2.87401 15.1587C2.34569 14.9445 2 14.4314 2 13.8613V6.13913C2 5.56904 2.34569 5.05589 2.87401 4.8417L8.87289 2.40972ZM10.6763 3.52181C10.2426 3.34598 9.75743 3.34598 9.32373 3.52181L3.32486 5.95379C3.24938 5.98438 3.2 6.05769 3.2 6.13913V13.8613C3.2 13.9427 3.24938 14.016 3.32486 14.0466L9.32373 16.4786C9.75743 16.6544 10.2426 16.6544 10.6763 16.4786L16.6751 14.0466C16.7506 14.016 16.8 13.9427 16.8 13.8613V6.13913C16.8 6.05769 16.7506 5.98438 16.6751 5.95379L10.6763 3.52181Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-cube-v4-0-0"; }
+  static get registryIs() { return "wpp-icon-cube-v4-1-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-cube", "wpp-icon-cube-v4-0-0", {
+}, [1, "wpp-icon-cube", "wpp-icon-cube-v4-1-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -28,9 +28,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-cube-v4-0-0"];
+  const components = ["wpp-icon-cube-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-cube-v4-0-0":
+    case "wpp-icon-cube-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconCube$1);
       }

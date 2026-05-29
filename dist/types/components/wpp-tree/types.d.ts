@@ -70,6 +70,7 @@ export interface TreeLazyConfig {
 }
 export interface TreeLocaleType {
   nothingFound: string;
+  loadingTree: string;
 }
 export type TransformSearchQuery = (search: string) => string;
 export interface TreeItemSearchConfig {

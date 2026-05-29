@@ -16,9 +16,9 @@ const WppIconCaptionOn = /*@__PURE__*/ proxyCustomElement(class WppIconCaptionOn
   render() {
     return (h(WppIcon, { name: "wpp-icon-caption-on", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M15.4 3.59961C16.8359 3.59961 18 4.76367 18 6.19961V13.8033C18 15.2392 16.8359 16.4033 15.4 16.4033H4.6C3.16406 16.4033 2 15.2392 2 13.8033V6.19961C2 4.81318 3.08516 3.68021 4.45246 3.60373L4.6 3.59961H15.4ZM15.4 4.79961H4.6L4.48518 4.80425C3.76569 4.86266 3.2 5.46507 3.2 6.19961V13.8033C3.2 14.5765 3.8268 15.2033 4.6 15.2033H15.4C16.1732 15.2033 16.8 14.5765 16.8 13.8033V6.19961C16.8 5.42641 16.1732 4.79961 15.4 4.79961ZM4.8 9.99961C4.8 7.48314 6.97058 6.17936 8.8973 7.27844C9.18513 7.44263 9.28536 7.80907 9.12117 8.09691C8.95697 8.38474 8.59054 8.48497 8.3027 8.32078C7.18457 7.68294 6 8.39447 6 9.99961C6 11.6033 7.18729 12.3166 8.30336 11.6818C8.5914 11.5179 8.95771 11.6186 9.12154 11.9067C9.28537 12.1947 9.18468 12.561 8.89664 12.7249C6.97231 13.8194 4.8 12.5143 4.8 9.99961ZM10.8 9.99961C10.8 7.48314 12.9706 6.17936 14.8973 7.27844C15.1851 7.44263 15.2854 7.80907 15.1212 8.09691C14.957 8.38474 14.5905 8.48497 14.3027 8.32078C13.1846 7.68294 12 8.39447 12 9.99961C12 11.6033 13.1873 12.3166 14.3034 11.6818C14.5914 11.5179 14.9577 11.6186 15.1215 11.9067C15.2854 12.1947 15.1847 12.561 14.8966 12.7249C12.9723 13.8194 10.8 12.5143 10.8 9.99961Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-caption-on-v4-0-0"; }
+  static get registryIs() { return "wpp-icon-caption-on-v4-1-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-caption-on", "wpp-icon-caption-on-v4-0-0", {
+}, [1, "wpp-icon-caption-on", "wpp-icon-caption-on-v4-1-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -28,9 +28,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-caption-on-v4-0-0"];
+  const components = ["wpp-icon-caption-on-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-caption-on-v4-0-0":
+    case "wpp-icon-caption-on-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconCaptionOn);
       }

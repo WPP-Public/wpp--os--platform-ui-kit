@@ -486,10 +486,10 @@
   color: var(--button-inverted-primary-icon-color);
 }
 .button.inverted.primary:hover, .button.inverted.primary.tab-focus {
-  background-color: rgba(255, 255, 255, var(--button-inverted-primary-hover-opacity));
+  background-color: color-mix(in srgb, var(--button-inverted-primary-bg-color) var(--button-inverted-primary-hover-opacity), transparent);
 }
 .button.inverted.primary:active, .button.inverted.primary.pressed {
-  background-color: rgba(255, 255, 255, var(--button-inverted-primary-active-opacity));
+  background-color: color-mix(in srgb, var(--button-inverted-primary-bg-color) var(--button-inverted-primary-active-opacity), transparent);
 }
 .button.inverted.primary:disabled {
   opacity: 1;
@@ -501,7 +501,7 @@
   color: var(--button-inverted-primary-icon-color-disabled);
 }
 .button.inverted.primary.loading {
-  background-color: rgba(255, 255, 255, var(--button-inverted-primary-loading-opacity));
+  background-color: color-mix(in srgb, var(--button-inverted-primary-bg-color) var(--button-inverted-primary-loading-opacity), transparent);
 }
 .button.inverted.secondary {
   color: var(--button-inverted-secondary-text-color);
@@ -535,4 +535,56 @@
 }
 .button.inverted.secondary.loading {
   background-color: rgba(248, 249, 251, var(--button-inverted-secondary-loading-opacity));
+}
+
+:host([data-wpp-theme=dark]) .button.primary:not(.loading):not(.inverted) {
+  background-color: var(--wpp-primary-color-400);
+}
+:host([data-wpp-theme=dark]) .button.primary:not(.loading):not(.inverted):hover, :host([data-wpp-theme=dark]) .button.primary:not(.loading):not(.inverted).tab-focus {
+  background-color: var(--wpp-primary-color-500);
+}
+:host([data-wpp-theme=dark]) .button.primary:not(.loading):not(.inverted):active, :host([data-wpp-theme=dark]) .button.primary:not(.loading):not(.inverted).pressed {
+  background-color: var(--wpp-primary-color-300);
+}
+:host([data-wpp-theme=dark]) .button.primary:not(.loading):not(.inverted).disabled {
+  background-color: var(--wpp-primary-color-300);
+}
+:host([data-wpp-theme=dark]) .button.primary.loading:not(.inverted) {
+  background-color: var(--wpp-primary-color-400);
+}
+:host([data-wpp-theme=dark]) .button.destructive {
+  background-color: var(--wpp-danger-color-400);
+}
+:host([data-wpp-theme=dark]) .button.destructive:hover, :host([data-wpp-theme=dark]) .button.destructive.tab-focus {
+  background-color: var(--wpp-danger-color-500);
+}
+:host([data-wpp-theme=dark]) .button.destructive:active, :host([data-wpp-theme=dark]) .button.destructive.pressed {
+  background-color: var(--wpp-danger-color-600);
+}
+:host([data-wpp-theme=dark]) .button.destructive:disabled {
+  background-color: var(--wpp-danger-color-300);
+}
+:host([data-wpp-theme=dark]) .button.destructive.loading {
+  background-color: var(--wpp-danger-color-400);
+}
+:host([data-wpp-theme=dark]) .button.primary, :host([data-wpp-theme=dark]) .button.destructive {
+  color: var(--wpp-grey-color-1000);
+}
+:host([data-wpp-theme=dark]) .button.primary.disabled, :host([data-wpp-theme=dark]) .button.destructive.disabled {
+  color: var(--wpp-grey-color-800);
+}
+:host([data-wpp-theme=dark]) .button.primary .wpp-spinner::part(circle), :host([data-wpp-theme=dark]) .button.destructive .wpp-spinner::part(circle) {
+  stroke: var(--wpp-grey-color-1000);
+}
+:host([data-wpp-theme=dark]) .button.primary .icon-start ::slotted(*),
+:host([data-wpp-theme=dark]) .button.primary .icon-end ::slotted(*), :host([data-wpp-theme=dark]) .button.destructive .icon-start ::slotted(*),
+:host([data-wpp-theme=dark]) .button.destructive .icon-end ::slotted(*) {
+  color: var(--wpp-grey-color-1000);
+}
+:host([data-wpp-theme=dark]) .button.inverted.primary {
+  --button-inverted-primary-bg-color: var(--wpp-grey-color-100);
+  --button-inverted-primary-disabled-bg-color: var(--wpp-grey-color-100);
+}
+:host([data-wpp-theme=dark]) .button.inverted.secondary {
+  --button-inverted-secondary-bg-color: transparent;
 }

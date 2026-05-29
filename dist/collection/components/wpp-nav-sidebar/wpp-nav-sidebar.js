@@ -2,6 +2,7 @@ import { h, Host } from '@stencil/core';
 import { transformToVersionedTag } from '../../utils/utils';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { Z_INDEX } from '../../common/consts';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
  * @slot - May contain only the `wpp-nav-sidebar-item` component. The default slot, without the name attribute.
  *
@@ -10,6 +11,7 @@ import { Z_INDEX } from '../../common/consts';
  */
 export class WppNavSidebar {
   constructor() {
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.calculateOsBarHeight = () => {
       const headerElement = document.querySelector('.wpp > header');
       if (!headerElement)
@@ -83,11 +85,17 @@ export class WppNavSidebar {
     this.setActiveItem(this.activePath);
     this.calculateOsBarHeight();
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
+  disconnectedCallback() {
+    this.themeSubscription.stop();
+  }
   render() {
     return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "nav-sidebar, body, header-wrapper, header, ws-wrapper, ws-inner" }, h("aside", { class: this.asideCssClasses(), part: "nav-sidebar" }, h("div", { class: "nav-wrapper", part: "body" }, h(WrappedSlot, { wrapperClass: "title-wrapper", name: "header" }), h(WrappedSlot, { wrapperClass: "items-wrapper" })))));
   }
   static get is() { return "wpp-nav-sidebar"; }
-  static get registryIs() { return "wpp-nav-sidebar-v4-0-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

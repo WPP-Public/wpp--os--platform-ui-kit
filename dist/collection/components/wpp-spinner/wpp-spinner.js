@@ -25,10 +25,10 @@ export class WppSpinner {
   }
   render() {
     const isAnnounced = this.ariaProps?.label && this.ariaProps?.label !== '';
-    return (h(Host, { class: this.hostCssClasses(), role: isAnnounced ? 'status' : null, "aria-hidden": isAnnounced ? null : 'true', "aria-live": isAnnounced ? 'polite' : null, "aria-label": isAnnounced ? this.ariaProps?.label : null }, h("svg", { class: this.spinnerCssClasses(), "aria-hidden": "true", focusable: "false" }, h("circle", { cx: SPINNER_SIZES[this.size], cy: SPINNER_SIZES[this.size], r: SPINNER_RADIUS[this.size], fill: "transparent", stroke: this.color, "stroke-linecap": "round" }))));
+    return (h(Host, { class: this.hostCssClasses(), role: isAnnounced ? 'status' : null, "aria-hidden": isAnnounced ? null : 'true', "aria-live": isAnnounced ? 'polite' : null, "aria-label": isAnnounced ? this.ariaProps?.label : null, exportparts: "circle" }, h("svg", { class: this.spinnerCssClasses(), "aria-hidden": "true", focusable: "false" }, h("circle", { cx: SPINNER_SIZES[this.size], cy: SPINNER_SIZES[this.size], r: SPINNER_RADIUS[this.size], fill: "transparent", stroke: this.color, "stroke-linecap": "round", part: "circle" }))));
   }
   static get is() { return "wpp-spinner"; }
-  static get registryIs() { return "wpp-spinner-v4-0-0"; }
+  static get registryIs() { return "wpp-spinner-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

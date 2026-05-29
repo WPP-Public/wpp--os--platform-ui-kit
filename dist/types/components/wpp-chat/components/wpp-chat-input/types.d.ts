@@ -11,6 +11,7 @@ export interface ChatInputLocaleInterface {
   voiceLabel: string;
   attachmentsLabel: string;
   messageInputLabel: string;
+  actionsMenuLabel: string;
 }
 export type ChatInputAriaProps = {
   minimizedTrigger?: Pick<AriaProps, 'label' | 'describedby' | 'controls' | 'expanded'>;
@@ -19,6 +20,7 @@ export type ChatInputAriaProps = {
   };
   sendButton?: Pick<AriaProps, 'label'>;
   attachButton?: Pick<AriaProps, 'label' | 'pressed'>;
+  actionsMenuButton?: Pick<AriaProps, 'label' | 'expanded' | 'haspopup'>;
   actionsToolbar?: {
     label?: string;
   };
@@ -29,6 +31,26 @@ export type ChatInputAriaProps = {
     label?: string;
   };
 };
+export type ActionsMenuToggleEventDetail = {
+  open: boolean;
+};
+/**
+ * Describes a single entry rendered inside the consolidated actions menu
+ * (the `wpp-icon-plus` dropdown). The component renders a `wpp-list-item`
+ * per entry; the `icon` must correspond to a valid wpp-icon component name
+ * (e.g. `'wpp-icon-attach'`, `'wpp-icon-pinned'`).
+ *
+ * The reserved id `'upload'` automatically wires the item to the same file
+ * picker that `enableAttach` uses, so consumers do not need extra plumbing
+ * to add an "Upload file" entry.
+ */
+export interface ChatInputAction {
+  id: string;
+  icon: string;
+  label: string;
+  disabled?: boolean;
+}
+export type ChatInputActionItemClickEventDetail = ChatInputAction;
 export interface ChatInputAttributes {
   textarea?: {
     id?: string;

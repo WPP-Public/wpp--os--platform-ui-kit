@@ -167,3 +167,6 @@
     transform: translate(-50%, -50%);
   }
 }
+:host([data-wpp-theme=dark]) .full-screen-modal {
+  background-color: var(--wpp-grey-color-100);
+}

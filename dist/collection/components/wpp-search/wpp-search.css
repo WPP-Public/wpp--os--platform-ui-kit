@@ -65,7 +65,7 @@
   --search-bg-color: var(--wpp-search-bg-color, transparent);
   --search-bg-color-hover: var(--wpp-search-bg-color-hover, var(--wpp-grey-color-200));
   --search-bg-color-active: var(--wpp-search-bg-color-active, transparent);
-  --search-bg-color-focused: var(--wpp-search-bg-color-focused, var(--wpp-grey-color-000));
+  --search-bg-color-focused: var(--wpp-search-bg-color-focused, transparent);
   --search-bg-color-disabled: var(--wpp-search-bg-color-disabled, var(--wpp-grey-color-100));
   --search-trigger-icon-color: var(--wpp-search-trigger-actions-right-position, var(--wpp-grey-color-800));
   --search-trigger-icon-color-hover: var(--wpp-search-trigger-icon-color-hover, var(--wpp-grey-color-800));
@@ -430,4 +430,8 @@
 
 .label {
   margin: var(--search-label-margin);
+}
+
+.dropdown:has([data-wpp-theme=dark]) {
+  background-color: var(--wpp-grey-color-200);
 }

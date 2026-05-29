@@ -1,19 +1,23 @@
 export { getAssetPath, setAssetPath, setNonce, setPlatformOptions } from '@stencil/core/internal/client';
+export { Z as Z_INDEX } from './consts.js';
 import { i as isObject, t as toKebabCase, r as recursiveObjectMap } from './utils.js';
 export { m as applyBodyStylesIfNeeded, a as areSetsEqual, n as autoFocusElement, l as closestElement, d as debounce, o as form2object, f as format, y as getAriaProps, p as getDurationValues, q as getHasFocused, w as getHighestContainerInDOM, j as getHighlightData, x as getOsBarOffsetHeight, g as getSlotEmptyStates, c as hasParentWithId, h as hasShadowDom, b as isEventTargetContained, i as isObject, z as isWppElement, r as recursiveObjectMap, s as selectDropdownWidth, v as setHasFocused, t as toKebabCase, k as transformToVersionedTag, e as truncate, u as uuidv4 } from './utils.js';
 export { S as ScrollState, WppFileUpload, defineCustomElement as defineCustomElementWppFileUpload } from './wpp-file-upload.js';
 export { F as FullScreenModalCloseReason, WppFullScreenModal, defineCustomElement as defineCustomElementWppFullScreenModal } from './wpp-full-screen-modal.js';
 export { I as InlineEditModeEnum, WppInlineEdit, defineCustomElement as defineCustomElementWppInlineEdit } from './wpp-inline-edit.js';
 export { M as ModalCloseReason, WppModal, defineCustomElement as defineCustomElementWppModal } from './wpp-modal.js';
-export { Q as Quill, U as RICHTEXT_UPLOAD_REQUEST_EVENT, d as debugLevels, f as formats, u as richtextUploadTypes, s as sources } from './config.js';
+export { E as Editor, Q as Quill, U as RICHTEXT_UPLOAD_REQUEST_EVENT, d as debugLevels, f as formats, u as richtextUploadTypes, s as sources } from './tiptap-config.js';
+export { T as TIPTAP_UPLOAD_REQUEST_EVENT, WppRichtext, defineCustomElement as defineCustomElementWppRichtext, a as tiptapFormats, b as tiptapSources, t as tiptapUploadTypes } from './wpp-richtext.js';
 export { S as SideModalCloseReason, WppSideModal, defineCustomElement as defineCustomElementWppSideModal } from './wpp-side-modal.js';
 export { WppAccordion, defineCustomElement as defineCustomElementWppAccordion } from './wpp-accordion.js';
 export { WppActionButton, defineCustomElement as defineCustomElementWppActionButton } from './wpp-action-button.js';
+export { WppArtefact, defineCustomElement as defineCustomElementWppArtefact } from './wpp-artefact.js';
 export { WppAutocomplete, defineCustomElement as defineCustomElementWppAutocomplete } from './wpp-autocomplete.js';
 export { WppAvatar, defineCustomElement as defineCustomElementWppAvatar } from './wpp-avatar.js';
 export { WppAvatarGroup, defineCustomElement as defineCustomElementWppAvatarGroup } from './wpp-avatar-group.js';
 export { WppBackToTopButton, defineCustomElement as defineCustomElementWppBackToTopButton } from './wpp-back-to-top-button.js';
 export { WppBanner, defineCustomElement as defineCustomElementWppBanner } from './wpp-banner.js';
+export { WppBasicNode, defineCustomElement as defineCustomElementWppBasicNode } from './wpp-basic-node.js';
 export { WppBreadcrumb, defineCustomElement as defineCustomElementWppBreadcrumb } from './wpp-breadcrumb.js';
 export { WppButton, defineCustomElement as defineCustomElementWppButton } from './wpp-button.js';
 export { WppCard, defineCustomElement as defineCustomElementWppCard } from './wpp-card.js';
@@ -21,6 +25,7 @@ export { WppCardGroup, defineCustomElement as defineCustomElementWppCardGroup } 
 export { WppChatConversation, defineCustomElement as defineCustomElementWppChatConversation } from './wpp-chat-conversation.js';
 export { WppChatConversationMessage, defineCustomElement as defineCustomElementWppChatConversationMessage } from './wpp-chat-conversation-message.js';
 export { WppChatInput, defineCustomElement as defineCustomElementWppChatInput } from './wpp-chat-input.js';
+export { WppChatNode, defineCustomElement as defineCustomElementWppChatNode } from './wpp-chat-node.js';
 export { WppCheckbox, defineCustomElement as defineCustomElementWppCheckbox } from './wpp-checkbox.js';
 export { WppCheckboxGroup, defineCustomElement as defineCustomElementWppCheckboxGroup } from './wpp-checkbox-group.js';
 export { WppColorPicker, defineCustomElement as defineCustomElementWppColorPicker } from './wpp-color-picker.js';
@@ -45,6 +50,7 @@ export { WppFilterButton, defineCustomElement as defineCustomElementWppFilterBut
 export { WppFloatingButton, defineCustomElement as defineCustomElementWppFloatingButton } from './wpp-floating-button.js';
 export { WppFloatingToolbar, defineCustomElement as defineCustomElementWppFloatingToolbar } from './wpp-floating-toolbar.js';
 export { WppGrid, defineCustomElement as defineCustomElementWppGrid } from './wpp-grid.js';
+export { WppHandle, defineCustomElement as defineCustomElementWppHandle } from './wpp-handle.js';
 export { WppHueSlider, defineCustomElement as defineCustomElementWppHueSlider } from './wpp-hue-slider.js';
 export { WppIconAbout, defineCustomElement as defineCustomElementWppIconAbout } from './wpp-icon-about.js';
 export { WppIconAccessibility, defineCustomElement as defineCustomElementWppIconAccessibility } from './wpp-icon-accessibility.js';
@@ -581,7 +587,6 @@ export { WppProgressIndicator, defineCustomElement as defineCustomElementWppProg
 export { WppQuillStyles, defineCustomElement as defineCustomElementWppQuillStyles } from './wpp-quill-styles.js';
 export { WppRadio, defineCustomElement as defineCustomElementWppRadio } from './wpp-radio.js';
 export { WppRadioGroup, defineCustomElement as defineCustomElementWppRadioGroup } from './wpp-radio-group.js';
-export { WppRichtext, defineCustomElement as defineCustomElementWppRichtext } from './wpp-richtext.js';
 export { WppRichtextCommonStyles, defineCustomElement as defineCustomElementWppRichtextCommonStyles } from './wpp-richtext-common-styles.js';
 export { WppRichtextHtml, defineCustomElement as defineCustomElementWppRichtextHtml } from './wpp-richtext-html.js';
 export { WppRichtextIconLoader, defineCustomElement as defineCustomElementWppRichtextIconLoader } from './wpp-richtext-icon-loader.js';

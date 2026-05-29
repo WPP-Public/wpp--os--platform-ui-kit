@@ -1,5 +1,6 @@
 import { h, Host } from '@stencil/core';
 import { truncate } from '../../../../utils/utils';
+import { Z_INDEX } from '../../../../common/consts';
 import { CONTEXT_ITEM_TAG } from '../../../wpp-menu-context/constants';
 const listItemNavStyle = {
   '--mc-item-margin': '4px 0',
@@ -23,10 +24,19 @@ export class WppTopbarItem {
     this.menuItemClick = (e) => {
       this.wppActiveTopbarItemChange.emit(e);
     };
+    this.topbarMenuShow = () => {
+      this.isMenuExpanded = true;
+      this.wppTopbarItemMenuToggle.emit(true);
+    };
+    this.topbarMenuHide = () => {
+      this.isMenuExpanded = false;
+      this.wppTopbarItemMenuToggle.emit(false);
+    };
     this.getMenuLevelData = (navigationData, firstLevel) => {
       const truncatedLabel = truncate(navigationData.label, 30);
       if (navigationData.children?.length) {
-        return (h("wpp-menu-context-v4-0-0", { listWidth: "224px", externalClass: "topbar", appendToListWrapper: true, dropdownConfig: {
+        return (h("wpp-menu-context-v4-1-0", { listWidth: "224px", externalClass: "topbar", appendToListWrapper: true, dropdownConfig: {
+            zIndex: this.zIndex,
             popperOptions: {
               strategy: 'fixed',
             },
@@ -34,14 +44,16 @@ export class WppTopbarItem {
               content: 'labelledby',
             },
             onHide: () => {
-              this.isMenuExpanded = false;
+              if (firstLevel)
+                this.topbarMenuHide();
             },
             onShow: () => {
-              this.isMenuExpanded = true;
+              if (firstLevel)
+                this.topbarMenuShow();
             },
-          } }, firstLevel ? (h("wpp-navigation-item-v4-0-0", { value: navigationData.value, label: truncatedLabel, slot: "trigger-element", extended: true, nativeLink: this.nativeLink, menu: this.menu, menuExpanded: this.isMenuExpanded, chevronOnly: navigationData.chevronOnly, active: this.menu ? this.active : this.activeItems.includes(navigationData.value) })) : (h("wpp-list-item-v4-0-0", { value: navigationData.value, slot: "trigger-element", isExtended: true, checked: this.activeItems.includes(navigationData.value), style: listItemNavStyle }, h("p", { slot: "label" }, navigationData.label))), h("div", null, navigationData.children?.map(navigationItem => navigationItem.children ? (this.getMenuLevelData(navigationItem, false)) : (h("wpp-navigation-item-v4-0-0", { value: navigationItem.value, path: navigationItem.path, label: navigationItem.label, nativeLink: this.nativeLink, nestedItem: true, active: this.activeItems.includes(navigationItem.value), chevronOnly: navigationData.chevronOnly, onWppActiveNavItemChanged: () => this.menuItemClick(this.getEmittedNavigationData(navigationItem)) }))))));
+          } }, firstLevel ? (h("wpp-navigation-item-v4-1-0", { value: navigationData.value, label: truncatedLabel, slot: "trigger-element", extended: true, nativeLink: this.nativeLink, menu: this.menu, menuExpanded: this.isMenuExpanded, chevronOnly: navigationData.chevronOnly, active: this.menu ? this.active : this.activeItems.includes(navigationData.value) })) : (h("wpp-list-item-v4-1-0", { value: navigationData.value, slot: "trigger-element", isExtended: true, checked: this.activeItems.includes(navigationData.value), style: listItemNavStyle }, h("p", { slot: "label" }, navigationData.label))), h("div", null, navigationData.children?.map(navigationItem => navigationItem.children ? (this.getMenuLevelData(navigationItem, false)) : (h("wpp-navigation-item-v4-1-0", { value: navigationItem.value, path: navigationItem.path, label: navigationItem.label, nativeLink: this.nativeLink, nestedItem: true, active: this.activeItems.includes(navigationItem.value), chevronOnly: navigationData.chevronOnly, onWppActiveNavItemChanged: () => this.menuItemClick(this.getEmittedNavigationData(navigationItem)) }))))));
       }
-      return firstLevel ? (h("wpp-navigation-item-v4-0-0", { value: navigationData.value, path: navigationData.path, label: truncatedLabel, nativeLink: this.nativeLink, active: this.activeItems.includes(navigationData.value), chevronOnly: navigationData.chevronOnly, onWppActiveNavItemChanged: this.topbarItemClick })) : (h("wpp-list-item-v4-0-0", { value: navigationData.value, checked: this.activeItems.includes(navigationData.value), style: listItemNavStyle }, h("p", { slot: "label" }, navigationData.label)));
+      return firstLevel ? (h("wpp-navigation-item-v4-1-0", { value: navigationData.value, path: navigationData.path, label: truncatedLabel, nativeLink: this.nativeLink, active: this.activeItems.includes(navigationData.value), chevronOnly: navigationData.chevronOnly, onWppActiveNavItemChanged: this.topbarItemClick })) : (h("wpp-list-item-v4-1-0", { value: navigationData.value, checked: this.activeItems.includes(navigationData.value), style: listItemNavStyle }, h("p", { slot: "label" }, navigationData.label)));
     };
     this.hostCssClasses = () => ({
       'wpp-topbar-item': true,
@@ -53,12 +65,13 @@ export class WppTopbarItem {
     this.active = undefined;
     this.activeItems = undefined;
     this.nativeLink = false;
+    this.zIndex = Z_INDEX.TOPBAR_MENU;
   }
   render() {
     return (h(Host, { class: this.hostCssClasses(), role: CONTEXT_ITEM_TAG }, this.getMenuLevelData(this.navigation, true)));
   }
   static get is() { return "wpp-topbar-item"; }
-  static get registryIs() { return "wpp-topbar-item-v4-0-0"; }
+  static get registryIs() { return "wpp-topbar-item-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -178,6 +191,24 @@ export class WppTopbarItem {
         "attribute": "native-link",
         "reflect": false,
         "defaultValue": "false"
+      },
+      "zIndex": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the z-index of the WppTopbarItem dropdown menus."
+        },
+        "attribute": "z-index",
+        "reflect": false,
+        "defaultValue": "Z_INDEX.TOPBAR_MENU"
       }
     };
   }
@@ -207,6 +238,21 @@ export class WppTopbarItem {
               "id": "src/components/wpp-topbar/types.ts::NavigationItemEventDetail"
             }
           }
+        }
+      }, {
+        "method": "wppTopbarItemMenuToggle",
+        "name": "wppTopbarItemMenuToggle",
+        "bubbles": false,
+        "cancelable": true,
+        "composed": false,
+        "docs": {
+          "tags": [],
+          "text": "Emitted when topbar item menu expanded state changes"
+        },
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
         }
       }];
   }

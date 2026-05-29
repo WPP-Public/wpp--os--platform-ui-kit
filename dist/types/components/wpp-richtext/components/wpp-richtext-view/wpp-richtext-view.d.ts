@@ -1,5 +1,5 @@
 import { ComponentDidLoad } from '../../../../stencil-public-runtime';
-import { DebugLevels, Formats, QuillInstance, RichtextValue } from '../../types';
+import { Formats, RichtextValue } from '../../types';
 export declare class WppRichtextView implements ComponentDidLoad {
   host: HTMLWppRichtextViewElement;
   /**
@@ -11,19 +11,11 @@ export declare class WppRichtextView implements ComponentDidLoad {
    */
   format: Formats;
   /**
-   * Debug level: `error`, `warn`, `log`, or `info`. Passing true is equivalent to passing `log`.
-   * Passing false disables all messages.
-   */
-  readonly debug: DebugLevels;
-  /**
    * Whitelist of formats to allow in the editor.
-   * See [Formats](https://quilljs.com/docs/formats/) for a complete list.
    */
   readonly formats: string[];
   /**
    * Collection of modules to include and respective options.
-   * The only configurable modules are the following: imageUpload, videoUpload, attachmentUpload and toolbar.aliases.embed (See "Usage" section of Notes)
-   * See [Modules](https://quilljs.com/docs/modules/) for more information about the library's modules.
    */
   modules?: string;
   /**
@@ -43,11 +35,12 @@ export declare class WppRichtextView implements ComponentDidLoad {
    * Name of the editor instance
    */
   readonly name?: string;
-  quill: QuillInstance;
+  private tiptapEditor;
   containerElement?: HTMLDivElement | HTMLPreElement | null;
   setValue(value: RichtextValue): void;
   getValue(): RichtextValue;
   componentDidLoad(): void;
+  disconnectedCallback(): void;
   updateStyle(newValue: string, oldValue: string): void;
   updateContent(newValue: RichtextValue): void | null;
   render(): any;

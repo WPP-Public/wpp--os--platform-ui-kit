@@ -11,6 +11,7 @@ import { InlineMessageLocalesType } from './types';
  * @part tooltip - tooltip wrapper content
  */
 export declare class WppInlineMessage {
+  private themeSubscription;
   host: HTMLWppInlineMessageElement;
   isTruncated: boolean;
   hasTitle: boolean;
@@ -68,6 +69,7 @@ export declare class WppInlineMessage {
   onUpdateLocales(newLocales: Partial<InlineMessageLocalesType>): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  connectedCallback(): void;
   disconnectedCallback(): void;
   private setupResizeObserver;
   private checkTruncation;

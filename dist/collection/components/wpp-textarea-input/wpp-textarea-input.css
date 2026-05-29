@@ -43,6 +43,8 @@
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
 }
 :host(.wpp-textarea-wrapper) textarea.stretch {
+  --wpp-textarea-height: auto;
+  min-height: calc(1 * var(--wpp-font-line-height-s-body, 22px) + 2 * var(--wpp-border-width-s) + 18px);
   overflow-x: hidden;
   overflow-y: hidden;
 }

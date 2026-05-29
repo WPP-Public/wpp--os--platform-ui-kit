@@ -1,21 +1,59 @@
 import { h, Host } from '@stencil/core';
 import { WrappedSlot } from '../../../common/WrappedSlot/WrappedSlot';
+import { FOCUS_TYPE } from '../../../../types/common';
+import { themeSubscriptionController } from '../../../../utils/subscribe-to-theme';
+let instanceCounter = 0;
 /**
  * @slot - Can contain either plain text or an icon depending on the `variant` prop. Use icons provided with the component library or custom **.svg** files that can be styled with the CSS color attribute. The default slot, without the name attribute.
  * @part item - Wrapper that can contain label or icon
  */
 export class WppSegmentedControlItem {
   constructor() {
+    this.isMouseClicked = false;
+    this.uniqueId = `sc-tab-${++instanceCounter}`;
+    this.mouseUpHandler = () => {
+      this.pressed = false;
+    };
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.handleClickSegmentedControl = () => {
+      this.focusType = FOCUS_TYPE.NONE;
       if (this.disabled)
         return;
       this.wppChangeSegmentedControlItem.emit({ value: this.value });
     };
     this.onFocus = (event) => {
+      this.focusType = this.isMouseClicked ? FOCUS_TYPE.MOUSE : FOCUS_TYPE.TAB;
+      this.isMouseClicked = false;
       this.wppFocus.emit(event);
     };
     this.onBlur = (event) => {
+      this.focusType = FOCUS_TYPE.NONE;
+      this.pressed = false;
       this.wppBlur.emit(event);
+    };
+    this.onKeyDown = (e) => {
+      if (this.disabled)
+        return;
+      if (e.key === ' ' || e.key === 'Enter') {
+        this.pressed = true;
+      }
+    };
+    this.onKeyUp = (e) => {
+      if (e.key === ' ' || e.key === 'Enter') {
+        this.pressed = false;
+      }
+    };
+    this.onMouseDown = () => {
+      if (this.focusType === FOCUS_TYPE.TAB) {
+        this.focusType = FOCUS_TYPE.MOUSE;
+      }
+      else {
+        this.isMouseClicked = true;
+      }
+      if (!this.disabled) {
+        this.pressed = true;
+        window.addEventListener('mouseup', this.mouseUpHandler, { once: true });
+      }
     };
     this.cssClasses = () => ({
       'segmented-control-item': true,
@@ -26,7 +64,10 @@ export class WppSegmentedControlItem {
     });
     this.hostCssClasses = () => ({
       'wpp-segmented-control-item': true,
+      'tab-focus': this.focusType === FOCUS_TYPE.TAB,
     });
+    this.focusType = undefined;
+    this.pressed = false;
     this.size = 'm';
     this.active = false;
     this.disabled = false;
@@ -34,15 +75,26 @@ export class WppSegmentedControlItem {
     this.counter = 0;
     this.variant = 'text';
     this.hugContentOff = false;
+    this.ariaProps = undefined;
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
+  disconnectedCallback() {
+    this.themeSubscription.stop();
+    window.removeEventListener('mouseup', this.mouseUpHandler);
+  }
+  // Roving tabindex: only the active, enabled item is tabbable
   get tabIndex() {
-    return this.disabled || this.active ? -1 : 0;
+    if (this.disabled)
+      return -1;
+    return this.active ? 0 : -1;
   }
   render() {
-    return (h(Host, { tabIndex: this.tabIndex, onClick: this.handleClickSegmentedControl, onFocus: this.onFocus, onBlur: this.onBlur, class: this.hostCssClasses(), exportparts: "item" }, h("div", { class: this.cssClasses(), part: "item", id: String(this.value), role: "option", "aria-selected": this.active ? 'true' : 'false' }, h(WrappedSlot, { wrapperClass: "content-wrapper" }), this.variant === 'text' && this.counter > 0 && h("div", { class: "counter" }, `(${this.counter})`))));
+    return (h(Host, { id: this.uniqueId, role: "tab", "aria-selected": this.active ? 'true' : 'false', "aria-disabled": this.disabled ? 'true' : null, "aria-controls": this.ariaProps?.tab?.controls, "aria-label": this.ariaProps?.tab?.label, "aria-describedby": this.ariaProps?.tab?.describedby, "data-pressed": this.pressed ? 'true' : null, tabIndex: this.tabIndex, onClick: this.handleClickSegmentedControl, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onBlur: this.onBlur, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, class: this.hostCssClasses(), exportparts: "item" }, h("div", { class: this.cssClasses(), part: "item" }, h(WrappedSlot, { wrapperClass: "content-wrapper" }), this.variant === 'text' && this.counter > 0 && h("div", { class: "counter" }, `(${this.counter})`))));
   }
   static get is() { return "wpp-segmented-control-item"; }
-  static get registryIs() { return "wpp-segmented-control-item-v4-0-0"; }
+  static get registryIs() { return "wpp-segmented-control-item-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -189,7 +241,34 @@ export class WppSegmentedControlItem {
         "attribute": "hug-content-off",
         "reflect": true,
         "defaultValue": "false"
+      },
+      "ariaProps": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "WppSegmentedControlItemAriaProps",
+          "resolved": "undefined | { tab?: Pick<AriaProps, \"label\" | \"describedby\" | \"controls\"> | undefined; }",
+          "references": {
+            "WppSegmentedControlItemAriaProps": {
+              "location": "import",
+              "path": "../../types",
+              "id": "src/components/wpp-segmented-control/types.ts::WppSegmentedControlItemAriaProps"
+            }
+          }
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Grouped ARIA props (explicit picks only).\ntab: { label?, describedby?, controls? }"
+        }
       }
+    };
+  }
+  static get states() {
+    return {
+      "focusType": {},
+      "pressed": {}
     };
   }
   static get events() {

@@ -368,3 +368,17 @@
   white-space: nowrap;
   border: 0;
 }
+
+:host([data-wpp-theme=dark]) {
+  --wpp-prop-icon-color: var(--wpp-grey-color-1000);
+}
+:host([data-wpp-theme=dark]) .video-time {
+  --wpp-text-color: var(--wpp-grey-color-1000);
+  color: var(--wpp-grey-color-1000);
+}
+:host([data-wpp-theme=dark]) .wpp-icon-play-filled,
+:host([data-wpp-theme=dark]) .wpp-icon-pause-filled,
+:host([data-wpp-theme=dark]) .wpp-icon-speaker,
+:host([data-wpp-theme=dark]) .wpp-icon-fullscreen {
+  color: var(--wpp-grey-color-1000);
+}

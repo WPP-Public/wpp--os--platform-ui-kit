@@ -18,7 +18,8 @@ export declare class WppFullScreenModal {
   host: HTMLWppFullScreenModalElement;
   private dialogRef?;
   private topOffset;
-  private pendingTimeouts;
+  private timeouts;
+  private themeSubscription;
   hasHeaderSlot: boolean;
   hasBodySlot: boolean;
   hasActionsSlot: boolean;
@@ -84,6 +85,7 @@ export declare class WppFullScreenModal {
   private onOverlayClick;
   componentDidLoad(): void;
   componentWillLoad(): void;
+  connectedCallback(): void;
   disconnectedCallback(): void;
   private updateSlotData;
   private handleTransitionStart;

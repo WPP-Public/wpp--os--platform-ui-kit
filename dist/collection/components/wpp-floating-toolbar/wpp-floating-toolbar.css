@@ -14,3 +14,7 @@
 .wrapper.vertical {
   flex-direction: column;
 }
+
+:host([data-wpp-theme=dark]) {
+  background-color: var(--wpp-grey-color-200);
+}

@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { WppBanner } from '../wpp-banner';
+import * as themeUtils from '../../../utils/subscribe-to-theme';
 describe('wpp-banner', () => {
   describe('Testing initialisation', () => {
     it('Test default init', async () => {
@@ -241,6 +242,42 @@ describe('wpp-banner', () => {
       await new Promise(resolve => setTimeout(resolve, 0));
       await page.waitForChanges();
       expect(page.root).toMatchSnapshot();
+    });
+  });
+  describe('subscribing to theme changes', () => {
+    let mockStart;
+    let mockStop;
+    beforeEach(() => {
+      mockStart = jest.fn();
+      mockStop = jest.fn();
+      jest.spyOn(themeUtils, 'themeSubscriptionController').mockReturnValue({
+        start: mockStart,
+        stop: mockStop,
+      });
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
+      await newSpecPage({
+        components: [WppBanner],
+        html: `<wpp-banner type='information' closable show>
+                  Some information-testing message
+               </wpp-banner>`,
+      });
+      await new Promise(resolve => setTimeout(resolve, 0));
+      expect(mockStart).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
+      const page = await newSpecPage({
+        components: [WppBanner],
+        html: `<wpp-banner type='information' closable show>
+                  Some information-testing message
+               </wpp-banner>`,
+      });
+      await new Promise(resolve => setTimeout(resolve, 0));
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
     });
   });
 });

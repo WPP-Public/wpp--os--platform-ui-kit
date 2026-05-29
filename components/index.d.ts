@@ -3,6 +3,8 @@ export { WppAccordion as WppAccordion } from '../dist/types/components/wpp-accor
 export { defineCustomElement as defineCustomElementWppAccordion } from './wpp-accordion';
 export { WppActionButton as WppActionButton } from '../dist/types/components/wpp-action-button/wpp-action-button';
 export { defineCustomElement as defineCustomElementWppActionButton } from './wpp-action-button';
+export { WppArtefact as WppArtefact } from '../dist/types/components/wpp-artefact/wpp-artefact';
+export { defineCustomElement as defineCustomElementWppArtefact } from './wpp-artefact';
 export { WppAutocomplete as WppAutocomplete } from '../dist/types/components/wpp-autocomplete/wpp-autocomplete';
 export { defineCustomElement as defineCustomElementWppAutocomplete } from './wpp-autocomplete';
 export { WppAvatar as WppAvatar } from '../dist/types/components/wpp-avatar/wpp-avatar';
@@ -13,6 +15,8 @@ export { WppBackToTopButton as WppBackToTopButton } from '../dist/types/componen
 export { defineCustomElement as defineCustomElementWppBackToTopButton } from './wpp-back-to-top-button';
 export { WppBanner as WppBanner } from '../dist/types/components/wpp-banner/wpp-banner';
 export { defineCustomElement as defineCustomElementWppBanner } from './wpp-banner';
+export { WppBasicNode as WppBasicNode } from '../dist/types/components/wpp-basic-node/wpp-basic-node';
+export { defineCustomElement as defineCustomElementWppBasicNode } from './wpp-basic-node';
 export { WppBreadcrumb as WppBreadcrumb } from '../dist/types/components/wpp-breadcrumb/wpp-breadcrumb';
 export { defineCustomElement as defineCustomElementWppBreadcrumb } from './wpp-breadcrumb';
 export { WppButton as WppButton } from '../dist/types/components/wpp-button/wpp-button';
@@ -27,6 +31,8 @@ export { WppChatConversationMessage as WppChatConversationMessage } from '../dis
 export { defineCustomElement as defineCustomElementWppChatConversationMessage } from './wpp-chat-conversation-message';
 export { WppChatInput as WppChatInput } from '../dist/types/components/wpp-chat/components/wpp-chat-input/wpp-chat-input';
 export { defineCustomElement as defineCustomElementWppChatInput } from './wpp-chat-input';
+export { WppChatNode as WppChatNode } from '../dist/types/components/wpp-chat-node/wpp-chat-node';
+export { defineCustomElement as defineCustomElementWppChatNode } from './wpp-chat-node';
 export { WppCheckbox as WppCheckbox } from '../dist/types/components/wpp-checkbox/wpp-checkbox';
 export { defineCustomElement as defineCustomElementWppCheckbox } from './wpp-checkbox';
 export { WppCheckboxGroup as WppCheckboxGroup } from '../dist/types/components/wpp-checkbox-group/wpp-checkbox-group';
@@ -79,6 +85,8 @@ export { WppFullScreenModal as WppFullScreenModal } from '../dist/types/componen
 export { defineCustomElement as defineCustomElementWppFullScreenModal } from './wpp-full-screen-modal';
 export { WppGrid as WppGrid } from '../dist/types/components/wpp-grid/wpp-grid';
 export { defineCustomElement as defineCustomElementWppGrid } from './wpp-grid';
+export { WppHandle as WppHandle } from '../dist/types/components/wpp-handle/wpp-handle';
+export { defineCustomElement as defineCustomElementWppHandle } from './wpp-handle';
 export { HueSlider as WppHueSlider } from '../dist/types/components/wpp-color-picker/components/wpp-hue-slider/wpp-hue-slider';
 export { defineCustomElement as defineCustomElementWppHueSlider } from './wpp-hue-slider';
 export { WppIconAbout as WppIconAbout } from '../dist/types/components/wpp-icon/components/communication/communication/wpp-icon-about/wpp-icon-about';

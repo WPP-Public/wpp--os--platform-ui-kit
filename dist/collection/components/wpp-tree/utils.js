@@ -107,3 +107,80 @@ export const extractExtraProps = (tree) => {
   }
   return extras;
 };
+/**
+ * Get all visible (not hidden, and parent is open) items in a flat list for keyboard navigation
+ */
+export const getAllVisibleItems = (tree) => {
+  const result = [];
+  const traverse = (items) => {
+    for (const item of items) {
+      if (item.hidden)
+        continue;
+      result.push(item);
+      if (item.open && item.children?.length) {
+        traverse(item.children);
+      }
+    }
+  };
+  traverse(tree);
+  return result;
+};
+/**
+ * Find an item by ID in the tree
+ */
+export const findItemById = (tree, id) => {
+  for (const item of tree) {
+    if (item.id === id)
+      return item;
+    if (item.children) {
+      const found = findItemById(item.children, id);
+      if (found)
+        return found;
+    }
+  }
+  return undefined;
+};
+/**
+ * Find the parent of an item by its ID
+ */
+export const findParentOfItem = (tree, targetId, parent = null) => {
+  for (const item of tree) {
+    if (item.id === targetId)
+      return parent;
+    if (item.children) {
+      const found = findParentOfItem(item.children, targetId, item);
+      if (found !== null)
+        return found;
+    }
+  }
+  return null;
+};
+/**
+ * Get siblings of an item
+ */
+export const getSiblings = (tree, targetId) => {
+  for (const item of tree) {
+    if (item.id === targetId)
+      return tree;
+    if (item.children) {
+      const result = getSiblings(item.children, targetId);
+      if (result.length > 0 && result.some(i => i.id === targetId))
+        return result;
+    }
+  }
+  return [];
+};
+/**
+ * Calculate aria-setsize and aria-posinset for an item
+ */
+export const getPositionInfo = (tree, targetId) => {
+  const siblings = getSiblings(tree, targetId);
+  const visibleSiblings = siblings.filter(s => !s.hidden);
+  const index = visibleSiblings.findIndex(s => s.id === targetId);
+  if (index === -1)
+    return null;
+  return {
+    setSize: visibleSiblings.length,
+    posInSet: index + 1,
+  };
+};

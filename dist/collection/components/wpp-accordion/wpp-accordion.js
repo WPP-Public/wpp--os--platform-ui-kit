@@ -72,10 +72,13 @@ export class WppAccordion {
     this.onKeyDown = (event) => {
       if (this.disabled || this.focusType === FOCUS_TYPE.NONE)
         return;
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        this.toggleExpand();
-      }
+      if (event.key !== 'Enter' && event.key !== ' ')
+        return;
+      const isFromContent = event.composedPath().some(node => node.getAttribute?.('part') === 'content');
+      if (isFromContent)
+        return;
+      event.preventDefault();
+      this.toggleExpand();
     };
     this.hostCssClasses = (isInternal) => ({
       'wpp-accordion': true,
@@ -293,11 +296,11 @@ export class WppAccordion {
     const internal = !!this.host.children[0]?.assignedElements;
     const style = this.getAnimationStyles();
     const tooltipText = headerTitle || '';
-    const titleContent = (h(Fragment, null, this.hasHeaderSlot && (h("wpp-typography-v4-0-0", { class: "typography-title", part: "title", type: this.getHeaderTypographyType(), style: { '--typography-color': 'var(--wpp-text-color)' } }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", role: "presentation", onSlotchange: this.updateSlotData })))));
-    return (h(Host, { class: this.hostCssClasses(internal), exportparts: "section, title, icon, divider, title-wrapper, content", style: style, onBlur: this.onBlur, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown }, h("div", { class: this.cssSectionClasses(), part: "section" }, h("button", { ref: ref => (this.titleTagsWrapperButtonRef = ref), class: this.cssTagWrapperClasses(), "aria-expanded": this.expanded.toString(), "aria-controls": this.ariaProps?.controls ?? 'expandable-panel', id: this.ariaProps?.labelledby ?? 'expandable-button', onFocus: this.onFocus, onClick: this.onClick, disabled: this.disabled, part: "button" }, h("div", { class: "title-wrapper", part: "title-wrapper", role: "none" }, h("wpp-icon-chevron-v4-0-0", { role: "presentation", part: "icon" }), this.isTitleOverflowing ? (h("wpp-tooltip-v4-0-0", { config: { triggerTarget: this.titleTagsWrapperButtonRef }, text: tooltipText }, titleContent)) : (titleContent)), this.withTag && (h(WrappedSlot, { wrapperClass: this.tagGroupCssClasses(), name: "tags", onSlotchange: this.updateSlotData }))), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), h("div", { class: this.contentCssClasses(), part: "content", role: "region", id: this.ariaProps?.controls ?? 'expandable-panel', "aria-labelledby": this.ariaProps?.labelledby ?? 'expandable-button', ...(!this.expanded ? { inert: true, 'aria-hidden': true } : {}) }, h("slot", { class: "slot-content" })), this.withDivider && h("wpp-divider-v4-0-0", { part: "divider" })));
+    const titleContent = (h(Fragment, null, this.hasHeaderSlot && (h("wpp-typography-v4-1-0", { class: "typography-title", part: "title", type: this.getHeaderTypographyType(), style: { '--typography-color': 'var(--wpp-text-color)' } }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", role: "presentation", onSlotchange: this.updateSlotData })))));
+    return (h(Host, { class: this.hostCssClasses(internal), exportparts: "section, title, icon, divider, title-wrapper, content, header-wrapper, typography", style: style, onBlur: this.onBlur, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown }, h("div", { class: this.cssSectionClasses(), part: "section" }, h("button", { ref: ref => (this.titleTagsWrapperButtonRef = ref), class: this.cssTagWrapperClasses(), "aria-expanded": this.expanded.toString(), "aria-controls": this.ariaProps?.controls ?? 'expandable-panel', id: this.ariaProps?.labelledby ?? 'expandable-button', onFocus: this.onFocus, onClick: this.onClick, disabled: this.disabled, part: "button" }, h("div", { class: "title-wrapper", part: "title-wrapper", role: "none" }, h("wpp-icon-chevron-v4-1-0", { role: "presentation", part: "icon" }), this.isTitleOverflowing ? (h("wpp-tooltip-v4-1-0", { config: { triggerTarget: this.titleTagsWrapperButtonRef }, text: tooltipText }, titleContent)) : (titleContent)), this.withTag && (h(WrappedSlot, { wrapperClass: this.tagGroupCssClasses(), name: "tags", onSlotchange: this.updateSlotData }))), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), h("div", { class: this.contentCssClasses(), part: "content", role: "region", id: this.ariaProps?.controls ?? 'expandable-panel', "aria-labelledby": this.ariaProps?.labelledby ?? 'expandable-button', ...(!this.expanded ? { inert: true, 'aria-hidden': true } : {}) }, h("slot", { class: "slot-content" })), this.withDivider && h("wpp-divider-v4-1-0", { part: "divider" })));
   }
   static get is() { return "wpp-accordion"; }
-  static get registryIs() { return "wpp-accordion-v4-0-0"; }
+  static get registryIs() { return "wpp-accordion-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

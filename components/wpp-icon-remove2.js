@@ -16,9 +16,9 @@ const WppIconRemove = /*@__PURE__*/ proxyCustomElement(class WppIconRemove exten
   render() {
     return (h(WppIcon, { name: "wpp-icon-remove", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: "M3 10C3 9.44772 3.44772 9 4 9H16C16.5523 9 17 9.44772 17 10C17 10.5523 16.5523 11 16 11H4C3.44772 11 3 10.5523 3 10Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-remove-v4-0-0"; }
+  static get registryIs() { return "wpp-icon-remove-v4-1-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-remove", "wpp-icon-remove-v4-0-0", {
+}, [1, "wpp-icon-remove", "wpp-icon-remove-v4-1-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -28,9 +28,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-remove-v4-0-0"];
+  const components = ["wpp-icon-remove-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-remove-v4-0-0":
+    case "wpp-icon-remove-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconRemove);
       }

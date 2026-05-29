@@ -2,6 +2,7 @@ import { newSpecPage } from '@stencil/core/testing';
 import { WppMenuContext } from '../wpp-menu-context';
 import { WppListItem } from '../../wpp-list-item/wpp-list-item';
 import { CONTEXT_ITEM_TAG } from '../constants';
+import * as themeUtils from '../../../utils/subscribe-to-theme';
 describe('wpp-menu-context', () => {
   it('should render empty context', async () => {
     const page = await newSpecPage({
@@ -162,5 +163,37 @@ describe('wpp-menu-context', () => {
     await new Promise(resolve => setTimeout(resolve, 0));
     await page.waitForChanges();
     expect(page.root).toMatchSnapshot();
+  });
+  describe('subscribing to theme changes', () => {
+    let mockStart;
+    let mockStop;
+    beforeEach(() => {
+      mockStart = jest.fn();
+      mockStop = jest.fn();
+      jest.spyOn(themeUtils, 'themeSubscriptionController').mockReturnValue({
+        start: mockStart,
+        stop: mockStop,
+      });
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
+      await newSpecPage({
+        components: [WppMenuContext],
+        html: `<wpp-menu-context></wpp-menu-context>`,
+      });
+      await new Promise(resolve => setTimeout(resolve, 0));
+      expect(mockStart).toHaveBeenCalledTimes(2);
+    });
+    it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
+      const page = await newSpecPage({
+        components: [WppMenuContext],
+        html: `<wpp-menu-context></wpp-menu-context>`,
+      });
+      await new Promise(resolve => setTimeout(resolve, 0));
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
+    });
   });
 });

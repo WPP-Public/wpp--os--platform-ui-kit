@@ -145,3 +145,11 @@
   max-height: var(--banner-height);
   transition: max-height var(--banner-animation-duration) ease-in-out;
 }
+
+:host([data-wpp-theme=dark]) .hidden-banner-wrapper .banner-wrapper.warning .message,
+:host([data-wpp-theme=dark]) .hidden-banner-wrapper .banner-wrapper.warning .left-icon {
+  color: var(--wpp-grey-color-100);
+}
+:host([data-wpp-theme=dark]) .hidden-banner-wrapper .banner-wrapper.information .content-wrapper .left-icon {
+  color: var(--wpp-grey-color-300);
+}

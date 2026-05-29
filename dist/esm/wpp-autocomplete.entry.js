@@ -1,11 +1,12 @@
 import { h, F as Fragment, r as registerInstance, c as createEvent, H as Host, g as getElement } from './index-9177bb6d.js';
 import { l as lodash } from './lodash-cc2b04b5.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
-import { m as menuListConfig } from './menuListConfig-4d091d14.js';
-import { w as getHighestContainerInDOM, d as debounce, s as selectDropdownWidth, b as isEventTargetContained } from './utils-45d1949f.js';
-import { Z as Z_INDEX } from './consts-9fc0a13a.js';
-import { i as isSelected, r as renderSlotsInListItem, s as selectedOptionsByOrder } from './utils-02b76d2c.js';
+import { m as menuListConfig } from './menuListConfig-ac199028.js';
+import { w as getHighestContainerInDOM, d as debounce, s as selectDropdownWidth, b as isEventTargetContained } from './utils-3463d13f.js';
+import { Z as Z_INDEX } from './consts-744c144f.js';
+import { i as isSelected, r as renderSlotsInListItem, s as selectedOptionsByOrder } from './utils-9d0a696b.js';
 import { L as LIB_COMPONENTS_PREFIX } from './const-ee6c5d3f.js';
+import { t as themeSubscriptionController } from './subscribe-to-theme-2f801cf6.js';
 import './_commonjsHelpers-ba3f0406.js';
 import './tippy.esm-c5fe8087.js';
 
@@ -48,8 +49,8 @@ function renderDropdownPillsComponent() {
    */
   const isNeedDivider = !!this.selectedOptions.length;
   // Render Show More/Show Less button only in cases when we have truncated WppPill (not .label inside)
-  const showMoreLessRender = (label) => (h("wpp-action-button-v4-0-0", { "data-testid": "wpp-autocomplete-show-btn", class: "nowrap", variant: "secondary", onClick: this.handleShowMoreLessClick }, label));
-  const renderPillComponent = (option, ndx, isTransparentPill = false) => (h("wpp-pill-v4-0-0", { ref: ref => {
+  const showMoreLessRender = (label) => (h("wpp-action-button-v4-1-0", { "data-testid": "wpp-autocomplete-show-btn", class: "nowrap", variant: "secondary", onClick: this.handleShowMoreLessClick }, label));
+  const renderPillComponent = (option, ndx, isTransparentPill = false) => (h("wpp-pill-v4-1-0", { ref: ref => {
       if (ref)
         this.selectedPillRefs[ndx] = ref;
     }, class: { transparent: this.isShowMore && isTransparentPill }, label: option.label, type: "display", onWppClose: event => {
@@ -72,7 +73,7 @@ function renderDropdownPillsComponent() {
       h("div", { ref: ref => (this.selectedPillsWrapperRef = ref), class: selectedPillsWrapperCssClasses() }, this.selectedOptions.map((option, ndx) => renderPillComponent(option, ndx, this.activePillsTruncationState[ndx]))),
       h("div", { ref: ref => (this.showMoreElementRef = ref), class: "show-more-action" }, showMoreLessRender(`+${this.activePillsTruncationState.filter(x => x).length} ${this._locales.showMore}`)))),
     !this.isShowMore && h("div", { class: "show-less-action" }, showMoreLessRender(this._locales.showLess)),
-    isNeedDivider && h("wpp-divider-v4-0-0", { class: "nothing-found-divider" })));
+    isNeedDivider && h("wpp-divider-v4-1-0", { class: "nothing-found-divider" })));
 }
 
 function renderPlaceholderTextComponent() {
@@ -87,9 +88,9 @@ function renderPlaceholderTextComponent() {
     computed: this.hiddenSelectedOptionsNumber > 0 && this.value.length > 1,
   });
   return (h(Fragment, null,
-    h("wpp-typography-v4-0-0", { ref: ref => (this.inputPlaceholderRef = ref), type: "s-body", class: inputPlaceholderCssClasses() }, this.placeholderText),
-    h("wpp-typography-v4-0-0", { ref: ref => (this.hiddenInputPlaceholderRef = ref), role: "presentation", type: "s-body", class: "hidden-input-placeholder" }),
-    this.value.length > 1 && (h("wpp-typography-v4-0-0", { class: hiddenCountCssClasses(), type: "s-body" },
+    h("wpp-typography-v4-1-0", { ref: ref => (this.inputPlaceholderRef = ref), type: "s-body", class: inputPlaceholderCssClasses() }, this.placeholderText),
+    h("wpp-typography-v4-1-0", { ref: ref => (this.hiddenInputPlaceholderRef = ref), role: "presentation", type: "s-body", class: "hidden-input-placeholder" }),
+    this.value.length > 1 && (h("wpp-typography-v4-1-0", { class: hiddenCountCssClasses(), type: "s-body" },
       "+ ",
       this.hiddenSelectedOptionsNumber))));
 }
@@ -106,33 +107,33 @@ function renderDropdownListComponent() {
     return (h(Fragment, null,
       this.internalList.map((item, ndx) => {
         const { label, slots, ...rest } = item;
-        return (h("wpp-list-item-v4-0-0", { ref: el => (this.listItemsRefs[ndx] = el), onWppChangeListItem: this.handleClickListItem, key: convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" },
+        return (h("wpp-list-item-v4-1-0", { ref: el => (this.listItemsRefs[ndx] = el), onWppChangeListItem: this.handleClickListItem, key: convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" },
           h("span", { slot: "label" }, label),
           slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
       }),
       this.isInfiniteLoading && (h("div", { class: "wpp-dropdown-infinite-loader" },
-        h("wpp-spinner-v4-0-0", null)))));
+        h("wpp-spinner-v4-1-0", null)))));
   };
   const renderSuggestionOptions = () => {
     this.suggestionsItemsRefs = [];
     return (h(Fragment, null,
-      h("wpp-typography-v4-0-0", { role: "presentation", type: "s-strong", class: "suggestions-heading" }, this._locales.suggestionTitle),
+      h("wpp-typography-v4-1-0", { role: "presentation", type: "s-strong", class: "suggestions-heading" }, this._locales.suggestionTitle),
       this.componentSuggestions?.map((suggestion, ndx) => {
         const { slots, checked, label, ...restProps } = suggestion;
         const isChecked = checked || isSelected(this.value, suggestion, this.getItemKey);
-        return (h("wpp-list-item-v4-0-0", { ref: el => (this.suggestionsItemsRefs[ndx] = el), onWppChangeListItem: this.handleClickListItem, key: convertValueToKey(suggestion.value), ...restProps, id: suggestion.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${suggestion.id}` : undefined, checked: isChecked, class: { 'suggestion-item': true, 'last-item': ndx === this.componentSuggestions.length - 1 }, role: "option" },
+        return (h("wpp-list-item-v4-1-0", { ref: el => (this.suggestionsItemsRefs[ndx] = el), onWppChangeListItem: this.handleClickListItem, key: convertValueToKey(suggestion.value), ...restProps, id: suggestion.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${suggestion.id}` : undefined, checked: isChecked, class: { 'suggestion-item': true, 'last-item': ndx === this.componentSuggestions.length - 1 }, role: "option" },
           h("span", { slot: "label" }, label),
           slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
   };
   if (this.loading) {
-    return (h("wpp-list-item-v4-0-0", { role: "status", "non-interactive": true },
-      h("wpp-spinner-v4-0-0", { slot: "left" }),
+    return (h("wpp-list-item-v4-1-0", { role: "status", "non-interactive": true },
+      h("wpp-spinner-v4-1-0", { slot: "left" }),
       h("span", { slot: "label" }, this._locales.loading)));
   }
   if (!this.visibleOptionsLength && this.searchText.length > 0) {
-    return (h("wpp-list-item-v4-0-0", { labelTypography: { color: 'var(--wpp-grey-color-700)', type: 's-body' }, nonInteractive: true },
-      h("wpp-typography-v4-0-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound)));
+    return (h("wpp-list-item-v4-1-0", { labelTypography: { color: 'var(--wpp-grey-color-700)', type: 's-body' }, nonInteractive: true },
+      h("wpp-typography-v4-1-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound)));
   }
   if (!this.searchText.trim().length && !!this.componentSuggestions?.length) {
     return renderSuggestionOptions();
@@ -141,7 +142,7 @@ function renderDropdownListComponent() {
 }
 
 function renderExtendedSelectedValuesComponent() {
-  return (h("div", { class: "selected-values" }, this.extendedSelectedValues?.map(el => (h("wpp-pill-v4-0-0", { label: el.label, type: "display", onWppClose: event => this.handleClickListItem({
+  return (h("div", { class: "selected-values" }, this.extendedSelectedValues?.map(el => (h("wpp-pill-v4-1-0", { label: el.label, type: "display", onWppClose: event => this.handleClickListItem({
       ...event,
       ...{ detail: { value: el.value } },
     }), removable: true })))));
@@ -158,12 +159,12 @@ function renderCreateNewOptionComponent() {
     this.handleBlur(undefined, { force: true });
   };
   return (h("div", { class: "wpp-dropdown-actions" },
-    h("wpp-divider-v4-0-0", null),
-    h("wpp-list-item-v4-0-0", { onClick: handleCreateNewOptionClick },
-      h("wpp-typography-v4-0-0", { type: "s-strong", class: "wpp-create-new-option", slot: "label" }, this._locales.createNewElement(this.searchText)))));
+    h("wpp-divider-v4-1-0", null),
+    h("wpp-list-item-v4-1-0", { onClick: handleCreateNewOptionClick },
+      h("wpp-typography-v4-1-0", { type: "s-strong", class: "wpp-create-new-option", slot: "label" }, this._locales.createNewElement(this.searchText)))));
 }
 
-const wppAutocompleteCss = ":host{--autocomplete-min-width:var(--wpp-autocomplete-min-width, 184px);position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;outline:none;min-width:var(--autocomplete-min-width)}.trigger{position:relative;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-webkit-box-sizing:border-box;box-sizing:border-box;background-color:transparent;border:var(--wpp-border-width-s) solid var(--wpp-grey-color-500);border-radius:var(--wpp-border-radius-m);cursor:text;outline:none}.trigger.size-s{height:32px}.trigger.size-m{height:40px}.trigger:hover{background-color:var(--wpp-grey-color-200);border-color:var(--wpp-grey-color-700)}.trigger:active{background-color:transparent;border-color:var(--wpp-grey-color-800)}.trigger:active .trigger-actions .wpp-icon-chevron,.trigger:active .wpp-icon-cross{color:var(--wpp-icon-color-active)}.trigger.focused{background-color:var(--wpp-grey-color-000);border-color:var(--wpp-grey-color-800)}.trigger.focused .input-placeholder,.trigger.focused .hidden-count{position:absolute;opacity:0;pointer-events:none;visibility:hidden}.trigger.warning,.trigger.warning:hover{border:var(--wpp-border-width-s) solid var(--wpp-warning-color-400)}.trigger.error,.trigger.error:hover{border:var(--wpp-border-width-s) solid var(--wpp-danger-color-400)}.trigger.disabled{background-color:var(--wpp-grey-color-100);border-color:var(--wpp-grey-color-400);pointer-events:none}.trigger.disabled .input-placeholder{--wpp-typography-color:var(--wpp-text-color-disabled)}.trigger.single .hidden-count{right:10px}.label{margin-bottom:8px}.wpp-input{min-width:70px;padding:0;background:transparent;border:none;outline:none;width:calc(100% + 2px);left:-1px;-ms-flex:1 0 auto;flex:1 0 auto;--wpp-input-border-width:0;--wpp-input-bg-color-hover:transparent;--wpp-input-bg-color-active:transparent;--wpp-input-bg-color-disabled:transparent}.wpp-input::-moz-placeholder{color:var(--wpp-grey-color-700);opacity:1}.wpp-input::-webkit-input-placeholder{color:var(--wpp-grey-color-700)}.wpp-input:-ms-input-placeholder{color:var(--wpp-grey-color-700)}.wpp-input::-ms-input-placeholder{color:var(--wpp-grey-color-700)}.wpp-input::placeholder{color:var(--wpp-grey-color-700)}.wpp-input.wpp-size-m{--wpp-input-padding-m:9px 10px 9px 12px}.wpp-input.wpp-size-s{--wpp-input-padding-s:5px 10px 5px 12px}.wpp-input.transparent::part(input){color:transparent}.input-placeholder{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;-webkit-box-sizing:border-box;box-sizing:border-box;position:absolute;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);left:11px;width:calc(100% - 50px - var(--hidden-count-width, -26px));-ms-flex:1 1 auto;flex:1 1 auto;min-width:0}.input-placeholder.hidden{opacity:0;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;pointer-events:none}.input-placeholder.disabled{color:var(--wpp-text-color-disabled)}.hidden-input-placeholder{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;visibility:hidden;position:absolute;z-index:-1}.wpp-icon-cross{position:absolute;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);right:10px;display:-ms-flexbox;display:flex;cursor:pointer}.wpp-icon-cross:hover{color:var(--wpp-icon-color-hover)}.hidden-count{position:absolute;top:50%;right:38px;-webkit-transform:translateY(-50%);transform:translateY(-50%);max-width:0;opacity:0}.hidden-count.computed{max-width:100px;opacity:1}.wpp-icon-cross.wpp-hidden{opacity:0;pointer-events:none}.selected-values{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;gap:8px;margin-top:12px}.selected-values .wpp-pill{max-width:100%}.empty-focus-anchor{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0;outline:none}.inline-message{margin-top:4px}";
+const wppAutocompleteCss = ":host{--autocomplete-min-width:var(--wpp-autocomplete-min-width, 184px);position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;outline:none;min-width:var(--autocomplete-min-width)}.trigger{position:relative;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-webkit-box-sizing:border-box;box-sizing:border-box;background-color:transparent;border:var(--wpp-border-width-s) solid var(--wpp-grey-color-500);border-radius:var(--wpp-border-radius-m);cursor:text;outline:none}.trigger.size-s{height:32px}.trigger.size-m{height:40px}.trigger:hover{background-color:var(--wpp-grey-color-200);border-color:var(--wpp-grey-color-700)}.trigger:active{background-color:transparent;border-color:var(--wpp-grey-color-800)}.trigger:active .trigger-actions .wpp-icon-chevron,.trigger:active .wpp-icon-cross{color:var(--wpp-icon-color-active)}.trigger.focused{background-color:transparent;border-color:var(--wpp-grey-color-800)}.trigger.focused .input-placeholder,.trigger.focused .hidden-count{position:absolute;opacity:0;pointer-events:none;visibility:hidden}.trigger.warning,.trigger.warning:hover{border:var(--wpp-border-width-s) solid var(--wpp-warning-color-400)}.trigger.error,.trigger.error:hover{border:var(--wpp-border-width-s) solid var(--wpp-danger-color-400)}.trigger.disabled{background-color:var(--wpp-grey-color-100);border-color:var(--wpp-grey-color-400);pointer-events:none}.trigger.disabled .input-placeholder{--wpp-typography-color:var(--wpp-text-color-disabled)}.trigger.single .hidden-count{right:10px}.label{margin-bottom:8px}.wpp-input{min-width:70px;padding:0;background:transparent;border:none;outline:none;width:calc(100% + 2px);left:-1px;-ms-flex:1 0 auto;flex:1 0 auto;--wpp-input-border-width:0;--wpp-input-bg-color-hover:transparent;--wpp-input-bg-color-active:transparent;--wpp-input-bg-color-disabled:transparent}.wpp-input::-moz-placeholder{color:var(--wpp-grey-color-700);opacity:1}.wpp-input::-webkit-input-placeholder{color:var(--wpp-grey-color-700)}.wpp-input:-ms-input-placeholder{color:var(--wpp-grey-color-700)}.wpp-input::-ms-input-placeholder{color:var(--wpp-grey-color-700)}.wpp-input::placeholder{color:var(--wpp-grey-color-700)}.wpp-input.wpp-size-m{--wpp-input-padding-m:9px 10px 9px 12px}.wpp-input.wpp-size-s{--wpp-input-padding-s:5px 10px 5px 12px}.wpp-input.transparent::part(input){color:transparent}.input-placeholder{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;-webkit-box-sizing:border-box;box-sizing:border-box;position:absolute;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);left:11px;width:calc(100% - 50px - var(--hidden-count-width, -26px));-ms-flex:1 1 auto;flex:1 1 auto;min-width:0}.input-placeholder.hidden{opacity:0;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;pointer-events:none}.input-placeholder.disabled{color:var(--wpp-text-color-disabled)}.hidden-input-placeholder{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;visibility:hidden;position:absolute;z-index:-1}.wpp-icon-cross{position:absolute;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);right:10px;display:-ms-flexbox;display:flex;cursor:pointer}.wpp-icon-cross:hover{color:var(--wpp-icon-color-hover)}.hidden-count{position:absolute;top:50%;right:38px;-webkit-transform:translateY(-50%);transform:translateY(-50%);max-width:0;opacity:0}.hidden-count.computed{max-width:100px;opacity:1}.wpp-icon-cross.wpp-hidden{opacity:0;pointer-events:none}.selected-values{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;gap:8px;margin-top:12px}.selected-values .wpp-pill{max-width:100%}.empty-focus-anchor{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0;outline:none}.inline-message{margin-top:4px}";
 
 const WppAutocomplete = class {
   constructor(hostRef) {
@@ -174,6 +175,7 @@ const WppAutocomplete = class {
     this.wppSearchValueChange = createEvent(this, "wppSearchValueChange", 1);
     this.wppCreateNewOption = createEvent(this, "wppCreateNewOption", 1);
     this._locales = LOCALES_DEFAULTS;
+    this.themeSubscription = themeSubscriptionController(() => this.dropdownRef);
     this.selectedPillRefs = [];
     this.withPills = false;
     this.activeListNdx = null;
@@ -992,6 +994,7 @@ const WppAutocomplete = class {
     this.handleListChange(normalized);
   }
   componentDidLoad() {
+    this.themeSubscription.start();
     this.createTippyInstance();
     if (this.type === 'regular')
       this.setupResizeObserver();
@@ -1000,22 +1003,24 @@ const WppAutocomplete = class {
       this.setFocus(true);
   }
   connectedCallback() {
+    this.themeSubscription.start();
     if (this.tippyInstance?.state.isDestroyed) {
       this.createTippyInstance();
     }
   }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     this.tippyInstance?.destroy();
     this.resizeObserver?.disconnect();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onBlur: this.handleBlur, onKeyUp: this.onKeyUp, exportparts: "input, dropdown, trigger, label" }, this.labelConfig?.text && (h("wpp-label-v4-0-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: this.handleTriggerClick })), h("div", { ref: ref => (this.triggerRef = ref), tabindex: -1, class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, this.renderPlaceholderText(), h("wpp-input-v4-0-0", { ref: ref => (this.inputRef = ref), part: "input", type: "text", role: "combobox", "aria-autocomplete": "list", "aria-expanded": this.isDropdownShown.toString(), "aria-controls": `${this.name}-listbox`, autocomplete: "off", class: this.inputCssClasses(), id: this.name, name: this.name, value: this.searchText, onWppChange: this.handleSearch, disabled: this.disabled, required: this.required, placeholder: this.isFocused || this.isDropdownShown || this.value.length > 0 || this.searchText.trim().length > 0
+    return (h(Host, { class: this.hostCssClasses(), onBlur: this.handleBlur, onKeyUp: this.onKeyUp, exportparts: "input, dropdown, trigger, label" }, this.labelConfig?.text && (h("wpp-label-v4-1-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: this.handleTriggerClick })), h("div", { ref: ref => (this.triggerRef = ref), tabindex: -1, class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, this.renderPlaceholderText(), h("wpp-input-v4-1-0", { ref: ref => (this.inputRef = ref), part: "input", type: "text", role: "combobox", "aria-autocomplete": "list", "aria-expanded": this.isDropdownShown.toString(), "aria-controls": `${this.name}-listbox`, autocomplete: "off", class: this.inputCssClasses(), id: this.name, name: this.name, value: this.searchText, onWppChange: this.handleSearch, disabled: this.disabled, required: this.required, placeholder: this.isFocused || this.isDropdownShown || this.value.length > 0 || this.searchText.trim().length > 0
         ? undefined
         : this.placeholder, onInput: this.handleInput, onFocus: this.handleFocus, onKeyDown: this.onKeyDown, size: this.size, withCrossIcon: false, ariaProps: {
         activedescendant: true,
-      } }), this.multiple && (h("wpp-icon-cross-v4-0-0", { class: this.iconCrossCssClasses(), role: "button", "aria-label": this.multiple ? this._locales.clearMultiple : this._locales.clearSingle, tabindex: this.value.length > 0 && this.multiple ? 0 : -1, onClick: this.handleClearClick, onFocus: this.handleCrossIconFocus, onKeyDown: this.handleCrossIconKeyDown }))), h("div", { ref: ref => (this.dropdownRef = ref), class: this.dropdownCssClasses(), part: "dropdown" }, this.isDropdownShown ? (h(Fragment, null, this.type === 'regular' && this.multiple ? this.renderDropdownPills() : null, h("div", { class: "wpp-autocomplete-dropdown-list", onMouseDown: e => e.preventDefault(), onScroll: this.handleOptionsScroll, id: `${this.name}-listbox`, role: "listbox", "aria-label": this.ariaProps?.label, "aria-busy": this.isInfiniteLoading || this.loading }, this.renderDropdownList()), this.renderCreateNewElement())) : null), !!this.message && (h("wpp-inline-message-v4-0-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType })), this.type === 'extended' && this.multiple ? this.renderExtendedSelectedValues() : null));
+      } }), this.multiple && (h("wpp-icon-cross-v4-1-0", { class: this.iconCrossCssClasses(), role: "button", "aria-label": this.multiple ? this._locales.clearMultiple : this._locales.clearSingle, tabindex: this.value.length > 0 && this.multiple ? 0 : -1, onClick: this.handleClearClick, onFocus: this.handleCrossIconFocus, onKeyDown: this.handleCrossIconKeyDown }))), h("div", { ref: ref => (this.dropdownRef = ref), class: this.dropdownCssClasses(), part: "dropdown" }, this.isDropdownShown ? (h(Fragment, null, this.type === 'regular' && this.multiple ? this.renderDropdownPills() : null, h("div", { class: "wpp-autocomplete-dropdown-list", onMouseDown: e => e.preventDefault(), onScroll: this.handleOptionsScroll, id: `${this.name}-listbox`, role: "listbox", "aria-label": this.ariaProps?.label, "aria-busy": this.isInfiniteLoading || this.loading }, this.renderDropdownList()), this.renderCreateNewElement())) : null), !!this.message && (h("wpp-inline-message-v4-1-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType })), this.type === 'extended' && this.multiple ? this.renderExtendedSelectedValues() : null));
   }
-  static get registryIs() { return "wpp-autocomplete-v4-0-0"; }
+  static get registryIs() { return "wpp-autocomplete-v4-1-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "value": ["onValueChange"],

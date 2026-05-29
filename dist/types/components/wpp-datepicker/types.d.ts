@@ -52,3 +52,35 @@ export interface MonthRangeNormalization {
    */
   endDay?: 'last' | number;
 }
+/**
+ * Configuration for normalizing year range dates.
+ * When using `view="years"` with `range`, this config allows automatic
+ * normalization of selected dates to a specific month/day boundary.
+ */
+export interface YearRangeNormalization {
+  /**
+   * If `true`, enables year range normalization when `view="years"` and `range` are set.
+   * @default true
+   */
+  enabled: boolean;
+  /**
+   * Month (1-12) to use for the start date of the range.
+   * @default 'first' (January)
+   */
+  startMonth?: 'first' | number;
+  /**
+   * Day to use for the start date of the range.
+   * @default 'first' (1st day of the start month)
+   */
+  startDay?: 'first' | number;
+  /**
+   * Month (1-12) to use for the end date of the range.
+   * @default 'last' (December)
+   */
+  endMonth?: 'last' | number;
+  /**
+   * Day to use for the end date of the range.
+   * @default 'last' (last day of the end month)
+   */
+  endDay?: 'last' | number;
+}

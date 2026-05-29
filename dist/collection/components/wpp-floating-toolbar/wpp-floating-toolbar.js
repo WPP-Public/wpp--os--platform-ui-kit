@@ -1,9 +1,11 @@
 import { h, Host } from '@stencil/core';
 import { transformToVersionedTag } from '../../utils/utils';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 export class WppFloatingToolbar {
   constructor() {
     this.items = [];
     this._actionButtonsConfig = [];
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.validateActionButtonConfig = (config) => {
       if (config.length < 2) {
         console.error('The number of action buttons must be at least 2.');
@@ -16,7 +18,7 @@ export class WppFloatingToolbar {
         variant: 'secondary',
       }));
     };
-    this.renderActionButton = (data) => (h("wpp-action-button-v4-0-0", { key: `${data.icon}`, ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
+    this.renderActionButton = (data) => (h("wpp-action-button-v4-1-0", { key: `${data.icon}`, ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
     this.setActionButtons = () => {
       this.items = Array.from(this.host.shadowRoot?.querySelectorAll(transformToVersionedTag('wpp-action-button')) || []);
       this.syncTabIndexes();
@@ -76,11 +78,17 @@ export class WppFloatingToolbar {
   componentDidLoad() {
     this.setActionButtons();
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
+  disconnectedCallback() {
+    this.themeSubscription.stop();
+  }
   render() {
     return (h(Host, { class: this.hostCssClasses(), role: "toolbar", "aria-orientation": this.orientation, "aria-label": this.ariaProps?.label, "aria-labelledby": this.ariaProps?.labelledby, onKeyDown: this.onKeyDown }, h("div", { class: this.wrapperCssClasses() }, this._actionButtonsConfig.map(this.renderActionButton))));
   }
   static get is() { return "wpp-floating-toolbar"; }
-  static get registryIs() { return "wpp-floating-toolbar-v4-0-0"; }
+  static get registryIs() { return "wpp-floating-toolbar-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

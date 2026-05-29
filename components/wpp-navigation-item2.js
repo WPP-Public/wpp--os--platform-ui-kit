@@ -30,10 +30,10 @@ const WppNavigationItem = /*@__PURE__*/ proxyCustomElement(class WppNavigationIt
       'wpp-navigation-item': true,
       'wpp-list-item-wrapper': this.nestedItem,
     });
-    this.linkItem = () => (h("a", { href: this.path, class: "link", onClick: this.onClick, tabIndex: -1 }, h("div", { class: this.navItemCssClasses() }, h("wpp-typography-v4-0-0", { type: this.nestedItem ? 's-body' : 's-midi', class: { 'label-text': true, 'nested-text': this.nestedItem } }, this.label))));
+    this.linkItem = () => (h("a", { href: this.path, class: "link", onClick: this.onClick, tabIndex: -1 }, h("div", { class: this.navItemCssClasses() }, h("wpp-typography-v4-1-0", { type: this.nestedItem ? 's-body' : 's-midi', class: { 'label-text': true, 'nested-text': this.nestedItem } }, this.label))));
     this.listItem = () => (h("li", { class: "list-item", part: "list-item" }, this.linkItem()));
-    this.menuItem = () => (h("div", { class: this.navItemCssClasses() }, h("wpp-icon-more-v4-0-0", { direction: "horizontal", class: "menu-icon" })));
-    this.extendedItem = () => (h("div", { class: this.navItemCssClasses() }, !this.chevronOnly && (h("wpp-typography-v4-0-0", { type: "s-midi", class: "label-text" }, this.label)), h("wpp-icon-chevron-v4-0-0", { direction: "down", color: "var(--wpp-grey-color-600)", class: "chevron-icon", part: "chevron-icon" })));
+    this.menuItem = () => (h("div", { class: this.navItemCssClasses() }, h("wpp-icon-more-v4-1-0", { direction: "horizontal", class: "menu-icon" })));
+    this.extendedItem = () => (h("div", { class: this.navItemCssClasses() }, !this.chevronOnly && (h("wpp-typography-v4-1-0", { type: "s-midi", class: "label-text" }, this.label)), h("wpp-icon-chevron-v4-1-0", { direction: "down", color: "var(--wpp-grey-color-600)", class: "chevron-icon", part: "chevron-icon" })));
     this.renderItem = () => {
       if (this.menu) {
         return this.menuItem();
@@ -60,9 +60,9 @@ const WppNavigationItem = /*@__PURE__*/ proxyCustomElement(class WppNavigationIt
   render() {
     return (h(Host, { class: this.hostCssClasses(), role: this.extended ? MENU_BAR_ROLE : CONTEXT_ITEM_TAG, tabIndex: 0, exportparts: "list-item, chevron-icon" }, this.renderItem()));
   }
-  static get registryIs() { return "wpp-navigation-item-v4-0-0"; }
+  static get registryIs() { return "wpp-navigation-item-v4-1-0"; }
   static get style() { return wppNavigationItemCss; }
-}, [1, "wpp-navigation-item", "wpp-navigation-item-v4-0-0", {
+}, [1, "wpp-navigation-item", "wpp-navigation-item-v4-1-0", {
     "menuExpanded": [516, "menu-expanded"],
     "label": [1],
     "value": [1],
@@ -78,24 +78,24 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-navigation-item-v4-0-0", "wpp-icon-chevron-v4-0-0", "wpp-icon-more-v4-0-0", "wpp-typography-v4-0-0"];
+  const components = ["wpp-navigation-item-v4-1-0", "wpp-icon-chevron-v4-1-0", "wpp-icon-more-v4-1-0", "wpp-typography-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-navigation-item-v4-0-0":
+    case "wpp-navigation-item-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppNavigationItem);
       }
       break;
-    case "wpp-icon-chevron-v4-0-0":
+    case "wpp-icon-chevron-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-icon-more-v4-0-0":
+    case "wpp-icon-more-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-0-0":
+    case "wpp-typography-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

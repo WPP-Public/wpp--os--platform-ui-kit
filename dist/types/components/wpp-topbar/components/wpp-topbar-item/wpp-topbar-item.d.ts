@@ -29,12 +29,22 @@ export declare class WppTopbarItem {
    */
   readonly nativeLink: boolean;
   /**
+   * Defines the z-index of the WppTopbarItem dropdown menus.
+   */
+  readonly zIndex: number;
+  /**
    * Emitted when topbar item was changed
    */
   wppActiveTopbarItemChange: EventEmitter<NavigationItemEventDetail>;
+  /**
+   * Emitted when topbar item menu expanded state changes
+   */
+  wppTopbarItemMenuToggle: EventEmitter<boolean>;
   private getEmittedNavigationData;
   private topbarItemClick;
   private menuItemClick;
+  private topbarMenuShow;
+  private topbarMenuHide;
   private getMenuLevelData;
   private hostCssClasses;
   render(): any;

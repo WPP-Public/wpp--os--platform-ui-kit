@@ -12,6 +12,7 @@ export default {
     skeletonNumberItems: { control: { type: 'number' } },
     multiple: { control: { type: 'boolean' } },
     lazyConfig: { control: { type: 'object' } },
+    label: { control: { type: 'text' } },
     defaultSelectedIds: { control: { type: 'object' } },
     disableOpenCloseAnimation: { control: { type: 'boolean' } },
     withItemsTruncation: { control: { type: 'boolean' } },
@@ -212,15 +213,16 @@ export const Tree = (args) => {
       loadChildren: lazyLoader,
     }
     : undefined;
-  return html `<wpp-tree-v4-0-0
+  return html `<wpp-tree-v4-1-0
     .multiple=${args.multiple}
     .data=${treeState}
     .search="${args.search}"
     .locales=${args.locales}
     .withItemsTruncation=${args.withItemsTruncation}
     .lazyConfig=${finalLazyConfig}
+    .label=${args.label}
     @wppChange="${handleTreeChange}"
-  ></wpp-tree-v4-0-0>`;
+  ></wpp-tree-v4-1-0>`;
 };
 Tree.args = {
   multiple: false,
@@ -228,6 +230,7 @@ Tree.args = {
   locales,
   search: '',
   lazyConfig: undefined,
+  label: 'File navigation tree',
   disableOpenCloseAnimation: false,
   defaultSelectedIds: [],
 };
@@ -250,11 +253,11 @@ export const TreeWithCustomSearch = (args) => {
     : undefined;
   return html `
     <div>
-      <wpp-typography-v4-0-0 .type=${'l-strong'}>
+      <wpp-typography-v4-1-0 .type=${'l-strong'}>
         Single tree with custom search: the search string should match exactly the title of the tree-item (case
         sensitive).
-      </wpp-typography-v4-0-0>
-      <wpp-tree-v4-0-0
+      </wpp-typography-v4-1-0>
+      <wpp-tree-v4-1-0
         .multiple=${args.multiple}
         .data=${treeState}
         .search="${args.search}"
@@ -263,7 +266,7 @@ export const TreeWithCustomSearch = (args) => {
         .searchConfig=${args.searchConfig}
         .lazyConfig=${finalLazyConfig}
         @wppChange="${handleTreeChange}"
-      ></wpp-tree-v4-0-0>
+      ></wpp-tree-v4-1-0>
     </div>
   `;
 };
@@ -289,15 +292,15 @@ export const TreeLoading = (args) => {
   };
   return html `
     <div>
-      <wpp-typography-v4-0-0 .type=${'l-strong'}>
+      <wpp-typography-v4-1-0 .type=${'l-strong'}>
         Tree in loading state: Use this to show a skeleton placeholder while the tree data is being fetched initially.
-      </wpp-typography-v4-0-0>
-      <wpp-tree-v4-0-0
+      </wpp-typography-v4-1-0>
+      <wpp-tree-v4-1-0
         .data=${treeState}
         .loading=${args.loading}
         .skeletonNumberItems=${args.skeletonNumberItems}
         @wppChange="${handleTreeChange}"
-      ></wpp-tree-v4-0-0>
+      ></wpp-tree-v4-1-0>
     </div>
   `;
 };
@@ -365,15 +368,15 @@ export const TreeOpenOnLoad = () => {
   };
   return html `
     <div>
-      <wpp-typography-v4-0-0 .type=${'l-strong'}>
+      <wpp-typography-v4-1-0 .type=${'l-strong'}>
         Open on Load: Set <code>open: true</code> on items in your data to have them expanded initially. Use
         <code>expandAll()</code> / <code>collapseAll()</code> methods for global control.
-      </wpp-typography-v4-0-0>
+      </wpp-typography-v4-1-0>
       <div style="display: flex; gap: 8px; margin: 12px 0;">
-        <wpp-button-v4-0-0 @click=${handleExpandAll}>Expand All</wpp-button-v4-0-0>
-        <wpp-button-v4-0-0 variant="secondary" @click=${handleCollapseAll}>Collapse All</wpp-button-v4-0-0>
+        <wpp-button-v4-1-0 @click=${handleExpandAll}>Expand All</wpp-button-v4-1-0>
+        <wpp-button-v4-1-0 variant="secondary" @click=${handleCollapseAll}>Collapse All</wpp-button-v4-1-0>
       </div>
-      <wpp-tree-v4-0-0 id="tree-open-on-load" .data=${treeState} @wppChange="${handleTreeChange}"></wpp-tree-v4-0-0>
+      <wpp-tree-v4-1-0 id="tree-open-on-load" .data=${treeState} @wppChange="${handleTreeChange}"></wpp-tree-v4-1-0>
     </div>
   `;
 };

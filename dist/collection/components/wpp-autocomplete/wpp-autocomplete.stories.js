@@ -61,7 +61,7 @@ const suggestions = [
 export const Regular = {
   render: args => {
     const [value, setValue] = useState([]);
-    return html ` <wpp-autocomplete-v4-0-0
+    return html ` <wpp-autocomplete-v4-1-0
       .list="${heroes}"
       .loading="${args.loading}"
       .disabled="${args.disabled}"
@@ -87,7 +87,7 @@ export const Regular = {
       @wppChange="${(e) => setValue(e.detail.value)}"
       @wppSearchValueChange="${(e) => console.log('onWppSearchValueChange', e.detail)}"
       @wppCreateNewOption="${(e) => console.log('onWppCreateNewOption', e.detail)}"
-    ></wpp-autocomplete-v4-0-0>`;
+    ></wpp-autocomplete-v4-1-0>`;
   },
   args: {
     loading: false,
@@ -129,7 +129,7 @@ export const Regular = {
 export const Extended = {
   render: args => {
     const [value, setValue] = useState([]);
-    return html ` <wpp-autocomplete-v4-0-0
+    return html ` <wpp-autocomplete-v4-1-0
       style="--wpp-autocomplete-extended-selected-values-wrapper-padding: 2px 10px 10px 10px;"
       .list="${heroes}"
       .loading="${args.loading}"
@@ -156,7 +156,7 @@ export const Extended = {
       @wppChange="${(e) => setValue(e.detail.value)}"
       @wppSearchValueChange="${(e) => console.log('onWppSearchValueChange', e.detail)}"
     >
-    </wpp-autocomplete-v4-0-0>`;
+    </wpp-autocomplete-v4-1-0>`;
   },
   args: {
     loading: false,
@@ -528,7 +528,7 @@ const staticSuggestionWithSlots = [
 export const RegularSlotSuggestions = {
   render: args => {
     const [value, setValue] = useState([]);
-    return html ` <wpp-autocomplete-v4-0-0
+    return html ` <wpp-autocomplete-v4-1-0
       .list="${fruitsList}"
       .loading="${args.loading}"
       .disabled="${args.disabled}"
@@ -555,7 +555,7 @@ export const RegularSlotSuggestions = {
       @wppSearchValueChange="${(e) => console.log('onWppSearchValueChange', e.detail)}"
       @wppCreateNewOption="${(e) => console.log('onWppCreateNewOption', e.detail)}"
     >
-    </wpp-autocomplete-v4-0-0>`;
+    </wpp-autocomplete-v4-1-0>`;
   },
   args: {
     loading: false,

@@ -1,11 +1,13 @@
 import { Host, h } from '@stencil/core';
 import { DEFAULT_SCROLL_TRESHOLD, INITIAL_BUTTONS_LIST_VALUE, MAXIMUM_ACTION_BUTTONS, MAXIMUM_PRIMARY_BUTTONS, MAXIMUM_SECONDARY_BUTTONS, MULTIPLE_ACTION_BUTTONS_ERROR, MULTIPLE_PRIMARY_BUTTONS_ERROR, TOO_MANY_SECONDARY_BUTTONS_ERROR, } from './const';
 import { Z_INDEX } from '../../common/consts';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
  * @slot content - Should contain the content for the sticky bar. This slot is available only for the following variant: 'medium'
  */
 export class WppStickyBar {
   constructor() {
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.getHeightOfOsBar = () => {
       const appContainer = document.body.querySelector('div.wpp');
       if (appContainer) {
@@ -117,6 +119,12 @@ export class WppStickyBar {
       this.host.style.zIndex = `${this.zIndex}`;
     }
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
+  disconnectedCallback() {
+    this.themeSubscription.stop();
+  }
   componentDidLoad() {
     if (!this.offsetFromTop) {
       setTimeout(() => {
@@ -128,20 +136,20 @@ export class WppStickyBar {
     }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v4-0-0", { variant: "secondary", onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v4-0-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v4-0-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), this.variant === 'small' && (h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v4-1-0", { variant: "secondary", onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v4-1-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v4-1-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), this.variant === 'small' && (h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
       if (!buttonItem)
         return null;
       if (buttonItem.variant === 'action-button') {
-        return (h("wpp-action-button-v4-0-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary" }, buttonItem.text));
+        return (h("wpp-action-button-v4-1-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary" }, buttonItem.text));
       }
-      return (h("wpp-button-v4-0-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant }, buttonItem.text));
-    })))), this.variant !== 'small' ? (h("div", { class: `body ${this.tabs?.length > 0 ? 'has-tabs' : ''}` }, this.variant === 'medium' ? (h("slot", { name: "content" })) : (this.tabs?.length > 0 && (h("wpp-tabs-v4-0-0", { size: this.tabSize, onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => {
+      return (h("wpp-button-v4-1-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant }, buttonItem.text));
+    })))), this.variant !== 'small' ? (h("div", { class: `body ${this.tabs?.length > 0 ? 'has-tabs' : ''}` }, this.variant === 'medium' ? (h("slot", { name: "content" })) : (this.tabs?.length > 0 && (h("wpp-tabs-v4-1-0", { size: this.tabSize, onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => {
       const { text, ...restProps } = tabItem;
-      return (h("wpp-tab-v4-0-0", { size: this.tabSize, key: tabItem.value, ...restProps }, tabItem.text));
-    })))))) : null), h("wpp-divider-v4-0-0", null)));
+      return (h("wpp-tab-v4-1-0", { size: this.tabSize, key: tabItem.value, ...restProps }, tabItem.text));
+    })))))) : null), h("wpp-divider-v4-1-0", null)));
   }
   static get is() { return "wpp-sticky-bar"; }
-  static get registryIs() { return "wpp-sticky-bar-v4-0-0"; }
+  static get registryIs() { return "wpp-sticky-bar-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -226,7 +234,7 @@ export class WppStickyBar {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "The zIndex of the sticky bar. The default value is 890 such that it hides below the os-bar."
+          "text": "The zIndex of the sticky bar."
         },
         "attribute": "z-index",
         "reflect": false,

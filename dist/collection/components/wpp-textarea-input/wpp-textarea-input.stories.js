@@ -17,7 +17,7 @@ export default {
     warningThreshold: { type: 'number' },
     maxMessageLength: { type: 'number' },
     rows: {
-      options: [0, 1, 3, 5, 'stretch'],
+      options: [1, 3, 5, 'stretch'],
       control: { type: 'select' },
       description: "Number of rows or 'stretch' for auto-height",
     },
@@ -29,7 +29,7 @@ export default {
     required: { control: { type: 'boolean' } },
   },
 };
-export const WithinLimit = (args) => html ` <wpp-textarea-input-v4-0-0
+export const WithinLimit = (args) => html ` <wpp-textarea-input-v4-1-0
     @click="${() => console.log('textarea clicked')}"
     .name="${args.name}"
     .placeholder="${args.placeholder}"
@@ -71,7 +71,7 @@ WithinLimit.args = {
 WithinLimit.parameters = {
   controls: { exclude: ['value'] },
 };
-export const LimitExceeded = (args) => html ` <wpp-textarea-input-v4-0-0
+export const LimitExceeded = (args) => html ` <wpp-textarea-input-v4-1-0
     @click="${() => console.log('textarea clicked')}"
     .name="${args.name}"
     .placeholder="${args.placeholder}"
@@ -108,7 +108,7 @@ LimitExceeded.args = {
 LimitExceeded.parameters = {
   controls: { exclude: ['value', 'message', 'messageType', 'maxMessageLength'] },
 };
-export const NoneLimit = (args) => html ` <wpp-textarea-input-v4-0-0
+export const NoneLimit = (args) => html ` <wpp-textarea-input-v4-1-0
     @click="${() => console.log('textarea clicked')}"
     .name="${args.name}"
     .placeholder="${args.placeholder}"
@@ -142,7 +142,7 @@ NoneLimit.args = {
 NoneLimit.parameters = {
   controls: { exclude: ['charactersLimit', 'warningThreshold'] },
 };
-export const StretchTextarea = (args) => html ` <wpp-textarea-input-v4-0-0
+export const StretchTextarea = (args) => html ` <wpp-textarea-input-v4-1-0
     @click="${() => console.log('textarea clicked')}"
     .name="${args.name}"
     .placeholder="${args.placeholder}"

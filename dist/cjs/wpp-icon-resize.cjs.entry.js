@@ -24,7 +24,7 @@ const WppIconResize = class {
   render() {
     return (index.h(WppIcon.WppIcon, { name: "wpp-icon-resize", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: ResizeDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-resize-v4-0-0"; }
+  static get registryIs() { return "wpp-icon-resize-v4-1-0"; }
 };
 WppIconResize.style = wppIconCss;
 

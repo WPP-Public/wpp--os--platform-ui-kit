@@ -25,3 +25,8 @@ export const MOCK_LARGE_LIST = Array.from({ length: 16 }, (_, i) => ({
   label: `Item ${i + 1}`,
   value: `item-${i + 1}`,
 }));
+export const MOCK_NUMERIC_LIST = [
+  { label: 'Dimension 1', value: 0 },
+  { label: 'Dimension 2', value: 1 },
+  { label: 'Dimension 3', value: 2 },
+];

@@ -16,7 +16,7 @@ const WppLabel = /*@__PURE__*/ proxyCustomElement(class WppLabel extends HTMLEle
     this.hostCssClasses = () => ({
       'wpp-label': true,
     });
-    this.renderContent = () => (h("wpp-internal-label-v4-0-0", { labelText: this.config?.text, description: this.config?.description, optional: this.optional, typography: this.typography, disabled: this.disabled, locales: this.config?.locales, tooltipConfig: this.tooltipConfig, part: "content", id: this.labelId }, this.config?.icon && h(transformToVersionedTag(this.config?.icon), { slot: 'icon', part: 'icon' })));
+    this.renderContent = () => (h("wpp-internal-label-v4-1-0", { labelText: this.config?.text, description: this.config?.description, optional: this.optional, typography: this.typography, disabled: this.disabled, locales: this.config?.locales, tooltipConfig: this.tooltipConfig, part: "content", id: this.labelId }, this.config?.icon && h(transformToVersionedTag(this.config?.icon), { slot: 'icon', part: 'icon' })));
     this.description = undefined;
     this.htmlFor = undefined;
     this.optional = false;
@@ -32,9 +32,9 @@ const WppLabel = /*@__PURE__*/ proxyCustomElement(class WppLabel extends HTMLEle
   render() {
     return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, content, icon" }, h(this.tag, { class: "internal-label-wrapper", part: "wrapper", ...(this.tag === 'label' && { htmlFor: this.htmlFor, 'aria-label': this.htmlFor }) }, this.renderContent())));
   }
-  static get registryIs() { return "wpp-label-v4-0-0"; }
+  static get registryIs() { return "wpp-label-v4-1-0"; }
   static get style() { return wppLabelCss; }
-}, [2, "wpp-label", "wpp-label-v4-0-0", {
+}, [2, "wpp-label", "wpp-label-v4-1-0", {
     "description": [1],
     "htmlFor": [1, "html-for"],
     "optional": [4],
@@ -49,39 +49,39 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-label-v4-0-0", "wpp-icon-error-v4-0-0", "wpp-icon-warning-v4-0-0", "wpp-internal-label-v4-0-0", "wpp-internal-tooltip-v4-0-0", "wpp-tooltip-v4-0-0", "wpp-typography-v4-0-0"];
+  const components = ["wpp-label-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-internal-label-v4-1-0", "wpp-internal-tooltip-v4-1-0", "wpp-tooltip-v4-1-0", "wpp-typography-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-label-v4-0-0":
+    case "wpp-label-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppLabel);
       }
       break;
-    case "wpp-icon-error-v4-0-0":
+    case "wpp-icon-error-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-icon-warning-v4-0-0":
+    case "wpp-icon-warning-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-internal-label-v4-0-0":
+    case "wpp-internal-label-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-internal-tooltip-v4-0-0":
+    case "wpp-internal-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-0-0":
+    case "wpp-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-0-0":
+    case "wpp-typography-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

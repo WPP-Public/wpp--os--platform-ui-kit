@@ -2,6 +2,7 @@ import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/
 import { g as getSlotEmptyStates } from './utils.js';
 import { W as WrappedSlot } from './WrappedSlot.js';
 import { Z as Z_INDEX } from './consts.js';
+import { t as themeSubscriptionController } from './subscribe-to-theme.js';
 import { d as defineCustomElement$p } from './wpp-action-button2.js';
 import { d as defineCustomElement$o } from './wpp-checkbox2.js';
 import { d as defineCustomElement$n } from './wpp-divider2.js';
@@ -27,7 +28,7 @@ import { d as defineCustomElement$4 } from './wpp-tooltip2.js';
 import { d as defineCustomElement$3 } from './wpp-topbar-item2.js';
 import { d as defineCustomElement$2 } from './wpp-typography2.js';
 
-const wppTopbarCss = ":host{--topbar-padding:var(--wpp-topbar-padding, 12px 0);--topbar-with-app-padding:var(--wpp-topbar-with-app-padding, 8px 0);--topbar-item-margin:var(--wpp-topbar-item-margin, 8px);--topbar-max-width:var(--wpp-topbar-max-width, 1812px);--topbar-offset-top:var(--wpp-topbar-offset-top, 0);display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-pack:justify;justify-content:space-between;position:absolute;top:var(--topbar-offset-top);left:0;right:0;background-color:var(--wpp-grey-color-000)}:host .wrapper{max-width:var(--topbar-max-width);width:95%;margin:0 auto;padding:0 2.5%}:host .wrapper .container{margin-left:0}:host .header{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;padding:var(--topbar-padding)}:host .header .navigation{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;width:100%;opacity:1}:host .header .navigation.hidden{height:32px;overflow-y:hidden;opacity:0}:host .header .navigation .wpp-topbar-item{white-space:nowrap}:host .header .navigation .wpp-topbar-item:not(:last-child){margin-right:var(--topbar-item-margin)}:host .header.without-application .application{display:none}:host .header.with-app{padding:var(--topbar-with-app-padding)}.app.slot-hidden,right.slot-hidden{display:none}";
+const wppTopbarCss = ":host{--topbar-padding:var(--wpp-topbar-padding, 12px 0);--topbar-with-app-padding:var(--wpp-topbar-with-app-padding, 8px 0);--topbar-item-margin:var(--wpp-topbar-item-margin, 8px);--topbar-max-width:var(--wpp-topbar-max-width, 1812px);--topbar-offset-top:var(--wpp-topbar-offset-top, 0);display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-pack:justify;justify-content:space-between;position:absolute;top:var(--topbar-offset-top);left:0;right:0;background-color:var(--wpp-grey-color-000)}:host .wrapper{max-width:var(--topbar-max-width);width:95%;margin:0 auto;padding:0 2.5%}:host .wrapper .container{margin-left:0}:host .header{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;padding:var(--topbar-padding)}:host .header .navigation{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;width:100%;opacity:1}:host .header .navigation.hidden{height:32px;overflow-y:hidden;opacity:0}:host .header .navigation .wpp-topbar-item{white-space:nowrap}:host .header .navigation .wpp-topbar-item:not(:last-child){margin-right:var(--topbar-item-margin)}:host .header.without-application .application{display:none}:host .header.with-app{padding:var(--topbar-with-app-padding)}.app.slot-hidden,right.slot-hidden{display:none}:host([data-wpp-theme=dark]){background-color:var(--wpp-grey-color-100)}";
 
 const WppTopbar$1 = /*@__PURE__*/ proxyCustomElement(class WppTopbar extends HTMLElement {
   constructor() {
@@ -35,6 +36,7 @@ const WppTopbar$1 = /*@__PURE__*/ proxyCustomElement(class WppTopbar extends HTM
     this.__registerHost();
     this.__attachShadow();
     this.wppChange = createEvent(this, "wppChange", 1);
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.getItemsWidth = () => {
       const navigationItemsElement = this.host.shadowRoot.querySelector('.navigation');
       const topbarItems = navigationItemsElement?.querySelectorAll('.wpp-topbar-item:not([is-menu])');
@@ -58,6 +60,9 @@ const WppTopbar$1 = /*@__PURE__*/ proxyCustomElement(class WppTopbar extends HTM
     };
     this.topbarItemClick = (e) => {
       this.wppChange.emit(e.detail);
+    };
+    this.topbarItemMenuToggle = (e) => {
+      this.hasOpenMenu = e.detail;
     };
     this.updateSlotData = () => {
       const emptyStates = getSlotEmptyStates(this.host.childNodes, {
@@ -88,6 +93,7 @@ const WppTopbar$1 = /*@__PURE__*/ proxyCustomElement(class WppTopbar extends HTM
     this.hasRightSlot = false;
     this.activeItems = [];
     this.topbarItemsWidth = [];
+    this.hasOpenMenu = false;
     this.navigation = undefined;
     this.value = undefined;
     this.nativeLink = false;
@@ -152,26 +158,31 @@ const WppTopbar$1 = /*@__PURE__*/ proxyCustomElement(class WppTopbar extends HTM
       });
     });
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
   }
   render() {
+    const topbarMenuZIndex = this.zIndex + (Z_INDEX.TOPBAR_MENU - Z_INDEX.TOPBAR);
     const hiddenNavigation = {
       children: this.navigation.slice(this.itemsToShow),
     };
     const isMenuActive = !!hiddenNavigation.children?.find(item => this.activeItems.includes(item.value));
-    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "wrapper, body, navigation, topbar-item, divider, app, right, app-wrapper, right-wrapper" }, h("div", { class: this.wrapperCssClasses(), part: "wrapper" }, h("wpp-grid-v4-0-0", { container: true }, h("wpp-grid-v4-0-0", { item: true, all: 24 }, h("div", { class: this.headerCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasAppSlot }, name: "app", onSlotchange: this.updateSlotData }), h("nav", { class: this.navigationCssClasses(), key: this.itemsToShow, part: "navigation" }, this.navigation.slice(0, this.itemsToShow).map(navigation => (h("wpp-topbar-item-v4-0-0", { navigation: navigation, firstLevel: true, active: navigation.active, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, part: "topbar-item" }))), this.truncated && (h("wpp-topbar-item-v4-0-0", { key: this.value, navigation: hiddenNavigation, firstLevel: true, menu: true, active: isMenuActive, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, part: "topbar-item" }))), h(WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasRightSlot }, name: "right", onSlotchange: this.updateSlotData }))))), h("wpp-divider-v4-0-0", { part: "divider" })));
+    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: (this.hasOpenMenu ? topbarMenuZIndex : this.zIndex).toString() }, exportparts: "wrapper, body, navigation, topbar-item, divider, app, right, app-wrapper, right-wrapper" }, h("div", { class: this.wrapperCssClasses(), part: "wrapper" }, h("wpp-grid-v4-1-0", { container: true }, h("wpp-grid-v4-1-0", { item: true, all: 24 }, h("div", { class: this.headerCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasAppSlot }, name: "app", onSlotchange: this.updateSlotData }), h("nav", { class: this.navigationCssClasses(), key: this.itemsToShow, part: "navigation" }, this.navigation.slice(0, this.itemsToShow).map(navigation => (h("wpp-topbar-item-v4-1-0", { navigation: navigation, firstLevel: true, active: navigation.active, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, zIndex: topbarMenuZIndex, part: "topbar-item", onWppTopbarItemMenuToggle: this.topbarItemMenuToggle }))), this.truncated && (h("wpp-topbar-item-v4-1-0", { key: this.value, navigation: hiddenNavigation, firstLevel: true, menu: true, active: isMenuActive, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, zIndex: topbarMenuZIndex, part: "topbar-item", onWppTopbarItemMenuToggle: this.topbarItemMenuToggle }))), h(WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasRightSlot }, name: "right", onSlotchange: this.updateSlotData }))))), h("wpp-divider-v4-1-0", { part: "divider" })));
   }
-  static get registryIs() { return "wpp-topbar-v4-0-0"; }
+  static get registryIs() { return "wpp-topbar-v4-1-0"; }
   get host() { return this; }
   static get watchers() { return {
     "navigation": ["navigationChanged"],
     "value": ["valueChanged"]
   }; }
   static get style() { return wppTopbarCss; }
-}, [1, "wpp-topbar", "wpp-topbar-v4-0-0", {
+}, [1, "wpp-topbar", "wpp-topbar-v4-1-0", {
     "navigation": [16],
     "value": [1],
     "nativeLink": [4, "native-link"],
@@ -181,135 +192,136 @@ const WppTopbar$1 = /*@__PURE__*/ proxyCustomElement(class WppTopbar extends HTM
     "hasAppSlot": [32],
     "hasRightSlot": [32],
     "activeItems": [32],
-    "topbarItemsWidth": [32]
+    "topbarItemsWidth": [32],
+    "hasOpenMenu": [32]
   }]);
 function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-topbar-v4-0-0", "wpp-action-button-v4-0-0", "wpp-checkbox-v4-0-0", "wpp-divider-v4-0-0", "wpp-grid-v4-0-0", "wpp-icon-chevron-v4-0-0", "wpp-icon-cross-v4-0-0", "wpp-icon-dash-v4-0-0", "wpp-icon-error-v4-0-0", "wpp-icon-info-message-v4-0-0", "wpp-icon-more-v4-0-0", "wpp-icon-success-v4-0-0", "wpp-icon-tick-v4-0-0", "wpp-icon-warning-v4-0-0", "wpp-inline-message-v4-0-0", "wpp-internal-label-v4-0-0", "wpp-internal-tooltip-v4-0-0", "wpp-label-v4-0-0", "wpp-list-item-v4-0-0", "wpp-menu-context-v4-0-0", "wpp-navigation-item-v4-0-0", "wpp-spinner-v4-0-0", "wpp-tooltip-v4-0-0", "wpp-topbar-item-v4-0-0", "wpp-typography-v4-0-0"];
+  const components = ["wpp-topbar-v4-1-0", "wpp-action-button-v4-1-0", "wpp-checkbox-v4-1-0", "wpp-divider-v4-1-0", "wpp-grid-v4-1-0", "wpp-icon-chevron-v4-1-0", "wpp-icon-cross-v4-1-0", "wpp-icon-dash-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-info-message-v4-1-0", "wpp-icon-more-v4-1-0", "wpp-icon-success-v4-1-0", "wpp-icon-tick-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-inline-message-v4-1-0", "wpp-internal-label-v4-1-0", "wpp-internal-tooltip-v4-1-0", "wpp-label-v4-1-0", "wpp-list-item-v4-1-0", "wpp-menu-context-v4-1-0", "wpp-navigation-item-v4-1-0", "wpp-spinner-v4-1-0", "wpp-tooltip-v4-1-0", "wpp-topbar-item-v4-1-0", "wpp-typography-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-topbar-v4-0-0":
+    case "wpp-topbar-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTopbar$1);
       }
       break;
-    case "wpp-action-button-v4-0-0":
+    case "wpp-action-button-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$p();
       }
       break;
-    case "wpp-checkbox-v4-0-0":
+    case "wpp-checkbox-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$o();
       }
       break;
-    case "wpp-divider-v4-0-0":
+    case "wpp-divider-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-grid-v4-0-0":
+    case "wpp-grid-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-icon-chevron-v4-0-0":
+    case "wpp-icon-chevron-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-cross-v4-0-0":
+    case "wpp-icon-cross-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-dash-v4-0-0":
+    case "wpp-icon-dash-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-error-v4-0-0":
+    case "wpp-icon-error-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-info-message-v4-0-0":
+    case "wpp-icon-info-message-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-more-v4-0-0":
+    case "wpp-icon-more-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-success-v4-0-0":
+    case "wpp-icon-success-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-tick-v4-0-0":
+    case "wpp-icon-tick-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-warning-v4-0-0":
+    case "wpp-icon-warning-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-inline-message-v4-0-0":
+    case "wpp-inline-message-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-internal-label-v4-0-0":
+    case "wpp-internal-label-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-internal-tooltip-v4-0-0":
+    case "wpp-internal-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-label-v4-0-0":
+    case "wpp-label-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-list-item-v4-0-0":
+    case "wpp-list-item-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-menu-context-v4-0-0":
+    case "wpp-menu-context-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-navigation-item-v4-0-0":
+    case "wpp-navigation-item-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-spinner-v4-0-0":
+    case "wpp-spinner-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-tooltip-v4-0-0":
+    case "wpp-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-topbar-item-v4-0-0":
+    case "wpp-topbar-item-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-0-0":
+    case "wpp-typography-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

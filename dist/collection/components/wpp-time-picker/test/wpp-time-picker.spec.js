@@ -6,6 +6,7 @@ import { WppTimePicker } from '../wpp-time-picker';
 import { menuListConfig } from '../../../common/menuListConfig';
 import { PLACEHOLDER, DEFAULT_CHECKED_TIME_VALUES, HOURS } from '../config';
 import { FOCUS_TYPE } from '../../../types/common';
+import * as themeUtils from '../../../utils/subscribe-to-theme';
 describe('wpp-time-picker', () => {
   it('renders component', async () => {
     const page = await newSpecPage({
@@ -357,5 +358,35 @@ describe('wpp-time-picker full function & branch coverage', () => {
     instance['onUpdateInput']({ target: instance.inputRef });
     expect(minuteSpy).toHaveBeenCalledWith('12', '45');
     expect(instance.previousInputValue).toBe('12:45');
+  });
+  describe('subscribing to theme changes', () => {
+    let mockStart;
+    let mockStop;
+    beforeEach(() => {
+      mockStart = jest.fn();
+      mockStop = jest.fn();
+      jest.spyOn(themeUtils, 'themeSubscriptionController').mockReturnValue({
+        start: mockStart,
+        stop: mockStop,
+      });
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
+      await newSpecPage({
+        components: [WppTimePicker],
+        html: `<wpp-time-picker></wpp-time-picker>`,
+      });
+      expect(mockStart).toHaveBeenCalledTimes(2);
+    });
+    it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
+      const page = await newSpecPage({
+        components: [WppTimePicker],
+        html: `<wpp-time-picker></wpp-time-picker>`,
+      });
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
+    });
   });
 });

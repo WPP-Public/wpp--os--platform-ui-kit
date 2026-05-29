@@ -12,8 +12,6 @@ export default {
   },
 };
 export const View = {
-  render: (args) => html `
-    <wpp-richtext-view-v4-0-0 .value=${value} debug=${args.debug} />
-  `,
+  render: () => html ` <wpp-richtext-view-v4-1-0 .value=${value} /> `,
   args: {},
 };

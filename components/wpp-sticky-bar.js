@@ -1,5 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { Z as Z_INDEX } from './consts.js';
+import { t as themeSubscriptionController } from './subscribe-to-theme.js';
 import { d as defineCustomElement$9 } from './wpp-action-button2.js';
 import { d as defineCustomElement$8 } from './wpp-button2.js';
 import { d as defineCustomElement$7 } from './wpp-divider2.js';
@@ -18,7 +19,7 @@ const MAXIMUM_ACTION_BUTTONS = 1;
 const INITIAL_BUTTONS_LIST_VALUE = [null, null, null, null];
 const DEFAULT_SCROLL_TRESHOLD = 200;
 
-const wppStickyBarCss = ":host{--sticky-bar-offset-top:var(--wpp-sticky-bar-offset-top, 63px);width:100%;position:fixed;-webkit-box-sizing:border-box;box-sizing:border-box;left:0;top:0;right:0;z-index:4;-webkit-transform:translateY(-100%);transform:translateY(-100%)}:host .container{-webkit-box-sizing:border-box;box-sizing:border-box;background-color:var(--wpp-grey-color-000);padding:12px 28px;position:relative}:host .container .header{height:32px;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between}:host .container .header .left-area,:host .container .header .right-area{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center}:host .container .header .left-area .wpp-action-button{margin-right:4px}:host .container .header .right-area .wpp-button,:host .container .header .right-area .wpp-action-button{margin-right:12px}:host .container .header .right-area .wpp-button:last-child,:host .container .header .right-area .wpp-action-button:last-child{margin-right:0}:host .container .body{margin-top:8px;--wpp-tabs-width:auto;--wpp-tab-width:auto}:host .wpp-divider{position:absolute;bottom:0;left:0;right:0}@media (min-width: 1280px){:host .container{padding:12px 28px}}@media (min-width: 1366px){:host .container{padding:12px 36px}}@media (min-width: 1440px){:host .container{padding:12px 38px}}@media (min-width: 1920px){:host .container{padding:12px 54px}}:host(.wpp-sticky-bar-medium) .container .header{height:24px}:host(.wpp-sticky-bar-medium) .body{height:32px}:host(.wpp-sticky-bar-with-tabs) .container{padding-bottom:0}:host(.wpp-sticky-bar-with-tabs) .container .body{height:36px}:host(.wpp-sticky-bar-with-tabs) .container .body.has-tabs{height:auto}:host(.wpp-visible){-webkit-transition:0.3s ease;transition:0.3s ease;top:var(--sticky-bar-offset-top);-webkit-transform:translateY(0);transform:translateY(0)}:host(.wpp-invisible){-webkit-transition:0.3s ease;transition:0.3s ease;top:0;-webkit-transform:translateY(-100%);transform:translateY(-100%)}";
+const wppStickyBarCss = ":host{--sticky-bar-offset-top:var(--wpp-sticky-bar-offset-top, 63px);width:100%;position:fixed;-webkit-box-sizing:border-box;box-sizing:border-box;left:0;top:0;right:0;z-index:4;-webkit-transform:translateY(-100%);transform:translateY(-100%)}:host .container{-webkit-box-sizing:border-box;box-sizing:border-box;background-color:var(--wpp-grey-color-000);padding:12px 28px;position:relative}:host .container .header{height:32px;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between}:host .container .header .left-area,:host .container .header .right-area{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center}:host .container .header .left-area .wpp-action-button{margin-right:4px}:host .container .header .right-area .wpp-button,:host .container .header .right-area .wpp-action-button{margin-right:12px}:host .container .header .right-area .wpp-button:last-child,:host .container .header .right-area .wpp-action-button:last-child{margin-right:0}:host .container .body{margin-top:8px;--wpp-tabs-width:auto;--wpp-tab-width:auto}:host .wpp-divider{position:absolute;bottom:0;left:0;right:0}@media (min-width: 1280px){:host .container{padding:12px 28px}}@media (min-width: 1366px){:host .container{padding:12px 36px}}@media (min-width: 1440px){:host .container{padding:12px 38px}}@media (min-width: 1920px){:host .container{padding:12px 54px}}:host(.wpp-sticky-bar-medium) .container .header{height:24px}:host(.wpp-sticky-bar-medium) .body{height:32px}:host(.wpp-sticky-bar-with-tabs) .container{padding-bottom:0}:host(.wpp-sticky-bar-with-tabs) .container .body{height:36px}:host(.wpp-sticky-bar-with-tabs) .container .body.has-tabs{height:auto}:host(.wpp-visible){-webkit-transition:0.3s ease;transition:0.3s ease;top:var(--sticky-bar-offset-top);-webkit-transform:translateY(0);transform:translateY(0)}:host(.wpp-invisible){-webkit-transition:0.3s ease;transition:0.3s ease;top:0;-webkit-transform:translateY(-100%);transform:translateY(-100%)}:host([data-wpp-theme=dark]) .container{background-color:var(--wpp-grey-color-100)}";
 
 const WppStickyBar$1 = /*@__PURE__*/ proxyCustomElement(class WppStickyBar extends HTMLElement {
   constructor() {
@@ -28,6 +29,7 @@ const WppStickyBar$1 = /*@__PURE__*/ proxyCustomElement(class WppStickyBar exten
     this.wppClickBackIcon = createEvent(this, "wppClickBackIcon", 1);
     this.wppClickBtn = createEvent(this, "wppClickBtn", 1);
     this.wppClickTab = createEvent(this, "wppClickTab", 1);
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.getHeightOfOsBar = () => {
       const appContainer = document.body.querySelector('div.wpp');
       if (appContainer) {
@@ -139,6 +141,12 @@ const WppStickyBar$1 = /*@__PURE__*/ proxyCustomElement(class WppStickyBar exten
       this.host.style.zIndex = `${this.zIndex}`;
     }
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
+  disconnectedCallback() {
+    this.themeSubscription.stop();
+  }
   componentDidLoad() {
     if (!this.offsetFromTop) {
       setTimeout(() => {
@@ -150,19 +158,19 @@ const WppStickyBar$1 = /*@__PURE__*/ proxyCustomElement(class WppStickyBar exten
     }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v4-0-0", { variant: "secondary", onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v4-0-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v4-0-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), this.variant === 'small' && (h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v4-1-0", { variant: "secondary", onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v4-1-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v4-1-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), this.variant === 'small' && (h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
       if (!buttonItem)
         return null;
       if (buttonItem.variant === 'action-button') {
-        return (h("wpp-action-button-v4-0-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary" }, buttonItem.text));
+        return (h("wpp-action-button-v4-1-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary" }, buttonItem.text));
       }
-      return (h("wpp-button-v4-0-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant }, buttonItem.text));
-    })))), this.variant !== 'small' ? (h("div", { class: `body ${this.tabs?.length > 0 ? 'has-tabs' : ''}` }, this.variant === 'medium' ? (h("slot", { name: "content" })) : (this.tabs?.length > 0 && (h("wpp-tabs-v4-0-0", { size: this.tabSize, onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => {
+      return (h("wpp-button-v4-1-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant }, buttonItem.text));
+    })))), this.variant !== 'small' ? (h("div", { class: `body ${this.tabs?.length > 0 ? 'has-tabs' : ''}` }, this.variant === 'medium' ? (h("slot", { name: "content" })) : (this.tabs?.length > 0 && (h("wpp-tabs-v4-1-0", { size: this.tabSize, onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => {
       const { text, ...restProps } = tabItem;
-      return (h("wpp-tab-v4-0-0", { size: this.tabSize, key: tabItem.value, ...restProps }, tabItem.text));
-    })))))) : null), h("wpp-divider-v4-0-0", null)));
+      return (h("wpp-tab-v4-1-0", { size: this.tabSize, key: tabItem.value, ...restProps }, tabItem.text));
+    })))))) : null), h("wpp-divider-v4-1-0", null)));
   }
-  static get registryIs() { return "wpp-sticky-bar-v4-0-0"; }
+  static get registryIs() { return "wpp-sticky-bar-v4-1-0"; }
   get host() { return this; }
   static get watchers() { return {
     "buttons": ["updateButtons"],
@@ -170,7 +178,7 @@ const WppStickyBar$1 = /*@__PURE__*/ proxyCustomElement(class WppStickyBar exten
     "offsetFromTop": ["updateOffset"]
   }; }
   static get style() { return wppStickyBarCss; }
-}, [1, "wpp-sticky-bar", "wpp-sticky-bar-v4-0-0", {
+}, [1, "wpp-sticky-bar", "wpp-sticky-bar-v4-1-0", {
     "variant": [1],
     "barTitle": [1, "bar-title"],
     "offsetFromTop": [2, "offset-from-top"],
@@ -188,49 +196,49 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-sticky-bar-v4-0-0", "wpp-action-button-v4-0-0", "wpp-button-v4-0-0", "wpp-divider-v4-0-0", "wpp-icon-chevron-v4-0-0", "wpp-spinner-v4-0-0", "wpp-tab-v4-0-0", "wpp-tabs-v4-0-0", "wpp-typography-v4-0-0"];
+  const components = ["wpp-sticky-bar-v4-1-0", "wpp-action-button-v4-1-0", "wpp-button-v4-1-0", "wpp-divider-v4-1-0", "wpp-icon-chevron-v4-1-0", "wpp-spinner-v4-1-0", "wpp-tab-v4-1-0", "wpp-tabs-v4-1-0", "wpp-typography-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-sticky-bar-v4-0-0":
+    case "wpp-sticky-bar-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppStickyBar$1);
       }
       break;
-    case "wpp-action-button-v4-0-0":
+    case "wpp-action-button-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-button-v4-0-0":
+    case "wpp-button-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-divider-v4-0-0":
+    case "wpp-divider-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-chevron-v4-0-0":
+    case "wpp-icon-chevron-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-spinner-v4-0-0":
+    case "wpp-spinner-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-tab-v4-0-0":
+    case "wpp-tab-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tabs-v4-0-0":
+    case "wpp-tabs-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-0-0":
+    case "wpp-typography-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

@@ -106,7 +106,7 @@
 }
 
 .ag-header-sub-text .wpp-typography {
-  color: var(--wpp-grey-color-800);
+  --typography-color: var(--wpp-grey-color-800) !important;
 }
 
 .ag-theme-wpp .ag-row {
@@ -299,7 +299,8 @@
   color: var(--wpp-grey-color-800);
 }
 
-.ag-cell-error wpp-icon-error {
+.ag-cell-error wpp-icon-error,
+.ag-cell-error wpp-icon-warning {
   flex-shrink: 0;
 }
 
@@ -316,5 +317,21 @@
   bottom: 0;
   width: 3px;
   background: var(--wpp-danger-color-400);
+  z-index: 1;
+}
+
+/* Warning Row Indicator */
+.ag-row-warning {
+  position: relative;
+}
+
+.ag-row-warning:not(.ag-row-error)::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--wpp-warning-color-400);
   z-index: 1;
 }

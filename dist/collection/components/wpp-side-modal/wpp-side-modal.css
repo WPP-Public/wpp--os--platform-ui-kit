@@ -338,3 +338,7 @@
     transform: translateX(100%);
   }
 }
+:host([data-wpp-theme=dark]) .side-modal,
+:host([data-wpp-theme=dark]) .actions {
+  background-color: var(--wpp-grey-color-100);
+}

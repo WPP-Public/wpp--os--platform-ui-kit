@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { WppExpandableCard } from '../wpp-expandable-card';
+import * as themeUtils from '../../../utils/subscribe-to-theme';
 describe('wpp-expandable-card', () => {
   it('should render card with context inside', async () => {
     const page = await newSpecPage({
@@ -20,5 +21,35 @@ describe('wpp-expandable-card', () => {
              </wpp-expandable-card>`,
     });
     expect(page.root).toMatchSnapshot();
+  });
+  describe('subscribing to theme changes', () => {
+    let mockStart;
+    let mockStop;
+    beforeEach(() => {
+      mockStart = jest.fn();
+      mockStop = jest.fn();
+      jest.spyOn(themeUtils, 'themeSubscriptionController').mockReturnValue({
+        start: mockStart,
+        stop: mockStop,
+      });
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
+      await newSpecPage({
+        components: [WppExpandableCard],
+        html: `<wpp-expandable-card><span>test context</span></wpp-expandable-card>`,
+      });
+      expect(mockStart).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
+      const page = await newSpecPage({
+        components: [WppExpandableCard],
+        html: `<wpp-expandable-card><span>test context</span></wpp-expandable-card>`,
+      });
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
+    });
   });
 });

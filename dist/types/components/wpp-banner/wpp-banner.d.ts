@@ -19,10 +19,12 @@ import { BannerChangeEventDetail } from './types';
 export declare class WppBanner {
   private resizeObserver;
   private messageText;
+  private themeSubscription;
   host: HTMLWppBannerElement;
   hasActionsSlot: boolean;
   heightBanner: number;
   isOverflowing: boolean;
+  isDarkTheme: boolean;
   /**
    * Contains the button `aria-` props.
    */
@@ -53,6 +55,7 @@ export declare class WppBanner {
   wppClose: EventEmitter<BannerChangeEventDetail>;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  connectedCallback(): void;
   disconnectedCallback(): void;
   private updateOverflowState;
   private updateMessageText;

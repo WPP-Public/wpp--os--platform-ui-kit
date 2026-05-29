@@ -2,6 +2,7 @@ import { Host, h } from '@stencil/core';
 import { getSlotEmptyStates } from '../../utils/utils';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { Z_INDEX } from '../../common/consts';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
  * @slot app - May contain descriptive app data (e.g., icon, name, and so on)
  *
@@ -13,6 +14,7 @@ import { Z_INDEX } from '../../common/consts';
  */
 export class WppTopbar {
   constructor() {
+    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.getItemsWidth = () => {
       const navigationItemsElement = this.host.shadowRoot.querySelector('.navigation');
       const topbarItems = navigationItemsElement?.querySelectorAll('.wpp-topbar-item:not([is-menu])');
@@ -36,6 +38,9 @@ export class WppTopbar {
     };
     this.topbarItemClick = (e) => {
       this.wppChange.emit(e.detail);
+    };
+    this.topbarItemMenuToggle = (e) => {
+      this.hasOpenMenu = e.detail;
     };
     this.updateSlotData = () => {
       const emptyStates = getSlotEmptyStates(this.host.childNodes, {
@@ -66,6 +71,7 @@ export class WppTopbar {
     this.hasRightSlot = false;
     this.activeItems = [];
     this.topbarItemsWidth = [];
+    this.hasOpenMenu = false;
     this.navigation = undefined;
     this.value = undefined;
     this.nativeLink = false;
@@ -130,20 +136,25 @@ export class WppTopbar {
       });
     });
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
   }
   render() {
+    const topbarMenuZIndex = this.zIndex + (Z_INDEX.TOPBAR_MENU - Z_INDEX.TOPBAR);
     const hiddenNavigation = {
       children: this.navigation.slice(this.itemsToShow),
     };
     const isMenuActive = !!hiddenNavigation.children?.find(item => this.activeItems.includes(item.value));
-    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "wrapper, body, navigation, topbar-item, divider, app, right, app-wrapper, right-wrapper" }, h("div", { class: this.wrapperCssClasses(), part: "wrapper" }, h("wpp-grid-v4-0-0", { container: true }, h("wpp-grid-v4-0-0", { item: true, all: 24 }, h("div", { class: this.headerCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasAppSlot }, name: "app", onSlotchange: this.updateSlotData }), h("nav", { class: this.navigationCssClasses(), key: this.itemsToShow, part: "navigation" }, this.navigation.slice(0, this.itemsToShow).map(navigation => (h("wpp-topbar-item-v4-0-0", { navigation: navigation, firstLevel: true, active: navigation.active, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, part: "topbar-item" }))), this.truncated && (h("wpp-topbar-item-v4-0-0", { key: this.value, navigation: hiddenNavigation, firstLevel: true, menu: true, active: isMenuActive, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, part: "topbar-item" }))), h(WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasRightSlot }, name: "right", onSlotchange: this.updateSlotData }))))), h("wpp-divider-v4-0-0", { part: "divider" })));
+    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: (this.hasOpenMenu ? topbarMenuZIndex : this.zIndex).toString() }, exportparts: "wrapper, body, navigation, topbar-item, divider, app, right, app-wrapper, right-wrapper" }, h("div", { class: this.wrapperCssClasses(), part: "wrapper" }, h("wpp-grid-v4-1-0", { container: true }, h("wpp-grid-v4-1-0", { item: true, all: 24 }, h("div", { class: this.headerCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasAppSlot }, name: "app", onSlotchange: this.updateSlotData }), h("nav", { class: this.navigationCssClasses(), key: this.itemsToShow, part: "navigation" }, this.navigation.slice(0, this.itemsToShow).map(navigation => (h("wpp-topbar-item-v4-1-0", { navigation: navigation, firstLevel: true, active: navigation.active, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, zIndex: topbarMenuZIndex, part: "topbar-item", onWppTopbarItemMenuToggle: this.topbarItemMenuToggle }))), this.truncated && (h("wpp-topbar-item-v4-1-0", { key: this.value, navigation: hiddenNavigation, firstLevel: true, menu: true, active: isMenuActive, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, zIndex: topbarMenuZIndex, part: "topbar-item", onWppTopbarItemMenuToggle: this.topbarItemMenuToggle }))), h(WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasRightSlot }, name: "right", onSlotchange: this.updateSlotData }))))), h("wpp-divider-v4-1-0", { part: "divider" })));
   }
   static get is() { return "wpp-topbar"; }
-  static get registryIs() { return "wpp-topbar-v4-0-0"; }
+  static get registryIs() { return "wpp-topbar-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -240,7 +251,8 @@ export class WppTopbar {
       "hasAppSlot": {},
       "hasRightSlot": {},
       "activeItems": {},
-      "topbarItemsWidth": {}
+      "topbarItemsWidth": {},
+      "hasOpenMenu": {}
     };
   }
   static get events() {

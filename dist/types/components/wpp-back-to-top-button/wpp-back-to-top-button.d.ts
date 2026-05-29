@@ -5,6 +5,7 @@ import { AriaProps, FOCUS_TYPE } from '../../types/common';
  */
 export declare class WppBackToTopButton {
   private buttonRef?;
+  private themeSubscription;
   host: HTMLWppBackToTopButtonElement;
   focusType: FOCUS_TYPE;
   isPressed: boolean;
@@ -19,6 +20,8 @@ export declare class WppBackToTopButton {
   setFocus(): Promise<void>;
   onUpdateAriaProps(): void;
   componentWillLoad(): void;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
   private onKeyDown;
   private onKeyUp;
   private onBlur;

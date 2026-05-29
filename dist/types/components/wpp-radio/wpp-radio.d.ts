@@ -10,6 +10,7 @@ import { RadioChangeEvent, RadioValue, RadioLabelConfig } from './types';
  */
 export declare class WppRadio implements BaseComponent, BooleanFormControl<RadioValue> {
   readonly host: HTMLWppRadioElement;
+  private themeSubscription;
   private inputRef?;
   private tippyInstance?;
   focusType: FOCUS_TYPE;
@@ -96,6 +97,8 @@ export declare class WppRadio implements BaseComponent, BooleanFormControl<Radio
    */
   setFocus(): Promise<void>;
   private onClick;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
   private onFocus;
   private onBlur;
   private onKeyDown;

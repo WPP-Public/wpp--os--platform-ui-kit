@@ -20,7 +20,7 @@ const LOCALES_DEFAULTS = {
   exceededByCharacters: 'exceeded by',
 };
 
-const wppTextareaInputCss = ":host{--wpp-textarea-height:128px}:host([disabled]:not([disabled=false]):active){pointer-events:none}:host(.wpp-textarea-wrapper){display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;font-size:var(--wpp-typography-xs-body-font-size, 12px);line-height:var(--wpp-typography-xs-body-line-height, 20px);font-weight:var(--wpp-typography-xs-body-font-weight, 400);color:var(--wpp-typography-xs-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-xs-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-xs-body-letter-spacing, 0)}:host(.wpp-textarea-wrapper) .label .label-text{color:var(--wpp-text-color-info)}:host(.wpp-textarea-wrapper) .label{margin:0 0 8px 0}:host(.wpp-textarea-wrapper) textarea{-webkit-box-sizing:border-box;box-sizing:border-box;padding:9px 12px;overflow-y:auto;background-color:transparent;border:var(--wpp-border-width-s) solid var(--wpp-grey-color-600);border-radius:var(--wpp-border-radius-m);resize:none;outline:none;height:var(--wpp-textarea-height);word-wrap:break-word;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent;font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host(.wpp-textarea-wrapper) textarea.stretch{overflow-x:hidden;overflow-y:hidden}:host(.wpp-textarea-wrapper) textarea.is-scrollable{overflow-y:auto}:host(.wpp-textarea-wrapper) textarea.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}:host(.wpp-textarea-wrapper) textarea::-webkit-scrollbar{width:4px;height:4px}:host(.wpp-textarea-wrapper) textarea::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}:host(.wpp-textarea-wrapper) textarea:hover{background:var(--wpp-grey-color-200);border:var(--wpp-border-width-s) solid var(--wpp-grey-color-700)}:host(.wpp-textarea-wrapper) textarea:active{border:var(--wpp-border-width-s) solid var(--wpp-grey-color-800)}:host(.wpp-textarea-wrapper) textarea::-webkit-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-textarea-wrapper) textarea::-moz-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-textarea-wrapper) textarea:-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-textarea-wrapper) textarea::-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-textarea-wrapper) textarea::placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-textarea-wrapper) textarea:focus{background:transparent;border:var(--wpp-border-width-s) solid var(--wpp-grey-color-800)}:host(.wpp-textarea-wrapper) textarea:disabled{color:var(--wpp-text-color-disabled);background:var(--wpp-grey-color-100);border:var(--wpp-border-width-s) solid var(--wpp-grey-color-400);cursor:not-allowed}:host(.wpp-textarea-wrapper) textarea:disabled::-webkit-input-placeholder{color:var(--wpp-text-color-disabled);-webkit-transition:0.5s ease-in-out;transition:0.5s ease-in-out}:host(.wpp-textarea-wrapper) textarea:disabled::-moz-placeholder{color:var(--wpp-text-color-disabled);-moz-transition:0.5s ease-in-out;transition:0.5s ease-in-out}:host(.wpp-textarea-wrapper) textarea:disabled:-ms-input-placeholder{color:var(--wpp-text-color-disabled);-ms-transition:0.5s ease-in-out;transition:0.5s ease-in-out}:host(.wpp-textarea-wrapper) textarea:disabled::-ms-input-placeholder{color:var(--wpp-text-color-disabled);-ms-transition:0.5s ease-in-out;transition:0.5s ease-in-out}:host(.wpp-textarea-wrapper) textarea:disabled::placeholder{color:var(--wpp-text-color-disabled);-webkit-transition:0.5s ease-in-out;transition:0.5s ease-in-out}:host(.wpp-textarea-wrapper) textarea.warning,:host(.wpp-textarea-wrapper) textarea.warning:hover{border:var(--wpp-border-width-s) solid var(--wpp-warning-color-400)}:host(.wpp-textarea-wrapper) textarea.error,:host(.wpp-textarea-wrapper) textarea.error:hover{border:var(--wpp-border-width-s) solid var(--wpp-danger-color-400)}:host(.wpp-textarea-wrapper) .characters-limit{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;margin-left:32px}:host(.wpp-textarea-wrapper) .characters-limit.warning .wpp-typography{color:var(--wpp-warning-color-500)}:host(.wpp-textarea-wrapper) .characters-limit.warning .wpp-typography:first-child::part(typography){color:var(--wpp-warning-color-500)}:host(.wpp-textarea-wrapper) .characters-limit.error .wpp-typography{color:var(--wpp-danger-color-500)}:host(.wpp-textarea-wrapper) .characters-limit.error .wpp-typography:first-child::part(typography){color:var(--wpp-danger-color-500)}:host(.wpp-textarea-wrapper) .characters-limit .wpp-typography:first-child{--wpp-typography-color:$labelColor;white-space:nowrap}:host(.wpp-textarea-wrapper) .characters-limit .wpp-typography:first-child::part(typography){color:var(--wpp-grey-color-800);font-weight:400}:host(.wpp-textarea-wrapper) .characters-limit .entered-characters{margin-left:2px;white-space:nowrap}:host(.wpp-textarea-wrapper) .messages-wrapper{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;margin:4px 0 0 0}:host(.wpp-textarea-wrapper) .messages-wrapper.without-text-message{-ms-flex-pack:end;justify-content:flex-end}:host(.wpp-textarea-wrapper) .sr-only{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0, 0, 0, 0) !important;-webkit-clip-path:inset(50%) !important;clip-path:inset(50%) !important;border:0 !important;white-space:nowrap !important}";
+const wppTextareaInputCss = ":host{--wpp-textarea-height:128px}:host([disabled]:not([disabled=false]):active){pointer-events:none}:host(.wpp-textarea-wrapper){display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;font-size:var(--wpp-typography-xs-body-font-size, 12px);line-height:var(--wpp-typography-xs-body-line-height, 20px);font-weight:var(--wpp-typography-xs-body-font-weight, 400);color:var(--wpp-typography-xs-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-xs-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-xs-body-letter-spacing, 0)}:host(.wpp-textarea-wrapper) .label .label-text{color:var(--wpp-text-color-info)}:host(.wpp-textarea-wrapper) .label{margin:0 0 8px 0}:host(.wpp-textarea-wrapper) textarea{-webkit-box-sizing:border-box;box-sizing:border-box;padding:9px 12px;overflow-y:auto;background-color:transparent;border:var(--wpp-border-width-s) solid var(--wpp-grey-color-600);border-radius:var(--wpp-border-radius-m);resize:none;outline:none;height:var(--wpp-textarea-height);word-wrap:break-word;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent;font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host(.wpp-textarea-wrapper) textarea.stretch{--wpp-textarea-height:auto;min-height:calc(1 * var(--wpp-font-line-height-s-body, 22px) + 2 * var(--wpp-border-width-s) + 18px);overflow-x:hidden;overflow-y:hidden}:host(.wpp-textarea-wrapper) textarea.is-scrollable{overflow-y:auto}:host(.wpp-textarea-wrapper) textarea.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}:host(.wpp-textarea-wrapper) textarea::-webkit-scrollbar{width:4px;height:4px}:host(.wpp-textarea-wrapper) textarea::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}:host(.wpp-textarea-wrapper) textarea:hover{background:var(--wpp-grey-color-200);border:var(--wpp-border-width-s) solid var(--wpp-grey-color-700)}:host(.wpp-textarea-wrapper) textarea:active{border:var(--wpp-border-width-s) solid var(--wpp-grey-color-800)}:host(.wpp-textarea-wrapper) textarea::-webkit-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-textarea-wrapper) textarea::-moz-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-textarea-wrapper) textarea:-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-textarea-wrapper) textarea::-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-textarea-wrapper) textarea::placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-textarea-wrapper) textarea:focus{background:transparent;border:var(--wpp-border-width-s) solid var(--wpp-grey-color-800)}:host(.wpp-textarea-wrapper) textarea:disabled{color:var(--wpp-text-color-disabled);background:var(--wpp-grey-color-100);border:var(--wpp-border-width-s) solid var(--wpp-grey-color-400);cursor:not-allowed}:host(.wpp-textarea-wrapper) textarea:disabled::-webkit-input-placeholder{color:var(--wpp-text-color-disabled);-webkit-transition:0.5s ease-in-out;transition:0.5s ease-in-out}:host(.wpp-textarea-wrapper) textarea:disabled::-moz-placeholder{color:var(--wpp-text-color-disabled);-moz-transition:0.5s ease-in-out;transition:0.5s ease-in-out}:host(.wpp-textarea-wrapper) textarea:disabled:-ms-input-placeholder{color:var(--wpp-text-color-disabled);-ms-transition:0.5s ease-in-out;transition:0.5s ease-in-out}:host(.wpp-textarea-wrapper) textarea:disabled::-ms-input-placeholder{color:var(--wpp-text-color-disabled);-ms-transition:0.5s ease-in-out;transition:0.5s ease-in-out}:host(.wpp-textarea-wrapper) textarea:disabled::placeholder{color:var(--wpp-text-color-disabled);-webkit-transition:0.5s ease-in-out;transition:0.5s ease-in-out}:host(.wpp-textarea-wrapper) textarea.warning,:host(.wpp-textarea-wrapper) textarea.warning:hover{border:var(--wpp-border-width-s) solid var(--wpp-warning-color-400)}:host(.wpp-textarea-wrapper) textarea.error,:host(.wpp-textarea-wrapper) textarea.error:hover{border:var(--wpp-border-width-s) solid var(--wpp-danger-color-400)}:host(.wpp-textarea-wrapper) .characters-limit{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;margin-left:32px}:host(.wpp-textarea-wrapper) .characters-limit.warning .wpp-typography{color:var(--wpp-warning-color-500)}:host(.wpp-textarea-wrapper) .characters-limit.warning .wpp-typography:first-child::part(typography){color:var(--wpp-warning-color-500)}:host(.wpp-textarea-wrapper) .characters-limit.error .wpp-typography{color:var(--wpp-danger-color-500)}:host(.wpp-textarea-wrapper) .characters-limit.error .wpp-typography:first-child::part(typography){color:var(--wpp-danger-color-500)}:host(.wpp-textarea-wrapper) .characters-limit .wpp-typography:first-child{--wpp-typography-color:$labelColor;white-space:nowrap}:host(.wpp-textarea-wrapper) .characters-limit .wpp-typography:first-child::part(typography){color:var(--wpp-grey-color-800);font-weight:400}:host(.wpp-textarea-wrapper) .characters-limit .entered-characters{margin-left:2px;white-space:nowrap}:host(.wpp-textarea-wrapper) .messages-wrapper{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;margin:4px 0 0 0}:host(.wpp-textarea-wrapper) .messages-wrapper.without-text-message{-ms-flex-pack:end;justify-content:flex-end}:host(.wpp-textarea-wrapper) .sr-only{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0, 0, 0, 0) !important;-webkit-clip-path:inset(50%) !important;clip-path:inset(50%) !important;border:0 !important;white-space:nowrap !important}";
 
 const WppTextareaInput$1 = /*@__PURE__*/ proxyCustomElement(class WppTextareaInput extends HTMLElement {
   constructor() {
@@ -37,12 +37,14 @@ const WppTextareaInput$1 = /*@__PURE__*/ proxyCustomElement(class WppTextareaInp
       if (!this.inputRef || this.inputRef.scrollHeight === 0)
         return;
       const computed = window.getComputedStyle(this.inputRef);
-      const shouldShrink = this.previousValue === '' || !this.inputRef.value.startsWith(this.previousValue);
+      const shouldShrink = this.previousValue !== '' &&
+        (this.inputRef.value.length < this.previousValue.length || !this.inputRef.value.startsWith(this.previousValue));
       if (shouldShrink) {
         this.isScrollable = false;
         this.inputRef.style.setProperty('--wpp-textarea-height', 'auto');
       }
-      const newHeight = this.inputRef.scrollHeight - (parseFloat(computed.borderTopWidth) + parseFloat(computed.borderBottomWidth));
+      const borderPadding = parseFloat(computed.borderTopWidth) + parseFloat(computed.borderBottomWidth);
+      const newHeight = this.inputRef.scrollHeight - borderPadding;
       if (this.rows === 'stretch' && this.maxHeight && newHeight > this.maxHeight) {
         this.inputRef.style.setProperty('--wpp-textarea-height', `${this.maxHeight}px`);
         this.isScrollable = true;
@@ -73,7 +75,6 @@ const WppTextareaInput$1 = /*@__PURE__*/ proxyCustomElement(class WppTextareaInp
       }
     };
     this.onInput = (event) => {
-      // this.focusType = FOCUS_TYPE.NONE
       this.value = event.target.value;
       if (this.rows === 'stretch')
         this.adjustHeight();
@@ -259,13 +260,13 @@ const WppTextareaInput$1 = /*@__PURE__*/ proxyCustomElement(class WppTextareaInp
   }
   render() {
     const style = {
-      '--wpp-textarea-height': this.rows ? 'auto' : '',
+      ...((this.rows === 'stretch' || !!this.rows) && { '--wpp-textarea-height': 'auto' }),
     };
     const ariaAttrs = this.getAriaAttributes();
     const overLimit = this.isOverLimit;
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, textarea, message-wrapper, message, limit-wrapper, limit-label, limit-text" }, this.labelConfig?.text && (h("wpp-label-v4-0-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("textarea", { name: this.name, value: this.value, disabled: this.disabled, placeholder: this.placeholder, rows: this.rows === 'stretch' ? 1 : this.rows ? Number(this.rows) : undefined, id: this.inputId, required: this.required, class: this.textAreaCssClasses(), onInput: this.onInput, ref: inputRef => (this.inputRef = inputRef), part: "textarea", style: style, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, ...ariaAttrs, ...this.validAriaProps }), (!!this.charactersLimit || !!this.message) && (h("div", { class: this.messageCssClasses(), part: "message-wrapper", "aria-live": "polite", "aria-atomic": "true" }, !!this.message && (h("wpp-inline-message-v4-0-0", { id: this.messageId, message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, part: "message" })), !!this.charactersLimit && (h("div", { id: this.counterId, class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, h("wpp-typography-v4-0-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":"), h("wpp-typography-v4-0-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit), overLimit && (h("wpp-typography-v4-0-0", { type: "xs-body", tag: "span", class: "exceeded-characters sr-only", part: "limit-text" }, this._locales.exceededByCharacters, " ", this.enteredCharacters - (this.charactersLimit || 0)))))))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, textarea, message-wrapper, message, limit-wrapper, limit-label, limit-text", style: style }, this.labelConfig?.text && (h("wpp-label-v4-1-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("textarea", { name: this.name, value: this.value, disabled: this.disabled, placeholder: this.placeholder, rows: this.rows === 'stretch' ? 1 : this.rows ? this.rows : undefined, id: this.inputId, required: this.required, class: this.textAreaCssClasses(), onInput: this.onInput, ref: inputRef => (this.inputRef = inputRef), part: "textarea", onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, ...ariaAttrs, ...this.validAriaProps }), (!!this.charactersLimit || !!this.message) && (h("div", { class: this.messageCssClasses(), part: "message-wrapper", "aria-live": "polite", "aria-atomic": "true" }, !!this.message && (h("wpp-inline-message-v4-1-0", { id: this.messageId, message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, part: "message" })), !!this.charactersLimit && (h("div", { id: this.counterId, class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, h("wpp-typography-v4-1-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":"), h("wpp-typography-v4-1-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit), overLimit && (h("wpp-typography-v4-1-0", { type: "xs-body", tag: "span", class: "exceeded-characters sr-only", part: "limit-text" }, this._locales.exceededByCharacters, " ", this.enteredCharacters - (this.charactersLimit || 0)))))))));
   }
-  static get registryIs() { return "wpp-textarea-input-v4-0-0"; }
+  static get registryIs() { return "wpp-textarea-input-v4-1-0"; }
   get host() { return this; }
   static get watchers() { return {
     "value": ["onValueChange"],
@@ -275,7 +276,7 @@ const WppTextareaInput$1 = /*@__PURE__*/ proxyCustomElement(class WppTextareaInp
     "ariaProps": ["onUpdateAriaProps"]
   }; }
   static get style() { return wppTextareaInputCss; }
-}, [1, "wpp-textarea-input", "wpp-textarea-input-v4-0-0", {
+}, [1, "wpp-textarea-input", "wpp-textarea-input-v4-1-0", {
     "name": [1],
     "value": [1025],
     "placeholder": [1],
@@ -307,74 +308,74 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-textarea-input-v4-0-0", "wpp-action-button-v4-0-0", "wpp-icon-cross-v4-0-0", "wpp-icon-error-v4-0-0", "wpp-icon-info-message-v4-0-0", "wpp-icon-success-v4-0-0", "wpp-icon-warning-v4-0-0", "wpp-inline-message-v4-0-0", "wpp-internal-label-v4-0-0", "wpp-internal-tooltip-v4-0-0", "wpp-label-v4-0-0", "wpp-spinner-v4-0-0", "wpp-tooltip-v4-0-0", "wpp-typography-v4-0-0"];
+  const components = ["wpp-textarea-input-v4-1-0", "wpp-action-button-v4-1-0", "wpp-icon-cross-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-info-message-v4-1-0", "wpp-icon-success-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-inline-message-v4-1-0", "wpp-internal-label-v4-1-0", "wpp-internal-tooltip-v4-1-0", "wpp-label-v4-1-0", "wpp-spinner-v4-1-0", "wpp-tooltip-v4-1-0", "wpp-typography-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-textarea-input-v4-0-0":
+    case "wpp-textarea-input-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTextareaInput$1);
       }
       break;
-    case "wpp-action-button-v4-0-0":
+    case "wpp-action-button-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-cross-v4-0-0":
+    case "wpp-icon-cross-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-error-v4-0-0":
+    case "wpp-icon-error-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-info-message-v4-0-0":
+    case "wpp-icon-info-message-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-success-v4-0-0":
+    case "wpp-icon-success-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-warning-v4-0-0":
+    case "wpp-icon-warning-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-inline-message-v4-0-0":
+    case "wpp-inline-message-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-internal-label-v4-0-0":
+    case "wpp-internal-label-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-tooltip-v4-0-0":
+    case "wpp-internal-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-label-v4-0-0":
+    case "wpp-label-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-0-0":
+    case "wpp-spinner-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-0-0":
+    case "wpp-tooltip-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-0-0":
+    case "wpp-typography-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

@@ -118,8 +118,6 @@
   display: flex;
   flex-direction: column-reverse;
   align-items: stretch;
-  flex: 1 1 auto;
-  box-sizing: border-box;
   color: var(--wpp-grey-color-1000);
   min-height: var(--chat-input-area-min-height);
   max-height: var(--chat-input-area-max-height);
@@ -249,8 +247,22 @@
 }
 .actions-bar .left-actions {
   display: flex;
-  gap: 4px;
+  gap: 8px;
   align-items: center;
+  /**
+   * The internal actions-menu (wpp-icon-plus) wraps a wpp-action-button
+   * inside a wpp-menu-context. The menu-context wrapper defaults to
+   * width: 100% via --mc-wrapper-width which would push siblings (the
+   * model select) onto a new line. Constrain it to its trigger so the
+   * plus button behaves like a regular icon-only action button in the
+   * toolbar.
+   */
+}
+.actions-bar .left-actions .actions-menu {
+  --wpp-mc-wrapper-width: auto;
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: auto;
 }
 .actions-bar .left-actions .select {
   display: flex;
@@ -303,4 +315,8 @@
   border-radius: var(--chat-minimized-border-radius-focus);
   outline: none;
   box-shadow: 0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus);
+}
+
+:host([data-wpp-theme=dark]) .chat-input-container {
+  background-color: var(--wpp-grey-color-100);
 }

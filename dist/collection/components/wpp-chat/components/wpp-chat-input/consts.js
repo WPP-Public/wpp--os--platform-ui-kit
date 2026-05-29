@@ -13,6 +13,12 @@ export const DEFAULT_FILE_UPLOAD_CONFIG = {
 };
 export const MAX_INPUT_AREA_HEIGHT = 240;
 export const MIN_TEXTAREA_HEIGHT = 52;
+/**
+ * Reserved `ChatInputAction.id` that auto-wires an actions-menu entry to the
+ * same file picker used by `enableAttach`. Consumers can still listen for the
+ * `wppActionsMenuItemClick` event on top of the built-in behavior.
+ */
+export const UPLOAD_ACTION_ID = 'upload';
 export const LOCALES_DEFAULTS = {
   placeholder: 'Type your message...',
   minimizedDescription: 'Expand message input',
@@ -24,4 +30,5 @@ export const LOCALES_DEFAULTS = {
   voiceLabel: 'Record voice message',
   attachmentsLabel: 'Attachments',
   messageInputLabel: 'Message input',
+  actionsMenuLabel: 'More actions',
 };

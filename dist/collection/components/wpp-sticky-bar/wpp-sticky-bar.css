@@ -97,3 +97,7 @@
   top: 0;
   transform: translateY(-100%);
 }
+
+:host([data-wpp-theme=dark]) .container {
+  background-color: var(--wpp-grey-color-100);
+}

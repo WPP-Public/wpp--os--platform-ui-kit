@@ -15,6 +15,7 @@ import { CardChangeEventDetail, CardSize, CardState, CardType, CardValue } from 
  * @part inner - Content slot element
  */
 export declare class WppCard {
+  private themeSubscription;
   host: HTMLWppCardElement;
   hasHeaderSlot: boolean;
   hasActionsSlot: boolean;
@@ -97,6 +98,8 @@ export declare class WppCard {
    */
   setFocus(): Promise<void>;
   componentWillLoad(): void;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
   private updateSlotData;
   private onClick;
   private onFocus;

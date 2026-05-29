@@ -533,3 +533,7 @@
 :host .wpp-divider.wpp-disabled {
   --divider-bg-color: var(--slider-divider-bg-color-disabled);
 }
+
+:host([data-wpp-theme=dark]) {
+  --slider-handle-bg-color: var(--wpp-grey-color-100);
+}

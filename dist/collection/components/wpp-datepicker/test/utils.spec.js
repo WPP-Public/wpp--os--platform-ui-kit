@@ -1,4 +1,4 @@
-import { getCurrentFormatDate, normalizeMonthRangeDates } from '../utils';
+import { getCurrentFormatDate, normalizeMonthRangeDates, normalizeYearRangeDates } from '../utils';
 describe('wpp-datepicker', () => {
   describe('utils', () => {
     describe('getCurrentFormatDate', () => {
@@ -159,6 +159,65 @@ describe('wpp-datepicker', () => {
         expect(result[0].getMinutes()).toBe(0);
         expect(result[1].getHours()).toBe(0);
         expect(result[1].getMinutes()).toBe(0);
+      });
+    });
+    describe('normalizeYearRangeDates', () => {
+      it('should normalize start date to Jan 1st and end date to Dec 31st by default', () => {
+        const startDate = new Date(2011, 5, 15); // June 15, 2011
+        const endDate = new Date(2019, 7, 20); // August 20, 2019
+        const result = normalizeYearRangeDates([startDate, endDate], { enabled: true });
+        expect(result[0].getFullYear()).toBe(2011);
+        expect(result[0].getMonth()).toBe(0); // January
+        expect(result[0].getDate()).toBe(1);
+        expect(result[1].getFullYear()).toBe(2019);
+        expect(result[1].getMonth()).toBe(11); // December
+        expect(result[1].getDate()).toBe(31);
+      });
+      it('should respect custom startMonth/startDay and endMonth/endDay', () => {
+        const startDate = new Date(2024, 5, 15);
+        const endDate = new Date(2025, 7, 20);
+        const result = normalizeYearRangeDates([startDate, endDate], {
+          enabled: true,
+          startMonth: 4,
+          startDay: 1,
+          endMonth: 3,
+          endDay: 31,
+        });
+        expect(result[0].getMonth()).toBe(3); // April (1-based 4 → 0-based 3)
+        expect(result[0].getDate()).toBe(1);
+        expect(result[1].getMonth()).toBe(2); // March (1-based 3 → 0-based 2)
+        expect(result[1].getDate()).toBe(31);
+      });
+      it('should cap end day to last day of end month (e.g. Feb 31 → Feb 28/29)', () => {
+        const result = normalizeYearRangeDates([new Date(2023, 0, 1), new Date(2023, 0, 1)], {
+          enabled: true,
+          endMonth: 2,
+          endDay: 31,
+        });
+        // Feb 2023 → 28 days
+        expect(result[1].getMonth()).toBe(1);
+        expect(result[1].getDate()).toBe(28);
+      });
+      it('should return dates as-is when disabled', () => {
+        const startDate = new Date(2011, 5, 15);
+        const endDate = new Date(2019, 7, 20);
+        const result = normalizeYearRangeDates([startDate, endDate], { enabled: false });
+        expect(result).toEqual([startDate, endDate]);
+      });
+      it('should return dates as-is when array length is not 2', () => {
+        const result = normalizeYearRangeDates([new Date(2011, 0, 1)], { enabled: true });
+        expect(result).toEqual([new Date(2011, 0, 1)]);
+      });
+      it('should return dates as-is when a date is invalid', () => {
+        const result = normalizeYearRangeDates([new Date('invalid'), new Date(2019, 0, 1)], { enabled: true });
+        expect(result.length).toBe(2);
+      });
+      it('should default to enabled when no config is provided', () => {
+        const result = normalizeYearRangeDates([new Date(2011, 5, 15), new Date(2019, 7, 20)]);
+        expect(result[0].getMonth()).toBe(0);
+        expect(result[0].getDate()).toBe(1);
+        expect(result[1].getMonth()).toBe(11);
+        expect(result[1].getDate()).toBe(31);
       });
     });
   });

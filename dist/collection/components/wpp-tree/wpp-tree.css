@@ -25,13 +25,14 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  overflow: hidden;
+}
+.container:focus {
+  outline: none;
 }
 
 .content-container {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   transition: height 500ms ease;
 }
 

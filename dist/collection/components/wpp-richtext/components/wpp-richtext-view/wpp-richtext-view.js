@@ -1,13 +1,13 @@
 import { h, Host } from '@stencil/core';
-import { Quill } from '../..';
-import { formats, sources } from '../../types';
-import turndownService from '../../config';
-import { processMarkdownValue } from '../../utils';
+import { Editor } from '@tiptap/core';
+import { formats } from '../../types';
+import { buildTiptapExtensions } from '../../tiptap-config';
+import { normalizeEmptyParagraphs, normalizeListHtml } from '../../utils';
 export class WppRichtextView {
   constructor() {
+    this.tiptapEditor = null;
     this.value = undefined;
     this.format = formats.html;
-    this.debug = 'warn';
     this.formats = undefined;
     this.modules = undefined;
     this.strict = true;
@@ -16,77 +16,68 @@ export class WppRichtextView {
     this.name = undefined;
   }
   setValue(value) {
+    if (!this.tiptapEditor)
+      return;
+    const noEmitOpts = { emitUpdate: false };
+    const noEmitPreserveOpts = { ...noEmitOpts, parseOptions: { preserveWhitespace: 'full' } };
     if (this.format === formats.html) {
-      const contents = this.quill.clipboard.convert(value);
-      this.quill.setContents(contents, sources.api);
+      this.tiptapEditor.commands.setContent(normalizeEmptyParagraphs(String(value || '')), noEmitPreserveOpts);
     }
     else if (this.format === formats.markdown) {
-      const { html } = processMarkdownValue(value);
-      const contents = this.quill.clipboard.convert(html);
-      this.quill.setContents(contents, sources.api);
-      // Quill's clipboard.convert adds extra empty <p><br></p> before lists when preceded by a <p> tag
-      // We need to remove these, but KEEP <p>&nbsp;</p> which are intentional blank lines
-      const lists = this.quill.root.querySelectorAll('ol, ul');
-      lists.forEach(list => {
-        const prevElement = list.previousElementSibling;
-        if (prevElement && prevElement.tagName === 'P') {
-          const content = prevElement.innerHTML.trim();
-          if (content === '<br>' || content === '') {
-            prevElement.remove();
-          }
-        }
-      });
-      // Clean up empty list items that may have been created
-      const emptyListItems = this.quill.root.querySelectorAll('li');
-      let removedCount = 0;
-      emptyListItems.forEach(li => {
-        const liContent = li.innerHTML.trim();
-        if (liContent === '<br>' || liContent === '') {
-          li.remove();
-          removedCount++;
-        }
-      });
-      if (removedCount > 0) {
-        this.quill.update(sources.api);
+      const md = String(value || '');
+      // `MarkdownManager.parse('')` returns `{ type: 'doc', content: [] }`,
+      // which violates the ProseMirror doc schema (one block-child minimum)
+      // and causes `setContent` to silently no-op — the previously-rendered
+      // content stays on screen, so a fully cleared editor's value (e.g.
+      // after the user deletes the last character) never propagates here.
+      // Route empties through the plain HTML path which DOES clear the doc.
+      if (!md) {
+        this.tiptapEditor.commands.setContent('', noEmitOpts);
+      }
+      else {
+        this.tiptapEditor.commands.setContent(md, { ...noEmitPreserveOpts, contentType: 'markdown' });
       }
     }
     else if (this.format === formats.text) {
-      this.quill.setText(value, sources.api);
+      const escaped = (value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      this.tiptapEditor.commands.setContent(`<p>${escaped}</p>`, noEmitOpts);
     }
     else if (this.format === formats.json) {
       try {
-        this.quill.setContents(JSON.parse(value), sources.api);
+        const content = JSON.parse(value);
+        this.tiptapEditor.commands.setContent(content, noEmitOpts);
       }
-      catch (_) {
-        this.quill.setText(value, sources.api);
+      catch {
+        const escaped = (value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        this.tiptapEditor.commands.setContent(`<p>${escaped}</p>`, noEmitOpts);
       }
     }
     else {
-      this.quill.setText(value, sources.api);
+      const escaped = (value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      this.tiptapEditor.commands.setContent(`<p>${escaped}</p>`, noEmitOpts);
     }
   }
   getValue() {
-    const text = this.quill.getText();
-    const content = this.quill.getContents();
-    let html = this.containerElement.children[0].innerHTML || '';
-    if (html === '<p><br></p>' || html === '<div><br></div>') {
-      html = '';
-    }
+    if (!this.tiptapEditor)
+      return '';
+    const html = this.tiptapEditor.getHTML();
+    const text = this.tiptapEditor.state.doc.textContent;
+    if (this.tiptapEditor.isEmpty)
+      return '';
     if (this.format === 'html') {
-      return html;
+      return normalizeListHtml(html);
     }
     else if (this.format === 'markdown') {
-      // Convert the rendered HTML back to Markdown
-      return turndownService.turndown(html);
+      return this.tiptapEditor.getMarkdown();
     }
     else if (this.format === 'text') {
       return text;
     }
     else if (this.format === 'json') {
       try {
-        return JSON.stringify(content);
+        return JSON.stringify(this.tiptapEditor.getJSON());
       }
-      catch (_) {
+      catch {
         return text;
       }
     }
@@ -95,44 +86,64 @@ export class WppRichtextView {
     }
   }
   componentDidLoad() {
-    const modules = this.modules ? JSON.parse(this.modules) : { toolbar: false };
-    if (modules.toolbar)
-      modules.toolbar = false;
-    this.quill = new Quill(this.containerElement, {
-      debug: this.debug,
-      modules,
-      readOnly: true,
-      theme: 'wpp',
+    const extensions = buildTiptapExtensions({
       formats: this.formats,
-      strict: this.strict,
+    });
+    this.tiptapEditor = new Editor({
+      element: this.containerElement,
+      extensions,
+      content: '',
+      editable: false,
+      injectCSS: false,
     });
     if (this.styles) {
-      const styles = JSON.parse(this.styles);
-      Object.keys(styles).forEach((key) => {
-        this.containerElement?.style.setProperty(key, styles[key]);
-      });
+      try {
+        const styles = JSON.parse(this.styles);
+        Object.keys(styles).forEach((key) => {
+          this.containerElement?.style.setProperty(key, styles[key]);
+        });
+      }
+      catch {
+        // ignore invalid JSON styles
+      }
     }
-    this.containerElement?.classList.add('quill-view');
+    this.containerElement?.classList.add('tiptap-view');
     if (this.value) {
       this.setValue(this.value);
-      this.quill['history'].clear();
     }
+  }
+  disconnectedCallback() {
+    this.tiptapEditor?.destroy();
+    this.tiptapEditor = null;
   }
   updateStyle(newValue, oldValue) {
     if (!this.containerElement) {
       return;
     }
+    // Tolerate invalid JSON in either value (matches componentDidLoad behaviour);
+    // a malformed `styles` prop must not throw and break the component for
+    // consumers that may pass dynamic / partially-built JSON.
     if (oldValue) {
-      const old = JSON.parse(oldValue);
-      Object.keys(old).forEach((key) => {
-        this.containerElement?.style.setProperty(key, '');
-      });
+      try {
+        const old = JSON.parse(oldValue);
+        Object.keys(old).forEach((key) => {
+          this.containerElement?.style.setProperty(key, '');
+        });
+      }
+      catch {
+        // ignore invalid previous JSON styles
+      }
     }
     if (newValue) {
-      const value = JSON.parse(newValue);
-      Object.keys(value).forEach((key) => {
-        this.containerElement?.style.setProperty(key, value[key]);
-      });
+      try {
+        const value = JSON.parse(newValue);
+        Object.keys(value).forEach((key) => {
+          this.containerElement?.style.setProperty(key, value[key]);
+        });
+      }
+      catch {
+        // ignore invalid new JSON styles
+      }
     }
   }
   updateContent(newValue) {
@@ -156,10 +167,20 @@ export class WppRichtextView {
     this.setValue(newValue);
   }
   render() {
-    return (h(Host, null, h("wpp-quill-styles-v4-0-0", null), h("wpp-richtext-common-styles-v4-0-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
+    return (h(Host, null, h("wpp-richtext-common-styles-v4-1-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
   }
   static get is() { return "wpp-richtext-view"; }
-  static get registryIs() { return "wpp-richtext-view-v4-0-0"; }
+  static get registryIs() { return "wpp-richtext-view-v4-1-0"; }
+  static get originalStyleUrls() {
+    return {
+      "$": ["wpp-richtext-view.scss"]
+    };
+  }
+  static get styleUrls() {
+    return {
+      "$": ["wpp-richtext-view.css"]
+    };
+  }
   static get properties() {
     return {
       "value": {
@@ -209,30 +230,6 @@ export class WppRichtextView {
         "reflect": true,
         "defaultValue": "formats.html"
       },
-      "debug": {
-        "type": "string",
-        "mutable": false,
-        "complexType": {
-          "original": "DebugLevels",
-          "resolved": "string",
-          "references": {
-            "DebugLevels": {
-              "location": "import",
-              "path": "../../types",
-              "id": "src/components/wpp-richtext/types.ts::DebugLevels"
-            }
-          }
-        },
-        "required": false,
-        "optional": false,
-        "docs": {
-          "tags": [],
-          "text": "Debug level: `error`, `warn`, `log`, or `info`. Passing true is equivalent to passing `log`.\nPassing false disables all messages."
-        },
-        "attribute": "debug",
-        "reflect": false,
-        "defaultValue": "'warn'"
-      },
       "formats": {
         "type": "unknown",
         "mutable": false,
@@ -245,7 +242,7 @@ export class WppRichtextView {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "Whitelist of formats to allow in the editor.\nSee [Formats](https://quilljs.com/docs/formats/) for a complete list."
+          "text": "Whitelist of formats to allow in the editor."
         }
       },
       "modules": {
@@ -260,7 +257,7 @@ export class WppRichtextView {
         "optional": true,
         "docs": {
           "tags": [],
-          "text": "Collection of modules to include and respective options.\nThe only configurable modules are the following: imageUpload, videoUpload, attachmentUpload and toolbar.aliases.embed (See \"Usage\" section of Notes)\nSee [Modules](https://quilljs.com/docs/modules/) for more information about the library's modules."
+          "text": "Collection of modules to include and respective options."
         },
         "attribute": "modules",
         "reflect": false

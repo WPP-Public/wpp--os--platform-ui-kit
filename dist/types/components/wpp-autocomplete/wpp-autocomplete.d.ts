@@ -9,6 +9,7 @@ import { AutocompleteChangeEventDetail, AutocompleteLocales, AutocompleteOption,
 export declare class WppAutocomplete {
   host: HTMLWppAutocompleteElement;
   protected _locales: AutocompleteLocales;
+  private themeSubscription;
   protected triggerRef?: HTMLDivElement;
   private dropdownRef?;
   private inputRef?;

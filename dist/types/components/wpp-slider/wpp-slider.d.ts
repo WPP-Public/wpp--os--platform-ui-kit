@@ -35,6 +35,7 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
   private marksListRef?;
   private segmentWidth;
   private totalWidth;
+  private themeSubscription;
   private middleValue;
   host: HTMLWppSliderElement;
   tooltipTexts: Record<number, string>;
@@ -142,6 +143,7 @@ export declare class WppSlider implements BaseComponent, BaseFormControl<SliderV
   setFocus(): Promise<void>;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  connectedCallback(): void;
   disconnectedCallback(): void;
   private getMidValueRespectingStep;
   private computeSegmentWidth;

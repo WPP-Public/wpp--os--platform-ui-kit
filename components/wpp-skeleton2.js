@@ -24,9 +24,9 @@ const WppSkeleton = /*@__PURE__*/ proxyCustomElement(class WppSkeleton extends H
     };
     return h(Host, { class: this.hostCssClasses(), style: style, "aria-hidden": "true" });
   }
-  static get registryIs() { return "wpp-skeleton-v4-0-0"; }
+  static get registryIs() { return "wpp-skeleton-v4-1-0"; }
   static get style() { return wppSkeletonCss; }
-}, [1, "wpp-skeleton", "wpp-skeleton-v4-0-0", {
+}, [1, "wpp-skeleton", "wpp-skeleton-v4-1-0", {
     "variant": [1],
     "width": [8],
     "height": [8]
@@ -35,9 +35,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-skeleton-v4-0-0"];
+  const components = ["wpp-skeleton-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-skeleton-v4-0-0":
+    case "wpp-skeleton-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppSkeleton);
       }

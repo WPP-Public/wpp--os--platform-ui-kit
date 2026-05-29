@@ -11,6 +11,15 @@ import { d as defineCustomElement$2 } from './wpp-spinner2.js';
 import { d as defineCustomElement$1 } from './wpp-typography2.js';
 
 const ANIMATION_DURATION = 500;
+/**
+ * Default minimum delay (ms) between two successive toasts becoming visible.
+ * Prevents "batched" enter/exit waves when toasts are queued in rapid succession.
+ *
+ * Kept shorter than `ANIMATION_DURATION` so that consecutive show animations
+ * overlap slightly, producing a smooth cascade effect while still filling the
+ * visible slots quickly.
+ */
+const DEFAULT_STAGGER_INTERVAL = 200;
 
 const wppToastCss = ":host{--toast-width:var(--wpp-toast-width, 400px);--toast-border-radius:var(--wpp-toast-border-radius, var(--wpp-border-radius-m));--toast-message-color:var(--wpp-toast-message-color, var(--wpp-grey-color-000));--toast-padding:var(--wpp-toast-padding, 12px 8px 12px 16px);--toast-with-header-message-color:var(--wpp-toast-with-header-message-color, var(--wpp-grey-color-200));--toast-actions-block-margin:var(--wpp-toast-actions-block-margin, 0 0 0 8px);--toast-icon-wrapper-bg-color:var(--wpp-toast-icon-wrapper-bg-color, transparent);--toast-icon-wrapper-margin:var(--wpp-toast-icon-wrapper-margin, 0 8px 0 0);--toast-icon-wrapper-padding:var(--wpp-toast-icon-wrapper-padding, 4px);--toast-icon-wrapper-border-radius:var(--wpp-toast-icon-wrapper-border-radius, 24px);--toast-icon-wrapper-warning-padding:var(--wpp-toast-icon-wrapper-warning-padding, 3.5px 4px 4.5px 4px);--toast-icon-wrapper-warning-bg-color:var(--wpp-toast-icon-wrapper-warning-bg-color, var(--wpp-warning-color-200));--toast-icon-wrapper-error-bg-color:var(--wpp-toast-icon-wrapper-error-bg-color, var(--wpp-danger-color-200));--toast-icon-wrapper-information-bg-color:var(--wpp-toast-icon-wrapper-information-bg-color, var(--wpp-grey-color-200));--toast-icon-wrapper-success-bg-color:var(--wpp-toast-icon-wrapper-success-bg-color, var(--wpp-success-color-200));--toast-custom-icon-wrapper-bg-color:var(--wpp-toast-custom-icon-wrapper-bg-color, transparent);--toast-custom-icon-color:var(--wpp-toast-custom-icon-color, var(--wpp-icon-color));--toast-custom-logo-wrapper-bg-color:var(--wpp-toast-custom-logo-wrapper-bg-color, transparent);--toast-custom-logo-wrapper-padding:var(--wpp-toast-custom-logo-wrapper-padding, 0);--toast-custom-logo-wrapper-width:var(--wpp-toast-custom-logo-wrapper-width, 24px);--toast-custom-logo-wrapper-height:var(--wpp-toast-custom-logo-wrapper-height, 24px);--toast-custom-logo-width:var(--wpp-toast-custom-logo-width, 24px);--toast-custom-logo-height:var(--wpp-toast-custom-logo-height, 24px);--toast-custom-logo-object-fit:var(--wpp-toast-custom-logo-object-fit, cover);--toast-custom-logo-border-radius:var(--wpp-toast-custom-logo-border-radius, var(--wpp-border-radius-xs))}:host(.wpp-toast-wrapper){position:relative;display:-ms-inline-flexbox;display:inline-flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-sizing:border-box;box-sizing:border-box;width:var(--toast-width);padding:var(--toast-padding);background:var(--wpp-grey-color-900);border-radius:var(--toast-border-radius);-webkit-box-shadow:0 4px 12px rgba(52, 58, 63, 0.102);box-shadow:0 4px 12px rgba(52, 58, 63, 0.102);-webkit-transform:translate(calc(100% + 16px), 0);transform:translate(calc(100% + 16px), 0);opacity:0;max-height:var(--mt-height);-webkit-transition-timing-function:ease;transition-timing-function:ease;-webkit-transition-duration:var(--mt-show-animation-duration);transition-duration:var(--mt-show-animation-duration);-webkit-transition-property:opacity, -webkit-transform;transition-property:opacity, -webkit-transform;transition-property:opacity, transform;transition-property:opacity, transform, -webkit-transform}:host(.wpp-toast-wrapper) .body{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;overflow:hidden}:host(.wpp-toast-wrapper) .body .message{color:var(--toast-message-color)}:host(.wpp-toast-wrapper) .actions{display:-ms-flexbox;display:flex;margin:var(--toast-actions-block-margin)}:host(.wpp-visible){-webkit-transform:translate(0, 0);transform:translate(0, 0);opacity:1}:host(.wpp-with-header) .body{display:-ms-flexbox;display:flex;-ms-flex-align:start;align-items:flex-start;overflow:hidden}:host(.wpp-with-header) .info{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;overflow:hidden;padding-top:1px}:host(.wpp-with-header) .info .message{color:var(--toast-with-header-message-color)}:host(.wpp-with-header-and-without-message) .body{-ms-flex-align:center;align-items:center}:host(.wpp-with-multiple-message-lines){-ms-flex-align:start;align-items:flex-start}:host(.wpp-with-multiple-message-lines) .body{padding:4px 0;-ms-flex-align:start;align-items:flex-start}:host(.wpp-with-custom-icon:hover){background:var(--wpp-grey-color-800);cursor:pointer}.wpp-typography{overflow:hidden;color:var(--toast-message-color);white-space:nowrap;text-overflow:ellipsis}.wpp-action-button{--ab-first-border-color-focus:var(--wpp-grey-color-900);--ab-second-border-color-focus:var(--wpp-grey-color-000)}.wpp-action-button:nth-child(2){margin-left:4px}.icon-wrapper{display:-ms-flexbox;display:flex;padding:var(--toast-icon-wrapper-padding);-ms-flex-pack:center;justify-content:center;-ms-flex-align:center;align-items:center;margin:var(--toast-icon-wrapper-margin);border-radius:var(--toast-icon-wrapper-border-radius);background:var(--toast-icon-wrapper-bg-color)}.icon-wrapper.warning{background-color:var(--toast-icon-wrapper-warning-bg-color);padding:var(--toast-icon-wrapper-warning-padding)}.icon-wrapper.error{background-color:var(--toast-icon-wrapper-error-bg-color)}.icon-wrapper.information{background-color:var(--toast-icon-wrapper-information-bg-color)}.icon-wrapper.success{background-color:var(--toast-icon-wrapper-success-bg-color)}.icon-wrapper.hidden{display:none}.icon-wrapper.logo-wrapper{padding:var(--toast-custom-logo-wrapper-padding);width:var(--toast-custom-logo-wrapper-width);height:var(--toast-custom-logo-wrapper-height);background:var(--toast-custom-logo-wrapper-bg-color)}.icon-wrapper.custom-icon-wrapper{background:var(--toast-custom-icon-wrapper-bg-color)}.icon-wrapper.custom-icon-wrapper .wpp-icon{color:var(--toast-custom-icon-color)}.icon-wrapper .custom-logo{width:var(--toast-custom-logo-width);height:var(--toast-custom-logo-height);-o-object-fit:var(--toast-custom-logo-object-fit);object-fit:var(--toast-custom-logo-object-fit);border-radius:var(--toast-custom-logo-border-radius)}:host(.wpp-hide){opacity:0;padding:0;margin:0;max-height:0;-webkit-transform:translateX(calc(100% + 16px));transform:translateX(calc(100% + 16px));-webkit-transition:opacity var(--mt-hide-animation-duration) ease-in-out 0s, padding 0.15s ease-in-out var(--mt-hide-animation-duration), margin 0.15s ease-in-out var(--mt-hide-animation-duration), max-height 0.15s ease-in-out var(--mt-hide-animation-duration), -webkit-transform var(--mt-hide-animation-duration) ease-in-out 0s;transition:opacity var(--mt-hide-animation-duration) ease-in-out 0s, padding 0.15s ease-in-out var(--mt-hide-animation-duration), margin 0.15s ease-in-out var(--mt-hide-animation-duration), max-height 0.15s ease-in-out var(--mt-hide-animation-duration), -webkit-transform var(--mt-hide-animation-duration) ease-in-out 0s;transition:transform var(--mt-hide-animation-duration) ease-in-out 0s, opacity var(--mt-hide-animation-duration) ease-in-out 0s, padding 0.15s ease-in-out var(--mt-hide-animation-duration), margin 0.15s ease-in-out var(--mt-hide-animation-duration), max-height 0.15s ease-in-out var(--mt-hide-animation-duration);transition:transform var(--mt-hide-animation-duration) ease-in-out 0s, opacity var(--mt-hide-animation-duration) ease-in-out 0s, padding 0.15s ease-in-out var(--mt-hide-animation-duration), margin 0.15s ease-in-out var(--mt-hide-animation-duration), max-height 0.15s ease-in-out var(--mt-hide-animation-duration), -webkit-transform var(--mt-hide-animation-duration) ease-in-out 0s}.message{white-space:normal;color:var(--toast-with-header-message-color);display:-webkit-box;-webkit-line-clamp:var(--mt-max-message-lines);line-clamp:var(--mt-max-message-lines);-webkit-box-orient:vertical}@-webkit-keyframes chatSlideFromTop{from{-webkit-transform:translateX(-50%) translateY(-50%);transform:translateX(-50%) translateY(-50%);opacity:0}to{-webkit-transform:translateX(-50%) translateY(0);transform:translateX(-50%) translateY(0);opacity:1}}@keyframes chatSlideFromTop{from{-webkit-transform:translateX(-50%) translateY(-50%);transform:translateX(-50%) translateY(-50%);opacity:0}to{-webkit-transform:translateX(-50%) translateY(0);transform:translateX(-50%) translateY(0);opacity:1}}@-webkit-keyframes chatSlideToTop{from{-webkit-transform:translateX(-50%) translateY(0);transform:translateX(-50%) translateY(0);opacity:1}to{-webkit-transform:translateX(-50%) translateY(-50%);transform:translateX(-50%) translateY(-50%);opacity:0}}@keyframes chatSlideToTop{from{-webkit-transform:translateX(-50%) translateY(0);transform:translateX(-50%) translateY(0);opacity:1}to{-webkit-transform:translateX(-50%) translateY(-50%);transform:translateX(-50%) translateY(-50%);opacity:0}}:host(.wpp-chat-variant){position:absolute;width:auto;height:auto;padding:0;-webkit-box-shadow:none;box-shadow:none;border-radius:6px;background-color:var(--wpp-grey-color-300);-webkit-box-sizing:border-box;box-sizing:border-box;top:8px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);opacity:1;-webkit-animation:chatSlideFromTop 0.3s ease-in-out;animation:chatSlideFromTop 0.3s ease-in-out;-webkit-transition:opacity var(--mt-show-animation-duration) ease, -webkit-transform var(--mt-show-animation-duration) ease;transition:opacity var(--mt-show-animation-duration) ease, -webkit-transform var(--mt-show-animation-duration) ease;transition:opacity var(--mt-show-animation-duration) ease, transform var(--mt-show-animation-duration) ease;transition:opacity var(--mt-show-animation-duration) ease, transform var(--mt-show-animation-duration) ease, -webkit-transform var(--mt-show-animation-duration) ease}:host(.wpp-chat-variant) .chat-toast-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;width:auto;height:auto;padding:0px 8px;border-radius:6px;background-color:var(--wpp-grey-color-300)}:host(.wpp-chat-variant) .chat-toast-wrapper .chat-toast-message{--wpp-typography-text-transform:UPPERCASE;color:var(--wpp-grey-color-800)}:host(.wpp-chat-variant) .chat-toast-wrapper .chat-toast-message .wpp-typography::part(typography){text-transform:uppercase}:host(.wpp-chat-variant) .success{background-color:var(--wpp-success-color-200)}:host(.wpp-chat-variant) .error{background-color:var(--wpp-danger-color-200)}:host(.wpp-chat-variant) .information{background-color:var(--wpp-grey-color-300)}:host(.wpp-hide.wpp-chat-variant){-webkit-animation:chatSlideToTop 0.3s ease-in-out forwards;animation:chatSlideToTop 0.3s ease-in-out forwards}";
 
@@ -20,6 +29,7 @@ const WppToast = /*@__PURE__*/ proxyCustomElement(class WppToast extends HTMLEle
     this.__registerHost();
     this.__attachShadow();
     this.wppToastComplete = createEvent(this, "wppToastComplete", 1);
+    this.hasLoaded = false;
     this.handleMouseEnter = () => {
       if (this.isIconProvided())
         this.isHovering = true;
@@ -30,26 +40,33 @@ const WppToast = /*@__PURE__*/ proxyCustomElement(class WppToast extends HTMLEle
     };
     this.getIconType = (iconType) => {
       if (iconType === 'warning')
-        return h("wpp-icon-warning-v4-0-0", { width: 16, height: 16, class: "icon" });
+        return h("wpp-icon-warning-v4-1-0", { width: 16, height: 16, class: "icon" });
       if (iconType === 'error')
-        return h("wpp-icon-error-v4-0-0", { width: 16, height: 16, class: "icon" });
+        return h("wpp-icon-error-v4-1-0", { width: 16, height: 16, class: "icon" });
       if (iconType === 'information')
-        return h("wpp-icon-info-message-v4-0-0", { color: "var(--wpp-grey-color-700)", width: 16, height: 16, class: "icon" });
+        return h("wpp-icon-info-message-v4-1-0", { color: "var(--wpp-grey-color-700)", width: 16, height: 16, class: "icon" });
       if (iconType === 'success')
-        return h("wpp-icon-success-v4-0-0", { width: 16, height: 16, class: "icon" });
+        return h("wpp-icon-success-v4-1-0", { width: 16, height: 16, class: "icon" });
       return null;
     };
     this.handleCloseClick = () => {
+      this.clearAllTimers();
       this.isHide = true;
-      setTimeout(() => {
-        this.onComplete();
+      const capturedIndex = this.index;
+      this.hideTimeout = setTimeout(() => {
+        if (!this.isHostConnected())
+          return;
+        this.wppToastComplete.emit({ currentIndex: capturedIndex || '' });
       }, ANIMATION_DURATION);
+      WppToast.unrefTimer(this.hideTimeout);
     };
     this.onComplete = () => {
       this.wppToastComplete.emit({ currentIndex: this.index || '' });
     };
     this.checkIfTextHasOneLine = () => {
-      const host = this.host.shadowRoot;
+      const host = this.hostElement?.shadowRoot;
+      if (!host)
+        return;
       const message = host.querySelector('.message');
       const lineHeightElement = message?.shadowRoot?.querySelector('.typography');
       if (!lineHeightElement || !message) {
@@ -120,45 +137,124 @@ const WppToast = /*@__PURE__*/ proxyCustomElement(class WppToast extends HTMLEle
   onContentChange() {
     this.checkIfTextHasOneLine();
     this.toastHeight = 0;
-    setTimeout(() => {
-      this.toastHeight = this.host.clientHeight;
+    if (this.contentChangeTimeout)
+      clearTimeout(this.contentChangeTimeout);
+    this.contentChangeTimeout = setTimeout(() => {
+      if (!this.isHostConnected())
+        return;
+      this.toastHeight = this.hostElement?.clientHeight || 0;
+      this.contentChangeTimeout = undefined;
     }, 0);
+    WppToast.unrefTimer(this.contentChangeTimeout);
   }
   componentWillLoad() {
+    this.hostElement = this.host;
     this.remainingTime = this.duration;
   }
   componentDidLoad() {
     // it's used to add animation to the toast, at first we render component and than we add class that's add move animation
-    requestAnimationFrame(() => {
+    this.animationFrame = requestAnimationFrame(() => {
+      this.animationFrame = undefined;
+      if (!this.isHostConnected())
+        return;
       this.checkIfTextHasOneLine();
-      this.toastHeight = this.host.clientHeight;
+      this.toastHeight = this.hostElement?.clientHeight || 0;
       this.isShown = true;
     });
     if (this.duration) {
       this.startTimer();
     }
+    this.hasLoaded = true;
   }
-  disconnectedCallback() {
-    if (this.timer) {
-      clearInterval(this.timer);
+  connectedCallback() {
+    this.hostElement = this.host;
+    if (!this.hasLoaded)
+      return;
+    if (this.isHide) {
+      // Was in hide-animation phase when VDOM disconnected us — re-schedule the
+      // complete event so the container eventually removes this toast.
+      if (!this.hideTimeout) {
+        const capturedIndex = this.index;
+        this.hideTimeout = setTimeout(() => {
+          if (!this.isHostConnected())
+            return;
+          this.wppToastComplete.emit({ currentIndex: capturedIndex || '' });
+        }, ANIMATION_DURATION);
+        WppToast.unrefTimer(this.hideTimeout);
+      }
+    }
+    else if (!this.timer && this.duration) {
+      // VDOM reconciliation reconnection — restart the countdown timer from
+      // the current remainingTime instead of resetting to full duration.
+      // Do NOT replay the entry animation (isShown is already true).
+      this.startTimer();
     }
   }
+  disconnectedCallback() {
+    this.clearAllTimers();
+  }
+  clearAllTimers() {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = undefined;
+    }
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+      this.hideTimeout = undefined;
+    }
+    if (this.contentChangeTimeout) {
+      clearTimeout(this.contentChangeTimeout);
+      this.contentChangeTimeout = undefined;
+    }
+    if (this.animationFrame !== undefined) {
+      cancelAnimationFrame(this.animationFrame);
+      this.animationFrame = undefined;
+    }
+  }
+  static unrefTimer(timer) {
+    if (typeof timer === 'object' && timer !== null && 'unref' in timer) {
+      const unref = timer.unref;
+      if (typeof unref === 'function') {
+        unref.call(timer);
+      }
+    }
+  }
+  isHostConnected() {
+    return this.hostElement?.isConnected ?? false;
+  }
   startTimer() {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = undefined;
+    }
     const interval = 1000;
+    const capturedIndex = this.index;
     this.timer = setInterval(() => {
+      if (!this.isHostConnected()) {
+        if (this.timer) {
+          clearInterval(this.timer);
+          this.timer = undefined;
+        }
+        return;
+      }
       if (!this.isHovering) {
         if (this.remainingTime <= interval) {
           clearInterval(this.timer);
+          this.timer = undefined;
           this.isHide = true;
-          setTimeout(() => {
-            this.onComplete();
+          this.hideTimeout = setTimeout(() => {
+            if (!this.isHostConnected())
+              return;
+            this.wppToastComplete.emit({ currentIndex: capturedIndex || '' });
           }, ANIMATION_DURATION);
+          WppToast.unrefTimer(this.hideTimeout);
         }
         else {
           this.remainingTime -= interval;
         }
       }
     }, interval);
+    WppToast.unrefTimer(this.timer);
   }
   render() {
     const style = {
@@ -168,9 +264,9 @@ const WppToast = /*@__PURE__*/ proxyCustomElement(class WppToast extends HTMLEle
       '--mt-max-message-lines': this.maxMessageLines + '',
       zIndex: this.zIndex.toString(),
     };
-    return (h(Host, { class: this.hostCssClasses(), style: style, exportparts: "body, message, body, info-wrapper, header, message, actions, action-button, icon-start, icon-wrapper", onMouseEnter: this.handleMouseEnter, onMouseLeave: this.handleMouseLeave, role: "alert" }, this.variant === 'chat' ? (h("div", { class: this.chatToastWrapper() }, h("wpp-typography-v4-0-0", { class: "chat-toast-message", type: "2xs-strong" }, this.message))) : (h(Fragment, null, this.message && !this.header && (h("div", { class: "body", part: "body" }, h("div", { class: this.iconWrapperCssClasses(), style: this.icon?.styles, part: "icon-wrapper" }, this.isIconProvided() ? this.renderIcon() : this.getIconType(this.type)), h("wpp-typography-v4-0-0", { type: "s-body", class: "message", part: "message" }, this.message))), this.header && (h("div", { class: "body", part: "body" }, h("div", { class: this.iconWrapperCssClasses(), style: this.icon?.styles, part: "icon-wrapper" }, this.isIconProvided() ? this.renderIcon() : this.getIconType(this.type)), h("div", { class: "info", part: "info-wrapper" }, h("wpp-typography-v4-0-0", { type: "s-strong", class: "header", part: "header" }, this.header), h("wpp-typography-v4-0-0", { type: "s-body", class: "message", part: "message" }, this.message)))), !!this.primaryBtn && (h("div", { class: "actions", part: "actions" }, this.primaryBtn && (h("wpp-action-button-v4-0-0", { onClick: () => this.primaryBtn?.onClick(this.index || ''), disabled: this.primaryBtn.disabled, loading: this.primaryBtn.loading, variant: this.primaryBtn.variant, ariaProps: this.ariaProps, part: "action-button" }, this.primaryBtn.label)), h("wpp-action-button-v4-0-0", { ariaProps: { label: 'Remove message' }, variant: "inverted", part: "action-button", onClick: this.handleCloseClick }, h("wpp-icon-cross-v4-0-0", { slot: "icon-start", part: "icon-start" })))), !this.primaryBtn && (h("div", { class: "actions", part: "actions" }, h("wpp-action-button-v4-0-0", { ariaProps: { label: 'Remove message' }, variant: "inverted", part: "action-button", onClick: this.handleCloseClick }, h("wpp-icon-cross-v4-0-0", { slot: "icon-start", part: "icon-start" }))))))));
+    return (h(Host, { class: this.hostCssClasses(), style: style, exportparts: "body, message, body, info-wrapper, header, message, actions, action-button, icon-start, icon-wrapper", onMouseEnter: this.handleMouseEnter, onMouseLeave: this.handleMouseLeave, role: "alert" }, this.variant === 'chat' ? (h("div", { class: this.chatToastWrapper() }, h("wpp-typography-v4-1-0", { class: "chat-toast-message", type: "2xs-strong" }, this.message))) : (h(Fragment, null, this.message && !this.header && (h("div", { class: "body", part: "body" }, h("div", { class: this.iconWrapperCssClasses(), style: this.icon?.styles, part: "icon-wrapper" }, this.isIconProvided() ? this.renderIcon() : this.getIconType(this.type)), h("wpp-typography-v4-1-0", { type: "s-body", class: "message", part: "message" }, this.message))), this.header && (h("div", { class: "body", part: "body" }, h("div", { class: this.iconWrapperCssClasses(), style: this.icon?.styles, part: "icon-wrapper" }, this.isIconProvided() ? this.renderIcon() : this.getIconType(this.type)), h("div", { class: "info", part: "info-wrapper" }, h("wpp-typography-v4-1-0", { type: "s-strong", class: "header", part: "header" }, this.header), h("wpp-typography-v4-1-0", { type: "s-body", class: "message", part: "message" }, this.message)))), !!this.primaryBtn && (h("div", { class: "actions", part: "actions" }, this.primaryBtn && (h("wpp-action-button-v4-1-0", { onClick: () => this.primaryBtn?.onClick(this.index || ''), disabled: this.primaryBtn.disabled, loading: this.primaryBtn.loading, variant: this.primaryBtn.variant, ariaProps: this.ariaProps, part: "action-button" }, this.primaryBtn.label)), h("wpp-action-button-v4-1-0", { ariaProps: { label: 'Remove message' }, variant: "inverted", part: "action-button", onClick: this.handleCloseClick }, h("wpp-icon-cross-v4-1-0", { slot: "icon-start", part: "icon-start" })))), !this.primaryBtn && (h("div", { class: "actions", part: "actions" }, h("wpp-action-button-v4-1-0", { ariaProps: { label: 'Remove message' }, variant: "inverted", part: "action-button", onClick: this.handleCloseClick }, h("wpp-icon-cross-v4-1-0", { slot: "icon-start", part: "icon-start" }))))))));
   }
-  static get registryIs() { return "wpp-toast-v4-0-0"; }
+  static get registryIs() { return "wpp-toast-v4-1-0"; }
   get host() { return this; }
   static get watchers() { return {
     "header": ["onContentChange"],
@@ -178,7 +274,7 @@ const WppToast = /*@__PURE__*/ proxyCustomElement(class WppToast extends HTMLEle
     "maxMessageLines": ["onContentChange"]
   }; }
   static get style() { return wppToastCss; }
-}, [1, "wpp-toast", "wpp-toast-v4-0-0", {
+}, [1, "wpp-toast", "wpp-toast-v4-1-0", {
     "variant": [1],
     "index": [1],
     "message": [1],
@@ -202,49 +298,49 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-toast-v4-0-0", "wpp-action-button-v4-0-0", "wpp-icon-cross-v4-0-0", "wpp-icon-error-v4-0-0", "wpp-icon-info-message-v4-0-0", "wpp-icon-success-v4-0-0", "wpp-icon-warning-v4-0-0", "wpp-spinner-v4-0-0", "wpp-typography-v4-0-0"];
+  const components = ["wpp-toast-v4-1-0", "wpp-action-button-v4-1-0", "wpp-icon-cross-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-info-message-v4-1-0", "wpp-icon-success-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-spinner-v4-1-0", "wpp-typography-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-toast-v4-0-0":
+    case "wpp-toast-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppToast);
       }
       break;
-    case "wpp-action-button-v4-0-0":
+    case "wpp-action-button-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-icon-cross-v4-0-0":
+    case "wpp-icon-cross-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-error-v4-0-0":
+    case "wpp-icon-error-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-icon-info-message-v4-0-0":
+    case "wpp-icon-info-message-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-success-v4-0-0":
+    case "wpp-icon-success-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-icon-warning-v4-0-0":
+    case "wpp-icon-warning-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-spinner-v4-0-0":
+    case "wpp-spinner-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-0-0":
+    case "wpp-typography-v4-1-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }
@@ -252,4 +348,4 @@ function defineCustomElement() {
   } });
 }
 
-export { ANIMATION_DURATION as A, WppToast as W, defineCustomElement as d };
+export { ANIMATION_DURATION as A, DEFAULT_STAGGER_INTERVAL as D, WppToast as W, defineCustomElement as d };

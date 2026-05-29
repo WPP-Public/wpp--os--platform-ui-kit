@@ -6,7 +6,7 @@ describe('wpp-select: showSelectAllOption', () => {
   const renderMultipleSelect = async (props = {}) => {
     const page = await newSpecPage({
       components: [WppSelect],
-      template: () => (h("wpp-select-v4-0-0", { type: "multiple", withFolder: true, showSelectAllOption: true, list: props.list ?? MOCK_MULTIPLE_LIST, value: props.value ?? [], placeholder: "Choose option", ...props })),
+      template: () => (h("wpp-select-v4-1-0", { type: "multiple", withFolder: true, showSelectAllOption: true, list: props.list ?? MOCK_MULTIPLE_LIST, value: props.value ?? [], placeholder: "Choose option", ...props })),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await page.waitForChanges();
@@ -249,7 +249,7 @@ describe('wpp-select: showSelectAllOption', () => {
     it('should not render select-all-option when showSelectAllOption is false', async () => {
       const page = await newSpecPage({
         components: [WppSelect],
-        template: () => (h("wpp-select-v4-0-0", { type: "multiple", withFolder: true, list: MOCK_MULTIPLE_LIST, value: [], placeholder: "Choose option" })),
+        template: () => (h("wpp-select-v4-1-0", { type: "multiple", withFolder: true, list: MOCK_MULTIPLE_LIST, value: [], placeholder: "Choose option" })),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       await page.waitForChanges();
@@ -271,7 +271,7 @@ describe('wpp-select: showSelectAllOption', () => {
     it('should render original Select All/Clear All buttons when showSelectAllOption is false', async () => {
       const page = await newSpecPage({
         components: [WppSelect],
-        template: () => (h("wpp-select-v4-0-0", { type: "multiple", withFolder: true, list: MOCK_MULTIPLE_LIST, value: ['a', 'b'], placeholder: "Choose option" })),
+        template: () => (h("wpp-select-v4-1-0", { type: "multiple", withFolder: true, list: MOCK_MULTIPLE_LIST, value: ['a', 'b'], placeholder: "Choose option" })),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       await page.waitForChanges();
@@ -301,7 +301,7 @@ describe('wpp-select: showSelectAllOption', () => {
     it('should use custom locale texts for Select All, Clear, and Apply', async () => {
       const page = await newSpecPage({
         components: [WppSelect],
-        template: () => (h("wpp-select-v4-0-0", { type: "multiple", withFolder: true, showSelectAllOption: true, list: MOCK_MULTIPLE_LIST, value: [], placeholder: "Choose option", locales: {
+        template: () => (h("wpp-select-v4-1-0", { type: "multiple", withFolder: true, showSelectAllOption: true, list: MOCK_MULTIPLE_LIST, value: [], placeholder: "Choose option", locales: {
             selectAllText: 'Alles auswählen',
             clearText: 'Löschen',
             applyText: 'Anwenden',
@@ -373,7 +373,7 @@ describe('wpp-select: showSelectAllOption', () => {
     it('should not pin items when showSelectAllOption is false', async () => {
       const page = await newSpecPage({
         components: [WppSelect],
-        template: () => (h("wpp-select-v4-0-0", { type: "multiple", withFolder: true, list: MOCK_MULTIPLE_LIST, value: ['a', 'b'], placeholder: "Choose option" })),
+        template: () => (h("wpp-select-v4-1-0", { type: "multiple", withFolder: true, list: MOCK_MULTIPLE_LIST, value: ['a', 'b'], placeholder: "Choose option" })),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       await page.waitForChanges();

@@ -2,6 +2,7 @@ import { Host, h } from '@stencil/core';
 import { getSlotEmptyStates } from '../../utils/utils';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { Z_INDEX } from '../../common/consts';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
  * @slot - Contains the main text content. This is the default slot, without the name attribute. Use only plain text or a `<span>` with plain text to maintain consistent styling and functionality.
  * @slot actions - Can contain action buttons.
@@ -19,6 +20,9 @@ import { Z_INDEX } from '../../common/consts';
  */
 export class WppBanner {
   constructor() {
+    this.themeSubscription = themeSubscriptionController(() => this.host, (theme) => {
+      this.isDarkTheme = theme === 'dark';
+    });
     this.updateOverflowState = () => {
       requestAnimationFrame(() => {
         const messageSpan = this.host.shadowRoot.querySelector('.message');
@@ -74,14 +78,15 @@ export class WppBanner {
     });
     this.getMessageTypesIcons = () => {
       if (this.type === 'warning')
-        return h("wpp-icon-warning-v4-0-0", { class: "left-icon", part: "left-icon" });
+        return h("wpp-icon-warning-v4-1-0", { class: "left-icon", part: "left-icon" });
       if (this.type === 'information')
-        return h("wpp-icon-info-message-v4-0-0", { class: "left-icon", part: "left-icon" });
+        return h("wpp-icon-info-message-v4-1-0", { class: "left-icon", part: "left-icon" });
       return null;
     };
     this.hasActionsSlot = false;
     this.heightBanner = undefined;
     this.isOverflowing = false;
+    this.isDarkTheme = false;
     this.ariaProps = {};
     this.role = 'alert';
     this.show = false;
@@ -105,7 +110,11 @@ export class WppBanner {
       this.resizeObserver.observe(contentWrapper);
     }
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
@@ -116,10 +125,10 @@ export class WppBanner {
       zIndex: this.zIndex.toString(),
     };
     const messageWrapper = (h(WrappedSlot, { wrapperClass: this.messageWrapperCssClasses(), part: "message", onSlotchange: this.updateMessageText }));
-    return (h(Host, { style: style, class: this.hostCssClasses(), role: this.role, "aria-label": this.ariaProps.label || 'banner', exportparts: "left-icon, wrapper, body, content-wrapper, message, actions-wrapper, close-button, close-icon, actions, actions-wrapper" }, h("div", { class: this.hiddenBannerWrapperCssClasses(), part: "wrapper" }, h("div", { class: this.bannerWrapperCssClasses(), part: "body" }, h("div", { class: "content-wrapper", part: "content-wrapper" }, this.getMessageTypesIcons(), !this.isOverflowing ? (messageWrapper) : (h("wpp-tooltip-v4-0-0", { text: this.messageText, class: this.tooltipCSSClasses() }, messageWrapper))), h("div", { class: "actions-wrapper", part: "actions-wrapper" }, h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData, role: "presentation" }), this.closable && (h("wpp-action-button-v4-0-0", { variant: this.type === 'information' ? 'inverted' : 'secondary', onClick: this.handleCloseIconClick, class: "close-button", part: "close-button", ariaProps: { label: 'close banner' }, role: "presentation" }, h("wpp-icon-cross-v4-0-0", { slot: "icon-start", part: "close-icon", "aria-hidden": "true" }))))))));
+    return (h(Host, { style: style, class: this.hostCssClasses(), role: this.role, "aria-label": this.ariaProps.label || 'banner', exportparts: "left-icon, wrapper, body, content-wrapper, message, actions-wrapper, close-button, close-icon, actions, actions-wrapper" }, h("div", { class: this.hiddenBannerWrapperCssClasses(), part: "wrapper" }, h("div", { class: this.bannerWrapperCssClasses(), part: "body" }, h("div", { class: "content-wrapper", part: "content-wrapper" }, this.getMessageTypesIcons(), !this.isOverflowing ? (messageWrapper) : (h("wpp-tooltip-v4-1-0", { text: this.messageText, class: this.tooltipCSSClasses() }, messageWrapper))), h("div", { class: "actions-wrapper", part: "actions-wrapper" }, h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData, role: "presentation" }), this.closable && (h("wpp-action-button-v4-1-0", { variant: this.type === 'information' || this.isDarkTheme ? 'inverted' : 'secondary', onClick: this.handleCloseIconClick, class: "close-button", part: "close-button", ariaProps: { label: 'close banner' }, role: "presentation" }, h("wpp-icon-cross-v4-1-0", { slot: "icon-start", part: "close-icon", "aria-hidden": "true" }))))))));
   }
   static get is() { return "wpp-banner"; }
-  static get registryIs() { return "wpp-banner-v4-0-0"; }
+  static get registryIs() { return "wpp-banner-v4-1-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -256,7 +265,8 @@ export class WppBanner {
     return {
       "hasActionsSlot": {},
       "heightBanner": {},
-      "isOverflowing": {}
+      "isOverflowing": {},
+      "isDarkTheme": {}
     };
   }
   static get events() {

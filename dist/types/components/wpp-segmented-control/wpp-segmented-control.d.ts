@@ -2,7 +2,7 @@ import { EventEmitter } from '../../stencil-public-runtime';
 import { DropdownConfig } from '../../types/common';
 import { BaseFormControl } from '../../interfaces/base-form-control';
 import { BaseComponent } from '../../interfaces/base-component';
-import { SegmentedControlChangeEventDetail, SegmentedControlValue, SegmentedControlItemChangeEventDetail, SegmentedControlItemSize, SegmentedControlLabelConfig } from './types';
+import { SegmentedControlChangeEventDetail, SegmentedControlValue, SegmentedControlItemChangeEventDetail, SegmentedControlItemSize, SegmentedControlLabelConfig, SegmentedControlLocaleInterface, WppSegmentedControlAriaProps } from './types';
 /**
  * @slot - Should contain only the `segmented-control-item` elements. The default slot, without the name attribute.
  *
@@ -13,6 +13,7 @@ import { SegmentedControlChangeEventDetail, SegmentedControlValue, SegmentedCont
 export declare class WppSegmentedControl implements BaseComponent, BaseFormControl<SegmentedControlValue> {
   host: HTMLWppSegmentedControlElement;
   previousActiveElement: Element | null;
+  _locales: SegmentedControlLocaleInterface;
   /**
    * Defines the segmented control size.
    */
@@ -47,6 +48,15 @@ export declare class WppSegmentedControl implements BaseComponent, BaseFormContr
    */
   readonly labelTooltipConfig: DropdownConfig;
   /**
+   * Grouped ARIA props for the tablist: { label?, labelledby? }
+   * Precedence: ariaProps > locales > defaults
+   */
+  readonly ariaProps?: WppSegmentedControlAriaProps;
+  /**
+   * Locales for accessible strings. Only tablistLabel currently.
+   */
+  readonly locales?: Partial<SegmentedControlLocaleInterface>;
+  /**
    * Emitted when the active item has changed, emits value of the active item
    */
   readonly wppChange: EventEmitter<SegmentedControlChangeEventDetail>;
@@ -59,11 +69,20 @@ export declare class WppSegmentedControl implements BaseComponent, BaseFormContr
    */
   readonly wppBlur: EventEmitter<FocusEvent>;
   handleChangeSegmentedControlItemClick(event: CustomEvent<SegmentedControlItemChangeEventDetail>): void;
-  valueChanged(newValue: string): void;
+  onLocalesChange(newLocales?: Partial<SegmentedControlLocaleInterface>): void;
+  /**
+   * Resolves the keyboard event target to a segmented control item.
+   * Walks up from event.target to handle slotted content (e.g. icon elements).
+   */
+  private resolveTargetItem;
+  handleKeydown(event: KeyboardEvent): void;
+  handleKeyup(event: KeyboardEvent): void;
+  valueChanged(newValue: SegmentedControlValue): void;
   widthChange(newValue: string): void;
   onUpdateSize(newSize: SegmentedControlItemSize): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  private getItems;
   private setSegmentedControlItemsSize;
   private onFocus;
   private onBlur;

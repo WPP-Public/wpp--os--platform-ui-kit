@@ -1,8 +1,9 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { m as menuListConfig } from './menuListConfig-4d091d14.js';
-import { Z as Z_INDEX } from './consts-9fc0a13a.js';
-import { w as getHighestContainerInDOM } from './utils-45d1949f.js';
+import { m as menuListConfig } from './menuListConfig-ac199028.js';
+import { Z as Z_INDEX } from './consts-744c144f.js';
+import { w as getHighestContainerInDOM } from './utils-3463d13f.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
+import { t as themeSubscriptionController } from './subscribe-to-theme-2f801cf6.js';
 import './tippy.esm-c5fe8087.js';
 
 const PLACEHOLDER = 'hh:mm';
@@ -54,6 +55,7 @@ const WppTimePicker = class {
     this.hasChangedHours = false;
     this.hasChangedMinutes = false;
     this.hasClearedValue = false;
+    this.themeSubscription = themeSubscriptionController(() => this.portalRef);
     this.highlightItem = () => {
       const [hoursValue, minutesValue] = this.value.split(':');
       const hoursIndex = HOURS.findIndex((hourItem) => hourItem === hoursValue);
@@ -480,12 +482,22 @@ const WppTimePicker = class {
     this.showDisplayCross = !!this.value;
   }
   componentDidLoad() {
+    this.themeSubscription.start();
     this.createTippyInstance();
   }
-  render() {
-    return (h(Host, { class: "wpp-time-picker", "aria-disabled": this.disabled, style: { width: !this.width ? DEFAULT_WIDTH_VALUE : this.width } }, this.labelConfig?.text && (h("wpp-label-v4-0-0", { typography: "s-strong", class: "label", htmlFor: this.name, optional: !this.required, config: this.labelConfig, disabled: this.disabled, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: el => (this.anchorRef = el), id: "anchor", class: this.getAnchorCssClasses() }, h("div", { class: "anchor-time" }, h("wpp-icon-clock-v4-0-0", { class: "clock-icon" }), h("input", { ref: el => (this.inputRef = el), onFocus: this.onFocus, onBlur: this.onBlur, onKeyUp: this.onKeyUp, onKeyPress: this.onKeyPress, onPaste: this.onPaste, disabled: this.disabled, onInput: this.onUpdateInput, id: "time-picker", type: "text", placeholder: this.placeholder, value: this.value })), h("div", { class: "cross-icon-container" }, this.showDisplayCross && (h("wpp-icon-cross-v4-0-0", { class: "cross-icon", "aria-label": "Erase time", onClick: this.handleClickCrossIcon })))), h("div", { ref: el => (this.portalRef = el), class: "wpp-time-picker-portal" }, h("div", { ref: refEl => (this.hoursSectionRef = refEl), class: "hours section" }, HOURS.map((hour, hourIndex) => (h("wpp-list-item-v4-0-0", { id: `hour-${hour}`, key: hour, checked: this.checkedTimeValues.hoursIndex === hourIndex, onWppChangeListItem: () => this.handleClickListItem(hour, 'hour') }, h("span", { slot: "label" }, hour))))), h("wpp-divider-v4-0-0", { vertical: true }), h("div", { ref: refEl => (this.minutesSectionRef = refEl), class: "minutes section" }, this.generatedMinutes.map((minutes, minutesIndex) => (h("wpp-list-item-v4-0-0", { id: `minutes-${minutes}`, key: minutes, checked: this.checkedTimeValues.minutesIndex === minutesIndex, onWppChangeListItem: () => this.handleClickListItem(minutes, 'minutes') }, h("span", { slot: "label" }, minutes)))))), this.message && (h("wpp-inline-message-v4-0-0", { class: !this.messageType ? 'helper-text' : '', message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
+  connectedCallback() {
+    this.themeSubscription.start();
+    if (this.tippyInstance?.state.isDestroyed) {
+      this.createTippyInstance();
+    }
   }
-  static get registryIs() { return "wpp-time-picker-v4-0-0"; }
+  disconnectedCallback() {
+    this.themeSubscription.stop();
+  }
+  render() {
+    return (h(Host, { class: "wpp-time-picker", "aria-disabled": this.disabled, style: { width: !this.width ? DEFAULT_WIDTH_VALUE : this.width } }, this.labelConfig?.text && (h("wpp-label-v4-1-0", { typography: "s-strong", class: "label", htmlFor: this.name, optional: !this.required, config: this.labelConfig, disabled: this.disabled, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: el => (this.anchorRef = el), id: "anchor", class: this.getAnchorCssClasses() }, h("div", { class: "anchor-time" }, h("wpp-icon-clock-v4-1-0", { class: "clock-icon" }), h("input", { ref: el => (this.inputRef = el), onFocus: this.onFocus, onBlur: this.onBlur, onKeyUp: this.onKeyUp, onKeyPress: this.onKeyPress, onPaste: this.onPaste, disabled: this.disabled, onInput: this.onUpdateInput, id: "time-picker", type: "text", placeholder: this.placeholder, value: this.value })), h("div", { class: "cross-icon-container" }, this.showDisplayCross && (h("wpp-icon-cross-v4-1-0", { class: "cross-icon", "aria-label": "Erase time", onClick: this.handleClickCrossIcon })))), h("div", { ref: el => (this.portalRef = el), class: "wpp-time-picker-portal" }, h("div", { ref: refEl => (this.hoursSectionRef = refEl), class: "hours section" }, HOURS.map((hour, hourIndex) => (h("wpp-list-item-v4-1-0", { id: `hour-${hour}`, key: hour, checked: this.checkedTimeValues.hoursIndex === hourIndex, onWppChangeListItem: () => this.handleClickListItem(hour, 'hour') }, h("span", { slot: "label" }, hour))))), h("wpp-divider-v4-1-0", { vertical: true }), h("div", { ref: refEl => (this.minutesSectionRef = refEl), class: "minutes section" }, this.generatedMinutes.map((minutes, minutesIndex) => (h("wpp-list-item-v4-1-0", { id: `minutes-${minutes}`, key: minutes, checked: this.checkedTimeValues.minutesIndex === minutesIndex, onWppChangeListItem: () => this.handleClickListItem(minutes, 'minutes') }, h("span", { slot: "label" }, minutes)))))), this.message && (h("wpp-inline-message-v4-1-0", { class: !this.messageType ? 'helper-text' : '', message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
+  }
+  static get registryIs() { return "wpp-time-picker-v4-1-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "minutesInterval": ["onUpdateMinutesInterval"],

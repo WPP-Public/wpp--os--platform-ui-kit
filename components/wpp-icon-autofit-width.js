@@ -16,9 +16,9 @@ const WppIconAutofitWidth$1 = /*@__PURE__*/ proxyCustomElement(class WppIconAuto
   render() {
     return (h(WppIcon, { name: "wpp-icon-autofit-width", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M15.5024 15.002L14.7678 15.7113C14.4699 15.999 14.4616 16.4738 14.7494 16.7718C15.0371 17.0698 15.5119 17.078 15.8099 16.7903L17.6954 14.9693C18.1025 14.5762 18.1025 13.9238 17.6954 13.5307L15.8099 11.7097C15.5119 11.422 15.0371 11.4302 14.7494 11.7282C14.4616 12.0261 14.4699 12.501 14.7678 12.7887L15.5064 13.502H12.7507C12.3365 13.502 12.0007 13.8377 12.0007 14.252C12.0007 14.6662 12.3365 15.002 12.7507 15.002H15.5024ZM15.0007 2.99921C16.1053 2.99921 17.0007 3.89464 17.0007 4.99921V9.24921C17.0007 9.66342 16.6649 9.99921 16.2507 9.99921C15.8365 9.99921 15.5007 9.66342 15.5007 9.24921V4.99921C15.5007 4.72306 15.2769 4.49921 15.0007 4.49921H5.00073C4.72459 4.49921 4.50073 4.72306 4.50073 4.99921V9.24921C4.50073 9.66342 4.16495 9.99921 3.75073 9.99921C3.33652 9.99921 3.00073 9.66342 3.00073 9.24921V4.99921C3.00073 3.89464 3.89616 2.99921 5.00073 2.99921H15.0007ZM5.23362 15.7113L4.49911 15.002H7.25073C7.66495 15.002 8.00073 14.6662 8.00073 14.252C8.00073 13.8377 7.66495 13.502 7.25073 13.502H4.49507L5.23362 12.7887C5.53157 12.501 5.53985 12.0261 5.2521 11.7282C4.96436 11.4302 4.48955 11.422 4.1916 11.7097L2.30605 13.5307C1.89896 13.9238 1.89896 14.5762 2.30605 14.9693L4.1916 16.7903C4.48955 17.078 4.96436 17.0698 5.2521 16.7718C5.53985 16.4738 5.53157 15.999 5.23362 15.7113Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-autofit-width-v4-0-0"; }
+  static get registryIs() { return "wpp-icon-autofit-width-v4-1-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-autofit-width", "wpp-icon-autofit-width-v4-0-0", {
+}, [1, "wpp-icon-autofit-width", "wpp-icon-autofit-width-v4-1-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -28,9 +28,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-autofit-width-v4-0-0"];
+  const components = ["wpp-icon-autofit-width-v4-1-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-autofit-width-v4-0-0":
+    case "wpp-icon-autofit-width-v4-1-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconAutofitWidth$1);
       }

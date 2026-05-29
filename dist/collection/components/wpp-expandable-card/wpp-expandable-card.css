@@ -100,3 +100,7 @@
 :host:host(.wpp-size-2xl) {
   padding: var(--expandable-card-padding-2xl);
 }
+
+:host([data-wpp-theme=dark]) {
+  background-color: var(--wpp-grey-color-100);
+}

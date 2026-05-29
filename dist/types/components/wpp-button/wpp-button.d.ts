@@ -13,6 +13,7 @@ import { AriaProps, FOCUS_TYPE } from '../../types/common';
  */
 export declare class WppButton {
   private buttonRef?;
+  private themeSubscription;
   host: HTMLWppButtonElement;
   hasIconStartSlot: boolean;
   hasIconEndSlot: boolean;
@@ -100,6 +101,8 @@ export declare class WppButton {
    */
   setFocus(): Promise<void>;
   onUpdateAriaProps(): void;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
   componentWillLoad(): void;
   private updateSlotData;
   private onBlur;

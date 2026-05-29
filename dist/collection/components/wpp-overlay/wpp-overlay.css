@@ -20,3 +20,7 @@
   visibility: hidden;
   pointer-events: none;
 }
+
+:host([data-wpp-theme=dark]) {
+  --overlay-bg-color: color-mix(in srgb, var(--wpp-grey-color-000) 90%, transparent);
+}

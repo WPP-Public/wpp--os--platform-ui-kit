@@ -14,6 +14,7 @@ import { InlineMessage } from '../../interfaces/inline-message';
 export declare class WppSelect implements BaseComponent, BaseFormControl<SelectValue[] | SelectValue>, InlineMessage {
   private resizeObserver;
   private hasReachedLimit;
+  private themeSubscription;
   protected canSelectAll: boolean;
   protected canClearAll: boolean;
   protected listRef?: HTMLDivElement;
@@ -156,12 +157,11 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
    */
   readonly ariaProps: AriaProps;
   /**
-   * Defines the input message. The message is placed right below the select.
+   * Defines the input message. The message is placed right below the select or in a tooltip when `messageInTooltip` is enabled.
    */
   readonly message?: string;
   /**
-   * Defines the input message type, which can be "error" or "warning". This property
-   * has to be used together with "message".
+   * Defines the input message type, which can be "error" or "warning". This controls the visual validation state even when no message is provided.
    */
   readonly messageType?: InputMessageTypes;
   /**
@@ -210,7 +210,8 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
    */
   tooltipConfig: DropdownConfig;
   /**
-   * Render error/warning/info message in tooltip instead of an inline message below a select element
+   * Render error/warning/info message in tooltip instead of an inline message below a select element.
+   * Only renders a tooltip when `message` is provided with an error or warning `messageType`; otherwise it has no effect.
    */
   readonly messageInTooltip: boolean;
   /**

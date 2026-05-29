@@ -1,0 +1,1 @@
+const s=500,a=200;export{s as A,a as D}
