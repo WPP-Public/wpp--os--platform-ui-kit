@@ -61,4 +61,3 @@ export * from './components/wpp-chat/components/wpp-chat-input/types';
 export * from './components/wpp-popover/types';
 export * from './components/wpp-artefact/types';
 export * from './components/wpp-basic-node/types';
-export * from './components/wpp-handle/types';
