@@ -41,7 +41,7 @@ describe('wpp-side-modal osBarCompatible', () => {
     const spy = jest.spyOn(utils, 'getOsBarOffsetHeight').mockReturnValue(72);
     const page = await newSpecPage({
       components: [WppSideModal],
-      template: () => h("wpp-side-modal-v4-1-0", { osBarCompatible: true }),
+      template: () => h("wpp-side-modal-v4-2-0", { osBarCompatible: true }),
     });
     expect(page.root?.style.getPropertyValue('--wpp-side-modal-top-offset')).toBe('72px');
     spy.mockRestore();
@@ -49,7 +49,7 @@ describe('wpp-side-modal osBarCompatible', () => {
   it('applies wpp-os-bar-compatible CSS class when osBarCompatible is true', async () => {
     const page = await newSpecPage({
       components: [WppSideModal],
-      template: () => h("wpp-side-modal-v4-1-0", { osBarCompatible: true }),
+      template: () => h("wpp-side-modal-v4-2-0", { osBarCompatible: true }),
     });
     expect(page.root).toHaveClass('wpp-os-bar-compatible');
   });
@@ -57,7 +57,7 @@ describe('wpp-side-modal osBarCompatible', () => {
     const spy = jest.spyOn(utils, 'getOsBarOffsetHeight').mockReturnValue(64);
     const page = await newSpecPage({
       components: [WppSideModal],
-      template: () => h("wpp-side-modal-v4-1-0", { osBarCompatible: true }),
+      template: () => h("wpp-side-modal-v4-2-0", { osBarCompatible: true }),
     });
     expect(page.root?.style.getPropertyValue('--wpp-side-modal-top-offset')).toBe('64px');
     spy.mockRestore();

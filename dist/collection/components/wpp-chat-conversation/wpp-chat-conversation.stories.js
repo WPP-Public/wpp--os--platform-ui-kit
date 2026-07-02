@@ -1,4 +1,4 @@
-import { html, render } from 'lit-html';
+import { html } from 'lit-html';
 import { transformToVersionedTag } from '../../utils/utils';
 export default {
   title: 'Design System/Components/Chat/Chat Conversation',
@@ -313,11 +313,28 @@ These render as literal symbols: * _ \` [ ] # ! \\\\ { }
 ---
 
 *End of the complete markdown showcase.*`;
+// Inline SVG preview so reference thumbnails render without external assets.
+const IMAGE_PREVIEW = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80'>" +
+  "<rect width='80' height='80' fill='%234C9AFF'/><circle cx='40' cy='40' r='18' fill='%23FFFFFF'/></svg>";
+const MOCK_RESPONSES_BY_KEYWORD = {
+  cards: `Here are some options I found for you:\n\nEach card below provides a different configuration profile. Review the details and select the one that best matches your requirements.`,
+  banner: `I have completed the analysis of your request.\n\nPlease review the alert below before proceeding — it contains important information about potential risks.`,
+  pills: `Based on your query, here are the most relevant topics I identified:\n\nThese tags summarise the key areas covered in this response.`,
+  references: `I have pulled together the source material attached to your message.\n\nThe references below include the original files I used to ground this answer.`,
+  quotes: `Here is the passage I quoted from to compose this answer.\n\nThe quote chips below preserve the exact wording so you can verify the context.`,
+  suggestions: `Here is a summary of what I found.\n\nWant to go deeper? Pick one of the follow-up suggestions below and I'll take it from there.`,
+};
 export const Default = {
   render: args => {
-    let messages = args.messages || [];
+    const msgTag = transformToVersionedTag('wpp-chat-conversation-message');
+    const cardTag = transformToVersionedTag('wpp-card');
+    const typoTag = transformToVersionedTag('wpp-typography');
+    const bannerTag = transformToVersionedTag('wpp-banner');
+    const pillTag = transformToVersionedTag('wpp-pill');
+    const referenceTag = transformToVersionedTag('wpp-chat-reference');
     let isStreaming = false;
-    let currentStream = null;
+    let currentStreamId = 0;
+    const msgElements = new Map();
     const actionBarActions = [
       { text: 'Action 1', onClick: () => console.log('Action 1 clicked') },
       { text: 'Action 2', onClick: () => console.log('Action 2 clicked') },
@@ -329,41 +346,179 @@ export const Default = {
       ariaProps: { label: `Action button with sources` },
       onClick: () => console.log(`Action sources clicked`),
     };
+    function getConvEl() {
+      return document.querySelector(transformToVersionedTag('wpp-chat-conversation'));
+    }
+    function createMessageEl(id, role, content, status, attachments) {
+      const el = document.createElement(msgTag);
+      el.id = id;
+      el.role = role;
+      el.content = content;
+      el.status = status;
+      el.assistantAvatarConfig = args.assistantAvatarConfig || { icon: 'wpp-icon-ai' };
+      el.userAvatarConfig = args.userAvatarConfig || { name: 'User' };
+      if (role === 'assistant') {
+        el.actionButtonsConfig = actionBarActions;
+        el.sourcesActionConfig = sourcesActionConfig;
+      }
+      if (attachments?.length) {
+        el.attachments = attachments;
+      }
+      return el;
+    }
+    function createCustomContent(keyword) {
+      switch (keyword) {
+        case 'cards': {
+          const wrapper = document.createElement('div');
+          wrapper.style.cssText = 'display: flex; gap: 8px; flex-wrap: wrap;';
+          const cardsData = [
+            { title: 'Standard', description: 'Default configuration, suitable for most use cases.' },
+            { title: 'Enhanced', description: 'Extended capabilities with additional processing power.' },
+            { title: 'Performance', description: 'Optimised for high-throughput and low-latency workloads.' },
+          ];
+          cardsData.forEach(({ title, description }) => {
+            const card = document.createElement(cardTag);
+            card.style.cssText = 'flex: 1 1 180px; min-width: 160px;';
+            const header = document.createElement(typoTag);
+            header.setAttribute('type', 's-strong');
+            header.setAttribute('slot', 'header');
+            header.textContent = title;
+            const body = document.createElement(typoTag);
+            body.setAttribute('type', 'xs-body');
+            body.textContent = description;
+            card.appendChild(header);
+            card.appendChild(body);
+            wrapper.appendChild(card);
+          });
+          return wrapper;
+        }
+        case 'banner': {
+          const banner = document.createElement(bannerTag);
+          banner.show = true;
+          banner.type = 'warning';
+          banner.textContent = 'This response contains a warning. Please review before proceeding.';
+          return banner;
+        }
+        case 'pills': {
+          const wrapper = document.createElement('div');
+          wrapper.style.cssText = 'display: flex; gap: 8px; flex-wrap: wrap;';
+          const labels = [
+            'Machine Learning',
+            'Natural Language Processing',
+            'Computer Vision',
+            'Reinforcement Learning',
+          ];
+          labels.forEach(label => {
+            const pill = document.createElement(pillTag);
+            pill.type = 'display';
+            pill.label = label;
+            wrapper.appendChild(pill);
+          });
+          return wrapper;
+        }
+        case 'references': {
+          const wrapper = document.createElement('div');
+          wrapper.style.cssText = 'display: flex; flex-direction: column; gap: 8px; align-items: flex-start;';
+          const referencesData = [
+            {
+              kind: 'file',
+              name: 'campaign-hero.png',
+              fileType: 'PNG image',
+              src: IMAGE_PREVIEW,
+            },
+            { kind: 'file', name: 'quarterly-budget.xlsx', fileType: 'Spreadsheet', fileExtension: '.xlsx' },
+          ];
+          referencesData.forEach(ref => {
+            const reference = document.createElement(referenceTag);
+            reference.type = 'file';
+            reference.name = ref.name;
+            reference.fileType = ref.fileType;
+            reference.src = ref.src;
+            reference.fileExtension = ref.fileExtension;
+            reference.removable = false;
+            wrapper.appendChild(reference);
+          });
+          return wrapper;
+        }
+        case 'quotes': {
+          const wrapper = document.createElement('div');
+          wrapper.style.cssText = 'display: flex; flex-direction: column; gap: 8px; align-items: flex-start;';
+          const quotesData = [
+            'Summarise the key takeaways from the quarterly marketing review and highlight the channels with the strongest return on investment for the next planning cycle.',
+            'The new campaign should emphasise sustainability and local sourcing.',
+          ];
+          quotesData.forEach(text => {
+            const quote = document.createElement(referenceTag);
+            quote.type = 'text';
+            quote.text = text;
+            quote.lines = 2;
+            quote.removable = false;
+            wrapper.appendChild(quote);
+          });
+          return wrapper;
+        }
+        case 'suggestions': {
+          const wrapper = document.createElement('div');
+          wrapper.style.cssText = 'display: flex; gap: 8px; flex-wrap: wrap;';
+          const suggestionsData = [
+            { label: 'Summarise this document', value: 'summarise', icon: 'wpp-icon-document' },
+            { label: 'Draft a reply', value: 'draft-reply', icon: 'wpp-icon-reply' },
+            { label: 'Find related campaigns', value: 'related-campaigns', icon: 'wpp-icon-search' },
+          ];
+          suggestionsData.forEach(({ label, value, icon }) => {
+            const pill = document.createElement(pillTag);
+            pill.type = 'single';
+            pill.label = label;
+            pill.value = value;
+            pill.addEventListener('wppClick', (e) => console.log('suggestion clicked:', e.detail.value));
+            const iconEl = document.createElement(transformToVersionedTag(icon));
+            iconEl.setAttribute('slot', 'icon-start');
+            pill.appendChild(iconEl);
+            wrapper.appendChild(pill);
+          });
+          return wrapper;
+        }
+        default:
+          return null;
+      }
+    }
     const initComponent = () => {
       const placeholder = document.getElementById('conversation-placeholder');
       if (!placeholder)
         return;
-      const chatInputConfig = {
-        enableAttach: true,
-        ...args.chatInputConfig,
-      };
       const convTag = transformToVersionedTag('wpp-chat-conversation');
-      // Check if component already exists to avoid re-creating it and losing state (though here we want to re-render it with new props)
       let el = placeholder.querySelector('#chat-conv-component');
       if (!el) {
-        placeholder.innerHTML = `
-          <${convTag}
-            id="chat-conv-component"
-          ></${convTag}>
-        `;
+        placeholder.innerHTML = `<${convTag} id="chat-conv-component"></${convTag}>`;
         el = placeholder.querySelector('#chat-conv-component');
         if (el) {
           el.addEventListener('wppSend', handleSend);
+          el.addEventListener('wppStop', handleStop);
           el.addEventListener('wppMessageChanged', (e) => console.log('Message changed:', e.detail));
         }
       }
       if (el) {
-        el.messages = messages;
         el.assistantAvatarConfig = args.assistantAvatarConfig || { icon: 'wpp-icon-ai' };
         el.userAvatarConfig = args.userAvatarConfig || { name: 'User' };
-        el.chatInputConfig = chatInputConfig;
-      }
-    };
-    const updateStory = () => {
-      const container = document.getElementById('chat-conversation-story-container');
-      if (container) {
-        render(renderContent(), container);
-        initComponent();
+        el.chatInputConfig = {
+          enableAttach: true,
+          debounceEnabled: false,
+          isGenerating: isStreaming,
+          locales: { stopLabel: 'Stop response' },
+          ariaProps: { stopButton: { label: 'Stop response' } },
+          fileUploadConfig: {
+            size: 50,
+            maxFiles: 5,
+            multiple: true,
+            showOnlyNewErrors: true,
+            acceptConfig: {
+              'image/png': ['.png'],
+              'image/jpeg': ['.jpg', '.jpeg'],
+              'application/pdf': ['.pdf'],
+            },
+          },
+          ...args.chatInputConfig,
+        };
       }
     };
     async function handleSend(event) {
@@ -371,9 +526,15 @@ export const Default = {
       if (!message.trim() || isStreaming)
         return;
       isStreaming = true;
+      updateChatInputConfig();
+      const convEl = getConvEl();
+      if (!convEl)
+        return;
       const userId = crypto.randomUUID();
+      const assistantId = crypto.randomUUID();
+      const keyword = message.toLowerCase().trim();
       let userAttachments = [];
-      if (message.toLowerCase().trim() === 'attachments') {
+      if (keyword === 'attachments') {
         const imageCount = Math.random() > 0.5 ? 5 : 2;
         const images = Array.from({ length: imageCount }).map((_, i) => ({
           name: `image-${i + 1}.jpg`,
@@ -389,72 +550,101 @@ export const Default = {
         }));
         userAttachments = [...images, ...files];
       }
-      messages = [
-        ...messages,
-        {
-          id: userId,
-          role: 'user',
-          content: message,
-          status: 'complete',
-          attachments: userAttachments,
-        },
-      ];
-      const assistantId = crypto.randomUUID();
-      messages = [
-        ...messages,
-        {
-          id: assistantId,
-          role: 'assistant',
-          content: '',
-          status: 'loading',
-          actionButtonsConfig: actionBarActions,
-          sourcesActionConfig,
-        },
-      ];
-      updateStory();
-      // Small delay to ensure component is rendered
-      await new Promise(r => setTimeout(r, 100));
-      const convTag = transformToVersionedTag('wpp-chat-conversation');
-      const convEl = document.querySelector(convTag);
-      if (convEl) {
-        await convEl.setStatus('streaming');
-        let responseText = '';
-        const lowerMsg = message.toLowerCase().trim();
-        if (lowerMsg === 'test') {
+      const userMsgEl = createMessageEl(userId, 'user', message, 'complete', userAttachments);
+      msgElements.set(userId, userMsgEl);
+      convEl.appendChild(userMsgEl);
+      const assistantMsgEl = createMessageEl(assistantId, 'assistant', '', 'loading');
+      msgElements.set(assistantId, assistantMsgEl);
+      convEl.appendChild(assistantMsgEl);
+      // Wait for DOM to mount the new message element before calling methods on it
+      await new Promise(r => setTimeout(r, 50));
+      await assistantMsgEl.setStatus('streaming');
+      // Resolve mock response text
+      let responseText = MOCK_RESPONSES_BY_KEYWORD[keyword] || '';
+      if (!responseText) {
+        if (keyword === 'test')
           responseText = MOCK_RESPONSE_ALL;
-        }
-        else if (lowerMsg === 'image') {
+        else if (keyword === 'image')
           responseText = MOCK_RESPONSES[5];
-        }
-        else if (lowerMsg === 'gallery') {
+        else if (keyword === 'gallery')
           responseText = MOCK_RESPONSES[6];
-        }
-        else {
+        else
           responseText = MOCK_RESPONSES[Math.floor(Math.random() * 5)];
-        }
-        const chunks = responseText.match(/\S+|\s+/g) || [];
-        currentStream = { cancelled: false };
-        for (const chunk of chunks) {
-          if (currentStream.cancelled)
-            break;
-          const delay = /^\s+$/.test(chunk) ? 5 : 30 + Math.random() * 50;
-          await new Promise(resolve => setTimeout(resolve, delay));
-          if (currentStream.cancelled)
-            break;
-          await convEl.appendChunk(chunk);
-        }
-        if (!currentStream.cancelled) {
-          await convEl.completeStream();
-          messages = messages.map(m => (m.id === assistantId ? { ...m, status: 'complete' } : m));
-          isStreaming = false;
-          updateStory();
-        }
       }
+      const streamId = (currentStreamId += 1);
+      const isActiveStream = () => currentStreamId === streamId;
+      const chunks = responseText.match(/\S+|\s+/g) || [];
+      for (const chunk of chunks) {
+        if (!isActiveStream())
+          break;
+        const delay = /^\s+$/.test(chunk) ? 5 : 30 + Math.random() * 50;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        if (!isActiveStream())
+          break;
+        await assistantMsgEl.appendChunk(chunk);
+        // Message-level appendChunk does not auto-scroll; scroll must be called explicitly
+        convEl.scrollToBottom();
+      }
+      if (isActiveStream()) {
+        await assistantMsgEl.completeStream();
+        const customContent = createCustomContent(keyword);
+        if (customContent) {
+          assistantMsgEl.appendChild(customContent);
+        }
+        isStreaming = false;
+        updateChatInputConfig();
+        await convEl.scrollToBottom();
+      }
+    }
+    function handleStop() {
+      if (!isStreaming)
+        return;
+      currentStreamId += 1;
+      // Setting status prop triggers @Watch('status') → completeStream() internally
+      const lastMsgEl = Array.from(msgElements.values()).at(-1);
+      if (lastMsgEl?.role === 'assistant') {
+        lastMsgEl.status = 'complete';
+      }
+      isStreaming = false;
+      updateChatInputConfig();
+    }
+    function updateChatInputConfig() {
+      const convEl = getConvEl();
+      if (!convEl)
+        return;
+      convEl.chatInputConfig = {
+        ...convEl.chatInputConfig,
+        isGenerating: isStreaming,
+      };
     }
     function renderContent() {
       return html `
-        <div style="height: 600px; display: flex; flex-direction: column; border: 1px solid var(--wpp-grey-color-200);">
-          <div id="conversation-placeholder" style="height: 100%; width: 100%;"></div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="height: 600px; border: 1px solid var(--wpp-grey-color-200);">
+            <div id="conversation-placeholder" style="height: 100%; width: 100%;"></div>
+          </div>
+          <div
+            style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--wpp-grey-color-700);"
+          >
+            <span><strong>test</strong> — full markdown showcase</span>
+            <span><strong>image</strong> — single image response</span>
+            <span><strong>gallery</strong> — image grid response</span>
+            <span><strong>attachments</strong> — user message with 2–5 images and 0–3 files</span>
+            <span><strong>cards</strong> — streams markdown, then reveals 3 WppCard components below the text</span>
+            <span><strong>banner</strong> — streams markdown, then reveals a WppBanner below the text</span>
+            <span><strong>pills</strong> — streams markdown, then reveals WppPill tags below the text</span>
+            <span
+              ><strong>references</strong> — streams markdown, then reveals file reference chips below the text</span
+            >
+            <span
+              ><strong>quotes</strong> — streams markdown, then reveals text/quote reference chips below the text</span
+            >
+            <span
+              ><strong>suggestions</strong> — streams markdown, then reveals follow-up suggestion pills below the
+              text</span
+            >
+            <span><em>any other message</em> — random streaming markdown response</span>
+          </div>
         </div>
       `;
     }

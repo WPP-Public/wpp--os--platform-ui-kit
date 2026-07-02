@@ -1,8 +1,7 @@
 /**
  * @file Tiptap v3 editor configuration for wpp-richtext
- * @description Replaces the Quill-based config.ts during WPPOPENDS-1287 migration.
- *   Configures all Tiptap extensions, the TurndownService (library-agnostic, carried over),
- *   and provides the `buildTiptapExtensions()` factory function.
+ * @description Configures all Tiptap extensions and provides the
+ *   `buildTiptapExtensions()` factory function.
  * @see https://jira.uhub.biz/browse/WPPOPENDS-1287
  * @see https://tiptap.dev/docs/editor/getting-started/configuration
  */
@@ -31,9 +30,6 @@ import { TiptapMarkdownFix } from './extensions/tiptap-markdown-fix';
 import { TiptapMarkdownShortcuts } from './extensions/tiptap-markdown-shortcuts';
 import { TiptapMarkdownPaste } from './extensions/tiptap-markdown-paste';
 import { ListShiftEnter } from './extensions/tiptap-list-shift-enter';
-// Re-export the library-agnostic TurndownService from the existing config
-// Kept for backward compatibility and wpp-richtext-markdown component
-export { default as turndownService, quillMarkdownOptions } from './config';
 /**
  * Default formats supported by the Tiptap editor, mapped from the Quill defaults.
  * Each format name maps to a Tiptap extension.
@@ -48,9 +44,13 @@ export const TIPTAP_DEFAULT_FORMATS = [
   'blockquote',
   'heading',
   'codeBlock',
+  'hardBreak',
+  'horizontalRule',
   'bulletList',
   'orderedList',
   'listItem',
+  'listKeymap',
+  'indent',
   'taskList',
   'taskItem',
   'textAlign',
@@ -69,18 +69,18 @@ export const TIPTAP_DEFAULT_FORMATS = [
   'attachment',
 ];
 /**
- * Mapping from Quill format names to Tiptap extension names.
+ * Mapping from legacy format names to Tiptap extension names.
  * Used to translate the consumer's `formats` prop.
  *
  * Only formats that have a corresponding Tiptap extension actually wired up
- * in `buildTiptapExtensions()` below are included. Quill-only formats that
+ * in `buildTiptapExtensions()` below are included. Unsupported legacy formats that
  * have no Tiptap equivalent here (e.g. `background`, `formula`, `script`)
  * are intentionally omitted so the whitelist translation never silently
  * promises support that the editor cannot deliver. If consumers pass an
- * unknown format name it falls through unchanged via `translateQuillFormat`,
- * matching the "ignore unknowns" behaviour of the previous Quill build.
+ * unknown format name it falls through unchanged via `translateLegacyFormat`,
+ * matching the previous "ignore unknowns" behaviour.
  */
-const QUILL_TO_TIPTAP_FORMAT_MAP = {
+const LEGACY_FORMAT_TO_TIPTAP_FORMAT_MAP = {
   bold: 'bold',
   italic: 'italic',
   underline: 'underline',
@@ -101,7 +101,49 @@ const QUILL_TO_TIPTAP_FORMAT_MAP = {
   video: 'video',
   attachment: 'attachment',
 };
-/** Toolbar alias definitions (matches existing Quill default module aliases) */
+const FORMAT_DEPENDENCIES = {
+  bulletList: ['listItem', 'listKeymap'],
+  orderedList: ['listItem', 'listKeymap'],
+  list: ['bulletList', 'orderedList', 'listItem', 'listKeymap'],
+  taskList: ['taskItem'],
+  table: ['tableRow', 'tableCell', 'tableHeader'],
+  color: ['textStyle'],
+  fontSize: ['textStyle'],
+  size: ['fontSize', 'textStyle'],
+  indent: ['listItem', 'listKeymap'],
+};
+function resolveAllowedFormats(formats) {
+  const resolvedFormats = new Set();
+  const sourceFormats = formats.length > 0 ? formats : [...TIPTAP_DEFAULT_FORMATS];
+  for (const format of sourceFormats) {
+    const translatedFormat = LEGACY_FORMAT_TO_TIPTAP_FORMAT_MAP[format] || format;
+    resolvedFormats.add(format);
+    resolvedFormats.add(translatedFormat);
+    FORMAT_DEPENDENCIES[format]?.forEach(dependency => resolvedFormats.add(dependency));
+    FORMAT_DEPENDENCIES[translatedFormat]?.forEach(dependency => resolvedFormats.add(dependency));
+  }
+  return resolvedFormats;
+}
+function starterKitFormatOptions(allowedFormats) {
+  return {
+    blockquote: allowedFormats.has('blockquote') ? {} : false,
+    bold: allowedFormats.has('bold') ? {} : false,
+    bulletList: allowedFormats.has('bulletList') ? {} : false,
+    code: allowedFormats.has('code') ? {} : false,
+    codeBlock: allowedFormats.has('codeBlock') ? {} : false,
+    hardBreak: allowedFormats.has('hardBreak') ? {} : false,
+    heading: allowedFormats.has('heading') ? { levels: [1, 2, 3] } : false,
+    horizontalRule: allowedFormats.has('horizontalRule') ? {} : false,
+    italic: allowedFormats.has('italic') ? {} : false,
+    listItem: allowedFormats.has('listItem') ? {} : false,
+    listKeymap: allowedFormats.has('listKeymap') ? {} : false,
+    link: false,
+    orderedList: allowedFormats.has('orderedList') ? {} : false,
+    strike: allowedFormats.has('strike') ? {} : false,
+    underline: false,
+  };
+}
+/** Toolbar alias definitions for legacy consumer aliases. */
 export const TIPTAP_DEFAULT_TOOLBAR_ALIASES = {
   size: ['fontSize'],
   fontStyle: ['bold', 'italic', 'underline', 'strike'],
@@ -113,25 +155,20 @@ export const TIPTAP_DEFAULT_TOOLBAR_ALIASES = {
 };
 /**
  * Builds the array of Tiptap extensions based on component props.
- * Maps existing Quill format whitelist to Tiptap extensions.
+ * Maps the existing format whitelist to Tiptap extensions.
  *
  * @param config - Component prop values to configure extensions
  * @returns Configured Tiptap extensions array
  */
 export function buildTiptapExtensions(config) {
   const { formats = [], placeholder, charactersLimit } = config;
-  // Translate Quill format names to Tiptap equivalents
-  const allowedFormats = new Set(formats.length > 0 ? formats.map(f => QUILL_TO_TIPTAP_FORMAT_MAP[f] || f) : TIPTAP_DEFAULT_FORMATS);
+  // Translate legacy format names to Tiptap equivalents.
+  const allowedFormats = resolveAllowedFormats(formats);
   const extensions = [];
-  // StarterKit v3 includes: Bold, Italic, Strike, Code, Heading, Blockquote,
-  // CodeBlock, BulletList, OrderedList, ListItem, HardBreak, HorizontalRule,
-  // History, Document, Paragraph, Text, Dropcursor, Gapcursor, Link, Underline
-  // Disable Link and Underline here — they are added explicitly below with custom config
-  extensions.push(StarterKit.configure({
-    heading: { levels: [1, 2, 3] },
-    link: false,
-    underline: false,
-  }));
+  // StarterKit v3 bundles several user-facing formats. Keep the structural
+  // editor essentials enabled, but gate bundled marks/nodes via `formats`.
+  // Link and Underline stay disabled here and are added explicitly below.
+  extensions.push(StarterKit.configure(starterKitFormatOptions(allowedFormats)));
   // Underline (not in StarterKit)
   if (allowedFormats.has('underline')) {
     // Override the default markdown serialization (`++text++`) to emit
@@ -181,7 +218,7 @@ export function buildTiptapExtensions(config) {
     extensions.push(TiptapAttachment);
   }
   // Text styling (color, font size)
-  if (allowedFormats.has('textStyle') || allowedFormats.has('color')) {
+  if (allowedFormats.has('textStyle') || allowedFormats.has('color') || allowedFormats.has('fontSize')) {
     extensions.push(TextStyle);
   }
   if (allowedFormats.has('color')) {
@@ -207,15 +244,19 @@ export function buildTiptapExtensions(config) {
   // Fixes for @tiptap/markdown integration bugs (must come after Markdown)
   extensions.push(TiptapMarkdownFix);
   // Paragraph/heading indentation
-  extensions.push(TiptapIndent);
+  if (allowedFormats.has('indent')) {
+    extensions.push(TiptapIndent);
+  }
   // Mid-word markdown shortcuts (bold/italic/strike) + horizontal rule input rule
   extensions.push(TiptapMarkdownShortcuts);
   // Pasted plain-text markdown (`# heading`, `> quote`, fenced code, links,
   // list items) is parsed by the MarkdownManager and converted to rich
-  // content. Mirrors the pre-migration `quilljs-markdown` paste behaviour.
+  // content, matching the markdown paste behavior from the legacy editor.
   extensions.push(TiptapMarkdownPaste);
   // Shift+Enter inside lists splits into a new numbered/bulleted item (Quill parity)
-  extensions.push(ListShiftEnter);
+  if (allowedFormats.has('bulletList') || allowedFormats.has('orderedList')) {
+    extensions.push(ListShiftEnter);
+  }
   // Font size (ql-size-* CSS classes)
   if (allowedFormats.has('fontSize') || allowedFormats.has('textStyle')) {
     extensions.push(TiptapFontSize);
@@ -235,9 +276,9 @@ export function buildTiptapExtensions(config) {
   return extensions;
 }
 /**
- * Translates a Quill format name to its Tiptap equivalent.
+ * Translates a legacy format name to its Tiptap equivalent.
  * Returns the original name if no mapping exists.
  */
-export function translateQuillFormat(quillFormat) {
-  return QUILL_TO_TIPTAP_FORMAT_MAP[quillFormat] || quillFormat;
+export function translateLegacyFormat(format) {
+  return LEGACY_FORMAT_TO_TIPTAP_FORMAT_MAP[format] || format;
 }

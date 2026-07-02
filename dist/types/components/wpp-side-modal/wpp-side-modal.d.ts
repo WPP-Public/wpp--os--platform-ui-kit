@@ -23,7 +23,6 @@ export declare class WppSideModal {
   private rightButtonsConfig;
   private topOffset;
   private ignoreOutsideClicks;
-  private _locales;
   private timeouts;
   private themeSubscription;
   host: HTMLWppSideModalElement;
@@ -131,6 +130,7 @@ export declare class WppSideModal {
   componentDidLoad(): void;
   connectedCallback(): void;
   disconnectedCallback(): void;
+  private get _locales();
   private handleScroll;
   private updateSlotData;
   private handleCloseModal;

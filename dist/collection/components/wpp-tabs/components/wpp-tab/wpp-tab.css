@@ -43,7 +43,7 @@
   line-height: var(--wpp-typography-s-strong-line-height, 22px);
   font-weight: var(--wpp-typography-s-strong-font-weight, 700);
   color: var(--wpp-typography-s-strong-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-strong-letter-spacing, 0);
   position: relative;
   display: flex;

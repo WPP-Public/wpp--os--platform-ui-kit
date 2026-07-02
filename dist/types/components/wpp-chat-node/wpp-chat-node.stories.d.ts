@@ -8,6 +8,10 @@ type ChatNodeStoryArgs = Components.WppChatNode & {
   selectedModelId?: string;
   locales?: Partial<ChatNodeLocales>;
 };
-declare const meta: Meta<ChatNodeStoryArgs>;
+declare const meta: Meta<ChatNodeStoryArgs & {
+  numberOfHandles: string;
+}>;
 export default meta;
-export declare const ChatNode: StoryObj<ChatNodeStoryArgs>;
+export declare const ChatNode: StoryObj<ChatNodeStoryArgs & {
+  numberOfHandles: string;
+}>;

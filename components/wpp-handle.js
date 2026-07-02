@@ -21,9 +21,9 @@ const WppHandle$1 = /*@__PURE__*/ proxyCustomElement(class WppHandle extends HTM
   render() {
     return h(Host, { class: this.getHostClasses(), style: { backgroundColor: this.color } });
   }
-  static get registryIs() { return "wpp-handle-v4-1-0"; }
+  static get registryIs() { return "wpp-handle-v4-2-0"; }
   static get style() { return wppHandleCss; }
-}, [1, "wpp-handle", "wpp-handle-v4-1-0", {
+}, [1, "wpp-handle", "wpp-handle-v4-2-0", {
     "type": [1],
     "isSelected": [4, "is-selected"],
     "isLoading": [4, "is-loading"],
@@ -33,9 +33,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-handle-v4-1-0"];
+  const components = ["wpp-handle-v4-2-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-handle-v4-1-0":
+    case "wpp-handle-v4-2-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppHandle$1);
       }

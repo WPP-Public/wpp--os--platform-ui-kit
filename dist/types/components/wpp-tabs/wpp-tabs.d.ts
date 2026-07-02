@@ -11,7 +11,6 @@ export declare class WppTabs {
   host: HTMLWppTabsElement;
   position: string;
   previousActiveTab: Element | null;
-  _locales: TabsLocaleInterface;
   /**
    * Defines the active tab `itemId`.
    */
@@ -34,7 +33,6 @@ export declare class WppTabs {
    */
   wppChange: EventEmitter<TabsChangeEventDetail>;
   handleChangeTabControlItemClick(event: CustomEvent<TabChangeEventDetail>): void;
-  onLocalesChange(newLocales?: Partial<TabsLocaleInterface>): void;
   handleKeydown(event: KeyboardEvent): void;
   sizeChanged(newSize: string): void;
   valueChanged(newValue: string): void;
@@ -42,9 +40,9 @@ export declare class WppTabs {
   private getTabs;
   private redrawUnderline;
   private lengthChange;
-  componentWillLoad(): void;
   componentDidLoad(): void;
   disconnectedCallback(): void;
+  private get _locales();
   private hostCssClasses;
   render(): any;
 }

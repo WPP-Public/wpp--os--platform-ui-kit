@@ -43,6 +43,10 @@ export declare class WppChatConversation {
    */
   readonly wppSend: EventEmitter<SendEventDetail>;
   /**
+   * Emitted when the user clicks the "Stop" button while an AI response is generating.
+   */
+  readonly wppStop: EventEmitter<void>;
+  /**
    * Emitted when the value of the input changes.
    */
   readonly wppChange: EventEmitter<FileUploadEventDetail>;
@@ -61,7 +65,12 @@ export declare class WppChatConversation {
    */
   readonly wppActionsMenuItemClick: EventEmitter<ChatInputActionItemClickEventDetail>;
   private getLastMessageElement;
-  private scrollToBottom;
+  /**
+   * Scrolls the conversation to the bottom. Use this when composing messages via the slot — the component
+   * does not auto-scroll on slot changes.
+   */
+  scrollToBottom(): Promise<void>;
+  private scrollContainerToBottom;
   private inputWrapperCssClasses;
   render(): any;
 }

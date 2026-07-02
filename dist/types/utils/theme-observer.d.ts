@@ -5,7 +5,7 @@ export declare class ThemeObserverService {
   private subscribers;
   private attribute;
   configure: (attribute: string) => void;
-  getThemeAttribute: () => ThemeAttributeValues;
+  getThemeAttribute: () => ThemeAttributeValues | undefined;
   subscribe: (cb: SubscriberCallback) => () => void;
   private notifySubscribers;
   private restartObserver;

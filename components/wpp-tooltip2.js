@@ -1,7 +1,7 @@
 import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
 import { m as menuListConfig, c as isEqual_1 } from './menuListConfig.js';
 import { Z as Z_INDEX } from './consts.js';
-import { w as getHighestContainerInDOM, z as isWppElement } from './utils.js';
+import { w as getHighestContainerInDOM, A as isWppElement } from './utils.js';
 import { t as themeSubscriptionController, a as themeObserver } from './subscribe-to-theme.js';
 import { d as defineCustomElement$3 } from './wpp-icon-error2.js';
 import { d as defineCustomElement$2 } from './wpp-icon-warning2.js';
@@ -39,8 +39,6 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
     super();
     this.__registerHost();
     this.__attachShadow();
-    this.FORBIDDEN_PREFIX = 'wpp-';
-    this.ALLOWED_TAGS = ['wpp-typography'];
     this.themeSubscription = themeSubscriptionController(() => (this.config.allowHTML ? this.customContentEl : this.contentEl), () => this.updateTippyProps({ arrow: this.arrowSVG() }));
     this.handleSlotChange = () => {
       if (this.slotRef) {
@@ -54,10 +52,6 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
       this.tippyInstance?.setProps({ ...props });
       this.tippyInstance?.popperInstance?.update();
     };
-    this.transformAllowedTags = () => this.ALLOWED_TAGS.map(el => el
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(''));
     this.arrowSVG = () => {
       const arrowSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       arrowSVG.setAttribute('width', '8');
@@ -205,25 +199,6 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
       this.createTippyInstance();
     }
   }
-  componentWillLoad() {
-    if (this.config.allowHTML) {
-      const content = this.host?.querySelector('[slot="tooltip-content"]');
-      if (content) {
-        const validateElement = (element) => {
-          element.childNodes.forEach(node => {
-            if (node.nodeType === Node.ELEMENT_NODE) {
-              const tagName = node.tagName.toLowerCase();
-              if (tagName.startsWith(this.FORBIDDEN_PREFIX) && !this.ALLOWED_TAGS.some(el => tagName.startsWith(el))) {
-                console.warn(`WPP components are not allowed in WppTooltip, except for: ${this.transformAllowedTags()}`);
-              }
-              validateElement(node);
-            }
-          });
-        };
-        validateElement(content);
-      }
-    }
-  }
   componentDidLoad() {
     this.themeSubscription.start();
     setTimeout(() => {
@@ -256,9 +231,9 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
     // is not well-supported on a div without a valid role)
     const hasAriaLabel = Boolean(this.ariaProps?.label);
     const anchorRole = this.ariaProps?.role ?? (hasAriaLabel ? 'img' : undefined);
-    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, role: anchorRole, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v4-1-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
+    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, role: anchorRole, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v4-2-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
   }
-  static get registryIs() { return "wpp-tooltip-v4-1-0"; }
+  static get registryIs() { return "wpp-tooltip-v4-2-0"; }
   get host() { return this; }
   static get watchers() { return {
     "config": ["updateConfig"],
@@ -269,7 +244,7 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
     "disabled": ["handleDisabledChange"]
   }; }
   static get style() { return wppTooltipCss; }
-}, [1, "wpp-tooltip", "wpp-tooltip-v4-1-0", {
+}, [1, "wpp-tooltip", "wpp-tooltip-v4-2-0", {
     "disabled": [4],
     "header": [1],
     "text": [1],
@@ -290,24 +265,24 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tooltip-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-internal-tooltip-v4-1-0"];
+  const components = ["wpp-tooltip-v4-2-0", "wpp-icon-error-v4-2-0", "wpp-icon-warning-v4-2-0", "wpp-internal-tooltip-v4-2-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tooltip-v4-1-0":
+    case "wpp-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTooltip);
       }
       break;
-    case "wpp-icon-error-v4-1-0":
+    case "wpp-icon-error-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-icon-warning-v4-1-0":
+    case "wpp-icon-warning-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-internal-tooltip-v4-1-0":
+    case "wpp-internal-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

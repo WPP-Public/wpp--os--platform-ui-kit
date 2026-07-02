@@ -1,0 +1,33 @@
+/**
+  * @prop --wpp-chat-thinking-gap:
+  * @prop --wpp-chat-thinking-max-width:
+  * @prop --wpp-chat-thinking-label-color:
+*/
+:host {
+  --ct-gap: var(--wpp-chat-thinking-gap, 8px);
+  --ct-max-width: var(--wpp-chat-thinking-max-width, 600px);
+  --ct-label-color: var(--wpp-chat-thinking-label-color, var(--wpp-grey-color-1000));
+  display: inline-block;
+  max-width: var(--ct-max-width);
+}
+
+.thinking {
+  display: flex;
+  align-items: center;
+  gap: var(--ct-gap);
+  min-width: 0;
+}
+
+.spinner {
+  flex: 0 0 auto;
+}
+
+.label {
+  min-width: 0;
+}
+.label::part(typography) {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--ct-label-color);
+}

@@ -116,25 +116,6 @@ describe('wpp-tooltip full coverage', () => {
     instance.handleDisabledChange(false);
     expect(instance.createTippyInstance).toHaveBeenCalled();
   });
-  it('validates HTML and warns on forbidden tags', async () => {
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
-    const page = await newSpecPage({
-      components: [WppTooltip],
-      html: `<wpp-tooltip></wpp-tooltip>`,
-    });
-    const instance = page.rootInstance;
-    // 👇 inject slot content manually BEFORE calling lifecycle
-    const content = document.createElement('div');
-    content.setAttribute('slot', 'tooltip-content');
-    const forbidden = document.createElement('wpp-bad');
-    content.appendChild(forbidden);
-    instance.host.appendChild(content);
-    // enable HTML validation
-    instance.config = { allowHTML: true };
-    // 👇 manually trigger lifecycle
-    instance.componentWillLoad();
-    expect(warnSpy).toHaveBeenCalled();
-  });
   it('sets anchorRef on slot change', async () => {
     const page = await newSpecPage({
       components: [WppTooltip],
@@ -147,25 +128,6 @@ describe('wpp-tooltip full coverage', () => {
     instance.slotRef = fakeSlot;
     instance['handleSlotChange']();
     expect(instance.anchorRef).toBeDefined();
-  });
-  it('covers componentWillLoad validation logic (forced execution)', async () => {
-    const page = await newSpecPage({
-      components: [WppTooltip],
-      html: `<wpp-tooltip></wpp-tooltip>`,
-    });
-    const instance = page.rootInstance;
-    // 👇 Inject slot content manually BEFORE calling lifecycle
-    const content = document.createElement('div');
-    content.setAttribute('slot', 'tooltip-content');
-    const forbidden = document.createElement('wpp-bad');
-    content.appendChild(forbidden);
-    instance.host.appendChild(content);
-    // enable allowHTML
-    instance.config = { allowHTML: true };
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
-    // 🔥 Manually invoke lifecycle
-    instance.componentWillLoad();
-    expect(warnSpy).toHaveBeenCalled();
   });
   it('runs componentDidLoad and unhides tooltip', async () => {
     const page = await newSpecPage({
@@ -192,14 +154,6 @@ describe('wpp-tooltip full coverage', () => {
     instance.createTippyInstance = jest.fn();
     instance.connectedCallback();
     expect(instance.createTippyInstance).toHaveBeenCalled();
-  });
-  it('returns transformed allowed tags', async () => {
-    const page = await newSpecPage({
-      components: [WppTooltip],
-      html: `<wpp-tooltip></wpp-tooltip>`,
-    });
-    const instance = page.rootInstance;
-    expect(instance.transformAllowedTags()).toContain('WppTypography');
   });
   it('handles onShow with fixed width', async () => {
     const page = await newSpecPage({

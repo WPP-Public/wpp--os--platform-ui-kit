@@ -1,3 +1,6 @@
+/**
+ * @deprecated Use `wpp-icon-stop` instead.
+ */
 export declare class WppIconRecordStop {
   /**
    Defines the icon size, where `s` is **16px** and `m` is **20px**.

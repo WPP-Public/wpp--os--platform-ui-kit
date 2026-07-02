@@ -1,3 +1,5 @@
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import { h } from '@stencil/core';
 import { newSpecPage } from '@stencil/core/testing';
 import { WppChatNode } from '../wpp-chat-node';
@@ -95,6 +97,24 @@ describe('wpp-chat-node', () => {
       expect(container?.classList.contains('loading-node')).toBe(true);
       expect(wrapper?.classList.contains('is-selected')).toBe(false);
     });
+    it('should draw the loading animation only on node-container::before overlay, not via container padding', () => {
+      // The spec page does not inject scoped CSS, so assert against SCSS source directly.
+      // Loading ring must be painted on .node-container.loading-node::before with inset: -2px,
+      // and the old padding-based .loading-node rule must not exist.
+      const styles = readFileSync(join(__dirname, '..', 'wpp-chat-node.scss'), 'utf8');
+      expect(styles).toMatch(/\.node-container[\s\S]*?&\.loading-node::before\s*\{[\s\S]*?animation:\s*loading-rotate/);
+      expect(styles).toMatch(/\.node-container[\s\S]*?&\.loading-node::before\s*\{[\s\S]*?inset:\s*-2px/);
+      expect(styles).not.toMatch(/\.loading-node\s*\{[\s\S]*?padding:\s*2px/);
+    });
+    it('should keep identical inner content structure between normal and loading states', async () => {
+      const innerHtml = (loading) => `<wpp-chat-node node-title="Test"${loading ? ' is-loading="true"' : ''}></wpp-chat-node>`;
+      const normalPage = await newSpecPage({ components: [WppChatNode], html: innerHtml(false) });
+      const loadingPage = await newSpecPage({ components: [WppChatNode], html: innerHtml(true) });
+      const normalWrapper = getRenderRoot(normalPage.root).querySelector('.node-wrapper');
+      const loadingWrapper = getRenderRoot(loadingPage.root).querySelector('.node-wrapper');
+      const childStructure = (wrapper) => Array.from(wrapper?.children ?? []).map(child => child.className || child.tagName.toLowerCase());
+      expect(childStructure(loadingWrapper)).toEqual(childStructure(normalWrapper));
+    });
   });
   describe('Rendering', () => {
     it('should render the header with a tooltip-backed truncated title for size m', async () => {
@@ -112,14 +132,16 @@ describe('wpp-chat-node', () => {
     it('should render a built-in chat bar with input and action buttons', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        html: `<wpp-chat-node node-title="Test"/>`,
+        html: `<wpp-chat-node is-selected="true" node-title="Test"/>`,
       });
       const chatBar = getRenderRoot(page.root).querySelector('.node-chat-bar');
       const input = chatBar?.querySelector('.chat-input');
       const actionButtons = chatBar?.querySelectorAll('wpp-action-button');
+      const primaryButton = chatBar?.querySelectorAll('wpp-button');
       expect(chatBar).toBeTruthy();
       expect(input).toBeTruthy();
-      expect(actionButtons?.length).toBe(2);
+      expect(actionButtons?.length).toBe(1);
+      expect(primaryButton?.length).toBe(1);
     });
     it('should render the handles slot', async () => {
       const page = await newSpecPage({
@@ -128,28 +150,40 @@ describe('wpp-chat-node', () => {
       });
       expect(page.root?.querySelector('[slot="handles"]')).toBeTruthy();
     });
-    it('should not render a header icon by default', async () => {
+    it('should always render a fixed wpp-icon-service header icon', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
         html: `<wpp-chat-node node-title="Test"/>`,
       });
-      expect(getRenderRoot(page.root).querySelector('wpp-icon-service')).toBeNull();
+      const titleIcon = getRenderRoot(page.root).querySelector('.title-icon');
+      expect(titleIcon).toBeTruthy();
+      expect(titleIcon?.firstElementChild?.tagName.toLowerCase()).toContain('wpp-icon-service');
     });
-    it('should render title icon prop when provided', async () => {
+    it('should render the fixed header icon in the idle state', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        html: `<wpp-chat-node node-title="Test" title-icon="wpp-icon-service"/>`,
+        html: `<wpp-chat-node node-title="Test"/>`,
+      });
+      expect(getRenderRoot(page.root).querySelectorAll('.title-icon')).toHaveLength(1);
+    });
+    it('should keep the fixed header icon while selected and loading', async () => {
+      const page = await newSpecPage({
+        components: [WppChatNode],
+        html: `<wpp-chat-node node-title="Test" is-selected="true" is-loading="true"/>`,
       });
       const titleIcon = getRenderRoot(page.root).querySelector('.title-icon');
       expect(titleIcon?.firstElementChild?.tagName.toLowerCase()).toContain('wpp-icon-service');
     });
-    it('should render a slotted left icon when provided', async () => {
+    it('should ignore the deprecated titleIcon prop and keep the fixed wpp-icon-service icon', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        html: `<wpp-chat-node node-title="Test"><wpp-icon-service slot="left-icon"/></wpp-chat-node>`,
+        html: `<wpp-chat-node node-title="Test" title-icon="wpp-icon-search"/>`,
       });
-      expect(page.root?.querySelector('[slot="left-icon"]')).toBeTruthy();
-      expect(getRenderRoot(page.root).querySelector('.title-icon')).toBeNull();
+      const titleIcon = getRenderRoot(page.root).querySelector('.title-icon');
+      // The deprecated prop is kept for backward compatibility but must not change the rendered icon.
+      expect(getRenderRoot(page.root).querySelectorAll('.title-icon')).toHaveLength(1);
+      expect(titleIcon?.firstElementChild?.tagName.toLowerCase()).toContain('wpp-icon-service');
+      expect(getRenderRoot(page.root).querySelector('wpp-icon-search')).toBeNull();
     });
     it('should NOT render header or body for size s', async () => {
       const page = await newSpecPage({
@@ -229,7 +263,7 @@ describe('wpp-chat-node', () => {
     it('should render action and model menu items when configured', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        template: () => (h("wpp-chat-node-v4-1-0", { nodeTitle: "Test", actions: [{ icon: 'wpp-icon-document', label: 'Some link...' }], models: [{ id: 'gpt-45', label: 'ChatGPT 4.5', icon: 'wpp-icon-ai' }] })),
+        template: () => (h("wpp-chat-node-v4-2-0", { nodeTitle: "Test", actions: [{ icon: 'wpp-icon-document', label: 'Some link...' }], models: [{ id: 'gpt-45', label: 'ChatGPT 4.5', icon: 'wpp-icon-ai' }] })),
       });
       const renderRoot = getRenderRoot(page.root);
       const menuContexts = renderRoot.querySelectorAll('wpp-menu-context');
@@ -389,7 +423,7 @@ describe('wpp-chat-node', () => {
     it('should emit wppActionClick when an action item is selected', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        template: () => (h("wpp-chat-node-v4-1-0", { nodeTitle: "Test", actions: [{ icon: 'wpp-icon-document', label: 'Some link...' }] })),
+        template: () => (h("wpp-chat-node-v4-2-0", { nodeTitle: "Test", actions: [{ icon: 'wpp-icon-document', label: 'Some link...' }] })),
       });
       const actionSpy = jest.spyOn(page.rootInstance.wppActionClick, 'emit');
       const actionItem = getRenderRoot(page.root).querySelector('wpp-list-item');
@@ -401,7 +435,7 @@ describe('wpp-chat-node', () => {
     it('should emit wppModelSelect when a model item is selected', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        template: () => (h("wpp-chat-node-v4-1-0", { nodeTitle: "Test", models: [
+        template: () => (h("wpp-chat-node-v4-2-0", { nodeTitle: "Test", models: [
             { id: 'gpt-45', label: 'ChatGPT 4.5', icon: 'wpp-icon-ai' },
             { id: 'claude-sonnet', label: 'Claude Sonnet', icon: 'wpp-icon-ai' },
           ] })),
@@ -437,12 +471,12 @@ describe('wpp-chat-node', () => {
     it('should show loading after send until an assistant response chunk arrives', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        html: `<wpp-chat-node node-title="Test"/>`,
+        html: `<wpp-chat-node is-selected="true" node-title="Test"/>`,
       });
       const renderRoot = getRenderRoot(page.root);
       const container = renderRoot.querySelector('.node-container');
       const input = renderRoot.querySelector('.chat-input');
-      const sendButton = renderRoot.querySelectorAll('.node-chat-bar wpp-action-button')[1];
+      const sendButton = renderRoot.querySelectorAll('.node-chat-bar wpp-button')[0];
       input.value = 'Hello';
       input.dispatchEvent(new Event('input'));
       sendButton?.dispatchEvent(new MouseEvent('click'));
@@ -462,7 +496,7 @@ describe('wpp-chat-node', () => {
       });
       const renderRoot = getRenderRoot(page.root);
       const stopSpy = jest.spyOn(page.rootInstance.wppStop, 'emit');
-      const sendButton = renderRoot.querySelectorAll('.node-chat-bar wpp-action-button')[1];
+      const sendButton = renderRoot.querySelectorAll('.node-chat-bar wpp-button')[0];
       expect(sendButton.querySelector('[slot="icon-start"]')?.tagName.toLowerCase()).toContain('wpp-icon-stop');
       expect(sendButton.ariaProps.label).toBe('Stop response');
       sendButton.dispatchEvent(new MouseEvent('click'));

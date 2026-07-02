@@ -60,20 +60,20 @@ export const Tag = (args) => html `
 
   <div class="wrapper">
     <div class="section-title">Default</div>
-    <wpp-tag-v4-1-0 .label="${args.label}" .variant=${args.variant}></wpp-tag-v4-1-0>
-    <wpp-tag-v4-1-0 .label="${args.label}" .variant=${args.variant}>
-      ${args.showIconStart ? html ` <wpp-icon-premium-v4-1-0 slot="icon-start"></wpp-icon-premium-v4-1-0> ` : null}
-    </wpp-tag-v4-1-0>
+    <wpp-tag-v4-2-0 .label="${args.label}" .variant=${args.variant}></wpp-tag-v4-2-0>
+    <wpp-tag-v4-2-0 .label="${args.label}" .variant=${args.variant}>
+      ${args.showIconStart ? html ` <wpp-icon-premium-v4-2-0 slot="icon-start"></wpp-icon-premium-v4-2-0> ` : null}
+    </wpp-tag-v4-2-0>
 
     <div class="section-title">Width-based Truncation (hover for tooltip)</div>
-    <wpp-tag-v4-1-0
+    <wpp-tag-v4-2-0
       style="max-width: ${args.maxWidth}"
       .label="${args.truncatedLabel}"
       .variant=${args.variant}
-    ></wpp-tag-v4-1-0>
-    <wpp-tag-v4-1-0 style="max-width: ${args.maxWidth}" .label="${args.truncatedLabel}" .variant=${args.variant}>
-      <wpp-icon-premium-v4-1-0 slot="icon-start"></wpp-icon-premium-v4-1-0>
-    </wpp-tag-v4-1-0>
+    ></wpp-tag-v4-2-0>
+    <wpp-tag-v4-2-0 style="max-width: ${args.maxWidth}" .label="${args.truncatedLabel}" .variant=${args.variant}>
+      <wpp-icon-premium-v4-2-0 slot="icon-start"></wpp-icon-premium-v4-2-0>
+    </wpp-tag-v4-2-0>
   </div>
 `;
 Tag.args = {

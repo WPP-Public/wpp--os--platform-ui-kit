@@ -4,4 +4,4 @@ declare const _default: Meta<Components.WppTooltip>;
 export default _default;
 export declare const TitleAndText: StoryObj<Components.WppTooltip>;
 export declare const Value: StoryObj<Components.WppTooltip>;
-export declare const CustomContent: StoryObj<Components.WppTooltip>;
+export declare const TextShortcut: StoryObj<Components.WppTooltip>;

@@ -13,7 +13,6 @@ import { SegmentedControlChangeEventDetail, SegmentedControlValue, SegmentedCont
 export declare class WppSegmentedControl implements BaseComponent, BaseFormControl<SegmentedControlValue> {
   host: HTMLWppSegmentedControlElement;
   previousActiveElement: Element | null;
-  _locales: SegmentedControlLocaleInterface;
   /**
    * Defines the segmented control size.
    */
@@ -69,7 +68,6 @@ export declare class WppSegmentedControl implements BaseComponent, BaseFormContr
    */
   readonly wppBlur: EventEmitter<FocusEvent>;
   handleChangeSegmentedControlItemClick(event: CustomEvent<SegmentedControlItemChangeEventDetail>): void;
-  onLocalesChange(newLocales?: Partial<SegmentedControlLocaleInterface>): void;
   /**
    * Resolves the keyboard event target to a segmented control item.
    * Walks up from event.target to handle slotted content (e.g. icon elements).
@@ -82,6 +80,7 @@ export declare class WppSegmentedControl implements BaseComponent, BaseFormContr
   onUpdateSize(newSize: SegmentedControlItemSize): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  private get _locales();
   private getItems;
   private setSegmentedControlItemsSize;
   private onFocus;

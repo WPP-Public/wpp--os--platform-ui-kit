@@ -1,7 +1,7 @@
 /**
  * @file Tiptap image upload extension for wpp-richtext
  * @description Custom Node extension that handles image paste, drag-and-drop, and upload flow.
- *   Replaces plugins/quill-upload/ functionality. Preserves the wppUploadRequest event shape.
+ *   Preserves the wppUploadRequest event shape.
  * @see https://jira.uhub.biz/browse/WPPOPENDS-1287
  */
 import { Node, mergeAttributes } from '@tiptap/core';

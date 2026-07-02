@@ -122,37 +122,37 @@ describe('wpp-typography', () => {
       const innerEl = page.root?.shadowRoot?.querySelector('.italic');
       expect(innerEl).toBeNull();
     });
-    it('should have type-m class for m- types', async () => {
+    it('should not have type-m class for m- types', async () => {
       const page = await newSpecPage({
         components: [WppTypography],
         html: `<wpp-typography type="m-body"></wpp-typography>`,
       });
       const innerEl = page.root?.shadowRoot?.querySelector('.type-m');
-      expect(innerEl).toBeTruthy();
+      expect(innerEl).toBe(null);
     });
-    it('should have type-l class for l- types', async () => {
+    it('should not have type-l class for l- types', async () => {
       const page = await newSpecPage({
         components: [WppTypography],
         html: `<wpp-typography type="l-strong"></wpp-typography>`,
       });
       const innerEl = page.root?.shadowRoot?.querySelector('.type-l');
-      expect(innerEl).toBeTruthy();
+      expect(innerEl).toBe(null);
     });
-    it('should have type-s class for s- types', async () => {
+    it('should not have type-s class for s- types', async () => {
       const page = await newSpecPage({
         components: [WppTypography],
         html: `<wpp-typography type="s-body"></wpp-typography>`,
       });
       const innerEl = page.root?.shadowRoot?.querySelector('.type-s');
-      expect(innerEl).toBeTruthy();
+      expect(innerEl).toBe(null);
     });
-    it('should have type-xs class for xs- types', async () => {
+    it('should not have type-xs class for xs- types', async () => {
       const page = await newSpecPage({
         components: [WppTypography],
         html: `<wpp-typography type="xs-body"></wpp-typography>`,
       });
       const innerEl = page.root?.shadowRoot?.querySelector('.type-xs');
-      expect(innerEl).toBeTruthy();
+      expect(innerEl).toBe(null);
     });
     it('should have type-2xl class for 2xl- types', async () => {
       const page = await newSpecPage({
@@ -231,7 +231,7 @@ describe('wpp-typography', () => {
       });
       const innerEl = page.root?.shadowRoot?.querySelector('span');
       expect(innerEl?.classList.contains('typography')).toBe(true);
-      expect(innerEl?.classList.contains('type-m')).toBe(true);
+      expect(innerEl?.classList.contains('type-m')).toBe(false);
       expect(innerEl?.classList.contains('wpp-typography-m-body')).toBe(true);
       expect(innerEl?.classList.contains('italic')).toBe(false);
     });

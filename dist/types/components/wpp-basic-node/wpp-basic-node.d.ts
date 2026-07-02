@@ -9,7 +9,6 @@ export declare class WppBasicNode {
   private resizeObserver;
   private bodyRef;
   private titleRef;
-  private _locales;
   hasScrollbar: boolean;
   host: HTMLWppBasicNodeElement;
   /**
@@ -41,10 +40,9 @@ export declare class WppBasicNode {
    * Emitted when an action is clicked. The event detail contains the `BasicNodeAction` object corresponding to the clicked action.
    */
   wppActionClick: EventEmitter<BasicNodeAction>;
-  onUpdateLocales(newLocales: Partial<BasicNodeLocales>): void;
   connectedCallback(): void;
   disconnectedCallback(): void;
-  componentWillLoad(): void;
+  private get _locales();
   private checkBodyForScroll;
   private handleActionClick;
   private getNodeContainerClasses;

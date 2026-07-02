@@ -1,6 +1,6 @@
 /**
  * @file Tiptap v3 type definitions for wpp-richtext
- * @description Replaces/extends the Quill-based types.ts during WPPOPENDS-1287 migration.
+ * @description Tiptap editor types for the WPPOPENDS-1287 richtext migration.
  *   All types preserve backward compatibility with the existing public API.
  * @see https://jira.uhub.biz/browse/WPPOPENDS-1287
  */
@@ -8,7 +8,7 @@ import type { Editor } from '@tiptap/core';
 import { ValuesOf } from '../../types/utils';
 /** Editor instance type exposed via wppInit event */
 export type TiptapEditorInstance = Editor;
-/** Selection range — replaces Quill's RangeStatic */
+/** Selection range exposed by richtext selection events. */
 export interface TiptapRange {
   /** Absolute start position in the document */
   from: number;
@@ -31,7 +31,7 @@ export interface TiptapRange {
 }
 /**
  * Change event detail — matches existing wppChange shape.
- * The `editor` field type changes from QuillInstance to TiptapEditorInstance.
+ * The `editor` field exposes the active Tiptap editor instance.
  */
 export interface TiptapChangeEventDetail {
   editor: TiptapEditorInstance;
@@ -84,8 +84,6 @@ export type TiptapSources = ValuesOf<typeof tiptapSources>;
 export interface TiptapRichtextLocales {
   charactersEntered: string;
 }
-/** Media element type for drag operations */
-export type TiptapMediaDragElement = HTMLImageElement | HTMLVideoElement;
 /**
  * Backward-compatible type aliases.
  * The Quill→Tiptap migration renamed these types internally, but external

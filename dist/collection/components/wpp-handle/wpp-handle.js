@@ -16,7 +16,7 @@ export class WppHandle {
     return h(Host, { class: this.getHostClasses(), style: { backgroundColor: this.color } });
   }
   static get is() { return "wpp-handle"; }
-  static get registryIs() { return "wpp-handle-v4-1-0"; }
+  static get registryIs() { return "wpp-handle-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -61,7 +61,7 @@ export class WppHandle {
           "resolved": "boolean",
           "references": {}
         },
-        "required": true,
+        "required": false,
         "optional": false,
         "docs": {
           "tags": [],

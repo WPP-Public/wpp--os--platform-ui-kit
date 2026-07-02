@@ -1,6 +1,6 @@
 import { h, Host } from '@stencil/core';
-import { debounce, transformToVersionedTag } from '../../utils/utils';
-import { TAB_MARGIN_RIGHT } from './const';
+import { debounce, mergeLocales, transformToVersionedTag } from '../../utils/utils';
+import { LOCALES_DEFAULTS, TAB_MARGIN_RIGHT } from './const';
 /**
  * @slot - Should contain only the tab control elements. The default slot, without the name attribute.
  *
@@ -18,7 +18,6 @@ export class WppTabs {
     });
     this.position = undefined;
     this.previousActiveTab = undefined;
-    this._locales = { tablistLabel: 'Tabs' };
     this.value = undefined;
     this.size = 'm';
     this.ariaProps = undefined;
@@ -26,9 +25,6 @@ export class WppTabs {
   }
   handleChangeTabControlItemClick(event) {
     this.value = event.detail.value;
-  }
-  onLocalesChange(newLocales) {
-    this._locales = { ...this._locales, ...(newLocales || {}) };
   }
   // Keyboard navigation per WAI-ARIA Tabs pattern (manual activation)
   handleKeydown(event) {
@@ -112,10 +108,6 @@ export class WppTabs {
   lengthChange(newLength) {
     newLength && this.host.style.setProperty('--item-length', newLength.toString());
   }
-  // Merge locales once at load and on change
-  componentWillLoad() {
-    this._locales = { ...this._locales, ...(this.locales || {}) };
-  }
   componentDidLoad() {
     if (this.resizeObserver) {
       this.resizeObserver.observe(this.host);
@@ -143,13 +135,16 @@ export class WppTabs {
       this.resizeObserver.disconnect();
     }
   }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
   render() {
     const tablistLabel = this.ariaProps?.tablist?.label ?? (this.ariaProps?.tablist?.labelledby ? undefined : this._locales.tablistLabel);
     const tablistLabelledBy = this.ariaProps?.tablist?.labelledby;
     return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, slider" }, h("div", { class: "wpp-tab-control-wrapper", role: "tablist", "aria-orientation": "horizontal", "aria-label": tablistLabel, "aria-labelledby": tablistLabelledBy, part: "wrapper" }, h("slot", { part: "inner" })), h("div", { class: "slider", part: "slider" })));
   }
   static get is() { return "wpp-tabs"; }
-  static get registryIs() { return "wpp-tabs-v4-1-0"; }
+  static get registryIs() { return "wpp-tabs-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -250,8 +245,7 @@ export class WppTabs {
   static get states() {
     return {
       "position": {},
-      "previousActiveTab": {},
-      "_locales": {}
+      "previousActiveTab": {}
     };
   }
   static get events() {
@@ -281,9 +275,6 @@ export class WppTabs {
   static get elementRef() { return "host"; }
   static get watchers() {
     return [{
-        "propName": "locales",
-        "methodName": "onLocalesChange"
-      }, {
         "propName": "size",
         "methodName": "sizeChanged"
       }, {

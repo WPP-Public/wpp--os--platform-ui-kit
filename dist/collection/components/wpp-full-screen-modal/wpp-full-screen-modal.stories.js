@@ -14,7 +14,6 @@ export default {
     open: { control: { type: 'boolean' } },
     disableOutsideClick: { control: { type: 'boolean' } },
     withTitle: { control: { type: 'boolean' } },
-    withActionBar: { control: { type: 'boolean' } },
   },
 };
 const styles = {
@@ -58,8 +57,8 @@ const getModalHandlers = () => {
 export const FullScreenModal = {
   render: args => {
     const { handleFullScreenModalOpen, handleFullScreenModalClose, handleFullScreenModalAction } = getModalHandlers();
-    return html ` <wpp-button-v4-1-0 @click=${handleFullScreenModalOpen}>Open Full Screen Modal</wpp-button-v4-1-0>
-      <wpp-full-screen-modal-v4-1-0
+    return html ` <wpp-button-v4-2-0 @click=${handleFullScreenModalOpen}>Open Full Screen Modal</wpp-button-v4-2-0>
+      <wpp-full-screen-modal-v4-2-0
         @wppFullScreenModalClose=${() => {
       console.log('Called wppFullScreenModalClose');
       handleFullScreenModalClose();
@@ -70,29 +69,41 @@ export const FullScreenModal = {
         @wppFullScreenModalCloseComplete=${() => console.log('Close complete')}
         .open=${args.open}
         .disableOutsideClick=${args.disableOutsideClick}
+        .actionsConfig=${{
+      primaryButtonConfig: {
+        ...args.actionsConfig?.primaryButtonConfig,
+        onClick: handleFullScreenModalAction,
+      },
+      secondaryButtonConfig: {
+        ...args.actionsConfig?.secondaryButtonConfig,
+        onClick: handleFullScreenModalClose,
+      },
+    }}
       >
         <div slot="header" style=${styleMap(styles.header)}>
           ${args.withTitle
-      ? html ` <wpp-typography-v4-1-0 type="2xl-heading" style=${styleMap(styles.title)}
-                >Title</wpp-typography-v4-1-0
+      ? html ` <wpp-typography-v4-2-0 type="2xl-heading" style=${styleMap(styles.title)}
+                >Title</wpp-typography-v4-2-0
               >`
       : null}
         </div>
         <p slot="body" style=${styleMap(styles.body)}></p>
-        ${args.withActionBar
-      ? html `<div slot="actions" style=${styleMap(styles.actions)}>
-              <wpp-button-v4-1-0 variant="secondary" style="margin-right: 12px" @click=${handleFullScreenModalClose}>
-                Cancel
-              </wpp-button-v4-1-0>
-              <wpp-button-v4-1-0 variant="primary" @click=${handleFullScreenModalAction}>Action</wpp-button-v4-1-0>
-            </div>`
-      : null}
-      </wpp-full-screen-modal-v4-1-0>`;
+      </wpp-full-screen-modal-v4-2-0>`;
   },
   args: {
     open: false,
     disableOutsideClick: false,
     withTitle: true,
-    withActionBar: true,
+    actionsConfig: {
+      primaryButtonConfig: {
+        variant: 'primary',
+        label: 'Action',
+        onClick: () => { },
+      },
+      secondaryButtonConfig: {
+        label: 'Cancel',
+        onClick: () => { },
+      },
+    },
   },
 };

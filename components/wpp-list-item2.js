@@ -153,6 +153,39 @@ var EVENT_SOURCE;
   EVENT_SOURCE["RIGHT_SLOT"] = "RIGHT_SLOT";
 })(EVENT_SOURCE || (EVENT_SOURCE = {}));
 const PRESENTATION_ROLE = 'presentation';
+const INTERACTIVE_RIGHT_SLOT_SELECTOR = [
+  'a[href]',
+  'button',
+  'input',
+  'select',
+  'textarea',
+  'summary',
+  '[contenteditable="true"]',
+].join(',');
+const INTERACTIVE_RIGHT_SLOT_ROLES = [
+  'button',
+  'checkbox',
+  'combobox',
+  'link',
+  'menu',
+  'menuitem',
+  'option',
+  'radio',
+  'searchbox',
+  'slider',
+  'spinbutton',
+  'switch',
+  'tab',
+  'textbox',
+];
+const INTERACTIVE_RIGHT_SLOT_COMPONENT_TAGS = [
+  'wpp-action-button',
+  'wpp-button',
+  'wpp-checkbox',
+  'wpp-menu-context',
+  'wpp-radio',
+  'wpp-toggle',
+];
 
 /**
  * Type guard to validate theme color usage
@@ -174,7 +207,7 @@ const getThemeColor = (color) => {
   return color;
 };
 
-const wppListItemCss = ":host{--li-border-radius:var(--wpp-list-item-border-radius, 6px);--li-height:var(--wpp-list-item-height, 32px);--li-with-caption-height:var(--wpp-list-item-with-caption-height, 52px);--li-width:var(--wpp-list-item-width, 240px);--li-padding:var(--wpp-list-item-padding, 0 8px);--li-with-right-icon-padding:var(--wpp-list-item-with-right-icon-padding, 0 6px 0 8px);--li-text-color-disabled:var(--wpp-list-item-text-color-disabled, var(--wpp-text-color-disabled));--li-caption-text-color:var(--wpp-list-item-caption-text-color, var(--wpp-text-color-info));--li-icons-color-disabled:var(--wpp-list-item-icons-color-disabled, var(--wpp-icon-color-disabled));--li-left-wrapper-margin-right:var(--wpp-list-item-left-wrapper-margin-right, 8px);--li-right-wrapper-margin-right:var(--wpp-list-item-right-wrapper-margin-right, -8px);--li-label-text-line-height:var(--wpp-list-item-label-text-line-height, 24px);--li-label-text-color-selected:var(--wpp-list-item-label-text-color-selected, var(--wpp-brand-color));--li-label-text-color-selected-hover:var(\n    --wpp-list-item-label-text-color-selected-hover,\n    var(--wpp-brand-color-hover)\n  );--li-label-text-color-selected-active:var(\n    --wpp-list-item-label-text-color-selected-active,\n    var(--wpp-brand-color-active)\n  );--li-bg-color:var(--wpp-list-item-bg-color, transparent);--li-bg-color-hover:var(--wpp-list-item-bg-color-hover, var(--wpp-grey-color-200));--li-bg-color-active:var(--wpp-list-item-bg-color-active, var(--wpp-grey-color-300));--li-bg-color-selected:var(--wpp-list-item-bg-color-selected, var(--wpp-primary-color-100));--li-icon-color-hover:var(--wpp-list-item-icon-color-hover, var(--wpp-icon-color-hover));--li-icon-color-active:var(--wpp-list-item-icon-color-active, var(--wpp-icon-color-active));--li-left-icon-color:var(--wpp-list-item-left-icon-color, var(--wpp-grey-color-800));--li-left-icon-color-hover:var(--wpp-list-item-left-icon-color-hover, var(--wpp-grey-color-800));--li-left-icon-color-active:var(--wpp-list-item-left-icon-color-active, var(--wpp-grey-color-900));--li-left-icon-color-selected:var(--wpp-list-item-left-icon-color-selected, var(--wpp-brand-color));--li-right-icon-color-selected:var(--wpp-list-item-right-icon-color-selected, var(--wpp-grey-color-600));--li-right-text-color:var(--wpp-list-item-right-text-color, var(--wpp-grey-color-800));--li-right-text-color-disabled:var(--wpp-list-item-right-text-color-disabled, var(--wpp-grey-color-500));--li-info-wrapper-padding:var(--wpp-li-info-wrapper-padding, 0 8px 0 0);--li-label-text-font-weight:var(--wpp-list-label-text-font-weight, 400);--li-label-text-font-weight-selected:var(--wpp-list-label-text-font-weight-selected, 500);--li-highlight-font-weight:var(--wpp-list-item-highlight-font-weight, 800);--li-subtitle-text-color:var(--wpp-list-item-subtitle-text-color, var(--wpp-grey-color-1000));--li-subtitle-padding:var(--wpp-li-subtitle-padding, 13px 0 5px 8px);display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;outline:none}:host .subtitle{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);width:var(--li-width);padding:var(--li-subtitle-padding);color:var(--li-subtitle-text-color)}:host .subtitle.slot-hidden{display:none}:host .item{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;height:var(--li-height);width:var(--li-width);padding:var(--li-padding);background-color:var(--li-bg-color);border-radius:var(--li-border-radius);-webkit-box-sizing:border-box;box-sizing:border-box;cursor:pointer}:host .item .right{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center}:host .item .label{--wpp-typography-s-body-font-weight:var(--li-label-text-font-weight);--wpp-typography-s-body-line-height:var(--li-label-text-line-height)}:host .item .info-wrapper{min-width:0;padding:var(--li-info-wrapper-padding)}:host .item .info-wrapper .body-wrapper{min-width:0;overflow:hidden}:host .item .info-wrapper .body-wrapper .highlight-text-wrapper{width:100%}:host .item .info-wrapper .tooltip{min-width:0}:host .item .info-wrapper .tooltip::part(anchor){overflow:hidden}:host .item .info-wrapper .label.slot-hidden,:host .item .info-wrapper .caption.slot-hidden{display:none}:host .item .info-wrapper .label .highlight-text,:host .item .info-wrapper .label ::slotted(*),:host .item .info-wrapper .caption .highlight-text,:host .item .info-wrapper .caption ::slotted(*){white-space:nowrap;text-overflow:ellipsis}:host .item .info-wrapper .label .highlight-wrapper,:host .item .info-wrapper .caption .highlight-wrapper{white-space:nowrap;text-overflow:ellipsis;overflow:hidden}:host .item .info-wrapper .label .highlight-wrapper .highlight,:host .item .info-wrapper .caption .highlight-wrapper .highlight{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);--wpp-typography-s-strong-font-weight:var(--li-highlight-font-weight)}:host .item ::slotted([slot=right][type=s-body]),:host .item ::slotted(.wpp-icon[slot=right]:not(.wpp-icon-chevron)){color:var(--li-right-text-color)}:host .item ::slotted(.wpp-icon[slot=left]){color:var(--li-left-icon-color)}:host .item.non-interactive,:host .item.has-toggle{cursor:default}:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle){background-color:var(--li-bg-color-hover)}:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=right]),:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) .fallback-icon{color:var(--li-icon-color-hover)}:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted(.wpp-icon[slot=left]){color:var(--li-left-icon-color-hover)}:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=right][type=s-body]){color:var(--li-right-text-color)}:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle),:host .item:focus-visible{background-color:var(--li-bg-color-active);outline:none}:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=right]),:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) .fallback-icon,:host .item:focus-visible ::slotted([slot=left]),:host .item:focus-visible ::slotted([slot=right]),:host .item:focus-visible .fallback-icon{color:var(--li-icon-color-active)}:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted(.wpp-icon[slot=left]),:host .item:focus-visible ::slotted(.wpp-icon[slot=left]){color:var(--li-left-icon-color-active)}:host .item.checked:not(.non-interactive):not(.has-toggle),:host .item .multiple:not(.non-interactive):not(.has-toggle),:host .item .active:not(.non-interactive):not(.has-toggle){background-color:var(--li-bg-color-selected)}:host .item.checked:not(.non-interactive):not(.has-toggle) .info-wrapper .label,:host .item .multiple:not(.non-interactive):not(.has-toggle) .info-wrapper .label,:host .item .active:not(.non-interactive):not(.has-toggle) .info-wrapper .label{font-size:var(--wpp-typography-s-midi-font-size, 14px);line-height:var(--wpp-typography-s-midi-line-height, 22px);font-weight:var(--wpp-typography-s-midi-font-weight, 500);color:var(--wpp-typography-s-midi-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-midi-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-midi-letter-spacing, 0);--wpp-typography-s-midi-font-weight:var(--li-label-text-font-weight-selected);--wpp-typography-s-body-line-height:var(--li-label-text-line-height);line-height:var(--li-label-text-line-height);color:var(--li-label-text-color-selected)}:host .item.checked:not(.non-interactive):not(.has-toggle) .info-wrapper .label .highlight-wrapper .highlight,:host .item .multiple:not(.non-interactive):not(.has-toggle) .info-wrapper .label .highlight-wrapper .highlight,:host .item .active:not(.non-interactive):not(.has-toggle) .info-wrapper .label .highlight-wrapper .highlight{color:var(--li-label-text-color-selected)}:host .item.checked:not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),:host .item.checked:not(.non-interactive):not(.has-toggle) .fallback-icon,:host .item .multiple:not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),:host .item .multiple:not(.non-interactive):not(.has-toggle) .fallback-icon,:host .item .active:not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),:host .item .active:not(.non-interactive):not(.has-toggle) .fallback-icon{color:var(--li-left-icon-color-selected)}:host .item.multiple.checked:not(.non-interactive):hover .label{color:var(--li-label-text-color-selected-hover)}:host .item.multiple.checked:not(.non-interactive):active .label{color:var(--li-label-text-color-selected-active)}:host .item.with-caption{height:var(--li-with-caption-height)}:host .item.with-caption ::slotted(.wpp-action-button){margin-right:0}:host .item.with-caption .info-wrapper{-ms-flex-direction:row;flex-direction:row;-ms-flex-align:center;align-items:center}:host .item.with-caption .info-wrapper .caption{display:-ms-flexbox;display:flex;color:var(--li-caption-text-color)}:host .item.with-caption .info-wrapper .caption.slot-hidden{display:none}:host .item.with-caption.multiple .info-wrapper{-ms-flex-align:start;align-items:flex-start}:host .item.with-caption.multiple .info-wrapper .wpp-checkbox{margin-top:5px}:host .item.with-caption.multiple .right{height:100%;-ms-flex-align:start;align-items:flex-start;margin-top:4px}:host .item.with-caption.multiple .right ::slotted([slot=right].wpp-tag){margin-top:3px}:host .item.with-caption.multiple .right ::slotted([slot=right][type=s-body]){margin-top:4px}:host .item.disabled{background-color:transparent;pointer-events:none}:host .item.disabled .info-wrapper .label,:host .item.disabled .info-wrapper .caption{color:var(--li-text-color-disabled)}:host .item.disabled ::slotted([slot=right][type=s-body]),:host .item.disabled ::slotted(.wpp-icon[slot=right]:not(.wpp-icon-chevron)){color:var(--li-icons-color-disabled)}:host .item.disabled ::slotted([slot=left]),:host .item.disabled ::slotted([slot=right]),:host .item.disabled .fallback-icon{color:var(--li-icons-color-disabled)}:host .item.disabled ::slotted(.wpp-avatar[slot=left]){opacity:0.4}:host .item.disabled ::slotted(.wpp-tag[slot=right]){opacity:0.5}:host .item.disabled ::slotted([slot=right][type=s-body]){color:var(--li-right-text-color-disabled)}:host .item.disabled ::slotted(.wpp-action-button){--ab-inverted-icon-color:var(--li-icons-color-disabled);--ab-tertiary-icon-color:var(--li-icons-color-disabled);--ab-secondary-icon-color:var(--li-icons-color-disabled);--ab-primary-icon-color:var(--li-icons-color-disabled)}:host .item.loading-item{pointer-events:none}:host .item.link{text-decoration:none}:host .item .info-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;min-width:0}:host .item .info-wrapper .body-wrapper{min-width:0}:host .item .info-wrapper .label,:host .item .info-wrapper .caption{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .item .wpp-checkbox,:host .item .left{margin-right:var(--li-left-wrapper-margin-right)}:host .item ::slotted(.wpp-action-button),:host .item ::slotted(.wpp-menu-context){margin-right:var(--li-right-wrapper-margin-right)}:host .item .label,:host .item .right,:host .item .left{display:-ms-flexbox;display:flex}:host .item .left.slot-hidden,:host .item .caption.slot-hidden,:host .item .right.slot-hidden{display:none}:host:host(.wpp-disabled){cursor:not-allowed}:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item{background-color:var(--li-bg-color-active)}:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item .wpp-checkbox{--checkbox-bg-color:var(--checkbox-bg-color-active);--checkbox-border-color:var(--checkbox-border-color-active)}:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item ::slotted([slot=left]),:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item ::slotted([slot=right]),:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item .fallback-icon{color:var(--li-icon-color-active)}:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item.checked{background-color:var(--wpp-primary-color-200)}:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item.checked .wpp-checkbox{--checkbox-bg-color-checked:var(--checkbox-bg-color-checked-active);--checkbox-border-color-checked:var(--checkbox-border-color-checked-active)}:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item.checked .info-wrapper .label{color:var(--li-label-text-color-selected-active)}:host(.has-right-slot) .item{padding:var(--li-with-right-icon-padding)}:host(.wpp-hidden){display:none}:host(.wpp-mounted) .label .highlight-text,:host(.wpp-mounted) .label ::slotted(*),:host(.wpp-mounted) .caption .highlight-text,:host(.wpp-mounted) .caption ::slotted(*){overflow:hidden}.with-tooltip{width:100%}.with-tooltip::part(anchor){width:100%}:host(.wpp-loading){opacity:0}.ul-wrapper{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%;padding:0;margin:0}:host(.tab-focus){border-radius:var(--wpp-border-radius-s);outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}:host(.tab-focus) .item{background-color:var(--li-bg-color-active);outline:none}:host(.tab-focus) .item ::slotted([slot=left]),:host(.tab-focus) .item ::slotted([slot=right]),:host(.tab-focus) .item .fallback-icon{color:var(--li-icon-color-active)}:host(.tab-focus) .item ::slotted(.wpp-icon[slot=left]){color:var(--li-left-icon-color-active)}:host .label.custom-typography ::slotted([slot=label]){font-size:var(--wpp-list-item-label-font-size) !important;font-weight:var(--wpp-list-item-label-font-weight) !important;font-family:var(--wpp-list-item-label-font-family) !important;font-style:var(--wpp-list-item-label-font-style) !important;line-height:var(--wpp-list-item-label-line-height) !important;letter-spacing:var(--wpp-list-item-label-letter-spacing) !important;text-transform:var(--wpp-list-item-label-text-transform) !important;-webkit-text-decoration:var(--wpp-list-item-label-text-decoration) !important;text-decoration:var(--wpp-list-item-label-text-decoration) !important;color:var(--wpp-list-item-label-color) !important}:host .caption.custom-typography ::slotted([slot=caption]){font-size:var(--wpp-list-item-caption-font-size) !important;font-weight:var(--wpp-list-item-caption-font-weight) !important;font-family:var(--wpp-list-item-caption-font-family) !important;font-style:var(--wpp-list-item-caption-font-style) !important;line-height:var(--wpp-list-item-caption-line-height) !important;letter-spacing:var(--wpp-list-item-caption-letter-spacing) !important;text-transform:var(--wpp-list-item-caption-text-transform) !important;-webkit-text-decoration:var(--wpp-list-item-caption-text-decoration) !important;text-decoration:var(--wpp-list-item-caption-text-decoration) !important;color:var(--wpp-list-item-caption-color) !important}:host([data-wpp-theme=dark]){--li-label-text-color-selected:var(--wpp-primary-color-800);--li-label-text-color-selected-hover:var(--wpp-primary-color-700);--li-label-text-color-selected-active:var(--wpp-primary-color-800)}:host([data-wpp-theme=dark]) .item.checked:not(.non-interactive):not(.has-toggle),:host([data-wpp-theme=dark]) .item .multiple:not(.non-interactive):not(.has-toggle),:host([data-wpp-theme=dark]) .item .active:not(.non-interactive):not(.has-toggle){--li-right-text-color:var(--wpp-primary-color-700);background-color:var(--wpp-primary-color-300)}:host([data-wpp-theme=dark]) .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle){background-color:var(--wpp-grey-color-400)}:host([data-wpp-theme=dark]) .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle),:host([data-wpp-theme=dark]) .item:focus-visible{background-color:var(--wpp-grey-color-500)}:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)[data-wpp-theme=dark]) .item:not(.checked){background-color:var(--wpp-grey-color-300)}:host(.tab-focus[data-wpp-theme=dark]) .item:not(.checked){background-color:var(--wpp-grey-color-300)}";
+const wppListItemCss = ":host{--li-border-radius:var(--wpp-list-item-border-radius, 6px);--li-height:var(--wpp-list-item-height, 32px);--li-with-caption-height:var(--wpp-list-item-with-caption-height, 52px);--li-width:var(--wpp-list-item-width, 240px);--li-padding:var(--wpp-list-item-padding, 0 8px);--li-with-right-icon-padding:var(--wpp-list-item-with-right-icon-padding, 0 6px 0 8px);--li-text-color-disabled:var(--wpp-list-item-text-color-disabled, var(--wpp-text-color-disabled));--li-caption-text-color:var(--wpp-list-item-caption-text-color, var(--wpp-text-color-info));--li-icons-color-disabled:var(--wpp-list-item-icons-color-disabled, var(--wpp-icon-color-disabled));--li-left-wrapper-margin-right:var(--wpp-list-item-left-wrapper-margin-right, 8px);--li-right-wrapper-margin-right:var(--wpp-list-item-right-wrapper-margin-right, -8px);--li-label-text-line-height:var(--wpp-list-item-label-text-line-height, 24px);--li-label-text-color-selected:var(--wpp-list-item-label-text-color-selected, var(--wpp-brand-color));--li-label-text-color-selected-hover:var(\n    --wpp-list-item-label-text-color-selected-hover,\n    var(--wpp-brand-color-hover)\n  );--li-label-text-color-selected-active:var(\n    --wpp-list-item-label-text-color-selected-active,\n    var(--wpp-brand-color-active)\n  );--li-bg-color:var(--wpp-list-item-bg-color, transparent);--li-bg-color-hover:var(--wpp-list-item-bg-color-hover, var(--wpp-grey-color-200));--li-bg-color-active:var(--wpp-list-item-bg-color-active, var(--wpp-grey-color-300));--li-bg-color-selected:var(--wpp-list-item-bg-color-selected, var(--wpp-primary-color-100));--li-icon-color-hover:var(--wpp-list-item-icon-color-hover, var(--wpp-icon-color-hover));--li-icon-color-active:var(--wpp-list-item-icon-color-active, var(--wpp-icon-color-active));--li-left-icon-color:var(--wpp-list-item-left-icon-color, var(--wpp-grey-color-800));--li-left-icon-color-hover:var(--wpp-list-item-left-icon-color-hover, var(--wpp-grey-color-800));--li-left-icon-color-active:var(--wpp-list-item-left-icon-color-active, var(--wpp-grey-color-900));--li-left-icon-color-selected:var(--wpp-list-item-left-icon-color-selected, var(--wpp-brand-color));--li-right-icon-color-selected:var(--wpp-list-item-right-icon-color-selected, var(--wpp-grey-color-600));--li-right-text-color:var(--wpp-list-item-right-text-color, var(--wpp-grey-color-800));--li-right-text-color-disabled:var(--wpp-list-item-right-text-color-disabled, var(--wpp-grey-color-500));--li-info-wrapper-padding:var(--wpp-li-info-wrapper-padding, 0 8px 0 0);--li-label-text-font-weight:var(--wpp-list-label-text-font-weight, 400);--li-label-text-font-weight-selected:var(--wpp-list-label-text-font-weight-selected, 500);--li-highlight-font-weight:var(--wpp-list-item-highlight-font-weight, 800);--li-subtitle-text-color:var(--wpp-list-item-subtitle-text-color, var(--wpp-grey-color-1000));--li-subtitle-padding:var(--wpp-li-subtitle-padding, 13px 0 5px 8px);display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;outline:none}:host .subtitle{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);width:var(--li-width);padding:var(--li-subtitle-padding);color:var(--li-subtitle-text-color)}:host .subtitle.slot-hidden{display:none}:host .item{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;height:var(--li-height);width:var(--li-width);padding:var(--li-padding);background-color:var(--li-bg-color);border-radius:var(--li-border-radius);-webkit-box-sizing:border-box;box-sizing:border-box;cursor:pointer}:host .item .right{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center}:host .item .label{--wpp-typography-s-body-font-weight:var(--li-label-text-font-weight);--wpp-typography-s-body-line-height:var(--li-label-text-line-height)}:host .item .info-wrapper{min-width:0;padding:var(--li-info-wrapper-padding)}:host .item .info-wrapper .body-wrapper{min-width:0;overflow:hidden}:host .item .info-wrapper .body-wrapper .highlight-text-wrapper{width:100%}:host .item .info-wrapper .tooltip{min-width:0}:host .item .info-wrapper .tooltip::part(anchor){overflow:hidden}:host .item .info-wrapper .label.slot-hidden,:host .item .info-wrapper .caption.slot-hidden{display:none}:host .item .info-wrapper .label .highlight-text,:host .item .info-wrapper .label ::slotted(*),:host .item .info-wrapper .caption .highlight-text,:host .item .info-wrapper .caption ::slotted(*){white-space:nowrap;text-overflow:ellipsis}:host .item .info-wrapper .label .highlight-wrapper,:host .item .info-wrapper .caption .highlight-wrapper{white-space:nowrap;text-overflow:ellipsis;overflow:hidden}:host .item .info-wrapper .label .highlight-wrapper .highlight,:host .item .info-wrapper .caption .highlight-wrapper .highlight{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);--wpp-typography-s-strong-font-weight:var(--li-highlight-font-weight)}:host .item ::slotted([slot=right][type=s-body]),:host .item ::slotted(.wpp-icon[slot=right]:not(.wpp-icon-chevron)){color:var(--li-right-text-color)}:host .item ::slotted(.wpp-icon[slot=left]){color:var(--li-left-icon-color)}:host .item.non-interactive,:host .item.has-toggle{cursor:default}:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle){background-color:var(--li-bg-color-hover)}:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=right]),:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) .fallback-icon{color:var(--li-icon-color-hover)}:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted(.wpp-icon[slot=left]){color:var(--li-left-icon-color-hover)}:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=right][type=s-body]){color:var(--li-right-text-color)}:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle),:host .item:focus-visible{background-color:var(--li-bg-color-active);outline:none}:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=right]),:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) .fallback-icon,:host .item:focus-visible ::slotted([slot=left]),:host .item:focus-visible ::slotted([slot=right]),:host .item:focus-visible .fallback-icon{color:var(--li-icon-color-active)}:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted(.wpp-icon[slot=left]),:host .item:focus-visible ::slotted(.wpp-icon[slot=left]){color:var(--li-left-icon-color-active)}:host .item.checked:not(.non-interactive):not(.has-toggle),:host .item .multiple:not(.non-interactive):not(.has-toggle),:host .item .active:not(.non-interactive):not(.has-toggle){background-color:var(--li-bg-color-selected)}:host .item.checked:not(.non-interactive):not(.has-toggle) .info-wrapper .label,:host .item .multiple:not(.non-interactive):not(.has-toggle) .info-wrapper .label,:host .item .active:not(.non-interactive):not(.has-toggle) .info-wrapper .label{font-size:var(--wpp-typography-s-midi-font-size, 14px);line-height:var(--wpp-typography-s-midi-line-height, 22px);font-weight:var(--wpp-typography-s-midi-font-weight, 500);color:var(--wpp-typography-s-midi-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-midi-letter-spacing, 0);--wpp-typography-s-midi-font-weight:var(--li-label-text-font-weight-selected);--wpp-typography-s-body-line-height:var(--li-label-text-line-height);line-height:var(--li-label-text-line-height);color:var(--li-label-text-color-selected)}:host .item.checked:not(.non-interactive):not(.has-toggle) .info-wrapper .label .highlight-wrapper .highlight,:host .item .multiple:not(.non-interactive):not(.has-toggle) .info-wrapper .label .highlight-wrapper .highlight,:host .item .active:not(.non-interactive):not(.has-toggle) .info-wrapper .label .highlight-wrapper .highlight{color:var(--li-label-text-color-selected)}:host .item.checked:not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),:host .item.checked:not(.non-interactive):not(.has-toggle) .fallback-icon,:host .item .multiple:not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),:host .item .multiple:not(.non-interactive):not(.has-toggle) .fallback-icon,:host .item .active:not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),:host .item .active:not(.non-interactive):not(.has-toggle) .fallback-icon{color:var(--li-left-icon-color-selected)}:host .item.multiple.checked:not(.non-interactive):hover .label{color:var(--li-label-text-color-selected-hover)}:host .item.multiple.checked:not(.non-interactive):active .label{color:var(--li-label-text-color-selected-active)}:host .item.with-caption{height:var(--li-with-caption-height)}:host .item.with-caption ::slotted(.wpp-action-button){margin-right:0}:host .item.with-caption .info-wrapper{-ms-flex-direction:row;flex-direction:row;-ms-flex-align:center;align-items:center}:host .item.with-caption .info-wrapper .caption{display:-ms-flexbox;display:flex;color:var(--li-caption-text-color)}:host .item.with-caption .info-wrapper .caption.slot-hidden{display:none}:host .item.with-caption.multiple .info-wrapper{-ms-flex-align:start;align-items:flex-start}:host .item.with-caption.multiple .info-wrapper .wpp-checkbox{margin-top:5px}:host .item.with-caption.multiple .right{height:100%;-ms-flex-align:start;align-items:flex-start;margin-top:4px}:host .item.with-caption.multiple .right ::slotted([slot=right].wpp-tag){margin-top:3px}:host .item.with-caption.multiple .right ::slotted([slot=right][type=s-body]){margin-top:4px}:host .item.disabled{background-color:transparent;pointer-events:none}:host .item.disabled .info-wrapper .label,:host .item.disabled .info-wrapper .caption{color:var(--li-text-color-disabled)}:host .item.disabled ::slotted([slot=right][type=s-body]),:host .item.disabled ::slotted(.wpp-icon[slot=right]:not(.wpp-icon-chevron)){color:var(--li-icons-color-disabled)}:host .item.disabled ::slotted([slot=left]),:host .item.disabled ::slotted([slot=right]),:host .item.disabled .fallback-icon{color:var(--li-icons-color-disabled)}:host .item.disabled ::slotted(.wpp-avatar[slot=left]){opacity:0.4}:host .item.disabled ::slotted(.wpp-tag[slot=right]){opacity:0.5}:host .item.disabled ::slotted([slot=right][type=s-body]){color:var(--li-right-text-color-disabled)}:host .item.disabled ::slotted(.wpp-action-button){--ab-inverted-icon-color:var(--li-icons-color-disabled);--ab-tertiary-icon-color:var(--li-icons-color-disabled);--ab-secondary-icon-color:var(--li-icons-color-disabled);--ab-primary-icon-color:var(--li-icons-color-disabled)}:host .item.loading-item{pointer-events:none}:host .item.link{text-decoration:none}:host .item .info-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;min-width:0}:host .item .info-wrapper .body-wrapper{min-width:0}:host .item .info-wrapper .label,:host .item .info-wrapper .caption{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .item .wpp-checkbox,:host .item .left{margin-right:var(--li-left-wrapper-margin-right)}:host .item ::slotted(.wpp-action-button),:host .item ::slotted(.wpp-menu-context){margin-right:var(--li-right-wrapper-margin-right)}:host .item .label,:host .item .right,:host .item .left{display:-ms-flexbox;display:flex}:host .item .left.slot-hidden,:host .item .caption.slot-hidden,:host .item .right.slot-hidden{display:none}:host:host(.wpp-disabled){cursor:not-allowed}:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item{background-color:var(--li-bg-color-active)}:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item .wpp-checkbox{--checkbox-bg-color:var(--checkbox-bg-color-active);--checkbox-border-color:var(--checkbox-border-color-active)}:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item ::slotted([slot=left]),:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item ::slotted([slot=right]),:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item .fallback-icon{color:var(--li-icon-color-active)}:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item.checked{background-color:var(--wpp-primary-color-200)}:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item.checked .wpp-checkbox{--checkbox-bg-color-checked:var(--checkbox-bg-color-checked-active);--checkbox-border-color-checked:var(--checkbox-border-color-checked-active)}:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item.checked .info-wrapper .label{color:var(--li-label-text-color-selected-active)}:host(.has-right-slot) .item{padding:var(--li-with-right-icon-padding)}:host(.wpp-hidden){display:none}:host(.wpp-mounted) .label .highlight-text,:host(.wpp-mounted) .label ::slotted(*),:host(.wpp-mounted) .caption .highlight-text,:host(.wpp-mounted) .caption ::slotted(*){overflow:hidden}.with-tooltip{width:100%}.with-tooltip::part(anchor){width:100%}:host(.wpp-loading){opacity:0}.ul-wrapper{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%;padding:0;margin:0}:host(.tab-focus){border-radius:var(--wpp-border-radius-s);outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}:host(.tab-focus) .item{background-color:var(--li-bg-color-active);outline:none}:host(.tab-focus) .item ::slotted([slot=left]),:host(.tab-focus) .item ::slotted([slot=right]),:host(.tab-focus) .item .fallback-icon{color:var(--li-icon-color-active)}:host(.tab-focus) .item ::slotted(.wpp-icon[slot=left]){color:var(--li-left-icon-color-active)}:host .label.custom-typography ::slotted([slot=label]){font-size:var(--wpp-list-item-label-font-size) !important;font-weight:var(--wpp-list-item-label-font-weight) !important;font-family:var(--wpp-list-item-label-font-family) !important;font-style:var(--wpp-list-item-label-font-style) !important;line-height:var(--wpp-list-item-label-line-height) !important;letter-spacing:var(--wpp-list-item-label-letter-spacing) !important;text-transform:var(--wpp-list-item-label-text-transform) !important;-webkit-text-decoration:var(--wpp-list-item-label-text-decoration) !important;text-decoration:var(--wpp-list-item-label-text-decoration) !important;color:var(--wpp-list-item-label-color) !important}:host .caption.custom-typography ::slotted([slot=caption]){font-size:var(--wpp-list-item-caption-font-size) !important;font-weight:var(--wpp-list-item-caption-font-weight) !important;font-family:var(--wpp-list-item-caption-font-family) !important;font-style:var(--wpp-list-item-caption-font-style) !important;line-height:var(--wpp-list-item-caption-line-height) !important;letter-spacing:var(--wpp-list-item-caption-letter-spacing) !important;text-transform:var(--wpp-list-item-caption-text-transform) !important;-webkit-text-decoration:var(--wpp-list-item-caption-text-decoration) !important;text-decoration:var(--wpp-list-item-caption-text-decoration) !important;color:var(--wpp-list-item-caption-color) !important}:host([data-wpp-theme=dark]){--li-label-text-color-selected:var(--wpp-primary-color-800);--li-label-text-color-selected-hover:var(--wpp-primary-color-700);--li-label-text-color-selected-active:var(--wpp-primary-color-800)}:host([data-wpp-theme=dark]) .item.checked:not(.non-interactive):not(.has-toggle),:host([data-wpp-theme=dark]) .item .multiple:not(.non-interactive):not(.has-toggle),:host([data-wpp-theme=dark]) .item .active:not(.non-interactive):not(.has-toggle){--li-right-text-color:var(--wpp-primary-color-700);background-color:var(--wpp-primary-color-300)}:host([data-wpp-theme=dark]) .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle){background-color:var(--wpp-grey-color-400)}:host([data-wpp-theme=dark]) .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle),:host([data-wpp-theme=dark]) .item:focus-visible{background-color:var(--wpp-grey-color-500)}:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)[data-wpp-theme=dark]) .item:not(.checked){background-color:var(--wpp-grey-color-300)}:host(.tab-focus[data-wpp-theme=dark]) .item:not(.checked){background-color:var(--wpp-grey-color-300)}";
 
 const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends HTMLElement {
   constructor() {
@@ -189,7 +222,7 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
     this.themeSubscription = themeSubscriptionController(() => this.host);
     this.removeTriggerWrapperAttributes = () => {
       const menuContextTag = transformToVersionedTag('wpp-menu-context').toUpperCase();
-      const menuContext = this.host.querySelector(`${menuContextTag}[slot="right"]`);
+      const menuContext = this.hostElement?.querySelector(`${menuContextTag}[slot="right"]`);
       if (menuContext) {
         let triggerWrapper = menuContext.querySelector('.trigger-wrapper');
         if (triggerWrapper) {
@@ -197,15 +230,16 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
           triggerWrapper.removeAttribute('role');
         }
         else {
-          const observer = new MutationObserver(() => {
+          this.triggerWrapperObserver = new MutationObserver(() => {
             triggerWrapper = menuContext.querySelector('.trigger-wrapper');
             if (triggerWrapper) {
               triggerWrapper.removeAttribute('tabindex');
               triggerWrapper.removeAttribute('role');
-              observer.disconnect();
+              this.triggerWrapperObserver?.disconnect();
+              this.triggerWrapperObserver = undefined;
             }
           });
-          observer.observe(menuContext, { childList: true, subtree: true });
+          this.triggerWrapperObserver.observe(menuContext, { childList: true, subtree: true });
         }
       }
     };
@@ -219,7 +253,7 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
         if (currentLabelText !== this.previousLabelText) {
           this.previousLabelText = currentLabelText;
           this.updateSlotData();
-          requestAnimationFrame(this.checkHasTooltip);
+          this.queueTooltipCheck();
         }
       });
       // Configure the observer to watch for changes in text content and child nodes
@@ -230,13 +264,16 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
       });
     };
     this.checkHasTooltip = () => {
-      let labelWrapper = this.host?.shadowRoot?.querySelector('[part="label-wrapper"]');
+      if (!this.isHostConnected())
+        return;
+      const hostElement = this.hostElement;
+      let labelWrapper = hostElement?.shadowRoot?.querySelector('[part="label-wrapper"]');
       if (labelWrapper?.classList.contains('slot-hidden')) {
-        labelWrapper = this.host?.shadowRoot?.querySelector('.highlight-text');
+        labelWrapper = hostElement?.shadowRoot?.querySelector('.highlight-text');
         this.hasTooltip = labelWrapper.clientWidth < labelWrapper.scrollWidth;
         return;
       }
-      const labelEl = this.host?.querySelector('[slot="label"]');
+      const labelEl = hostElement?.querySelector('[slot="label"]');
       if (!labelEl)
         return;
       const textEl = labelEl?.shadowRoot?.querySelector('.typography');
@@ -248,11 +285,37 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
       }
     };
     this.handleComponentMount = () => {
+      if (!this.isHostConnected())
+        return;
       this.mounted = true;
-      requestAnimationFrame(() => {
+      this.queueTooltipCheck();
+      this.loading = false;
+    };
+    this.isHostConnected = () => this.hostElement?.isConnected ?? false;
+    this.queueTooltipCheck = () => {
+      if (this.tooltipAnimationFrame !== undefined)
+        cancelAnimationFrame(this.tooltipAnimationFrame);
+      this.tooltipAnimationFrame = requestAnimationFrame(() => {
+        this.tooltipAnimationFrame = undefined;
         this.checkHasTooltip();
       });
-      this.loading = false;
+    };
+    this.clearPendingCallbacks = () => {
+      if (this.focusTimeout)
+        clearTimeout(this.focusTimeout);
+      if (this.rightSlotIconTimeout)
+        clearTimeout(this.rightSlotIconTimeout);
+      if (this.toggleSlotTimeout)
+        clearTimeout(this.toggleSlotTimeout);
+      if (this.mountTimeout)
+        clearTimeout(this.mountTimeout);
+      if (this.tooltipAnimationFrame !== undefined)
+        cancelAnimationFrame(this.tooltipAnimationFrame);
+      this.focusTimeout = undefined;
+      this.rightSlotIconTimeout = undefined;
+      this.toggleSlotTimeout = undefined;
+      this.mountTimeout = undefined;
+      this.tooltipAnimationFrame = undefined;
     };
     this.getSlotText = (slotName) => {
       const slotEl = this.host.querySelector(`[slot="${slotName}"]`);
@@ -301,8 +364,26 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
         isAutocompleteBasedEvent: !!this.host.closest(transformToVersionedTag('wpp-autocomplete')),
       });
     };
-    this.handleRightWrapperClick = () => {
-      this.eventSource = EVENT_SOURCE.RIGHT_SLOT;
+    this.isInteractiveRightSlotElement = (eventTarget) => {
+      const element = eventTarget;
+      if (typeof element?.tagName !== 'string')
+        return false;
+      const tagName = element.tagName.toLowerCase();
+      const role = element.getAttribute?.('role')?.toLowerCase();
+      const tabIndex = element.getAttribute?.('tabindex');
+      return (INTERACTIVE_RIGHT_SLOT_COMPONENT_TAGS.some(componentTagName => tagName === componentTagName || tagName.startsWith(`${componentTagName}-`)) ||
+        (typeof element.matches === 'function' && element.matches(INTERACTIVE_RIGHT_SLOT_SELECTOR)) ||
+        (role !== undefined && INTERACTIVE_RIGHT_SLOT_ROLES.includes(role)) ||
+        (tabIndex !== null && Number(tabIndex) >= 0));
+    };
+    this.isInteractiveRightSlotEvent = (event) => {
+      const composedPath = event.composedPath();
+      const currentTargetIndex = composedPath.indexOf(event.currentTarget);
+      const slottedContentPath = currentTargetIndex === -1 ? [event.target] : composedPath.slice(0, currentTargetIndex);
+      return slottedContentPath.some(this.isInteractiveRightSlotElement);
+    };
+    this.handleRightWrapperClick = (event) => {
+      this.eventSource = this.isInteractiveRightSlotEvent(event) ? EVENT_SOURCE.RIGHT_SLOT : null;
     };
     this.hostCssClasses = () => ({
       'wpp-list-item': true,
@@ -350,7 +431,7 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
       const hasHighlight = Boolean(this.highlight);
       return (h("div", { ref: ref => (this.wrapperRef = ref), class: "body-wrapper", part: "body-wrapper", style: { width: 'auto' } }, h(WrappedSlot, { wrapperClass: this.labelSlotCssClasses(), name: "label", onSlotchange: this.updateSlotData }), hasHighlight && (h("div", { class: "label highlight-text-wrapper", ref: highlightRef => (this.highlightRef = highlightRef) }, h("span", { class: "highlight-text" }, this.getHighlightedText('label')))), h(WrappedSlot, { wrapperClass: this.captionSlotCssClasses(), name: "caption", onSlotchange: this.updateSlotData }), hasHighlight && (h("div", { class: "caption" }, h("span", { class: "highlight-text" }, this.getHighlightedText('caption'))))));
     };
-    this.renderRightSlot = () => (h(WrappedSlot, { wrapperClass: this.rightSlotCssClasses(), name: "right", onSlotchange: this.updateSlotData, onClick: this.handleRightWrapperClick }, this.isExtended && h("wpp-icon-chevron-v4-1-0", { class: "fallback-icon", size: "s", part: "icon-extended" }), !this.isExtended && this.active && h("wpp-icon-tick-v4-1-0", { class: "fallback-icon", part: "icon-active" })));
+    this.renderRightSlot = () => (h(WrappedSlot, { wrapperClass: this.rightSlotCssClasses(), name: "right", onSlotchange: this.updateSlotData, onClick: this.handleRightWrapperClick }, this.isExtended && h("wpp-icon-chevron-v4-2-0", { class: "fallback-icon", size: "s", part: "icon-extended" }), !this.isExtended && this.active && h("wpp-icon-tick-v4-2-0", { class: "fallback-icon", part: "icon-active" })));
     this.renderLeftSlot = () => (h(WrappedSlot, { wrapperClass: this.leftSlotCssClasses(), name: "left", onSlotchange: this.updateSlotData }));
     this.handleMouseEnter = () => {
       this.updateComponentState({ hover: true });
@@ -403,6 +484,7 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
     this.linkConfig = {};
     this.hidden = false;
     this.isLoadingItem = false;
+    this.isDarkTheme = undefined;
     this.nonInteractive = false;
     this.checkboxName = undefined;
   }
@@ -410,8 +492,12 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
    * Sets focus on the list-item element.
    */
   async setFocus() {
-    setTimeout(() => {
-      this.host.focus();
+    const hostElement = this.hostElement || this.host;
+    this.focusTimeout = setTimeout(() => {
+      if (!hostElement.isConnected)
+        return;
+      hostElement.focus();
+      this.focusTimeout = undefined;
     }, 0);
   }
   onResize() {
@@ -422,17 +508,30 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
   typographyLabel() {
     this.applyTypographyVariables('label', this.labelTypography || {});
   }
+  onUpdateDarkTheme() {
+    // In case the `list-item` component subscribed to theme changes before the parent component starts controlling the `isDarkTheme` prop.
+    if (this.isDarkTheme !== undefined) {
+      this.themeSubscription.stop();
+    }
+  }
   typographyCaption() {
     this.applyTypographyVariables('caption', this.captionTypography || {});
   }
   componentWillLoad() {
+    this.hostElement = this.host;
     this.updateSlotData();
-    this.hasRightSlot = !!this.host.querySelector('[slot="right"]');
-    setTimeout(() => {
-      this.hasRightSlotIcon = !!this.host.querySelector('[slot="right"].wpp-icon');
+    this.hasRightSlot = !!this.hostElement.querySelector('[slot="right"]');
+    this.rightSlotIconTimeout = setTimeout(() => {
+      if (!this.isHostConnected())
+        return;
+      this.hasRightSlotIcon = !!this.hostElement?.querySelector('[slot="right"].wpp-icon');
+      this.rightSlotIconTimeout = undefined;
     }, 0);
-    setTimeout(() => {
-      this.hasToggle = !!this.host.querySelector('[slot="right"].wpp-toggle');
+    this.toggleSlotTimeout = setTimeout(() => {
+      if (!this.isHostConnected())
+        return;
+      this.hasToggle = !!this.hostElement?.querySelector('[slot="right"].wpp-toggle');
+      this.toggleSlotTimeout = undefined;
     }, 0);
     this.debouncedResizeHandler = debounce(() => {
       this.checkHasTooltip();
@@ -476,13 +575,25 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
     }
   }
   connectedCallback() {
-    this.themeSubscription.start();
+    // By default, the component will subscribe to theme changes, unless the `isDarkTheme` property is passed explicitly from the parent component (from select, autocomplete).
+    // This is needed in order to avoid unnecessary subscription to theme changes for each list-item.
+    if (this.isDarkTheme === undefined) {
+      this.themeSubscription.start();
+    }
+    this.handleComponentMount();
   }
   disconnectedCallback() {
-    this.themeSubscription.stop();
+    if (this.isDarkTheme === undefined) {
+      this.themeSubscription.stop();
+    }
     this.tooltipId = uuidv4();
+    this.clearPendingCallbacks();
     if (this.labelObserver) {
       this.labelObserver.disconnect();
+    }
+    if (this.triggerWrapperObserver) {
+      this.triggerWrapperObserver.disconnect();
+      this.triggerWrapperObserver = undefined;
     }
   }
   highlightUpdate(newValue) {
@@ -499,11 +610,14 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
       this.mounted = false;
       this.loading = false;
       this.hasTooltip = false;
-      setTimeout(this.handleComponentMount, 100);
+      this.mountTimeout = setTimeout(() => {
+        this.handleComponentMount();
+        this.mountTimeout = undefined;
+      }, 100);
     }
     // Special state for a cases when we have list items inside context menu to trigger tooltip check
     if (newContainerState === 'tooltipTrigger') {
-      requestAnimationFrame(this.checkHasTooltip);
+      this.queueTooltipCheck();
     }
   }
   disabledChanged() {
@@ -529,19 +643,20 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
   render() {
     const displayState = this.componentState.active ? 'active' : this.componentState.hover ? 'hover' : '';
     const tabIndex = this.disabled ? -1 : this.nonInteractive ? -1 : 0;
-    return (h(Host, { class: this.hostCssClasses(), role: PRESENTATION_ROLE, exportparts: "item, info-wrapper, checkbox, body-wrapper, left, label, caption, right, left-wrapper, label-wrapper, caption-wrapper, right-wrapper", tabIndex: tabIndex }, this.hasSubtitleSlot && (h(WrappedSlot, { wrapperClass: this.subtitleSlotCssClasses(), name: "subtitle", onSlotchange: this.updateSlotData })), h("ul", { onClick: this.handleItemClick, onKeyDown: this.handleKeyDown, onMouseEnter: this.handleMouseEnter, onMouseLeave: this.handleMouseLeave, onMouseDown: this.handleMouseDown, onMouseUp: this.handleMouseUp, class: this.ulWrapperCssClasses(), part: "ul-wrapper" }, h(this.itemWrapper, { class: this.itemWrapperCssClasses(), part: "item", ...(this.linkConfig?.href && this.linkConfig) }, h("div", { class: "info-wrapper", part: "info-wrapper" }, this.multiple ? (h("wpp-checkbox-v4-1-0", { disabled: this.disabled, checked: this.checked, indeterminate: this.indeterminate, internalState: displayState, part: "checkbox", name: this.checkboxName || 'wpp-list-item-checkbox' })) : (h(Fragment, null, this.tooltipConfig.leftSlot ? (h("wpp-tooltip-v4-1-0", { key: this.tooltipId, header: this.tooltipConfig.leftSlot.header, text: this.tooltipConfig.leftSlot.text, value: this.tooltipConfig.leftSlot.value, error: this.tooltipConfig.leftSlot.error, warning: this.tooltipConfig.leftSlot.warning, theme: this.tooltipConfig.leftSlot.theme, config: this.tooltipConfig.leftSlot.config, externalClass: this.tooltipConfig.leftSlot.externalClass }, this.renderLeftSlot())) : (this.renderLeftSlot()))), this.hasTooltip ? (h("wpp-tooltip-v4-1-0", { text: this.getSlotText('label'), config: { placement: 'right', ...this.labelTooltipConfig }, class: "tooltip" }, this.renderBody())) : (this.renderBody())), this.tooltipConfig.rightSlot ? (h("wpp-tooltip-v4-1-0", { key: this.tooltipId, header: this.tooltipConfig.rightSlot.header, text: this.tooltipConfig.rightSlot.text, value: this.tooltipConfig.rightSlot.value, error: this.tooltipConfig.rightSlot.error, warning: this.tooltipConfig.rightSlot.warning, theme: this.tooltipConfig.rightSlot.theme, config: this.tooltipConfig.rightSlot.config, externalClass: this.tooltipConfig.rightSlot.externalClass }, this.renderRightSlot())) : (this.renderRightSlot())))));
+    return (h(Host, { class: this.hostCssClasses(), role: PRESENTATION_ROLE, exportparts: "item, info-wrapper, checkbox, body-wrapper, left, label, caption, right, left-wrapper, label-wrapper, caption-wrapper, right-wrapper", tabIndex: tabIndex, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}) }, this.hasSubtitleSlot && (h(WrappedSlot, { wrapperClass: this.subtitleSlotCssClasses(), name: "subtitle", onSlotchange: this.updateSlotData })), h("ul", { onClick: this.handleItemClick, onKeyDown: this.handleKeyDown, onMouseEnter: this.handleMouseEnter, onMouseLeave: this.handleMouseLeave, onMouseDown: this.handleMouseDown, onMouseUp: this.handleMouseUp, class: this.ulWrapperCssClasses(), part: "ul-wrapper" }, h(this.itemWrapper, { class: this.itemWrapperCssClasses(), part: "item", ...(this.linkConfig?.href && this.linkConfig) }, h("div", { class: "info-wrapper", part: "info-wrapper" }, this.multiple ? (h("wpp-checkbox-v4-2-0", { isDarkTheme: this.isDarkTheme, disabled: this.disabled, checked: this.checked, indeterminate: this.indeterminate, internalState: displayState, part: "checkbox", name: this.checkboxName || 'wpp-list-item-checkbox' })) : (h(Fragment, null, this.tooltipConfig.leftSlot ? (h("wpp-tooltip-v4-2-0", { key: this.tooltipId, header: this.tooltipConfig.leftSlot.header, text: this.tooltipConfig.leftSlot.text, value: this.tooltipConfig.leftSlot.value, error: this.tooltipConfig.leftSlot.error, warning: this.tooltipConfig.leftSlot.warning, theme: this.tooltipConfig.leftSlot.theme, config: this.tooltipConfig.leftSlot.config, externalClass: this.tooltipConfig.leftSlot.externalClass }, this.renderLeftSlot())) : (this.renderLeftSlot()))), this.hasTooltip ? (h("wpp-tooltip-v4-2-0", { text: this.getSlotText('label'), config: { placement: 'right', ...this.labelTooltipConfig }, class: "tooltip" }, this.renderBody())) : (this.renderBody())), this.tooltipConfig.rightSlot ? (h("wpp-tooltip-v4-2-0", { key: this.tooltipId, header: this.tooltipConfig.rightSlot.header, text: this.tooltipConfig.rightSlot.text, value: this.tooltipConfig.rightSlot.value, error: this.tooltipConfig.rightSlot.error, warning: this.tooltipConfig.rightSlot.warning, theme: this.tooltipConfig.rightSlot.theme, config: this.tooltipConfig.rightSlot.config, externalClass: this.tooltipConfig.rightSlot.externalClass }, this.renderRightSlot())) : (this.renderRightSlot())))));
   }
-  static get registryIs() { return "wpp-list-item-v4-1-0"; }
+  static get registryIs() { return "wpp-list-item-v4-2-0"; }
   get host() { return this; }
   static get watchers() { return {
     "labelTypography": ["typographyLabel"],
+    "isDarkTheme": ["onUpdateDarkTheme"],
     "captionTypography": ["typographyCaption"],
     "highlight": ["highlightUpdate"],
     "containerState": ["handleViewChange"],
     "disabled": ["disabledChanged"]
   }; }
   static get style() { return wppListItemCss; }
-}, [1, "wpp-list-item", "wpp-list-item-v4-1-0", {
+}, [1, "wpp-list-item", "wpp-list-item-v4-2-0", {
     "labelTypography": [16],
     "captionTypography": [16],
     "value": [520],
@@ -560,6 +675,7 @@ const WppListItem = /*@__PURE__*/ proxyCustomElement(class WppListItem extends H
     "linkConfig": [16],
     "hidden": [1540],
     "isLoadingItem": [516, "is-loading-item"],
+    "isDarkTheme": [4, "is-dark-theme"],
     "nonInteractive": [1540, "non-interactive"],
     "checkboxName": [513, "checkbox-name"],
     "loading": [32],
@@ -578,94 +694,94 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-list-item-v4-1-0", "wpp-action-button-v4-1-0", "wpp-checkbox-v4-1-0", "wpp-icon-chevron-v4-1-0", "wpp-icon-cross-v4-1-0", "wpp-icon-dash-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-info-message-v4-1-0", "wpp-icon-success-v4-1-0", "wpp-icon-tick-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-inline-message-v4-1-0", "wpp-internal-label-v4-1-0", "wpp-internal-tooltip-v4-1-0", "wpp-label-v4-1-0", "wpp-spinner-v4-1-0", "wpp-tooltip-v4-1-0", "wpp-typography-v4-1-0"];
+  const components = ["wpp-list-item-v4-2-0", "wpp-action-button-v4-2-0", "wpp-checkbox-v4-2-0", "wpp-icon-chevron-v4-2-0", "wpp-icon-cross-v4-2-0", "wpp-icon-dash-v4-2-0", "wpp-icon-error-v4-2-0", "wpp-icon-info-message-v4-2-0", "wpp-icon-success-v4-2-0", "wpp-icon-tick-v4-2-0", "wpp-icon-warning-v4-2-0", "wpp-inline-message-v4-2-0", "wpp-internal-label-v4-2-0", "wpp-internal-tooltip-v4-2-0", "wpp-label-v4-2-0", "wpp-spinner-v4-2-0", "wpp-tooltip-v4-2-0", "wpp-typography-v4-2-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-list-item-v4-1-0":
+    case "wpp-list-item-v4-2-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppListItem);
       }
       break;
-    case "wpp-action-button-v4-1-0":
+    case "wpp-action-button-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-checkbox-v4-1-0":
+    case "wpp-checkbox-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-chevron-v4-1-0":
+    case "wpp-icon-chevron-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-cross-v4-1-0":
+    case "wpp-icon-cross-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-dash-v4-1-0":
+    case "wpp-icon-dash-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-error-v4-1-0":
+    case "wpp-icon-error-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-info-message-v4-1-0":
+    case "wpp-icon-info-message-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-success-v4-1-0":
+    case "wpp-icon-success-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-tick-v4-1-0":
+    case "wpp-icon-tick-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-warning-v4-1-0":
+    case "wpp-icon-warning-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-inline-message-v4-1-0":
+    case "wpp-inline-message-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-label-v4-1-0":
+    case "wpp-internal-label-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-internal-tooltip-v4-1-0":
+    case "wpp-internal-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-label-v4-1-0":
+    case "wpp-label-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v4-1-0":
+    case "wpp-spinner-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-1-0":
+    case "wpp-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-1-0":
+    case "wpp-typography-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

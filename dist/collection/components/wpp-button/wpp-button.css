@@ -274,7 +274,7 @@
   margin: 0;
   font-weight: var(--button-font-weight);
   font-size: var(--button-font-size);
-  font-family: var(--wpp-font-family);
+  font-family: var(--wpp-font-family, system-ui, sans-serif);
   font-style: normal;
   line-height: var(--button-line-height);
   text-decoration: none;

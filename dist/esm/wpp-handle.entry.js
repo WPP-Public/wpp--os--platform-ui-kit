@@ -19,7 +19,7 @@ const WppHandle = class {
   render() {
     return h(Host, { class: this.getHostClasses(), style: { backgroundColor: this.color } });
   }
-  static get registryIs() { return "wpp-handle-v4-1-0"; }
+  static get registryIs() { return "wpp-handle-v4-2-0"; }
 };
 WppHandle.style = wppHandleCss;
 

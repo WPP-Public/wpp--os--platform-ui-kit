@@ -5,6 +5,7 @@ import { StickyBarButtonItem, StickyBarTabItem, StickyBarVariants, VisibilityCla
  */
 export declare class WppStickyBar {
   private themeSubscription;
+  private offsetFromTopTimeout?;
   visibility: VisibilityClasses;
   currentTab: string;
   buttonsList: Array<StickyBarButtonItem | null>;
@@ -66,19 +67,21 @@ export declare class WppStickyBar {
    * contains the details of the tab item clicked.
    */
   readonly wppClickTab: EventEmitter<StickyBarTabItem>;
-  updateButtons(): void;
-  updateTabs(newValue: StickyBarTabItem[]): void;
-  updateOffset(newValue: number): void;
+  onUpdateButtons(): void;
+  onUpdateTabs(newValue: StickyBarTabItem[]): void;
+  onUpdateOffsetFromTop(newValue: number | undefined): void;
   handleScroll(): void;
   componentWillLoad(): void;
   connectedCallback(): void;
   disconnectedCallback(): void;
   componentDidLoad(): void;
+  private updateOffsetFromTop;
   private getHeightOfOsBar;
   private getButtonsList;
   private handleLeftIconClick;
   private handleButtonClick;
   private handleTabClick;
+  private getButtonItemIcons;
   private hostCssClasses;
   render(): any;
 }

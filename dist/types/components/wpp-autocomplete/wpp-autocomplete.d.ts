@@ -8,7 +8,6 @@ import { ListItemChangeEventDetail } from '../wpp-list-item/types';
 import { AutocompleteChangeEventDetail, AutocompleteLocales, AutocompleteOption, AutocompleteTypes, GetItemKeyType, LoadMoreHandler } from './types';
 export declare class WppAutocomplete {
   host: HTMLWppAutocompleteElement;
-  protected _locales: AutocompleteLocales;
   private themeSubscription;
   protected triggerRef?: HTMLDivElement;
   private dropdownRef?;
@@ -39,6 +38,7 @@ export declare class WppAutocomplete {
   extendedSelectedValues: ListItemInterface[];
   hiddenSelectedOptionsNumber: number;
   hiddenCountElWidth: number;
+  isDarkTheme?: boolean;
   activePillsTruncationState: boolean[];
   isShowMore: boolean;
   componentSuggestions: ListItemInterface[];
@@ -217,6 +217,7 @@ export declare class WppAutocomplete {
   componentDidLoad(): void;
   connectedCallback(): void;
   disconnectedCallback(): void;
+  protected get _locales(): AutocompleteLocales;
   /**
    * Observers
    */

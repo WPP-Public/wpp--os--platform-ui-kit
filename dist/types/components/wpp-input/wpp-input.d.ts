@@ -18,15 +18,13 @@ interface FocusType {
  * @part message - message
  *
  * @slot icon-start - Can contain an icon that will be placed before the main content, e.g. a search icon.
- * @slot icon-end - Can contain an icon that will be placed after the main content, e.g. a cross icon.
+ * @slot icon-end (DEPRECATED) - Can contain an icon that will be placed after the main content, e.g. a cross icon.
  */
 export declare class WppInput implements BaseComponent, BaseFormControl<InputValue>, InlineMessage {
   private inputRef?;
   private lengthValidationError?;
   private maskedElement?;
-  private _locales;
   private previouslyRenderedValue?;
-  private previouslyRenderedHasCrossIcon?;
   private generatedMask;
   private internalDefaultValue?;
   private resizeObserver?;
@@ -197,7 +195,6 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
    */
   getValue(): Promise<InputValue>;
   onUpdateMaskOptions(newMaskOptions: MaskOptions, prevMaskOptions: MaskOptions): void;
-  onUpdateLocales(newLocales: Partial<InputLocaleInterface>): void;
   onUpdateValue(newValue: InputValue): void;
   connectedCallback(): void;
   componentWillLoad(): void;
@@ -211,6 +208,7 @@ export declare class WppInput implements BaseComponent, BaseFormControl<InputVal
   private createMaskForInput;
   private destroyMask;
   disconnectedCallback(): void;
+  private get _locales();
   private checkForEllipsis;
   private getMaskOptions;
   private createTelPatternOptions;

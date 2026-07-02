@@ -60,12 +60,12 @@ const WppExpandableCard$1 = /*@__PURE__*/ proxyCustomElement(class WppExpandable
     this.themeSubscription.stop();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "expandable-card-body, accordion, section, title, icon, counter, divider, title-wrapper" }, h("div", { class: "body-container", part: "expandable-card-body" }, h("wpp-accordion-v4-1-0", { size: this.size, expanded: this.isExpanded, expandedByDefault: this.expandedByDefault, withDivider: false, onWppChange: this.onChange, part: "accordion" }, h("slot", null), h("slot", { name: "header", slot: "header", class: "header" }), h("slot", { name: "actions", slot: "actions", class: "actions" })))));
+    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "expandable-card-body, accordion, section, title, icon, counter, divider, title-wrapper" }, h("div", { class: "body-container", part: "expandable-card-body" }, h("wpp-accordion-v4-2-0", { size: this.size, expanded: this.isExpanded, expandedByDefault: this.expandedByDefault, withDivider: false, onWppChange: this.onChange, part: "accordion" }, h("slot", null), h("slot", { name: "header", slot: "header", class: "header" }), h("slot", { name: "actions", slot: "actions", class: "actions" })))));
   }
-  static get registryIs() { return "wpp-expandable-card-v4-1-0"; }
+  static get registryIs() { return "wpp-expandable-card-v4-2-0"; }
   get host() { return this; }
   static get style() { return wppExpandableCardCss; }
-}, [1, "wpp-expandable-card", "wpp-expandable-card-v4-1-0", {
+}, [1, "wpp-expandable-card", "wpp-expandable-card-v4-2-0", {
     "expandedByDefault": [1540, "expanded-by-default"],
     "isExpanded": [1028, "is-expanded"],
     "size": [1],
@@ -77,49 +77,49 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-expandable-card-v4-1-0", "wpp-accordion-v4-1-0", "wpp-divider-v4-1-0", "wpp-icon-chevron-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-internal-tooltip-v4-1-0", "wpp-tooltip-v4-1-0", "wpp-typography-v4-1-0"];
+  const components = ["wpp-expandable-card-v4-2-0", "wpp-accordion-v4-2-0", "wpp-divider-v4-2-0", "wpp-icon-chevron-v4-2-0", "wpp-icon-error-v4-2-0", "wpp-icon-warning-v4-2-0", "wpp-internal-tooltip-v4-2-0", "wpp-tooltip-v4-2-0", "wpp-typography-v4-2-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-expandable-card-v4-1-0":
+    case "wpp-expandable-card-v4-2-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppExpandableCard$1);
       }
       break;
-    case "wpp-accordion-v4-1-0":
+    case "wpp-accordion-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-divider-v4-1-0":
+    case "wpp-divider-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-icon-chevron-v4-1-0":
+    case "wpp-icon-chevron-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-error-v4-1-0":
+    case "wpp-icon-error-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-icon-warning-v4-1-0":
+    case "wpp-icon-warning-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-internal-tooltip-v4-1-0":
+    case "wpp-internal-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-1-0":
+    case "wpp-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-1-0":
+    case "wpp-typography-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

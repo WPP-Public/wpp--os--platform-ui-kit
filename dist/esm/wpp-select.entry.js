@@ -2,10 +2,10 @@ import { h, F as Fragment, H as Host, r as registerInstance, c as createEvent, g
 import { m as menuListConfig } from './menuListConfig-ac199028.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
-import { w as getHighestContainerInDOM, k as transformToVersionedTag, g as getSlotEmptyStates, A as version, b as isEventTargetContained } from './utils-3463d13f.js';
+import { w as getHighestContainerInDOM, k as transformToVersionedTag, g as getSlotEmptyStates, B as version, y as mergeLocales, b as isEventTargetContained } from './utils-fc9002c9.js';
 import { l as lodash } from './lodash-cc2b04b5.js';
 import { W as WrappedSlot } from './WrappedSlot-629d3e4f.js';
-import { t as themeSubscriptionController } from './subscribe-to-theme-2f801cf6.js';
+import { t as themeSubscriptionController } from './subscribe-to-theme-3920c16c.js';
 import './tippy.esm-c5fe8087.js';
 import './_commonjsHelpers-ba3f0406.js';
 
@@ -20,7 +20,7 @@ const DEFAULT_DROPDOWN_CONFIG = {
 };
 const LOCALES_DEFAULTS = {
   emptyText: 'Nothing Found',
-  clearAllText: 'Clear All',
+  clearAllText: 'Clear',
   selectAllText: 'Select All',
   searchInputPlaceholder: 'Search',
   allSelectedText: 'All selected',
@@ -48,26 +48,28 @@ function renderSingleSelect(isBaseComponent = true, customSize, isRenderMessageI
     }
     return this.renderedText;
   };
-  const getInlineMessage = () => (h(Fragment, null, this.message && isBaseComponent && (h("wpp-inline-message-v4-1-0", { class: !this.messageType ? 'default-message' : '', showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType || 'information', tooltipConfig: this.tooltipConfig }))));
+  const getInlineMessage = () => (h(Fragment, null, this.message && isBaseComponent && (h("wpp-inline-message-v4-2-0", { class: !this.messageType ? 'default-message' : '', showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType || 'information', tooltipConfig: this.tooltipConfig }))));
   const renderAnchor = () => (h("div", { class: getAnchorCSSClasses(), ref: el => (this.anchorRef = el), tabIndex: this.disabled ? -1 : 0, onClick: () => this.handleClick() }, this.anchorButton ? (h("slot", { name: "anchor-button", onSlotchange: this.updateSlotData })) : (h(Fragment, null,
     h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }),
-    h("div", { class: "overflow-container", ref: refEl => (this.overflowContainerRef = refEl) }, this.textOverflows ? (h("wpp-tooltip-v4-1-0", { text: getSelectPlaceholder() },
+    h("div", { class: "overflow-container", ref: refEl => (this.overflowContainerRef = refEl) }, this.textOverflows ? (h("wpp-tooltip-v4-2-0", { text: getSelectPlaceholder() },
       h("p", null, getSelectPlaceholder()))) : (h("p", null, getSelectPlaceholder()))),
     h("input", { class: "input", ref: refEl => (this.inputRef = refEl), type: "text", id: this.name, name: this.name, onChange: () => this.checkIfTextOverflows(), disabled: this.disabled, value: getSelectPlaceholder(), tabIndex: -1, readonly: true, "aria-label": this.ariaProps.label, title: "", style: { width: this.overflowContainerRef ? `${this.overflowContainerRef.clientWidth}px` : 'auto' }, required: this.required }),
-    h("wpp-icon-chevron-v4-1-0", { class: this.isOpen || this.isDropdownOpen ? 'isOpen' : '', direction: 'down' })))));
+    h("wpp-icon-chevron-v4-2-0", { class: this.isOpen || this.isDropdownOpen ? 'isOpen' : '', direction: 'down' })))));
   const RootTag = isBaseComponent ? Host : Fragment;
   return (h(RootTag, { onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, class: "wpp-single-select", "aria-disabled": this.disabled, onFocus: this.onFocus, onBlur: this.onBlur },
-    this.labelConfig?.text && isBaseComponent && (h("wpp-label-v4-1-0", { class: this.labelCssClasses(), optional: !this.required, htmlFor: this.name, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: () => this.handleClick() })),
-    h("div", { class: "anchor-container" }, isRenderMessageInTooltip ? (h("wpp-tooltip-v4-1-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
+    this.labelConfig?.text && isBaseComponent && (h("wpp-label-v4-2-0", { class: this.labelCssClasses(), optional: !this.required, htmlFor: this.name, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: () => this.handleClick() })),
+    h("div", { class: "anchor-container" }, isRenderMessageInTooltip ? (h("wpp-tooltip-v4-2-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
     h("div", null, !isRenderMessageInTooltip && getInlineMessage()),
     h("div", { class: "wpp-select-portal", onKeyDown: this.onKeyDownPortal, ref: el => (this.portalRef = el) },
       this.shouldShowSearch && (h(Fragment, null,
-        h("wpp-input-v4-1-0", { type: "search", class: "select-portal-search-input", value: this.searchText, onWppChange: this.handleSearch, name: this.name && `${this.name}-search-input`, placeholder: this._locales.searchInputPlaceholder }),
-        h("wpp-divider-v4-1-0", { color: "var(--wpp-grey-color-300)" }))),
-      h("div", { class: "list" }, this.renderList()))));
+        h("wpp-input-v4-2-0", { type: "search", class: "select-portal-search-input", value: this.searchText, onWppChange: this.handleSearch, name: this.name && `${this.name}-search-input`, placeholder: this._locales.searchInputPlaceholder }),
+        h("wpp-divider-v4-2-0", { color: "var(--wpp-grey-color-300)" }))),
+      h("div", { class: "list", ref: el => (this.listRef = el) }, this.renderList()))));
 }
 
 function renderMultipleSelect() {
+  const shouldRenderTopSelectAll = this.showSelectAllOption && this.isOpen;
+  const hasPinnedItems = this.filteredPinnedItems.length > 0;
   const getAnchorCSSClasses = () => ({
     anchor: true,
     [`size-${this.size}`]: true,
@@ -90,43 +92,45 @@ function renderMultipleSelect() {
     }
     return this.renderedText || this.placeholder;
   };
-  const getInlineMessage = () => (h(Fragment, null, this.message && (h("wpp-inline-message-v4-1-0", { class: !this.messageType ? 'default-message' : '', showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType || 'information', tooltipConfig: this.tooltipConfig }))));
+  const getInlineMessage = () => (h(Fragment, null, this.message && (h("wpp-inline-message-v4-2-0", { class: !this.messageType ? 'default-message' : '', showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType || 'information', tooltipConfig: this.tooltipConfig }))));
   const renderAnchor = () => (h("div", { class: getAnchorCSSClasses(), ref: el => (this.anchorRef = el), tabIndex: this.disabled ? -1 : 0, onClick: () => this.handleClick() }, this.anchorButton ? (h("slot", { name: "anchor-button", onSlotchange: this.updateSlotData })) : (h(Fragment, null,
     h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }),
     h("div", { class: "overflow-container", ref: refEl => (this.overflowContainerRef = refEl) },
       h("p", null, getRenderedText())),
     h("input", { class: "input", type: "text", ref: refEl => (this.inputRef = refEl), name: this.name, onChange: () => this.checkIfTextOverflows(), disabled: this.disabled, value: this.renderedText, tabIndex: -1, readonly: true, "aria-label": this.ariaProps.label, title: "", style: { width: this.overflowContainerRef ? `${this.overflowContainerRef.clientWidth}px` : 'auto' }, required: this.required }),
-    h("wpp-icon-chevron-v4-1-0", { class: this.isOpen ? 'isOpen' : '', direction: 'down' })))));
+    h("wpp-icon-chevron-v4-2-0", { class: this.isOpen ? 'isOpen' : '', direction: 'down' })))));
   return (h(Host, { class: "wpp-multiple-select", onKeyUp: this.onKeyUp, "aria-disabled": this.disabled, onFocus: this.onFocus, onBlur: this.onBlur },
-    this.labelConfig?.text && (h("wpp-label-v4-1-0", { class: this.labelCssClasses(), optional: !this.required, htmlFor: this.name, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: () => this.handleClick() })),
-    h("div", { class: "anchor-container" }, this.isRenderMessageInTooltip ? (h("wpp-tooltip-v4-1-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
+    this.labelConfig?.text && (h("wpp-label-v4-2-0", { class: this.labelCssClasses(), optional: !this.required, htmlFor: this.name, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: () => this.handleClick() })),
+    h("div", { class: "anchor-container" }, this.isRenderMessageInTooltip ? (h("wpp-tooltip-v4-2-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
     h("div", null, !this.isRenderMessageInTooltip && getInlineMessage()),
     h("div", { class: "wpp-select-portal", ref: el => (this.portalRef = el) },
       this.shouldShowSearch && (h(Fragment, null,
-        h("wpp-input-v4-1-0", { type: "search", class: "select-portal-search-input", value: this.searchText, onWppChange: this.handleSearch, name: this.name && `${this.name}-search-input`, placeholder: this._locales.searchInputPlaceholder }),
-        h("wpp-divider-v4-1-0", { color: "var(--wpp-grey-color-300)" }))),
+        h("wpp-input-v4-2-0", { type: "search", class: "select-portal-search-input", value: this.searchText, onWppChange: this.handleSearch, name: this.name && `${this.name}-search-input`, placeholder: this._locales.searchInputPlaceholder }),
+        h("wpp-divider-v4-2-0", { color: "var(--wpp-grey-color-300)" }))),
       h("div", { class: "list list-with-scrollable" },
         h("div", { class: "list-scrollable", ref: refEl => (this.listRef = refEl) },
-          this.withFolder && this.showSelectAllOption && this.isOpen && (h("div", { class: "select-all-section" },
-            !this.maximumSelectedItems && (h("wpp-list-item-v4-1-0", { multiple: true, checked: this.isSelectAllChecked, indeterminate: this.isSelectAllIndeterminate, disabled: this.isSelectAllDisabled, onWppChangeListItem: e => {
-                e.stopPropagation();
-                this.handleSelectAllToggle();
-              }, class: "select-all-item" },
-              h("p", { slot: "label" },
-                this._locales.selectAllText,
-                " (",
-                this.selectAllCount,
-                ")"))),
+          shouldRenderTopSelectAll && (h("div", { class: "select-all-section" },
+            !this.maximumSelectedItems && (h(Fragment, null,
+              h("wpp-list-item-v4-2-0", { multiple: true, checked: this.isSelectAllChecked, indeterminate: this.isSelectAllIndeterminate, disabled: this.isSelectAllDisabled, onWppChangeListItem: e => {
+                  e.stopPropagation();
+                  this.handleSelectAllToggle();
+                }, isDarkTheme: this.isDarkTheme, class: "select-all-item" },
+                h("p", { slot: "label" },
+                  this._locales.selectAllText,
+                  " (",
+                  this.selectAllCount,
+                  ")")),
+              h("wpp-divider-v4-2-0", { class: "select-all-divider", color: "var(--wpp-grey-color-300)" }))),
             this.renderPinnedItems(),
-            this.filteredPinnedItems.length > 0 && h("wpp-divider-v4-1-0", { color: "var(--wpp-grey-color-300)" }))),
+            hasPinnedItems && (h("wpp-divider-v4-2-0", { class: "pinned-items-divider", color: "var(--wpp-grey-color-300)" })))),
           this.renderList())),
       this.withFolder && this.isOpen && (h("div", { class: "multiple-select-folder" },
-        this.withScroll && h("wpp-divider-v4-1-0", null),
+        this.withScroll && h("wpp-divider-v4-2-0", null),
         this.showSelectAllOption ? (h("div", { class: `multiple-select-folder-buttons select-all-mode${this.withScroll ? ' with-divider' : ''}` },
-          h("wpp-action-button-v4-1-0", { variant: "secondary", disabled: !this.canClearVisible || this.loading, onClick: this.handleClearAll }, this._locales.clearText),
-          h("wpp-action-button-v4-1-0", { variant: "primary", disabled: this.loading, onClick: this.handleApply }, this._locales.applyText))) : (h("div", { class: `multiple-select-folder-buttons${this.withScroll ? ' with-divider' : ''}` },
-          h("wpp-action-button-v4-1-0", { variant: "secondary", disabled: !this.canSelectAll || this.loading, onClick: this.handleSelectAll }, this._locales.selectAllText),
-          this.canClearAll && (h("wpp-action-button-v4-1-0", { variant: "secondary", disabled: this.loading, onClick: this.handleClearAll }, this._locales.clearAllText)))))))));
+          this.canClearVisible && (h("wpp-action-button-v4-2-0", { variant: "secondary", disabled: this.loading, onClick: this.handleClearAll }, this._locales.clearText)),
+          h("wpp-action-button-v4-2-0", { class: "apply-button", variant: "primary", disabled: this.loading, onClick: this.handleApply }, this._locales.applyText))) : (h("div", { class: `multiple-select-folder-buttons${this.withScroll ? ' with-divider' : ''}` },
+          h("wpp-action-button-v4-2-0", { variant: "secondary", disabled: !this.canSelectAll || this.loading, onClick: this.handleSelectAll }, this._locales.selectAllText),
+          this.canClearAll && (h("wpp-action-button-v4-2-0", { variant: "secondary", disabled: this.loading, onClick: this.handleClearAll }, this._locales.clearAllText)))))))));
 }
 
 /**
@@ -134,8 +138,8 @@ function renderMultipleSelect() {
  */
 function renderTextSelect() {
   const renderAnchor = () => (h(Fragment, null,
-    h("wpp-typography-v4-1-0", { id: "select-text", type: "s-body" }, this.renderedText || this.placeholder),
-    h("wpp-icon-chevron-v4-1-0", { class: this.isOpen ? 'isOpen' : '', direction: 'down' })));
+    h("wpp-typography-v4-2-0", { id: "select-text", type: "s-body" }, this.renderedText || this.placeholder),
+    h("wpp-icon-chevron-v4-2-0", { class: this.isOpen ? 'isOpen' : '', direction: 'down' })));
   const getAnchorCSSClasses = () => ({
     anchor: true,
     disabled: this.disabled,
@@ -144,7 +148,7 @@ function renderTextSelect() {
     'should-truncate': this.shouldTruncate,
     'tab-focus': this.focusType === FOCUS_TYPE.TAB,
   });
-  const getInlineMessage = () => (h(Fragment, null, this.message && (h("wpp-inline-message-v4-1-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, tooltipConfig: this.tooltipConfig }))));
+  const getInlineMessage = () => (h(Fragment, null, this.message && (h("wpp-inline-message-v4-2-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, tooltipConfig: this.tooltipConfig }))));
   return (h(Host, { class: "wpp-text-select", onKeyUp: this.onKeyUp, "aria-disabled": this.disabled, onFocus: this.onFocus, onBlur: this.onBlur },
     h("div", { class: getAnchorCSSClasses(), ref: el => (this.anchorRef = el), tabIndex: this.disabled ? -1 : 0, onClick: () => this.handleClick(), role: this.ariaProps.role || 'button', "aria-label": this.ariaProps.label ||
         (this.truncate && this.shouldTruncate
@@ -154,7 +158,7 @@ function renderTextSelect() {
           e.preventDefault();
           this.handleClick();
         }
-      } }, this.truncate && this.shouldTruncate ? (h("wpp-tooltip-v4-1-0", { text: this.renderedText || this.placeholder, config: { placement: 'right' }, class: "tooltip" }, renderAnchor())) : (renderAnchor())),
+      } }, this.truncate && this.shouldTruncate ? (h("wpp-tooltip-v4-2-0", { text: this.renderedText || this.placeholder, config: { placement: 'right' }, class: "tooltip" }, renderAnchor())) : (renderAnchor())),
     getInlineMessage(),
     h("div", { class: "wpp-select-portal", ref: el => (this.portalRef = el) },
       h("div", { class: "list" }, this.renderList()))));
@@ -182,7 +186,7 @@ function renderCombinedSelect() {
   const onBlurInput = () => {
     this.isContainerFocused = false;
   };
-  const getInlineMessage = () => (h(Fragment, null, this.message && (h("wpp-inline-message-v4-1-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
+  const getInlineMessage = () => (h(Fragment, null, this.message && (h("wpp-inline-message-v4-2-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
   const combinedInputWrapperCssClasses = () => ({
     'inputs-container': true,
     'with-errors': this.hasErrorsOrWarnings('error'),
@@ -196,14 +200,14 @@ function renderCombinedSelect() {
   });
   const renderAnchor = () => (h("div", { class: combinedInputWrapperCssClasses() },
     renderSingleSelect.call(this, false, this.size, false),
-    h("wpp-input-v4-1-0", { onWppChange: handleInputChange, value: this.inputValue, disabled: this.disabled, type: this.inputType, maskOptions: this.maskOptions, messageType: this.messageType, placeholder: this.placeholder, size: this.size, tabIndex: -1, onFocus: onFocusInput, onBlur: onBlurInput, onClick: (event) => event.stopPropagation() })));
+    h("wpp-input-v4-2-0", { onWppChange: handleInputChange, value: this.inputValue, disabled: this.disabled, type: this.inputType, maskOptions: this.maskOptions, messageType: this.messageType, placeholder: this.placeholder, size: this.size, tabIndex: -1, onFocus: onFocusInput, onBlur: onBlurInput, onClick: (event) => event.stopPropagation() })));
   return (h(Host, { class: getHostCssClasses(), onKeyUp: this.onKeyUp, "aria-disabled": this.disabled, onFocus: this.onFocus, onBlur: this.onBlur },
-    this.labelConfig?.text && (h("wpp-label-v4-1-0", { class: this.labelCssClasses(), htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: () => this.handleClick() })),
-    h("div", { class: "combined-anchor-container" }, this.isRenderMessageInTooltip ? (h("wpp-tooltip-v4-1-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
+    this.labelConfig?.text && (h("wpp-label-v4-2-0", { class: this.labelCssClasses(), htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: () => this.handleClick() })),
+    h("div", { class: "combined-anchor-container" }, this.isRenderMessageInTooltip ? (h("wpp-tooltip-v4-2-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
     h("div", null, !this.isRenderMessageInTooltip && getInlineMessage())));
 }
 
-const wppSelectCss = ":host{--select-min-width:var(--wpp-select-min-width, 120px);display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;min-width:var(--select-min-width)}:host .wpp-label{display:-ms-inline-flexbox;display:inline-flex;margin-bottom:8px}:host .wpp-label.disabled .internal-label-wrapper:hover{cursor:not-allowed}:host>.wpp-tooltip{width:100%}:host>.wpp-tooltip::part(anchor){width:100%}:host .anchor-container .wpp-tooltip{width:100%}:host .anchor-container .wpp-tooltip::part(anchor){width:100%}:host .anchor{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;width:100%;border-radius:var(--wpp-border-radius-m);border:1px solid var(--wpp-grey-color-500);position:relative;-webkit-box-sizing:border-box;box-sizing:border-box;outline:none}:host .anchor.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}:host .anchor .icon-start{height:20px;margin-right:9px}:host .anchor.size-s{padding:4px 10px 4px 10px}:host .anchor.size-s .overflow-container{left:5px}:host .anchor.size-m{padding:8px 10px 8px 10px}:host .anchor.size-m p .overflow-container{left:9px}:host .anchor .slot-hidden{display:none}:host .anchor .input{position:absolute;pointer-events:none;outline:none;padding:0;border:none;left:0;bottom:0;opacity:0;color:var(--grey-color-1000);font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input:hover{cursor:pointer}:host .anchor .input::-webkit-input-placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input::-moz-placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input:-ms-input-placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input::-ms-input-placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input::placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .wpp-icon-chevron{-webkit-transition:-webkit-transform 0.2s;transition:-webkit-transform 0.2s;transition:transform 0.2s;transition:transform 0.2s, -webkit-transform 0.2s;-webkit-transform:rotateZ(0deg);transform:rotateZ(0deg);margin-left:4px}:host .anchor .wpp-icon-chevron.isOpen{-webkit-transform:rotateZ(180deg);transform:rotateZ(180deg)}:host .anchor .overflow-container{display:-ms-flexbox;display:flex;width:100%;min-width:32px;-ms-flex-align:center;align-items:center;color:var(--grey-color-1000);height:var(--wpp-typography-s-body-line-height, 22px);padding:0 2px}:host .anchor .overflow-container p{width:100%;margin:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .overflow-container .wpp-tooltip{width:100%}:host .anchor .overflow-container .wpp-tooltip::part(anchor){width:100%}:host .anchor.opened{border-color:var(--wpp-grey-color-800)}:host .anchor:hover{cursor:pointer;background-color:var(--wpp-grey-color-200);border-color:var(--wpp-grey-color-700);--wpp-icon-color:var(--wpp-grey-color-800)}:host .anchor:hover .input{background-color:var(--wpp-grey-color-200)}:host .anchor:hover .overflow-container{background-color:var(--wpp-grey-color-200)}:host .anchor:active{background-color:var(--wpp-grey-color-300);border-color:var(--wpp-grey-color-800);--wpp-icon-color:var(--wpp-grey-color-900)}:host .anchor:active .input{background-color:var(--wpp-grey-color-300)}:host .anchor:active .overflow-container{background-color:var(--wpp-grey-color-300)}:host .anchor.with-errors{border-color:var(--wpp-danger-color-400)}:host .anchor.with-warnings{border-color:var(--wpp-warning-color-400)}:host .anchor.disabled{background-color:var(--wpp-grey-color-100);border-color:var(--wpp-grey-color-400);--wpp-text-color:var(--wpp-text-color-disabled);--wpp-icon-color:var(--wpp-grey-color-400)}:host .anchor.disabled:hover{cursor:not-allowed}:host .anchor.disabled .input{background-color:var(--wpp-grey-color-100);color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input:hover{cursor:not-allowed}:host .anchor.disabled .input::-webkit-input-placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input::-moz-placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input:-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input::-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input::placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .overflow-container{background-color:var(--wpp-grey-color-100)}:host .anchor.disabled .overflow-container p{color:var(--wpp-text-color-disabled)}:host .anchor.anchor-button{padding:0;border:none;background:none;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content}:host .wpp-select-portal{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m);border-radius:var(--wpp-border-radius-s);display:none;-ms-flex-align:start;align-items:flex-start;-ms-flex-direction:column;flex-direction:column;width:100%;overflow:hidden;max-height:372px;background-color:var(--wpp-grey-color-000)}:host .wpp-select-portal .wpp-input{--text-input-height-m:var(--wpp-input-select-search-input-height, 40px);--wpp-border-radius-m:0;--text-input-border-width:0;--text-input-second-border-color-focus:transparent;--text-input-first-border-color-focus:transparent;width:100%}:host .wpp-select-portal .nothing-found{--wpp-typography-color:var(--wpp-grey-color-700);padding:5px 8px}:host .wpp-select-portal .wpp-divider{width:100%}:host .wpp-select-portal .list{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%;gap:4px;padding:8px;-webkit-box-sizing:border-box;box-sizing:border-box;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}:host .wpp-select-portal .list::-webkit-scrollbar{width:4px;height:4px}:host .wpp-select-portal .list::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}:host .wpp-select-portal .list .wpp-list-item{--wpp-list-item-width:100%;width:100%}:host .wpp-select-portal .list .wpp-list-item p{margin:0}:host .wpp-select-portal .list.list-with-scrollable{gap:0;padding:0;overflow:hidden}:host .wpp-select-portal .list-scrollable{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:4px;width:100%;padding:4px 8px 8px 8px;-webkit-box-sizing:border-box;box-sizing:border-box;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}:host .wpp-select-portal .list-scrollable::-webkit-scrollbar{width:4px;height:4px}:host .wpp-select-portal .list-scrollable::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}:host .wpp-select-portal .list-scrollable .select-all-section{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:4px}:host .wpp-select-portal .list-scrollable .select-all-section .wpp-list-item{--wpp-list-item-width:100%;width:100%}:host .wpp-select-portal .list-scrollable .select-all-section .wpp-list-item p{margin:0}:host .wpp-select-portal .list-scrollable .wpp-list-item{--wpp-list-item-width:100%;width:100%}:host .wpp-select-portal .list-scrollable .wpp-list-item p{margin:0}:host .wpp-select-portal .list-scrollable .loading-container{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;height:32px;gap:4px}:host .wpp-select-portal .multiple-select-folder{width:100%}:host .wpp-select-portal .multiple-select-folder-buttons{padding:0 8px 8px 8px;-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;-ms-flex-align:center;align-items:center}:host .wpp-select-portal .multiple-select-folder-buttons.with-divider{padding:7px 8px 8px 8px}:host .wpp-select-portal .multiple-select-folder-buttons.select-all-mode{-ms-flex-pack:end;justify-content:flex-end}:host .wpp-select-portal[data-wpp-theme=dark]{background-color:var(--wpp-grey-color-200)}:host .wpp-inline-message{display:-ms-inline-flexbox;display:inline-flex;margin-top:4px}:host .default-message::part(message-icon){display:none}:host(.wpp-text-select){width:auto;--wpp-select-min-width:auto}:host(.wpp-text-select) .anchor{border-radius:var(--wpp-border-radius-s);-ms-flex-pack:start;justify-content:flex-start;padding:1px 6px 1px 8px;border:none;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content}:host(.wpp-text-select) .truncated-text{max-width:100%;overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box}:host(.wpp-text-select) .truncated-text .tooltip{max-width:100%}:host(.wpp-text-select) .truncated-text .tooltip::part(anchor){max-width:100%}:host(.wpp-text-select) .truncated-text .wpp-typography{white-space:nowrap;text-overflow:ellipsis}:host(.wpp-text-select) .should-truncate .wpp-typography{overflow:hidden}:host(.wpp-combined-select){--combined-select-width:var(--wpp-combined-select-width, 274px);--combined-select-element-width:var(--wpp-combined-select-element-width, 112px);--select-min-width:80px;--combined-select-min-width:250px;width:var(--combined-select-width);min-width:var(--combined-select-min-width);display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start}:host(.wpp-combined-select) .wpp-label{margin-bottom:8px}:host(.wpp-combined-select) .combined-anchor-container{width:100%}:host(.wpp-combined-select) .inputs-container{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:start;justify-content:flex-start;width:100%}:host(.wpp-combined-select) .inputs-container .anchor{width:var(--combined-select-element-width);min-width:var(---select-min-width);border:1px solid var(--wpp-grey-color-500);border-radius:var(--wpp-border-radius-m) 0 0 var(--wpp-border-radius-m)}:host(.wpp-combined-select) .inputs-container .anchor.size-s{padding:4px 10px 4px 12px}:host(.wpp-combined-select) .inputs-container .wpp-input{border:1px solid var(--wpp-grey-color-500);border-radius:0 var(--wpp-border-radius-m) var(--wpp-border-radius-m) 0;border-left:none;width:100%;--wpp-input-height-m:38px;--wpp-input-height-s:30px}:host(.wpp-combined-select) .inputs-container .wpp-input::part(input){border:none}:host(.wpp-combined-select) .inputs-container:hover{background-color:var(--wpp-grey-color-200)}:host(.wpp-combined-select) .inputs-container:hover .overflow-container{background-color:var(--wpp-grey-color-200)}:host(.wpp-combined-select) .inputs-container:hover .anchor,:host(.wpp-combined-select) .inputs-container:hover .wpp-input{background-color:var(--wpp-grey-color-200);border:1px solid var(--wpp-grey-color-700)}:host(.wpp-combined-select) .inputs-container:hover .wpp-input{border-left:none}:host(.wpp-combined-select) .inputs-container.is-active{background-color:transparent}:host(.wpp-combined-select) .inputs-container.is-active .anchor,:host(.wpp-combined-select) .inputs-container.is-active .wpp-input{border:1px solid var(--wpp-grey-color-800)}:host(.wpp-combined-select) .inputs-container.is-active .wpp-input{border-left:none}:host(.wpp-combined-select) .inputs-container.is-active .wpp-input::part(input):hover{background-color:transparent}:host(.wpp-combined-select) .inputs-container.is-active:hover .overflow-container{background-color:transparent}:host(.wpp-combined-select) .inputs-container.is-active:hover .anchor,:host(.wpp-combined-select) .inputs-container.is-active:hover .wpp-input{background-color:transparent}:host(.wpp-combined-select) .inputs-container.disabled{background-color:var(--wpp-grey-color-100);color:var(--wpp-text-color-disabled)}:host(.wpp-combined-select) .inputs-container.disabled .anchor,:host(.wpp-combined-select) .inputs-container.disabled .wpp-input{border-color:var(--wpp-grey-color-400)}:host(.wpp-combined-select) .inputs-container.disabled:hover .anchor,:host(.wpp-combined-select) .inputs-container.disabled:hover .wpp-input{background-color:var(--wpp-grey-color-100);border:1px solid var(--wpp-grey-color-400)}:host(.wpp-combined-select) .inputs-container.disabled:hover .wpp-input{border-left:none}:host(.wpp-combined-select) .inputs-container.disabled:hover .overflow-container{background-color:var(--wpp-grey-color-100)}:host(.wpp-combined-select) .inputs-container.with-errors .anchor,:host(.wpp-combined-select) .inputs-container.with-errors .wpp-input{border-color:var(--wpp-danger-color-400)}:host(.wpp-combined-select) .inputs-container.with-warnings .anchor,:host(.wpp-combined-select) .inputs-container.with-warnings .wpp-input{border-color:var(--wpp-warning-color-400)}";
+const wppSelectCss = ":host{--select-min-width:var(--wpp-select-min-width, 120px);display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;min-width:var(--select-min-width)}:host .wpp-label{display:-ms-inline-flexbox;display:inline-flex;margin-bottom:8px}:host .wpp-label.disabled .internal-label-wrapper:hover{cursor:not-allowed}:host>.wpp-tooltip{width:100%}:host>.wpp-tooltip::part(anchor){width:100%}:host .anchor-container .wpp-tooltip{width:100%}:host .anchor-container .wpp-tooltip::part(anchor){width:100%}:host .anchor{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;width:100%;border-radius:var(--wpp-border-radius-m);border:1px solid var(--wpp-grey-color-500);position:relative;-webkit-box-sizing:border-box;box-sizing:border-box;outline:none}:host .anchor.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}:host .anchor .icon-start{height:20px;margin-right:9px}:host .anchor.size-s{padding:4px 10px 4px 10px}:host .anchor.size-s .overflow-container{left:5px}:host .anchor.size-m{padding:8px 10px 8px 10px}:host .anchor.size-m p .overflow-container{left:9px}:host .anchor .slot-hidden{display:none}:host .anchor .input{position:absolute;pointer-events:none;outline:none;padding:0;border:none;left:0;bottom:0;opacity:0;color:var(--grey-color-1000);font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input:hover{cursor:pointer}:host .anchor .input::-webkit-input-placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input::-moz-placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input:-ms-input-placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input::-ms-input-placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .input::placeholder{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .wpp-icon-chevron{-webkit-transition:-webkit-transform 0.2s;transition:-webkit-transform 0.2s;transition:transform 0.2s;transition:transform 0.2s, -webkit-transform 0.2s;-webkit-transform:rotateZ(0deg);transform:rotateZ(0deg);margin-left:4px}:host .anchor .wpp-icon-chevron.isOpen{-webkit-transform:rotateZ(180deg);transform:rotateZ(180deg)}:host .anchor .overflow-container{display:-ms-flexbox;display:flex;width:100%;min-width:32px;-ms-flex-align:center;align-items:center;color:var(--grey-color-1000);height:var(--wpp-typography-s-body-line-height, 22px);padding:0 2px}:host .anchor .overflow-container p{width:100%;margin:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .anchor .overflow-container .wpp-tooltip{width:100%}:host .anchor .overflow-container .wpp-tooltip::part(anchor){width:100%}:host .anchor.opened{border-color:var(--wpp-grey-color-800)}:host .anchor:hover{cursor:pointer;background-color:var(--wpp-grey-color-200);border-color:var(--wpp-grey-color-700);--wpp-icon-color:var(--wpp-grey-color-800)}:host .anchor:hover .input{background-color:var(--wpp-grey-color-200)}:host .anchor:hover .overflow-container{background-color:var(--wpp-grey-color-200)}:host .anchor:active{background-color:var(--wpp-grey-color-300);border-color:var(--wpp-grey-color-800);--wpp-icon-color:var(--wpp-grey-color-900)}:host .anchor:active .input{background-color:var(--wpp-grey-color-300)}:host .anchor:active .overflow-container{background-color:var(--wpp-grey-color-300)}:host .anchor.with-errors{border-color:var(--wpp-danger-color-400)}:host .anchor.with-warnings{border-color:var(--wpp-warning-color-400)}:host .anchor.disabled{background-color:var(--wpp-grey-color-100);border-color:var(--wpp-grey-color-400);--wpp-text-color:var(--wpp-text-color-disabled);--wpp-icon-color:var(--wpp-grey-color-400)}:host .anchor.disabled:hover{cursor:not-allowed}:host .anchor.disabled .input{background-color:var(--wpp-grey-color-100);color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input:hover{cursor:not-allowed}:host .anchor.disabled .input::-webkit-input-placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input::-moz-placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input:-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input::-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .input::placeholder{color:var(--wpp-text-color-disabled)}:host .anchor.disabled .overflow-container{background-color:var(--wpp-grey-color-100)}:host .anchor.disabled .overflow-container p{color:var(--wpp-text-color-disabled)}:host .anchor.anchor-button{padding:0;border:none;background:none;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content}:host .wpp-select-portal{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m);border-radius:var(--wpp-border-radius-s);display:none;-ms-flex-align:start;align-items:flex-start;-ms-flex-direction:column;flex-direction:column;width:100%;overflow:hidden;max-height:372px;background-color:var(--wpp-grey-color-000)}:host .wpp-select-portal .wpp-input{--text-input-height-m:var(--wpp-input-select-search-input-height, 40px);--wpp-border-radius-m:0;--text-input-border-width:0;--text-input-second-border-color-focus:transparent;--text-input-first-border-color-focus:transparent;width:100%}:host .wpp-select-portal .nothing-found{--wpp-typography-color:var(--wpp-grey-color-700);padding:5px 8px}:host .wpp-select-portal .wpp-divider{width:100%}:host .wpp-select-portal .list{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%;gap:4px;padding:8px;-webkit-box-sizing:border-box;box-sizing:border-box;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}:host .wpp-select-portal .list::-webkit-scrollbar{width:4px;height:4px}:host .wpp-select-portal .list::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}:host .wpp-select-portal .list .wpp-list-item{--wpp-list-item-width:100%;width:100%}:host .wpp-select-portal .list .wpp-list-item p{margin:0}:host .wpp-select-portal .list.list-with-scrollable{gap:0;padding:0;overflow:hidden}:host .wpp-select-portal .list-scrollable{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:4px;width:100%;padding:8px;-webkit-box-sizing:border-box;box-sizing:border-box;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}:host .wpp-select-portal .list-scrollable::-webkit-scrollbar{width:4px;height:4px}:host .wpp-select-portal .list-scrollable::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}:host .wpp-select-portal .list-scrollable .select-all-section{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:4px}:host .wpp-select-portal .list-scrollable .select-all-section .select-all-divider,:host .wpp-select-portal .list-scrollable .select-all-section .pinned-items-divider{margin:4px 0}:host .wpp-select-portal .list-scrollable .select-all-section .wpp-list-item{--wpp-list-item-width:100%;width:100%}:host .wpp-select-portal .list-scrollable .select-all-section .wpp-list-item p{margin:0}:host .wpp-select-portal .list-scrollable .wpp-list-item{--wpp-list-item-width:100%;width:100%}:host .wpp-select-portal .list-scrollable .wpp-list-item::part(info-wrapper){-ms-flex-align:center;align-items:center}:host .wpp-select-portal .list-scrollable .wpp-list-item::part(checkbox){-ms-flex-item-align:center;align-self:center}:host .wpp-select-portal .list-scrollable .wpp-list-item p{margin:0}:host .wpp-select-portal .list-scrollable .loading-container{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;height:32px;gap:4px}:host .wpp-select-portal .multiple-select-folder{width:100%}:host .wpp-select-portal .multiple-select-folder-buttons{padding:0 8px 8px 8px;-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;-ms-flex-align:center;align-items:center}:host .wpp-select-portal .multiple-select-folder-buttons.with-divider{padding:7px 8px 8px 8px}:host .wpp-select-portal .multiple-select-folder-buttons.select-all-mode{-ms-flex-pack:justify;justify-content:space-between}:host .wpp-select-portal .multiple-select-folder-buttons.select-all-mode .apply-button{margin-left:auto}:host .wpp-select-portal[data-wpp-theme=dark]{background-color:var(--wpp-grey-color-200)}:host .wpp-inline-message{display:-ms-inline-flexbox;display:inline-flex;margin-top:4px}:host .default-message::part(message-icon){display:none}:host(.wpp-text-select){width:auto;--wpp-select-min-width:auto}:host(.wpp-text-select) .anchor{border-radius:var(--wpp-border-radius-s);-ms-flex-pack:start;justify-content:flex-start;padding:1px 6px 1px 8px;border:none;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content}:host(.wpp-text-select) .truncated-text{max-width:100%;overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box}:host(.wpp-text-select) .truncated-text .tooltip{max-width:100%}:host(.wpp-text-select) .truncated-text .tooltip::part(anchor){max-width:100%}:host(.wpp-text-select) .truncated-text .wpp-typography{white-space:nowrap;text-overflow:ellipsis}:host(.wpp-text-select) .should-truncate .wpp-typography{overflow:hidden}:host(.wpp-combined-select){--combined-select-width:var(--wpp-combined-select-width, 274px);--combined-select-element-width:var(--wpp-combined-select-element-width, 112px);--select-min-width:80px;--combined-select-min-width:250px;width:var(--combined-select-width);min-width:var(--combined-select-min-width);display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start}:host(.wpp-combined-select) .wpp-label{margin-bottom:8px}:host(.wpp-combined-select) .combined-anchor-container{width:100%}:host(.wpp-combined-select) .inputs-container{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:start;justify-content:flex-start;width:100%}:host(.wpp-combined-select) .inputs-container .anchor{width:var(--combined-select-element-width);min-width:var(---select-min-width);border:1px solid var(--wpp-grey-color-500);border-radius:var(--wpp-border-radius-m) 0 0 var(--wpp-border-radius-m)}:host(.wpp-combined-select) .inputs-container .anchor.size-s{padding:4px 10px 4px 12px}:host(.wpp-combined-select) .inputs-container .wpp-input{border:1px solid var(--wpp-grey-color-500);border-radius:0 var(--wpp-border-radius-m) var(--wpp-border-radius-m) 0;border-left:none;width:100%;--wpp-input-height-m:38px;--wpp-input-height-s:30px}:host(.wpp-combined-select) .inputs-container .wpp-input::part(input){border:none}:host(.wpp-combined-select) .inputs-container:hover{background-color:var(--wpp-grey-color-200)}:host(.wpp-combined-select) .inputs-container:hover .overflow-container{background-color:var(--wpp-grey-color-200)}:host(.wpp-combined-select) .inputs-container:hover .anchor,:host(.wpp-combined-select) .inputs-container:hover .wpp-input{background-color:var(--wpp-grey-color-200);border:1px solid var(--wpp-grey-color-700)}:host(.wpp-combined-select) .inputs-container:hover .wpp-input{border-left:none}:host(.wpp-combined-select) .inputs-container.is-active{background-color:transparent}:host(.wpp-combined-select) .inputs-container.is-active .anchor,:host(.wpp-combined-select) .inputs-container.is-active .wpp-input{border:1px solid var(--wpp-grey-color-800)}:host(.wpp-combined-select) .inputs-container.is-active .wpp-input{border-left:none}:host(.wpp-combined-select) .inputs-container.is-active .wpp-input::part(input):hover{background-color:transparent}:host(.wpp-combined-select) .inputs-container.is-active:hover .overflow-container{background-color:transparent}:host(.wpp-combined-select) .inputs-container.is-active:hover .anchor,:host(.wpp-combined-select) .inputs-container.is-active:hover .wpp-input{background-color:transparent}:host(.wpp-combined-select) .inputs-container.disabled{background-color:var(--wpp-grey-color-100);color:var(--wpp-text-color-disabled)}:host(.wpp-combined-select) .inputs-container.disabled .anchor,:host(.wpp-combined-select) .inputs-container.disabled .wpp-input{border-color:var(--wpp-grey-color-400)}:host(.wpp-combined-select) .inputs-container.disabled:hover .anchor,:host(.wpp-combined-select) .inputs-container.disabled:hover .wpp-input{background-color:var(--wpp-grey-color-100);border:1px solid var(--wpp-grey-color-400)}:host(.wpp-combined-select) .inputs-container.disabled:hover .wpp-input{border-left:none}:host(.wpp-combined-select) .inputs-container.disabled:hover .overflow-container{background-color:var(--wpp-grey-color-100)}:host(.wpp-combined-select) .inputs-container.with-errors .anchor,:host(.wpp-combined-select) .inputs-container.with-errors .wpp-input{border-color:var(--wpp-danger-color-400)}:host(.wpp-combined-select) .inputs-container.with-warnings .anchor,:host(.wpp-combined-select) .inputs-container.with-warnings .wpp-input{border-color:var(--wpp-warning-color-400)}";
 
 const MINIMUM_ITEMS_COUNT_TO_DISPLAY_SEARCH = 10;
 const TRUNCATION_DELAY = 100;
@@ -215,12 +219,13 @@ const WppSelect = class {
     this.wppBlur = createEvent(this, "wppBlur", 1);
     this.wppApply = createEvent(this, "wppApply", 1);
     this.hasReachedLimit = false;
-    this.themeSubscription = themeSubscriptionController(() => this.portalRef);
+    this.themeSubscription = themeSubscriptionController(() => this.portalRef, (theme) => {
+      this.isDarkTheme = theme === 'dark';
+    });
     this.canSelectAll = false;
     this.canClearAll = false;
     // ************************************
     this.LIB_COMPONENTS_PREFIX = 'wpp-';
-    this._locales = LOCALES_DEFAULTS;
     this.getSelectedItems = () => {
       if (this.type === 'multiple') {
         const selectedItems = this.internalList?.filter((item) => this.emittedValue.some((emittedValueItem) => lodash.isEqual(emittedValueItem, item.value)));
@@ -366,10 +371,10 @@ const WppSelect = class {
         return h(Fragment, null);
       }
       if (this.loading) {
-        return (h("div", { class: "loading-container" }, h("wpp-spinner-v4-1-0", null), h("wpp-typography-v4-1-0", { type: "s-body" }, this._locales.loadingText)));
+        return (h("div", { class: "loading-container" }, h("wpp-spinner-v4-2-0", null), h("wpp-typography-v4-2-0", { type: "s-body" }, this._locales.loadingText)));
       }
       if (this.internalList?.length === 0) {
-        return (h("wpp-typography-v4-1-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+        return (h("wpp-typography-v4-2-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
       }
       let hiddeItemsCount = 0;
       return (h(Fragment, null, this.internalList?.map((item) => {
@@ -379,11 +384,13 @@ const WppSelect = class {
           if (hidden)
             hiddeItemsCount++;
           if (hiddeItemsCount === this.internalList?.length) {
-            return (h("wpp-typography-v4-1-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+            return (h("wpp-typography-v4-2-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
           }
           return null;
         }
-        return (h("wpp-list-item-v4-1-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
+        return (h("wpp-list-item-v4-2-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ref: item.checked && this.type === 'single'
+            ? el => (this.selectedItemRef = el)
+            : undefined, isDarkTheme: this.isDarkTheme, ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
     };
     this.renderPinnedItems = () => {
@@ -391,9 +398,15 @@ const WppSelect = class {
       if (items.length === 0)
         return h(Fragment, null);
       return (h(Fragment, null, items.map((item) => {
-        const { label, value, checked, disabled, id, slots } = item;
+        // The pinned list is a snapshot captured when the dropdown opens. The live checked/disabled
+        // state must be read from the current internalList, otherwise toggling a pinned item (or a
+        // parent passing a new `list` reference) leaves the rendered checkbox out of sync.
+        const current = this.internalList?.find(listItem => lodash.isEqual(listItem.value, item.value));
+        if (!current)
+          return null;
+        const { label, value, checked, disabled, id, slots } = current;
         const itemValueKey = this.convertValueToKey(value);
-        return (h("wpp-list-item-v4-1-0", { onWppChangeListItem: this.handleClickListItem, key: `pinned-${itemValueKey}`, value: value, checked: checked, disabled: disabled, multiple: true, id: id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${id}` : undefined, class: "pinned-item" }, h("p", { slot: "label" }, label), slots && this.renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+        return (h("wpp-list-item-v4-2-0", { onWppChangeListItem: this.handleClickListItem, key: `pinned-${itemValueKey}`, value: value, checked: checked, disabled: disabled, multiple: true, isDarkTheme: this.isDarkTheme, id: id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${id}` : undefined, class: "pinned-item" }, h("p", { slot: "label" }, label), slots && this.renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
     };
     this.renderSlotsInListItem = (slots, isLabelExists) => slots
@@ -508,7 +521,7 @@ const WppSelect = class {
         this.dropdownConfig?.onShow(instance);
       }
       this.isOpen = true;
-      if (this.showSelectAllOption && this.type === 'multiple' && this.withFolder) {
+      if (this.showSelectAllOption && this.type === 'multiple') {
         this.pinnedItems = this.internalList?.filter(item => item.checked) ?? [];
       }
     };
@@ -541,6 +554,13 @@ const WppSelect = class {
         this.dropdownConfig?.onHidden(instance);
       }
     };
+    this.scrollSelectedListItemIntoView = () => {
+      if (!this.scrollSelectedItemIntoView || this.type !== 'single' || !this.selectedItemRef || !this.listRef)
+        return;
+      const itemBottom = this.selectedItemRef.offsetTop + this.selectedItemRef.offsetHeight;
+      // Need to add 4px due to gap in list items
+      this.listRef.scrollTo({ top: Math.max(0, itemBottom + 4 - this.listRef.clientHeight), behavior: 'smooth' });
+    };
     this.createTippyInstance = () => {
       if (!this.anchorRef || !this.portalRef)
         return;
@@ -567,6 +587,7 @@ const WppSelect = class {
           else {
             this.focusFirstListItem();
           }
+          this.scrollSelectedListItemIntoView();
           if (this.dropdownConfig?.onShown) {
             this.dropdownConfig?.onShown(instance);
           }
@@ -775,6 +796,7 @@ const WppSelect = class {
     this.shouldShowSearch = false;
     this.focusType = undefined;
     this.isRenderMessageInTooltip = false;
+    this.isDarkTheme = undefined;
     this.withScroll = false;
     this.checkedItems = 0;
     this.disabledItems = 0;
@@ -815,12 +837,13 @@ const WppSelect = class {
     this.dropdownConfig = {};
     this.locales = {};
     this.showSelectAllText = true;
-    this.showSelectAllOption = false;
+    this.showSelectAllOption = true;
     this.inputValue = undefined;
     this.maskOptions = undefined;
     this.inputType = 'text';
     this.tooltipConfig = {};
     this.messageInTooltip = false;
+    this.scrollSelectedItemIntoView = false;
   }
   onUpdateDisplayValue() {
     if (this.type === 'single' && this.displayValue !== undefined) {
@@ -931,9 +954,6 @@ const WppSelect = class {
   onUpdateMessage() {
     this.checkMessageInTooltip();
   }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
-  }
   /**
    * Sets focus on the select and opens the dropdown.
    */
@@ -941,7 +961,6 @@ const WppSelect = class {
     this.handleClick(true);
   }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
     this.versionToCompare = version.slice(1).split('-').join('');
     this.updateSlotData();
     this.checkMessageInTooltip();
@@ -1020,6 +1039,9 @@ const WppSelect = class {
       this.resizeObserver.disconnect();
     }
   }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
   get filteredPinnedItems() {
     if (!this.searchText)
       return this.pinnedItems;
@@ -1064,7 +1086,7 @@ const WppSelect = class {
     }
     return renderCombinedSelect.call(this);
   }
-  static get registryIs() { return "wpp-select-v4-1-0"; }
+  static get registryIs() { return "wpp-select-v4-2-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "displayValue": ["onUpdateDisplayValue"],
@@ -1076,8 +1098,7 @@ const WppSelect = class {
     "maximumSelectedItems": ["onUpdateMaximumSelectedItems"],
     "messageInTooltip": ["onUpdateMessage"],
     "message": ["onUpdateMessage"],
-    "messageType": ["onUpdateMessage"],
-    "locales": ["onUpdateLocales"]
+    "messageType": ["onUpdateMessage"]
   }; }
 };
 WppSelect.style = wppSelectCss;

@@ -18,7 +18,6 @@ export declare class WppInlineMessage {
   focusType: FOCUS_TYPE;
   private messageRef?;
   private resizeObserver;
-  private _locales;
   /**
    * Defines the title of the component. This prop is available only for inline-messages with size="l".
    */
@@ -66,11 +65,11 @@ export declare class WppInlineMessage {
    */
   wppClickCloseBtn: EventEmitter<void>;
   onUpdateTitleText(): void;
-  onUpdateLocales(newLocales: Partial<InlineMessageLocalesType>): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
   connectedCallback(): void;
   disconnectedCallback(): void;
+  private get _locales();
   private setupResizeObserver;
   private checkTruncation;
   private getMessage;

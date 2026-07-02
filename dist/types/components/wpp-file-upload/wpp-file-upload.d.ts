@@ -26,7 +26,6 @@ interface FocusType {
  */
 export declare class WppFileUpload implements BaseFormControl<FileItemType[], FileUploadEventDetail> {
   private inputRef?;
-  private _locales;
   private inputId;
   private labelId;
   private lastKeyWasTab;
@@ -159,9 +158,8 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
   private reInitValue;
   protected onDisabledChange(disabled: boolean): void;
   onValueChange(newValue: FileItemType[]): void;
-  onUpdateLocales(newLocales: Partial<FileUploadLocales>): void;
-  componentWillLoad(): void;
   componentDidLoad(): void;
+  private get _locales();
   connectedCallback(): void;
   disconnectedCallback(): void;
   private onGlobalKeyDown;

@@ -216,7 +216,7 @@ const clickOnElementsWithHandlers = (e) => {
     ?.some(elem => Array.from(elem.classList || []).some(className => innerElementsWithHandlers.includes(className)));
 };
 
-const wppTreeItemCss = ":host{--tree-item-height:var(--wpp-tree-item-height, 32px);--tree-item-width:var(--wpp-tree-item-width, 100%);--tree-item-padding:var(--wpp-tree-item-padding, 4px 8px 4px 0);--tree-item-cursor:var(--wpp-tree-item-cursor, pointer);--tree-item-border-radius:var(--wpp-tree-item-border-radius, 6px);--tree-item-checkbox-margin:var(--wpp-tree-item-checkbox-margin, 0 8px 0 0);--tree-item-disabled-color:var(--wpp-tree-item-disabled-color, var(--wpp-grey-color-400));--tree-item-bg-color:var(--wpp-tree-item-bg-color, var(--wpp-grey-color-000));--tree-item-bg-color-hover:var(--wpp-tree-item-bg-color-hover, var(--wpp-grey-color-200));--tree-item-bg-color-active:var(--wpp-tree-item-bg-color-active, var(--wpp-grey-color-300));--tree-item-bg-color-selected:var(--wpp-tree-item-bg-color-selected, var(--wpp-primary-color-100));--tree-item-extended-active-bg-color:var(--wpp-tree-item-extended-active-bg-color, var(--wpp-grey-color-200));--tree-item-extended-icon-margin:var(--wpp-tree-item-extended-icon-margin, 0 4px 0 0);--tree-item-extended-icon-color-hover:var(--wpp-tree-item-extended-icon-color-hover, var(--wpp-icon-color-hover));--tree-item-extended-icon-color-active:var(--wpp-tree-item-extended-icon-color-active, var(--wpp-icon-color-active));--tree-item-icon-end-color-hover:var(--wpp-tree-item-icon-end-color-hover, var(--wpp-icon-color-hover));--tree-item-icon-end-color-active:var(--wpp-tree-item-icon-end-color-active, var(--wpp-icon-color-active));--tree-item-text-active:var(--wpp-tree-item-text-active, var(--wpp-brand-color));--tree-item-text-highlight:var(--wpp-tree-item-text-highlight, var(--wpp-grey-color-1000));--tree-item-switcher-transition-property:var(--wpp-tree-item-switcher-transition-property, all);--tree-item-switcher-transition-duration:var(--wpp-tree-item-switcher-transition-duration, 100ms);--tree-item-switcher-transition-timing-function:var(\n    --wpp-tree-item-switcher-transition-timing-function,\n    ease-in-out\n  );--tree-item-end-content-margin-left:var(--wpp-tree-item-end-content-margin-left, 8px);--tree-item-end-content-avatar-size-xs:var(--wpp-tree-item-end-content-avatar-size-xs, 24px);--tree-item-focus-outline-color:var(--wpp-tree-item-focus-outline-color, var(--wpp-primary-color-500));--tree-item-focus-outline-width:var(--wpp-tree-item-focus-outline-width, 2px);--tree-item-focus-outline-offset:var(--wpp-tree-item-focus-outline-offset, -2px);display:inline-block;-webkit-transition:height 350ms ease;transition:height 350ms ease;width:var(--tree-item-width);outline:none}:host([is-focused]) .tree-item{outline:var(--tree-item-focus-outline-width) solid var(--tree-item-focus-outline-color);outline-offset:var(--tree-item-focus-outline-offset);border-radius:var(--tree-item-border-radius)}:host(.wpp-hidden){display:none}.tree-item{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);height:var(--tree-item-height);display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;-ms-flex-align:center;align-items:center;position:relative;background:var(--tree-item-bg-color);border-radius:var(--tree-item-border-radius);padding:var(--tree-item-padding);padding-left:36px;-webkit-box-sizing:border-box;box-sizing:border-box;cursor:var(--tree-item-cursor);-webkit-transition:0.1s ease-in-out;transition:0.1s ease-in-out;width:var(--tree-item-width)}.tree-item.with-text-wrap:not(.with-truncation){height:auto}.tree-item.with-text-wrap:not(.with-truncation) .title{white-space:normal}.tree-item.with-truncation{min-width:0}.tree-item.with-truncation .tooltip{min-width:0}.tree-item.with-truncation .tooltip::part(anchor){overflow:hidden}.tree-item.with-truncation .title{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.tree-item.parent{padding-left:0}.tree-item .wpp-checkbox{margin:var(--tree-item-checkbox-margin)}.tree-item.selected:not(.multiple){background:var(--tree-item-bg-color-selected)}.tree-item.selected:not(.multiple) .title{font-size:var(--wpp-typography-s-midi-font-size, 14px);line-height:var(--wpp-typography-s-midi-line-height, 22px);font-weight:var(--wpp-typography-s-midi-font-weight, 500);color:var(--wpp-typography-s-midi-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-midi-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-midi-letter-spacing, 0);color:var(--tree-item-text-active)}.tree-item.selected:not(.multiple):hover{background:var(--tree-item-bg-color-selected)}.tree-item.disabled{cursor:not-allowed}.tree-item.disabled .title{color:var(--tree-item-disabled-color)}.tree-item.disabled .switcher .wpp-icon-triangle-fill{color:var(--tree-item-disabled-color)}.tree-item.disabled .switcher:hover .wpp-icon-triangle-fill{color:var(--tree-item-disabled-color)}.tree-item.disabled .icon-end{pointer-events:none}.tree-item.disabled:hover{background:none}.tree-item .switcher{display:-ms-flexbox;display:flex;-ms-flex-pack:center;justify-content:center;-ms-flex-align:center;align-items:center;height:32px;width:32px;min-width:32px;border-radius:var(--tree-item-border-radius);margin-right:4px}.tree-item .switcher .wpp-icon-triangle-fill{-webkit-transition-property:var(--tree-item-switcher-transition-property);transition-property:var(--tree-item-switcher-transition-property);-webkit-transition-duration:var(--tree-item-switcher-transition-duration);transition-duration:var(--tree-item-switcher-transition-duration);-webkit-transition-timing-function:var(--tree-item-switcher-transition-timing-function);transition-timing-function:var(--tree-item-switcher-transition-timing-function)}.tree-item .switcher .wpp-icon-triangle-fill[data-open=true]{rotate:90deg}.tree-item .switcher:hover .wpp-icon-triangle-fill{color:var(--tree-item-extended-icon-color-hover)}.tree-item:hover{background:var(--tree-item-bg-color-hover)}.tree-item:hover:not(.disabled) .icon-end{opacity:1}.tree-item:hover .wpp-icon-triangle-fill{color:var(--wpp-grey-color-800)}.tree-item:hover .icon-extended{color:var(--tree-item-extended-icon-color-hover)}.tree-item:active{background:var(--tree-item-bg-color-active)}.tree-item:active .wpp-icon-triangle-fill{color:var(--wpp-grey-color-900)}.tree-item:active .icon-end{color:var(--wpp-grey-color-900)}.tree-item .title{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);width:100%;white-space:nowrap}.tree-item .title.with-icon-end{padding-right:32px}.tree-item .icon-start{display:-ms-inline-flexbox;display:inline-flex;margin-right:8px;color:var(--wpp-grey-color-800)}.tree-item .icon-start ::slotted(*){color:var(--wpp-grey-color-800)}.tree-item .icon-start:hover{color:var(--wpp-grey-color-800)}.tree-item .icon-start:hover ::slotted(*){color:var(--wpp-grey-color-800)}.tree-item .icon-start:active{color:var(--wpp-grey-color-900)}.tree-item .icon-start:active ::slotted(*){color:var(--wpp-grey-color-900)}.tree-item .wpp-menu-context{margin-top:6px}.tree-item .icon-end{width:var(--tree-input-trigger-area);height:var(--tree-input-trigger-area);-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;display:-ms-inline-flexbox;display:inline-flex;margin-left:auto;opacity:0;-webkit-transition:0.1s ease-in-out;transition:0.1s ease-in-out;border-radius:var(--tree-item-border-radius);margin-right:-4px;position:absolute;right:4px;cursor:pointer;pointer-events:all;--wpp-action-button-secondary-icon-color-active:var(--tree-item-icon-end-color-active)}.tree-item .icon-end:hover{opacity:1}.tree-item .icon-end:active{opacity:1}.tree-item .icon-end:focus-within{opacity:1}.tree-item .end-content{display:-ms-flexbox;display:flex;-ms-flex-pack:end;justify-content:flex-end;margin-left:var(--tree-item-end-content-margin-left);white-space:nowrap}.tree-item .end-content.wpp-typography{color:var(--wpp-grey-color-800)}.tree-item .tree-end-content-tag{overflow:visible}.tree-item .wpp-avatar.size-xs::part(image){width:var(--tree-item-end-content-avatar-size-xs)}.tree-item .slot-hidden{display:none}.menu-trigger{-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:var(--tree-input-trigger-area);height:var(--tree-input-trigger-area);border-radius:var(--tree-item-border-radius);-webkit-transition:0.2s ease-in-out;transition:0.2s ease-in-out;color:var(--tree-item-icon-end-color)}.menu-trigger.disabled{pointer-events:none;color:var(--tree-item-disabled-color);background-color:transparent}.menu-trigger[aria-expanded=true]{color:var(--tree-item-icon-end-color-active);background-color:var(--tree-item-icon-end-background-active-color)}.menu-trigger:active{color:var(--tree-item-icon-end-color-active)}.content-container{display:grid;-ms-flex-direction:column;flex-direction:column}.highlight{font-weight:700}.content-wrapper{display:grid;overflow:hidden;-webkit-transition:height 500ms ease;transition:height 500ms ease}:host([data-wpp-theme=dark]) .tree-item{background:var(--wpp-grey-color-100)}";
+const wppTreeItemCss = ":host{--tree-item-height:var(--wpp-tree-item-height, 32px);--tree-item-width:var(--wpp-tree-item-width, 100%);--tree-item-padding:var(--wpp-tree-item-padding, 4px 8px 4px 0);--tree-item-cursor:var(--wpp-tree-item-cursor, pointer);--tree-item-border-radius:var(--wpp-tree-item-border-radius, 6px);--tree-item-checkbox-margin:var(--wpp-tree-item-checkbox-margin, 0 8px 0 0);--tree-item-disabled-color:var(--wpp-tree-item-disabled-color, var(--wpp-grey-color-400));--tree-item-bg-color:var(--wpp-tree-item-bg-color, var(--wpp-grey-color-000));--tree-item-bg-color-hover:var(--wpp-tree-item-bg-color-hover, var(--wpp-grey-color-200));--tree-item-bg-color-active:var(--wpp-tree-item-bg-color-active, var(--wpp-grey-color-300));--tree-item-bg-color-selected:var(--wpp-tree-item-bg-color-selected, var(--wpp-primary-color-100));--tree-item-extended-active-bg-color:var(--wpp-tree-item-extended-active-bg-color, var(--wpp-grey-color-200));--tree-item-extended-icon-margin:var(--wpp-tree-item-extended-icon-margin, 0 4px 0 0);--tree-item-extended-icon-color-hover:var(--wpp-tree-item-extended-icon-color-hover, var(--wpp-icon-color-hover));--tree-item-extended-icon-color-active:var(--wpp-tree-item-extended-icon-color-active, var(--wpp-icon-color-active));--tree-item-icon-end-color-hover:var(--wpp-tree-item-icon-end-color-hover, var(--wpp-icon-color-hover));--tree-item-icon-end-color-active:var(--wpp-tree-item-icon-end-color-active, var(--wpp-icon-color-active));--tree-item-text-active:var(--wpp-tree-item-text-active, var(--wpp-brand-color));--tree-item-text-highlight:var(--wpp-tree-item-text-highlight, var(--wpp-grey-color-1000));--tree-item-switcher-transition-property:var(--wpp-tree-item-switcher-transition-property, all);--tree-item-switcher-transition-duration:var(--wpp-tree-item-switcher-transition-duration, 100ms);--tree-item-switcher-transition-timing-function:var(\n    --wpp-tree-item-switcher-transition-timing-function,\n    ease-in-out\n  );--tree-item-end-content-margin-left:var(--wpp-tree-item-end-content-margin-left, 8px);--tree-item-end-content-avatar-size-xs:var(--wpp-tree-item-end-content-avatar-size-xs, 24px);--tree-item-focus-outline-color:var(--wpp-tree-item-focus-outline-color, var(--wpp-primary-color-500));--tree-item-focus-outline-width:var(--wpp-tree-item-focus-outline-width, 2px);--tree-item-focus-outline-offset:var(--wpp-tree-item-focus-outline-offset, -2px);display:inline-block;-webkit-transition:height 350ms ease;transition:height 350ms ease;width:var(--tree-item-width);outline:none}:host([is-focused]) .tree-item{outline:var(--tree-item-focus-outline-width) solid var(--tree-item-focus-outline-color);outline-offset:var(--tree-item-focus-outline-offset);border-radius:var(--tree-item-border-radius)}:host(.wpp-hidden){display:none}.tree-item{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);height:var(--tree-item-height);display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;-ms-flex-align:center;align-items:center;position:relative;background:var(--tree-item-bg-color);border-radius:var(--tree-item-border-radius);padding:var(--tree-item-padding);padding-left:36px;-webkit-box-sizing:border-box;box-sizing:border-box;cursor:var(--tree-item-cursor);-webkit-transition:0.1s ease-in-out;transition:0.1s ease-in-out;width:var(--tree-item-width)}.tree-item.with-text-wrap:not(.with-truncation){height:auto}.tree-item.with-text-wrap:not(.with-truncation) .title{white-space:normal}.tree-item.with-truncation{min-width:0}.tree-item.with-truncation .tooltip{min-width:0}.tree-item.with-truncation .tooltip::part(anchor){overflow:hidden}.tree-item.with-truncation .title{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.tree-item.parent{padding-left:0}.tree-item .wpp-checkbox{margin:var(--tree-item-checkbox-margin)}.tree-item.selected:not(.multiple){background:var(--tree-item-bg-color-selected)}.tree-item.selected:not(.multiple) .title{font-size:var(--wpp-typography-s-midi-font-size, 14px);line-height:var(--wpp-typography-s-midi-line-height, 22px);font-weight:var(--wpp-typography-s-midi-font-weight, 500);color:var(--wpp-typography-s-midi-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-midi-letter-spacing, 0);color:var(--tree-item-text-active)}.tree-item.selected:not(.multiple):hover{background:var(--tree-item-bg-color-selected)}.tree-item.disabled{cursor:not-allowed}.tree-item.disabled .title{color:var(--tree-item-disabled-color)}.tree-item.disabled .switcher .wpp-icon-triangle-fill{color:var(--tree-item-disabled-color)}.tree-item.disabled .switcher:hover .wpp-icon-triangle-fill{color:var(--tree-item-disabled-color)}.tree-item.disabled .icon-end{pointer-events:none}.tree-item.disabled:hover{background:none}.tree-item .switcher{display:-ms-flexbox;display:flex;-ms-flex-pack:center;justify-content:center;-ms-flex-align:center;align-items:center;height:32px;width:32px;min-width:32px;border-radius:var(--tree-item-border-radius);margin-right:4px}.tree-item .switcher .wpp-icon-triangle-fill{-webkit-transition-property:var(--tree-item-switcher-transition-property);transition-property:var(--tree-item-switcher-transition-property);-webkit-transition-duration:var(--tree-item-switcher-transition-duration);transition-duration:var(--tree-item-switcher-transition-duration);-webkit-transition-timing-function:var(--tree-item-switcher-transition-timing-function);transition-timing-function:var(--tree-item-switcher-transition-timing-function)}.tree-item .switcher .wpp-icon-triangle-fill[data-open=true]{rotate:90deg}.tree-item .switcher:hover .wpp-icon-triangle-fill{color:var(--tree-item-extended-icon-color-hover)}.tree-item:hover{background:var(--tree-item-bg-color-hover)}.tree-item:hover:not(.disabled) .icon-end{opacity:1}.tree-item:hover .wpp-icon-triangle-fill{color:var(--wpp-grey-color-800)}.tree-item:hover .icon-extended{color:var(--tree-item-extended-icon-color-hover)}.tree-item:active{background:var(--tree-item-bg-color-active)}.tree-item:active .wpp-icon-triangle-fill{color:var(--wpp-grey-color-900)}.tree-item:active .icon-end{color:var(--wpp-grey-color-900)}.tree-item .title{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);width:100%;white-space:nowrap}.tree-item .title.with-icon-end{padding-right:32px}.tree-item .icon-start{display:-ms-inline-flexbox;display:inline-flex;margin-right:8px;color:var(--wpp-grey-color-800)}.tree-item .icon-start ::slotted(*){color:var(--wpp-grey-color-800)}.tree-item .icon-start:hover{color:var(--wpp-grey-color-800)}.tree-item .icon-start:hover ::slotted(*){color:var(--wpp-grey-color-800)}.tree-item .icon-start:active{color:var(--wpp-grey-color-900)}.tree-item .icon-start:active ::slotted(*){color:var(--wpp-grey-color-900)}.tree-item .wpp-menu-context{margin-top:6px}.tree-item .icon-end{width:var(--tree-input-trigger-area);height:var(--tree-input-trigger-area);-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;display:-ms-inline-flexbox;display:inline-flex;margin-left:auto;opacity:0;-webkit-transition:0.1s ease-in-out;transition:0.1s ease-in-out;border-radius:var(--tree-item-border-radius);margin-right:-4px;position:absolute;right:4px;cursor:pointer;pointer-events:all;--wpp-action-button-secondary-icon-color-active:var(--tree-item-icon-end-color-active)}.tree-item .icon-end:hover{opacity:1}.tree-item .icon-end:active{opacity:1}.tree-item .icon-end:focus-within{opacity:1}.tree-item .end-content{display:-ms-flexbox;display:flex;-ms-flex-pack:end;justify-content:flex-end;margin-left:var(--tree-item-end-content-margin-left);white-space:nowrap}.tree-item .end-content.wpp-typography{color:var(--wpp-grey-color-800)}.tree-item .tree-end-content-tag{overflow:visible}.tree-item .wpp-avatar.size-xs::part(image){width:var(--tree-item-end-content-avatar-size-xs)}.tree-item .slot-hidden{display:none}.menu-trigger{-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:var(--tree-input-trigger-area);height:var(--tree-input-trigger-area);border-radius:var(--tree-item-border-radius);-webkit-transition:0.2s ease-in-out;transition:0.2s ease-in-out;color:var(--tree-item-icon-end-color)}.menu-trigger.disabled{pointer-events:none;color:var(--tree-item-disabled-color);background-color:transparent}.menu-trigger[aria-expanded=true]{color:var(--tree-item-icon-end-color-active);background-color:var(--tree-item-icon-end-background-active-color)}.menu-trigger:active{color:var(--tree-item-icon-end-color-active)}.content-container{display:grid;-ms-flex-direction:column;flex-direction:column}.highlight{font-weight:700}.content-wrapper{display:grid;overflow:hidden;-webkit-transition:height 500ms ease;transition:height 500ms ease}:host([data-wpp-theme=dark]) .tree-item{--tree-item-bg-color:var(--wpp-grey-color-100)}";
 
 const WppTreeItem = /*@__PURE__*/ proxyCustomElement(class WppTreeItem extends HTMLElement {
   constructor() {
@@ -414,21 +414,21 @@ const WppTreeItem = /*@__PURE__*/ proxyCustomElement(class WppTreeItem extends H
       const { className } = props;
       switch (contentType) {
         case 'text':
-          return (h("wpp-typography-v4-1-0", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
+          return (h("wpp-typography-v4-2-0", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
         case 'tag': {
           const { icon } = props;
-          return (h("wpp-tag-v4-1-0", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
+          return (h("wpp-tag-v4-2-0", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
             h(transformToVersionedTag(icon), {
               slot: 'icon-start',
               part: 'icon-start',
             })));
         }
         case 'avatar':
-          return (h("wpp-avatar-v4-1-0", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar",
+          return (h("wpp-avatar-v4-2-0", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar",
             // Remove from tab order - tree uses arrow keys per ARIA APG
             index: -1 }));
         case 'avatarGroup':
-          return (h("wpp-avatar-group-v4-1-0", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group",
+          return (h("wpp-avatar-group-v4-2-0", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group",
             // Remove avatars from tab order - tree uses arrow keys per ARIA APG
             avatarsIndex: -1 }));
         default:
@@ -473,6 +473,7 @@ const WppTreeItem = /*@__PURE__*/ proxyCustomElement(class WppTreeItem extends H
     this.disableOpenCloseAnimation = false;
     this.withItemsTruncation = false;
     this.endContent = undefined;
+    this.isDarkTheme = undefined;
   }
   onItemChange(next, prev) {
     const openChanged = prev.open !== next.open;
@@ -519,6 +520,12 @@ const WppTreeItem = /*@__PURE__*/ proxyCustomElement(class WppTreeItem extends H
       this.updateParentHeight(this.host);
     }
   }
+  onUpdateDarkTheme() {
+    // In case the `tree-item` component subscribed to theme changes before the parent component starts controlling the `isDarkTheme` prop.
+    if (this.isDarkTheme !== undefined) {
+      this.themeSubscription.stop();
+    }
+  }
   componentDidLoad() {
     this.titleMeasureTimeout = window.setTimeout(() => {
       if (!this.host?.isConnected)
@@ -530,10 +537,16 @@ const WppTreeItem = /*@__PURE__*/ proxyCustomElement(class WppTreeItem extends H
     }, 0);
   }
   connectedCallback() {
-    this.themeSubscription.start();
+    // By default, the component will subscribe to theme changes, unless the `isDarkTheme` property is passed explicitly from the parent component (from select, autocomplete).
+    // This is needed in order to avoid unnecessary subscription to theme changes for each list-item.
+    if (this.isDarkTheme === undefined) {
+      this.themeSubscription.start();
+    }
   }
   disconnectedCallback() {
-    this.themeSubscription.stop();
+    if (this.isDarkTheme === undefined) {
+      this.themeSubscription.stop();
+    }
     if (this.titleMeasureTimeout != null) {
       clearTimeout(this.titleMeasureTimeout);
       this.titleMeasureTimeout = undefined;
@@ -571,7 +584,7 @@ const WppTreeItem = /*@__PURE__*/ proxyCustomElement(class WppTreeItem extends H
   render() {
     const isParent = !!this.item?.hasChildren || !!this.item?.children?.length;
     const selectionAttr = this.getSelectionAttribute();
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeitem", "aria-label": this.item.title, "aria-level": this.level, "aria-setsize": this.setSize, "aria-posinset": this.posInSet, "aria-expanded": isParent ? (this.item.open ? 'true' : 'false') : undefined, "aria-disabled": this.item.disabled ? 'true' : undefined, "aria-busy": this.item.loadingChildren ? 'true' : undefined, ...selectionAttr, ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (h("div", { class: "switcher", onClick: this.onSwitcherClick, part: "tree-item-switcher", "data-switcher": "true", "aria-hidden": "true" }, h("wpp-icon-triangle-fill-v4-1-0", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (h("wpp-checkbox-v4-1-0", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox", "aria-hidden": "true", index: -1 })), h(WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (h("wpp-tooltip-v4-1-0", { text: this.item.title, config: { placement: 'right' }, class: "tooltip", anchorTabIndex: -1 }, this.renderTitle())) : (this.renderTitle()), h("wpp-action-button-v4-1-0", { variant: "secondary", disabled: this.item.disabled || this.item.loadingChildren, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button", ariaProps: {
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeitem", "aria-label": this.item.title, "aria-level": this.level, "aria-setsize": this.setSize, "aria-posinset": this.posInSet, "aria-expanded": isParent ? (this.item.open ? 'true' : 'false') : undefined, "aria-disabled": this.item.disabled ? 'true' : undefined, "aria-busy": this.item.loadingChildren ? 'true' : undefined, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}), ...selectionAttr, ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (h("div", { class: "switcher", onClick: this.onSwitcherClick, part: "tree-item-switcher", "data-switcher": "true", "aria-hidden": "true" }, h("wpp-icon-triangle-fill-v4-2-0", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (h("wpp-checkbox-v4-2-0", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox", isDarkTheme: this.isDarkTheme, "aria-hidden": "true", index: -1 })), h(WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (h("wpp-tooltip-v4-2-0", { text: this.item.title, config: { placement: 'right' }, class: "tooltip", anchorTabIndex: -1 }, this.renderTitle())) : (this.renderTitle()), h("wpp-action-button-v4-2-0", { variant: "secondary", disabled: this.item.disabled || this.item.loadingChildren, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button", ariaProps: {
         label: this.hasIconEndSlot ? `Actions for ${this.item.title}` : undefined,
         // tabIndex=-1 removes from sequential Tab order; tree handles Tab navigation
         // per W3C ARIA APG Treeview: Tab from tree container moves focus here programmatically
@@ -580,13 +593,14 @@ const WppTreeItem = /*@__PURE__*/ proxyCustomElement(class WppTreeItem extends H
       (this.item.loadingChildren || (Array.isArray(this.item.children) && this.item.children.length > 0))) ||
       !this.isCollapseTransitionEnd) && h(WrappedSlot, { name: "content", onSlotchange: this.updateSlotData })));
   }
-  static get registryIs() { return "wpp-tree-item-v4-1-0"; }
+  static get registryIs() { return "wpp-tree-item-v4-2-0"; }
   get host() { return this; }
   static get watchers() { return {
-    "item": ["onItemChange"]
+    "item": ["onItemChange"],
+    "isDarkTheme": ["onUpdateDarkTheme"]
   }; }
   static get style() { return wppTreeItemCss; }
-}, [1, "wpp-tree-item", "wpp-tree-item-v4-1-0", {
+}, [1, "wpp-tree-item", "wpp-tree-item-v4-2-0", {
     "text": [513],
     "multiple": [516],
     "search": [1],
@@ -601,6 +615,7 @@ const WppTreeItem = /*@__PURE__*/ proxyCustomElement(class WppTreeItem extends H
     "disableOpenCloseAnimation": [4, "disable-open-close-animation"],
     "withItemsTruncation": [4, "with-items-truncation"],
     "endContent": [16],
+    "isDarkTheme": [4, "is-dark-theme"],
     "hasIconStartSlot": [32],
     "hasIconEndSlot": [32],
     "hasIconEndContextMenu": [32],
@@ -612,124 +627,124 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tree-item-v4-1-0", "wpp-action-button-v4-1-0", "wpp-avatar-v4-1-0", "wpp-avatar-group-v4-1-0", "wpp-checkbox-v4-1-0", "wpp-icon-chevron-v4-1-0", "wpp-icon-cross-v4-1-0", "wpp-icon-dash-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-info-message-v4-1-0", "wpp-icon-success-v4-1-0", "wpp-icon-tick-v4-1-0", "wpp-icon-triangle-fill-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-inline-message-v4-1-0", "wpp-internal-label-v4-1-0", "wpp-internal-tooltip-v4-1-0", "wpp-label-v4-1-0", "wpp-list-item-v4-1-0", "wpp-menu-context-v4-1-0", "wpp-spinner-v4-1-0", "wpp-tag-v4-1-0", "wpp-tooltip-v4-1-0", "wpp-typography-v4-1-0"];
+  const components = ["wpp-tree-item-v4-2-0", "wpp-action-button-v4-2-0", "wpp-avatar-v4-2-0", "wpp-avatar-group-v4-2-0", "wpp-checkbox-v4-2-0", "wpp-icon-chevron-v4-2-0", "wpp-icon-cross-v4-2-0", "wpp-icon-dash-v4-2-0", "wpp-icon-error-v4-2-0", "wpp-icon-info-message-v4-2-0", "wpp-icon-success-v4-2-0", "wpp-icon-tick-v4-2-0", "wpp-icon-triangle-fill-v4-2-0", "wpp-icon-warning-v4-2-0", "wpp-inline-message-v4-2-0", "wpp-internal-label-v4-2-0", "wpp-internal-tooltip-v4-2-0", "wpp-label-v4-2-0", "wpp-list-item-v4-2-0", "wpp-menu-context-v4-2-0", "wpp-spinner-v4-2-0", "wpp-tag-v4-2-0", "wpp-tooltip-v4-2-0", "wpp-typography-v4-2-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tree-item-v4-1-0":
+    case "wpp-tree-item-v4-2-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTreeItem);
       }
       break;
-    case "wpp-action-button-v4-1-0":
+    case "wpp-action-button-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-avatar-v4-1-0":
+    case "wpp-avatar-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-avatar-group-v4-1-0":
+    case "wpp-avatar-group-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-checkbox-v4-1-0":
+    case "wpp-checkbox-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-chevron-v4-1-0":
+    case "wpp-icon-chevron-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-cross-v4-1-0":
+    case "wpp-icon-cross-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-dash-v4-1-0":
+    case "wpp-icon-dash-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-error-v4-1-0":
+    case "wpp-icon-error-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-info-message-v4-1-0":
+    case "wpp-icon-info-message-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-success-v4-1-0":
+    case "wpp-icon-success-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-tick-v4-1-0":
+    case "wpp-icon-tick-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-triangle-fill-v4-1-0":
+    case "wpp-icon-triangle-fill-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-warning-v4-1-0":
+    case "wpp-icon-warning-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-inline-message-v4-1-0":
+    case "wpp-inline-message-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-internal-label-v4-1-0":
+    case "wpp-internal-label-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-tooltip-v4-1-0":
+    case "wpp-internal-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-label-v4-1-0":
+    case "wpp-label-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-list-item-v4-1-0":
+    case "wpp-list-item-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-menu-context-v4-1-0":
+    case "wpp-menu-context-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-1-0":
+    case "wpp-spinner-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tag-v4-1-0":
+    case "wpp-tag-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-1-0":
+    case "wpp-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-1-0":
+    case "wpp-typography-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

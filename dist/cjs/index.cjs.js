@@ -3,15 +3,13 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const consts = require('./consts-d8f5ef98.js');
-const utils = require('./utils-2231f97a.js');
+const utils = require('./utils-06b46408.js');
 const types = require('./types-332b969c.js');
 const types$1 = require('./types-05f8f988.js');
 const types$2 = require('./types-7010056a.js');
 const types$3 = require('./types-18fdc89e.js');
-const index = require('./index-10e1072f.js');
-const tiptapTypes = require('./tiptap-types-03d4d5ad.js');
+const index = require('./index-4e03e73e.js');
 const types$4 = require('./types-2185a602.js');
-require('./_commonjsHelpers-bcc1208a.js');
 
 const dsPrefix = '--wpp';
 /**
@@ -102,6 +100,28 @@ const resolveTheme = (initJson, variant = 'light') => {
     return value;
   });
 };
+const WppAgGridThemeConfig = {
+  wrapperBorder: false,
+  headerRowBorder: false,
+  rowBorder: { style: 'solid', width: 1, color: 'var(--wpp-grey-color-300)' },
+  backgroundColor: 'var(--wpp-grey-color-000)',
+  headerBackgroundColor: 'var(--wpp-grey-color-000)',
+  headerColumnBorderHeight: 20,
+  headerColumnBorder: { style: 'solid', width: 0, color: 'var(--wpp-grey-color-300)' },
+  headerColumnResizeHandleColor: 'var(--wpp-grey-color-600)',
+  headerColumnResizeHandleHeight: '100%',
+  headerColumnResizeHandleWidth: 2,
+  headerCellHoverBackgroundColor: 'var(--wpp-grey-color-200)',
+  headerHeight: 47,
+  rowHeight: 47,
+  rowHoverColor: 'var(--wpp-grey-color-200)',
+  oddRowBackgroundColor: 'var(--wpp-grey-color-000)',
+  selectedRowBackgroundColor: 'var(--wpp-grey-color-200)',
+  rangeSelectionBorderColor: 'transparent',
+  cellHorizontalPadding: 16,
+  fontFamily: 'var(--wpp-font-family)',
+  fontSize: 13,
+};
 
 Object.defineProperty(exports, 'Z_INDEX', {
   enumerable: true,
@@ -128,6 +148,7 @@ exports.hasShadowDom = utils.hasShadowDom;
 exports.isEventTargetContained = utils.isEventTargetContained;
 exports.isObject = utils.isObject;
 exports.isWppElement = utils.isWppElement;
+exports.mergeLocales = utils.mergeLocales;
 exports.recursiveObjectMap = utils.recursiveObjectMap;
 exports.selectDropdownWidth = utils.selectDropdownWidth;
 exports.setHasFocused = utils.setHasFocused;
@@ -160,21 +181,21 @@ Object.defineProperty(exports, 'ModalCloseReason', {
   }
 });
 exports.Editor = index.Editor;
-exports.Quill = index.Quill;
-exports.RICHTEXT_UPLOAD_REQUEST_EVENT = index.UPLOAD_REQUEST_EVENT;
+exports.RICHTEXT_UPLOAD_REQUEST_EVENT = index.RICHTEXT_UPLOAD_REQUEST_EVENT;
+exports.TIPTAP_UPLOAD_REQUEST_EVENT = index.TIPTAP_UPLOAD_REQUEST_EVENT;
 exports.debugLevels = index.debugLevels;
 exports.formats = index.formats;
-exports.richtextUploadTypes = index.uploadTypes;
+exports.richtextUploadTypes = index.richtextUploadTypes;
 exports.sources = index.sources;
-exports.TIPTAP_UPLOAD_REQUEST_EVENT = tiptapTypes.TIPTAP_UPLOAD_REQUEST_EVENT;
-exports.tiptapFormats = tiptapTypes.tiptapFormats;
-exports.tiptapSources = tiptapTypes.tiptapSources;
-exports.tiptapUploadTypes = tiptapTypes.tiptapUploadTypes;
+exports.tiptapFormats = index.tiptapFormats;
+exports.tiptapSources = index.tiptapSources;
+exports.tiptapUploadTypes = index.tiptapUploadTypes;
 Object.defineProperty(exports, 'SideModalCloseReason', {
   enumerable: true,
   get: function () {
     return types$4.SideModalCloseReason;
   }
 });
+exports.WppAgGridThemeConfig = WppAgGridThemeConfig;
 exports.createTheme = createTheme;
 exports.resolveTheme = resolveTheme;

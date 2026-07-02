@@ -32,7 +32,7 @@ describe('wpp-select', () => {
     };
     const page = await newSpecPage({
       components: [WppSelect, WppListItem, WppLabel, WppInternalLabel],
-      template: () => (h("wpp-select-v4-1-0", { placeholder: "Placeholder", type: "combined", labelConfig: labelConfig }, h("wpp-list-item-v4-1-0", { value: "car", "data-id": "1" }, h("span", { slot: "label" }, "Car")), h("wpp-list-item-v4-1-0", { value: "house", "data-id": "2", disabled: true }, h("span", { slot: "label" }, "House")), h("wpp-list-item-v4-1-0", { value: "apartment", "data-id": "3" }, h("span", { slot: "label" }, "Apartment")))),
+      template: () => (h("wpp-select-v4-2-0", { placeholder: "Placeholder", type: "combined", labelConfig: labelConfig }, h("wpp-list-item-v4-2-0", { value: "car", "data-id": "1" }, h("span", { slot: "label" }, "Car")), h("wpp-list-item-v4-2-0", { value: "house", "data-id": "2", disabled: true }, h("span", { slot: "label" }, "House")), h("wpp-list-item-v4-2-0", { value: "apartment", "data-id": "3" }, h("span", { slot: "label" }, "Apartment")))),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await page.waitForChanges();
@@ -48,7 +48,7 @@ describe('wpp-select', () => {
       });
       await newSpecPage({
         components: [WppSelect, WppListItem, WppLabel, WppInternalLabel],
-        template: () => (h("wpp-select-v4-1-0", { placeholder: "Placeholder", type: "combined" }, h("wpp-list-item-v4-1-0", { value: "car", "data-id": "1" }, h("span", { slot: "label" }, "Car")), h("wpp-list-item-v4-1-0", { value: "house", "data-id": "2", disabled: true }, h("span", { slot: "label" }, "House")), h("wpp-list-item-v4-1-0", { value: "apartment", "data-id": "3" }, h("span", { slot: "label" }, "Apartment")))),
+        template: () => (h("wpp-select-v4-2-0", { placeholder: "Placeholder", type: "combined" }, h("wpp-list-item-v4-2-0", { value: "car", "data-id": "1" }, h("span", { slot: "label" }, "Car")), h("wpp-list-item-v4-2-0", { value: "house", "data-id": "2", disabled: true }, h("span", { slot: "label" }, "House")), h("wpp-list-item-v4-2-0", { value: "apartment", "data-id": "3" }, h("span", { slot: "label" }, "Apartment")))),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       expect(mockStart).toHaveBeenCalled();
@@ -62,7 +62,7 @@ describe('wpp-select', () => {
       });
       const page = await newSpecPage({
         components: [WppSelect, WppListItem, WppLabel, WppInternalLabel],
-        template: () => (h("wpp-select-v4-1-0", { placeholder: "Placeholder", type: "combined" }, h("wpp-list-item-v4-1-0", { value: "car", "data-id": "1" }, h("span", { slot: "label" }, "Car")), h("wpp-list-item-v4-1-0", { value: "house", "data-id": "2", disabled: true }, h("span", { slot: "label" }, "House")), h("wpp-list-item-v4-1-0", { value: "apartment", "data-id": "3" }, h("span", { slot: "label" }, "Apartment")))),
+        template: () => (h("wpp-select-v4-2-0", { placeholder: "Placeholder", type: "combined" }, h("wpp-list-item-v4-2-0", { value: "car", "data-id": "1" }, h("span", { slot: "label" }, "Car")), h("wpp-list-item-v4-2-0", { value: "house", "data-id": "2", disabled: true }, h("span", { slot: "label" }, "House")), h("wpp-list-item-v4-2-0", { value: "apartment", "data-id": "3" }, h("span", { slot: "label" }, "Apartment")))),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       page.root?.remove();
@@ -72,7 +72,7 @@ describe('wpp-select', () => {
   it('should render single select warning state without a message', async () => {
     const page = await newSpecPage({
       components: [WppSelect],
-      template: () => h("wpp-select-v4-1-0", { messageType: "warning", list: MOCK_SINGLE_LIST }),
+      template: () => h("wpp-select-v4-2-0", { messageType: "warning", list: MOCK_SINGLE_LIST }),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await page.waitForChanges();
@@ -83,7 +83,7 @@ describe('wpp-select', () => {
   it('should render multiple select error state without a message', async () => {
     const page = await newSpecPage({
       components: [WppSelect],
-      template: () => h("wpp-select-v4-1-0", { type: "multiple", value: [], messageType: "error", list: MOCK_MULTIPLE_LIST }),
+      template: () => h("wpp-select-v4-2-0", { type: "multiple", value: [], messageType: "error", list: MOCK_MULTIPLE_LIST }),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await page.waitForChanges();
@@ -94,7 +94,7 @@ describe('wpp-select', () => {
   it('should render combined select warning state without a message', async () => {
     const page = await newSpecPage({
       components: [WppSelect],
-      template: () => h("wpp-select-v4-1-0", { type: "combined", messageType: "warning", list: MOCK_SINGLE_LIST }),
+      template: () => h("wpp-select-v4-2-0", { type: "combined", messageType: "warning", list: MOCK_SINGLE_LIST }),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await page.waitForChanges();
@@ -105,7 +105,7 @@ describe('wpp-select', () => {
   it('should not render a message tooltip when messageInTooltip is enabled without a message', async () => {
     const page = await newSpecPage({
       components: [WppSelect],
-      template: () => h("wpp-select-v4-1-0", { messageType: "error", messageInTooltip: true, list: MOCK_SINGLE_LIST }),
+      template: () => h("wpp-select-v4-2-0", { messageType: "error", messageInTooltip: true, list: MOCK_SINGLE_LIST }),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await page.waitForChanges();
@@ -115,7 +115,7 @@ describe('wpp-select', () => {
   it('should keep rendering an inline message when message is provided', async () => {
     const page = await newSpecPage({
       components: [WppSelect],
-      template: () => h("wpp-select-v4-1-0", { messageType: "warning", message: "Review this value", list: MOCK_SINGLE_LIST }),
+      template: () => h("wpp-select-v4-2-0", { messageType: "warning", message: "Review this value", list: MOCK_SINGLE_LIST }),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await page.waitForChanges();
@@ -126,7 +126,7 @@ describe('wpp-select', () => {
   it('should keep rendering a message tooltip when message and messageInTooltip are provided', async () => {
     const page = await newSpecPage({
       components: [WppSelect],
-      template: () => (h("wpp-select-v4-1-0", { messageType: "error", message: "This value is invalid", messageInTooltip: true, list: MOCK_SINGLE_LIST })),
+      template: () => (h("wpp-select-v4-2-0", { messageType: "error", message: "This value is invalid", messageInTooltip: true, list: MOCK_SINGLE_LIST })),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await page.waitForChanges();

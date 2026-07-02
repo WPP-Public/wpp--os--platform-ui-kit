@@ -29,7 +29,7 @@
   bottom: 0;
   left: 0;
   display: block;
-  font-family: var(--wpp-font-family);
+  font-family: var(--wpp-font-family, system-ui, sans-serif);
   visibility: hidden;
   opacity: 0;
   overflow: auto;
@@ -60,12 +60,20 @@
   display: none;
 }
 
+.actions-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: var(--modal-actions-paddings);
+}
+
 .header {
   font-size: var(--wpp-typography-xl-heading-font-size, 20px);
   line-height: var(--wpp-typography-xl-heading-line-height, 32px);
   font-weight: var(--wpp-typography-xl-heading-font-weight, 400);
   color: var(--wpp-typography-xl-heading-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-xl-heading-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-xl-heading-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-xl-heading-letter-spacing, 0);
   padding: var(--modal-header-padding);
 }
@@ -77,7 +85,7 @@
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
   padding: var(--modal-body-paddings);
   overflow-y: auto;
@@ -97,7 +105,7 @@
   line-height: var(--wpp-typography-s-strong-line-height, 22px);
   font-weight: var(--wpp-typography-s-strong-font-weight, 700);
   color: var(--wpp-typography-s-strong-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-strong-letter-spacing, 0);
   padding: var(--modal-actions-paddings);
 }
@@ -119,7 +127,7 @@
   box-shadow: var(--modal-box-shadow);
   transform: translate(-50%, -50%);
   max-height: calc(100vh - 120px);
-  max-width: 90vh;
+  max-width: 90vw;
   overflow-y: auto;
   overflow-x: hidden;
 }

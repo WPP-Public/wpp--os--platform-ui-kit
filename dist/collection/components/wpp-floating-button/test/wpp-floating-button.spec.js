@@ -6,21 +6,21 @@ describe('wpp-floating-button', () => {
   it('should render primary floating button', async () => {
     const page = await newSpecPage({
       components: [WppFloatingButton],
-      template: () => h("wpp-floating-button-v4-1-0", null),
+      template: () => h("wpp-floating-button-v4-2-0", null),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('should render disabled floating button', async () => {
     const page = await newSpecPage({
       components: [WppFloatingButton],
-      template: () => h("wpp-floating-button-v4-1-0", { disabled: true }),
+      template: () => h("wpp-floating-button-v4-2-0", { disabled: true }),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('should render loading floating button', async () => {
     const page = await newSpecPage({
       components: [WppFloatingButton],
-      template: () => h("wpp-floating-button-v4-1-0", { loading: true }),
+      template: () => h("wpp-floating-button-v4-2-0", { loading: true }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -41,14 +41,14 @@ describe('wpp-floating-button', () => {
     it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
       await newSpecPage({
         components: [WppFloatingButton],
-        template: () => h("wpp-floating-button-v4-1-0", null),
+        template: () => h("wpp-floating-button-v4-2-0", null),
       });
       expect(mockStart).toHaveBeenCalledTimes(1);
     });
     it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
       const page = await newSpecPage({
         components: [WppFloatingButton],
-        template: () => h("wpp-floating-button-v4-1-0", null),
+        template: () => h("wpp-floating-button-v4-2-0", null),
       });
       page.root?.remove();
       expect(mockStop).toHaveBeenCalledTimes(1);

@@ -1,6 +1,6 @@
 import { WppRichtextHtml } from '../wpp-richtext-html';
 import { newSpecPage } from '@stencil/core/testing';
-describe('QuillViewHTMLComponent', () => {
+describe('WppRichtextHtml', () => {
   let page;
   beforeEach(async () => {
     page = await newSpecPage({
@@ -11,9 +11,8 @@ describe('QuillViewHTMLComponent', () => {
     await page.setContent('<wpp-richtext-html></wpp-richtext-html>');
     expect(page.root).toEqualHtml(`
       <wpp-richtext-html>
-        <wpp-quill-styles></wpp-quill-styles>
         <wpp-richtext-common-styles></wpp-richtext-common-styles>
-        <div class="ql-container ql-wpp quill-view-html" data-testid="richtext-editor-container">
+        <div class="ql-container ql-wpp richtext-view-html" data-testid="richtext-editor-container">
           <div class="ql-editor" data-testid="richtext-editor"></div>
         </div>
       </wpp-richtext-html>
@@ -24,9 +23,8 @@ describe('QuillViewHTMLComponent', () => {
     await page.setContent('<wpp-richtext-html value="<p>Hallo</p>"></wpp-richtext-html>');
     expect(page.root).toEqualHtml(`
       <wpp-richtext-html value="<p>Hallo</p>">
-        <wpp-quill-styles></wpp-quill-styles>
         <wpp-richtext-common-styles></wpp-richtext-common-styles>
-        <div class="ql-container ql-wpp quill-view-html" data-testid="richtext-editor-container">
+        <div class="ql-container ql-wpp richtext-view-html" data-testid="richtext-editor-container">
           <div class="ql-editor" data-testid="richtext-editor">
             <p>
               Hallo
@@ -39,14 +37,13 @@ describe('QuillViewHTMLComponent', () => {
   });
   it('renders value update', async () => {
     await page.setContent('<wpp-richtext-html value="<p>Hallo</p>"></wpp-richtext-html>');
-    const quillView = page.rootInstance;
-    quillView.value = '<p>test</p>';
+    const richtextHtml = page.rootInstance;
+    richtextHtml.value = '<p>test</p>';
     await page.waitForChanges();
     expect(page.root).toEqualHtml(`
       <wpp-richtext-html value="<p>Hallo</p>">
-        <wpp-quill-styles></wpp-quill-styles>
         <wpp-richtext-common-styles></wpp-richtext-common-styles>
-        <div class="ql-container ql-wpp quill-view-html" data-testid="richtext-editor-container">
+        <div class="ql-container ql-wpp richtext-view-html" data-testid="richtext-editor-container">
           <div class="ql-editor" data-testid="richtext-editor">
             <p>
               test

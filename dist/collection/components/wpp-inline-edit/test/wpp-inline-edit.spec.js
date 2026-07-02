@@ -210,7 +210,7 @@ describe('wpp-inline-edit', () => {
         html: `<wpp-inline-edit>Text</wpp-inline-edit>`,
       });
       const customLocales = { defaultErrorMessage: 'Custom Error' };
-      page.rootInstance.onUpdateLocales(customLocales);
+      page.rootInstance.locales = customLocales;
       expect(page.rootInstance._locales.defaultErrorMessage).toBe('Custom Error');
     });
   });

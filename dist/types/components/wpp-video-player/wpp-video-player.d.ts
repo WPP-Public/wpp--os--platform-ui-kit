@@ -27,7 +27,6 @@ export declare class WppVideoPlayer {
   private savedVolume;
   protected controlPanelConfigDefault: ControlPanelConfig;
   protected preventMouseLeaveEvent: boolean;
-  protected _locales: VideoPlayerLocales;
   protected hoverTimeout: NodeJS.Timeout;
   private textTracks;
   private activeTrack;
@@ -111,11 +110,11 @@ export declare class WppVideoPlayer {
   onVolumeChange(value: number): void;
   onCurrentVideoTimeChange(value: number): void;
   onSelectedLanguageChange(value: string): void;
-  onUpdateLocales(newLocales: Partial<VideoPlayerLocales>): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
   connectedCallback(): void;
   disconnectedCallback(): void;
+  protected get _locales(): VideoPlayerLocales;
   private setupKeyboardEventListeners;
   private removeKeyboardEventListeners;
   private handleKeyboardInput;

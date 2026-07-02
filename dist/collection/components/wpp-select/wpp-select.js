@@ -4,7 +4,7 @@ import { FOCUS_TYPE } from '../../types/common';
 import { DEFAULT_DROPDOWN_CONFIG, LOCALES_DEFAULTS, MULTIPLE_SELECT_SINGLE_VALUE_ERROR } from './config';
 import { isEqual } from 'lodash';
 import version from '../../../versioned-components/version';
-import { getSlotEmptyStates, isEventTargetContained, transformToVersionedTag } from '../../utils/utils';
+import { getSlotEmptyStates, isEventTargetContained, mergeLocales, transformToVersionedTag } from '../../utils/utils';
 import { renderSingleSelect } from './components/wpp-single-select/wpp-single-select';
 import { renderMultipleSelect } from './components/wpp-multiple-select/wpp-multiple-select';
 import { renderTextSelect } from './components/wpp-text-select/wpp-text-select';
@@ -18,12 +18,13 @@ const TRUNCATION_DELAY = 100;
 export class WppSelect {
   constructor() {
     this.hasReachedLimit = false;
-    this.themeSubscription = themeSubscriptionController(() => this.portalRef);
+    this.themeSubscription = themeSubscriptionController(() => this.portalRef, (theme) => {
+      this.isDarkTheme = theme === 'dark';
+    });
     this.canSelectAll = false;
     this.canClearAll = false;
     // ************************************
     this.LIB_COMPONENTS_PREFIX = 'wpp-';
-    this._locales = LOCALES_DEFAULTS;
     this.getSelectedItems = () => {
       if (this.type === 'multiple') {
         const selectedItems = this.internalList?.filter((item) => this.emittedValue.some((emittedValueItem) => isEqual(emittedValueItem, item.value)));
@@ -169,10 +170,10 @@ export class WppSelect {
         return h(Fragment, null);
       }
       if (this.loading) {
-        return (h("div", { class: "loading-container" }, h("wpp-spinner-v4-1-0", null), h("wpp-typography-v4-1-0", { type: "s-body" }, this._locales.loadingText)));
+        return (h("div", { class: "loading-container" }, h("wpp-spinner-v4-2-0", null), h("wpp-typography-v4-2-0", { type: "s-body" }, this._locales.loadingText)));
       }
       if (this.internalList?.length === 0) {
-        return (h("wpp-typography-v4-1-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+        return (h("wpp-typography-v4-2-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
       }
       let hiddeItemsCount = 0;
       return (h(Fragment, null, this.internalList?.map((item) => {
@@ -182,11 +183,13 @@ export class WppSelect {
           if (hidden)
             hiddeItemsCount++;
           if (hiddeItemsCount === this.internalList?.length) {
-            return (h("wpp-typography-v4-1-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+            return (h("wpp-typography-v4-2-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
           }
           return null;
         }
-        return (h("wpp-list-item-v4-1-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
+        return (h("wpp-list-item-v4-2-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ref: item.checked && this.type === 'single'
+            ? el => (this.selectedItemRef = el)
+            : undefined, isDarkTheme: this.isDarkTheme, ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
     };
     this.renderPinnedItems = () => {
@@ -194,9 +197,15 @@ export class WppSelect {
       if (items.length === 0)
         return h(Fragment, null);
       return (h(Fragment, null, items.map((item) => {
-        const { label, value, checked, disabled, id, slots } = item;
+        // The pinned list is a snapshot captured when the dropdown opens. The live checked/disabled
+        // state must be read from the current internalList, otherwise toggling a pinned item (or a
+        // parent passing a new `list` reference) leaves the rendered checkbox out of sync.
+        const current = this.internalList?.find(listItem => isEqual(listItem.value, item.value));
+        if (!current)
+          return null;
+        const { label, value, checked, disabled, id, slots } = current;
         const itemValueKey = this.convertValueToKey(value);
-        return (h("wpp-list-item-v4-1-0", { onWppChangeListItem: this.handleClickListItem, key: `pinned-${itemValueKey}`, value: value, checked: checked, disabled: disabled, multiple: true, id: id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${id}` : undefined, class: "pinned-item" }, h("p", { slot: "label" }, label), slots && this.renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+        return (h("wpp-list-item-v4-2-0", { onWppChangeListItem: this.handleClickListItem, key: `pinned-${itemValueKey}`, value: value, checked: checked, disabled: disabled, multiple: true, isDarkTheme: this.isDarkTheme, id: id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${id}` : undefined, class: "pinned-item" }, h("p", { slot: "label" }, label), slots && this.renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
     };
     this.renderSlotsInListItem = (slots, isLabelExists) => slots
@@ -311,7 +320,7 @@ export class WppSelect {
         this.dropdownConfig?.onShow(instance);
       }
       this.isOpen = true;
-      if (this.showSelectAllOption && this.type === 'multiple' && this.withFolder) {
+      if (this.showSelectAllOption && this.type === 'multiple') {
         this.pinnedItems = this.internalList?.filter(item => item.checked) ?? [];
       }
     };
@@ -344,6 +353,13 @@ export class WppSelect {
         this.dropdownConfig?.onHidden(instance);
       }
     };
+    this.scrollSelectedListItemIntoView = () => {
+      if (!this.scrollSelectedItemIntoView || this.type !== 'single' || !this.selectedItemRef || !this.listRef)
+        return;
+      const itemBottom = this.selectedItemRef.offsetTop + this.selectedItemRef.offsetHeight;
+      // Need to add 4px due to gap in list items
+      this.listRef.scrollTo({ top: Math.max(0, itemBottom + 4 - this.listRef.clientHeight), behavior: 'smooth' });
+    };
     this.createTippyInstance = () => {
       if (!this.anchorRef || !this.portalRef)
         return;
@@ -370,6 +386,7 @@ export class WppSelect {
           else {
             this.focusFirstListItem();
           }
+          this.scrollSelectedListItemIntoView();
           if (this.dropdownConfig?.onShown) {
             this.dropdownConfig?.onShown(instance);
           }
@@ -578,6 +595,7 @@ export class WppSelect {
     this.shouldShowSearch = false;
     this.focusType = undefined;
     this.isRenderMessageInTooltip = false;
+    this.isDarkTheme = undefined;
     this.withScroll = false;
     this.checkedItems = 0;
     this.disabledItems = 0;
@@ -618,12 +636,13 @@ export class WppSelect {
     this.dropdownConfig = {};
     this.locales = {};
     this.showSelectAllText = true;
-    this.showSelectAllOption = false;
+    this.showSelectAllOption = true;
     this.inputValue = undefined;
     this.maskOptions = undefined;
     this.inputType = 'text';
     this.tooltipConfig = {};
     this.messageInTooltip = false;
+    this.scrollSelectedItemIntoView = false;
   }
   onUpdateDisplayValue() {
     if (this.type === 'single' && this.displayValue !== undefined) {
@@ -734,9 +753,6 @@ export class WppSelect {
   onUpdateMessage() {
     this.checkMessageInTooltip();
   }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
-  }
   /**
    * Sets focus on the select and opens the dropdown.
    */
@@ -744,7 +760,6 @@ export class WppSelect {
     this.handleClick(true);
   }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
     this.versionToCompare = version.slice(1).split('-').join('');
     this.updateSlotData();
     this.checkMessageInTooltip();
@@ -823,6 +838,9 @@ export class WppSelect {
       this.resizeObserver.disconnect();
     }
   }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
   get filteredPinnedItems() {
     if (!this.searchText)
       return this.pinnedItems;
@@ -868,7 +886,7 @@ export class WppSelect {
     return renderCombinedSelect.call(this);
   }
   static get is() { return "wpp-select"; }
-  static get registryIs() { return "wpp-select-v4-1-0"; }
+  static get registryIs() { return "wpp-select-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -1092,7 +1110,7 @@ export class WppSelect {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "If `true` the dropdown has controls folder, meaning that the \"Select All\" and \"Clear All\" button will appear at the bottom of the dropdown.\nThis property works just for the multiple select."
+          "text": "If `true`, the multiple select dropdown has a controls footer.\nWhen `showSelectAllOption` is enabled, the footer shows Clear and Apply actions.\nWhen `showSelectAllOption` is disabled, the footer keeps the legacy Select All and Clear actions."
         },
         "attribute": "with-folder",
         "reflect": true,
@@ -1501,11 +1519,11 @@ export class WppSelect {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "If `true`, renders a \"Select all (N)\" checkbox at the top of the dropdown list and replaces\nthe bottom \"Select All\" / \"Clear All\" buttons with \"Clear\" / \"Apply\" buttons.\nSelected items are rendered at the top of the dropdown when it is opened.\nThis property works only for the multiple select with `withFolder` enabled."
+          "text": "If `true`, renders a \"Select all (N)\" checkbox and divider at the top of multiple select dropdowns,\nand selected items are pinned to the top of the dropdown when it is opened.\nSet to `false` to hide the \"Select all (N)\" option and its divider when the feature is not needed."
         },
         "attribute": "show-select-all-option",
-        "reflect": true,
-        "defaultValue": "false"
+        "reflect": false,
+        "defaultValue": "true"
       },
       "inputValue": {
         "type": "string",
@@ -1608,6 +1626,24 @@ export class WppSelect {
         "attribute": "message-in-tooltip",
         "reflect": false,
         "defaultValue": "false"
+      },
+      "scrollSelectedItemIntoView": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "If `true`, scrolls the selected item into view when the dropdown opens in WppSelect type='single'."
+        },
+        "attribute": "scroll-selected-item-into-view",
+        "reflect": true,
+        "defaultValue": "false"
       }
     };
   }
@@ -1623,6 +1659,7 @@ export class WppSelect {
       "shouldShowSearch": {},
       "focusType": {},
       "isRenderMessageInTooltip": {},
+      "isDarkTheme": {},
       "withScroll": {},
       "checkedItems": {},
       "disabledItems": {},
@@ -1702,7 +1739,7 @@ export class WppSelect {
         "composed": false,
         "docs": {
           "tags": [],
-          "text": "Emitted when the user clicks the Apply button in the multiple select with showSelectAllOption."
+          "text": "Emitted when the user clicks the Apply button in the multiple select footer."
         },
         "complexType": {
           "original": "void",
@@ -1764,9 +1801,6 @@ export class WppSelect {
       }, {
         "propName": "messageType",
         "methodName": "onUpdateMessage"
-      }, {
-        "propName": "locales",
-        "methodName": "onUpdateLocales"
       }];
   }
 }

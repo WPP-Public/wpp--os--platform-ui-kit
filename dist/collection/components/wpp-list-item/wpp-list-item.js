@@ -2,7 +2,7 @@ import { Host, h, Fragment, } from '@stencil/core';
 import highlightWords from 'highlight-words';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { debounce, getSlotEmptyStates, transformToVersionedTag, uuidv4 } from '../../utils/utils';
-import { EVENT_SOURCE, PRESENTATION_ROLE } from './const';
+import { EVENT_SOURCE, INTERACTIVE_RIGHT_SLOT_COMPONENT_TAGS, INTERACTIVE_RIGHT_SLOT_ROLES, INTERACTIVE_RIGHT_SLOT_SELECTOR, PRESENTATION_ROLE, } from './const';
 import { getThemeColor, isValidThemeColor } from './utils';
 import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
@@ -26,7 +26,7 @@ export class WppListItem {
     this.themeSubscription = themeSubscriptionController(() => this.host);
     this.removeTriggerWrapperAttributes = () => {
       const menuContextTag = transformToVersionedTag('wpp-menu-context').toUpperCase();
-      const menuContext = this.host.querySelector(`${menuContextTag}[slot="right"]`);
+      const menuContext = this.hostElement?.querySelector(`${menuContextTag}[slot="right"]`);
       if (menuContext) {
         let triggerWrapper = menuContext.querySelector('.trigger-wrapper');
         if (triggerWrapper) {
@@ -34,15 +34,16 @@ export class WppListItem {
           triggerWrapper.removeAttribute('role');
         }
         else {
-          const observer = new MutationObserver(() => {
+          this.triggerWrapperObserver = new MutationObserver(() => {
             triggerWrapper = menuContext.querySelector('.trigger-wrapper');
             if (triggerWrapper) {
               triggerWrapper.removeAttribute('tabindex');
               triggerWrapper.removeAttribute('role');
-              observer.disconnect();
+              this.triggerWrapperObserver?.disconnect();
+              this.triggerWrapperObserver = undefined;
             }
           });
-          observer.observe(menuContext, { childList: true, subtree: true });
+          this.triggerWrapperObserver.observe(menuContext, { childList: true, subtree: true });
         }
       }
     };
@@ -56,7 +57,7 @@ export class WppListItem {
         if (currentLabelText !== this.previousLabelText) {
           this.previousLabelText = currentLabelText;
           this.updateSlotData();
-          requestAnimationFrame(this.checkHasTooltip);
+          this.queueTooltipCheck();
         }
       });
       // Configure the observer to watch for changes in text content and child nodes
@@ -67,13 +68,16 @@ export class WppListItem {
       });
     };
     this.checkHasTooltip = () => {
-      let labelWrapper = this.host?.shadowRoot?.querySelector('[part="label-wrapper"]');
+      if (!this.isHostConnected())
+        return;
+      const hostElement = this.hostElement;
+      let labelWrapper = hostElement?.shadowRoot?.querySelector('[part="label-wrapper"]');
       if (labelWrapper?.classList.contains('slot-hidden')) {
-        labelWrapper = this.host?.shadowRoot?.querySelector('.highlight-text');
+        labelWrapper = hostElement?.shadowRoot?.querySelector('.highlight-text');
         this.hasTooltip = labelWrapper.clientWidth < labelWrapper.scrollWidth;
         return;
       }
-      const labelEl = this.host?.querySelector('[slot="label"]');
+      const labelEl = hostElement?.querySelector('[slot="label"]');
       if (!labelEl)
         return;
       const textEl = labelEl?.shadowRoot?.querySelector('.typography');
@@ -85,11 +89,37 @@ export class WppListItem {
       }
     };
     this.handleComponentMount = () => {
+      if (!this.isHostConnected())
+        return;
       this.mounted = true;
-      requestAnimationFrame(() => {
+      this.queueTooltipCheck();
+      this.loading = false;
+    };
+    this.isHostConnected = () => this.hostElement?.isConnected ?? false;
+    this.queueTooltipCheck = () => {
+      if (this.tooltipAnimationFrame !== undefined)
+        cancelAnimationFrame(this.tooltipAnimationFrame);
+      this.tooltipAnimationFrame = requestAnimationFrame(() => {
+        this.tooltipAnimationFrame = undefined;
         this.checkHasTooltip();
       });
-      this.loading = false;
+    };
+    this.clearPendingCallbacks = () => {
+      if (this.focusTimeout)
+        clearTimeout(this.focusTimeout);
+      if (this.rightSlotIconTimeout)
+        clearTimeout(this.rightSlotIconTimeout);
+      if (this.toggleSlotTimeout)
+        clearTimeout(this.toggleSlotTimeout);
+      if (this.mountTimeout)
+        clearTimeout(this.mountTimeout);
+      if (this.tooltipAnimationFrame !== undefined)
+        cancelAnimationFrame(this.tooltipAnimationFrame);
+      this.focusTimeout = undefined;
+      this.rightSlotIconTimeout = undefined;
+      this.toggleSlotTimeout = undefined;
+      this.mountTimeout = undefined;
+      this.tooltipAnimationFrame = undefined;
     };
     this.getSlotText = (slotName) => {
       const slotEl = this.host.querySelector(`[slot="${slotName}"]`);
@@ -138,8 +168,26 @@ export class WppListItem {
         isAutocompleteBasedEvent: !!this.host.closest(transformToVersionedTag('wpp-autocomplete')),
       });
     };
-    this.handleRightWrapperClick = () => {
-      this.eventSource = EVENT_SOURCE.RIGHT_SLOT;
+    this.isInteractiveRightSlotElement = (eventTarget) => {
+      const element = eventTarget;
+      if (typeof element?.tagName !== 'string')
+        return false;
+      const tagName = element.tagName.toLowerCase();
+      const role = element.getAttribute?.('role')?.toLowerCase();
+      const tabIndex = element.getAttribute?.('tabindex');
+      return (INTERACTIVE_RIGHT_SLOT_COMPONENT_TAGS.some(componentTagName => tagName === componentTagName || tagName.startsWith(`${componentTagName}-`)) ||
+        (typeof element.matches === 'function' && element.matches(INTERACTIVE_RIGHT_SLOT_SELECTOR)) ||
+        (role !== undefined && INTERACTIVE_RIGHT_SLOT_ROLES.includes(role)) ||
+        (tabIndex !== null && Number(tabIndex) >= 0));
+    };
+    this.isInteractiveRightSlotEvent = (event) => {
+      const composedPath = event.composedPath();
+      const currentTargetIndex = composedPath.indexOf(event.currentTarget);
+      const slottedContentPath = currentTargetIndex === -1 ? [event.target] : composedPath.slice(0, currentTargetIndex);
+      return slottedContentPath.some(this.isInteractiveRightSlotElement);
+    };
+    this.handleRightWrapperClick = (event) => {
+      this.eventSource = this.isInteractiveRightSlotEvent(event) ? EVENT_SOURCE.RIGHT_SLOT : null;
     };
     this.hostCssClasses = () => ({
       'wpp-list-item': true,
@@ -187,7 +235,7 @@ export class WppListItem {
       const hasHighlight = Boolean(this.highlight);
       return (h("div", { ref: ref => (this.wrapperRef = ref), class: "body-wrapper", part: "body-wrapper", style: { width: 'auto' } }, h(WrappedSlot, { wrapperClass: this.labelSlotCssClasses(), name: "label", onSlotchange: this.updateSlotData }), hasHighlight && (h("div", { class: "label highlight-text-wrapper", ref: highlightRef => (this.highlightRef = highlightRef) }, h("span", { class: "highlight-text" }, this.getHighlightedText('label')))), h(WrappedSlot, { wrapperClass: this.captionSlotCssClasses(), name: "caption", onSlotchange: this.updateSlotData }), hasHighlight && (h("div", { class: "caption" }, h("span", { class: "highlight-text" }, this.getHighlightedText('caption'))))));
     };
-    this.renderRightSlot = () => (h(WrappedSlot, { wrapperClass: this.rightSlotCssClasses(), name: "right", onSlotchange: this.updateSlotData, onClick: this.handleRightWrapperClick }, this.isExtended && h("wpp-icon-chevron-v4-1-0", { class: "fallback-icon", size: "s", part: "icon-extended" }), !this.isExtended && this.active && h("wpp-icon-tick-v4-1-0", { class: "fallback-icon", part: "icon-active" })));
+    this.renderRightSlot = () => (h(WrappedSlot, { wrapperClass: this.rightSlotCssClasses(), name: "right", onSlotchange: this.updateSlotData, onClick: this.handleRightWrapperClick }, this.isExtended && h("wpp-icon-chevron-v4-2-0", { class: "fallback-icon", size: "s", part: "icon-extended" }), !this.isExtended && this.active && h("wpp-icon-tick-v4-2-0", { class: "fallback-icon", part: "icon-active" })));
     this.renderLeftSlot = () => (h(WrappedSlot, { wrapperClass: this.leftSlotCssClasses(), name: "left", onSlotchange: this.updateSlotData }));
     this.handleMouseEnter = () => {
       this.updateComponentState({ hover: true });
@@ -240,6 +288,7 @@ export class WppListItem {
     this.linkConfig = {};
     this.hidden = false;
     this.isLoadingItem = false;
+    this.isDarkTheme = undefined;
     this.nonInteractive = false;
     this.checkboxName = undefined;
   }
@@ -247,8 +296,12 @@ export class WppListItem {
    * Sets focus on the list-item element.
    */
   async setFocus() {
-    setTimeout(() => {
-      this.host.focus();
+    const hostElement = this.hostElement || this.host;
+    this.focusTimeout = setTimeout(() => {
+      if (!hostElement.isConnected)
+        return;
+      hostElement.focus();
+      this.focusTimeout = undefined;
     }, 0);
   }
   onResize() {
@@ -259,17 +312,30 @@ export class WppListItem {
   typographyLabel() {
     this.applyTypographyVariables('label', this.labelTypography || {});
   }
+  onUpdateDarkTheme() {
+    // In case the `list-item` component subscribed to theme changes before the parent component starts controlling the `isDarkTheme` prop.
+    if (this.isDarkTheme !== undefined) {
+      this.themeSubscription.stop();
+    }
+  }
   typographyCaption() {
     this.applyTypographyVariables('caption', this.captionTypography || {});
   }
   componentWillLoad() {
+    this.hostElement = this.host;
     this.updateSlotData();
-    this.hasRightSlot = !!this.host.querySelector('[slot="right"]');
-    setTimeout(() => {
-      this.hasRightSlotIcon = !!this.host.querySelector('[slot="right"].wpp-icon');
+    this.hasRightSlot = !!this.hostElement.querySelector('[slot="right"]');
+    this.rightSlotIconTimeout = setTimeout(() => {
+      if (!this.isHostConnected())
+        return;
+      this.hasRightSlotIcon = !!this.hostElement?.querySelector('[slot="right"].wpp-icon');
+      this.rightSlotIconTimeout = undefined;
     }, 0);
-    setTimeout(() => {
-      this.hasToggle = !!this.host.querySelector('[slot="right"].wpp-toggle');
+    this.toggleSlotTimeout = setTimeout(() => {
+      if (!this.isHostConnected())
+        return;
+      this.hasToggle = !!this.hostElement?.querySelector('[slot="right"].wpp-toggle');
+      this.toggleSlotTimeout = undefined;
     }, 0);
     this.debouncedResizeHandler = debounce(() => {
       this.checkHasTooltip();
@@ -313,13 +379,25 @@ export class WppListItem {
     }
   }
   connectedCallback() {
-    this.themeSubscription.start();
+    // By default, the component will subscribe to theme changes, unless the `isDarkTheme` property is passed explicitly from the parent component (from select, autocomplete).
+    // This is needed in order to avoid unnecessary subscription to theme changes for each list-item.
+    if (this.isDarkTheme === undefined) {
+      this.themeSubscription.start();
+    }
+    this.handleComponentMount();
   }
   disconnectedCallback() {
-    this.themeSubscription.stop();
+    if (this.isDarkTheme === undefined) {
+      this.themeSubscription.stop();
+    }
     this.tooltipId = uuidv4();
+    this.clearPendingCallbacks();
     if (this.labelObserver) {
       this.labelObserver.disconnect();
+    }
+    if (this.triggerWrapperObserver) {
+      this.triggerWrapperObserver.disconnect();
+      this.triggerWrapperObserver = undefined;
     }
   }
   highlightUpdate(newValue) {
@@ -336,11 +414,14 @@ export class WppListItem {
       this.mounted = false;
       this.loading = false;
       this.hasTooltip = false;
-      setTimeout(this.handleComponentMount, 100);
+      this.mountTimeout = setTimeout(() => {
+        this.handleComponentMount();
+        this.mountTimeout = undefined;
+      }, 100);
     }
     // Special state for a cases when we have list items inside context menu to trigger tooltip check
     if (newContainerState === 'tooltipTrigger') {
-      requestAnimationFrame(this.checkHasTooltip);
+      this.queueTooltipCheck();
     }
   }
   disabledChanged() {
@@ -366,10 +447,10 @@ export class WppListItem {
   render() {
     const displayState = this.componentState.active ? 'active' : this.componentState.hover ? 'hover' : '';
     const tabIndex = this.disabled ? -1 : this.nonInteractive ? -1 : 0;
-    return (h(Host, { class: this.hostCssClasses(), role: PRESENTATION_ROLE, exportparts: "item, info-wrapper, checkbox, body-wrapper, left, label, caption, right, left-wrapper, label-wrapper, caption-wrapper, right-wrapper", tabIndex: tabIndex }, this.hasSubtitleSlot && (h(WrappedSlot, { wrapperClass: this.subtitleSlotCssClasses(), name: "subtitle", onSlotchange: this.updateSlotData })), h("ul", { onClick: this.handleItemClick, onKeyDown: this.handleKeyDown, onMouseEnter: this.handleMouseEnter, onMouseLeave: this.handleMouseLeave, onMouseDown: this.handleMouseDown, onMouseUp: this.handleMouseUp, class: this.ulWrapperCssClasses(), part: "ul-wrapper" }, h(this.itemWrapper, { class: this.itemWrapperCssClasses(), part: "item", ...(this.linkConfig?.href && this.linkConfig) }, h("div", { class: "info-wrapper", part: "info-wrapper" }, this.multiple ? (h("wpp-checkbox-v4-1-0", { disabled: this.disabled, checked: this.checked, indeterminate: this.indeterminate, internalState: displayState, part: "checkbox", name: this.checkboxName || 'wpp-list-item-checkbox' })) : (h(Fragment, null, this.tooltipConfig.leftSlot ? (h("wpp-tooltip-v4-1-0", { key: this.tooltipId, header: this.tooltipConfig.leftSlot.header, text: this.tooltipConfig.leftSlot.text, value: this.tooltipConfig.leftSlot.value, error: this.tooltipConfig.leftSlot.error, warning: this.tooltipConfig.leftSlot.warning, theme: this.tooltipConfig.leftSlot.theme, config: this.tooltipConfig.leftSlot.config, externalClass: this.tooltipConfig.leftSlot.externalClass }, this.renderLeftSlot())) : (this.renderLeftSlot()))), this.hasTooltip ? (h("wpp-tooltip-v4-1-0", { text: this.getSlotText('label'), config: { placement: 'right', ...this.labelTooltipConfig }, class: "tooltip" }, this.renderBody())) : (this.renderBody())), this.tooltipConfig.rightSlot ? (h("wpp-tooltip-v4-1-0", { key: this.tooltipId, header: this.tooltipConfig.rightSlot.header, text: this.tooltipConfig.rightSlot.text, value: this.tooltipConfig.rightSlot.value, error: this.tooltipConfig.rightSlot.error, warning: this.tooltipConfig.rightSlot.warning, theme: this.tooltipConfig.rightSlot.theme, config: this.tooltipConfig.rightSlot.config, externalClass: this.tooltipConfig.rightSlot.externalClass }, this.renderRightSlot())) : (this.renderRightSlot())))));
+    return (h(Host, { class: this.hostCssClasses(), role: PRESENTATION_ROLE, exportparts: "item, info-wrapper, checkbox, body-wrapper, left, label, caption, right, left-wrapper, label-wrapper, caption-wrapper, right-wrapper", tabIndex: tabIndex, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}) }, this.hasSubtitleSlot && (h(WrappedSlot, { wrapperClass: this.subtitleSlotCssClasses(), name: "subtitle", onSlotchange: this.updateSlotData })), h("ul", { onClick: this.handleItemClick, onKeyDown: this.handleKeyDown, onMouseEnter: this.handleMouseEnter, onMouseLeave: this.handleMouseLeave, onMouseDown: this.handleMouseDown, onMouseUp: this.handleMouseUp, class: this.ulWrapperCssClasses(), part: "ul-wrapper" }, h(this.itemWrapper, { class: this.itemWrapperCssClasses(), part: "item", ...(this.linkConfig?.href && this.linkConfig) }, h("div", { class: "info-wrapper", part: "info-wrapper" }, this.multiple ? (h("wpp-checkbox-v4-2-0", { isDarkTheme: this.isDarkTheme, disabled: this.disabled, checked: this.checked, indeterminate: this.indeterminate, internalState: displayState, part: "checkbox", name: this.checkboxName || 'wpp-list-item-checkbox' })) : (h(Fragment, null, this.tooltipConfig.leftSlot ? (h("wpp-tooltip-v4-2-0", { key: this.tooltipId, header: this.tooltipConfig.leftSlot.header, text: this.tooltipConfig.leftSlot.text, value: this.tooltipConfig.leftSlot.value, error: this.tooltipConfig.leftSlot.error, warning: this.tooltipConfig.leftSlot.warning, theme: this.tooltipConfig.leftSlot.theme, config: this.tooltipConfig.leftSlot.config, externalClass: this.tooltipConfig.leftSlot.externalClass }, this.renderLeftSlot())) : (this.renderLeftSlot()))), this.hasTooltip ? (h("wpp-tooltip-v4-2-0", { text: this.getSlotText('label'), config: { placement: 'right', ...this.labelTooltipConfig }, class: "tooltip" }, this.renderBody())) : (this.renderBody())), this.tooltipConfig.rightSlot ? (h("wpp-tooltip-v4-2-0", { key: this.tooltipId, header: this.tooltipConfig.rightSlot.header, text: this.tooltipConfig.rightSlot.text, value: this.tooltipConfig.rightSlot.value, error: this.tooltipConfig.rightSlot.error, warning: this.tooltipConfig.rightSlot.warning, theme: this.tooltipConfig.rightSlot.theme, config: this.tooltipConfig.rightSlot.config, externalClass: this.tooltipConfig.rightSlot.externalClass }, this.renderRightSlot())) : (this.renderRightSlot())))));
   }
   static get is() { return "wpp-list-item"; }
-  static get registryIs() { return "wpp-list-item-v4-1-0"; }
+  static get registryIs() { return "wpp-list-item-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -759,6 +840,27 @@ export class WppListItem {
         "reflect": true,
         "defaultValue": "false"
       },
+      "isDarkTheme": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [{
+              "name": "internal",
+              "text": "- This prop is controlled by Select / Autocomplete"
+            }],
+          "text": "If 'true', the component has dark theme styles applied to it."
+        },
+        "attribute": "is-dark-theme",
+        "reflect": false,
+        "defaultValue": "undefined"
+      },
       "nonInteractive": {
         "type": "boolean",
         "mutable": true,
@@ -860,6 +962,9 @@ export class WppListItem {
     return [{
         "propName": "labelTypography",
         "methodName": "typographyLabel"
+      }, {
+        "propName": "isDarkTheme",
+        "methodName": "onUpdateDarkTheme"
       }, {
         "propName": "captionTypography",
         "methodName": "typographyCaption"

@@ -1,17 +1,20 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { k as transformToVersionedTag, u as uuidv4, d as debounce } from './utils-3463d13f.js';
-import { L as LOCALES_DEFAULTS, r as recalculateIndeterminateTreeState, u as updateTreeByIds, f as findSelectedItems, c as convertToOriginalItems, a as updateTreeById, m as markChildrenAs, i as isHaveFoundChildren, e as extractExtraProps, g as getAllVisibleItems, b as findTreeItemById, d as getSiblings, h as findParentOfItem } from './utils-e79ed7cb.js';
+import { k as transformToVersionedTag, u as uuidv4, d as debounce, y as mergeLocales } from './utils-fc9002c9.js';
+import { r as recalculateIndeterminateTreeState, u as updateTreeByIds, f as findSelectedItems, c as convertToOriginalItems, a as updateTreeById, m as markChildrenAs, i as isHaveFoundChildren, e as extractExtraProps, g as getAllVisibleItems, b as findTreeItemById, d as getSiblings, h as findParentOfItem, L as LOCALES_DEFAULTS } from './utils-e79ed7cb.js';
+import { t as themeSubscriptionController } from './subscribe-to-theme-3920c16c.js';
 import './consts-744c144f.js';
 
-const wppTreeCss = ":host{--tree-item-padding:var(--wpp-tree-item-padding, 6px 4px 0 4px);--tree-container-width:var(--wpp-tree-container-width, 100%);--tree-container-height:var(--wpp-tree-container-height, 100%);--tree-container-bg-color:var(--wpp-tree-container-bg-color, var(--wpp-grey-color-000));--tree-input-trigger-area:var(--wpp-tree-trigger-area, 32px);--tree-item-icon-end-color:var(--wpp-tree-icon-end-color, var(--wpp-grey-color-800));--tree-skeleton-height:var(--wpp-tree-skeleton-height, 22px);--tree-skeleton-padding:var(--wpp-tree-skeleton-padding, 3px 0 3px 36px);--tree-skeleton-width:var(--wpp-tree-skeleton-width, 100%);display:-ms-flexbox;display:flex;padding:var(--tree-item-padding)}.container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%}.container:focus{outline:none}.content-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-transition:height 500ms ease;transition:height 500ms ease}.skeleton-wrapper{width:var(--tree-skeleton-width)}.skeleton-wrapper .skeleton-item{padding:var(--tree-skeleton-padding)}.skeleton-wrapper .wpp-skeleton{--skeleton-height:var(--tree-skeleton-height)}.empty-tree-text{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);margin:0;text-align:center}";
+const wppTreeCss = ":host{--tree-item-padding:var(--wpp-tree-item-padding, 6px 4px 0 4px);--tree-container-width:var(--wpp-tree-container-width, 100%);--tree-container-height:var(--wpp-tree-container-height, 100%);--tree-container-bg-color:var(--wpp-tree-container-bg-color, var(--wpp-grey-color-000));--tree-input-trigger-area:var(--wpp-tree-trigger-area, 32px);--tree-item-icon-end-color:var(--wpp-tree-icon-end-color, var(--wpp-grey-color-800));--tree-skeleton-height:var(--wpp-tree-skeleton-height, 22px);--tree-skeleton-padding:var(--wpp-tree-skeleton-padding, 3px 0 3px 36px);--tree-skeleton-width:var(--wpp-tree-skeleton-width, 100%);display:-ms-flexbox;display:flex;padding:var(--tree-item-padding)}.container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%}.container:focus{outline:none}.content-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-transition:height 500ms ease;transition:height 500ms ease}.skeleton-wrapper{width:var(--tree-skeleton-width)}.skeleton-wrapper .skeleton-item{padding:var(--tree-skeleton-padding)}.skeleton-wrapper .wpp-skeleton{--skeleton-height:var(--tree-skeleton-height)}.empty-tree-text{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);margin:0;text-align:center}";
 
 const WppTree = class {
   constructor(hostRef) {
     registerInstance(this, hostRef);
     this.wppChange = createEvent(this, "wppChange", 1);
     this.wppActionClick = createEvent(this, "wppActionClick", 1);
+    this.themeSubscription = themeSubscriptionController(() => this.host, (theme) => {
+      this.isDarkTheme = theme === 'dark';
+    });
     this.resizeInProgress = false;
-    this._locales = LOCALES_DEFAULTS;
     this.pendingLoads = new Map();
     this.isSearchResultFound = true;
     this.isMouseInteraction = false;
@@ -373,15 +376,15 @@ const WppTree = class {
     this.hostCssClasses = () => ({
       'wpp-tree': true,
     });
-    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v4-1-0", { dropdownConfig: {
+    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v4-2-0", { dropdownConfig: {
         trigger: 'click',
         interactiveDebounce: 15,
         interactiveBorder: 25,
         offset: [0, 0],
-      } }, h("wpp-icon-more-v4-1-0", { class: {
+      } }, h("wpp-icon-more-v4-2-0", { class: {
         'menu-trigger': true,
         disabled: !!item.disabled,
-      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v4-1-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
+      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v4-2-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
     this.renderTree = (treeData, level = 1) => {
       const visibleItems = treeData.filter(item => !item.hidden);
       const setSize = visibleItems.length;
@@ -392,7 +395,7 @@ const WppTree = class {
         // Only show focus ring during keyboard navigation (suppress when action mode is active)
         const isFocused = this.isKeyboardNavigating && this.focusedItemId === item.id && !this.isFocusOnAction;
         if (isParent) {
-          return (h("wpp-tree-item-v4-1-0", { id: `tree-item-${item.id}`, text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isFocused: isFocused, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
+          return (h("wpp-tree-item-v4-2-0", { id: `tree-item-${item.id}`, text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isFocused: isFocused, isDarkTheme: this.isDarkTheme, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
             h(transformToVersionedTag(item.iconStart.icon), {
               slot: 'icon-start',
               part: 'icon-start',
@@ -410,7 +413,7 @@ const WppTree = class {
                 ? this.renderTree(item.children, level + 1)
                 : null))));
         }
-        return (h("wpp-tree-item-v4-1-0", { id: `tree-item-${item.id}`, text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isFocused: isFocused, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
+        return (h("wpp-tree-item-v4-2-0", { id: `tree-item-${item.id}`, text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isFocused: isFocused, isDarkTheme: this.isDarkTheme, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
           h(transformToVersionedTag(item.iconStart.icon), {
             slot: 'icon-start',
             part: 'icon-start',
@@ -486,6 +489,7 @@ const WppTree = class {
     this.selectedIds = [];
     this.focusedItemId = null;
     this.isKeyboardNavigating = false;
+    this.isDarkTheme = undefined;
     this.isFocusOnAction = false;
     this.data = undefined;
     this.search = '';
@@ -507,7 +511,7 @@ const WppTree = class {
   }
   renderSkeletonRows(count = 1, paddingLeft) {
     const { height = 32 } = this.lazyConfig?.skeleton || {};
-    return Array.from({ length: count }, (_, idx) => (h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, h("wpp-skeleton-v4-1-0", { variant: "rectangle", width: "100%", height: height }))));
+    return Array.from({ length: count }, (_, idx) => (h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, h("wpp-skeleton-v4-2-0", { variant: "rectangle", width: "100%", height: height }))));
   }
   onInputChange(searchText) {
     if (!searchText.trim()) {
@@ -545,9 +549,6 @@ const WppTree = class {
   updateDate(newData) {
     this.currentTreeData = newData;
     this.preloadInitialOpenChildren();
-  }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
   }
   async handleOpenItem(event) {
     event.stopPropagation();
@@ -1106,12 +1107,19 @@ const WppTree = class {
     // Add document click listener to clear focus ring when clicking outside
     document.addEventListener('mousedown', this.handleDocumentMouseDown);
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
     // Remove document click listener
     document.removeEventListener('mousedown', this.handleDocumentMouseDown);
+  }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
   }
   handleActionClick({ item, name, place, }) {
     return (event) => {
@@ -1127,7 +1135,6 @@ const WppTree = class {
     };
   }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
     this.currentTreeData = this.checkData(this.data);
     this.preloadInitialOpenChildren();
   }
@@ -1135,12 +1142,11 @@ const WppTree = class {
     const hasVisibleContent = this.currentTreeData && this.isSearchResultFound;
     return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text" }, !this.loading && (h("div", { class: "container", part: "tree-container", role: "tree", "aria-label": this.label, "aria-multiselectable": this.multiple ? 'true' : undefined, "aria-activedescendant": this.getActiveDescendantId(), tabindex: hasVisibleContent ? '0' : undefined, onFocus: this.handleContainerFocus, onBlur: this.handleContainerBlur }, hasVisibleContent ? (this.renderTree(this.currentTreeData)) : (h("p", { class: "empty-tree-text", part: "tree-empty-text", role: "status" }, this._locales.nothingFound)))), this.loading && (h("div", { class: "skeleton-wrapper", role: "status", "aria-label": this._locales.loadingTree }, this.renderSkeletonRows(this.skeletonNumberItems)))));
   }
-  static get registryIs() { return "wpp-tree-v4-1-0"; }
+  static get registryIs() { return "wpp-tree-v4-2-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "search": ["onInputChange"],
-    "data": ["updateDate"],
-    "locales": ["onUpdateLocales"]
+    "data": ["updateDate"]
   }; }
 };
 WppTree.style = wppTreeCss;

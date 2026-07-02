@@ -1,25 +1,26 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { WppPaginationSelect } from '../wpp-pagination-select';
 import { FOCUS_TYPE } from '../../../../../types/common';
+import { h } from '@stencil/core';
 describe('wpp-pagination-select', () => {
   it('renders component', async () => {
     const page = await newSpecPage({
       components: [WppPaginationSelect],
-      html: `<wpp-pagination-select></wpp-pagination-select>`,
+      template: () => h("wpp-pagination-select-v4-2-0", { count: 1 }),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('renders component with 10 pages', async () => {
     const page = await newSpecPage({
       components: [WppPaginationSelect],
-      html: `<wpp-pagination-select count={10}></wpp-pagination-select>`,
+      html: `<wpp-pagination-select count="10"></wpp-pagination-select>`,
     });
     expect(page.root).toMatchSnapshot();
   });
   it('renders component with 8 pages and active page 2', async () => {
     const page = await newSpecPage({
       components: [WppPaginationSelect],
-      html: `<wpp-pagination-select count={8} activePageNumber={2}></wpp-pagination-select>`,
+      html: `<wpp-pagination-select count="8" activePageNumber={2}></wpp-pagination-select>`,
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -66,7 +67,7 @@ describe('wpp-pagination-select', () => {
     expect(instance.activePageNumber).toBe(5);
     expect(input.value).toBe('5');
     expect(spy).toHaveBeenCalledWith(expect.objectContaining({
-      detail: { page: 5 },
+      detail: { page: 5, itemsPerPage: 1 },
     }));
   });
   it('updates page on pagination-item click', async () => {
@@ -80,7 +81,7 @@ describe('wpp-pagination-select', () => {
     instance.handlePageClick({ detail: { page: 3 } });
     expect(instance.activePageNumber).toBe(3);
     expect(spy).toHaveBeenCalledWith(expect.objectContaining({
-      detail: { page: 3 },
+      detail: { page: 3, itemsPerPage: 1 },
     }));
   });
   it('handles left and right arrow navigation with bounds', async () => {
@@ -194,5 +195,55 @@ describe('wpp-pagination-select', () => {
     rightChevron.dispatchEvent(new FocusEvent('blur'));
     await page.waitForChanges();
     expect(instance.focusType['right-chevron']).toBe(FOCUS_TYPE.NONE);
+  });
+  describe('Testing initialization', () => {
+    it('Should set numberOfPages to 0 when count is 0', async () => {
+      const page = await newSpecPage({
+        components: [WppPaginationSelect],
+        template: () => h("wpp-pagination-select-v4-2-0", { count: 0 }),
+      });
+      await page.waitForChanges();
+      expect(page.rootInstance.numberOfPages).toBe(0);
+    });
+    it('Should set numberOfPages to 10 when count is 10 and itemsPerPage is not set (defaults to 1)', async () => {
+      const page = await newSpecPage({
+        components: [WppPaginationSelect],
+        template: () => h("wpp-pagination-select-v4-2-0", { count: 10 }),
+      });
+      await page.waitForChanges();
+      expect(page.rootInstance.numberOfPages).toBe(10);
+    });
+    it('Should set numberOfPages to 5 when count is 10 and itemsPerPage is 2', async () => {
+      const page = await newSpecPage({
+        components: [WppPaginationSelect],
+        template: () => h("wpp-pagination-select-v4-2-0", { count: 10, itemsPerPage: 2 }),
+      });
+      await page.waitForChanges();
+      expect(page.rootInstance.numberOfPages).toBe(5);
+    });
+  });
+  describe('Testing watchers', () => {
+    it('Should update numberOfPages when count changes', async () => {
+      const page = await newSpecPage({
+        components: [WppPaginationSelect],
+        template: () => h("wpp-pagination-select-v4-2-0", { count: 10, itemsPerPage: 2 }),
+      });
+      await page.waitForChanges();
+      expect(page.rootInstance.numberOfPages).toBe(5);
+      page.rootInstance.count = 20;
+      await page.waitForChanges();
+      expect(page.rootInstance.numberOfPages).toBe(10);
+    });
+    it('Should update numberOfPages when itemsPerPage changes', async () => {
+      const page = await newSpecPage({
+        components: [WppPaginationSelect],
+        template: () => h("wpp-pagination-select-v4-2-0", { count: 10, itemsPerPage: 2 }),
+      });
+      await page.waitForChanges();
+      expect(page.rootInstance.numberOfPages).toBe(5);
+      page.rootInstance.itemsPerPage = 5;
+      await page.waitForChanges();
+      expect(page.rootInstance.numberOfPages).toBe(2);
+    });
   });
 });

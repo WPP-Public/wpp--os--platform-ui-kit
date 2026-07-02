@@ -1,12 +1,14 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host, Fragment } from '@stencil/core/internal/client';
-import { c as convertMBToBytes, b as getExtensionsList, E as EXTENSION_TO_TYPE, g as getExtension, m as modifyPropertiesOnFile, a as getBaseName, r as renameFile, d as defineCustomElement$w } from './wpp-file-upload-item2.js';
+import { c as convertMBToBytes, b as getExtensionsList, E as EXTENSION_TO_TYPE, g as getExtension, m as modifyPropertiesOnFile, a as getBaseName, r as renameFile } from './const2.js';
 import { W as WrappedSlot } from './WrappedSlot.js';
-import { c as hasParentWithId, g as getSlotEmptyStates, d as debounce, k as transformToVersionedTag } from './utils.js';
+import { c as hasParentWithId, k as transformToVersionedTag, g as getSlotEmptyStates, d as debounce, y as mergeLocales } from './utils.js';
 import { Z as Z_INDEX } from './consts.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme.js';
-import { d as defineCustomElement$y } from './wpp-action-button2.js';
+import { d as defineCustomElement$z } from './wpp-action-button2.js';
+import { d as defineCustomElement$y } from './wpp-button2.js';
 import { d as defineCustomElement$x } from './wpp-checkbox2.js';
-import { d as defineCustomElement$v } from './wpp-icon-attach2.js';
+import { d as defineCustomElement$w } from './wpp-file-upload-item2.js';
+import { d as defineCustomElement$v } from './wpp-icon-arrow2.js';
 import { d as defineCustomElement$u } from './wpp-icon-chevron2.js';
 import { d as defineCustomElement$t } from './wpp-icon-cross2.js';
 import { d as defineCustomElement$s } from './wpp-icon-dash2.js';
@@ -21,8 +23,8 @@ import { d as defineCustomElement$k } from './wpp-icon-mic-on2.js';
 import { d as defineCustomElement$j } from './wpp-icon-music2.js';
 import { d as defineCustomElement$i } from './wpp-icon-pitch2.js';
 import { d as defineCustomElement$h } from './wpp-icon-plus2.js';
-import { d as defineCustomElement$g } from './wpp-icon-send2.js';
-import { d as defineCustomElement$f } from './wpp-icon-spreadsheet2.js';
+import { d as defineCustomElement$g } from './wpp-icon-spreadsheet2.js';
+import { d as defineCustomElement$f } from './wpp-icon-stop2.js';
 import { d as defineCustomElement$e } from './wpp-icon-success2.js';
 import { d as defineCustomElement$d } from './wpp-icon-tick2.js';
 import { d as defineCustomElement$c } from './wpp-icon-video-clip2.js';
@@ -39,6 +41,27 @@ import { d as defineCustomElement$2 } from './wpp-tooltip2.js';
 import { d as defineCustomElement$1 } from './wpp-typography2.js';
 
 const TOAST_DURATION = 5000;
+const debounceWithControl = (callback, timeout) => {
+  let timer;
+  return {
+    call: (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        timer = undefined;
+        callback(...args);
+      }, timeout);
+    },
+    cancel: () => {
+      clearTimeout(timer);
+      timer = undefined;
+    },
+    flush: (...args) => {
+      clearTimeout(timer);
+      timer = undefined;
+      callback(...args);
+    },
+  };
+};
 
 const DEFAULT_FILE_UPLOAD_CONFIG = {
   acceptConfig: {},
@@ -61,6 +84,7 @@ const MIN_TEXTAREA_HEIGHT = 52;
  * `wppActionsMenuItemClick` event on top of the built-in behavior.
  */
 const UPLOAD_ACTION_ID = 'upload';
+const UPLOAD_ICON = 'wpp-icon-attach';
 const LOCALES_DEFAULTS = {
   placeholder: 'Type your message...',
   minimizedDescription: 'Expand message input',
@@ -68,21 +92,31 @@ const LOCALES_DEFAULTS = {
   leftActionsGroupLabel: 'Attachments and tools',
   rightActionsGroupLabel: 'Send and character counter',
   sendLabel: 'Send message',
+  stopLabel: 'Stop response',
   attachLabel: 'Attach file',
   voiceLabel: 'Record voice message',
   attachmentsLabel: 'Attachments',
   messageInputLabel: 'Message input',
   actionsMenuLabel: 'More actions',
+  audioRecordButtonLabel: 'Start audio recording',
+  audioStopRecordButtonLabel: 'Stop audio recording',
+  audioLanguage: 'en-US',
 };
 
-const wppChatInputCss = ":host{--chat-input-container-min-width:var(--wpp-chat-input-container-min-width, 320px);--chat-input-container-bg-color:var(--wpp-chat-input-container-bg-color, var(--wpp-grey-color-000));--chat-input-container-outline-width:var(--wpp-chat-input-container-outline-width, 1px);--chat-input-container-outline-style:var(--wpp-chat-input-container-outline-style, solid);--chat-input-container-outline-color:var(--wpp-chat-input-container-outline-color, var(--wpp-grey-color-500));--chat-input-container-outline-color-hover:var(\n    --wpp-chat-input-container-outline-color-hover,\n    var(--wpp-grey-color-700)\n  );--chat-input-container-outline-color-active:var(\n    --wpp-chat-input-container-outline-color-active,\n    var(--wpp-grey-color-800)\n  );--chat-input-container-outline-color-disabled:var(\n    --wpp-chat-input-container-outline-color-disabled,\n    var(--wpp-grey-color-400)\n  );--chat-input-container-border-radius:var(--wpp-chat-input-container-border-radius, 8px);--chat-input-area-min-height:var(--wpp-chat-input-area-min-height, 52px);--chat-input-area-max-height:var(--wpp-chat-input-area-max-height, 240px);--chat-input-area-padding:var(--wpp-chat-input-area-padding, 12px 6px 0 12px);--chat-input-area-placeholder-color:var(--wpp-chat-input-area-placeholder-color, var(--wpp-grey-color-700));--chat-text-input-min-height:var(--wpp-chat-text-input-min-height, 52px);--chat-text-input-padding:var(--wpp-chat-text-input-padding, 0);--chat-text-input-bg-color:var(--wpp-chat-text-input-bg-color, transparent);--chat-text-input-placeholder-color:var(--wpp-chat-text-input-placeholder-color, var(--wpp-grey-color-700));--chat-actions-bar-padding:var(--wpp-chat-actions-bar-padding, 0 10px 8px 10px);--chat-actions-bar-color:var(--wpp-chat-actions-bar-color, var(--wpp-grey-color-500));--chat-actions-bar-color-disabled:var(--wpp-chat-actions-bar-color-disabled, var(--wpp-grey-color-400));--chat-actions-bar-char-counter-color:var(--wpp-chat-actions-bar-char-counter-color, var(--wpp-danger-color-500));--chat-actions-bar-char-counter-color-disabled:var(\n    --wpp-chat-actions-bar-char-counter-color-disabled,\n    var(--wpp-danger-color-300)\n  );--chat-text-input-minimized-width:var(--wpp-chat-text-input-minimized-width, 264px);--chat-text-input-minimized-height:var(--wpp-chat-text-input-minimized-height, 22px);--chat-text-input-minimized-padding:var(--wpp-chat-text-input-minimized-padding, 8px 10px);--chat-input-transition-timing:0.3s cubic-bezier(0.4, 0, 0.2, 1);--chat-minimized-focus-ring-color:var(--wpp-focus-ring-color, var(--wpp-primary-color-600));--chat-minimized-focus-ring-width:var(--wpp-focus-ring-width, 2px);--chat-minimized-focus-ring-radius:var(--wpp-chat-input-container-border-radius, 8px);--chat-minimized-first-border-color-focus:var(\n    --wpp-chat-minimized-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--chat-minimized-second-border-color-focus:var(\n    --wpp-chat-minimized-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--chat-minimized-border-radius-focus:var(--wpp-chat-minimized-border-radius-focus, var(--wpp-border-radius-xs));display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-box-sizing:border-box;box-sizing:border-box;position:relative;-ms-flex-align:center;align-items:center;width:100%}.chat-input-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;background-color:var(--chat-input-container-bg-color);gap:8px;outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color);border-radius:var(--chat-input-container-border-radius);min-width:var(--chat-input-container-min-width);width:100%;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);will-change:width, height;cursor:text}.chat-input-container:hover,.chat-input-container:focus-within{outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-hover)}.chat-input-container:active{outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-active)}.chat-input-container.disabled{pointer-events:none;cursor:not-allowed;outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-disabled)}.chat-file-upload-toast{position:absolute;top:8px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);cursor:pointer}.input-area{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);display:-ms-flexbox;display:flex;-ms-flex-direction:column-reverse;flex-direction:column-reverse;-ms-flex-align:stretch;align-items:stretch;color:var(--wpp-grey-color-1000);min-height:var(--chat-input-area-min-height);max-height:var(--chat-input-area-max-height);overflow-y:hidden;-ms-flex:1;flex:1;padding:var(--chat-input-area-padding);gap:12px;-webkit-box-sizing:border-box;box-sizing:border-box;border-radius:8px 8px 0 0;-webkit-transition:height var(--chat-input-transition-timing);transition:height var(--chat-input-transition-timing);will-change:height;-webkit-transform-origin:bottom;transform-origin:bottom}.input-area .attachments{-ms-flex-order:2;order:2}.input-area .text-input{-ms-flex-order:1;order:1}.input-area:not(.minimized){scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.input-area::-webkit-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-moz-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area:-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-webkit-scrollbar{width:4px;height:4px}.input-area::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400);border-radius:4px;margin:6px}.input-area::-webkit-scrollbar-track{background:transparent}.input-area textarea{width:100%;min-height:var(--chat-text-input-min-height);resize:none;border:none;outline:none;padding:var(--chat-text-input-padding);font-family:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;background-color:var(--chat-text-input-bg-color);overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;color:inherit;-webkit-transition:min-height var(--chat-input-transition-timing);transition:min-height var(--chat-input-transition-timing);will-change:min-height;-webkit-transform-origin:bottom;transform-origin:bottom;margin:0}.input-area textarea::-webkit-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-moz-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:hover,.input-area textarea:focus-within{color:var(--wpp-grey-color-1000)}.input-area textarea:active{color:var(--wpp-grey-color-1000)}.input-area textarea:disabled{cursor:not-allowed;color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-webkit-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-moz-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled:-ms-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-ms-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::placeholder{color:var(--wpp-grey-color-500)}.input-area.minimized{min-height:0;padding:var(--chat-text-input-minimized-padding)}.input-area.minimized .input-area-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;gap:4px}.input-area.minimized .input-area-wrapper .sr-only{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0, 0, 0, 0) !important;-webkit-clip-path:inset(50%) !important;clip-path:inset(50%) !important;border:0 !important;white-space:nowrap !important}.input-area.minimized .minimized-input{-ms-flex-align:center;align-items:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:var(--chat-text-input-minimized-width);outline:none}.input-area.minimized .minimized-input .input-value{width:100%}.input-area.minimized .minimized-input .input-value.disabled{color:var(--wpp-grey-color-500)}.input-area.minimized .minimized-input .input-value-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area.minimized .minimized-input .input-value-placeholder.disabled{color:var(--wpp-grey-color-500)}.actions-bar{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;-ms-flex-align:end;align-items:flex-end;padding:var(--chat-actions-bar-padding);border-radius:0 0 8px 8px}.actions-bar .left-actions{display:-ms-flexbox;display:flex;gap:8px;-ms-flex-align:center;align-items:center;}.actions-bar .left-actions .actions-menu{--wpp-mc-wrapper-width:auto;display:-ms-inline-flexbox;display:inline-flex;-ms-flex:0 0 auto;flex:0 0 auto;width:auto}.actions-bar .left-actions .select{display:-ms-flexbox;display:flex;width:100%}.actions-bar .left-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.actions-bar .left-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.actions-bar .right-actions{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}.actions-bar .right-actions .char-counter{color:var(--chat-actions-bar-char-counter-color)}.actions-bar .right-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.actions-bar .right-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.actions-bar .right-actions.disabled .char-counter{color:var(--chat-actions-bar-char-counter-color-disabled)}.attachments{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:4px;width:100%}.attachments .wpp-file-upload-item{width:100%}.attachments .wpp-file-upload-item::part(file-item){margin-top:0}.attachments .wpp-file-upload-item::part(controls){-ms-flex-pack:end;justify-content:flex-end}.input-area.minimized .minimized-input:focus-visible{border-radius:var(--chat-minimized-border-radius-focus);outline:none;-webkit-box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus);box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus)}:host([data-wpp-theme=dark]) .chat-input-container{background-color:var(--wpp-grey-color-100)}";
+const wppChatInputCss = "@charset \"UTF-8\";:host{--chat-input-container-min-width:var(--wpp-chat-input-container-min-width, 351px);--chat-input-container-bg-color:var(--wpp-chat-input-container-bg-color, var(--wpp-grey-color-000));--chat-input-container-outline-width:var(--wpp-chat-input-container-outline-width, 1px);--chat-input-container-outline-style:var(--wpp-chat-input-container-outline-style, solid);--chat-input-container-outline-color:var(--wpp-chat-input-container-outline-color, var(--wpp-grey-color-500));--chat-input-container-outline-color-disabled:var(\n    --wpp-chat-input-container-outline-color-disabled,\n    var(--wpp-grey-color-400)\n  );--chat-input-container-border-radius:var(--wpp-chat-input-container-border-radius, 8px);--chat-input-area-min-height:var(--wpp-chat-input-area-min-height, 52px);--chat-input-area-max-height:var(--wpp-chat-input-area-max-height, 240px);--chat-input-area-padding:var(--wpp-chat-input-area-padding, 12px 6px 0 12px);--chat-input-area-placeholder-color:var(--wpp-chat-input-area-placeholder-color, var(--wpp-grey-color-700));--chat-text-input-min-height:var(--wpp-chat-text-input-min-height, 52px);--chat-text-input-padding:var(--wpp-chat-text-input-padding, 0);--chat-text-input-bg-color:var(--wpp-chat-text-input-bg-color, transparent);--chat-text-input-placeholder-color:var(--wpp-chat-text-input-placeholder-color, var(--wpp-grey-color-700));--chat-actions-bar-padding:var(--wpp-chat-actions-bar-padding, 12px 16px 16px 12px);--chat-s-size-actions-bar-padding:var(--wpp-chat-s-size-actions-bar-padding, 8px 16px 8px 12px);--chat-actions-bar-color:var(--wpp-chat-actions-bar-color, var(--wpp-grey-color-500));--chat-actions-bar-color-disabled:var(--wpp-chat-actions-bar-color-disabled, var(--wpp-grey-color-400));--chat-actions-bar-char-counter-color:var(--wpp-chat-actions-bar-char-counter-color, var(--wpp-danger-color-500));--chat-actions-bar-char-counter-color-disabled:var(\n    --wpp-chat-actions-bar-char-counter-color-disabled,\n    var(--wpp-danger-color-300)\n  );--chat-text-input-minimized-width:var(--wpp-chat-text-input-minimized-width, 203px);--chat-text-input-minimized-height:var(--wpp-chat-text-input-minimized-height, 22px);--chat-text-input-minimized-padding:var(--wpp-chat-text-input-minimized-padding, 8px 16px 8px 12px);--chat-input-transition-timing:0.3s cubic-bezier(0.4, 0, 0.2, 1);--chat-minimized-focus-ring-color:var(--wpp-focus-ring-color, var(--wpp-primary-color-600));--chat-minimized-focus-ring-width:var(--wpp-focus-ring-width, 2px);--chat-minimized-focus-ring-radius:var(--wpp-chat-input-container-border-radius, 8px);--chat-minimized-first-border-color-focus:var(\n    --wpp-chat-minimized-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--chat-minimized-second-border-color-focus:var(\n    --wpp-chat-minimized-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--chat-minimized-border-radius-focus:var(--wpp-chat-minimized-border-radius-focus, var(--wpp-border-radius-xs));display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-box-sizing:border-box;box-sizing:border-box;position:relative;-ms-flex-align:center;align-items:center;width:100%}.chat-input-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;background-color:var(--chat-input-container-bg-color);gap:8px;outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color);border-radius:var(--chat-input-container-border-radius);min-width:var(--chat-input-container-min-width);width:100%;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:var(--wpp-box-shadow-s);box-shadow:var(--wpp-box-shadow-s);-webkit-transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);will-change:width, height;cursor:text}.chat-input-container:hover,.chat-input-container:focus-within{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m)}.chat-input-container:active{-webkit-box-shadow:var(--wpp-box-shadow-s);box-shadow:var(--wpp-box-shadow-s)}.chat-input-container.disabled{pointer-events:none;cursor:not-allowed;outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-disabled)}.chat-input-container.is-focused{outline-color:var(--wpp-primary-color-500)}.chat-input-container.has-alert{gap:0}.alert{-ms-flex-item-align:stretch;align-self:stretch;border-top-left-radius:var(--chat-input-container-border-radius);border-top-right-radius:var(--chat-input-container-border-radius);overflow:hidden}.alert[hidden]{display:none}.chat-file-upload-toast{position:absolute;top:8px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);cursor:pointer}.input-area{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);display:-ms-flexbox;display:flex;-ms-flex-direction:column-reverse;flex-direction:column-reverse;-ms-flex-align:stretch;align-items:stretch;color:var(--wpp-grey-color-1000);min-height:var(--chat-input-area-min-height);max-height:var(--chat-input-area-max-height);overflow-y:hidden;-ms-flex:1;flex:1;padding:var(--chat-input-area-padding);gap:12px;-webkit-box-sizing:border-box;box-sizing:border-box;border-radius:8px 8px 0 0;-webkit-transition:height var(--chat-input-transition-timing);transition:height var(--chat-input-transition-timing);will-change:height;-webkit-transform-origin:bottom;transform-origin:bottom}.input-area .attachments{-ms-flex-order:3;order:3}.input-area .references{-ms-flex-order:2;order:2}.input-area .text-input{-ms-flex-order:1;order:1}.input-area:not(.minimized){scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.input-area::-webkit-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-moz-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area:-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-webkit-scrollbar{width:4px;height:4px}.input-area::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400);border-radius:4px;margin:6px}.input-area::-webkit-scrollbar-track{background:transparent}.input-area textarea{width:100%;min-height:var(--chat-text-input-min-height);resize:none;border:none;outline:none;padding:var(--chat-text-input-padding);font-family:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;background-color:var(--chat-text-input-bg-color);overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;color:inherit;-webkit-transition:min-height var(--chat-input-transition-timing);transition:min-height var(--chat-input-transition-timing);will-change:min-height;-webkit-transform-origin:bottom;transform-origin:bottom;margin:0}.input-area textarea::-webkit-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-moz-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:hover,.input-area textarea:focus-within{color:var(--wpp-grey-color-1000)}.input-area textarea:active{color:var(--wpp-grey-color-1000)}.input-area textarea:disabled{cursor:not-allowed;color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-webkit-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-moz-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled:-ms-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-ms-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::placeholder{color:var(--wpp-grey-color-500)}.input-area.minimized{min-height:0;padding:var(--chat-text-input-minimized-padding)}.input-area.minimized .input-area-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;gap:8px}.input-area.minimized .input-area-wrapper .actions-menu{--wpp-mc-wrapper-width:auto}.input-area.minimized .input-area-wrapper .sr-only{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0, 0, 0, 0) !important;-webkit-clip-path:inset(50%) !important;clip-path:inset(50%) !important;border:0 !important;white-space:nowrap !important}.input-area.minimized .minimized-input{-ms-flex-align:center;align-items:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;min-width:var(--chat-text-input-minimized-width);outline:none}.input-area.minimized .minimized-input .input-value{width:100%}.input-area.minimized .minimized-input .input-value.disabled{color:var(--wpp-grey-color-500)}.input-area.minimized .minimized-input .input-value-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area.minimized .minimized-input .input-value-placeholder.disabled{color:var(--wpp-grey-color-500)}.actions-bar{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;-ms-flex-align:end;align-items:flex-end;padding:var(--chat-actions-bar-padding);border-radius:0 0 8px 8px}.actions-bar.size-s{padding:var(--chat-s-size-actions-bar-padding)}.actions-bar .left-actions{display:-ms-flexbox;display:flex;gap:8px;-ms-flex-align:center;align-items:center;}.actions-bar .left-actions .actions-menu{--wpp-mc-wrapper-width:auto;display:-ms-inline-flexbox;display:inline-flex;-ms-flex:0 0 auto;flex:0 0 auto;width:auto}.actions-bar .left-actions .select{display:-ms-flexbox;display:flex;width:100%;--wpp-action-button-padding:4px 6px;--wpp-action-button-icon-start-padding:8px;--wpp-action-button-icon-end-padding:6px;--wpp-action-button-icon-start-margin:8px;--wpp-action-button-icon-end-margin:8px;--wpp-action-button-bg-color-active:var(--wpp-grey-color-300);--wpp-action-button-opacity-active:1;}.actions-bar .left-actions .select ::slotted(.wpp-action-button:not(.with-icon-end)){--wpp-action-button-padding:4px 8px}.actions-bar .left-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.actions-bar .left-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.right-actions{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:4px}.right-actions .char-counter{color:var(--chat-actions-bar-char-counter-color)}.right-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.right-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.right-actions.disabled .char-counter{color:var(--chat-actions-bar-char-counter-color-disabled)}.play-btn{margin-left:4px;--button-padding-s:6px}.play-btn::part(icon-start-wrapper){margin:0}.attachments{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;gap:8px;width:100%;-ms-flex:0 0 auto;flex:0 0 auto;overflow:auto hidden;scrollbar-width:thin;scrollbar-color:transparent transparent;-webkit-transition:scrollbar-color 0.3s ease-in-out;transition:scrollbar-color 0.3s ease-in-out}.attachments::-webkit-scrollbar{height:4px}.attachments::-webkit-scrollbar-thumb{background-color:transparent;border-radius:var(--wpp-border-radius-xs, 4px);-webkit-transition:background-color 0.3s ease-in-out;transition:background-color 0.3s ease-in-out}.attachments:hover,.attachments:focus-within{scrollbar-color:var(--wpp-grey-color-400) transparent}.attachments:hover::-webkit-scrollbar-thumb,.attachments:focus-within::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400)}.attachments .wpp-file-upload-item{-ms-flex:0 0 auto;flex:0 0 auto;width:224px;min-width:224px;max-width:224px;--wpp-file-upload-item-chat-gap:0}.attachments .wpp-file-upload-item::part(file-item){margin-top:0}.attachments .wpp-file-upload-item::part(controls){-ms-flex-pack:end;justify-content:flex-end}.attachments .wpp-file-upload-item::part(thumbnail){margin-right:8px}.attachments .wpp-file-upload-item::part(cross-icon){margin-left:12px}.references{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:end;align-items:flex-end;gap:8px;width:100%;-ms-flex:0 0 auto;flex:0 0 auto}.references[hidden]{display:none}.input-area.minimized .minimized-input:focus-visible{border-radius:var(--chat-minimized-border-radius-focus);outline:none;-webkit-box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus);box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus)}:host([data-wpp-theme=dark]) .chat-input-container{background-color:var(--wpp-grey-color-100)}";
 
+// Model-selector dropdown defaults applied centrally to the slotted menu-context
+// (Figma spec) so consuming apps don't repeat them. SELECT_DROPDOWN_CLASS is also
+// targeted by a global rule that spaces the dropdown list items 4px apart.
+const SELECT_DROPDOWN_WIDTH = '200px';
+const SELECT_DROPDOWN_CLASS = 'wpp-chat-input-model-options';
 const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends HTMLElement {
   constructor() {
     super();
     this.__registerHost();
     this.__attachShadow();
     this.wppSend = createEvent(this, "wppSend", 1);
+    this.wppStop = createEvent(this, "wppStop", 1);
     this.wppMic = createEvent(this, "wppMic", 1);
     this.wppChange = createEvent(this, "wppChange", 1);
     this.wppFileUploadItemDelete = createEvent(this, "wppFileUploadItemDelete", 1);
@@ -92,38 +126,61 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
     this.wppActionsMenuItemClick = createEvent(this, "wppActionsMenuItemClick", 1);
     this.scrollTimeout = null;
     this.inputAreaId = `wpp-ci-area`;
-    this.charCounterId = `wpp-ci-cc`;
     this.textareaAutoId = `wpp-ci-ta`;
     this.minimizedDescId = `wpp-ci-min-desc`;
-    this._locales = LOCALES_DEFAULTS; // Locales state holder (merged default + user overrides)
+    this.recognition = null;
     this.themeSubscription = themeSubscriptionController(() => this.host);
+    this.aiModelBtn = null;
     this.reInitValue = (list) => {
       this.successAttachmentsList = list.filter(file => !this.isFileWithError(file));
       this.errorAttachmentsList = list.filter(this.isFileWithError);
     };
-    // Handler to block click during dialog
-    this.onAttachClick = (e) => {
-      // Space/Enter on buttons can still synthesize click; block if dialog is open
-      if (this.isFileDialogOpen) {
-        e.preventDefault();
-        e.stopPropagation();
+    this.setupSpeechRecognition = () => {
+      const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognitionAPI)
         return;
-      }
-      this.handleFileSelection();
+      this.recognition = new SpeechRecognitionAPI();
+      this.recognition.continuous = true;
+      this.recognition.interimResults = true;
+      this.recognition.lang = this._locales.audioLanguage;
     };
-    this.handleDocumentFocusIn = (event) => {
-      const target = event.target;
-      if (this.size === 's' && this.isChatInputExpanded && this.host && !this.host.contains(target)) {
-        if (!hasParentWithId(target, 'tippy-')) {
-          this.handleSimpleBlur();
+    this.startSpeechRecognition = () => {
+      if (!this.recognition)
+        return;
+      const previousText = this.internalValue.trim();
+      this.recognition.onresult = (event) => {
+        let text = '';
+        for (let i = 0; i < event.results.length; i++) {
+          text += event.results[i][0].transcript;
         }
-      }
+        const newOutput = previousText ? `${previousText} ${text}` : text;
+        if (this.internalValue === newOutput)
+          return;
+        this.internalValue = newOutput;
+        this.emitMessageChangedEvent(this.internalValue);
+      };
+      this.recognition.onerror = () => {
+        this.isAudioRecording = false;
+      };
+      this.recognition.onend = () => {
+        this.isAudioRecording = false;
+      };
+      this.recognition?.start();
     };
-    this.handleDocumentClick = (event) => {
-      if (this.size === 's' && this.isChatInputExpanded && this.host && !this.host.contains(event.target)) {
+    this.stopSpeechRecognition = () => {
+      if (!this.recognition)
+        return;
+      this.recognition.onresult = null;
+      this.recognition.onend = null;
+      this.recognition.onerror = null;
+      this.recognition.stop();
+    };
+    this.checkInteractedItem = (event) => {
+      const path = event.composedPath();
+      if (this.isFocused && this.host && !path.includes(this.host)) {
         // For cases when the user click item from select.
         // The dropdown of the select is rendered outside of the component.
-        if (!hasParentWithId(event.target, 'tippy-')) {
+        if (!hasParentWithId(path[0], 'tippy-')) {
           this.handleSimpleBlur();
         }
       }
@@ -167,11 +224,61 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
       }
       this.wppActionsMenuItemClick.emit(action);
     };
+    // Centralizes the chat-input model-selector wiring so consuming apps don't have
+    // to repeat these overrides per example/framework:
+    //  - SC 4.1.2 (nested-interactive): the decorative brand logo (wpp-avatar) sitting
+    //    inside the interactive trigger button must not be a focusable widget, so it is
+    //    demoted to role="presentation" (which also drops its tabindex).
+    //  - The dropdown width is pinned to the Figma spec (200px) on the slotted
+    //    menu-context, and tagged with a class. That class lets menu-context apply the
+    //    dropdown's own a11y wiring (menuitem roles, non-interactive option avatars) and
+    //    the global rule space the option rows 4px apart. The dropdown content is moved
+    //    to document.body by tippy, so it cannot be reached from here — only the trigger
+    //    (which stays in place) is configured in this method.
+    this.configureSelectSlot = () => {
+      const selectEl = this.host.querySelector('[slot="select"]');
+      if (!selectEl)
+        return;
+      const triggerAvatars = selectEl.querySelectorAll('[slot="icon-start"], [slot="icon-end"]');
+      triggerAvatars.forEach(el => {
+        el.setAttribute('role', 'presentation');
+        if (el.tabIndex >= 0)
+          el.tabIndex = -1;
+      });
+      const menuContext = (selectEl.matches(transformToVersionedTag('wpp-menu-context'))
+        ? selectEl
+        : selectEl.querySelector(transformToVersionedTag('wpp-menu-context')));
+      if (menuContext) {
+        if (menuContext.listWidth === 'auto')
+          menuContext.listWidth = SELECT_DROPDOWN_WIDTH;
+        const externalClasses = (menuContext.externalClass ?? '').split(' ').filter(Boolean);
+        if (!externalClasses.includes(SELECT_DROPDOWN_CLASS)) {
+          menuContext.externalClass = [...externalClasses, SELECT_DROPDOWN_CLASS].join(' ');
+        }
+      }
+    };
     this.updateSlotData = () => {
       const emptyStates = getSlotEmptyStates(this.host.childNodes, {
         select: '[slot="select"]',
+        alert: '[slot="alert"]',
+        references: '[slot="references"]',
       });
       this.hasSelectSlot = !emptyStates.select;
+      this.hasAlertSlot = !emptyStates.alert;
+      this.hasReferencesSlot = !emptyStates.references;
+      this.configureSelectSlot();
+    };
+    // A fresh alert appearing in the slot should always be shown, even if a
+    // previous one was dismissed.
+    this.handleAlertSlotChange = () => {
+      this.updateSlotData();
+      this.isAlertDismissed = false;
+    };
+    this.handleReferencesSlotChange = () => {
+      this.updateSlotData();
+      // References add height to the input area, so recompute whether it needs to
+      // scroll once the slotted content has been laid out.
+      requestAnimationFrame(() => this.adjustTextareaHeight(false));
     };
     this.handleScroll = () => {
       if (this.scrollTimeout)
@@ -217,11 +324,14 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
         return;
       const target = event.target;
       const inputValue = target.value;
+      this.internalValue = inputValue;
+      this.emitMessageChangedEvent(inputValue);
+    };
+    this.emitMessageChangedEvent = (inputValue) => {
       if (this.debounceEnabled && this.debouncedHandleInput) {
-        this.debouncedHandleInput(inputValue);
+        this.debouncedHandleInput.call(inputValue);
       }
       else {
-        this.internalValue = inputValue;
         this.wppMessageChanged.emit({ value: inputValue });
       }
       if (!inputValue.trim() && this.textareaRef) {
@@ -243,9 +353,12 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
       const attachmentsElement = this.inputAreaRef.querySelector('.attachments');
       const attachmentsHeight = attachmentsElement?.scrollHeight || 0;
       const gap = attachmentsElement ? parseFloat(getComputedStyle(attachmentsElement).gap) || 0 : 0;
+      const referencesElement = this.inputAreaRef.querySelector('.references');
+      const referencesHeight = referencesElement && !referencesElement.hasAttribute('hidden') ? referencesElement.scrollHeight : 0;
+      const referencesGap = referencesHeight ? parseFloat(getComputedStyle(this.inputAreaRef).rowGap) || 0 : 0;
       const messageText = value !== undefined ? value : this.textareaRef.value;
       const textAreaContentHeight = Math.max(this.calculateTextHeight(messageText), MIN_TEXTAREA_HEIGHT);
-      const totalHeight = attachmentsHeight + textAreaContentHeight + gap;
+      const totalHeight = attachmentsHeight + referencesHeight + textAreaContentHeight + gap + referencesGap;
       const reachMaxHeight = totalHeight > MAX_INPUT_AREA_HEIGHT;
       this.inputAreaRef.style.overflowY = reachMaxHeight ? 'auto' : 'hidden';
       this.textareaRef.style.minHeight = `${textAreaContentHeight}px`;
@@ -395,15 +508,6 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
         this.minimizedPressed = false;
       }
     };
-    this.onAttachKeyDown = (e) => {
-      if (e.key === ' ' || e.key === 'Enter') {
-        e.preventDefault();
-        this.attachPressed = true;
-        this.handleFileSelection();
-        // Clear immediately to avoid sticky state when dialog steals focus
-        this.attachPressed = false;
-      }
-    };
     this.onWindowFocus = () => {
       if (this.isFileDialogOpen) {
         this.clearDialogState();
@@ -411,8 +515,42 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
     };
     this.clearDialogState = () => {
       this.isFileDialogOpen = false;
-      this.attachPressed = false;
     };
+    this.handleOnFocus = () => {
+      if (!this.isFocused) {
+        this.addExpandedListeners();
+      }
+      this.isFocused = true;
+    };
+    this.handleClickAudioRecording = (event) => {
+      event.stopPropagation();
+      event.preventDefault();
+      if (!this.recognition)
+        return;
+      this.isAudioRecording = !this.isAudioRecording;
+      if (this.isAudioRecording) {
+        this.startSpeechRecognition();
+      }
+      else {
+        this.stopSpeechRecognition();
+      }
+    };
+    this.shouldDisplaySend = () => this.disabled
+      ? false
+      : !!this.internalValue.trim() ||
+        this.isGenerating ||
+        [...this.successAttachmentsList, ...this.errorAttachmentsList].length > 0;
+    this.renderMicrophoneBtn = (recordButtonLabel) => (h("wpp-action-button-v4-2-0", { "data-testid": "wpp-micophone-btn", onClick: this.handleClickAudioRecording, variant: "secondary", ariaProps: { label: recordButtonLabel }, disabled: this.disabled }, this.isAudioRecording ? h("wpp-icon-stop-v4-2-0", { slot: "icon-start" }) : h("wpp-icon-mic-on-v4-2-0", { slot: "icon-start" })));
+    this.renderActionsMenu = () => (h("wpp-menu-context-v4-2-0", { class: "actions-menu", part: "actions-menu", dropdownConfig: this.actionsMenuDropdownConfig }, h("wpp-action-button-v4-2-0", { slot: "trigger-element", class: "actions-menu-trigger", "data-testid": "actions-menu-trigger-button", variant: "secondary", disabled: this.disabled, ariaProps: {
+        label: this.getActionsMenuButtonLabel(),
+        expanded: this.ariaProps?.actionsMenuButton?.expanded ?? this.actionsMenuOpen,
+        haspopup: 'menu',
+      } }, h("wpp-icon-plus-v4-2-0", { slot: "icon-start" })), h("div", null, h("wpp-list-item-v4-2-0", { "data-testid": `actions-menu-item-${UPLOAD_ACTION_ID}`, disabled: this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick({
+        id: UPLOAD_ACTION_ID,
+        icon: UPLOAD_ICON,
+        label: this.getAttachButtonLabel(),
+        disabled: this.disabled || this.isFileDialogOpen,
+      }) }, h(transformToVersionedTag(UPLOAD_ICON), { slot: 'left' }), h("span", { slot: "label" }, this.getAttachButtonLabel())), this.actions.map(action => (h("wpp-list-item-v4-2-0", { key: action.id, "data-testid": `actions-menu-item-${action.id}`, disabled: action.disabled || this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))));
     this.hostCssClasses = () => ({
       'wpp-chat-input': true,
     });
@@ -421,6 +559,8 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
     });
     this.chatInputContainerClasses = () => ({
       'chat-input-container': true,
+      'is-focused': this.isFocused,
+      'has-alert': this.hasAlertSlot && !this.isAlertDismissed,
       disabled: this.disabled,
     });
     this.inputAreaClasses = () => ({
@@ -446,6 +586,7 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
     });
     this.actionsBarClasses = () => ({
       'actions-bar': true,
+      [`size-${this.size}`]: true,
     });
     this.leftActionsClasses = () => ({
       'left-actions': true,
@@ -465,6 +606,7 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
     this.enableAttach = false;
     this.enableMic = false;
     this.disabled = false;
+    this.isGenerating = false;
     this.fileUploadConfig = {
       /**
        * Format of the file upload result.
@@ -532,12 +674,16 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
     this.showToast = false;
     this.areAttachmentsVisible = true;
     this.hasSelectSlot = false;
+    this.hasAlertSlot = false;
+    this.isAlertDismissed = false;
+    this.hasReferencesSlot = false;
     this.isChatInputExpanded = false;
-    this.attachPressed = false;
     this.minimizedPressed = false;
     this.isFileDialogOpen = false;
     this.internalValue = '';
     this.actionsMenuOpen = false;
+    this.isFocused = false;
+    this.isAudioRecording = false;
   }
   onAttachmentsChange(newValue) {
     if (this.mergedFileUploadConfig.controlled) {
@@ -553,24 +699,20 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
       this.adjustTextareaHeight(false, value);
     }
   }
-  onUpdateLocales(newLocales) {
-    // Merge into private _locales, not the readonly @Prop
-    this._locales = { ...this._locales, ...newLocales };
-  }
   componentWillLoad() {
     if (!this.textValue?.trim() && this.textValue !== this.internalValue) {
       this.internalValue = this.textValue;
     }
-    this.debouncedHandleInput = debounce((value) => {
-      this.internalValue = value;
+    this.aiModelBtn = this.host.querySelector('[slot="select"] > [slot="trigger-element"]');
+    this.aiModelBtn?.addEventListener('focus', this.handleOnFocus);
+    this.debouncedHandleInput = debounceWithControl((value) => {
       this.wppMessageChanged.emit({ value });
     }, this.debounceDelay);
     const list = [...this.attachments, ...(this.successAttachmentsList || []), ...(this.errorAttachmentsList || [])];
     this.reInitValue(list);
-    // Merge initial locales once at load
-    this._locales = { ...this._locales, ...this.locales };
   }
   componentDidLoad() {
+    this.setupSpeechRecognition();
     requestAnimationFrame(() => {
       this.initializeObserver();
     });
@@ -591,13 +733,15 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
     }
     this.resizeObserver = resizeObserver;
     window.addEventListener('focus', this.onWindowFocus, true);
+    // Run once after first render so select-slot elements are already in the DOM
+    requestAnimationFrame(() => this.configureSelectSlot());
   }
   addExpandedListeners() {
     this.expandedListenersAbort?.abort();
     this.expandedListenersAbort = new AbortController();
     const signal = this.expandedListenersAbort.signal;
-    document.addEventListener('mousedown', this.handleDocumentClick, { capture: true, signal });
-    document.addEventListener('focusin', this.handleDocumentFocusIn, { capture: true, signal });
+    document.addEventListener('mousedown', this.checkInteractedItem, { capture: true, signal });
+    document.addEventListener('focusin', this.checkInteractedItem, { capture: true, signal });
   }
   removeExpandedListeners() {
     this.expandedListenersAbort?.abort();
@@ -609,11 +753,16 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
   disconnectedCallback() {
     this.disconnectObserver();
     this.themeSubscription.stop();
+    this.stopSpeechRecognition();
     if (this.resizeObserver && this.inputAreaRef) {
       this.resizeObserver.unobserve(this.inputAreaRef);
     }
     this.removeExpandedListeners();
     window.removeEventListener('focus', this.onWindowFocus, true);
+    this.aiModelBtn?.removeEventListener('focus', this.handleOnFocus);
+  }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
   }
   onSizeChange(newValue, oldValue) {
     if (newValue !== oldValue && this.size === 's') {
@@ -626,7 +775,6 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
   handleSizeToggle() {
     if (this.size === 's' && !this.disabled) {
       this.isChatInputExpanded = true;
-      this.addExpandedListeners();
       requestAnimationFrame(() => {
         if (this.debouncedAdjustTextareaHeight) {
           this.debouncedAdjustTextareaHeight();
@@ -641,9 +789,9 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
   handleSimpleBlur() {
     if (this.size === 's' && this.isChatInputExpanded) {
       this.isChatInputExpanded = false;
-      this.removeExpandedListeners();
-      requestAnimationFrame(() => this.minimizedTriggerRef?.focus());
     }
+    this.removeExpandedListeners();
+    this.isFocused = false;
   }
   forceRecalculateHeight() {
     if (this.textareaRef) {
@@ -706,11 +854,20 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
   getSendButtonLabel() {
     return this.ariaProps?.sendButton?.label ?? this._locales.sendLabel;
   }
+  getStopButtonLabel() {
+    return this.ariaProps?.stopButton?.label ?? this._locales.stopLabel;
+  }
   getAttachButtonLabel() {
     return this.ariaProps?.attachButton?.label ?? this._locales.attachLabel;
   }
   getActionsMenuButtonLabel() {
     return this.ariaProps?.actionsMenuButton?.label ?? this._locales.actionsMenuLabel;
+  }
+  getAudioRecordButtonLabel() {
+    return this.ariaProps?.audioRecordButton?.label ?? this._locales.audioRecordButtonLabel;
+  }
+  getAudioStopRecordButtonLabel() {
+    return this.ariaProps?.audioStopRecordButton?.label ?? this._locales.audioStopRecordButtonLabel;
   }
   checkAttachmentsVisibility() {
     const attachmentsElement = this.inputAreaRef?.querySelector('.attachments');
@@ -718,9 +875,29 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
       this.areAttachmentsVisible = false;
       return;
     }
-    const { top: inputTop, bottom: inputBottom } = this.inputAreaRef.getBoundingClientRect();
-    const { top: attachTop, bottom: attachBottom } = attachmentsElement.getBoundingClientRect();
-    this.areAttachmentsVisible = attachTop >= inputTop && attachBottom <= inputBottom;
+    // Attachments lay out horizontally, so they are fully visible only when the
+    // row is not overflowing its horizontal scroll container.
+    const { scrollWidth, clientWidth } = attachmentsElement;
+    const horizontallyVisible = scrollWidth <= clientWidth + 1;
+    // The input area is `column-reverse` with `overflow-y: hidden` and a fixed
+    // max-height, so a tall textarea pushes the attachments row off the top
+    // where it gets clipped out of view. Compare the row's box against the input
+    // area's box to detect that vertical clipping, which a horizontal-only check
+    // misses (e.g. long text + a single file that fits the row).
+    const areaRect = this.inputAreaRef.getBoundingClientRect();
+    const rowRect = attachmentsElement.getBoundingClientRect();
+    const verticallyVisible = rowRect.top >= areaRect.top - 1 && rowRect.bottom <= areaRect.bottom + 1;
+    this.areAttachmentsVisible = horizontallyVisible && verticallyVisible;
+  }
+  // The slotted alert lives in the light DOM, so its close event bubbles up to
+  // the chat input. Hiding it here keeps the alert dismissal contained to the
+  // alert area without disturbing the rest of the chat input. References share
+  // the same close event, so we only react when the alert itself was dismissed.
+  handleAlertClose(event) {
+    const target = event.target;
+    if (target?.getAttribute('slot') === 'alert') {
+      this.isAlertDismissed = true;
+    }
   }
   disconnectObserver() {
     if (this.inputAreaRef) {
@@ -746,14 +923,19 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
       selector += '.error';
     if (type === 'success')
       selector += ':not(.error)';
-    const attachment = attachmentsElement.querySelector(selector);
+    // New files are appended to the end of each list, so the most recently added
+    // file is the LAST element matching the selector. Target it so clicking the
+    // toast reveals the file the user just added, not the oldest matching one.
+    const matches = attachmentsElement.querySelectorAll(selector);
+    const attachment = matches[matches.length - 1];
     if (attachment) {
-      // Use block: 'nearest' to minimize page scroll issues
-      attachment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      // Attachments scroll horizontally, so align along the inline axis while
+      // using block: 'nearest' to avoid nudging the surrounding page vertically.
+      attachment.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
       return;
     }
-    // Fallback: scroll to top (visual top in column-reverse is scrollTop = 0)
-    attachmentsElement.scrollTo({ top: 0, behavior: 'smooth' });
+    // Fallback: scroll back to the first attachment (start of the horizontal row).
+    attachmentsElement.scrollTo({ left: 0, behavior: 'smooth' });
   }
   displayToast(message, type) {
     this.checkAttachmentsVisibility();
@@ -766,11 +948,17 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
     setTimeout(() => (this.showToast = false), TOAST_DURATION);
   }
   handleSend() {
+    if (this.debounceEnabled && this.textareaRef) {
+      this.debouncedHandleInput.flush(this.textareaRef.value);
+    }
     if (this.disabled ||
+      this.isGenerating ||
       this.isSendDisabled ||
       (!this.internalValue.trim() && !this.successAttachmentsList.length) ||
       this.errorAttachmentsList.length)
       return;
+    this.isAudioRecording = false;
+    this.stopSpeechRecognition();
     this.wppSend.emit({
       message: this.internalValue.trim(),
       attachments: this.successAttachmentsList,
@@ -783,8 +971,17 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
     this.wppChange.emit({ value: [], hasError: false, errorFiles: [] });
     this.adjustTextareaHeight(true);
     if (this.size === 's') {
-      this.isChatInputExpanded = false;
+      // Collapse back to the minimized resting state. Use the blur routine so it
+      // also clears `isFocused` (and tears down the expanded listeners); just
+      // setting `isChatInputExpanded = false` would leave the active focus border
+      // painted on the minimized input after sending.
+      this.handleSimpleBlur();
     }
+  }
+  handleStop() {
+    if (this.disabled)
+      return;
+    this.wppStop.emit();
   }
   handleFileSelection() {
     if (!this.inputRef || this.isFileDialogOpen)
@@ -855,51 +1052,45 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
     this.scrollToAttachment(this.toastType === 'error' ? 'error' : 'success');
   }
   get isSendDisabled() {
-    const charExceeded = this.charactersLimit !== undefined && this.internalValue.length > this.charactersLimit;
     return (this.disabled ||
       (!this.internalValue.trim() && this.successAttachmentsList.length === 0) ||
-      this.errorAttachmentsList.length > 0 ||
-      charExceeded);
+      this.errorAttachmentsList.length > 0);
   }
   render() {
     const allFiles = [...this.successAttachmentsList, ...this.errorAttachmentsList];
-    const charExceeded = this.charactersLimit && this.internalValue.length > this.charactersLimit;
     const isMaximizedS = this.isChatInputExpanded && this.size === 's';
     const maximizedSorSizeM = isMaximizedS || this.size === 'm';
     const isMinimizedS = this.size === 's' && !this.isChatInputExpanded;
     const placeholderText = this.getPlaceholderText();
-    const ariaInvalid = this.ariaProps?.textarea?.invalid !== undefined
-      ? this.ariaProps.textarea.invalid
-      : charExceeded
-        ? 'true'
-        : undefined;
-    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, toast, input-area, attachments, text-input, actions-bar, left-actions, right-actions, file-item, actions-menu", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick }, h("div", { class: this.chatInputContainerClasses(), onKeyDown: this.onExpandedKeyDown, part: "chat-input-container" }, this.showToast && (h("wpp-toast-v4-1-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { id: this.inputAreaId, class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments", role: "list", "aria-label": this._locales.attachmentsLabel }, allFiles.map((file, index) => (h("wpp-file-upload-item-v4-1-0", { key: index, file: file, format: this.mergedFileUploadConfig.format, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
+    const actionButtonLabel = this.isGenerating ? this.getStopButtonLabel() : this.getSendButtonLabel();
+    const recordButtonLabel = this.isAudioRecording
+      ? this.getAudioStopRecordButtonLabel()
+      : this.getAudioRecordButtonLabel();
+    const actionButtonDisabled = this.isGenerating ? this.disabled : this.isSendDisabled;
+    const ariaInvalid = this.ariaProps?.textarea?.invalid !== undefined ? this.ariaProps.textarea.invalid : undefined;
+    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, alert, toast, input-area, attachments, references, text-input, actions-bar, left-actions, right-actions, file-item, actions-menu", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick, onFocus: this.handleOnFocus }, h("div", { class: this.chatInputContainerClasses(), onKeyDown: this.onExpandedKeyDown, part: "chat-input-container" }, h("div", { class: "alert", part: "alert", hidden: !this.hasAlertSlot || this.isAlertDismissed }, h("slot", { name: "alert", onSlotchange: this.handleAlertSlotChange })), this.showToast && (h("wpp-toast-v4-2-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { id: this.inputAreaId, class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments", role: "list", "aria-label": this._locales.attachmentsLabel }, allFiles.map((file, index) => (h("wpp-file-upload-item-v4-2-0", { key: index, file: file, variant: "chat", format: this.mergedFileUploadConfig.format, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
         sizeError: this.mergedFileUploadConfig.locales.sizeError,
         formatError: this.mergedFileUploadConfig.locales.formatError,
-      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded, "aria-posinset": (index + 1).toString(), "aria-setsize": allFiles.length.toString() }))))), h("textarea", { id: (this.htmlAttributes?.textarea?.id ?? this.textareaId) || this.textareaAutoId, name: this.htmlAttributes?.textarea?.name ?? this.textareaName ?? 'message', class: this.textInputClasses(), placeholder: placeholderText, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input", "aria-label": this.getTextareaLabel(), "aria-invalid": ariaInvalid, "aria-describedby": charExceeded ? this.charCounterId : undefined, autocomplete: this.htmlAttributes?.textarea?.autocomplete, maxLength: this.htmlAttributes?.textarea?.maxLength, "data-gramm": "false", "data-gramm_editor": "false" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, h("div", { class: this.minimizedInput(), part: "minimized-input", ref: el => (this.minimizedTriggerRef = el), "data-pressed": this.minimizedPressed ? 'true' : null, role: "button", tabindex: this.disabled ? -1 : 0, "aria-expanded": this.isChatInputExpanded ? 'true' : 'false', "aria-controls": this.inputAreaId, "aria-label": this.getMinimizedAriaLabel(), "aria-describedby": this.minimizedDescId, onKeyDown: this.onMinimizedKeyDown, onKeyUp: this.onMinimizedKeyUp }, h("wpp-typography-v4-1-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || placeholderText)), h("span", { id: this.minimizedDescId, class: "sr-only" }, this.getMinimizedDescriptionText()), h("wpp-action-button-v4-1-0", { "data-testid": "send-icon-only-button", variant: "secondary", onClick: e => {
+      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded, role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": allFiles.length.toString() }))))), h("div", { class: "references", part: "references", hidden: !this.hasReferencesSlot }, h("slot", { name: "references", onSlotchange: this.handleReferencesSlotChange })), h("textarea", { id: (this.htmlAttributes?.textarea?.id ?? this.textareaId) || this.textareaAutoId, name: this.htmlAttributes?.textarea?.name ?? this.textareaName ?? 'message', class: this.textInputClasses(), placeholder: placeholderText, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input", "aria-label": this.getTextareaLabel(), "aria-invalid": ariaInvalid, autocomplete: this.htmlAttributes?.textarea?.autocomplete, maxLength: this.htmlAttributes?.textarea?.maxLength, "data-gramm": "false", "data-gramm_editor": "false" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, this.renderActionsMenu(), h("div", { class: this.minimizedInput(), part: "minimized-input", "data-pressed": this.minimizedPressed ? 'true' : null, role: "button", tabindex: this.disabled ? -1 : 0, "aria-expanded": this.isChatInputExpanded ? 'true' : 'false', "aria-controls": this.inputAreaId, "aria-label": this.getMinimizedAriaLabel(), "aria-describedby": this.minimizedDescId, onKeyDown: this.onMinimizedKeyDown, onKeyUp: this.onMinimizedKeyUp }, h("wpp-typography-v4-2-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || placeholderText)), h("span", { id: this.minimizedDescId, class: "sr-only" }, this.getMinimizedDescriptionText()), h("div", { class: this.rightActionsClasses() }, this.renderMicrophoneBtn(recordButtonLabel), this.shouldDisplaySend() && (h("wpp-button-v4-2-0", { class: "play-btn", "data-testid": "send-icon-only-button", size: "s", variant: this.isGenerating ? 'secondary' : 'primary', onClick: e => {
         e.stopPropagation();
-        this.handleSend();
-      }, disabled: this.isSendDisabled, ariaProps: { label: this.getSendButtonLabel() } }, h("wpp-icon-send-v4-1-0", { slot: "icon-start" }))))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar", role: "toolbar", "aria-label": this.getActionsToolbarLabel() }, h("div", { class: this.leftActionsClasses(), part: "left-actions", role: "group", "aria-label": this.getLeftActionsLabel() }, this.actions.length > 0 && (h("wpp-menu-context-v4-1-0", { class: "actions-menu", part: "actions-menu", dropdownConfig: this.actionsMenuDropdownConfig }, h("wpp-action-button-v4-1-0", { slot: "trigger-element", class: "actions-menu-trigger", "data-testid": "actions-menu-trigger-button", variant: "secondary", disabled: this.disabled, ariaProps: {
-        label: this.getActionsMenuButtonLabel(),
-        expanded: this.ariaProps?.actionsMenuButton?.expanded ?? this.actionsMenuOpen,
-        haspopup: 'menu',
-      } }, h("wpp-icon-plus-v4-1-0", { slot: "icon-start" })), h("div", null, this.actions.map(action => (h("wpp-list-item-v4-1-0", { key: action.id, "data-testid": `actions-menu-item-${action.id}`, disabled: action.disabled || this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label))))))), this.enableAttach && (h("wpp-action-button-v4-1-0", { "data-testid": "attach-icon-only-button", disabled: this.disabled || this.isFileDialogOpen, variant: "secondary", onClick: this.onAttachClick, onKeyDown: this.onAttachKeyDown, "data-pressed": this.attachPressed ? 'true' : null, ariaProps: { label: this.getAttachButtonLabel() } }, h("wpp-icon-attach-v4-1-0", { slot: "icon-start" }))), (this.enableAttach || this.actions.some(a => a.id === UPLOAD_ACTION_ID)) && (h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.htmlAttributes?.attachmentsInput?.multiple ?? this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.htmlAttributes?.attachmentsInput?.accept ?? this.getAcceptExtensions().join(), title: "", id: this.htmlAttributes?.attachmentsInput?.id ?? 'wpp-ci-file', name: this.htmlAttributes?.attachmentsInput?.name ?? 'attachments', "aria-hidden": "true" })), this.withSelect && (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })), this.enableMic && (h("wpp-action-button-v4-1-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled, ariaProps: { label: this._locales.voiceLabel } }, h("wpp-icon-mic-on-v4-1-0", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions", role: "group", "aria-label": this.getRightActionsLabel() }, charExceeded && (h("wpp-typography-v4-1-0", { class: "char-counter", type: "xs-midi", id: this.charCounterId, "aria-live": "polite" }, this.internalValue.length, "/", this.charactersLimit)), h("wpp-action-button-v4-1-0", { "data-testid": "send-icon-only-button", variant: "secondary", onClick: () => this.handleSend(), disabled: this.isSendDisabled, ariaProps: { label: this.getSendButtonLabel() } }, h("wpp-icon-send-v4-1-0", { slot: "icon-start" }))))))));
+        this.isGenerating ? this.handleStop() : this.handleSend();
+      }, disabled: actionButtonDisabled, ariaProps: { label: actionButtonLabel } }, this.isGenerating ? (h("wpp-icon-stop-v4-2-0", { slot: "icon-start" })) : (h("wpp-icon-arrow-v4-2-0", { direction: "up", slot: "icon-start" })))))))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar", role: "toolbar", "aria-label": this.getActionsToolbarLabel() }, h("div", { class: this.leftActionsClasses(), part: "left-actions", role: "group", "aria-label": this.getLeftActionsLabel() }, this.renderActionsMenu(), this.enableMic && (h("wpp-action-button-v4-2-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled, ariaProps: { label: this._locales.voiceLabel } }, h("wpp-icon-mic-on-v4-2-0", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions", role: "group", "aria-label": this.getRightActionsLabel() }, this.withSelect && (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })), this.renderMicrophoneBtn(recordButtonLabel), this.shouldDisplaySend() && (h("wpp-button-v4-2-0", { class: "play-btn", "data-testid": "send-icon-only-button", size: "s", disabled: actionButtonDisabled, variant: this.isGenerating ? 'secondary' : 'primary', onClick: () => (this.isGenerating ? this.handleStop() : this.handleSend()), ariaProps: { label: actionButtonLabel } }, this.isGenerating ? (h("wpp-icon-stop-v4-2-0", { slot: "icon-start" })) : (h("wpp-icon-arrow-v4-2-0", { direction: "up", slot: "icon-start" }))))))), h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.htmlAttributes?.attachmentsInput?.multiple ?? this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.htmlAttributes?.attachmentsInput?.accept ?? this.getAcceptExtensions().join(), title: "", id: this.htmlAttributes?.attachmentsInput?.id ?? 'wpp-ci-file', name: this.htmlAttributes?.attachmentsInput?.name ?? 'attachments', "aria-hidden": "true" }))));
   }
-  static get registryIs() { return "wpp-chat-input-v4-1-0"; }
+  static get registryIs() { return "wpp-chat-input-v4-2-0"; }
   get host() { return this; }
   static get watchers() { return {
     "attachments": ["onAttachmentsChange"],
     "textValue": ["onTextValueChange"],
-    "locales": ["onUpdateLocales"],
     "size": ["onSizeChange"]
   }; }
   static get style() { return wppChatInputCss; }
-}, [1, "wpp-chat-input", "wpp-chat-input-v4-1-0", {
+}, [1, "wpp-chat-input", "wpp-chat-input-v4-2-0", {
     "size": [1],
     "placeholder": [1],
     "enableAttach": [4, "enable-attach"],
     "enableMic": [4, "enable-mic"],
     "disabled": [4],
+    "isGenerating": [4, "is-generating"],
     "fileUploadConfig": [16],
     "charactersLimit": [2, "characters-limit"],
     "attachments": [1040],
@@ -922,190 +1113,199 @@ const WppChatInput = /*@__PURE__*/ proxyCustomElement(class WppChatInput extends
     "showToast": [32],
     "areAttachmentsVisible": [32],
     "hasSelectSlot": [32],
+    "hasAlertSlot": [32],
+    "isAlertDismissed": [32],
+    "hasReferencesSlot": [32],
     "isChatInputExpanded": [32],
-    "attachPressed": [32],
     "minimizedPressed": [32],
     "isFileDialogOpen": [32],
     "internalValue": [32],
-    "actionsMenuOpen": [32]
-  }]);
+    "actionsMenuOpen": [32],
+    "isFocused": [32],
+    "isAudioRecording": [32]
+  }, [[0, "wppClose", "handleAlertClose"]]]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-chat-input-v4-1-0", "wpp-action-button-v4-1-0", "wpp-checkbox-v4-1-0", "wpp-file-upload-item-v4-1-0", "wpp-icon-attach-v4-1-0", "wpp-icon-chevron-v4-1-0", "wpp-icon-cross-v4-1-0", "wpp-icon-dash-v4-1-0", "wpp-icon-database-v4-1-0", "wpp-icon-document-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-file-v4-1-0", "wpp-icon-file-zip-v4-1-0", "wpp-icon-image-v4-1-0", "wpp-icon-info-message-v4-1-0", "wpp-icon-mic-on-v4-1-0", "wpp-icon-music-v4-1-0", "wpp-icon-pitch-v4-1-0", "wpp-icon-plus-v4-1-0", "wpp-icon-send-v4-1-0", "wpp-icon-spreadsheet-v4-1-0", "wpp-icon-success-v4-1-0", "wpp-icon-tick-v4-1-0", "wpp-icon-video-clip-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-inline-message-v4-1-0", "wpp-internal-label-v4-1-0", "wpp-internal-tooltip-v4-1-0", "wpp-label-v4-1-0", "wpp-list-item-v4-1-0", "wpp-menu-context-v4-1-0", "wpp-spinner-v4-1-0", "wpp-toast-v4-1-0", "wpp-tooltip-v4-1-0", "wpp-typography-v4-1-0"];
+  const components = ["wpp-chat-input-v4-2-0", "wpp-action-button-v4-2-0", "wpp-button-v4-2-0", "wpp-checkbox-v4-2-0", "wpp-file-upload-item-v4-2-0", "wpp-icon-arrow-v4-2-0", "wpp-icon-chevron-v4-2-0", "wpp-icon-cross-v4-2-0", "wpp-icon-dash-v4-2-0", "wpp-icon-database-v4-2-0", "wpp-icon-document-v4-2-0", "wpp-icon-error-v4-2-0", "wpp-icon-file-v4-2-0", "wpp-icon-file-zip-v4-2-0", "wpp-icon-image-v4-2-0", "wpp-icon-info-message-v4-2-0", "wpp-icon-mic-on-v4-2-0", "wpp-icon-music-v4-2-0", "wpp-icon-pitch-v4-2-0", "wpp-icon-plus-v4-2-0", "wpp-icon-spreadsheet-v4-2-0", "wpp-icon-stop-v4-2-0", "wpp-icon-success-v4-2-0", "wpp-icon-tick-v4-2-0", "wpp-icon-video-clip-v4-2-0", "wpp-icon-warning-v4-2-0", "wpp-inline-message-v4-2-0", "wpp-internal-label-v4-2-0", "wpp-internal-tooltip-v4-2-0", "wpp-label-v4-2-0", "wpp-list-item-v4-2-0", "wpp-menu-context-v4-2-0", "wpp-spinner-v4-2-0", "wpp-toast-v4-2-0", "wpp-tooltip-v4-2-0", "wpp-typography-v4-2-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-chat-input-v4-1-0":
+    case "wpp-chat-input-v4-2-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppChatInput);
       }
       break;
-    case "wpp-action-button-v4-1-0":
+    case "wpp-action-button-v4-2-0":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$z();
+      }
+      break;
+    case "wpp-button-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$y();
       }
       break;
-    case "wpp-checkbox-v4-1-0":
+    case "wpp-checkbox-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$x();
       }
       break;
-    case "wpp-file-upload-item-v4-1-0":
+    case "wpp-file-upload-item-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$w();
       }
       break;
-    case "wpp-icon-attach-v4-1-0":
+    case "wpp-icon-arrow-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$v();
       }
       break;
-    case "wpp-icon-chevron-v4-1-0":
+    case "wpp-icon-chevron-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$u();
       }
       break;
-    case "wpp-icon-cross-v4-1-0":
+    case "wpp-icon-cross-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$t();
       }
       break;
-    case "wpp-icon-dash-v4-1-0":
+    case "wpp-icon-dash-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$s();
       }
       break;
-    case "wpp-icon-database-v4-1-0":
+    case "wpp-icon-database-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$r();
       }
       break;
-    case "wpp-icon-document-v4-1-0":
+    case "wpp-icon-document-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$q();
       }
       break;
-    case "wpp-icon-error-v4-1-0":
+    case "wpp-icon-error-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$p();
       }
       break;
-    case "wpp-icon-file-v4-1-0":
+    case "wpp-icon-file-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$o();
       }
       break;
-    case "wpp-icon-file-zip-v4-1-0":
+    case "wpp-icon-file-zip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-icon-image-v4-1-0":
+    case "wpp-icon-image-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-icon-info-message-v4-1-0":
+    case "wpp-icon-info-message-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-mic-on-v4-1-0":
+    case "wpp-icon-mic-on-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-music-v4-1-0":
+    case "wpp-icon-music-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-pitch-v4-1-0":
+    case "wpp-icon-pitch-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-plus-v4-1-0":
+    case "wpp-icon-plus-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-send-v4-1-0":
+    case "wpp-icon-spreadsheet-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-spreadsheet-v4-1-0":
+    case "wpp-icon-stop-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-success-v4-1-0":
+    case "wpp-icon-success-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-tick-v4-1-0":
+    case "wpp-icon-tick-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-video-clip-v4-1-0":
+    case "wpp-icon-video-clip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-warning-v4-1-0":
+    case "wpp-icon-warning-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-inline-message-v4-1-0":
+    case "wpp-inline-message-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-internal-label-v4-1-0":
+    case "wpp-internal-label-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-tooltip-v4-1-0":
+    case "wpp-internal-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-label-v4-1-0":
+    case "wpp-label-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-list-item-v4-1-0":
+    case "wpp-list-item-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-menu-context-v4-1-0":
+    case "wpp-menu-context-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-1-0":
+    case "wpp-spinner-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-toast-v4-1-0":
+    case "wpp-toast-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-1-0":
+    case "wpp-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-1-0":
+    case "wpp-typography-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

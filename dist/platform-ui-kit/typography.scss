@@ -47,7 +47,7 @@
 
   // Common properties
   color: var(--wpp-typography-#{$size}-#{$type}-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-#{$size}-#{$type}-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-#{$size}-#{$type}-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-#{$size}-#{$type}-letter-spacing, 0);
 
   // Add text-transform for emphasis type

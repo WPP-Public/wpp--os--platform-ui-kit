@@ -14,13 +14,16 @@ export class ThemeObserverService {
       // Notify all subscribers in order to not have stale values
       this.notifySubscribers();
     };
-    this.getThemeAttribute = () => document.documentElement.getAttribute(this.attribute) ?? 'light';
+    this.getThemeAttribute = () => document.documentElement.getAttribute(this.attribute);
     this.subscribe = (cb) => {
+      const themeValue = this.getThemeAttribute();
       this.subscribers.add(cb);
       if (this.subscribers.size === 1) {
         this.startObserving();
       }
-      cb(this.getThemeAttribute());
+      if (themeValue) {
+        cb(themeValue);
+      }
       return () => {
         this.subscribers.delete(cb);
         if (this.subscribers.size === 0) {
@@ -29,8 +32,10 @@ export class ThemeObserverService {
       };
     };
     this.notifySubscribers = () => {
-      const theme = this.getThemeAttribute();
-      this.subscribers.forEach((cb) => cb(theme));
+      const themeValue = this.getThemeAttribute();
+      if (!themeValue)
+        return;
+      this.subscribers.forEach((cb) => cb(themeValue));
     };
     this.restartObserver = () => {
       if (this.observer) {

@@ -1,6 +1,6 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
-import { t as themeSubscriptionController } from './subscribe-to-theme-2f801cf6.js';
+import { t as themeSubscriptionController } from './subscribe-to-theme-3920c16c.js';
 
 const wppOverlayCss = ":host{--overlay-bg-color:var(--wpp-overlay-bg-color, color-mix(in srgb, var(--wpp-grey-color-500) 60%, transparent))}:host .overlay{position:absolute;top:0;left:0;width:100%;height:100%;background-color:var(--overlay-bg-color);opacity:0;-webkit-transition:opacity 0.2s ease-in-out;transition:opacity 0.2s ease-in-out}:host .overlay--visible{visibility:visible;opacity:1;-webkit-transition:opacity 0.2s ease-in-out;transition:opacity 0.2s ease-in-out}:host .overlay--hidden{visibility:hidden;pointer-events:none}:host([data-wpp-theme=dark]){--overlay-bg-color:color-mix(in srgb, var(--wpp-grey-color-000) 90%, transparent)}";
 
@@ -46,7 +46,7 @@ const WppOverlay = class {
   render() {
     return (h(Host, null, h("div", { class: this.getOverlayCssClasses(), style: { zIndex: this.zIndex.toString() }, onClick: this.handleClick })));
   }
-  static get registryIs() { return "wpp-overlay-v4-1-0"; }
+  static get registryIs() { return "wpp-overlay-v4-2-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "isVisible": ["handleVisibleChange"]

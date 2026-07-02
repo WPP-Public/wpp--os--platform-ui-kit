@@ -76,6 +76,12 @@ export declare class WppTreeItem {
    */
   readonly endContent?: TreeItemEndContentProps;
   /**
+   * If 'true', the component has dark theme styles applied to it.
+   *
+   * @internal - This prop is controlled by the parent wpp-tree component.
+   */
+  isDarkTheme?: boolean;
+  /**
    * Emitted updated item details
    */
   wppTreeItemOpenChange: EventEmitter<TreeType>;
@@ -84,6 +90,7 @@ export declare class WppTreeItem {
    */
   wppTreeItemSelectChange: EventEmitter<TreeType>;
   onItemChange(next: TreeType, prev: TreeType): void;
+  onUpdateDarkTheme(): void;
   private shouldRecalculateItemHeight;
   private defaultItemHeight;
   private itemHeight;

@@ -1,5 +1,6 @@
 import { Fragment, h, Host } from '@stencil/core';
 import { truncate, uuidv4 } from '../../utils/utils';
+import { DEFAULT_ICON_COLOR } from './consts';
 /**
  * @part item-text - item text element
  * @part item-tooltip - item tooltip element
@@ -7,7 +8,7 @@ import { truncate, uuidv4 } from '../../utils/utils';
  * @part menu-item - menu item element
  * @part menu-item-label - menu item label text element
  * @part icon-more - icon more element
- * @part slash - slash element
+ * @part separator - separator element
  */
 export class WppBreadcrumb {
   constructor() {
@@ -60,7 +61,7 @@ export class WppBreadcrumb {
   createItemElement(item, isActive = false) {
     const truncatedLabel = truncate(item.label, this.maxLabelLength, this.middleTruncation);
     if (isActive) {
-      return (h("wpp-tooltip-v4-1-0", { text: item.label, part: "item-tooltip", config: {
+      return (h("wpp-tooltip-v4-2-0", { text: item.label, part: "item-tooltip", config: {
           onShow: () => {
             if (item.label.length < this.maxLabelLength)
               return false;
@@ -68,10 +69,10 @@ export class WppBreadcrumb {
         } }, h("span", { class: "active item", tabIndex: -1, part: "item-text" }, truncatedLabel)));
     }
     else if (item.label.length > this.maxLabelLength && !this.nativeLink) {
-      return (h("wpp-tooltip-v4-1-0", { text: item.label, part: "item-tooltip" }, h("span", { class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, truncatedLabel)));
+      return (h("wpp-tooltip-v4-2-0", { text: item.label, part: "item-tooltip" }, h("span", { class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, truncatedLabel)));
     }
     else if (item.label.length > this.maxLabelLength) {
-      return (h("wpp-tooltip-v4-1-0", { text: item.label, part: "item-tooltip" }, h("a", { href: item.path, class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, truncatedLabel)));
+      return (h("wpp-tooltip-v4-2-0", { text: item.label, part: "item-tooltip" }, h("a", { href: item.path, class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, truncatedLabel)));
     }
     else if (!this.nativeLink) {
       return (h("span", { class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, item.label));
@@ -82,23 +83,23 @@ export class WppBreadcrumb {
   }
   createMenuElement(item) {
     if (this.nativeLink) {
-      return (h("wpp-list-item-v4-1-0", { key: uuidv4(), class: "link", linkConfig: { href: item.path }, part: "menu-item" }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
+      return (h("wpp-list-item-v4-2-0", { key: uuidv4(), class: "link", linkConfig: { href: item.path }, part: "menu-item" }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
     }
     else {
-      return (h("wpp-list-item-v4-1-0", { key: uuidv4(), class: "link", part: "menu-item", onClick: this.createRouteChangeTrigger(item) }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
+      return (h("wpp-list-item-v4-2-0", { key: uuidv4(), class: "link", part: "menu-item", onClick: this.createRouteChangeTrigger(item) }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
     }
   }
   render() {
     if (this.backBtnLabel) {
-      return (h(Host, { class: this.hostCssClasses(), exportparts: "icon" }, h("button", { class: "back", onClick: this.handleBackClick, onKeyDown: this.handleBackKeyDown, type: "button", tabIndex: 0 }, h("wpp-icon-chevron-v4-1-0", { class: "back-icon-chevron", part: "icon", direction: "left", size: "s" }), h("span", { class: "back-label" }, this.backBtnLabel))));
+      return (h(Host, { class: this.hostCssClasses(), exportparts: "icon" }, h("button", { class: "back", onClick: this.handleBackClick, onKeyDown: this.handleBackKeyDown, type: "button", tabIndex: 0 }, h("wpp-icon-chevron-v4-2-0", { class: "back-icon-chevron", part: "icon", direction: "left", size: "s" }), h("span", { class: "back-label" }, this.backBtnLabel))));
     }
     if (!this.rootItem) {
       return;
     }
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "item-tooltip, item-text, menu-item, menu-item-label, slash, menu, icon-more, slash" }, this.createItemElement(this.rootItem), this.hiddenItems.length > 0 && (h(Fragment, null, h("div", { class: "slash", part: "slash" }, "/"), h("wpp-menu-context-v4-1-0", { key: this.hiddenItemsSnapshot, class: "menu", dropdownConfig: { triggerElementWidth: false, ...this.dropdownConfig }, tabIndex: 0, part: "menu" }, h("wpp-icon-more-v4-1-0", { class: "menu-trigger", direction: "horizontal", slot: "trigger-element", part: "icon-more" }), h("div", { key: this.hiddenItemsSnapshot }, this.hiddenItems.map(item => this.createMenuElement(item)))))), this.visibleItems.map((item, index, items) => (h(Fragment, null, h("div", { class: "slash", tabIndex: -1, part: "slash" }, "/"), this.createItemElement(item, index === items.length - 1))))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "item-tooltip, item-text, menu-item, menu-item-label, separator, menu, icon-more" }, this.createItemElement(this.rootItem), this.hiddenItems.length > 0 && (h(Fragment, null, h("div", { class: "separator", part: "separator" }, h("wpp-icon-chevron-v4-2-0", { size: "s", color: DEFAULT_ICON_COLOR })), h("wpp-menu-context-v4-2-0", { key: this.hiddenItemsSnapshot, class: "menu", dropdownConfig: { triggerElementWidth: false, ...this.dropdownConfig }, tabIndex: 0, part: "menu" }, h("wpp-icon-more-v4-2-0", { class: "menu-trigger", direction: "horizontal", slot: "trigger-element", part: "icon-more" }), h("div", { key: this.hiddenItemsSnapshot }, this.hiddenItems.map(item => this.createMenuElement(item)))))), this.visibleItems.map((item, index, items) => (h(Fragment, null, h("div", { class: "separator", tabIndex: -1, part: "separator" }, h("wpp-icon-chevron-v4-2-0", { size: "s", color: DEFAULT_ICON_COLOR })), this.createItemElement(item, index === items.length - 1))))));
   }
   static get is() { return "wpp-breadcrumb"; }
-  static get registryIs() { return "wpp-breadcrumb-v4-1-0"; }
+  static get registryIs() { return "wpp-breadcrumb-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

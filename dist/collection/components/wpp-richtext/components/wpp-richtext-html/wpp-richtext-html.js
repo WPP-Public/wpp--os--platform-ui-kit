@@ -4,11 +4,11 @@ export class WppRichtextHtml {
     this.value = undefined;
   }
   render() {
-    const classes = `ql-container ql-wpp quill-view-html`;
-    return (h(Host, null, h("wpp-quill-styles-v4-1-0", null), h("wpp-richtext-common-styles-v4-1-0", null), h("div", { class: classes, "data-testid": "richtext-editor-container" }, h("div", { class: "ql-editor", innerHTML: this.value, "data-testid": "richtext-editor" }))));
+    const classes = `ql-container ql-wpp richtext-view-html`;
+    return (h(Host, null, h("wpp-richtext-common-styles-v4-2-0", null), h("div", { class: classes, "data-testid": "richtext-editor-container" }, h("div", { class: "ql-editor", innerHTML: this.value, "data-testid": "richtext-editor" }))));
   }
   static get is() { return "wpp-richtext-html"; }
-  static get registryIs() { return "wpp-richtext-html-v4-1-0"; }
+  static get registryIs() { return "wpp-richtext-html-v4-2-0"; }
   static get properties() {
     return {
       "value": {

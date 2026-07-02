@@ -1,5 +1,5 @@
-import { AcceptConfig, FileItemType, FileUploadResultFormaType } from '../../../wpp-file-upload/types';
-import { AriaProps } from '../../../../types/common';
+import type { AcceptConfig, FileItemType, FileUploadResultFormaType } from '../../../wpp-file-upload/types';
+import type { AriaProps } from '../../../../types/common';
 export interface ChatInputLocaleInterface {
   placeholder: string;
   minimizedDescription: string;
@@ -7,11 +7,16 @@ export interface ChatInputLocaleInterface {
   leftActionsGroupLabel: string;
   rightActionsGroupLabel: string;
   sendLabel: string;
+  /** Localized label used by the stop action when `isGenerating` is true. */
+  stopLabel: string;
   attachLabel: string;
   voiceLabel: string;
   attachmentsLabel: string;
   messageInputLabel: string;
   actionsMenuLabel: string;
+  audioRecordButtonLabel: string;
+  audioStopRecordButtonLabel: string;
+  audioLanguage: string;
 }
 export type ChatInputAriaProps = {
   minimizedTrigger?: Pick<AriaProps, 'label' | 'describedby' | 'controls' | 'expanded'>;
@@ -19,8 +24,12 @@ export type ChatInputAriaProps = {
     invalid?: 'true' | 'false';
   };
   sendButton?: Pick<AriaProps, 'label'>;
+  /** Override the accessible label for the stop action shown while `isGenerating` is true. */
+  stopButton?: Pick<AriaProps, 'label'>;
   attachButton?: Pick<AriaProps, 'label' | 'pressed'>;
   actionsMenuButton?: Pick<AriaProps, 'label' | 'expanded' | 'haspopup'>;
+  audioRecordButton?: Pick<AriaProps, 'label'>;
+  audioStopRecordButton?: Pick<AriaProps, 'label'>;
   actionsToolbar?: {
     label?: string;
   };

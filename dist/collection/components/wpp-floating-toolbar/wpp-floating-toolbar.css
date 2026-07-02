@@ -14,6 +14,12 @@
 .wrapper.vertical {
   flex-direction: column;
 }
+.wrapper .is-selected {
+  --wpp-action-button-bg-color: var(--wpp-primary-color-100);
+  --wpp-action-button-secondary-icon-color: var(--wpp-primary-color-500);
+  --wpp-action-button-secondary-icon-color-hover: var(--wpp-primary-color-400);
+  --wpp-action-button-secondary-icon-color-active: var(--wpp-primary-color-600);
+}
 
 :host([data-wpp-theme=dark]) {
   background-color: var(--wpp-grey-color-200);

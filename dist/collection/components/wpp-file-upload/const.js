@@ -56,19 +56,19 @@ export const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
   switch (fileExtension) {
     // Text
     case '.txt':
-      return h("wpp-icon-document-v4-1-0", null);
+      return h("wpp-icon-document-v4-2-0", null);
     // Compressed
     case '.zip':
     case '.rar':
     case '.7z':
-      return h("wpp-icon-file-zip-v4-1-0", null);
+      return h("wpp-icon-file-zip-v4-2-0", null);
     // Image
     case '.png':
     case '.jpg':
     case '.jpeg':
     case '.svg':
     case '.gif':
-      return h("wpp-icon-image-v4-1-0", null);
+      return h("wpp-icon-image-v4-2-0", null);
     // Video
     case '.mp4':
     case '.mov':
@@ -77,7 +77,7 @@ export const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.mkv':
     case '.flv':
     case '.webm':
-      return h("wpp-icon-video-clip-v4-1-0", null);
+      return h("wpp-icon-video-clip-v4-2-0", null);
     // Audio
     case '.mp3':
     case '.wav':
@@ -85,7 +85,7 @@ export const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.wma':
     case '.m4a':
     case '.aac':
-      return h("wpp-icon-music-v4-1-0", null);
+      return h("wpp-icon-music-v4-2-0", null);
     // Data
     case '.csv':
     case '.json':
@@ -93,25 +93,81 @@ export const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.db':
     case '.sqlite':
     case '.dat':
-      return h("wpp-icon-database-v4-1-0", null);
+      return h("wpp-icon-database-v4-2-0", null);
     // Presentation
     case '.pptx':
     case '.key':
     case '.odp':
-    case '.pdf':
     case '.pps':
     case '.sldx':
     case '.ppt':
-      return h("wpp-icon-pitch-v4-1-0", null);
+      return h("wpp-icon-pitch-v4-2-0", null);
     // Spreadsheet
     case '.xlsx':
     case '.xls':
     case '.ods':
     case '.numbers':
     case '.tsv':
-      return h("wpp-icon-spreadsheet-v4-1-0", null);
+      return h("wpp-icon-spreadsheet-v4-2-0", null);
     default:
-      return h("wpp-icon-file-v4-1-0", null);
+      return h("wpp-icon-file-v4-2-0", null);
+  }
+};
+/**
+ * Maps a file extension to a human-readable file type category label.
+ * Used as the subtitle in the chat variant of `wpp-file-upload-item`.
+ */
+export const returnFileTypeLabel = (fileExtension) => {
+  switch (fileExtension.toLowerCase()) {
+    case '.txt':
+      return 'Text';
+    case '.zip':
+    case '.rar':
+    case '.7z':
+      return 'Zip';
+    case '.png':
+    case '.jpg':
+    case '.jpeg':
+    case '.svg':
+    case '.gif':
+      return 'Image';
+    case '.mp4':
+    case '.mov':
+    case '.avi':
+    case '.wmv':
+    case '.mkv':
+    case '.flv':
+    case '.webm':
+      return 'Video';
+    case '.mp3':
+    case '.wav':
+    case '.ogg':
+    case '.wma':
+    case '.m4a':
+    case '.aac':
+      return 'Audio';
+    case '.csv':
+    case '.json':
+    case '.xml':
+    case '.db':
+    case '.sqlite':
+    case '.dat':
+      return 'Data';
+    case '.pptx':
+    case '.key':
+    case '.odp':
+    case '.pps':
+    case '.sldx':
+    case '.ppt':
+      return 'Presentation';
+    case '.xlsx':
+    case '.xls':
+    case '.ods':
+    case '.numbers':
+    case '.tsv':
+      return 'Spreadsheet';
+    default:
+      return 'Document';
   }
 };
 export const LOCALES_DEFAULTS = {

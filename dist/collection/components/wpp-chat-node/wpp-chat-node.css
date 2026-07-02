@@ -15,8 +15,8 @@
   min-height: 64px;
   max-height: 64px;
 }
-:host(.wpp-size-s) .loading-node {
-  padding: 0;
+:host(.wpp-size-s) .node-container.loading-node::before {
+  content: none;
   background: none;
   animation: none;
 }
@@ -39,6 +39,16 @@
   pointer-events: none;
   border: 1px solid var(--wpp-primary-color-500);
   border-radius: calc(var(--wpp-border-radius-l) + 1px);
+}
+.node-container.loading-node::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: -2px;
+  pointer-events: none;
+  background: conic-gradient(from var(--loading-angle), var(--wpp-primary-color-500), var(--wpp-primary-color-100), var(--wpp-primary-color-500));
+  animation: loading-rotate 2s linear infinite;
+  border-radius: calc(var(--wpp-border-radius-l) + 2px);
 }
 
 .node-wrapper {
@@ -71,15 +81,14 @@
   min-width: 0;
 }
 
-.title-icon,
-::slotted([slot=left-icon]) {
+.title-icon {
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
   width: 20px;
   height: 20px;
-  color: var(--wpp-grey-color-800);
+  color: var(--wpp-grey-color-700);
 }
 
 .title-tooltip {
@@ -101,7 +110,7 @@
   line-height: var(--wpp-typography-s-midi-line-height, 22px);
   font-weight: var(--wpp-typography-s-midi-font-weight, 500);
   color: var(--wpp-typography-s-midi-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-midi-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-midi-letter-spacing, 0);
 }
 
@@ -295,9 +304,16 @@
 
 .node-chat-bar wpp-tooltip,
 .node-chat-bar wpp-menu-context,
-.node-chat-bar wpp-action-button {
+.node-chat-bar wpp-button {
   --wpp-mc-wrapper-width: fit-content;
   flex: 0 0 auto;
+}
+
+.node-chat-bar .play-btn {
+  --button-padding-s: 6px;
+}
+.node-chat-bar .play-btn::part(icon-start-wrapper) {
+  margin: 0;
 }
 
 .node-chat-bar .chat-actions-menu-context {
@@ -316,7 +332,7 @@
   border: none;
   outline: none;
   background: transparent;
-  font-family: var(--wpp-font-family);
+  font-family: var(--wpp-font-family, system-ui, sans-serif);
   font-size: 14px;
   font-weight: 400;
   line-height: 22px;
@@ -336,13 +352,6 @@
     --loading-angle: 360deg;
   }
 }
-.loading-node {
-  padding: 2px;
-  background: conic-gradient(from var(--loading-angle), var(--wpp-primary-color-500), var(--wpp-primary-color-100), var(--wpp-primary-color-500));
-  animation: loading-rotate 2s linear infinite;
-  border-radius: calc(var(--wpp-border-radius-l) + 2px);
-}
-
 ::slotted([slot=handles]) {
   position: absolute;
   inset: 0;

@@ -3,32 +3,10 @@
  * @description Tests rendering, read-only mode, props, value updates, and cleanup.
  * @see https://jira.uhub.biz/browse/WPPOPENDS-1287
  */
-// Mock Quill to avoid DOMTokenList error in jsdom
-jest.mock('quill', () => ({
-  default: { import: () => ({}), register: () => { }, DEFAULTS: { formats: [], modules: {} } },
-}));
-// Mock the old config module that imports Quill plugins/themes
-jest.mock('../config', () => ({
-  __esModule: true,
-  default: {
-    turndown: (html) => html,
-    use: () => { },
-    addRule: () => { },
-    escape: (text) => text,
-  },
-  quillMarkdownOptions: { tags: {} },
-}));
 // Mock tiptap-config to return empty extensions and prevent ProseMirror init
 jest.mock('../tiptap-config', () => ({
   __esModule: true,
   buildTiptapExtensions: () => [],
-  translateQuillFormat: (f) => f,
-  turndownService: {
-    turndown: (html) => html,
-    use: () => { },
-    addRule: () => { },
-    escape: (text) => text,
-  },
 }));
 // Mock Tiptap Editor to avoid ProseMirror getSelection crash in Stencil mock docs
 jest.mock('@tiptap/core', () => {

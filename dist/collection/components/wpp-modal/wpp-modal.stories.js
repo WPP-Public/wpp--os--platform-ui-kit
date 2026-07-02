@@ -50,8 +50,8 @@ const styles = {
 };
 export const Regular = (args) => {
   const { handleOpenModal, handleCloseModal, handleActionModal } = getModalHandlers();
-  return html ` <wpp-button-v4-1-0 @click=${handleOpenModal}>Open Modal</wpp-button-v4-1-0>
-    <wpp-modal-v4-1-0
+  return html ` <wpp-button-v4-2-0 @click=${handleOpenModal}>Open Modal</wpp-button-v4-2-0>
+    <wpp-modal-v4-2-0
       @wppModalClose=${() => {
     console.log('Called: wppModalClose');
     handleCloseModal();
@@ -63,17 +63,27 @@ export const Regular = (args) => {
       .open=${args.open}
       .size=${args.size}
       .disableOutsideClick=${args.disableOutsideClick}
+      .actionsConfig=${{
+    primaryButtonConfig: {
+      ...args.actionsConfig?.primaryButtonConfig,
+      onClick: handleActionModal,
+    },
+    secondaryButtonConfig: {
+      ...args.actionsConfig?.secondaryButtonConfig,
+      onClick: handleCloseModal,
+    },
+  }}
     >
       ${args.withCrossButton
     ? html `<div slot="header" style=${styleMap(styles.header)}>
             <h3>Title</h3>
-            <wpp-action-button-v4-1-0
+            <wpp-action-button-v4-2-0
               variant="secondary"
               @click=${handleCloseModal}
               style=${styleMap(styles.iconButton)}
             >
-              <wpp-icon-cross-v4-1-0 slot="icon-start"></wpp-icon-cross-v4-1-0>
-            </wpp-action-button-v4-1-0>
+              <wpp-icon-cross-v4-2-0 slot="icon-start"></wpp-icon-cross-v4-2-0>
+            </wpp-action-button-v4-2-0>
           </div>`
     : html `<div slot="header">Title</div>`}
       <p
@@ -83,24 +93,29 @@ export const Regular = (args) => {
         height: 44px;
       "
       ></p>
-      <div slot="actions" style="display:flex; justify-content: flex-end;">
-        <wpp-button-v4-1-0 variant="secondary" size="s" style="margin-right: 12px" @click=${handleCloseModal}>
-          Cancel
-        </wpp-button-v4-1-0>
-        <wpp-button-v4-1-0 variant="primary" size="s" @click=${handleActionModal}>Action</wpp-button-v4-1-0>
-      </div>
-    </wpp-modal-v4-1-0>`;
+    </wpp-modal-v4-2-0>`;
 };
 Regular.args = {
   open: false,
   disableOutsideClick: false,
   size: 's',
   withCrossButton: true,
+  actionsConfig: {
+    primaryButtonConfig: {
+      variant: 'primary',
+      label: 'Action',
+      onClick: () => { },
+    },
+    secondaryButtonConfig: {
+      label: 'Cancel',
+      onClick: () => { },
+    },
+  },
 };
 export const Destructive = (args) => {
   const { handleOpenModal, handleCloseModal, handleActionModal } = getModalHandlers();
-  return html ` <wpp-button-v4-1-0 @click=${handleOpenModal}>Open Destructive Modal</wpp-button-v4-1-0>
-    <wpp-modal-v4-1-0
+  return html ` <wpp-button-v4-2-0 @click=${handleOpenModal}>Open Destructive Modal</wpp-button-v4-2-0>
+    <wpp-modal-v4-2-0
       @wppModalClose=${() => {
     console.log('Called: wppModalClose');
     handleCloseModal();
@@ -112,17 +127,27 @@ export const Destructive = (args) => {
       .open=${args.open}
       .size=${args.size}
       .disableOutsideClick=${args.disableOutsideClick}
+      .actionsConfig=${{
+    primaryButtonConfig: {
+      ...args.actionsConfig?.primaryButtonConfig,
+      onClick: handleActionModal,
+    },
+    secondaryButtonConfig: {
+      ...args.actionsConfig?.secondaryButtonConfig,
+      onClick: handleCloseModal,
+    },
+  }}
     >
       ${args.withCrossButton
     ? html `<div slot="header" style=${styleMap(styles.header)}>
             <h3>This is a destructive message</h3>
-            <wpp-action-button-v4-1-0
+            <wpp-action-button-v4-2-0
               variant="secondary"
               @click=${handleCloseModal}
               style=${styleMap(styles.iconButton)}
             >
-              <wpp-icon-cross-v4-1-0 slot="icon-start"></wpp-icon-cross-v4-1-0>
-            </wpp-action-button-v4-1-0>
+              <wpp-icon-cross-v4-2-0 slot="icon-start"></wpp-icon-cross-v4-2-0>
+            </wpp-action-button-v4-2-0>
           </div>`
     : html `<div slot="header">This is a destructive message</div>`}
       <p
@@ -132,17 +157,22 @@ export const Destructive = (args) => {
         height: 44px;
       "
       ></p>
-      <div slot="actions" style="display:flex; justify-content: flex-end;">
-        <wpp-button-v4-1-0 variant="secondary" size="s" style="margin-right: 12px;" @click=${handleCloseModal}>
-          Cancel
-        </wpp-button-v4-1-0>
-        <wpp-button-v4-1-0 variant="destructive" size="s" @click=${handleActionModal}>Action</wpp-button-v4-1-0>
-      </div>
-    </wpp-modal-v4-1-0>`;
+    </wpp-modal-v4-2-0>`;
 };
 Destructive.args = {
   open: false,
   disableOutsideClick: false,
   size: 's',
   withCrossButton: true,
+  actionsConfig: {
+    primaryButtonConfig: {
+      variant: 'destructive',
+      label: 'Action',
+      onClick: () => { },
+    },
+    secondaryButtonConfig: {
+      label: 'Cancel',
+      onClick: () => { },
+    },
+  },
 };

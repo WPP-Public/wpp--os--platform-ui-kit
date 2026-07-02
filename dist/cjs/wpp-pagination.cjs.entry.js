@@ -3,6 +3,8 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-ecf423ba.js');
+const utils = require('./utils-06b46408.js');
+require('./consts-d8f5ef98.js');
 
 const LOCALES_DEFAULTS = {
   itemsPerPage: 'Items per page',
@@ -16,7 +18,6 @@ const WppPagination = class {
   constructor(hostRef) {
     index.registerInstance(this, hostRef);
     this.wppChange = index.createEvent(this, "wppChange", 1);
-    this._locales = LOCALES_DEFAULTS;
     this.handleItemsPerPageNumberChange = (e) => {
       this.activePageNumber = 1;
       this.selectedItemPerPage = Number(e.detail.value);
@@ -52,34 +53,29 @@ const WppPagination = class {
     this.dropdownConfig = {};
     this.locales = {};
   }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
-  }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
     if (!this.selectedItemPerPage) {
       this.selectedItemPerPage = this.itemsPerPage[0];
       this.wppChange.emit({ page: this.activePageNumber, itemsPerPage: this.selectedItemPerPage });
     }
   }
+  get _locales() {
+    return utils.mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
   get hasSingleItemPerPageOption() {
     return this.itemsPerPage.length === 1;
   }
   render() {
-    const countPagesToDisplay = Math.ceil(this.count / this.selectedItemPerPage);
     if (this.count === 0) {
       return null;
     }
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, index.h("div", { class: "control-pagination-wrapper", part: "body" }, !this.hasSingleItemPerPageOption && (index.h(index.Fragment, null, index.h("wpp-typography-v4-1-0", { type: "s-body", part: "per-page-label" }, this._locales.itemsPerPage, ":"), index.h("wpp-select-v4-1-0", { type: "single", isTextSelect: true, onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig }, dropdownWidth: "100px", part: "pre-page-select", list: this.itemsPerPage.map(item => ({
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, index.h("div", { class: "control-pagination-wrapper", part: "body" }, !this.hasSingleItemPerPageOption && (index.h(index.Fragment, null, index.h("wpp-typography-v4-2-0", { type: "s-body", part: "per-page-label" }, this._locales.itemsPerPage, ":"), index.h("wpp-select-v4-2-0", { type: "single", isTextSelect: true, onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig }, dropdownWidth: "100px", part: "pre-page-select", list: this.itemsPerPage.map(item => ({
         value: item,
         label: `${item}`,
         part: 'per-page-item',
-      })) }), index.h("wpp-divider-v4-1-0", { part: "divider" }))), index.h("wpp-typography-v4-1-0", { type: "s-body", part: "range" }, this.getPageRange())), countPagesToDisplay && (index.h("wpp-pagination-select-v4-1-0", { count: countPagesToDisplay, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, part: "page-select" }))));
+      })) }), index.h("wpp-divider-v4-2-0", { part: "divider" }))), index.h("wpp-typography-v4-2-0", { type: "s-body", part: "range" }, this.getPageRange())), this.selectedItemPerPage && (index.h("wpp-pagination-select-v4-2-0", { count: this.count, itemsPerPage: this.selectedItemPerPage, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, part: "page-select" }))));
   }
-  static get registryIs() { return "wpp-pagination-v4-1-0"; }
-  static get watchers() { return {
-    "locales": ["onUpdateLocales"]
-  }; }
+  static get registryIs() { return "wpp-pagination-v4-2-0"; }
 };
 WppPagination.style = wppPaginationCss;
 

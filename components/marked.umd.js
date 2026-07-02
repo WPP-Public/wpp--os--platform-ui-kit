@@ -2212,7 +2212,6 @@ var parser = _Parser.parse;
 var lexer = _Lexer.lex;
 
 if(__exports != exports)module.exports = exports;return module.exports}));
-//# sourceMappingURL=marked.umd.js.map
 });
 
 export { marked_umd as m };

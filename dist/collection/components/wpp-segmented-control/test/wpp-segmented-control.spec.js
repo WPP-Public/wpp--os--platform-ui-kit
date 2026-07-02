@@ -374,7 +374,7 @@ describe('wpp-segmented-control accessibility', () => {
     it('should render wpp-label with tag="span" to avoid empty label element', async () => {
       page = await newSpecPage({
         components: [WppSegmentedControl, WppSegmentedControlItem],
-        template: () => (h("wpp-segmented-control-v4-1-0", { size: "m", value: "item-1", labelConfig: { text: 'My Control' } }, h("wpp-segmented-control-item-v4-1-0", { value: "item-1" }, "Tab 1"))),
+        template: () => (h("wpp-segmented-control-v4-2-0", { size: "m", value: "item-1", labelConfig: { text: 'My Control' } }, h("wpp-segmented-control-item-v4-2-0", { value: "item-1" }, "Tab 1"))),
       });
       const label = page.root?.shadowRoot?.querySelector('wpp-label');
       expect(label).not.toBeNull();
@@ -383,7 +383,7 @@ describe('wpp-segmented-control accessibility', () => {
     it('should set aria-labelledby on tablist pointing to the label id when labelConfig is present', async () => {
       page = await newSpecPage({
         components: [WppSegmentedControl, WppSegmentedControlItem],
-        template: () => (h("wpp-segmented-control-v4-1-0", { size: "m", value: "item-1", labelConfig: { text: 'My Control' } }, h("wpp-segmented-control-item-v4-1-0", { value: "item-1" }, "Tab 1"))),
+        template: () => (h("wpp-segmented-control-v4-2-0", { size: "m", value: "item-1", labelConfig: { text: 'My Control' } }, h("wpp-segmented-control-item-v4-2-0", { value: "item-1" }, "Tab 1"))),
       });
       const tablist = page.root?.shadowRoot?.querySelector('[role="tablist"]');
       expect(tablist?.getAttribute('aria-labelledby')).toBe('segmented-control-label');
@@ -419,14 +419,14 @@ describe('wpp-segmented-control accessibility', () => {
     it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
       await newSpecPage({
         components: [WppSegmentedControl, WppSegmentedControlItem],
-        template: () => (h("wpp-segmented-control-v4-1-0", { size: "m", value: "item-1", labelConfig: { text: 'My Control' } }, h("wpp-segmented-control-item-v4-1-0", { value: "item-1" }, "Tab 1"))),
+        template: () => (h("wpp-segmented-control-v4-2-0", { size: "m", value: "item-1", labelConfig: { text: 'My Control' } }, h("wpp-segmented-control-item-v4-2-0", { value: "item-1" }, "Tab 1"))),
       });
       expect(mockStart).toHaveBeenCalledTimes(1);
     });
     it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
       const page = await newSpecPage({
         components: [WppSegmentedControl, WppSegmentedControlItem],
-        template: () => (h("wpp-segmented-control-v4-1-0", { size: "m", value: "item-1", labelConfig: { text: 'My Control' } }, h("wpp-segmented-control-item-v4-1-0", { value: "item-1" }, "Tab 1"))),
+        template: () => (h("wpp-segmented-control-v4-2-0", { size: "m", value: "item-1", labelConfig: { text: 'My Control' } }, h("wpp-segmented-control-item-v4-2-0", { value: "item-1" }, "Tab 1"))),
       });
       page.root?.remove();
       expect(mockStop).toHaveBeenCalledTimes(1);

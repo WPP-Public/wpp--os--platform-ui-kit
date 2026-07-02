@@ -6,7 +6,7 @@ describe('wpp-pagination', () => {
     const itemsPerPage = [10, 11, 12, 13];
     const page = await newSpecPage({
       components: [WppPagination],
-      template: () => h("wpp-pagination-v4-1-0", { count: 78, itemsPerPage: itemsPerPage }),
+      template: () => h("wpp-pagination-v4-2-0", { count: 78, itemsPerPage: itemsPerPage }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -14,14 +14,14 @@ describe('wpp-pagination', () => {
     const itemsPerPage = [10, 11, 12, 13];
     const page = await newSpecPage({
       components: [WppPagination],
-      template: () => h("wpp-pagination-v4-1-0", { count: 100, itemsPerPage: itemsPerPage, selectedItemPerPage: 13 }),
+      template: () => h("wpp-pagination-v4-2-0", { count: 100, itemsPerPage: itemsPerPage, selectedItemPerPage: 13 }),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('renders component with 100 pages and with 5 active page number', async () => {
     const page = await newSpecPage({
       components: [WppPagination],
-      template: () => h("wpp-pagination-v4-1-0", { count: 100, activePageNumber: 5 }),
+      template: () => h("wpp-pagination-v4-2-0", { count: 100, activePageNumber: 5 }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -29,7 +29,7 @@ describe('wpp-pagination', () => {
     it('hides the entire items-per-page section when itemsPerPage has only one option', async () => {
       const page = await newSpecPage({
         components: [WppPagination],
-        template: () => h("wpp-pagination-v4-1-0", { count: 50, itemsPerPage: [10] }),
+        template: () => h("wpp-pagination-v4-2-0", { count: 50, itemsPerPage: [10] }),
       });
       const shadowRoot = page.root?.shadowRoot;
       const labelEl = shadowRoot?.querySelector('[part="per-page-label"]');
@@ -42,7 +42,7 @@ describe('wpp-pagination', () => {
     it('shows items-per-page section when itemsPerPage has multiple options', async () => {
       const page = await newSpecPage({
         components: [WppPagination],
-        template: () => h("wpp-pagination-v4-1-0", { count: 50, itemsPerPage: [10, 20, 50] }),
+        template: () => h("wpp-pagination-v4-2-0", { count: 50, itemsPerPage: [10, 20, 50] }),
       });
       const shadowRoot = page.root?.shadowRoot;
       const labelEl = shadowRoot?.querySelector('[part="per-page-label"]');
@@ -55,7 +55,7 @@ describe('wpp-pagination', () => {
     it('only displays page range text with single itemsPerPage option', async () => {
       const page = await newSpecPage({
         components: [WppPagination],
-        template: () => h("wpp-pagination-v4-1-0", { count: 100, itemsPerPage: [25], activePageNumber: 2 }),
+        template: () => h("wpp-pagination-v4-2-0", { count: 100, itemsPerPage: [25], activePageNumber: 2 }),
       });
       const rangeEl = page.root?.shadowRoot?.querySelector('[part="range"]');
       expect(rangeEl?.textContent?.trim()).toBe('26-50 of 100 items');
@@ -63,7 +63,7 @@ describe('wpp-pagination', () => {
     it('renders snapshot correctly with single itemsPerPage', async () => {
       const page = await newSpecPage({
         components: [WppPagination],
-        template: () => h("wpp-pagination-v4-1-0", { count: 200, itemsPerPage: [6], selectedItemPerPage: 6 }),
+        template: () => h("wpp-pagination-v4-2-0", { count: 200, itemsPerPage: [6], selectedItemPerPage: 6 }),
       });
       const shadowRoot = page.root?.shadowRoot;
       expect(shadowRoot?.querySelector('[part="per-page-label"]')).toBeNull();
@@ -75,7 +75,7 @@ describe('wpp-pagination', () => {
     it('handles empty itemsPerPage array gracefully', async () => {
       const page = await newSpecPage({
         components: [WppPagination],
-        template: () => h("wpp-pagination-v4-1-0", { count: 50, itemsPerPage: [] }),
+        template: () => h("wpp-pagination-v4-2-0", { count: 50, itemsPerPage: [] }),
       });
       const shadowRoot = page.root?.shadowRoot;
       // Empty array length !== 1, so items-per-page section is shown (no options in select)
@@ -85,7 +85,7 @@ describe('wpp-pagination', () => {
     it('renders with default itemsPerPage when not provided', async () => {
       const page = await newSpecPage({
         components: [WppPagination],
-        template: () => h("wpp-pagination-v4-1-0", { count: 100 }),
+        template: () => h("wpp-pagination-v4-2-0", { count: 100 }),
       });
       const shadowRoot = page.root?.shadowRoot;
       // Default itemsPerPage=[5,10,20,50] has 4 items, so section is shown
@@ -98,7 +98,7 @@ describe('wpp-pagination', () => {
       const wppChangeSpy = jest.fn();
       await newSpecPage({
         components: [WppPagination],
-        template: () => h("wpp-pagination-v4-1-0", { count: 50, itemsPerPage: [10], onWppChange: wppChangeSpy }),
+        template: () => h("wpp-pagination-v4-2-0", { count: 50, itemsPerPage: [10], onWppChange: wppChangeSpy }),
       });
       expect(wppChangeSpy).toHaveBeenCalledWith(expect.objectContaining({
         detail: { page: 1, itemsPerPage: 10 },

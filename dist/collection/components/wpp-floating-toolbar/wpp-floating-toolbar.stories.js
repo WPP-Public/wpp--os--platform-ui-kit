@@ -16,6 +16,7 @@ export default {
       options: ['horizontal', 'vertical'],
       control: { type: 'select' },
     },
+    selectable: { control: { type: 'boolean' } },
     length: {
       control: { type: 'number', min: 2, max: 7 },
     },
@@ -59,13 +60,15 @@ const actionButtonsConfigConst = [
   },
 ];
 export const FloatingToolbar = {
-  render: args => html `<wpp-floating-toolbar-v4-1-0
+  render: args => html `<wpp-floating-toolbar-v4-2-0
       .actionButtonsConfig="${args.actionButtonsConfig.slice(0, args.length)}"
       .orientation="${args.orientation}"
+      .selectable="${args.selectable}"
     />`,
   args: {
     actionButtonsConfig: actionButtonsConfigConst,
     orientation: 'horizontal',
     length: 2,
+    selectable: false,
   },
 };

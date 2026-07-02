@@ -1,6 +1,6 @@
 import { Host, h } from '@stencil/core';
-import { transformToVersionedTag } from '../../utils/utils';
-import { DEFAULT_TABLIST_LABEL } from './const';
+import { mergeLocales, transformToVersionedTag } from '../../utils/utils';
+import { LOCALES_DEFAULTS } from './const';
 /**
  * @slot - Should contain only the `segmented-control-item` elements. The default slot, without the name attribute.
  *
@@ -32,7 +32,6 @@ export class WppSegmentedControl {
       'wpp-segmented-control': true,
     });
     this.previousActiveElement = undefined;
-    this._locales = { tablistLabel: DEFAULT_TABLIST_LABEL };
     this.size = 'm';
     this.hugContentOff = false;
     this.width = 'auto';
@@ -48,9 +47,6 @@ export class WppSegmentedControl {
   }
   handleChangeSegmentedControlItemClick(event) {
     this.value = event.detail.value;
-  }
-  onLocalesChange(newLocales) {
-    this._locales = { ...this._locales, ...(newLocales || {}) };
   }
   /**
    * Resolves the keyboard event target to a segmented control item.
@@ -128,7 +124,6 @@ export class WppSegmentedControl {
     this.setSegmentedControlItemsSize(newSize);
   }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...(this.locales || {}) };
     this.widthChange(this.width);
     this.setSegmentedControlItemsSize(this.size);
   }
@@ -142,6 +137,9 @@ export class WppSegmentedControl {
       }
     });
   }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
   getItems() {
     return Array.from(this.host.querySelectorAll(transformToVersionedTag('wpp-segmented-control-item')));
   }
@@ -151,10 +149,10 @@ export class WppSegmentedControl {
     const tablistLabel = this.ariaProps?.tablist?.label ??
       (this.ariaProps?.tablist?.labelledby || this.labelConfig?.text ? undefined : this._locales.tablistLabel);
     const tablistLabelledBy = this.ariaProps?.tablist?.labelledby ?? (this.labelConfig?.text ? labelId : undefined);
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-1-0", { class: "label", tag: "span", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, labelId: labelId, part: "label" })), h("div", { class: this.cssClasses(), role: "tablist", "aria-orientation": "horizontal", "aria-label": tablistLabel, "aria-labelledby": tablistLabelledBy, part: "wrapper" }, h("slot", { part: "inner" }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-2-0", { class: "label", tag: "span", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, labelId: labelId, part: "label" })), h("div", { class: this.cssClasses(), role: "tablist", "aria-orientation": "horizontal", "aria-label": tablistLabel, "aria-labelledby": tablistLabelledBy, part: "wrapper" }, h("slot", { part: "inner" }))));
   }
   static get is() { return "wpp-segmented-control"; }
-  static get registryIs() { return "wpp-segmented-control-v4-1-0"; }
+  static get registryIs() { return "wpp-segmented-control-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -381,8 +379,7 @@ export class WppSegmentedControl {
   }
   static get states() {
     return {
-      "previousActiveElement": {},
-      "_locales": {}
+      "previousActiveElement": {}
     };
   }
   static get events() {
@@ -452,9 +449,6 @@ export class WppSegmentedControl {
   static get elementRef() { return "host"; }
   static get watchers() {
     return [{
-        "propName": "locales",
-        "methodName": "onLocalesChange"
-      }, {
         "propName": "value",
         "methodName": "valueChanged"
       }, {

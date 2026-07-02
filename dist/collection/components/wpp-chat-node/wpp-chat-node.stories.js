@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+import { renderHandles } from '../wpp-basic-node/utils';
 const CHAT_ACTIONS = [
   { icon: 'wpp-icon-document', label: 'Attach brief' },
   { icon: 'wpp-icon-image', label: 'Add reference image' },
@@ -66,9 +67,6 @@ const meta = {
     nodeTitle: {
       control: { type: 'text' },
     },
-    titleIcon: {
-      control: { type: 'text' },
-    },
     isLoading: {
       control: { type: 'boolean' },
     },
@@ -95,15 +93,16 @@ const meta = {
     locales: {
       control: { type: 'object' },
     },
+    numberOfHandles: { control: 'select', options: ['1 handle', '3 handles'], if: { arg: 'size', eq: 'm' } },
   },
 };
 export default meta;
 export const ChatNode = {
   args: {
     nodeTitle: LONG_TITLE,
-    titleIcon: 'wpp-icon-service',
     isLoading: false,
     isSelected: false,
+    numberOfHandles: '1 handle',
     size: 'm',
     actions: CHAT_ACTIONS,
     models: CHAT_MODELS,
@@ -121,10 +120,9 @@ export const ChatNode = {
       tabindex="0"
     >
       <div style="position: relative; width: 320px; height: 360px;">
-        <wpp-chat-node-v4-1-0
+        <wpp-chat-node-v4-2-0
           id=${nodeId}
           .nodeTitle=${args.nodeTitle}
-          .titleIcon=${args.titleIcon}
           .isLoading=${args.isLoading}
           .isSelected=${args.isSelected}
           .size=${args.size}
@@ -133,7 +131,11 @@ export const ChatNode = {
           .models=${args.models ?? []}
           .selectedModelId=${args.selectedModelId}
           .locales=${args.locales ?? {}}
-        />
+        >
+          <div slot="handles">
+            ${renderHandles(args.numberOfHandles || '1 handle', args.isSelected, args.isLoading)}
+          </div>
+        </wpp-chat-node-v4-2-0>
       </div>
     </div>`;
   },

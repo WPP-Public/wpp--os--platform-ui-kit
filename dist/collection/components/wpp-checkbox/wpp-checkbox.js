@@ -104,6 +104,7 @@ export class WppCheckbox {
     this.internalState = '';
     this.index = 0;
     this.decorative = false;
+    this.isDarkTheme = undefined;
   }
   /**
    * Method that sets focus on the native input.
@@ -114,19 +115,31 @@ export class WppCheckbox {
     this.inputRef.focus();
     this.focusType = FOCUS_TYPE.TAB;
   }
+  onUpdateDarkTheme() {
+    // In case the `checkbox` component subscribed to theme changes before the parent component starts controlling the `isDarkTheme` prop.
+    if (this.isDarkTheme !== undefined) {
+      this.themeSubscription.stop();
+    }
+  }
   connectedCallback() {
-    this.themeSubscription.start();
+    // By default, the component will subscribe to theme changes, unless the `isDarkTheme` property is passed explicitly from the parent component (from wpp-list-item).
+    // This is needed in order to avoid unnecessary subscription to theme changes for each checkbox from wpp-list-item.
+    if (this.isDarkTheme === undefined) {
+      this.themeSubscription.start();
+    }
   }
   disconnectedCallback() {
-    this.themeSubscription.stop();
+    if (this.isDarkTheme === undefined) {
+      this.themeSubscription.stop();
+    }
   }
   render() {
     if (this.decorative)
-      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name }, h("wpp-label-v4-1-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v4-1-0", { part: "icon-tick" }), h("wpp-icon-dash-v4-1-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v4-1-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
-    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name }, h("wpp-label-v4-1-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, htmlFor: this.name, disabled: this.disabled, onClick: this.onClick, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("input", { class: this.inputCssClasses(), type: "checkbox", id: this.name, name: this.name, disabled: this.disabled, checked: this.checked || this.indeterminate, required: this.required, onFocus: this.onFocus, onBlur: this.onBlur, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-hidden": this.disabled ? 'true' : null, "aria-required": this.required.toString(), tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v4-1-0", { part: "icon-tick" }), h("wpp-icon-dash-v4-1-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v4-1-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
+      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}) }, h("wpp-label-v4-2-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v4-2-0", { part: "icon-tick" }), h("wpp-icon-dash-v4-2-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v4-2-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
+    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}) }, h("wpp-label-v4-2-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, htmlFor: this.name, disabled: this.disabled, onClick: this.onClick, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("input", { class: this.inputCssClasses(), type: "checkbox", id: this.name, name: this.name, disabled: this.disabled, checked: this.checked || this.indeterminate, required: this.required, onFocus: this.onFocus, onBlur: this.onBlur, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-hidden": this.disabled ? 'true' : null, "aria-required": this.required.toString(), tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v4-2-0", { part: "icon-tick" }), h("wpp-icon-dash-v4-2-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v4-2-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
   }
   static get is() { return "wpp-checkbox"; }
-  static get registryIs() { return "wpp-checkbox-v4-1-0"; }
+  static get registryIs() { return "wpp-checkbox-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -472,6 +485,27 @@ export class WppCheckbox {
         "attribute": "decorative",
         "reflect": false,
         "defaultValue": "false"
+      },
+      "isDarkTheme": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [{
+              "name": "internal",
+              "text": "- This prop is controlled by Select / Autocomplete"
+            }],
+          "text": "If 'true', the component has dark theme styles applied to it."
+        },
+        "attribute": "is-dark-theme",
+        "reflect": false,
+        "defaultValue": "undefined"
       }
     };
   }
@@ -591,4 +625,10 @@ export class WppCheckbox {
     };
   }
   static get elementRef() { return "host"; }
+  static get watchers() {
+    return [{
+        "propName": "isDarkTheme",
+        "methodName": "onUpdateDarkTheme"
+      }];
+  }
 }

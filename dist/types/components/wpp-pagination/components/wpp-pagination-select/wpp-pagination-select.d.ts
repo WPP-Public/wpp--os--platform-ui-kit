@@ -18,10 +18,15 @@ interface FocusType {
  */
 export declare class WppPaginationSelect {
   focusType: FocusType;
+  numberOfPages: number;
   /**
    * Defines the total number of items.
    */
   readonly count: number;
+  /**
+   * Defines how many items to display per page. The number of pages is calculated by dividing the total number of items by the number of itemsPerPage.
+   */
+  readonly itemsPerPage: number;
   /**
    * Defines a threshold for pages to display. When the number of pages to display exceeds this value, the component displays a numeric selector instead of the page list.
    */
@@ -31,9 +36,11 @@ export declare class WppPaginationSelect {
    */
   activePageNumber: number;
   /**
-   * Emitted active page number
+   * Contains the active page number and itemsPerPage value.
    */
   wppChange: EventEmitter<PaginationPageChangeEventDetail>;
+  onUpdateCountOrItemsPerPage(): void;
+  componentWillLoad(): void;
   private getPageItems;
   private getUpdatedFocusInfo;
   private onBlur;

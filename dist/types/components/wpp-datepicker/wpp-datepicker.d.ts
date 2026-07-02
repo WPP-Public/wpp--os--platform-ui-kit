@@ -28,7 +28,6 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   private isNormalizingMonthRange;
   private isNormalizingYearRange;
   private isDestroyed;
-  private _locales;
   private themeSubscription;
   host: HTMLWppDatepickerElement;
   datePickerInstance: AirDatepicker;
@@ -226,7 +225,7 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   updateMaxDate(): void;
   updateDropdownConfig(newConfig: DropdownConfig, oldConfig: DropdownConfig): void;
   updateIsInComponent(value: boolean): void;
-  onUpdateLocales(newLocales: Partial<LocaleTypes>): void;
+  onUpdateLocales(): void;
   private setInitialDate;
   private setMinMaxDate;
   private clearIfDateNotInInterval;
@@ -235,6 +234,7 @@ export declare class WppDatepicker implements BaseComponent, InlineMessage {
   componentDidLoad(): void;
   connectedCallback(): void;
   disconnectedCallback(): void;
+  private get _locales();
   /**
    * Determines the first day of the week based on `dateLocale`, `firstDay`, or falls back to default.
    * @returns {0 | 1 | 2 | 3 | 4 | 5 | 6} The first day of the week (0 = Sunday, 1 = Monday, etc.)

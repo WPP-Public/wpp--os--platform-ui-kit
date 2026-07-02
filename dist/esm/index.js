@@ -1,14 +1,12 @@
 export { Z as Z_INDEX } from './consts-744c144f.js';
-import { i as isObject, t as toKebabCase, r as recursiveObjectMap } from './utils-3463d13f.js';
-export { m as applyBodyStylesIfNeeded, a as areSetsEqual, n as autoFocusElement, l as closestElement, d as debounce, o as form2object, f as format, y as getAriaProps, p as getDurationValues, q as getHasFocused, w as getHighestContainerInDOM, j as getHighlightData, x as getOsBarOffsetHeight, g as getSlotEmptyStates, c as hasParentWithId, h as hasShadowDom, b as isEventTargetContained, i as isObject, z as isWppElement, r as recursiveObjectMap, s as selectDropdownWidth, v as setHasFocused, t as toKebabCase, k as transformToVersionedTag, e as truncate, u as uuidv4 } from './utils-3463d13f.js';
+import { i as isObject, t as toKebabCase, r as recursiveObjectMap } from './utils-fc9002c9.js';
+export { m as applyBodyStylesIfNeeded, a as areSetsEqual, n as autoFocusElement, l as closestElement, d as debounce, o as form2object, f as format, z as getAriaProps, p as getDurationValues, q as getHasFocused, w as getHighestContainerInDOM, j as getHighlightData, x as getOsBarOffsetHeight, g as getSlotEmptyStates, c as hasParentWithId, h as hasShadowDom, b as isEventTargetContained, i as isObject, A as isWppElement, y as mergeLocales, r as recursiveObjectMap, s as selectDropdownWidth, v as setHasFocused, t as toKebabCase, k as transformToVersionedTag, e as truncate, u as uuidv4 } from './utils-fc9002c9.js';
 export { S as ScrollState } from './types-6eb465ab.js';
 export { F as FullScreenModalCloseReason } from './types-b5cf2c7a.js';
 export { I as InlineEditModeEnum } from './types-55e66228.js';
 export { M as ModalCloseReason } from './types-9a70ac4e.js';
-export { E as Editor, Q as Quill, U as RICHTEXT_UPLOAD_REQUEST_EVENT, d as debugLevels, f as formats, u as richtextUploadTypes, s as sources } from './index-7537e942.js';
-export { T as TIPTAP_UPLOAD_REQUEST_EVENT, a as tiptapFormats, b as tiptapSources, t as tiptapUploadTypes } from './tiptap-types-4be5fddc.js';
+export { E as Editor, R as RICHTEXT_UPLOAD_REQUEST_EVENT, T as TIPTAP_UPLOAD_REQUEST_EVENT, d as debugLevels, f as formats, r as richtextUploadTypes, s as sources, a as tiptapFormats, b as tiptapSources, t as tiptapUploadTypes } from './index-90a07263.js';
 export { S as SideModalCloseReason } from './types-945bd5da.js';
-import './_commonjsHelpers-ba3f0406.js';
 
 const dsPrefix = '--wpp';
 /**
@@ -99,5 +97,27 @@ const resolveTheme = (initJson, variant = 'light') => {
     return value;
   });
 };
+const WppAgGridThemeConfig = {
+  wrapperBorder: false,
+  headerRowBorder: false,
+  rowBorder: { style: 'solid', width: 1, color: 'var(--wpp-grey-color-300)' },
+  backgroundColor: 'var(--wpp-grey-color-000)',
+  headerBackgroundColor: 'var(--wpp-grey-color-000)',
+  headerColumnBorderHeight: 20,
+  headerColumnBorder: { style: 'solid', width: 0, color: 'var(--wpp-grey-color-300)' },
+  headerColumnResizeHandleColor: 'var(--wpp-grey-color-600)',
+  headerColumnResizeHandleHeight: '100%',
+  headerColumnResizeHandleWidth: 2,
+  headerCellHoverBackgroundColor: 'var(--wpp-grey-color-200)',
+  headerHeight: 47,
+  rowHeight: 47,
+  rowHoverColor: 'var(--wpp-grey-color-200)',
+  oddRowBackgroundColor: 'var(--wpp-grey-color-000)',
+  selectedRowBackgroundColor: 'var(--wpp-grey-color-200)',
+  rangeSelectionBorderColor: 'transparent',
+  cellHorizontalPadding: 16,
+  fontFamily: 'var(--wpp-font-family)',
+  fontSize: 13,
+};
 
-export { createTheme, resolveTheme };
+export { WppAgGridThemeConfig, createTheme, resolveTheme };

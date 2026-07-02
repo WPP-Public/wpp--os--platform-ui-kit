@@ -53,7 +53,7 @@ describe('wpp-topbar', () => {
   it('renders component', async () => {
     const page = await newSpecPage({
       components: [WppTopbar, WppTopbarItem],
-      template: () => h("wpp-topbar-v4-1-0", { navigation: navigation, value: "community" }),
+      template: () => h("wpp-topbar-v4-2-0", { navigation: navigation, value: "community" }),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await new Promise(resolve => requestAnimationFrame(resolve));
@@ -63,7 +63,7 @@ describe('wpp-topbar', () => {
   it('renders component with application', async () => {
     const page = await newSpecPage({
       components: [WppTopbar, WppTopbarItem],
-      template: () => (h("wpp-topbar-v4-1-0", { navigation: navigation, value: "community" }, h("div", { slot: "app" }, h("img", { src: "https://easydrawingguides.com/wp-content/uploads/2018/09/Impossible-Triangle-09.png", alt: "app-logo" }), h("wpp-typography-v4-1-0", { type: "m-strong", tag: "h3" }, "APP Name")))),
+      template: () => (h("wpp-topbar-v4-2-0", { navigation: navigation, value: "community" }, h("div", { slot: "app" }, h("img", { src: "https://easydrawingguides.com/wp-content/uploads/2018/09/Impossible-Triangle-09.png", alt: "app-logo" }), h("wpp-typography-v4-2-0", { type: "m-strong", tag: "h3" }, "APP Name")))),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await new Promise(resolve => requestAnimationFrame(resolve));
@@ -73,7 +73,7 @@ describe('wpp-topbar', () => {
   it('passes topbar z-index to topbar items', async () => {
     const page = await newSpecPage({
       components: [WppTopbar, WppTopbarItem],
-      template: () => h("wpp-topbar-v4-1-0", { navigation: navigation, value: "community", zIndex: topbarZIndex }),
+      template: () => h("wpp-topbar-v4-2-0", { navigation: navigation, value: "community", zIndex: topbarZIndex }),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await new Promise(resolve => requestAnimationFrame(resolve));
@@ -84,7 +84,7 @@ describe('wpp-topbar', () => {
   it('sets topbar z-index on topbar item menus', async () => {
     const page = await newSpecPage({
       components: [WppTopbarItem],
-      template: () => (h("wpp-topbar-item-v4-1-0", { navigation: navigation[2], firstLevel: true, activeItems: [], zIndex: topbarMenuZIndex })),
+      template: () => (h("wpp-topbar-item-v4-2-0", { navigation: navigation[2], firstLevel: true, activeItems: [], zIndex: topbarMenuZIndex })),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await page.waitForChanges();
@@ -94,7 +94,7 @@ describe('wpp-topbar', () => {
   it('raises the topbar while a topbar item menu is open', async () => {
     const page = await newSpecPage({
       components: [WppTopbar, WppTopbarItem],
-      template: () => h("wpp-topbar-v4-1-0", { navigation: navigation, value: "community", zIndex: topbarZIndex }),
+      template: () => h("wpp-topbar-v4-2-0", { navigation: navigation, value: "community", zIndex: topbarZIndex }),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await new Promise(resolve => requestAnimationFrame(resolve));
@@ -124,14 +124,14 @@ describe('wpp-topbar', () => {
     it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
       await newSpecPage({
         components: [WppTopbar, WppTopbarItem],
-        template: () => h("wpp-topbar-v4-1-0", { navigation: navigation, value: "community" }),
+        template: () => h("wpp-topbar-v4-2-0", { navigation: navigation, value: "community" }),
       });
       expect(mockStart).toHaveBeenCalledTimes(1);
     });
     it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
       const page = await newSpecPage({
         components: [WppTopbar, WppTopbarItem],
-        template: () => h("wpp-topbar-v4-1-0", { navigation: navigation, value: "community" }),
+        template: () => h("wpp-topbar-v4-2-0", { navigation: navigation, value: "community" }),
       });
       page.root?.remove();
       expect(mockStop).toHaveBeenCalledTimes(1);

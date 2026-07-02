@@ -1,6 +1,6 @@
 import { EventEmitter } from '../../../stencil-public-runtime';
 import { FOCUS_TYPE } from '../../../types/common';
-import { FileItemType, FileUploadItemEventDetail, FileUploadResultFormaType, FileUploadItemLocales } from '../types';
+import { FileItemType, FileUploadItemEventDetail, FileUploadItemVariant, FileUploadResultFormaType, FileUploadItemLocales } from '../types';
 /**
  * @part file-item - file item wrapper.
  * @part wrapper - component wrapper element
@@ -12,10 +12,12 @@ import { FileItemType, FileUploadItemEventDetail, FileUploadResultFormaType, Fil
  * @part cross-icon - cross icon element
  */
 export declare class WppFileUploadItem {
-  private _locales;
   private fileNameRef?;
   private tooltipRef?;
   private measureRef?;
+  private subtitleRef?;
+  private subtitleMeasureRef?;
+  private isSubtitleTruncated;
   private loadingRef?;
   private observer;
   private pendingTruncation;
@@ -55,6 +57,12 @@ export declare class WppFileUploadItem {
    */
   readonly uploaded?: boolean;
   /**
+   * Visual variant of the item. Use `chat` to render the taller two-line
+   * thumbnail card used by chat parts (file name + type/progress/error).
+   * Defaults to `default` (the compact single-line chip).
+   */
+  readonly variant: FileUploadItemVariant;
+  /**
    * When true, this item inherits the parent uploader’s disabled state.
    * Interactive controls inside the item (e.g., the delete icon) must be non-interactive:
    * - removed from the tab order (tabindex = -1)
@@ -71,13 +79,14 @@ export declare class WppFileUploadItem {
     name: string;
     size: number;
   }>;
-  onUpdateLocales(newLocales: Partial<FileUploadItemLocales>): void;
   private convertToAppropriateFormat;
   private setReaderFormat;
   componentWillLoad(): void;
   componentDidLoad(): void;
   disconnectedCallback(): void;
+  private get _locales();
   private scheduleTruncate;
+  private checkSubtitleTruncation;
   private truncateFileName;
   private computeAvailableWidth;
   private measure;
@@ -101,5 +110,10 @@ export declare class WppFileUploadItem {
   private hostCssClasses;
   private itemCssClasses;
   private crossIconClasses;
+  private getImagePreviewUrl;
+  private renderThumbnail;
+  private getChatSubtitle;
+  private renderDeleteIcon;
+  private renderChatVariant;
   render(): any;
 }

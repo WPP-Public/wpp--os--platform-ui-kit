@@ -1,26 +1,10 @@
 /**
  * @file Unit tests for tiptap-config.ts
- * @description Tests for buildTiptapExtensions(), turndown service re-export,
- *   and format translation.
+ * @description Tests for buildTiptapExtensions() and format translation.
  * @see https://jira.uhub.biz/browse/WPPOPENDS-1287
  */
-// Mock Quill before any imports can pull it in
-jest.mock('quill', () => ({
-  default: { import: () => ({}), register: () => { }, DEFAULTS: { formats: [], modules: {} } },
-}));
-// Mock the old config module that imports Quill
-jest.mock('../config', () => ({
-  __esModule: true,
-  default: {
-    turndown: (html) => html,
-    use: () => { },
-    addRule: () => { },
-    escape: (text) => text,
-  },
-  quillMarkdownOptions: { tags: {} },
-}));
 import { Editor } from '@tiptap/core';
-import { buildTiptapExtensions, translateQuillFormat } from '../tiptap-config';
+import { buildTiptapExtensions, translateLegacyFormat } from '../tiptap-config';
 beforeAll(() => {
   jest.spyOn(console, 'log').mockImplementation(() => { });
   jest.spyOn(console, 'warn').mockImplementation(() => { });
@@ -91,18 +75,59 @@ describe('wpp-richtext', () => {
         expect(editor.storage.characterCount).toBeDefined();
         editor.destroy();
       });
+      it('should disable StarterKit bundled formats outside an explicit whitelist', () => {
+        const extensions = buildTiptapExtensions({ formats: ['bold'] });
+        const editor = new Editor({
+          extensions,
+          content: '<p>Test</p>',
+        });
+        expect(editor.schema.marks.bold).toBeDefined();
+        expect(editor.schema.marks.italic).toBeUndefined();
+        expect(editor.schema.marks.strike).toBeUndefined();
+        expect(editor.schema.nodes.heading).toBeUndefined();
+        expect(editor.schema.nodes.blockquote).toBeUndefined();
+        expect(editor.schema.nodes.codeBlock).toBeUndefined();
+        expect(editor.schema.nodes.bulletList).toBeUndefined();
+        expect(editor.schema.nodes.orderedList).toBeUndefined();
+        expect(editor.schema.marks.link).toBeUndefined();
+        editor.destroy();
+      });
+      it('should expand legacy list whitelist to required Tiptap list formats', () => {
+        const extensions = buildTiptapExtensions({ formats: ['list'] });
+        const editor = new Editor({
+          extensions,
+          content: '<p>Item</p>',
+        });
+        expect(editor.schema.nodes.bulletList).toBeDefined();
+        expect(editor.schema.nodes.orderedList).toBeDefined();
+        expect(editor.schema.nodes.listItem).toBeDefined();
+        expect(editor.schema.nodes.heading).toBeUndefined();
+        expect(editor.schema.marks.bold).toBeUndefined();
+        editor.destroy();
+      });
+      it('should keep indent extension enabled when indent is whitelisted', () => {
+        const extensions = buildTiptapExtensions({ formats: ['indent'] });
+        const names = extensions.map(e => e.name);
+        const editor = new Editor({
+          extensions,
+          content: '<p>Item</p>',
+        });
+        expect(names).toContain('indent');
+        expect(editor.commands.increaseIndent()).toBe(true);
+        expect(editor.getJSON().content?.[0]?.attrs?.indent).toBe(1);
+        editor.destroy();
+      });
     });
-    describe('translateQuillFormat()', () => {
-      it('should translate known Quill format names', () => {
-        expect(translateQuillFormat('code-block')).toBe('codeBlock');
-        expect(translateQuillFormat('strike')).toBe('strike');
+    describe('translateLegacyFormat()', () => {
+      it('should translate known legacy format names', () => {
+        expect(translateLegacyFormat('code-block')).toBe('codeBlock');
+        expect(translateLegacyFormat('strike')).toBe('strike');
       });
       it('should return the input for unknown formats', () => {
-        expect(translateQuillFormat('bold')).toBe('bold');
-        expect(translateQuillFormat('unknown-format')).toBe('unknown-format');
+        expect(translateLegacyFormat('bold')).toBe('bold');
+        expect(translateLegacyFormat('unknown-format')).toBe('unknown-format');
       });
     });
-    // turndownService tests are in utils.spec.ts (library-agnostic, same config)
     describe('Editor with extensions can handle formatting', () => {
       let editor;
       beforeEach(() => {

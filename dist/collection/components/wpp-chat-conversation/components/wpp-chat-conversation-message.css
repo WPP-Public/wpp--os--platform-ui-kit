@@ -1,3 +1,4 @@
+@charset "UTF-8";
 :host {
   display: flex;
   width: auto;
@@ -7,13 +8,13 @@
 .container {
   display: grid;
   width: 100%;
-  grid-template-columns: 64px minmax(0, 80ch) 64px;
+  grid-template-columns: 44px minmax(0, 80ch) 44px;
 }
 .container.no-user-avatar {
-  grid-template-columns: 64px minmax(0, 80ch);
+  grid-template-columns: 44px minmax(0, 80ch);
 }
 .container.no-assistant-avatar {
-  grid-template-columns: minmax(0, 80ch) 64px;
+  grid-template-columns: minmax(0, 80ch) 44px;
 }
 .container.no-user-avatar.no-assistant-avatar {
   grid-template-columns: minmax(0, 80ch);
@@ -23,6 +24,12 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
+}
+.avatar-wrapper.ai-avatar {
+  justify-content: flex-start;
+}
+.avatar-wrapper.user-avatar {
+  justify-content: flex-end;
 }
 
 .content {
@@ -41,6 +48,9 @@
   background-color: var(--wpp-primary-color-100);
   border-radius: var(--wpp-border-radius-m) 0 var(--wpp-border-radius-m) var(--wpp-border-radius-m);
 }
+.content.content-user .attachments {
+  justify-content: flex-end;
+}
 .content p {
   margin-top: 0;
 }
@@ -56,6 +66,10 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.custom-content ::slotted(*) {
+  margin-top: var(--wpp-chat-message-slot-gap, 8px);
 }
 
 .cursor {
@@ -300,21 +314,21 @@
   display: none;
 }
 
-/* Attachments */
+/* Attachments — sent files/images shown as thumbnail cards (file-upload-item chat
+   variant, which already carries the Figma card spec: 56px min-height, 8px padding,
+   12px gap, 12px radius). Cards are 224–256px wide and wrap at most two per row
+   (1 → single card, 2 → one row, 3 → 2 + 1, 4 → 2 × 2). The block aligns to the
+   sender's side — see the .content-user override below for the right alignment. */
 .attachments {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.chat-file-attachments-column {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-wrap: wrap;
+  gap: 8px;
   width: 100%;
 }
-.chat-file-attachments-column .wpp-file-upload-item {
-  width: 100%;
+.attachments .wpp-file-upload-item {
+  flex: 1 1 calc(50% - 4px);
+  min-width: 224px;
+  max-width: 256px;
 }
 
 /* Animations */

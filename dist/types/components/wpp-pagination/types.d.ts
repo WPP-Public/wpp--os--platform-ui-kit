@@ -1,5 +1,6 @@
 export interface PaginationPageChangeEventDetail {
   page: number;
+  itemsPerPage?: number;
 }
 export interface ItemsPerPageChangeEventDetail {
   itemsPerPage: number;

@@ -1,6 +1,6 @@
 /**
  * @file Tiptap v3 type definitions for wpp-richtext
- * @description Replaces/extends the Quill-based types.ts during WPPOPENDS-1287 migration.
+ * @description Tiptap editor types for the WPPOPENDS-1287 richtext migration.
  *   All types preserve backward compatibility with the existing public API.
  * @see https://jira.uhub.biz/browse/WPPOPENDS-1287
  */

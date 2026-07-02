@@ -3,7 +3,7 @@ describe('given theme', () => {
   const jsonTheme = {
     version: 1,
     settings: {
-      fontUrl: 'https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900',
+      fontUrl: 'https://public-assets.os.wpp.com/fonts/wpp/index.css',
     },
     content: {
       light: {
@@ -184,7 +184,7 @@ describe('given theme', () => {
           l: '0px 8px 32px 0px rgba(53, 59, 65, 0.05)',
         },
         font: {
-          family: 'Inter',
+          family: 'WPP',
         },
         icon: {
           color: {
@@ -352,7 +352,7 @@ describe('given theme', () => {
         '--wpp-box-shadow-m': '0px 1px 4px 0px rgba(53, 59, 65, 0.05), 0px 4px 16px 0px rgba(53, 59, 65, 0.12)',
         '--wpp-box-shadow-brand': '0px 4px 12px 0px rgba(94, 0, 181, 0.3)',
         '--wpp-box-shadow-l': '0px 8px 32px 0px rgba(53, 59, 65, 0.05)',
-        '--wpp-font-family': 'Inter',
+        '--wpp-font-family': 'WPP',
         '--wpp-icon-color': '#8b919a',
         '--wpp-icon-color-disabled': '#c1c7cd',
         '--wpp-icon-color-hover': '#697077',
@@ -376,7 +376,7 @@ describe('given theme', () => {
           fontUrl: [
             'https://public-assets.os.wpp.com/fonts/dm-serif-display/index.css',
             'https://public-assets.os.wpp.com/fonts/open-sans/index.css',
-            'https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900',
+            'https://public-assets.os.wpp.com/fonts/wpp/index.css',
           ],
         },
         content: {
@@ -558,7 +558,7 @@ describe('given theme', () => {
               l: '0px 8px 32px 0px rgba(57, 57, 57, 0.05)',
             },
             font: {
-              family: ['DM Serif Display', 'Open Sans', 'Inter'],
+              family: ['DM Serif Display', 'Open Sans', 'WPP'],
             },
             icon: {
               color: {
@@ -606,7 +606,7 @@ describe('given theme', () => {
               },
               '3xl': {
                 heading: {
-                  fontFamily: ['', 'Inter'],
+                  fontFamily: ['', 'WPP'],
                   fontSize: '28px',
                   fontWeight: '700',
                   letterSpacing: '0px',
@@ -624,7 +624,7 @@ describe('given theme', () => {
               },
               xl: {
                 heading: {
-                  fontFamily: ['Open Sans', 'Inter'],
+                  fontFamily: ['Open Sans', 'WPP'],
                   fontSize: '20px',
                   fontWeight: '700',
                   letterSpacing: '0px',
@@ -633,21 +633,21 @@ describe('given theme', () => {
               },
               m: {
                 strong: {
-                  fontFamily: ['Open Sans', 'MStrong', 'Inter'],
+                  fontFamily: ['Open Sans', 'MStrong', 'WPP'],
                   fontSize: '16px',
                   fontWeight: '700',
                   letterSpacing: '0px',
                   lineHeight: '24px',
                 },
                 midi: {
-                  fontFamily: ['Open Sans', 'MMidi', 'Inter'],
+                  fontFamily: ['Open Sans', 'MMidi', 'WPP'],
                   fontSize: '16px',
                   fontWeight: '600',
                   letterSpacing: '0px',
                   lineHeight: '24px',
                 },
                 body: {
-                  fontFamily: ['Open Sans', 'MBody', 'Inter'],
+                  fontFamily: ['Open Sans', 'MBody', 'WPP'],
                   fontSize: '16px',
                   fontWeight: '400',
                   letterSpacing: '0px',
@@ -656,21 +656,21 @@ describe('given theme', () => {
               },
               s: {
                 strong: {
-                  fontFamily: ['Open Sans', 'SStrong', 'Inter'],
+                  fontFamily: ['Open Sans', 'SStrong', 'WPP'],
                   fontSize: '14px',
                   fontWeight: '700',
                   letterSpacing: '0px',
                   lineHeight: '22px',
                 },
                 midi: {
-                  fontFamily: ['Open Sans', 'SMidi', 'Inter'],
+                  fontFamily: ['Open Sans', 'SMidi', 'WPP'],
                   fontSize: '14px',
                   fontWeight: '600',
                   letterSpacing: '0px',
                   lineHeight: '22px',
                 },
                 body: {
-                  fontFamily: ['Open Sans', 'SBody', 'Inter'],
+                  fontFamily: ['Open Sans', 'SBody', 'WPP'],
                   fontSize: '14px',
                   fontWeight: '400',
                   letterSpacing: '0px',
@@ -679,7 +679,7 @@ describe('given theme', () => {
               },
               '2xs': {
                 strong: {
-                  fontFamily: ['Open Sans', 'Inter', ''],
+                  fontFamily: ['Open Sans', 'WPP', ''],
                   fontSize: '10px',
                   fontWeight: '700',
                   letterSpacing: '5%',
@@ -794,7 +794,7 @@ describe('given theme', () => {
         '--wpp-dataviz-color-seq-warning-700': '#bd4b12',
         '--wpp-dataviz-color-seq-warning-800': '#A13702',
         '--wpp-dataviz-color-seq-warning-900': '#832C00',
-        '--wpp-font-family': 'DM Serif Display, Open Sans, Inter',
+        '--wpp-font-family': 'DM Serif Display, Open Sans, WPP',
         '--wpp-grey-color-000': '#FFFFFF',
         '--wpp-grey-color-100': '#F6F6F6',
         '--wpp-grey-color-1000': '#161616',
@@ -837,13 +837,13 @@ describe('given theme', () => {
         '--wpp-typography-2xl-heading-font-weight': '700',
         '--wpp-typography-2xl-heading-letter-spacing': '0px',
         '--wpp-typography-2xl-heading-line-height': '32px',
-        '--wpp-typography-2xs-strong-font-family': 'Open Sans, Inter',
+        '--wpp-typography-2xs-strong-font-family': 'Open Sans, WPP',
         '--wpp-typography-2xs-strong-font-size': '10px',
         '--wpp-typography-2xs-strong-font-weight': '700',
         '--wpp-typography-2xs-strong-letter-spacing': '5%',
         '--wpp-typography-2xs-strong-line-height': '20px',
         '--wpp-typography-2xs-strong-text-transform': 'uppercase',
-        '--wpp-typography-3xl-heading-font-family': 'Inter',
+        '--wpp-typography-3xl-heading-font-family': 'WPP',
         '--wpp-typography-3xl-heading-font-size': '28px',
         '--wpp-typography-3xl-heading-font-weight': '700',
         '--wpp-typography-3xl-heading-letter-spacing': '0px',
@@ -858,37 +858,37 @@ describe('given theme', () => {
         '--wpp-typography-5xl-display-font-weight': '400',
         '--wpp-typography-5xl-display-letter-spacing': '0px',
         '--wpp-typography-5xl-display-line-height': '62px',
-        '--wpp-typography-m-body-font-family': 'Open Sans, MBody, Inter',
+        '--wpp-typography-m-body-font-family': 'Open Sans, MBody, WPP',
         '--wpp-typography-m-body-font-size': '16px',
         '--wpp-typography-m-body-font-weight': '400',
         '--wpp-typography-m-body-letter-spacing': '0px',
         '--wpp-typography-m-body-line-height': '24px',
-        '--wpp-typography-m-midi-font-family': 'Open Sans, MMidi, Inter',
+        '--wpp-typography-m-midi-font-family': 'Open Sans, MMidi, WPP',
         '--wpp-typography-m-midi-font-size': '16px',
         '--wpp-typography-m-midi-font-weight': '600',
         '--wpp-typography-m-midi-letter-spacing': '0px',
         '--wpp-typography-m-midi-line-height': '24px',
-        '--wpp-typography-m-strong-font-family': 'Open Sans, MStrong, Inter',
+        '--wpp-typography-m-strong-font-family': 'Open Sans, MStrong, WPP',
         '--wpp-typography-m-strong-font-size': '16px',
         '--wpp-typography-m-strong-font-weight': '700',
         '--wpp-typography-m-strong-letter-spacing': '0px',
         '--wpp-typography-m-strong-line-height': '24px',
-        '--wpp-typography-s-body-font-family': 'Open Sans, SBody, Inter',
+        '--wpp-typography-s-body-font-family': 'Open Sans, SBody, WPP',
         '--wpp-typography-s-body-font-size': '14px',
         '--wpp-typography-s-body-font-weight': '400',
         '--wpp-typography-s-body-letter-spacing': '0px',
         '--wpp-typography-s-body-line-height': '22px',
-        '--wpp-typography-s-midi-font-family': 'Open Sans, SMidi, Inter',
+        '--wpp-typography-s-midi-font-family': 'Open Sans, SMidi, WPP',
         '--wpp-typography-s-midi-font-size': '14px',
         '--wpp-typography-s-midi-font-weight': '600',
         '--wpp-typography-s-midi-letter-spacing': '0px',
         '--wpp-typography-s-midi-line-height': '22px',
-        '--wpp-typography-s-strong-font-family': 'Open Sans, SStrong, Inter',
+        '--wpp-typography-s-strong-font-family': 'Open Sans, SStrong, WPP',
         '--wpp-typography-s-strong-font-size': '14px',
         '--wpp-typography-s-strong-font-weight': '700',
         '--wpp-typography-s-strong-letter-spacing': '0px',
         '--wpp-typography-s-strong-line-height': '22px',
-        '--wpp-typography-xl-heading-font-family': 'Open Sans, Inter',
+        '--wpp-typography-xl-heading-font-family': 'Open Sans, WPP',
         '--wpp-typography-xl-heading-font-size': '20px',
         '--wpp-typography-xl-heading-font-weight': '700',
         '--wpp-typography-xl-heading-letter-spacing': '0px',
@@ -904,7 +904,7 @@ describe('given theme', () => {
       expect(resolveTheme(jsonTheme)).toEqual({
         version: 1,
         settings: {
-          fontUrl: 'https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900',
+          fontUrl: 'https://public-assets.os.wpp.com/fonts/wpp/index.css',
         },
         content: {
           light: {
@@ -1085,7 +1085,7 @@ describe('given theme', () => {
               l: '0px 8px 32px 0px rgba(53, 59, 65, 0.05)',
             },
             font: {
-              family: 'Inter',
+              family: 'WPP',
             },
             icon: {
               color: {

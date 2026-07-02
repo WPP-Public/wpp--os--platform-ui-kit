@@ -11,6 +11,9 @@ export declare class WppStepper {
   private prevStep;
   private componentHasLoaded;
   private stepMainNdx;
+  private hostElement?;
+  private textCssTimeout;
+  private stepAttributeTimeout;
   private resizeObserver;
   host: HTMLWppStepperElement;
   stepIndicator: number;
@@ -64,6 +67,7 @@ export declare class WppStepper {
   private setTextCSSVariables;
   componentDidLoad(): void;
   disconnectedCallback(): void;
+  private isHostConnected;
   private getStepperProps;
   private calculateStepperPosition;
   private calculateStepperPositionOnResize;

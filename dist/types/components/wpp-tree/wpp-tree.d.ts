@@ -1,11 +1,13 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { TreeActionClickEventDetail, TreeChangeEventDetail, TreeItemSearchConfig, TreeLazyConfig, TreeLocaleType, TreeType } from './types';
 export declare class WppTree {
+  private themeSubscription;
   host: HTMLWppTreeElement;
   currentTreeData: TreeType[];
   selectedIds: (TreeType | null | string | number)[];
   focusedItemId: string | number | null;
   isKeyboardNavigating: boolean;
+  isDarkTheme?: boolean;
   /**
    * Tracks whether focus is currently on an internal action element within a tree item.
    * When true, Tab navigation follows W3C APG pattern for actionable content.
@@ -14,7 +16,6 @@ export declare class WppTree {
   isFocusOnAction: boolean;
   private resizeObserver;
   private resizeInProgress;
-  private _locales;
   private pendingLoads;
   private isSearchResultFound;
   private isMouseInteraction;
@@ -84,7 +85,6 @@ export declare class WppTree {
   private renderSkeletonRows;
   onInputChange(searchText: string): void;
   updateDate(newData: TreeType[]): void;
-  onUpdateLocales(newLocales: Partial<TreeLocaleType>): void;
   handleOpenItem(event: CustomEvent<TreeType>): Promise<void>;
   handleKeyDown(event: KeyboardEvent): void;
   private focusTreeItem;
@@ -178,7 +178,9 @@ export declare class WppTree {
   private toggleItemSelection;
   private clearSelectionExcept;
   componentDidLoad(): void;
+  connectedCallback(): void;
   disconnectedCallback(): void;
+  private get _locales();
   /**
    * Handle document-level mousedown to clear focus ring when clicking outside the tree
    */

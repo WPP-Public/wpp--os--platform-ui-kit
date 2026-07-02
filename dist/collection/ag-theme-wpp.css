@@ -7,32 +7,15 @@
   z-index: 2;
 }
 
-.ag-theme-wpp {
-  --ag-borders: none;
-  --ag-borders-secondary: solid 1px;
-  --ag-borders-critical: none;
-  --ag-borders-row: solid 1px;
-  --ag-background-color: var(--wpp-grey-color-000);
-  --ag-header-background-color: var(--wpp-grey-color-000);
-  --ag-header-column-separator-display: block;
-  --ag-header-column-separator-height: 20px;
-  --ag-header-column-separator-width: 0;
-  --ag-header-column-separator-color: var(--wpp-grey-color-300);
-  --ag-header-column-resize-handle-display: block;
-  --ag-header-column-resize-handle-height: 100%;
-  --ag-header-column-resize-handle-width: 2px;
-  --ag-header-column-resize-handle-color: var(--wpp-grey-color-600);
-  --ag-header-cell-hover-background-color: var(--wpp-grey-color-200);
-  --ag-header-height: 47px;
-  --ag-row-height: 47px;
-  --ag-row-border-color: var(--wpp-grey-color-300);
-  --ag-row-hover-color: var(--wpp-grey-color-200);
-  --ag-odd-row-background-color: var(--wpp-grey-color-000);
-  --ag-selected-row-background-color: var(--wpp-grey-color-200);
-  --ag-range-selection-border-color: transparent;
-  --ag-cell-horizontal-padding: 16px;
-  --ag-font-family: var(--wpp-font-family);
-  --ag-font-size: 13px;
+.ag-pinned-left-header,
+.ag-cell.ag-cell-last-left-pinned:not(.ag-cell-range-right):not(.ag-cell-range-single-cell):not(.ag-cell-focus:not(.ag-cell-range-selected):focus-within) {
+  border-right: none;
+}
+
+.ag-body-horizontal-scroll:not(.ag-scrollbar-invisible) {
+  .ag-horizontal-left-spacer:not(.ag-scroller-corner) {
+    border-right: none;
+  }
 }
 
 .ag-theme-wpp .ag-header-row {
@@ -167,9 +150,14 @@
 .ag-checkbox-input-wrapper {
   --ag-icon-size: 20px;
 
+  border: none;
   background-color: var(--wpp-grey-color-600);
   mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0.5' y='0.5' width='19' height='19' rx='3.5' stroke='currentColor'/%3E%3C/svg%3E");
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0.5' y='0.5' width='19' height='19' rx='3.5' stroke='currentColor'/%3E%3C/svg%3E");
+
+  &::after {
+    background-color: transparent;
+  }
 }
 
 .ag-checkbox-input-wrapper:hover {
@@ -319,6 +307,16 @@
   background: var(--wpp-danger-color-400);
   z-index: 1;
 }
+
+.ag-layout-auto-height,
+.ag-layout-print {
+
+  .ag-center-cols-container,
+  .ag-center-cols-viewport {
+    min-height: 50px
+  }
+}
+
 
 /* Warning Row Indicator */
 .ag-row-warning {

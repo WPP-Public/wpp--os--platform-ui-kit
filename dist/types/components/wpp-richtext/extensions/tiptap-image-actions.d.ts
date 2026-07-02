@@ -1,7 +1,7 @@
 /**
  * @file Tiptap image resize and alignment extension for wpp-richtext
  * @description Custom extension that provides click-to-select images with resize handles
- *   and alignment controls. Replaces plugins/quill-image-actions/.
+ *   and alignment controls.
  *   All overlay DOM is created INSIDE the shadow root (not document.body).
  * @see https://jira.uhub.biz/browse/WPPOPENDS-1287
  */

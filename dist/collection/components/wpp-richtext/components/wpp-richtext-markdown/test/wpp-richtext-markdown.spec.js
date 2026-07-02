@@ -11,7 +11,6 @@ describe('WppRichtextMarkdown', () => {
     await page.setContent('<wpp-richtext-markdown></wpp-richtext-markdown>');
     expect(page.root).toEqualHtml(`
       <wpp-richtext-markdown>
-        <wpp-quill-styles></wpp-quill-styles>
         <wpp-richtext-common-styles></wpp-richtext-common-styles>
         <pre class="richtext-markdown"></pre>
       </wpp-richtext-markdown>
@@ -25,7 +24,6 @@ describe('WppRichtextMarkdown', () => {
     await page.setContent('<wpp-richtext-markdown value="<p>Hello</p>"></wpp-richtext-markdown>');
     expect(page.root).toEqualHtml(`
       <wpp-richtext-markdown value="<p>Hello</p>">
-        <wpp-quill-styles></wpp-quill-styles>
         <wpp-richtext-common-styles></wpp-richtext-common-styles>
         <pre class="richtext-markdown">Hello</pre>
       </wpp-richtext-markdown>
@@ -40,7 +38,6 @@ describe('WppRichtextMarkdown', () => {
     await page.waitForChanges();
     expect(page.root).toEqualHtml(`
       <wpp-richtext-markdown value="<p>Updated</p>">
-        <wpp-quill-styles></wpp-quill-styles>
         <wpp-richtext-common-styles></wpp-richtext-common-styles>
         <pre class="richtext-markdown">Updated</pre>
       </wpp-richtext-markdown>

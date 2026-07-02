@@ -1,5 +1,5 @@
 import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
-import { y as getAriaProps } from './utils.js';
+import { z as getAriaProps } from './utils.js';
 import { F as FOCUS_TYPE } from './common.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme.js';
 import { d as defineCustomElement$2 } from './wpp-icon-arrow2.js';
@@ -74,15 +74,15 @@ const WppBackToTopButton$1 = /*@__PURE__*/ proxyCustomElement(class WppBackToTop
     this.themeSubscription.stop();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "button, icon", onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { ref: el => (this.buttonRef = el), onBlur: this.onBlur, class: this.buttonCssClasses(), type: "button", part: "button", "data-testid": "wppBackToTopButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps }, h("wpp-icon-arrow-v4-1-0", { direction: "up", class: "icon", part: "icon" }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "button, icon", onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { ref: el => (this.buttonRef = el), onBlur: this.onBlur, class: this.buttonCssClasses(), type: "button", part: "button", "data-testid": "wppBackToTopButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps }, h("wpp-icon-arrow-v4-2-0", { direction: "up", class: "icon", part: "icon" }))));
   }
-  static get registryIs() { return "wpp-back-to-top-button-v4-1-0"; }
+  static get registryIs() { return "wpp-back-to-top-button-v4-2-0"; }
   get host() { return this; }
   static get watchers() { return {
     "ariaProps": ["onUpdateAriaProps"]
   }; }
   static get style() { return wppBackToTopButtonCss; }
-}, [1, "wpp-back-to-top-button", "wpp-back-to-top-button-v4-1-0", {
+}, [1, "wpp-back-to-top-button", "wpp-back-to-top-button-v4-2-0", {
     "ariaProps": [16],
     "focusType": [32],
     "isPressed": [32],
@@ -93,14 +93,14 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-back-to-top-button-v4-1-0", "wpp-icon-arrow-v4-1-0"];
+  const components = ["wpp-back-to-top-button-v4-2-0", "wpp-icon-arrow-v4-2-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-back-to-top-button-v4-1-0":
+    case "wpp-back-to-top-button-v4-2-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppBackToTopButton$1);
       }
       break;
-    case "wpp-icon-arrow-v4-1-0":
+    case "wpp-icon-arrow-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

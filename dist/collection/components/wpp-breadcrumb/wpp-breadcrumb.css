@@ -1,6 +1,6 @@
 /**
   * @prop --wpp-breadcrumb-color:
-  * @prop --wpp-breadcrumb-slash-margin:
+  * @prop --wpp-breadcrumb-separator-margin:
   * @prop --wpp-breadcrumb-item-text-color:
   * @prop --wpp-breadcrumb-item-text-hover-color:
   * @prop --wpp-breadcrumb-item-text-active-color:
@@ -13,7 +13,7 @@
 */
 :host {
   --breadcrumb-color: var(--wpp-breadcrumb-color, var(--wpp-grey-color-500));
-  --breadcrumb-slash-margin: var(--wpp-breadcrumb-slash-margin, 0 12px);
+  --breadcrumb-separator-margin: var(--wpp-breadcrumb-separator-margin, 0 8px);
   --breadcrumb-item-text-color: var(--wpp-breadcrumb-item-text-color, var(--wpp-grey-color-800));
   --breadcrumb-item-text-hover-color: var(--wpp-breadcrumb-item-text-color-hover, var(--wpp-grey-color-900));
   --breadcrumb-item-text-active-color: var(--wpp-breadcrumb-item-text-color-active, var(--wpp-grey-color-1000));
@@ -35,7 +35,7 @@
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
   display: flex;
   color: var(--breadcrumb-color);
@@ -115,8 +115,10 @@
   color: var(--breadcrumb-menu-trigger-hover-color);
 }
 
-.slash {
-  margin: var(--breadcrumb-slash-margin);
+.separator {
+  display: flex;
+  align-items: center;
+  margin: var(--breadcrumb-separator-margin);
 }
 
 .back {

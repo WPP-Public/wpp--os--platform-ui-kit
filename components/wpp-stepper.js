@@ -1,7 +1,7 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { k as transformToVersionedTag } from './utils.js';
 
-const wppStepperCss = ":host{display:block;min-width:70px}:host([orientation=horizontal]){position:relative;width:100%;overflow:hidden;--stepper-translate-position:var(--wpp-stepper-translate-position, 0)}:host([orientation=vertical]){--vertical-stepper-width:var(--wpp-vertical-stepper-width, 158px);width:var(--vertical-stepper-width)}.stepper{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start}.orientation-horizontal{-ms-flex-direction:row;flex-direction:row;width:9999px;-webkit-transform:translateX(var(--stepper-translate-position));transform:translateX(var(--stepper-translate-position));-webkit-transition:0.5s ease-in-out;transition:0.5s ease-in-out}.step-indicator{position:absolute;top:0;right:0;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:32px;height:24px;color:var(--wpp-grey-color-800);background-color:var(--wpp-grey-color-300);border-radius:24px;-webkit-transition:0.5s ease-in-out;transition:0.5s ease-in-out;font-size:var(--wpp-typography-xs-strong-font-size, 12px);line-height:var(--wpp-typography-xs-strong-line-height, 20px);font-weight:var(--wpp-typography-xs-strong-font-weight, 700);color:var(--wpp-typography-xs-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-xs-strong-font-family, var(--wpp-font-family));letter-spacing:var(--wpp-typography-xs-strong-letter-spacing, 0)}.step-indicator.hide{visibility:hidden;opacity:0}";
+const wppStepperCss = ":host{display:block;min-width:70px}:host([orientation=horizontal]){position:relative;width:100%;overflow:hidden;--stepper-translate-position:var(--wpp-stepper-translate-position, 0)}:host([orientation=vertical]){--vertical-stepper-width:var(--wpp-vertical-stepper-width, 158px);width:var(--vertical-stepper-width)}.stepper{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start}.orientation-horizontal{-ms-flex-direction:row;flex-direction:row;width:9999px;-webkit-transform:translateX(var(--stepper-translate-position));transform:translateX(var(--stepper-translate-position));-webkit-transition:0.5s ease-in-out;transition:0.5s ease-in-out}.step-indicator{position:absolute;top:0;right:0;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:32px;height:24px;color:var(--wpp-grey-color-800);background-color:var(--wpp-grey-color-300);border-radius:24px;-webkit-transition:0.5s ease-in-out;transition:0.5s ease-in-out;font-size:var(--wpp-typography-xs-strong-font-size, 12px);line-height:var(--wpp-typography-xs-strong-line-height, 20px);font-weight:var(--wpp-typography-xs-strong-font-weight, 700);color:var(--wpp-typography-xs-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-xs-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-xs-strong-letter-spacing, 0)}.step-indicator.hide{visibility:hidden;opacity:0}";
 
 const MAX_STEPS_COUNT = 8;
 const WppStepper$1 = /*@__PURE__*/ proxyCustomElement(class WppStepper extends HTMLElement {
@@ -14,16 +14,21 @@ const WppStepper$1 = /*@__PURE__*/ proxyCustomElement(class WppStepper extends H
     this.componentHasLoaded = false;
     this.stepMainNdx = 0;
     this.setTextCSSVariables = () => {
-      this.host.style.setProperty('--wpp-vertical-stepper-width', this.stepperWidth);
+      const hostElement = this.hostElement || this.host;
+      hostElement.style.setProperty('--wpp-vertical-stepper-width', this.stepperWidth);
       if (this.stepperWidth.includes('%')) {
-        setTimeout(() => {
-          this.host.style.setProperty('--wpp-step-label-width', `${this.host.clientWidth - 54}px`);
+        this.textCssTimeout = setTimeout(() => {
+          if (!hostElement.isConnected)
+            return;
+          hostElement.style.setProperty('--wpp-step-label-width', `${hostElement.clientWidth - 54}px`);
+          this.textCssTimeout = undefined;
         }, 0);
       }
       else if (this.stepperWidth.includes('px')) {
-        this.host.style.setProperty('--wpp-step-label-width', `${parseInt(this.stepperWidth) - 54}px`);
+        hostElement.style.setProperty('--wpp-step-label-width', `${parseInt(this.stepperWidth) - 54}px`);
       }
     };
+    this.isHostConnected = () => this.hostElement?.isConnected ?? false;
     this.getStepperProps = () => {
       const stepperWidth = this.host.clientWidth;
       const stepList = this.host.querySelectorAll(transformToVersionedTag('wpp-step'));
@@ -384,6 +389,7 @@ const WppStepper$1 = /*@__PURE__*/ proxyCustomElement(class WppStepper extends H
     this.setStepAttribute();
   }
   componentWillLoad() {
+    this.hostElement = this.host;
     if (this.stepperWidth && this.orientation === 'vertical') {
       this.setTextCSSVariables();
       window.addEventListener('resize', this.setTextCSSVariables);
@@ -396,11 +402,14 @@ const WppStepper$1 = /*@__PURE__*/ proxyCustomElement(class WppStepper extends H
         throw new Error(`Maximum amount of steps exceeded. Only ${MAX_STEPS_COUNT} steps are allowed.`);
       }
     }
-    setTimeout(() => {
+    this.stepAttributeTimeout = setTimeout(() => {
+      if (!this.isHostConnected())
+        return;
       this.setStepAttribute();
       this.componentHasLoaded = true;
-      const stepMainList = this.host.querySelectorAll(`:scope > ${transformToVersionedTag('wpp-step')}`);
-      this.stepMainNdx = Number(stepMainList[stepMainList.length - 1]?.getAttribute('index'));
+      const stepMainList = this.hostElement?.querySelectorAll(`:scope > ${transformToVersionedTag('wpp-step')}`);
+      this.stepMainNdx = stepMainList ? Number(stepMainList[stepMainList.length - 1]?.getAttribute('index')) : 0;
+      this.stepAttributeTimeout = undefined;
     }, 0);
     if (this.orientation === 'horizontal' && this.useResizeObserver) {
       this.resizeObserver = new ResizeObserver(this.onResize);
@@ -410,6 +419,14 @@ const WppStepper$1 = /*@__PURE__*/ proxyCustomElement(class WppStepper extends H
     }
   }
   disconnectedCallback() {
+    if (this.textCssTimeout) {
+      clearTimeout(this.textCssTimeout);
+      this.textCssTimeout = undefined;
+    }
+    if (this.stepAttributeTimeout) {
+      clearTimeout(this.stepAttributeTimeout);
+      this.stepAttributeTimeout = undefined;
+    }
     if (this.orientation === 'horizontal' && this.useResizeObserver && this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
@@ -421,13 +438,13 @@ const WppStepper$1 = /*@__PURE__*/ proxyCustomElement(class WppStepper extends H
     const isHorizontalOrientation = this.orientation === 'horizontal';
     return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, indicator" }, h("div", { class: this.stepperWrapperCssClasses(), part: "wrapper" }, h("slot", { part: "inner" })), isHorizontalOrientation && this.stepAmount ? (h("div", { class: { 'step-indicator': true, hide: this.stepIndicator <= 0 }, part: "indicator" }, "+", this.stepIndicator || 1)) : null));
   }
-  static get registryIs() { return "wpp-stepper-v4-1-0"; }
+  static get registryIs() { return "wpp-stepper-v4-2-0"; }
   get host() { return this; }
   static get watchers() { return {
     "activeStep": ["watchActiveStep"]
   }; }
   static get style() { return wppStepperCss; }
-}, [1, "wpp-stepper", "wpp-stepper-v4-1-0", {
+}, [1, "wpp-stepper", "wpp-stepper-v4-2-0", {
     "activeStep": [514, "active-step"],
     "stepAmount": [2, "step-amount"],
     "completedSteps": [514, "completed-steps"],
@@ -444,9 +461,9 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-stepper-v4-1-0"];
+  const components = ["wpp-stepper-v4-2-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-stepper-v4-1-0":
+    case "wpp-stepper-v4-2-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppStepper$1);
       }

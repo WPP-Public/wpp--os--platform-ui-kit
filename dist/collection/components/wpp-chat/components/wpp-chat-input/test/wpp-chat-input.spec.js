@@ -1,6 +1,8 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { WppChatInput } from '../wpp-chat-input';
 import * as themeUtils from '../../../../../utils/subscribe-to-theme';
+import { h } from '@stencil/core';
+import { MockSpeechRecognition } from './mocks';
 describe('wpp-chat-input', () => {
   it('should render chat input with attachments enabled', async () => {
     const page = await newSpecPage({
@@ -32,20 +34,177 @@ describe('wpp-chat-input', () => {
       attachments: [],
     });
   });
+  it('should stop audio recording when clicking send and isAudioRecording is true', async () => {
+    const page = await newSpecPage({
+      components: [WppChatInput],
+      html: `<wpp-chat-input></wpp-chat-input>`,
+    });
+    const stopSpeechRecognitionSpy = jest.fn();
+    page.rootInstance.stopSpeechRecognition = stopSpeechRecognitionSpy;
+    page.rootInstance.isAudioRecording = true;
+    page.rootInstance.textValue = 'Hello, World!';
+    page.rootInstance.handleSend();
+    expect(page.rootInstance.isAudioRecording).toBe(false);
+    expect(stopSpeechRecognitionSpy).toHaveBeenCalledTimes(1);
+  });
+  it('should render stop action and emit wppStop while generating', async () => {
+    const page = await newSpecPage({
+      components: [WppChatInput],
+      html: `<wpp-chat-input is-generating="true"></wpp-chat-input>`,
+    });
+    const stopSpy = jest.fn();
+    const sendSpy = jest.fn();
+    page.root?.addEventListener('wppStop', stopSpy);
+    page.root?.addEventListener('wppSend', sendSpy);
+    const actionButton = page.root?.shadowRoot?.querySelector('[data-testid="send-icon-only-button"]');
+    expect(actionButton.disabled).not.toBe(true);
+    expect(actionButton.ariaProps.label).toBe('Stop response');
+    expect(actionButton.querySelector('[slot="icon-start"]')?.tagName.toLowerCase()).toContain('wpp-icon-stop');
+    actionButton.dispatchEvent(new MouseEvent('click'));
+    await page.waitForChanges();
+    expect(stopSpy).toHaveBeenCalledTimes(1);
+    expect(sendSpy).not.toHaveBeenCalled();
+  });
+  it('Testing that isFocused is set when handleOnFocus is called', async () => {
+    const page = await newSpecPage({
+      components: [WppChatInput],
+      html: `<wpp-chat-input></wpp-chat-input>`,
+    });
+    expect(page.rootInstance.isFocused).toBeFalsy();
+    page.rootInstance.handleOnFocus();
+    expect(page.rootInstance.isFocused).toBeTruthy();
+  });
+  describe('Testing handleSimpleBlur', () => {
+    it('should set isFocused to false and removeExpandedListeners for size-s', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input size="s"></wpp-chat-input>`,
+      });
+      const removeExpandedListenersSpy = jest.fn();
+      page.rootInstance.isFocused = true;
+      page.rootInstance.removeExpandedListeners = removeExpandedListenersSpy;
+      page.rootInstance.isChatInputExpanded = true;
+      page.rootInstance.handleSimpleBlur();
+      expect(page.rootInstance.isChatInputExpanded).toBe(false);
+      expect(removeExpandedListenersSpy).toHaveBeenCalledTimes(1);
+      expect(page.rootInstance.isFocused).toBe(false);
+    });
+    it('should set isFocused to false and removeExpandedListeners for size-m', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input></wpp-chat-input>`,
+      });
+      const removeExpandedListenersSpy = jest.fn();
+      page.rootInstance.isFocused = true;
+      page.rootInstance.removeExpandedListeners = removeExpandedListenersSpy;
+      page.rootInstance.isChatInputExpanded = true;
+      page.rootInstance.handleSimpleBlur();
+      expect(page.rootInstance.isChatInputExpanded).toBe(true);
+      expect(removeExpandedListenersSpy).toHaveBeenCalledTimes(1);
+      expect(page.rootInstance.isFocused).toBe(false);
+    });
+  });
+  describe('Testing handleClickAudioRecording', () => {
+    const createMouseEvent = () => ({
+      stopPropagation: jest.fn(),
+      preventDefault: jest.fn(),
+    });
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+    it('Testing that `startSpeechRecognition` is called when isAudioRecording is false (initially)', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input></wpp-chat-input>`,
+      });
+      const event = createMouseEvent();
+      const startSpeechRecognitionSpy = jest.fn();
+      page.rootInstance.startSpeechRecognition = startSpeechRecognitionSpy;
+      const mockRecognition = new MockSpeechRecognition();
+      page.rootInstance.recognition = mockRecognition;
+      expect(page.rootInstance.isAudioRecording).toBe(false);
+      page.rootInstance.handleClickAudioRecording(event);
+      expect(event.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(event.preventDefault).toHaveBeenCalledTimes(1);
+      expect(page.rootInstance.isAudioRecording).toBe(true);
+      expect(startSpeechRecognitionSpy).toHaveBeenCalledTimes(1);
+    });
+    it('Testing that `stopSpeechRecognition` is called when isAudioRecording is true (initially)', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input></wpp-chat-input>`,
+      });
+      const event = createMouseEvent();
+      const stopSpeechRecognitionSpy = jest.fn();
+      page.rootInstance.stopSpeechRecognition = stopSpeechRecognitionSpy;
+      page.rootInstance.isAudioRecording = true;
+      const mockRecognition = new MockSpeechRecognition();
+      page.rootInstance.recognition = mockRecognition;
+      expect(page.rootInstance.isAudioRecording).toBe(true);
+      page.rootInstance.handleClickAudioRecording(event);
+      expect(event.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(event.preventDefault).toHaveBeenCalledTimes(1);
+      expect(page.rootInstance.isAudioRecording).toBe(false);
+      expect(stopSpeechRecognitionSpy).toHaveBeenCalledTimes(1);
+    });
+    it('Testing that `isAudioRecording` does not change if recognition not defined', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input></wpp-chat-input>`,
+      });
+      const event = createMouseEvent();
+      const stopSpeechRecognitionSpy = jest.fn();
+      const startSpeechRecognitionSpy = jest.fn();
+      page.rootInstance.startSpeechRecognition = startSpeechRecognitionSpy;
+      page.rootInstance.stopSpeechRecognition = stopSpeechRecognitionSpy;
+      expect(page.rootInstance.isAudioRecording).toBe(false);
+      page.rootInstance.handleClickAudioRecording(event);
+      expect(event.stopPropagation).toHaveBeenCalledTimes(1);
+      expect(event.preventDefault).toHaveBeenCalledTimes(1);
+      expect(page.rootInstance.isAudioRecording).toBe(false);
+      expect(startSpeechRecognitionSpy).toHaveBeenCalledTimes(0);
+      expect(stopSpeechRecognitionSpy).toHaveBeenCalledTimes(0);
+    });
+  });
+  describe('Testing shouldDisplaySend', () => {
+    it('Testing that it returns false when component is disabled', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        template: () => h("wpp-chat-input-v4-2-0", { disabled: true }),
+      });
+      expect(page.rootInstance.shouldDisplaySend()).toBe(false);
+    });
+    it('Testing that it returns true when component is generating and not disabled', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        template: () => h("wpp-chat-input-v4-2-0", { disabled: false, isGenerating: true }),
+      });
+      expect(page.rootInstance.shouldDisplaySend()).toBe(true);
+    });
+    it('Testing that it returns true when component is audio recording with a value and not disabled', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        template: () => h("wpp-chat-input-v4-2-0", { disabled: false }),
+      });
+      page.rootInstance.internalValue = 'Testing';
+      page.rootInstance.isAudioRecording = true;
+      expect(page.rootInstance.shouldDisplaySend()).toBe(true);
+    });
+  });
   describe('actions menu (actions prop)', () => {
-    const sampleActions = [
-      { id: 'upload', icon: 'wpp-icon-attach', label: 'Upload file' },
-      { id: 'pinboard', icon: 'wpp-icon-pinned', label: 'Pinboard' },
-    ];
-    it('should not render the actions-menu trigger when actions is empty', async () => {
+    const sampleActions = [{ id: 'pinboard', icon: 'wpp-icon-pinned', label: 'Pinboard' }];
+    it('should only render the actions-menu with the "upload" action when actions is empty', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
         html: `<wpp-chat-input></wpp-chat-input>`,
       });
       const trigger = page.root?.shadowRoot?.querySelector('[data-testid="actions-menu-trigger-button"]');
       const menuContext = page.root?.shadowRoot?.querySelector('wpp-menu-context.actions-menu');
-      expect(trigger).toBeNull();
-      expect(menuContext).toBeNull();
+      const listItems = menuContext?.querySelectorAll('wpp-list-item');
+      expect(trigger).not.toBeNull();
+      expect(menuContext).not.toBeNull();
+      expect(listItems?.[0].querySelector('[slot="left"]')?.tagName.toLowerCase()).toMatch(/^wpp-icon-attach/);
+      expect(listItems?.[0].querySelector('span[slot="label"]')?.textContent).toBe('Attach file');
     });
     it('should render the wpp-icon-plus trigger and one wpp-list-item per action', async () => {
       const page = await newSpecPage({
@@ -61,9 +220,9 @@ describe('wpp-chat-input', () => {
       expect(menuContext).not.toBeNull();
       expect(trigger).not.toBeNull();
       expect(iconPlus).not.toBeNull();
-      expect(listItems?.length).toBe(sampleActions.length);
+      expect(listItems?.length).toBe(sampleActions.length + 1);
       expect(listItems?.[0].querySelector('[slot="left"]')?.tagName.toLowerCase()).toMatch(/^wpp-icon-attach/);
-      expect(listItems?.[0].querySelector('span[slot="label"]')?.textContent).toBe('Upload file');
+      expect(listItems?.[0].querySelector('span[slot="label"]')?.textContent).toBe('Attach file');
       expect(listItems?.[1].querySelector('[slot="left"]')?.tagName.toLowerCase()).toMatch(/^wpp-icon-pinned/);
     });
     it('should propagate the custom actionsMenuLabel from locales to the trigger aria-label', async () => {
@@ -105,9 +264,9 @@ describe('wpp-chat-input', () => {
       // we exercise the JSX onWppChangeListItem binding rather than the private
       // handler in isolation.
       const items = page.root?.shadowRoot?.querySelectorAll('wpp-menu-context.actions-menu wpp-list-item');
-      items?.[1].dispatchEvent(new CustomEvent('wppChangeListItem', { detail: sampleActions[1] }));
+      items?.[1].dispatchEvent(new CustomEvent('wppChangeListItem', { detail: sampleActions[0] }));
       await page.waitForChanges();
-      expect(itemClickSpy).toHaveBeenCalledWith(sampleActions[1]);
+      expect(itemClickSpy).toHaveBeenCalledWith(sampleActions[0]);
     });
     it('should not emit wppActionsMenuItemClick for an action whose `disabled` flag is true', async () => {
       const page = await newSpecPage({
@@ -119,7 +278,7 @@ describe('wpp-chat-input', () => {
       await page.waitForChanges();
       const itemClickSpy = jest.fn();
       page.root?.addEventListener('wppActionsMenuItemClick', e => itemClickSpy(e.detail));
-      const item = page.root?.shadowRoot?.querySelector('wpp-menu-context.actions-menu wpp-list-item');
+      const item = page.root?.shadowRoot?.querySelectorAll('wpp-menu-context.actions-menu wpp-list-item')[1];
       item?.dispatchEvent(new CustomEvent('wppChangeListItem', { detail: disabledActions[0] }));
       await page.waitForChanges();
       expect(itemClickSpy).not.toHaveBeenCalled();
@@ -154,11 +313,55 @@ describe('wpp-chat-input', () => {
       const itemClickSpy = jest.fn();
       page.root?.addEventListener('wppActionsMenuItemClick', e => itemClickSpy(e.detail));
       const uploadItem = page.root?.shadowRoot?.querySelector('wpp-menu-context.actions-menu wpp-list-item[data-testid="actions-menu-item-upload"]');
-      uploadItem?.dispatchEvent(new CustomEvent('wppChangeListItem', { detail: sampleActions[0] }));
+      uploadItem?.dispatchEvent(new CustomEvent('wppChangeListItem'));
       await page.waitForChanges();
       expect(clickSpy).not.toHaveBeenCalled();
       // The event still emits so consumers can handle disabled-state UX themselves
-      expect(itemClickSpy).toHaveBeenCalledWith(sampleActions[0]);
+      expect(itemClickSpy).not.toHaveBeenCalledWith();
+    });
+  });
+  describe('references slot', () => {
+    it('reveals the references wrapper when references are slotted', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input><wpp-chat-reference slot="references" name="creative-brief.pdf"></wpp-chat-reference></wpp-chat-input>`,
+      });
+      page.rootInstance.updateSlotData();
+      await page.waitForChanges();
+      expect(page.rootInstance.hasReferencesSlot).toBe(true);
+      const referencesWrapper = page.root?.shadowRoot?.querySelector('.references');
+      expect(referencesWrapper).not.toBeNull();
+      expect(referencesWrapper?.hasAttribute('hidden')).toBe(false);
+    });
+    it('keeps the references wrapper hidden when nothing is slotted', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input></wpp-chat-input>`,
+      });
+      page.rootInstance.updateSlotData();
+      await page.waitForChanges();
+      expect(page.rootInstance.hasReferencesSlot).toBe(false);
+      expect(page.root?.shadowRoot?.querySelector('.references')?.hasAttribute('hidden')).toBe(true);
+    });
+    it('does not dismiss the alert when a reference emits its close event', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input></wpp-chat-input>`,
+      });
+      const referenceEl = document.createElement('div');
+      referenceEl.setAttribute('slot', 'references');
+      page.rootInstance.handleAlertClose({ target: referenceEl });
+      expect(page.rootInstance.isAlertDismissed).toBe(false);
+    });
+    it('dismisses the alert when the alert emits its close event', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input></wpp-chat-input>`,
+      });
+      const alertEl = document.createElement('div');
+      alertEl.setAttribute('slot', 'alert');
+      page.rootInstance.handleAlertClose({ target: alertEl });
+      expect(page.rootInstance.isAlertDismissed).toBe(true);
     });
   });
   describe('subscribing to theme changes', () => {
@@ -189,6 +392,55 @@ describe('wpp-chat-input', () => {
       });
       page.root?.remove();
       expect(mockStop).toHaveBeenCalledTimes(1);
+    });
+  });
+  describe('Testing Speech Recognition', () => {
+    it('Testing startSpeechRecognition', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input></wpp-chat-input>`,
+      });
+      const mockRecognition = new MockSpeechRecognition();
+      page.rootInstance.recognition = mockRecognition;
+      page.rootInstance.startSpeechRecognition();
+      expect(mockRecognition.onresult).not.toBe(null);
+      expect(mockRecognition.start).toHaveBeenCalled();
+    });
+    it('Testing stopSpeechRecognition', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input></wpp-chat-input>`,
+      });
+      const mockRecognition = new MockSpeechRecognition();
+      page.rootInstance.recognition = mockRecognition;
+      page.rootInstance.stopSpeechRecognition();
+      expect(mockRecognition.stop).toHaveBeenCalled();
+      expect(mockRecognition.onresult).toBe(null);
+    });
+    it('Testing that stopSpeechRecognition is called when component disconnects', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input></wpp-chat-input>`,
+      });
+      const mockStop = jest.fn();
+      page.rootInstance.stopSpeechRecognition = mockStop;
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
+    });
+    it('Testing that isAudioRecording is set to false when SpeechRecognition throws error or ends', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input></wpp-chat-input>`,
+      });
+      const mockRecognition = new MockSpeechRecognition();
+      page.rootInstance.recognition = mockRecognition;
+      page.rootInstance.isAudioRecording = true;
+      page.rootInstance.startSpeechRecognition();
+      mockRecognition.onerror?.({ error: 'not-allowed' });
+      expect(page.rootInstance.isAudioRecording).toBeFalsy();
+      page.rootInstance.isAudioRecording = true;
+      mockRecognition.onend?.();
+      expect(page.rootInstance.isAudioRecording).toBeFalsy();
     });
   });
 });

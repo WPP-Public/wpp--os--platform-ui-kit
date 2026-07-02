@@ -5,11 +5,17 @@ export declare class WppFloatingToolbar {
   private items;
   private _actionButtonsConfig;
   private themeSubscription;
+  private hasIdProp;
+  selectedIdentifier: string | number | undefined;
   /**
    * Defines the action buttons configuration.
    * Must contain between 2 and 7 items.
    */
   readonly actionButtonsConfig: ActionButtonData[];
+  /**
+   * Defines whether the buttons will have a "selected" state after being clicked.
+   */
+  readonly selectable: boolean;
   /**
    * Defines the orientation of the floating toolbar.
    */
@@ -24,6 +30,7 @@ export declare class WppFloatingToolbar {
   connectedCallback(): void;
   disconnectedCallback(): void;
   private validateActionButtonConfig;
+  private handleBtnClick;
   private renderActionButton;
   private setActionButtons;
   private getEnabledButtons;

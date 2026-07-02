@@ -289,6 +289,9 @@ export function getOsBarOffsetHeight() {
     return DEFAULT_OS_BAR_HEIGHT;
   return highestContainer.querySelector('.wpp > header')?.offsetHeight ?? DEFAULT_OS_BAR_HEIGHT;
 }
+export function mergeLocales(defaults, overrides) {
+  return { ...defaults, ...overrides };
+}
 export const getAriaProps = (ariaProps) => {
   const result = {};
   Object.entries(ariaProps).forEach(([key, val]) => {

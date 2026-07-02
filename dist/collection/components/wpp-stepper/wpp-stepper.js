@@ -14,16 +14,21 @@ export class WppStepper {
     this.componentHasLoaded = false;
     this.stepMainNdx = 0;
     this.setTextCSSVariables = () => {
-      this.host.style.setProperty('--wpp-vertical-stepper-width', this.stepperWidth);
+      const hostElement = this.hostElement || this.host;
+      hostElement.style.setProperty('--wpp-vertical-stepper-width', this.stepperWidth);
       if (this.stepperWidth.includes('%')) {
-        setTimeout(() => {
-          this.host.style.setProperty('--wpp-step-label-width', `${this.host.clientWidth - 54}px`);
+        this.textCssTimeout = setTimeout(() => {
+          if (!hostElement.isConnected)
+            return;
+          hostElement.style.setProperty('--wpp-step-label-width', `${hostElement.clientWidth - 54}px`);
+          this.textCssTimeout = undefined;
         }, 0);
       }
       else if (this.stepperWidth.includes('px')) {
-        this.host.style.setProperty('--wpp-step-label-width', `${parseInt(this.stepperWidth) - 54}px`);
+        hostElement.style.setProperty('--wpp-step-label-width', `${parseInt(this.stepperWidth) - 54}px`);
       }
     };
+    this.isHostConnected = () => this.hostElement?.isConnected ?? false;
     this.getStepperProps = () => {
       const stepperWidth = this.host.clientWidth;
       const stepList = this.host.querySelectorAll(transformToVersionedTag('wpp-step'));
@@ -384,6 +389,7 @@ export class WppStepper {
     this.setStepAttribute();
   }
   componentWillLoad() {
+    this.hostElement = this.host;
     if (this.stepperWidth && this.orientation === 'vertical') {
       this.setTextCSSVariables();
       window.addEventListener('resize', this.setTextCSSVariables);
@@ -396,11 +402,14 @@ export class WppStepper {
         throw new Error(`Maximum amount of steps exceeded. Only ${MAX_STEPS_COUNT} steps are allowed.`);
       }
     }
-    setTimeout(() => {
+    this.stepAttributeTimeout = setTimeout(() => {
+      if (!this.isHostConnected())
+        return;
       this.setStepAttribute();
       this.componentHasLoaded = true;
-      const stepMainList = this.host.querySelectorAll(`:scope > ${transformToVersionedTag('wpp-step')}`);
-      this.stepMainNdx = Number(stepMainList[stepMainList.length - 1]?.getAttribute('index'));
+      const stepMainList = this.hostElement?.querySelectorAll(`:scope > ${transformToVersionedTag('wpp-step')}`);
+      this.stepMainNdx = stepMainList ? Number(stepMainList[stepMainList.length - 1]?.getAttribute('index')) : 0;
+      this.stepAttributeTimeout = undefined;
     }, 0);
     if (this.orientation === 'horizontal' && this.useResizeObserver) {
       this.resizeObserver = new ResizeObserver(this.onResize);
@@ -410,6 +419,14 @@ export class WppStepper {
     }
   }
   disconnectedCallback() {
+    if (this.textCssTimeout) {
+      clearTimeout(this.textCssTimeout);
+      this.textCssTimeout = undefined;
+    }
+    if (this.stepAttributeTimeout) {
+      clearTimeout(this.stepAttributeTimeout);
+      this.stepAttributeTimeout = undefined;
+    }
     if (this.orientation === 'horizontal' && this.useResizeObserver && this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
@@ -422,7 +439,7 @@ export class WppStepper {
     return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, indicator" }, h("div", { class: this.stepperWrapperCssClasses(), part: "wrapper" }, h("slot", { part: "inner" })), isHorizontalOrientation && this.stepAmount ? (h("div", { class: { 'step-indicator': true, hide: this.stepIndicator <= 0 }, part: "indicator" }, "+", this.stepIndicator || 1)) : null));
   }
   static get is() { return "wpp-stepper"; }
-  static get registryIs() { return "wpp-stepper-v4-1-0"; }
+  static get registryIs() { return "wpp-stepper-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

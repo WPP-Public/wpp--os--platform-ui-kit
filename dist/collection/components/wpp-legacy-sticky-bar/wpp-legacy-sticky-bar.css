@@ -1,0 +1,80 @@
+:host {
+  --sticky-bar-offset-top: var(--wpp-sticky-bar-offset-top, 63px);
+  --sticky-bar-padding: var(--wpp-sticky-bar-padding, 12px 32px);
+  --sticky-bar-header-size: var(--wpp-sticky-bar-header-size, 32px);
+  --sticky-bar-header-size-m: var(--wpp-sticky-bar-header-size-m, 40px);
+  --sticky-bar-with-tabs-body-height: var(--wpp-sticky-bar-with-tabs-body-height, 36px);
+  width: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 4;
+  transform: translateY(-100%);
+}
+:host .container {
+  box-sizing: border-box;
+  background-color: var(--wpp-grey-color-000);
+  padding: var(--sticky-bar-padding);
+  position: relative;
+}
+:host .container::before {
+  position: absolute;
+  content: "";
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--wpp-grey-color-300);
+}
+:host .container .header {
+  height: var(--sticky-bar-header-size);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+:host .container .header .left-area,
+:host .container .header .right-area {
+  display: flex;
+  align-items: center;
+}
+:host .container .header .left-area .wpp-action-button {
+  margin-right: 4px;
+}
+:host .container .header .right-area .wpp-button,
+:host .container .header .right-area .wpp-action-button {
+  margin-right: 12px;
+}
+:host .container .header .right-area .wpp-button:last-child,
+:host .container .header .right-area .wpp-action-button:last-child {
+  margin-right: 0;
+}
+:host .container .body {
+  height: var(--sticky-bar-header-size);
+  margin-top: 8px;
+  --wpp-tabs-width: auto;
+  --wpp-tab-width: auto;
+}
+
+:host(.wpp-visible) {
+  transition: 0.3s ease;
+  top: var(--sticky-bar-offset-top);
+  transform: translateY(0);
+}
+
+:host(.wpp-invisible) {
+  transition: 0.3s ease;
+  top: 0;
+  transform: translateY(-100%);
+}
+
+:host(.wpp-blank) .container {
+  height: 96px;
+}
+
+:host(.wpp-two-lines-with-tabs) .container {
+  padding-bottom: 0;
+}
+:host(.wpp-two-lines-with-tabs) .container .body {
+  height: var(--sticky-bar-with-tabs-body-height);
+}
