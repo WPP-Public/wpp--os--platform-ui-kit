@@ -53,7 +53,7 @@
   line-height: var(--wpp-typography-xs-midi-line-height, 20px);
   font-weight: var(--wpp-typography-xs-midi-font-weight, 500);
   color: var(--wpp-typography-xs-midi-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-xs-midi-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-xs-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-xs-midi-letter-spacing, 0);
 }
 .inline-message-wrapper.size-s.warning-message {
@@ -78,7 +78,7 @@
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
 }
 .inline-message-wrapper.size-l.warning-message, .inline-message-wrapper.size-m.warning-message {

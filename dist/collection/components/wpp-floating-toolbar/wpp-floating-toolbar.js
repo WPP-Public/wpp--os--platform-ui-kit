@@ -6,19 +6,24 @@ export class WppFloatingToolbar {
     this.items = [];
     this._actionButtonsConfig = [];
     this.themeSubscription = themeSubscriptionController(() => this.host);
+    // Used to identify the property we keep track of the selected btn (id or index)
+    this.hasIdProp = false;
     this.validateActionButtonConfig = (config) => {
-      if (config.length < 2) {
-        console.error('The number of action buttons must be at least 2.');
-      }
-      else if (config.length > 7) {
+      if (config.length > 7) {
         console.error('The number of action buttons must not exceed 7.');
       }
-      this._actionButtonsConfig = this.actionButtonsConfig.slice(0, 7).map(item => ({
-        ...item,
-        variant: 'secondary',
-      }));
+      this.hasIdProp = this.actionButtonsConfig.every((item) => !!item.id);
+      this._actionButtonsConfig = this.actionButtonsConfig.slice(0, 7);
     };
-    this.renderActionButton = (data) => (h("wpp-action-button-v4-1-0", { key: `${data.icon}`, ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
+    this.handleBtnClick = (data, index) => {
+      data?.onClick && data.onClick();
+      if (!this.selectable)
+        return;
+      this.selectedIdentifier = this.hasIdProp ? data.id : index;
+    };
+    this.renderActionButton = (data, index) => (h("wpp-action-button-v4-2-0", { key: `${data.icon}`, ...data, variant: "secondary", class: {
+        'is-selected': this.selectable && (this.hasIdProp ? this.selectedIdentifier === data.id : this.selectedIdentifier === index),
+      }, onClick: () => this.handleBtnClick(data, index) }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
     this.setActionButtons = () => {
       this.items = Array.from(this.host.shadowRoot?.querySelectorAll(transformToVersionedTag('wpp-action-button')) || []);
       this.syncTabIndexes();
@@ -64,7 +69,9 @@ export class WppFloatingToolbar {
       wrapper: true,
       vertical: this.orientation === 'vertical',
     });
+    this.selectedIdentifier = undefined;
     this.actionButtonsConfig = undefined;
+    this.selectable = false;
     this.orientation = 'horizontal';
     this.ariaProps = {};
   }
@@ -88,7 +95,7 @@ export class WppFloatingToolbar {
     return (h(Host, { class: this.hostCssClasses(), role: "toolbar", "aria-orientation": this.orientation, "aria-label": this.ariaProps?.label, "aria-labelledby": this.ariaProps?.labelledby, onKeyDown: this.onKeyDown }, h("div", { class: this.wrapperCssClasses() }, this._actionButtonsConfig.map(this.renderActionButton))));
   }
   static get is() { return "wpp-floating-toolbar"; }
-  static get registryIs() { return "wpp-floating-toolbar-v4-1-0"; }
+  static get registryIs() { return "wpp-floating-toolbar-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -122,6 +129,24 @@ export class WppFloatingToolbar {
           "tags": [],
           "text": "Defines the action buttons configuration.\nMust contain between 2 and 7 items."
         }
+      },
+      "selectable": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines whether the buttons will have a \"selected\" state after being clicked."
+        },
+        "attribute": "selectable",
+        "reflect": false,
+        "defaultValue": "false"
       },
       "orientation": {
         "type": "string",
@@ -163,6 +188,11 @@ export class WppFloatingToolbar {
         },
         "defaultValue": "{}"
       }
+    };
+  }
+  static get states() {
+    return {
+      "selectedIdentifier": {}
     };
   }
   static get elementRef() { return "host"; }

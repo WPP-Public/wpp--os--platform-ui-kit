@@ -82,7 +82,7 @@ const WppTag = /*@__PURE__*/ proxyCustomElement(class WppTag extends HTMLElement
       const wasMaxLengthTruncated = !!this.maxLabelLength && this.maxLabelLength > 0 && displayedText !== originalLabel;
       const shouldShowTooltip = this.isOverflowTruncated || wasMaxLengthTruncated;
       const labelNode = (h("span", { class: "label-text", part: "tooltip-text", ref: this.setLabelRef }, displayedText));
-      return shouldShowTooltip ? (h("wpp-tooltip-v4-1-0", { class: "wpp-tooltip", text: originalLabel, config: this.tooltipConfig, part: "tooltip", disabled: this.disabled }, labelNode)) : (labelNode);
+      return shouldShowTooltip ? (h("wpp-tooltip-v4-2-0", { class: "wpp-tooltip", text: originalLabel, config: this.tooltipConfig, part: "tooltip", disabled: this.disabled }, labelNode)) : (labelNode);
     };
     this.hasIconStartSlot = false;
     this.isOverflowTruncated = false;
@@ -109,16 +109,16 @@ const WppTag = /*@__PURE__*/ proxyCustomElement(class WppTag extends HTMLElement
     this.resizeObserver?.disconnect();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("wpp-typography-v4-1-0", { class: "wpp-typography", type: "xs-midi", tag: "span", part: "label" }, this.renderLabel()), h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("wpp-typography-v4-2-0", { class: "wpp-typography", type: "xs-midi", tag: "span", part: "label" }, this.renderLabel()), h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
   }
-  static get registryIs() { return "wpp-tag-v4-1-0"; }
+  static get registryIs() { return "wpp-tag-v4-2-0"; }
   get host() { return this; }
   static get watchers() { return {
     "label": ["onLabelChange"],
     "maxLabelLength": ["onLabelChange"]
   }; }
   static get style() { return wppTagCss; }
-}, [1, "wpp-tag", "wpp-tag-v4-1-0", {
+}, [1, "wpp-tag", "wpp-tag-v4-2-0", {
     "variant": [1],
     "maxLabelLength": [2, "max-label-length"],
     "tooltipConfig": [16],
@@ -131,34 +131,34 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tag-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-internal-tooltip-v4-1-0", "wpp-tooltip-v4-1-0", "wpp-typography-v4-1-0"];
+  const components = ["wpp-tag-v4-2-0", "wpp-icon-error-v4-2-0", "wpp-icon-warning-v4-2-0", "wpp-internal-tooltip-v4-2-0", "wpp-tooltip-v4-2-0", "wpp-typography-v4-2-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tag-v4-1-0":
+    case "wpp-tag-v4-2-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTag);
       }
       break;
-    case "wpp-icon-error-v4-1-0":
+    case "wpp-icon-error-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-warning-v4-1-0":
+    case "wpp-icon-warning-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-internal-tooltip-v4-1-0":
+    case "wpp-internal-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-1-0":
+    case "wpp-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-1-0":
+    case "wpp-typography-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

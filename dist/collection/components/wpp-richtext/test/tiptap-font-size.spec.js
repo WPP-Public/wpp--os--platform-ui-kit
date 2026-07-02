@@ -5,20 +5,6 @@
  *   Validates the consuming:false + priority:60 fix for WPPOPENDS-1287.
  * @see https://jira.uhub.biz/browse/WPPOPENDS-1287
  */
-// Mock Quill before any imports can pull it in
-jest.mock('quill', () => ({
-  default: { import: () => ({}), register: () => { }, DEFAULTS: { formats: [], modules: {} } },
-}));
-jest.mock('../config', () => ({
-  __esModule: true,
-  default: {
-    turndown: (html) => html,
-    use: () => { },
-    addRule: () => { },
-    escape: (text) => text,
-  },
-  quillMarkdownOptions: { tags: {} },
-}));
 import { Editor } from '@tiptap/core';
 import { buildTiptapExtensions } from '../tiptap-config';
 beforeAll(() => {

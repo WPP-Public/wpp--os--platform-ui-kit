@@ -14,11 +14,11 @@ const WppIconStop = /*@__PURE__*/ proxyCustomElement(class WppIconStop extends H
     this.color = 'var(--wpp-icon-color)';
   }
   render() {
-    return (h(WppIcon, { name: "wpp-icon-stop", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M15.6389 4.16667C15.7463 4.16667 15.8333 4.25372 15.8333 4.36111V15.6389C15.8333 15.7463 15.7463 15.8333 15.6389 15.8333H4.36111C4.25372 15.8333 4.16667 15.7463 4.16667 15.6389V4.36111C4.16667 4.25372 4.25372 4.16667 4.36111 4.16667H15.6389ZM4.36111 3C3.60939 3 3 3.60939 3 4.36111V15.6389C3 16.3906 3.60939 17 4.36111 17H15.6389C16.3906 17 17 16.3906 17 15.6389V4.36111C17 3.60939 16.3906 3 15.6389 3H4.36111Z", fill: "currentColor" })));
+    return (h(WppIcon, { name: "wpp-icon-stop", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M10 3.2C6.24446 3.2 3.2 6.24446 3.2 10C3.2 13.7555 6.24446 16.8 10 16.8C13.7555 16.8 16.8 13.7555 16.8 10C16.8 6.24446 13.7555 3.2 10 3.2ZM2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10ZM6.8 8C6.8 7.33726 7.33726 6.8 8 6.8H12C12.6627 6.8 13.2 7.33726 13.2 8V12C13.2 12.6627 12.6627 13.2 12 13.2H8C7.33726 13.2 6.8 12.6627 6.8 12V8Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-stop-v4-1-0"; }
+  static get registryIs() { return "wpp-icon-stop-v4-2-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-stop", "wpp-icon-stop-v4-1-0", {
+}, [1, "wpp-icon-stop", "wpp-icon-stop-v4-2-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -28,9 +28,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-stop-v4-1-0"];
+  const components = ["wpp-icon-stop-v4-2-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-stop-v4-1-0":
+    case "wpp-icon-stop-v4-2-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconStop);
       }

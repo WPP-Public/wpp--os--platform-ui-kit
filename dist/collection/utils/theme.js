@@ -88,3 +88,25 @@ export const resolveTheme = (initJson, variant = 'light') => {
     return value;
   });
 };
+export const WppAgGridThemeConfig = {
+  wrapperBorder: false,
+  headerRowBorder: false,
+  rowBorder: { style: 'solid', width: 1, color: 'var(--wpp-grey-color-300)' },
+  backgroundColor: 'var(--wpp-grey-color-000)',
+  headerBackgroundColor: 'var(--wpp-grey-color-000)',
+  headerColumnBorderHeight: 20,
+  headerColumnBorder: { style: 'solid', width: 0, color: 'var(--wpp-grey-color-300)' },
+  headerColumnResizeHandleColor: 'var(--wpp-grey-color-600)',
+  headerColumnResizeHandleHeight: '100%',
+  headerColumnResizeHandleWidth: 2,
+  headerCellHoverBackgroundColor: 'var(--wpp-grey-color-200)',
+  headerHeight: 47,
+  rowHeight: 47,
+  rowHoverColor: 'var(--wpp-grey-color-200)',
+  oddRowBackgroundColor: 'var(--wpp-grey-color-000)',
+  selectedRowBackgroundColor: 'var(--wpp-grey-color-200)',
+  rangeSelectionBorderColor: 'transparent',
+  cellHorizontalPadding: 16,
+  fontFamily: 'var(--wpp-font-family)',
+  fontSize: 13,
+};

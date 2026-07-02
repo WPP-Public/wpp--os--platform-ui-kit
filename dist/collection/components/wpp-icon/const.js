@@ -36,7 +36,7 @@ export const iconsList = [
             name: 'bookmark-add',
           },
           {
-            name: 'bookmark-filled',
+            name: 'bookmark-selected',
           },
           {
             name: 'close',
@@ -272,6 +272,9 @@ export const iconsList = [
           },
           {
             name: 'stop',
+          },
+          {
+            name: 'player-stop',
           },
           {
             name: 'previous',

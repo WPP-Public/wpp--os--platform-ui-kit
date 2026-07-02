@@ -231,7 +231,7 @@
   line-height: var(--wpp-typography-s-midi-line-height, 22px);
   font-weight: var(--wpp-typography-s-midi-font-weight, 500);
   color: var(--wpp-typography-s-midi-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-midi-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-midi-letter-spacing, 0);
   flex-grow: 1;
   overflow: auto;
@@ -250,7 +250,7 @@
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
   color: var(--ns-item-nested-label-text-color);
   padding: var(--ns-item-nested-label-padding);
@@ -299,7 +299,7 @@
   text-transform: var(--wpp-typography-2xs-strong-text-transform, uppercase);
   font-weight: var(--wpp-typography-2xs-strong-font-weight, 700);
   color: var(--wpp-typography-2xs-strong-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-2xs-strong-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-2xs-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-2xs-strong-letter-spacing, 0);
   margin: 0;
   padding: var(--ns-item-label-paddings);
@@ -329,7 +329,7 @@
   text-transform: var(--wpp-typography-2xs-strong-text-transform, uppercase);
   font-weight: var(--wpp-typography-2xs-strong-font-weight, 700);
   color: var(--wpp-typography-2xs-strong-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-2xs-strong-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-2xs-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-2xs-strong-letter-spacing, 0);
   margin: var(--ns-item-submenu-label-margin);
 }
@@ -341,7 +341,7 @@
   text-transform: var(--wpp-typography-2xs-strong-text-transform, uppercase);
   font-weight: var(--wpp-typography-2xs-strong-font-weight, 700);
   color: var(--wpp-typography-2xs-strong-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-2xs-strong-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-2xs-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-2xs-strong-letter-spacing, 0);
   margin: var(--ns-item-group-title-margin);
   color: var(--wpp-grey-color-700);

@@ -12,8 +12,6 @@ import { themeObserver } from '../../utils/theme-observer';
  */
 export class WppTooltip {
   constructor() {
-    this.FORBIDDEN_PREFIX = 'wpp-';
-    this.ALLOWED_TAGS = ['wpp-typography'];
     this.themeSubscription = themeSubscriptionController(() => (this.config.allowHTML ? this.customContentEl : this.contentEl), () => this.updateTippyProps({ arrow: this.arrowSVG() }));
     this.handleSlotChange = () => {
       if (this.slotRef) {
@@ -27,10 +25,6 @@ export class WppTooltip {
       this.tippyInstance?.setProps({ ...props });
       this.tippyInstance?.popperInstance?.update();
     };
-    this.transformAllowedTags = () => this.ALLOWED_TAGS.map(el => el
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(''));
     this.arrowSVG = () => {
       const arrowSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       arrowSVG.setAttribute('width', '8');
@@ -178,25 +172,6 @@ export class WppTooltip {
       this.createTippyInstance();
     }
   }
-  componentWillLoad() {
-    if (this.config.allowHTML) {
-      const content = this.host?.querySelector('[slot="tooltip-content"]');
-      if (content) {
-        const validateElement = (element) => {
-          element.childNodes.forEach(node => {
-            if (node.nodeType === Node.ELEMENT_NODE) {
-              const tagName = node.tagName.toLowerCase();
-              if (tagName.startsWith(this.FORBIDDEN_PREFIX) && !this.ALLOWED_TAGS.some(el => tagName.startsWith(el))) {
-                console.warn(`WPP components are not allowed in WppTooltip, except for: ${this.transformAllowedTags()}`);
-              }
-              validateElement(node);
-            }
-          });
-        };
-        validateElement(content);
-      }
-    }
-  }
   componentDidLoad() {
     this.themeSubscription.start();
     setTimeout(() => {
@@ -229,10 +204,10 @@ export class WppTooltip {
     // is not well-supported on a div without a valid role)
     const hasAriaLabel = Boolean(this.ariaProps?.label);
     const anchorRole = this.ariaProps?.role ?? (hasAriaLabel ? 'img' : undefined);
-    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, role: anchorRole, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v4-1-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
+    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, role: anchorRole, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v4-2-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
   }
   static get is() { return "wpp-tooltip"; }
-  static get registryIs() { return "wpp-tooltip-v4-1-0"; }
+  static get registryIs() { return "wpp-tooltip-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

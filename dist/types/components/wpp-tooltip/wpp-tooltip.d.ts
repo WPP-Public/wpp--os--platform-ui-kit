@@ -10,8 +10,6 @@ export declare class WppTooltip {
   private contentEl?;
   private customContentEl?;
   private tippyInstance?;
-  private readonly FORBIDDEN_PREFIX;
-  private readonly ALLOWED_TAGS;
   private themeSubscription;
   host: HTMLWppTooltipElement;
   hidden: boolean;
@@ -81,13 +79,11 @@ export declare class WppTooltip {
   updateTheme(): void;
   textChanged(newText: string, oldText: string): void;
   handleDisabledChange(newDisabled: boolean): void;
-  componentWillLoad(): void;
   private handleSlotChange;
   componentDidLoad(): void;
   disconnectedCallback(): void;
   connectedCallback(): void;
   private updateTippyProps;
-  private transformAllowedTags;
   private arrowSVG;
   private createTippyInstance;
   private getArrowBgColor;

@@ -2,6 +2,12 @@ import { EventEmitter } from '../../../../stencil-public-runtime';
 import { FileItemType, FileUploadEventDetail, FileUploadItemEventDetail } from '../../../wpp-file-upload/types';
 import { ActionsMenuToggleEventDetail, ChatInputAction, ChatInputActionItemClickEventDetail, ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from './types';
 import { MessageTypes } from '../../../../types/common';
+/**
+ * @slot alert - Optional alert (for example wpp-chat-alert) rendered at the top of the chat input frame. Dismissing it hides the alert without affecting the rest of the input.
+ * @part alert - Wrapper around the alert slot.
+ * @slot references - Optional references (for example wpp-chat-reference) stacked above the textarea inside the input area.
+ * @part references - Wrapper around the references slot.
+ */
 export declare class WppChatInput {
   host: HTMLWppChatInputElement;
   private resizeObserver;
@@ -11,13 +17,12 @@ export declare class WppChatInput {
   private scrollTimeout;
   private debouncedHandleInput;
   private readonly inputAreaId;
-  private readonly charCounterId;
   private readonly textareaAutoId;
   private readonly minimizedDescId;
-  private minimizedTriggerRef?;
   private expandedListenersAbort?;
-  private _locales;
+  private recognition;
   private themeSubscription;
+  private aiModelBtn;
   /**
    * Size of the component.
    */
@@ -29,6 +34,7 @@ export declare class WppChatInput {
   readonly placeholder: string;
   /**
    * Whether the attach button is enabled.
+   * @deprecated - the `upload` action will always be available in the actions menu. This property will be removed in version 5.0.0.
    */
   readonly enableAttach: boolean;
   /**
@@ -40,6 +46,10 @@ export declare class WppChatInput {
    * If `true`, the chat input is disabled.
    */
   readonly disabled: boolean;
+  /**
+   * If `true`, displays a stop action for an in-progress AI response.
+   */
+  readonly isGenerating: boolean;
   /**
    * Configuration object for file upload functionality.
    *
@@ -53,6 +63,7 @@ export declare class WppChatInput {
   readonly fileUploadConfig?: Partial<FileUploadConfig>;
   /**
    * Maximum number of allowed characters.
+   * @deprecated - This property is no longer valid. This property will be removed in version 5.0.0.
    */
   readonly charactersLimit?: number;
   /**
@@ -66,15 +77,9 @@ export declare class WppChatInput {
   /**
    * Defines the entries shown in the consolidated actions menu (the
    * `wpp-icon-plus` dropdown rendered at the start of the left toolbar).
-   * When this array is non-empty, chat-input renders a single `wpp-icon-plus`
-   * trigger that opens a `wpp-menu-context` containing one `wpp-list-item`
-   * per entry. Use this to consolidate auxiliary actions (translate,
+   * By default, the menu always renders the `upload` action.
+   * Use this to consolidate auxiliary actions (translate,
    * pinboard, upload, etc.) behind a single "plus" affordance.
-   *
-   * An entry with the reserved id `'upload'` is automatically wired to the
-   * same file picker that `enableAttach` uses, so consumers do not need to
-   * imperatively open the dialog. The `wppActionsMenuItemClick` event still
-   * fires for that entry, in case the consumer wants to track the click.
    */
   readonly actions: ChatInputAction[];
   /**
@@ -133,16 +138,24 @@ export declare class WppChatInput {
   showToast: boolean;
   areAttachmentsVisible: boolean;
   hasSelectSlot: boolean;
+  hasAlertSlot: boolean;
+  isAlertDismissed: boolean;
+  hasReferencesSlot: boolean;
   isChatInputExpanded: boolean;
-  attachPressed: boolean;
   minimizedPressed: boolean;
   isFileDialogOpen: boolean;
   internalValue: string;
   actionsMenuOpen: boolean;
+  isFocused: boolean;
+  isAudioRecording: boolean;
   /**
    * Emitted when the user clicks the "Send" button.
    */
   readonly wppSend: EventEmitter<SendEventDetail>;
+  /**
+   * Emitted when the user clicks the "Stop" button while an AI response is generating.
+   */
+  readonly wppStop: EventEmitter<void>;
   /**
    * Emitted when the user clicks the "Mic" button.
    * @internal - This prop will be of use in the future, but for now, it's not used.
@@ -181,16 +194,17 @@ export declare class WppChatInput {
   private reInitValue;
   onAttachmentsChange(newValue: FileItemType[]): void;
   onTextValueChange(value: string): void;
-  onUpdateLocales(newLocales: Partial<ChatInputLocaleInterface>): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  private setupSpeechRecognition;
+  private startSpeechRecognition;
+  private stopSpeechRecognition;
   private addExpandedListeners;
   private removeExpandedListeners;
-  private onAttachClick;
   connectedCallback(): void;
   disconnectedCallback(): void;
-  private handleDocumentFocusIn;
-  private handleDocumentClick;
+  private get _locales();
+  private checkInteractedItem;
   private onExpandedKeyDown;
   onSizeChange(newValue: ChatInputSize, oldValue: ChatInputSize): void;
   private handleFileLoaded;
@@ -213,12 +227,19 @@ export declare class WppChatInput {
   private getLeftActionsLabel;
   private getRightActionsLabel;
   private getSendButtonLabel;
+  private getStopButtonLabel;
   private getAttachButtonLabel;
   private getActionsMenuButtonLabel;
+  private getAudioRecordButtonLabel;
+  private getAudioStopRecordButtonLabel;
   private actionsMenuDropdownConfig;
   private handleActionsMenuItemClick;
   private checkAttachmentsVisibility;
+  private configureSelectSlot;
   private updateSlotData;
+  private handleAlertSlotChange;
+  private handleReferencesSlotChange;
+  handleAlertClose(event: CustomEvent): void;
   private handleScroll;
   private disconnectObserver;
   private initializeObserver;
@@ -229,6 +250,7 @@ export declare class WppChatInput {
   private scrollToAttachment;
   private displayToast;
   private handleSend;
+  private handleStop;
   private handlePaste;
   /**
    * Handles image file pasting from clipboard items.
@@ -236,6 +258,7 @@ export declare class WppChatInput {
    */
   private handleFilePaste;
   private handleInput;
+  private emitMessageChangedEvent;
   private debouncedAdjustTextareaHeight;
   private adjustTextareaHeight;
   private isFileWithError;
@@ -258,9 +281,13 @@ export declare class WppChatInput {
   private get isSendDisabled();
   private onMinimizedKeyDown;
   private onMinimizedKeyUp;
-  private onAttachKeyDown;
   private onWindowFocus;
   private clearDialogState;
+  private handleOnFocus;
+  private handleClickAudioRecording;
+  private shouldDisplaySend;
+  private renderMicrophoneBtn;
+  private renderActionsMenu;
   private hostCssClasses;
   private chatToastClasses;
   private chatInputContainerClasses;

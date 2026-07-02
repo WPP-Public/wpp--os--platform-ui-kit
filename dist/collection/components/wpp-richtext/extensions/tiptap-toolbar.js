@@ -1,7 +1,7 @@
 /**
  * @file Tiptap toolbar command mapping for wpp-richtext
  * @description Maps toolbar button names to Tiptap editor commands.
- *   Replaces plugins/wpp-quill-toolbar/ which provided alias resolution.
+ *   Handles the legacy toolbar alias resolution locally.
  *   Tiptap is headless — the toolbar DOM stays in the component template.
  * @see https://jira.uhub.biz/browse/WPPOPENDS-1287
  */

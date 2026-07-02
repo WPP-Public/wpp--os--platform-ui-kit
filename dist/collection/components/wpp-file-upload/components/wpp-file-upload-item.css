@@ -47,6 +47,22 @@
   --fu-item-error-color: var(--wpp-file-upload-item-error-color, var(--wpp-text-color-danger));
   --fu-item-bg-color-disabled: var(--wpp-file-upload-item-bg-color-disabled, var(--wpp-grey-color-200));
   --fu-item-text-color-disabled: var(--wpp-file-upload-item-text-color-disabled, var(--wpp-text-color-disabled));
+  --fu-item-chat-bg-color: var(--wpp-file-upload-item-chat-bg-color, var(--wpp-grey-color-100));
+  --fu-item-chat-padding: var(--wpp-file-upload-item-chat-padding, 8px);
+  --fu-item-chat-gap: var(--wpp-file-upload-item-chat-gap, 12px);
+  --fu-item-chat-border-radius: var(--wpp-file-upload-item-chat-border-radius, var(--wpp-border-radius-m));
+  --fu-item-chat-min-height: var(--wpp-file-upload-item-chat-min-height, 56px);
+  --fu-item-chat-name-color: var(--wpp-file-upload-item-chat-name-color, var(--wpp-grey-color-1000));
+  --fu-item-chat-subtitle-color: var(--wpp-file-upload-item-chat-subtitle-color, var(--wpp-grey-color-800));
+  --fu-item-chat-subtitle-error-color: var(
+    --wpp-file-upload-item-chat-subtitle-error-color,
+    var(--wpp-danger-color-500)
+  );
+  --fu-item-thumbnail-size: var(--wpp-file-upload-item-thumbnail-size, 40px);
+  --fu-item-thumbnail-bg-color: var(--wpp-file-upload-item-thumbnail-bg-color, var(--wpp-grey-color-300));
+  --fu-item-thumbnail-radius: var(--wpp-file-upload-item-chat-thumbnail-border-radius, var(--wpp-border-radius-m));
+  --fu-item-thumbnail-icon-color: var(--wpp-file-upload-item-thumbnail-icon-color, var(--wpp-grey-color-800));
+  --fu-item-thumbnail-error-bg-color: var(--wpp-file-upload-item-thumbnail-error-bg-color, var(--wpp-grey-color-300));
 }
 :host .wpp-tooltip {
   width: 100%;
@@ -90,7 +106,7 @@
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
 }
 .item-wrapper.disabled {
@@ -214,7 +230,98 @@
   line-height: var(--wpp-typography-s-strong-line-height, 22px);
   font-weight: var(--wpp-typography-s-strong-font-weight, 700);
   color: var(--wpp-typography-s-strong-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-strong-letter-spacing, 0);
   color: var(--fu-item-error-color);
+}
+
+:host(.variant-chat) {
+  display: block;
+  width: 100%;
+}
+:host(.variant-chat) .item-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--fu-item-chat-gap);
+  box-sizing: border-box;
+  min-height: var(--fu-item-chat-min-height);
+  max-width: none;
+  padding: var(--fu-item-chat-padding);
+  background-color: var(--fu-item-chat-bg-color);
+  border-radius: var(--fu-item-chat-border-radius);
+  font-size: var(--wpp-typography-xs-midi-font-size, 12px);
+  line-height: var(--wpp-typography-xs-midi-line-height, 20px);
+  font-weight: var(--wpp-typography-xs-midi-font-weight, 500);
+  color: var(--wpp-typography-xs-midi-color, var(--wpp-text-color));
+  font-family: var(--wpp-typography-xs-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));
+  letter-spacing: var(--wpp-typography-xs-midi-letter-spacing, 0);
+}
+:host(.variant-chat) .item-wrapper.disabled {
+  background-color: var(--fu-item-bg-color-disabled);
+}
+:host(.variant-chat) .thumbnail {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fu-item-thumbnail-size);
+  height: var(--fu-item-thumbnail-size);
+  overflow: hidden;
+  --wpp-icon-color: var(--fu-item-thumbnail-icon-color);
+  color: var(--fu-item-thumbnail-icon-color);
+  background-color: var(--fu-item-thumbnail-bg-color);
+  border-radius: var(--fu-item-thumbnail-radius);
+}
+:host(.variant-chat) .thumbnail.error {
+  background-color: var(--fu-item-thumbnail-error-bg-color);
+}
+:host(.variant-chat) .thumbnail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+:host(.variant-chat) .details {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+:host(.variant-chat) .name {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+:host(.variant-chat) .name::part(typography) {
+  color: var(--fu-item-chat-name-color);
+  text-overflow: ellipsis;
+}
+:host(.variant-chat) .subtitle {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+:host(.variant-chat) .subtitle::part(typography) {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--fu-item-chat-subtitle-color);
+}
+:host(.variant-chat) .subtitle.subtitle-error::part(typography) {
+  color: var(--fu-item-chat-subtitle-error-color);
+}
+:host(.variant-chat) .cross-icon {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
+}
+
+:host(.variant-chat:hover) .cross-icon,
+:host(.variant-chat) .cross-icon:focus-visible {
+  opacity: 1;
 }

@@ -110,7 +110,7 @@
   font-size: var(--wpp-typography-s-body-font-size, 14px);
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
-  font-family: var(--wpp-font-family, inherit);
+  font-family: var(--wpp-font-family, system-ui, sans-serif);
   color: var(--wpp-grey-color-1000);
   display: block;
   overflow: hidden;

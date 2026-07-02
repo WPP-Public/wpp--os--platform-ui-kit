@@ -76,7 +76,7 @@
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
 }
 :host .anchor .input:hover {
@@ -87,7 +87,7 @@
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
 }
 :host .anchor .wpp-icon-chevron {
@@ -117,7 +117,7 @@
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
 }
 :host .anchor .overflow-container .wpp-tooltip {
@@ -252,7 +252,7 @@
   flex-direction: column;
   gap: 4px;
   width: 100%;
-  padding: 4px 8px 8px 8px;
+  padding: 8px;
   box-sizing: border-box;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -272,6 +272,10 @@
   flex-direction: column;
   gap: 4px;
 }
+:host .wpp-select-portal .list-scrollable .select-all-section .select-all-divider,
+:host .wpp-select-portal .list-scrollable .select-all-section .pinned-items-divider {
+  margin: 4px 0;
+}
 :host .wpp-select-portal .list-scrollable .select-all-section .wpp-list-item {
   --wpp-list-item-width: 100%;
   width: 100%;
@@ -282,6 +286,12 @@
 :host .wpp-select-portal .list-scrollable .wpp-list-item {
   --wpp-list-item-width: 100%;
   width: 100%;
+}
+:host .wpp-select-portal .list-scrollable .wpp-list-item::part(info-wrapper) {
+  align-items: center;
+}
+:host .wpp-select-portal .list-scrollable .wpp-list-item::part(checkbox) {
+  align-self: center;
 }
 :host .wpp-select-portal .list-scrollable .wpp-list-item p {
   margin: 0;
@@ -307,7 +317,10 @@
   padding: 7px 8px 8px 8px;
 }
 :host .wpp-select-portal .multiple-select-folder-buttons.select-all-mode {
-  justify-content: flex-end;
+  justify-content: space-between;
+}
+:host .wpp-select-portal .multiple-select-folder-buttons.select-all-mode .apply-button {
+  margin-left: auto;
 }
 :host .wpp-select-portal[data-wpp-theme=dark] {
   background-color: var(--wpp-grey-color-200);

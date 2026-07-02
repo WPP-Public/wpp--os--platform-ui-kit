@@ -35,7 +35,7 @@ describe('wpp-full-screen-modal osBarCompatible', () => {
     const spy = jest.spyOn(utils, 'getOsBarOffsetHeight').mockReturnValue(72);
     const page = await newSpecPage({
       components: [WppFullScreenModal],
-      template: () => h("wpp-full-screen-modal-v4-1-0", { osBarCompatible: true }),
+      template: () => h("wpp-full-screen-modal-v4-2-0", { osBarCompatible: true }),
     });
     expect(page.root?.style.getPropertyValue('--wpp-full-screen-modal-top-offset')).toBe('72px');
     spy.mockRestore();
@@ -43,7 +43,7 @@ describe('wpp-full-screen-modal osBarCompatible', () => {
   it('applies wpp-os-bar-compatible CSS class when osBarCompatible is true', async () => {
     const page = await newSpecPage({
       components: [WppFullScreenModal],
-      template: () => h("wpp-full-screen-modal-v4-1-0", { osBarCompatible: true }),
+      template: () => h("wpp-full-screen-modal-v4-2-0", { osBarCompatible: true }),
     });
     expect(page.root).toHaveClass('wpp-os-bar-compatible');
   });
@@ -58,7 +58,7 @@ describe('wpp-full-screen-modal osBarCompatible', () => {
     const spy = jest.spyOn(utils, 'getOsBarOffsetHeight').mockReturnValue(64);
     const page = await newSpecPage({
       components: [WppFullScreenModal],
-      template: () => h("wpp-full-screen-modal-v4-1-0", { osBarCompatible: true }),
+      template: () => h("wpp-full-screen-modal-v4-2-0", { osBarCompatible: true }),
     });
     expect(page.root?.style.getPropertyValue('--wpp-full-screen-modal-top-offset')).toBe('64px');
     spy.mockRestore();
@@ -91,6 +91,51 @@ describe('wpp-full-screen-modal osBarCompatible', () => {
       });
       page.root?.remove();
       expect(mockStop).toHaveBeenCalledTimes(1);
+    });
+  });
+  describe('Testing `actionsConfig` using snapshots', () => {
+    it('Should render only 1 button in the actions section', async () => {
+      const page = await newSpecPage({
+        components: [WppFullScreenModal],
+        template: () => (h("wpp-full-screen-modal-v4-2-0", { actionsConfig: {
+            primaryButtonConfig: {
+              variant: 'primary',
+              label: 'Submit',
+              onClick: () => console.log('Confirm'),
+            },
+          } })),
+      });
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await page.waitForChanges();
+      expect(page.root).toMatchSnapshot();
+    });
+    it('Should render 2 buttons in the actions section', async () => {
+      const page = await newSpecPage({
+        components: [WppFullScreenModal],
+        template: () => (h("wpp-full-screen-modal-v4-2-0", { actionsConfig: {
+            primaryButtonConfig: {
+              variant: 'primary',
+              label: 'Submit',
+              onClick: () => console.log('Confirm'),
+            },
+            secondaryButtonConfig: {
+              label: 'Cancel',
+              onClick: () => console.log('Cancel'),
+            },
+          } })),
+      });
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await page.waitForChanges();
+      expect(page.root).toMatchSnapshot();
+    });
+    it('Should render the `actions` slot when there is no `actionsConfig` provided', async () => {
+      const page = await newSpecPage({
+        components: [WppFullScreenModal],
+        template: () => h("wpp-full-screen-modal-v4-2-0", null),
+      });
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await page.waitForChanges();
+      expect(page.root).toMatchSnapshot();
     });
   });
 });

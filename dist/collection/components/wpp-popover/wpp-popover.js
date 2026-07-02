@@ -2,15 +2,18 @@ import { Host, h } from '@stencil/core';
 import isEqual from 'lodash/isEqual';
 import { menuListConfig } from '../../common/menuListConfig';
 import { Z_INDEX } from '../../common/consts';
-import { getHighestContainerInDOM, hasParentWithId, isEventTargetContained } from '../../utils/utils';
+import { getHighestContainerInDOM, getSlotEmptyStates, hasParentWithId, isEventTargetContained, mergeLocales, } from '../../utils/utils';
 import { DEFAULT_POPOVER_LOCALES } from './config';
 import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
  * @slot trigger-element - Can contain the popover anchor element.
+ * @slot actions - Can contain the right-side popover footer actions.
  * @slot - Can contain the popover content. The default slot, without the name attribute.
  *
  * @part anchor - Popover anchor wrapper
  * @part content - Popover content wrapper
+ * @part footer - Popover footer wrapper
+ * @part footer-actions - Popover footer actions wrapper
  */
 export class WppPopover {
   constructor() {
@@ -27,9 +30,14 @@ export class WppPopover {
       return true;
     };
     this.createTippyInstance = () => {
-      const slotContent = this.host.children[1];
-      if (slotContent) {
-        this.contentEl?.append(slotContent);
+      const hostChildren = Array.from(this.host.children);
+      const slotContent = hostChildren.find(child => !child.hasAttribute('slot'));
+      const actionContents = hostChildren.filter(child => child.getAttribute('slot') === 'actions');
+      if (slotContent && this.contentEl) {
+        this.contentEl.insertBefore(slotContent, this.footerEl || null);
+      }
+      if (this.footerActionsEl) {
+        actionContents.forEach(actionContent => this.footerActionsEl?.append(actionContent));
       }
       if (this.contentEl && this.anchorRef) {
         this.tippyInstance = menuListConfig({
@@ -93,9 +101,24 @@ export class WppPopover {
       }
     };
     this.handleCrossButtonClick = () => this.tippyInstance.hide();
+    this.handleClearButtonClick = () => {
+      this.wppClear.emit({ clear: true });
+    };
     this.handleSearchChange = (e) => {
       const { value } = e.detail;
       this.wppSearchChange.emit({ name: this.internalSearchName, value });
+    };
+    this.updateSlotData = () => {
+      const emptyStates = getSlotEmptyStates(this.host.childNodes, {
+        actions: '[slot="actions"]',
+      });
+      this.hasFooterActions = !emptyStates.actions || Boolean(this.footerActionsEl?.querySelector('[slot="actions"]'));
+    };
+    this.handleTriggerSlotChange = () => {
+      this.updateSlotData();
+      if (this.mutationObserver) {
+        this.startObserving();
+      }
     };
     this.hostCssClasses = () => ({
       'wpp-popover': true,
@@ -105,8 +128,13 @@ export class WppPopover {
       'wpp-hidden': this.hidden,
       [`${this.externalClass}`]: true,
       'wpp-with-search': this.withSearch,
+      'wpp-with-footer': this.showClearButton || this.hasFooterActions,
     });
+    this.exportParts = () => this.showClearButton || this.hasFooterActions
+      ? 'anchor, trigger-element, footer, footer-actions'
+      : 'anchor, trigger-element';
     this.hidden = true;
+    this.hasFooterActions = false;
     this.config = {};
     this.shouldCloseOnOutsideClick = () => true;
     this.closable = false;
@@ -119,7 +147,8 @@ export class WppPopover {
     this.ariaProps = {
       role: 'dialog',
     };
-    this.locales = DEFAULT_POPOVER_LOCALES;
+    this.locales = {};
+    this.showClearButton = false;
   }
   /**
    * Method for closing the popover programatically
@@ -143,6 +172,7 @@ export class WppPopover {
   }
   componentWillLoad() {
     this.internalSearchName = this.searchName || 'wpp-popover-search';
+    this.updateSlotData();
   }
   componentDidLoad() {
     this.themeSubscription.start();
@@ -170,13 +200,21 @@ export class WppPopover {
     }
   }
   startObserving() {
-    this.mutationObserver.observe(this.host?.children[0], { attributes: true });
+    const triggerEl = this.host?.querySelector('[slot="trigger-element"]');
+    this.mutationObserver?.disconnect();
+    if (!triggerEl)
+      return;
+    this.mutationObserver.observe(triggerEl, { attributes: true });
+  }
+  get mergedLocales() {
+    return mergeLocales(DEFAULT_POPOVER_LOCALES, this.locales);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "anchor, trigger-element" }, h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref) }, h("slot", { name: "trigger-element", part: "trigger-element" })), h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-label": this.ariaProps.label, "aria-modal": "true" }, this.withSearch && (h("wpp-input-v4-1-0", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: this.locales.searchInputPlaceholder || DEFAULT_POPOVER_LOCALES.searchInputPlaceholder, type: "search", size: "m" })), !this.withSearch && this.closable && (h("wpp-action-button-v4-1-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, h("wpp-icon-cross-v4-1-0", { slot: "icon-end" }))), h("slot", null))));
+    const locales = this.mergedLocales;
+    return (h(Host, { class: this.hostCssClasses(), exportparts: this.exportParts() }, h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref) }, h("slot", { name: "trigger-element", part: "trigger-element", onSlotchange: this.handleTriggerSlotChange })), h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-label": this.ariaProps.label, "aria-modal": "true" }, this.withSearch && (h("wpp-input-v4-2-0", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: locales.searchInputPlaceholder, type: "search", size: "m" })), !this.withSearch && this.closable && (h("wpp-action-button-v4-2-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, h("wpp-icon-cross-v4-2-0", { slot: "icon-end" }))), h("slot", null), (this.showClearButton || this.hasFooterActions) && (h("div", { class: "wpp-popover-footer", part: "footer", ref: footerEl => (this.footerEl = footerEl) }, h("div", { class: "wpp-popover-clear-action" }, this.showClearButton && (h("wpp-action-button-v4-2-0", { variant: "secondary", onClick: this.handleClearButtonClick }, locales.clearText))), h("div", { class: "wpp-popover-footer-actions", part: "footer-actions", ref: footerActionsEl => (this.footerActionsEl = footerActionsEl) }, h("slot", { name: "actions", onSlotchange: this.updateSlotData })))))));
   }
   static get is() { return "wpp-popover"; }
-  static get registryIs() { return "wpp-popover-v4-1-0"; }
+  static get registryIs() { return "wpp-popover-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -386,9 +424,13 @@ export class WppPopover {
         "type": "unknown",
         "mutable": false,
         "complexType": {
-          "original": "PopoverLocalesInterface",
-          "resolved": "PopoverLocalesInterface",
+          "original": "Partial<PopoverLocalesInterface>",
+          "resolved": "{ searchInputPlaceholder?: string | undefined; clearText?: string | undefined; }",
           "references": {
+            "Partial": {
+              "location": "global",
+              "id": "global::Partial"
+            },
             "PopoverLocalesInterface": {
               "location": "import",
               "path": "./types",
@@ -402,13 +444,32 @@ export class WppPopover {
           "tags": [],
           "text": "Defines the component locale types."
         },
-        "defaultValue": "DEFAULT_POPOVER_LOCALES"
+        "defaultValue": "{}"
+      },
+      "showClearButton": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "If `true`, renders a Clear action on the left edge of the popover footer."
+        },
+        "attribute": "show-clear-button",
+        "reflect": false,
+        "defaultValue": "false"
       }
     };
   }
   static get states() {
     return {
-      "hidden": {}
+      "hidden": {},
+      "hasFooterActions": {}
     };
   }
   static get events() {
@@ -430,6 +491,27 @@ export class WppPopover {
               "location": "import",
               "path": "./types",
               "id": "src/components/wpp-popover/types.ts::PopoverInputChangeEventDetail"
+            }
+          }
+        }
+      }, {
+        "method": "wppClear",
+        "name": "wppClear",
+        "bubbles": false,
+        "cancelable": true,
+        "composed": false,
+        "docs": {
+          "tags": [],
+          "text": "Emitted when the optional Clear action is clicked."
+        },
+        "complexType": {
+          "original": "PopoverClearEventDetail",
+          "resolved": "PopoverClearEventDetail",
+          "references": {
+            "PopoverClearEventDetail": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-popover/types.ts::PopoverClearEventDetail"
             }
           }
         }

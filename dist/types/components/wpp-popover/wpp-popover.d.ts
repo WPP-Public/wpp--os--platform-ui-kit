@@ -1,22 +1,28 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { AriaProps, DropdownConfig } from '../../types/common';
-import { PopoverInputChangeEventDetail, PopoverLocalesInterface, PopoverShouldCloseOnOutsideClickHandler } from './types';
+import { PopoverClearEventDetail, PopoverInputChangeEventDetail, PopoverLocalesInterface, PopoverShouldCloseOnOutsideClickHandler } from './types';
 /**
  * @slot trigger-element - Can contain the popover anchor element.
+ * @slot actions - Can contain the right-side popover footer actions.
  * @slot - Can contain the popover content. The default slot, without the name attribute.
  *
  * @part anchor - Popover anchor wrapper
  * @part content - Popover content wrapper
+ * @part footer - Popover footer wrapper
+ * @part footer-actions - Popover footer actions wrapper
  */
 export declare class WppPopover {
   private anchorRef;
   private contentEl?;
+  private footerEl?;
+  private footerActionsEl?;
   private mutationObserver;
   private tippyInstance;
   private internalSearchName;
   private searchInputEl?;
   private themeSubscription;
   hidden: boolean;
+  hasFooterActions: boolean;
   host: HTMLWppPopoverElement;
   /**
    * Defines the dropdown configuration. Under the hood dropdown using tippy.js,
@@ -70,11 +76,19 @@ export declare class WppPopover {
   /**
    * Defines the component locale types.
    */
-  readonly locales: PopoverLocalesInterface;
+  readonly locales: Partial<PopoverLocalesInterface>;
+  /**
+   * If `true`, renders a Clear action on the left edge of the popover footer.
+   */
+  readonly showClearButton: boolean;
   /**
    * Emitted when the value of the search input inside the dropdown changes.
    */
   readonly wppSearchChange: EventEmitter<PopoverInputChangeEventDetail>;
+  /**
+   * Emitted when the optional Clear action is clicked.
+   */
+  readonly wppClear: EventEmitter<PopoverClearEventDetail>;
   /**
    * Method for closing the popover programatically
    */
@@ -93,8 +107,13 @@ export declare class WppPopover {
   private removeDisabledTag;
   private startObserving;
   private handleCrossButtonClick;
+  private handleClearButtonClick;
   private handleSearchChange;
+  private updateSlotData;
+  private handleTriggerSlotChange;
   private hostCssClasses;
   private contentCssClasses;
+  private get mergedLocales();
+  private exportParts;
   render(): any;
 }

@@ -28,7 +28,6 @@ export declare class WppSearch implements BaseComponent, InlineMessage {
   private placeholderEl?;
   private hasActiveEllipses?;
   private observer;
-  private _locales;
   private isDropdownShown;
   private themeSubscription;
   host: HTMLWppSearchElement;
@@ -167,7 +166,6 @@ export declare class WppSearch implements BaseComponent, InlineMessage {
   updateDropdownConfig(newConfig: DropdownConfig, oldConfig: DropdownConfig): void;
   onLoadingChange(loading: boolean): void;
   updateIsInComponent(value: boolean): void;
-  onUpdateLocales(newLocales: Partial<SearchLocales>): void;
   /**
    * Sets focus on native input
    */
@@ -176,6 +174,7 @@ export declare class WppSearch implements BaseComponent, InlineMessage {
   componentDidLoad(): void;
   disconnectedCallback(): void;
   connectedCallback(): void;
+  private get _locales();
   private valueResizeObserver;
   private createTippyInstance;
   private hasClearButton;

@@ -61,6 +61,7 @@ export declare class WppChatConversationMessage {
   private renderAttachments;
   private renderActionButton;
   private renderMenuContextListItems;
+  private hasTextContent;
   private hostCssClasses;
   private containerCssClasses;
   private contentCssClasses;

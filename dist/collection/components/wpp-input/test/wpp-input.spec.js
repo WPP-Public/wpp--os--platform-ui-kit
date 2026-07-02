@@ -76,15 +76,13 @@ describe('wpp-input', () => {
       const componentWillLoadSpy = jest.spyOn(WppInput.prototype, 'componentWillLoad');
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => h("wpp-input-v4-1-0", null),
+        template: () => h("wpp-input-v4-2-0", null),
       });
       const componentInstance = page.rootInstance;
       await page.waitForChanges();
       expect(componentWillLoadSpy).toHaveBeenCalled();
-      expect(JSON.stringify(componentInstance['_locales'])).toBe(JSON.stringify({
-        minLengthErrorMessage: (minLength) => `The input must have at least ${minLength} characters`,
-        maxLengthErrorMessage: (maxLength) => `The input can have a maximum of ${maxLength} characters`,
-      }));
+      expect(componentInstance['_locales'].minLengthErrorMessage(3)).toBe('The input must have at least 3 characters');
+      expect(componentInstance['_locales'].maxLengthErrorMessage(10)).toBe('The input can have a maximum of 10 characters');
     });
   });
   describe('Testing componentDidLoad', () => {
@@ -95,7 +93,7 @@ describe('wpp-input', () => {
     it('Testing componentDidLoad', async () => {
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => h("wpp-input-v4-1-0", null),
+        template: () => h("wpp-input-v4-2-0", null),
       });
       const inputEl = page.rootInstance;
       const createMaskForInputSpy = jest.spyOn(inputEl, 'createMaskForInput');
@@ -113,7 +111,7 @@ describe('wpp-input', () => {
     it('Testing initial value updating the value property with no mask', async () => {
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => h("wpp-input-v4-1-0", { value: "initial" }),
+        template: () => h("wpp-input-v4-2-0", { value: "initial" }),
       });
       const componentInstance = page.rootInstance;
       await page.waitForChanges();
@@ -125,7 +123,7 @@ describe('wpp-input', () => {
     it('Testing initial value and updating the value property with mask', async () => {
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => (h("wpp-input-v4-1-0", { value: "0722334455", maskOptions: {
+        template: () => (h("wpp-input-v4-2-0", { value: "0722334455", maskOptions: {
             telPatternOptions: {
               countryCode: 'RO',
             },
@@ -142,31 +140,31 @@ describe('wpp-input', () => {
     it('Testing updating locales', async () => {
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => h("wpp-input-v4-1-0", null),
+        template: () => h("wpp-input-v4-2-0", null),
       });
       const componentInstance = page.rootInstance;
       await page.waitForChanges();
-      // Initial locales
-      expect(JSON.stringify(componentInstance['_locales'])).toBe(JSON.stringify({
-        minLengthErrorMessage: (minLength) => `The input must have at least ${minLength} characters`,
-        maxLengthErrorMessage: (maxLength) => `The input can have a maximum of ${maxLength} characters`,
-      }));
-      const expectedLocales = {
+      // Initial locales — defaults
+      expect(componentInstance['_locales'].minLengthErrorMessage(3)).toBe('The input must have at least 3 characters');
+      expect(componentInstance['_locales'].maxLengthErrorMessage(10)).toBe('The input can have a maximum of 10 characters');
+      // Changing only minLengthErrorMessage
+      componentInstance.locales = {
         minLengthErrorMessage: (minLength) => `Minimum length is ${minLength}`,
       };
-      // Changing locales dynamically
-      componentInstance.onUpdateLocales(expectedLocales);
       await page.waitForChanges();
-      // Because only the minLengthErrorMessge was updated, we expect the maxLengthErrorMessage to remain the same as initial
-      expect(JSON.stringify(componentInstance['_locales'])).toBe(JSON.stringify({
-        minLengthErrorMessage: (minLength) => `Minimum length is ${minLength}`,
-        maxLengthErrorMessage: (maxLength) => `The input can have a maximum of ${maxLength} characters`,
-      }));
+      // Override applied; default for maxLengthErrorMessage still intact
+      expect(componentInstance['_locales'].minLengthErrorMessage(5)).toBe('Minimum length is 5');
+      expect(componentInstance['_locales'].maxLengthErrorMessage(10)).toBe('The input can have a maximum of 10 characters');
+      // Stale-override regression: clearing the override must revert to default
+      componentInstance.locales = {};
+      await page.waitForChanges();
+      expect(componentInstance['_locales'].minLengthErrorMessage(3)).toBe('The input must have at least 3 characters');
+      expect(componentInstance['_locales'].maxLengthErrorMessage(10)).toBe('The input can have a maximum of 10 characters');
     });
     it('Testing updating maskOptions', async () => {
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => h("wpp-input-v4-1-0", null),
+        template: () => h("wpp-input-v4-2-0", null),
       });
       const componentInstance = page.rootInstance;
       const createMaskForInputSpy = jest.spyOn(componentInstance, 'createMaskForInput');
@@ -210,7 +208,7 @@ describe('wpp-input', () => {
     };
     const page = await newSpecPage({
       components: [WppInput, WppLabel, WppInternalLabel],
-      template: () => h("wpp-input-v4-1-0", { labelConfig: labelConfig, name: "text-input" }),
+      template: () => h("wpp-input-v4-2-0", { labelConfig: labelConfig, name: "text-input" }),
     });
     await new Promise(resolve => setTimeout(resolve, 100));
     await page.waitForChanges();

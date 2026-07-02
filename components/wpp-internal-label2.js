@@ -1,5 +1,5 @@
 import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
-import { g as getSlotEmptyStates } from './utils.js';
+import { g as getSlotEmptyStates, y as mergeLocales } from './utils.js';
 import { F as FOCUS_TYPE } from './common.js';
 import { W as WrappedSlot } from './WrappedSlot.js';
 import { d as defineCustomElement$5 } from './wpp-icon-error2.js';
@@ -19,7 +19,6 @@ const WppInternalLabel = /*@__PURE__*/ proxyCustomElement(class WppInternalLabel
     super();
     this.__registerHost();
     this.__attachShadow();
-    this._locales = LOCALES_DEFAULTS;
     this.updateSlotData = () => {
       const emptyStates = getSlotEmptyStates(this.host.childNodes, {
         icon: '[slot="icon"]',
@@ -58,23 +57,19 @@ const WppInternalLabel = /*@__PURE__*/ proxyCustomElement(class WppInternalLabel
     this.tooltipConfig = {};
     this.role = 'presentation';
   }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
-  }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
     this.updateSlotData();
   }
-  render() {
-    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onBlur: this.onBlur, exportparts: "info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" }, !!this.labelText && (h("div", { class: this.infoWrapperCssClasses(), part: "info-wrapper", role: this.role }, h("wpp-typography-v4-1-0", { type: this.typography, class: "text", part: "text" }, this.labelText), this.optional && (h("wpp-typography-v4-1-0", { type: "s-body", class: "optional", part: "optional-text" }, "(", this._locales.optional, ")")))), !!this.description && this.hasIconSlot ? (h("wpp-tooltip-v4-1-0", { class: "tooltip", text: this.description, config: this.tooltipConfig, part: "tooltip" }, h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: this.tooltipConfig.tabIndex === -1 ? 'none' : 'button', tabIndex: this.tooltipConfig.tabIndex ?? 0, "aria-label": this.tooltipConfig.tabIndex !== -1 ? 'Show info' : undefined }))) : (h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: "button", tabIndex: 0, "aria-label": "Show info" }))));
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
   }
-  static get registryIs() { return "wpp-internal-label-v4-1-0"; }
+  render() {
+    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onBlur: this.onBlur, exportparts: "info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" }, !!this.labelText && (h("div", { class: this.infoWrapperCssClasses(), part: "info-wrapper", role: this.role }, h("wpp-typography-v4-2-0", { type: this.typography, class: "text", part: "text" }, this.labelText), this.optional && (h("wpp-typography-v4-2-0", { type: "s-body", class: "optional", part: "optional-text" }, "(", this._locales.optional, ")")))), !!this.description && this.hasIconSlot ? (h("wpp-tooltip-v4-2-0", { class: "tooltip", text: this.description, config: this.tooltipConfig, part: "tooltip" }, h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: this.tooltipConfig.tabIndex === -1 ? 'none' : 'button', tabIndex: this.tooltipConfig.tabIndex ?? 0, "aria-label": this.tooltipConfig.tabIndex !== -1 ? 'Show info' : undefined }))) : (h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: "button", tabIndex: 0, "aria-label": "Show info" }))));
+  }
+  static get registryIs() { return "wpp-internal-label-v4-2-0"; }
   get host() { return this; }
-  static get watchers() { return {
-    "locales": ["onUpdateLocales"]
-  }; }
   static get style() { return wppInternalLabelCss; }
-}, [1, "wpp-internal-label", "wpp-internal-label-v4-1-0", {
+}, [1, "wpp-internal-label", "wpp-internal-label-v4-2-0", {
     "labelText": [1, "label-text"],
     "description": [1],
     "optional": [4],
@@ -90,34 +85,34 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-internal-label-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-internal-tooltip-v4-1-0", "wpp-tooltip-v4-1-0", "wpp-typography-v4-1-0"];
+  const components = ["wpp-internal-label-v4-2-0", "wpp-icon-error-v4-2-0", "wpp-icon-warning-v4-2-0", "wpp-internal-tooltip-v4-2-0", "wpp-tooltip-v4-2-0", "wpp-typography-v4-2-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-internal-label-v4-1-0":
+    case "wpp-internal-label-v4-2-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppInternalLabel);
       }
       break;
-    case "wpp-icon-error-v4-1-0":
+    case "wpp-icon-error-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-warning-v4-1-0":
+    case "wpp-icon-warning-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-internal-tooltip-v4-1-0":
+    case "wpp-internal-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-1-0":
+    case "wpp-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-1-0":
+    case "wpp-typography-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

@@ -3,21 +3,6 @@
  * @description Tests rendering, props, public methods, events, CSS classes, and cleanup.
  * @see https://jira.uhub.biz/browse/WPPOPENDS-1287
  */
-// Mock Quill to avoid DOMTokenList error in jsdom
-jest.mock('quill', () => ({
-  default: { import: () => ({}), register: () => { }, DEFAULTS: { formats: [], modules: {} } },
-}));
-// Mock the old config module that imports Quill plugins/themes
-jest.mock('../config', () => ({
-  __esModule: true,
-  default: {
-    turndown: (html) => html,
-    use: () => { },
-    addRule: () => { },
-    escape: (text) => text,
-  },
-  quillMarkdownOptions: { tags: {} },
-}));
 import { newSpecPage } from '@stencil/core/testing';
 import { WppRichtext } from '../wpp-richtext';
 beforeAll(() => {

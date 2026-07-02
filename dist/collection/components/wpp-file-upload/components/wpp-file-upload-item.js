@@ -2,7 +2,8 @@ import { h, Host } from '@stencil/core';
 import { FOCUS_TYPE } from '../../../types/common';
 import { sizeFormat, maxSize } from './types';
 import { getExtension } from '../utils';
-import { LOCALES_DEFAULTS, returnIconFromExtension } from '../const';
+import { LOCALES_DEFAULTS, returnFileTypeLabel, returnIconFromExtension } from '../const';
+import { mergeLocales } from '../../../utils/utils';
 /**
  * @part file-item - file item wrapper.
  * @part wrapper - component wrapper element
@@ -15,7 +16,7 @@ import { LOCALES_DEFAULTS, returnIconFromExtension } from '../const';
  */
 export class WppFileUploadItem {
   constructor() {
-    this._locales = LOCALES_DEFAULTS;
+    this.isSubtitleTruncated = false;
     this.pendingTruncation = false;
     this.isTruncated = false;
     this.ELLIPSIS = '...';
@@ -54,8 +55,24 @@ export class WppFileUploadItem {
         requestAnimationFrame(() => {
           this.pendingTruncation = false;
           this.truncateFileName();
+          this.checkSubtitleTruncation();
         });
       });
+    };
+    // Detect whether the chat subtitle overflows its available width so the
+    // tooltip is only shown when the text is actually truncated.
+    this.checkSubtitleTruncation = () => {
+      if (this.variant !== 'chat')
+        return;
+      const text = this.getChatSubtitle();
+      if (!this.subtitleRef || !this.subtitleMeasureRef || !text) {
+        this.isSubtitleTruncated = false;
+        return;
+      }
+      this.subtitleMeasureRef.textContent = text;
+      const fullWidth = this.subtitleMeasureRef.scrollWidth;
+      const available = this.subtitleRef.getBoundingClientRect().width;
+      this.isSubtitleTruncated = available > 0 && fullWidth > available + 1;
     };
     this.truncateFileName = () => {
       const text = this.file?.name || '';
@@ -138,7 +155,7 @@ export class WppFileUploadItem {
     this.isFileLoading = () => !this.uploaded && (this.file.isLoading || !this.isLoadingFinished);
     this.setCurrentIcon = () => {
       if (this.isFileLoading())
-        return h("wpp-spinner-v4-1-0", null);
+        return h("wpp-spinner-v4-2-0", null);
       const { name } = this.file;
       if (this.isFileWithError())
         return null;
@@ -156,7 +173,7 @@ export class WppFileUploadItem {
     this.setCurrentError = () => {
       if (this.isFileWithError()) {
         const currentError = this.getErrorMessage();
-        return (h("div", { class: "error-wrapper" }, h("wpp-inline-message-v4-1-0", { class: "inline-message-error", message: currentError, type: "error", showTooltipFrom: 140, tooltipConfig: { popperOptions: { strategy: 'fixed' } } }), this.file.deletable !== false && (h("wpp-icon-cross-v4-1-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": `Remove file ${this.file.name}`, onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onKeyUp: this.handleDeleteKeyUp, onBlur: this.handleDeleteBlur }))));
+        return (h("div", { class: "error-wrapper" }, h("wpp-inline-message-v4-2-0", { class: "inline-message-error", message: currentError, type: "error", showTooltipFrom: 140, tooltipConfig: { popperOptions: { strategy: 'fixed' } } }), this.file.deletable !== false && (h("wpp-icon-cross-v4-2-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": `Remove file ${this.file.name}`, onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onKeyUp: this.handleDeleteKeyUp, onBlur: this.handleDeleteBlur }))));
       }
       return null;
     };
@@ -206,6 +223,7 @@ export class WppFileUploadItem {
     this.hostCssClasses = () => ({
       'wpp-file-upload-item': true,
       'file-upload-item': true,
+      [`variant-${this.variant}`]: true,
     });
     this.itemCssClasses = () => ({
       'item-wrapper': true,
@@ -216,6 +234,29 @@ export class WppFileUploadItem {
       pressed: this.isPressed,
       'tab-focus': this.focusType === FOCUS_TYPE.TAB,
     });
+    this.getImagePreviewUrl = () => {
+      const fileExtension = getExtension(this.file.name).toLowerCase();
+      const isImage = ['.jpg', '.jpeg', '.png', '.gif', '.svg', '.webp'].includes(fileExtension);
+      return isImage && 'url' in this.file && this.file.url ? this.file.url : null;
+    };
+    this.renderThumbnail = () => {
+      if (this.isFileLoading())
+        return h("wpp-spinner-v4-2-0", null);
+      if (this.isFileWithError())
+        return h("wpp-icon-error-v4-2-0", { class: "thumbnail-error-icon", "aria-hidden": "true" });
+      const previewUrl = this.thumbnailUrl ?? this.getImagePreviewUrl();
+      if (previewUrl)
+        return h("img", { src: previewUrl, alt: "", class: "thumbnail-image" });
+      return returnIconFromExtension(getExtension(this.file.name), null);
+    };
+    this.getChatSubtitle = () => {
+      if (this.isFileLoading())
+        return `${this.percentage}%`;
+      if (this.isFileWithError())
+        return this.getErrorMessage();
+      return returnFileTypeLabel(getExtension(this.file.name));
+    };
+    this.renderDeleteIcon = () => this.file.deletable !== false && (h("wpp-icon-cross-v4-2-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": `Remove file ${this.file.name}`, onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onKeyUp: this.handleDeleteKeyUp, onBlur: this.handleDeleteBlur }));
     this.thumbnailUrl = null;
     this.percentage = 0;
     this.total = 0;
@@ -230,13 +271,10 @@ export class WppFileUploadItem {
     this.currentIndex = undefined;
     this.locales = undefined;
     this.uploaded = undefined;
+    this.variant = 'default';
     this.parentDisabled = undefined;
   }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
-  }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
     const { size, name } = this.file;
     if (this.isFileWithError()) {
       this.isLoadingFinished = true;
@@ -265,6 +303,9 @@ export class WppFileUploadItem {
   }
   disconnectedCallback() {
     this.observer?.disconnect();
+  }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
   }
   handleFileReading() {
     const reader = new FileReader();
@@ -319,19 +360,40 @@ export class WppFileUploadItem {
     };
     reader.readAsDataURL(this.file);
   }
-  render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, wrapper, content, file-name, tooltip, loading, percentage, cross-icon", onClick: this.handleClick, role: "listitem" }, h("div", { class: this.itemCssClasses(), part: "file-item" }, this.setCurrentError(), h("div", { class: "content-wrapper", part: "wrapper" }, h("div", { class: this.blockCssClasses(), part: "content" }, h("div", { class: "icon-wrapper" }, this.setCurrentIcon()), h("wpp-tooltip-v4-1-0", { ref: ref => (this.tooltipRef = ref), text: this.file.name, config: {
+  renderChatVariant() {
+    const subtitle = this.getChatSubtitle();
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, thumbnail, content, file-name, subtitle, cross-icon", onClick: this.handleClick, role: "listitem" }, h("div", { class: this.itemCssClasses(), part: "file-item" }, h("div", { class: { thumbnail: true, error: this.isFileWithError(), loading: this.isFileLoading() }, part: "thumbnail" }, this.renderThumbnail()), h("div", { class: "details", part: "content" }, h("wpp-tooltip-v4-2-0", { ref: ref => (this.tooltipRef = ref), text: this.file.name, config: {
         popperOptions: { strategy: 'fixed' },
         onShow: () => {
           if (!this.isTruncated)
             return false;
         },
-      }, part: "tooltip" }, h("wpp-typography-v4-1-0", { ref: ref => (this.fileNameRef = ref), class: this.fileNameCssClasses(), type: "s-body", part: "file-name", title: this.file.name }, this.file?.name)), !this.isFileWithError() ? (h("span", { ref: ref => (this.loadingRef = ref), class: "loading", part: "loading" }, this.isFileLoading()
+      }, part: "tooltip" }, h("wpp-typography-v4-2-0", { ref: ref => (this.fileNameRef = ref), class: this.fileNameCssClasses(), type: "xs-midi", part: "file-name", title: this.file.name }, this.file?.name)), h("wpp-tooltip-v4-2-0", { text: subtitle, config: {
+        popperOptions: { strategy: 'fixed' },
+        onShow: () => {
+          // Recompute truncation on demand so the guard is never stale
+          // when the subtitle text changes (e.g. progress -> error).
+          this.checkSubtitleTruncation();
+          if (!this.isSubtitleTruncated)
+            return false;
+        },
+      } }, h("wpp-typography-v4-2-0", { ref: ref => (this.subtitleRef = ref), type: "xs-body", class: { subtitle: true, 'subtitle-error': this.isFileWithError() }, part: "subtitle" }, subtitle))), this.renderDeleteIcon()), h("wpp-typography-v4-2-0", { ref: ref => (this.measureRef = ref), type: "xs-midi", class: "measure", "aria-hidden": "true", role: "presentation" }), h("wpp-typography-v4-2-0", { ref: ref => (this.subtitleMeasureRef = ref), type: "xs-body", class: "measure", "aria-hidden": "true", role: "presentation" })));
+  }
+  render() {
+    if (this.variant === 'chat')
+      return this.renderChatVariant();
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, wrapper, content, file-name, tooltip, loading, percentage, cross-icon", onClick: this.handleClick, role: "listitem" }, h("div", { class: this.itemCssClasses(), part: "file-item" }, this.setCurrentError(), h("div", { class: "content-wrapper", part: "wrapper" }, h("div", { class: this.blockCssClasses(), part: "content" }, h("div", { class: "icon-wrapper" }, this.setCurrentIcon()), h("wpp-tooltip-v4-2-0", { ref: ref => (this.tooltipRef = ref), text: this.file.name, config: {
+        popperOptions: { strategy: 'fixed' },
+        onShow: () => {
+          if (!this.isTruncated)
+            return false;
+        },
+      }, part: "tooltip" }, h("wpp-typography-v4-2-0", { ref: ref => (this.fileNameRef = ref), class: this.fileNameCssClasses(), type: "s-body", part: "file-name", title: this.file.name }, this.file?.name)), !this.isFileWithError() ? (h("span", { ref: ref => (this.loadingRef = ref), class: "loading", part: "loading" }, this.isFileLoading()
       ? `${this.loaded}/${this.total} ${this.measurementUnit}`
-      : `${this.total} ${this.measurementUnit}`)) : (h("span", { class: "error-message", part: "error-message" }, this.total, " ", this.measurementUnit))), h("div", { class: "controls-wrapper", part: "controls" }, this.isFileLoading() && (h("span", { class: "percentage", part: "percentage" }, this.percentage, "%")), this.file.deletable !== false && !this.isFileWithError() && (h("wpp-icon-cross-v4-1-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": `Remove file ${this.file.name}`, onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onBlur: this.handleDeleteBlur, onKeyUp: this.handleDeleteKeyUp }))))), h("wpp-typography-v4-1-0", { ref: ref => (this.measureRef = ref), type: "s-body", class: "measure", "aria-hidden": "true", role: "presentation" })));
+      : `${this.total} ${this.measurementUnit}`)) : (h("span", { class: "error-message", part: "error-message" }, this.total, " ", this.measurementUnit))), h("div", { class: "controls-wrapper", part: "controls" }, this.isFileLoading() && (h("span", { class: "percentage", part: "percentage" }, this.percentage, "%")), this.file.deletable !== false && !this.isFileWithError() && (h("wpp-icon-cross-v4-2-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": `Remove file ${this.file.name}`, onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onBlur: this.handleDeleteBlur, onKeyUp: this.handleDeleteKeyUp }))))), h("wpp-typography-v4-2-0", { ref: ref => (this.measureRef = ref), type: "s-body", class: "measure", "aria-hidden": "true", role: "presentation" })));
   }
   static get is() { return "wpp-file-upload-item"; }
-  static get registryIs() { return "wpp-file-upload-item-v4-1-0"; }
+  static get registryIs() { return "wpp-file-upload-item-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -465,6 +527,30 @@ export class WppFileUploadItem {
         "attribute": "uploaded",
         "reflect": false
       },
+      "variant": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "FileUploadItemVariant",
+          "resolved": "\"chat\" | \"default\"",
+          "references": {
+            "FileUploadItemVariant": {
+              "location": "import",
+              "path": "../types",
+              "id": "src/components/wpp-file-upload/types.ts::FileUploadItemVariant"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Visual variant of the item. Use `chat` to render the taller two-line\nthumbnail card used by chat parts (file name + type/progress/error).\nDefaults to `default` (the compact single-line chip)."
+        },
+        "attribute": "variant",
+        "reflect": true,
+        "defaultValue": "'default'"
+      },
       "parentDisabled": {
         "type": "boolean",
         "mutable": false,
@@ -566,10 +652,4 @@ export class WppFileUploadItem {
       }];
   }
   static get elementRef() { return "host"; }
-  static get watchers() {
-    return [{
-        "propName": "locales",
-        "methodName": "onUpdateLocales"
-      }];
-  }
 }

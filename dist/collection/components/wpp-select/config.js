@@ -11,7 +11,7 @@ export const DEFAULT_DROPDOWN_CONFIG = {
 };
 export const LOCALES_DEFAULTS = {
   emptyText: 'Nothing Found',
-  clearAllText: 'Clear All',
+  clearAllText: 'Clear',
   selectAllText: 'Select All',
   searchInputPlaceholder: 'Search',
   allSelectedText: 'All selected',

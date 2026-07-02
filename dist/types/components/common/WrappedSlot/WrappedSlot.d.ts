@@ -12,7 +12,7 @@ interface Props extends JSXBase.SlotAttributes {
   onBlur?: (event: FocusEvent) => void;
   onKeyUp?: (event: KeyboardEvent) => void;
   class?: string;
-  onClick?: (event?: FocusEvent) => void;
+  onClick?: (event: MouseEvent) => void;
 }
 /**
  * Helper component that unifies slot wrapping across the project

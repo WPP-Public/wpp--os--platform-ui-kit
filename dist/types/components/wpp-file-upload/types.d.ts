@@ -50,6 +50,16 @@ export declare enum ScrollState {
   scroll = "scroll"
 }
 export type FileUploadResultFormaType = 'base64' | 'binaryString' | 'arrayBuffer';
+/**
+ * Visual variant of a single `wpp-file-upload-item`.
+ * - `default`: the compact single-line chip used by the standalone uploader.
+ * - `chat`: the taller two-line thumbnail card used by chat parts (file name + type/progress).
+ */
+export type FileUploadItemVariant = 'default' | 'chat';
+/**
+ * Human-readable file type category shown as the subtitle of the chat variant.
+ */
+export type FileTypeLabel = 'Image' | 'Document' | 'Zip' | 'Spreadsheet' | 'Text' | 'Video' | 'Audio' | 'Data' | 'Presentation';
 export type FileUploadMessageType = Exclude<MessageTypes, 'information' | 'success' | 'warning' | 'brand'>;
 export type FileUploadTabElements = 'wrapper' | 'item';
 export {};

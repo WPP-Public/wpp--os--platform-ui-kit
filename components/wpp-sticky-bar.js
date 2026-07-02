@@ -1,5 +1,6 @@
-import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
+import { proxyCustomElement, HTMLElement, createEvent, h, Fragment, Host } from '@stencil/core/internal/client';
 import { Z as Z_INDEX } from './consts.js';
+import { k as transformToVersionedTag } from './utils.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme.js';
 import { d as defineCustomElement$9 } from './wpp-action-button2.js';
 import { d as defineCustomElement$8 } from './wpp-button2.js';
@@ -30,6 +31,14 @@ const WppStickyBar$1 = /*@__PURE__*/ proxyCustomElement(class WppStickyBar exten
     this.wppClickBtn = createEvent(this, "wppClickBtn", 1);
     this.wppClickTab = createEvent(this, "wppClickTab", 1);
     this.themeSubscription = themeSubscriptionController(() => this.host);
+    this.updateOffsetFromTop = (newOffset) => {
+      if (newOffset === undefined) {
+        this.getHeightOfOsBar();
+      }
+      else {
+        this.host.style.setProperty('--wpp-sticky-bar-offset-top', `${newOffset}px`);
+      }
+    };
     this.getHeightOfOsBar = () => {
       const appContainer = document.body.querySelector('div.wpp');
       if (appContainer) {
@@ -88,6 +97,7 @@ const WppStickyBar$1 = /*@__PURE__*/ proxyCustomElement(class WppStickyBar exten
       this.currentTab = event.detail.value;
       this.wppClickTab.emit(this.tabs.find((tabItem) => tabItem.value === event.detail.value));
     };
+    this.getButtonItemIcons = (buttonItem) => (h(Fragment, null, buttonItem.iconStart && h(transformToVersionedTag(buttonItem.iconStart), { slot: 'icon-start' }), buttonItem.text, buttonItem.iconEnd && h(transformToVersionedTag(buttonItem.iconEnd), { slot: 'icon-end' })));
     this.hostCssClasses = () => ({
       'wpp-sticky-bar': true,
       [`wpp-sticky-bar-${this.variant}`]: true,
@@ -106,12 +116,12 @@ const WppStickyBar$1 = /*@__PURE__*/ proxyCustomElement(class WppStickyBar exten
     this.tabs = [];
     this.tabSize = 's';
   }
-  updateButtons() {
+  onUpdateButtons() {
     if (this.variant === 'small') {
       this.getButtonsList();
     }
   }
-  updateTabs(newValue) {
+  onUpdateTabs(newValue) {
     if (newValue?.length > 0) {
       if (!newValue.find((tabItem) => tabItem.value === this.currentTab)) {
         this.currentTab = newValue[0].value;
@@ -121,8 +131,8 @@ const WppStickyBar$1 = /*@__PURE__*/ proxyCustomElement(class WppStickyBar exten
       this.currentTab = '';
     }
   }
-  updateOffset(newValue) {
-    this.host.style.setProperty('--wpp-sticky-bar-offset-top', `${newValue}px`);
+  onUpdateOffsetFromTop(newValue) {
+    this.updateOffsetFromTop(newValue);
   }
   handleScroll() {
     this.visibility = window.scrollY > this.scrollTreshold ? `visible` : `invisible`;
@@ -146,39 +156,41 @@ const WppStickyBar$1 = /*@__PURE__*/ proxyCustomElement(class WppStickyBar exten
   }
   disconnectedCallback() {
     this.themeSubscription.stop();
+    if (this.offsetFromTopTimeout) {
+      clearTimeout(this.offsetFromTopTimeout);
+      this.offsetFromTopTimeout = undefined;
+    }
   }
   componentDidLoad() {
-    if (!this.offsetFromTop) {
-      setTimeout(() => {
-        this.getHeightOfOsBar();
-      }, 0);
-    }
-    else {
-      this.host.style.setProperty('--wpp-sticky-bar-offset-top', `${this.offsetFromTop}px`);
-    }
+    this.offsetFromTopTimeout = setTimeout(() => {
+      this.offsetFromTopTimeout = undefined;
+      if (!this.host?.isConnected)
+        return;
+      this.updateOffsetFromTop(this.offsetFromTop);
+    }, 0);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v4-1-0", { variant: "secondary", onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v4-1-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v4-1-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), this.variant === 'small' && (h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v4-2-0", { variant: "secondary", onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v4-2-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v4-2-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), this.variant === 'small' && (h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
       if (!buttonItem)
         return null;
       if (buttonItem.variant === 'action-button') {
-        return (h("wpp-action-button-v4-1-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary" }, buttonItem.text));
+        return (h("wpp-action-button-v4-2-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary", disabled: buttonItem.disabled, loading: buttonItem.loading }, this.getButtonItemIcons(buttonItem)));
       }
-      return (h("wpp-button-v4-1-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant }, buttonItem.text));
-    })))), this.variant !== 'small' ? (h("div", { class: `body ${this.tabs?.length > 0 ? 'has-tabs' : ''}` }, this.variant === 'medium' ? (h("slot", { name: "content" })) : (this.tabs?.length > 0 && (h("wpp-tabs-v4-1-0", { size: this.tabSize, onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => {
+      return (h("wpp-button-v4-2-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant, disabled: buttonItem.disabled, loading: buttonItem.loading }, this.getButtonItemIcons(buttonItem)));
+    })))), this.variant !== 'small' ? (h("div", { class: `body ${this.tabs?.length > 0 ? 'has-tabs' : ''}` }, this.variant === 'medium' ? (h("slot", { name: "content" })) : (this.tabs?.length > 0 && (h("wpp-tabs-v4-2-0", { size: this.tabSize, onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => {
       const { text, ...restProps } = tabItem;
-      return (h("wpp-tab-v4-1-0", { size: this.tabSize, key: tabItem.value, ...restProps }, tabItem.text));
-    })))))) : null), h("wpp-divider-v4-1-0", null)));
+      return (h("wpp-tab-v4-2-0", { size: this.tabSize, key: tabItem.value, ...restProps }, tabItem.text));
+    })))))) : null), h("wpp-divider-v4-2-0", null)));
   }
-  static get registryIs() { return "wpp-sticky-bar-v4-1-0"; }
+  static get registryIs() { return "wpp-sticky-bar-v4-2-0"; }
   get host() { return this; }
   static get watchers() { return {
-    "buttons": ["updateButtons"],
-    "tabs": ["updateTabs"],
-    "offsetFromTop": ["updateOffset"]
+    "buttons": ["onUpdateButtons"],
+    "tabs": ["onUpdateTabs"],
+    "offsetFromTop": ["onUpdateOffsetFromTop"]
   }; }
   static get style() { return wppStickyBarCss; }
-}, [1, "wpp-sticky-bar", "wpp-sticky-bar-v4-1-0", {
+}, [1, "wpp-sticky-bar", "wpp-sticky-bar-v4-2-0", {
     "variant": [1],
     "barTitle": [1, "bar-title"],
     "offsetFromTop": [2, "offset-from-top"],
@@ -196,49 +208,49 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-sticky-bar-v4-1-0", "wpp-action-button-v4-1-0", "wpp-button-v4-1-0", "wpp-divider-v4-1-0", "wpp-icon-chevron-v4-1-0", "wpp-spinner-v4-1-0", "wpp-tab-v4-1-0", "wpp-tabs-v4-1-0", "wpp-typography-v4-1-0"];
+  const components = ["wpp-sticky-bar-v4-2-0", "wpp-action-button-v4-2-0", "wpp-button-v4-2-0", "wpp-divider-v4-2-0", "wpp-icon-chevron-v4-2-0", "wpp-spinner-v4-2-0", "wpp-tab-v4-2-0", "wpp-tabs-v4-2-0", "wpp-typography-v4-2-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-sticky-bar-v4-1-0":
+    case "wpp-sticky-bar-v4-2-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppStickyBar$1);
       }
       break;
-    case "wpp-action-button-v4-1-0":
+    case "wpp-action-button-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-button-v4-1-0":
+    case "wpp-button-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-divider-v4-1-0":
+    case "wpp-divider-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-chevron-v4-1-0":
+    case "wpp-icon-chevron-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-spinner-v4-1-0":
+    case "wpp-spinner-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-tab-v4-1-0":
+    case "wpp-tab-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tabs-v4-1-0":
+    case "wpp-tabs-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-1-0":
+    case "wpp-typography-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

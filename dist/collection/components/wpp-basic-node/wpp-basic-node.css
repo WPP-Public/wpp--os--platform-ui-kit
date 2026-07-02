@@ -11,14 +11,29 @@
   height: 100%;
   width: 100%;
   box-sizing: border-box;
+  position: relative;
 }
-:host .node-container.loading-node {
+:host .node-container.loading-node::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: -2px;
+  pointer-events: none;
+  background: conic-gradient(from var(--loading-angle), var(--wpp-primary-color-500), var(--wpp-primary-color-100), var(--wpp-primary-color-500));
+  animation: loading-rotate 2s linear infinite;
   border-radius: calc(var(--wpp-border-radius-l) + 2px);
 }
-:host .node-container:not(.loading-node) .node-wrapper.is-selected {
+:host .node-container:not(.loading-node) .node-wrapper.is-selected::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
   border: 1px solid var(--wpp-primary-color-500);
+  border-radius: calc(var(--wpp-border-radius-l) + 1px);
 }
 :host .node-container .node-wrapper {
+  position: relative;
+  z-index: 1;
   border-radius: var(--wpp-border-radius-l);
   background-color: var(--wpp-grey-color-000);
   box-sizing: border-box;
@@ -54,7 +69,7 @@
   line-height: var(--wpp-typography-s-midi-line-height, 22px);
   font-weight: var(--wpp-typography-s-midi-font-weight, 500);
   color: var(--wpp-typography-s-midi-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-midi-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-midi-letter-spacing, 0);
 }
 :host .node-container .node-wrapper .node-body {
@@ -84,6 +99,12 @@
   display: flex;
   gap: 4px;
 }
+:host .node-container .node-wrapper .node-actions .play-btn {
+  --button-padding-s: 6px;
+}
+:host .node-container .node-wrapper .node-actions .play-btn::part(icon-start-wrapper) {
+  margin: 0;
+}
 
 @property --loading-angle {
   syntax: "<angle>";
@@ -95,13 +116,6 @@
     --loading-angle: 360deg;
   }
 }
-.loading-node {
-  padding: 2px;
-  background: conic-gradient(from var(--loading-angle), var(--wpp-primary-color-500), var(--wpp-primary-color-100), var(--wpp-primary-color-500));
-  animation: loading-rotate 2s linear infinite;
-  border-radius: calc(var(--wpp-border-radius-l) + 2px);
-}
-
 :host([data-wpp-theme=dark]) .node-container .node-wrapper {
   background-color: var(--wpp-grey-color-100);
 }

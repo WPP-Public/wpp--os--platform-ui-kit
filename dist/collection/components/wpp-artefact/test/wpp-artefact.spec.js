@@ -143,7 +143,7 @@ describe('WppArtefact', () => {
     it('Should emit wppActionClick event when an additional action from the dropdown menu is clicked', async () => {
       const page = await newSpecPage({
         components: [WppArtefact],
-        template: () => (h("wpp-artefact-v4-1-0", { artefactTitle: "Test Artefact", actions: [{ icon: 'wpp-icon-edit', label: 'Edit' }] }, h("div", { slot: "body" }))),
+        template: () => (h("wpp-artefact-v4-2-0", { artefactTitle: "Test Artefact", actions: [{ icon: 'wpp-icon-edit', label: 'Edit' }] }, h("div", { slot: "body" }))),
       });
       const wppActionClickSpy = jest.spyOn(page.rootInstance.wppActionClick, 'emit');
       const additionalListItem = page.root?.querySelectorAll('wpp-list-item')[1];
@@ -170,7 +170,7 @@ describe('WppArtefact', () => {
     it('Should render additional actions in the dropdown menu when provided via the actions prop and a scrollbar in the body when the height exceeds the maximum', async () => {
       const page = await newSpecPage({
         components: [WppArtefact],
-        template: () => (h("wpp-artefact-v4-1-0", { artefactTitle: "Test Artefact", actions: [{ icon: 'wpp-icon-edit', label: 'Edit' }] }, h("div", { slot: "body" }, h("div", { style: { height: '1300px' } }, h("p", null, "Body content with height 1300px"))))),
+        template: () => (h("wpp-artefact-v4-2-0", { artefactTitle: "Test Artefact", actions: [{ icon: 'wpp-icon-edit', label: 'Edit' }] }, h("div", { slot: "body" }, h("div", { style: { height: '1300px' } }, h("p", null, "Body content with height 1300px"))))),
       });
       await page.waitForChanges();
       expect(page.root).toMatchSnapshot();

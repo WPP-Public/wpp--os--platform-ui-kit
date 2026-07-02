@@ -18,14 +18,15 @@ export declare class WppToast {
   private animationFrame;
   private hostElement?;
   private hasLoaded;
+  private remainingTime;
+  private isHovering;
+  private isHideStarted;
   host: HTMLWppToastElement;
   isShown: boolean;
   isHide: boolean;
   toastHeight: number;
-  remainingTime: number;
   isMessageFitsWithinSingleLine: boolean;
   hasIconSlot: boolean;
-  isHovering: boolean;
   /**
    * Defines the toast style variant.
    * This property is primarily intended for internal use in the chat component.

@@ -92,6 +92,12 @@ export declare class WppCheckbox implements BaseComponent, BooleanFormControl<Ch
    */
   readonly decorative?: boolean;
   /**
+   * If 'true', the component has dark theme styles applied to it.
+   *
+   * @internal - This prop is controlled by Select / Autocomplete
+   */
+  isDarkTheme?: boolean;
+  /**
    * Emitted when the selected state changes.
    */
   readonly wppChange: EventEmitter<CheckboxChangeEvent>;
@@ -114,6 +120,7 @@ export declare class WppCheckbox implements BaseComponent, BooleanFormControl<Ch
    */
   setFocus(): Promise<void>;
   private inputRef?;
+  onUpdateDarkTheme(): void;
   connectedCallback(): void;
   disconnectedCallback(): void;
   private onClick;

@@ -37,10 +37,10 @@ export class WppPaginationItem {
     this.themeSubscription.stop();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, tabIndex: 0, exportparts: "number" }, h("wpp-typography-v4-1-0", { type: "s-body", part: "number" }, this.number)));
+    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, tabIndex: 0, exportparts: "number" }, h("wpp-typography-v4-2-0", { type: "s-body", part: "number" }, this.number)));
   }
   static get is() { return "wpp-pagination-item"; }
-  static get registryIs() { return "wpp-pagination-item-v4-1-0"; }
+  static get registryIs() { return "wpp-pagination-item-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

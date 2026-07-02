@@ -1001,6 +1001,9 @@
   width: 100%;
   --li-width: 100%;
 }
+.wpp-list.wpp-chat-input-model-options .wpp-list-item:not(:first-child) {
+  margin-top: 4px;
+}
 .wpp-list::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -1113,7 +1116,7 @@
   flex-direction: column;
   gap: 4px;
   width: 100%;
-  padding: 4px 8px 8px 8px;
+  padding: 8px;
   box-sizing: border-box;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -1133,6 +1136,10 @@
   flex-direction: column;
   gap: 4px;
 }
+.wpp-select-portal .list-scrollable .select-all-section .select-all-divider,
+.wpp-select-portal .list-scrollable .select-all-section .pinned-items-divider {
+  margin: 4px 0;
+}
 .wpp-select-portal .list-scrollable .select-all-section .wpp-list-item {
   --wpp-list-item-width: 100%;
   width: 100%;
@@ -1143,6 +1150,12 @@
 .wpp-select-portal .list-scrollable .wpp-list-item {
   --wpp-list-item-width: 100%;
   width: 100%;
+}
+.wpp-select-portal .list-scrollable .wpp-list-item::part(info-wrapper) {
+  align-items: center;
+}
+.wpp-select-portal .list-scrollable .wpp-list-item::part(checkbox) {
+  align-self: center;
 }
 .wpp-select-portal .list-scrollable .wpp-list-item p {
   margin: 0;
@@ -1168,7 +1181,10 @@
   padding: 7px 8px 8px 8px;
 }
 .wpp-select-portal .multiple-select-folder-buttons.select-all-mode {
-  justify-content: flex-end;
+  justify-content: space-between;
+}
+.wpp-select-portal .multiple-select-folder-buttons.select-all-mode .apply-button {
+  margin-left: auto;
 }
 
 .wpp-select-portal[data-wpp-theme=dark] {
@@ -1390,7 +1406,7 @@
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
   color: var(--datepicker-day-color);
 }
@@ -1444,7 +1460,7 @@
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
   margin: var(--datepicker-month-year-margin);
   color: var(--datepicker-month-color);
@@ -1475,7 +1491,7 @@
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
   height: var(--datepicker-year-height);
   margin: var(--datepicker-month-year-margin);
@@ -1507,7 +1523,7 @@
   line-height: var(--wpp-typography-s-strong-line-height, 22px);
   font-weight: var(--wpp-typography-s-strong-font-weight, 700);
   color: var(--wpp-typography-s-strong-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-strong-letter-spacing, 0);
   color: var(--datepicker-current-date-color);
 }
@@ -1532,7 +1548,7 @@
   line-height: var(--wpp-typography-xs-strong-line-height, 20px);
   font-weight: var(--wpp-typography-xs-strong-font-weight, 700);
   color: var(--wpp-typography-xs-strong-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-xs-strong-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-xs-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-xs-strong-letter-spacing, 0);
   color: var(--wpp-grey-color-800);
   text-transform: initial;
@@ -1542,7 +1558,7 @@
   line-height: var(--wpp-typography-s-strong-line-height, 22px);
   font-weight: var(--wpp-typography-s-strong-font-weight, 700);
   color: var(--wpp-typography-s-strong-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-strong-letter-spacing, 0);
   color: var(--datepicker-title-color);
 }
@@ -1557,7 +1573,7 @@
   line-height: var(--wpp-typography-s-strong-line-height, 22px);
   font-weight: var(--wpp-typography-s-strong-font-weight, 700);
   color: var(--wpp-typography-s-strong-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-strong-letter-spacing, 0);
   margin: 0;
   color: var(--datepicker-header-color);
@@ -1569,7 +1585,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   box-sizing: border-box;
   height: var(--datepicker-buttons-height);
   border-top: none;
@@ -1585,13 +1601,15 @@
 .wpp-datepicker-portal.portal-datepicker .air-datepicker-buttons {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 .wpp-datepicker-portal.portal-datepicker .air-datepicker-buttons .air-datepicker-button {
   font-size: var(--wpp-typography-s-strong-font-size, 14px);
   line-height: var(--wpp-typography-s-strong-line-height, 22px);
   font-weight: var(--wpp-typography-s-strong-font-weight, 700);
   color: var(--wpp-typography-s-strong-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-strong-letter-spacing, 0);
 }
 .wpp-datepicker-portal.portal-datepicker .air-datepicker-buttons .button-apply {
@@ -1645,7 +1663,7 @@
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
 }
 .wpp-datepicker-portal.portal-datepicker .inline-message {
@@ -1791,6 +1809,31 @@
   border: none;
   border-radius: 0;
   border-bottom: 1px solid var(--wpp-grey-color-300);
+}
+.wpp-popover-content.wpp-with-footer {
+  display: flex;
+  flex-direction: column;
+}
+.wpp-popover-content .wpp-popover-footer {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border-top: 1px solid var(--wpp-grey-color-300);
+}
+.wpp-popover-content .wpp-popover-clear-action,
+.wpp-popover-content .wpp-popover-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.wpp-popover-content .wpp-popover-footer-actions {
+  justify-content: flex-end;
+  margin-left: auto;
 }
 
 .wpp-popover-content[data-wpp-theme=dark] {

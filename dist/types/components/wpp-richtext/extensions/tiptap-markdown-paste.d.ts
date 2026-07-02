@@ -4,8 +4,7 @@
  *   containing markdown syntax is parsed and rendered as rich content rather
  *   than inserted verbatim. Tiptap's input rules in
  *   `tiptap-markdown-shortcuts.ts` only fire on keystrokes — never on paste —
- *   which is why a dedicated paste plugin is needed to restore the
- *   `quilljs-markdown` paste behaviour from the pre-migration editor.
+ *   which is why a dedicated paste plugin is needed for markdown-aware pastes.
  *
  *   The plugin only intervenes when the clipboard payload is plain text
  *   (no `text/html`), so HTML pastes from web pages, Word, or another Tiptap

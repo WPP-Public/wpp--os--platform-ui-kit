@@ -34,6 +34,7 @@ export declare function getHighestContainerInDOM(): HTMLElement;
  * Falls back to a default of 64px if the OS bar cannot be found.
  */
 export declare function getOsBarOffsetHeight(): number;
+export declare function mergeLocales<T>(defaults: T, overrides: Partial<T> | undefined): T;
 export declare const getAriaProps: (ariaProps: AriaProps) => Record<string, string>;
 export declare const isWppElement: (element: HTMLElement) => boolean;
 export {};

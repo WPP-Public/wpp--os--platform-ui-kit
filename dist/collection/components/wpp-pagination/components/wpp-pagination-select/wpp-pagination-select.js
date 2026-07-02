@@ -17,7 +17,7 @@ const getInitFocusInfo = () => ({
  */
 export class WppPaginationSelect {
   constructor() {
-    this.getPageItems = () => Array.from({ length: this.count }, (_, i) => i + 1);
+    this.getPageItems = () => Array.from({ length: this.numberOfPages }, (_, i) => i + 1);
     this.getUpdatedFocusInfo = (type, updateValue) => ({
       ...this.focusType,
       [type]: updateValue,
@@ -36,21 +36,21 @@ export class WppPaginationSelect {
     this.handlePageNumberChange = (event) => {
       const target = event.target;
       const inputValue = Math.round(Number(target.value));
-      this.activePageNumber = Math.max(1, Math.min(this.count, inputValue));
+      this.activePageNumber = Math.max(1, Math.min(this.numberOfPages, inputValue));
       target.value = String(this.activePageNumber);
-      this.wppChange.emit({ page: this.activePageNumber });
+      this.wppChange.emit({ page: this.activePageNumber, itemsPerPage: this.itemsPerPage });
     };
     this.handlePageClick = (e) => {
       this.activePageNumber = e.detail.page;
-      this.wppChange.emit({ page: this.activePageNumber });
+      this.wppChange.emit({ page: this.activePageNumber, itemsPerPage: this.itemsPerPage });
     };
     this.handleLeftArrowClick = () => {
       this.activePageNumber = Math.max(this.activePageNumber - 1, 1);
-      this.wppChange.emit({ page: this.activePageNumber });
+      this.wppChange.emit({ page: this.activePageNumber, itemsPerPage: this.itemsPerPage });
     };
     this.handleRightArrowClick = () => {
-      this.activePageNumber = Math.min(this.activePageNumber + 1, this.count);
-      this.wppChange.emit({ page: this.activePageNumber });
+      this.activePageNumber = Math.min(this.activePageNumber + 1, this.numberOfPages);
+      this.wppChange.emit({ page: this.activePageNumber, itemsPerPage: this.itemsPerPage });
     };
     this.leftArrowCssClasses = () => ({
       'icon-start': true,
@@ -59,7 +59,7 @@ export class WppPaginationSelect {
     });
     this.rightArrowCssClasses = () => ({
       'icon-end': true,
-      disabled: this.activePageNumber === this.count,
+      disabled: this.activePageNumber === this.numberOfPages,
       [this.focusType['right-chevron']]: true,
     });
     this.hostCssClasses = () => ({
@@ -67,15 +67,23 @@ export class WppPaginationSelect {
       'pagination-select-wrapper': true,
     });
     this.focusType = getInitFocusInfo();
+    this.numberOfPages = undefined;
     this.count = undefined;
+    this.itemsPerPage = 1;
     this.pageSelectThreshold = 8;
     this.activePageNumber = 1;
   }
+  onUpdateCountOrItemsPerPage() {
+    this.numberOfPages = Math.ceil(this.count / this.itemsPerPage);
+  }
+  componentWillLoad() {
+    this.numberOfPages = Math.ceil(this.count / this.itemsPerPage);
+  }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "icon-left, page-select, page-item, page-numeric, input, divider, total, icon-right" }, h("wpp-icon-chevron-v4-1-0", { class: this.leftArrowCssClasses(), onClick: () => this.handleLeftArrowClick(), tabIndex: this.activePageNumber === 1 ? -1 : 0, onBlur: () => this.onBlur('left-chevron'), onMouseDown: () => this.onMouseDown('left-chevron'), onKeyUp: (event) => this.onKeyUp(event, 'left-chevron'), part: "icon-left" }), this.count <= this.pageSelectThreshold ? (h("div", { class: "page-select", part: "page-select" }, this.getPageItems().map(page => (h("wpp-pagination-item-v4-1-0", { number: page, selected: this.activePageNumber === page, part: "page-item", onWppPageChange: this.handlePageClick }))))) : (h("div", { class: "page-numeric", part: "page-numeric" }, h("input", { type: "number", class: { 'input-page': true, [this.focusType['input']]: true }, value: this.activePageNumber, onChange: this.handlePageNumberChange, onInput: () => (this.focusType = this.getUpdatedFocusInfo('input', FOCUS_TYPE.NONE)), onBlur: () => this.onBlur('input'), onMouseDown: () => this.onMouseDown('input'), onKeyUp: (event) => this.onKeyUp(event, 'input'), part: "input", title: "" }), h("wpp-divider-v4-1-0", { part: "divider" }), h("div", { class: "total-pages", part: "total" }, this.count))), h("wpp-icon-chevron-v4-1-0", { class: this.rightArrowCssClasses(), onClick: () => this.handleRightArrowClick(), onBlur: () => this.onBlur('right-chevron'), onMouseDown: () => this.onMouseDown('right-chevron'), onKeyUp: (event) => this.onKeyUp(event, 'right-chevron'), tabIndex: this.activePageNumber === this.count ? -1 : 0, part: "icon-right" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "icon-left, page-select, page-item, page-numeric, input, divider, total, icon-right" }, h("wpp-icon-chevron-v4-2-0", { class: this.leftArrowCssClasses(), onClick: () => this.handleLeftArrowClick(), tabIndex: this.activePageNumber === 1 ? -1 : 0, onBlur: () => this.onBlur('left-chevron'), onMouseDown: () => this.onMouseDown('left-chevron'), onKeyUp: (event) => this.onKeyUp(event, 'left-chevron'), part: "icon-left" }), this.numberOfPages <= this.pageSelectThreshold ? (h("div", { class: "page-select", part: "page-select" }, this.getPageItems().map(page => (h("wpp-pagination-item-v4-2-0", { number: page, selected: this.activePageNumber === page, part: "page-item", onWppPageChange: this.handlePageClick }))))) : (h("div", { class: "page-numeric", part: "page-numeric" }, h("input", { type: "number", class: { 'input-page': true, [this.focusType['input']]: true }, value: this.activePageNumber, onChange: this.handlePageNumberChange, onInput: () => (this.focusType = this.getUpdatedFocusInfo('input', FOCUS_TYPE.NONE)), onBlur: () => this.onBlur('input'), onMouseDown: () => this.onMouseDown('input'), onKeyUp: (event) => this.onKeyUp(event, 'input'), part: "input", title: "" }), h("wpp-divider-v4-2-0", { part: "divider" }), h("div", { class: "total-pages", part: "total" }, this.numberOfPages))), h("wpp-icon-chevron-v4-2-0", { class: this.rightArrowCssClasses(), onClick: () => this.handleRightArrowClick(), onBlur: () => this.onBlur('right-chevron'), onMouseDown: () => this.onMouseDown('right-chevron'), onKeyUp: (event) => this.onKeyUp(event, 'right-chevron'), tabIndex: this.activePageNumber === this.numberOfPages ? -1 : 0, part: "icon-right" })));
   }
   static get is() { return "wpp-pagination-select"; }
-  static get registryIs() { return "wpp-pagination-select-v4-1-0"; }
+  static get registryIs() { return "wpp-pagination-select-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -105,6 +113,24 @@ export class WppPaginationSelect {
         },
         "attribute": "count",
         "reflect": false
+      },
+      "itemsPerPage": {
+        "type": "number",
+        "mutable": false,
+        "complexType": {
+          "original": "number",
+          "resolved": "number",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines how many items to display per page. The number of pages is calculated by dividing the total number of items by the number of itemsPerPage."
+        },
+        "attribute": "items-per-page",
+        "reflect": false,
+        "defaultValue": "1"
       },
       "pageSelectThreshold": {
         "type": "number",
@@ -146,7 +172,8 @@ export class WppPaginationSelect {
   }
   static get states() {
     return {
-      "focusType": {}
+      "focusType": {},
+      "numberOfPages": {}
     };
   }
   static get events() {
@@ -158,7 +185,7 @@ export class WppPaginationSelect {
         "composed": false,
         "docs": {
           "tags": [],
-          "text": "Emitted active page number"
+          "text": "Contains the active page number and itemsPerPage value."
         },
         "complexType": {
           "original": "PaginationPageChangeEventDetail",
@@ -171,6 +198,15 @@ export class WppPaginationSelect {
             }
           }
         }
+      }];
+  }
+  static get watchers() {
+    return [{
+        "propName": "count",
+        "methodName": "onUpdateCountOrItemsPerPage"
+      }, {
+        "propName": "itemsPerPage",
+        "methodName": "onUpdateCountOrItemsPerPage"
       }];
   }
 }

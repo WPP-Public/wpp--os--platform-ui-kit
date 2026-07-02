@@ -1,18 +1,6 @@
-import { default as _Quill, RangeStatic, Sources as QuillSources } from 'quill';
 import type { ValuesOf } from '../../types/utils';
-export declare const Quill: typeof _Quill & {
-  DEFAULTS: Record<string, any>;
-};
-export type QuillInstance = _Quill & {
-  clipboard?: any;
-  history?: any;
-  editor?: any;
-  selection?: any;
-  theme?: any;
-  emitter?: any;
-  wppRichtext?: any;
-};
-export type RichtextValue = string;
+import { type TiptapRichtextLocales, type TiptapRichtextValue, type TiptapSources, type TiptapUploadCallbackItem, type TiptapUploadTypes } from './tiptap-types';
+export type RichtextValue = TiptapRichtextValue;
 /**
  * Debug levels for the richtext component. Controls verbosity of internal
  * console output. Set via the `debug` prop on `wpp-richtext`.
@@ -36,30 +24,14 @@ export declare const formats: {
   markdown: string;
 };
 export type Formats = ValuesOf<typeof formats>;
-export declare const sources: Record<string, QuillSources>;
-export type Sources = ValuesOf<typeof sources>;
-/**
- * @deprecated Use TiptapChangeEventDetail from './tiptap-types' instead.
- * These Quill-based interfaces are kept only for internal legacy plugin compatibility.
- * The backward-compatible aliases for consumers are in tiptap-types.ts.
- */
-export interface QuillChangeEventDetail {
-  editor: QuillInstance;
-  value: RichtextValue;
-  source: Sources;
-  name?: string;
-  plainText?: string;
-}
-/** @deprecated Use TiptapSelectionChangeEventDetail from './tiptap-types' instead. */
-export interface QuillSelectionChangeEventDetail {
-  editor: QuillInstance;
-  range: RangeStatic;
-  oldRange: RangeStatic;
-  source: Sources;
-}
-export interface RichtextLocales {
-  charactersEntered: string;
-}
-export { uploadTypes as richtextUploadTypes, UPLOAD_REQUEST_EVENT as RICHTEXT_UPLOAD_REQUEST_EVENT, } from './plugins/quill-upload/types';
-export type { UploadTypes as RichtextUploadTypes, UploadCallbackItem as RichtextUploadCallbackItem, } from './plugins/quill-upload/types';
-export type MediaDragElement = HTMLImageElement | HTMLVideoElement;
+export declare const sources: {
+  readonly api: "api";
+  readonly user: "user";
+  readonly silent: "silent";
+};
+export type Sources = TiptapSources;
+export type RichtextLocales = TiptapRichtextLocales;
+export declare const richtextUploadTypes: readonly ["image", "video", "attachment"];
+export declare const RICHTEXT_UPLOAD_REQUEST_EVENT = "upload-request";
+export type RichtextUploadTypes = TiptapUploadTypes;
+export type RichtextUploadCallbackItem = TiptapUploadCallbackItem;

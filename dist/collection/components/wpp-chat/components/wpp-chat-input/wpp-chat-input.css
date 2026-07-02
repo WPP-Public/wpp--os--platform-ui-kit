@@ -1,17 +1,10 @@
+@charset "UTF-8";
 :host {
-  --chat-input-container-min-width: var(--wpp-chat-input-container-min-width, 320px);
+  --chat-input-container-min-width: var(--wpp-chat-input-container-min-width, 351px);
   --chat-input-container-bg-color: var(--wpp-chat-input-container-bg-color, var(--wpp-grey-color-000));
   --chat-input-container-outline-width: var(--wpp-chat-input-container-outline-width, 1px);
   --chat-input-container-outline-style: var(--wpp-chat-input-container-outline-style, solid);
   --chat-input-container-outline-color: var(--wpp-chat-input-container-outline-color, var(--wpp-grey-color-500));
-  --chat-input-container-outline-color-hover: var(
-    --wpp-chat-input-container-outline-color-hover,
-    var(--wpp-grey-color-700)
-  );
-  --chat-input-container-outline-color-active: var(
-    --wpp-chat-input-container-outline-color-active,
-    var(--wpp-grey-color-800)
-  );
   --chat-input-container-outline-color-disabled: var(
     --wpp-chat-input-container-outline-color-disabled,
     var(--wpp-grey-color-400)
@@ -25,7 +18,8 @@
   --chat-text-input-padding: var(--wpp-chat-text-input-padding, 0);
   --chat-text-input-bg-color: var(--wpp-chat-text-input-bg-color, transparent);
   --chat-text-input-placeholder-color: var(--wpp-chat-text-input-placeholder-color, var(--wpp-grey-color-700));
-  --chat-actions-bar-padding: var(--wpp-chat-actions-bar-padding, 0 10px 8px 10px);
+  --chat-actions-bar-padding: var(--wpp-chat-actions-bar-padding, 12px 16px 16px 12px);
+  --chat-s-size-actions-bar-padding: var(--wpp-chat-s-size-actions-bar-padding, 8px 16px 8px 12px);
   --chat-actions-bar-color: var(--wpp-chat-actions-bar-color, var(--wpp-grey-color-500));
   --chat-actions-bar-color-disabled: var(--wpp-chat-actions-bar-color-disabled, var(--wpp-grey-color-400));
   --chat-actions-bar-char-counter-color: var(--wpp-chat-actions-bar-char-counter-color, var(--wpp-danger-color-500));
@@ -33,9 +27,9 @@
     --wpp-chat-actions-bar-char-counter-color-disabled,
     var(--wpp-danger-color-300)
   );
-  --chat-text-input-minimized-width: var(--wpp-chat-text-input-minimized-width, 264px);
+  --chat-text-input-minimized-width: var(--wpp-chat-text-input-minimized-width, 203px);
   --chat-text-input-minimized-height: var(--wpp-chat-text-input-minimized-height, 22px);
-  --chat-text-input-minimized-padding: var(--wpp-chat-text-input-minimized-padding, 8px 10px);
+  --chat-text-input-minimized-padding: var(--wpp-chat-text-input-minimized-padding, 8px 16px 8px 12px);
   --chat-input-transition-timing: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --chat-minimized-focus-ring-color: var(--wpp-focus-ring-color, var(--wpp-primary-color-600));
   --chat-minimized-focus-ring-width: var(--wpp-focus-ring-width, 2px);
@@ -68,20 +62,38 @@
   min-width: var(--chat-input-container-min-width);
   width: 100%;
   box-sizing: border-box;
+  box-shadow: var(--wpp-box-shadow-s);
   transition: width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);
   will-change: width, height;
   cursor: text;
 }
 .chat-input-container:hover, .chat-input-container:focus-within {
-  outline: var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-hover);
+  box-shadow: var(--wpp-box-shadow-m);
 }
 .chat-input-container:active {
-  outline: var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-active);
+  box-shadow: var(--wpp-box-shadow-s);
 }
 .chat-input-container.disabled {
   pointer-events: none;
   cursor: not-allowed;
   outline: var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-disabled);
+}
+.chat-input-container.is-focused {
+  outline-color: var(--wpp-primary-color-500);
+}
+.chat-input-container.has-alert {
+  gap: 0;
+}
+
+/* Chat Alert Slot */
+.alert {
+  align-self: stretch;
+  border-top-left-radius: var(--chat-input-container-border-radius);
+  border-top-right-radius: var(--chat-input-container-border-radius);
+  overflow: hidden;
+}
+.alert[hidden] {
+  display: none;
 }
 
 /* File Upload Toast */
@@ -113,7 +125,7 @@
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
   display: flex;
   flex-direction: column-reverse;
@@ -132,6 +144,9 @@
   transform-origin: bottom;
 }
 .input-area .attachments {
+  order: 3;
+}
+.input-area .references {
   order: 2;
 }
 .input-area .text-input {
@@ -202,7 +217,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 4px;
+  gap: 8px;
+}
+.input-area.minimized .input-area-wrapper .actions-menu {
+  --wpp-mc-wrapper-width: auto;
 }
 .input-area.minimized .input-area-wrapper .sr-only {
   position: absolute !important;
@@ -221,6 +239,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  width: 100%;
   min-width: var(--chat-text-input-minimized-width);
   outline: none;
 }
@@ -245,6 +264,9 @@
   padding: var(--chat-actions-bar-padding);
   border-radius: 0 0 8px 8px;
 }
+.actions-bar.size-s {
+  padding: var(--chat-s-size-actions-bar-padding);
+}
 .actions-bar .left-actions {
   display: flex;
   gap: 8px;
@@ -267,6 +289,38 @@
 .actions-bar .left-actions .select {
   display: flex;
   width: 100%;
+  /**
+   * Centralized model-selector trigger spacing (Figma). Applied here via
+   * wpp-action-button custom-property hooks (which inherit through the slot
+   * into the slotted trigger button) so consumers don't have to repeat
+   * `::part(button)` padding overrides in every example/app.
+   *   - Outer padding: 4px top/bottom, 8px logo side, 6px chevron side.
+   *   - 8px gap between the brand logo and the model label.
+   */
+  --wpp-action-button-padding: 4px 6px;
+  --wpp-action-button-icon-start-padding: 8px;
+  --wpp-action-button-icon-end-padding: 6px;
+  --wpp-action-button-icon-start-margin: 8px;
+  --wpp-action-button-icon-end-margin: 8px;
+  /**
+   * Active/open state of the model-selector trigger (Figma): when the
+   * context menu is open the trigger carries a solid grey-300 background.
+   * The action-button paints its state via the overlay, so set a solid
+   * grey-300 fill (full opacity) for the active state, which the
+   * action-button also applies while the dropdown is expanded
+   * (aria-expanded="true").
+   */
+  --wpp-action-button-bg-color-active: var(--wpp-grey-color-300);
+  --wpp-action-button-opacity-active: 1;
+  /**
+   * Single model (static label, no chevron): the trigger action-button is
+   * slotted directly (no menu-context wrapper) and has no icon-end to
+   * balance the 8px logo-side padding, so use symmetric 8px horizontal
+   * padding instead of the 6px chevron-side value.
+   */
+}
+.actions-bar .left-actions .select ::slotted(.wpp-action-button:not(.with-icon-end)) {
+  --wpp-action-button-padding: 4px 8px;
 }
 .actions-bar .left-actions .wpp-action-button::part(button) {
   color: var(--chat-actions-bar-color);
@@ -275,39 +329,90 @@
   cursor: not-allowed;
   color: var(--chat-actions-bar-color-disabled);
 }
-.actions-bar .right-actions {
+
+.right-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
 }
-.actions-bar .right-actions .char-counter {
+.right-actions .char-counter {
   color: var(--chat-actions-bar-char-counter-color);
 }
-.actions-bar .right-actions .wpp-action-button::part(button) {
+.right-actions .wpp-action-button::part(button) {
   color: var(--chat-actions-bar-color);
 }
-.actions-bar .right-actions.disabled .wpp-action-button::part(button) {
+.right-actions.disabled .wpp-action-button::part(button) {
   cursor: not-allowed;
   color: var(--chat-actions-bar-color-disabled);
 }
-.actions-bar .right-actions.disabled .char-counter {
+.right-actions.disabled .char-counter {
   color: var(--chat-actions-bar-char-counter-color-disabled);
+}
+
+.play-btn {
+  margin-left: 4px;
+  --button-padding-s: 6px;
+}
+.play-btn::part(icon-start-wrapper) {
+  margin: 0;
 }
 
 .attachments {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-direction: row;
+  gap: 8px;
   width: 100%;
+  flex: 0 0 auto;
+  overflow: auto hidden;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.3s ease-in-out;
+}
+.attachments::-webkit-scrollbar {
+  height: 4px;
+}
+.attachments::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: var(--wpp-border-radius-xs, 4px);
+  transition: background-color 0.3s ease-in-out;
+}
+.attachments:hover, .attachments:focus-within {
+  scrollbar-color: var(--wpp-grey-color-400) transparent;
+}
+.attachments:hover::-webkit-scrollbar-thumb, .attachments:focus-within::-webkit-scrollbar-thumb {
+  background-color: var(--wpp-grey-color-400);
 }
 .attachments .wpp-file-upload-item {
-  width: 100%;
+  flex: 0 0 auto;
+  width: 224px;
+  min-width: 224px;
+  max-width: 224px;
+  --wpp-file-upload-item-chat-gap: 0;
 }
 .attachments .wpp-file-upload-item::part(file-item) {
   margin-top: 0;
 }
 .attachments .wpp-file-upload-item::part(controls) {
   justify-content: flex-end;
+}
+.attachments .wpp-file-upload-item::part(thumbnail) {
+  margin-right: 8px;
+}
+.attachments .wpp-file-upload-item::part(cross-icon) {
+  margin-left: 12px;
+}
+
+/* Chat References Slot — quotes/file references stacked above the textarea. */
+.references {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  width: 100%;
+  flex: 0 0 auto;
+}
+.references[hidden] {
+  display: none;
 }
 
 /* Keyboard-only focus ring for minimized trigger */

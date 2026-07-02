@@ -164,6 +164,81 @@ describe('wpp-menu-context', () => {
     await page.waitForChanges();
     expect(page.root).toMatchSnapshot();
   });
+  describe('Testing "handleClickTrigger" function', () => {
+    let page = undefined;
+    let hideMock;
+    let showMock;
+    const event = new MouseEvent('click');
+    const preventDefaultMock = jest.fn();
+    const stopPropagationMock = jest.fn();
+    beforeEach(async () => {
+      page = await newSpecPage({
+        components: [WppMenuContext, WppListItem],
+        html: `<wpp-menu-context>
+      <wpp-button
+        slot="trigger-element"
+        >Button</wpp-button
+      >
+      <div>
+        <wpp-list-item>Item</wpp-list-item>
+      </div>
+      </wpp-menu-context>`,
+      });
+      hideMock = jest.fn();
+      showMock = jest.fn();
+      Object.defineProperty(page.rootInstance, 'tippyInstance', {
+        value: {
+          state: { isShown: false },
+          hide: hideMock,
+          show: showMock,
+        },
+      });
+      Object.defineProperty(event, 'preventDefault', {
+        value: preventDefaultMock,
+      });
+      Object.defineProperty(event, 'stopPropagation', {
+        value: stopPropagationMock,
+      });
+    });
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+    it('Testing that the function prevents default and stops propagation of the event when tippyInstance is hidden', async () => {
+      if (!page)
+        return;
+      page.rootInstance.handleClickTrigger(event);
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await page.waitForChanges();
+      expect(preventDefaultMock).toHaveBeenCalled();
+      expect(stopPropagationMock).toHaveBeenCalled();
+      expect(showMock).toHaveBeenCalledTimes(1);
+    });
+    it('Test that niether `show` or `hide` are called when the trigger is clicked but is disabled', async () => {
+      if (!page)
+        return;
+      page.rootInstance.triggerElement = document.createElement('button');
+      page.rootInstance.triggerElement.setAttribute('disabled', 'true');
+      page.rootInstance.handleClickTrigger(event);
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await page.waitForChanges();
+      expect(preventDefaultMock).toHaveBeenCalled();
+      expect(stopPropagationMock).toHaveBeenCalled();
+      expect(showMock).toHaveBeenCalledTimes(0);
+      expect(hideMock).toHaveBeenCalledTimes(0);
+    });
+    it('Test that niether `show` or `hide` are called when the trigger is clicked but isNestedContext is true', async () => {
+      if (!page)
+        return;
+      page.rootInstance.isNestedContext = true;
+      page.rootInstance.handleClickTrigger(event);
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await page.waitForChanges();
+      expect(preventDefaultMock).toHaveBeenCalled();
+      expect(stopPropagationMock).toHaveBeenCalled();
+      expect(showMock).toHaveBeenCalledTimes(0);
+      expect(hideMock).toHaveBeenCalledTimes(0);
+    });
+  });
   describe('subscribing to theme changes', () => {
     let mockStart;
     let mockStop;

@@ -8,7 +8,7 @@ import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
  * @slot header - Content that is displayed within the `.full-screen-modal` element. To add header content, pass `slot="header"` – can contain the modal title.
  * @slot body - Content that is displayed within the `.full-screen-modal` element. To add body content, pass `slot="body"` – can contain any text that describes the modal actions.
- * @slot actions - Content that is displayed within the `.full-screen-modal` element. To add actions, pass `slot="actions"` – can contain any action buttons.
+ * @slot actions (DEPRECATED) - Content that is displayed within the `.full-screen-modal` element. To add actions, pass `slot="actions"` – can contain any action buttons.
 
  *
  * @part wrapper - component wrapper element
@@ -71,6 +71,16 @@ export class WppFullScreenModal {
       }
       this.closeReason = null;
     };
+    this.renderActionBtn = (btnConfig, variant) => {
+      const { label, ...rest } = btnConfig;
+      return (h("wpp-button-v4-2-0", { variant: variant, ...rest }, label));
+    };
+    this.renderActionsConfig = () => {
+      if (!this.actionsConfig)
+        return;
+      return (h("div", { class: "actions-container" }, this.actionsConfig?.secondaryButtonConfig &&
+        this.renderActionBtn(this.actionsConfig.secondaryButtonConfig, 'secondary'), this.renderActionBtn(this.actionsConfig.primaryButtonConfig)));
+    };
     this.focusDialog = () => {
       if (!this.dialogRef)
         return;
@@ -121,6 +131,7 @@ export class WppFullScreenModal {
       role: 'dialog',
       labelledby: 'dialog_label',
     };
+    this.actionsConfig = undefined;
   }
   handleCloseOnEsc(event) {
     if (event.key === 'Escape' && this.open) {
@@ -154,6 +165,9 @@ export class WppFullScreenModal {
   componentDidLoad() {
     this.timeouts.schedule(() => {
       this.open && this.host.classList.add('component-ready');
+      if (this.hasActionsSlot) {
+        console.warn('The `actions` slot is deprecated and will be removed in a future release. Please use the `actionsConfig` property instead.');
+      }
     });
   }
   // TODO: topOffset is calculated once on mount. If the OS bar height becomes dynamic
@@ -171,10 +185,10 @@ export class WppFullScreenModal {
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-full-screen-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-1-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-fullscreen-modal-content", ref: ref => (this.dialogRef = ref) }, h("div", { class: this.headerContainerCssClasses() }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h("wpp-action-button-v4-1-0", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button" }, h("wpp-icon-cross-v4-1-0", { slot: "icon-start" }))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData })), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-full-screen-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-2-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-fullscreen-modal-content", ref: ref => (this.dialogRef = ref) }, h("div", { class: this.headerContainerCssClasses() }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h("wpp-action-button-v4-2-0", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button" }, h("wpp-icon-cross-v4-2-0", { slot: "icon-start" }))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig ? (this.renderActionsConfig()) : (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
   }
   static get is() { return "wpp-full-screen-modal"; }
-  static get registryIs() { return "wpp-full-screen-modal-v4-1-0"; }
+  static get registryIs() { return "wpp-full-screen-modal-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -319,6 +333,28 @@ export class WppFullScreenModal {
           "text": "Contains the modal `aria-` props."
         },
         "defaultValue": "{\n    role: 'dialog',\n    labelledby: 'dialog_label',\n  }"
+      },
+      "actionsConfig": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "ModalActionsConfig",
+          "resolved": "ModalActionsConfig | undefined",
+          "references": {
+            "ModalActionsConfig": {
+              "location": "import",
+              "path": "../wpp-modal/types",
+              "id": "src/components/wpp-modal/types.ts::ModalActionsConfig"
+            }
+          }
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Configuration for rendering action buttons.\n\nAccepts an object with:\n- `buttonConfig`: primary WppButton (variant \"primary\" / \"destructive\").\n- `secondaryButtonConfig` (optional): secondary WppButton."
+        },
+        "defaultValue": "undefined"
       }
     };
   }

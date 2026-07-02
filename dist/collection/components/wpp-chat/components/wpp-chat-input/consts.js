@@ -19,6 +19,7 @@ export const MIN_TEXTAREA_HEIGHT = 52;
  * `wppActionsMenuItemClick` event on top of the built-in behavior.
  */
 export const UPLOAD_ACTION_ID = 'upload';
+export const UPLOAD_ICON = 'wpp-icon-attach';
 export const LOCALES_DEFAULTS = {
   placeholder: 'Type your message...',
   minimizedDescription: 'Expand message input',
@@ -26,9 +27,13 @@ export const LOCALES_DEFAULTS = {
   leftActionsGroupLabel: 'Attachments and tools',
   rightActionsGroupLabel: 'Send and character counter',
   sendLabel: 'Send message',
+  stopLabel: 'Stop response',
   attachLabel: 'Attach file',
   voiceLabel: 'Record voice message',
   attachmentsLabel: 'Attachments',
   messageInputLabel: 'Message input',
   actionsMenuLabel: 'More actions',
+  audioRecordButtonLabel: 'Start audio recording',
+  audioStopRecordButtonLabel: 'Stop audio recording',
+  audioLanguage: 'en-US',
 };

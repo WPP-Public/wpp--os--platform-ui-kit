@@ -56,18 +56,28 @@ describe('wpp-floating-toolbar', () => {
       icon: 'wpp-icon-add',
     },
   ];
+  const actionButtonsWithIDs = [
+    {
+      icon: 'wpp-icon-add',
+      id: 'item-1',
+    },
+    {
+      icon: 'wpp-icon-add',
+      id: 'item-2',
+    },
+  ];
   describe('snapshots', () => {
     it('should render WppFloatingToolbar with 2 action buttons', async () => {
       const page = await newSpecPage({
         components: [WppFloatingToolbar],
-        template: () => (h("wpp-floating-toolbar-v4-1-0", { actionButtonsConfig: actionButtonsWithTwoBtnConfig })),
+        template: () => (h("wpp-floating-toolbar-v4-2-0", { actionButtonsConfig: actionButtonsWithTwoBtnConfig })),
       });
       expect(page.root).toMatchSnapshot();
     });
     it('should render WppFloatingToolbar with 7 action buttons', async () => {
       const page = await newSpecPage({
         components: [WppFloatingToolbar],
-        template: () => (h("wpp-floating-toolbar-v4-1-0", { actionButtonsConfig: actionButtonsWithTenBtnConfig })),
+        template: () => (h("wpp-floating-toolbar-v4-2-0", { actionButtonsConfig: actionButtonsWithTenBtnConfig })),
       });
       expect(page.root).toMatchSnapshot();
     });
@@ -76,42 +86,42 @@ describe('wpp-floating-toolbar', () => {
     it('should render WppFloatingToolbar with 2 action buttons', async () => {
       const page = await newSpecPage({
         components: [WppFloatingToolbar],
-        template: () => (h("wpp-floating-toolbar-v4-1-0", { actionButtonsConfig: actionButtonsWithTwoBtnConfig })),
+        template: () => (h("wpp-floating-toolbar-v4-2-0", { actionButtonsConfig: actionButtonsWithTwoBtnConfig })),
       });
       expect(page.rootInstance._actionButtonsConfig.length).toEqual(actionButtonsWithTwoBtnConfig.length);
     });
     it('should render WppFloatingToolbar with 7 action buttons with passed 10 items', async () => {
       const page = await newSpecPage({
         components: [WppFloatingToolbar],
-        template: () => (h("wpp-floating-toolbar-v4-1-0", { actionButtonsConfig: actionButtonsWithTenBtnConfig })),
+        template: () => (h("wpp-floating-toolbar-v4-2-0", { actionButtonsConfig: actionButtonsWithTenBtnConfig })),
       });
       expect(page.rootInstance._actionButtonsConfig.length).toEqual(7);
     });
     it('should render WppFloatingToolbar with 1 action button', async () => {
       const page = await newSpecPage({
         components: [WppFloatingToolbar],
-        template: () => h("wpp-floating-toolbar-v4-1-0", { actionButtonsConfig: [{ icon: 'wpp-icon-add' }] }),
+        template: () => h("wpp-floating-toolbar-v4-2-0", { actionButtonsConfig: [{ icon: 'wpp-icon-add' }] }),
       });
       expect(page.rootInstance._actionButtonsConfig.length).toEqual(1);
     });
     it('should render WppFloatingToolbar with default horizontal orientation', async () => {
       const page = await newSpecPage({
         components: [WppFloatingToolbar],
-        template: () => (h("wpp-floating-toolbar-v4-1-0", { actionButtonsConfig: actionButtonsWithTwoBtnConfig })),
+        template: () => (h("wpp-floating-toolbar-v4-2-0", { actionButtonsConfig: actionButtonsWithTwoBtnConfig })),
       });
       expect(page.rootInstance.orientation).toEqual('horizontal');
     });
     it('should render WppFloatingToolbar with passed vertical orientation', async () => {
       const page = await newSpecPage({
         components: [WppFloatingToolbar],
-        template: () => (h("wpp-floating-toolbar-v4-1-0", { actionButtonsConfig: actionButtonsWithTwoBtnConfig, orientation: "vertical" })),
+        template: () => (h("wpp-floating-toolbar-v4-2-0", { actionButtonsConfig: actionButtonsWithTwoBtnConfig, orientation: "vertical" })),
       });
       expect(page.rootInstance.orientation).toEqual('vertical');
     });
     it('should update number of action buttons', async () => {
       const page = await newSpecPage({
         components: [WppFloatingToolbar],
-        template: () => (h("wpp-floating-toolbar-v4-1-0", { actionButtonsConfig: actionButtonsWithTwoBtnConfig })),
+        template: () => (h("wpp-floating-toolbar-v4-2-0", { actionButtonsConfig: actionButtonsWithTwoBtnConfig })),
       });
       expect(page.rootInstance._actionButtonsConfig.length).toEqual(actionButtonsWithTwoBtnConfig.length);
       page.rootInstance.actionButtonsConfig = actionButtonsWithTenBtnConfig;
@@ -137,7 +147,7 @@ describe('wpp-floating-toolbar', () => {
       it('should have role="toolbar", aria-label and aria-labeledby when it passed in ariaProps property', async () => {
         const { root } = await newSpecPage({
           components: [WppFloatingToolbar],
-          template: () => (h("wpp-floating-toolbar-v4-1-0", { actionButtonsConfig: actionButtonsWithTwoBtnConfig, ariaProps: {
+          template: () => (h("wpp-floating-toolbar-v4-2-0", { actionButtonsConfig: actionButtonsWithTwoBtnConfig, ariaProps: {
               role: 'toolbar',
               label: 'test',
               labelledby: 'test',
@@ -150,7 +160,7 @@ describe('wpp-floating-toolbar', () => {
       it('should navigate with keyboard', async () => {
         const { root, waitForChanges } = await newSpecPage({
           components: [WppFloatingToolbar, WppActionButton],
-          template: () => h("wpp-floating-toolbar-v4-1-0", { actionButtonsConfig: actionButtonsWithThreeBtnConfig }),
+          template: () => h("wpp-floating-toolbar-v4-2-0", { actionButtonsConfig: actionButtonsWithThreeBtnConfig }),
         });
         const buttons = root.shadowRoot.querySelectorAll('wpp-action-button');
         expect(buttons.length).toBe(3);
@@ -173,6 +183,61 @@ describe('wpp-floating-toolbar', () => {
         expect(b2.getAttribute('tabindex')).toBe('-1');
       });
     });
+    describe('Testing handleBtnClick function', () => {
+      it('Testing that this.selectedIdentifier is undefined when component not selectable', async () => {
+        const page = await newSpecPage({
+          components: [WppFloatingToolbar],
+          template: () => (h("wpp-floating-toolbar-v4-2-0", { actionButtonsConfig: actionButtonsWithTwoBtnConfig })),
+        });
+        const btnEl = page.root?.shadowRoot?.querySelector('wpp-action-button');
+        expect(btnEl).toBeTruthy();
+        btnEl?.dispatchEvent(new MouseEvent('click'));
+        await page.waitForChanges();
+        expect(page.rootInstance.selectedIdentifier).toBeUndefined();
+      });
+      it('Testing that this.selectedIdentifier is set when component is selectable', async () => {
+        const page = await newSpecPage({
+          components: [WppFloatingToolbar],
+          template: () => (h("wpp-floating-toolbar-v4-2-0", { selectable: true, actionButtonsConfig: actionButtonsWithTwoBtnConfig })),
+        });
+        const btnEl = page.root?.shadowRoot?.querySelector('wpp-action-button');
+        expect(btnEl).toBeTruthy();
+        btnEl?.dispatchEvent(new MouseEvent('click'));
+        await page.waitForChanges();
+        expect(page.rootInstance.selectedIdentifier).toEqual(0);
+      });
+      it('Testing that onClick is called when defined on btn config and this.selectedIdentifier is set correctly', async () => {
+        const onClickBtn = jest.fn();
+        const btnData = {
+          icon: 'wpp-icon-remove',
+          id: 'item-remove',
+          onClick: onClickBtn,
+        };
+        const page = await newSpecPage({
+          components: [WppFloatingToolbar],
+          template: () => (h("wpp-floating-toolbar-v4-2-0", { selectable: true, actionButtonsConfig: [...actionButtonsWithTwoBtnConfig, btnData] })),
+        });
+        const btnEl = page.root?.shadowRoot?.querySelector('wpp-action-button[id="item-remove"]');
+        expect(btnEl).toBeTruthy();
+        btnEl?.dispatchEvent(new MouseEvent('click'));
+        await page.waitForChanges();
+        expect(page.rootInstance.hasIdProp).toBeFalsy();
+        expect(page.rootInstance.selectedIdentifier).toEqual(2);
+        expect(onClickBtn).toHaveBeenCalledTimes(1);
+      });
+      it('Testing that this.selectedIdentifier will hold the value of the id when actionsButtonsConfig have items with this attribute', async () => {
+        const page = await newSpecPage({
+          components: [WppFloatingToolbar],
+          template: () => (h("wpp-floating-toolbar-v4-2-0", { selectable: true, actionButtonsConfig: actionButtonsWithIDs })),
+        });
+        const btnEl = page.root?.shadowRoot?.querySelector('wpp-action-button');
+        expect(btnEl).toBeTruthy();
+        btnEl?.dispatchEvent(new MouseEvent('click'));
+        await page.waitForChanges();
+        expect(page.rootInstance.hasIdProp).toBeTruthy();
+        expect(page.rootInstance.selectedIdentifier).toEqual('item-1');
+      });
+    });
   });
   describe('subscribing to theme changes', () => {
     let mockStart;
@@ -191,14 +256,14 @@ describe('wpp-floating-toolbar', () => {
     it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
       await newSpecPage({
         components: [WppFloatingToolbar],
-        template: () => (h("wpp-floating-toolbar-v4-1-0", { actionButtonsConfig: actionButtonsWithTwoBtnConfig })),
+        template: () => (h("wpp-floating-toolbar-v4-2-0", { actionButtonsConfig: actionButtonsWithTwoBtnConfig })),
       });
       expect(mockStart).toHaveBeenCalledTimes(1);
     });
     it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
       const page = await newSpecPage({
         components: [WppFloatingToolbar],
-        template: () => (h("wpp-floating-toolbar-v4-1-0", { actionButtonsConfig: actionButtonsWithTwoBtnConfig })),
+        template: () => (h("wpp-floating-toolbar-v4-2-0", { actionButtonsConfig: actionButtonsWithTwoBtnConfig })),
       });
       page.root?.remove();
       expect(mockStop).toHaveBeenCalledTimes(1);

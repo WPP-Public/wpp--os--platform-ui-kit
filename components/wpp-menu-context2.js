@@ -88,8 +88,10 @@ const WppMenuContext = /*@__PURE__*/ proxyCustomElement(class WppMenuContext ext
           this.handleAriaExpandedOnTrigger('show');
           const listItems = this.contentRef?.querySelectorAll(transformToVersionedTag('wpp-list-item'));
           Array.from(listItems || []).forEach(item => {
+            item.setAttribute('container-state', 'shown');
             item.setAttribute('container-state', 'tooltipTrigger');
           });
+          this.applyChatInputDropdownA11y(Array.from(listItems || []));
           if (this.dropdownConfig?.onShow) {
             return this.dropdownConfig.onShow(instance);
           }
@@ -113,12 +115,53 @@ const WppMenuContext = /*@__PURE__*/ proxyCustomElement(class WppMenuContext ext
         },
       });
     };
-    this.handleAriaExpandedOnTrigger = (type) => {
-      if (!this.triggerRef)
+    // Accessibility wiring for the chat-input model-selector dropdown only (identified by its
+    // external class). Runs on every show because the dropdown content is appended to the body
+    // and its consumer (e.g. React) may re-render the list items, resetting these attributes.
+    //  - SC 1.3.1 (aria-required-children): the dropdown <ul> has role="menu", but wpp-list-item
+    //    hosts default to role="presentation", which is not a valid menu child. Promote them to
+    //    role="menuitem".
+    //  - SC 4.1.2 (nested-interactive): the decorative brand-logo wpp-avatar inside each item
+    //    ships role="button" tabindex="0"; demote it to role="presentation" so it is not an
+    //    independently focusable control nested inside the menu item.
+    this.applyChatInputDropdownA11y = (listItems) => {
+      if (!this.externalClass?.includes('wpp-chat-input-model-options'))
         return;
-      const ariaExpandedValue = this.triggerRef.getAttribute('aria-expanded');
+      listItems.forEach(item => {
+        item.setAttribute('role', 'menuitem');
+        const decorativeAvatars = item.querySelectorAll('[slot="left"], [slot="right"]');
+        decorativeAvatars.forEach(avatar => {
+          avatar.setAttribute('role', 'presentation');
+          if (avatar.tabIndex >= 0)
+            avatar.tabIndex = -1;
+        });
+      });
+    };
+    this.getAriaExpandedTarget = () => {
+      const trigger = this.triggerElement;
+      // SC 4.1.2 (aria-allowed-attr): a custom-element host (e.g. wpp-action-button) has a
+      // generic role that does not allow aria-expanded. For the chat-input model selector the
+      // trigger is an action-button, so place aria-expanded on its inner native <button>
+      // (exposed via part="button"), which supports it. Scoped to the chat-input dropdown via
+      // its external class so other menus keep their existing trigger behavior.
+      if (trigger && this.externalClass?.includes('wpp-chat-input-model-options')) {
+        const innerButton = trigger.shadowRoot?.querySelector('[part="button"]');
+        if (innerButton)
+          return innerButton;
+      }
+      return trigger ?? this.triggerRef;
+    };
+    this.handleAriaExpandedOnTrigger = (type) => {
+      // Set aria-expanded on the inner interactive element (e.g. the slotted button), NOT on the
+      // wrapper <div>. A plain div does not have a role that allows aria-expanded (SC 4.1.2), so
+      // placing it there causes an aria-allowed-attr violation. The slotted trigger element (e.g.
+      // wpp-action-button) is the semantically correct target.
+      const target = this.getAriaExpandedTarget();
+      if (!target)
+        return;
+      const ariaExpandedValue = target.getAttribute('aria-expanded');
       if (!ariaExpandedValue || ariaExpandedValue === (type === 'show' ? 'false' : 'true')) {
-        this.triggerRef.setAttribute('aria-expanded', type === 'show' ? 'true' : 'false');
+        target.setAttribute('aria-expanded', type === 'show' ? 'true' : 'false');
       }
     };
     this.onBlur = () => {
@@ -139,6 +182,7 @@ const WppMenuContext = /*@__PURE__*/ proxyCustomElement(class WppMenuContext ext
     };
     this.handleClickTrigger = (event) => {
       event.stopPropagation();
+      event.preventDefault();
       const isTriggerDisabled = !!((this.triggerElement?.hasAttribute('disabled') && this.triggerElement?.getAttribute('disabled') !== 'false') ||
         this.triggerElement?.classList.contains('disabled'));
       if (this.isNestedContext || isTriggerDisabled)
@@ -268,14 +312,14 @@ const WppMenuContext = /*@__PURE__*/ proxyCustomElement(class WppMenuContext ext
     };
     return (h(Host, { class: this.menuCssClasses(), exportparts: "trigger, list-wrapper, list, inner", onFocusout: this.onFocusout }, h("div", { ref: this.getTriggerRef, onClick: this.handleClickTrigger, class: this.triggerWrapperCssClasses() }, h("slot", { name: "trigger-element", part: "trigger" })), h("div", { class: "wpp-list-wrapper", part: "list-wrapper", ref: ref => (this.wppListWrapperRef = ref) }, h("ul", { class: this.listWrapperCssClasses(), style: style, ref: this.getContentRef, role: MENU_ROLE, part: "list" }, h("slot", { part: "inner" })))));
   }
-  static get registryIs() { return "wpp-menu-context-v4-1-0"; }
+  static get registryIs() { return "wpp-menu-context-v4-2-0"; }
   get host() { return this; }
   static get watchers() { return {
     "dropdownConfig": ["updateDropdownConfig"],
     "isInComponent": ["updateIsInComponent"]
   }; }
   static get style() { return wppMenuContextCss; }
-}, [6, "wpp-menu-context", "wpp-menu-context-v4-1-0", {
+}, [6, "wpp-menu-context", "wpp-menu-context-v4-2-0", {
     "listWidth": [513, "list-width"],
     "dropdownConfig": [1040],
     "appendToListWrapper": [4, "append-to-list-wrapper"],
@@ -291,9 +335,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-menu-context-v4-1-0"];
+  const components = ["wpp-menu-context-v4-2-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-menu-context-v4-1-0":
+    case "wpp-menu-context-v4-2-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppMenuContext);
       }

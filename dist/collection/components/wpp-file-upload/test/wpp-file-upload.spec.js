@@ -30,7 +30,7 @@ describe('wpp-file-upload', () => {
   it('should render file upload with acceptConfig', async () => {
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => (h("wpp-file-upload-v4-1-0", { acceptConfig: {
+      template: () => (h("wpp-file-upload-v4-2-0", { acceptConfig: {
           'video/quicktime': ['.mov'],
           'video/x-msvideo': ['.avi'],
         } })),
@@ -40,14 +40,14 @@ describe('wpp-file-upload', () => {
   it('should render file uploader with file items based on url', async () => {
     const page = await newSpecPage({
       components: [WppFileUpload, WppFileUploadItem],
-      template: () => h("wpp-file-upload-v4-1-0", { value: value }),
+      template: () => h("wpp-file-upload-v4-2-0", { value: value }),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('should reset a controlled file upload when value changes to an empty array', async () => {
     const page = await newSpecPage({
       components: [WppFileUpload, WppFileUploadItem],
-      template: () => h("wpp-file-upload-v4-1-0", { controlled: true, value: value }),
+      template: () => h("wpp-file-upload-v4-2-0", { controlled: true, value: value }),
     });
     const fileUpload = page.root;
     expect(page.root?.shadowRoot?.querySelectorAll('wpp-file-upload-item')).toHaveLength(2);
@@ -58,7 +58,7 @@ describe('wpp-file-upload', () => {
   it('should reset a controlled file upload when value changes to undefined', async () => {
     const page = await newSpecPage({
       components: [WppFileUpload, WppFileUploadItem],
-      template: () => h("wpp-file-upload-v4-1-0", { controlled: true, value: value }),
+      template: () => h("wpp-file-upload-v4-2-0", { controlled: true, value: value }),
     });
     const fileUpload = page.root;
     let error;

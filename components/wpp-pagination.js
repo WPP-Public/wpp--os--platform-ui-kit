@@ -1,4 +1,5 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host, Fragment } from '@stencil/core/internal/client';
+import { y as mergeLocales } from './utils.js';
 import { d as defineCustomElement$p } from './wpp-action-button2.js';
 import { d as defineCustomElement$o } from './wpp-checkbox2.js';
 import { d as defineCustomElement$n } from './wpp-divider2.js';
@@ -38,7 +39,6 @@ const WppPagination$1 = /*@__PURE__*/ proxyCustomElement(class WppPagination ext
     this.__registerHost();
     this.__attachShadow();
     this.wppChange = createEvent(this, "wppChange", 1);
-    this._locales = LOCALES_DEFAULTS;
     this.handleItemsPerPageNumberChange = (e) => {
       this.activePageNumber = 1;
       this.selectedItemPerPage = Number(e.detail.value);
@@ -74,36 +74,31 @@ const WppPagination$1 = /*@__PURE__*/ proxyCustomElement(class WppPagination ext
     this.dropdownConfig = {};
     this.locales = {};
   }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
-  }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
     if (!this.selectedItemPerPage) {
       this.selectedItemPerPage = this.itemsPerPage[0];
       this.wppChange.emit({ page: this.activePageNumber, itemsPerPage: this.selectedItemPerPage });
     }
   }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
   get hasSingleItemPerPageOption() {
     return this.itemsPerPage.length === 1;
   }
   render() {
-    const countPagesToDisplay = Math.ceil(this.count / this.selectedItemPerPage);
     if (this.count === 0) {
       return null;
     }
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, h("div", { class: "control-pagination-wrapper", part: "body" }, !this.hasSingleItemPerPageOption && (h(Fragment, null, h("wpp-typography-v4-1-0", { type: "s-body", part: "per-page-label" }, this._locales.itemsPerPage, ":"), h("wpp-select-v4-1-0", { type: "single", isTextSelect: true, onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig }, dropdownWidth: "100px", part: "pre-page-select", list: this.itemsPerPage.map(item => ({
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, h("div", { class: "control-pagination-wrapper", part: "body" }, !this.hasSingleItemPerPageOption && (h(Fragment, null, h("wpp-typography-v4-2-0", { type: "s-body", part: "per-page-label" }, this._locales.itemsPerPage, ":"), h("wpp-select-v4-2-0", { type: "single", isTextSelect: true, onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig }, dropdownWidth: "100px", part: "pre-page-select", list: this.itemsPerPage.map(item => ({
         value: item,
         label: `${item}`,
         part: 'per-page-item',
-      })) }), h("wpp-divider-v4-1-0", { part: "divider" }))), h("wpp-typography-v4-1-0", { type: "s-body", part: "range" }, this.getPageRange())), countPagesToDisplay && (h("wpp-pagination-select-v4-1-0", { count: countPagesToDisplay, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, part: "page-select" }))));
+      })) }), h("wpp-divider-v4-2-0", { part: "divider" }))), h("wpp-typography-v4-2-0", { type: "s-body", part: "range" }, this.getPageRange())), this.selectedItemPerPage && (h("wpp-pagination-select-v4-2-0", { count: this.count, itemsPerPage: this.selectedItemPerPage, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, part: "page-select" }))));
   }
-  static get registryIs() { return "wpp-pagination-v4-1-0"; }
-  static get watchers() { return {
-    "locales": ["onUpdateLocales"]
-  }; }
+  static get registryIs() { return "wpp-pagination-v4-2-0"; }
   static get style() { return wppPaginationCss; }
-}, [1, "wpp-pagination", "wpp-pagination-v4-1-0", {
+}, [1, "wpp-pagination", "wpp-pagination-v4-2-0", {
     "count": [2],
     "itemsPerPage": [16],
     "selectedItemPerPage": [1026, "selected-item-per-page"],
@@ -116,129 +111,129 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-pagination-v4-1-0", "wpp-action-button-v4-1-0", "wpp-checkbox-v4-1-0", "wpp-divider-v4-1-0", "wpp-icon-chevron-v4-1-0", "wpp-icon-cross-v4-1-0", "wpp-icon-dash-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-info-message-v4-1-0", "wpp-icon-search-v4-1-0", "wpp-icon-success-v4-1-0", "wpp-icon-tick-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-inline-message-v4-1-0", "wpp-input-v4-1-0", "wpp-internal-label-v4-1-0", "wpp-internal-tooltip-v4-1-0", "wpp-label-v4-1-0", "wpp-list-item-v4-1-0", "wpp-pagination-item-v4-1-0", "wpp-pagination-select-v4-1-0", "wpp-select-v4-1-0", "wpp-spinner-v4-1-0", "wpp-tooltip-v4-1-0", "wpp-typography-v4-1-0"];
+  const components = ["wpp-pagination-v4-2-0", "wpp-action-button-v4-2-0", "wpp-checkbox-v4-2-0", "wpp-divider-v4-2-0", "wpp-icon-chevron-v4-2-0", "wpp-icon-cross-v4-2-0", "wpp-icon-dash-v4-2-0", "wpp-icon-error-v4-2-0", "wpp-icon-info-message-v4-2-0", "wpp-icon-search-v4-2-0", "wpp-icon-success-v4-2-0", "wpp-icon-tick-v4-2-0", "wpp-icon-warning-v4-2-0", "wpp-inline-message-v4-2-0", "wpp-input-v4-2-0", "wpp-internal-label-v4-2-0", "wpp-internal-tooltip-v4-2-0", "wpp-label-v4-2-0", "wpp-list-item-v4-2-0", "wpp-pagination-item-v4-2-0", "wpp-pagination-select-v4-2-0", "wpp-select-v4-2-0", "wpp-spinner-v4-2-0", "wpp-tooltip-v4-2-0", "wpp-typography-v4-2-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-pagination-v4-1-0":
+    case "wpp-pagination-v4-2-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppPagination$1);
       }
       break;
-    case "wpp-action-button-v4-1-0":
+    case "wpp-action-button-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$p();
       }
       break;
-    case "wpp-checkbox-v4-1-0":
+    case "wpp-checkbox-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$o();
       }
       break;
-    case "wpp-divider-v4-1-0":
+    case "wpp-divider-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-icon-chevron-v4-1-0":
+    case "wpp-icon-chevron-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-icon-cross-v4-1-0":
+    case "wpp-icon-cross-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-dash-v4-1-0":
+    case "wpp-icon-dash-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-error-v4-1-0":
+    case "wpp-icon-error-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-info-message-v4-1-0":
+    case "wpp-icon-info-message-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-search-v4-1-0":
+    case "wpp-icon-search-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-success-v4-1-0":
+    case "wpp-icon-success-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-tick-v4-1-0":
+    case "wpp-icon-tick-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-warning-v4-1-0":
+    case "wpp-icon-warning-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-inline-message-v4-1-0":
+    case "wpp-inline-message-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-input-v4-1-0":
+    case "wpp-input-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-internal-label-v4-1-0":
+    case "wpp-internal-label-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-internal-tooltip-v4-1-0":
+    case "wpp-internal-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-label-v4-1-0":
+    case "wpp-label-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-list-item-v4-1-0":
+    case "wpp-list-item-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-pagination-item-v4-1-0":
+    case "wpp-pagination-item-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-pagination-select-v4-1-0":
+    case "wpp-pagination-select-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-select-v4-1-0":
+    case "wpp-select-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-1-0":
+    case "wpp-spinner-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-1-0":
+    case "wpp-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-1-0":
+    case "wpp-typography-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

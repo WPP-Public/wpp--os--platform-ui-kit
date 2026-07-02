@@ -1,6 +1,6 @@
 /**
  * @file Tiptap markdown shortcuts extension for wpp-richtext
- * @description InputRules-based auto-formatting that replaces quilljs-markdown.
+ * @description InputRules-based auto-formatting for markdown shortcuts.
  *   Handles: # → Heading, > → Blockquote, ``` → Code block, - → Bullet list,
  *   1. → Ordered list, *text* → Italic, **text** → Bold, ~~text~~ → Strikethrough,
  *   `code` → Inline code.

@@ -12,7 +12,6 @@ import { LabelLocales } from '../../types';
  * @slot icon - may contain an icon that will be placed after text wrapper, e.g. a info icon
  */
 export declare class WppInternalLabel {
-  private _locales;
   hasIconSlot: boolean;
   host: HTMLWppInternalLabelElement;
   focusType: FOCUS_TYPE;
@@ -49,8 +48,8 @@ export declare class WppInternalLabel {
    * Indicates the role attribute for the component
    */
   readonly role: string;
-  onUpdateLocales(newLocales: Partial<LabelLocales>): void;
   componentWillLoad(): void;
+  private get _locales();
   private updateSlotData;
   private onBlur;
   private onKeyUp;

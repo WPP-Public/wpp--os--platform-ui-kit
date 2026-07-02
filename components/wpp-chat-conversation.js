@@ -1,12 +1,13 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
-import { d as defineCustomElement$G } from './wpp-action-button2.js';
-import { d as defineCustomElement$F } from './wpp-avatar2.js';
+import { d as defineCustomElement$H } from './wpp-action-button2.js';
+import { d as defineCustomElement$G } from './wpp-avatar2.js';
+import { d as defineCustomElement$F } from './wpp-button2.js';
 import { d as defineCustomElement$E } from './wpp-chat-conversation-message2.js';
 import { d as defineCustomElement$D } from './wpp-chat-input2.js';
 import { d as defineCustomElement$C } from './wpp-checkbox2.js';
 import { d as defineCustomElement$B } from './wpp-divider2.js';
 import { d as defineCustomElement$A } from './wpp-file-upload-item2.js';
-import { d as defineCustomElement$z } from './wpp-icon-attach2.js';
+import { d as defineCustomElement$z } from './wpp-icon-arrow2.js';
 import { d as defineCustomElement$y } from './wpp-icon-chevron2.js';
 import { d as defineCustomElement$x } from './wpp-icon-copy2.js';
 import { d as defineCustomElement$w } from './wpp-icon-cross2.js';
@@ -24,8 +25,8 @@ import { d as defineCustomElement$l } from './wpp-icon-more2.js';
 import { d as defineCustomElement$k } from './wpp-icon-music2.js';
 import { d as defineCustomElement$j } from './wpp-icon-pitch2.js';
 import { d as defineCustomElement$i } from './wpp-icon-plus2.js';
-import { d as defineCustomElement$h } from './wpp-icon-send2.js';
-import { d as defineCustomElement$g } from './wpp-icon-spreadsheet2.js';
+import { d as defineCustomElement$h } from './wpp-icon-spreadsheet2.js';
+import { d as defineCustomElement$g } from './wpp-icon-stop2.js';
 import { d as defineCustomElement$f } from './wpp-icon-success2.js';
 import { d as defineCustomElement$e } from './wpp-icon-tick2.js';
 import { d as defineCustomElement$d } from './wpp-icon-video-clip2.js';
@@ -41,7 +42,7 @@ import { d as defineCustomElement$4 } from './wpp-toast2.js';
 import { d as defineCustomElement$3 } from './wpp-tooltip2.js';
 import { d as defineCustomElement$2 } from './wpp-typography2.js';
 
-const wppChatConversationCss = ":host{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%;height:100%;min-height:0;padding:10px;border:1px solid var(--wpp-border-color);border-radius:var(--wpp-border-radius-m);-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m)}.conversation-container{-ms-flex:1 1 auto;flex:1 1 auto;min-height:0;overflow:hidden auto;scrollbar-gutter:stable both-edges;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:center;align-items:center;gap:24px;padding:16px 0;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.conversation-container::-webkit-scrollbar{width:4px;height:4px}.conversation-container::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.input-wrapper{margin:auto auto 0;width:100%;max-width:calc(80ch + 128px)}.input-wrapper.no-user-avatar,.input-wrapper.no-assistant-avatar{max-width:calc(80ch + 64px)}.input-wrapper.no-user-avatar.no-assistant-avatar{max-width:80ch}";
+const wppChatConversationCss = ":host{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%;height:100%;min-height:0;padding:10px;border:1px solid var(--wpp-border-color);border-radius:var(--wpp-border-radius-m);-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m)}.conversation-container{-ms-flex:1 1 auto;flex:1 1 auto;min-height:0;overflow:hidden auto;scrollbar-gutter:stable both-edges;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:center;align-items:center;gap:24px;padding:16px 0;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.conversation-container::-webkit-scrollbar{width:4px;height:4px}.conversation-container::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.conversation-container slot{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:center;align-items:center;gap:24px;width:100%}.input-wrapper{margin:auto auto 0;width:100%;max-width:calc(80ch + 88px)}.input-wrapper.no-user-avatar,.input-wrapper.no-assistant-avatar{max-width:calc(80ch + 44px)}.input-wrapper.no-user-avatar.no-assistant-avatar{max-width:80ch}";
 
 const WppChatConversation$1 = /*@__PURE__*/ proxyCustomElement(class WppChatConversation extends HTMLElement {
   constructor() {
@@ -49,6 +50,7 @@ const WppChatConversation$1 = /*@__PURE__*/ proxyCustomElement(class WppChatConv
     this.__registerHost();
     this.__attachShadow();
     this.wppSend = createEvent(this, "wppSend", 1);
+    this.wppStop = createEvent(this, "wppStop", 1);
     this.wppChange = createEvent(this, "wppChange", 1);
     this.wppMessageChanged = createEvent(this, "wppMessageChanged", 1);
     this.wppActionsMenuToggle = createEvent(this, "wppActionsMenuToggle", 1);
@@ -71,7 +73,7 @@ const WppChatConversation$1 = /*@__PURE__*/ proxyCustomElement(class WppChatConv
     const messageEl = this.getLastMessageElement();
     if (messageEl) {
       await messageEl.appendChunk(chunk);
-      this.scrollToBottom();
+      this.scrollContainerToBottom();
     }
   }
   /**
@@ -96,7 +98,7 @@ const WppChatConversation$1 = /*@__PURE__*/ proxyCustomElement(class WppChatConv
    * Handles changes in the messages prop and scrolls to the bottom.
    */
   handleMessagesChange() {
-    this.scrollToBottom();
+    this.scrollContainerToBottom();
   }
   getLastMessageElement() {
     const lastMessage = this.messages[this.messages.length - 1];
@@ -105,7 +107,14 @@ const WppChatConversation$1 = /*@__PURE__*/ proxyCustomElement(class WppChatConv
     }
     return this.messageElementsMap.get(lastMessage.id) || null;
   }
-  scrollToBottom() {
+  /**
+   * Scrolls the conversation to the bottom. Use this when composing messages via the slot — the component
+   * does not auto-scroll on slot changes.
+   */
+  async scrollToBottom() {
+    this.scrollContainerToBottom();
+  }
+  scrollContainerToBottom() {
     setTimeout(() => {
       if (!this.conversationContainerRef)
         return;
@@ -116,238 +125,244 @@ const WppChatConversation$1 = /*@__PURE__*/ proxyCustomElement(class WppChatConv
     }, 100);
   }
   render() {
-    return (h(Host, null, h("div", { class: "conversation-container", ref: el => (this.conversationContainerRef = el) }, this.messages?.map(message => (h("wpp-chat-conversation-message-v4-1-0", { key: message.id, id: message.id, ref: el => {
+    return (h(Host, null, h("div", { class: "conversation-container", ref: el => (this.conversationContainerRef = el) }, this.messages?.map(message => (h("wpp-chat-conversation-message-v4-2-0", { key: message.id, id: message.id, ref: el => {
         if (el)
           this.messageElementsMap.set(message.id, el);
-      }, role: message.role, content: message.content, status: message.status, attachments: message.attachments, actionButtonsConfig: message.actionButtonsConfig, sourcesActionConfig: message.sourcesActionConfig, menuContextListItems: message.menuContextListItems, assistantAvatarConfig: this.assistantAvatarConfig, userAvatarConfig: this.userAvatarConfig })))), h("div", { class: this.inputWrapperCssClasses() }, h("wpp-chat-input-v4-1-0", { ...this.chatInputConfig, onWppSend: e => this.wppSend.emit(e.detail), onWppChange: e => this.wppChange.emit(e.detail), onWppMessageChanged: e => this.wppMessageChanged.emit(e.detail), onWppActionsMenuToggle: e => this.wppActionsMenuToggle.emit(e.detail), onWppActionsMenuItemClick: e => this.wppActionsMenuItemClick.emit(e.detail) }))));
+      }, role: message.role, content: message.content, status: message.status, attachments: message.attachments, actionButtonsConfig: message.actionButtonsConfig, sourcesActionConfig: message.sourcesActionConfig, menuContextListItems: message.menuContextListItems, assistantAvatarConfig: this.assistantAvatarConfig, userAvatarConfig: this.userAvatarConfig }))), h("slot", null)), h("div", { class: this.inputWrapperCssClasses() }, h("wpp-chat-input-v4-2-0", { ...this.chatInputConfig, onWppSend: e => this.wppSend.emit(e.detail), onWppStop: () => this.wppStop.emit(), onWppChange: e => this.wppChange.emit(e.detail), onWppMessageChanged: e => this.wppMessageChanged.emit(e.detail), onWppActionsMenuToggle: e => this.wppActionsMenuToggle.emit(e.detail), onWppActionsMenuItemClick: e => this.wppActionsMenuItemClick.emit(e.detail) }))));
   }
-  static get registryIs() { return "wpp-chat-conversation-v4-1-0"; }
+  static get registryIs() { return "wpp-chat-conversation-v4-2-0"; }
   get host() { return this; }
   static get watchers() { return {
     "messages": ["handleMessagesChange"]
   }; }
   static get style() { return wppChatConversationCss; }
-}, [1, "wpp-chat-conversation", "wpp-chat-conversation-v4-1-0", {
+}, [1, "wpp-chat-conversation", "wpp-chat-conversation-v4-2-0", {
     "messages": [16],
     "assistantAvatarConfig": [4, "assistant-avatar-config"],
     "userAvatarConfig": [4, "user-avatar-config"],
     "chatInputConfig": [16],
     "appendChunk": [64],
     "completeStream": [64],
-    "setStatus": [64]
+    "setStatus": [64],
+    "scrollToBottom": [64]
   }]);
 function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-chat-conversation-v4-1-0", "wpp-action-button-v4-1-0", "wpp-avatar-v4-1-0", "wpp-chat-conversation-message-v4-1-0", "wpp-chat-input-v4-1-0", "wpp-checkbox-v4-1-0", "wpp-divider-v4-1-0", "wpp-file-upload-item-v4-1-0", "wpp-icon-attach-v4-1-0", "wpp-icon-chevron-v4-1-0", "wpp-icon-copy-v4-1-0", "wpp-icon-cross-v4-1-0", "wpp-icon-dash-v4-1-0", "wpp-icon-database-v4-1-0", "wpp-icon-document-v4-1-0", "wpp-icon-download-v4-1-0", "wpp-icon-error-v4-1-0", "wpp-icon-file-v4-1-0", "wpp-icon-file-zip-v4-1-0", "wpp-icon-image-v4-1-0", "wpp-icon-info-message-v4-1-0", "wpp-icon-mic-on-v4-1-0", "wpp-icon-more-v4-1-0", "wpp-icon-music-v4-1-0", "wpp-icon-pitch-v4-1-0", "wpp-icon-plus-v4-1-0", "wpp-icon-send-v4-1-0", "wpp-icon-spreadsheet-v4-1-0", "wpp-icon-success-v4-1-0", "wpp-icon-tick-v4-1-0", "wpp-icon-video-clip-v4-1-0", "wpp-icon-warning-v4-1-0", "wpp-inline-message-v4-1-0", "wpp-internal-label-v4-1-0", "wpp-internal-tooltip-v4-1-0", "wpp-label-v4-1-0", "wpp-list-item-v4-1-0", "wpp-menu-context-v4-1-0", "wpp-spinner-v4-1-0", "wpp-toast-v4-1-0", "wpp-tooltip-v4-1-0", "wpp-typography-v4-1-0"];
+  const components = ["wpp-chat-conversation-v4-2-0", "wpp-action-button-v4-2-0", "wpp-avatar-v4-2-0", "wpp-button-v4-2-0", "wpp-chat-conversation-message-v4-2-0", "wpp-chat-input-v4-2-0", "wpp-checkbox-v4-2-0", "wpp-divider-v4-2-0", "wpp-file-upload-item-v4-2-0", "wpp-icon-arrow-v4-2-0", "wpp-icon-chevron-v4-2-0", "wpp-icon-copy-v4-2-0", "wpp-icon-cross-v4-2-0", "wpp-icon-dash-v4-2-0", "wpp-icon-database-v4-2-0", "wpp-icon-document-v4-2-0", "wpp-icon-download-v4-2-0", "wpp-icon-error-v4-2-0", "wpp-icon-file-v4-2-0", "wpp-icon-file-zip-v4-2-0", "wpp-icon-image-v4-2-0", "wpp-icon-info-message-v4-2-0", "wpp-icon-mic-on-v4-2-0", "wpp-icon-more-v4-2-0", "wpp-icon-music-v4-2-0", "wpp-icon-pitch-v4-2-0", "wpp-icon-plus-v4-2-0", "wpp-icon-spreadsheet-v4-2-0", "wpp-icon-stop-v4-2-0", "wpp-icon-success-v4-2-0", "wpp-icon-tick-v4-2-0", "wpp-icon-video-clip-v4-2-0", "wpp-icon-warning-v4-2-0", "wpp-inline-message-v4-2-0", "wpp-internal-label-v4-2-0", "wpp-internal-tooltip-v4-2-0", "wpp-label-v4-2-0", "wpp-list-item-v4-2-0", "wpp-menu-context-v4-2-0", "wpp-spinner-v4-2-0", "wpp-toast-v4-2-0", "wpp-tooltip-v4-2-0", "wpp-typography-v4-2-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-chat-conversation-v4-1-0":
+    case "wpp-chat-conversation-v4-2-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppChatConversation$1);
       }
       break;
-    case "wpp-action-button-v4-1-0":
+    case "wpp-action-button-v4-2-0":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$H();
+      }
+      break;
+    case "wpp-avatar-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$G();
       }
       break;
-    case "wpp-avatar-v4-1-0":
+    case "wpp-button-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$F();
       }
       break;
-    case "wpp-chat-conversation-message-v4-1-0":
+    case "wpp-chat-conversation-message-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$E();
       }
       break;
-    case "wpp-chat-input-v4-1-0":
+    case "wpp-chat-input-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$D();
       }
       break;
-    case "wpp-checkbox-v4-1-0":
+    case "wpp-checkbox-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$C();
       }
       break;
-    case "wpp-divider-v4-1-0":
+    case "wpp-divider-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$B();
       }
       break;
-    case "wpp-file-upload-item-v4-1-0":
+    case "wpp-file-upload-item-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$A();
       }
       break;
-    case "wpp-icon-attach-v4-1-0":
+    case "wpp-icon-arrow-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$z();
       }
       break;
-    case "wpp-icon-chevron-v4-1-0":
+    case "wpp-icon-chevron-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$y();
       }
       break;
-    case "wpp-icon-copy-v4-1-0":
+    case "wpp-icon-copy-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$x();
       }
       break;
-    case "wpp-icon-cross-v4-1-0":
+    case "wpp-icon-cross-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$w();
       }
       break;
-    case "wpp-icon-dash-v4-1-0":
+    case "wpp-icon-dash-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$v();
       }
       break;
-    case "wpp-icon-database-v4-1-0":
+    case "wpp-icon-database-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$u();
       }
       break;
-    case "wpp-icon-document-v4-1-0":
+    case "wpp-icon-document-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$t();
       }
       break;
-    case "wpp-icon-download-v4-1-0":
+    case "wpp-icon-download-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$s();
       }
       break;
-    case "wpp-icon-error-v4-1-0":
+    case "wpp-icon-error-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$r();
       }
       break;
-    case "wpp-icon-file-v4-1-0":
+    case "wpp-icon-file-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$q();
       }
       break;
-    case "wpp-icon-file-zip-v4-1-0":
+    case "wpp-icon-file-zip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$p();
       }
       break;
-    case "wpp-icon-image-v4-1-0":
+    case "wpp-icon-image-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$o();
       }
       break;
-    case "wpp-icon-info-message-v4-1-0":
+    case "wpp-icon-info-message-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-icon-mic-on-v4-1-0":
+    case "wpp-icon-mic-on-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-icon-more-v4-1-0":
+    case "wpp-icon-more-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-music-v4-1-0":
+    case "wpp-icon-music-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-pitch-v4-1-0":
+    case "wpp-icon-pitch-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-plus-v4-1-0":
+    case "wpp-icon-plus-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-send-v4-1-0":
+    case "wpp-icon-spreadsheet-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-spreadsheet-v4-1-0":
+    case "wpp-icon-stop-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-success-v4-1-0":
+    case "wpp-icon-success-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-tick-v4-1-0":
+    case "wpp-icon-tick-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-video-clip-v4-1-0":
+    case "wpp-icon-video-clip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-warning-v4-1-0":
+    case "wpp-icon-warning-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-inline-message-v4-1-0":
+    case "wpp-inline-message-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-internal-label-v4-1-0":
+    case "wpp-internal-label-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-internal-tooltip-v4-1-0":
+    case "wpp-internal-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-label-v4-1-0":
+    case "wpp-label-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-list-item-v4-1-0":
+    case "wpp-list-item-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-menu-context-v4-1-0":
+    case "wpp-menu-context-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-spinner-v4-1-0":
+    case "wpp-spinner-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-toast-v4-1-0":
+    case "wpp-toast-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-1-0":
+    case "wpp-tooltip-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-1-0":
+    case "wpp-typography-v4-2-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

@@ -11,13 +11,12 @@ import { PaginationChangeEventDetail, PaginationLocales } from './types';
  * @part page-select - page select element
  */
 export declare class WppPagination {
-  private _locales;
   /**
    * Defines the total number of items.
    */
   readonly count: number;
   /**
-   * Defines the menu items.
+   * Defines how many items to display per page. These options are displayed in a dropdown.
    */
   readonly itemsPerPage: number[];
   /**
@@ -45,8 +44,8 @@ export declare class WppPagination {
    * Emitted when selected page or number of items per page changes
    */
   wppChange: EventEmitter<PaginationChangeEventDetail>;
-  onUpdateLocales(newLocales: Partial<PaginationLocales>): void;
   componentWillLoad(): void;
+  private get _locales();
   private handleItemsPerPageNumberChange;
   private handleSelectedPageChange;
   private getPageRange;

@@ -1,0 +1,90 @@
+/**
+  * @prop --wpp-chat-alert-padding:
+  * @prop --wpp-chat-alert-gap:
+  * @prop --wpp-chat-alert-border-radius:
+  * @prop --wpp-chat-alert-bg-color:
+  * @prop --wpp-chat-alert-icon-color:
+  * @prop --wpp-chat-alert-message-color:
+  * @prop --wpp-chat-alert-description-color:
+  * @prop --wpp-chat-alert-close-icon-color:
+  * @prop --wpp-chat-alert-close-icon-color-hover:
+  * @prop --wpp-chat-alert-close-icon-color-active:
+*/
+:host {
+  --ca-padding: var(--wpp-chat-alert-padding, 11px 16px);
+  --ca-gap: var(--wpp-chat-alert-gap, 8px);
+  --ca-border-radius: var(--wpp-chat-alert-border-radius, 0px);
+  --ca-bg-color: var(--wpp-chat-alert-bg-color, var(--wpp-danger-color-200));
+  --ca-icon-color: var(--wpp-chat-alert-icon-color, var(--wpp-danger-color-400));
+  --ca-message-color: var(--wpp-chat-alert-message-color, var(--wpp-grey-color-1000));
+  --ca-description-color: var(--wpp-chat-alert-description-color, var(--wpp-grey-color-900));
+  --ca-close-icon-color: var(--wpp-chat-alert-close-icon-color, var(--wpp-grey-color-600));
+  --ca-close-icon-color-hover: var(--wpp-chat-alert-close-icon-color-hover, var(--wpp-grey-color-800));
+  --ca-close-icon-color-active: var(--wpp-chat-alert-close-icon-color-active, var(--wpp-grey-color-900));
+  display: block;
+}
+
+:host([type=warning]) {
+  --ca-bg-color: var(--wpp-chat-alert-bg-color, var(--wpp-warning-color-200));
+  --ca-icon-color: var(--wpp-chat-alert-icon-color, var(--wpp-warning-color-400));
+}
+
+:host([type=info]) {
+  --ca-bg-color: var(--wpp-chat-alert-bg-color, var(--wpp-grey-color-300));
+  --ca-icon-color: var(--wpp-chat-alert-icon-color, var(--wpp-text-color-info));
+}
+
+:host([type=success]) {
+  --ca-bg-color: var(--wpp-chat-alert-bg-color, var(--wpp-success-color-200));
+  --ca-icon-color: var(--wpp-chat-alert-icon-color, var(--wpp-text-color-success));
+}
+
+.alert {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  gap: var(--ca-gap);
+  padding: var(--ca-padding);
+  background-color: var(--ca-bg-color);
+  border-radius: var(--ca-border-radius);
+}
+
+.icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  color: var(--ca-icon-color);
+}
+
+.message {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.message::part(typography) {
+  color: var(--ca-message-color);
+}
+
+.description {
+  flex: 0 0 auto;
+}
+.description::part(typography) {
+  color: var(--ca-description-color);
+}
+
+.close {
+  flex: 0 0 auto;
+  cursor: pointer;
+  color: var(--ca-close-icon-color);
+  outline: none;
+}
+.close:hover {
+  color: var(--ca-close-icon-color-hover);
+}
+.close:active {
+  color: var(--ca-close-icon-color-active);
+}
+.close:focus-visible {
+  border-radius: var(--wpp-border-radius-xs, 4px);
+  box-shadow: 0 0 0 2px var(--wpp-primary-color-500);
+}

@@ -1,5 +1,4 @@
-import { default as _Quill } from 'quill';
-export const Quill = _Quill;
+import { TIPTAP_UPLOAD_REQUEST_EVENT, tiptapSources, tiptapUploadTypes, } from './tiptap-types';
 /**
  * Debug levels for the richtext component. Controls verbosity of internal
  * console output. Set via the `debug` prop on `wpp-richtext`.
@@ -21,9 +20,6 @@ export const formats = {
   json: 'json',
   markdown: 'markdown',
 };
-export const sources = {
-  api: 'api',
-  user: 'user',
-  silent: 'silent',
-};
-export { uploadTypes as richtextUploadTypes, UPLOAD_REQUEST_EVENT as RICHTEXT_UPLOAD_REQUEST_EVENT, } from './plugins/quill-upload/types';
+export const sources = tiptapSources;
+export const richtextUploadTypes = tiptapUploadTypes;
+export const RICHTEXT_UPLOAD_REQUEST_EVENT = TIPTAP_UPLOAD_REQUEST_EVENT;

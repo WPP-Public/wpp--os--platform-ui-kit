@@ -23,6 +23,13 @@ export declare class WppListItem {
   private debouncedResizeHandler;
   private previousLabelText;
   private labelObserver;
+  private hostElement?;
+  private focusTimeout;
+  private rightSlotIconTimeout;
+  private toggleSlotTimeout;
+  private mountTimeout;
+  private tooltipAnimationFrame;
+  private triggerWrapperObserver;
   private themeSubscription;
   protected wrapperRef?: HTMLDivElement;
   protected highlightRef?: HTMLDivElement;
@@ -130,6 +137,12 @@ export declare class WppListItem {
    */
   readonly isLoadingItem: boolean;
   /**
+   * If 'true', the component has dark theme styles applied to it.
+   *
+   * @internal - This prop is controlled by Select / Autocomplete
+   */
+  isDarkTheme?: boolean;
+  /**
    * If 'false', the component will have hover/active style states
    */
   nonInteractive: boolean;
@@ -148,6 +161,7 @@ export declare class WppListItem {
   setFocus(): Promise<void>;
   onResize(): void;
   typographyLabel(): void;
+  onUpdateDarkTheme(): void;
   typographyCaption(): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
@@ -161,6 +175,9 @@ export declare class WppListItem {
   private setupLabelContentObserver;
   private checkHasTooltip;
   protected handleComponentMount: () => void;
+  private isHostConnected;
+  private queueTooltipCheck;
+  private clearPendingCallbacks;
   private getHighlightedText;
   private getSlotText;
   private subtitleSlotCssClasses;
@@ -168,6 +185,8 @@ export declare class WppListItem {
   private updateComponentState;
   private updateSlotData;
   private handleItemClick;
+  private isInteractiveRightSlotElement;
+  private isInteractiveRightSlotEvent;
   private handleRightWrapperClick;
   private hostCssClasses;
   private itemWrapperCssClasses;

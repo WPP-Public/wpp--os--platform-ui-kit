@@ -73,7 +73,7 @@
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
   height: var(--tree-item-height);
   display: flex;
@@ -123,7 +123,7 @@
   line-height: var(--wpp-typography-s-midi-line-height, 22px);
   font-weight: var(--wpp-typography-s-midi-font-weight, 500);
   color: var(--wpp-typography-s-midi-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-midi-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-midi-letter-spacing, 0);
   color: var(--tree-item-text-active);
 }
@@ -195,7 +195,7 @@
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
   width: 100%;
   white-space: nowrap;
@@ -309,5 +309,5 @@
 }
 
 :host([data-wpp-theme=dark]) .tree-item {
-  background: var(--wpp-grey-color-100);
+  --tree-item-bg-color: var(--wpp-grey-color-100);
 }

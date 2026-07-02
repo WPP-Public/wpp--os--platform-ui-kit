@@ -8,7 +8,7 @@ import { BreadcrumbItemState, BreadcrumbItemEventDetails } from './types';
  * @part menu-item - menu item element
  * @part menu-item-label - menu item label text element
  * @part icon-more - icon more element
- * @part slash - slash element
+ * @part separator - separator element
  */
 export declare class WppBreadcrumb {
   private readonly maxItems;

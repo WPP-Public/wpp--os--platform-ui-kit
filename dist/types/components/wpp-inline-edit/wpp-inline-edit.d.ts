@@ -12,7 +12,6 @@ export declare class WppInlineEdit {
   private popoverRef?;
   private triggerContainerRef?;
   private lastValueWithError?;
-  private _locales;
   host: HTMLWppInlineEditElement;
   initialValue: string;
   inputValue: string;
@@ -69,11 +68,11 @@ export declare class WppInlineEdit {
   setFocus(): Promise<void>;
   editModeChangeHandler(): void;
   onValueChange(): void;
-  onUpdateLocales(newLocales: Partial<InlineEditLocales>): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
   private handleAnchorResize;
   disconnectedCallback(): void;
+  private get _locales();
   private checkViewTextOverflow;
   private initViewResizeObserver;
   private setViewTextRef;

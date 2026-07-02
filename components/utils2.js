@@ -1,7 +1,8 @@
 import { h } from '@stencil/core/internal/client';
 import { k as transformToVersionedTag } from './utils.js';
 import { l as lodash } from './lodash.js';
-import { L as LIB_COMPONENTS_PREFIX } from './const.js';
+
+const LIB_COMPONENTS_PREFIX = 'wpp-';
 
 const renderSlotsInListItem = (slots, isLabelExists) => slots
   .map(slotElement => {
@@ -64,4 +65,4 @@ const selectedOptionsByOrder = (internalList, value, getItemKey) => {
   return selectedInOrder;
 };
 
-export { isSelected as i, renderSlotsInListItem as r, selectedOptionsByOrder as s };
+export { LIB_COMPONENTS_PREFIX as L, isSelected as i, renderSlotsInListItem as r, selectedOptionsByOrder as s };

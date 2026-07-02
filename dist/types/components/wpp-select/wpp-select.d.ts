@@ -25,7 +25,7 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
   protected portalRef?: HTMLDivElement;
   protected inputRef?: HTMLDivElement;
   protected overflowContainerRef?: HTMLDivElement;
-  protected _locales: SelectLocaleInterface;
+  protected selectedItemRef?: HTMLWppListItemElement;
   host: HTMLWppSelectElement;
   isOpen: boolean;
   searchText: string;
@@ -37,6 +37,7 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
   shouldShowSearch: boolean;
   focusType: FOCUS_TYPE;
   isRenderMessageInTooltip: boolean;
+  isDarkTheme?: boolean;
   withScroll: boolean;
   checkedItems: number;
   disabledItems: number;
@@ -89,8 +90,9 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
    */
   readonly loading: boolean;
   /**
-   * If `true` the dropdown has controls folder, meaning that the "Select All" and "Clear All" button will appear at the bottom of the dropdown.
-   * This property works just for the multiple select.
+   * If `true`, the multiple select dropdown has a controls footer.
+   * When `showSelectAllOption` is enabled, the footer shows Clear and Apply actions.
+   * When `showSelectAllOption` is disabled, the footer keeps the legacy Select All and Clear actions.
    */
   readonly withFolder: boolean;
   /**
@@ -184,10 +186,9 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
    */
   readonly showSelectAllText: boolean;
   /**
-   * If `true`, renders a "Select all (N)" checkbox at the top of the dropdown list and replaces
-   * the bottom "Select All" / "Clear All" buttons with "Clear" / "Apply" buttons.
-   * Selected items are rendered at the top of the dropdown when it is opened.
-   * This property works only for the multiple select with `withFolder` enabled.
+   * If `true`, renders a "Select all (N)" checkbox and divider at the top of multiple select dropdowns,
+   * and selected items are pinned to the top of the dropdown when it is opened.
+   * Set to `false` to hide the "Select all (N)" option and its divider when the feature is not needed.
    */
   readonly showSelectAllOption: boolean;
   /**
@@ -215,6 +216,10 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
    */
   readonly messageInTooltip: boolean;
   /**
+   * If `true`, scrolls the selected item into view when the dropdown opens in WppSelect type='single'.
+   */
+  readonly scrollSelectedItemIntoView: boolean;
+  /**
    * Emitted when an input value changes.
    */
   readonly wppChange: EventEmitter<SelectChangeEventDetails>;
@@ -227,7 +232,7 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
    */
   readonly wppBlur: EventEmitter<FocusEvent>;
   /**
-   * Emitted when the user clicks the Apply button in the multiple select with showSelectAllOption.
+   * Emitted when the user clicks the Apply button in the multiple select footer.
    */
   readonly wppApply: EventEmitter<void>;
   onUpdateDisplayValue(): void;
@@ -239,7 +244,6 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
   onUpdateLoading(): void;
   onUpdateMaximumSelectedItems(): void;
   onUpdateMessage(): void;
-  onUpdateLocales(newLocales: Partial<SelectLocaleInterface>): void;
   /**
    * Sets focus on the select and opens the dropdown.
    */
@@ -248,6 +252,7 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
   componentDidLoad(): void;
   connectedCallback(): void;
   disconnectedCallback(): void;
+  protected get _locales(): SelectLocaleInterface;
   private checkMessageInTooltip;
   private checkTruncationInTextSelect;
   private onUpdateListSingle;
@@ -268,6 +273,7 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
   protected onShowDropdown: (instance: Instance<Props>) => false | void;
   private onShowDropdownText;
   protected onHiddenDropdown: (instance: Instance<Props>) => void;
+  private scrollSelectedListItemIntoView;
   protected createTippyInstance: () => void;
   private focusFirstListItem;
   private focusSearchInput;

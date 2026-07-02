@@ -140,7 +140,7 @@
   text-transform: var(--wpp-typography-2xs-strong-text-transform, uppercase);
   font-weight: var(--wpp-typography-2xs-strong-font-weight, 700);
   color: var(--wpp-typography-2xs-strong-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-2xs-strong-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-2xs-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-2xs-strong-letter-spacing, 0);
 }
 .ProseMirror .ql-size-xs {
@@ -148,7 +148,7 @@
   line-height: var(--wpp-typography-xs-body-line-height, 20px);
   font-weight: var(--wpp-typography-xs-body-font-weight, 400);
   color: var(--wpp-typography-xs-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-xs-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-xs-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-xs-body-letter-spacing, 0);
 }
 .ProseMirror .ql-size-m {
@@ -156,7 +156,7 @@
   line-height: var(--wpp-typography-m-body-line-height, 24px);
   font-weight: var(--wpp-typography-m-body-font-weight, 400);
   color: var(--wpp-typography-m-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-m-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-m-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-m-body-letter-spacing, 0);
 }
 .ProseMirror .ql-size-l {
@@ -164,7 +164,7 @@
   line-height: var(--wpp-typography-l-body-line-height, 28px);
   font-weight: var(--wpp-typography-l-body-font-weight, 400);
   color: var(--wpp-typography-l-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-l-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-l-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-l-body-letter-spacing, 0);
 }
 .ProseMirror .ql-size-xl {
@@ -172,7 +172,7 @@
   line-height: var(--wpp-typography-xl-heading-line-height, 32px);
   font-weight: var(--wpp-typography-xl-heading-font-weight, 400);
   color: var(--wpp-typography-xl-heading-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-xl-heading-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-xl-heading-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-xl-heading-letter-spacing, 0);
 }
 .ProseMirror .ql-size-2xl {
@@ -180,7 +180,7 @@
   line-height: var(--wpp-typography-2xl-heading-line-height, 32px);
   font-weight: var(--wpp-typography-2xl-heading-font-weight, 400);
   color: var(--wpp-typography-2xl-heading-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-2xl-heading-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-2xl-heading-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-2xl-heading-letter-spacing, 0);
 }
 .ProseMirror .ql-size-3xl {
@@ -188,7 +188,7 @@
   line-height: var(--wpp-typography-3xl-heading-line-height, 40px);
   font-weight: var(--wpp-typography-3xl-heading-font-weight, 400);
   color: var(--wpp-typography-3xl-heading-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-3xl-heading-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-3xl-heading-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-3xl-heading-letter-spacing, 0);
 }
 .ProseMirror .ql-size-4xl {
@@ -196,7 +196,7 @@
   line-height: var(--wpp-typography-4xl-display-line-height, 48px);
   font-weight: var(--wpp-typography-4xl-display-font-weight, 400);
   color: var(--wpp-typography-4xl-display-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-4xl-display-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-4xl-display-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-4xl-display-letter-spacing, 0);
 }
 .ProseMirror .ql-size-5xl {
@@ -204,7 +204,7 @@
   line-height: var(--wpp-typography-5xl-display-line-height, 62px);
   font-weight: var(--wpp-typography-5xl-display-font-weight, 400);
   color: var(--wpp-typography-5xl-display-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-5xl-display-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-5xl-display-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-5xl-display-letter-spacing, 0);
 }
 .ProseMirror li {
@@ -221,7 +221,7 @@
   text-transform: var(--wpp-typography-2xs-strong-text-transform, uppercase);
   font-weight: var(--wpp-typography-2xs-strong-font-weight, 700);
   color: var(--wpp-typography-2xs-strong-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-2xs-strong-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-2xs-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-2xs-strong-letter-spacing, 0);
 }
 .ProseMirror li:has(*.ql-size-xs)::before {
@@ -229,7 +229,7 @@
   line-height: var(--wpp-typography-xs-body-line-height, 20px);
   font-weight: var(--wpp-typography-xs-body-font-weight, 400);
   color: var(--wpp-typography-xs-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-xs-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-xs-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-xs-body-letter-spacing, 0);
 }
 .ProseMirror li:has(*.ql-size-m)::before {
@@ -237,7 +237,7 @@
   line-height: var(--wpp-typography-m-body-line-height, 24px);
   font-weight: var(--wpp-typography-m-body-font-weight, 400);
   color: var(--wpp-typography-m-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-m-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-m-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-m-body-letter-spacing, 0);
 }
 .ProseMirror li:has(*.ql-size-l)::before {
@@ -245,7 +245,7 @@
   line-height: var(--wpp-typography-l-body-line-height, 28px);
   font-weight: var(--wpp-typography-l-body-font-weight, 400);
   color: var(--wpp-typography-l-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-l-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-l-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-l-body-letter-spacing, 0);
 }
 .ProseMirror li:has(*.ql-size-xl)::before {
@@ -253,7 +253,7 @@
   line-height: var(--wpp-typography-xl-heading-line-height, 32px);
   font-weight: var(--wpp-typography-xl-heading-font-weight, 400);
   color: var(--wpp-typography-xl-heading-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-xl-heading-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-xl-heading-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-xl-heading-letter-spacing, 0);
 }
 .ProseMirror li:has(*.ql-size-2xl)::before {
@@ -261,7 +261,7 @@
   line-height: var(--wpp-typography-2xl-heading-line-height, 32px);
   font-weight: var(--wpp-typography-2xl-heading-font-weight, 400);
   color: var(--wpp-typography-2xl-heading-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-2xl-heading-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-2xl-heading-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-2xl-heading-letter-spacing, 0);
 }
 .ProseMirror li:has(*.ql-size-3xl)::before {
@@ -269,7 +269,7 @@
   line-height: var(--wpp-typography-3xl-heading-line-height, 40px);
   font-weight: var(--wpp-typography-3xl-heading-font-weight, 400);
   color: var(--wpp-typography-3xl-heading-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-3xl-heading-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-3xl-heading-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-3xl-heading-letter-spacing, 0);
 }
 .ProseMirror li:has(*.ql-size-4xl)::before {
@@ -277,7 +277,7 @@
   line-height: var(--wpp-typography-4xl-display-line-height, 48px);
   font-weight: var(--wpp-typography-4xl-display-font-weight, 400);
   color: var(--wpp-typography-4xl-display-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-4xl-display-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-4xl-display-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-4xl-display-letter-spacing, 0);
 }
 .ProseMirror li:has(*.ql-size-5xl)::before {
@@ -285,7 +285,7 @@
   line-height: var(--wpp-typography-5xl-display-line-height, 62px);
   font-weight: var(--wpp-typography-5xl-display-font-weight, 400);
   color: var(--wpp-typography-5xl-display-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-5xl-display-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-5xl-display-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-5xl-display-letter-spacing, 0);
 }
 .ProseMirror ul,
@@ -807,7 +807,7 @@
   font-size: var(--wpp-typography-s-body-font-size, 14px);
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
   transform: translateY(10px);
   /* -- Default (view-mode) layout: column -------------------------------- */

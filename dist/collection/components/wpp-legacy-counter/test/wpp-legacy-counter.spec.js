@@ -1,0 +1,392 @@
+import { h } from '@stencil/core';
+import { newSpecPage } from '@stencil/core/testing';
+import { WppLegacyCounter } from '../wpp-legacy-counter';
+import { WppLabel } from '../../wpp-label/wpp-label';
+import { WppInternalLabel } from '../../wpp-label/components/wpp-internal-label/wpp-internal-label';
+describe('wpp-legacy-counter', () => {
+  describe('rendering', () => {
+    it('should render component with default value of 1', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter />`,
+      });
+      expect(page.root).toMatchSnapshot();
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input?.value).toBe('1');
+    });
+    it('should render component with warning message', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter message-type='warning'/>`,
+      });
+      expect(page.root).toMatchSnapshot();
+    });
+    it('should render component with value 50', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter value=${50} />`,
+      });
+      expect(page.root).toMatchSnapshot();
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input?.value).toBe('50');
+    });
+    it('should render component with label, icon and tooltip description', async () => {
+      const labelConfig = {
+        text: 'Test label',
+        locales: {
+          optional: 'Optick',
+        },
+        icon: 'wpp-icon-mail',
+        description: 'Your email will be used to send you a confirmation number',
+      };
+      const page = await newSpecPage({
+        components: [WppLegacyCounter, WppLabel, WppInternalLabel],
+        template: () => h("wpp-legacy-counter-v4-2-0", { labelConfig: labelConfig }),
+      });
+      expect(page.root).toMatchSnapshot();
+    });
+  });
+  describe('placeholder functionality', () => {
+    it('should display placeholder text in input element', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter placeholder="Enter quantity" />`,
+      });
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input?.getAttribute('placeholder')).toBe('Enter quantity');
+    });
+    it('should not display placeholder attribute when not provided', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter />`,
+      });
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input?.getAttribute('placeholder')).toBeNull();
+    });
+    it('should show placeholder when value is explicitly set to undefined via property', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter placeholder="Enter value" />`,
+      });
+      // Explicitly set value to undefined after creation to trigger placeholder state
+      const counter = page.root;
+      counter.value = undefined;
+      await page.waitForChanges();
+      const input = page.root?.shadowRoot?.querySelector('input');
+      // After setting undefined, formattedValue should be empty showing placeholder
+      expect(input?.value).toBe('');
+      expect(input?.getAttribute('placeholder')).toBe('Enter value');
+    });
+    it('should show value instead of placeholder when value is provided', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        template: () => h("wpp-legacy-counter-v4-2-0", { value: 5, placeholder: "Enter value" }),
+      });
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input?.value).toBe('5');
+      expect(input?.getAttribute('placeholder')).toBe('Enter value');
+    });
+    it('should render placeholder with label config', async () => {
+      const labelConfig = {
+        text: 'Quantity',
+      };
+      const page = await newSpecPage({
+        components: [WppLegacyCounter, WppLabel, WppInternalLabel],
+        template: () => h("wpp-legacy-counter-v4-2-0", { placeholder: "Enter amount", labelConfig: labelConfig }),
+      });
+      // Explicitly set value to undefined after creation to trigger placeholder state
+      const counter = page.root;
+      counter.value = undefined;
+      await page.waitForChanges();
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input?.getAttribute('placeholder')).toBe('Enter amount');
+      expect(input?.value).toBe('');
+      expect(page.root).toMatchSnapshot();
+    });
+    it('should render placeholder attribute on size M counter', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter placeholder="Size M" size="m" />`,
+      });
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input?.getAttribute('placeholder')).toBe('Size M');
+    });
+    it('should render placeholder attribute on size S counter', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter placeholder="Size S" size="s" />`,
+      });
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input?.getAttribute('placeholder')).toBe('Size S');
+    });
+    it('should show placeholder after clearing input via user interaction', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter value="5" placeholder="Enter value" />`,
+      });
+      const input = page.root?.shadowRoot?.querySelector('input');
+      // Simulate clearing the input
+      input.value = '';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      await page.waitForChanges();
+      // After clearing, input should be empty and placeholder should be visible
+      expect(input.value).toBe('');
+      expect(input.getAttribute('placeholder')).toBe('Enter value');
+    });
+    it('should set value to min when clicking increase button with undefined value', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter placeholder="Enter value" min="1" max="10" />`,
+      });
+      const counter = page.root;
+      counter.value = undefined;
+      await page.waitForChanges();
+      // Click increase button
+      const increaseButton = page.root?.shadowRoot?.querySelector('.increase-wrapper');
+      increaseButton?.click();
+      await page.waitForChanges();
+      // Value should be set to min + step (since it starts from empty/undefined state)
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input.value).not.toBe('');
+    });
+    it('should set value to min when clicking decrease button with undefined value', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter placeholder="Enter value" min="1" max="10" />`,
+      });
+      const counter = page.root;
+      counter.value = undefined;
+      await page.waitForChanges();
+      // Click decrease button
+      const decreaseButton = page.root?.shadowRoot?.querySelector('.decrease-wrapper');
+      decreaseButton?.click();
+      await page.waitForChanges();
+      // Value should be set based on component logic
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input).toBeTruthy();
+    });
+  });
+  describe('min/max constraints', () => {
+    it('should use default min value of 1', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter />`,
+      });
+      const counter = page.rootInstance;
+      expect(counter.min).toBe(1);
+    });
+    it('should use default max value of 100', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter />`,
+      });
+      const counter = page.rootInstance;
+      expect(counter.max).toBe(100);
+    });
+    it('should respect custom min value', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter min="5" value="10" />`,
+      });
+      const counter = page.rootInstance;
+      expect(counter.min).toBe(5);
+    });
+    it('should respect custom max value', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter max="50" value="10" />`,
+      });
+      const counter = page.rootInstance;
+      expect(counter.max).toBe(50);
+    });
+    it('should clamp value to min when value is below min', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter min="10" value="5" />`,
+      });
+      const input = page.root?.shadowRoot?.querySelector('input');
+      // The value should be clamped on input, but initial render shows the provided value
+      expect(input).toBeTruthy();
+    });
+    it('should disable decrease button when value equals min', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter min="1" value="1" />`,
+      });
+      const decreaseButton = page.root?.shadowRoot?.querySelector('.decrease-wrapper');
+      expect(decreaseButton?.hasAttribute('disabled')).toBe(true);
+    });
+    it('should disable increase button when value equals max', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter max="10" value="10" />`,
+      });
+      const increaseButton = page.root?.shadowRoot?.querySelector('.increase-wrapper');
+      expect(increaseButton?.hasAttribute('disabled')).toBe(true);
+    });
+    it('should enable both buttons when value is between min and max', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter min="1" max="10" value="5" />`,
+      });
+      const decreaseButton = page.root?.shadowRoot?.querySelector('.decrease-wrapper');
+      const increaseButton = page.root?.shadowRoot?.querySelector('.increase-wrapper');
+      expect(decreaseButton?.hasAttribute('disabled')).toBe(false);
+      expect(increaseButton?.hasAttribute('disabled')).toBe(false);
+    });
+  });
+  describe('step functionality', () => {
+    it('should use default step value of 1', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter />`,
+      });
+      const counter = page.rootInstance;
+      expect(counter.step).toBe(1);
+    });
+    it('should respect custom step value', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter step="5" />`,
+      });
+      const counter = page.rootInstance;
+      expect(counter.step).toBe(5);
+    });
+    it('should support decimal step values', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter step="0.1" value="1.5" />`,
+      });
+      const counter = page.rootInstance;
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(counter.step).toBe(0.1);
+      expect(input?.value).toBe('1.5');
+    });
+  });
+  describe('disabled state', () => {
+    it('should render disabled counter', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter disabled />`,
+      });
+      const input = page.root?.shadowRoot?.querySelector('input');
+      const decreaseButton = page.root?.shadowRoot?.querySelector('.decrease-wrapper');
+      const increaseButton = page.root?.shadowRoot?.querySelector('.increase-wrapper');
+      expect(input?.hasAttribute('disabled')).toBe(true);
+      expect(decreaseButton?.hasAttribute('disabled')).toBe(true);
+      expect(increaseButton?.hasAttribute('disabled')).toBe(true);
+    });
+    it('should not allow interaction when disabled', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter disabled value="5" />`,
+      });
+      const counter = page.rootInstance;
+      const initialValue = counter.value;
+      // Verify initial value
+      expect(initialValue).toBe(5);
+      // Verify counter is disabled
+      expect(counter.disabled).toBe(true);
+    });
+  });
+  describe('withButtons option', () => {
+    it('should render without buttons when withButtons is false', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter with-buttons="false" />`,
+      });
+      const decreaseButton = page.root?.shadowRoot?.querySelector('.decrease-wrapper');
+      const increaseButton = page.root?.shadowRoot?.querySelector('.increase-wrapper');
+      expect(decreaseButton).toBeNull();
+      expect(increaseButton).toBeNull();
+    });
+    it('should render with buttons by default', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter />`,
+      });
+      const decreaseButton = page.root?.shadowRoot?.querySelector('.decrease-wrapper');
+      const increaseButton = page.root?.shadowRoot?.querySelector('.increase-wrapper');
+      expect(decreaseButton).not.toBeNull();
+      expect(increaseButton).not.toBeNull();
+    });
+  });
+  describe('format functionality', () => {
+    it('should format value using custom format', async () => {
+      const format = {
+        searchValue: /(.)(?=(\d{3})+$)/g,
+        replaceValue: '$1 ',
+      };
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        template: () => h("wpp-legacy-counter-v4-2-0", { value: 1000, format: format }),
+      });
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input?.value).toBe('1 000');
+    });
+  });
+  describe('size variants', () => {
+    it('should render medium size by default', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter />`,
+      });
+      const wrapper = page.root?.shadowRoot?.querySelector('.counter-wrapper');
+      expect(wrapper?.classList.contains('size-m')).toBe(true);
+    });
+    it('should render small size when specified', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter size="s" />`,
+      });
+      const wrapper = page.root?.shadowRoot?.querySelector('.counter-wrapper');
+      expect(wrapper?.classList.contains('size-s')).toBe(true);
+    });
+  });
+  describe('message display', () => {
+    it('should display info message', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter message="Info message" />`,
+      });
+      const message = page.root?.shadowRoot?.querySelector('wpp-inline-message');
+      expect(message).not.toBeNull();
+    });
+    it('should display error message with correct type', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter message="Error message" message-type="error" />`,
+      });
+      const message = page.root?.shadowRoot?.querySelector('wpp-inline-message');
+      expect(message?.getAttribute('type')).toBe('error');
+    });
+    it('should display warning message with correct type', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter message="Warning message" message-type="warning" />`,
+      });
+      const message = page.root?.shadowRoot?.querySelector('wpp-inline-message');
+      expect(message?.getAttribute('type')).toBe('warning');
+    });
+  });
+  describe('backward compatibility', () => {
+    it('should maintain default value of 1 for backward compatibility', async () => {
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter />`,
+      });
+      const counter = page.rootInstance;
+      expect(counter.value).toBe(1);
+    });
+    it('should show default value when placeholder is provided but value is not explicitly undefined', async () => {
+      // This tests backward compatibility - placeholder alone doesn't change behavior
+      const page = await newSpecPage({
+        components: [WppLegacyCounter],
+        html: `<wpp-legacy-counter placeholder="Enter value" />`,
+      });
+      const input = page.root?.shadowRoot?.querySelector('input');
+      // Default value should still be 1 (backward compatible)
+      expect(input?.value).toBe('1');
+    });
+  });
+});

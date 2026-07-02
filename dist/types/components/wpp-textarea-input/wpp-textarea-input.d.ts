@@ -15,7 +15,6 @@ import { TextareaInputChangeEventDetail, TextareaInputValue, TextareaInputLocale
  */
 export declare class WppTextareaInput implements BaseComponent, BaseFormControl<TextareaInputValue>, InlineMessage {
   private inputRef?;
-  private _locales;
   private previousValue;
   private resizeObserver?;
   focusType: FOCUS_TYPE;
@@ -133,11 +132,11 @@ export declare class WppTextareaInput implements BaseComponent, BaseFormControl<
   componentWillLoad(): void;
   componentDidLoad(): void;
   disconnectedCallback(): void;
+  private get _locales();
   private updateEnteredCharacters;
   onValueChange(): void;
   onRowsChange(newValue: number | 'stretch', oldValue: number | 'stretch'): void;
   handleMaxHeightChange(): void;
-  onUpdateLocales(newLocales: Partial<TextareaInputLocales>): void;
   onUpdateAriaProps(): void;
   private initAutosize;
   private adjustHeight;

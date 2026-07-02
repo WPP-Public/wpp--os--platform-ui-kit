@@ -102,6 +102,7 @@ export declare class WppPill {
   disconnectedCallback(): void;
   private getUpdatedFocusInfo;
   private updateSlotData;
+  private makeIconStartNonInteractive;
   private onClick;
   private onFocus;
   private onBlur;

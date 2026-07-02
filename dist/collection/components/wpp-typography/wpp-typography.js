@@ -8,7 +8,7 @@ export class WppTypography {
     this.typographyCssClasses = () => ({
       typography: true,
       italic: this.type.includes('emphasis'),
-      [`type-${this.type.split('-')[0]}`]: true,
+      [`type-${this.type.split('-')[0]}`]: this.type.includes('xl'),
       [`wpp-typography-${this.type}`]: true,
     });
     this.type = 'm-body';
@@ -20,7 +20,7 @@ export class WppTypography {
     return (h(Host, { class: "wpp-typography", exportparts: "typography, inner", style: { '--typography-color': this.color } }, h(TypographyTag, { class: this.typographyCssClasses(), part: "typography", exportparts: "typography" }, h("slot", { part: "inner" }))));
   }
   static get is() { return "wpp-typography"; }
-  static get registryIs() { return "wpp-typography-v4-1-0"; }
+  static get registryIs() { return "wpp-typography-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

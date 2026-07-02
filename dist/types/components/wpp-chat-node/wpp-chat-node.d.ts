@@ -9,7 +9,9 @@ import type { ChatNodeAction, ChatNodeMessageAction, ChatNodeMessageActionClickD
  * Loading shows an animated gradient border.
  * Resize is handled externally by React Flow's `<NodeResizer />`.
  *
- * @slot left-icon - Optional icon rendered before the node title in the header.
+ * The header always renders a fixed `wpp-icon-service` node icon that cannot be hidden, removed, or changed.
+ *
+ * @slot left-icon - Deprecated. No longer rendered; the header always shows the fixed `wpp-icon-service` node icon. This slot will be removed in version 5.0.0.
  * @slot - Default slot for the messages body (e.g. chat messages list).
  * @slot handles - Slot for React Flow `<Handle>` elements. Positioned outside the card so they are not clipped.
  */
@@ -21,7 +23,9 @@ export declare class WppChatNode {
    */
   readonly nodeTitle: string;
   /**
-   * Defines an optional title icon rendered before the node title. Use `left-icon` slot for custom icon markup.
+   * Defines an optional title icon rendered before the node title.
+   * @deprecated The node icon is now fixed and non-customizable; this prop is maintained for backward
+   * compatibility but no longer affects the rendered icon. This property will be removed in version 5.0.0.
    */
   readonly titleIcon?: `wpp-icon-${string}`;
   /**
@@ -134,7 +138,6 @@ export declare class WppChatNode {
   private clearResponseWaitTimer;
   private getSelectedModel;
   private renderIcon;
-  private renderTitleIcon;
   private renderActionMenu;
   private renderChatBar;
   private renderAvatar;

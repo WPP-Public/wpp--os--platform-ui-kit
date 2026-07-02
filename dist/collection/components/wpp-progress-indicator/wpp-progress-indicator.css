@@ -32,7 +32,7 @@
 :host(.wpp-wrapper) {
   display: inline-flex;
   flex-direction: column;
-  font-family: var(--wpp-font-family);
+  font-family: var(--wpp-font-family, system-ui, sans-serif);
 }
 
 :host(.wpp-wrapper-linear-full-width) {
@@ -51,7 +51,7 @@
   line-height: var(--wpp-typography-s-midi-line-height, 22px);
   font-weight: var(--wpp-typography-s-midi-font-weight, 500);
   color: var(--wpp-typography-s-midi-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-midi-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-midi-letter-spacing, 0);
   position: absolute;
   top: 50%;
@@ -138,7 +138,7 @@
   line-height: var(--wpp-typography-s-midi-line-height, 22px);
   font-weight: var(--wpp-typography-s-midi-font-weight, 500);
   color: var(--wpp-typography-s-midi-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-midi-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-midi-letter-spacing, 0);
   content: counter(percentage) "%";
   counter-reset: percentage var(--pi-value);

@@ -13,7 +13,9 @@ const RESPONSE_WAIT_TIMEOUT_MS = 30000;
  * Loading shows an animated gradient border.
  * Resize is handled externally by React Flow's `<NodeResizer />`.
  *
- * @slot left-icon - Optional icon rendered before the node title in the header.
+ * The header always renders a fixed `wpp-icon-service` node icon that cannot be hidden, removed, or changed.
+ *
+ * @slot left-icon - Deprecated. No longer rendered; the header always shows the fixed `wpp-icon-service` node icon. This slot will be removed in version 5.0.0.
  * @slot - Default slot for the messages body (e.g. chat messages list).
  * @slot handles - Slot for React Flow `<Handle>` elements. Positioned outside the card so they are not clipped.
  */
@@ -213,29 +215,24 @@ export class WppChatNode {
       return null;
     return h(transformToVersionedTag(icon), slot ? { slot } : {});
   }
-  renderTitleIcon() {
-    if (!this.titleIcon)
-      return null;
-    return h("span", { class: "title-icon" }, h(transformToVersionedTag(this.titleIcon)));
-  }
   renderActionMenu() {
     const hasActions = this.actions.length > 0;
     const hasModels = this.models.length > 0;
     const selectedModel = this.getSelectedModel();
     if (!hasActions && !hasModels) {
-      return (h("wpp-tooltip-v4-1-0", { text: this._locales.attachAction, config: { placement: 'bottom' } }, h("wpp-action-button-v4-1-0", { variant: "secondary", ariaProps: { label: this._locales.attachAction }, onClick: this.handleAttach }, h("wpp-icon-plus-v4-1-0", { slot: "icon-start" }))));
+      return (h("wpp-tooltip-v4-2-0", { text: this._locales.attachAction, config: { placement: 'bottom' } }, h("wpp-action-button-v4-2-0", { variant: "secondary", ariaProps: { label: this._locales.attachAction }, onClick: this.handleAttach }, h("wpp-icon-plus-v4-2-0", { slot: "icon-start" }))));
     }
-    return (h("wpp-menu-context-v4-1-0", { appendToListWrapper: true, class: "chat-actions-menu-context", style: { width: 'fit-content' } }, h("wpp-action-button-v4-1-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this._locales.actionsMenu } }, h("wpp-icon-plus-v4-1-0", { slot: "icon-start" })), h("div", { class: "chat-actions-menu" }, this.actions.map(action => (h("wpp-list-item-v4-1-0", { key: `${action.icon}-${action.label}`, onWppChangeListItem: () => this.handleActionClick(action) }, this.renderIcon(action.icon, 'left'), h("span", { slot: "label" }, action.label)))), hasActions && hasModels && h("wpp-divider-v4-1-0", { class: "chat-actions-menu-divider" }), hasModels && (h("wpp-menu-context-v4-1-0", { appendToListWrapper: true }, h("wpp-list-item-v4-1-0", { slot: "trigger-element", isExtended: true }, this.renderIcon(selectedModel?.icon || 'wpp-icon-ai', 'left'), h("span", { slot: "label" }, selectedModel?.label)), h("div", { class: "chat-models-menu" }, this.models.map(model => (h("wpp-list-item-v4-1-0", { key: model.id, checked: model.id === selectedModel?.id, onWppChangeListItem: () => this.handleModelSelect(model) }, this.renderIcon(model.icon || 'wpp-icon-ai', 'left'), h("span", { slot: "label" }, model.label))))))))));
+    return (h("wpp-menu-context-v4-2-0", { appendToListWrapper: true, class: "chat-actions-menu-context", style: { width: 'fit-content' } }, h("wpp-action-button-v4-2-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this._locales.actionsMenu } }, h("wpp-icon-plus-v4-2-0", { slot: "icon-start" })), h("div", { class: "chat-actions-menu" }, this.actions.map(action => (h("wpp-list-item-v4-2-0", { key: `${action.icon}-${action.label}`, onWppChangeListItem: () => this.handleActionClick(action) }, this.renderIcon(action.icon, 'left'), h("span", { slot: "label" }, action.label)))), hasActions && hasModels && h("wpp-divider-v4-2-0", { class: "chat-actions-menu-divider" }), hasModels && (h("wpp-menu-context-v4-2-0", { appendToListWrapper: true }, h("wpp-list-item-v4-2-0", { slot: "trigger-element", isExtended: true }, this.renderIcon(selectedModel?.icon || 'wpp-icon-ai', 'left'), h("span", { slot: "label" }, selectedModel?.label)), h("div", { class: "chat-models-menu" }, this.models.map(model => (h("wpp-list-item-v4-2-0", { key: model.id, checked: model.id === selectedModel?.id, onWppChangeListItem: () => this.handleModelSelect(model) }, this.renderIcon(model.icon || 'wpp-icon-ai', 'left'), h("span", { slot: "label" }, model.label))))))))));
   }
-  renderChatBar(isLoadingActive) {
-    const sendIcon = isLoadingActive ? 'wpp-icon-stop' : 'wpp-icon-send';
+  renderChatBar(isLoadingActive, isSelectedActive) {
+    const sendIcon = isLoadingActive ? 'wpp-icon-stop' : 'wpp-icon-play';
     const sendActionLabel = isLoadingActive ? this._locales.stopResponse : this._locales.sendMessage;
-    return (h("div", { class: "node-chat-bar" }, this.renderActionMenu(), h("input", { class: "chat-input", type: "text", "aria-label": this._locales.messageInputLabel, placeholder: this._locales.messageInput, value: this.inputValue, onInput: this.handleInput, onKeyDown: this.handleKeyDown }), h("wpp-action-button-v4-1-0", { variant: "secondary", ariaProps: { label: sendActionLabel }, onClick: isLoadingActive ? this.handleStop : this.handleSend }, this.renderIcon(sendIcon, 'icon-start'))));
+    return (h("div", { class: "node-chat-bar" }, this.renderActionMenu(), h("input", { class: "chat-input", type: "text", "aria-label": this._locales.messageInputLabel, placeholder: this._locales.messageInput, value: this.inputValue, onInput: this.handleInput, onKeyDown: this.handleKeyDown }), (isSelectedActive || isLoadingActive) && (h("wpp-button-v4-2-0", { class: "play-btn", size: "s", variant: isLoadingActive ? 'secondary' : 'primary', ariaProps: { label: sendActionLabel }, onClick: isLoadingActive ? this.handleStop : this.handleSend }, this.renderIcon(sendIcon, 'icon-start')))));
   }
   renderAvatar(config) {
     if (config === false)
       return null;
-    return (h("wpp-avatar-v4-1-0", { class: "message-avatar", size: "s", variant: "circle", name: config.name || '', icon: config.icon, color: config.color }));
+    return (h("wpp-avatar-v4-2-0", { class: "message-avatar", size: "s", variant: "circle", name: config.name || '', icon: config.icon, color: config.color }));
   }
   getAttachmentKind(attachment) {
     if (attachment.type.startsWith('image/'))
@@ -265,7 +262,7 @@ export class WppChatNode {
     const hasRenderableContent = Boolean(message.content.trim() || message.attachments?.length);
     if (!hasRenderableContent || actions.length === 0)
       return null;
-    return (h("div", { class: "chat-message-actions" }, actions.map(action => (h("wpp-tooltip-v4-1-0", { key: action.id, text: action.label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-1-0", { variant: "secondary", ariaProps: { label: action.label }, onClick: () => this.handleMessageActionClick(message, action) }, this.renderIcon(action.icon, 'icon-start')))))));
+    return (h("div", { class: "chat-message-actions" }, actions.map(action => (h("wpp-tooltip-v4-2-0", { key: action.id, text: action.label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-2-0", { variant: "secondary", ariaProps: { label: action.label }, onClick: () => this.handleMessageActionClick(message, action) }, this.renderIcon(action.icon, 'icon-start')))))));
   }
   renderMessages() {
     if (this.messages.length === 0)
@@ -280,7 +277,7 @@ export class WppChatNode {
           'chat-message': true,
           [`chat-message-${msg.role}`]: true,
           'chat-message-no-avatar': avatarConfig === false,
-        }, key: msg.id }, this.renderAvatar(avatarConfig), h("div", { class: `chat-message-content chat-message-content-${msg.role}` }, hasContent && (h("div", { class: `chat-bubble chat-bubble-${msg.role}` }, h("wpp-typography-v4-1-0", { type: "s-body" }, msg.content))), this.renderMessageAttachments(msg), this.renderMessageActions(msg))));
+        }, key: msg.id }, this.renderAvatar(avatarConfig), h("div", { class: `chat-message-content chat-message-content-${msg.role}` }, hasContent && (h("div", { class: `chat-bubble chat-bubble-${msg.role}` }, h("wpp-typography-v4-2-0", { type: "s-body" }, msg.content))), this.renderMessageAttachments(msg), this.renderMessageActions(msg))));
     });
   }
   render() {
@@ -297,18 +294,18 @@ export class WppChatNode {
       'is-selected': isSelectedActive && !isLoadingActive,
     };
     if (isSizeS) {
-      return (h(Host, { class: { 'wpp-chat-node': true, 'wpp-size-s': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, h("div", { class: containerClasses }, h("div", { class: wrapperClasses }, this.renderChatBar(false))), h("slot", { name: "handles" })));
+      return (h(Host, { class: { 'wpp-chat-node': true, 'wpp-size-s': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, h("div", { class: containerClasses }, h("div", { class: wrapperClasses }, this.renderChatBar(false, isSelectedActive))), h("slot", { name: "handles" })));
     }
-    return (h(Host, { class: { 'wpp-chat-node': true, 'wpp-size-m': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, h("div", { class: containerClasses }, h("div", { class: wrapperClasses }, h("div", { class: "node-header" }, h("slot", { name: "left-icon" }, this.renderTitleIcon()), h("wpp-tooltip-v4-1-0", { text: this.nodeTitle, class: "title-tooltip", config: {
+    return (h(Host, { class: { 'wpp-chat-node': true, 'wpp-size-m': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, h("div", { class: containerClasses }, h("div", { class: wrapperClasses }, h("div", { class: "node-header" }, h("span", { class: "title-icon" }, h("wpp-icon-service-v4-2-0", { color: "var(--wpp-grey-color-700)" })), h("wpp-tooltip-v4-2-0", { text: this.nodeTitle, class: "title-tooltip", config: {
         placement: 'top',
         onShow: () => {
           if (!this.titleRef || this.titleRef.clientWidth >= this.titleRef.scrollWidth)
             return false;
         },
-      } }, h("p", { ref: el => (this.titleRef = el), class: "node-title" }, this.nodeTitle))), h("wpp-divider-v4-1-0", null), h("div", { class: "node-body", ref: el => (this.bodyRef = el) }, this.renderMessages(), h("slot", null)), h("wpp-divider-v4-1-0", null), this.renderChatBar(isLoadingActive))), h("slot", { name: "handles" })));
+      } }, h("p", { ref: el => (this.titleRef = el), class: "node-title" }, this.nodeTitle))), h("wpp-divider-v4-2-0", null), h("div", { class: "node-body", ref: el => (this.bodyRef = el) }, this.renderMessages(), h("slot", null)), h("wpp-divider-v4-2-0", null), this.renderChatBar(isLoadingActive, isSelectedActive))), h("slot", { name: "handles" })));
   }
   static get is() { return "wpp-chat-node"; }
-  static get registryIs() { return "wpp-chat-node-v4-1-0"; }
+  static get registryIs() { return "wpp-chat-node-v4-2-0"; }
   static get encapsulation() { return "scoped"; }
   static get originalStyleUrls() {
     return {
@@ -351,8 +348,11 @@ export class WppChatNode {
         "required": false,
         "optional": true,
         "docs": {
-          "tags": [],
-          "text": "Defines an optional title icon rendered before the node title. Use `left-icon` slot for custom icon markup."
+          "tags": [{
+              "name": "deprecated",
+              "text": "The node icon is now fixed and non-customizable; this prop is maintained for backward\ncompatibility but no longer affects the rendered icon. This property will be removed in version 5.0.0."
+            }],
+          "text": "Defines an optional title icon rendered before the node title."
         },
         "attribute": "title-icon",
         "reflect": false

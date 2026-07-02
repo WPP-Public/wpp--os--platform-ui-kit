@@ -5,6 +5,10 @@
   width: fit-content;
   display: inline-flex;
 }
+:host .wpp-popover-content {
+  display: flex;
+  flex-direction: column;
+}
 :host .wpp-popover-content.wpp-hidden {
   position: absolute;
   z-index: -1;
@@ -20,6 +24,30 @@
   scrollbar-width: thin;
   position: relative;
   overflow: hidden;
+}
+:host .wpp-popover-content.wpp-with-footer {
+  overflow: hidden;
+}
+:host .wpp-popover-content .wpp-popover-footer {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border-top: 1px solid var(--wpp-grey-color-300);
+}
+:host .wpp-popover-content .wpp-popover-clear-action,
+:host .wpp-popover-content .wpp-popover-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+:host .wpp-popover-content .wpp-popover-footer-actions {
+  justify-content: flex-end;
+  margin-left: auto;
 }
 :host slot {
   display: block;

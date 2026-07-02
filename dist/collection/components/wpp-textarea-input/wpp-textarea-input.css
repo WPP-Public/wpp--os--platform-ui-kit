@@ -13,7 +13,7 @@
   line-height: var(--wpp-typography-xs-body-line-height, 20px);
   font-weight: var(--wpp-typography-xs-body-font-weight, 400);
   color: var(--wpp-typography-xs-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-xs-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-xs-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-xs-body-letter-spacing, 0);
 }
 :host(.wpp-textarea-wrapper) .label .label-text {
@@ -39,7 +39,7 @@
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
 }
 :host(.wpp-textarea-wrapper) textarea.stretch {

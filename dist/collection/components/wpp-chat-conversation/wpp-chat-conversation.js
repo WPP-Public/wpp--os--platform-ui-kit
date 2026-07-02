@@ -19,7 +19,7 @@ export class WppChatConversation {
     const messageEl = this.getLastMessageElement();
     if (messageEl) {
       await messageEl.appendChunk(chunk);
-      this.scrollToBottom();
+      this.scrollContainerToBottom();
     }
   }
   /**
@@ -44,7 +44,7 @@ export class WppChatConversation {
    * Handles changes in the messages prop and scrolls to the bottom.
    */
   handleMessagesChange() {
-    this.scrollToBottom();
+    this.scrollContainerToBottom();
   }
   getLastMessageElement() {
     const lastMessage = this.messages[this.messages.length - 1];
@@ -53,7 +53,14 @@ export class WppChatConversation {
     }
     return this.messageElementsMap.get(lastMessage.id) || null;
   }
-  scrollToBottom() {
+  /**
+   * Scrolls the conversation to the bottom. Use this when composing messages via the slot — the component
+   * does not auto-scroll on slot changes.
+   */
+  async scrollToBottom() {
+    this.scrollContainerToBottom();
+  }
+  scrollContainerToBottom() {
     setTimeout(() => {
       if (!this.conversationContainerRef)
         return;
@@ -64,13 +71,13 @@ export class WppChatConversation {
     }, 100);
   }
   render() {
-    return (h(Host, null, h("div", { class: "conversation-container", ref: el => (this.conversationContainerRef = el) }, this.messages?.map(message => (h("wpp-chat-conversation-message-v4-1-0", { key: message.id, id: message.id, ref: el => {
+    return (h(Host, null, h("div", { class: "conversation-container", ref: el => (this.conversationContainerRef = el) }, this.messages?.map(message => (h("wpp-chat-conversation-message-v4-2-0", { key: message.id, id: message.id, ref: el => {
         if (el)
           this.messageElementsMap.set(message.id, el);
-      }, role: message.role, content: message.content, status: message.status, attachments: message.attachments, actionButtonsConfig: message.actionButtonsConfig, sourcesActionConfig: message.sourcesActionConfig, menuContextListItems: message.menuContextListItems, assistantAvatarConfig: this.assistantAvatarConfig, userAvatarConfig: this.userAvatarConfig })))), h("div", { class: this.inputWrapperCssClasses() }, h("wpp-chat-input-v4-1-0", { ...this.chatInputConfig, onWppSend: e => this.wppSend.emit(e.detail), onWppChange: e => this.wppChange.emit(e.detail), onWppMessageChanged: e => this.wppMessageChanged.emit(e.detail), onWppActionsMenuToggle: e => this.wppActionsMenuToggle.emit(e.detail), onWppActionsMenuItemClick: e => this.wppActionsMenuItemClick.emit(e.detail) }))));
+      }, role: message.role, content: message.content, status: message.status, attachments: message.attachments, actionButtonsConfig: message.actionButtonsConfig, sourcesActionConfig: message.sourcesActionConfig, menuContextListItems: message.menuContextListItems, assistantAvatarConfig: this.assistantAvatarConfig, userAvatarConfig: this.userAvatarConfig }))), h("slot", null)), h("div", { class: this.inputWrapperCssClasses() }, h("wpp-chat-input-v4-2-0", { ...this.chatInputConfig, onWppSend: e => this.wppSend.emit(e.detail), onWppStop: () => this.wppStop.emit(), onWppChange: e => this.wppChange.emit(e.detail), onWppMessageChanged: e => this.wppMessageChanged.emit(e.detail), onWppActionsMenuToggle: e => this.wppActionsMenuToggle.emit(e.detail), onWppActionsMenuItemClick: e => this.wppActionsMenuItemClick.emit(e.detail) }))));
   }
   static get is() { return "wpp-chat-conversation"; }
-  static get registryIs() { return "wpp-chat-conversation-v4-1-0"; }
+  static get registryIs() { return "wpp-chat-conversation-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -159,7 +166,7 @@ export class WppChatConversation {
         "mutable": false,
         "complexType": {
           "original": "ChatInputConfig",
-          "resolved": "{ actions?: ChatInputAction[] | undefined; ariaProps?: ChatInputAriaProps | undefined; attachments?: FileItemType[] | undefined; charactersLimit?: number | undefined; debounceDelay?: number | undefined; debounceEnabled?: boolean | undefined; disabled?: boolean | undefined; enableAttach?: boolean | undefined; enableMic?: boolean | undefined; fileUploadConfig?: Partial<FileUploadConfig> | undefined; htmlAttributes?: ChatInputAttributes | undefined; locales?: Partial<ChatInputLocaleInterface> | undefined; placeholder?: string | undefined; size?: ChatInputSize | undefined; textValue?: string | undefined; textareaAriaLabel?: string | undefined; textareaId?: string | undefined; textareaName?: string | undefined; withSelect?: boolean | undefined; zIndex?: number | undefined; }",
+          "resolved": "{ actions?: ChatInputAction[] | undefined; ariaProps?: ChatInputAriaProps | undefined; attachments?: FileItemType[] | undefined; charactersLimit?: number | undefined; debounceDelay?: number | undefined; debounceEnabled?: boolean | undefined; disabled?: boolean | undefined; enableAttach?: boolean | undefined; enableMic?: boolean | undefined; fileUploadConfig?: Partial<FileUploadConfig> | undefined; htmlAttributes?: ChatInputAttributes | undefined; isGenerating?: boolean | undefined; locales?: Partial<ChatInputLocaleInterface> | undefined; placeholder?: string | undefined; size?: ChatInputSize | undefined; textValue?: string | undefined; textareaAriaLabel?: string | undefined; textareaId?: string | undefined; textareaName?: string | undefined; withSelect?: boolean | undefined; zIndex?: number | undefined; }",
           "references": {
             "ChatInputConfig": {
               "location": "import",
@@ -199,6 +206,21 @@ export class WppChatConversation {
               "id": "src/components/wpp-chat/components/wpp-chat-input/types.ts::SendEventDetail"
             }
           }
+        }
+      }, {
+        "method": "wppStop",
+        "name": "wppStop",
+        "bubbles": false,
+        "cancelable": true,
+        "composed": false,
+        "docs": {
+          "tags": [],
+          "text": "Emitted when the user clicks the \"Stop\" button while an AI response is generating."
+        },
+        "complexType": {
+          "original": "void",
+          "resolved": "void",
+          "references": {}
         }
       }, {
         "method": "wppChange",
@@ -347,6 +369,23 @@ export class WppChatConversation {
         },
         "docs": {
           "text": "Sets the status of the last message.",
+          "tags": []
+        }
+      },
+      "scrollToBottom": {
+        "complexType": {
+          "signature": "() => Promise<void>",
+          "parameters": [],
+          "references": {
+            "Promise": {
+              "location": "global",
+              "id": "global::Promise"
+            }
+          },
+          "return": "Promise<void>"
+        },
+        "docs": {
+          "text": "Scrolls the conversation to the bottom. Use this when composing messages via the slot \u2014 the component\ndoes not auto-scroll on slot changes.",
           "tags": []
         }
       }

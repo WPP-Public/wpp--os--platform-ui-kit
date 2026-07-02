@@ -1,6 +1,6 @@
 import { h, Host } from '@stencil/core';
 import { FOCUS_TYPE } from '../../types/common';
-import { autoFocusElement, getAriaProps } from '../../utils/utils';
+import { autoFocusElement, getAriaProps, mergeLocales } from '../../utils/utils';
 import { LOCALES_DEFAULTS } from './const';
 /**
  * @part textarea - Textarea input element
@@ -13,7 +13,6 @@ import { LOCALES_DEFAULTS } from './const';
  */
 export class WppTextareaInput {
   constructor() {
-    this._locales = LOCALES_DEFAULTS;
     // Autosize variables
     this.previousValue = '';
     this.adjustHeight = () => {
@@ -151,7 +150,6 @@ export class WppTextareaInput {
     return this.value;
   }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
     this.inputId = this.name || 'textarea-input';
     this.labelId = this.labelConfig?.labelId || 'label';
     this.messageId = 'message';
@@ -170,6 +168,9 @@ export class WppTextareaInput {
     if (this.rows === 'stretch')
       this.cleanup();
   }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
   updateEnteredCharacters() {
     this.enteredCharacters = this.value?.length ?? 0;
   }
@@ -187,9 +188,6 @@ export class WppTextareaInput {
   handleMaxHeightChange() {
     if (this.rows === 'stretch')
       this.adjustHeight();
-  }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
   }
   onUpdateAriaProps() {
     this.validAriaProps = getAriaProps(this.ariaProps);
@@ -247,10 +245,10 @@ export class WppTextareaInput {
     };
     const ariaAttrs = this.getAriaAttributes();
     const overLimit = this.isOverLimit;
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, textarea, message-wrapper, message, limit-wrapper, limit-label, limit-text", style: style }, this.labelConfig?.text && (h("wpp-label-v4-1-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("textarea", { name: this.name, value: this.value, disabled: this.disabled, placeholder: this.placeholder, rows: this.rows === 'stretch' ? 1 : this.rows ? this.rows : undefined, id: this.inputId, required: this.required, class: this.textAreaCssClasses(), onInput: this.onInput, ref: inputRef => (this.inputRef = inputRef), part: "textarea", onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, ...ariaAttrs, ...this.validAriaProps }), (!!this.charactersLimit || !!this.message) && (h("div", { class: this.messageCssClasses(), part: "message-wrapper", "aria-live": "polite", "aria-atomic": "true" }, !!this.message && (h("wpp-inline-message-v4-1-0", { id: this.messageId, message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, part: "message" })), !!this.charactersLimit && (h("div", { id: this.counterId, class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, h("wpp-typography-v4-1-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":"), h("wpp-typography-v4-1-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit), overLimit && (h("wpp-typography-v4-1-0", { type: "xs-body", tag: "span", class: "exceeded-characters sr-only", part: "limit-text" }, this._locales.exceededByCharacters, " ", this.enteredCharacters - (this.charactersLimit || 0)))))))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, textarea, message-wrapper, message, limit-wrapper, limit-label, limit-text", style: style }, this.labelConfig?.text && (h("wpp-label-v4-2-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("textarea", { name: this.name, value: this.value, disabled: this.disabled, placeholder: this.placeholder, rows: this.rows === 'stretch' ? 1 : this.rows ? this.rows : undefined, id: this.inputId, required: this.required, class: this.textAreaCssClasses(), onInput: this.onInput, ref: inputRef => (this.inputRef = inputRef), part: "textarea", onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, ...ariaAttrs, ...this.validAriaProps }), (!!this.charactersLimit || !!this.message) && (h("div", { class: this.messageCssClasses(), part: "message-wrapper", "aria-live": "polite", "aria-atomic": "true" }, !!this.message && (h("wpp-inline-message-v4-2-0", { id: this.messageId, message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, part: "message" })), !!this.charactersLimit && (h("div", { id: this.counterId, class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, h("wpp-typography-v4-2-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":"), h("wpp-typography-v4-2-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit), overLimit && (h("wpp-typography-v4-2-0", { type: "xs-body", tag: "span", class: "exceeded-characters sr-only", part: "limit-text" }, this._locales.exceededByCharacters, " ", this.enteredCharacters - (this.charactersLimit || 0)))))))));
   }
   static get is() { return "wpp-textarea-input"; }
-  static get registryIs() { return "wpp-textarea-input-v4-1-0"; }
+  static get registryIs() { return "wpp-textarea-input-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -781,9 +779,6 @@ export class WppTextareaInput {
       }, {
         "propName": "maxHeight",
         "methodName": "handleMaxHeightChange"
-      }, {
-        "propName": "locales",
-        "methodName": "onUpdateLocales"
       }, {
         "propName": "ariaProps",
         "methodName": "onUpdateAriaProps"

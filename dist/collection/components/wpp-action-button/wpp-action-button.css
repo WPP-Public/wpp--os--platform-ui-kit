@@ -181,11 +181,11 @@
 }
 
 .icon-start {
-  margin-right: 4px;
+  margin-right: var(--wpp-action-button-icon-start-margin, 4px);
 }
 
 .icon-end {
-  margin-left: 4px;
+  margin-left: var(--wpp-action-button-icon-end-margin, 4px);
 }
 
 button {
@@ -195,7 +195,7 @@ button {
   padding: var(--ab-padding);
   font-weight: var(--ab-font-weight);
   font-size: var(--ab-font-size);
-  font-family: var(--wpp-font-family);
+  font-family: var(--wpp-font-family, system-ui, sans-serif);
   font-style: normal;
   line-height: var(--ab-line-height);
   background-color: var(--ab-bg-color);
@@ -235,7 +235,7 @@ button:hover ~ .overlay, button.tab-focus ~ .overlay {
   background-color: var(--ab-bg-color-hover);
   opacity: var(--ab-bg-opacity-hover);
 }
-button:active ~ .overlay, button.pressed ~ .overlay {
+button:active ~ .overlay, button.pressed ~ .overlay, button[aria-expanded=true] ~ .overlay {
   background-color: var(--ab-bg-color-active);
   opacity: var(--ab-bg-opacity-active);
 }
@@ -261,10 +261,10 @@ button.with-icon-only .icon-end {
   margin: 0;
 }
 button.with-icon-start:not(.with-icon-only) {
-  padding-left: var(--ab-icon-padding);
+  padding-left: var(--wpp-action-button-icon-start-padding, var(--ab-icon-padding));
 }
 button.with-icon-end:not(.with-icon-only) {
-  padding-right: var(--ab-icon-padding);
+  padding-right: var(--wpp-action-button-icon-end-padding, var(--ab-icon-padding));
 }
 button.primary {
   color: var(--ab-primary-text-color);

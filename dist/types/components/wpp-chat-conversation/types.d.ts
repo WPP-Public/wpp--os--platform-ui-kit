@@ -1,5 +1,5 @@
-import { Components } from '../../components';
-import { ActionButtonData } from '../wpp-floating-toolbar/types';
+import type { Components, ListItemInterface } from '../../components';
+import type { ActionButtonData } from '../wpp-floating-toolbar/types';
 export type MessageRole = 'user' | 'assistant';
 export type MessageStatus = 'loading' | 'streaming' | 'complete';
 export type AvatarConfig = Partial<Pick<Components.WppAvatar, 'name' | 'icon' | 'src' | 'color' | 'withTooltip' | 'ariaProps'>>;
@@ -22,5 +22,5 @@ export type ChatMessage = {
   attachments?: ChatAttachment[];
   actionButtonsConfig?: ActionButtonDataConfig[];
   sourcesActionConfig?: ActionButtonDataConfig;
-  menuContextListItems?: any[];
+  menuContextListItems?: ListItemInterface[];
 };

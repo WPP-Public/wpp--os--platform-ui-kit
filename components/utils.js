@@ -1,6 +1,6 @@
 import { D as DEFAULT_SHOW_DURATION_ANIMATION, a as DEFAULT_HIDE_DURATION_ANIMATION } from './consts.js';
 
-const version = 'v4-1-0';
+const version = 'v4-2-0';
 
 function format(first, middle, last) {
   return (first || '') + (middle ? ` ${middle}` : '') + (last ? ` ${last}` : '');
@@ -291,6 +291,9 @@ function getOsBarOffsetHeight() {
     return DEFAULT_OS_BAR_HEIGHT;
   return highestContainer.querySelector('.wpp > header')?.offsetHeight ?? DEFAULT_OS_BAR_HEIGHT;
 }
+function mergeLocales(defaults, overrides) {
+  return { ...defaults, ...overrides };
+}
 const getAriaProps = (ariaProps) => {
   const result = {};
   Object.entries(ariaProps).forEach(([key, val]) => {
@@ -304,4 +307,4 @@ const getAriaProps = (ariaProps) => {
 };
 const isWppElement = (element) => element.tagName.toLowerCase().includes('wpp-') && element.tagName.toLowerCase().includes('-v');
 
-export { version as A, areSetsEqual as a, isEventTargetContained as b, hasParentWithId as c, debounce as d, truncate as e, format as f, getSlotEmptyStates as g, hasShadowDom as h, isObject as i, getHighlightData as j, transformToVersionedTag as k, closestElement as l, applyBodyStylesIfNeeded as m, autoFocusElement as n, form2object as o, getDurationValues as p, getHasFocused as q, recursiveObjectMap as r, selectDropdownWidth as s, toKebabCase as t, uuidv4 as u, setHasFocused as v, getHighestContainerInDOM as w, getOsBarOffsetHeight as x, getAriaProps as y, isWppElement as z };
+export { isWppElement as A, version as B, areSetsEqual as a, isEventTargetContained as b, hasParentWithId as c, debounce as d, truncate as e, format as f, getSlotEmptyStates as g, hasShadowDom as h, isObject as i, getHighlightData as j, transformToVersionedTag as k, closestElement as l, applyBodyStylesIfNeeded as m, autoFocusElement as n, form2object as o, getDurationValues as p, getHasFocused as q, recursiveObjectMap as r, selectDropdownWidth as s, toKebabCase as t, uuidv4 as u, setHasFocused as v, getHighestContainerInDOM as w, getOsBarOffsetHeight as x, mergeLocales as y, getAriaProps as z };

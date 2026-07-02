@@ -65,6 +65,8 @@ export declare class WppMenuContext {
   private checkNestedItemIsDisabled;
   private removeDisabledTag;
   private createTippyInstance;
+  private applyChatInputDropdownA11y;
+  private getAriaExpandedTarget;
   private handleAriaExpandedOnTrigger;
   private startObserving;
   private onBlur;

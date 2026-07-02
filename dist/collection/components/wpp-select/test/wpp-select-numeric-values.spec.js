@@ -6,7 +6,7 @@ describe('wpp-select: multiple mode with numeric values (WPPOPENDS-1317)', () =>
   const renderMultipleSelect = async (props = {}) => {
     const page = await newSpecPage({
       components: [WppSelect],
-      template: () => (h("wpp-select-v4-1-0", { type: "multiple", withFolder: true, list: props.list ?? MOCK_NUMERIC_LIST, value: props.value ?? [], placeholder: "Choose option", ...props })),
+      template: () => (h("wpp-select-v4-2-0", { type: "multiple", withFolder: true, list: props.list ?? MOCK_NUMERIC_LIST, value: props.value ?? [], placeholder: "Choose option", ...props })),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await page.waitForChanges();

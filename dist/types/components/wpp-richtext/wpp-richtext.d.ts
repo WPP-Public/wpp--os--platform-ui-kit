@@ -6,7 +6,6 @@ import { BaseComponent } from '../../interfaces/base-component';
 import { Formats, RichtextLocales, RichtextValue, DebugLevels } from './types';
 import type { TiptapChangeEventDetail, TiptapSelectionChangeEventDetail, TiptapUploadRequestEventDetail } from './tiptap-types';
 export declare class WppRichtext implements BaseComponent {
-  private _locales;
   private themeSubscription;
   host: HTMLWppRichtextElement;
   focusType: FOCUS_TYPE;
@@ -193,12 +192,12 @@ export declare class WppRichtext implements BaseComponent {
   componentDidLoad(): void;
   connectedCallback(): void;
   disconnectedCallback(): void;
+  private get _locales();
   updateContent(newValue: RichtextValue): void | null;
   updateDisabled(newValue: boolean): void;
   updatePlaceholder(newValue: string, oldValue: string): void;
   updateStyle(newValue: string, oldValue: string): void;
   updateCharacterLimit(): void;
-  onUpdateLocales(newLocales: Partial<RichtextLocales>): void;
   componentWillLoad(): void;
   private updateToolbarActiveFormats;
   private buildToolbarConfig;

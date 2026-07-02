@@ -21,7 +21,7 @@ describe('wpp-checkbox', () => {
     };
     const { root } = await newSpecPage({
       components: [WppCheckbox, WppLabel, WppInternalLabel],
-      template: () => h("wpp-checkbox-v4-1-0", { indeterminate: true, labelConfig: labelConfig }),
+      template: () => h("wpp-checkbox-v4-2-0", { indeterminate: true, labelConfig: labelConfig }),
     });
     expect(root).toMatchSnapshot();
   });
@@ -36,7 +36,7 @@ describe('wpp-checkbox', () => {
     };
     const { root } = await newSpecPage({
       components: [WppCheckbox, WppLabel, WppInternalLabel],
-      template: () => h("wpp-checkbox-v4-1-0", { indeterminate: true, disabled: true, name: "checkbox", labelConfig: labelConfig }),
+      template: () => h("wpp-checkbox-v4-2-0", { indeterminate: true, disabled: true, name: "checkbox", labelConfig: labelConfig }),
     });
     expect(root).toMatchSnapshot();
   });
@@ -208,6 +208,33 @@ describe('wpp-checkbox', () => {
         html: `<wpp-checkbox></wpp-checkbox>`,
       });
       page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(1);
+    });
+    it('Test that the component does not subcribe to theme changes when the isDarkTheme prop is passed explicitly from the parent component', async () => {
+      await newSpecPage({
+        components: [WppCheckbox],
+        html: `<wpp-checkbox is-dark-theme="true"></wpp-checkbox>`,
+      });
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(mockStart).toHaveBeenCalledTimes(0);
+    });
+    it('Test that the component does not unsubcribe to theme changes when the isDarkTheme prop is passed explicitly from the parent component', async () => {
+      const page = await newSpecPage({
+        components: [WppCheckbox],
+        html: `<wpp-checkbox is-dark-theme="true"></wpp-checkbox>`,
+      });
+      await new Promise(resolve => setTimeout(resolve, 100));
+      page.root?.remove();
+      expect(mockStop).toHaveBeenCalledTimes(0);
+    });
+    it('Test that the component unsubscribes from theme changes when `isDarkTheme` prop is undefined initially, but then gets set to a defined value', async () => {
+      const page = await newSpecPage({
+        components: [WppCheckbox],
+        html: `<wpp-checkbox></wpp-checkbox>`,
+      });
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(mockStart).toHaveBeenCalledTimes(1);
+      page.rootInstance.isDarkTheme = false;
       expect(mockStop).toHaveBeenCalledTimes(1);
     });
   });

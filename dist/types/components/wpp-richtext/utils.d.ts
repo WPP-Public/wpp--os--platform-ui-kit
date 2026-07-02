@@ -1,7 +1,5 @@
-import { MediaDragElement, QuillInstance, RichtextValue } from './types';
+import { RichtextValue } from './types';
 import type { Node as PmNode } from '@tiptap/pm/model';
-export declare function ignoreHistory(quill: QuillInstance, changes: () => void): void;
-export declare const embedBlotInnerHtmlRegexp: RegExp;
 /**
  * Normalizes Quill-style empty paragraphs and list items for Tiptap/ProseMirror.
  *
@@ -39,8 +37,6 @@ export declare const normalizeEmptyParagraphs: (html: string) => string;
  * that happens to use the same wrapper pattern outside of lists.
  */
 export declare const normalizeListHtml: (html: string) => string;
-export declare const exportHtml: (html: string) => string;
-export declare function createDragThumbnail(node: MediaDragElement): MediaDragElement;
 /**
  * Converts markdown to HTML using standard GFM.
  *

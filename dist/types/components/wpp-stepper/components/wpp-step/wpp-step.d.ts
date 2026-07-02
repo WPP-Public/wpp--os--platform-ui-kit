@@ -17,6 +17,8 @@ import { OrientationType, StepChangeEventDetail } from '../../types';
  */
 export declare class WppStep {
   private themeSubscription;
+  private hostElement?;
+  private truncationTimeout;
   host: HTMLWppStepElement;
   tooltipText: string | null;
   labelTooltipText: string | null;
@@ -94,6 +96,7 @@ export declare class WppStep {
    * @internal - This event is controlled by Stepper, do not set it manually.
    */
   readonly wppStepUpdate: EventEmitter;
+  componentWillLoad(): void;
   componentDidLoad(): void;
   connectedCallback(): void;
   disconnectedCallback(): void;

@@ -1,0 +1,148 @@
+/**
+  * @prop --wpp-chat-reference-bg-color:
+  * @prop --wpp-chat-reference-padding:
+  * @prop --wpp-chat-reference-gap:
+  * @prop --wpp-chat-reference-border-radius:
+  * @prop --wpp-chat-reference-min-height:
+  * @prop --wpp-chat-reference-max-width:
+  * @prop --wpp-chat-reference-block-line-color:
+  * @prop --wpp-chat-reference-thumbnail-bg-color:
+  * @prop --wpp-chat-reference-thumbnail-icon-color:
+  * @prop --wpp-chat-reference-name-color:
+  * @prop --wpp-chat-reference-type-color:
+  * @prop --wpp-chat-reference-text-color:
+  * @prop --wpp-chat-reference-close-icon-color:
+  * @prop --wpp-chat-reference-close-icon-color-hover:
+  * @prop --wpp-chat-reference-close-icon-color-active:
+*/
+:host {
+  --cr-bg-color: var(--wpp-chat-reference-bg-color, var(--wpp-grey-color-100));
+  --cr-padding: var(--wpp-chat-reference-padding, 12px 12px 12px 8px);
+  --cr-gap: var(--wpp-chat-reference-gap, 8px);
+  --cr-border-radius: var(--wpp-chat-reference-border-radius, var(--wpp-border-radius-l, 12px));
+  --cr-min-height: var(--wpp-chat-reference-min-height, 64px);
+  --cr-max-width: var(--wpp-chat-reference-max-width, 476px);
+  --cr-block-line-color: var(--wpp-chat-reference-block-line-color, var(--wpp-grey-color-400));
+  --cr-thumbnail-size: 40px;
+  --cr-thumbnail-bg-color: var(--wpp-chat-reference-thumbnail-bg-color, var(--wpp-grey-color-300));
+  --cr-thumbnail-radius: var(--wpp-border-radius-m, 8px);
+  --cr-thumbnail-icon-color: var(--wpp-chat-reference-thumbnail-icon-color, var(--wpp-grey-color-800));
+  --cr-name-color: var(--wpp-chat-reference-name-color, var(--wpp-grey-color-1000));
+  --cr-type-color: var(--wpp-chat-reference-type-color, var(--wpp-grey-color-800));
+  --cr-text-color: var(--wpp-chat-reference-text-color, var(--wpp-grey-color-800));
+  --cr-close-icon-color: var(--wpp-chat-reference-close-icon-color, var(--wpp-grey-color-600));
+  --cr-close-icon-color-hover: var(--wpp-chat-reference-close-icon-color-hover, var(--wpp-grey-color-800));
+  --cr-close-icon-color-active: var(--wpp-chat-reference-close-icon-color-active, var(--wpp-grey-color-900));
+  display: block;
+  width: 100%;
+  max-width: var(--cr-max-width);
+}
+
+.reference {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  gap: 0;
+  width: 100%;
+  min-height: var(--cr-min-height);
+  padding: var(--cr-padding);
+  background-color: var(--cr-bg-color);
+  border-radius: var(--cr-border-radius);
+}
+
+.block-line {
+  flex: 0 0 auto;
+  width: 4px;
+  height: 40px;
+  border-radius: var(--wpp-border-radius-xs, 4px);
+  background-color: var(--cr-block-line-color);
+}
+
+.thumbnail {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  margin-left: 12px;
+  width: var(--cr-thumbnail-size);
+  height: var(--cr-thumbnail-size);
+  border-radius: var(--cr-thumbnail-radius);
+  background-color: var(--cr-thumbnail-bg-color);
+  --wpp-icon-color: var(--cr-thumbnail-icon-color);
+  color: var(--cr-thumbnail-icon-color);
+  overflow: hidden;
+}
+
+.thumbnail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+  margin-left: 8px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.name {
+  min-width: 0;
+}
+.name::part(typography) {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--cr-name-color);
+}
+
+.type::part(typography) {
+  color: var(--cr-type-color);
+}
+
+.text-content {
+  display: flex;
+  align-items: center;
+  margin-left: 12px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.text {
+  min-width: 0;
+}
+.text::part(typography) {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  color: var(--cr-text-color);
+}
+.text.lines-1::part(typography) {
+  -webkit-line-clamp: 1;
+}
+.text.lines-2::part(typography) {
+  -webkit-line-clamp: 2;
+}
+
+.close {
+  flex: 0 0 auto;
+  margin-left: 12px;
+  align-self: flex-start;
+  cursor: pointer;
+  color: var(--cr-close-icon-color);
+  outline: none;
+}
+.close:hover {
+  color: var(--cr-close-icon-color-hover);
+}
+.close:active {
+  color: var(--cr-close-icon-color-active);
+}
+.close:focus-visible {
+  border-radius: var(--wpp-border-radius-xs, 4px);
+  box-shadow: 0 0 0 2px var(--wpp-primary-color-500);
+}

@@ -6,7 +6,7 @@ describe('wpp-select: showSelectAllOption', () => {
   const renderMultipleSelect = async (props = {}) => {
     const page = await newSpecPage({
       components: [WppSelect],
-      template: () => (h("wpp-select-v4-1-0", { type: "multiple", withFolder: true, showSelectAllOption: true, list: props.list ?? MOCK_MULTIPLE_LIST, value: props.value ?? [], placeholder: "Choose option", ...props })),
+      template: () => (h("wpp-select-v4-2-0", { type: "multiple", withFolder: true, showSelectAllOption: true, list: props.list ?? MOCK_MULTIPLE_LIST, value: props.value ?? [], placeholder: "Choose option", ...props })),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await page.waitForChanges();
@@ -246,40 +246,76 @@ describe('wpp-select: showSelectAllOption', () => {
       const selectAllItem = selectAllSection?.querySelector('wpp-list-item.select-all-item');
       expect(selectAllItem).toBeTruthy();
     });
-    it('should not render select-all-option when showSelectAllOption is false', async () => {
+    it('should render select-all-option by default for multiple select', async () => {
       const page = await newSpecPage({
         components: [WppSelect],
-        template: () => (h("wpp-select-v4-1-0", { type: "multiple", withFolder: true, list: MOCK_MULTIPLE_LIST, value: [], placeholder: "Choose option" })),
+        template: () => h("wpp-select-v4-2-0", { type: "multiple", list: MOCK_MULTIPLE_LIST, value: [], placeholder: "Choose option" }),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       await page.waitForChanges();
       const instance = page.rootInstance;
       instance.isOpen = true;
       await page.waitForChanges();
-      const selectAllOption = page.root?.shadowRoot?.querySelector('.select-all-option');
-      expect(selectAllOption).toBeFalsy();
+      const selectAllSection = page.root?.shadowRoot?.querySelector('.select-all-section');
+      expect(selectAllSection).toBeTruthy();
     });
-    it('should render Clear and Apply buttons when showSelectAllOption is true', async () => {
+    it('should not render select-all-option when showSelectAllOption is explicitly false', async () => {
+      const page = await newSpecPage({
+        components: [WppSelect],
+        template: () => (h("wpp-select-v4-2-0", { type: "multiple", withFolder: true, showSelectAllOption: false, list: MOCK_MULTIPLE_LIST, value: [], placeholder: "Choose option" })),
+      });
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await page.waitForChanges();
+      const instance = page.rootInstance;
+      instance.isOpen = true;
+      await page.waitForChanges();
+      const selectAllSection = page.root?.shadowRoot?.querySelector('.select-all-section');
+      expect(selectAllSection).toBeFalsy();
+    });
+    it('should render Clear and Apply buttons when items are selected', async () => {
+      const page = await renderMultipleSelect({ value: ['a'] });
+      const instance = page.rootInstance;
+      instance.isOpen = true;
+      await page.waitForChanges();
+      const folderButtons = page.root?.shadowRoot?.querySelectorAll('.multiple-select-folder-buttons wpp-action-button');
+      // When items are selected, should have Clear and Apply buttons
+      expect(folderButtons?.length).toBe(2);
+    });
+    it('should hide the Clear button and only render Apply when nothing is selected', async () => {
       const page = await renderMultipleSelect({ value: [] });
       const instance = page.rootInstance;
       instance.isOpen = true;
       await page.waitForChanges();
       const folderButtons = page.root?.shadowRoot?.querySelectorAll('.multiple-select-folder-buttons wpp-action-button');
-      // When showSelectAllOption is true, should have Clear and Apply buttons
-      expect(folderButtons?.length).toBe(2);
+      // With no selection there is nothing to clear, so only the Apply button is rendered.
+      expect(folderButtons?.length).toBe(1);
+      expect(folderButtons?.[0]?.classList.contains('apply-button')).toBe(true);
     });
-    it('should render original Select All/Clear All buttons when showSelectAllOption is false', async () => {
+    it('should render original Select All/Clear buttons when showSelectAllOption is false', async () => {
       const page = await newSpecPage({
         components: [WppSelect],
-        template: () => (h("wpp-select-v4-1-0", { type: "multiple", withFolder: true, list: MOCK_MULTIPLE_LIST, value: ['a', 'b'], placeholder: "Choose option" })),
+        template: () => (h("wpp-select-v4-2-0", { type: "multiple", withFolder: true, showSelectAllOption: false, list: MOCK_MULTIPLE_LIST, value: ['a', 'b'], placeholder: "Choose option" })),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       await page.waitForChanges();
       const instance = page.rootInstance;
       instance.isOpen = true;
       await page.waitForChanges();
-      const selectAllOption = page.root?.shadowRoot?.querySelector('.select-all-option');
-      expect(selectAllOption).toBeFalsy();
+      const selectAllSection = page.root?.shadowRoot?.querySelector('.select-all-section');
+      expect(selectAllSection).toBeFalsy();
+    });
+    it('should render a divider directly below the top Select All row', async () => {
+      const page = await renderMultipleSelect({ value: [] });
+      const instance = page.rootInstance;
+      instance.isOpen = true;
+      await page.waitForChanges();
+      const selectAllSection = page.root?.shadowRoot?.querySelector('.select-all-section');
+      expect(selectAllSection?.children[0]).toEqualHtml(`
+        <wpp-list-item class="select-all-item" multiple="">
+          <p slot="label">Select All (5)</p>
+        </wpp-list-item>
+      `);
+      expect(selectAllSection?.children[1]).toEqualHtml('<wpp-divider class="select-all-divider" color="var(--wpp-grey-color-300)"></wpp-divider>');
     });
     it('should disable Clear button when no items are selected', async () => {
       const page = await renderMultipleSelect({ value: [] });
@@ -301,7 +337,7 @@ describe('wpp-select: showSelectAllOption', () => {
     it('should use custom locale texts for Select All, Clear, and Apply', async () => {
       const page = await newSpecPage({
         components: [WppSelect],
-        template: () => (h("wpp-select-v4-1-0", { type: "multiple", withFolder: true, showSelectAllOption: true, list: MOCK_MULTIPLE_LIST, value: [], placeholder: "Choose option", locales: {
+        template: () => (h("wpp-select-v4-2-0", { type: "multiple", withFolder: true, showSelectAllOption: true, list: MOCK_MULTIPLE_LIST, value: [], placeholder: "Choose option", locales: {
             selectAllText: 'Alles auswählen',
             clearText: 'Löschen',
             applyText: 'Anwenden',
@@ -344,6 +380,17 @@ describe('wpp-select: showSelectAllOption', () => {
       instance['onShowDropdown']({ popper: { style: {} }, setProps: () => { } });
       expect(instance['pinnedItems'].map(i => i.value)).toEqual(['a', 'c']);
     });
+    it('should capture checked items as pinnedItems without withFolder', async () => {
+      const page = await newSpecPage({
+        components: [WppSelect],
+        template: () => h("wpp-select-v4-2-0", { type: "multiple", list: MOCK_MULTIPLE_LIST, value: ['a', 'c'] }),
+      });
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await page.waitForChanges();
+      const instance = page.rootInstance;
+      instance['onShowDropdown']({ popper: { style: {} }, setProps: () => { } });
+      expect(instance['pinnedItems'].map(i => i.value)).toEqual(['a', 'c']);
+    });
     it('should clear pinnedItems on dropdown close', async () => {
       const page = await renderMultipleSelect({ value: ['a', 'b'] });
       const instance = page.rootInstance;
@@ -373,7 +420,7 @@ describe('wpp-select: showSelectAllOption', () => {
     it('should not pin items when showSelectAllOption is false', async () => {
       const page = await newSpecPage({
         components: [WppSelect],
-        template: () => (h("wpp-select-v4-1-0", { type: "multiple", withFolder: true, list: MOCK_MULTIPLE_LIST, value: ['a', 'b'], placeholder: "Choose option" })),
+        template: () => (h("wpp-select-v4-2-0", { type: "multiple", withFolder: true, showSelectAllOption: false, list: MOCK_MULTIPLE_LIST, value: ['a', 'b'], placeholder: "Choose option" })),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       await page.waitForChanges();
@@ -396,7 +443,7 @@ describe('wpp-select: showSelectAllOption', () => {
       // Pinned items (a, b) are hidden from remaining list, leaving 3 items (c, d, e)
       expect(remainingItems?.length).toBe(3);
     });
-    it('should render a single divider between pinned section and scrollable list', async () => {
+    it('should render dividers below Select All and pinned items', async () => {
       const page = await renderMultipleSelect({ value: ['a', 'b'] });
       const instance = page.rootInstance;
       instance['pinnedItems'] = getPinnedFromList(instance, ['a', 'b']);
@@ -404,8 +451,9 @@ describe('wpp-select: showSelectAllOption', () => {
       await page.waitForChanges();
       const section = page.root?.shadowRoot?.querySelector('.select-all-section');
       const dividers = section?.querySelectorAll('wpp-divider');
-      // Single divider at the end of select-all-section
-      expect(dividers?.length).toBe(1);
+      expect(dividers?.length).toBe(2);
+      expect(dividers?.[0]).toHaveClass('select-all-divider');
+      expect(dividers?.[1]).toHaveClass('pinned-items-divider');
     });
     it('should render pinned items inside select-all-section within scrollable list', async () => {
       const page = await renderMultipleSelect({ value: ['a', 'b'] });
@@ -427,6 +475,27 @@ describe('wpp-select: showSelectAllOption', () => {
       // 'a' is in value so checked, 'b' is in pinnedItems but not in value
       expect(pinned[0].checked).toBe(true);
       expect(pinned[1].checked).toBe(false);
+    });
+    it('should render pinned items using live state from internalList when the list reference changes (#31688)', async () => {
+      const page = await renderMultipleSelect({ value: ['a', 'b'] });
+      const instance = page.rootInstance;
+      // Capture a decoupled pinned snapshot (a, b both checked), mimicking the dropdown open.
+      instance['pinnedItems'] = getPinnedFromList(instance, ['a', 'b']).map(item => ({ ...item }));
+      instance.isOpen = true;
+      await page.waitForChanges();
+      // Simulate a parent passing a brand new `list` reference with 'b' unchecked, which replaces
+      // internalList with fresh objects and orphans the stale pinnedItems snapshot.
+      instance['internalList'] = instance['internalList'].map(item => ({
+        ...item,
+        checked: item.value === 'a',
+      }));
+      await page.waitForChanges();
+      const pinnedRows = Array.from(page.root?.shadowRoot?.querySelectorAll('.select-all-section wpp-list-item.pinned-item') ?? []);
+      const pinnedA = pinnedRows.find(el => el.getAttribute('value') === 'a');
+      const pinnedB = pinnedRows.find(el => el.getAttribute('value') === 'b');
+      // Pinned rows must reflect the live internalList state, not the stale snapshot.
+      expect(pinnedA?.hasAttribute('checked')).toBe(true);
+      expect(pinnedB?.hasAttribute('checked')).toBe(false);
     });
     it('should NOT render empty state when all items are pinned', async () => {
       const page = await renderMultipleSelect({ value: ['a', 'b', 'c', 'd', 'e'] });

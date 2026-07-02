@@ -1,10 +1,11 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { AriaProps } from '../../types/common';
 import { FullScreenModalCloseDetails, FullScreenModalCloseReason, FullScreenModalFormConfig } from './types';
+import { ModalActionsConfig } from '../wpp-modal/types';
 /**
  * @slot header - Content that is displayed within the `.full-screen-modal` element. To add header content, pass `slot="header"` – can contain the modal title.
  * @slot body - Content that is displayed within the `.full-screen-modal` element. To add body content, pass `slot="body"` – can contain any text that describes the modal actions.
- * @slot actions - Content that is displayed within the `.full-screen-modal` element. To add actions, pass `slot="actions"` – can contain any action buttons.
+ * @slot actions (DEPRECATED) - Content that is displayed within the `.full-screen-modal` element. To add actions, pass `slot="actions"` – can contain any action buttons.
 
  *
  * @part wrapper - component wrapper element
@@ -53,6 +54,14 @@ export declare class WppFullScreenModal {
    */
   readonly ariaProps: AriaProps;
   /**
+   * Configuration for rendering action buttons.
+   *
+   * Accepts an object with:
+   * - `buttonConfig`: primary WppButton (variant "primary" / "destructive").
+   * - `secondaryButtonConfig` (optional): secondary WppButton.
+   */
+  readonly actionsConfig?: ModalActionsConfig;
+  /**
    * Handles the modal closing actions.
    */
   wppFullScreenModalClose: EventEmitter<FullScreenModalCloseDetails>;
@@ -90,6 +99,8 @@ export declare class WppFullScreenModal {
   private updateSlotData;
   private handleTransitionStart;
   private handleTransitionEnd;
+  private renderActionBtn;
+  private renderActionsConfig;
   private focusDialog;
   private handleCloseModal;
   private headerCssClasses;

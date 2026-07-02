@@ -1,11 +1,14 @@
 import { h, Host } from '@stencil/core';
-import { debounce, transformToVersionedTag, uuidv4 } from '../../utils/utils';
+import { debounce, mergeLocales, transformToVersionedTag, uuidv4 } from '../../utils/utils';
 import { findSelectedItems, findTreeItemById, isHaveFoundChildren, markChildrenAs, recalculateIndeterminateTreeState, convertToOriginalItems, updateTreeById, updateTreeByIds, extractExtraProps, getAllVisibleItems, findParentOfItem, getSiblings, } from './utils';
 import { LOCALES_DEFAULTS } from './const';
+import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 export class WppTree {
   constructor() {
+    this.themeSubscription = themeSubscriptionController(() => this.host, (theme) => {
+      this.isDarkTheme = theme === 'dark';
+    });
     this.resizeInProgress = false;
-    this._locales = LOCALES_DEFAULTS;
     this.pendingLoads = new Map();
     this.isSearchResultFound = true;
     this.isMouseInteraction = false;
@@ -367,15 +370,15 @@ export class WppTree {
     this.hostCssClasses = () => ({
       'wpp-tree': true,
     });
-    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v4-1-0", { dropdownConfig: {
+    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v4-2-0", { dropdownConfig: {
         trigger: 'click',
         interactiveDebounce: 15,
         interactiveBorder: 25,
         offset: [0, 0],
-      } }, h("wpp-icon-more-v4-1-0", { class: {
+      } }, h("wpp-icon-more-v4-2-0", { class: {
         'menu-trigger': true,
         disabled: !!item.disabled,
-      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v4-1-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
+      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v4-2-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
     this.renderTree = (treeData, level = 1) => {
       const visibleItems = treeData.filter(item => !item.hidden);
       const setSize = visibleItems.length;
@@ -386,7 +389,7 @@ export class WppTree {
         // Only show focus ring during keyboard navigation (suppress when action mode is active)
         const isFocused = this.isKeyboardNavigating && this.focusedItemId === item.id && !this.isFocusOnAction;
         if (isParent) {
-          return (h("wpp-tree-item-v4-1-0", { id: `tree-item-${item.id}`, text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isFocused: isFocused, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
+          return (h("wpp-tree-item-v4-2-0", { id: `tree-item-${item.id}`, text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isFocused: isFocused, isDarkTheme: this.isDarkTheme, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
             h(transformToVersionedTag(item.iconStart.icon), {
               slot: 'icon-start',
               part: 'icon-start',
@@ -404,7 +407,7 @@ export class WppTree {
                 ? this.renderTree(item.children, level + 1)
                 : null))));
         }
-        return (h("wpp-tree-item-v4-1-0", { id: `tree-item-${item.id}`, text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isFocused: isFocused, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
+        return (h("wpp-tree-item-v4-2-0", { id: `tree-item-${item.id}`, text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isFocused: isFocused, isDarkTheme: this.isDarkTheme, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
           h(transformToVersionedTag(item.iconStart.icon), {
             slot: 'icon-start',
             part: 'icon-start',
@@ -480,6 +483,7 @@ export class WppTree {
     this.selectedIds = [];
     this.focusedItemId = null;
     this.isKeyboardNavigating = false;
+    this.isDarkTheme = undefined;
     this.isFocusOnAction = false;
     this.data = undefined;
     this.search = '';
@@ -501,7 +505,7 @@ export class WppTree {
   }
   renderSkeletonRows(count = 1, paddingLeft) {
     const { height = 32 } = this.lazyConfig?.skeleton || {};
-    return Array.from({ length: count }, (_, idx) => (h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, h("wpp-skeleton-v4-1-0", { variant: "rectangle", width: "100%", height: height }))));
+    return Array.from({ length: count }, (_, idx) => (h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, h("wpp-skeleton-v4-2-0", { variant: "rectangle", width: "100%", height: height }))));
   }
   onInputChange(searchText) {
     if (!searchText.trim()) {
@@ -539,9 +543,6 @@ export class WppTree {
   updateDate(newData) {
     this.currentTreeData = newData;
     this.preloadInitialOpenChildren();
-  }
-  onUpdateLocales(newLocales) {
-    this._locales = { ...this._locales, ...newLocales };
   }
   async handleOpenItem(event) {
     event.stopPropagation();
@@ -1100,12 +1101,19 @@ export class WppTree {
     // Add document click listener to clear focus ring when clicking outside
     document.addEventListener('mousedown', this.handleDocumentMouseDown);
   }
+  connectedCallback() {
+    this.themeSubscription.start();
+  }
   disconnectedCallback() {
+    this.themeSubscription.stop();
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
     // Remove document click listener
     document.removeEventListener('mousedown', this.handleDocumentMouseDown);
+  }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
   }
   handleActionClick({ item, name, place, }) {
     return (event) => {
@@ -1121,7 +1129,6 @@ export class WppTree {
     };
   }
   componentWillLoad() {
-    this._locales = { ...this._locales, ...this.locales };
     this.currentTreeData = this.checkData(this.data);
     this.preloadInitialOpenChildren();
   }
@@ -1130,7 +1137,7 @@ export class WppTree {
     return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text" }, !this.loading && (h("div", { class: "container", part: "tree-container", role: "tree", "aria-label": this.label, "aria-multiselectable": this.multiple ? 'true' : undefined, "aria-activedescendant": this.getActiveDescendantId(), tabindex: hasVisibleContent ? '0' : undefined, onFocus: this.handleContainerFocus, onBlur: this.handleContainerBlur }, hasVisibleContent ? (this.renderTree(this.currentTreeData)) : (h("p", { class: "empty-tree-text", part: "tree-empty-text", role: "status" }, this._locales.nothingFound)))), this.loading && (h("div", { class: "skeleton-wrapper", role: "status", "aria-label": this._locales.loadingTree }, this.renderSkeletonRows(this.skeletonNumberItems)))));
   }
   static get is() { return "wpp-tree"; }
-  static get registryIs() { return "wpp-tree-v4-1-0"; }
+  static get registryIs() { return "wpp-tree-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -1401,6 +1408,7 @@ export class WppTree {
       "selectedIds": {},
       "focusedItemId": {},
       "isKeyboardNavigating": {},
+      "isDarkTheme": {},
       "isFocusOnAction": {}
     };
   }
@@ -1546,9 +1554,6 @@ export class WppTree {
       }, {
         "propName": "data",
         "methodName": "updateDate"
-      }, {
-        "propName": "locales",
-        "methodName": "onUpdateLocales"
       }];
   }
   static get listeners() {

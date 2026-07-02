@@ -25,9 +25,8 @@ describe('ThemeObserverService', () => {
       jest.spyOn(document.documentElement, 'getAttribute').mockReturnValue('dark');
       expect(service.getThemeAttribute()).toBe('dark');
     });
-    it('should return "light" as default when attribute is not set', () => {
-      jest.spyOn(document.documentElement, 'getAttribute').mockReturnValue(null);
-      expect(service.getThemeAttribute()).toBe('light');
+    it('should return "null" as default when attribute is not set', () => {
+      expect(service.getThemeAttribute()).toBe(null);
     });
   });
   describe('configure', () => {
@@ -119,6 +118,7 @@ describe('ThemeObserverService', () => {
       expect(cb2).toHaveBeenCalledWith('dark');
     });
     it('should not notify unsubscribed callbacks', () => {
+      jest.spyOn(document.documentElement, 'getAttribute').mockReturnValue('light');
       const cb1 = jest.fn();
       const cb2 = jest.fn();
       const unsubscribe1 = service.subscribe(cb1);

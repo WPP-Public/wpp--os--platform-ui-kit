@@ -45,7 +45,7 @@
   line-height: var(--wpp-typography-xs-strong-line-height, 20px);
   font-weight: var(--wpp-typography-xs-strong-font-weight, 700);
   color: var(--wpp-typography-xs-strong-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-xs-strong-font-family, var(--wpp-font-family));
+  font-family: var(--wpp-typography-xs-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-xs-strong-letter-spacing, 0);
 }
 .step-indicator.hide {

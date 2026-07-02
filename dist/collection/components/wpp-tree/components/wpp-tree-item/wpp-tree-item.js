@@ -196,21 +196,21 @@ export class WppTreeItem {
       const { className } = props;
       switch (contentType) {
         case 'text':
-          return (h("wpp-typography-v4-1-0", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
+          return (h("wpp-typography-v4-2-0", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
         case 'tag': {
           const { icon } = props;
-          return (h("wpp-tag-v4-1-0", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
+          return (h("wpp-tag-v4-2-0", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
             h(transformToVersionedTag(icon), {
               slot: 'icon-start',
               part: 'icon-start',
             })));
         }
         case 'avatar':
-          return (h("wpp-avatar-v4-1-0", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar",
+          return (h("wpp-avatar-v4-2-0", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar",
             // Remove from tab order - tree uses arrow keys per ARIA APG
             index: -1 }));
         case 'avatarGroup':
-          return (h("wpp-avatar-group-v4-1-0", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group",
+          return (h("wpp-avatar-group-v4-2-0", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group",
             // Remove avatars from tab order - tree uses arrow keys per ARIA APG
             avatarsIndex: -1 }));
         default:
@@ -255,6 +255,7 @@ export class WppTreeItem {
     this.disableOpenCloseAnimation = false;
     this.withItemsTruncation = false;
     this.endContent = undefined;
+    this.isDarkTheme = undefined;
   }
   onItemChange(next, prev) {
     const openChanged = prev.open !== next.open;
@@ -301,6 +302,12 @@ export class WppTreeItem {
       this.updateParentHeight(this.host);
     }
   }
+  onUpdateDarkTheme() {
+    // In case the `tree-item` component subscribed to theme changes before the parent component starts controlling the `isDarkTheme` prop.
+    if (this.isDarkTheme !== undefined) {
+      this.themeSubscription.stop();
+    }
+  }
   componentDidLoad() {
     this.titleMeasureTimeout = window.setTimeout(() => {
       if (!this.host?.isConnected)
@@ -312,10 +319,16 @@ export class WppTreeItem {
     }, 0);
   }
   connectedCallback() {
-    this.themeSubscription.start();
+    // By default, the component will subscribe to theme changes, unless the `isDarkTheme` property is passed explicitly from the parent component (from select, autocomplete).
+    // This is needed in order to avoid unnecessary subscription to theme changes for each list-item.
+    if (this.isDarkTheme === undefined) {
+      this.themeSubscription.start();
+    }
   }
   disconnectedCallback() {
-    this.themeSubscription.stop();
+    if (this.isDarkTheme === undefined) {
+      this.themeSubscription.stop();
+    }
     if (this.titleMeasureTimeout != null) {
       clearTimeout(this.titleMeasureTimeout);
       this.titleMeasureTimeout = undefined;
@@ -353,7 +366,7 @@ export class WppTreeItem {
   render() {
     const isParent = !!this.item?.hasChildren || !!this.item?.children?.length;
     const selectionAttr = this.getSelectionAttribute();
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeitem", "aria-label": this.item.title, "aria-level": this.level, "aria-setsize": this.setSize, "aria-posinset": this.posInSet, "aria-expanded": isParent ? (this.item.open ? 'true' : 'false') : undefined, "aria-disabled": this.item.disabled ? 'true' : undefined, "aria-busy": this.item.loadingChildren ? 'true' : undefined, ...selectionAttr, ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (h("div", { class: "switcher", onClick: this.onSwitcherClick, part: "tree-item-switcher", "data-switcher": "true", "aria-hidden": "true" }, h("wpp-icon-triangle-fill-v4-1-0", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (h("wpp-checkbox-v4-1-0", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox", "aria-hidden": "true", index: -1 })), h(WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (h("wpp-tooltip-v4-1-0", { text: this.item.title, config: { placement: 'right' }, class: "tooltip", anchorTabIndex: -1 }, this.renderTitle())) : (this.renderTitle()), h("wpp-action-button-v4-1-0", { variant: "secondary", disabled: this.item.disabled || this.item.loadingChildren, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button", ariaProps: {
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeitem", "aria-label": this.item.title, "aria-level": this.level, "aria-setsize": this.setSize, "aria-posinset": this.posInSet, "aria-expanded": isParent ? (this.item.open ? 'true' : 'false') : undefined, "aria-disabled": this.item.disabled ? 'true' : undefined, "aria-busy": this.item.loadingChildren ? 'true' : undefined, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}), ...selectionAttr, ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (h("div", { class: "switcher", onClick: this.onSwitcherClick, part: "tree-item-switcher", "data-switcher": "true", "aria-hidden": "true" }, h("wpp-icon-triangle-fill-v4-2-0", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (h("wpp-checkbox-v4-2-0", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox", isDarkTheme: this.isDarkTheme, "aria-hidden": "true", index: -1 })), h(WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (h("wpp-tooltip-v4-2-0", { text: this.item.title, config: { placement: 'right' }, class: "tooltip", anchorTabIndex: -1 }, this.renderTitle())) : (this.renderTitle()), h("wpp-action-button-v4-2-0", { variant: "secondary", disabled: this.item.disabled || this.item.loadingChildren, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button", ariaProps: {
         label: this.hasIconEndSlot ? `Actions for ${this.item.title}` : undefined,
         // tabIndex=-1 removes from sequential Tab order; tree handles Tab navigation
         // per W3C ARIA APG Treeview: Tab from tree container moves focus here programmatically
@@ -363,7 +376,7 @@ export class WppTreeItem {
       !this.isCollapseTransitionEnd) && h(WrappedSlot, { name: "content", onSlotchange: this.updateSlotData })));
   }
   static get is() { return "wpp-tree-item"; }
-  static get registryIs() { return "wpp-tree-item-v4-1-0"; }
+  static get registryIs() { return "wpp-tree-item-v4-2-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -636,6 +649,27 @@ export class WppTreeItem {
           "tags": [],
           "text": "Specifies the content to be displayed on the right side of the tree item.\nThe content can be one of the following types: `avatar`, `avatarGroup`, `tag`, or `text`.\nEach type supports its own set of properties, which are passed through the `TreeItemEndContentProps` interface.\n\nExample usage:\n- `avatar`: Display a single avatar, typically representing a user.\n- `avatarGroup`: Show multiple avatars grouped together.\n- `tag`: Render a status tag with customizable label and color.\n- `text`: Show a text label with optional tooltip."
         }
+      },
+      "isDarkTheme": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [{
+              "name": "internal",
+              "text": "- This prop is controlled by the parent wpp-tree component."
+            }],
+          "text": "If 'true', the component has dark theme styles applied to it."
+        },
+        "attribute": "is-dark-theme",
+        "reflect": false,
+        "defaultValue": "undefined"
       }
     };
   }
@@ -699,6 +733,9 @@ export class WppTreeItem {
     return [{
         "propName": "item",
         "methodName": "onItemChange"
+      }, {
+        "propName": "isDarkTheme",
+        "methodName": "onUpdateDarkTheme"
       }];
   }
 }
