@@ -80,7 +80,7 @@ export class WppArtefact {
     this.resizeObserver = undefined;
   }
   render() {
-    return (h(Host, { class: "wpp-artefact" }, h("div", { class: this.getArtefactWrapperClasses() }, h("div", { class: "artefact-header" }, this.titleIcon && h("div", { class: "artefact-icon-container" }, h(transformToVersionedTag(this.titleIcon))), h("wpp-tooltip-v4-2-0", { text: this.artefactTitle, class: "title-tooltip", config: {
+    return (h(Host, { class: "wpp-artefact" }, h("div", { class: this.getArtefactWrapperClasses() }, h("div", { class: "artefact-header" }, this.titleIcon && h("div", { class: "artefact-icon-container" }, h(transformToVersionedTag(this.titleIcon))), h("wpp-tooltip-v4-3-0", { text: this.artefactTitle, class: "title-tooltip", config: {
         placement: 'top',
         onShow: () => {
           if (!this.titleRef)
@@ -88,10 +88,10 @@ export class WppArtefact {
           if (this.titleRef.clientWidth >= this.titleRef.scrollWidth)
             return false;
         },
-      } }, h("p", { ref: el => (this.titleRef = el), class: "artefact-title" }, this.artefactTitle))), h("wpp-divider-v4-2-0", null), h("div", { class: "artefact-body" }, h("slot", { name: "body" })), this.hasScrollbar && h("wpp-divider-v4-2-0", null), h("div", { class: "artefact-actions" }, this.defaultActions.map((action) => (h("wpp-tooltip-v4-2-0", { text: action.label, key: action.label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-2-0", { variant: "secondary", onClick: () => this.handleActionClick(action), ariaProps: { label: action.label } }, h(transformToVersionedTag(action.icon), { slot: 'icon-start' }))))), this.dropdownActions.length > 0 && (h("wpp-menu-context-v4-2-0", { appendToListWrapper: true }, h("wpp-action-button-v4-2-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this.ariaProps.label } }, h("wpp-icon-more-v4-2-0", { slot: "icon-start" })), h("div", null, this.dropdownActions.map((action) => (h("wpp-list-item-v4-2-0", { key: action.label, onWppChangeListItem: () => this.handleActionClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))))), h("slot", { name: "handles" }))));
+      } }, h("p", { ref: el => (this.titleRef = el), class: "artefact-title" }, this.artefactTitle))), h("wpp-divider-v4-3-0", null), h("div", { class: "artefact-body" }, h("slot", { name: "body" })), this.hasScrollbar && h("wpp-divider-v4-3-0", null), h("div", { class: "artefact-actions" }, this.defaultActions.map((action) => (h("wpp-tooltip-v4-3-0", { text: action.label, key: action.label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-3-0", { variant: "secondary", onClick: () => this.handleActionClick(action), ariaProps: { label: action.label } }, h(transformToVersionedTag(action.icon), { slot: 'icon-start' }))))), this.dropdownActions.length > 0 && (h("wpp-menu-context-v4-3-0", { appendToListWrapper: true }, h("wpp-action-button-v4-3-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this.ariaProps.label } }, h("wpp-icon-more-v4-3-0", { slot: "icon-start" })), h("div", null, this.dropdownActions.map((action) => (h("wpp-list-item-v4-3-0", { key: action.label, onWppChangeListItem: () => this.handleActionClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))))), h("slot", { name: "handles" }))));
   }
   static get is() { return "wpp-artefact"; }
-  static get registryIs() { return "wpp-artefact-v4-2-0"; }
+  static get registryIs() { return "wpp-artefact-v4-3-0"; }
   static get encapsulation() { return "scoped"; }
   static get originalStyleUrls() {
     return {

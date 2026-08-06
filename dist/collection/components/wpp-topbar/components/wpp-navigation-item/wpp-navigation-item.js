@@ -1,5 +1,5 @@
 import { Host, h } from '@stencil/core';
-import { CONTEXT_ITEM_TAG, MENU_BAR_ROLE } from '../../../wpp-menu-context/constants';
+import { BUTTON_ROLE, MENU_ITEM, PRESENTATION_ROLE } from '../../../wpp-menu-context/constants';
 export class WppNavigationItem {
   constructor() {
     this.onClick = (event) => {
@@ -20,10 +20,40 @@ export class WppNavigationItem {
       'wpp-navigation-item': true,
       'wpp-list-item-wrapper': this.nestedItem,
     });
-    this.linkItem = () => (h("a", { href: this.path, class: "link", onClick: this.onClick, tabIndex: -1 }, h("div", { class: this.navItemCssClasses() }, h("wpp-typography-v4-2-0", { type: this.nestedItem ? 's-body' : 's-midi', class: { 'label-text': true, 'nested-text': this.nestedItem } }, this.label))));
-    this.listItem = () => (h("li", { class: "list-item", part: "list-item" }, this.linkItem()));
-    this.menuItem = () => (h("div", { class: this.navItemCssClasses() }, h("wpp-icon-more-v4-2-0", { direction: "horizontal", class: "menu-icon" })));
-    this.extendedItem = () => (h("div", { class: this.navItemCssClasses() }, !this.chevronOnly && (h("wpp-typography-v4-2-0", { type: "s-midi", class: "label-text" }, this.label)), h("wpp-icon-chevron-v4-2-0", { direction: "down", color: "var(--wpp-grey-color-600)", class: "chevron-icon", part: "chevron-icon" })));
+    // Resolve a valid ARIA role for the host. Previously this used the
+    // `WPP-LIST-ITEM` tag name (an invalid role) and `menubar` (which requires
+    // menuitem children it never has), producing aria-roles / aria-required-children
+    // violations. A menu/extended item is a menu trigger (button), a nested item is
+    // a menuitem inside the dropdown menu, and a plain top-level link needs no role.
+    this.getHostRole = () => {
+      if (this.extended || this.menu)
+        return BUTTON_ROLE;
+      if (this.nestedItem)
+        return MENU_ITEM;
+      return undefined;
+    };
+    // A menu/extended trigger renders as a button and can be icon-only (no
+    // visible text), so it needs an explicit accessible name to satisfy axe
+    // `aria-command-name`. Chevron-only triggers may have no label at all
+    // (e.g. `{ chevronOnly: true, value: 'learning' }`) — fall back to the
+    // navigation value. The truncated-overflow "more" trigger has neither label
+    // nor value, so give it a fixed name, mirroring wpp-breadcrumb's
+    // "Show more breadcrumb items" overflow trigger.
+    this.getAccessibleName = () => {
+      if (this.label || this.value)
+        return this.label || this.value;
+      if (this.menu)
+        return 'More navigation items';
+      return undefined;
+    };
+    this.linkItem = () => (h("a", { href: this.path, class: "link", onClick: this.onClick, tabIndex: -1 }, h("div", { class: this.navItemCssClasses() }, h("wpp-typography-v4-3-0", { type: this.nestedItem ? 's-body' : 's-midi', class: { 'label-text': true, 'nested-text': this.nestedItem } }, this.label))));
+    this.listItem = () => (
+    // The menuitem role lives on the host, so the inner <li> is purely
+    // structural. Mark it presentation, otherwise it claims listitem
+    // semantics without a list parent (axe `listitem`/`list` violation).
+    h("li", { class: "list-item", part: "list-item", role: PRESENTATION_ROLE }, this.linkItem()));
+    this.menuItem = () => (h("div", { class: this.navItemCssClasses() }, h("wpp-icon-more-v4-3-0", { direction: "horizontal", class: "menu-icon" })));
+    this.extendedItem = () => (h("div", { class: this.navItemCssClasses() }, !this.chevronOnly && (h("wpp-typography-v4-3-0", { type: "s-midi", class: "label-text" }, this.label)), h("wpp-icon-chevron-v4-3-0", { direction: "down", color: "var(--wpp-grey-color-600)", class: "chevron-icon", part: "chevron-icon" })));
     this.renderItem = () => {
       if (this.menu) {
         return this.menuItem();
@@ -48,10 +78,11 @@ export class WppNavigationItem {
     this.nativeLink = false;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), role: this.extended ? MENU_BAR_ROLE : CONTEXT_ITEM_TAG, tabIndex: 0, exportparts: "list-item, chevron-icon" }, this.renderItem()));
+    const hostRole = this.getHostRole();
+    return (h(Host, { class: this.hostCssClasses(), role: hostRole, "aria-label": hostRole === BUTTON_ROLE ? this.getAccessibleName() : undefined, tabIndex: 0, exportparts: "list-item, chevron-icon" }, this.renderItem()));
   }
   static get is() { return "wpp-navigation-item"; }
-  static get registryIs() { return "wpp-navigation-item-v4-2-0"; }
+  static get registryIs() { return "wpp-navigation-item-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

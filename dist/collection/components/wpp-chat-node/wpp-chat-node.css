@@ -31,13 +31,13 @@
   border-radius: calc(var(--wpp-border-radius-l) + 2px);
   box-sizing: border-box;
 }
-.node-container.selected-node:not(.loading-node)::before {
+.node-container.selected-node::before {
   content: "";
   position: absolute;
   z-index: 0;
   inset: -1px;
   pointer-events: none;
-  border: 1px solid var(--wpp-primary-color-500);
+  border: var(--wpp-border-width-s) solid var(--wpp-primary-color-500);
   border-radius: calc(var(--wpp-border-radius-l) + 1px);
 }
 .node-container.loading-node::before {
@@ -181,7 +181,7 @@
 .chat-bubble {
   max-width: 100%;
   padding: 12px;
-  border-radius: 8px;
+  border-radius: var(--wpp-border-radius-m);
   box-sizing: border-box;
   word-wrap: break-word;
 }
@@ -192,7 +192,7 @@
 .chat-bubble-user {
   width: 100%;
   background-color: var(--wpp-primary-color-100);
-  border-radius: 8px 0 8px 8px;
+  border-radius: var(--wpp-border-radius-m) 0 var(--wpp-border-radius-m) var(--wpp-border-radius-m);
 }
 
 .chat-bubble-assistant {
@@ -213,6 +213,11 @@
 .chat-attachments::-webkit-scrollbar {
   display: none;
 }
+.chat-attachments:focus-visible {
+  border-radius: var(--wpp-border-radius-s);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
+}
 
 .chat-attachment {
   position: relative;
@@ -224,8 +229,8 @@
   height: 80px;
   overflow: hidden;
   box-sizing: border-box;
-  border: 1px solid var(--wpp-grey-color-000);
-  border-radius: 4px;
+  border: var(--wpp-border-width-s) solid var(--wpp-grey-color-000);
+  border-radius: var(--wpp-border-radius-xs);
   background: var(--wpp-grey-color-200);
   color: var(--wpp-grey-color-600);
 }
@@ -274,7 +279,7 @@
   height: 31px;
   border-radius: 50%;
   color: var(--wpp-grey-color-000);
-  background: rgba(18, 22, 25, 0.6);
+  background: color-mix(in srgb, var(--wpp-grey-color-1000) 60%, transparent);
   transform: translate(-50%, -50%);
 }
 
@@ -296,10 +301,35 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 16px;
-  gap: 4px;
+  height: 64px;
+  padding: 0 16px;
+  gap: 8px;
   box-sizing: border-box;
   flex: 0 0 auto;
+}
+
+.left-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.right-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+}
+
+.right-actions-controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
 }
 
 .node-chat-bar wpp-tooltip,
@@ -311,14 +341,42 @@
 
 .node-chat-bar .play-btn {
   --button-padding-s: 6px;
+  margin-left: 8px;
+  max-width: 32px;
+  opacity: 1;
+  overflow: clip;
+  overflow-clip-margin: 4px;
+  transition: max-width 0.2s ease, opacity 0.2s ease, margin-left 0.2s ease, transform 0.2s ease;
 }
 .node-chat-bar .play-btn::part(icon-start-wrapper) {
   margin: 0;
 }
+.node-chat-bar .play-btn.is-hidden {
+  max-width: 0;
+  margin-left: 0;
+  opacity: 0;
+  transform: scale(0.85);
+  pointer-events: none;
+}
 
-.node-chat-bar .chat-actions-menu-context {
+.node-chat-bar .chat-actions-menu-context,
+.node-chat-bar .chat-model-selector {
   width: fit-content;
   max-width: fit-content;
+}
+
+.model-selector-trigger {
+  --wpp-action-button-padding: 4px;
+  --wpp-action-button-icon-start-margin: 0;
+  --wpp-action-button-bg-color-active: var(--wpp-grey-color-300);
+  --wpp-action-button-opacity-active: 1;
+}
+.model-selector-trigger::part(icon-start-wrapper) {
+  margin: 0;
+}
+
+.model-avatar {
+  pointer-events: none;
 }
 
 .chat-actions-menu-divider {
@@ -333,9 +391,9 @@
   outline: none;
   background: transparent;
   font-family: var(--wpp-font-family, system-ui, sans-serif);
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 22px;
+  font-size: var(--wpp-typography-s-body-font-size);
+  font-weight: var(--wpp-typography-s-body-font-weight);
+  line-height: var(--wpp-typography-s-body-line-height);
   color: var(--wpp-grey-color-1000);
 }
 .chat-input::placeholder {
@@ -357,6 +415,7 @@
   inset: 0;
   pointer-events: none;
   flex: none;
+  z-index: 2;
 }
 
 :host([data-wpp-theme=dark]) .node-wrapper {

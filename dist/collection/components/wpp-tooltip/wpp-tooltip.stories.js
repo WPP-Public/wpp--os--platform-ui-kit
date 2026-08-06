@@ -23,7 +23,7 @@ export default {
   },
 };
 export const TitleAndText = (args) => html `
-  <wpp-tooltip-v4-2-0
+  <wpp-tooltip-v4-3-0
     .dropdownWidth="${args.dropdownWidth}"
     .header="${args.header}"
     .text="${args.text}"
@@ -33,10 +33,10 @@ export const TitleAndText = (args) => html `
     .warning="${args.warning}"
     .error="${args.error}"
   >
-    <wpp-button-v4-2-0 variant="${args.error ? 'destructive' : 'primary'}">
+    <wpp-button-v4-3-0 variant="${args.error ? 'destructive' : 'primary'}">
       ${args.error ? 'Error tooltip' : args.warning ? 'Warning tooltip' : 'Tooltip'}
-    </wpp-button-v4-2-0>
-  </wpp-tooltip-v4-2-0>
+    </wpp-button-v4-3-0>
+  </wpp-tooltip-v4-3-0>
 `;
 TitleAndText.args = {
   header: 'Title',
@@ -51,7 +51,7 @@ TitleAndText.args = {
 TitleAndText.parameters = {
   layout: 'centered',
 };
-export const Value = (args) => html ` <wpp-tooltip-v4-2-0
+export const Value = (args) => html ` <wpp-tooltip-v4-3-0
     .text="${args.text}"
     .value="${args.value}"
     .theme="${args.theme}"
@@ -59,8 +59,8 @@ export const Value = (args) => html ` <wpp-tooltip-v4-2-0
     .dropdownWidth="${args.dropdownWidth}"
     .wordBreak="${args.wordBreak}"
   >
-    <wpp-button-v4-2-0 variant="primary">Button</wpp-button-v4-2-0>
-  </wpp-tooltip-v4-2-0>`;
+    <wpp-button-v4-3-0 variant="primary">Button</wpp-button-v4-3-0>
+  </wpp-tooltip-v4-3-0>`;
 Value.args = {
   text: 'Label',
   value: '$100,000',
@@ -77,24 +77,24 @@ const styles = {
   typographyLight: 'var(--wpp-grey-color-900)',
 };
 export const TextShortcut = (args) => html `
-  <wpp-tooltip-v4-2-0
+  <wpp-tooltip-v4-3-0
     .dropdownWidth="${args.dropdownWidth}"
     .text="${args.text}"
     .config="${args.config}"
     .theme="${args.theme}"
     .wordBreak="${args.wordBreak}"
   >
-    <wpp-button-v4-2-0 data-testid="allow-html-tooltip-button">Tooltip with Shortcut</wpp-button-v4-2-0>
+    <wpp-button-v4-3-0 data-testid="allow-html-tooltip-button">Tooltip with Shortcut</wpp-button-v4-3-0>
     <div slot="tooltip-content" style="display: flex; align-items: center; gap: 10px;">
-      <wpp-typography-v4-2-0
+      <wpp-typography-v4-3-0
         tag="h2"
         type="m-body"
         color=${args.theme === 'dark' ? styles.typographyDark : styles.typographyLight}
         >${args.text}
-      </wpp-typography-v4-2-0>
-      <wpp-tag-v4-2-0 variant="neutral" label="S" />
+      </wpp-typography-v4-3-0>
+      <wpp-tag-v4-3-0 variant="neutral" label="S" />
     </div>
-  </wpp-tooltip-v4-2-0>
+  </wpp-tooltip-v4-3-0>
 `;
 TextShortcut.args = {
   text: 'Tooltip Text',

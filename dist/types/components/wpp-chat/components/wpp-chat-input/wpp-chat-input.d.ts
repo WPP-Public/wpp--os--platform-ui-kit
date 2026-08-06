@@ -1,6 +1,6 @@
 import { EventEmitter } from '../../../../stencil-public-runtime';
 import { FileItemType, FileUploadEventDetail, FileUploadItemEventDetail } from '../../../wpp-file-upload/types';
-import { ActionsMenuToggleEventDetail, ChatInputAction, ChatInputActionItemClickEventDetail, ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from './types';
+import { ActionsMenuToggleEventDetail, ChatInputAction, ChatInputActionItemClickEventDetail, ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputModel, ChatInputMicEventDetail, ChatInputSelectableModel, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail, ChatInputSelectedModel } from './types';
 import { MessageTypes } from '../../../../types/common';
 /**
  * @slot alert - Optional alert (for example wpp-chat-alert) rendered at the top of the chat input frame. Dismissing it hides the alert without affecting the rest of the input.
@@ -72,8 +72,20 @@ export declare class WppChatInput {
   attachments: FileItemType[];
   /**
    * If set to true, displays `Select` in left actions. The Select must placed in the `.select` slot.
+   * @deprecated - To pass a custom list of AI models, use the `models` property.
    */
   readonly withSelect: boolean;
+  /**
+   * Defines the list of AI models that will be rendered in the `models` dropdowns. Do not use it together with the `withSelect` property.
+   * If the array is empty, the dropdown will render an additional action: "Select model or agent" that, when clicked,
+   * will emit the `wppModelBrowse` event.
+   */
+  readonly models: ChatInputModel[];
+  /**
+   * Defines the ID of the selected AI model. Used when the initial selected model should be different than the default value ("Auto").
+   * This property should be used when selecting the AI model follows a different flow than that of the component (E.g: selecting model from a side-modal).
+   */
+  selectedModel: ChatInputSelectedModel;
   /**
    * Defines the entries shown in the consolidated actions menu (the
    * `wpp-icon-plus` dropdown rendered at the start of the left toolbar).
@@ -148,6 +160,7 @@ export declare class WppChatInput {
   actionsMenuOpen: boolean;
   isFocused: boolean;
   isAudioRecording: boolean;
+  isModelMenuOpen: boolean;
   /**
    * Emitted when the user clicks the "Send" button.
    */
@@ -157,10 +170,11 @@ export declare class WppChatInput {
    */
   readonly wppStop: EventEmitter<void>;
   /**
-   * Emitted when the user clicks the "Mic" button.
-   * @internal - This prop will be of use in the future, but for now, it's not used.
+   * Emitted when the user clicks the microphone button.
+   * The detail carries the resulting state: `isRecording` is `true` when listening
+   * has just started and `false` when it has just stopped.
    */
-  readonly wppMic: EventEmitter<void>;
+  readonly wppMic: EventEmitter<ChatInputMicEventDetail>;
   /**
    * Emitted when the value of the input changes.
    */
@@ -191,6 +205,17 @@ export declare class WppChatInput {
    * additionally wired to open the file picker automatically).
    */
   readonly wppActionsMenuItemClick: EventEmitter<ChatInputActionItemClickEventDetail>;
+  /**
+   * Emitted when an item from the AI models dropdown is selected.
+   * The detail is the selected model object — a built-in `ChatInputDefaultModel` (`Auto` / `Premium`)
+   * or one of the dev-provided `ChatInputModel`s.
+   */
+  readonly wppModelSelect: EventEmitter<ChatInputSelectableModel>;
+  /**
+   * Emitted when the "Select model or agent" action from the AI models dropdown is clicked.
+   * Note: The "Select model or agent" action is rendered only when the `models` property is an empty array.
+   */
+  readonly wppModelBrowse: EventEmitter<void>;
   private reInitValue;
   onAttachmentsChange(newValue: FileItemType[]): void;
   onTextValueChange(value: string): void;
@@ -235,7 +260,6 @@ export declare class WppChatInput {
   private actionsMenuDropdownConfig;
   private handleActionsMenuItemClick;
   private checkAttachmentsVisibility;
-  private configureSelectSlot;
   private updateSlotData;
   private handleAlertSlotChange;
   private handleReferencesSlotChange;
@@ -278,7 +302,6 @@ export declare class WppChatInput {
   private handleClick;
   private handleToastClick;
   private onKeyDown;
-  private get isSendDisabled();
   private onMinimizedKeyDown;
   private onMinimizedKeyUp;
   private onWindowFocus;
@@ -288,6 +311,14 @@ export declare class WppChatInput {
   private shouldDisplaySend;
   private renderMicrophoneBtn;
   private renderActionsMenu;
+  private getSelectedModel;
+  private handleModelMenuShow;
+  private handleModelMenuHide;
+  private handleModelSelect;
+  private handleModelChange;
+  private renderModelSelector;
+  private renderModelListItem;
+  private modelSelectorTriggerCssClasses;
   private hostCssClasses;
   private chatToastClasses;
   private chatInputContainerClasses;

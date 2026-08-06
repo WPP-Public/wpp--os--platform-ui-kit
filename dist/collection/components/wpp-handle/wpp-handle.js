@@ -10,13 +10,13 @@ export class WppHandle {
     this.type = undefined;
     this.isSelected = undefined;
     this.isLoading = false;
-    this.color = 'var(--wpp-grey-color-600)';
+    this.color = 'var(--wpp-grey-color-500)';
   }
   render() {
     return h(Host, { class: this.getHostClasses(), style: { backgroundColor: this.color } });
   }
   static get is() { return "wpp-handle"; }
-  static get registryIs() { return "wpp-handle-v4-2-0"; }
+  static get registryIs() { return "wpp-handle-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -104,7 +104,7 @@ export class WppHandle {
         },
         "attribute": "color",
         "reflect": false,
-        "defaultValue": "'var(--wpp-grey-color-600)'"
+        "defaultValue": "'var(--wpp-grey-color-500)'"
       }
     };
   }

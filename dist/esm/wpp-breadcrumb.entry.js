@@ -1,16 +1,34 @@
-import { r as registerInstance, c as createEvent, h, H as Host, F as Fragment, g as getElement } from './index-9177bb6d.js';
-import { e as truncate, u as uuidv4 } from './utils-fc9002c9.js';
+import { r as registerInstance, c as createEvent, h, H as Host, F as Fragment, g as getElement } from './index-93f63aaa.js';
+import { y as mergeLocales, e as truncate, u as uuidv4 } from './utils-452958a4.js';
 import './consts-744c144f.js';
 
 const DEFAULT_ICON_COLOR = 'var(--wpp-grey-color-700)';
 
-const wppBreadcrumbCss = ":host{--breadcrumb-color:var(--wpp-breadcrumb-color, var(--wpp-grey-color-500));--breadcrumb-separator-margin:var(--wpp-breadcrumb-separator-margin, 0 8px);--breadcrumb-item-text-color:var(--wpp-breadcrumb-item-text-color, var(--wpp-grey-color-800));--breadcrumb-item-text-hover-color:var(--wpp-breadcrumb-item-text-color-hover, var(--wpp-grey-color-900));--breadcrumb-item-text-active-color:var(--wpp-breadcrumb-item-text-color-active, var(--wpp-grey-color-1000));--breadcrumb-item-icon-hover-color:var(--wpp-breadcrumb-item-icon-color-hover, var(--wpp-grey-color-800));--breadcrumb-item-icon-active-color:var(--wpp-breadcrumb-item-icon-color-active, var(--wpp-grey-color-900));--breadcrumb-menu-trigger-color:var(--wpp-breadcrumb-menu-trigger-color, var(--wpp-icon-color));--breadcrumb-menu-trigger-hover-color:var(--wpp-breadcrumb-menu-trigger-color-hover, var(--wpp-icon-color-hover));--breadcrumb-menu-trigger-active-color:var(--wpp-breadcrumb-menu-trigger-color-active, var(--wpp-icon-color-active));--breadcrumb-item-first-border-color-focus:var(\n    --wpp-breadcrumb-item-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--breadcrumb-item-second-border-color-focus:var(\n    --wpp-breadcrumb-item-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--breadcrumb-item-border-radius-focus:var(--wpp-breadcrumb-item-border-radius-focus, 2px);font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);display:-ms-flexbox;display:flex;color:var(--breadcrumb-color);white-space:nowrap}:host .menu{--mc-wrapper-width:20px;height:20px;vertical-align:text-top}:host .menu .wpp-list{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column}.item{color:var(--breadcrumb-item-text-color);text-decoration:none}.item:not(.active){cursor:pointer}.item:not(.active):hover{color:var(--breadcrumb-item-text-hover-color);text-decoration:underline}.item:not(.active):active{color:var(--breadcrumb-item-text-active-color);text-decoration:underline}.item.active{color:var(--breadcrumb-item-text-active-color);cursor:default}.menu-trigger{color:var(--breadcrumb-menu-trigger-color);cursor:pointer}.menu-trigger[aria-expanded=true]{color:var(--breadcrumb-item-text-color)}.menu-trigger:hover{color:var(--breadcrumb-menu-trigger-hover-color)}.menu-trigger:active{color:var(--breadcrumb-menu-trigger-active-color)}.link{text-decoration:none}.unclickable{text-decoration:none}.unclickable:not(.active){cursor:default}.unclickable:not(.active):hover{text-decoration:none}.item:focus-visible,.menu:focus-visible{border-radius:var(--breadcrumb-item-border-radius-focus);outline:none;-webkit-box-shadow:0 0 0 1px var(--breadcrumb-item-first-border-color-focus), 0 0 0 3px var(--breadcrumb-item-second-border-color-focus);box-shadow:0 0 0 1px var(--breadcrumb-item-first-border-color-focus), 0 0 0 3px var(--breadcrumb-item-second-border-color-focus)}.item:focus-visible{color:var(--breadcrumb-item-text-hover-color);text-decoration:underline}.menu:focus-visible .menu-trigger{color:var(--breadcrumb-menu-trigger-hover-color)}.separator{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;margin:var(--breadcrumb-separator-margin)}.back{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;cursor:pointer;color:var(--breadcrumb-item-text-color);text-decoration:none;background:none;border:none;padding:0;font:inherit}.back:hover{color:var(--breadcrumb-item-text-hover-color);text-decoration:underline}.back:hover .back-icon-chevron{color:var(--breadcrumb-item-icon-hover-color)}.back:active{color:var(--breadcrumb-item-text-active-color);text-decoration:underline}.back:active .back-icon-chevron{color:var(--breadcrumb-item-icon-active-color)}.back .back-label{margin-left:4px}.back:focus-visible{border-radius:var(--breadcrumb-item-border-radius-focus);outline:none;-webkit-box-shadow:0 0 0 1px var(--breadcrumb-item-first-border-color-focus), 0 0 0 3px var(--breadcrumb-item-second-border-color-focus);box-shadow:0 0 0 1px var(--breadcrumb-item-first-border-color-focus), 0 0 0 3px var(--breadcrumb-item-second-border-color-focus)}";
+const LOCALES_DEFAULTS = {
+  navigationLabel: 'Breadcrumb',
+  showMoreLabel: 'Show more breadcrumb items',
+};
+
+const wppBreadcrumbCss = ":host{--breadcrumb-color:var(--wpp-breadcrumb-color, var(--wpp-grey-color-500));--breadcrumb-separator-margin:var(--wpp-breadcrumb-separator-margin, 0 8px);--breadcrumb-item-text-color:var(--wpp-breadcrumb-item-text-color, var(--wpp-grey-color-800));--breadcrumb-item-text-hover-color:var(--wpp-breadcrumb-item-text-color-hover, var(--wpp-grey-color-900));--breadcrumb-item-text-active-color:var(--wpp-breadcrumb-item-text-color-active, var(--wpp-grey-color-1000));--breadcrumb-item-icon-hover-color:var(--wpp-breadcrumb-item-icon-color-hover, var(--wpp-grey-color-800));--breadcrumb-item-icon-active-color:var(--wpp-breadcrumb-item-icon-color-active, var(--wpp-grey-color-900));--breadcrumb-menu-trigger-color:var(--wpp-breadcrumb-menu-trigger-color, var(--wpp-icon-color));--breadcrumb-menu-trigger-hover-color:var(--wpp-breadcrumb-menu-trigger-color-hover, var(--wpp-icon-color-hover));--breadcrumb-menu-trigger-active-color:var(--wpp-breadcrumb-menu-trigger-color-active, var(--wpp-icon-color-active));--breadcrumb-item-first-border-color-focus:var(\n    --wpp-breadcrumb-item-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--breadcrumb-item-second-border-color-focus:var(\n    --wpp-breadcrumb-item-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--breadcrumb-item-border-radius-focus:var(--wpp-breadcrumb-item-border-radius-focus, 2px);font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);display:-ms-flexbox;display:flex;color:var(--breadcrumb-color);white-space:nowrap}:host .menu{--mc-wrapper-width:20px;height:20px;vertical-align:text-top}:host .menu .wpp-list{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column}.item{color:var(--breadcrumb-item-text-color);text-decoration:none}.item:not(.active){cursor:pointer}.item:not(.active):hover{color:var(--breadcrumb-item-text-hover-color);text-decoration:underline}.item:not(.active):active{color:var(--breadcrumb-item-text-active-color);text-decoration:underline}.item.active{color:var(--breadcrumb-item-text-active-color);cursor:default}.menu-trigger{color:var(--breadcrumb-menu-trigger-color);cursor:pointer}.menu-trigger[aria-expanded=true]{color:var(--breadcrumb-item-text-color)}.menu-trigger:hover{color:var(--breadcrumb-menu-trigger-hover-color)}.menu-trigger:active{color:var(--breadcrumb-menu-trigger-active-color)}.link{text-decoration:none}.unclickable{text-decoration:none}.unclickable:not(.active){cursor:default}.unclickable:not(.active):hover{text-decoration:none}.item:focus-visible,.menu-trigger:focus-visible{border-radius:var(--breadcrumb-item-border-radius-focus);outline:none;-webkit-box-shadow:0 0 0 1px var(--breadcrumb-item-first-border-color-focus), 0 0 0 3px var(--breadcrumb-item-second-border-color-focus);box-shadow:0 0 0 1px var(--breadcrumb-item-first-border-color-focus), 0 0 0 3px var(--breadcrumb-item-second-border-color-focus)}.item:focus-visible{color:var(--breadcrumb-item-text-hover-color);text-decoration:underline}.menu-trigger:focus-visible{color:var(--breadcrumb-menu-trigger-hover-color)}.separator{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;margin:var(--breadcrumb-separator-margin)}.back{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;cursor:pointer;color:var(--breadcrumb-item-text-color);text-decoration:none;background:none;border:none;padding:0;font:inherit}.back:hover{color:var(--breadcrumb-item-text-hover-color);text-decoration:underline}.back:hover .back-icon-chevron{color:var(--breadcrumb-item-icon-hover-color)}.back:active{color:var(--breadcrumb-item-text-active-color);text-decoration:underline}.back:active .back-icon-chevron{color:var(--breadcrumb-item-icon-active-color)}.back .back-label{margin-left:4px}.back:focus-visible{border-radius:var(--breadcrumb-item-border-radius-focus);outline:none;-webkit-box-shadow:0 0 0 1px var(--breadcrumb-item-first-border-color-focus), 0 0 0 3px var(--breadcrumb-item-second-border-color-focus);box-shadow:0 0 0 1px var(--breadcrumb-item-first-border-color-focus), 0 0 0 3px var(--breadcrumb-item-second-border-color-focus)}";
 
 const WppBreadcrumb = class {
   constructor(hostRef) {
     registerInstance(this, hostRef);
     this.wppChange = createEvent(this, "wppChange", 1);
     this.maxItems = 5;
+    // Interactive items are reachable with Tab but carry no native activation behaviour of their own
+    // (the non-native variant renders a `span`), so Enter/Space are wired up here to keep every
+    // variant operable by keyboard (WCAG 2.1.1). An `a` already activates itself on Enter, so that
+    // one case is left to the browser — synthesising a click there would navigate twice.
+    this.handleItemKeyDown = (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ')
+        return;
+      const target = event.currentTarget;
+      if (target.tagName === 'A' && event.key === 'Enter')
+        return;
+      event.preventDefault();
+      target.click();
+    };
     this.handleBackClick = (event) => {
       event.preventDefault();
       this.wppChange.emit({ path: 'back', label: this.backBtnLabel });
@@ -30,6 +48,11 @@ const WppBreadcrumb = class {
     this.nativeLink = false;
     this.dropdownConfig = {};
     this.backBtnLabel = undefined;
+    this.ariaProps = undefined;
+    this.locales = {};
+  }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
   }
   get rootItem() {
     return this.items[0] ?? null;
@@ -59,44 +82,51 @@ const WppBreadcrumb = class {
   createItemElement(item, isActive = false) {
     const truncatedLabel = truncate(item.label, this.maxLabelLength, this.middleTruncation);
     if (isActive) {
-      return (h("wpp-tooltip-v4-2-0", { text: item.label, part: "item-tooltip", config: {
+      return (h("wpp-tooltip-v4-3-0", { text: item.label, part: "item-tooltip", config: {
           onShow: () => {
             if (item.label.length < this.maxLabelLength)
               return false;
           },
-        } }, h("span", { class: "active item", tabIndex: -1, part: "item-text" }, truncatedLabel)));
+        } }, this.nativeLink ? (h("a", { href: item.path, class: "active item", tabIndex: -1, part: "item-text", "aria-current": "page" }, truncatedLabel)) : (h("span", { class: "active item", tabIndex: -1, part: "item-text" }, truncatedLabel))));
     }
     else if (item.label.length > this.maxLabelLength && !this.nativeLink) {
-      return (h("wpp-tooltip-v4-2-0", { text: item.label, part: "item-tooltip" }, h("span", { class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, truncatedLabel)));
+      return (h("wpp-tooltip-v4-3-0", { text: item.label, part: "item-tooltip" }, h("span", { class: "item", onClick: this.createRouteChangeTrigger(item), onKeyDown: this.handleItemKeyDown, tabIndex: 0, role: "link", part: "item-text" }, truncatedLabel)));
     }
     else if (item.label.length > this.maxLabelLength) {
-      return (h("wpp-tooltip-v4-2-0", { text: item.label, part: "item-tooltip" }, h("a", { href: item.path, class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, truncatedLabel)));
+      return (h("wpp-tooltip-v4-3-0", { text: item.label, part: "item-tooltip" }, h("a", { href: item.path, class: "item", onClick: this.createRouteChangeTrigger(item), onKeyDown: this.handleItemKeyDown, tabIndex: 0, part: "item-text" }, truncatedLabel)));
     }
     else if (!this.nativeLink) {
-      return (h("span", { class: "item", onClick: this.createRouteChangeTrigger(item), tabIndex: 0, part: "item-text" }, item.label));
+      return (h("span", { class: "item", onClick: this.createRouteChangeTrigger(item), onKeyDown: this.handleItemKeyDown, tabIndex: 0, role: "link", part: "item-text" }, item.label));
     }
     else {
-      return (h("a", { href: item.path, class: "item", onClick: this.createRouteChangeTrigger(item), part: "item-text" }, item.label));
+      return (h("a", { href: item.path, class: "item", onClick: this.createRouteChangeTrigger(item), onKeyDown: this.handleItemKeyDown, part: "item-text" }, item.label));
     }
   }
   createMenuElement(item) {
     if (this.nativeLink) {
-      return (h("wpp-list-item-v4-2-0", { key: uuidv4(), class: "link", linkConfig: { href: item.path }, part: "menu-item" }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
+      return (h("wpp-list-item-v4-3-0", { key: uuidv4(), class: "link", linkConfig: { href: item.path }, part: "menu-item" }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
     }
     else {
-      return (h("wpp-list-item-v4-2-0", { key: uuidv4(), class: "link", part: "menu-item", onClick: this.createRouteChangeTrigger(item) }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
+      // wpp-list-item emits wppChangeListItem for both a mouse click and a keyboard
+      // (Enter/Space) selection, so binding the route change here — rather than to
+      // onClick — makes the collapsed-items menu operable by keyboard too (WCAG 2.1.1),
+      // through a single handler that behaves identically for mouse and keyboard.
+      return (h("wpp-list-item-v4-3-0", { key: uuidv4(), class: "link", part: "menu-item", onWppChangeListItem: this.createRouteChangeTrigger(item) }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
     }
   }
   render() {
     if (this.backBtnLabel) {
-      return (h(Host, { class: this.hostCssClasses(), exportparts: "icon" }, h("button", { class: "back", onClick: this.handleBackClick, onKeyDown: this.handleBackKeyDown, type: "button", tabIndex: 0 }, h("wpp-icon-chevron-v4-2-0", { class: "back-icon-chevron", part: "icon", direction: "left", size: "s" }), h("span", { class: "back-label" }, this.backBtnLabel))));
+      return (h(Host, { class: this.hostCssClasses(), exportparts: "icon" }, h("button", { class: "back", onClick: this.handleBackClick, onKeyDown: this.handleBackKeyDown, type: "button", tabIndex: 0 }, h("wpp-icon-chevron-v4-3-0", { class: "back-icon-chevron", part: "icon", direction: "left", size: "s" }), h("span", { class: "back-label" }, this.backBtnLabel))));
     }
     if (!this.rootItem) {
       return;
     }
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "item-tooltip, item-text, menu-item, menu-item-label, separator, menu, icon-more" }, this.createItemElement(this.rootItem), this.hiddenItems.length > 0 && (h(Fragment, null, h("div", { class: "separator", part: "separator" }, h("wpp-icon-chevron-v4-2-0", { size: "s", color: DEFAULT_ICON_COLOR })), h("wpp-menu-context-v4-2-0", { key: this.hiddenItemsSnapshot, class: "menu", dropdownConfig: { triggerElementWidth: false, ...this.dropdownConfig }, tabIndex: 0, part: "menu" }, h("wpp-icon-more-v4-2-0", { class: "menu-trigger", direction: "horizontal", slot: "trigger-element", part: "icon-more" }), h("div", { key: this.hiddenItemsSnapshot }, this.hiddenItems.map(item => this.createMenuElement(item)))))), this.visibleItems.map((item, index, items) => (h(Fragment, null, h("div", { class: "separator", tabIndex: -1, part: "separator" }, h("wpp-icon-chevron-v4-2-0", { size: "s", color: DEFAULT_ICON_COLOR })), this.createItemElement(item, index === items.length - 1))))));
+    const navLabel = this.ariaProps?.navigation?.label ??
+      (this.ariaProps?.navigation?.labelledby ? undefined : this._locales.navigationLabel);
+    const navLabelledBy = this.ariaProps?.navigation?.labelledby;
+    return (h(Host, { class: this.hostCssClasses(), role: "navigation", "aria-label": navLabel, "aria-labelledby": navLabelledBy, exportparts: "item-tooltip, item-text, menu-item, menu-item-label, separator, menu, icon-more" }, this.createItemElement(this.rootItem), this.hiddenItems.length > 0 && (h(Fragment, null, h("div", { class: "separator", part: "separator" }, h("wpp-icon-chevron-v4-3-0", { size: "s", color: DEFAULT_ICON_COLOR })), h("wpp-menu-context-v4-3-0", { key: this.hiddenItemsSnapshot, class: "menu", dropdownConfig: { triggerElementWidth: false, ...this.dropdownConfig }, part: "menu", ariaProps: { label: this._locales.showMoreLabel } }, h("wpp-icon-more-v4-3-0", { class: "menu-trigger", direction: "horizontal", slot: "trigger-element", part: "icon-more", tabIndex: 0, "aria-label": "Show more breadcrumb items" }), h("div", { key: this.hiddenItemsSnapshot }, this.hiddenItems.map(item => this.createMenuElement(item)))))), this.visibleItems.map((item, index, items) => (h(Fragment, null, h("div", { class: "separator", tabIndex: -1, part: "separator" }, h("wpp-icon-chevron-v4-3-0", { size: "s", color: DEFAULT_ICON_COLOR })), this.createItemElement(item, index === items.length - 1))))));
   }
-  static get registryIs() { return "wpp-breadcrumb-v4-2-0"; }
+  static get registryIs() { return "wpp-breadcrumb-v4-3-0"; }
   get host() { return getElement(this); }
 };
 WppBreadcrumb.style = wppBreadcrumbCss;

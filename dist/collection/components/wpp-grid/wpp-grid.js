@@ -67,7 +67,7 @@ export class WppGrid {
     return (h(Host, { class: this.hostCssClasses(), exportparts: "inner" }, h("slot", { part: "inner" })));
   }
   static get is() { return "wpp-grid"; }
-  static get registryIs() { return "wpp-grid-v4-2-0"; }
+  static get registryIs() { return "wpp-grid-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -240,7 +240,7 @@ export class WppGrid {
         "mutable": false,
         "complexType": {
           "original": "RangeOf<24> | 'auto' | true",
-          "resolved": "true | 0 | 2 | 1 | 3 | 4 | 5 | 6 | 8 | 7 | 9 | 10 | 11 | 12 | 16 | \"auto\" | 15 | 20 | 13 | 14 | 17 | 18 | 19 | 21 | 22 | 23 | 24 | undefined",
+          "resolved": "true | 0 | 2 | \"auto\" | 1 | 3 | 4 | 5 | 6 | 8 | 7 | 9 | 10 | 11 | 12 | 16 | 15 | 20 | 13 | 14 | 17 | 18 | 19 | 21 | 22 | 23 | 24 | undefined",
           "references": {
             "RangeOf": {
               "location": "import",
@@ -263,7 +263,7 @@ export class WppGrid {
         "mutable": false,
         "complexType": {
           "original": "RangeOf<24> | 'auto' | true",
-          "resolved": "true | 0 | 2 | 1 | 3 | 4 | 5 | 6 | 8 | 7 | 9 | 10 | 11 | 12 | 16 | \"auto\" | 15 | 20 | 13 | 14 | 17 | 18 | 19 | 21 | 22 | 23 | 24 | undefined",
+          "resolved": "true | 0 | 2 | \"auto\" | 1 | 3 | 4 | 5 | 6 | 8 | 7 | 9 | 10 | 11 | 12 | 16 | 15 | 20 | 13 | 14 | 17 | 18 | 19 | 21 | 22 | 23 | 24 | undefined",
           "references": {
             "RangeOf": {
               "location": "import",
@@ -286,7 +286,7 @@ export class WppGrid {
         "mutable": false,
         "complexType": {
           "original": "RangeOf<24> | 'auto' | true",
-          "resolved": "true | 0 | 2 | 1 | 3 | 4 | 5 | 6 | 8 | 7 | 9 | 10 | 11 | 12 | 16 | \"auto\" | 15 | 20 | 13 | 14 | 17 | 18 | 19 | 21 | 22 | 23 | 24 | undefined",
+          "resolved": "true | 0 | 2 | \"auto\" | 1 | 3 | 4 | 5 | 6 | 8 | 7 | 9 | 10 | 11 | 12 | 16 | 15 | 20 | 13 | 14 | 17 | 18 | 19 | 21 | 22 | 23 | 24 | undefined",
           "references": {
             "RangeOf": {
               "location": "import",
@@ -309,7 +309,7 @@ export class WppGrid {
         "mutable": false,
         "complexType": {
           "original": "RangeOf<24> | 'auto' | true",
-          "resolved": "true | 0 | 2 | 1 | 3 | 4 | 5 | 6 | 8 | 7 | 9 | 10 | 11 | 12 | 16 | \"auto\" | 15 | 20 | 13 | 14 | 17 | 18 | 19 | 21 | 22 | 23 | 24 | undefined",
+          "resolved": "true | 0 | 2 | \"auto\" | 1 | 3 | 4 | 5 | 6 | 8 | 7 | 9 | 10 | 11 | 12 | 16 | 15 | 20 | 13 | 14 | 17 | 18 | 19 | 21 | 22 | 23 | 24 | undefined",
           "references": {
             "RangeOf": {
               "location": "import",
@@ -332,7 +332,7 @@ export class WppGrid {
         "mutable": false,
         "complexType": {
           "original": "RangeOf<24> | 'auto' | true",
-          "resolved": "true | 0 | 2 | 1 | 3 | 4 | 5 | 6 | 8 | 7 | 9 | 10 | 11 | 12 | 16 | \"auto\" | 15 | 20 | 13 | 14 | 17 | 18 | 19 | 21 | 22 | 23 | 24 | undefined",
+          "resolved": "true | 0 | 2 | \"auto\" | 1 | 3 | 4 | 5 | 6 | 8 | 7 | 9 | 10 | 11 | 12 | 16 | 15 | 20 | 13 | 14 | 17 | 18 | 19 | 21 | 22 | 23 | 24 | undefined",
           "references": {
             "RangeOf": {
               "location": "import",
@@ -355,7 +355,7 @@ export class WppGrid {
         "mutable": false,
         "complexType": {
           "original": "RangeOf<24> | 'auto' | true",
-          "resolved": "true | 0 | 2 | 1 | 3 | 4 | 5 | 6 | 8 | 7 | 9 | 10 | 11 | 12 | 16 | \"auto\" | 15 | 20 | 13 | 14 | 17 | 18 | 19 | 21 | 22 | 23 | 24 | undefined",
+          "resolved": "true | 0 | 2 | \"auto\" | 1 | 3 | 4 | 5 | 6 | 8 | 7 | 9 | 10 | 11 | 12 | 16 | 15 | 20 | 13 | 14 | 17 | 18 | 19 | 21 | 22 | 23 | 24 | undefined",
           "references": {
             "RangeOf": {
               "location": "import",

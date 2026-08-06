@@ -170,21 +170,21 @@ describe('wpp-chat-input', () => {
     it('Testing that it returns false when component is disabled', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
-        template: () => h("wpp-chat-input-v4-2-0", { disabled: true }),
+        template: () => h("wpp-chat-input-v4-3-0", { disabled: true }),
       });
       expect(page.rootInstance.shouldDisplaySend()).toBe(false);
     });
     it('Testing that it returns true when component is generating and not disabled', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
-        template: () => h("wpp-chat-input-v4-2-0", { disabled: false, isGenerating: true }),
+        template: () => h("wpp-chat-input-v4-3-0", { disabled: false, isGenerating: true }),
       });
       expect(page.rootInstance.shouldDisplaySend()).toBe(true);
     });
     it('Testing that it returns true when component is audio recording with a value and not disabled', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
-        template: () => h("wpp-chat-input-v4-2-0", { disabled: false }),
+        template: () => h("wpp-chat-input-v4-3-0", { disabled: false }),
       });
       page.rootInstance.internalValue = 'Testing';
       page.rootInstance.isAudioRecording = true;
@@ -441,6 +441,192 @@ describe('wpp-chat-input', () => {
       page.rootInstance.isAudioRecording = true;
       mockRecognition.onend?.();
       expect(page.rootInstance.isAudioRecording).toBeFalsy();
+    });
+  });
+  describe('AI model selector', () => {
+    const customModels = [
+      { id: 'gpt-x', label: 'GPT-X', logo: 'https://example.com/gpt-x.svg' },
+      { id: 'claude', label: 'Claude', logo: 'https://example.com/claude.svg' },
+    ];
+    describe('getSelectedModel', () => {
+      it('returns the default "Auto" option when selectedModel is "auto"', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input></wpp-chat-input>`,
+        });
+        const selected = page.rootInstance.getSelectedModel();
+        expect(selected).toMatchObject({ id: 'auto', label: 'Auto' });
+      });
+      it('returns the default "Premium" option when selectedModel is "premium"', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input selected-model="premium"></wpp-chat-input>`,
+        });
+        const selected = page.rootInstance.getSelectedModel();
+        expect(selected).toMatchObject({ id: 'premium', label: 'Premium' });
+      });
+      it('returns the raw selectedModel object when models list is empty', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input></wpp-chat-input>`,
+        });
+        page.rootInstance.selectedModel = customModels[0];
+        expect(page.rootInstance.getSelectedModel()).toBe(customModels[0]);
+      });
+      it('finds the selected model within a non-empty models list by id', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input></wpp-chat-input>`,
+        });
+        page.rootInstance.models = customModels;
+        page.rootInstance.selectedModel = { id: 'claude' };
+        expect(page.rootInstance.getSelectedModel()).toBe(customModels[1]);
+      });
+      it('returns the `auto` model when the selected model id is not present in the models list', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input></wpp-chat-input>`,
+        });
+        page.rootInstance.models = customModels;
+        page.rootInstance.selectedModel = { id: 'missing' };
+        expect(page.rootInstance.getSelectedModel()).toMatchObject({ id: 'auto', label: 'Auto' });
+      });
+    });
+    describe('menu open state', () => {
+      it('handleModelMenuShow sets isModelMenuOpen to true', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input></wpp-chat-input>`,
+        });
+        page.rootInstance.handleModelMenuShow();
+        expect(page.rootInstance.isModelMenuOpen).toBe(true);
+      });
+      it('handleModelMenuHide sets isModelMenuOpen to false', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input></wpp-chat-input>`,
+        });
+        page.rootInstance.isModelMenuOpen = true;
+        page.rootInstance.handleModelMenuHide();
+        expect(page.rootInstance.isModelMenuOpen).toBe(false);
+      });
+    });
+    describe('handleModelSelect', () => {
+      it('normalises the default "auto" option to the "auto" keyword and emits the model object', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input selected-model="premium"></wpp-chat-input>`,
+        });
+        const changeModelSpy = jest.fn();
+        page.rootInstance.wppModelSelect = { emit: changeModelSpy };
+        const autoModel = { id: 'auto', label: 'Auto', caption: '', logo: '' };
+        page.rootInstance.handleModelSelect(autoModel);
+        expect(page.rootInstance.selectedModel).toBe('auto');
+        expect(changeModelSpy).toHaveBeenCalledWith(autoModel);
+      });
+      it('normalises the default "premium" option to the "premium" keyword and emits the model object', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input></wpp-chat-input>`,
+        });
+        const changeModelSpy = jest.fn();
+        page.rootInstance.wppModelSelect = { emit: changeModelSpy };
+        const premiumModel = { id: 'premium', label: 'Premium', caption: '', logo: '' };
+        page.rootInstance.handleModelSelect(premiumModel);
+        expect(page.rootInstance.selectedModel).toBe('premium');
+        expect(changeModelSpy).toHaveBeenCalledWith(premiumModel);
+      });
+      it('stores the whole model object for a custom model and emits it', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input></wpp-chat-input>`,
+        });
+        const changeModelSpy = jest.fn();
+        page.rootInstance.wppModelSelect = { emit: changeModelSpy };
+        page.rootInstance.handleModelSelect(customModels[0]);
+        expect(page.rootInstance.selectedModel).toBe(customModels[0]);
+        expect(changeModelSpy).toHaveBeenCalledWith(customModels[0]);
+      });
+    });
+    describe('handleModelChange', () => {
+      it('emits wppModelBrowse', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input></wpp-chat-input>`,
+        });
+        const selectModelSpy = jest.fn();
+        page.rootInstance.wppModelBrowse = { emit: selectModelSpy };
+        page.rootInstance.handleModelChange();
+        expect(selectModelSpy).toHaveBeenCalledTimes(1);
+      });
+    });
+    // Rendering output (renderModelSelector / renderModelListItem) via snapshots.
+    describe('rendering (snapshots)', () => {
+      const getSelector = (page) => page.root?.shadowRoot?.querySelector('.select-model-trigger');
+      const getDropdown = (page) => page.root?.shadowRoot?.querySelector('.wpp-model-dropdown');
+      it('renders the model selector trigger and dropdown with the default options', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input></wpp-chat-input>`,
+        });
+        expect(getSelector(page)).toMatchSnapshot('trigger');
+        expect(getDropdown(page)).toMatchSnapshot('dropdown');
+      });
+      it('renders a "Select model or agent" list item when the models list is empty', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input></wpp-chat-input>`,
+        });
+        const dropdown = getDropdown(page);
+        const listItems = dropdown?.querySelectorAll('wpp-list-item');
+        // Two default options + the "Select model or agent" fallback item.
+        expect(listItems?.[listItems.length - 1].querySelector('span[slot="label"]')?.textContent).toBe('Select model or agent');
+        expect(dropdown).toMatchSnapshot();
+      });
+      it('renders one list item per custom model when the models list is provided', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input></wpp-chat-input>`,
+        });
+        page.root.models = customModels;
+        await page.waitForChanges();
+        expect(getDropdown(page)).toMatchSnapshot();
+      });
+      it('renders only the avatar (no label) in the trigger for size "s"', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input size="s"></wpp-chat-input>`,
+        });
+        page.rootInstance.isChatInputExpanded = false;
+        await page.waitForChanges();
+        expect(getSelector(page)).toMatchSnapshot();
+      });
+    });
+    describe('trigger disabled state and size behaviour', () => {
+      const getSelector = (page) => page.root?.shadowRoot?.querySelector('.select-model-trigger');
+      it('disables the model selector trigger when the component is disabled', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input disabled="true"></wpp-chat-input>`,
+        });
+        expect(getSelector(page)?.hasAttribute('disabled')).toBe(true);
+      });
+      it('does not disable the model selector trigger when the component is enabled', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input></wpp-chat-input>`,
+        });
+        expect(getSelector(page)?.hasAttribute('disabled')).toBe(false);
+      });
+      it('does not render the model selector for size "s" even when withSelect is true', async () => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          html: `<wpp-chat-input size="s" with-select="true"></wpp-chat-input>`,
+        });
+        page.rootInstance.isChatInputExpanded = false;
+        await page.waitForChanges();
+        expect(getSelector(page)).toBeNull();
+      });
     });
   });
 });

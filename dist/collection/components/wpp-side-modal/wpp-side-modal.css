@@ -45,10 +45,7 @@
 
 :host(.wpp-side-modal-wrapper) {
   position: fixed;
-  top: var(--wpp-side-modal-top-offset);
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: var(--wpp-side-modal-top-offset) 0 0 0;
   display: block;
   font-family: var(--wpp-font-family, system-ui, sans-serif);
   visibility: hidden;

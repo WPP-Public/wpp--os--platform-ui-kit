@@ -199,6 +199,74 @@ describe('wpp-list-item', () => {
       expect(mockStop).toHaveBeenCalledTimes(1);
     });
   });
+  it('emits change and keeps active state while Enter is held on the host', async () => {
+    const page = await newSpecPage({
+      components: [WppListItem],
+      html: `<wpp-list-item value="keyboard-item">
+               <p slot="label">Text</p>
+             </wpp-list-item>`,
+    });
+    const changeSpy = jest.fn();
+    page.root?.addEventListener('wppChangeListItem', changeSpy);
+    await new Promise(resolve => setTimeout(resolve, 100));
+    await page.waitForChanges();
+    page.root?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+    await page.waitForChanges();
+    expect(changeSpy).toHaveBeenCalledTimes(1);
+    expect(page.root?.shadowRoot?.querySelector('.item')?.classList.contains('interaction-active')).toBe(true);
+    page.root?.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter', bubbles: true, cancelable: true }));
+    await page.waitForChanges();
+    expect(page.root?.shadowRoot?.querySelector('.item')?.classList.contains('interaction-active')).toBe(false);
+  });
+  it('finishes mounting when the host menu sets container-state="tooltipTrigger" while still loading', async () => {
+    const page = await newSpecPage({
+      components: [WppListItem],
+      html: `<wpp-list-item>
+               <p slot="label">Text</p>
+             </wpp-list-item>`,
+    });
+    await new Promise(resolve => setTimeout(resolve, 100));
+    await page.waitForChanges();
+    // Simulate a list item that hydrated while detached inside a menu-context
+    // popup, so it stayed stuck in the loading (opacity: 0) state.
+    page.rootInstance.loading = true;
+    page.rootInstance.mounted = false;
+    await page.waitForChanges();
+    expect(page.root?.classList.contains('wpp-loading')).toBe(true);
+    // The menu sets container-state='tooltipTrigger' as the popup opens; the item
+    // should finish mounting and clear the loading state.
+    page.root?.setAttribute('container-state', 'tooltipTrigger');
+    await page.waitForChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    await page.waitForChanges();
+    expect(page.rootInstance.loading).toBe(false);
+    expect(page.rootInstance.mounted).toBe(true);
+    expect(page.root?.classList.contains('wpp-loading')).toBe(false);
+    expect(page.root?.classList.contains('wpp-mounted')).toBe(true);
+  });
+  it('drives the truncated-label tooltip from the host so keyboard focus reveals it', async () => {
+    const page = await newSpecPage({
+      components: [WppListItem],
+      html: `<wpp-list-item>
+               <p slot="label">A label far too long to fit on one line</p>
+             </wpp-list-item>`,
+    });
+    await new Promise(resolve => setTimeout(resolve, 100));
+    await page.waitForChanges();
+    // mock-doc measures every box as 0x0, so stub the overflow the truncation check reads.
+    const label = page.root?.querySelector('[slot="label"]');
+    Object.defineProperty(label, 'clientWidth', { value: 100, configurable: true });
+    Object.defineProperty(label, 'scrollWidth', { value: 300, configurable: true });
+    page.root?.setAttribute('container-state', 'tooltipTrigger');
+    await page.waitForChanges();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    await page.waitForChanges();
+    const tooltip = page.root?.shadowRoot?.querySelector('wpp-tooltip');
+    expect(tooltip).not.toBeNull();
+    // The tooltip anchor is not focusable, so the host — the element that takes
+    // focus — has to trigger it, or a keyboard user never sees the full label.
+    expect(tooltip?.config.triggerTarget).toBe(page.root);
+  });
   it('Test that `handleComponentMount` is called inside connectedCallback', async () => {
     const page = await newSpecPage({
       components: [WppListItem],

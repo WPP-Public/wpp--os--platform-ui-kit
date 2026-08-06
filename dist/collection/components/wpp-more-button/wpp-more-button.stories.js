@@ -15,7 +15,7 @@ export default {
     },
   },
 };
-export const MoreButton = (args) => html ` <wpp-more-button-v4-2-0
+export const MoreButton = (args) => html ` <wpp-more-button-v4-3-0
     .size="${args.size}"
     .name="${args.name}"
     .disabled="${args.disabled}"

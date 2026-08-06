@@ -8,10 +8,10 @@
 */
 :host {
   --avatar-stroke-color: var(--wpp-avatar-stroke-color, var(--wpp-grey-color-000));
-  --avatar-stroke-width: var(--wpp-avatar-stroke-width, 2px);
-  --avatar-circle-group-margin-left-size-xs: var(--wpp-avatar-circle-group-margin-left-size-xs, -4px);
+  --avatar-stroke-width: var(--wpp-avatar-stroke-width, var(--wpp-border-width-m));
+  --avatar-circle-group-margin-left-size-xs: var(--wpp-avatar-circle-group-margin-left-size-xs, -8px);
   --avatar-circle-group-margin-left-size-s: var(--wpp-avatar-circle-group-margin-left-size-s, -12px);
-  --avatar-square-group-margin-left-size-xs: var(--wpp-avatar-square-group-margin-left-size-xs, -4px);
+  --avatar-square-group-margin-left-size-xs: var(--wpp-avatar-square-group-margin-left-size-xs, -8px);
   --avatar-square-group-margin-left-size-s: var(--wpp-avatar-square-group-margin-left-size-s, -12px);
   display: inline-flex;
 }

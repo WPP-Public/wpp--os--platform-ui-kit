@@ -47,7 +47,7 @@ describe('wpp-radio', () => {
   it('renders component with label text', async () => {
     const page = await newSpecPage({
       components: [WppRadio, WppLabel, WppInternalLabel],
-      template: () => h("wpp-radio-v4-2-0", { name: "contact", value: "email", labelConfig: { text: 'Email' } }),
+      template: () => h("wpp-radio-v4-3-0", { name: "contact", value: "email", labelConfig: { text: 'Email' } }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -62,7 +62,7 @@ describe('wpp-radio', () => {
     };
     const page = await newSpecPage({
       components: [WppRadio, WppLabel, WppInternalLabel],
-      template: () => h("wpp-radio-v4-2-0", { name: "contact", value: "email", labelConfig: labelConfig }),
+      template: () => h("wpp-radio-v4-3-0", { name: "contact", value: "email", labelConfig: labelConfig }),
     });
     expect(page.root).toMatchSnapshot();
   });

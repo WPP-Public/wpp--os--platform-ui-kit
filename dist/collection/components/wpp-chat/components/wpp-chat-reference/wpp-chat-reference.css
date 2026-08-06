@@ -3,7 +3,6 @@
   * @prop --wpp-chat-reference-padding:
   * @prop --wpp-chat-reference-gap:
   * @prop --wpp-chat-reference-border-radius:
-  * @prop --wpp-chat-reference-min-height:
   * @prop --wpp-chat-reference-max-width:
   * @prop --wpp-chat-reference-block-line-color:
   * @prop --wpp-chat-reference-thumbnail-bg-color:
@@ -17,12 +16,11 @@
 */
 :host {
   --cr-bg-color: var(--wpp-chat-reference-bg-color, var(--wpp-grey-color-100));
-  --cr-padding: var(--wpp-chat-reference-padding, 12px 12px 12px 8px);
+  --cr-padding: var(--wpp-chat-reference-padding, 12px 12px 12px 4px);
   --cr-gap: var(--wpp-chat-reference-gap, 8px);
-  --cr-border-radius: var(--wpp-chat-reference-border-radius, var(--wpp-border-radius-l, 12px));
-  --cr-min-height: var(--wpp-chat-reference-min-height, 64px);
+  --cr-border-radius: var(--wpp-chat-reference-border-radius, var(--wpp-border-radius-m, 8px));
   --cr-max-width: var(--wpp-chat-reference-max-width, 476px);
-  --cr-block-line-color: var(--wpp-chat-reference-block-line-color, var(--wpp-grey-color-400));
+  --cr-block-line-color: var(--wpp-chat-reference-block-line-color, var(--wpp-primary-color-500));
   --cr-thumbnail-size: 40px;
   --cr-thumbnail-bg-color: var(--wpp-chat-reference-thumbnail-bg-color, var(--wpp-grey-color-300));
   --cr-thumbnail-radius: var(--wpp-border-radius-m, 8px);
@@ -42,19 +40,21 @@
   display: flex;
   align-items: center;
   box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
   gap: 0;
   width: 100%;
-  min-height: var(--cr-min-height);
   padding: var(--cr-padding);
   background-color: var(--cr-bg-color);
   border-radius: var(--cr-border-radius);
 }
 
 .block-line {
-  flex: 0 0 auto;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
   width: 4px;
-  height: 40px;
-  border-radius: var(--wpp-border-radius-xs, 4px);
   background-color: var(--cr-block-line-color);
 }
 

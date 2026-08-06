@@ -29,15 +29,15 @@
   --banner-information-icon-color: var(--wpp-banner-information-icon-color, var(--wpp-grey-color-400));
   --banner-information-box-shadow: var(
     --wpp-banner-information-box-shadow,
-    0px 1px 2px rgba(52, 58, 63, 0.05),
-    0px 2px 8px rgba(52, 58, 63, 0.12)
+    0px 1px 2px rgb(52 58 63 / 5%),
+    0px 2px 8px rgb(52 58 63 / 12%)
   );
   --banner-information-icon-message-color: var(--wpp-banner-information-icon-message-color, var(--wpp-grey-color-000));
   --banner-warning-bg-color: var(--wpp-banner-warning-bg-color, var(--wpp-highlight-color-400));
   --banner-warning-box-shadow: var(
     --wpp-banner-warning-box-shadow,
-    0px 1px 2px rgba(52, 58, 63, 0.05),
-    0px 2px 8px rgba(52, 58, 63, 0.12)
+    0px 1px 2px rgb(52 58 63 / 5%),
+    0px 2px 8px rgb(52 58 63 / 12%)
   );
   --banner-warning-icon-message-color: var(--wpp-banner-warning-icon-message-color, var(--wpp-text-color));
   position: sticky;
@@ -69,7 +69,7 @@
   transform: translateY(-100%);
   transition: all var(--banner-animation-duration) ease-in-out;
   max-width: var(--banner-max-width);
-  margin: 0px auto;
+  margin: 0 auto;
 }
 :host .hidden-banner-wrapper .banner-wrapper .content-wrapper {
   padding: var(--banner-content-wrapper-padding);

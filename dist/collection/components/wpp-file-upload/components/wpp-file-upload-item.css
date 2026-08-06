@@ -47,10 +47,11 @@
   --fu-item-error-color: var(--wpp-file-upload-item-error-color, var(--wpp-text-color-danger));
   --fu-item-bg-color-disabled: var(--wpp-file-upload-item-bg-color-disabled, var(--wpp-grey-color-200));
   --fu-item-text-color-disabled: var(--wpp-file-upload-item-text-color-disabled, var(--wpp-text-color-disabled));
+  --fu-item-chat-max-width: var(--wpp-fu-item-chat-max-width, 720px);
   --fu-item-chat-bg-color: var(--wpp-file-upload-item-chat-bg-color, var(--wpp-grey-color-100));
   --fu-item-chat-padding: var(--wpp-file-upload-item-chat-padding, 8px);
   --fu-item-chat-gap: var(--wpp-file-upload-item-chat-gap, 12px);
-  --fu-item-chat-border-radius: var(--wpp-file-upload-item-chat-border-radius, var(--wpp-border-radius-m));
+  --fu-item-chat-border-radius: var(--wpp-file-upload-item-chat-border-radius, var(--wpp-border-radius-l));
   --fu-item-chat-min-height: var(--wpp-file-upload-item-chat-min-height, 56px);
   --fu-item-chat-name-color: var(--wpp-file-upload-item-chat-name-color, var(--wpp-grey-color-1000));
   --fu-item-chat-subtitle-color: var(--wpp-file-upload-item-chat-subtitle-color, var(--wpp-grey-color-800));
@@ -237,7 +238,6 @@
 
 :host(.variant-chat) {
   display: block;
-  width: 100%;
 }
 :host(.variant-chat) .item-wrapper {
   display: flex;
@@ -246,7 +246,7 @@
   gap: var(--fu-item-chat-gap);
   box-sizing: border-box;
   min-height: var(--fu-item-chat-min-height);
-  max-width: none;
+  max-width: var(--fu-item-chat-max-width);
   padding: var(--fu-item-chat-padding);
   background-color: var(--fu-item-chat-bg-color);
   border-radius: var(--fu-item-chat-border-radius);

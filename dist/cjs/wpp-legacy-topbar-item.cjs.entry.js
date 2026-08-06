@@ -2,9 +2,9 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-ecf423ba.js');
-const utils = require('./utils-06b46408.js');
-const constants = require('./constants-6680c2a7.js');
+const index = require('./index-5f5af6a9.js');
+const utils = require('./utils-9529c2fe.js');
+const constants = require('./constants-780314eb.js');
 require('./consts-d8f5ef98.js');
 
 const wppLegacyTopbarItemCss = ":host{display:-ms-inline-flexbox;display:inline-flex}:host .wpp-menu-context .trigger-wrapper[aria-expanded=true] .wpp-navigation-item::part(chevron-icon){-webkit-transform:rotate(180deg);transform:rotate(180deg)}";
@@ -36,7 +36,7 @@ const WppLegacyTopbarItem = class {
     this.getMenuLevelData = (navigationData, firstLevel) => {
       const truncatedLabel = utils.truncate(navigationData.label, 30);
       if (navigationData.children?.length) {
-        return (index.h("wpp-menu-context-v4-2-0", { listWidth: "224px", externalClass: "topbar", appendToListWrapper: true, dropdownConfig: {
+        return (index.h("wpp-menu-context-v4-3-0", { listWidth: "224px", externalClass: "topbar", appendToListWrapper: true, dropdownConfig: {
             popperOptions: {
               strategy: 'fixed',
             },
@@ -49,9 +49,9 @@ const WppLegacyTopbarItem = class {
             onShow: () => {
               this.isMenuExpanded = true;
             },
-          } }, firstLevel ? (index.h("wpp-navigation-item-v4-2-0", { value: navigationData.value, label: truncatedLabel, slot: "trigger-element", extended: true, nativeLink: this.nativeLink, menu: this.menu, menuExpanded: this.isMenuExpanded, chevronOnly: navigationData.chevronOnly, active: this.menu ? this.active : this.activeItems.includes(navigationData.value) })) : (index.h("wpp-list-item-v4-2-0", { value: navigationData.value, slot: "trigger-element", isExtended: true, checked: this.activeItems.includes(navigationData.value), style: listItemNavStyle }, index.h("p", { slot: "label" }, navigationData.label))), index.h("div", null, navigationData.children?.map(navigationItem => navigationItem.children ? (this.getMenuLevelData(navigationItem, false)) : (index.h("wpp-navigation-item-v4-2-0", { value: navigationItem.value, path: navigationItem.path, label: navigationItem.label, nativeLink: this.nativeLink, nestedItem: true, active: this.activeItems.includes(navigationItem.value), chevronOnly: navigationData.chevronOnly, onWppActiveNavItemChanged: () => this.menuItemClick(this.getEmittedNavigationData(navigationItem)) }))))));
+          } }, firstLevel ? (index.h("wpp-navigation-item-v4-3-0", { value: navigationData.value, label: truncatedLabel, slot: "trigger-element", extended: true, nativeLink: this.nativeLink, menu: this.menu, menuExpanded: this.isMenuExpanded, chevronOnly: navigationData.chevronOnly, active: this.menu ? this.active : this.activeItems.includes(navigationData.value) })) : (index.h("wpp-list-item-v4-3-0", { value: navigationData.value, slot: "trigger-element", isExtended: true, checked: this.activeItems.includes(navigationData.value), style: listItemNavStyle }, index.h("p", { slot: "label" }, navigationData.label))), index.h("div", null, navigationData.children?.map(navigationItem => navigationItem.children ? (this.getMenuLevelData(navigationItem, false)) : (index.h("wpp-navigation-item-v4-3-0", { value: navigationItem.value, path: navigationItem.path, label: navigationItem.label, nativeLink: this.nativeLink, nestedItem: true, active: this.activeItems.includes(navigationItem.value), chevronOnly: navigationData.chevronOnly, onWppActiveNavItemChanged: () => this.menuItemClick(this.getEmittedNavigationData(navigationItem)) }))))));
       }
-      return firstLevel ? (index.h("wpp-navigation-item-v4-2-0", { value: navigationData.value, path: navigationData.path, label: truncatedLabel, nativeLink: this.nativeLink, active: this.activeItems.includes(navigationData.value), chevronOnly: navigationData.chevronOnly, onWppActiveNavItemChanged: this.topbarItemClick })) : (index.h("wpp-list-item-v4-2-0", { value: navigationData.value, checked: this.activeItems.includes(navigationData.value), style: listItemNavStyle }, index.h("p", { slot: "label" }, navigationData.label)));
+      return firstLevel ? (index.h("wpp-navigation-item-v4-3-0", { value: navigationData.value, path: navigationData.path, label: truncatedLabel, nativeLink: this.nativeLink, active: this.activeItems.includes(navigationData.value), chevronOnly: navigationData.chevronOnly, onWppActiveNavItemChanged: this.topbarItemClick })) : (index.h("wpp-list-item-v4-3-0", { value: navigationData.value, checked: this.activeItems.includes(navigationData.value), style: listItemNavStyle }, index.h("p", { slot: "label" }, navigationData.label)));
     };
     this.hostCssClasses = () => ({
       'wpp-topbar-item': true,
@@ -67,7 +67,7 @@ const WppLegacyTopbarItem = class {
   render() {
     return (index.h(index.Host, { class: this.hostCssClasses(), role: constants.CONTEXT_ITEM_TAG }, this.getMenuLevelData(this.navigation, true)));
   }
-  static get registryIs() { return "wpp-legacy-topbar-item-v4-2-0"; }
+  static get registryIs() { return "wpp-legacy-topbar-item-v4-3-0"; }
 };
 WppLegacyTopbarItem.style = wppLegacyTopbarItemCss;
 

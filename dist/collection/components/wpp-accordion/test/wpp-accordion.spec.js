@@ -119,6 +119,7 @@ describe('wpp-accordion', () => {
     host.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab', bubbles: true }));
     await page.waitForChanges();
     expect(instance.focusType).toBe(FOCUS_TYPE.TAB);
+    expect(button.classList.contains('tab-focus')).toBe(true);
   });
   it('toggles on Space key', async () => {
     const page = await newSpecPage({
@@ -232,18 +233,25 @@ describe('wpp-accordion', () => {
   it('sets correct aria attributes', async () => {
     const page = await newSpecPage({
       components: [WppAccordion],
-      html: `
-        <wpp-accordion
-          aria-props='{"controls":"panel1","labelledby":"btn1"}'
-        ></wpp-accordion>
-      `,
+      html: `<wpp-accordion></wpp-accordion>`,
     });
     const button = page.root?.shadowRoot?.querySelector('button');
     const content = page.root?.shadowRoot?.querySelector('[part="content"]');
     expect(button).not.toBeNull();
     expect(content).not.toBeNull();
     expect(button?.getAttribute('aria-expanded')).toBe('false');
+    expect(button?.getAttribute('aria-controls')).toBe('expandable-panel');
     expect(content?.getAttribute('role')).toBe('region');
+    expect(content?.id).toBe('expandable-panel');
+    expect(content?.getAttribute('aria-labelledby')).toBe('expandable-button');
+    expect(button?.id).toBe('expandable-button');
+    expect(content?.hasAttribute('inert')).toBe(true);
+    expect(content?.hasAttribute('aria-hidden')).toBe(true);
+    button?.click();
+    await page.waitForChanges();
+    expect(button?.getAttribute('aria-expanded')).toBe('true');
+    expect(content?.hasAttribute('inert')).toBe(false);
+    expect(content?.hasAttribute('aria-hidden')).toBe(false);
   });
   it('uses CSS variables when available for font style', () => {
     const instance = new WppAccordion();

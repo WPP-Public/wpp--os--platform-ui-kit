@@ -25,12 +25,12 @@
   --bttb-border-color-active: var(--wpp-back-to-top-button-border-color-active, var(--wpp-grey-color-800));
   --bttb-first-border-color-focus: var(--wpp-back-to-top-button-first-border-color-focus, var(--wpp-grey-color-000));
   --bttb-second-border-color-focus: var(--wpp-back-to-top-button-second-border-color-focus, var(--wpp-brand-color));
-  --bttb-bg-color: var(--wpp--back-to-top-button-bg-color, var(--wpp-grey-color-000));
-  --bttb-bg-color-hover: var(--wpp--back-to-top-button-bg-color-hover, var(--wpp-grey-color-200));
-  --bttb-bg-color-active: var(--wpp--wpp--back-to-top-button-bg-color-active, var(--wpp-grey-color-300));
-  --bttb-icon-color: var(--wpp--back-to-top-button-icon-color, var(--wpp-grey-color-800));
-  --bttb-icon-color-hover: var(--wpp--back-to-top-button-icon-color-hover, var(--wpp-icon-color-hover));
-  --bttb-icon-color-active: var(--wpp--back-to-top-button-icon-color-active, var(--wpp-icon-color-active));
+  --bttb-bg-color: var(--wpp-back-to-top-button-bg-color, var(--wpp-grey-color-000));
+  --bttb-bg-color-hover: var(--wpp-back-to-top-button-bg-color-hover, var(--wpp-grey-color-200));
+  --bttb-bg-color-active: var(--wpp-back-to-top-button-bg-color-active, var(--wpp-grey-color-300));
+  --bttb-icon-color: var(--wpp-back-to-top-button-icon-color, var(--wpp-grey-color-800));
+  --bttb-icon-color-hover: var(--wpp-back-to-top-button-icon-color-hover, var(--wpp-icon-color-hover));
+  --bttb-icon-color-active: var(--wpp-back-to-top-button-icon-color-active, var(--wpp-icon-color-active));
   display: inline-flex;
   outline: none;
 }

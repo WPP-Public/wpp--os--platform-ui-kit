@@ -67,6 +67,7 @@ export class WppNavSidebar {
     this.activePath = undefined;
     this.nativeLink = false;
     this.zIndex = Z_INDEX.NAV_SIDEBAR;
+    this.navLabel = 'Main navigation';
   }
   handleActivePathChange(newValue) {
     this.setActiveItem(newValue);
@@ -92,10 +93,10 @@ export class WppNavSidebar {
     this.themeSubscription.stop();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "nav-sidebar, body, header-wrapper, header, ws-wrapper, ws-inner" }, h("aside", { class: this.asideCssClasses(), part: "nav-sidebar" }, h("div", { class: "nav-wrapper", part: "body" }, h(WrappedSlot, { wrapperClass: "title-wrapper", name: "header" }), h(WrappedSlot, { wrapperClass: "items-wrapper" })))));
+    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "nav-sidebar, body, header-wrapper, header, ws-wrapper, ws-inner" }, h("aside", { class: this.asideCssClasses(), part: "nav-sidebar" }, h("nav", { class: "nav-wrapper", part: "body", "aria-label": this.navLabel }, h(WrappedSlot, { wrapperClass: "title-wrapper", name: "header" }), h(WrappedSlot, { wrapperClass: "items-wrapper" })))));
   }
   static get is() { return "wpp-nav-sidebar"; }
-  static get registryIs() { return "wpp-nav-sidebar-v4-2-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -164,6 +165,24 @@ export class WppNavSidebar {
         "attribute": "z-index",
         "reflect": false,
         "defaultValue": "Z_INDEX.NAV_SIDEBAR"
+      },
+      "navLabel": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Accessible name for the navigation landmark, so assistive technology can tell this\nnavigation apart from others on the page."
+        },
+        "attribute": "nav-label",
+        "reflect": false,
+        "defaultValue": "'Main navigation'"
       }
     };
   }

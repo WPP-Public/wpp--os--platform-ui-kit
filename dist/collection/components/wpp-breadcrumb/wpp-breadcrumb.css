@@ -100,7 +100,7 @@
 }
 
 .item:focus-visible,
-.menu:focus-visible {
+.menu-trigger:focus-visible {
   border-radius: var(--breadcrumb-item-border-radius-focus);
   outline: none;
   box-shadow: 0 0 0 1px var(--breadcrumb-item-first-border-color-focus), 0 0 0 3px var(--breadcrumb-item-second-border-color-focus);
@@ -111,7 +111,7 @@
   text-decoration: underline;
 }
 
-.menu:focus-visible .menu-trigger {
+.menu-trigger:focus-visible {
   color: var(--breadcrumb-menu-trigger-hover-color);
 }
 

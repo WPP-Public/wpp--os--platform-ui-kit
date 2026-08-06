@@ -472,6 +472,46 @@ describe('wpp-action-button', () => {
       expect(page.rootInstance.focusType).toBeUndefined();
     });
   });
+  describe('Testing hover state', () => {
+    it('Adds the `hovered` class on pointer enter and removes it on pointer leave', async () => {
+      const page = await newSpecPage({
+        components: [WppActionButton],
+        html: `<wpp-action-button>Button</wpp-action-button>`,
+      });
+      const button = page.root.shadowRoot.querySelector('button');
+      page.root?.dispatchEvent(new MouseEvent('pointerenter', { clientX: 10, clientY: 10 }));
+      await page.waitForChanges();
+      expect(button.classList.contains('hovered')).toBe(true);
+      // A container resize moves the button out from under a stationary pointer; the browser
+      // still fires pointerleave in that case, which clears the JS-driven hover overlay.
+      page.root?.dispatchEvent(new MouseEvent('pointerleave'));
+      await page.waitForChanges();
+      expect(button.classList.contains('hovered')).toBe(false);
+    });
+    it('Does not set the `hovered` class while disabled', async () => {
+      const page = await newSpecPage({
+        components: [WppActionButton],
+        html: `<wpp-action-button disabled>Button</wpp-action-button>`,
+      });
+      const button = page.root.shadowRoot.querySelector('button');
+      page.root?.dispatchEvent(new MouseEvent('pointerenter', { clientX: 10, clientY: 10 }));
+      await page.waitForChanges();
+      expect(button.classList.contains('hovered')).toBe(false);
+    });
+    it('Clears the `hovered` class when the button becomes disabled while hovered', async () => {
+      const page = await newSpecPage({
+        components: [WppActionButton],
+        html: `<wpp-action-button>Button</wpp-action-button>`,
+      });
+      const button = page.root.shadowRoot.querySelector('button');
+      page.root?.dispatchEvent(new MouseEvent('pointerenter', { clientX: 10, clientY: 10 }));
+      await page.waitForChanges();
+      expect(button.classList.contains('hovered')).toBe(true);
+      page.root.disabled = true;
+      await page.waitForChanges();
+      expect(button.classList.contains('hovered')).toBe(false);
+    });
+  });
   describe('Test loadingColor', () => {
     it('Testing for default variant', async () => {
       const page = await newSpecPage({

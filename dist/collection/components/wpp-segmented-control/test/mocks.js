@@ -44,6 +44,19 @@ export const FIVE_ITEMS_WITH_DISABLED_HTML = `
   </wpp-segmented-control>
 `;
 /**
+ * HTML template where the checked (active) item is also disabled.
+ * Used to test the roving-tabindex fallback: when the active item is disabled,
+ * the first non-disabled item should become focusable instead.
+ * Items: item-1 (active + disabled), item-2, item-3
+ */
+export const CHECKED_DISABLED_HTML = `
+  <wpp-segmented-control size="m" value="item-1">
+    <wpp-segmented-control-item value="item-1" active disabled>Tab 1</wpp-segmented-control-item>
+    <wpp-segmented-control-item value="item-2">Tab 2</wpp-segmented-control-item>
+    <wpp-segmented-control-item value="item-3">Tab 3</wpp-segmented-control-item>
+  </wpp-segmented-control>
+`;
+/**
  * Creates a KeyboardEvent for testing keyboard navigation.
  */
 export const createKeyboardEvent = (key, options) => new KeyboardEvent('keydown', {

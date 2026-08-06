@@ -65,9 +65,9 @@
     --wpp-border-radius-fully-rounded,
     var(--wpp-action-border-radius, var(--wpp-border-radius-s))
   );
-  --ab-font-weight: var(--wpp-action-button-font-weight, 600);
-  --ab-font-size: var(--wpp-action-button-font-size, 14px);
-  --ab-line-height: var(--wpp-action-button-line-height, 22px);
+  --ab-font-weight: var(--wpp-action-button-font-weight, var(--wpp-typography-s-strong-font-weight));
+  --ab-font-size: var(--wpp-action-button-font-size, var(--wpp-typography-s-strong-font-size));
+  --ab-line-height: var(--wpp-action-button-line-height, var(--wpp-typography-s-strong-line-height));
   --ab-icon-padding: var(--wpp-action-button-icon-only-padding, 6px);
   --ab-bg-color: var(--wpp-action-button-bg-color, var(--wpp-btns-action-color-fill, transparent));
   --ab-bg-color-hover: var(--wpp-action-button-bg-color-hover, var(--wpp-grey-color-700));
@@ -231,7 +231,7 @@ button.tab-focus {
   outline: none;
   box-shadow: 0 0 0 1px var(--ab-first-border-color-focus), 0 0 0 3px var(--ab-second-border-color-focus);
 }
-button:hover ~ .overlay, button.tab-focus ~ .overlay {
+button.hovered ~ .overlay, button.tab-focus ~ .overlay {
   background-color: var(--ab-bg-color-hover);
   opacity: var(--ab-bg-opacity-hover);
 }
@@ -273,11 +273,11 @@ button.primary .icon-start ::slotted(*),
 button.primary .icon-end ::slotted(*) {
   color: var(--ab-primary-icon-color);
 }
-button.primary:hover, button.primary.tab-focus {
+button.primary.hovered, button.primary.tab-focus {
   color: var(--ab-primary-text-color-hover);
 }
-button.primary:hover .icon-start ::slotted(*),
-button.primary:hover .icon-end ::slotted(*), button.primary.tab-focus .icon-start ::slotted(*),
+button.primary.hovered .icon-start ::slotted(*),
+button.primary.hovered .icon-end ::slotted(*), button.primary.tab-focus .icon-start ::slotted(*),
 button.primary.tab-focus .icon-end ::slotted(*) {
   color: var(--ab-primary-icon-color-hover);
 }
@@ -303,11 +303,11 @@ button.secondary .icon-start ::slotted(*),
 button.secondary .icon-end ::slotted(*) {
   color: var(--ab-secondary-icon-color);
 }
-button.secondary:hover, button.secondary.tab-focus {
+button.secondary.hovered, button.secondary.tab-focus {
   color: var(--ab-secondary-text-color-hover);
 }
-button.secondary:hover .icon-start ::slotted(*),
-button.secondary:hover .icon-end ::slotted(*), button.secondary.tab-focus .icon-start ::slotted(*),
+button.secondary.hovered .icon-start ::slotted(*),
+button.secondary.hovered .icon-end ::slotted(*), button.secondary.tab-focus .icon-start ::slotted(*),
 button.secondary.tab-focus .icon-end ::slotted(*) {
   color: var(--ab-secondary-icon-color-hover);
 }
@@ -341,15 +341,15 @@ button.inverted .icon-start ::slotted(*),
 button.inverted .icon-end ::slotted(*) {
   color: var(--ab-inverted-icon-color);
 }
-button.inverted:hover:not(.disabled):not(.loading):not(:active), button.inverted.tab-focus:not(.disabled):not(.loading):not(:active) {
+button.inverted.hovered:not(.disabled, .loading, :active), button.inverted.tab-focus:not(.disabled, .loading, :active) {
   color: var(--ab-inverted-text-color-hover);
 }
-button.inverted:hover:not(.disabled):not(.loading):not(:active) ~ .overlay, button.inverted.tab-focus:not(.disabled):not(.loading):not(:active) ~ .overlay {
+button.inverted.hovered:not(.disabled, .loading, :active) ~ .overlay, button.inverted.tab-focus:not(.disabled, .loading, :active) ~ .overlay {
   background-color: var(--ab-inverted-bg-color-hover);
 }
-button.inverted:hover:not(.disabled):not(.loading):not(:active) .icon-start ::slotted(*),
-button.inverted:hover:not(.disabled):not(.loading):not(:active) .icon-end ::slotted(*), button.inverted.tab-focus:not(.disabled):not(.loading):not(:active) .icon-start ::slotted(*),
-button.inverted.tab-focus:not(.disabled):not(.loading):not(:active) .icon-end ::slotted(*) {
+button.inverted.hovered:not(.disabled, .loading, :active) .icon-start ::slotted(*),
+button.inverted.hovered:not(.disabled, .loading, :active) .icon-end ::slotted(*), button.inverted.tab-focus:not(.disabled, .loading, :active) .icon-start ::slotted(*),
+button.inverted.tab-focus:not(.disabled, .loading, :active) .icon-end ::slotted(*) {
   color: var(--ab-inverted-icon-color-hover);
 }
 button.inverted:active, button.inverted.pressed {
@@ -386,15 +386,15 @@ button.destructive .icon-start ::slotted(*),
 button.destructive .icon-end ::slotted(*) {
   color: var(--ab-destructive-icon-color);
 }
-button.destructive:hover:not(.disabled):not(.loading):not(:active):not(.pressed), button.destructive.tab-focus:not(.disabled):not(.loading):not(:active):not(.pressed) {
+button.destructive.hovered:not(.disabled, .loading, :active, .pressed), button.destructive.tab-focus:not(.disabled, .loading, :active, .pressed) {
   color: var(--ab-destructive-text-color-hover);
 }
-button.destructive:hover:not(.disabled):not(.loading):not(:active):not(.pressed) ~ .overlay, button.destructive.tab-focus:not(.disabled):not(.loading):not(:active):not(.pressed) ~ .overlay {
+button.destructive.hovered:not(.disabled, .loading, :active, .pressed) ~ .overlay, button.destructive.tab-focus:not(.disabled, .loading, :active, .pressed) ~ .overlay {
   background-color: var(--ab-destructive-bg-color-hover);
 }
-button.destructive:hover:not(.disabled):not(.loading):not(:active):not(.pressed) .icon-start ::slotted(*),
-button.destructive:hover:not(.disabled):not(.loading):not(:active):not(.pressed) .icon-end ::slotted(*), button.destructive.tab-focus:not(.disabled):not(.loading):not(:active):not(.pressed) .icon-start ::slotted(*),
-button.destructive.tab-focus:not(.disabled):not(.loading):not(:active):not(.pressed) .icon-end ::slotted(*) {
+button.destructive.hovered:not(.disabled, .loading, :active, .pressed) .icon-start ::slotted(*),
+button.destructive.hovered:not(.disabled, .loading, :active, .pressed) .icon-end ::slotted(*), button.destructive.tab-focus:not(.disabled, .loading, :active, .pressed) .icon-start ::slotted(*),
+button.destructive.tab-focus:not(.disabled, .loading, :active, .pressed) .icon-end ::slotted(*) {
   color: var(--ab-destructive-icon-color-hover);
 }
 button.destructive:active, button.destructive.pressed {

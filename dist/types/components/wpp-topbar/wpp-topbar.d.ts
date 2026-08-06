@@ -11,7 +11,6 @@ import { NavigationState, TopbarChangeEventDetail } from './types';
  */
 export declare class WppTopbar {
   private resizeObserver;
-  private themeSubscription;
   host: HTMLWppTopbarElement;
   truncated: boolean;
   itemsToShow: number;
@@ -50,7 +49,6 @@ export declare class WppTopbar {
   private updateSlotData;
   componentWillLoad(): void;
   componentDidLoad(): void;
-  connectedCallback(): void;
   disconnectedCallback(): void;
   private wrapperCssClasses;
   private headerCssClasses;

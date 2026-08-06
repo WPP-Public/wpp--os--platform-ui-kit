@@ -1,4 +1,4 @@
-import { r as registerInstance, h, H as Host } from './index-9177bb6d.js';
+import { r as registerInstance, h, H as Host } from './index-93f63aaa.js';
 
 function extend(destination) {
   for (var i = 1; i < arguments.length; i++) {
@@ -808,9 +808,9 @@ const WppRichtextMarkdown = class {
     this.handleValueChange(this.value);
   }
   render() {
-    return (h(Host, null, h("wpp-richtext-common-styles-v4-2-0", null), h("pre", { class: "richtext-markdown" }, this.markdown)));
+    return (h(Host, null, h("wpp-richtext-common-styles-v4-3-0", null), h("pre", { class: "richtext-markdown" }, this.markdown)));
   }
-  static get registryIs() { return "wpp-richtext-markdown-v4-2-0"; }
+  static get registryIs() { return "wpp-richtext-markdown-v4-3-0"; }
   static get watchers() { return {
     "value": ["handleValueChange"]
   }; }

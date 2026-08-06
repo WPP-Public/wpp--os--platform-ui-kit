@@ -1,10 +1,10 @@
-import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { k as transformToVersionedTag, u as uuidv4, d as debounce, y as mergeLocales } from './utils-fc9002c9.js';
-import { r as recalculateIndeterminateTreeState, u as updateTreeByIds, f as findSelectedItems, c as convertToOriginalItems, a as updateTreeById, m as markChildrenAs, i as isHaveFoundChildren, e as extractExtraProps, g as getAllVisibleItems, b as findTreeItemById, d as getSiblings, h as findParentOfItem, L as LOCALES_DEFAULTS } from './utils-e79ed7cb.js';
+import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-93f63aaa.js';
+import { k as transformToVersionedTag, u as uuidv4, d as debounce, y as mergeLocales } from './utils-452958a4.js';
+import { T as TREE_ITEM_HEIGHT, a as TREE_PADDING_TOP, r as recalculateIndeterminateTreeState, u as updateTreeByIds, f as findSelectedItems, c as convertToOriginalItems, b as updateTreeById, m as markChildrenAs, i as isHaveFoundChildren, e as extractExtraProps, g as getAllVisibleItems, d as findTreeItemById, h as getSiblings, j as findParentOfItem, L as LOCALES_DEFAULTS, D as DEFAULT_OVERSCAN, k as DEFAULT_TREE_HEIGHT } from './utils-6139e925.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme-3920c16c.js';
 import './consts-744c144f.js';
 
-const wppTreeCss = ":host{--tree-item-padding:var(--wpp-tree-item-padding, 6px 4px 0 4px);--tree-container-width:var(--wpp-tree-container-width, 100%);--tree-container-height:var(--wpp-tree-container-height, 100%);--tree-container-bg-color:var(--wpp-tree-container-bg-color, var(--wpp-grey-color-000));--tree-input-trigger-area:var(--wpp-tree-trigger-area, 32px);--tree-item-icon-end-color:var(--wpp-tree-icon-end-color, var(--wpp-grey-color-800));--tree-skeleton-height:var(--wpp-tree-skeleton-height, 22px);--tree-skeleton-padding:var(--wpp-tree-skeleton-padding, 3px 0 3px 36px);--tree-skeleton-width:var(--wpp-tree-skeleton-width, 100%);display:-ms-flexbox;display:flex;padding:var(--tree-item-padding)}.container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%}.container:focus{outline:none}.content-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-transition:height 500ms ease;transition:height 500ms ease}.skeleton-wrapper{width:var(--tree-skeleton-width)}.skeleton-wrapper .skeleton-item{padding:var(--tree-skeleton-padding)}.skeleton-wrapper .wpp-skeleton{--skeleton-height:var(--tree-skeleton-height)}.empty-tree-text{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);margin:0;text-align:center}";
+const wppTreeCss = ":host{--tree-item-padding:var(--wpp-tree-item-padding, 6px 4px 0 4px);--tree-container-width:var(--wpp-tree-container-width, 100%);--tree-container-height:var(--wpp-tree-container-height, 100%);--tree-container-bg-color:var(--wpp-tree-container-bg-color, var(--wpp-grey-color-000));--tree-input-trigger-area:var(--wpp-tree-trigger-area, 32px);--tree-item-icon-end-color:var(--wpp-tree-icon-end-color, var(--wpp-grey-color-800));--tree-skeleton-height:var(--wpp-tree-skeleton-height, 22px);--tree-skeleton-padding:var(--wpp-tree-skeleton-padding, 3px 0 3px 36px);--tree-skeleton-width:var(--wpp-tree-skeleton-width, 100%);display:-ms-flexbox;display:flex;padding:var(--tree-item-padding)}.container-wrapper{width:100%}.container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%}.container:focus{outline:none}.content-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-transition:height 500ms ease;transition:height 500ms ease}.skeleton-wrapper{width:var(--tree-skeleton-width)}.skeleton-wrapper .skeleton-item{padding:var(--tree-skeleton-padding)}.skeleton-wrapper .wpp-skeleton{--skeleton-height:var(--tree-skeleton-height)}.empty-tree-text{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);margin:0;text-align:center}:host(.wpp-virtualised-tree) .container-wrapper{overflow-y:auto;overflow-x:hidden;scrollbar-gutter:12px;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}:host(.wpp-virtualised-tree) .container-wrapper::-webkit-scrollbar{width:4px;height:4px}:host(.wpp-virtualised-tree) .container-wrapper::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}:host(.wpp-virtualised-tree) .container-wrapper .container{position:relative;width:100%}:host(.wpp-virtualised-tree) .container-wrapper .wpp-tree-item{width:100%;position:absolute}:host(.wpp-virtualised-tree) .container-wrapper .wpp-tree-item::part(tree-item){width:100%}";
 
 const WppTree = class {
   constructor(hostRef) {
@@ -18,6 +18,12 @@ const WppTree = class {
     this.pendingLoads = new Map();
     this.isSearchResultFound = true;
     this.isMouseInteraction = false;
+    this.bufferStart = 0;
+    // Contains a list (not a tree structure) with all tree-items in a virtualised tree.
+    // Note: virtualised tree displays only the tree-items in the viewport, but this list holds all tree-items that can be seen when scrolling.
+    this.visibleItemsList = [];
+    this.scrollContainer = undefined;
+    this.getTotalHeightOfTree = () => this.visibleItemsList.length * TREE_ITEM_HEIGHT + TREE_PADDING_TOP;
     this.focusTreeItem = (itemId) => {
       // Use attribute-only selector — tag names are versioned at runtime (e.g. wpp-tree-item-v3-4-0)
       const treeItemEl = this.host.shadowRoot?.querySelector(`[data-item-id="${itemId}"]`);
@@ -375,56 +381,45 @@ const WppTree = class {
     };
     this.hostCssClasses = () => ({
       'wpp-tree': true,
+      'wpp-virtualised-tree': !!this.withVirtualisation,
     });
-    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v4-2-0", { dropdownConfig: {
+    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v4-3-0", { dropdownConfig: {
         trigger: 'click',
         interactiveDebounce: 15,
         interactiveBorder: 25,
         offset: [0, 0],
-      } }, h("wpp-icon-more-v4-2-0", { class: {
+      } }, h("wpp-icon-more-v4-3-0", { class: {
         'menu-trigger': true,
         disabled: !!item.disabled,
-      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v4-2-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
+      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v4-3-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
+    this.renderTreeItem = (item, level, setSize, posInSet, isFocused, extraProps, isParent) => (h("wpp-tree-item-v4-3-0", { id: `tree-item-${item.id}`, key: `tree-item-${item.id}`, style: { top: `${(posInSet - 1) * TREE_ITEM_HEIGHT}px` }, text: item.title, item: item, level: this.withVirtualisation ? item?.level || 1 : level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isDarkTheme: this.isDarkTheme, isFocused: isFocused, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
+      h(transformToVersionedTag(item.iconStart.icon), {
+        slot: 'icon-start',
+        part: 'icon-start',
+        onclick: this.handleActionClick({ item, name: item.iconStart.name, place: 'start' }),
+      }), item.iconsStart && this.renderIconsList(item, item.iconsStart, 'start'), item.iconsEnd && this.renderIconsList(item, item.iconsEnd), !item.iconsEnd &&
+      item.iconEnd?.icon &&
+      h(transformToVersionedTag(item.iconEnd.icon), {
+        slot: 'icon-end',
+        part: 'icon-end',
+        onclick: this.handleActionClick({ item, name: item.iconEnd.name, place: 'end' }),
+      }), isParent && this.withVirtualisation === false && (h("div", { slot: "content", class: "content-container", role: "group", part: "content" }, item.open &&
+      (item.loadingChildren
+        ? this.renderSkeletonRows(this.lazyConfig?.skeleton?.count || 1)
+        : Array.isArray(item.children) && item.children.length > 0
+          ? this.renderTree(item.children, level + 1)
+          : null)))));
     this.renderTree = (treeData, level = 1) => {
       const visibleItems = treeData.filter(item => !item.hidden);
-      const setSize = visibleItems.length;
+      const setSize = this.withVirtualisation ? this.visibleItemsList.length : visibleItems.length;
       return visibleItems.map((item, index) => {
         const extraProps = extractExtraProps(item);
         const isParent = !!item.hasChildren || !!(item.children && item.children.length);
-        const posInSet = index + 1;
+        // For lists without virtualisation, bufferStart will always be 0. Otherwise, it will represent the starting index of the virtualised window
+        const posInSet = this.bufferStart + index + 1;
         // Only show focus ring during keyboard navigation (suppress when action mode is active)
         const isFocused = this.isKeyboardNavigating && this.focusedItemId === item.id && !this.isFocusOnAction;
-        if (isParent) {
-          return (h("wpp-tree-item-v4-2-0", { id: `tree-item-${item.id}`, text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isFocused: isFocused, isDarkTheme: this.isDarkTheme, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
-            h(transformToVersionedTag(item.iconStart.icon), {
-              slot: 'icon-start',
-              part: 'icon-start',
-              onclick: this.handleActionClick({ item, name: item.iconStart.name, place: 'start' }),
-            }), item.iconsStart && this.renderIconsList(item, item.iconsStart, 'start'), item.iconsEnd && this.renderIconsList(item, item.iconsEnd), !item.iconsEnd &&
-            item.iconEnd?.icon &&
-            h(transformToVersionedTag(item.iconEnd.icon), {
-              slot: 'icon-end',
-              part: 'icon-end',
-              onclick: this.handleActionClick({ item, name: item.iconEnd.name, place: 'end' }),
-            }), h("div", { slot: "content", class: "content-container", role: "group", part: "content" }, item.open &&
-            (item.loadingChildren
-              ? this.renderSkeletonRows(this.lazyConfig?.skeleton?.count || 1)
-              : Array.isArray(item.children) && item.children.length > 0
-                ? this.renderTree(item.children, level + 1)
-                : null))));
-        }
-        return (h("wpp-tree-item-v4-2-0", { id: `tree-item-${item.id}`, text: item.title, item: item, level: level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isFocused: isFocused, isDarkTheme: this.isDarkTheme, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
-          h(transformToVersionedTag(item.iconStart.icon), {
-            slot: 'icon-start',
-            part: 'icon-start',
-            onclick: this.handleActionClick({ item, name: item.iconStart.name, place: 'start' }),
-          }), item.iconsStart && this.renderIconsList(item, item.iconsStart, 'start'), item.iconsEnd && this.renderIconsList(item, item.iconsEnd), !item.iconsEnd &&
-          item.iconEnd?.icon &&
-          h(transformToVersionedTag(item.iconEnd.icon), {
-            slot: 'icon-end',
-            part: 'icon-end',
-            onclick: this.handleActionClick({ item, name: item.iconEnd.name, place: 'end' }),
-          })));
+        return this.renderTreeItem(item, level, setSize, posInSet, isFocused, extraProps, isParent);
       });
     };
     this.handleContainerFocus = (event) => {
@@ -443,10 +438,20 @@ const WppTree = class {
         this.isMouseInteraction = false;
         // Initialize focused item when tree receives focus
         if (this.currentTreeData?.length > 0) {
-          const visibleItems = getAllVisibleItems(this.currentTreeData);
+          const visibleItems = this.withVirtualisation
+            ? this.getVirtualisedNodes(this.visibleItemsList)
+            : getAllVisibleItems(this.currentTreeData);
           // Find first non-disabled item, preferring selected items
           const selectedItem = visibleItems.find(item => item.selected && !item.disabled);
-          const firstNonDisabledItem = visibleItems.find(item => !item.disabled);
+          let firstNonDisabledItem = undefined;
+          if (this.withVirtualisation) {
+            // In a virtualised list, we will focus the first element that is visible
+            const startIndex = Math.min(Math.floor(this.scrollTop / TREE_ITEM_HEIGHT), DEFAULT_OVERSCAN);
+            firstNonDisabledItem = visibleItems.find((item, index) => index >= startIndex && index <= visibleItems.length - startIndex && !item.disabled);
+          }
+          else {
+            firstNonDisabledItem = visibleItems.find(item => !item.disabled);
+          }
           this.focusedItemId = selectedItem?.id ?? firstNonDisabledItem?.id ?? null;
         }
       }
@@ -460,6 +465,7 @@ const WppTree = class {
       if (isMovingOutside) {
         this.isKeyboardNavigating = false;
         this.isFocusOnAction = false;
+        this.isMouseInteraction = false;
       }
     };
     /**
@@ -485,12 +491,28 @@ const WppTree = class {
         return undefined;
       return `tree-item-${this.focusedItemId}`;
     };
+    this.handleScroll = (event) => {
+      if (!this.withVirtualisation)
+        return;
+      this.scrollTop = event.target.scrollTop;
+    };
+    this.handleTreeRender = (hasVisibleContent) => {
+      if (this.withVirtualisation) {
+        return this.renderTree(this.getVirtualisedNodes(this.visibleItemsList));
+      }
+      if (hasVisibleContent) {
+        return this.renderTree(this.currentTreeData);
+      }
+      return (h("p", { class: "empty-tree-text", part: "tree-empty-text", role: "status" }, this._locales.nothingFound));
+    };
     this.currentTreeData = undefined;
     this.selectedIds = [];
     this.focusedItemId = null;
     this.isKeyboardNavigating = false;
     this.isDarkTheme = undefined;
+    this.scrollTop = 0;
     this.isFocusOnAction = false;
+    this.totalHeight = undefined;
     this.data = undefined;
     this.search = '';
     this.multiple = false;
@@ -508,10 +530,11 @@ const WppTree = class {
     this.label = undefined;
     this.skeletonNumberItems = 5;
     this.lazyConfig = undefined;
+    this.withVirtualisation = false;
   }
   renderSkeletonRows(count = 1, paddingLeft) {
     const { height = 32 } = this.lazyConfig?.skeleton || {};
-    return Array.from({ length: count }, (_, idx) => (h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, h("wpp-skeleton-v4-2-0", { variant: "rectangle", width: "100%", height: height }))));
+    return Array.from({ length: count }, (_, idx) => (h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, h("wpp-skeleton-v4-3-0", { variant: "rectangle", width: "100%", height: height }))));
   }
   onInputChange(searchText) {
     if (!searchText.trim()) {
@@ -549,6 +572,10 @@ const WppTree = class {
   updateDate(newData) {
     this.currentTreeData = newData;
     this.preloadInitialOpenChildren();
+    if (this.withVirtualisation) {
+      this.visibleItemsList = getAllVisibleItems(this.currentTreeData);
+      this.totalHeight = this.getTotalHeightOfTree();
+    }
   }
   async handleOpenItem(event) {
     event.stopPropagation();
@@ -756,6 +783,10 @@ const WppTree = class {
             // Move to parent
             const parent = findParentOfItem(this.currentTreeData, currentItem.id);
             if (parent) {
+              if (this.withVirtualisation && this.scrollContainer) {
+                this.scrollContainer.scrollTop =
+                  this.visibleItemsList.findIndex((item) => item.id === parent.id) * TREE_ITEM_HEIGHT;
+              }
               this.focusedItemId = parent.id;
               this.focusTreeItem(this.focusedItemId);
             }
@@ -768,6 +799,9 @@ const WppTree = class {
         // Find first non-disabled item
         const firstNonDisabled = visibleItems.find(item => !item.disabled);
         if (firstNonDisabled) {
+          if (this.withVirtualisation && this.scrollContainer) {
+            this.scrollContainer.scrollTop = 0;
+          }
           this.focusedItemId = firstNonDisabled.id;
           this.focusTreeItem(this.focusedItemId);
         }
@@ -778,6 +812,10 @@ const WppTree = class {
         // Find last non-disabled item
         const lastNonDisabled = [...visibleItems].reverse().find(item => !item.disabled);
         if (lastNonDisabled) {
+          if (this.withVirtualisation && this.scrollContainer) {
+            this.scrollContainer.scrollTop =
+              this.visibleItemsList.findIndex((item) => item.id === lastNonDisabled.id) * TREE_ITEM_HEIGHT;
+          }
           this.focusedItemId = lastNonDisabled.id;
           this.focusTreeItem(this.focusedItemId);
         }
@@ -1083,6 +1121,10 @@ const WppTree = class {
     if (this.disableOpenCloseAnimation) {
       this.host.style.setProperty('--wpp-tree-item-switcher-transition-duration', '50ms');
     }
+    if (this.withVirtualisation) {
+      this.visibleItemsList = getAllVisibleItems(this.currentTreeData);
+      this.totalHeight = this.getTotalHeightOfTree();
+    }
     this.resizeObserver = new ResizeObserver(debounce(entries => {
       if (this.resizeInProgress)
         return;
@@ -1138,11 +1180,21 @@ const WppTree = class {
     this.currentTreeData = this.checkData(this.data);
     this.preloadInitialOpenChildren();
   }
+  getVirtualisedNodes(flatNodes) {
+    const startIndex = Math.floor(this.scrollTop / TREE_ITEM_HEIGHT);
+    const containerHeight = this.host.clientHeight || DEFAULT_TREE_HEIGHT;
+    const visibleCount = Math.ceil(containerHeight / TREE_ITEM_HEIGHT);
+    const endIndex = startIndex + visibleCount;
+    // We need to keep `bufferStart` value in a state to compute the `top` position of each tree-item
+    this.bufferStart = Math.max(0, startIndex - DEFAULT_OVERSCAN);
+    const bufferedEnd = Math.min(flatNodes.length, endIndex + DEFAULT_OVERSCAN);
+    return flatNodes.slice(this.bufferStart, bufferedEnd);
+  }
   render() {
     const hasVisibleContent = this.currentTreeData && this.isSearchResultFound;
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text" }, !this.loading && (h("div", { class: "container", part: "tree-container", role: "tree", "aria-label": this.label, "aria-multiselectable": this.multiple ? 'true' : undefined, "aria-activedescendant": this.getActiveDescendantId(), tabindex: hasVisibleContent ? '0' : undefined, onFocus: this.handleContainerFocus, onBlur: this.handleContainerBlur }, hasVisibleContent ? (this.renderTree(this.currentTreeData)) : (h("p", { class: "empty-tree-text", part: "tree-empty-text", role: "status" }, this._locales.nothingFound)))), this.loading && (h("div", { class: "skeleton-wrapper", role: "status", "aria-label": this._locales.loadingTree }, this.renderSkeletonRows(this.skeletonNumberItems)))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text", onScroll: this.handleScroll }, !this.loading && (h("div", { ref: el => (this.scrollContainer = el), class: "container-wrapper", onScroll: this.handleScroll }, h("div", { class: "container", style: this.withVirtualisation ? { height: `${this.totalHeight}px` } : undefined, part: "tree-container", role: "tree", "aria-label": this.label, "aria-multiselectable": this.multiple ? 'true' : undefined, "aria-activedescendant": this.getActiveDescendantId(), tabindex: hasVisibleContent ? '0' : undefined, onFocus: this.handleContainerFocus, onBlur: this.handleContainerBlur }, hasVisibleContent ? (this.handleTreeRender(hasVisibleContent)) : (h("p", { class: "empty-tree-text", part: "tree-empty-text", role: "status" }, this._locales.nothingFound))))), this.loading && (h("div", { class: "skeleton-wrapper", role: "status", "aria-label": this._locales.loadingTree }, this.renderSkeletonRows(this.skeletonNumberItems)))));
   }
-  static get registryIs() { return "wpp-tree-v4-2-0"; }
+  static get registryIs() { return "wpp-tree-v4-3-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "search": ["onInputChange"],

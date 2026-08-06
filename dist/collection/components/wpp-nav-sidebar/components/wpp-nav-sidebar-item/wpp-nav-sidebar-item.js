@@ -35,6 +35,14 @@ export class WppNavSidebarItem {
       this.wppClickExpandedItem.emit({ label: this.label, path: this.path });
       this.expanded = !this.expanded;
     };
+    // The group toggle is a `role="button"` control, so it must activate on both Enter and Space
+    // (W3C ARIA APG disclosure pattern).
+    this.handleExpandedItemKeyDown = (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        this.handleClickExpandedItem();
+      }
+    };
     this.navigationWrapperCssClasses = () => ({
       item: true,
       expanded: this.expanded,
@@ -61,12 +69,21 @@ export class WppNavSidebarItem {
       const isNeedTruncate = this.label.length > currentMaxLengthLabel;
       return (h(Fragment, null, h(WrappedSlot, { name: "icon-start", wrapperClass: "icon-wrapper", class: "slot-icon-start-fallback", onSlotchange: this.updateSlotData }), h("p", { class: this.labelCssClasses(), part: "label" }, isNeedTruncate
         ? truncate(this.label, this.extended ? this.maxTitleLengthWithSubItems : this.maxTitleLengthWithoutSubItems)
-        : this.label), h(WrappedSlot, { name: "icon-end", wrapperClass: this.iconEndCssClasses(), class: "slot-icon-end-fallback" }, this.extended && h("wpp-icon-chevron-v4-2-0", { class: "extended-icon", size: "m", part: "icon-chevron" }))));
+        : this.label), h(WrappedSlot, { name: "icon-end", wrapperClass: this.iconEndCssClasses(), class: "slot-icon-end-fallback" }, this.extended && h("wpp-icon-chevron-v4-3-0", { class: "extended-icon", size: "m", part: "icon-chevron", "aria-hidden": "true" }))));
     };
-    this.extendedItem = () => (h("div", { class: this.navigationWrapperCssClasses(), onClick: this.handleClickExpandedItem, part: "extended-item" }, this.item()));
-    this.linkItem = () => (h("a", { class: this.navigationWrapperCssClasses(), href: this.path, onClick: this.handleClickLinkItem, target: this.target, tabIndex: -1, part: "link-item" }, this.item()));
-    this.renderSubItemsWrapper = () => h(WrappedSlot, { wrapperClass: this.subItemWrapperCssClasses() });
-    this.renderItemWithTooltip = () => (h("wpp-tooltip-v4-2-0", { text: this.label, config: tooltipConfig, part: "tooltip" }, this.extended ? this.extendedItem() : this.linkItem()));
+    // The disclosure toggle for a group of sub-items (W3C ARIA APG): a keyboard-operable button
+    // exposing its open state. DOM focus sits here rather than on the host, so assistive tech
+    // announces a real control instead of a nameless custom element.
+    this.extendedItem = () => (h("div", { class: this.navigationWrapperCssClasses(), role: "button", tabIndex: 0, "aria-expanded": this.expanded ? 'true' : 'false', onClick: this.handleClickExpandedItem, onKeyDown: this.handleExpandedItemKeyDown, part: "extended-item" }, this.item()));
+    // The link itself is the tab stop: a focused native anchor activates on Enter and is announced
+    // with its link semantics — the previous host-focus model left Enter dead (WCAG 2.1.1) and
+    // nested a link inside a nameless focusable element. The active item is exposed on the link
+    // via aria-current="page".
+    this.linkItem = () => (h("a", { class: this.navigationWrapperCssClasses(), href: this.path, onClick: this.handleClickLinkItem, target: this.target, "aria-current": this.active ? 'page' : undefined, part: "link-item" }, this.item()));
+    // Collapsed sub-items are only visually hidden (max-height 0), so without `inert` their links
+    // would stay in the tab order and the accessibility tree.
+    this.renderSubItemsWrapper = () => (h("div", { class: this.subItemWrapperCssClasses(), part: "ws-wrapper", ...(!this.expanded ? { inert: true, 'aria-hidden': 'true' } : {}) }, h("slot", { part: "ws-inner" })));
+    this.renderItemWithTooltip = () => (h("wpp-tooltip-v4-3-0", { text: this.label, config: tooltipConfig, part: "tooltip" }, this.extended ? this.extendedItem() : this.linkItem()));
     this.renderItem = () => {
       const currentMaxLengthLabel = this.extended ? this.maxTitleLengthWithSubItems : this.maxTitleLengthWithoutSubItems;
       const isNeedToTruncate = this.label.length > currentMaxLengthLabel;
@@ -94,25 +111,18 @@ export class WppNavSidebarItem {
     this.updateSlotData();
   }
   componentDidLoad() {
+    // Nested items no longer need host tabindex juggling: the tab stops are the real links and
+    // toggle buttons inside each item, and a collapsed sub-items wrapper is `inert`, which takes
+    // its content out of both the tab order and the accessibility tree.
     this.host.querySelectorAll(transformToVersionedTag('wpp-nav-sidebar-item')).forEach(item => {
       item.setAttribute('nested-item', `${true}`);
-      item.setAttribute('tabIndex', String(this.expanded ? 0 : -1));
-    });
-  }
-  handleExpandedChange(newValue) {
-    this.host.querySelectorAll(transformToVersionedTag('wpp-nav-sidebar-item')).forEach(item => {
-      item.setAttribute('tabIndex', String(newValue ? 0 : -1));
     });
   }
   render() {
-    let hostProps = {};
-    if (!this.nestedItem) {
-      hostProps = { ...hostProps, tabIndex: 0 };
-    }
-    return (h(Host, { class: this.hostCssClasses(), ...hostProps, exportparts: "label, icon-chevron, extended-item, link-item, tooltip, title, divider, icon-start, icon-end, ws-inner, icon-start, icon-end, ws-wrapper" }, this.groupTitle && (h("p", { class: "group-title", part: "title" }, this.groupTitle)), this.renderItem(), this.divide && h("wpp-divider-v4-2-0", { class: "slot-divider-fallback", part: "divider" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, icon-chevron, extended-item, link-item, tooltip, title, divider, icon-start, icon-end, ws-inner, icon-start, icon-end, ws-wrapper" }, this.groupTitle && (h("p", { class: "group-title", part: "title" }, this.groupTitle)), this.renderItem(), this.divide && h("wpp-divider-v4-3-0", { class: "slot-divider-fallback", part: "divider" })));
   }
   static get is() { return "wpp-nav-sidebar-item"; }
-  static get registryIs() { return "wpp-nav-sidebar-item-v4-2-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-item-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -393,10 +403,4 @@ export class WppNavSidebarItem {
       }];
   }
   static get elementRef() { return "host"; }
-  static get watchers() {
-    return [{
-        "propName": "expanded",
-        "methodName": "handleExpandedChange"
-      }];
-  }
 }

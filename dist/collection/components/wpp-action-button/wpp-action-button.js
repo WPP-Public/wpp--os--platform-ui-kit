@@ -83,6 +83,19 @@ export class WppActionButton {
         this.isPressed = false;
       }
     };
+    // Drive hover from JS state rather than CSS `:hover`. Chromium does not re-evaluate `:hover`
+    // inside shadow DOM after a layout change with no pointer move — e.g. clicking this button
+    // collapses its container and moves the button out from under a stationary cursor — which left
+    // the CSS-only overlay stuck on. Pointer enter/leave events do still fire in that case, so
+    // tracking `isHovered` here clears the overlay when the button moves away from the pointer.
+    this.onPointerEnter = () => {
+      if (this.disabled || this.loading)
+        return;
+      this.isHovered = true;
+    };
+    this.onPointerLeave = () => {
+      this.isHovered = false;
+    };
     this.hostCssClasses = () => ({
       'wpp-action-button': true,
       'wpp-disabled': this.disabled,
@@ -97,6 +110,7 @@ export class WppActionButton {
       'with-icon-start': this.hasIconStartSlot,
       'with-icon-end': this.hasIconEndSlot,
       pressed: this.isPressed,
+      hovered: this.isHovered,
     });
     this.loadingColor = () => {
       switch (this.variant) {
@@ -134,6 +148,7 @@ export class WppActionButton {
     this.isIconOnly = false;
     this.focusType = undefined;
     this.isPressed = false;
+    this.isHovered = false;
     this.validAriaProps = {};
     this.disabled = false;
     this.loading = false;
@@ -161,8 +176,9 @@ export class WppActionButton {
   }
   onDisabledChange(newVal) {
     if (newVal) {
-      // Clear pressed state when disabled to avoid lingering “active”
+      // Clear pressed/hover state when disabled to avoid a lingering “active” or hover overlay
       this.isPressed = false;
+      this.isHovered = false;
     }
   }
   componentWillLoad() {
@@ -170,10 +186,10 @@ export class WppActionButton {
     this.validAriaProps = getAriaProps(this.ariaProps);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, exportparts: "button, spinner-wrapper, spinner, body, icon-start-wrapper, icon-start, icon-end-wrapper, icon-end, inner, overlay" }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, value: this.value, name: this.name, type: this.type, part: "button", "data-testid": "wppActionButton", "aria-pressed": this.isPressed ? 'true' : 'false', tabindex: this.ariaProps?.tabIndex, ...this.validAriaProps }, this.loading && (h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, h("wpp-spinner-v4-2-0", { color: this.loadingColor(), part: "spinner" }))), h("div", { class: this.contentCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("slot", { part: "inner", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData }))), h("div", { class: "overlay", part: "overlay" })));
+    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onPointerEnter: this.onPointerEnter, onPointerLeave: this.onPointerLeave, exportparts: "button, spinner-wrapper, spinner, body, icon-start-wrapper, icon-start, icon-end-wrapper, icon-end, inner, overlay" }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, value: this.value, name: this.name, type: this.type, part: "button", "data-testid": "wppActionButton", "aria-pressed": this.isPressed ? 'true' : 'false', tabindex: this.ariaProps?.tabIndex, ...this.validAriaProps }, this.loading && (h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, h("wpp-spinner-v4-3-0", { color: this.loadingColor(), part: "spinner" }))), h("div", { class: this.contentCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("slot", { part: "inner", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData }))), h("div", { class: "overlay", part: "overlay" })));
   }
   static get is() { return "wpp-action-button"; }
-  static get registryIs() { return "wpp-action-button-v4-2-0"; }
+  static get registryIs() { return "wpp-action-button-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -364,6 +380,7 @@ export class WppActionButton {
       "isIconOnly": {},
       "focusType": {},
       "isPressed": {},
+      "isHovered": {},
       "validAriaProps": {}
     };
   }

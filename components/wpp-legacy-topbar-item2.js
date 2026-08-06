@@ -54,7 +54,7 @@ const WppLegacyTopbarItem = /*@__PURE__*/ proxyCustomElement(class WppLegacyTopb
     this.getMenuLevelData = (navigationData, firstLevel) => {
       const truncatedLabel = truncate(navigationData.label, 30);
       if (navigationData.children?.length) {
-        return (h("wpp-menu-context-v4-2-0", { listWidth: "224px", externalClass: "topbar", appendToListWrapper: true, dropdownConfig: {
+        return (h("wpp-menu-context-v4-3-0", { listWidth: "224px", externalClass: "topbar", appendToListWrapper: true, dropdownConfig: {
             popperOptions: {
               strategy: 'fixed',
             },
@@ -67,9 +67,9 @@ const WppLegacyTopbarItem = /*@__PURE__*/ proxyCustomElement(class WppLegacyTopb
             onShow: () => {
               this.isMenuExpanded = true;
             },
-          } }, firstLevel ? (h("wpp-navigation-item-v4-2-0", { value: navigationData.value, label: truncatedLabel, slot: "trigger-element", extended: true, nativeLink: this.nativeLink, menu: this.menu, menuExpanded: this.isMenuExpanded, chevronOnly: navigationData.chevronOnly, active: this.menu ? this.active : this.activeItems.includes(navigationData.value) })) : (h("wpp-list-item-v4-2-0", { value: navigationData.value, slot: "trigger-element", isExtended: true, checked: this.activeItems.includes(navigationData.value), style: listItemNavStyle }, h("p", { slot: "label" }, navigationData.label))), h("div", null, navigationData.children?.map(navigationItem => navigationItem.children ? (this.getMenuLevelData(navigationItem, false)) : (h("wpp-navigation-item-v4-2-0", { value: navigationItem.value, path: navigationItem.path, label: navigationItem.label, nativeLink: this.nativeLink, nestedItem: true, active: this.activeItems.includes(navigationItem.value), chevronOnly: navigationData.chevronOnly, onWppActiveNavItemChanged: () => this.menuItemClick(this.getEmittedNavigationData(navigationItem)) }))))));
+          } }, firstLevel ? (h("wpp-navigation-item-v4-3-0", { value: navigationData.value, label: truncatedLabel, slot: "trigger-element", extended: true, nativeLink: this.nativeLink, menu: this.menu, menuExpanded: this.isMenuExpanded, chevronOnly: navigationData.chevronOnly, active: this.menu ? this.active : this.activeItems.includes(navigationData.value) })) : (h("wpp-list-item-v4-3-0", { value: navigationData.value, slot: "trigger-element", isExtended: true, checked: this.activeItems.includes(navigationData.value), style: listItemNavStyle }, h("p", { slot: "label" }, navigationData.label))), h("div", null, navigationData.children?.map(navigationItem => navigationItem.children ? (this.getMenuLevelData(navigationItem, false)) : (h("wpp-navigation-item-v4-3-0", { value: navigationItem.value, path: navigationItem.path, label: navigationItem.label, nativeLink: this.nativeLink, nestedItem: true, active: this.activeItems.includes(navigationItem.value), chevronOnly: navigationData.chevronOnly, onWppActiveNavItemChanged: () => this.menuItemClick(this.getEmittedNavigationData(navigationItem)) }))))));
       }
-      return firstLevel ? (h("wpp-navigation-item-v4-2-0", { value: navigationData.value, path: navigationData.path, label: truncatedLabel, nativeLink: this.nativeLink, active: this.activeItems.includes(navigationData.value), chevronOnly: navigationData.chevronOnly, onWppActiveNavItemChanged: this.topbarItemClick })) : (h("wpp-list-item-v4-2-0", { value: navigationData.value, checked: this.activeItems.includes(navigationData.value), style: listItemNavStyle }, h("p", { slot: "label" }, navigationData.label)));
+      return firstLevel ? (h("wpp-navigation-item-v4-3-0", { value: navigationData.value, path: navigationData.path, label: truncatedLabel, nativeLink: this.nativeLink, active: this.activeItems.includes(navigationData.value), chevronOnly: navigationData.chevronOnly, onWppActiveNavItemChanged: this.topbarItemClick })) : (h("wpp-list-item-v4-3-0", { value: navigationData.value, checked: this.activeItems.includes(navigationData.value), style: listItemNavStyle }, h("p", { slot: "label" }, navigationData.label)));
     };
     this.hostCssClasses = () => ({
       'wpp-topbar-item': true,
@@ -85,9 +85,9 @@ const WppLegacyTopbarItem = /*@__PURE__*/ proxyCustomElement(class WppLegacyTopb
   render() {
     return (h(Host, { class: this.hostCssClasses(), role: CONTEXT_ITEM_TAG }, this.getMenuLevelData(this.navigation, true)));
   }
-  static get registryIs() { return "wpp-legacy-topbar-item-v4-2-0"; }
+  static get registryIs() { return "wpp-legacy-topbar-item-v4-3-0"; }
   static get style() { return wppLegacyTopbarItemCss; }
-}, [1, "wpp-legacy-topbar-item", "wpp-legacy-topbar-item-v4-2-0", {
+}, [1, "wpp-legacy-topbar-item", "wpp-legacy-topbar-item-v4-3-0", {
     "navigation": [16],
     "firstLevel": [516, "first-level"],
     "menu": [516],
@@ -100,114 +100,114 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-legacy-topbar-item-v4-2-0", "wpp-action-button-v4-2-0", "wpp-checkbox-v4-2-0", "wpp-icon-chevron-v4-2-0", "wpp-icon-cross-v4-2-0", "wpp-icon-dash-v4-2-0", "wpp-icon-error-v4-2-0", "wpp-icon-info-message-v4-2-0", "wpp-icon-more-v4-2-0", "wpp-icon-success-v4-2-0", "wpp-icon-tick-v4-2-0", "wpp-icon-warning-v4-2-0", "wpp-inline-message-v4-2-0", "wpp-internal-label-v4-2-0", "wpp-internal-tooltip-v4-2-0", "wpp-label-v4-2-0", "wpp-list-item-v4-2-0", "wpp-menu-context-v4-2-0", "wpp-navigation-item-v4-2-0", "wpp-spinner-v4-2-0", "wpp-tooltip-v4-2-0", "wpp-typography-v4-2-0"];
+  const components = ["wpp-legacy-topbar-item-v4-3-0", "wpp-action-button-v4-3-0", "wpp-checkbox-v4-3-0", "wpp-icon-chevron-v4-3-0", "wpp-icon-cross-v4-3-0", "wpp-icon-dash-v4-3-0", "wpp-icon-error-v4-3-0", "wpp-icon-info-message-v4-3-0", "wpp-icon-more-v4-3-0", "wpp-icon-success-v4-3-0", "wpp-icon-tick-v4-3-0", "wpp-icon-warning-v4-3-0", "wpp-inline-message-v4-3-0", "wpp-internal-label-v4-3-0", "wpp-internal-tooltip-v4-3-0", "wpp-label-v4-3-0", "wpp-list-item-v4-3-0", "wpp-menu-context-v4-3-0", "wpp-navigation-item-v4-3-0", "wpp-spinner-v4-3-0", "wpp-tooltip-v4-3-0", "wpp-typography-v4-3-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-legacy-topbar-item-v4-2-0":
+    case "wpp-legacy-topbar-item-v4-3-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppLegacyTopbarItem);
       }
       break;
-    case "wpp-action-button-v4-2-0":
+    case "wpp-action-button-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-checkbox-v4-2-0":
+    case "wpp-checkbox-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-chevron-v4-2-0":
+    case "wpp-icon-chevron-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-cross-v4-2-0":
+    case "wpp-icon-cross-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-dash-v4-2-0":
+    case "wpp-icon-dash-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-error-v4-2-0":
+    case "wpp-icon-error-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-info-message-v4-2-0":
+    case "wpp-icon-info-message-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-more-v4-2-0":
+    case "wpp-icon-more-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-success-v4-2-0":
+    case "wpp-icon-success-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-tick-v4-2-0":
+    case "wpp-icon-tick-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-warning-v4-2-0":
+    case "wpp-icon-warning-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-inline-message-v4-2-0":
+    case "wpp-inline-message-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-internal-label-v4-2-0":
+    case "wpp-internal-label-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-tooltip-v4-2-0":
+    case "wpp-internal-tooltip-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-label-v4-2-0":
+    case "wpp-label-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-list-item-v4-2-0":
+    case "wpp-list-item-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-menu-context-v4-2-0":
+    case "wpp-menu-context-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-navigation-item-v4-2-0":
+    case "wpp-navigation-item-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v4-2-0":
+    case "wpp-spinner-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-2-0":
+    case "wpp-tooltip-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-2-0":
+    case "wpp-typography-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

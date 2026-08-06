@@ -3,13 +3,14 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const consts = require('./consts-d8f5ef98.js');
-const utils = require('./utils-06b46408.js');
+const utils = require('./utils-9529c2fe.js');
 const types = require('./types-332b969c.js');
 const types$1 = require('./types-05f8f988.js');
 const types$2 = require('./types-7010056a.js');
 const types$3 = require('./types-18fdc89e.js');
-const index = require('./index-4e03e73e.js');
+const index = require('./index-31c1a657.js');
 const types$4 = require('./types-2185a602.js');
+const types$5 = require('./types-391abf05.js');
 
 const dsPrefix = '--wpp';
 /**
@@ -194,6 +195,12 @@ Object.defineProperty(exports, 'SideModalCloseReason', {
   enumerable: true,
   get: function () {
     return types$4.SideModalCloseReason;
+  }
+});
+Object.defineProperty(exports, 'SidePanelCloseReason', {
+  enumerable: true,
+  get: function () {
+    return types$5.SidePanelCloseReason;
   }
 });
 exports.WppAgGridThemeConfig = WppAgGridThemeConfig;

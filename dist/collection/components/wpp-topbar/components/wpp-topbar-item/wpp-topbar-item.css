@@ -1,6 +1,10 @@
 :host {
   display: inline-flex;
 }
+:host .menu-items {
+  display: flex;
+  flex-direction: column;
+}
 :host .wpp-menu-context .trigger-wrapper[aria-expanded=true] .wpp-navigation-item::part(chevron-icon) {
   transform: rotate(180deg);
 }

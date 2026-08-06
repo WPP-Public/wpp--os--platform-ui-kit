@@ -14,6 +14,8 @@
   * @prop --wpp-avatar-circle-border-radius
   * @prop --wpp-avatar-icon-border-radius
   * @prop --wpp-avatar-icon-bg-color
+  * @prop --wpp-avatar-icon-bg-color-hover
+  * @prop --wpp-avatar-icon-bg-color-pressed
   * @prop --wpp-avatar-icon-color
   * @prop --wpp-avatar-without-image-border-radius
   * @prop --wpp-avatar-without-image-text-color
@@ -48,7 +50,8 @@
   --avatar-circle-border-radius: var(--wpp-avatar-circle-border-radius, 120px);
   --avatar-icon-border-radius: var(--wpp-avatar-icon-border-radius, 120px);
   --avatar-icon-bg-color: var(--wpp-avatar-icon-bg-color, var(--wpp-grey-color-200));
-  --avatar-icon-bg-color-hover: var(--wpp-avatar-icon-bg-color-hover, var(--wpp-grey-color-300));
+  --avatar-icon-bg-color-hover: var(--wpp-avatar-icon-bg-color-hover, var(--wpp-grey-color-100));
+  --avatar-icon-bg-color-pressed: var(--wpp-avatar-icon-bg-color-pressed, var(--wpp-grey-color-200));
   --avatar-icon-color: var(--wpp-avatar-icon-color, var(--wpp-grey-color-800));
   --avatar-without-image-border-radius: var(--wpp-avatar-without-image-border-radius, 120px);
   --avatar-without-image-text-color: var(--wpp-avatar-without-image-text-color, var(--wpp-grey-color-000));
@@ -64,7 +67,7 @@
   --avatar-second-border-color-focus: var(--wpp-avatar-second-border-color-focus, var(--wpp-brand-color));
   --avatar-interactable-hover-background-color: var(
     --wpp-avatar-interactable-hover-background-color,
-    rgba(255, 255, 255, 0.4)
+    color-mix(in srgb, var(--wpp-grey-color-000) 40%, transparent)
   );
   display: inline-flex;
   user-select: none;
@@ -311,7 +314,7 @@
 :host(.interactable) .interactable-wrapper {
   position: relative;
 }
-:host(.interactable) .interactable-wrapper:before {
+:host(.interactable) .interactable-wrapper::before {
   content: "";
   position: absolute;
   top: 0;
@@ -325,45 +328,54 @@
   cursor: pointer;
   z-index: 1;
 }
-:host(.interactable) .interactable-wrapper:hover:before {
+:host(.interactable) .interactable-wrapper:hover::before {
   background-color: var(--avatar-interactable-hover-background-color);
 }
-:host(.interactable) .interactable-wrapper.image-wrapper:before {
+:host(.interactable) .interactable-wrapper.image-wrapper::before {
   border-radius: var(--avatar-circle-border-radius);
 }
-:host(.interactable) .interactable-wrapper.without-image:before {
+:host(.interactable) .interactable-wrapper.without-image::before {
   border-radius: var(--avatar-without-image-border-radius);
 }
 :host(.interactable):host(.tab-focus) .interactable-wrapper {
   z-index: 1;
 }
-:host(.interactable):host(.tab-focus) .interactable-wrapper:before {
+:host(.interactable):host(.tab-focus) .interactable-wrapper::before {
   background-color: var(--avatar-interactable-hover-background-color);
 }
-:host(.interactable):host(.size-xs) .square:before {
+:host(.interactable):host(.size-xs) .square::before {
   border-radius: var(--avatar-size-xs-square-border-radius);
 }
-:host(.interactable):host(.size-s) .square:before {
+:host(.interactable):host(.size-s) .square::before {
   border-radius: var(--avatar-size-s-square-border-radius);
 }
-:host(.interactable):host(.size-m) .square:before {
+:host(.interactable):host(.size-m) .square::before {
   border-radius: var(--avatar-size-m-square-border-radius);
 }
-:host(.interactable):host(.size-l) .square:before {
+:host(.interactable):host(.size-l) .square::before {
   border-radius: var(--avatar-size-l-square-border-radius);
 }
-:host(.interactable):host(.size-xl) .square:before {
+:host(.interactable):host(.size-xl) .square::before {
   border-radius: var(--avatar-size-xl-square-border-radius);
 }
-:host(.interactable):host(.size-2xl) .square:before {
+:host(.interactable):host(.size-2xl) .square::before {
   border-radius: var(--avatar-size-2xl-square-border-radius);
 }
-:host(.interactable):host(.size-3xl) .square:before {
+:host(.interactable):host(.size-3xl) .square::before {
   border-radius: var(--avatar-size-3xl-square-border-radius);
 }
-:host(.interactable):host(.size-4xl) .square:before {
+:host(.interactable):host(.size-4xl) .square::before {
   border-radius: var(--avatar-size-4xl-square-border-radius);
 }
-:host(.interactable) .with-amount-of-hidden-avatars:before {
+:host(.interactable) .with-amount-of-hidden-avatars::before {
   content: none;
+}
+:host(.interactable) .icon-wrapper::before {
+  content: none;
+}
+:host(.interactable) .icon-wrapper:hover {
+  background: linear-gradient(0deg, var(--avatar-interactable-hover-background-color), var(--avatar-interactable-hover-background-color)), var(--avatar-icon-bg-color-hover);
+}
+:host(.interactable) .icon-wrapper:active {
+  background: var(--avatar-icon-bg-color-pressed);
 }

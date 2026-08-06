@@ -254,10 +254,10 @@ input .loading .wpp-spinner {
   margin-right: 7px;
 }
 input[type=number] {
-  -moz-appearance: textfield;
+  appearance: textfield;
 }
 input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
+  appearance: none;
 }
 input:hover {
   background: var(--text-input-bg-color-hover);
@@ -319,8 +319,16 @@ input.error:hover, input.with-validation-error:hover {
   border: var(--text-input-border-width) var(--text-input-border-style) var(--wpp-danger-color-500);
 }
 
-@keyframes onAutoFillStart {}
-input:autofill, input:-webkit-autofill {
+@keyframes onAutoFillStart {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+  }
+}
+input:autofill,
+input:-webkit-autofill {
   animation-name: onAutoFillStart;
   transition: background-color 50000s ease-in-out 0s;
 }

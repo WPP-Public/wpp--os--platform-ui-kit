@@ -355,8 +355,6 @@ export const Default = {
       el.role = role;
       el.content = content;
       el.status = status;
-      el.assistantAvatarConfig = args.assistantAvatarConfig || { icon: 'wpp-icon-ai' };
-      el.userAvatarConfig = args.userAvatarConfig || { name: 'User' };
       if (role === 'assistant') {
         el.actionButtonsConfig = actionBarActions;
         el.sourcesActionConfig = sourcesActionConfig;
@@ -498,8 +496,6 @@ export const Default = {
         }
       }
       if (el) {
-        el.assistantAvatarConfig = args.assistantAvatarConfig || { icon: 'wpp-icon-ai' };
-        el.userAvatarConfig = args.userAvatarConfig || { name: 'User' };
         el.chatInputConfig = {
           enableAttach: true,
           debounceEnabled: false,

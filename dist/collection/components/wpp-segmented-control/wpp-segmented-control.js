@@ -10,12 +10,41 @@ import { LOCALES_DEFAULTS } from './const';
  */
 export class WppSegmentedControl {
   constructor() {
+    this.firstNonDisabledItem = undefined;
     this.setSegmentedControlItemsSize = (size) => {
       this.host
         .querySelectorAll(transformToVersionedTag('wpp-segmented-control-item'))
         .forEach(item => {
         item.setAttribute('size', size);
       });
+    };
+    this.updateTabIndexOfItem = (tabItem, tabIndex) => {
+      tabItem.ariaProps = {
+        tab: {
+          ...tabItem.ariaProps?.tab,
+          tabIndex,
+        },
+      };
+    };
+    // Clears a previously applied tabindex fallback, if any.
+    this.clearFirstNonDisabledItem = () => {
+      if (this.firstNonDisabledItem) {
+        this.updateTabIndexOfItem(this.firstNonDisabledItem, undefined);
+        this.firstNonDisabledItem = undefined;
+      }
+    };
+    this.handleSlotChange = () => {
+      const segmentedItems = this.getItems();
+      // Always clear the previous fallback before recomputing, so re-slotting can't leave a stale tab stop.
+      this.clearFirstNonDisabledItem();
+      const hasCheckedDisabled = segmentedItems.some((item) => item.active && item.disabled);
+      if (!hasCheckedDisabled)
+        return;
+      // If the checked element is disabled, the first focusable element in the group becomes the first non-disabled one.
+      this.firstNonDisabledItem = segmentedItems.find((item) => !item.disabled);
+      if (this.firstNonDisabledItem) {
+        this.updateTabIndexOfItem(this.firstNonDisabledItem, 0);
+      }
     };
     this.onFocus = (event) => {
       this.wppFocus.emit(event);
@@ -47,6 +76,10 @@ export class WppSegmentedControl {
   }
   handleChangeSegmentedControlItemClick(event) {
     this.value = event.detail.value;
+  }
+  // An item toggling `disabled` can change which item should hold the group's tab stop.
+  handleDisabledChangeSegmentedControlItem() {
+    this.handleSlotChange();
   }
   /**
    * Resolves the keyboard event target to a segmented control item.
@@ -115,6 +148,8 @@ export class WppSegmentedControl {
     const activeElement = Array.from(this.host.querySelectorAll(transformToVersionedTag('wpp-segmented-control-item'))).find(item => item.value === newValue);
     activeElement?.setAttribute('active', 'true');
     this.previousActiveElement = activeElement;
+    // When the value changes in the group, only the checked element will be focusable, so we reset the fallback if it was set.
+    this.clearFirstNonDisabledItem();
     this.wppChange.emit({ value: newValue, reason: 'valueChanged' });
   }
   widthChange(newValue) {
@@ -149,10 +184,10 @@ export class WppSegmentedControl {
     const tablistLabel = this.ariaProps?.tablist?.label ??
       (this.ariaProps?.tablist?.labelledby || this.labelConfig?.text ? undefined : this._locales.tablistLabel);
     const tablistLabelledBy = this.ariaProps?.tablist?.labelledby ?? (this.labelConfig?.text ? labelId : undefined);
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-2-0", { class: "label", tag: "span", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, labelId: labelId, part: "label" })), h("div", { class: this.cssClasses(), role: "tablist", "aria-orientation": "horizontal", "aria-label": tablistLabel, "aria-labelledby": tablistLabelledBy, part: "wrapper" }, h("slot", { part: "inner" }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-3-0", { class: "label", tag: "span", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, labelId: labelId, part: "label" })), h("div", { class: this.cssClasses(), role: "tablist", "aria-orientation": "horizontal", "aria-label": tablistLabel, "aria-labelledby": tablistLabelledBy, part: "wrapper" }, h("slot", { onSlotchange: this.handleSlotChange, part: "inner" }))));
   }
   static get is() { return "wpp-segmented-control"; }
-  static get registryIs() { return "wpp-segmented-control-v4-2-0"; }
+  static get registryIs() { return "wpp-segmented-control-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -463,6 +498,12 @@ export class WppSegmentedControl {
     return [{
         "name": "wppChangeSegmentedControlItem",
         "method": "handleChangeSegmentedControlItemClick",
+        "target": undefined,
+        "capture": true,
+        "passive": false
+      }, {
+        "name": "wppDisabledChangeSegmentedControlItem",
+        "method": "handleDisabledChangeSegmentedControlItem",
         "target": undefined,
         "capture": true,
         "passive": false

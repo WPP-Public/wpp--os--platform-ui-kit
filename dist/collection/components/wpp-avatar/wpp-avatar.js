@@ -2,6 +2,7 @@ import { h, Host, Fragment } from '@stencil/core';
 import { FOCUS_TYPE } from '../../types/common';
 import { AVATAR_COLORS_VARIANTS } from '../wpp-avatar-group/const';
 import { transformToVersionedTag } from '../../utils/utils';
+import { AVATAR_CIRCLE_BORDER_RADIUS, AVATAR_ICON_SIZE, AVATAR_SQUARE_RADIUS_TOKEN } from './const';
 /**
  * @part image - Image element
  * @part icon - Icon element
@@ -35,34 +36,15 @@ export class WppAvatar {
         this.handleClick();
       }
     };
-    this.getIconSize = () => {
-      if (this.size === 'xs')
-        return 16;
-      if (this.size === 's')
-        return 20;
-      if (this.size === 'm')
-        return 24;
-      if (this.size === 'l')
-        return 28;
-      if (this.size === 'xl')
-        return 32;
-      if (this.size === '2xl')
-        return 48;
-      if (this.size === '3xl')
-        return 56;
-      if (this.size === '4xl')
-        return 64;
-    };
     this.renderIcon = () => {
       if (!this.icon)
         return null;
-      if (this.isAvatarIcon()) {
-        return h(transformToVersionedTag(this.icon), {
-          width: this.getIconSize(),
-          height: this.getIconSize(),
-          part: 'icon',
-        });
-      }
+      const iconSize = AVATAR_ICON_SIZE[this.size];
+      return h(transformToVersionedTag(this.icon), {
+        width: iconSize,
+        height: iconSize,
+        part: 'icon',
+      });
     };
     this.handleClick = () => {
       if (this.interactable) {
@@ -72,6 +54,7 @@ export class WppAvatar {
     this.hostCssClasses = () => ({
       'wpp-avatar': true,
       interactable: this.interactable,
+      'wpp-icon-avatar': !!this.icon,
       'with-tooltip': this.withTooltip,
       'tab-focus': this.focusType === FOCUS_TYPE.TAB,
       [`size-${this.size}`]: true,
@@ -79,7 +62,7 @@ export class WppAvatar {
     this.contentWrapperCssClasses = () => ({
       'without-image': true,
       'interactable-wrapper': this.interactable,
-      square: this.variant === 'square',
+      square: this.variant === 'square' || this.isAvatarIcon(),
       'icon-wrapper': this.isAvatarIcon(),
       'with-amount-of-hidden-avatars': !!this.amountOfHiddenAvatars,
     });
@@ -92,6 +75,16 @@ export class WppAvatar {
       image: true,
       square: this.variant === 'square',
     });
+    /** A tooltip is only shown for named (non-icon) avatars that opted in via `withTooltip`. */
+    this.hasTooltip = () => this.withTooltip && !this.isAvatarIcon();
+    /**
+     * Avatars are presentational (removed from the a11y tree) when the tooltip already exposes the
+     * name, or when explicitly marked via `role="presentation"`. Otherwise they expose their role,
+     * tab index and label.
+     */
+    this.getHostAriaProps = () => this.hasTooltip() || this.role === 'presentation'
+      ? { role: 'presentation' }
+      : { role: this.role, tabIndex: this.index, ariaLabel: this.ariaProps.label };
     this.isImageFailedToLoad = false;
     this.focusType = undefined;
     this.name = '';
@@ -121,22 +114,23 @@ export class WppAvatar {
     if (!this.isAvatarIcon()) {
       this.colorChange(this.color || AVATAR_COLORS_VARIANTS[Math.floor(Math.random() * AVATAR_COLORS_VARIANTS.length)]);
     }
-    if (this.variant === 'circle') {
-      this.host.style.setProperty('--avatar-border-radius', '120px');
-    }
-    else {
-      const size = ['xl', 'l'].includes(this.size) ? 'm' : ['2xl', '3xl', '4xl'].includes(this.size) ? 'l' : this.size;
-      this.host.style.setProperty('--avatar-border-radius', `var(--wpp-border-radius-${size})`);
-    }
+    // Icon avatars are always rectangular (like logos), so only non-icon circle avatars use the
+    // fully rounded radius; everything else follows the size-based square (rounded rectangle) radius.
+    const borderRadius = this.variant === 'circle' && !this.isAvatarIcon()
+      ? AVATAR_CIRCLE_BORDER_RADIUS
+      : `var(--wpp-border-radius-${AVATAR_SQUARE_RADIUS_TOKEN[this.size]})`;
+    this.host.style.setProperty('--avatar-border-radius', borderRadius);
   }
   render() {
-    const content = this.src && !this.isImageFailedToLoad ? (h("div", { class: this.imageWrapperCssClasses(), part: "content" }, h("img", { src: this.src, alt: `${this.name} - avatar`, class: this.imageCssClasses(), onError: this.handleImageLoadFailure, part: "image" }))) : (h(Fragment, null, h("div", { class: this.contentWrapperCssClasses(), part: "content" }, this.amountOfHiddenAvatars ? `+${this.amountOfHiddenAvatars}` : this.getUserAbbreviation(this.name), this.renderIcon())));
-    return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onClick: this.handleClick, exportparts: "image, content, tooltip", ...((this.withTooltip && !this.isAvatarIcon()) || this.role === 'presentation'
-        ? { role: 'presentation' }
-        : { role: this.role, tabIndex: this.index, ariaLabel: this.ariaProps.label }) }, this.withTooltip && !this.isAvatarIcon() ? (h("wpp-tooltip-v4-2-0", { text: this.name, config: this.tooltipConfig, part: "tooltip", ariaProps: { label: `User: ${this.name}`, role: 'button' } }, content)) : (content)));
+    const content = this.src && !this.isImageFailedToLoad ? (h("div", { class: this.imageWrapperCssClasses(), part: "content" }, h("img", { src: this.src, alt: `${this.name} - avatar`, class: this.imageCssClasses(), onError: this.handleImageLoadFailure, part: "image" }))) : (h(Fragment, null, h("div", { class: this.contentWrapperCssClasses(), part: "content" }, this.isAvatarIcon()
+      ? this.renderIcon()
+      : this.amountOfHiddenAvatars
+        ? `+${this.amountOfHiddenAvatars}`
+        : this.getUserAbbreviation(this.name))));
+    return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onClick: this.handleClick, exportparts: "image, content, tooltip", ...this.getHostAriaProps() }, this.hasTooltip() ? (h("wpp-tooltip-v4-3-0", { text: this.name, config: this.tooltipConfig, part: "tooltip", ariaProps: { label: `User: ${this.name}`, role: 'button' } }, content)) : (content)));
   }
   static get is() { return "wpp-avatar"; }
-  static get registryIs() { return "wpp-avatar-v4-2-0"; }
+  static get registryIs() { return "wpp-avatar-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -245,7 +239,7 @@ export class WppAvatar {
         "optional": true,
         "docs": {
           "tags": [],
-          "text": "Defines the avatar icon. This prop will work if variant='circle', and you can pass icon as wpp-icon-premium."
+          "text": "Defines the avatar icon (e.g. `wpp-icon-premium`). Icon avatars are always rendered as a\nrounded rectangle (like logo avatars), regardless of the `variant` value."
         },
         "attribute": "icon",
         "reflect": false

@@ -6,6 +6,7 @@ export interface BasicNodeAction {
 export interface BasicNodeLocales {
   playAction: string;
   stopAction: string;
+  reRunAction: string;
   filterAction: string;
   uploadFileAction: string;
 }

@@ -6,7 +6,7 @@
   font-weight: var(--wpp-typography-5xl-display-font-weight, 600);
   font-size: var(--wpp-typography-5xl-display-font-size, 48px);
   line-height: var(--wpp-typography-5xl-display-line-height, 62px);
-  letter-spacing: var(--wpp-typography-5xl-display-letter-spacing, 0px);
+  letter-spacing: var(--wpp-typography-5xl-display-letter-spacing, 0);
   font-family: var(--wpp-typography-5xl-display-font-family, var(--wpp-font-family, system-ui, sans-serif));
 }
 :host .wpp-typography-5xl-display-light {
@@ -19,7 +19,7 @@
   font-weight: var(--wpp-typography-4xl-display-font-weight, 600);
   font-size: var(--wpp-typography-4xl-display-font-size, 36px);
   line-height: var(--wpp-typography-4xl-display-line-height, 48px);
-  letter-spacing: var(--wpp-typography-4xl-display-letter-spacing, 0px);
+  letter-spacing: var(--wpp-typography-4xl-display-letter-spacing, 0);
   font-family: var(--wpp-typography-4xl-display-font-family, var(--wpp-font-family, system-ui, sans-serif));
 }
 :host .wpp-typography-4xl-display-light {
@@ -32,7 +32,7 @@
   font-weight: var(--wpp-typography-3xl-heading-font-weight, 600);
   font-size: var(--wpp-typography-3xl-heading-font-size, 28px);
   line-height: var(--wpp-typography-3xl-heading-line-height, 40px);
-  letter-spacing: var(--wpp-typography-3xl-heading-letter-spacing, 0px);
+  letter-spacing: var(--wpp-typography-3xl-heading-letter-spacing, 0);
   font-family: var(--wpp-typography-3xl-heading-font-family, var(--wpp-font-family, system-ui, sans-serif));
 }
 :host .wpp-typography-3xl-display-light {
@@ -45,7 +45,7 @@
   font-weight: var(--wpp-typography-2xl-heading-font-weight, 600);
   font-size: var(--wpp-typography-2xl-heading-font-size, 24px);
   line-height: var(--wpp-typography-2xl-heading-line-height, 32px);
-  letter-spacing: var(--wpp-typography-2xl-heading-letter-spacing, 0px);
+  letter-spacing: var(--wpp-typography-2xl-heading-letter-spacing, 0);
   font-family: var(--wpp-typography-2xl-heading-font-family, var(--wpp-font-family, system-ui, sans-serif));
 }
 :host .wpp-typography-2xl-display-light {
@@ -58,7 +58,7 @@
   font-weight: var(--wpp-typography-xl-heading-font-weight, 600);
   font-size: var(--wpp-typography-xl-heading-font-size, 20px);
   line-height: var(--wpp-typography-xl-heading-line-height, 32px);
-  letter-spacing: var(--wpp-typography-xl-heading-letter-spacing, 0px);
+  letter-spacing: var(--wpp-typography-xl-heading-letter-spacing, 0);
   font-family: var(--wpp-typography-xl-heading-font-family, var(--wpp-font-family, system-ui, sans-serif));
 }
 :host .wpp-typography-xl-display-light {
@@ -73,21 +73,21 @@
   font-weight: var(--wpp-typography-l-body-font-weight, 400);
   font-size: var(--wpp-typography-l-body-font-size, 18px);
   line-height: var(--wpp-typography-l-body-line-height, 28px);
-  letter-spacing: var(--wpp-typography-l-body-letter-spacing, 0px);
+  letter-spacing: var(--wpp-typography-l-body-letter-spacing, 0);
   font-family: var(--wpp-typography-l-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
 }
 :host .wpp-typography-l-midi {
   font-weight: var(--wpp-typography-l-midi-font-weight, 500);
   font-size: var(--wpp-typography-l-midi-font-size, 18px);
   line-height: var(--wpp-typography-l-midi-line-height, 28px);
-  letter-spacing: var(--wpp-typography-l-midi-letter-spacing, 0px);
+  letter-spacing: var(--wpp-typography-l-midi-letter-spacing, 0);
   font-family: var(--wpp-typography-l-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));
 }
 :host .wpp-typography-l-strong {
   font-weight: var(--wpp-typography-l-strong-font-weight, 600);
   font-size: var(--wpp-typography-l-strong-font-size, 18px);
   line-height: var(--wpp-typography-l-strong-line-height, 28px);
-  letter-spacing: var(--wpp-typography-l-strong-letter-spacing, 0px);
+  letter-spacing: var(--wpp-typography-l-strong-letter-spacing, 0);
   font-family: var(--wpp-typography-l-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
 }
 :host .wpp-typography-l-light {
@@ -99,21 +99,21 @@
   font-weight: var(--wpp-typography-m-body-font-weight, 400);
   font-size: var(--wpp-typography-m-body-font-size, 16px);
   line-height: var(--wpp-typography-m-body-line-height, 24px);
-  letter-spacing: var(--wpp-typography-m-body-letter-spacing, 0px);
+  letter-spacing: var(--wpp-typography-m-body-letter-spacing, 0);
   font-family: var(--wpp-typography-m-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
 }
 :host .wpp-typography-m-midi {
   font-weight: var(--wpp-typography-m-midi-font-weight, 500);
   font-size: var(--wpp-typography-m-midi-font-size, 16px);
   line-height: var(--wpp-typography-m-midi-line-height, 24px);
-  letter-spacing: var(--wpp-typography-m-midi-letter-spacing, 0px);
+  letter-spacing: var(--wpp-typography-m-midi-letter-spacing, 0);
   font-family: var(--wpp-typography-m-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));
 }
 :host .wpp-typography-m-strong {
   font-weight: var(--wpp-typography-m-strong-font-weight, 600);
   font-size: var(--wpp-typography-m-strong-font-size, 16px);
   line-height: var(--wpp-typography-m-strong-line-height, 24px);
-  letter-spacing: var(--wpp-typography-m-strong-letter-spacing, 0px);
+  letter-spacing: var(--wpp-typography-m-strong-letter-spacing, 0);
   font-family: var(--wpp-typography-m-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
 }
 :host .wpp-typography-m-light {
@@ -151,21 +151,21 @@
   font-weight: var(--wpp-typography-xs-body-font-weight, 400);
   font-size: var(--wpp-typography-xs-body-font-size, 12px);
   line-height: var(--wpp-typography-xs-body-line-height, 20px);
-  letter-spacing: var(--wpp-typography-xs-body-letter-spacing, 0px);
+  letter-spacing: var(--wpp-typography-xs-body-letter-spacing, 0);
   font-family: var(--wpp-typography-xs-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
 }
 :host .wpp-typography-xs-midi {
   font-weight: var(--wpp-typography-xs-midi-font-weight, 500);
   font-size: var(--wpp-typography-xs-midi-font-size, 12px);
   line-height: var(--wpp-typography-xs-midi-line-height, 20px);
-  letter-spacing: var(--wpp-typography-xs-midi-letter-spacing, 0px);
+  letter-spacing: var(--wpp-typography-xs-midi-letter-spacing, 0);
   font-family: var(--wpp-typography-xs-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));
 }
 :host .wpp-typography-xs-strong {
   font-weight: var(--wpp-typography-xs-strong-font-weight, 600);
   font-size: var(--wpp-typography-xs-strong-font-size, 12px);
   line-height: var(--wpp-typography-xs-strong-line-height, 20px);
-  letter-spacing: var(--wpp-typography-xs-strong-letter-spacing, 0px);
+  letter-spacing: var(--wpp-typography-xs-strong-letter-spacing, 0);
   font-family: var(--wpp-typography-xs-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
 }
 :host .wpp-typography-xs-light {

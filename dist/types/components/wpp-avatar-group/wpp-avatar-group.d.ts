@@ -15,7 +15,7 @@ import { Instance } from 'tippy.js';
 export declare class WppAvatarGroup {
   menuContextTippyRef?: Instance;
   /**
-   * Defines a list of avatars with specific attributes, such as name, src, color, and so on: `avatars={[{name: '', src: ''}]}`
+   * Defines a list of avatars with specific attributes, such as name, src, color, icon, and so on: `avatars={[{name: '', src: ''}]}`. Avatars with an `icon` are rendered as rounded rectangles.
    */
   readonly avatars: AvatarState[];
   /**

@@ -53,7 +53,7 @@
   --fu-item-max-width: var(--wpp-file-upload-item-max-width, 100%);
   --fu-item-gradient: var(
     --wpp-file-upload-item-gradient,
-    linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.75) 100%)
+    linear-gradient(180deg, rgb(255 255 255 / 0%) 0%, rgb(255 255 255 / 75%) 100%)
   );
   --fu-item-gradient-height: var(--wpp-file-upload-item-gradient-height, 32px);
   --fu-content-margin: var(--wpp-file-upload-content-margin, 0px 20px 0 20px);
@@ -195,9 +195,8 @@
   scrollbar-color: var(--wpp-grey-color-400) transparent;
   width: var(--fu-item-max-width);
   max-height: 400px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  margin: 8px 0 0 0;
+  overflow: hidden auto;
+  margin: 8px 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -280,7 +279,7 @@
   letter-spacing: var(--wpp-typography-s-strong-letter-spacing, 0);
 }
 
-@-moz-document url-prefix() {
+@supports (-moz-appearance: none) {
   .file-list {
     padding-right: 10px;
   }

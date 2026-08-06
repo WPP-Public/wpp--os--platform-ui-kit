@@ -1,4 +1,4 @@
-import { r as registerInstance, h, H as Host } from './index-9177bb6d.js';
+import { r as registerInstance, h, H as Host } from './index-93f63aaa.js';
 
 const wppLegendCss = ":host{display:-ms-inline-flexbox;display:inline-flex;-ms-flex-align:center;align-items:center;gap:6px;cursor:default}.dot{width:12px;height:12px}:host(:hover) .wpp-typography{color:var(--wpp-grey-color-800) !important}:host(.wpp-disabled){pointer-events:none}:host(.wpp-disabled) .dot{opacity:0.5}";
 
@@ -17,9 +17,9 @@ const WppLegend = class {
     this.color = 'var(--wpp-dataviz-color-cat-neutral-1)';
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("svg", { class: this.dotCssClasses() }, h("circle", { cx: 6, cy: 6, r: 5, fill: this.color })), this.label && (h("wpp-typography-v4-2-0", { color: this.disabled ? 'var(--wpp-text-color-disabled)' : 'var(--wpp-grey-color-1000)', type: "xs-body" }, this.label))));
+    return (h(Host, { class: this.hostCssClasses() }, h("svg", { class: this.dotCssClasses() }, h("circle", { cx: 6, cy: 6, r: 5, fill: this.color })), this.label && (h("wpp-typography-v4-3-0", { color: this.disabled ? 'var(--wpp-text-color-disabled)' : 'var(--wpp-grey-color-1000)', type: "xs-body" }, this.label))));
   }
-  static get registryIs() { return "wpp-legend-v4-2-0"; }
+  static get registryIs() { return "wpp-legend-v4-3-0"; }
 };
 WppLegend.style = wppLegendCss;
 

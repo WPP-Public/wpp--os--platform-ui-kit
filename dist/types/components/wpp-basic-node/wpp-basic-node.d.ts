@@ -7,9 +7,11 @@ import { BasicNodeLocales, BasicNodeAction, BasicNodeAriaProps } from './types';
 export declare class WppBasicNode {
   private themeSubscription;
   private resizeObserver;
+  private slotObserver;
   private bodyRef;
   private titleRef;
   hasScrollbar: boolean;
+  hasContent: boolean;
   host: HTMLWppBasicNodeElement;
   /**
    * Defines the title of the node, which is displayed in the header section. This prop is required.
@@ -19,6 +21,11 @@ export declare class WppBasicNode {
    * Defines whether the node is in a loading state. If true, the border of the node will be animated.
    */
   readonly isLoading: boolean;
+  /**
+   * Defines whether the node is in the re-run state. When true (and not loading), the primary action button
+   * shows a refresh icon instead of the play icon, indicating the node can be run again.
+   */
+  readonly isReRun: boolean;
   /**
    * Defines the additional actions available for the Basic Node. The actions are added to the dropdown menu in the footer section.
    * The `icon` should correspond to a valid icon name in the design system.
@@ -42,9 +49,18 @@ export declare class WppBasicNode {
   wppActionClick: EventEmitter<BasicNodeAction>;
   connectedCallback(): void;
   disconnectedCallback(): void;
+  componentWillLoad(): void;
+  componentDidLoad(): void;
   private get _locales();
   private checkBodyForScroll;
   private handleActionClick;
+  /**
+   * Reflects whether any content is projected into the `body` slot in the `hasContent` state.
+   * Runs on load and whenever the slotted content changes (see `slotObserver`).
+   */
+  private updateHasContent;
+  private getPrimaryAction;
+  private handlePrimaryActionClick;
   private getNodeContainerClasses;
   private getNodeWrapperClasses;
   render(): any;

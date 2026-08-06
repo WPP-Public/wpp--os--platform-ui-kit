@@ -20,11 +20,13 @@ export class WppAvatarGroup {
     this.getAvatarsWithColors = (avatars) => {
       let colorIndex = 0;
       return avatars.map(avatar => {
-        if (!avatar.src && !avatar.color) {
-          avatar.color = AVATAR_COLORS_VARIANTS[colorIndex];
-          colorIndex = colorIndex === AVATAR_COLORS_VARIANTS.length - 1 ? 0 : colorIndex + 1;
-        }
-        return avatar;
+        // Images, icons and explicit colors keep their own appearance; only plain placeholder
+        // avatars get an auto-assigned color, cycling through the palette.
+        if (avatar.src || avatar.icon || avatar.color)
+          return avatar;
+        const color = AVATAR_COLORS_VARIANTS[colorIndex];
+        colorIndex = (colorIndex + 1) % AVATAR_COLORS_VARIANTS.length;
+        return { ...avatar, color };
       });
     };
     this.handleAvatarClick = (event, avatarIndex, fromDropdown) => {
@@ -60,7 +62,7 @@ export class WppAvatarGroup {
     return (h(Host, { class: this.avatarGroupWrapperCssClasses(), role: "group", exportparts: "list, item, menu, avatar, hidden-item, hidden-item-with-avatar, hidden-item-avatar, hidden-item-name" }, h("ul", { class: "avatars-list", part: "list" }, avatarsToDisplay.map((avatar, avatarIndex) => (h("li", { class: {
         'avatar-item': true,
         interactable: avatar.interactable ?? true,
-      }, part: "item" }, h("wpp-avatar-v4-2-0", { size: this.size, variant: this.variant, name: avatar.name, src: avatar.src, withTooltip: this.withTooltip, tooltipConfig: this.tooltipConfig, interactable: avatar.interactable ?? true, color: avatar.color, index: this.avatarsIndex, onWppClick: (event) => this.handleAvatarClick(event, avatarIndex, false) })))), this.avatars.length > this.maxAvatarsToDisplay && (h("li", { class: "avatar-item", part: "item" }, h("wpp-menu-context-v4-2-0", { externalClass: "avatar-group", listWidth: "240px", dropdownConfig: {
+      }, part: "item" }, h("wpp-avatar-v4-3-0", { size: this.size, variant: this.variant, name: avatar.name, src: avatar.src, icon: avatar.icon, withTooltip: this.withTooltip, tooltipConfig: this.tooltipConfig, interactable: avatar.interactable ?? true, color: avatar.color, index: this.avatarsIndex, onWppClick: (event) => this.handleAvatarClick(event, avatarIndex, false) })))), this.avatars.length > this.maxAvatarsToDisplay && (h("li", { class: "avatar-item", part: "item" }, h("wpp-menu-context-v4-3-0", { externalClass: "avatar-group", listWidth: "240px", dropdownConfig: {
         ...this.dropdownConfig,
         onShow: (instance) => {
           const firstListItem = instance.popper.querySelector('.wpp-list-item');
@@ -77,10 +79,10 @@ export class WppAvatarGroup {
         onDestroy: () => {
           this.menuContextTippyRef = undefined;
         },
-      }, part: "menu", onKeyDown: this.onKeyDown, ariaProps: { label: `+${avatarsInHiddenList.length} more list items with avatars` } }, h("wpp-avatar-v4-2-0", { amountOfHiddenAvatars: avatarsInHiddenList.length, size: this.size, variant: this.variant, slot: "trigger-element", part: "avatar" }), h(Fragment, null, avatarsInHiddenList.map((avatar, avatarIndex) => (h("wpp-list-item-v4-2-0", { key: avatar.name, onWppChangeListItem: (event) => this.handleListItemClick(event, avatarIndex + this.maxAvatarsToDisplay), value: avatar.name, nonInteractive: avatar.interactable === false, part: "hidden-item" }, h("wpp-avatar-v4-2-0", { name: avatar.name, src: avatar.src, color: avatar.color, variant: this.variant, interactable: false, role: "presentation", slot: "left", part: "hidden-item-avatar" }), h("span", { slot: "label", class: "name", part: "hidden-item-name" }, avatar.name)))))))))));
+      }, part: "menu", onKeyDown: this.onKeyDown, ariaProps: { label: `+${avatarsInHiddenList.length} more list items with avatars` } }, h("wpp-avatar-v4-3-0", { amountOfHiddenAvatars: avatarsInHiddenList.length, size: this.size, variant: this.variant, slot: "trigger-element", part: "avatar" }), h(Fragment, null, avatarsInHiddenList.map((avatar, avatarIndex) => (h("wpp-list-item-v4-3-0", { key: avatar.name, onWppChangeListItem: (event) => this.handleListItemClick(event, avatarIndex + this.maxAvatarsToDisplay), value: avatar.name, nonInteractive: avatar.interactable === false, part: "hidden-item" }, h("wpp-avatar-v4-3-0", { name: avatar.name, src: avatar.src, icon: avatar.icon, color: avatar.color, variant: this.variant, interactable: false, role: "presentation", slot: "left", part: "hidden-item-avatar" }), h("span", { slot: "label", class: "name", part: "hidden-item-name" }, avatar.name)))))))))));
   }
   static get is() { return "wpp-avatar-group"; }
-  static get registryIs() { return "wpp-avatar-group-v4-2-0"; }
+  static get registryIs() { return "wpp-avatar-group-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -112,7 +114,7 @@ export class WppAvatarGroup {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "Defines a list of avatars with specific attributes, such as name, src, color, and so on: `avatars={[{name: '', src: ''}]}`"
+          "text": "Defines a list of avatars with specific attributes, such as name, src, color, icon, and so on: `avatars={[{name: '', src: ''}]}`. Avatars with an `icon` are rendered as rounded rectangles."
         },
         "defaultValue": "[]"
       },

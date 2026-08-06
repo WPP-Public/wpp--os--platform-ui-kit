@@ -28,7 +28,6 @@ export declare class WppFileUploadItem {
   thumbnailUrl: string | null;
   percentage: number;
   total: number;
-  loaded: number;
   isLoadingFinished: boolean;
   measurementUnit: string;
   isPressed: boolean;

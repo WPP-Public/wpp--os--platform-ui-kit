@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-ecf423ba.js');
+const index = require('./index-5f5af6a9.js');
 const consts = require('./consts-d8f5ef98.js');
 const subscribeToTheme = require('./subscribe-to-theme-1879a649.js');
 
@@ -50,7 +50,7 @@ const WppOverlay = class {
   render() {
     return (index.h(index.Host, null, index.h("div", { class: this.getOverlayCssClasses(), style: { zIndex: this.zIndex.toString() }, onClick: this.handleClick })));
   }
-  static get registryIs() { return "wpp-overlay-v4-2-0"; }
+  static get registryIs() { return "wpp-overlay-v4-3-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "isVisible": ["handleVisibleChange"]

@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-ecf423ba.js');
+const index = require('./index-5f5af6a9.js');
 const common = require('./common-ee802540.js');
 const subscribeToTheme = require('./subscribe-to-theme-1879a649.js');
 
@@ -43,9 +43,9 @@ const WppPaginationItem = class {
     this.themeSubscription.stop();
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, tabIndex: 0, exportparts: "number" }, index.h("wpp-typography-v4-2-0", { type: "s-body", part: "number" }, this.number)));
+    return (index.h(index.Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, tabIndex: 0, exportparts: "number" }, index.h("wpp-typography-v4-3-0", { type: "s-body", part: "number" }, this.number)));
   }
-  static get registryIs() { return "wpp-pagination-item-v4-2-0"; }
+  static get registryIs() { return "wpp-pagination-item-v4-3-0"; }
   get host() { return index.getElement(this); }
 };
 WppPaginationItem.style = wppPaginationItemCss;

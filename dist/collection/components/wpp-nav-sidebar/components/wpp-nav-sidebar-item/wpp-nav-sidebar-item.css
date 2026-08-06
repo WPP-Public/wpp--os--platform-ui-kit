@@ -49,51 +49,93 @@
   --ns-item-submenu-paddings: var(--wpp-nav-sidebar-item-submenu-paddings, 8px 18px);
   --ns-item-submenu-label-margin: var(--wpp-nav-sidebar-item-submenu-label-margin, 8px 0 8px 20px);
   --ns-item-nested-label-text-color: var(--wpp-nav-sidebar-item-nested-label-text-color, var(--wpp-text-color-info));
-  --ns-item-nested-label-text-color-hover: var(--wpp-nav-sidebar-item-nested-label-text-color-hover, var(--wpp-text-color));
-  --ns-item-nested-label-text-color-active: var(--wpp-nav-sidebar-item-nested-label-text-color-active, var(--wpp-text-color));
-  --ns-item-nested-label-text-color-selected: var(--wpp-nav-sidebar-item-nested-label-text-color-selected, var(--wpp-text-color));
-  --ns-item-nested-label-text-color-selected-hover: var(--wpp-nav-sidebar-item-nested-label-text-color-selected-hover, var(--wpp-text-color));
-  --ns-item-nested-label-text-color-selected-active: var(--wpp-nav-sidebar-item-nested-label-text-color-selected-active, var(--wpp-text-color));
+  --ns-item-nested-label-text-color-hover: var(
+    --wpp-nav-sidebar-item-nested-label-text-color-hover,
+    var(--wpp-text-color)
+  );
+  --ns-item-nested-label-text-color-active: var(
+    --wpp-nav-sidebar-item-nested-label-text-color-active,
+    var(--wpp-text-color)
+  );
+  --ns-item-nested-label-text-color-selected: var(
+    --wpp-nav-sidebar-item-nested-label-text-color-selected,
+    var(--wpp-text-color)
+  );
+  --ns-item-nested-label-text-color-selected-hover: var(
+    --wpp-nav-sidebar-item-nested-label-text-color-selected-hover,
+    var(--wpp-text-color)
+  );
+  --ns-item-nested-label-text-color-selected-active: var(
+    --wpp-nav-sidebar-item-nested-label-text-color-selected-active,
+    var(--wpp-text-color)
+  );
   --ns-item-nested-label-padding: var(--wpp-nav-sidebar-item-nested-label-padding, 0 0 0 20px);
   --ns-item-group-title-margin: var(--wpp-nav-sidebar-item-group-title-margin, 16px 0 0 12px);
   --ns-item-icons-color: var(--wpp-nav-sidebar-item-icons-color, var(--wpp-icon-color));
   --ns-item-icons-color-hover: var(--wpp-nav-sidebar-item-icons-color-hover, var(--wpp-icon-color-hover));
   --ns-item-icons-color-pressed: var(--wpp-nav-sidebar-item-icons-color-pressed, var(--wpp-icon-color-active));
   --ns-item-icons-active-color: var(--wpp-nav-sidebar-item-icons-active-color, var(--wpp-grey-color-1000));
-  --ns-item-icons-active-color-hover: var(
-    --wpp-nav-sidebar-item-icons-active-color-hover,
-    var(--wpp-grey-color-1000)
-  );
+  --ns-item-icons-active-color-hover: var(--wpp-nav-sidebar-item-icons-active-color-hover, var(--wpp-grey-color-1000));
   --ns-item-icons-active-color-pressed: var(
     --wpp-nav-sidebar-item-icons-active-color-pressed,
     var(--wpp-grey-color-1000)
   );
   --ns-item-without-icon-start-padding: var(--wpp-nav-sidebar-item-without-icon-start-padding, 5px 12px);
-  --ns-item-start-icon-color-selected-idle: var(--wpp-nav-sidebar-item-start-icon-color-selected-idle, var(--wpp-grey-color-900));
-  --ns-item-start-icon-color-selected-active: var(--wpp-nav-sidebar-item-start-icon-color-selected-active, var(--wpp-grey-color-900));
-  --ns-item-start-icon-color-unselected-active: var(--wpp-nav-sidebar-item-start-icon-color-unselected-active, var(--wpp-grey-color-900));
-  --ns-item-start-icon-color-unselected-pressed: var(--wpp-nav-sidebar-item-start-icon-color-unselected-pressed, var(--wpp-grey-color-900));
-  --ns-item-start-icon-color-unselected-hover: var(--wpp-nav-sidebar-item-start-icon-color-unselected-hover, var(--wpp-grey-color-800));
-  --ns-item-start-icon-color-unselected: var(--wpp-nav-sidebar-item-start-icon-color-unselected, var(--wpp-grey-color-700));
+  --ns-item-start-icon-color-selected-idle: var(
+    --wpp-nav-sidebar-item-start-icon-color-selected-idle,
+    var(--wpp-grey-color-900)
+  );
+  --ns-item-start-icon-color-selected-active: var(
+    --wpp-nav-sidebar-item-start-icon-color-selected-active,
+    var(--wpp-grey-color-900)
+  );
+  --ns-item-start-icon-color-unselected-active: var(
+    --wpp-nav-sidebar-item-start-icon-color-unselected-active,
+    var(--wpp-grey-color-900)
+  );
+  --ns-item-start-icon-color-unselected-pressed: var(
+    --wpp-nav-sidebar-item-start-icon-color-unselected-pressed,
+    var(--wpp-grey-color-900)
+  );
+  --ns-item-start-icon-color-unselected-hover: var(
+    --wpp-nav-sidebar-item-start-icon-color-unselected-hover,
+    var(--wpp-grey-color-800)
+  );
+  --ns-item-start-icon-color-unselected: var(
+    --wpp-nav-sidebar-item-start-icon-color-unselected,
+    var(--wpp-grey-color-700)
+  );
 }
 
-:host(:focus-visible) .item {
-  background-color: var(--wpp-grey-color-300);
+:host(:focus-visible) .item,
+.item:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--wpp-grey-color-000), inset 0 0 0 3px var(--wpp-brand-color);
+  background-color: var(--wpp-grey-color-200);
 }
 :host(:focus-visible) .item ::slotted([slot=icon-start]),
 :host(:focus-visible) .item ::slotted([slot=icon-end]),
-:host(:focus-visible) .item .slot-icon-start-fallback {
-  color: var(--ns-item-icons-color-pressed);
+:host(:focus-visible) .item .slot-icon-start-fallback,
+.item:focus-visible ::slotted([slot=icon-start]),
+.item:focus-visible ::slotted([slot=icon-end]),
+.item:focus-visible .slot-icon-start-fallback {
+  color: var(--ns-item-icons-color-hover);
 }
 :host(:focus-visible) .item .label,
-:host(:focus-visible) .item .nested-label {
-  color: var(--ns-item-label-text-color-active);
+.item:focus-visible .label {
+  color: var(--ns-item-label-text-color-hover);
 }
-:host(:focus-visible) .item .label.open-nested-label {
-  color: var(--ns-item-nested-label-text-color-selected-hover);
+:host(:focus-visible) .item .label.open-nested-label,
+.item:focus-visible .label.open-nested-label {
+  color: var(--ns-item-nested-label-text-color-hover);
 }
-:host(:focus-visible) .item .extended-icon {
+:host(:focus-visible) .item .extended-icon,
+.item:focus-visible .extended-icon {
   color: var(--ns-item-icons-color-hover);
+}
+:host(:focus-visible) .item ::slotted([slot=icon-start]),
+.item:focus-visible ::slotted([slot=icon-start]) {
+  color: var(--ns-item-start-icon-color-unselected-hover);
 }
 
 .wpp-tooltip {

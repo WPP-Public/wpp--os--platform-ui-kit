@@ -46,7 +46,6 @@ swiper-container::part(button-prev)::after, swiper-container::part(button-next):
   width: var(--swiper-navigation-size);
   height: var(--swiper-navigation-size);
   mask-image: url("data:image/svg+xml,%3Csvg fill='none' role='img' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m18 14 6 6-6 6' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2'/%3E%3C/svg%3E");
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg fill='none' role='img' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m18 14 6 6-6 6' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2'/%3E%3C/svg%3E");
   background-color: var(--swiper-navigation-arrow-bg-color);
   border-radius: 50%;
 }

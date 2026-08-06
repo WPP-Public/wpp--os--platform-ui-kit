@@ -1,6 +1,6 @@
-import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { k as transformToVersionedTag } from './utils-fc9002c9.js';
-import { W as WrappedSlot } from './WrappedSlot-629d3e4f.js';
+import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-93f63aaa.js';
+import { k as transformToVersionedTag } from './utils-452958a4.js';
+import { W as WrappedSlot } from './WrappedSlot-6fa08584.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme-3920c16c.js';
 
@@ -66,6 +66,7 @@ const WppNavSidebar = class {
     this.activePath = undefined;
     this.nativeLink = false;
     this.zIndex = Z_INDEX.NAV_SIDEBAR;
+    this.navLabel = 'Main navigation';
   }
   handleActivePathChange(newValue) {
     this.setActiveItem(newValue);
@@ -91,9 +92,9 @@ const WppNavSidebar = class {
     this.themeSubscription.stop();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "nav-sidebar, body, header-wrapper, header, ws-wrapper, ws-inner" }, h("aside", { class: this.asideCssClasses(), part: "nav-sidebar" }, h("div", { class: "nav-wrapper", part: "body" }, h(WrappedSlot, { wrapperClass: "title-wrapper", name: "header" }), h(WrappedSlot, { wrapperClass: "items-wrapper" })))));
+    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "nav-sidebar, body, header-wrapper, header, ws-wrapper, ws-inner" }, h("aside", { class: this.asideCssClasses(), part: "nav-sidebar" }, h("nav", { class: "nav-wrapper", part: "body", "aria-label": this.navLabel }, h(WrappedSlot, { wrapperClass: "title-wrapper", name: "header" }), h(WrappedSlot, { wrapperClass: "items-wrapper" })))));
   }
-  static get registryIs() { return "wpp-nav-sidebar-v4-2-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-v4-3-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "activePath": ["handleActivePathChange"]

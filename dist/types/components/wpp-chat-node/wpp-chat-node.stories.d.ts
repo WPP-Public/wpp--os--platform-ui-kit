@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
 import type { Components } from '../../components';
 import type { ChatNodeAction, ChatNodeLocales, ChatNodeMessageAction, ChatNodeModel } from './types';
-type ChatNodeStoryArgs = Components.WppChatNode & {
+type ChatNodeStoryArgs = Omit<Components.WppChatNode, 'selectedModel'> & {
   actions?: ChatNodeAction[];
   messageActions?: ChatNodeMessageAction[];
   models?: ChatNodeModel[];
-  selectedModelId?: string;
+  selectedModel?: string;
   locales?: Partial<ChatNodeLocales>;
 };
 declare const meta: Meta<ChatNodeStoryArgs & {

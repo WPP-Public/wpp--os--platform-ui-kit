@@ -37,7 +37,7 @@
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
-  border-top: 1px solid var(--wpp-grey-color-300);
+  border-top: var(--wpp-border-width-s) solid var(--wpp-grey-color-300);
 }
 :host .wpp-popover-content .wpp-popover-clear-action,
 :host .wpp-popover-content .wpp-popover-footer-actions {

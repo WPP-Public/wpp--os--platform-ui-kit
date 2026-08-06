@@ -139,16 +139,16 @@ const WppLegacyStickyBar$1 = /*@__PURE__*/ proxyCustomElement(class WppLegacySti
     }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, this.variant === 'blank' ? (h("slot", { name: "content" })) : (h(Fragment, null, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v4-2-0", { variant: "secondary", onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v4-2-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v4-2-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, this.variant === 'blank' ? (h("slot", { name: "content" })) : (h(Fragment, null, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v4-3-0", { variant: "secondary", onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v4-3-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v4-3-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
       if (!buttonItem)
         return null;
       if (buttonItem.variant === 'action-button') {
-        return (h("wpp-action-button-v4-2-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary" }, buttonItem.text));
+        return (h("wpp-action-button-v4-3-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary" }, buttonItem.text));
       }
-      return (h("wpp-button-v4-2-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant }, buttonItem.text));
-    }))), this.variant !== 'one-line' && (h("div", { class: "body" }, this.variant === 'two-lines' ? (h("slot", { name: "content" })) : (this.tabs.length > 0 && (h("wpp-tabs-v4-2-0", { size: "s", onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => (h("wpp-tab-v4-2-0", { size: "s", key: tabItem.value, value: tabItem.value }, tabItem.text)))))))))))));
+      return (h("wpp-button-v4-3-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant }, buttonItem.text));
+    }))), this.variant !== 'one-line' && (h("div", { class: "body" }, this.variant === 'two-lines' ? (h("slot", { name: "content" })) : (this.tabs.length > 0 && (h("wpp-tabs-v4-3-0", { size: "s", onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => (h("wpp-tab-v4-3-0", { size: "s", key: tabItem.value, value: tabItem.value }, tabItem.text)))))))))))));
   }
-  static get registryIs() { return "wpp-legacy-sticky-bar-v4-2-0"; }
+  static get registryIs() { return "wpp-legacy-sticky-bar-v4-3-0"; }
   get host() { return this; }
   static get watchers() { return {
     "buttons": ["updateButtons"],
@@ -156,7 +156,7 @@ const WppLegacyStickyBar$1 = /*@__PURE__*/ proxyCustomElement(class WppLegacySti
     "offsetFromTop": ["updateOffset"]
   }; }
   static get style() { return wppLegacyStickyBarCss; }
-}, [1, "wpp-legacy-sticky-bar", "wpp-legacy-sticky-bar-v4-2-0", {
+}, [1, "wpp-legacy-sticky-bar", "wpp-legacy-sticky-bar-v4-3-0", {
     "variant": [1],
     "barTitle": [1, "bar-title"],
     "offsetFromTop": [2, "offset-from-top"],
@@ -175,44 +175,44 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-legacy-sticky-bar-v4-2-0", "wpp-action-button-v4-2-0", "wpp-button-v4-2-0", "wpp-icon-chevron-v4-2-0", "wpp-spinner-v4-2-0", "wpp-tab-v4-2-0", "wpp-tabs-v4-2-0", "wpp-typography-v4-2-0"];
+  const components = ["wpp-legacy-sticky-bar-v4-3-0", "wpp-action-button-v4-3-0", "wpp-button-v4-3-0", "wpp-icon-chevron-v4-3-0", "wpp-spinner-v4-3-0", "wpp-tab-v4-3-0", "wpp-tabs-v4-3-0", "wpp-typography-v4-3-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-legacy-sticky-bar-v4-2-0":
+    case "wpp-legacy-sticky-bar-v4-3-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppLegacyStickyBar$1);
       }
       break;
-    case "wpp-action-button-v4-2-0":
+    case "wpp-action-button-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-button-v4-2-0":
+    case "wpp-button-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-chevron-v4-2-0":
+    case "wpp-icon-chevron-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-spinner-v4-2-0":
+    case "wpp-spinner-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-tab-v4-2-0":
+    case "wpp-tab-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tabs-v4-2-0":
+    case "wpp-tabs-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-2-0":
+    case "wpp-typography-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

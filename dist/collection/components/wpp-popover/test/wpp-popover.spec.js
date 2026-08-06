@@ -98,7 +98,7 @@ describe('wpp-popover', () => {
   it('should render custom clear text from locales', async () => {
     const page = await newSpecPage({
       components: [WppPopover],
-      template: () => (h("wpp-popover-v4-2-0", { showClearButton: true, locales: { clearText: 'Reset' } }, h("wpp-button-v4-2-0", { slot: "trigger-element" }, "Trigger Button"), h("div", null, "Content"))),
+      template: () => (h("wpp-popover-v4-3-0", { showClearButton: true, locales: { clearText: 'Reset' } }, h("wpp-button-v4-3-0", { slot: "trigger-element" }, "Trigger Button"), h("div", null, "Content"))),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await page.waitForChanges();

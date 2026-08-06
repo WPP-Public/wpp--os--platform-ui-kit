@@ -728,49 +728,49 @@ export class WppRichtext {
     const iconProps = { size: 'm', color: 'inherit' };
     switch (actionName) {
       case 'bold':
-        return h("wpp-icon-bold-v4-2-0", { ...iconProps });
+        return h("wpp-icon-bold-v4-3-0", { ...iconProps });
       case 'italic':
-        return h("wpp-icon-italic-v4-2-0", { ...iconProps });
+        return h("wpp-icon-italic-v4-3-0", { ...iconProps });
       case 'underline':
-        return h("wpp-icon-underline-v4-2-0", { ...iconProps });
+        return h("wpp-icon-underline-v4-3-0", { ...iconProps });
       case 'strike':
-        return h("wpp-icon-strike-through-v4-2-0", { ...iconProps });
+        return h("wpp-icon-strike-through-v4-3-0", { ...iconProps });
       case 'codeBlock':
-        return h("wpp-icon-code-view-v4-2-0", { ...iconProps });
+        return h("wpp-icon-code-view-v4-3-0", { ...iconProps });
       case 'blockquote':
-        return h("wpp-icon-blockquote-v4-2-0", { ...iconProps });
+        return h("wpp-icon-blockquote-v4-3-0", { ...iconProps });
       case 'orderedList':
-        return h("wpp-icon-ordered-list-v4-2-0", { ...iconProps });
+        return h("wpp-icon-ordered-list-v4-3-0", { ...iconProps });
       case 'bulletList':
-        return h("wpp-icon-unordered-list-v4-2-0", { ...iconProps });
+        return h("wpp-icon-unordered-list-v4-3-0", { ...iconProps });
       case 'outdent':
-        return h("wpp-icon-indent-decrease-v4-2-0", { ...iconProps });
+        return h("wpp-icon-indent-decrease-v4-3-0", { ...iconProps });
       case 'indent':
-        return h("wpp-icon-indent-increase-v4-2-0", { ...iconProps });
+        return h("wpp-icon-indent-increase-v4-3-0", { ...iconProps });
       case 'heading1':
-        return h("wpp-icon-h1-v4-2-0", { ...iconProps });
+        return h("wpp-icon-h1-v4-3-0", { ...iconProps });
       case 'heading2':
-        return h("wpp-icon-h2-v4-2-0", { ...iconProps });
+        return h("wpp-icon-h2-v4-3-0", { ...iconProps });
       case 'alignLeft':
-        return h("wpp-icon-text-alignment-left-v4-2-0", { ...iconProps });
+        return h("wpp-icon-text-alignment-left-v4-3-0", { ...iconProps });
       case 'alignCenter':
-        return h("wpp-icon-text-alignment-center-v4-2-0", { ...iconProps });
+        return h("wpp-icon-text-alignment-center-v4-3-0", { ...iconProps });
       case 'alignRight':
-        return h("wpp-icon-text-alignment-right-v4-2-0", { ...iconProps });
+        return h("wpp-icon-text-alignment-right-v4-3-0", { ...iconProps });
       case 'alignJustify':
-        return h("wpp-icon-text-alignment-justify-v4-2-0", { ...iconProps });
+        return h("wpp-icon-text-alignment-justify-v4-3-0", { ...iconProps });
       case 'link':
-        return h("wpp-icon-link-v4-2-0", { ...iconProps });
+        return h("wpp-icon-link-v4-3-0", { ...iconProps });
       case 'image':
-        return h("wpp-icon-image-v4-2-0", { ...iconProps });
+        return h("wpp-icon-image-v4-3-0", { ...iconProps });
       case 'video':
-        return h("wpp-icon-video-clip-v4-2-0", { ...iconProps });
+        return h("wpp-icon-video-clip-v4-3-0", { ...iconProps });
       case 'attachment':
-        return h("wpp-icon-attach-v4-2-0", { ...iconProps });
+        return h("wpp-icon-attach-v4-3-0", { ...iconProps });
       case 'undo':
-        return h("wpp-icon-undo-v4-2-0", { ...iconProps });
+        return h("wpp-icon-undo-v4-3-0", { ...iconProps });
       case 'redo':
-        return h("wpp-icon-redo-v4-2-0", { ...iconProps });
+        return h("wpp-icon-redo-v4-3-0", { ...iconProps });
       default:
         return null;
     }
@@ -916,10 +916,10 @@ export class WppRichtext {
       { value: '5xl', label: '5XL' },
     ];
     const currentLabel = sizes.find(s => s.value === this.activeFontSize)?.label || 'S';
-    return (h("wpp-menu-context-v4-2-0", { class: "ql-size-menu", dropdownConfig: this.fontSizeDropdownConfig, "data-testid": "font-size-picker" }, h("wpp-action-button-v4-2-0", { slot: "trigger-element", variant: "secondary", class: "ql-size-trigger", disabled: this.disabled }, currentLabel, h("wpp-icon-chevron-v4-2-0", { slot: "icon-end", direction: this.isFontSizePickerOpen ? 'up' : 'down', size: "s" })), h("div", null, sizes.map(s => (h("wpp-list-item-v4-2-0", { checked: this.activeFontSize === s.value, onWppChangeListItem: () => this.onFontSizeChange(s.value) }, h("span", { slot: "label" }, s.label)))))));
+    return (h("wpp-menu-context-v4-3-0", { class: "ql-size-menu", dropdownConfig: this.fontSizeDropdownConfig, "data-testid": "font-size-picker" }, h("wpp-action-button-v4-3-0", { slot: "trigger-element", variant: "secondary", class: "ql-size-trigger", disabled: this.disabled }, currentLabel, h("wpp-icon-chevron-v4-3-0", { slot: "icon-end", direction: this.isFontSizePickerOpen ? 'up' : 'down', size: "s" })), h("div", null, sizes.map(s => (h("wpp-list-item-v4-3-0", { checked: this.activeFontSize === s.value, onWppChangeListItem: () => this.onFontSizeChange(s.value) }, h("span", { slot: "label" }, s.label)))))));
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-required": this.required, "data-testid": "wpp-rich-text" }, h("wpp-richtext-icon-loader-v4-2-0", null), h("wpp-richtext-common-styles-v4-2-0", null), this.labelConfig?.text && (h("wpp-label-v4-2-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.formControlCssClasses(), "data-testid": "rich-text-form" }, h("slot", { name: "editor-toolbar" }, this.parsedToolbarItems.length > 0 && (h("div", { class: "ql-toolbar ql-wpp", role: "toolbar", "aria-label": "Text formatting" }, this.parsedToolbarItems.map(group => {
+    return (h(Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-required": this.required, "data-testid": "wpp-rich-text" }, h("wpp-richtext-icon-loader-v4-3-0", null), h("wpp-richtext-common-styles-v4-3-0", null), this.labelConfig?.text && (h("wpp-label-v4-3-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.formControlCssClasses(), "data-testid": "rich-text-form" }, h("slot", { name: "editor-toolbar" }, this.parsedToolbarItems.length > 0 && (h("div", { class: "ql-toolbar ql-wpp", role: "toolbar", "aria-label": "Text formatting" }, this.parsedToolbarItems.map(group => {
       if (group.length === 0)
         return null;
       return (h("span", { class: "ql-formats" }, group.map(actionName => {
@@ -934,16 +934,16 @@ export class WppRichtext {
         (this.linkPromptMode === 'edit' ? ' ql-editing' : '') +
         (this.linkPromptPosition.flip ? ' ql-flip' : ''), "data-mode": this.linkPromptMode === 'edit' ? 'link' : undefined, "data-testid": "richtext-link-prompt", style: { top: `${this.linkPromptPosition.top}px`, left: `${this.linkPromptPosition.left}px` } }, h("div", { class: "ql-tooltip-wrapper" }, this.linkPromptMode === 'edit'
       ? [
-        h("wpp-input-v4-2-0", { key: "link-input", size: "s", type: "text", placeholder: "https://", value: this.linkPromptValue, onWppChange: this.onLinkPromptInput, onKeyDown: this.onLinkPromptKeyDown, "data-testid": "richtext-link-prompt-input" }),
-        h("wpp-action-button-v4-2-0", { key: "link-save", class: "ql-action ql-save", variant: "primary", onClick: this.onLinkPromptSave, "data-testid": "richtext-link-prompt-save" }, "Save"),
+        h("wpp-input-v4-3-0", { key: "link-input", size: "s", type: "text", placeholder: "https://", value: this.linkPromptValue, onWppChange: this.onLinkPromptInput, onKeyDown: this.onLinkPromptKeyDown, "data-testid": "richtext-link-prompt-input" }),
+        h("wpp-action-button-v4-3-0", { key: "link-save", class: "ql-action ql-save", variant: "primary", onClick: this.onLinkPromptSave, "data-testid": "richtext-link-prompt-save" }, "Save"),
       ]
       : [
         h("a", { key: "link-preview", class: "ql-preview", rel: "noopener noreferrer", target: "_blank", href: this.linkPromptPreviewHref || 'about:blank', "data-testid": "richtext-link-prompt-preview" }, this.linkPromptPreviewHref),
-        h("div", { key: "link-action-buttons", class: "ql-action-buttons" }, h("wpp-action-button-v4-2-0", { class: "ql-action ql-edit", variant: "primary", onClick: this.onLinkPromptEdit, "data-testid": "richtext-link-prompt-edit" }, "Edit"), h("wpp-action-button-v4-2-0", { class: "ql-delete", variant: "destructive", onClick: this.onLinkPromptDelete, "data-testid": "richtext-link-prompt-delete" }, "Delete")),
-      ]))), h("div", { key: "tiptap-editor-container", ref: el => (this.containerElement = el), class: "tiptap-editor-container", "data-testid": "richtext-editor" }), h("img", { class: "image-actions__proxy-image", style: { display: 'none' } }), Boolean(this.name) && (h("input", { ref: el => (this.formControlInput = el), tabindex: "-1", id: this.name, class: "form-control-input", "data-testid": "rich-text-input", disabled: this.disabled }))), (Boolean(this.message) || Boolean(this.charactersLimit)) && (h("div", { class: this.messageCssClasses(), part: "message-wrapper" }, Boolean(this.message) && (h("wpp-inline-message-v4-2-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", class: "message", "data-testid": "message" })), Boolean(this.charactersLimit) && (h("div", { class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, h("wpp-typography-v4-2-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":\u00A0"), h("wpp-typography-v4-2-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit)))))));
+        h("div", { key: "link-action-buttons", class: "ql-action-buttons" }, h("wpp-action-button-v4-3-0", { class: "ql-action ql-edit", variant: "primary", onClick: this.onLinkPromptEdit, "data-testid": "richtext-link-prompt-edit" }, "Edit"), h("wpp-action-button-v4-3-0", { class: "ql-delete", variant: "destructive", onClick: this.onLinkPromptDelete, "data-testid": "richtext-link-prompt-delete" }, "Delete")),
+      ]))), h("div", { key: "tiptap-editor-container", ref: el => (this.containerElement = el), class: "tiptap-editor-container", "data-testid": "richtext-editor" }), h("img", { class: "image-actions__proxy-image", style: { display: 'none' } }), Boolean(this.name) && (h("input", { ref: el => (this.formControlInput = el), tabindex: "-1", id: this.name, class: "form-control-input", "data-testid": "rich-text-input", disabled: this.disabled }))), (Boolean(this.message) || Boolean(this.charactersLimit)) && (h("div", { class: this.messageCssClasses(), part: "message-wrapper" }, Boolean(this.message) && (h("wpp-inline-message-v4-3-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", class: "message", "data-testid": "message" })), Boolean(this.charactersLimit) && (h("div", { class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, h("wpp-typography-v4-3-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":\u00A0"), h("wpp-typography-v4-3-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit)))))));
   }
   static get is() { return "wpp-richtext"; }
-  static get registryIs() { return "wpp-richtext-v4-2-0"; }
+  static get registryIs() { return "wpp-richtext-v4-3-0"; }
   static get originalStyleUrls() {
     return {
       "$": ["wpp-richtext.scss"]

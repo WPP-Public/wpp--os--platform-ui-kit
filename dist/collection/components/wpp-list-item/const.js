@@ -3,6 +3,7 @@ export var EVENT_SOURCE;
   EVENT_SOURCE["RIGHT_SLOT"] = "RIGHT_SLOT";
 })(EVENT_SOURCE || (EVENT_SOURCE = {}));
 export const PRESENTATION_ROLE = 'presentation';
+export const MENU_ITEM_ACTIVE_CLASS = 'wpp-menu-item-active';
 export const INTERACTIVE_RIGHT_SLOT_SELECTOR = [
   'a[href]',
   'button',

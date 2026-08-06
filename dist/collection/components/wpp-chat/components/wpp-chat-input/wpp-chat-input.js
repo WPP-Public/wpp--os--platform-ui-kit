@@ -4,14 +4,9 @@ import { EXTENSION_TO_TYPE } from '../../../wpp-file-upload/const';
 import { WrappedSlot } from '../../../common/WrappedSlot/WrappedSlot';
 import { debounce, getSlotEmptyStates, hasParentWithId, mergeLocales, transformToVersionedTag, } from '../../../../utils/utils';
 import { debounceWithControl, TOAST_DURATION } from './utils';
-import { DEFAULT_FILE_UPLOAD_CONFIG, MAX_INPUT_AREA_HEIGHT, MIN_TEXTAREA_HEIGHT, LOCALES_DEFAULTS, UPLOAD_ACTION_ID, UPLOAD_ICON, } from './consts';
+import { DEFAULT_FILE_UPLOAD_CONFIG, MAX_INPUT_AREA_HEIGHT, MIN_TEXTAREA_HEIGHT, LOCALES_DEFAULTS, UPLOAD_ACTION_ID, UPLOAD_ICON, getDefaultModelOptions, } from './consts';
 import { Z_INDEX } from '../../../../common/consts';
 import { themeSubscriptionController } from '../../../../utils/subscribe-to-theme';
-// Model-selector dropdown defaults applied centrally to the slotted menu-context
-// (Figma spec) so consuming apps don't repeat them. SELECT_DROPDOWN_CLASS is also
-// targeted by a global rule that spaces the dropdown list items 4px apart.
-const SELECT_DROPDOWN_WIDTH = '200px';
-const SELECT_DROPDOWN_CLASS = 'wpp-chat-input-model-options';
 /**
  * @slot alert - Optional alert (for example wpp-chat-alert) rendered at the top of the chat input frame. Dismissing it hides the alert without affecting the rest of the input.
  * @part alert - Wrapper around the alert slot.
@@ -120,39 +115,6 @@ export class WppChatInput {
       }
       this.wppActionsMenuItemClick.emit(action);
     };
-    // Centralizes the chat-input model-selector wiring so consuming apps don't have
-    // to repeat these overrides per example/framework:
-    //  - SC 4.1.2 (nested-interactive): the decorative brand logo (wpp-avatar) sitting
-    //    inside the interactive trigger button must not be a focusable widget, so it is
-    //    demoted to role="presentation" (which also drops its tabindex).
-    //  - The dropdown width is pinned to the Figma spec (200px) on the slotted
-    //    menu-context, and tagged with a class. That class lets menu-context apply the
-    //    dropdown's own a11y wiring (menuitem roles, non-interactive option avatars) and
-    //    the global rule space the option rows 4px apart. The dropdown content is moved
-    //    to document.body by tippy, so it cannot be reached from here — only the trigger
-    //    (which stays in place) is configured in this method.
-    this.configureSelectSlot = () => {
-      const selectEl = this.host.querySelector('[slot="select"]');
-      if (!selectEl)
-        return;
-      const triggerAvatars = selectEl.querySelectorAll('[slot="icon-start"], [slot="icon-end"]');
-      triggerAvatars.forEach(el => {
-        el.setAttribute('role', 'presentation');
-        if (el.tabIndex >= 0)
-          el.tabIndex = -1;
-      });
-      const menuContext = (selectEl.matches(transformToVersionedTag('wpp-menu-context'))
-        ? selectEl
-        : selectEl.querySelector(transformToVersionedTag('wpp-menu-context')));
-      if (menuContext) {
-        if (menuContext.listWidth === 'auto')
-          menuContext.listWidth = SELECT_DROPDOWN_WIDTH;
-        const externalClasses = (menuContext.externalClass ?? '').split(' ').filter(Boolean);
-        if (!externalClasses.includes(SELECT_DROPDOWN_CLASS)) {
-          menuContext.externalClass = [...externalClasses, SELECT_DROPDOWN_CLASS].join(' ');
-        }
-      }
-    };
     this.updateSlotData = () => {
       const emptyStates = getSlotEmptyStates(this.host.childNodes, {
         select: '[slot="select"]',
@@ -162,7 +124,6 @@ export class WppChatInput {
       this.hasSelectSlot = !emptyStates.select;
       this.hasAlertSlot = !emptyStates.alert;
       this.hasReferencesSlot = !emptyStates.references;
-      this.configureSelectSlot();
     };
     // A fresh alert appearing in the slot should always be shown, even if a
     // previous one was dismissed.
@@ -424,6 +385,7 @@ export class WppChatInput {
       if (!this.recognition)
         return;
       this.isAudioRecording = !this.isAudioRecording;
+      this.wppMic.emit({ isRecording: this.isAudioRecording });
       if (this.isAudioRecording) {
         this.startSpeechRecognition();
       }
@@ -431,22 +393,64 @@ export class WppChatInput {
         this.stopSpeechRecognition();
       }
     };
-    this.shouldDisplaySend = () => this.disabled
+    this.shouldDisplaySend = () => this.disabled || this.errorAttachmentsList.length > 0
       ? false
-      : !!this.internalValue.trim() ||
-        this.isGenerating ||
-        [...this.successAttachmentsList, ...this.errorAttachmentsList].length > 0;
-    this.renderMicrophoneBtn = (recordButtonLabel) => (h("wpp-action-button-v4-2-0", { "data-testid": "wpp-micophone-btn", onClick: this.handleClickAudioRecording, variant: "secondary", ariaProps: { label: recordButtonLabel }, disabled: this.disabled }, this.isAudioRecording ? h("wpp-icon-stop-v4-2-0", { slot: "icon-start" }) : h("wpp-icon-mic-on-v4-2-0", { slot: "icon-start" })));
-    this.renderActionsMenu = () => (h("wpp-menu-context-v4-2-0", { class: "actions-menu", part: "actions-menu", dropdownConfig: this.actionsMenuDropdownConfig }, h("wpp-action-button-v4-2-0", { slot: "trigger-element", class: "actions-menu-trigger", "data-testid": "actions-menu-trigger-button", variant: "secondary", disabled: this.disabled, ariaProps: {
+      : !!this.internalValue.trim() || this.isGenerating || this.successAttachmentsList.length > 0;
+    this.renderMicrophoneBtn = (recordButtonLabel) => (h("wpp-action-button-v4-3-0", { "data-testid": "wpp-micophone-btn", onClick: this.handleClickAudioRecording, variant: "secondary", ariaProps: { label: recordButtonLabel }, disabled: this.disabled }, this.isAudioRecording ? h("wpp-icon-stop-v4-3-0", { slot: "icon-start" }) : h("wpp-icon-mic-on-v4-3-0", { slot: "icon-start" })));
+    this.renderActionsMenu = () => (h("wpp-menu-context-v4-3-0", { class: "actions-menu", part: "actions-menu", dropdownConfig: this.actionsMenuDropdownConfig }, h("wpp-action-button-v4-3-0", { slot: "trigger-element", class: "actions-menu-trigger", "data-testid": "actions-menu-trigger-button", variant: "secondary", disabled: this.disabled, ariaProps: {
         label: this.getActionsMenuButtonLabel(),
         expanded: this.ariaProps?.actionsMenuButton?.expanded ?? this.actionsMenuOpen,
         haspopup: 'menu',
-      } }, h("wpp-icon-plus-v4-2-0", { slot: "icon-start" })), h("div", null, h("wpp-list-item-v4-2-0", { "data-testid": `actions-menu-item-${UPLOAD_ACTION_ID}`, disabled: this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick({
+      } }, h("wpp-icon-plus-v4-3-0", { slot: "icon-start" })), h("div", null, h("wpp-list-item-v4-3-0", { "data-testid": `actions-menu-item-${UPLOAD_ACTION_ID}`, disabled: this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick({
         id: UPLOAD_ACTION_ID,
         icon: UPLOAD_ICON,
         label: this.getAttachButtonLabel(),
         disabled: this.disabled || this.isFileDialogOpen,
-      }) }, h(transformToVersionedTag(UPLOAD_ICON), { slot: 'left' }), h("span", { slot: "label" }, this.getAttachButtonLabel())), this.actions.map(action => (h("wpp-list-item-v4-2-0", { key: action.id, "data-testid": `actions-menu-item-${action.id}`, disabled: action.disabled || this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))));
+      }) }, h(transformToVersionedTag(UPLOAD_ICON), { slot: 'left' }), h("span", { slot: "label" }, this.getAttachButtonLabel())), this.actions.map(action => (h("wpp-list-item-v4-3-0", { key: action.id, "data-testid": `actions-menu-item-${action.id}`, disabled: action.disabled || this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))));
+    this.getSelectedModel = () => {
+      if (this.selectedModel === 'auto') {
+        return getDefaultModelOptions(this._locales)[0];
+      }
+      else if (this.selectedModel === 'premium') {
+        return getDefaultModelOptions(this._locales)[1];
+      }
+      return this.models.length === 0
+        ? this.selectedModel
+        : this.models.find((model) => model.id === this.selectedModel.id) || getDefaultModelOptions(this._locales)[0];
+    };
+    this.handleModelMenuShow = () => {
+      this.isModelMenuOpen = true;
+    };
+    this.handleModelMenuHide = () => {
+      this.isModelMenuOpen = false;
+    };
+    this.handleModelSelect = (model) => {
+      if (model.id === 'auto') {
+        this.selectedModel = 'auto';
+      }
+      else if (model.id === 'premium') {
+        this.selectedModel = 'premium';
+      }
+      else {
+        this.selectedModel = model;
+      }
+      this.wppModelSelect.emit(model);
+    };
+    this.handleModelChange = () => {
+      this.wppModelBrowse.emit();
+    };
+    this.renderModelSelector = (size) => {
+      const selectedModel = this.getSelectedModel();
+      const triggerAvatar = (h("wpp-avatar-v4-3-0", { slot: "left", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, name: selectedModel.label }));
+      return (h("wpp-menu-context-v4-3-0", { isBtnTrigger: true, class: "model-selector", dropdownConfig: { onShow: this.handleModelMenuShow, onHide: this.handleModelMenuHide, placement: 'top-start' } }, h("wpp-list-item-v4-3-0", { slot: "trigger-element", class: this.modelSelectorTriggerCssClasses(), role: "button", disabled: this.disabled, "aria-label": this._locales.modelSelectorBtnLabel, "aria-expanded": this.isModelMenuOpen, "aria-haspopup": 'menu' }, triggerAvatar, size === 'm' && (h(Fragment, null, h("span", { slot: "label" }, selectedModel.label), h("wpp-icon-chevron-v4-3-0", { slot: "right", direction: this.isModelMenuOpen ? 'up' : 'down' })))), h("div", { class: "wpp-model-dropdown" }, getDefaultModelOptions(this._locales).map((model) => this.renderModelListItem(model, model.id === selectedModel.id)), h("wpp-divider-v4-3-0", null), this.models.length > 0 ? (this.models.map((model) => this.renderModelListItem(model, model.id === selectedModel.id))) : (h("wpp-list-item-v4-3-0", { onWppChangeListItem: this.handleModelChange }, h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), h("wpp-icon-chevron-v4-3-0", { slot: "right", direction: "right" }))))));
+    };
+    this.renderModelListItem = (model, checked) => (h("wpp-list-item-v4-3-0", { key: model.id, checked: checked, onWppChangeListItem: () => this.handleModelSelect(model) }, h("wpp-avatar-v4-3-0", { role: "presentation", slot: "left", size: "xs", variant: "square", src: model.logo, name: model.label }), h("span", { slot: "label" }, model.label), model?.caption && (h("span", { slot: "caption" }, model.caption))));
+    this.modelSelectorTriggerCssClasses = () => ({
+      'select-model-trigger': true,
+      [`size-${this.size}`]: true,
+      'is-menu-opened': this.isModelMenuOpen,
+      'is-chat-expanded': this.size === 's' && this.isChatInputExpanded,
+    });
     this.hostCssClasses = () => ({
       'wpp-chat-input': true,
     });
@@ -552,6 +556,8 @@ export class WppChatInput {
     this.charactersLimit = undefined;
     this.attachments = [];
     this.withSelect = false;
+    this.models = [];
+    this.selectedModel = 'auto';
     this.actions = [];
     this.textValue = '';
     this.debounceEnabled = true;
@@ -580,6 +586,7 @@ export class WppChatInput {
     this.actionsMenuOpen = false;
     this.isFocused = false;
     this.isAudioRecording = false;
+    this.isModelMenuOpen = false;
   }
   onAttachmentsChange(newValue) {
     if (this.mergedFileUploadConfig.controlled) {
@@ -629,8 +636,6 @@ export class WppChatInput {
     }
     this.resizeObserver = resizeObserver;
     window.addEventListener('focus', this.onWindowFocus, true);
-    // Run once after first render so select-slot elements are already in the DOM
-    requestAnimationFrame(() => this.configureSelectSlot());
   }
   addExpandedListeners() {
     this.expandedListenersAbort?.abort();
@@ -850,7 +855,6 @@ export class WppChatInput {
     }
     if (this.disabled ||
       this.isGenerating ||
-      this.isSendDisabled ||
       (!this.internalValue.trim() && !this.successAttachmentsList.length) ||
       this.errorAttachmentsList.length)
       return;
@@ -948,11 +952,6 @@ export class WppChatInput {
     event.stopPropagation();
     this.scrollToAttachment(this.toastType === 'error' ? 'error' : 'success');
   }
-  get isSendDisabled() {
-    return (this.disabled ||
-      (!this.internalValue.trim() && this.successAttachmentsList.length === 0) ||
-      this.errorAttachmentsList.length > 0);
-  }
   render() {
     const allFiles = [...this.successAttachmentsList, ...this.errorAttachmentsList];
     const isMaximizedS = this.isChatInputExpanded && this.size === 's';
@@ -963,18 +962,17 @@ export class WppChatInput {
     const recordButtonLabel = this.isAudioRecording
       ? this.getAudioStopRecordButtonLabel()
       : this.getAudioRecordButtonLabel();
-    const actionButtonDisabled = this.isGenerating ? this.disabled : this.isSendDisabled;
     const ariaInvalid = this.ariaProps?.textarea?.invalid !== undefined ? this.ariaProps.textarea.invalid : undefined;
-    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, alert, toast, input-area, attachments, references, text-input, actions-bar, left-actions, right-actions, file-item, actions-menu", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick, onFocus: this.handleOnFocus }, h("div", { class: this.chatInputContainerClasses(), onKeyDown: this.onExpandedKeyDown, part: "chat-input-container" }, h("div", { class: "alert", part: "alert", hidden: !this.hasAlertSlot || this.isAlertDismissed }, h("slot", { name: "alert", onSlotchange: this.handleAlertSlotChange })), this.showToast && (h("wpp-toast-v4-2-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { id: this.inputAreaId, class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments", role: "list", "aria-label": this._locales.attachmentsLabel }, allFiles.map((file, index) => (h("wpp-file-upload-item-v4-2-0", { key: index, file: file, variant: "chat", format: this.mergedFileUploadConfig.format, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
+    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, alert, toast, input-area, attachments, references, text-input, actions-bar, left-actions, right-actions, file-item, actions-menu", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick, onFocus: this.handleOnFocus }, h("div", { class: this.chatInputContainerClasses(), onKeyDown: this.onExpandedKeyDown, part: "chat-input-container" }, h("div", { class: "alert", part: "alert", hidden: !this.hasAlertSlot || this.isAlertDismissed }, h("slot", { name: "alert", onSlotchange: this.handleAlertSlotChange })), this.showToast && (h("wpp-toast-v4-3-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { id: this.inputAreaId, class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments", role: "list", "aria-label": this._locales.attachmentsLabel }, allFiles.map((file, index) => (h("wpp-file-upload-item-v4-3-0", { key: index, file: file, variant: "chat", format: this.mergedFileUploadConfig.format, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
         sizeError: this.mergedFileUploadConfig.locales.sizeError,
         formatError: this.mergedFileUploadConfig.locales.formatError,
-      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded, role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": allFiles.length.toString() }))))), h("div", { class: "references", part: "references", hidden: !this.hasReferencesSlot }, h("slot", { name: "references", onSlotchange: this.handleReferencesSlotChange })), h("textarea", { id: (this.htmlAttributes?.textarea?.id ?? this.textareaId) || this.textareaAutoId, name: this.htmlAttributes?.textarea?.name ?? this.textareaName ?? 'message', class: this.textInputClasses(), placeholder: placeholderText, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input", "aria-label": this.getTextareaLabel(), "aria-invalid": ariaInvalid, autocomplete: this.htmlAttributes?.textarea?.autocomplete, maxLength: this.htmlAttributes?.textarea?.maxLength, "data-gramm": "false", "data-gramm_editor": "false" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, this.renderActionsMenu(), h("div", { class: this.minimizedInput(), part: "minimized-input", "data-pressed": this.minimizedPressed ? 'true' : null, role: "button", tabindex: this.disabled ? -1 : 0, "aria-expanded": this.isChatInputExpanded ? 'true' : 'false', "aria-controls": this.inputAreaId, "aria-label": this.getMinimizedAriaLabel(), "aria-describedby": this.minimizedDescId, onKeyDown: this.onMinimizedKeyDown, onKeyUp: this.onMinimizedKeyUp }, h("wpp-typography-v4-2-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || placeholderText)), h("span", { id: this.minimizedDescId, class: "sr-only" }, this.getMinimizedDescriptionText()), h("div", { class: this.rightActionsClasses() }, this.renderMicrophoneBtn(recordButtonLabel), this.shouldDisplaySend() && (h("wpp-button-v4-2-0", { class: "play-btn", "data-testid": "send-icon-only-button", size: "s", variant: this.isGenerating ? 'secondary' : 'primary', onClick: e => {
+      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded, role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": allFiles.length.toString() }))))), h("div", { class: "references", part: "references", hidden: !this.hasReferencesSlot }, h("slot", { name: "references", onSlotchange: this.handleReferencesSlotChange })), h("textarea", { id: (this.htmlAttributes?.textarea?.id ?? this.textareaId) || this.textareaAutoId, name: this.htmlAttributes?.textarea?.name ?? this.textareaName ?? 'message', class: this.textInputClasses(), placeholder: placeholderText, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input", "aria-label": this.getTextareaLabel(), "aria-invalid": ariaInvalid, autocomplete: this.htmlAttributes?.textarea?.autocomplete, maxLength: this.htmlAttributes?.textarea?.maxLength, "data-gramm": "false", "data-gramm_editor": "false" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, this.renderActionsMenu(), h("div", { class: this.minimizedInput(), part: "minimized-input", "data-pressed": this.minimizedPressed ? 'true' : null, role: "button", tabindex: this.disabled ? -1 : 0, "aria-expanded": this.isChatInputExpanded ? 'true' : 'false', "aria-controls": this.inputAreaId, "aria-label": this.getMinimizedAriaLabel(), "aria-describedby": this.minimizedDescId, onKeyDown: this.onMinimizedKeyDown, onKeyUp: this.onMinimizedKeyUp }, h("wpp-typography-v4-3-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || placeholderText)), h("span", { id: this.minimizedDescId, class: "sr-only" }, this.getMinimizedDescriptionText()), h("div", { class: this.rightActionsClasses() }, !this.withSelect && this.renderModelSelector('s'), this.renderMicrophoneBtn(recordButtonLabel), this.shouldDisplaySend() && (h("wpp-button-v4-3-0", { class: "play-btn", "data-testid": "send-icon-only-button", size: "s", variant: this.isGenerating ? 'secondary' : 'primary', onClick: e => {
         e.stopPropagation();
         this.isGenerating ? this.handleStop() : this.handleSend();
-      }, disabled: actionButtonDisabled, ariaProps: { label: actionButtonLabel } }, this.isGenerating ? (h("wpp-icon-stop-v4-2-0", { slot: "icon-start" })) : (h("wpp-icon-arrow-v4-2-0", { direction: "up", slot: "icon-start" })))))))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar", role: "toolbar", "aria-label": this.getActionsToolbarLabel() }, h("div", { class: this.leftActionsClasses(), part: "left-actions", role: "group", "aria-label": this.getLeftActionsLabel() }, this.renderActionsMenu(), this.enableMic && (h("wpp-action-button-v4-2-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled, ariaProps: { label: this._locales.voiceLabel } }, h("wpp-icon-mic-on-v4-2-0", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions", role: "group", "aria-label": this.getRightActionsLabel() }, this.withSelect && (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })), this.renderMicrophoneBtn(recordButtonLabel), this.shouldDisplaySend() && (h("wpp-button-v4-2-0", { class: "play-btn", "data-testid": "send-icon-only-button", size: "s", disabled: actionButtonDisabled, variant: this.isGenerating ? 'secondary' : 'primary', onClick: () => (this.isGenerating ? this.handleStop() : this.handleSend()), ariaProps: { label: actionButtonLabel } }, this.isGenerating ? (h("wpp-icon-stop-v4-2-0", { slot: "icon-start" })) : (h("wpp-icon-arrow-v4-2-0", { direction: "up", slot: "icon-start" }))))))), h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.htmlAttributes?.attachmentsInput?.multiple ?? this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.htmlAttributes?.attachmentsInput?.accept ?? this.getAcceptExtensions().join(), title: "", id: this.htmlAttributes?.attachmentsInput?.id ?? 'wpp-ci-file', name: this.htmlAttributes?.attachmentsInput?.name ?? 'attachments', "aria-hidden": "true" }))));
+      }, ariaProps: { label: actionButtonLabel } }, this.isGenerating ? (h("wpp-icon-stop-v4-3-0", { slot: "icon-start" })) : (h("wpp-icon-arrow-v4-3-0", { direction: "up", slot: "icon-start" })))))))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar", role: "toolbar", "aria-label": this.getActionsToolbarLabel() }, h("div", { class: this.leftActionsClasses(), part: "left-actions", role: "group", "aria-label": this.getLeftActionsLabel() }, this.renderActionsMenu(), this.enableMic && (h("wpp-action-button-v4-3-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled, ariaProps: { label: this._locales.voiceLabel } }, h("wpp-icon-mic-on-v4-3-0", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions", role: "group", "aria-label": this.getRightActionsLabel() }, this.withSelect ? (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })) : (this.renderModelSelector('m')), this.renderMicrophoneBtn(recordButtonLabel), this.shouldDisplaySend() && (h("wpp-button-v4-3-0", { class: "play-btn", "data-testid": "send-icon-only-button", size: "s", variant: this.isGenerating ? 'secondary' : 'primary', onClick: () => (this.isGenerating ? this.handleStop() : this.handleSend()), ariaProps: { label: actionButtonLabel } }, this.isGenerating ? (h("wpp-icon-stop-v4-3-0", { slot: "icon-start" })) : (h("wpp-icon-arrow-v4-3-0", { direction: "up", slot: "icon-start" }))))))), h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.htmlAttributes?.attachmentsInput?.multiple ?? this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.htmlAttributes?.attachmentsInput?.accept ?? this.getAcceptExtensions().join(), title: "", id: this.htmlAttributes?.attachmentsInput?.id ?? 'wpp-ci-file', name: this.htmlAttributes?.attachmentsInput?.name ?? 'attachments', "aria-hidden": "true" }))));
   }
   static get is() { return "wpp-chat-input"; }
-  static get registryIs() { return "wpp-chat-input-v4-2-0"; }
+  static get registryIs() { return "wpp-chat-input-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -1193,12 +1191,61 @@ export class WppChatInput {
         "required": false,
         "optional": false,
         "docs": {
-          "tags": [],
+          "tags": [{
+              "name": "deprecated",
+              "text": "- To pass a custom list of AI models, use the `models` property."
+            }],
           "text": "If set to true, displays `Select` in left actions. The Select must placed in the `.select` slot."
         },
         "attribute": "with-select",
         "reflect": true,
         "defaultValue": "false"
+      },
+      "models": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "ChatInputModel[]",
+          "resolved": "ChatInputModel[]",
+          "references": {
+            "ChatInputModel": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-chat/components/wpp-chat-input/types.ts::ChatInputModel"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the list of AI models that will be rendered in the `models` dropdowns. Do not use it together with the `withSelect` property.\nIf the array is empty, the dropdown will render an additional action: \"Select model or agent\" that, when clicked,\nwill emit the `wppModelBrowse` event."
+        },
+        "defaultValue": "[]"
+      },
+      "selectedModel": {
+        "type": "string",
+        "mutable": true,
+        "complexType": {
+          "original": "ChatInputSelectedModel",
+          "resolved": "\"auto\" | \"premium\" | ChatInputModel",
+          "references": {
+            "ChatInputSelectedModel": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-chat/components/wpp-chat-input/types.ts::ChatInputSelectedModel"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the ID of the selected AI model. Used when the initial selected model should be different than the default value (\"Auto\").\nThis property should be used when selecting the AI model follows a different flow than that of the component (E.g: selecting model from a side-modal)."
+        },
+        "attribute": "selected-model",
+        "reflect": false,
+        "defaultValue": "'auto'"
       },
       "actions": {
         "type": "unknown",
@@ -1401,7 +1448,7 @@ export class WppChatInput {
         "mutable": false,
         "complexType": {
           "original": "Partial<ChatInputLocaleInterface>",
-          "resolved": "{ placeholder?: string | undefined; minimizedDescription?: string | undefined; actionsToolbarLabel?: string | undefined; leftActionsGroupLabel?: string | undefined; rightActionsGroupLabel?: string | undefined; sendLabel?: string | undefined; stopLabel?: string | undefined; attachLabel?: string | undefined; voiceLabel?: string | undefined; attachmentsLabel?: string | undefined; messageInputLabel?: string | undefined; actionsMenuLabel?: string | undefined; audioRecordButtonLabel?: string | undefined; audioStopRecordButtonLabel?: string | undefined; audioLanguage?: string | undefined; }",
+          "resolved": "{ placeholder?: string | undefined; minimizedDescription?: string | undefined; actionsToolbarLabel?: string | undefined; leftActionsGroupLabel?: string | undefined; rightActionsGroupLabel?: string | undefined; sendLabel?: string | undefined; stopLabel?: string | undefined; attachLabel?: string | undefined; voiceLabel?: string | undefined; attachmentsLabel?: string | undefined; messageInputLabel?: string | undefined; actionsMenuLabel?: string | undefined; audioRecordButtonLabel?: string | undefined; audioStopRecordButtonLabel?: string | undefined; audioLanguage?: string | undefined; modelSelectorBtnLabel?: string | undefined; modelAutoOptionLabel?: string | undefined; modelAutoOptionCaption?: string | undefined; modelPremiumOptionLabel?: string | undefined; modelPremiumOptionCaption?: string | undefined; modelSelectorListItemLabel?: string | undefined; }",
           "references": {
             "Partial": {
               "location": "global",
@@ -1442,7 +1489,8 @@ export class WppChatInput {
       "internalValue": {},
       "actionsMenuOpen": {},
       "isFocused": {},
-      "isAudioRecording": {}
+      "isAudioRecording": {},
+      "isModelMenuOpen": {}
     };
   }
   static get events() {
@@ -1489,16 +1537,19 @@ export class WppChatInput {
         "cancelable": true,
         "composed": false,
         "docs": {
-          "tags": [{
-              "name": "internal",
-              "text": "- This prop will be of use in the future, but for now, it's not used."
-            }],
-          "text": "Emitted when the user clicks the \"Mic\" button."
+          "tags": [],
+          "text": "Emitted when the user clicks the microphone button.\nThe detail carries the resulting state: `isRecording` is `true` when listening\nhas just started and `false` when it has just stopped."
         },
         "complexType": {
-          "original": "void",
-          "resolved": "void",
-          "references": {}
+          "original": "ChatInputMicEventDetail",
+          "resolved": "ChatInputMicEventDetail",
+          "references": {
+            "ChatInputMicEventDetail": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-chat/components/wpp-chat-input/types.ts::ChatInputMicEventDetail"
+            }
+          }
         }
       }, {
         "method": "wppChange",
@@ -1631,6 +1682,42 @@ export class WppChatInput {
               "id": "src/components/wpp-chat/components/wpp-chat-input/types.ts::ChatInputActionItemClickEventDetail"
             }
           }
+        }
+      }, {
+        "method": "wppModelSelect",
+        "name": "wppModelSelect",
+        "bubbles": false,
+        "cancelable": true,
+        "composed": false,
+        "docs": {
+          "tags": [],
+          "text": "Emitted when an item from the AI models dropdown is selected.\nThe detail is the selected model object \u2014 a built-in `ChatInputDefaultModel` (`Auto` / `Premium`)\nor one of the dev-provided `ChatInputModel`s."
+        },
+        "complexType": {
+          "original": "ChatInputSelectableModel",
+          "resolved": "ChatInputDefaultModel | ChatInputModel",
+          "references": {
+            "ChatInputSelectableModel": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-chat/components/wpp-chat-input/types.ts::ChatInputSelectableModel"
+            }
+          }
+        }
+      }, {
+        "method": "wppModelBrowse",
+        "name": "wppModelBrowse",
+        "bubbles": false,
+        "cancelable": true,
+        "composed": false,
+        "docs": {
+          "tags": [],
+          "text": "Emitted when the \"Select model or agent\" action from the AI models dropdown is clicked.\nNote: The \"Select model or agent\" action is rendered only when the `models` property is an empty array."
+        },
+        "complexType": {
+          "original": "void",
+          "resolved": "void",
+          "references": {}
         }
       }];
   }

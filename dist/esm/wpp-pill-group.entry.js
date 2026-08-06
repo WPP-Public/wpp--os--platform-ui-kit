@@ -1,5 +1,5 @@
-import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { k as transformToVersionedTag } from './utils-fc9002c9.js';
+import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-93f63aaa.js';
+import { k as transformToVersionedTag } from './utils-452958a4.js';
 import './consts-744c144f.js';
 
 const wppPillGroupCss = ":host{--pill-group-item-margin:var(--wpp-pill-group-item-margin, 0 8px 0 0);--pill-group-label-margin:var(--wpp-pill-group-label-margin, 0 0 8px 0);display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column}:host .label{margin:var(--pill-group-label-margin)}:host .pills-wrapper{display:-ms-inline-flexbox;display:inline-flex}:host .pills-wrapper ::slotted(.wpp-pill:not(:last-child)){margin:var(--pill-group-item-margin)}";
@@ -69,9 +69,9 @@ const WppPillGroup = class {
     }
   }
   render() {
-    return (h(Host, { "aria-multiselectable": this.type === 'multiple', "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, class: this.hostCssClasses(), exportparts: "label, content, inner" }, this.labelConfig?.text && (h("wpp-label-v4-2-0", { class: "label", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: "pills-wrapper", part: "content" }, h("slot", { part: "inner" }))));
+    return (h(Host, { "aria-multiselectable": this.type === 'multiple', "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, class: this.hostCssClasses(), exportparts: "label, content, inner" }, this.labelConfig?.text && (h("wpp-label-v4-3-0", { class: "label", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: "pills-wrapper", part: "content" }, h("slot", { part: "inner" }))));
   }
-  static get registryIs() { return "wpp-pill-group-v4-2-0"; }
+  static get registryIs() { return "wpp-pill-group-v4-3-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "value": ["onValueChange"],

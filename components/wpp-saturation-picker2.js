@@ -1,6 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 
-const wppSaturationPickerCss = ":host{position:relative;display:block;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host .picker-container{position:relative;width:100%;height:208px}:host canvas{width:100%;height:100%;border-radius:var(--wpp-border-radius-s)}:host .marker{position:absolute;width:16px;height:16px;border:3px solid var(--wpp-grey-color-000);border-radius:50%;background-color:transparent;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:0px 1px 5px 0px rgba(52, 58, 63, 0.1019607843), 0px 0px 1px 0px rgba(52, 58, 63, 0.1019607843);box-shadow:0px 1px 5px 0px rgba(52, 58, 63, 0.1019607843), 0px 0px 1px 0px rgba(52, 58, 63, 0.1019607843);-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%);pointer-events:none}";
+const wppSaturationPickerCss = ":host{position:relative;display:block;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host .picker-container{position:relative;width:100%;height:208px}:host canvas{width:100%;height:100%;border-radius:var(--wpp-border-radius-s)}:host .marker{position:absolute;width:16px;height:16px;border:3px solid var(--wpp-grey-color-000);border-radius:50%;background-color:transparent;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%);pointer-events:none}";
 
 const SaturationPicker = /*@__PURE__*/ proxyCustomElement(class SaturationPicker extends HTMLElement {
   constructor() {
@@ -95,7 +95,7 @@ const SaturationPicker = /*@__PURE__*/ proxyCustomElement(class SaturationPicker
         top: `${this.markerY}px`,
       } }))));
   }
-  static get registryIs() { return "wpp-saturation-picker-v4-2-0"; }
+  static get registryIs() { return "wpp-saturation-picker-v4-3-0"; }
   get host() { return this; }
   static get watchers() { return {
     "hue": ["onPropertyChange"],
@@ -103,7 +103,7 @@ const SaturationPicker = /*@__PURE__*/ proxyCustomElement(class SaturationPicker
     "value": ["onPropertyChange"]
   }; }
   static get style() { return wppSaturationPickerCss; }
-}, [1, "wpp-saturation-picker", "wpp-saturation-picker-v4-2-0", {
+}, [1, "wpp-saturation-picker", "wpp-saturation-picker-v4-3-0", {
     "saturation": [1026],
     "value": [1026],
     "hue": [2],
@@ -114,9 +114,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-saturation-picker-v4-2-0"];
+  const components = ["wpp-saturation-picker-v4-3-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-saturation-picker-v4-2-0":
+    case "wpp-saturation-picker-v4-3-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, SaturationPicker);
       }

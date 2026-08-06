@@ -43,11 +43,11 @@ const WppChatAlert$1 = /*@__PURE__*/ proxyCustomElement(class WppChatAlert exten
     return (h("span", { class: "icon", part: "icon", "aria-hidden": "true" }, h(transformToVersionedTag(iconTag), {})));
   }
   render() {
-    return (h(Host, null, h("div", { class: "alert", part: "alert", role: "alert" }, this.renderIcon(), h("wpp-typography-v4-2-0", { class: "message", type: "s-body", part: "message" }, this.message), this.description && (h("wpp-typography-v4-2-0", { class: "description", type: "xs-body", part: "description" }, this.description)), this.closable && (h("wpp-icon-cross-v4-2-0", { class: "close", part: "close", role: "button", tabindex: 0, "aria-label": this._locales.closeLabel, onClick: this.handleClose, onKeyDown: this.handleCloseKeyDown })))));
+    return (h(Host, null, h("div", { class: "alert", part: "alert", role: "alert" }, this.renderIcon(), h("wpp-typography-v4-3-0", { class: "message", type: "s-body", part: "message" }, this.message), this.description && (h("wpp-typography-v4-3-0", { class: "description", type: "xs-body", part: "description" }, this.description)), this.closable && (h("wpp-icon-cross-v4-3-0", { class: "close", part: "close", role: "button", tabindex: 0, "aria-label": this._locales.closeLabel, onClick: this.handleClose, onKeyDown: this.handleCloseKeyDown })))));
   }
-  static get registryIs() { return "wpp-chat-alert-v4-2-0"; }
+  static get registryIs() { return "wpp-chat-alert-v4-3-0"; }
   static get style() { return wppChatAlertCss; }
-}, [1, "wpp-chat-alert", "wpp-chat-alert-v4-2-0", {
+}, [1, "wpp-chat-alert", "wpp-chat-alert-v4-3-0", {
     "type": [513],
     "message": [1],
     "description": [1],
@@ -58,19 +58,19 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-chat-alert-v4-2-0", "wpp-icon-cross-v4-2-0", "wpp-typography-v4-2-0"];
+  const components = ["wpp-chat-alert-v4-3-0", "wpp-icon-cross-v4-3-0", "wpp-typography-v4-3-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-chat-alert-v4-2-0":
+    case "wpp-chat-alert-v4-3-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppChatAlert$1);
       }
       break;
-    case "wpp-icon-cross-v4-2-0":
+    case "wpp-icon-cross-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-2-0":
+    case "wpp-typography-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

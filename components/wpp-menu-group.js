@@ -1,4 +1,5 @@
 import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
+import { P as PRESENTATION_ROLE, G as GROUP_ROLE } from './constants.js';
 import { d as defineCustomElement$3 } from './wpp-divider2.js';
 import { d as defineCustomElement$2 } from './wpp-typography2.js';
 
@@ -12,15 +13,16 @@ const WppMenuGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppMenuGroup exten
     this.hostCssClasses = () => ({
       'wpp-menu-group': true,
     });
+    this.getRole = () => (this.withDivider && !this.header ? PRESENTATION_ROLE : GROUP_ROLE);
     this.header = undefined;
     this.withDivider = false;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "header, divider" }, this.header && (h("wpp-typography-v4-2-0", { type: "2xs-strong", part: "header" }, this.header)), h("slot", null), this.withDivider && h("wpp-divider-v4-2-0", { class: "slot-divider", part: "divider" })));
+    return (h(Host, { class: this.hostCssClasses(), role: this.getRole(), "aria-label": this.header, exportparts: "header, divider" }, this.header && (h("wpp-typography-v4-3-0", { type: "2xs-strong", part: "header" }, this.header)), h("slot", null), this.withDivider && h("wpp-divider-v4-3-0", { class: "slot-divider", part: "divider" })));
   }
-  static get registryIs() { return "wpp-menu-group-v4-2-0"; }
+  static get registryIs() { return "wpp-menu-group-v4-3-0"; }
   static get style() { return wppMenuGroupCss; }
-}, [1, "wpp-menu-group", "wpp-menu-group-v4-2-0", {
+}, [1, "wpp-menu-group", "wpp-menu-group-v4-3-0", {
     "header": [1],
     "withDivider": [4, "with-divider"]
   }]);
@@ -28,19 +30,19 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-menu-group-v4-2-0", "wpp-divider-v4-2-0", "wpp-typography-v4-2-0"];
+  const components = ["wpp-menu-group-v4-3-0", "wpp-divider-v4-3-0", "wpp-typography-v4-3-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-menu-group-v4-2-0":
+    case "wpp-menu-group-v4-3-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppMenuGroup$1);
       }
       break;
-    case "wpp-divider-v4-2-0":
+    case "wpp-divider-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-2-0":
+    case "wpp-typography-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

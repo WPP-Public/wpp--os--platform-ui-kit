@@ -68,6 +68,29 @@ describe('wpp-avatar', () => {
       expect(el.style.getPropertyValue('--avatar-border-radius')).toBe('120px');
     }
   });
+  it('should render icon avatars as rounded rectangles regardless of variant', async () => {
+    const expectedBorderRadiusMap = {
+      xs: 'var(--wpp-border-radius-xs)',
+      s: 'var(--wpp-border-radius-s)',
+      m: 'var(--wpp-border-radius-m)',
+      l: 'var(--wpp-border-radius-m)',
+      xl: 'var(--wpp-border-radius-m)',
+      '2xl': 'var(--wpp-border-radius-l)',
+      '3xl': 'var(--wpp-border-radius-l)',
+      '4xl': 'var(--wpp-border-radius-l)',
+    };
+    for (const size of Object.keys(expectedBorderRadiusMap)) {
+      const page = await newSpecPage({
+        components: [WppAvatar],
+        html: `<wpp-avatar variant="circle" icon="${RAW_ICON}" size="${size}"></wpp-avatar>`,
+      });
+      await page.waitForChanges();
+      const el = page.root;
+      const contentWrapper = el.shadowRoot?.querySelector('.icon-wrapper');
+      expect(el.style.getPropertyValue('--avatar-border-radius')).toBe(expectedBorderRadiusMap[size]);
+      expect(contentWrapper?.classList.contains('square')).toBe(true);
+    }
+  });
   it('should reset image failure state when src changes', () => {
     const a = new WppAvatar();
     a.isImageFailedToLoad = true;
@@ -117,6 +140,17 @@ describe('wpp-avatar', () => {
     await page.waitForChanges();
     const txt = page.root?.shadowRoot?.textContent || '';
     expect(txt).toContain('+5');
+  });
+  it('should render only the icon (not the name abbreviation) for icon avatars', async () => {
+    const page = await newSpecPage({
+      components: [WppAvatar],
+      html: `<wpp-avatar icon="${RAW_ICON}" name="Premium"></wpp-avatar>`,
+    });
+    await page.waitForChanges();
+    const content = page.root?.shadowRoot?.querySelector('[part="content"]');
+    const iconEl = page.root?.shadowRoot?.querySelector(TEST_ICON);
+    expect(iconEl).not.toBeNull();
+    expect(content?.textContent?.trim()).toBe('');
   });
   for (const [size, expected] of Object.entries(EXPECTED_SIZES)) {
     it(`returns ${expected} for size="${size}"`, async () => {

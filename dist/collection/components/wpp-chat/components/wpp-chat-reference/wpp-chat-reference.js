@@ -48,16 +48,16 @@ export class WppChatReference {
     return returnIconFromExtension(extension, null);
   }
   renderFile() {
-    return (h(Fragment, null, h("div", { class: "thumbnail", part: "thumbnail" }, this.renderThumbnail()), h("div", { class: "details", part: "content" }, h("wpp-typography-v4-2-0", { class: "name", type: "xs-midi", part: "name" }, this.name), this.fileType && (h("wpp-typography-v4-2-0", { class: "type", type: "xs-body", part: "type" }, this.fileType)))));
+    return (h(Fragment, null, h("div", { class: "thumbnail", part: "thumbnail" }, this.renderThumbnail()), h("div", { class: "details", part: "content" }, h("wpp-typography-v4-3-0", { class: "name", type: "xs-midi", part: "name" }, this.name), this.fileType && (h("wpp-typography-v4-3-0", { class: "type", type: "xs-body", part: "type" }, this.fileType)))));
   }
   renderText() {
-    return (h("div", { class: "text-content", part: "content" }, h("wpp-typography-v4-2-0", { class: { text: true, [`lines-${this.lines}`]: true }, type: "xs-body", part: "text" }, this.text)));
+    return (h("div", { class: "text-content", part: "content" }, h("wpp-typography-v4-3-0", { class: { text: true, [`lines-${this.lines}`]: true }, type: "xs-body", part: "text" }, this.text)));
   }
   render() {
-    return (h(Host, null, h("div", { class: "reference", part: "reference" }, h("span", { class: "block-line", part: "block-line", "aria-hidden": "true" }), this.type === 'file' ? this.renderFile() : this.renderText(), this.removable && (h("wpp-icon-cross-v4-2-0", { class: "close", part: "close", role: "button", tabindex: 0, "aria-label": this._locales.removeLabel, onClick: this.handleClose, onKeyDown: this.handleCloseKeyDown })))));
+    return (h(Host, null, h("div", { class: "reference", part: "reference" }, h("span", { class: "block-line", part: "block-line", "aria-hidden": "true" }), this.type === 'file' ? this.renderFile() : this.renderText(), this.removable && (h("wpp-icon-cross-v4-3-0", { class: "close", part: "close", role: "button", tabindex: 0, "aria-label": this._locales.removeLabel, onClick: this.handleClose, onKeyDown: this.handleCloseKeyDown })))));
   }
   static get is() { return "wpp-chat-reference"; }
-  static get registryIs() { return "wpp-chat-reference-v4-2-0"; }
+  static get registryIs() { return "wpp-chat-reference-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

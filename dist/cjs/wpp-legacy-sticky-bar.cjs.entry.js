@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-ecf423ba.js');
+const index = require('./index-5f5af6a9.js');
 const consts = require('./consts-d8f5ef98.js');
 
 const MULTIPLE_PRIMARY_BUTTONS_ERROR = 'Only one primary button allowed in the sticky bar.';
@@ -134,16 +134,16 @@ const WppLegacyStickyBar = class {
     }
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses() }, index.h("div", { class: "container" }, this.variant === 'blank' ? (index.h("slot", { name: "content" })) : (index.h(index.Fragment, null, index.h("div", { class: "header" }, index.h("div", { class: "left-area" }, this.withBackButton && (index.h("wpp-action-button-v4-2-0", { variant: "secondary", onClick: this.handleLeftIconClick }, index.h("wpp-icon-chevron-v4-2-0", { slot: "icon-start", direction: "left" }))), index.h("wpp-typography-v4-2-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), index.h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
+    return (index.h(index.Host, { class: this.hostCssClasses() }, index.h("div", { class: "container" }, this.variant === 'blank' ? (index.h("slot", { name: "content" })) : (index.h(index.Fragment, null, index.h("div", { class: "header" }, index.h("div", { class: "left-area" }, this.withBackButton && (index.h("wpp-action-button-v4-3-0", { variant: "secondary", onClick: this.handleLeftIconClick }, index.h("wpp-icon-chevron-v4-3-0", { slot: "icon-start", direction: "left" }))), index.h("wpp-typography-v4-3-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), index.h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
       if (!buttonItem)
         return null;
       if (buttonItem.variant === 'action-button') {
-        return (index.h("wpp-action-button-v4-2-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary" }, buttonItem.text));
+        return (index.h("wpp-action-button-v4-3-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary" }, buttonItem.text));
       }
-      return (index.h("wpp-button-v4-2-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant }, buttonItem.text));
-    }))), this.variant !== 'one-line' && (index.h("div", { class: "body" }, this.variant === 'two-lines' ? (index.h("slot", { name: "content" })) : (this.tabs.length > 0 && (index.h("wpp-tabs-v4-2-0", { size: "s", onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => (index.h("wpp-tab-v4-2-0", { size: "s", key: tabItem.value, value: tabItem.value }, tabItem.text)))))))))))));
+      return (index.h("wpp-button-v4-3-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant }, buttonItem.text));
+    }))), this.variant !== 'one-line' && (index.h("div", { class: "body" }, this.variant === 'two-lines' ? (index.h("slot", { name: "content" })) : (this.tabs.length > 0 && (index.h("wpp-tabs-v4-3-0", { size: "s", onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => (index.h("wpp-tab-v4-3-0", { size: "s", key: tabItem.value, value: tabItem.value }, tabItem.text)))))))))))));
   }
-  static get registryIs() { return "wpp-legacy-sticky-bar-v4-2-0"; }
+  static get registryIs() { return "wpp-legacy-sticky-bar-v4-3-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "buttons": ["updateButtons"],

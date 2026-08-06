@@ -45,8 +45,9 @@
 .content.content-user {
   width: calc(100% - clamp(10%, 56px, 56px));
   padding: 12px;
-  background-color: var(--wpp-primary-color-100);
-  border-radius: var(--wpp-border-radius-m) 0 var(--wpp-border-radius-m) var(--wpp-border-radius-m);
+  background-color: var(--wpp-grey-color-000);
+  border-radius: var(--wpp-border-radius-m);
+  box-shadow: var(--wpp-box-shadow-xs);
 }
 .content.content-user .attachments {
   justify-content: flex-end;
@@ -78,7 +79,7 @@
   height: 0.85em;
   margin-left: 2px;
   vertical-align: text-bottom;
-  background-color: currentColor;
+  background-color: currentcolor;
   border-radius: 1px;
   animation: blink 1s steps(1) infinite;
 }

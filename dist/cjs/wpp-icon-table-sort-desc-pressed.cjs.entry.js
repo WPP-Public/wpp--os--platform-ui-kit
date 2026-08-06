@@ -2,8 +2,8 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-ecf423ba.js');
-const WppIcon = require('./WppIcon-55327707.js');
+const index = require('./index-5f5af6a9.js');
+const WppIcon = require('./WppIcon-86481908.js');
 
 const wppIconCss = ":host{display:-ms-inline-flexbox;display:inline-flex;color:var(--wpp-prop-icon-color)}";
 
@@ -20,7 +20,7 @@ const WppIconTableSortDescPressed = class {
   render() {
     return (index.h(WppIcon.WppIcon, { name: "wpp-icon-table-sort-desc-pressed", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { d: "M10 4L13.4641 8.5H6.5359L10 4Z", fill: this.upArrowColor }), index.h("path", { d: "M10 16L13.4641 11.5H6.5359L10 16Z", fill: this.downArrowColor })));
   }
-  static get registryIs() { return "wpp-icon-table-sort-desc-pressed-v4-2-0"; }
+  static get registryIs() { return "wpp-icon-table-sort-desc-pressed-v4-3-0"; }
 };
 WppIconTableSortDescPressed.style = wppIconCss;
 

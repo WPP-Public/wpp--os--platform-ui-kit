@@ -63,6 +63,13 @@ export declare class WppSegmentedControlItem {
    * Emitted when an item loses focus.
    */
   wppBlur: EventEmitter<FocusEvent>;
+  /**
+   * Emitted when the `disabled` prop changes, so the container can recalculate which item is focusable.
+   *
+   * @internal - This event is consumed by container like Segmented Control, do not rely on it.
+   */
+  wppDisabledChangeSegmentedControlItem: EventEmitter<void>;
+  disabledChanged(): void;
   private handleClickSegmentedControl;
   private onFocus;
   private onBlur;

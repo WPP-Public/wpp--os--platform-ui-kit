@@ -1,4 +1,5 @@
 import { h, Host } from '@stencil/core';
+import { GROUP_ROLE, PRESENTATION_ROLE } from '../../constants';
 /**
  * @slot - Content displayed within the `menu-group` component. The default slot, without the name attribute.
  *
@@ -10,14 +11,15 @@ export class WppMenuGroup {
     this.hostCssClasses = () => ({
       'wpp-menu-group': true,
     });
+    this.getRole = () => (this.withDivider && !this.header ? PRESENTATION_ROLE : GROUP_ROLE);
     this.header = undefined;
     this.withDivider = false;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "header, divider" }, this.header && (h("wpp-typography-v4-2-0", { type: "2xs-strong", part: "header" }, this.header)), h("slot", null), this.withDivider && h("wpp-divider-v4-2-0", { class: "slot-divider", part: "divider" })));
+    return (h(Host, { class: this.hostCssClasses(), role: this.getRole(), "aria-label": this.header, exportparts: "header, divider" }, this.header && (h("wpp-typography-v4-3-0", { type: "2xs-strong", part: "header" }, this.header)), h("slot", null), this.withDivider && h("wpp-divider-v4-3-0", { class: "slot-divider", part: "divider" })));
   }
   static get is() { return "wpp-menu-group"; }
-  static get registryIs() { return "wpp-menu-group-v4-2-0"; }
+  static get registryIs() { return "wpp-menu-group-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

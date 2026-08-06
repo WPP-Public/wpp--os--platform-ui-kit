@@ -1,8 +1,7 @@
 import { h, Host } from '@stencil/core';
 import { transformToVersionedTag } from '../../utils/utils';
-import { getDefaultMessageActions, LOCALES_DEFAULTS } from './consts';
+import { getDefaultMessageActions, getDefaultModelOptions, LOCALES_DEFAULTS } from './consts';
 import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
-const ACTIVE_STATE_TIMEOUT_MS = 3000;
 const RESPONSE_WAIT_TIMEOUT_MS = 30000;
 /**
  * Card-style node intended for use inside a React Flow canvas.
@@ -23,6 +22,7 @@ export class WppChatNode {
   constructor() {
     this.themeSubscription = themeSubscriptionController(() => this.host);
     this._locales = LOCALES_DEFAULTS;
+    this.recognition = null;
     this.handleInput = (event) => {
       const target = event.target;
       this.activateNode();
@@ -33,6 +33,8 @@ export class WppChatNode {
         return;
       this.activateNode();
       this.startWaitingForResponse();
+      this.isAudioRecording = false;
+      this.stopSpeechRecognition();
       const message = {
         id: `msg-${Date.now()}`,
         content: this.inputValue.trim(),
@@ -48,11 +50,69 @@ export class WppChatNode {
       this.clearWaitingForResponse();
       this.wppStop.emit();
     };
+    this.handleReRun = () => {
+      this.activateNode();
+      this.wppReRun.emit();
+    };
     this.handleKeyDown = (event) => {
       this.activateNode();
       if (event.key === 'Enter') {
         event.preventDefault();
         this.handleSend();
+      }
+    };
+    this.setupSpeechRecognition = () => {
+      const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognitionAPI)
+        return;
+      this.recognition = new SpeechRecognitionAPI();
+      this.recognition.continuous = true;
+      this.recognition.interimResults = true;
+      this.recognition.lang = this._locales.audioLanguage;
+    };
+    this.startSpeechRecognition = () => {
+      if (!this.recognition)
+        return;
+      const previousText = this.inputValue.trim();
+      this.recognition.onresult = (event) => {
+        let text = '';
+        for (let i = 0; i < event.results.length; i++) {
+          text += event.results[i][0].transcript;
+        }
+        const newOutput = previousText ? `${previousText} ${text}` : text;
+        if (this.inputValue === newOutput)
+          return;
+        this.inputValue = newOutput;
+      };
+      this.recognition.onerror = () => {
+        this.isAudioRecording = false;
+      };
+      this.recognition.onend = () => {
+        this.isAudioRecording = false;
+      };
+      this.recognition.start();
+    };
+    this.stopSpeechRecognition = () => {
+      if (!this.recognition)
+        return;
+      this.recognition.onresult = null;
+      this.recognition.onend = null;
+      this.recognition.onerror = null;
+      this.recognition.stop();
+    };
+    this.handleClickAudioRecording = (event) => {
+      event.stopPropagation();
+      event.preventDefault();
+      this.activateNode();
+      if (!this.recognition)
+        return;
+      this.isAudioRecording = !this.isAudioRecording;
+      this.wppMic.emit({ isRecording: this.isAudioRecording });
+      if (this.isAudioRecording) {
+        this.startSpeechRecognition();
+      }
+      else {
+        this.stopSpeechRecognition();
       }
     };
     this.handleAttach = () => {
@@ -65,8 +125,28 @@ export class WppChatNode {
     };
     this.handleModelSelect = (model) => {
       this.activateNode();
-      this.activeModelId = model.id;
+      if (model.id === 'auto') {
+        this.selectedModel = 'auto';
+      }
+      else if (model.id === 'premium') {
+        this.selectedModel = 'premium';
+      }
+      else {
+        this.selectedModel = model;
+      }
+      this.selectedModelId = model.id;
       this.wppModelSelect.emit(model);
+    };
+    this.handleModelChange = () => {
+      this.activateNode();
+      this.wppModelBrowse.emit();
+    };
+    this.handleModelMenuShow = () => {
+      this.activateNode();
+      this.isModelMenuOpen = true;
+    };
+    this.handleModelMenuHide = () => {
+      this.isModelMenuOpen = false;
     };
     this.handleMessageActionClick = (message, action) => {
       this.activateNode();
@@ -75,6 +155,9 @@ export class WppChatNode {
     this.handleNodeInteraction = () => {
       this.activateNode();
     };
+    // The active border is held for as long as the user is working in the node and
+    // is released on the next pointer-down outside of it, mirroring the selected
+    // state React Flow drives through `isSelected`.
     this.handleWindowPointerDown = (event) => {
       const target = event.target;
       if (!(target instanceof Node) || !this.host.contains(target)) {
@@ -82,26 +165,10 @@ export class WppChatNode {
       }
     };
     this.activateNode = () => {
-      const hostElement = this.host;
       this.isActive = true;
-      this.clearActiveStateTimer();
-      this.activeStateTimer = setTimeout(() => {
-        this.activeStateTimer = undefined;
-        if (hostElement.isConnected) {
-          this.isActive = false;
-        }
-      }, ACTIVE_STATE_TIMEOUT_MS);
-      WppChatNode.unrefTimer(this.activeStateTimer);
     };
     this.clearActiveState = () => {
-      this.clearActiveStateTimer();
       this.isActive = false;
-    };
-    this.clearActiveStateTimer = () => {
-      if (this.activeStateTimer !== undefined) {
-        clearTimeout(this.activeStateTimer);
-        this.activeStateTimer = undefined;
-      }
     };
     this.startWaitingForResponse = () => {
       const hostElement = this.host;
@@ -133,19 +200,22 @@ export class WppChatNode {
     this.titleIcon = undefined;
     this.isLoading = false;
     this.isSelected = false;
+    this.isReRun = false;
     this.size = 'm';
     this.userAvatarConfig = false;
     this.assistantAvatarConfig = { icon: 'wpp-icon-ai' };
     this.actions = [];
     this.models = [];
     this.messageActions = undefined;
+    this.selectedModel = 'auto';
     this.selectedModelId = undefined;
     this.locales = {};
     this.inputValue = '';
     this.messages = [];
-    this.activeModelId = undefined;
     this.isActive = false;
     this.isWaitingForResponse = false;
+    this.isAudioRecording = false;
+    this.isModelMenuOpen = false;
     this.defaultMessageActions = [];
   }
   static unrefTimer(timer) {
@@ -160,6 +230,9 @@ export class WppChatNode {
     this._locales = { ...LOCALES_DEFAULTS, ...newLocales };
     this.defaultMessageActions = getDefaultMessageActions(this._locales);
   }
+  onUpdateSelectedModel(newModel) {
+    this.selectedModelId = typeof newModel === 'string' ? newModel : newModel?.id;
+  }
   componentWillLoad() {
     this._locales = { ...LOCALES_DEFAULTS, ...this.locales };
     this.defaultMessageActions = getDefaultMessageActions(this._locales);
@@ -168,10 +241,13 @@ export class WppChatNode {
     this.themeSubscription.start();
     window.addEventListener('pointerdown', this.handleWindowPointerDown, true);
   }
+  componentDidLoad() {
+    this.setupSpeechRecognition();
+  }
   disconnectedCallback() {
     this.themeSubscription.stop();
     window.removeEventListener('pointerdown', this.handleWindowPointerDown, true);
-    this.clearActiveStateTimer();
+    this.stopSpeechRecognition();
     this.clearResponseWaitTimer();
   }
   /**
@@ -204,11 +280,28 @@ export class WppChatNode {
       }
     });
   }
+  getDefaultModels() {
+    return getDefaultModelOptions(this._locales);
+  }
+  // The selector always resolves to a model: the built-in defaults ("Auto" / "Premium")
+  // are prepended to the dev-provided `models`, and the selection falls back to "Auto".
   getSelectedModel() {
-    if (this.models.length === 0)
+    if (this.selectedModel === 'auto') {
+      return this.getModelFromDeprecatedId() ?? this.getDefaultModels()[0];
+    }
+    else if (this.selectedModel === 'premium') {
+      return this.getDefaultModels()[1];
+    }
+    return this.models.length === 0
+      ? this.selectedModel
+      : this.models.find(model => model.id === this.selectedModel.id) || this.getDefaultModels()[0];
+  }
+  getModelFromDeprecatedId() {
+    const selectedModelId = this.selectedModelId;
+    if (!selectedModelId)
       return undefined;
-    const selectedId = this.selectedModelId || this.activeModelId;
-    return this.models.find(model => model.id === selectedId) || this.models[0];
+    const selectableModels = [...this.getDefaultModels(), ...this.models];
+    return selectableModels.find(model => model.id === selectedModelId);
   }
   renderIcon(icon, slot) {
     if (!icon)
@@ -217,22 +310,112 @@ export class WppChatNode {
   }
   renderActionMenu() {
     const hasActions = this.actions.length > 0;
-    const hasModels = this.models.length > 0;
-    const selectedModel = this.getSelectedModel();
-    if (!hasActions && !hasModels) {
-      return (h("wpp-tooltip-v4-2-0", { text: this._locales.attachAction, config: { placement: 'bottom' } }, h("wpp-action-button-v4-2-0", { variant: "secondary", ariaProps: { label: this._locales.attachAction }, onClick: this.handleAttach }, h("wpp-icon-plus-v4-2-0", { slot: "icon-start" }))));
+    if (!hasActions) {
+      return (h("wpp-tooltip-v4-3-0", { text: this._locales.attachAction, config: { placement: 'bottom' } }, h("wpp-action-button-v4-3-0", { variant: "secondary", ariaProps: { label: this._locales.attachAction }, onClick: this.handleAttach }, h("wpp-icon-plus-v4-3-0", { slot: "icon-start" }))));
     }
-    return (h("wpp-menu-context-v4-2-0", { appendToListWrapper: true, class: "chat-actions-menu-context", style: { width: 'fit-content' } }, h("wpp-action-button-v4-2-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this._locales.actionsMenu } }, h("wpp-icon-plus-v4-2-0", { slot: "icon-start" })), h("div", { class: "chat-actions-menu" }, this.actions.map(action => (h("wpp-list-item-v4-2-0", { key: `${action.icon}-${action.label}`, onWppChangeListItem: () => this.handleActionClick(action) }, this.renderIcon(action.icon, 'left'), h("span", { slot: "label" }, action.label)))), hasActions && hasModels && h("wpp-divider-v4-2-0", { class: "chat-actions-menu-divider" }), hasModels && (h("wpp-menu-context-v4-2-0", { appendToListWrapper: true }, h("wpp-list-item-v4-2-0", { slot: "trigger-element", isExtended: true }, this.renderIcon(selectedModel?.icon || 'wpp-icon-ai', 'left'), h("span", { slot: "label" }, selectedModel?.label)), h("div", { class: "chat-models-menu" }, this.models.map(model => (h("wpp-list-item-v4-2-0", { key: model.id, checked: model.id === selectedModel?.id, onWppChangeListItem: () => this.handleModelSelect(model) }, this.renderIcon(model.icon || 'wpp-icon-ai', 'left'), h("span", { slot: "label" }, model.label))))))))));
+    return (h("wpp-menu-context-v4-3-0", { class: "chat-actions-menu-context", style: { width: 'fit-content' } }, h("wpp-action-button-v4-3-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this._locales.actionsMenu } }, h("wpp-icon-plus-v4-3-0", { slot: "icon-start" })), h("div", { class: "chat-actions-menu" }, this.actions.map(action => (h("wpp-list-item-v4-3-0", { key: `${action.icon}-${action.label}`, onWppChangeListItem: () => this.handleActionClick(action) }, this.renderIcon(action.icon, 'left'), h("span", { slot: "label" }, action.label)))))));
   }
-  renderChatBar(isLoadingActive, isSelectedActive) {
-    const sendIcon = isLoadingActive ? 'wpp-icon-stop' : 'wpp-icon-play';
-    const sendActionLabel = isLoadingActive ? this._locales.stopResponse : this._locales.sendMessage;
-    return (h("div", { class: "node-chat-bar" }, this.renderActionMenu(), h("input", { class: "chat-input", type: "text", "aria-label": this._locales.messageInputLabel, placeholder: this._locales.messageInput, value: this.inputValue, onInput: this.handleInput, onKeyDown: this.handleKeyDown }), (isSelectedActive || isLoadingActive) && (h("wpp-button-v4-2-0", { class: "play-btn", size: "s", variant: isLoadingActive ? 'secondary' : 'primary', ariaProps: { label: sendActionLabel }, onClick: isLoadingActive ? this.handleStop : this.handleSend }, this.renderIcon(sendIcon, 'icon-start')))));
+  renderModelListItem(model, checked) {
+    return (h("wpp-list-item-v4-3-0", { key: model.id, checked: checked, onWppChangeListItem: () => this.handleModelSelect(model) }, h("wpp-avatar-v4-3-0", { slot: "left", size: "xs", variant: "square", role: "presentation", src: model.logo, icon: model.icon, name: model.label }), h("span", { slot: "label" }, model.label), model.caption && (h("span", { slot: "caption" }, model.caption))));
+  }
+  /**
+   * Model selector triggered by the compact logo avatar (Figma). Unlike wpp-chat-input,
+   * which shows the full brand logo + model label, the node exposes only the compact logo
+   * avatar. The dropdown always starts with the built-in default options ("Auto" / "Premium").
+   * When `models` are provided they are listed below the defaults; when `models` is empty a
+   * "Select model or agent" action is rendered instead, emitting `wppModelBrowse` on click.
+   */
+  renderModelSelector() {
+    const selectedModel = this.getSelectedModel();
+    // `logo` (an image URL) wins when provided; `icon` is the asset-free fallback for
+    // hosts that cannot serve the brand logos (e.g. Storybook), and initials last.
+    const triggerAvatar = (h("wpp-avatar-v4-3-0", { slot: "icon-start", class: "model-avatar", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, icon: selectedModel.icon, name: selectedModel.label || '' }));
+    return (h("wpp-menu-context-v4-3-0", { class: "chat-model-selector", style: { width: 'fit-content' }, dropdownConfig: {
+        onShow: this.handleModelMenuShow,
+        onHide: this.handleModelMenuHide,
+        // Per Figma (Chat Input / Model Selector): the dropdown opens ABOVE the trigger and
+        // is left-aligned to it — its left edge lines up with the trigger's left edge and it
+        // extends to the right ('top-start'). Fall back to 'bottom-start' (still left-aligned)
+        // only when there is no room above.
+        placement: 'top-start',
+        popperOptions: {
+          modifiers: [{ name: 'flip', options: { fallbackPlacements: ['bottom-start'] } }],
+        },
+      } }, h("wpp-action-button-v4-3-0", { slot: "trigger-element", class: "model-selector-trigger", variant: "secondary", ariaProps: { label: this._locales.modelSelectorLabel, expanded: this.isModelMenuOpen, haspopup: 'menu' } }, triggerAvatar), h("div", { class: "wpp-model-dropdown" }, this.getDefaultModels().map(model => this.renderModelListItem(model, model.id === selectedModel.id)), h("wpp-divider-v4-3-0", null), this.models.length > 0 ? (this.models.map(model => this.renderModelListItem(model, model.id === selectedModel.id))) : (h("wpp-list-item-v4-3-0", { onWppChangeListItem: this.handleModelChange }, h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), h("wpp-icon-chevron-v4-3-0", { slot: "right", direction: "right" }))))));
+  }
+  renderMicrophoneBtn() {
+    const recordLabel = this.isAudioRecording ? this._locales.audioStopRecordAction : this._locales.audioRecordAction;
+    return (h("wpp-action-button-v4-3-0", { class: "mic-btn", "data-testid": "chat-node-mic-btn", variant: "secondary", ariaProps: { label: recordLabel }, onClick: this.handleClickAudioRecording }, this.isAudioRecording ? h("wpp-icon-stop-v4-3-0", { slot: "icon-start" }) : h("wpp-icon-mic-on-v4-3-0", { slot: "icon-start" })));
+  }
+  // The primary action follows a fixed priority: stop (while loading/processing)
+  // > re-run (when `isReRun`) > send (once the input has content).
+  getPrimaryAction(isLoadingActive) {
+    if (isLoadingActive) {
+      return {
+        icon: 'wpp-icon-stop',
+        label: this._locales.stopResponse,
+        handler: this.handleStop,
+        variant: 'secondary',
+      };
+    }
+    if (this.isReRun) {
+      return {
+        icon: 'wpp-icon-refresh',
+        label: this._locales.reRunResponse,
+        handler: this.handleReRun,
+        variant: 'primary',
+      };
+    }
+    return {
+      icon: 'wpp-icon-play',
+      label: this._locales.sendMessage,
+      handler: this.handleSend,
+      variant: 'primary',
+    };
+  }
+  isPrimaryActionVisible(isLoadingActive) {
+    return isLoadingActive || this.isReRun || this.inputValue.trim().length > 0;
+  }
+  // The button is always rendered so it can fade/scale in smoothly (and the mic
+  // slides over) via the `.is-hidden` transition instead of popping in on mount.
+  renderSendButton(isLoadingActive) {
+    const visible = this.isPrimaryActionVisible(isLoadingActive);
+    const { icon, label, handler, variant } = this.getPrimaryAction(isLoadingActive);
+    return (h("wpp-button-v4-3-0", { class: { 'play-btn': true, 'is-hidden': !visible }, size: "s", variant: variant,
+      // While hidden the button stays in the DOM (to animate the fade), but must leave the
+      // focus order and a11y tree so its focusable inner control does not trip axe's
+      // aria-hidden-focus (SC 4.1.2). `inert` does exactly that without the disabled-grey
+      // styling; it is set via ref because Stencil's JSX types don't expose the attribute.
+      ref: (el) => {
+        if (!el)
+          return;
+        if (visible)
+          el.removeAttribute('inert');
+        else
+          el.setAttribute('inert', '');
+      }, ariaProps: { label }, onClick: visible ? handler : undefined }, this.renderIcon(icon, 'icon-start')));
+  }
+  renderInput() {
+    return (h("input", { class: "chat-input", type: "text",
+      // Free-form chat message with no standard autofill token; declare autocomplete="off"
+      // so browsers do not offer autofill and the field satisfies WCAG 1.3.5 (autocomplete-valid).
+      autocomplete: "off", "aria-label": this._locales.messageInputLabel, placeholder: this._locales.messageInput, value: this.inputValue, onInput: this.handleInput, onKeyDown: this.handleKeyDown }));
+  }
+  // Single-row chat bar matching the Figma spec for both sizes: the `+` menu and
+  // the input sit on the left (input grows), and the model-selector logo avatar,
+  // microphone and the send/stop button sit on the right. The send button only
+  // appears once the input has content (Active Filled) or while processing.
+  renderChatBar(isLoadingActive) {
+    const barClasses = {
+      'node-chat-bar': true,
+      'audio-recording': this.isAudioRecording,
+    };
+    return (h("div", { class: barClasses }, h("div", { class: "left-actions" }, this.renderActionMenu(), this.renderInput()), h("div", { class: "right-actions" }, h("div", { class: "right-actions-controls" }, this.renderModelSelector(), this.renderMicrophoneBtn()), this.renderSendButton(isLoadingActive))));
   }
   renderAvatar(config) {
     if (config === false)
       return null;
-    return (h("wpp-avatar-v4-2-0", { class: "message-avatar", size: "s", variant: "circle", name: config.name || '', icon: config.icon, color: config.color }));
+    return (h("wpp-avatar-v4-3-0", { class: "message-avatar", size: "s", variant: "circle", name: config.name || '', icon: config.icon, color: config.color, role: "presentation" }));
   }
   getAttachmentKind(attachment) {
     if (attachment.type.startsWith('image/'))
@@ -249,7 +432,11 @@ export class WppChatNode {
     const attachments = message.attachments ?? [];
     if (attachments.length === 0)
       return null;
-    return (h("div", { class: "chat-attachments", role: "list" }, attachments.map((attachment, index) => {
+    return (
+    // The attachments strip scrolls horizontally with no visible scrollbar, so it must be a
+    // keyboard tab stop to stay operable via arrow keys (WCAG 2.1.1). A label names the region
+    // now that it is focusable.
+    h("div", { class: "chat-attachments", role: "list", tabIndex: 0, "aria-label": this._locales.attachmentsRegionLabel }, attachments.map((attachment, index) => {
       const kind = this.getAttachmentKind(attachment);
       const imageSource = attachment.thumbnailUrl || attachment.url;
       return (h("div", { class: `chat-attachment chat-attachment-${kind}`, role: "listitem", "aria-label": attachment.name, key: `${attachment.name}-${index}` }, imageSource ? (h("img", { src: imageSource, alt: attachment.alt || attachment.name, loading: "lazy", onError: this.handleAttachmentImageError })) : (this.renderAttachmentFallback(kind)), h("span", { class: "chat-attachment-broken-icon" }, this.renderAttachmentFallback(kind)), kind === 'video' && (h("span", { class: "chat-attachment-play", "aria-hidden": "true" }, this.renderIcon('wpp-icon-play-filled')))));
@@ -262,7 +449,7 @@ export class WppChatNode {
     const hasRenderableContent = Boolean(message.content.trim() || message.attachments?.length);
     if (!hasRenderableContent || actions.length === 0)
       return null;
-    return (h("div", { class: "chat-message-actions" }, actions.map(action => (h("wpp-tooltip-v4-2-0", { key: action.id, text: action.label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-2-0", { variant: "secondary", ariaProps: { label: action.label }, onClick: () => this.handleMessageActionClick(message, action) }, this.renderIcon(action.icon, 'icon-start')))))));
+    return (h("div", { class: "chat-message-actions" }, actions.map(action => (h("wpp-tooltip-v4-3-0", { key: action.id, text: action.label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-3-0", { variant: "secondary", ariaProps: { label: action.label }, onClick: () => this.handleMessageActionClick(message, action) }, this.renderIcon(action.icon, 'icon-start')))))));
   }
   renderMessages() {
     if (this.messages.length === 0)
@@ -277,13 +464,15 @@ export class WppChatNode {
           'chat-message': true,
           [`chat-message-${msg.role}`]: true,
           'chat-message-no-avatar': avatarConfig === false,
-        }, key: msg.id }, this.renderAvatar(avatarConfig), h("div", { class: `chat-message-content chat-message-content-${msg.role}` }, hasContent && (h("div", { class: `chat-bubble chat-bubble-${msg.role}` }, h("wpp-typography-v4-2-0", { type: "s-body" }, msg.content))), this.renderMessageAttachments(msg), this.renderMessageActions(msg))));
+        }, key: msg.id }, this.renderAvatar(avatarConfig), h("div", { class: `chat-message-content chat-message-content-${msg.role}` }, hasContent && (h("div", { class: `chat-bubble chat-bubble-${msg.role}` }, h("wpp-typography-v4-3-0", { type: "s-body" }, msg.content))), this.renderMessageAttachments(msg), this.renderMessageActions(msg))));
     });
   }
   render() {
     const isSizeS = this.size === 's';
     const isLoadingActive = !isSizeS && (this.isLoading || this.isWaitingForResponse);
-    const isSelectedActive = this.isSelected || this.isActive;
+    // While loading, the loading ring owns the border — the selected state is suppressed so the
+    // two never co-occur (they are mutually exclusive at the source, not via a CSS guard).
+    const isSelectedActive = (this.isSelected || this.isActive) && !isLoadingActive;
     const containerClasses = {
       'node-container': true,
       'loading-node': isLoadingActive,
@@ -294,18 +483,18 @@ export class WppChatNode {
       'is-selected': isSelectedActive && !isLoadingActive,
     };
     if (isSizeS) {
-      return (h(Host, { class: { 'wpp-chat-node': true, 'wpp-size-s': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, h("div", { class: containerClasses }, h("div", { class: wrapperClasses }, this.renderChatBar(false, isSelectedActive))), h("slot", { name: "handles" })));
+      return (h(Host, { class: { 'wpp-chat-node': true, 'wpp-size-s': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, h("div", { class: containerClasses }, h("div", { class: wrapperClasses }, this.renderChatBar(false))), h("slot", { name: "handles" })));
     }
-    return (h(Host, { class: { 'wpp-chat-node': true, 'wpp-size-m': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, h("div", { class: containerClasses }, h("div", { class: wrapperClasses }, h("div", { class: "node-header" }, h("span", { class: "title-icon" }, h("wpp-icon-service-v4-2-0", { color: "var(--wpp-grey-color-700)" })), h("wpp-tooltip-v4-2-0", { text: this.nodeTitle, class: "title-tooltip", config: {
+    return (h(Host, { class: { 'wpp-chat-node': true, 'wpp-size-m': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, h("div", { class: containerClasses }, h("div", { class: wrapperClasses }, h("div", { class: "node-header" }, h("span", { class: "title-icon" }, h("wpp-icon-service-v4-3-0", { color: "var(--wpp-grey-color-700)" })), h("wpp-tooltip-v4-3-0", { text: this.nodeTitle, class: "title-tooltip", config: {
         placement: 'top',
         onShow: () => {
           if (!this.titleRef || this.titleRef.clientWidth >= this.titleRef.scrollWidth)
             return false;
         },
-      } }, h("p", { ref: el => (this.titleRef = el), class: "node-title" }, this.nodeTitle))), h("wpp-divider-v4-2-0", null), h("div", { class: "node-body", ref: el => (this.bodyRef = el) }, this.renderMessages(), h("slot", null)), h("wpp-divider-v4-2-0", null), this.renderChatBar(isLoadingActive, isSelectedActive))), h("slot", { name: "handles" })));
+      } }, h("p", { ref: el => (this.titleRef = el), class: "node-title" }, this.nodeTitle))), h("wpp-divider-v4-3-0", null), h("div", { class: "node-body", ref: el => (this.bodyRef = el) }, this.renderMessages(), h("slot", null)), h("wpp-divider-v4-3-0", null), this.renderChatBar(isLoadingActive))), h("slot", { name: "handles" })));
   }
   static get is() { return "wpp-chat-node"; }
-  static get registryIs() { return "wpp-chat-node-v4-2-0"; }
+  static get registryIs() { return "wpp-chat-node-v4-3-0"; }
   static get encapsulation() { return "scoped"; }
   static get originalStyleUrls() {
     return {
@@ -390,6 +579,24 @@ export class WppChatNode {
           "text": "Defines whether the node is in the selected/active state. Shows a blue border."
         },
         "attribute": "is-selected",
+        "reflect": false,
+        "defaultValue": "false"
+      },
+      "isReRun": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "If `true`, the primary action shows a re-run affordance (refresh icon) that\nlets the user re-run the last response. Takes precedence over the send action\nbut not over the stop action shown while loading."
+        },
+        "attribute": "is-re-run",
         "reflect": false,
         "defaultValue": "false"
       },
@@ -483,7 +690,7 @@ export class WppChatNode {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "Defines the actions shown in the + menu."
+          "text": "Defines the actions available from the `+` button.\nWhen empty (the default), the `+` button is a plain action that emits `wppAttach` on click.\nWhen it contains at least one action, the `+` button instead opens a dropdown listing them,\nand selecting one emits `wppActionClick` with the chosen action."
         },
         "defaultValue": "[]"
       },
@@ -505,7 +712,7 @@ export class WppChatNode {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "Defines the available chat models shown in the nested + menu."
+          "text": "Defines the list of AI models offered by the AI model selector on the chat bar.\nThe selector always renders a dropdown that starts with the built-in default options\n(\"Auto\" / \"Premium\"). When this array is empty, the dropdown additionally renders a\n\"Select model or agent\" action that emits `wppModelBrowse` when clicked; otherwise the\nprovided models are listed below the defaults. Picking any model emits `wppModelSelect`.\nNote: the `icon` property is deprecated and should not be used, always aim to use `logo` for the image."
         },
         "defaultValue": "[]"
       },
@@ -530,9 +737,33 @@ export class WppChatNode {
           "text": "Defines action buttons shown below assistant messages. If omitted, localized default actions are shown.\nSet to an empty array to hide them."
         }
       },
+      "selectedModel": {
+        "type": "string",
+        "mutable": true,
+        "complexType": {
+          "original": "ChatNodeSelectedModel",
+          "resolved": "\"auto\" | \"premium\" | ChatNodeModel",
+          "references": {
+            "ChatNodeSelectedModel": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-chat-node/types.ts::ChatNodeSelectedModel"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the selected AI model. Accepts a built-in default option (`'auto'` / `'premium'`) or one\nof the provided `models`. Defaults to `'auto'`. The component keeps this in sync when the user\npicks a model from the dropdown; it can also be set externally when selection follows a\ndifferent flow (e.g. from a side-modal)."
+        },
+        "attribute": "selected-model",
+        "reflect": false,
+        "defaultValue": "'auto'"
+      },
       "selectedModelId": {
         "type": "string",
-        "mutable": false,
+        "mutable": true,
         "complexType": {
           "original": "string",
           "resolved": "string | undefined",
@@ -541,8 +772,11 @@ export class WppChatNode {
         "required": false,
         "optional": true,
         "docs": {
-          "tags": [],
-          "text": "Defines the selected chat model id. If omitted, the first model is shown as selected."
+          "tags": [{
+              "name": "deprecated",
+              "text": "Use `selectedModel` instead. This id-based prop will be removed in a future release."
+            }],
+          "text": "Defines the id of the selected model. Kept for backwards compatibility: it still selects the\nmatching option from the built-in defaults (`'auto'` / `'premium'`) or from `models`, but only\nwhile `selectedModel` sits at its default \u2014 `selectedModel` always takes precedence."
         },
         "attribute": "selected-model-id",
         "reflect": false
@@ -552,7 +786,7 @@ export class WppChatNode {
         "mutable": false,
         "complexType": {
           "original": "Partial<ChatNodeLocales>",
-          "resolved": "{ attachAction?: string | undefined; actionsMenu?: string | undefined; messageInputLabel?: string | undefined; messageInput?: string | undefined; sendMessage?: string | undefined; stopResponse?: string | undefined; copyMessageAction?: string | undefined; likeMessageAction?: string | undefined; dislikeMessageAction?: string | undefined; regenerateMessageAction?: string | undefined; }",
+          "resolved": "{ attachAction?: string | undefined; actionsMenu?: string | undefined; messageInputLabel?: string | undefined; messageInput?: string | undefined; sendMessage?: string | undefined; stopResponse?: string | undefined; reRunResponse?: string | undefined; copyMessageAction?: string | undefined; likeMessageAction?: string | undefined; dislikeMessageAction?: string | undefined; regenerateMessageAction?: string | undefined; attachmentsRegionLabel?: string | undefined; audioRecordAction?: string | undefined; audioStopRecordAction?: string | undefined; audioLanguage?: string | undefined; modelSelectorLabel?: string | undefined; modelAutoOptionLabel?: string | undefined; modelAutoOptionCaption?: string | undefined; modelPremiumOptionLabel?: string | undefined; modelPremiumOptionCaption?: string | undefined; modelSelectorListItemLabel?: string | undefined; }",
           "references": {
             "Partial": {
               "location": "global",
@@ -579,9 +813,10 @@ export class WppChatNode {
     return {
       "inputValue": {},
       "messages": {},
-      "activeModelId": {},
       "isActive": {},
       "isWaitingForResponse": {},
+      "isAudioRecording": {},
+      "isModelMenuOpen": {},
       "defaultMessageActions": {}
     };
   }
@@ -617,6 +852,21 @@ export class WppChatNode {
           "references": {}
         }
       }, {
+        "method": "wppReRun",
+        "name": "wppReRun",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": "Emitted when the user clicks the re-run button (shown when `isReRun` is true)."
+        },
+        "complexType": {
+          "original": "void",
+          "resolved": "void",
+          "references": {}
+        }
+      }, {
         "method": "wppAttach",
         "name": "wppAttach",
         "bubbles": true,
@@ -624,12 +874,33 @@ export class WppChatNode {
         "composed": true,
         "docs": {
           "tags": [],
-          "text": "Emitted when the user clicks the + (attach) button."
+          "text": "Emitted when the user clicks the + button while `actions` is empty.\nWhen `actions` is non-empty the + button opens the actions dropdown instead and this never fires."
         },
         "complexType": {
           "original": "void",
           "resolved": "void",
           "references": {}
+        }
+      }, {
+        "method": "wppMic",
+        "name": "wppMic",
+        "bubbles": true,
+        "cancelable": true,
+        "composed": true,
+        "docs": {
+          "tags": [],
+          "text": "Emitted when the user toggles the audio-record (microphone) button.\nThe detail carries the resulting state: `isRecording` is `true` when listening\nhas just started and `false` when it has just stopped."
+        },
+        "complexType": {
+          "original": "ChatNodeMicEventDetail",
+          "resolved": "ChatNodeMicEventDetail",
+          "references": {
+            "ChatNodeMicEventDetail": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-chat-node/types.ts::ChatNodeMicEventDetail"
+            }
+          }
         }
       }, {
         "method": "wppActionClick",
@@ -639,7 +910,7 @@ export class WppChatNode {
         "composed": true,
         "docs": {
           "tags": [],
-          "text": "Emitted when an action from the + menu is selected."
+          "text": "Emitted when an action is selected from the + button's actions dropdown."
         },
         "complexType": {
           "original": "ChatNodeAction",
@@ -660,25 +931,40 @@ export class WppChatNode {
         "composed": true,
         "docs": {
           "tags": [],
-          "text": "Emitted when a chat model from the nested + menu is selected."
+          "text": "Emitted when a model is selected from the AI model selector dropdown.\nThe detail is the selected model object \u2014 a built-in `ChatNodeDefaultModel` (`Auto` / `Premium`)\nor one of the dev-provided `ChatNodeModel`s."
         },
         "complexType": {
-          "original": "ChatNodeModel",
-          "resolved": "ChatNodeModel",
+          "original": "ChatNodeSelectableModel",
+          "resolved": "ChatNodeDefaultModel | ChatNodeModel",
           "references": {
-            "ChatNodeModel": {
+            "ChatNodeSelectableModel": {
               "location": "import",
               "path": "./types",
-              "id": "src/components/wpp-chat-node/types.ts::ChatNodeModel"
+              "id": "src/components/wpp-chat-node/types.ts::ChatNodeSelectableModel"
             }
           }
         }
       }, {
+        "method": "wppModelBrowse",
+        "name": "wppModelBrowse",
+        "bubbles": false,
+        "cancelable": true,
+        "composed": false,
+        "docs": {
+          "tags": [],
+          "text": "Emitted when the \"Select model or agent\" action from the model-selector dropdown is clicked.\nThis action is rendered only when the `models` property is an empty array."
+        },
+        "complexType": {
+          "original": "void",
+          "resolved": "void",
+          "references": {}
+        }
+      }, {
         "method": "wppMessageActionClick",
         "name": "wppMessageActionClick",
-        "bubbles": true,
+        "bubbles": false,
         "cancelable": true,
-        "composed": true,
+        "composed": false,
         "docs": {
           "tags": [],
           "text": "Emitted when a message action button is clicked."
@@ -750,6 +1036,9 @@ export class WppChatNode {
     return [{
         "propName": "locales",
         "methodName": "onUpdateLocales"
+      }, {
+        "propName": "selectedModel",
+        "methodName": "onUpdateSelectedModel"
       }];
   }
 }

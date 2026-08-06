@@ -6,7 +6,7 @@ describe('wpp-pagination-select', () => {
   it('renders component', async () => {
     const page = await newSpecPage({
       components: [WppPaginationSelect],
-      template: () => h("wpp-pagination-select-v4-2-0", { count: 1 }),
+      template: () => h("wpp-pagination-select-v4-3-0", { count: 1 }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -200,7 +200,7 @@ describe('wpp-pagination-select', () => {
     it('Should set numberOfPages to 0 when count is 0', async () => {
       const page = await newSpecPage({
         components: [WppPaginationSelect],
-        template: () => h("wpp-pagination-select-v4-2-0", { count: 0 }),
+        template: () => h("wpp-pagination-select-v4-3-0", { count: 0 }),
       });
       await page.waitForChanges();
       expect(page.rootInstance.numberOfPages).toBe(0);
@@ -208,7 +208,7 @@ describe('wpp-pagination-select', () => {
     it('Should set numberOfPages to 10 when count is 10 and itemsPerPage is not set (defaults to 1)', async () => {
       const page = await newSpecPage({
         components: [WppPaginationSelect],
-        template: () => h("wpp-pagination-select-v4-2-0", { count: 10 }),
+        template: () => h("wpp-pagination-select-v4-3-0", { count: 10 }),
       });
       await page.waitForChanges();
       expect(page.rootInstance.numberOfPages).toBe(10);
@@ -216,7 +216,7 @@ describe('wpp-pagination-select', () => {
     it('Should set numberOfPages to 5 when count is 10 and itemsPerPage is 2', async () => {
       const page = await newSpecPage({
         components: [WppPaginationSelect],
-        template: () => h("wpp-pagination-select-v4-2-0", { count: 10, itemsPerPage: 2 }),
+        template: () => h("wpp-pagination-select-v4-3-0", { count: 10, itemsPerPage: 2 }),
       });
       await page.waitForChanges();
       expect(page.rootInstance.numberOfPages).toBe(5);
@@ -226,7 +226,7 @@ describe('wpp-pagination-select', () => {
     it('Should update numberOfPages when count changes', async () => {
       const page = await newSpecPage({
         components: [WppPaginationSelect],
-        template: () => h("wpp-pagination-select-v4-2-0", { count: 10, itemsPerPage: 2 }),
+        template: () => h("wpp-pagination-select-v4-3-0", { count: 10, itemsPerPage: 2 }),
       });
       await page.waitForChanges();
       expect(page.rootInstance.numberOfPages).toBe(5);
@@ -237,7 +237,7 @@ describe('wpp-pagination-select', () => {
     it('Should update numberOfPages when itemsPerPage changes', async () => {
       const page = await newSpecPage({
         components: [WppPaginationSelect],
-        template: () => h("wpp-pagination-select-v4-2-0", { count: 10, itemsPerPage: 2 }),
+        template: () => h("wpp-pagination-select-v4-3-0", { count: 10, itemsPerPage: 2 }),
       });
       await page.waitForChanges();
       expect(page.rootInstance.numberOfPages).toBe(5);

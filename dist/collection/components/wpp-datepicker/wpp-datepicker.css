@@ -576,7 +576,7 @@
   justify-content: space-between;
   background: var(--wpp-grey-color-000);
 }
-:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout:after {
+:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout::after {
   content: "";
   position: relative;
   flex-basis: 100%;
@@ -590,7 +590,7 @@
   padding: var(--datepicker-padding) 0 0 var(--datepicker-padding);
   order: 2;
 }
-:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout .wpp-presets-container:before {
+:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout .wpp-presets-container::before {
   right: initial;
   left: 0;
   border-left: 1px solid var(--wpp-grey-color-300);
@@ -643,7 +643,7 @@
 :host #container.has-default-format #datepicker:hover {
   cursor: text;
 }
-:host .datepicker-wrapper:hover #datepicker:not(.focus):not([disabled]):not(.error):not(.warning) {
+:host .datepicker-wrapper:hover #datepicker:not(.focus, [disabled], .error, .warning) {
   background-color: var(--wpp-grey-color-200);
   border-color: var(--datepicker-input-border-color-hover);
 }

@@ -879,7 +879,10 @@
   --richtext-inline-message-margin: var(--wpp-richtext-inline-message-margin, 4px 0 0 0);
   --richtext-placeholder-color: var(--wpp-richtext-placeholder-color, var(--wpp-grey-color-700));
   --richtext-text-color-disabled: var(--wpp-richtext-text-color-disabled, var(--wpp-text-color-disabled));
-  --richtext-characters-limit-font-weight: var(--wpp-richtext-characters-limit-font-weight, 400);
+  --richtext-characters-limit-font-weight: var(
+    --wpp-richtext-characters-limit-font-weight,
+    var(--wpp-typography-s-body-font-weight)
+  );
   --richtext-warning-charecters-limit-color: var(--wpp-richtext-border-radius, var(--wpp-warning-color-500));
   --richtext-error-charecters-limit-color: var(--wpp-richtext-border-radius, var(--wpp-danger-color-500));
   --richtext-bg-color: var(--wpp-richtext-bg-color, transparent);
@@ -1039,7 +1042,7 @@
 .preserve-whitespace,
 .preserve-whitespace .ProseMirror {
   white-space: pre-wrap;
-  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .wpp-richtext[data-wpp-theme=dark] .ql-form-control .tiptap-editor-container {

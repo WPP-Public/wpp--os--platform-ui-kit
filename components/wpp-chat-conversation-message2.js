@@ -1551,10 +1551,10 @@ const renderImageNode = (role, data, className) => {
         const wrap = e.target.closest('.chat-image-error-wrap');
         wrap?.classList.add('chat-image-broken');
       } }),
-    h("wpp-icon-image-v4-2-0", { role: "presentation", "aria-hidden": "true" })));
+    h("wpp-icon-image-v4-3-0", { role: "presentation", "aria-hidden": "true" })));
   return data.linkHref ? (h("a", { href: data.linkHref, target: "_blank", rel: "noopener noreferrer", class: "chat-image-link" }, img)) : role === 'assistant' ? (h(Fragment, null,
-    h("wpp-action-button-v4-2-0", { class: "image-download-button", variant: "secondary", onClick: () => handleDownload(data.href, data.alt) },
-      h("wpp-icon-download-v4-2-0", { slot: "icon-start", "aria-hidden": "true" })),
+    h("wpp-action-button-v4-3-0", { class: "image-download-button", variant: "secondary", onClick: () => handleDownload(data.href, data.alt) },
+      h("wpp-icon-download-v4-3-0", { slot: "icon-start", "aria-hidden": "true" })),
     img)) : (img);
 };
 const renderToken = (token, role = 'user') => {
@@ -1565,16 +1565,16 @@ const renderToken = (token, role = 'user') => {
       const headingTypes = ['2xl-heading', 'xl-heading', 'l-body', 'm-body', 's-body', 'xs-body'];
       const type = headingTypes[token.depth - 1] || 's-body';
       const tag = `h${token.depth}`;
-      return (h("wpp-typography-v4-2-0", { type: type, tag: tag }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
+      return (h("wpp-typography-v4-3-0", { type: type, tag: tag }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
     }
     case 'del':
       return h("del", null, token.tokens?.map(t => renderToken(t)));
     case 'paragraph':
-      return (h("wpp-typography-v4-2-0", { type: "s-body", tag: "p" }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
+      return (h("wpp-typography-v4-3-0", { type: "s-body", tag: "p" }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
     case 'blockquote':
       return h("blockquote", { class: "chat-quote" }, token.tokens?.map(t => renderToken(t)));
     case 'strong':
-      return (h("wpp-typography-v4-2-0", { type: "s-strong", tag: "span" }, token.tokens?.map(t => renderToken(t))));
+      return (h("wpp-typography-v4-3-0", { type: "s-strong", tag: "span" }, token.tokens?.map(t => renderToken(t))));
     case 'em':
       return h("em", null, token.tokens?.map(t => renderToken(t)));
     case 'codespan':
@@ -1583,7 +1583,7 @@ const renderToken = (token, role = 'user') => {
       return (h("pre", { class: "code-block" },
         h("div", { class: "code-lang" },
           h("span", null, token.lang || 'plaintext'),
-          h("wpp-icon-copy-v4-2-0", { class: "code-block-copy-icon", size: "s", color: "var(--wpp-grey-color-600)", onClick: () => {
+          h("wpp-icon-copy-v4-3-0", { class: "code-block-copy-icon", size: "s", color: "var(--wpp-grey-color-600)", onClick: () => {
               navigator.clipboard.writeText(token.text);
             } })),
         h("code", null, token.text)));
@@ -1600,8 +1600,8 @@ const renderToken = (token, role = 'user') => {
       const nestedLists = token.tokens?.filter(t => t.type === 'list') || [];
       const inlineContent = token.tokens?.filter(t => t.type !== 'list') || [];
       return (h("li", { class: `chat-list-item ${token.task ? `chat-list-item-task ${token.checked ? 'chat-list-item-task-checked' : ''}` : ''}` },
-        token.task && h("wpp-icon-tick-v4-2-0", null),
-        inlineContent.length > 0 && (h("wpp-typography-v4-2-0", { type: "s-body" }, inlineContent.map(t => renderToken(t)))),
+        token.task && h("wpp-icon-tick-v4-3-0", null),
+        inlineContent.length > 0 && (h("wpp-typography-v4-3-0", { type: "s-body" }, inlineContent.map(t => renderToken(t)))),
         nestedLists.map(t => renderToken(t))));
     }
     case 'table': {
@@ -1609,13 +1609,13 @@ const renderToken = (token, role = 'user') => {
         h("table", { class: "chat-table" },
           h("thead", null,
             h("tr", null, token.header.map((cell, i) => (h("th", { key: i },
-              h("wpp-typography-v4-2-0", { type: "s-strong" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))),
+              h("wpp-typography-v4-3-0", { type: "s-strong" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))),
           h("tbody", null, token.rows.map((row, r) => (h("tr", { key: r }, row.map((cell, c) => (h("td", { key: c },
-            h("wpp-typography-v4-2-0", { type: "s-body" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))))))));
+            h("wpp-typography-v4-3-0", { type: "s-body" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))))))));
     }
     case 'link':
       if (token.title) {
-        return (h("wpp-tooltip-v4-2-0", { text: token.title },
+        return (h("wpp-tooltip-v4-3-0", { text: token.title },
           h("a", { href: token.href, target: "_blank", rel: "noopener noreferrer", class: "chat-link" }, token.tokens?.length ? token.tokens.map((t) => renderToken(t)) : token.text)));
       }
       return (h("a", { href: token.href, target: "_blank", rel: "noopener noreferrer", title: token.title, class: "chat-link" }, token.tokens?.length ? token.tokens.map((t) => renderToken(t)) : token.text));
@@ -1636,7 +1636,7 @@ const renderToken = (token, role = 'user') => {
         h("div", { class: "chat-image-grid-row" }, rest.map((data, i) => (h("div", { key: i, class: "chat-image-grid-item chat-image-error-wrap" }, renderImageNode(role, data)))))));
     }
     case 'hr':
-      return h("wpp-divider-v4-2-0", null);
+      return h("wpp-divider-v4-3-0", null);
     case 'text':
       return token.tokens
         ? token.tokens.flatMap(t => renderToken(t)).filter((t) => t !== null)
@@ -1646,11 +1646,11 @@ const renderToken = (token, role = 'user') => {
       // Intentionally ignore raw HTML from LLM output for security
       return null;
     default:
-      return 'text' in token ? h("wpp-typography-v4-2-0", { type: "s-body" }, token.text) : null;
+      return 'text' in token ? h("wpp-typography-v4-3-0", { type: "s-body" }, token.text) : null;
   }
 };
 
-const wppChatConversationMessageCss = "@charset \"UTF-8\";:host{display:-ms-flexbox;display:flex;width:auto}.container{display:grid;width:100%;grid-template-columns:44px minmax(0, 80ch) 44px}.container.no-user-avatar{grid-template-columns:44px minmax(0, 80ch)}.container.no-assistant-avatar{grid-template-columns:minmax(0, 80ch) 44px}.container.no-user-avatar.no-assistant-avatar{grid-template-columns:minmax(0, 80ch)}.avatar-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:start;align-items:flex-start;-ms-flex-pack:center;justify-content:center}.avatar-wrapper.ai-avatar{-ms-flex-pack:start;justify-content:flex-start}.avatar-wrapper.user-avatar{-ms-flex-pack:end;justify-content:flex-end}.content{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:10px;width:100%;margin-left:auto}.content .wpp-typography{display:initial}.content.content-user{width:calc(100% - clamp(10%, 56px, 56px));padding:12px;background-color:var(--wpp-primary-color-100);border-radius:var(--wpp-border-radius-m) 0 var(--wpp-border-radius-m) var(--wpp-border-radius-m)}.content.content-user .attachments{-ms-flex-pack:end;justify-content:flex-end}.content p{margin-top:0}.message{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px}.message-text{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:10px}.custom-content ::slotted(*){margin-top:var(--wpp-chat-message-slot-gap, 8px)}.cursor{display:inline-block;width:2px;height:0.85em;margin-left:2px;vertical-align:text-bottom;background-color:currentColor;border-radius:1px;-webkit-animation:blink 1s steps(1) infinite;animation:blink 1s steps(1) infinite}.code-block{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;background-color:var(--wpp-grey-color-100);border-radius:var(--wpp-border-radius-m)}.code-block:hover .code-block-copy-icon{opacity:1}.code-block .code-lang{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;padding:8px 8px 4px;color:var(--wpp-grey-color-600)}.code-block code{padding:8px}.code-block-copy-icon{cursor:pointer;opacity:0;-webkit-transition:opacity 0.1s linear;transition:opacity 0.1s linear}.code-block-copy-icon:hover{--wpp-prop-icon-color:var(--wpp-grey-color-800) !important}.action-toolbar{display:-ms-flexbox;display:flex;gap:4px}.actions{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;-ms-flex-align:center;align-items:center;margin-top:10px}.actions .sources-action{margin-left:auto}.chat-list{padding:0 0 0 16px;margin:0 0 0 16px}.chat-list.chat-list-nonordered,.chat-list .chat-list-nonordered{list-style-type:disc}.chat-list.chat-list-ordered,.chat-list .chat-list-ordered{list-style-type:decimal}.chat-list.chat-list-task{padding:0;margin:0;list-style-type:none}.chat-list .chat-list-item{display:list-item;margin:0}.chat-list .chat-list-item::marker{font-size:var(--wpp-typography-s-body-font-size);line-height:var(--wpp-typography-s-body-line-height)}.chat-list .chat-list-item .wpp-typography{display:block}.chat-list .chat-list-item .chat-list{display:block}.chat-list .chat-list-item-task{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}.chat-list .chat-list-item-task .chat-list{margin-left:8px}.chat-list .chat-list-item-task:not(.chat-list-item-task-checked){text-decoration:line-through}.chat-list .chat-list-item-task:not(.chat-list-item-task-checked) .wpp-icon-tick{display:inline-block;text-decoration:none}.chat-link{font-size:var(--wpp-typography-s-body-font-size);line-height:var(--wpp-typography-s-body-line-height);color:var(--wpp-primary-color-500);-webkit-transition:color 0.2s ease-in-out;transition:color 0.2s ease-in-out}.chat-link:hover{color:var(--wpp-primary-color-400)}.chat-link:active{color:var(--wpp-primary-color-600)}.chat-table{width:100%;border-collapse:collapse;border-spacing:0}.chat-table th,.chat-table td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--wpp-grey-color-300)}.chat-quote{padding-left:16px;margin-left:0;border-left:3px solid var(--wpp-grey-color-300)}.chat-image-single{position:relative;width:100%}.chat-image-single img{display:block;width:100%;height:auto;-o-object-fit:cover;object-fit:cover}.chat-image-full{display:block;width:100%;height:auto;-o-object-fit:cover;object-fit:cover;border:1px solid var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-xs)}.chat-image-grid{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px;width:100%}.chat-image-grid-first{position:relative;width:100%}.chat-image-grid-row{display:-ms-flexbox;display:flex;gap:12px;-ms-flex-align:start;align-items:flex-start;overflow:visible hidden;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.chat-image-grid-row::-webkit-scrollbar{width:4px;height:4px}.chat-image-grid-row::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.chat-image-grid-row .chat-image-grid-item{display:-ms-flexbox;display:flex;-ms-flex:0 0 calc(23% - 9px);flex:0 0 calc(23% - 9px);aspect-ratio:1/1;min-width:100px;overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;border:1px solid var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-xs);position:relative}.chat-image-grid-row .chat-image-grid-item img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}.image-download-button{--wpp-btns-action-color-fill:var(--wpp-grey-color-000);position:absolute;top:8px;right:8px;opacity:0;-webkit-transition:opacity 0.2s ease-in-out;transition:opacity 0.2s ease-in-out}.chat-image-grid-item:hover .image-download-button,.chat-image-single:hover .image-download-button,.chat-image-grid-first:hover .image-download-button{opacity:1}.wpp-icon-image{display:none;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.chat-image-broken{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;background-color:var(--wpp-grey-color-200)}.chat-image-broken .wpp-icon-image{display:block}.chat-image-broken .image-download-button{display:none}.chat-image-broken img{display:none}.attachments{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;gap:8px;width:100%}.attachments .wpp-file-upload-item{-ms-flex:1 1 calc(50% - 4px);flex:1 1 calc(50% - 4px);min-width:224px;max-width:256px}@-webkit-keyframes blink{0%,100%{opacity:1}50%{opacity:0}}@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}";
+const wppChatConversationMessageCss = "@charset \"UTF-8\";:host{display:-ms-flexbox;display:flex;width:auto}.container{display:grid;width:100%;grid-template-columns:44px minmax(0, 80ch) 44px}.container.no-user-avatar{grid-template-columns:44px minmax(0, 80ch)}.container.no-assistant-avatar{grid-template-columns:minmax(0, 80ch) 44px}.container.no-user-avatar.no-assistant-avatar{grid-template-columns:minmax(0, 80ch)}.avatar-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:start;align-items:flex-start;-ms-flex-pack:center;justify-content:center}.avatar-wrapper.ai-avatar{-ms-flex-pack:start;justify-content:flex-start}.avatar-wrapper.user-avatar{-ms-flex-pack:end;justify-content:flex-end}.content{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:10px;width:100%;margin-left:auto}.content .wpp-typography{display:initial}.content.content-user{width:calc(100% - clamp(10%, 56px, 56px));padding:12px;background-color:var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-m);-webkit-box-shadow:var(--wpp-box-shadow-xs);box-shadow:var(--wpp-box-shadow-xs)}.content.content-user .attachments{-ms-flex-pack:end;justify-content:flex-end}.content p{margin-top:0}.message{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px}.message-text{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:10px}.custom-content ::slotted(*){margin-top:var(--wpp-chat-message-slot-gap, 8px)}.cursor{display:inline-block;width:2px;height:0.85em;margin-left:2px;vertical-align:text-bottom;background-color:currentcolor;border-radius:1px;-webkit-animation:blink 1s steps(1) infinite;animation:blink 1s steps(1) infinite}.code-block{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;background-color:var(--wpp-grey-color-100);border-radius:var(--wpp-border-radius-m)}.code-block:hover .code-block-copy-icon{opacity:1}.code-block .code-lang{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;padding:8px 8px 4px;color:var(--wpp-grey-color-600)}.code-block code{padding:8px}.code-block-copy-icon{cursor:pointer;opacity:0;-webkit-transition:opacity 0.1s linear;transition:opacity 0.1s linear}.code-block-copy-icon:hover{--wpp-prop-icon-color:var(--wpp-grey-color-800) !important}.action-toolbar{display:-ms-flexbox;display:flex;gap:4px}.actions{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;-ms-flex-align:center;align-items:center;margin-top:10px}.actions .sources-action{margin-left:auto}.chat-list{padding:0 0 0 16px;margin:0 0 0 16px}.chat-list.chat-list-nonordered,.chat-list .chat-list-nonordered{list-style-type:disc}.chat-list.chat-list-ordered,.chat-list .chat-list-ordered{list-style-type:decimal}.chat-list.chat-list-task{padding:0;margin:0;list-style-type:none}.chat-list .chat-list-item{display:list-item;margin:0}.chat-list .chat-list-item::marker{font-size:var(--wpp-typography-s-body-font-size);line-height:var(--wpp-typography-s-body-line-height)}.chat-list .chat-list-item .wpp-typography{display:block}.chat-list .chat-list-item .chat-list{display:block}.chat-list .chat-list-item-task{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}.chat-list .chat-list-item-task .chat-list{margin-left:8px}.chat-list .chat-list-item-task:not(.chat-list-item-task-checked){text-decoration:line-through}.chat-list .chat-list-item-task:not(.chat-list-item-task-checked) .wpp-icon-tick{display:inline-block;text-decoration:none}.chat-link{font-size:var(--wpp-typography-s-body-font-size);line-height:var(--wpp-typography-s-body-line-height);color:var(--wpp-primary-color-500);-webkit-transition:color 0.2s ease-in-out;transition:color 0.2s ease-in-out}.chat-link:hover{color:var(--wpp-primary-color-400)}.chat-link:active{color:var(--wpp-primary-color-600)}.chat-table{width:100%;border-collapse:collapse;border-spacing:0}.chat-table th,.chat-table td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--wpp-grey-color-300)}.chat-quote{padding-left:16px;margin-left:0;border-left:3px solid var(--wpp-grey-color-300)}.chat-image-single{position:relative;width:100%}.chat-image-single img{display:block;width:100%;height:auto;-o-object-fit:cover;object-fit:cover}.chat-image-full{display:block;width:100%;height:auto;-o-object-fit:cover;object-fit:cover;border:1px solid var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-xs)}.chat-image-grid{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px;width:100%}.chat-image-grid-first{position:relative;width:100%}.chat-image-grid-row{display:-ms-flexbox;display:flex;gap:12px;-ms-flex-align:start;align-items:flex-start;overflow:visible hidden;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.chat-image-grid-row::-webkit-scrollbar{width:4px;height:4px}.chat-image-grid-row::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.chat-image-grid-row .chat-image-grid-item{display:-ms-flexbox;display:flex;-ms-flex:0 0 calc(23% - 9px);flex:0 0 calc(23% - 9px);aspect-ratio:1/1;min-width:100px;overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;border:1px solid var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-xs);position:relative}.chat-image-grid-row .chat-image-grid-item img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}.image-download-button{--wpp-btns-action-color-fill:var(--wpp-grey-color-000);position:absolute;top:8px;right:8px;opacity:0;-webkit-transition:opacity 0.2s ease-in-out;transition:opacity 0.2s ease-in-out}.chat-image-grid-item:hover .image-download-button,.chat-image-single:hover .image-download-button,.chat-image-grid-first:hover .image-download-button{opacity:1}.wpp-icon-image{display:none;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.chat-image-broken{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;background-color:var(--wpp-grey-color-200)}.chat-image-broken .wpp-icon-image{display:block}.chat-image-broken .image-download-button{display:none}.chat-image-broken img{display:none}.attachments{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;gap:8px;width:100%}.attachments .wpp-file-upload-item{-ms-flex:1 1 calc(50% - 4px);flex:1 1 calc(50% - 4px);min-width:224px;max-width:256px}@-webkit-keyframes blink{0%,100%{opacity:1}50%{opacity:0}}@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}";
 
 const WppChatConversationMessage = /*@__PURE__*/ proxyCustomElement(class WppChatConversationMessage extends HTMLElement {
   constructor() {
@@ -1670,20 +1670,28 @@ const WppChatConversationMessage = /*@__PURE__*/ proxyCustomElement(class WppCha
     this.renderActionButton = (data) => {
       if (!data.icon)
         return null;
-      return (h("wpp-action-button-v4-2-0", { variant: "secondary", ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
+      return (h("wpp-action-button-v4-3-0", { variant: "secondary", ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
     };
     this.renderMenuContextListItems = () => (h(Fragment, null, this.menuContextListItems.map(item => {
       const { label, slots, ...rest } = item;
-      return (h("wpp-list-item-v4-2-0", { ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, h("span", { slot: "label" }, label), slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+      return (h("wpp-list-item-v4-3-0", { ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, h("span", { slot: "label" }, label), slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
     })));
     this.hostCssClasses = () => ({
       'wpp-chat-conversation': true,
     });
+    this.shouldRenderAvatar = (type) => {
+      if (this.userAvatarConfig === false && type === 'user')
+        return false;
+      if (this.assistantAvatarConfig === false && type === 'assistant')
+        return false;
+      const config = type === 'user' ? this.userAvatarConfig : this.assistantAvatarConfig;
+      return Object.keys(config).length > 0;
+    };
     this.containerCssClasses = () => ({
       container: true,
       [`container-${this.role}`]: true,
-      'no-user-avatar': !this.userAvatarConfig,
-      'no-assistant-avatar': !this.assistantAvatarConfig,
+      'no-user-avatar': !this.shouldRenderAvatar('user'),
+      'no-assistant-avatar': !this.shouldRenderAvatar('assistant'),
     });
     this.contentCssClasses = () => ({
       content: true,
@@ -1799,14 +1807,14 @@ const WppChatConversationMessage = /*@__PURE__*/ proxyCustomElement(class WppCha
   renderComplete() {
     const tokens = getMarkdownTokens(this.finalContent);
     if (!Array.isArray(tokens)) {
-      return (h("wpp-typography-v4-2-0", { type: "s-body", tag: "p" }, purify.sanitize(this.finalContent)));
+      return (h("wpp-typography-v4-3-0", { type: "s-body", tag: "p" }, purify.sanitize(this.finalContent)));
     }
     return h("div", { class: "message-text" }, tokens.map((token) => renderToken(token, this.role)));
   }
   renderAttachments() {
     if (!this.attachments || this.attachments.length === 0)
       return null;
-    return (h("div", { class: "attachments", part: "attachments", role: "list" }, this.attachments.map((file, index) => (h("wpp-file-upload-item-v4-2-0", { key: index, variant: "chat", part: "file-item", role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": this.attachments.length.toString(), file: {
+    return (h("div", { class: "attachments", part: "attachments", role: "list" }, this.attachments.map((file, index) => (h("wpp-file-upload-item-v4-3-0", { key: index, variant: "chat", part: "file-item", role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": this.attachments.length.toString(), file: {
         name: file.name,
         url: file.url,
         type: file.type,
@@ -1819,16 +1827,16 @@ const WppChatConversationMessage = /*@__PURE__*/ proxyCustomElement(class WppCha
     return !!this.finalContent && this.finalContent.trim().length > 0;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: this.containerCssClasses() }, this.assistantAvatarConfig && (h("div", { class: "avatar-wrapper ai-avatar" }, this.role === 'assistant' && (h("wpp-avatar-v4-2-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), h("div", { class: this.contentCssClasses() }, h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.hasTextContent() && this.renderComplete(), h("slot", { part: "custom-content" }), this.currentStatus === 'complete' && !!this.attachments?.length && this.renderAttachments()), this.role === 'assistant' && this.status === 'complete' && (h("div", { class: "actions" }, h("div", { class: "action-toolbar" }, this._actionButtonConfig.map(this.renderActionButton), this.menuContextListItems && (h("wpp-menu-context-v4-2-0", null, h("wpp-action-button-v4-2-0", { variant: "secondary", slot: "trigger-element" }, h("wpp-icon-more-v4-2-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.sourcesActionConfig && (h("div", { class: "sources-action" }, h("wpp-action-button-v4-2-0", { variant: "secondary", ...this.sourcesActionConfig }, this.sourcesActionConfig.text)))))), this.userAvatarConfig && (h("div", { class: "avatar-wrapper user-avatar" }, this.role === 'user' && h("wpp-avatar-v4-2-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: this.containerCssClasses() }, this.shouldRenderAvatar('assistant') && (h("div", { class: "avatar-wrapper ai-avatar" }, this.role === 'assistant' && (h("wpp-avatar-v4-3-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), h("div", { class: this.contentCssClasses() }, h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.hasTextContent() && this.renderComplete(), h("slot", { part: "custom-content" }), this.currentStatus === 'complete' && !!this.attachments?.length && this.renderAttachments()), this.role === 'assistant' && this.status === 'complete' && (h("div", { class: "actions" }, h("div", { class: "action-toolbar" }, this._actionButtonConfig.map(this.renderActionButton), this.menuContextListItems && (h("wpp-menu-context-v4-3-0", null, h("wpp-action-button-v4-3-0", { variant: "secondary", slot: "trigger-element" }, h("wpp-icon-more-v4-3-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.sourcesActionConfig && (h("div", { class: "sources-action" }, h("wpp-action-button-v4-3-0", { variant: "secondary", ...this.sourcesActionConfig }, this.sourcesActionConfig.text)))))), this.shouldRenderAvatar('user') && (h("div", { class: "avatar-wrapper user-avatar" }, this.role === 'user' && h("wpp-avatar-v4-3-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
   }
-  static get registryIs() { return "wpp-chat-conversation-message-v4-2-0"; }
+  static get registryIs() { return "wpp-chat-conversation-message-v4-3-0"; }
   get host() { return this; }
   static get watchers() { return {
     "status": ["onStatusChange"],
     "content": ["onContentChange"]
   }; }
   static get style() { return wppChatConversationMessageCss; }
-}, [1, "wpp-chat-conversation-message", "wpp-chat-conversation-message-v4-2-0", {
+}, [1, "wpp-chat-conversation-message", "wpp-chat-conversation-message-v4-3-0", {
     "role": [1],
     "content": [1],
     "status": [1],
@@ -1850,179 +1858,179 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-chat-conversation-message-v4-2-0", "wpp-action-button-v4-2-0", "wpp-avatar-v4-2-0", "wpp-checkbox-v4-2-0", "wpp-divider-v4-2-0", "wpp-file-upload-item-v4-2-0", "wpp-icon-chevron-v4-2-0", "wpp-icon-copy-v4-2-0", "wpp-icon-cross-v4-2-0", "wpp-icon-dash-v4-2-0", "wpp-icon-database-v4-2-0", "wpp-icon-document-v4-2-0", "wpp-icon-download-v4-2-0", "wpp-icon-error-v4-2-0", "wpp-icon-file-v4-2-0", "wpp-icon-file-zip-v4-2-0", "wpp-icon-image-v4-2-0", "wpp-icon-info-message-v4-2-0", "wpp-icon-more-v4-2-0", "wpp-icon-music-v4-2-0", "wpp-icon-pitch-v4-2-0", "wpp-icon-spreadsheet-v4-2-0", "wpp-icon-success-v4-2-0", "wpp-icon-tick-v4-2-0", "wpp-icon-video-clip-v4-2-0", "wpp-icon-warning-v4-2-0", "wpp-inline-message-v4-2-0", "wpp-internal-label-v4-2-0", "wpp-internal-tooltip-v4-2-0", "wpp-label-v4-2-0", "wpp-list-item-v4-2-0", "wpp-menu-context-v4-2-0", "wpp-spinner-v4-2-0", "wpp-tooltip-v4-2-0", "wpp-typography-v4-2-0"];
+  const components = ["wpp-chat-conversation-message-v4-3-0", "wpp-action-button-v4-3-0", "wpp-avatar-v4-3-0", "wpp-checkbox-v4-3-0", "wpp-divider-v4-3-0", "wpp-file-upload-item-v4-3-0", "wpp-icon-chevron-v4-3-0", "wpp-icon-copy-v4-3-0", "wpp-icon-cross-v4-3-0", "wpp-icon-dash-v4-3-0", "wpp-icon-database-v4-3-0", "wpp-icon-document-v4-3-0", "wpp-icon-download-v4-3-0", "wpp-icon-error-v4-3-0", "wpp-icon-file-v4-3-0", "wpp-icon-file-zip-v4-3-0", "wpp-icon-image-v4-3-0", "wpp-icon-info-message-v4-3-0", "wpp-icon-more-v4-3-0", "wpp-icon-music-v4-3-0", "wpp-icon-pitch-v4-3-0", "wpp-icon-spreadsheet-v4-3-0", "wpp-icon-success-v4-3-0", "wpp-icon-tick-v4-3-0", "wpp-icon-video-clip-v4-3-0", "wpp-icon-warning-v4-3-0", "wpp-inline-message-v4-3-0", "wpp-internal-label-v4-3-0", "wpp-internal-tooltip-v4-3-0", "wpp-label-v4-3-0", "wpp-list-item-v4-3-0", "wpp-menu-context-v4-3-0", "wpp-spinner-v4-3-0", "wpp-tooltip-v4-3-0", "wpp-typography-v4-3-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-chat-conversation-message-v4-2-0":
+    case "wpp-chat-conversation-message-v4-3-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppChatConversationMessage);
       }
       break;
-    case "wpp-action-button-v4-2-0":
+    case "wpp-action-button-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$y();
       }
       break;
-    case "wpp-avatar-v4-2-0":
+    case "wpp-avatar-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$x();
       }
       break;
-    case "wpp-checkbox-v4-2-0":
+    case "wpp-checkbox-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$w();
       }
       break;
-    case "wpp-divider-v4-2-0":
+    case "wpp-divider-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$v();
       }
       break;
-    case "wpp-file-upload-item-v4-2-0":
+    case "wpp-file-upload-item-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$u();
       }
       break;
-    case "wpp-icon-chevron-v4-2-0":
+    case "wpp-icon-chevron-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$t();
       }
       break;
-    case "wpp-icon-copy-v4-2-0":
+    case "wpp-icon-copy-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$s();
       }
       break;
-    case "wpp-icon-cross-v4-2-0":
+    case "wpp-icon-cross-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$r();
       }
       break;
-    case "wpp-icon-dash-v4-2-0":
+    case "wpp-icon-dash-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$q();
       }
       break;
-    case "wpp-icon-database-v4-2-0":
+    case "wpp-icon-database-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$p();
       }
       break;
-    case "wpp-icon-document-v4-2-0":
+    case "wpp-icon-document-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$o();
       }
       break;
-    case "wpp-icon-download-v4-2-0":
+    case "wpp-icon-download-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-icon-error-v4-2-0":
+    case "wpp-icon-error-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-icon-file-v4-2-0":
+    case "wpp-icon-file-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-file-zip-v4-2-0":
+    case "wpp-icon-file-zip-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-image-v4-2-0":
+    case "wpp-icon-image-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-info-message-v4-2-0":
+    case "wpp-icon-info-message-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-more-v4-2-0":
+    case "wpp-icon-more-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-music-v4-2-0":
+    case "wpp-icon-music-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-pitch-v4-2-0":
+    case "wpp-icon-pitch-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-spreadsheet-v4-2-0":
+    case "wpp-icon-spreadsheet-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-success-v4-2-0":
+    case "wpp-icon-success-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-tick-v4-2-0":
+    case "wpp-icon-tick-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-video-clip-v4-2-0":
+    case "wpp-icon-video-clip-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-warning-v4-2-0":
+    case "wpp-icon-warning-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-inline-message-v4-2-0":
+    case "wpp-inline-message-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-label-v4-2-0":
+    case "wpp-internal-label-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-internal-tooltip-v4-2-0":
+    case "wpp-internal-tooltip-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-label-v4-2-0":
+    case "wpp-label-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-list-item-v4-2-0":
+    case "wpp-list-item-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-menu-context-v4-2-0":
+    case "wpp-menu-context-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v4-2-0":
+    case "wpp-spinner-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-2-0":
+    case "wpp-tooltip-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-2-0":
+    case "wpp-typography-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

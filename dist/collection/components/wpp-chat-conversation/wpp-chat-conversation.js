@@ -2,10 +2,18 @@ import { h, Host } from '@stencil/core';
 export class WppChatConversation {
   constructor() {
     this.messageElementsMap = new Map();
+    this.shouldRenderAvatar = (type) => {
+      if (this.userAvatarConfig === false && type === 'user')
+        return false;
+      if (this.assistantAvatarConfig === false && type === 'assistant')
+        return false;
+      const config = type === 'user' ? this.userAvatarConfig : this.assistantAvatarConfig;
+      return Object.keys(config).length > 0;
+    };
     this.inputWrapperCssClasses = () => ({
       'input-wrapper': true,
-      'no-assistant-avatar': !this.assistantAvatarConfig,
-      'no-user-avatar': !this.userAvatarConfig,
+      'no-assistant-avatar': !this.shouldRenderAvatar('assistant'),
+      'no-user-avatar': !this.shouldRenderAvatar('user'),
     });
     this.messages = [];
     this.assistantAvatarConfig = {};
@@ -71,13 +79,13 @@ export class WppChatConversation {
     }, 100);
   }
   render() {
-    return (h(Host, null, h("div", { class: "conversation-container", ref: el => (this.conversationContainerRef = el) }, this.messages?.map(message => (h("wpp-chat-conversation-message-v4-2-0", { key: message.id, id: message.id, ref: el => {
+    return (h(Host, null, h("div", { class: "conversation-container", ref: el => (this.conversationContainerRef = el) }, this.messages?.map(message => (h("wpp-chat-conversation-message-v4-3-0", { key: message.id, id: message.id, ref: el => {
         if (el)
           this.messageElementsMap.set(message.id, el);
-      }, role: message.role, content: message.content, status: message.status, attachments: message.attachments, actionButtonsConfig: message.actionButtonsConfig, sourcesActionConfig: message.sourcesActionConfig, menuContextListItems: message.menuContextListItems, assistantAvatarConfig: this.assistantAvatarConfig, userAvatarConfig: this.userAvatarConfig }))), h("slot", null)), h("div", { class: this.inputWrapperCssClasses() }, h("wpp-chat-input-v4-2-0", { ...this.chatInputConfig, onWppSend: e => this.wppSend.emit(e.detail), onWppStop: () => this.wppStop.emit(), onWppChange: e => this.wppChange.emit(e.detail), onWppMessageChanged: e => this.wppMessageChanged.emit(e.detail), onWppActionsMenuToggle: e => this.wppActionsMenuToggle.emit(e.detail), onWppActionsMenuItemClick: e => this.wppActionsMenuItemClick.emit(e.detail) }))));
+      }, role: message.role, content: message.content, status: message.status, attachments: message.attachments, actionButtonsConfig: message.actionButtonsConfig, sourcesActionConfig: message.sourcesActionConfig, menuContextListItems: message.menuContextListItems, assistantAvatarConfig: this.assistantAvatarConfig, userAvatarConfig: this.userAvatarConfig }))), h("slot", null)), h("div", { class: this.inputWrapperCssClasses() }, h("wpp-chat-input-v4-3-0", { ...this.chatInputConfig, onWppSend: e => this.wppSend.emit(e.detail), onWppStop: () => this.wppStop.emit(), onWppChange: e => this.wppChange.emit(e.detail), onWppMessageChanged: e => this.wppMessageChanged.emit(e.detail), onWppActionsMenuToggle: e => this.wppActionsMenuToggle.emit(e.detail), onWppActionsMenuItemClick: e => this.wppActionsMenuItemClick.emit(e.detail) }))));
   }
   static get is() { return "wpp-chat-conversation"; }
-  static get registryIs() { return "wpp-chat-conversation-v4-2-0"; }
+  static get registryIs() { return "wpp-chat-conversation-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -130,7 +138,10 @@ export class WppChatConversation {
         "required": false,
         "optional": false,
         "docs": {
-          "tags": [],
+          "tags": [{
+              "name": "deprecated",
+              "text": "- The component should no longer render an avatar for the AI model."
+            }],
           "text": "Defines the avatar configuration for the assistant."
         },
         "attribute": "assistant-avatar-config",
@@ -154,7 +165,10 @@ export class WppChatConversation {
         "required": false,
         "optional": false,
         "docs": {
-          "tags": [],
+          "tags": [{
+              "name": "deprecated",
+              "text": "- The component should no longer render an avatar for the user."
+            }],
           "text": "Defines the avatar configuration for the user."
         },
         "attribute": "user-avatar-config",
@@ -166,7 +180,7 @@ export class WppChatConversation {
         "mutable": false,
         "complexType": {
           "original": "ChatInputConfig",
-          "resolved": "{ actions?: ChatInputAction[] | undefined; ariaProps?: ChatInputAriaProps | undefined; attachments?: FileItemType[] | undefined; charactersLimit?: number | undefined; debounceDelay?: number | undefined; debounceEnabled?: boolean | undefined; disabled?: boolean | undefined; enableAttach?: boolean | undefined; enableMic?: boolean | undefined; fileUploadConfig?: Partial<FileUploadConfig> | undefined; htmlAttributes?: ChatInputAttributes | undefined; isGenerating?: boolean | undefined; locales?: Partial<ChatInputLocaleInterface> | undefined; placeholder?: string | undefined; size?: ChatInputSize | undefined; textValue?: string | undefined; textareaAriaLabel?: string | undefined; textareaId?: string | undefined; textareaName?: string | undefined; withSelect?: boolean | undefined; zIndex?: number | undefined; }",
+          "resolved": "{ actions?: ChatInputAction[] | undefined; ariaProps?: ChatInputAriaProps | undefined; attachments?: FileItemType[] | undefined; charactersLimit?: number | undefined; debounceDelay?: number | undefined; debounceEnabled?: boolean | undefined; disabled?: boolean | undefined; enableAttach?: boolean | undefined; enableMic?: boolean | undefined; fileUploadConfig?: Partial<FileUploadConfig> | undefined; htmlAttributes?: ChatInputAttributes | undefined; isGenerating?: boolean | undefined; locales?: Partial<ChatInputLocaleInterface> | undefined; models?: ChatInputModel[] | undefined; placeholder?: string | undefined; selectedModel?: ChatInputSelectedModel | undefined; size?: ChatInputSize | undefined; textValue?: string | undefined; textareaAriaLabel?: string | undefined; textareaId?: string | undefined; textareaName?: string | undefined; withSelect?: boolean | undefined; zIndex?: number | undefined; }",
           "references": {
             "ChatInputConfig": {
               "location": "import",

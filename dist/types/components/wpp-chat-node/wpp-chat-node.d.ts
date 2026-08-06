@@ -1,5 +1,5 @@
 import { EventEmitter } from '../../stencil-public-runtime';
-import type { ChatNodeAction, ChatNodeMessageAction, ChatNodeMessageActionClickDetail, ChatNodeAvatarConfig, ChatNodeLocales, ChatNodeMessage, ChatNodeModel, WppChatNodeSize } from './types';
+import type { ChatNodeAction, ChatNodeMessageAction, ChatNodeMessageActionClickDetail, ChatNodeAvatarConfig, ChatNodeLocales, ChatNodeMessage, ChatNodeMicEventDetail, ChatNodeModel, ChatNodeSelectableModel, ChatNodeSelectedModel, WppChatNodeSize } from './types';
 /**
  * Card-style node intended for use inside a React Flow canvas.
  * It renders a chat bar footer, an optional messages body,
@@ -37,6 +37,12 @@ export declare class WppChatNode {
    */
   readonly isSelected: boolean;
   /**
+   * If `true`, the primary action shows a re-run affordance (refresh icon) that
+   * lets the user re-run the last response. Takes precedence over the send action
+   * but not over the stop action shown while loading.
+   */
+  readonly isReRun: boolean;
+  /**
    * Defines the chat node size. `'s'` renders the compact chat bar only.
    */
   readonly size: WppChatNodeSize;
@@ -49,11 +55,19 @@ export declare class WppChatNode {
    */
   readonly assistantAvatarConfig: ChatNodeAvatarConfig | false;
   /**
-   * Defines the actions shown in the + menu.
+   * Defines the actions available from the `+` button.
+   * When empty (the default), the `+` button is a plain action that emits `wppAttach` on click.
+   * When it contains at least one action, the `+` button instead opens a dropdown listing them,
+   * and selecting one emits `wppActionClick` with the chosen action.
    */
   readonly actions: ChatNodeAction[];
   /**
-   * Defines the available chat models shown in the nested + menu.
+   * Defines the list of AI models offered by the AI model selector on the chat bar.
+   * The selector always renders a dropdown that starts with the built-in default options
+   * ("Auto" / "Premium"). When this array is empty, the dropdown additionally renders a
+   * "Select model or agent" action that emits `wppModelBrowse` when clicked; otherwise the
+   * provided models are listed below the defaults. Picking any model emits `wppModelSelect`.
+   * Note: the `icon` property is deprecated and should not be used, always aim to use `logo` for the image.
    */
   readonly models: ChatNodeModel[];
   /**
@@ -62,9 +76,19 @@ export declare class WppChatNode {
    */
   readonly messageActions?: ChatNodeMessageAction[];
   /**
-   * Defines the selected chat model id. If omitted, the first model is shown as selected.
+   * Defines the selected AI model. Accepts a built-in default option (`'auto'` / `'premium'`) or one
+   * of the provided `models`. Defaults to `'auto'`. The component keeps this in sync when the user
+   * picks a model from the dropdown; it can also be set externally when selection follows a
+   * different flow (e.g. from a side-modal).
    */
-  readonly selectedModelId?: string;
+  selectedModel: ChatNodeSelectedModel;
+  /**
+   * Defines the id of the selected model. Kept for backwards compatibility: it still selects the
+   * matching option from the built-in defaults (`'auto'` / `'premium'`) or from `models`, but only
+   * while `selectedModel` sits at its default — `selectedModel` always takes precedence.
+   * @deprecated Use `selectedModel` instead. This id-based prop will be removed in a future release.
+   */
+  selectedModelId?: string;
   /**
    * Indicates the locales for the chat-node component.
    */
@@ -80,36 +104,57 @@ export declare class WppChatNode {
    */
   wppStop: EventEmitter<void>;
   /**
-   * Emitted when the user clicks the + (attach) button.
+   * Emitted when the user clicks the re-run button (shown when `isReRun` is true).
+   */
+  wppReRun: EventEmitter<void>;
+  /**
+   * Emitted when the user clicks the + button while `actions` is empty.
+   * When `actions` is non-empty the + button opens the actions dropdown instead and this never fires.
    */
   wppAttach: EventEmitter<void>;
   /**
-   * Emitted when an action from the + menu is selected.
+   * Emitted when the user toggles the audio-record (microphone) button.
+   * The detail carries the resulting state: `isRecording` is `true` when listening
+   * has just started and `false` when it has just stopped.
+   */
+  wppMic: EventEmitter<ChatNodeMicEventDetail>;
+  /**
+   * Emitted when an action is selected from the + button's actions dropdown.
    */
   wppActionClick: EventEmitter<ChatNodeAction>;
   /**
-   * Emitted when a chat model from the nested + menu is selected.
+   * Emitted when a model is selected from the AI model selector dropdown.
+   * The detail is the selected model object — a built-in `ChatNodeDefaultModel` (`Auto` / `Premium`)
+   * or one of the dev-provided `ChatNodeModel`s.
    */
-  wppModelSelect: EventEmitter<ChatNodeModel>;
+  wppModelSelect: EventEmitter<ChatNodeSelectableModel>;
+  /**
+   * Emitted when the "Select model or agent" action from the model-selector dropdown is clicked.
+   * This action is rendered only when the `models` property is an empty array.
+   */
+  wppModelBrowse: EventEmitter<void>;
   /**
    * Emitted when a message action button is clicked.
    */
   wppMessageActionClick: EventEmitter<ChatNodeMessageActionClickDetail>;
   private inputValue;
   private messages;
-  private activeModelId?;
   private isActive;
   private isWaitingForResponse;
+  private isAudioRecording;
+  private isModelMenuOpen;
   private defaultMessageActions;
   private _locales;
   private bodyRef?;
   private titleRef?;
-  private activeStateTimer?;
+  private recognition;
   private responseWaitTimer?;
   private static unrefTimer;
   onUpdateLocales(newLocales: Partial<ChatNodeLocales>): void;
+  onUpdateSelectedModel(newModel: ChatNodeSelectedModel): void;
   componentWillLoad(): void;
   connectedCallback(): void;
+  componentDidLoad(): void;
   disconnectedCallback(): void;
   /**
    * Programmatically add a message (user or assistant) to the chat body.
@@ -123,22 +168,45 @@ export declare class WppChatNode {
   private handleInput;
   private handleSend;
   private handleStop;
+  private handleReRun;
   private handleKeyDown;
+  private setupSpeechRecognition;
+  private startSpeechRecognition;
+  private stopSpeechRecognition;
+  private handleClickAudioRecording;
   private handleAttach;
   private handleActionClick;
   private handleModelSelect;
+  private handleModelChange;
+  private handleModelMenuShow;
+  private handleModelMenuHide;
   private handleMessageActionClick;
   private handleNodeInteraction;
   private handleWindowPointerDown;
   private activateNode;
   private clearActiveState;
-  private clearActiveStateTimer;
   private startWaitingForResponse;
   private clearWaitingForResponse;
   private clearResponseWaitTimer;
+  private getDefaultModels;
   private getSelectedModel;
+  private getModelFromDeprecatedId;
   private renderIcon;
   private renderActionMenu;
+  private renderModelListItem;
+  /**
+   * Model selector triggered by the compact logo avatar (Figma). Unlike wpp-chat-input,
+   * which shows the full brand logo + model label, the node exposes only the compact logo
+   * avatar. The dropdown always starts with the built-in default options ("Auto" / "Premium").
+   * When `models` are provided they are listed below the defaults; when `models` is empty a
+   * "Select model or agent" action is rendered instead, emitting `wppModelBrowse` on click.
+   */
+  private renderModelSelector;
+  private renderMicrophoneBtn;
+  private getPrimaryAction;
+  private isPrimaryActionVisible;
+  private renderSendButton;
+  private renderInput;
   private renderChatBar;
   private renderAvatar;
   private getAttachmentKind;

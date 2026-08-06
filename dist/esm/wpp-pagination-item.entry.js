@@ -1,4 +1,4 @@
-import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
+import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-93f63aaa.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme-3920c16c.js';
 
@@ -39,9 +39,9 @@ const WppPaginationItem = class {
     this.themeSubscription.stop();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, tabIndex: 0, exportparts: "number" }, h("wpp-typography-v4-2-0", { type: "s-body", part: "number" }, this.number)));
+    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, tabIndex: 0, exportparts: "number" }, h("wpp-typography-v4-3-0", { type: "s-body", part: "number" }, this.number)));
   }
-  static get registryIs() { return "wpp-pagination-item-v4-2-0"; }
+  static get registryIs() { return "wpp-pagination-item-v4-3-0"; }
   get host() { return getElement(this); }
 };
 WppPaginationItem.style = wppPaginationItemCss;

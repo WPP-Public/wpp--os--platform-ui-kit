@@ -18,6 +18,13 @@ export declare const ICON_ITEMS_HTML = "\n  <wpp-segmented-control size=\"s\" va
  */
 export declare const FIVE_ITEMS_WITH_DISABLED_HTML = "\n  <wpp-segmented-control size=\"m\" value=\"item-1\">\n    <wpp-segmented-control-item value=\"item-1\">Tab 1</wpp-segmented-control-item>\n    <wpp-segmented-control-item value=\"item-2\" disabled>Tab 2</wpp-segmented-control-item>\n    <wpp-segmented-control-item value=\"item-3\">Tab 3</wpp-segmented-control-item>\n    <wpp-segmented-control-item value=\"item-4\" disabled>Tab 4</wpp-segmented-control-item>\n    <wpp-segmented-control-item value=\"item-5\">Tab 5</wpp-segmented-control-item>\n  </wpp-segmented-control>\n";
 /**
+ * HTML template where the checked (active) item is also disabled.
+ * Used to test the roving-tabindex fallback: when the active item is disabled,
+ * the first non-disabled item should become focusable instead.
+ * Items: item-1 (active + disabled), item-2, item-3
+ */
+export declare const CHECKED_DISABLED_HTML = "\n  <wpp-segmented-control size=\"m\" value=\"item-1\">\n    <wpp-segmented-control-item value=\"item-1\" active disabled>Tab 1</wpp-segmented-control-item>\n    <wpp-segmented-control-item value=\"item-2\">Tab 2</wpp-segmented-control-item>\n    <wpp-segmented-control-item value=\"item-3\">Tab 3</wpp-segmented-control-item>\n  </wpp-segmented-control>\n";
+/**
  * Creates a KeyboardEvent for testing keyboard navigation.
  */
 export declare const createKeyboardEvent: (key: string, options?: Partial<KeyboardEvent>) => KeyboardEvent;

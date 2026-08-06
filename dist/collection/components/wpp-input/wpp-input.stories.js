@@ -31,7 +31,7 @@ export default {
     maxLength: { control: { type: 'number' } },
   },
 };
-export const Regular = (args) => html ` <wpp-input-v4-2-0
+export const Regular = (args) => html ` <wpp-input-v4-3-0
     .type="${args.type}"
     .name="${args.name}"
     .value="${args.value}"
@@ -49,16 +49,16 @@ export const Regular = (args) => html ` <wpp-input-v4-2-0
   >
     ${args.showIconStart
   ? html `
-          <wpp-icon-search-v4-2-0
+          <wpp-icon-search-v4-3-0
             slot="icon-start"
             @click="${(e) => {
     e.stopPropagation();
     console.log('Left icon clicked');
   }}"
-          ></wpp-icon-search-v4-2-0>
+          ></wpp-icon-search-v4-3-0>
         `
   : null}
-  </wpp-input-v4-2-0>`;
+  </wpp-input-v4-3-0>`;
 Regular.args = {
   type: 'text',
   size: 'm',
@@ -83,7 +83,7 @@ Regular.args = {
   maxLength: undefined,
 };
 Regular.parameters = {};
-export const Search = (args) => html ` <wpp-input-v4-2-0
+export const Search = (args) => html ` <wpp-input-v4-3-0
     type="search"
     .name="${args.name}"
     .value="${args.value}"
@@ -98,7 +98,7 @@ export const Search = (args) => html ` <wpp-input-v4-2-0
     .loading="${args.loading}"
     .minLength="${args.minLength}"
     .maxLength="${args.maxLength}"
-  ></wpp-input-v4-2-0>`;
+  ></wpp-input-v4-3-0>`;
 Search.args = {
   size: 'm',
   name: 'text-input',
@@ -121,7 +121,7 @@ Search.args = {
 Search.parameters = {
   controls: { exclude: ['type', 'showIconStart'] },
 };
-export const DecimalWithLimits = (args) => html ` <wpp-input-v4-2-0
+export const DecimalWithLimits = (args) => html ` <wpp-input-v4-3-0
       type="decimal"
       .name="${args.name}"
       .value="${args.value}"
@@ -135,9 +135,9 @@ export const DecimalWithLimits = (args) => html ` <wpp-input-v4-2-0
       .autocomplete="${args.autocomplete}"
       .minLength=${args.minLength}
       .maxLength=${args.maxLength}
-    ></wpp-input-v4-2-0>
+    ></wpp-input-v4-3-0>
     <br />
-    <wpp-input-v4-2-0
+    <wpp-input-v4-3-0
       type="decimal"
       .name="${args.name}"
       .value="${args.value}"
@@ -158,7 +158,7 @@ export const DecimalWithLimits = (args) => html ` <wpp-input-v4-2-0
       .minLength=${args.minLength}
       .maxLength=${args.maxLength}
       .locales=${args.locales}
-    ></wpp-input-v4-2-0>`;
+    ></wpp-input-v4-3-0>`;
 DecimalWithLimits.args = {
   type: 'decimal',
   size: 'm',
@@ -188,7 +188,7 @@ DecimalWithLimits.parameters = {
   controls: { exclude: ['type', 'size', 'showIconStart'] },
 };
 export const TextWithDecimalMask = (args) => html `
-  <wpp-input-v4-2-0
+  <wpp-input-v4-3-0
     type=${args.type}
     .name="${args.name}"
     .value="${args.value}"
@@ -201,7 +201,7 @@ export const TextWithDecimalMask = (args) => html `
     .message="${args.message}"
     .labelConfig="${args.labelConfig}"
     .maskOptions="${args.maskOptions}"
-  ></wpp-input-v4-2-0>
+  ></wpp-input-v4-3-0>
 `;
 TextWithDecimalMask.args = {
   type: 'text',
@@ -234,7 +234,7 @@ TextWithDecimalMask.parameters = {
   controls: { exclude: ['type', 'size', 'showIconStart', 'minLength', 'maxLength'] },
 };
 export const TextWithCustomMask = (args) => html `
-  <wpp-input-v4-2-0
+  <wpp-input-v4-3-0
     type=${args.type}
     .name="${args.name}"
     .value="${args.value}"
@@ -247,7 +247,7 @@ export const TextWithCustomMask = (args) => html `
     .message="${args.message}"
     .labelConfig="${args.labelConfig}"
     .maskOptions="${args.maskOptions}"
-  ></wpp-input-v4-2-0>
+  ></wpp-input-v4-3-0>
 `;
 TextWithCustomMask.args = {
   type: 'text',
@@ -297,7 +297,7 @@ TextWithCustomMask.parameters = {
   controls: { exclude: ['type', 'size', 'showIconStart', 'minLength', 'maxLength'] },
 };
 export const TelWithPlaceholderMask = (args) => html `
-  <wpp-input-v4-2-0
+  <wpp-input-v4-3-0
     type=${args.type}
     .name="${args.name}"
     .size="${args.size}"
@@ -308,7 +308,7 @@ export const TelWithPlaceholderMask = (args) => html `
     .messageType="${args.messageType}"
     .labelConfig="${args.labelConfig}"
     .maskOptions="${args.maskOptions}"
-  ></wpp-input-v4-2-0>
+  ></wpp-input-v4-3-0>
 `;
 TelWithPlaceholderMask.args = {
   type: 'tel',

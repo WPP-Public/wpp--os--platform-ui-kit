@@ -777,6 +777,7 @@
   transition: opacity var(--adp-overlay-transition-duration) var(--adp-overlay-transition-ease), height 0s, width 0s;
 }
 
+/* stylelint-disable no-invalid-position-at-import-rule */
 .wpp-datepicker-portal[data-wpp-theme=dark] {
   --wpp-datepicker-bg-color: var(--wpp-grey-color-200);
 }
@@ -1001,9 +1002,6 @@
   width: 100%;
   --li-width: 100%;
 }
-.wpp-list.wpp-chat-input-model-options .wpp-list-item:not(:first-child) {
-  margin-top: 4px;
-}
 .wpp-list::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -1016,8 +1014,6 @@
 .wpp-list.avatar-group {
   --avatar-dropdown-height: var(--wpp-drop-down-list-menu-height, 372px);
   --avatar-item-margin: var(--wpp-drop-down-item-margin, 0 0 4px 0);
-  max-height: var(--avatar-dropdown-height);
-  max-height: var(--avatar-dropdown-height);
   max-height: var(--avatar-dropdown-height);
   scrollbar-width: thin;
   scrollbar-color: var(--wpp-grey-color-400) transparent;
@@ -1036,7 +1032,7 @@
   max-height: var(--topbar-menu-list-max-height);
 }
 .wpp-list.topbar .wpp-menu-context {
-  margin: 0 0 4px 0;
+  margin: 0 0 4px;
 }
 .wpp-list.topbar *:last-child {
   margin: 0;
@@ -1170,7 +1166,7 @@
   width: 100%;
 }
 .wpp-select-portal .multiple-select-folder-buttons {
-  padding: 0 8px 8px 8px;
+  padding: 0 8px 8px;
   box-sizing: border-box;
   width: 100%;
   display: flex;
@@ -1178,7 +1174,7 @@
   align-items: center;
 }
 .wpp-select-portal .multiple-select-folder-buttons.with-divider {
-  padding: 7px 8px 8px 8px;
+  padding: 7px 8px 8px;
 }
 .wpp-select-portal .multiple-select-folder-buttons.select-all-mode {
   justify-content: space-between;
@@ -1739,7 +1735,7 @@
   justify-content: space-between;
   background: var(--wpp-grey-color-000);
 }
-.wpp-datepicker-portal.portal-datepicker.wpp-with-presets.wpp-reverse-layout:after {
+.wpp-datepicker-portal.portal-datepicker.wpp-with-presets.wpp-reverse-layout::after {
   content: "";
   position: relative;
   flex-basis: 100%;
@@ -1753,7 +1749,7 @@
   padding: var(--datepicker-padding) 0 0 var(--datepicker-padding);
   order: 2;
 }
-.wpp-datepicker-portal.portal-datepicker.wpp-with-presets.wpp-reverse-layout .wpp-presets-container:before {
+.wpp-datepicker-portal.portal-datepicker.wpp-with-presets.wpp-reverse-layout .wpp-presets-container::before {
   right: initial;
   left: 0;
   border-left: 1px solid var(--wpp-grey-color-300);
@@ -1843,6 +1839,15 @@
   background: var(--wpp-grey-color-800);
 }
 
+.wpp-model-dropdown {
+  gap: 4px;
+  display: flex;
+  flex-direction: column;
+}
+.wpp-model-dropdown .wpp-divider {
+  margin: 4px 0;
+}
+
 .wpp-time-picker-portal {
   box-shadow: var(--wpp-box-shadow-m);
   height: 372px;
@@ -1871,7 +1876,7 @@
   box-shadow: inset 0 0 0 2px var(--wpp-grey-color-400);
 }
 .wpp-time-picker-portal .section.has-scroll {
-  padding-right: 0px;
+  padding-right: 0;
 }
 .wpp-time-picker-portal .section .wpp-list-item {
   width: 100%;

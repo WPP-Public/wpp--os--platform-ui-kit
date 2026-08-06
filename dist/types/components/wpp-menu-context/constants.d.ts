@@ -10,3 +10,5 @@ export declare const MENU_ITEM = "menuitem";
 export declare const GROUP_ROLE = "group";
 export declare const PRESENTATION_ROLE = "presentation";
 export declare const WPP_LIST_CLASSNAME = "wpp-list";
+export declare const TAB_FOCUS_CLASS = "tab-focus";
+export declare const MENU_CONTEXT_KEYBOARD_ACTIVATION_EVENT = "wppMenuContextKeyboardActivation";

@@ -112,13 +112,13 @@ export const extractExtraProps = (tree) => {
  */
 export const getAllVisibleItems = (tree) => {
   const result = [];
-  const traverse = (items) => {
+  const traverse = (items, level = 1) => {
     for (const item of items) {
       if (item.hidden)
         continue;
-      result.push(item);
+      result.push({ ...item, level });
       if (item.open && item.children?.length) {
-        traverse(item.children);
+        traverse(item.children, level + 1);
       }
     }
   };

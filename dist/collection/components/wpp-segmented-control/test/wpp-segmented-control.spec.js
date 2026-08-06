@@ -2,7 +2,7 @@ import { h } from '@stencil/core';
 import { newSpecPage } from '@stencil/core/testing';
 import { WppSegmentedControl } from '../wpp-segmented-control';
 import { WppSegmentedControlItem } from '../components/wpp-segmented-control-item/wpp-segmented-control-item';
-import { TEXT_ITEMS_HTML, ICON_ITEMS_HTML, FIVE_ITEMS_WITH_DISABLED_HTML, createKeyboardEvent } from './mocks';
+import { TEXT_ITEMS_HTML, ICON_ITEMS_HTML, FIVE_ITEMS_WITH_DISABLED_HTML, CHECKED_DISABLED_HTML, createKeyboardEvent, } from './mocks';
 import * as utils from '../../../utils/utils';
 import * as themeUtils from '../../../utils/subscribe-to-theme';
 describe('wpp-segmented-control', () => {
@@ -171,6 +171,80 @@ describe('wpp-segmented-control accessibility', () => {
     it('should set tabIndex=-1 on disabled items', () => {
       const disabledItem = page.root?.querySelector('wpp-segmented-control-item[value="item-3"]');
       expect(disabledItem?.getAttribute('tabindex')).toBe('-1');
+    });
+  });
+  describe('roving tabindex fallback (checked item is disabled)', () => {
+    const getItem = (value) => page.root?.querySelector(`wpp-segmented-control-item[value="${value}"]`);
+    beforeEach(async () => {
+      page = await newSpecPage({
+        components: [WppSegmentedControl, WppSegmentedControlItem],
+        html: CHECKED_DISABLED_HTML,
+      });
+    });
+    it('should make the first non-disabled item focusable when the checked item is disabled', async () => {
+      page.rootInstance.handleSlotChange();
+      await page.waitForChanges();
+      // item-1 is active + disabled, so item-2 (first enabled) becomes the focusable fallback
+      expect(page.rootInstance.firstNonDisabledItem).toBe(getItem('item-2'));
+      expect(getItem('item-2')?.getAttribute('tabindex')).toBe('0');
+    });
+    it('should force tabIndex=0 via ariaProps on the fallback item', async () => {
+      page.rootInstance.handleSlotChange();
+      await page.waitForChanges();
+      expect(getItem('item-2')?.ariaProps?.tab?.tabIndex).toBe(0);
+    });
+    it('should not set a fallback item when the checked item is enabled', async () => {
+      page = await newSpecPage({
+        components: [WppSegmentedControl, WppSegmentedControlItem],
+        html: TEXT_ITEMS_HTML,
+      });
+      page.rootInstance.handleSlotChange();
+      await page.waitForChanges();
+      // item-1 is active and enabled, so no fallback is needed
+      expect(page.rootInstance.firstNonDisabledItem).toBeUndefined();
+    });
+    it('should reset the fallback tabIndex when the value changes', async () => {
+      page.rootInstance.handleSlotChange();
+      await page.waitForChanges();
+      // Precondition: item-2 is the forced-focusable fallback
+      expect(page.rootInstance.firstNonDisabledItem).toBe(getItem('item-2'));
+      // Selecting another item makes it naturally focusable, so the fallback must be cleared
+      page.rootInstance.value = 'item-3';
+      await page.waitForChanges();
+      expect(page.rootInstance.firstNonDisabledItem).toBeUndefined();
+      expect(getItem('item-2')?.ariaProps?.tab?.tabIndex).toBeUndefined();
+      // item-2 is no longer active nor forced, so it falls back to -1
+      expect(getItem('item-2')?.getAttribute('tabindex')).toBe('-1');
+    });
+    it('should clear the fallback on re-slot once the checked item becomes enabled', async () => {
+      page.rootInstance.handleSlotChange();
+      await page.waitForChanges();
+      expect(page.rootInstance.firstNonDisabledItem).toBe(getItem('item-2'));
+      // The checked item is no longer disabled, so it is naturally focusable again.
+      const activeItem = getItem('item-1');
+      activeItem.disabled = false;
+      await page.waitForChanges();
+      page.rootInstance.handleSlotChange();
+      await page.waitForChanges();
+      // Fallback must be cleared so we don't end up with two tab stops (item-1 and item-2).
+      expect(page.rootInstance.firstNonDisabledItem).toBeUndefined();
+      expect(getItem('item-1')?.getAttribute('tabindex')).toBe('0');
+      expect(getItem('item-2')?.getAttribute('tabindex')).toBe('-1');
+    });
+    it('should move the fallback to the new first enabled item on re-slot', async () => {
+      page.rootInstance.handleSlotChange();
+      await page.waitForChanges();
+      expect(page.rootInstance.firstNonDisabledItem).toBe(getItem('item-2'));
+      // item-2 (the current fallback) becomes disabled, so item-3 should take over.
+      const previousFallback = getItem('item-2');
+      previousFallback.disabled = true;
+      await page.waitForChanges();
+      page.rootInstance.handleSlotChange();
+      await page.waitForChanges();
+      expect(page.rootInstance.firstNonDisabledItem).toBe(getItem('item-3'));
+      expect(getItem('item-3')?.getAttribute('tabindex')).toBe('0');
+      // Stale fallback must be dropped, not left tabbable alongside item-3.
+      expect(getItem('item-2')?.ariaProps?.tab?.tabIndex).toBeUndefined();
     });
   });
   describe('keyboard navigation', () => {
@@ -369,12 +443,21 @@ describe('wpp-segmented-control accessibility', () => {
         expect(item.getAttribute('role')).toBe('tab');
       });
     });
+    it('should render aria-label on the icon variant', async () => {
+      page = await newSpecPage({
+        components: [WppSegmentedControl, WppSegmentedControlItem],
+        template: () => (h("wpp-segmented-control-v4-3-0", { size: "s", variant: "icon", value: "grid" }, h("wpp-segmented-control-item-v4-3-0", { variant: "icon", value: "grid", ariaProps: { tab: { label: 'Grid' } } }, h("wpp-icon-grid-dots-v4-3-0", null)))),
+      });
+      const item = page.root?.querySelector('wpp-segmented-control-item[value="grid"]');
+      await page.waitForChanges();
+      expect(item?.getAttribute('aria-label')).toBe('Grid');
+    });
   });
   describe('label association (label-empty fix)', () => {
     it('should render wpp-label with tag="span" to avoid empty label element', async () => {
       page = await newSpecPage({
         components: [WppSegmentedControl, WppSegmentedControlItem],
-        template: () => (h("wpp-segmented-control-v4-2-0", { size: "m", value: "item-1", labelConfig: { text: 'My Control' } }, h("wpp-segmented-control-item-v4-2-0", { value: "item-1" }, "Tab 1"))),
+        template: () => (h("wpp-segmented-control-v4-3-0", { size: "m", value: "item-1", labelConfig: { text: 'My Control' } }, h("wpp-segmented-control-item-v4-3-0", { value: "item-1" }, "Tab 1"))),
       });
       const label = page.root?.shadowRoot?.querySelector('wpp-label');
       expect(label).not.toBeNull();
@@ -383,7 +466,7 @@ describe('wpp-segmented-control accessibility', () => {
     it('should set aria-labelledby on tablist pointing to the label id when labelConfig is present', async () => {
       page = await newSpecPage({
         components: [WppSegmentedControl, WppSegmentedControlItem],
-        template: () => (h("wpp-segmented-control-v4-2-0", { size: "m", value: "item-1", labelConfig: { text: 'My Control' } }, h("wpp-segmented-control-item-v4-2-0", { value: "item-1" }, "Tab 1"))),
+        template: () => (h("wpp-segmented-control-v4-3-0", { size: "m", value: "item-1", labelConfig: { text: 'My Control' } }, h("wpp-segmented-control-item-v4-3-0", { value: "item-1" }, "Tab 1"))),
       });
       const tablist = page.root?.shadowRoot?.querySelector('[role="tablist"]');
       expect(tablist?.getAttribute('aria-labelledby')).toBe('segmented-control-label');
@@ -419,14 +502,14 @@ describe('wpp-segmented-control accessibility', () => {
     it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
       await newSpecPage({
         components: [WppSegmentedControl, WppSegmentedControlItem],
-        template: () => (h("wpp-segmented-control-v4-2-0", { size: "m", value: "item-1", labelConfig: { text: 'My Control' } }, h("wpp-segmented-control-item-v4-2-0", { value: "item-1" }, "Tab 1"))),
+        template: () => (h("wpp-segmented-control-v4-3-0", { size: "m", value: "item-1", labelConfig: { text: 'My Control' } }, h("wpp-segmented-control-item-v4-3-0", { value: "item-1" }, "Tab 1"))),
       });
       expect(mockStart).toHaveBeenCalledTimes(1);
     });
     it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
       const page = await newSpecPage({
         components: [WppSegmentedControl, WppSegmentedControlItem],
-        template: () => (h("wpp-segmented-control-v4-2-0", { size: "m", value: "item-1", labelConfig: { text: 'My Control' } }, h("wpp-segmented-control-item-v4-2-0", { value: "item-1" }, "Tab 1"))),
+        template: () => (h("wpp-segmented-control-v4-3-0", { size: "m", value: "item-1", labelConfig: { text: 'My Control' } }, h("wpp-segmented-control-item-v4-3-0", { value: "item-1" }, "Tab 1"))),
       });
       page.root?.remove();
       expect(mockStop).toHaveBeenCalledTimes(1);

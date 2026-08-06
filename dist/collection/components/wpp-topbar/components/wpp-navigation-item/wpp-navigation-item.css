@@ -60,46 +60,127 @@
   --navigation-item-bg-color-hover: var(--wpp-navigation-item-bg-color-hover, var(--wpp-grey-color-200));
   --navigation-item-bg-color-active: var(--wpp-navigation-item-bg-color-active, var(--wpp-grey-color-300));
   --navigation-item-bg-color-selected: var(--wpp-navigation-item-bg-color-selected, var(--wpp-grey-color-300));
-  --navigation-item-bg-color-selected-hover: var(--wpp-navigation-item-bg-color-selected-hover, var(--wpp-grey-color-300));
-  --navigation-item-bg-color-selected-active: var(--wpp-navigation-item-bg-color-selected-active, var(--wpp-grey-color-300));
+  --navigation-item-bg-color-selected-hover: var(
+    --wpp-navigation-item-bg-color-selected-hover,
+    var(--wpp-grey-color-300)
+  );
+  --navigation-item-bg-color-selected-active: var(
+    --wpp-navigation-item-bg-color-selected-active,
+    var(--wpp-grey-color-300)
+  );
   --navigation-item-expanded-bg-color: var(--wpp-navigation-item-expanded-bg-color, var(--wpp-grey-color-200));
-  --navigation-item-expanded-bg-color-active: var(--wpp-navigation-item-expanded-bg-color-active, var(--wpp-grey-color-300));
+  --navigation-item-expanded-bg-color-active: var(
+    --wpp-navigation-item-expanded-bg-color-active,
+    var(--wpp-grey-color-300)
+  );
   --navigation-item-menu-bg-color: var(--wpp-navigation-item-menu-bg-color, transparent);
   --navigation-item-menu-bg-color-hover: var(--wpp-navigation-item-menu-bg-color-hover, var(--wpp-grey-color-200));
   --navigation-item-menu-bg-color-active: var(--wpp-navigation-item-menu-bg-color-active, var(--wpp-grey-color-300));
-  --navigation-item-menu-bg-color-selected: var(--wpp-navigation-item-menu-bg-color-selected, var(--wpp-grey-color-300));
-  --navigation-item-menu-bg-color-selected-hover: var(--wpp-navigation-item-menu-bg-color-selected-hover, var(--wpp-grey-color-200));
-  --navigation-item-menu-bg-color-selected-active: var(--wpp-navigation-item-menu-bg-color-selected-active, var(--wpp-grey-color-300));
-  --navigation-item-expanded-menu-bg-color: var(--wpp-navigation-item-expanded-menu-bg-color, var(--wpp-grey-color-200));
-  --navigation-item-expanded-menu-bg-color-selected: var(--wpp-navigation-item-expanded-menu-bg-color-selected, var(--wpp-grey-color-300));
+  --navigation-item-menu-bg-color-selected: var(
+    --wpp-navigation-item-menu-bg-color-selected,
+    var(--wpp-grey-color-300)
+  );
+  --navigation-item-menu-bg-color-selected-hover: var(
+    --wpp-navigation-item-menu-bg-color-selected-hover,
+    var(--wpp-grey-color-200)
+  );
+  --navigation-item-menu-bg-color-selected-active: var(
+    --wpp-navigation-item-menu-bg-color-selected-active,
+    var(--wpp-grey-color-300)
+  );
+  --navigation-item-expanded-menu-bg-color: var(
+    --wpp-navigation-item-expanded-menu-bg-color,
+    var(--wpp-grey-color-200)
+  );
+  --navigation-item-expanded-menu-bg-color-selected: var(
+    --wpp-navigation-item-expanded-menu-bg-color-selected,
+    var(--wpp-grey-color-300)
+  );
   --navigation-item-text-color: var(--wpp-navigation-item-text-color, var(--wpp-text-color-info));
   --navigation-item-text-color-hover: var(--wpp-navigation-item-text-color-hover, var(--wpp-text-color));
   --navigation-item-text-color-active: var(--wpp-navigation-item-text-color-active, var(--wpp-text-color));
   --navigation-item-text-color-selected: var(--wpp-navigation-item-text-color-selected, var(--wpp-text-color));
-  --navigation-item-text-color-selected-hover: var(--wpp-navigation-item-text-color-selected-hover, var(--wpp-text-color));
-  --navigation-item-text-color-selected-active: var(--wpp-navigation-item-text-color-selected-active, var(--wpp-text-color));
+  --navigation-item-text-color-selected-hover: var(
+    --wpp-navigation-item-text-color-selected-hover,
+    var(--wpp-text-color)
+  );
+  --navigation-item-text-color-selected-active: var(
+    --wpp-navigation-item-text-color-selected-active,
+    var(--wpp-text-color)
+  );
   --navigation-item-expanded-text-color: var(--wpp-navigation-item-expanded-text-color, var(--wpp-text-color-info));
-  --navigation-item-expanded-text-color-selected: var(--wpp-navigation-item-expanded-text-color-selected, var(--wpp-text-color));
+  --navigation-item-expanded-text-color-selected: var(
+    --wpp-navigation-item-expanded-text-color-selected,
+    var(--wpp-text-color)
+  );
   --navigation-item-nested-text-color: var(--wpp-navigation-item-nested-text-color, var(--wpp-text-color));
   --navigation-item-extended-icon-color: var(--wpp-navigation-item-extended-icon-color, var(--wpp-icon-color));
-  --navigation-item-extended-icon-color-hover: var(--wpp-navigation-item-extended-icon-color-hover, var(--wpp-icon-color-hover));
-  --navigation-item-extended-icon-color-active: var(--wpp-navigation-item-extended-icon-color-active, var(--wpp-icon-color-active));
-  --navigation-item-extended-icon-color-selected: var(--wpp-navigation-item-extended-icon-color-selected, var(--wpp-icon-color));
-  --navigation-item-extended-icon-color-selected-hover: var(--wpp-navigation-item-extended-icon-color-selected-hover, var(--wpp-icon-color-hover));
-  --navigation-item-extended-icon-color-selected-active: var(--wpp-navigation-item-extended-icon-color-selected-active, var(--wpp-icon-color-active));
-  --navigation-item-expanded-extended-icon-color: var(--wpp-navigation-item-expanded-extended-icon-color, var(--wpp-icon-color));
-  --navigation-item-expanded-extended-icon-color-selected: var(--wpp-navigation-item-expanded-extended-icon-color-selected, var(--wpp-icon-color));
+  --navigation-item-extended-icon-color-hover: var(
+    --wpp-navigation-item-extended-icon-color-hover,
+    var(--wpp-icon-color-hover)
+  );
+  --navigation-item-extended-icon-color-active: var(
+    --wpp-navigation-item-extended-icon-color-active,
+    var(--wpp-icon-color-active)
+  );
+  --navigation-item-extended-icon-color-selected: var(
+    --wpp-navigation-item-extended-icon-color-selected,
+    var(--wpp-icon-color)
+  );
+  --navigation-item-extended-icon-color-selected-hover: var(
+    --wpp-navigation-item-extended-icon-color-selected-hover,
+    var(--wpp-icon-color-hover)
+  );
+  --navigation-item-extended-icon-color-selected-active: var(
+    --wpp-navigation-item-extended-icon-color-selected-active,
+    var(--wpp-icon-color-active)
+  );
+  --navigation-item-expanded-extended-icon-color: var(
+    --wpp-navigation-item-expanded-extended-icon-color,
+    var(--wpp-icon-color)
+  );
+  --navigation-item-expanded-extended-icon-color-selected: var(
+    --wpp-navigation-item-expanded-extended-icon-color-selected,
+    var(--wpp-icon-color)
+  );
   --navigation-item-extended-icon-margin: var(--wpp-navigation-item-extended-icon-margin, 0 0 0 4px);
   --navigation-item-menu-icon-color: var(--wpp-navigation-item-menu-icon-color, var(--wpp-icon-color));
-  --navigation-item-menu-icon-color-hover: var(--wpp-navigation-item-menu-icon-color-hover, var(--wpp-icon-color-hover));
-  --navigation-item-menu-icon-color-active: var(--wpp-navigation-item-menu-icon-color-active, var(--wpp-icon-color-active));
-  --navigation-item-menu-icon-color-selected: var(--wpp-navigation-item-menu-icon-color-selected, var(--wpp-grey-color-1000));
-  --navigation-item-menu-icon-color-selected-hover: var(--wpp-navigation-item-menu-icon-color-selected-hover, var(--wpp-icon-color-hover));
-  --navigation-item-menu-icon-color-selected-active: var(-wpp--navigation-item-menu-icon-color-selected-active, var(--wpp-grey-color-1000));
-  --navigation-item-expanded-menu-icon-color: var(--wpp-navigation-item-expanded-menu-icon-color, var(--wpp-icon-color));
-  --navigation-item-expanded-menu-icon-color-selected: var(--wpp-navigation-item-expanded-menu-icon-color-selected, var(--wpp-grey-color-1000));
-  --topbar-menu-item-first-border-color-focus: var(--wpp-topbar-menu-item-first-border-color-focus, var(--wpp-grey-color-000));
-  --topbar-menu-item-second-border-color-focus: var(--wpp-topbar-menu-item-second-border-color-focus, var(--wpp-brand-color));
+  --navigation-item-menu-icon-color-hover: var(
+    --wpp-navigation-item-menu-icon-color-hover,
+    var(--wpp-icon-color-hover)
+  );
+  --navigation-item-menu-icon-color-active: var(
+    --wpp-navigation-item-menu-icon-color-active,
+    var(--wpp-icon-color-active)
+  );
+  --navigation-item-menu-icon-color-selected: var(
+    --wpp-navigation-item-menu-icon-color-selected,
+    var(--wpp-grey-color-1000)
+  );
+  --navigation-item-menu-icon-color-selected-hover: var(
+    --wpp-navigation-item-menu-icon-color-selected-hover,
+    var(--wpp-icon-color-hover)
+  );
+  --navigation-item-menu-icon-color-selected-active: var(
+    --wpp-navigation-item-menu-icon-color-selected-active,
+    var(--wpp-grey-color-1000)
+  );
+  --navigation-item-expanded-menu-icon-color: var(
+    --wpp-navigation-item-expanded-menu-icon-color,
+    var(--wpp-icon-color)
+  );
+  --navigation-item-expanded-menu-icon-color-selected: var(
+    --wpp-navigation-item-expanded-menu-icon-color-selected,
+    var(--wpp-grey-color-1000)
+  );
+  --topbar-menu-item-first-border-color-focus: var(
+    --wpp-topbar-menu-item-first-border-color-focus,
+    var(--wpp-grey-color-000)
+  );
+  --topbar-menu-item-second-border-color-focus: var(
+    --wpp-topbar-menu-item-second-border-color-focus,
+    var(--wpp-brand-color)
+  );
 }
 
 :host([aria-expanded=true]) .navigation-item-wrapper:not(.menu) {
@@ -285,13 +366,15 @@
   display: block;
   width: 100%;
 }
-:host(.wpp-list-item-wrapper):host(:focus-visible) .navigation-item-wrapper {
+:host(.wpp-list-item-wrapper):host(.tab-focus) .navigation-item-wrapper, :host(.wpp-list-item-wrapper):host(:focus-visible) .navigation-item-wrapper, :host(.wpp-list-item-wrapper):host(.wpp-menu-item-active) .navigation-item-wrapper {
+  outline: none;
+  box-shadow: none;
   background-color: var(--navigation-item-bg-color-active);
 }
-:host(.wpp-list-item-wrapper):host(:focus-visible) .navigation-item-wrapper .label-text {
+:host(.wpp-list-item-wrapper):host(.tab-focus) .navigation-item-wrapper .label-text, :host(.wpp-list-item-wrapper):host(:focus-visible) .navigation-item-wrapper .label-text, :host(.wpp-list-item-wrapper):host(.wpp-menu-item-active) .navigation-item-wrapper .label-text {
   color: var(--navigation-item-text-color-active);
 }
-:host(.wpp-list-item-wrapper):host(:focus-visible) .navigation-item-wrapper .chevron-icon {
+:host(.wpp-list-item-wrapper):host(.tab-focus) .navigation-item-wrapper .chevron-icon, :host(.wpp-list-item-wrapper):host(:focus-visible) .navigation-item-wrapper .chevron-icon, :host(.wpp-list-item-wrapper):host(.wpp-menu-item-active) .navigation-item-wrapper .chevron-icon {
   color: var(--navigation-item-extended-icon-color-active);
 }
 

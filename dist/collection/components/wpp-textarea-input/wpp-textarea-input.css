@@ -20,7 +20,7 @@
   color: var(--wpp-text-color-info);
 }
 :host(.wpp-textarea-wrapper) .label {
-  margin: 0 0 8px 0;
+  margin: 0 0 8px;
 }
 :host(.wpp-textarea-wrapper) textarea {
   box-sizing: border-box;
@@ -45,8 +45,7 @@
 :host(.wpp-textarea-wrapper) textarea.stretch {
   --wpp-textarea-height: auto;
   min-height: calc(1 * var(--wpp-font-line-height-s-body, 22px) + 2 * var(--wpp-border-width-s) + 18px);
-  overflow-x: hidden;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 :host(.wpp-textarea-wrapper) textarea.is-scrollable {
   overflow-y: auto;
@@ -127,7 +126,7 @@
 :host(.wpp-textarea-wrapper) .messages-wrapper {
   display: flex;
   justify-content: space-between;
-  margin: 4px 0 0 0;
+  margin: 4px 0 0;
 }
 :host(.wpp-textarea-wrapper) .messages-wrapper.without-text-message {
   justify-content: flex-end;

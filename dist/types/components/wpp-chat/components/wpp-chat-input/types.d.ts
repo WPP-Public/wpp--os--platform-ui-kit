@@ -17,6 +17,12 @@ export interface ChatInputLocaleInterface {
   audioRecordButtonLabel: string;
   audioStopRecordButtonLabel: string;
   audioLanguage: string;
+  modelSelectorBtnLabel: string;
+  modelAutoOptionLabel: string;
+  modelAutoOptionCaption: string;
+  modelPremiumOptionLabel: string;
+  modelPremiumOptionCaption: string;
+  modelSelectorListItemLabel: string;
 }
 export type ChatInputAriaProps = {
   minimizedTrigger?: Pick<AriaProps, 'label' | 'describedby' | 'controls' | 'expanded'>;
@@ -104,3 +110,25 @@ export type ChatInputSize = 's' | 'm';
 export type MessageChangeEventDetail = {
   value: string;
 };
+export interface ChatInputModel {
+  id: string | number;
+  label: string;
+  logo: string;
+}
+export interface ChatInputDefaultModel extends ChatInputModel {
+  caption: string;
+}
+/**
+ * A model option surfaced by the selector: either a built-in default option
+ * (`ChatInputDefaultModel`) or a dev-provided `ChatInputModel`.
+ *
+ * Declared as a single named alias (rather than an inline `ChatInputModel | ChatInputDefaultModel`
+ * union in the `@Event()` type) because Stencil's Angular output target only aliases the first
+ * member of a union of complex types when generating the proxy, leaving the rest unresolved.
+ */
+export type ChatInputSelectableModel = ChatInputModel | ChatInputDefaultModel;
+export type ChatInputSelectedModel = 'auto' | 'premium' | ChatInputModel;
+export interface ChatInputMicEventDetail {
+  /** `true` when the microphone just started listening, `false` when it stopped. */
+  isRecording: boolean;
+}

@@ -21,7 +21,7 @@ export class WppFloatingToolbar {
         return;
       this.selectedIdentifier = this.hasIdProp ? data.id : index;
     };
-    this.renderActionButton = (data, index) => (h("wpp-action-button-v4-2-0", { key: `${data.icon}`, ...data, variant: "secondary", class: {
+    this.renderActionButton = (data, index) => (h("wpp-action-button-v4-3-0", { key: `${data.icon}`, ...data, variant: "secondary", class: {
         'is-selected': this.selectable && (this.hasIdProp ? this.selectedIdentifier === data.id : this.selectedIdentifier === index),
       }, onClick: () => this.handleBtnClick(data, index) }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
     this.setActionButtons = () => {
@@ -95,7 +95,7 @@ export class WppFloatingToolbar {
     return (h(Host, { class: this.hostCssClasses(), role: "toolbar", "aria-orientation": this.orientation, "aria-label": this.ariaProps?.label, "aria-labelledby": this.ariaProps?.labelledby, onKeyDown: this.onKeyDown }, h("div", { class: this.wrapperCssClasses() }, this._actionButtonsConfig.map(this.renderActionButton))));
   }
   static get is() { return "wpp-floating-toolbar"; }
-  static get registryIs() { return "wpp-floating-toolbar-v4-2-0"; }
+  static get registryIs() { return "wpp-floating-toolbar-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

@@ -422,7 +422,7 @@ function hsvToHex(h, s, v) {
   return rgbToHex(r, g, b);
 }
 
-const wppOpacitySliderCss = ":host{position:relative;display:block;height:16px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host .slider-container{position:relative;width:100%;height:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host .checkerboard{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;border-radius:32px;overflow:hidden}:host canvas{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:32px;display:block;z-index:1}:host .marker{position:absolute;width:16px;height:16px;border:3px solid var(--wpp-grey-color-000);border-radius:50%;background-color:transparent;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:0px 1px 5px 0px rgba(52, 58, 63, 0.1019607843), 0px 0px 1px 0px rgba(52, 58, 63, 0.1019607843);box-shadow:0px 1px 5px 0px rgba(52, 58, 63, 0.1019607843), 0px 0px 1px 0px rgba(52, 58, 63, 0.1019607843);-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%);pointer-events:none;top:50%;left:calc(var(--marker-position) - 8px);z-index:2}";
+const wppOpacitySliderCss = ":host{position:relative;display:block;height:16px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host .slider-container{position:relative;width:100%;height:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host .checkerboard{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;border-radius:32px;overflow:hidden}:host canvas{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:32px;display:block;z-index:1}:host .marker{position:absolute;width:16px;height:16px;border:3px solid var(--wpp-grey-color-000);border-radius:50%;background-color:transparent;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%);pointer-events:none;top:50%;left:calc(var(--marker-position) - 8px);z-index:2}";
 
 const OpacitySlider = /*@__PURE__*/ proxyCustomElement(class OpacitySlider extends HTMLElement {
   constructor() {
@@ -500,18 +500,18 @@ const OpacitySlider = /*@__PURE__*/ proxyCustomElement(class OpacitySlider exten
     window.addEventListener('mousemove', this.handleMouseMove);
   }
   render() {
-    return (h(Host, { class: "wpp-opacity-slider" }, h("div", { class: "slider-container" }, h("wpp-icon-transparent-v4-2-0", { class: "checkerboard" }), h("canvas", null), h("div", { class: "marker", style: {
+    return (h(Host, { class: "wpp-opacity-slider" }, h("div", { class: "slider-container" }, h("wpp-icon-transparent-v4-3-0", { class: "checkerboard" }), h("canvas", null), h("div", { class: "marker", style: {
         left: `${this.markerPosition}px`,
       } }))));
   }
-  static get registryIs() { return "wpp-opacity-slider-v4-2-0"; }
+  static get registryIs() { return "wpp-opacity-slider-v4-3-0"; }
   get host() { return this; }
   static get watchers() { return {
     "hexColor": ["onPropertyChange"],
     "opacity": ["onPropertyChange"]
   }; }
   static get style() { return wppOpacitySliderCss; }
-}, [1, "wpp-opacity-slider", "wpp-opacity-slider-v4-2-0", {
+}, [1, "wpp-opacity-slider", "wpp-opacity-slider-v4-3-0", {
     "hexColor": [1, "hex-color"],
     "opacity": [2],
     "markerPosition": [32]
@@ -520,14 +520,14 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-opacity-slider-v4-2-0", "wpp-icon-transparent-v4-2-0"];
+  const components = ["wpp-opacity-slider-v4-3-0", "wpp-icon-transparent-v4-3-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-opacity-slider-v4-2-0":
+    case "wpp-opacity-slider-v4-3-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, OpacitySlider);
       }
       break;
-    case "wpp-icon-transparent-v4-2-0":
+    case "wpp-icon-transparent-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

@@ -2,6 +2,7 @@
   * @prop --wpp-list-item-border-radius:
   * @prop --wpp-list-item-height:
   * @prop --wpp-list-item-with-caption-height:
+  * @prop --wpp-list-item-custom-typography-height:
   * @prop --wpp-list-item-width:
   * @prop --wpp-list-item-padding:
   * @prop --wpp-list-item-with-right-icon-padding:
@@ -31,15 +32,17 @@
   --li-border-radius: var(--wpp-list-item-border-radius, 6px);
   --li-height: var(--wpp-list-item-height, 32px);
   --li-with-caption-height: var(--wpp-list-item-with-caption-height, 52px);
+  --li-custom-typography-height: var(--wpp-list-item-custom-typography-height, auto);
   --li-width: var(--wpp-list-item-width, 240px);
-  --li-padding: var(--wpp-list-item-padding, 0 8px);
+  --li-padding: var(--wpp-list-item-padding, 4px 8px);
   --li-with-right-icon-padding: var(--wpp-list-item-with-right-icon-padding, 0 6px 0 8px);
   --li-text-color-disabled: var(--wpp-list-item-text-color-disabled, var(--wpp-text-color-disabled));
-  --li-caption-text-color: var(--wpp-list-item-caption-text-color, var(--wpp-text-color-info));
+  --li-caption-text-color: var(--wpp-list-item-caption-text-color, var(--wpp-grey-color-800));
+  --li-caption-text-color-selected: var(--wpp-list-item-caption-text-color-selected, var(--wpp-brand-color));
   --li-icons-color-disabled: var(--wpp-list-item-icons-color-disabled, var(--wpp-icon-color-disabled));
   --li-left-wrapper-margin-right: var(--wpp-list-item-left-wrapper-margin-right, 8px);
   --li-right-wrapper-margin-right: var(--wpp-list-item-right-wrapper-margin-right, -8px);
-  --li-label-text-line-height: var(--wpp-list-item-label-text-line-height, 24px);
+  --li-label-text-line-height: var(--wpp-list-item-label-text-line-height, 22px);
   --li-label-text-color-selected: var(--wpp-list-item-label-text-color-selected, var(--wpp-brand-color));
   --li-label-text-color-selected-hover: var(
     --wpp-list-item-label-text-color-selected-hover,
@@ -49,6 +52,7 @@
     --wpp-list-item-label-text-color-selected-active,
     var(--wpp-brand-color-active)
   );
+  --li-avatar-bg-color-selected: var(--wpp-li-avatar-bg-color-selected, var(--wpp-primary-color-200));
   --li-bg-color: var(--wpp-list-item-bg-color, transparent);
   --li-bg-color-hover: var(--wpp-list-item-bg-color-hover, var(--wpp-grey-color-200));
   --li-bg-color-active: var(--wpp-list-item-bg-color-active, var(--wpp-grey-color-300));
@@ -66,20 +70,22 @@
   --li-label-text-font-weight: var(--wpp-list-label-text-font-weight, 400);
   --li-label-text-font-weight-selected: var(--wpp-list-label-text-font-weight-selected, 500);
   --li-highlight-font-weight: var(--wpp-list-item-highlight-font-weight, 800);
-  --li-subtitle-text-color: var(--wpp-list-item-subtitle-text-color, var(--wpp-grey-color-1000));
-  --li-subtitle-padding: var(--wpp-li-subtitle-padding, 13px 0 5px 8px);
+  --li-subtitle-text-color: var(--wpp-list-item-subtitle-text-color, var(--wpp-grey-color-800));
+  --li-subtitle-padding: var(--wpp-li-subtitle-padding, 12px 0 4px 8px);
   display: flex;
   flex-direction: column;
   width: fit-content;
   outline: none;
 }
 :host .subtitle {
-  font-size: var(--wpp-typography-s-strong-font-size, 14px);
-  line-height: var(--wpp-typography-s-strong-line-height, 22px);
-  font-weight: var(--wpp-typography-s-strong-font-weight, 700);
-  color: var(--wpp-typography-s-strong-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
-  letter-spacing: var(--wpp-typography-s-strong-letter-spacing, 0);
+  font-size: var(--wpp-typography-2xs-strong-font-size, 10px);
+  line-height: var(--wpp-typography-2xs-strong-line-height, 20px);
+  letter-spacing: var(--wpp-typography-2xs-strong-letter-spacing, 0.5px);
+  text-transform: var(--wpp-typography-2xs-strong-text-transform, uppercase);
+  font-weight: var(--wpp-typography-2xs-strong-font-weight, 700);
+  color: var(--wpp-typography-2xs-strong-color, var(--wpp-text-color));
+  font-family: var(--wpp-typography-2xs-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
+  letter-spacing: var(--wpp-typography-2xs-strong-letter-spacing, 0);
   width: var(--li-width);
   padding: var(--li-subtitle-padding);
   color: var(--li-subtitle-text-color);
@@ -109,7 +115,6 @@
 }
 :host .item .info-wrapper {
   min-width: 0;
-  padding: var(--li-info-wrapper-padding);
 }
 :host .item .info-wrapper .body-wrapper {
   min-width: 0;
@@ -161,42 +166,42 @@
 :host .item.non-interactive, :host .item.has-toggle {
   cursor: default;
 }
-:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) {
+:host .item:hover:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) {
   background-color: var(--li-bg-color-hover);
 }
-:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),
-:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=right]),
-:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) .fallback-icon {
+:host .item:hover:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=left]),
+:host .item:hover:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=right]),
+:host .item:hover:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) .fallback-icon {
   color: var(--li-icon-color-hover);
 }
-:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted(.wpp-icon[slot=left]) {
+:host .item:hover:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted(.wpp-icon[slot=left]) {
   color: var(--li-left-icon-color-hover);
 }
-:host .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=right][type=s-body]) {
+:host .item:hover:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=right][type=s-body]) {
   color: var(--li-right-text-color);
 }
-:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle), :host .item:focus-visible {
+:host .item:active:not(.checked, .active, .loading-item, .non-interactive, .has-toggle), :host .item.interaction-active:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) {
   background-color: var(--li-bg-color-active);
   outline: none;
 }
-:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),
-:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted([slot=right]),
-:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) .fallback-icon, :host .item:focus-visible ::slotted([slot=left]),
-:host .item:focus-visible ::slotted([slot=right]),
-:host .item:focus-visible .fallback-icon {
+:host .item:active:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=left]),
+:host .item:active:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=right]),
+:host .item:active:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) .fallback-icon, :host .item.interaction-active:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=left]),
+:host .item.interaction-active:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=right]),
+:host .item.interaction-active:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) .fallback-icon {
   color: var(--li-icon-color-active);
 }
-:host .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) ::slotted(.wpp-icon[slot=left]), :host .item:focus-visible ::slotted(.wpp-icon[slot=left]) {
+:host .item:active:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted(.wpp-icon[slot=left]), :host .item.interaction-active:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted(.wpp-icon[slot=left]) {
   color: var(--li-left-icon-color-active);
 }
-:host .item.checked:not(.non-interactive):not(.has-toggle),
-:host .item .multiple:not(.non-interactive):not(.has-toggle),
-:host .item .active:not(.non-interactive):not(.has-toggle) {
+:host .item.checked:not(.non-interactive, .has-toggle),
+:host .item .multiple:not(.non-interactive, .has-toggle),
+:host .item .active:not(.non-interactive, .has-toggle) {
   background-color: var(--li-bg-color-selected);
 }
-:host .item.checked:not(.non-interactive):not(.has-toggle) .info-wrapper .label,
-:host .item .multiple:not(.non-interactive):not(.has-toggle) .info-wrapper .label,
-:host .item .active:not(.non-interactive):not(.has-toggle) .info-wrapper .label {
+:host .item.checked:not(.non-interactive, .has-toggle) .info-wrapper .label,
+:host .item .multiple:not(.non-interactive, .has-toggle) .info-wrapper .label,
+:host .item .active:not(.non-interactive, .has-toggle) .info-wrapper .label {
   font-size: var(--wpp-typography-s-midi-font-size, 14px);
   line-height: var(--wpp-typography-s-midi-line-height, 22px);
   font-weight: var(--wpp-typography-s-midi-font-weight, 500);
@@ -208,23 +213,42 @@
   line-height: var(--li-label-text-line-height);
   color: var(--li-label-text-color-selected);
 }
-:host .item.checked:not(.non-interactive):not(.has-toggle) .info-wrapper .label .highlight-wrapper .highlight,
-:host .item .multiple:not(.non-interactive):not(.has-toggle) .info-wrapper .label .highlight-wrapper .highlight,
-:host .item .active:not(.non-interactive):not(.has-toggle) .info-wrapper .label .highlight-wrapper .highlight {
+:host .item.checked:not(.non-interactive, .has-toggle) .info-wrapper .label .highlight-wrapper .highlight,
+:host .item .multiple:not(.non-interactive, .has-toggle) .info-wrapper .label .highlight-wrapper .highlight,
+:host .item .active:not(.non-interactive, .has-toggle) .info-wrapper .label .highlight-wrapper .highlight {
   color: var(--li-label-text-color-selected);
 }
-:host .item.checked:not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),
-:host .item.checked:not(.non-interactive):not(.has-toggle) .fallback-icon,
-:host .item .multiple:not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),
-:host .item .multiple:not(.non-interactive):not(.has-toggle) .fallback-icon,
-:host .item .active:not(.non-interactive):not(.has-toggle) ::slotted([slot=left]),
-:host .item .active:not(.non-interactive):not(.has-toggle) .fallback-icon {
+:host .item.checked:not(.non-interactive, .has-toggle) ::slotted([slot=left]),
+:host .item.checked:not(.non-interactive, .has-toggle) .fallback-icon,
+:host .item .multiple:not(.non-interactive, .has-toggle) ::slotted([slot=left]),
+:host .item .multiple:not(.non-interactive, .has-toggle) .fallback-icon,
+:host .item .active:not(.non-interactive, .has-toggle) ::slotted([slot=left]),
+:host .item .active:not(.non-interactive, .has-toggle) .fallback-icon {
   color: var(--li-left-icon-color-selected);
+}
+:host .item.checked:not(.non-interactive, .has-toggle) ::slotted(.wpp-icon-avatar[slot=left]),
+:host .item .multiple:not(.non-interactive, .has-toggle) ::slotted(.wpp-icon-avatar[slot=left]),
+:host .item .active:not(.non-interactive, .has-toggle) ::slotted(.wpp-icon-avatar[slot=left]) {
+  --wpp-avatar-icon-bg-color: var(--li-avatar-bg-color-selected);
+}
+:host .item.checked:not(.non-interactive, .has-toggle).with-caption .info-wrapper .caption,
+:host .item .multiple:not(.non-interactive, .has-toggle).with-caption .info-wrapper .caption,
+:host .item .active:not(.non-interactive, .has-toggle).with-caption .info-wrapper .caption {
+  color: var(--li-caption-text-color-selected);
 }
 :host .item.multiple.checked:not(.non-interactive):hover .label {
   color: var(--li-label-text-color-selected-hover);
 }
+:host .item.multiple.checked:not(.non-interactive):hover .info-wrapper .caption {
+  color: var(--li-label-text-color-selected-hover);
+}
+:host .item.multiple.checked:not(.non-interactive):active .wpp-checkbox {
+  --wpp-checkbox-bg-color-checked: var(--li-label-text-color-selected-active);
+}
 :host .item.multiple.checked:not(.non-interactive):active .label {
+  color: var(--li-label-text-color-selected-active);
+}
+:host .item.multiple.checked:not(.non-interactive):active .info-wrapper .caption {
   color: var(--li-label-text-color-selected-active);
 }
 :host .item.with-caption {
@@ -235,10 +259,16 @@
 }
 :host .item.with-caption .info-wrapper {
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
 }
 :host .item.with-caption .info-wrapper .caption {
   display: flex;
+  font-size: var(--wpp-typography-xs-body-font-size, 12px);
+  line-height: var(--wpp-typography-xs-body-line-height, 20px);
+  font-weight: var(--wpp-typography-xs-body-font-weight, 400);
+  color: var(--wpp-typography-xs-body-color, var(--wpp-text-color));
+  font-family: var(--wpp-typography-xs-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
+  letter-spacing: var(--wpp-typography-xs-body-letter-spacing, 0);
   color: var(--li-caption-text-color);
 }
 :host .item.with-caption .info-wrapper .caption.slot-hidden {
@@ -248,18 +278,18 @@
   align-items: flex-start;
 }
 :host .item.with-caption.multiple .info-wrapper .wpp-checkbox {
-  margin-top: 5px;
+  margin-top: 1px;
 }
 :host .item.with-caption.multiple .right {
   height: 100%;
   align-items: flex-start;
-  margin-top: 4px;
 }
-:host .item.with-caption.multiple .right ::slotted([slot=right].wpp-tag) {
-  margin-top: 3px;
+:host .item.with-caption.multiple .right ::slotted([slot=right].wpp-typography) {
+  margin-top: 1px;
 }
-:host .item.with-caption.multiple .right ::slotted([slot=right][type=s-body]) {
-  margin-top: 4px;
+:host .item.with-caption.multiple .right ::slotted([slot=right].wpp-menu-context),
+:host .item.with-caption.multiple .right ::slotted([slot=right].wpp-action-button) {
+  margin-top: -4px;
 }
 :host .item.disabled {
   background-color: transparent;
@@ -307,8 +337,7 @@
 :host .item .info-wrapper .body-wrapper {
   min-width: 0;
 }
-:host .item .info-wrapper .label,
-:host .item .info-wrapper .caption {
+:host .item .info-wrapper .label {
   font-size: var(--wpp-typography-s-body-font-size, 14px);
   line-height: var(--wpp-typography-s-body-line-height, 22px);
   font-weight: var(--wpp-typography-s-body-font-weight, 400);
@@ -334,30 +363,39 @@
 :host .item .right.slot-hidden {
   display: none;
 }
+:host .item.with-right-slot .info-wrapper {
+  padding: var(--li-info-wrapper-padding);
+}
 :host:host(.wpp-disabled) {
   cursor: not-allowed;
 }
 
-:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item {
-  background-color: var(--li-bg-color-active);
+:host(:focus-visible:not(.wpp-disabled, .non-interactive)) {
+  outline: none;
 }
-:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item .wpp-checkbox {
-  --checkbox-bg-color: var(--checkbox-bg-color-active);
-  --checkbox-border-color: var(--checkbox-border-color-active);
+:host(:focus-visible:not(.wpp-disabled, .non-interactive)) .item {
+  border-radius: var(--wpp-border-radius-s);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
+  background-color: var(--li-bg-color-hover);
 }
-:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item ::slotted([slot=left]),
-:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item ::slotted([slot=right]),
-:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item .fallback-icon {
-  color: var(--li-icon-color-active);
+:host(:focus-visible:not(.wpp-disabled, .non-interactive)) .item .wpp-checkbox {
+  --checkbox-bg-color: var(--checkbox-bg-color-hover);
+  --checkbox-border-color: var(--checkbox-border-color-hover);
 }
-:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item.checked {
+:host(:focus-visible:not(.wpp-disabled, .non-interactive)) .item ::slotted([slot=left]),
+:host(:focus-visible:not(.wpp-disabled, .non-interactive)) .item ::slotted([slot=right]),
+:host(:focus-visible:not(.wpp-disabled, .non-interactive)) .item .fallback-icon {
+  color: var(--li-icon-color-hover);
+}
+:host(:focus-visible:not(.wpp-disabled, .non-interactive)) .item.checked {
   background-color: var(--wpp-primary-color-200);
 }
-:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item.checked .wpp-checkbox {
+:host(:focus-visible:not(.wpp-disabled, .non-interactive)) .item.checked .wpp-checkbox {
   --checkbox-bg-color-checked: var(--checkbox-bg-color-checked-active);
   --checkbox-border-color-checked: var(--checkbox-border-color-checked-active);
 }
-:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)) .item.checked .info-wrapper .label {
+:host(:focus-visible:not(.wpp-disabled, .non-interactive)) .item.checked .info-wrapper .label {
   color: var(--li-label-text-color-selected-active);
 }
 
@@ -395,24 +433,65 @@
   margin: 0;
 }
 
-:host(.tab-focus) {
+:host(.tab-focus) .item {
   border-radius: var(--wpp-border-radius-s);
   outline: none;
   box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
-}
-:host(.tab-focus) .item {
-  background-color: var(--li-bg-color-active);
-  outline: none;
+  background-color: var(--li-bg-color-hover);
 }
 :host(.tab-focus) .item ::slotted([slot=left]),
 :host(.tab-focus) .item ::slotted([slot=right]),
 :host(.tab-focus) .item .fallback-icon {
-  color: var(--li-icon-color-active);
+  color: var(--li-icon-color-hover);
 }
 :host(.tab-focus) .item ::slotted(.wpp-icon[slot=left]) {
+  color: var(--li-left-icon-color-hover);
+}
+
+:host([role=menuitem].tab-focus) .item,
+:host([role=menuitem].tab-focus:focus-visible:not(.wpp-disabled, .non-interactive)) .item {
+  outline: none;
+  box-shadow: none;
+}
+:host([role=menuitem].tab-focus) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle),
+:host([role=menuitem].tab-focus:focus-visible:not(.wpp-disabled, .non-interactive)) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) {
+  background-color: var(--li-bg-color-active);
+}
+:host([role=menuitem].tab-focus) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=left]),
+:host([role=menuitem].tab-focus) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=right]),
+:host([role=menuitem].tab-focus) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) .fallback-icon,
+:host([role=menuitem].tab-focus:focus-visible:not(.wpp-disabled, .non-interactive)) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=left]),
+:host([role=menuitem].tab-focus:focus-visible:not(.wpp-disabled, .non-interactive)) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=right]),
+:host([role=menuitem].tab-focus:focus-visible:not(.wpp-disabled, .non-interactive)) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) .fallback-icon {
+  color: var(--li-icon-color-active);
+}
+:host([role=menuitem].tab-focus) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted(.wpp-icon[slot=left]),
+:host([role=menuitem].tab-focus:focus-visible:not(.wpp-disabled, .non-interactive)) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted(.wpp-icon[slot=left]) {
   color: var(--li-left-icon-color-active);
 }
 
+:host(.wpp-menu-item-active) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) {
+  background-color: var(--li-bg-color-active);
+}
+:host(.wpp-menu-item-active) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=left]),
+:host(.wpp-menu-item-active) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=right]),
+:host(.wpp-menu-item-active) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) .fallback-icon {
+  color: var(--li-icon-color-active);
+}
+:host(.wpp-menu-item-active) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted(.wpp-icon[slot=left]) {
+  color: var(--li-left-icon-color-active);
+}
+
+:host .item.custom-typography {
+  height: var(--li-custom-typography-height);
+  min-height: var(--li-height);
+}
+:host .item.custom-typography.multiple {
+  align-items: flex-start;
+}
+:host .item.custom-typography.with-caption {
+  min-height: var(--li-with-caption-height);
+}
 :host .label.custom-typography ::slotted([slot=label]) {
   font-size: var(--wpp-list-item-label-font-size) !important;
   font-weight: var(--wpp-list-item-label-font-weight) !important;
@@ -440,21 +519,22 @@
   --li-label-text-color-selected: var(--wpp-primary-color-800);
   --li-label-text-color-selected-hover: var(--wpp-primary-color-700);
   --li-label-text-color-selected-active: var(--wpp-primary-color-800);
+  --li-caption-text-color-selected: var(--wpp-primary-color-800);
 }
-:host([data-wpp-theme=dark]) .item.checked:not(.non-interactive):not(.has-toggle),
-:host([data-wpp-theme=dark]) .item .multiple:not(.non-interactive):not(.has-toggle),
-:host([data-wpp-theme=dark]) .item .active:not(.non-interactive):not(.has-toggle) {
+:host([data-wpp-theme=dark]) .item.checked:not(.non-interactive, .has-toggle),
+:host([data-wpp-theme=dark]) .item .multiple:not(.non-interactive, .has-toggle),
+:host([data-wpp-theme=dark]) .item .active:not(.non-interactive, .has-toggle) {
   --li-right-text-color: var(--wpp-primary-color-700);
   background-color: var(--wpp-primary-color-300);
 }
-:host([data-wpp-theme=dark]) .item:hover:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle) {
+:host([data-wpp-theme=dark]) .item:hover:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) {
   background-color: var(--wpp-grey-color-400);
 }
-:host([data-wpp-theme=dark]) .item:active:not(.checked):not(.active):not(.loading-item):not(.non-interactive):not(.has-toggle), :host([data-wpp-theme=dark]) .item:focus-visible {
+:host([data-wpp-theme=dark]) .item:active:not(.checked, .active, .loading-item, .non-interactive, .has-toggle), :host([data-wpp-theme=dark]) .item:focus-visible {
   background-color: var(--wpp-grey-color-500);
 }
 
-:host(:focus-visible:not(.wpp-disabled):not(.non-interactive)[data-wpp-theme=dark]) .item:not(.checked) {
+:host(:focus-visible:not(.wpp-disabled, .non-interactive)[data-wpp-theme=dark]) .item:not(.checked) {
   background-color: var(--wpp-grey-color-300);
 }
 

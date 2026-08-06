@@ -14,6 +14,7 @@ const WppSegmentedControlItem = /*@__PURE__*/ proxyCustomElement(class WppSegmen
     this.wppChangeSegmentedControlItem = createEvent(this, "wppChangeSegmentedControlItem", 1);
     this.wppFocus = createEvent(this, "wppFocus", 1);
     this.wppBlur = createEvent(this, "wppBlur", 1);
+    this.wppDisabledChangeSegmentedControlItem = createEvent(this, "wppDisabledChangeSegmentedControlItem", 1);
     this.isMouseClicked = false;
     this.uniqueId = `sc-tab-${++instanceCounter}`;
     this.mouseUpHandler = () => {
@@ -82,6 +83,9 @@ const WppSegmentedControlItem = /*@__PURE__*/ proxyCustomElement(class WppSegmen
     this.hugContentOff = false;
     this.ariaProps = undefined;
   }
+  disabledChanged() {
+    this.wppDisabledChangeSegmentedControlItem.emit();
+  }
   connectedCallback() {
     this.themeSubscription.start();
   }
@@ -93,15 +97,21 @@ const WppSegmentedControlItem = /*@__PURE__*/ proxyCustomElement(class WppSegmen
   get tabIndex() {
     if (this.disabled)
       return -1;
+    if (this.ariaProps?.tab?.tabIndex !== undefined) {
+      return this.ariaProps?.tab?.tabIndex;
+    }
     return this.active ? 0 : -1;
   }
   render() {
     return (h(Host, { id: this.uniqueId, role: "tab", "aria-selected": this.active ? 'true' : 'false', "aria-disabled": this.disabled ? 'true' : null, "aria-controls": this.ariaProps?.tab?.controls, "aria-label": this.ariaProps?.tab?.label, "aria-describedby": this.ariaProps?.tab?.describedby, "data-pressed": this.pressed ? 'true' : null, tabIndex: this.tabIndex, onClick: this.handleClickSegmentedControl, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onBlur: this.onBlur, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, class: this.hostCssClasses(), exportparts: "item" }, h("div", { class: this.cssClasses(), part: "item" }, h(WrappedSlot, { wrapperClass: "content-wrapper" }), this.variant === 'text' && this.counter > 0 && h("div", { class: "counter" }, `(${this.counter})`))));
   }
-  static get registryIs() { return "wpp-segmented-control-item-v4-2-0"; }
+  static get registryIs() { return "wpp-segmented-control-item-v4-3-0"; }
   get host() { return this; }
+  static get watchers() { return {
+    "disabled": ["disabledChanged"]
+  }; }
   static get style() { return wppSegmentedControlItemCss; }
-}, [1, "wpp-segmented-control-item", "wpp-segmented-control-item-v4-2-0", {
+}, [1, "wpp-segmented-control-item", "wpp-segmented-control-item-v4-3-0", {
     "size": [1],
     "active": [516],
     "disabled": [516],
@@ -117,9 +127,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-segmented-control-item-v4-2-0"];
+  const components = ["wpp-segmented-control-item-v4-3-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-segmented-control-item-v4-2-0":
+    case "wpp-segmented-control-item-v4-3-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppSegmentedControlItem);
       }

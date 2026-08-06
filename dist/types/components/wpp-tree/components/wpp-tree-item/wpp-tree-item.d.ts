@@ -3,6 +3,7 @@ import { TransformSearchQuery, TreeItemEndContentProps, TreeType } from '../../t
 import { TreeItemHighlightOptions } from '../../types';
 export declare class WppTreeItem {
   private themeSubscription;
+  private shouldCheckTruncation;
   host: HTMLWppTreeItemElement;
   hasIconStartSlot: boolean;
   hasIconEndSlot: boolean;
@@ -94,14 +95,13 @@ export declare class WppTreeItem {
   private shouldRecalculateItemHeight;
   private defaultItemHeight;
   private itemHeight;
-  private lastSwitcherClickTs;
-  private readonly SWITCHER_CLICK_GUARD_MS;
   private getItemHeight;
   private titleMeasureTimeout?;
-  componentDidLoad(): void;
   connectedCallback(): void;
   disconnectedCallback(): void;
   componentDidUpdate(): void;
+  componentDidRender: () => void;
+  private checkTitleTruncation;
   private addHeightToHost;
   private releaseAncestorHeights;
   private onSwitcherClick;

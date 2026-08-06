@@ -41,10 +41,10 @@ export class WppChatAlert {
     return (h("span", { class: "icon", part: "icon", "aria-hidden": "true" }, h(transformToVersionedTag(iconTag), {})));
   }
   render() {
-    return (h(Host, null, h("div", { class: "alert", part: "alert", role: "alert" }, this.renderIcon(), h("wpp-typography-v4-2-0", { class: "message", type: "s-body", part: "message" }, this.message), this.description && (h("wpp-typography-v4-2-0", { class: "description", type: "xs-body", part: "description" }, this.description)), this.closable && (h("wpp-icon-cross-v4-2-0", { class: "close", part: "close", role: "button", tabindex: 0, "aria-label": this._locales.closeLabel, onClick: this.handleClose, onKeyDown: this.handleCloseKeyDown })))));
+    return (h(Host, null, h("div", { class: "alert", part: "alert", role: "alert" }, this.renderIcon(), h("wpp-typography-v4-3-0", { class: "message", type: "s-body", part: "message" }, this.message), this.description && (h("wpp-typography-v4-3-0", { class: "description", type: "xs-body", part: "description" }, this.description)), this.closable && (h("wpp-icon-cross-v4-3-0", { class: "close", part: "close", role: "button", tabindex: 0, "aria-label": this._locales.closeLabel, onClick: this.handleClose, onKeyDown: this.handleCloseKeyDown })))));
   }
   static get is() { return "wpp-chat-alert"; }
-  static get registryIs() { return "wpp-chat-alert-v4-2-0"; }
+  static get registryIs() { return "wpp-chat-alert-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

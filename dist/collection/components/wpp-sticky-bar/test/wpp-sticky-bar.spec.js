@@ -62,7 +62,7 @@ describe('wpp-sticky-bar', () => {
       it('Testing "small" variant with buttons', async () => {
         const page = await newSpecPage({
           components: [WppStickyBar],
-          template: () => h("wpp-sticky-bar-v4-2-0", { variant: "small", barTitle: "Page Title", buttons: BUTTONS }),
+          template: () => h("wpp-sticky-bar-v4-3-0", { variant: "small", barTitle: "Page Title", buttons: BUTTONS }),
         });
         const stickyBarInstance = page.rootInstance;
         await new Promise(resolve => setTimeout(resolve, 0));
@@ -73,7 +73,7 @@ describe('wpp-sticky-bar', () => {
       it('Testing "small" variant without buttons', async () => {
         const page = await newSpecPage({
           components: [WppStickyBar],
-          template: () => h("wpp-sticky-bar-v4-2-0", { variant: "small", barTitle: "Page Title" }),
+          template: () => h("wpp-sticky-bar-v4-3-0", { variant: "small", barTitle: "Page Title" }),
         });
         const stickyBarInstance = page.rootInstance;
         await new Promise(resolve => setTimeout(resolve, 0));
@@ -84,7 +84,7 @@ describe('wpp-sticky-bar', () => {
       it('Testing "medium" variant', async () => {
         const page = await newSpecPage({
           components: [WppStickyBar],
-          template: () => h("wpp-sticky-bar-v4-2-0", { variant: "medium", barTitle: "Page Title" }),
+          template: () => h("wpp-sticky-bar-v4-3-0", { variant: "medium", barTitle: "Page Title" }),
         });
         const stickyBarInstance = page.rootInstance;
         await new Promise(resolve => setTimeout(resolve, 0));
@@ -96,7 +96,7 @@ describe('wpp-sticky-bar', () => {
       it('Testing "with-tabs" variant with tabs', async () => {
         const page = await newSpecPage({
           components: [WppStickyBar],
-          template: () => h("wpp-sticky-bar-v4-2-0", { variant: "with-tabs", barTitle: "Page Title", tabs: TABS }),
+          template: () => h("wpp-sticky-bar-v4-3-0", { variant: "with-tabs", barTitle: "Page Title", tabs: TABS }),
         });
         const stickyBarInstance = page.rootInstance;
         await new Promise(resolve => setTimeout(resolve, 0));
@@ -108,7 +108,7 @@ describe('wpp-sticky-bar', () => {
       it('Testing "with-tabs" variant without tabs', async () => {
         const page = await newSpecPage({
           components: [WppStickyBar],
-          template: () => h("wpp-sticky-bar-v4-2-0", { variant: "with-tabs", barTitle: "Page Title", offsetFromTop: 200 }),
+          template: () => h("wpp-sticky-bar-v4-3-0", { variant: "with-tabs", barTitle: "Page Title", offsetFromTop: 200 }),
         });
         const stickyBarInstance = page.rootInstance;
         await new Promise(resolve => setTimeout(resolve, 0));
@@ -129,7 +129,7 @@ describe('wpp-sticky-bar', () => {
     it('Testing "updateOffsetFromTop" is called when component loads', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { variant: "with-tabs", barTitle: "Page Title" }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { variant: "with-tabs", barTitle: "Page Title" }),
       });
       const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
       const updateOffsetFromTopSpy = jest.spyOn(page.rootInstance, 'updateOffsetFromTop');
@@ -146,7 +146,7 @@ describe('wpp-sticky-bar', () => {
     it('Testing "offsetFromTop" is set correctly when "0" is provided as its value', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { variant: "with-tabs", barTitle: "Page Title", offsetFromTop: 0 }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { variant: "with-tabs", barTitle: "Page Title", offsetFromTop: 0 }),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       await page.waitForChanges();
@@ -155,7 +155,7 @@ describe('wpp-sticky-bar', () => {
     it('Testing "offsetFromTop" is set when provided', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { variant: "with-tabs", barTitle: "Page Title", offsetFromTop: 150 }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { variant: "with-tabs", barTitle: "Page Title", offsetFromTop: 150 }),
       });
       const stickyBarInstance = page.rootInstance;
       const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
@@ -171,7 +171,7 @@ describe('wpp-sticky-bar', () => {
     it('Testing "tabs" watcher when new value is an Array of length 2', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { variant: "with-tabs", barTitle: "Page Title" }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { variant: "with-tabs", barTitle: "Page Title" }),
       });
       const stickyBarInstance = page.rootInstance;
       const newTabs = [
@@ -194,7 +194,7 @@ describe('wpp-sticky-bar', () => {
     it('Testing "tabs" watcher when new value is an empty Array', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { variant: "with-tabs", barTitle: "Page Title", tabs: TABS }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { variant: "with-tabs", barTitle: "Page Title", tabs: TABS }),
       });
       const stickyBarInstance = page.rootInstance;
       expect(stickyBarInstance.currentTab).toBe('tab1');
@@ -208,7 +208,7 @@ describe('wpp-sticky-bar', () => {
     it('Testing "tabs" watcher when new value is undefined', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { variant: "with-tabs", barTitle: "Page Title", tabs: TABS }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { variant: "with-tabs", barTitle: "Page Title", tabs: TABS }),
       });
       const stickyBarInstance = page.rootInstance;
       expect(stickyBarInstance.currentTab).toBe('tab1');
@@ -222,7 +222,7 @@ describe('wpp-sticky-bar', () => {
     it('Testing "buttons" watcher for "small" variant', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { variant: "small", barTitle: "Page Title" }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { variant: "small", barTitle: "Page Title" }),
       });
       const stickyBarInstance = page.rootInstance;
       const getButtonsListSpy = jest.spyOn(stickyBarInstance, 'getButtonsList').mockImplementation(() => { });
@@ -234,7 +234,7 @@ describe('wpp-sticky-bar', () => {
     it('Testing "buttons" watcher for non-"small" variant', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { variant: "medium", barTitle: "Page Title" }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { variant: "medium", barTitle: "Page Title" }),
       });
       const stickyBarInstance = page.rootInstance;
       const getButtonsListSpy = jest.spyOn(stickyBarInstance, 'getButtonsList').mockImplementation(() => { });
@@ -246,7 +246,7 @@ describe('wpp-sticky-bar', () => {
     it('Testing "offsetFromTop" watcher', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { variant: "with-tabs", barTitle: "Page Title" }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { variant: "with-tabs", barTitle: "Page Title" }),
       });
       const stickyBarInstance = page.rootInstance;
       expect(stickyBarInstance.host.style.getPropertyValue('--wpp-sticky-bar-offset-top')).toBe('');
@@ -258,7 +258,7 @@ describe('wpp-sticky-bar', () => {
     it('Testing "handleScroll" listener', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { variant: "small", barTitle: "Page Title", scrollTreshold: 100 }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { variant: "small", barTitle: "Page Title", scrollTreshold: 100 }),
       });
       const stickyBarInstance = page.rootInstance;
       expect(stickyBarInstance.visibility).toBe('');
@@ -277,7 +277,7 @@ describe('wpp-sticky-bar', () => {
     it('Testing "onUpdateOffsetFromTop" watcher', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { barTitle: "Page Title" }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { barTitle: "Page Title" }),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       const updateOffsetFromTopSpy = jest.spyOn(page.rootInstance, 'updateOffsetFromTop');
@@ -295,7 +295,7 @@ describe('wpp-sticky-bar', () => {
     it('Test that the `wppClickBtn` event is fired when clicking a valid button', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { variant: "small", barTitle: "Page Title", buttons: STICKY_BAR_BUTTONS }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { variant: "small", barTitle: "Page Title", buttons: STICKY_BAR_BUTTONS }),
       });
       const wppClickBtnEmitSpy = jest.spyOn(page.rootInstance.wppClickBtn, 'emit');
       await new Promise(resolve => setTimeout(resolve, 0));
@@ -308,7 +308,7 @@ describe('wpp-sticky-bar', () => {
     it('Test that the `wppClickBtn` event is not fired when clicking a "disabled" / "loading" button', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { variant: "small", barTitle: "Page Title", buttons: DISABLED_LOADING_BUTTONS }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { variant: "small", barTitle: "Page Title", buttons: DISABLED_LOADING_BUTTONS }),
       });
       const wppClickBtnEmitSpy = jest.spyOn(page.rootInstance.wppClickBtn, 'emit');
       await new Promise(resolve => setTimeout(resolve, 0));
@@ -326,7 +326,7 @@ describe('wpp-sticky-bar', () => {
     it('render small sticky bar', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { variant: "small", barTitle: "Page Title" }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { variant: "small", barTitle: "Page Title" }),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       expect(page.root).toMatchSnapshot();
@@ -334,7 +334,7 @@ describe('wpp-sticky-bar', () => {
     it('render small sticky bar with buttons', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { variant: "small", barTitle: "Page Title", buttons: STICKY_BAR_BUTTONS }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { variant: "small", barTitle: "Page Title", buttons: STICKY_BAR_BUTTONS }),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       expect(page.root).toMatchSnapshot();
@@ -342,7 +342,7 @@ describe('wpp-sticky-bar', () => {
     it('render medium sticky bar with custom content', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => (h("wpp-sticky-bar-v4-2-0", { variant: "medium", barTitle: "Page Title", buttons: BUTTONS }, h("div", { slot: "content" }, h("wpp-typography-v4-2-0", { type: "m-body" }, "Body Content")))),
+        template: () => (h("wpp-sticky-bar-v4-3-0", { variant: "medium", barTitle: "Page Title", buttons: BUTTONS }, h("div", { slot: "content" }, h("wpp-typography-v4-3-0", { type: "m-body" }, "Body Content")))),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       expect(page.root).toMatchSnapshot();
@@ -350,7 +350,7 @@ describe('wpp-sticky-bar', () => {
     it('render with-tabs sticky bar', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { variant: "with-tabs", barTitle: "Page Title", buttons: BUTTONS, tabs: TABS }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { variant: "with-tabs", barTitle: "Page Title", buttons: BUTTONS, tabs: TABS }),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       expect(page.root).toMatchSnapshot();
@@ -373,7 +373,7 @@ describe('wpp-sticky-bar', () => {
     it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
       await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { variant: "small", barTitle: "Page Title" }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { variant: "small", barTitle: "Page Title" }),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       expect(mockStart).toHaveBeenCalledTimes(1);
@@ -381,7 +381,7 @@ describe('wpp-sticky-bar', () => {
     it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
       const page = await newSpecPage({
         components: [WppStickyBar],
-        template: () => h("wpp-sticky-bar-v4-2-0", { variant: "small", barTitle: "Page Title" }),
+        template: () => h("wpp-sticky-bar-v4-3-0", { variant: "small", barTitle: "Page Title" }),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       page.root?.remove();
