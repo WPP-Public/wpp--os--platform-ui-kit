@@ -24,12 +24,27 @@ export const hideOnPopperBlur = {
   name: 'hideOnPopperBlur',
   defaultValue: false,
   fn(instance) {
+    // A nested popup (e.g. a submenu) can be appended to the document root
+    // rather than to this popper, so focus moving into it looks like focus
+    // leaving. Walk the popup -> anchor chain: if any ancestor popup is
+    // anchored inside this popper, focus is still logically within it.
+    const containsFocus = (target) => {
+      let current = target;
+      while (current) {
+        if (instance.popper.contains(current))
+          return true;
+        const popperRoot = current.closest?.('[data-tippy-root]');
+        const reference = popperRoot?._tippy?.reference;
+        if (!reference || reference === current)
+          return false;
+        current = reference;
+      }
+      return false;
+    };
     return {
       onCreate() {
         instance.popper.addEventListener('focusout', (event) => {
-          if (instance.props.hideOnPopperBlur &&
-            event.relatedTarget &&
-            !instance.popper.contains(event.relatedTarget)) {
+          if (instance.props.hideOnPopperBlur && event.relatedTarget && !containsFocus(event.relatedTarget)) {
             instance.hide();
           }
         });

@@ -10,6 +10,9 @@ export class WppBasicNode {
   constructor() {
     this.themeSubscription = themeSubscriptionController(() => this.host);
     this.resizeObserver = undefined;
+    // Watches the slotted `body` content for added/removed nodes. `slotchange` is not an option here:
+    // it only fires for real shadow-DOM slots, and this component is `scoped`, so its slots are emulated.
+    this.slotObserver = undefined;
     this.bodyRef = undefined;
     this.titleRef = undefined;
     this.checkBodyForScroll = () => {
@@ -20,6 +23,37 @@ export class WppBasicNode {
     this.handleActionClick = (action) => {
       this.wppActionClick.emit(action);
     };
+    /**
+     * Reflects whether any content is projected into the `body` slot in the `hasContent` state.
+     * Runs on load and whenever the slotted content changes (see `slotObserver`).
+     */
+    this.updateHasContent = () => {
+      const body = this.host.querySelector('[slot="body"]');
+      this.hasContent = !!body && (body.children.length > 0 || (body.textContent?.trim().length ?? 0) > 0);
+    };
+    this.getPrimaryAction = () => {
+      if (this.isLoading) {
+        return {
+          icon: 'wpp-icon-stop',
+          label: this._locales.stopAction,
+          variant: 'secondary',
+          testId: 'wpp-pause-button',
+        };
+      }
+      if (this.isReRun) {
+        return {
+          icon: 'wpp-icon-refresh',
+          label: this._locales.reRunAction,
+          variant: 'primary',
+          testId: 'wpp-rerun-button',
+        };
+      }
+      return { icon: 'wpp-icon-play', label: this._locales.playAction, variant: 'primary', testId: 'wpp-play-button' };
+    };
+    this.handlePrimaryActionClick = () => {
+      const { icon, label } = this.getPrimaryAction();
+      this.handleActionClick({ icon, label });
+    };
     this.getNodeContainerClasses = () => ({
       'node-container': true,
       'loading-node': this.isLoading,
@@ -29,8 +63,10 @@ export class WppBasicNode {
       'is-selected': this.isSelected,
     });
     this.hasScrollbar = false;
+    this.hasContent = false;
     this.nodeTitle = 'Title';
     this.isLoading = false;
+    this.isReRun = false;
     this.actions = [];
     this.locales = {};
     this.isSelected = false;
@@ -51,12 +87,28 @@ export class WppBasicNode {
       this.resizeObserver.disconnect();
     }
     this.resizeObserver = undefined;
+    this.slotObserver?.disconnect();
+    this.slotObserver = undefined;
+  }
+  componentWillLoad() {
+    // Determine the initial content state of the `body` slot.
+    this.updateHasContent();
+  }
+  componentDidLoad() {
+    if (!this.bodyRef)
+      return;
+    // Re-evaluate whenever the slotted `body` content changes.
+    this.slotObserver = new MutationObserver(() => {
+      this.updateHasContent();
+    });
+    this.slotObserver.observe(this.bodyRef, { childList: true, subtree: true });
   }
   get _locales() {
     return mergeLocales(LOCALES_DEFAULTS, this.locales);
   }
   render() {
-    return (h(Host, { class: "wpp-basic-node" }, h("div", { class: this.getNodeContainerClasses() }, h("div", { class: this.getNodeWrapperClasses() }, h("div", { class: "node-header" }, h("wpp-icon-service-v4-2-0", { color: "var(--wpp-grey-color-700)" }), h("wpp-tooltip-v4-2-0", { text: this.nodeTitle, class: "title-tooltip", config: {
+    const primaryAction = this.getPrimaryAction();
+    return (h(Host, { class: "wpp-basic-node" }, h("div", { class: this.getNodeContainerClasses() }, h("div", { class: this.getNodeWrapperClasses() }, h("div", { class: "node-header" }, h("wpp-icon-service-v4-3-0", { color: "var(--wpp-grey-color-700)" }), h("wpp-tooltip-v4-3-0", { text: this.nodeTitle, class: "title-tooltip", config: {
         placement: 'top',
         onShow: () => {
           if (!this.titleRef)
@@ -64,13 +116,10 @@ export class WppBasicNode {
           if (this.titleRef.clientWidth >= this.titleRef.scrollWidth)
             return false;
         },
-      } }, h("p", { ref: el => (this.titleRef = el), class: "node-title" }, this.nodeTitle))), h("wpp-divider-v4-2-0", null), h("div", { ref: el => (this.bodyRef = el), class: "node-body" }, h("slot", { name: "body" })), this.hasScrollbar && h("wpp-divider-v4-2-0", null), h("div", { class: "node-actions" }, h("div", { class: "node-left-actions" }, h("wpp-menu-context-v4-2-0", { appendToListWrapper: true }, h("wpp-action-button-v4-2-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this.ariaProps.label } }, h("wpp-icon-plus-v4-2-0", { slot: "icon-start" })), h("div", null, h("wpp-list-item-v4-2-0", { onWppChangeListItem: () => this.handleActionClick({ icon: 'wpp-icon-file', label: this._locales.uploadFileAction }) }, h("wpp-icon-file-v4-2-0", { slot: "left" }), h("span", { slot: "label" }, this._locales.uploadFileAction)), this.actions.map((action) => (h("wpp-list-item-v4-2-0", { key: action.icon, onWppChangeListItem: () => this.handleActionClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))), h("wpp-tooltip-v4-2-0", { text: this._locales.filterAction, config: { placement: 'bottom' } }, h("wpp-action-button-v4-2-0", { variant: "secondary", "data-testid": "wpp-settings-btn", ariaProps: { label: this._locales.filterAction }, onClick: () => this.handleActionClick({ icon: 'wpp-icon-gear', label: this._locales.filterAction }) }, h("wpp-icon-gear-v4-2-0", { slot: "icon-start" })))), (this.isSelected || this.isLoading) && (h("wpp-tooltip-v4-2-0", { text: this.isLoading ? this._locales.stopAction : this._locales.playAction, config: { placement: 'bottom' } }, h("wpp-button-v4-2-0", { class: "play-btn", size: "s", variant: this.isLoading ? 'secondary' : 'primary', "data-testid": `wpp-${this.isLoading ? 'pause' : 'play'}-button`, ariaProps: { label: this._locales[this.isLoading ? 'stopAction' : 'playAction'] }, onClick: () => this.handleActionClick({
-        icon: `wpp-icon-${this.isLoading ? 'stop' : 'play'}`,
-        label: this._locales[this.isLoading ? 'stopAction' : 'playAction'],
-      }) }, this.isLoading ? h("wpp-icon-stop-v4-2-0", { slot: "icon-start" }) : h("wpp-icon-play-v4-2-0", { slot: "icon-start" }))))))), h("slot", { name: "handles" })));
+      } }, h("p", { ref: el => (this.titleRef = el), class: "node-title" }, this.nodeTitle))), h("wpp-divider-v4-3-0", null), h("div", { ref: el => (this.bodyRef = el), class: "node-body" }, h("slot", { name: "body" })), this.hasScrollbar && h("wpp-divider-v4-3-0", null), h("div", { class: "node-actions" }, h("div", { class: "node-left-actions" }, h("wpp-menu-context-v4-3-0", { appendToListWrapper: true }, h("wpp-action-button-v4-3-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this.ariaProps.label } }, h("wpp-icon-plus-v4-3-0", { slot: "icon-start" })), h("div", null, h("wpp-list-item-v4-3-0", { onWppChangeListItem: () => this.handleActionClick({ icon: 'wpp-icon-file', label: this._locales.uploadFileAction }) }, h("wpp-icon-file-v4-3-0", { slot: "left" }), h("span", { slot: "label" }, this._locales.uploadFileAction)), this.actions.map((action) => (h("wpp-list-item-v4-3-0", { key: action.icon, onWppChangeListItem: () => this.handleActionClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))), h("wpp-tooltip-v4-3-0", { text: this._locales.filterAction, config: { placement: 'bottom' } }, h("wpp-action-button-v4-3-0", { variant: "secondary", "data-testid": "wpp-settings-btn", ariaProps: { label: this._locales.filterAction }, onClick: () => this.handleActionClick({ icon: 'wpp-icon-gear', label: this._locales.filterAction }) }, h("wpp-icon-gear-v4-3-0", { slot: "icon-start" })))), (this.isSelected || this.isLoading || this.isReRun) && (h("wpp-tooltip-v4-3-0", { text: primaryAction.label, config: { placement: 'bottom' } }, h("wpp-button-v4-3-0", { class: "play-btn", size: "s", disabled: !this.hasContent && !this.isLoading && !this.isReRun, variant: primaryAction.variant, "data-testid": primaryAction.testId, ariaProps: { label: primaryAction.label }, onClick: this.handlePrimaryActionClick }, this.isLoading ? (h("wpp-icon-stop-v4-3-0", { slot: "icon-start" })) : this.isReRun ? (h("wpp-icon-refresh-v4-3-0", { slot: "icon-start" })) : (h("wpp-icon-play-v4-3-0", { slot: "icon-start" })))))))), h("slot", { name: "handles" })));
   }
   static get is() { return "wpp-basic-node"; }
-  static get registryIs() { return "wpp-basic-node-v4-2-0"; }
+  static get registryIs() { return "wpp-basic-node-v4-3-0"; }
   static get encapsulation() { return "scoped"; }
   static get originalStyleUrls() {
     return {
@@ -120,6 +169,24 @@ export class WppBasicNode {
         "reflect": false,
         "defaultValue": "false"
       },
+      "isReRun": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines whether the node is in the re-run state. When true (and not loading), the primary action button\nshows a refresh icon instead of the play icon, indicating the node can be run again."
+        },
+        "attribute": "is-re-run",
+        "reflect": false,
+        "defaultValue": "false"
+      },
       "actions": {
         "type": "unknown",
         "mutable": false,
@@ -147,7 +214,7 @@ export class WppBasicNode {
         "mutable": false,
         "complexType": {
           "original": "Partial<BasicNodeLocales>",
-          "resolved": "{ playAction?: string | undefined; stopAction?: string | undefined; filterAction?: string | undefined; uploadFileAction?: string | undefined; }",
+          "resolved": "{ playAction?: string | undefined; stopAction?: string | undefined; reRunAction?: string | undefined; filterAction?: string | undefined; uploadFileAction?: string | undefined; }",
           "references": {
             "Partial": {
               "location": "global",
@@ -212,7 +279,8 @@ export class WppBasicNode {
   }
   static get states() {
     return {
-      "hasScrollbar": {}
+      "hasScrollbar": {},
+      "hasContent": {}
     };
   }
   static get events() {

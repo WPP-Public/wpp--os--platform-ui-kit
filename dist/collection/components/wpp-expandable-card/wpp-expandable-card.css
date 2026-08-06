@@ -69,9 +69,8 @@
   --accordion-expandable-section-margin-l-internal: var(--expandable-card-accordion-content-margin-l-internal);
   --accordion-expandable-section-margin-xl-internal: var(--expandable-card-accordion-content-margin-xl-internal);
   --accordion-expandable-section-margin-2xl-internal: var(--expandable-card-accordion-content-margin-2xl-internal);
-}
-:host .body-container .wpp-accordion::part(section).tab-focus {
-  box-shadow: 0 0 0 5px var(--expandable-card-accordion-first-border-color-focus), 0 0 0 7px var(--expandable-card-accordion-second-border-color-focus);
+  --wpp-accordion-first-border-color-focus: var(--expandable-card-accordion-first-border-color-focus);
+  --wpp-accordion-second-border-color-focus: var(--expandable-card-accordion-second-border-color-focus);
 }
 :host .body-container .wpp-accordion::part(title) {
   overflow: hidden;

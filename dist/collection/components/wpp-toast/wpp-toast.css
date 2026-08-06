@@ -39,7 +39,10 @@
   --toast-icon-wrapper-warning-padding: var(--wpp-toast-icon-wrapper-warning-padding, 3.5px 4px 4.5px 4px);
   --toast-icon-wrapper-warning-bg-color: var(--wpp-toast-icon-wrapper-warning-bg-color, var(--wpp-warning-color-200));
   --toast-icon-wrapper-error-bg-color: var(--wpp-toast-icon-wrapper-error-bg-color, var(--wpp-danger-color-200));
-  --toast-icon-wrapper-information-bg-color: var(--wpp-toast-icon-wrapper-information-bg-color, var(--wpp-grey-color-200));
+  --toast-icon-wrapper-information-bg-color: var(
+    --wpp-toast-icon-wrapper-information-bg-color,
+    var(--wpp-grey-color-200)
+  );
   --toast-icon-wrapper-success-bg-color: var(--wpp-toast-icon-wrapper-success-bg-color, var(--wpp-success-color-200));
   --toast-custom-icon-wrapper-bg-color: var(--wpp-toast-custom-icon-wrapper-bg-color, transparent);
   --toast-custom-icon-color: var(--wpp-toast-custom-icon-color, var(--wpp-icon-color));
@@ -239,12 +242,12 @@
   align-items: center;
   width: auto;
   height: auto;
-  padding: 0px 8px;
+  padding: 0 8px;
   border-radius: 6px;
   background-color: var(--wpp-grey-color-300);
 }
 :host(.wpp-chat-variant) .chat-toast-wrapper .chat-toast-message {
-  --wpp-typography-text-transform: UPPERCASE;
+  --wpp-typography-text-transform: uppercase;
   color: var(--wpp-grey-color-800);
 }
 :host(.wpp-chat-variant) .chat-toast-wrapper .chat-toast-message .wpp-typography::part(typography) {

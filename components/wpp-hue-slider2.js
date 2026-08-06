@@ -1,7 +1,7 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { l as lodash } from './lodash.js';
 
-const wppHueSliderCss = ":host{position:relative;display:block;height:16px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host .slider-container{position:relative;width:100%;height:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host canvas{width:100%;height:100%;border-radius:32px;display:block}:host .marker{position:absolute;width:16px;height:16px;border:3px solid var(--wpp-grey-color-000);border-radius:50%;background-color:transparent;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:0px 1px 5px 0px rgba(52, 58, 63, 0.1019607843), 0px 0px 1px 0px rgba(52, 58, 63, 0.1019607843);box-shadow:0px 1px 5px 0px rgba(52, 58, 63, 0.1019607843), 0px 0px 1px 0px rgba(52, 58, 63, 0.1019607843);-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%);pointer-events:none;top:50%;left:calc(var(--marker-position) - 8px);z-index:2}";
+const wppHueSliderCss = ":host{position:relative;display:block;height:16px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host .slider-container{position:relative;width:100%;height:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}:host canvas{width:100%;height:100%;border-radius:32px;display:block}:host .marker{position:absolute;width:16px;height:16px;border:3px solid var(--wpp-grey-color-000);border-radius:50%;background-color:transparent;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);box-shadow:0 1px 5px 0 rgba(52, 58, 63, 0.1019607843), 0 0 1px 0 rgba(52, 58, 63, 0.1019607843);-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%);pointer-events:none;top:50%;left:calc(var(--marker-position) - 8px);z-index:2}";
 
 const HueSlider = /*@__PURE__*/ proxyCustomElement(class HueSlider extends HTMLElement {
   constructor() {
@@ -84,13 +84,13 @@ const HueSlider = /*@__PURE__*/ proxyCustomElement(class HueSlider extends HTMLE
         left: `${this.markerPosition}px`,
       } }))));
   }
-  static get registryIs() { return "wpp-hue-slider-v4-2-0"; }
+  static get registryIs() { return "wpp-hue-slider-v4-3-0"; }
   get host() { return this; }
   static get watchers() { return {
     "hue": ["updateHue"]
   }; }
   static get style() { return wppHueSliderCss; }
-}, [1, "wpp-hue-slider", "wpp-hue-slider-v4-2-0", {
+}, [1, "wpp-hue-slider", "wpp-hue-slider-v4-3-0", {
     "hue": [2],
     "markerPosition": [32]
   }]);
@@ -98,9 +98,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-hue-slider-v4-2-0"];
+  const components = ["wpp-hue-slider-v4-3-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-hue-slider-v4-2-0":
+    case "wpp-hue-slider-v4-3-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, HueSlider);
       }

@@ -1,7 +1,13 @@
 :host {
   --load-more-progress-text-color: var(--wpp-load-more-progress-text-color, var(--wpp-grey-color-700));
-  --load-more-progress-text-color-disabled: var(--wpp-load-more-progress-text-color-disabled, var(--wpp-text-color-disabled));
-  --load-more-progress-bar-color-disabled: var(--wpp-load-more-progress-bar-color-disabled, var(--wpp-brand-color-disabled));
+  --load-more-progress-text-color-disabled: var(
+    --wpp-load-more-progress-text-color-disabled,
+    var(--wpp-text-color-disabled)
+  );
+  --load-more-progress-bar-color-disabled: var(
+    --wpp-load-more-progress-bar-color-disabled,
+    var(--wpp-brand-color-disabled)
+  );
   --load-more-button-width: var(--wpp-load-more-button-width, 200px);
   display: flex;
   flex-direction: column;

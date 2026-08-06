@@ -1,10 +1,10 @@
-import { h, F as Fragment, r as registerInstance, H as Host, g as getElement, c as createEvent } from './index-9177bb6d.js';
+import { h, F as Fragment, r as registerInstance, H as Host, g as getElement, c as createEvent } from './index-93f63aaa.js';
 import { m as marked_umd } from './marked.umd-be419d39.js';
-import { k as transformToVersionedTag, c as hasParentWithId, g as getSlotEmptyStates, d as debounce, y as mergeLocales } from './utils-fc9002c9.js';
+import { k as transformToVersionedTag, c as hasParentWithId, g as getSlotEmptyStates, d as debounce, y as mergeLocales } from './utils-452958a4.js';
 import { c as createCommonjsModule, a as commonjsGlobal } from './_commonjsHelpers-ba3f0406.js';
-import { L as LIB_COMPONENTS_PREFIX, r as renderSlotsInListItem } from './utils-0b61f4d9.js';
-import { c as convertMBToBytes, d as getExtensionsList, E as EXTENSION_TO_TYPE, g as getExtension, m as modifyPropertiesOnFile, a as getBaseName, b as renameFile } from './utils-1f8c3b95.js';
-import { W as WrappedSlot } from './WrappedSlot-629d3e4f.js';
+import { L as LIB_COMPONENTS_PREFIX, r as renderSlotsInListItem } from './utils-6a0543a3.js';
+import { c as convertMBToBytes, d as getExtensionsList, E as EXTENSION_TO_TYPE, g as getExtension, m as modifyPropertiesOnFile, a as getBaseName, b as renameFile } from './utils-4a583072.js';
+import { W as WrappedSlot } from './WrappedSlot-6fa08584.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme-3920c16c.js';
 import './lodash-cc2b04b5.js';
@@ -1523,10 +1523,10 @@ const renderImageNode = (role, data, className) => {
         const wrap = e.target.closest('.chat-image-error-wrap');
         wrap?.classList.add('chat-image-broken');
       } }),
-    h("wpp-icon-image-v4-2-0", { role: "presentation", "aria-hidden": "true" })));
+    h("wpp-icon-image-v4-3-0", { role: "presentation", "aria-hidden": "true" })));
   return data.linkHref ? (h("a", { href: data.linkHref, target: "_blank", rel: "noopener noreferrer", class: "chat-image-link" }, img)) : role === 'assistant' ? (h(Fragment, null,
-    h("wpp-action-button-v4-2-0", { class: "image-download-button", variant: "secondary", onClick: () => handleDownload(data.href, data.alt) },
-      h("wpp-icon-download-v4-2-0", { slot: "icon-start", "aria-hidden": "true" })),
+    h("wpp-action-button-v4-3-0", { class: "image-download-button", variant: "secondary", onClick: () => handleDownload(data.href, data.alt) },
+      h("wpp-icon-download-v4-3-0", { slot: "icon-start", "aria-hidden": "true" })),
     img)) : (img);
 };
 const renderToken = (token, role = 'user') => {
@@ -1537,16 +1537,16 @@ const renderToken = (token, role = 'user') => {
       const headingTypes = ['2xl-heading', 'xl-heading', 'l-body', 'm-body', 's-body', 'xs-body'];
       const type = headingTypes[token.depth - 1] || 's-body';
       const tag = `h${token.depth}`;
-      return (h("wpp-typography-v4-2-0", { type: type, tag: tag }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
+      return (h("wpp-typography-v4-3-0", { type: type, tag: tag }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
     }
     case 'del':
       return h("del", null, token.tokens?.map(t => renderToken(t)));
     case 'paragraph':
-      return (h("wpp-typography-v4-2-0", { type: "s-body", tag: "p" }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
+      return (h("wpp-typography-v4-3-0", { type: "s-body", tag: "p" }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
     case 'blockquote':
       return h("blockquote", { class: "chat-quote" }, token.tokens?.map(t => renderToken(t)));
     case 'strong':
-      return (h("wpp-typography-v4-2-0", { type: "s-strong", tag: "span" }, token.tokens?.map(t => renderToken(t))));
+      return (h("wpp-typography-v4-3-0", { type: "s-strong", tag: "span" }, token.tokens?.map(t => renderToken(t))));
     case 'em':
       return h("em", null, token.tokens?.map(t => renderToken(t)));
     case 'codespan':
@@ -1555,7 +1555,7 @@ const renderToken = (token, role = 'user') => {
       return (h("pre", { class: "code-block" },
         h("div", { class: "code-lang" },
           h("span", null, token.lang || 'plaintext'),
-          h("wpp-icon-copy-v4-2-0", { class: "code-block-copy-icon", size: "s", color: "var(--wpp-grey-color-600)", onClick: () => {
+          h("wpp-icon-copy-v4-3-0", { class: "code-block-copy-icon", size: "s", color: "var(--wpp-grey-color-600)", onClick: () => {
               navigator.clipboard.writeText(token.text);
             } })),
         h("code", null, token.text)));
@@ -1572,8 +1572,8 @@ const renderToken = (token, role = 'user') => {
       const nestedLists = token.tokens?.filter(t => t.type === 'list') || [];
       const inlineContent = token.tokens?.filter(t => t.type !== 'list') || [];
       return (h("li", { class: `chat-list-item ${token.task ? `chat-list-item-task ${token.checked ? 'chat-list-item-task-checked' : ''}` : ''}` },
-        token.task && h("wpp-icon-tick-v4-2-0", null),
-        inlineContent.length > 0 && (h("wpp-typography-v4-2-0", { type: "s-body" }, inlineContent.map(t => renderToken(t)))),
+        token.task && h("wpp-icon-tick-v4-3-0", null),
+        inlineContent.length > 0 && (h("wpp-typography-v4-3-0", { type: "s-body" }, inlineContent.map(t => renderToken(t)))),
         nestedLists.map(t => renderToken(t))));
     }
     case 'table': {
@@ -1581,13 +1581,13 @@ const renderToken = (token, role = 'user') => {
         h("table", { class: "chat-table" },
           h("thead", null,
             h("tr", null, token.header.map((cell, i) => (h("th", { key: i },
-              h("wpp-typography-v4-2-0", { type: "s-strong" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))),
+              h("wpp-typography-v4-3-0", { type: "s-strong" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))),
           h("tbody", null, token.rows.map((row, r) => (h("tr", { key: r }, row.map((cell, c) => (h("td", { key: c },
-            h("wpp-typography-v4-2-0", { type: "s-body" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))))))));
+            h("wpp-typography-v4-3-0", { type: "s-body" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))))))));
     }
     case 'link':
       if (token.title) {
-        return (h("wpp-tooltip-v4-2-0", { text: token.title },
+        return (h("wpp-tooltip-v4-3-0", { text: token.title },
           h("a", { href: token.href, target: "_blank", rel: "noopener noreferrer", class: "chat-link" }, token.tokens?.length ? token.tokens.map((t) => renderToken(t)) : token.text)));
       }
       return (h("a", { href: token.href, target: "_blank", rel: "noopener noreferrer", title: token.title, class: "chat-link" }, token.tokens?.length ? token.tokens.map((t) => renderToken(t)) : token.text));
@@ -1608,7 +1608,7 @@ const renderToken = (token, role = 'user') => {
         h("div", { class: "chat-image-grid-row" }, rest.map((data, i) => (h("div", { key: i, class: "chat-image-grid-item chat-image-error-wrap" }, renderImageNode(role, data)))))));
     }
     case 'hr':
-      return h("wpp-divider-v4-2-0", null);
+      return h("wpp-divider-v4-3-0", null);
     case 'text':
       return token.tokens
         ? token.tokens.flatMap(t => renderToken(t)).filter((t) => t !== null)
@@ -1618,11 +1618,11 @@ const renderToken = (token, role = 'user') => {
       // Intentionally ignore raw HTML from LLM output for security
       return null;
     default:
-      return 'text' in token ? h("wpp-typography-v4-2-0", { type: "s-body" }, token.text) : null;
+      return 'text' in token ? h("wpp-typography-v4-3-0", { type: "s-body" }, token.text) : null;
   }
 };
 
-const wppChatConversationMessageCss = "@charset \"UTF-8\";:host{display:-ms-flexbox;display:flex;width:auto}.container{display:grid;width:100%;grid-template-columns:44px minmax(0, 80ch) 44px}.container.no-user-avatar{grid-template-columns:44px minmax(0, 80ch)}.container.no-assistant-avatar{grid-template-columns:minmax(0, 80ch) 44px}.container.no-user-avatar.no-assistant-avatar{grid-template-columns:minmax(0, 80ch)}.avatar-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:start;align-items:flex-start;-ms-flex-pack:center;justify-content:center}.avatar-wrapper.ai-avatar{-ms-flex-pack:start;justify-content:flex-start}.avatar-wrapper.user-avatar{-ms-flex-pack:end;justify-content:flex-end}.content{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:10px;width:100%;margin-left:auto}.content .wpp-typography{display:initial}.content.content-user{width:calc(100% - clamp(10%, 56px, 56px));padding:12px;background-color:var(--wpp-primary-color-100);border-radius:var(--wpp-border-radius-m) 0 var(--wpp-border-radius-m) var(--wpp-border-radius-m)}.content.content-user .attachments{-ms-flex-pack:end;justify-content:flex-end}.content p{margin-top:0}.message{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px}.message-text{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:10px}.custom-content ::slotted(*){margin-top:var(--wpp-chat-message-slot-gap, 8px)}.cursor{display:inline-block;width:2px;height:0.85em;margin-left:2px;vertical-align:text-bottom;background-color:currentColor;border-radius:1px;-webkit-animation:blink 1s steps(1) infinite;animation:blink 1s steps(1) infinite}.code-block{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;background-color:var(--wpp-grey-color-100);border-radius:var(--wpp-border-radius-m)}.code-block:hover .code-block-copy-icon{opacity:1}.code-block .code-lang{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;padding:8px 8px 4px;color:var(--wpp-grey-color-600)}.code-block code{padding:8px}.code-block-copy-icon{cursor:pointer;opacity:0;-webkit-transition:opacity 0.1s linear;transition:opacity 0.1s linear}.code-block-copy-icon:hover{--wpp-prop-icon-color:var(--wpp-grey-color-800) !important}.action-toolbar{display:-ms-flexbox;display:flex;gap:4px}.actions{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;-ms-flex-align:center;align-items:center;margin-top:10px}.actions .sources-action{margin-left:auto}.chat-list{padding:0 0 0 16px;margin:0 0 0 16px}.chat-list.chat-list-nonordered,.chat-list .chat-list-nonordered{list-style-type:disc}.chat-list.chat-list-ordered,.chat-list .chat-list-ordered{list-style-type:decimal}.chat-list.chat-list-task{padding:0;margin:0;list-style-type:none}.chat-list .chat-list-item{display:list-item;margin:0}.chat-list .chat-list-item::marker{font-size:var(--wpp-typography-s-body-font-size);line-height:var(--wpp-typography-s-body-line-height)}.chat-list .chat-list-item .wpp-typography{display:block}.chat-list .chat-list-item .chat-list{display:block}.chat-list .chat-list-item-task{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}.chat-list .chat-list-item-task .chat-list{margin-left:8px}.chat-list .chat-list-item-task:not(.chat-list-item-task-checked){text-decoration:line-through}.chat-list .chat-list-item-task:not(.chat-list-item-task-checked) .wpp-icon-tick{display:inline-block;text-decoration:none}.chat-link{font-size:var(--wpp-typography-s-body-font-size);line-height:var(--wpp-typography-s-body-line-height);color:var(--wpp-primary-color-500);-webkit-transition:color 0.2s ease-in-out;transition:color 0.2s ease-in-out}.chat-link:hover{color:var(--wpp-primary-color-400)}.chat-link:active{color:var(--wpp-primary-color-600)}.chat-table{width:100%;border-collapse:collapse;border-spacing:0}.chat-table th,.chat-table td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--wpp-grey-color-300)}.chat-quote{padding-left:16px;margin-left:0;border-left:3px solid var(--wpp-grey-color-300)}.chat-image-single{position:relative;width:100%}.chat-image-single img{display:block;width:100%;height:auto;-o-object-fit:cover;object-fit:cover}.chat-image-full{display:block;width:100%;height:auto;-o-object-fit:cover;object-fit:cover;border:1px solid var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-xs)}.chat-image-grid{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px;width:100%}.chat-image-grid-first{position:relative;width:100%}.chat-image-grid-row{display:-ms-flexbox;display:flex;gap:12px;-ms-flex-align:start;align-items:flex-start;overflow:visible hidden;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.chat-image-grid-row::-webkit-scrollbar{width:4px;height:4px}.chat-image-grid-row::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.chat-image-grid-row .chat-image-grid-item{display:-ms-flexbox;display:flex;-ms-flex:0 0 calc(23% - 9px);flex:0 0 calc(23% - 9px);aspect-ratio:1/1;min-width:100px;overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;border:1px solid var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-xs);position:relative}.chat-image-grid-row .chat-image-grid-item img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}.image-download-button{--wpp-btns-action-color-fill:var(--wpp-grey-color-000);position:absolute;top:8px;right:8px;opacity:0;-webkit-transition:opacity 0.2s ease-in-out;transition:opacity 0.2s ease-in-out}.chat-image-grid-item:hover .image-download-button,.chat-image-single:hover .image-download-button,.chat-image-grid-first:hover .image-download-button{opacity:1}.wpp-icon-image{display:none;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.chat-image-broken{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;background-color:var(--wpp-grey-color-200)}.chat-image-broken .wpp-icon-image{display:block}.chat-image-broken .image-download-button{display:none}.chat-image-broken img{display:none}.attachments{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;gap:8px;width:100%}.attachments .wpp-file-upload-item{-ms-flex:1 1 calc(50% - 4px);flex:1 1 calc(50% - 4px);min-width:224px;max-width:256px}@-webkit-keyframes blink{0%,100%{opacity:1}50%{opacity:0}}@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}";
+const wppChatConversationMessageCss = "@charset \"UTF-8\";:host{display:-ms-flexbox;display:flex;width:auto}.container{display:grid;width:100%;grid-template-columns:44px minmax(0, 80ch) 44px}.container.no-user-avatar{grid-template-columns:44px minmax(0, 80ch)}.container.no-assistant-avatar{grid-template-columns:minmax(0, 80ch) 44px}.container.no-user-avatar.no-assistant-avatar{grid-template-columns:minmax(0, 80ch)}.avatar-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:start;align-items:flex-start;-ms-flex-pack:center;justify-content:center}.avatar-wrapper.ai-avatar{-ms-flex-pack:start;justify-content:flex-start}.avatar-wrapper.user-avatar{-ms-flex-pack:end;justify-content:flex-end}.content{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:10px;width:100%;margin-left:auto}.content .wpp-typography{display:initial}.content.content-user{width:calc(100% - clamp(10%, 56px, 56px));padding:12px;background-color:var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-m);-webkit-box-shadow:var(--wpp-box-shadow-xs);box-shadow:var(--wpp-box-shadow-xs)}.content.content-user .attachments{-ms-flex-pack:end;justify-content:flex-end}.content p{margin-top:0}.message{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px}.message-text{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:10px}.custom-content ::slotted(*){margin-top:var(--wpp-chat-message-slot-gap, 8px)}.cursor{display:inline-block;width:2px;height:0.85em;margin-left:2px;vertical-align:text-bottom;background-color:currentcolor;border-radius:1px;-webkit-animation:blink 1s steps(1) infinite;animation:blink 1s steps(1) infinite}.code-block{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;background-color:var(--wpp-grey-color-100);border-radius:var(--wpp-border-radius-m)}.code-block:hover .code-block-copy-icon{opacity:1}.code-block .code-lang{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;padding:8px 8px 4px;color:var(--wpp-grey-color-600)}.code-block code{padding:8px}.code-block-copy-icon{cursor:pointer;opacity:0;-webkit-transition:opacity 0.1s linear;transition:opacity 0.1s linear}.code-block-copy-icon:hover{--wpp-prop-icon-color:var(--wpp-grey-color-800) !important}.action-toolbar{display:-ms-flexbox;display:flex;gap:4px}.actions{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;-ms-flex-align:center;align-items:center;margin-top:10px}.actions .sources-action{margin-left:auto}.chat-list{padding:0 0 0 16px;margin:0 0 0 16px}.chat-list.chat-list-nonordered,.chat-list .chat-list-nonordered{list-style-type:disc}.chat-list.chat-list-ordered,.chat-list .chat-list-ordered{list-style-type:decimal}.chat-list.chat-list-task{padding:0;margin:0;list-style-type:none}.chat-list .chat-list-item{display:list-item;margin:0}.chat-list .chat-list-item::marker{font-size:var(--wpp-typography-s-body-font-size);line-height:var(--wpp-typography-s-body-line-height)}.chat-list .chat-list-item .wpp-typography{display:block}.chat-list .chat-list-item .chat-list{display:block}.chat-list .chat-list-item-task{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}.chat-list .chat-list-item-task .chat-list{margin-left:8px}.chat-list .chat-list-item-task:not(.chat-list-item-task-checked){text-decoration:line-through}.chat-list .chat-list-item-task:not(.chat-list-item-task-checked) .wpp-icon-tick{display:inline-block;text-decoration:none}.chat-link{font-size:var(--wpp-typography-s-body-font-size);line-height:var(--wpp-typography-s-body-line-height);color:var(--wpp-primary-color-500);-webkit-transition:color 0.2s ease-in-out;transition:color 0.2s ease-in-out}.chat-link:hover{color:var(--wpp-primary-color-400)}.chat-link:active{color:var(--wpp-primary-color-600)}.chat-table{width:100%;border-collapse:collapse;border-spacing:0}.chat-table th,.chat-table td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--wpp-grey-color-300)}.chat-quote{padding-left:16px;margin-left:0;border-left:3px solid var(--wpp-grey-color-300)}.chat-image-single{position:relative;width:100%}.chat-image-single img{display:block;width:100%;height:auto;-o-object-fit:cover;object-fit:cover}.chat-image-full{display:block;width:100%;height:auto;-o-object-fit:cover;object-fit:cover;border:1px solid var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-xs)}.chat-image-grid{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px;width:100%}.chat-image-grid-first{position:relative;width:100%}.chat-image-grid-row{display:-ms-flexbox;display:flex;gap:12px;-ms-flex-align:start;align-items:flex-start;overflow:visible hidden;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.chat-image-grid-row::-webkit-scrollbar{width:4px;height:4px}.chat-image-grid-row::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.chat-image-grid-row .chat-image-grid-item{display:-ms-flexbox;display:flex;-ms-flex:0 0 calc(23% - 9px);flex:0 0 calc(23% - 9px);aspect-ratio:1/1;min-width:100px;overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;border:1px solid var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-xs);position:relative}.chat-image-grid-row .chat-image-grid-item img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}.image-download-button{--wpp-btns-action-color-fill:var(--wpp-grey-color-000);position:absolute;top:8px;right:8px;opacity:0;-webkit-transition:opacity 0.2s ease-in-out;transition:opacity 0.2s ease-in-out}.chat-image-grid-item:hover .image-download-button,.chat-image-single:hover .image-download-button,.chat-image-grid-first:hover .image-download-button{opacity:1}.wpp-icon-image{display:none;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.chat-image-broken{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;background-color:var(--wpp-grey-color-200)}.chat-image-broken .wpp-icon-image{display:block}.chat-image-broken .image-download-button{display:none}.chat-image-broken img{display:none}.attachments{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;gap:8px;width:100%}.attachments .wpp-file-upload-item{-ms-flex:1 1 calc(50% - 4px);flex:1 1 calc(50% - 4px);min-width:224px;max-width:256px}@-webkit-keyframes blink{0%,100%{opacity:1}50%{opacity:0}}@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}";
 
 const WppChatConversationMessage = class {
   constructor(hostRef) {
@@ -1640,20 +1640,28 @@ const WppChatConversationMessage = class {
     this.renderActionButton = (data) => {
       if (!data.icon)
         return null;
-      return (h("wpp-action-button-v4-2-0", { variant: "secondary", ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
+      return (h("wpp-action-button-v4-3-0", { variant: "secondary", ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
     };
     this.renderMenuContextListItems = () => (h(Fragment, null, this.menuContextListItems.map(item => {
       const { label, slots, ...rest } = item;
-      return (h("wpp-list-item-v4-2-0", { ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, h("span", { slot: "label" }, label), slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+      return (h("wpp-list-item-v4-3-0", { ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, h("span", { slot: "label" }, label), slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
     })));
     this.hostCssClasses = () => ({
       'wpp-chat-conversation': true,
     });
+    this.shouldRenderAvatar = (type) => {
+      if (this.userAvatarConfig === false && type === 'user')
+        return false;
+      if (this.assistantAvatarConfig === false && type === 'assistant')
+        return false;
+      const config = type === 'user' ? this.userAvatarConfig : this.assistantAvatarConfig;
+      return Object.keys(config).length > 0;
+    };
     this.containerCssClasses = () => ({
       container: true,
       [`container-${this.role}`]: true,
-      'no-user-avatar': !this.userAvatarConfig,
-      'no-assistant-avatar': !this.assistantAvatarConfig,
+      'no-user-avatar': !this.shouldRenderAvatar('user'),
+      'no-assistant-avatar': !this.shouldRenderAvatar('assistant'),
     });
     this.contentCssClasses = () => ({
       content: true,
@@ -1769,14 +1777,14 @@ const WppChatConversationMessage = class {
   renderComplete() {
     const tokens = getMarkdownTokens(this.finalContent);
     if (!Array.isArray(tokens)) {
-      return (h("wpp-typography-v4-2-0", { type: "s-body", tag: "p" }, purify.sanitize(this.finalContent)));
+      return (h("wpp-typography-v4-3-0", { type: "s-body", tag: "p" }, purify.sanitize(this.finalContent)));
     }
     return h("div", { class: "message-text" }, tokens.map((token) => renderToken(token, this.role)));
   }
   renderAttachments() {
     if (!this.attachments || this.attachments.length === 0)
       return null;
-    return (h("div", { class: "attachments", part: "attachments", role: "list" }, this.attachments.map((file, index) => (h("wpp-file-upload-item-v4-2-0", { key: index, variant: "chat", part: "file-item", role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": this.attachments.length.toString(), file: {
+    return (h("div", { class: "attachments", part: "attachments", role: "list" }, this.attachments.map((file, index) => (h("wpp-file-upload-item-v4-3-0", { key: index, variant: "chat", part: "file-item", role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": this.attachments.length.toString(), file: {
         name: file.name,
         url: file.url,
         type: file.type,
@@ -1789,9 +1797,9 @@ const WppChatConversationMessage = class {
     return !!this.finalContent && this.finalContent.trim().length > 0;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: this.containerCssClasses() }, this.assistantAvatarConfig && (h("div", { class: "avatar-wrapper ai-avatar" }, this.role === 'assistant' && (h("wpp-avatar-v4-2-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), h("div", { class: this.contentCssClasses() }, h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.hasTextContent() && this.renderComplete(), h("slot", { part: "custom-content" }), this.currentStatus === 'complete' && !!this.attachments?.length && this.renderAttachments()), this.role === 'assistant' && this.status === 'complete' && (h("div", { class: "actions" }, h("div", { class: "action-toolbar" }, this._actionButtonConfig.map(this.renderActionButton), this.menuContextListItems && (h("wpp-menu-context-v4-2-0", null, h("wpp-action-button-v4-2-0", { variant: "secondary", slot: "trigger-element" }, h("wpp-icon-more-v4-2-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.sourcesActionConfig && (h("div", { class: "sources-action" }, h("wpp-action-button-v4-2-0", { variant: "secondary", ...this.sourcesActionConfig }, this.sourcesActionConfig.text)))))), this.userAvatarConfig && (h("div", { class: "avatar-wrapper user-avatar" }, this.role === 'user' && h("wpp-avatar-v4-2-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: this.containerCssClasses() }, this.shouldRenderAvatar('assistant') && (h("div", { class: "avatar-wrapper ai-avatar" }, this.role === 'assistant' && (h("wpp-avatar-v4-3-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), h("div", { class: this.contentCssClasses() }, h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.hasTextContent() && this.renderComplete(), h("slot", { part: "custom-content" }), this.currentStatus === 'complete' && !!this.attachments?.length && this.renderAttachments()), this.role === 'assistant' && this.status === 'complete' && (h("div", { class: "actions" }, h("div", { class: "action-toolbar" }, this._actionButtonConfig.map(this.renderActionButton), this.menuContextListItems && (h("wpp-menu-context-v4-3-0", null, h("wpp-action-button-v4-3-0", { variant: "secondary", slot: "trigger-element" }, h("wpp-icon-more-v4-3-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.sourcesActionConfig && (h("div", { class: "sources-action" }, h("wpp-action-button-v4-3-0", { variant: "secondary", ...this.sourcesActionConfig }, this.sourcesActionConfig.text)))))), this.shouldRenderAvatar('user') && (h("div", { class: "avatar-wrapper user-avatar" }, this.role === 'user' && h("wpp-avatar-v4-3-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
   }
-  static get registryIs() { return "wpp-chat-conversation-message-v4-2-0"; }
+  static get registryIs() { return "wpp-chat-conversation-message-v4-3-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "status": ["onStatusChange"],
@@ -1861,15 +1869,31 @@ const LOCALES_DEFAULTS = {
   audioRecordButtonLabel: 'Start audio recording',
   audioStopRecordButtonLabel: 'Stop audio recording',
   audioLanguage: 'en-US',
+  // Specific to AI model selector
+  modelSelectorBtnLabel: 'Select AI model',
+  modelAutoOptionLabel: 'Auto',
+  modelAutoOptionCaption: 'Picks the right model per task',
+  modelPremiumOptionLabel: 'Premium',
+  modelPremiumOptionCaption: 'Favours high-end, efficient models',
+  modelSelectorListItemLabel: 'Select model or agent',
 };
+const getDefaultModelOptions = (locales) => [
+  {
+    id: 'auto',
+    label: locales.modelAutoOptionLabel,
+    caption: locales.modelAutoOptionCaption,
+    logo: 'https://public-assets.os.wpp.com/images/social-media-and-companies-auto.svg',
+  },
+  {
+    id: 'premium',
+    label: locales.modelPremiumOptionLabel,
+    caption: locales.modelPremiumOptionCaption,
+    logo: 'https://public-assets.os.wpp.com/images/social-media-and-companies-premium.svg',
+  },
+];
 
-const wppChatInputCss = "@charset \"UTF-8\";:host{--chat-input-container-min-width:var(--wpp-chat-input-container-min-width, 351px);--chat-input-container-bg-color:var(--wpp-chat-input-container-bg-color, var(--wpp-grey-color-000));--chat-input-container-outline-width:var(--wpp-chat-input-container-outline-width, 1px);--chat-input-container-outline-style:var(--wpp-chat-input-container-outline-style, solid);--chat-input-container-outline-color:var(--wpp-chat-input-container-outline-color, var(--wpp-grey-color-500));--chat-input-container-outline-color-disabled:var(\n    --wpp-chat-input-container-outline-color-disabled,\n    var(--wpp-grey-color-400)\n  );--chat-input-container-border-radius:var(--wpp-chat-input-container-border-radius, 8px);--chat-input-area-min-height:var(--wpp-chat-input-area-min-height, 52px);--chat-input-area-max-height:var(--wpp-chat-input-area-max-height, 240px);--chat-input-area-padding:var(--wpp-chat-input-area-padding, 12px 6px 0 12px);--chat-input-area-placeholder-color:var(--wpp-chat-input-area-placeholder-color, var(--wpp-grey-color-700));--chat-text-input-min-height:var(--wpp-chat-text-input-min-height, 52px);--chat-text-input-padding:var(--wpp-chat-text-input-padding, 0);--chat-text-input-bg-color:var(--wpp-chat-text-input-bg-color, transparent);--chat-text-input-placeholder-color:var(--wpp-chat-text-input-placeholder-color, var(--wpp-grey-color-700));--chat-actions-bar-padding:var(--wpp-chat-actions-bar-padding, 12px 16px 16px 12px);--chat-s-size-actions-bar-padding:var(--wpp-chat-s-size-actions-bar-padding, 8px 16px 8px 12px);--chat-actions-bar-color:var(--wpp-chat-actions-bar-color, var(--wpp-grey-color-500));--chat-actions-bar-color-disabled:var(--wpp-chat-actions-bar-color-disabled, var(--wpp-grey-color-400));--chat-actions-bar-char-counter-color:var(--wpp-chat-actions-bar-char-counter-color, var(--wpp-danger-color-500));--chat-actions-bar-char-counter-color-disabled:var(\n    --wpp-chat-actions-bar-char-counter-color-disabled,\n    var(--wpp-danger-color-300)\n  );--chat-text-input-minimized-width:var(--wpp-chat-text-input-minimized-width, 203px);--chat-text-input-minimized-height:var(--wpp-chat-text-input-minimized-height, 22px);--chat-text-input-minimized-padding:var(--wpp-chat-text-input-minimized-padding, 8px 16px 8px 12px);--chat-input-transition-timing:0.3s cubic-bezier(0.4, 0, 0.2, 1);--chat-minimized-focus-ring-color:var(--wpp-focus-ring-color, var(--wpp-primary-color-600));--chat-minimized-focus-ring-width:var(--wpp-focus-ring-width, 2px);--chat-minimized-focus-ring-radius:var(--wpp-chat-input-container-border-radius, 8px);--chat-minimized-first-border-color-focus:var(\n    --wpp-chat-minimized-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--chat-minimized-second-border-color-focus:var(\n    --wpp-chat-minimized-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--chat-minimized-border-radius-focus:var(--wpp-chat-minimized-border-radius-focus, var(--wpp-border-radius-xs));display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-box-sizing:border-box;box-sizing:border-box;position:relative;-ms-flex-align:center;align-items:center;width:100%}.chat-input-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;background-color:var(--chat-input-container-bg-color);gap:8px;outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color);border-radius:var(--chat-input-container-border-radius);min-width:var(--chat-input-container-min-width);width:100%;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:var(--wpp-box-shadow-s);box-shadow:var(--wpp-box-shadow-s);-webkit-transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);will-change:width, height;cursor:text}.chat-input-container:hover,.chat-input-container:focus-within{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m)}.chat-input-container:active{-webkit-box-shadow:var(--wpp-box-shadow-s);box-shadow:var(--wpp-box-shadow-s)}.chat-input-container.disabled{pointer-events:none;cursor:not-allowed;outline:var(--chat-input-container-outline-width) var(--chat-input-container-outline-style) var(--chat-input-container-outline-color-disabled)}.chat-input-container.is-focused{outline-color:var(--wpp-primary-color-500)}.chat-input-container.has-alert{gap:0}.alert{-ms-flex-item-align:stretch;align-self:stretch;border-top-left-radius:var(--chat-input-container-border-radius);border-top-right-radius:var(--chat-input-container-border-radius);overflow:hidden}.alert[hidden]{display:none}.chat-file-upload-toast{position:absolute;top:8px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);cursor:pointer}.input-area{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);display:-ms-flexbox;display:flex;-ms-flex-direction:column-reverse;flex-direction:column-reverse;-ms-flex-align:stretch;align-items:stretch;color:var(--wpp-grey-color-1000);min-height:var(--chat-input-area-min-height);max-height:var(--chat-input-area-max-height);overflow-y:hidden;-ms-flex:1;flex:1;padding:var(--chat-input-area-padding);gap:12px;-webkit-box-sizing:border-box;box-sizing:border-box;border-radius:8px 8px 0 0;-webkit-transition:height var(--chat-input-transition-timing);transition:height var(--chat-input-transition-timing);will-change:height;-webkit-transform-origin:bottom;transform-origin:bottom}.input-area .attachments{-ms-flex-order:3;order:3}.input-area .references{-ms-flex-order:2;order:2}.input-area .text-input{-ms-flex-order:1;order:1}.input-area:not(.minimized){scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.input-area::-webkit-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-moz-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area:-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-webkit-scrollbar{width:4px;height:4px}.input-area::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400);border-radius:4px;margin:6px}.input-area::-webkit-scrollbar-track{background:transparent}.input-area textarea{width:100%;min-height:var(--chat-text-input-min-height);resize:none;border:none;outline:none;padding:var(--chat-text-input-padding);font-family:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;background-color:var(--chat-text-input-bg-color);overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;color:inherit;-webkit-transition:min-height var(--chat-input-transition-timing);transition:min-height var(--chat-input-transition-timing);will-change:min-height;-webkit-transform-origin:bottom;transform-origin:bottom;margin:0}.input-area textarea::-webkit-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-moz-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:hover,.input-area textarea:focus-within{color:var(--wpp-grey-color-1000)}.input-area textarea:active{color:var(--wpp-grey-color-1000)}.input-area textarea:disabled{cursor:not-allowed;color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-webkit-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-moz-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled:-ms-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-ms-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::placeholder{color:var(--wpp-grey-color-500)}.input-area.minimized{min-height:0;padding:var(--chat-text-input-minimized-padding)}.input-area.minimized .input-area-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;gap:8px}.input-area.minimized .input-area-wrapper .actions-menu{--wpp-mc-wrapper-width:auto}.input-area.minimized .input-area-wrapper .sr-only{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0, 0, 0, 0) !important;-webkit-clip-path:inset(50%) !important;clip-path:inset(50%) !important;border:0 !important;white-space:nowrap !important}.input-area.minimized .minimized-input{-ms-flex-align:center;align-items:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;min-width:var(--chat-text-input-minimized-width);outline:none}.input-area.minimized .minimized-input .input-value{width:100%}.input-area.minimized .minimized-input .input-value.disabled{color:var(--wpp-grey-color-500)}.input-area.minimized .minimized-input .input-value-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area.minimized .minimized-input .input-value-placeholder.disabled{color:var(--wpp-grey-color-500)}.actions-bar{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;-ms-flex-align:end;align-items:flex-end;padding:var(--chat-actions-bar-padding);border-radius:0 0 8px 8px}.actions-bar.size-s{padding:var(--chat-s-size-actions-bar-padding)}.actions-bar .left-actions{display:-ms-flexbox;display:flex;gap:8px;-ms-flex-align:center;align-items:center;}.actions-bar .left-actions .actions-menu{--wpp-mc-wrapper-width:auto;display:-ms-inline-flexbox;display:inline-flex;-ms-flex:0 0 auto;flex:0 0 auto;width:auto}.actions-bar .left-actions .select{display:-ms-flexbox;display:flex;width:100%;--wpp-action-button-padding:4px 6px;--wpp-action-button-icon-start-padding:8px;--wpp-action-button-icon-end-padding:6px;--wpp-action-button-icon-start-margin:8px;--wpp-action-button-icon-end-margin:8px;--wpp-action-button-bg-color-active:var(--wpp-grey-color-300);--wpp-action-button-opacity-active:1;}.actions-bar .left-actions .select ::slotted(.wpp-action-button:not(.with-icon-end)){--wpp-action-button-padding:4px 8px}.actions-bar .left-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.actions-bar .left-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.right-actions{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:4px}.right-actions .char-counter{color:var(--chat-actions-bar-char-counter-color)}.right-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.right-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.right-actions.disabled .char-counter{color:var(--chat-actions-bar-char-counter-color-disabled)}.play-btn{margin-left:4px;--button-padding-s:6px}.play-btn::part(icon-start-wrapper){margin:0}.attachments{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;gap:8px;width:100%;-ms-flex:0 0 auto;flex:0 0 auto;overflow:auto hidden;scrollbar-width:thin;scrollbar-color:transparent transparent;-webkit-transition:scrollbar-color 0.3s ease-in-out;transition:scrollbar-color 0.3s ease-in-out}.attachments::-webkit-scrollbar{height:4px}.attachments::-webkit-scrollbar-thumb{background-color:transparent;border-radius:var(--wpp-border-radius-xs, 4px);-webkit-transition:background-color 0.3s ease-in-out;transition:background-color 0.3s ease-in-out}.attachments:hover,.attachments:focus-within{scrollbar-color:var(--wpp-grey-color-400) transparent}.attachments:hover::-webkit-scrollbar-thumb,.attachments:focus-within::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400)}.attachments .wpp-file-upload-item{-ms-flex:0 0 auto;flex:0 0 auto;width:224px;min-width:224px;max-width:224px;--wpp-file-upload-item-chat-gap:0}.attachments .wpp-file-upload-item::part(file-item){margin-top:0}.attachments .wpp-file-upload-item::part(controls){-ms-flex-pack:end;justify-content:flex-end}.attachments .wpp-file-upload-item::part(thumbnail){margin-right:8px}.attachments .wpp-file-upload-item::part(cross-icon){margin-left:12px}.references{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:end;align-items:flex-end;gap:8px;width:100%;-ms-flex:0 0 auto;flex:0 0 auto}.references[hidden]{display:none}.input-area.minimized .minimized-input:focus-visible{border-radius:var(--chat-minimized-border-radius-focus);outline:none;-webkit-box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus);box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus)}:host([data-wpp-theme=dark]) .chat-input-container{background-color:var(--wpp-grey-color-100)}";
+const wppChatInputCss = "@charset \"UTF-8\";:host{--chat-input-container-min-width:var(--wpp-chat-input-container-min-width, 351px);--chat-input-container-bg-color:var(--wpp-chat-input-container-bg-color, var(--wpp-grey-color-000));--chat-input-container-border-radius:var(--wpp-chat-input-container-border-radius, var(--wpp-border-radius-m));--chat-input-area-min-height:var(--wpp-chat-input-area-min-height, 52px);--chat-input-area-max-height:var(--wpp-chat-input-area-max-height, 240px);--chat-input-area-padding:var(--wpp-chat-input-area-padding, 16px 16px 4px 16px);--chat-input-area-placeholder-color:var(--wpp-chat-input-area-placeholder-color, var(--wpp-grey-color-700));--chat-text-input-min-height:var(--wpp-chat-text-input-min-height, 52px);--chat-text-input-padding:var(--wpp-chat-text-input-padding, 0);--chat-text-input-bg-color:var(--wpp-chat-text-input-bg-color, transparent);--chat-text-input-placeholder-color:var(--wpp-chat-text-input-placeholder-color, var(--wpp-grey-color-700));--chat-actions-bar-padding:var(--wpp-chat-actions-bar-padding, 12px 16px 16px 12px);--chat-s-size-actions-bar-padding:var(--wpp-chat-s-size-actions-bar-padding, 8px 16px 8px 12px);--chat-actions-bar-color:var(--wpp-chat-actions-bar-color, var(--wpp-grey-color-1000));--chat-actions-bar-color-disabled:var(--wpp-chat-actions-bar-color-disabled, var(--wpp-grey-color-400));--chat-actions-bar-char-counter-color:var(--wpp-chat-actions-bar-char-counter-color, var(--wpp-danger-color-500));--chat-actions-bar-char-counter-color-disabled:var(\n    --wpp-chat-actions-bar-char-counter-color-disabled,\n    var(--wpp-danger-color-300)\n  );--chat-text-input-minimized-width:var(--wpp-chat-text-input-minimized-width, 203px);--chat-text-input-minimized-height:var(--wpp-chat-text-input-minimized-height, 22px);--chat-text-input-minimized-padding:var(--wpp-chat-text-input-minimized-padding, 8px 16px 8px 12px);--chat-input-transition-timing:0.3s cubic-bezier(0.4, 0, 0.2, 1);--chat-minimized-focus-ring-color:var(--wpp-focus-ring-color, var(--wpp-primary-color-600));--chat-minimized-focus-ring-width:var(--wpp-focus-ring-width, var(--wpp-border-width-m));--chat-minimized-focus-ring-radius:var(--wpp-chat-input-container-border-radius, var(--wpp-border-radius-m));--chat-minimized-first-border-color-focus:var(\n    --wpp-chat-minimized-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--chat-minimized-second-border-color-focus:var(\n    --wpp-chat-minimized-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--chat-minimized-border-radius-focus:var(--wpp-chat-minimized-border-radius-focus, var(--wpp-border-radius-xs));display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-box-sizing:border-box;box-sizing:border-box;position:relative;-ms-flex-align:center;align-items:center;width:100%}.chat-input-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;background-color:var(--chat-input-container-bg-color);border-radius:var(--chat-input-container-border-radius);min-width:var(--chat-input-container-min-width);width:100%;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:var(--wpp-box-shadow-s);box-shadow:var(--wpp-box-shadow-s);-webkit-transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);will-change:width, height;cursor:text}.chat-input-container:not(.is-focused):hover{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m)}.chat-input-container.disabled{pointer-events:none;cursor:not-allowed}.chat-input-container.has-alert{gap:0}.alert{-ms-flex-item-align:stretch;align-self:stretch;border-top-left-radius:var(--chat-input-container-border-radius);border-top-right-radius:var(--chat-input-container-border-radius);overflow:hidden}.alert[hidden]{display:none}.chat-file-upload-toast{position:absolute;top:8px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);cursor:pointer}.input-area{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);display:-ms-flexbox;display:flex;-ms-flex-direction:column-reverse;flex-direction:column-reverse;-ms-flex-align:stretch;align-items:stretch;color:var(--wpp-grey-color-1000);min-height:var(--chat-input-area-min-height);max-height:var(--chat-input-area-max-height);overflow-y:hidden;-ms-flex:1;flex:1;padding:var(--chat-input-area-padding);gap:12px;-webkit-box-sizing:border-box;box-sizing:border-box;border-radius:var(--wpp-border-radius-m) var(--wpp-border-radius-m) 0 0;-webkit-transition:height var(--chat-input-transition-timing);transition:height var(--chat-input-transition-timing);will-change:height;-webkit-transform-origin:bottom;transform-origin:bottom}.input-area .attachments{-ms-flex-order:3;order:3}.input-area .references{-ms-flex-order:2;order:2}.input-area .text-input{-ms-flex-order:1;order:1}.input-area:not(.minimized){scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.input-area::-webkit-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-moz-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area:-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-webkit-scrollbar{width:4px;height:4px}.input-area::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400);border-radius:var(--wpp-border-radius-xs);margin:6px}.input-area::-webkit-scrollbar-track{background:transparent}.input-area textarea{width:100%;min-height:var(--chat-text-input-min-height);resize:none;border:none;outline:none;padding:var(--chat-text-input-padding);font-family:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;background-color:var(--chat-text-input-bg-color);overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;color:inherit;-webkit-transition:min-height var(--chat-input-transition-timing);transition:min-height var(--chat-input-transition-timing);will-change:min-height;-webkit-transform-origin:bottom;transform-origin:bottom;margin:0}.input-area textarea::-webkit-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-moz-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:hover,.input-area textarea:focus-within{color:var(--wpp-grey-color-1000)}.input-area textarea:active{color:var(--wpp-grey-color-1000)}.input-area textarea:disabled{cursor:not-allowed;color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-webkit-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-moz-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled:-ms-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-ms-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::placeholder{color:var(--wpp-grey-color-500)}.input-area.minimized{min-height:0;padding:var(--chat-text-input-minimized-padding)}.input-area.minimized .input-area-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;gap:8px}.input-area.minimized .input-area-wrapper .actions-menu{--wpp-mc-wrapper-width:auto;display:-ms-flexbox;display:flex}.input-area.minimized .input-area-wrapper .sr-only{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0, 0, 0, 0) !important;-webkit-clip-path:inset(50%) !important;clip-path:inset(50%) !important;border:0 !important;white-space:nowrap !important}.input-area.minimized .minimized-input{-ms-flex-align:center;align-items:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;min-width:var(--chat-text-input-minimized-width);outline:none}.input-area.minimized .minimized-input .input-value{width:100%}.input-area.minimized .minimized-input .input-value.disabled{color:var(--wpp-grey-color-500)}.input-area.minimized .minimized-input .input-value-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area.minimized .minimized-input .input-value-placeholder.disabled{color:var(--wpp-grey-color-500)}.actions-bar{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;-ms-flex-align:end;align-items:flex-end;padding:var(--chat-actions-bar-padding);border-radius:0 0 var(--wpp-border-radius-m) var(--wpp-border-radius-m)}.actions-bar.size-s{padding:var(--chat-s-size-actions-bar-padding)}.actions-bar .left-actions{display:-ms-flexbox;display:flex;gap:8px;-ms-flex-align:center;align-items:center;}.actions-bar .left-actions .actions-menu{--wpp-mc-wrapper-width:auto;display:-ms-inline-flexbox;display:inline-flex;-ms-flex:0 0 auto;flex:0 0 auto;width:auto}.actions-bar .left-actions .select{display:-ms-flexbox;display:flex;width:100%;--wpp-action-button-padding:4px 6px;--wpp-action-button-icon-start-padding:8px;--wpp-action-button-icon-end-padding:6px;--wpp-action-button-icon-start-margin:8px;--wpp-action-button-icon-end-margin:8px;--wpp-action-button-bg-color-active:var(--wpp-grey-color-300);--wpp-action-button-opacity-active:1;}.actions-bar .left-actions .select ::slotted(.wpp-action-button:not(.with-icon-end)){--wpp-action-button-padding:4px 8px}.actions-bar .left-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.actions-bar .left-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.right-actions{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:4px}.right-actions .select{line-height:0}.right-actions .char-counter{color:var(--chat-actions-bar-char-counter-color)}.right-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.right-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.right-actions.disabled .char-counter{color:var(--chat-actions-bar-char-counter-color-disabled)}.play-btn{margin-left:4px;--button-padding-s:6px}.play-btn::part(icon-start-wrapper){margin:0}.model-selector{height:32px}.select-model-trigger.size-s:not(.is-chat-expanded){--wpp-list-item-padding:4px}.select-model-trigger.size-s:not(.is-chat-expanded)::part(left-wrapper){margin-right:0}.select-model-trigger.is-menu-opened{--li-bg-color:var(--wpp-grey-color-300);--wpp-icon-color:var(--wpp-grey-color-900)}.attachments{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;gap:8px;width:100%;-ms-flex:0 0 auto;flex:0 0 auto;overflow:auto hidden;scrollbar-width:thin;scrollbar-color:transparent transparent;-webkit-transition:scrollbar-color 0.3s ease-in-out;transition:scrollbar-color 0.3s ease-in-out}.attachments::-webkit-scrollbar{height:4px}.attachments::-webkit-scrollbar-thumb{background-color:transparent;border-radius:var(--wpp-border-radius-xs, 4px);-webkit-transition:background-color 0.3s ease-in-out;transition:background-color 0.3s ease-in-out}.attachments:hover,.attachments:focus-within{scrollbar-color:var(--wpp-grey-color-400) transparent}.attachments:hover::-webkit-scrollbar-thumb,.attachments:focus-within::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400)}.attachments .wpp-file-upload-item{--wpp-file-upload-item-chat-gap:0}.attachments .wpp-file-upload-item::part(file-item){margin-top:0}.attachments .wpp-file-upload-item::part(controls){-ms-flex-pack:end;justify-content:flex-end}.attachments .wpp-file-upload-item::part(thumbnail){margin-right:8px}.attachments .wpp-file-upload-item::part(cross-icon){margin-left:12px}.references{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:end;align-items:flex-end;gap:8px;width:100%;-ms-flex:0 0 auto;flex:0 0 auto}.references[hidden]{display:none}.input-area.minimized .minimized-input:focus-visible{border-radius:var(--chat-minimized-border-radius-focus);outline:none;-webkit-box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus);box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus)}:host([data-wpp-theme=dark]) .chat-input-container{background-color:var(--wpp-grey-color-100)}";
 
-// Model-selector dropdown defaults applied centrally to the slotted menu-context
-// (Figma spec) so consuming apps don't repeat them. SELECT_DROPDOWN_CLASS is also
-// targeted by a global rule that spaces the dropdown list items 4px apart.
-const SELECT_DROPDOWN_WIDTH = '200px';
-const SELECT_DROPDOWN_CLASS = 'wpp-chat-input-model-options';
 const WppChatInput = class {
   constructor(hostRef) {
     registerInstance(this, hostRef);
@@ -1882,6 +1906,8 @@ const WppChatInput = class {
     this.wppMessageChanged = createEvent(this, "wppMessageChanged", 1);
     this.wppActionsMenuToggle = createEvent(this, "wppActionsMenuToggle", 1);
     this.wppActionsMenuItemClick = createEvent(this, "wppActionsMenuItemClick", 1);
+    this.wppModelSelect = createEvent(this, "wppModelSelect", 1);
+    this.wppModelBrowse = createEvent(this, "wppModelBrowse", 1);
     this.scrollTimeout = null;
     this.inputAreaId = `wpp-ci-area`;
     this.textareaAutoId = `wpp-ci-ta`;
@@ -1982,39 +2008,6 @@ const WppChatInput = class {
       }
       this.wppActionsMenuItemClick.emit(action);
     };
-    // Centralizes the chat-input model-selector wiring so consuming apps don't have
-    // to repeat these overrides per example/framework:
-    //  - SC 4.1.2 (nested-interactive): the decorative brand logo (wpp-avatar) sitting
-    //    inside the interactive trigger button must not be a focusable widget, so it is
-    //    demoted to role="presentation" (which also drops its tabindex).
-    //  - The dropdown width is pinned to the Figma spec (200px) on the slotted
-    //    menu-context, and tagged with a class. That class lets menu-context apply the
-    //    dropdown's own a11y wiring (menuitem roles, non-interactive option avatars) and
-    //    the global rule space the option rows 4px apart. The dropdown content is moved
-    //    to document.body by tippy, so it cannot be reached from here — only the trigger
-    //    (which stays in place) is configured in this method.
-    this.configureSelectSlot = () => {
-      const selectEl = this.host.querySelector('[slot="select"]');
-      if (!selectEl)
-        return;
-      const triggerAvatars = selectEl.querySelectorAll('[slot="icon-start"], [slot="icon-end"]');
-      triggerAvatars.forEach(el => {
-        el.setAttribute('role', 'presentation');
-        if (el.tabIndex >= 0)
-          el.tabIndex = -1;
-      });
-      const menuContext = (selectEl.matches(transformToVersionedTag('wpp-menu-context'))
-        ? selectEl
-        : selectEl.querySelector(transformToVersionedTag('wpp-menu-context')));
-      if (menuContext) {
-        if (menuContext.listWidth === 'auto')
-          menuContext.listWidth = SELECT_DROPDOWN_WIDTH;
-        const externalClasses = (menuContext.externalClass ?? '').split(' ').filter(Boolean);
-        if (!externalClasses.includes(SELECT_DROPDOWN_CLASS)) {
-          menuContext.externalClass = [...externalClasses, SELECT_DROPDOWN_CLASS].join(' ');
-        }
-      }
-    };
     this.updateSlotData = () => {
       const emptyStates = getSlotEmptyStates(this.host.childNodes, {
         select: '[slot="select"]',
@@ -2024,7 +2017,6 @@ const WppChatInput = class {
       this.hasSelectSlot = !emptyStates.select;
       this.hasAlertSlot = !emptyStates.alert;
       this.hasReferencesSlot = !emptyStates.references;
-      this.configureSelectSlot();
     };
     // A fresh alert appearing in the slot should always be shown, even if a
     // previous one was dismissed.
@@ -2286,6 +2278,7 @@ const WppChatInput = class {
       if (!this.recognition)
         return;
       this.isAudioRecording = !this.isAudioRecording;
+      this.wppMic.emit({ isRecording: this.isAudioRecording });
       if (this.isAudioRecording) {
         this.startSpeechRecognition();
       }
@@ -2293,22 +2286,64 @@ const WppChatInput = class {
         this.stopSpeechRecognition();
       }
     };
-    this.shouldDisplaySend = () => this.disabled
+    this.shouldDisplaySend = () => this.disabled || this.errorAttachmentsList.length > 0
       ? false
-      : !!this.internalValue.trim() ||
-        this.isGenerating ||
-        [...this.successAttachmentsList, ...this.errorAttachmentsList].length > 0;
-    this.renderMicrophoneBtn = (recordButtonLabel) => (h("wpp-action-button-v4-2-0", { "data-testid": "wpp-micophone-btn", onClick: this.handleClickAudioRecording, variant: "secondary", ariaProps: { label: recordButtonLabel }, disabled: this.disabled }, this.isAudioRecording ? h("wpp-icon-stop-v4-2-0", { slot: "icon-start" }) : h("wpp-icon-mic-on-v4-2-0", { slot: "icon-start" })));
-    this.renderActionsMenu = () => (h("wpp-menu-context-v4-2-0", { class: "actions-menu", part: "actions-menu", dropdownConfig: this.actionsMenuDropdownConfig }, h("wpp-action-button-v4-2-0", { slot: "trigger-element", class: "actions-menu-trigger", "data-testid": "actions-menu-trigger-button", variant: "secondary", disabled: this.disabled, ariaProps: {
+      : !!this.internalValue.trim() || this.isGenerating || this.successAttachmentsList.length > 0;
+    this.renderMicrophoneBtn = (recordButtonLabel) => (h("wpp-action-button-v4-3-0", { "data-testid": "wpp-micophone-btn", onClick: this.handleClickAudioRecording, variant: "secondary", ariaProps: { label: recordButtonLabel }, disabled: this.disabled }, this.isAudioRecording ? h("wpp-icon-stop-v4-3-0", { slot: "icon-start" }) : h("wpp-icon-mic-on-v4-3-0", { slot: "icon-start" })));
+    this.renderActionsMenu = () => (h("wpp-menu-context-v4-3-0", { class: "actions-menu", part: "actions-menu", dropdownConfig: this.actionsMenuDropdownConfig }, h("wpp-action-button-v4-3-0", { slot: "trigger-element", class: "actions-menu-trigger", "data-testid": "actions-menu-trigger-button", variant: "secondary", disabled: this.disabled, ariaProps: {
         label: this.getActionsMenuButtonLabel(),
         expanded: this.ariaProps?.actionsMenuButton?.expanded ?? this.actionsMenuOpen,
         haspopup: 'menu',
-      } }, h("wpp-icon-plus-v4-2-0", { slot: "icon-start" })), h("div", null, h("wpp-list-item-v4-2-0", { "data-testid": `actions-menu-item-${UPLOAD_ACTION_ID}`, disabled: this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick({
+      } }, h("wpp-icon-plus-v4-3-0", { slot: "icon-start" })), h("div", null, h("wpp-list-item-v4-3-0", { "data-testid": `actions-menu-item-${UPLOAD_ACTION_ID}`, disabled: this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick({
         id: UPLOAD_ACTION_ID,
         icon: UPLOAD_ICON,
         label: this.getAttachButtonLabel(),
         disabled: this.disabled || this.isFileDialogOpen,
-      }) }, h(transformToVersionedTag(UPLOAD_ICON), { slot: 'left' }), h("span", { slot: "label" }, this.getAttachButtonLabel())), this.actions.map(action => (h("wpp-list-item-v4-2-0", { key: action.id, "data-testid": `actions-menu-item-${action.id}`, disabled: action.disabled || this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))));
+      }) }, h(transformToVersionedTag(UPLOAD_ICON), { slot: 'left' }), h("span", { slot: "label" }, this.getAttachButtonLabel())), this.actions.map(action => (h("wpp-list-item-v4-3-0", { key: action.id, "data-testid": `actions-menu-item-${action.id}`, disabled: action.disabled || this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))));
+    this.getSelectedModel = () => {
+      if (this.selectedModel === 'auto') {
+        return getDefaultModelOptions(this._locales)[0];
+      }
+      else if (this.selectedModel === 'premium') {
+        return getDefaultModelOptions(this._locales)[1];
+      }
+      return this.models.length === 0
+        ? this.selectedModel
+        : this.models.find((model) => model.id === this.selectedModel.id) || getDefaultModelOptions(this._locales)[0];
+    };
+    this.handleModelMenuShow = () => {
+      this.isModelMenuOpen = true;
+    };
+    this.handleModelMenuHide = () => {
+      this.isModelMenuOpen = false;
+    };
+    this.handleModelSelect = (model) => {
+      if (model.id === 'auto') {
+        this.selectedModel = 'auto';
+      }
+      else if (model.id === 'premium') {
+        this.selectedModel = 'premium';
+      }
+      else {
+        this.selectedModel = model;
+      }
+      this.wppModelSelect.emit(model);
+    };
+    this.handleModelChange = () => {
+      this.wppModelBrowse.emit();
+    };
+    this.renderModelSelector = (size) => {
+      const selectedModel = this.getSelectedModel();
+      const triggerAvatar = (h("wpp-avatar-v4-3-0", { slot: "left", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, name: selectedModel.label }));
+      return (h("wpp-menu-context-v4-3-0", { isBtnTrigger: true, class: "model-selector", dropdownConfig: { onShow: this.handleModelMenuShow, onHide: this.handleModelMenuHide, placement: 'top-start' } }, h("wpp-list-item-v4-3-0", { slot: "trigger-element", class: this.modelSelectorTriggerCssClasses(), role: "button", disabled: this.disabled, "aria-label": this._locales.modelSelectorBtnLabel, "aria-expanded": this.isModelMenuOpen, "aria-haspopup": 'menu' }, triggerAvatar, size === 'm' && (h(Fragment, null, h("span", { slot: "label" }, selectedModel.label), h("wpp-icon-chevron-v4-3-0", { slot: "right", direction: this.isModelMenuOpen ? 'up' : 'down' })))), h("div", { class: "wpp-model-dropdown" }, getDefaultModelOptions(this._locales).map((model) => this.renderModelListItem(model, model.id === selectedModel.id)), h("wpp-divider-v4-3-0", null), this.models.length > 0 ? (this.models.map((model) => this.renderModelListItem(model, model.id === selectedModel.id))) : (h("wpp-list-item-v4-3-0", { onWppChangeListItem: this.handleModelChange }, h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), h("wpp-icon-chevron-v4-3-0", { slot: "right", direction: "right" }))))));
+    };
+    this.renderModelListItem = (model, checked) => (h("wpp-list-item-v4-3-0", { key: model.id, checked: checked, onWppChangeListItem: () => this.handleModelSelect(model) }, h("wpp-avatar-v4-3-0", { role: "presentation", slot: "left", size: "xs", variant: "square", src: model.logo, name: model.label }), h("span", { slot: "label" }, model.label), model?.caption && (h("span", { slot: "caption" }, model.caption))));
+    this.modelSelectorTriggerCssClasses = () => ({
+      'select-model-trigger': true,
+      [`size-${this.size}`]: true,
+      'is-menu-opened': this.isModelMenuOpen,
+      'is-chat-expanded': this.size === 's' && this.isChatInputExpanded,
+    });
     this.hostCssClasses = () => ({
       'wpp-chat-input': true,
     });
@@ -2414,6 +2449,8 @@ const WppChatInput = class {
     this.charactersLimit = undefined;
     this.attachments = [];
     this.withSelect = false;
+    this.models = [];
+    this.selectedModel = 'auto';
     this.actions = [];
     this.textValue = '';
     this.debounceEnabled = true;
@@ -2442,6 +2479,7 @@ const WppChatInput = class {
     this.actionsMenuOpen = false;
     this.isFocused = false;
     this.isAudioRecording = false;
+    this.isModelMenuOpen = false;
   }
   onAttachmentsChange(newValue) {
     if (this.mergedFileUploadConfig.controlled) {
@@ -2491,8 +2529,6 @@ const WppChatInput = class {
     }
     this.resizeObserver = resizeObserver;
     window.addEventListener('focus', this.onWindowFocus, true);
-    // Run once after first render so select-slot elements are already in the DOM
-    requestAnimationFrame(() => this.configureSelectSlot());
   }
   addExpandedListeners() {
     this.expandedListenersAbort?.abort();
@@ -2711,7 +2747,6 @@ const WppChatInput = class {
     }
     if (this.disabled ||
       this.isGenerating ||
-      this.isSendDisabled ||
       (!this.internalValue.trim() && !this.successAttachmentsList.length) ||
       this.errorAttachmentsList.length)
       return;
@@ -2809,11 +2844,6 @@ const WppChatInput = class {
     event.stopPropagation();
     this.scrollToAttachment(this.toastType === 'error' ? 'error' : 'success');
   }
-  get isSendDisabled() {
-    return (this.disabled ||
-      (!this.internalValue.trim() && this.successAttachmentsList.length === 0) ||
-      this.errorAttachmentsList.length > 0);
-  }
   render() {
     const allFiles = [...this.successAttachmentsList, ...this.errorAttachmentsList];
     const isMaximizedS = this.isChatInputExpanded && this.size === 's';
@@ -2824,17 +2854,16 @@ const WppChatInput = class {
     const recordButtonLabel = this.isAudioRecording
       ? this.getAudioStopRecordButtonLabel()
       : this.getAudioRecordButtonLabel();
-    const actionButtonDisabled = this.isGenerating ? this.disabled : this.isSendDisabled;
     const ariaInvalid = this.ariaProps?.textarea?.invalid !== undefined ? this.ariaProps.textarea.invalid : undefined;
-    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, alert, toast, input-area, attachments, references, text-input, actions-bar, left-actions, right-actions, file-item, actions-menu", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick, onFocus: this.handleOnFocus }, h("div", { class: this.chatInputContainerClasses(), onKeyDown: this.onExpandedKeyDown, part: "chat-input-container" }, h("div", { class: "alert", part: "alert", hidden: !this.hasAlertSlot || this.isAlertDismissed }, h("slot", { name: "alert", onSlotchange: this.handleAlertSlotChange })), this.showToast && (h("wpp-toast-v4-2-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { id: this.inputAreaId, class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments", role: "list", "aria-label": this._locales.attachmentsLabel }, allFiles.map((file, index) => (h("wpp-file-upload-item-v4-2-0", { key: index, file: file, variant: "chat", format: this.mergedFileUploadConfig.format, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
+    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, alert, toast, input-area, attachments, references, text-input, actions-bar, left-actions, right-actions, file-item, actions-menu", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick, onFocus: this.handleOnFocus }, h("div", { class: this.chatInputContainerClasses(), onKeyDown: this.onExpandedKeyDown, part: "chat-input-container" }, h("div", { class: "alert", part: "alert", hidden: !this.hasAlertSlot || this.isAlertDismissed }, h("slot", { name: "alert", onSlotchange: this.handleAlertSlotChange })), this.showToast && (h("wpp-toast-v4-3-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { id: this.inputAreaId, class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments", role: "list", "aria-label": this._locales.attachmentsLabel }, allFiles.map((file, index) => (h("wpp-file-upload-item-v4-3-0", { key: index, file: file, variant: "chat", format: this.mergedFileUploadConfig.format, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
         sizeError: this.mergedFileUploadConfig.locales.sizeError,
         formatError: this.mergedFileUploadConfig.locales.formatError,
-      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded, role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": allFiles.length.toString() }))))), h("div", { class: "references", part: "references", hidden: !this.hasReferencesSlot }, h("slot", { name: "references", onSlotchange: this.handleReferencesSlotChange })), h("textarea", { id: (this.htmlAttributes?.textarea?.id ?? this.textareaId) || this.textareaAutoId, name: this.htmlAttributes?.textarea?.name ?? this.textareaName ?? 'message', class: this.textInputClasses(), placeholder: placeholderText, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input", "aria-label": this.getTextareaLabel(), "aria-invalid": ariaInvalid, autocomplete: this.htmlAttributes?.textarea?.autocomplete, maxLength: this.htmlAttributes?.textarea?.maxLength, "data-gramm": "false", "data-gramm_editor": "false" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, this.renderActionsMenu(), h("div", { class: this.minimizedInput(), part: "minimized-input", "data-pressed": this.minimizedPressed ? 'true' : null, role: "button", tabindex: this.disabled ? -1 : 0, "aria-expanded": this.isChatInputExpanded ? 'true' : 'false', "aria-controls": this.inputAreaId, "aria-label": this.getMinimizedAriaLabel(), "aria-describedby": this.minimizedDescId, onKeyDown: this.onMinimizedKeyDown, onKeyUp: this.onMinimizedKeyUp }, h("wpp-typography-v4-2-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || placeholderText)), h("span", { id: this.minimizedDescId, class: "sr-only" }, this.getMinimizedDescriptionText()), h("div", { class: this.rightActionsClasses() }, this.renderMicrophoneBtn(recordButtonLabel), this.shouldDisplaySend() && (h("wpp-button-v4-2-0", { class: "play-btn", "data-testid": "send-icon-only-button", size: "s", variant: this.isGenerating ? 'secondary' : 'primary', onClick: e => {
+      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded, role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": allFiles.length.toString() }))))), h("div", { class: "references", part: "references", hidden: !this.hasReferencesSlot }, h("slot", { name: "references", onSlotchange: this.handleReferencesSlotChange })), h("textarea", { id: (this.htmlAttributes?.textarea?.id ?? this.textareaId) || this.textareaAutoId, name: this.htmlAttributes?.textarea?.name ?? this.textareaName ?? 'message', class: this.textInputClasses(), placeholder: placeholderText, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input", "aria-label": this.getTextareaLabel(), "aria-invalid": ariaInvalid, autocomplete: this.htmlAttributes?.textarea?.autocomplete, maxLength: this.htmlAttributes?.textarea?.maxLength, "data-gramm": "false", "data-gramm_editor": "false" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, this.renderActionsMenu(), h("div", { class: this.minimizedInput(), part: "minimized-input", "data-pressed": this.minimizedPressed ? 'true' : null, role: "button", tabindex: this.disabled ? -1 : 0, "aria-expanded": this.isChatInputExpanded ? 'true' : 'false', "aria-controls": this.inputAreaId, "aria-label": this.getMinimizedAriaLabel(), "aria-describedby": this.minimizedDescId, onKeyDown: this.onMinimizedKeyDown, onKeyUp: this.onMinimizedKeyUp }, h("wpp-typography-v4-3-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || placeholderText)), h("span", { id: this.minimizedDescId, class: "sr-only" }, this.getMinimizedDescriptionText()), h("div", { class: this.rightActionsClasses() }, !this.withSelect && this.renderModelSelector('s'), this.renderMicrophoneBtn(recordButtonLabel), this.shouldDisplaySend() && (h("wpp-button-v4-3-0", { class: "play-btn", "data-testid": "send-icon-only-button", size: "s", variant: this.isGenerating ? 'secondary' : 'primary', onClick: e => {
         e.stopPropagation();
         this.isGenerating ? this.handleStop() : this.handleSend();
-      }, disabled: actionButtonDisabled, ariaProps: { label: actionButtonLabel } }, this.isGenerating ? (h("wpp-icon-stop-v4-2-0", { slot: "icon-start" })) : (h("wpp-icon-arrow-v4-2-0", { direction: "up", slot: "icon-start" })))))))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar", role: "toolbar", "aria-label": this.getActionsToolbarLabel() }, h("div", { class: this.leftActionsClasses(), part: "left-actions", role: "group", "aria-label": this.getLeftActionsLabel() }, this.renderActionsMenu(), this.enableMic && (h("wpp-action-button-v4-2-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled, ariaProps: { label: this._locales.voiceLabel } }, h("wpp-icon-mic-on-v4-2-0", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions", role: "group", "aria-label": this.getRightActionsLabel() }, this.withSelect && (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })), this.renderMicrophoneBtn(recordButtonLabel), this.shouldDisplaySend() && (h("wpp-button-v4-2-0", { class: "play-btn", "data-testid": "send-icon-only-button", size: "s", disabled: actionButtonDisabled, variant: this.isGenerating ? 'secondary' : 'primary', onClick: () => (this.isGenerating ? this.handleStop() : this.handleSend()), ariaProps: { label: actionButtonLabel } }, this.isGenerating ? (h("wpp-icon-stop-v4-2-0", { slot: "icon-start" })) : (h("wpp-icon-arrow-v4-2-0", { direction: "up", slot: "icon-start" }))))))), h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.htmlAttributes?.attachmentsInput?.multiple ?? this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.htmlAttributes?.attachmentsInput?.accept ?? this.getAcceptExtensions().join(), title: "", id: this.htmlAttributes?.attachmentsInput?.id ?? 'wpp-ci-file', name: this.htmlAttributes?.attachmentsInput?.name ?? 'attachments', "aria-hidden": "true" }))));
+      }, ariaProps: { label: actionButtonLabel } }, this.isGenerating ? (h("wpp-icon-stop-v4-3-0", { slot: "icon-start" })) : (h("wpp-icon-arrow-v4-3-0", { direction: "up", slot: "icon-start" })))))))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar", role: "toolbar", "aria-label": this.getActionsToolbarLabel() }, h("div", { class: this.leftActionsClasses(), part: "left-actions", role: "group", "aria-label": this.getLeftActionsLabel() }, this.renderActionsMenu(), this.enableMic && (h("wpp-action-button-v4-3-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled, ariaProps: { label: this._locales.voiceLabel } }, h("wpp-icon-mic-on-v4-3-0", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions", role: "group", "aria-label": this.getRightActionsLabel() }, this.withSelect ? (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })) : (this.renderModelSelector('m')), this.renderMicrophoneBtn(recordButtonLabel), this.shouldDisplaySend() && (h("wpp-button-v4-3-0", { class: "play-btn", "data-testid": "send-icon-only-button", size: "s", variant: this.isGenerating ? 'secondary' : 'primary', onClick: () => (this.isGenerating ? this.handleStop() : this.handleSend()), ariaProps: { label: actionButtonLabel } }, this.isGenerating ? (h("wpp-icon-stop-v4-3-0", { slot: "icon-start" })) : (h("wpp-icon-arrow-v4-3-0", { direction: "up", slot: "icon-start" }))))))), h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.htmlAttributes?.attachmentsInput?.multiple ?? this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.htmlAttributes?.attachmentsInput?.accept ?? this.getAcceptExtensions().join(), title: "", id: this.htmlAttributes?.attachmentsInput?.id ?? 'wpp-ci-file', name: this.htmlAttributes?.attachmentsInput?.name ?? 'attachments', "aria-hidden": "true" }))));
   }
-  static get registryIs() { return "wpp-chat-input-v4-2-0"; }
+  static get registryIs() { return "wpp-chat-input-v4-3-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "attachments": ["onAttachmentsChange"],

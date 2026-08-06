@@ -1,6 +1,6 @@
 :host {
   display: inline-flex;
-  width: -webkit-fit-content;
+  width: fit-content;
 }
 :host .anchor {
   display: inline-flex;

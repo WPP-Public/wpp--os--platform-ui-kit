@@ -27,6 +27,7 @@ export declare class WppActionButton {
   isIconOnly: boolean;
   focusType: FOCUS_TYPE;
   isPressed: boolean;
+  isHovered: boolean;
   validAriaProps: Record<string, string>;
   /**
    * If the component is disabled.
@@ -78,6 +79,8 @@ export declare class WppActionButton {
   private onBlur;
   private onMouseDown;
   private onKeyUp;
+  private onPointerEnter;
+  private onPointerLeave;
   private hostCssClasses;
   private buttonCssClasses;
   private loadingColor;

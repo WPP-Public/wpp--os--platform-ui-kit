@@ -79,7 +79,7 @@ export class WppTag {
       const wasMaxLengthTruncated = !!this.maxLabelLength && this.maxLabelLength > 0 && displayedText !== originalLabel;
       const shouldShowTooltip = this.isOverflowTruncated || wasMaxLengthTruncated;
       const labelNode = (h("span", { class: "label-text", part: "tooltip-text", ref: this.setLabelRef }, displayedText));
-      return shouldShowTooltip ? (h("wpp-tooltip-v4-2-0", { class: "wpp-tooltip", text: originalLabel, config: this.tooltipConfig, part: "tooltip", disabled: this.disabled }, labelNode)) : (labelNode);
+      return shouldShowTooltip ? (h("wpp-tooltip-v4-3-0", { class: "wpp-tooltip", text: originalLabel, config: this.tooltipConfig, part: "tooltip", disabled: this.disabled }, labelNode)) : (labelNode);
     };
     this.hasIconStartSlot = false;
     this.isOverflowTruncated = false;
@@ -106,10 +106,10 @@ export class WppTag {
     this.resizeObserver?.disconnect();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("wpp-typography-v4-2-0", { class: "wpp-typography", type: "xs-midi", tag: "span", part: "label" }, this.renderLabel()), h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("wpp-typography-v4-3-0", { class: "wpp-typography", type: "xs-midi", tag: "span", part: "label" }, this.renderLabel()), h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
   }
   static get is() { return "wpp-tag"; }
-  static get registryIs() { return "wpp-tag-v4-2-0"; }
+  static get registryIs() { return "wpp-tag-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

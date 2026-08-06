@@ -1,0 +1,1 @@
+var s;!function(s){s.crossClick="crossClick",s.escapePress="escapePress"}(s||(s={}));export{s as S}

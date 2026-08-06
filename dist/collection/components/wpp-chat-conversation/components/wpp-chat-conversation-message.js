@@ -20,20 +20,28 @@ export class WppChatConversationMessage {
     this.renderActionButton = (data) => {
       if (!data.icon)
         return null;
-      return (h("wpp-action-button-v4-2-0", { variant: "secondary", ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
+      return (h("wpp-action-button-v4-3-0", { variant: "secondary", ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
     };
     this.renderMenuContextListItems = () => (h(Fragment, null, this.menuContextListItems.map(item => {
       const { label, slots, ...rest } = item;
-      return (h("wpp-list-item-v4-2-0", { ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, h("span", { slot: "label" }, label), slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+      return (h("wpp-list-item-v4-3-0", { ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, h("span", { slot: "label" }, label), slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
     })));
     this.hostCssClasses = () => ({
       'wpp-chat-conversation': true,
     });
+    this.shouldRenderAvatar = (type) => {
+      if (this.userAvatarConfig === false && type === 'user')
+        return false;
+      if (this.assistantAvatarConfig === false && type === 'assistant')
+        return false;
+      const config = type === 'user' ? this.userAvatarConfig : this.assistantAvatarConfig;
+      return Object.keys(config).length > 0;
+    };
     this.containerCssClasses = () => ({
       container: true,
       [`container-${this.role}`]: true,
-      'no-user-avatar': !this.userAvatarConfig,
-      'no-assistant-avatar': !this.assistantAvatarConfig,
+      'no-user-avatar': !this.shouldRenderAvatar('user'),
+      'no-assistant-avatar': !this.shouldRenderAvatar('assistant'),
     });
     this.contentCssClasses = () => ({
       content: true,
@@ -149,14 +157,14 @@ export class WppChatConversationMessage {
   renderComplete() {
     const tokens = getMarkdownTokens(this.finalContent);
     if (!Array.isArray(tokens)) {
-      return (h("wpp-typography-v4-2-0", { type: "s-body", tag: "p" }, DOMPurify.sanitize(this.finalContent)));
+      return (h("wpp-typography-v4-3-0", { type: "s-body", tag: "p" }, DOMPurify.sanitize(this.finalContent)));
     }
     return h("div", { class: "message-text" }, tokens.map((token) => renderToken(token, this.role)));
   }
   renderAttachments() {
     if (!this.attachments || this.attachments.length === 0)
       return null;
-    return (h("div", { class: "attachments", part: "attachments", role: "list" }, this.attachments.map((file, index) => (h("wpp-file-upload-item-v4-2-0", { key: index, variant: "chat", part: "file-item", role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": this.attachments.length.toString(), file: {
+    return (h("div", { class: "attachments", part: "attachments", role: "list" }, this.attachments.map((file, index) => (h("wpp-file-upload-item-v4-3-0", { key: index, variant: "chat", part: "file-item", role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": this.attachments.length.toString(), file: {
         name: file.name,
         url: file.url,
         type: file.type,
@@ -169,10 +177,10 @@ export class WppChatConversationMessage {
     return !!this.finalContent && this.finalContent.trim().length > 0;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: this.containerCssClasses() }, this.assistantAvatarConfig && (h("div", { class: "avatar-wrapper ai-avatar" }, this.role === 'assistant' && (h("wpp-avatar-v4-2-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), h("div", { class: this.contentCssClasses() }, h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.hasTextContent() && this.renderComplete(), h("slot", { part: "custom-content" }), this.currentStatus === 'complete' && !!this.attachments?.length && this.renderAttachments()), this.role === 'assistant' && this.status === 'complete' && (h("div", { class: "actions" }, h("div", { class: "action-toolbar" }, this._actionButtonConfig.map(this.renderActionButton), this.menuContextListItems && (h("wpp-menu-context-v4-2-0", null, h("wpp-action-button-v4-2-0", { variant: "secondary", slot: "trigger-element" }, h("wpp-icon-more-v4-2-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.sourcesActionConfig && (h("div", { class: "sources-action" }, h("wpp-action-button-v4-2-0", { variant: "secondary", ...this.sourcesActionConfig }, this.sourcesActionConfig.text)))))), this.userAvatarConfig && (h("div", { class: "avatar-wrapper user-avatar" }, this.role === 'user' && h("wpp-avatar-v4-2-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: this.containerCssClasses() }, this.shouldRenderAvatar('assistant') && (h("div", { class: "avatar-wrapper ai-avatar" }, this.role === 'assistant' && (h("wpp-avatar-v4-3-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), h("div", { class: this.contentCssClasses() }, h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.hasTextContent() && this.renderComplete(), h("slot", { part: "custom-content" }), this.currentStatus === 'complete' && !!this.attachments?.length && this.renderAttachments()), this.role === 'assistant' && this.status === 'complete' && (h("div", { class: "actions" }, h("div", { class: "action-toolbar" }, this._actionButtonConfig.map(this.renderActionButton), this.menuContextListItems && (h("wpp-menu-context-v4-3-0", null, h("wpp-action-button-v4-3-0", { variant: "secondary", slot: "trigger-element" }, h("wpp-icon-more-v4-3-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.sourcesActionConfig && (h("div", { class: "sources-action" }, h("wpp-action-button-v4-3-0", { variant: "secondary", ...this.sourcesActionConfig }, this.sourcesActionConfig.text)))))), this.shouldRenderAvatar('user') && (h("div", { class: "avatar-wrapper user-avatar" }, this.role === 'user' && h("wpp-avatar-v4-3-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
   }
   static get is() { return "wpp-chat-conversation-message"; }
-  static get registryIs() { return "wpp-chat-conversation-message-v4-2-0"; }
+  static get registryIs() { return "wpp-chat-conversation-message-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -332,7 +340,10 @@ export class WppChatConversationMessage {
         "required": false,
         "optional": false,
         "docs": {
-          "tags": [],
+          "tags": [{
+              "name": "deprecated",
+              "text": "- The component should no longer render an avatar for the AI model."
+            }],
           "text": "Defines the avatar configuration for the assistant avatar."
         },
         "attribute": "assistant-avatar-config",
@@ -356,7 +367,10 @@ export class WppChatConversationMessage {
         "required": false,
         "optional": false,
         "docs": {
-          "tags": [],
+          "tags": [{
+              "name": "deprecated",
+              "text": "- The component should no longer render an avatar for the user."
+            }],
           "text": "Defines the avatar configuration for the user avatar."
         },
         "attribute": "user-avatar-config",

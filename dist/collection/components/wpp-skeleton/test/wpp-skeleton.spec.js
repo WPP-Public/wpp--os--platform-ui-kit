@@ -73,6 +73,34 @@ describe('wpp-skeleton', () => {
       });
       expect(page.root?.getAttribute('aria-hidden')).toBe('true');
     });
+    it('should always be hidden from screen readers (decorative pattern)', async () => {
+      const page = await newSpecPage({
+        components: [WppSkeleton],
+        html: `<wpp-skeleton variant="circle" width="50px" height="50px" />`,
+      });
+      expect(page.root?.getAttribute('aria-hidden')).toBe('true');
+    });
+    it('should not have role attribute (decorative element)', async () => {
+      const page = await newSpecPage({
+        components: [WppSkeleton],
+        html: `<wpp-skeleton />`,
+      });
+      expect(page.root?.getAttribute('role')).toBeNull();
+    });
+    it('should not have aria-label (decorative element)', async () => {
+      const page = await newSpecPage({
+        components: [WppSkeleton],
+        html: `<wpp-skeleton />`,
+      });
+      expect(page.root?.getAttribute('aria-label')).toBeNull();
+    });
+    it('should not have aria-live (decorative element)', async () => {
+      const page = await newSpecPage({
+        components: [WppSkeleton],
+        html: `<wpp-skeleton />`,
+      });
+      expect(page.root?.getAttribute('aria-live')).toBeNull();
+    });
   });
   describe('CSS Variables', () => {
     it('should set --skeleton-width CSS variable', async () => {
@@ -118,6 +146,17 @@ describe('wpp-skeleton', () => {
       });
       expect(page.root?.style.getPropertyValue('--skeleton-width')).toBe('');
       expect(page.root?.style.getPropertyValue('--skeleton-height')).toBe('');
+    });
+  });
+  describe('accessibility (WPPOPENDS-1500)', () => {
+    it('stays hidden from assistive technology', async () => {
+      const page = await newSpecPage({
+        components: [WppSkeleton],
+        html: `<wpp-skeleton />`,
+      });
+      // The skeleton is a purely decorative loading placeholder: it must never be announced
+      // as content. Communicating the loading state (aria-busy / status) is the consumer's job.
+      expect(page.root?.getAttribute('aria-hidden')).toBe('true');
     });
   });
 });

@@ -3,13 +3,17 @@
   * @prop --wpp-topbar-with-app-padding:
   * @prop --wpp-topbar-item-margin:
   * @prop --wpp-topbar-max-width:
+  * @prop --wpp-topbar-bg-color:
+  * @prop --wpp-topbar-divider-color:
 */
 :host {
-  --topbar-padding: var(--wpp-topbar-padding, 12px 0);
-  --topbar-with-app-padding: var(--wpp-topbar-with-app-padding, 8px 0);
+  --topbar-padding: var(--wpp-topbar-padding, 12px 0 11px);
+  --topbar-with-app-padding: var(--wpp-topbar-with-app-padding, 8px 0 7px);
   --topbar-item-margin: var(--wpp-topbar-item-margin, 8px);
   --topbar-max-width: var(--wpp-topbar-max-width, 1812px);
   --topbar-offset-top: var(--wpp-topbar-offset-top, 0);
+  --topbar-bg-color: var(--wpp-topbar-bg-color, transparent);
+  --topbar-divider-color: var(--wpp-topbar-divider-color, transparent);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -17,7 +21,7 @@
   top: var(--topbar-offset-top);
   left: 0;
   right: 0;
-  background-color: var(--wpp-grey-color-000);
+  background-color: var(--topbar-bg-color);
 }
 :host .wrapper {
   max-width: var(--topbar-max-width);
@@ -27,6 +31,9 @@
 }
 :host .wrapper .container {
   margin-left: 0;
+}
+:host .wpp-divider {
+  --wpp-divider-bg-color: var(--topbar-divider-color);
 }
 :host .header {
   display: flex;
@@ -58,10 +65,6 @@
 }
 
 .app.slot-hidden,
-right.slot-hidden {
+.right.slot-hidden {
   display: none;
-}
-
-:host([data-wpp-theme=dark]) {
-  background-color: var(--wpp-grey-color-100);
 }

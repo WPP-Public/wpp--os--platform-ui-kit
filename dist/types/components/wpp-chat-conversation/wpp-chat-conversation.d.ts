@@ -12,10 +12,12 @@ export declare class WppChatConversation {
   messages: ChatMessage[];
   /**
    * Defines the avatar configuration for the assistant.
+   * @deprecated - The component should no longer render an avatar for the AI model.
    */
   assistantAvatarConfig: AvatarConfig | false;
   /**
    * Defines the avatar configuration for the user.
+   * @deprecated - The component should no longer render an avatar for the user.
    */
   userAvatarConfig: AvatarConfig | false;
   /**
@@ -71,6 +73,7 @@ export declare class WppChatConversation {
    */
   scrollToBottom(): Promise<void>;
   private scrollContainerToBottom;
+  private shouldRenderAvatar;
   private inputWrapperCssClasses;
   render(): any;
 }

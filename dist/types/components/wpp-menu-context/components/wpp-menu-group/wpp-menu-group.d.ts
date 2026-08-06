@@ -14,5 +14,6 @@ export declare class WppMenuGroup {
    */
   readonly withDivider?: boolean;
   private hostCssClasses;
+  private getRole;
   render(): any;
 }

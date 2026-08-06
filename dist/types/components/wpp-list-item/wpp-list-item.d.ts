@@ -56,7 +56,7 @@ export declare class WppListItem {
   /**
    * Custom Typography for caption text
    * @example
-   * captionTypography={{ color: var(--wpp-warning-color-500), type: 's-caption' }}
+   * captionTypography={{ color: var(--wpp-warning-color-500), type: 's-midi' }}
    */
   readonly captionTypography?: {
     color?: ThemeColorValue;
@@ -195,6 +195,8 @@ export declare class WppListItem {
   private rightSlotCssClasses;
   private captionSlotCssClasses;
   private ulWrapperCssClasses;
+  private getHostRole;
+  private getHostTabIndex;
   private renderBody;
   private renderRightSlot;
   private renderLeftSlot;
@@ -202,6 +204,8 @@ export declare class WppListItem {
   private handleMouseLeave;
   private handleMouseDown;
   private handleMouseUp;
+  private isManagedByMenuContext;
   private handleKeyDown;
+  private handleKeyUp;
   render(): any;
 }

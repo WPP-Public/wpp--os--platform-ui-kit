@@ -1,16 +1,14 @@
-import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { g as getSlotEmptyStates } from './utils-fc9002c9.js';
-import { W as WrappedSlot } from './WrappedSlot-629d3e4f.js';
+import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-93f63aaa.js';
+import { g as getSlotEmptyStates } from './utils-452958a4.js';
+import { W as WrappedSlot } from './WrappedSlot-6fa08584.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
-import { t as themeSubscriptionController } from './subscribe-to-theme-3920c16c.js';
 
-const wppTopbarCss = ":host{--topbar-padding:var(--wpp-topbar-padding, 12px 0);--topbar-with-app-padding:var(--wpp-topbar-with-app-padding, 8px 0);--topbar-item-margin:var(--wpp-topbar-item-margin, 8px);--topbar-max-width:var(--wpp-topbar-max-width, 1812px);--topbar-offset-top:var(--wpp-topbar-offset-top, 0);display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-pack:justify;justify-content:space-between;position:absolute;top:var(--topbar-offset-top);left:0;right:0;background-color:var(--wpp-grey-color-000)}:host .wrapper{max-width:var(--topbar-max-width);width:95%;margin:0 auto;padding:0 2.5%}:host .wrapper .container{margin-left:0}:host .header{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;padding:var(--topbar-padding)}:host .header .navigation{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;width:100%;opacity:1}:host .header .navigation.hidden{height:32px;overflow-y:hidden;opacity:0}:host .header .navigation .wpp-topbar-item{white-space:nowrap}:host .header .navigation .wpp-topbar-item:not(:last-child){margin-right:var(--topbar-item-margin)}:host .header.without-application .application{display:none}:host .header.with-app{padding:var(--topbar-with-app-padding)}.app.slot-hidden,right.slot-hidden{display:none}:host([data-wpp-theme=dark]){background-color:var(--wpp-grey-color-100)}";
+const wppTopbarCss = ":host{--topbar-padding:var(--wpp-topbar-padding, 12px 0 11px);--topbar-with-app-padding:var(--wpp-topbar-with-app-padding, 8px 0 7px);--topbar-item-margin:var(--wpp-topbar-item-margin, 8px);--topbar-max-width:var(--wpp-topbar-max-width, 1812px);--topbar-offset-top:var(--wpp-topbar-offset-top, 0);--topbar-bg-color:var(--wpp-topbar-bg-color, transparent);--topbar-divider-color:var(--wpp-topbar-divider-color, transparent);display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-pack:justify;justify-content:space-between;position:absolute;top:var(--topbar-offset-top);left:0;right:0;background-color:var(--topbar-bg-color)}:host .wrapper{max-width:var(--topbar-max-width);width:95%;margin:0 auto;padding:0 2.5%}:host .wrapper .container{margin-left:0}:host .wpp-divider{--wpp-divider-bg-color:var(--topbar-divider-color)}:host .header{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;padding:var(--topbar-padding)}:host .header .navigation{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;width:100%;opacity:1}:host .header .navigation.hidden{height:32px;overflow-y:hidden;opacity:0}:host .header .navigation .wpp-topbar-item{white-space:nowrap}:host .header .navigation .wpp-topbar-item:not(:last-child){margin-right:var(--topbar-item-margin)}:host .header.without-application .application{display:none}:host .header.with-app{padding:var(--topbar-with-app-padding)}.app.slot-hidden,.right.slot-hidden{display:none}";
 
 const WppTopbar = class {
   constructor(hostRef) {
     registerInstance(this, hostRef);
     this.wppChange = createEvent(this, "wppChange", 1);
-    this.themeSubscription = themeSubscriptionController(() => this.host);
     this.getItemsWidth = () => {
       const navigationItemsElement = this.host.shadowRoot.querySelector('.navigation');
       const topbarItems = navigationItemsElement?.querySelectorAll('.wpp-topbar-item:not([is-menu])');
@@ -132,11 +130,7 @@ const WppTopbar = class {
       });
     });
   }
-  connectedCallback() {
-    this.themeSubscription.start();
-  }
   disconnectedCallback() {
-    this.themeSubscription.stop();
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
@@ -147,9 +141,9 @@ const WppTopbar = class {
       children: this.navigation.slice(this.itemsToShow),
     };
     const isMenuActive = !!hiddenNavigation.children?.find(item => this.activeItems.includes(item.value));
-    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: (this.hasOpenMenu ? topbarMenuZIndex : this.zIndex).toString() }, exportparts: "wrapper, body, navigation, topbar-item, divider, app, right, app-wrapper, right-wrapper" }, h("div", { class: this.wrapperCssClasses(), part: "wrapper" }, h("wpp-grid-v4-2-0", { container: true }, h("wpp-grid-v4-2-0", { item: true, all: 24 }, h("div", { class: this.headerCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasAppSlot }, name: "app", onSlotchange: this.updateSlotData }), h("nav", { class: this.navigationCssClasses(), key: this.itemsToShow, part: "navigation" }, this.navigation.slice(0, this.itemsToShow).map(navigation => (h("wpp-topbar-item-v4-2-0", { navigation: navigation, firstLevel: true, active: navigation.active, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, zIndex: topbarMenuZIndex, part: "topbar-item", onWppTopbarItemMenuToggle: this.topbarItemMenuToggle }))), this.truncated && (h("wpp-topbar-item-v4-2-0", { key: this.value, navigation: hiddenNavigation, firstLevel: true, menu: true, active: isMenuActive, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, zIndex: topbarMenuZIndex, part: "topbar-item", onWppTopbarItemMenuToggle: this.topbarItemMenuToggle }))), h(WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasRightSlot }, name: "right", onSlotchange: this.updateSlotData }))))), h("wpp-divider-v4-2-0", { part: "divider" })));
+    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: (this.hasOpenMenu ? topbarMenuZIndex : this.zIndex).toString() }, exportparts: "wrapper, body, navigation, topbar-item, divider, app, right, app-wrapper, right-wrapper" }, h("div", { class: this.wrapperCssClasses(), part: "wrapper" }, h("wpp-grid-v4-3-0", { container: true }, h("wpp-grid-v4-3-0", { item: true, all: 24 }, h("div", { class: this.headerCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasAppSlot }, name: "app", onSlotchange: this.updateSlotData }), h("nav", { class: this.navigationCssClasses(), key: this.itemsToShow, part: "navigation" }, this.navigation.slice(0, this.itemsToShow).map(navigation => (h("wpp-topbar-item-v4-3-0", { navigation: navigation, firstLevel: true, active: navigation.active, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, zIndex: topbarMenuZIndex, part: "topbar-item", onWppTopbarItemMenuToggle: this.topbarItemMenuToggle }))), this.truncated && (h("wpp-topbar-item-v4-3-0", { key: this.value, navigation: hiddenNavigation, firstLevel: true, menu: true, active: isMenuActive, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, zIndex: topbarMenuZIndex, part: "topbar-item", onWppTopbarItemMenuToggle: this.topbarItemMenuToggle }))), h(WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasRightSlot }, name: "right", onSlotchange: this.updateSlotData }))))), h("wpp-divider-v4-3-0", { part: "divider" })));
   }
-  static get registryIs() { return "wpp-topbar-v4-2-0"; }
+  static get registryIs() { return "wpp-topbar-v4-3-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "navigation": ["navigationChanged"],

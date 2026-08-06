@@ -40,28 +40,28 @@ describe.skip('wpp-datepicker', () => {
     };
     const page = await newSpecPage({
       components: [WppDatepicker, WppLabel, WppInternalLabel],
-      template: () => h("wpp-datepicker-v4-2-0", { range: true, labelConfig: labelConfig }),
+      template: () => h("wpp-datepicker-v4-3-0", { range: true, labelConfig: labelConfig }),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('should render datepicker with button trigger variant', async () => {
     const page = await newSpecPage({
       components: [WppDatepicker],
-      template: () => (h("wpp-datepicker-v4-2-0", null, h("button", { slot: "trigger" }, "Select Date"))),
+      template: () => (h("wpp-datepicker-v4-3-0", null, h("button", { slot: "trigger" }, "Select Date"))),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('should have wpp-button-trigger class when trigger slot is used', async () => {
     const page = await newSpecPage({
       components: [WppDatepicker],
-      template: () => (h("wpp-datepicker-v4-2-0", null, h("button", { slot: "trigger" }, "Select Date"))),
+      template: () => (h("wpp-datepicker-v4-3-0", null, h("button", { slot: "trigger" }, "Select Date"))),
     });
     expect(page.root).toHaveClass('wpp-button-trigger');
   });
   it('should render trigger-wrapper part when trigger slot is used', async () => {
     const page = await newSpecPage({
       components: [WppDatepicker],
-      template: () => (h("wpp-datepicker-v4-2-0", null, h("button", { slot: "trigger" }, "Select Date"))),
+      template: () => (h("wpp-datepicker-v4-3-0", null, h("button", { slot: "trigger" }, "Select Date"))),
     });
     const triggerWrapper = page.root?.shadowRoot?.querySelector('[part="trigger-wrapper"]');
     expect(triggerWrapper).not.toBeNull();
@@ -69,7 +69,7 @@ describe.skip('wpp-datepicker', () => {
   it('should not render input when trigger slot is used', async () => {
     const page = await newSpecPage({
       components: [WppDatepicker],
-      template: () => (h("wpp-datepicker-v4-2-0", null, h("button", { slot: "trigger" }, "Select Date"))),
+      template: () => (h("wpp-datepicker-v4-3-0", null, h("button", { slot: "trigger" }, "Select Date"))),
     });
     const input = page.root?.shadowRoot?.querySelector('input#datepicker');
     expect(input).toBeNull();
@@ -79,7 +79,7 @@ describe('wpp-datepicker monthRangeNormalization', () => {
   const setup = async (props = {}) => {
     const page = await newSpecPage({
       components: [WppDatepicker],
-      template: () => (h("wpp-datepicker-v4-2-0", { range: props.range ?? true, view: props.view ?? 'months', monthRangeNormalization: props.monthRangeNormalization ?? { enabled: true } })),
+      template: () => (h("wpp-datepicker-v4-3-0", { range: props.range ?? true, view: props.view ?? 'months', monthRangeNormalization: props.monthRangeNormalization ?? { enabled: true } })),
     });
     return { page, instance: page.rootInstance };
   };
@@ -131,7 +131,7 @@ describe('wpp-datepicker view watcher', () => {
   it('destroys and recreates the datepicker instance when the view prop changes', async () => {
     const page = await newSpecPage({
       components: [WppDatepicker],
-      template: () => h("wpp-datepicker-v4-2-0", { view: "months" }),
+      template: () => h("wpp-datepicker-v4-3-0", { view: "months" }),
     });
     const instance = page.rootInstance;
     const destroySpy = jest.fn();
@@ -156,7 +156,7 @@ describe('wpp-datepicker view watcher', () => {
   it('uses optional chaining when datePickerInstance is undefined', async () => {
     const page = await newSpecPage({
       components: [WppDatepicker],
-      template: () => h("wpp-datepicker-v4-2-0", { view: "years" }),
+      template: () => h("wpp-datepicker-v4-3-0", { view: "years" }),
     });
     const instance = page.rootInstance;
     jest
@@ -204,14 +204,14 @@ describe('wpp-datepicker manual input', () => {
   const setupSingle = async (props = {}) => {
     const page = await newSpecPage({
       components: [WppDatepicker],
-      template: () => h("wpp-datepicker-v4-2-0", { ...props }),
+      template: () => h("wpp-datepicker-v4-3-0", { ...props }),
     });
     return { page, instance: page.rootInstance };
   };
   const setupRange = async (props = {}) => {
     const page = await newSpecPage({
       components: [WppDatepicker],
-      template: () => h("wpp-datepicker-v4-2-0", { range: true, ...props }),
+      template: () => h("wpp-datepicker-v4-3-0", { range: true, ...props }),
     });
     return { page, instance: page.rootInstance };
   };
@@ -772,14 +772,14 @@ describe('wpp-datepicker manual input', () => {
     it('Test the component subscribes when it connects (connectedCallback & componentDidLoad)', async () => {
       await newSpecPage({
         components: [WppDatepicker],
-        template: () => h("wpp-datepicker-v4-2-0", null),
+        template: () => h("wpp-datepicker-v4-3-0", null),
       });
       expect(mockStart).toHaveBeenCalledTimes(2);
     });
     it('should unsubscribe from theme when component disconnects (disconnectedCallback)', async () => {
       const page = await newSpecPage({
         components: [WppDatepicker],
-        template: () => h("wpp-datepicker-v4-2-0", null),
+        template: () => h("wpp-datepicker-v4-3-0", null),
       });
       page.root?.remove();
       expect(mockStop).toHaveBeenCalledTimes(1);

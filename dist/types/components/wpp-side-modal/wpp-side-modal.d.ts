@@ -33,6 +33,7 @@ export declare class WppSideModal {
   hasHeaderSlot: boolean;
   hasBodySlot: boolean;
   hasActionsSlot: boolean;
+  headerLabel: string;
   isScrolled: boolean;
   closeReason: SideModalCloseReason | null;
   /**
@@ -82,6 +83,11 @@ export declare class WppSideModal {
   readonly headerActionsConfig: HeaderActionsConfig;
   /**
    * Contains the modal `aria-` props.
+   *
+   * `labelledby` is intentionally not defaulted: it previously pointed at an id rendered inside
+   * the shadow root, which an `aria-labelledby` on the host can never resolve, leaving the dialog
+   * with no accessible name. When you do supply one it must name an element in your own tree
+   * scope, and it is used verbatim. Otherwise the name is derived from the `header` slot.
    */
   readonly ariaProps: AriaProps;
   /**
@@ -133,6 +139,13 @@ export declare class WppSideModal {
   private get _locales();
   private handleScroll;
   private updateSlotData;
+  /**
+   * The dialog's accessible name is derived from the slotted header, because an `aria-labelledby`
+   * on the host cannot reference an id that lives inside the shadow root – IDREFs do not cross the
+   * shadow boundary. Anything the consumer supplies wins, since their ids and labels resolve in
+   * their own tree scope.
+   */
+  private updateHeaderLabel;
   private handleCloseModal;
   private handleBackButtonClick;
   private handleTransitionStart;

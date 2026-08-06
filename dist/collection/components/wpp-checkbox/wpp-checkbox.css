@@ -51,7 +51,10 @@
     var(--wpp-text-color-disabled)
   );
   --checkbox-bg-color: var(--wpp-checkbox-bg-color-hover, transparent);
-  --checkbox-bg-color-hover: var(--wpp-checkbox-bg-color-hover, rgb(240 242 245 / 75%));
+  --checkbox-bg-color-hover: var(
+    --wpp-checkbox-bg-color-hover,
+    color-mix(in srgb, var(--wpp-grey-color-200) 75%, transparent)
+  );
   --checkbox-bg-color-active: var(--wpp-checkbox-bg-color-active, var(--wpp-grey-color-300));
   --checkbox-bg-color-disabled: var(--wpp-checkbox-bg-color-disabled, transparent);
   --checkbox-bg-color-checked: var(--wpp-checkbox-bg-color-checked, var(--wpp-brand-color));

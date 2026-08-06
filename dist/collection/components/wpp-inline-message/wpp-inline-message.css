@@ -166,11 +166,6 @@
   outline: none;
   box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
 }
-.inline-message-wrapper .message-block.tab-focus {
-  border-radius: "";
-  outline: none;
-  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
-}
 .inline-message-wrapper .message-block.tooltip-maxlength-auto {
   display: grid;
   grid-auto-flow: column;
@@ -188,7 +183,7 @@
 }
 .inline-message-wrapper .message-block .message {
   width: 100%;
-  word-break: break-word;
+  overflow-wrap: break-word;
 }
 .inline-message-wrapper .message {
   border-radius: var(--im-border-radius);

@@ -6,6 +6,7 @@
   min-height: 280px;
   max-width: 440px;
   max-height: 600px;
+  position: relative;
 }
 :host .node-container {
   height: 100%;
@@ -28,7 +29,7 @@
   position: absolute;
   inset: -1px;
   pointer-events: none;
-  border: 1px solid var(--wpp-primary-color-500);
+  border: var(--wpp-border-width-s) solid var(--wpp-primary-color-500);
   border-radius: calc(var(--wpp-border-radius-l) + 1px);
 }
 :host .node-container .node-wrapper {
@@ -40,6 +41,7 @@
   box-shadow: var(--wpp-box-shadow-s);
   width: 100%;
   height: 100%;
+  max-height: 600px;
   display: flex;
   flex-direction: column;
 }
@@ -104,6 +106,14 @@
 }
 :host .node-container .node-wrapper .node-actions .play-btn::part(icon-start-wrapper) {
   margin: 0;
+}
+
+::slotted([slot=handles]) {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  flex: none;
+  z-index: 2;
 }
 
 @property --loading-angle {

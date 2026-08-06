@@ -5,9 +5,8 @@
   height: 100%;
   min-height: 0;
   padding: 10px;
-  border: 1px solid var(--wpp-border-color);
+  border: var(--wpp-border-width-s) solid var(--wpp-border-color);
   border-radius: var(--wpp-border-radius-m);
-  box-shadow: var(--wpp-box-shadow-m);
 }
 
 .conversation-container {

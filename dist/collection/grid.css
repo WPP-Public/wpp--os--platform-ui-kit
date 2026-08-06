@@ -57,9 +57,7 @@
   padding: var(--grid-vertical-spacing) var(--grid-horizontal-spacing);
 }
 .wpp-grid-container .wpp-grid-item-all-auto {
-  flex-basis: auto;
-  flex-grow: 0;
-  flex-shrink: 0;
+  flex: 0 0 auto;
   max-width: none;
   width: auto;
   min-width: 0;
@@ -291,9 +289,7 @@
   padding: var(--grid-vertical-spacing) var(--grid-horizontal-spacing);
 }
 .wpp-grid-container .wpp-grid-item-sm-auto {
-  flex-basis: auto;
-  flex-grow: 0;
-  flex-shrink: 0;
+  flex: 0 0 auto;
   max-width: none;
   width: auto;
   min-width: 0;
@@ -527,9 +523,7 @@
   padding: var(--grid-vertical-spacing) var(--grid-horizontal-spacing);
 }
 .wpp-grid-container .wpp-grid-item-md-auto {
-  flex-basis: auto;
-  flex-grow: 0;
-  flex-shrink: 0;
+  flex: 0 0 auto;
   max-width: none;
   width: auto;
   min-width: 0;
@@ -763,9 +757,7 @@
   padding: var(--grid-vertical-spacing) var(--grid-horizontal-spacing);
 }
 .wpp-grid-container .wpp-grid-item-lg-auto {
-  flex-basis: auto;
-  flex-grow: 0;
-  flex-shrink: 0;
+  flex: 0 0 auto;
   max-width: none;
   width: auto;
   min-width: 0;
@@ -999,9 +991,7 @@
   padding: var(--grid-vertical-spacing) var(--grid-horizontal-spacing);
 }
 .wpp-grid-container .wpp-grid-item-xl-auto {
-  flex-basis: auto;
-  flex-grow: 0;
-  flex-shrink: 0;
+  flex: 0 0 auto;
   max-width: none;
   width: auto;
   min-width: 0;
@@ -1235,9 +1225,7 @@
   padding: var(--grid-vertical-spacing) var(--grid-horizontal-spacing);
 }
 .wpp-grid-container .wpp-grid-item-xxl-auto {
-  flex-basis: auto;
-  flex-grow: 0;
-  flex-shrink: 0;
+  flex: 0 0 auto;
   max-width: none;
   width: auto;
   min-width: 0;

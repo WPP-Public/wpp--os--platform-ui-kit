@@ -8,6 +8,8 @@ export declare class WppTree {
   focusedItemId: string | number | null;
   isKeyboardNavigating: boolean;
   isDarkTheme?: boolean;
+  /** Current scroll position from the top */
+  scrollTop: number;
   /**
    * Tracks whether focus is currently on an internal action element within a tree item.
    * When true, Tab navigation follows W3C APG pattern for actionable content.
@@ -19,6 +21,10 @@ export declare class WppTree {
   private pendingLoads;
   private isSearchResultFound;
   private isMouseInteraction;
+  private bufferStart;
+  private visibleItemsList;
+  private scrollContainer;
+  totalHeight?: number;
   /**
    * Defines the tree data.
    */
@@ -75,6 +81,10 @@ export declare class WppTree {
    */
   readonly lazyConfig?: TreeLazyConfig;
   /**
+   * Defines whether or not the wpp-tree uses virtualisation as an optimization technique. Useful when there is a large set of list-items that need to be displayed.
+   */
+  readonly withVirtualisation?: boolean;
+  /**
    * Emitted when tree have changed it's state
    */
   wppChange: EventEmitter<TreeChangeEventDetail>;
@@ -87,6 +97,7 @@ export declare class WppTree {
   updateDate(newData: TreeType[]): void;
   handleOpenItem(event: CustomEvent<TreeType>): Promise<void>;
   handleKeyDown(event: KeyboardEvent): void;
+  private getTotalHeightOfTree;
   private focusTreeItem;
   /**
    * Enters action mode for the given tree item.
@@ -194,6 +205,7 @@ export declare class WppTree {
   componentWillLoad(): void;
   private hostCssClasses;
   private renderIconsList;
+  private renderTreeItem;
   private renderTree;
   private handleContainerFocus;
   private handleContainerBlur;
@@ -203,5 +215,8 @@ export declare class WppTree {
    */
   private isDescendantOfHost;
   private getActiveDescendantId;
+  private getVirtualisedNodes;
+  private handleScroll;
+  private handleTreeRender;
   render(): any;
 }

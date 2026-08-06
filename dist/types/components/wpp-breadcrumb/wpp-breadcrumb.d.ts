@@ -1,6 +1,6 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { DropdownConfig } from '../../types/common';
-import { BreadcrumbItemState, BreadcrumbItemEventDetails } from './types';
+import { BreadcrumbItemState, BreadcrumbItemEventDetails, BreadcrumbLocaleInterface, WppBreadcrumbAriaProps } from './types';
 /**
  * @part item-text - item text element
  * @part item-tooltip - item tooltip element
@@ -40,15 +40,26 @@ export declare class WppBreadcrumb {
    */
   readonly backBtnLabel?: string;
   /**
+   * Grouped ARIA props for the breadcrumb navigation landmark: { label?, labelledby? }
+   * Precedence: ariaProps > locales > defaults
+   */
+  readonly ariaProps?: WppBreadcrumbAriaProps;
+  /**
+   * Locales for accessible strings (navigation landmark label and the collapsed-items menu label).
+   */
+  readonly locales?: Partial<BreadcrumbLocaleInterface>;
+  /**
    * Emitted when route changes, return object like { path: '/home', label: 'Home' }
    * For back variant, emits { path: 'back', label: backBtnLabel }
    */
   readonly wppChange: EventEmitter<BreadcrumbItemEventDetails>;
+  private get _locales();
   private get rootItem();
   private get hiddenItems();
   private get visibleItems();
   private get hiddenItemsSnapshot();
   private createRouteChangeTrigger;
+  private handleItemKeyDown;
   private createItemElement;
   private createMenuElement;
   private handleBackClick;

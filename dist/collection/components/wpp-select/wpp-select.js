@@ -170,10 +170,10 @@ export class WppSelect {
         return h(Fragment, null);
       }
       if (this.loading) {
-        return (h("div", { class: "loading-container" }, h("wpp-spinner-v4-2-0", null), h("wpp-typography-v4-2-0", { type: "s-body" }, this._locales.loadingText)));
+        return (h("div", { class: "loading-container" }, h("wpp-spinner-v4-3-0", null), h("wpp-typography-v4-3-0", { type: "s-body" }, this._locales.loadingText)));
       }
       if (this.internalList?.length === 0) {
-        return (h("wpp-typography-v4-2-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+        return (h("wpp-typography-v4-3-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
       }
       let hiddeItemsCount = 0;
       return (h(Fragment, null, this.internalList?.map((item) => {
@@ -183,11 +183,11 @@ export class WppSelect {
           if (hidden)
             hiddeItemsCount++;
           if (hiddeItemsCount === this.internalList?.length) {
-            return (h("wpp-typography-v4-2-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+            return (h("wpp-typography-v4-3-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
           }
           return null;
         }
-        return (h("wpp-list-item-v4-2-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ref: item.checked && this.type === 'single'
+        return (h("wpp-list-item-v4-3-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ref: item.checked && this.type === 'single'
             ? el => (this.selectedItemRef = el)
             : undefined, isDarkTheme: this.isDarkTheme, ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
@@ -205,7 +205,7 @@ export class WppSelect {
           return null;
         const { label, value, checked, disabled, id, slots } = current;
         const itemValueKey = this.convertValueToKey(value);
-        return (h("wpp-list-item-v4-2-0", { onWppChangeListItem: this.handleClickListItem, key: `pinned-${itemValueKey}`, value: value, checked: checked, disabled: disabled, multiple: true, isDarkTheme: this.isDarkTheme, id: id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${id}` : undefined, class: "pinned-item" }, h("p", { slot: "label" }, label), slots && this.renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+        return (h("wpp-list-item-v4-3-0", { onWppChangeListItem: this.handleClickListItem, key: `pinned-${itemValueKey}`, value: value, checked: checked, disabled: disabled, multiple: true, isDarkTheme: this.isDarkTheme, id: id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${id}` : undefined, class: "pinned-item" }, h("p", { slot: "label" }, label), slots && this.renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
     };
     this.renderSlotsInListItem = (slots, isLabelExists) => slots
@@ -886,7 +886,7 @@ export class WppSelect {
     return renderCombinedSelect.call(this);
   }
   static get is() { return "wpp-select"; }
-  static get registryIs() { return "wpp-select-v4-2-0"; }
+  static get registryIs() { return "wpp-select-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

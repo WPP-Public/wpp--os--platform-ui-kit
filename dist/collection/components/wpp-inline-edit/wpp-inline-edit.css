@@ -91,10 +91,7 @@
 }
 :host .content .content-bg {
   position: absolute;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  top: 0;
+  inset: 0;
   border-radius: var(--inline-edit-content-border-radius);
   pointer-events: none;
 }

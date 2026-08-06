@@ -73,9 +73,9 @@
   * @prop --wpp-button-inverted-secondary-border-color-disabled
 */
 :host {
-  --button-font-weight: var(--wpp-button-font-weight, 600);
-  --button-font-size: var(--wpp-button-font-size, 14px);
-  --button-line-height: var(--wpp-button-line-height, 22px);
+  --button-font-weight: var(--wpp-button-font-weight, var(--wpp-typography-s-strong-font-weight));
+  --button-font-size: var(--wpp-button-font-size, var(--wpp-typography-s-strong-font-size));
+  --button-line-height: var(--wpp-button-line-height, var(--wpp-typography-s-strong-line-height));
   --button-padding-m: var(--wpp-button-padding-m, 9px 20px);
   --button-padding-s: var(--wpp-button-padding-s, 5px 16px);
   --button-icon-padding-m: var(--wpp-button-icon-padding-m, calc(10px - var(--button-border-width)));
@@ -518,10 +518,10 @@
   color: var(--button-inverted-secondary-icon-color);
 }
 .button.inverted.secondary:hover, .button.inverted.secondary.tab-focus {
-  background-color: rgba(248, 249, 251, var(--button-inverted-secondary-hover-opacity));
+  background-color: color-mix(in srgb, var(--wpp-grey-color-100) var(--button-inverted-secondary-hover-opacity), transparent);
 }
 .button.inverted.secondary:active, .button.inverted.secondary.pressed {
-  background-color: rgba(248, 249, 251, var(--button-inverted-secondary-active-opacity));
+  background-color: color-mix(in srgb, var(--wpp-grey-color-100) var(--button-inverted-secondary-active-opacity), transparent);
 }
 .button.inverted.secondary:disabled {
   color: var(--button-inverted-secondary-text-color-disabled);
@@ -534,19 +534,19 @@
   color: var(--button-inverted-secondary-icon-color-disabled);
 }
 .button.inverted.secondary.loading {
-  background-color: rgba(248, 249, 251, var(--button-inverted-secondary-loading-opacity));
+  background-color: color-mix(in srgb, var(--wpp-grey-color-100) var(--button-inverted-secondary-loading-opacity), transparent);
 }
 
-:host([data-wpp-theme=dark]) .button.primary:not(.loading):not(.inverted) {
+:host([data-wpp-theme=dark]) .button.primary:not(.loading, .inverted) {
   background-color: var(--wpp-primary-color-400);
 }
-:host([data-wpp-theme=dark]) .button.primary:not(.loading):not(.inverted):hover, :host([data-wpp-theme=dark]) .button.primary:not(.loading):not(.inverted).tab-focus {
+:host([data-wpp-theme=dark]) .button.primary:not(.loading, .inverted):hover, :host([data-wpp-theme=dark]) .button.primary:not(.loading, .inverted).tab-focus {
   background-color: var(--wpp-primary-color-500);
 }
-:host([data-wpp-theme=dark]) .button.primary:not(.loading):not(.inverted):active, :host([data-wpp-theme=dark]) .button.primary:not(.loading):not(.inverted).pressed {
+:host([data-wpp-theme=dark]) .button.primary:not(.loading, .inverted):active, :host([data-wpp-theme=dark]) .button.primary:not(.loading, .inverted).pressed {
   background-color: var(--wpp-primary-color-300);
 }
-:host([data-wpp-theme=dark]) .button.primary:not(.loading):not(.inverted).disabled {
+:host([data-wpp-theme=dark]) .button.primary:not(.loading, .inverted).disabled {
   background-color: var(--wpp-primary-color-300);
 }
 :host([data-wpp-theme=dark]) .button.primary.loading:not(.inverted) {

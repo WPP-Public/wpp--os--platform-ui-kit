@@ -13,7 +13,7 @@ export default {
     activePageNumber: { type: 'number' },
   },
 };
-export const Default = (args) => html ` <wpp-pagination-select-v4-2-0
+export const Default = (args) => html ` <wpp-pagination-select-v4-3-0
     .itemsPerPage=${args.itemsPerPage}
     .pageSelectThreshold=${args.pageSelectThreshold}
     .count="${args.count}"

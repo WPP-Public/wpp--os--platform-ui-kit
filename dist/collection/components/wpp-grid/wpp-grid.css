@@ -312,9 +312,7 @@
 }
 
 :host(.item-all-auto) {
-  flex-basis: auto;
-  flex-grow: 0;
-  flex-shrink: 0;
+  flex: 0 0 auto;
   max-width: none;
   width: auto;
   min-width: 0;
@@ -572,9 +570,7 @@
 }
 
 :host(.item-sm-auto) {
-  flex-basis: auto;
-  flex-grow: 0;
-  flex-shrink: 0;
+  flex: 0 0 auto;
   max-width: none;
   width: auto;
   min-width: 0;
@@ -810,9 +806,7 @@
 }
 
 :host(.item-md-auto) {
-  flex-basis: auto;
-  flex-grow: 0;
-  flex-shrink: 0;
+  flex: 0 0 auto;
   max-width: none;
   width: auto;
   min-width: 0;
@@ -1048,9 +1042,7 @@
 }
 
 :host(.item-lg-auto) {
-  flex-basis: auto;
-  flex-grow: 0;
-  flex-shrink: 0;
+  flex: 0 0 auto;
   max-width: none;
   width: auto;
   min-width: 0;
@@ -1286,9 +1278,7 @@
 }
 
 :host(.item-xl-auto) {
-  flex-basis: auto;
-  flex-grow: 0;
-  flex-shrink: 0;
+  flex: 0 0 auto;
   max-width: none;
   width: auto;
   min-width: 0;
@@ -1524,9 +1514,7 @@
 }
 
 :host(.item-xxl-auto) {
-  flex-basis: auto;
-  flex-grow: 0;
-  flex-shrink: 0;
+  flex: 0 0 auto;
   max-width: none;
   width: auto;
   min-width: 0;

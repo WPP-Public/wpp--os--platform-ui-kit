@@ -97,8 +97,6 @@
 
 .progress-bar {
   cursor: pointer;
-  -webkit-appearance: none;
-  -moz-appearance: none;
   appearance: none;
   background: transparent;
   position: absolute;
@@ -121,7 +119,7 @@
   background: linear-gradient(to right, #fff var(--progress-bar-progress, 0%), rgba(255, 255, 255, 0.3) var(--progress-bar-progress, 0%));
 }
 .progress-bar::-webkit-slider-thumb {
-  -webkit-appearance: none;
+  appearance: none;
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -215,7 +213,7 @@
 
 .caption-cue {
   display: inline-block;
-  font-family: "Arial", sans-serif;
+  font-family: Arial, sans-serif;
   font-size: 1.2rem;
   color: white;
   background-color: rgba(0, 0, 0, 0.7);

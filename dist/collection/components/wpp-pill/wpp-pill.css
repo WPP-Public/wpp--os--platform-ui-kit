@@ -69,12 +69,12 @@
   );
   --pill-margin-icon-text-m: var(--wpp-pill-margin-icon-text-m, 0 6px 0 0);
   --pill-draggable-margin-icon-text-m: var(--wpp-pill-draggable-margin-icon-text-m, 0 4px 0 0);
-  --pill-margin-icon-close: var(--wpp-pill-margin-icon--close, 0 0 0 4px);
+  --pill-margin-icon-close: var(--wpp-pill-margin-icon-close, 0 0 0 4px);
   --pill-bg-color: var(--wpp-pill-bg-color, transparent);
   --pill-bg-color-hover: var(--wpp-pill-bg-color-hover, var(--wpp-grey-color-200));
   --pill-bg-color-active: var(--wpp-pill-bg-color-active, var(--wpp-grey-color-300));
-  --pill-checked-bg-color: var(--wpp-pill-checked-bg-color, var(--wpp-grey-color-200));
-  --pill-checked-bg-color-hover: var(--wpp-pill-checked-bg-color-hover, var(--wpp-grey-color-300));
+  --pill-checked-bg-color: var(--wpp-pill-checked-bg-color, var(--wpp-primary-color-100));
+  --pill-checked-bg-color-hover: var(--wpp-pill-checked-bg-color-hover, var(--wpp-primary-color-200));
   --pill-border-radius: var(--wpp-pill-border-radius, var(--wpp-border-radius-round));
   --pill-border-width: var(--wpp-pill-border-width, var(--wpp-border-width-s));
   --pill-border-style: var(--wpp-pill-border-style, solid);
@@ -82,6 +82,7 @@
   --pill-border-color-hover: var(--wpp-pill-border-color-hover, var(--wpp-grey-color-700));
   --pill-border-color-active: var(--wpp-pill-border-color-active, var(--wpp-grey-color-800));
   --pill-border-color-disabled: var(--wpp-pill-border-color-disabled, var(--wpp-grey-color-400));
+  --pill-border-color-checked: var(--wpp-pill-border-color-checked, var(--wpp-primary-color-500));
   --pill-checked-single-border-color: var(--wpp-pill-checked-single-border-color, var(--wpp-brand-color));
   --pill-checked-multiple-border-color: var(--wpp-pill-checked-multiple-border-color, var(--wpp-primary-color-500));
   --pill-checked-multiple-border-color-hover: var(
@@ -92,15 +93,19 @@
   --pill-second-border-color-focus: var(--wpp-pill-second-border-color-focus, var(--wpp-brand-color));
   --pill-text-color: var(--wpp-pill-text-color, var(--wpp-text-color));
   --pill-text-color-disabled: var(--wpp-pill-text-color-disabled, var(--wpp-text-color-disabled));
-  --pill-checked-text-color: var(--wpp-pill-checked-text-color, var(--wpp-brand-color-active));
-  --pill-checked-font-weight: var(--wpp-pill-checked-font-weight, 600);
-  --pill-checked-multiple-text-color: var(--wpp-pill-checked-multiple-text-color, var(--wpp-primary-color-600));
+  --pill-checked-text-color: var(--wpp-pill-checked-text-color, var(--wpp-primary-color-500));
+  --pill-checked-font-weight: var(--wpp-pill-checked-font-weight, 500);
+  --pill-checked-multiple-text-color: var(--wpp-pill-checked-multiple-text-color, var(--wpp-primary-color-500));
+  --pill-checked-multiple-text-color-hover: var(
+    --wpp-pill-checked-multiple-text-color-hover,
+    var(--wpp-primary-color-600)
+  );
   --pill-active-icon-color: var(--wpp-pill-active-icon-color, var(--wpp-brand-color-active));
   --pill-active-icon-margin: var(--wpp-pill-active-icon-margin, 0 0 0 2px);
   --pill-single-icon-color: var(--wpp-pill-single-icon-color, var(--wpp-grey-color-600));
   --pill-display-icon-color: var(--wpp-pill-display-icon-color, var(--wpp-grey-color-600));
   --pill-draggable-icon-color: var(--wpp-pill-draggable-icon-color, var(--wpp-grey-color-600));
-  --pill-checked-start-icon-color: var(--wpp-pill-checked-start-icon-color, var(--wpp-primary-color-600));
+  --pill-checked-start-icon-color: var(--wpp-pill-checked-start-icon-color, var(--wpp-primary-color-500));
   --pill-start-icon-color-hover: var(--wpp-pill-start-icon-color-hover, var(--wpp-icon-color-hover));
   --pill-start-icon-color-active: var(--wpp-pill-start-icon-color-active, var(--wpp-icon-color-active));
   --pill-cross-icon-color-hover: var(--wpp-pill-cross-icon-color-hover, var(--wpp-icon-color-hover));
@@ -110,7 +115,7 @@
   --pill-drag-icon-color-active: var(--wpp-pill-drag-icon-color-active, var(--wpp-icon-color-active));
   --pill-drag-icon-color-disabled: var(--wpp-pill-drag-icon-color-active, var(--wpp-grey-color-400));
   --pill-icon-color-disabled: var(--wpp-pill-icon-color-disabled, var(--wpp-grey-color-400));
-  --pill-checked-multiple-icon-color: var(--wpp-pill-checked-multiple-icon-color, var(--wpp-primary-color-600));
+  --pill-checked-multiple-icon-color: var(--wpp-pill-checked-multiple-icon-color, var(--wpp-primary-color-500));
   --pill-checked-multiple-icon-color-hover: var(
     --wpp-pill-checked-multiple-icon-color-hover,
     var(--wpp-primary-color-600)
@@ -175,15 +180,16 @@
   display: none;
 }
 :host .pill-wrapper .label {
-  font-size: var(--wpp-typography-s-body-font-size, 14px);
-  line-height: var(--wpp-typography-s-body-line-height, 22px);
-  font-weight: var(--wpp-typography-s-body-font-weight, 400);
-  color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
-  font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
-  letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
+  font-size: var(--wpp-typography-s-midi-font-size, 14px);
+  line-height: var(--wpp-typography-s-midi-line-height, 22px);
+  font-weight: var(--wpp-typography-s-midi-font-weight, 500);
+  color: var(--wpp-typography-s-midi-color, var(--wpp-text-color));
+  font-family: var(--wpp-typography-s-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));
+  letter-spacing: var(--wpp-typography-s-midi-letter-spacing, 0);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  font-weight: 400;
   color: var(--pill-text-color);
   user-select: none;
 }
@@ -281,6 +287,7 @@
 }
 :host .pill-wrapper.checked {
   background-color: var(--pill-checked-bg-color);
+  border-color: var(--pill-border-color-checked);
 }
 :host .pill-wrapper.checked .label {
   color: var(--pill-checked-text-color);
@@ -293,9 +300,6 @@
 :host .pill-wrapper.checked.single ::slotted([slot=icon-start]),
 :host .pill-wrapper.checked.single .active-icon {
   color: var(--pill-checked-start-icon-color);
-}
-:host .pill-wrapper.checked.multiple {
-  border-color: var(--pill-checked-multiple-border-color);
 }
 :host .pill-wrapper.checked.multiple.size-m {
   padding: var(--pill-checked-multiple-padding-m);
@@ -315,7 +319,14 @@
 }
 :host .pill-wrapper.checked.multiple:hover {
   background-color: var(--pill-checked-bg-color-hover);
-  border-color: var(--pill-checked-multiple-border-color-hover);
+  border-color: var(--pill-checked-multiple-text-color-hover);
+}
+:host .pill-wrapper.checked.multiple:hover .label {
+  color: var(--pill-checked-multiple-text-color-hover);
+}
+:host .pill-wrapper.checked.multiple:hover ::slotted([slot=icon-start]),
+:host .pill-wrapper.checked.multiple:hover .active-icon {
+  color: var(--pill-checked-multiple-icon-color-hover);
 }
 :host .pill-wrapper.disabled:not(.checked) {
   pointer-events: none;

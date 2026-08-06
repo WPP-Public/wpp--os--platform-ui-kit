@@ -32,7 +32,8 @@
   background-color: transparent;
   border-color: var(--wpp-grey-color-800);
 }
-.trigger:active .trigger-actions .wpp-icon-chevron, .trigger:active .wpp-icon-cross {
+.trigger:active .trigger-actions .wpp-icon-chevron,
+.trigger:active .wpp-icon-cross {
   color: var(--wpp-icon-color-active);
 }
 .trigger.focused {
@@ -85,7 +86,7 @@
   --wpp-input-bg-color-active: transparent;
   --wpp-input-bg-color-disabled: transparent;
 }
-.wpp-input::-moz-placeholder {
+.wpp-input::placeholder {
   color: var(--wpp-grey-color-700);
   opacity: 1;
 }

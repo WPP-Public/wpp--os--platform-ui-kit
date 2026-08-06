@@ -1,3 +1,29 @@
+/**
+ * GENERATED FILE — DO NOT EDIT.
+ *
+ * Built by versioned-components/utils/create-ag-theme-files.js from:
+ *   - src/ag-theme-wpp-v33.css
+ *   - src/ag-theme-wpp-legacy-vars.css
+ *
+ * Edit those files instead; this one is overwritten on every build.
+ *
+ * WPP AG Grid theme for AG Grid v32 and below. Carries the structural styles plus the legacy
+ * `--ag-*` variables that pre-v33 AG Grid reads. Must be loaded AFTER `ag-grid.css`.
+ * On v33 and above import `ag-theme-wpp-v33.css` instead and apply the theme through
+ * `themeAlpine.withParams(WppAgGridThemeConfig)`.
+ */
+
+/**
+ * WPP AG Grid theme — structural styles, for AG Grid v33 and above.
+ *
+ * This is the shared part of the theme: layout, checkbox styling, scrollbars, error and
+ * warning row indicators. It contains no `--ag-*` variable declarations, so it does not
+ * interfere with the v33+ Theming API — pair it with `themeAlpine.withParams(WppAgGridThemeConfig)`.
+ *
+ * On AG Grid v32 and below, import `ag-theme-wpp.css` instead. That file is generated from
+ * this one plus `ag-theme-wpp-legacy-vars.css`, which restores the `--ag-*` variables older
+ * versions need. See the Table AG Grid docs for the version compatibility matrix.
+ */
 .ag-pinned-left-cols-container {
   z-index: 1;
   box-shadow: var(--wpp-box-shadow-l);
@@ -332,4 +358,70 @@
   width: 3px;
   background: var(--wpp-warning-color-400);
   z-index: 1;
+}
+
+/**
+ * WPP AG Grid theme — legacy (CSS variable) values.
+ *
+ * BUILD INPUT — do not import this file directly, and do not ship it as an entry point.
+ * `build.js` concatenates `ag-theme-wpp-v33.css` + this file to generate
+ * `ag-theme-wpp.css`. Editing the generated file has no effect; edit this one.
+ *
+ * AG Grid v33 replaced CSS-variable theming with the JavaScript Theming API, so this block
+ * was removed from the stylesheet in v4.2.0. Versions below v33 have no `theme` grid option
+ * and cannot consume `WppAgGridThemeConfig`, which left them with no WPP styling at all.
+ * These are exactly the values they used to get.
+ *
+ * IMPORTANT — load order. `ag-grid.css` declares its own defaults for these same variables
+ * on `[class*='ag-theme-']`, which has the *same* specificity (0,1,0) as `.ag-theme-wpp`.
+ * Ties are broken by source order, so the generated `ag-theme-wpp.css` MUST be loaded AFTER
+ * `ag-grid.css` or every value below is silently ignored.
+ *
+ * These values must NOT reach a grid using the v33+ Theming API. `.ag-theme-wpp` (0,1,0)
+ * outranks the `:where()`-wrapped selectors the Theming API generates for its parameters
+ * (0,0,0), so they would silently override any `withParams()` customisation with no error —
+ * measured: `withParams({ rowHeight: 60 })` renders 47px. That is why v33+ consumers import
+ * `ag-theme-wpp-v33.css`, which omits this block.
+ */
+.ag-theme-wpp {
+  --ag-borders: none;
+  --ag-borders-secondary: solid 1px;
+  --ag-borders-critical: none;
+
+  /* Unused by modern AG Grid — the name appears nowhere in v32+. Kept only so this block
+     stays a faithful copy of the pre-v33 theme. Safe to ignore. */
+  --ag-borders-row: solid 1px;
+  --ag-background-color: var(--wpp-grey-color-000);
+  --ag-header-background-color: var(--wpp-grey-color-000);
+  --ag-header-column-separator-display: block;
+  --ag-header-column-separator-height: 20px;
+  --ag-header-column-separator-width: 0;
+  --ag-header-column-separator-color: var(--wpp-grey-color-300);
+  --ag-header-column-resize-handle-display: block;
+  --ag-header-column-resize-handle-height: 100%;
+  --ag-header-column-resize-handle-width: 2px;
+  --ag-header-column-resize-handle-color: var(--wpp-grey-color-600);
+  --ag-header-cell-hover-background-color: var(--wpp-grey-color-200);
+  --ag-header-height: 47px;
+  --ag-row-height: 47px;
+  --ag-row-border-color: var(--wpp-grey-color-300);
+  --ag-row-hover-color: var(--wpp-grey-color-200);
+  --ag-odd-row-background-color: var(--wpp-grey-color-000);
+  --ag-selected-row-background-color: var(--wpp-grey-color-200);
+  --ag-range-selection-border-color: transparent;
+  --ag-cell-horizontal-padding: 16px;
+
+  /* The `system-ui, sans-serif` part never applies: it is a var() fallback, and
+     `--wpp-font-family` is always defined by the WPP theme (as 'WPP'). It is preserved
+     verbatim from the pre-v33 theme. If the WPP webfont itself is not loaded by the host
+     page, text falls back to the browser default — see the "Brand font" note in the docs. */
+  --ag-font-family: var(--wpp-font-family, system-ui, sans-serif);
+  --ag-font-size: 13px;
+
+  /* Not part of the original block. `ag-grid.css` ships the icon glyph codes and reads
+     `--ag-icon-font-family`, but never declares it — only AG Grid's own theme files do, and
+     they scope it to `.ag-theme-alpine`, which never matches our wrapper. Without this the
+     icons inherit the text font and render as blank, zero-width boxes. Pair it with
+     `ag-grid-community/styles/agGridAlpineFont.css`, which supplies the matching @font-face. */
+  --ag-icon-font-family: 'agGridAlpine';
 }

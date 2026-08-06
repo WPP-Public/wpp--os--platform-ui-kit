@@ -64,7 +64,7 @@
   --avatar-second-border-color-focus: var(--wpp-avatar-second-border-color-focus, var(--wpp-brand-color));
   --avatar-interactable-hover-background-color: var(
     --wpp-avatar-interactable-hover-background-color,
-    rgba(255, 255, 255, 0.4)
+    rgb(255 255 255 / 40%)
   );
   display: inline-flex;
   user-select: none;
@@ -311,7 +311,7 @@
 :host(.interactable) .interactable-wrapper {
   position: relative;
 }
-:host(.interactable) .interactable-wrapper:before {
+:host(.interactable) .interactable-wrapper::before {
   content: "";
   position: absolute;
   top: 0;
@@ -325,45 +325,45 @@
   cursor: pointer;
   z-index: 1;
 }
-:host(.interactable) .interactable-wrapper:hover:before {
+:host(.interactable) .interactable-wrapper:hover::before {
   background-color: var(--avatar-interactable-hover-background-color);
 }
-:host(.interactable) .interactable-wrapper.image-wrapper:before {
+:host(.interactable) .interactable-wrapper.image-wrapper::before {
   border-radius: var(--avatar-circle-border-radius);
 }
-:host(.interactable) .interactable-wrapper.without-image:before {
+:host(.interactable) .interactable-wrapper.without-image::before {
   border-radius: var(--avatar-without-image-border-radius);
 }
 :host(.interactable):host(.tab-focus) .interactable-wrapper {
   z-index: 1;
 }
-:host(.interactable):host(.tab-focus) .interactable-wrapper:before {
+:host(.interactable):host(.tab-focus) .interactable-wrapper::before {
   background-color: var(--avatar-interactable-hover-background-color);
 }
-:host(.interactable):host(.size-xs) .square:before {
+:host(.interactable):host(.size-xs) .square::before {
   border-radius: var(--avatar-size-xs-square-border-radius);
 }
-:host(.interactable):host(.size-s) .square:before {
+:host(.interactable):host(.size-s) .square::before {
   border-radius: var(--avatar-size-s-square-border-radius);
 }
-:host(.interactable):host(.size-m) .square:before {
+:host(.interactable):host(.size-m) .square::before {
   border-radius: var(--avatar-size-m-square-border-radius);
 }
-:host(.interactable):host(.size-l) .square:before {
+:host(.interactable):host(.size-l) .square::before {
   border-radius: var(--avatar-size-l-square-border-radius);
 }
-:host(.interactable):host(.size-xl) .square:before {
+:host(.interactable):host(.size-xl) .square::before {
   border-radius: var(--avatar-size-xl-square-border-radius);
 }
-:host(.interactable):host(.size-2xl) .square:before {
+:host(.interactable):host(.size-2xl) .square::before {
   border-radius: var(--avatar-size-2xl-square-border-radius);
 }
-:host(.interactable):host(.size-3xl) .square:before {
+:host(.interactable):host(.size-3xl) .square::before {
   border-radius: var(--avatar-size-3xl-square-border-radius);
 }
-:host(.interactable):host(.size-4xl) .square:before {
+:host(.interactable):host(.size-4xl) .square::before {
   border-radius: var(--avatar-size-4xl-square-border-radius);
 }
-:host(.interactable) .with-amount-of-hidden-avatars:before {
+:host(.interactable) .with-amount-of-hidden-avatars::before {
   content: none;
 }

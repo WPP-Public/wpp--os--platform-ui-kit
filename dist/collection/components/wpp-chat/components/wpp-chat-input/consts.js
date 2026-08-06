@@ -36,4 +36,25 @@ export const LOCALES_DEFAULTS = {
   audioRecordButtonLabel: 'Start audio recording',
   audioStopRecordButtonLabel: 'Stop audio recording',
   audioLanguage: 'en-US',
+  // Specific to AI model selector
+  modelSelectorBtnLabel: 'Select AI model',
+  modelAutoOptionLabel: 'Auto',
+  modelAutoOptionCaption: 'Picks the right model per task',
+  modelPremiumOptionLabel: 'Premium',
+  modelPremiumOptionCaption: 'Favours high-end, efficient models',
+  modelSelectorListItemLabel: 'Select model or agent',
 };
+export const getDefaultModelOptions = (locales) => [
+  {
+    id: 'auto',
+    label: locales.modelAutoOptionLabel,
+    caption: locales.modelAutoOptionCaption,
+    logo: 'https://public-assets.os.wpp.com/images/social-media-and-companies-auto.svg',
+  },
+  {
+    id: 'premium',
+    label: locales.modelPremiumOptionLabel,
+    caption: locales.modelPremiumOptionCaption,
+    logo: 'https://public-assets.os.wpp.com/images/social-media-and-companies-premium.svg',
+  },
+];

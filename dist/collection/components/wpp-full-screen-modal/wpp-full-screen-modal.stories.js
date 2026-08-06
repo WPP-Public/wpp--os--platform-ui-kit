@@ -57,8 +57,8 @@ const getModalHandlers = () => {
 export const FullScreenModal = {
   render: args => {
     const { handleFullScreenModalOpen, handleFullScreenModalClose, handleFullScreenModalAction } = getModalHandlers();
-    return html ` <wpp-button-v4-2-0 @click=${handleFullScreenModalOpen}>Open Full Screen Modal</wpp-button-v4-2-0>
-      <wpp-full-screen-modal-v4-2-0
+    return html ` <wpp-button-v4-3-0 @click=${handleFullScreenModalOpen}>Open Full Screen Modal</wpp-button-v4-3-0>
+      <wpp-full-screen-modal-v4-3-0
         @wppFullScreenModalClose=${() => {
       console.log('Called wppFullScreenModalClose');
       handleFullScreenModalClose();
@@ -82,13 +82,13 @@ export const FullScreenModal = {
       >
         <div slot="header" style=${styleMap(styles.header)}>
           ${args.withTitle
-      ? html ` <wpp-typography-v4-2-0 type="2xl-heading" style=${styleMap(styles.title)}
-                >Title</wpp-typography-v4-2-0
+      ? html ` <wpp-typography-v4-3-0 type="2xl-heading" style=${styleMap(styles.title)}
+                >Title</wpp-typography-v4-3-0
               >`
       : null}
         </div>
         <p slot="body" style=${styleMap(styles.body)}></p>
-      </wpp-full-screen-modal-v4-2-0>`;
+      </wpp-full-screen-modal-v4-3-0>`;
   },
   args: {
     open: false,

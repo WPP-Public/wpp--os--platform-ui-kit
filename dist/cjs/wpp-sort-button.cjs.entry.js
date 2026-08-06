@@ -2,8 +2,8 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-ecf423ba.js');
-const utils = require('./utils-06b46408.js');
+const index = require('./index-5f5af6a9.js');
+const utils = require('./utils-9529c2fe.js');
 const common = require('./common-ee802540.js');
 require('./consts-d8f5ef98.js');
 
@@ -72,9 +72,9 @@ const WppSortButton = class {
     this.validAriaProps = utils.getAriaProps(this.ariaProps);
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "button, icon, text, inner", onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, index.h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled, name: this.name, type: "button", "data-testid": "wppSortButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps, part: "button" }, index.h("wpp-icon-sort-v4-2-0", { class: "icon", part: "icon" }), index.h("span", { class: "text", part: "text" }, index.h("slot", { part: "inner" })))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "button, icon, text, inner", onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, index.h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled, name: this.name, type: "button", "data-testid": "wppSortButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps, part: "button" }, index.h("wpp-icon-sort-v4-3-0", { class: "icon", part: "icon" }), index.h("span", { class: "text", part: "text" }, index.h("slot", { part: "inner" })))));
   }
-  static get registryIs() { return "wpp-sort-button-v4-2-0"; }
+  static get registryIs() { return "wpp-sort-button-v4-3-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "ariaProps": ["onUpdateAriaProps"]

@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-ecf423ba.js');
+const index = require('./index-5f5af6a9.js');
 
 function extend(destination) {
   for (var i = 1; i < arguments.length; i++) {
@@ -812,9 +812,9 @@ const WppRichtextMarkdown = class {
     this.handleValueChange(this.value);
   }
   render() {
-    return (index.h(index.Host, null, index.h("wpp-richtext-common-styles-v4-2-0", null), index.h("pre", { class: "richtext-markdown" }, this.markdown)));
+    return (index.h(index.Host, null, index.h("wpp-richtext-common-styles-v4-3-0", null), index.h("pre", { class: "richtext-markdown" }, this.markdown)));
   }
-  static get registryIs() { return "wpp-richtext-markdown-v4-2-0"; }
+  static get registryIs() { return "wpp-richtext-markdown-v4-3-0"; }
   static get watchers() { return {
     "value": ["handleValueChange"]
   }; }

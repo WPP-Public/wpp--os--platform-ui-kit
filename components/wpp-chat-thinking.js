@@ -12,30 +12,30 @@ const WppChatThinking$1 = /*@__PURE__*/ proxyCustomElement(class WppChatThinking
     this.label = 'Thinking...';
   }
   render() {
-    return (h(Host, { role: "status", "aria-live": "polite" }, h("div", { class: "thinking", part: "thinking" }, h("wpp-spinner-v4-2-0", { class: "spinner", part: "spinner", size: "s", "aria-hidden": "true" }), h("wpp-typography-v4-2-0", { class: "label", type: "s-body", part: "label" }, this.label))));
+    return (h(Host, { role: "status", "aria-live": "polite" }, h("div", { class: "thinking", part: "thinking" }, h("wpp-spinner-v4-3-0", { class: "spinner", part: "spinner", size: "s", "aria-hidden": "true" }), h("wpp-typography-v4-3-0", { class: "label", type: "s-body", part: "label" }, this.label))));
   }
-  static get registryIs() { return "wpp-chat-thinking-v4-2-0"; }
+  static get registryIs() { return "wpp-chat-thinking-v4-3-0"; }
   static get style() { return wppChatThinkingCss; }
-}, [1, "wpp-chat-thinking", "wpp-chat-thinking-v4-2-0", {
+}, [1, "wpp-chat-thinking", "wpp-chat-thinking-v4-3-0", {
     "label": [1]
   }]);
 function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-chat-thinking-v4-2-0", "wpp-spinner-v4-2-0", "wpp-typography-v4-2-0"];
+  const components = ["wpp-chat-thinking-v4-3-0", "wpp-spinner-v4-3-0", "wpp-typography-v4-3-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-chat-thinking-v4-2-0":
+    case "wpp-chat-thinking-v4-3-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppChatThinking$1);
       }
       break;
-    case "wpp-spinner-v4-2-0":
+    case "wpp-spinner-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-2-0":
+    case "wpp-typography-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

@@ -19,7 +19,7 @@ export default {
  * Basic Skeleton Example
  */
 export const Skeleton = (args) => html `
-  <wpp-skeleton-v4-2-0 .variant="${args.variant}" .width=${args.width} .height=${args.height} />
+  <wpp-skeleton-v4-3-0 .variant="${args.variant}" .width=${args.width} .height=${args.height} />
 `;
 Skeleton.args = {
   variant: 'rectangle',

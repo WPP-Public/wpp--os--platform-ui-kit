@@ -39,7 +39,7 @@ export const Artefact = {
       aria-roledescription="node"
       tabindex="0"
     >
-      <wpp-artefact-v4-2-0
+      <wpp-artefact-v4-3-0
         .artefactTitle=${args.artefactTitle}
         .size=${args.size}
         .actions=${args.actions}
@@ -48,13 +48,13 @@ export const Artefact = {
         @wppActionClick=${(e) => console.log('Action clicked:', e.detail)}
       >
         <div slot="body" style="display: flex; flex-direction: column; gap: 10px;">
-          <wpp-typography-v4-2-0>This is the body of the artefact.</wpp-typography-v4-2-0>
-          <wpp-typography-v4-2-0
+          <wpp-typography-v4-3-0>This is the body of the artefact.</wpp-typography-v4-3-0>
+          <wpp-typography-v4-3-0
             >You can put any content here, and it will become scrollable if it exceeds the maximum
-            height.</wpp-typography-v4-2-0
+            height.</wpp-typography-v4-3-0
           >
         </div>
-      </wpp-artefact-v4-2-0>
+      </wpp-artefact-v4-3-0>
     </div>
   `,
 };

@@ -12,6 +12,7 @@ const meta = {
     isSelected: { control: 'boolean' },
     numberOfHandles: { control: 'select', options: ['1 handle', '3 handles'] },
     isLoading: { control: 'boolean' },
+    isReRun: { control: 'boolean' },
   },
 };
 export default meta;
@@ -21,6 +22,7 @@ export const BasicNode = {
     numberOfHandles: '1 handle',
     isSelected: false,
     isLoading: false,
+    isReRun: false,
     actions: [
       {
         icon: 'wpp-icon-pinned',
@@ -45,23 +47,24 @@ export const BasicNode = {
         aria-roledescription="node"
         tabindex="0"
       >
-        <wpp-basic-node-v4-2-0
+        <wpp-basic-node-v4-3-0
           .nodeTitle=${args.nodeTitle}
           .actions=${args.actions}
           .isSelected=${args.isSelected}
           .isLoading=${args.isLoading}
+          .isReRun=${args.isReRun}
           .locales=${args.locales}
           @wppActionClick=${handleActionClick}
         >
           <div slot="body" style="display: flex; flex-direction: column; gap: 10px;">
-            <wpp-typography-v4-2-0>This is the body of the basic node.</wpp-typography-v4-2-0>
-            <wpp-typography-v4-2-0
+            <wpp-typography-v4-3-0>This is the body of the basic node.</wpp-typography-v4-3-0>
+            <wpp-typography-v4-3-0
               >You can put any content here, and it will become scrollable if it exceeds the maximum
-              height.</wpp-typography-v4-2-0
+              height.</wpp-typography-v4-3-0
             >
           </div>
           <div slot="handles">${renderHandles(args.numberOfHandles, args.isSelected, args.isLoading)}</div>
-        </wpp-basic-node-v4-2-0>
+        </wpp-basic-node-v4-3-0>
       </div>
     `;
   },

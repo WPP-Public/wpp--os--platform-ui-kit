@@ -1,6 +1,6 @@
-import { r as registerInstance, h, H as Host, g as getElement } from './index-9177bb6d.js';
-import { f as formats, E as Editor } from './index-90a07263.js';
-import { n as normalizeEmptyParagraphs, a as normalizeListHtml, b as buildTiptapExtensions } from './tiptap-config-f438db9a.js';
+import { r as registerInstance, h, H as Host, g as getElement } from './index-93f63aaa.js';
+import { f as formats, E as Editor } from './index-6a313091.js';
+import { n as normalizeEmptyParagraphs, a as normalizeListHtml, b as buildTiptapExtensions } from './tiptap-config-c2b29d19.js';
 import './marked.umd-be419d39.js';
 import './_commonjsHelpers-ba3f0406.js';
 
@@ -171,9 +171,9 @@ const WppRichtextView = class {
     this.setValue(newValue);
   }
   render() {
-    return (h(Host, null, h("wpp-richtext-common-styles-v4-2-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
+    return (h(Host, null, h("wpp-richtext-common-styles-v4-3-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
   }
-  static get registryIs() { return "wpp-richtext-view-v4-2-0"; }
+  static get registryIs() { return "wpp-richtext-view-v4-3-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "styles": ["updateStyle"],

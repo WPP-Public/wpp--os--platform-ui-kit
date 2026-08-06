@@ -79,7 +79,7 @@
   );
   --card-interactive-box-shadow-color-active: var(
     --wpp-card-interactive-box-shadow-color-active,
-    0px 8px 32px rgba(52, 58, 63, 0.05)
+    0px 8px 32px rgb(52 58 63 / 5%)
   );
   --card-interactive-first-border-color-focus: var(
     --wpp-card-interactive-first-border-color-focus,

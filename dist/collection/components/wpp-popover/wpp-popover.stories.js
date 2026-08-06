@@ -59,7 +59,7 @@ export const Popover = (args) => {
     return '8px 12px 8px 16px';
   };
   return html `
-    <wpp-popover-v4-2-0
+    <wpp-popover-v4-3-0
       .config="${args.config}"
       .closable="${args.withHeader && args.closable}"
       .showClearButton="${args.showClearButton}"
@@ -68,58 +68,58 @@ export const Popover = (args) => {
       .ariaProps="${args.ariaProps}"
       @wppClear="${() => console.log('Clear clicked')}"
     >
-      <wpp-button-v4-2-0 variant="secondary" slot="trigger-element">Trigger Button</wpp-button-v4-2-0>
+      <wpp-button-v4-3-0 variant="secondary" slot="trigger-element">Trigger Button</wpp-button-v4-3-0>
       <div
         style="display: flex; flex-direction: column; width:100%; height:200px; justify-content: ${handleTextPlacement(args.withActions, args.withScroll)}"
       >
         ${args.withHeader
     ? html `<div style=${styleMap(styles.header)}>
-              <wpp-typography-v4-2-0 type="m-strong">Title</wpp-typography-v4-2-0>
+              <wpp-typography-v4-3-0 type="m-strong">Title</wpp-typography-v4-3-0>
             </div>`
     : null}
         ${args.withScroll
     ? html ` ${args.withHeader
-      ? html `<wpp-divider-v4-2-0 style=${styleMap(styles.divider)}></wpp-divider-v4-2-0>`
+      ? html `<wpp-divider-v4-3-0 style=${styleMap(styles.divider)}></wpp-divider-v4-3-0>`
       : null}
               <div
                 style="display: flex; overflow-y: auto; padding: ${getPadding(args.withHeader, args.withScroll, args.withActions)}"
                 class="body"
               >
-                <wpp-typography-v4-2-0 type="s-body" style=${styleMap(styles.text)} class="text">
+                <wpp-typography-v4-3-0 type="s-body" style=${styleMap(styles.text)} class="text">
                   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
                   industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
                   scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap
                   into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
                   release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing
                   software like Aldus PageMaker including.
-                </wpp-typography-v4-2-0>
+                </wpp-typography-v4-3-0>
               </div>
               ${args.withActions
-      ? html `<wpp-divider-v4-2-0 style=${styleMap(styles.divider)}></wpp-divider-v4-2-0>`
+      ? html `<wpp-divider-v4-3-0 style=${styleMap(styles.divider)}></wpp-divider-v4-3-0>`
       : null}`
     : html ` <div
               style="display: flex; overflow-y: auto; padding: ${getPadding(args.withHeader, args.withScroll, args.withActions)}"
               class="body"
             >
-              <wpp-typography-v4-2-0 type="s-body" style=${styleMap(styles.text)} class="text">
+              <wpp-typography-v4-3-0 type="s-body" style=${styleMap(styles.text)} class="text">
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry.It has been the industry's
                 standard text
-              </wpp-typography-v4-2-0>
+              </wpp-typography-v4-3-0>
             </div>`}
         ${args.withActions && !args.showClearButton
     ? html ` <div style=${styleMap(styles.actions)}>
-              <wpp-action-button-v4-2-0 variant="secondary" style=${styleMap(styles.button)}>
+              <wpp-action-button-v4-3-0 variant="secondary" style=${styleMap(styles.button)}>
                 Button
-              </wpp-action-button-v4-2-0>
+              </wpp-action-button-v4-3-0>
 
-              <wpp-action-button-v4-2-0 variant="primary">Button</wpp-action-button-v4-2-0>
+              <wpp-action-button-v4-3-0 variant="primary">Button</wpp-action-button-v4-3-0>
             </div>`
     : null}
       </div>
       ${args.withActions && args.showClearButton
-    ? html ` <wpp-action-button-v4-2-0 slot="actions" variant="primary">Apply</wpp-action-button-v4-2-0> `
+    ? html ` <wpp-action-button-v4-3-0 slot="actions" variant="primary">Apply</wpp-action-button-v4-3-0> `
     : null}
-    </wpp-popover-v4-2-0>
+    </wpp-popover-v4-3-0>
   `;
 };
 Popover.args = {
@@ -139,7 +139,7 @@ Popover.args = {
   },
 };
 export const PopoverWithSearch = (args) => html `
-  <wpp-popover-v4-2-0
+  <wpp-popover-v4-3-0
     .dropdownWidth="${args.dropdownWidth}"
     .persistantSearch="${args.persistantSearch}"
     .withSearch="${args.withSearch}"
@@ -154,11 +154,11 @@ export const PopoverWithSearch = (args) => html `
   }
 }}"
   >
-    <wpp-button-v4-2-0 variant="secondary" slot="trigger-element">Trigger Button</wpp-button-v4-2-0>
+    <wpp-button-v4-3-0 variant="secondary" slot="trigger-element">Trigger Button</wpp-button-v4-3-0>
     <div style="display: flex; flex-direction: column; width:100%; height:200px; padding: 10px 20px;">
-      <wpp-typography-v4-2-0 type="s-body">Content inside the popover.</wpp-typography-v4-2-0>
+      <wpp-typography-v4-3-0 type="s-body">Content inside the popover.</wpp-typography-v4-3-0>
     </div>
-  </wpp-popover-v4-2-0>
+  </wpp-popover-v4-3-0>
 `;
 PopoverWithSearch.args = {
   dropdownWidth: '260px',

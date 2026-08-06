@@ -20,12 +20,41 @@ const WppSegmentedControl = /*@__PURE__*/ proxyCustomElement(class WppSegmentedC
     this.wppChange = createEvent(this, "wppChange", 1);
     this.wppFocus = createEvent(this, "wppFocus", 1);
     this.wppBlur = createEvent(this, "wppBlur", 1);
+    this.firstNonDisabledItem = undefined;
     this.setSegmentedControlItemsSize = (size) => {
       this.host
         .querySelectorAll(transformToVersionedTag('wpp-segmented-control-item'))
         .forEach(item => {
         item.setAttribute('size', size);
       });
+    };
+    this.updateTabIndexOfItem = (tabItem, tabIndex) => {
+      tabItem.ariaProps = {
+        tab: {
+          ...tabItem.ariaProps?.tab,
+          tabIndex,
+        },
+      };
+    };
+    // Clears a previously applied tabindex fallback, if any.
+    this.clearFirstNonDisabledItem = () => {
+      if (this.firstNonDisabledItem) {
+        this.updateTabIndexOfItem(this.firstNonDisabledItem, undefined);
+        this.firstNonDisabledItem = undefined;
+      }
+    };
+    this.handleSlotChange = () => {
+      const segmentedItems = this.getItems();
+      // Always clear the previous fallback before recomputing, so re-slotting can't leave a stale tab stop.
+      this.clearFirstNonDisabledItem();
+      const hasCheckedDisabled = segmentedItems.some((item) => item.active && item.disabled);
+      if (!hasCheckedDisabled)
+        return;
+      // If the checked element is disabled, the first focusable element in the group becomes the first non-disabled one.
+      this.firstNonDisabledItem = segmentedItems.find((item) => !item.disabled);
+      if (this.firstNonDisabledItem) {
+        this.updateTabIndexOfItem(this.firstNonDisabledItem, 0);
+      }
     };
     this.onFocus = (event) => {
       this.wppFocus.emit(event);
@@ -57,6 +86,10 @@ const WppSegmentedControl = /*@__PURE__*/ proxyCustomElement(class WppSegmentedC
   }
   handleChangeSegmentedControlItemClick(event) {
     this.value = event.detail.value;
+  }
+  // An item toggling `disabled` can change which item should hold the group's tab stop.
+  handleDisabledChangeSegmentedControlItem() {
+    this.handleSlotChange();
   }
   /**
    * Resolves the keyboard event target to a segmented control item.
@@ -123,6 +156,8 @@ const WppSegmentedControl = /*@__PURE__*/ proxyCustomElement(class WppSegmentedC
     const activeElement = Array.from(this.host.querySelectorAll(transformToVersionedTag('wpp-segmented-control-item'))).find(item => item.value === newValue);
     activeElement?.setAttribute('active', 'true');
     this.previousActiveElement = activeElement;
+    // When the value changes in the group, only the checked element will be focusable, so we reset the fallback if it was set.
+    this.clearFirstNonDisabledItem();
     this.wppChange.emit({ value: newValue, reason: 'valueChanged' });
   }
   widthChange(newValue) {
@@ -157,9 +192,9 @@ const WppSegmentedControl = /*@__PURE__*/ proxyCustomElement(class WppSegmentedC
     const tablistLabel = this.ariaProps?.tablist?.label ??
       (this.ariaProps?.tablist?.labelledby || this.labelConfig?.text ? undefined : this._locales.tablistLabel);
     const tablistLabelledBy = this.ariaProps?.tablist?.labelledby ?? (this.labelConfig?.text ? labelId : undefined);
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-2-0", { class: "label", tag: "span", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, labelId: labelId, part: "label" })), h("div", { class: this.cssClasses(), role: "tablist", "aria-orientation": "horizontal", "aria-label": tablistLabel, "aria-labelledby": tablistLabelledBy, part: "wrapper" }, h("slot", { part: "inner" }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-3-0", { class: "label", tag: "span", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, labelId: labelId, part: "label" })), h("div", { class: this.cssClasses(), role: "tablist", "aria-orientation": "horizontal", "aria-label": tablistLabel, "aria-labelledby": tablistLabelledBy, part: "wrapper" }, h("slot", { onSlotchange: this.handleSlotChange, part: "inner" }))));
   }
-  static get registryIs() { return "wpp-segmented-control-v4-2-0"; }
+  static get registryIs() { return "wpp-segmented-control-v4-3-0"; }
   get host() { return this; }
   static get watchers() { return {
     "value": ["valueChanged"],
@@ -167,7 +202,7 @@ const WppSegmentedControl = /*@__PURE__*/ proxyCustomElement(class WppSegmentedC
     "size": ["onUpdateSize"]
   }; }
   static get style() { return wppSegmentedControlCss; }
-}, [1, "wpp-segmented-control", "wpp-segmented-control-v4-2-0", {
+}, [1, "wpp-segmented-control", "wpp-segmented-control-v4-3-0", {
     "size": [1],
     "hugContentOff": [516, "hug-content-off"],
     "width": [1],
@@ -179,49 +214,49 @@ const WppSegmentedControl = /*@__PURE__*/ proxyCustomElement(class WppSegmentedC
     "ariaProps": [16],
     "locales": [16],
     "previousActiveElement": [32]
-  }, [[2, "wppChangeSegmentedControlItem", "handleChangeSegmentedControlItemClick"], [2, "keydown", "handleKeydown"], [2, "keyup", "handleKeyup"]]]);
+  }, [[2, "wppChangeSegmentedControlItem", "handleChangeSegmentedControlItemClick"], [2, "wppDisabledChangeSegmentedControlItem", "handleDisabledChangeSegmentedControlItem"], [2, "keydown", "handleKeydown"], [2, "keyup", "handleKeyup"]]]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-segmented-control-v4-2-0", "wpp-icon-error-v4-2-0", "wpp-icon-warning-v4-2-0", "wpp-internal-label-v4-2-0", "wpp-internal-tooltip-v4-2-0", "wpp-label-v4-2-0", "wpp-tooltip-v4-2-0", "wpp-typography-v4-2-0"];
+  const components = ["wpp-segmented-control-v4-3-0", "wpp-icon-error-v4-3-0", "wpp-icon-warning-v4-3-0", "wpp-internal-label-v4-3-0", "wpp-internal-tooltip-v4-3-0", "wpp-label-v4-3-0", "wpp-tooltip-v4-3-0", "wpp-typography-v4-3-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-segmented-control-v4-2-0":
+    case "wpp-segmented-control-v4-3-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppSegmentedControl);
       }
       break;
-    case "wpp-icon-error-v4-2-0":
+    case "wpp-icon-error-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-warning-v4-2-0":
+    case "wpp-icon-warning-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-internal-label-v4-2-0":
+    case "wpp-internal-label-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-internal-tooltip-v4-2-0":
+    case "wpp-internal-tooltip-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-label-v4-2-0":
+    case "wpp-label-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-2-0":
+    case "wpp-tooltip-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-2-0":
+    case "wpp-typography-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

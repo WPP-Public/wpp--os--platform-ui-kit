@@ -5,10 +5,10 @@ export class WppRichtextHtml {
   }
   render() {
     const classes = `ql-container ql-wpp richtext-view-html`;
-    return (h(Host, null, h("wpp-richtext-common-styles-v4-2-0", null), h("div", { class: classes, "data-testid": "richtext-editor-container" }, h("div", { class: "ql-editor", innerHTML: this.value, "data-testid": "richtext-editor" }))));
+    return (h(Host, null, h("wpp-richtext-common-styles-v4-3-0", null), h("div", { class: classes, "data-testid": "richtext-editor-container" }, h("div", { class: "ql-editor", innerHTML: this.value, "data-testid": "richtext-editor" }))));
   }
   static get is() { return "wpp-richtext-html"; }
-  static get registryIs() { return "wpp-richtext-html-v4-2-0"; }
+  static get registryIs() { return "wpp-richtext-html-v4-3-0"; }
   static get properties() {
     return {
       "value": {

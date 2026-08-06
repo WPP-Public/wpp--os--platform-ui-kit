@@ -48,22 +48,22 @@
   left: 0;
   right: 0;
 }
-@media (min-width: 1280px) {
+@media (width >= 1280px) {
   :host .container {
     padding: 12px 28px;
   }
 }
-@media (min-width: 1366px) {
+@media (width >= 1366px) {
   :host .container {
     padding: 12px 36px;
   }
 }
-@media (min-width: 1440px) {
+@media (width >= 1440px) {
   :host .container {
     padding: 12px 38px;
   }
 }
-@media (min-width: 1920px) {
+@media (width >= 1920px) {
   :host .container {
     padding: 12px 54px;
   }

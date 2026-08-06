@@ -339,9 +339,9 @@ export class WppInput {
       if (this.type !== 'search')
         return null;
       if (this.loading && !this.disabled) {
-        return h("wpp-spinner-v4-2-0", { class: this.iconStartCssClasses(), slot: "left", "aria-label": "Loading" });
+        return h("wpp-spinner-v4-3-0", { class: this.iconStartCssClasses(), slot: "left", "aria-label": "Loading" });
       }
-      return h("wpp-icon-search-v4-2-0", { class: this.iconStartCssClasses(), part: "icon-search" });
+      return h("wpp-icon-search-v4-3-0", { class: this.iconStartCssClasses(), part: "icon-search" });
     };
     this.shouldRenderCrossIcon = false;
     this.hasActiveEllipses = false;
@@ -494,7 +494,7 @@ export class WppInput {
       }, onMouseLeave: () => {
         this.isHovered = false;
         this.updateCrossIcon();
-      }, onKeyUp: (event) => this.onKeyUp(event, 'input'), exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v4-2-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v4-2-0", { part: "anchor", text: this.renderedValue, class: "with-tooltip", anchorTabIndex: -1, config: {
+      }, onKeyUp: (event) => this.onKeyUp(event, 'input'), exportparts: "label, body, icon-search, input, icon-cross, message, icon-start, icon-start-wrapper, icon-end, icon-end-wrapper" }, this.labelConfig?.text && (h("wpp-label-v4-3-0", { class: "label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.inputWithIconsCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), this.renderSearchIconOrSpinner(), h("wpp-tooltip-v4-3-0", { part: "anchor", text: this.renderedValue, class: "with-tooltip", anchorTabIndex: -1, config: {
         ...this.truncationTooltipConfig,
         onShow: (instance) => {
           if (!this.hasActiveEllipses || this.type === 'password')
@@ -503,10 +503,10 @@ export class WppInput {
             return this.truncationTooltipConfig?.onShow(instance);
           }
         },
-      } }, this.renderInput()), this.shouldRenderCrossIcon && this.withCrossIcon && (h("wpp-icon-cross-v4-2-0", { class: this.iconEndCssClasses('native'), "aria-label": "Erase input text", role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: 0, part: "icon-cross", onMouseDown: event => event.preventDefault(), onClick: event => this.onClear(event), onKeyUp: (event) => this.onKeyUp(event, 'icon'), onKeyDown: (event) => this.onKeyDown(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses('slot'), name: "icon-end", onSlotchange: this.updateSlotData, tabIndex: this.hasIconEndSlot ? 0 : -1, "aria-label": "Clear input", role: "button" })), this.lengthValidationError && (h("wpp-inline-message-v4-2-0", { message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') })), this.message && (h("wpp-inline-message-v4-2-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') }))));
+      } }, this.renderInput()), this.shouldRenderCrossIcon && this.withCrossIcon && (h("wpp-icon-cross-v4-3-0", { class: this.iconEndCssClasses('native'), "aria-label": "Erase input text", role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: 0, part: "icon-cross", onMouseDown: event => event.preventDefault(), onClick: event => this.onClear(event), onKeyUp: (event) => this.onKeyUp(event, 'icon'), onKeyDown: (event) => this.onKeyDown(event, 'icon') })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses('slot'), name: "icon-end", onSlotchange: this.updateSlotData, tabIndex: this.hasIconEndSlot ? 0 : -1, "aria-label": "Clear input", role: "button" })), this.lengthValidationError && (h("wpp-inline-message-v4-3-0", { message: this.lengthValidationError, type: 'error', showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') })), this.message && (h("wpp-inline-message-v4-3-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", onKeyUp: (event) => this.onKeyUp(event, 'inlineMessage') }))));
   }
   static get is() { return "wpp-input"; }
-  static get registryIs() { return "wpp-input-v4-2-0"; }
+  static get registryIs() { return "wpp-input-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

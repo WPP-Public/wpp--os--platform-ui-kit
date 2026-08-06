@@ -28,7 +28,8 @@ export declare class WppAvatar {
    */
   readonly src?: string;
   /**
-   * Defines the avatar icon. This prop will work if variant='circle', and you can pass icon as wpp-icon-premium.
+   * Defines the avatar icon (e.g. `wpp-icon-premium`). Icon avatars are always rendered as a
+   * rounded rectangle (like logo avatars), regardless of the `variant` value.
    */
   readonly icon?: string;
   /**
@@ -80,12 +81,19 @@ export declare class WppAvatar {
   private onMouseDown;
   private onKeyUp;
   private onKeyDown;
-  private getIconSize;
   private renderIcon;
   private handleClick;
   private hostCssClasses;
   private contentWrapperCssClasses;
   private imageWrapperCssClasses;
   private imageCssClasses;
+  /** A tooltip is only shown for named (non-icon) avatars that opted in via `withTooltip`. */
+  private hasTooltip;
+  /**
+   * Avatars are presentational (removed from the a11y tree) when the tooltip already exposes the
+   * name, or when explicitly marked via `role="presentation"`. Otherwise they expose their role,
+   * tab index and label.
+   */
+  private getHostAriaProps;
   render(): any;
 }

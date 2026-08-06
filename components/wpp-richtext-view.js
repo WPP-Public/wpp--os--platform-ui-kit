@@ -170,16 +170,16 @@ const WppRichtextView$1 = /*@__PURE__*/ proxyCustomElement(class WppRichtextView
     this.setValue(newValue);
   }
   render() {
-    return (h(Host, null, h("wpp-richtext-common-styles-v4-2-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
+    return (h(Host, null, h("wpp-richtext-common-styles-v4-3-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
   }
-  static get registryIs() { return "wpp-richtext-view-v4-2-0"; }
+  static get registryIs() { return "wpp-richtext-view-v4-3-0"; }
   get host() { return this; }
   static get watchers() { return {
     "styles": ["updateStyle"],
     "value": ["updateContent"]
   }; }
   static get style() { return wppRichtextViewCss; }
-}, [0, "wpp-richtext-view", "wpp-richtext-view-v4-2-0", {
+}, [0, "wpp-richtext-view", "wpp-richtext-view-v4-3-0", {
     "value": [1537],
     "format": [1537],
     "formats": [16],
@@ -193,14 +193,14 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-richtext-view-v4-2-0", "wpp-richtext-common-styles-v4-2-0"];
+  const components = ["wpp-richtext-view-v4-3-0", "wpp-richtext-common-styles-v4-3-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-richtext-view-v4-2-0":
+    case "wpp-richtext-view-v4-3-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppRichtextView$1);
       }
       break;
-    case "wpp-richtext-common-styles-v4-2-0":
+    case "wpp-richtext-common-styles-v4-3-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

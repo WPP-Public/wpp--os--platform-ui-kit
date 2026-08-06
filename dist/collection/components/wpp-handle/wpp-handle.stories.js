@@ -30,7 +30,7 @@ export const Handle = {
       aria-roledescription="node"
       tabindex="0"
     >
-      <wpp-artefact-v4-2-0
+      <wpp-artefact-v4-3-0
         .size="m"
         .isSelected=${args.isSelected}
         @wppActionClick=${(e) => console.log('Action clicked:', e.detail)}
@@ -39,13 +39,13 @@ export const Handle = {
           <div
             style="position: absolute; right: ${args.type === 'source'
     ? '0'
-    : '100%'}; top: 32px; transform: translate(50%, -50%); width: 6px;
+    : '100%'}; top: 20px; transform: translate(50%, -50%); width: 6px;
     height: 6px;"
           >
-            <wpp-handle-v4-2-0 .isSelected=${args.isSelected} .type=${args.type} />
+            <wpp-handle-v4-3-0 .isSelected=${args.isSelected} .type=${args.type} />
           </div>
         </div>
-      </wpp-artefact-v4-2-0>
+      </wpp-artefact-v4-3-0>
     </div>
   `,
 };

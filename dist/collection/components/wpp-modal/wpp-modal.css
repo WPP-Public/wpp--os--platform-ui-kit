@@ -24,10 +24,7 @@
 
 :host(.wpp-modal-wrapper) {
   position: fixed;
-  top: var(--wpp-modal-top-offset, 0);
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: var(--wpp-modal-top-offset, 0) 0 0 0;
   display: block;
   font-family: var(--wpp-font-family, system-ui, sans-serif);
   visibility: hidden;
@@ -128,8 +125,7 @@
   transform: translate(-50%, -50%);
   max-height: calc(100vh - 120px);
   max-width: 90vw;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden auto;
 }
 .modal.visible {
   animation: modalAppearAboveCenterAnimations 0.2s linear;
@@ -149,7 +145,7 @@
   user-select: none;
 }
 
-@media (max-height: 800px) {
+@media (height <= 800px) {
   .modal {
     transform: translate(-50%, -50%);
   }

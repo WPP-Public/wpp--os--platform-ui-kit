@@ -21,6 +21,10 @@
   padding: var(--tree-item-padding);
 }
 
+.container-wrapper {
+  width: 100%;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -55,4 +59,32 @@
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
   margin: 0;
   text-align: center;
+}
+
+:host(.wpp-virtualised-tree) .container-wrapper {
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: 12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--wpp-grey-color-400) transparent;
+}
+:host(.wpp-virtualised-tree) .container-wrapper::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+:host(.wpp-virtualised-tree) .container-wrapper::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 2px var(--wpp-grey-color-400);
+}
+:host(.wpp-virtualised-tree) .container-wrapper .container {
+  position: relative;
+  width: 100%;
+}
+:host(.wpp-virtualised-tree) .container-wrapper .wpp-tree-item {
+  width: 100%;
+  position: absolute;
+}
+:host(.wpp-virtualised-tree) .container-wrapper .wpp-tree-item::part(tree-item) {
+  width: 100%;
 }

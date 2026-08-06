@@ -2,9 +2,9 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-ecf423ba.js');
+const index = require('./index-5f5af6a9.js');
 const common = require('./common-ee802540.js');
-const utils = require('./utils-06b46408.js');
+const utils = require('./utils-9529c2fe.js');
 const subscribeToTheme = require('./subscribe-to-theme-1879a649.js');
 require('./consts-d8f5ef98.js');
 
@@ -119,9 +119,9 @@ const WppRadio = class {
   }
   render() {
     if (this.decorative) {
-      return (index.h(index.Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "label, content, inner", name: this.name }, index.h("wpp-label-v4-2-0", { class: this.labelCssClasses(), part: "label" }, index.h("div", { class: "circle", part: "circle" }))));
+      return (index.h(index.Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "label, content, inner", name: this.name }, index.h("wpp-label-v4-3-0", { class: this.labelCssClasses(), part: "label" }, index.h("div", { class: "circle", part: "circle" }))));
     }
-    return (index.h(index.Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "label, content, inner", name: this.name }, index.h("wpp-label-v4-2-0", { class: this.labelCssClasses(), typography: "s-body", htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, onClick: this.onClick, tooltipConfig: {
+    return (index.h(index.Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "label, content, inner", name: this.name }, index.h("wpp-label-v4-3-0", { class: this.labelCssClasses(), typography: "s-body", htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, onClick: this.onClick, tooltipConfig: {
         ...{
           onCreate: (instance) => {
             this.tippyInstance = instance;
@@ -131,7 +131,7 @@ const WppRadio = class {
         ...this.labelTooltipConfig,
       }, part: "label" }, index.h("input", { class: this.inputCssClasses(), type: "radio", name: this.name, id: this.name, value: this.value, disabled: this.disabled, checked: this.checked, required: this.required, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-hidden": this.disabled ? 'true' : null, "aria-required": this.required.toString(), tabindex: this.disabled ? '-1' : this.index, part: "input" }), index.h("div", { class: "circle", part: "circle" }))));
   }
-  static get registryIs() { return "wpp-radio-v4-2-0"; }
+  static get registryIs() { return "wpp-radio-v4-3-0"; }
   get host() { return index.getElement(this); }
 };
 WppRadio.style = wppRadioCss;

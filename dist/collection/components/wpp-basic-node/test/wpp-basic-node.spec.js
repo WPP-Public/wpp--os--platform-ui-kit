@@ -16,6 +16,7 @@ describe('WppBasicNode', () => {
       expect(basicNode).toBeDefined();
       expect(basicNode.nodeTitle).toBe('Default Title');
       expect(basicNode.isLoading).toBe(false);
+      expect(basicNode.isReRun).toBe(false);
       expect(basicNode.actions).toEqual([]);
       expect(basicNode.locales).toEqual({});
       expect(basicNode.isSelected).toEqual(false);
@@ -131,7 +132,7 @@ describe('WppBasicNode', () => {
     it('Should emit wppActionClick event when an additional action from the dropdown menu is clicked', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-2-0", { nodeTitle: "Test Artefact" }, h("div", { slot: "body" }))),
+        template: () => (h("wpp-basic-node-v4-3-0", { nodeTitle: "Test Artefact" }, h("div", { slot: "body" }))),
       });
       const wppActionClickSpy = jest.spyOn(page.rootInstance.wppActionClick, 'emit');
       const additionalListItem = page.root?.querySelectorAll('wpp-list-item')[0];
@@ -146,7 +147,7 @@ describe('WppBasicNode', () => {
     it('Should emit wppActionClick event when the play / pause action is clicked', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => h("wpp-basic-node-v4-2-0", { isSelected: true, nodeTitle: "Test Artefact" }),
+        template: () => h("wpp-basic-node-v4-3-0", { isSelected: true, nodeTitle: "Test Artefact" }),
       });
       const wppActionClickSpy = jest.spyOn(page.rootInstance.wppActionClick, 'emit');
       const playBtn = page.root?.querySelector('[data-testid="wpp-play-button"]');
@@ -166,6 +167,32 @@ describe('WppBasicNode', () => {
       });
     });
   });
+  describe('Testing re-run state', () => {
+    it('Should render the re-run button with the refresh icon and emit wppActionClick when clicked', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        template: () => h("wpp-basic-node-v4-3-0", { isReRun: true, nodeTitle: "Test Artefact" }),
+      });
+      const wppActionClickSpy = jest.spyOn(page.rootInstance.wppActionClick, 'emit');
+      const reRunBtn = page.root?.querySelector('[data-testid="wpp-rerun-button"]');
+      expect(reRunBtn).toBeTruthy();
+      expect(page.root?.querySelector('[data-testid="wpp-play-button"]')).toBeFalsy();
+      reRunBtn?.dispatchEvent(new MouseEvent('click'));
+      await page.waitForChanges();
+      expect(wppActionClickSpy).toHaveBeenCalledWith({
+        icon: 'wpp-icon-refresh',
+        label: 'Re-run',
+      });
+    });
+    it('Should prioritise the loading (stop) state over the re-run state', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        template: () => h("wpp-basic-node-v4-3-0", { isReRun: true, isLoading: true, nodeTitle: "Test Artefact" }),
+      });
+      expect(page.root?.querySelector('[data-testid="wpp-pause-button"]')).toBeTruthy();
+      expect(page.root?.querySelector('[data-testid="wpp-rerun-button"]')).toBeFalsy();
+    });
+  });
   describe('Testing render output', () => {
     it('Should render the component with the correct structure and content', async () => {
       const page = await newSpecPage({
@@ -180,7 +207,7 @@ describe('WppBasicNode', () => {
     it('Should render the component in isSelected state', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-2-0", { isSelected: true, nodeTitle: "Test Artefact" }, h("div", { slot: "body" }, "Body Content"))),
+        template: () => (h("wpp-basic-node-v4-3-0", { isSelected: true, nodeTitle: "Test Artefact" }, h("div", { slot: "body" }, "Body Content"))),
       });
       await page.waitForChanges();
       expect(page.root).toMatchSnapshot();
@@ -188,7 +215,7 @@ describe('WppBasicNode', () => {
     it('Should render additional actions in the dropdown menu when provided via the actions prop and a scrollbar in the body when the height exceeds the maximum', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-2-0", { nodeTitle: "Test Artefact", actions: [{ icon: 'wpp-icon-edit', label: 'Edit' }] }, h("div", { slot: "body" }, h("div", { style: { height: '1300px' } }, h("p", null, "Body content with height 1300px"))))),
+        template: () => (h("wpp-basic-node-v4-3-0", { nodeTitle: "Test Artefact", actions: [{ icon: 'wpp-icon-edit', label: 'Edit' }] }, h("div", { slot: "body" }, h("div", { style: { height: '1300px' } }, h("p", null, "Body content with height 1300px"))))),
       });
       page.rootInstance.hasScrollbar = true;
       await page.waitForChanges();
@@ -197,7 +224,7 @@ describe('WppBasicNode', () => {
     it('Should render the node in loading state', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-2-0", { nodeTitle: "Test Artefact", isLoading: true }, h("div", { slot: "body" }, h("div", { style: { height: '100px' } }, h("p", null, "Body content with height 100px"))))),
+        template: () => (h("wpp-basic-node-v4-3-0", { nodeTitle: "Test Artefact", isLoading: true }, h("div", { slot: "body" }, h("div", { style: { height: '100px' } }, h("p", null, "Body content with height 100px"))))),
       });
       await page.waitForChanges();
       expect(page.root).toMatchSnapshot();
@@ -221,7 +248,7 @@ describe('WppBasicNode', () => {
       // on the box-sizing: border-box wrapper would shrink the content box and shift inner content.
       const styles = readFileSync(join(__dirname, '..', 'wpp-basic-node.scss'), 'utf8');
       // The overlay rule must exist (border painted on ::before).
-      expect(styles).toMatch(/\.node-wrapper\.is-selected::before\s*\{[\s\S]*?border:\s*1px solid var\(--wpp-primary-color-500\)/);
+      expect(styles).toMatch(/\.node-wrapper\.is-selected::before\s*\{[\s\S]*?border:\s*var\(--wpp-border-width-s\) solid var\(--wpp-primary-color-500\)/);
       // The layout-affecting border on the wrapper itself must not be (re)introduced.
       expect(styles).not.toMatch(/\.node-wrapper\.is-selected\s*\{[\s\S]*?border:\s*1px solid/);
     });
@@ -256,6 +283,115 @@ describe('WppBasicNode', () => {
       const childStructure = (wrapper) => Array.from(wrapper?.children ?? []).map(child => child.className || child.tagName.toLowerCase());
       // Loading must not add or remove any layout nodes (header/body/actions stay identical).
       expect(childStructure(loadingWrapper)).toEqual(childStructure(normalWrapper));
+    });
+  });
+  describe('Testing hasContent state driven by slotted body content', () => {
+    // A capturing MutationObserver mock so tests can trigger the callback and assert observe/disconnect.
+    // The global setup mock returns a fresh anonymous object per call, which we cannot introspect.
+    class MutationObserverMock {
+      constructor(callback) {
+        this.observe = jest.fn();
+        this.disconnect = jest.fn();
+        this.takeRecords = jest.fn(() => []);
+        this.callback = callback;
+      }
+      // Helper to manually run the observer callback in tests.
+      trigger() {
+        this.callback([], this);
+      }
+    }
+    let mutationObserverInstance;
+    let originalMutationObserver;
+    beforeEach(() => {
+      originalMutationObserver = global.MutationObserver;
+      global.MutationObserver = jest.fn().mockImplementation((callback) => {
+        mutationObserverInstance = new MutationObserverMock(callback);
+        return mutationObserverInstance;
+      });
+    });
+    afterEach(() => {
+      global.MutationObserver = originalMutationObserver;
+      jest.clearAllMocks();
+    });
+    const getPlayButton = (root) => root?.querySelector('[data-testid="wpp-play-button"]');
+    it('should set hasContent true and enable the primary action when the body slot has content', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        html: `<wpp-basic-node is-selected="true" node-title="Test">
+                 <div slot="body"><input /></div>
+               </wpp-basic-node>`,
+      });
+      await page.waitForChanges();
+      expect(page.rootInstance.hasContent).toBe(true);
+      expect(getPlayButton(page.root)?.hasAttribute('disabled')).toBe(false);
+    });
+    it('should keep hasContent false when the body slot has no content', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        html: `<wpp-basic-node is-selected="true" node-title="Test"></wpp-basic-node>`,
+      });
+      await page.waitForChanges();
+      expect(page.rootInstance.hasContent).toBe(false);
+      expect(getPlayButton(page.root)?.hasAttribute('disabled')).toBe(true);
+    });
+    it('should keep hasContent false when only an empty body slot wrapper is present', async () => {
+      // Frameworks such as React keep the `slot="body"` wrapper mounted and toggle its inner
+      // content, so an empty wrapper must NOT count as content.
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        html: `<wpp-basic-node is-selected="true" node-title="Test">
+                 <div slot="body"></div>
+               </wpp-basic-node>`,
+      });
+      await page.waitForChanges();
+      expect(page.rootInstance.hasContent).toBe(false);
+      expect(getPlayButton(page.root)?.hasAttribute('disabled')).toBe(true);
+    });
+    it('should observe the body element and re-evaluate hasContent when content is added inside the wrapper', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        html: `<wpp-basic-node is-selected="true" node-title="Test">
+                 <div slot="body"></div>
+               </wpp-basic-node>`,
+      });
+      const body = page.root?.querySelector('.node-body');
+      expect(mutationObserverInstance.observe).toHaveBeenCalledWith(body, { childList: true, subtree: true });
+      expect(page.rootInstance.hasContent).toBe(false);
+      // Simulate the consumer rendering content inside the persistent body slot wrapper.
+      const content = page.doc.createElement('input');
+      page.root?.querySelector('[slot="body"]')?.appendChild(content);
+      mutationObserverInstance.trigger();
+      await page.waitForChanges();
+      expect(page.rootInstance.hasContent).toBe(true);
+      expect(getPlayButton(page.root)?.hasAttribute('disabled')).toBe(false);
+    });
+    it('should flip hasContent back to false when the body content is cleared from the wrapper', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        html: `<wpp-basic-node is-selected="true" node-title="Test">
+                 <div slot="body"><input /></div>
+               </wpp-basic-node>`,
+      });
+      await page.waitForChanges();
+      expect(page.rootInstance.hasContent).toBe(true);
+      const wrapper = page.root?.querySelector('[slot="body"]');
+      if (wrapper)
+        wrapper.innerHTML = '';
+      mutationObserverInstance.trigger();
+      await page.waitForChanges();
+      expect(page.rootInstance.hasContent).toBe(false);
+      expect(getPlayButton(page.root)?.hasAttribute('disabled')).toBe(true);
+    });
+    it('should disconnect the MutationObserver on disconnectedCallback', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        html: `<wpp-basic-node is-selected="true" node-title="Test">
+                 <div slot="body"><input /></div>
+               </wpp-basic-node>`,
+      });
+      page.root?.remove();
+      await page.waitForChanges();
+      expect(mutationObserverInstance.disconnect).toHaveBeenCalled();
     });
   });
 });

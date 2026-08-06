@@ -15,8 +15,8 @@
 */
 :host {
   --pi-bar-text-margin: var(--wpp-progress-bar-text-margin, 4px 0);
-  --pi-bar-text-weight: var(--wpp-progress-bar-text-weight, 400);
-  --pi-bar-text-size: var(--wpp-progress-bar-text-size, 14px);
+  --pi-bar-text-weight: var(--wpp-progress-bar-text-weight, var(--wpp-typography-s-midi-font-weight));
+  --pi-bar-text-size: var(--wpp-progress-bar-text-size, var(--wpp-typography-s-midi-font-size));
   --pi-bar-height: var(--wpp-progress-bar-height, 4px);
   --pi-bar-color: var(--wpp-progress-bar-color, var(--wpp-brand-color));
   --pi-circle-stroke-width: var(--wpp-progress-circle-stroke-width, 4);

@@ -1,12 +1,12 @@
-import { r as registerInstance, c as createEvent, h, F as Fragment, H as Host, g as getElement } from './index-9177bb6d.js';
+import { r as registerInstance, c as createEvent, h, F as Fragment, H as Host, g as getElement } from './index-93f63aaa.js';
 import { A as AVATAR_COLORS_VARIANTS } from './const-271ccb95.js';
-import { W as WppIcon } from './WppIcon-f4802cc9.js';
-import { W as WrappedSlot } from './WrappedSlot-629d3e4f.js';
-import { g as getSlotEmptyStates, d as debounce, e as truncate } from './utils-fc9002c9.js';
+import { W as WppIcon } from './WppIcon-a0bcacb1.js';
+import { W as WrappedSlot } from './WrappedSlot-6fa08584.js';
+import { g as getSlotEmptyStates, d as debounce, e as truncate } from './utils-452958a4.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme-3920c16c.js';
 import './consts-744c144f.js';
 
-const wppAvatarGroupCss = ":host{--avatar-stroke-color:var(--wpp-avatar-stroke-color, var(--wpp-grey-color-000));--avatar-stroke-width:var(--wpp-avatar-stroke-width, 2px);--avatar-circle-group-margin-left-size-xs:var(--wpp-avatar-circle-group-margin-left-size-xs, -4px);--avatar-circle-group-margin-left-size-s:var(--wpp-avatar-circle-group-margin-left-size-s, -12px);--avatar-square-group-margin-left-size-xs:var(--wpp-avatar-square-group-margin-left-size-xs, -4px);--avatar-square-group-margin-left-size-s:var(--wpp-avatar-square-group-margin-left-size-s, -12px);display:-ms-inline-flexbox;display:inline-flex}:host .avatar-item{display:-ms-inline-flexbox;display:inline-flex;position:relative}:host .avatar-item.interactable:hover{z-index:1}:host .avatars-list{display:-ms-flexbox;display:flex;margin:0;padding:0;list-style-type:none}:host:host(.wpp-circle) .avatar-item{border-radius:var(--wpp-border-radius-round);-webkit-box-shadow:0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color);box-shadow:0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color)}:host:host(.wpp-circle):host(.wpp-size-xs) .avatar-item:not(:first-child){margin-left:var(--avatar-circle-group-margin-left-size-xs)}:host:host(.wpp-circle):host(.wpp-size-s) .avatar-item:not(:first-child){margin-left:var(--avatar-circle-group-margin-left-size-s)}:host:host(.wpp-square) .avatar-item{-webkit-box-shadow:0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color);box-shadow:0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color)}:host:host(.wpp-square):host(.wpp-size-xs) .avatar-item{border-radius:var(--wpp-border-radius-xs)}:host:host(.wpp-square):host(.wpp-size-xs) .avatar-item:not(:first-child){margin-left:var(--avatar-square-group-margin-left-size-xs)}:host:host(.wpp-square):host(.wpp-size-s) .avatar-item{border-radius:var(--wpp-border-radius-s)}:host:host(.wpp-square):host(.wpp-size-s) .avatar-item:not(:first-child){margin-left:var(--avatar-square-group-margin-left-size-s)}";
+const wppAvatarGroupCss = ":host{--avatar-stroke-color:var(--wpp-avatar-stroke-color, var(--wpp-grey-color-000));--avatar-stroke-width:var(--wpp-avatar-stroke-width, var(--wpp-border-width-m));--avatar-circle-group-margin-left-size-xs:var(--wpp-avatar-circle-group-margin-left-size-xs, -8px);--avatar-circle-group-margin-left-size-s:var(--wpp-avatar-circle-group-margin-left-size-s, -12px);--avatar-square-group-margin-left-size-xs:var(--wpp-avatar-square-group-margin-left-size-xs, -8px);--avatar-square-group-margin-left-size-s:var(--wpp-avatar-square-group-margin-left-size-s, -12px);display:-ms-inline-flexbox;display:inline-flex}:host .avatar-item{display:-ms-inline-flexbox;display:inline-flex;position:relative}:host .avatar-item.interactable:hover{z-index:1}:host .avatars-list{display:-ms-flexbox;display:flex;margin:0;padding:0;list-style-type:none}:host:host(.wpp-circle) .avatar-item{border-radius:var(--wpp-border-radius-round);-webkit-box-shadow:0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color);box-shadow:0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color)}:host:host(.wpp-circle):host(.wpp-size-xs) .avatar-item:not(:first-child){margin-left:var(--avatar-circle-group-margin-left-size-xs)}:host:host(.wpp-circle):host(.wpp-size-s) .avatar-item:not(:first-child){margin-left:var(--avatar-circle-group-margin-left-size-s)}:host:host(.wpp-square) .avatar-item{-webkit-box-shadow:0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color);box-shadow:0 0 0 var(--avatar-stroke-width) var(--avatar-stroke-color)}:host:host(.wpp-square):host(.wpp-size-xs) .avatar-item{border-radius:var(--wpp-border-radius-xs)}:host:host(.wpp-square):host(.wpp-size-xs) .avatar-item:not(:first-child){margin-left:var(--avatar-square-group-margin-left-size-xs)}:host:host(.wpp-square):host(.wpp-size-s) .avatar-item{border-radius:var(--wpp-border-radius-s)}:host:host(.wpp-square):host(.wpp-size-s) .avatar-item:not(:first-child){margin-left:var(--avatar-square-group-margin-left-size-s)}";
 
 const WppAvatarGroup = class {
   constructor(hostRef) {
@@ -20,11 +20,13 @@ const WppAvatarGroup = class {
     this.getAvatarsWithColors = (avatars) => {
       let colorIndex = 0;
       return avatars.map(avatar => {
-        if (!avatar.src && !avatar.color) {
-          avatar.color = AVATAR_COLORS_VARIANTS[colorIndex];
-          colorIndex = colorIndex === AVATAR_COLORS_VARIANTS.length - 1 ? 0 : colorIndex + 1;
-        }
-        return avatar;
+        // Images, icons and explicit colors keep their own appearance; only plain placeholder
+        // avatars get an auto-assigned color, cycling through the palette.
+        if (avatar.src || avatar.icon || avatar.color)
+          return avatar;
+        const color = AVATAR_COLORS_VARIANTS[colorIndex];
+        colorIndex = (colorIndex + 1) % AVATAR_COLORS_VARIANTS.length;
+        return { ...avatar, color };
       });
     };
     this.handleAvatarClick = (event, avatarIndex, fromDropdown) => {
@@ -60,7 +62,7 @@ const WppAvatarGroup = class {
     return (h(Host, { class: this.avatarGroupWrapperCssClasses(), role: "group", exportparts: "list, item, menu, avatar, hidden-item, hidden-item-with-avatar, hidden-item-avatar, hidden-item-name" }, h("ul", { class: "avatars-list", part: "list" }, avatarsToDisplay.map((avatar, avatarIndex) => (h("li", { class: {
         'avatar-item': true,
         interactable: avatar.interactable ?? true,
-      }, part: "item" }, h("wpp-avatar-v4-2-0", { size: this.size, variant: this.variant, name: avatar.name, src: avatar.src, withTooltip: this.withTooltip, tooltipConfig: this.tooltipConfig, interactable: avatar.interactable ?? true, color: avatar.color, index: this.avatarsIndex, onWppClick: (event) => this.handleAvatarClick(event, avatarIndex, false) })))), this.avatars.length > this.maxAvatarsToDisplay && (h("li", { class: "avatar-item", part: "item" }, h("wpp-menu-context-v4-2-0", { externalClass: "avatar-group", listWidth: "240px", dropdownConfig: {
+      }, part: "item" }, h("wpp-avatar-v4-3-0", { size: this.size, variant: this.variant, name: avatar.name, src: avatar.src, icon: avatar.icon, withTooltip: this.withTooltip, tooltipConfig: this.tooltipConfig, interactable: avatar.interactable ?? true, color: avatar.color, index: this.avatarsIndex, onWppClick: (event) => this.handleAvatarClick(event, avatarIndex, false) })))), this.avatars.length > this.maxAvatarsToDisplay && (h("li", { class: "avatar-item", part: "item" }, h("wpp-menu-context-v4-3-0", { externalClass: "avatar-group", listWidth: "240px", dropdownConfig: {
         ...this.dropdownConfig,
         onShow: (instance) => {
           const firstListItem = instance.popper.querySelector('.wpp-list-item');
@@ -77,9 +79,9 @@ const WppAvatarGroup = class {
         onDestroy: () => {
           this.menuContextTippyRef = undefined;
         },
-      }, part: "menu", onKeyDown: this.onKeyDown, ariaProps: { label: `+${avatarsInHiddenList.length} more list items with avatars` } }, h("wpp-avatar-v4-2-0", { amountOfHiddenAvatars: avatarsInHiddenList.length, size: this.size, variant: this.variant, slot: "trigger-element", part: "avatar" }), h(Fragment, null, avatarsInHiddenList.map((avatar, avatarIndex) => (h("wpp-list-item-v4-2-0", { key: avatar.name, onWppChangeListItem: (event) => this.handleListItemClick(event, avatarIndex + this.maxAvatarsToDisplay), value: avatar.name, nonInteractive: avatar.interactable === false, part: "hidden-item" }, h("wpp-avatar-v4-2-0", { name: avatar.name, src: avatar.src, color: avatar.color, variant: this.variant, interactable: false, role: "presentation", slot: "left", part: "hidden-item-avatar" }), h("span", { slot: "label", class: "name", part: "hidden-item-name" }, avatar.name)))))))))));
+      }, part: "menu", onKeyDown: this.onKeyDown, ariaProps: { label: `+${avatarsInHiddenList.length} more list items with avatars` } }, h("wpp-avatar-v4-3-0", { amountOfHiddenAvatars: avatarsInHiddenList.length, size: this.size, variant: this.variant, slot: "trigger-element", part: "avatar" }), h(Fragment, null, avatarsInHiddenList.map((avatar, avatarIndex) => (h("wpp-list-item-v4-3-0", { key: avatar.name, onWppChangeListItem: (event) => this.handleListItemClick(event, avatarIndex + this.maxAvatarsToDisplay), value: avatar.name, nonInteractive: avatar.interactable === false, part: "hidden-item" }, h("wpp-avatar-v4-3-0", { name: avatar.name, src: avatar.src, icon: avatar.icon, color: avatar.color, variant: this.variant, interactable: false, role: "presentation", slot: "left", part: "hidden-item-avatar" }), h("span", { slot: "label", class: "name", part: "hidden-item-name" }, avatar.name)))))))))));
   }
-  static get registryIs() { return "wpp-avatar-group-v4-2-0"; }
+  static get registryIs() { return "wpp-avatar-group-v4-3-0"; }
 };
 WppAvatarGroup.style = wppAvatarGroupCss;
 
@@ -96,7 +98,7 @@ const WppIconTriangleFill = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-triangle-fill", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { d: "M13.1271 9.24407C13.5876 9.64284 13.5876 10.3572 13.1271 10.7559L9.65465 13.7632C9.00701 14.3241 8 13.864 8 13.0073L8 6.99275C8 6.136 9.00701 5.67594 9.65465 6.23682L13.1271 9.24407Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-triangle-fill-v4-2-0"; }
+  static get registryIs() { return "wpp-icon-triangle-fill-v4-3-0"; }
 };
 WppIconTriangleFill.style = wppIconCss;
 
@@ -172,7 +174,7 @@ const WppTag = class {
       const wasMaxLengthTruncated = !!this.maxLabelLength && this.maxLabelLength > 0 && displayedText !== originalLabel;
       const shouldShowTooltip = this.isOverflowTruncated || wasMaxLengthTruncated;
       const labelNode = (h("span", { class: "label-text", part: "tooltip-text", ref: this.setLabelRef }, displayedText));
-      return shouldShowTooltip ? (h("wpp-tooltip-v4-2-0", { class: "wpp-tooltip", text: originalLabel, config: this.tooltipConfig, part: "tooltip", disabled: this.disabled }, labelNode)) : (labelNode);
+      return shouldShowTooltip ? (h("wpp-tooltip-v4-3-0", { class: "wpp-tooltip", text: originalLabel, config: this.tooltipConfig, part: "tooltip", disabled: this.disabled }, labelNode)) : (labelNode);
     };
     this.hasIconStartSlot = false;
     this.isOverflowTruncated = false;
@@ -199,9 +201,9 @@ const WppTag = class {
     this.resizeObserver?.disconnect();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("wpp-typography-v4-2-0", { class: "wpp-typography", type: "xs-midi", tag: "span", part: "label" }, this.renderLabel()), h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("wpp-typography-v4-3-0", { class: "wpp-typography", type: "xs-midi", tag: "span", part: "label" }, this.renderLabel()), h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
   }
-  static get registryIs() { return "wpp-tag-v4-2-0"; }
+  static get registryIs() { return "wpp-tag-v4-3-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "label": ["onLabelChange"],

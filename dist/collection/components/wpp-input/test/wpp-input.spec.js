@@ -76,7 +76,7 @@ describe('wpp-input', () => {
       const componentWillLoadSpy = jest.spyOn(WppInput.prototype, 'componentWillLoad');
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => h("wpp-input-v4-2-0", null),
+        template: () => h("wpp-input-v4-3-0", null),
       });
       const componentInstance = page.rootInstance;
       await page.waitForChanges();
@@ -93,7 +93,7 @@ describe('wpp-input', () => {
     it('Testing componentDidLoad', async () => {
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => h("wpp-input-v4-2-0", null),
+        template: () => h("wpp-input-v4-3-0", null),
       });
       const inputEl = page.rootInstance;
       const createMaskForInputSpy = jest.spyOn(inputEl, 'createMaskForInput');
@@ -111,7 +111,7 @@ describe('wpp-input', () => {
     it('Testing initial value updating the value property with no mask', async () => {
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => h("wpp-input-v4-2-0", { value: "initial" }),
+        template: () => h("wpp-input-v4-3-0", { value: "initial" }),
       });
       const componentInstance = page.rootInstance;
       await page.waitForChanges();
@@ -123,7 +123,7 @@ describe('wpp-input', () => {
     it('Testing initial value and updating the value property with mask', async () => {
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => (h("wpp-input-v4-2-0", { value: "0722334455", maskOptions: {
+        template: () => (h("wpp-input-v4-3-0", { value: "0722334455", maskOptions: {
             telPatternOptions: {
               countryCode: 'RO',
             },
@@ -140,7 +140,7 @@ describe('wpp-input', () => {
     it('Testing updating locales', async () => {
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => h("wpp-input-v4-2-0", null),
+        template: () => h("wpp-input-v4-3-0", null),
       });
       const componentInstance = page.rootInstance;
       await page.waitForChanges();
@@ -164,7 +164,7 @@ describe('wpp-input', () => {
     it('Testing updating maskOptions', async () => {
       const page = await newSpecPage({
         components: [WppInput],
-        template: () => h("wpp-input-v4-2-0", null),
+        template: () => h("wpp-input-v4-3-0", null),
       });
       const componentInstance = page.rootInstance;
       const createMaskForInputSpy = jest.spyOn(componentInstance, 'createMaskForInput');
@@ -208,7 +208,7 @@ describe('wpp-input', () => {
     };
     const page = await newSpecPage({
       components: [WppInput, WppLabel, WppInternalLabel],
-      template: () => h("wpp-input-v4-2-0", { labelConfig: labelConfig, name: "text-input" }),
+      template: () => h("wpp-input-v4-3-0", { labelConfig: labelConfig, name: "text-input" }),
     });
     await new Promise(resolve => setTimeout(resolve, 100));
     await page.waitForChanges();

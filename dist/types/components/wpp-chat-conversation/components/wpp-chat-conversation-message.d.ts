@@ -38,10 +38,12 @@ export declare class WppChatConversationMessage {
   readonly sourcesActionConfig: ActionButtonDataConfig;
   /**
    * Defines the avatar configuration for the assistant avatar.
+   * @deprecated - The component should no longer render an avatar for the AI model.
    */
   readonly assistantAvatarConfig: AvatarConfig | false;
   /**
    * Defines the avatar configuration for the user avatar.
+   * @deprecated - The component should no longer render an avatar for the user.
    */
   readonly userAvatarConfig: AvatarConfig | false;
   /**
@@ -63,6 +65,7 @@ export declare class WppChatConversationMessage {
   private renderMenuContextListItems;
   private hasTextContent;
   private hostCssClasses;
+  private shouldRenderAvatar;
   private containerCssClasses;
   private contentCssClasses;
   private messageCssClasses;

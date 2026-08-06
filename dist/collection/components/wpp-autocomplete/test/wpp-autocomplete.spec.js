@@ -286,7 +286,7 @@ describe('wpp-autocomplete', () => {
       const getItemKey = (v) => v?.id;
       const page = await newSpecPage({
         components: [WppAutocomplete],
-        template: () => h("wpp-autocomplete-v4-2-0", { type: "extended", multiple: true, getItemKey: getItemKey }),
+        template: () => h("wpp-autocomplete-v4-3-0", { type: "extended", multiple: true, getItemKey: getItemKey }),
       });
       const inst = page.rootInstance;
       const spyUpdate = (inst.updatePlaceholderText = jest.fn());

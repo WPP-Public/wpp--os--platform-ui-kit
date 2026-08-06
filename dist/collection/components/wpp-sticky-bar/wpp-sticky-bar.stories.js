@@ -126,10 +126,10 @@ export const StickyBar = (args) => html `
     <div class="wpp" style="position: sticky; top: 0; z-index: ${Z_INDEX.OS_BAR}; height: 63px; background-color: #ffffff; border-bottom: 1px solid black; display: ${args.offsetFromTop === 0 ? 'none' : 'block'}">
       <!-- Simulates WPP Open OS Bar (external platform, not our library) -->
       <header style="height: 100%">
-        <wpp-typography-v4-2-0 type="2xl-heading">OS-bar</wpp-typography-v4-2-0>
+        <wpp-typography-v4-3-0 type="2xl-heading">OS-bar</wpp-typography-v4-3-0>
       </header>
     </div>
-    <wpp-sticky-bar-v4-2-0
+    <wpp-sticky-bar-v4-3-0
       .variant=${args.variant}
       .barTitle=${args.barTitle}
       .withBackButton=${args.withBackButton}
@@ -139,11 +139,11 @@ export const StickyBar = (args) => html `
       .offsetFromTop=${args.offsetFromTop}
       .tabSize=${args.tabSize}
     >
-      ${args.withContent ? html `<div slot="content"><wpp-typography-v4-2-0 type=${'xl-heading'}>Content</wpp-typography-v4-2-0></div>` : null}
-    </wpp-sticky-bar-v4-2-0>
+      ${args.withContent ? html `<div slot="content"><wpp-typography-v4-3-0 type=${'xl-heading'}>Content</wpp-typography-v4-3-0></div>` : null}
+    </wpp-sticky-bar-v4-3-0>
     <div style="width: 100%; height: 1400px; display: flex; flex-direction: column; align-items: center; padding: 50px; box-sizing: border-box">
         <div style="width: 70%; height: 100%; display: flex; align-items: center; flex-direction: column; box-sizing: border-box; padding: 50px; background: rgb(173 216 230); border: 4px dashed gray; border-radius: 50px; opacity: 0.5">
-            <wpp-typography-v4-2-0 type="2xl-heading">Additional space on page</wpp-typography-v4-2-0>
+            <wpp-typography-v4-3-0 type="2xl-heading">Additional space on page</wpp-typography-v4-3-0>
         </div>
     </<div>
   `;

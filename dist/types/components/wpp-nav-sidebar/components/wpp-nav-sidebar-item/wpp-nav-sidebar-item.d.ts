@@ -80,10 +80,10 @@ export declare class WppNavSidebarItem {
   wppClickExpandedItem: EventEmitter<NavSidebarItemEventDetail>;
   componentWillLoad(): void;
   componentDidLoad(): void;
-  handleExpandedChange(newValue: boolean): void;
   private updateSlotData;
   private handleClickLinkItem;
   private handleClickExpandedItem;
+  private handleExpandedItemKeyDown;
   private navigationWrapperCssClasses;
   private labelCssClasses;
   private iconEndCssClasses;

@@ -11,6 +11,7 @@ import { SegmentedControlChangeEventDetail, SegmentedControlValue, SegmentedCont
  * @part label - Label text element
  */
 export declare class WppSegmentedControl implements BaseComponent, BaseFormControl<SegmentedControlValue> {
+  private firstNonDisabledItem;
   host: HTMLWppSegmentedControlElement;
   previousActiveElement: Element | null;
   /**
@@ -68,6 +69,7 @@ export declare class WppSegmentedControl implements BaseComponent, BaseFormContr
    */
   readonly wppBlur: EventEmitter<FocusEvent>;
   handleChangeSegmentedControlItemClick(event: CustomEvent<SegmentedControlItemChangeEventDetail>): void;
+  handleDisabledChangeSegmentedControlItem(): void;
   /**
    * Resolves the keyboard event target to a segmented control item.
    * Walks up from event.target to handle slotted content (e.g. icon elements).
@@ -83,6 +85,9 @@ export declare class WppSegmentedControl implements BaseComponent, BaseFormContr
   private get _locales();
   private getItems;
   private setSegmentedControlItemsSize;
+  private updateTabIndexOfItem;
+  private clearFirstNonDisabledItem;
+  private handleSlotChange;
   private onFocus;
   private onBlur;
   private cssClasses;

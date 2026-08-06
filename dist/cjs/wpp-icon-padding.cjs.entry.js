@@ -2,8 +2,8 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-ecf423ba.js');
-const WppIcon = require('./WppIcon-55327707.js');
+const index = require('./index-5f5af6a9.js');
+const WppIcon = require('./WppIcon-86481908.js');
 
 const wppIconCss = ":host{display:-ms-inline-flexbox;display:inline-flex;color:var(--wpp-prop-icon-color)}";
 
@@ -26,7 +26,7 @@ const WppIconPadding = class {
   render() {
     return (index.h(WppIcon.WppIcon, { name: "wpp-icon-padding", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { d: PaddingDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-padding-v4-2-0"; }
+  static get registryIs() { return "wpp-icon-padding-v4-3-0"; }
 };
 WppIconPadding.style = wppIconCss;
 

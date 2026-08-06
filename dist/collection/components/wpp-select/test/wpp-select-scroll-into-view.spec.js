@@ -6,7 +6,7 @@ describe('wpp-select: scrollSelectedItemIntoView', () => {
   const renderSingleSelect = async (props = {}) => {
     const page = await newSpecPage({
       components: [WppSelect],
-      template: () => h("wpp-select-v4-2-0", { type: "single", list: MOCK_SINGLE_LIST, value: "car", ...props }),
+      template: () => h("wpp-select-v4-3-0", { type: "single", list: MOCK_SINGLE_LIST, value: "car", ...props }),
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await page.waitForChanges();

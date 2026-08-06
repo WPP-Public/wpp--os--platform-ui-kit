@@ -23,6 +23,11 @@ export declare class WppNavSidebar {
    */
   readonly zIndex: number;
   /**
+   * Accessible name for the navigation landmark, so assistive technology can tell this
+   * navigation apart from others on the page.
+   */
+  readonly navLabel: string;
+  /**
    * Emitted when app routes change, return object like { path: '/home', label: 'Home' }
    */
   wppChange: EventEmitter<NavSidebarItemEventDetail>;

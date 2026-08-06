@@ -2,8 +2,8 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-ecf423ba.js');
-const utils = require('./utils-06b46408.js');
+const index = require('./index-5f5af6a9.js');
+const utils = require('./utils-9529c2fe.js');
 require('./consts-d8f5ef98.js');
 
 const LOCALES_DEFAULTS = {
@@ -69,13 +69,13 @@ const WppPagination = class {
     if (this.count === 0) {
       return null;
     }
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, index.h("div", { class: "control-pagination-wrapper", part: "body" }, !this.hasSingleItemPerPageOption && (index.h(index.Fragment, null, index.h("wpp-typography-v4-2-0", { type: "s-body", part: "per-page-label" }, this._locales.itemsPerPage, ":"), index.h("wpp-select-v4-2-0", { type: "single", isTextSelect: true, onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig }, dropdownWidth: "100px", part: "pre-page-select", list: this.itemsPerPage.map(item => ({
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, index.h("div", { class: "control-pagination-wrapper", part: "body" }, !this.hasSingleItemPerPageOption && (index.h(index.Fragment, null, index.h("wpp-typography-v4-3-0", { type: "s-body", part: "per-page-label" }, this._locales.itemsPerPage, ":"), index.h("wpp-select-v4-3-0", { type: "single", isTextSelect: true, onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig }, dropdownWidth: "100px", part: "pre-page-select", list: this.itemsPerPage.map(item => ({
         value: item,
         label: `${item}`,
         part: 'per-page-item',
-      })) }), index.h("wpp-divider-v4-2-0", { part: "divider" }))), index.h("wpp-typography-v4-2-0", { type: "s-body", part: "range" }, this.getPageRange())), this.selectedItemPerPage && (index.h("wpp-pagination-select-v4-2-0", { count: this.count, itemsPerPage: this.selectedItemPerPage, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, part: "page-select" }))));
+      })) }), index.h("wpp-divider-v4-3-0", { part: "divider" }))), index.h("wpp-typography-v4-3-0", { type: "s-body", part: "range" }, this.getPageRange())), this.selectedItemPerPage && (index.h("wpp-pagination-select-v4-3-0", { count: this.count, itemsPerPage: this.selectedItemPerPage, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, part: "page-select" }))));
   }
-  static get registryIs() { return "wpp-pagination-v4-2-0"; }
+  static get registryIs() { return "wpp-pagination-v4-3-0"; }
 };
 WppPagination.style = wppPaginationCss;
 

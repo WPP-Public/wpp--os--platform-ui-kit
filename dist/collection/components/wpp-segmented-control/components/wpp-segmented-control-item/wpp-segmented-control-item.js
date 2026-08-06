@@ -77,6 +77,9 @@ export class WppSegmentedControlItem {
     this.hugContentOff = false;
     this.ariaProps = undefined;
   }
+  disabledChanged() {
+    this.wppDisabledChangeSegmentedControlItem.emit();
+  }
   connectedCallback() {
     this.themeSubscription.start();
   }
@@ -88,13 +91,16 @@ export class WppSegmentedControlItem {
   get tabIndex() {
     if (this.disabled)
       return -1;
+    if (this.ariaProps?.tab?.tabIndex !== undefined) {
+      return this.ariaProps?.tab?.tabIndex;
+    }
     return this.active ? 0 : -1;
   }
   render() {
     return (h(Host, { id: this.uniqueId, role: "tab", "aria-selected": this.active ? 'true' : 'false', "aria-disabled": this.disabled ? 'true' : null, "aria-controls": this.ariaProps?.tab?.controls, "aria-label": this.ariaProps?.tab?.label, "aria-describedby": this.ariaProps?.tab?.describedby, "data-pressed": this.pressed ? 'true' : null, tabIndex: this.tabIndex, onClick: this.handleClickSegmentedControl, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onBlur: this.onBlur, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, class: this.hostCssClasses(), exportparts: "item" }, h("div", { class: this.cssClasses(), part: "item" }, h(WrappedSlot, { wrapperClass: "content-wrapper" }), this.variant === 'text' && this.counter > 0 && h("div", { class: "counter" }, `(${this.counter})`))));
   }
   static get is() { return "wpp-segmented-control-item"; }
-  static get registryIs() { return "wpp-segmented-control-item-v4-2-0"; }
+  static get registryIs() { return "wpp-segmented-control-item-v4-3-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -247,7 +253,7 @@ export class WppSegmentedControlItem {
         "mutable": false,
         "complexType": {
           "original": "WppSegmentedControlItemAriaProps",
-          "resolved": "undefined | { tab?: Pick<AriaProps, \"label\" | \"describedby\" | \"controls\"> | undefined; }",
+          "resolved": "undefined | { tab?: Pick<AriaProps, \"tabIndex\" | \"label\" | \"describedby\" | \"controls\"> | undefined; }",
           "references": {
             "WppSegmentedControlItemAriaProps": {
               "location": "import",
@@ -333,7 +339,31 @@ export class WppSegmentedControlItem {
             }
           }
         }
+      }, {
+        "method": "wppDisabledChangeSegmentedControlItem",
+        "name": "wppDisabledChangeSegmentedControlItem",
+        "bubbles": false,
+        "cancelable": true,
+        "composed": false,
+        "docs": {
+          "tags": [{
+              "name": "internal",
+              "text": "- This event is consumed by container like Segmented Control, do not rely on it."
+            }],
+          "text": "Emitted when the `disabled` prop changes, so the container can recalculate which item is focusable."
+        },
+        "complexType": {
+          "original": "void",
+          "resolved": "void",
+          "references": {}
+        }
       }];
   }
   static get elementRef() { return "host"; }
+  static get watchers() {
+    return [{
+        "propName": "disabled",
+        "methodName": "disabledChanged"
+      }];
+  }
 }

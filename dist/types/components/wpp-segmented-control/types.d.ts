@@ -16,7 +16,7 @@ export type WppSegmentedControlAriaProps = {
   tablist?: Pick<AriaProps, 'label' | 'labelledby'>;
 };
 export type WppSegmentedControlItemAriaProps = {
-  tab?: Pick<AriaProps, 'label' | 'describedby' | 'controls'>;
+  tab?: Pick<AriaProps, 'label' | 'describedby' | 'controls' | 'tabIndex'>;
 };
 export interface SegmentedControlLocaleInterface {
   tablistLabel?: string;

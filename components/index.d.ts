@@ -229,6 +229,8 @@ export { WppIconBranchReview as WppIconBranchReview } from '../dist/types/compon
 export { defineCustomElement as defineCustomElementWppIconBranchReview } from './wpp-icon-branch-review';
 export { WppIconBtc as WppIconBtc } from '../dist/types/components/wpp-icon/components/content/currencies/wpp-icon-btc/wpp-icon-btc';
 export { defineCustomElement as defineCustomElementWppIconBtc } from './wpp-icon-btc';
+export { WppIconBuilding as WppIconBuilding } from '../dist/types/components/wpp-icon/components/retail/wpp-icon-building/wpp-icon-building';
+export { defineCustomElement as defineCustomElementWppIconBuilding } from './wpp-icon-building';
 export { WppIconBus as WppIconBus } from '../dist/types/components/wpp-icon/components/transport/wpp-icon-bus/wpp-icon-bus';
 export { defineCustomElement as defineCustomElementWppIconBus } from './wpp-icon-bus';
 export { WppIconBusiness as WppIconBusiness } from '../dist/types/components/wpp-icon/components/generic/wpp-icon-business/wpp-icon-business';
@@ -517,6 +519,8 @@ export { WppIconFont as WppIconFont } from '../dist/types/components/wpp-icon/co
 export { defineCustomElement as defineCustomElementWppIconFont } from './wpp-icon-font';
 export { WppIconForward as WppIconForward } from '../dist/types/components/wpp-icon/components/arrows/arrows/wpp-icon-forward/wpp-icon-forward';
 export { defineCustomElement as defineCustomElementWppIconForward } from './wpp-icon-forward';
+export { WppIconFrame as WppIconFrame } from '../dist/types/components/wpp-icon/components/actions/content actions/wpp-icon-frame/wpp-icon-frame';
+export { defineCustomElement as defineCustomElementWppIconFrame } from './wpp-icon-frame';
 export { WppIconFullscreen as WppIconFullscreen } from '../dist/types/components/wpp-icon/components/tools/resize-and-scale/wpp-icon-fullscreen/wpp-icon-fullscreen';
 export { defineCustomElement as defineCustomElementWppIconFullscreen } from './wpp-icon-fullscreen';
 export { WppIconFullscreenMinimise as WppIconFullscreenMinimise } from '../dist/types/components/wpp-icon/components/tools/resize-and-scale/wpp-icon-fullscreen-minimise/wpp-icon-fullscreen-minimise';
@@ -899,6 +903,8 @@ export { WppIconShopping as WppIconShopping } from '../dist/types/components/wpp
 export { defineCustomElement as defineCustomElementWppIconShopping } from './wpp-icon-shopping';
 export { WppIconShutDown as WppIconShutDown } from '../dist/types/components/wpp-icon/components/actions/content actions/wpp-icon-shut-down/wpp-icon-shut-down';
 export { defineCustomElement as defineCustomElementWppIconShutDown } from './wpp-icon-shut-down';
+export { WppIconSidebar as WppIconSidebar } from '../dist/types/components/wpp-icon/components/actions/content actions/wpp-icon-sidebar/wpp-icon-sidebar';
+export { defineCustomElement as defineCustomElementWppIconSidebar } from './wpp-icon-sidebar';
 export { WppIconSmartwatch as WppIconSmartwatch } from '../dist/types/components/wpp-icon/components/media/media-channels-and-devices/wpp-icon-smartwatch/wpp-icon-smartwatch';
 export { defineCustomElement as defineCustomElementWppIconSmartwatch } from './wpp-icon-smartwatch';
 export { WppIconSmile as WppIconSmile } from '../dist/types/components/wpp-icon/components/content/emoji/wpp-icon-smile/wpp-icon-smile';
@@ -1209,6 +1215,8 @@ export { WppSelect as WppSelect } from '../dist/types/components/wpp-select/wpp-
 export { defineCustomElement as defineCustomElementWppSelect } from './wpp-select';
 export { WppSideModal as WppSideModal } from '../dist/types/components/wpp-side-modal/wpp-side-modal';
 export { defineCustomElement as defineCustomElementWppSideModal } from './wpp-side-modal';
+export { WppSidePanel as WppSidePanel } from '../dist/types/components/wpp-side-panel/wpp-side-panel';
+export { defineCustomElement as defineCustomElementWppSidePanel } from './wpp-side-panel';
 export { WppSkeleton as WppSkeleton } from '../dist/types/components/wpp-skeleton/wpp-skeleton';
 export { defineCustomElement as defineCustomElementWppSkeleton } from './wpp-skeleton';
 export { WppSlider as WppSlider } from '../dist/types/components/wpp-slider/wpp-slider';

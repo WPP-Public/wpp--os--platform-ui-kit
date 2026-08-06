@@ -2,6 +2,7 @@ export interface AvatarState {
   name: string;
   src?: string;
   color?: string;
+  icon?: string;
   interactable?: boolean;
 }
 export interface UserState {

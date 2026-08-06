@@ -68,6 +68,7 @@ const WppNavSidebar$1 = /*@__PURE__*/ proxyCustomElement(class WppNavSidebar ext
     this.activePath = undefined;
     this.nativeLink = false;
     this.zIndex = Z_INDEX.NAV_SIDEBAR;
+    this.navLabel = 'Main navigation';
   }
   handleActivePathChange(newValue) {
     this.setActiveItem(newValue);
@@ -93,26 +94,27 @@ const WppNavSidebar$1 = /*@__PURE__*/ proxyCustomElement(class WppNavSidebar ext
     this.themeSubscription.stop();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "nav-sidebar, body, header-wrapper, header, ws-wrapper, ws-inner" }, h("aside", { class: this.asideCssClasses(), part: "nav-sidebar" }, h("div", { class: "nav-wrapper", part: "body" }, h(WrappedSlot, { wrapperClass: "title-wrapper", name: "header" }), h(WrappedSlot, { wrapperClass: "items-wrapper" })))));
+    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "nav-sidebar, body, header-wrapper, header, ws-wrapper, ws-inner" }, h("aside", { class: this.asideCssClasses(), part: "nav-sidebar" }, h("nav", { class: "nav-wrapper", part: "body", "aria-label": this.navLabel }, h(WrappedSlot, { wrapperClass: "title-wrapper", name: "header" }), h(WrappedSlot, { wrapperClass: "items-wrapper" })))));
   }
-  static get registryIs() { return "wpp-nav-sidebar-v4-2-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-v4-3-0"; }
   get host() { return this; }
   static get watchers() { return {
     "activePath": ["handleActivePathChange"]
   }; }
   static get style() { return wppNavSidebarCss; }
-}, [1, "wpp-nav-sidebar", "wpp-nav-sidebar-v4-2-0", {
+}, [1, "wpp-nav-sidebar", "wpp-nav-sidebar-v4-3-0", {
     "activePath": [1, "active-path"],
     "nativeLink": [4, "native-link"],
-    "zIndex": [2, "z-index"]
+    "zIndex": [2, "z-index"],
+    "navLabel": [1, "nav-label"]
   }, [[2, "wppClickSidebarItem", "handleItemClick"], [2, "wppClickExpandedItem", "handleExpandedClick"]]]);
 function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-nav-sidebar-v4-2-0"];
+  const components = ["wpp-nav-sidebar-v4-3-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-nav-sidebar-v4-2-0":
+    case "wpp-nav-sidebar-v4-3-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppNavSidebar$1);
       }

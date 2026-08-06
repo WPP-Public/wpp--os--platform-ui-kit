@@ -59,7 +59,7 @@
 :host(.wpp-menu-context-wrapper) .trigger-wrapper.nested {
   border-radius: var(--mc-nested-wrapper-border-radius);
 }
-:host(.wpp-menu-context-wrapper) .trigger-wrapper.nested[aria-expanded=true] {
+:host(.wpp-menu-context-wrapper) .trigger-wrapper.nested[data-expanded=true] {
   background-color: var(--mc-item-bg-color-active);
 }
 :host(.wpp-menu-context-wrapper) .wpp-list {

@@ -50,6 +50,8 @@ export declare class WppNavigationItem {
   private onClick;
   private navItemCssClasses;
   private hostCssClasses;
+  private getHostRole;
+  private getAccessibleName;
   private linkItem;
   private listItem;
   private menuItem;

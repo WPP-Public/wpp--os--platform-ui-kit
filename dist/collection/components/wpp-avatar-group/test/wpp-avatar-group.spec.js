@@ -39,7 +39,7 @@ describe('wpp-avatar-group', () => {
     ];
     const page = await newSpecPage({
       components: [WppAvatarGroup],
-      template: () => h("wpp-avatar-group-v4-2-0", { avatars: avatars }),
+      template: () => h("wpp-avatar-group-v4-3-0", { avatars: avatars }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -103,6 +103,29 @@ describe('wpp-avatar-group', () => {
     expect(result[1].color).toBe(AVATAR_COLORS_VARIANTS[1]);
     expect(result[2].color).toBe(undefined);
     expect(result[3].color).toBe('red');
+  });
+  it('should not assign a generated color to icon avatars', async () => {
+    const page = await newSpecPage({
+      components: [WppAvatarGroup],
+      html: `<wpp-avatar-group></wpp-avatar-group>`,
+    });
+    const instance = page.rootInstance;
+    const avatars = [
+      { name: 'Icon', src: undefined, color: undefined, icon: 'wpp-icon-premium' },
+      { name: 'Plain', src: undefined, color: undefined },
+    ];
+    const result = instance['getAvatarsWithColors']([...avatars]);
+    expect(result[0].color).toBe(undefined);
+    expect(result[1].color).toBe(AVATAR_COLORS_VARIANTS[0]);
+  });
+  it('should forward the icon prop to the rendered avatar', async () => {
+    const page = await newSpecPage({
+      components: [WppAvatarGroup],
+      template: () => (h("wpp-avatar-group-v4-3-0", { variant: "square", avatars: [{ name: 'Premium', icon: 'wpp-icon-premium' }] })),
+    });
+    await page.waitForChanges();
+    const avatar = page.root?.shadowRoot?.querySelector('wpp-avatar');
+    expect(avatar?.getAttribute('icon')).toBe('wpp-icon-premium');
   });
   it('should assign colors and cycle when index exceeds AVATAR_COLORS_VARIANTS length', async () => {
     const page = await newSpecPage({
@@ -253,7 +276,7 @@ describe('wpp-avatar-group', () => {
       ];
       const page = await newSpecPage({
         components: [WppAvatarGroup],
-        template: () => h("wpp-avatar-group-v4-2-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
+        template: () => h("wpp-avatar-group-v4-3-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
       });
       await page.waitForChanges();
       const listItemC = page.root?.shadowRoot?.querySelector('wpp-list-item[value="C"]');
@@ -274,7 +297,7 @@ describe('wpp-avatar-group', () => {
       ];
       const page = await newSpecPage({
         components: [WppAvatarGroup],
-        template: () => h("wpp-avatar-group-v4-2-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
+        template: () => h("wpp-avatar-group-v4-3-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
       });
       await page.waitForChanges();
       const listItemC = page.root?.shadowRoot?.querySelector('wpp-list-item[value="C"]');
@@ -295,7 +318,7 @@ describe('wpp-avatar-group', () => {
       ];
       const page = await newSpecPage({
         components: [WppAvatarGroup],
-        template: () => h("wpp-avatar-group-v4-2-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
+        template: () => h("wpp-avatar-group-v4-3-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
       });
       await page.waitForChanges();
       const listItemC = page.root?.shadowRoot?.querySelector('wpp-list-item[value="C"]');

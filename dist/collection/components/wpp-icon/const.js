@@ -102,6 +102,9 @@ export const iconsList = [
             name: 'flag-on',
           },
           {
+            name: 'frame',
+          },
+          {
             name: 'hand-draw',
           },
           {
@@ -198,6 +201,9 @@ export const iconsList = [
             name: 'shut-down',
           },
           {
+            name: 'sidebar',
+          },
+          {
             name: 'sync',
           },
           {
@@ -284,9 +290,6 @@ export const iconsList = [
           },
           {
             name: 'record',
-          },
-          {
-            name: 'record-stop',
           },
           {
             name: 'cut',
@@ -1600,6 +1603,9 @@ export const iconsList = [
           },
           {
             name: 'pharmacy',
+          },
+          {
+            name: 'building',
           },
         ],
       },

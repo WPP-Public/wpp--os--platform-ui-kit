@@ -11,7 +11,7 @@
   box-shadow: var(--wpp-box-shadow-m);
 }
 :host .artefact-wrapper.is-selected {
-  border: 1px solid var(--wpp-primary-color-500);
+  border: var(--wpp-border-width-s) solid var(--wpp-primary-color-500);
 }
 :host .artefact-wrapper.is-selected .artefact-body {
   min-height: 149px;
@@ -73,9 +73,7 @@
   min-height: 151px;
   max-height: 1070px;
   box-sizing: border-box;
-  padding: 16px 6px 16px 16px;
   overflow-y: auto;
-  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: var(--wpp-grey-color-400) transparent;
 }

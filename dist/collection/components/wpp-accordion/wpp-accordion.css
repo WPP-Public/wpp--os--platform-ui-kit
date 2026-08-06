@@ -28,10 +28,6 @@
   * @prop --wpp-accordion-second-border-color-focus:
 */
 :host {
-  --accordion-actions-wrapper-left-margin: var(--wpp-accordion-actions-wrapper-left-margin, 8px);
-  --accordion-counter-font-weight: var(--wpp-accordion-counter-font-weight, 400);
-  --accordion-counter-font-size: var(--wpp-accordion-counter-font-size, 16px);
-  --accordion-counter-height: var(--wpp-accordion-counter-height, 24px);
   --accordion-margin-s: var(--wpp-accordion-margin-s, 7px 0);
   --accordion-margin-m: var(--wpp-accordion-margin-m, 11px 0);
   --accordion-margin-l: var(--wpp-accordion-margin-l, 15px 0);
@@ -138,13 +134,19 @@
   outline: none;
   flex-grow: 1;
 }
-:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper.tab-focus {
+:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper:focus-visible::before, :host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper.tab-focus::before {
   border-radius: 3px;
   outline: none;
   box-shadow: 0 0 0 1px var(--accordion-first-border-color-focus), 0 0 0 3px var(--accordion-second-border-color-focus);
 }
-:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper:focus-visible .title-wrapper .wpp-icon-chevron,
-:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .tab-focus .title-wrapper .wpp-icon-chevron {
+:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 3px;
+  pointer-events: none;
+}
+:host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper:focus-visible .title-wrapper .wpp-icon-chevron, :host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper.tab-focus .title-wrapper .wpp-icon-chevron {
   color: var(--accordion-icon-color-hover) !important;
 }
 :host(.wpp-section-wrapper) .wpp-section .title-tags-wrapper .title-wrapper {
