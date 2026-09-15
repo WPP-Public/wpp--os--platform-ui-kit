@@ -292,6 +292,61 @@ export function getOsBarOffsetHeight() {
 export function mergeLocales(defaults, overrides) {
   return { ...defaults, ...overrides };
 }
+let cachedScrollbarGutterWidth = null;
+/**
+ * Width the platform reserves in layout for a scrollbar, in px.
+ *
+ * Measured against `scrollbar-width: thin` + `scrollbar-gutter: stable`, which is what the modal
+ * bodies declare. A scroll container's content box shrinks by this amount, so a declared
+ * horizontal padding renders asymmetrically: the scrollbar side gains the gutter. Callers subtract
+ * this value to keep the designed inset symmetric on every platform.
+ *
+ * Measured once from an offscreen probe and cached — it cannot change without a restart.
+ */
+export const getScrollbarGutterWidth = () => {
+  if (cachedScrollbarGutterWidth !== null)
+    return cachedScrollbarGutterWidth;
+  if (typeof document === 'undefined' || !document.body)
+    return 0;
+  const probe = document.createElement('div');
+  // The probe must declare exactly what the consuming components declare — that is the
+  // `scrollbarThin` mixin in `global/scrollbar.scss`, so a scrollbar width change there has to be
+  // mirrored here — or it measures the wrong number twice over:
+  //   - without `scrollbar-width: thin` it reports the platform default (~15px), not the thin one
+  //   - without `scrollbar-gutter: stable` it reports overlay behaviour (0px) on macOS, even though
+  //     `stable` makes those platforms reserve a real gutter anyway
+  probe.style.cssText =
+    'position:absolute;top:-9999px;left:-9999px;width:100px;height:100px;' +
+      'overflow-y:auto;scrollbar-width:thin;scrollbar-gutter:stable;';
+  document.body.appendChild(probe);
+  // Environments without layout — Stencil's mock-doc in specs, and server-side hydration — leave
+  // offsetWidth/clientWidth undefined, which would make this NaN and emit an invalid `NaNpx` CSS
+  // value that silently drops the declaration using it. Fall back to 0, which is inert.
+  const measured = probe.offsetWidth - probe.clientWidth;
+  cachedScrollbarGutterWidth = Number.isFinite(measured) && measured > 0 ? measured : 0;
+  probe.remove();
+  return cachedScrollbarGutterWidth;
+};
+/**
+ * Generate a DOM-unique id for content that is portaled into shared light DOM
+ * (e.g. a tippy dropdown appended to `document.body`). Ids from different
+ * component instances — or from different CL versions coexisting on one page
+ * under SingleSPA — would otherwise collide there. Prefers `crypto.randomUUID`
+ * and falls back to `Math.random` where it is unavailable (older/SSR runtimes),
+ * via optional chaining so it never throws.
+ */
+export const uniquePortalId = (prefix) => `${prefix}-${globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2, 10)}`;
+/**
+ * Keyboard-activation handler for elements given `role="button"` (e.g. icons)
+ * that have no native Enter/Space activation. Runs `handler` on Enter or Space
+ * and prevents the default (page scroll on Space).
+ */
+export const activateOnEnterOrSpace = (handler) => (event) => {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    handler(event);
+  }
+};
 export const getAriaProps = (ariaProps) => {
   const result = {};
   Object.entries(ariaProps).forEach(([key, val]) => {

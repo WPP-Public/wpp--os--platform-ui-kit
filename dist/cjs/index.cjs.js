@@ -3,12 +3,12 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const consts = require('./consts-d8f5ef98.js');
-const utils = require('./utils-9529c2fe.js');
+const utils = require('./utils-a6513d61.js');
 const types = require('./types-332b969c.js');
 const types$1 = require('./types-05f8f988.js');
 const types$2 = require('./types-7010056a.js');
 const types$3 = require('./types-18fdc89e.js');
-const index = require('./index-31c1a657.js');
+const index = require('./index-7f49a24b.js');
 const types$4 = require('./types-2185a602.js');
 const types$5 = require('./types-391abf05.js');
 
@@ -130,6 +130,7 @@ Object.defineProperty(exports, 'Z_INDEX', {
     return consts.Z_INDEX;
   }
 });
+exports.activateOnEnterOrSpace = utils.activateOnEnterOrSpace;
 exports.applyBodyStylesIfNeeded = utils.applyBodyStylesIfNeeded;
 exports.areSetsEqual = utils.areSetsEqual;
 exports.autoFocusElement = utils.autoFocusElement;
@@ -143,6 +144,7 @@ exports.getHasFocused = utils.getHasFocused;
 exports.getHighestContainerInDOM = utils.getHighestContainerInDOM;
 exports.getHighlightData = utils.getHighlightData;
 exports.getOsBarOffsetHeight = utils.getOsBarOffsetHeight;
+exports.getScrollbarGutterWidth = utils.getScrollbarGutterWidth;
 exports.getSlotEmptyStates = utils.getSlotEmptyStates;
 exports.hasParentWithId = utils.hasParentWithId;
 exports.hasShadowDom = utils.hasShadowDom;
@@ -156,6 +158,7 @@ exports.setHasFocused = utils.setHasFocused;
 exports.toKebabCase = utils.toKebabCase;
 exports.transformToVersionedTag = utils.transformToVersionedTag;
 exports.truncate = utils.truncate;
+exports.uniquePortalId = utils.uniquePortalId;
 exports.uuidv4 = utils.uuidv4;
 Object.defineProperty(exports, 'ScrollState', {
   enumerable: true,

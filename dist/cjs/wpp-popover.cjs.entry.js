@@ -6,10 +6,11 @@ const index = require('./index-5f5af6a9.js');
 const isEqual = require('./isEqual-c003d7ce.js');
 const menuListConfig = require('./menuListConfig-ec0bf6d4.js');
 const consts = require('./consts-d8f5ef98.js');
-const utils = require('./utils-9529c2fe.js');
-const subscribeToTheme = require('./subscribe-to-theme-1879a649.js');
+const utils = require('./utils-a6513d61.js');
+const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
 require('./_commonjsHelpers-bcc1208a.js');
 require('./tippy.esm-9d703cd4.js');
+require('./theme-observer-4179316e.js');
 
 const DEFAULT_POPOVER_LOCALES = {
   searchInputPlaceholder: 'Search',
@@ -217,9 +218,9 @@ const WppPopover = class {
   }
   render() {
     const locales = this.mergedLocales;
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: this.exportParts() }, index.h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref) }, index.h("slot", { name: "trigger-element", part: "trigger-element", onSlotchange: this.handleTriggerSlotChange })), index.h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-label": this.ariaProps.label, "aria-modal": "true" }, this.withSearch && (index.h("wpp-input-v4-3-0", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: locales.searchInputPlaceholder, type: "search", size: "m" })), !this.withSearch && this.closable && (index.h("wpp-action-button-v4-3-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, index.h("wpp-icon-cross-v4-3-0", { slot: "icon-end" }))), index.h("slot", null), (this.showClearButton || this.hasFooterActions) && (index.h("div", { class: "wpp-popover-footer", part: "footer", ref: footerEl => (this.footerEl = footerEl) }, index.h("div", { class: "wpp-popover-clear-action" }, this.showClearButton && (index.h("wpp-action-button-v4-3-0", { variant: "secondary", onClick: this.handleClearButtonClick }, locales.clearText))), index.h("div", { class: "wpp-popover-footer-actions", part: "footer-actions", ref: footerActionsEl => (this.footerActionsEl = footerActionsEl) }, index.h("slot", { name: "actions", onSlotchange: this.updateSlotData })))))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: this.exportParts() }, index.h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref) }, index.h("slot", { name: "trigger-element", part: "trigger-element", onSlotchange: this.handleTriggerSlotChange })), index.h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-label": this.ariaProps.label, "aria-modal": "true" }, this.withSearch && (index.h("wpp-input-v4-4-0", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: locales.searchInputPlaceholder, type: "search", size: "m" })), !this.withSearch && this.closable && (index.h("wpp-action-button-v4-4-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, index.h("wpp-icon-cross-v4-4-0", { slot: "icon-end" }))), index.h("slot", null), (this.showClearButton || this.hasFooterActions) && (index.h("div", { class: "wpp-popover-footer", part: "footer", ref: footerEl => (this.footerEl = footerEl) }, index.h("div", { class: "wpp-popover-clear-action" }, this.showClearButton && (index.h("wpp-action-button-v4-4-0", { variant: "secondary", onClick: this.handleClearButtonClick }, locales.clearText))), index.h("div", { class: "wpp-popover-footer-actions", part: "footer-actions", ref: footerActionsEl => (this.footerActionsEl = footerActionsEl) }, index.h("slot", { name: "actions", onSlotchange: this.updateSlotData })))))));
   }
-  static get registryIs() { return "wpp-popover-v4-3-0"; }
+  static get registryIs() { return "wpp-popover-v4-4-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "config": ["updateConfig"]

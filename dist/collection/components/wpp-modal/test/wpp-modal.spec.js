@@ -18,11 +18,38 @@ describe('wpp-modal', () => {
   it('Should render open modal', async () => {
     const page = await newSpecPage({
       components: [WppModal],
-      html: `<wpp-modal is-open=${true}></wpp-modal>`,
+      html: `<wpp-modal open></wpp-modal>`,
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     await page.waitForChanges();
+    // `is-open` is not a real attribute, so this used to snapshot a closed modal.
+    expect(page.root?.shadowRoot?.querySelector('.modal')).toHaveClass('visible');
     expect(page.root).toMatchSnapshot();
+  });
+});
+describe('wpp-modal accessible name', () => {
+  it('derives the dialog name from the header slot and emits no dangling IDREF', async () => {
+    const page = await newSpecPage({
+      components: [WppModal],
+      html: `<wpp-modal open><div slot="header">Delete report</div></wpp-modal>`,
+    });
+    expect(page.root).toEqualAttribute('aria-label', 'Delete report');
+    expect(page.root?.hasAttribute('aria-labelledby')).toBe(false);
+  });
+  it('honours a consumer supplied ariaProps.labelledby instead of deriving a name', async () => {
+    const page = await newSpecPage({
+      components: [WppModal],
+      template: () => (h("wpp-modal-v4-4-0", { open: true, ariaProps: { role: 'dialog', labelledby: 'their-title' } }, h("div", { slot: "header" }, "Delete report"))),
+    });
+    expect(page.root).toEqualAttribute('aria-labelledby', 'their-title');
+    expect(page.root?.hasAttribute('aria-label')).toBe(false);
+  });
+  it('honours a consumer supplied ariaProps.label', async () => {
+    const page = await newSpecPage({
+      components: [WppModal],
+      template: () => (h("wpp-modal-v4-4-0", { open: true, ariaProps: { role: 'dialog', label: 'Their label' } }, h("div", { slot: "header" }, "Delete report"))),
+    });
+    expect(page.root).toEqualAttribute('aria-label', 'Their label');
   });
 });
 describe('wpp-modal minimal coverage', () => {
@@ -235,7 +262,7 @@ describe('wpp-modal osBarCompatible', () => {
     const spy = jest.spyOn(utils, 'getOsBarOffsetHeight').mockReturnValue(72);
     const page = await newSpecPage({
       components: [WppModal],
-      template: () => h("wpp-modal-v4-3-0", { osBarCompatible: true }),
+      template: () => h("wpp-modal-v4-4-0", { osBarCompatible: true }),
     });
     expect(page.root?.style.getPropertyValue('--wpp-modal-top-offset')).toBe('72px');
     spy.mockRestore();
@@ -243,7 +270,7 @@ describe('wpp-modal osBarCompatible', () => {
   it('applies wpp-os-bar-compatible CSS class when osBarCompatible is true', async () => {
     const page = await newSpecPage({
       components: [WppModal],
-      template: () => h("wpp-modal-v4-3-0", { osBarCompatible: true }),
+      template: () => h("wpp-modal-v4-4-0", { osBarCompatible: true }),
     });
     expect(page.root).toHaveClass('wpp-os-bar-compatible');
   });
@@ -258,7 +285,7 @@ describe('wpp-modal osBarCompatible', () => {
     const spy = jest.spyOn(utils, 'getOsBarOffsetHeight').mockReturnValue(64);
     const page = await newSpecPage({
       components: [WppModal],
-      template: () => h("wpp-modal-v4-3-0", { osBarCompatible: true }),
+      template: () => h("wpp-modal-v4-4-0", { osBarCompatible: true }),
     });
     expect(page.root?.style.getPropertyValue('--wpp-modal-top-offset')).toBe('64px');
     spy.mockRestore();
@@ -297,7 +324,7 @@ describe('wpp-modal osBarCompatible', () => {
     it('Should render only 1 button in the actions section', async () => {
       const page = await newSpecPage({
         components: [WppModal],
-        template: () => (h("wpp-modal-v4-3-0", { actionsConfig: {
+        template: () => (h("wpp-modal-v4-4-0", { actionsConfig: {
             primaryButtonConfig: {
               variant: 'primary',
               label: 'Submit',
@@ -312,7 +339,7 @@ describe('wpp-modal osBarCompatible', () => {
     it('Should render 2 buttons in the actions section', async () => {
       const page = await newSpecPage({
         components: [WppModal],
-        template: () => (h("wpp-modal-v4-3-0", { actionsConfig: {
+        template: () => (h("wpp-modal-v4-4-0", { actionsConfig: {
             primaryButtonConfig: {
               variant: 'primary',
               label: 'Submit',
@@ -331,7 +358,7 @@ describe('wpp-modal osBarCompatible', () => {
     it('Should render the `actions` slot when there is no `actionsConfig` provided', async () => {
       const page = await newSpecPage({
         components: [WppModal],
-        template: () => h("wpp-modal-v4-3-0", null),
+        template: () => h("wpp-modal-v4-4-0", null),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       await page.waitForChanges();

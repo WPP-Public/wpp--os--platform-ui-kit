@@ -218,6 +218,25 @@ describe('wpp-list-item', () => {
     await page.waitForChanges();
     expect(page.root?.shadowRoot?.querySelector('.item')?.classList.contains('interaction-active')).toBe(false);
   });
+  it('drops the pressed state when focus leaves while the key is still down', async () => {
+    const page = await newSpecPage({
+      components: [WppListItem],
+      html: `<wpp-list-item value="keyboard-item">
+               <p slot="label">Text</p>
+             </wpp-list-item>`,
+    });
+    await new Promise(resolve => setTimeout(resolve, 100));
+    await page.waitForChanges();
+    page.root?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+    await page.waitForChanges();
+    expect(page.root?.shadowRoot?.querySelector('.item')?.classList.contains('interaction-active')).toBe(true);
+    // A listbox that advances the highlight on selection (the time picker moves from hours to
+    // minutes) takes focus away before keyup, so the keyup lands on the next item. Without
+    // clearing here the item stays visibly pressed for good.
+    page.root?.dispatchEvent(new FocusEvent('blur', { bubbles: true }));
+    await page.waitForChanges();
+    expect(page.root?.shadowRoot?.querySelector('.item')?.classList.contains('interaction-active')).toBe(false);
+  });
   it('finishes mounting when the host menu sets container-state="tooltipTrigger" while still loading', async () => {
     const page = await newSpecPage({
       components: [WppListItem],

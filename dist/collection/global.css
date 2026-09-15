@@ -1,3 +1,5 @@
+@charset "UTF-8";
+/* air-datepicker:start */
 .air-datepicker-cell.-year-.-other-decade-, .air-datepicker-cell.-day-.-other-month- {
   color: var(--adp-color-other-month);
 }
@@ -777,11 +779,22 @@
   transition: opacity var(--adp-overlay-transition-duration) var(--adp-overlay-transition-ease), height 0s, width 0s;
 }
 
+/* air-datepicker:end */
 /* stylelint-disable no-invalid-position-at-import-rule */
 .wpp-datepicker-portal[data-wpp-theme=dark] {
   --wpp-datepicker-bg-color: var(--wpp-grey-color-200);
 }
 
+/*
+ * Double calendar (`withDoubleCalendar`) — Figma "Days double" / "Presets=On, Double=Yes".
+ * Column of [rail | calendars] row, full-width divider, then a full-width actions row.
+ * 616 = 136 rail + 480 calendars; 480 = 8 + 224 + 16 + 224 + 8.
+ *
+ * Lives in a mixin because the popup variant escapes the shadow root: tippy re-parents the
+ * portal into document.body, where `:host`-scoped component styles no longer reach it. So this
+ * has to be applied both in wpp-datepicker.scss (static, still in the shadow root) and in
+ * global.scss (popup) — the same split the air-datepicker and datepicker-presets mixins use.
+ */
 :root {
   --autocomplete-dropdown-max-height: var(--wpp-autocomplete-dropdown-max-height, 372px);
 }
@@ -1206,6 +1219,7 @@
     * @prop --wpp-datepicker-border-radius:
     * @prop --wpp-datepicker-z-index:
     * @prop --wpp-datepicker-buttons-height:
+    * @prop --wpp-datepicker-nav-control-height:
     * @prop --wpp-datepicker-title-margin:
     * @prop --wpp-datepicker-label-margin:
     * @prop --wpp-datepicker-cancel-button-color-disabled:
@@ -1267,6 +1281,7 @@
   --datepicker-border-radius: var(--wpp-datepicker-border-radius, var(--wpp-border-radius-m));
   --datepicker-z-index: var(--wpp-datepicker-z-index, 940);
   --datepicker-buttons-height: var(--wpp-datepicker-buttons-height, 48px);
+  --datepicker-nav-control-height: var(--wpp-datepicker-nav-control-height, 32px);
   --datepicker-title-margin: var(--wpp-datepicker-title-margin, 0 0 0 4px);
   --datepicker-label-margin: var(--wpp-datepicker-label-margin, 0 0 8px 0);
   --datepicker-cancel-button-color-disabled: var(
@@ -1336,6 +1351,10 @@
   --wpp-datepicker-month-year-current-active-bg: color-mix(in srgb, var(--wpp-grey-color-800) 18%, transparent);
   min-width: var(--datepicker-min-width);
   display: flex;
+  /* The popup portal is re-parented into document.body by tippy, so the component's
+     shadow-scoped copy of this layout never reaches it — it has to be applied here too.
+     Declared after .wpp-with-presets so the double-calendar rail wins over the
+     single-calendar preset styles at equal specificity. */
 }
 .wpp-datepicker-portal.portal-datepicker .label {
   margin: var(--datepicker-label-margin);
@@ -1549,6 +1568,14 @@
   color: var(--wpp-grey-color-800);
   text-transform: initial;
 }
+.wpp-datepicker-portal.portal-datepicker .air-datepicker-nav--title,
+.wpp-datepicker-portal.portal-datepicker .air-datepicker-nav--action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: var(--datepicker-nav-control-height);
+}
 .wpp-datepicker-portal.portal-datepicker .air-datepicker-nav--title {
   font-size: var(--wpp-typography-s-strong-font-size, 14px);
   line-height: var(--wpp-typography-s-strong-line-height, 22px);
@@ -1558,7 +1585,7 @@
   letter-spacing: var(--wpp-typography-s-strong-letter-spacing, 0);
   color: var(--datepicker-title-color);
 }
-.wpp-datepicker-portal.portal-datepicker .air-datepicker-nav--title:hover {
+.wpp-datepicker-portal.portal-datepicker .air-datepicker-nav--title:hover, .wpp-datepicker-portal.portal-datepicker .air-datepicker-nav--title:focus-visible {
   background: var(--wpp-grey-color-200);
 }
 .wpp-datepicker-portal.portal-datepicker .air-datepicker-nav--title:active {
@@ -1597,8 +1624,16 @@
 .wpp-datepicker-portal.portal-datepicker .air-datepicker-buttons {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* Both actions sit together on the right, as the design has them — they used to be pushed
+     to opposite ends of the row. */
+  justify-content: flex-end;
+  gap: 4px;
   width: 100%;
+  /* Hover and press follow the design system's secondary (ghost) button — grey-700 at 12%
+     and grey-800 at 18% — rather than air-datepicker's own `--adp-btn-*` greys, which are a
+     flat, more saturated fill. The radius stays at the datepicker's own 4px rather than the
+     ghost button's 6px, matching the other parts of the calendar. Keeps this row identical
+     to the double calendar's, which renders its own actions outside `.air-datepicker`. */
 }
 .wpp-datepicker-portal.portal-datepicker .air-datepicker-buttons .air-datepicker-button {
   font-size: var(--wpp-typography-s-strong-font-size, 14px);
@@ -1607,6 +1642,16 @@
   color: var(--wpp-typography-s-strong-color, var(--wpp-text-color));
   font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-strong-letter-spacing, 0);
+  border-radius: var(--wpp-border-radius-xs);
+}
+.wpp-datepicker-portal.portal-datepicker .air-datepicker-buttons .air-datepicker-button:focus {
+  background: transparent;
+}
+.wpp-datepicker-portal.portal-datepicker .air-datepicker-buttons .air-datepicker-button:hover, .wpp-datepicker-portal.portal-datepicker .air-datepicker-buttons .air-datepicker-button:focus-visible {
+  background: color-mix(in srgb, var(--wpp-grey-color-700) 12%, transparent);
+}
+.wpp-datepicker-portal.portal-datepicker .air-datepicker-buttons .air-datepicker-button:active {
+  background: color-mix(in srgb, var(--wpp-grey-color-800) 18%, transparent);
 }
 .wpp-datepicker-portal.portal-datepicker .air-datepicker-buttons .button-apply {
   margin: var(--datepicker-buttons-margin) !important;
@@ -1626,13 +1671,20 @@
 .wpp-datepicker-portal.portal-datepicker .air-datepicker-buttons .button-clear {
   padding: var(--datepicker-button-padding) !important;
   color: var(--datepicker-cancel-button-color-active);
+  /* air-datepicker's base rule recolours the label on hover; the design keeps it. */
 }
 .wpp-datepicker-portal.portal-datepicker .air-datepicker-buttons .button-clear.disabled {
   color: var(--wpp-text-color-disabled);
   pointer-events: none;
 }
-.wpp-datepicker-portal.portal-datepicker .air-datepicker-nav--action:hover {
-  background-color: transparent;
+.wpp-datepicker-portal.portal-datepicker .air-datepicker-buttons .button-clear:hover {
+  color: var(--datepicker-cancel-button-color-active);
+}
+.wpp-datepicker-portal.portal-datepicker .air-datepicker-buttons .button-clear:active {
+  color: var(--wpp-grey-color-1000);
+}
+.wpp-datepicker-portal.portal-datepicker .air-datepicker-nav--action:hover .nav-icon, .wpp-datepicker-portal.portal-datepicker .air-datepicker-nav--action:focus-visible .nav-icon {
+  color: var(--datepicker-close-icon-color-hover);
 }
 .wpp-datepicker-portal.portal-datepicker .nav-icon {
   color: var(--datepicker-close-icon-color);
@@ -1661,6 +1713,22 @@
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
   font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
+}
+.wpp-datepicker-portal.portal-datepicker .air-datepicker-cell:focus-visible,
+.wpp-datepicker-portal.portal-datepicker .air-datepicker-nav--action:focus-visible,
+.wpp-datepicker-portal.portal-datepicker .air-datepicker-nav--title:focus-visible,
+.wpp-datepicker-portal.portal-datepicker .air-datepicker-button:focus-visible {
+  position: relative;
+  z-index: 2;
+  outline: none;
+  box-shadow: 0 0 0 1px var(--datepicker-input-first-border-color-focus), 0 0 0 3px var(--datepicker-input-second-border-color-focus);
+}
+.wpp-datepicker-portal.portal-datepicker .air-datepicker-cell:focus-visible:not(.-selected-, .-in-range-, .-disabled-) {
+  background-color: var(--datepicker-cell-bg-color-hover);
+}
+.wpp-datepicker-portal.portal-datepicker .air-datepicker .air-datepicker-cell.-disabled-.-in-range-, .wpp-datepicker-portal.portal-datepicker .air-datepicker .air-datepicker-cell.-disabled-.-range-from-, .wpp-datepicker-portal.portal-datepicker .air-datepicker .air-datepicker-cell.-disabled-.-range-to-, .wpp-datepicker-portal.portal-datepicker .air-datepicker .air-datepicker-cell.-disabled-:hover {
+  background: transparent;
+  border-color: transparent;
 }
 .wpp-datepicker-portal.portal-datepicker .inline-message {
   margin: var(--datepicker-inline-message-margin);
@@ -1766,6 +1834,180 @@
   right: var(--datepicker-padding);
   width: calc(100% - var(--datepicker-padding) * 3);
 }
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: max-content;
+  /* The pair reads as one surface, so the two .air-datepicker cards below are stripped of
+     their background/border/shadow — which means the portal has to supply them. Without this
+     the popup is transparent; it only looked right on a white page. */
+  background: var(--datepicker-bg-color);
+  border-radius: var(--datepicker-border-radius);
+  box-shadow: var(--wpp-box-shadow-m);
+  overflow: hidden;
+  /* One popup, two grids — drop the per-instance card chrome so the pair reads as a
+     single surface and each calendar is exactly the Figma's 224px.
+     The side padding goes too: the day cells are 7 x 32px = 224, so any inset would squeeze
+     the grid and leave the calendar wider than the row it belongs to. */
+  /* The facing chevrons are hidden in the Figma: the left calendar keeps only "prev",
+     the right only "next", and either one moves the pair. */
+  /* Figma's "Month / year control" is a 32px row, then 8px of breathing room, then the 1px
+     divider — 41px in total. air-datepicker instead puts --adp-padding on both sides of a
+     content-box nav, which made it 49px and pushed the whole popup past the design height. */
+  /* Figma's Calendar column is 32 + 8 + 1 + 8 + 22 + 8 + 176 = 255. Two parts were off:
+     the weekday row measured 20 rather than 22, and the content box padded the bottom as well
+     as the top, adding an eighth gap the design doesn't have after the last week. */
+  /* A date at a month boundary is rendered twice — as a real cell in the month that owns it,
+     and as a greyed spill cell in the neighbouring grid. Letting both paint the range shows
+     the same selection in both calendars, which reads as two separate ranges. Keep the
+     highlight on the owning month only. Untouched otherwise, so a spill cell looks exactly as
+     it does when nothing is selected. */
+  /* The rail carries its own border here, so the ::before/footer spacer the single-calendar
+     layout uses to dodge air-datepicker's button row isn't needed. */
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-row {
+  display: flex;
+  flex-direction: row;
+  /* stretch so the rail's divider runs the full height of the calendars */
+  align-items: stretch;
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-calendars {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  padding: var(--datepicker-padding);
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .air-datepicker {
+  box-sizing: border-box;
+  width: 224px;
+  padding-right: 0;
+  padding-left: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-calendar-primary .air-datepicker-nav--action[data-action=next],
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-calendar-secondary .air-datepicker-nav--action[data-action=prev] {
+  visibility: hidden;
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .air-datepicker-nav {
+  min-height: 32px;
+  padding: 0 0 8px;
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .air-datepicker--content {
+  padding: var(--datepicker-padding) 0 0;
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .air-datepicker-body--day-names {
+  height: 22px;
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .air-datepicker-cell.-day-.-other-month-.-selected-, .wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .air-datepicker-cell.-day-.-other-month-.-in-range-, .wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .air-datepicker-cell.-day-.-other-month-.-range-from-, .wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .air-datepicker-cell.-day-.-other-month-.-range-to- {
+  border-color: transparent;
+  background: none;
+  color: var(--wpp-text-color-disabled);
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-divider {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 var(--datepicker-padding);
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-divider::after {
+  display: block;
+  height: 1px;
+  background: var(--wpp-grey-color-300);
+  content: "";
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  gap: 4px;
+  width: 100%;
+  height: var(--datepicker-buttons-height);
+  padding: var(--datepicker-padding);
+  /* Both are ghost buttons in the Figma; Apply differs only by label colour.
+
+     This row sits outside `.air-datepicker`, which is where the `--adp-btn-*` tokens are
+     declared, so air-datepicker's own `:hover`/`:active` rules resolve to nothing here and
+     the buttons were left with no hover or press feedback.
+
+     The states follow the design system's secondary (ghost) button rather than
+     air-datepicker's: grey-700 at 12% on hover, grey-800 at 18% pressed. wpp-action-button
+     paints those with a separate overlay element it can fade; a translucent background gets
+     to the same colour without the extra node. The radius stays at the datepicker's own 4px
+     rather than the ghost button's 6px, matching the other parts of the calendar. */
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button {
+  font-size: var(--wpp-typography-s-strong-font-size, 14px);
+  line-height: var(--wpp-typography-s-strong-line-height, 22px);
+  font-weight: var(--wpp-typography-s-strong-font-weight, 700);
+  color: var(--wpp-typography-s-strong-color, var(--wpp-text-color));
+  font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
+  letter-spacing: var(--wpp-typography-s-strong-letter-spacing, 0);
+  height: 32px;
+  padding: var(--datepicker-button-padding);
+  border: none;
+  border-radius: var(--wpp-border-radius-xs);
+  background: transparent;
+  cursor: pointer;
+  /* air-datepicker declares `.air-datepicker-button:focus` unscoped, and the reset for it is
+     scoped to `.air-datepicker-buttons` — the single calendar's own row. This row is not in
+     there, so the vendor grey still landed on Tab. Clear it and let :focus-visible carry the
+     same ghost fill as hover, so a keyboard-focused button reads like a hovered one here too. */
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button:focus {
+  background: transparent;
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button:hover, .wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button:focus-visible {
+  background: color-mix(in srgb, var(--wpp-grey-color-700) 12%, transparent);
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button:active {
+  background: color-mix(in srgb, var(--wpp-grey-color-800) 18%, transparent);
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button.disabled {
+  background: transparent;
+  pointer-events: none;
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-actions .button-clear {
+  color: var(--datepicker-cancel-button-color-active);
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-actions .button-clear.disabled {
+  color: var(--wpp-text-color-disabled);
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-actions .button-clear:active {
+  color: var(--wpp-grey-color-1000);
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-actions .button-apply {
+  color: var(--wpp-brand-color);
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-actions .button-apply.disabled {
+  color: var(--wpp-primary-color-300);
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-actions .button-apply:hover {
+  color: var(--wpp-brand-color-hover);
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-datepicker-actions .button-apply:active {
+  color: var(--wpp-brand-color-active);
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-presets-container {
+  box-sizing: border-box;
+  width: 136px;
+  padding: var(--datepicker-padding) 0 0;
+  /* The divider belongs to the list, not the container, so it starts below the 8px of top
+     padding rather than running all the way into the popup's top edge. */
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-presets-container::before {
+  content: none;
+}
+.wpp-datepicker-portal.portal-datepicker.wpp-double-calendar .wpp-presets-container .wpp-presets-list {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 0 var(--datepicker-padding);
+  border-right: 1px solid var(--wpp-grey-color-300);
+}
 .wpp-datepicker-portal.portal-datepicker.wpp-range-selected {
   --wpp-datepicker-range-bg-color: var(--wpp-primary-color-100);
   --wpp-datepicker-day-in-range-border-color: var(--wpp-primary-color-100);
@@ -1851,7 +2093,7 @@
 .wpp-time-picker-portal {
   box-shadow: var(--wpp-box-shadow-m);
   height: 372px;
-  padding: 8px 0;
+  padding: 4px 0;
   box-sizing: border-box;
   border-radius: var(--wpp-border-radius-s);
   background-color: var(--wpp-grey-color-000);
@@ -1861,8 +2103,11 @@
 .wpp-time-picker-portal .section {
   width: 50%;
   height: 100%;
+  box-sizing: border-box;
   overflow-y: auto;
-  padding: 0 8px;
+  padding: 4px 4px 4px 8px;
+  scroll-padding-block: 4px;
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: var(--wpp-grey-color-400) transparent;
 }
@@ -1875,9 +2120,6 @@
   border-radius: 4px;
   box-shadow: inset 0 0 0 2px var(--wpp-grey-color-400);
 }
-.wpp-time-picker-portal .section.has-scroll {
-  padding-right: 0;
-}
 .wpp-time-picker-portal .section .wpp-list-item {
   width: 100%;
   margin-bottom: 4px;
@@ -1885,6 +2127,9 @@
 }
 .wpp-time-picker-portal .section .wpp-list-item:last-child {
   margin-bottom: 0;
+}
+.wpp-time-picker-portal .section .wpp-list-item.tab-focus {
+  --li-bg-color-active: var(--li-bg-color-hover);
 }
 .wpp-time-picker-portal .wpp-divider {
   height: 100%;

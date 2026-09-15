@@ -26,8 +26,12 @@ interface FocusType {
  */
 export declare class WppFileUpload implements BaseFormControl<FileItemType[], FileUploadEventDetail> {
   private inputRef?;
+  private itemRefs;
   private inputId;
   private labelId;
+  private ctaId;
+  private hintId;
+  private messageId;
   private lastKeyWasTab;
   private themeSubscription;
   host: HTMLWppFileUploadElement;
@@ -38,6 +42,8 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
   errorList: FileItemType[];
   successList: FileItemType[];
   isLimitReached: boolean;
+  liveAnnouncement: string;
+  private focusItemAfterDelete;
   /**
    * Defines the input name.
    */
@@ -159,6 +165,7 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
   protected onDisabledChange(disabled: boolean): void;
   onValueChange(newValue: FileItemType[]): void;
   componentDidLoad(): void;
+  componentDidRender(): void;
   private get _locales();
   connectedCallback(): void;
   disconnectedCallback(): void;
@@ -181,6 +188,7 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
   private generateUniqueName;
   private displayErrorListByShowingOption;
   private handleFileLoad;
+  private getFileErrorText;
   private handleDrop;
   private handleDragOver;
   private handleDragEnter;

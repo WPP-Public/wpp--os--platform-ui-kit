@@ -1,9 +1,10 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-93f63aaa.js';
-import { b as isEventTargetContained, y as mergeLocales } from './utils-452958a4.js';
+import { b as isEventTargetContained, y as mergeLocales } from './utils-a4b26a20.js';
 import { T as TimeoutManager } from './timeout-manager-ad76cedb.js';
 import { S as SidePanelCloseReason } from './types-bb202fab.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
-import { t as themeSubscriptionController } from './subscribe-to-theme-3920c16c.js';
+import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
+import './theme-observer-b7886d19.js';
 
 const LOCALES_DEFAULTS = {
   closeIconLabel: 'Close side panel',
@@ -156,7 +157,7 @@ const WppSidePanel = class {
       const [secondaryConfig, primaryConfig] = this.actionsConfig;
       const { label: secondaryLabel, ...secondaryRest } = secondaryConfig;
       const { label: primaryLabel, ...primaryRest } = primaryConfig;
-      return (h("div", { class: "actions-container" }, h("wpp-divider-v4-3-0", null), h("div", { class: "actions" }, h("wpp-button-v4-3-0", { size: "m", variant: "secondary", ...secondaryRest }, secondaryLabel), h("wpp-button-v4-3-0", { size: "m", variant: "primary", ...primaryRest }, primaryLabel))));
+      return (h("div", { class: "actions-container" }, h("wpp-divider-v4-4-0", null), h("div", { class: "actions" }, h("wpp-button-v4-4-0", { size: "m", variant: "secondary", ...secondaryRest }, secondaryLabel), h("wpp-button-v4-4-0", { size: "m", variant: "primary", ...primaryRest }, primaryLabel))));
     };
     this.isHidden = true;
     this.closeReason = null;
@@ -213,7 +214,7 @@ const WppSidePanel = class {
   render() {
     return (h(Host, { class: this.hostCssClasses(), onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: {
         zIndex: this.zIndex.toString(),
-      }, role: this.ariaProps.role, "aria-label": this.ariaProps.label || this.panelTitle || undefined }, h("div", { class: this.panelCssClasses(), tabindex: "-1", ref: ref => (this.panelRef = ref), "data-testid": "wpp-side-panel-content" }, h("div", { class: "resize-handle", role: "separator", tabindex: "0", "aria-orientation": "vertical", "aria-label": this._locales.resizeHandleLabel, "aria-valuenow": this.currentWidth, "aria-valuemin": SIDE_PANEL_MIN_WIDTH, "aria-valuemax": SIDE_PANEL_MAX_WIDTH, "aria-valuetext": `${this.currentWidth}px`, onPointerDown: this.handleResizeStart, onKeyDown: this.handleResizeKeyDown, "data-testid": "wpp-side-panel-resize-handle" }), h("div", { class: "header-container" }, h("wpp-tooltip-v4-3-0", { class: "title-tooltip", text: this.panelTitle, config: {
+      }, role: this.ariaProps.role, "aria-label": this.ariaProps.label || this.panelTitle || undefined }, h("div", { class: this.panelCssClasses(), tabindex: "-1", ref: ref => (this.panelRef = ref), "data-testid": "wpp-side-panel-content" }, h("div", { class: "resize-handle", role: "separator", tabindex: "0", "aria-orientation": "vertical", "aria-label": this._locales.resizeHandleLabel, "aria-valuenow": this.currentWidth, "aria-valuemin": SIDE_PANEL_MIN_WIDTH, "aria-valuemax": SIDE_PANEL_MAX_WIDTH, "aria-valuetext": `${this.currentWidth}px`, onPointerDown: this.handleResizeStart, onKeyDown: this.handleResizeKeyDown, "data-testid": "wpp-side-panel-resize-handle" }), h("div", { class: "header-container" }, h("wpp-tooltip-v4-4-0", { class: "title-tooltip", text: this.panelTitle, config: {
         placement: 'top',
         onShow: () => {
           if (!this.titleRef)
@@ -221,9 +222,9 @@ const WppSidePanel = class {
           if (this.titleRef.clientWidth >= this.titleRef.scrollWidth)
             return false;
         },
-      } }, h("wpp-typography-v4-3-0", { ref: el => (this.titleRef = el), type: "s-strong", class: "title" }, this.panelTitle)), h("wpp-action-button-v4-3-0", { ariaProps: { label: this._locales.closeIconLabel }, variant: "secondary", onClick: this.handleCloseClick, class: "close-button" }, h("wpp-icon-cross-v4-3-0", { slot: "icon-start" }))), h("wpp-divider-v4-3-0", null), h("div", { class: "body", ref: el => (this.bodyRef = el) }, h("slot", null)), this.renderActions())));
+      } }, h("wpp-typography-v4-4-0", { ref: el => (this.titleRef = el), type: "s-strong", class: "title" }, this.panelTitle)), h("wpp-action-button-v4-4-0", { ariaProps: { label: this._locales.closeIconLabel }, variant: "secondary", onClick: this.handleCloseClick, class: "close-button" }, h("wpp-icon-cross-v4-4-0", { slot: "icon-start" }))), h("wpp-divider-v4-4-0", null), h("div", { class: "body", ref: el => (this.bodyRef = el) }, h("slot", null)), this.renderActions())));
   }
-  static get registryIs() { return "wpp-side-panel-v4-3-0"; }
+  static get registryIs() { return "wpp-side-panel-v4-4-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "open": ["handleChangeOpenStatus"]

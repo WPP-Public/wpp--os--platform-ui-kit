@@ -134,28 +134,28 @@ describe('wpp-tree', () => {
   beforeEach(async () => {
     page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: mockTree }),
+      template: () => h("wpp-tree-v4-4-0", { data: mockTree }),
     });
     instance = page.rootInstance;
   });
   it('should render tree component', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: treeData }),
+      template: () => h("wpp-tree-v4-4-0", { data: treeData }),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('should render multiple tree component', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: treeData, multiple: true }),
+      template: () => h("wpp-tree-v4-4-0", { data: treeData, multiple: true }),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('should render tree component with filtered data', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: treeData, search: "cars" }),
+      template: () => h("wpp-tree-v4-4-0", { data: treeData, search: "cars" }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -164,7 +164,7 @@ describe('wpp-tree', () => {
     const loadChildren = jest.fn().mockReturnValue(d.promise);
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: baseData, lazyConfig: {
+      template: () => (h("wpp-tree-v4-4-0", { data: baseData, lazyConfig: {
           loadChildren,
           skeleton: { height: 22, count: 1 },
         } })),
@@ -209,7 +209,7 @@ describe('wpp-tree', () => {
     const loadChildren = jest.fn();
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: data, lazyConfig: {
+      template: () => (h("wpp-tree-v4-4-0", { data: data, lazyConfig: {
           loadChildren,
           skeleton: { height: 22 },
         } })),
@@ -225,7 +225,7 @@ describe('wpp-tree', () => {
     const loadChildren = jest.fn().mockResolvedValue({ items: [] });
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: baseData, lazyConfig: {
+      template: () => (h("wpp-tree-v4-4-0", { data: baseData, lazyConfig: {
           loadChildren,
         } })),
     });
@@ -247,7 +247,7 @@ describe('wpp-tree', () => {
     });
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: baseData, lazyConfig: {
+      template: () => (h("wpp-tree-v4-4-0", { data: baseData, lazyConfig: {
           loadChildren,
           skeleton: { height: 32, count: 1 },
         } })),
@@ -271,7 +271,7 @@ describe('wpp-tree', () => {
     const changeSpy = jest.fn();
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: baseData, lazyConfig: {
+      template: () => (h("wpp-tree-v4-4-0", { data: baseData, lazyConfig: {
           loadChildren,
         } })),
     });
@@ -306,7 +306,7 @@ describe('wpp-tree', () => {
     }));
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: baseData, lazyConfig: {
+      template: () => (h("wpp-tree-v4-4-0", { data: baseData, lazyConfig: {
           loadChildren,
         } })),
     });
@@ -325,7 +325,7 @@ describe('wpp-tree', () => {
     const loadChildren = jest.fn().mockRejectedValue(new Error('Network error'));
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: baseData, lazyConfig: {
+      template: () => (h("wpp-tree-v4-4-0", { data: baseData, lazyConfig: {
           loadChildren,
         } })),
     });
@@ -367,7 +367,7 @@ describe('wpp-tree', () => {
     });
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: baseData, lazyConfig: {
+      template: () => (h("wpp-tree-v4-4-0", { data: baseData, lazyConfig: {
           loadChildren,
         } })),
     });
@@ -418,7 +418,7 @@ describe('wpp-tree', () => {
   it('handles multiple-mode selection actions without warnings', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { multiple: true, defaultSelectedIds: [], data: [
+      template: () => (h("wpp-tree-v4-4-0", { multiple: true, defaultSelectedIds: [], data: [
           {
             id: '1',
             title: 'Parent',
@@ -466,7 +466,7 @@ describe('wpp-tree', () => {
   it('handles defaultSelectedIds and disableOpenCloseAnimation', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: [
+      template: () => (h("wpp-tree-v4-4-0", { data: [
           { id: '1', title: 'One' },
           { id: '2', title: 'Two' },
         ], defaultSelectedIds: ['1'], disableOpenCloseAnimation: true })),
@@ -487,7 +487,7 @@ describe('wpp-tree', () => {
     });
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: [{ id: '1', title: 'Test' }] }),
+      template: () => h("wpp-tree-v4-4-0", { data: [{ id: '1', title: 'Test' }] }),
     });
     const tree = page.root;
     // attach to real DOM so parentElement exists
@@ -507,7 +507,7 @@ describe('wpp-tree', () => {
   it('uses custom isMatchingSearch', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: [{ id: '1', title: 'hello' }], searchConfig: {
+      template: () => (h("wpp-tree-v4-4-0", { data: [{ id: '1', title: 'hello' }], searchConfig: {
           isMatchingSearch: (item, search) => item.title === search,
         } })),
     });
@@ -518,7 +518,7 @@ describe('wpp-tree', () => {
   it('handles multiple selection update', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: [
+      template: () => (h("wpp-tree-v4-4-0", { data: [
           {
             id: '1',
             title: 'Parent',
@@ -537,7 +537,7 @@ describe('wpp-tree', () => {
   it('updates tree with search', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: [
+      template: () => (h("wpp-tree-v4-4-0", { data: [
           {
             id: '1',
             title: 'Parent',
@@ -552,7 +552,7 @@ describe('wpp-tree', () => {
   it('handles open change without lazy loading', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: [{ id: '1', title: 'Node', open: false }] }),
+      template: () => h("wpp-tree-v4-4-0", { data: [{ id: '1', title: 'Node', open: false }] }),
     });
     const tree = page.root;
     const instance = page.rootInstance;
@@ -566,7 +566,7 @@ describe('wpp-tree', () => {
   it('resets tree when search is empty', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: [
+      template: () => (h("wpp-tree-v4-4-0", { data: [
           {
             id: '1',
             title: 'Item',
@@ -583,7 +583,7 @@ describe('wpp-tree', () => {
   it('uses custom isMatchingSearch', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: [{ id: '1', title: 'hello' }], searchConfig: {
+      template: () => (h("wpp-tree-v4-4-0", { data: [{ id: '1', title: 'hello' }], searchConfig: {
           isMatchingSearch: (item, search) => item.title === search,
         } })),
     });
@@ -594,7 +594,7 @@ describe('wpp-tree', () => {
   it('throws error when multiple defaultSelectedIds provided in single mode', async () => {
     await expect(newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: [
+      template: () => (h("wpp-tree-v4-4-0", { data: [
           { id: '1', title: 'One' },
           { id: '2', title: 'Two' },
         ], defaultSelectedIds: ['1', '2'] })),
@@ -603,7 +603,7 @@ describe('wpp-tree', () => {
   it('sets isSearchResultFound when a match is found', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: [
+      template: () => (h("wpp-tree-v4-4-0", { data: [
           {
             id: '1',
             title: 'MatchMe',
@@ -622,7 +622,7 @@ describe('wpp-tree', () => {
   it('covers nested match logic inside updateTreeWithSearch', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: [
+      template: () => (h("wpp-tree-v4-4-0", { data: [
           {
             id: '1',
             title: 'Parent Match',
@@ -648,7 +648,7 @@ describe('wpp-tree', () => {
   it('renders icons, skeleton and empty state correctly', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { loading: true, data: [
+      template: () => (h("wpp-tree-v4-4-0", { loading: true, data: [
           {
             id: '1',
             title: 'Node',
@@ -664,7 +664,7 @@ describe('wpp-tree', () => {
   it('clears children selection when item is unselected', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { multiple: true, data: [
+      template: () => (h("wpp-tree-v4-4-0", { multiple: true, data: [
           {
             id: '1',
             title: 'Parent',
@@ -685,7 +685,7 @@ describe('wpp-tree', () => {
   it('renders parent item with start/end icons and child content', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: [
+      template: () => (h("wpp-tree-v4-4-0", { data: [
           {
             id: '1',
             title: 'Parent',
@@ -733,7 +733,7 @@ describe('wpp-tree', () => {
     });
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: dataWithOpenNodes, lazyConfig: {
+      template: () => (h("wpp-tree-v4-4-0", { data: dataWithOpenNodes, lazyConfig: {
           loadChildren,
           skeleton: { height: 22 },
         } })),
@@ -781,7 +781,7 @@ describe('wpp-tree expandAll/collapseAll', () => {
   it('expandAll opens all non-disabled nodes', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: staticData }),
+      template: () => h("wpp-tree-v4-4-0", { data: staticData }),
     });
     const changeSpy = jest.fn();
     page.root.addEventListener('wppChange', changeSpy);
@@ -810,7 +810,7 @@ describe('wpp-tree expandAll/collapseAll', () => {
     }));
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: openData }),
+      template: () => h("wpp-tree-v4-4-0", { data: openData }),
     });
     const changeSpy = jest.fn();
     page.root.addEventListener('wppChange', changeSpy);
@@ -846,7 +846,7 @@ describe('wpp-tree expandAll/collapseAll', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: dataWithDisabled }),
+      template: () => h("wpp-tree-v4-4-0", { data: dataWithDisabled }),
     });
     await page.rootInstance.expandAll();
     await page.waitForChanges();
@@ -876,7 +876,7 @@ describe('wpp-tree expandAll/collapseAll', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: dataWithDisabledOpen }),
+      template: () => h("wpp-tree-v4-4-0", { data: dataWithDisabledOpen }),
     });
     await page.rootInstance.collapseAll();
     await page.waitForChanges();
@@ -908,7 +908,7 @@ describe('wpp-tree expandAll/collapseAll', () => {
     });
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => (h("wpp-tree-v4-3-0", { data: lazyData, lazyConfig: {
+      template: () => (h("wpp-tree-v4-4-0", { data: lazyData, lazyConfig: {
           loadChildren,
           skeleton: { height: 22 },
         } })),
@@ -958,7 +958,7 @@ describe('wpp-tree open on load', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: dataWithOpenNodes }),
+      template: () => h("wpp-tree-v4-4-0", { data: dataWithOpenNodes }),
     });
     await page.waitForChanges();
     const instance = page.rootInstance;
@@ -993,7 +993,7 @@ describe('wpp-tree accessibility', () => {
   it('renders tree with role="tree" on container', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: accessibilityTestData, label: "Test tree" }),
+      template: () => h("wpp-tree-v4-4-0", { data: accessibilityTestData, label: "Test tree" }),
     });
     const container = page.root.shadowRoot.querySelector('.container');
     expect(container?.getAttribute('role')).toBe('tree');
@@ -1002,7 +1002,7 @@ describe('wpp-tree accessibility', () => {
   it('renders tree with aria-multiselectable for multiple mode', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: accessibilityTestData, multiple: true, label: "Multi-select tree" }),
+      template: () => h("wpp-tree-v4-4-0", { data: accessibilityTestData, multiple: true, label: "Multi-select tree" }),
     });
     const container = page.root.shadowRoot.querySelector('.container');
     expect(container?.getAttribute('aria-multiselectable')).toBe('true');
@@ -1010,7 +1010,7 @@ describe('wpp-tree accessibility', () => {
   it('renders tree container with tabindex for keyboard focus', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: accessibilityTestData }),
+      template: () => h("wpp-tree-v4-4-0", { data: accessibilityTestData }),
     });
     const container = page.root.shadowRoot.querySelector('.container');
     expect(container?.getAttribute('tabindex')).toBe('0');
@@ -1018,7 +1018,7 @@ describe('wpp-tree accessibility', () => {
   it('renders loading state with appropriate aria attributes', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: accessibilityTestData, loading: true }),
+      template: () => h("wpp-tree-v4-4-0", { data: accessibilityTestData, loading: true }),
     });
     const skeleton = page.root.shadowRoot.querySelector('.skeleton-wrapper');
     expect(skeleton?.getAttribute('role')).toBe('status');
@@ -1032,7 +1032,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData }),
     });
     const treeItems = page.root.shadowRoot.querySelectorAll('wpp-tree-item');
     expect(treeItems.length).toBe(3);
@@ -1048,7 +1048,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData }),
     });
     const instance = page.rootInstance;
     instance.focusedItemId = '1';
@@ -1063,7 +1063,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData }),
     });
     const instance = page.rootInstance;
     instance.focusedItemId = '2';
@@ -1079,7 +1079,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData }),
     });
     const instance = page.rootInstance;
     instance.focusedItemId = '3';
@@ -1095,7 +1095,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData }),
     });
     const instance = page.rootInstance;
     instance.focusedItemId = '1';
@@ -1114,7 +1114,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: treeWithParent }),
+      template: () => h("wpp-tree-v4-4-0", { data: treeWithParent }),
     });
     const instance = page.rootInstance;
     const changeSpy = jest.fn();
@@ -1137,7 +1137,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: treeWithParent }),
+      template: () => h("wpp-tree-v4-4-0", { data: treeWithParent }),
     });
     const instance = page.rootInstance;
     const changeSpy = jest.fn();
@@ -1160,7 +1160,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: treeWithParent }),
+      template: () => h("wpp-tree-v4-4-0", { data: treeWithParent }),
     });
     const instance = page.rootInstance;
     instance.focusedItemId = 'c1';
@@ -1172,7 +1172,7 @@ describe('wpp-tree accessibility', () => {
     const simpleData = [{ title: 'Item 1', id: '1', selected: false }];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData }),
     });
     const instance = page.rootInstance;
     const changeSpy = jest.fn();
@@ -1187,7 +1187,7 @@ describe('wpp-tree accessibility', () => {
     const simpleData = [{ title: 'Item 1', id: '1', selected: false }];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData, multiple: true }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData, multiple: true }),
     });
     const instance = page.rootInstance;
     const changeSpy = jest.fn();
@@ -1206,7 +1206,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData }),
     });
     const instance = page.rootInstance;
     instance.focusedItemId = '1';
@@ -1223,7 +1223,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: dataWithHidden }),
+      template: () => h("wpp-tree-v4-4-0", { data: dataWithHidden }),
     });
     const instance = page.rootInstance;
     instance.focusedItemId = '1';
@@ -1239,7 +1239,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData, loading: true }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData, loading: true }),
     });
     const instance = page.rootInstance;
     instance.focusedItemId = '1';
@@ -1252,7 +1252,7 @@ describe('wpp-tree accessibility', () => {
     const dataWithDisabled = [{ title: 'Disabled Item', id: '1', disabled: true }];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: dataWithDisabled }),
+      template: () => h("wpp-tree-v4-4-0", { data: dataWithDisabled }),
     });
     const instance = page.rootInstance;
     const changeSpy = jest.fn();
@@ -1271,7 +1271,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData }),
     });
     const instance = page.rootInstance;
     // Trigger focus initialization
@@ -1288,7 +1288,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: dataWithSelected }),
+      template: () => h("wpp-tree-v4-4-0", { data: dataWithSelected }),
     });
     const instance = page.rootInstance;
     // Trigger focus initialization
@@ -1313,7 +1313,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: nestedData }),
+      template: () => h("wpp-tree-v4-4-0", { data: nestedData }),
     });
     const instance = page.rootInstance;
     const parent = findParentOfItem(instance.currentTreeData, 'g1');
@@ -1333,7 +1333,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: dataWithSiblings }),
+      template: () => h("wpp-tree-v4-4-0", { data: dataWithSiblings }),
     });
     const instance = page.rootInstance;
     const siblings = getSiblings(instance.currentTreeData, 's2');
@@ -1351,7 +1351,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: treeWithChildren }),
+      template: () => h("wpp-tree-v4-4-0", { data: treeWithChildren }),
     });
     const groupContainer = page.root.shadowRoot.querySelector('[role="group"]');
     expect(groupContainer).toBeTruthy();
@@ -1366,7 +1366,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData }),
     });
     const instance = page.rootInstance;
     expect(instance.isFocusOnAction).toBe(false);
@@ -1378,7 +1378,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData }),
     });
     const instance = page.rootInstance;
     const actions = instance.getActionElementsInItem('1');
@@ -1392,7 +1392,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData }),
     });
     const instance = page.rootInstance;
     instance.enterActionMode('1');
@@ -1405,7 +1405,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData }),
     });
     const instance = page.rootInstance;
     const container = page.root.shadowRoot.querySelector('.container');
@@ -1423,7 +1423,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData }),
     });
     const instance = page.rootInstance;
     const externalEl = document.createElement('div');
@@ -1436,7 +1436,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData }),
     });
     const instance = page.rootInstance;
     instance.isFocusOnAction = true;
@@ -1452,7 +1452,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData }),
     });
     const instance = page.rootInstance;
     instance.focusedItemId = '1';
@@ -1469,7 +1469,7 @@ describe('wpp-tree accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData }),
     });
     const instance = page.rootInstance;
     instance.focusedItemId = '1';
@@ -1484,7 +1484,7 @@ describe('wpp-tree accessibility', () => {
     const simpleData = [{ title: 'Item 1', id: '1' }];
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { data: simpleData }),
+      template: () => h("wpp-tree-v4-4-0", { data: simpleData }),
     });
     const instance = page.rootInstance;
     const result = instance.getFocusableElements([]);
@@ -1498,7 +1498,7 @@ describe('Testing withVirtualisation', () => {
   it('Testing that `visibleItemsList` and `totalHeight` are set correctly when component loads', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { withVirtualisation: true, data: treeData }),
+      template: () => h("wpp-tree-v4-4-0", { withVirtualisation: true, data: treeData }),
     });
     expect(page.rootInstance.visibleItemsList.length).toBe(6);
     expect(page.rootInstance.totalHeight).toBe(6 * TREE_ITEM_HEIGHT + TREE_PADDING_TOP);
@@ -1506,7 +1506,7 @@ describe('Testing withVirtualisation', () => {
   it('Testing that `visibleItemsList` and `totalHeight` are set correctly when `updateData` is called (data changes dynamically)', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { withVirtualisation: true, data: treeData }),
+      template: () => h("wpp-tree-v4-4-0", { withVirtualisation: true, data: treeData }),
     });
     expect(page.rootInstance.visibleItemsList.length).toBe(6);
     expect(page.rootInstance.totalHeight).toBe(6 * TREE_ITEM_HEIGHT + TREE_PADDING_TOP);
@@ -1521,7 +1521,7 @@ describe('Testing withVirtualisation', () => {
     it('handles keyboard navigation - Home moves focus to first item and updates scrollContainer.scrollTop value to 0', async () => {
       const page = await newSpecPage({
         components: [WppTree],
-        template: () => h("wpp-tree-v4-3-0", { withVirtualisation: true, data: treeDataSample }),
+        template: () => h("wpp-tree-v4-4-0", { withVirtualisation: true, data: treeDataSample }),
       });
       page.rootInstance.focusedItemId = '0-2';
       const event = new KeyboardEvent('keydown', { key: 'Home' });
@@ -1533,7 +1533,7 @@ describe('Testing withVirtualisation', () => {
     it('handles keyboard navigation - Arrow left moves to parent from child and updates scrollContainer.scrollTop', async () => {
       const page = await newSpecPage({
         components: [WppTree],
-        template: () => h("wpp-tree-v4-3-0", { withVirtualisation: true, data: treeDataSample }),
+        template: () => h("wpp-tree-v4-4-0", { withVirtualisation: true, data: treeDataSample }),
       });
       page.rootInstance.focusedItemId = '0-0-2';
       const event = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
@@ -1546,7 +1546,7 @@ describe('Testing withVirtualisation', () => {
     it('handles keyboard navigation - End moves to last non-disabled element in the list and updates scrollContainer.scrollTop', async () => {
       const page = await newSpecPage({
         components: [WppTree],
-        template: () => h("wpp-tree-v4-3-0", { withVirtualisation: true, data: treeDataSample }),
+        template: () => h("wpp-tree-v4-4-0", { withVirtualisation: true, data: treeDataSample }),
       });
       page.rootInstance.focusedItemId = '0';
       const event = new KeyboardEvent('keydown', { key: 'End' });
@@ -1568,7 +1568,7 @@ describe('Testing withVirtualisation', () => {
     it('Testing that it start from index 0 when scrollTop is 0 and renders first 17 items with overscan = 1 (default)', async () => {
       const page = await newSpecPage({
         components: [WppTree],
-        template: () => h("wpp-tree-v4-3-0", { withVirtualisation: true, data: treeDataSample }),
+        template: () => h("wpp-tree-v4-4-0", { withVirtualisation: true, data: treeDataSample }),
       });
       const flatNodes = generateMockNodes(100);
       page.rootInstance.scrollTop = 0;
@@ -1580,7 +1580,7 @@ describe('Testing withVirtualisation', () => {
     it('Testing that it computes bufferStart correctly when scrollTop = 200', async () => {
       const page = await newSpecPage({
         components: [WppTree],
-        template: () => h("wpp-tree-v4-3-0", { withVirtualisation: true, data: treeDataSample }),
+        template: () => h("wpp-tree-v4-4-0", { withVirtualisation: true, data: treeDataSample }),
       });
       const flatNodes = generateMockNodes(100);
       page.rootInstance.scrollTop = 200;
@@ -1594,7 +1594,7 @@ describe('Testing withVirtualisation', () => {
   it('Testing handleScroll sets correct value', async () => {
     const page = await newSpecPage({
       components: [WppTree],
-      template: () => h("wpp-tree-v4-3-0", { withVirtualisation: true, data: treeDataSample }),
+      template: () => h("wpp-tree-v4-4-0", { withVirtualisation: true, data: treeDataSample }),
     });
     const event = new Event('scroll');
     Object.defineProperty(event, 'target', {
@@ -1608,7 +1608,7 @@ describe('Testing withVirtualisation', () => {
     it('Testing that renderTree is called with virtualisedNodes when withVirtualisation is enabled', async () => {
       const page = await newSpecPage({
         components: [WppTree],
-        template: () => h("wpp-tree-v4-3-0", { withVirtualisation: true, data: treeDataSample }),
+        template: () => h("wpp-tree-v4-4-0", { withVirtualisation: true, data: treeDataSample }),
       });
       const flatNodes = getAllVisibleItems(treeDataSample);
       page.rootInstance.renderTree = jest.fn();
@@ -1618,7 +1618,7 @@ describe('Testing withVirtualisation', () => {
     it('Testing that renderTree is called with currentTreeData when withVirtualisation is disabled', async () => {
       const page = await newSpecPage({
         components: [WppTree],
-        template: () => h("wpp-tree-v4-3-0", { data: treeDataSample }),
+        template: () => h("wpp-tree-v4-4-0", { data: treeDataSample }),
       });
       page.rootInstance.renderTree = jest.fn();
       page.rootInstance.handleTreeRender(true);

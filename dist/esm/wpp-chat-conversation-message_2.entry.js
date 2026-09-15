@@ -1,13 +1,15 @@
 import { h, F as Fragment, r as registerInstance, H as Host, g as getElement, c as createEvent } from './index-93f63aaa.js';
 import { m as marked_umd } from './marked.umd-be419d39.js';
-import { k as transformToVersionedTag, c as hasParentWithId, g as getSlotEmptyStates, d as debounce, y as mergeLocales } from './utils-452958a4.js';
+import { k as transformToVersionedTag, c as hasParentWithId, g as getSlotEmptyStates, d as debounce, y as mergeLocales } from './utils-a4b26a20.js';
 import { c as createCommonjsModule, a as commonjsGlobal } from './_commonjsHelpers-ba3f0406.js';
-import { L as LIB_COMPONENTS_PREFIX, r as renderSlotsInListItem } from './utils-6a0543a3.js';
-import { c as convertMBToBytes, d as getExtensionsList, E as EXTENSION_TO_TYPE, g as getExtension, m as modifyPropertiesOnFile, a as getBaseName, b as renameFile } from './utils-4a583072.js';
+import { L as LIB_COMPONENTS_PREFIX, r as renderSlotsInListItem } from './utils-17d209e0.js';
+import { c as convertMBToBytes, d as getExtensionsList, E as EXTENSION_TO_TYPE, g as getExtension, m as modifyPropertiesOnFile, a as getBaseName, b as renameFile } from './utils-b7410a53.js';
 import { W as WrappedSlot } from './WrappedSlot-6fa08584.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
-import { t as themeSubscriptionController } from './subscribe-to-theme-3920c16c.js';
+import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
+import { S as SpeechRecognitionService } from './speech-recognition-6803da23.js';
 import './lodash-cc2b04b5.js';
+import './theme-observer-b7886d19.js';
 
 const md = new marked_umd.Marked({
   gfm: true,
@@ -113,27 +115,68 @@ const handleDownload = async (href, alt) => {
 };
 
 var purify = createCommonjsModule(function (module, exports) {
-/*! @license DOMPurify 3.3.3 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.3.3/LICENSE */
+/*! @license DOMPurify 3.4.14 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.4.14/LICENSE */
 
 (function (global, factory) {
   module.exports = factory() ;
 })(commonjsGlobal, (function () {
-  const {
-    entries,
-    setPrototypeOf,
-    isFrozen,
-    getPrototypeOf,
-    getOwnPropertyDescriptor
-  } = Object;
-  let {
-    freeze,
-    seal,
-    create
-  } = Object; // eslint-disable-line import/no-mutable-exports
-  let {
-    apply,
-    construct
-  } = typeof Reflect !== 'undefined' && Reflect;
+  function _arrayLikeToArray(r, a) {
+    (null == a || a > r.length) && (a = r.length);
+    for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
+    return n;
+  }
+  function _arrayWithHoles(r) {
+    if (Array.isArray(r)) return r;
+  }
+  function _iterableToArrayLimit(r, l) {
+    var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+    if (null != t) {
+      var e,
+        n,
+        i,
+        u,
+        a = [],
+        f = true,
+        o = false;
+      try {
+        if (i = (t = t.call(r)).next, 0 === l) ; else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0);
+      } catch (r) {
+        o = true, n = r;
+      } finally {
+        try {
+          if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return;
+        } finally {
+          if (o) throw n;
+        }
+      }
+      return a;
+    }
+  }
+  function _nonIterableRest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  function _slicedToArray(r, e) {
+    return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
+  }
+  function _unsupportedIterableToArray(r, a) {
+    if (r) {
+      if ("string" == typeof r) return _arrayLikeToArray(r, a);
+      var t = {}.toString.call(r).slice(8, -1);
+      return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0;
+    }
+  }
+
+  const entries = Object.entries,
+    setPrototypeOf = Object.setPrototypeOf,
+    isFrozen = Object.isFrozen,
+    getPrototypeOf = Object.getPrototypeOf,
+    getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+  let freeze = Object.freeze,
+    seal = Object.seal,
+    create = Object.create; // eslint-disable-line import/no-mutable-exports
+  let _ref = typeof Reflect !== 'undefined' && Reflect,
+    apply = _ref.apply,
+    construct = _ref.construct;
   if (!freeze) {
     freeze = function freeze(x) {
       return x;
@@ -165,13 +208,19 @@ var purify = createCommonjsModule(function (module, exports) {
   const arrayPop = unapply(Array.prototype.pop);
   const arrayPush = unapply(Array.prototype.push);
   const arraySplice = unapply(Array.prototype.splice);
+  const arrayIsArray = Array.isArray;
   const stringToLowerCase = unapply(String.prototype.toLowerCase);
   const stringToString = unapply(String.prototype.toString);
   const stringMatch = unapply(String.prototype.match);
   const stringReplace = unapply(String.prototype.replace);
   const stringIndexOf = unapply(String.prototype.indexOf);
   const stringTrim = unapply(String.prototype.trim);
+  const numberToString = unapply(Number.prototype.toString);
+  const booleanToString = unapply(Boolean.prototype.toString);
+  const bigintToString = typeof BigInt === 'undefined' ? null : unapply(BigInt.prototype.toString);
+  const symbolToString = typeof Symbol === 'undefined' ? null : unapply(Symbol.prototype.toString);
   const objectHasOwnProperty = unapply(Object.prototype.hasOwnProperty);
+  const objectToString = unapply(Object.prototype.toString);
   const regExpTest = unapply(RegExp.prototype.test);
   const typeErrorCreate = unconstruct(TypeError);
   /**
@@ -221,6 +270,9 @@ var purify = createCommonjsModule(function (module, exports) {
       // Prevent prototype setters from intercepting set as a this value.
       setPrototypeOf(set, null);
     }
+    if (!arrayIsArray(array)) {
+      return set;
+    }
     let l = array.length;
     while (l--) {
       let element = array[l];
@@ -261,10 +313,13 @@ var purify = createCommonjsModule(function (module, exports) {
    */
   function clone(object) {
     const newObject = create(null);
-    for (const [property, value] of entries(object)) {
+    for (const _ref2 of entries(object)) {
+      var _ref3 = _slicedToArray(_ref2, 2);
+      const property = _ref3[0];
+      const value = _ref3[1];
       const isPropertyExist = objectHasOwnProperty(object, property);
       if (isPropertyExist) {
-        if (Array.isArray(value)) {
+        if (arrayIsArray(value)) {
           newObject[property] = cleanArray(value);
         } else if (value && typeof value === 'object' && value.constructor === Object) {
           newObject[property] = clone(value);
@@ -274,6 +329,58 @@ var purify = createCommonjsModule(function (module, exports) {
       }
     }
     return newObject;
+  }
+  /**
+   * Convert non-node values into strings without depending on direct property access.
+   *
+   * @param value - The value to stringify.
+   * @returns A string representation of the provided value.
+   */
+  function stringifyValue(value) {
+    switch (typeof value) {
+      case 'string':
+        {
+          return value;
+        }
+      case 'number':
+        {
+          return numberToString(value);
+        }
+      case 'boolean':
+        {
+          return booleanToString(value);
+        }
+      case 'bigint':
+        {
+          return bigintToString ? bigintToString(value) : '0';
+        }
+      case 'symbol':
+        {
+          return symbolToString ? symbolToString(value) : 'Symbol()';
+        }
+      case 'undefined':
+        {
+          return objectToString(value);
+        }
+      case 'function':
+      case 'object':
+        {
+          if (value === null) {
+            return objectToString(value);
+          }
+          const valueAsRecord = value;
+          const valueToString = lookupGetter(valueAsRecord, 'toString');
+          if (typeof valueToString === 'function') {
+            const stringified = valueToString(valueAsRecord);
+            return typeof stringified === 'string' ? stringified : objectToString(stringified);
+          }
+          return objectToString(value);
+        }
+      default:
+        {
+          return objectToString(value);
+        }
+    }
   }
   /**
    * This method automatically checks if the prop is function or getter and behaves accordingly.
@@ -300,6 +407,14 @@ var purify = createCommonjsModule(function (module, exports) {
     }
     return fallbackValue;
   }
+  function isRegex(value) {
+    try {
+      regExpTest(value, '');
+      return true;
+    } catch (_unused) {
+      return false;
+    }
+  }
 
   const html$1 = freeze(['a', 'abbr', 'acronym', 'address', 'area', 'article', 'aside', 'audio', 'b', 'bdi', 'bdo', 'big', 'blink', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'content', 'data', 'datalist', 'dd', 'decorator', 'del', 'details', 'dfn', 'dialog', 'dir', 'div', 'dl', 'dt', 'element', 'em', 'fieldset', 'figcaption', 'figure', 'font', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hgroup', 'hr', 'html', 'i', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li', 'main', 'map', 'mark', 'marquee', 'menu', 'menuitem', 'meter', 'nav', 'nobr', 'ol', 'optgroup', 'option', 'output', 'p', 'picture', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'search', 'section', 'select', 'shadow', 'slot', 'small', 'source', 'spacer', 'span', 'strike', 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'template', 'textarea', 'tfoot', 'th', 'thead', 'time', 'tr', 'track', 'tt', 'u', 'ul', 'var', 'video', 'wbr']);
   const svg$1 = freeze(['svg', 'a', 'altglyph', 'altglyphdef', 'altglyphitem', 'animatecolor', 'animatemotion', 'animatetransform', 'circle', 'clippath', 'defs', 'desc', 'ellipse', 'enterkeyhint', 'exportparts', 'filter', 'font', 'g', 'glyph', 'glyphref', 'hkern', 'image', 'inputmode', 'line', 'lineargradient', 'marker', 'mask', 'metadata', 'mpath', 'part', 'path', 'pattern', 'polygon', 'polyline', 'radialgradient', 'rect', 'stop', 'style', 'switch', 'symbol', 'text', 'textpath', 'title', 'tref', 'tspan', 'view', 'vkern']);
@@ -315,15 +430,14 @@ var purify = createCommonjsModule(function (module, exports) {
   const mathMlDisallowed = freeze(['maction', 'maligngroup', 'malignmark', 'mlongdiv', 'mscarries', 'mscarry', 'msgroup', 'mstack', 'msline', 'msrow', 'semantics', 'annotation', 'annotation-xml', 'mprescripts', 'none']);
   const text = freeze(['#text']);
 
-  const html = freeze(['accept', 'action', 'align', 'alt', 'autocapitalize', 'autocomplete', 'autopictureinpicture', 'autoplay', 'background', 'bgcolor', 'border', 'capture', 'cellpadding', 'cellspacing', 'checked', 'cite', 'class', 'clear', 'color', 'cols', 'colspan', 'controls', 'controlslist', 'coords', 'crossorigin', 'datetime', 'decoding', 'default', 'dir', 'disabled', 'disablepictureinpicture', 'disableremoteplayback', 'download', 'draggable', 'enctype', 'enterkeyhint', 'exportparts', 'face', 'for', 'headers', 'height', 'hidden', 'high', 'href', 'hreflang', 'id', 'inert', 'inputmode', 'integrity', 'ismap', 'kind', 'label', 'lang', 'list', 'loading', 'loop', 'low', 'max', 'maxlength', 'media', 'method', 'min', 'minlength', 'multiple', 'muted', 'name', 'nonce', 'noshade', 'novalidate', 'nowrap', 'open', 'optimum', 'part', 'pattern', 'placeholder', 'playsinline', 'popover', 'popovertarget', 'popovertargetaction', 'poster', 'preload', 'pubdate', 'radiogroup', 'readonly', 'rel', 'required', 'rev', 'reversed', 'role', 'rows', 'rowspan', 'spellcheck', 'scope', 'selected', 'shape', 'size', 'sizes', 'slot', 'span', 'srclang', 'start', 'src', 'srcset', 'step', 'style', 'summary', 'tabindex', 'title', 'translate', 'type', 'usemap', 'valign', 'value', 'width', 'wrap', 'xmlns', 'slot']);
-  const svg = freeze(['accent-height', 'accumulate', 'additive', 'alignment-baseline', 'amplitude', 'ascent', 'attributename', 'attributetype', 'azimuth', 'basefrequency', 'baseline-shift', 'begin', 'bias', 'by', 'class', 'clip', 'clippathunits', 'clip-path', 'clip-rule', 'color', 'color-interpolation', 'color-interpolation-filters', 'color-profile', 'color-rendering', 'cx', 'cy', 'd', 'dx', 'dy', 'diffuseconstant', 'direction', 'display', 'divisor', 'dur', 'edgemode', 'elevation', 'end', 'exponent', 'fill', 'fill-opacity', 'fill-rule', 'filter', 'filterunits', 'flood-color', 'flood-opacity', 'font-family', 'font-size', 'font-size-adjust', 'font-stretch', 'font-style', 'font-variant', 'font-weight', 'fx', 'fy', 'g1', 'g2', 'glyph-name', 'glyphref', 'gradientunits', 'gradienttransform', 'height', 'href', 'id', 'image-rendering', 'in', 'in2', 'intercept', 'k', 'k1', 'k2', 'k3', 'k4', 'kerning', 'keypoints', 'keysplines', 'keytimes', 'lang', 'lengthadjust', 'letter-spacing', 'kernelmatrix', 'kernelunitlength', 'lighting-color', 'local', 'marker-end', 'marker-mid', 'marker-start', 'markerheight', 'markerunits', 'markerwidth', 'maskcontentunits', 'maskunits', 'max', 'mask', 'mask-type', 'media', 'method', 'mode', 'min', 'name', 'numoctaves', 'offset', 'operator', 'opacity', 'order', 'orient', 'orientation', 'origin', 'overflow', 'paint-order', 'path', 'pathlength', 'patterncontentunits', 'patterntransform', 'patternunits', 'points', 'preservealpha', 'preserveaspectratio', 'primitiveunits', 'r', 'rx', 'ry', 'radius', 'refx', 'refy', 'repeatcount', 'repeatdur', 'restart', 'result', 'rotate', 'scale', 'seed', 'shape-rendering', 'slope', 'specularconstant', 'specularexponent', 'spreadmethod', 'startoffset', 'stddeviation', 'stitchtiles', 'stop-color', 'stop-opacity', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke', 'stroke-width', 'style', 'surfacescale', 'systemlanguage', 'tabindex', 'tablevalues', 'targetx', 'targety', 'transform', 'transform-origin', 'text-anchor', 'text-decoration', 'text-rendering', 'textlength', 'type', 'u1', 'u2', 'unicode', 'values', 'viewbox', 'visibility', 'version', 'vert-adv-y', 'vert-origin-x', 'vert-origin-y', 'width', 'word-spacing', 'wrap', 'writing-mode', 'xchannelselector', 'ychannelselector', 'x', 'x1', 'x2', 'xmlns', 'y', 'y1', 'y2', 'z', 'zoomandpan']);
-  const mathMl = freeze(['accent', 'accentunder', 'align', 'bevelled', 'close', 'columnsalign', 'columnlines', 'columnspan', 'denomalign', 'depth', 'dir', 'display', 'displaystyle', 'encoding', 'fence', 'frame', 'height', 'href', 'id', 'largeop', 'length', 'linethickness', 'lspace', 'lquote', 'mathbackground', 'mathcolor', 'mathsize', 'mathvariant', 'maxsize', 'minsize', 'movablelimits', 'notation', 'numalign', 'open', 'rowalign', 'rowlines', 'rowspacing', 'rowspan', 'rspace', 'rquote', 'scriptlevel', 'scriptminsize', 'scriptsizemultiplier', 'selection', 'separator', 'separators', 'stretchy', 'subscriptshift', 'supscriptshift', 'symmetric', 'voffset', 'width', 'xmlns']);
+  const html = freeze(['accept', 'action', 'align', 'alt', 'autocapitalize', 'autocomplete', 'autopictureinpicture', 'autoplay', 'background', 'bgcolor', 'border', 'capture', 'cellpadding', 'cellspacing', 'checked', 'cite', 'class', 'clear', 'color', 'cols', 'colspan', 'command', 'commandfor', 'controls', 'controlslist', 'coords', 'crossorigin', 'datetime', 'decoding', 'default', 'dir', 'disabled', 'disablepictureinpicture', 'disableremoteplayback', 'download', 'draggable', 'enctype', 'enterkeyhint', 'exportparts', 'face', 'for', 'headers', 'height', 'hidden', 'high', 'href', 'hreflang', 'id', 'inert', 'inputmode', 'integrity', 'ismap', 'kind', 'label', 'lang', 'list', 'loading', 'loop', 'low', 'max', 'maxlength', 'media', 'method', 'min', 'minlength', 'multiple', 'muted', 'name', 'nonce', 'noshade', 'novalidate', 'nowrap', 'open', 'optimum', 'part', 'pattern', 'placeholder', 'playsinline', 'popover', 'popovertarget', 'popovertargetaction', 'poster', 'preload', 'pubdate', 'radiogroup', 'readonly', 'rel', 'required', 'rev', 'reversed', 'role', 'rows', 'rowspan', 'spellcheck', 'scope', 'selected', 'shape', 'size', 'sizes', 'slot', 'span', 'srclang', 'start', 'src', 'srcset', 'step', 'style', 'summary', 'tabindex', 'title', 'translate', 'type', 'usemap', 'valign', 'value', 'width', 'wrap', 'xmlns']);
+  const svg = freeze(['accent-height', 'accumulate', 'additive', 'alignment-baseline', 'amplitude', 'ascent', 'attributename', 'attributetype', 'azimuth', 'basefrequency', 'baseline-shift', 'begin', 'bias', 'by', 'class', 'clip', 'clippathunits', 'clip-path', 'clip-rule', 'color', 'color-interpolation', 'color-interpolation-filters', 'color-profile', 'color-rendering', 'cx', 'cy', 'd', 'dx', 'dy', 'diffuseconstant', 'direction', 'display', 'divisor', 'dominant-baseline', 'dur', 'edgemode', 'elevation', 'end', 'exponent', 'fill', 'fill-opacity', 'fill-rule', 'filter', 'filterunits', 'flood-color', 'flood-opacity', 'font-family', 'font-size', 'font-size-adjust', 'font-stretch', 'font-style', 'font-variant', 'font-weight', 'fx', 'fy', 'g1', 'g2', 'glyph-name', 'glyphref', 'gradientunits', 'gradienttransform', 'height', 'href', 'id', 'image-rendering', 'in', 'in2', 'intercept', 'k', 'k1', 'k2', 'k3', 'k4', 'kerning', 'keypoints', 'keysplines', 'keytimes', 'lang', 'lengthadjust', 'letter-spacing', 'kernelmatrix', 'kernelunitlength', 'lighting-color', 'local', 'marker-end', 'marker-mid', 'marker-start', 'markerheight', 'markerunits', 'markerwidth', 'maskcontentunits', 'maskunits', 'max', 'mask', 'mask-type', 'media', 'method', 'mode', 'min', 'name', 'numoctaves', 'offset', 'operator', 'opacity', 'order', 'orient', 'orientation', 'origin', 'overflow', 'paint-order', 'path', 'pathlength', 'patterncontentunits', 'patterntransform', 'patternunits', 'pointer-events', 'points', 'preservealpha', 'preserveaspectratio', 'primitiveunits', 'r', 'rx', 'ry', 'radius', 'refx', 'refy', 'repeatcount', 'repeatdur', 'restart', 'result', 'rotate', 'scale', 'seed', 'shape-rendering', 'slope', 'specularconstant', 'specularexponent', 'spreadmethod', 'startoffset', 'stddeviation', 'stitchtiles', 'stop-color', 'stop-opacity', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke', 'stroke-width', 'style', 'surfacescale', 'systemlanguage', 'tabindex', 'tablevalues', 'targetx', 'targety', 'transform', 'transform-origin', 'text-anchor', 'text-decoration', 'text-orientation', 'text-rendering', 'textlength', 'type', 'u1', 'u2', 'unicode', 'values', 'vector-effect', 'viewbox', 'visibility', 'version', 'vert-adv-y', 'vert-origin-x', 'vert-origin-y', 'width', 'word-spacing', 'wrap', 'writing-mode', 'xchannelselector', 'ychannelselector', 'x', 'x1', 'x2', 'xmlns', 'y', 'y1', 'y2', 'z', 'zoomandpan']);
+  const mathMl = freeze(['accent', 'accentunder', 'align', 'bevelled', 'close', 'columnalign', 'columnlines', 'columnspacing', 'columnspan', 'denomalign', 'depth', 'dir', 'display', 'displaystyle', 'encoding', 'fence', 'frame', 'height', 'href', 'id', 'largeop', 'length', 'linethickness', 'lquote', 'lspace', 'mathbackground', 'mathcolor', 'mathsize', 'mathvariant', 'maxsize', 'minsize', 'movablelimits', 'notation', 'numalign', 'open', 'rowalign', 'rowlines', 'rowspacing', 'rowspan', 'rspace', 'rquote', 'scriptlevel', 'scriptminsize', 'scriptsizemultiplier', 'selection', 'separator', 'separators', 'stretchy', 'subscriptshift', 'supscriptshift', 'symmetric', 'voffset', 'width', 'xmlns']);
   const xml = freeze(['xlink:href', 'xml:id', 'xlink:title', 'xml:space', 'xmlns:xlink']);
 
-  // eslint-disable-next-line unicorn/better-regex
-  const MUSTACHE_EXPR = seal(/\{\{[\w\W]*|[\w\W]*\}\}/gm); // Specify template detection regex for SAFE_FOR_TEMPLATES mode
-  const ERB_EXPR = seal(/<%[\w\W]*|[\w\W]*%>/gm);
-  const TMPLIT_EXPR = seal(/\$\{[\w\W]*/gm); // eslint-disable-line unicorn/better-regex
+  const MUSTACHE_EXPR = seal(/{{[\w\W]*|^[\w\W]*}}/g);
+  const ERB_EXPR = seal(/<%[\w\W]*|^[\w\W]*%>/g);
+  const TMPLIT_EXPR = seal(/\${[\w\W]*/g);
   const DATA_ATTR = seal(/^data-[\-\w.\u00B7-\uFFFF]+$/); // eslint-disable-line no-useless-escape
   const ARIA_ATTR = seal(/^aria-[\-\w]+$/); // eslint-disable-line no-useless-escape
   const IS_ALLOWED_URI = seal(/^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|matrix):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i // eslint-disable-line no-useless-escape
@@ -333,22 +447,14 @@ var purify = createCommonjsModule(function (module, exports) {
   );
   const DOCTYPE_NAME = seal(/^html$/i);
   const CUSTOM_ELEMENT = seal(/^[a-z][.\w]*(-[.\w]+)+$/i);
+  // Markup-significant character probes used by _sanitizeElements.
+  // Shared module-level instances are safe despite the sticky /g flags:
+  // unapply() resets lastIndex for RegExp receivers before every call.
+  const ELEMENT_MARKUP_PROBE = seal(/<[/\w!]/g);
+  const COMMENT_MARKUP_PROBE = seal(/<[/\w]/g);
+  const FALLBACK_TAG_CLOSE = seal(/<\/no(script|embed|frames)/i);
+  const SELF_CLOSING_TAG = seal(/\/>/i);
 
-  var EXPRESSIONS = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    ARIA_ATTR: ARIA_ATTR,
-    ATTR_WHITESPACE: ATTR_WHITESPACE,
-    CUSTOM_ELEMENT: CUSTOM_ELEMENT,
-    DATA_ATTR: DATA_ATTR,
-    DOCTYPE_NAME: DOCTYPE_NAME,
-    ERB_EXPR: ERB_EXPR,
-    IS_ALLOWED_URI: IS_ALLOWED_URI,
-    IS_SCRIPT_OR_DATA: IS_SCRIPT_OR_DATA,
-    MUSTACHE_EXPR: MUSTACHE_EXPR,
-    TMPLIT_EXPR: TMPLIT_EXPR
-  });
-
-  /* eslint-disable @typescript-eslint/indent */
   // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
   const NODE_TYPE = {
     element: 1,
@@ -359,13 +465,44 @@ var purify = createCommonjsModule(function (module, exports) {
     // Deprecated
     entityNode: 6,
     // Deprecated
-    progressingInstruction: 7,
+    processingInstruction: 7,
     comment: 8,
     document: 9,
     documentType: 10,
     documentFragment: 11,
     notation: 12 // Deprecated
   };
+  /* HTML-namespace elements whose child text nodes are serialized *literally*
+     (unescaped) by the HTML fragment-serialization algorithm. Two reparse-mXSS
+     shapes ride on that literal serialization:
+       (a) an element child - a tree the HTML parser can never build, but the DOM
+           API and an XML/XHTML parse can - after which a `</tag>`-bearing text
+           sibling breaks the element open on reparse; and
+       (b) text-only content that already carries the element's OWN end tag, e.g.
+           `<style>...</style><img onerror=x>` built as a node, which the literal
+           serializer emits verbatim for the HTML parser to re-open.
+     Shape (a) is handled by the firstElementChild branch in _isUnsafeNode; shape
+     (b) by the LITERAL_TEXT_CLOSE probe. Both read textContent (the raw-serialized
+     form for these elements) rather than innerHTML, because an XML/XHTML working
+     document serializes innerHTML with `<` escaped, which silently blinds the
+     innerHTML-based probes (rule 1's second probe and FALLBACK_TAG_CLOSE) there.
+     `script` is never allow-listed, but is kept here so the guard matches the
+     serializer's own literal-text list exactly. */
+  const LITERAL_TEXT_ELEMENT_NAMES = ['style', 'script', 'xmp', 'iframe', 'noembed', 'noframes', 'plaintext', 'noscript'];
+  const LITERAL_TEXT_ELEMENTS = freeze(addToSet({}, LITERAL_TEXT_ELEMENT_NAMES));
+  /* Per-element end-tag matcher. On an HTML reparse the ONLY token that
+     terminates a literal-text element's raw content is its own end tag; a foreign
+     literal-text close (e.g. `</xmp>` sitting inside `<style>`) does not break
+     out, so matching is per-element, not a shared alternation. The lookahead
+     requires an HTML tag-name terminator (whitespace, `/` or `>`) so a longer
+     name such as `</styles` is not mistaken for `</style`. */
+  const LITERAL_TEXT_CLOSE = function () {
+    const map = {};
+    arrayForEach(LITERAL_TEXT_ELEMENT_NAMES, name => {
+      map[name] = seal(new RegExp('</' + name + '(?=[\\t\\n\\f\\r />])', 'i'));
+    });
+    return freeze(map);
+  }();
   const getGlobal = function getGlobal() {
     return typeof window === 'undefined' ? null : window;
   };
@@ -420,10 +557,40 @@ var purify = createCommonjsModule(function (module, exports) {
       uponSanitizeShadowNode: []
     };
   };
+  /**
+   * Resolve a set-valued configuration option: a fresh set built from
+   * cfg[key] when it is an own array property (seeded with a clone of
+   * options.base when given, case-normalized via options.transform),
+   * the fallback set otherwise.
+   *
+   * @param cfg the cloned, prototype-free configuration object
+   * @param key the configuration property to read
+   * @param fallback the set to use when the option is absent or not an array
+   * @param options transform and optional base set to merge into
+   * @returns the resolved set
+   */
+  const _resolveSetOption = function _resolveSetOption(cfg, key, fallback, options) {
+    return objectHasOwnProperty(cfg, key) && arrayIsArray(cfg[key]) ? addToSet(options.base ? clone(options.base) : {}, cfg[key], options.transform) : fallback;
+  };
+  /**
+   * Resolve an object-valued configuration option: a prototype-free clone
+   * of cfg[key] when it is an own, truthy object property, else a fresh
+   * fallback built by makeFallback (fresh on every parse, so a previous
+   * parse can never leak state into the next one).
+   *
+   * @param cfg the cloned, prototype-free configuration object
+   * @param key the configuration property to read
+   * @param makeFallback builds the fallback value when the option is absent
+   * @returns the resolved object
+   */
+  const _resolveObjectOption = function _resolveObjectOption(cfg, key, makeFallback) {
+    const value = objectHasOwnProperty(cfg, key) ? cfg[key] : undefined;
+    return value && typeof value === 'object' ? clone(value) : makeFallback();
+  };
   function createDOMPurify() {
     let window = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : getGlobal();
     const DOMPurify = root => createDOMPurify(root);
-    DOMPurify.version = '3.3.3';
+    DOMPurify.version = '3.4.14';
     DOMPurify.removed = [];
     if (!window || !window.document || window.document.nodeType !== NODE_TYPE.document || !window.Element) {
       // Not running in a browser, provide a factory function
@@ -431,28 +598,36 @@ var purify = createCommonjsModule(function (module, exports) {
       DOMPurify.isSupported = false;
       return DOMPurify;
     }
-    let {
-      document
-    } = window;
+    let document = window.document;
     const originalDocument = document;
     const currentScript = originalDocument.currentScript;
-    const {
-      DocumentFragment,
-      HTMLTemplateElement,
-      Node,
-      Element,
-      NodeFilter,
-      NamedNodeMap = window.NamedNodeMap || window.MozNamedAttrMap,
-      HTMLFormElement,
-      DOMParser,
-      trustedTypes
-    } = window;
+      const HTMLTemplateElement = window.HTMLTemplateElement,
+      Node = window.Node,
+      Element = window.Element,
+      NodeFilter = window.NodeFilter;
+      const DOMParser = window.DOMParser,
+      trustedTypes = window.trustedTypes;
     const ElementPrototype = Element.prototype;
     const cloneNode = lookupGetter(ElementPrototype, 'cloneNode');
     const remove = lookupGetter(ElementPrototype, 'remove');
     const getNextSibling = lookupGetter(ElementPrototype, 'nextSibling');
     const getChildNodes = lookupGetter(ElementPrototype, 'childNodes');
     const getParentNode = lookupGetter(ElementPrototype, 'parentNode');
+    const getShadowRoot = lookupGetter(ElementPrototype, 'shadowRoot');
+    const getAttributes = lookupGetter(ElementPrototype, 'attributes');
+    const getNodeType = Node && Node.prototype ? lookupGetter(Node.prototype, 'nodeType') : null;
+    const getNodeName = Node && Node.prototype ? lookupGetter(Node.prototype, 'nodeName') : null;
+    const getOwnerDocument = Node && Node.prototype ? lookupGetter(Node.prototype, 'ownerDocument') : null;
+    /* Clobber-safe nodeType / nodeName reads through the cached Node.prototype
+       getters, with a direct-property fallback for environments that lack
+       Node.prototype. Sites that need a different fallback (e.g. _isClobbered
+       returns early on a null name) intentionally keep their own reads. */
+    const _readNodeType = function _readNodeType(node) {
+      return getNodeType ? getNodeType(node) : node.nodeType;
+    };
+    const _readNodeName = function _readNodeName(node) {
+      return getNodeName ? getNodeName(node) : node.nodeName;
+    };
     // As per issue #47, the web-components registry is inherited by a
     // new document created via createHTMLDocument. As per the spec
     // (http://w3c.github.io/webcomponents/spec/custom/#creating-and-passing-registries)
@@ -467,33 +642,74 @@ var purify = createCommonjsModule(function (module, exports) {
     }
     let trustedTypesPolicy;
     let emptyHTML = '';
-    const {
-      implementation,
-      createNodeIterator,
-      createDocumentFragment,
-      getElementsByTagName
-    } = document;
-    const {
-      importNode
-    } = originalDocument;
+    // The instance's own internal Trusted Types policy. Unlike a caller-supplied
+    // `TRUSTED_TYPES_POLICY`, this is created at most once — Trusted Types throws
+    // on duplicate policy names — and is the only policy allowed to persist
+    // across configurations and survive `clearConfig()`.
+    let defaultTrustedTypesPolicy;
+    let defaultTrustedTypesPolicyResolved = false;
+    // Tracks whether we are already inside a call to the configured Trusted Types
+    // policy (`createHTML` or `createScriptURL`). If a supplied policy callback
+    // itself calls `DOMPurify.sanitize` (the cause of #1422), `sanitize` would
+    // re-enter the policy and recurse until the stack overflows. We detect that
+    // re-entry and throw a clear, actionable error instead. The guard is shared
+    // across both callbacks, because either one re-entering `sanitize` triggers
+    // the same unbounded recursion.
+    let IN_TRUSTED_TYPES_POLICY = 0;
+    const _assertNotInTrustedTypesPolicy = function _assertNotInTrustedTypesPolicy() {
+      if (IN_TRUSTED_TYPES_POLICY > 0) {
+        throw typeErrorCreate('A configured TRUSTED_TYPES_POLICY callback (createHTML or ' + 'createScriptURL) must not call DOMPurify.sanitize, as that causes ' + 'infinite recursion. Do not pass a policy whose callbacks wrap ' + 'DOMPurify as TRUSTED_TYPES_POLICY; see the "DOMPurify and Trusted ' + 'Types" section of the README.');
+      }
+    };
+    const _createTrustedHTML = function _createTrustedHTML(html) {
+      _assertNotInTrustedTypesPolicy();
+      IN_TRUSTED_TYPES_POLICY++;
+      try {
+        return trustedTypesPolicy.createHTML(html);
+      } finally {
+        IN_TRUSTED_TYPES_POLICY--;
+      }
+    };
+    const _createTrustedScriptURL = function _createTrustedScriptURL(scriptUrl) {
+      _assertNotInTrustedTypesPolicy();
+      IN_TRUSTED_TYPES_POLICY++;
+      try {
+        return trustedTypesPolicy.createScriptURL(scriptUrl);
+      } finally {
+        IN_TRUSTED_TYPES_POLICY--;
+      }
+    };
+    // Lazily resolve (and cache) the instance's internal default policy.
+    // Resolution is attempted at most once: a successful `createPolicy` cannot be
+    // repeated (Trusted Types throws on duplicate names), and a failed or
+    // unsupported attempt must not be retried on every parse.
+    const _getDefaultTrustedTypesPolicy = function _getDefaultTrustedTypesPolicy() {
+      if (!defaultTrustedTypesPolicyResolved) {
+        defaultTrustedTypesPolicy = _createTrustedTypesPolicy(trustedTypes, currentScript);
+        defaultTrustedTypesPolicyResolved = true;
+      }
+      return defaultTrustedTypesPolicy;
+    };
+    const _document = document,
+      implementation = _document.implementation,
+      createNodeIterator = _document.createNodeIterator,
+      createDocumentFragment = _document.createDocumentFragment,
+      getElementsByTagName = _document.getElementsByTagName;
+    const importNode = originalDocument.importNode;
     let hooks = _createHooksMap();
     /**
      * Expose whether this browser supports running the full DOMPurify.
      */
     DOMPurify.isSupported = typeof entries === 'function' && typeof getParentNode === 'function' && implementation && implementation.createHTMLDocument !== undefined;
-    const {
-      MUSTACHE_EXPR,
-      ERB_EXPR,
-      TMPLIT_EXPR,
-      DATA_ATTR,
-      ARIA_ATTR,
-      IS_SCRIPT_OR_DATA,
-      ATTR_WHITESPACE,
-      CUSTOM_ELEMENT
-    } = EXPRESSIONS;
-    let {
-      IS_ALLOWED_URI: IS_ALLOWED_URI$1
-    } = EXPRESSIONS;
+    const MUSTACHE_EXPR$1 = MUSTACHE_EXPR,
+      ERB_EXPR$1 = ERB_EXPR,
+      TMPLIT_EXPR$1 = TMPLIT_EXPR,
+      DATA_ATTR$1 = DATA_ATTR,
+      ARIA_ATTR$1 = ARIA_ATTR,
+      IS_SCRIPT_OR_DATA$1 = IS_SCRIPT_OR_DATA,
+      ATTR_WHITESPACE$1 = ATTR_WHITESPACE,
+      CUSTOM_ELEMENT$1 = CUSTOM_ELEMENT;
+    let IS_ALLOWED_URI$1 = IS_ALLOWED_URI;
     /**
      * We consider the elements and attributes below to be safe. Ideally
      * don't add any new ones but feel free to remove unwanted ones.
@@ -570,6 +786,13 @@ var purify = createCommonjsModule(function (module, exports) {
     let WHOLE_DOCUMENT = false;
     /* Track whether config is already set on this instance of DOMPurify. */
     let SET_CONFIG = false;
+    /* Pristine allowlist bindings captured at setConfig() time. On the
+     * persistent-config path sanitize() restores the sets from these before
+     * the per-walk hook clone-guard, so a hook's in-call widening cannot
+     * carry across calls. Null until setConfig() is called; reset by
+     * clearConfig(). */
+    let SET_CONFIG_ALLOWED_TAGS = null;
+    let SET_CONFIG_ALLOWED_ATTR = null;
     /* Decide if all elements (e.g. style, script) must be children of
      * document.body. By default, browsers might move them to document.head */
     let FORCE_BODY = false;
@@ -612,7 +835,17 @@ var purify = createCommonjsModule(function (module, exports) {
     let USE_PROFILES = {};
     /* Tags to ignore content of when KEEP_CONTENT is true */
     let FORBID_CONTENTS = null;
-    const DEFAULT_FORBID_CONTENTS = addToSet({}, ['annotation-xml', 'audio', 'colgroup', 'desc', 'foreignobject', 'head', 'iframe', 'math', 'mi', 'mn', 'mo', 'ms', 'mtext', 'noembed', 'noframes', 'noscript', 'plaintext', 'script', 'style', 'svg', 'template', 'thead', 'title', 'video', 'xmp']);
+    const DEFAULT_FORBID_CONTENTS = addToSet({}, ['annotation-xml', 'audio', 'colgroup', 'desc', 'foreignobject', 'head', 'iframe', 'math', 'mi', 'mn', 'mo', 'ms', 'mtext', 'noembed', 'noframes', 'noscript', 'plaintext', 'script',
+    // <selectedcontent> mirrors the selected <option>'s subtree, cloned by
+    // the UA (customizable <select>) — including any on* handlers — and the
+    // engine re-mirrors synchronously whenever a removal changes which
+    // option/selectedcontent is current, even inside DOMPurify's inert
+    // DOMParser document. Hoisting its children on removal re-inserts a fresh
+    // mirror target ahead of the walk, which the engine refills, looping
+    // forever (DoS) and amplifying output. Dropping its content on removal
+    // (rather than hoisting) breaks that cascade; the content is a duplicate
+    // of the option, which is sanitized on its own. See campaign-3 F1/F6.
+    'selectedcontent', 'style', 'svg', 'template', 'thead', 'title', 'video', 'xmp']);
     /* Tags that are safe for data: URIs */
     let DATA_URI_TAGS = null;
     const DEFAULT_DATA_URI_TAGS = addToSet({}, ['audio', 'video', 'img', 'source', 'image', 'track']);
@@ -628,8 +861,10 @@ var purify = createCommonjsModule(function (module, exports) {
     /* Allowed XHTML+XML namespaces */
     let ALLOWED_NAMESPACES = null;
     const DEFAULT_ALLOWED_NAMESPACES = addToSet({}, [MATHML_NAMESPACE, SVG_NAMESPACE, HTML_NAMESPACE], stringToString);
-    let MATHML_TEXT_INTEGRATION_POINTS = addToSet({}, ['mi', 'mo', 'mn', 'ms', 'mtext']);
-    let HTML_INTEGRATION_POINTS = addToSet({}, ['annotation-xml']);
+    const DEFAULT_MATHML_TEXT_INTEGRATION_POINTS = freeze(['mi', 'mo', 'mn', 'ms', 'mtext']);
+    let MATHML_TEXT_INTEGRATION_POINTS = addToSet({}, DEFAULT_MATHML_TEXT_INTEGRATION_POINTS);
+    const DEFAULT_HTML_INTEGRATION_POINTS = freeze(['annotation-xml']);
+    let HTML_INTEGRATION_POINTS = addToSet({}, DEFAULT_HTML_INTEGRATION_POINTS);
     // Certain elements are allowed in both SVG and HTML
     // namespace. We need to specify them explicitly
     // so that they don't get erroneously deleted from
@@ -671,15 +906,33 @@ var purify = createCommonjsModule(function (module, exports) {
       // HTML tags and attributes are not case-sensitive, converting to lowercase. Keeping XHTML as is.
       transformCaseFunc = PARSER_MEDIA_TYPE === 'application/xhtml+xml' ? stringToString : stringToLowerCase;
       /* Set configuration parameters */
-      ALLOWED_TAGS = objectHasOwnProperty(cfg, 'ALLOWED_TAGS') ? addToSet({}, cfg.ALLOWED_TAGS, transformCaseFunc) : DEFAULT_ALLOWED_TAGS;
-      ALLOWED_ATTR = objectHasOwnProperty(cfg, 'ALLOWED_ATTR') ? addToSet({}, cfg.ALLOWED_ATTR, transformCaseFunc) : DEFAULT_ALLOWED_ATTR;
-      ALLOWED_NAMESPACES = objectHasOwnProperty(cfg, 'ALLOWED_NAMESPACES') ? addToSet({}, cfg.ALLOWED_NAMESPACES, stringToString) : DEFAULT_ALLOWED_NAMESPACES;
-      URI_SAFE_ATTRIBUTES = objectHasOwnProperty(cfg, 'ADD_URI_SAFE_ATTR') ? addToSet(clone(DEFAULT_URI_SAFE_ATTRIBUTES), cfg.ADD_URI_SAFE_ATTR, transformCaseFunc) : DEFAULT_URI_SAFE_ATTRIBUTES;
-      DATA_URI_TAGS = objectHasOwnProperty(cfg, 'ADD_DATA_URI_TAGS') ? addToSet(clone(DEFAULT_DATA_URI_TAGS), cfg.ADD_DATA_URI_TAGS, transformCaseFunc) : DEFAULT_DATA_URI_TAGS;
-      FORBID_CONTENTS = objectHasOwnProperty(cfg, 'FORBID_CONTENTS') ? addToSet({}, cfg.FORBID_CONTENTS, transformCaseFunc) : DEFAULT_FORBID_CONTENTS;
-      FORBID_TAGS = objectHasOwnProperty(cfg, 'FORBID_TAGS') ? addToSet({}, cfg.FORBID_TAGS, transformCaseFunc) : clone({});
-      FORBID_ATTR = objectHasOwnProperty(cfg, 'FORBID_ATTR') ? addToSet({}, cfg.FORBID_ATTR, transformCaseFunc) : clone({});
-      USE_PROFILES = objectHasOwnProperty(cfg, 'USE_PROFILES') ? cfg.USE_PROFILES : false;
+      ALLOWED_TAGS = _resolveSetOption(cfg, 'ALLOWED_TAGS', DEFAULT_ALLOWED_TAGS, {
+        transform: transformCaseFunc
+      });
+      ALLOWED_ATTR = _resolveSetOption(cfg, 'ALLOWED_ATTR', DEFAULT_ALLOWED_ATTR, {
+        transform: transformCaseFunc
+      });
+      ALLOWED_NAMESPACES = _resolveSetOption(cfg, 'ALLOWED_NAMESPACES', DEFAULT_ALLOWED_NAMESPACES, {
+        transform: stringToString
+      });
+      URI_SAFE_ATTRIBUTES = _resolveSetOption(cfg, 'ADD_URI_SAFE_ATTR', DEFAULT_URI_SAFE_ATTRIBUTES, {
+        transform: transformCaseFunc,
+        base: DEFAULT_URI_SAFE_ATTRIBUTES
+      });
+      DATA_URI_TAGS = _resolveSetOption(cfg, 'ADD_DATA_URI_TAGS', DEFAULT_DATA_URI_TAGS, {
+        transform: transformCaseFunc,
+        base: DEFAULT_DATA_URI_TAGS
+      });
+      FORBID_CONTENTS = _resolveSetOption(cfg, 'FORBID_CONTENTS', DEFAULT_FORBID_CONTENTS, {
+        transform: transformCaseFunc
+      });
+      FORBID_TAGS = _resolveSetOption(cfg, 'FORBID_TAGS', clone({}), {
+        transform: transformCaseFunc
+      });
+      FORBID_ATTR = _resolveSetOption(cfg, 'FORBID_ATTR', clone({}), {
+        transform: transformCaseFunc
+      });
+      USE_PROFILES = objectHasOwnProperty(cfg, 'USE_PROFILES') ? cfg.USE_PROFILES && typeof cfg.USE_PROFILES === 'object' ? clone(cfg.USE_PROFILES) : cfg.USE_PROFILES : false;
       ALLOW_ARIA_ATTR = cfg.ALLOW_ARIA_ATTR !== false; // Default true
       ALLOW_DATA_ATTR = cfg.ALLOW_DATA_ATTR !== false; // Default true
       ALLOW_UNKNOWN_PROTOCOLS = cfg.ALLOW_UNKNOWN_PROTOCOLS || false; // Default false
@@ -695,20 +948,24 @@ var purify = createCommonjsModule(function (module, exports) {
       SANITIZE_NAMED_PROPS = cfg.SANITIZE_NAMED_PROPS || false; // Default false
       KEEP_CONTENT = cfg.KEEP_CONTENT !== false; // Default true
       IN_PLACE = cfg.IN_PLACE || false; // Default false
-      IS_ALLOWED_URI$1 = cfg.ALLOWED_URI_REGEXP || IS_ALLOWED_URI;
-      NAMESPACE = cfg.NAMESPACE || HTML_NAMESPACE;
-      MATHML_TEXT_INTEGRATION_POINTS = cfg.MATHML_TEXT_INTEGRATION_POINTS || MATHML_TEXT_INTEGRATION_POINTS;
-      HTML_INTEGRATION_POINTS = cfg.HTML_INTEGRATION_POINTS || HTML_INTEGRATION_POINTS;
-      CUSTOM_ELEMENT_HANDLING = cfg.CUSTOM_ELEMENT_HANDLING || {};
-      if (cfg.CUSTOM_ELEMENT_HANDLING && isRegexOrFunction(cfg.CUSTOM_ELEMENT_HANDLING.tagNameCheck)) {
-        CUSTOM_ELEMENT_HANDLING.tagNameCheck = cfg.CUSTOM_ELEMENT_HANDLING.tagNameCheck;
+      IS_ALLOWED_URI$1 = isRegex(cfg.ALLOWED_URI_REGEXP) ? cfg.ALLOWED_URI_REGEXP : IS_ALLOWED_URI; // Default regexp
+      NAMESPACE = typeof cfg.NAMESPACE === 'string' ? cfg.NAMESPACE : HTML_NAMESPACE; // Default HTML namespace
+      MATHML_TEXT_INTEGRATION_POINTS = _resolveObjectOption(cfg, 'MATHML_TEXT_INTEGRATION_POINTS', () => addToSet({}, DEFAULT_MATHML_TEXT_INTEGRATION_POINTS) // Default built-in map
+      );
+      HTML_INTEGRATION_POINTS = _resolveObjectOption(cfg, 'HTML_INTEGRATION_POINTS', () => addToSet({}, DEFAULT_HTML_INTEGRATION_POINTS) // Default built-in map
+      );
+      const customElementHandling = _resolveObjectOption(cfg, 'CUSTOM_ELEMENT_HANDLING', () => create(null));
+      CUSTOM_ELEMENT_HANDLING = create(null);
+      if (objectHasOwnProperty(customElementHandling, 'tagNameCheck') && isRegexOrFunction(customElementHandling.tagNameCheck)) {
+        CUSTOM_ELEMENT_HANDLING.tagNameCheck = customElementHandling.tagNameCheck; // Default undefined
       }
-      if (cfg.CUSTOM_ELEMENT_HANDLING && isRegexOrFunction(cfg.CUSTOM_ELEMENT_HANDLING.attributeNameCheck)) {
-        CUSTOM_ELEMENT_HANDLING.attributeNameCheck = cfg.CUSTOM_ELEMENT_HANDLING.attributeNameCheck;
+      if (objectHasOwnProperty(customElementHandling, 'attributeNameCheck') && isRegexOrFunction(customElementHandling.attributeNameCheck)) {
+        CUSTOM_ELEMENT_HANDLING.attributeNameCheck = customElementHandling.attributeNameCheck; // Default undefined
       }
-      if (cfg.CUSTOM_ELEMENT_HANDLING && typeof cfg.CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements === 'boolean') {
-        CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements = cfg.CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements;
+      if (objectHasOwnProperty(customElementHandling, 'allowCustomizedBuiltInElements') && typeof customElementHandling.allowCustomizedBuiltInElements === 'boolean') {
+        CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements = customElementHandling.allowCustomizedBuiltInElements; // Default undefined
       }
+      seal(CUSTOM_ELEMENT_HANDLING);
       if (SAFE_FOR_TEMPLATES) {
         ALLOW_DATA_ATTR = false;
       }
@@ -739,44 +996,32 @@ var purify = createCommonjsModule(function (module, exports) {
           addToSet(ALLOWED_ATTR, xml);
         }
       }
-      /* Prevent function-based ADD_ATTR / ADD_TAGS from leaking across calls */
-      if (!objectHasOwnProperty(cfg, 'ADD_TAGS')) {
-        EXTRA_ELEMENT_HANDLING.tagCheck = null;
-      }
-      if (!objectHasOwnProperty(cfg, 'ADD_ATTR')) {
-        EXTRA_ELEMENT_HANDLING.attributeCheck = null;
-      }
+      /* Always reset function-based ADD_TAGS / ADD_ATTR checks to prevent
+       * leaking across calls when switching from function to array config */
+      EXTRA_ELEMENT_HANDLING.tagCheck = null;
+      EXTRA_ELEMENT_HANDLING.attributeCheck = null;
       /* Merge configuration parameters */
-      if (cfg.ADD_TAGS) {
+      if (objectHasOwnProperty(cfg, 'ADD_TAGS')) {
         if (typeof cfg.ADD_TAGS === 'function') {
           EXTRA_ELEMENT_HANDLING.tagCheck = cfg.ADD_TAGS;
-        } else {
+        } else if (arrayIsArray(cfg.ADD_TAGS)) {
           if (ALLOWED_TAGS === DEFAULT_ALLOWED_TAGS) {
             ALLOWED_TAGS = clone(ALLOWED_TAGS);
           }
           addToSet(ALLOWED_TAGS, cfg.ADD_TAGS, transformCaseFunc);
         }
       }
-      if (cfg.ADD_ATTR) {
+      if (objectHasOwnProperty(cfg, 'ADD_ATTR')) {
         if (typeof cfg.ADD_ATTR === 'function') {
           EXTRA_ELEMENT_HANDLING.attributeCheck = cfg.ADD_ATTR;
-        } else {
+        } else if (arrayIsArray(cfg.ADD_ATTR)) {
           if (ALLOWED_ATTR === DEFAULT_ALLOWED_ATTR) {
             ALLOWED_ATTR = clone(ALLOWED_ATTR);
           }
           addToSet(ALLOWED_ATTR, cfg.ADD_ATTR, transformCaseFunc);
         }
       }
-      if (cfg.ADD_URI_SAFE_ATTR) {
-        addToSet(URI_SAFE_ATTRIBUTES, cfg.ADD_URI_SAFE_ATTR, transformCaseFunc);
-      }
-      if (cfg.FORBID_CONTENTS) {
-        if (FORBID_CONTENTS === DEFAULT_FORBID_CONTENTS) {
-          FORBID_CONTENTS = clone(FORBID_CONTENTS);
-        }
-        addToSet(FORBID_CONTENTS, cfg.FORBID_CONTENTS, transformCaseFunc);
-      }
-      if (cfg.ADD_FORBID_CONTENTS) {
+      if (objectHasOwnProperty(cfg, 'ADD_FORBID_CONTENTS') && arrayIsArray(cfg.ADD_FORBID_CONTENTS)) {
         if (FORBID_CONTENTS === DEFAULT_FORBID_CONTENTS) {
           FORBID_CONTENTS = clone(FORBID_CONTENTS);
         }
@@ -795,6 +1040,13 @@ var purify = createCommonjsModule(function (module, exports) {
         addToSet(ALLOWED_TAGS, ['tbody']);
         delete FORBID_TAGS.tbody;
       }
+      // Re-derive the active Trusted Types policy from this configuration on
+      // every parse. The active policy must never be sticky closure state that
+      // outlives the config that set it: a caller-supplied policy left in place
+      // after `clearConfig()` — or after a later call that supplied none, or
+      // `TRUSTED_TYPES_POLICY: null` — could sign a subsequent "default"
+      // `RETURN_TRUSTED_TYPE` result with a foreign, possibly unsafe policy.
+      // See GHSA-vxr8-fq34-vvx9.
       if (cfg.TRUSTED_TYPES_POLICY) {
         if (typeof cfg.TRUSTED_TYPES_POLICY.createHTML !== 'function') {
           throw typeErrorCreate('TRUSTED_TYPES_POLICY configuration option must provide a "createHTML" hook.');
@@ -802,18 +1054,45 @@ var purify = createCommonjsModule(function (module, exports) {
         if (typeof cfg.TRUSTED_TYPES_POLICY.createScriptURL !== 'function') {
           throw typeErrorCreate('TRUSTED_TYPES_POLICY configuration option must provide a "createScriptURL" hook.');
         }
-        // Overwrite existing TrustedTypes policy.
+        // A caller-supplied policy applies to this configuration only.
+        const previousTrustedTypesPolicy = trustedTypesPolicy;
         trustedTypesPolicy = cfg.TRUSTED_TYPES_POLICY;
-        // Sign local variables required by `sanitize`.
-        emptyHTML = trustedTypesPolicy.createHTML('');
-      } else {
-        // Uninitialized policy, attempt to initialize the internal dompurify policy.
-        if (trustedTypesPolicy === undefined) {
-          trustedTypesPolicy = _createTrustedTypesPolicy(trustedTypes, currentScript);
+        // Sign local variables required by `sanitize`. If the supplied policy's
+        // `createHTML` is circular (i.e. it calls `DOMPurify.sanitize`), this
+        // throws via the re-entrancy guard. Restore the previous policy first so
+        // the instance is not left in a poisoned state. See #1422.
+        try {
+          emptyHTML = _createTrustedHTML('');
+        } catch (error) {
+          trustedTypesPolicy = previousTrustedTypesPolicy;
+          throw error;
         }
-        // If creating the internal policy succeeded sign internal variables.
-        if (trustedTypesPolicy !== null && typeof emptyHTML === 'string') {
-          emptyHTML = trustedTypesPolicy.createHTML('');
+      } else if (cfg.TRUSTED_TYPES_POLICY === null) {
+        // Explicit opt-out for this call: perform no Trusted Types signing and
+        // create nothing (so a strict `trusted-types` CSP that disallows a
+        // `dompurify` policy can still call `sanitize` from inside its own
+        // policy — see #1422). Resetting to `undefined` rather than a sticky
+        // `null` also drops any previously retained caller policy, so it cannot
+        // resurface on a later call, while still allowing the next config-less
+        // call to restore the internal default policy. See GHSA-vxr8-fq34-vvx9.
+        trustedTypesPolicy = undefined;
+        emptyHTML = '';
+      } else {
+        // No policy supplied: keep the currently active policy if one is set — a
+        // previously supplied policy is intentionally sticky across config-less
+        // calls — otherwise fall back to the instance's own internal policy,
+        // created at most once. (A policy supplied for a *single* call still
+        // lingers by design; what must not linger is a policy whose configuration
+        // has been torn down via `clearConfig()`, which restores the default.)
+        if (trustedTypesPolicy === undefined) {
+          trustedTypesPolicy = _getDefaultTrustedTypesPolicy();
+        }
+        // Sign internal variables only when a policy is active. A falsy policy
+        // (Trusted Types unsupported, creation failed, or an explicit opt-out)
+        // leaves `emptyHTML` as a plain string, so we never call `.createHTML` on
+        // a non-policy and throw. See #1422.
+        if (trustedTypesPolicy && typeof emptyHTML === 'string') {
+          emptyHTML = _createTrustedHTML('');
         }
       }
       // Prevent further manipulation of configuration.
@@ -828,6 +1107,77 @@ var purify = createCommonjsModule(function (module, exports) {
      * correctly. */
     const ALL_SVG_TAGS = addToSet({}, [...svg$1, ...svgFilters, ...svgDisallowed]);
     const ALL_MATHML_TAGS = addToSet({}, [...mathMl$1, ...mathMlDisallowed]);
+    /**
+     * Namespace rules for an element in the SVG namespace.
+     *
+     * @param tagName the element's lowercase tag name
+     * @param parent the (possibly simulated) parent node
+     * @param parentTagName the parent's lowercase tag name
+     * @returns true if a spec-compliant parser could produce this element
+     */
+    const _checkSvgNamespace = function _checkSvgNamespace(tagName, parent, parentTagName) {
+      // The only way to switch from HTML namespace to SVG
+      // is via <svg>. If it happens via any other tag, then
+      // it should be killed.
+      if (parent.namespaceURI === HTML_NAMESPACE) {
+        return tagName === 'svg';
+      }
+      // The only way to switch from MathML to SVG is via <svg>
+      // if the parent is either <annotation-xml> or a MathML
+      // text integration point.
+      if (parent.namespaceURI === MATHML_NAMESPACE) {
+        return tagName === 'svg' && (parentTagName === 'annotation-xml' || MATHML_TEXT_INTEGRATION_POINTS[parentTagName]);
+      }
+      // We only allow elements that are defined in SVG
+      // spec. All others are disallowed in SVG namespace.
+      return Boolean(ALL_SVG_TAGS[tagName]);
+    };
+    /**
+     * Namespace rules for an element in the MathML namespace.
+     *
+     * @param tagName the element's lowercase tag name
+     * @param parent the (possibly simulated) parent node
+     * @param parentTagName the parent's lowercase tag name
+     * @returns true if a spec-compliant parser could produce this element
+     */
+    const _checkMathMlNamespace = function _checkMathMlNamespace(tagName, parent, parentTagName) {
+      // The only way to switch from HTML namespace to MathML
+      // is via <math>. If it happens via any other tag, then
+      // it should be killed.
+      if (parent.namespaceURI === HTML_NAMESPACE) {
+        return tagName === 'math';
+      }
+      // The only way to switch from SVG to MathML is via
+      // <math> and HTML integration points
+      if (parent.namespaceURI === SVG_NAMESPACE) {
+        return tagName === 'math' && HTML_INTEGRATION_POINTS[parentTagName];
+      }
+      // We only allow elements that are defined in MathML
+      // spec. All others are disallowed in MathML namespace.
+      return Boolean(ALL_MATHML_TAGS[tagName]);
+    };
+    /**
+     * Namespace rules for an element in the HTML namespace.
+     *
+     * @param tagName the element's lowercase tag name
+     * @param parent the (possibly simulated) parent node
+     * @param parentTagName the parent's lowercase tag name
+     * @returns true if a spec-compliant parser could produce this element
+     */
+    const _checkHtmlNamespace = function _checkHtmlNamespace(tagName, parent, parentTagName) {
+      // The only way to switch from SVG to HTML is via
+      // HTML integration points, and from MathML to HTML
+      // is via MathML text integration points
+      if (parent.namespaceURI === SVG_NAMESPACE && !HTML_INTEGRATION_POINTS[parentTagName]) {
+        return false;
+      }
+      if (parent.namespaceURI === MATHML_NAMESPACE && !MATHML_TEXT_INTEGRATION_POINTS[parentTagName]) {
+        return false;
+      }
+      // We disallow tags that are specific for MathML
+      // or SVG and should never appear in HTML namespace
+      return !ALL_MATHML_TAGS[tagName] && (COMMON_SVG_AND_HTML_ELEMENTS[tagName] || !ALL_SVG_TAGS[tagName]);
+    };
     /**
      * @param element a DOM element whose namespace is being checked
      * @returns Return false if the element has a
@@ -850,51 +1200,13 @@ var purify = createCommonjsModule(function (module, exports) {
         return false;
       }
       if (element.namespaceURI === SVG_NAMESPACE) {
-        // The only way to switch from HTML namespace to SVG
-        // is via <svg>. If it happens via any other tag, then
-        // it should be killed.
-        if (parent.namespaceURI === HTML_NAMESPACE) {
-          return tagName === 'svg';
-        }
-        // The only way to switch from MathML to SVG is via`
-        // svg if parent is either <annotation-xml> or MathML
-        // text integration points.
-        if (parent.namespaceURI === MATHML_NAMESPACE) {
-          return tagName === 'svg' && (parentTagName === 'annotation-xml' || MATHML_TEXT_INTEGRATION_POINTS[parentTagName]);
-        }
-        // We only allow elements that are defined in SVG
-        // spec. All others are disallowed in SVG namespace.
-        return Boolean(ALL_SVG_TAGS[tagName]);
+        return _checkSvgNamespace(tagName, parent, parentTagName);
       }
       if (element.namespaceURI === MATHML_NAMESPACE) {
-        // The only way to switch from HTML namespace to MathML
-        // is via <math>. If it happens via any other tag, then
-        // it should be killed.
-        if (parent.namespaceURI === HTML_NAMESPACE) {
-          return tagName === 'math';
-        }
-        // The only way to switch from SVG to MathML is via
-        // <math> and HTML integration points
-        if (parent.namespaceURI === SVG_NAMESPACE) {
-          return tagName === 'math' && HTML_INTEGRATION_POINTS[parentTagName];
-        }
-        // We only allow elements that are defined in MathML
-        // spec. All others are disallowed in MathML namespace.
-        return Boolean(ALL_MATHML_TAGS[tagName]);
+        return _checkMathMlNamespace(tagName, parent, parentTagName);
       }
       if (element.namespaceURI === HTML_NAMESPACE) {
-        // The only way to switch from SVG to HTML is via
-        // HTML integration points, and from MathML to HTML
-        // is via MathML text integration points
-        if (parent.namespaceURI === SVG_NAMESPACE && !HTML_INTEGRATION_POINTS[parentTagName]) {
-          return false;
-        }
-        if (parent.namespaceURI === MATHML_NAMESPACE && !MATHML_TEXT_INTEGRATION_POINTS[parentTagName]) {
-          return false;
-        }
-        // We disallow tags that are specific for MathML
-        // or SVG and should never appear in HTML namespace
-        return !ALL_MATHML_TAGS[tagName] && (COMMON_SVG_AND_HTML_ELEMENTS[tagName] || !ALL_SVG_TAGS[tagName]);
+        return _checkHtmlNamespace(tagName, parent, parentTagName);
       }
       // For XHTML and XML documents that support custom namespaces
       if (PARSER_MEDIA_TYPE === 'application/xhtml+xml' && ALLOWED_NAMESPACES[element.namespaceURI]) {
@@ -919,28 +1231,148 @@ var purify = createCommonjsModule(function (module, exports) {
         // eslint-disable-next-line unicorn/prefer-dom-node-remove
         getParentNode(node).removeChild(node);
       } catch (_) {
+        /* The normal detach failed — this is reached for a parentless node
+           (getParentNode() is null, so .removeChild throws). Element.prototype
+           .remove() is itself a spec no-op on a parentless node, so a recorded
+           "removal" would otherwise hand the caller back an intact,
+           payload-bearing node (e.g. a detached IN_PLACE root the mXSS canary or
+           the style-with-element-child rule decided to kill). Fail closed by
+           throwing — exactly as a clobbered root does at the IN_PLACE entry —
+           rather than trying to "neutralize" the node via its own methods.
+           Neutralizing would mean calling getAttributeNames()/removeAttribute()
+           on the node, both of which a <form> root can clobber via a named child
+           (and _isClobbered does not even probe getAttributeNames), so the
+           neutralize step could itself be silently defeated, leaving the payload
+           intact. A throw touches only the cached, clobber-safe remove() and
+           getParentNode(). Generalizes GHSA-r47g-fvhr-h676 (clobbered-form root)
+           to every root-kill reason. REPORT-3.
+                  This lives inside the catch, so it never fires for a normally-removed
+           in-tree node: those have a parent, removeChild() succeeds, and the
+           catch is not entered. Only a kept (parentless) root reaches here. */
         remove(node);
+        if (!getParentNode(node)) {
+          throw typeErrorCreate('a node selected for removal could not be detached from its tree ' + 'and cannot be safely returned; refusing to sanitize in place');
+        }
+      }
+    };
+    /**
+     * _stripAttributeNode
+     *
+     * Remove a single Attr node case/namespace-exactly on an attribute-teardown
+     * path. Name-based removeAttribute() ASCII-lowercases its lookup key for an
+     * HTML element in an HTML document and so silently misses a case-preserved
+     * handler (e.g. `ONERROR` off an XML/XHTML import) - the same defect
+     * _removeAttribute() was fixed for, which a name-based call would reintroduce
+     * on these IN_PLACE teardown paths. Unlike _removeAttribute this does not
+     * record into DOMPurify.removed: the neutralize passes intentionally do not
+     * book-keep. A clobbered/detached node falls back to best-effort name-based
+     * removal.
+     *
+     * @param element the element to strip the attribute from
+     * @param attribute the Attr node to remove
+     * @param name the attribute's name, for the fallback path
+     */
+    const _stripAttributeNode = function _stripAttributeNode(element, attribute, name) {
+      try {
+        element.removeAttributeNode(attribute);
+      } catch (_) {
+        try {
+          element.removeAttribute(name);
+        } catch (_) {}
+      }
+    };
+    /**
+     * _neutralizeRoot
+     *
+     * Fail-closed teardown of an in-place root after the sanitize walk aborts
+     * (campaign-3 F2). An internal throw mid-walk — e.g. a page-registered
+     * custom element's reaction detaches a node so `_forceRemove`'s deliberate
+     * parentless guard throws, or any other re-entrant engine mutation — would
+     * otherwise leave the caller's *live* tree half-sanitized, with everything
+     * after the abort point still carrying its handlers. There is no safe way
+     * to resume the walk (the tree mutated under us), so we strip the root bare:
+     * remove every child and every attribute, then let the caller's catch see
+     * the original error. Clobber-safe (cached `remove`/`childNodes`/`attributes`
+     * getters; the root was already clobber-pre-flighted at the IN_PLACE entry).
+     *
+     * @param root the in-place root to empty
+     */
+    const _neutralizeRoot = function _neutralizeRoot(root) {
+      /* Strip every disallowed attribute (on* handlers included) off the whole
+         subtree BEFORE detaching anything. Detaching first would hand back
+         handler-bearing originals (e.g. an already-loading `<img onerror>`)
+         whose queued resource event still fires in page scope after we throw.
+         Clobber-safe reads; a doomed clobbered node's own attributes are
+         irrelevant while its non-clobbered descendants are reached and scrubbed. */
+      _neutralizeSubtree(root);
+      const childNodes = getChildNodes(root);
+      if (childNodes) {
+        const snapshot = [];
+        arrayForEach(childNodes, child => {
+          arrayPush(snapshot, child);
+        });
+        arrayForEach(snapshot, child => {
+          try {
+            remove(child);
+          } catch (_) {
+            /* Best-effort teardown; a still-attached child is handled below */
+          }
+        });
+      }
+      const attributes = getAttributes(root);
+      if (attributes) {
+        for (let i = attributes.length - 1; i >= 0; --i) {
+          const attribute = attributes[i];
+          const name = attribute && attribute.name;
+          if (typeof name === 'string') {
+            _stripAttributeNode(root, attribute, name);
+          }
+        }
       }
     };
     /**
      * _removeAttribute
      *
+     * Name-based getAttributeNode()/removeAttribute() ASCII-lowercase their
+     * lookup key for HTML elements in an HTML document, so they silently miss an
+     * attribute whose stored qualified name still contains uppercase ASCII
+     * letters. That happens when the node came from a case-preserving source
+     * (an XML/XHTML document imported via importNode(), or createAttributeNS()),
+     * where e.g. `ONERROR` survives the walk: the policy check lowercases to
+     * `onerror` and rejects it, but `removeAttribute('ONERROR')` looks up
+     * `onerror` and finds nothing. Remove the exact Attr node instead, which is
+     * case- and namespace-exact, and fall back to name-based removal only when
+     * the caller could not supply the node.
+     *
      * @param name an Attribute name
      * @param element a DOM node
+     * @param attr the exact Attr node to remove, when the caller has it
      */
-    const _removeAttribute = function _removeAttribute(name, element) {
-      try {
-        arrayPush(DOMPurify.removed, {
-          attribute: element.getAttributeNode(name),
-          from: element
-        });
-      } catch (_) {
-        arrayPush(DOMPurify.removed, {
-          attribute: null,
-          from: element
-        });
+    const _removeAttribute = function _removeAttribute(name, element, attr) {
+      if (!attr) {
+        try {
+          attr = element.getAttributeNode(name);
+        } catch (_) {
+          attr = null;
+        }
       }
-      element.removeAttribute(name);
+      arrayPush(DOMPurify.removed, {
+        attribute: attr || null,
+        from: element
+      });
+      try {
+        if (attr) {
+          element.removeAttributeNode(attr);
+        } else {
+          element.removeAttribute(name);
+        }
+      } catch (_) {
+        /* Clobbered or already-detached node - best-effort fall back to a
+           name-based removal so the "is" handling below still runs. */
+        try {
+          element.removeAttribute(name);
+        } catch (_) {}
+      }
       // We void attribute values for unremovable "is" attributes
       if (name === 'is') {
         if (RETURN_DOM || RETURN_DOM_FRAGMENT) {
@@ -951,6 +1383,164 @@ var purify = createCommonjsModule(function (module, exports) {
           try {
             element.setAttribute(name, '');
           } catch (_) {}
+        }
+      }
+    };
+    /**
+     * _stripDisallowedAttributes
+     *
+     * Removes every attribute the active configuration does not allow from a
+     * single element, using the same allowlist as the main attribute pass (so
+     * `on*` handlers go, but no `/^on/` blocklist is introduced). Used only to
+     * neutralise nodes that are being discarded from an in-place tree.
+     *
+     * @param element the element to strip
+     */
+    const _stripDisallowedAttributes = function _stripDisallowedAttributes(element) {
+      const attributes = getAttributes(element);
+      if (!attributes) {
+        return;
+      }
+      for (let i = attributes.length - 1; i >= 0; --i) {
+        const attribute = attributes[i];
+        const name = attribute && attribute.name;
+        if (typeof name !== 'string' || ALLOWED_ATTR[transformCaseFunc(name)]) {
+          continue;
+        }
+        _stripAttributeNode(element, attribute, name);
+      }
+    };
+    /**
+     * _neutralizeSubtree
+     *
+     * Completes the audit-5 F1 fix across every removal path. The KEEP_CONTENT
+     * move-hoist neutralises only disallowed-tag removals; clobber, mXSS-canary,
+     * namespace, comment, processing-instruction and KEEP_CONTENT:false removals
+     * all drop their subtree wholesale via `_forceRemove`. On the IN_PLACE path
+     * those dropped nodes are detached from the caller's LIVE tree but a
+     * handler-bearing original among them (an `<img onerror>`/`<video>` that was
+     * loading) keeps its queued resource event, which fires in page scope after
+     * sanitize returns. This walks a removed subtree and strips every attribute
+     * the active configuration does not allow — so `on*` handlers are cancelled
+     * through the SAME allowlist that governs kept nodes, not a separate `/^on/`
+     * blocklist. Run synchronously before sanitize returns, i.e. before any
+     * queued event can fire. Hook-free by design: these nodes leave the output,
+     * so firing attribute hooks for them would be surprising. Clobber-safe reads;
+     * a doomed clobbered node may shadow `removeAttribute` (its own attributes are
+     * irrelevant — it is discarded — while its non-clobbered descendants, e.g.
+     * the `<img>`, are reached and scrubbed).
+     *
+     * @param root the root of a removed subtree to neutralise
+     */
+    const _neutralizeSubtree = function _neutralizeSubtree(root) {
+      const stack = [root];
+      while (stack.length > 0) {
+        const node = stack.pop();
+        const nodeType = _readNodeType(node);
+        if (nodeType === NODE_TYPE.element) {
+          _stripDisallowedAttributes(node);
+        }
+        const childNodes = getChildNodes(node);
+        if (childNodes) {
+          for (let i = childNodes.length - 1; i >= 0; --i) {
+            stack.push(childNodes[i]);
+          }
+        }
+      }
+    };
+    /**
+     * _neutralizePatchLinkage
+     *
+     * IN_PLACE entry pre-pass (declarative-partial-updates / streaming
+     * hardening, https://github.com/WICG/declarative-partial-updates).
+     *
+     * The main walk strips patch linkage (`for`/`patchsrc`) and removes range
+     * markers (PIs / markup comments) node-by-node, in document order, AS it
+     * reaches each node. On a live in-place root that leaves a window: from the
+     * moment the root is connected until the walk arrives at a given node, that
+     * node's linkage is live. A patch applied on connection/stream can fire as
+     * a microtask during the walk and inject or teleport an unsanitized DOM
+     * range into a region the iterator has already passed and will not revisit,
+     * so the post-return "tree is sanitized" contract is violated. Sweep the
+     * whole tree once up front and sever every linkage before the walk begins,
+     * closing that window.
+     *
+     * This CANNOT undo a patch that already fired before sanitize ran — that is
+     * the irreducible "do not IN_PLACE a live-connected attacker tree" caveat —
+     * but it closes everything from sanitize-start onward. Gated on SAFE_FOR_XML
+     * to group with the rest of the declarative-partial-updates handling and
+     * stay overridable, consistent with the codebase.
+     *
+     * Clobber-safe traversal (cached childNodes getter); per-node try/catch so a
+     * clobbered root cannot defeat the sweep of its non-clobbered descendants.
+     *
+     * NOTE (pending real-Chrome confirmation, see test/declarative-patch-probe
+     * .html Q1): this mirrors the existing policy of keeping `for` on
+     * <label>/<output>. If the shipping feature can drive a patch through a
+     * surviving `for`-on-label/output + `id` pair, this pre-pass and the
+     * attribute check at _isBasicCustomElement's caller must additionally drop
+     * that pair on the IN_PLACE path. Left as-is until the taxonomy is verified.
+     *
+     * @param root the in-place root to sweep
+     */
+    /**
+     * Central policy for declarative-partial-updates patch-linkage attributes,
+     * shared by the _neutralizePatchLinkage pre-pass and _isValidAttribute so
+     * the two sites cannot drift: `patchsrc` always links, `for` links
+     * everywhere except on <label>/<output>, and the whole policy is gated on
+     * SAFE_FOR_XML (see the rationale block in _isValidAttribute).
+     *
+     * @param lcName the transformCaseFunc'd attribute name
+     * @param lcTag the transformCaseFunc'd tag name of the carrying element
+     * @return true if the attribute is patch linkage and must be dropped
+     */
+    const _isPatchLinkageAttribute = function _isPatchLinkageAttribute(lcName, lcTag) {
+      if (!SAFE_FOR_XML) {
+        return false;
+      }
+      if (lcName === 'patchsrc') {
+        return true;
+      }
+      return lcName === 'for' && lcTag !== 'label' && lcTag !== 'output';
+    };
+    const _neutralizePatchLinkage = function _neutralizePatchLinkage(root) {
+      if (!SAFE_FOR_XML) {
+        return;
+      }
+      const stack = [root];
+      while (stack.length > 0) {
+        const node = stack.pop();
+        const nodeType = _readNodeType(node);
+        /* Remove range markers (the target side of a patch linkage): every
+           processing instruction, and any markup-bearing comment. */
+        if (nodeType === NODE_TYPE.processingInstruction || nodeType === NODE_TYPE.comment && regExpTest(COMMENT_MARKUP_PROBE, node.data)) {
+          try {
+            remove(node);
+          } catch (_) {
+            /* Best-effort */
+          }
+          continue;
+        }
+        /* Strip patch-source attributes (the source side) off elements. */
+        if (nodeType === NODE_TYPE.element) {
+          const element = node;
+          const lcTag = transformCaseFunc(_readNodeName(node));
+          try {
+            if (element.hasAttribute && element.hasAttribute('patchsrc')) {
+              element.removeAttribute('patchsrc');
+            }
+            if (element.hasAttribute && element.hasAttribute('for') && _isPatchLinkageAttribute('for', lcTag)) {
+              element.removeAttribute('for');
+            }
+          } catch (_) {
+            /* Clobbered removeAttribute/hasAttribute on a doomed node — ignore */
+          }
+        }
+        const childNodes = getChildNodes(node);
+        if (childNodes) {
+          for (let i = childNodes.length - 1; i >= 0; --i) {
+            stack.push(childNodes[i]);
+          }
         }
       }
     };
@@ -975,7 +1565,7 @@ var purify = createCommonjsModule(function (module, exports) {
         // Root of XHTML doc must contain xmlns declaration (see https://www.w3.org/TR/xhtml1/normative.html#strict)
         dirty = '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>' + dirty + '</body></html>';
       }
-      const dirtyPayload = trustedTypesPolicy ? trustedTypesPolicy.createHTML(dirty) : dirty;
+      const dirtyPayload = trustedTypesPolicy ? _createTrustedHTML(dirty) : dirty;
       /*
        * Use the DOMParser API by default, fallback later if needs be
        * DOMParser not work for svg when has multiple root element.
@@ -1011,33 +1601,364 @@ var purify = createCommonjsModule(function (module, exports) {
      * @return The created NodeIterator
      */
     const _createNodeIterator = function _createNodeIterator(root) {
-      return createNodeIterator.call(root.ownerDocument || root, root,
+      /* Read ownerDocument through the cached Node.prototype getter, never the
+         direct property. HTMLFormElement has [LegacyOverrideBuiltIns], so a
+         clobbering child (<input name="ownerDocument"> or a form-associated
+         external input) shadows the prototype getter and makes a direct read
+         return that <input>. createNodeIterator.call(<input>, ...) then throws
+         "Illegal invocation", and on the IN_PLACE path that throw lands before
+         the walk's fail-closed barrier - leaving the caller's live tree, with
+         any already-armed handler in it, un-neutralized. The cached getter
+         returns the real Document regardless of the clobber. */
+      const doc = getOwnerDocument ? getOwnerDocument(root) : root.ownerDocument;
+      return createNodeIterator.call(doc || root, root,
       // eslint-disable-next-line no-bitwise
       NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_COMMENT | NodeFilter.SHOW_TEXT | NodeFilter.SHOW_PROCESSING_INSTRUCTION | NodeFilter.SHOW_CDATA_SECTION, null);
     };
     /**
+     * Replace template expression syntax (mustache, ERB, template
+     * literal) with a space; shared by all SAFE_FOR_TEMPLATES scrub
+     * sites. Order matters: mustache, then ERB, then template literal.
+     *
+     * @param value the string to scrub
+     * @returns the scrubbed string
+     */
+    const _stripTemplateExpressions = function _stripTemplateExpressions(value) {
+      value = stringReplace(value, MUSTACHE_EXPR$1, ' ');
+      value = stringReplace(value, ERB_EXPR$1, ' ');
+      value = stringReplace(value, TMPLIT_EXPR$1, ' ');
+      return value;
+    };
+    /**
+     * Strip template-engine expressions ({{...}}, ${...}, <%...%>) from the
+     * character data of an element subtree. Used as the final safety net for
+     * SAFE_FOR_TEMPLATES on every DOM-returning code path so that expressions
+     * which only form after text-node normalization (e.g. fragments split across
+     * stripped elements) cannot survive into a template-evaluating framework.
+     *
+     * Walks text/comment/CDATA/processing-instruction nodes and mutates `.data`
+     * in place rather than round-tripping through innerHTML. This preserves
+     * descendant node references (important for IN_PLACE callers), avoids a
+     * serialize/reparse cycle, and reads literal character data — which means
+     * `<%...%>` in text content matches the ERB regex against its real bytes
+     * instead of the HTML-entity-escaped form innerHTML would produce.
+     *
+     * Attribute values are not visited here; SAFE_FOR_TEMPLATES handling for
+     * attributes is performed during the per-node `_sanitizeAttributes` pass.
+     *
+     * @param node The root element whose character data should be scrubbed.
+     */
+    const _scrubTemplateExpressions2 = function _scrubTemplateExpressions(node) {
+      var _node$querySelectorAl;
+      node.normalize();
+      /* Clobber-safe ownerDocument read, same reasoning as _createNodeIterator:
+         under SAFE_FOR_TEMPLATES this runs on the live IN_PLACE root, which may
+         carry a form-named-getter override of ownerDocument. */
+      const doc = getOwnerDocument ? getOwnerDocument(node) : node.ownerDocument;
+      const walker = createNodeIterator.call(doc || node, node,
+      // eslint-disable-next-line no-bitwise
+      NodeFilter.SHOW_TEXT | NodeFilter.SHOW_COMMENT | NodeFilter.SHOW_CDATA_SECTION | NodeFilter.SHOW_PROCESSING_INSTRUCTION, null);
+      let currentNode = walker.nextNode();
+      while (currentNode) {
+        currentNode.data = _stripTemplateExpressions(currentNode.data);
+        currentNode = walker.nextNode();
+      }
+      // NodeIterator does not descend into <template>.content per the DOM spec,
+      // so we must explicitly recurse into each template's content fragment,
+      // mirroring the approach used by _sanitizeShadowDOM.
+      const templates = (_node$querySelectorAl = node.querySelectorAll) === null || _node$querySelectorAl === void 0 ? void 0 : _node$querySelectorAl.call(node, 'template');
+      if (templates) {
+        arrayForEach(templates, tmpl => {
+          if (_isDocumentFragment(tmpl.content)) {
+            _scrubTemplateExpressions2(tmpl.content);
+          }
+        });
+      }
+    };
+    /**
      * _isClobbered
+     *
+     * Detect DOM-clobbering on HTMLFormElement nodes. Form is the only HTML
+     * interface with [LegacyOverrideBuiltIns]; a descendant element with a
+     * `name` attribute matching a prototype property shadows that property
+     * on direct reads. We use this check at the IN_PLACE entry-point and
+     * during attribute sanitization to refuse clobbered forms.
      *
      * @param element element to check for clobbering attacks
      * @return true if clobbered, false if safe
      */
     const _isClobbered = function _isClobbered(element) {
-      return element instanceof HTMLFormElement && (typeof element.nodeName !== 'string' || typeof element.textContent !== 'string' || typeof element.removeChild !== 'function' || !(element.attributes instanceof NamedNodeMap) || typeof element.removeAttribute !== 'function' || typeof element.setAttribute !== 'function' || typeof element.namespaceURI !== 'string' || typeof element.insertBefore !== 'function' || typeof element.hasChildNodes !== 'function');
+      // Realm-independent tag-name probe. If we can't determine the tag
+      // name at all, we can't reason about clobbering — return false
+      // (the caller's other defences still apply).
+      const realTagName = getNodeName ? getNodeName(element) : null;
+      if (typeof realTagName !== 'string') {
+        return false;
+      }
+      if (transformCaseFunc(realTagName) !== 'form') {
+        return false;
+      }
+      return typeof element.nodeName !== 'string' || typeof element.textContent !== 'string' || typeof element.removeChild !== 'function' ||
+      // Realm-safe NamedNodeMap detection: equality against the cached
+      // prototype getter. Clobbered .attributes (e.g. <input name="attributes">)
+      // makes the direct read diverge from the cached read; a clean form
+      // (same-realm OR foreign-realm) has both reads pointing at the same
+      // canonical NamedNodeMap.
+      element.attributes !== getAttributes(element) || typeof element.removeAttribute !== 'function' || typeof element.setAttribute !== 'function' || typeof element.namespaceURI !== 'string' || typeof element.insertBefore !== 'function' || typeof element.hasChildNodes !== 'function' ||
+      // NodeType clobbering probe. Cached Node.prototype.nodeType getter
+      // returns the integer 1 for any Element regardless of realm; direct
+      // read on a clobbered form (e.g. <input name="nodeType">) returns
+      // the named child element. Cheap addition — nodeType is read from
+      // an internal slot, no serialization cost — and removes a residual
+      // clobbering surface used by several mXSS / PI / comment branches
+      // in _sanitizeElements that compare currentNode.nodeType directly.
+      element.nodeType !== getNodeType(element) ||
+      // HTMLFormElement has [LegacyOverrideBuiltIns]: a descendant named
+      // "childNodes" shadows the prototype getter. Direct reads of
+      // form.childNodes from a clobbered form return the named child
+      // instead of the real NodeList, so any walk that reads it directly
+      // skips the form's real children. Compare the direct read to the
+      // cached Node.prototype getter — when the form's named-property
+      // getter intercepts the read, the two values differ and we flag
+      // the form. This catches every clobbering child type (input,
+      // select, etc.) regardless of whether the named child happens to
+      // carry a numeric .length, which a typeof-based probe would miss
+      // (e.g. HTMLSelectElement.length is a defined unsigned-long).
+      element.childNodes !== getChildNodes(element);
     };
     /**
-     * Checks whether the given object is a DOM node.
+     * Checks whether the given value is a DocumentFragment from any realm.
+     *
+     * The realm-independent replacement reads `nodeType` through the cached
+     * Node.prototype getter and compares to the DOCUMENT_FRAGMENT_NODE
+     * constant (11). nodeType is a numeric value resolved from the node's
+     * internal slot, identical across realms for the same kind of node.
+     *
+     * @param value object to check
+     * @return true if value is a DocumentFragment-shaped node from any realm
+     */
+    const _isDocumentFragment = function _isDocumentFragment(value) {
+      if (!getNodeType || typeof value !== 'object' || value === null) {
+        return false;
+      }
+      try {
+        return getNodeType(value) === NODE_TYPE.documentFragment;
+      } catch (_) {
+        return false;
+      }
+    };
+    /**
+     * Checks whether the given object is a DOM node, including nodes that
+     * originate from a different window/realm (e.g. an iframe's
+     * contentDocument). The previous `value instanceof Node` check was
+     * realm-bound: nodes from a different window failed it, causing
+     * sanitize() to silently stringify them and reset IN_PLACE to false,
+     * returning the original node unsanitized. See GHSA-4w3q-35jp-p934.
      *
      * @param value object to check whether it's a DOM node
-     * @return true is object is a DOM node
+     * @return true if value is a DOM node from any realm
      */
     const _isNode = function _isNode(value) {
-      return typeof Node === 'function' && value instanceof Node;
+      if (!getNodeType || typeof value !== 'object' || value === null) {
+        return false;
+      }
+      try {
+        return typeof getNodeType(value) === 'number';
+      } catch (_) {
+        return false;
+      }
     };
     function _executeHooks(hooks, currentNode, data) {
+      if (hooks.length === 0) {
+        return;
+      }
       arrayForEach(hooks, hook => {
         hook.call(DOMPurify, currentNode, data, CONFIG);
       });
     }
+    /**
+     * Structural-threat checks that condemn a node regardless of the
+     * allowlists: mXSS via namespace confusion, risky CSS construction,
+     * processing instructions, markup-bearing comments. Pure predicate;
+     * the caller removes. Check order is load-bearing.
+     *
+     * @param currentNode the node to inspect
+     * @param tagName the node's transformCaseFunc'd tag name
+     * @return true if the node must be removed
+     */
+    const _isUnsafeNode = function _isUnsafeNode(currentNode, tagName) {
+      /* Detect mXSS attempts abusing namespace confusion */
+      if (SAFE_FOR_XML && currentNode.hasChildNodes() && !_isNode(currentNode.firstElementChild) && regExpTest(ELEMENT_MARKUP_PROBE, currentNode.textContent) && regExpTest(ELEMENT_MARKUP_PROBE, currentNode.innerHTML)) {
+        return true;
+      }
+      /* Remove rawtext/literal-text elements whose literal serialization
+         re-opens markup on an HTML reparse - shapes (a) and (b) documented at
+         LITERAL_TEXT_ELEMENTS. Both are invisible to rule 1 above (which
+         self-disables once there is an element child, and whose second probe
+         reads the innerHTML an XML/XHTML document serializes escaped), which
+         is why both probes here read textContent instead. Previously only
+         `style`-with-element-child was covered; every element in
+         LITERAL_TEXT_ELEMENTS shares this literal serialization and is
+         equally affected. */
+      if (SAFE_FOR_XML && currentNode.namespaceURI === HTML_NAMESPACE && LITERAL_TEXT_ELEMENTS[tagName] && (_isNode(currentNode.firstElementChild) || typeof currentNode.textContent === 'string' && regExpTest(LITERAL_TEXT_CLOSE[tagName], currentNode.textContent))) {
+        return true;
+      }
+      /* Remove any occurrence of processing instructions */
+      if (currentNode.nodeType === NODE_TYPE.processingInstruction) {
+        return true;
+      }
+      /* Remove any kind of possibly harmful comments */
+      if (SAFE_FOR_XML && currentNode.nodeType === NODE_TYPE.comment && regExpTest(COMMENT_MARKUP_PROBE, currentNode.data)) {
+        return true;
+      }
+      return false;
+    };
+    /**
+     * Evaluate a CUSTOM_ELEMENT_HANDLING check (a RegExp or a predicate
+     * function, per the validation in _parseConfig) against a name.
+     * Additional arguments are forwarded to predicate functions - the
+     * attributeNameCheck predicate receives the tag name as its second
+     * argument. A null/absent check never matches.
+     *
+     * @param check the configured tagNameCheck / attributeNameCheck value
+     * @param name the name to test
+     * @param args extra arguments forwarded to a predicate function
+     * @return true if the check matches the name
+     */
+    const _matchesNameCheck = function _matchesNameCheck(check, name) {
+      if (check instanceof RegExp) {
+        return regExpTest(check, name);
+      }
+      if (check instanceof Function) {
+        for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+          args[_key - 2] = arguments[_key];
+        }
+        return Boolean(check(name, ...args));
+      }
+      return false;
+    };
+    /**
+     * Handle a node whose tag is forbidden or not allowlisted: keep
+     * allowed custom elements (false return exits _sanitizeElements
+     * early - the namespace and fallback-tag removal checks are
+     * intentionally skipped for kept custom elements), else hoist
+     * content per KEEP_CONTENT and remove.
+     *
+     * A kept custom element is the ONLY case in which this function
+     * returns false, so the caller uses that return value to run the
+     * afterSanitizeElements hook on the kept element and keep the
+     * element-hook lifecycle consistent with normal allowlisted
+     * elements (GHSA-c2j3-45gr-mqc4).
+     *
+     * @param currentNode the disallowed node
+     * @param tagName the node's transformCaseFunc'd tag name
+     * @return true if the node was removed, false if kept
+     */
+    const _sanitizeDisallowedNode = function _sanitizeDisallowedNode(currentNode, tagName, root) {
+      /* Check if we have a custom element to handle */
+      if (!FORBID_TAGS[tagName] && _isBasicCustomElement(tagName) && _matchesNameCheck(CUSTOM_ELEMENT_HANDLING.tagNameCheck, tagName)) {
+        return false;
+      }
+      /* Keep content except for bad-listed elements.
+           Use the cached prototype getters exclusively — the previous code
+           had `|| currentNode.parentNode` / `|| currentNode.childNodes`
+           fallbacks, but the cached getters always return the canonical
+           value (or null for a real parent-less node), so the fallback
+           path was dead in safe cases and a clobbering surface in unsafe
+           ones. Falsy cached results stay falsy; the `if (childNodes &&
+           parentNode)` check already gates correctly. */
+      if (KEEP_CONTENT && !FORBID_CONTENTS[tagName]) {
+        const parentNode = getParentNode(currentNode);
+        const childNodes = getChildNodes(currentNode);
+        if (childNodes && parentNode) {
+          const childCount = childNodes.length;
+          /* Hoist by moving each child up one level rather than deep-cloning
+               it. Moving transfers every descendant exactly once, so a chain of
+               nested disallowed elements costs O(n) instead of the O(n^2) that
+               re-cloning the shrinking subtree at each level produced; it also
+               empties the removed original, so `DOMPurify.removed` no longer
+               pins whole subtrees. Moving preserves the in-place guarantee too:
+               an original carrying already-queued resource events (`<img
+               onerror>`, `<video>`/`<audio>` error, lazy/`onload`, …) is
+               relocated and sanitised rather than left detached but still armed.
+                        The sole case that must clone is removing the walk root itself.
+               The result is serialised from the root's subtree, so a restrictive
+               ALLOWED_TAGS that strips the root (`body` on the string path) must
+               leave the content inside it, which only cloning does. In IN_PLACE
+               the root is pre-validated as an allowed tag and so is never removed
+               here, so that path always takes the move branch.
+                        `childNodes` is live; a tail-to-head walk keeps `childNodes[i]`
+               valid whether we move (drops the trailing entry) or clone (leaves
+               the list intact). */
+          for (let i = childCount - 1; i >= 0; --i) {
+            const hoisted = currentNode === root ? cloneNode(childNodes[i], true) : childNodes[i];
+            parentNode.insertBefore(hoisted, getNextSibling(currentNode));
+          }
+        }
+      }
+      _forceRemove(currentNode);
+      return true;
+    };
+    /**
+     * Fork a hook-mutable allowlist off its shared binding the first time a
+     * (possibly lazily-installed) uponSanitize* hook is about to see it, so the
+     * hook cannot widen the per-instance default or the setConfig binding by
+     * reference and leak past the call. Returns the set unchanged once it is
+     * already call-local, so repeated calls across elements are idempotent.
+     *
+     * @param hookList the uponSanitize* hook array for this event
+     * @param set the current ALLOWED_TAGS / ALLOWED_ATTR binding
+     * @param defaultSet the per-instance DEFAULT_ALLOWED_* constant
+     * @param setConfigSet the captured setConfig() binding, or null
+     * @return a call-local clone if a hook is present and set is still shared,
+     *   else set unchanged
+     */
+    const _forkSharedAllowlist = function _forkSharedAllowlist(hookList, set, defaultSet, setConfigSet) {
+      if (hookList.length === 0) {
+        return set;
+      }
+      return set === defaultSet || set === setConfigSet ? clone(set) : set;
+    };
+    /**
+     * Shared guard for a node that a hook has detached from the walk tree,
+     * used after each element-hook site in _sanitizeElements. Detaching is a
+     * long-standing user pattern (issue #469; draw.io-style foreignObject
+     * filtering). Per the cached, unclobberable parentNode getter the node is
+     * genuinely out of the tree, so it can reach neither the serialized
+     * output nor an IN_PLACE live tree; treat it as removed and stop
+     * processing it. Without this guard, the unsafe-node / namespace checks
+     * would call _forceRemove on a parentless node and hit the REPORT-3
+     * fail-closed throw — which exists for nodes DOMPurify wants gone but
+     * *cannot* detach (clobbered / parentless roots), the opposite of a node
+     * that is already safely gone. The walk root is exempt: a detached
+     * IN_PLACE root is legitimate input and must still be fully sanitized,
+     * and a kill-decision on it must keep hitting the REPORT-3 throw.
+     *
+     * Nodes detached by hooks stay the hook's responsibility for placement:
+     * they are not recorded in DOMPurify.removed, so the post-walk IN_PLACE
+     * pass (which iterates DOMPurify.removed) does not reach them. But a
+     * hook-detached subtree can still hold a queued resource-event handler -
+     * e.g. an <img onload> that began loading when the caller built the live
+     * tree - which fires in page scope after sanitize returns even though the
+     * handler never reached the returned tree. That is the audit-5 F1 hazard,
+     * and the documented node.remove() hook pattern walks straight into it.
+     * So on the IN_PLACE path we neutralize the detached subtree inline,
+     * stripping its non-allow-listed attributes before returning, exactly as
+     * the post-walk pass does for _forceRemove'd subtrees.
+     *
+     * @param currentNode the node a hook may have detached
+     * @param root the current walk root
+     * @return true if the node is detached and now handled, false otherwise
+     */
+    const _handleHookDetachedNode = function _handleHookDetachedNode(currentNode, root) {
+      if (currentNode === root || getParentNode(currentNode) !== null) {
+        return false;
+      }
+      if (IN_PLACE) {
+        _neutralizeSubtree(currentNode);
+      }
+      return true;
+    };
     /**
      * _sanitizeElements
      *
@@ -1047,81 +1968,81 @@ var purify = createCommonjsModule(function (module, exports) {
      * @param currentNode to check for permission to exist
      * @return true if node was killed, false if left alive
      */
-    const _sanitizeElements = function _sanitizeElements(currentNode) {
-      let content = null;
+    const _sanitizeElements = function _sanitizeElements(currentNode, root) {
       /* Execute a hook if present */
       _executeHooks(hooks.beforeSanitizeElements, currentNode, null);
+      /* A hook may have detached the node - treat it as removed (see
+         _handleHookDetachedNode for the full rationale). */
+      if (_handleHookDetachedNode(currentNode, root)) {
+        return true;
+      }
       /* Check if element is clobbered or can clobber */
       if (_isClobbered(currentNode)) {
         _forceRemove(currentNode);
         return true;
       }
       /* Now let's check the element's type and name */
-      const tagName = transformCaseFunc(currentNode.nodeName);
+      const tagName = transformCaseFunc(_readNodeName(currentNode));
+      /* Close the pre-walk clone-guard's timing gap: an uponSanitizeElement
+         hook may have been installed after that guard sampled the hook arrays
+         (e.g. lazily from beforeSanitizeElements), leaving ALLOWED_TAGS still
+         aliasing a shared binding that a widening hook would mutate by
+         reference. Fork it before exposing it to the hook. */
+      ALLOWED_TAGS = _forkSharedAllowlist(hooks.uponSanitizeElement, ALLOWED_TAGS, DEFAULT_ALLOWED_TAGS, SET_CONFIG_ALLOWED_TAGS);
       /* Execute a hook if present */
       _executeHooks(hooks.uponSanitizeElement, currentNode, {
         tagName,
         allowedTags: ALLOWED_TAGS
       });
-      /* Detect mXSS attempts abusing namespace confusion */
-      if (SAFE_FOR_XML && currentNode.hasChildNodes() && !_isNode(currentNode.firstElementChild) && regExpTest(/<[/\w!]/g, currentNode.innerHTML) && regExpTest(/<[/\w!]/g, currentNode.textContent)) {
-        _forceRemove(currentNode);
+      /* The uponSanitizeElement hook may have detached the node, exactly as
+         above (see _handleHookDetachedNode for the full rationale). */
+      if (_handleHookDetachedNode(currentNode, root)) {
         return true;
       }
-      /* Remove any occurrence of processing instructions */
-      if (currentNode.nodeType === NODE_TYPE.progressingInstruction) {
-        _forceRemove(currentNode);
-        return true;
-      }
-      /* Remove any kind of possibly harmful comments */
-      if (SAFE_FOR_XML && currentNode.nodeType === NODE_TYPE.comment && regExpTest(/<[/\w]/g, currentNode.data)) {
+      /* Remove mXSS vectors, processing instructions and risky comments */
+      if (_isUnsafeNode(currentNode, tagName)) {
         _forceRemove(currentNode);
         return true;
       }
       /* Remove element if anything forbids its presence */
-      if (!(EXTRA_ELEMENT_HANDLING.tagCheck instanceof Function && EXTRA_ELEMENT_HANDLING.tagCheck(tagName)) && (!ALLOWED_TAGS[tagName] || FORBID_TAGS[tagName])) {
-        /* Check if we have a custom element to handle */
-        if (!FORBID_TAGS[tagName] && _isBasicCustomElement(tagName)) {
-          if (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, tagName)) {
-            return false;
-          }
-          if (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(tagName)) {
-            return false;
-          }
+      if (FORBID_TAGS[tagName] || !(EXTRA_ELEMENT_HANDLING.tagCheck instanceof Function && EXTRA_ELEMENT_HANDLING.tagCheck(tagName)) && !ALLOWED_TAGS[tagName]) {
+        const removed = _sanitizeDisallowedNode(currentNode, tagName, root);
+        /* A false return means the node is a custom element kept via
+           CUSTOM_ELEMENT_HANDLING - the only keep path through
+           _sanitizeDisallowedNode. Run afterSanitizeElements on it so the
+           element-hook lifecycle matches normal allowlisted elements: a
+           security policy applied in this hook (e.g. stripping an attribute
+           from every surviving element) must not silently skip kept custom
+           elements (GHSA-c2j3-45gr-mqc4). This mirrors the normal-element
+           tail below - the hook runs, then the walker's subsequent
+           _sanitizeAttributes pass sanitizes the element's attributes. The
+           deliberately skipped namespace and fallback-tag removal checks stay
+           skipped; they are removal decisions, not the hook contract. */
+        if (removed === false) {
+          _executeHooks(hooks.afterSanitizeElements, currentNode, null);
         }
-        /* Keep content except for bad-listed elements */
-        if (KEEP_CONTENT && !FORBID_CONTENTS[tagName]) {
-          const parentNode = getParentNode(currentNode) || currentNode.parentNode;
-          const childNodes = getChildNodes(currentNode) || currentNode.childNodes;
-          if (childNodes && parentNode) {
-            const childCount = childNodes.length;
-            for (let i = childCount - 1; i >= 0; --i) {
-              const childClone = cloneNode(childNodes[i], true);
-              childClone.__removalCount = (currentNode.__removalCount || 0) + 1;
-              parentNode.insertBefore(childClone, getNextSibling(currentNode));
-            }
-          }
-        }
-        _forceRemove(currentNode);
-        return true;
+        return removed;
       }
-      /* Check whether element has a valid namespace */
-      if (currentNode instanceof Element && !_checkValidNamespace(currentNode)) {
+      /* Check whether element has a valid namespace.
+         Realm-safe check (GHSA-hpcv-96wg-7vj8): use the cached Node.prototype
+         nodeType getter rather than `instanceof Element`, which is realm-
+         bound and short-circuits to false for any node minted in a different
+         realm — letting a foreign-realm element with a forbidden namespace
+         slip past the namespace check entirely. */
+      const nt = _readNodeType(currentNode);
+      if (nt === NODE_TYPE.element && !_checkValidNamespace(currentNode)) {
         _forceRemove(currentNode);
         return true;
       }
       /* Make sure that older browsers don't get fallback-tag mXSS */
-      if ((tagName === 'noscript' || tagName === 'noembed' || tagName === 'noframes') && regExpTest(/<\/no(script|embed|frames)/i, currentNode.innerHTML)) {
+      if ((tagName === 'noscript' || tagName === 'noembed' || tagName === 'noframes') && regExpTest(FALLBACK_TAG_CLOSE, currentNode.innerHTML)) {
         _forceRemove(currentNode);
         return true;
       }
       /* Sanitize element content to be template-safe */
       if (SAFE_FOR_TEMPLATES && currentNode.nodeType === NODE_TYPE.text) {
         /* Get the element's text content */
-        content = currentNode.textContent;
-        arrayForEach([MUSTACHE_EXPR, ERB_EXPR, TMPLIT_EXPR], expr => {
-          content = stringReplace(content, expr, ' ');
-        });
+        const content = _stripTemplateExpressions(currentNode.textContent);
         if (currentNode.textContent !== content) {
           arrayPush(DOMPurify.removed, {
             element: currentNode.cloneNode()
@@ -1147,31 +2068,92 @@ var purify = createCommonjsModule(function (module, exports) {
       if (FORBID_ATTR[lcName]) {
         return false;
       }
+      /* Reject declarative-partial-updates patch-linkage attributes
+         (https://github.com/WICG/declarative-partial-updates).
+              Empirical note (Chrome 150, verified — see
+         test/declarative-patch-probe-v3.html): expansion is NOT applied after
+         sanitization. For the string path it fires during sanitize()'s own
+         parse, so the walk sees and sanitizes the fully materialized expanded
+         tree — teleports into MathML/SVG integration points included; a
+         weaponized `<template for>`->`<img onerror>` comes back with the handler
+         stripped. For the IN_PLACE path it fires on connection, before the walk.
+         Either way DOMPurify is NOT blind to the patch.
+              This removal is therefore defense-in-depth rather than the sole barrier:
+         it prevents live linkage from surviving into the OUTPUT and re-expanding
+         in the caller's context, and keeps behaviour deterministic if a future
+         engine defers expansion. `for` is legitimate only on <label>/<output>;
+         anywhere else (notably <template for>) it links the element to a patch
+         target and teleports or removes an arbitrary DOM range by id/marker name.
+         `patchsrc` fetches remote markup and is treated as a script-loading
+         mechanism (CSP). Gated on SAFE_FOR_XML so the removal groups with the
+         other structural-threat checks and stays overridable, consistent with
+         the rest of the codebase. PI range markers are already removed by
+         _isUnsafeNode. */
+      if (_isPatchLinkageAttribute(lcName, lcTag)) {
+        return false;
+      }
       /* Make sure attribute cannot clobber */
       if (SANITIZE_DOM && (lcName === 'id' || lcName === 'name') && (value in document || value in formElement)) {
         return false;
       }
+      const nameIsPermitted = ALLOWED_ATTR[lcName] || EXTRA_ELEMENT_HANDLING.attributeCheck instanceof Function && EXTRA_ELEMENT_HANDLING.attributeCheck(lcName, lcTag);
       /* Allow valid data-* attributes: At least one character after "-"
           (https://html.spec.whatwg.org/multipage/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes)
           XML-compatible (https://html.spec.whatwg.org/multipage/infrastructure.html#xml-compatible and http://www.w3.org/TR/xml/#d0e804)
           We don't need to check the value; it's always URI safe. */
-      if (ALLOW_DATA_ATTR && !FORBID_ATTR[lcName] && regExpTest(DATA_ATTR, lcName)) ; else if (ALLOW_ARIA_ATTR && regExpTest(ARIA_ATTR, lcName)) ; else if (EXTRA_ELEMENT_HANDLING.attributeCheck instanceof Function && EXTRA_ELEMENT_HANDLING.attributeCheck(lcName, lcTag)) ; else if (!ALLOWED_ATTR[lcName] || FORBID_ATTR[lcName]) {
-        if (
-        // First condition does a very basic check if a) it's basically a valid custom element tagname AND
-        // b) if the tagName passes whatever the user has configured for CUSTOM_ELEMENT_HANDLING.tagNameCheck
-        // and c) if the attribute name passes whatever the user has configured for CUSTOM_ELEMENT_HANDLING.attributeNameCheck
-        _isBasicCustomElement(lcTag) && (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, lcTag) || CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(lcTag)) && (CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.attributeNameCheck, lcName) || CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.attributeNameCheck(lcName, lcTag)) ||
-        // Alternative, second condition checks if it's an `is`-attribute, AND
-        // the value passes whatever the user has configured for CUSTOM_ELEMENT_HANDLING.tagNameCheck
-        lcName === 'is' && CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements && (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, value) || CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(value))) ; else {
-          return false;
-        }
-        /* Check value is safe. First, is attr inert? If so, is safe */
-      } else if (URI_SAFE_ATTRIBUTES[lcName]) ; else if (regExpTest(IS_ALLOWED_URI$1, stringReplace(value, ATTR_WHITESPACE, ''))) ; else if ((lcName === 'src' || lcName === 'xlink:href' || lcName === 'href') && lcTag !== 'script' && stringIndexOf(value, 'data:') === 0 && DATA_URI_TAGS[lcTag]) ; else if (ALLOW_UNKNOWN_PROTOCOLS && !regExpTest(IS_SCRIPT_OR_DATA, stringReplace(value, ATTR_WHITESPACE, ''))) ; else if (value) {
-        return false;
-      } else ;
-      return true;
+      if (ALLOW_DATA_ATTR && regExpTest(DATA_ATTR$1, lcName)) {
+        return true;
+      }
+      /* Allow valid aria-* attributes, the value is always URI safe */
+      if (ALLOW_ARIA_ATTR && regExpTest(ARIA_ATTR$1, lcName)) {
+        return true;
+      }
+      /* A name outside the allowlist is acceptable on custom-element terms
+         only. The value checks below are intentionally skipped in that case:
+         if the user supplied a tagNameCheck we also allow derived custom
+         elements using the same test, and attributes passing the configured
+         attributeNameCheck are allowed as custom elements define these at
+         their own discretion. */
+      if (!nameIsPermitted) {
+        return (
+          // Condition a) covers a basically valid custom element tag name whose
+          // tag passes the configured tagNameCheck and whose attribute name
+          // passes the configured attributeNameCheck ...
+          _isBasicCustomElement(lcTag) && _matchesNameCheck(CUSTOM_ELEMENT_HANDLING.tagNameCheck, lcTag) && _matchesNameCheck(CUSTOM_ELEMENT_HANDLING.attributeNameCheck, lcName, lcTag) ||
+          // Condition b) covers an `is` attribute whose value passes the
+          // configured tagNameCheck while customized built-in elements are
+          // allowed.
+          lcName === 'is' && CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements && _matchesNameCheck(CUSTOM_ELEMENT_HANDLING.tagNameCheck, value)
+        );
+      }
+      /* Check value is safe. First, is attr inert? If so, is safe */
+      if (URI_SAFE_ATTRIBUTES[lcName]) {
+        return true;
+      }
+      /* Check no script, data or unknown possibly unsafe URI
+          unless we know URI values are safe for that attribute */
+      if (regExpTest(IS_ALLOWED_URI$1, stringReplace(value, ATTR_WHITESPACE$1, ''))) {
+        return true;
+      }
+      /* Keep image data URIs alive if src/xlink:href is allowed */
+      /* Further prevent gadget XSS for dynamically built script tags */
+      if ((lcName === 'src' || lcName === 'xlink:href' || lcName === 'href') && lcTag !== 'script' && stringIndexOf(value, 'data:') === 0 && DATA_URI_TAGS[lcTag]) {
+        return true;
+      }
+      /* Allow unknown protocols: This provides support for links that
+          are handled by protocol handlers which may be unknown ahead of
+          time, e.g. fb:, spotify: */
+      if (ALLOW_UNKNOWN_PROTOCOLS && !regExpTest(IS_SCRIPT_OR_DATA$1, stringReplace(value, ATTR_WHITESPACE$1, ''))) {
+        return true;
+      }
+      /* Only an empty (binary) value remains safe at this point;
+         anything else is presumed unsafe, do not add it back */
+      return !value;
     };
+    /* Names the HTML spec reserves from valid-custom-element-name; these must
+     * never be treated as basic custom elements even when a permissive
+     * CUSTOM_ELEMENT_HANDLING.tagNameCheck is configured. */
+    const RESERVED_CUSTOM_ELEMENT_NAMES = addToSet({}, ['annotation-xml', 'color-profile', 'font-face', 'font-face-format', 'font-face-name', 'font-face-src', 'font-face-uri', 'missing-glyph']);
     /**
      * _isBasicCustomElement
      * checks if at least one dash is included in tagName, and it's not the first char
@@ -1181,7 +2163,64 @@ var purify = createCommonjsModule(function (module, exports) {
      * @returns Returns true if the tag name meets the basic criteria for a custom element, otherwise false.
      */
     const _isBasicCustomElement = function _isBasicCustomElement(tagName) {
-      return tagName !== 'annotation-xml' && stringMatch(tagName, CUSTOM_ELEMENT);
+      return !RESERVED_CUSTOM_ELEMENT_NAMES[stringToLowerCase(tagName)] && regExpTest(CUSTOM_ELEMENT$1, tagName);
+    };
+    /**
+     * Wrap an attribute value in the matching Trusted Types object when
+     * the active policy requires it. Namespaced attributes pass through
+     * unchanged (no TT support yet, see
+     * https://bugs.chromium.org/p/chromium/issues/detail?id=1305293).
+     *
+     * @param lcTag lowercase tag name of the containing element
+     * @param lcName lowercase attribute name
+     * @param namespaceURI the attribute's namespace, if any
+     * @param value the attribute value to wrap
+     * @return the value, wrapped when Trusted Types demand it
+     */
+    const _applyTrustedTypesToAttribute = function _applyTrustedTypesToAttribute(lcTag, lcName, namespaceURI, value) {
+      if (trustedTypesPolicy && typeof trustedTypes === 'object' && typeof trustedTypes.getAttributeType === 'function' && !namespaceURI) {
+        switch (trustedTypes.getAttributeType(lcTag, lcName)) {
+          case 'TrustedHTML':
+            {
+              return _createTrustedHTML(value);
+            }
+          case 'TrustedScriptURL':
+            {
+              return _createTrustedScriptURL(value);
+            }
+        }
+      }
+      return value;
+    };
+    /**
+     * Write a modified attribute value back onto the element. On
+     * success, re-probe for clobbering introduced by the new value and
+     * remove the element when found; otherwise pop the removal entry
+     * recorded by the earlier _removeAttribute (long-standing pairing
+     * with the SANITIZE_NAMED_PROPS path - do not "fix" casually). On
+     * failure, remove the attribute instead.
+     *
+     * @param currentNode the element carrying the attribute
+     * @param name the attribute name as present on the element
+     * @param namespaceURI the attribute's namespace, if any
+     * @param value the new attribute value
+     */
+    const _setAttributeValue = function _setAttributeValue(currentNode, name, namespaceURI, value) {
+      try {
+        if (namespaceURI) {
+          currentNode.setAttributeNS(namespaceURI, name, value);
+        } else {
+          /* Fallback to setAttribute() for browser-unrecognized namespaces e.g. "x-schema". */
+          currentNode.setAttribute(name, value);
+        }
+        if (_isClobbered(currentNode)) {
+          _forceRemove(currentNode);
+        } else {
+          arrayPop(DOMPurify.removed);
+        }
+      } catch (_) {
+        _removeAttribute(name, currentNode);
+      }
     };
     /**
      * _sanitizeAttributes
@@ -1196,13 +2235,14 @@ var purify = createCommonjsModule(function (module, exports) {
     const _sanitizeAttributes = function _sanitizeAttributes(currentNode) {
       /* Execute a hook if present */
       _executeHooks(hooks.beforeSanitizeAttributes, currentNode, null);
-      const {
-        attributes
-      } = currentNode;
+      const attributes = currentNode.attributes;
       /* Check if we have attributes; if not we might have a text node */
       if (!attributes || _isClobbered(currentNode)) {
         return;
       }
+      /* Same lazy-install guard as uponSanitizeElement (see there): fork the
+         attribute allowlist off its shared binding before a hook can see it. */
+      ALLOWED_ATTR = _forkSharedAllowlist(hooks.uponSanitizeAttribute, ALLOWED_ATTR, DEFAULT_ALLOWED_ATTR, SET_CONFIG_ALLOWED_ATTR);
       const hookEvent = {
         attrName: '',
         attrValue: '',
@@ -1211,14 +2251,13 @@ var purify = createCommonjsModule(function (module, exports) {
         forceKeepAttr: undefined
       };
       let l = attributes.length;
+      const lcTag = transformCaseFunc(currentNode.nodeName);
       /* Go backwards over all attributes; safely remove bad ones */
       while (l--) {
         const attr = attributes[l];
-        const {
-          name,
-          namespaceURI,
-          value: attrValue
-        } = attr;
+        const name = attr.name,
+          namespaceURI = attr.namespaceURI,
+          attrValue = attr.value;
         const lcName = transformCaseFunc(name);
         const initValue = attrValue;
         let value = name === 'value' ? initValue : stringTrim(initValue);
@@ -1232,82 +2271,52 @@ var purify = createCommonjsModule(function (module, exports) {
         /* Full DOM Clobbering protection via namespace isolation,
          * Prefix id and name attributes with `user-content-`
          */
-        if (SANITIZE_NAMED_PROPS && (lcName === 'id' || lcName === 'name')) {
+        if (SANITIZE_NAMED_PROPS && (lcName === 'id' || lcName === 'name') && stringIndexOf(value, SANITIZE_NAMED_PROPS_PREFIX) !== 0) {
           // Remove the attribute with this value
-          _removeAttribute(name, currentNode);
+          _removeAttribute(name, currentNode, attr);
           // Prefix the value and later re-create the attribute with the sanitized value
           value = SANITIZE_NAMED_PROPS_PREFIX + value;
         }
+        // Else: already prefixed, leave the attribute alone — the prefix is
+        // itself the clobbering protection, and re-applying it is incorrect.
         /* Work around a security issue with comments inside attributes */
         if (SAFE_FOR_XML && regExpTest(/((--!?|])>)|<\/(style|script|title|xmp|textarea|noscript|iframe|noembed|noframes)/i, value)) {
-          _removeAttribute(name, currentNode);
+          _removeAttribute(name, currentNode, attr);
           continue;
         }
         /* Make sure we cannot easily use animated hrefs, even if animations are allowed */
         if (lcName === 'attributename' && stringMatch(value, 'href')) {
-          _removeAttribute(name, currentNode);
+          _removeAttribute(name, currentNode, attr);
           continue;
         }
-        /* Did the hooks approve of the attribute? */
+        /* Did the hooks force-keep the attribute? */
         if (hookEvent.forceKeepAttr) {
           continue;
         }
         /* Did the hooks approve of the attribute? */
         if (!hookEvent.keepAttr) {
-          _removeAttribute(name, currentNode);
+          _removeAttribute(name, currentNode, attr);
           continue;
         }
         /* Work around a security issue in jQuery 3.0 */
-        if (!ALLOW_SELF_CLOSE_IN_ATTR && regExpTest(/\/>/i, value)) {
-          _removeAttribute(name, currentNode);
+        if (!ALLOW_SELF_CLOSE_IN_ATTR && regExpTest(SELF_CLOSING_TAG, value)) {
+          _removeAttribute(name, currentNode, attr);
           continue;
         }
         /* Sanitize attribute content to be template-safe */
         if (SAFE_FOR_TEMPLATES) {
-          arrayForEach([MUSTACHE_EXPR, ERB_EXPR, TMPLIT_EXPR], expr => {
-            value = stringReplace(value, expr, ' ');
-          });
+          value = _stripTemplateExpressions(value);
         }
         /* Is `value` valid for this attribute? */
-        const lcTag = transformCaseFunc(currentNode.nodeName);
         if (!_isValidAttribute(lcTag, lcName, value)) {
-          _removeAttribute(name, currentNode);
+          _removeAttribute(name, currentNode, attr);
           continue;
         }
         /* Handle attributes that require Trusted Types */
-        if (trustedTypesPolicy && typeof trustedTypes === 'object' && typeof trustedTypes.getAttributeType === 'function') {
-          if (namespaceURI) ; else {
-            switch (trustedTypes.getAttributeType(lcTag, lcName)) {
-              case 'TrustedHTML':
-                {
-                  value = trustedTypesPolicy.createHTML(value);
-                  break;
-                }
-              case 'TrustedScriptURL':
-                {
-                  value = trustedTypesPolicy.createScriptURL(value);
-                  break;
-                }
-            }
-          }
-        }
+        value = _applyTrustedTypesToAttribute(lcTag, lcName, namespaceURI, value);
         /* Handle invalid data-* attribute set by try-catching it */
         if (value !== initValue) {
-          try {
-            if (namespaceURI) {
-              currentNode.setAttributeNS(namespaceURI, name, value);
-            } else {
-              /* Fallback to setAttribute() for browser-unrecognized namespaces e.g. "x-schema". */
-              currentNode.setAttribute(name, value);
-            }
-            if (_isClobbered(currentNode)) {
-              _forceRemove(currentNode);
-            } else {
-              arrayPop(DOMPurify.removed);
-            }
-          } catch (_) {
-            _removeAttribute(name, currentNode);
-          }
+          _setAttributeValue(currentNode, name, namespaceURI, value);
         }
       }
       /* Execute a hook if present */
@@ -1318,7 +2327,7 @@ var purify = createCommonjsModule(function (module, exports) {
      *
      * @param fragment to iterate over recursively
      */
-    const _sanitizeShadowDOM = function _sanitizeShadowDOM(fragment) {
+    const _sanitizeShadowDOM2 = function _sanitizeShadowDOM(fragment) {
       let shadowNode = null;
       const shadowIterator = _createNodeIterator(fragment);
       /* Execute a hook if present */
@@ -1327,16 +2336,134 @@ var purify = createCommonjsModule(function (module, exports) {
         /* Execute a hook if present */
         _executeHooks(hooks.uponSanitizeShadowNode, shadowNode, null);
         /* Sanitize tags and elements */
-        _sanitizeElements(shadowNode);
+        _sanitizeElements(shadowNode, fragment);
         /* Check attributes next */
         _sanitizeAttributes(shadowNode);
-        /* Deep shadow DOM detected */
-        if (shadowNode.content instanceof DocumentFragment) {
-          _sanitizeShadowDOM(shadowNode.content);
+        /* Deep shadow DOM detected.
+           Realm-safe check (GHSA-hpcv-96wg-7vj8): use nodeType against the
+           DOCUMENT_FRAGMENT_NODE constant rather than instanceof, so we
+           recurse into <template>.content from foreign realms too. */
+        if (_isDocumentFragment(shadowNode.content)) {
+          _sanitizeShadowDOM2(shadowNode.content);
+        }
+        /* An element iterated here may itself host an attached
+           shadow root. The default NodeIterator does not enter shadow
+           trees, so a shadow root nested inside template.content was
+           previously reached by no walk at all (the pre-pass at
+           _sanitizeAttachedShadowRoots descends via childNodes, which
+           doesn't enter template.content; the template-content recursion
+           above iterates the content but never inspected shadowRoot).
+           Walk it explicitly. The nodeType guard avoids reading
+           shadowRoot off text / comment / CDATA / PI nodes that the
+           iterator also surfaces. */
+        if (_readNodeType(shadowNode) === NODE_TYPE.element) {
+          const innerSr = getShadowRoot(shadowNode);
+          if (_isDocumentFragment(innerSr)) {
+            _sanitizeAttachedShadowRoots(innerSr);
+            _sanitizeShadowDOM2(innerSr);
+          }
         }
       }
       /* Execute a hook if present */
       _executeHooks(hooks.afterSanitizeShadowDOM, fragment, null);
+    };
+    /**
+     * _sanitizeAttachedShadowRoots
+     *
+     * Walks `root` and feeds every attached shadow root we encounter into
+     * the existing _sanitizeShadowDOM pipeline. The default node iterator
+     * does not descend into shadow trees, so nodes inside an attached
+     * shadow root would otherwise be skipped entirely.
+     *
+     * Two real input paths put attached shadow roots in front of us:
+     *   1. IN_PLACE on a DOM node that already has shadow roots attached.
+     *   2. DOM-node input where importNode(dirty, true) deep-clones the
+     *      shadow root because it was created with `clonable: true`.
+     *
+     * This pass runs once, up front, so the main iteration loop (and the
+     * existing _sanitizeShadowDOM template-content recursion) stay
+     * untouched — string-input paths are not affected.
+     *
+     * @param root the subtree root to walk for attached shadow roots
+     */
+    const _sanitizeAttachedShadowRoots = function _sanitizeAttachedShadowRoots(root) {
+      /* Iterative (explicit stack) rather than per-child recursion. DOM APIs
+         impose no depth cap, so an attacker-shaped tree (JSON/CRDT/editor data
+         built straight into the DOM — the IN_PLACE surface) deeper than the JS
+         call-stack budget would otherwise overflow native recursion here and
+         throw at the IN_PLACE entry pre-pass, before a single node is
+         sanitized, leaving the caller's live tree untouched (fail-open). See
+         campaign-3 F4. A heap stack keeps depth off the call stack.
+              Each work item is either a node to descend into, or a deferred
+         `_sanitizeShadowDOM` for an already-walked shadow root. The deferred
+         form preserves the original post-order discipline: a shadow root's
+         nested shadow roots are discovered before the outer shadow is
+         sanitized (which may remove hosts). Pushes are in reverse of the
+         desired processing order (LIFO): template content, then children, then
+         the shadow-sanitize, then the shadow walk — so the order matches the
+         previous recursion exactly. */
+      const stack = [{
+        node: root,
+        shadow: null
+      }];
+      while (stack.length > 0) {
+        const item = stack.pop();
+        /* Deferred shadow-DOM sanitisation: runs after its subtree was walked. */
+        if (item.shadow) {
+          _sanitizeShadowDOM2(item.shadow);
+          continue;
+        }
+        const node = item.node;
+        const nodeType = _readNodeType(node);
+        const isElement = nodeType === NODE_TYPE.element;
+        /* (pushed last → processed first) Children, snapshotted in reverse so
+           the first child is processed first. Snapshotting matters because a
+           hook may detach siblings mid-walk. */
+        const childNodes = getChildNodes(node);
+        if (childNodes) {
+          for (let i = childNodes.length - 1; i >= 0; --i) {
+            stack.push({
+              node: childNodes[i],
+              shadow: null
+            });
+          }
+        }
+        /* (pushed before children → processed after them, matching the old
+           "template content last" order) When the node is a <template>,
+           descend into its content. */
+        if (isElement) {
+          const rootName = getNodeName ? getNodeName(node) : null;
+          if (typeof rootName === 'string' && transformCaseFunc(rootName) === 'template') {
+            const content = node.content;
+            if (_isDocumentFragment(content)) {
+              stack.push({
+                node: content,
+                shadow: null
+              });
+            }
+          }
+        }
+        /* Shadow root (processed first): walk its subtree, then sanitise it.
+           Realm-safe check (GHSA-hpcv-96wg-7vj8): nodeType-based detection
+           rather than `instanceof DocumentFragment`, which is realm-bound and
+           silently skipped foreign-realm shadow roots (e.g.
+           iframe.contentDocument attachShadow). */
+        if (isElement) {
+          const sr = getShadowRoot(node);
+          if (_isDocumentFragment(sr)) {
+            /* Push the deferred sanitise first so it pops after the shadow
+               walk we push next, i.e. nested shadow roots are discovered
+               before this one is sanitised. */
+            stack.push({
+              node: null,
+              shadow: sr
+            }, {
+              node: sr,
+              shadow: null
+            });
+          }
+        }
+      }
     };
     // eslint-disable-next-line complexity
     DOMPurify.sanitize = function (dirty) {
@@ -1354,13 +2481,9 @@ var purify = createCommonjsModule(function (module, exports) {
       }
       /* Stringify, in case dirty is an object */
       if (typeof dirty !== 'string' && !_isNode(dirty)) {
-        if (typeof dirty.toString === 'function') {
-          dirty = dirty.toString();
-          if (typeof dirty !== 'string') {
-            throw typeErrorCreate('dirty is not a string, aborting');
-          }
-        } else {
-          throw typeErrorCreate('toString is not a function');
+        dirty = stringifyValue(dirty);
+        if (typeof dirty !== 'string') {
+          throw typeErrorCreate('dirty is not a string, aborting');
         }
       }
       /* Return dirty HTML if DOMPurify cannot run */
@@ -1368,24 +2491,90 @@ var purify = createCommonjsModule(function (module, exports) {
         return dirty;
       }
       /* Assign config vars */
-      if (!SET_CONFIG) {
+      if (SET_CONFIG) {
+        /* Persistent setConfig() path: _parseConfig is skipped, so the sets are
+         * not re-derived per call. Restore them from the pristine bindings
+         * captured at setConfig() time so a previous call's hook clone (mutated
+         * below) does not carry over. */
+        ALLOWED_TAGS = SET_CONFIG_ALLOWED_TAGS;
+        ALLOWED_ATTR = SET_CONFIG_ALLOWED_ATTR;
+      } else {
         _parseConfig(cfg);
+      }
+      /* Clone the hook-mutable allowlists before the walk whenever an
+       * uponSanitize* hook is registered. The hook event exposes ALLOWED_TAGS
+       * and ALLOWED_ATTR by reference (as allowedTags / allowedAttributes), so
+       * a hook that widens them would otherwise mutate the shared set
+       * permanently: across later calls and across every element. Cloning per
+       * walk keeps documented in-call widening working while scoping it to the
+       * call. A single guard for both config paths - the per-call path rebinds
+       * the sets in _parseConfig each call, the persistent path restores them
+       * from the captured bindings just above - so the two cannot diverge. */
+      if (hooks.uponSanitizeElement.length > 0 || hooks.uponSanitizeAttribute.length > 0) {
+        ALLOWED_TAGS = clone(ALLOWED_TAGS);
+      }
+      if (hooks.uponSanitizeAttribute.length > 0) {
+        ALLOWED_ATTR = clone(ALLOWED_ATTR);
       }
       /* Clean up removed elements */
       DOMPurify.removed = [];
-      /* Check if dirty is correctly typed for IN_PLACE */
-      if (typeof dirty === 'string') {
-        IN_PLACE = false;
-      }
-      if (IN_PLACE) {
-        /* Do some early pre-sanitization to avoid unsafe root nodes */
-        if (dirty.nodeName) {
-          const tagName = transformCaseFunc(dirty.nodeName);
+      /* Resolve IN_PLACE for this call without mutating persistent config.
+         Writing the IN_PLACE closure variable here leaks under setConfig(),
+         where _parseConfig is skipped on later calls: a single string call would
+         disable in-place mode for every subsequent node call, returning a
+         sanitized copy while leaving the caller's node — which in-place callers
+         keep using and whose return value they ignore — unsanitized. REPORT-2. */
+      const inPlace = IN_PLACE && typeof dirty !== 'string' && _isNode(dirty);
+      if (inPlace) {
+        /* Declarative-partial-updates / streaming pre-pass: sever every patch
+           linkage across the live tree BEFORE the walk, so no patch can fire
+           mid-walk and inject into an already-processed region. Runs first, so
+           it also covers the forbidden/clobbered roots that throw below. */
+        _neutralizePatchLinkage(dirty);
+        /* Do some early pre-sanitization to avoid unsafe root nodes.
+           Read nodeName through the cached prototype getter — a clobbering
+           child named "nodeName" on the form root would otherwise shadow
+           the property and let this check skip the root-allowlist
+           validation entirely. */
+        const nn = _readNodeName(dirty);
+        if (typeof nn === 'string') {
+          const tagName = transformCaseFunc(nn);
           if (!ALLOWED_TAGS[tagName] || FORBID_TAGS[tagName]) {
+            /* Fail closed on a live root: neutralize handlers/children before
+               throwing, exactly as the mid-walk abort path does. */
+            _neutralizeRoot(dirty);
             throw typeErrorCreate('root node is forbidden and cannot be sanitized in-place');
           }
         }
-      } else if (dirty instanceof Node) {
+        /* Pre-flight the root through _isClobbered. The iterator-driven
+           removal path can not detach a parent-less root: _forceRemove
+           falls through to Element.prototype.remove(), which per spec
+           is a no-op on a node with no parent. A clobbered root would
+           then survive the main loop with its attributes uninspected,
+           because _sanitizeAttributes early-returns on _isClobbered. The
+           result would be an attacker-controlled form, complete with any
+           event-handler attributes the caller passed in, handed back to
+           the application unsanitized. Refuse to sanitize such a root
+           the same way we refuse a forbidden tag. GHSA-r47g-fvhr-h676. */
+        if (_isClobbered(dirty)) {
+          /* Fail closed on a live clobbered root before throwing.
+             _neutralizeRoot's reads are clobber-safe (cached getters); the
+             form's non-clobbered descendants, e.g. an armed <img>, are scrubbed. */
+          _neutralizeRoot(dirty);
+          throw typeErrorCreate('root node is clobbered and cannot be sanitized in-place');
+        }
+        /* Sanitize attached shadow roots before the main iterator runs.
+           The iterator does not descend into shadow trees. Same fail-closed
+           barrier as the main walk (campaign-3 F2): a custom-element reaction
+           inside a shadow root could abort this pre-pass before the walk runs,
+           which would otherwise leave the entire live tree unsanitized. */
+        try {
+          _sanitizeAttachedShadowRoots(dirty);
+        } catch (error) {
+          _neutralizeRoot(dirty);
+          throw error;
+        }
+      } else if (_isNode(dirty)) {
         /* If dirty is a DOM element, append to an empty document to avoid
            elements being stripped by the parser */
         body = _initDocument('<!---->');
@@ -1399,12 +2588,18 @@ var purify = createCommonjsModule(function (module, exports) {
           // eslint-disable-next-line unicorn/prefer-dom-node-append
           body.appendChild(importedNode);
         }
+        /* Clonable shadow roots are deep-cloned by importNode(); sanitize
+           them before the main iterator runs, since the iterator does not
+           descend into shadow trees. The walk routes every read through a
+           cached prototype getter so clobbering descendants on a form root
+           cannot hide a shadow host from this pass. */
+        _sanitizeAttachedShadowRoots(importedNode);
       } else {
         /* Exit directly if we have nothing to do */
         if (!RETURN_DOM && !SAFE_FOR_TEMPLATES && !WHOLE_DOCUMENT &&
         // eslint-disable-next-line unicorn/prefer-includes
         dirty.indexOf('<') === -1) {
-          return trustedTypesPolicy && RETURN_TRUSTED_TYPE ? trustedTypesPolicy.createHTML(dirty) : dirty;
+          return trustedTypesPolicy && RETURN_TRUSTED_TYPE ? _createTrustedHTML(dirty) : dirty;
         }
         /* Initialize the document to work on */
         body = _initDocument(dirty);
@@ -1418,24 +2613,72 @@ var purify = createCommonjsModule(function (module, exports) {
         _forceRemove(body.firstChild);
       }
       /* Get node iterator */
-      const nodeIterator = _createNodeIterator(IN_PLACE ? dirty : body);
-      /* Now start iterating over the created document */
-      while (currentNode = nodeIterator.nextNode()) {
-        /* Sanitize tags and elements */
-        _sanitizeElements(currentNode);
-        /* Check attributes next */
-        _sanitizeAttributes(currentNode);
-        /* Shadow DOM detected, sanitize it */
-        if (currentNode.content instanceof DocumentFragment) {
-          _sanitizeShadowDOM(currentNode.content);
+      const walkRoot = inPlace ? dirty : body;
+      /* Now start iterating over the created document.
+         The walk runs inside an exception barrier (campaign-3 F2): a re-entrant
+         engine/custom-element mutation can detach a node mid-walk so
+         `_forceRemove`'s parentless guard throws, aborting the loop. Without the
+         barrier the caller's in-place tree would be left half-sanitized with the
+         unvisited tail still armed. _createNodeIterator itself is inside the
+         barrier too: constructing the iterator dereferences the root's document,
+         and any failure there (e.g. an exotic/clobbered root) must still fail
+         closed rather than skip the neutralize. On any throw we fail closed -
+         strip the in-place root bare - then rethrow so the existing throw
+         contract is preserved. (String/DOM-copy paths never return the partial
+         body, so the propagating throw is already fail-closed there.) */
+      try {
+        const nodeIterator = _createNodeIterator(walkRoot);
+        while (currentNode = nodeIterator.nextNode()) {
+          /* Sanitize tags and elements */
+          _sanitizeElements(currentNode, walkRoot);
+          /* Check attributes next */
+          _sanitizeAttributes(currentNode);
+          /* Shadow DOM detected, sanitize it.
+             Realm-safe check (GHSA-hpcv-96wg-7vj8): nodeType-based detection
+             instead of instanceof, so foreign-realm <template>.content is
+             walked correctly. */
+          if (_isDocumentFragment(currentNode.content)) {
+            _sanitizeShadowDOM2(currentNode.content);
+          }
         }
+      } catch (error) {
+        if (inPlace) {
+          _neutralizeRoot(dirty);
+          /* Nodes _forceRemove'd earlier in the aborted walk are already
+             detached from the root, so _neutralizeRoot's subtree pass does not
+             reach them. Defuse them too, mirroring the success-path loop below. */
+          arrayForEach(DOMPurify.removed, entry => {
+            if (entry.element) {
+              _neutralizeSubtree(entry.element);
+            }
+          });
+        }
+        throw error;
       }
       /* If we sanitized `dirty` in-place, return it. */
-      if (IN_PLACE) {
+      if (inPlace) {
+        /* Fail-closed completion of the audit-5 F1 fix: every node removed from
+           the caller's live tree is detached but may still hold a queued
+           resource-event handler that fires in page scope after we return. The
+           move-hoist covers only disallowed-tag KEEP_CONTENT removals; strip the
+           non-allow-listed attributes off every other removed subtree (clobber,
+           mXSS, namespace, comments, KEEP_CONTENT:false, …) so those handlers are
+           cancelled before any event can fire. Runs synchronously, pre-return. */
+        arrayForEach(DOMPurify.removed, entry => {
+          if (entry.element) {
+            _neutralizeSubtree(entry.element);
+          }
+        });
+        if (SAFE_FOR_TEMPLATES) {
+          _scrubTemplateExpressions2(dirty);
+        }
         return dirty;
       }
       /* Return sanitized string or DOM */
       if (RETURN_DOM) {
+        if (SAFE_FOR_TEMPLATES) {
+          _scrubTemplateExpressions2(body);
+        }
         if (RETURN_DOM_FRAGMENT) {
           returnNode = createDocumentFragment.call(body.ownerDocument);
           while (body.firstChild) {
@@ -1464,20 +2707,28 @@ var purify = createCommonjsModule(function (module, exports) {
       }
       /* Sanitize final string template-safe */
       if (SAFE_FOR_TEMPLATES) {
-        arrayForEach([MUSTACHE_EXPR, ERB_EXPR, TMPLIT_EXPR], expr => {
-          serializedHTML = stringReplace(serializedHTML, expr, ' ');
-        });
+        serializedHTML = _stripTemplateExpressions(serializedHTML);
       }
-      return trustedTypesPolicy && RETURN_TRUSTED_TYPE ? trustedTypesPolicy.createHTML(serializedHTML) : serializedHTML;
+      return trustedTypesPolicy && RETURN_TRUSTED_TYPE ? _createTrustedHTML(serializedHTML) : serializedHTML;
     };
     DOMPurify.setConfig = function () {
       let cfg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       _parseConfig(cfg);
       SET_CONFIG = true;
+      SET_CONFIG_ALLOWED_TAGS = ALLOWED_TAGS;
+      SET_CONFIG_ALLOWED_ATTR = ALLOWED_ATTR;
     };
     DOMPurify.clearConfig = function () {
       CONFIG = null;
       SET_CONFIG = false;
+      SET_CONFIG_ALLOWED_TAGS = null;
+      SET_CONFIG_ALLOWED_ATTR = null;
+      // Drop any caller-supplied Trusted Types policy so it cannot poison later
+      // `RETURN_TRUSTED_TYPE` output. The internal default policy (cached, and
+      // never recreated — Trusted Types throws on duplicate names) is restored by
+      // the next `_parseConfig`. See GHSA-vxr8-fq34-vvx9.
+      trustedTypesPolicy = defaultTrustedTypesPolicy;
+      emptyHTML = '';
     };
     DOMPurify.isValidAttribute = function (tag, attr, value) {
       /* Initialize shared config vars if necessary. */
@@ -1492,9 +2743,19 @@ var purify = createCommonjsModule(function (module, exports) {
       if (typeof hookFunction !== 'function') {
         return;
       }
+      /* Reject unknown entry points. Without this, a non-hook key (e.g.
+       * '__proto__') indexes off the prototype chain rather than a real
+       * hook array, and arrayPush then writes to Object.prototype. Guard
+       * with an own-property check against the known hook names. */
+      if (!objectHasOwnProperty(hooks, entryPoint)) {
+        return;
+      }
       arrayPush(hooks[entryPoint], hookFunction);
     };
     DOMPurify.removeHook = function (entryPoint, hookFunction) {
+      if (!objectHasOwnProperty(hooks, entryPoint)) {
+        return undefined;
+      }
       if (hookFunction !== undefined) {
         const index = arrayLastIndexOf(hooks[entryPoint], hookFunction);
         return index === -1 ? undefined : arraySplice(hooks[entryPoint], index, 1)[0];
@@ -1502,6 +2763,9 @@ var purify = createCommonjsModule(function (module, exports) {
       return arrayPop(hooks[entryPoint]);
     };
     DOMPurify.removeHooks = function (entryPoint) {
+      if (!objectHasOwnProperty(hooks, entryPoint)) {
+        return;
+      }
       hooks[entryPoint] = [];
     };
     DOMPurify.removeAllHooks = function () {
@@ -1523,10 +2787,10 @@ const renderImageNode = (role, data, className) => {
         const wrap = e.target.closest('.chat-image-error-wrap');
         wrap?.classList.add('chat-image-broken');
       } }),
-    h("wpp-icon-image-v4-3-0", { role: "presentation", "aria-hidden": "true" })));
+    h("wpp-icon-image-v4-4-0", { role: "presentation", "aria-hidden": "true" })));
   return data.linkHref ? (h("a", { href: data.linkHref, target: "_blank", rel: "noopener noreferrer", class: "chat-image-link" }, img)) : role === 'assistant' ? (h(Fragment, null,
-    h("wpp-action-button-v4-3-0", { class: "image-download-button", variant: "secondary", onClick: () => handleDownload(data.href, data.alt) },
-      h("wpp-icon-download-v4-3-0", { slot: "icon-start", "aria-hidden": "true" })),
+    h("wpp-action-button-v4-4-0", { class: "image-download-button", variant: "secondary", onClick: () => handleDownload(data.href, data.alt) },
+      h("wpp-icon-download-v4-4-0", { slot: "icon-start", "aria-hidden": "true" })),
     img)) : (img);
 };
 const renderToken = (token, role = 'user') => {
@@ -1537,16 +2801,16 @@ const renderToken = (token, role = 'user') => {
       const headingTypes = ['2xl-heading', 'xl-heading', 'l-body', 'm-body', 's-body', 'xs-body'];
       const type = headingTypes[token.depth - 1] || 's-body';
       const tag = `h${token.depth}`;
-      return (h("wpp-typography-v4-3-0", { type: type, tag: tag }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
+      return (h("wpp-typography-v4-4-0", { type: type, tag: tag }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
     }
     case 'del':
       return h("del", null, token.tokens?.map(t => renderToken(t)));
     case 'paragraph':
-      return (h("wpp-typography-v4-3-0", { type: "s-body", tag: "p" }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
+      return (h("wpp-typography-v4-4-0", { type: "s-body", tag: "p" }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
     case 'blockquote':
       return h("blockquote", { class: "chat-quote" }, token.tokens?.map(t => renderToken(t)));
     case 'strong':
-      return (h("wpp-typography-v4-3-0", { type: "s-strong", tag: "span" }, token.tokens?.map(t => renderToken(t))));
+      return (h("wpp-typography-v4-4-0", { type: "s-strong", tag: "span" }, token.tokens?.map(t => renderToken(t))));
     case 'em':
       return h("em", null, token.tokens?.map(t => renderToken(t)));
     case 'codespan':
@@ -1555,7 +2819,7 @@ const renderToken = (token, role = 'user') => {
       return (h("pre", { class: "code-block" },
         h("div", { class: "code-lang" },
           h("span", null, token.lang || 'plaintext'),
-          h("wpp-icon-copy-v4-3-0", { class: "code-block-copy-icon", size: "s", color: "var(--wpp-grey-color-600)", onClick: () => {
+          h("wpp-icon-copy-v4-4-0", { class: "code-block-copy-icon", size: "s", color: "var(--wpp-grey-color-600)", onClick: () => {
               navigator.clipboard.writeText(token.text);
             } })),
         h("code", null, token.text)));
@@ -1572,8 +2836,8 @@ const renderToken = (token, role = 'user') => {
       const nestedLists = token.tokens?.filter(t => t.type === 'list') || [];
       const inlineContent = token.tokens?.filter(t => t.type !== 'list') || [];
       return (h("li", { class: `chat-list-item ${token.task ? `chat-list-item-task ${token.checked ? 'chat-list-item-task-checked' : ''}` : ''}` },
-        token.task && h("wpp-icon-tick-v4-3-0", null),
-        inlineContent.length > 0 && (h("wpp-typography-v4-3-0", { type: "s-body" }, inlineContent.map(t => renderToken(t)))),
+        token.task && h("wpp-icon-tick-v4-4-0", null),
+        inlineContent.length > 0 && (h("wpp-typography-v4-4-0", { type: "s-body" }, inlineContent.map(t => renderToken(t)))),
         nestedLists.map(t => renderToken(t))));
     }
     case 'table': {
@@ -1581,13 +2845,13 @@ const renderToken = (token, role = 'user') => {
         h("table", { class: "chat-table" },
           h("thead", null,
             h("tr", null, token.header.map((cell, i) => (h("th", { key: i },
-              h("wpp-typography-v4-3-0", { type: "s-strong" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))),
+              h("wpp-typography-v4-4-0", { type: "s-strong" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))),
           h("tbody", null, token.rows.map((row, r) => (h("tr", { key: r }, row.map((cell, c) => (h("td", { key: c },
-            h("wpp-typography-v4-3-0", { type: "s-body" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))))))));
+            h("wpp-typography-v4-4-0", { type: "s-body" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))))))));
     }
     case 'link':
       if (token.title) {
-        return (h("wpp-tooltip-v4-3-0", { text: token.title },
+        return (h("wpp-tooltip-v4-4-0", { text: token.title },
           h("a", { href: token.href, target: "_blank", rel: "noopener noreferrer", class: "chat-link" }, token.tokens?.length ? token.tokens.map((t) => renderToken(t)) : token.text)));
       }
       return (h("a", { href: token.href, target: "_blank", rel: "noopener noreferrer", title: token.title, class: "chat-link" }, token.tokens?.length ? token.tokens.map((t) => renderToken(t)) : token.text));
@@ -1608,7 +2872,7 @@ const renderToken = (token, role = 'user') => {
         h("div", { class: "chat-image-grid-row" }, rest.map((data, i) => (h("div", { key: i, class: "chat-image-grid-item chat-image-error-wrap" }, renderImageNode(role, data)))))));
     }
     case 'hr':
-      return h("wpp-divider-v4-3-0", null);
+      return h("wpp-divider-v4-4-0", null);
     case 'text':
       return token.tokens
         ? token.tokens.flatMap(t => renderToken(t)).filter((t) => t !== null)
@@ -1618,7 +2882,7 @@ const renderToken = (token, role = 'user') => {
       // Intentionally ignore raw HTML from LLM output for security
       return null;
     default:
-      return 'text' in token ? h("wpp-typography-v4-3-0", { type: "s-body" }, token.text) : null;
+      return 'text' in token ? h("wpp-typography-v4-4-0", { type: "s-body" }, token.text) : null;
   }
 };
 
@@ -1640,11 +2904,11 @@ const WppChatConversationMessage = class {
     this.renderActionButton = (data) => {
       if (!data.icon)
         return null;
-      return (h("wpp-action-button-v4-3-0", { variant: "secondary", ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
+      return (h("wpp-action-button-v4-4-0", { variant: "secondary", ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
     };
     this.renderMenuContextListItems = () => (h(Fragment, null, this.menuContextListItems.map(item => {
       const { label, slots, ...rest } = item;
-      return (h("wpp-list-item-v4-3-0", { ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, h("span", { slot: "label" }, label), slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+      return (h("wpp-list-item-v4-4-0", { ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, h("span", { slot: "label" }, label), slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
     })));
     this.hostCssClasses = () => ({
       'wpp-chat-conversation': true,
@@ -1777,14 +3041,14 @@ const WppChatConversationMessage = class {
   renderComplete() {
     const tokens = getMarkdownTokens(this.finalContent);
     if (!Array.isArray(tokens)) {
-      return (h("wpp-typography-v4-3-0", { type: "s-body", tag: "p" }, purify.sanitize(this.finalContent)));
+      return (h("wpp-typography-v4-4-0", { type: "s-body", tag: "p" }, purify.sanitize(this.finalContent)));
     }
     return h("div", { class: "message-text" }, tokens.map((token) => renderToken(token, this.role)));
   }
   renderAttachments() {
     if (!this.attachments || this.attachments.length === 0)
       return null;
-    return (h("div", { class: "attachments", part: "attachments", role: "list" }, this.attachments.map((file, index) => (h("wpp-file-upload-item-v4-3-0", { key: index, variant: "chat", part: "file-item", role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": this.attachments.length.toString(), file: {
+    return (h("div", { class: "attachments", part: "attachments", role: "list" }, this.attachments.map((file, index) => (h("wpp-file-upload-item-v4-4-0", { key: index, variant: "chat", part: "file-item", role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": this.attachments.length.toString(), file: {
         name: file.name,
         url: file.url,
         type: file.type,
@@ -1797,9 +3061,9 @@ const WppChatConversationMessage = class {
     return !!this.finalContent && this.finalContent.trim().length > 0;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: this.containerCssClasses() }, this.shouldRenderAvatar('assistant') && (h("div", { class: "avatar-wrapper ai-avatar" }, this.role === 'assistant' && (h("wpp-avatar-v4-3-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), h("div", { class: this.contentCssClasses() }, h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.hasTextContent() && this.renderComplete(), h("slot", { part: "custom-content" }), this.currentStatus === 'complete' && !!this.attachments?.length && this.renderAttachments()), this.role === 'assistant' && this.status === 'complete' && (h("div", { class: "actions" }, h("div", { class: "action-toolbar" }, this._actionButtonConfig.map(this.renderActionButton), this.menuContextListItems && (h("wpp-menu-context-v4-3-0", null, h("wpp-action-button-v4-3-0", { variant: "secondary", slot: "trigger-element" }, h("wpp-icon-more-v4-3-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.sourcesActionConfig && (h("div", { class: "sources-action" }, h("wpp-action-button-v4-3-0", { variant: "secondary", ...this.sourcesActionConfig }, this.sourcesActionConfig.text)))))), this.shouldRenderAvatar('user') && (h("div", { class: "avatar-wrapper user-avatar" }, this.role === 'user' && h("wpp-avatar-v4-3-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: this.containerCssClasses() }, this.shouldRenderAvatar('assistant') && (h("div", { class: "avatar-wrapper ai-avatar" }, this.role === 'assistant' && (h("wpp-avatar-v4-4-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), h("div", { class: this.contentCssClasses() }, h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.hasTextContent() && this.renderComplete(), h("slot", { part: "custom-content" }), this.currentStatus === 'complete' && !!this.attachments?.length && this.renderAttachments()), this.role === 'assistant' && this.status === 'complete' && (h("div", { class: "actions" }, h("div", { class: "action-toolbar" }, this._actionButtonConfig.map(this.renderActionButton), this.menuContextListItems && (h("wpp-menu-context-v4-4-0", null, h("wpp-action-button-v4-4-0", { variant: "secondary", slot: "trigger-element" }, h("wpp-icon-more-v4-4-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.sourcesActionConfig && (h("div", { class: "sources-action" }, h("wpp-action-button-v4-4-0", { variant: "secondary", ...this.sourcesActionConfig }, this.sourcesActionConfig.text)))))), this.shouldRenderAvatar('user') && (h("div", { class: "avatar-wrapper user-avatar" }, this.role === 'user' && h("wpp-avatar-v4-4-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
   }
-  static get registryIs() { return "wpp-chat-conversation-message-v4-3-0"; }
+  static get registryIs() { return "wpp-chat-conversation-message-v4-4-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "status": ["onStatusChange"],
@@ -1830,6 +3094,30 @@ const debounceWithControl = (callback, timeout) => {
     },
   };
 };
+let isLoadingAngleRegistered = false;
+/**
+ * Registers the angle driving the `is-loading` conic-gradient border.
+ *
+ * Custom property registrations are document-scoped, so an `@property` rule inside this
+ * component's shadow stylesheet is ignored. Without a registration the angle interpolates
+ * discretely and the gradient is invalid for half of every cycle.
+ */
+const registerLoadingAngle = () => {
+  if (isLoadingAngleRegistered || typeof CSS === 'undefined' || !CSS.registerProperty)
+    return;
+  isLoadingAngleRegistered = true;
+  try {
+    CSS.registerProperty({
+      name: '--wpp-chat-input-loading-angle',
+      syntax: '<angle>',
+      initialValue: '0deg',
+      inherits: false,
+    });
+  }
+  catch {
+    // Already registered by another instance.
+  }
+};
 
 const DEFAULT_FILE_UPLOAD_CONFIG = {
   acceptConfig: {},
@@ -1846,6 +3134,11 @@ const DEFAULT_FILE_UPLOAD_CONFIG = {
 };
 const MAX_INPUT_AREA_HEIGHT = 240;
 const MIN_TEXTAREA_HEIGHT = 52;
+/**
+ * How long the send/stop button takes to collapse out of the actions bar.
+ * Should be kept in sync with `--chat-input-action-transition-duration` from the `scss` file.
+ */
+const PRIMARY_ACTION_TRANSITION_MS = 200;
 /**
  * Reserved `ChatInputAction.id` that auto-wires an actions-menu entry to the
  * same file picker used by `enableAttach`. Consumers can still listen for the
@@ -1892,7 +3185,7 @@ const getDefaultModelOptions = (locales) => [
   },
 ];
 
-const wppChatInputCss = "@charset \"UTF-8\";:host{--chat-input-container-min-width:var(--wpp-chat-input-container-min-width, 351px);--chat-input-container-bg-color:var(--wpp-chat-input-container-bg-color, var(--wpp-grey-color-000));--chat-input-container-border-radius:var(--wpp-chat-input-container-border-radius, var(--wpp-border-radius-m));--chat-input-area-min-height:var(--wpp-chat-input-area-min-height, 52px);--chat-input-area-max-height:var(--wpp-chat-input-area-max-height, 240px);--chat-input-area-padding:var(--wpp-chat-input-area-padding, 16px 16px 4px 16px);--chat-input-area-placeholder-color:var(--wpp-chat-input-area-placeholder-color, var(--wpp-grey-color-700));--chat-text-input-min-height:var(--wpp-chat-text-input-min-height, 52px);--chat-text-input-padding:var(--wpp-chat-text-input-padding, 0);--chat-text-input-bg-color:var(--wpp-chat-text-input-bg-color, transparent);--chat-text-input-placeholder-color:var(--wpp-chat-text-input-placeholder-color, var(--wpp-grey-color-700));--chat-actions-bar-padding:var(--wpp-chat-actions-bar-padding, 12px 16px 16px 12px);--chat-s-size-actions-bar-padding:var(--wpp-chat-s-size-actions-bar-padding, 8px 16px 8px 12px);--chat-actions-bar-color:var(--wpp-chat-actions-bar-color, var(--wpp-grey-color-1000));--chat-actions-bar-color-disabled:var(--wpp-chat-actions-bar-color-disabled, var(--wpp-grey-color-400));--chat-actions-bar-char-counter-color:var(--wpp-chat-actions-bar-char-counter-color, var(--wpp-danger-color-500));--chat-actions-bar-char-counter-color-disabled:var(\n    --wpp-chat-actions-bar-char-counter-color-disabled,\n    var(--wpp-danger-color-300)\n  );--chat-text-input-minimized-width:var(--wpp-chat-text-input-minimized-width, 203px);--chat-text-input-minimized-height:var(--wpp-chat-text-input-minimized-height, 22px);--chat-text-input-minimized-padding:var(--wpp-chat-text-input-minimized-padding, 8px 16px 8px 12px);--chat-input-transition-timing:0.3s cubic-bezier(0.4, 0, 0.2, 1);--chat-minimized-focus-ring-color:var(--wpp-focus-ring-color, var(--wpp-primary-color-600));--chat-minimized-focus-ring-width:var(--wpp-focus-ring-width, var(--wpp-border-width-m));--chat-minimized-focus-ring-radius:var(--wpp-chat-input-container-border-radius, var(--wpp-border-radius-m));--chat-minimized-first-border-color-focus:var(\n    --wpp-chat-minimized-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--chat-minimized-second-border-color-focus:var(\n    --wpp-chat-minimized-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--chat-minimized-border-radius-focus:var(--wpp-chat-minimized-border-radius-focus, var(--wpp-border-radius-xs));display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-box-sizing:border-box;box-sizing:border-box;position:relative;-ms-flex-align:center;align-items:center;width:100%}.chat-input-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;background-color:var(--chat-input-container-bg-color);border-radius:var(--chat-input-container-border-radius);min-width:var(--chat-input-container-min-width);width:100%;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:var(--wpp-box-shadow-s);box-shadow:var(--wpp-box-shadow-s);-webkit-transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);will-change:width, height;cursor:text}.chat-input-container:not(.is-focused):hover{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m)}.chat-input-container.disabled{pointer-events:none;cursor:not-allowed}.chat-input-container.has-alert{gap:0}.alert{-ms-flex-item-align:stretch;align-self:stretch;border-top-left-radius:var(--chat-input-container-border-radius);border-top-right-radius:var(--chat-input-container-border-radius);overflow:hidden}.alert[hidden]{display:none}.chat-file-upload-toast{position:absolute;top:8px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);cursor:pointer}.input-area{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);display:-ms-flexbox;display:flex;-ms-flex-direction:column-reverse;flex-direction:column-reverse;-ms-flex-align:stretch;align-items:stretch;color:var(--wpp-grey-color-1000);min-height:var(--chat-input-area-min-height);max-height:var(--chat-input-area-max-height);overflow-y:hidden;-ms-flex:1;flex:1;padding:var(--chat-input-area-padding);gap:12px;-webkit-box-sizing:border-box;box-sizing:border-box;border-radius:var(--wpp-border-radius-m) var(--wpp-border-radius-m) 0 0;-webkit-transition:height var(--chat-input-transition-timing);transition:height var(--chat-input-transition-timing);will-change:height;-webkit-transform-origin:bottom;transform-origin:bottom}.input-area .attachments{-ms-flex-order:3;order:3}.input-area .references{-ms-flex-order:2;order:2}.input-area .text-input{-ms-flex-order:1;order:1}.input-area:not(.minimized){scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.input-area::-webkit-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-moz-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area:-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-webkit-scrollbar{width:4px;height:4px}.input-area::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400);border-radius:var(--wpp-border-radius-xs);margin:6px}.input-area::-webkit-scrollbar-track{background:transparent}.input-area textarea{width:100%;min-height:var(--chat-text-input-min-height);resize:none;border:none;outline:none;padding:var(--chat-text-input-padding);font-family:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;background-color:var(--chat-text-input-bg-color);overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;color:inherit;-webkit-transition:min-height var(--chat-input-transition-timing);transition:min-height var(--chat-input-transition-timing);will-change:min-height;-webkit-transform-origin:bottom;transform-origin:bottom;margin:0}.input-area textarea::-webkit-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-moz-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:hover,.input-area textarea:focus-within{color:var(--wpp-grey-color-1000)}.input-area textarea:active{color:var(--wpp-grey-color-1000)}.input-area textarea:disabled{cursor:not-allowed;color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-webkit-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-moz-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled:-ms-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-ms-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::placeholder{color:var(--wpp-grey-color-500)}.input-area.minimized{min-height:0;padding:var(--chat-text-input-minimized-padding)}.input-area.minimized .input-area-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;gap:8px}.input-area.minimized .input-area-wrapper .actions-menu{--wpp-mc-wrapper-width:auto;display:-ms-flexbox;display:flex}.input-area.minimized .input-area-wrapper .sr-only{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0, 0, 0, 0) !important;-webkit-clip-path:inset(50%) !important;clip-path:inset(50%) !important;border:0 !important;white-space:nowrap !important}.input-area.minimized .minimized-input{-ms-flex-align:center;align-items:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;min-width:var(--chat-text-input-minimized-width);outline:none}.input-area.minimized .minimized-input .input-value{width:100%}.input-area.minimized .minimized-input .input-value.disabled{color:var(--wpp-grey-color-500)}.input-area.minimized .minimized-input .input-value-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area.minimized .minimized-input .input-value-placeholder.disabled{color:var(--wpp-grey-color-500)}.actions-bar{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;-ms-flex-align:end;align-items:flex-end;padding:var(--chat-actions-bar-padding);border-radius:0 0 var(--wpp-border-radius-m) var(--wpp-border-radius-m)}.actions-bar.size-s{padding:var(--chat-s-size-actions-bar-padding)}.actions-bar .left-actions{display:-ms-flexbox;display:flex;gap:8px;-ms-flex-align:center;align-items:center;}.actions-bar .left-actions .actions-menu{--wpp-mc-wrapper-width:auto;display:-ms-inline-flexbox;display:inline-flex;-ms-flex:0 0 auto;flex:0 0 auto;width:auto}.actions-bar .left-actions .select{display:-ms-flexbox;display:flex;width:100%;--wpp-action-button-padding:4px 6px;--wpp-action-button-icon-start-padding:8px;--wpp-action-button-icon-end-padding:6px;--wpp-action-button-icon-start-margin:8px;--wpp-action-button-icon-end-margin:8px;--wpp-action-button-bg-color-active:var(--wpp-grey-color-300);--wpp-action-button-opacity-active:1;}.actions-bar .left-actions .select ::slotted(.wpp-action-button:not(.with-icon-end)){--wpp-action-button-padding:4px 8px}.actions-bar .left-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.actions-bar .left-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.right-actions{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:4px}.right-actions .select{line-height:0}.right-actions .char-counter{color:var(--chat-actions-bar-char-counter-color)}.right-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.right-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.right-actions.disabled .char-counter{color:var(--chat-actions-bar-char-counter-color-disabled)}.play-btn{margin-left:4px;--button-padding-s:6px}.play-btn::part(icon-start-wrapper){margin:0}.model-selector{height:32px}.select-model-trigger.size-s:not(.is-chat-expanded){--wpp-list-item-padding:4px}.select-model-trigger.size-s:not(.is-chat-expanded)::part(left-wrapper){margin-right:0}.select-model-trigger.is-menu-opened{--li-bg-color:var(--wpp-grey-color-300);--wpp-icon-color:var(--wpp-grey-color-900)}.attachments{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;gap:8px;width:100%;-ms-flex:0 0 auto;flex:0 0 auto;overflow:auto hidden;scrollbar-width:thin;scrollbar-color:transparent transparent;-webkit-transition:scrollbar-color 0.3s ease-in-out;transition:scrollbar-color 0.3s ease-in-out}.attachments::-webkit-scrollbar{height:4px}.attachments::-webkit-scrollbar-thumb{background-color:transparent;border-radius:var(--wpp-border-radius-xs, 4px);-webkit-transition:background-color 0.3s ease-in-out;transition:background-color 0.3s ease-in-out}.attachments:hover,.attachments:focus-within{scrollbar-color:var(--wpp-grey-color-400) transparent}.attachments:hover::-webkit-scrollbar-thumb,.attachments:focus-within::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400)}.attachments .wpp-file-upload-item{--wpp-file-upload-item-chat-gap:0}.attachments .wpp-file-upload-item::part(file-item){margin-top:0}.attachments .wpp-file-upload-item::part(controls){-ms-flex-pack:end;justify-content:flex-end}.attachments .wpp-file-upload-item::part(thumbnail){margin-right:8px}.attachments .wpp-file-upload-item::part(cross-icon){margin-left:12px}.references{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:end;align-items:flex-end;gap:8px;width:100%;-ms-flex:0 0 auto;flex:0 0 auto}.references[hidden]{display:none}.input-area.minimized .minimized-input:focus-visible{border-radius:var(--chat-minimized-border-radius-focus);outline:none;-webkit-box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus);box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus)}:host([data-wpp-theme=dark]) .chat-input-container{background-color:var(--wpp-grey-color-100)}";
+const wppChatInputCss = "@charset \"UTF-8\";:host{--chat-input-container-min-width:var(--wpp-chat-input-container-min-width, 351px);--chat-input-container-bg-color:var(--wpp-chat-input-container-bg-color, var(--wpp-grey-color-000));--chat-input-container-border-width:var(--wpp-chat-input-container-border-width, 1px);--chat-input-container-loading-border-width:var(--wpp-chat-input-container-loading-border-width, 2px);--chat-input-container-border-color-active:var(\n    --wpp-chat-input-container-border-color-active,\n    var(--wpp-primary-color-500)\n  );--chat-input-container-border-radius:var(--wpp-chat-input-container-border-radius, var(--wpp-border-radius-m));--chat-input-area-min-height:var(--wpp-chat-input-area-min-height, 52px);--chat-input-area-max-height:var(--wpp-chat-input-area-max-height, 240px);--chat-input-area-padding:var(\n    --wpp-chat-input-area-padding,\n    calc(16px - var(--chat-input-container-border-width)) 16px 4px 16px\n  );--chat-input-area-placeholder-color:var(--wpp-chat-input-area-placeholder-color, var(--wpp-grey-color-700));--chat-text-input-min-height:var(--wpp-chat-text-input-min-height, 52px);--chat-text-input-padding:var(--wpp-chat-text-input-padding, 0);--chat-text-input-bg-color:var(--wpp-chat-text-input-bg-color, transparent);--chat-text-input-placeholder-color:var(--wpp-chat-text-input-placeholder-color, var(--wpp-grey-color-700));--chat-actions-bar-padding:var(\n    --wpp-chat-actions-bar-padding,\n    12px 16px calc(16px - var(--chat-input-container-border-width)) 12px\n  );--chat-s-size-actions-bar-padding:var(\n    --wpp-chat-s-size-actions-bar-padding,\n    8px 16px calc(8px - var(--chat-input-container-border-width)) 12px\n  );--chat-actions-bar-color:var(--wpp-chat-actions-bar-color, var(--wpp-grey-color-1000));--chat-actions-bar-color-disabled:var(--wpp-chat-actions-bar-color-disabled, var(--wpp-grey-color-400));--chat-actions-bar-char-counter-color:var(--wpp-chat-actions-bar-char-counter-color, var(--wpp-danger-color-500));--chat-actions-bar-char-counter-color-disabled:var(\n    --wpp-chat-actions-bar-char-counter-color-disabled,\n    var(--wpp-danger-color-300)\n  );--chat-text-input-minimized-width:var(--wpp-chat-text-input-minimized-width, 203px);--chat-text-input-minimized-height:var(--wpp-chat-text-input-minimized-height, 22px);--chat-text-input-minimized-padding:var(\n    --wpp-chat-text-input-minimized-padding,\n    calc(8px - var(--chat-input-container-border-width)) 16px calc(8px - var(--chat-input-container-border-width)) 12px\n  );--chat-input-transition-timing:0.3s cubic-bezier(0.4, 0, 0.2, 1);--chat-input-action-transition-duration:200ms;--chat-minimized-focus-ring-color:var(--wpp-focus-ring-color, var(--wpp-primary-color-600));--chat-minimized-focus-ring-width:var(--wpp-focus-ring-width, var(--wpp-border-width-m));--chat-minimized-focus-ring-radius:var(--wpp-chat-input-container-border-radius, var(--wpp-border-radius-m));--chat-minimized-first-border-color-focus:var(\n    --wpp-chat-minimized-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--chat-minimized-second-border-color-focus:var(\n    --wpp-chat-minimized-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--chat-minimized-border-radius-focus:var(--wpp-chat-minimized-border-radius-focus, var(--wpp-border-radius-xs));--chat-input-loading-color-primary:var(--wpp-chat-input-loading-color-primary, var(--wpp-primary-color-500));--chat-input-loading-color-secondary:var(--wpp-chat-input-loading-color-secondary, var(--wpp-primary-color-100));display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-box-sizing:border-box;box-sizing:border-box;position:relative;-ms-flex-align:center;align-items:center;width:100%;isolation:isolate}.chat-input-container{position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;background-color:var(--chat-input-container-bg-color);border-radius:var(--chat-input-container-border-radius);border:var(--chat-input-container-border-width) solid transparent;min-width:var(--chat-input-container-min-width);width:100%;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:var(--wpp-box-shadow-s);box-shadow:var(--wpp-box-shadow-s);-webkit-transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);will-change:width, height;cursor:text}.chat-input-container.is-focused{border-color:var(--chat-input-container-border-color-active)}.chat-input-container.is-loading::before{content:\"\";position:absolute;z-index:-1;inset:calc(-1 * (var(--chat-input-container-loading-border-width) + var(--chat-input-container-border-width)));pointer-events:none;background:conic-gradient(from var(--wpp-chat-input-loading-angle), var(--chat-input-loading-color-primary), var(--chat-input-loading-color-secondary), var(--chat-input-loading-color-primary));-webkit-animation:loading-rotate 2s linear infinite;animation:loading-rotate 2s linear infinite;border-radius:calc(var(--chat-input-container-border-radius) + var(--chat-input-container-loading-border-width))}@-webkit-keyframes loading-rotate{to{--wpp-chat-input-loading-angle:360deg}}@keyframes loading-rotate{to{--wpp-chat-input-loading-angle:360deg}}.chat-input-container:not(.is-focused):hover{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m)}.chat-input-container.disabled{pointer-events:none;cursor:not-allowed}.chat-input-container.has-alert{gap:0}.alert{-ms-flex-item-align:stretch;align-self:stretch;border-top-left-radius:var(--chat-input-container-border-radius);border-top-right-radius:var(--chat-input-container-border-radius);overflow:hidden}.alert[hidden]{display:none}.chat-file-upload-toast{position:absolute;top:8px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);cursor:pointer}.input-area{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);display:-ms-flexbox;display:flex;-ms-flex-direction:column-reverse;flex-direction:column-reverse;-ms-flex-align:stretch;align-items:stretch;color:var(--wpp-grey-color-1000);min-height:var(--chat-input-area-min-height);max-height:var(--chat-input-area-max-height);overflow-y:hidden;-ms-flex:1;flex:1;padding:var(--chat-input-area-padding);gap:12px;-webkit-box-sizing:border-box;box-sizing:border-box;border-radius:var(--wpp-border-radius-m) var(--wpp-border-radius-m) 0 0;-webkit-transition:height var(--chat-input-transition-timing);transition:height var(--chat-input-transition-timing);will-change:height;-webkit-transform-origin:bottom;transform-origin:bottom}.input-area .attachments{-ms-flex-order:3;order:3}.input-area .references{-ms-flex-order:2;order:2}.input-area .text-input{-ms-flex-order:1;order:1}.input-area:not(.minimized){scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.input-area::-webkit-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-moz-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area:-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-webkit-scrollbar{width:4px;height:4px}.input-area::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400);border-radius:var(--wpp-border-radius-xs);margin:6px}.input-area::-webkit-scrollbar-track{background:transparent}.input-area textarea{width:100%;min-height:var(--chat-text-input-min-height);resize:none;border:none;outline:none;padding:var(--chat-text-input-padding);font-family:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;background-color:var(--chat-text-input-bg-color);overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;color:inherit;-webkit-transition:min-height var(--chat-input-transition-timing);transition:min-height var(--chat-input-transition-timing);will-change:min-height;-webkit-transform-origin:bottom;transform-origin:bottom;margin:0}.input-area textarea::-webkit-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-moz-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:hover,.input-area textarea:focus-within{color:var(--wpp-grey-color-1000)}.input-area textarea:active{color:var(--wpp-grey-color-1000)}.input-area textarea:disabled{cursor:not-allowed;color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-webkit-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-moz-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled:-ms-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-ms-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::placeholder{color:var(--wpp-grey-color-500)}.input-area.minimized{min-height:0;padding:var(--chat-text-input-minimized-padding)}.input-area.minimized .input-area-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;gap:8px}.input-area.minimized .input-area-wrapper .actions-menu{--wpp-mc-wrapper-width:auto;display:-ms-flexbox;display:flex}.input-area.minimized .input-area-wrapper .sr-only{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0, 0, 0, 0) !important;-webkit-clip-path:inset(50%) !important;clip-path:inset(50%) !important;border:0 !important;white-space:nowrap !important}.input-area.minimized .minimized-input{-ms-flex-align:center;align-items:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;min-width:var(--chat-text-input-minimized-width);outline:none}.input-area.minimized .minimized-input .input-value{width:100%}.input-area.minimized .minimized-input .input-value.disabled{color:var(--wpp-grey-color-500)}.input-area.minimized .minimized-input .input-value-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area.minimized .minimized-input .input-value-placeholder.disabled{color:var(--wpp-grey-color-500)}.actions-bar{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;-ms-flex-align:end;align-items:flex-end;padding:var(--chat-actions-bar-padding);border-radius:0 0 var(--wpp-border-radius-m) var(--wpp-border-radius-m)}.actions-bar.size-s{padding:var(--chat-s-size-actions-bar-padding)}.actions-bar .left-actions{display:-ms-flexbox;display:flex;gap:8px;-ms-flex-align:center;align-items:center;}.actions-bar .left-actions .actions-menu{--wpp-mc-wrapper-width:auto;display:-ms-inline-flexbox;display:inline-flex;-ms-flex:0 0 auto;flex:0 0 auto;width:auto}.actions-bar .left-actions .select{display:-ms-flexbox;display:flex;width:100%;--wpp-action-button-padding:4px 6px;--wpp-action-button-icon-start-padding:8px;--wpp-action-button-icon-end-padding:6px;--wpp-action-button-icon-start-margin:8px;--wpp-action-button-icon-end-margin:8px;--wpp-action-button-bg-color-active:var(--wpp-grey-color-300);--wpp-action-button-opacity-active:1;}.actions-bar .left-actions .select ::slotted(.wpp-action-button:not(.with-icon-end)){--wpp-action-button-padding:4px 8px}.actions-bar .left-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.actions-bar .left-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.right-actions{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center}.right-actions .select{line-height:0}.right-actions .char-counter{color:var(--chat-actions-bar-char-counter-color)}.right-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.right-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.right-actions.disabled .char-counter{color:var(--chat-actions-bar-char-counter-color-disabled)}.play-btn{--button-padding-s:6px;margin-left:8px;max-width:32px;opacity:1;overflow:clip;overflow-clip-margin:8px;-webkit-transition:max-width var(--chat-input-action-transition-duration) ease, opacity var(--chat-input-action-transition-duration) ease, margin-left var(--chat-input-action-transition-duration) ease, -webkit-transform var(--chat-input-action-transition-duration) ease;transition:max-width var(--chat-input-action-transition-duration) ease, opacity var(--chat-input-action-transition-duration) ease, margin-left var(--chat-input-action-transition-duration) ease, -webkit-transform var(--chat-input-action-transition-duration) ease;transition:max-width var(--chat-input-action-transition-duration) ease, opacity var(--chat-input-action-transition-duration) ease, margin-left var(--chat-input-action-transition-duration) ease, transform var(--chat-input-action-transition-duration) ease;transition:max-width var(--chat-input-action-transition-duration) ease, opacity var(--chat-input-action-transition-duration) ease, margin-left var(--chat-input-action-transition-duration) ease, transform var(--chat-input-action-transition-duration) ease, -webkit-transform var(--chat-input-action-transition-duration) ease}.play-btn::part(icon-start-wrapper){margin:0}.play-btn.is-hidden{max-width:0;margin-left:0;opacity:0;-webkit-transform:scale(0.85);transform:scale(0.85);pointer-events:none}.model-selector{height:32px;margin-right:4px}.select-model-trigger.size-s:not(.is-chat-expanded){--wpp-list-item-padding:4px}.select-model-trigger.size-s:not(.is-chat-expanded)::part(left-wrapper){margin-right:0}.select-model-trigger.is-menu-opened{--li-bg-color:var(--wpp-grey-color-300);--wpp-icon-color:var(--wpp-grey-color-900)}.attachments{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;gap:8px;width:100%;-ms-flex:0 0 auto;flex:0 0 auto;overflow:auto hidden;scrollbar-width:thin;scrollbar-color:transparent transparent;-webkit-transition:scrollbar-color 0.3s ease-in-out;transition:scrollbar-color 0.3s ease-in-out}.attachments::-webkit-scrollbar{height:4px}.attachments::-webkit-scrollbar-thumb{background-color:transparent;border-radius:var(--wpp-border-radius-xs, 4px);-webkit-transition:background-color 0.3s ease-in-out;transition:background-color 0.3s ease-in-out}.attachments:hover,.attachments:focus-within{scrollbar-color:var(--wpp-grey-color-400) transparent}.attachments:hover::-webkit-scrollbar-thumb,.attachments:focus-within::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400)}.attachments .wpp-file-upload-item{--wpp-file-upload-item-chat-gap:0}.attachments .wpp-file-upload-item::part(file-item){margin-top:0}.attachments .wpp-file-upload-item::part(controls){-ms-flex-pack:end;justify-content:flex-end}.attachments .wpp-file-upload-item::part(thumbnail){margin-right:8px}.attachments .wpp-file-upload-item::part(cross-icon){margin-left:12px}.references{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:end;align-items:flex-end;gap:8px;width:100%;-ms-flex:0 0 auto;flex:0 0 auto}.references[hidden]{display:none}.input-area.minimized .minimized-input:focus-visible{border-radius:var(--chat-minimized-border-radius-focus);outline:none;-webkit-box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus);box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus)}:host([data-wpp-theme=dark]) .chat-input-container{background-color:var(--wpp-grey-color-100)}";
 
 const WppChatInput = class {
   constructor(hostRef) {
@@ -1909,55 +3202,16 @@ const WppChatInput = class {
     this.wppModelSelect = createEvent(this, "wppModelSelect", 1);
     this.wppModelBrowse = createEvent(this, "wppModelBrowse", 1);
     this.scrollTimeout = null;
+    this.stopBtnHideTimeout = null;
     this.inputAreaId = `wpp-ci-area`;
     this.textareaAutoId = `wpp-ci-ta`;
     this.minimizedDescId = `wpp-ci-min-desc`;
-    this.recognition = null;
+    this.recognition = new SpeechRecognitionService();
     this.themeSubscription = themeSubscriptionController(() => this.host);
     this.aiModelBtn = null;
     this.reInitValue = (list) => {
       this.successAttachmentsList = list.filter(file => !this.isFileWithError(file));
       this.errorAttachmentsList = list.filter(this.isFileWithError);
-    };
-    this.setupSpeechRecognition = () => {
-      const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognitionAPI)
-        return;
-      this.recognition = new SpeechRecognitionAPI();
-      this.recognition.continuous = true;
-      this.recognition.interimResults = true;
-      this.recognition.lang = this._locales.audioLanguage;
-    };
-    this.startSpeechRecognition = () => {
-      if (!this.recognition)
-        return;
-      const previousText = this.internalValue.trim();
-      this.recognition.onresult = (event) => {
-        let text = '';
-        for (let i = 0; i < event.results.length; i++) {
-          text += event.results[i][0].transcript;
-        }
-        const newOutput = previousText ? `${previousText} ${text}` : text;
-        if (this.internalValue === newOutput)
-          return;
-        this.internalValue = newOutput;
-        this.emitMessageChangedEvent(this.internalValue);
-      };
-      this.recognition.onerror = () => {
-        this.isAudioRecording = false;
-      };
-      this.recognition.onend = () => {
-        this.isAudioRecording = false;
-      };
-      this.recognition?.start();
-    };
-    this.stopSpeechRecognition = () => {
-      if (!this.recognition)
-        return;
-      this.recognition.onresult = null;
-      this.recognition.onend = null;
-      this.recognition.onerror = null;
-      this.recognition.stop();
     };
     this.checkInteractedItem = (event) => {
       const path = event.composedPath();
@@ -2275,31 +3529,46 @@ const WppChatInput = class {
     this.handleClickAudioRecording = (event) => {
       event.stopPropagation();
       event.preventDefault();
-      if (!this.recognition)
+      if (!this.recognition.isSupported) {
+        console.warn('SpeechRecognition API is not supported in this browser.');
         return;
+      }
       this.isAudioRecording = !this.isAudioRecording;
-      this.wppMic.emit({ isRecording: this.isAudioRecording });
       if (this.isAudioRecording) {
-        this.startSpeechRecognition();
+        this.wppMic.emit({ isRecording: true });
+        this.recognition.startRecognition({
+          baseText: this.internalValue,
+          onTranscript: newOutput => {
+            if (this.internalValue === newOutput)
+              return;
+            this.internalValue = newOutput;
+            this.emitMessageChangedEvent(this.internalValue);
+          },
+          onStop: () => {
+            this.isAudioRecording = false;
+            this.wppMic.emit({ isRecording: false });
+          },
+        });
       }
       else {
-        this.stopSpeechRecognition();
+        this.wppMic.emit({ isRecording: false });
+        this.recognition.stopRecognition();
       }
     };
     this.shouldDisplaySend = () => this.disabled || this.errorAttachmentsList.length > 0
       ? false
       : !!this.internalValue.trim() || this.isGenerating || this.successAttachmentsList.length > 0;
-    this.renderMicrophoneBtn = (recordButtonLabel) => (h("wpp-action-button-v4-3-0", { "data-testid": "wpp-micophone-btn", onClick: this.handleClickAudioRecording, variant: "secondary", ariaProps: { label: recordButtonLabel }, disabled: this.disabled }, this.isAudioRecording ? h("wpp-icon-stop-v4-3-0", { slot: "icon-start" }) : h("wpp-icon-mic-on-v4-3-0", { slot: "icon-start" })));
-    this.renderActionsMenu = () => (h("wpp-menu-context-v4-3-0", { class: "actions-menu", part: "actions-menu", dropdownConfig: this.actionsMenuDropdownConfig }, h("wpp-action-button-v4-3-0", { slot: "trigger-element", class: "actions-menu-trigger", "data-testid": "actions-menu-trigger-button", variant: "secondary", disabled: this.disabled, ariaProps: {
+    this.renderMicrophoneBtn = (recordButtonLabel) => (h("wpp-action-button-v4-4-0", { "data-testid": "wpp-micophone-btn", onClick: this.handleClickAudioRecording, variant: "secondary", ariaProps: { label: recordButtonLabel }, disabled: this.disabled }, this.isAudioRecording ? h("wpp-icon-stop-v4-4-0", { slot: "icon-start" }) : h("wpp-icon-mic-on-v4-4-0", { slot: "icon-start" })));
+    this.renderActionsMenu = () => (h("wpp-menu-context-v4-4-0", { class: "actions-menu", part: "actions-menu", dropdownConfig: this.actionsMenuDropdownConfig }, h("wpp-action-button-v4-4-0", { slot: "trigger-element", class: "actions-menu-trigger", "data-testid": "actions-menu-trigger-button", variant: "secondary", disabled: this.disabled, ariaProps: {
         label: this.getActionsMenuButtonLabel(),
         expanded: this.ariaProps?.actionsMenuButton?.expanded ?? this.actionsMenuOpen,
         haspopup: 'menu',
-      } }, h("wpp-icon-plus-v4-3-0", { slot: "icon-start" })), h("div", null, h("wpp-list-item-v4-3-0", { "data-testid": `actions-menu-item-${UPLOAD_ACTION_ID}`, disabled: this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick({
+      } }, h("wpp-icon-plus-v4-4-0", { slot: "icon-start" })), h("div", null, h("wpp-list-item-v4-4-0", { "data-testid": `actions-menu-item-${UPLOAD_ACTION_ID}`, disabled: this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick({
         id: UPLOAD_ACTION_ID,
         icon: UPLOAD_ICON,
         label: this.getAttachButtonLabel(),
         disabled: this.disabled || this.isFileDialogOpen,
-      }) }, h(transformToVersionedTag(UPLOAD_ICON), { slot: 'left' }), h("span", { slot: "label" }, this.getAttachButtonLabel())), this.actions.map(action => (h("wpp-list-item-v4-3-0", { key: action.id, "data-testid": `actions-menu-item-${action.id}`, disabled: action.disabled || this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))));
+      }) }, h(transformToVersionedTag(UPLOAD_ICON), { slot: 'left' }), h("span", { slot: "label" }, this.getAttachButtonLabel())), this.actions.map(action => (h("wpp-list-item-v4-4-0", { key: action.id, "data-testid": `actions-menu-item-${action.id}`, disabled: action.disabled || this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))));
     this.getSelectedModel = () => {
       if (this.selectedModel === 'auto') {
         return getDefaultModelOptions(this._locales)[0];
@@ -2334,10 +3603,43 @@ const WppChatInput = class {
     };
     this.renderModelSelector = (size) => {
       const selectedModel = this.getSelectedModel();
-      const triggerAvatar = (h("wpp-avatar-v4-3-0", { slot: "left", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, name: selectedModel.label }));
-      return (h("wpp-menu-context-v4-3-0", { isBtnTrigger: true, class: "model-selector", dropdownConfig: { onShow: this.handleModelMenuShow, onHide: this.handleModelMenuHide, placement: 'top-start' } }, h("wpp-list-item-v4-3-0", { slot: "trigger-element", class: this.modelSelectorTriggerCssClasses(), role: "button", disabled: this.disabled, "aria-label": this._locales.modelSelectorBtnLabel, "aria-expanded": this.isModelMenuOpen, "aria-haspopup": 'menu' }, triggerAvatar, size === 'm' && (h(Fragment, null, h("span", { slot: "label" }, selectedModel.label), h("wpp-icon-chevron-v4-3-0", { slot: "right", direction: this.isModelMenuOpen ? 'up' : 'down' })))), h("div", { class: "wpp-model-dropdown" }, getDefaultModelOptions(this._locales).map((model) => this.renderModelListItem(model, model.id === selectedModel.id)), h("wpp-divider-v4-3-0", null), this.models.length > 0 ? (this.models.map((model) => this.renderModelListItem(model, model.id === selectedModel.id))) : (h("wpp-list-item-v4-3-0", { onWppChangeListItem: this.handleModelChange }, h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), h("wpp-icon-chevron-v4-3-0", { slot: "right", direction: "right" }))))));
+      const triggerAvatar = (h("wpp-avatar-v4-4-0", { slot: "left", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, name: selectedModel.label }));
+      return (h("wpp-menu-context-v4-4-0", { isBtnTrigger: true, class: "model-selector", dropdownConfig: { onShow: this.handleModelMenuShow, onHide: this.handleModelMenuHide, placement: 'top-start' } }, h("wpp-list-item-v4-4-0", { slot: "trigger-element", class: this.modelSelectorTriggerCssClasses(), role: "button", disabled: this.disabled, "aria-label": this._locales.modelSelectorBtnLabel, "aria-expanded": this.isModelMenuOpen, "aria-haspopup": 'menu' }, triggerAvatar, size === 'm' && (h(Fragment, null, h("span", { slot: "label" }, selectedModel.label), h("wpp-icon-chevron-v4-4-0", { slot: "right", direction: this.isModelMenuOpen ? 'up' : 'down' })))), h("div", { class: "wpp-model-dropdown" }, getDefaultModelOptions(this._locales).map((model) => this.renderModelListItem(model, model.id === selectedModel.id)), h("wpp-divider-v4-4-0", null), this.models.length > 0 ? (this.models.map((model) => this.renderModelListItem(model, model.id === selectedModel.id))) : (h("wpp-list-item-v4-4-0", { onWppChangeListItem: this.handleModelChange }, h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), h("wpp-icon-chevron-v4-4-0", { slot: "right", direction: "right" }))))));
     };
-    this.renderModelListItem = (model, checked) => (h("wpp-list-item-v4-3-0", { key: model.id, checked: checked, onWppChangeListItem: () => this.handleModelSelect(model) }, h("wpp-avatar-v4-3-0", { role: "presentation", slot: "left", size: "xs", variant: "square", src: model.logo, name: model.label }), h("span", { slot: "label" }, model.label), model?.caption && (h("span", { slot: "caption" }, model.caption))));
+    this.renderModelListItem = (model, checked) => (h("wpp-list-item-v4-4-0", { key: model.id, checked: checked, onWppChangeListItem: () => this.handleModelSelect(model) }, h("wpp-avatar-v4-4-0", { role: "presentation", slot: "left", size: "xs", variant: "square", src: model.logo, name: model.label }), h("span", { slot: "label" }, model.label), model?.caption && (h("span", { slot: "caption" }, model.caption))));
+    this.clearStopBtnHideTimeout = () => {
+      if (!this.stopBtnHideTimeout)
+        return;
+      clearTimeout(this.stopBtnHideTimeout);
+      this.stopBtnHideTimeout = null;
+    };
+    this.handleSendClick = (event) => {
+      event.stopPropagation();
+      this.handleSend();
+    };
+    this.handleStopBtnClick = (event) => {
+      event.stopPropagation();
+      this.handleStop();
+      this.isStopBtnHiding = true;
+      this.clearStopBtnHideTimeout();
+      this.stopBtnHideTimeout = setTimeout(() => {
+        this.stopBtnHideTimeout = null;
+        this.isStopBtnHiding = false;
+      }, PRIMARY_ACTION_TRANSITION_MS);
+    };
+    /**
+     * The stop button is still on screen while it animates out, but it is no longer actionable —
+     * `is-hidden` and `inert` must be driven by the same condition so it never becomes an invisible
+     * focus target.
+     */
+    this.isPrimaryActionInteractive = () => this.shouldDisplaySend() && !this.isStopBtnHiding;
+    this.renderSendStopBtn = () => {
+      const interactive = this.isPrimaryActionInteractive();
+      // While hidden the button stays in the DOM (to animate the collapse), but must leave the
+      // focus order and a11y tree so its focusable inner control does not trip axe's aria-hidden-focus.
+      const inertProps = interactive ? {} : { inert: true };
+      return this.isGenerating || this.isStopBtnHiding ? (h("wpp-action-button-v4-4-0", { class: { 'play-btn': true, 'is-hidden': !interactive }, "data-testid": "stop-icon-only-button", onClick: this.handleStopBtnClick, ariaProps: { label: this.getStopButtonLabel() }, ...inertProps }, h("wpp-icon-stop-v4-4-0", { slot: "icon-start" }))) : (h("wpp-button-v4-4-0", { class: { 'play-btn': true, 'is-hidden': !interactive }, "data-testid": "send-icon-only-button", size: "s", onClick: this.handleSendClick, ariaProps: { label: this.getSendButtonLabel() }, ...inertProps }, h("wpp-icon-arrow-v4-4-0", { direction: "up", slot: "icon-start" })));
+    };
     this.modelSelectorTriggerCssClasses = () => ({
       'select-model-trigger': true,
       [`size-${this.size}`]: true,
@@ -2353,6 +3655,7 @@ const WppChatInput = class {
     this.chatInputContainerClasses = () => ({
       'chat-input-container': true,
       'is-focused': this.isFocused,
+      'is-loading': this.isGenerating,
       'has-alert': this.hasAlertSlot && !this.isAlertDismissed,
       disabled: this.disabled,
     });
@@ -2480,6 +3783,7 @@ const WppChatInput = class {
     this.isFocused = false;
     this.isAudioRecording = false;
     this.isModelMenuOpen = false;
+    this.isStopBtnHiding = false;
   }
   onAttachmentsChange(newValue) {
     if (this.mergedFileUploadConfig.controlled) {
@@ -2508,7 +3812,7 @@ const WppChatInput = class {
     this.reInitValue(list);
   }
   componentDidLoad() {
-    this.setupSpeechRecognition();
+    this.recognition.setupRecognition(this._locales.audioLanguage);
     requestAnimationFrame(() => {
       this.initializeObserver();
     });
@@ -2542,12 +3846,19 @@ const WppChatInput = class {
     this.expandedListenersAbort = undefined;
   }
   connectedCallback() {
+    // This is needed so the animation from "Processing" state works as expected (this component uses shadow DOM).
+    registerLoadingAngle();
     this.themeSubscription.start();
   }
   disconnectedCallback() {
     this.disconnectObserver();
     this.themeSubscription.stop();
-    this.stopSpeechRecognition();
+    this.recognition.stopRecognition();
+    this.clearStopBtnHideTimeout();
+    if (this.scrollTimeout) {
+      clearTimeout(this.scrollTimeout);
+      this.scrollTimeout = null;
+    }
     if (this.resizeObserver && this.inputAreaRef) {
       this.resizeObserver.unobserve(this.inputAreaRef);
     }
@@ -2751,7 +4062,7 @@ const WppChatInput = class {
       this.errorAttachmentsList.length)
       return;
     this.isAudioRecording = false;
-    this.stopSpeechRecognition();
+    this.recognition.stopRecognition();
     this.wppSend.emit({
       message: this.internalValue.trim(),
       attachments: this.successAttachmentsList,
@@ -2850,20 +4161,16 @@ const WppChatInput = class {
     const maximizedSorSizeM = isMaximizedS || this.size === 'm';
     const isMinimizedS = this.size === 's' && !this.isChatInputExpanded;
     const placeholderText = this.getPlaceholderText();
-    const actionButtonLabel = this.isGenerating ? this.getStopButtonLabel() : this.getSendButtonLabel();
     const recordButtonLabel = this.isAudioRecording
       ? this.getAudioStopRecordButtonLabel()
       : this.getAudioRecordButtonLabel();
     const ariaInvalid = this.ariaProps?.textarea?.invalid !== undefined ? this.ariaProps.textarea.invalid : undefined;
-    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, alert, toast, input-area, attachments, references, text-input, actions-bar, left-actions, right-actions, file-item, actions-menu", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick, onFocus: this.handleOnFocus }, h("div", { class: this.chatInputContainerClasses(), onKeyDown: this.onExpandedKeyDown, part: "chat-input-container" }, h("div", { class: "alert", part: "alert", hidden: !this.hasAlertSlot || this.isAlertDismissed }, h("slot", { name: "alert", onSlotchange: this.handleAlertSlotChange })), this.showToast && (h("wpp-toast-v4-3-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { id: this.inputAreaId, class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments", role: "list", "aria-label": this._locales.attachmentsLabel }, allFiles.map((file, index) => (h("wpp-file-upload-item-v4-3-0", { key: index, file: file, variant: "chat", format: this.mergedFileUploadConfig.format, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
+    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, alert, toast, input-area, attachments, references, text-input, actions-bar, left-actions, right-actions, file-item, actions-menu", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick, onFocus: this.handleOnFocus }, h("div", { class: this.chatInputContainerClasses(), onKeyDown: this.onExpandedKeyDown, part: "chat-input-container" }, h("div", { class: "alert", part: "alert", hidden: !this.hasAlertSlot || this.isAlertDismissed }, h("slot", { name: "alert", onSlotchange: this.handleAlertSlotChange })), this.showToast && (h("wpp-toast-v4-4-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { id: this.inputAreaId, class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments", role: "list", "aria-label": this._locales.attachmentsLabel }, allFiles.map((file, index) => (h("wpp-file-upload-item-v4-4-0", { key: index, file: file, variant: "chat", format: this.mergedFileUploadConfig.format, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
         sizeError: this.mergedFileUploadConfig.locales.sizeError,
         formatError: this.mergedFileUploadConfig.locales.formatError,
-      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded, role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": allFiles.length.toString() }))))), h("div", { class: "references", part: "references", hidden: !this.hasReferencesSlot }, h("slot", { name: "references", onSlotchange: this.handleReferencesSlotChange })), h("textarea", { id: (this.htmlAttributes?.textarea?.id ?? this.textareaId) || this.textareaAutoId, name: this.htmlAttributes?.textarea?.name ?? this.textareaName ?? 'message', class: this.textInputClasses(), placeholder: placeholderText, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input", "aria-label": this.getTextareaLabel(), "aria-invalid": ariaInvalid, autocomplete: this.htmlAttributes?.textarea?.autocomplete, maxLength: this.htmlAttributes?.textarea?.maxLength, "data-gramm": "false", "data-gramm_editor": "false" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, this.renderActionsMenu(), h("div", { class: this.minimizedInput(), part: "minimized-input", "data-pressed": this.minimizedPressed ? 'true' : null, role: "button", tabindex: this.disabled ? -1 : 0, "aria-expanded": this.isChatInputExpanded ? 'true' : 'false', "aria-controls": this.inputAreaId, "aria-label": this.getMinimizedAriaLabel(), "aria-describedby": this.minimizedDescId, onKeyDown: this.onMinimizedKeyDown, onKeyUp: this.onMinimizedKeyUp }, h("wpp-typography-v4-3-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || placeholderText)), h("span", { id: this.minimizedDescId, class: "sr-only" }, this.getMinimizedDescriptionText()), h("div", { class: this.rightActionsClasses() }, !this.withSelect && this.renderModelSelector('s'), this.renderMicrophoneBtn(recordButtonLabel), this.shouldDisplaySend() && (h("wpp-button-v4-3-0", { class: "play-btn", "data-testid": "send-icon-only-button", size: "s", variant: this.isGenerating ? 'secondary' : 'primary', onClick: e => {
-        e.stopPropagation();
-        this.isGenerating ? this.handleStop() : this.handleSend();
-      }, ariaProps: { label: actionButtonLabel } }, this.isGenerating ? (h("wpp-icon-stop-v4-3-0", { slot: "icon-start" })) : (h("wpp-icon-arrow-v4-3-0", { direction: "up", slot: "icon-start" })))))))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar", role: "toolbar", "aria-label": this.getActionsToolbarLabel() }, h("div", { class: this.leftActionsClasses(), part: "left-actions", role: "group", "aria-label": this.getLeftActionsLabel() }, this.renderActionsMenu(), this.enableMic && (h("wpp-action-button-v4-3-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled, ariaProps: { label: this._locales.voiceLabel } }, h("wpp-icon-mic-on-v4-3-0", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions", role: "group", "aria-label": this.getRightActionsLabel() }, this.withSelect ? (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })) : (this.renderModelSelector('m')), this.renderMicrophoneBtn(recordButtonLabel), this.shouldDisplaySend() && (h("wpp-button-v4-3-0", { class: "play-btn", "data-testid": "send-icon-only-button", size: "s", variant: this.isGenerating ? 'secondary' : 'primary', onClick: () => (this.isGenerating ? this.handleStop() : this.handleSend()), ariaProps: { label: actionButtonLabel } }, this.isGenerating ? (h("wpp-icon-stop-v4-3-0", { slot: "icon-start" })) : (h("wpp-icon-arrow-v4-3-0", { direction: "up", slot: "icon-start" }))))))), h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.htmlAttributes?.attachmentsInput?.multiple ?? this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.htmlAttributes?.attachmentsInput?.accept ?? this.getAcceptExtensions().join(), title: "", id: this.htmlAttributes?.attachmentsInput?.id ?? 'wpp-ci-file', name: this.htmlAttributes?.attachmentsInput?.name ?? 'attachments', "aria-hidden": "true" }))));
+      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded, role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": allFiles.length.toString() }))))), h("div", { class: "references", part: "references", hidden: !this.hasReferencesSlot }, h("slot", { name: "references", onSlotchange: this.handleReferencesSlotChange })), h("textarea", { id: (this.htmlAttributes?.textarea?.id ?? this.textareaId) || this.textareaAutoId, name: this.htmlAttributes?.textarea?.name ?? this.textareaName ?? 'message', class: this.textInputClasses(), placeholder: placeholderText, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input", "aria-label": this.getTextareaLabel(), "aria-invalid": ariaInvalid, autocomplete: this.htmlAttributes?.textarea?.autocomplete, maxLength: this.htmlAttributes?.textarea?.maxLength, "data-gramm": "false", "data-gramm_editor": "false" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, this.renderActionsMenu(), h("div", { class: this.minimizedInput(), part: "minimized-input", "data-pressed": this.minimizedPressed ? 'true' : null, role: "button", tabindex: this.disabled ? -1 : 0, "aria-expanded": this.isChatInputExpanded ? 'true' : 'false', "aria-controls": this.inputAreaId, "aria-label": this.getMinimizedAriaLabel(), "aria-describedby": this.minimizedDescId, onKeyDown: this.onMinimizedKeyDown, onKeyUp: this.onMinimizedKeyUp }, h("wpp-typography-v4-4-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || placeholderText)), h("span", { id: this.minimizedDescId, class: "sr-only" }, this.getMinimizedDescriptionText()), h("div", { class: this.rightActionsClasses() }, !this.withSelect && this.renderModelSelector('s'), this.renderMicrophoneBtn(recordButtonLabel), this.renderSendStopBtn())))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar", role: "toolbar", "aria-label": this.getActionsToolbarLabel() }, h("div", { class: this.leftActionsClasses(), part: "left-actions", role: "group", "aria-label": this.getLeftActionsLabel() }, this.renderActionsMenu(), this.enableMic && (h("wpp-action-button-v4-4-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled, ariaProps: { label: this._locales.voiceLabel } }, h("wpp-icon-mic-on-v4-4-0", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions", role: "group", "aria-label": this.getRightActionsLabel() }, this.withSelect ? (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })) : (this.renderModelSelector('m')), this.renderMicrophoneBtn(recordButtonLabel), this.renderSendStopBtn()))), h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.htmlAttributes?.attachmentsInput?.multiple ?? this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.htmlAttributes?.attachmentsInput?.accept ?? this.getAcceptExtensions().join(), title: "", id: this.htmlAttributes?.attachmentsInput?.id ?? 'wpp-ci-file', name: this.htmlAttributes?.attachmentsInput?.name ?? 'attachments', "aria-hidden": "true" }))));
   }
-  static get registryIs() { return "wpp-chat-input-v4-3-0"; }
+  static get registryIs() { return "wpp-chat-input-v4-4-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "attachments": ["onAttachmentsChange"],

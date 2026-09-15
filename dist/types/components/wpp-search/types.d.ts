@@ -29,5 +29,19 @@ export interface SearchLocales {
   nothingFound?: string;
   loading?: string;
   dropdownHeader?: string;
+  /**
+   * Accessible name for the clear (cross) button shown when the search has a value.
+   * Defaults to 'Clear search'.
+   */
+  clearButtonLabel?: string;
+  /**
+   * Accessible name for the options `listbox` popup. Defaults to 'Search results'.
+   */
+  optionsListLabel?: string;
+  /**
+   * Accessible name for the search input, used when no visible label or placeholder
+   * is provided. Defaults to 'Search'.
+   */
+  searchLabel?: string;
 }
 export type SearchLabelConfig = LabelConfig;

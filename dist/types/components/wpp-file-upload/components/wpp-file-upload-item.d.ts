@@ -48,7 +48,7 @@ export declare class WppFileUploadItem {
   /**
    * Indicates locales for file upload component
    */
-  readonly locales: FileUploadItemLocales;
+  readonly locales: Partial<FileUploadItemLocales>;
   /**
    * Indicates if the file has been uploaded.
    *

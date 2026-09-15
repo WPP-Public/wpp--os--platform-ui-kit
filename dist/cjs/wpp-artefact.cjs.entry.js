@@ -3,9 +3,10 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-5f5af6a9.js');
-const utils = require('./utils-9529c2fe.js');
-const subscribeToTheme = require('./subscribe-to-theme-1879a649.js');
+const utils = require('./utils-a6513d61.js');
+const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
 require('./consts-d8f5ef98.js');
+require('./theme-observer-4179316e.js');
 
 const getArtefactActions = (locales) => [
   { icon: 'wpp-icon-copy', label: locales.duplicateAction },
@@ -98,7 +99,7 @@ const WppArtefact = class {
     this.resizeObserver = undefined;
   }
   render() {
-    return (index.h(index.Host, { class: "wpp-artefact" }, index.h("div", { class: this.getArtefactWrapperClasses() }, index.h("div", { class: "artefact-header" }, this.titleIcon && index.h("div", { class: "artefact-icon-container" }, index.h(utils.transformToVersionedTag(this.titleIcon))), index.h("wpp-tooltip-v4-3-0", { text: this.artefactTitle, class: "title-tooltip", config: {
+    return (index.h(index.Host, { class: "wpp-artefact" }, index.h("div", { class: this.getArtefactWrapperClasses() }, index.h("div", { class: "artefact-header" }, this.titleIcon && index.h("div", { class: "artefact-icon-container" }, index.h(utils.transformToVersionedTag(this.titleIcon))), index.h("wpp-tooltip-v4-4-0", { text: this.artefactTitle, class: "title-tooltip", config: {
         placement: 'top',
         onShow: () => {
           if (!this.titleRef)
@@ -106,9 +107,9 @@ const WppArtefact = class {
           if (this.titleRef.clientWidth >= this.titleRef.scrollWidth)
             return false;
         },
-      } }, index.h("p", { ref: el => (this.titleRef = el), class: "artefact-title" }, this.artefactTitle))), index.h("wpp-divider-v4-3-0", null), index.h("div", { class: "artefact-body" }, index.h("slot", { name: "body" })), this.hasScrollbar && index.h("wpp-divider-v4-3-0", null), index.h("div", { class: "artefact-actions" }, this.defaultActions.map((action) => (index.h("wpp-tooltip-v4-3-0", { text: action.label, key: action.label, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-3-0", { variant: "secondary", onClick: () => this.handleActionClick(action), ariaProps: { label: action.label } }, index.h(utils.transformToVersionedTag(action.icon), { slot: 'icon-start' }))))), this.dropdownActions.length > 0 && (index.h("wpp-menu-context-v4-3-0", { appendToListWrapper: true }, index.h("wpp-action-button-v4-3-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this.ariaProps.label } }, index.h("wpp-icon-more-v4-3-0", { slot: "icon-start" })), index.h("div", null, this.dropdownActions.map((action) => (index.h("wpp-list-item-v4-3-0", { key: action.label, onWppChangeListItem: () => this.handleActionClick(action) }, index.h(utils.transformToVersionedTag(action.icon), { slot: 'left' }), index.h("span", { slot: "label" }, action.label)))))))), index.h("slot", { name: "handles" }))));
+      } }, index.h("p", { ref: el => (this.titleRef = el), class: "artefact-title" }, this.artefactTitle))), index.h("wpp-divider-v4-4-0", null), index.h("div", { class: "artefact-body" }, index.h("slot", { name: "body" })), this.hasScrollbar && index.h("wpp-divider-v4-4-0", null), index.h("div", { class: "artefact-actions" }, this.defaultActions.map((action) => (index.h("wpp-tooltip-v4-4-0", { text: action.label, key: action.label, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-4-0", { variant: "secondary", onClick: () => this.handleActionClick(action), ariaProps: { label: action.label } }, index.h(utils.transformToVersionedTag(action.icon), { slot: 'icon-start' }))))), this.dropdownActions.length > 0 && (index.h("wpp-menu-context-v4-4-0", { appendToListWrapper: true }, index.h("wpp-action-button-v4-4-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this.ariaProps.label } }, index.h("wpp-icon-more-v4-4-0", { slot: "icon-start" })), index.h("div", null, this.dropdownActions.map((action) => (index.h("wpp-list-item-v4-4-0", { key: action.label, onWppChangeListItem: () => this.handleActionClick(action) }, index.h(utils.transformToVersionedTag(action.icon), { slot: 'left' }), index.h("span", { slot: "label" }, action.label)))))))), index.h("slot", { name: "handles" }))));
   }
-  static get registryIs() { return "wpp-artefact-v4-3-0"; }
+  static get registryIs() { return "wpp-artefact-v4-4-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "locales": ["onUpdateLocales"],

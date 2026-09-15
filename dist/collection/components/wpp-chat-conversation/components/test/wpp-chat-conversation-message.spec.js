@@ -6,7 +6,7 @@ describe('wpp-chat-conversation-message', () => {
     it('renders markdown when content is present (complete)', async () => {
       const page = await newSpecPage({
         components: [WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-message-v4-3-0", { role: "assistant", content: "Hello world", status: "complete" }),
+        template: () => h("wpp-chat-conversation-message-v4-4-0", { role: "assistant", content: "Hello world", status: "complete" }),
       });
       await page.waitForChanges();
       const messageEl = page.root?.shadowRoot?.querySelector('.message');
@@ -15,7 +15,7 @@ describe('wpp-chat-conversation-message', () => {
     it('does not render markdown block when content is empty (slot-only message)', async () => {
       const page = await newSpecPage({
         components: [WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-message-v4-3-0", { role: "assistant", content: "", status: "complete" }),
+        template: () => h("wpp-chat-conversation-message-v4-4-0", { role: "assistant", content: "", status: "complete" }),
       });
       await page.waitForChanges();
       const messageEl = page.root?.shadowRoot?.querySelector('.message');
@@ -24,7 +24,7 @@ describe('wpp-chat-conversation-message', () => {
     it('does not render markdown block when content is whitespace only', async () => {
       const page = await newSpecPage({
         components: [WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-message-v4-3-0", { role: "assistant", content: "   ", status: "complete" }),
+        template: () => h("wpp-chat-conversation-message-v4-4-0", { role: "assistant", content: "   ", status: "complete" }),
       });
       await page.waitForChanges();
       const messageEl = page.root?.shadowRoot?.querySelector('.message');
@@ -35,7 +35,7 @@ describe('wpp-chat-conversation-message', () => {
     it('slot wrapper is always present in complete state', async () => {
       const page = await newSpecPage({
         components: [WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-message-v4-3-0", { role: "assistant", content: "Hello", status: "complete" }),
+        template: () => h("wpp-chat-conversation-message-v4-4-0", { role: "assistant", content: "Hello", status: "complete" }),
       });
       await page.waitForChanges();
       const slot = page.root?.shadowRoot?.querySelector('.custom-content slot');
@@ -44,7 +44,7 @@ describe('wpp-chat-conversation-message', () => {
     it('slot wrapper is not present in streaming state', async () => {
       const page = await newSpecPage({
         components: [WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-message-v4-3-0", { role: "assistant", content: "", status: "streaming" }),
+        template: () => h("wpp-chat-conversation-message-v4-4-0", { role: "assistant", content: "", status: "streaming" }),
       });
       await page.waitForChanges();
       const slot = page.root?.shadowRoot?.querySelector('.custom-content slot');
@@ -55,7 +55,7 @@ describe('wpp-chat-conversation-message', () => {
     it('renderStreaming is shown when status is streaming', async () => {
       const page = await newSpecPage({
         components: [WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-message-v4-3-0", { role: "assistant", content: "", status: "streaming" }),
+        template: () => h("wpp-chat-conversation-message-v4-4-0", { role: "assistant", content: "", status: "streaming" }),
       });
       await page.waitForChanges();
       const instance = page.rootInstance;
@@ -73,7 +73,7 @@ describe('wpp-chat-conversation-message', () => {
     it('returns false for an explicit `false` config', async () => {
       const page = await newSpecPage({
         components: [WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-message-v4-3-0", { role: "assistant", content: "Hi" }),
+        template: () => h("wpp-chat-conversation-message-v4-4-0", { role: "assistant", content: "Hi" }),
       });
       setConfigs(page.rootInstance, false, false);
       expect(page.rootInstance.shouldRenderAvatar('user')).toBe(false);
@@ -82,7 +82,7 @@ describe('wpp-chat-conversation-message', () => {
     it('returns false for an empty config object (the default)', async () => {
       const page = await newSpecPage({
         components: [WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-message-v4-3-0", { role: "assistant", content: "Hi" }),
+        template: () => h("wpp-chat-conversation-message-v4-4-0", { role: "assistant", content: "Hi" }),
       });
       expect(page.rootInstance.shouldRenderAvatar('user')).toBe(false);
       expect(page.rootInstance.shouldRenderAvatar('assistant')).toBe(false);
@@ -90,7 +90,7 @@ describe('wpp-chat-conversation-message', () => {
     it('returns true for a non-empty config object', async () => {
       const page = await newSpecPage({
         components: [WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-message-v4-3-0", { role: "assistant", content: "Hi" }),
+        template: () => h("wpp-chat-conversation-message-v4-4-0", { role: "assistant", content: "Hi" }),
       });
       setConfigs(page.rootInstance, { name: 'John' }, { icon: 'wpp-icon-ai' });
       expect(page.rootInstance.shouldRenderAvatar('user')).toBe(true);
@@ -99,7 +99,7 @@ describe('wpp-chat-conversation-message', () => {
     it('renders the assistant avatar wrapper when the assistant config is non-empty', async () => {
       const page = await newSpecPage({
         components: [WppChatConversationMessage],
-        template: () => (h("wpp-chat-conversation-message-v4-3-0", { role: "assistant", content: "Hi", assistantAvatarConfig: { icon: 'wpp-icon-ai' } })),
+        template: () => (h("wpp-chat-conversation-message-v4-4-0", { role: "assistant", content: "Hi", assistantAvatarConfig: { icon: 'wpp-icon-ai' } })),
       });
       await page.waitForChanges();
       const container = page.root?.shadowRoot?.querySelector('.container');
@@ -110,7 +110,7 @@ describe('wpp-chat-conversation-message', () => {
     it('renders the user avatar wrapper when the user config is non-empty', async () => {
       const page = await newSpecPage({
         components: [WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-message-v4-3-0", { role: "user", content: "Hi", userAvatarConfig: { name: 'John' } }),
+        template: () => h("wpp-chat-conversation-message-v4-4-0", { role: "user", content: "Hi", userAvatarConfig: { name: 'John' } }),
       });
       await page.waitForChanges();
       const container = page.root?.shadowRoot?.querySelector('.container');
@@ -121,7 +121,7 @@ describe('wpp-chat-conversation-message', () => {
     it('renders no avatar wrappers and flags both no-avatar classes for the default empty config', async () => {
       const page = await newSpecPage({
         components: [WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-message-v4-3-0", { role: "assistant", content: "Hi" }),
+        template: () => h("wpp-chat-conversation-message-v4-4-0", { role: "assistant", content: "Hi" }),
       });
       await page.waitForChanges();
       const container = page.root?.shadowRoot?.querySelector('.container');
@@ -132,7 +132,7 @@ describe('wpp-chat-conversation-message', () => {
     it('renders no assistant avatar wrapper when the assistant config is `false`', async () => {
       const page = await newSpecPage({
         components: [WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-message-v4-3-0", { role: "assistant", content: "Hi", assistantAvatarConfig: false }),
+        template: () => h("wpp-chat-conversation-message-v4-4-0", { role: "assistant", content: "Hi", assistantAvatarConfig: false }),
       });
       await page.waitForChanges();
       const container = page.root?.shadowRoot?.querySelector('.container');

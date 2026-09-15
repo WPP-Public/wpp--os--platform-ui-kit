@@ -49,7 +49,7 @@
   box-shadow: var(--wpp-box-shadow-m);
 }
 :host .node-container .node-wrapper .node-header {
-  padding: 21px 22px;
+  padding: 22px 22px;
   display: flex;
   align-items: center;
   justify-content: flex-start;

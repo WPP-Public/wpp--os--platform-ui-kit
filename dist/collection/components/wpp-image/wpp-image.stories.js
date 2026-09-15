@@ -11,7 +11,7 @@ export default {
         hidden: true,
       },
     },
-    options: { showPanel: false },
+    options: { showPanel: true },
   },
   argTypes: {
     width: {
@@ -55,21 +55,28 @@ const itemWrapper = {
 const labelStyle = {
   marginTop: '10px',
 };
-const getEmptyStates = () => imageList.groups[0].images.map(image => html `
+const getEmptyStates = ({ width, height }) => imageList.groups[0].images.map(image => {
+  const tag = transformToVersionedTag(`wpp-empty-${image.name}`);
+  // The tag name is versioned at build time, so the graphics are written as
+  // markup rather than as a lit template - which means the size controls have
+  // to be interpolated in as attributes to reach the component at all.
+  const size = `${width == null ? '' : ` width="${width}"`}${height == null ? '' : ` height="${height}"`}`;
+  return html `
       <div style=${styleMap(itemWrapper)}>
-        ${unsafeHTML(`<${transformToVersionedTag(`wpp-empty-${image.name}`)}></${transformToVersionedTag(`wpp-empty-${image.name}`)}>`)}
-        <wpp-typography-v4-3-0 type="xs-body" style=${styleMap(labelStyle)}>${image.label}</wpp-typography-v4-3-0>
+        ${unsafeHTML(`<${tag}${size}></${tag}>`)}
+        <wpp-typography-v4-4-0 type="xs-body" style=${styleMap(labelStyle)}>${image.label}</wpp-typography-v4-4-0>
       </div>
-    `);
+    `;
+});
 export const EmptyStates = {
-  render: () => html `
+  render: args => html `
     <div style=${styleMap(pageStyle)}>
       <div style=${styleMap(pageWrapper)}>
-        <wpp-typography-v4-3-0 type="3xl-heading" tag="h3" style=${styleMap(headerStyle)}>
+        <wpp-typography-v4-4-0 type="3xl-heading" tag="h3" style=${styleMap(headerStyle)}>
           Empty States
-        </wpp-typography-v4-3-0>
+        </wpp-typography-v4-4-0>
         <hr />
-        <section style=${styleMap(contentWrapper)}>${getEmptyStates()}</section>
+        <section style=${styleMap(contentWrapper)}>${getEmptyStates(args)}</section>
       </div>
     </div>
   `,

@@ -64,19 +64,19 @@ const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
   switch (fileExtension) {
     // Text
     case '.txt':
-      return h("wpp-icon-document-v4-3-0", null);
+      return h("wpp-icon-document-v4-4-0", null);
     // Compressed
     case '.zip':
     case '.rar':
     case '.7z':
-      return h("wpp-icon-file-zip-v4-3-0", null);
+      return h("wpp-icon-file-zip-v4-4-0", null);
     // Image
     case '.png':
     case '.jpg':
     case '.jpeg':
     case '.svg':
     case '.gif':
-      return h("wpp-icon-image-v4-3-0", null);
+      return h("wpp-icon-image-v4-4-0", null);
     // Video
     case '.mp4':
     case '.mov':
@@ -85,7 +85,7 @@ const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.mkv':
     case '.flv':
     case '.webm':
-      return h("wpp-icon-video-clip-v4-3-0", null);
+      return h("wpp-icon-video-clip-v4-4-0", null);
     // Audio
     case '.mp3':
     case '.wav':
@@ -93,7 +93,7 @@ const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.wma':
     case '.m4a':
     case '.aac':
-      return h("wpp-icon-music-v4-3-0", null);
+      return h("wpp-icon-music-v4-4-0", null);
     // Data
     case '.csv':
     case '.json':
@@ -101,7 +101,7 @@ const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.db':
     case '.sqlite':
     case '.dat':
-      return h("wpp-icon-database-v4-3-0", null);
+      return h("wpp-icon-database-v4-4-0", null);
     // Presentation
     case '.pptx':
     case '.key':
@@ -109,16 +109,16 @@ const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.pps':
     case '.sldx':
     case '.ppt':
-      return h("wpp-icon-pitch-v4-3-0", null);
+      return h("wpp-icon-pitch-v4-4-0", null);
     // Spreadsheet
     case '.xlsx':
     case '.xls':
     case '.ods':
     case '.numbers':
     case '.tsv':
-      return h("wpp-icon-spreadsheet-v4-3-0", null);
+      return h("wpp-icon-spreadsheet-v4-4-0", null);
     default:
-      return h("wpp-icon-file-v4-3-0", null);
+      return h("wpp-icon-file-v4-4-0", null);
   }
 };
 /**
@@ -186,6 +186,9 @@ const LOCALES_DEFAULTS = {
   formatError: 'Wrong format',
   singleFileLimitError: 'Only one file is allowed',
   multipleFileLimitError: 'File limit has been reached',
+  fileAdded: (fileName) => `${fileName} added`,
+  fileRemoved: (fileName) => `${fileName} removed`,
+  removeFile: (fileName) => `Remove file ${fileName}`,
 };
 
 export { EXTENSION_TO_TYPE as E, LOCALES_DEFAULTS as L, getBaseName as a, getExtensionsList as b, convertMBToBytes as c, returnIconFromExtension as d, returnFileTypeLabel as e, getExtension as g, modifyPropertiesOnFile as m, renameFile as r };

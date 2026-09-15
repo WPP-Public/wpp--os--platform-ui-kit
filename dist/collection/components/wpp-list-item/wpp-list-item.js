@@ -2,7 +2,7 @@ import { Host, h, Fragment, forceUpdate, } from '@stencil/core';
 import highlightWords from 'highlight-words';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { debounce, getSlotEmptyStates, transformToVersionedTag, uuidv4 } from '../../utils/utils';
-import { EVENT_SOURCE, INTERACTIVE_RIGHT_SLOT_COMPONENT_TAGS, INTERACTIVE_RIGHT_SLOT_ROLES, INTERACTIVE_RIGHT_SLOT_SELECTOR, PRESENTATION_ROLE, } from './const';
+import { EVENT_SOURCE, INTERACTIVE_RIGHT_SLOT_COMPONENT_TAGS, INTERACTIVE_RIGHT_SLOT_ROLES, INTERACTIVE_RIGHT_SLOT_SELECTOR, OPTION_ROLE, PRESENTATION_ROLE, } from './const';
 import { getThemeColor, isValidThemeColor } from './utils';
 import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
@@ -241,7 +241,9 @@ export class WppListItem {
     });
     this.getHostRole = () => this.host.getAttribute('role') || PRESENTATION_ROLE;
     this.getHostTabIndex = () => {
-      if (this.disabled || this.nonInteractive)
+      // A `role="option"` is driven by its combobox parent (real focus stays in the combobox input),
+      // so an option must never be its own tab stop.
+      if (this.disabled || this.nonInteractive || this.getHostRole() === OPTION_ROLE)
         return -1;
       const tabIndex = this.host.getAttribute('tabindex');
       return tabIndex === null ? 0 : Number(tabIndex);
@@ -250,7 +252,7 @@ export class WppListItem {
       const hasHighlight = Boolean(this.highlight);
       return (h("div", { ref: ref => (this.wrapperRef = ref), class: "body-wrapper", part: "body-wrapper", style: { width: 'auto' } }, h(WrappedSlot, { wrapperClass: this.labelSlotCssClasses(), name: "label", onSlotchange: this.updateSlotData }), hasHighlight && (h("div", { class: "label highlight-text-wrapper", ref: highlightRef => (this.highlightRef = highlightRef) }, h("span", { class: "highlight-text" }, this.getHighlightedText('label')))), h(WrappedSlot, { wrapperClass: this.captionSlotCssClasses(), name: "caption", onSlotchange: this.updateSlotData }), hasHighlight && (h("div", { class: "caption" }, h("span", { class: "highlight-text" }, this.getHighlightedText('caption'))))));
     };
-    this.renderRightSlot = () => (h(WrappedSlot, { wrapperClass: this.rightSlotCssClasses(), name: "right", onSlotchange: this.updateSlotData, onClick: this.handleRightWrapperClick }, this.isExtended && h("wpp-icon-chevron-v4-3-0", { class: "fallback-icon", size: "s", part: "icon-extended" }), !this.isExtended && this.active && h("wpp-icon-tick-v4-3-0", { class: "fallback-icon", part: "icon-active" })));
+    this.renderRightSlot = () => (h(WrappedSlot, { wrapperClass: this.rightSlotCssClasses(), name: "right", onSlotchange: this.updateSlotData, onClick: this.handleRightWrapperClick }, this.isExtended && h("wpp-icon-chevron-v4-4-0", { class: "fallback-icon", size: "s", part: "icon-extended" }), !this.isExtended && this.active && h("wpp-icon-tick-v4-4-0", { class: "fallback-icon", part: "icon-active" })));
     this.renderLeftSlot = () => (h(WrappedSlot, { wrapperClass: this.leftSlotCssClasses(), name: "left", onSlotchange: this.updateSlotData }));
     this.handleMouseEnter = () => {
       this.updateComponentState({ hover: true });
@@ -281,6 +283,15 @@ export class WppListItem {
     };
     this.handleKeyUp = (event) => {
       if (event.key === 'Enter' || event.key === ' ') {
+        this.updateComponentState({ active: false });
+      }
+    };
+    this.handleBlur = () => {
+      // The pressed state is normally cleared on keyup, but a listbox that advances the highlight
+      // on selection (the time picker moves from hours to minutes) takes focus away while the key
+      // is still down, so the keyup lands on the next item and this one would stay pressed for
+      // good. An element that no longer has focus cannot be mid-activation, so clear it here.
+      if (this.componentState.active) {
         this.updateComponentState({ active: false });
       }
     };
@@ -318,6 +329,7 @@ export class WppListItem {
     this.isDarkTheme = undefined;
     this.nonInteractive = false;
     this.checkboxName = undefined;
+    this.role = PRESENTATION_ROLE;
   }
   /**
    * Sets focus on the list-item element.
@@ -488,15 +500,15 @@ export class WppListItem {
   }
   render() {
     const displayState = this.componentState.active ? 'active' : this.componentState.hover ? 'hover' : '';
-    return (h(Host, { class: this.hostCssClasses(), role: this.getHostRole(), exportparts: "item, info-wrapper, checkbox, body-wrapper, left, label, caption, right, left-wrapper, label-wrapper, caption-wrapper, right-wrapper", tabIndex: this.getHostTabIndex(), ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}), onKeyDown: this.handleKeyDown, onKeyUp: this.handleKeyUp }, this.hasSubtitleSlot && (h(WrappedSlot, { wrapperClass: this.subtitleSlotCssClasses(), name: "subtitle", onSlotchange: this.updateSlotData })), h("ul", { onClick: this.handleItemClick, onMouseEnter: this.handleMouseEnter, onMouseLeave: this.handleMouseLeave, onMouseDown: this.handleMouseDown, onMouseUp: this.handleMouseUp, class: this.ulWrapperCssClasses(), part: "ul-wrapper", role: this.linkConfig?.href ? PRESENTATION_ROLE : undefined }, h(this.itemWrapper, { class: this.itemWrapperCssClasses(), part: "item", ...(this.linkConfig?.href && this.linkConfig) }, h("div", { class: "info-wrapper", part: "info-wrapper" }, this.multiple ? (h("wpp-checkbox-v4-3-0", { isDarkTheme: this.isDarkTheme, disabled: this.disabled, checked: this.checked, indeterminate: this.indeterminate, internalState: displayState, part: "checkbox", name: this.checkboxName || 'wpp-list-item-checkbox' })) : (h(Fragment, null, this.tooltipConfig.leftSlot ? (h("wpp-tooltip-v4-3-0", { key: this.tooltipId, header: this.tooltipConfig.leftSlot.header, text: this.tooltipConfig.leftSlot.text, value: this.tooltipConfig.leftSlot.value, error: this.tooltipConfig.leftSlot.error, warning: this.tooltipConfig.leftSlot.warning, theme: this.tooltipConfig.leftSlot.theme, config: this.tooltipConfig.leftSlot.config, externalClass: this.tooltipConfig.leftSlot.externalClass }, this.renderLeftSlot())) : (this.renderLeftSlot()))), this.hasTooltip ? (h("wpp-tooltip-v4-3-0", { text: this.getSlotText('label'),
+    return (h(Host, { class: this.hostCssClasses(), role: this.getHostRole(), exportparts: "item, info-wrapper, checkbox, body-wrapper, left, label, caption, right, left-wrapper, label-wrapper, caption-wrapper, right-wrapper", tabIndex: this.getHostTabIndex(), ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}), onKeyDown: this.handleKeyDown, onKeyUp: this.handleKeyUp, onBlur: this.handleBlur }, this.hasSubtitleSlot && (h(WrappedSlot, { wrapperClass: this.subtitleSlotCssClasses(), name: "subtitle", onSlotchange: this.updateSlotData })), h("ul", { onClick: this.handleItemClick, onMouseEnter: this.handleMouseEnter, onMouseLeave: this.handleMouseLeave, onMouseDown: this.handleMouseDown, onMouseUp: this.handleMouseUp, class: this.ulWrapperCssClasses(), part: "ul-wrapper", role: this.linkConfig?.href ? PRESENTATION_ROLE : undefined }, h(this.itemWrapper, { class: this.itemWrapperCssClasses(), part: "item", ...(this.linkConfig?.href && this.linkConfig) }, h("div", { class: "info-wrapper", part: "info-wrapper" }, this.multiple ? (h("wpp-checkbox-v4-4-0", { isDarkTheme: this.isDarkTheme, disabled: this.disabled, checked: this.checked, indeterminate: this.indeterminate, internalState: displayState, ariaProps: { label: this.getSlotText('label') }, part: "checkbox", name: this.checkboxName || 'wpp-list-item-checkbox' })) : (h(Fragment, null, this.tooltipConfig.leftSlot ? (h("wpp-tooltip-v4-4-0", { key: this.tooltipId, header: this.tooltipConfig.leftSlot.header, text: this.tooltipConfig.leftSlot.text, value: this.tooltipConfig.leftSlot.value, error: this.tooltipConfig.leftSlot.error, warning: this.tooltipConfig.leftSlot.warning, theme: this.tooltipConfig.leftSlot.theme, config: this.tooltipConfig.leftSlot.config, externalClass: this.tooltipConfig.leftSlot.externalClass }, this.renderLeftSlot())) : (this.renderLeftSlot()))), this.hasTooltip ? (h("wpp-tooltip-v4-4-0", { text: this.getSlotText('label'),
       // The tooltip anchor lives in this shadow root and is not focusable, so the
       // default `focus` trigger never fires and a truncated label stays unreadable
       // for keyboard users (SC 1.4.13). The host is the element that takes focus,
       // so it drives the tooltip while the anchor still positions it.
-      config: { placement: 'right', triggerTarget: this.host, ...this.labelTooltipConfig }, class: "tooltip" }, this.renderBody())) : (this.renderBody())), this.tooltipConfig.rightSlot ? (h("wpp-tooltip-v4-3-0", { key: this.tooltipId, header: this.tooltipConfig.rightSlot.header, text: this.tooltipConfig.rightSlot.text, value: this.tooltipConfig.rightSlot.value, error: this.tooltipConfig.rightSlot.error, warning: this.tooltipConfig.rightSlot.warning, theme: this.tooltipConfig.rightSlot.theme, config: this.tooltipConfig.rightSlot.config, externalClass: this.tooltipConfig.rightSlot.externalClass }, this.renderRightSlot())) : (this.renderRightSlot())))));
+      config: { placement: 'right', triggerTarget: this.host, ...this.labelTooltipConfig }, class: "tooltip" }, this.renderBody())) : (this.renderBody())), this.tooltipConfig.rightSlot ? (h("wpp-tooltip-v4-4-0", { key: this.tooltipId, header: this.tooltipConfig.rightSlot.header, text: this.tooltipConfig.rightSlot.text, value: this.tooltipConfig.rightSlot.value, error: this.tooltipConfig.rightSlot.error, warning: this.tooltipConfig.rightSlot.warning, theme: this.tooltipConfig.rightSlot.theme, config: this.tooltipConfig.rightSlot.config, externalClass: this.tooltipConfig.rightSlot.externalClass }, this.renderRightSlot())) : (this.renderRightSlot())))));
   }
   static get is() { return "wpp-list-item"; }
-  static get registryIs() { return "wpp-list-item-v4-3-0"; }
+  static get registryIs() { return "wpp-list-item-v4-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -941,6 +953,24 @@ export class WppListItem {
         },
         "attribute": "checkbox-name",
         "reflect": true
+      },
+      "role": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Defines the ARIA role of the component. Combobox-style parents (e.g. WppSearch)\nset this to `option` to expose items as options inside a `listbox`. When the role\nis `option` the item is removed from the tab order, as it is meant to be driven by\nthe combobox via `aria-activedescendant` rather than receiving its own tab stop."
+        },
+        "attribute": "role",
+        "reflect": true,
+        "defaultValue": "PRESENTATION_ROLE"
       }
     };
   }

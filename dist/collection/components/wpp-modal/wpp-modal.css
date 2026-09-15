@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /**
   * @prop --wpp-modal-overlay-bg-color:
   * @prop --wpp-modal-width-s:
@@ -6,16 +7,19 @@
   * @prop --wpp-modal-vertical-position-minus-number:
   * @prop --wpp-modal-vertical-position-animation-minus-number:
   * @prop --wpp-modal-body-paddings:
+  * @prop --wpp-modal-body-padding-inline:
   * @prop --wpp-modal-actions-paddings:
   * @prop --wpp-modal-header-padding:
   * @prop --wpp-modal-bg-color:
+  * @prop --modal-scrollbar-gutter: set by the component; do not override
 */
 :host {
   --modal-width-s: var(--wpp-modal-width-s, 440px);
   --modal-width-m: var(--wpp-modal-width-m, 600px);
   --modal-box-shadow: var(--wpp-modal-box-shadow, var(--wpp-box-shadow-l));
   --modal-vertical-position-animation-minus-number: var(--wpp-modal-vertical-position-animation-minus-number, 40px);
-  --modal-body-paddings: var(--wpp-modal-body-paddings, 0 24px);
+  --modal-body-padding-inline: var(--wpp-modal-body-padding-inline, 24px);
+  --modal-body-paddings: var(--wpp-modal-body-paddings, 0 var(--modal-body-padding-inline));
   --modal-actions-paddings: var(--wpp-modal-actions-paddings, 24px);
   --modal-header-padding: var(--wpp-modal-header-padding, 20px 24px 16px 24px);
   --modal-transition: visibility 0.15s linear 0.2s, opacity 0.2s 0.2s;
@@ -84,8 +88,16 @@
   color: var(--wpp-typography-s-body-color, var(--wpp-text-color));
   font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
+  /* The body scrolls, so the scrollbar has to be visible AND the designed inset has to stay
+     symmetric. `stable` keeps the gutter reserved inside the body — so the scrollbar renders at the
+     modal's right edge and there is no layout shift when it appears — and the end padding is then
+     reduced by the gutter so the content still ends exactly one inset from the modal edge.
+     Do NOT pull the box out with a negative margin instead: that puts the scrollbar past the
+     modal's edge, where `overflow: hidden` clips it and it disappears. */
   padding: var(--modal-body-paddings);
+  padding-inline-end: max(0px, var(--modal-body-padding-inline) - var(--modal-scrollbar-gutter, 0px));
   overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 .body::-webkit-scrollbar {
   width: 4px;

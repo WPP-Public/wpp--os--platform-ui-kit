@@ -149,5 +149,56 @@ describe('wpp-nav-sidebar', () => {
       expect(wrapper()?.hasAttribute('inert')).toBe(false);
       expect(wrapper()?.hasAttribute('aria-hidden')).toBe(false);
     });
+    // The rail shortens long labels for layout. Without an explicit name the control is announced
+    // as the clipped string — "Scheduled repo…" rather than "Scheduled reporting".
+    describe('truncated labels', () => {
+      const mkLongLabels = () => newSpecPage({
+        components: [WppNavSidebar, WppNavSidebarItem],
+        html: `<wpp-nav-sidebar>
+                <wpp-nav-sidebar-item label="Shared reports" path="/shared"></wpp-nav-sidebar-item>
+                <wpp-nav-sidebar-item label="Scheduled reporting overview" path="/scheduled"></wpp-nav-sidebar-item>
+                <wpp-nav-sidebar-item label="Scheduled reporting" extended>
+                  <wpp-nav-sidebar-item label="Nested" path="/nested"></wpp-nav-sidebar-item>
+                </wpp-nav-sidebar-item>
+              </wpp-nav-sidebar>`,
+      });
+      it('names a truncated link with its full label', async () => {
+        const page = await mkLongLabels();
+        const item = page.root?.querySelector('wpp-nav-sidebar-item[path="/scheduled"]');
+        const link = item?.shadowRoot?.querySelector('a');
+        expect(link?.textContent).not.toBe('Scheduled reporting overview');
+        expect(link?.getAttribute('aria-label')).toBe('Scheduled reporting overview');
+      });
+      it('names a truncated group toggle with its full label', async () => {
+        const page = await mkLongLabels();
+        const group = page.root?.querySelector('wpp-nav-sidebar-item[extended]');
+        const toggle = group?.shadowRoot?.querySelector('[role="button"]');
+        expect(toggle?.getAttribute('aria-label')).toBe('Scheduled reporting');
+      });
+      it('leaves a label that fits to name itself from its content', async () => {
+        const page = await mkLongLabels();
+        const item = page.root?.querySelector('wpp-nav-sidebar-item[path="/shared"]');
+        const link = item?.shadowRoot?.querySelector('a');
+        expect(link?.textContent).toContain('Shared reports');
+        expect(link?.hasAttribute('aria-label')).toBe(false);
+      });
+    });
+    // The parent sets `active` after first render, so the marker has to follow the attribute
+    // rather than a class captured on the way in. `active` is set directly for the same reason as
+    // above: the sidebar's own query uses versioned tag names the spec environment does not register.
+    it('moves the current-page marker when the active item changes', async () => {
+      const page = await mkSidebar();
+      const dashboard = page.root?.querySelector('wpp-nav-sidebar-item[path="/dashboard"]');
+      const projects = page.root?.querySelector('wpp-nav-sidebar-item[extended]');
+      const currentOf = (el) => el.shadowRoot?.querySelector('a')?.getAttribute('aria-current') ?? null;
+      dashboard.setAttribute('active', 'true');
+      await page.waitForChanges();
+      expect(currentOf(dashboard)).toBe('page');
+      dashboard.removeAttribute('active');
+      await page.waitForChanges();
+      expect(currentOf(dashboard)).toBeNull();
+      // The group toggle is not a link, so it never carries the current-page marker.
+      expect(projects.shadowRoot?.querySelector('a')).toBeNull();
+    });
   });
 });

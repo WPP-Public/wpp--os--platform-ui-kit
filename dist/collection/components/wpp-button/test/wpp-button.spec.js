@@ -25,6 +25,10 @@ describe('wpp-button', () => {
       const myBtn = new WppButton();
       expect(myBtn.variant).toBe('primary');
     });
+    it('should set default isMenuBtn to "false"', async () => {
+      const myBtn = new WppButton();
+      expect(myBtn.isMenuBtn).toBe(false);
+    });
     it('should set default inverted to "false"', async () => {
       const myBtn = new WppButton();
       expect(myBtn.inverted).toBe(false);
@@ -47,6 +51,41 @@ describe('wpp-button', () => {
       expect(page.rootInstance.hasIconStartSlot).toBe(false);
       expect(page.rootInstance.hasIconEndSlot).toBe(false);
       expect(page.rootInstance.isIconOnly).toBe(false);
+      expect(page.root?.shadowRoot?.querySelector('button')?.hasAttribute('aria-haspopup')).toBe(false);
+    });
+    it('should render a fixed downward chevron for a primary menu button', async () => {
+      const page = await newSpecPage({
+        components: [WppButton],
+        html: `
+          <wpp-button is-menu-btn>
+            Button
+            <span slot="icon-end">Consumer icon</span>
+          </wpp-button>
+        `,
+      });
+      const chevron = page.root?.shadowRoot?.querySelector('wpp-icon-chevron');
+      const consumerIcon = page.root?.shadowRoot?.querySelector('.icon-end slot');
+      expect(chevron).toBeTruthy();
+      expect(chevron?.getAttribute('direction')).toBe('down');
+      expect(chevron?.getAttribute('color')).toBe('var(--wpp-grey-color-000)');
+      expect(consumerIcon).toBeNull();
+      expect(page.rootInstance.hasIconEndSlot).toBe(false);
+      expect(page.rootInstance.isIconOnly).toBe(false);
+      expect(page.root?.shadowRoot?.querySelector('button')?.getAttribute('aria-haspopup')).toBe('menu');
+    });
+    it('should allow aria-haspopup to be overridden on a menu button', async () => {
+      const page = await newSpecPage({
+        components: [WppButton],
+        template: () => (h("wpp-button-v4-4-0", { isMenuBtn: true, ariaProps: { haspopup: 'dialog' } }, "Button")),
+      });
+      expect(page.root?.shadowRoot?.querySelector('button')?.getAttribute('aria-haspopup')).toBe('dialog');
+    });
+    it('should not render a menu chevron for non-primary variants', async () => {
+      const page = await newSpecPage({
+        components: [WppButton],
+        html: `<wpp-button with-menu variant="secondary">Button</wpp-button>`,
+      });
+      expect(page.root?.shadowRoot?.querySelector('wpp-icon-chevron')).toBeNull();
     });
     it('should detect start icon slot', async () => {
       const page = await newSpecPage({
@@ -161,7 +200,7 @@ describe('wpp-button', () => {
         const form = document.createElement('form');
         const page = await newSpecPage({
           components: [WppButton],
-          template: () => h("wpp-button-v4-3-0", { form: form, type: "submit" }),
+          template: () => h("wpp-button-v4-4-0", { form: form, type: "submit" }),
         });
         const mockEvent = new Event('click');
         form.requestSubmit = jest.fn();
@@ -174,7 +213,7 @@ describe('wpp-button', () => {
         const form = document.createElement('form');
         const page = await newSpecPage({
           components: [WppButton],
-          template: () => h("wpp-button-v4-3-0", { form: form, type: "reset" }),
+          template: () => h("wpp-button-v4-4-0", { form: form, type: "reset" }),
         });
         const mockEvent = new Event('click');
         form.reset = jest.fn();
@@ -185,7 +224,7 @@ describe('wpp-button', () => {
       it('should submit when form params as a string (form ID)', async () => {
         const page = await newSpecPage({
           components: [WppButton],
-          template: () => (h("form", { id: "test-form" }, h("wpp-button-v4-3-0", { form: "test-form", type: "submit" }))),
+          template: () => (h("form", { id: "test-form" }, h("wpp-button-v4-4-0", { form: "test-form", type: "submit" }))),
         });
         const form = page.root?.closest('form');
         const mockEvent = new Event('click');
@@ -201,7 +240,7 @@ describe('wpp-button', () => {
       it('should submit when form params is not defined', async () => {
         const page = await newSpecPage({
           components: [WppButton],
-          template: () => (h("form", null, h("wpp-button-v4-3-0", { type: "submit" }))),
+          template: () => (h("form", null, h("wpp-button-v4-4-0", { type: "submit" }))),
         });
         const form = page.root?.closest('form');
         const mockEvent = new Event('click');

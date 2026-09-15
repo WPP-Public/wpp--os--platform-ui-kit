@@ -18,6 +18,8 @@ export declare class WppInlineMessage {
   focusType: FOCUS_TYPE;
   private messageRef?;
   private resizeObserver;
+  private observedMessageEl?;
+  private truncationFrame?;
   /**
    * Defines the title of the component. This prop is available only for inline-messages with size="l".
    */
@@ -67,10 +69,14 @@ export declare class WppInlineMessage {
   onUpdateTitleText(): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  componentDidRender(): void;
+  onMessageChange(): void;
   connectedCallback(): void;
   disconnectedCallback(): void;
   private get _locales();
   private setupResizeObserver;
+  private observeMessageEl;
+  private queueTruncationCheck;
   private checkTruncation;
   private getMessage;
   private onBlur;

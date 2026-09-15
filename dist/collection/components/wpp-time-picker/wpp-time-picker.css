@@ -30,13 +30,21 @@
   width: 20px;
   height: 20px;
 }
+:host(.wpp-time-picker) #anchor .cross-icon {
+  outline: none;
+}
 :host(.wpp-time-picker) #anchor .cross-icon:hover {
   --wpp-icon-color: var(--wpp-grey-color-800);
 }
 :host(.wpp-time-picker) #anchor .cross-icon:active {
   --wpp-icon-color: var(--wpp-grey-color-900);
 }
-:host(.wpp-time-picker) #anchor #time-picker {
+:host(.wpp-time-picker) #anchor .cross-icon:focus-visible {
+  border-radius: var(--wpp-border-radius-s);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
+}
+:host(.wpp-time-picker) #anchor .time-picker-input {
   border: none;
   padding: 0;
   width: 100%;
@@ -50,13 +58,13 @@
   font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
 }
-:host(.wpp-time-picker) #anchor #time-picker::placeholder {
+:host(.wpp-time-picker) #anchor .time-picker-input::placeholder {
   color: var(--wpp-grey-color-700);
 }
-:host(.wpp-time-picker) #anchor #time-picker::selection {
+:host(.wpp-time-picker) #anchor .time-picker-input::selection {
   background-color: var(--wpp-primary-color-200);
 }
-:host(.wpp-time-picker) #anchor #time-picker:hover {
+:host(.wpp-time-picker) #anchor .time-picker-input:hover {
   cursor: pointer;
 }
 :host(.wpp-time-picker) #anchor.no-value .clock-icon {
@@ -70,7 +78,7 @@
 :host(.wpp-time-picker) #anchor:hover .clock-icon {
   --wpp-icon-color: var(--wpp-grey-color-800);
 }
-:host(.wpp-time-picker) #anchor:hover #time-picker {
+:host(.wpp-time-picker) #anchor:hover .time-picker-input {
   background-color: var(--wpp-grey-color-200);
 }
 :host(.wpp-time-picker) #anchor.focus {
@@ -79,6 +87,18 @@
 :host(.wpp-time-picker) #anchor.focus .clock-icon {
   --wpp-icon-color: var(--wpp-grey-color-800);
 }
+:host(.wpp-time-picker) #anchor.tab-focus {
+  border-color: var(--wpp-grey-color-800);
+  border-radius: var(--wpp-border-radius-m);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
+}
+:host(.wpp-time-picker) #anchor.tab-focus .clock-icon {
+  --wpp-icon-color: var(--wpp-grey-color-800);
+}
+:host(.wpp-time-picker) #anchor.idle .time-picker-input {
+  caret-color: transparent;
+}
 :host(.wpp-time-picker) #anchor.disabled {
   background-color: var(--wpp-grey-color-100);
   border-color: var(--wpp-grey-color-400);
@@ -86,14 +106,14 @@
 :host(.wpp-time-picker) #anchor.disabled:hover {
   cursor: not-allowed;
 }
-:host(.wpp-time-picker) #anchor.disabled #time-picker {
+:host(.wpp-time-picker) #anchor.disabled .time-picker-input {
   background-color: var(--wpp-grey-color-100);
   color: var(--wpp-text-color-disabled);
 }
-:host(.wpp-time-picker) #anchor.disabled #time-picker::placeholder {
+:host(.wpp-time-picker) #anchor.disabled .time-picker-input::placeholder {
   color: var(--wpp-text-color-disabled);
 }
-:host(.wpp-time-picker) #anchor.disabled #time-picker:hover {
+:host(.wpp-time-picker) #anchor.disabled .time-picker-input:hover {
   cursor: not-allowed;
 }
 :host(.wpp-time-picker) #anchor.disabled .clock-icon {
@@ -109,9 +129,11 @@
   border-color: var(--wpp-warning-color-400);
 }
 :host(.wpp-time-picker) #anchor.size-s {
+  height: 32px;
   padding: 4px 10px;
 }
 :host(.wpp-time-picker) #anchor.size-m {
+  height: 40px;
   padding: 8px 10px;
 }
 :host(.wpp-time-picker) .wpp-inline-message {

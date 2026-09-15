@@ -38,6 +38,11 @@ export declare class WppButton {
    */
   readonly variant: 'primary' | 'secondary' | 'destructive' | 'destructive-secondary';
   /**
+   * In case this property is true, the button will render a chevron icon on the right. The downward chevron is fixed and cannot be updated.
+     Note: This property should be used only for the primary variant. It also sets `aria-haspopup="menu"` by default.
+   */
+  readonly isMenuBtn: boolean;
+  /**
    * If the component is inverted.
    * This prop can only be used together with the following variants: "primary" and "secondary".
    */
@@ -116,6 +121,7 @@ export declare class WppButton {
   private buttonCssClasses;
   private iconStartCssClasses;
   private iconEndCssClasses;
+  private isMenuButton;
   private loaderCssClasses;
   private contentCssClasses;
   render(): any;

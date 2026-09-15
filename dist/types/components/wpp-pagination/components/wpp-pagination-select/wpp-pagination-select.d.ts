@@ -36,6 +36,22 @@ export declare class WppPaginationSelect {
    */
   activePageNumber: number;
   /**
+   * Accessible name for the previous-page control.
+   */
+  readonly previousPageLabel: string;
+  /**
+   * Accessible name for the next-page control.
+   */
+  readonly nextPageLabel: string;
+  /**
+   * Accessible name for the page-number input shown above the page-select threshold.
+   */
+  readonly pageInputLabel: string;
+  /**
+   * Accessible name for a page button.
+   */
+  readonly pageLabel: (page: number) => string;
+  /**
    * Contains the active page number and itemsPerPage value.
    */
   wppChange: EventEmitter<PaginationPageChangeEventDetail>;
@@ -50,6 +66,7 @@ export declare class WppPaginationSelect {
   private handlePageClick;
   private handleLeftArrowClick;
   private handleRightArrowClick;
+  private handleArrowKeyDown;
   private leftArrowCssClasses;
   private rightArrowCssClasses;
   private hostCssClasses;

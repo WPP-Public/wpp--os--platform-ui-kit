@@ -4,7 +4,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-5f5af6a9.js');
 const common = require('./common-ee802540.js');
-const subscribeToTheme = require('./subscribe-to-theme-1879a649.js');
+const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
+require('./theme-observer-4179316e.js');
 
 const wppPaginationItemCss = ":host{--pagination-item-padding:var(--wpp-pagination-item-padding, 5px 1px);--pagination-item-size:var(--wpp-pagination-item-size, 32px);--pagination-item-border-radius:var(--wpp-pagination-item-border-radius, var(--wpp-border-radius-xs));--pagination-item-first-border-color-focus:var(\n    --wpp-pagination-item-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--pagination-item-second-border-color-focus:var(\n    --wpp-pagination-item-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--pagination-item-text-color:var(--wpp-pagination-item-text-color, var(--wpp-text-color-info));--pagination-item-text-color-hover:var(--wpp-pagination-item-text-color-hover, var(--wpp-text-color));--pagination-item-text-color-active:var(--wpp-pagination-item-text-color-active, var(--wpp-text-color));--pagination-item-bg-color-hover:var(--wpp-pagination-item-bg-color-hover, var(--wpp-grey-color-200));--pagination-item-bg-color-active:var(--wpp-pagination-item-bg-color-active, var(--wpp-grey-color-300));--pagination-item-text-color-selected:var(--wpp-pagination-item-text-color-selected, var(--wpp-brand-color));--pagination-item-bg-color-selected:var(--wpp-pagination-item-bg-color-selected, var(--wpp-primary-color-100))}:host(.pagination-item-wrapper){display:-ms-inline-flexbox;display:inline-flex;-ms-flex-pack:center;justify-content:center;-webkit-box-sizing:border-box;box-sizing:border-box;width:var(--pagination-item-size);height:var(--pagination-item-size);padding:var(--pagination-item-padding);border-radius:var(--pagination-item-border-radius);cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;outline:none}:host(.pagination-item-wrapper) .wpp-typography{color:var(--pagination-item-text-color)}:host(.pagination-item-wrapper):host(:focus-visible){border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--pagination-item-first-border-color-focus), 0 0 0 3px var(--pagination-item-second-border-color-focus);box-shadow:0 0 0 1px var(--pagination-item-first-border-color-focus), 0 0 0 3px var(--pagination-item-second-border-color-focus);position:relative;z-index:1}:host(.pagination-item-wrapper:hover){background-color:var(--pagination-item-bg-color-hover)}:host(.pagination-item-wrapper:hover):host(:not(.selected)) .wpp-typography{color:var(--pagination-item-text-color-hover)}:host(.pagination-item-wrapper:active){background-color:var(--pagination-item-bg-color-active)}:host(.pagination-item-wrapper:active):host(:not(.selected)) .wpp-typography{color:var(--pagination-item-text-color-active)}:host(.pagination-item-wrapper:focus-visible){background-color:var(--pagination-item-bg-color-hover)}:host(.pagination-item-wrapper:focus-visible):host(:not(.selected)) .wpp-typography{color:var(--pagination-item-text-color-hover)}:host(.selected){background-color:var(--pagination-item-bg-color-selected)}:host(.selected) .wpp-typography{color:var(--pagination-item-text-color-selected)}:host(.selected) .wpp-typography::part(typography){font-weight:600}:host(.selected:active){background-color:var(--pagination-item-bg-color-selected)}:host(.selected:hover){background-color:var(--pagination-item-bg-color-selected)}:host(.selected:focus-visible){background-color:var(--wpp-primary-color-100)}:host([data-wpp-theme=dark]){--pagination-item-text-color-selected:var(--wpp-primary-color-800);--pagination-item-bg-color-selected:var(--wpp-primary-color-300)}";
 
@@ -23,6 +24,14 @@ const WppPaginationItem = class {
       if (event.key === 'Tab')
         this.focusType = common.FOCUS_TYPE.TAB;
     };
+    // A `role="button"` control must activate on both Enter and Space (W3C ARIA APG) — without
+    // this, keyboard users can reach the page numbers but not select them.
+    this.onKeyDown = (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        this.handleClick();
+      }
+    };
     this.handleClick = () => {
       this.wppPageChange.emit({ page: this.number });
     };
@@ -35,6 +44,7 @@ const WppPaginationItem = class {
     this.focusType = undefined;
     this.number = undefined;
     this.selected = false;
+    this.pageLabel = page => `Page ${page}`;
   }
   connectedCallback() {
     this.themeSubscription.start();
@@ -43,9 +53,9 @@ const WppPaginationItem = class {
     this.themeSubscription.stop();
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, tabIndex: 0, exportparts: "number" }, index.h("wpp-typography-v4-3-0", { type: "s-body", part: "number" }, this.number)));
+    return (index.h(index.Host, { class: this.hostCssClasses(), role: "button", "aria-label": this.pageLabel(this.number), "aria-current": this.selected ? 'page' : undefined, onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, tabIndex: 0, exportparts: "number" }, index.h("wpp-typography-v4-4-0", { type: "s-body", part: "number" }, this.number)));
   }
-  static get registryIs() { return "wpp-pagination-item-v4-3-0"; }
+  static get registryIs() { return "wpp-pagination-item-v4-4-0"; }
   get host() { return index.getElement(this); }
 };
 WppPaginationItem.style = wppPaginationItemCss;

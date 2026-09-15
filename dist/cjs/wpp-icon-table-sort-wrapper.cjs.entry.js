@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-5f5af6a9.js');
-const utils = require('./utils-9529c2fe.js');
+const utils = require('./utils-a6513d61.js');
 require('./consts-d8f5ef98.js');
 
 const wppIconCss = ":host{display:-ms-inline-flexbox;display:inline-flex;color:var(--wpp-prop-icon-color)}";
@@ -139,7 +139,7 @@ const WppIconTableSortWrapper = class {
   render() {
     return index.h(index.Host, null, this.getIconComponent());
   }
-  static get registryIs() { return "wpp-icon-table-sort-wrapper-v4-3-0"; }
+  static get registryIs() { return "wpp-icon-table-sort-wrapper-v4-4-0"; }
   get host() { return index.getElement(this); }
 };
 WppIconTableSortWrapper.style = wppIconCss;

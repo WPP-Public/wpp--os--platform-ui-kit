@@ -1,0 +1,1 @@
+import{t}from"./p-d3df7b57.js";const l=(l,n)=>{let s=null,o=null;const r=()=>{s?.(),s=null,o=null};return{start:()=>{const a=l()??null;var p;a?s&&o===a||(r(),o=a,p=a,s=t.subscribe((t=>{p.setAttribute("data-wpp-theme",t),n?.(t)}))):r()},stop:r}};export{l as t}

@@ -31,7 +31,7 @@ export declare class WppCard {
    */
   readonly value?: CardValue;
   /**
-   * Indicates the size of the card
+   * Indicates the size of the card. Use `none` to render the card without any padding.
    */
   readonly size: CardSize;
   /**

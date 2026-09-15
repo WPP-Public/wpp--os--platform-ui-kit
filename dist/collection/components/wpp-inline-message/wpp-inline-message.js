@@ -56,13 +56,13 @@ export class WppInlineMessage {
     });
     this.getMessageTypesIcons = () => {
       if (this.type === 'warning')
-        return h("wpp-icon-warning-v4-3-0", { class: "left-icon", part: "message-icon", role: "presentation" });
+        return h("wpp-icon-warning-v4-4-0", { class: "left-icon", part: "message-icon", role: "presentation" });
       if (this.type === 'error')
-        return h("wpp-icon-error-v4-3-0", { class: "left-icon", part: "message-icon", role: "presentation" });
+        return h("wpp-icon-error-v4-4-0", { class: "left-icon", part: "message-icon", role: "presentation" });
       if (this.type === 'information')
-        return (h("wpp-icon-info-message-v4-3-0", { color: "var(--wpp-grey-color-700)", class: "left-icon", part: "message-icon", role: "presentation" }));
+        return (h("wpp-icon-info-message-v4-4-0", { color: "var(--wpp-grey-color-700)", class: "left-icon", part: "message-icon", role: "presentation" }));
       if (this.type === 'success')
-        return h("wpp-icon-success-v4-3-0", { class: "left-icon", part: "message-icon", role: "presentation" });
+        return h("wpp-icon-success-v4-4-0", { class: "left-icon", part: "message-icon", role: "presentation" });
       return null;
     };
     this.handleClickClose = () => {
@@ -82,7 +82,7 @@ export class WppInlineMessage {
     });
     this.renderContent = () => {
       const message = this.getMessage();
-      return this.size === 'l' ? (h("div", { class: "container", part: "container" }, h("div", { class: this.getContainerContentCssClasses() }, this.getMessageTypesIcons(), h("div", { class: "content-wrapper" }, h("wpp-typography-v4-3-0", { class: this.titleCssClasses(), tag: "h4", type: "m-strong", part: "title" }, this.titleText), h("div", { class: "container-body" }, this.isTruncated ? (h("wpp-tooltip-v4-3-0", { class: "tooltip", text: this.message, config: { placement: 'bottom', triggerTarget: this.messageRef, ...this.tooltipConfig }, part: "tooltip" }, h("span", { ref: ref => (this.messageRef = ref), class: this.messageCssClasses(), tabIndex: 0, part: "message", onBlur: this.onBlur }, message))) : (h("span", { class: "message", part: "message" }, message))))), this.actionBtnText || !this.hideCloseBtn ? (h("div", { class: "container-actions" }, this.actionBtnText?.length > 0 && (h("wpp-action-button-v4-3-0", { part: "action-btn", class: "action-btn", variant: "secondary", onClick: this.handleClickActionBtn }, this.actionBtnText)), !this.hideCloseBtn && (h("wpp-action-button-v4-3-0", { class: "close-btn", ariaProps: { label: this._locales.close }, variant: "secondary", onClick: this.handleClickClose }, h("wpp-icon-cross-v4-3-0", { color: "var(--ab-secondary-text-color)", size: "m" }))))) : null)) : this.isTruncated ? (h("wpp-tooltip-v4-3-0", { text: this.message, config: { placement: 'bottom', ...this.tooltipConfig }, part: "tooltip" }, h("div", { class: this.messageBlockCssClasses(), part: "message-block", ref: ref => (this.messageRef = ref), onBlur: this.onBlur, tabIndex: 0 }, this.getMessageTypesIcons(), h("span", { class: "message", part: "message" }, message)))) : (h("div", { class: this.messageBlockCssClasses(), part: "message-block" }, this.getMessageTypesIcons(), h("span", { class: "message", part: "message" }, message)));
+      return this.size === 'l' ? (h("div", { class: "container", part: "container" }, h("div", { class: this.getContainerContentCssClasses() }, this.getMessageTypesIcons(), h("div", { class: "content-wrapper" }, h("wpp-typography-v4-4-0", { class: this.titleCssClasses(), tag: "h4", type: "m-strong", part: "title" }, this.titleText), h("div", { class: "container-body" }, this.isTruncated ? (h("wpp-tooltip-v4-4-0", { class: "tooltip", text: this.message, config: { placement: 'bottom', triggerTarget: this.messageRef, ...this.tooltipConfig }, part: "tooltip" }, h("span", { ref: ref => (this.messageRef = ref), class: this.messageCssClasses(), tabIndex: 0, part: "message", onBlur: this.onBlur }, message))) : (h("span", { class: "message", part: "message" }, message))))), this.actionBtnText || !this.hideCloseBtn ? (h("div", { class: "container-actions" }, this.actionBtnText?.length > 0 && (h("wpp-action-button-v4-4-0", { part: "action-btn", class: "action-btn", variant: "secondary", onClick: this.handleClickActionBtn }, this.actionBtnText)), !this.hideCloseBtn && (h("wpp-action-button-v4-4-0", { class: "close-btn", ariaProps: { label: this._locales.close }, variant: "secondary", onClick: this.handleClickClose }, h("wpp-icon-cross-v4-4-0", { color: "var(--ab-secondary-text-color)", size: "m" }))))) : null)) : this.isTruncated ? (h("wpp-tooltip-v4-4-0", { text: this.message, config: { placement: 'bottom', ...this.tooltipConfig }, part: "tooltip" }, h("div", { class: this.messageBlockCssClasses(), part: "message-block", ref: ref => (this.messageRef = ref), onBlur: this.onBlur, tabIndex: 0 }, this.getMessageTypesIcons(), h("span", { class: "message", part: "message" }, message)))) : (h("div", { class: this.messageBlockCssClasses(), part: "message-block" }, this.getMessageTypesIcons(), h("span", { class: "message", part: "message" }, message)));
     };
     this.getExportParts = () => {
       let defaultParts = 'wrapper, message-icon, message';
@@ -116,9 +116,18 @@ export class WppInlineMessage {
   }
   componentDidLoad() {
     this.setupResizeObserver();
-    requestAnimationFrame(() => {
-      this.checkTruncation();
-    });
+    this.queueTruncationCheck();
+  }
+  componentDidRender() {
+    // Keep the observer on the live message node: rendering the truncated branch replaces it, and
+    // an observer left on the detached node would never report a later width change.
+    this.observeMessageEl();
+  }
+  // A message that changes after mount is a different string in the same box, so the previous
+  // measurement no longer holds. Without this the field can render visibly clipped text with no
+  // tooltip and no tab stop, leaving the full message unreachable by keyboard (WCAG 2.1.1).
+  onMessageChange() {
+    this.queueTruncationCheck();
   }
   connectedCallback() {
     this.themeSubscription.start();
@@ -127,6 +136,9 @@ export class WppInlineMessage {
     this.themeSubscription.stop();
     if (this.resizeObserver)
       this.resizeObserver.disconnect();
+    if (this.truncationFrame !== undefined)
+      cancelAnimationFrame(this.truncationFrame);
+    this.observedMessageEl = undefined;
   }
   get _locales() {
     return mergeLocales(LOCALES_DEFAULTS, this.locales);
@@ -137,9 +149,30 @@ export class WppInlineMessage {
     }, 50));
     if (this.resizeObserver)
       this.resizeObserver.observe(this.host);
+    this.observeMessageEl();
+  }
+  // The host can keep its size while the message box inside it does not (a longer string, a font
+  // finishing loading), so measure the message element itself as well as the host.
+  observeMessageEl() {
+    const messageEl = this.host?.shadowRoot?.querySelector('.message');
+    if (!this.resizeObserver || !messageEl || messageEl === this.observedMessageEl)
+      return;
+    if (this.observedMessageEl)
+      this.resizeObserver.unobserve(this.observedMessageEl);
+    this.observedMessageEl = messageEl;
+    this.resizeObserver.observe(messageEl);
+  }
+  // Widths are only meaningful after layout, so defer a frame rather than reading mid-render.
+  queueTruncationCheck() {
+    if (this.truncationFrame !== undefined)
+      cancelAnimationFrame(this.truncationFrame);
+    this.truncationFrame = requestAnimationFrame(() => {
+      this.truncationFrame = undefined;
+      this.checkTruncation();
+    });
   }
   checkTruncation() {
-    const messageSpan = (this.host?.shadowRoot).querySelector('.message');
+    const messageSpan = this.host?.shadowRoot?.querySelector('.message');
     if (!messageSpan)
       return;
     this.isTruncated = messageSpan.clientWidth < messageSpan.scrollWidth;
@@ -148,7 +181,7 @@ export class WppInlineMessage {
     return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onKeyUp: this.onKeyUp, exportparts: this.getExportParts() }, h("div", { class: this.inlineMessageWrapperCssClasses(), part: "wrapper" }, this.renderContent())));
   }
   static get is() { return "wpp-inline-message"; }
-  static get registryIs() { return "wpp-inline-message-v4-3-0"; }
+  static get registryIs() { return "wpp-inline-message-v4-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -388,6 +421,12 @@ export class WppInlineMessage {
     return [{
         "propName": "titleText",
         "methodName": "onUpdateTitleText"
+      }, {
+        "propName": "message",
+        "methodName": "onMessageChange"
+      }, {
+        "propName": "showTooltipFrom",
+        "methodName": "onMessageChange"
       }];
   }
 }

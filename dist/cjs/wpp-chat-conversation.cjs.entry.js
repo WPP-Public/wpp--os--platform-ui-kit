@@ -93,12 +93,12 @@ const WppChatConversation = class {
     }, 100);
   }
   render() {
-    return (index.h(index.Host, null, index.h("div", { class: "conversation-container", ref: el => (this.conversationContainerRef = el) }, this.messages?.map(message => (index.h("wpp-chat-conversation-message-v4-3-0", { key: message.id, id: message.id, ref: el => {
+    return (index.h(index.Host, null, index.h("div", { class: "conversation-container", ref: el => (this.conversationContainerRef = el) }, this.messages?.map(message => (index.h("wpp-chat-conversation-message-v4-4-0", { key: message.id, id: message.id, ref: el => {
         if (el)
           this.messageElementsMap.set(message.id, el);
-      }, role: message.role, content: message.content, status: message.status, attachments: message.attachments, actionButtonsConfig: message.actionButtonsConfig, sourcesActionConfig: message.sourcesActionConfig, menuContextListItems: message.menuContextListItems, assistantAvatarConfig: this.assistantAvatarConfig, userAvatarConfig: this.userAvatarConfig }))), index.h("slot", null)), index.h("div", { class: this.inputWrapperCssClasses() }, index.h("wpp-chat-input-v4-3-0", { ...this.chatInputConfig, onWppSend: e => this.wppSend.emit(e.detail), onWppStop: () => this.wppStop.emit(), onWppChange: e => this.wppChange.emit(e.detail), onWppMessageChanged: e => this.wppMessageChanged.emit(e.detail), onWppActionsMenuToggle: e => this.wppActionsMenuToggle.emit(e.detail), onWppActionsMenuItemClick: e => this.wppActionsMenuItemClick.emit(e.detail) }))));
+      }, role: message.role, content: message.content, status: message.status, attachments: message.attachments, actionButtonsConfig: message.actionButtonsConfig, sourcesActionConfig: message.sourcesActionConfig, menuContextListItems: message.menuContextListItems, assistantAvatarConfig: this.assistantAvatarConfig, userAvatarConfig: this.userAvatarConfig }))), index.h("slot", null)), index.h("div", { class: this.inputWrapperCssClasses() }, index.h("wpp-chat-input-v4-4-0", { ...this.chatInputConfig, onWppSend: e => this.wppSend.emit(e.detail), onWppStop: () => this.wppStop.emit(), onWppChange: e => this.wppChange.emit(e.detail), onWppMessageChanged: e => this.wppMessageChanged.emit(e.detail), onWppActionsMenuToggle: e => this.wppActionsMenuToggle.emit(e.detail), onWppActionsMenuItemClick: e => this.wppActionsMenuItemClick.emit(e.detail) }))));
   }
-  static get registryIs() { return "wpp-chat-conversation-v4-3-0"; }
+  static get registryIs() { return "wpp-chat-conversation-v4-4-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "messages": ["handleMessagesChange"]

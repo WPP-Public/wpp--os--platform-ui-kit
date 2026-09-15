@@ -1,7 +1,7 @@
 {
   "name": "@wppopen/components-library",
   "description": "WPP Platform Open Components Library",
-  "version": "4.3.0",
+  "version": "4.4.0",
   "files": [
     "components",
     "dist",
@@ -25,11 +25,11 @@
     "clean": "rimraf components dist loader storybook-static node_modules",
     "build": "node ./build.js",
     "build-watch": "npm run build -- --watch",
-    "test": "export TZ=UTC; stencil test --spec --coverage --maxWorkers=1",
+    "test": "cross-env TZ=UTC stencil test --spec --coverage --maxWorkers=1",
     "test:clear": "jest --clearCache",
     "test-watch": "npm run test -- --watch",
-    "test:snapshot": "export TZ=UTC; jest --updateSnapshot",
-    "test:richtext": "export TZ=UTC; stencil test --spec --maxWorkers=1 -- --testPathPattern=wpp-richtext",
+    "test:snapshot": "cross-env TZ=UTC jest --updateSnapshot",
+    "test:richtext": "cross-env TZ=UTC stencil test --spec --maxWorkers=1 -- --testPathPattern=wpp-richtext",
     "eslint": "eslint src/**/*.{ts,tsx} --no-error-on-unmatched-pattern",
     "eslint:fix": "npm run eslint -- --fix",
     "stylelint": "stylelint src/**/*.scss --allow-empty-input",
@@ -64,12 +64,13 @@
     "@tiptap/pm": "^3.20.4",
     "@tiptap/starter-kit": "^3.20.4",
     "air-datepicker": "3.6.0",
-    "dompurify": "3.3.3",
+    "dompurify": "3.4.14",
     "extend": "^3.0.2",
     "highlight-words": "1.2.2",
     "jsdom": "^28.1.0",
     "libphonenumber-js": "1.10.57",
     "lodash": "4.18.1",
+    "lottie-web": "5.13.0",
     "marked": "^15.0.7",
     "tippy.js": "6.3.7",
     "turndown": "^7.2.0"
@@ -92,7 +93,8 @@
     "jest-runner": "^27.5.1",
     "lit": "^3.3.1",
     "stencil-inline-svg": "1.1.0",
-    "storybook": "9.1.20"
+    "storybook": "9.1.20",
+    "cross-env": "^7.0.3"
   },
   "publishConfig": {
     "registry": "https://github.com/WPP-Public/wpp--os--platform-ui-kit"

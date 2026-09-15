@@ -3,8 +3,8 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-5f5af6a9.js');
-const index$1 = require('./index-31c1a657.js');
-const tiptapConfig = require('./tiptap-config-b10ac2b9.js');
+const index$1 = require('./index-7f49a24b.js');
+const tiptapConfig = require('./tiptap-config-85477f82.js');
 require('./marked.umd-e1074c94.js');
 require('./_commonjsHelpers-bcc1208a.js');
 
@@ -175,9 +175,9 @@ const WppRichtextView = class {
     this.setValue(newValue);
   }
   render() {
-    return (index.h(index.Host, null, index.h("wpp-richtext-common-styles-v4-3-0", null), index.h("div", { ref: (el) => (this.containerElement = el) })));
+    return (index.h(index.Host, null, index.h("wpp-richtext-common-styles-v4-4-0", null), index.h("div", { ref: (el) => (this.containerElement = el) })));
   }
-  static get registryIs() { return "wpp-richtext-view-v4-3-0"; }
+  static get registryIs() { return "wpp-richtext-view-v4-4-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "styles": ["updateStyle"],

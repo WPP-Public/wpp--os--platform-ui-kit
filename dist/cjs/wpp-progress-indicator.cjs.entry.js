@@ -85,7 +85,7 @@ const WppProgressIndicator = class {
     const renderCircle = () => (index.h("svg", { class: this.circleWrapperCssClasses(isShowCircleInfinityLoading), viewBox: "0 0 120 120", part: "circle" }, index.h("circle", { class: "circle", cx: "60", cy: "60", r: "54", fill: "none" }), index.h("circle", { class: this.circleCssClasses(isShowCircleInfinityLoading, shouldShowPercentage), cx: "60", cy: "60", r: "54", fill: "none", pathLength: "100" })));
     return (index.h(index.Host, { class: this.hostCssClasses(isLinearDontHaveWidth), role: "progressbar", "aria-valuenow": this.value, "aria-valuemin": "0", "aria-valuemax": "100", "aria-label": this.ariaProps?.label, "aria-labelledby": this.ariaProps?.labelledby, exportparts: "label, content, inner" }, index.h("div", { class: this.progressBarCssClasses(isLinearDontHaveProgress, shouldShowPercentage), part: "body" }, isCircle ? renderCircle() : renderLine()), !!this.label && (index.h("p", { class: "progress-text", part: "label" }, this.label))));
   }
-  static get registryIs() { return "wpp-progress-indicator-v4-3-0"; }
+  static get registryIs() { return "wpp-progress-indicator-v4-4-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "value": ["progressChange"],

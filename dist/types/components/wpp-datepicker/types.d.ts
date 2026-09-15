@@ -14,10 +14,40 @@ export type DateFormatType = typeof DATE_FORMAT.DAY_MONTH_YEAR | typeof DATE_FOR
 export interface LocaleTypes extends Partial<AirDatepickerLocale> {
   dateFormat: DateFormatType;
   /**
+   * Label for the range datepicker's apply button.
+   * Defaults to 'Apply'.
+   */
+  apply: string;
+  /**
+   * Label for the range datepicker's clear button.
+   * Defaults to 'Clear all'.
+   */
+  clear: string;
+  /**
    * Custom error message shown when the user types an invalid date.
    * Defaults to 'Invalid date format'.
    */
   invalidDateMessage?: string;
+  /**
+   * Accessible name for the clear (erase) button announced to screen readers.
+   * Defaults to 'Erase date'.
+   */
+  eraseDateLabel?: string;
+  /**
+   * Accessible name for the calendar popup (dialog) announced to screen readers.
+   * Defaults to 'Choose date'.
+   */
+  calendarLabel?: string;
+  /**
+   * Accessible name for the previous-period navigation chevron.
+   * Defaults to 'Previous month'.
+   */
+  previousMonthLabel?: string;
+  /**
+   * Accessible name for the next-period navigation chevron.
+   * Defaults to 'Next month'.
+   */
+  nextMonthLabel?: string;
   /**
    * The locale string used to determine date-related properties like `firstDay`.
    * Example: 'en-US', 'fr-FR', etc.

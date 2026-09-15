@@ -1,4 +1,10 @@
 export const PLACEHOLDER = 'hh:mm';
+export const TIME_PICKER_LOCALES_DEFAULTS = {
+  timePickerLabel: 'Choose time',
+  hoursLabel: 'Hours',
+  minutesLabel: 'Minutes',
+  eraseTimeLabel: 'Erase time',
+};
 export const HOURS = [
   '00',
   '01',

@@ -62,8 +62,7 @@
 }
 
 :host(.wpp-virtualised-tree) .container-wrapper {
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden auto;
   scrollbar-gutter: 12px;
   scrollbar-width: thin;
   scrollbar-color: var(--wpp-grey-color-400) transparent;

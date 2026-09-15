@@ -3,11 +3,12 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-5f5af6a9.js');
-const utils = require('./utils-9529c2fe.js');
+const utils = require('./utils-a6513d61.js');
 const timeoutManager = require('./timeout-manager-5ad93b8f.js');
 const types = require('./types-391abf05.js');
 const consts = require('./consts-d8f5ef98.js');
-const subscribeToTheme = require('./subscribe-to-theme-1879a649.js');
+const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
+require('./theme-observer-4179316e.js');
 
 const LOCALES_DEFAULTS = {
   closeIconLabel: 'Close side panel',
@@ -160,7 +161,7 @@ const WppSidePanel = class {
       const [secondaryConfig, primaryConfig] = this.actionsConfig;
       const { label: secondaryLabel, ...secondaryRest } = secondaryConfig;
       const { label: primaryLabel, ...primaryRest } = primaryConfig;
-      return (index.h("div", { class: "actions-container" }, index.h("wpp-divider-v4-3-0", null), index.h("div", { class: "actions" }, index.h("wpp-button-v4-3-0", { size: "m", variant: "secondary", ...secondaryRest }, secondaryLabel), index.h("wpp-button-v4-3-0", { size: "m", variant: "primary", ...primaryRest }, primaryLabel))));
+      return (index.h("div", { class: "actions-container" }, index.h("wpp-divider-v4-4-0", null), index.h("div", { class: "actions" }, index.h("wpp-button-v4-4-0", { size: "m", variant: "secondary", ...secondaryRest }, secondaryLabel), index.h("wpp-button-v4-4-0", { size: "m", variant: "primary", ...primaryRest }, primaryLabel))));
     };
     this.isHidden = true;
     this.closeReason = null;
@@ -217,7 +218,7 @@ const WppSidePanel = class {
   render() {
     return (index.h(index.Host, { class: this.hostCssClasses(), onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: {
         zIndex: this.zIndex.toString(),
-      }, role: this.ariaProps.role, "aria-label": this.ariaProps.label || this.panelTitle || undefined }, index.h("div", { class: this.panelCssClasses(), tabindex: "-1", ref: ref => (this.panelRef = ref), "data-testid": "wpp-side-panel-content" }, index.h("div", { class: "resize-handle", role: "separator", tabindex: "0", "aria-orientation": "vertical", "aria-label": this._locales.resizeHandleLabel, "aria-valuenow": this.currentWidth, "aria-valuemin": SIDE_PANEL_MIN_WIDTH, "aria-valuemax": SIDE_PANEL_MAX_WIDTH, "aria-valuetext": `${this.currentWidth}px`, onPointerDown: this.handleResizeStart, onKeyDown: this.handleResizeKeyDown, "data-testid": "wpp-side-panel-resize-handle" }), index.h("div", { class: "header-container" }, index.h("wpp-tooltip-v4-3-0", { class: "title-tooltip", text: this.panelTitle, config: {
+      }, role: this.ariaProps.role, "aria-label": this.ariaProps.label || this.panelTitle || undefined }, index.h("div", { class: this.panelCssClasses(), tabindex: "-1", ref: ref => (this.panelRef = ref), "data-testid": "wpp-side-panel-content" }, index.h("div", { class: "resize-handle", role: "separator", tabindex: "0", "aria-orientation": "vertical", "aria-label": this._locales.resizeHandleLabel, "aria-valuenow": this.currentWidth, "aria-valuemin": SIDE_PANEL_MIN_WIDTH, "aria-valuemax": SIDE_PANEL_MAX_WIDTH, "aria-valuetext": `${this.currentWidth}px`, onPointerDown: this.handleResizeStart, onKeyDown: this.handleResizeKeyDown, "data-testid": "wpp-side-panel-resize-handle" }), index.h("div", { class: "header-container" }, index.h("wpp-tooltip-v4-4-0", { class: "title-tooltip", text: this.panelTitle, config: {
         placement: 'top',
         onShow: () => {
           if (!this.titleRef)
@@ -225,9 +226,9 @@ const WppSidePanel = class {
           if (this.titleRef.clientWidth >= this.titleRef.scrollWidth)
             return false;
         },
-      } }, index.h("wpp-typography-v4-3-0", { ref: el => (this.titleRef = el), type: "s-strong", class: "title" }, this.panelTitle)), index.h("wpp-action-button-v4-3-0", { ariaProps: { label: this._locales.closeIconLabel }, variant: "secondary", onClick: this.handleCloseClick, class: "close-button" }, index.h("wpp-icon-cross-v4-3-0", { slot: "icon-start" }))), index.h("wpp-divider-v4-3-0", null), index.h("div", { class: "body", ref: el => (this.bodyRef = el) }, index.h("slot", null)), this.renderActions())));
+      } }, index.h("wpp-typography-v4-4-0", { ref: el => (this.titleRef = el), type: "s-strong", class: "title" }, this.panelTitle)), index.h("wpp-action-button-v4-4-0", { ariaProps: { label: this._locales.closeIconLabel }, variant: "secondary", onClick: this.handleCloseClick, class: "close-button" }, index.h("wpp-icon-cross-v4-4-0", { slot: "icon-start" }))), index.h("wpp-divider-v4-4-0", null), index.h("div", { class: "body", ref: el => (this.bodyRef = el) }, index.h("slot", null)), this.renderActions())));
   }
-  static get registryIs() { return "wpp-side-panel-v4-3-0"; }
+  static get registryIs() { return "wpp-side-panel-v4-4-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "open": ["handleChangeOpenStatus"]

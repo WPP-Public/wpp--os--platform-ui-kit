@@ -12,5 +12,5 @@ export default {
   },
 };
 export const HTMLView = {
-  render: () => html ` <wpp-richtext-html-v4-3-0 .value=${value} /> `,
+  render: () => html ` <wpp-richtext-html-v4-4-0 .value=${value} /> `,
 };

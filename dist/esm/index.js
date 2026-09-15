@@ -1,11 +1,11 @@
 export { Z as Z_INDEX } from './consts-744c144f.js';
-import { i as isObject, t as toKebabCase, r as recursiveObjectMap } from './utils-452958a4.js';
-export { m as applyBodyStylesIfNeeded, a as areSetsEqual, n as autoFocusElement, l as closestElement, d as debounce, o as form2object, f as format, z as getAriaProps, p as getDurationValues, q as getHasFocused, w as getHighestContainerInDOM, j as getHighlightData, x as getOsBarOffsetHeight, g as getSlotEmptyStates, c as hasParentWithId, h as hasShadowDom, b as isEventTargetContained, i as isObject, A as isWppElement, y as mergeLocales, r as recursiveObjectMap, s as selectDropdownWidth, v as setHasFocused, t as toKebabCase, k as transformToVersionedTag, e as truncate, u as uuidv4 } from './utils-452958a4.js';
+import { i as isObject, t as toKebabCase, r as recursiveObjectMap } from './utils-a4b26a20.js';
+export { B as activateOnEnterOrSpace, m as applyBodyStylesIfNeeded, a as areSetsEqual, n as autoFocusElement, l as closestElement, d as debounce, o as form2object, f as format, C as getAriaProps, p as getDurationValues, q as getHasFocused, w as getHighestContainerInDOM, j as getHighlightData, x as getOsBarOffsetHeight, z as getScrollbarGutterWidth, g as getSlotEmptyStates, c as hasParentWithId, h as hasShadowDom, b as isEventTargetContained, i as isObject, D as isWppElement, y as mergeLocales, r as recursiveObjectMap, s as selectDropdownWidth, v as setHasFocused, t as toKebabCase, k as transformToVersionedTag, e as truncate, A as uniquePortalId, u as uuidv4 } from './utils-a4b26a20.js';
 export { S as ScrollState } from './types-6eb465ab.js';
 export { F as FullScreenModalCloseReason } from './types-b5cf2c7a.js';
 export { I as InlineEditModeEnum } from './types-55e66228.js';
 export { M as ModalCloseReason } from './types-9a70ac4e.js';
-export { E as Editor, R as RICHTEXT_UPLOAD_REQUEST_EVENT, T as TIPTAP_UPLOAD_REQUEST_EVENT, d as debugLevels, f as formats, r as richtextUploadTypes, s as sources, a as tiptapFormats, b as tiptapSources, t as tiptapUploadTypes } from './index-6a313091.js';
+export { E as Editor, R as RICHTEXT_UPLOAD_REQUEST_EVENT, T as TIPTAP_UPLOAD_REQUEST_EVENT, d as debugLevels, f as formats, r as richtextUploadTypes, s as sources, a as tiptapFormats, b as tiptapSources, t as tiptapUploadTypes } from './index-37c1afe6.js';
 export { S as SideModalCloseReason } from './types-945bd5da.js';
 export { S as SidePanelCloseReason } from './types-bb202fab.js';
 

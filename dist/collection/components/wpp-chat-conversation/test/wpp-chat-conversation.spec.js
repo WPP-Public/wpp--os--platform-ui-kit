@@ -11,7 +11,7 @@ describe('wpp-chat-conversation', () => {
     it('renders data-driven messages', async () => {
       const page = await newSpecPage({
         components: [WppChatConversation, WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-v4-3-0", { messages: messages }),
+        template: () => h("wpp-chat-conversation-v4-4-0", { messages: messages }),
       });
       await page.waitForChanges();
       const msgEls = page.root?.shadowRoot?.querySelectorAll('wpp-chat-conversation-message');
@@ -20,7 +20,7 @@ describe('wpp-chat-conversation', () => {
     it('slot is empty on legacy path (no regression)', async () => {
       const page = await newSpecPage({
         components: [WppChatConversation, WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-v4-3-0", { messages: messages }),
+        template: () => h("wpp-chat-conversation-v4-4-0", { messages: messages }),
       });
       await page.waitForChanges();
       const slot = page.root?.shadowRoot?.querySelector('slot');
@@ -29,7 +29,7 @@ describe('wpp-chat-conversation', () => {
     it('auto-scrolls when messages change', async () => {
       const page = await newSpecPage({
         components: [WppChatConversation, WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-v4-3-0", { messages: messages }),
+        template: () => h("wpp-chat-conversation-v4-4-0", { messages: messages }),
       });
       await page.waitForChanges();
       const scrollToMock = jest.fn();
@@ -44,7 +44,7 @@ describe('wpp-chat-conversation', () => {
     it('scrolls the container on demand', async () => {
       const page = await newSpecPage({
         components: [WppChatConversation, WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-v4-3-0", null),
+        template: () => h("wpp-chat-conversation-v4-4-0", null),
       });
       await page.waitForChanges();
       const scrollToMock = jest.fn();
@@ -57,7 +57,7 @@ describe('wpp-chat-conversation', () => {
     it('does not throw when container ref is absent', async () => {
       const page = await newSpecPage({
         components: [WppChatConversation, WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-v4-3-0", null),
+        template: () => h("wpp-chat-conversation-v4-4-0", null),
       });
       await page.waitForChanges();
       const instance = page.rootInstance;
@@ -82,7 +82,7 @@ describe('wpp-chat-conversation', () => {
     it('slot renders after data-driven messages when both present', async () => {
       const page = await newSpecPage({
         components: [WppChatConversation, WppChatConversationMessage],
-        template: () => (h("wpp-chat-conversation-v4-3-0", { messages: [messages[0]] }, h("wpp-chat-conversation-message-v4-3-0", { id: "slotted-1", role: "assistant", content: "Slotted", status: "complete" }))),
+        template: () => (h("wpp-chat-conversation-v4-4-0", { messages: [messages[0]] }, h("wpp-chat-conversation-message-v4-4-0", { id: "slotted-1", role: "assistant", content: "Slotted", status: "complete" }))),
       });
       await page.waitForChanges();
       const dataMsgEls = page.root?.shadowRoot?.querySelectorAll('wpp-chat-conversation-message');
@@ -93,7 +93,7 @@ describe('wpp-chat-conversation', () => {
     it('does not auto-scroll when slot content changes', async () => {
       const page = await newSpecPage({
         components: [WppChatConversation, WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-v4-3-0", null),
+        template: () => h("wpp-chat-conversation-v4-4-0", null),
       });
       await page.waitForChanges();
       const scrollToMock = jest.fn();
@@ -106,7 +106,7 @@ describe('wpp-chat-conversation', () => {
     it('resolves via legacy messages map (unchanged)', async () => {
       const page = await newSpecPage({
         components: [WppChatConversation, WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-v4-3-0", { messages: messages }),
+        template: () => h("wpp-chat-conversation-v4-4-0", { messages: messages }),
       });
       await page.waitForChanges();
       const instance = page.rootInstance;
@@ -118,7 +118,7 @@ describe('wpp-chat-conversation', () => {
     it('returns false for `false` and empty configs, true for non-empty configs', async () => {
       const page = await newSpecPage({
         components: [WppChatConversation, WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-v4-3-0", null),
+        template: () => h("wpp-chat-conversation-v4-4-0", null),
       });
       const instance = page.rootInstance;
       instance.userAvatarConfig = false;
@@ -133,7 +133,7 @@ describe('wpp-chat-conversation', () => {
     it('flags both no-avatar classes on the input wrapper for the default empty config', async () => {
       const page = await newSpecPage({
         components: [WppChatConversation, WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-v4-3-0", null),
+        template: () => h("wpp-chat-conversation-v4-4-0", null),
       });
       await page.waitForChanges();
       const inputWrapper = page.root?.shadowRoot?.querySelector('.input-wrapper');
@@ -143,7 +143,7 @@ describe('wpp-chat-conversation', () => {
     it('drops the no-avatar class for the type whose avatar config is non-empty', async () => {
       const page = await newSpecPage({
         components: [WppChatConversation, WppChatConversationMessage],
-        template: () => h("wpp-chat-conversation-v4-3-0", { userAvatarConfig: { name: 'John' }, assistantAvatarConfig: false }),
+        template: () => h("wpp-chat-conversation-v4-4-0", { userAvatarConfig: { name: 'John' }, assistantAvatarConfig: false }),
       });
       await page.waitForChanges();
       const inputWrapper = page.root?.shadowRoot?.querySelector('.input-wrapper');

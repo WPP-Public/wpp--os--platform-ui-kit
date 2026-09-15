@@ -9,7 +9,7 @@ const renderHandle = (top, isSelected, type, isLoading) => html `<div
   : '100%'}; top: ${top}px; transform: translate(50%, -50%); width: 6px;
     height: 6px; min-width: 5px; min-height: 5px; border-radius: 100%;"
   >
-    <wpp-handle-v4-3-0 .isSelected=${isSelected} .type=${type} .isLoading=${isLoading} />
+    <wpp-handle-v4-4-0 .isSelected=${isSelected} .type=${type} .isLoading=${isLoading} />
   </div>`;
 export const renderHandles = (handles, isSelected, isLoading) => {
   if (handles === '1 handle') {

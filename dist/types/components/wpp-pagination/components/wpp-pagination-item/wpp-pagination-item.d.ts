@@ -17,6 +17,10 @@ export declare class WppPaginationItem {
    */
   readonly selected: boolean;
   /**
+   * Accessible name for the page button.
+   */
+  readonly pageLabel: (page: number) => string;
+  /**
    * Emitted active page number
    */
   wppPageChange: EventEmitter<PaginationPageChangeEventDetail>;
@@ -25,6 +29,7 @@ export declare class WppPaginationItem {
   private onBlur;
   private onMouseDown;
   private onKeyUp;
+  private onKeyDown;
   private handleClick;
   private hostCssClasses;
   render(): any;

@@ -56,5 +56,6 @@ export declare class WppInternalLabel {
   private iconCssClasses;
   private hostCssClasses;
   private infoWrapperCssClasses;
+  private infoIconInteractiveProps;
   render(): any;
 }

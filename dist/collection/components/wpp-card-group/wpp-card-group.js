@@ -207,7 +207,7 @@ export class WppCardGroup {
     return (h(Host, { "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, class: this.hostCssClasses(), exportparts: "inner", role: this.multiple ? 'group' : 'radiogroup', "aria-labelledby": this.ariaProps.labelledby }, h("slot", { part: "inner" })));
   }
   static get is() { return "wpp-card-group"; }
-  static get registryIs() { return "wpp-card-group-v4-3-0"; }
+  static get registryIs() { return "wpp-card-group-v4-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -242,9 +242,13 @@ export class WppCardGroup {
         "type": "string",
         "mutable": false,
         "complexType": {
-          "original": "CardSize",
+          "original": "Exclude<CardSize, 'none'>",
           "resolved": "\"2xl\" | \"l\" | \"m\" | \"s\" | \"xl\"",
           "references": {
+            "Exclude": {
+              "location": "global",
+              "id": "global::Exclude"
+            },
             "CardSize": {
               "location": "import",
               "path": "./components/wpp-card/types",
@@ -256,7 +260,7 @@ export class WppCardGroup {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "Indicates the size of the cards"
+          "text": "Indicates the size of the cards."
         },
         "attribute": "size",
         "reflect": false,

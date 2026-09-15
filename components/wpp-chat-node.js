@@ -1,6 +1,7 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { k as transformToVersionedTag } from './utils.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme.js';
+import { S as SpeechRecognitionService } from './speech-recognition.js';
 import { d as defineCustomElement$r } from './wpp-action-button2.js';
 import { d as defineCustomElement$q } from './wpp-avatar2.js';
 import { d as defineCustomElement$p } from './wpp-button2.js';
@@ -94,7 +95,7 @@ const WppChatNode$1 = /*@__PURE__*/ proxyCustomElement(class WppChatNode extends
     this.wppMessageActionClick = createEvent(this, "wppMessageActionClick", 1);
     this.themeSubscription = themeSubscriptionController(() => this.host);
     this._locales = LOCALES_DEFAULTS;
-    this.recognition = null;
+    this.recognition = new SpeechRecognitionService();
     this.handleInput = (event) => {
       const target = event.target;
       this.activateNode();
@@ -106,7 +107,7 @@ const WppChatNode$1 = /*@__PURE__*/ proxyCustomElement(class WppChatNode extends
       this.activateNode();
       this.startWaitingForResponse();
       this.isAudioRecording = false;
-      this.stopSpeechRecognition();
+      this.recognition.stopRecognition();
       const message = {
         id: `msg-${Date.now()}`,
         content: this.inputValue.trim(),
@@ -133,58 +134,33 @@ const WppChatNode$1 = /*@__PURE__*/ proxyCustomElement(class WppChatNode extends
         this.handleSend();
       }
     };
-    this.setupSpeechRecognition = () => {
-      const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognitionAPI)
-        return;
-      this.recognition = new SpeechRecognitionAPI();
-      this.recognition.continuous = true;
-      this.recognition.interimResults = true;
-      this.recognition.lang = this._locales.audioLanguage;
-    };
-    this.startSpeechRecognition = () => {
-      if (!this.recognition)
-        return;
-      const previousText = this.inputValue.trim();
-      this.recognition.onresult = (event) => {
-        let text = '';
-        for (let i = 0; i < event.results.length; i++) {
-          text += event.results[i][0].transcript;
-        }
-        const newOutput = previousText ? `${previousText} ${text}` : text;
-        if (this.inputValue === newOutput)
-          return;
-        this.inputValue = newOutput;
-      };
-      this.recognition.onerror = () => {
-        this.isAudioRecording = false;
-      };
-      this.recognition.onend = () => {
-        this.isAudioRecording = false;
-      };
-      this.recognition.start();
-    };
-    this.stopSpeechRecognition = () => {
-      if (!this.recognition)
-        return;
-      this.recognition.onresult = null;
-      this.recognition.onend = null;
-      this.recognition.onerror = null;
-      this.recognition.stop();
-    };
     this.handleClickAudioRecording = (event) => {
       event.stopPropagation();
       event.preventDefault();
       this.activateNode();
-      if (!this.recognition)
+      if (!this.recognition.isSupported) {
+        console.warn('SpeechRecognition API is not supported in this browser.');
         return;
+      }
       this.isAudioRecording = !this.isAudioRecording;
-      this.wppMic.emit({ isRecording: this.isAudioRecording });
       if (this.isAudioRecording) {
-        this.startSpeechRecognition();
+        this.wppMic.emit({ isRecording: true });
+        this.recognition.startRecognition({
+          baseText: this.inputValue,
+          onTranscript: newOutput => {
+            if (this.inputValue === newOutput)
+              return;
+            this.inputValue = newOutput;
+          },
+          onStop: () => {
+            this.isAudioRecording = false;
+            this.wppMic.emit({ isRecording: false });
+          },
+        });
       }
       else {
-        this.stopSpeechRecognition();
+        this.wppMic.emit({ isRecording: false });
+        this.recognition.stopRecognition();
       }
     };
     this.handleAttach = () => {
@@ -314,12 +290,12 @@ const WppChatNode$1 = /*@__PURE__*/ proxyCustomElement(class WppChatNode extends
     window.addEventListener('pointerdown', this.handleWindowPointerDown, true);
   }
   componentDidLoad() {
-    this.setupSpeechRecognition();
+    this.recognition.setupRecognition(this._locales.audioLanguage);
   }
   disconnectedCallback() {
     this.themeSubscription.stop();
     window.removeEventListener('pointerdown', this.handleWindowPointerDown, true);
-    this.stopSpeechRecognition();
+    this.recognition.stopRecognition();
     this.clearResponseWaitTimer();
   }
   /**
@@ -383,12 +359,12 @@ const WppChatNode$1 = /*@__PURE__*/ proxyCustomElement(class WppChatNode extends
   renderActionMenu() {
     const hasActions = this.actions.length > 0;
     if (!hasActions) {
-      return (h("wpp-tooltip-v4-3-0", { text: this._locales.attachAction, config: { placement: 'bottom' } }, h("wpp-action-button-v4-3-0", { variant: "secondary", ariaProps: { label: this._locales.attachAction }, onClick: this.handleAttach }, h("wpp-icon-plus-v4-3-0", { slot: "icon-start" }))));
+      return (h("wpp-tooltip-v4-4-0", { text: this._locales.attachAction, config: { placement: 'bottom' } }, h("wpp-action-button-v4-4-0", { variant: "secondary", ariaProps: { label: this._locales.attachAction }, onClick: this.handleAttach }, h("wpp-icon-plus-v4-4-0", { slot: "icon-start" }))));
     }
-    return (h("wpp-menu-context-v4-3-0", { class: "chat-actions-menu-context", style: { width: 'fit-content' } }, h("wpp-action-button-v4-3-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this._locales.actionsMenu } }, h("wpp-icon-plus-v4-3-0", { slot: "icon-start" })), h("div", { class: "chat-actions-menu" }, this.actions.map(action => (h("wpp-list-item-v4-3-0", { key: `${action.icon}-${action.label}`, onWppChangeListItem: () => this.handleActionClick(action) }, this.renderIcon(action.icon, 'left'), h("span", { slot: "label" }, action.label)))))));
+    return (h("wpp-menu-context-v4-4-0", { class: "chat-actions-menu-context", style: { width: 'fit-content' } }, h("wpp-action-button-v4-4-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this._locales.actionsMenu } }, h("wpp-icon-plus-v4-4-0", { slot: "icon-start" })), h("div", { class: "chat-actions-menu" }, this.actions.map(action => (h("wpp-list-item-v4-4-0", { key: `${action.icon}-${action.label}`, onWppChangeListItem: () => this.handleActionClick(action) }, this.renderIcon(action.icon, 'left'), h("span", { slot: "label" }, action.label)))))));
   }
   renderModelListItem(model, checked) {
-    return (h("wpp-list-item-v4-3-0", { key: model.id, checked: checked, onWppChangeListItem: () => this.handleModelSelect(model) }, h("wpp-avatar-v4-3-0", { slot: "left", size: "xs", variant: "square", role: "presentation", src: model.logo, icon: model.icon, name: model.label }), h("span", { slot: "label" }, model.label), model.caption && (h("span", { slot: "caption" }, model.caption))));
+    return (h("wpp-list-item-v4-4-0", { key: model.id, checked: checked, onWppChangeListItem: () => this.handleModelSelect(model) }, h("wpp-avatar-v4-4-0", { slot: "left", size: "xs", variant: "square", role: "presentation", src: model.logo, icon: model.icon, name: model.label }), h("span", { slot: "label" }, model.label), model.caption && (h("span", { slot: "caption" }, model.caption))));
   }
   /**
    * Model selector triggered by the compact logo avatar (Figma). Unlike wpp-chat-input,
@@ -401,8 +377,8 @@ const WppChatNode$1 = /*@__PURE__*/ proxyCustomElement(class WppChatNode extends
     const selectedModel = this.getSelectedModel();
     // `logo` (an image URL) wins when provided; `icon` is the asset-free fallback for
     // hosts that cannot serve the brand logos (e.g. Storybook), and initials last.
-    const triggerAvatar = (h("wpp-avatar-v4-3-0", { slot: "icon-start", class: "model-avatar", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, icon: selectedModel.icon, name: selectedModel.label || '' }));
-    return (h("wpp-menu-context-v4-3-0", { class: "chat-model-selector", style: { width: 'fit-content' }, dropdownConfig: {
+    const triggerAvatar = (h("wpp-avatar-v4-4-0", { slot: "icon-start", class: "model-avatar", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, icon: selectedModel.icon, name: selectedModel.label || '' }));
+    return (h("wpp-menu-context-v4-4-0", { class: "chat-model-selector", style: { width: 'fit-content' }, dropdownConfig: {
         onShow: this.handleModelMenuShow,
         onHide: this.handleModelMenuHide,
         // Per Figma (Chat Input / Model Selector): the dropdown opens ABOVE the trigger and
@@ -413,11 +389,11 @@ const WppChatNode$1 = /*@__PURE__*/ proxyCustomElement(class WppChatNode extends
         popperOptions: {
           modifiers: [{ name: 'flip', options: { fallbackPlacements: ['bottom-start'] } }],
         },
-      } }, h("wpp-action-button-v4-3-0", { slot: "trigger-element", class: "model-selector-trigger", variant: "secondary", ariaProps: { label: this._locales.modelSelectorLabel, expanded: this.isModelMenuOpen, haspopup: 'menu' } }, triggerAvatar), h("div", { class: "wpp-model-dropdown" }, this.getDefaultModels().map(model => this.renderModelListItem(model, model.id === selectedModel.id)), h("wpp-divider-v4-3-0", null), this.models.length > 0 ? (this.models.map(model => this.renderModelListItem(model, model.id === selectedModel.id))) : (h("wpp-list-item-v4-3-0", { onWppChangeListItem: this.handleModelChange }, h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), h("wpp-icon-chevron-v4-3-0", { slot: "right", direction: "right" }))))));
+      } }, h("wpp-action-button-v4-4-0", { slot: "trigger-element", class: "model-selector-trigger", variant: "secondary", ariaProps: { label: this._locales.modelSelectorLabel, expanded: this.isModelMenuOpen, haspopup: 'menu' } }, triggerAvatar), h("div", { class: "wpp-model-dropdown" }, this.getDefaultModels().map(model => this.renderModelListItem(model, model.id === selectedModel.id)), h("wpp-divider-v4-4-0", null), this.models.length > 0 ? (this.models.map(model => this.renderModelListItem(model, model.id === selectedModel.id))) : (h("wpp-list-item-v4-4-0", { onWppChangeListItem: this.handleModelChange }, h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), h("wpp-icon-chevron-v4-4-0", { slot: "right", direction: "right" }))))));
   }
   renderMicrophoneBtn() {
     const recordLabel = this.isAudioRecording ? this._locales.audioStopRecordAction : this._locales.audioRecordAction;
-    return (h("wpp-action-button-v4-3-0", { class: "mic-btn", "data-testid": "chat-node-mic-btn", variant: "secondary", ariaProps: { label: recordLabel }, onClick: this.handleClickAudioRecording }, this.isAudioRecording ? h("wpp-icon-stop-v4-3-0", { slot: "icon-start" }) : h("wpp-icon-mic-on-v4-3-0", { slot: "icon-start" })));
+    return (h("wpp-action-button-v4-4-0", { class: "mic-btn", "data-testid": "chat-node-mic-btn", variant: "secondary", ariaProps: { label: recordLabel }, onClick: this.handleClickAudioRecording }, this.isAudioRecording ? h("wpp-icon-stop-v4-4-0", { slot: "icon-start" }) : h("wpp-icon-mic-on-v4-4-0", { slot: "icon-start" })));
   }
   // The primary action follows a fixed priority: stop (while loading/processing)
   // > re-run (when `isReRun`) > send (once the input has content).
@@ -453,7 +429,7 @@ const WppChatNode$1 = /*@__PURE__*/ proxyCustomElement(class WppChatNode extends
   renderSendButton(isLoadingActive) {
     const visible = this.isPrimaryActionVisible(isLoadingActive);
     const { icon, label, handler, variant } = this.getPrimaryAction(isLoadingActive);
-    return (h("wpp-button-v4-3-0", { class: { 'play-btn': true, 'is-hidden': !visible }, size: "s", variant: variant,
+    return (h("wpp-button-v4-4-0", { class: { 'play-btn': true, 'is-hidden': !visible }, size: "s", variant: variant,
       // While hidden the button stays in the DOM (to animate the fade), but must leave the
       // focus order and a11y tree so its focusable inner control does not trip axe's
       // aria-hidden-focus (SC 4.1.2). `inert` does exactly that without the disabled-grey
@@ -487,7 +463,7 @@ const WppChatNode$1 = /*@__PURE__*/ proxyCustomElement(class WppChatNode extends
   renderAvatar(config) {
     if (config === false)
       return null;
-    return (h("wpp-avatar-v4-3-0", { class: "message-avatar", size: "s", variant: "circle", name: config.name || '', icon: config.icon, color: config.color, role: "presentation" }));
+    return (h("wpp-avatar-v4-4-0", { class: "message-avatar", size: "s", variant: "circle", name: config.name || '', icon: config.icon, color: config.color, role: "presentation" }));
   }
   getAttachmentKind(attachment) {
     if (attachment.type.startsWith('image/'))
@@ -521,7 +497,7 @@ const WppChatNode$1 = /*@__PURE__*/ proxyCustomElement(class WppChatNode extends
     const hasRenderableContent = Boolean(message.content.trim() || message.attachments?.length);
     if (!hasRenderableContent || actions.length === 0)
       return null;
-    return (h("div", { class: "chat-message-actions" }, actions.map(action => (h("wpp-tooltip-v4-3-0", { key: action.id, text: action.label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-3-0", { variant: "secondary", ariaProps: { label: action.label }, onClick: () => this.handleMessageActionClick(message, action) }, this.renderIcon(action.icon, 'icon-start')))))));
+    return (h("div", { class: "chat-message-actions" }, actions.map(action => (h("wpp-tooltip-v4-4-0", { key: action.id, text: action.label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-4-0", { variant: "secondary", ariaProps: { label: action.label }, onClick: () => this.handleMessageActionClick(message, action) }, this.renderIcon(action.icon, 'icon-start')))))));
   }
   renderMessages() {
     if (this.messages.length === 0)
@@ -536,7 +512,7 @@ const WppChatNode$1 = /*@__PURE__*/ proxyCustomElement(class WppChatNode extends
           'chat-message': true,
           [`chat-message-${msg.role}`]: true,
           'chat-message-no-avatar': avatarConfig === false,
-        }, key: msg.id }, this.renderAvatar(avatarConfig), h("div", { class: `chat-message-content chat-message-content-${msg.role}` }, hasContent && (h("div", { class: `chat-bubble chat-bubble-${msg.role}` }, h("wpp-typography-v4-3-0", { type: "s-body" }, msg.content))), this.renderMessageAttachments(msg), this.renderMessageActions(msg))));
+        }, key: msg.id }, this.renderAvatar(avatarConfig), h("div", { class: `chat-message-content chat-message-content-${msg.role}` }, hasContent && (h("div", { class: `chat-bubble chat-bubble-${msg.role}` }, h("wpp-typography-v4-4-0", { type: "s-body" }, msg.content))), this.renderMessageAttachments(msg), this.renderMessageActions(msg))));
     });
   }
   render() {
@@ -557,22 +533,22 @@ const WppChatNode$1 = /*@__PURE__*/ proxyCustomElement(class WppChatNode extends
     if (isSizeS) {
       return (h(Host, { class: { 'wpp-chat-node': true, 'wpp-size-s': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, h("div", { class: containerClasses }, h("div", { class: wrapperClasses }, this.renderChatBar(false))), h("slot", { name: "handles" })));
     }
-    return (h(Host, { class: { 'wpp-chat-node': true, 'wpp-size-m': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, h("div", { class: containerClasses }, h("div", { class: wrapperClasses }, h("div", { class: "node-header" }, h("span", { class: "title-icon" }, h("wpp-icon-service-v4-3-0", { color: "var(--wpp-grey-color-700)" })), h("wpp-tooltip-v4-3-0", { text: this.nodeTitle, class: "title-tooltip", config: {
+    return (h(Host, { class: { 'wpp-chat-node': true, 'wpp-size-m': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, h("div", { class: containerClasses }, h("div", { class: wrapperClasses }, h("div", { class: "node-header" }, h("span", { class: "title-icon" }, h("wpp-icon-service-v4-4-0", { color: "var(--wpp-grey-color-700)" })), h("wpp-tooltip-v4-4-0", { text: this.nodeTitle, class: "title-tooltip", config: {
         placement: 'top',
         onShow: () => {
           if (!this.titleRef || this.titleRef.clientWidth >= this.titleRef.scrollWidth)
             return false;
         },
-      } }, h("p", { ref: el => (this.titleRef = el), class: "node-title" }, this.nodeTitle))), h("wpp-divider-v4-3-0", null), h("div", { class: "node-body", ref: el => (this.bodyRef = el) }, this.renderMessages(), h("slot", null)), h("wpp-divider-v4-3-0", null), this.renderChatBar(isLoadingActive))), h("slot", { name: "handles" })));
+      } }, h("p", { ref: el => (this.titleRef = el), class: "node-title" }, this.nodeTitle))), h("wpp-divider-v4-4-0", null), h("div", { class: "node-body", ref: el => (this.bodyRef = el) }, this.renderMessages(), h("slot", null)), h("wpp-divider-v4-4-0", null), this.renderChatBar(isLoadingActive))), h("slot", { name: "handles" })));
   }
-  static get registryIs() { return "wpp-chat-node-v4-3-0"; }
+  static get registryIs() { return "wpp-chat-node-v4-4-0"; }
   get host() { return this; }
   static get watchers() { return {
     "locales": ["onUpdateLocales"],
     "selectedModel": ["onUpdateSelectedModel"]
   }; }
   static get style() { return wppChatNodeCss; }
-}, [6, "wpp-chat-node", "wpp-chat-node-v4-3-0", {
+}, [6, "wpp-chat-node", "wpp-chat-node-v4-4-0", {
     "nodeTitle": [1, "node-title"],
     "titleIcon": [1, "title-icon"],
     "isLoading": [4, "is-loading"],
@@ -601,139 +577,139 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-chat-node-v4-3-0", "wpp-action-button-v4-3-0", "wpp-avatar-v4-3-0", "wpp-button-v4-3-0", "wpp-checkbox-v4-3-0", "wpp-divider-v4-3-0", "wpp-icon-chevron-v4-3-0", "wpp-icon-cross-v4-3-0", "wpp-icon-dash-v4-3-0", "wpp-icon-error-v4-3-0", "wpp-icon-info-message-v4-3-0", "wpp-icon-mic-on-v4-3-0", "wpp-icon-plus-v4-3-0", "wpp-icon-service-v4-3-0", "wpp-icon-stop-v4-3-0", "wpp-icon-success-v4-3-0", "wpp-icon-tick-v4-3-0", "wpp-icon-warning-v4-3-0", "wpp-inline-message-v4-3-0", "wpp-internal-label-v4-3-0", "wpp-internal-tooltip-v4-3-0", "wpp-label-v4-3-0", "wpp-list-item-v4-3-0", "wpp-menu-context-v4-3-0", "wpp-spinner-v4-3-0", "wpp-tooltip-v4-3-0", "wpp-typography-v4-3-0"];
+  const components = ["wpp-chat-node-v4-4-0", "wpp-action-button-v4-4-0", "wpp-avatar-v4-4-0", "wpp-button-v4-4-0", "wpp-checkbox-v4-4-0", "wpp-divider-v4-4-0", "wpp-icon-chevron-v4-4-0", "wpp-icon-cross-v4-4-0", "wpp-icon-dash-v4-4-0", "wpp-icon-error-v4-4-0", "wpp-icon-info-message-v4-4-0", "wpp-icon-mic-on-v4-4-0", "wpp-icon-plus-v4-4-0", "wpp-icon-service-v4-4-0", "wpp-icon-stop-v4-4-0", "wpp-icon-success-v4-4-0", "wpp-icon-tick-v4-4-0", "wpp-icon-warning-v4-4-0", "wpp-inline-message-v4-4-0", "wpp-internal-label-v4-4-0", "wpp-internal-tooltip-v4-4-0", "wpp-label-v4-4-0", "wpp-list-item-v4-4-0", "wpp-menu-context-v4-4-0", "wpp-spinner-v4-4-0", "wpp-tooltip-v4-4-0", "wpp-typography-v4-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-chat-node-v4-3-0":
+    case "wpp-chat-node-v4-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppChatNode$1);
       }
       break;
-    case "wpp-action-button-v4-3-0":
+    case "wpp-action-button-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$r();
       }
       break;
-    case "wpp-avatar-v4-3-0":
+    case "wpp-avatar-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$q();
       }
       break;
-    case "wpp-button-v4-3-0":
+    case "wpp-button-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$p();
       }
       break;
-    case "wpp-checkbox-v4-3-0":
+    case "wpp-checkbox-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$o();
       }
       break;
-    case "wpp-divider-v4-3-0":
+    case "wpp-divider-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-icon-chevron-v4-3-0":
+    case "wpp-icon-chevron-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-icon-cross-v4-3-0":
+    case "wpp-icon-cross-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-dash-v4-3-0":
+    case "wpp-icon-dash-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-error-v4-3-0":
+    case "wpp-icon-error-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-info-message-v4-3-0":
+    case "wpp-icon-info-message-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-mic-on-v4-3-0":
+    case "wpp-icon-mic-on-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-plus-v4-3-0":
+    case "wpp-icon-plus-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-service-v4-3-0":
+    case "wpp-icon-service-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-stop-v4-3-0":
+    case "wpp-icon-stop-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-success-v4-3-0":
+    case "wpp-icon-success-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-tick-v4-3-0":
+    case "wpp-icon-tick-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-warning-v4-3-0":
+    case "wpp-icon-warning-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-inline-message-v4-3-0":
+    case "wpp-inline-message-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-internal-label-v4-3-0":
+    case "wpp-internal-label-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-tooltip-v4-3-0":
+    case "wpp-internal-tooltip-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-label-v4-3-0":
+    case "wpp-label-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-list-item-v4-3-0":
+    case "wpp-list-item-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-menu-context-v4-3-0":
+    case "wpp-menu-context-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-3-0":
+    case "wpp-spinner-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-3-0":
+    case "wpp-tooltip-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-3-0":
+    case "wpp-typography-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

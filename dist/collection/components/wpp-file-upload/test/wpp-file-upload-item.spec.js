@@ -14,7 +14,7 @@ describe('wpp-file-upload-item', () => {
   it('defaults to the compact variant and keeps the single-line layout', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-3-0", { file: urlFile() }),
+      template: () => h("wpp-file-upload-item-v4-4-0", { file: urlFile() }),
     });
     const host = page.root;
     expect(host.classList.contains('variant-default')).toBe(true);
@@ -49,7 +49,7 @@ describe('wpp-file-upload-item', () => {
       };
       const page = await newSpecPage({
         components: [WppFileUploadItem],
-        template: () => h("wpp-file-upload-item-v4-3-0", { file: file }),
+        template: () => h("wpp-file-upload-item-v4-4-0", { file: file }),
       });
       progressHandler?.({
         loaded: 5 * 1024 * 1024,
@@ -76,7 +76,7 @@ describe('wpp-file-upload-item', () => {
   ])('shows only the total file size in the %s state', async (_state, overrides) => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-3-0", { file: urlFile({ size: 15 * 1024 * 1024, ...overrides }) }),
+      template: () => h("wpp-file-upload-item-v4-4-0", { file: urlFile({ size: 15 * 1024 * 1024, ...overrides }) }),
     });
     const size = page.root?.shadowRoot?.querySelector('[part="loading"], [part="error-message"]');
     expect(size?.textContent?.trim()).toBe('15 MB');
@@ -85,7 +85,7 @@ describe('wpp-file-upload-item', () => {
   it('renders the thumbnail card, file name and file-type subtitle in the chat variant', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-3-0", { variant: "chat", file: urlFile() }),
+      template: () => h("wpp-file-upload-item-v4-4-0", { variant: "chat", file: urlFile() }),
     });
     const host = page.root;
     expect(host.classList.contains('variant-chat')).toBe(true);
@@ -97,7 +97,7 @@ describe('wpp-file-upload-item', () => {
   it('wraps the subtitle in a tooltip whose text mirrors the subtitle for truncation', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-3-0", { variant: "chat", file: urlFile() }),
+      template: () => h("wpp-file-upload-item-v4-4-0", { variant: "chat", file: urlFile() }),
     });
     const host = page.root;
     const subtitle = host.shadowRoot?.querySelector('.subtitle');
@@ -108,7 +108,7 @@ describe('wpp-file-upload-item', () => {
   it('renders the error icon and danger subtitle for a file with an error', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => (h("wpp-file-upload-item-v4-3-0", { variant: "chat", file: urlFile({ sizeError: true }), locales: { sizeError: 'Too big', formatError: 'Wrong format' } })),
+      template: () => (h("wpp-file-upload-item-v4-4-0", { variant: "chat", file: urlFile({ sizeError: true }), locales: { sizeError: 'Too big', formatError: 'Wrong format' } })),
     });
     const host = page.root;
     expect(host.shadowRoot?.querySelector('.thumbnail.error')).not.toBeNull();
@@ -120,12 +120,12 @@ describe('wpp-file-upload-item', () => {
   it('keeps the delete icon when deletable is not disabled and drops it when deletable is false', async () => {
     const withDelete = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-3-0", { variant: "chat", file: urlFile() }),
+      template: () => h("wpp-file-upload-item-v4-4-0", { variant: "chat", file: urlFile() }),
     });
     expect(withDelete.root?.shadowRoot?.querySelector('[part="cross-icon"]')).not.toBeNull();
     const withoutDelete = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-3-0", { variant: "chat", file: urlFile({ deletable: false }) }),
+      template: () => h("wpp-file-upload-item-v4-4-0", { variant: "chat", file: urlFile({ deletable: false }) }),
     });
     expect(withoutDelete.root?.shadowRoot?.querySelector('[part="cross-icon"]')).toBeNull();
   });
