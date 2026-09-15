@@ -91,147 +91,87 @@
   --button-primary-bg-color-disabled: var(--wpp-button-primary-bg-color-disabled, var(--wpp-brand-color-disabled));
   --button-primary-text-color: var(--wpp-button-primary-text-color, var(--wpp-grey-color-000));
   --button-primary-icon-color: var(--wpp-button-primary-icon-color, var(--wpp-grey-color-000));
-  --button-secondary-padding-m: var(
-    --wpp-button-secondary-padding-m,
-    calc(9px - var(--button-border-width)) calc(20px - var(--button-border-width))
-  );
-  --button-secondary-padding-s: var(
-    --wpp-button-secondary-padding-s,
-    calc(5px - var(--button-border-width)) calc(16px - var(--button-border-width))
-  );
+  --button-secondary-padding-m: var(--wpp-button-secondary-padding-m,
+      calc(9px - var(--button-border-width)) calc(20px - var(--button-border-width)));
+  --button-secondary-padding-s: var(--wpp-button-secondary-padding-s,
+      calc(5px - var(--button-border-width)) calc(16px - var(--button-border-width)));
   --button-secondary-bg-color-hover: var(--wpp-button-secondary-bg-color-hover, var(--wpp-primary-color-100));
   --button-secondary-bg-color-active: var(--wpp-button-secondary-bg-color-active, var(--wpp-primary-color-200));
   --button-secondary-bg-color-disabled: var(--wpp-button-secondary-bg-color-disabled, transparent);
   --button-secondary-border-color: var(--wpp-button-secondary-border-color, var(--wpp-brand-color));
-  --button-secondary-border-color-active: var(
-    --wpp-button-secondary-border-color-active,
-    var(--wpp-brand-color-active)
-  );
-  --button-secondary-border-color-disabled: var(
-    --wpp-button-secondary-border-color-disabled,
-    var(--wpp-brand-color-disabled)
-  );
+  --button-secondary-border-color-active: var(--wpp-button-secondary-border-color-active,
+      var(--wpp-brand-color-active));
+  --button-secondary-border-color-disabled: var(--wpp-button-secondary-border-color-disabled,
+      var(--wpp-brand-color-disabled));
   --button-secondary-text-color: var(--wpp-button-secondary-text-color, var(--wpp-brand-color));
   --button-secondary-text-color-active: var(--wpp-button-secondary-text-color-active, var(--wpp-brand-color-active));
-  --button-secondary-text-color-disabled: var(
-    --wpp-button-secondary-text-color-disabled,
-    var(--wpp-brand-color-disabled)
-  );
+  --button-secondary-text-color-disabled: var(--wpp-button-secondary-text-color-disabled,
+      var(--wpp-brand-color-disabled));
   --button-secondary-icon-color: var(--wpp-button-secondary-icon-color, var(--wpp-brand-color));
   --button-secondary-icon-color-active: var(--wpp-button-secondary-icon-color-active, var(--wpp-brand-color-active));
-  --button-secondary-icon-color-disabled: var(
-    --wpp-button-secondary-icon-color-disabled,
-    var(--wpp-brand-color-disabled)
-  );
-  --button-destructive-secondary-padding-m: var(
-    --wpp-button-destructive-secondary-padding-m,
-    calc(9px - var(--button-border-width)) calc(20px - var(--button-border-width))
-  );
-  --button-destructive-secondary-padding-s: var(
-    --wpp-button-destructive-secondary-padding-s,
-    calc(5px - var(--button-border-width)) calc(16px - var(--button-border-width))
-  );
+  --button-secondary-icon-color-disabled: var(--wpp-button-secondary-icon-color-disabled,
+      var(--wpp-brand-color-disabled));
+  --button-destructive-secondary-padding-m: var(--wpp-button-destructive-secondary-padding-m,
+      calc(9px - var(--button-border-width)) calc(20px - var(--button-border-width)));
+  --button-destructive-secondary-padding-s: var(--wpp-button-destructive-secondary-padding-s,
+      calc(5px - var(--button-border-width)) calc(16px - var(--button-border-width)));
   --button-destructive-secondary-bg-color: var(--wpp-button-destructive-secondary-bg-color, transparent);
-  --button-destructive-secondary-bg-color-hover: var(
-    --wpp-button-destructive-secondary-bg-color-hover,
-    var(--wpp-danger-color-200)
-  );
-  --button-destructive-secondary-bg-color-active: var(
-    --wpp-button-destructive-secondary-bg-color-active,
-    var(--wpp-danger-color-300)
-  );
-  --button-destructive-secondary-bg-color-disabled: var(
-    --wpp-button-destructive-secondary-bg-color-disabled,
-    transparent
-  );
-  --button-destructive-secondary-bg-color-loading: var(
-    --wpp-button-destructive-secondary-bg-color-loading,
-    transparent
-  );
-  --button-destructive-secondary-border-color: var(
-    --wpp-button-destructive-secondary-border-color,
-    var(--wpp-danger-color-500)
-  );
-  --button-destructive-secondary-border-color-hover: var(
-    --wpp-button-destructive-secondary-border-color-hover,
-    var(--wpp-danger-color-500)
-  );
-  --button-destructive-secondary-border-color-active: var(
-    --wpp-button-destructive-secondary-border-color-active,
-    var(--wpp-danger-color-600)
-  );
-  --button-destructive-secondary-border-color-disabled: var(
-    --wpp-button-destructive-secondary-border-color-disabled,
-    var(--wpp-danger-color-300)
-  );
-  --button-destructive-secondary-border-color-loading: var(
-    --wpp-button-destructive-secondary-border-color-loading,
-    var(--wpp-danger-color-500)
-  );
-  --button-destructive-secondary-text-color: var(
-    --wpp-button-destructive-secondary-text-color,
-    var(--wpp-danger-color-500)
-  );
-  --button-destructive-secondary-text-color-disabled: var(
-    --wpp-button-destructive-secondary-text-color-disabled,
-    var(--wpp-danger-color-300)
-  );
-  --button-destructive-secondary-icon-color: var(
-    --wpp-button-destructive-secondary-icon-color,
-    var(--wpp-danger-color-500)
-  );
+  --button-destructive-secondary-bg-color-hover: var(--wpp-button-destructive-secondary-bg-color-hover,
+      var(--wpp-danger-color-200));
+  --button-destructive-secondary-bg-color-active: var(--wpp-button-destructive-secondary-bg-color-active,
+      var(--wpp-danger-color-300));
+  --button-destructive-secondary-bg-color-disabled: var(--wpp-button-destructive-secondary-bg-color-disabled,
+      transparent);
+  --button-destructive-secondary-bg-color-loading: var(--wpp-button-destructive-secondary-bg-color-loading,
+      transparent);
+  --button-destructive-secondary-border-color: var(--wpp-button-destructive-secondary-border-color,
+      var(--wpp-danger-color-500));
+  --button-destructive-secondary-border-color-hover: var(--wpp-button-destructive-secondary-border-color-hover,
+      var(--wpp-danger-color-500));
+  --button-destructive-secondary-border-color-active: var(--wpp-button-destructive-secondary-border-color-active,
+      var(--wpp-danger-color-600));
+  --button-destructive-secondary-border-color-disabled: var(--wpp-button-destructive-secondary-border-color-disabled,
+      var(--wpp-danger-color-300));
+  --button-destructive-secondary-border-color-loading: var(--wpp-button-destructive-secondary-border-color-loading,
+      var(--wpp-danger-color-500));
+  --button-destructive-secondary-text-color: var(--wpp-button-destructive-secondary-text-color,
+      var(--wpp-danger-color-500));
+  --button-destructive-secondary-text-color-disabled: var(--wpp-button-destructive-secondary-text-color-disabled,
+      var(--wpp-danger-color-300));
+  --button-destructive-secondary-icon-color: var(--wpp-button-destructive-secondary-icon-color,
+      var(--wpp-danger-color-500));
   --button-inverted-primary-bg-color: var(--wpp-button-inverted-primary-bg-color, var(--wpp-grey-color-000));
-  --button-inverted-primary-disabled-bg-color: var(
-    --wpp-button-inverted-primary-disabled-bg-color,
-    var(--wpp-grey-color-000)
-  );
+  --button-inverted-primary-disabled-bg-color: var(--wpp-button-inverted-primary-disabled-bg-color,
+      var(--wpp-grey-color-000));
   --button-inverted-primary-hover-opacity: var(--wpp-button-inverted-primary-hover-opacity, 88%);
   --button-inverted-primary-active-opacity: var(--wpp-button-inverted-primary-active-opacity, 80%);
   --button-inverted-primary-loading-opacity: var(--wpp-button-inverted-primary-loading-opacity, 80%);
   --button-inverted-primary-text-color: var(--wpp-button-inverted-primary-text-color, var(--wpp-grey-color-1000));
-  --button-inverted-primary-text-color-disabled: var(
-    --wpp-button-inverted-primary-text-color-disabled,
-    var(--wpp-grey-color-500)
-  );
+  --button-inverted-primary-text-color-disabled: var(--wpp-button-inverted-primary-text-color-disabled,
+      var(--wpp-grey-color-500));
   --button-inverted-primary-icon-color: var(--wpp-button-inverted-primary-icon-color, var(--wpp-grey-color-1000));
-  --button-inverted-primary-icon-color-disabled: var(
-    --wpp-button-inverted-primary-icon-color-disabled,
-    var(--wpp-grey-color-500)
-  );
-  --button-inverted-first-border-color-focus: var(
-    --wpp-button-inverted-first-border-color-focus,
-    var(--wpp-grey-color-000)
-  );
-  --button-inverted-second-border-color-focus: var(
-    --wpp-button-inverted-second-border-color-focus,
-    var(--wpp-grey-color-000)
-  );
+  --button-inverted-primary-icon-color-disabled: var(--wpp-button-inverted-primary-icon-color-disabled,
+      var(--wpp-grey-color-500));
+  --button-inverted-first-border-color-focus: var(--wpp-button-inverted-first-border-color-focus,
+      var(--wpp-grey-color-000));
+  --button-inverted-second-border-color-focus: var(--wpp-button-inverted-second-border-color-focus,
+      var(--wpp-grey-color-000));
   --button-inverted-secondary-bg-color: var(--wpp-button-inverted-secondary-bg-color, var(--wpp-grey-color-900));
-  --button-inverted-secondary-bg-color-disabled: var(
-    --wpp-button-inverted-secondary-bg-color-disabled,
-    var(--wpp-grey-color-900)
-  );
+  --button-inverted-secondary-bg-color-disabled: var(--wpp-button-inverted-secondary-bg-color-disabled,
+      var(--wpp-grey-color-900));
   --button-inverted-secondary-hover-opacity: var(--wpp-button-inverted-secondary-hover-opacity, 12%);
   --button-inverted-secondary-active-opacity: var(--wpp-button-inverted-secondary-active-opacity, 18%);
   --button-inverted-secondary-loading-opacity: var(--wpp-button-inverted-secondary-loading-opacity, 18%);
   --button-inverted-secondary-text-color: var(--wpp-button-inverted-secondary-text-color, var(--wpp-grey-color-000));
-  --button-inverted-secondary-text-color-disabled: var(
-    --wpp-button-inverted-secondary-text-color-disabled,
-    var(--wpp-grey-color-500)
-  );
+  --button-inverted-secondary-text-color-disabled: var(--wpp-button-inverted-secondary-text-color-disabled,
+      var(--wpp-grey-color-500));
   --button-inverted-secondary-icon-color: var(--wpp-button-inverted-secondary-icon-color, var(--wpp-grey-color-000));
-  --button-inverted-secondary-icon-color-disabled: var(
-    --wpp-button-inverted-secondary-icon-color-disabled,
-    var(--wpp-grey-color-500)
-  );
-  --button-inverted-secondary-border-color: var(
-    --wpp-button-inverted-secondary-border-color,
-    var(--wpp-grey-color-000)
-  );
-  --button-inverted-secondary-border-color-disabled: var(
-    --wpp-button-inverted-secondary-border-color-disabled,
-    var(--wpp-grey-color-500)
-  );
+  --button-inverted-secondary-icon-color-disabled: var(--wpp-button-inverted-secondary-icon-color-disabled,
+      var(--wpp-grey-color-500));
+  --button-inverted-secondary-border-color: var(--wpp-button-inverted-secondary-border-color,
+      var(--wpp-grey-color-000));
+  --button-inverted-secondary-border-color-disabled: var(--wpp-button-inverted-secondary-border-color-disabled,
+      var(--wpp-grey-color-500));
   display: inline-flex;
   outline: none;
   vertical-align: top;
@@ -291,6 +231,24 @@
 .button .content {
   overflow: hidden;
 }
+.button.with-menu {
+  display: inline-flex;
+  background: var(--wpp-primary-color-500);
+}
+.button.with-menu .content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+}
+.button.with-menu .truncate {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+.button.with-menu .icon-end {
+  flex: 0 0 auto;
+  margin-left: 0;
+}
 .button .loader {
   position: absolute;
   top: 0;
@@ -319,10 +277,12 @@
   cursor: not-allowed;
 }
 .button.size-m {
+  height: 40px;
   padding: var(--button-padding-m);
   border-radius: var(--wpp-border-radius-fully-rounded, var(--wpp-border-radius-m));
 }
 .button.size-s {
+  height: 32px;
   padding: var(--button-padding-s);
   border-radius: var(--wpp-border-radius-fully-rounded, var(--wpp-border-radius-s));
 }
@@ -349,10 +309,18 @@
 .button.with-icon-start:not(.with-icon-only).size-s {
   padding-left: 12px;
 }
-.button.with-icon-end:not(.with-icon-only).size-m {
+.button.with-icon-end:not(.with-icon-only):not(.with-menu).size-m {
   padding-right: 16px;
 }
-.button.with-icon-end:not(.with-icon-only).size-s {
+.button.with-icon-end:not(.with-icon-only):not(.with-menu).size-s {
+  padding-right: 12px;
+}
+.button.with-menu.size-s {
+  padding-left: 12px;
+  padding-right: 10px;
+}
+.button.with-menu.size-m {
+  padding-left: 16px;
   padding-right: 12px;
 }
 .button.primary {

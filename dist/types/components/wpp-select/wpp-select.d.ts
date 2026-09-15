@@ -298,6 +298,8 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
   protected onKeyUp: (event: KeyboardEvent) => void;
   protected onKeyDown: (event: KeyboardEvent) => void;
   protected onKeyDownPortal: (event: KeyboardEvent) => void;
+  protected getPortalItems: () => HTMLElement[];
+  protected onPortalKeyDown: (event: KeyboardEvent) => void;
   protected onFocus: (event: FocusEvent) => void;
   protected onBlur: (event?: FocusEvent) => void;
   protected hasErrorsOrWarnings: (type: 'error' | 'warning') => boolean;

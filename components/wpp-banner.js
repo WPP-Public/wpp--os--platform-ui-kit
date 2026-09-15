@@ -78,9 +78,9 @@ const WppBanner$1 = /*@__PURE__*/ proxyCustomElement(class WppBanner extends HTM
     });
     this.getMessageTypesIcons = () => {
       if (this.type === 'warning')
-        return h("wpp-icon-warning-v4-3-0", { class: "left-icon", part: "left-icon" });
+        return h("wpp-icon-warning-v4-4-0", { class: "left-icon", part: "left-icon" });
       if (this.type === 'information')
-        return h("wpp-icon-info-message-v4-3-0", { class: "left-icon", part: "left-icon" });
+        return h("wpp-icon-info-message-v4-4-0", { class: "left-icon", part: "left-icon" });
       return null;
     };
     this.hasActionsSlot = false;
@@ -125,12 +125,12 @@ const WppBanner$1 = /*@__PURE__*/ proxyCustomElement(class WppBanner extends HTM
       zIndex: this.zIndex.toString(),
     };
     const messageWrapper = (h(WrappedSlot, { wrapperClass: this.messageWrapperCssClasses(), part: "message", onSlotchange: this.updateMessageText }));
-    return (h(Host, { style: style, class: this.hostCssClasses(), role: this.role, "aria-label": this.ariaProps.label || 'banner', exportparts: "left-icon, wrapper, body, content-wrapper, message, actions-wrapper, close-button, close-icon, actions, actions-wrapper" }, h("div", { class: this.hiddenBannerWrapperCssClasses(), part: "wrapper" }, h("div", { class: this.bannerWrapperCssClasses(), part: "body" }, h("div", { class: "content-wrapper", part: "content-wrapper" }, this.getMessageTypesIcons(), !this.isOverflowing ? (messageWrapper) : (h("wpp-tooltip-v4-3-0", { text: this.messageText, class: this.tooltipCSSClasses() }, messageWrapper))), h("div", { class: "actions-wrapper", part: "actions-wrapper" }, h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData, role: "presentation" }), this.closable && (h("wpp-action-button-v4-3-0", { variant: this.type === 'information' || this.isDarkTheme ? 'inverted' : 'secondary', onClick: this.handleCloseIconClick, class: "close-button", part: "close-button", ariaProps: { label: 'close banner' }, role: "presentation" }, h("wpp-icon-cross-v4-3-0", { slot: "icon-start", part: "close-icon", "aria-hidden": "true" }))))))));
+    return (h(Host, { style: style, class: this.hostCssClasses(), role: this.role, "aria-label": this.ariaProps.label || 'banner', exportparts: "left-icon, wrapper, body, content-wrapper, message, actions-wrapper, close-button, close-icon, actions, actions-wrapper" }, h("div", { class: this.hiddenBannerWrapperCssClasses(), part: "wrapper" }, h("div", { class: this.bannerWrapperCssClasses(), part: "body" }, h("div", { class: "content-wrapper", part: "content-wrapper" }, this.getMessageTypesIcons(), !this.isOverflowing ? (messageWrapper) : (h("wpp-tooltip-v4-4-0", { text: this.messageText, class: this.tooltipCSSClasses() }, messageWrapper))), h("div", { class: "actions-wrapper", part: "actions-wrapper" }, h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData, role: "presentation" }), this.closable && (h("wpp-action-button-v4-4-0", { variant: this.type === 'information' || this.isDarkTheme ? 'inverted' : 'secondary', onClick: this.handleCloseIconClick, class: "close-button", part: "close-button", ariaProps: { label: 'close banner' }, role: "presentation" }, h("wpp-icon-cross-v4-4-0", { slot: "icon-start", part: "close-icon", "aria-hidden": "true" }))))))));
   }
-  static get registryIs() { return "wpp-banner-v4-3-0"; }
+  static get registryIs() { return "wpp-banner-v4-4-0"; }
   get host() { return this; }
   static get style() { return wppBannerCss; }
-}, [1, "wpp-banner", "wpp-banner-v4-3-0", {
+}, [1, "wpp-banner", "wpp-banner-v4-4-0", {
     "ariaProps": [16],
     "role": [1],
     "show": [1540],
@@ -146,49 +146,49 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-banner-v4-3-0", "wpp-action-button-v4-3-0", "wpp-icon-cross-v4-3-0", "wpp-icon-error-v4-3-0", "wpp-icon-info-message-v4-3-0", "wpp-icon-warning-v4-3-0", "wpp-internal-tooltip-v4-3-0", "wpp-spinner-v4-3-0", "wpp-tooltip-v4-3-0"];
+  const components = ["wpp-banner-v4-4-0", "wpp-action-button-v4-4-0", "wpp-icon-cross-v4-4-0", "wpp-icon-error-v4-4-0", "wpp-icon-info-message-v4-4-0", "wpp-icon-warning-v4-4-0", "wpp-internal-tooltip-v4-4-0", "wpp-spinner-v4-4-0", "wpp-tooltip-v4-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-banner-v4-3-0":
+    case "wpp-banner-v4-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppBanner$1);
       }
       break;
-    case "wpp-action-button-v4-3-0":
+    case "wpp-action-button-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-cross-v4-3-0":
+    case "wpp-icon-cross-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-icon-error-v4-3-0":
+    case "wpp-icon-error-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-info-message-v4-3-0":
+    case "wpp-icon-info-message-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-icon-warning-v4-3-0":
+    case "wpp-icon-warning-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-internal-tooltip-v4-3-0":
+    case "wpp-internal-tooltip-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v4-3-0":
+    case "wpp-spinner-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-3-0":
+    case "wpp-tooltip-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

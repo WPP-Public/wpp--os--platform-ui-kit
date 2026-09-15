@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, h, H as Host, F as Fragment, g as getElement } from './index-93f63aaa.js';
-import { y as mergeLocales, e as truncate, u as uuidv4 } from './utils-452958a4.js';
+import { y as mergeLocales, e as truncate, u as uuidv4 } from './utils-a4b26a20.js';
 import './consts-744c144f.js';
 
 const DEFAULT_ICON_COLOR = 'var(--wpp-grey-color-700)';
@@ -82,7 +82,7 @@ const WppBreadcrumb = class {
   createItemElement(item, isActive = false) {
     const truncatedLabel = truncate(item.label, this.maxLabelLength, this.middleTruncation);
     if (isActive) {
-      return (h("wpp-tooltip-v4-3-0", { text: item.label, part: "item-tooltip", config: {
+      return (h("wpp-tooltip-v4-4-0", { text: item.label, part: "item-tooltip", config: {
           onShow: () => {
             if (item.label.length < this.maxLabelLength)
               return false;
@@ -90,10 +90,10 @@ const WppBreadcrumb = class {
         } }, this.nativeLink ? (h("a", { href: item.path, class: "active item", tabIndex: -1, part: "item-text", "aria-current": "page" }, truncatedLabel)) : (h("span", { class: "active item", tabIndex: -1, part: "item-text" }, truncatedLabel))));
     }
     else if (item.label.length > this.maxLabelLength && !this.nativeLink) {
-      return (h("wpp-tooltip-v4-3-0", { text: item.label, part: "item-tooltip" }, h("span", { class: "item", onClick: this.createRouteChangeTrigger(item), onKeyDown: this.handleItemKeyDown, tabIndex: 0, role: "link", part: "item-text" }, truncatedLabel)));
+      return (h("wpp-tooltip-v4-4-0", { text: item.label, part: "item-tooltip" }, h("span", { class: "item", onClick: this.createRouteChangeTrigger(item), onKeyDown: this.handleItemKeyDown, tabIndex: 0, role: "link", part: "item-text" }, truncatedLabel)));
     }
     else if (item.label.length > this.maxLabelLength) {
-      return (h("wpp-tooltip-v4-3-0", { text: item.label, part: "item-tooltip" }, h("a", { href: item.path, class: "item", onClick: this.createRouteChangeTrigger(item), onKeyDown: this.handleItemKeyDown, tabIndex: 0, part: "item-text" }, truncatedLabel)));
+      return (h("wpp-tooltip-v4-4-0", { text: item.label, part: "item-tooltip" }, h("a", { href: item.path, class: "item", onClick: this.createRouteChangeTrigger(item), onKeyDown: this.handleItemKeyDown, tabIndex: 0, part: "item-text" }, truncatedLabel)));
     }
     else if (!this.nativeLink) {
       return (h("span", { class: "item", onClick: this.createRouteChangeTrigger(item), onKeyDown: this.handleItemKeyDown, tabIndex: 0, role: "link", part: "item-text" }, item.label));
@@ -104,19 +104,19 @@ const WppBreadcrumb = class {
   }
   createMenuElement(item) {
     if (this.nativeLink) {
-      return (h("wpp-list-item-v4-3-0", { key: uuidv4(), class: "link", linkConfig: { href: item.path }, part: "menu-item" }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
+      return (h("wpp-list-item-v4-4-0", { key: uuidv4(), class: "link", linkConfig: { href: item.path }, part: "menu-item" }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
     }
     else {
       // wpp-list-item emits wppChangeListItem for both a mouse click and a keyboard
       // (Enter/Space) selection, so binding the route change here — rather than to
       // onClick — makes the collapsed-items menu operable by keyboard too (WCAG 2.1.1),
       // through a single handler that behaves identically for mouse and keyboard.
-      return (h("wpp-list-item-v4-3-0", { key: uuidv4(), class: "link", part: "menu-item", onWppChangeListItem: this.createRouteChangeTrigger(item) }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
+      return (h("wpp-list-item-v4-4-0", { key: uuidv4(), class: "link", part: "menu-item", onWppChangeListItem: this.createRouteChangeTrigger(item) }, h("span", { slot: "label", part: "menu-item-label" }, item.label)));
     }
   }
   render() {
     if (this.backBtnLabel) {
-      return (h(Host, { class: this.hostCssClasses(), exportparts: "icon" }, h("button", { class: "back", onClick: this.handleBackClick, onKeyDown: this.handleBackKeyDown, type: "button", tabIndex: 0 }, h("wpp-icon-chevron-v4-3-0", { class: "back-icon-chevron", part: "icon", direction: "left", size: "s" }), h("span", { class: "back-label" }, this.backBtnLabel))));
+      return (h(Host, { class: this.hostCssClasses(), exportparts: "icon" }, h("button", { class: "back", onClick: this.handleBackClick, onKeyDown: this.handleBackKeyDown, type: "button", tabIndex: 0 }, h("wpp-icon-chevron-v4-4-0", { class: "back-icon-chevron", part: "icon", direction: "left", size: "s" }), h("span", { class: "back-label" }, this.backBtnLabel))));
     }
     if (!this.rootItem) {
       return;
@@ -124,9 +124,9 @@ const WppBreadcrumb = class {
     const navLabel = this.ariaProps?.navigation?.label ??
       (this.ariaProps?.navigation?.labelledby ? undefined : this._locales.navigationLabel);
     const navLabelledBy = this.ariaProps?.navigation?.labelledby;
-    return (h(Host, { class: this.hostCssClasses(), role: "navigation", "aria-label": navLabel, "aria-labelledby": navLabelledBy, exportparts: "item-tooltip, item-text, menu-item, menu-item-label, separator, menu, icon-more" }, this.createItemElement(this.rootItem), this.hiddenItems.length > 0 && (h(Fragment, null, h("div", { class: "separator", part: "separator" }, h("wpp-icon-chevron-v4-3-0", { size: "s", color: DEFAULT_ICON_COLOR })), h("wpp-menu-context-v4-3-0", { key: this.hiddenItemsSnapshot, class: "menu", dropdownConfig: { triggerElementWidth: false, ...this.dropdownConfig }, part: "menu", ariaProps: { label: this._locales.showMoreLabel } }, h("wpp-icon-more-v4-3-0", { class: "menu-trigger", direction: "horizontal", slot: "trigger-element", part: "icon-more", tabIndex: 0, "aria-label": "Show more breadcrumb items" }), h("div", { key: this.hiddenItemsSnapshot }, this.hiddenItems.map(item => this.createMenuElement(item)))))), this.visibleItems.map((item, index, items) => (h(Fragment, null, h("div", { class: "separator", tabIndex: -1, part: "separator" }, h("wpp-icon-chevron-v4-3-0", { size: "s", color: DEFAULT_ICON_COLOR })), this.createItemElement(item, index === items.length - 1))))));
+    return (h(Host, { class: this.hostCssClasses(), role: "navigation", "aria-label": navLabel, "aria-labelledby": navLabelledBy, exportparts: "item-tooltip, item-text, menu-item, menu-item-label, separator, menu, icon-more" }, this.createItemElement(this.rootItem), this.hiddenItems.length > 0 && (h(Fragment, null, h("div", { class: "separator", part: "separator" }, h("wpp-icon-chevron-v4-4-0", { size: "s", color: DEFAULT_ICON_COLOR })), h("wpp-menu-context-v4-4-0", { key: this.hiddenItemsSnapshot, class: "menu", dropdownConfig: { triggerElementWidth: false, ...this.dropdownConfig }, part: "menu", ariaProps: { label: this._locales.showMoreLabel } }, h("wpp-icon-more-v4-4-0", { class: "menu-trigger", direction: "horizontal", slot: "trigger-element", part: "icon-more", tabIndex: 0, "aria-label": "Show more breadcrumb items" }), h("div", { key: this.hiddenItemsSnapshot }, this.hiddenItems.map(item => this.createMenuElement(item)))))), this.visibleItems.map((item, index, items) => (h(Fragment, null, h("div", { class: "separator", tabIndex: -1, part: "separator" }, h("wpp-icon-chevron-v4-4-0", { size: "s", color: DEFAULT_ICON_COLOR })), this.createItemElement(item, index === items.length - 1))))));
   }
-  static get registryIs() { return "wpp-breadcrumb-v4-3-0"; }
+  static get registryIs() { return "wpp-breadcrumb-v4-4-0"; }
   get host() { return getElement(this); }
 };
 WppBreadcrumb.style = wppBreadcrumbCss;

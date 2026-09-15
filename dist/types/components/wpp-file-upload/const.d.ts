@@ -1,4 +1,4 @@
-import { FileTypeLabel, FileUploadLocales } from './types';
+import { FileTypeLabel, ResolvedFileUploadLocales } from './types';
 export declare const EXTENSION_TO_TYPE: {
   [key: string]: string;
 };
@@ -8,4 +8,4 @@ export declare const returnIconFromExtension: (fileExtension: string, thumbnailU
  * Used as the subtitle in the chat variant of `wpp-file-upload-item`.
  */
 export declare const returnFileTypeLabel: (fileExtension: string) => FileTypeLabel;
-export declare const LOCALES_DEFAULTS: FileUploadLocales;
+export declare const LOCALES_DEFAULTS: ResolvedFileUploadLocales;

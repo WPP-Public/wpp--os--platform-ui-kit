@@ -5,7 +5,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 const index = require('./index-5f5af6a9.js');
 const common = require('./common-ee802540.js');
 const _const = require('./const-e53f51b2.js');
-const utils = require('./utils-9529c2fe.js');
+const utils = require('./utils-a6513d61.js');
 require('./consts-d8f5ef98.js');
 
 /** Border radius applied to circular avatars (large enough to always render a full circle). */
@@ -158,9 +158,9 @@ const WppAvatar = class {
       : this.amountOfHiddenAvatars
         ? `+${this.amountOfHiddenAvatars}`
         : this.getUserAbbreviation(this.name))));
-    return (index.h(index.Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onClick: this.handleClick, exportparts: "image, content, tooltip", ...this.getHostAriaProps() }, this.hasTooltip() ? (index.h("wpp-tooltip-v4-3-0", { text: this.name, config: this.tooltipConfig, part: "tooltip", ariaProps: { label: `User: ${this.name}`, role: 'button' } }, content)) : (content)));
+    return (index.h(index.Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onClick: this.handleClick, exportparts: "image, content, tooltip", ...this.getHostAriaProps() }, this.hasTooltip() ? (index.h("wpp-tooltip-v4-4-0", { text: this.name, config: this.tooltipConfig, part: "tooltip", ariaProps: { label: `User: ${this.name}`, role: 'button' } }, content)) : (content)));
   }
-  static get registryIs() { return "wpp-avatar-v4-3-0"; }
+  static get registryIs() { return "wpp-avatar-v4-4-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "color": ["colorChange"],

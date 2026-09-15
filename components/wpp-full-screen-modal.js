@@ -4,8 +4,9 @@ import { g as getSlotEmptyStates, m as applyBodyStylesIfNeeded, x as getOsBarOff
 import { T as TimeoutManager } from './timeout-manager.js';
 import { W as WrappedSlot } from './WrappedSlot.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme.js';
-import { d as defineCustomElement$6 } from './wpp-action-button2.js';
-import { d as defineCustomElement$5 } from './wpp-button2.js';
+import { d as defineCustomElement$7 } from './wpp-action-button2.js';
+import { d as defineCustomElement$6 } from './wpp-button2.js';
+import { d as defineCustomElement$5 } from './wpp-icon-chevron2.js';
 import { d as defineCustomElement$4 } from './wpp-icon-cross2.js';
 import { d as defineCustomElement$3 } from './wpp-overlay2.js';
 import { d as defineCustomElement$2 } from './wpp-spinner2.js';
@@ -82,7 +83,7 @@ const WppFullScreenModal$1 = /*@__PURE__*/ proxyCustomElement(class WppFullScree
     };
     this.renderActionBtn = (btnConfig, variant) => {
       const { label, ...rest } = btnConfig;
-      return (h("wpp-button-v4-3-0", { variant: variant, ...rest }, label));
+      return (h("wpp-button-v4-4-0", { variant: variant, ...rest }, label));
     };
     this.renderActionsConfig = () => {
       if (!this.actionsConfig)
@@ -194,15 +195,15 @@ const WppFullScreenModal$1 = /*@__PURE__*/ proxyCustomElement(class WppFullScree
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-full-screen-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-3-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-fullscreen-modal-content", ref: ref => (this.dialogRef = ref) }, h("div", { class: this.headerContainerCssClasses() }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h("wpp-action-button-v4-3-0", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button" }, h("wpp-icon-cross-v4-3-0", { slot: "icon-start" }))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig ? (this.renderActionsConfig()) : (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-full-screen-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-4-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-fullscreen-modal-content", ref: ref => (this.dialogRef = ref) }, h("div", { class: this.headerContainerCssClasses() }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h("wpp-action-button-v4-4-0", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button" }, h("wpp-icon-cross-v4-4-0", { slot: "icon-start" }))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig ? (this.renderActionsConfig()) : (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
   }
-  static get registryIs() { return "wpp-full-screen-modal-v4-3-0"; }
+  static get registryIs() { return "wpp-full-screen-modal-v4-4-0"; }
   get host() { return this; }
   static get watchers() { return {
     "open": ["handleChangeFullScreenModalStatus"]
   }; }
   static get style() { return wppFullScreenModalCss; }
-}, [1, "wpp-full-screen-modal", "wpp-full-screen-modal-v4-3-0", {
+}, [1, "wpp-full-screen-modal", "wpp-full-screen-modal-v4-4-0", {
     "open": [1540],
     "withTransparentOverlay": [4, "with-transparent-overlay"],
     "disableOutsideClick": [4, "disable-outside-click"],
@@ -222,34 +223,39 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-full-screen-modal-v4-3-0", "wpp-action-button-v4-3-0", "wpp-button-v4-3-0", "wpp-icon-cross-v4-3-0", "wpp-overlay-v4-3-0", "wpp-spinner-v4-3-0"];
+  const components = ["wpp-full-screen-modal-v4-4-0", "wpp-action-button-v4-4-0", "wpp-button-v4-4-0", "wpp-icon-chevron-v4-4-0", "wpp-icon-cross-v4-4-0", "wpp-overlay-v4-4-0", "wpp-spinner-v4-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-full-screen-modal-v4-3-0":
+    case "wpp-full-screen-modal-v4-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppFullScreenModal$1);
       }
       break;
-    case "wpp-action-button-v4-3-0":
+    case "wpp-action-button-v4-4-0":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$7();
+      }
+      break;
+    case "wpp-button-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-button-v4-3-0":
+    case "wpp-icon-chevron-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-cross-v4-3-0":
+    case "wpp-icon-cross-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-overlay-v4-3-0":
+    case "wpp-overlay-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-spinner-v4-3-0":
+    case "wpp-spinner-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

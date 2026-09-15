@@ -184,10 +184,10 @@ export class WppSegmentedControl {
     const tablistLabel = this.ariaProps?.tablist?.label ??
       (this.ariaProps?.tablist?.labelledby || this.labelConfig?.text ? undefined : this._locales.tablistLabel);
     const tablistLabelledBy = this.ariaProps?.tablist?.labelledby ?? (this.labelConfig?.text ? labelId : undefined);
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-3-0", { class: "label", tag: "span", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, labelId: labelId, part: "label" })), h("div", { class: this.cssClasses(), role: "tablist", "aria-orientation": "horizontal", "aria-label": tablistLabel, "aria-labelledby": tablistLabelledBy, part: "wrapper" }, h("slot", { onSlotchange: this.handleSlotChange, part: "inner" }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-4-0", { class: "label", tag: "span", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, labelId: labelId, part: "label" })), h("div", { class: this.cssClasses(), role: "tablist", "aria-orientation": "horizontal", "aria-label": tablistLabel, "aria-labelledby": tablistLabelledBy, part: "wrapper" }, h("slot", { onSlotchange: this.handleSlotChange, part: "inner" }))));
   }
   static get is() { return "wpp-segmented-control"; }
-  static get registryIs() { return "wpp-segmented-control-v4-3-0"; }
+  static get registryIs() { return "wpp-segmented-control-v4-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

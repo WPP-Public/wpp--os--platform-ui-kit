@@ -135,7 +135,7 @@ export const ChatNode = {
       tabindex="0"
     >
       <div style="position: relative; width: 320px; height: 360px;">
-        <wpp-chat-node-v4-3-0
+        <wpp-chat-node-v4-4-0
           id=${nodeId}
           .nodeTitle=${args.nodeTitle}
           .isLoading=${args.isLoading}
@@ -153,7 +153,7 @@ export const ChatNode = {
           <div slot="handles">
             ${renderHandles(args.numberOfHandles || '1 handle', args.isSelected, args.isLoading)}
           </div>
-        </wpp-chat-node-v4-3-0>
+        </wpp-chat-node-v4-4-0>
       </div>
     </div>`;
   },

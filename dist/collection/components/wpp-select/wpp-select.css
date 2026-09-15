@@ -48,12 +48,14 @@
   margin-right: 9px;
 }
 :host .anchor.size-s {
+  height: 32px;
   padding: 4px 10px;
 }
 :host .anchor.size-s .overflow-container {
   left: 5px;
 }
 :host .anchor.size-m {
+  height: 40px;
   padding: 8px 10px;
 }
 :host .anchor.size-m p .overflow-container {
@@ -104,7 +106,6 @@
   min-width: 32px;
   align-items: center;
   color: var(--grey-color-1000);
-  height: var(--wpp-typography-s-body-line-height, 22px);
   padding: 0 2px;
 }
 :host .anchor .overflow-container p {
@@ -184,6 +185,7 @@
   color: var(--wpp-text-color-disabled);
 }
 :host .anchor.anchor-button {
+  height: auto;
   padding: 0;
   border: none;
   background: none;
@@ -338,6 +340,7 @@
   --wpp-select-min-width: auto;
 }
 :host(.wpp-text-select) .anchor {
+  height: auto;
   border-radius: var(--wpp-border-radius-s);
   justify-content: flex-start;
   padding: 1px 6px 1px 8px;
@@ -400,8 +403,6 @@
   border-radius: 0 var(--wpp-border-radius-m) var(--wpp-border-radius-m) 0;
   border-left: none;
   width: 100%;
-  --wpp-input-height-m: 38px;
-  --wpp-input-height-s: 30px;
 }
 :host(.wpp-combined-select) .inputs-container .wpp-input::part(input) {
   border: none;

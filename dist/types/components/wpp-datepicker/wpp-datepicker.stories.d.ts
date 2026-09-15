@@ -9,6 +9,7 @@ export default _default;
 export declare const Single: StoryObj<DatepickerWithLimits>;
 export declare const Range: StoryObj<DatepickerWithLimits>;
 export declare const RangeWithPresets: StoryObj<DatepickerWithLimits>;
+export declare const RangeDoubleCalendarWithPresets: StoryObj<DatepickerWithLimits>;
 export declare const DependableDatepickers: StoryObj<DatepickerWithLimits>;
 export declare const MonthsView: StoryObj<DatepickerWithLimits>;
 export declare const ButtonTrigger: StoryObj<DatepickerWithLimits>;

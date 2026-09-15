@@ -328,7 +328,7 @@ export const iconsList = [
           },
           {
             name: 'double-chevron',
-            directions: ['top', 'down', 'right', 'left'],
+            directions: ['up', 'down', 'right', 'left'],
           },
           {
             name: 'enter',

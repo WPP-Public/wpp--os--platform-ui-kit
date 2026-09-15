@@ -1,3 +1,38 @@
+/**
+  * @prop --wpp-empty-state-shadow-color: Colour of the blurred drop-shadow behind the artwork, for the graphics that have one. Set by the component to the matching theme token; override to re-tint the shadow.
+*/
 :host {
   display: inline-flex;
+  position: relative;
+}
+
+.wpp-empty-state-animation {
+  display: block;
+  /*
+   * The four graphics with a blurred drop-shadow ship it as an alpha-only mask,
+   * so the colour is applied here. It has to be a CSS property: as an SVG
+   * presentation attribute `flood-color="var(...)"` never resolves, which would
+   * silently paint the shadow black.
+   */
+}
+.wpp-empty-state-animation image {
+  filter: url("#wpp-empty-state-shadow-tint");
+}
+
+/* Targeted by class, not by type: `feFlood` is case-sensitive as a selector. */
+.wpp-empty-state-tint {
+  flood-color: var(--wpp-empty-state-shadow-color, transparent);
+}
+
+/* Covers the animation box while it loads, so the swap cannot shift layout. */
+.wpp-empty-state-skeleton {
+  position: absolute;
+  inset: 0;
+}
+
+/* Carries the tint filter only; never painted itself. */
+.wpp-empty-state-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
 }

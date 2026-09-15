@@ -3,6 +3,7 @@ import type { Components } from '../../components';
 type WppButtonTypes = Components.WppButton & {
   showIconStart: boolean;
   showIconEnd: boolean;
+  isMenuBtn: boolean;
   text: string;
   buttonWidth: string | undefined;
 };

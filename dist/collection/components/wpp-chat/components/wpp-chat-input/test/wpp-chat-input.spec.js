@@ -3,6 +3,11 @@ import { WppChatInput } from '../wpp-chat-input';
 import * as themeUtils from '../../../../../utils/subscribe-to-theme';
 import { h } from '@stencil/core';
 import { MockSpeechRecognition } from './mocks';
+import { PRIMARY_ACTION_TRANSITION_MS } from '../consts';
+const createMouseEvent = () => ({
+  stopPropagation: jest.fn(),
+  preventDefault: jest.fn(),
+});
 describe('wpp-chat-input', () => {
   it('should render chat input with attachments enabled', async () => {
     const page = await newSpecPage({
@@ -39,13 +44,13 @@ describe('wpp-chat-input', () => {
       components: [WppChatInput],
       html: `<wpp-chat-input></wpp-chat-input>`,
     });
-    const stopSpeechRecognitionSpy = jest.fn();
-    page.rootInstance.stopSpeechRecognition = stopSpeechRecognitionSpy;
+    const mockRecognition = new MockSpeechRecognition();
+    Reflect.set(page.rootInstance.recognition, 'recognition', mockRecognition);
     page.rootInstance.isAudioRecording = true;
     page.rootInstance.textValue = 'Hello, World!';
     page.rootInstance.handleSend();
     expect(page.rootInstance.isAudioRecording).toBe(false);
-    expect(stopSpeechRecognitionSpy).toHaveBeenCalledTimes(1);
+    expect(mockRecognition.stop).toHaveBeenCalledTimes(1);
   });
   it('should render stop action and emit wppStop while generating', async () => {
     const page = await newSpecPage({
@@ -56,7 +61,9 @@ describe('wpp-chat-input', () => {
     const sendSpy = jest.fn();
     page.root?.addEventListener('wppStop', stopSpy);
     page.root?.addEventListener('wppSend', sendSpy);
-    const actionButton = page.root?.shadowRoot?.querySelector('[data-testid="send-icon-only-button"]');
+    const actionButton = page.root?.shadowRoot?.querySelector('[data-testid="stop-icon-only-button"]');
+    // While generating, the send button is replaced by the stop action rather than restyled.
+    expect(page.root?.shadowRoot?.querySelector('[data-testid="send-icon-only-button"]')).toBeNull();
     expect(actionButton.disabled).not.toBe(true);
     expect(actionButton.ariaProps.label).toBe('Stop response');
     expect(actionButton.querySelector('[slot="icon-start"]')?.tagName.toLowerCase()).toContain('wpp-icon-stop');
@@ -64,6 +71,58 @@ describe('wpp-chat-input', () => {
     await page.waitForChanges();
     expect(stopSpy).toHaveBeenCalledTimes(1);
     expect(sendSpy).not.toHaveBeenCalled();
+    // Pressing stop starts the hide timer; tear the component down so it does not outlive the test.
+    page.root?.remove();
+  });
+  describe('send/stop primary action', () => {
+    const getStopBtn = (page) => page.root?.shadowRoot?.querySelector('[data-testid="stop-icon-only-button"]');
+    const getSendBtn = (page) => page.root?.shadowRoot?.querySelector('[data-testid="send-icon-only-button"]');
+    it('keeps the hidden send button out of the tab order and a11y tree via inert (WCAG 4.1.2)', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input></wpp-chat-input>`,
+      });
+      // Nothing to send yet, so the button is only visually collapsed and must be inert.
+      expect(getSendBtn(page)?.hasAttribute('inert')).toBe(true);
+      page.rootInstance.internalValue = 'Hello';
+      await page.waitForChanges();
+      expect(getSendBtn(page)?.hasAttribute('inert')).toBe(false);
+    });
+    it('holds the stop button for one transition after it is pressed, inert while it animates out', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input is-generating="true"></wpp-chat-input>`,
+      });
+      expect(getStopBtn(page)?.hasAttribute('inert')).toBe(false);
+      getStopBtn(page)?.dispatchEvent(new MouseEvent('click'));
+      await page.waitForChanges();
+      expect(page.rootInstance.isStopBtnHiding).toBe(true);
+      // A consumer flips `isGenerating` off in response to `wppStop`. Without the hide timer the
+      // stop button would be swapped for send on this very render.
+      page.rootInstance.isGenerating = false;
+      await page.waitForChanges();
+      // Still mounted so it can collapse away, but no longer an invisible focus target.
+      const stopBtn = getStopBtn(page);
+      expect(stopBtn).not.toBeNull();
+      expect(stopBtn?.classList.contains('is-hidden')).toBe(true);
+      expect(stopBtn?.hasAttribute('inert')).toBe(true);
+      await new Promise(resolve => setTimeout(resolve, PRIMARY_ACTION_TRANSITION_MS + 50));
+      await page.waitForChanges();
+      expect(page.rootInstance.isStopBtnHiding).toBe(false);
+      expect(getStopBtn(page)).toBeNull();
+      expect(getSendBtn(page)).not.toBeNull();
+    });
+    it('clears the pending hide timer on disconnect', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input is-generating="true"></wpp-chat-input>`,
+      });
+      getStopBtn(page)?.dispatchEvent(new MouseEvent('click'));
+      await page.waitForChanges();
+      expect(page.rootInstance.stopBtnHideTimeout).not.toBeNull();
+      page.rootInstance.disconnectedCallback();
+      expect(page.rootInstance.stopBtnHideTimeout).toBeNull();
+    });
   });
   it('Testing that isFocused is set when handleOnFocus is called', async () => {
     const page = await newSpecPage({
@@ -105,47 +164,46 @@ describe('wpp-chat-input', () => {
     });
   });
   describe('Testing handleClickAudioRecording', () => {
-    const createMouseEvent = () => ({
-      stopPropagation: jest.fn(),
-      preventDefault: jest.fn(),
-    });
     afterEach(() => {
       jest.clearAllMocks();
     });
-    it('Testing that `startSpeechRecognition` is called when isAudioRecording is false (initially)', async () => {
+    it('Testing that speech recognition starts when isAudioRecording is false (initially)', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
         html: `<wpp-chat-input></wpp-chat-input>`,
       });
       const event = createMouseEvent();
-      const startSpeechRecognitionSpy = jest.fn();
-      page.rootInstance.startSpeechRecognition = startSpeechRecognitionSpy;
+      const wppMicSpy = jest.fn();
       const mockRecognition = new MockSpeechRecognition();
-      page.rootInstance.recognition = mockRecognition;
+      Reflect.set(page.rootInstance.recognition, 'recognition', mockRecognition);
+      jest.spyOn(page.rootInstance.recognition, 'isSupported', 'get').mockReturnValue(true);
+      page.rootInstance.wppMic = { emit: wppMicSpy };
+      const startRecognitionSpy = jest.spyOn(page.rootInstance.recognition, 'startRecognition');
       expect(page.rootInstance.isAudioRecording).toBe(false);
       page.rootInstance.handleClickAudioRecording(event);
       expect(event.stopPropagation).toHaveBeenCalledTimes(1);
       expect(event.preventDefault).toHaveBeenCalledTimes(1);
       expect(page.rootInstance.isAudioRecording).toBe(true);
-      expect(startSpeechRecognitionSpy).toHaveBeenCalledTimes(1);
+      expect(wppMicSpy).toHaveBeenCalledWith({ isRecording: true });
+      expect(startRecognitionSpy).toHaveBeenCalledTimes(1);
     });
-    it('Testing that `stopSpeechRecognition` is called when isAudioRecording is true (initially)', async () => {
+    it('Testing that speech recognition stops when isAudioRecording is true (initially)', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
         html: `<wpp-chat-input></wpp-chat-input>`,
       });
       const event = createMouseEvent();
-      const stopSpeechRecognitionSpy = jest.fn();
-      page.rootInstance.stopSpeechRecognition = stopSpeechRecognitionSpy;
-      page.rootInstance.isAudioRecording = true;
       const mockRecognition = new MockSpeechRecognition();
-      page.rootInstance.recognition = mockRecognition;
+      Reflect.set(page.rootInstance.recognition, 'recognition', mockRecognition);
+      jest.spyOn(page.rootInstance.recognition, 'isSupported', 'get').mockReturnValue(true);
+      page.rootInstance.isAudioRecording = true;
+      const stopRecognitionSpy = jest.spyOn(page.rootInstance.recognition, 'stopRecognition');
       expect(page.rootInstance.isAudioRecording).toBe(true);
       page.rootInstance.handleClickAudioRecording(event);
       expect(event.stopPropagation).toHaveBeenCalledTimes(1);
       expect(event.preventDefault).toHaveBeenCalledTimes(1);
       expect(page.rootInstance.isAudioRecording).toBe(false);
-      expect(stopSpeechRecognitionSpy).toHaveBeenCalledTimes(1);
+      expect(stopRecognitionSpy).toHaveBeenCalledTimes(1);
     });
     it('Testing that `isAudioRecording` does not change if recognition not defined', async () => {
       const page = await newSpecPage({
@@ -153,38 +211,36 @@ describe('wpp-chat-input', () => {
         html: `<wpp-chat-input></wpp-chat-input>`,
       });
       const event = createMouseEvent();
-      const stopSpeechRecognitionSpy = jest.fn();
-      const startSpeechRecognitionSpy = jest.fn();
-      page.rootInstance.startSpeechRecognition = startSpeechRecognitionSpy;
-      page.rootInstance.stopSpeechRecognition = stopSpeechRecognitionSpy;
+      const wppMicSpy = jest.fn();
+      page.rootInstance.wppMic = { emit: wppMicSpy };
+      Reflect.set(page.rootInstance.recognition, 'recognition', null);
       expect(page.rootInstance.isAudioRecording).toBe(false);
       page.rootInstance.handleClickAudioRecording(event);
       expect(event.stopPropagation).toHaveBeenCalledTimes(1);
       expect(event.preventDefault).toHaveBeenCalledTimes(1);
       expect(page.rootInstance.isAudioRecording).toBe(false);
-      expect(startSpeechRecognitionSpy).toHaveBeenCalledTimes(0);
-      expect(stopSpeechRecognitionSpy).toHaveBeenCalledTimes(0);
+      expect(wppMicSpy).toHaveBeenCalledTimes(0);
     });
   });
   describe('Testing shouldDisplaySend', () => {
     it('Testing that it returns false when component is disabled', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
-        template: () => h("wpp-chat-input-v4-3-0", { disabled: true }),
+        template: () => h("wpp-chat-input-v4-4-0", { disabled: true }),
       });
       expect(page.rootInstance.shouldDisplaySend()).toBe(false);
     });
     it('Testing that it returns true when component is generating and not disabled', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
-        template: () => h("wpp-chat-input-v4-3-0", { disabled: false, isGenerating: true }),
+        template: () => h("wpp-chat-input-v4-4-0", { disabled: false, isGenerating: true }),
       });
       expect(page.rootInstance.shouldDisplaySend()).toBe(true);
     });
     it('Testing that it returns true when component is audio recording with a value and not disabled', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
-        template: () => h("wpp-chat-input-v4-3-0", { disabled: false }),
+        template: () => h("wpp-chat-input-v4-4-0", { disabled: false }),
       });
       page.rootInstance.internalValue = 'Testing';
       page.rootInstance.isAudioRecording = true;
@@ -395,37 +451,37 @@ describe('wpp-chat-input', () => {
     });
   });
   describe('Testing Speech Recognition', () => {
-    it('Testing startSpeechRecognition', async () => {
+    it('Testing speech recognition setup wiring', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
         html: `<wpp-chat-input></wpp-chat-input>`,
       });
-      const mockRecognition = new MockSpeechRecognition();
-      page.rootInstance.recognition = mockRecognition;
-      page.rootInstance.startSpeechRecognition();
-      expect(mockRecognition.onresult).not.toBe(null);
-      expect(mockRecognition.start).toHaveBeenCalled();
+      const setupRecognitionSpy = jest.spyOn(page.rootInstance.recognition, 'setupRecognition');
+      page.rootInstance.componentDidLoad();
+      expect(setupRecognitionSpy).toHaveBeenCalledTimes(1);
     });
-    it('Testing stopSpeechRecognition', async () => {
+    it('Testing speech recognition stop wiring', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
         html: `<wpp-chat-input></wpp-chat-input>`,
       });
       const mockRecognition = new MockSpeechRecognition();
-      page.rootInstance.recognition = mockRecognition;
-      page.rootInstance.stopSpeechRecognition();
+      Reflect.set(page.rootInstance.recognition, 'recognition', mockRecognition);
+      page.rootInstance.isAudioRecording = true;
+      page.rootInstance.internalValue = 'Hello, World!';
+      page.rootInstance.handleSend();
       expect(mockRecognition.stop).toHaveBeenCalled();
       expect(mockRecognition.onresult).toBe(null);
     });
-    it('Testing that stopSpeechRecognition is called when component disconnects', async () => {
+    it('Testing that speech recognition stops when component disconnects', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
         html: `<wpp-chat-input></wpp-chat-input>`,
       });
-      const mockStop = jest.fn();
-      page.rootInstance.stopSpeechRecognition = mockStop;
+      const mockRecognition = new MockSpeechRecognition();
+      Reflect.set(page.rootInstance.recognition, 'recognition', mockRecognition);
       page.root?.remove();
-      expect(mockStop).toHaveBeenCalledTimes(1);
+      expect(mockRecognition.stop).toHaveBeenCalledTimes(1);
     });
     it('Testing that isAudioRecording is set to false when SpeechRecognition throws error or ends', async () => {
       const page = await newSpecPage({
@@ -433,14 +489,20 @@ describe('wpp-chat-input', () => {
         html: `<wpp-chat-input></wpp-chat-input>`,
       });
       const mockRecognition = new MockSpeechRecognition();
-      page.rootInstance.recognition = mockRecognition;
+      Reflect.set(page.rootInstance.recognition, 'recognition', mockRecognition);
+      const wppMicSpy = jest.fn();
+      page.rootInstance.wppMic = { emit: wppMicSpy };
       page.rootInstance.isAudioRecording = true;
-      page.rootInstance.startSpeechRecognition();
+      jest.spyOn(page.rootInstance.recognition, 'isSupported', 'get').mockReturnValue(true);
+      page.rootInstance.handleClickAudioRecording(createMouseEvent());
       mockRecognition.onerror?.({ error: 'not-allowed' });
       expect(page.rootInstance.isAudioRecording).toBeFalsy();
+      expect(wppMicSpy).toHaveBeenLastCalledWith({ isRecording: false });
       page.rootInstance.isAudioRecording = true;
+      page.rootInstance.handleClickAudioRecording(createMouseEvent());
       mockRecognition.onend?.();
       expect(page.rootInstance.isAudioRecording).toBeFalsy();
+      expect(wppMicSpy).toHaveBeenLastCalledWith({ isRecording: false });
     });
   });
   describe('AI model selector', () => {

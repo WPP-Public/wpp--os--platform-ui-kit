@@ -22,6 +22,14 @@ const WppPaginationItem = /*@__PURE__*/ proxyCustomElement(class WppPaginationIt
       if (event.key === 'Tab')
         this.focusType = FOCUS_TYPE.TAB;
     };
+    // A `role="button"` control must activate on both Enter and Space (W3C ARIA APG) — without
+    // this, keyboard users can reach the page numbers but not select them.
+    this.onKeyDown = (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        this.handleClick();
+      }
+    };
     this.handleClick = () => {
       this.wppPageChange.emit({ page: this.number });
     };
@@ -34,6 +42,7 @@ const WppPaginationItem = /*@__PURE__*/ proxyCustomElement(class WppPaginationIt
     this.focusType = undefined;
     this.number = undefined;
     this.selected = false;
+    this.pageLabel = page => `Page ${page}`;
   }
   connectedCallback() {
     this.themeSubscription.start();
@@ -42,28 +51,29 @@ const WppPaginationItem = /*@__PURE__*/ proxyCustomElement(class WppPaginationIt
     this.themeSubscription.stop();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, tabIndex: 0, exportparts: "number" }, h("wpp-typography-v4-3-0", { type: "s-body", part: "number" }, this.number)));
+    return (h(Host, { class: this.hostCssClasses(), role: "button", "aria-label": this.pageLabel(this.number), "aria-current": this.selected ? 'page' : undefined, onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, tabIndex: 0, exportparts: "number" }, h("wpp-typography-v4-4-0", { type: "s-body", part: "number" }, this.number)));
   }
-  static get registryIs() { return "wpp-pagination-item-v4-3-0"; }
+  static get registryIs() { return "wpp-pagination-item-v4-4-0"; }
   get host() { return this; }
   static get style() { return wppPaginationItemCss; }
-}, [1, "wpp-pagination-item", "wpp-pagination-item-v4-3-0", {
+}, [1, "wpp-pagination-item", "wpp-pagination-item-v4-4-0", {
     "number": [2],
     "selected": [4],
+    "pageLabel": [16],
     "focusType": [32]
   }]);
 function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-pagination-item-v4-3-0", "wpp-typography-v4-3-0"];
+  const components = ["wpp-pagination-item-v4-4-0", "wpp-typography-v4-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-pagination-item-v4-3-0":
+    case "wpp-pagination-item-v4-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppPaginationItem);
       }
       break;
-    case "wpp-typography-v4-3-0":
+    case "wpp-typography-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

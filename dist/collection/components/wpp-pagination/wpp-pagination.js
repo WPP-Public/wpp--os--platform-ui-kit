@@ -63,14 +63,21 @@ export class WppPagination {
     if (this.count === 0) {
       return null;
     }
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, h("div", { class: "control-pagination-wrapper", part: "body" }, !this.hasSingleItemPerPageOption && (h(Fragment, null, h("wpp-typography-v4-3-0", { type: "s-body", part: "per-page-label" }, this._locales.itemsPerPage, ":"), h("wpp-select-v4-3-0", { type: "single", isTextSelect: true, onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig }, dropdownWidth: "100px", part: "pre-page-select", list: this.itemsPerPage.map(item => ({
+    return (h(Host, { class: this.hostCssClasses(),
+      // The pagination is a navigation landmark so assistive tech can find and skip it
+      // (W3C ARIA APG pagination pattern).
+      role: "navigation", "aria-label": this._locales.paginationLabel, exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, h("div", { class: "control-pagination-wrapper", part: "body" }, !this.hasSingleItemPerPageOption && (h(Fragment, null, h("wpp-typography-v4-4-0", { type: "s-body", part: "per-page-label" }, this._locales.itemsPerPage, ":"), h("wpp-select-v4-4-0", { type: "single", isTextSelect: true, onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig }, dropdownWidth: "100px", part: "pre-page-select",
+      // The visible "Items per page" typography cannot be associated across the
+      // select's shadow boundary, so the name is passed explicitly — including the
+      // current value, which the select's default label would otherwise announce alone.
+      ariaProps: { label: `${this._locales.itemsPerPage}: ${this.selectedItemPerPage}` }, list: this.itemsPerPage.map(item => ({
         value: item,
         label: `${item}`,
         part: 'per-page-item',
-      })) }), h("wpp-divider-v4-3-0", { part: "divider" }))), h("wpp-typography-v4-3-0", { type: "s-body", part: "range" }, this.getPageRange())), this.selectedItemPerPage && (h("wpp-pagination-select-v4-3-0", { count: this.count, itemsPerPage: this.selectedItemPerPage, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, part: "page-select" }))));
+      })) }), h("wpp-divider-v4-4-0", { part: "divider" }))), h("wpp-typography-v4-4-0", { type: "s-body", part: "range" }, this.getPageRange())), this.selectedItemPerPage && (h("wpp-pagination-select-v4-4-0", { count: this.count, itemsPerPage: this.selectedItemPerPage, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, previousPageLabel: this._locales.previousPage, nextPageLabel: this._locales.nextPage, pageInputLabel: this._locales.pageInputLabel, pageLabel: this._locales.pageLabel, part: "page-select" }))));
   }
   static get is() { return "wpp-pagination"; }
-  static get registryIs() { return "wpp-pagination-v4-3-0"; }
+  static get registryIs() { return "wpp-pagination-v4-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -197,7 +204,7 @@ export class WppPagination {
         "mutable": false,
         "complexType": {
           "original": "Partial<PaginationLocales>",
-          "resolved": "{ itemsPerPage?: string | undefined; of?: string | undefined; items?: string | undefined; }",
+          "resolved": "{ itemsPerPage?: string | undefined; of?: string | undefined; items?: string | undefined; paginationLabel?: string | undefined; previousPage?: string | undefined; nextPage?: string | undefined; pageInputLabel?: string | undefined; pageLabel?: ((page: number) => string) | undefined; }",
           "references": {
             "Partial": {
               "location": "global",

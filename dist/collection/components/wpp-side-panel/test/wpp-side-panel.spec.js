@@ -16,7 +16,7 @@ describe('wpp-side-panel', () => {
   it('Should render open side panel with actions config', async () => {
     const page = await newSpecPage({
       components: [WppSidePanel],
-      template: () => (h("wpp-side-panel-v4-3-0", { open: true, panelTitle: "Title", actionsConfig: [
+      template: () => (h("wpp-side-panel-v4-4-0", { open: true, panelTitle: "Title", actionsConfig: [
           { label: 'Cancel', onClick: () => { } },
           { label: 'Save', onClick: () => { } },
         ] }, h("div", null, "Body content"))),

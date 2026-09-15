@@ -1,3 +1,7 @@
+// Changing the scrollbar width here means changing the gutter with it: `getScrollbarGutterWidth()`
+// in `utils/utils.ts` measures a probe that declares these same properties, and wpp-modal and
+// wpp-side-modal subtract that measurement from their body's end padding to keep the designed inset
+// symmetric. A width change here without a matching change there compensates for the old number.
 @mixin scrollbarThin() {
   scrollbar-width: thin;
   scrollbar-color: var(--wpp-grey-color-400) transparent;

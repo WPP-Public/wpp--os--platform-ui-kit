@@ -28,9 +28,9 @@ export const SidePanel = (args) => {
   const { handleOpenPanel, handleClosePanel } = getPanelHandlers();
   return html `
     <div style="height: 1200px">
-      <wpp-button-v4-3-0 @click=${handleOpenPanel}>Open Side Panel</wpp-button-v4-3-0>
+      <wpp-button-v4-4-0 @click=${handleOpenPanel}>Open Side Panel</wpp-button-v4-4-0>
 
-      <wpp-side-panel-v4-3-0
+      <wpp-side-panel-v4-4-0
         @wppSidePanelClose=${() => {
     console.log('Called wppSidePanelClose');
     handleClosePanel();
@@ -50,7 +50,7 @@ export const SidePanel = (args) => {
           This is the body of the side panel. It is placed in the default slot and its container has 16px padding. Drag
           the handle on the left edge to resize the panel between 280px and 440px.
         </wpp-typography>
-      </wpp-side-panel-v4-3-0>
+      </wpp-side-panel-v4-4-0>
     </div>
   `;
 };

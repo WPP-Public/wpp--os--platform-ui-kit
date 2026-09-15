@@ -17,9 +17,9 @@ export declare class WppCardGroup implements BaseComponent {
    */
   readonly name: string;
   /**
-   * Indicates the size of the cards
+   * Indicates the size of the cards.
    */
-  readonly size: CardSize;
+  readonly size: Exclude<CardSize, 'none'>;
   /**
    * Indicates the card group value
    */

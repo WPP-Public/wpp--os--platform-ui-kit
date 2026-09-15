@@ -141,7 +141,7 @@ export class WppSidePanel {
       const [secondaryConfig, primaryConfig] = this.actionsConfig;
       const { label: secondaryLabel, ...secondaryRest } = secondaryConfig;
       const { label: primaryLabel, ...primaryRest } = primaryConfig;
-      return (h("div", { class: "actions-container" }, h("wpp-divider-v4-3-0", null), h("div", { class: "actions" }, h("wpp-button-v4-3-0", { size: "m", variant: "secondary", ...secondaryRest }, secondaryLabel), h("wpp-button-v4-3-0", { size: "m", variant: "primary", ...primaryRest }, primaryLabel))));
+      return (h("div", { class: "actions-container" }, h("wpp-divider-v4-4-0", null), h("div", { class: "actions" }, h("wpp-button-v4-4-0", { size: "m", variant: "secondary", ...secondaryRest }, secondaryLabel), h("wpp-button-v4-4-0", { size: "m", variant: "primary", ...primaryRest }, primaryLabel))));
     };
     this.isHidden = true;
     this.closeReason = null;
@@ -198,7 +198,7 @@ export class WppSidePanel {
   render() {
     return (h(Host, { class: this.hostCssClasses(), onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: {
         zIndex: this.zIndex.toString(),
-      }, role: this.ariaProps.role, "aria-label": this.ariaProps.label || this.panelTitle || undefined }, h("div", { class: this.panelCssClasses(), tabindex: "-1", ref: ref => (this.panelRef = ref), "data-testid": "wpp-side-panel-content" }, h("div", { class: "resize-handle", role: "separator", tabindex: "0", "aria-orientation": "vertical", "aria-label": this._locales.resizeHandleLabel, "aria-valuenow": this.currentWidth, "aria-valuemin": SIDE_PANEL_MIN_WIDTH, "aria-valuemax": SIDE_PANEL_MAX_WIDTH, "aria-valuetext": `${this.currentWidth}px`, onPointerDown: this.handleResizeStart, onKeyDown: this.handleResizeKeyDown, "data-testid": "wpp-side-panel-resize-handle" }), h("div", { class: "header-container" }, h("wpp-tooltip-v4-3-0", { class: "title-tooltip", text: this.panelTitle, config: {
+      }, role: this.ariaProps.role, "aria-label": this.ariaProps.label || this.panelTitle || undefined }, h("div", { class: this.panelCssClasses(), tabindex: "-1", ref: ref => (this.panelRef = ref), "data-testid": "wpp-side-panel-content" }, h("div", { class: "resize-handle", role: "separator", tabindex: "0", "aria-orientation": "vertical", "aria-label": this._locales.resizeHandleLabel, "aria-valuenow": this.currentWidth, "aria-valuemin": SIDE_PANEL_MIN_WIDTH, "aria-valuemax": SIDE_PANEL_MAX_WIDTH, "aria-valuetext": `${this.currentWidth}px`, onPointerDown: this.handleResizeStart, onKeyDown: this.handleResizeKeyDown, "data-testid": "wpp-side-panel-resize-handle" }), h("div", { class: "header-container" }, h("wpp-tooltip-v4-4-0", { class: "title-tooltip", text: this.panelTitle, config: {
         placement: 'top',
         onShow: () => {
           if (!this.titleRef)
@@ -206,10 +206,10 @@ export class WppSidePanel {
           if (this.titleRef.clientWidth >= this.titleRef.scrollWidth)
             return false;
         },
-      } }, h("wpp-typography-v4-3-0", { ref: el => (this.titleRef = el), type: "s-strong", class: "title" }, this.panelTitle)), h("wpp-action-button-v4-3-0", { ariaProps: { label: this._locales.closeIconLabel }, variant: "secondary", onClick: this.handleCloseClick, class: "close-button" }, h("wpp-icon-cross-v4-3-0", { slot: "icon-start" }))), h("wpp-divider-v4-3-0", null), h("div", { class: "body", ref: el => (this.bodyRef = el) }, h("slot", null)), this.renderActions())));
+      } }, h("wpp-typography-v4-4-0", { ref: el => (this.titleRef = el), type: "s-strong", class: "title" }, this.panelTitle)), h("wpp-action-button-v4-4-0", { ariaProps: { label: this._locales.closeIconLabel }, variant: "secondary", onClick: this.handleCloseClick, class: "close-button" }, h("wpp-icon-cross-v4-4-0", { slot: "icon-start" }))), h("wpp-divider-v4-4-0", null), h("div", { class: "body", ref: el => (this.bodyRef = el) }, h("slot", null)), this.renderActions())));
   }
   static get is() { return "wpp-side-panel"; }
-  static get registryIs() { return "wpp-side-panel-v4-3-0"; }
+  static get registryIs() { return "wpp-side-panel-v4-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

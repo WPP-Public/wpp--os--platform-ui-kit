@@ -17,6 +17,14 @@ export class WppPaginationItem {
       if (event.key === 'Tab')
         this.focusType = FOCUS_TYPE.TAB;
     };
+    // A `role="button"` control must activate on both Enter and Space (W3C ARIA APG) — without
+    // this, keyboard users can reach the page numbers but not select them.
+    this.onKeyDown = (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        this.handleClick();
+      }
+    };
     this.handleClick = () => {
       this.wppPageChange.emit({ page: this.number });
     };
@@ -29,6 +37,7 @@ export class WppPaginationItem {
     this.focusType = undefined;
     this.number = undefined;
     this.selected = false;
+    this.pageLabel = page => `Page ${page}`;
   }
   connectedCallback() {
     this.themeSubscription.start();
@@ -37,10 +46,10 @@ export class WppPaginationItem {
     this.themeSubscription.stop();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, tabIndex: 0, exportparts: "number" }, h("wpp-typography-v4-3-0", { type: "s-body", part: "number" }, this.number)));
+    return (h(Host, { class: this.hostCssClasses(), role: "button", "aria-label": this.pageLabel(this.number), "aria-current": this.selected ? 'page' : undefined, onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, tabIndex: 0, exportparts: "number" }, h("wpp-typography-v4-4-0", { type: "s-body", part: "number" }, this.number)));
   }
   static get is() { return "wpp-pagination-item"; }
-  static get registryIs() { return "wpp-pagination-item-v4-3-0"; }
+  static get registryIs() { return "wpp-pagination-item-v4-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -88,6 +97,22 @@ export class WppPaginationItem {
         "attribute": "selected",
         "reflect": false,
         "defaultValue": "false"
+      },
+      "pageLabel": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "(page: number) => string",
+          "resolved": "(page: number) => string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Accessible name for the page button."
+        },
+        "defaultValue": "page => `Page ${page}`"
       }
     };
   }

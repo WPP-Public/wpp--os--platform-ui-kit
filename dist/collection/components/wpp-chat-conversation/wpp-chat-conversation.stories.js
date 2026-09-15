@@ -597,7 +597,7 @@ export const Default = {
         return;
       currentStreamId += 1;
       // Setting status prop triggers @Watch('status') → completeStream() internally
-      const lastMsgEl = Array.from(msgElements.values()).at(-1);
+      const lastMsgEl = Array.from(msgElements.values())[msgElements.size - 1];
       if (lastMsgEl?.role === 'assistant') {
         lastMsgEl.status = 'complete';
       }

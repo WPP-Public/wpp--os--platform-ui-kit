@@ -45,12 +45,24 @@ export class WppPaginationSelect {
       this.wppChange.emit({ page: this.activePageNumber, itemsPerPage: this.itemsPerPage });
     };
     this.handleLeftArrowClick = () => {
+      if (this.activePageNumber === 1)
+        return;
       this.activePageNumber = Math.max(this.activePageNumber - 1, 1);
       this.wppChange.emit({ page: this.activePageNumber, itemsPerPage: this.itemsPerPage });
     };
     this.handleRightArrowClick = () => {
+      if (this.activePageNumber === this.numberOfPages)
+        return;
       this.activePageNumber = Math.min(this.activePageNumber + 1, this.numberOfPages);
       this.wppChange.emit({ page: this.activePageNumber, itemsPerPage: this.itemsPerPage });
+    };
+    // The chevrons are `role="button"` controls, so they must activate on both Enter and Space
+    // (W3C ARIA APG) — without this, keyboard users can reach them but not change the page.
+    this.handleArrowKeyDown = (event, handler) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        handler();
+      }
     };
     this.leftArrowCssClasses = () => ({
       'icon-start': true,
@@ -72,6 +84,10 @@ export class WppPaginationSelect {
     this.itemsPerPage = 1;
     this.pageSelectThreshold = 8;
     this.activePageNumber = 1;
+    this.previousPageLabel = 'Previous page';
+    this.nextPageLabel = 'Next page';
+    this.pageInputLabel = 'Page number';
+    this.pageLabel = page => `Page ${page}`;
   }
   onUpdateCountOrItemsPerPage() {
     this.numberOfPages = Math.ceil(this.count / this.itemsPerPage);
@@ -80,10 +96,10 @@ export class WppPaginationSelect {
     this.numberOfPages = Math.ceil(this.count / this.itemsPerPage);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "icon-left, page-select, page-item, page-numeric, input, divider, total, icon-right" }, h("wpp-icon-chevron-v4-3-0", { class: this.leftArrowCssClasses(), onClick: () => this.handleLeftArrowClick(), tabIndex: this.activePageNumber === 1 ? -1 : 0, onBlur: () => this.onBlur('left-chevron'), onMouseDown: () => this.onMouseDown('left-chevron'), onKeyUp: (event) => this.onKeyUp(event, 'left-chevron'), part: "icon-left" }), this.numberOfPages <= this.pageSelectThreshold ? (h("div", { class: "page-select", part: "page-select" }, this.getPageItems().map(page => (h("wpp-pagination-item-v4-3-0", { number: page, selected: this.activePageNumber === page, part: "page-item", onWppPageChange: this.handlePageClick }))))) : (h("div", { class: "page-numeric", part: "page-numeric" }, h("input", { type: "number", class: { 'input-page': true, [this.focusType['input']]: true }, value: this.activePageNumber, onChange: this.handlePageNumberChange, onInput: () => (this.focusType = this.getUpdatedFocusInfo('input', FOCUS_TYPE.NONE)), onBlur: () => this.onBlur('input'), onMouseDown: () => this.onMouseDown('input'), onKeyUp: (event) => this.onKeyUp(event, 'input'), part: "input", title: "" }), h("wpp-divider-v4-3-0", { part: "divider" }), h("div", { class: "total-pages", part: "total" }, this.numberOfPages))), h("wpp-icon-chevron-v4-3-0", { class: this.rightArrowCssClasses(), onClick: () => this.handleRightArrowClick(), onBlur: () => this.onBlur('right-chevron'), onMouseDown: () => this.onMouseDown('right-chevron'), onKeyUp: (event) => this.onKeyUp(event, 'right-chevron'), tabIndex: this.activePageNumber === this.numberOfPages ? -1 : 0, part: "icon-right" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "icon-left, page-select, page-item, page-numeric, input, divider, total, icon-right" }, h("wpp-icon-chevron-v4-4-0", { class: this.leftArrowCssClasses(), role: "button", "aria-label": this.previousPageLabel, "aria-disabled": this.activePageNumber === 1 ? 'true' : 'false', onClick: () => this.handleLeftArrowClick(), onKeyDown: (event) => this.handleArrowKeyDown(event, this.handleLeftArrowClick), tabIndex: this.activePageNumber === 1 ? -1 : 0, onBlur: () => this.onBlur('left-chevron'), onMouseDown: () => this.onMouseDown('left-chevron'), onKeyUp: (event) => this.onKeyUp(event, 'left-chevron'), part: "icon-left" }), this.numberOfPages <= this.pageSelectThreshold ? (h("div", { class: "page-select", part: "page-select" }, this.getPageItems().map(page => (h("wpp-pagination-item-v4-4-0", { number: page, selected: this.activePageNumber === page, pageLabel: this.pageLabel, part: "page-item", onWppPageChange: this.handlePageClick }))))) : (h("div", { class: "page-numeric", part: "page-numeric" }, h("input", { type: "number", class: { 'input-page': true, [this.focusType['input']]: true }, value: this.activePageNumber, min: "1", max: this.numberOfPages, "aria-label": this.pageInputLabel, "aria-describedby": "total-pages", onChange: this.handlePageNumberChange, onInput: () => (this.focusType = this.getUpdatedFocusInfo('input', FOCUS_TYPE.NONE)), onBlur: () => this.onBlur('input'), onMouseDown: () => this.onMouseDown('input'), onKeyUp: (event) => this.onKeyUp(event, 'input'), part: "input" }), h("wpp-divider-v4-4-0", { part: "divider" }), h("div", { class: "total-pages", part: "total", id: "total-pages" }, this.numberOfPages))), h("wpp-icon-chevron-v4-4-0", { class: this.rightArrowCssClasses(), role: "button", "aria-label": this.nextPageLabel, "aria-disabled": this.activePageNumber === this.numberOfPages ? 'true' : 'false', onClick: () => this.handleRightArrowClick(), onKeyDown: (event) => this.handleArrowKeyDown(event, this.handleRightArrowClick), onBlur: () => this.onBlur('right-chevron'), onMouseDown: () => this.onMouseDown('right-chevron'), onKeyUp: (event) => this.onKeyUp(event, 'right-chevron'), tabIndex: this.activePageNumber === this.numberOfPages ? -1 : 0, part: "icon-right" })));
   }
   static get is() { return "wpp-pagination-select"; }
-  static get registryIs() { return "wpp-pagination-select-v4-3-0"; }
+  static get registryIs() { return "wpp-pagination-select-v4-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -167,6 +183,76 @@ export class WppPaginationSelect {
         "attribute": "active-page-number",
         "reflect": true,
         "defaultValue": "1"
+      },
+      "previousPageLabel": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Accessible name for the previous-page control."
+        },
+        "attribute": "previous-page-label",
+        "reflect": false,
+        "defaultValue": "'Previous page'"
+      },
+      "nextPageLabel": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Accessible name for the next-page control."
+        },
+        "attribute": "next-page-label",
+        "reflect": false,
+        "defaultValue": "'Next page'"
+      },
+      "pageInputLabel": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Accessible name for the page-number input shown above the page-select threshold."
+        },
+        "attribute": "page-input-label",
+        "reflect": false,
+        "defaultValue": "'Page number'"
+      },
+      "pageLabel": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "(page: number) => string",
+          "resolved": "(page: number) => string",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Accessible name for a page button."
+        },
+        "defaultValue": "page => `Page ${page}`"
       }
     };
   }

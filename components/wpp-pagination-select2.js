@@ -46,12 +46,24 @@ const WppPaginationSelect = /*@__PURE__*/ proxyCustomElement(class WppPagination
       this.wppChange.emit({ page: this.activePageNumber, itemsPerPage: this.itemsPerPage });
     };
     this.handleLeftArrowClick = () => {
+      if (this.activePageNumber === 1)
+        return;
       this.activePageNumber = Math.max(this.activePageNumber - 1, 1);
       this.wppChange.emit({ page: this.activePageNumber, itemsPerPage: this.itemsPerPage });
     };
     this.handleRightArrowClick = () => {
+      if (this.activePageNumber === this.numberOfPages)
+        return;
       this.activePageNumber = Math.min(this.activePageNumber + 1, this.numberOfPages);
       this.wppChange.emit({ page: this.activePageNumber, itemsPerPage: this.itemsPerPage });
+    };
+    // The chevrons are `role="button"` controls, so they must activate on both Enter and Space
+    // (W3C ARIA APG) — without this, keyboard users can reach them but not change the page.
+    this.handleArrowKeyDown = (event, handler) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        handler();
+      }
     };
     this.leftArrowCssClasses = () => ({
       'icon-start': true,
@@ -73,6 +85,10 @@ const WppPaginationSelect = /*@__PURE__*/ proxyCustomElement(class WppPagination
     this.itemsPerPage = 1;
     this.pageSelectThreshold = 8;
     this.activePageNumber = 1;
+    this.previousPageLabel = 'Previous page';
+    this.nextPageLabel = 'Next page';
+    this.pageInputLabel = 'Page number';
+    this.pageLabel = page => `Page ${page}`;
   }
   onUpdateCountOrItemsPerPage() {
     this.numberOfPages = Math.ceil(this.count / this.itemsPerPage);
@@ -81,19 +97,23 @@ const WppPaginationSelect = /*@__PURE__*/ proxyCustomElement(class WppPagination
     this.numberOfPages = Math.ceil(this.count / this.itemsPerPage);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "icon-left, page-select, page-item, page-numeric, input, divider, total, icon-right" }, h("wpp-icon-chevron-v4-3-0", { class: this.leftArrowCssClasses(), onClick: () => this.handleLeftArrowClick(), tabIndex: this.activePageNumber === 1 ? -1 : 0, onBlur: () => this.onBlur('left-chevron'), onMouseDown: () => this.onMouseDown('left-chevron'), onKeyUp: (event) => this.onKeyUp(event, 'left-chevron'), part: "icon-left" }), this.numberOfPages <= this.pageSelectThreshold ? (h("div", { class: "page-select", part: "page-select" }, this.getPageItems().map(page => (h("wpp-pagination-item-v4-3-0", { number: page, selected: this.activePageNumber === page, part: "page-item", onWppPageChange: this.handlePageClick }))))) : (h("div", { class: "page-numeric", part: "page-numeric" }, h("input", { type: "number", class: { 'input-page': true, [this.focusType['input']]: true }, value: this.activePageNumber, onChange: this.handlePageNumberChange, onInput: () => (this.focusType = this.getUpdatedFocusInfo('input', FOCUS_TYPE.NONE)), onBlur: () => this.onBlur('input'), onMouseDown: () => this.onMouseDown('input'), onKeyUp: (event) => this.onKeyUp(event, 'input'), part: "input", title: "" }), h("wpp-divider-v4-3-0", { part: "divider" }), h("div", { class: "total-pages", part: "total" }, this.numberOfPages))), h("wpp-icon-chevron-v4-3-0", { class: this.rightArrowCssClasses(), onClick: () => this.handleRightArrowClick(), onBlur: () => this.onBlur('right-chevron'), onMouseDown: () => this.onMouseDown('right-chevron'), onKeyUp: (event) => this.onKeyUp(event, 'right-chevron'), tabIndex: this.activePageNumber === this.numberOfPages ? -1 : 0, part: "icon-right" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "icon-left, page-select, page-item, page-numeric, input, divider, total, icon-right" }, h("wpp-icon-chevron-v4-4-0", { class: this.leftArrowCssClasses(), role: "button", "aria-label": this.previousPageLabel, "aria-disabled": this.activePageNumber === 1 ? 'true' : 'false', onClick: () => this.handleLeftArrowClick(), onKeyDown: (event) => this.handleArrowKeyDown(event, this.handleLeftArrowClick), tabIndex: this.activePageNumber === 1 ? -1 : 0, onBlur: () => this.onBlur('left-chevron'), onMouseDown: () => this.onMouseDown('left-chevron'), onKeyUp: (event) => this.onKeyUp(event, 'left-chevron'), part: "icon-left" }), this.numberOfPages <= this.pageSelectThreshold ? (h("div", { class: "page-select", part: "page-select" }, this.getPageItems().map(page => (h("wpp-pagination-item-v4-4-0", { number: page, selected: this.activePageNumber === page, pageLabel: this.pageLabel, part: "page-item", onWppPageChange: this.handlePageClick }))))) : (h("div", { class: "page-numeric", part: "page-numeric" }, h("input", { type: "number", class: { 'input-page': true, [this.focusType['input']]: true }, value: this.activePageNumber, min: "1", max: this.numberOfPages, "aria-label": this.pageInputLabel, "aria-describedby": "total-pages", onChange: this.handlePageNumberChange, onInput: () => (this.focusType = this.getUpdatedFocusInfo('input', FOCUS_TYPE.NONE)), onBlur: () => this.onBlur('input'), onMouseDown: () => this.onMouseDown('input'), onKeyUp: (event) => this.onKeyUp(event, 'input'), part: "input" }), h("wpp-divider-v4-4-0", { part: "divider" }), h("div", { class: "total-pages", part: "total", id: "total-pages" }, this.numberOfPages))), h("wpp-icon-chevron-v4-4-0", { class: this.rightArrowCssClasses(), role: "button", "aria-label": this.nextPageLabel, "aria-disabled": this.activePageNumber === this.numberOfPages ? 'true' : 'false', onClick: () => this.handleRightArrowClick(), onKeyDown: (event) => this.handleArrowKeyDown(event, this.handleRightArrowClick), onBlur: () => this.onBlur('right-chevron'), onMouseDown: () => this.onMouseDown('right-chevron'), onKeyUp: (event) => this.onKeyUp(event, 'right-chevron'), tabIndex: this.activePageNumber === this.numberOfPages ? -1 : 0, part: "icon-right" })));
   }
-  static get registryIs() { return "wpp-pagination-select-v4-3-0"; }
+  static get registryIs() { return "wpp-pagination-select-v4-4-0"; }
   static get watchers() { return {
     "count": ["onUpdateCountOrItemsPerPage"],
     "itemsPerPage": ["onUpdateCountOrItemsPerPage"]
   }; }
   static get style() { return wppPaginationSelectCss; }
-}, [1, "wpp-pagination-select", "wpp-pagination-select-v4-3-0", {
+}, [1, "wpp-pagination-select", "wpp-pagination-select-v4-4-0", {
     "count": [2],
     "itemsPerPage": [2, "items-per-page"],
     "pageSelectThreshold": [2, "page-select-threshold"],
     "activePageNumber": [1538, "active-page-number"],
+    "previousPageLabel": [1, "previous-page-label"],
+    "nextPageLabel": [1, "next-page-label"],
+    "pageInputLabel": [1, "page-input-label"],
+    "pageLabel": [16],
     "focusType": [32],
     "numberOfPages": [32]
   }]);
@@ -101,29 +121,29 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-pagination-select-v4-3-0", "wpp-divider-v4-3-0", "wpp-icon-chevron-v4-3-0", "wpp-pagination-item-v4-3-0", "wpp-typography-v4-3-0"];
+  const components = ["wpp-pagination-select-v4-4-0", "wpp-divider-v4-4-0", "wpp-icon-chevron-v4-4-0", "wpp-pagination-item-v4-4-0", "wpp-typography-v4-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-pagination-select-v4-3-0":
+    case "wpp-pagination-select-v4-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppPaginationSelect);
       }
       break;
-    case "wpp-divider-v4-3-0":
+    case "wpp-divider-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-icon-chevron-v4-3-0":
+    case "wpp-icon-chevron-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-pagination-item-v4-3-0":
+    case "wpp-pagination-item-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-3-0":
+    case "wpp-typography-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

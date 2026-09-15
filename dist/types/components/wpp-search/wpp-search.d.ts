@@ -8,11 +8,18 @@ import { LoadMoreHandler } from '../wpp-autocomplete/types';
 /**
  * @slot - Should contain a list of `wpp-list-item` elements that represents the current options list. The default slot, without the name attribute.
  *
+ * Slotted option content must be non-interactive: each `wpp-list-item` is exposed as
+ * `role="option"`, and a `role="option"` must not contain focusable descendants (WCAG
+ * "nested-interactive"). Do not slot links, buttons or other tabbable elements inside an option —
+ * they become stray tab stops inside the listbox. Note that `wpp-avatar` defaults to
+ * `role="button"` with a tab stop, so a decorative avatar needs `role="presentation"` on it.
+ *
  * @part input - Autocomplete input element
  * @part dropdown - Dropdown container
  * @part dropdown-header - Dropdown header
  * @part options - Options list container
  * @part anchor - Search input tooltip
+ * @part icon-cross - Clear (erase) button
  */
 export declare class WppSearch implements BaseComponent, InlineMessage {
   private inputEl?;
@@ -25,18 +32,25 @@ export declare class WppSearch implements BaseComponent, InlineMessage {
   private tippyInstance?;
   private infiniteLoadingPromise?;
   private optionsListEl?;
-  private placeholderEl?;
-  private hasActiveEllipses?;
   private observer;
-  private isDropdownShown;
+  private activeOptionIndex;
+  private focusClearAfterSelect;
+  private placeholderEl?;
+  private valueTooltipConfig;
+  private listboxId;
+  private optionIdPrefix;
   private themeSubscription;
   host: HTMLWppSearchElement;
   isFocused: boolean;
+  isInputFocused: boolean;
   searchValue: string;
   isEmptyOptions: boolean;
   isInfiniteLoading: boolean;
   focusType: FOCUS_TYPE;
   isInComponent: boolean;
+  isDropdownShown: boolean;
+  isOptionsScrollable: boolean;
+  activeOptionAnnouncement: string;
   /**
    * Defines the search name.
    */
@@ -161,6 +175,7 @@ export declare class WppSearch implements BaseComponent, InlineMessage {
    */
   wppSearchValueChange: EventEmitter<string>;
   handleOptionToggle(event: CustomEvent<ListItemChangeEventDetail>): void;
+  private commitSelection;
   onNextValueChange(): void;
   onSearchValueChange(initSearchValue: string): never[] | undefined;
   updateDropdownConfig(newConfig: DropdownConfig, oldConfig: DropdownConfig): void;
@@ -172,6 +187,8 @@ export declare class WppSearch implements BaseComponent, InlineMessage {
   setFocus(): Promise<void>;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  componentDidRender(): void;
+  private isValueTruncated;
   disconnectedCallback(): void;
   connectedCallback(): void;
   private get _locales();
@@ -192,29 +209,38 @@ export declare class WppSearch implements BaseComponent, InlineMessage {
   private showDropdown;
   private hideDropdown;
   private updateOptions;
+  private applyOptionSemantics;
+  private isOptionNavigable;
+  private setActiveOption;
+  private clearActiveOption;
+  private get liveAnnouncement();
+  private selectActiveOption;
   private handleTriggerContainerMouseDown;
   private handleTriggerClick;
   private handleMouseDown;
   private handleInputMouseDown;
   private handleKeyUp;
   private handleInput;
+  private handleInputKeyDown;
   private handleFocus;
+  private handleInputFocus;
+  private handleInputBlur;
   private handleOptionsScroll;
   private handleBlur;
-  private isEllipsisActive;
   private handleOptionsChange;
   private handleClearClick;
+  private handleClearKeyDown;
   private hostCssClasses;
   private searchWrapperCssClasses;
   private triggerCssClasses;
   private inputCssClasses;
   private labelCssClasses;
   private dropdownListCssClasses;
-  private tooltipCSSClasses;
   private hostStyle;
   private getInputValue;
   private renderInputPlaceholder;
   private getDropdownWidth;
   private renderDropdownContent;
+  private renderListboxItems;
   render(): any;
 }

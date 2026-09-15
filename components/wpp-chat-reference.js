@@ -54,17 +54,17 @@ const WppChatReference$1 = /*@__PURE__*/ proxyCustomElement(class WppChatReferen
     return returnIconFromExtension(extension, null);
   }
   renderFile() {
-    return (h(Fragment, null, h("div", { class: "thumbnail", part: "thumbnail" }, this.renderThumbnail()), h("div", { class: "details", part: "content" }, h("wpp-typography-v4-3-0", { class: "name", type: "xs-midi", part: "name" }, this.name), this.fileType && (h("wpp-typography-v4-3-0", { class: "type", type: "xs-body", part: "type" }, this.fileType)))));
+    return (h(Fragment, null, h("div", { class: "thumbnail", part: "thumbnail" }, this.renderThumbnail()), h("div", { class: "details", part: "content" }, h("wpp-typography-v4-4-0", { class: "name", type: "xs-midi", part: "name" }, this.name), this.fileType && (h("wpp-typography-v4-4-0", { class: "type", type: "xs-body", part: "type" }, this.fileType)))));
   }
   renderText() {
-    return (h("div", { class: "text-content", part: "content" }, h("wpp-typography-v4-3-0", { class: { text: true, [`lines-${this.lines}`]: true }, type: "xs-body", part: "text" }, this.text)));
+    return (h("div", { class: "text-content", part: "content" }, h("wpp-typography-v4-4-0", { class: { text: true, [`lines-${this.lines}`]: true }, type: "xs-body", part: "text" }, this.text)));
   }
   render() {
-    return (h(Host, null, h("div", { class: "reference", part: "reference" }, h("span", { class: "block-line", part: "block-line", "aria-hidden": "true" }), this.type === 'file' ? this.renderFile() : this.renderText(), this.removable && (h("wpp-icon-cross-v4-3-0", { class: "close", part: "close", role: "button", tabindex: 0, "aria-label": this._locales.removeLabel, onClick: this.handleClose, onKeyDown: this.handleCloseKeyDown })))));
+    return (h(Host, null, h("div", { class: "reference", part: "reference" }, h("span", { class: "block-line", part: "block-line", "aria-hidden": "true" }), this.type === 'file' ? this.renderFile() : this.renderText(), this.removable && (h("wpp-icon-cross-v4-4-0", { class: "close", part: "close", role: "button", tabindex: 0, "aria-label": this._locales.removeLabel, onClick: this.handleClose, onKeyDown: this.handleCloseKeyDown })))));
   }
-  static get registryIs() { return "wpp-chat-reference-v4-3-0"; }
+  static get registryIs() { return "wpp-chat-reference-v4-4-0"; }
   static get style() { return wppChatReferenceCss; }
-}, [1, "wpp-chat-reference", "wpp-chat-reference-v4-3-0", {
+}, [1, "wpp-chat-reference", "wpp-chat-reference-v4-4-0", {
     "type": [513],
     "name": [1],
     "fileType": [1, "file-type"],
@@ -79,64 +79,64 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-chat-reference-v4-3-0", "wpp-icon-cross-v4-3-0", "wpp-icon-database-v4-3-0", "wpp-icon-document-v4-3-0", "wpp-icon-file-v4-3-0", "wpp-icon-file-zip-v4-3-0", "wpp-icon-image-v4-3-0", "wpp-icon-music-v4-3-0", "wpp-icon-pitch-v4-3-0", "wpp-icon-spreadsheet-v4-3-0", "wpp-icon-video-clip-v4-3-0", "wpp-typography-v4-3-0"];
+  const components = ["wpp-chat-reference-v4-4-0", "wpp-icon-cross-v4-4-0", "wpp-icon-database-v4-4-0", "wpp-icon-document-v4-4-0", "wpp-icon-file-v4-4-0", "wpp-icon-file-zip-v4-4-0", "wpp-icon-image-v4-4-0", "wpp-icon-music-v4-4-0", "wpp-icon-pitch-v4-4-0", "wpp-icon-spreadsheet-v4-4-0", "wpp-icon-video-clip-v4-4-0", "wpp-typography-v4-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-chat-reference-v4-3-0":
+    case "wpp-chat-reference-v4-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppChatReference$1);
       }
       break;
-    case "wpp-icon-cross-v4-3-0":
+    case "wpp-icon-cross-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-database-v4-3-0":
+    case "wpp-icon-database-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-document-v4-3-0":
+    case "wpp-icon-document-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-file-v4-3-0":
+    case "wpp-icon-file-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-file-zip-v4-3-0":
+    case "wpp-icon-file-zip-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-icon-image-v4-3-0":
+    case "wpp-icon-image-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-music-v4-3-0":
+    case "wpp-icon-music-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-icon-pitch-v4-3-0":
+    case "wpp-icon-pitch-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-spreadsheet-v4-3-0":
+    case "wpp-icon-spreadsheet-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-icon-video-clip-v4-3-0":
+    case "wpp-icon-video-clip-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-3-0":
+    case "wpp-typography-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

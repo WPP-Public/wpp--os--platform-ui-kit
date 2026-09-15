@@ -1,7 +1,8 @@
 import { r as registerInstance, c as createEvent, h, F as Fragment, H as Host, g as getElement } from './index-93f63aaa.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
-import { k as transformToVersionedTag } from './utils-452958a4.js';
-import { t as themeSubscriptionController } from './subscribe-to-theme-3920c16c.js';
+import { k as transformToVersionedTag } from './utils-a4b26a20.js';
+import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
+import './theme-observer-b7886d19.js';
 
 const MULTIPLE_PRIMARY_BUTTONS_ERROR = 'Only one primary button allowed in the sticky bar.';
 const TOO_MANY_SECONDARY_BUTTONS_ERROR = 'Only 2 secondary buttons allowed in the sticky bar.';
@@ -160,19 +161,19 @@ const WppStickyBar = class {
     }, 0);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v4-3-0", { variant: "secondary", onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v4-3-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v4-3-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), this.variant === 'small' && (h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v4-4-0", { variant: "secondary", onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v4-4-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v4-4-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), this.variant === 'small' && (h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
       if (!buttonItem)
         return null;
       if (buttonItem.variant === 'action-button') {
-        return (h("wpp-action-button-v4-3-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary", disabled: buttonItem.disabled, loading: buttonItem.loading }, this.getButtonItemIcons(buttonItem)));
+        return (h("wpp-action-button-v4-4-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary", disabled: buttonItem.disabled, loading: buttonItem.loading }, this.getButtonItemIcons(buttonItem)));
       }
-      return (h("wpp-button-v4-3-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant, disabled: buttonItem.disabled, loading: buttonItem.loading }, this.getButtonItemIcons(buttonItem)));
-    })))), this.variant !== 'small' ? (h("div", { class: `body ${this.tabs?.length > 0 ? 'has-tabs' : ''}` }, this.variant === 'medium' ? (h("slot", { name: "content" })) : (this.tabs?.length > 0 && (h("wpp-tabs-v4-3-0", { size: this.tabSize, onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => {
+      return (h("wpp-button-v4-4-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant, disabled: buttonItem.disabled, loading: buttonItem.loading }, this.getButtonItemIcons(buttonItem)));
+    })))), this.variant !== 'small' ? (h("div", { class: `body ${this.tabs?.length > 0 ? 'has-tabs' : ''}` }, this.variant === 'medium' ? (h("slot", { name: "content" })) : (this.tabs?.length > 0 && (h("wpp-tabs-v4-4-0", { size: this.tabSize, onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => {
       const { text, ...restProps } = tabItem;
-      return (h("wpp-tab-v4-3-0", { size: this.tabSize, key: tabItem.value, ...restProps }, tabItem.text));
-    })))))) : null), h("wpp-divider-v4-3-0", null)));
+      return (h("wpp-tab-v4-4-0", { size: this.tabSize, key: tabItem.value, ...restProps }, tabItem.text));
+    })))))) : null), h("wpp-divider-v4-4-0", null)));
   }
-  static get registryIs() { return "wpp-sticky-bar-v4-3-0"; }
+  static get registryIs() { return "wpp-sticky-bar-v4-4-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "buttons": ["onUpdateButtons"],

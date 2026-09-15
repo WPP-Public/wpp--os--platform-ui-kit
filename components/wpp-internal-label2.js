@@ -46,6 +46,20 @@ const WppInternalLabel = /*@__PURE__*/ proxyCustomElement(class WppInternalLabel
       'info-wrapper': true,
       'with-icon': this.hasIconSlot,
     });
+    // The info icon is a help affordance rather than the field's control, but while the field is
+    // disabled it must not be a tab stop either: everything else in the field is inert, so the icon
+    // would be the only thing focus could land on. Produces the same non-interactive shape the
+    // existing `tooltipConfig.tabIndex: -1` escape hatch already gives consumers, so both branches
+    // of the render stay in step.
+    this.infoIconInteractiveProps = () => {
+      const tabIndex = this.disabled ? -1 : (this.tooltipConfig.tabIndex ?? 0);
+      const isInteractive = tabIndex !== -1;
+      return {
+        role: isInteractive ? 'button' : 'none',
+        tabIndex,
+        ...(isInteractive ? { 'aria-label': 'Show info' } : {}),
+      };
+    };
     this.hasIconSlot = true;
     this.focusType = undefined;
     this.labelText = undefined;
@@ -64,12 +78,12 @@ const WppInternalLabel = /*@__PURE__*/ proxyCustomElement(class WppInternalLabel
     return mergeLocales(LOCALES_DEFAULTS, this.locales);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onBlur: this.onBlur, exportparts: "info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" }, !!this.labelText && (h("div", { class: this.infoWrapperCssClasses(), part: "info-wrapper", role: this.role }, h("wpp-typography-v4-3-0", { type: this.typography, class: "text", part: "text" }, this.labelText), this.optional && (h("wpp-typography-v4-3-0", { type: "s-body", class: "optional", part: "optional-text" }, "(", this._locales.optional, ")")))), !!this.description && this.hasIconSlot ? (h("wpp-tooltip-v4-3-0", { class: "tooltip", text: this.description, config: this.tooltipConfig, part: "tooltip" }, h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: this.tooltipConfig.tabIndex === -1 ? 'none' : 'button', tabIndex: this.tooltipConfig.tabIndex ?? 0, "aria-label": this.tooltipConfig.tabIndex !== -1 ? 'Show info' : undefined }))) : (h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: "button", tabIndex: 0, "aria-label": "Show info" }))));
+    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onBlur: this.onBlur, exportparts: "info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" }, !!this.labelText && (h("div", { class: this.infoWrapperCssClasses(), part: "info-wrapper", role: this.role }, h("wpp-typography-v4-4-0", { type: this.typography, class: "text", part: "text" }, this.labelText), this.optional && (h("wpp-typography-v4-4-0", { type: "s-body", class: "optional", part: "optional-text" }, "(", this._locales.optional, ")")))), !!this.description && this.hasIconSlot ? (h("wpp-tooltip-v4-4-0", { class: "tooltip", text: this.description, config: this.tooltipConfig, part: "tooltip" }, h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, ...this.infoIconInteractiveProps() }))) : (h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, ...this.infoIconInteractiveProps() }))));
   }
-  static get registryIs() { return "wpp-internal-label-v4-3-0"; }
+  static get registryIs() { return "wpp-internal-label-v4-4-0"; }
   get host() { return this; }
   static get style() { return wppInternalLabelCss; }
-}, [1, "wpp-internal-label", "wpp-internal-label-v4-3-0", {
+}, [1, "wpp-internal-label", "wpp-internal-label-v4-4-0", {
     "labelText": [1, "label-text"],
     "description": [1],
     "optional": [4],
@@ -85,34 +99,34 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-internal-label-v4-3-0", "wpp-icon-error-v4-3-0", "wpp-icon-warning-v4-3-0", "wpp-internal-tooltip-v4-3-0", "wpp-tooltip-v4-3-0", "wpp-typography-v4-3-0"];
+  const components = ["wpp-internal-label-v4-4-0", "wpp-icon-error-v4-4-0", "wpp-icon-warning-v4-4-0", "wpp-internal-tooltip-v4-4-0", "wpp-tooltip-v4-4-0", "wpp-typography-v4-4-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-internal-label-v4-3-0":
+    case "wpp-internal-label-v4-4-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppInternalLabel);
       }
       break;
-    case "wpp-icon-error-v4-3-0":
+    case "wpp-icon-error-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-warning-v4-3-0":
+    case "wpp-icon-warning-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-internal-tooltip-v4-3-0":
+    case "wpp-internal-tooltip-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-3-0":
+    case "wpp-tooltip-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-3-0":
+    case "wpp-typography-v4-4-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

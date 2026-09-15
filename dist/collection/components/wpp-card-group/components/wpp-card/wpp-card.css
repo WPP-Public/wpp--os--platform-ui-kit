@@ -316,6 +316,10 @@
 .card .header-wrapper .header.slot-hidden {
   display: none;
 }
+.card.size-none .header-wrapper .actions {
+  top: 0;
+  right: 0;
+}
 
 .card.tab-focus.interactive:not(.choosable):not(:hover), .card.tab-focus.interactive:not(.choosable):not(:active) {
   border-radius: "";

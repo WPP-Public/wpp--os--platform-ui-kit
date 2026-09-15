@@ -289,7 +289,7 @@ describe('wpp-chat-node', () => {
     it('should render the actions menu and the avatar-triggered model selector with the built-in defaults and provided models', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        template: () => (h("wpp-chat-node-v4-3-0", { nodeTitle: "Test", actions: [{ icon: 'wpp-icon-document', label: 'Some link...' }], selectedModel: { id: 'gpt-45', label: 'ChatGPT 4.5', logo: '/models/gpt.svg' }, models: [
+        template: () => (h("wpp-chat-node-v4-4-0", { nodeTitle: "Test", actions: [{ icon: 'wpp-icon-document', label: 'Some link...' }], selectedModel: { id: 'gpt-45', label: 'ChatGPT 4.5', logo: '/models/gpt.svg' }, models: [
             { id: 'gpt-45', label: 'ChatGPT 4.5', logo: '/models/gpt.svg' },
             { id: 'claude', label: 'Claude', logo: '/models/claude.svg' },
           ] })),
@@ -334,7 +334,7 @@ describe('wpp-chat-node', () => {
     it('should render only the built-in defaults with a single provided model in the dropdown', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        template: () => (h("wpp-chat-node-v4-3-0", { nodeTitle: "Test", models: [{ id: 'gpt-45', label: 'ChatGPT 4.5', logo: '/models/gpt.svg' }] })),
+        template: () => (h("wpp-chat-node-v4-4-0", { nodeTitle: "Test", models: [{ id: 'gpt-45', label: 'ChatGPT 4.5', logo: '/models/gpt.svg' }] })),
       });
       const renderRoot = getRenderRoot(page.root);
       const modelSelector = renderRoot.querySelector('.chat-model-selector');
@@ -352,7 +352,7 @@ describe('wpp-chat-node', () => {
     it('should render the built-in defaults and a "Select model or agent" action when no models are provided', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        template: () => h("wpp-chat-node-v4-3-0", { nodeTitle: "Test" }),
+        template: () => h("wpp-chat-node-v4-4-0", { nodeTitle: "Test" }),
       });
       const renderRoot = getRenderRoot(page.root);
       const modelSelector = renderRoot.querySelector('.chat-model-selector');
@@ -367,7 +367,7 @@ describe('wpp-chat-node', () => {
     it('should emit wppModelBrowse when the "Select model or agent" action is clicked', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        template: () => h("wpp-chat-node-v4-3-0", { nodeTitle: "Test" }),
+        template: () => h("wpp-chat-node-v4-4-0", { nodeTitle: "Test" }),
       });
       const selectSpy = jest.spyOn(page.rootInstance.wppModelBrowse, 'emit');
       const modelItems = getRenderRoot(page.root).querySelectorAll('.wpp-model-dropdown wpp-list-item');
@@ -537,7 +537,7 @@ describe('wpp-chat-node', () => {
     it('should emit wppActionClick when an action item is selected', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        template: () => (h("wpp-chat-node-v4-3-0", { nodeTitle: "Test", actions: [{ icon: 'wpp-icon-document', label: 'Some link...' }] })),
+        template: () => (h("wpp-chat-node-v4-4-0", { nodeTitle: "Test", actions: [{ icon: 'wpp-icon-document', label: 'Some link...' }] })),
       });
       const actionSpy = jest.spyOn(page.rootInstance.wppActionClick, 'emit');
       const actionItem = getRenderRoot(page.root).querySelector('wpp-list-item');
@@ -549,7 +549,7 @@ describe('wpp-chat-node', () => {
     it('should emit wppModelSelect with the model object when a provided model item is selected', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        template: () => (h("wpp-chat-node-v4-3-0", { nodeTitle: "Test", models: [
+        template: () => (h("wpp-chat-node-v4-4-0", { nodeTitle: "Test", models: [
             { id: 'gpt-45', label: 'ChatGPT 4.5', icon: 'wpp-icon-ai' },
             { id: 'claude-sonnet', label: 'Claude Sonnet', icon: 'wpp-icon-ai' },
           ] })),
@@ -569,7 +569,7 @@ describe('wpp-chat-node', () => {
     it('should emit wppModelSelect with the default model object when a built-in default option is selected', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        template: () => (h("wpp-chat-node-v4-3-0", { nodeTitle: "Test", selectedModel: { id: 'gpt-45', label: 'ChatGPT 4.5', icon: 'wpp-icon-ai' }, models: [{ id: 'gpt-45', label: 'ChatGPT 4.5', icon: 'wpp-icon-ai' }] })),
+        template: () => (h("wpp-chat-node-v4-4-0", { nodeTitle: "Test", selectedModel: { id: 'gpt-45', label: 'ChatGPT 4.5', icon: 'wpp-icon-ai' }, models: [{ id: 'gpt-45', label: 'ChatGPT 4.5', icon: 'wpp-icon-ai' }] })),
       });
       const modelSpy = jest.spyOn(page.rootInstance.wppModelSelect, 'emit');
       const modelItems = getRenderRoot(page.root).querySelectorAll('.wpp-model-dropdown wpp-list-item');
@@ -593,7 +593,7 @@ describe('wpp-chat-node', () => {
     it('should select the provided model matching the deprecated selectedModelId', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        template: () => h("wpp-chat-node-v4-3-0", { nodeTitle: "Test", selectedModelId: "claude-sonnet", models: models }),
+        template: () => h("wpp-chat-node-v4-4-0", { nodeTitle: "Test", selectedModelId: "claude-sonnet", models: models }),
       });
       // 2 built-in defaults + 2 provided models: "Claude Sonnet" is the last item.
       const modelItems = getModelItems(page);
@@ -605,7 +605,7 @@ describe('wpp-chat-node', () => {
     it('should select the built-in default matching the deprecated selectedModelId', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        template: () => h("wpp-chat-node-v4-3-0", { nodeTitle: "Test", selectedModelId: "premium", models: models }),
+        template: () => h("wpp-chat-node-v4-4-0", { nodeTitle: "Test", selectedModelId: "premium", models: models }),
       });
       const modelItems = getModelItems(page);
       expect(modelItems[1].getAttribute('checked')).not.toBeNull();
@@ -614,14 +614,14 @@ describe('wpp-chat-node', () => {
     it('should fall back to the "Auto" default when the deprecated selectedModelId matches no model', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        template: () => h("wpp-chat-node-v4-3-0", { nodeTitle: "Test", selectedModelId: "unknown-model", models: models }),
+        template: () => h("wpp-chat-node-v4-4-0", { nodeTitle: "Test", selectedModelId: "unknown-model", models: models }),
       });
       expect(getModelItems(page)[0].getAttribute('checked')).not.toBeNull();
     });
     it('should let selectedModel take precedence over the deprecated selectedModelId', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        template: () => (h("wpp-chat-node-v4-3-0", { nodeTitle: "Test", selectedModel: models[0], selectedModelId: "claude-sonnet", models: models })),
+        template: () => (h("wpp-chat-node-v4-4-0", { nodeTitle: "Test", selectedModel: models[0], selectedModelId: "claude-sonnet", models: models })),
       });
       const modelItems = getModelItems(page);
       expect(modelItems[2].getAttribute('checked')).not.toBeNull();
@@ -630,7 +630,7 @@ describe('wpp-chat-node', () => {
     it('should mirror selectedModel into the deprecated selectedModelId so a stale id cannot resurface', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        template: () => h("wpp-chat-node-v4-3-0", { nodeTitle: "Test", selectedModelId: "claude-sonnet", models: models }),
+        template: () => h("wpp-chat-node-v4-4-0", { nodeTitle: "Test", selectedModelId: "claude-sonnet", models: models }),
       });
       page.rootInstance.selectedModel = 'premium';
       await page.waitForChanges();
@@ -645,7 +645,7 @@ describe('wpp-chat-node', () => {
     it('should keep the deprecated selectedModelId in sync when a model is picked from the dropdown', async () => {
       const page = await newSpecPage({
         components: [WppChatNode],
-        template: () => h("wpp-chat-node-v4-3-0", { nodeTitle: "Test", selectedModelId: "claude-sonnet", models: models }),
+        template: () => h("wpp-chat-node-v4-4-0", { nodeTitle: "Test", selectedModelId: "claude-sonnet", models: models }),
       });
       // Re-picking the already selected option leaves `selectedModel` untouched, so the id is
       // mirrored by the selection handler rather than by the `selectedModel` watcher.
@@ -818,7 +818,11 @@ describe('wpp-chat-node', () => {
       // Simulate an available SpeechRecognition engine.
       const startMock = jest.fn();
       const stopMock = jest.fn();
-      Reflect.set(page.rootInstance, 'recognition', { start: startMock, stop: stopMock });
+      Reflect.set(page.rootInstance, 'recognition', {
+        isSupported: true,
+        startRecognition: startMock,
+        stopRecognition: stopMock,
+      });
       const micButton = getRenderRoot(page.root).querySelector('[data-testid="chat-node-mic-btn"]');
       micButton.dispatchEvent(new MouseEvent('click'));
       await page.waitForChanges();
@@ -843,7 +847,7 @@ describe('wpp-chat-node', () => {
         components: [WppChatNode],
         html: `<wpp-chat-node node-title="Test"/>`,
       });
-      Reflect.set(page.rootInstance, 'recognition', null);
+      Reflect.set(page.rootInstance, 'recognition', { isSupported: false });
       const micButton = getRenderRoot(page.root).querySelector('[data-testid="chat-node-mic-btn"]');
       micButton.dispatchEvent(new MouseEvent('click'));
       await page.waitForChanges();

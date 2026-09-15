@@ -1,6 +1,6 @@
 import { Host, h } from '@stencil/core';
 import { ANIMATION_PROPERTY_NAME, Z_INDEX } from '../../common/consts';
-import { applyBodyStylesIfNeeded, getOsBarOffsetHeight, getSlotEmptyStates } from '../../utils/utils';
+import { applyBodyStylesIfNeeded, getOsBarOffsetHeight, getScrollbarGutterWidth, getSlotEmptyStates, } from '../../utils/utils';
 import { TimeoutManager } from '../../utils/timeout-manager';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { ModalCloseReason, } from './types';
@@ -53,6 +53,23 @@ export class WppModal {
       this.hasHeaderSlot = !emptyStates.header;
       this.hasBodySlot = !emptyStates.body;
       this.hasActionsSlot = !emptyStates.actions;
+      this.updateHeaderLabel();
+    };
+    /**
+     * The dialog's accessible name is derived from the slotted header, because an `aria-labelledby`
+     * on the host cannot reference an id that lives inside the shadow root – IDREFs do not cross the
+     * shadow boundary. Anything the consumer supplies wins, since their ids and labels resolve in
+     * their own tree scope.
+     */
+    this.updateHeaderLabel = () => {
+      if (this.ariaProps.labelledby || this.ariaProps.label) {
+        this.headerLabel = '';
+        return;
+      }
+      this.headerLabel = Array.from(this.host.querySelectorAll('[slot="header"]'))
+        .map(node => node.textContent?.trim() ?? '')
+        .filter(Boolean)
+        .join(' ');
     };
     this.handleTransitionStart = (event) => {
       if (event.propertyName !== ANIMATION_PROPERTY_NAME)
@@ -88,7 +105,7 @@ export class WppModal {
     };
     this.renderActionBtn = (btnConfig, variant) => {
       const { label, ...rest } = btnConfig;
-      return (h("wpp-button-v4-3-0", { size: "s", variant: variant, ...rest }, label));
+      return (h("wpp-button-v4-4-0", { size: "s", variant: variant, ...rest }, label));
     };
     this.renderActionsConfig = () => {
       if (!this.actionsConfig)
@@ -131,6 +148,7 @@ export class WppModal {
     this.hasActionsSlot = false;
     this.closeReason = null;
     this.isBodyScrollable = false;
+    this.headerLabel = '';
     this.open = false;
     this.size = 's';
     this.withTransparentOverlay = undefined;
@@ -140,7 +158,6 @@ export class WppModal {
     this.osBarCompatible = false;
     this.ariaProps = {
       role: 'dialog',
-      labelledby: 'dialog_label',
     };
     this.actionsConfig = undefined;
   }
@@ -158,8 +175,12 @@ export class WppModal {
     else {
       this.disconnectObserver();
     }
+    // Use the watcher's argument rather than re-reading `this.open` inside the timeout: reading a
+    // @Prop off an instance that was torn down first throws asynchronously, which is uncaught and
+    // kills the Node process. Required by the specs added here, which mount enough instances to
+    // trigger it.
     this.timeouts.schedule(() => {
-      applyBodyStylesIfNeeded(this.open ? 'add' : 'remove');
+      applyBodyStylesIfNeeded(openStatus ? 'add' : 'remove');
     });
   }
   /**
@@ -178,9 +199,11 @@ export class WppModal {
   //       invisiblePrehydration:true( works for Storybook, but not for react/angular components) there is might
   //       be an option, that we need to provide our own prehydration mechanism. Temporal solution.
   componentDidLoad() {
+    // Captured up front for the same reason as the `open` watcher above.
+    const { host, open, hasActionsSlot } = this;
     this.timeouts.schedule(() => {
-      this.open && this.host.classList.add('wpp-component-ready');
-      if (this.hasActionsSlot) {
+      open && host.classList.add('wpp-component-ready');
+      if (hasActionsSlot) {
         console.warn('The `actions` slot is deprecated and will be removed in a future release. Please use the `actionsConfig` property instead.');
       }
     });
@@ -189,6 +212,9 @@ export class WppModal {
   //       (e.g., responsive resize), consider recalculating via ResizeObserver or a shared CSS variable on :root.
   componentWillLoad() {
     this.topOffset = this.osBarCompatible ? getOsBarOffsetHeight() : 0;
+    // Seed the slot state before the first render, as wpp-side-modal does. Without this the
+    // derived accessible name is empty on the initial paint.
+    this.updateSlotData();
   }
   connectedCallback() {
     this.themeSubscription.start();
@@ -201,10 +227,16 @@ export class WppModal {
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-3-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-3-0", null), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-3-0", null), this.actionsConfig ? (this.renderActionsConfig()) : (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: {
+        zIndex: this.zIndex.toString(),
+        '--wpp-modal-top-offset': `${this.topOffset}px`,
+        // The body is a scroll container, so a classic scrollbar would eat into its right
+        // padding and render the designed inset asymmetrically. The SCSS subtracts this.
+        '--modal-scrollbar-gutter': `${getScrollbarGutterWidth()}px`,
+      }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-4-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-4-0", null), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-4-0", null), this.actionsConfig ? (this.renderActionsConfig()) : (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
   }
   static get is() { return "wpp-modal"; }
-  static get registryIs() { return "wpp-modal-v4-3-0"; }
+  static get registryIs() { return "wpp-modal-v4-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -364,9 +396,9 @@ export class WppModal {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "Contains the modal `aria-` props."
+          "text": "Contains the modal `aria-` props.\n\n`labelledby` is intentionally not defaulted: it previously pointed at an id rendered inside\nthe shadow root, which an `aria-labelledby` on the host can never resolve, leaving the dialog\nwith no accessible name. When you do supply one it must name an element in your own tree\nscope, and it is used verbatim. Otherwise the name is derived from the `header` slot."
         },
-        "defaultValue": "{\n    role: 'dialog',\n    labelledby: 'dialog_label',\n  }"
+        "defaultValue": "{\n    role: 'dialog',\n  }"
       },
       "actionsConfig": {
         "type": "unknown",
@@ -398,7 +430,8 @@ export class WppModal {
       "hasBodySlot": {},
       "hasActionsSlot": {},
       "closeReason": {},
-      "isBodyScrollable": {}
+      "isBodyScrollable": {},
+      "headerLabel": {}
     };
   }
   static get events() {

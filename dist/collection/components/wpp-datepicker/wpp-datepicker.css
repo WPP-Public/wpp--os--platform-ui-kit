@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .air-datepicker-cell.-year-.-other-decade-,.air-datepicker-cell.-day-.-other-month-{color:var(--adp-color-other-month)}.air-datepicker-cell.-year-.-other-decade-:hover,.air-datepicker-cell.-day-.-other-month-:hover{color:var(--adp-color-other-month-hover)}.-disabled-.-focus-.air-datepicker-cell.-year-.-other-decade-,.-disabled-.-focus-.air-datepicker-cell.-day-.-other-month-{color:var(--adp-color-other-month)}.-selected-.air-datepicker-cell.-year-.-other-decade-,.-selected-.air-datepicker-cell.-day-.-other-month-{color:#fff;background:var(--adp-background-color-selected-other-month)}.-selected-.-focus-.air-datepicker-cell.-year-.-other-decade-,.-selected-.-focus-.air-datepicker-cell.-day-.-other-month-{background:var(--adp-background-color-selected-other-month-focused)}.-in-range-.air-datepicker-cell.-year-.-other-decade-,.-in-range-.air-datepicker-cell.-day-.-other-month-{background-color:var(--adp-background-color-in-range);color:var(--adp-color)}.-in-range-.-focus-.air-datepicker-cell.-year-.-other-decade-,.-in-range-.-focus-.air-datepicker-cell.-day-.-other-month-{background-color:var(--adp-background-color-in-range-focused)}.air-datepicker-cell.-year-.-other-decade-:empty,.air-datepicker-cell.-day-.-other-month-:empty{background:none;border:none}.air-datepicker-cell{border-radius:var(--adp-cell-border-radius);box-sizing:border-box;cursor:pointer;display:flex;position:relative;align-items:center;justify-content:center;z-index:1}.air-datepicker-cell.-focus-{background:var(--adp-cell-background-color-hover)}.air-datepicker-cell.-current-{color:var(--adp-color-current-date)}.air-datepicker-cell.-current-.-focus-{color:var(--adp-color)}.air-datepicker-cell.-current-.-in-range-{color:var(--adp-color-current-date)}.air-datepicker-cell.-disabled-{cursor:default;color:var(--adp-color-disabled)}.air-datepicker-cell.-disabled-.-focus-{color:var(--adp-color-disabled)}.air-datepicker-cell.-disabled-.-in-range-{color:var(--adp-color-disabled-in-range)}.air-datepicker-cell.-disabled-.-current-.-focus-{color:var(--adp-color-disabled)}.air-datepicker-cell.-in-range-{background:var(--adp-cell-background-color-in-range);border-radius:0}.air-datepicker-cell.-in-range-:hover,.air-datepicker-cell.-in-range-.-focus-{background:var(--adp-cell-background-color-in-range-hover)}.air-datepicker-cell.-range-from-{border:1px solid var(--adp-cell-border-color-in-range);background-color:var(--adp-cell-background-color-in-range);border-radius:var(--adp-cell-border-radius) 0 0 var(--adp-cell-border-radius)}.air-datepicker-cell.-range-to-{border:1px solid var(--adp-cell-border-color-in-range);background-color:var(--adp-cell-background-color-in-range);border-radius:0 var(--adp-cell-border-radius) var(--adp-cell-border-radius) 0}.air-datepicker-cell.-range-to-.-range-from-{border-radius:var(--adp-cell-border-radius)}.air-datepicker-cell.-selected-{color:#fff;border:none;background:var(--adp-cell-background-color-selected)}.air-datepicker-cell.-selected-.-current-{color:#fff;background:var(--adp-cell-background-color-selected)}.air-datepicker-cell.-selected-.-focus-{background:var(--adp-cell-background-color-selected-hover)}
 .air-datepicker-body{transition:all var(--adp-transition-duration) var(--adp-transition-ease)}.air-datepicker-body.-hidden-{display:none}.air-datepicker-body--day-names{display:grid;grid-template-columns:repeat(7, var(--adp-day-cell-width));margin:8px 0 3px}.air-datepicker-body--day-name{color:var(--adp-day-name-color);display:flex;align-items:center;justify-content:center;flex:1;text-align:center;text-transform:uppercase;font-size:.8em}.air-datepicker-body--day-name.-clickable-{cursor:pointer}.air-datepicker-body--day-name.-clickable-:hover{color:var(--adp-day-name-color-hover)}.air-datepicker-body--cells{display:grid}.air-datepicker-body--cells.-days-{grid-template-columns:repeat(7, var(--adp-day-cell-width));grid-auto-rows:var(--adp-day-cell-height)}.air-datepicker-body--cells.-months-{grid-template-columns:repeat(3, 1fr);grid-auto-rows:var(--adp-month-cell-height)}.air-datepicker-body--cells.-years-{grid-template-columns:repeat(4, 1fr);grid-auto-rows:var(--adp-year-cell-height)}
 .air-datepicker-nav{display:flex;justify-content:space-between;border-bottom:1px solid var(--adp-border-color-inner);min-height:var(--adp-nav-height);padding:var(--adp-padding);box-sizing:content-box}.-only-timepicker- .air-datepicker-nav{display:none}.air-datepicker-nav--title,.air-datepicker-nav--action{display:flex;cursor:pointer;align-items:center;justify-content:center}.air-datepicker-nav--action{width:var(--adp-nav-action-size);border-radius:var(--adp-border-radius);-webkit-user-select:none;-moz-user-select:none;user-select:none}.air-datepicker-nav--action:hover{background:var(--adp-background-color-hover)}.air-datepicker-nav--action:active{background:var(--adp-background-color-active)}.air-datepicker-nav--action.-disabled-{visibility:hidden}.air-datepicker-nav--action svg{width:32px;height:32px}.air-datepicker-nav--action path{fill:none;stroke:var(--adp-nav-arrow-color);stroke-width:2px}.air-datepicker-nav--title{border-radius:var(--adp-border-radius);padding:0 8px}.air-datepicker-nav--title i{font-style:normal;color:var(--adp-nav-color-secondary);margin-left:.3em}.air-datepicker-nav--title:hover{background:var(--adp-background-color-hover)}.air-datepicker-nav--title:active{background:var(--adp-background-color-active)}.air-datepicker-nav--title.-disabled-{cursor:default;background:none}
@@ -10,6 +11,16 @@
   --wpp-datepicker-bg-color: var(--wpp-grey-color-200);
 }
 
+/*
+ * Double calendar (`withDoubleCalendar`) — Figma "Days double" / "Presets=On, Double=Yes".
+ * Column of [rail | calendars] row, full-width divider, then a full-width actions row.
+ * 616 = 136 rail + 480 calendars; 480 = 8 + 224 + 16 + 224 + 8.
+ *
+ * Lives in a mixin because the popup variant escapes the shadow root: tippy re-parents the
+ * portal into document.body, where `:host`-scoped component styles no longer reach it. So this
+ * has to be applied both in wpp-datepicker.scss (static, still in the shadow root) and in
+ * global.scss (popup) — the same split the air-datepicker and datepicker-presets mixins use.
+ */
 :host {
   /**
     * @prop --wpp-datepicker-width:
@@ -29,6 +40,7 @@
     * @prop --wpp-datepicker-border-radius:
     * @prop --wpp-datepicker-z-index:
     * @prop --wpp-datepicker-buttons-height:
+    * @prop --wpp-datepicker-nav-control-height:
     * @prop --wpp-datepicker-title-margin:
     * @prop --wpp-datepicker-label-margin:
     * @prop --wpp-datepicker-cancel-button-color-disabled:
@@ -90,6 +102,7 @@
   --datepicker-border-radius: var(--wpp-datepicker-border-radius, var(--wpp-border-radius-m));
   --datepicker-z-index: var(--wpp-datepicker-z-index, 940);
   --datepicker-buttons-height: var(--wpp-datepicker-buttons-height, 48px);
+  --datepicker-nav-control-height: var(--wpp-datepicker-nav-control-height, 32px);
   --datepicker-title-margin: var(--wpp-datepicker-title-margin, 0 0 0 4px);
   --datepicker-label-margin: var(--wpp-datepicker-label-margin, 0 0 8px 0);
   --datepicker-cancel-button-color-disabled: var(
@@ -371,6 +384,14 @@
   color: var(--wpp-grey-color-800);
   text-transform: initial;
 }
+:host .air-datepicker-nav--title,
+:host .air-datepicker-nav--action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: var(--datepicker-nav-control-height);
+}
 :host .air-datepicker-nav--title {
   font-size: var(--wpp-typography-s-strong-font-size, 14px);
   line-height: var(--wpp-typography-s-strong-line-height, 22px);
@@ -380,7 +401,7 @@
   letter-spacing: var(--wpp-typography-s-strong-letter-spacing, 0);
   color: var(--datepicker-title-color);
 }
-:host .air-datepicker-nav--title:hover {
+:host .air-datepicker-nav--title:hover, :host .air-datepicker-nav--title:focus-visible {
   background: var(--wpp-grey-color-200);
 }
 :host .air-datepicker-nav--title:active {
@@ -419,8 +440,16 @@
 :host .air-datepicker-buttons {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* Both actions sit together on the right, as the design has them — they used to be pushed
+     to opposite ends of the row. */
+  justify-content: flex-end;
+  gap: 4px;
   width: 100%;
+  /* Hover and press follow the design system's secondary (ghost) button — grey-700 at 12%
+     and grey-800 at 18% — rather than air-datepicker's own `--adp-btn-*` greys, which are a
+     flat, more saturated fill. The radius stays at the datepicker's own 4px rather than the
+     ghost button's 6px, matching the other parts of the calendar. Keeps this row identical
+     to the double calendar's, which renders its own actions outside `.air-datepicker`. */
 }
 :host .air-datepicker-buttons .air-datepicker-button {
   font-size: var(--wpp-typography-s-strong-font-size, 14px);
@@ -429,6 +458,16 @@
   color: var(--wpp-typography-s-strong-color, var(--wpp-text-color));
   font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-strong-letter-spacing, 0);
+  border-radius: var(--wpp-border-radius-xs);
+}
+:host .air-datepicker-buttons .air-datepicker-button:focus {
+  background: transparent;
+}
+:host .air-datepicker-buttons .air-datepicker-button:hover, :host .air-datepicker-buttons .air-datepicker-button:focus-visible {
+  background: color-mix(in srgb, var(--wpp-grey-color-700) 12%, transparent);
+}
+:host .air-datepicker-buttons .air-datepicker-button:active {
+  background: color-mix(in srgb, var(--wpp-grey-color-800) 18%, transparent);
 }
 :host .air-datepicker-buttons .button-apply {
   margin: var(--datepicker-buttons-margin) !important;
@@ -448,13 +487,20 @@
 :host .air-datepicker-buttons .button-clear {
   padding: var(--datepicker-button-padding) !important;
   color: var(--datepicker-cancel-button-color-active);
+  /* air-datepicker's base rule recolours the label on hover; the design keeps it. */
 }
 :host .air-datepicker-buttons .button-clear.disabled {
   color: var(--wpp-text-color-disabled);
   pointer-events: none;
 }
-:host .air-datepicker-nav--action:hover {
-  background-color: transparent;
+:host .air-datepicker-buttons .button-clear:hover {
+  color: var(--datepicker-cancel-button-color-active);
+}
+:host .air-datepicker-buttons .button-clear:active {
+  color: var(--wpp-grey-color-1000);
+}
+:host .air-datepicker-nav--action:hover .nav-icon, :host .air-datepicker-nav--action:focus-visible .nav-icon {
+  color: var(--datepicker-close-icon-color-hover);
 }
 :host .nav-icon {
   color: var(--datepicker-close-icon-color);
@@ -484,6 +530,22 @@
   font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
 }
+:host .air-datepicker-cell:focus-visible,
+:host .air-datepicker-nav--action:focus-visible,
+:host .air-datepicker-nav--title:focus-visible,
+:host .air-datepicker-button:focus-visible {
+  position: relative;
+  z-index: 2;
+  outline: none;
+  box-shadow: 0 0 0 1px var(--datepicker-input-first-border-color-focus), 0 0 0 3px var(--datepicker-input-second-border-color-focus);
+}
+:host .air-datepicker-cell:focus-visible:not(.-selected-, .-in-range-, .-disabled-) {
+  background-color: var(--datepicker-cell-bg-color-hover);
+}
+:host .air-datepicker .air-datepicker-cell.-disabled-.-in-range-, :host .air-datepicker .air-datepicker-cell.-disabled-.-range-from-, :host .air-datepicker .air-datepicker-cell.-disabled-.-range-to-, :host .air-datepicker .air-datepicker-cell.-disabled-:hover {
+  background: transparent;
+  border-color: transparent;
+}
 :host .inline-message {
   margin: var(--datepicker-inline-message-margin);
 }
@@ -492,6 +554,8 @@
 }
 :host .wpp-datepicker-portal {
   min-width: var(--datepicker-min-width);
+  /* Shared with global.scss so the popup variant (portal re-parented out of the shadow
+     root by tippy) gets the same layout. */
 }
 :host .wpp-datepicker-portal .air-datepicker {
   position: relative;
@@ -557,6 +621,180 @@
 }
 :host .wpp-datepicker-portal.wpp-range-selected .air-datepicker {
   --adp-cell-background-color-in-range: var(--wpp-primary-color-100);
+}
+:host .wpp-datepicker-portal.wpp-double-calendar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: max-content;
+  /* The pair reads as one surface, so the two .air-datepicker cards below are stripped of
+     their background/border/shadow — which means the portal has to supply them. Without this
+     the popup is transparent; it only looked right on a white page. */
+  background: var(--datepicker-bg-color);
+  border-radius: var(--datepicker-border-radius);
+  box-shadow: var(--wpp-box-shadow-m);
+  overflow: hidden;
+  /* One popup, two grids — drop the per-instance card chrome so the pair reads as a
+     single surface and each calendar is exactly the Figma's 224px.
+     The side padding goes too: the day cells are 7 x 32px = 224, so any inset would squeeze
+     the grid and leave the calendar wider than the row it belongs to. */
+  /* The facing chevrons are hidden in the Figma: the left calendar keeps only "prev",
+     the right only "next", and either one moves the pair. */
+  /* Figma's "Month / year control" is a 32px row, then 8px of breathing room, then the 1px
+     divider — 41px in total. air-datepicker instead puts --adp-padding on both sides of a
+     content-box nav, which made it 49px and pushed the whole popup past the design height. */
+  /* Figma's Calendar column is 32 + 8 + 1 + 8 + 22 + 8 + 176 = 255. Two parts were off:
+     the weekday row measured 20 rather than 22, and the content box padded the bottom as well
+     as the top, adding an eighth gap the design doesn't have after the last week. */
+  /* A date at a month boundary is rendered twice — as a real cell in the month that owns it,
+     and as a greyed spill cell in the neighbouring grid. Letting both paint the range shows
+     the same selection in both calendars, which reads as two separate ranges. Keep the
+     highlight on the owning month only. Untouched otherwise, so a spill cell looks exactly as
+     it does when nothing is selected. */
+  /* The rail carries its own border here, so the ::before/footer spacer the single-calendar
+     layout uses to dodge air-datepicker's button row isn't needed. */
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-row {
+  display: flex;
+  flex-direction: row;
+  /* stretch so the rail's divider runs the full height of the calendars */
+  align-items: stretch;
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-calendars {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  padding: var(--datepicker-padding);
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .air-datepicker {
+  box-sizing: border-box;
+  width: 224px;
+  padding-right: 0;
+  padding-left: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-calendar-primary .air-datepicker-nav--action[data-action=next],
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-calendar-secondary .air-datepicker-nav--action[data-action=prev] {
+  visibility: hidden;
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .air-datepicker-nav {
+  min-height: 32px;
+  padding: 0 0 8px;
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .air-datepicker--content {
+  padding: var(--datepicker-padding) 0 0;
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .air-datepicker-body--day-names {
+  height: 22px;
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .air-datepicker-cell.-day-.-other-month-.-selected-, :host .wpp-datepicker-portal.wpp-double-calendar .air-datepicker-cell.-day-.-other-month-.-in-range-, :host .wpp-datepicker-portal.wpp-double-calendar .air-datepicker-cell.-day-.-other-month-.-range-from-, :host .wpp-datepicker-portal.wpp-double-calendar .air-datepicker-cell.-day-.-other-month-.-range-to- {
+  border-color: transparent;
+  background: none;
+  color: var(--wpp-text-color-disabled);
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-divider {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 var(--datepicker-padding);
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-divider::after {
+  display: block;
+  height: 1px;
+  background: var(--wpp-grey-color-300);
+  content: "";
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  gap: 4px;
+  width: 100%;
+  height: var(--datepicker-buttons-height);
+  padding: var(--datepicker-padding);
+  /* Both are ghost buttons in the Figma; Apply differs only by label colour.
+
+     This row sits outside `.air-datepicker`, which is where the `--adp-btn-*` tokens are
+     declared, so air-datepicker's own `:hover`/`:active` rules resolve to nothing here and
+     the buttons were left with no hover or press feedback.
+
+     The states follow the design system's secondary (ghost) button rather than
+     air-datepicker's: grey-700 at 12% on hover, grey-800 at 18% pressed. wpp-action-button
+     paints those with a separate overlay element it can fade; a translucent background gets
+     to the same colour without the extra node. The radius stays at the datepicker's own 4px
+     rather than the ghost button's 6px, matching the other parts of the calendar. */
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button {
+  font-size: var(--wpp-typography-s-strong-font-size, 14px);
+  line-height: var(--wpp-typography-s-strong-line-height, 22px);
+  font-weight: var(--wpp-typography-s-strong-font-weight, 700);
+  color: var(--wpp-typography-s-strong-color, var(--wpp-text-color));
+  font-family: var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));
+  letter-spacing: var(--wpp-typography-s-strong-letter-spacing, 0);
+  height: 32px;
+  padding: var(--datepicker-button-padding);
+  border: none;
+  border-radius: var(--wpp-border-radius-xs);
+  background: transparent;
+  cursor: pointer;
+  /* air-datepicker declares `.air-datepicker-button:focus` unscoped, and the reset for it is
+     scoped to `.air-datepicker-buttons` — the single calendar's own row. This row is not in
+     there, so the vendor grey still landed on Tab. Clear it and let :focus-visible carry the
+     same ghost fill as hover, so a keyboard-focused button reads like a hovered one here too. */
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button:focus {
+  background: transparent;
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button:hover, :host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button:focus-visible {
+  background: color-mix(in srgb, var(--wpp-grey-color-700) 12%, transparent);
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button:active {
+  background: color-mix(in srgb, var(--wpp-grey-color-800) 18%, transparent);
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button.disabled {
+  background: transparent;
+  pointer-events: none;
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .button-clear {
+  color: var(--datepicker-cancel-button-color-active);
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .button-clear.disabled {
+  color: var(--wpp-text-color-disabled);
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .button-clear:active {
+  color: var(--wpp-grey-color-1000);
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .button-apply {
+  color: var(--wpp-brand-color);
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .button-apply.disabled {
+  color: var(--wpp-primary-color-300);
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .button-apply:hover {
+  color: var(--wpp-brand-color-hover);
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .button-apply:active {
+  color: var(--wpp-brand-color-active);
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-presets-container {
+  box-sizing: border-box;
+  width: 136px;
+  padding: var(--datepicker-padding) 0 0;
+  /* The divider belongs to the list, not the container, so it starts below the 8px of top
+     padding rather than running all the way into the popup's top edge. */
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-presets-container::before {
+  content: none;
+}
+:host .wpp-datepicker-portal.wpp-double-calendar .wpp-presets-container .wpp-presets-list {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 0 var(--datepicker-padding);
+  border-right: 1px solid var(--wpp-grey-color-300);
 }
 :host .wpp-datepicker-portal.wpp-static-portal {
   position: relative;
@@ -643,20 +881,19 @@
 :host #container.has-default-format #datepicker:hover {
   cursor: text;
 }
-:host .datepicker-wrapper:hover #datepicker:not(.focus, [disabled], .error, .warning) {
-  background-color: var(--wpp-grey-color-200);
-  border-color: var(--datepicker-input-border-color-hover);
+:host .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  border: 0;
+  white-space: nowrap;
 }
-:host .datepicker-wrapper:hover #datepicker.error:not([disabled]),
-:host .datepicker-wrapper:hover #datepicker.warning:not([disabled]) {
-  background-color: var(--wpp-grey-color-200);
-}
-:host .datepicker-wrapper:hover .cross-icon {
-  opacity: 1;
-  pointer-events: auto;
-}
-:host .datepicker-wrapper:hover .calendar-icon {
-  color: var(--wpp-grey-color-800);
+:host .inline-message-live-region {
+  margin-top: 4px;
 }
 :host #datepicker {
   font-size: var(--wpp-typography-s-body-font-size, 14px);
@@ -722,6 +959,15 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.15s ease;
+  outline: none;
+}
+:host .cross-icon:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+  color: var(--datepicker-close-icon-color-hover);
+  border-radius: var(--wpp-border-radius-s);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--datepicker-input-first-border-color-focus), 0 0 0 3px var(--datepicker-input-second-border-color-focus);
 }
 :host .cross-icon.disabled {
   pointer-events: none;
@@ -740,9 +986,17 @@
   position: absolute;
   left: 10px;
   top: 10px;
+  outline: none;
 }
 :host .calendar-icon:hover {
   cursor: pointer;
+  color: var(--datepicker-close-icon-color-hover);
+}
+:host .calendar-icon:focus-visible {
+  color: var(--datepicker-close-icon-color-hover);
+  border-radius: var(--wpp-border-radius-s);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--datepicker-input-first-border-color-focus), 0 0 0 3px var(--datepicker-input-second-border-color-focus);
 }
 :host .calendar-icon.size-s {
   top: 6px;
@@ -768,7 +1022,24 @@
 :host(.wpp-has-value) .datepicker-input.idle {
   border-color: var(--wpp-grey-color-500);
 }
-:host(.wpp-has-value) .datepicker-wrapper:hover .datepicker-input {
+
+.datepicker-wrapper:not(.disabled):has(> #datepicker:hover, > .calendar-icon:hover, > .cross-icon:hover) #datepicker:not(.focus, [disabled], .error, .warning) {
+  background-color: var(--wpp-grey-color-200);
+  border-color: var(--datepicker-input-border-color-hover);
+}
+.datepicker-wrapper:not(.disabled):has(> #datepicker:hover, > .calendar-icon:hover, > .cross-icon:hover) #datepicker.error:not([disabled]),
+.datepicker-wrapper:not(.disabled):has(> #datepicker:hover, > .calendar-icon:hover, > .cross-icon:hover) #datepicker.warning:not([disabled]) {
+  background-color: var(--wpp-grey-color-200);
+}
+.datepicker-wrapper:not(.disabled):has(> #datepicker:hover, > .calendar-icon:hover, > .cross-icon:hover) .cross-icon {
+  opacity: 1;
+  pointer-events: auto;
+}
+.datepicker-wrapper:not(.disabled):has(> #datepicker:hover, > .calendar-icon:hover, > .cross-icon:hover) .calendar-icon {
+  color: var(--wpp-grey-color-800);
+}
+
+.datepicker-wrapper.has-value:not(.disabled):has(> #datepicker:hover, > .calendar-icon:hover, > .cross-icon:hover) .datepicker-input {
   border-color: var(--wpp-grey-color-700);
 }
 

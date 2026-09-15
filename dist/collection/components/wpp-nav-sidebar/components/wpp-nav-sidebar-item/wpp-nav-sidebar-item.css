@@ -109,8 +109,9 @@
 
 :host(:focus-visible) .item,
 .item:focus-visible {
+  border-radius: var(--ns-item-border-radius);
   outline: none;
-  box-shadow: inset 0 0 0 1px var(--wpp-grey-color-000), inset 0 0 0 3px var(--wpp-brand-color);
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
   background-color: var(--wpp-grey-color-200);
 }
 :host(:focus-visible) .item ::slotted([slot=icon-start]),
@@ -171,61 +172,61 @@
 .item .extended-icon {
   color: var(--ns-item-icons-color);
 }
-.item.active {
+:host([active]) .item {
   background-color: var(--wpp-grey-color-300);
 }
-.item.active .label,
-.item.active .nested-label {
+:host([active]) .item .label,
+:host([active]) .item .nested-label {
   color: var(--ns-item-label-text-color-active);
 }
-.item.active .label.open-nested-label {
+:host([active]) .item .label.open-nested-label {
   color: var(--ns-item-nested-label-text-color-selected);
 }
-.item.active ::slotted([slot=icon-start]),
-.item.active ::slotted([slot=icon-end]),
-.item.active .slot-icon-start-fallback {
+:host([active]) .item ::slotted([slot=icon-start]),
+:host([active]) .item ::slotted([slot=icon-end]),
+:host([active]) .item .slot-icon-start-fallback {
   color: var(--ns-item-icons-active-color);
 }
-.item.active:hover {
+:host([active]) .item:hover {
   background-color: var(--wpp-grey-color-300);
 }
-.item.active:hover .label,
-.item.active:hover .nested-label {
+:host([active]) .item:hover .label,
+:host([active]) .item:hover .nested-label {
   color: var(--ns-item-label-text-color-active);
 }
-.item.active:hover .label.open-nested-label {
+:host([active]) .item:hover .label.open-nested-label {
   color: var(--ns-item-nested-label-text-color-selected-hover);
 }
-.item.active:hover .extended-icon {
+:host([active]) .item:hover .extended-icon {
   color: var(--ns-item-icons-color);
 }
-.item.active:hover ::slotted([slot=icon-start]),
-.item.active:hover ::slotted([slot=icon-end]),
-.item.active:hover .slot-icon-start-fallback {
+:host([active]) .item:hover ::slotted([slot=icon-start]),
+:host([active]) .item:hover ::slotted([slot=icon-end]),
+:host([active]) .item:hover .slot-icon-start-fallback {
   color: var(--ns-item-icons-active-color-hover);
 }
-.item.active:active {
+:host([active]) .item:active {
   background-color: var(--wpp-grey-color-300);
 }
-.item.active:active .label,
-.item.active:active .nested-label {
+:host([active]) .item:active .label,
+:host([active]) .item:active .nested-label {
   color: var(--ns-item-label-text-color-active);
 }
-.item.active:active .label.open-nested-label {
+:host([active]) .item:active .label.open-nested-label {
   color: var(--ns-item-nested-label-text-color-selected-active);
 }
-.item.active .extended-icon {
+:host([active]) .item .extended-icon {
   color: var(--ns-item-icons-color);
 }
-.item.active.expanded ::slotted([slot=icon-start]) {
+:host([active]) .item.expanded ::slotted([slot=icon-start]) {
   color: var(--ns-item-start-icon-color-selected-active);
 }
-.item.active ::slotted([slot=icon-start]),
-.item.active ::slotted([slot=icon-end]),
-.item.active .slot-icon-start-fallback {
+:host([active]) .item ::slotted([slot=icon-start]),
+:host([active]) .item ::slotted([slot=icon-end]),
+:host([active]) .item .slot-icon-start-fallback {
   color: var(--ns-item-icons-active-color-pressed);
 }
-.item.active ::slotted([slot=icon-start]) {
+:host([active]) .item ::slotted([slot=icon-start]) {
   color: var(--ns-item-start-icon-color-selected-idle);
 }
 .item:hover {
@@ -349,6 +350,8 @@
 }
 .sub-items-wrapper.expanded {
   max-height: 100vh;
+  padding: 4px;
+  margin: -4px;
   opacity: 1;
   pointer-events: initial;
 }

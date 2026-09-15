@@ -14,9 +14,9 @@ const WppMenuGroup = class {
     this.withDivider = false;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), role: this.getRole(), "aria-label": this.header, exportparts: "header, divider" }, this.header && (h("wpp-typography-v4-3-0", { type: "2xs-strong", part: "header" }, this.header)), h("slot", null), this.withDivider && h("wpp-divider-v4-3-0", { class: "slot-divider", part: "divider" })));
+    return (h(Host, { class: this.hostCssClasses(), role: this.getRole(), "aria-label": this.header, exportparts: "header, divider" }, this.header && (h("wpp-typography-v4-4-0", { type: "2xs-strong", part: "header" }, this.header)), h("slot", null), this.withDivider && h("wpp-divider-v4-4-0", { class: "slot-divider", part: "divider" })));
   }
-  static get registryIs() { return "wpp-menu-group-v4-3-0"; }
+  static get registryIs() { return "wpp-menu-group-v4-4-0"; }
 };
 WppMenuGroup.style = wppMenuGroupCss;
 

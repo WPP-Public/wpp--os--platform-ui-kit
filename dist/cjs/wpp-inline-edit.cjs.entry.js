@@ -5,7 +5,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 const index = require('./index-5f5af6a9.js');
 const types = require('./types-7010056a.js');
 const tippy_esm = require('./tippy.esm-9d703cd4.js');
-const utils = require('./utils-9529c2fe.js');
+const utils = require('./utils-a6513d61.js');
 require('./consts-d8f5ef98.js');
 
 const LOCALES_DEFAULTS = {
@@ -183,9 +183,9 @@ const WppInlineEdit = class {
     };
     this.renderViewContent = () => {
       const shouldShowTooltip = this.isViewTextTruncated && this.value;
-      return shouldShowTooltip ? (index.h("wpp-tooltip-v4-3-0", { class: "view-tooltip", text: this.value }, this.renderViewText())) : (this.renderViewText());
+      return shouldShowTooltip ? (index.h("wpp-tooltip-v4-4-0", { class: "view-tooltip", text: this.value }, this.renderViewText())) : (this.renderViewText());
     };
-    this.renderTriggerElement = () => (index.h("div", { tabIndex: 0, role: "button", class: "trigger", "aria-label": this.value || this.placeholder }, this.mode === types.InlineEditModeEnum.EDIT ? (index.h("div", { class: "wrapper", part: "wrapper" }, index.h("div", { class: "form-element", onKeyDown: this.onKeyDownFormEl }, index.h("slot", { name: "form-element" })))) : (index.h("div", { class: "content", onClick: () => this.emitModeChange(types.InlineEditModeEnum.EDIT), part: "content" }, index.h("div", { class: "content-bg", part: "content-bg" }), this.renderViewContent(), index.h("wpp-icon-edit-v4-3-0", { "aria-hidden": "true" })))));
+    this.renderTriggerElement = () => (index.h("div", { tabIndex: 0, role: "button", class: "trigger", "aria-label": this.value || this.placeholder }, this.mode === types.InlineEditModeEnum.EDIT ? (index.h("div", { class: "wrapper", part: "wrapper" }, index.h("div", { class: "form-element", onKeyDown: this.onKeyDownFormEl }, index.h("slot", { name: "form-element" })))) : (index.h("div", { class: "content", onClick: () => this.emitModeChange(types.InlineEditModeEnum.EDIT), part: "content" }, index.h("div", { class: "content-bg", part: "content-bg" }), this.renderViewContent(), index.h("wpp-icon-edit-v4-4-0", { "aria-hidden": "true" })))));
     this.initialValue = undefined;
     this.inputValue = undefined;
     this.formType = 'input';
@@ -254,7 +254,7 @@ const WppInlineEdit = class {
   }
   render() {
     const inlineWidth = this.mode === types.InlineEditModeEnum.EDIT && this.inputWidth !== 'auto' && this.inputWidth !== undefined;
-    return (index.h(index.Host, { class: this.inlineEditCssClasses(), exportparts: "label, wrapper, input, textarea, buttons, view-text, content, content-bg" }, index.h("wpp-popover-v4-3-0", { ref: ref => (this.popoverRef = ref), externalClass: "inline-edit-popover", exportparts: "content", class: this.inlineEditPopoverCssClasses(), style: { width: inlineWidth ? this.inputWidth : '' }, config: {
+    return (index.h(index.Host, { class: this.inlineEditCssClasses(), exportparts: "label, wrapper, input, textarea, buttons, view-text, content, content-bg" }, index.h("wpp-popover-v4-4-0", { ref: ref => (this.popoverRef = ref), externalClass: "inline-edit-popover", exportparts: "content", class: this.inlineEditPopoverCssClasses(), style: { width: inlineWidth ? this.inputWidth : '' }, config: {
         placement: this.formType === 'input' ? 'right-start' : 'bottom-start',
         offset: [0, 4],
         hideOnClick: false,
@@ -292,7 +292,7 @@ const WppInlineEdit = class {
           }
         },
         onClickOutside: (_, e) => this.handleClose(e, 'outsideClick'),
-      } }, index.h("div", { slot: "trigger-element", ref: elRef => (this.triggerContainerRef = elRef), class: "trigger-element" }, this.errorMessage && this.mode === types.InlineEditModeEnum.EDIT ? (index.h("wpp-tooltip-v4-3-0", { class: 'wpp-anchor-toolip', error: true, text: this.errorMessage, config: {
+      } }, index.h("div", { slot: "trigger-element", ref: elRef => (this.triggerContainerRef = elRef), class: "trigger-element" }, this.errorMessage && this.mode === types.InlineEditModeEnum.EDIT ? (index.h("wpp-tooltip-v4-4-0", { class: 'wpp-anchor-toolip', error: true, text: this.errorMessage, config: {
         showOnCreate: true,
         onCreate: instance => {
           this.tooltipInstance = instance;
@@ -302,9 +302,9 @@ const WppInlineEdit = class {
             instance.popperInstance?.update();
           }, 20);
         },
-      } }, this.renderTriggerElement())) : (this.renderTriggerElement())), index.h("div", { class: "wpp-buttons-container", part: "buttons" }, index.h("wpp-action-button-v4-3-0", { disabled: this.isPendingRequest || this.value === this.lastValueWithError, variant: "inverted", onClick: this.handleAccept }, index.h("wpp-icon-done-v4-3-0", { slot: "icon-start" })), index.h("wpp-action-button-v4-3-0", { disabled: this.isPendingRequest, variant: "inverted", onClick: e => this.handleClose(e, 'cancel') }, index.h("wpp-icon-cross-v4-3-0", { slot: "icon-start" }))))));
+      } }, this.renderTriggerElement())) : (this.renderTriggerElement())), index.h("div", { class: "wpp-buttons-container", part: "buttons" }, index.h("wpp-action-button-v4-4-0", { disabled: this.isPendingRequest || this.value === this.lastValueWithError, variant: "inverted", onClick: this.handleAccept }, index.h("wpp-icon-done-v4-4-0", { slot: "icon-start" })), index.h("wpp-action-button-v4-4-0", { disabled: this.isPendingRequest, variant: "inverted", onClick: e => this.handleClose(e, 'cancel') }, index.h("wpp-icon-cross-v4-4-0", { slot: "icon-start" }))))));
   }
-  static get registryIs() { return "wpp-inline-edit-v4-3-0"; }
+  static get registryIs() { return "wpp-inline-edit-v4-4-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "mode": ["editModeChangeHandler"],

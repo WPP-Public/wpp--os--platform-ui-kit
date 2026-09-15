@@ -2,11 +2,12 @@ import { r as registerInstance, c as createEvent, h, H as Host, g as getElement 
 import { c as createCommonjsModule, a as commonjsGlobal, g as getDefaultExportFromCjs } from './_commonjsHelpers-ba3f0406.js';
 import { i as isObjectLike_1, _ as _baseGetTag, a as _baseUnary, b as _nodeUtil, c as isEqual_1 } from './isEqual-cbad439f.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
-import { g as getSlotEmptyStates, k as transformToVersionedTag, w as getHighestContainerInDOM, n as autoFocusElement, y as mergeLocales } from './utils-452958a4.js';
+import { A as uniquePortalId, g as getSlotEmptyStates, k as transformToVersionedTag, w as getHighestContainerInDOM, n as autoFocusElement, y as mergeLocales, B as activateOnEnterOrSpace } from './utils-a4b26a20.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
 import { m as menuListConfig } from './menuListConfig-2c1d4b4f.js';
-import { t as themeSubscriptionController } from './subscribe-to-theme-3920c16c.js';
+import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
 import './tippy.esm-c5fe8087.js';
+import './theme-observer-b7886d19.js';
 
 function _typeof(o) {
   "@babel/helpers - typeof";
@@ -87,6 +88,98 @@ function toDate(argument) {
 }
 
 /**
+ * @name addDays
+ * @category Day Helpers
+ * @summary Add the specified number of days to the given date.
+ *
+ * @description
+ * Add the specified number of days to the given date.
+ *
+ * @param {Date|Number} date - the date to be changed
+ * @param {Number} amount - the amount of days to be added. Positive decimals will be rounded using `Math.floor`, decimals less than zero will be rounded using `Math.ceil`.
+ * @returns {Date} - the new date with the days added
+ * @throws {TypeError} - 2 arguments required
+ *
+ * @example
+ * // Add 10 days to 1 September 2014:
+ * const result = addDays(new Date(2014, 8, 1), 10)
+ * //=> Thu Sep 11 2014 00:00:00
+ */
+function addDays(dirtyDate, dirtyAmount) {
+  requiredArgs(2, arguments);
+  var date = toDate(dirtyDate);
+  var amount = toInteger(dirtyAmount);
+  if (isNaN(amount)) {
+    return new Date(NaN);
+  }
+  if (!amount) {
+    // If 0 days, no-op to avoid changing times in the hour before end of DST
+    return date;
+  }
+  date.setDate(date.getDate() + amount);
+  return date;
+}
+
+/**
+ * @name addMonths
+ * @category Month Helpers
+ * @summary Add the specified number of months to the given date.
+ *
+ * @description
+ * Add the specified number of months to the given date.
+ *
+ * @param {Date|Number} date - the date to be changed
+ * @param {Number} amount - the amount of months to be added. Positive decimals will be rounded using `Math.floor`, decimals less than zero will be rounded using `Math.ceil`.
+ * @returns {Date} the new date with the months added
+ * @throws {TypeError} 2 arguments required
+ *
+ * @example
+ * // Add 5 months to 1 September 2014:
+ * const result = addMonths(new Date(2014, 8, 1), 5)
+ * //=> Sun Feb 01 2015 00:00:00
+ */
+function addMonths(dirtyDate, dirtyAmount) {
+  requiredArgs(2, arguments);
+  var date = toDate(dirtyDate);
+  var amount = toInteger(dirtyAmount);
+  if (isNaN(amount)) {
+    return new Date(NaN);
+  }
+  if (!amount) {
+    // If 0 months, no-op to avoid changing times in the hour before end of DST
+    return date;
+  }
+  var dayOfMonth = date.getDate();
+
+  // The JS Date object supports date math by accepting out-of-bounds values for
+  // month, day, etc. For example, new Date(2020, 0, 0) returns 31 Dec 2019 and
+  // new Date(2020, 13, 1) returns 1 Feb 2021.  This is *almost* the behavior we
+  // want except that dates will wrap around the end of a month, meaning that
+  // new Date(2020, 13, 31) will return 3 Mar 2021 not 28 Feb 2021 as desired. So
+  // we'll default to the end of the desired month by adding 1 to the desired
+  // month and using a date of 0 to back up one day to the end of the desired
+  // month.
+  var endOfDesiredMonth = new Date(date.getTime());
+  endOfDesiredMonth.setMonth(date.getMonth() + amount + 1, 0);
+  var daysInMonth = endOfDesiredMonth.getDate();
+  if (dayOfMonth >= daysInMonth) {
+    // If we're already at the end of the month, then this is the correct date
+    // and we're done.
+    return endOfDesiredMonth;
+  } else {
+    // Otherwise, we now know that setting the original day-of-month value won't
+    // cause an overflow, so set the desired day-of-month. Note that we can't
+    // just set the date of `endOfDesiredMonth` because that object may have had
+    // its time changed in the unusual case where where a DST transition was on
+    // the last day of the month and its local time was in the hour skipped or
+    // repeated next to a DST transition.  So we use `date` instead which is
+    // guaranteed to still have the original time.
+    date.setFullYear(endOfDesiredMonth.getFullYear(), endOfDesiredMonth.getMonth(), dayOfMonth);
+    return date;
+  }
+}
+
+/**
  * @name addMilliseconds
  * @category Millisecond Helpers
  * @summary Add the specified number of milliseconds to the given date.
@@ -131,6 +224,55 @@ function getTimezoneOffsetInMilliseconds(date) {
   var utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
   utcDate.setUTCFullYear(date.getFullYear());
   return date.getTime() - utcDate.getTime();
+}
+
+/**
+ * @name startOfDay
+ * @category Day Helpers
+ * @summary Return the start of a day for the given date.
+ *
+ * @description
+ * Return the start of a day for the given date.
+ * The result will be in the local timezone.
+ *
+ * @param {Date|Number} date - the original date
+ * @returns {Date} the start of a day
+ * @throws {TypeError} 1 argument required
+ *
+ * @example
+ * // The start of a day for 2 September 2014 11:55:00:
+ * const result = startOfDay(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Tue Sep 02 2014 00:00:00
+ */
+function startOfDay(dirtyDate) {
+  requiredArgs(1, arguments);
+  var date = toDate(dirtyDate);
+  date.setHours(0, 0, 0, 0);
+  return date;
+}
+
+/**
+ * @name addYears
+ * @category Year Helpers
+ * @summary Add the specified number of years to the given date.
+ *
+ * @description
+ * Add the specified number of years to the given date.
+ *
+ * @param {Date|Number} date - the date to be changed
+ * @param {Number} amount - the amount of years to be added. Positive decimals will be rounded using `Math.floor`, decimals less than zero will be rounded using `Math.ceil`.
+ * @returns {Date} the new date with the years added
+ * @throws {TypeError} 2 arguments required
+ *
+ * @example
+ * // Add 5 years to 1 September 2014:
+ * const result = addYears(new Date(2014, 8, 1), 5)
+ * //=> Sun Sep 01 2019 00:00:00
+ */
+function addYears(dirtyDate, dirtyAmount) {
+  requiredArgs(2, arguments);
+  var amount = toInteger(dirtyAmount);
+  return addMonths(dirtyDate, amount * 12);
 }
 
 /**
@@ -5113,6 +5255,36 @@ const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 
 const DAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const DAYS_MIN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const DATE_FORMAT_REG_EXP = /([YyMmwdE]+)/g;
+/**
+ * air-datepicker renders the calendar DOM itself; these are ITS internal class
+ * names — a third-party contract that is brittle across air-datepicker upgrades.
+ * Centralised here so a library bump has one place to audit rather than a dozen
+ * string literals scattered through the component's a11y augmentation.
+ */
+const AIR_DP_CLASS = {
+  /** The calendar root air-datepicker renders — one per month in double mode. */
+  root: 'air-datepicker',
+  body: 'air-datepicker-body',
+  cell: 'air-datepicker-cell',
+  cells: 'air-datepicker-body--cells',
+  navAction: 'air-datepicker-nav--action',
+  navTitle: 'air-datepicker-nav--title',
+  button: 'air-datepicker-button',
+  buttonsContainer: 'air-datepicker--buttons',
+  dayNames: 'air-datepicker-body--day-names',
+  dayName: 'air-datepicker-body--day-name',
+};
+/** air-datepicker's stateful modifier classes (leading/trailing dashes are theirs). */
+const AIR_DP_STATE = {
+  selected: '-selected-',
+  current: '-current-',
+  disabled: '-disabled-',
+  hidden: '-hidden-',
+  /** Spill cell for a neighbouring month, rendered greyed at the edges of a grid. */
+  otherMonth: '-other-month-',
+};
+/** Our own preset list-item class rendered inside the calendar popup. */
+const PRESET_ITEM_CLASS = 'wpp-presets-item';
 const LOCALES_DEFAULTS = {
   days: DAYS,
   daysShort: DAYS_SHORT,
@@ -5120,10 +5292,15 @@ const LOCALES_DEFAULTS = {
   months: MONTHS,
   monthsShort: MONTHS_SHORT,
   today: 'Today',
-  clear: 'Clear',
+  clear: 'Clear all',
+  apply: 'Apply',
   dateFormat: DATE_FORMAT.DAY_MONTH_YEAR,
   timeFormat: 'hh:mm aa',
   invalidDateMessage: 'Invalid date format',
+  eraseDateLabel: 'Erase date',
+  calendarLabel: 'Choose date',
+  previousMonthLabel: 'Previous month',
+  nextMonthLabel: 'Next month',
   dateLocale: undefined,
   firstDay: undefined,
 };
@@ -5305,7 +5482,7 @@ const normalizeYearRangeDates = (dates, config = { enabled: true }) => {
   return [normalizedStart, normalizedEnd];
 };
 
-const wppDatepickerCss = ".air-datepicker-cell.-year-.-other-decade-,.air-datepicker-cell.-day-.-other-month-{color:var(--adp-color-other-month)}.air-datepicker-cell.-year-.-other-decade-:hover,.air-datepicker-cell.-day-.-other-month-:hover{color:var(--adp-color-other-month-hover)}.-disabled-.-focus-.air-datepicker-cell.-year-.-other-decade-,.-disabled-.-focus-.air-datepicker-cell.-day-.-other-month-{color:var(--adp-color-other-month)}.-selected-.air-datepicker-cell.-year-.-other-decade-,.-selected-.air-datepicker-cell.-day-.-other-month-{color:#fff;background:var(--adp-background-color-selected-other-month)}.-selected-.-focus-.air-datepicker-cell.-year-.-other-decade-,.-selected-.-focus-.air-datepicker-cell.-day-.-other-month-{background:var(--adp-background-color-selected-other-month-focused)}.-in-range-.air-datepicker-cell.-year-.-other-decade-,.-in-range-.air-datepicker-cell.-day-.-other-month-{background-color:var(--adp-background-color-in-range);color:var(--adp-color)}.-in-range-.-focus-.air-datepicker-cell.-year-.-other-decade-,.-in-range-.-focus-.air-datepicker-cell.-day-.-other-month-{background-color:var(--adp-background-color-in-range-focused)}.air-datepicker-cell.-year-.-other-decade-:empty,.air-datepicker-cell.-day-.-other-month-:empty{background:none;border:none}.air-datepicker-cell{border-radius:var(--adp-cell-border-radius);-webkit-box-sizing:border-box;box-sizing:border-box;cursor:pointer;display:-ms-flexbox;display:flex;position:relative;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;z-index:1}.air-datepicker-cell.-focus-{background:var(--adp-cell-background-color-hover)}.air-datepicker-cell.-current-{color:var(--adp-color-current-date)}.air-datepicker-cell.-current-.-focus-{color:var(--adp-color)}.air-datepicker-cell.-current-.-in-range-{color:var(--adp-color-current-date)}.air-datepicker-cell.-disabled-{cursor:default;color:var(--adp-color-disabled)}.air-datepicker-cell.-disabled-.-focus-{color:var(--adp-color-disabled)}.air-datepicker-cell.-disabled-.-in-range-{color:var(--adp-color-disabled-in-range)}.air-datepicker-cell.-disabled-.-current-.-focus-{color:var(--adp-color-disabled)}.air-datepicker-cell.-in-range-{background:var(--adp-cell-background-color-in-range);border-radius:0}.air-datepicker-cell.-in-range-:hover,.air-datepicker-cell.-in-range-.-focus-{background:var(--adp-cell-background-color-in-range-hover)}.air-datepicker-cell.-range-from-{border:1px solid var(--adp-cell-border-color-in-range);background-color:var(--adp-cell-background-color-in-range);border-radius:var(--adp-cell-border-radius) 0 0 var(--adp-cell-border-radius)}.air-datepicker-cell.-range-to-{border:1px solid var(--adp-cell-border-color-in-range);background-color:var(--adp-cell-background-color-in-range);border-radius:0 var(--adp-cell-border-radius) var(--adp-cell-border-radius) 0}.air-datepicker-cell.-range-to-.-range-from-{border-radius:var(--adp-cell-border-radius)}.air-datepicker-cell.-selected-{color:#fff;border:none;background:var(--adp-cell-background-color-selected)}.air-datepicker-cell.-selected-.-current-{color:#fff;background:var(--adp-cell-background-color-selected)}.air-datepicker-cell.-selected-.-focus-{background:var(--adp-cell-background-color-selected-hover)}.air-datepicker-body{-webkit-transition:all var(--adp-transition-duration) var(--adp-transition-ease);transition:all var(--adp-transition-duration) var(--adp-transition-ease)}.air-datepicker-body.-hidden-{display:none}.air-datepicker-body--day-names{display:grid;grid-template-columns:repeat(7, var(--adp-day-cell-width));margin:8px 0 3px}.air-datepicker-body--day-name{color:var(--adp-day-name-color);display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;-ms-flex:1;flex:1;text-align:center;text-transform:uppercase;font-size:.8em}.air-datepicker-body--day-name.-clickable-{cursor:pointer}.air-datepicker-body--day-name.-clickable-:hover{color:var(--adp-day-name-color-hover)}.air-datepicker-body--cells{display:grid}.air-datepicker-body--cells.-days-{grid-template-columns:repeat(7, var(--adp-day-cell-width));grid-auto-rows:var(--adp-day-cell-height)}.air-datepicker-body--cells.-months-{grid-template-columns:repeat(3, 1fr);grid-auto-rows:var(--adp-month-cell-height)}.air-datepicker-body--cells.-years-{grid-template-columns:repeat(4, 1fr);grid-auto-rows:var(--adp-year-cell-height)}.air-datepicker-nav{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;border-bottom:1px solid var(--adp-border-color-inner);min-height:var(--adp-nav-height);padding:var(--adp-padding);-webkit-box-sizing:content-box;box-sizing:content-box}.-only-timepicker- .air-datepicker-nav{display:none}.air-datepicker-nav--title,.air-datepicker-nav--action{display:-ms-flexbox;display:flex;cursor:pointer;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center}.air-datepicker-nav--action{width:var(--adp-nav-action-size);border-radius:var(--adp-border-radius);-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.air-datepicker-nav--action:hover{background:var(--adp-background-color-hover)}.air-datepicker-nav--action:active{background:var(--adp-background-color-active)}.air-datepicker-nav--action.-disabled-{visibility:hidden}.air-datepicker-nav--action svg{width:32px;height:32px}.air-datepicker-nav--action path{fill:none;stroke:var(--adp-nav-arrow-color);stroke-width:2px}.air-datepicker-nav--title{border-radius:var(--adp-border-radius);padding:0 8px}.air-datepicker-nav--title i{font-style:normal;color:var(--adp-nav-color-secondary);margin-left:.3em}.air-datepicker-nav--title:hover{background:var(--adp-background-color-hover)}.air-datepicker-nav--title:active{background:var(--adp-background-color-active)}.air-datepicker-nav--title.-disabled-{cursor:default;background:none}.air-datepicker-buttons{display:grid;grid-auto-columns:1fr;grid-auto-flow:column}.air-datepicker-button{display:-ms-inline-flexbox;display:inline-flex;color:var(--adp-btn-color);border-radius:var(--adp-btn-border-radius);cursor:pointer;height:var(--adp-btn-height);border:none;background:rgba(255,255,255,0)}.air-datepicker-button:hover{color:var(--adp-btn-color-hover);background:var(--adp-btn-background-color-hover)}.air-datepicker-button:focus{color:var(--adp-btn-color-hover);background:var(--adp-btn-background-color-hover);outline:none}.air-datepicker-button:active{background:var(--adp-btn-background-color-active)}.air-datepicker-button span{outline:none;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:100%;height:100%}.air-datepicker-time{display:grid;grid-template-columns:-webkit-max-content 1fr;grid-template-columns:max-content 1fr;grid-column-gap:12px;-ms-flex-align:center;align-items:center;position:relative;padding:0 var(--adp-time-padding-inner)}.-only-timepicker- .air-datepicker-time{border-top:none}.air-datepicker-time--current{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex:1;flex:1;font-size:14px;text-align:center}.air-datepicker-time--current-colon{margin:0 2px 3px;line-height:1}.air-datepicker-time--current-hours,.air-datepicker-time--current-minutes{line-height:1;font-size:19px;font-family:\"Century Gothic\",CenturyGothic,AppleGothic,sans-serif;position:relative;z-index:1}.air-datepicker-time--current-hours:after,.air-datepicker-time--current-minutes:after{content:\"\";background:var(--adp-background-color-hover);border-radius:var(--adp-border-radius);position:absolute;left:-2px;top:-3px;right:-2px;bottom:-2px;z-index:-1;opacity:0}.air-datepicker-time--current-hours.-focus-:after,.air-datepicker-time--current-minutes.-focus-:after{opacity:1}.air-datepicker-time--current-ampm{text-transform:uppercase;-ms-flex-item-align:end;align-self:flex-end;color:var(--adp-time-day-period-color);margin-left:6px;font-size:11px;margin-bottom:1px}.air-datepicker-time--row{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;font-size:11px;height:17px;background:-webkit-gradient(linear, left top, right top, from(var(--adp-time-track-color)), to(var(--adp-time-track-color))) left 50%/100% var(--adp-time-track-height) no-repeat;background:linear-gradient(to right, var(--adp-time-track-color), var(--adp-time-track-color)) left 50%/100% var(--adp-time-track-height) no-repeat}.air-datepicker-time--row:first-child{margin-bottom:4px}.air-datepicker-time--row input[type=range]{background:none;cursor:pointer;-ms-flex:1;flex:1;height:100%;width:100%;padding:0;margin:0;-webkit-appearance:none}.air-datepicker-time--row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none}.air-datepicker-time--row input[type=range]::-ms-tooltip{display:none}.air-datepicker-time--row input[type=range]:hover::-webkit-slider-thumb{border-color:var(--adp-time-track-color-hover)}.air-datepicker-time--row input[type=range]:hover::-moz-range-thumb{border-color:var(--adp-time-track-color-hover)}.air-datepicker-time--row input[type=range]:hover::-ms-thumb{border-color:var(--adp-time-track-color-hover)}.air-datepicker-time--row input[type=range]:focus{outline:none}.air-datepicker-time--row input[type=range]:focus::-webkit-slider-thumb{background:var(--adp-cell-background-color-selected);border-color:var(--adp-cell-background-color-selected)}.air-datepicker-time--row input[type=range]:focus::-moz-range-thumb{background:var(--adp-cell-background-color-selected);border-color:var(--adp-cell-background-color-selected)}.air-datepicker-time--row input[type=range]:focus::-ms-thumb{background:var(--adp-cell-background-color-selected);border-color:var(--adp-cell-background-color-selected)}.air-datepicker-time--row input[type=range]::-webkit-slider-thumb{-webkit-box-sizing:border-box;box-sizing:border-box;height:12px;width:12px;border-radius:3px;border:1px solid var(--adp-time-track-color);background:#fff;cursor:pointer;-webkit-transition:background var(--adp-transition-duration);transition:background var(--adp-transition-duration)}.air-datepicker-time--row input[type=range]::-moz-range-thumb{box-sizing:border-box;height:12px;width:12px;border-radius:3px;border:1px solid var(--adp-time-track-color);background:#fff;cursor:pointer;-moz-transition:background var(--adp-transition-duration);transition:background var(--adp-transition-duration)}.air-datepicker-time--row input[type=range]::-ms-thumb{box-sizing:border-box;height:12px;width:12px;border-radius:3px;border:1px solid var(--adp-time-track-color);background:#fff;cursor:pointer;-ms-transition:background var(--adp-transition-duration);transition:background var(--adp-transition-duration)}.air-datepicker-time--row input[type=range]::-webkit-slider-thumb{margin-top:calc(var(--adp-time-thumb-size)/2*-1)}.air-datepicker-time--row input[type=range]::-webkit-slider-runnable-track{border:none;height:var(--adp-time-track-height);cursor:pointer;color:rgba(0,0,0,0);background:rgba(0,0,0,0)}.air-datepicker-time--row input[type=range]::-moz-range-track{border:none;height:var(--adp-time-track-height);cursor:pointer;color:rgba(0,0,0,0);background:rgba(0,0,0,0)}.air-datepicker-time--row input[type=range]::-ms-track{border:none;height:var(--adp-time-track-height);cursor:pointer;color:rgba(0,0,0,0);background:rgba(0,0,0,0)}.air-datepicker-time--row input[type=range]::-ms-fill-lower{background:rgba(0,0,0,0)}.air-datepicker-time--row input[type=range]::-ms-fill-upper{background:rgba(0,0,0,0)}.air-datepicker{--adp-font-family:-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\";--adp-font-size:14px;--adp-width:246px;--adp-z-index:100;--adp-padding:4px;--adp-grid-areas:\"nav\" \"body\" \"timepicker\" \"buttons\";--adp-transition-duration:.3s;--adp-transition-ease:ease-out;--adp-transition-offset:8px;--adp-background-color:#fff;--adp-background-color-hover:#f0f0f0;--adp-background-color-active:#eaeaea;--adp-background-color-in-range:rgba(92, 196, 239, .1);--adp-background-color-in-range-focused:rgba(92, 196, 239, .2);--adp-background-color-selected-other-month-focused:#8ad5f4;--adp-background-color-selected-other-month:#a2ddf6;--adp-color:#4a4a4a;--adp-color-secondary:#9c9c9c;--adp-accent-color:#4eb5e6;--adp-color-current-date:var(--adp-accent-color);--adp-color-other-month:#dedede;--adp-color-disabled:#aeaeae;--adp-color-disabled-in-range:#939393;--adp-color-other-month-hover:#c5c5c5;--adp-border-color:#dbdbdb;--adp-border-color-inner:#efefef;--adp-border-radius:4px;--adp-border-color-inline:#d7d7d7;--adp-nav-height:32px;--adp-nav-arrow-color:var(--adp-color-secondary);--adp-nav-action-size:32px;--adp-nav-color-secondary:var(--adp-color-secondary);--adp-day-name-color:#ff9a19;--adp-day-name-color-hover:#8ad5f4;--adp-day-cell-width:1fr;--adp-day-cell-height:32px;--adp-month-cell-height:42px;--adp-year-cell-height:56px;--adp-pointer-size:10px;--adp-poiner-border-radius:2px;--adp-pointer-offset:14px;--adp-cell-border-radius:4px;--adp-cell-background-color-hover:var(--adp-background-color-hover);--adp-cell-background-color-selected:#5cc4ef;--adp-cell-background-color-selected-hover:#45bced;--adp-cell-background-color-in-range:rgba(92, 196, 239, 0.1);--adp-cell-background-color-in-range-hover:rgba(92, 196, 239, 0.2);--adp-cell-border-color-in-range:var(--adp-cell-background-color-selected);--adp-btn-height:32px;--adp-btn-color:var(--adp-accent-color);--adp-btn-color-hover:var(--adp-color);--adp-btn-border-radius:var(--adp-border-radius);--adp-btn-background-color-hover:var(--adp-background-color-hover);--adp-btn-background-color-active:var(--adp-background-color-active);--adp-time-track-height:1px;--adp-time-track-color:#dedede;--adp-time-track-color-hover:#b1b1b1;--adp-time-thumb-size:12px;--adp-time-padding-inner:10px;--adp-time-day-period-color:var(--adp-color-secondary);--adp-mobile-font-size:16px;--adp-mobile-nav-height:40px;--adp-mobile-width:320px;--adp-mobile-day-cell-height:38px;--adp-mobile-month-cell-height:48px;--adp-mobile-year-cell-height:64px}.air-datepicker-overlay{--adp-overlay-background-color:rgba(0, 0, 0, .3);--adp-overlay-transition-duration:.3s;--adp-overlay-transition-ease:ease-out;--adp-overlay-z-index:99}.air-datepicker{background:var(--adp-background-color);border:1px solid var(--adp-border-color);-webkit-box-shadow:0 4px 12px rgba(0,0,0,.15);box-shadow:0 4px 12px rgba(0,0,0,.15);border-radius:var(--adp-border-radius);-webkit-box-sizing:content-box;box-sizing:content-box;display:grid;grid-template-columns:1fr;grid-template-rows:repeat(4, -webkit-max-content);grid-template-rows:repeat(4, max-content);grid-template-areas:var(--adp-grid-areas);font-family:var(--adp-font-family),sans-serif;font-size:var(--adp-font-size);color:var(--adp-color);width:var(--adp-width);position:absolute;-webkit-transition:opacity var(--adp-transition-duration) var(--adp-transition-ease),-webkit-transform var(--adp-transition-duration) var(--adp-transition-ease);transition:opacity var(--adp-transition-duration) var(--adp-transition-ease),-webkit-transform var(--adp-transition-duration) var(--adp-transition-ease);transition:opacity var(--adp-transition-duration) var(--adp-transition-ease),transform var(--adp-transition-duration) var(--adp-transition-ease);transition:opacity var(--adp-transition-duration) var(--adp-transition-ease),transform var(--adp-transition-duration) var(--adp-transition-ease),-webkit-transform var(--adp-transition-duration) var(--adp-transition-ease);z-index:var(--adp-z-index)}.air-datepicker:not(.-custom-position-){opacity:0}.air-datepicker.-from-top-{-webkit-transform:translateY(calc(var(--adp-transition-offset) * -1));transform:translateY(calc(var(--adp-transition-offset) * -1))}.air-datepicker.-from-right-{-webkit-transform:translateX(var(--adp-transition-offset));transform:translateX(var(--adp-transition-offset))}.air-datepicker.-from-bottom-{-webkit-transform:translateY(var(--adp-transition-offset));transform:translateY(var(--adp-transition-offset))}.air-datepicker.-from-left-{-webkit-transform:translateX(calc(var(--adp-transition-offset) * -1));transform:translateX(calc(var(--adp-transition-offset) * -1))}.air-datepicker.-active-:not(.-custom-position-){-webkit-transform:translate(0, 0);transform:translate(0, 0);opacity:1}.air-datepicker.-active-.-custom-position-{-webkit-transition:none;transition:none}.air-datepicker.-inline-{border-color:var(--adp-border-color-inline);-webkit-box-shadow:none;box-shadow:none;position:static;left:auto;right:auto;opacity:1;-webkit-transform:none;transform:none}.air-datepicker.-inline- .air-datepicker--pointer{display:none}.air-datepicker.-is-mobile-{--adp-font-size:var(--adp-mobile-font-size);--adp-day-cell-height:var(--adp-mobile-day-cell-height);--adp-month-cell-height:var(--adp-mobile-month-cell-height);--adp-year-cell-height:var(--adp-mobile-year-cell-height);--adp-nav-height:var(--adp-mobile-nav-height);--adp-nav-action-size:var(--adp-mobile-nav-height);position:fixed;width:var(--adp-mobile-width);border:none}.air-datepicker.-is-mobile- *{-webkit-tap-highlight-color:rgba(0,0,0,0)}.air-datepicker.-is-mobile- .air-datepicker--pointer{display:none}.air-datepicker.-is-mobile-:not(.-custom-position-){-webkit-transform:translate(-50%, calc(-50% + var(--adp-transition-offset)));transform:translate(-50%, calc(-50% + var(--adp-transition-offset)))}.air-datepicker.-is-mobile-.-active-:not(.-custom-position-){-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.air-datepicker.-custom-position-{-webkit-transition:none;transition:none}.air-datepicker-global-container{position:absolute;left:0;top:0}.air-datepicker--pointer{--pointer-half-size:calc(var(--adp-pointer-size) / 2);position:absolute;width:var(--adp-pointer-size);height:var(--adp-pointer-size);z-index:-1}.air-datepicker--pointer:after{content:\"\";position:absolute;background:#fff;border-top:1px solid var(--adp-border-color-inline);border-right:1px solid var(--adp-border-color-inline);border-top-right-radius:var(--adp-poiner-border-radius);width:var(--adp-pointer-size);height:var(--adp-pointer-size);-webkit-box-sizing:border-box;box-sizing:border-box}.-top-left- .air-datepicker--pointer,.-top-center- .air-datepicker--pointer,.-top-right- .air-datepicker--pointer,[data-popper-placement^=top] .air-datepicker--pointer{top:calc(100% - var(--pointer-half-size) + 1px)}.-top-left- .air-datepicker--pointer:after,.-top-center- .air-datepicker--pointer:after,.-top-right- .air-datepicker--pointer:after,[data-popper-placement^=top] .air-datepicker--pointer:after{-webkit-transform:rotate(135deg);transform:rotate(135deg)}.-right-top- .air-datepicker--pointer,.-right-center- .air-datepicker--pointer,.-right-bottom- .air-datepicker--pointer,[data-popper-placement^=right] .air-datepicker--pointer{right:calc(100% - var(--pointer-half-size) + 1px)}.-right-top- .air-datepicker--pointer:after,.-right-center- .air-datepicker--pointer:after,.-right-bottom- .air-datepicker--pointer:after,[data-popper-placement^=right] .air-datepicker--pointer:after{-webkit-transform:rotate(225deg);transform:rotate(225deg)}.-bottom-left- .air-datepicker--pointer,.-bottom-center- .air-datepicker--pointer,.-bottom-right- .air-datepicker--pointer,[data-popper-placement^=bottom] .air-datepicker--pointer{bottom:calc(100% - var(--pointer-half-size) + 1px)}.-bottom-left- .air-datepicker--pointer:after,.-bottom-center- .air-datepicker--pointer:after,.-bottom-right- .air-datepicker--pointer:after,[data-popper-placement^=bottom] .air-datepicker--pointer:after{-webkit-transform:rotate(315deg);transform:rotate(315deg)}.-left-top- .air-datepicker--pointer,.-left-center- .air-datepicker--pointer,.-left-bottom- .air-datepicker--pointer,[data-popper-placement^=left] .air-datepicker--pointer{left:calc(100% - var(--pointer-half-size) + 1px)}.-left-top- .air-datepicker--pointer:after,.-left-center- .air-datepicker--pointer:after,.-left-bottom- .air-datepicker--pointer:after,[data-popper-placement^=left] .air-datepicker--pointer:after{-webkit-transform:rotate(45deg);transform:rotate(45deg)}.-top-left- .air-datepicker--pointer,.-bottom-left- .air-datepicker--pointer{left:var(--adp-pointer-offset)}.-top-right- .air-datepicker--pointer,.-bottom-right- .air-datepicker--pointer{right:var(--adp-pointer-offset)}.-top-center- .air-datepicker--pointer,.-bottom-center- .air-datepicker--pointer{left:calc(50% - var(--adp-pointer-size)/2)}.-left-top- .air-datepicker--pointer,.-right-top- .air-datepicker--pointer{top:var(--adp-pointer-offset)}.-left-bottom- .air-datepicker--pointer,.-right-bottom- .air-datepicker--pointer{bottom:var(--adp-pointer-offset)}.-left-center- .air-datepicker--pointer,.-right-center- .air-datepicker--pointer{top:calc(50% - var(--adp-pointer-size)/2)}.air-datepicker--navigation{grid-area:nav}.air-datepicker--content{-webkit-box-sizing:content-box;box-sizing:content-box;padding:var(--adp-padding);grid-area:body}.-only-timepicker- .air-datepicker--content{display:none}.air-datepicker--time{grid-area:timepicker}.air-datepicker--buttons{grid-area:buttons}.air-datepicker--buttons,.air-datepicker--time{padding:var(--adp-padding);border-top:1px solid var(--adp-border-color-inner)}.air-datepicker-overlay{position:fixed;background:var(--adp-overlay-background-color);left:0;top:0;width:0;height:0;opacity:0;-webkit-transition:opacity var(--adp-overlay-transition-duration) var(--adp-overlay-transition-ease),left 0s,height 0s,width 0s;transition:opacity var(--adp-overlay-transition-duration) var(--adp-overlay-transition-ease),left 0s,height 0s,width 0s;-webkit-transition-delay:0s,var(--adp-overlay-transition-duration),var(--adp-overlay-transition-duration),var(--adp-overlay-transition-duration);transition-delay:0s,var(--adp-overlay-transition-duration),var(--adp-overlay-transition-duration),var(--adp-overlay-transition-duration);z-index:var(--adp-overlay-z-index)}.air-datepicker-overlay.-active-{opacity:1;width:100%;height:100%;-webkit-transition:opacity var(--adp-overlay-transition-duration) var(--adp-overlay-transition-ease),height 0s,width 0s;transition:opacity var(--adp-overlay-transition-duration) var(--adp-overlay-transition-ease),height 0s,width 0s}.wpp-datepicker-portal[data-wpp-theme=dark]{--wpp-datepicker-bg-color:var(--wpp-grey-color-200)}:host{--datepicker-button-padding:var(--wpp-datepicker-button-padding, 1px 6px);--datepicker-min-width:var(--wpp-datepicker-min-width, 240px);--datepicker-padding:var(--wpp-datepicker-padding, 8px);--datepicker-box-shadow:var(--wpp-datepicker-box-shadow, var(--wpp-box-shadow-xs));--datepicker-current-date-color:var(--wpp-datepicker-current-date-color, var(--wpp-brand-color));--datepicker-current-date-color-active:var(--wpp-datepicker-current-date-color-active, var(--wpp-grey-color-000));--datepicker-cell-color-selected:var(--wpp-datepicker-cell-color-selected, var(--wpp-brand-color));--datepicker-color-active:var(--wpp-datepicker-color-active, var(--wpp-brand-color-active));--datepicker-color-hover:var(--wpp-datepicker-color-hover, var(--wpp-brand-color-hover));--datepicker-bg-color:var(--wpp-datepicker-bg-color, var(--wpp-grey-color-000));--datepicker-cell-bg-color-hover:var(--wpp-datepicker-cell-bg-color-hover, var(--wpp-grey-color-200));--datepicker-cell-bg-color-active:var(--wpp-datepicker-cell-bg-color-active, var(--wpp-grey-color-300));--datepicker-border-width:var(--wpp-datepicker-border-width, 1px);--datepicker-border-style:var(--wpp-datepicker-border-style, solid);--datepicker-border-color:var(--wpp-datepicker-border-color, transparent);--datepicker-border-radius:var(--wpp-datepicker-border-radius, var(--wpp-border-radius-m));--datepicker-z-index:var(--wpp-datepicker-z-index, 940);--datepicker-buttons-height:var(--wpp-datepicker-buttons-height, 48px);--datepicker-title-margin:var(--wpp-datepicker-title-margin, 0 0 0 4px);--datepicker-label-margin:var(--wpp-datepicker-label-margin, 0 0 8px 0);--datepicker-cancel-button-color-disabled:var(\n    --wpp-datepicker-cancel-button-color-disabled,\n    var(--wpp-grey-color-300)\n  );--datepicker-cancel-button-color-active:var(--wpp-datepicker-cancel-button-color-active, var(--wpp-grey-color-900));--datepicker-month-year-margin:var(--wpp-datepicker-month-year-margin, 2px);--datepicker-year-height:var(--wpp-datepicker-year-height, 32px);--datepicker-close-icon-color:var(--wpp-datepicker-close-icon-color, var(--wpp-icon-color));--datepicker-close-icon-color-hover:var(--wpp-datepicker-close-icon-color-hover, var(--wpp-icon-color-hover));--datepicker-close-icon-color-active:var(--wpp-datepicker-close-icon-color-active, var(--wpp-icon-color-active));--datepicker-close-icon-color-disabled:var(\n    --wpp-datepicker-close-icon-color-disabled,\n    var(--wpp-icon-color-disabled)\n  );--datepicker-calendar-icon-color:var(--wpp-datepicker-calendar-icon-color, var(--wpp-icon-color));--datepicker-calendar-icon-color-disabled:var(\n    --wpp-datepicker-calendar-icon-color-disabled,\n    var(--wpp-icon-color-disabled)\n  );--datepicker-header-color:var(--wpp-datepicker-header-color, var(--wpp-grey-color-900));--datepicker-month-color:var(--wpp-datepicker-month-color, var(--wpp-grey-color-1000));--datepicker-buttons-margin:var(--wpp-datepicker-buttons-margin, 0 0 0 4px);--datepicker-day-in-range-border-color:var(--wpp-datepicker-day-in-range-border-color, var(--wpp-grey-color-100));--datepicker-day-color:var(--wpp-datepicker-day-color, var(--wpp-grey-color-800));--datepicker-day-in-range-color:var(--wpp-datepicker-day-in-range-color, var(--wpp-grey-color-1000));--datepicker-year-color:var(--wpp-datepicker-year-color, var(--wpp-grey-color-1000));--datepicker-title-color:var(--wpp-datepicker-title-color, var(--wpp-grey-color-900));--datepicker-active-date-color:var(--wpp-datepicker-active-date-color, var(--wpp-grey-color-000));--datepicker-years-range-color:var(--wpp-datepicker-years-range-color, var(--wpp-grey-color-1000));--datepicker-day-active-color:var(--wpp-datepicker-day-active-color, var(--wpp-grey-color-1000));--datepicker-single-container-width:var(--wpp-datepicker-container-width, 200px);--datepicker-range-container-width:var(--wpp-datepicker-container-width, 264px);--datepicker-inline-message-margin:var(--wpp-datepicker-inline-message-margin, 4px 0 0 0);--datepicker-range-bg-color:var(--wpp-datepicker-range-bg-color, var(--wpp-grey-color-200));--datepicker-range-bg-color-hover:var(--wpp-datepicker-range-bg-color-hover, var(--wpp-grey-color-100));--datepicker-range-bg-color-active:var(--wpp-datepicker-range-bg-color-active, var(--wpp-grey-color-300));--datepicker-range-border-color:var(--wpp-datepicker-range-border-color, none);--datepicker-input-border-radius:var(--wpp-datepicker-input-border-radius, var(--wpp-border-radius-m));--datepicker-input-height-m:var(--wpp-datepicker-input-m, 40px);--datepicker-input-height-s:var(--wpp-datepicker-input-s, 32px);--datepicker-input-border-color:var(--wpp-datepicker-input-border-color, var(--wpp-grey-color-500));--datepicker-input-bg-color-hover:var(--wpp-datepicker-input-bg-color-hover, var(--wpp-grey-color-200));--datepicker-input-bg-color-disabled:var(--wpp-datepicker-input-bg-color-disabled, var(--wpp-grey-color-100));--datepicker-input-text-color-disabled:var(\n    --wpp-datepicker-input-text-color-disabled,\n    var(--wpp-text-color-disabled)\n  );--datepicker-input-border-color-hover:var(--wpp-datepicker-input-border-color-hover, var(--wpp-grey-color-700));--datepicker-input-border-color-active:var(--wpp-datepicker-input-border-color-active, var(--wpp-grey-color-800));--datepicker-input-border-color-disabled:var(\n    --wpp-datepicker-input-border-color-disabled,\n    var(--wpp-grey-color-400)\n  );--datepicker-input-first-border-color-focus:var(\n    --wpp-datepicker-input-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--datepicker-input-second-border-color-focus:var(\n    --wpp-datepicker-input-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--datepicker-input-padding-m:var(--wpp-datepicker-input-padding-m, 10px 30px 10px 38px);--datepicker-input-padding-s:var(--wpp-datepicker-input-padding-s, 5px 30px 5px 38px);--wpp-datepicker-month-year-current-focus-bg:color-mix(in srgb, var(--wpp-grey-color-700) 12%, transparent);--wpp-datepicker-month-year-current-active-bg:color-mix(in srgb, var(--wpp-grey-color-800) 18%, transparent);width:-webkit-max-content;width:-moz-max-content;width:max-content}:host .label{margin:var(--datepicker-label-margin)}:host .air-datepicker{--adp-color-current-date:var(--datepicker-current-date-color);--adp-cell-background-color-selected:var(--datepicker-cell-color-selected);--adp-cell-background-color-selected-hover:var(--datepicker-color-hover);--adp-background-color:var(--datepicker-bg-color);--adp-background-color-hover:var(--wpp-grey-color-300);--adp-border-color-inline:var(--datepicker-border-color);--adp-background-color-selected-other-month:var(--datepicker-current-date-color);--adp-background-color-selected-other-month-focused:var(--datepicker-color-hover);--adp-cell-background-color-in-range:var(--wpp-grey-color-100);--adp-cell-background-color-in-range-hover:var(--datepicker-range-bg-color-hover);--adp-cell-border-color-in-range:var(--datepicker-range-border-color);--adp-z-index:var(--datepicker-z-index);--adp-background-color-in-range:var(--datepicker-range-bg-color);--adp-padding:var(--datepicker-padding) 0;--adp-color:var(--datepicker-day-color);--adp-color-other-month:var(--datepicker-cancel-button-color-disabled);--adp-width:224px;padding:0 8px;border:0;border-radius:var(--datepicker-border-radius);-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m)}:host .air-datepicker.-inline-{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m)}:host .air-datepicker .air-datepicker-cell.-range-to-:not(.-selected-){background:var(--wpp-grey-color-300)}:host .air-datepicker .air-datepicker-cell.-disabled-{cursor:not-allowed}:host .air-datepicker .air-datepicker-cell.-disabled-.-month-,:host .air-datepicker .air-datepicker-cell.-disabled-.-year-,:host .air-datepicker .air-datepicker-cell.-disabled-.-day-{color:var(--datepicker-input-text-color-disabled)}:host .air-datepicker .air-datepicker-cell.-disabled-.-focus-{background-color:initial}:host .air-datepicker .air-datepicker-cell.-disabled-.-focus-:hover{background-color:initial}:host .air-datepicker .air-datepicker-cell.-other-decade-.-year-.-focus-:hover{background-color:var(--adp-cell-background-color-in-range-hover)}:host .air-datepicker .air-datepicker-cell.-year-.-other-decade-.-selected-{color:var(--datepicker-current-date-color-active);background-color:var(--datepicker-cell-color-selected)}:host .air-datepicker .air-datepicker-cell.-year-.-other-decade-.-selected-.-focus-{background-color:var(--adp-cell-background-color-selected-hover)}:host .air-datepicker .air-datepicker-cell.-year-.-other-decade-.-selected-:active{background-color:var(--datepicker-color-active)}:host .air-datepicker--pointer{display:none}:host .air-datepicker-cell.-day-{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);color:var(--datepicker-day-color)}:host .air-datepicker-cell.-day-:active{color:var(--wpp-primary-color-600);background-color:var(--datepicker-cell-bg-color-active)}:host .air-datepicker-cell.-day-.-disabled-{color:var(--datepicker-cancel-button-color-disabled)}:host .air-datepicker-cell.-day-.-in-range-{color:var(--datepicker-day-in-range-color);border-top:1px solid var(--datepicker-day-in-range-border-color);border-bottom:1px solid var(--datepicker-day-in-range-border-color)}:host .air-datepicker-cell.-day-.-in-range-:active{background-color:var(--wpp-grey-color-400)}:host .air-datepicker-cell.-day-.-in-range-.-current-{color:var(--wpp-primary-color-500)}:host .air-datepicker-cell.-focus-{color:var(--wpp-grey-color-1000);background-color:var(--wpp-grey-color-200)}:host .air-datepicker-cell.-other-month-{--other-month-color-in-range:var(--wpp-other-month-color-in-range, var(--datepicker-range-bg-color));color:var(--wpp-text-color-disabled)}:host .air-datepicker-cell.-other-month-.-in-range-{background-color:var(--other-month-color-in-range)}:host .air-datepicker-cell.-other-month-.-in-range-.-focus-{background-color:var(--datepicker-range-bg-color-hover)}:host .air-datepicker-cell:active{background-color:var(--datepicker-cell-bg-color-active)}:host .air-datepicker-cell.-selected-{color:var(--datepicker-current-date-color-active)}:host .air-datepicker-cell.-selected-:active{color:var(--datepicker-current-date-color-active);background-color:var(--wpp-primary-color-600)}:host .air-datepicker-cell.-selected-.-focus-{background-color:var(--wpp-primary-color-400)}:host .air-datepicker-cell.-month-{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);margin:var(--datepicker-month-year-margin);color:var(--datepicker-month-color)}:host .air-datepicker-cell.-month-.-selected-{color:var(--datepicker-current-date-color-active)}:host .air-datepicker-cell.-month-.-selected-:active{background-color:var(--datepicker-color-active)}:host .air-datepicker-cell.-month-.-current-{color:var(--wpp-grey-color-900)}:host .air-datepicker-cell.-month-.-focus-.-current-{color:var(--wpp-grey-color-900);background:var(--wpp-datepicker-month-year-current-focus-bg)}:host .air-datepicker-cell.-month-:active{color:var(--wpp-grey-color-000);background:var(--wpp-primary-color-600)}:host .air-datepicker-cell.-month-:active.-current-{color:var(--wpp-grey-color-1000);background:var(--wpp-datepicker-month-year-current-active-bg)}:host .air-datepicker-cell.-year-{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);height:var(--datepicker-year-height);margin:var(--datepicker-month-year-margin);color:var(--datepicker-year-color)}:host .air-datepicker-cell.-year-.-selected-{color:var(--datepicker-current-date-color-active)}:host .air-datepicker-cell.-year-.-selected-:active{background-color:var(--datepicker-color-active)}:host .air-datepicker-cell.-year-.-current-{color:var(--wpp-grey-color-900)}:host .air-datepicker-cell.-year-.-focus-.-current-{color:var(--wpp-grey-color-900);background:var(--wpp-datepicker-month-year-current-focus-bg)}:host .air-datepicker-cell.-year-:active{color:var(--wpp-grey-color-000);background:var(--wpp-primary-color-600)}:host .air-datepicker-cell.-year-:active.-current-{color:var(--wpp-grey-color-1000);background:var(--wpp-datepicker-month-year-current-active-bg)}:host .air-datepicker-cell.-current-{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);color:var(--datepicker-current-date-color)}:host .air-datepicker-cell.-current-.-focus-{color:var(--wpp-primary-color-400)}:host .air-datepicker-cell.-current-:active{color:var(--datepicker-color-active)}:host .air-datepicker-cell.-current-.-selected-{color:var(--datepicker-current-date-color-active)}:host .air-datepicker-cell.-current-.-selected-:active{color:var(--datepicker-current-date-color-active);background-color:var(--datepicker-color-active)}:host .air-datepicker-body--day-names{margin:0 0 8px}:host .air-datepicker-body--day-name{font-size:var(--wpp-typography-xs-strong-font-size, 12px);line-height:var(--wpp-typography-xs-strong-line-height, 20px);font-weight:var(--wpp-typography-xs-strong-font-weight, 700);color:var(--wpp-typography-xs-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-xs-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-xs-strong-letter-spacing, 0);color:var(--wpp-grey-color-800);text-transform:initial}:host .air-datepicker-nav--title{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);color:var(--datepicker-title-color)}:host .air-datepicker-nav--title:hover{background:var(--wpp-grey-color-200)}:host .air-datepicker-nav--title:active{background:var(--wpp-grey-color-300)}:host .air-datepicker-nav--title .datepicker-header{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);margin:0;color:var(--datepicker-header-color)}:host .air-datepicker-nav--title .header-year{margin:var(--datepicker-title-margin)}:host .air-datepicker--buttons{position:relative;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-sizing:border-box;box-sizing:border-box;height:var(--datepicker-buttons-height);border-top:none}:host .air-datepicker--buttons::before{position:absolute;top:0;right:0;left:0;border-top:1px solid var(--wpp-grey-color-300);content:\"\"}:host .air-datepicker-buttons{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;width:100%}:host .air-datepicker-buttons .air-datepicker-button{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0)}:host .air-datepicker-buttons .button-apply{margin:var(--datepicker-buttons-margin) !important;padding:var(--datepicker-button-padding) !important;color:var(--wpp-brand-color)}:host .air-datepicker-buttons .button-apply.disabled{color:var(--wpp-primary-color-300);pointer-events:none}:host .air-datepicker-buttons .button-apply:hover{color:var(--wpp-brand-color-hover)}:host .air-datepicker-buttons .button-apply:active{color:var(--wpp-brand-color-active)}:host .air-datepicker-buttons .button-clear{padding:var(--datepicker-button-padding) !important;color:var(--datepicker-cancel-button-color-active)}:host .air-datepicker-buttons .button-clear.disabled{color:var(--wpp-text-color-disabled);pointer-events:none}:host .air-datepicker-nav--action:hover{background-color:transparent}:host .nav-icon{color:var(--datepicker-close-icon-color)}:host .nav-icon:hover{color:var(--datepicker-close-icon-color-hover)}:host .nav-icon:active{color:var(--datepicker-close-icon-color-active)}:host .prev-icon{-webkit-transform:rotate(180deg);transform:rotate(180deg)}:host .air-datepicker-body--cells.-years-{-ms-flex-align:center;align-items:center}:host .air-datepicker-body--cells.-days-{gap:4px 0}:host .years{margin:0;color:var(--datepicker-years-range-color);font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .inline-message{margin:var(--datepicker-inline-message-margin)}:host.range-selected.with-presets .air-datepicker .air-datepicker--buttons::before{left:-8px}:host .wpp-datepicker-portal{min-width:var(--datepicker-min-width)}:host .wpp-datepicker-portal .air-datepicker{position:relative}:host .wpp-datepicker-portal.wpp-with-presets{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m);border-radius:var(--datepicker-border-radius);overflow:hidden}:host .wpp-datepicker-portal.wpp-with-presets .air-datepicker{border-radius:0;-webkit-box-shadow:none;box-shadow:none}:host .wpp-datepicker-portal.wpp-with-presets .wpp-presets-container{position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-pack:justify;justify-content:space-between;padding:var(--datepicker-padding) 0 0 var(--datepicker-padding);background-color:var(--datepicker-bg-color)}:host .wpp-datepicker-portal.wpp-with-presets .wpp-presets-container .wpp-presets-list{padding-right:var(--datepicker-padding)}:host .wpp-datepicker-portal.wpp-with-presets .wpp-presets-container .wpp-presets-list .wpp-presets-item{width:120px;margin-bottom:4px}:host .wpp-datepicker-portal.wpp-with-presets .wpp-presets-container .wpp-presets-list .wpp-presets-item:last-child{margin-bottom:0}:host .wpp-datepicker-portal.wpp-with-presets .wpp-presets-container .wpp-presets-list .wpp-presets-item::part(item){width:100%}:host .wpp-datepicker-portal.wpp-with-presets .wpp-presets-container::before{position:absolute;top:var(--datepicker-padding);right:0;bottom:var(--datepicker-buttons-height);border-right:1px solid var(--wpp-grey-color-300);content:\"\"}:host .wpp-datepicker-portal.wpp-with-presets .wpp-presets-container .wpp-presets-footer{position:relative;width:100%;height:var(--datepicker-buttons-height)}:host .wpp-datepicker-portal.wpp-with-presets .wpp-presets-container .wpp-presets-footer::before{position:absolute;top:0;right:0;left:0;border-top:1px solid var(--wpp-grey-color-300);content:\"\"}:host .wpp-datepicker-portal .air-datepicker{--adp-cell-background-color-in-range:var(--wpp-grey-color-100)}:host .wpp-datepicker-portal.wpp-range-selected{--wpp-datepicker-range-bg-color:var(--wpp-primary-color-100);--wpp-datepicker-day-in-range-border-color:var(--wpp-primary-color-100);--wpp-other-month-color-in-range:var(--wpp-primary-color-100)}:host .wpp-datepicker-portal.wpp-range-selected .air-datepicker{--adp-cell-background-color-in-range:var(--wpp-primary-color-100)}:host .wpp-datepicker-portal.wpp-static-portal{position:relative;visibility:visible}:host .wpp-datepicker-portal.wpp-static-portal.wpp-with-presets{display:-ms-flexbox;display:flex}:host .wpp-datepicker-portal.wpp-static-portal.wpp-with-presets .air-datepicker .air-datepicker--buttons::before{left:-8px}:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout{display:grid;grid-template-columns:auto auto;grid-template-rows:auto auto;width:100%;-ms-flex-pack:justify;justify-content:space-between;background:var(--wpp-grey-color-000)}:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout::after{content:\"\";position:relative;-ms-flex-preferred-size:100%;flex-basis:100%;height:var(--datepicker-buttons-height);-ms-flex-order:3;order:3}:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout .wpp-presets-footer{display:none}:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout .wpp-presets-container{padding:var(--datepicker-padding) 0 0 var(--datepicker-padding);-ms-flex-order:2;order:2}:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout .wpp-presets-container::before{right:initial;left:0;border-left:1px solid var(--wpp-grey-color-300);border-right:none;bottom:0}:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout .air-datepicker{position:initial;-ms-flex-order:1;order:1}:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout .air-datepicker--buttons{position:absolute;top:calc(100% - var(--datepicker-buttons-height));right:var(--datepicker-padding);width:calc(100% - var(--datepicker-padding) * 3)}:host .calendar-icon{color:var(--wpp-grey-color-600)}:host .calendar-icon:hover{color:var(--wpp-grey-color-800)}:host #container{display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column;position:relative}:host #container #datepicker:hover{cursor:pointer}:host #container.single-datepicker.has-default-format:not(.static-datepicker){width:var(--datepicker-single-container-width)}:host #container.range-datepicker,:host #container.single-datepicker{width:var(--datepicker-range-container-width)}:host #container.static-datepicker{width:var(--datepicker-range-container-width)}:host #container.static-datepicker .calendar-icon,:host #container.static-datepicker .cross-icon{top:14px}:host #container.static-datepicker #datepicker{margin-top:4px}:host #container.static-datepicker.with-presets{width:auto}:host #container.has-default-format #datepicker:hover{cursor:text}:host .datepicker-wrapper:hover #datepicker:not(.focus,[disabled],.error,.warning){background-color:var(--wpp-grey-color-200);border-color:var(--datepicker-input-border-color-hover)}:host .datepicker-wrapper:hover #datepicker.error:not([disabled]),:host .datepicker-wrapper:hover #datepicker.warning:not([disabled]){background-color:var(--wpp-grey-color-200)}:host .datepicker-wrapper:hover .cross-icon{opacity:1;pointer-events:auto}:host .datepicker-wrapper:hover .calendar-icon{color:var(--wpp-grey-color-800)}:host #datepicker{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);width:100%;display:-ms-inline-flexbox;display:inline-flex;padding:var(--datepicker-input-padding-m);height:var(--datepicker-input-height-m);border:1px solid var(--datepicker-input-border-color);border-radius:var(--datepicker-input-border-radius);-webkit-box-sizing:border-box;box-sizing:border-box;outline:none;background-color:transparent}:host #datepicker.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--datepicker-input-first-border-color-focus), 0 0 0 3px var(--datepicker-input-second-border-color-focus);box-shadow:0 0 0 1px var(--datepicker-input-first-border-color-focus), 0 0 0 3px var(--datepicker-input-second-border-color-focus)}:host #datepicker:focus{border-color:var(--datepicker-input-border-color-active)}:host #datepicker:focus+.calendar-icon{color:var(--wpp-grey-color-800)}:host #datepicker:disabled{color:var(--datepicker-input-text-color-disabled);background:var(--datepicker-input-bg-color-disabled);border-color:var(--datepicker-input-border-color-disabled)}:host #datepicker:disabled::-webkit-input-placeholder{color:var(--datepicker-input-text-color-disabled)}:host #datepicker:disabled::-moz-placeholder{color:var(--datepicker-input-text-color-disabled)}:host #datepicker:disabled:-ms-input-placeholder{color:var(--datepicker-input-text-color-disabled)}:host #datepicker:disabled::-ms-input-placeholder{color:var(--datepicker-input-text-color-disabled)}:host #datepicker:disabled::placeholder{color:var(--datepicker-input-text-color-disabled)}:host #datepicker:disabled+.calendar-icon{color:var(--wpp-grey-color-400)}:host #datepicker::-webkit-input-placeholder{color:var(--wpp-grey-color-700)}:host #datepicker::-moz-placeholder{color:var(--wpp-grey-color-700)}:host #datepicker:-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host #datepicker::-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host #datepicker::placeholder{color:var(--wpp-grey-color-700)}:host #datepicker[type=number]{-webkit-appearance:textfield;-moz-appearance:textfield;appearance:textfield}:host #datepicker.size-s{height:var(--datepicker-input-height-s);padding:var(--datepicker-input-padding-s)}:host #datepicker.warning,:host #datepicker.warning:hover{border:var(--datepicker-border-width) var(--datepicker-border-style) var(--wpp-warning-color-400)}:host #datepicker.error,:host #datepicker.error:hover{border:var(--datepicker-border-width) var(--datepicker-border-style) var(--wpp-danger-color-400)}:host .cross-icon{color:var(--datepicker-close-icon-color);position:absolute;right:10px;top:10px;cursor:pointer;opacity:0;pointer-events:none;-webkit-transition:opacity 0.15s ease;transition:opacity 0.15s ease}:host .cross-icon.disabled{pointer-events:none;color:var(--datepicker-close-icon-color-disabled)}:host .cross-icon:hover{color:var(--datepicker-close-icon-color-hover)}:host .cross-icon:active{color:var(--datepicker-close-icon-color-active)}:host .cross-icon.size-s{top:6px}:host .calendar-icon{position:absolute;left:10px;top:10px}:host .calendar-icon:hover{cursor:pointer}:host .calendar-icon.size-s{top:6px}:host .tippy-box[data-animation=fadein][data-state=hidden]{opacity:0}:host .tippy-box{opacity:1}:host(.wpp-disabled){cursor:not-allowed}:host(.wpp-disabled) #datepicker{pointer-events:none}:host(.wpp-has-value) .calendar-icon{color:var(--wpp-grey-color-800)}:host(.wpp-has-value) .datepicker-input,:host(.wpp-has-value) .datepicker-input.idle{border-color:var(--wpp-grey-color-500)}:host(.wpp-has-value) .datepicker-wrapper:hover .datepicker-input{border-color:var(--wpp-grey-color-700)}:host(.wpp-has-value.wpp-active) .cross-icon{opacity:1;pointer-events:auto}:host(.wpp-disabled){cursor:not-allowed}:host(.wpp-disabled) #datepicker{pointer-events:none}:host(.wpp-disabled) .datepicker-input{border-color:var(--wpp-grey-color-400)}:host(.wpp-disabled) .trigger-wrapper{pointer-events:none;cursor:not-allowed}:host(.wpp-button-trigger){width:-webkit-fit-content;width:-moz-fit-content;width:fit-content}:host(.wpp-button-trigger) #container{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content}:host(.wpp-button-trigger) .trigger-wrapper{display:-ms-inline-flexbox;display:inline-flex;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;cursor:pointer}";
+const wppDatepickerCss = "@charset \"UTF-8\";.air-datepicker-cell.-year-.-other-decade-,.air-datepicker-cell.-day-.-other-month-{color:var(--adp-color-other-month)}.air-datepicker-cell.-year-.-other-decade-:hover,.air-datepicker-cell.-day-.-other-month-:hover{color:var(--adp-color-other-month-hover)}.-disabled-.-focus-.air-datepicker-cell.-year-.-other-decade-,.-disabled-.-focus-.air-datepicker-cell.-day-.-other-month-{color:var(--adp-color-other-month)}.-selected-.air-datepicker-cell.-year-.-other-decade-,.-selected-.air-datepicker-cell.-day-.-other-month-{color:#fff;background:var(--adp-background-color-selected-other-month)}.-selected-.-focus-.air-datepicker-cell.-year-.-other-decade-,.-selected-.-focus-.air-datepicker-cell.-day-.-other-month-{background:var(--adp-background-color-selected-other-month-focused)}.-in-range-.air-datepicker-cell.-year-.-other-decade-,.-in-range-.air-datepicker-cell.-day-.-other-month-{background-color:var(--adp-background-color-in-range);color:var(--adp-color)}.-in-range-.-focus-.air-datepicker-cell.-year-.-other-decade-,.-in-range-.-focus-.air-datepicker-cell.-day-.-other-month-{background-color:var(--adp-background-color-in-range-focused)}.air-datepicker-cell.-year-.-other-decade-:empty,.air-datepicker-cell.-day-.-other-month-:empty{background:none;border:none}.air-datepicker-cell{border-radius:var(--adp-cell-border-radius);-webkit-box-sizing:border-box;box-sizing:border-box;cursor:pointer;display:-ms-flexbox;display:flex;position:relative;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;z-index:1}.air-datepicker-cell.-focus-{background:var(--adp-cell-background-color-hover)}.air-datepicker-cell.-current-{color:var(--adp-color-current-date)}.air-datepicker-cell.-current-.-focus-{color:var(--adp-color)}.air-datepicker-cell.-current-.-in-range-{color:var(--adp-color-current-date)}.air-datepicker-cell.-disabled-{cursor:default;color:var(--adp-color-disabled)}.air-datepicker-cell.-disabled-.-focus-{color:var(--adp-color-disabled)}.air-datepicker-cell.-disabled-.-in-range-{color:var(--adp-color-disabled-in-range)}.air-datepicker-cell.-disabled-.-current-.-focus-{color:var(--adp-color-disabled)}.air-datepicker-cell.-in-range-{background:var(--adp-cell-background-color-in-range);border-radius:0}.air-datepicker-cell.-in-range-:hover,.air-datepicker-cell.-in-range-.-focus-{background:var(--adp-cell-background-color-in-range-hover)}.air-datepicker-cell.-range-from-{border:1px solid var(--adp-cell-border-color-in-range);background-color:var(--adp-cell-background-color-in-range);border-radius:var(--adp-cell-border-radius) 0 0 var(--adp-cell-border-radius)}.air-datepicker-cell.-range-to-{border:1px solid var(--adp-cell-border-color-in-range);background-color:var(--adp-cell-background-color-in-range);border-radius:0 var(--adp-cell-border-radius) var(--adp-cell-border-radius) 0}.air-datepicker-cell.-range-to-.-range-from-{border-radius:var(--adp-cell-border-radius)}.air-datepicker-cell.-selected-{color:#fff;border:none;background:var(--adp-cell-background-color-selected)}.air-datepicker-cell.-selected-.-current-{color:#fff;background:var(--adp-cell-background-color-selected)}.air-datepicker-cell.-selected-.-focus-{background:var(--adp-cell-background-color-selected-hover)}.air-datepicker-body{-webkit-transition:all var(--adp-transition-duration) var(--adp-transition-ease);transition:all var(--adp-transition-duration) var(--adp-transition-ease)}.air-datepicker-body.-hidden-{display:none}.air-datepicker-body--day-names{display:grid;grid-template-columns:repeat(7, var(--adp-day-cell-width));margin:8px 0 3px}.air-datepicker-body--day-name{color:var(--adp-day-name-color);display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;-ms-flex:1;flex:1;text-align:center;text-transform:uppercase;font-size:.8em}.air-datepicker-body--day-name.-clickable-{cursor:pointer}.air-datepicker-body--day-name.-clickable-:hover{color:var(--adp-day-name-color-hover)}.air-datepicker-body--cells{display:grid}.air-datepicker-body--cells.-days-{grid-template-columns:repeat(7, var(--adp-day-cell-width));grid-auto-rows:var(--adp-day-cell-height)}.air-datepicker-body--cells.-months-{grid-template-columns:repeat(3, 1fr);grid-auto-rows:var(--adp-month-cell-height)}.air-datepicker-body--cells.-years-{grid-template-columns:repeat(4, 1fr);grid-auto-rows:var(--adp-year-cell-height)}.air-datepicker-nav{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;border-bottom:1px solid var(--adp-border-color-inner);min-height:var(--adp-nav-height);padding:var(--adp-padding);-webkit-box-sizing:content-box;box-sizing:content-box}.-only-timepicker- .air-datepicker-nav{display:none}.air-datepicker-nav--title,.air-datepicker-nav--action{display:-ms-flexbox;display:flex;cursor:pointer;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center}.air-datepicker-nav--action{width:var(--adp-nav-action-size);border-radius:var(--adp-border-radius);-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.air-datepicker-nav--action:hover{background:var(--adp-background-color-hover)}.air-datepicker-nav--action:active{background:var(--adp-background-color-active)}.air-datepicker-nav--action.-disabled-{visibility:hidden}.air-datepicker-nav--action svg{width:32px;height:32px}.air-datepicker-nav--action path{fill:none;stroke:var(--adp-nav-arrow-color);stroke-width:2px}.air-datepicker-nav--title{border-radius:var(--adp-border-radius);padding:0 8px}.air-datepicker-nav--title i{font-style:normal;color:var(--adp-nav-color-secondary);margin-left:.3em}.air-datepicker-nav--title:hover{background:var(--adp-background-color-hover)}.air-datepicker-nav--title:active{background:var(--adp-background-color-active)}.air-datepicker-nav--title.-disabled-{cursor:default;background:none}.air-datepicker-buttons{display:grid;grid-auto-columns:1fr;grid-auto-flow:column}.air-datepicker-button{display:-ms-inline-flexbox;display:inline-flex;color:var(--adp-btn-color);border-radius:var(--adp-btn-border-radius);cursor:pointer;height:var(--adp-btn-height);border:none;background:rgba(255,255,255,0)}.air-datepicker-button:hover{color:var(--adp-btn-color-hover);background:var(--adp-btn-background-color-hover)}.air-datepicker-button:focus{color:var(--adp-btn-color-hover);background:var(--adp-btn-background-color-hover);outline:none}.air-datepicker-button:active{background:var(--adp-btn-background-color-active)}.air-datepicker-button span{outline:none;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:100%;height:100%}.air-datepicker-time{display:grid;grid-template-columns:-webkit-max-content 1fr;grid-template-columns:max-content 1fr;grid-column-gap:12px;-ms-flex-align:center;align-items:center;position:relative;padding:0 var(--adp-time-padding-inner)}.-only-timepicker- .air-datepicker-time{border-top:none}.air-datepicker-time--current{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex:1;flex:1;font-size:14px;text-align:center}.air-datepicker-time--current-colon{margin:0 2px 3px;line-height:1}.air-datepicker-time--current-hours,.air-datepicker-time--current-minutes{line-height:1;font-size:19px;font-family:\"Century Gothic\",CenturyGothic,AppleGothic,sans-serif;position:relative;z-index:1}.air-datepicker-time--current-hours:after,.air-datepicker-time--current-minutes:after{content:\"\";background:var(--adp-background-color-hover);border-radius:var(--adp-border-radius);position:absolute;left:-2px;top:-3px;right:-2px;bottom:-2px;z-index:-1;opacity:0}.air-datepicker-time--current-hours.-focus-:after,.air-datepicker-time--current-minutes.-focus-:after{opacity:1}.air-datepicker-time--current-ampm{text-transform:uppercase;-ms-flex-item-align:end;align-self:flex-end;color:var(--adp-time-day-period-color);margin-left:6px;font-size:11px;margin-bottom:1px}.air-datepicker-time--row{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;font-size:11px;height:17px;background:-webkit-gradient(linear, left top, right top, from(var(--adp-time-track-color)), to(var(--adp-time-track-color))) left 50%/100% var(--adp-time-track-height) no-repeat;background:linear-gradient(to right, var(--adp-time-track-color), var(--adp-time-track-color)) left 50%/100% var(--adp-time-track-height) no-repeat}.air-datepicker-time--row:first-child{margin-bottom:4px}.air-datepicker-time--row input[type=range]{background:none;cursor:pointer;-ms-flex:1;flex:1;height:100%;width:100%;padding:0;margin:0;-webkit-appearance:none}.air-datepicker-time--row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none}.air-datepicker-time--row input[type=range]::-ms-tooltip{display:none}.air-datepicker-time--row input[type=range]:hover::-webkit-slider-thumb{border-color:var(--adp-time-track-color-hover)}.air-datepicker-time--row input[type=range]:hover::-moz-range-thumb{border-color:var(--adp-time-track-color-hover)}.air-datepicker-time--row input[type=range]:hover::-ms-thumb{border-color:var(--adp-time-track-color-hover)}.air-datepicker-time--row input[type=range]:focus{outline:none}.air-datepicker-time--row input[type=range]:focus::-webkit-slider-thumb{background:var(--adp-cell-background-color-selected);border-color:var(--adp-cell-background-color-selected)}.air-datepicker-time--row input[type=range]:focus::-moz-range-thumb{background:var(--adp-cell-background-color-selected);border-color:var(--adp-cell-background-color-selected)}.air-datepicker-time--row input[type=range]:focus::-ms-thumb{background:var(--adp-cell-background-color-selected);border-color:var(--adp-cell-background-color-selected)}.air-datepicker-time--row input[type=range]::-webkit-slider-thumb{-webkit-box-sizing:border-box;box-sizing:border-box;height:12px;width:12px;border-radius:3px;border:1px solid var(--adp-time-track-color);background:#fff;cursor:pointer;-webkit-transition:background var(--adp-transition-duration);transition:background var(--adp-transition-duration)}.air-datepicker-time--row input[type=range]::-moz-range-thumb{box-sizing:border-box;height:12px;width:12px;border-radius:3px;border:1px solid var(--adp-time-track-color);background:#fff;cursor:pointer;-moz-transition:background var(--adp-transition-duration);transition:background var(--adp-transition-duration)}.air-datepicker-time--row input[type=range]::-ms-thumb{box-sizing:border-box;height:12px;width:12px;border-radius:3px;border:1px solid var(--adp-time-track-color);background:#fff;cursor:pointer;-ms-transition:background var(--adp-transition-duration);transition:background var(--adp-transition-duration)}.air-datepicker-time--row input[type=range]::-webkit-slider-thumb{margin-top:calc(var(--adp-time-thumb-size)/2*-1)}.air-datepicker-time--row input[type=range]::-webkit-slider-runnable-track{border:none;height:var(--adp-time-track-height);cursor:pointer;color:rgba(0,0,0,0);background:rgba(0,0,0,0)}.air-datepicker-time--row input[type=range]::-moz-range-track{border:none;height:var(--adp-time-track-height);cursor:pointer;color:rgba(0,0,0,0);background:rgba(0,0,0,0)}.air-datepicker-time--row input[type=range]::-ms-track{border:none;height:var(--adp-time-track-height);cursor:pointer;color:rgba(0,0,0,0);background:rgba(0,0,0,0)}.air-datepicker-time--row input[type=range]::-ms-fill-lower{background:rgba(0,0,0,0)}.air-datepicker-time--row input[type=range]::-ms-fill-upper{background:rgba(0,0,0,0)}.air-datepicker{--adp-font-family:-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\";--adp-font-size:14px;--adp-width:246px;--adp-z-index:100;--adp-padding:4px;--adp-grid-areas:\"nav\" \"body\" \"timepicker\" \"buttons\";--adp-transition-duration:.3s;--adp-transition-ease:ease-out;--adp-transition-offset:8px;--adp-background-color:#fff;--adp-background-color-hover:#f0f0f0;--adp-background-color-active:#eaeaea;--adp-background-color-in-range:rgba(92, 196, 239, .1);--adp-background-color-in-range-focused:rgba(92, 196, 239, .2);--adp-background-color-selected-other-month-focused:#8ad5f4;--adp-background-color-selected-other-month:#a2ddf6;--adp-color:#4a4a4a;--adp-color-secondary:#9c9c9c;--adp-accent-color:#4eb5e6;--adp-color-current-date:var(--adp-accent-color);--adp-color-other-month:#dedede;--adp-color-disabled:#aeaeae;--adp-color-disabled-in-range:#939393;--adp-color-other-month-hover:#c5c5c5;--adp-border-color:#dbdbdb;--adp-border-color-inner:#efefef;--adp-border-radius:4px;--adp-border-color-inline:#d7d7d7;--adp-nav-height:32px;--adp-nav-arrow-color:var(--adp-color-secondary);--adp-nav-action-size:32px;--adp-nav-color-secondary:var(--adp-color-secondary);--adp-day-name-color:#ff9a19;--adp-day-name-color-hover:#8ad5f4;--adp-day-cell-width:1fr;--adp-day-cell-height:32px;--adp-month-cell-height:42px;--adp-year-cell-height:56px;--adp-pointer-size:10px;--adp-poiner-border-radius:2px;--adp-pointer-offset:14px;--adp-cell-border-radius:4px;--adp-cell-background-color-hover:var(--adp-background-color-hover);--adp-cell-background-color-selected:#5cc4ef;--adp-cell-background-color-selected-hover:#45bced;--adp-cell-background-color-in-range:rgba(92, 196, 239, 0.1);--adp-cell-background-color-in-range-hover:rgba(92, 196, 239, 0.2);--adp-cell-border-color-in-range:var(--adp-cell-background-color-selected);--adp-btn-height:32px;--adp-btn-color:var(--adp-accent-color);--adp-btn-color-hover:var(--adp-color);--adp-btn-border-radius:var(--adp-border-radius);--adp-btn-background-color-hover:var(--adp-background-color-hover);--adp-btn-background-color-active:var(--adp-background-color-active);--adp-time-track-height:1px;--adp-time-track-color:#dedede;--adp-time-track-color-hover:#b1b1b1;--adp-time-thumb-size:12px;--adp-time-padding-inner:10px;--adp-time-day-period-color:var(--adp-color-secondary);--adp-mobile-font-size:16px;--adp-mobile-nav-height:40px;--adp-mobile-width:320px;--adp-mobile-day-cell-height:38px;--adp-mobile-month-cell-height:48px;--adp-mobile-year-cell-height:64px}.air-datepicker-overlay{--adp-overlay-background-color:rgba(0, 0, 0, .3);--adp-overlay-transition-duration:.3s;--adp-overlay-transition-ease:ease-out;--adp-overlay-z-index:99}.air-datepicker{background:var(--adp-background-color);border:1px solid var(--adp-border-color);-webkit-box-shadow:0 4px 12px rgba(0,0,0,.15);box-shadow:0 4px 12px rgba(0,0,0,.15);border-radius:var(--adp-border-radius);-webkit-box-sizing:content-box;box-sizing:content-box;display:grid;grid-template-columns:1fr;grid-template-rows:repeat(4, -webkit-max-content);grid-template-rows:repeat(4, max-content);grid-template-areas:var(--adp-grid-areas);font-family:var(--adp-font-family),sans-serif;font-size:var(--adp-font-size);color:var(--adp-color);width:var(--adp-width);position:absolute;-webkit-transition:opacity var(--adp-transition-duration) var(--adp-transition-ease),-webkit-transform var(--adp-transition-duration) var(--adp-transition-ease);transition:opacity var(--adp-transition-duration) var(--adp-transition-ease),-webkit-transform var(--adp-transition-duration) var(--adp-transition-ease);transition:opacity var(--adp-transition-duration) var(--adp-transition-ease),transform var(--adp-transition-duration) var(--adp-transition-ease);transition:opacity var(--adp-transition-duration) var(--adp-transition-ease),transform var(--adp-transition-duration) var(--adp-transition-ease),-webkit-transform var(--adp-transition-duration) var(--adp-transition-ease);z-index:var(--adp-z-index)}.air-datepicker:not(.-custom-position-){opacity:0}.air-datepicker.-from-top-{-webkit-transform:translateY(calc(var(--adp-transition-offset) * -1));transform:translateY(calc(var(--adp-transition-offset) * -1))}.air-datepicker.-from-right-{-webkit-transform:translateX(var(--adp-transition-offset));transform:translateX(var(--adp-transition-offset))}.air-datepicker.-from-bottom-{-webkit-transform:translateY(var(--adp-transition-offset));transform:translateY(var(--adp-transition-offset))}.air-datepicker.-from-left-{-webkit-transform:translateX(calc(var(--adp-transition-offset) * -1));transform:translateX(calc(var(--adp-transition-offset) * -1))}.air-datepicker.-active-:not(.-custom-position-){-webkit-transform:translate(0, 0);transform:translate(0, 0);opacity:1}.air-datepicker.-active-.-custom-position-{-webkit-transition:none;transition:none}.air-datepicker.-inline-{border-color:var(--adp-border-color-inline);-webkit-box-shadow:none;box-shadow:none;position:static;left:auto;right:auto;opacity:1;-webkit-transform:none;transform:none}.air-datepicker.-inline- .air-datepicker--pointer{display:none}.air-datepicker.-is-mobile-{--adp-font-size:var(--adp-mobile-font-size);--adp-day-cell-height:var(--adp-mobile-day-cell-height);--adp-month-cell-height:var(--adp-mobile-month-cell-height);--adp-year-cell-height:var(--adp-mobile-year-cell-height);--adp-nav-height:var(--adp-mobile-nav-height);--adp-nav-action-size:var(--adp-mobile-nav-height);position:fixed;width:var(--adp-mobile-width);border:none}.air-datepicker.-is-mobile- *{-webkit-tap-highlight-color:rgba(0,0,0,0)}.air-datepicker.-is-mobile- .air-datepicker--pointer{display:none}.air-datepicker.-is-mobile-:not(.-custom-position-){-webkit-transform:translate(-50%, calc(-50% + var(--adp-transition-offset)));transform:translate(-50%, calc(-50% + var(--adp-transition-offset)))}.air-datepicker.-is-mobile-.-active-:not(.-custom-position-){-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.air-datepicker.-custom-position-{-webkit-transition:none;transition:none}.air-datepicker-global-container{position:absolute;left:0;top:0}.air-datepicker--pointer{--pointer-half-size:calc(var(--adp-pointer-size) / 2);position:absolute;width:var(--adp-pointer-size);height:var(--adp-pointer-size);z-index:-1}.air-datepicker--pointer:after{content:\"\";position:absolute;background:#fff;border-top:1px solid var(--adp-border-color-inline);border-right:1px solid var(--adp-border-color-inline);border-top-right-radius:var(--adp-poiner-border-radius);width:var(--adp-pointer-size);height:var(--adp-pointer-size);-webkit-box-sizing:border-box;box-sizing:border-box}.-top-left- .air-datepicker--pointer,.-top-center- .air-datepicker--pointer,.-top-right- .air-datepicker--pointer,[data-popper-placement^=top] .air-datepicker--pointer{top:calc(100% - var(--pointer-half-size) + 1px)}.-top-left- .air-datepicker--pointer:after,.-top-center- .air-datepicker--pointer:after,.-top-right- .air-datepicker--pointer:after,[data-popper-placement^=top] .air-datepicker--pointer:after{-webkit-transform:rotate(135deg);transform:rotate(135deg)}.-right-top- .air-datepicker--pointer,.-right-center- .air-datepicker--pointer,.-right-bottom- .air-datepicker--pointer,[data-popper-placement^=right] .air-datepicker--pointer{right:calc(100% - var(--pointer-half-size) + 1px)}.-right-top- .air-datepicker--pointer:after,.-right-center- .air-datepicker--pointer:after,.-right-bottom- .air-datepicker--pointer:after,[data-popper-placement^=right] .air-datepicker--pointer:after{-webkit-transform:rotate(225deg);transform:rotate(225deg)}.-bottom-left- .air-datepicker--pointer,.-bottom-center- .air-datepicker--pointer,.-bottom-right- .air-datepicker--pointer,[data-popper-placement^=bottom] .air-datepicker--pointer{bottom:calc(100% - var(--pointer-half-size) + 1px)}.-bottom-left- .air-datepicker--pointer:after,.-bottom-center- .air-datepicker--pointer:after,.-bottom-right- .air-datepicker--pointer:after,[data-popper-placement^=bottom] .air-datepicker--pointer:after{-webkit-transform:rotate(315deg);transform:rotate(315deg)}.-left-top- .air-datepicker--pointer,.-left-center- .air-datepicker--pointer,.-left-bottom- .air-datepicker--pointer,[data-popper-placement^=left] .air-datepicker--pointer{left:calc(100% - var(--pointer-half-size) + 1px)}.-left-top- .air-datepicker--pointer:after,.-left-center- .air-datepicker--pointer:after,.-left-bottom- .air-datepicker--pointer:after,[data-popper-placement^=left] .air-datepicker--pointer:after{-webkit-transform:rotate(45deg);transform:rotate(45deg)}.-top-left- .air-datepicker--pointer,.-bottom-left- .air-datepicker--pointer{left:var(--adp-pointer-offset)}.-top-right- .air-datepicker--pointer,.-bottom-right- .air-datepicker--pointer{right:var(--adp-pointer-offset)}.-top-center- .air-datepicker--pointer,.-bottom-center- .air-datepicker--pointer{left:calc(50% - var(--adp-pointer-size)/2)}.-left-top- .air-datepicker--pointer,.-right-top- .air-datepicker--pointer{top:var(--adp-pointer-offset)}.-left-bottom- .air-datepicker--pointer,.-right-bottom- .air-datepicker--pointer{bottom:var(--adp-pointer-offset)}.-left-center- .air-datepicker--pointer,.-right-center- .air-datepicker--pointer{top:calc(50% - var(--adp-pointer-size)/2)}.air-datepicker--navigation{grid-area:nav}.air-datepicker--content{-webkit-box-sizing:content-box;box-sizing:content-box;padding:var(--adp-padding);grid-area:body}.-only-timepicker- .air-datepicker--content{display:none}.air-datepicker--time{grid-area:timepicker}.air-datepicker--buttons{grid-area:buttons}.air-datepicker--buttons,.air-datepicker--time{padding:var(--adp-padding);border-top:1px solid var(--adp-border-color-inner)}.air-datepicker-overlay{position:fixed;background:var(--adp-overlay-background-color);left:0;top:0;width:0;height:0;opacity:0;-webkit-transition:opacity var(--adp-overlay-transition-duration) var(--adp-overlay-transition-ease),left 0s,height 0s,width 0s;transition:opacity var(--adp-overlay-transition-duration) var(--adp-overlay-transition-ease),left 0s,height 0s,width 0s;-webkit-transition-delay:0s,var(--adp-overlay-transition-duration),var(--adp-overlay-transition-duration),var(--adp-overlay-transition-duration);transition-delay:0s,var(--adp-overlay-transition-duration),var(--adp-overlay-transition-duration),var(--adp-overlay-transition-duration);z-index:var(--adp-overlay-z-index)}.air-datepicker-overlay.-active-{opacity:1;width:100%;height:100%;-webkit-transition:opacity var(--adp-overlay-transition-duration) var(--adp-overlay-transition-ease),height 0s,width 0s;transition:opacity var(--adp-overlay-transition-duration) var(--adp-overlay-transition-ease),height 0s,width 0s}.wpp-datepicker-portal[data-wpp-theme=dark]{--wpp-datepicker-bg-color:var(--wpp-grey-color-200)}:host{--datepicker-button-padding:var(--wpp-datepicker-button-padding, 1px 6px);--datepicker-min-width:var(--wpp-datepicker-min-width, 240px);--datepicker-padding:var(--wpp-datepicker-padding, 8px);--datepicker-box-shadow:var(--wpp-datepicker-box-shadow, var(--wpp-box-shadow-xs));--datepicker-current-date-color:var(--wpp-datepicker-current-date-color, var(--wpp-brand-color));--datepicker-current-date-color-active:var(--wpp-datepicker-current-date-color-active, var(--wpp-grey-color-000));--datepicker-cell-color-selected:var(--wpp-datepicker-cell-color-selected, var(--wpp-brand-color));--datepicker-color-active:var(--wpp-datepicker-color-active, var(--wpp-brand-color-active));--datepicker-color-hover:var(--wpp-datepicker-color-hover, var(--wpp-brand-color-hover));--datepicker-bg-color:var(--wpp-datepicker-bg-color, var(--wpp-grey-color-000));--datepicker-cell-bg-color-hover:var(--wpp-datepicker-cell-bg-color-hover, var(--wpp-grey-color-200));--datepicker-cell-bg-color-active:var(--wpp-datepicker-cell-bg-color-active, var(--wpp-grey-color-300));--datepicker-border-width:var(--wpp-datepicker-border-width, 1px);--datepicker-border-style:var(--wpp-datepicker-border-style, solid);--datepicker-border-color:var(--wpp-datepicker-border-color, transparent);--datepicker-border-radius:var(--wpp-datepicker-border-radius, var(--wpp-border-radius-m));--datepicker-z-index:var(--wpp-datepicker-z-index, 940);--datepicker-buttons-height:var(--wpp-datepicker-buttons-height, 48px);--datepicker-nav-control-height:var(--wpp-datepicker-nav-control-height, 32px);--datepicker-title-margin:var(--wpp-datepicker-title-margin, 0 0 0 4px);--datepicker-label-margin:var(--wpp-datepicker-label-margin, 0 0 8px 0);--datepicker-cancel-button-color-disabled:var(\n    --wpp-datepicker-cancel-button-color-disabled,\n    var(--wpp-grey-color-300)\n  );--datepicker-cancel-button-color-active:var(--wpp-datepicker-cancel-button-color-active, var(--wpp-grey-color-900));--datepicker-month-year-margin:var(--wpp-datepicker-month-year-margin, 2px);--datepicker-year-height:var(--wpp-datepicker-year-height, 32px);--datepicker-close-icon-color:var(--wpp-datepicker-close-icon-color, var(--wpp-icon-color));--datepicker-close-icon-color-hover:var(--wpp-datepicker-close-icon-color-hover, var(--wpp-icon-color-hover));--datepicker-close-icon-color-active:var(--wpp-datepicker-close-icon-color-active, var(--wpp-icon-color-active));--datepicker-close-icon-color-disabled:var(\n    --wpp-datepicker-close-icon-color-disabled,\n    var(--wpp-icon-color-disabled)\n  );--datepicker-calendar-icon-color:var(--wpp-datepicker-calendar-icon-color, var(--wpp-icon-color));--datepicker-calendar-icon-color-disabled:var(\n    --wpp-datepicker-calendar-icon-color-disabled,\n    var(--wpp-icon-color-disabled)\n  );--datepicker-header-color:var(--wpp-datepicker-header-color, var(--wpp-grey-color-900));--datepicker-month-color:var(--wpp-datepicker-month-color, var(--wpp-grey-color-1000));--datepicker-buttons-margin:var(--wpp-datepicker-buttons-margin, 0 0 0 4px);--datepicker-day-in-range-border-color:var(--wpp-datepicker-day-in-range-border-color, var(--wpp-grey-color-100));--datepicker-day-color:var(--wpp-datepicker-day-color, var(--wpp-grey-color-800));--datepicker-day-in-range-color:var(--wpp-datepicker-day-in-range-color, var(--wpp-grey-color-1000));--datepicker-year-color:var(--wpp-datepicker-year-color, var(--wpp-grey-color-1000));--datepicker-title-color:var(--wpp-datepicker-title-color, var(--wpp-grey-color-900));--datepicker-active-date-color:var(--wpp-datepicker-active-date-color, var(--wpp-grey-color-000));--datepicker-years-range-color:var(--wpp-datepicker-years-range-color, var(--wpp-grey-color-1000));--datepicker-day-active-color:var(--wpp-datepicker-day-active-color, var(--wpp-grey-color-1000));--datepicker-single-container-width:var(--wpp-datepicker-container-width, 200px);--datepicker-range-container-width:var(--wpp-datepicker-container-width, 264px);--datepicker-inline-message-margin:var(--wpp-datepicker-inline-message-margin, 4px 0 0 0);--datepicker-range-bg-color:var(--wpp-datepicker-range-bg-color, var(--wpp-grey-color-200));--datepicker-range-bg-color-hover:var(--wpp-datepicker-range-bg-color-hover, var(--wpp-grey-color-100));--datepicker-range-bg-color-active:var(--wpp-datepicker-range-bg-color-active, var(--wpp-grey-color-300));--datepicker-range-border-color:var(--wpp-datepicker-range-border-color, none);--datepicker-input-border-radius:var(--wpp-datepicker-input-border-radius, var(--wpp-border-radius-m));--datepicker-input-height-m:var(--wpp-datepicker-input-m, 40px);--datepicker-input-height-s:var(--wpp-datepicker-input-s, 32px);--datepicker-input-border-color:var(--wpp-datepicker-input-border-color, var(--wpp-grey-color-500));--datepicker-input-bg-color-hover:var(--wpp-datepicker-input-bg-color-hover, var(--wpp-grey-color-200));--datepicker-input-bg-color-disabled:var(--wpp-datepicker-input-bg-color-disabled, var(--wpp-grey-color-100));--datepicker-input-text-color-disabled:var(\n    --wpp-datepicker-input-text-color-disabled,\n    var(--wpp-text-color-disabled)\n  );--datepicker-input-border-color-hover:var(--wpp-datepicker-input-border-color-hover, var(--wpp-grey-color-700));--datepicker-input-border-color-active:var(--wpp-datepicker-input-border-color-active, var(--wpp-grey-color-800));--datepicker-input-border-color-disabled:var(\n    --wpp-datepicker-input-border-color-disabled,\n    var(--wpp-grey-color-400)\n  );--datepicker-input-first-border-color-focus:var(\n    --wpp-datepicker-input-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--datepicker-input-second-border-color-focus:var(\n    --wpp-datepicker-input-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--datepicker-input-padding-m:var(--wpp-datepicker-input-padding-m, 10px 30px 10px 38px);--datepicker-input-padding-s:var(--wpp-datepicker-input-padding-s, 5px 30px 5px 38px);--wpp-datepicker-month-year-current-focus-bg:color-mix(in srgb, var(--wpp-grey-color-700) 12%, transparent);--wpp-datepicker-month-year-current-active-bg:color-mix(in srgb, var(--wpp-grey-color-800) 18%, transparent);width:-webkit-max-content;width:-moz-max-content;width:max-content}:host .label{margin:var(--datepicker-label-margin)}:host .air-datepicker{--adp-color-current-date:var(--datepicker-current-date-color);--adp-cell-background-color-selected:var(--datepicker-cell-color-selected);--adp-cell-background-color-selected-hover:var(--datepicker-color-hover);--adp-background-color:var(--datepicker-bg-color);--adp-background-color-hover:var(--wpp-grey-color-300);--adp-border-color-inline:var(--datepicker-border-color);--adp-background-color-selected-other-month:var(--datepicker-current-date-color);--adp-background-color-selected-other-month-focused:var(--datepicker-color-hover);--adp-cell-background-color-in-range:var(--wpp-grey-color-100);--adp-cell-background-color-in-range-hover:var(--datepicker-range-bg-color-hover);--adp-cell-border-color-in-range:var(--datepicker-range-border-color);--adp-z-index:var(--datepicker-z-index);--adp-background-color-in-range:var(--datepicker-range-bg-color);--adp-padding:var(--datepicker-padding) 0;--adp-color:var(--datepicker-day-color);--adp-color-other-month:var(--datepicker-cancel-button-color-disabled);--adp-width:224px;padding:0 8px;border:0;border-radius:var(--datepicker-border-radius);-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m)}:host .air-datepicker.-inline-{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m)}:host .air-datepicker .air-datepicker-cell.-range-to-:not(.-selected-){background:var(--wpp-grey-color-300)}:host .air-datepicker .air-datepicker-cell.-disabled-{cursor:not-allowed}:host .air-datepicker .air-datepicker-cell.-disabled-.-month-,:host .air-datepicker .air-datepicker-cell.-disabled-.-year-,:host .air-datepicker .air-datepicker-cell.-disabled-.-day-{color:var(--datepicker-input-text-color-disabled)}:host .air-datepicker .air-datepicker-cell.-disabled-.-focus-{background-color:initial}:host .air-datepicker .air-datepicker-cell.-disabled-.-focus-:hover{background-color:initial}:host .air-datepicker .air-datepicker-cell.-other-decade-.-year-.-focus-:hover{background-color:var(--adp-cell-background-color-in-range-hover)}:host .air-datepicker .air-datepicker-cell.-year-.-other-decade-.-selected-{color:var(--datepicker-current-date-color-active);background-color:var(--datepicker-cell-color-selected)}:host .air-datepicker .air-datepicker-cell.-year-.-other-decade-.-selected-.-focus-{background-color:var(--adp-cell-background-color-selected-hover)}:host .air-datepicker .air-datepicker-cell.-year-.-other-decade-.-selected-:active{background-color:var(--datepicker-color-active)}:host .air-datepicker--pointer{display:none}:host .air-datepicker-cell.-day-{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);color:var(--datepicker-day-color)}:host .air-datepicker-cell.-day-:active{color:var(--wpp-primary-color-600);background-color:var(--datepicker-cell-bg-color-active)}:host .air-datepicker-cell.-day-.-disabled-{color:var(--datepicker-cancel-button-color-disabled)}:host .air-datepicker-cell.-day-.-in-range-{color:var(--datepicker-day-in-range-color);border-top:1px solid var(--datepicker-day-in-range-border-color);border-bottom:1px solid var(--datepicker-day-in-range-border-color)}:host .air-datepicker-cell.-day-.-in-range-:active{background-color:var(--wpp-grey-color-400)}:host .air-datepicker-cell.-day-.-in-range-.-current-{color:var(--wpp-primary-color-500)}:host .air-datepicker-cell.-focus-{color:var(--wpp-grey-color-1000);background-color:var(--wpp-grey-color-200)}:host .air-datepicker-cell.-other-month-{--other-month-color-in-range:var(--wpp-other-month-color-in-range, var(--datepicker-range-bg-color));color:var(--wpp-text-color-disabled)}:host .air-datepicker-cell.-other-month-.-in-range-{background-color:var(--other-month-color-in-range)}:host .air-datepicker-cell.-other-month-.-in-range-.-focus-{background-color:var(--datepicker-range-bg-color-hover)}:host .air-datepicker-cell:active{background-color:var(--datepicker-cell-bg-color-active)}:host .air-datepicker-cell.-selected-{color:var(--datepicker-current-date-color-active)}:host .air-datepicker-cell.-selected-:active{color:var(--datepicker-current-date-color-active);background-color:var(--wpp-primary-color-600)}:host .air-datepicker-cell.-selected-.-focus-{background-color:var(--wpp-primary-color-400)}:host .air-datepicker-cell.-month-{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);margin:var(--datepicker-month-year-margin);color:var(--datepicker-month-color)}:host .air-datepicker-cell.-month-.-selected-{color:var(--datepicker-current-date-color-active)}:host .air-datepicker-cell.-month-.-selected-:active{background-color:var(--datepicker-color-active)}:host .air-datepicker-cell.-month-.-current-{color:var(--wpp-grey-color-900)}:host .air-datepicker-cell.-month-.-focus-.-current-{color:var(--wpp-grey-color-900);background:var(--wpp-datepicker-month-year-current-focus-bg)}:host .air-datepicker-cell.-month-:active{color:var(--wpp-grey-color-000);background:var(--wpp-primary-color-600)}:host .air-datepicker-cell.-month-:active.-current-{color:var(--wpp-grey-color-1000);background:var(--wpp-datepicker-month-year-current-active-bg)}:host .air-datepicker-cell.-year-{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);height:var(--datepicker-year-height);margin:var(--datepicker-month-year-margin);color:var(--datepicker-year-color)}:host .air-datepicker-cell.-year-.-selected-{color:var(--datepicker-current-date-color-active)}:host .air-datepicker-cell.-year-.-selected-:active{background-color:var(--datepicker-color-active)}:host .air-datepicker-cell.-year-.-current-{color:var(--wpp-grey-color-900)}:host .air-datepicker-cell.-year-.-focus-.-current-{color:var(--wpp-grey-color-900);background:var(--wpp-datepicker-month-year-current-focus-bg)}:host .air-datepicker-cell.-year-:active{color:var(--wpp-grey-color-000);background:var(--wpp-primary-color-600)}:host .air-datepicker-cell.-year-:active.-current-{color:var(--wpp-grey-color-1000);background:var(--wpp-datepicker-month-year-current-active-bg)}:host .air-datepicker-cell.-current-{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);color:var(--datepicker-current-date-color)}:host .air-datepicker-cell.-current-.-focus-{color:var(--wpp-primary-color-400)}:host .air-datepicker-cell.-current-:active{color:var(--datepicker-color-active)}:host .air-datepicker-cell.-current-.-selected-{color:var(--datepicker-current-date-color-active)}:host .air-datepicker-cell.-current-.-selected-:active{color:var(--datepicker-current-date-color-active);background-color:var(--datepicker-color-active)}:host .air-datepicker-body--day-names{margin:0 0 8px}:host .air-datepicker-body--day-name{font-size:var(--wpp-typography-xs-strong-font-size, 12px);line-height:var(--wpp-typography-xs-strong-line-height, 20px);font-weight:var(--wpp-typography-xs-strong-font-weight, 700);color:var(--wpp-typography-xs-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-xs-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-xs-strong-letter-spacing, 0);color:var(--wpp-grey-color-800);text-transform:initial}:host .air-datepicker-nav--title,:host .air-datepicker-nav--action{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;-webkit-box-sizing:border-box;box-sizing:border-box;height:var(--datepicker-nav-control-height)}:host .air-datepicker-nav--title{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);color:var(--datepicker-title-color)}:host .air-datepicker-nav--title:hover,:host .air-datepicker-nav--title:focus-visible{background:var(--wpp-grey-color-200)}:host .air-datepicker-nav--title:active{background:var(--wpp-grey-color-300)}:host .air-datepicker-nav--title .datepicker-header{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);margin:0;color:var(--datepicker-header-color)}:host .air-datepicker-nav--title .header-year{margin:var(--datepicker-title-margin)}:host .air-datepicker--buttons{position:relative;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-sizing:border-box;box-sizing:border-box;height:var(--datepicker-buttons-height);border-top:none}:host .air-datepicker--buttons::before{position:absolute;top:0;right:0;left:0;border-top:1px solid var(--wpp-grey-color-300);content:\"\"}:host .air-datepicker-buttons{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:end;justify-content:flex-end;gap:4px;width:100%;}:host .air-datepicker-buttons .air-datepicker-button{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);border-radius:var(--wpp-border-radius-xs)}:host .air-datepicker-buttons .air-datepicker-button:focus{background:transparent}:host .air-datepicker-buttons .air-datepicker-button:hover,:host .air-datepicker-buttons .air-datepicker-button:focus-visible{background:color-mix(in srgb, var(--wpp-grey-color-700) 12%, transparent)}:host .air-datepicker-buttons .air-datepicker-button:active{background:color-mix(in srgb, var(--wpp-grey-color-800) 18%, transparent)}:host .air-datepicker-buttons .button-apply{margin:var(--datepicker-buttons-margin) !important;padding:var(--datepicker-button-padding) !important;color:var(--wpp-brand-color)}:host .air-datepicker-buttons .button-apply.disabled{color:var(--wpp-primary-color-300);pointer-events:none}:host .air-datepicker-buttons .button-apply:hover{color:var(--wpp-brand-color-hover)}:host .air-datepicker-buttons .button-apply:active{color:var(--wpp-brand-color-active)}:host .air-datepicker-buttons .button-clear{padding:var(--datepicker-button-padding) !important;color:var(--datepicker-cancel-button-color-active);}:host .air-datepicker-buttons .button-clear.disabled{color:var(--wpp-text-color-disabled);pointer-events:none}:host .air-datepicker-buttons .button-clear:hover{color:var(--datepicker-cancel-button-color-active)}:host .air-datepicker-buttons .button-clear:active{color:var(--wpp-grey-color-1000)}:host .air-datepicker-nav--action:hover .nav-icon,:host .air-datepicker-nav--action:focus-visible .nav-icon{color:var(--datepicker-close-icon-color-hover)}:host .nav-icon{color:var(--datepicker-close-icon-color)}:host .nav-icon:hover{color:var(--datepicker-close-icon-color-hover)}:host .nav-icon:active{color:var(--datepicker-close-icon-color-active)}:host .prev-icon{-webkit-transform:rotate(180deg);transform:rotate(180deg)}:host .air-datepicker-body--cells.-years-{-ms-flex-align:center;align-items:center}:host .air-datepicker-body--cells.-days-{gap:4px 0}:host .years{margin:0;color:var(--datepicker-years-range-color);font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host .air-datepicker-cell:focus-visible,:host .air-datepicker-nav--action:focus-visible,:host .air-datepicker-nav--title:focus-visible,:host .air-datepicker-button:focus-visible{position:relative;z-index:2;outline:none;-webkit-box-shadow:0 0 0 1px var(--datepicker-input-first-border-color-focus), 0 0 0 3px var(--datepicker-input-second-border-color-focus);box-shadow:0 0 0 1px var(--datepicker-input-first-border-color-focus), 0 0 0 3px var(--datepicker-input-second-border-color-focus)}:host .air-datepicker-cell:focus-visible:not(.-selected-,.-in-range-,.-disabled-){background-color:var(--datepicker-cell-bg-color-hover)}:host .air-datepicker .air-datepicker-cell.-disabled-.-in-range-,:host .air-datepicker .air-datepicker-cell.-disabled-.-range-from-,:host .air-datepicker .air-datepicker-cell.-disabled-.-range-to-,:host .air-datepicker .air-datepicker-cell.-disabled-:hover{background:transparent;border-color:transparent}:host .inline-message{margin:var(--datepicker-inline-message-margin)}:host.range-selected.with-presets .air-datepicker .air-datepicker--buttons::before{left:-8px}:host .wpp-datepicker-portal{min-width:var(--datepicker-min-width);}:host .wpp-datepicker-portal .air-datepicker{position:relative}:host .wpp-datepicker-portal.wpp-with-presets{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m);border-radius:var(--datepicker-border-radius);overflow:hidden}:host .wpp-datepicker-portal.wpp-with-presets .air-datepicker{border-radius:0;-webkit-box-shadow:none;box-shadow:none}:host .wpp-datepicker-portal.wpp-with-presets .wpp-presets-container{position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-pack:justify;justify-content:space-between;padding:var(--datepicker-padding) 0 0 var(--datepicker-padding);background-color:var(--datepicker-bg-color)}:host .wpp-datepicker-portal.wpp-with-presets .wpp-presets-container .wpp-presets-list{padding-right:var(--datepicker-padding)}:host .wpp-datepicker-portal.wpp-with-presets .wpp-presets-container .wpp-presets-list .wpp-presets-item{width:120px;margin-bottom:4px}:host .wpp-datepicker-portal.wpp-with-presets .wpp-presets-container .wpp-presets-list .wpp-presets-item:last-child{margin-bottom:0}:host .wpp-datepicker-portal.wpp-with-presets .wpp-presets-container .wpp-presets-list .wpp-presets-item::part(item){width:100%}:host .wpp-datepicker-portal.wpp-with-presets .wpp-presets-container::before{position:absolute;top:var(--datepicker-padding);right:0;bottom:var(--datepicker-buttons-height);border-right:1px solid var(--wpp-grey-color-300);content:\"\"}:host .wpp-datepicker-portal.wpp-with-presets .wpp-presets-container .wpp-presets-footer{position:relative;width:100%;height:var(--datepicker-buttons-height)}:host .wpp-datepicker-portal.wpp-with-presets .wpp-presets-container .wpp-presets-footer::before{position:absolute;top:0;right:0;left:0;border-top:1px solid var(--wpp-grey-color-300);content:\"\"}:host .wpp-datepicker-portal .air-datepicker{--adp-cell-background-color-in-range:var(--wpp-grey-color-100)}:host .wpp-datepicker-portal.wpp-range-selected{--wpp-datepicker-range-bg-color:var(--wpp-primary-color-100);--wpp-datepicker-day-in-range-border-color:var(--wpp-primary-color-100);--wpp-other-month-color-in-range:var(--wpp-primary-color-100)}:host .wpp-datepicker-portal.wpp-range-selected .air-datepicker{--adp-cell-background-color-in-range:var(--wpp-primary-color-100)}:host .wpp-datepicker-portal.wpp-double-calendar{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start;width:-webkit-max-content;width:-moz-max-content;width:max-content;background:var(--datepicker-bg-color);border-radius:var(--datepicker-border-radius);-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m);overflow:hidden;}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-row{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;-ms-flex-align:stretch;align-items:stretch}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-calendars{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;gap:16px;padding:var(--datepicker-padding)}:host .wpp-datepicker-portal.wpp-double-calendar .air-datepicker{-webkit-box-sizing:border-box;box-sizing:border-box;width:224px;padding-right:0;padding-left:0;border:none;border-radius:0;-webkit-box-shadow:none;box-shadow:none;background:transparent}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-calendar-primary .air-datepicker-nav--action[data-action=next],:host .wpp-datepicker-portal.wpp-double-calendar .wpp-calendar-secondary .air-datepicker-nav--action[data-action=prev]{visibility:hidden}:host .wpp-datepicker-portal.wpp-double-calendar .air-datepicker-nav{min-height:32px;padding:0 0 8px}:host .wpp-datepicker-portal.wpp-double-calendar .air-datepicker--content{padding:var(--datepicker-padding) 0 0}:host .wpp-datepicker-portal.wpp-double-calendar .air-datepicker-body--day-names{height:22px}:host .wpp-datepicker-portal.wpp-double-calendar .air-datepicker-cell.-day-.-other-month-.-selected-,:host .wpp-datepicker-portal.wpp-double-calendar .air-datepicker-cell.-day-.-other-month-.-in-range-,:host .wpp-datepicker-portal.wpp-double-calendar .air-datepicker-cell.-day-.-other-month-.-range-from-,:host .wpp-datepicker-portal.wpp-double-calendar .air-datepicker-cell.-day-.-other-month-.-range-to-{border-color:transparent;background:none;color:var(--wpp-text-color-disabled)}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-divider{-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;padding:0 var(--datepicker-padding)}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-divider::after{display:block;height:1px;background:var(--wpp-grey-color-300);content:\"\"}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;-ms-flex-align:center;align-items:center;-ms-flex-pack:end;justify-content:flex-end;-webkit-box-sizing:border-box;box-sizing:border-box;gap:4px;width:100%;height:var(--datepicker-buttons-height);padding:var(--datepicker-padding);}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);height:32px;padding:var(--datepicker-button-padding);border:none;border-radius:var(--wpp-border-radius-xs);background:transparent;cursor:pointer;}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button:focus{background:transparent}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button:hover,:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button:focus-visible{background:color-mix(in srgb, var(--wpp-grey-color-700) 12%, transparent)}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button:active{background:color-mix(in srgb, var(--wpp-grey-color-800) 18%, transparent)}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .air-datepicker-button.disabled{background:transparent;pointer-events:none}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .button-clear{color:var(--datepicker-cancel-button-color-active)}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .button-clear.disabled{color:var(--wpp-text-color-disabled)}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .button-clear:active{color:var(--wpp-grey-color-1000)}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .button-apply{color:var(--wpp-brand-color)}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .button-apply.disabled{color:var(--wpp-primary-color-300)}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .button-apply:hover{color:var(--wpp-brand-color-hover)}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-datepicker-actions .button-apply:active{color:var(--wpp-brand-color-active)}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-presets-container{-webkit-box-sizing:border-box;box-sizing:border-box;width:136px;padding:var(--datepicker-padding) 0 0;}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-presets-container::before{content:none}:host .wpp-datepicker-portal.wpp-double-calendar .wpp-presets-container .wpp-presets-list{-webkit-box-sizing:border-box;box-sizing:border-box;height:100%;padding:0 var(--datepicker-padding);border-right:1px solid var(--wpp-grey-color-300)}:host .wpp-datepicker-portal.wpp-static-portal{position:relative;visibility:visible}:host .wpp-datepicker-portal.wpp-static-portal.wpp-with-presets{display:-ms-flexbox;display:flex}:host .wpp-datepicker-portal.wpp-static-portal.wpp-with-presets .air-datepicker .air-datepicker--buttons::before{left:-8px}:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout{display:grid;grid-template-columns:auto auto;grid-template-rows:auto auto;width:100%;-ms-flex-pack:justify;justify-content:space-between;background:var(--wpp-grey-color-000)}:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout::after{content:\"\";position:relative;-ms-flex-preferred-size:100%;flex-basis:100%;height:var(--datepicker-buttons-height);-ms-flex-order:3;order:3}:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout .wpp-presets-footer{display:none}:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout .wpp-presets-container{padding:var(--datepicker-padding) 0 0 var(--datepicker-padding);-ms-flex-order:2;order:2}:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout .wpp-presets-container::before{right:initial;left:0;border-left:1px solid var(--wpp-grey-color-300);border-right:none;bottom:0}:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout .air-datepicker{position:initial;-ms-flex-order:1;order:1}:host .wpp-datepicker-portal.wpp-with-presets.wpp-reverse-layout .air-datepicker--buttons{position:absolute;top:calc(100% - var(--datepicker-buttons-height));right:var(--datepicker-padding);width:calc(100% - var(--datepicker-padding) * 3)}:host .calendar-icon{color:var(--wpp-grey-color-600)}:host .calendar-icon:hover{color:var(--wpp-grey-color-800)}:host #container{display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column;position:relative}:host #container #datepicker:hover{cursor:pointer}:host #container.single-datepicker.has-default-format:not(.static-datepicker){width:var(--datepicker-single-container-width)}:host #container.range-datepicker,:host #container.single-datepicker{width:var(--datepicker-range-container-width)}:host #container.static-datepicker{width:var(--datepicker-range-container-width)}:host #container.static-datepicker .calendar-icon,:host #container.static-datepicker .cross-icon{top:14px}:host #container.static-datepicker #datepicker{margin-top:4px}:host #container.static-datepicker.with-presets{width:auto}:host #container.has-default-format #datepicker:hover{cursor:text}:host .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;-webkit-clip-path:inset(50%);clip-path:inset(50%);border:0;white-space:nowrap}:host .inline-message-live-region{margin-top:4px}:host #datepicker{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);width:100%;display:-ms-inline-flexbox;display:inline-flex;padding:var(--datepicker-input-padding-m);height:var(--datepicker-input-height-m);border:1px solid var(--datepicker-input-border-color);border-radius:var(--datepicker-input-border-radius);-webkit-box-sizing:border-box;box-sizing:border-box;outline:none;background-color:transparent}:host #datepicker.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--datepicker-input-first-border-color-focus), 0 0 0 3px var(--datepicker-input-second-border-color-focus);box-shadow:0 0 0 1px var(--datepicker-input-first-border-color-focus), 0 0 0 3px var(--datepicker-input-second-border-color-focus)}:host #datepicker:focus{border-color:var(--datepicker-input-border-color-active)}:host #datepicker:focus+.calendar-icon{color:var(--wpp-grey-color-800)}:host #datepicker:disabled{color:var(--datepicker-input-text-color-disabled);background:var(--datepicker-input-bg-color-disabled);border-color:var(--datepicker-input-border-color-disabled)}:host #datepicker:disabled::-webkit-input-placeholder{color:var(--datepicker-input-text-color-disabled)}:host #datepicker:disabled::-moz-placeholder{color:var(--datepicker-input-text-color-disabled)}:host #datepicker:disabled:-ms-input-placeholder{color:var(--datepicker-input-text-color-disabled)}:host #datepicker:disabled::-ms-input-placeholder{color:var(--datepicker-input-text-color-disabled)}:host #datepicker:disabled::placeholder{color:var(--datepicker-input-text-color-disabled)}:host #datepicker:disabled+.calendar-icon{color:var(--wpp-grey-color-400)}:host #datepicker::-webkit-input-placeholder{color:var(--wpp-grey-color-700)}:host #datepicker::-moz-placeholder{color:var(--wpp-grey-color-700)}:host #datepicker:-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host #datepicker::-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host #datepicker::placeholder{color:var(--wpp-grey-color-700)}:host #datepicker[type=number]{-webkit-appearance:textfield;-moz-appearance:textfield;appearance:textfield}:host #datepicker.size-s{height:var(--datepicker-input-height-s);padding:var(--datepicker-input-padding-s)}:host #datepicker.warning,:host #datepicker.warning:hover{border:var(--datepicker-border-width) var(--datepicker-border-style) var(--wpp-warning-color-400)}:host #datepicker.error,:host #datepicker.error:hover{border:var(--datepicker-border-width) var(--datepicker-border-style) var(--wpp-danger-color-400)}:host .cross-icon{color:var(--datepicker-close-icon-color);position:absolute;right:10px;top:10px;cursor:pointer;opacity:0;pointer-events:none;-webkit-transition:opacity 0.15s ease;transition:opacity 0.15s ease;outline:none}:host .cross-icon:focus-visible{opacity:1;pointer-events:auto;color:var(--datepicker-close-icon-color-hover);border-radius:var(--wpp-border-radius-s);outline:none;-webkit-box-shadow:0 0 0 1px var(--datepicker-input-first-border-color-focus), 0 0 0 3px var(--datepicker-input-second-border-color-focus);box-shadow:0 0 0 1px var(--datepicker-input-first-border-color-focus), 0 0 0 3px var(--datepicker-input-second-border-color-focus)}:host .cross-icon.disabled{pointer-events:none;color:var(--datepicker-close-icon-color-disabled)}:host .cross-icon:hover{color:var(--datepicker-close-icon-color-hover)}:host .cross-icon:active{color:var(--datepicker-close-icon-color-active)}:host .cross-icon.size-s{top:6px}:host .calendar-icon{position:absolute;left:10px;top:10px;outline:none}:host .calendar-icon:hover{cursor:pointer;color:var(--datepicker-close-icon-color-hover)}:host .calendar-icon:focus-visible{color:var(--datepicker-close-icon-color-hover);border-radius:var(--wpp-border-radius-s);outline:none;-webkit-box-shadow:0 0 0 1px var(--datepicker-input-first-border-color-focus), 0 0 0 3px var(--datepicker-input-second-border-color-focus);box-shadow:0 0 0 1px var(--datepicker-input-first-border-color-focus), 0 0 0 3px var(--datepicker-input-second-border-color-focus)}:host .calendar-icon.size-s{top:6px}:host .tippy-box[data-animation=fadein][data-state=hidden]{opacity:0}:host .tippy-box{opacity:1}:host(.wpp-disabled){cursor:not-allowed}:host(.wpp-disabled) #datepicker{pointer-events:none}:host(.wpp-has-value) .calendar-icon{color:var(--wpp-grey-color-800)}:host(.wpp-has-value) .datepicker-input,:host(.wpp-has-value) .datepicker-input.idle{border-color:var(--wpp-grey-color-500)}.datepicker-wrapper:not(.disabled):has(>#datepicker:hover,>.calendar-icon:hover,>.cross-icon:hover) #datepicker:not(.focus,[disabled],.error,.warning){background-color:var(--wpp-grey-color-200);border-color:var(--datepicker-input-border-color-hover)}.datepicker-wrapper:not(.disabled):has(>#datepicker:hover,>.calendar-icon:hover,>.cross-icon:hover) #datepicker.error:not([disabled]),.datepicker-wrapper:not(.disabled):has(>#datepicker:hover,>.calendar-icon:hover,>.cross-icon:hover) #datepicker.warning:not([disabled]){background-color:var(--wpp-grey-color-200)}.datepicker-wrapper:not(.disabled):has(>#datepicker:hover,>.calendar-icon:hover,>.cross-icon:hover) .cross-icon{opacity:1;pointer-events:auto}.datepicker-wrapper:not(.disabled):has(>#datepicker:hover,>.calendar-icon:hover,>.cross-icon:hover) .calendar-icon{color:var(--wpp-grey-color-800)}.datepicker-wrapper.has-value:not(.disabled):has(>#datepicker:hover,>.calendar-icon:hover,>.cross-icon:hover) .datepicker-input{border-color:var(--wpp-grey-color-700)}:host(.wpp-has-value.wpp-active) .cross-icon{opacity:1;pointer-events:auto}:host(.wpp-disabled){cursor:not-allowed}:host(.wpp-disabled) #datepicker{pointer-events:none}:host(.wpp-disabled) .datepicker-input{border-color:var(--wpp-grey-color-400)}:host(.wpp-disabled) .trigger-wrapper{pointer-events:none;cursor:not-allowed}:host(.wpp-button-trigger){width:-webkit-fit-content;width:-moz-fit-content;width:fit-content}:host(.wpp-button-trigger) #container{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content}:host(.wpp-button-trigger) .trigger-wrapper{display:-ms-inline-flexbox;display:inline-flex;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;cursor:pointer}";
 
 const WppDatepicker = class {
   constructor(hostRef) {
@@ -5314,6 +5491,15 @@ const WppDatepicker = class {
     this.wppBlur = createEvent(this, "wppBlur", 1);
     this.wppFocus = createEvent(this, "wppFocus", 1);
     this.wppDateClear = createEvent(this, "wppDateClear", 1);
+    this.isSyncingCalendars = false;
+    // Set when ArrowDown/ArrowUp opened the calendar: focus moves into the grid once it exists.
+    this.focusGridWhenOpened = false;
+    /**
+     * Whether the last thing the user did was a key press. Drives whether a dismissal hands the
+     * field a keyboard focus ring: clicking Apply with the mouse should leave no ring, the same way
+     * `:focus-visible` would not paint one.
+     */
+    this.lastInteractionWasKeyboard = false;
     this.hasClickedPreset = false;
     this.isDatePickerInitialized = false;
     this.isNormalizingMonthRange = false;
@@ -5322,6 +5508,16 @@ const WppDatepicker = class {
     this.themeSubscription = themeSubscriptionController(() => this.portalRef);
     this.justSelectedFromCalendar = false;
     this.isManuallyTyping = false;
+    // Set right before we programmatically return focus to the input (after a selection or
+    // ESC) so onFocus does not immediately re-open the calendar it just closed.
+    this.suppressShowOnFocus = false;
+    // Only the POPUP id needs to be instance-unique: tippy re-parents the portal into the
+    // light DOM, where multiple datepickers' popups (and popups from different CL versions
+    // coexisting under SingleSPA) would otherwise collide. The input and message ids stay
+    // static — each lives inside this component's own shadow root, where ids (and the
+    // aria-describedby reference) are scoped per tree, and the stylesheet targets
+    // `#datepicker` directly.
+    this.popupId = uniquePortalId('wpp-datepicker-popup');
     this.isStringDateValid = (stringDateValue) => {
       const parsedDate = parse(stringDateValue, this._locales.dateFormat, new Date());
       return isValid(parsedDate) && format(parsedDate, this._locales.dateFormat) === stringDateValue;
@@ -5337,6 +5533,8 @@ const WppDatepicker = class {
      */
     this.recreateDatePicker = () => {
       this.datePickerInstance?.destroy();
+      this.mirrorDatePickerInstance?.destroy();
+      this.mirrorDatePickerInstance = undefined;
       this.isDatePickerInitialized = false;
       this.createDateInstance();
       this.setInitialDate();
@@ -5346,9 +5544,22 @@ const WppDatepicker = class {
       // initial mount in componentDidLoad re-parents it into portalRef so
       // tippy can use it as popover content; we must repeat that move here,
       // otherwise tippy's content stays empty and the popup won't open.
-      const datepickerEl = this.host.shadowRoot?.querySelector('[part="datepicker"]');
-      if (datepickerEl && this.portalRef) {
-        this.portalRef.appendChild(datepickerEl);
+      this.moveCalendarsIntoPortal();
+    };
+    /**
+     * Re-parents the calendar element(s) air-datepicker created next to the input into the
+     * portal (or, in double mode, into the calendars row) so tippy has them as popup content.
+     */
+    this.moveCalendarsIntoPortal = () => {
+      const target = this.isDoubleCalendar() ? this.calendarsRef : this.portalRef;
+      if (!target)
+        return;
+      const primaryEl = this.host.shadowRoot?.querySelector('[part="datepicker"]');
+      // Appended in order, so the mirror is always the right-hand calendar. Skipping nodes that
+      // are already in place keeps this cheap enough to re-run on every render.
+      for (const el of [primaryEl, this.mirrorDatePickerInstance?.['$datepicker']]) {
+        if (el && el.parentElement !== target)
+          target.appendChild(el);
       }
     };
     this.setInitialDate = () => {
@@ -5372,6 +5583,9 @@ const WppDatepicker = class {
           this.datePickerInstance.selectDate([formatDate(startDate), formatDate(endDate)]);
           this.lastValidDate = this.value;
           this.lastAppliedDate = this.value;
+          // onSelect deliberately leaves the view alone in double mode, so park the pair on the
+          // range's start month here instead of leaving it on the current month.
+          this.setDoubleCalendarView(formatDate(startDate));
         }
         return;
       }
@@ -5385,14 +5599,14 @@ const WppDatepicker = class {
     this.setMinMaxDate = () => {
       const formatDate = getCurrentFormatDate(this.getDateFormat(), this.getDateFormatSeparator(this.getDateFormat()));
       if (this.maxDate) {
-        this.datePickerInstance.update({
-          maxDate: formatDate(this.maxDate),
-        });
+        const maxDate = formatDate(this.maxDate);
+        this.datePickerInstance.update({ maxDate });
+        this.mirrorDatePickerInstance?.update({ maxDate });
       }
       if (this.minDate) {
-        this.datePickerInstance.update({
-          minDate: formatDate(this.minDate),
-        });
+        const minDate = formatDate(this.minDate);
+        this.datePickerInstance.update({ minDate });
+        this.mirrorDatePickerInstance?.update({ minDate });
       }
       if (this.range) {
         if (this.lastAppliedDate.length < 2)
@@ -5417,7 +5631,23 @@ const WppDatepicker = class {
       });
       this.hasTriggerSlot = !emptyStates.trigger;
     };
+    /**
+     * air-datepicker wraps each month's prev/title/next in a `<nav>`, which is an implicit
+     * `navigation` landmark. Two calendars therefore expose two unnamed duplicates, which axe
+     * flags as landmark-unique. A date picker's month header isn't a page-level landmark in the
+     * first place (the APG date picker dialog uses plain buttons), so drop the role rather than
+     * invent names for it. The buttons inside keep their own semantics.
+     */
+    this.applyDoubleCalendarA11y = () => {
+      if (!this.isDoubleCalendar())
+        return;
+      for (const el of [this.datePickerInstance?.['$datepicker'], this.mirrorDatePickerInstance?.['$datepicker']]) {
+        el?.querySelector('.air-datepicker-nav')?.setAttribute('role', 'presentation');
+      }
+    };
     this.hasPresets = () => this.range && this.presets.length > 0;
+    /** Double calendar is a range-only layout, gated the same way presets are. */
+    this.isDoubleCalendar = () => this.range && this.withDoubleCalendar;
     /**
      * Checks if month range normalization should be applied.
      * Normalization is only applied when range mode is enabled, view is 'months', and normalization is enabled.
@@ -5443,45 +5673,60 @@ const WppDatepicker = class {
       return false;
     };
     this.getDateFormat = () => this._locales.dateFormat;
+    this.handleApply = () => {
+      const selected = this.datePickerInstance.selectedDates.map(selectedDate => this.datePickerInstance.formatDate(selectedDate, this.getDateFormat()));
+      // Picking the same day for both ends leaves air-datepicker with one date. Commit it as the
+      // one-day range the user actually chose, so the value and the input read like every other
+      // range rather than like a single date.
+      const formattedDates = this.range && selected.length === 1 ? [selected[0], selected[0]] : selected;
+      this.wppChange.emit({
+        date: this.datePickerInstance.selectedDates,
+        formattedDate: formattedDates,
+        name: this.name,
+      });
+      if (this.range && Array.isArray(this.lastValidDate)) {
+        this.lastAppliedDate = formattedDates;
+        this.lastValidDate = formattedDates;
+      }
+      // Update the input field to reflect the applied dates (normalized or not)
+      const inputValue = formattedDates.join(DATES_SEPARATOR);
+      this.updateInput(inputValue, inputValue.length);
+      this.value = inputValue;
+      if (this.tippyInstance)
+        this.tippyInstance.hide();
+      // Combobox: applying the range commits it and closes the popup, so focus belongs back on the
+      // control the user opened it from rather than being dropped.
+      this.returnFocusToTrigger();
+    };
+    this.handleClear = () => {
+      this.clearDatePicker();
+    };
     this.createDateInstance = () => {
       const datepickerInputRef = this.hasTriggerSlot ? this.hiddenInputRef : this.inputRef;
       if (!datepickerInputRef || this.isDatePickerInitialized)
         return;
       const buttonApply = {
-        content: 'Apply',
+        content: this._locales.apply,
         className: 'disabled button-apply',
         attrs: {
-          tabindex: '-1',
+          // Focusable so a keyboard user can Tab to Apply inside the popup (item 4).
+          // augmentCalendarA11y() flips this to -1 + aria-disabled while the button is disabled.
+          tabindex: '0',
         },
-        onClick: () => {
-          const formattedDates = this.datePickerInstance.selectedDates.map(selectedDate => this.datePickerInstance.formatDate(selectedDate, this.getDateFormat()));
-          this.wppChange.emit({
-            date: this.datePickerInstance.selectedDates,
-            formattedDate: formattedDates,
-            name: this.name,
-          });
-          if (this.range && Array.isArray(this.lastValidDate)) {
-            this.lastAppliedDate = formattedDates;
-            this.lastValidDate = formattedDates;
-          }
-          // Update the input field to reflect the applied dates (normalized or not)
-          const inputValue = formattedDates.join(DATES_SEPARATOR);
-          this.updateInput(inputValue, inputValue.length);
-          this.value = inputValue;
-          if (this.tippyInstance)
-            this.tippyInstance.hide();
-        },
+        onClick: this.handleApply,
       };
       const buttonCancel = {
-        content: 'Clear',
+        content: this._locales.clear,
         className: 'disabled button-clear',
         attrs: {
-          tabindex: '-1',
+          // Focusable so a keyboard user can Tab to Clear inside the popup (item 4).
+          tabindex: '0',
         },
-        onClick: () => {
-          this.clearDatePicker();
-        },
+        onClick: this.handleClear,
       };
+      // In double mode the actions row is rendered by this component so it can span the full
+      // popup width below both calendars, per the Figma. air-datepicker's own buttons live
+      // inside a single $datepicker and would sit under the left calendar only.
       const buttonsConfig = {
         buttons: [buttonCancel, buttonApply],
       };
@@ -5496,6 +5741,10 @@ const WppDatepicker = class {
         multipleDatesSeparator: DATES_SEPARATOR,
         autoClose: !this.range,
         inline: true,
+        // We own keyboard navigation (roving tabindex on the grid + our own arrow date-math)
+        // so air-datepicker's built-in keyboardNav must be off — otherwise it hijacks the
+        // input's Left/Right caret keys (item 3 / C8) and fights our DOM focus on cells.
+        keyboardNav: false,
         locale: { ...defaultLocale, ...this._locales, firstDay },
         showOtherMonths: true,
         fixedHeight: true,
@@ -5515,6 +5764,8 @@ const WppDatepicker = class {
         nextHtml: `<${IconChevron} class="nav-icon"></${IconChevron}>`,
         prevHtml: `<${IconChevron} class="nav-icon prev-icon"></${IconChevron}>`,
         onBeforeSelect: ({ date, datepicker }) => {
+          this.captureGridFocus();
+          this.captureViewAnchor();
           // Intercept 2nd month click to normalize dates before selection
           if (!this.isNormalizingMonthRange &&
             this.shouldNormalizeMonthRange() &&
@@ -5545,10 +5796,26 @@ const WppDatepicker = class {
           }
           return true;
         },
+        // Prev/next navigation and title (view) changes re-render the grid, wiping the ARIA
+        // augmentation — re-apply it once air-datepicker has rendered the new view.
+        onChangeViewDate: () => {
+          this.syncViewDates('primary');
+          this.scheduleCalendarA11yAugment();
+        },
+        onChangeView: view => {
+          this.syncCalendarView('primary', view);
+          this.scheduleCalendarA11yAugment();
+        },
+        onFocus: ({ date }) => this.syncFocusDate('primary', date),
         onSelect: ({ date, formattedDate }) => {
           // Guard against async callback after component destruction (air-datepicker uses setTimeout)
           if (this.isDestroyed)
             return;
+          this.syncMirrorSelection();
+          this.restoreViewAnchor();
+          // Selecting rebuilds the cells, so the ARIA the grid depends on (role, aria-selected,
+          // accessible names, the roving tab stop) has to be re-applied to the new nodes.
+          this.scheduleCalendarA11yAugment();
           // Skip onSelect side-effects when air-datepicker auto-adjusts a manually typed invalid date
           if (this.isManuallyTyping)
             return;
@@ -5569,18 +5836,33 @@ const WppDatepicker = class {
               this.isValueExists = true;
               this.datePickerInstance.setViewDate(formatDate(formattedDate));
             }
+            // Read before hide(): onHidden clears the flag, and only a pick the user made in an
+            // open calendar should hand focus back. Setting `value` in code runs through onSelect
+            // too — that is how one datepicker updates a dependent one — and focusing there
+            // snatched focus onto the datepicker that had just been updated, away from whatever
+            // the user was actually on.
+            const pickedFromOpenCalendar = this.isCalendarOpen;
             this.tippyInstance?.hide();
+            // Queued, not called straight out: air-datepicker runs its own selection work on a
+            // later task and re-renders the cells, which took focus off the field again and left it
+            // on the document. Handing it back afterwards is what makes a keyboard commit land on
+            // the field. Same reason the autoFocus open below is queued.
+            if (pickedFromOpenCalendar) {
+              clearTimeout(this.commitFocusTimer);
+              this.commitFocusTimer = setTimeout(() => {
+                if (!this.isDestroyed)
+                  this.returnFocusToTrigger();
+              });
+            }
             return;
           }
           if (formattedDate?.length) {
             const [startDate, endDate] = formattedDate;
-            if (startDate && endDate) {
-              this.isValueExists = true;
-              this.datePickerInstance.setViewDate(formatDate(endDate));
-            }
-            else {
-              this.isValueExists = true;
-              this.datePickerInstance.setViewDate(formatDate(startDate));
+            this.isValueExists = true;
+            // In double mode both months are already on screen, so jumping the view to the date
+            // the user just clicked would scroll the pair out from under them.
+            if (!this.isDoubleCalendar()) {
+              this.datePickerInstance.setViewDate(formatDate(startDate && endDate ? endDate : startDate));
             }
             if (formattedDate.length === 2) {
               this.portalRef?.classList.add('wpp-range-selected');
@@ -5591,10 +5873,232 @@ const WppDatepicker = class {
             this.lastValidDate = formattedDate;
           }
         },
-        ...(this.range ? buttonsConfig : {}),
+        ...(this.range && !this.isDoubleCalendar() ? buttonsConfig : {}),
       });
       this.datePickerInstance['$datepicker'].setAttribute('part', 'datepicker');
+      this.datePickerInstance['$datepicker'].classList.add('wpp-calendar-primary');
+      if (this.isDoubleCalendar()) {
+        this.createMirrorInstance(firstDay, IconChevron);
+      }
       this.isDatePickerInitialized = true;
+    };
+    /**
+     * Builds the second, display-only calendar shown one month ahead of the primary.
+     *
+     * air-datepicker derives each cell's `-in-range-`/`-range-from-`/`-range-to-` class from its
+     * own `selectedDates` and `focusDate` and never clamps them to the visible month. So feeding
+     * both instances the same dates makes each paint its own slice and the range reads as one
+     * continuous run across the gap — no cell painting of our own.
+     */
+    this.createMirrorInstance = (firstDay, IconChevron) => {
+      // Detached host: with `inline: true` air-datepicker renders next to its $el, and we move
+      // $datepicker into the calendars row ourselves. Binding it to the real input instead would
+      // double up the input's key/focus handling.
+      const mirrorHost = document.createElement('div');
+      this.mirrorDatePickerInstance = new airDatepicker(mirrorHost, {
+        range: this.range,
+        toggleSelected: false,
+        multipleDatesSeparator: DATES_SEPARATOR,
+        autoClose: false,
+        inline: true,
+        locale: { ...defaultLocale, ...this._locales, firstDay },
+        showOtherMonths: true,
+        fixedHeight: true,
+        selectOtherMonths: true,
+        view: this.view,
+        minView: this.view,
+        dateFormat: this.getDateFormat(),
+        startDate: this.getNextMonth(this.datePickerInstance.viewDate),
+        navTitles: {
+          days: '<p class="datepicker-header">MMMM</p>,<p class="datepicker-header header-year">yyyy</p>',
+          years: '<p class="years">yyyy1 - yyyy2</p>',
+        },
+        nextHtml: `<${IconChevron} class="nav-icon"></${IconChevron}>`,
+        prevHtml: `<${IconChevron} class="nav-icon prev-icon"></${IconChevron}>`,
+        // Selection made in the right-hand calendar: hand it to the primary so the normal
+        // pipeline (validation, input, wppChange, range-selected class) runs exactly once.
+        // Captured before the mirror moves itself, so picking its greyed 1 October keeps the
+        // pair on August|September too.
+        onBeforeSelect: () => {
+          this.captureGridFocus();
+          this.captureViewAnchor();
+          return true;
+        },
+        onSelect: () => {
+          if (this.isDestroyed || this.isSyncingCalendars)
+            return;
+          const dates = this.mirrorDatePickerInstance?.selectedDates.slice() ?? [];
+          this.isSyncingCalendars = true;
+          this.datePickerInstance.clear({ silent: true });
+          this.isSyncingCalendars = false;
+          // Hand the pick to the primary so the normal pipeline runs exactly once, then put the
+          // pair back where the user left it.
+          if (dates.length)
+            this.datePickerInstance.selectDate(dates);
+          this.restoreViewAnchor();
+          this.scheduleCalendarA11yAugment();
+        },
+        onChangeViewDate: () => {
+          this.syncViewDates('mirror');
+          this.scheduleCalendarA11yAugment();
+        },
+        onChangeView: view => {
+          this.syncCalendarView('mirror', view);
+          this.scheduleCalendarA11yAugment();
+        },
+        onFocus: ({ date }) => this.syncFocusDate('mirror', date),
+      });
+      const mirrorEl = this.mirrorDatePickerInstance['$datepicker'];
+      mirrorEl.setAttribute('part', 'datepicker-secondary');
+      mirrorEl.classList.add('wpp-calendar-secondary');
+    };
+    this.getNextMonth = (date) => new Date(date.getFullYear(), date.getMonth() + 1, 1);
+    /**
+     * The mirror sits one *page* ahead of the primary, where a page is whatever the current view
+     * shows: a month in days view, a year in months view, a decade in years view. That matches
+     * what the chevrons already step by, so the pair stays consistent at every drill level.
+     */
+    this.getPageOffset = (date, direction) => {
+      switch (this.datePickerInstance?.currentView) {
+        case 'months':
+          return new Date(date.getFullYear() + direction, date.getMonth(), 1);
+        case 'years':
+          return new Date(date.getFullYear() + direction * 10, date.getMonth(), 1);
+        default:
+          return new Date(date.getFullYear(), date.getMonth() + direction, 1);
+      }
+    };
+    /**
+     * Pushes the primary's selection onto the mirror so both paint the same range. Called after
+     * every programmatic change, since `silent` updates don't fire `onSelect`.
+     */
+    this.syncMirrorSelection = () => {
+      if (!this.mirrorDatePickerInstance || this.isSyncingCalendars)
+        return;
+      this.isSyncingCalendars = true;
+      const dates = this.datePickerInstance.selectedDates.slice();
+      const keepViewDate = this.mirrorDatePickerInstance.viewDate;
+      // Range mode appends, so clear first — otherwise a partial range gets corrupted.
+      this.mirrorDatePickerInstance.clear({ silent: true });
+      if (dates.length)
+        this.mirrorDatePickerInstance.selectDate(dates, { silent: true });
+      this.mirrorDatePickerInstance.setViewDate(keepViewDate);
+      this.isSyncingCalendars = false;
+    };
+    /**
+     * Selecting a date must never move the pair. air-datepicker navigates to a date's own month
+     * when you pick it, which is right for one calendar but wrong here: clicking the greyed
+     * 1 September inside the August grid would slide the pair to September|October under the
+     * user. The anchor is the primary's month as it was before the click, captured in
+     * onBeforeSelect and re-applied once the selection has settled.
+     */
+    /**
+     * Committing a date re-renders the cells, so the node that had focus is thrown away and focus
+     * falls to the document — most visibly on the right-hand calendar, whose pick is handed to the
+     * primary as a clear + selectDate. Record that the calendar owned focus before the re-render;
+     * augmentCalendarA11y hands it back once the new cells are decorated and focusable.
+     */
+    this.captureGridFocus = () => {
+      // Only the first capture of a selection counts, for the same reason as the view anchor below:
+      // the right calendar's pick re-fires the primary's onBeforeSelect, by which point focus is
+      // already gone and a second capture would record nothing over the real answer.
+      if (this.gridFocusBeforeSelect)
+        return;
+      const active = this.deepActiveElement();
+      if (!active || !this.portalRef?.contains(active) || !active.classList.contains(AIR_DP_CLASS.cell))
+        return;
+      // The grid is recorded alongside the date because both calendars render the days either side
+      // of the boundary: picking 8 October in the right calendar also matches September's greyed
+      // copy of it, and restoring by date alone would move the ring to the wrong month.
+      const bodyIndex = this.getActiveBodies().findIndex(body => body.contains(active));
+      this.gridFocusBeforeSelect = { bodyIndex, key: this.cellKey(active) };
+    };
+    /** Identifies a cell by the date it renders — stable across the re-render that replaces it. */
+    this.cellKey = (cell) => `${cell.dataset.year}-${cell.dataset.month}-${cell.dataset.date}`;
+    this.captureViewAnchor = () => {
+      // Only the first capture of a selection counts. Handing a right-calendar pick to the
+      // primary calls selectDate on it, which re-fires the primary's onBeforeSelect — capturing
+      // again there would overwrite the user's real starting month with one already moved.
+      if (!this.isDoubleCalendar() || this.viewAnchorBeforeSelect)
+        return;
+      this.viewAnchorBeforeSelect = this.datePickerInstance?.viewDate;
+    };
+    this.restoreViewAnchor = () => {
+      const anchor = this.viewAnchorBeforeSelect;
+      if (!anchor || !this.isDoubleCalendar())
+        return;
+      this.applyDoubleCalendarView(anchor);
+      // selectDate settles asynchronously and re-parks the view afterwards, so re-apply once the
+      // microtask queue has drained. A deliberate move in between clears the anchor, which
+      // cancels this — that is what keeps an initial value or a preset preview from being
+      // dragged back to the month the user happened to be on.
+      Promise.resolve().then(() => {
+        if (this.isDestroyed || this.viewAnchorBeforeSelect !== anchor)
+          return;
+        this.applyDoubleCalendarView(anchor);
+        this.viewAnchorBeforeSelect = undefined;
+      });
+    };
+    /** Either calendar's chevrons move both; the mirror stays exactly one page ahead. */
+    this.syncViewDates = (source) => {
+      if (!this.mirrorDatePickerInstance || this.isSyncingCalendars)
+        return;
+      this.isSyncingCalendars = true;
+      if (source === 'primary') {
+        this.mirrorDatePickerInstance.setViewDate(this.getPageOffset(this.datePickerInstance.viewDate, 1));
+      }
+      else {
+        this.datePickerInstance.setViewDate(this.getPageOffset(this.mirrorDatePickerInstance.viewDate, -1));
+      }
+      this.isSyncingCalendars = false;
+    };
+    /**
+     * Drilling up to months/years switches only the calendar that was clicked, which would leave
+     * a months grid sitting next to a days grid. Move both, then re-assert the one-page-ahead
+     * offset at the new granularity.
+     */
+    this.syncCalendarView = (source, view) => {
+      if (!this.mirrorDatePickerInstance || this.isSyncingCalendars)
+        return;
+      const target = source === 'primary' ? this.mirrorDatePickerInstance : this.datePickerInstance;
+      const leader = source === 'primary' ? this.datePickerInstance : this.mirrorDatePickerInstance;
+      this.isSyncingCalendars = true;
+      target.setCurrentView(view, { silent: true });
+      target.setViewDate(this.getPageOffset(leader.viewDate, source === 'primary' ? 1 : -1));
+      this.isSyncingCalendars = false;
+    };
+    /**
+     * Extends the half-picked hover preview across the gap. air-datepicker recomputes in-range
+     * from `focusDate`, so handing the hovered date to the other instance is all it takes.
+     */
+    this.syncFocusDate = (source, date) => {
+      if (!this.mirrorDatePickerInstance || this.isSyncingCalendars)
+        return;
+      const target = source === 'primary' ? this.mirrorDatePickerInstance : this.datePickerInstance;
+      this.isSyncingCalendars = true;
+      target.setFocusDate(date || false, { viewDateTransition: false });
+      this.isSyncingCalendars = false;
+    };
+    /**
+     * A deliberate move — an initial value, a preset preview. Clears the selection anchor so a
+     * pending restore doesn't drag the pair back afterwards.
+     */
+    this.setDoubleCalendarView = (date) => {
+      this.viewAnchorBeforeSelect = undefined;
+      this.applyDoubleCalendarView(date);
+    };
+    /** Puts the primary on `date`'s month and the mirror on the one after. */
+    this.applyDoubleCalendarView = (date) => {
+      if (!this.mirrorDatePickerInstance)
+        return;
+      const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+      this.isSyncingCalendars = true;
+      this.datePickerInstance.setViewDate(startOfMonth);
+      // One page ahead at the granularity on screen — a month in days view, a year in months
+      // view, a decade in years view. Hardcoding "next month" here left both calendars showing
+      // the same year once the user drilled up.
+      this.mirrorDatePickerInstance.setViewDate(this.getPageOffset(startOfMonth, 1));
+      this.isSyncingCalendars = false;
     };
     this.onHideGetLastAppliedValue = () => {
       // If onBlur already detected an invalid manual input, preserve the error state
@@ -5650,7 +6154,8 @@ const WppDatepicker = class {
         hideOnClick: false,
         trigger: this.hasTriggerSlot ? 'manual' : 'click',
         appendTo: getHighestContainerInDOM(),
-        showOnCreate: this.autoFocus && !this.hasTriggerSlot,
+        // Only an explicit `autoFocus` opens the calendar on load (componentDidLoad); focus arriving
+        // by click or Tab never does.
         popperOptions: {
           strategy: 'fixed',
           modifiers: [
@@ -5681,14 +6186,36 @@ const WppDatepicker = class {
           ],
         },
         ...dropdownConfig,
+        onShow: (instance) => {
+          this.isCalendarOpen = true;
+          // Opening the calendar is the user engaging again, whatever put focus here.
+          this.isVisuallyActive = true;
+          if (this.dropdownConfig.onShow) {
+            this.dropdownConfig.onShow(instance);
+          }
+        },
         onShown: (instance) => {
           this.updateDatepickerClearButton(this.lastValidDate);
+          this.scheduleCalendarA11yAugment();
+          // Queued after the augmentation above, so the roving tabindex is already assigned by the
+          // time focus moves. The grid does not exist until tippy has mounted, which is why this
+          // cannot happen where the key was handled.
+          if (this.focusGridWhenOpened) {
+            this.focusGridWhenOpened = false;
+            clearTimeout(this.openGridFocusTimer);
+            this.openGridFocusTimer = setTimeout(() => {
+              if (!this.isDestroyed)
+                this.focusGrid();
+            });
+          }
           if (this.dropdownConfig.onShown) {
             this.dropdownConfig.onShown(instance);
           }
         },
         onHidden: (instance) => {
           this.isInComponent = false;
+          this.isVisuallyActive = false;
+          this.isCalendarOpen = false;
           if (this.range) {
             this.onHideGetLastAppliedValue();
           }
@@ -5728,6 +6255,7 @@ const WppDatepicker = class {
       this.isValueExists = false;
       this.datePickerInstance.clear();
       this.datePickerInstance.update();
+      this.syncMirrorSelection();
       this.wppDateClear.emit({
         clear: true,
       });
@@ -5772,10 +6300,32 @@ const WppDatepicker = class {
       this.clearInternalValidation();
       return true;
     };
-    this.onBlur = () => {
-      if (this.isInComponent)
+    /**
+     * Runs the leave checks. Called two ways: the input's own blur event, and the @Watch on
+     * `isInComponent` when the popup closes — which is not a blur at all. `keepFocusRing` marks
+     * that second case: Escape and Apply hand focus back to the field before the popup finishes
+     * hiding, so clearing the ring there stripped it off a field the user was still sitting on.
+     */
+    this.onBlur = (options) => {
+      // Clear the keyboard focus ring the moment the input actually blurs — even while the calendar
+      // is still open — so a datepicker you have tabbed away from does not keep its ring. The
+      // `.tab-focus` class is stateful, not :focus-visible, so it must be reset explicitly.
+      if (!options?.keepFocusRing) {
+        this.focusType = FOCUS_TYPE.NONE;
+      }
+      if (this.isInComponent) {
+        // Blurring while the calendar is open means focus moved into the popup, so the field stays
+        // "in component" and the leave logic below waits for onHidden to flip the flag. With the
+        // calendar closed there is no popup to move into and no onHidden coming, so the flag has to
+        // be dropped here — otherwise a field that was only ever focused (never opened) keeps its
+        // active look after you tab away, and never emits wppBlur or re-validates again.
+        if (this.isCalendarOpen)
+          return;
+        this.isVisuallyActive = false;
+        // Flipping this re-enters onBlur through its @Watch, which then runs the leave logic below.
+        this.isInComponent = false;
         return;
-      this.focusType = FOCUS_TYPE.NONE;
+      }
       const inputValue = this.inputRef?.value ?? '';
       this.wppBlur.emit();
       // Skip re-validation if user just selected a date from the calendar
@@ -5825,14 +6375,30 @@ const WppDatepicker = class {
     };
     this.onFocus = (event) => {
       this.isInComponent = true;
+      // Read before the block below clears it: focus returned programmatically after a selection,
+      // a clear or Escape leaves the field looking idle (and without the clear affordance) rather
+      // than painted active, while still keeping focus so the keyboard user is not stranded.
+      this.isVisuallyActive = !this.suppressShowOnFocus;
       this.clearInternalValidation();
       this.justSelectedFromCalendar = false;
       this.wppFocus.emit(event);
-      if (this.tippyInstance && !this.tippyInstance.state.isShown) {
-        this.tippyInstance.show();
-      }
+      // Tabbing to the field opens the calendar, so the keyboard lands on the same state a click
+      // does — QA asked for the two to agree. The date can still be typed with the popup up.
+      //
+      // Only for keyboard focus. A pointer press already sets MOUSE in onMouseDown, which runs
+      // before this, and tippy's own `click` trigger toggles the popup for that case — opening here
+      // as well would show it on focus and let the click that followed immediately toggle it shut.
+      //
+      // The suppress flag keeps this off the dismissal paths: focus handed back after Escape, Apply,
+      // a committed date, or a Tab past the last popup control would otherwise reopen the popup the
+      // user had just closed.
+      const shouldOpen = !this.suppressShowOnFocus && this.focusType !== FOCUS_TYPE.MOUSE;
+      this.suppressShowOnFocus = false;
+      if (shouldOpen && !this.static)
+        this.tippyInstance?.show();
     };
     this.onMouseDown = () => {
+      this.lastInteractionWasKeyboard = false;
       this.focusType = FOCUS_TYPE.MOUSE;
     };
     this.onKeyUp = (event) => {
@@ -5905,10 +6471,71 @@ const WppDatepicker = class {
         this.inputRef.setSelectionRange(cursorPosition, cursorPosition);
       }
     };
+    /**
+     * Whether the calendar popup is (or is becoming) visible. tippy flips `isVisible`
+     * synchronously on show() but `isShown` only after the show transition — checking both
+     * closes the race where a fast Tab/Escape lands during the opening animation.
+     */
+    this.isCalendarPopupVisible = () => Boolean(this.tippyInstance?.state?.isVisible || this.tippyInstance?.state?.isShown);
     this.onKeyDown = (event) => {
-      // For non-default date formats (e.g. 'MMMM yyyy'), keep input read-only
+      this.lastInteractionWasKeyboard = true;
+      // Escape closes the calendar first and must NOT bubble to a containing modal
+      // (WPPOPENDS-1484 item 10). wpp-side-modal listens for Escape on `document` in the
+      // bubble phase, so stopping propagation here (at the input, the event target) keeps
+      // the modal open. Only swallow Escape while the calendar is actually open.
+      if (event.key === 'Escape') {
+        if (this.isCalendarPopupVisible()) {
+          event.preventDefault();
+          event.stopPropagation();
+          this.closeCalendar();
+        }
+        return;
+      }
+      // Enter and Space open the calendar from the field, which is how it is reopened after being
+      // dismissed (W3C ARIA APG, Date Picker Dialog — the pattern's trigger is activated this way).
+      // The calendar icon carries those semantics but is deliberately out of the tab order, so the
+      // field answers for it. Only while closed: with the popup up, Space belongs to the grid.
+      if ((event.key === 'Enter' || event.key === ' ') && !this.isCalendarPopupVisible() && !this.static) {
+        event.preventDefault();
+        this.tippyInstance?.show();
+        return;
+      }
+      // ArrowDown / ArrowUp open the calendar from the field and move focus into the date grid,
+      // so the keyboard route does not depend on tabbing to the "choose date" button.
+      // Left/Right stay with the text caret.
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        if (this.isCalendarPopupVisible()) {
+          this.focusGrid();
+        }
+        else {
+          // Opening first: the grid does not exist yet, so `onShown` hands focus over once it does.
+          this.focusGridWhenOpened = true;
+          this.tippyInstance?.show();
+        }
+        return;
+      }
+      // Tab from the input bridges focus INTO the popup — the calendar lives in a portal
+      // (appended to the body), so the browser's natural tab order would skip it. Forward
+      // Tab only: from the first control, the popup's controls are natural tab stops, and
+      // Tab past the last one closes the popup (handlePortalKeyDown).
+      if (event.key === 'Tab' && !event.shiftKey && this.isCalendarPopupVisible()) {
+        let firstControl = this.getFirstPopupControl();
+        // A fast Tab can outrun the scheduled onShown augmentation, leaving the nav
+        // controls without tabindex (unfocusable). Augment synchronously and retry.
+        if (!firstControl || firstControl.getAttribute('tabindex') !== '0') {
+          this.augmentCalendarA11y();
+          firstControl = this.getFirstPopupControl();
+        }
+        if (firstControl && firstControl.getAttribute('tabindex') === '0') {
+          event.preventDefault();
+          firstControl.focus();
+          return;
+        }
+      }
+      // For non-default date formats (e.g. 'MMMM yyyy'), keep the input read-only.
       if (!this.isDefaultDateFormat()) {
-        if (!event.metaKey && !event.ctrlKey && event.key !== 'Tab' && event.key !== 'Escape') {
+        if (!event.metaKey && !event.ctrlKey && event.key !== 'Tab') {
           event.preventDefault();
         }
         return;
@@ -5918,8 +6545,13 @@ const WppDatepicker = class {
         'Backspace',
         'Delete',
         'Tab',
-        'Escape',
         'Enter',
+        // Caret navigation within the typed date must keep working (item 3 / C8) — these keys
+        // do not insert characters, so they are safe to allow through the numeric-only filter.
+        'ArrowLeft',
+        'ArrowRight',
+        'Home',
+        'End',
         separator,
         ...Array.from({ length: 10 }, (_, i) => i.toString()),
       ];
@@ -5948,9 +6580,13 @@ const WppDatepicker = class {
         this.datePickerInstance.clear({ silent: true });
         this.datePickerInstance.selectDate([formattedStartDate, formattedEndDate]);
         this.datePickerInstance.update();
+        // Park the pair on the preset's start month so the previewed range is actually visible.
+        this.setDoubleCalendarView(formattedStartDate);
       }
     };
     this.handleClickCalendarIcon = () => {
+      if (this.disabled)
+        return;
       if (this.inputRef && this.tippyInstance) {
         this.inputRef.focus();
         this.tippyInstance.show();
@@ -5984,6 +6620,8 @@ const WppDatepicker = class {
       }, 100);
     };
     this.handleClickIconCross = () => {
+      if (this.disabled)
+        return;
       // Clear input even if no valid date was committed
       if (this.inputRef) {
         this.inputRef.value = '';
@@ -5997,6 +6635,517 @@ const WppDatepicker = class {
       this.datePickerInstance.clear();
       this.datePickerInstance.update();
       this.wppDateClear.emit({ clear: true });
+    };
+    // ---------------------------------------------------------------------------
+    // Calendar popup keyboard accessibility (WPPOPENDS-1484)
+    //
+    // air-datepicker renders the navigation, grid and footer buttons itself into
+    // `portalRef`. We layer the ARIA APG date-picker semantics on top of that DOM
+    // in `augmentCalendarA11y`, re-running it whenever air-datepicker re-renders
+    // (open, prev/next, view switch). Grid navigation uses roving tabindex + real
+    // DOM focus on cells, with our own date math (air-datepicker's keyboardNav is
+    // disabled) so the input's caret keys keep working.
+    // ---------------------------------------------------------------------------
+    /**
+     * The control the calendar was opened from: the field normally, the slotted button when a
+     * trigger is used. A `wpp-*` trigger keeps its real button inside its own shadow root, and
+     * focusing the host of a custom element that isn't focusable itself does nothing, so reach
+     * through to that button.
+     */
+    /** The calendar is on screen: either the popup is open, or it is a static, always-visible one. */
+    this.isCalendarVisible = () => this.static || this.isCalendarOpen;
+    /**
+     * The node that really has focus. `document.activeElement` stops at a shadow host, and a static
+     * datepicker renders its calendar inside this component's shadow root rather than a light-DOM
+     * popup — so every `portal.contains(document.activeElement)` check quietly read false there.
+     */
+    this.deepActiveElement = () => {
+      let element = document.activeElement;
+      while (element?.shadowRoot?.activeElement)
+        element = element.shadowRoot.activeElement;
+      return element;
+    };
+    this.getTriggerFocusTarget = () => {
+      const slotted = this.host.querySelector('[slot="trigger"]');
+      return slotted?.shadowRoot?.querySelector('button, [tabindex]') ?? slotted;
+    };
+    /**
+     * Return focus to the control that opened the calendar, without re-opening it. Only refocuses
+     * when that control isn't already focused, so the suppress flag can't get stuck set (which
+     * would stop the next legitimate open).
+     */
+    this.returnFocusToTrigger = () => {
+      // A trigger-slot datepicker renders no input at all, so the old `inputRef.focus()` was a
+      // silent no-op: closing with Escape, or committing with Apply, dropped focus on the document
+      // instead of handing it back to the button (WCAG 2.4.3). Nothing below applies to that path —
+      // the popup is opened manually, not by focus, and the ring belongs to the button itself.
+      if (this.hasTriggerSlot) {
+        this.getTriggerFocusTarget()?.focus();
+        return;
+      }
+      // The field's focus ring comes from the stateful `.tab-focus` class, not `:focus-visible`, and
+      // that class is only ever set by a real mousedown or Tab keyup — handing focus back in code
+      // fires neither, so the field ended up focused while painted idle (WCAG 2.4.7). Which state it
+      // takes follows the modality: a keyboard dismissal needs the ring, a mouse one must not draw
+      // it, exactly as `:focus-visible` would behave.
+      //
+      // Set before the guard below: dismissing repaints the field's focus state even when focus
+      // never left it, which is the common keyboard case — the popup opens from the field and
+      // Escape closes it without focus ever moving into the grid.
+      this.focusType = this.lastInteractionWasKeyboard ? FOCUS_TYPE.TAB : FOCUS_TYPE.NONE;
+      // A pointer-driven dismissal stops here: dragging focus back into the field put a text caret
+      // in it and left it painted active, which is not what clicking a date or Apply should leave
+      // behind. The keyboard needs the hand-back — a mouse user does not.
+      if (!this.lastInteractionWasKeyboard)
+        return;
+      if (this.host.shadowRoot?.activeElement === this.inputRef)
+        return;
+      this.suppressShowOnFocus = true;
+      this.inputRef?.focus();
+    };
+    /** Hide the calendar and return focus to the input (ESC / after selection). */
+    this.closeCalendar = () => {
+      this.tippyInstance?.hide();
+      this.returnFocusToTrigger();
+    };
+    /** Move focus from the input into the grid, onto the roving cell. */
+    this.focusGrid = () => {
+      this.getRovingCell()?.focus();
+    };
+    /** Re-apply ARIA augmentation after air-datepicker finishes its async render. */
+    this.scheduleCalendarA11yAugment = () => {
+      if (this.isDestroyed)
+        return;
+      clearTimeout(this.a11yAugmentTimer);
+      this.a11yAugmentTimer = setTimeout(() => {
+        if (!this.isDestroyed)
+          this.augmentCalendarA11y();
+      });
+    };
+    /**
+     * Every rendered grid. `withDoubleCalendar` renders two months side by side, so the keyboard
+     * model has to treat the pair as one composite grid — otherwise it silently drives only the
+     * left calendar. With a single calendar this is a one-element list and nothing changes.
+     */
+    this.getActiveBodies = () => Array.from(this.portalRef?.querySelectorAll(`.${AIR_DP_CLASS.body}:not(.${AIR_DP_STATE.hidden})`) ?? []);
+    this.getActiveBody = () => this.getActiveBodies()[0] ?? null;
+    /** Cells across every grid, in DOM order — which is chronological across the pair. */
+    this.getCells = () => this.getActiveBodies().flatMap(body => Array.from(body.querySelectorAll(`.${AIR_DP_CLASS.cell}`)));
+    this.getRovingCell = () => this.getCells().find(c => c.getAttribute('tabindex') === '0') || this.getPreferredCell() || null;
+    /** The cell that should be the single tab stop: selected, else today, else first enabled. */
+    this.getPreferredCell = () => {
+      const cells = this.getCells();
+      return (cells.find(c => c.classList.contains(AIR_DP_STATE.selected)) ||
+        cells.find(c => c.classList.contains(AIR_DP_STATE.current)) ||
+        cells.find(c => !c.classList.contains(AIR_DP_STATE.disabled)) ||
+        null);
+    };
+    this.setRovingCell = (cell) => {
+      this.getCells().forEach(c => c.setAttribute('tabindex', c === cell ? '0' : '-1'));
+    };
+    this.getGridColumns = () => {
+      const cellsContainer = this.getActiveBody()?.querySelector(`.${AIR_DP_CLASS.cells}`);
+      if (!cellsContainer)
+        return 7;
+      // gridTemplateColumns can be undefined in non-layout environments (mock DOM).
+      const columns = (getComputedStyle(cellsContainer).gridTemplateColumns ?? '').split(' ').filter(Boolean).length;
+      return columns || 7;
+    };
+    /** The instance that rendered a cell — the mirror owns the right-hand calendar's grid. */
+    this.instanceForCell = (cell) => {
+      const mirrorRoot = this.mirrorDatePickerInstance?.['$datepicker'];
+      return mirrorRoot?.contains(cell) ? this.mirrorDatePickerInstance : this.datePickerInstance;
+    };
+    this.cellDate = (cell) => {
+      const { year, month, date } = cell.dataset;
+      if (year === undefined)
+        return null;
+      return new Date(Number(year), month === undefined ? 0 : Number(month), date === undefined ? 1 : Number(date));
+    };
+    this.cellAccessibleName = (cell) => {
+      const { year, month, date } = cell.dataset;
+      const months = this._locales.months;
+      if (year !== undefined && month !== undefined && date !== undefined) {
+        return `${Number(date)} ${months[Number(month)]} ${year}`;
+      }
+      if (year !== undefined && month !== undefined) {
+        return `${months[Number(month)]} ${year}`;
+      }
+      if (year !== undefined)
+        return `${year}`;
+      return cell.textContent?.trim() ?? '';
+    };
+    this.findCellForDate = (target) => {
+      const view = this.datePickerInstance?.currentView;
+      const year = target.getFullYear();
+      const month = target.getMonth();
+      const day = target.getDate();
+      let selector;
+      if (view === 'years') {
+        selector = `.${AIR_DP_CLASS.cell}[data-year="${year}"]`;
+      }
+      else if (view === 'months') {
+        selector = `.${AIR_DP_CLASS.cell}[data-year="${year}"][data-month="${month}"]`;
+      }
+      else {
+        selector = `.${AIR_DP_CLASS.cell}[data-year="${year}"][data-month="${month}"][data-date="${day}"]`;
+      }
+      const matches = this.getActiveBodies().flatMap(body => Array.from(body.querySelectorAll(selector)));
+      // A date can appear more than once across two months: 1 Aug is a real cell in the August
+      // grid and a greyed spill cell in July's trailing row. Prefer the month that owns it, so
+      // arrowing off 31 Jul lands in the August calendar rather than on July's spill.
+      return matches.find(c => !c.classList.contains(AIR_DP_STATE.otherMonth)) ?? matches[0] ?? null;
+    };
+    /** Focus the cell for `target`, navigating the view first if it is not rendered. */
+    /**
+     * Whether a date the keyboard is about to move to is inside the picker's own min/max window.
+     * Outside it every cell is disabled, so paging there would strand the user on a month they
+     * cannot select anything in.
+     */
+    this.isDateWithinLimits = (target) => {
+      if (!this.minDate && !this.maxDate)
+        return true;
+      const parseDate = getCurrentFormatDate(this.getDateFormat(), this.getDateFormatSeparator(this.getDateFormat()));
+      const min = this.minDate ? parseDate(this.minDate) : null;
+      const max = this.maxDate ? parseDate(this.maxDate) : null;
+      if (min && startOfDay(target) < startOfDay(min))
+        return false;
+      if (max && startOfDay(target) > startOfDay(max))
+        return false;
+      return true;
+    };
+    this.focusDateCell = (target) => {
+      // Arrowing past minDate/maxDate used to page the view onto a month where every date is
+      // disabled. Stay where we are instead, the way a native date grid stops at its bounds.
+      if (!this.isDateWithinLimits(target))
+        return;
+      const cell = this.findCellForDate(target);
+      if (cell && !cell.classList.contains(AIR_DP_STATE.disabled)) {
+        this.setRovingCell(cell);
+        cell.focus();
+        return;
+      }
+      // Target is outside the rendered page (or disabled) — navigate; augmentCalendarA11y
+      // re-runs via onChangeViewDate and focuses the pending date once it is rendered.
+      this.pendingGridFocusDate = target;
+      this.datePickerInstance?.setViewDate(target);
+    };
+    this.moveGridFocusByDate = (current, key, columns, view) => {
+      switch (key) {
+        case 'ArrowRight':
+          return this.focusDateCell(view === 'days' || !view ? addDays(current, 1) : this.addByView(current, view, 1));
+        case 'ArrowLeft':
+          return this.focusDateCell(view === 'days' || !view ? addDays(current, -1) : this.addByView(current, view, -1));
+        case 'ArrowDown':
+          return this.focusDateCell(this.addByView(current, view, columns));
+        case 'ArrowUp':
+          return this.focusDateCell(this.addByView(current, view, -columns));
+        case 'PageDown':
+          return this.focusDateCell(this.pageByView(current, view, 1));
+        case 'PageUp':
+          return this.focusDateCell(this.pageByView(current, view, -1));
+      }
+    };
+    this.addByView = (date, view, delta) => {
+      if (view === 'years')
+        return addYears(date, delta);
+      if (view === 'months')
+        return addMonths(date, delta);
+      return addDays(date, delta);
+    };
+    this.pageByView = (date, view, direction) => {
+      if (view === 'years')
+        return addYears(date, direction * 10);
+      if (view === 'months')
+        return addYears(date, direction);
+      return addMonths(date, direction);
+    };
+    this.handleGridKeyDown = (event, cell) => {
+      const key = event.key;
+      if (key === 'Enter' || key === ' ') {
+        event.preventDefault();
+        // air-datepicker resolves an activated cell from its own `focusDate`, not from the element
+        // that was clicked, and it only maintains that from its pointer handlers and its own arrow
+        // keys — which are bound to the input, not to the cells our roving tabindex focuses. So it
+        // had no idea which cell the keyboard was on and acted on whatever the pointer last hovered:
+        // drilling into a month from the months view landed on the wrong one. Hand it the date first.
+        const date = this.cellDate(cell);
+        const instance = this.instanceForCell(cell);
+        if (date && instance)
+          instance.setFocusDate(date);
+        // Activating a cell above the day view drills down rather than selects, and that rebuilds
+        // every cell — so ask for focus to land on the same date in the view underneath, the way a
+        // cross-view arrow move already does. Otherwise the re-render leaves focus on the document.
+        if (date && instance && instance.currentView !== 'days')
+          this.pendingGridFocusDate = date;
+        cell.click(); // air-datepicker owns selection; single mode also closes + returns focus
+        return;
+      }
+      if (key === 'Home' || key === 'End') {
+        event.preventDefault();
+        const cells = this.getCells();
+        const columns = this.getGridColumns();
+        const index = cells.indexOf(cell);
+        const rowStart = index - (index % columns);
+        const targetIndex = key === 'Home' ? rowStart : Math.min(rowStart + columns - 1, cells.length - 1);
+        const target = cells[targetIndex];
+        if (target && !target.classList.contains(AIR_DP_STATE.disabled)) {
+          this.setRovingCell(target);
+          target.focus();
+        }
+        return;
+      }
+      if (['ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'PageDown', 'PageUp'].includes(key)) {
+        const current = this.cellDate(cell);
+        if (!current)
+          return;
+        event.preventDefault();
+        this.moveGridFocusByDate(current, key, this.getGridColumns(), this.datePickerInstance?.currentView);
+      }
+    };
+    this.getPresetItems = () => Array.from(this.portalRef?.querySelectorAll(`.${PRESET_ITEM_CLASS}`) ?? []);
+    /**
+     * First control focus lands on when Tab enters the popup: the first ENABLED tab stop in
+     * DOM order. Using the tab-stop chain (not a hard-coded prev chevron) means a datepicker
+     * whose chevrons are disabled by min/max bridges to the title instead of a dead control.
+     */
+    this.getFirstPopupControl = () => this.getPopupTabStops()[0] ?? null;
+    this.handlePresetKeyDown = (event, item) => {
+      const items = this.getPresetItems();
+      const index = items.indexOf(item);
+      if (index === -1)
+        return;
+      let nextIndex = index;
+      switch (event.key) {
+        case 'ArrowDown':
+          nextIndex = (index + 1) % items.length;
+          break;
+        case 'ArrowUp':
+          nextIndex = (index - 1 + items.length) % items.length;
+          break;
+        case 'Home':
+          nextIndex = 0;
+          break;
+        case 'End':
+          nextIndex = items.length - 1;
+          break;
+        // Enter/Space are handled by wpp-list-item itself (emits wppChangeListItem ->
+        // handleClickPreset); handling them here too would select the preset twice.
+        default:
+          return;
+      }
+      event.preventDefault();
+      // Roving tabindex is driven declaratively off presetRovingIndex (wpp-list-item reflects
+      // its host tabindex, so a declarative value is stable where an imperative one raced its
+      // render). Move focus now; the tabindex attributes follow on the next render.
+      this.presetRovingIndex = nextIndex;
+      items[nextIndex].focus();
+      // Preview the highlighted preset in the calendar, matching mouse hover.
+      this.handlePreviewPreset(this.presets[nextIndex].value);
+    };
+    /** The popup's tab stops in DOM order (only enabled controls carry tabindex=0). */
+    this.getPopupTabStops = () => Array.from(this.portalRef?.querySelectorAll(`.${PRESET_ITEM_CLASS}[tabindex="0"], .${AIR_DP_CLASS.navAction}[tabindex="0"], ` +
+      `.${AIR_DP_CLASS.navTitle}[tabindex="0"], .${AIR_DP_CLASS.cell}[tabindex="0"], ` +
+      `.${AIR_DP_CLASS.button}[tabindex="0"]`) ?? []);
+    /** Single delegated keydown handler for everything inside the popup. */
+    this.handlePortalKeyDown = (event) => {
+      this.lastInteractionWasKeyboard = true;
+      // Escape closes the calendar first and must not reach a containing modal (item 10).
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
+        this.closeCalendar();
+        return;
+      }
+      const target = event.target;
+      if (!target)
+        return;
+      // Keep the non-modal popup from being abandoned open: forward Tab on the LAST control
+      // closes the calendar and re-anchors focus on the input, so the browser's default Tab
+      // then continues to the element after the input (no preventDefault). Shift+Tab on the
+      // FIRST control returns to the input while the popup stays open.
+      if (event.key === 'Tab') {
+        const stops = this.getPopupTabStops();
+        if (!event.shiftKey && stops.length && target === stops[stops.length - 1]) {
+          this.tippyInstance?.hide();
+          this.returnFocusToTrigger();
+          return;
+        }
+        if (event.shiftKey && stops.length && target === stops[0]) {
+          event.preventDefault();
+          this.inputRef?.focus();
+          return;
+        }
+        return;
+      }
+      if (target.getAttribute('role') === 'gridcell') {
+        this.handleGridKeyDown(event, target);
+        return;
+      }
+      if (target.classList.contains(PRESET_ITEM_CLASS)) {
+        this.handlePresetKeyDown(event, target);
+        return;
+      }
+      // Chevrons and the view-switching title are air-datepicker DIVs promoted to
+      // role="button" — they have no native keyboard activation, so Enter/Space must
+      // synthesize the click. (Clear/Apply are real <button>s and activate natively.)
+      if ((event.key === 'Enter' || event.key === ' ') &&
+        (target.classList.contains(AIR_DP_CLASS.navAction) || target.classList.contains(AIR_DP_CLASS.navTitle)) &&
+        target.getAttribute('aria-disabled') !== 'true') {
+        event.preventDefault();
+        // Activation re-renders the nav; if air-datepicker replaces the focused node,
+        // restore focus to its successor after the augmentation pass.
+        if (target.classList.contains(AIR_DP_CLASS.navTitle)) {
+          this.pendingNavRefocus = { selector: `.${AIR_DP_CLASS.navTitle}`, index: 0 };
+        }
+        else {
+          const actions = Array.from(this.portalRef?.querySelectorAll(`.${AIR_DP_CLASS.navAction}`) ?? []);
+          this.pendingNavRefocus = { selector: `.${AIR_DP_CLASS.navAction}`, index: actions.indexOf(target) };
+        }
+        target.click();
+        this.scheduleCalendarA11yAugment();
+      }
+    };
+    /** Layer ARIA APG semantics onto air-datepicker's freshly-rendered DOM. */
+    this.augmentCalendarA11y = () => {
+      const portal = this.portalRef;
+      if (!portal)
+        return;
+      // Navigation chevrons (prev = first, next = last) + title.
+      const navActions = Array.from(portal.querySelectorAll(`.${AIR_DP_CLASS.navAction}`));
+      navActions.forEach(action => {
+        const disabled = action.classList.contains(AIR_DP_STATE.disabled);
+        action.setAttribute('role', 'button');
+        action.setAttribute('tabindex', disabled ? '-1' : '0');
+        action.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+        // Labelled from air-datepicker's own `data-action` rather than the loop index: a double
+        // calendar renders four of these, so indexing called everything after the first "next month".
+        action.setAttribute('aria-label', action.getAttribute('data-action') === 'prev'
+          ? this._locales.previousMonthLabel
+          : this._locales.nextMonthLabel);
+      });
+      // querySelectorAll, not querySelector: a double calendar has one title per month, and taking
+      // only the first left the second month's title with no role and out of the tab order.
+      const titles = Array.from(portal.querySelectorAll(`.${AIR_DP_CLASS.navTitle}`));
+      titles.forEach(title => {
+        const disabled = title.classList.contains(AIR_DP_STATE.disabled);
+        title.setAttribute('role', 'button');
+        title.setAttribute('tabindex', disabled ? '-1' : '0');
+        title.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+      });
+      // Footer Clear / Apply buttons: reflect their disabled class into the tab order + a11y.
+      Array.from(portal.querySelectorAll(`.${AIR_DP_CLASS.button}`)).forEach(el => {
+        const button = el;
+        const disabled = button.classList.contains('disabled');
+        button.setAttribute('role', 'button');
+        button.setAttribute('tabindex', disabled ? '-1' : '0');
+        button.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+      });
+      this.augmentGrid(titles[0]?.textContent?.trim());
+      // Focus a pending cell after a cross-view navigation triggered by arrow keys, or by
+      // activating a month/year cell. Only while the calendar is actually on screen: committing a
+      // date closes the popup, and focus belongs on the field then, not in a hidden grid.
+      if (this.pendingGridFocusDate && this.isCalendarVisible()) {
+        const target = this.findCellForDate(this.pendingGridFocusDate);
+        this.pendingGridFocusDate = undefined;
+        if (target && !target.classList.contains(AIR_DP_STATE.disabled)) {
+          this.setRovingCell(target);
+          target.focus();
+        }
+      }
+      // Put focus back in the grid after a selection replaced the focused cell's node. Consume the
+      // record either way, and only step in when focus actually fell out of the popup.
+      const gridFocus = this.gridFocusBeforeSelect;
+      this.gridFocusBeforeSelect = undefined;
+      // The calendar has to actually be on screen: committing a single date closes the popup and
+      // hands focus back to the field, and without this the deferred augmentation would drag focus
+      // into a hidden grid. A static datepicker has no popup at all, so tippy never sets
+      // isCalendarOpen and the restore was being skipped there entirely.
+      if (gridFocus && this.isCalendarVisible() && !portal.contains(this.deepActiveElement())) {
+        const bodies = this.getActiveBodies();
+        const body = bodies[gridFocus.bodyIndex] ?? bodies[0];
+        const cells = body ? Array.from(body.querySelectorAll(`.${AIR_DP_CLASS.cell}`)) : [];
+        const target = cells.find(cell => this.cellKey(cell) === gridFocus.key) ?? this.getRovingCell();
+        if (target) {
+          this.setRovingCell(target);
+          target.focus();
+        }
+      }
+      // Restore focus to a keyboard-activated nav control whose node the re-render replaced.
+      if (this.pendingNavRefocus) {
+        const { selector, index } = this.pendingNavRefocus;
+        const control = portal.querySelectorAll(selector)[Math.max(index, 0)];
+        this.pendingNavRefocus = undefined;
+        // Only intervene when focus was actually lost out of the popup (node replaced).
+        if (control && !portal.contains(this.deepActiveElement())) {
+          control.focus();
+        }
+      }
+    };
+    this.augmentGrid = (gridLabel) => {
+      // Each rendered month is its own grid. In double mode that means two, and each is named
+      // from its own nav title so a screen reader can tell July from August.
+      this.getActiveBodies().forEach(body => this.augmentSingleGrid(body, gridLabel));
+    };
+    this.augmentSingleGrid = (body, fallbackLabel) => {
+      const ownTitle = body
+        .closest(`.${AIR_DP_CLASS.root}`)
+        ?.querySelector(`.${AIR_DP_CLASS.navTitle}`)
+        ?.textContent?.trim();
+      const gridLabel = ownTitle || fallbackLabel;
+      body.setAttribute('role', 'grid');
+      if (gridLabel)
+        body.setAttribute('aria-label', gridLabel);
+      // Weekday header row (days view only).
+      const dayNames = body.querySelector(`.${AIR_DP_CLASS.dayNames}`);
+      if (dayNames) {
+        dayNames.setAttribute('role', 'row');
+        Array.from(dayNames.querySelectorAll(`.${AIR_DP_CLASS.dayName}`)).forEach(el => el.setAttribute('role', 'columnheader'));
+      }
+      const cellsContainer = body.querySelector(`.${AIR_DP_CLASS.cells}`);
+      if (!cellsContainer)
+        return;
+      this.wrapCellsIntoRows(cellsContainer);
+      // Decorate every cell + set the single roving tab stop.
+      const cells = this.getCells();
+      const rovingTarget = this.getRovingCell();
+      cells.forEach(cell => {
+        cell.setAttribute('role', 'gridcell');
+        cell.setAttribute('aria-label', this.cellAccessibleName(cell));
+        if (cell.classList.contains(AIR_DP_STATE.selected))
+          cell.setAttribute('aria-selected', 'true');
+        else
+          cell.removeAttribute('aria-selected');
+        if (cell.classList.contains(AIR_DP_STATE.current))
+          cell.setAttribute('aria-current', 'date');
+        else
+          cell.removeAttribute('aria-current');
+        if (cell.classList.contains(AIR_DP_STATE.disabled))
+          cell.setAttribute('aria-disabled', 'true');
+        else
+          cell.removeAttribute('aria-disabled');
+        cell.setAttribute('tabindex', cell === rovingTarget ? '0' : '-1');
+      });
+    };
+    /**
+     * Group the flat cell list into `role="row"` wrappers so the grid has the
+     * grid > rowgroup > row > gridcell structure ARIA requires. `display: contents`
+     * keeps air-datepicker's CSS grid layout intact (the cells still lay out as
+     * direct grid items). Re-runs each render; skips if already wrapped.
+     */
+    this.wrapCellsIntoRows = (cellsContainer) => {
+      const directCells = Array.from(cellsContainer.children).filter(el => el.classList.contains(AIR_DP_CLASS.cell));
+      if (directCells.length === 0)
+        return; // already wrapped for this render
+      cellsContainer.setAttribute('role', 'rowgroup');
+      const columns = this.getGridColumns();
+      for (let i = 0; i < directCells.length; i += columns) {
+        const row = document.createElement('div');
+        row.setAttribute('role', 'row');
+        row.style.display = 'contents';
+        directCells.slice(i, i + columns).forEach(cell => row.appendChild(cell));
+        cellsContainer.appendChild(row);
+      }
     };
     this.handleTriggerClick = (event) => {
       if (this.disabled)
@@ -6017,7 +7166,7 @@ const WppDatepicker = class {
       'wpp-disabled': this.disabled,
       [`wpp-size-${this.size}`]: true,
       'wpp-has-value': this.isValueExists,
-      'wpp-active': this.isInComponent,
+      'wpp-active': this.isVisuallyActive,
       'wpp-button-trigger': this.hasTriggerSlot,
     });
     this.inputCssClasses = () => ({
@@ -6038,6 +7187,8 @@ const WppDatepicker = class {
     });
     this.containerClasses = () => ({
       'datepicker-wrapper': true,
+      disabled: this.disabled,
+      'has-value': this.isValueExists,
       'single-datepicker': !this.range,
       'range-datepicker': this.range,
       'has-default-format': this.isDefaultDateFormat(),
@@ -6050,7 +7201,22 @@ const WppDatepicker = class {
       'wpp-static-portal': this.static,
       'wpp-with-presets': this.hasPresets(),
       'wpp-reverse-layout': this.reverseLayout,
+      'wpp-double-calendar': this.isDoubleCalendar(),
     });
+    this.renderPresets = () => (h("div", { class: "wpp-presets-container" }, h("div", { class: "wpp-presets-list" }, this.presets.map((preset, index) => (h("wpp-list-item-v4-4-0", { onMouseEnter: () => this.handlePreviewPreset(preset.value), onMouseLeave: this.handleMouseLeavePreset, onFocus: () => this.handlePreviewPreset(preset.value), onWppChangeListItem: () => this.handleClickPreset(preset), class: "wpp-presets-item", tabIndex: index === this.presetRovingIndex ? 0 : -1 }, h("wpp-typography-v4-4-0", { type: "s-body", slot: "label" }, preset.label))))), !this.isDoubleCalendar() && h("div", { class: "wpp-presets-footer" })));
+    /**
+     * Double mode owns its actions row so it can span the full popup width beneath both
+     * calendars, instead of air-datepicker's per-instance buttons under the left one. Reuses
+     * air-datepicker's button classes so both layouts stay visually identical, but right-aligns
+     * them per the Figma rather than space-between.
+     *
+     * Enabled/disabled mirrors `updateDatepickerClearButton`, declaratively off `lastValidDate`.
+     */
+    this.renderActions = () => {
+      const canClear = !!this.lastValidDate;
+      const canApply = Array.isArray(this.lastValidDate) && this.lastValidDate.length === 2;
+      return (h("div", { class: "wpp-datepicker-actions", part: "datepicker-actions" }, h("button", { type: "button", class: { 'air-datepicker-button': true, 'button-clear': true, disabled: !canClear }, onClick: this.handleClear, part: "datepicker-action-clear" }, h("span", null, this._locales.clear)), h("button", { type: "button", class: { 'air-datepicker-button': true, 'button-apply': true, disabled: !canApply }, onClick: this.handleApply, part: "datepicker-action-apply" }, h("span", null, this._locales.apply))));
+    };
     this.datePickerInstance = undefined;
     this.lastValidDate = undefined;
     this.lastAppliedDate = [];
@@ -6058,10 +7224,13 @@ const WppDatepicker = class {
     this.hidden = true;
     this.tippyInstance = undefined;
     this.isInComponent = false;
+    this.isVisuallyActive = false;
     this.isValueExists = false;
     this.hasTriggerSlot = false;
     this.internalMessage = '';
     this.internalMessageType = undefined;
+    this.isCalendarOpen = false;
+    this.presetRovingIndex = 0;
     this.range = false;
     this.toggleSelected = true;
     this.value = undefined;
@@ -6091,6 +7260,7 @@ const WppDatepicker = class {
     this.appendToListWrapper = false;
     this.dropdownConfig = {};
     this.reverseLayout = false;
+    this.withDoubleCalendar = false;
   }
   /**
    * Method that returns a datepicker instance which allows manipulating all props and changing them as necessary. [Read more](https://air-datepicker.com/docs).
@@ -6105,14 +7275,17 @@ const WppDatepicker = class {
     this.inputRef?.focus();
   }
   async updateDatepickerClearButton(newValidDate) {
-    const clearButton = this.portalRef?.querySelector('.air-datepicker--buttons .button-clear');
-    const applyButton = this.portalRef?.querySelector('.air-datepicker--buttons .button-apply');
+    const clearButton = this.portalRef?.querySelector(`.${AIR_DP_CLASS.buttonsContainer} .button-clear`);
+    const applyButton = this.portalRef?.querySelector(`.${AIR_DP_CLASS.buttonsContainer} .button-apply`);
     if (newValidDate) {
       clearButton?.classList?.remove('disabled');
     }
     else {
       clearButton?.classList?.add('disabled');
     }
+    // Apply commits a range, so it stays disabled until both ends are set. This has to match the
+    // `canApply` gate in render(): the two used to disagree (>= 1 here, === 2 there), and whichever
+    // ran last won, which is how Apply came to be live on a single date.
     if (Array.isArray(newValidDate) && newValidDate.length === 2) {
       applyButton?.classList?.remove('disabled');
     }
@@ -6154,6 +7327,9 @@ const WppDatepicker = class {
   updateView() {
     this.recreateDatePicker();
   }
+  updateDoubleCalendar() {
+    this.recreateDatePicker();
+  }
   updateMinDate() {
     this.setMinMaxDate();
   }
@@ -6167,8 +7343,9 @@ const WppDatepicker = class {
     }
   }
   updateIsInComponent(value) {
+    // The popup closing, not a blur — keep whatever focus ring the field is wearing.
     if (!value)
-      this.onBlur();
+      this.onBlur({ keepFocusRing: true });
   }
   onUpdateLocales() {
     const firstDay = this.determineFirstDay();
@@ -6187,14 +7364,40 @@ const WppDatepicker = class {
     this.createDateInstance();
     this.setInitialDate();
     this.setMinMaxDate();
-    const datepickerEl = this.host.shadowRoot?.querySelector('[part="datepicker"]');
-    if (datepickerEl) {
-      this.portalRef?.appendChild(datepickerEl);
-    }
+    this.moveCalendarsIntoPortal();
     if (!this.static) {
       this.createTippyInstance();
     }
+    // Same reason as returnFocusToTrigger: autoFocusElement focuses in code, which fires neither
+    // mousedown nor a Tab keyup, so the field was left holding focus with nothing drawn on it —
+    // an autofocused control has to show where focus is.
+    if (this.autoFocus)
+      this.focusType = FOCUS_TYPE.TAB;
     autoFocusElement(this.autoFocus, this.inputRef);
+    // `autoFocus` opens the calendar alongside focusing the field. Focus stays in the input so the
+    // date can still be typed; the popup is just already on screen. Ordinary focus (click, Tab)
+    // does not do this — see handleFocus.
+    // Queued rather than called straight out: autoFocusElement defers its own focus() by a
+    // macrotask, so opening synchronously here would fire onShow before the field is focused.
+    if (this.autoFocus && !this.static) {
+      this.autoFocusOpenTimer = setTimeout(() => {
+        if (!this.isDestroyed)
+          this.tippyInstance?.show();
+      });
+    }
+  }
+  /**
+   * `withDoubleCalendar` arriving as a property after first render (which is what framework
+   * wrappers do) fires the @Watch before Stencil has rendered the calendars row, so the
+   * re-parent inside recreateDatePicker has nowhere to put them. Re-asserting it here — after
+   * every render — is what keeps the two calendars inside the flex row instead of stacking
+   * loose in the portal. It no-ops when they are already in place.
+   */
+  componentDidRender() {
+    if (!this.isDatePickerInitialized)
+      return;
+    this.moveCalendarsIntoPortal();
+    this.applyDoubleCalendarA11y();
   }
   connectedCallback() {
     this.themeSubscription.start();
@@ -6205,7 +7408,15 @@ const WppDatepicker = class {
   disconnectedCallback() {
     this.themeSubscription.stop();
     this.isDestroyed = true;
+    clearTimeout(this.a11yAugmentTimer);
+    clearTimeout(this.hideTimer);
+    clearTimeout(this.previewPresetTimer);
+    clearTimeout(this.openGridFocusTimer);
+    clearTimeout(this.autoFocusOpenTimer);
+    clearTimeout(this.commitFocusTimer);
     this.tippyInstance?.destroy();
+    this.mirrorDatePickerInstance?.destroy();
+    this.mirrorDatePickerInstance = undefined;
   }
   get _locales() {
     return mergeLocales(LOCALES_DEFAULTS, this.locales);
@@ -6228,21 +7439,33 @@ const WppDatepicker = class {
     return this._locales.firstDay ?? 1; // Default to Monday (ISO 8601) if no valid value is found
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, datepicker-container, icon-calendar, datepicker-input, icon-cross, message, trigger-wrapper" }, this.labelConfig?.text && !this.hasTriggerSlot && (h("wpp-label-v4-3-0", { class: "label", htmlFor: this.name, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.containerClasses(), id: "container", part: "datepicker-container" }, this.hasTriggerSlot
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, datepicker-container, icon-calendar, datepicker-input, icon-cross, message, trigger-wrapper" }, this.labelConfig?.text && !this.hasTriggerSlot && (h("wpp-label-v4-4-0", { class: "label", htmlFor: "datepicker", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.containerClasses(), id: "container", part: "datepicker-container" }, this.hasTriggerSlot
       ? [
         h("input", { type: "hidden", ref: el => (this.hiddenInputRef = el), "aria-hidden": "true" }),
         h("div", { class: "trigger-wrapper", ref: el => (this.triggerWrapperRef = el), onClick: (e) => this.handleTriggerClick(e), role: "presentation", part: "trigger-wrapper" }, h("slot", { name: "trigger", onSlotchange: () => this.updateSlotData() })),
       ]
       : [
-        h("input", { id: "datepicker", type: "text", class: this.inputCssClasses(), onInput: this.onInput, onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, disabled: this.disabled, placeholder: this.placeholder ||
+        h("input", { id: "datepicker", type: "text", class: this.inputCssClasses(), onInput: this.onInput, onBlur: () => this.onBlur(), onFocus: this.onFocus, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, disabled: this.disabled, placeholder: this.placeholder ||
             (this.range
               ? `${this._locales.dateFormat}${DATES_SEPARATOR}${this._locales.dateFormat}`
-              : `${this._locales.dateFormat}`), ref: inputRef => (this.inputRef = inputRef), autocomplete: "off", part: "datepicker-input", title: "", "aria-invalid": !!((this.message || this.internalMessage) &&
-            (this.messageType || this.internalMessageType) === 'error'), "aria-describedby": this.message || this.internalMessage ? 'datepicker-message' : undefined }),
-        h("wpp-icon-calendar-v4-3-0", { onClick: this.handleClickCalendarIcon, class: this.iconCalendarCssClasses(), part: "icon-calendar", color: "inherit" }),
-      ], h("div", { onBlur: this.handleBlurPortal, onFocus: () => clearTimeout(this.hideTimer), ...(this.hasPresets() ? { tabIndex: 0 } : {}), ref: ref => (this.portalRef = ref), class: this.portalClasses() }, this.hasPresets() && (h("div", { class: "wpp-presets-container" }, h("div", { class: "wpp-presets-list" }, this.presets.map((preset) => (h("wpp-list-item-v4-3-0", { onMouseEnter: () => this.handlePreviewPreset(preset.value), onMouseLeave: this.handleMouseLeavePreset, onWppChangeListItem: () => this.handleClickPreset(preset), class: "wpp-presets-item" }, h("wpp-typography-v4-3-0", { type: "s-body", slot: "label" }, preset.label))))), h("div", { class: "wpp-presets-footer" })))), (!!this.lastValidDate || this.inputRef?.value) && !this.hasTriggerSlot && (h("wpp-icon-cross-v4-3-0", { class: this.iconCrossCssClasses(), "aria-label": "Erase date", onClick: this.handleClickIconCross, onMouseDown: (e) => e.preventDefault(), part: "icon-cross" })), (this.message || this.internalMessage) && (h("wpp-inline-message-v4-3-0", { id: "datepicker-message", class: "inline-message", message: this.message || this.internalMessage, type: this.message ? this.messageType : this.internalMessageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })))));
+              : `${this._locales.dateFormat}`), ref: inputRef => (this.inputRef = inputRef), autocomplete: "off", part: "datepicker-input", title: "", "aria-label": this.labelConfig?.text || this._locales.calendarLabel, "aria-invalid": (this.message || this.internalMessage) && (this.messageType || this.internalMessageType) === 'error'
+            ? 'true'
+            : undefined, "aria-describedby": this.message || this.internalMessage ? 'datepicker-message' : undefined }),
+        h("wpp-icon-calendar-v4-4-0", { onClick: this.handleClickCalendarIcon, onKeyDown: activateOnEnterOrSpace(this.handleClickCalendarIcon), class: this.iconCalendarCssClasses(), part: "icon-calendar", color: "inherit", role: "button",
+          // Pointer-only trigger: QA asked for it out of the tab order. The keyboard route
+          // into the calendar is ArrowDown/ArrowUp on the field, which also lands focus in
+          // the date grid, so the dialog stays reachable without this being a tab stop.
+          tabIndex: -1, "aria-disabled": this.disabled ? 'true' : 'false', "aria-label": this._locales.calendarLabel, "aria-haspopup": "dialog", "aria-expanded": this.isCalendarOpen ? 'true' : 'false' }),
+      ], h("div", { id: this.popupId, role: "dialog", "aria-modal": "false", "aria-label": this._locales.calendarLabel, onBlur: this.handleBlurPortal, onFocus: () => clearTimeout(this.hideTimer), onKeyDown: this.handlePortalKeyDown, onPointerDown: () => (this.lastInteractionWasKeyboard = false), ref: ref => (this.portalRef = ref), class: this.portalClasses() }, this.isDoubleCalendar()
+      ? [
+        // Figma: [rail | calendars] row, then a full-width divider, then actions.
+        h("div", { class: "wpp-datepicker-row" }, this.hasPresets() && this.renderPresets(), h("div", { class: "wpp-datepicker-calendars", ref: ref => (this.calendarsRef = ref) })),
+        h("div", { class: "wpp-datepicker-divider" }),
+        this.renderActions(),
+      ]
+      : this.hasPresets() && this.renderPresets()), (!!this.lastValidDate || this.inputRef?.value) && !this.hasTriggerSlot && (h("wpp-icon-cross-v4-4-0", { class: this.iconCrossCssClasses(), "aria-label": this._locales.eraseDateLabel, role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: this.disabled ? -1 : 0, onClick: this.handleClickIconCross, onKeyDown: activateOnEnterOrSpace(this.handleClickIconCross), onMouseDown: (e) => e.preventDefault(), part: "icon-cross" })), (this.message || this.internalMessage) && (h("div", { id: "datepicker-message", class: "inline-message-live-region", role: (this.message ? this.messageType : this.internalMessageType) === 'error' ? 'alert' : 'status' }, h("span", { class: "sr-only" }, this.message || this.internalMessage), h("wpp-inline-message-v4-4-0", { "aria-hidden": "true", class: "inline-message", message: this.message || this.internalMessage, type: this.message ? this.messageType : this.internalMessageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" }))))));
   }
-  static get registryIs() { return "wpp-datepicker-v4-3-0"; }
+  static get registryIs() { return "wpp-datepicker-v4-4-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "lastValidDate": ["updateDatepickerClearButton"],
@@ -6250,6 +7473,7 @@ const WppDatepicker = class {
     "width": ["onUpdateWidth"],
     "range": ["updateRange"],
     "view": ["updateView"],
+    "withDoubleCalendar": ["updateDoubleCalendar"],
     "minDate": ["updateMinDate"],
     "maxDate": ["updateMaxDate"],
     "dropdownConfig": ["updateDropdownConfig"],

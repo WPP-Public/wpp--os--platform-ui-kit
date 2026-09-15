@@ -60,7 +60,7 @@
   * @prop --wpp-action-button-destructive-bg-color-disabled:
 */
 :host {
-  --ab-padding: var(--wpp-action-button-padding, 5px 8px);
+  --ab-padding: var(--wpp-action-button-padding, 4px 8px);
   --ab-border-radius: var(
     --wpp-border-radius-fully-rounded,
     var(--wpp-action-border-radius, var(--wpp-border-radius-s))
@@ -158,6 +158,7 @@
   display: inline-flex;
   outline: none;
   position: relative;
+  height: 32px;
   width: fit-content;
   vertical-align: top;
 }

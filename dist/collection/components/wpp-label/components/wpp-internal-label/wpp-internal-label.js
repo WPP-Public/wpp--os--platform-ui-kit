@@ -42,6 +42,20 @@ export class WppInternalLabel {
       'info-wrapper': true,
       'with-icon': this.hasIconSlot,
     });
+    // The info icon is a help affordance rather than the field's control, but while the field is
+    // disabled it must not be a tab stop either: everything else in the field is inert, so the icon
+    // would be the only thing focus could land on. Produces the same non-interactive shape the
+    // existing `tooltipConfig.tabIndex: -1` escape hatch already gives consumers, so both branches
+    // of the render stay in step.
+    this.infoIconInteractiveProps = () => {
+      const tabIndex = this.disabled ? -1 : (this.tooltipConfig.tabIndex ?? 0);
+      const isInteractive = tabIndex !== -1;
+      return {
+        role: isInteractive ? 'button' : 'none',
+        tabIndex,
+        ...(isInteractive ? { 'aria-label': 'Show info' } : {}),
+      };
+    };
     this.hasIconSlot = true;
     this.focusType = undefined;
     this.labelText = undefined;
@@ -60,10 +74,10 @@ export class WppInternalLabel {
     return mergeLocales(LOCALES_DEFAULTS, this.locales);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onBlur: this.onBlur, exportparts: "info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" }, !!this.labelText && (h("div", { class: this.infoWrapperCssClasses(), part: "info-wrapper", role: this.role }, h("wpp-typography-v4-3-0", { type: this.typography, class: "text", part: "text" }, this.labelText), this.optional && (h("wpp-typography-v4-3-0", { type: "s-body", class: "optional", part: "optional-text" }, "(", this._locales.optional, ")")))), !!this.description && this.hasIconSlot ? (h("wpp-tooltip-v4-3-0", { class: "tooltip", text: this.description, config: this.tooltipConfig, part: "tooltip" }, h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: this.tooltipConfig.tabIndex === -1 ? 'none' : 'button', tabIndex: this.tooltipConfig.tabIndex ?? 0, "aria-label": this.tooltipConfig.tabIndex !== -1 ? 'Show info' : undefined }))) : (h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, role: "button", tabIndex: 0, "aria-label": "Show info" }))));
+    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onBlur: this.onBlur, exportparts: "info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" }, !!this.labelText && (h("div", { class: this.infoWrapperCssClasses(), part: "info-wrapper", role: this.role }, h("wpp-typography-v4-4-0", { type: this.typography, class: "text", part: "text" }, this.labelText), this.optional && (h("wpp-typography-v4-4-0", { type: "s-body", class: "optional", part: "optional-text" }, "(", this._locales.optional, ")")))), !!this.description && this.hasIconSlot ? (h("wpp-tooltip-v4-4-0", { class: "tooltip", text: this.description, config: this.tooltipConfig, part: "tooltip" }, h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, ...this.infoIconInteractiveProps() }))) : (h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, ...this.infoIconInteractiveProps() }))));
   }
   static get is() { return "wpp-internal-label"; }
-  static get registryIs() { return "wpp-internal-label-v4-3-0"; }
+  static get registryIs() { return "wpp-internal-label-v4-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

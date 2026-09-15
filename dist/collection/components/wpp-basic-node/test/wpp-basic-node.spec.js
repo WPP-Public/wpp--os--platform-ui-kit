@@ -132,7 +132,7 @@ describe('WppBasicNode', () => {
     it('Should emit wppActionClick event when an additional action from the dropdown menu is clicked', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-3-0", { nodeTitle: "Test Artefact" }, h("div", { slot: "body" }))),
+        template: () => (h("wpp-basic-node-v4-4-0", { nodeTitle: "Test Artefact" }, h("div", { slot: "body" }))),
       });
       const wppActionClickSpy = jest.spyOn(page.rootInstance.wppActionClick, 'emit');
       const additionalListItem = page.root?.querySelectorAll('wpp-list-item')[0];
@@ -147,7 +147,7 @@ describe('WppBasicNode', () => {
     it('Should emit wppActionClick event when the play / pause action is clicked', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => h("wpp-basic-node-v4-3-0", { isSelected: true, nodeTitle: "Test Artefact" }),
+        template: () => h("wpp-basic-node-v4-4-0", { isSelected: true, nodeTitle: "Test Artefact" }),
       });
       const wppActionClickSpy = jest.spyOn(page.rootInstance.wppActionClick, 'emit');
       const playBtn = page.root?.querySelector('[data-testid="wpp-play-button"]');
@@ -171,7 +171,7 @@ describe('WppBasicNode', () => {
     it('Should render the re-run button with the refresh icon and emit wppActionClick when clicked', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => h("wpp-basic-node-v4-3-0", { isReRun: true, nodeTitle: "Test Artefact" }),
+        template: () => h("wpp-basic-node-v4-4-0", { isReRun: true, nodeTitle: "Test Artefact" }),
       });
       const wppActionClickSpy = jest.spyOn(page.rootInstance.wppActionClick, 'emit');
       const reRunBtn = page.root?.querySelector('[data-testid="wpp-rerun-button"]');
@@ -187,7 +187,7 @@ describe('WppBasicNode', () => {
     it('Should prioritise the loading (stop) state over the re-run state', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => h("wpp-basic-node-v4-3-0", { isReRun: true, isLoading: true, nodeTitle: "Test Artefact" }),
+        template: () => h("wpp-basic-node-v4-4-0", { isReRun: true, isLoading: true, nodeTitle: "Test Artefact" }),
       });
       expect(page.root?.querySelector('[data-testid="wpp-pause-button"]')).toBeTruthy();
       expect(page.root?.querySelector('[data-testid="wpp-rerun-button"]')).toBeFalsy();
@@ -207,7 +207,7 @@ describe('WppBasicNode', () => {
     it('Should render the component in isSelected state', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-3-0", { isSelected: true, nodeTitle: "Test Artefact" }, h("div", { slot: "body" }, "Body Content"))),
+        template: () => (h("wpp-basic-node-v4-4-0", { isSelected: true, nodeTitle: "Test Artefact" }, h("div", { slot: "body" }, "Body Content"))),
       });
       await page.waitForChanges();
       expect(page.root).toMatchSnapshot();
@@ -215,7 +215,7 @@ describe('WppBasicNode', () => {
     it('Should render additional actions in the dropdown menu when provided via the actions prop and a scrollbar in the body when the height exceeds the maximum', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-3-0", { nodeTitle: "Test Artefact", actions: [{ icon: 'wpp-icon-edit', label: 'Edit' }] }, h("div", { slot: "body" }, h("div", { style: { height: '1300px' } }, h("p", null, "Body content with height 1300px"))))),
+        template: () => (h("wpp-basic-node-v4-4-0", { nodeTitle: "Test Artefact", actions: [{ icon: 'wpp-icon-edit', label: 'Edit' }] }, h("div", { slot: "body" }, h("div", { style: { height: '1300px' } }, h("p", null, "Body content with height 1300px"))))),
       });
       page.rootInstance.hasScrollbar = true;
       await page.waitForChanges();
@@ -224,7 +224,7 @@ describe('WppBasicNode', () => {
     it('Should render the node in loading state', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-3-0", { nodeTitle: "Test Artefact", isLoading: true }, h("div", { slot: "body" }, h("div", { style: { height: '100px' } }, h("p", null, "Body content with height 100px"))))),
+        template: () => (h("wpp-basic-node-v4-4-0", { nodeTitle: "Test Artefact", isLoading: true }, h("div", { slot: "body" }, h("div", { style: { height: '100px' } }, h("p", null, "Body content with height 100px"))))),
       });
       await page.waitForChanges();
       expect(page.root).toMatchSnapshot();

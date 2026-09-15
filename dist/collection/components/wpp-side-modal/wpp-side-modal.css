@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /**
   * @prop --wpp-side-modal-width-s:
   * @prop --wpp-side-modal-width-m:
@@ -10,12 +11,14 @@
   * @prop --wpp-side-modal-header-with-back-button-paddings:
   * @prop --wpp-side-modal-header-paddings:
   * @prop --wpp-side-modal-body-paddings:
+  * @prop --wpp-side-modal-body-padding-inline:
   * @prop --wpp-side-modal-actions-paddings:
   * @prop --wpp-side-modal-close-button-margin-left:
   * @prop --wpp-side-modal-back-button-margin-left:
   * @prop --wpp-side-modal-bg-color:
   * @prop --wpp-side-modal-actions-bg-color:
   * @prop --wpp-side-modal-actions-border-color:
+  * @prop --side-modal-scrollbar-gutter: set by the component; do not override
 */
 :host {
   --side-modal-width-s: var(--wpp-side-modal-width-s, 440px);
@@ -33,7 +36,8 @@
     --wpp-side-modal-header-with-back-button-paddings,
     24px 24px 20px 24px
   );
-  --side-modal-body-paddings: var(--wpp-side-modal-body-paddings, 0 32px);
+  --side-modal-body-padding-inline: var(--wpp-side-modal-body-padding-inline, 32px);
+  --side-modal-body-paddings: var(--wpp-side-modal-body-paddings, 0 var(--side-modal-body-padding-inline));
   --side-modal-actions-paddings: var(--wpp-side-modal-actions-paddings, 24px 32px 24px 32px);
   --side-modal-close-button-margin-left: var(--wpp-side-modal-close-button-margin-left, 8px);
   --side-modal-back-button-margin-right: var(--wpp-side-modal-close-button-margin-left, 8px);
@@ -98,8 +102,16 @@
   font-family: var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));
   letter-spacing: var(--wpp-typography-s-body-letter-spacing, 0);
   height: 100%;
+  /* The body scrolls, so the scrollbar has to be visible AND the designed inset has to stay
+     symmetric. `stable` keeps the gutter reserved inside the body — so the scrollbar renders at the
+     modal's right edge and there is no layout shift when it appears — and the end padding is then
+     reduced by the gutter so the content still ends exactly one inset from the modal edge.
+     Do NOT pull the box out with a negative margin instead: that puts the scrollbar past the
+     modal's edge, where it gets clipped and disappears. */
   padding: var(--side-modal-body-paddings);
+  padding-inline-end: max(0px, var(--side-modal-body-padding-inline) - var(--side-modal-scrollbar-gutter, 0px));
   overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 .body::-webkit-scrollbar {
   width: 4px;

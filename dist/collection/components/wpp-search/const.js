@@ -4,4 +4,7 @@ export const LOCALES_DEFAULTS = {
   nothingFound: 'Nothing found',
   loading: 'Loading...',
   dropdownHeader: '',
+  clearButtonLabel: 'Clear search',
+  optionsListLabel: 'Search results',
+  searchLabel: 'Search',
 };

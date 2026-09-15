@@ -3,9 +3,11 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-5f5af6a9.js');
-const utils = require('./utils-9529c2fe.js');
-const subscribeToTheme = require('./subscribe-to-theme-1879a649.js');
+const utils = require('./utils-a6513d61.js');
+const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
+const speechRecognition = require('./speech-recognition-f6839ec3.js');
 require('./consts-d8f5ef98.js');
+require('./theme-observer-4179316e.js');
 
 const LOCALES_DEFAULTS = {
   attachAction: 'Attach file',
@@ -72,7 +74,7 @@ const WppChatNode = class {
     this.wppMessageActionClick = index.createEvent(this, "wppMessageActionClick", 1);
     this.themeSubscription = subscribeToTheme.themeSubscriptionController(() => this.host);
     this._locales = LOCALES_DEFAULTS;
-    this.recognition = null;
+    this.recognition = new speechRecognition.SpeechRecognitionService();
     this.handleInput = (event) => {
       const target = event.target;
       this.activateNode();
@@ -84,7 +86,7 @@ const WppChatNode = class {
       this.activateNode();
       this.startWaitingForResponse();
       this.isAudioRecording = false;
-      this.stopSpeechRecognition();
+      this.recognition.stopRecognition();
       const message = {
         id: `msg-${Date.now()}`,
         content: this.inputValue.trim(),
@@ -111,58 +113,33 @@ const WppChatNode = class {
         this.handleSend();
       }
     };
-    this.setupSpeechRecognition = () => {
-      const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognitionAPI)
-        return;
-      this.recognition = new SpeechRecognitionAPI();
-      this.recognition.continuous = true;
-      this.recognition.interimResults = true;
-      this.recognition.lang = this._locales.audioLanguage;
-    };
-    this.startSpeechRecognition = () => {
-      if (!this.recognition)
-        return;
-      const previousText = this.inputValue.trim();
-      this.recognition.onresult = (event) => {
-        let text = '';
-        for (let i = 0; i < event.results.length; i++) {
-          text += event.results[i][0].transcript;
-        }
-        const newOutput = previousText ? `${previousText} ${text}` : text;
-        if (this.inputValue === newOutput)
-          return;
-        this.inputValue = newOutput;
-      };
-      this.recognition.onerror = () => {
-        this.isAudioRecording = false;
-      };
-      this.recognition.onend = () => {
-        this.isAudioRecording = false;
-      };
-      this.recognition.start();
-    };
-    this.stopSpeechRecognition = () => {
-      if (!this.recognition)
-        return;
-      this.recognition.onresult = null;
-      this.recognition.onend = null;
-      this.recognition.onerror = null;
-      this.recognition.stop();
-    };
     this.handleClickAudioRecording = (event) => {
       event.stopPropagation();
       event.preventDefault();
       this.activateNode();
-      if (!this.recognition)
+      if (!this.recognition.isSupported) {
+        console.warn('SpeechRecognition API is not supported in this browser.');
         return;
+      }
       this.isAudioRecording = !this.isAudioRecording;
-      this.wppMic.emit({ isRecording: this.isAudioRecording });
       if (this.isAudioRecording) {
-        this.startSpeechRecognition();
+        this.wppMic.emit({ isRecording: true });
+        this.recognition.startRecognition({
+          baseText: this.inputValue,
+          onTranscript: newOutput => {
+            if (this.inputValue === newOutput)
+              return;
+            this.inputValue = newOutput;
+          },
+          onStop: () => {
+            this.isAudioRecording = false;
+            this.wppMic.emit({ isRecording: false });
+          },
+        });
       }
       else {
-        this.stopSpeechRecognition();
+        this.wppMic.emit({ isRecording: false });
+        this.recognition.stopRecognition();
       }
     };
     this.handleAttach = () => {
@@ -292,12 +269,12 @@ const WppChatNode = class {
     window.addEventListener('pointerdown', this.handleWindowPointerDown, true);
   }
   componentDidLoad() {
-    this.setupSpeechRecognition();
+    this.recognition.setupRecognition(this._locales.audioLanguage);
   }
   disconnectedCallback() {
     this.themeSubscription.stop();
     window.removeEventListener('pointerdown', this.handleWindowPointerDown, true);
-    this.stopSpeechRecognition();
+    this.recognition.stopRecognition();
     this.clearResponseWaitTimer();
   }
   /**
@@ -361,12 +338,12 @@ const WppChatNode = class {
   renderActionMenu() {
     const hasActions = this.actions.length > 0;
     if (!hasActions) {
-      return (index.h("wpp-tooltip-v4-3-0", { text: this._locales.attachAction, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-3-0", { variant: "secondary", ariaProps: { label: this._locales.attachAction }, onClick: this.handleAttach }, index.h("wpp-icon-plus-v4-3-0", { slot: "icon-start" }))));
+      return (index.h("wpp-tooltip-v4-4-0", { text: this._locales.attachAction, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-4-0", { variant: "secondary", ariaProps: { label: this._locales.attachAction }, onClick: this.handleAttach }, index.h("wpp-icon-plus-v4-4-0", { slot: "icon-start" }))));
     }
-    return (index.h("wpp-menu-context-v4-3-0", { class: "chat-actions-menu-context", style: { width: 'fit-content' } }, index.h("wpp-action-button-v4-3-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this._locales.actionsMenu } }, index.h("wpp-icon-plus-v4-3-0", { slot: "icon-start" })), index.h("div", { class: "chat-actions-menu" }, this.actions.map(action => (index.h("wpp-list-item-v4-3-0", { key: `${action.icon}-${action.label}`, onWppChangeListItem: () => this.handleActionClick(action) }, this.renderIcon(action.icon, 'left'), index.h("span", { slot: "label" }, action.label)))))));
+    return (index.h("wpp-menu-context-v4-4-0", { class: "chat-actions-menu-context", style: { width: 'fit-content' } }, index.h("wpp-action-button-v4-4-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this._locales.actionsMenu } }, index.h("wpp-icon-plus-v4-4-0", { slot: "icon-start" })), index.h("div", { class: "chat-actions-menu" }, this.actions.map(action => (index.h("wpp-list-item-v4-4-0", { key: `${action.icon}-${action.label}`, onWppChangeListItem: () => this.handleActionClick(action) }, this.renderIcon(action.icon, 'left'), index.h("span", { slot: "label" }, action.label)))))));
   }
   renderModelListItem(model, checked) {
-    return (index.h("wpp-list-item-v4-3-0", { key: model.id, checked: checked, onWppChangeListItem: () => this.handleModelSelect(model) }, index.h("wpp-avatar-v4-3-0", { slot: "left", size: "xs", variant: "square", role: "presentation", src: model.logo, icon: model.icon, name: model.label }), index.h("span", { slot: "label" }, model.label), model.caption && (index.h("span", { slot: "caption" }, model.caption))));
+    return (index.h("wpp-list-item-v4-4-0", { key: model.id, checked: checked, onWppChangeListItem: () => this.handleModelSelect(model) }, index.h("wpp-avatar-v4-4-0", { slot: "left", size: "xs", variant: "square", role: "presentation", src: model.logo, icon: model.icon, name: model.label }), index.h("span", { slot: "label" }, model.label), model.caption && (index.h("span", { slot: "caption" }, model.caption))));
   }
   /**
    * Model selector triggered by the compact logo avatar (Figma). Unlike wpp-chat-input,
@@ -379,8 +356,8 @@ const WppChatNode = class {
     const selectedModel = this.getSelectedModel();
     // `logo` (an image URL) wins when provided; `icon` is the asset-free fallback for
     // hosts that cannot serve the brand logos (e.g. Storybook), and initials last.
-    const triggerAvatar = (index.h("wpp-avatar-v4-3-0", { slot: "icon-start", class: "model-avatar", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, icon: selectedModel.icon, name: selectedModel.label || '' }));
-    return (index.h("wpp-menu-context-v4-3-0", { class: "chat-model-selector", style: { width: 'fit-content' }, dropdownConfig: {
+    const triggerAvatar = (index.h("wpp-avatar-v4-4-0", { slot: "icon-start", class: "model-avatar", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, icon: selectedModel.icon, name: selectedModel.label || '' }));
+    return (index.h("wpp-menu-context-v4-4-0", { class: "chat-model-selector", style: { width: 'fit-content' }, dropdownConfig: {
         onShow: this.handleModelMenuShow,
         onHide: this.handleModelMenuHide,
         // Per Figma (Chat Input / Model Selector): the dropdown opens ABOVE the trigger and
@@ -391,11 +368,11 @@ const WppChatNode = class {
         popperOptions: {
           modifiers: [{ name: 'flip', options: { fallbackPlacements: ['bottom-start'] } }],
         },
-      } }, index.h("wpp-action-button-v4-3-0", { slot: "trigger-element", class: "model-selector-trigger", variant: "secondary", ariaProps: { label: this._locales.modelSelectorLabel, expanded: this.isModelMenuOpen, haspopup: 'menu' } }, triggerAvatar), index.h("div", { class: "wpp-model-dropdown" }, this.getDefaultModels().map(model => this.renderModelListItem(model, model.id === selectedModel.id)), index.h("wpp-divider-v4-3-0", null), this.models.length > 0 ? (this.models.map(model => this.renderModelListItem(model, model.id === selectedModel.id))) : (index.h("wpp-list-item-v4-3-0", { onWppChangeListItem: this.handleModelChange }, index.h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), index.h("wpp-icon-chevron-v4-3-0", { slot: "right", direction: "right" }))))));
+      } }, index.h("wpp-action-button-v4-4-0", { slot: "trigger-element", class: "model-selector-trigger", variant: "secondary", ariaProps: { label: this._locales.modelSelectorLabel, expanded: this.isModelMenuOpen, haspopup: 'menu' } }, triggerAvatar), index.h("div", { class: "wpp-model-dropdown" }, this.getDefaultModels().map(model => this.renderModelListItem(model, model.id === selectedModel.id)), index.h("wpp-divider-v4-4-0", null), this.models.length > 0 ? (this.models.map(model => this.renderModelListItem(model, model.id === selectedModel.id))) : (index.h("wpp-list-item-v4-4-0", { onWppChangeListItem: this.handleModelChange }, index.h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), index.h("wpp-icon-chevron-v4-4-0", { slot: "right", direction: "right" }))))));
   }
   renderMicrophoneBtn() {
     const recordLabel = this.isAudioRecording ? this._locales.audioStopRecordAction : this._locales.audioRecordAction;
-    return (index.h("wpp-action-button-v4-3-0", { class: "mic-btn", "data-testid": "chat-node-mic-btn", variant: "secondary", ariaProps: { label: recordLabel }, onClick: this.handleClickAudioRecording }, this.isAudioRecording ? index.h("wpp-icon-stop-v4-3-0", { slot: "icon-start" }) : index.h("wpp-icon-mic-on-v4-3-0", { slot: "icon-start" })));
+    return (index.h("wpp-action-button-v4-4-0", { class: "mic-btn", "data-testid": "chat-node-mic-btn", variant: "secondary", ariaProps: { label: recordLabel }, onClick: this.handleClickAudioRecording }, this.isAudioRecording ? index.h("wpp-icon-stop-v4-4-0", { slot: "icon-start" }) : index.h("wpp-icon-mic-on-v4-4-0", { slot: "icon-start" })));
   }
   // The primary action follows a fixed priority: stop (while loading/processing)
   // > re-run (when `isReRun`) > send (once the input has content).
@@ -431,7 +408,7 @@ const WppChatNode = class {
   renderSendButton(isLoadingActive) {
     const visible = this.isPrimaryActionVisible(isLoadingActive);
     const { icon, label, handler, variant } = this.getPrimaryAction(isLoadingActive);
-    return (index.h("wpp-button-v4-3-0", { class: { 'play-btn': true, 'is-hidden': !visible }, size: "s", variant: variant,
+    return (index.h("wpp-button-v4-4-0", { class: { 'play-btn': true, 'is-hidden': !visible }, size: "s", variant: variant,
       // While hidden the button stays in the DOM (to animate the fade), but must leave the
       // focus order and a11y tree so its focusable inner control does not trip axe's
       // aria-hidden-focus (SC 4.1.2). `inert` does exactly that without the disabled-grey
@@ -465,7 +442,7 @@ const WppChatNode = class {
   renderAvatar(config) {
     if (config === false)
       return null;
-    return (index.h("wpp-avatar-v4-3-0", { class: "message-avatar", size: "s", variant: "circle", name: config.name || '', icon: config.icon, color: config.color, role: "presentation" }));
+    return (index.h("wpp-avatar-v4-4-0", { class: "message-avatar", size: "s", variant: "circle", name: config.name || '', icon: config.icon, color: config.color, role: "presentation" }));
   }
   getAttachmentKind(attachment) {
     if (attachment.type.startsWith('image/'))
@@ -499,7 +476,7 @@ const WppChatNode = class {
     const hasRenderableContent = Boolean(message.content.trim() || message.attachments?.length);
     if (!hasRenderableContent || actions.length === 0)
       return null;
-    return (index.h("div", { class: "chat-message-actions" }, actions.map(action => (index.h("wpp-tooltip-v4-3-0", { key: action.id, text: action.label, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-3-0", { variant: "secondary", ariaProps: { label: action.label }, onClick: () => this.handleMessageActionClick(message, action) }, this.renderIcon(action.icon, 'icon-start')))))));
+    return (index.h("div", { class: "chat-message-actions" }, actions.map(action => (index.h("wpp-tooltip-v4-4-0", { key: action.id, text: action.label, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-4-0", { variant: "secondary", ariaProps: { label: action.label }, onClick: () => this.handleMessageActionClick(message, action) }, this.renderIcon(action.icon, 'icon-start')))))));
   }
   renderMessages() {
     if (this.messages.length === 0)
@@ -514,7 +491,7 @@ const WppChatNode = class {
           'chat-message': true,
           [`chat-message-${msg.role}`]: true,
           'chat-message-no-avatar': avatarConfig === false,
-        }, key: msg.id }, this.renderAvatar(avatarConfig), index.h("div", { class: `chat-message-content chat-message-content-${msg.role}` }, hasContent && (index.h("div", { class: `chat-bubble chat-bubble-${msg.role}` }, index.h("wpp-typography-v4-3-0", { type: "s-body" }, msg.content))), this.renderMessageAttachments(msg), this.renderMessageActions(msg))));
+        }, key: msg.id }, this.renderAvatar(avatarConfig), index.h("div", { class: `chat-message-content chat-message-content-${msg.role}` }, hasContent && (index.h("div", { class: `chat-bubble chat-bubble-${msg.role}` }, index.h("wpp-typography-v4-4-0", { type: "s-body" }, msg.content))), this.renderMessageAttachments(msg), this.renderMessageActions(msg))));
     });
   }
   render() {
@@ -535,15 +512,15 @@ const WppChatNode = class {
     if (isSizeS) {
       return (index.h(index.Host, { class: { 'wpp-chat-node': true, 'wpp-size-s': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, index.h("div", { class: containerClasses }, index.h("div", { class: wrapperClasses }, this.renderChatBar(false))), index.h("slot", { name: "handles" })));
     }
-    return (index.h(index.Host, { class: { 'wpp-chat-node': true, 'wpp-size-m': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, index.h("div", { class: containerClasses }, index.h("div", { class: wrapperClasses }, index.h("div", { class: "node-header" }, index.h("span", { class: "title-icon" }, index.h("wpp-icon-service-v4-3-0", { color: "var(--wpp-grey-color-700)" })), index.h("wpp-tooltip-v4-3-0", { text: this.nodeTitle, class: "title-tooltip", config: {
+    return (index.h(index.Host, { class: { 'wpp-chat-node': true, 'wpp-size-m': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, index.h("div", { class: containerClasses }, index.h("div", { class: wrapperClasses }, index.h("div", { class: "node-header" }, index.h("span", { class: "title-icon" }, index.h("wpp-icon-service-v4-4-0", { color: "var(--wpp-grey-color-700)" })), index.h("wpp-tooltip-v4-4-0", { text: this.nodeTitle, class: "title-tooltip", config: {
         placement: 'top',
         onShow: () => {
           if (!this.titleRef || this.titleRef.clientWidth >= this.titleRef.scrollWidth)
             return false;
         },
-      } }, index.h("p", { ref: el => (this.titleRef = el), class: "node-title" }, this.nodeTitle))), index.h("wpp-divider-v4-3-0", null), index.h("div", { class: "node-body", ref: el => (this.bodyRef = el) }, this.renderMessages(), index.h("slot", null)), index.h("wpp-divider-v4-3-0", null), this.renderChatBar(isLoadingActive))), index.h("slot", { name: "handles" })));
+      } }, index.h("p", { ref: el => (this.titleRef = el), class: "node-title" }, this.nodeTitle))), index.h("wpp-divider-v4-4-0", null), index.h("div", { class: "node-body", ref: el => (this.bodyRef = el) }, this.renderMessages(), index.h("slot", null)), index.h("wpp-divider-v4-4-0", null), this.renderChatBar(isLoadingActive))), index.h("slot", { name: "handles" })));
   }
-  static get registryIs() { return "wpp-chat-node-v4-3-0"; }
+  static get registryIs() { return "wpp-chat-node-v4-4-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "locales": ["onUpdateLocales"],

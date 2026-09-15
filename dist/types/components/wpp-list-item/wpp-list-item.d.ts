@@ -152,6 +152,13 @@ export declare class WppListItem {
    */
   readonly checkboxName?: string;
   /**
+   * Defines the ARIA role of the component. Combobox-style parents (e.g. WppSearch)
+   * set this to `option` to expose items as options inside a `listbox`. When the role
+   * is `option` the item is removed from the tab order, as it is meant to be driven by
+   * the combobox via `aria-activedescendant` rather than receiving its own tab stop.
+   */
+  readonly role: string;
+  /**
    * Emitted when the list item was clicked
    */
   wppChangeListItem: EventEmitter<ListItemChangeEventDetail>;
@@ -207,5 +214,6 @@ export declare class WppListItem {
   private isManagedByMenuContext;
   private handleKeyDown;
   private handleKeyUp;
+  private handleBlur;
   render(): any;
 }

@@ -2,10 +2,11 @@ import { r as registerInstance, c as createEvent, h, H as Host, g as getElement 
 import { c as isEqual_1 } from './isEqual-cbad439f.js';
 import { m as menuListConfig } from './menuListConfig-2c1d4b4f.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
-import { g as getSlotEmptyStates, y as mergeLocales, w as getHighestContainerInDOM, b as isEventTargetContained, c as hasParentWithId } from './utils-452958a4.js';
-import { t as themeSubscriptionController } from './subscribe-to-theme-3920c16c.js';
+import { g as getSlotEmptyStates, y as mergeLocales, w as getHighestContainerInDOM, b as isEventTargetContained, c as hasParentWithId } from './utils-a4b26a20.js';
+import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
 import './_commonjsHelpers-ba3f0406.js';
 import './tippy.esm-c5fe8087.js';
+import './theme-observer-b7886d19.js';
 
 const DEFAULT_POPOVER_LOCALES = {
   searchInputPlaceholder: 'Search',
@@ -213,9 +214,9 @@ const WppPopover = class {
   }
   render() {
     const locales = this.mergedLocales;
-    return (h(Host, { class: this.hostCssClasses(), exportparts: this.exportParts() }, h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref) }, h("slot", { name: "trigger-element", part: "trigger-element", onSlotchange: this.handleTriggerSlotChange })), h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-label": this.ariaProps.label, "aria-modal": "true" }, this.withSearch && (h("wpp-input-v4-3-0", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: locales.searchInputPlaceholder, type: "search", size: "m" })), !this.withSearch && this.closable && (h("wpp-action-button-v4-3-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, h("wpp-icon-cross-v4-3-0", { slot: "icon-end" }))), h("slot", null), (this.showClearButton || this.hasFooterActions) && (h("div", { class: "wpp-popover-footer", part: "footer", ref: footerEl => (this.footerEl = footerEl) }, h("div", { class: "wpp-popover-clear-action" }, this.showClearButton && (h("wpp-action-button-v4-3-0", { variant: "secondary", onClick: this.handleClearButtonClick }, locales.clearText))), h("div", { class: "wpp-popover-footer-actions", part: "footer-actions", ref: footerActionsEl => (this.footerActionsEl = footerActionsEl) }, h("slot", { name: "actions", onSlotchange: this.updateSlotData })))))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: this.exportParts() }, h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref) }, h("slot", { name: "trigger-element", part: "trigger-element", onSlotchange: this.handleTriggerSlotChange })), h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-label": this.ariaProps.label, "aria-modal": "true" }, this.withSearch && (h("wpp-input-v4-4-0", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: locales.searchInputPlaceholder, type: "search", size: "m" })), !this.withSearch && this.closable && (h("wpp-action-button-v4-4-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary" }, h("wpp-icon-cross-v4-4-0", { slot: "icon-end" }))), h("slot", null), (this.showClearButton || this.hasFooterActions) && (h("div", { class: "wpp-popover-footer", part: "footer", ref: footerEl => (this.footerEl = footerEl) }, h("div", { class: "wpp-popover-clear-action" }, this.showClearButton && (h("wpp-action-button-v4-4-0", { variant: "secondary", onClick: this.handleClearButtonClick }, locales.clearText))), h("div", { class: "wpp-popover-footer-actions", part: "footer-actions", ref: footerActionsEl => (this.footerActionsEl = footerActionsEl) }, h("slot", { name: "actions", onSlotchange: this.updateSlotData })))))));
   }
-  static get registryIs() { return "wpp-popover-v4-3-0"; }
+  static get registryIs() { return "wpp-popover-v4-4-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "config": ["updateConfig"]

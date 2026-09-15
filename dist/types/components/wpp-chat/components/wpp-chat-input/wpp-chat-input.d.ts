@@ -15,6 +15,7 @@ export declare class WppChatInput {
   private textareaRef?;
   private inputAreaRef?;
   private scrollTimeout;
+  private stopBtnHideTimeout;
   private debouncedHandleInput;
   private readonly inputAreaId;
   private readonly textareaAutoId;
@@ -161,6 +162,7 @@ export declare class WppChatInput {
   isFocused: boolean;
   isAudioRecording: boolean;
   isModelMenuOpen: boolean;
+  isStopBtnHiding: boolean;
   /**
    * Emitted when the user clicks the "Send" button.
    */
@@ -221,9 +223,6 @@ export declare class WppChatInput {
   onTextValueChange(value: string): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
-  private setupSpeechRecognition;
-  private startSpeechRecognition;
-  private stopSpeechRecognition;
   private addExpandedListeners;
   private removeExpandedListeners;
   connectedCallback(): void;
@@ -318,6 +317,16 @@ export declare class WppChatInput {
   private handleModelChange;
   private renderModelSelector;
   private renderModelListItem;
+  private clearStopBtnHideTimeout;
+  private handleSendClick;
+  private handleStopBtnClick;
+  /**
+   * The stop button is still on screen while it animates out, but it is no longer actionable —
+   * `is-hidden` and `inert` must be driven by the same condition so it never becomes an invisible
+   * focus target.
+   */
+  private isPrimaryActionInteractive;
+  private renderSendStopBtn;
   private modelSelectorTriggerCssClasses;
   private hostCssClasses;
   private chatToastClasses;

@@ -47,7 +47,7 @@ export const BasicNode = {
         aria-roledescription="node"
         tabindex="0"
       >
-        <wpp-basic-node-v4-3-0
+        <wpp-basic-node-v4-4-0
           .nodeTitle=${args.nodeTitle}
           .actions=${args.actions}
           .isSelected=${args.isSelected}
@@ -57,14 +57,14 @@ export const BasicNode = {
           @wppActionClick=${handleActionClick}
         >
           <div slot="body" style="display: flex; flex-direction: column; gap: 10px;">
-            <wpp-typography-v4-3-0>This is the body of the basic node.</wpp-typography-v4-3-0>
-            <wpp-typography-v4-3-0
+            <wpp-typography-v4-4-0>This is the body of the basic node.</wpp-typography-v4-4-0>
+            <wpp-typography-v4-4-0
               >You can put any content here, and it will become scrollable if it exceeds the maximum
-              height.</wpp-typography-v4-3-0
+              height.</wpp-typography-v4-4-0
             >
           </div>
           <div slot="handles">${renderHandles(args.numberOfHandles, args.isSelected, args.isLoading)}</div>
-        </wpp-basic-node-v4-3-0>
+        </wpp-basic-node-v4-4-0>
       </div>
     `;
   },

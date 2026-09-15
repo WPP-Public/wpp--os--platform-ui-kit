@@ -37,7 +37,7 @@ export const Single = {
     if (!args.view) {
       args.view = 'days';
     }
-    return html `<wpp-datepicker-v4-3-0
+    return html `<wpp-datepicker-v4-4-0
       .range=${args.range}
       .messageType="${args.messageType}"
       .message="${args.message}"
@@ -53,7 +53,7 @@ export const Single = {
       .view="${args.view}"
       @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
       @wppChange="${(e) => console.log('wppChange', e.detail)}"
-    ></wpp-datepicker-v4-3-0>`;
+    ></wpp-datepicker-v4-4-0>`;
   },
   args: {
     range: false,
@@ -72,7 +72,7 @@ export const Single = {
       months: MONTHS,
       monthsShort: MONTHS_SHORT,
       today: 'Today',
-      clear: 'Clear',
+      clear: 'Clear all',
       dateFormat: 'dd/MM/yyyy',
       timeFormat: 'hh:mm aa',
       firstDay: 0,
@@ -93,7 +93,7 @@ Single.parameters = {
   controls: { exclude: ['range', 'minDate', 'maxDate'] },
 };
 export const Range = {
-  render: args => html `<wpp-datepicker-v4-3-0
+  render: args => html `<wpp-datepicker-v4-4-0
       .range=${args.range}
       .messageType="${args.messageType}"
       .message="${args.message}"
@@ -109,7 +109,7 @@ export const Range = {
       .view="${args.view || 'days'}"
       @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
       @wppChange="${(e) => console.log('wppChange', e.detail)}"
-    ></wpp-datepicker-v4-3-0>`,
+    ></wpp-datepicker-v4-4-0>`,
   args: {
     range: true,
     static: false,
@@ -127,7 +127,7 @@ export const Range = {
       months: MONTHS,
       monthsShort: MONTHS_SHORT,
       today: 'Today',
-      clear: 'Clear',
+      clear: 'Clear all',
       dateFormat: 'dd/MM/yyyy',
       timeFormat: 'hh:mm aa',
       firstDay: 0,
@@ -148,7 +148,7 @@ Range.parameters = {
   controls: { exclude: ['range', 'minDate', 'maxDate'] },
 };
 export const RangeWithPresets = {
-  render: args => html `<wpp-datepicker-v4-3-0
+  render: args => html `<wpp-datepicker-v4-4-0
       .range=${args.range}
       .messageType="${args.messageType}"
       .message="${args.message}"
@@ -166,7 +166,7 @@ export const RangeWithPresets = {
       .view="${args.view || 'days'}"
       @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
       @wppChange="${(e) => console.log('wppChange', e.detail)}"
-    ></wpp-datepicker-v4-3-0>`,
+    ></wpp-datepicker-v4-4-0>`,
   args: {
     range: true,
     static: false,
@@ -184,7 +184,7 @@ export const RangeWithPresets = {
       months: MONTHS,
       monthsShort: MONTHS_SHORT,
       today: 'Today',
-      clear: 'Clear',
+      clear: 'Clear all',
       dateFormat: 'dd/MM/yyyy',
       timeFormat: 'hh:mm aa',
       firstDay: 0,
@@ -206,6 +206,36 @@ export const RangeWithPresets = {
 RangeWithPresets.parameters = {
   controls: { exclude: ['range', 'minDate', 'maxDate'] },
 };
+export const RangeDoubleCalendarWithPresets = {
+  render: args => html `<wpp-datepicker-v4-4-0
+      .range=${args.range}
+      .withDoubleCalendar=${args.withDoubleCalendar}
+      .messageType="${args.messageType}"
+      .message="${args.message}"
+      .static=${args.static}
+      .size="${args.size}"
+      .placeholder=${args.placeholder}
+      .name="${args.name}"
+      .required="${args.required}"
+      .disabled="${args.disabled}"
+      .labelConfig="${args.labelConfig}"
+      .presets="${args.presets}"
+      .locales="${args.locales}"
+      .value="${args.value}"
+      .toggleSelected="${args.toggleSelected}"
+      .view="${args.view || 'days'}"
+      @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
+      @wppChange="${(e) => console.log('wppChange', e.detail)}"
+    ></wpp-datepicker-v4-4-0>`,
+  args: {
+    ...RangeWithPresets.args,
+    withDoubleCalendar: true,
+    static: true,
+  },
+};
+RangeDoubleCalendarWithPresets.parameters = {
+  controls: { exclude: ['range', 'minDate', 'maxDate'] },
+};
 export const DependableDatepickers = {
   render: args => {
     if (!args.view) {
@@ -221,7 +251,7 @@ export const DependableDatepickers = {
     };
     return html `
       <div>
-        <wpp-datepicker-v4-3-0
+        <wpp-datepicker-v4-4-0
           style="margin-right: 40px;"
           .range=${args.range}
           .messageType="${args.messageType}"
@@ -238,9 +268,9 @@ export const DependableDatepickers = {
           .view="${args.view}"
           @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
           @wppChange="${handleDateChange}"
-        ></wpp-datepicker-v4-3-0>
+        ></wpp-datepicker-v4-4-0>
 
-        <wpp-datepicker-v4-3-0
+        <wpp-datepicker-v4-4-0
           id="second-datepicker"
           .range=${args.range}
           .messageType="${args.messageType}"
@@ -255,7 +285,7 @@ export const DependableDatepickers = {
           .locales="${args.locales}"
           .toggleSelected="${args.toggleSelected}"
           .view="${args.view}"
-        ></wpp-datepicker-v4-3-0>
+        ></wpp-datepicker-v4-4-0>
       </div>
     `;
   },
@@ -276,7 +306,7 @@ export const DependableDatepickers = {
       months: MONTHS,
       monthsShort: MONTHS_SHORT,
       today: 'Today',
-      clear: 'Clear',
+      clear: 'Clear all',
       dateFormat: 'MM/dd/yyyy',
       timeFormat: 'hh:mm aa',
       firstDay: 0,
@@ -297,7 +327,7 @@ DependableDatepickers.parameters = {
   controls: { exclude: ['range', 'locale', 'minDate', 'maxDate'] },
 };
 export const MonthsView = {
-  render: args => html `<wpp-datepicker-v4-3-0
+  render: args => html `<wpp-datepicker-v4-4-0
       .range=${args.range}
       .messageType=${args.messageType}
       .size="${args.size}"
@@ -316,7 +346,7 @@ export const MonthsView = {
       .width=${args.width}
       @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
       @wppChange="${(e) => console.log('wppChange', e.detail)}"
-    ></wpp-datepicker-v4-3-0>`,
+    ></wpp-datepicker-v4-4-0>`,
   args: {
     range: true,
     size: 'm',
@@ -351,7 +381,7 @@ export const ButtonTrigger = {
     if (!args.view) {
       args.view = 'days';
     }
-    return html `<wpp-datepicker-v4-3-0
+    return html `<wpp-datepicker-v4-4-0
       .range=${args.range}
       .size="${args.size}"
       .name="${args.name}"
@@ -364,8 +394,8 @@ export const ButtonTrigger = {
       @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
       @wppChange="${(e) => console.log('wppChange', e.detail)}"
     >
-      <wpp-button-v4-3-0 slot="trigger" ?disabled="${args.disabled}">Button</wpp-button-v4-3-0>
-    </wpp-datepicker-v4-3-0>`;
+      <wpp-button-v4-4-0 slot="trigger" ?disabled="${args.disabled}">Button</wpp-button-v4-4-0>
+    </wpp-datepicker-v4-4-0>`;
   },
   args: {
     range: false,
@@ -380,7 +410,7 @@ export const ButtonTrigger = {
       months: MONTHS,
       monthsShort: MONTHS_SHORT,
       today: 'Today',
-      clear: 'Clear',
+      clear: 'Clear all',
       dateFormat: 'dd/MM/yyyy',
       timeFormat: 'hh:mm aa',
       firstDay: 0,
@@ -409,7 +439,7 @@ export const ButtonTriggerWithActionButton = {
     if (!args.view) {
       args.view = 'days';
     }
-    return html `<wpp-datepicker-v4-3-0
+    return html `<wpp-datepicker-v4-4-0
       .range=${args.range}
       .size="${args.size}"
       .name="${args.name}"
@@ -422,10 +452,10 @@ export const ButtonTriggerWithActionButton = {
       @wppDateClear="${(e) => console.log('wppDateClear', e.detail)}"
       @wppChange="${(e) => console.log('wppChange', e.detail)}"
     >
-      <wpp-action-button-v4-3-0 slot="trigger" ?disabled="${args.disabled}">
-        <wpp-icon-calendar-v4-3-0 slot="icon-start"></wpp-icon-calendar-v4-3-0>
-      </wpp-action-button-v4-3-0>
-    </wpp-datepicker-v4-3-0>`;
+      <wpp-action-button-v4-4-0 slot="trigger" ?disabled="${args.disabled}">
+        <wpp-icon-calendar-v4-4-0 slot="icon-start"></wpp-icon-calendar-v4-4-0>
+      </wpp-action-button-v4-4-0>
+    </wpp-datepicker-v4-4-0>`;
   },
   args: {
     range: false,
@@ -440,7 +470,7 @@ export const ButtonTriggerWithActionButton = {
       months: MONTHS,
       monthsShort: MONTHS_SHORT,
       today: 'Today',
-      clear: 'Clear',
+      clear: 'Clear all',
       dateFormat: 'dd/MM/yyyy',
       timeFormat: 'hh:mm aa',
       firstDay: 0,

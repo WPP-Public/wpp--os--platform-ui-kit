@@ -1,12 +1,19 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-93f63aaa.js';
 import { m as menuListConfig } from './menuListConfig-2c1d4b4f.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
-import { w as getHighestContainerInDOM } from './utils-452958a4.js';
+import { A as uniquePortalId, y as mergeLocales, B as activateOnEnterOrSpace, w as getHighestContainerInDOM } from './utils-a4b26a20.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
-import { t as themeSubscriptionController } from './subscribe-to-theme-3920c16c.js';
+import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
 import './tippy.esm-c5fe8087.js';
+import './theme-observer-b7886d19.js';
 
 const PLACEHOLDER = 'hh:mm';
+const TIME_PICKER_LOCALES_DEFAULTS = {
+  timePickerLabel: 'Choose time',
+  hoursLabel: 'Hours',
+  minutesLabel: 'Minutes',
+  eraseTimeLabel: 'Erase time',
+};
 const HOURS = [
   '00',
   '01',
@@ -42,7 +49,7 @@ const DEFAULT_WIDTH_VALUE = '198px';
 const isValidHour = (value) => /^(0\d|1\d|2[0-3])$/.test(value);
 const isValidMinutes = (value) => /^[0-5]\d$/.test(value);
 
-const wppTimePickerCss = ":host(.wpp-time-picker){display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start;min-width:124px}:host(.wpp-time-picker) .label{margin-bottom:8px}:host(.wpp-time-picker) #anchor{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;border-radius:var(--wpp-border-radius-m);border:var(--wpp-border-width-s) solid;border-color:var(--wpp-grey-color-500);-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;gap:8px}:host(.wpp-time-picker) #anchor .anchor-time{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}:host(.wpp-time-picker) #anchor .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor .cross-icon-container{width:20px;height:20px}:host(.wpp-time-picker) #anchor .cross-icon:hover{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor .cross-icon:active{--wpp-icon-color:var(--wpp-grey-color-900)}:host(.wpp-time-picker) #anchor #time-picker{border:none;padding:0;width:100%;outline:none;color:var(--wpp-grey-color-1000);background-color:transparent;font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host(.wpp-time-picker) #anchor #time-picker::-webkit-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor #time-picker::-moz-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor #time-picker:-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor #time-picker::-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor #time-picker::placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor #time-picker::-moz-selection{background-color:var(--wpp-primary-color-200)}:host(.wpp-time-picker) #anchor #time-picker::selection{background-color:var(--wpp-primary-color-200)}:host(.wpp-time-picker) #anchor #time-picker:hover{cursor:pointer}:host(.wpp-time-picker) #anchor.no-value .clock-icon{--wpp-icon-color:var(--wpp-grey-color-600)}:host(.wpp-time-picker) #anchor:hover{background-color:var(--wpp-grey-color-200);border-color:var(--wpp-grey-color-700);cursor:pointer}:host(.wpp-time-picker) #anchor:hover .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor:hover #time-picker{background-color:var(--wpp-grey-color-200)}:host(.wpp-time-picker) #anchor.focus{border-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor.focus .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor.disabled{background-color:var(--wpp-grey-color-100);border-color:var(--wpp-grey-color-400)}:host(.wpp-time-picker) #anchor.disabled:hover{cursor:not-allowed}:host(.wpp-time-picker) #anchor.disabled #time-picker{background-color:var(--wpp-grey-color-100);color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled #time-picker::-webkit-input-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled #time-picker::-moz-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled #time-picker:-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled #time-picker::-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled #time-picker::placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled #time-picker:hover{cursor:not-allowed}:host(.wpp-time-picker) #anchor.disabled .clock-icon{--wpp-icon-color:var(--wpp-grey-color-400)}:host(.wpp-time-picker) #anchor.disabled .cross-icon{--wpp-icon-color:var(--wpp-grey-color-400)}:host(.wpp-time-picker) #anchor.error{border-color:var(--wpp-danger-color-500)}:host(.wpp-time-picker) #anchor.warning{border-color:var(--wpp-warning-color-400)}:host(.wpp-time-picker) #anchor.size-s{padding:4px 10px}:host(.wpp-time-picker) #anchor.size-m{padding:8px 10px}:host(.wpp-time-picker) .wpp-inline-message{margin-top:4px}:host(.wpp-time-picker) .wpp-inline-message.helper-text{--wpp-typography-xs-midi-color:var(--wpp-grey-color-800)}";
+const wppTimePickerCss = ":host(.wpp-time-picker){display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start;min-width:124px}:host(.wpp-time-picker) .label{margin-bottom:8px}:host(.wpp-time-picker) #anchor{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;border-radius:var(--wpp-border-radius-m);border:var(--wpp-border-width-s) solid;border-color:var(--wpp-grey-color-500);-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;gap:8px}:host(.wpp-time-picker) #anchor .anchor-time{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}:host(.wpp-time-picker) #anchor .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor .cross-icon-container{width:20px;height:20px}:host(.wpp-time-picker) #anchor .cross-icon{outline:none}:host(.wpp-time-picker) #anchor .cross-icon:hover{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor .cross-icon:active{--wpp-icon-color:var(--wpp-grey-color-900)}:host(.wpp-time-picker) #anchor .cross-icon:focus-visible{border-radius:var(--wpp-border-radius-s);outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}:host(.wpp-time-picker) #anchor .time-picker-input{border:none;padding:0;width:100%;outline:none;color:var(--wpp-grey-color-1000);background-color:transparent;font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host(.wpp-time-picker) #anchor .time-picker-input::-webkit-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor .time-picker-input::-moz-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor .time-picker-input:-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor .time-picker-input::-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor .time-picker-input::placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor .time-picker-input::-moz-selection{background-color:var(--wpp-primary-color-200)}:host(.wpp-time-picker) #anchor .time-picker-input::selection{background-color:var(--wpp-primary-color-200)}:host(.wpp-time-picker) #anchor .time-picker-input:hover{cursor:pointer}:host(.wpp-time-picker) #anchor.no-value .clock-icon{--wpp-icon-color:var(--wpp-grey-color-600)}:host(.wpp-time-picker) #anchor:hover{background-color:var(--wpp-grey-color-200);border-color:var(--wpp-grey-color-700);cursor:pointer}:host(.wpp-time-picker) #anchor:hover .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor:hover .time-picker-input{background-color:var(--wpp-grey-color-200)}:host(.wpp-time-picker) #anchor.focus{border-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor.focus .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor.tab-focus{border-color:var(--wpp-grey-color-800);border-radius:var(--wpp-border-radius-m);outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}:host(.wpp-time-picker) #anchor.tab-focus .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor.idle .time-picker-input{caret-color:transparent}:host(.wpp-time-picker) #anchor.disabled{background-color:var(--wpp-grey-color-100);border-color:var(--wpp-grey-color-400)}:host(.wpp-time-picker) #anchor.disabled:hover{cursor:not-allowed}:host(.wpp-time-picker) #anchor.disabled .time-picker-input{background-color:var(--wpp-grey-color-100);color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input::-webkit-input-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input::-moz-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input:-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input::-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input::placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input:hover{cursor:not-allowed}:host(.wpp-time-picker) #anchor.disabled .clock-icon{--wpp-icon-color:var(--wpp-grey-color-400)}:host(.wpp-time-picker) #anchor.disabled .cross-icon{--wpp-icon-color:var(--wpp-grey-color-400)}:host(.wpp-time-picker) #anchor.error{border-color:var(--wpp-danger-color-500)}:host(.wpp-time-picker) #anchor.warning{border-color:var(--wpp-warning-color-400)}:host(.wpp-time-picker) #anchor.size-s{height:32px;padding:4px 10px}:host(.wpp-time-picker) #anchor.size-m{height:40px;padding:8px 10px}:host(.wpp-time-picker) .wpp-inline-message{margin-top:4px}:host(.wpp-time-picker) .wpp-inline-message.helper-text{--wpp-typography-xs-midi-color:var(--wpp-grey-color-800)}";
 
 const WppTimePicker = class {
   constructor(hostRef) {
@@ -52,6 +59,20 @@ const WppTimePicker = class {
     this.wppChange = createEvent(this, "wppChange", 7);
     this.wppClear = createEvent(this, "wppClear", 7);
     this.hasSelectedMinutes = false;
+    // Instance-unique so the portaled (light-DOM) dropdown never collides with another
+    // time-picker's — or another CL version's — popup. See uniquePortalId.
+    this.popupId = uniquePortalId('wpp-time-picker-popup');
+    // The input used to carry a hard-coded id while the label pointed its `for` at `name`, so
+    // the two never matched and the label was left dangling (axe: "Form label must be associated
+    // with a content"). A shared instance-unique id fixes the association and stops several
+    // pickers on one page from all claiming the same id.
+    this.inputId = uniquePortalId('wpp-time-picker-input');
+    // Guards the setTimeout(0) callbacks (focus + scroll) that outlive a fast open→unmount.
+    this.isDestroyed = false;
+    // Whether the selection currently being handled came from Enter/Space rather than a click.
+    this.selectionFromKeyboard = false;
+    // Whether closing the dropdown is about to take focus with it, so it can be handed back.
+    this.restoreFocusOnHidden = false;
     this.hasChangedHours = false;
     this.hasChangedMinutes = false;
     this.hasClearedValue = false;
@@ -63,6 +84,10 @@ const WppTimePicker = class {
       this.checkedTimeValues = {
         hoursIndex,
         minutesIndex,
+      };
+      this.rovingTimeValues = {
+        hoursIndex: hoursIndex >= 0 ? hoursIndex : 0,
+        minutesIndex: minutesIndex >= 0 ? minutesIndex : 0,
       };
     };
     this.scrollIntoView = () => {
@@ -117,6 +142,15 @@ const WppTimePicker = class {
         },
         ...this.dropdownConfig,
         onHide: (instance) => {
+          this.focusedColumn = null;
+          this.selectionFromKeyboard = false;
+          // The popup takes whatever inside it holds focus down with it, so picking a time with
+          // the mouse dropped focus on `<body>` while the field still drew itself as focused.
+          // Decide here, while that element is still focused, and act in `onHidden` — restoring
+          // any earlier than that and the teardown blurs the input straight back off again. When
+          // the dropdown is closing *because* focus left the component, the new target is already
+          // outside the portal, so this correctly leaves it alone.
+          this.restoreFocusOnHidden = !!this.portalRef?.contains(document.activeElement);
           if (this.value === PLACEHOLDER) {
             // If true, then no changes were made in the time picker.
             // Reverting value back to empty string to display placeholder.
@@ -127,7 +161,6 @@ const WppTimePicker = class {
               this.updateValueOnHide(this.inputRef.value);
             }
             this.inputRef.value = this.value;
-            this.inputRef.blur();
           }
           // When dropdown hides, emit values of time picker.
           const [hours, minutes] = this.value.split(':');
@@ -147,6 +180,14 @@ const WppTimePicker = class {
         onShow: (instance) => {
           if (!this.host || this.disabled)
             return false;
+          this.isDropdownOpen = true;
+          // The pointer focus border tracks the dropdown being open (see `onHidden`), and the field
+          // can be reopened without focus ever moving — so it is re-applied here rather than in
+          // `onFocus`, which only runs on the way into the component. A keyboard user keeps TAB so
+          // their focus ring is not swapped for the pointer border.
+          if (this.focusType !== FOCUS_TYPE.TAB) {
+            this.focusType = FOCUS_TYPE.MOUSE;
+          }
           if (this.host.clientWidth < 150) {
             instance.popper.style.width = '150px';
           }
@@ -157,8 +198,9 @@ const WppTimePicker = class {
           this.selectTextInInput('hours');
           this.highlightItem();
           if (this.value !== '' && this.value !== PLACEHOLDER) {
-            setTimeout(() => {
-              this.scrollIntoView();
+            this.scrollTimer = setTimeout(() => {
+              if (!this.isDestroyed)
+                this.scrollIntoView();
             }, 0);
           }
           if (this.dropdownConfig.onShow) {
@@ -179,7 +221,24 @@ const WppTimePicker = class {
           }
         },
         onHidden: () => {
-          this.isInComponent = false;
+          // `isInComponent` deliberately stays put: closing the dropdown does not mean focus
+          // has left (Escape puts it back on the input). onFocus/onBlur own that flag.
+          this.isDropdownOpen = false;
+          if (this.restoreFocusOnHidden) {
+            this.restoreFocusOnHidden = false;
+            this.inputRef?.focus();
+          }
+          // `focus` is the pointer-interaction border, not the keyboard ring (`tab-focus` is), so
+          // it belongs to the field only while the dropdown it opened is up. Once a time has been
+          // picked the field is done being interacted with and reads as idle again, the same way a
+          // mouse-focused control shows no focus indicator. Focus itself deliberately stays on the
+          // input: a keyboard user carries on from the field, and a later blur stays truthful.
+          // This replaces the `inputRef.blur()` that `onHide` used to do for the same effect —
+          // that dropped the keyboard modality on the floor (so the ring came back as the pointer
+          // border) and fired a spurious wppBlur/wppFocus pair at consumers on every close.
+          if (this.focusType === FOCUS_TYPE.MOUSE) {
+            this.focusType = FOCUS_TYPE.NONE;
+          }
         },
       });
     };
@@ -198,7 +257,9 @@ const WppTimePicker = class {
     // Clears value of time picker
     this.handleClickCrossIcon = (event) => {
       event.stopPropagation();
-      if (this.tippyInstance.state.isShown) {
+      if (this.disabled)
+        return;
+      if (this.tippyInstance?.state?.isShown) {
         this.value = PLACEHOLDER;
         this.hasClearedValue = true;
         this.selectTextInInput('hours');
@@ -218,6 +279,14 @@ const WppTimePicker = class {
       this.hasClearedValue = false;
       if (type === 'hour') {
         this.value = `${value}:${minutes || 'mm'}`;
+        // Keyboard flow: choosing an hour always hands over to the minutes column. It never
+        // closes the dropdown and never puts focus back on the input, so Enter/Space on an hour
+        // behaves the same whether or not the minutes are already set. The pointer flow below
+        // keeps its own behaviour, where a complete value means the picker is done.
+        if (this.selectionFromKeyboard) {
+          this.focusColumnAfterSelection('minutes');
+          return;
+        }
         if (this.hasSelectedMinutes) {
           this.tippyInstance?.hide();
         }
@@ -229,6 +298,17 @@ const WppTimePicker = class {
       else {
         this.value = `${hours || 'hh'}:${value}`;
         this.hasSelectedMinutes = true;
+        if (this.selectionFromKeyboard) {
+          if (isValidHour(hours)) {
+            this.closeAndReturnFocusToInput();
+          }
+          else {
+            // No hour picked yet, so send the highlight to the hours column instead of closing on
+            // an incomplete value.
+            this.focusColumnAfterSelection('hours');
+          }
+          return;
+        }
         const inputHours = this.inputRef.value.split(':')[0];
         if (inputHours && inputHours.length === 1) {
           this.value = `0${inputHours}:${value}`;
@@ -243,6 +323,27 @@ const WppTimePicker = class {
             this.tippyInstance?.hide();
           }
       }
+    };
+    /**
+     * Close the dropdown and hand focus back to the text input. The focused item is unmounted with
+     * the dropdown, so without this focus falls back to `<body>` and the keyboard user is stranded.
+     */
+    this.closeAndReturnFocusToInput = () => {
+      clearTimeout(this.focusItemTimer);
+      this.focusedColumn = null;
+      this.tippyInstance?.hide();
+      this.inputRef?.focus();
+    };
+    /**
+     * Move the keyboard highlight into `column` once the dropdown has settled. The list re-renders
+     * on the value change that triggered this, so the target item only exists on the next task.
+     */
+    this.focusColumnAfterSelection = (column) => {
+      clearTimeout(this.focusItemTimer);
+      this.focusItemTimer = setTimeout(() => {
+        if (!this.isDestroyed)
+          this.focusColumnItem(column, this.getColumnEntryIndex(column));
+      }, 0);
     };
     this.selectTextInInput = (text) => {
       // The input element needs to be focused before selection.
@@ -403,7 +504,23 @@ const WppTimePicker = class {
         event.preventDefault();
       }
     };
+    /**
+     * Focus legitimately moves between the text input, the clear ("x") control and the
+     * portaled dropdown items, and all of those still count as "inside" the component.
+     * `relatedTarget` is retargeted to the host element for anything in our shadow root, and the
+     * dropdown lives in the light DOM (tippy portal), so both cases are covered here.
+     */
+    this.isFocusStillInside = (nextTarget) => {
+      const node = nextTarget;
+      if (!node)
+        return false;
+      return node === this.host || this.host.contains(node) || !!this.portalRef?.contains(node);
+    };
     this.onFocus = (event) => {
+      // Track the text input's own focus regardless of the component-level guard
+      // below, so the anchor focus ring follows the input and drops the moment
+      // focus moves into the dropdown items or onto the clear ("x") control.
+      this.isInputFocused = true;
       if (this.isInComponent)
         return;
       this.isInComponent = true;
@@ -412,12 +529,26 @@ const WppTimePicker = class {
         this.value = PLACEHOLDER;
         this.previousInputValue = PLACEHOLDER;
       }
+      // Open on focus, so keyboard users reach the dropdown by tabbing to the field —
+      // it used to only respond to a mouse click. Mirrors wpp-datepicker.
+      if (!this.disabled && !this.isDropdownOpen) {
+        this.tippyInstance?.show();
+      }
       this.wppFocus.emit(event);
     };
-    this.onBlur = () => {
-      if (this.isInComponent)
+    this.onBlur = (event) => {
+      this.isInputFocused = false;
+      if (this.isFocusStillInside(event?.relatedTarget ?? null))
         return;
+      this.isInComponent = false;
       this.focusType = FOCUS_TYPE.NONE;
+      // Focus turns an empty input into the "--:--" edit mask; leaving without picking a
+      // time has to put the placeholder back, otherwise the field reads as still active
+      // after focus has moved on to another time picker.
+      if (this.value === PLACEHOLDER) {
+        this.value = '';
+      }
+      this.tippyInstance?.hide();
       this.wppBlur.emit();
     };
     this.onKeyUp = (event) => {
@@ -425,18 +556,196 @@ const WppTimePicker = class {
         this.focusType = FOCUS_TYPE.TAB;
       }
     };
-    this.getAnchorCssClasses = () => ({
-      [this.focusType]: true,
-      [`${this.messageType}`]: !!this.messageType,
-      [`size-${this.size}`]: true,
-      disabled: this.disabled,
-      'no-value': this.value === '' || this.value === undefined,
-    });
+    this.onKeyDown = (event) => {
+      // Typing re-engages a field that went idle after a pointer pick, so the caret the idle state
+      // hides comes back for the character about to be entered. A keyboard user is already TAB, so
+      // this never swaps their focus ring for the pointer border.
+      if (this.focusType === FOCUS_TYPE.NONE) {
+        this.focusType = FOCUS_TYPE.MOUSE;
+      }
+      if (event.key === 'Escape' && this.isDropdownOpen) {
+        event.preventDefault();
+        this.tippyInstance.hide();
+        this.inputRef?.focus();
+        return;
+      }
+      // Enter and Space toggle the dropdown from the input, per the combobox pattern. They stay
+      // on the input rather than diving into the columns — ArrowDown/ArrowUp below do that.
+      // Space is safe to claim here because the field only accepts digits and ':' (see
+      // `onKeyPress`), so it never had a character to type.
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        if (this.isDropdownOpen) {
+          // `onHide` blurs the field on the way out, but the user is still standing on it, so put
+          // focus back the same way Escape does rather than dropping it on `<body>`.
+          this.closeAndReturnFocusToInput();
+        }
+        else {
+          this.tippyInstance?.show();
+        }
+        return;
+      }
+      // ArrowDown/ArrowUp open the dropdown (if needed) and move focus into the
+      // hours column so the time can be picked entirely from the keyboard.
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        if (!this.isDropdownOpen) {
+          this.tippyInstance?.show();
+        }
+        const hoursIndex = this.checkedTimeValues.hoursIndex >= 0 ? this.checkedTimeValues.hoursIndex : 0;
+        this.focusItemTimer = setTimeout(() => {
+          if (!this.isDestroyed)
+            this.focusColumnItem('hours', hoursIndex);
+        }, 0);
+      }
+    };
+    this.getColumnItems = (column) => {
+      const section = column === 'hours' ? this.hoursSectionRef : this.minutesSectionRef;
+      return section ? Array.from(section.querySelectorAll('.wpp-list-item')) : [];
+    };
+    this.focusColumnItem = (column, index) => {
+      const items = this.getColumnItems(column);
+      if (!items.length)
+        return;
+      const clampedIndex = Math.max(0, Math.min(index, items.length - 1));
+      const item = items[clampedIndex];
+      this.rovingTimeValues = {
+        ...this.rovingTimeValues,
+        [column === 'hours' ? 'hoursIndex' : 'minutesIndex']: clampedIndex,
+      };
+      // Reaching an item this way means the keyboard owns the highlight, which is what tells
+      // `handleClickListItem` to advance to the next column instead of taking the pointer path.
+      this.selectionFromKeyboard = true;
+      // Mirror the design-system keyboard state declaratively: focusedColumn + the roving
+      // index render the `tab-focus` highlight (blue ring + hover-like highlight) on exactly
+      // this item, matching what a mouse hover would show. No imperative classList mutation.
+      this.focusedColumn = column;
+      // `focus()` scrolls on its own, and Chromium centres an element that is fully outside the
+      // scrollport: a one-item arrow step jumped ~200px and parked the item mid-list. Suppress
+      // that and scroll once, minimally. `.section` reserves `scroll-padding-block` so landing on
+      // the first or last visible item does not clip the focus ring.
+      item.focus({ preventScroll: true });
+      item.scrollIntoView({ block: 'nearest' });
+    };
+    /**
+     * Index the keyboard should land on when it enters a column: the selected value if there is
+     * one, else wherever the roving index last sat, else the first item. Crossing columns used to
+     * carry the source column's index over, so ArrowRight from hour `07` landed on the 8th minute
+     * (clamped to `45`) instead of the selected one.
+     */
+    this.getColumnEntryIndex = (column) => {
+      const key = column === 'hours' ? 'hoursIndex' : 'minutesIndex';
+      const checkedIndex = this.checkedTimeValues[key];
+      return checkedIndex >= 0 ? checkedIndex : Math.max(this.rovingTimeValues[key], 0);
+    };
+    this.getFocusedPosition = (event) => {
+      const target = event.target?.closest('.wpp-list-item');
+      if (!target)
+        return null;
+      const column = target.closest('.hours.section')
+        ? 'hours'
+        : target.closest('.minutes.section')
+          ? 'minutes'
+          : null;
+      if (!column)
+        return null;
+      return { column, index: this.getColumnItems(column).indexOf(target) };
+    };
+    /**
+     * `wpp-list-item` handles Enter/Space itself and emits `wppChangeListItem`, so that is the one
+     * selection path — and it gives no clue about which input device drove it. A pointer selection
+     * always fires `pointerdown` on the portal first, so clearing the flag here is enough to tell
+     * the two apart; `focusColumnItem` sets it whenever the keyboard moves the highlight.
+     */
+    this.onPortalPointerDown = () => {
+      this.selectionFromKeyboard = false;
+    };
+    /**
+     * Keep the text input focused when the pointer lands on the dropdown's own chrome rather than
+     * on an option — that means the scroll container itself, i.e. its scrollbar or padding gutter.
+     * Letting focus move there blurs the input with a null `relatedTarget`, which reads as "focus
+     * left the component" and closed the dropdown mid scroll-drag. Options are deliberately
+     * excluded so a click can still hand them focus and move the roving highlight; preventing the
+     * default here does not stop the scrollbar itself from working.
+     */
+    this.onPortalMouseDown = (event) => {
+      if (!event.target?.closest('.wpp-list-item')) {
+        event.preventDefault();
+      }
+    };
+    this.onPortalKeyDown = (event) => {
+      const position = this.getFocusedPosition(event);
+      switch (event.key) {
+        case 'ArrowDown':
+          if (!position)
+            return;
+          event.preventDefault();
+          this.focusColumnItem(position.column, position.index + 1);
+          break;
+        case 'ArrowUp':
+          if (!position)
+            return;
+          event.preventDefault();
+          this.focusColumnItem(position.column, position.index - 1);
+          break;
+        case 'ArrowRight':
+          if (position?.column === 'hours') {
+            event.preventDefault();
+            this.focusColumnItem('minutes', this.getColumnEntryIndex('minutes'));
+          }
+          break;
+        case 'ArrowLeft':
+          if (position?.column === 'minutes') {
+            event.preventDefault();
+            this.focusColumnItem('hours', this.getColumnEntryIndex('hours'));
+          }
+          break;
+        case 'Home':
+          if (!position)
+            return;
+          event.preventDefault();
+          this.focusColumnItem(position.column, 0);
+          break;
+        case 'End':
+          if (!position)
+            return;
+          event.preventDefault();
+          this.focusColumnItem(position.column, this.getColumnItems(position.column).length - 1);
+          break;
+        case 'Escape':
+        case 'Tab':
+          event.preventDefault();
+          this.closeAndReturnFocusToInput();
+          break;
+      }
+    };
+    this.getAnchorCssClasses = () => {
+      // The blue focus ring (tab-focus) is only shown while the text input itself
+      // holds keyboard focus. As soon as focus moves into the dropdown items or
+      // onto the clear ("x") control, the input blurs and the ring is dropped.
+      const showTabFocus = this.focusType === FOCUS_TYPE.TAB && this.isInputFocused;
+      return {
+        focus: this.focusType === FOCUS_TYPE.MOUSE,
+        'tab-focus': showTabFocus,
+        idle: !showTabFocus && this.focusType !== FOCUS_TYPE.MOUSE,
+        [`${this.messageType}`]: !!this.messageType,
+        [`size-${this.size}`]: true,
+        disabled: this.disabled,
+        'no-value': this.value === '' || this.value === undefined,
+      };
+    };
     this.focusType = FOCUS_TYPE.NONE;
+    this.isInputFocused = false;
     this.showDisplayCross = true;
     this.generatedMinutes = [];
     this.checkedTimeValues = DEFAULT_CHECKED_TIME_VALUES;
     this.isInComponent = false;
+    this.isDropdownOpen = false;
+    this.rovingTimeValues = {
+      hoursIndex: 0,
+      minutesIndex: 0,
+    };
+    this.focusedColumn = null;
     this.size = 'm';
     this.disabled = false;
     this.dropdownConfig = {};
@@ -453,6 +762,7 @@ const WppTimePicker = class {
     this.messageType = undefined;
     this.message = undefined;
     this.maxMessageLength = undefined;
+    this.locales = {};
     this.tooltipConfig = {};
   }
   onUpdateMinutesInterval() {
@@ -470,10 +780,6 @@ const WppTimePicker = class {
     this.showDisplayCross = true;
     this.highlightItem();
   }
-  updateIsInComponent(value) {
-    if (!value)
-      this.onBlur();
-  }
   componentWillLoad() {
     this.generateMinutes();
     if (this.value) {
@@ -487,22 +793,36 @@ const WppTimePicker = class {
   }
   connectedCallback() {
     this.themeSubscription.start();
-    if (this.tippyInstance?.state.isDestroyed) {
+    if (this.tippyInstance?.state?.isDestroyed) {
       this.createTippyInstance();
     }
   }
   disconnectedCallback() {
     this.themeSubscription.stop();
+    this.isDestroyed = true;
+    clearTimeout(this.focusItemTimer);
+    clearTimeout(this.scrollTimer);
+  }
+  get _locales() {
+    return mergeLocales(TIME_PICKER_LOCALES_DEFAULTS, this.locales);
   }
   render() {
-    return (h(Host, { class: "wpp-time-picker", "aria-disabled": this.disabled, style: { width: !this.width ? DEFAULT_WIDTH_VALUE : this.width } }, this.labelConfig?.text && (h("wpp-label-v4-3-0", { typography: "s-strong", class: "label", htmlFor: this.name, optional: !this.required, config: this.labelConfig, disabled: this.disabled, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: el => (this.anchorRef = el), id: "anchor", class: this.getAnchorCssClasses() }, h("div", { class: "anchor-time" }, h("wpp-icon-clock-v4-3-0", { class: "clock-icon" }), h("input", { ref: el => (this.inputRef = el), onFocus: this.onFocus, onBlur: this.onBlur, onKeyUp: this.onKeyUp, onKeyPress: this.onKeyPress, onPaste: this.onPaste, disabled: this.disabled, onInput: this.onUpdateInput, id: "time-picker", type: "text", placeholder: this.placeholder, value: this.value })), h("div", { class: "cross-icon-container" }, this.showDisplayCross && (h("wpp-icon-cross-v4-3-0", { class: "cross-icon", "aria-label": "Erase time", onClick: this.handleClickCrossIcon })))), h("div", { ref: el => (this.portalRef = el), class: "wpp-time-picker-portal" }, h("div", { ref: refEl => (this.hoursSectionRef = refEl), class: "hours section" }, HOURS.map((hour, hourIndex) => (h("wpp-list-item-v4-3-0", { id: `hour-${hour}`, key: hour, checked: this.checkedTimeValues.hoursIndex === hourIndex, onWppChangeListItem: () => this.handleClickListItem(hour, 'hour') }, h("span", { slot: "label" }, hour))))), h("wpp-divider-v4-3-0", { vertical: true }), h("div", { ref: refEl => (this.minutesSectionRef = refEl), class: "minutes section" }, this.generatedMinutes.map((minutes, minutesIndex) => (h("wpp-list-item-v4-3-0", { id: `minutes-${minutes}`, key: minutes, checked: this.checkedTimeValues.minutesIndex === minutesIndex, onWppChangeListItem: () => this.handleClickListItem(minutes, 'minutes') }, h("span", { slot: "label" }, minutes)))))), this.message && (h("wpp-inline-message-v4-3-0", { class: !this.messageType ? 'helper-text' : '', message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
+    return (h(Host, { class: "wpp-time-picker", "aria-disabled": this.disabled, style: { width: !this.width ? DEFAULT_WIDTH_VALUE : this.width } }, this.labelConfig?.text && (h("wpp-label-v4-4-0", { typography: "s-strong", class: "label", htmlFor: this.inputId, optional: !this.required, config: this.labelConfig, disabled: this.disabled, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: el => (this.anchorRef = el), id: "anchor", class: this.getAnchorCssClasses() }, h("div", { class: "anchor-time" }, h("wpp-icon-clock-v4-4-0", { class: "clock-icon" }), h("input", {
+      // Styled by class, not by id: the id is per-instance (so `for` / `aria-controls`
+      // stay unique when several pickers share a page), which a `#time-picker` selector
+      // could not follow.
+      class: "time-picker-input", ref: el => (this.inputRef = el), onFocus: this.onFocus, onBlur: this.onBlur, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, onKeyPress: this.onKeyPress, onPaste: this.onPaste, disabled: this.disabled, onInput: this.onUpdateInput, id: this.inputId, name: this.name, type: "text", autocomplete: "off", placeholder: this.placeholder, value: this.value, role: "combobox", "aria-haspopup": "dialog", "aria-expanded": this.isDropdownOpen ? 'true' : 'false', "aria-controls": this.popupId, "aria-label": this.labelConfig?.text || this._locales.timePickerLabel
+    })), h("div", { class: "cross-icon-container" }, this.showDisplayCross && (h("wpp-icon-cross-v4-4-0", { class: "cross-icon", "aria-label": this._locales.eraseTimeLabel, role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: this.disabled ? -1 : 0, onClick: this.handleClickCrossIcon, onMouseDown: (event) => event.preventDefault(), onKeyDown: activateOnEnterOrSpace(this.handleClickCrossIcon) })))), h("div", { id: this.popupId, ref: el => (this.portalRef = el), class: "wpp-time-picker-portal", role: "dialog", "aria-modal": "false", "aria-label": this._locales.timePickerLabel, onKeyDown: this.onPortalKeyDown, onPointerDown: this.onPortalPointerDown, onMouseDown: this.onPortalMouseDown }, h("div", { ref: refEl => (this.hoursSectionRef = refEl), class: "hours section", role: "listbox", "aria-label": this._locales.hoursLabel }, HOURS.map((hour, hourIndex) => (h("wpp-list-item-v4-4-0", { id: `hour-${hour}`, key: hour, class: {
+        'tab-focus': this.focusedColumn === 'hours' && this.rovingTimeValues.hoursIndex === hourIndex,
+      }, checked: this.checkedTimeValues.hoursIndex === hourIndex, role: "option", "aria-selected": this.checkedTimeValues.hoursIndex === hourIndex ? 'true' : 'false', tabIndex: this.rovingTimeValues.hoursIndex === hourIndex ? 0 : -1, onWppChangeListItem: () => this.handleClickListItem(hour, 'hour') }, h("span", { slot: "label" }, hour))))), h("wpp-divider-v4-4-0", { vertical: true }), h("div", { ref: refEl => (this.minutesSectionRef = refEl), class: "minutes section", role: "listbox", "aria-label": this._locales.minutesLabel }, this.generatedMinutes.map((minutes, minutesIndex) => (h("wpp-list-item-v4-4-0", { id: `minutes-${minutes}`, key: minutes, class: {
+        'tab-focus': this.focusedColumn === 'minutes' && this.rovingTimeValues.minutesIndex === minutesIndex,
+      }, checked: this.checkedTimeValues.minutesIndex === minutesIndex, role: "option", "aria-selected": this.checkedTimeValues.minutesIndex === minutesIndex ? 'true' : 'false', tabIndex: this.rovingTimeValues.minutesIndex === minutesIndex ? 0 : -1, onWppChangeListItem: () => this.handleClickListItem(minutes, 'minutes') }, h("span", { slot: "label" }, minutes)))))), this.message && (h("wpp-inline-message-v4-4-0", { class: !this.messageType ? 'helper-text' : '', message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
   }
-  static get registryIs() { return "wpp-time-picker-v4-3-0"; }
+  static get registryIs() { return "wpp-time-picker-v4-4-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "minutesInterval": ["onUpdateMinutesInterval"],
-    "value": ["onUpdateValue"],
-    "isInComponent": ["updateIsInComponent"]
+    "value": ["onUpdateValue"]
   }; }
 };
 WppTimePicker.style = wppTimePickerCss;

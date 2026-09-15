@@ -39,7 +39,7 @@ describe('wpp-avatar-group', () => {
     ];
     const page = await newSpecPage({
       components: [WppAvatarGroup],
-      template: () => h("wpp-avatar-group-v4-3-0", { avatars: avatars }),
+      template: () => h("wpp-avatar-group-v4-4-0", { avatars: avatars }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -121,7 +121,7 @@ describe('wpp-avatar-group', () => {
   it('should forward the icon prop to the rendered avatar', async () => {
     const page = await newSpecPage({
       components: [WppAvatarGroup],
-      template: () => (h("wpp-avatar-group-v4-3-0", { variant: "square", avatars: [{ name: 'Premium', icon: 'wpp-icon-premium' }] })),
+      template: () => (h("wpp-avatar-group-v4-4-0", { variant: "square", avatars: [{ name: 'Premium', icon: 'wpp-icon-premium' }] })),
     });
     await page.waitForChanges();
     const avatar = page.root?.shadowRoot?.querySelector('wpp-avatar');
@@ -276,7 +276,7 @@ describe('wpp-avatar-group', () => {
       ];
       const page = await newSpecPage({
         components: [WppAvatarGroup],
-        template: () => h("wpp-avatar-group-v4-3-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
+        template: () => h("wpp-avatar-group-v4-4-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
       });
       await page.waitForChanges();
       const listItemC = page.root?.shadowRoot?.querySelector('wpp-list-item[value="C"]');
@@ -297,7 +297,7 @@ describe('wpp-avatar-group', () => {
       ];
       const page = await newSpecPage({
         components: [WppAvatarGroup],
-        template: () => h("wpp-avatar-group-v4-3-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
+        template: () => h("wpp-avatar-group-v4-4-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
       });
       await page.waitForChanges();
       const listItemC = page.root?.shadowRoot?.querySelector('wpp-list-item[value="C"]');
@@ -318,7 +318,7 @@ describe('wpp-avatar-group', () => {
       ];
       const page = await newSpecPage({
         components: [WppAvatarGroup],
-        template: () => h("wpp-avatar-group-v4-3-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
+        template: () => h("wpp-avatar-group-v4-4-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
       });
       await page.waitForChanges();
       const listItemC = page.root?.shadowRoot?.querySelector('wpp-list-item[value="C"]');

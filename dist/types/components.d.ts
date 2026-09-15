@@ -69,7 +69,7 @@ import { MaskitoNumberParams } from "@maskito/kit/src/lib/masks/number/number-pa
 import { OrientationType, StepChangeEventDetail } from "./components/wpp-stepper/types";
 import { TabChangeEventDetail, TabsChangeEventDetail, TabsLocaleInterface, WppTabAriaProps, WppTabsAriaProps } from "./components/wpp-tabs/types";
 import { TextareaInputChangeEventDetail, TextareaInputLocales, TextareaInputValue, TextareaLabelConfig } from "./components/wpp-textarea-input/types";
-import { TimePickerChangeEventDetails } from "./components/wpp-time-picker/types";
+import { TimePickerChangeEventDetails, TimePickerLocaleTypes } from "./components/wpp-time-picker/types";
 import { ButtonState, ToastCompleteDetail, ToastIcon } from "./components/wpp-toast/types";
 import { ToastState } from "./components/wpp-toast/components/wpp-toast-container/types";
 import { ToggleChangeEvent, ToggleLabelConfig, ToggleValue } from "./components/wpp-toggle/types";
@@ -139,7 +139,7 @@ export { MaskitoNumberParams } from "@maskito/kit/src/lib/masks/number/number-pa
 export { OrientationType, StepChangeEventDetail } from "./components/wpp-stepper/types";
 export { TabChangeEventDetail, TabsChangeEventDetail, TabsLocaleInterface, WppTabAriaProps, WppTabsAriaProps } from "./components/wpp-tabs/types";
 export { TextareaInputChangeEventDetail, TextareaInputLocales, TextareaInputValue, TextareaLabelConfig } from "./components/wpp-textarea-input/types";
-export { TimePickerChangeEventDetails } from "./components/wpp-time-picker/types";
+export { TimePickerChangeEventDetails, TimePickerLocaleTypes } from "./components/wpp-time-picker/types";
 export { ButtonState, ToastCompleteDetail, ToastIcon } from "./components/wpp-toast/types";
 export { ToastState } from "./components/wpp-toast/components/wpp-toast-container/types";
 export { ToggleChangeEvent, ToggleLabelConfig, ToggleValue } from "./components/wpp-toggle/types";
@@ -620,6 +620,10 @@ export namespace Components {
          */
         "inverted": boolean;
         /**
+          * In case this property is true, the button will render a chevron icon on the right. The downward chevron is fixed and cannot be updated. Note: This property should be used only for the primary variant. It also sets `aria-haspopup="menu"` by default.
+         */
+        "isMenuBtn": boolean;
+        /**
           * If the component is in loading state.
          */
         "loading": boolean;
@@ -686,7 +690,7 @@ export namespace Components {
          */
         "setFocus": () => Promise<void>;
         /**
-          * Indicates the size of the card
+          * Indicates the size of the card. Use `none` to render the card without any padding.
          */
         "size": CardSize;
         /**
@@ -728,9 +732,9 @@ export namespace Components {
          */
         "required": boolean;
         /**
-          * Indicates the size of the cards
+          * Indicates the size of the cards.
          */
-        "size": CardSize;
+        "size": Exclude<CardSize, 'none'>;
         /**
           * Indicates the card group value
          */
@@ -1303,7 +1307,7 @@ export namespace Components {
          */
         "appendToListWrapper"?: boolean;
         /**
-          * If `true`, the input should be focused on page load
+          * If `true`, the input is focused on page load and the calendar opens with it. Focus stays in the input, so a date can still be typed. Has no effect on a `static` datepicker, whose calendar is always visible.
          */
         "autoFocus": boolean;
         /**
@@ -1413,6 +1417,10 @@ export namespace Components {
           * Defines the width of the datepicker. If it is undefined, the datepicker will take the default value (200px single datepicker, 260px range datepicker).
          */
         "width"?: string;
+        /**
+          * If `true`, the range datepicker shows two consecutive months side by side, so a range spanning a month boundary can be picked without navigating. Only applies when `range` is `true`; ignored otherwise. Works with `presets`.
+         */
+        "withDoubleCalendar": boolean;
         /**
           * Configuration for normalizing year range dates. When using `view="years"` with `range`, this option allows automatic normalization of selected dates to specific month/day boundaries. By default, normalizes start date to January 1st and end date to December 31st of their respective years.
           * @example // Enable normalization with defaults (Jan 1st and Dec 31st) yearRangeNormalization={{ enabled: true }}
@@ -1667,7 +1675,7 @@ export namespace Components {
         /**
           * Indicates locales for file upload component
          */
-        "locales": FileUploadItemLocales;
+        "locales": Partial<FileUploadItemLocales>;
         /**
           * When true, this item inherits the parent uploader’s disabled state. Interactive controls inside the item (e.g., the delete icon) must be non-interactive: - removed from the tab order (tabindex = -1) - marked as aria-disabled="true" - click/keyboard handlers should no-op
          */
@@ -12084,6 +12092,10 @@ export namespace Components {
          */
         "nonInteractive": boolean;
         /**
+          * Defines the ARIA role of the component. Combobox-style parents (e.g. WppSearch) set this to `option` to expose items as options inside a `listbox`. When the role is `option` the item is removed from the tab order, as it is meant to be driven by the combobox via `aria-activedescendant` rather than receiving its own tab stop.
+         */
+        "role": string;
+        /**
           * If `true`, the component is selectable.
          */
         "selectable": boolean;
@@ -12176,7 +12188,7 @@ export namespace Components {
          */
         "actionsConfig"?: ModalActionsConfig;
         /**
-          * Contains the modal `aria-` props.
+          * Contains the modal `aria-` props.  `labelledby` is intentionally not defaulted: it previously pointed at an id rendered inside the shadow root, which an `aria-labelledby` on the host can never resolve, leaving the dialog with no accessible name. When you do supply one it must name an element in your own tree scope, and it is used verbatim. Otherwise the name is derived from the `header` slot.
          */
         "ariaProps": AriaProps;
         /**
@@ -12409,6 +12421,10 @@ export namespace Components {
          */
         "number": number;
         /**
+          * Accessible name for the page button.
+         */
+        "pageLabel": (page: number) => string;
+        /**
           * If `true`, the component is selected
          */
         "selected": boolean;
@@ -12427,9 +12443,25 @@ export namespace Components {
          */
         "itemsPerPage": number;
         /**
+          * Accessible name for the next-page control.
+         */
+        "nextPageLabel": string;
+        /**
+          * Accessible name for the page-number input shown above the page-select threshold.
+         */
+        "pageInputLabel": string;
+        /**
+          * Accessible name for a page button.
+         */
+        "pageLabel": (page: number) => string;
+        /**
           * Defines a threshold for pages to display. When the number of pages to display exceeds this value, the component displays a numeric selector instead of the page list.
          */
         "pageSelectThreshold": number;
+        /**
+          * Accessible name for the previous-page control.
+         */
+        "previousPageLabel": string;
     }
     interface WppPill {
         /**
@@ -13727,6 +13759,10 @@ export namespace Components {
           * Dropdown config for label, under the hood tooltip using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
         "labelTooltipConfig": DropdownConfig1;
+        /**
+          * Defines accessible labels used by the time picker, using English defaults.
+         */
+        "locales": Partial<TimePickerLocaleTypes>;
         /**
           * Indicates time picker message maximum length
          */
@@ -19432,6 +19468,10 @@ declare namespace LocalJSX {
          */
         "inverted"?: boolean;
         /**
+          * In case this property is true, the button will render a chevron icon on the right. The downward chevron is fixed and cannot be updated. Note: This property should be used only for the primary variant. It also sets `aria-haspopup="menu"` by default.
+         */
+        "isMenuBtn"?: boolean;
+        /**
           * If the component is in loading state.
          */
         "loading"?: boolean;
@@ -19502,7 +19542,7 @@ declare namespace LocalJSX {
          */
         "onWppFocus"?: (event: WppCardCustomEvent<FocusEvent>) => void;
         /**
-          * Indicates the size of the card
+          * Indicates the size of the card. Use `none` to render the card without any padding.
          */
         "size"?: CardSize;
         /**
@@ -19552,9 +19592,9 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
-          * Indicates the size of the cards
+          * Indicates the size of the cards.
          */
-        "size"?: CardSize;
+        "size"?: Exclude<CardSize, 'none'>;
         /**
           * Indicates the card group value
          */
@@ -20232,7 +20272,7 @@ declare namespace LocalJSX {
          */
         "appendToListWrapper"?: boolean;
         /**
-          * If `true`, the input should be focused on page load
+          * If `true`, the input is focused on page load and the calendar opens with it. Focus stays in the input, so a date can still be typed. Has no effect on a `static` datepicker, whose calendar is always visible.
          */
         "autoFocus"?: boolean;
         /**
@@ -20350,6 +20390,10 @@ declare namespace LocalJSX {
           * Defines the width of the datepicker. If it is undefined, the datepicker will take the default value (200px single datepicker, 260px range datepicker).
          */
         "width"?: string;
+        /**
+          * If `true`, the range datepicker shows two consecutive months side by side, so a range spanning a month boundary can be picked without navigating. Only applies when `range` is `true`; ignored otherwise. Works with `presets`.
+         */
+        "withDoubleCalendar"?: boolean;
         /**
           * Configuration for normalizing year range dates. When using `view="years"` with `range`, this option allows automatic normalization of selected dates to specific month/day boundaries. By default, normalizes start date to January 1st and end date to December 31st of their respective years.
           * @example // Enable normalization with defaults (Jan 1st and Dec 31st) yearRangeNormalization={{ enabled: true }}
@@ -20636,7 +20680,7 @@ declare namespace LocalJSX {
         /**
           * Indicates locales for file upload component
          */
-        "locales"?: FileUploadItemLocales;
+        "locales"?: Partial<FileUploadItemLocales>;
         /**
           * When true, this item inherits the parent uploader’s disabled state. Interactive controls inside the item (e.g., the delete icon) must be non-interactive: - removed from the tab order (tabindex = -1) - marked as aria-disabled="true" - click/keyboard handlers should no-op
          */
@@ -31085,6 +31129,10 @@ declare namespace LocalJSX {
          */
         "onWppChangeListItem"?: (event: WppListItemCustomEvent<ListItemChangeEventDetail>) => void;
         /**
+          * Defines the ARIA role of the component. Combobox-style parents (e.g. WppSearch) set this to `option` to expose items as options inside a `listbox`. When the role is `option` the item is removed from the tab order, as it is meant to be driven by the combobox via `aria-activedescendant` rather than receiving its own tab stop.
+         */
+        "role"?: string;
+        /**
           * If `true`, the component is selectable.
          */
         "selectable"?: boolean;
@@ -31177,7 +31225,7 @@ declare namespace LocalJSX {
          */
         "actionsConfig"?: ModalActionsConfig;
         /**
-          * Contains the modal `aria-` props.
+          * Contains the modal `aria-` props.  `labelledby` is intentionally not defaulted: it previously pointed at an id rendered inside the shadow root, which an `aria-labelledby` on the host can never resolve, leaving the dialog with no accessible name. When you do supply one it must name an element in your own tree scope, and it is used verbatim. Otherwise the name is derived from the `header` slot.
          */
         "ariaProps"?: AriaProps;
         /**
@@ -31446,6 +31494,10 @@ declare namespace LocalJSX {
          */
         "onWppPageChange"?: (event: WppPaginationItemCustomEvent<PaginationPageChangeEventDetail>) => void;
         /**
+          * Accessible name for the page button.
+         */
+        "pageLabel"?: (page: number) => string;
+        /**
           * If `true`, the component is selected
          */
         "selected"?: boolean;
@@ -31464,13 +31516,29 @@ declare namespace LocalJSX {
          */
         "itemsPerPage"?: number;
         /**
+          * Accessible name for the next-page control.
+         */
+        "nextPageLabel"?: string;
+        /**
           * Contains the active page number and itemsPerPage value.
          */
         "onWppChange"?: (event: WppPaginationSelectCustomEvent<PaginationPageChangeEventDetail>) => void;
         /**
+          * Accessible name for the page-number input shown above the page-select threshold.
+         */
+        "pageInputLabel"?: string;
+        /**
+          * Accessible name for a page button.
+         */
+        "pageLabel"?: (page: number) => string;
+        /**
           * Defines a threshold for pages to display. When the number of pages to display exceeds this value, the component displays a numeric selector instead of the page list.
          */
         "pageSelectThreshold"?: number;
+        /**
+          * Accessible name for the previous-page control.
+         */
+        "previousPageLabel"?: string;
     }
     interface WppPill {
         /**
@@ -32936,6 +33004,10 @@ declare namespace LocalJSX {
           * Dropdown config for label, under the hood tooltip using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
         "labelTooltipConfig"?: DropdownConfig1;
+        /**
+          * Defines accessible labels used by the time picker, using English defaults.
+         */
+        "locales"?: Partial<TimePickerLocaleTypes>;
         /**
           * Indicates time picker message maximum length
          */

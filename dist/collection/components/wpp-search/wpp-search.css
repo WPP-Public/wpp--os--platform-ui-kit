@@ -149,6 +149,14 @@
   cursor: pointer;
   transition: all 0.15s ease-out 0s;
 }
+.trigger-actions .wpp-icon-cross {
+  outline: none;
+}
+.trigger-actions .wpp-icon-cross:focus-visible {
+  border-radius: var(--wpp-border-radius-s);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
+}
 
 .values {
   scrollbar-width: thin;
@@ -223,24 +231,19 @@
   text-overflow: ellipsis;
   width: 100%;
 }
-.values .wpp-chip + .search-input {
-  margin-left: 6px;
-}
-
-.count-block {
-  display: none;
-}
-
-.with-tooltip {
-  display: none;
-}
-.with-tooltip.visible {
+.values .value-tooltip {
   display: flex;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+.values .value-tooltip::part(anchor) {
+  display: block;
   width: 100%;
   overflow: hidden;
 }
-.with-tooltip.visible::part(anchor) {
-  width: 100%;
+.values .wpp-chip + .search-input {
+  margin-left: 6px;
 }
 
 .trigger {
@@ -425,6 +428,19 @@
 }
 .dropdown .dropdown-list ::slotted(.wpp-list-item:not(:last-child)) {
   margin-bottom: var(--search-item-margin-bottom);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
 }
 
 .label {

@@ -15,6 +15,7 @@ import { NavSidebarItemEventDetail } from '../../types';
  */
 export declare class WppNavSidebarItem {
   host: HTMLWppNavSidebarItemElement;
+  private linkRef?;
   hasIconStartSlot: boolean;
   /**
    * If `true`, navigation item expanded
@@ -79,8 +80,10 @@ export declare class WppNavSidebarItem {
   /** @internal */
   wppClickExpandedItem: EventEmitter<NavSidebarItemEventDetail>;
   componentWillLoad(): void;
+  handleActiveChange(isActive: boolean): void;
   componentDidLoad(): void;
   private updateSlotData;
+  private tooltipInstance?;
   private handleClickLinkItem;
   private handleClickExpandedItem;
   private handleExpandedItemKeyDown;
@@ -89,10 +92,14 @@ export declare class WppNavSidebarItem {
   private iconEndCssClasses;
   private subItemWrapperCssClasses;
   private hostCssClasses;
+  private get maxLabelLength();
+  private get isLabelTruncated();
+  private accessibleNameProps;
   private item;
   private extendedItem;
   private linkItem;
   private renderSubItemsWrapper;
+  private itemTooltipConfig;
   private renderItemWithTooltip;
   private renderItem;
   render(): any;

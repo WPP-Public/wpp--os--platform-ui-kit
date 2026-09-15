@@ -1,4 +1,6 @@
+import { TimePickerLocaleTypes } from './types';
 export declare const PLACEHOLDER = "hh:mm";
+export declare const TIME_PICKER_LOCALES_DEFAULTS: TimePickerLocaleTypes;
 export declare const HOURS: string[];
 export declare const DEFAULT_CHECKED_TIME_VALUES: {
   hoursIndex: number;

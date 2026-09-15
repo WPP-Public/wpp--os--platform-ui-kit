@@ -96,7 +96,7 @@ export class WppNavSidebar {
     return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "nav-sidebar, body, header-wrapper, header, ws-wrapper, ws-inner" }, h("aside", { class: this.asideCssClasses(), part: "nav-sidebar" }, h("nav", { class: "nav-wrapper", part: "body", "aria-label": this.navLabel }, h(WrappedSlot, { wrapperClass: "title-wrapper", name: "header" }), h(WrappedSlot, { wrapperClass: "items-wrapper" })))));
   }
   static get is() { return "wpp-nav-sidebar"; }
-  static get registryIs() { return "wpp-nav-sidebar-v4-3-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-v4-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

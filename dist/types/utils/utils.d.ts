@@ -35,6 +35,32 @@ export declare function getHighestContainerInDOM(): HTMLElement;
  */
 export declare function getOsBarOffsetHeight(): number;
 export declare function mergeLocales<T>(defaults: T, overrides: Partial<T> | undefined): T;
+/**
+ * Width the platform reserves in layout for a scrollbar, in px.
+ *
+ * Measured against `scrollbar-width: thin` + `scrollbar-gutter: stable`, which is what the modal
+ * bodies declare. A scroll container's content box shrinks by this amount, so a declared
+ * horizontal padding renders asymmetrically: the scrollbar side gains the gutter. Callers subtract
+ * this value to keep the designed inset symmetric on every platform.
+ *
+ * Measured once from an offscreen probe and cached — it cannot change without a restart.
+ */
+export declare const getScrollbarGutterWidth: () => number;
+/**
+ * Generate a DOM-unique id for content that is portaled into shared light DOM
+ * (e.g. a tippy dropdown appended to `document.body`). Ids from different
+ * component instances — or from different CL versions coexisting on one page
+ * under SingleSPA — would otherwise collide there. Prefers `crypto.randomUUID`
+ * and falls back to `Math.random` where it is unavailable (older/SSR runtimes),
+ * via optional chaining so it never throws.
+ */
+export declare const uniquePortalId: (prefix: string) => string;
+/**
+ * Keyboard-activation handler for elements given `role="button"` (e.g. icons)
+ * that have no native Enter/Space activation. Runs `handler` on Enter or Space
+ * and prevents the default (page scroll on Space).
+ */
+export declare const activateOnEnterOrSpace: (handler: (event: KeyboardEvent) => void) => (event: KeyboardEvent) => void;
 export declare const getAriaProps: (ariaProps: AriaProps) => Record<string, string>;
 export declare const isWppElement: (element: HTMLElement) => boolean;
 export {};

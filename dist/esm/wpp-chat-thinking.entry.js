@@ -8,9 +8,9 @@ const WppChatThinking = class {
     this.label = 'Thinking...';
   }
   render() {
-    return (h(Host, { role: "status", "aria-live": "polite" }, h("div", { class: "thinking", part: "thinking" }, h("wpp-spinner-v4-3-0", { class: "spinner", part: "spinner", size: "s", "aria-hidden": "true" }), h("wpp-typography-v4-3-0", { class: "label", type: "s-body", part: "label" }, this.label))));
+    return (h(Host, { role: "status", "aria-live": "polite" }, h("div", { class: "thinking", part: "thinking" }, h("wpp-spinner-v4-4-0", { class: "spinner", part: "spinner", size: "s", "aria-hidden": "true" }), h("wpp-typography-v4-4-0", { class: "label", type: "s-body", part: "label" }, this.label))));
   }
-  static get registryIs() { return "wpp-chat-thinking-v4-3-0"; }
+  static get registryIs() { return "wpp-chat-thinking-v4-4-0"; }
 };
 WppChatThinking.style = wppChatThinkingCss;
 

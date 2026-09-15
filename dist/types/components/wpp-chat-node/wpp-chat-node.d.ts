@@ -170,9 +170,6 @@ export declare class WppChatNode {
   private handleStop;
   private handleReRun;
   private handleKeyDown;
-  private setupSpeechRecognition;
-  private startSpeechRecognition;
-  private stopSpeechRecognition;
   private handleClickAudioRecording;
   private handleAttach;
   private handleActionClick;

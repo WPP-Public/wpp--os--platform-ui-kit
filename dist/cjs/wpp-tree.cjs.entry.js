@@ -3,12 +3,13 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-5f5af6a9.js');
-const utils$1 = require('./utils-9529c2fe.js');
+const utils$1 = require('./utils-a6513d61.js');
 const utils = require('./utils-ce02f074.js');
-const subscribeToTheme = require('./subscribe-to-theme-1879a649.js');
+const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
 require('./consts-d8f5ef98.js');
+require('./theme-observer-4179316e.js');
 
-const wppTreeCss = ":host{--tree-item-padding:var(--wpp-tree-item-padding, 6px 4px 0 4px);--tree-container-width:var(--wpp-tree-container-width, 100%);--tree-container-height:var(--wpp-tree-container-height, 100%);--tree-container-bg-color:var(--wpp-tree-container-bg-color, var(--wpp-grey-color-000));--tree-input-trigger-area:var(--wpp-tree-trigger-area, 32px);--tree-item-icon-end-color:var(--wpp-tree-icon-end-color, var(--wpp-grey-color-800));--tree-skeleton-height:var(--wpp-tree-skeleton-height, 22px);--tree-skeleton-padding:var(--wpp-tree-skeleton-padding, 3px 0 3px 36px);--tree-skeleton-width:var(--wpp-tree-skeleton-width, 100%);display:-ms-flexbox;display:flex;padding:var(--tree-item-padding)}.container-wrapper{width:100%}.container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%}.container:focus{outline:none}.content-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-transition:height 500ms ease;transition:height 500ms ease}.skeleton-wrapper{width:var(--tree-skeleton-width)}.skeleton-wrapper .skeleton-item{padding:var(--tree-skeleton-padding)}.skeleton-wrapper .wpp-skeleton{--skeleton-height:var(--tree-skeleton-height)}.empty-tree-text{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);margin:0;text-align:center}:host(.wpp-virtualised-tree) .container-wrapper{overflow-y:auto;overflow-x:hidden;scrollbar-gutter:12px;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}:host(.wpp-virtualised-tree) .container-wrapper::-webkit-scrollbar{width:4px;height:4px}:host(.wpp-virtualised-tree) .container-wrapper::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}:host(.wpp-virtualised-tree) .container-wrapper .container{position:relative;width:100%}:host(.wpp-virtualised-tree) .container-wrapper .wpp-tree-item{width:100%;position:absolute}:host(.wpp-virtualised-tree) .container-wrapper .wpp-tree-item::part(tree-item){width:100%}";
+const wppTreeCss = ":host{--tree-item-padding:var(--wpp-tree-item-padding, 6px 4px 0 4px);--tree-container-width:var(--wpp-tree-container-width, 100%);--tree-container-height:var(--wpp-tree-container-height, 100%);--tree-container-bg-color:var(--wpp-tree-container-bg-color, var(--wpp-grey-color-000));--tree-input-trigger-area:var(--wpp-tree-trigger-area, 32px);--tree-item-icon-end-color:var(--wpp-tree-icon-end-color, var(--wpp-grey-color-800));--tree-skeleton-height:var(--wpp-tree-skeleton-height, 22px);--tree-skeleton-padding:var(--wpp-tree-skeleton-padding, 3px 0 3px 36px);--tree-skeleton-width:var(--wpp-tree-skeleton-width, 100%);display:-ms-flexbox;display:flex;padding:var(--tree-item-padding)}.container-wrapper{width:100%}.container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%}.container:focus{outline:none}.content-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-transition:height 500ms ease;transition:height 500ms ease}.skeleton-wrapper{width:var(--tree-skeleton-width)}.skeleton-wrapper .skeleton-item{padding:var(--tree-skeleton-padding)}.skeleton-wrapper .wpp-skeleton{--skeleton-height:var(--tree-skeleton-height)}.empty-tree-text{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);margin:0;text-align:center}:host(.wpp-virtualised-tree) .container-wrapper{overflow:hidden auto;scrollbar-gutter:12px;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}:host(.wpp-virtualised-tree) .container-wrapper::-webkit-scrollbar{width:4px;height:4px}:host(.wpp-virtualised-tree) .container-wrapper::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}:host(.wpp-virtualised-tree) .container-wrapper .container{position:relative;width:100%}:host(.wpp-virtualised-tree) .container-wrapper .wpp-tree-item{width:100%;position:absolute}:host(.wpp-virtualised-tree) .container-wrapper .wpp-tree-item::part(tree-item){width:100%}";
 
 const WppTree = class {
   constructor(hostRef) {
@@ -387,16 +388,16 @@ const WppTree = class {
       'wpp-tree': true,
       'wpp-virtualised-tree': !!this.withVirtualisation,
     });
-    this.renderIconsList = (item, icons, place = 'end') => (index.h("div", { slot: `icon-${place}`, key: utils$1.uuidv4() }, index.h("wpp-menu-context-v4-3-0", { dropdownConfig: {
+    this.renderIconsList = (item, icons, place = 'end') => (index.h("div", { slot: `icon-${place}`, key: utils$1.uuidv4() }, index.h("wpp-menu-context-v4-4-0", { dropdownConfig: {
         trigger: 'click',
         interactiveDebounce: 15,
         interactiveBorder: 25,
         offset: [0, 0],
-      } }, index.h("wpp-icon-more-v4-3-0", { class: {
+      } }, index.h("wpp-icon-more-v4-4-0", { class: {
         'menu-trigger': true,
         disabled: !!item.disabled,
-      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), index.h("div", null, icons.map(({ icon, name }) => (index.h("wpp-list-item-v4-3-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, index.h(utils$1.transformToVersionedTag(icon), { slot: 'left' }), index.h("span", { slot: "label" }, name))))))));
-    this.renderTreeItem = (item, level, setSize, posInSet, isFocused, extraProps, isParent) => (index.h("wpp-tree-item-v4-3-0", { id: `tree-item-${item.id}`, key: `tree-item-${item.id}`, style: { top: `${(posInSet - 1) * utils.TREE_ITEM_HEIGHT}px` }, text: item.title, item: item, level: this.withVirtualisation ? item?.level || 1 : level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isDarkTheme: this.isDarkTheme, isFocused: isFocused, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
+      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), index.h("div", null, icons.map(({ icon, name }) => (index.h("wpp-list-item-v4-4-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, index.h(utils$1.transformToVersionedTag(icon), { slot: 'left' }), index.h("span", { slot: "label" }, name))))))));
+    this.renderTreeItem = (item, level, setSize, posInSet, isFocused, extraProps, isParent) => (index.h("wpp-tree-item-v4-4-0", { id: `tree-item-${item.id}`, key: `tree-item-${item.id}`, style: { top: `${(posInSet - 1) * utils.TREE_ITEM_HEIGHT}px` }, text: item.title, item: item, level: this.withVirtualisation ? item?.level || 1 : level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isDarkTheme: this.isDarkTheme, isFocused: isFocused, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
       index.h(utils$1.transformToVersionedTag(item.iconStart.icon), {
         slot: 'icon-start',
         part: 'icon-start',
@@ -538,7 +539,7 @@ const WppTree = class {
   }
   renderSkeletonRows(count = 1, paddingLeft) {
     const { height = 32 } = this.lazyConfig?.skeleton || {};
-    return Array.from({ length: count }, (_, idx) => (index.h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, index.h("wpp-skeleton-v4-3-0", { variant: "rectangle", width: "100%", height: height }))));
+    return Array.from({ length: count }, (_, idx) => (index.h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, index.h("wpp-skeleton-v4-4-0", { variant: "rectangle", width: "100%", height: height }))));
   }
   onInputChange(searchText) {
     if (!searchText.trim()) {
@@ -1198,7 +1199,7 @@ const WppTree = class {
     const hasVisibleContent = this.currentTreeData && this.isSearchResultFound;
     return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text", onScroll: this.handleScroll }, !this.loading && (index.h("div", { ref: el => (this.scrollContainer = el), class: "container-wrapper", onScroll: this.handleScroll }, index.h("div", { class: "container", style: this.withVirtualisation ? { height: `${this.totalHeight}px` } : undefined, part: "tree-container", role: "tree", "aria-label": this.label, "aria-multiselectable": this.multiple ? 'true' : undefined, "aria-activedescendant": this.getActiveDescendantId(), tabindex: hasVisibleContent ? '0' : undefined, onFocus: this.handleContainerFocus, onBlur: this.handleContainerBlur }, hasVisibleContent ? (this.handleTreeRender(hasVisibleContent)) : (index.h("p", { class: "empty-tree-text", part: "tree-empty-text", role: "status" }, this._locales.nothingFound))))), this.loading && (index.h("div", { class: "skeleton-wrapper", role: "status", "aria-label": this._locales.loadingTree }, this.renderSkeletonRows(this.skeletonNumberItems)))));
   }
-  static get registryIs() { return "wpp-tree-v4-3-0"; }
+  static get registryIs() { return "wpp-tree-v4-4-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "search": ["onInputChange"],

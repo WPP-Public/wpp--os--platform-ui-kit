@@ -23,7 +23,7 @@ export class WppButton {
         end: '[slot="icon-end"]',
       });
       this.hasIconStartSlot = !emptyStates.start;
-      this.hasIconEndSlot = !emptyStates.end;
+      this.hasIconEndSlot = !emptyStates.end && !this.isMenuButton();
       const hasSingleIcon = this.hasIconStartSlot !== this.hasIconEndSlot;
       const hasMainSlot = !emptyStates.main;
       this.isIconOnly = hasSingleIcon && !hasMainSlot;
@@ -106,7 +106,8 @@ export class WppButton {
       [`${this.variant}`]: true,
       'tab-focus': this.focusType === FOCUS_TYPE.TAB,
       'with-icon-start': this.hasIconStartSlot,
-      'with-icon-end': this.hasIconEndSlot,
+      'with-icon-end': this.hasIconEndSlot || this.isMenuButton(),
+      'with-menu': this.isMenuButton(),
       'with-icon-only': this.isIconOnly,
       'size-s': this.size === 's',
       'size-m': this.size === 'm',
@@ -118,8 +119,9 @@ export class WppButton {
     });
     this.iconEndCssClasses = () => ({
       'icon-end': true,
-      'slot-hidden': !this.hasIconEndSlot,
+      'slot-hidden': !this.hasIconEndSlot && !this.isMenuButton(),
     });
+    this.isMenuButton = () => this.isMenuBtn && this.variant === 'primary';
     this.loaderCssClasses = () => ({
       loader: true,
     });
@@ -137,6 +139,7 @@ export class WppButton {
     this.disabled = false;
     this.loading = false;
     this.variant = 'primary';
+    this.isMenuBtn = false;
     this.inverted = false;
     this.autoFocus = false;
     this.name = undefined;
@@ -175,10 +178,10 @@ export class WppButton {
     this.validAriaProps = getAriaProps(this.ariaProps);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, exportparts: "button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper" }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, formAction: this.formAction, formEncType: this.formEncType, formMethod: this.formMethod, formNoValidate: this.formNoValidate, formTarget: this.formTarget, value: this.value, name: this.name, type: this.type, part: "button", "data-testid": "wppButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps }, this.loading && (h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, h("wpp-spinner-v4-3-0", { color: this.getSpinnerColor(), part: "spinner" }))), h("div", { class: this.contentCssClasses() }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("span", { class: "truncate", part: "text" }, h("slot", { onSlotchange: this.updateSlotData, part: "inner" })), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData })))));
+    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, exportparts: "button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper" }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, formAction: this.formAction, formEncType: this.formEncType, formMethod: this.formMethod, formNoValidate: this.formNoValidate, formTarget: this.formTarget, value: this.value, name: this.name, type: this.type, part: "button", "data-testid": "wppButton", "aria-pressed": this.isPressed ? 'true' : 'false', "aria-haspopup": this.isMenuBtn ? 'menu' : undefined, ...this.validAriaProps }, this.loading && (h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, h("wpp-spinner-v4-4-0", { color: this.getSpinnerColor(), part: "spinner" }))), h("div", { class: this.contentCssClasses() }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("span", { class: "truncate", part: "text" }, h("slot", { onSlotchange: this.updateSlotData, part: "inner" })), this.isMenuButton() ? (h("div", { class: this.iconEndCssClasses(), part: "icon-end" }, h("wpp-icon-chevron-v4-4-0", { direction: "down", color: "var(--wpp-grey-color-000)" }))) : (h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData }))))));
   }
   static get is() { return "wpp-button"; }
-  static get registryIs() { return "wpp-button-v4-3-0"; }
+  static get registryIs() { return "wpp-button-v4-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -263,6 +266,24 @@ export class WppButton {
         "attribute": "variant",
         "reflect": false,
         "defaultValue": "'primary'"
+      },
+      "isMenuBtn": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "In case this property is true, the button will render a chevron icon on the right. The downward chevron is fixed and cannot be updated.\nNote: This property should be used only for the primary variant. It also sets `aria-haspopup=\"menu\"` by default."
+        },
+        "attribute": "is-menu-btn",
+        "reflect": true,
+        "defaultValue": "false"
       },
       "inverted": {
         "type": "boolean",

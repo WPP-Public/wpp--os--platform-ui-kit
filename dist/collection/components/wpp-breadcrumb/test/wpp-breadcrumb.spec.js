@@ -44,14 +44,14 @@ describe('wpp-breadcrumb', () => {
   it('renders correctly with no items', async () => {
     const page = await newSpecPage({
       components: [WppBreadcrumb],
-      template: () => h("wpp-breadcrumb-v4-3-0", null),
+      template: () => h("wpp-breadcrumb-v4-4-0", null),
     });
     expect(page.root).toMatchSnapshot();
   });
   it('renders correctly with items', async () => {
     const page = await newSpecPage({
       components: [WppBreadcrumb],
-      template: () => h("wpp-breadcrumb-v4-3-0", { items: items }),
+      template: () => h("wpp-breadcrumb-v4-4-0", { items: items }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -68,7 +68,7 @@ describe('wpp-breadcrumb', () => {
     it('exposes the trail as a navigation landmark with a default label', async () => {
       const page = await newSpecPage({
         components: [WppBreadcrumb],
-        template: () => h("wpp-breadcrumb-v4-3-0", { items: items }),
+        template: () => h("wpp-breadcrumb-v4-4-0", { items: items }),
       });
       expect(page.root.getAttribute('role')).toBe('navigation');
       expect(page.root.getAttribute('aria-label')).toBe('Breadcrumb');
@@ -76,14 +76,14 @@ describe('wpp-breadcrumb', () => {
     it('lets the landmark label be overridden via locales', async () => {
       const page = await newSpecPage({
         components: [WppBreadcrumb],
-        template: () => h("wpp-breadcrumb-v4-3-0", { items: items, locales: { navigationLabel: 'Fil dʼAriane' } }),
+        template: () => h("wpp-breadcrumb-v4-4-0", { items: items, locales: { navigationLabel: 'Fil dʼAriane' } }),
       });
       expect(page.root.getAttribute('aria-label')).toBe('Fil dʼAriane');
     });
     it('prefers ariaProps.navigation.labelledby over a label', async () => {
       const page = await newSpecPage({
         components: [WppBreadcrumb],
-        template: () => h("wpp-breadcrumb-v4-3-0", { items: items, ariaProps: { navigation: { labelledby: 'heading-id' } } }),
+        template: () => h("wpp-breadcrumb-v4-4-0", { items: items, ariaProps: { navigation: { labelledby: 'heading-id' } } }),
       });
       expect(page.root.getAttribute('aria-labelledby')).toBe('heading-id');
       expect(page.root.hasAttribute('aria-label')).toBe(false);
@@ -91,7 +91,7 @@ describe('wpp-breadcrumb', () => {
     it('marks the last item as the current page on the link when nativeLink is set', async () => {
       const page = await newSpecPage({
         components: [WppBreadcrumb],
-        template: () => h("wpp-breadcrumb-v4-3-0", { items: items, nativeLink: true }),
+        template: () => h("wpp-breadcrumb-v4-4-0", { items: items, nativeLink: true }),
       });
       const current = page.root.shadowRoot.querySelectorAll('[aria-current="page"]');
       expect(current).toHaveLength(1);
@@ -101,7 +101,7 @@ describe('wpp-breadcrumb', () => {
     it('does not force aria-current on the non-link current page', async () => {
       const page = await newSpecPage({
         components: [WppBreadcrumb],
-        template: () => h("wpp-breadcrumb-v4-3-0", { items: items }),
+        template: () => h("wpp-breadcrumb-v4-4-0", { items: items }),
       });
       const current = page.root.shadowRoot.querySelectorAll('[aria-current="page"]');
       expect(current).toHaveLength(0);
@@ -109,7 +109,7 @@ describe('wpp-breadcrumb', () => {
     it('forwards an accessible name to the collapsed-items menu trigger', async () => {
       const page = await newSpecPage({
         components: [WppBreadcrumb],
-        template: () => h("wpp-breadcrumb-v4-3-0", { items: items }),
+        template: () => h("wpp-breadcrumb-v4-4-0", { items: items }),
       });
       const menu = page.root.shadowRoot.querySelector('.menu');
       expect(menu).not.toBeNull();
@@ -121,7 +121,7 @@ describe('wpp-breadcrumb', () => {
     it('makes the collapsed-items menu trigger keyboard-focusable', async () => {
       const page = await newSpecPage({
         components: [WppBreadcrumb],
-        template: () => h("wpp-breadcrumb-v4-3-0", { items: items }),
+        template: () => h("wpp-breadcrumb-v4-4-0", { items: items }),
       });
       const menu = page.root.shadowRoot.querySelector('.menu');
       const trigger = menu.querySelector('[slot="trigger-element"]');
@@ -131,7 +131,7 @@ describe('wpp-breadcrumb', () => {
     it('lets the collapsed-items menu label be overridden via locales', async () => {
       const page = await newSpecPage({
         components: [WppBreadcrumb],
-        template: () => h("wpp-breadcrumb-v4-3-0", { items: items, locales: { showMoreLabel: 'More pages' } }),
+        template: () => h("wpp-breadcrumb-v4-4-0", { items: items, locales: { showMoreLabel: 'More pages' } }),
       });
       const menu = page.root.shadowRoot.querySelector('.menu');
       expect(menu.ariaProps?.label).toBe('More pages');
@@ -139,7 +139,7 @@ describe('wpp-breadcrumb', () => {
     it('does not render the navigation landmark for the back-button variant', async () => {
       const page = await newSpecPage({
         components: [WppBreadcrumb],
-        template: () => h("wpp-breadcrumb-v4-3-0", { backBtnLabel: "Back to dashboard" }),
+        template: () => h("wpp-breadcrumb-v4-4-0", { backBtnLabel: "Back to dashboard" }),
       });
       expect(page.root.getAttribute('role')).toBeNull();
       expect(page.root.shadowRoot.querySelector('button.back').textContent).toContain('Back to dashboard');
@@ -149,7 +149,7 @@ describe('wpp-breadcrumb', () => {
     describe('keyboard activation', () => {
       const mkPage = (nativeLink = false) => newSpecPage({
         components: [WppBreadcrumb],
-        template: () => h("wpp-breadcrumb-v4-3-0", { items: items, nativeLink: nativeLink }),
+        template: () => h("wpp-breadcrumb-v4-4-0", { items: items, nativeLink: nativeLink }),
       });
       const pressKey = (el, key) => {
         const event = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true });
@@ -209,7 +209,7 @@ describe('wpp-breadcrumb', () => {
       it('routes an SPA menu item selection (wppChangeListItem) to wppChange', async () => {
         const page = await newSpecPage({
           components: [WppBreadcrumb],
-          template: () => h("wpp-breadcrumb-v4-3-0", { items: items }),
+          template: () => h("wpp-breadcrumb-v4-4-0", { items: items }),
         });
         const changes = [];
         page.root.addEventListener('wppChange', (e) => changes.push(e.detail));
@@ -222,7 +222,7 @@ describe('wpp-breadcrumb', () => {
       it('gives native-link menu items an href and does not double-route wppChange', async () => {
         const page = await newSpecPage({
           components: [WppBreadcrumb],
-          template: () => h("wpp-breadcrumb-v4-3-0", { items: items, nativeLink: true }),
+          template: () => h("wpp-breadcrumb-v4-4-0", { items: items, nativeLink: true }),
         });
         const changes = [];
         page.root.addEventListener('wppChange', (e) => changes.push(e.detail));

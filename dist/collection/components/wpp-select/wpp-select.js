@@ -170,10 +170,10 @@ export class WppSelect {
         return h(Fragment, null);
       }
       if (this.loading) {
-        return (h("div", { class: "loading-container" }, h("wpp-spinner-v4-3-0", null), h("wpp-typography-v4-3-0", { type: "s-body" }, this._locales.loadingText)));
+        return (h("div", { class: "loading-container" }, h("wpp-spinner-v4-4-0", null), h("wpp-typography-v4-4-0", { type: "s-body" }, this._locales.loadingText)));
       }
       if (this.internalList?.length === 0) {
-        return (h("wpp-typography-v4-3-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+        return (h("wpp-typography-v4-4-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
       }
       let hiddeItemsCount = 0;
       return (h(Fragment, null, this.internalList?.map((item) => {
@@ -183,11 +183,11 @@ export class WppSelect {
           if (hidden)
             hiddeItemsCount++;
           if (hiddeItemsCount === this.internalList?.length) {
-            return (h("wpp-typography-v4-3-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+            return (h("wpp-typography-v4-4-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
           }
           return null;
         }
-        return (h("wpp-list-item-v4-3-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ref: item.checked && this.type === 'single'
+        return (h("wpp-list-item-v4-4-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ref: item.checked && this.type === 'single'
             ? el => (this.selectedItemRef = el)
             : undefined, isDarkTheme: this.isDarkTheme, ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
@@ -205,7 +205,7 @@ export class WppSelect {
           return null;
         const { label, value, checked, disabled, id, slots } = current;
         const itemValueKey = this.convertValueToKey(value);
-        return (h("wpp-list-item-v4-3-0", { onWppChangeListItem: this.handleClickListItem, key: `pinned-${itemValueKey}`, value: value, checked: checked, disabled: disabled, multiple: true, isDarkTheme: this.isDarkTheme, id: id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${id}` : undefined, class: "pinned-item" }, h("p", { slot: "label" }, label), slots && this.renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+        return (h("wpp-list-item-v4-4-0", { onWppChangeListItem: this.handleClickListItem, key: `pinned-${itemValueKey}`, value: value, checked: checked, disabled: disabled, multiple: true, isDarkTheme: this.isDarkTheme, id: id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${id}` : undefined, class: "pinned-item" }, h("p", { slot: "label" }, label), slots && this.renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
     };
     this.renderSlotsInListItem = (slots, isLabelExists) => slots
@@ -380,7 +380,9 @@ export class WppSelect {
         },
         onShown: (instance) => {
           this.updateScrollState();
-          if (['single', 'multiple'].includes(this.type)) {
+          // Text selects render no search input, so the search-focus branch silently dropped
+          // keyboard focus on the anchor — the list itself must receive it instead.
+          if (!this.isTextSelect && ['single', 'multiple'].includes(this.type)) {
             this.focusSearchInput();
           }
           else {
@@ -408,13 +410,20 @@ export class WppSelect {
         },
       });
     };
+    // `setFocus()` on a list item does not check whether that item is disabled, so the first
+    // *focusable* option is resolved here — otherwise focus can land on a row the user cannot
+    // activate or arrow away from.
     this.focusFirstListItem = () => {
-      if (!this.portalRef)
+      const [firstFocusable] = this.getPortalItems();
+      if (!firstFocusable)
         return;
-      const listItem = this.portalRef.querySelector('.wpp-list-item');
-      if (!listItem)
-        return;
-      listItem.setFocus();
+      const listItem = firstFocusable;
+      if (typeof listItem.setFocus === 'function') {
+        listItem.setFocus();
+      }
+      else {
+        firstFocusable.focus();
+      }
     };
     this.focusSearchInput = () => {
       if (!this.portalRef)
@@ -446,14 +455,24 @@ export class WppSelect {
       }
     };
     this.onClickListItemSingle = (listItemValue) => {
-      if (isEqual(this.value, listItemValue)) {
-        this.tippyInstance?.hide();
-        return;
-      }
-      else {
+      // Selecting an option hides the popup together with the focused option, which would silently
+      // drop keyboard focus to the page body (WCAG 2.4.3). Captured before hiding. The active
+      // element is resolved through shadow roots: after tippy relocates the portal to its
+      // body-level root the option is the document's active element directly, but before
+      // relocation it sits behind the host's shadow boundary.
+      let activeEl = document.activeElement;
+      while (activeEl?.shadowRoot?.activeElement)
+        activeEl = activeEl.shadowRoot.activeElement;
+      const focusWasInPortal = !!this.portalRef && !!activeEl && this.portalRef.contains(activeEl);
+      if (!isEqual(this.value, listItemValue)) {
         this.emittedValue = listItemValue;
-        // Hide dropdown only when user clicked a new item.
-        this.tippyInstance?.hide();
+      }
+      this.tippyInstance?.hide();
+      // Mirrors the Escape behaviour: focus returns to the anchor the popup belongs to. The focus
+      // styling is left as it was — a keyboard user is already in `tab-focus`, and forcing it here
+      // would light the keyboard ring up after a mouse selection too.
+      if (focusWasInPortal) {
+        this.anchorRef?.focus();
       }
     };
     this.onClickListItemMultiple = (listItemValue) => {
@@ -565,6 +584,33 @@ export class WppSelect {
         this.anchorRef?.focus();
         this.focusType = FOCUS_TYPE.TAB;
       }
+    };
+    // The `.wpp-list-item` class is stable even though the tag carries the versioned-build postfix,
+    // so the options are selected directly. Disabled items (tabindex -1) are skipped.
+    this.getPortalItems = () => Array.from(this.portalRef?.querySelectorAll('.wpp-list-item') ?? []).filter(el => el.tabIndex >= 0);
+    // Roving focus for the open dropdown list (W3C ARIA APG select pattern): Up/Down move DOM
+    // focus between options, Escape closes the popup and returns the focus ring to the anchor.
+    // Bound on the portal, so it keeps working after tippy relocates it into its body-level root.
+    this.onPortalKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        this.onKeyDownPortal(event);
+        return;
+      }
+      if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp')
+        return;
+      const items = this.getPortalItems();
+      if (!items.length)
+        return;
+      event.preventDefault();
+      const path = event.composedPath();
+      const currentIndex = items.findIndex(item => path.includes(item));
+      const step = event.key === 'ArrowDown' ? 1 : -1;
+      const nextIndex = currentIndex === -1
+        ? step === 1
+          ? 0
+          : items.length - 1
+        : Math.min(items.length - 1, Math.max(0, currentIndex + step));
+      items[nextIndex]?.focus();
     };
     this.onFocus = (event) => {
       this.wppFocus.emit(event);
@@ -886,7 +932,7 @@ export class WppSelect {
     return renderCombinedSelect.call(this);
   }
   static get is() { return "wpp-select"; }
-  static get registryIs() { return "wpp-select-v4-3-0"; }
+  static get registryIs() { return "wpp-select-v4-4-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

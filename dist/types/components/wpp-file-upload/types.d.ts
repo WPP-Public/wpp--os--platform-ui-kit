@@ -44,8 +44,30 @@ export interface FileUploadLocales {
   formatError: string;
   singleFileLimitError: string;
   multipleFileLimitError: string;
+  /**
+   * Screen-reader announcement made when a file is added successfully.
+   * Defaults to '<fileName> added'.
+   */
+  fileAdded?: (fileName: string) => string;
+  /**
+   * Screen-reader announcement made when a file is removed from the list.
+   * Defaults to '<fileName> removed'.
+   */
+  fileRemoved?: (fileName: string) => string;
+  /**
+   * Accessible name of the per-file delete control.
+   * Defaults to 'Remove file <fileName>'.
+   */
+  removeFile?: (fileName: string) => string;
 }
-export type FileUploadItemLocales = Pick<FileUploadLocales, 'sizeError' | 'formatError'>;
+export type FileUploadItemLocales = Pick<FileUploadLocales, 'sizeError' | 'formatError' | 'removeFile'>;
+/**
+ * Locales once `LOCALES_DEFAULTS` has filled in every key the consumer left out. Internal use
+ * only - `FileUploadLocales` stays the public shape so a consumer can keep annotating a complete
+ * translation object without having to supply the accessibility strings.
+ */
+export type ResolvedFileUploadLocales = Required<FileUploadLocales>;
+export type ResolvedFileUploadItemLocales = Required<FileUploadItemLocales>;
 export declare enum ScrollState {
   scroll = "scroll"
 }

@@ -16,6 +16,25 @@ describe('wpp-card', () => {
     });
     expect(page.root).toMatchSnapshot();
   });
+  describe('Testing the size prop', () => {
+    const getCard = (page) => page.root?.shadowRoot?.querySelector('.card');
+    it('should apply the matching size class by default', async () => {
+      const page = await newSpecPage({
+        components: [WppCard],
+        html: `<wpp-card><span>test context</span></wpp-card>`,
+      });
+      expect(getCard(page)).toHaveClass('size-m');
+    });
+    it('should apply "size-none" class when size="none", so that no padding is applied', async () => {
+      const page = await newSpecPage({
+        components: [WppCard],
+        html: `<wpp-card size="none"><span>test context</span></wpp-card>`,
+      });
+      const card = getCard(page);
+      expect(card).toHaveClass('size-none');
+      expect(card.className.split(' ').some(className => className.startsWith('size-'))).toBe(true);
+    });
+  });
   describe('subscribing to theme changes', () => {
     let mockStart;
     let mockStop;
