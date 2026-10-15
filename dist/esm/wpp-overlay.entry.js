@@ -1,4 +1,4 @@
-import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-93f63aaa.js';
+import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-a0877c3d.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
 import './theme-observer-b7886d19.js';
@@ -47,7 +47,7 @@ const WppOverlay = class {
   render() {
     return (h(Host, null, h("div", { class: this.getOverlayCssClasses(), style: { zIndex: this.zIndex.toString() }, onClick: this.handleClick })));
   }
-  static get registryIs() { return "wpp-overlay-v4-4-0"; }
+  static get registryIs() { return "wpp-overlay-v4-5-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "isVisible": ["handleVisibleChange"]

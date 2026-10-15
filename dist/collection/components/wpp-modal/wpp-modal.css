@@ -139,6 +139,9 @@
   max-width: 90vw;
   overflow: hidden auto;
 }
+.modal:focus, .modal:focus-visible {
+  outline: none;
+}
 .modal.visible {
   animation: modalAppearAboveCenterAnimations 0.2s linear;
   animation-delay: 0.15s;

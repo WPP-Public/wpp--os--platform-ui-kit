@@ -1,7 +1,7 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { BaseFormControl } from '../../interfaces/base-form-control';
 import { FOCUS_TYPE, DropdownConfig } from '../../types/common';
-import { FileItemType, FileUploadEventDetail, FileUploadResultFormaType, FileUploadLocales, ScrollState, FileUploadMessageType, FileUploadItemEventDetail, AcceptConfig, FileValidatorHandler, FileUploadErrorEventDetails } from './types';
+import { FileItemType, FileUploadEventDetail, FileUploadResultFormaType, FileUploadLocales, ScrollState, FileUploadMessageType, FileUploadItemEventDetail, AcceptConfig, FileValidatorHandler, FileUploadErrorEventDetails, FileProcessorHandler, FileUploadProcessingEventDetail } from './types';
 import { LabelConfig } from '../wpp-label/types';
 interface FocusType {
   wrapper: FOCUS_TYPE;
@@ -34,13 +34,25 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
   private messageId;
   private lastKeyWasTab;
   private themeSubscription;
+  private fileStatuses;
+  private controllers;
+  private hasWarnedAboutControlledProcessor;
+  private isChangeFlushScheduled;
+  private disconnectTimeout?;
   host: HTMLWppFileUploadElement;
   private hasTabFocus;
   scrollState: ScrollState | false;
   focusType: FocusType;
   isFileDrag: boolean;
+  isLabelHovered: boolean;
   errorList: FileItemType[];
   successList: FileItemType[];
+  /**
+   * All files in the order they were added. Rendering from this rather than
+   * from `[...successList, ...errorList]` keeps a file in place when it settles
+   * to an error asynchronously.
+   */
+  orderedFiles: FileItemType[];
   isLimitReached: boolean;
   liveAnnouncement: string;
   private focusItemAfterDelete;
@@ -65,14 +77,28 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
    */
   readonly format: FileUploadResultFormaType;
   /**
-   * Configuration for accepted file formats. This property allows you to specify supported file types
-   * using an object where the key is the MIME type and the value is an array of file extensions.
+   * Configuration for accepted file formats: an object whose key is a MIME type and whose value is
+   * an array of file extensions.
    *
    * Example:
    * {
    *   'image/png': ['.png'],
    *   'text/html': ['.htm', '.html']
    * }
+   *
+   * A key may also be a wildcard family such as `image/*`, which accepts the whole family the way
+   * the native `accept` attribute does:
+   * {
+   *   'image/*': []
+   * }
+   *
+   * Entries are combined as a union - a file only has to satisfy one of them. A single entry is an
+   * intersection: when it lists extensions, a file must match the entry's type AND carry one of
+   * those extensions. An entry with an empty array puts no extension restriction on the type, so
+   * it matches on the MIME type alone.
+   *
+   * Matching ignores casing. A file the browser reports with no type is typed from its extension
+   * where possible, and otherwise matched against the extensions the configuration lists.
    *
    * To allow all file types, pass an empty object (`{}`) or leave the property undefined.
    */
@@ -133,6 +159,24 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
    */
   readonly showOnlyNewErrors: boolean;
   /**
+   * Asynchronous processing applied to each newly added file - typically a call
+   * to your backend to upload, scan or validate it.
+   *
+   * While a processor runs the file is shown in the loading state. Resolve with
+   * nothing to mark the file done, resolve `{ error }` to fail it with a
+   * message, or reject to fail it using the error's `message`. Report progress
+   * with `context.onProgress(0-100)` and honour `context.signal` so work is
+   * cancelled when the file is removed.
+   *
+   * Pass an array to run several steps in sequence over the same file. They
+   * share one abort signal and stop at the first one that fails.
+   *
+   * Ignored when `controlled` is `true` - a controlled consumer already owns
+   * the file state and should drive `status`, `progress` and `processingError`
+   * through `value` instead.
+   */
+  readonly processor?: FileProcessorHandler | FileProcessorHandler[];
+  /**
    * Emitted when file downloads, returns only those files, that not have any error
    */
   readonly wppChange: EventEmitter<FileUploadEventDetail>;
@@ -157,11 +201,31 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
    */
   readonly wppError: EventEmitter<FileUploadErrorEventDetails>;
   /**
+   * Emitted when a file starts being processed by `processor`.
+   */
+  readonly wppFileProcessingStart: EventEmitter<FileUploadProcessingEventDetail>;
+  /**
+   * Emitted when a file finishes being processed by `processor`, successfully or not.
+   */
+  readonly wppFileProcessingEnd: EventEmitter<FileUploadProcessingEventDetail>;
+  /**
    * Method to reset FileUpload. Should be called only when the component is uncontrolled.
    */
   reset(): Promise<void>;
   private clearInputValue;
   private reInitValue;
+  /**
+   * Keeps files in the order they were first seen and appends anything new,
+   * so an async status change never reorders the list.
+   */
+  private buildOrderedFiles;
+  private getFileStatus;
+  /**
+   * Announces only terminal transitions. Progress updates are intentionally not
+   * announced - they are exposed on a progressbar instead, so a screen reader
+   * is not flooded on every percent.
+   */
+  private announceSettledFiles;
   protected onDisabledChange(disabled: boolean): void;
   onValueChange(newValue: FileItemType[]): void;
   componentDidLoad(): void;
@@ -189,13 +253,38 @@ export declare class WppFileUpload implements BaseFormControl<FileItemType[], Fi
   private displayErrorListByShowingOption;
   private handleFileLoad;
   private getFileErrorText;
+  private getProcessors;
+  /**
+   * A file already carrying a terminal status is passed through untouched, the
+   * same convention the shared upload pipeline uses between its own stages.
+   */
+  private shouldProcessFile;
+  private isFileStillPresent;
+  /** Re-assigns the list so Stencil re-renders after a file object was mutated. */
+  private refreshFiles;
+  private abortFile;
+  private abortAllFiles;
+  private processFiles;
+  private runProcessors;
+  /**
+   * Only the fields a processor is allowed to return are copied across. A real
+   * `File` exposes name/size/type as getters, so assigning them would throw.
+   */
+  private applyProcessorResult;
+  private getProcessingEventData;
+  /**
+   * Files that settle in the same tick produce a single `wppChange`, so a
+   * consumer bound to `hasError` is not re-rendered once per file.
+   */
+  private scheduleChangeFlush;
   private handleDrop;
   private handleDragOver;
   private handleDragEnter;
   private handleDragLeave;
   private handleChange;
   private handleListScroll;
-  private getAcceptExtensions;
+  private getAcceptTokens;
+  private getAcceptLabels;
   private isMaximumFilesSet;
   private isMaximumFilesReached;
   private getMessageText;

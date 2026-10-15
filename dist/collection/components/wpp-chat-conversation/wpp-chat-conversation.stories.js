@@ -9,6 +9,37 @@ export default {
   },
   argTypes: {},
 };
+// Reasoning and verbosity levels as the platform passes them per LLM (WPPOPENDS-1593). The
+// conversation forwards the chat input's model props and re-emits its model events, so the story
+// seeds them here to exercise both submenus.
+const REASONING_OPTIONS = [
+  { id: 'none', label: 'None' },
+  { id: 'auto', label: 'Auto', caption: 'Adapts to request complexity' },
+  { id: 'minimal', label: 'Minimal', caption: 'Fastest with basic reasoning' },
+  { id: 'low', label: 'Low', caption: 'Quick with light reasoning' },
+  { id: 'medium', label: 'Medium', caption: 'Balanced with moderate reasoning' },
+  { id: 'high', label: 'High', caption: 'Thorough with deep reasoning' },
+];
+const VERBOSITY_OPTIONS = [
+  { id: 'low', label: 'Low', caption: 'Concise and direct' },
+  { id: 'medium', label: 'Medium', caption: 'Balanced and contextual' },
+  { id: 'high', label: 'High', caption: 'Comprehensive and detailed' },
+];
+const MOCK_MODELS = [
+  {
+    id: 'gpt-5-4-mini',
+    label: 'GPT 5.4 Mini',
+    logo: 'https://public-assets.os.wpp.com/logos/ai-openai.svg',
+    reasoningOptions: REASONING_OPTIONS,
+    verbosityOptions: VERBOSITY_OPTIONS,
+  },
+  {
+    id: 'gemini-3-5-flash',
+    label: 'Gemini 3.5 Flash',
+    logo: 'https://public-assets.os.wpp.com/logos/ai-gemini.svg',
+    reasoningOptions: REASONING_OPTIONS,
+  },
+];
 const MOCK_RESPONSES = [
   `## Greeting Function in JavaScript
 
@@ -334,18 +365,47 @@ export const Default = {
     const referenceTag = transformToVersionedTag('wpp-chat-reference');
     let isStreaming = false;
     let currentStreamId = 0;
+    /** Text captured by the Quote action, waiting to be consumed by the next send. */
+    let pendingQuote = null;
     const msgElements = new Map();
-    const actionBarActions = [
-      { text: 'Action 1', onClick: () => console.log('Action 1 clicked') },
-      { text: 'Action 2', onClick: () => console.log('Action 2 clicked') },
-      { text: 'Action 3', onClick: () => console.log('Action 3 clicked') },
-      { text: 'Action 4', onClick: () => console.log('Action 4 clicked') },
+    // Overrides merge onto the built-in Quote / Copy / Pin defaults BY ID, so only the pin's live
+    // state needs restating. Copy is handled by the component itself.
+    const pinnedIds = new Set();
+    const getActionBarActions = (messageId) => [
+      { id: 'quote', onClick: () => console.log('Quote clicked') },
+      { id: 'pin', isActive: pinnedIds.has(messageId) },
     ];
+    // Kept to exercise the deprecated `sourcesActionConfig` path, which still renders on any
+    // message that has no `tokenCount`.
     const sourcesActionConfig = {
       text: '3 Sources',
       ariaProps: { label: `Action button with sources` },
       onClick: () => console.log(`Action sources clicked`),
     };
+    /**
+     * Renders the quoted text as a `wpp-chat-reference` in the conversation's `input-references`
+     * slot, which wpp-chat-conversation forwards to the composer's own references slot.
+     */
+    function showQuotedChip(text) {
+      const convEl = getConvEl();
+      if (!convEl)
+        return;
+      clearQuotedChip();
+      const chip = document.createElement(referenceTag);
+      chip.setAttribute('slot', 'input-references');
+      chip.type = 'text';
+      chip.text = text.trim();
+      chip.lines = 2;
+      chip.addEventListener('wppClose', clearQuotedChip);
+      convEl.appendChild(chip);
+      pendingQuote = text.trim();
+    }
+    /** Removes the composer chip and drops the pending quote, whether it was sent or dismissed. */
+    function clearQuotedChip() {
+      const convEl = getConvEl();
+      convEl?.querySelectorAll(`${referenceTag}[slot="input-references"]`).forEach((node) => node.remove());
+      pendingQuote = null;
+    }
     function getConvEl() {
       return document.querySelector(transformToVersionedTag('wpp-chat-conversation'));
     }
@@ -356,8 +416,41 @@ export const Default = {
       el.content = content;
       el.status = status;
       if (role === 'assistant') {
-        el.actionButtonsConfig = actionBarActions;
-        el.sourcesActionConfig = sourcesActionConfig;
+        el.actionButtonsConfig = getActionBarActions(id);
+        // Every other assistant response shows a token count, so the story covers BOTH the new
+        // token-count tag and the deprecated sources button it supersedes.
+        if (msgElements.size % 2 === 0) {
+          el.tokenCount = '30,000';
+        }
+        else {
+          el.sourcesActionConfig = sourcesActionConfig;
+        }
+        el.addEventListener('wppMessageActionClick', (event) => {
+          const { action, content } = event.detail;
+          console.log('[wppMessageActionClick]', {
+            actionId: action.id,
+            isActive: action.isActive,
+            messageId: id,
+            contentPreview: `${content.slice(0, 60)}${content.length > 60 ? '…' : ''}`,
+          });
+          // Quote drops the response into the composer as a reference chip, which is what the
+          // action is for — the component emits, the app decides where the quote lands.
+          if (action.id === 'quote') {
+            showQuotedChip(content);
+            return;
+          }
+          if (action.id !== 'pin')
+            return;
+          // Pin is CONTROLLED here so the story also covers that path; leaving `isActive` unset
+          // would let the component toggle itself.
+          if (pinnedIds.has(id)) {
+            pinnedIds.delete(id);
+          }
+          else {
+            pinnedIds.add(id);
+          }
+          el.actionButtonsConfig = getActionBarActions(id);
+        });
       }
       if (attachments?.length) {
         el.attachments = attachments;
@@ -493,6 +586,10 @@ export const Default = {
           el.addEventListener('wppSend', handleSend);
           el.addEventListener('wppStop', handleStop);
           el.addEventListener('wppMessageChanged', (e) => console.log('Message changed:', e.detail));
+          el.addEventListener('wppModelSelect', (e) => console.log('Select model event:', e.detail));
+          el.addEventListener('wppModelBrowse', () => console.log('Browse model event'));
+          el.addEventListener('wppReasoningSelect', (e) => console.log('Reasoning select event:', e.detail));
+          el.addEventListener('wppVerbositySelect', (e) => console.log('Verbosity select event:', e.detail));
         }
       }
       if (el) {
@@ -500,6 +597,10 @@ export const Default = {
           enableAttach: true,
           debounceEnabled: false,
           isGenerating: isStreaming,
+          models: MOCK_MODELS,
+          // A custom model is what puts the Reasoning and Verbosity rows in the dropdown; the
+          // levels are left out so the component applies its documented defaults.
+          selectedModel: MOCK_MODELS[0],
           locales: { stopLabel: 'Stop response' },
           ariaProps: { stopButton: { label: 'Stop response' } },
           fileUploadConfig: {
@@ -515,8 +616,56 @@ export const Default = {
           },
           ...args.chatInputConfig,
         };
+        seedFooterMessages(el);
       }
     };
+    /**
+     * Seeds one exchange so the WPPOPENDS-1594 footer is visible WITHOUT typing: a pinned response
+     * carrying a token count, and a second response falling back to the deprecated sources button.
+     * The versioned Storybook build does not re-render on interaction, so the pinned state has to
+     * be seeded rather than clicked.
+     */
+    function seedFooterMessages(convEl) {
+      if (convEl.dataset.footerSeeded === 'true')
+        return;
+      convEl.dataset.footerSeeded = 'true';
+      const seed = [
+        { id: 'seed-user-1', role: 'user', content: 'Summarise the campaign brief.' },
+        {
+          id: 'seed-assistant-1',
+          role: 'assistant',
+          content: 'Pinned response with a token count — the pin renders in its filled state.',
+          pinned: true,
+        },
+        {
+          id: 'seed-assistant-2',
+          role: 'assistant',
+          content: 'Second response showing the deprecated sources button instead of a token count.',
+          pinned: false,
+        },
+      ];
+      seed.forEach(message => {
+        if (message.role === 'assistant' && message.pinned) {
+          pinnedIds.add(message.id);
+        }
+        const el = createMessageEl(message.id, message.role, message.content, 'complete');
+        if (message.role === 'assistant') {
+          // Set both states explicitly rather than leaning on createMessageEl's alternating
+          // default, so the seeded pair always covers the token count AND the deprecated sources.
+          if (message.pinned) {
+            el.tokenCount = '30,000';
+            el.sourcesActionConfig = undefined;
+          }
+          else {
+            el.tokenCount = undefined;
+            el.sourcesActionConfig = sourcesActionConfig;
+          }
+          el.actionButtonsConfig = getActionBarActions(message.id);
+        }
+        convEl.appendChild(el);
+        msgElements.set(message.id, el);
+      });
+    }
     async function handleSend(event) {
       const message = event.detail.message;
       if (!message.trim() || isStreaming)
@@ -547,6 +696,18 @@ export const Default = {
         userAttachments = [...images, ...files];
       }
       const userMsgEl = createMessageEl(userId, 'user', message, 'complete', userAttachments);
+      // A pending quote is CONSUMED by the send: it rides along on the user's message as a text
+      // reference and the composer chip is cleared. Without this the chip just sits in the
+      // composer forever and the quote never reaches the conversation.
+      if (pendingQuote) {
+        const quoteChip = document.createElement(referenceTag);
+        quoteChip.type = 'text';
+        quoteChip.text = pendingQuote;
+        quoteChip.lines = 2;
+        quoteChip.removable = false;
+        userMsgEl.appendChild(quoteChip);
+        clearQuotedChip();
+      }
       msgElements.set(userId, userMsgEl);
       convEl.appendChild(userMsgEl);
       const assistantMsgEl = createMessageEl(assistantId, 'assistant', '', 'loading');

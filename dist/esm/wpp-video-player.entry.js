@@ -1,5 +1,6 @@
-import { h, F as Fragment, r as registerInstance, H as Host, g as getElement } from './index-93f63aaa.js';
-import { y as mergeLocales } from './utils-a4b26a20.js';
+import { h, F as Fragment, r as registerInstance, H as Host, g as getElement } from './index-a0877c3d.js';
+import { y as mergeLocales } from './utils-f7e38fc9.js';
+import { p as placeVolumeSlider, r as renderVolumeBarComponent } from './wpp-volume-bar-cab33a71.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
 import './consts-744c144f.js';
 import './theme-observer-b7886d19.js';
@@ -12,20 +13,16 @@ const PADDING_CHAR = '0';
  * Format time in seconds to a string representation
  * @param format - 'default' returns time as 'MM:SS', 'extended' returns 'HH:MM:SS'
  * @param timeInSeconds - Time in seconds to format
- * @param split - If true, the time will be split into hours, minutes and seconds. If false, the time will be formatted as 'MM:SS' or 'HH:MM:SS'
  * @returns Formatted time string in 'MM:SS' or 'HH:MM:SS' format
  * @throws Error if timeInSeconds is negative
  */
-const formatTime = (format = 'default', timeInSeconds, split = false) => {
+const formatTime = (format = 'default', timeInSeconds) => {
   if (timeInSeconds < 0)
     throw new Error('Time cannot be negative');
   const formatTwoDigits = (value) => Math.floor(value).toString().padStart(TIME_PADDING, PADDING_CHAR);
   const hours = formatTwoDigits(timeInSeconds / SECONDS_IN_HOUR);
   const minutes = formatTwoDigits((timeInSeconds % SECONDS_IN_HOUR) / SECONDS_IN_MINUTE);
   const seconds = formatTwoDigits(timeInSeconds % SECONDS_IN_MINUTE);
-  if (split) {
-    return format === 'extended' ? { hours, minutes, seconds } : { minutes, seconds };
-  }
   return format === 'extended' ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
 };
 const calculateBufferProgress = (videoPlayerRef) => {
@@ -65,15 +62,6 @@ const calculateBufferProgress = (videoPlayerRef) => {
   return Math.round(loadedPercentage * 100) / 100;
 };
 
-const INIT_SPLIT_TIME_FORMAT = {
-  minutes: '00',
-  seconds: '00',
-};
-const INIT_SPLIT_TIME_FORMAT_W_HOURS = {
-  hours: '00',
-  minutes: '00',
-  seconds: '00',
-};
 const LOCALES_DEFAULTS = {
   notSupportedPlayer: 'Your browser does not support the video tag.',
   hostAriaLabel: 'Video player component',
@@ -98,6 +86,8 @@ const LOCALES_DEFAULTS = {
   fullscreenButtonAriaLabel: 'Fullscreen button',
   videoProgressLabel: 'Video progress',
   videoProgressAriaLabel: 'Seek video timeline',
+  currentTimeAriaLabel: 'Current time',
+  durationAriaLabel: 'Total time',
   languageMenuAriaLabel: 'Language menu',
   videoCaptionsAriaLabel: 'Video captions',
   keyboardShortcutsDescription: {
@@ -117,40 +107,12 @@ function renderSeekBarComponent() {
     h("div", { class: "progress-container" },
       h("div", { class: "loading-progress", style: { width: `${this.loadedPercentage}%` }, "aria-hidden": "true" }),
       h("label", { htmlFor: id, class: "sr-only" }, this._locales.videoProgressLabel),
-      h("input", { ref: ref => (this.seekBarRef = ref), id: id, class: "progress-bar", type: "range", min: 0, max: this.overallVideoTime, step: 0.01, value: this.currentVideoTime, onInput: this.handleSeek, "aria-label": this._locales.videoProgressAriaLabel, "aria-valuemin": "0", "aria-valuemax": this.overallVideoTime, "aria-valuenow": this.currentVideoTime, autocomplete: "off" }))));
+      h("input", { ref: ref => (this.seekBarRef = ref), id: id, class: "progress-bar", type: "range", min: 0, max: this.overallVideoTime, step: "any", value: this.currentVideoTime, onInput: this.handleSeek, "aria-label": this._locales.videoProgressAriaLabel, "aria-valuemin": "0", "aria-valuemax": this.overallVideoTime, "aria-valuenow": this.currentVideoTime, autocomplete: "off" }))));
 }
 
-function renderVideoCurrentTimeComponent(time) {
-  const ariaLabel = time.hours ? `${time.hours}:${time.minutes}:${time.seconds}` : `${time.minutes}:${time.seconds}`;
-  return (h(Fragment, null,
-    h("wpp-typography-v4-4-0", { class: "video-time", type: "xs-body" },
-      h("span", { class: "wrapper", role: "timer", "aria-label": ariaLabel },
-        time.hours && (h(Fragment, null,
-          h("span", { class: "time-wrapper", role: "presentation" },
-            h("span", { class: "time-placeholder", "aria-hidden": "true" }, "44"),
-            h("span", { class: "time-value" },
-              h("span", null, time.hours[0]),
-              h("span", null, time.hours[1]))),
-          h("span", { class: "time-separator", role: "presentation" }, ":"))),
-        h("span", { class: "time-wrapper", role: "presentation" },
-          h("span", { class: "time-placeholder", "aria-hidden": "true" }, "44"),
-          h("span", { class: "time-value" },
-            h("span", null, time.minutes[0]),
-            h("span", null, time.minutes[1]))),
-        h("span", { class: "time-separator", role: "presentation" }, ":"),
-        h("span", { class: "time-wrapper", role: "presentation" },
-          h("span", { class: "time-placeholder", "aria-hidden": "true" }, "44"),
-          h("span", { class: "time-value" },
-            h("span", null, time.seconds[0]),
-            h("span", null, time.seconds[1])))))));
-}
-
-function renderVolumeBarComponent() {
-  return (h("div", { ref: ref => (this.volumeContainerRef = ref), class: "volume-container", onMouseEnter: this.handleSliderShow, onMouseLeave: () => this.handleSliderHide(300) },
-    h("wpp-action-button-v4-4-0", { ref: ref => (this.volumeButtonRef = ref), class: "volume-button", variant: "inverted", onClick: this.toggleMute, onFocus: this.handleSliderShow, onFocusout: () => this.handleSliderHide(300), ariaProps: { label: this._locales.volumeButtonAriaLabel } }, this.volume === 0 ? (h("wpp-icon-speaker-mute-v4-4-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-speaker-v4-4-0", { slot: "icon-start", "aria-hidden": "true" }))),
-    h("div", { ref: ref => (this.volumeBarContainerRef = ref), class: "slider-container" },
-      h("label", { htmlFor: "volume-slider", class: "sr-only" }, this._locales.volumeProgressLabel),
-      h("input", { ref: ref => (this.volumeBarRef = ref), style: { '--progress-bar-progress': `${this.volume * 100}%` }, class: "progress-bar", id: "volume-slider", type: "range", min: 0, max: 1, step: 0.01, value: this.volume, onInput: this.handleVolume, "aria-label": "Volume control bar", "aria-valuemin": "0", "aria-valuemax": "1", "aria-valuenow": this.volume.toString(), autocomplete: "off", onFocus: this.handleSliderShow, onFocusout: () => this.handleSliderHide(300) }))));
+function renderVideoCurrentTimeComponent(time, label) {
+  return (h("wpp-typography-v4-5-0", { class: "video-time", type: "xs-body", part: "time" },
+    h("span", { role: "timer", "aria-label": `${label} ${time}` }, time)));
 }
 
 function renderCaptionsComponent() {
@@ -185,7 +147,7 @@ function renderAccessibilityInstructionsComponent() {
         !this.controlPanelConfigDefault.showFullscreenButton && (h("li", null, this._locales.keyboardShortcutsDescription.fullscreen)))))));
 }
 
-const wppVideoPlayerCss = ".progress-container{width:100%;position:relative;height:4px;border-radius:8px;background-color:rgba(255, 255, 255, 0.3)}.loading-progress{position:absolute;top:0;left:0;height:100%;border-radius:8px;background-color:rgba(255, 255, 255, 0.3);z-index:1;pointer-events:none;max-width:100%}.video-time{cursor:default;color:var(--wpp-grey-color-000)}.wrapper{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap}.time-wrapper{position:relative}.time-placeholder{opacity:0;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.time-value{position:absolute;top:0;left:0;width:100%;display:grid;grid-template-columns:repeat(2, 1fr);text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.volume-container{position:relative}.slider-container{position:absolute;top:-68px;left:50%;height:32px;width:80px;border-radius:6px;background-color:rgba(0, 0, 0, 0.6);-webkit-transform:translateX(-50%) rotate(270deg);transform:translateX(-50%) rotate(270deg);-webkit-transform-origin:center center;transform-origin:center center;opacity:0;pointer-events:none;-webkit-transition:opacity 0.15s ease-in-out;transition:opacity 0.15s ease-in-out}.slider-container.active{opacity:1;pointer-events:initial}.slider-container .progress-bar{width:64px;height:auto;left:50%;top:50%;-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.wpp-action-button::part(button).hover-active{color:var(--ab-inverted-text-color-hover)}.wpp-action-button::part(button).hover-active~.overlay{background-color:var(--ab-inverted-bg-color-hover)}.wpp-action-button::part(button).hover-active .icon-start ::slotted(*),.wpp-action-button::part(button).hover-active .icon-end ::slotted(*){color:var(--ab-inverted-icon-color-hover)}.progress-bar{cursor:pointer;-webkit-appearance:none;-moz-appearance:none;appearance:none;background:transparent;position:absolute;width:100%;height:100%;z-index:2;margin:0;padding:0;}.progress-bar:focus{outline:none}.progress-bar::-webkit-slider-runnable-track{width:100%;height:4px;border-radius:8px;background:-webkit-gradient(linear, left top, right top, from(#fff), to(rgba(255, 255, 255, 0.3)));background:linear-gradient(to right, #fff var(--progress-bar-progress, 0%), rgba(255, 255, 255, 0.3) var(--progress-bar-progress, 0%))}.progress-bar::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:12px;height:12px;border-radius:50%;background-color:#fff;cursor:pointer;border:none;margin-top:-4px;}.progress-bar::-moz-range-track{width:100%;height:4px;background-color:rgba(255, 255, 255, 0.3);border-radius:8px;border:none}.progress-bar::-moz-range-progress{height:4px;background-color:#fff;border-radius:8px;border:none}.progress-bar::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background-color:#fff;cursor:pointer;border:none}.progress-bar::-ms-track{width:100%;height:4px;background:transparent;border-color:transparent;color:transparent;border-radius:8px}.progress-bar::-ms-fill-lower{background-color:#fff;border-radius:8px}.progress-bar::-ms-fill-upper{background-color:rgba(255, 255, 255, 0.3);border-radius:8px}.progress-bar::-ms-thumb{width:12px;height:12px;border-radius:50%;background-color:#fff;cursor:pointer;border:none}.progress-bar:focus-visible{border-radius:4px;outline:none;-webkit-box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000);box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000)}.progress-bar:focus-visible::-webkit-slider-thumb{-webkit-box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000);box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000)}.progress-bar:focus-visible::-moz-range-thumb{box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000)}@media (forced-colors: active){.progress-bar:focus-visible,.progress-bar.tab-focus{outline:2px solid CanvasText}.progress-bar:focus-visible::-webkit-slider-thumb,.progress-bar.tab-focus::-webkit-slider-thumb{outline:2px solid CanvasText}.progress-bar:focus-visible::-moz-range-thumb,.progress-bar.tab-focus::-moz-range-thumb{outline:2px solid CanvasText}}.captions-wrapper{position:absolute;bottom:60px;left:0;right:0;text-align:center;z-index:10;pointer-events:none;opacity:0;-webkit-transition:opacity 0.15s ease-in-out, bottom 0.15s ease-in-out;transition:opacity 0.15s ease-in-out, bottom 0.15s ease-in-out}.captions-wrapper.caption-enabled{opacity:1}.caption-cue{display:inline-block;font-family:Arial, sans-serif;font-size:1.2rem;color:white;background-color:rgba(0, 0, 0, 0.7);padding:0.3em 0.7em;margin:0.2em;border-radius:0.2em;max-width:80%;text-shadow:1px 1px 1px black}:host{display:-ms-flexbox;display:flex;position:relative;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;background-color:#000;color:#fff;outline:none}:host:host(.wpp-full-screen) .video-player{width:100% !important;height:100% !important}:host:host(.wpp-full-screen) .controls-bar{bottom:16px;width:100%;max-width:62.5%}.video-player{aspect-ratio:var(--aspect-ratio, 16/9)}.controls{background-size:cover;background-position:center;cursor:pointer;position:absolute;width:100%;height:100%;-webkit-transition:opacity 0.15s ease-in-out;transition:opacity 0.15s ease-in-out}.controls.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-900), 0 0 0 3px var(--wpp-grey-color-000);box-shadow:0 0 0 1px var(--wpp-grey-color-900), 0 0 0 3px var(--wpp-grey-color-000)}.controls.state-idle{cursor:default;background-color:var(--wpp-grey-color-800)}.controls.state-idle .play-button{display:-ms-flexbox;display:flex}.controls.state-idle .controls-bar{opacity:0;pointer-events:none}.controls.state-playing,.controls.state-paused{background-image:none !important;background-color:transparent}.controls.state-playing .play-button,.controls.state-paused .play-button{display:none}.controls.state-playing .controls-bar,.controls.state-paused .controls-bar{opacity:1;pointer-events:initial}.controls.state-playing.invisible .controls-bar{opacity:0;pointer-events:none}.controls.state-playing.invisible .captions-wrapper{bottom:8px}.play-button{--wpp-icon-color:#fff;border:none;cursor:pointer;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%, -50%) scale(0.875);transform:translate(-50%, -50%) scale(0.875);width:66px;height:66px;padding:2px;overflow:hidden;border-radius:50%;background-color:rgba(0, 0, 0, 0.6);-webkit-transition:background-color 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out;transition:background-color 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out;transition:transform 0.15s ease-in-out, background-color 0.15s ease-in-out;transition:transform 0.15s ease-in-out, background-color 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out;z-index:1}.play-button:hover{-webkit-transform:translate(-50%, -50%) scale(1);transform:translate(-50%, -50%) scale(1);background-color:rgba(0, 0, 0, 0.72)}.play-button:active{-webkit-transform:translate(-50%, -50%) scale(0.875);transform:translate(-50%, -50%) scale(0.875);background-color:rgba(0, 0, 0, 0.78)}.play-button::part(overlay){display:none}.play-button::part(button){border-radius:50%;width:100%;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center}.play-button.invisible{visibility:hidden;z-index:-1}.controls-bar{-webkit-box-sizing:border-box;box-sizing:border-box;display:-ms-flexbox;display:flex;gap:8px;-ms-flex-align:center;align-items:center;position:absolute;bottom:8px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);background-color:rgba(0, 0, 0, 0.6);padding:6px 8px;border-radius:6px;width:calc(100% - 32px);-webkit-transition:opacity 0.15s ease-in-out;transition:opacity 0.15s ease-in-out;cursor:default;z-index:10}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0}:host([data-wpp-theme=dark]){--wpp-prop-icon-color:var(--wpp-grey-color-1000)}:host([data-wpp-theme=dark]) .video-time{--wpp-text-color:var(--wpp-grey-color-1000);color:var(--wpp-grey-color-1000)}:host([data-wpp-theme=dark]) .wpp-icon-play-filled,:host([data-wpp-theme=dark]) .wpp-icon-pause-filled,:host([data-wpp-theme=dark]) .wpp-icon-speaker,:host([data-wpp-theme=dark]) .wpp-icon-fullscreen{color:var(--wpp-grey-color-1000)}";
+const wppVideoPlayerCss = ".progress-container{width:100%;position:relative;height:4px;border-radius:8px;background-color:rgba(255, 255, 255, 0.3)}.loading-progress{position:absolute;top:0;left:0;height:100%;border-radius:8px;background-color:rgba(255, 255, 255, 0.3);z-index:1;pointer-events:none;max-width:100%}.video-time{cursor:default;color:var(--wpp-grey-color-000);font-variant-numeric:tabular-nums;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.volume-container{position:relative}.slider-container{position:absolute;top:-68px;left:50%;height:32px;width:80px;border-radius:6px;background-color:rgba(0, 0, 0, 0.6);-webkit-transform:translateX(-50%) rotate(270deg);transform:translateX(-50%) rotate(270deg);-webkit-transform-origin:center center;transform-origin:center center;opacity:0;visibility:hidden;pointer-events:none;-webkit-transition:opacity 0.15s ease-in-out, visibility 0s linear 0.15s;transition:opacity 0.15s ease-in-out, visibility 0s linear 0.15s}.slider-container.below{top:auto;bottom:-68px}.slider-container.active{opacity:1;visibility:visible;pointer-events:initial;-webkit-transition:opacity 0.15s ease-in-out, visibility 0s;transition:opacity 0.15s ease-in-out, visibility 0s}.slider-container .progress-bar{width:64px;height:auto;left:50%;top:50%;-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.slider-container .progress-bar::-webkit-slider-thumb{width:12px;height:12px;margin-top:-4px;}.slider-container .progress-bar::-moz-range-thumb{width:12px;height:12px}.volume-container.open .volume-button::part(overlay){background-color:var(--ab-bg-color-hover);opacity:var(--ab-bg-opacity-hover)}.volume-container.open .volume-button>[slot=icon-start]{color:var(--ab-secondary-icon-color-hover)}.volume-container.open.inverted .volume-button::part(overlay){background-color:var(--ab-inverted-bg-color-hover)}.volume-container.open.inverted .volume-button>[slot=icon-start]{color:var(--ab-inverted-icon-color-hover)}@media (prefers-reduced-motion: reduce){.slider-container,.slider-container.active{-webkit-transition:none;transition:none}}.volume-container.open .volume-button::part(overlay){background-color:var(--ab-bg-color-hover);opacity:var(--ab-bg-opacity-hover)}.volume-container.open .volume-button>[slot=icon-start]{color:var(--ab-secondary-icon-color-hover)}.volume-container.open.inverted .volume-button::part(overlay){background-color:var(--ab-inverted-bg-color-hover)}.volume-container.open.inverted .volume-button>[slot=icon-start]{color:var(--ab-inverted-icon-color-hover)}@media (prefers-reduced-motion: reduce){.slider-container,.slider-container.active{-webkit-transition:none;transition:none}}.progress-bar{cursor:pointer;-webkit-appearance:none;-moz-appearance:none;appearance:none;background:transparent;position:absolute;width:100%;height:100%;z-index:2;margin:0;padding:0;}.progress-bar:focus{outline:none}.progress-bar::-webkit-slider-runnable-track{width:100%;height:4px;border-radius:8px;background:-webkit-gradient(linear, left top, right top, from(#fff), to(rgba(255, 255, 255, 0.3)));background:linear-gradient(to right, #fff var(--progress-bar-progress, 0%), rgba(255, 255, 255, 0.3) var(--progress-bar-progress, 0%))}.progress-bar::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:12px;height:12px;border-radius:50%;background-color:#fff;cursor:pointer;border:none;margin-top:-4px;}.progress-bar::-moz-range-track{width:100%;height:4px;background-color:rgba(255, 255, 255, 0.3);border-radius:8px;border:none}.progress-bar::-moz-range-progress{height:4px;background-color:#fff;border-radius:8px;border:none}.progress-bar::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background-color:#fff;cursor:pointer;border:none}.progress-bar::-ms-track{width:100%;height:4px;background:transparent;border-color:transparent;color:transparent;border-radius:8px}.progress-bar::-ms-fill-lower{background-color:#fff;border-radius:8px}.progress-bar::-ms-fill-upper{background-color:rgba(255, 255, 255, 0.3);border-radius:8px}.progress-bar::-ms-thumb{width:12px;height:12px;border-radius:50%;background-color:#fff;cursor:pointer;border:none}.progress-bar:focus-visible{border-radius:4px;outline:none;-webkit-box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000);box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000)}.progress-bar:focus-visible::-webkit-slider-thumb{-webkit-box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000);box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000)}.progress-bar:focus-visible::-moz-range-thumb{box-shadow:0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--wpp-grey-color-000)}@media (forced-colors: active){.progress-bar:focus-visible,.progress-bar.tab-focus{outline:2px solid CanvasText}.progress-bar:focus-visible::-webkit-slider-thumb,.progress-bar.tab-focus::-webkit-slider-thumb{outline:2px solid CanvasText}.progress-bar:focus-visible::-moz-range-thumb,.progress-bar.tab-focus::-moz-range-thumb{outline:2px solid CanvasText}}.captions-wrapper{position:absolute;bottom:60px;left:0;right:0;text-align:center;z-index:10;pointer-events:none;opacity:0;-webkit-transition:opacity 0.15s ease-in-out, bottom 0.15s ease-in-out;transition:opacity 0.15s ease-in-out, bottom 0.15s ease-in-out}.captions-wrapper.caption-enabled{opacity:1}.caption-cue{display:inline-block;font-family:Arial, sans-serif;font-size:1.2rem;color:white;background-color:rgba(0, 0, 0, 0.7);padding:0.3em 0.7em;margin:0.2em;border-radius:0.2em;max-width:80%;text-shadow:1px 1px 1px black}:host{display:-ms-flexbox;display:flex;position:relative;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;background-color:#000;color:#fff;outline:none}:host:host(.wpp-full-screen) .video-player{width:100% !important;height:100% !important}:host:host(.wpp-full-screen) .controls-bar{bottom:16px;width:100%;max-width:62.5%}.video-player{aspect-ratio:var(--aspect-ratio, 16/9)}.controls{background-size:cover;background-position:center;cursor:pointer;position:absolute;width:100%;height:100%;-webkit-transition:opacity 0.15s ease-in-out;transition:opacity 0.15s ease-in-out}.controls.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-900), 0 0 0 3px var(--wpp-grey-color-000);box-shadow:0 0 0 1px var(--wpp-grey-color-900), 0 0 0 3px var(--wpp-grey-color-000)}.controls.state-idle{cursor:default;background-color:var(--wpp-grey-color-800)}.controls.state-idle .play-button{display:-ms-flexbox;display:flex}.controls.state-idle .controls-bar{opacity:0;pointer-events:none}.controls.state-playing,.controls.state-paused{background-image:none !important;background-color:transparent}.controls.state-playing .play-button,.controls.state-paused .play-button{display:none}.controls.state-playing .controls-bar,.controls.state-paused .controls-bar{opacity:1;pointer-events:initial}.controls.state-playing.invisible .controls-bar,.controls.state-paused.invisible .controls-bar{opacity:0;pointer-events:none}.controls.state-playing.invisible .captions-wrapper,.controls.state-paused.invisible .captions-wrapper{bottom:8px}.play-button{--wpp-icon-color:#fff;border:none;cursor:pointer;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%, -50%) scale(0.875);transform:translate(-50%, -50%) scale(0.875);width:66px;height:66px;padding:2px;overflow:hidden;border-radius:50%;background-color:rgba(0, 0, 0, 0.6);-webkit-transition:background-color 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out;transition:background-color 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out;transition:transform 0.15s ease-in-out, background-color 0.15s ease-in-out;transition:transform 0.15s ease-in-out, background-color 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out;z-index:1}.play-button:hover{-webkit-transform:translate(-50%, -50%) scale(1);transform:translate(-50%, -50%) scale(1);background-color:rgba(0, 0, 0, 0.72)}.play-button:active{-webkit-transform:translate(-50%, -50%) scale(0.875);transform:translate(-50%, -50%) scale(0.875);background-color:rgba(0, 0, 0, 0.78)}.play-button::part(overlay){display:none}.play-button::part(button){border-radius:50%;width:100%;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center}.play-button.invisible{visibility:hidden;z-index:-1}.controls-bar{-webkit-box-sizing:border-box;box-sizing:border-box;display:-ms-flexbox;display:flex;gap:8px;-ms-flex-align:center;align-items:center;position:absolute;bottom:8px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);background-color:rgba(0, 0, 0, 0.6);padding:6px 8px;border-radius:6px;width:calc(100% - 32px);-webkit-transition:opacity 0.15s ease-in-out;transition:opacity 0.15s ease-in-out;cursor:default;z-index:10}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0}:host([data-wpp-theme=dark]){--wpp-prop-icon-color:var(--wpp-grey-color-1000)}:host([data-wpp-theme=dark]) .video-time{--wpp-text-color:var(--wpp-grey-color-1000);color:var(--wpp-grey-color-1000)}:host([data-wpp-theme=dark]) .wpp-icon-play-filled,:host([data-wpp-theme=dark]) .wpp-icon-pause-filled,:host([data-wpp-theme=dark]) .wpp-icon-speaker,:host([data-wpp-theme=dark]) .wpp-icon-fullscreen{color:var(--wpp-grey-color-1000)}";
 
 const WppVideoPlayer = class {
   constructor(hostRef) {
@@ -299,9 +261,7 @@ const WppVideoPlayer = class {
         return;
       if (this.videoPlayerRef.duration > 3600) {
         this.timeFormat = 'extended';
-        this.splitCurrentVideoTime = INIT_SPLIT_TIME_FORMAT_W_HOURS;
       }
-      this.splitOverallVideoTime = formatTime(this.timeFormat, this.videoPlayerRef.duration, true);
       this.overallVideoTime = this.videoPlayerRef.duration;
       if (this.videoPlayerRef.videoWidth && this.videoPlayerRef.videoHeight) {
         this.aspectRatio = (this.videoPlayerRef.videoWidth / this.videoPlayerRef.videoHeight).toString();
@@ -332,30 +292,51 @@ const WppVideoPlayer = class {
       }
     };
     this.handleVideoEnded = () => {
-      if (this.videoPlayerRef && this.controlPanelConfigDefault.autoplay && !this.controlPanelConfigDefault.loop) {
-        this.videoPlayerRef.currentTime = 0;
+      // The last `timeupdate` can land slightly before the end, so pin the progress to the full duration
+      if (this.videoPlayerRef) {
+        this.currentVideoTime = this.videoPlayerRef.duration;
       }
-      this.videoPlayerState = 'idle';
-      this.hideControls();
+      // Autoplay has no controls bar, so it falls back to the main play button to replay
+      if (this.controlPanelConfigDefault.autoplay) {
+        this.videoPlayerState = 'idle';
+        return;
+      }
+      this.videoPlayerState = 'paused';
     };
     this.handleSliderShow = () => this.volumeSliderShow();
     this.handleSliderHide = (delay) => this.volumeSliderHide(delay);
+    /** The container's `open` class keeps the mute button in its hover look while the slider shows. */
     this.volumeSliderShow = () => {
       if (!this.volumeBarContainerRef || !this.volumeButtonRef)
         return;
       clearTimeout(this.hoverTimeout);
-      const btnEl = this.volumeButtonRef?.shadowRoot?.querySelector('.inverted');
+      placeVolumeSlider(this.volumeContainerRef, this.volumeBarContainerRef);
       this.volumeBarContainerRef.classList.add('active');
-      btnEl?.classList.add('hover-active');
+      this.volumeContainerRef?.classList.add('open');
     };
     this.volumeSliderHide = (delay = 300) => {
       if (this.hoverTimeout)
         clearTimeout(this.hoverTimeout);
-      this.hoverTimeout = setTimeout(() => {
-        const btnEl = this.volumeButtonRef?.shadowRoot?.querySelector('.inverted');
-        this.volumeBarContainerRef?.classList.remove('active');
-        btnEl?.classList.remove('hover-active');
-      }, delay);
+      this.hoverTimeout = setTimeout(this.volumeSliderHideNow, delay);
+    };
+    this.volumeSliderHideNow = () => {
+      this.volumeBarContainerRef?.classList.remove('active');
+      this.volumeContainerRef?.classList.remove('open');
+    };
+    /**
+     * Escape closes the slider at once. A closed slider is hidden from the focus, so when the focus
+     * sits on it, it is moved back to the mute button first; that focus would reopen the slider,
+     * which is why the hide follows it rather than the other way round.
+     */
+    this.dismissVolumeSlider = () => {
+      if (!this.volumeBarContainerRef?.classList.contains('active'))
+        return;
+      if (this.host.shadowRoot?.activeElement === this.volumeBarRef) {
+        this.volumeButtonRef?.shadowRoot?.querySelector('button')?.focus();
+      }
+      if (this.hoverTimeout)
+        clearTimeout(this.hoverTimeout);
+      this.volumeSliderHideNow();
     };
     this.handleFullscreenChange = () => {
       this.isFullscreen = !!(document.fullscreenElement ||
@@ -364,8 +345,13 @@ const WppVideoPlayer = class {
         document.mozFullScreenElement);
     };
     this.handleMouseLeave = () => {
-      if (this.videoPlayerState === 'playing')
+      if (this.videoPlayerState !== 'idle')
         this.hideControls();
+    };
+    /** Reveals the controls when focus moves into them, so a focused control is never hidden. */
+    this.handleFocusIn = () => {
+      if (this.isInvisible)
+        this.showControls();
     };
     this.handleMouseMove = () => {
       this.showControls();
@@ -410,7 +396,7 @@ const WppVideoPlayer = class {
         return;
       const min = parseFloat(this.seekBarRef.min);
       const max = parseFloat(this.seekBarRef.max);
-      const progress = ((value - min) / (max - min)) * 100;
+      const progress = max > min ? Math.min(Math.max(((value - min) / (max - min)) * 100, 0), 100) : 0;
       this.seekBarRef.style.setProperty('--progress-bar-progress', `${progress}%`);
     };
     this.showAndHideVolumeSlider = (delay = 1000) => {
@@ -580,12 +566,12 @@ const WppVideoPlayer = class {
      * - autoplay=false && state = idle
      * - autoplay=true
      */
-    this.renderMainPlayButton = () => (h("wpp-action-button-v4-4-0", { ref: ref => (this.initPlayButtonRef = ref), class: this.playButtonCssClasses(), onClick: this.togglePlay, variant: "inverted", ariaProps: {
+    this.renderMainPlayButton = () => (h("wpp-action-button-v4-5-0", { ref: ref => (this.initPlayButtonRef = ref), class: this.playButtonCssClasses(), onClick: this.togglePlay, variant: "inverted", ariaProps: {
         label: this.videoPlayerState === 'playing'
           ? this._locales.playButtonAriaLabel.play
           : this._locales.playButtonAriaLabel.pause,
         pressed: this.videoPlayerState === 'playing',
-      } }, this.videoPlayerState !== 'playing' ? (h("wpp-icon-play-filled-v4-4-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-pause-filled-v4-4-0", { slot: "icon-start", "aria-hidden": "true" }))));
+      } }, this.videoPlayerState !== 'playing' ? (h("wpp-icon-play-filled-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-pause-filled-v4-5-0", { slot: "icon-start", "aria-hidden": "true" }))));
     this.renderVideoTag = () => (h("video", { ref: ref => (this.videoPlayerRef = ref), id: "video-element", class: "video-player", part: "video-player", controls: false, poster: this.thumbnail, autoplay: this.controlPanelConfigDefault.autoplay, muted: !this.controlPanelConfigDefault.showVolumeButton || this.controlPanelConfigDefault.autoplay, loop: this.controlPanelConfigDefault.loop, preload: this.preload, onEnded: this.handleVideoEnded, onLoadedMetaData: this.handleMetadataLoaded, ...(this.controlPanelConfigDefault.autoplay
         ? {
           onClick: this.togglePlay,
@@ -600,7 +586,7 @@ const WppVideoPlayer = class {
           onPlay: this.handlePlayStateChange,
           onPause: this.handlePlayStateChange,
         }), ...this.videoPlayerSize }, this.sourceElements, this.trackElements, this._locales.notSupportedPlayer));
-    this.renderVideoTime = (time) => renderVideoCurrentTimeComponent.call(this, time);
+    this.renderVideoTime = (timeInSeconds, label) => renderVideoCurrentTimeComponent.call(this, formatTime(this.timeFormat, timeInSeconds), label);
     this.renderSeekBar = () => renderSeekBarComponent.call(this);
     this.renderVolumeBar = () => renderVolumeBarComponent.call(this);
     this.renderCaptions = () => renderCaptionsComponent.call(this);
@@ -608,9 +594,7 @@ const WppVideoPlayer = class {
     this.videoPlayerState = 'idle';
     this.currentVideoTime = 0;
     this.timeFormat = 'default';
-    this.splitCurrentVideoTime = INIT_SPLIT_TIME_FORMAT;
     this.overallVideoTime = 0;
-    this.splitOverallVideoTime = INIT_SPLIT_TIME_FORMAT;
     this.loadedPercentage = 0;
     this.volume = 1;
     this.isFullscreen = false;
@@ -674,7 +658,6 @@ const WppVideoPlayer = class {
   onCurrentVideoTimeChange(value) {
     if (!this.videoPlayerRef)
       return;
-    this.splitCurrentVideoTime = formatTime(this.timeFormat, value, true);
     this.updateSeekProgress(value);
   }
   onSelectedLanguageChange(value) {
@@ -717,26 +700,30 @@ const WppVideoPlayer = class {
   get _locales() {
     return mergeLocales(LOCALES_DEFAULTS, this.locales);
   }
+  /** The shared volume bar reads the mute button's label from here. */
+  get volumeButtonLabel() {
+    return this._locales.volumeButtonAriaLabel;
+  }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "video-player, controls", onMouseMove: this.handleMouseMove, onMouseLeave: this.handleMouseLeave, ...this.videoPlayerHostSize, role: "region", "aria-label": this._locales.hostAriaLabel }, this.renderVideoTag(), this.renderMainPlayButton(), !this.controlPanelConfigDefault.autoplay && (h("div", { ref: ref => (this.controlsRef = ref), ...(this.thumbnail ? { style: { backgroundImage: `url(${this.thumbnail})` } } : {}), class: this.controlsCssClasses(), part: "controls", tabindex: "-1", ...(this.videoPlayerState !== 'idle'
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "video-player, controls", onMouseMove: this.handleMouseMove, onMouseLeave: this.handleMouseLeave, onFocusin: this.handleFocusIn, ...this.videoPlayerHostSize, role: "region", "aria-label": this._locales.hostAriaLabel }, this.renderVideoTag(), this.renderMainPlayButton(), !this.controlPanelConfigDefault.autoplay && (h("div", { ref: ref => (this.controlsRef = ref), ...(this.thumbnail ? { style: { backgroundImage: `url(${this.thumbnail})` } } : {}), class: this.controlsCssClasses(), part: "controls", tabindex: "-1", ...(this.videoPlayerState !== 'idle'
         ? {
           onDblClick: this.handleControlsDblClick,
           onClick: this.handleControlsClick,
           role: 'region',
           'aria-label': this._locales.controlsAriaLabel,
         }
-        : {}) }, this.videoPlayerState !== 'idle' && (h(Fragment, null, this.caption && this.renderCaptions(), h("div", { class: "controls-bar", ref: ref => (this.controlsBarRef = ref) }, h("wpp-action-button-v4-4-0", { ref: ref => (this.playPauseButtonRef = ref), class: "play-pause-button", variant: "inverted", onClick: this.togglePlay, ariaProps: {
+        : {}) }, this.videoPlayerState !== 'idle' && (h(Fragment, null, this.caption && this.renderCaptions(), h("div", { class: "controls-bar", ref: ref => (this.controlsBarRef = ref) }, h("wpp-action-button-v4-5-0", { ref: ref => (this.playPauseButtonRef = ref), class: "play-pause-button", variant: "inverted", onClick: this.togglePlay, ariaProps: {
         label: this.videoPlayerState === 'playing'
           ? this._locales.playPauseButtonArealLabels.pause
           : this._locales.playPauseButtonArealLabels.play,
         pressed: this.videoPlayerState === 'playing',
-      } }, this.videoPlayerState === 'playing' ? (h("wpp-icon-pause-filled-v4-4-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-play-filled-v4-4-0", { slot: "icon-start", "aria-hidden": "true" }))), this.renderVideoTime(this.splitCurrentVideoTime), this.renderSeekBar(), this.renderVideoTime(this.splitOverallVideoTime), this.caption && (h("wpp-action-button-v4-4-0", { ref: ref => (this.captionButtonRef = ref), onClick: this.toggleCaptions, variant: "inverted", ariaProps: {
+      } }, this.videoPlayerState === 'playing' ? (h("wpp-icon-pause-filled-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-play-filled-v4-5-0", { slot: "icon-start", "aria-hidden": "true" }))), this.renderVideoTime(this.currentVideoTime, this._locales.currentTimeAriaLabel), this.renderSeekBar(), this.renderVideoTime(this.overallVideoTime, this._locales.durationAriaLabel), this.caption && (h("wpp-action-button-v4-5-0", { ref: ref => (this.captionButtonRef = ref), onClick: this.toggleCaptions, variant: "inverted", ariaProps: {
         label: this._locales.captionButtonAriaLabel,
-      } }, this.isCaptionEnabled ? (h("wpp-icon-caption-on-v4-4-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-caption-off-v4-4-0", { slot: "icon-start", "aria-hidden": "true" })))), this.controlPanelConfigDefault.showVolumeButton && this.renderVolumeBar(), this.controlPanelConfigDefault.showFullscreenButton && (h("wpp-action-button-v4-4-0", { ref: ref => (this.fullScreenButtonRef = ref), onClick: this.toggleFullscreen, variant: "inverted", ariaProps: {
+      } }, this.isCaptionEnabled ? (h("wpp-icon-caption-on-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-caption-off-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })))), this.controlPanelConfigDefault.showVolumeButton && this.renderVolumeBar(), this.controlPanelConfigDefault.showFullscreenButton && (h("wpp-action-button-v4-5-0", { ref: ref => (this.fullScreenButtonRef = ref), onClick: this.toggleFullscreen, variant: "inverted", ariaProps: {
         label: this._locales.fullscreenButtonAriaLabel,
-      } }, this.isFullscreen ? (h("wpp-icon-fullscreen-minimise-v4-4-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-fullscreen-v4-4-0", { slot: "icon-start", "aria-hidden": "true" })))), this.renderAccessibilityInstructions())))))));
+      } }, this.isFullscreen ? (h("wpp-icon-fullscreen-minimise-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-fullscreen-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })))), this.renderAccessibilityInstructions())))))));
   }
-  static get registryIs() { return "wpp-video-player-v4-4-0"; }
+  static get registryIs() { return "wpp-video-player-v4-5-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "videoPlayerState": ["onVideoPlayerState"],

@@ -24,6 +24,7 @@ export declare class WppSideModal {
   private topOffset;
   private ignoreOutsideClicks;
   private timeouts;
+  private dialogFocus;
   private themeSubscription;
   host: HTMLWppSideModalElement;
   private dialogRef?;
@@ -153,6 +154,7 @@ export declare class WppSideModal {
   private renderLeftButton;
   private renderRightButtons;
   private focusDialog;
+  componentDidRender(): void;
   private headerCssClasses;
   private bodyCssClasses;
   private actionsCssClasses;

@@ -86,6 +86,11 @@ export declare class WppTooltip {
   private updateTippyProps;
   private arrowSVG;
   private createTippyInstance;
+  /**
+   * Focus only shows the tooltip to keyboard users, the same way `:focus-visible` paints a ring. Otherwise a popover
+   * closed with the pointer would pop it when it hands the focus back to its trigger, although the pointer is elsewhere.
+   */
+  private isFocusedWithPointer;
   private getArrowBgColor;
   private hostCssClasses;
   private contentWrapperCssClasses;

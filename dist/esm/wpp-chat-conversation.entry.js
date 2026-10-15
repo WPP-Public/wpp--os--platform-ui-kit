@@ -1,4 +1,4 @@
-import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-93f63aaa.js';
+import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-a0877c3d.js';
 
 const wppChatConversationCss = ":host{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%;height:100%;min-height:0;padding:10px;border:var(--wpp-border-width-s) solid var(--wpp-border-color);border-radius:var(--wpp-border-radius-m)}.conversation-container{-ms-flex:1 1 auto;flex:1 1 auto;min-height:0;overflow:hidden auto;scrollbar-gutter:stable both-edges;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:center;align-items:center;gap:24px;padding:16px 0;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.conversation-container::-webkit-scrollbar{width:4px;height:4px}.conversation-container::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.conversation-container slot{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:center;align-items:center;gap:24px;width:100%}.input-wrapper{margin:auto auto 0;width:100%;max-width:calc(80ch + 88px)}.input-wrapper.no-user-avatar,.input-wrapper.no-assistant-avatar{max-width:calc(80ch + 44px)}.input-wrapper.no-user-avatar.no-assistant-avatar{max-width:80ch}";
 
@@ -9,8 +9,13 @@ const WppChatConversation = class {
     this.wppStop = createEvent(this, "wppStop", 1);
     this.wppChange = createEvent(this, "wppChange", 1);
     this.wppMessageChanged = createEvent(this, "wppMessageChanged", 1);
+    this.wppMessageActionClick = createEvent(this, "wppMessageActionClick", 1);
     this.wppActionsMenuToggle = createEvent(this, "wppActionsMenuToggle", 1);
     this.wppActionsMenuItemClick = createEvent(this, "wppActionsMenuItemClick", 1);
+    this.wppModelSelect = createEvent(this, "wppModelSelect", 1);
+    this.wppModelBrowse = createEvent(this, "wppModelBrowse", 1);
+    this.wppReasoningSelect = createEvent(this, "wppReasoningSelect", 1);
+    this.wppVerbositySelect = createEvent(this, "wppVerbositySelect", 1);
     this.messageElementsMap = new Map();
     this.shouldRenderAvatar = (type) => {
       if (this.userAvatarConfig === false && type === 'user')
@@ -29,6 +34,7 @@ const WppChatConversation = class {
     this.assistantAvatarConfig = {};
     this.userAvatarConfig = {};
     this.chatInputConfig = {};
+    this.locales = undefined;
   }
   /**
    * Appends a chunk of text to the last message.
@@ -89,12 +95,12 @@ const WppChatConversation = class {
     }, 100);
   }
   render() {
-    return (h(Host, null, h("div", { class: "conversation-container", ref: el => (this.conversationContainerRef = el) }, this.messages?.map(message => (h("wpp-chat-conversation-message-v4-4-0", { key: message.id, id: message.id, ref: el => {
+    return (h(Host, null, h("div", { class: "conversation-container", ref: el => (this.conversationContainerRef = el) }, this.messages?.map(message => (h("wpp-chat-conversation-message-v4-5-0", { key: message.id, id: message.id, ref: el => {
         if (el)
           this.messageElementsMap.set(message.id, el);
-      }, role: message.role, content: message.content, status: message.status, attachments: message.attachments, actionButtonsConfig: message.actionButtonsConfig, sourcesActionConfig: message.sourcesActionConfig, menuContextListItems: message.menuContextListItems, assistantAvatarConfig: this.assistantAvatarConfig, userAvatarConfig: this.userAvatarConfig }))), h("slot", null)), h("div", { class: this.inputWrapperCssClasses() }, h("wpp-chat-input-v4-4-0", { ...this.chatInputConfig, onWppSend: e => this.wppSend.emit(e.detail), onWppStop: () => this.wppStop.emit(), onWppChange: e => this.wppChange.emit(e.detail), onWppMessageChanged: e => this.wppMessageChanged.emit(e.detail), onWppActionsMenuToggle: e => this.wppActionsMenuToggle.emit(e.detail), onWppActionsMenuItemClick: e => this.wppActionsMenuItemClick.emit(e.detail) }))));
+      }, role: message.role, content: message.content, status: message.status, attachments: message.attachments, actionButtonsConfig: message.actionButtonsConfig, sourcesActionConfig: message.sourcesActionConfig, menuContextListItems: message.menuContextListItems, tokenCount: message.tokenCount, tokenCountIcon: message.tokenCountIcon, locales: message.locales ?? this.locales, onWppMessageActionClick: e => this.wppMessageActionClick.emit(e.detail), assistantAvatarConfig: this.assistantAvatarConfig, userAvatarConfig: this.userAvatarConfig }))), h("slot", null)), h("div", { class: this.inputWrapperCssClasses() }, h("wpp-chat-input-v4-5-0", { ...this.chatInputConfig, onWppSend: e => this.wppSend.emit(e.detail), onWppStop: () => this.wppStop.emit(), onWppChange: e => this.wppChange.emit(e.detail), onWppMessageChanged: e => this.wppMessageChanged.emit(e.detail), onWppActionsMenuToggle: e => this.wppActionsMenuToggle.emit(e.detail), onWppActionsMenuItemClick: e => this.wppActionsMenuItemClick.emit(e.detail), onWppModelSelect: e => this.wppModelSelect.emit(e.detail), onWppModelBrowse: () => this.wppModelBrowse.emit(), onWppReasoningSelect: e => this.wppReasoningSelect.emit(e.detail), onWppVerbositySelect: e => this.wppVerbositySelect.emit(e.detail) }, h("slot", { name: "input-references", slot: "references" })))));
   }
-  static get registryIs() { return "wpp-chat-conversation-v4-4-0"; }
+  static get registryIs() { return "wpp-chat-conversation-v4-5-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "messages": ["handleMessagesChange"]

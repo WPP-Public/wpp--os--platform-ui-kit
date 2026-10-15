@@ -1,194 +1,42 @@
-import { h } from '@stencil/core/internal/client';
+var EVENT_SOURCE;
+(function (EVENT_SOURCE) {
+  EVENT_SOURCE["RIGHT_SLOT"] = "RIGHT_SLOT";
+})(EVENT_SOURCE || (EVENT_SOURCE = {}));
+const PRESENTATION_ROLE = 'presentation';
+const OPTION_ROLE = 'option';
+const MENU_ITEM_ACTIVE_CLASS = 'wpp-menu-item-active';
+const INTERACTIVE_RIGHT_SLOT_SELECTOR = [
+  'a[href]',
+  'button',
+  'input',
+  'select',
+  'textarea',
+  'summary',
+  '[contenteditable="true"]',
+].join(',');
+const INTERACTIVE_RIGHT_SLOT_ROLES = [
+  'button',
+  'checkbox',
+  'combobox',
+  'link',
+  'menu',
+  'menuitem',
+  'option',
+  'radio',
+  'searchbox',
+  'slider',
+  'spinbutton',
+  'switch',
+  'tab',
+  'textbox',
+];
+const INTERACTIVE_RIGHT_SLOT_COMPONENT_TAGS = [
+  'wpp-action-button',
+  'wpp-button',
+  'wpp-checkbox',
+  'wpp-menu-context',
+  'wpp-radio',
+  'wpp-toggle',
+];
 
-const convertMBToBytes = (size) => size * 1024 ** 2;
-const getExtension = (filename = '') => `.${filename.split('.').pop()}`;
-const getExtensionsList = (acceptConfig) => Object.entries(acceptConfig).reduce((acc, [_, extensions]) => [...acc, ...extensions], []);
-const getBaseName = (fileName = '') => fileName.split('.')[0];
-const renameFile = (file, newFileName) => new File([file], newFileName, { type: file.type });
-const modifyPropertiesOnFile = (file, properties) => new File([file], file.name, { ...properties });
-
-const EXTENSION_TO_TYPE = {
-  pdf: 'application/pdf',
-  doc: 'application/msword',
-  docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  xls: 'application/vnd.ms-excel',
-  xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  ppt: 'application/vnd.ms-powerpoint',
-  pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-  txt: 'text/plain',
-  csv: 'text/csv',
-  html: 'text/html',
-  xml: 'application/xml',
-  json: 'application/json',
-  png: 'image/png',
-  jpg: 'image/jpg',
-  jpeg: 'image/jpeg',
-  gif: 'image/gif',
-  bmp: 'image/bmp',
-  tiff: 'image/tiff',
-  svg: 'image/svg+xml',
-  mp3: 'audio/mpeg',
-  wav: 'audio/wav',
-  ogg: 'audio/ogg',
-  mp4: 'video/mp4',
-  avi: 'video/x-msvideo',
-  mov: 'video/quicktime',
-  wmv: 'video/x-ms-wmv',
-  flv: 'video/x-flv',
-  rar: 'application/x-rar-compressed',
-  zip: 'application/zip',
-  '7z': 'application/x-7z-compressed',
-  tar: 'application/x-tar',
-  gz: 'application/gzip',
-  bz2: 'application/x-bzip2',
-  exe: 'application/x-msdownload',
-  dmg: 'application/x-apple-diskimage',
-  apk: 'application/vnd.android.package-archive',
-  iso: 'application/x-iso9660-image',
-  css: 'text/css',
-  js: 'application/javascript',
-  woff: 'application/font-woff',
-  woff2: 'application/font-woff2',
-  ttf: 'application/font-sfnt',
-  otf: 'application/font-sfnt',
-  eot: 'application/vnd.ms-fontobject',
-  rtf: 'application/rtf',
-  ics: 'text/calendar',
-  jsonld: 'application/ld+json',
-  key: 'application/x-iwork-keynote-sffkey',
-};
-const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
-  if (thumbnailUrl) {
-    return h("img", { src: thumbnailUrl, alt: "File Thumbnail", class: "thumbnail-preview" });
-  }
-  switch (fileExtension) {
-    // Text
-    case '.txt':
-      return h("wpp-icon-document-v4-4-0", null);
-    // Compressed
-    case '.zip':
-    case '.rar':
-    case '.7z':
-      return h("wpp-icon-file-zip-v4-4-0", null);
-    // Image
-    case '.png':
-    case '.jpg':
-    case '.jpeg':
-    case '.svg':
-    case '.gif':
-      return h("wpp-icon-image-v4-4-0", null);
-    // Video
-    case '.mp4':
-    case '.mov':
-    case '.avi':
-    case '.wmv':
-    case '.mkv':
-    case '.flv':
-    case '.webm':
-      return h("wpp-icon-video-clip-v4-4-0", null);
-    // Audio
-    case '.mp3':
-    case '.wav':
-    case '.ogg':
-    case '.wma':
-    case '.m4a':
-    case '.aac':
-      return h("wpp-icon-music-v4-4-0", null);
-    // Data
-    case '.csv':
-    case '.json':
-    case '.xml':
-    case '.db':
-    case '.sqlite':
-    case '.dat':
-      return h("wpp-icon-database-v4-4-0", null);
-    // Presentation
-    case '.pptx':
-    case '.key':
-    case '.odp':
-    case '.pps':
-    case '.sldx':
-    case '.ppt':
-      return h("wpp-icon-pitch-v4-4-0", null);
-    // Spreadsheet
-    case '.xlsx':
-    case '.xls':
-    case '.ods':
-    case '.numbers':
-    case '.tsv':
-      return h("wpp-icon-spreadsheet-v4-4-0", null);
-    default:
-      return h("wpp-icon-file-v4-4-0", null);
-  }
-};
-/**
- * Maps a file extension to a human-readable file type category label.
- * Used as the subtitle in the chat variant of `wpp-file-upload-item`.
- */
-const returnFileTypeLabel = (fileExtension) => {
-  switch (fileExtension.toLowerCase()) {
-    case '.txt':
-      return 'Text';
-    case '.zip':
-    case '.rar':
-    case '.7z':
-      return 'Zip';
-    case '.png':
-    case '.jpg':
-    case '.jpeg':
-    case '.svg':
-    case '.gif':
-      return 'Image';
-    case '.mp4':
-    case '.mov':
-    case '.avi':
-    case '.wmv':
-    case '.mkv':
-    case '.flv':
-    case '.webm':
-      return 'Video';
-    case '.mp3':
-    case '.wav':
-    case '.ogg':
-    case '.wma':
-    case '.m4a':
-    case '.aac':
-      return 'Audio';
-    case '.csv':
-    case '.json':
-    case '.xml':
-    case '.db':
-    case '.sqlite':
-    case '.dat':
-      return 'Data';
-    case '.pptx':
-    case '.key':
-    case '.odp':
-    case '.pps':
-    case '.sldx':
-    case '.ppt':
-      return 'Presentation';
-    case '.xlsx':
-    case '.xls':
-    case '.ods':
-    case '.numbers':
-    case '.tsv':
-      return 'Spreadsheet';
-    default:
-      return 'Document';
-  }
-};
-const LOCALES_DEFAULTS = {
-  label: 'Choose a file',
-  text: 'to upload or drag it here',
-  info: (accept, size) => `Only ${accept} file at ${size} MB or less`,
-  sizeError: 'File exceeds size limit',
-  formatError: 'Wrong format',
-  singleFileLimitError: 'Only one file is allowed',
-  multipleFileLimitError: 'File limit has been reached',
-  fileAdded: (fileName) => `${fileName} added`,
-  fileRemoved: (fileName) => `${fileName} removed`,
-  removeFile: (fileName) => `Remove file ${fileName}`,
-};
-
-export { EXTENSION_TO_TYPE as E, LOCALES_DEFAULTS as L, getBaseName as a, getExtensionsList as b, convertMBToBytes as c, returnIconFromExtension as d, returnFileTypeLabel as e, getExtension as g, modifyPropertiesOnFile as m, renameFile as r };
+export { EVENT_SOURCE as E, INTERACTIVE_RIGHT_SLOT_COMPONENT_TAGS as I, MENU_ITEM_ACTIVE_CLASS as M, OPTION_ROLE as O, PRESENTATION_ROLE as P, INTERACTIVE_RIGHT_SLOT_SELECTOR as a, INTERACTIVE_RIGHT_SLOT_ROLES as b };

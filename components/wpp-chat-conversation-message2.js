@@ -1,6 +1,6 @@
-import { h, Fragment, proxyCustomElement, HTMLElement, Host } from '@stencil/core/internal/client';
+import { h, Fragment, proxyCustomElement, HTMLElement, createEvent, Host } from '@stencil/core/internal/client';
 import { m as marked_umd } from './marked.umd.js';
-import { k as transformToVersionedTag } from './utils.js';
+import { k as transformToVersionedTag, y as mergeLocales } from './utils.js';
 import { c as createCommonjsModule, a as commonjsGlobal } from './_commonjsHelpers.js';
 import { L as LIB_COMPONENTS_PREFIX, r as renderSlotsInListItem } from './utils2.js';
 import { d as defineCustomElement$y } from './wpp-action-button2.js';
@@ -140,6 +140,41 @@ const handleDownload = async (href, alt) => {
     console.error('Image download failed:', error);
   }
 };
+
+const LOCALES_DEFAULTS = {
+  quoteAction: 'Reply',
+  copyAction: 'Copy',
+  copiedAction: 'Copied',
+  pinAction: 'Pin',
+  unpinAction: 'Unpin',
+  tokenCountLabel: 'Token usage',
+};
+/**
+ * How long the copy confirmation (checkmark + "Copied" label) stays visible before the button
+ * reverts to its idle state.
+ */
+const COPIED_CONFIRMATION_TIMEOUT = 3000;
+/**
+ * The footer actions rendered when a dev passes no `actionButtonsConfig`. Overrides are merged onto
+ * these by `id`, so a dev can retarget one action without restating the others or preserving order.
+ */
+const getDefaultActionButtons = (locales) => [
+  { id: 'quote', icon: 'wpp-icon-blockquote', label: locales.quoteAction },
+  { id: 'copy', icon: 'wpp-icon-copy', label: locales.copyAction },
+  {
+    id: 'pin',
+    icon: 'wpp-icon-unpinned',
+    activeIcon: 'wpp-icon-pinned',
+    label: locales.pinAction,
+    activeLabel: locales.unpinAction,
+  },
+];
+/**
+ * A valid ARIA role parked on the host so the `role` @Prop's `MessageRole` value ("user" /
+ * "assistant") never occupies the host's global `role` attribute, where it is not a valid ARIA
+ * role (axe: aria-roles, critical). The prop keeps driving layout via internal state.
+ */
+const HOST_ARIA_ROLE = 'group';
 
 var purify = createCommonjsModule(function (module, exports) {
 /*! @license DOMPurify 3.4.14 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.4.14/LICENSE */
@@ -2813,10 +2848,10 @@ const renderImageNode = (role, data, className) => {
         const wrap = e.target.closest('.chat-image-error-wrap');
         wrap?.classList.add('chat-image-broken');
       } }),
-    h("wpp-icon-image-v4-4-0", { role: "presentation", "aria-hidden": "true" })));
+    h("wpp-icon-image-v4-5-0", { role: "presentation", "aria-hidden": "true" })));
   return data.linkHref ? (h("a", { href: data.linkHref, target: "_blank", rel: "noopener noreferrer", class: "chat-image-link" }, img)) : role === 'assistant' ? (h(Fragment, null,
-    h("wpp-action-button-v4-4-0", { class: "image-download-button", variant: "secondary", onClick: () => handleDownload(data.href, data.alt) },
-      h("wpp-icon-download-v4-4-0", { slot: "icon-start", "aria-hidden": "true" })),
+    h("wpp-action-button-v4-5-0", { class: "image-download-button", variant: "secondary", onClick: () => handleDownload(data.href, data.alt) },
+      h("wpp-icon-download-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })),
     img)) : (img);
 };
 const renderToken = (token, role = 'user') => {
@@ -2827,16 +2862,16 @@ const renderToken = (token, role = 'user') => {
       const headingTypes = ['2xl-heading', 'xl-heading', 'l-body', 'm-body', 's-body', 'xs-body'];
       const type = headingTypes[token.depth - 1] || 's-body';
       const tag = `h${token.depth}`;
-      return (h("wpp-typography-v4-4-0", { type: type, tag: tag }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
+      return (h("wpp-typography-v4-5-0", { type: type, tag: tag }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
     }
     case 'del':
       return h("del", null, token.tokens?.map(t => renderToken(t)));
     case 'paragraph':
-      return (h("wpp-typography-v4-4-0", { type: "s-body", tag: "p" }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
+      return (h("wpp-typography-v4-5-0", { type: "s-body", tag: "p" }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
     case 'blockquote':
       return h("blockquote", { class: "chat-quote" }, token.tokens?.map(t => renderToken(t)));
     case 'strong':
-      return (h("wpp-typography-v4-4-0", { type: "s-strong", tag: "span" }, token.tokens?.map(t => renderToken(t))));
+      return (h("wpp-typography-v4-5-0", { type: "s-strong", tag: "span" }, token.tokens?.map(t => renderToken(t))));
     case 'em':
       return h("em", null, token.tokens?.map(t => renderToken(t)));
     case 'codespan':
@@ -2845,7 +2880,7 @@ const renderToken = (token, role = 'user') => {
       return (h("pre", { class: "code-block" },
         h("div", { class: "code-lang" },
           h("span", null, token.lang || 'plaintext'),
-          h("wpp-icon-copy-v4-4-0", { class: "code-block-copy-icon", size: "s", color: "var(--wpp-grey-color-600)", onClick: () => {
+          h("wpp-icon-copy-v4-5-0", { class: "code-block-copy-icon", size: "s", color: "var(--wpp-grey-color-600)", onClick: () => {
               navigator.clipboard.writeText(token.text);
             } })),
         h("code", null, token.text)));
@@ -2862,8 +2897,8 @@ const renderToken = (token, role = 'user') => {
       const nestedLists = token.tokens?.filter(t => t.type === 'list') || [];
       const inlineContent = token.tokens?.filter(t => t.type !== 'list') || [];
       return (h("li", { class: `chat-list-item ${token.task ? `chat-list-item-task ${token.checked ? 'chat-list-item-task-checked' : ''}` : ''}` },
-        token.task && h("wpp-icon-tick-v4-4-0", null),
-        inlineContent.length > 0 && (h("wpp-typography-v4-4-0", { type: "s-body" }, inlineContent.map(t => renderToken(t)))),
+        token.task && h("wpp-icon-tick-v4-5-0", null),
+        inlineContent.length > 0 && (h("wpp-typography-v4-5-0", { type: "s-body" }, inlineContent.map(t => renderToken(t)))),
         nestedLists.map(t => renderToken(t))));
     }
     case 'table': {
@@ -2871,13 +2906,13 @@ const renderToken = (token, role = 'user') => {
         h("table", { class: "chat-table" },
           h("thead", null,
             h("tr", null, token.header.map((cell, i) => (h("th", { key: i },
-              h("wpp-typography-v4-4-0", { type: "s-strong" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))),
+              h("wpp-typography-v4-5-0", { type: "s-strong" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))),
           h("tbody", null, token.rows.map((row, r) => (h("tr", { key: r }, row.map((cell, c) => (h("td", { key: c },
-            h("wpp-typography-v4-4-0", { type: "s-body" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))))))));
+            h("wpp-typography-v4-5-0", { type: "s-body" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))))))));
     }
     case 'link':
       if (token.title) {
-        return (h("wpp-tooltip-v4-4-0", { text: token.title },
+        return (h("wpp-tooltip-v4-5-0", { text: token.title },
           h("a", { href: token.href, target: "_blank", rel: "noopener noreferrer", class: "chat-link" }, token.tokens?.length ? token.tokens.map((t) => renderToken(t)) : token.text)));
       }
       return (h("a", { href: token.href, target: "_blank", rel: "noopener noreferrer", title: token.title, class: "chat-link" }, token.tokens?.length ? token.tokens.map((t) => renderToken(t)) : token.text));
@@ -2898,7 +2933,7 @@ const renderToken = (token, role = 'user') => {
         h("div", { class: "chat-image-grid-row" }, rest.map((data, i) => (h("div", { key: i, class: "chat-image-grid-item chat-image-error-wrap" }, renderImageNode(role, data)))))));
     }
     case 'hr':
-      return h("wpp-divider-v4-4-0", null);
+      return h("wpp-divider-v4-5-0", null);
     case 'text':
       return token.tokens
         ? token.tokens.flatMap(t => renderToken(t)).filter((t) => t !== null)
@@ -2908,35 +2943,59 @@ const renderToken = (token, role = 'user') => {
       // Intentionally ignore raw HTML from LLM output for security
       return null;
     default:
-      return 'text' in token ? h("wpp-typography-v4-4-0", { type: "s-body" }, token.text) : null;
+      return 'text' in token ? h("wpp-typography-v4-5-0", { type: "s-body" }, token.text) : null;
   }
 };
 
-const wppChatConversationMessageCss = "@charset \"UTF-8\";:host{display:-ms-flexbox;display:flex;width:auto}.container{display:grid;width:100%;grid-template-columns:44px minmax(0, 80ch) 44px}.container.no-user-avatar{grid-template-columns:44px minmax(0, 80ch)}.container.no-assistant-avatar{grid-template-columns:minmax(0, 80ch) 44px}.container.no-user-avatar.no-assistant-avatar{grid-template-columns:minmax(0, 80ch)}.avatar-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:start;align-items:flex-start;-ms-flex-pack:center;justify-content:center}.avatar-wrapper.ai-avatar{-ms-flex-pack:start;justify-content:flex-start}.avatar-wrapper.user-avatar{-ms-flex-pack:end;justify-content:flex-end}.content{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:10px;width:100%;margin-left:auto}.content .wpp-typography{display:initial}.content.content-user{width:calc(100% - clamp(10%, 56px, 56px));padding:12px;background-color:var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-m);-webkit-box-shadow:var(--wpp-box-shadow-xs);box-shadow:var(--wpp-box-shadow-xs)}.content.content-user .attachments{-ms-flex-pack:end;justify-content:flex-end}.content p{margin-top:0}.message{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px}.message-text{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:10px}.custom-content ::slotted(*){margin-top:var(--wpp-chat-message-slot-gap, 8px)}.cursor{display:inline-block;width:2px;height:0.85em;margin-left:2px;vertical-align:text-bottom;background-color:currentcolor;border-radius:1px;-webkit-animation:blink 1s steps(1) infinite;animation:blink 1s steps(1) infinite}.code-block{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;background-color:var(--wpp-grey-color-100);border-radius:var(--wpp-border-radius-m)}.code-block:hover .code-block-copy-icon{opacity:1}.code-block .code-lang{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;padding:8px 8px 4px;color:var(--wpp-grey-color-600)}.code-block code{padding:8px}.code-block-copy-icon{cursor:pointer;opacity:0;-webkit-transition:opacity 0.1s linear;transition:opacity 0.1s linear}.code-block-copy-icon:hover{--wpp-prop-icon-color:var(--wpp-grey-color-800) !important}.action-toolbar{display:-ms-flexbox;display:flex;gap:4px}.actions{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;-ms-flex-align:center;align-items:center;margin-top:10px}.actions .sources-action{margin-left:auto}.chat-list{padding:0 0 0 16px;margin:0 0 0 16px}.chat-list.chat-list-nonordered,.chat-list .chat-list-nonordered{list-style-type:disc}.chat-list.chat-list-ordered,.chat-list .chat-list-ordered{list-style-type:decimal}.chat-list.chat-list-task{padding:0;margin:0;list-style-type:none}.chat-list .chat-list-item{display:list-item;margin:0}.chat-list .chat-list-item::marker{font-size:var(--wpp-typography-s-body-font-size);line-height:var(--wpp-typography-s-body-line-height)}.chat-list .chat-list-item .wpp-typography{display:block}.chat-list .chat-list-item .chat-list{display:block}.chat-list .chat-list-item-task{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}.chat-list .chat-list-item-task .chat-list{margin-left:8px}.chat-list .chat-list-item-task:not(.chat-list-item-task-checked){text-decoration:line-through}.chat-list .chat-list-item-task:not(.chat-list-item-task-checked) .wpp-icon-tick{display:inline-block;text-decoration:none}.chat-link{font-size:var(--wpp-typography-s-body-font-size);line-height:var(--wpp-typography-s-body-line-height);color:var(--wpp-primary-color-500);-webkit-transition:color 0.2s ease-in-out;transition:color 0.2s ease-in-out}.chat-link:hover{color:var(--wpp-primary-color-400)}.chat-link:active{color:var(--wpp-primary-color-600)}.chat-table{width:100%;border-collapse:collapse;border-spacing:0}.chat-table th,.chat-table td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--wpp-grey-color-300)}.chat-quote{padding-left:16px;margin-left:0;border-left:3px solid var(--wpp-grey-color-300)}.chat-image-single{position:relative;width:100%}.chat-image-single img{display:block;width:100%;height:auto;-o-object-fit:cover;object-fit:cover}.chat-image-full{display:block;width:100%;height:auto;-o-object-fit:cover;object-fit:cover;border:1px solid var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-xs)}.chat-image-grid{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px;width:100%}.chat-image-grid-first{position:relative;width:100%}.chat-image-grid-row{display:-ms-flexbox;display:flex;gap:12px;-ms-flex-align:start;align-items:flex-start;overflow:visible hidden;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.chat-image-grid-row::-webkit-scrollbar{width:4px;height:4px}.chat-image-grid-row::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.chat-image-grid-row .chat-image-grid-item{display:-ms-flexbox;display:flex;-ms-flex:0 0 calc(23% - 9px);flex:0 0 calc(23% - 9px);aspect-ratio:1/1;min-width:100px;overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;border:1px solid var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-xs);position:relative}.chat-image-grid-row .chat-image-grid-item img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}.image-download-button{--wpp-btns-action-color-fill:var(--wpp-grey-color-000);position:absolute;top:8px;right:8px;opacity:0;-webkit-transition:opacity 0.2s ease-in-out;transition:opacity 0.2s ease-in-out}.chat-image-grid-item:hover .image-download-button,.chat-image-single:hover .image-download-button,.chat-image-grid-first:hover .image-download-button{opacity:1}.wpp-icon-image{display:none;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.chat-image-broken{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;background-color:var(--wpp-grey-color-200)}.chat-image-broken .wpp-icon-image{display:block}.chat-image-broken .image-download-button{display:none}.chat-image-broken img{display:none}.attachments{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;gap:8px;width:100%}.attachments .wpp-file-upload-item{-ms-flex:1 1 calc(50% - 4px);flex:1 1 calc(50% - 4px);min-width:224px;max-width:256px}@-webkit-keyframes blink{0%,100%{opacity:1}50%{opacity:0}}@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}";
+const wppChatConversationMessageCss = "@charset \"UTF-8\";:host{display:-ms-flexbox;display:flex;width:auto}.container{display:grid;width:100%;grid-template-columns:44px minmax(0, 80ch) 44px}.container.no-user-avatar{grid-template-columns:44px minmax(0, 80ch)}.container.no-assistant-avatar{grid-template-columns:minmax(0, 80ch) 44px}.container.no-user-avatar.no-assistant-avatar{grid-template-columns:minmax(0, 80ch)}.avatar-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:start;align-items:flex-start;-ms-flex-pack:center;justify-content:center}.avatar-wrapper.ai-avatar{-ms-flex-pack:start;justify-content:flex-start}.avatar-wrapper.user-avatar{-ms-flex-pack:end;justify-content:flex-end}.content{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:10px;width:100%;margin-left:auto}.content .wpp-typography{display:initial}.content.content-user{width:calc(100% - clamp(10%, 56px, 56px));padding:12px;background-color:var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-m);-webkit-box-shadow:var(--wpp-box-shadow-xs);box-shadow:var(--wpp-box-shadow-xs)}.content.content-user .attachments{-ms-flex-pack:end;justify-content:flex-end}.content p{margin-top:0}.message{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px}.message-text{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:10px}.custom-content ::slotted(*){margin-top:var(--wpp-chat-message-slot-gap, 8px)}.cursor{display:inline-block;width:2px;height:0.85em;margin-left:2px;vertical-align:text-bottom;background-color:currentcolor;border-radius:1px;-webkit-animation:blink 1s steps(1) infinite;animation:blink 1s steps(1) infinite}.code-block{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;background-color:var(--wpp-grey-color-100);border-radius:var(--wpp-border-radius-m)}.code-block:hover .code-block-copy-icon{opacity:1}.code-block .code-lang{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;padding:8px 8px 4px;color:var(--wpp-grey-color-600)}.code-block code{padding:8px}.code-block-copy-icon{cursor:pointer;opacity:0;-webkit-transition:opacity 0.1s linear;transition:opacity 0.1s linear}.code-block-copy-icon:hover{--wpp-prop-icon-color:var(--wpp-grey-color-800) !important}.action-toolbar{display:-ms-flexbox;display:flex;gap:4px}.actions{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;-ms-flex-align:center;align-items:center;margin-top:10px}.actions .sources-action,.actions .token-count{margin-left:auto}.token-count{--wpp-action-button-secondary-icon-color:var(--wpp-grey-color-600);-ms-flex:0 0 auto;flex:0 0 auto}.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0}.chat-list{padding:0 0 0 16px;margin:0 0 0 16px}.chat-list.chat-list-nonordered,.chat-list .chat-list-nonordered{list-style-type:disc}.chat-list.chat-list-ordered,.chat-list .chat-list-ordered{list-style-type:decimal}.chat-list.chat-list-task{padding:0;margin:0;list-style-type:none}.chat-list .chat-list-item{display:list-item;margin:0}.chat-list .chat-list-item::marker{font-size:var(--wpp-typography-s-body-font-size);line-height:var(--wpp-typography-s-body-line-height)}.chat-list .chat-list-item .wpp-typography{display:block}.chat-list .chat-list-item .chat-list{display:block}.chat-list .chat-list-item-task{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}.chat-list .chat-list-item-task .chat-list{margin-left:8px}.chat-list .chat-list-item-task:not(.chat-list-item-task-checked){text-decoration:line-through}.chat-list .chat-list-item-task:not(.chat-list-item-task-checked) .wpp-icon-tick{display:inline-block;text-decoration:none}.chat-link{font-size:var(--wpp-typography-s-body-font-size);line-height:var(--wpp-typography-s-body-line-height);color:var(--wpp-primary-color-500);-webkit-transition:color 0.2s ease-in-out;transition:color 0.2s ease-in-out}.chat-link:hover{color:var(--wpp-primary-color-400)}.chat-link:active{color:var(--wpp-primary-color-600)}.chat-table{width:100%;border-collapse:collapse;border-spacing:0}.chat-table th,.chat-table td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--wpp-grey-color-300)}.chat-quote{padding-left:16px;margin-left:0;border-left:3px solid var(--wpp-grey-color-300)}.chat-image-single{position:relative;width:100%}.chat-image-single img{display:block;width:100%;height:auto;-o-object-fit:cover;object-fit:cover}.chat-image-full{display:block;width:100%;height:auto;-o-object-fit:cover;object-fit:cover;border:1px solid var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-xs)}.chat-image-grid{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px;width:100%}.chat-image-grid-first{position:relative;width:100%}.chat-image-grid-row{display:-ms-flexbox;display:flex;gap:12px;-ms-flex-align:start;align-items:flex-start;overflow:visible hidden;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.chat-image-grid-row::-webkit-scrollbar{width:4px;height:4px}.chat-image-grid-row::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.chat-image-grid-row .chat-image-grid-item{display:-ms-flexbox;display:flex;-ms-flex:0 0 calc(23% - 9px);flex:0 0 calc(23% - 9px);aspect-ratio:1/1;min-width:100px;overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;border:1px solid var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-xs);position:relative}.chat-image-grid-row .chat-image-grid-item img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}.image-download-button{--wpp-btns-action-color-fill:var(--wpp-grey-color-000);position:absolute;top:8px;right:8px;opacity:0;-webkit-transition:opacity 0.2s ease-in-out;transition:opacity 0.2s ease-in-out}.chat-image-grid-item:hover .image-download-button,.chat-image-single:hover .image-download-button,.chat-image-grid-first:hover .image-download-button{opacity:1}.wpp-icon-image{display:none;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.chat-image-broken{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;background-color:var(--wpp-grey-color-200)}.chat-image-broken .wpp-icon-image{display:block}.chat-image-broken .image-download-button{display:none}.chat-image-broken img{display:none}.attachments{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;gap:8px;width:100%}.attachments .wpp-file-upload-item{-ms-flex:1 1 calc(50% - 4px);flex:1 1 calc(50% - 4px);min-width:224px;max-width:256px}@-webkit-keyframes blink{0%,100%{opacity:1}50%{opacity:0}}@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}";
 
 const WppChatConversationMessage = /*@__PURE__*/ proxyCustomElement(class WppChatConversationMessage extends HTMLElement {
   constructor() {
     super();
     this.__registerHost();
     this.__attachShadow();
-    this._actionButtonConfig = [
-      { icon: 'wpp-icon-thumbs-up' },
-      { icon: 'wpp-icon-thumbs-down' },
-      { icon: 'wpp-icon-refresh' },
-      { icon: 'wpp-icon-copy' },
-    ];
+    this.wppMessageActionClick = createEvent(this, "wppMessageActionClick", 1);
     // Streaming state
     this.accumulatedText = '';
     this.committedLength = 0;
     this.rafHandle = null;
-    this.renderActionButton = (data) => {
-      if (!data.icon)
+    // Handle of the timer that reverts the copy confirmation to the idle copy icon.
+    this.copyResetHandle = null;
+    this.handleActionClick = (action) => {
+      const isToggle = Boolean(action.activeIcon || action.activeLabel);
+      let isActive = this.isActionActive(action);
+      if (isToggle && action.isActive === undefined && action.id) {
+        isActive = !isActive;
+        this.toggledActionIds = isActive
+          ? [...this.toggledActionIds, action.id]
+          : this.toggledActionIds.filter(id => id !== action.id);
+      }
+      // The detail carries the state the action ends in, not the one it started in.
+      this.wppMessageActionClick.emit({
+        action: isToggle ? { ...action, isActive } : action,
+        content: this.finalContent ?? '',
+      });
+      action.onClick?.();
+      if (action.id === 'copy') {
+        this.copyMessageToClipboard();
+      }
+    };
+    this.renderActionButton = (action) => {
+      const isCopyConfirmed = action.id === 'copy' && this.isCopied;
+      const isToggle = Boolean(action.activeIcon || action.activeLabel);
+      const isActive = this.isActionActive(action);
+      const icon = isCopyConfirmed ? 'wpp-icon-done' : (isActive && action.activeIcon) || action.icon;
+      const label = isCopyConfirmed ? this._locales.copiedAction : (isActive && action.activeLabel) || action.label;
+      if (!icon)
         return null;
-      return (h("wpp-action-button-v4-4-0", { variant: "secondary", ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
+      return (h("wpp-tooltip-v4-5-0", { key: action.id, text: label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-5-0", { variant: "secondary", disabled: action.disabled, loading: action.loading,
+        // The derived label and toggle state come first so a dev override wins, while the
+        // config-only fields (icon, text, isActive, …) are never spread onto the element.
+        ariaProps: { label, ...(isToggle ? { pressed: isActive } : {}), ...action.ariaProps }, onClick: () => this.handleActionClick(action) }, h(transformToVersionedTag(icon), { slot: 'icon-start', part: 'icon' }))));
     };
     this.renderMenuContextListItems = () => (h(Fragment, null, this.menuContextListItems.map(item => {
       const { label, slots, ...rest } = item;
-      return (h("wpp-list-item-v4-4-0", { ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, h("span", { slot: "label" }, label), slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+      return (h("wpp-list-item-v4-5-0", { ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, h("span", { slot: "label" }, label), slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
     })));
     this.hostCssClasses = () => ({
       'wpp-chat-conversation': true,
@@ -2951,17 +3010,17 @@ const WppChatConversationMessage = /*@__PURE__*/ proxyCustomElement(class WppCha
     };
     this.containerCssClasses = () => ({
       container: true,
-      [`container-${this.role}`]: true,
+      [`container-${this.resolvedRole}`]: true,
       'no-user-avatar': !this.shouldRenderAvatar('user'),
       'no-assistant-avatar': !this.shouldRenderAvatar('assistant'),
     });
     this.contentCssClasses = () => ({
       content: true,
-      [`content-${this.role}`]: true,
+      [`content-${this.resolvedRole}`]: true,
     });
     this.messageCssClasses = () => ({
       message: true,
-      [`message-${this.role}`]: true,
+      [`message-${this.resolvedRole}`]: true,
       [`message-${this.currentStatus}`]: true,
     });
     this.committedTokens = [] // parsed + rendered blocks
@@ -2970,12 +3029,18 @@ const WppChatConversationMessage = /*@__PURE__*/ proxyCustomElement(class WppCha
     ;
     this.currentStatus = 'complete';
     this.finalContent = '';
+    this.isCopied = false;
+    this.toggledActionIds = [];
+    this.resolvedRole = 'user';
     this.role = 'user';
     this.content = '';
     this.status = 'complete';
     this.actionButtonsConfig = undefined;
     this.menuContextListItems = undefined;
     this.sourcesActionConfig = undefined;
+    this.tokenCount = undefined;
+    this.tokenCountIcon = 'wpp-icon-premium';
+    this.locales = undefined;
     this.assistantAvatarConfig = {};
     this.userAvatarConfig = {};
     this.attachments = [];
@@ -3024,18 +3089,133 @@ const WppChatConversationMessage = /*@__PURE__*/ proxyCustomElement(class WppCha
   onContentChange(newValue) {
     this.finalContent = newValue;
   }
+  onRoleChange(newValue) {
+    if (newValue !== 'user' && newValue !== 'assistant')
+      return;
+    this.resolvedRole = newValue;
+    // Re-park immediately rather than waiting for the next render: framework bindings write this
+    // AFTER the component's last render (React does, on every re-render), so a render-time-only
+    // fix leaves the invalid ARIA role on the host until something else forces a re-render.
+    this.parkHostAriaRole();
+  }
   componentWillLoad() {
     this.currentStatus = this.status;
     this.finalContent = this.content;
-    if (this.actionButtonsConfig) {
-      this._actionButtonConfig = this.actionButtonsConfig.map((button, ndx) => ({
-        ...(this._actionButtonConfig[ndx] || {}),
-        ...button,
-        onClick: () => {
-          button.onClick?.();
-        },
-      }));
+    this.onRoleChange(this.role);
+  }
+  // Deliberately NOT connectedCallback: parking the role there runs before the props hydrate, so
+  // `this.role` is already 'group' by the time componentWillLoad reads it and the message role is
+  // lost (it broke 38 specs). The remaining window is pre-first-paint, so nothing renders or is
+  // scanned with the invalid role.
+  componentDidRender() {
+    this.parkHostAriaRole();
+    this.observeHostAriaRole();
+  }
+  /**
+   * `role` is a data prop carrying a MessageRole, but it shares its name with the global ARIA
+   * attribute, so "user"/"assistant" would sit on the host as an invalid ARIA role (axe:
+   * aria-roles, critical). Park a valid role there instead; `resolvedRole` keeps the real value.
+   */
+  parkHostAriaRole() {
+    const current = this.host?.getAttribute('role');
+    if (current === HOST_ARIA_ROLE)
+      return;
+    // Capture a message role written straight to the attribute before overwriting it, so an
+    // attribute-only update still drives the layout.
+    if (current === 'user' || current === 'assistant') {
+      this.resolvedRole = current;
     }
+    this.host?.setAttribute('role', HOST_ARIA_ROLE);
+  }
+  /**
+   * Framework bindings re-assert `role` outside Stencil's prop lifecycle — React rewrites it on
+   * every re-render — so the only reliable guard is observing the attribute itself.
+   *
+   * Why not the `@Watch('role')` alone: it was tried and measured. With the watcher as the sole
+   * guard, hosts read `role="group"` on first paint but reverted to `role="user"`/`"assistant"`
+   * after the very next React re-render (toggling any page state), because React's identical
+   * re-write is not a change from Stencil's point of view once the prop already holds that value,
+   * so the watcher never fires. With this observer, five consecutive forced re-renders and a raw
+   * `setAttribute('role', 'assistant')` all held at `group`, and axe's aria-roles rule went from
+   * 1 critical node per message to 0. mock-doc does not deliver MutationObserver records, so this
+   * is verified in the browser rather than in a spec.
+   *
+   * Re-parking is idempotent: the guard in `parkHostAriaRole` makes the observer's own write a
+   * no-op, so it cannot loop.
+   */
+  observeHostAriaRole() {
+    if (this.roleObserver || typeof MutationObserver === 'undefined')
+      return;
+    this.roleObserver = new MutationObserver(() => this.parkHostAriaRole());
+    this.roleObserver.observe(this.host, { attributes: true, attributeFilter: ['role'] });
+  }
+  disconnectedCallback() {
+    this.clearCopyReset();
+    this.roleObserver?.disconnect();
+    this.roleObserver = undefined;
+    if (this.rafHandle !== null) {
+      cancelAnimationFrame(this.rafHandle);
+      this.rafHandle = null;
+    }
+  }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
+  /**
+   * The footer actions as rendered: the built-in defaults with any dev override merged on top.
+   *
+   * Overrides are matched by `id` so config order stops being load-bearing — a dev can retarget a
+   * single action without restating the others. An override with no `id` falls back to the default
+   * at the same index, which keeps pre-existing positional configs (handlers only, no icons) wired.
+   * Anything left over is appended as an extra action and must bring its own icon.
+   */
+  get mergedActions() {
+    const defaults = getDefaultActionButtons(this._locales);
+    const overrides = this.actionButtonsConfig;
+    if (!overrides?.length)
+      return defaults;
+    const merged = new Map(defaults.map(action => [action.id, { ...action }]));
+    const extras = [];
+    overrides.forEach((override, ndx) => {
+      const targetId = override.id ?? defaults[ndx]?.id;
+      if (targetId && merged.has(targetId)) {
+        merged.set(targetId, { ...merged.get(targetId), ...override, id: targetId });
+      }
+      else {
+        extras.push({ ...override });
+      }
+    });
+    return [...merged.values(), ...extras];
+  }
+  /** Controlled `isActive` when the dev supplies one, otherwise the component's own toggle state. */
+  isActionActive(action) {
+    return action.isActive ?? (!!action.id && this.toggledActionIds.includes(action.id));
+  }
+  clearCopyReset() {
+    if (this.copyResetHandle !== null) {
+      clearTimeout(this.copyResetHandle);
+      this.copyResetHandle = null;
+    }
+  }
+  async copyMessageToClipboard() {
+    const text = this.finalContent?.trim();
+    if (!text || !navigator.clipboard?.writeText)
+      return;
+    try {
+      await navigator.clipboard.writeText(text);
+    }
+    catch {
+      // The clipboard can reject (denied permission, insecure context). Leave the button in its
+      // idle state rather than confirming a copy that did not happen.
+      return;
+    }
+    // Restart the window on a repeat click instead of stacking timers.
+    this.clearCopyReset();
+    this.isCopied = true;
+    this.copyResetHandle = setTimeout(() => {
+      this.isCopied = false;
+      this.copyResetHandle = null;
+    }, COPIED_CONFIRMATION_TIMEOUT);
   }
   scheduleRefresh() {
     if (this.rafHandle !== null)
@@ -3064,19 +3244,19 @@ const WppChatConversationMessage = /*@__PURE__*/ proxyCustomElement(class WppCha
     }
   }
   renderStreaming() {
-    return (h("div", { class: "message-text" }, this.committedTokens.map((token) => renderToken(token, this.role)), h("span", { class: "streaming-live" }, purify.sanitize(this.liveText), h("span", { class: "cursor", "aria-hidden": "true" }))));
+    return (h("div", { class: "message-text" }, this.committedTokens.map((token) => renderToken(token, this.resolvedRole)), h("span", { class: "streaming-live" }, purify.sanitize(this.liveText), h("span", { class: "cursor", "aria-hidden": "true" }))));
   }
   renderComplete() {
     const tokens = getMarkdownTokens(this.finalContent);
     if (!Array.isArray(tokens)) {
-      return (h("wpp-typography-v4-4-0", { type: "s-body", tag: "p" }, purify.sanitize(this.finalContent)));
+      return (h("wpp-typography-v4-5-0", { type: "s-body", tag: "p" }, purify.sanitize(this.finalContent)));
     }
-    return h("div", { class: "message-text" }, tokens.map((token) => renderToken(token, this.role)));
+    return h("div", { class: "message-text" }, tokens.map((token) => renderToken(token, this.resolvedRole)));
   }
   renderAttachments() {
     if (!this.attachments || this.attachments.length === 0)
       return null;
-    return (h("div", { class: "attachments", part: "attachments", role: "list" }, this.attachments.map((file, index) => (h("wpp-file-upload-item-v4-4-0", { key: index, variant: "chat", part: "file-item", role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": this.attachments.length.toString(), file: {
+    return (h("div", { class: "attachments", part: "attachments", role: "list" }, this.attachments.map((file, index) => (h("wpp-file-upload-item-v4-5-0", { key: index, variant: "chat", part: "file-item", role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": this.attachments.length.toString(), file: {
         name: file.name,
         url: file.url,
         type: file.type,
@@ -3085,26 +3265,46 @@ const WppChatConversationMessage = /*@__PURE__*/ proxyCustomElement(class WppCha
         ...file.fileItemProps,
       } })))));
   }
+  hasTokenCount() {
+    return typeof this.tokenCount === 'string' && this.tokenCount.trim().length > 0;
+  }
+  /**
+   * The DS component file renders the token count as an Action Button instance (S-Strong text,
+   * ghost hover, 6px radius), so it IS a wpp-action-button here — not a styled div — and it emits
+   * the same event as the other footer actions so a consumer can hook usage details onto it. The
+   * only deviation from the button's defaults is the grey-600 icon, set through the button's own
+   * `--wpp-action-button-secondary-icon-color` hook in SCSS (an icon `color` prop loses to the
+   * button's ::slotted rule).
+   */
+  renderTokenCount() {
+    return (h("wpp-action-button-v4-5-0", { variant: "secondary", class: "token-count", part: "token-count", ariaProps: { label: `${this._locales.tokenCountLabel} ${this.tokenCount}` }, onClick: () => this.handleActionClick({ id: 'tokenCount', label: this._locales.tokenCountLabel }) }, h(transformToVersionedTag(this.tokenCountIcon), { slot: 'icon-start' }), this.tokenCount));
+  }
   hasTextContent() {
     return !!this.finalContent && this.finalContent.trim().length > 0;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: this.containerCssClasses() }, this.shouldRenderAvatar('assistant') && (h("div", { class: "avatar-wrapper ai-avatar" }, this.role === 'assistant' && (h("wpp-avatar-v4-4-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), h("div", { class: this.contentCssClasses() }, h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.hasTextContent() && this.renderComplete(), h("slot", { part: "custom-content" }), this.currentStatus === 'complete' && !!this.attachments?.length && this.renderAttachments()), this.role === 'assistant' && this.status === 'complete' && (h("div", { class: "actions" }, h("div", { class: "action-toolbar" }, this._actionButtonConfig.map(this.renderActionButton), this.menuContextListItems && (h("wpp-menu-context-v4-4-0", null, h("wpp-action-button-v4-4-0", { variant: "secondary", slot: "trigger-element" }, h("wpp-icon-more-v4-4-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.sourcesActionConfig && (h("div", { class: "sources-action" }, h("wpp-action-button-v4-4-0", { variant: "secondary", ...this.sourcesActionConfig }, this.sourcesActionConfig.text)))))), this.shouldRenderAvatar('user') && (h("div", { class: "avatar-wrapper user-avatar" }, this.role === 'user' && h("wpp-avatar-v4-4-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: this.containerCssClasses() }, this.shouldRenderAvatar('assistant') && (h("div", { class: "avatar-wrapper ai-avatar" }, this.resolvedRole === 'assistant' && (h("wpp-avatar-v4-5-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), h("div", { class: this.contentCssClasses() }, h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.hasTextContent() && this.renderComplete(), h("slot", { part: "custom-content" }), this.currentStatus === 'complete' && !!this.attachments?.length && this.renderAttachments()), this.resolvedRole === 'assistant' && this.currentStatus === 'complete' && (h("div", { class: "actions" }, h("div", { class: "action-toolbar", part: "action-toolbar" }, this.mergedActions.map(this.renderActionButton), this.menuContextListItems && (h("wpp-menu-context-v4-5-0", null, h("wpp-action-button-v4-5-0", { variant: "secondary", slot: "trigger-element" }, h("wpp-icon-more-v4-5-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.hasTokenCount()
+      ? this.renderTokenCount()
+      : this.sourcesActionConfig && (h("div", { class: "sources-action" }, h("wpp-action-button-v4-5-0", { variant: "secondary", ariaProps: this.sourcesActionConfig.ariaProps, disabled: this.sourcesActionConfig.disabled, loading: this.sourcesActionConfig.loading, onClick: () => this.sourcesActionConfig.onClick?.() }, this.sourcesActionConfig.text))), h("span", { class: "sr-only", "aria-live": "polite" }, this.isCopied ? this._locales.copiedAction : '')))), this.shouldRenderAvatar('user') && (h("div", { class: "avatar-wrapper user-avatar" }, this.resolvedRole === 'user' && h("wpp-avatar-v4-5-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
   }
-  static get registryIs() { return "wpp-chat-conversation-message-v4-4-0"; }
+  static get registryIs() { return "wpp-chat-conversation-message-v4-5-0"; }
   get host() { return this; }
   static get watchers() { return {
     "status": ["onStatusChange"],
-    "content": ["onContentChange"]
+    "content": ["onContentChange"],
+    "role": ["onRoleChange"]
   }; }
   static get style() { return wppChatConversationMessageCss; }
-}, [1, "wpp-chat-conversation-message", "wpp-chat-conversation-message-v4-4-0", {
-    "role": [1],
+}, [1, "wpp-chat-conversation-message", "wpp-chat-conversation-message-v4-5-0", {
+    "role": [1025],
     "content": [1],
     "status": [1],
     "actionButtonsConfig": [16],
     "menuContextListItems": [16],
     "sourcesActionConfig": [16],
+    "tokenCount": [1, "token-count"],
+    "tokenCountIcon": [1, "token-count-icon"],
+    "locales": [16],
     "assistantAvatarConfig": [4, "assistant-avatar-config"],
     "userAvatarConfig": [4, "user-avatar-config"],
     "attachments": [16],
@@ -3112,6 +3312,9 @@ const WppChatConversationMessage = /*@__PURE__*/ proxyCustomElement(class WppCha
     "liveText": [32],
     "currentStatus": [32],
     "finalContent": [32],
+    "isCopied": [32],
+    "toggledActionIds": [32],
+    "resolvedRole": [32],
     "appendChunk": [64],
     "completeStream": [64],
     "setStatus": [64]
@@ -3120,179 +3323,179 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-chat-conversation-message-v4-4-0", "wpp-action-button-v4-4-0", "wpp-avatar-v4-4-0", "wpp-checkbox-v4-4-0", "wpp-divider-v4-4-0", "wpp-file-upload-item-v4-4-0", "wpp-icon-chevron-v4-4-0", "wpp-icon-copy-v4-4-0", "wpp-icon-cross-v4-4-0", "wpp-icon-dash-v4-4-0", "wpp-icon-database-v4-4-0", "wpp-icon-document-v4-4-0", "wpp-icon-download-v4-4-0", "wpp-icon-error-v4-4-0", "wpp-icon-file-v4-4-0", "wpp-icon-file-zip-v4-4-0", "wpp-icon-image-v4-4-0", "wpp-icon-info-message-v4-4-0", "wpp-icon-more-v4-4-0", "wpp-icon-music-v4-4-0", "wpp-icon-pitch-v4-4-0", "wpp-icon-spreadsheet-v4-4-0", "wpp-icon-success-v4-4-0", "wpp-icon-tick-v4-4-0", "wpp-icon-video-clip-v4-4-0", "wpp-icon-warning-v4-4-0", "wpp-inline-message-v4-4-0", "wpp-internal-label-v4-4-0", "wpp-internal-tooltip-v4-4-0", "wpp-label-v4-4-0", "wpp-list-item-v4-4-0", "wpp-menu-context-v4-4-0", "wpp-spinner-v4-4-0", "wpp-tooltip-v4-4-0", "wpp-typography-v4-4-0"];
+  const components = ["wpp-chat-conversation-message-v4-5-0", "wpp-action-button-v4-5-0", "wpp-avatar-v4-5-0", "wpp-checkbox-v4-5-0", "wpp-divider-v4-5-0", "wpp-file-upload-item-v4-5-0", "wpp-icon-chevron-v4-5-0", "wpp-icon-copy-v4-5-0", "wpp-icon-cross-v4-5-0", "wpp-icon-dash-v4-5-0", "wpp-icon-database-v4-5-0", "wpp-icon-document-v4-5-0", "wpp-icon-download-v4-5-0", "wpp-icon-error-v4-5-0", "wpp-icon-file-v4-5-0", "wpp-icon-file-zip-v4-5-0", "wpp-icon-image-v4-5-0", "wpp-icon-info-message-v4-5-0", "wpp-icon-more-v4-5-0", "wpp-icon-music-v4-5-0", "wpp-icon-pitch-v4-5-0", "wpp-icon-spreadsheet-v4-5-0", "wpp-icon-success-v4-5-0", "wpp-icon-tick-v4-5-0", "wpp-icon-video-clip-v4-5-0", "wpp-icon-warning-v4-5-0", "wpp-inline-message-v4-5-0", "wpp-internal-label-v4-5-0", "wpp-internal-tooltip-v4-5-0", "wpp-label-v4-5-0", "wpp-list-item-v4-5-0", "wpp-menu-context-v4-5-0", "wpp-spinner-v4-5-0", "wpp-tooltip-v4-5-0", "wpp-typography-v4-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-chat-conversation-message-v4-4-0":
+    case "wpp-chat-conversation-message-v4-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppChatConversationMessage);
       }
       break;
-    case "wpp-action-button-v4-4-0":
+    case "wpp-action-button-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$y();
       }
       break;
-    case "wpp-avatar-v4-4-0":
+    case "wpp-avatar-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$x();
       }
       break;
-    case "wpp-checkbox-v4-4-0":
+    case "wpp-checkbox-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$w();
       }
       break;
-    case "wpp-divider-v4-4-0":
+    case "wpp-divider-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$v();
       }
       break;
-    case "wpp-file-upload-item-v4-4-0":
+    case "wpp-file-upload-item-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$u();
       }
       break;
-    case "wpp-icon-chevron-v4-4-0":
+    case "wpp-icon-chevron-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$t();
       }
       break;
-    case "wpp-icon-copy-v4-4-0":
+    case "wpp-icon-copy-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$s();
       }
       break;
-    case "wpp-icon-cross-v4-4-0":
+    case "wpp-icon-cross-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$r();
       }
       break;
-    case "wpp-icon-dash-v4-4-0":
+    case "wpp-icon-dash-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$q();
       }
       break;
-    case "wpp-icon-database-v4-4-0":
+    case "wpp-icon-database-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$p();
       }
       break;
-    case "wpp-icon-document-v4-4-0":
+    case "wpp-icon-document-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$o();
       }
       break;
-    case "wpp-icon-download-v4-4-0":
+    case "wpp-icon-download-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-icon-error-v4-4-0":
+    case "wpp-icon-error-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-icon-file-v4-4-0":
+    case "wpp-icon-file-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-file-zip-v4-4-0":
+    case "wpp-icon-file-zip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-image-v4-4-0":
+    case "wpp-icon-image-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-info-message-v4-4-0":
+    case "wpp-icon-info-message-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-more-v4-4-0":
+    case "wpp-icon-more-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-music-v4-4-0":
+    case "wpp-icon-music-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-pitch-v4-4-0":
+    case "wpp-icon-pitch-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-spreadsheet-v4-4-0":
+    case "wpp-icon-spreadsheet-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-success-v4-4-0":
+    case "wpp-icon-success-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-tick-v4-4-0":
+    case "wpp-icon-tick-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-video-clip-v4-4-0":
+    case "wpp-icon-video-clip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-warning-v4-4-0":
+    case "wpp-icon-warning-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-inline-message-v4-4-0":
+    case "wpp-inline-message-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-label-v4-4-0":
+    case "wpp-internal-label-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-internal-tooltip-v4-4-0":
+    case "wpp-internal-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-label-v4-4-0":
+    case "wpp-label-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-list-item-v4-4-0":
+    case "wpp-list-item-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-menu-context-v4-4-0":
+    case "wpp-menu-context-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v4-4-0":
+    case "wpp-spinner-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-4-0":
+    case "wpp-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-4-0":
+    case "wpp-typography-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

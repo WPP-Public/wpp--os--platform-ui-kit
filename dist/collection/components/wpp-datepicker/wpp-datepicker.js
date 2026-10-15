@@ -1735,7 +1735,7 @@ export class WppDatepicker {
       'wpp-reverse-layout': this.reverseLayout,
       'wpp-double-calendar': this.isDoubleCalendar(),
     });
-    this.renderPresets = () => (h("div", { class: "wpp-presets-container" }, h("div", { class: "wpp-presets-list" }, this.presets.map((preset, index) => (h("wpp-list-item-v4-4-0", { onMouseEnter: () => this.handlePreviewPreset(preset.value), onMouseLeave: this.handleMouseLeavePreset, onFocus: () => this.handlePreviewPreset(preset.value), onWppChangeListItem: () => this.handleClickPreset(preset), class: "wpp-presets-item", tabIndex: index === this.presetRovingIndex ? 0 : -1 }, h("wpp-typography-v4-4-0", { type: "s-body", slot: "label" }, preset.label))))), !this.isDoubleCalendar() && h("div", { class: "wpp-presets-footer" })));
+    this.renderPresets = () => (h("div", { class: "wpp-presets-container" }, h("div", { class: "wpp-presets-list" }, this.presets.map((preset, index) => (h("wpp-list-item-v4-5-0", { onMouseEnter: () => this.handlePreviewPreset(preset.value), onMouseLeave: this.handleMouseLeavePreset, onFocus: () => this.handlePreviewPreset(preset.value), onWppChangeListItem: () => this.handleClickPreset(preset), class: "wpp-presets-item", tabIndex: index === this.presetRovingIndex ? 0 : -1 }, h("wpp-typography-v4-5-0", { type: "s-body", slot: "label" }, preset.label))))), !this.isDoubleCalendar() && h("div", { class: "wpp-presets-footer" })));
     /**
      * Double mode owns its actions row so it can span the full popup width beneath both
      * calendars, instead of air-datepicker's per-instance buttons under the left one. Reuses
@@ -1971,7 +1971,7 @@ export class WppDatepicker {
     return this._locales.firstDay ?? 1; // Default to Monday (ISO 8601) if no valid value is found
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, datepicker-container, icon-calendar, datepicker-input, icon-cross, message, trigger-wrapper" }, this.labelConfig?.text && !this.hasTriggerSlot && (h("wpp-label-v4-4-0", { class: "label", htmlFor: "datepicker", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.containerClasses(), id: "container", part: "datepicker-container" }, this.hasTriggerSlot
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, datepicker-container, icon-calendar, datepicker-input, icon-cross, message, trigger-wrapper" }, this.labelConfig?.text && !this.hasTriggerSlot && (h("wpp-label-v4-5-0", { class: "label", disabled: this.disabled, htmlFor: "datepicker", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.containerClasses(), id: "container", part: "datepicker-container" }, this.hasTriggerSlot
       ? [
         h("input", { type: "hidden", ref: el => (this.hiddenInputRef = el), "aria-hidden": "true" }),
         h("div", { class: "trigger-wrapper", ref: el => (this.triggerWrapperRef = el), onClick: (e) => this.handleTriggerClick(e), role: "presentation", part: "trigger-wrapper" }, h("slot", { name: "trigger", onSlotchange: () => this.updateSlotData() })),
@@ -1983,7 +1983,7 @@ export class WppDatepicker {
               : `${this._locales.dateFormat}`), ref: inputRef => (this.inputRef = inputRef), autocomplete: "off", part: "datepicker-input", title: "", "aria-label": this.labelConfig?.text || this._locales.calendarLabel, "aria-invalid": (this.message || this.internalMessage) && (this.messageType || this.internalMessageType) === 'error'
             ? 'true'
             : undefined, "aria-describedby": this.message || this.internalMessage ? 'datepicker-message' : undefined }),
-        h("wpp-icon-calendar-v4-4-0", { onClick: this.handleClickCalendarIcon, onKeyDown: activateOnEnterOrSpace(this.handleClickCalendarIcon), class: this.iconCalendarCssClasses(), part: "icon-calendar", color: "inherit", role: "button",
+        h("wpp-icon-calendar-v4-5-0", { onClick: this.handleClickCalendarIcon, onKeyDown: activateOnEnterOrSpace(this.handleClickCalendarIcon), class: this.iconCalendarCssClasses(), part: "icon-calendar", color: "inherit", role: "button",
           // Pointer-only trigger: QA asked for it out of the tab order. The keyboard route
           // into the calendar is ArrowDown/ArrowUp on the field, which also lands focus in
           // the date grid, so the dialog stays reachable without this being a tab stop.
@@ -1995,10 +1995,10 @@ export class WppDatepicker {
         h("div", { class: "wpp-datepicker-divider" }),
         this.renderActions(),
       ]
-      : this.hasPresets() && this.renderPresets()), (!!this.lastValidDate || this.inputRef?.value) && !this.hasTriggerSlot && (h("wpp-icon-cross-v4-4-0", { class: this.iconCrossCssClasses(), "aria-label": this._locales.eraseDateLabel, role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: this.disabled ? -1 : 0, onClick: this.handleClickIconCross, onKeyDown: activateOnEnterOrSpace(this.handleClickIconCross), onMouseDown: (e) => e.preventDefault(), part: "icon-cross" })), (this.message || this.internalMessage) && (h("div", { id: "datepicker-message", class: "inline-message-live-region", role: (this.message ? this.messageType : this.internalMessageType) === 'error' ? 'alert' : 'status' }, h("span", { class: "sr-only" }, this.message || this.internalMessage), h("wpp-inline-message-v4-4-0", { "aria-hidden": "true", class: "inline-message", message: this.message || this.internalMessage, type: this.message ? this.messageType : this.internalMessageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" }))))));
+      : this.hasPresets() && this.renderPresets()), (!!this.lastValidDate || this.inputRef?.value) && !this.hasTriggerSlot && (h("wpp-icon-cross-v4-5-0", { class: this.iconCrossCssClasses(), "aria-label": this._locales.eraseDateLabel, role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: this.disabled ? -1 : 0, onClick: this.handleClickIconCross, onKeyDown: activateOnEnterOrSpace(this.handleClickIconCross), onMouseDown: (e) => e.preventDefault(), part: "icon-cross" })), (this.message || this.internalMessage) && (h("div", { id: "datepicker-message", class: "inline-message-live-region", role: (this.message ? this.messageType : this.internalMessageType) === 'error' ? 'alert' : 'status' }, h("span", { class: "sr-only" }, this.message || this.internalMessage), h("wpp-inline-message-v4-5-0", { "aria-hidden": "true", class: "inline-message", message: this.message || this.internalMessage, type: this.message ? this.messageType : this.internalMessageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" }))))));
   }
   static get is() { return "wpp-datepicker"; }
-  static get registryIs() { return "wpp-datepicker-v4-4-0"; }
+  static get registryIs() { return "wpp-datepicker-v4-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

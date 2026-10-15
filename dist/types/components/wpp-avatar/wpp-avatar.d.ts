@@ -74,6 +74,7 @@ export declare class WppAvatar {
   colorChange(newValue: string): void;
   srcChange(): void;
   componentWillLoad(): void;
+  componentDidRender(): void;
   private isAvatarIcon;
   private getUserAbbreviation;
   private handleImageLoadFailure;
@@ -90,9 +91,8 @@ export declare class WppAvatar {
   /** A tooltip is only shown for named (non-icon) avatars that opted in via `withTooltip`. */
   private hasTooltip;
   /**
-   * Avatars are presentational (removed from the a11y tree) when the tooltip already exposes the
-   * name, or when explicitly marked via `role="presentation"`. Otherwise they expose their role,
-   * tab index and label.
+   * Explicitly presentational avatars are removed from the a11y tree. Tooltip avatars leave their
+   * host unsemanticed because the tooltip supplies the focusable, labelled trigger.
    */
   private getHostAriaProps;
   render(): any;

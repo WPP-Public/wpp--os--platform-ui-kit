@@ -135,6 +135,9 @@
   width: var(--full-screen-modal-width);
   height: var(--full-screen-modal-height);
 }
+.full-screen-modal:focus, .full-screen-modal:focus-visible {
+  outline: none;
+}
 .full-screen-modal.visible {
   animation: fullScreenModalAppearAboveCenterAnimations 0.2s linear;
   animation-delay: 0.15s;

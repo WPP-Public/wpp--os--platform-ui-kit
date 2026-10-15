@@ -10,15 +10,19 @@ export declare class WppBasicNode {
   private slotObserver;
   private bodyRef;
   private titleRef;
+  private errorIconRef;
+  private shouldFocusErrorIcon;
   hasScrollbar: boolean;
   hasContent: boolean;
+  isErrorDismissed: boolean;
   host: HTMLWppBasicNodeElement;
   /**
    * Defines the title of the node, which is displayed in the header section. This prop is required.
    */
   readonly nodeTitle: string;
   /**
-   * Defines whether the node is in a loading state. If true, the border of the node will be animated.
+   * Defines whether the node is in a loading state. If true, an arc rotates around the border of the node
+   * with a soft glow behind it.
    */
   readonly isLoading: boolean;
   /**
@@ -26,6 +30,11 @@ export declare class WppBasicNode {
    * shows a refresh icon instead of the play icon, indicating the node can be run again.
    */
   readonly isReRun: boolean;
+  /**
+   * Defines the error message of the node. When provided, the node is rendered in the error state:
+   * an error icon is displayed in the header and the message is shown in an inline message at the top of the body.
+   */
+  readonly errorMessage: string | undefined;
   /**
    * Defines the additional actions available for the Basic Node. The actions are added to the dropdown menu in the footer section.
    * The `icon` should correspond to a valid icon name in the design system.
@@ -47,6 +56,12 @@ export declare class WppBasicNode {
    * Emitted when an action is clicked. The event detail contains the `BasicNodeAction` object corresponding to the clicked action.
    */
   wppActionClick: EventEmitter<BasicNodeAction>;
+  /**
+   * Emitted when the user dismisses the error inline message with its close button.
+   * The error icon remains in the header until `errorMessage` is cleared.
+   */
+  wppDismissError: EventEmitter<void>;
+  onErrorMessageChange(): void;
   connectedCallback(): void;
   disconnectedCallback(): void;
   componentWillLoad(): void;
@@ -60,8 +75,12 @@ export declare class WppBasicNode {
    */
   private updateHasContent;
   private getPrimaryAction;
+  private getErrorAnnouncement;
+  private handleErrorDismiss;
   private handlePrimaryActionClick;
   private getNodeContainerClasses;
   private getNodeWrapperClasses;
+  private getErrorMessageClasses;
+  private getErrorIconClasses;
   render(): any;
 }

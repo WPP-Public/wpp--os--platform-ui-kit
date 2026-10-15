@@ -43,6 +43,7 @@ export declare class WppSearch implements BaseComponent, InlineMessage {
   host: HTMLWppSearchElement;
   isFocused: boolean;
   isInputFocused: boolean;
+  isLabelHovered: boolean;
   searchValue: string;
   isEmptyOptions: boolean;
   isInfiniteLoading: boolean;

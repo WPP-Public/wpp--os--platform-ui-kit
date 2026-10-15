@@ -64,6 +64,9 @@
 :host([disabled]:not([disabled=false])) {
   cursor: not-allowed;
 }
+:host([disabled]:not([disabled=false])) .wpp-inline-message {
+  cursor: text;
+}
 
 :host .file-upload-label {
   margin-bottom: 8px;
@@ -93,11 +96,11 @@
 .upload-wrapper .icon-file::part(content) {
   transition: 0.2s ease-in-out;
 }
-.upload-wrapper:hover, .upload-wrapper.tab-focus {
+.upload-wrapper:hover, .upload-wrapper.label-hovered, .upload-wrapper.tab-focus {
   background-color: var(--fu-bg-color-hover);
   border-color: var(--fu-border-color-hover);
 }
-.upload-wrapper:hover .icon-file::part(content), .upload-wrapper.tab-focus .icon-file::part(content) {
+.upload-wrapper:hover .icon-file::part(content), .upload-wrapper.label-hovered .icon-file::part(content), .upload-wrapper.tab-focus .icon-file::part(content) {
   background-color: var(--fu-icon-bg-color-hover);
 }
 .upload-wrapper.message {

@@ -126,8 +126,29 @@
   align-items: center;
   margin-top: 10px;
 }
-.actions .sources-action {
+.actions .sources-action,
+.actions .token-count {
   margin-left: auto;
+}
+
+/* Trailing token count — a wpp-action-button per the DS component file; it brings its own
+   S-Strong typography, hover fill and radius, so nothing is restyled here. */
+.token-count {
+  /* The DS node shows the Premium icon at grey-600 (the button's default is grey-800). This is the
+     button's documented theming hook; an icon `color` prop would lose to its ::slotted rule. */
+  --wpp-action-button-secondary-icon-color: var(--wpp-grey-color-600);
+  flex: 0 0 auto;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Typography Elements */

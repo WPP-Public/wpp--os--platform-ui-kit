@@ -1,10 +1,10 @@
 import { Fragment, h, Host } from '@stencil/core';
 import { calculateBufferProgress, formatTime } from './utils';
-import { LOCALES_DEFAULTS, INIT_SPLIT_TIME_FORMAT, INIT_SPLIT_TIME_FORMAT_W_HOURS } from './const';
+import { LOCALES_DEFAULTS } from './const';
 import { mergeLocales } from '../../utils/utils';
 import { renderSeekBarComponent } from './components/wpp-seek-bar';
 import { renderVideoCurrentTimeComponent } from './components/wpp-video-time';
-import { renderVolumeBarComponent } from './components/wpp-volume-bar';
+import { placeVolumeSlider, renderVolumeBarComponent } from './components/wpp-volume-bar';
 import { renderCaptionsComponent } from './components/wpp-captions';
 import { renderAccessibilityInstructionsComponent } from './components/wpp-accessibility-instructions';
 import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
@@ -119,9 +119,7 @@ export class WppVideoPlayer {
         return;
       if (this.videoPlayerRef.duration > 3600) {
         this.timeFormat = 'extended';
-        this.splitCurrentVideoTime = INIT_SPLIT_TIME_FORMAT_W_HOURS;
       }
-      this.splitOverallVideoTime = formatTime(this.timeFormat, this.videoPlayerRef.duration, true);
       this.overallVideoTime = this.videoPlayerRef.duration;
       if (this.videoPlayerRef.videoWidth && this.videoPlayerRef.videoHeight) {
         this.aspectRatio = (this.videoPlayerRef.videoWidth / this.videoPlayerRef.videoHeight).toString();
@@ -152,30 +150,51 @@ export class WppVideoPlayer {
       }
     };
     this.handleVideoEnded = () => {
-      if (this.videoPlayerRef && this.controlPanelConfigDefault.autoplay && !this.controlPanelConfigDefault.loop) {
-        this.videoPlayerRef.currentTime = 0;
+      // The last `timeupdate` can land slightly before the end, so pin the progress to the full duration
+      if (this.videoPlayerRef) {
+        this.currentVideoTime = this.videoPlayerRef.duration;
       }
-      this.videoPlayerState = 'idle';
-      this.hideControls();
+      // Autoplay has no controls bar, so it falls back to the main play button to replay
+      if (this.controlPanelConfigDefault.autoplay) {
+        this.videoPlayerState = 'idle';
+        return;
+      }
+      this.videoPlayerState = 'paused';
     };
     this.handleSliderShow = () => this.volumeSliderShow();
     this.handleSliderHide = (delay) => this.volumeSliderHide(delay);
+    /** The container's `open` class keeps the mute button in its hover look while the slider shows. */
     this.volumeSliderShow = () => {
       if (!this.volumeBarContainerRef || !this.volumeButtonRef)
         return;
       clearTimeout(this.hoverTimeout);
-      const btnEl = this.volumeButtonRef?.shadowRoot?.querySelector('.inverted');
+      placeVolumeSlider(this.volumeContainerRef, this.volumeBarContainerRef);
       this.volumeBarContainerRef.classList.add('active');
-      btnEl?.classList.add('hover-active');
+      this.volumeContainerRef?.classList.add('open');
     };
     this.volumeSliderHide = (delay = 300) => {
       if (this.hoverTimeout)
         clearTimeout(this.hoverTimeout);
-      this.hoverTimeout = setTimeout(() => {
-        const btnEl = this.volumeButtonRef?.shadowRoot?.querySelector('.inverted');
-        this.volumeBarContainerRef?.classList.remove('active');
-        btnEl?.classList.remove('hover-active');
-      }, delay);
+      this.hoverTimeout = setTimeout(this.volumeSliderHideNow, delay);
+    };
+    this.volumeSliderHideNow = () => {
+      this.volumeBarContainerRef?.classList.remove('active');
+      this.volumeContainerRef?.classList.remove('open');
+    };
+    /**
+     * Escape closes the slider at once. A closed slider is hidden from the focus, so when the focus
+     * sits on it, it is moved back to the mute button first; that focus would reopen the slider,
+     * which is why the hide follows it rather than the other way round.
+     */
+    this.dismissVolumeSlider = () => {
+      if (!this.volumeBarContainerRef?.classList.contains('active'))
+        return;
+      if (this.host.shadowRoot?.activeElement === this.volumeBarRef) {
+        this.volumeButtonRef?.shadowRoot?.querySelector('button')?.focus();
+      }
+      if (this.hoverTimeout)
+        clearTimeout(this.hoverTimeout);
+      this.volumeSliderHideNow();
     };
     this.handleFullscreenChange = () => {
       this.isFullscreen = !!(document.fullscreenElement ||
@@ -184,8 +203,13 @@ export class WppVideoPlayer {
         document.mozFullScreenElement);
     };
     this.handleMouseLeave = () => {
-      if (this.videoPlayerState === 'playing')
+      if (this.videoPlayerState !== 'idle')
         this.hideControls();
+    };
+    /** Reveals the controls when focus moves into them, so a focused control is never hidden. */
+    this.handleFocusIn = () => {
+      if (this.isInvisible)
+        this.showControls();
     };
     this.handleMouseMove = () => {
       this.showControls();
@@ -230,7 +254,7 @@ export class WppVideoPlayer {
         return;
       const min = parseFloat(this.seekBarRef.min);
       const max = parseFloat(this.seekBarRef.max);
-      const progress = ((value - min) / (max - min)) * 100;
+      const progress = max > min ? Math.min(Math.max(((value - min) / (max - min)) * 100, 0), 100) : 0;
       this.seekBarRef.style.setProperty('--progress-bar-progress', `${progress}%`);
     };
     this.showAndHideVolumeSlider = (delay = 1000) => {
@@ -400,12 +424,12 @@ export class WppVideoPlayer {
      * - autoplay=false && state = idle
      * - autoplay=true
      */
-    this.renderMainPlayButton = () => (h("wpp-action-button-v4-4-0", { ref: ref => (this.initPlayButtonRef = ref), class: this.playButtonCssClasses(), onClick: this.togglePlay, variant: "inverted", ariaProps: {
+    this.renderMainPlayButton = () => (h("wpp-action-button-v4-5-0", { ref: ref => (this.initPlayButtonRef = ref), class: this.playButtonCssClasses(), onClick: this.togglePlay, variant: "inverted", ariaProps: {
         label: this.videoPlayerState === 'playing'
           ? this._locales.playButtonAriaLabel.play
           : this._locales.playButtonAriaLabel.pause,
         pressed: this.videoPlayerState === 'playing',
-      } }, this.videoPlayerState !== 'playing' ? (h("wpp-icon-play-filled-v4-4-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-pause-filled-v4-4-0", { slot: "icon-start", "aria-hidden": "true" }))));
+      } }, this.videoPlayerState !== 'playing' ? (h("wpp-icon-play-filled-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-pause-filled-v4-5-0", { slot: "icon-start", "aria-hidden": "true" }))));
     this.renderVideoTag = () => (h("video", { ref: ref => (this.videoPlayerRef = ref), id: "video-element", class: "video-player", part: "video-player", controls: false, poster: this.thumbnail, autoplay: this.controlPanelConfigDefault.autoplay, muted: !this.controlPanelConfigDefault.showVolumeButton || this.controlPanelConfigDefault.autoplay, loop: this.controlPanelConfigDefault.loop, preload: this.preload, onEnded: this.handleVideoEnded, onLoadedMetaData: this.handleMetadataLoaded, ...(this.controlPanelConfigDefault.autoplay
         ? {
           onClick: this.togglePlay,
@@ -420,7 +444,7 @@ export class WppVideoPlayer {
           onPlay: this.handlePlayStateChange,
           onPause: this.handlePlayStateChange,
         }), ...this.videoPlayerSize }, this.sourceElements, this.trackElements, this._locales.notSupportedPlayer));
-    this.renderVideoTime = (time) => renderVideoCurrentTimeComponent.call(this, time);
+    this.renderVideoTime = (timeInSeconds, label) => renderVideoCurrentTimeComponent.call(this, formatTime(this.timeFormat, timeInSeconds), label);
     this.renderSeekBar = () => renderSeekBarComponent.call(this);
     this.renderVolumeBar = () => renderVolumeBarComponent.call(this);
     this.renderCaptions = () => renderCaptionsComponent.call(this);
@@ -428,9 +452,7 @@ export class WppVideoPlayer {
     this.videoPlayerState = 'idle';
     this.currentVideoTime = 0;
     this.timeFormat = 'default';
-    this.splitCurrentVideoTime = INIT_SPLIT_TIME_FORMAT;
     this.overallVideoTime = 0;
-    this.splitOverallVideoTime = INIT_SPLIT_TIME_FORMAT;
     this.loadedPercentage = 0;
     this.volume = 1;
     this.isFullscreen = false;
@@ -494,7 +516,6 @@ export class WppVideoPlayer {
   onCurrentVideoTimeChange(value) {
     if (!this.videoPlayerRef)
       return;
-    this.splitCurrentVideoTime = formatTime(this.timeFormat, value, true);
     this.updateSeekProgress(value);
   }
   onSelectedLanguageChange(value) {
@@ -537,27 +558,31 @@ export class WppVideoPlayer {
   get _locales() {
     return mergeLocales(LOCALES_DEFAULTS, this.locales);
   }
+  /** The shared volume bar reads the mute button's label from here. */
+  get volumeButtonLabel() {
+    return this._locales.volumeButtonAriaLabel;
+  }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "video-player, controls", onMouseMove: this.handleMouseMove, onMouseLeave: this.handleMouseLeave, ...this.videoPlayerHostSize, role: "region", "aria-label": this._locales.hostAriaLabel }, this.renderVideoTag(), this.renderMainPlayButton(), !this.controlPanelConfigDefault.autoplay && (h("div", { ref: ref => (this.controlsRef = ref), ...(this.thumbnail ? { style: { backgroundImage: `url(${this.thumbnail})` } } : {}), class: this.controlsCssClasses(), part: "controls", tabindex: "-1", ...(this.videoPlayerState !== 'idle'
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "video-player, controls", onMouseMove: this.handleMouseMove, onMouseLeave: this.handleMouseLeave, onFocusin: this.handleFocusIn, ...this.videoPlayerHostSize, role: "region", "aria-label": this._locales.hostAriaLabel }, this.renderVideoTag(), this.renderMainPlayButton(), !this.controlPanelConfigDefault.autoplay && (h("div", { ref: ref => (this.controlsRef = ref), ...(this.thumbnail ? { style: { backgroundImage: `url(${this.thumbnail})` } } : {}), class: this.controlsCssClasses(), part: "controls", tabindex: "-1", ...(this.videoPlayerState !== 'idle'
         ? {
           onDblClick: this.handleControlsDblClick,
           onClick: this.handleControlsClick,
           role: 'region',
           'aria-label': this._locales.controlsAriaLabel,
         }
-        : {}) }, this.videoPlayerState !== 'idle' && (h(Fragment, null, this.caption && this.renderCaptions(), h("div", { class: "controls-bar", ref: ref => (this.controlsBarRef = ref) }, h("wpp-action-button-v4-4-0", { ref: ref => (this.playPauseButtonRef = ref), class: "play-pause-button", variant: "inverted", onClick: this.togglePlay, ariaProps: {
+        : {}) }, this.videoPlayerState !== 'idle' && (h(Fragment, null, this.caption && this.renderCaptions(), h("div", { class: "controls-bar", ref: ref => (this.controlsBarRef = ref) }, h("wpp-action-button-v4-5-0", { ref: ref => (this.playPauseButtonRef = ref), class: "play-pause-button", variant: "inverted", onClick: this.togglePlay, ariaProps: {
         label: this.videoPlayerState === 'playing'
           ? this._locales.playPauseButtonArealLabels.pause
           : this._locales.playPauseButtonArealLabels.play,
         pressed: this.videoPlayerState === 'playing',
-      } }, this.videoPlayerState === 'playing' ? (h("wpp-icon-pause-filled-v4-4-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-play-filled-v4-4-0", { slot: "icon-start", "aria-hidden": "true" }))), this.renderVideoTime(this.splitCurrentVideoTime), this.renderSeekBar(), this.renderVideoTime(this.splitOverallVideoTime), this.caption && (h("wpp-action-button-v4-4-0", { ref: ref => (this.captionButtonRef = ref), onClick: this.toggleCaptions, variant: "inverted", ariaProps: {
+      } }, this.videoPlayerState === 'playing' ? (h("wpp-icon-pause-filled-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-play-filled-v4-5-0", { slot: "icon-start", "aria-hidden": "true" }))), this.renderVideoTime(this.currentVideoTime, this._locales.currentTimeAriaLabel), this.renderSeekBar(), this.renderVideoTime(this.overallVideoTime, this._locales.durationAriaLabel), this.caption && (h("wpp-action-button-v4-5-0", { ref: ref => (this.captionButtonRef = ref), onClick: this.toggleCaptions, variant: "inverted", ariaProps: {
         label: this._locales.captionButtonAriaLabel,
-      } }, this.isCaptionEnabled ? (h("wpp-icon-caption-on-v4-4-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-caption-off-v4-4-0", { slot: "icon-start", "aria-hidden": "true" })))), this.controlPanelConfigDefault.showVolumeButton && this.renderVolumeBar(), this.controlPanelConfigDefault.showFullscreenButton && (h("wpp-action-button-v4-4-0", { ref: ref => (this.fullScreenButtonRef = ref), onClick: this.toggleFullscreen, variant: "inverted", ariaProps: {
+      } }, this.isCaptionEnabled ? (h("wpp-icon-caption-on-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-caption-off-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })))), this.controlPanelConfigDefault.showVolumeButton && this.renderVolumeBar(), this.controlPanelConfigDefault.showFullscreenButton && (h("wpp-action-button-v4-5-0", { ref: ref => (this.fullScreenButtonRef = ref), onClick: this.toggleFullscreen, variant: "inverted", ariaProps: {
         label: this._locales.fullscreenButtonAriaLabel,
-      } }, this.isFullscreen ? (h("wpp-icon-fullscreen-minimise-v4-4-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-fullscreen-v4-4-0", { slot: "icon-start", "aria-hidden": "true" })))), this.renderAccessibilityInstructions())))))));
+      } }, this.isFullscreen ? (h("wpp-icon-fullscreen-minimise-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-fullscreen-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })))), this.renderAccessibilityInstructions())))))));
   }
   static get is() { return "wpp-video-player"; }
-  static get registryIs() { return "wpp-video-player-v4-4-0"; }
+  static get registryIs() { return "wpp-video-player-v4-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -719,7 +744,7 @@ export class WppVideoPlayer {
         "mutable": false,
         "complexType": {
           "original": "Partial<VideoPlayerLocales>",
-          "resolved": "{ notSupportedPlayer?: string | undefined; hostAriaLabel?: string | undefined; videoPlayerElement?: string | undefined; videoStates?: { playing: string; paused: string; idle: string; } | undefined; controlsAriaLabel?: string | undefined; playButtonAriaLabel?: { play: string; pause: string; } | undefined; playPauseButtonArealLabels?: { play: string; pause: string; } | undefined; captionButtonAriaLabel?: string | undefined; volumeProgressLabel?: string | undefined; volumeButtonAriaLabel?: string | undefined; fullscreenButtonAriaLabel?: string | undefined; videoProgressLabel?: string | undefined; videoProgressAriaLabel?: string | undefined; languageMenuAriaLabel?: string | undefined; videoCaptionsAriaLabel?: string | undefined; keyboardShortcutsDescription?: { title: string; playPause: string; backwardForward: string; volumeUpDown: string; captions: string; muteUnmute: string; fullscreen: string; } | undefined; }",
+          "resolved": "{ notSupportedPlayer?: string | undefined; hostAriaLabel?: string | undefined; videoPlayerElement?: string | undefined; videoStates?: { playing: string; paused: string; idle: string; } | undefined; controlsAriaLabel?: string | undefined; playButtonAriaLabel?: { play: string; pause: string; } | undefined; playPauseButtonArealLabels?: { play: string; pause: string; } | undefined; captionButtonAriaLabel?: string | undefined; volumeProgressLabel?: string | undefined; volumeButtonAriaLabel?: string | undefined; fullscreenButtonAriaLabel?: string | undefined; videoProgressLabel?: string | undefined; videoProgressAriaLabel?: string | undefined; currentTimeAriaLabel?: string | undefined; durationAriaLabel?: string | undefined; languageMenuAriaLabel?: string | undefined; videoCaptionsAriaLabel?: string | undefined; keyboardShortcutsDescription?: { title: string; playPause: string; backwardForward: string; volumeUpDown: string; captions: string; muteUnmute: string; fullscreen: string; } | undefined; }",
           "references": {
             "Partial": {
               "location": "global",
@@ -791,9 +816,7 @@ export class WppVideoPlayer {
       "videoPlayerState": {},
       "currentVideoTime": {},
       "timeFormat": {},
-      "splitCurrentVideoTime": {},
       "overallVideoTime": {},
-      "splitOverallVideoTime": {},
       "loadedPercentage": {},
       "volume": {},
       "isFullscreen": {},

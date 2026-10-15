@@ -5,6 +5,7 @@ import { newSpecPage } from '@stencil/core/testing';
 import { WppBasicNode } from '../wpp-basic-node';
 import { ResizeObserverMock } from '../../wpp-artefact/test/mocks';
 import { LOCALES_DEFAULTS } from '../consts';
+import * as loadingHalo from '../../../utils/loading-halo';
 describe('WppBasicNode', () => {
   describe('Testing initialization of the component', () => {
     it('should initialize with default properties', async () => {
@@ -17,6 +18,7 @@ describe('WppBasicNode', () => {
       expect(basicNode.nodeTitle).toBe('Default Title');
       expect(basicNode.isLoading).toBe(false);
       expect(basicNode.isReRun).toBe(false);
+      expect(basicNode.errorMessage).toBeUndefined();
       expect(basicNode.actions).toEqual([]);
       expect(basicNode.locales).toEqual({});
       expect(basicNode.isSelected).toEqual(false);
@@ -57,6 +59,19 @@ describe('WppBasicNode', () => {
       page.root?.remove();
       await page.waitForChanges();
       expect(resizeObserverInstance.disconnect).toHaveBeenCalled();
+    });
+  });
+  describe('Testing lifecycle methods', () => {
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('should register the loading animation angle on connectedCallback', async () => {
+      const registerSpy = jest.spyOn(loadingHalo, 'registerLoadingHaloAngle');
+      await newSpecPage({
+        components: [WppBasicNode],
+        html: `<wpp-basic-node node-title="Test Artefact"></wpp-basic-node>`,
+      });
+      expect(registerSpy).toHaveBeenCalled();
     });
   });
   describe('Testing locales', () => {
@@ -132,7 +147,7 @@ describe('WppBasicNode', () => {
     it('Should emit wppActionClick event when an additional action from the dropdown menu is clicked', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-4-0", { nodeTitle: "Test Artefact" }, h("div", { slot: "body" }))),
+        template: () => (h("wpp-basic-node-v4-5-0", { nodeTitle: "Test Artefact" }, h("div", { slot: "body" }))),
       });
       const wppActionClickSpy = jest.spyOn(page.rootInstance.wppActionClick, 'emit');
       const additionalListItem = page.root?.querySelectorAll('wpp-list-item')[0];
@@ -147,7 +162,7 @@ describe('WppBasicNode', () => {
     it('Should emit wppActionClick event when the play / pause action is clicked', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => h("wpp-basic-node-v4-4-0", { isSelected: true, nodeTitle: "Test Artefact" }),
+        template: () => h("wpp-basic-node-v4-5-0", { isSelected: true, nodeTitle: "Test Artefact" }),
       });
       const wppActionClickSpy = jest.spyOn(page.rootInstance.wppActionClick, 'emit');
       const playBtn = page.root?.querySelector('[data-testid="wpp-play-button"]');
@@ -171,7 +186,7 @@ describe('WppBasicNode', () => {
     it('Should render the re-run button with the refresh icon and emit wppActionClick when clicked', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => h("wpp-basic-node-v4-4-0", { isReRun: true, nodeTitle: "Test Artefact" }),
+        template: () => h("wpp-basic-node-v4-5-0", { isReRun: true, nodeTitle: "Test Artefact" }),
       });
       const wppActionClickSpy = jest.spyOn(page.rootInstance.wppActionClick, 'emit');
       const reRunBtn = page.root?.querySelector('[data-testid="wpp-rerun-button"]');
@@ -187,10 +202,193 @@ describe('WppBasicNode', () => {
     it('Should prioritise the loading (stop) state over the re-run state', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => h("wpp-basic-node-v4-4-0", { isReRun: true, isLoading: true, nodeTitle: "Test Artefact" }),
+        template: () => h("wpp-basic-node-v4-5-0", { isReRun: true, isLoading: true, nodeTitle: "Test Artefact" }),
       });
       expect(page.root?.querySelector('[data-testid="wpp-pause-button"]')).toBeTruthy();
       expect(page.root?.querySelector('[data-testid="wpp-rerun-button"]')).toBeFalsy();
+    });
+  });
+  describe('Testing error state', () => {
+    it('should not render the error icon or the error inline message when errorMessage is not provided', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        html: `<wpp-basic-node node-title="Test Node"></wpp-basic-node>`,
+      });
+      expect(page.root?.querySelector('.node-header wpp-icon-error')).toBeNull();
+      expect(page.root?.querySelector('.node-body wpp-inline-message')).toBeNull();
+    });
+    it('should render the error icon in the header and an L error inline message at the top of the body', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        template: () => (h("wpp-basic-node-v4-5-0", { nodeTitle: "Test Node", errorMessage: "Something went wrong" }, h("div", { slot: "body" }, "Body Content"))),
+      });
+      expect(page.root?.querySelector('.node-header wpp-icon-error')).not.toBeNull();
+      const body = page.root?.querySelector('.node-body');
+      const inlineMessage = body.querySelector('wpp-inline-message');
+      // wpp-inline-message is not registered in this spec, so its props are reflected as attributes.
+      expect(body.firstElementChild?.classList.contains('error-region')).toBe(true);
+      expect(inlineMessage.parentElement).toBe(body.firstElementChild);
+      expect(inlineMessage.getAttribute('size')).toBe('l');
+      expect(inlineMessage.getAttribute('type')).toBe('error');
+      expect(inlineMessage.getAttribute('message')).toBe('Something went wrong');
+      expect(inlineMessage.hasAttribute('titletext')).toBe(false);
+      expect(inlineMessage.hasAttribute('iscompact')).toBe(true);
+      expect(inlineMessage.hasAttribute('hideclosebtn')).toBe(false);
+      expect(inlineMessage.locales).toEqual({ close: LOCALES_DEFAULTS.dismissErrorAction });
+    });
+    it('should toggle the error state when errorMessage changes', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        html: `<wpp-basic-node node-title="Test Node"></wpp-basic-node>`,
+      });
+      page.root.errorMessage = 'Something went wrong';
+      await page.waitForChanges();
+      expect(page.root?.querySelector('wpp-icon-error')).not.toBeNull();
+      expect(page.root?.querySelector('wpp-inline-message')).not.toBeNull();
+      page.root.errorMessage = undefined;
+      await page.waitForChanges();
+      expect(page.root?.querySelector('wpp-icon-error')).toBeNull();
+      expect(page.root?.querySelector('wpp-inline-message')).toBeNull();
+    });
+    it('should space the inline message from the body only when the body has content', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        template: () => (h("wpp-basic-node-v4-5-0", { nodeTitle: "Test Node", errorMessage: "Something went wrong" }, h("div", { slot: "body" }))),
+      });
+      const inlineMessage = () => page.root?.querySelector('wpp-inline-message');
+      expect(inlineMessage().classList.contains('with-content')).toBe(false);
+      page.rootInstance.hasContent = true;
+      await page.waitForChanges();
+      expect(inlineMessage().classList.contains('with-content')).toBe(true);
+    });
+    it('should match the snapshot of the error message classes', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        html: `<wpp-basic-node node-title="Test Node" error-message="Something went wrong"></wpp-basic-node>`,
+      });
+      expect(page.rootInstance.getErrorMessageClasses()).toMatchSnapshot();
+      page.rootInstance.hasContent = true;
+      expect(page.rootInstance.getErrorMessageClasses()).toMatchSnapshot();
+    });
+    it('should render the node in error state', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        template: () => (h("wpp-basic-node-v4-5-0", { nodeTitle: "Test Node", errorMessage: "Something went wrong" }, h("div", { slot: "body" }, "Body Content"))),
+      });
+      expect(page.root).toMatchSnapshot();
+    });
+  });
+  describe('Testing error dismissal', () => {
+    const renderErrorNode = () => newSpecPage({
+      components: [WppBasicNode],
+      template: () => h("wpp-basic-node-v4-5-0", { nodeTitle: "Image generator", errorMessage: "Something went wrong" }),
+    });
+    // wpp-tooltip is not registered in this spec, so its props are reflected as attributes, except objects like `config`.
+    const getErrorTooltip = (page) => page.root?.querySelector('.node-header wpp-tooltip:not(.title-tooltip)');
+    const dismiss = async (page) => {
+      page.root?.querySelector('wpp-inline-message')?.dispatchEvent(new CustomEvent('wppClickCloseBtn'));
+      await page.waitForChanges();
+    };
+    it('should keep the error icon decorative and its tooltip disabled while the inline message is shown', async () => {
+      const page = await renderErrorNode();
+      const icon = page.root?.querySelector('.node-header wpp-icon-error');
+      const tooltip = getErrorTooltip(page);
+      expect(page.rootInstance.isErrorDismissed).toBe(false);
+      expect(icon.hasAttribute('tabindex')).toBe(false);
+      expect(icon.hasAttribute('role')).toBe(false);
+      expect(icon.hasAttribute('aria-label')).toBe(false);
+      expect(tooltip.hasAttribute('disabled')).toBe(true);
+    });
+    it('should remove only the inline message and the announcement when the close button is clicked', async () => {
+      const page = await renderErrorNode();
+      await dismiss(page);
+      expect(page.rootInstance.isErrorDismissed).toBe(true);
+      expect(page.root?.querySelector('wpp-inline-message')).toBeNull();
+      expect(page.root?.querySelector('.error-region .sr-only')).toBeNull();
+      expect(page.root?.querySelector('.error-region[role="alert"]')).not.toBeNull();
+      expect(page.root?.querySelector('.node-header wpp-icon-error')).not.toBeNull();
+    });
+    it('should expose the error message through the icon tooltip once dismissed', async () => {
+      const page = await renderErrorNode();
+      await dismiss(page);
+      const icon = page.root?.querySelector('.node-header wpp-icon-error');
+      const tooltip = getErrorTooltip(page);
+      expect(tooltip.hasAttribute('disabled')).toBe(false);
+      expect(tooltip.getAttribute('text')).toBe('Something went wrong');
+      expect(icon.getAttribute('tabindex')).toBe('0');
+      expect(icon.getAttribute('role')).toBe('img');
+      expect(icon.getAttribute('aria-label')).toBe('Image generator error: Something went wrong');
+    });
+    it('should emit wppDismissError when the inline message is dismissed', async () => {
+      const page = await renderErrorNode();
+      const dismissSpy = jest.spyOn(page.rootInstance.wppDismissError, 'emit');
+      await dismiss(page);
+      expect(dismissSpy).toHaveBeenCalledTimes(1);
+    });
+    it('should move focus to the error icon only for the tooltip created by the dismissal', async () => {
+      const page = await renderErrorNode();
+      await dismiss(page);
+      const icon = page.root?.querySelector('.node-header wpp-icon-error');
+      const { onCreate } = getErrorTooltip(page).config;
+      const focusSpy = jest.spyOn(icon, 'focus');
+      // wpp-tooltip is not registered in this spec, so its tippy `onCreate` hook is invoked directly.
+      // The second call stands for the tooltip being re-created later (e.g. the node re-attached to the DOM).
+      onCreate();
+      onCreate();
+      await new Promise(resolve => setTimeout(resolve, 0));
+      expect(focusSpy).toHaveBeenCalledTimes(1);
+    });
+    it('should render the node with the inline message dismissed', async () => {
+      const page = await renderErrorNode();
+      await dismiss(page);
+      expect(page.root).toMatchSnapshot();
+    });
+    it('should show the inline message again when a new error message is set', async () => {
+      const page = await renderErrorNode();
+      await dismiss(page);
+      page.root.errorMessage = 'Another error';
+      await page.waitForChanges();
+      expect(page.rootInstance.isErrorDismissed).toBe(false);
+      expect(page.root?.querySelector('wpp-inline-message')?.getAttribute('message')).toBe('Another error');
+      expect(getErrorTooltip(page)?.hasAttribute('disabled')).toBe(true);
+    });
+    it('should reset the dismissed state when the error is cleared', async () => {
+      const page = await renderErrorNode();
+      await dismiss(page);
+      page.root.errorMessage = undefined;
+      await page.waitForChanges();
+      expect(page.rootInstance.isErrorDismissed).toBe(false);
+      expect(getErrorTooltip(page)).toBeNull();
+    });
+    it('should use the dismissErrorAction locale for the close button label', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        template: () => (h("wpp-basic-node-v4-5-0", { nodeTitle: "Image generator", errorMessage: "Something went wrong", locales: { dismissErrorAction: 'Fermer le message' } })),
+      });
+      expect((page.root?.querySelector('wpp-inline-message')).locales).toEqual({ close: 'Fermer le message' });
+    });
+  });
+  describe('Testing accessibility', () => {
+    it('should always render the error live region, empty when there is no error, so later errors are announced', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        html: `<wpp-basic-node node-title="Test Node"></wpp-basic-node>`,
+      });
+      const region = page.root?.querySelector('.node-body .error-region');
+      expect(region?.getAttribute('role')).toBe('alert');
+      expect(region?.getAttribute('aria-atomic')).toBe('true');
+      expect(region?.children.length).toBe(0);
+    });
+    it('should announce which node is in error with a visually hidden text built from the errorAnnouncement locale', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        template: () => h("wpp-basic-node-v4-5-0", { nodeTitle: "Image generator", errorMessage: "Something went wrong" }),
+      });
+      const getAnnouncement = () => page.root?.querySelector('.error-region[role="alert"] .sr-only')?.textContent;
+      expect(getAnnouncement()).toBe('Image generator error:');
+      page.root.locales = { errorAnnouncement: 'Erreur dans {nodeTitle} :' };
+      await page.waitForChanges();
+      expect(getAnnouncement()).toBe('Erreur dans Image generator :');
     });
   });
   describe('Testing render output', () => {
@@ -207,7 +405,7 @@ describe('WppBasicNode', () => {
     it('Should render the component in isSelected state', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-4-0", { isSelected: true, nodeTitle: "Test Artefact" }, h("div", { slot: "body" }, "Body Content"))),
+        template: () => (h("wpp-basic-node-v4-5-0", { isSelected: true, nodeTitle: "Test Artefact" }, h("div", { slot: "body" }, "Body Content"))),
       });
       await page.waitForChanges();
       expect(page.root).toMatchSnapshot();
@@ -215,7 +413,7 @@ describe('WppBasicNode', () => {
     it('Should render additional actions in the dropdown menu when provided via the actions prop and a scrollbar in the body when the height exceeds the maximum', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-4-0", { nodeTitle: "Test Artefact", actions: [{ icon: 'wpp-icon-edit', label: 'Edit' }] }, h("div", { slot: "body" }, h("div", { style: { height: '1300px' } }, h("p", null, "Body content with height 1300px"))))),
+        template: () => (h("wpp-basic-node-v4-5-0", { nodeTitle: "Test Artefact", actions: [{ icon: 'wpp-icon-edit', label: 'Edit' }] }, h("div", { slot: "body" }, h("div", { style: { height: '1300px' } }, h("p", null, "Body content with height 1300px"))))),
       });
       page.rootInstance.hasScrollbar = true;
       await page.waitForChanges();
@@ -224,7 +422,7 @@ describe('WppBasicNode', () => {
     it('Should render the node in loading state', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-4-0", { nodeTitle: "Test Artefact", isLoading: true }, h("div", { slot: "body" }, h("div", { style: { height: '100px' } }, h("p", null, "Body content with height 100px"))))),
+        template: () => (h("wpp-basic-node-v4-5-0", { nodeTitle: "Test Artefact", isLoading: true }, h("div", { slot: "body" }, h("div", { style: { height: '100px' } }, h("p", null, "Body content with height 100px"))))),
       });
       await page.waitForChanges();
       expect(page.root).toMatchSnapshot();
@@ -247,8 +445,10 @@ describe('WppBasicNode', () => {
       // SCSS source of truth: the selected border must live on the ::before overlay. A real border
       // on the box-sizing: border-box wrapper would shrink the content box and shift inner content.
       const styles = readFileSync(join(__dirname, '..', 'wpp-basic-node.scss'), 'utf8');
-      // The overlay rule must exist (border painted on ::before).
-      expect(styles).toMatch(/\.node-wrapper\.is-selected::before\s*\{[\s\S]*?border:\s*var\(--wpp-border-width-s\) solid var\(--wpp-primary-color-500\)/);
+      // The overlay rule must exist (border painted on ::before), coloured by the state border colour,
+      // which defaults to the selected colour.
+      expect(styles).toMatch(/--bn-state-border-color:\s*var\(--wpp-primary-color-500\)/);
+      expect(styles).toMatch(/\.node-wrapper\.is-selected::before,[\s\S]*?\{[\s\S]*?border:\s*var\(--wpp-border-width-s\) solid var\(--bn-state-border-color\)/);
       // The layout-affecting border on the wrapper itself must not be (re)introduced.
       expect(styles).not.toMatch(/\.node-wrapper\.is-selected\s*\{[\s\S]*?border:\s*1px solid/);
     });
@@ -262,17 +462,42 @@ describe('WppBasicNode', () => {
       // Selection must not add or remove any layout nodes (header/body/actions stay identical).
       expect(childStructure(selectedWrapper)).toEqual(childStructure(unselectedWrapper));
     });
-    it('should draw the loading animation only on an overlay, never affecting layout', () => {
+    it('should draw the loading animation with the loadingHalo mixin overlays, never affecting layout', () => {
       // The spec page does not inject the compiled scoped stylesheet, so we assert against the
-      // SCSS source: the loading border animation must live on the .node-container.loading-node::before
-      // overlay with inset: -2px so the animated ring is visible outside the card while preserving
-      // the exact inner wrapper layout.
+      // SCSS source: the loading state must use the loadingHalo mixin (overlays painted outside the card,
+      // see src/utils/loading-halo.spec.ts), preserving the exact inner wrapper layout.
       const styles = readFileSync(join(__dirname, '..', 'wpp-basic-node.scss'), 'utf8');
-      // The overlay rule must exist (animated gradient on ::before).
-      expect(styles).toMatch(/\.loading-node::before\s*\{[\s\S]*?animation:\s*loading-rotate/);
-      expect(styles).toMatch(/\.loading-node::before\s*\{[\s\S]*?inset:\s*-2px/);
+      expect(styles).toMatch(/\.node-container \{[\s\S]*?&\.loading-node \{\s*@include loadingHalo\(var\(--wpp-border-radius-l\)\);/);
       // The layout-affecting padding on the container itself must not be (re)introduced.
-      expect(styles).not.toMatch(/\.loading-node\s*\{[\s\S]*?padding:\s*2px/);
+      expect(styles).not.toMatch(/\.loading-node\s*\{[^}]*?padding:\s*2px/);
+    });
+    it('should add the has-error class to the container only while there is an error message', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        html: `<wpp-basic-node node-title="Test"><div slot="body">Body</div></wpp-basic-node>`,
+      });
+      const getContainer = () => page.root?.querySelector('.node-container');
+      expect(getContainer()?.classList.contains('has-error')).toBe(false);
+      page.root.errorMessage = 'Something went wrong';
+      await page.waitForChanges();
+      expect(getContainer()?.classList.contains('has-error')).toBe(true);
+      page.root.errorMessage = undefined;
+      await page.waitForChanges();
+      expect(getContainer()?.classList.contains('has-error')).toBe(false);
+    });
+    it('should show only the loading animation while loading, suppressing the selected and error borders', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        template: () => (h("wpp-basic-node-v4-5-0", { nodeTitle: "Test", isLoading: true, isSelected: true, errorMessage: "Something went wrong" }, h("div", { slot: "body" }, "Body"))),
+      });
+      const container = page.root?.querySelector('.node-container');
+      expect(container?.classList.contains('loading-node')).toBe(true);
+      expect(container?.classList.contains('has-error')).toBe(false);
+      expect(getWrapper(page.root)?.classList.contains('is-selected')).toBe(false);
+      page.root.isLoading = false;
+      await page.waitForChanges();
+      expect(container?.classList.contains('has-error')).toBe(true);
+      expect(getWrapper(page.root)?.classList.contains('is-selected')).toBe(true);
     });
     it('should keep identical inner content structure between normal and loading states', async () => {
       const innerHtml = (loading) => `<wpp-basic-node node-title="Test"${loading ? ' is-loading="true"' : ''}><div slot="body">Body</div></wpp-basic-node>`;

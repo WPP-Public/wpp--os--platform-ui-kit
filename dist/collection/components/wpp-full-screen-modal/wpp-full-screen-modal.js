@@ -1,9 +1,11 @@
 import { Host, h } from '@stencil/core';
 import { ANIMATION_PROPERTY_NAME, Z_INDEX } from '../../common/consts';
-import { applyBodyStylesIfNeeded, getOsBarOffsetHeight, getSlotEmptyStates } from '../../utils/utils';
+import { applyBodyStylesIfNeeded, getOsBarOffsetHeight, getSlotEmptyStates, mergeLocales } from '../../utils/utils';
 import { TimeoutManager } from '../../utils/timeout-manager';
+import { dialogFocusController, isFocusInsideDialog } from '../../utils/dialog-focus';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
-import { FullScreenModalCloseReason } from './types';
+import { FullScreenModalCloseReason, } from './types';
+import { LOCALES_DEFAULTS } from './const';
 import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
  * @slot header - Content that is displayed within the `.full-screen-modal` element. To add header content, pass `slot="header"` – can contain the modal title.
@@ -22,6 +24,7 @@ export class WppFullScreenModal {
   constructor() {
     this.topOffset = 0;
     this.timeouts = new TimeoutManager();
+    this.dialogFocus = dialogFocusController();
     this.themeSubscription = themeSubscriptionController(() => this.host);
     this.onOverlayClick = () => {
       if (this.disableOutsideClick)
@@ -38,6 +41,23 @@ export class WppFullScreenModal {
       this.hasHeaderSlot = !emptyStates.header;
       this.hasBodySlot = !emptyStates.body;
       this.hasActionsSlot = !emptyStates.actions;
+      this.updateHeaderLabel();
+    };
+    /**
+     * The dialog's accessible name is derived from the slotted header, because an `aria-labelledby`
+     * on the host cannot reference an id that lives inside the shadow root – IDREFs do not cross the
+     * shadow boundary. Anything the consumer supplies wins, since their ids and labels resolve in
+     * their own tree scope.
+     */
+    this.updateHeaderLabel = () => {
+      if (this.ariaProps.labelledby || this.ariaProps.label) {
+        this.headerLabel = '';
+        return;
+      }
+      this.headerLabel = Array.from(this.host.querySelectorAll('[slot="header"]'))
+        .map(node => node.textContent?.trim() ?? '')
+        .filter(Boolean)
+        .join(' ');
     };
     this.handleTransitionStart = (event) => {
       if (event.propertyName !== ANIMATION_PROPERTY_NAME)
@@ -73,7 +93,7 @@ export class WppFullScreenModal {
     };
     this.renderActionBtn = (btnConfig, variant) => {
       const { label, ...rest } = btnConfig;
-      return (h("wpp-button-v4-4-0", { variant: variant, ...rest }, label));
+      return (h("wpp-button-v4-5-0", { variant: variant, ...rest }, label));
     };
     this.renderActionsConfig = () => {
       if (!this.actionsConfig)
@@ -83,6 +103,10 @@ export class WppFullScreenModal {
     };
     this.focusDialog = () => {
       if (!this.dialogRef)
+        return;
+      // Idempotent: the sentinels, the open render and the transition all route through here, and
+      // pulling focus back to the container would undo whatever the user had reached inside.
+      if (isFocusInsideDialog(this.host, this.dialogRef))
         return;
       this.dialogRef.focus();
     };
@@ -121,6 +145,7 @@ export class WppFullScreenModal {
     this.hasBodySlot = false;
     this.hasActionsSlot = false;
     this.closeReason = null;
+    this.headerLabel = '';
     this.open = false;
     this.withTransparentOverlay = undefined;
     this.disableOutsideClick = false;
@@ -129,8 +154,8 @@ export class WppFullScreenModal {
     this.osBarCompatible = false;
     this.ariaProps = {
       role: 'dialog',
-      labelledby: 'dialog_label',
     };
+    this.locales = {};
     this.actionsConfig = undefined;
   }
   handleCloseOnEsc(event) {
@@ -141,7 +166,23 @@ export class WppFullScreenModal {
   }
   handleChangeFullScreenModalStatus(openStatus) {
     if (openStatus) {
+      // Captured before the dialog takes focus, so it can be handed back on close.
+      this.dialogFocus.capture();
       this.host.classList.add('component-ready');
+    }
+    else {
+      // The dialog is about to hide with focus still inside it, which would leave focus on a
+      // container the user can no longer see and restart the next Tab from the top of the
+      // document. Decide now, while that is still true, and restore once the close render has
+      // been applied.
+      const shouldRestoreFocus = isFocusInsideDialog(this.host, this.dialogRef);
+      // Read now, alongside the line above: `closeReason` is cleared once the close transition
+      // finishes, which can beat the scheduled restore.
+      const closedFromKeyboard = this.closeReason === FullScreenModalCloseReason.escapePress;
+      this.timeouts.schedule(() => {
+        if (shouldRestoreFocus)
+          this.dialogFocus.restore({ withKeyboardRing: closedFromKeyboard });
+      });
     }
     this.timeouts.schedule(() => {
       applyBodyStylesIfNeeded(this.open ? 'add' : 'remove');
@@ -181,14 +222,30 @@ export class WppFullScreenModal {
   disconnectedCallback() {
     this.themeSubscription.stop();
     this.timeouts.clearAll();
+    // `clearAll` above cancels the scheduled restore, so drop the reference rather than holding
+    // on to a detached element for the lifetime of the page.
+    this.dialogFocus.clear();
     this.closeFullScreenModal();
+  }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
+  componentDidRender() {
+    if (!this.open)
+      return;
+    // Move focus into the dialog as soon as it has painted rather than waiting for the open
+    // transition to finish. `transitionend` never arrives for a reduced-motion user, or when a
+    // consumer turns the animation off, and focus would stay outside a dialog that is
+    // `aria-modal` — leaving the rest of the page hidden from assistive tech with nothing
+    // reachable inside it.
+    this.focusDialog();
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-full-screen-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-modal": "true" }, h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-4-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-fullscreen-modal-content", ref: ref => (this.dialogRef = ref) }, h("div", { class: this.headerContainerCssClasses() }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h("wpp-action-button-v4-4-0", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button" }, h("wpp-icon-cross-v4-4-0", { slot: "icon-start" }))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig ? (this.renderActionsConfig()) : (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-full-screen-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-5-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-fullscreen-modal-content", ref: ref => (this.dialogRef = ref) }, h("div", { class: this.headerContainerCssClasses() }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h("wpp-action-button-v4-5-0", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button", ariaProps: { label: this._locales.closeIconLabel } }, h("wpp-icon-cross-v4-5-0", { slot: "icon-start" }))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig ? (this.renderActionsConfig()) : (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
   }
   static get is() { return "wpp-full-screen-modal"; }
-  static get registryIs() { return "wpp-full-screen-modal-v4-4-0"; }
+  static get registryIs() { return "wpp-full-screen-modal-v4-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -330,9 +387,35 @@ export class WppFullScreenModal {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "Contains the modal `aria-` props."
+          "text": "Contains the modal `aria-` props.\n\n`labelledby` is intentionally not defaulted: it previously pointed at an id rendered inside\nthe shadow root, which an `aria-labelledby` on the host can never resolve, leaving the dialog\nwith no accessible name. When you do supply one it must name an element in your own tree\nscope, and it is used verbatim. Otherwise the name is derived from the `header` slot."
         },
-        "defaultValue": "{\n    role: 'dialog',\n    labelledby: 'dialog_label',\n  }"
+        "defaultValue": "{\n    role: 'dialog',\n  }"
+      },
+      "locales": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "Partial<FullScreenModalLocalesType>",
+          "resolved": "{ closeIconLabel?: string | undefined; }",
+          "references": {
+            "Partial": {
+              "location": "global",
+              "id": "global::Partial"
+            },
+            "FullScreenModalLocalesType": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-full-screen-modal/types.ts::FullScreenModalLocalesType"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Indicates locales for the full screen modal."
+        },
+        "defaultValue": "{}"
       },
       "actionsConfig": {
         "type": "unknown",
@@ -363,7 +446,8 @@ export class WppFullScreenModal {
       "hasHeaderSlot": {},
       "hasBodySlot": {},
       "hasActionsSlot": {},
-      "closeReason": {}
+      "closeReason": {},
+      "headerLabel": {}
     };
   }
   static get events() {

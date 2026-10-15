@@ -2,7 +2,7 @@ import { h, Fragment, proxyCustomElement, HTMLElement, createEvent, Host } from 
 import { l as lodash } from './lodash.js';
 import { F as FOCUS_TYPE } from './common.js';
 import { m as menuListConfig } from './menuListConfig.js';
-import { w as getHighestContainerInDOM, d as debounce, s as selectDropdownWidth, y as mergeLocales, b as isEventTargetContained } from './utils.js';
+import { w as getHighestContainerInDOM, d as debounce, s as selectDropdownWidth, k as transformToVersionedTag, y as mergeLocales, b as isEventTargetContained } from './utils.js';
 import { Z as Z_INDEX } from './consts.js';
 import { i as isSelected, L as LIB_COMPONENTS_PREFIX, r as renderSlotsInListItem, s as selectedOptionsByOrder } from './utils2.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme.js';
@@ -51,6 +51,8 @@ const LOCALES_DEFAULTS = {
   createNewElement: query => `Create "${query}"`,
   clearMultiple: 'Clear selections',
   clearSingle: 'Clear selection',
+  searchLabel: 'Search',
+  optionsListLabel: 'Search results',
 };
 const PILL_MARGIN = 8;
 
@@ -69,8 +71,8 @@ function renderDropdownPillsComponent() {
    */
   const isNeedDivider = !!this.selectedOptions.length;
   // Render Show More/Show Less button only in cases when we have truncated WppPill (not .label inside)
-  const showMoreLessRender = (label) => (h("wpp-action-button-v4-4-0", { "data-testid": "wpp-autocomplete-show-btn", class: "nowrap", variant: "secondary", onClick: this.handleShowMoreLessClick }, label));
-  const renderPillComponent = (option, ndx, isTransparentPill = false) => (h("wpp-pill-v4-4-0", { ref: ref => {
+  const showMoreLessRender = (label) => (h("wpp-action-button-v4-5-0", { "data-testid": "wpp-autocomplete-show-btn", class: "nowrap", variant: "secondary", onClick: this.handleShowMoreLessClick }, label));
+  const renderPillComponent = (option, ndx, isTransparentPill = false) => (h("wpp-pill-v4-5-0", { ref: ref => {
       if (ref)
         this.selectedPillRefs[ndx] = ref;
     }, class: { transparent: this.isShowMore && isTransparentPill }, label: option.label, type: "display", onWppClose: event => {
@@ -78,7 +80,7 @@ function renderDropdownPillsComponent() {
         ...event,
         ...{ detail: { value: option.value } },
       });
-      this.setFocus();
+      this.restoreFocusAfterPillRemoval(event, ndx, () => this.selectedPillRefs);
     }, removable: true }));
   const selectedPillsWrapperCssClasses = () => ({
     'selected-pills-wrapper': true,
@@ -89,11 +91,11 @@ function renderDropdownPillsComponent() {
         'header-wrapper': true,
         overflow: this.isShowMore,
         visible: this.isShowMore && this.activePillsTruncationState.includes(true),
-      }, tabindex: "-1", onClick: () => this.setFocus() },
+      }, tabindex: "-1", onClick: this.handleSelectedPillsClick },
       h("div", { ref: ref => (this.selectedPillsWrapperRef = ref), class: selectedPillsWrapperCssClasses() }, this.selectedOptions.map((option, ndx) => renderPillComponent(option, ndx, this.activePillsTruncationState[ndx]))),
       h("div", { ref: ref => (this.showMoreElementRef = ref), class: "show-more-action" }, showMoreLessRender(`+${this.activePillsTruncationState.filter(x => x).length} ${this._locales.showMore}`)))),
-    !this.isShowMore && h("div", { class: "show-less-action" }, showMoreLessRender(this._locales.showLess)),
-    isNeedDivider && h("wpp-divider-v4-4-0", { class: "nothing-found-divider" })));
+    !this.isShowMore && (h("div", { ref: ref => (this.showLessElementRef = ref), class: "show-less-action" }, showMoreLessRender(this._locales.showLess))),
+    isNeedDivider && h("wpp-divider-v4-5-0", { class: "nothing-found-divider" })));
 }
 
 function renderPlaceholderTextComponent() {
@@ -108,9 +110,9 @@ function renderPlaceholderTextComponent() {
     computed: this.hiddenSelectedOptionsNumber > 0 && this.value.length > 1,
   });
   return (h(Fragment, null,
-    h("wpp-typography-v4-4-0", { ref: ref => (this.inputPlaceholderRef = ref), type: "s-body", class: inputPlaceholderCssClasses() }, this.placeholderText),
-    h("wpp-typography-v4-4-0", { ref: ref => (this.hiddenInputPlaceholderRef = ref), role: "presentation", type: "s-body", class: "hidden-input-placeholder" }),
-    this.value.length > 1 && (h("wpp-typography-v4-4-0", { class: hiddenCountCssClasses(), type: "s-body" },
+    h("wpp-typography-v4-5-0", { ref: ref => (this.inputPlaceholderRef = ref), type: "s-body", class: inputPlaceholderCssClasses() }, this.placeholderText),
+    h("wpp-typography-v4-5-0", { ref: ref => (this.hiddenInputPlaceholderRef = ref), role: "presentation", type: "s-body", class: "hidden-input-placeholder" }),
+    this.value.length > 1 && (h("wpp-typography-v4-5-0", { class: hiddenCountCssClasses(), type: "s-body" },
       "+ ",
       this.hiddenSelectedOptionsNumber))));
 }
@@ -124,36 +126,36 @@ function renderDropdownListComponent() {
   };
   const renderListOptions = () => {
     this.listItemsRefs = [];
-    return (h(Fragment, null,
-      this.internalList.map((item, ndx) => {
-        const { label, slots, ...rest } = item;
-        return (h("wpp-list-item-v4-4-0", { ref: el => (this.listItemsRefs[ndx] = el), onWppChangeListItem: this.handleClickListItem, key: convertValueToKey(item.value), isDarkTheme: this.isDarkTheme, ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" },
-          h("span", { slot: "label" }, label),
-          slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
-      }),
-      this.isInfiniteLoading && (h("div", { class: "wpp-dropdown-infinite-loader" },
-        h("wpp-spinner-v4-4-0", null)))));
+    return (h(Fragment, null, this.internalList.map((item, ndx) => {
+      const { label, slots, ...rest } = item;
+      return (h("wpp-list-item-v4-5-0", { ref: el => (this.listItemsRefs[ndx] = el), onWppChangeListItem: this.handleClickListItem, key: convertValueToKey(item.value), isDarkTheme: this.isDarkTheme, ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option", "aria-selected": item.checked ? 'true' : 'false', tabIndex: -1 },
+        h("span", { slot: "label" }, label),
+        slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+    })));
   };
   const renderSuggestionOptions = () => {
     this.suggestionsItemsRefs = [];
     return (h(Fragment, null,
-      h("wpp-typography-v4-4-0", { role: "presentation", type: "s-strong", class: "suggestions-heading" }, this._locales.suggestionTitle),
+      h("wpp-typography-v4-5-0", { role: "presentation", type: "s-strong", class: "suggestions-heading" }, this._locales.suggestionTitle),
       this.componentSuggestions?.map((suggestion, ndx) => {
         const { slots, checked, label, ...restProps } = suggestion;
         const isChecked = checked || isSelected(this.value, suggestion, this.getItemKey);
-        return (h("wpp-list-item-v4-4-0", { ref: el => (this.suggestionsItemsRefs[ndx] = el), onWppChangeListItem: this.handleClickListItem, key: convertValueToKey(suggestion.value), ...restProps, id: suggestion.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${suggestion.id}` : undefined, checked: isChecked, isDarkTheme: this.isDarkTheme, class: { 'suggestion-item': true, 'last-item': ndx === this.componentSuggestions.length - 1 }, role: "option" },
+        return (h("wpp-list-item-v4-5-0", { ref: el => (this.suggestionsItemsRefs[ndx] = el), onWppChangeListItem: this.handleClickListItem, key: convertValueToKey(suggestion.value), ...restProps, id: suggestion.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${suggestion.id}` : undefined, checked: isChecked, isDarkTheme: this.isDarkTheme, class: { 'suggestion-item': true, 'last-item': ndx === this.componentSuggestions.length - 1 }, role: "option", "aria-selected": isChecked ? 'true' : 'false', tabIndex: -1 },
           h("span", { slot: "label" }, label),
           slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
   };
+  // Both placeholder rows render as disabled options: the parent container is a `role="listbox"`,
+  // whose required-children contract only admits options (a `status` row inside it would be an
+  // AXE violation). Their text is announced through the component's live region instead.
   if (this.loading) {
-    return (h("wpp-list-item-v4-4-0", { isDarkTheme: this.isDarkTheme, role: "status", "non-interactive": true },
-      h("wpp-spinner-v4-4-0", { slot: "left" }),
+    return (h("wpp-list-item-v4-5-0", { isDarkTheme: this.isDarkTheme, role: "option", "aria-disabled": "true", "non-interactive": true },
+      h("wpp-spinner-v4-5-0", { slot: "left" }),
       h("span", { slot: "label" }, this._locales.loading)));
   }
   if (!this.visibleOptionsLength && this.searchText.length > 0) {
-    return (h("wpp-list-item-v4-4-0", { isDarkTheme: this.isDarkTheme, labelTypography: { color: 'var(--wpp-grey-color-700)', type: 's-body' }, nonInteractive: true },
-      h("wpp-typography-v4-4-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound)));
+    return (h("wpp-list-item-v4-5-0", { isDarkTheme: this.isDarkTheme, labelTypography: { color: 'var(--wpp-grey-color-700)', type: 's-body' }, nonInteractive: true, role: "option", "aria-disabled": "true" },
+      h("wpp-typography-v4-5-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound)));
   }
   if (!this.searchText.trim().length && !!this.componentSuggestions?.length) {
     return renderSuggestionOptions();
@@ -162,10 +164,17 @@ function renderDropdownListComponent() {
 }
 
 function renderExtendedSelectedValuesComponent() {
-  return (h("div", { class: "selected-values" }, this.extendedSelectedValues?.map(el => (h("wpp-pill-v4-4-0", { label: el.label, type: "display", onWppClose: event => this.handleClickListItem({
-      ...event,
-      ...{ detail: { value: el.value } },
-    }), removable: true })))));
+  this.extendedPillRefs = [];
+  return (h("div", { class: "selected-values" }, this.extendedSelectedValues?.map((el, ndx) => (h("wpp-pill-v4-5-0", { ref: ref => {
+      if (ref)
+        this.extendedPillRefs[ndx] = ref;
+    }, label: el.label, type: "display", onWppClose: event => {
+      this.handleClickListItem({
+        ...event,
+        ...{ detail: { value: el.value } },
+      });
+      this.restoreFocusAfterPillRemoval(event, ndx, () => this.extendedPillRefs);
+    }, removable: true })))));
 }
 
 function renderCreateNewOptionComponent() {
@@ -179,13 +188,16 @@ function renderCreateNewOptionComponent() {
     this.handleBlur(undefined, { force: true });
   };
   return (h("div", { class: "wpp-dropdown-actions" },
-    h("wpp-divider-v4-4-0", null),
-    h("wpp-list-item-v4-4-0", { onClick: handleCreateNewOptionClick },
-      h("wpp-typography-v4-4-0", { type: "s-strong", class: "wpp-create-new-option", slot: "label" }, this._locales.createNewElement(this.searchText)))));
+    h("wpp-divider-v4-5-0", null),
+    h("wpp-list-item-v4-5-0", { onWppChangeListItem: handleCreateNewOptionClick },
+      h("wpp-typography-v4-5-0", { type: "s-strong", class: "wpp-create-new-option", slot: "label" }, this._locales.createNewElement(this.searchText)))));
 }
 
-const wppAutocompleteCss = ":host{--autocomplete-min-width:var(--wpp-autocomplete-min-width, 184px);position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;outline:none;min-width:var(--autocomplete-min-width)}.trigger{position:relative;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-webkit-box-sizing:border-box;box-sizing:border-box;background-color:transparent;border:var(--wpp-border-width-s) solid var(--wpp-grey-color-500);border-radius:var(--wpp-border-radius-m);cursor:text;outline:none}.trigger.size-s{height:32px}.trigger.size-m{height:40px}.trigger:hover{background-color:var(--wpp-grey-color-200);border-color:var(--wpp-grey-color-700)}.trigger:active{background-color:transparent;border-color:var(--wpp-grey-color-800)}.trigger:active .trigger-actions .wpp-icon-chevron,.trigger:active .wpp-icon-cross{color:var(--wpp-icon-color-active)}.trigger.focused{background-color:transparent;border-color:var(--wpp-grey-color-800)}.trigger.focused .input-placeholder,.trigger.focused .hidden-count{position:absolute;opacity:0;pointer-events:none;visibility:hidden}.trigger.warning,.trigger.warning:hover{border:var(--wpp-border-width-s) solid var(--wpp-warning-color-400)}.trigger.error,.trigger.error:hover{border:var(--wpp-border-width-s) solid var(--wpp-danger-color-400)}.trigger.disabled{background-color:var(--wpp-grey-color-100);border-color:var(--wpp-grey-color-400);pointer-events:none}.trigger.disabled .input-placeholder{--wpp-typography-color:var(--wpp-text-color-disabled)}.trigger.single .hidden-count{right:10px}.label{margin-bottom:8px}.wpp-input{min-width:70px;padding:0;background:transparent;border:none;outline:none;width:calc(100% + 2px);left:-1px;-ms-flex:1 0 auto;flex:1 0 auto;--wpp-input-border-width:0;--wpp-input-bg-color-hover:transparent;--wpp-input-bg-color-active:transparent;--wpp-input-bg-color-disabled:transparent}.wpp-input::-webkit-input-placeholder{color:var(--wpp-grey-color-700);opacity:1}.wpp-input::-moz-placeholder{color:var(--wpp-grey-color-700);opacity:1}.wpp-input:-ms-input-placeholder{color:var(--wpp-grey-color-700);opacity:1}.wpp-input::-ms-input-placeholder{color:var(--wpp-grey-color-700);opacity:1}.wpp-input::placeholder{color:var(--wpp-grey-color-700);opacity:1}.wpp-input::-webkit-input-placeholder{color:var(--wpp-grey-color-700)}.wpp-input::-moz-placeholder{color:var(--wpp-grey-color-700)}.wpp-input:-ms-input-placeholder{color:var(--wpp-grey-color-700)}.wpp-input::-ms-input-placeholder{color:var(--wpp-grey-color-700)}.wpp-input::placeholder{color:var(--wpp-grey-color-700)}.wpp-input.wpp-size-m{--wpp-input-padding-m:9px 10px 9px 12px}.wpp-input.wpp-size-s{--wpp-input-padding-s:5px 10px 5px 12px}.wpp-input.transparent::part(input){color:transparent}.input-placeholder{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;-webkit-box-sizing:border-box;box-sizing:border-box;position:absolute;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);left:11px;width:calc(100% - 50px - var(--hidden-count-width, -26px));-ms-flex:1 1 auto;flex:1 1 auto;min-width:0}.input-placeholder.hidden{opacity:0;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;pointer-events:none}.input-placeholder.disabled{color:var(--wpp-text-color-disabled)}.hidden-input-placeholder{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;visibility:hidden;position:absolute;z-index:-1}.wpp-icon-cross{position:absolute;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);right:10px;display:-ms-flexbox;display:flex;cursor:pointer}.wpp-icon-cross:hover{color:var(--wpp-icon-color-hover)}.hidden-count{position:absolute;top:50%;right:38px;-webkit-transform:translateY(-50%);transform:translateY(-50%);max-width:0;opacity:0}.hidden-count.computed{max-width:100px;opacity:1}.wpp-icon-cross.wpp-hidden{opacity:0;pointer-events:none}.selected-values{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;gap:8px;margin-top:12px}.selected-values .wpp-pill{max-width:100%}.empty-focus-anchor{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0;outline:none}.inline-message{margin-top:4px}";
+const wppAutocompleteCss = ":host{--autocomplete-min-width:var(--wpp-autocomplete-min-width, 184px);position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;outline:none;min-width:var(--autocomplete-min-width)}.trigger{position:relative;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-webkit-box-sizing:border-box;box-sizing:border-box;background-color:transparent;border:var(--wpp-border-width-s) solid var(--wpp-grey-color-500);border-radius:var(--wpp-border-radius-m);cursor:text;outline:none}.trigger.size-s{height:32px}.trigger.size-m{height:40px}.trigger:hover,.trigger.label-hovered{background-color:var(--wpp-grey-color-200);border-color:var(--wpp-grey-color-700)}.trigger:active{background-color:transparent;border-color:var(--wpp-grey-color-800)}.trigger:active .trigger-actions .wpp-icon-chevron,.trigger:active .wpp-icon-cross{color:var(--wpp-icon-color-active)}.trigger.focused{background-color:transparent;border-color:var(--wpp-grey-color-800)}.trigger.focused .input-placeholder,.trigger.focused .hidden-count{position:absolute;opacity:0;pointer-events:none;visibility:hidden}.trigger.warning,.trigger.warning:hover{border:var(--wpp-border-width-s) solid var(--wpp-warning-color-400)}.trigger.error,.trigger.error:hover{border:var(--wpp-border-width-s) solid var(--wpp-danger-color-400)}.trigger.disabled{background-color:var(--wpp-grey-color-100);border-color:var(--wpp-grey-color-400);cursor:not-allowed}.trigger.disabled .input-placeholder{--wpp-typography-color:var(--wpp-text-color-disabled)}.trigger.single .hidden-count{right:10px}.label{margin-bottom:8px}.wpp-input{min-width:70px;padding:0;background:transparent;border:none;outline:none;width:calc(100% + 2px);left:-1px;-ms-flex:1 0 auto;flex:1 0 auto;--wpp-input-border-width:0;--wpp-input-bg-color-hover:transparent;--wpp-input-bg-color-active:transparent;--wpp-input-bg-color-disabled:transparent}.wpp-input::-webkit-input-placeholder{color:var(--wpp-grey-color-700);opacity:1}.wpp-input::-moz-placeholder{color:var(--wpp-grey-color-700);opacity:1}.wpp-input:-ms-input-placeholder{color:var(--wpp-grey-color-700);opacity:1}.wpp-input::-ms-input-placeholder{color:var(--wpp-grey-color-700);opacity:1}.wpp-input::placeholder{color:var(--wpp-grey-color-700);opacity:1}.wpp-input::-webkit-input-placeholder{color:var(--wpp-grey-color-700)}.wpp-input::-moz-placeholder{color:var(--wpp-grey-color-700)}.wpp-input:-ms-input-placeholder{color:var(--wpp-grey-color-700)}.wpp-input::-ms-input-placeholder{color:var(--wpp-grey-color-700)}.wpp-input::placeholder{color:var(--wpp-grey-color-700)}.wpp-input.wpp-size-m{--wpp-input-padding-m:9px 10px 9px 12px}.wpp-input.wpp-size-s{--wpp-input-padding-s:5px 10px 5px 12px}.wpp-input.transparent::part(input){color:transparent}.input-placeholder{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;-webkit-box-sizing:border-box;box-sizing:border-box;position:absolute;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);left:11px;width:calc(100% - 50px - var(--hidden-count-width, -26px));-ms-flex:1 1 auto;flex:1 1 auto;min-width:0}.input-placeholder.hidden{opacity:0;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;pointer-events:none}.input-placeholder.disabled{color:var(--wpp-text-color-disabled)}.hidden-input-placeholder{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;visibility:hidden;position:absolute;z-index:-1}.wpp-icon-cross{position:absolute;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);right:10px;display:-ms-flexbox;display:flex;cursor:pointer;outline:none}.wpp-icon-cross:hover{color:var(--wpp-icon-color-hover)}.wpp-icon-cross.tab-focus{border-radius:3px;outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);color:var(--wpp-icon-color-hover)}.hidden-count{position:absolute;top:50%;right:38px;-webkit-transform:translateY(-50%);transform:translateY(-50%);max-width:0;opacity:0}.hidden-count.computed{max-width:100px;opacity:1}.wpp-icon-cross.wpp-hidden{opacity:0;pointer-events:none}.selected-values{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;gap:8px;margin-top:12px}.selected-values .wpp-pill{max-width:100%}.empty-focus-anchor{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0;outline:none}.visually-hidden{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;white-space:nowrap;clip:rect(0 0 0 0);-webkit-clip-path:inset(50%);clip-path:inset(50%)}.inline-message{margin-top:4px}";
 
+// Monotonic counter used to build per-instance listbox ids: the `name` prop is optional (and can
+// repeat), but `aria-controls` must reference a unique element id.
+let autocompleteInstanceId = 0;
 const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete extends HTMLElement {
   constructor() {
     super();
@@ -199,16 +211,75 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
     this.themeSubscription = themeSubscriptionController(() => this.dropdownRef, (theme) => {
       this.isDarkTheme = theme === 'dark';
     });
+    // Set when the show more/less toggle is activated, so focus can follow it to its counterpart
+    // once that counterpart has rendered. 'pointer' moves focus without arming the keyboard ring.
+    this.pendingTogglePress = null;
     this.selectedPillRefs = [];
+    // WppPill's rendered under the field in `extended` mode
+    this.extendedPillRefs = [];
+    // Set when a keyboard pill removal needs focus re-homed once that removal has rendered.
+    this.pendingPillFocus = null;
     this.withPills = false;
     this.activeListNdx = null;
     this.activeSuggestionNdx = null;
     this.listItemsRefs = [];
     this.suggestionsItemsRefs = [];
     this.preventBlur = false;
+    // Unique id wiring the combobox input's `aria-controls` to its listbox popup.
+    this.listboxId = '';
+    // Set when Escape is pressed inside the popup: focus returns to the input, and the focus
+    // handler must not immediately reopen the popup the user just dismissed.
+    this.suppressNextFocusDropdown = false;
     /**
      * Observers
      */
+    // `role="option"`, `tabindex="-1"` and `aria-selected` are set declaratively in JSX and honoured
+    // by wpp-list-item itself (getHostRole/getHostTabIndex), so they no longer need re-asserting. The
+    // one thing that still needs a runtime pass is neutralizing focusable descendants inside an option
+    // (WCAG "nested-interactive"): slotted content such as `wpp-avatar` defaults to `role="button"`
+    // with a tab stop and can hydrate after render. This observer runs that pass; every write is a
+    // guarded no-op once an option is neutral, so it never loops.
+    this.setupOptionSemanticsObserver = () => {
+      if (!this.dropdownRef)
+        return;
+      this.optionSemanticsObserver = new MutationObserver(() => this.queueOptionSemantics());
+      // The observer follows the dropdown node even after tippy relocates it into `document.body`.
+      this.optionSemanticsObserver.observe(this.dropdownRef, {
+        subtree: true,
+        childList: true,
+        attributes: true,
+        attributeFilter: ['role', 'tabindex'],
+      });
+    };
+    this.queueOptionSemantics = () => {
+      if (this.optionSemanticsFrame !== undefined)
+        cancelAnimationFrame(this.optionSemanticsFrame);
+      this.optionSemanticsFrame = requestAnimationFrame(() => {
+        this.optionSemanticsFrame = undefined;
+        this.applyOptionSemantics();
+      });
+    };
+    this.applyOptionSemantics = () => {
+      if (!this.optionsListRef)
+        return;
+      Array.from(this.optionsListRef.children)
+        .filter(el => el.tagName.toLowerCase().includes('list-item'))
+        .forEach(el => this.neutralizeNestedInteractives(el));
+    };
+    // A `role="option"` must not contain focusable descendants (WCAG "nested-interactive"), so any
+    // interactive slotted content — e.g. `wpp-avatar`, which defaults to `role="button"` with a tab
+    // stop — is demoted here. Writes are guarded, so once an option is neutral this is a no-op and
+    // the semantics observer (which watches `role`/`tabindex`) never loops.
+    this.neutralizeNestedInteractives = (option) => {
+      option
+        .querySelectorAll('a[href], button, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"])')
+        .forEach(el => {
+        if (el.getAttribute('tabindex') !== '-1')
+          el.setAttribute('tabindex', '-1');
+        if (el.getAttribute('role') === 'button')
+          el.setAttribute('role', 'presentation');
+      });
+    };
     this.setupResizeObserver = () => {
       this.resizeObserver = new ResizeObserver(debounce(() => {
         this.countHiddenElements();
@@ -263,6 +334,11 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
             return;
           instance.hide();
           this.isDropdownShown = false;
+          // Clicking bare page chrome moves focus to nothing, so the focus-out handlers — which both
+          // need a `relatedTarget` to tell inside from outside — never fire. The field was left
+          // believing it still had focus, and the focused state hides the field's own value, so a
+          // misclick after removing a pill blanked it.
+          this.handleBlur(undefined, { force: true });
           if (this.dropdownConfig?.onClickOutside) {
             this.dropdownConfig.onClickOutside(instance, event);
           }
@@ -377,7 +453,14 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
           this.requestLoadMore();
         }
       }
-      this.showDropdown();
+      // Focus is returning from the popup the user just dismissed with Escape — reopening it here
+      // would make the popup impossible to close from the keyboard.
+      if (this.suppressNextFocusDropdown) {
+        this.suppressNextFocusDropdown = false;
+      }
+      else {
+        this.showDropdown();
+      }
       if (event)
         this.wppFocus.emit(event);
     };
@@ -400,13 +483,38 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
       this.hideDropdown();
       this.wppBlur.emit();
     };
+    // The combobox is the trigger (the input and the clear button) plus the popup. The inline
+    // message and the `extended` mode pills sit inside the host but outside the combobox, so focus
+    // reaching them is focus leaving the combobox and must close the popup.
+    this.isInsideCombobox = (node) => !!node && (!!this.triggerRef?.contains(node) || !!this.dropdownRef?.contains(node));
+    this.handleTriggerFocusOut = (event) => {
+      const next = event.relatedTarget;
+      if (!next || this.isInsideCombobox(next))
+        return;
+      this.handleBlur(event, { force: true });
+    };
     this.handleCrossIconFocus = () => {
       this.isInputValueTransparent = true;
       this.isFocused = false;
+      this.isCrossIconFocused = true;
+      this.clearActiveOption();
       this.hideDropdown();
     };
+    this.handleCrossIconBlur = () => {
+      this.isCrossIconFocused = false;
+    };
+    // The arrow-key highlight marks the combobox's active option, not real focus. Once Tab hands DOM
+    // focus to something that draws its own ring, leaving the highlight painted shows the user two
+    // focus indicators at once, so it is dropped as part of the move.
+    this.clearActiveOption = () => {
+      this.setActiveClass('list', this.activeListNdx, null);
+      this.setActiveClass('suggestions', this.activeSuggestionNdx, null);
+      this.activeListNdx = null;
+      this.activeSuggestionNdx = null;
+    };
     this.handleCrossIconKeyDown = (event) => {
-      if (event.key === 'Enter') {
+      // A `role="button"` control must respond to both Enter and Space (W3C ARIA APG).
+      if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
         this.handleClearClick(event);
         this.setFocus();
@@ -438,6 +546,8 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
     };
     this.handleClearClick = (event) => {
       event.stopPropagation();
+      if (this.disabled)
+        return;
       this.value = [];
       this.placeholderText = undefined;
       this.hiddenSelectedOptionsNumber = 0;
@@ -468,11 +578,22 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
         return;
       switch (event.key) {
         case 'Escape': {
+          // Editable-combobox pattern (W3C ARIA APG): Escape dismisses the popup while DOM focus
+          // stays in the input, so the user can keep editing. Only fall back to the blur handler
+          // when there is no popup to close.
+          if (this.isDropdownShown) {
+            event.preventDefault();
+            this.hideDropdown();
+            return;
+          }
           this.handleBlur();
           return;
         }
         case 'ArrowDown': {
           event.preventDefault();
+          // Per the combobox pattern the arrows also (re)open a dismissed popup.
+          if (!this.isDropdownShown)
+            this.showDropdown();
           const src = this.getVisibleSource();
           if (!src)
             return;
@@ -487,6 +608,8 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
         }
         case 'ArrowUp': {
           event.preventDefault();
+          if (!this.isDropdownShown)
+            this.showDropdown();
           const src = this.getVisibleSource();
           if (!src)
             return;
@@ -513,8 +636,99 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
             this.multiple ? this.onClickListItemMultiple(val) : this.onClickListItemSingle(val);
             this.checkListAgainstValue();
           }
+          return;
+        }
+        case 'Tab': {
+          // The popup can hold interactive content beyond the options — pill remove buttons,
+          // Show More, the create-new row. They live in a tippy popper appended near the end of
+          // the document, so a plain Tab would wander through the rest of the page before ever
+          // reaching them (WCAG 2.1.1). While the popup is open, Tab jumps straight into its
+          // first interactive element instead; Escape from inside returns to the input.
+          if (event.shiftKey || !this.isDropdownShown)
+            return;
+          this.clearActiveOption();
+          if (this.focusFirstDropdownInteractable())
+            event.preventDefault();
         }
       }
+    };
+    // The popup's interactive elements in DOM order: pill remove buttons, Show More, the
+    // scrollable listbox container, the create-new row. Options themselves are skipped — they are
+    // not tab stops in the combobox pattern, and nothing inside them may act as one either.
+    this.getDropdownInteractables = () => {
+      if (!this.dropdownRef)
+        return [];
+      const interactables = [];
+      for (const el of Array.from(this.dropdownRef.querySelectorAll('*'))) {
+        if (this.optionsListRef && this.optionsListRef.contains(el) && el !== this.optionsListRef)
+          continue;
+        // Pills beyond the "Show more" cut are `visibility: hidden`; focusing one is a no-op that
+        // would strand focus where it is.
+        if (getComputedStyle(el).visibility === 'hidden')
+          continue;
+        if (el.tabIndex >= 0) {
+          interactables.push({ host: el, focusTarget: el });
+          continue;
+        }
+        // Pills and action buttons keep their real controls inside their shadow roots.
+        const inner = el.shadowRoot?.querySelector('[tabindex="0"], button:not([disabled])');
+        if (inner)
+          interactables.push({ host: el, focusTarget: inner });
+      }
+      return interactables;
+    };
+    this.focusFirstDropdownInteractable = () => {
+      const first = this.getDropdownInteractables()[0];
+      if (!first)
+        return false;
+      first.focusTarget.focus();
+      return true;
+    };
+    // Handles keys while focus is on interactive content inside the popup (which tippy relocates
+    // out of the host, so the input's own keydown handler never sees these events).
+    this.handleDropdownKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
+        this.suppressNextFocusDropdown = true;
+        this.hideDropdown();
+        // Focus the input directly (not via `setFocus()`, which invokes the focus handler a second
+        // time and would consume the suppress flag before the native focus event arrives).
+        this.inputRef?.setFocus();
+        return;
+      }
+      // Tab past the popup's last interactive element (or Shift+Tab before its first) returns to
+      // the input, mirroring how Tab jumped in — otherwise focus would fall out of the popper into
+      // whatever happens to follow it in the document. Focusing the input keeps the popup open;
+      // Escape or Tab from a middle element behave as before.
+      if (event.key === 'Tab') {
+        const interactables = this.getDropdownInteractables();
+        // Keydown listeners sit on the popup container, so events from inside a pill's shadow DOM
+        // arrive retargeted to the pill host — match on the host.
+        const ndx = interactables.findIndex(({ host }) => host === event.target || host.contains(event.target));
+        if (ndx === -1)
+          return;
+        const atFirstGoingBack = event.shiftKey && ndx === 0;
+        const atLastGoingForward = !event.shiftKey && ndx === interactables.length - 1;
+        if (atLastGoingForward && this.isCrossIconTabbable()) {
+          event.preventDefault();
+          this.crossIconRef?.focus();
+          return;
+        }
+        if (atFirstGoingBack || atLastGoingForward) {
+          event.preventDefault();
+          this.inputRef?.setFocus();
+        }
+      }
+    };
+    // The popup lives outside the host, so the host's blur handler never fires when keyboard focus
+    // moves on from the popup's interactive content. Without this, tabbing out of the popup would
+    // leave it stranded open with the field still styled as focused.
+    this.handleDropdownFocusOut = (event) => {
+      const next = event.relatedTarget;
+      if (!next || this.isInsideCombobox(next))
+        return;
+      this.handleBlur(event, { force: true });
     };
     /**
      * Validators
@@ -698,6 +912,42 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
      * Dropdown Pills methods
      */
     /**
+     * Removing a pill destroys the control that had focus. After a keyboard removal focus moves to
+     * the remove icon of the pill that takes its place — the last remaining one when the tail pill
+     * goes, the input when none are left — so the user can keep deleting without tabbing back in
+     * (W3C APG, managing focus when an element is removed). A mouse removal returns focus to the
+     * input as before: moving it onto a pill there would paint a keyboard focus ring on a pointer
+     * interaction.
+     */
+    this.restoreFocusAfterPillRemoval = (event, removedNdx, getPills) => {
+      if (event.detail?.type !== 'keydown') {
+        this.setFocus();
+        return;
+      }
+      // Handed to componentDidRender rather than a frame callback: a frame can land before the
+      // removal has rendered, and the pill at this index is then still the one on its way out, so
+      // focus went to a node about to be destroyed. After the render the refs describe what is left.
+      this.pendingPillFocus = { ndx: removedNdx, getPills };
+    };
+    this.focusPillAfterRemoval = () => {
+      if (!this.pendingPillFocus)
+        return;
+      const { ndx, getPills } = this.pendingPillFocus;
+      this.pendingPillFocus = null;
+      const remaining = (getPills() || []).filter(pill => pill?.isConnected);
+      const target = remaining[ndx] ?? remaining[remaining.length - 1];
+      // `setRemoveIconFocus` rather than a plain `focus()` on the icon: the pill paints its focus
+      // ring from a class it only sets on its own Tab keyup, so focusing the icon directly would
+      // move focus with nothing to show for it.
+      // Nothing left to focus means the field itself takes over, and this only runs for keyboard
+      // removals — so it has to be the outlined focus, or focus lands back in the input with
+      // nothing on screen to say where it went.
+      if (target?.setRemoveIconFocus)
+        target.setRemoveIconFocus();
+      else
+        this.setFocus(true);
+    };
+    /**
      * Validate each WppPill if it has a truncated text label inside or WppPill got truncated when it's in `showMore` mode
      */
     this.validateTruncatedPills = () => {
@@ -757,8 +1007,40 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
         Math.max(0, visibleCount - 1) * PILL_MARGIN;
       this.headerWrapperRef.style.setProperty('--pills-wrapper-width', `${totalWidth}px`);
     };
-    this.handleShowMoreLessClick = () => {
+    this.handleShowMoreLessClick = (event) => {
       this.isShowMore = !this.isShowMore;
+      // "Show more" and "Show less" are two different buttons in two different containers, and
+      // pressing one hides its own container. The browser blurs an element that becomes
+      // `visibility: hidden`, so focus would land on the body. A click synthesised from Enter or
+      // Space reports detail 0, which is how a real pointer press is told apart — only the former
+      // should re-arm the focus ring on the counterpart.
+      this.pendingTogglePress = event?.detail === 0 ? 'keyboard' : 'pointer';
+    };
+    this.focusToggleAfterRender = () => {
+      if (!this.pendingTogglePress)
+        return;
+      const press = this.pendingTogglePress;
+      this.pendingTogglePress = null;
+      const wrapper = this.isShowMore ? this.showMoreElementRef : this.showLessElementRef;
+      // The built output registers a version-suffixed tag while specs render the bare one, so both
+      // spellings have to be looked for.
+      const button = wrapper?.querySelector(`wpp-action-button, ${transformToVersionedTag('wpp-action-button')}`);
+      // Only the keyboard path is handled. wpp-action-button's setFocus paints the keyboard ring as
+      // well as moving focus, which is what a key press should get and what a pointer press must not;
+      // and a pointer press leaves focus on the body, which is the browser's own behaviour when the
+      // clicked control disappears. Reaching past setFocus into the button's shadow DOM to focus it
+      // ringless is not worth the coupling for a case nobody has reported.
+      if (press !== 'keyboard' || !button)
+        return;
+      // Optional: the element may not have upgraded yet, and specs never register it.
+      button.setFocus?.();
+    };
+    // Clicking the pills area puts the caret back in the field, but the Show more/less toggle sits
+    // in the same wrapper and its own click bubbles here. That pulled focus off the toggle and into
+    // the input, so the toggle appeared not to respond and the next activation went to the input.
+    this.handleSelectedPillsClick = (event) => {
+      if (this.showMoreElementRef?.contains(event.target))
+        return;
       this.setFocus();
     };
     /**
@@ -799,25 +1081,42 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
       }
       return from;
     };
+    // Moves the visual highlight (`wpp-list-item-active` wears the hover tint + focus ring — the
+    // keyboard equivalent of a mouse hover, not the pressed/active state), scrolls the option into
+    // view and announces it through the `aria-live` region. DOM focus never leaves the input, so
+    // typing keeps working while the user browses the results. `aria-selected` is left to reflect
+    // the actual selection (the `checked` state), not the keyboard highlight.
     this.setActiveClass = (source, prev, next) => {
       const arr = source === 'list' ? this.listItemsRefs : this.suggestionsItemsRefs;
       if (prev != null && arr[prev]) {
-        arr[prev].classList.remove('tab-focus');
-        arr[prev].removeAttribute('aria-selected');
+        arr[prev].classList.remove('wpp-list-item-active');
       }
       if (next != null && arr[next]) {
-        arr[next].classList.add('tab-focus');
-        arr[next].setAttribute('aria-selected', 'true');
+        arr[next].classList.add('wpp-list-item-active');
         arr[next].scrollIntoView({ block: 'nearest' });
       }
+      this.announceActiveOption(source, next);
+    };
+    this.announceActiveOption = (source, ndx) => {
+      const items = source === 'list' ? this.internalList : this.componentSuggestions;
+      const item = ndx != null ? items[ndx] : undefined;
+      if (!item) {
+        this.activeOptionAnnouncement = '';
+        return;
+      }
+      const visibleItems = items.filter(i => !i.hidden);
+      const position = visibleItems.indexOf(item) + 1;
+      const label = (item.label ?? (typeof item.value === 'string' ? item.value : ''))?.toString().trim();
+      this.activeOptionAnnouncement = label && position > 0 ? `${label}, ${position} of ${visibleItems.length}` : '';
     };
     this.clearActive = () => {
       if (this.activeListNdx != null)
-        this.listItemsRefs[this.activeListNdx]?.classList.remove('tab-focus');
+        this.listItemsRefs[this.activeListNdx]?.classList.remove('wpp-list-item-active');
       if (this.activeSuggestionNdx != null)
-        this.suggestionsItemsRefs[this.activeSuggestionNdx]?.classList.remove('tab-focus');
+        this.suggestionsItemsRefs[this.activeSuggestionNdx]?.classList.remove('wpp-list-item-active');
       this.activeListNdx = null;
       this.activeSuggestionNdx = null;
+      this.activeOptionAnnouncement = '';
     };
     /**
      * CSS Classes Methods
@@ -835,6 +1134,7 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
       [`${this.messageType}`]: !!this.messageType,
       [`size-${this.size}`]: !!this.size,
       single: !this.multiple,
+      'label-hovered': this.isLabelHovered,
     });
     this.inputCssClasses = () => ({
       hidden: !this.isFocused && !!this.value.length,
@@ -844,10 +1144,19 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
       'wpp-autocomplete-dropdown': true,
       'wpp-empty-list': !this.visibleOptionsLength && this.searchText.length === 0 && !this.componentSuggestions.length,
     });
+    this.isCrossIconHidden = () => this.value.length === 0 || this.isDropdownShown || this.isFocused || !this.multiple;
+    // The icon is only *visually* hidden while the field has focus or the popup is open, and
+    // `handleCrossIconFocus` reveals it again the moment it takes focus. Those two states must not
+    // take it out of the tab order, because they are the only states a keyboard user could ever
+    // reach it from — tying `tabindex` to them left the control mouse-only (WCAG 2.1.1).
+    this.isCrossIconTabbable = () => this.multiple && !this.disabled && this.value.length > 0;
     this.iconCrossCssClasses = () => ({
-      'wpp-hidden': this.value.length === 0 || this.isDropdownShown || this.isFocused || !this.multiple,
+      'wpp-hidden': this.isCrossIconHidden(),
+      // `focusType` only becomes TAB on a Tab keyup, so a pointer press on the icon never rings it.
+      'tab-focus': this.isCrossIconFocused && this.focusType === FOCUS_TYPE.TAB,
     });
     this.isFocused = false;
+    this.isLabelHovered = false;
     this.isDropdownShown = false;
     this.isInfiniteLoading = false;
     this.internalList = undefined;
@@ -865,7 +1174,10 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
     this.activeNdx = -1;
     this.activeSourceList = 'list';
     this.focusType = undefined;
+    this.isCrossIconFocused = false;
     this.isInputValueTransparent = false;
+    this.activeOptionAnnouncement = '';
+    this.isOptionsScrollable = false;
     this.labelConfig = undefined;
     this.name = undefined;
     this.autoFocus = false;
@@ -961,7 +1273,11 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
   }
   onShowMoreChange(isShowMore) {
     if (isShowMore) {
-      setTimeout(this.validateTruncatedPills, 0);
+      // Replace rather than stack: a rapid toggle would otherwise leave earlier timers pending,
+      // and only the last id could be cleared on disconnect.
+      if (this.truncationTimeout !== undefined)
+        clearTimeout(this.truncationTimeout);
+      this.truncationTimeout = setTimeout(this.validateTruncatedPills, 0);
     }
     else {
       this.selectedPillRefs?.forEach(el => el?.classList.remove('transparent'));
@@ -1004,6 +1320,7 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
     if (this.limitSelectedItems > 0 && !this.multiple) {
       throw new Error('There could be only one selected item in single mode, otherwise, use multiple mode.');
     }
+    this.listboxId = `wpp-autocomplete-listbox-${++autocompleteInstanceId}`;
     this.withPills = this.type === 'regular' && this.multiple;
     const normalized = (this.list ?? []).map(item => ({
       ...item,
@@ -1019,11 +1336,26 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
   componentDidLoad() {
     this.themeSubscription.start();
     this.createTippyInstance();
+    this.setupOptionSemanticsObserver();
     if (this.type === 'regular')
       this.setupResizeObserver();
     this.checkListAgainstValue();
     if (this.autoFocus)
       this.setFocus(true);
+  }
+  componentDidRender() {
+    // Keep the options list in the tab order only while it can actually scroll (WCAG 2.1.1 —
+    // options are not tab stops in the combobox pattern, so the scroll region itself must be
+    // reachable). Measured here so it stays in sync as options load in or the query changes.
+    const scrollable = this.isDropdownShown &&
+      !!this.optionsListRef &&
+      this.optionsListRef.scrollHeight > this.optionsListRef.clientHeight;
+    if (scrollable !== this.isOptionsScrollable) {
+      this.isOptionsScrollable = scrollable;
+    }
+    this.queueOptionSemantics();
+    this.focusPillAfterRemoval();
+    this.focusToggleAfterRender();
   }
   connectedCallback() {
     this.themeSubscription.start();
@@ -1035,18 +1367,46 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
     this.themeSubscription.stop();
     this.tippyInstance?.destroy();
     this.resizeObserver?.disconnect();
+    this.optionSemanticsObserver?.disconnect();
+    if (this.optionSemanticsFrame !== undefined)
+      cancelAnimationFrame(this.optionSemanticsFrame);
+    // Left pending, this re-measures a component that is already gone and reads state off a
+    // disposed instance.
+    if (this.truncationTimeout !== undefined)
+      clearTimeout(this.truncationTimeout);
   }
   get _locales() {
     return mergeLocales(LOCALES_DEFAULTS, this.locales);
   }
-  render() {
-    return (h(Host, { class: this.hostCssClasses(), onBlur: this.handleBlur, onKeyUp: this.onKeyUp, exportparts: "input, dropdown, trigger, label" }, this.labelConfig?.text && (h("wpp-label-v4-4-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: this.handleTriggerClick })), h("div", { ref: ref => (this.triggerRef = ref), tabindex: -1, class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, this.renderPlaceholderText(), h("wpp-input-v4-4-0", { ref: ref => (this.inputRef = ref), part: "input", type: "text", role: "combobox", "aria-autocomplete": "list", "aria-expanded": this.isDropdownShown.toString(), "aria-controls": `${this.name}-listbox`, autocomplete: "off", class: this.inputCssClasses(), id: this.name, name: this.name, value: this.searchText, onWppChange: this.handleSearch, disabled: this.disabled, required: this.required, placeholder: this.isFocused || this.isDropdownShown || this.value.length > 0 || this.searchText.trim().length > 0
-        ? undefined
-        : this.placeholder, onInput: this.handleInput, onFocus: this.handleFocus, onKeyDown: this.onKeyDown, size: this.size, withCrossIcon: false, ariaProps: {
-        activedescendant: true,
-      } }), this.multiple && (h("wpp-icon-cross-v4-4-0", { class: this.iconCrossCssClasses(), role: "button", "aria-label": this.multiple ? this._locales.clearMultiple : this._locales.clearSingle, tabindex: this.value.length > 0 && this.multiple ? 0 : -1, onClick: this.handleClearClick, onFocus: this.handleCrossIconFocus, onKeyDown: this.handleCrossIconKeyDown }))), h("div", { ref: ref => (this.dropdownRef = ref), class: this.dropdownCssClasses(), part: "dropdown" }, this.isDropdownShown ? (h(Fragment, null, this.type === 'regular' && this.multiple ? this.renderDropdownPills() : null, h("div", { class: "wpp-autocomplete-dropdown-list", onMouseDown: e => e.preventDefault(), onScroll: this.handleOptionsScroll, id: `${this.name}-listbox`, role: "listbox", "aria-label": this.ariaProps?.label, "aria-busy": this.isInfiniteLoading || this.loading }, this.renderDropdownList()), this.renderCreateNewElement())) : null), !!this.message && (h("wpp-inline-message-v4-4-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType })), this.type === 'extended' && this.multiple ? this.renderExtendedSelectedValues() : null));
+  // Text piped to the polite live region. Highlight announcements take priority; when the open
+  // dropdown has no matches (the visible "nothing found" state) we announce that instead, so a
+  // screen-reader user typing a query with no results hears the outcome rather than silence.
+  get liveAnnouncement() {
+    if (this.activeOptionAnnouncement)
+      return this.activeOptionAnnouncement;
+    if (this.isDropdownShown && !this.loading && !this.visibleOptionsLength && this.searchText.length > 0) {
+      return this._locales.nothingFound ?? '';
+    }
+    return '';
   }
-  static get registryIs() { return "wpp-autocomplete-v4-4-0"; }
+  render() {
+    return (h(Host, { class: this.hostCssClasses(), onBlur: this.handleBlur, onKeyUp: this.onKeyUp, exportparts: "input, dropdown, trigger, label" }, this.labelConfig?.text && (h("wpp-label-v4-5-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: this.handleTriggerClick, onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })), h("div", { ref: ref => (this.triggerRef = ref), tabindex: -1, class: this.triggerCssClasses(), onClick: this.handleTriggerClick, onFocusout: this.handleTriggerFocusOut }, this.renderPlaceholderText(), h("wpp-input-v4-5-0", { ref: ref => (this.inputRef = ref), part: "input", type: "text", class: this.inputCssClasses(), id: this.name, name: this.name, value: this.searchText, onWppChange: this.handleSearch, disabled: this.disabled, required: this.required, placeholder: this.isFocused || this.isDropdownShown || this.value.length > 0 || this.searchText.trim().length > 0
+        ? undefined
+        : this.placeholder, onInput: this.handleInput, onFocus: this.handleFocus, onKeyDown: this.onKeyDown, size: this.size, withCrossIcon: false,
+      // The combobox semantics must land on the native input inside wpp-input's shadow DOM —
+      // attributes on the wpp-input host never reach it. The label fallback chain guarantees
+      // an accessible name even when the visible placeholder is suppressed (WCAG 4.1.2).
+      // `aria-controls` is only set while the listbox exists in the DOM.
+      ariaProps: {
+        label: this.labelConfig?.text || this.placeholder || this._locales.searchLabel,
+        role: 'combobox',
+        expanded: this.isDropdownShown,
+        controls: this.isDropdownShown ? this.listboxId : undefined,
+        haspopup: 'listbox',
+        autocomplete: 'list',
+      } }), h("span", { class: "visually-hidden", "aria-live": "polite" }, this.liveAnnouncement), this.multiple && (h("wpp-icon-cross-v4-5-0", { ref: ref => (this.crossIconRef = ref), class: this.iconCrossCssClasses(), role: "button", "aria-label": this.multiple ? this._locales.clearMultiple : this._locales.clearSingle, "aria-disabled": this.disabled ? 'true' : 'false', tabindex: this.isCrossIconTabbable() ? 0 : -1, onClick: this.handleClearClick, onFocus: this.handleCrossIconFocus, onBlur: this.handleCrossIconBlur, onKeyDown: this.handleCrossIconKeyDown }))), h("div", { ref: ref => (this.dropdownRef = ref), class: this.dropdownCssClasses(), part: "dropdown", onKeyDown: this.handleDropdownKeyDown, onFocusout: this.handleDropdownFocusOut }, this.isDropdownShown ? (h(Fragment, null, this.type === 'regular' && this.multiple ? this.renderDropdownPills() : null, h("div", { ref: ref => (this.optionsListRef = ref), class: "wpp-autocomplete-dropdown-list", onMouseDown: e => e.preventDefault(), onScroll: this.handleOptionsScroll, id: this.listboxId, role: "listbox", "aria-label": this.ariaProps?.label || this._locales.optionsListLabel, "aria-busy": this.isInfiniteLoading || this.loading, tabIndex: this.isOptionsScrollable ? 0 : -1 }, this.renderDropdownList()), this.isInfiniteLoading && (h("div", { class: "wpp-dropdown-infinite-loader", role: "status" }, h("wpp-spinner-v4-5-0", null))), this.renderCreateNewElement())) : null), !!this.message && (h("wpp-inline-message-v4-5-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType })), this.type === 'extended' && this.multiple ? this.renderExtendedSelectedValues() : null));
+  }
+  static get registryIs() { return "wpp-autocomplete-v4-5-0"; }
   get host() { return this; }
   static get watchers() { return {
     "value": ["onValueChange"],
@@ -1059,7 +1419,7 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
     "loading": ["onLoadingChange"]
   }; }
   static get style() { return wppAutocompleteCss; }
-}, [1, "wpp-autocomplete", "wpp-autocomplete-v4-4-0", {
+}, [1, "wpp-autocomplete", "wpp-autocomplete-v4-5-0", {
     "labelConfig": [16],
     "name": [1],
     "autoFocus": [4, "auto-focus"],
@@ -1092,6 +1452,7 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
     "getItemKey": [16],
     "ariaProps": [16],
     "isFocused": [32],
+    "isLabelHovered": [32],
     "isDropdownShown": [32],
     "isInfiniteLoading": [32],
     "internalList": [32],
@@ -1109,131 +1470,134 @@ const WppAutocomplete$1 = /*@__PURE__*/ proxyCustomElement(class WppAutocomplete
     "activeNdx": [32],
     "activeSourceList": [32],
     "focusType": [32],
+    "isCrossIconFocused": [32],
     "isInputValueTransparent": [32],
+    "activeOptionAnnouncement": [32],
+    "isOptionsScrollable": [32],
     "setFocus": [64]
   }]);
 function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-autocomplete-v4-4-0", "wpp-action-button-v4-4-0", "wpp-checkbox-v4-4-0", "wpp-divider-v4-4-0", "wpp-icon-chevron-v4-4-0", "wpp-icon-cross-v4-4-0", "wpp-icon-dash-v4-4-0", "wpp-icon-drag-v4-4-0", "wpp-icon-error-v4-4-0", "wpp-icon-info-message-v4-4-0", "wpp-icon-search-v4-4-0", "wpp-icon-success-v4-4-0", "wpp-icon-tick-v4-4-0", "wpp-icon-warning-v4-4-0", "wpp-inline-message-v4-4-0", "wpp-input-v4-4-0", "wpp-internal-label-v4-4-0", "wpp-internal-tooltip-v4-4-0", "wpp-label-v4-4-0", "wpp-list-item-v4-4-0", "wpp-pill-v4-4-0", "wpp-spinner-v4-4-0", "wpp-tooltip-v4-4-0", "wpp-typography-v4-4-0"];
+  const components = ["wpp-autocomplete-v4-5-0", "wpp-action-button-v4-5-0", "wpp-checkbox-v4-5-0", "wpp-divider-v4-5-0", "wpp-icon-chevron-v4-5-0", "wpp-icon-cross-v4-5-0", "wpp-icon-dash-v4-5-0", "wpp-icon-drag-v4-5-0", "wpp-icon-error-v4-5-0", "wpp-icon-info-message-v4-5-0", "wpp-icon-search-v4-5-0", "wpp-icon-success-v4-5-0", "wpp-icon-tick-v4-5-0", "wpp-icon-warning-v4-5-0", "wpp-inline-message-v4-5-0", "wpp-input-v4-5-0", "wpp-internal-label-v4-5-0", "wpp-internal-tooltip-v4-5-0", "wpp-label-v4-5-0", "wpp-list-item-v4-5-0", "wpp-pill-v4-5-0", "wpp-spinner-v4-5-0", "wpp-tooltip-v4-5-0", "wpp-typography-v4-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-autocomplete-v4-4-0":
+    case "wpp-autocomplete-v4-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppAutocomplete$1);
       }
       break;
-    case "wpp-action-button-v4-4-0":
+    case "wpp-action-button-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$o();
       }
       break;
-    case "wpp-checkbox-v4-4-0":
+    case "wpp-checkbox-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-divider-v4-4-0":
+    case "wpp-divider-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-icon-chevron-v4-4-0":
+    case "wpp-icon-chevron-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-cross-v4-4-0":
+    case "wpp-icon-cross-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-dash-v4-4-0":
+    case "wpp-icon-dash-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-drag-v4-4-0":
+    case "wpp-icon-drag-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-error-v4-4-0":
+    case "wpp-icon-error-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-info-message-v4-4-0":
+    case "wpp-icon-info-message-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-search-v4-4-0":
+    case "wpp-icon-search-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-success-v4-4-0":
+    case "wpp-icon-success-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-tick-v4-4-0":
+    case "wpp-icon-tick-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-warning-v4-4-0":
+    case "wpp-icon-warning-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-inline-message-v4-4-0":
+    case "wpp-inline-message-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-input-v4-4-0":
+    case "wpp-input-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-internal-label-v4-4-0":
+    case "wpp-internal-label-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-tooltip-v4-4-0":
+    case "wpp-internal-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-label-v4-4-0":
+    case "wpp-label-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-list-item-v4-4-0":
+    case "wpp-list-item-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-pill-v4-4-0":
+    case "wpp-pill-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-4-0":
+    case "wpp-spinner-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-4-0":
+    case "wpp-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-4-0":
+    case "wpp-typography-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

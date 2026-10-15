@@ -30,6 +30,8 @@ export type VideoPlayerLocales = {
   fullscreenButtonAriaLabel: string;
   videoProgressLabel: string;
   videoProgressAriaLabel: string;
+  currentTimeAriaLabel: string;
+  durationAriaLabel: string;
   languageMenuAriaLabel: string;
   videoCaptionsAriaLabel: string;
   keyboardShortcutsDescription: {
@@ -43,11 +45,6 @@ export type VideoPlayerLocales = {
   };
 };
 export type VideoPlayerStates = 'idle' | 'playing' | 'paused';
-export type SplitTimeFormat = {
-  hours?: string;
-  minutes: string;
-  seconds: string;
-};
 export type CalculatedVideoSize = {
   width?: number;
   height?: number;

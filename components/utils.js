@@ -1,6 +1,6 @@
 import { D as DEFAULT_SHOW_DURATION_ANIMATION, a as DEFAULT_HIDE_DURATION_ANIMATION } from './consts.js';
 
-const version = 'v4-4-0';
+const version = 'v4-5-0';
 
 function format(first, middle, last) {
   return (first || '') + (middle ? ` ${middle}` : '') + (last ? ` ${last}` : '');
@@ -294,6 +294,35 @@ function getOsBarOffsetHeight() {
 function mergeLocales(defaults, overrides) {
   return { ...defaults, ...overrides };
 }
+/**
+ * Returns true when `mime` matches one of the configured patterns.
+ *
+ * A pattern is either an exact type (`image/png`), a family wildcard (`image/…`) or the
+ * match-everything pattern. An empty pattern list means unrestricted.
+ *
+ * A file the browser could not type matches nothing except the match-everything pattern, which
+ * holds precisely because it asks nothing of the file - a screenshot saved without an extension
+ * has no type to offer and is still a file. Every other pattern leaves the decision to the caller.
+ *
+ * Matching is case-insensitive on both sides: browsers are inconsistent about the casing they
+ * report, and a file typed `IMAGE/PNG` is the same file as one typed `image/png`.
+ */
+const isMimeAccepted = (mime, patterns) => {
+  if (!patterns.length)
+    return true;
+  const candidate = mime.toLowerCase();
+  return patterns.some(pattern => {
+    const normalised = pattern.toLowerCase();
+    if (normalised === '*/*')
+      return true;
+    if (!candidate)
+      return false;
+    if (normalised === candidate)
+      return true;
+    // 'image/*' -> 'image/', so only the family has to line up.
+    return normalised.endsWith('/*') && candidate.startsWith(normalised.slice(0, -1));
+  });
+};
 let cachedScrollbarGutterWidth = null;
 /**
  * Width the platform reserves in layout for a scrollbar, in px.
@@ -355,11 +384,13 @@ const getAriaProps = (ariaProps) => {
     if (key === 'tabIndex')
       return;
     if (val !== undefined && val !== null) {
-      result[`aria-${key}`] = typeof val === 'boolean' ? String(val) : val;
+      // `role` is a plain attribute, not an `aria-*` one — prefixing it would produce the
+      // invalid `aria-role` attribute and silently drop the requested role.
+      result[key === 'role' ? 'role' : `aria-${key}`] = typeof val === 'boolean' ? String(val) : val;
     }
   });
   return result;
 };
 const isWppElement = (element) => element.tagName.toLowerCase().includes('wpp-') && element.tagName.toLowerCase().includes('-v');
 
-export { uniquePortalId as A, activateOnEnterOrSpace as B, getAriaProps as C, isWppElement as D, version as E, areSetsEqual as a, isEventTargetContained as b, hasParentWithId as c, debounce as d, truncate as e, format as f, getSlotEmptyStates as g, hasShadowDom as h, isObject as i, getHighlightData as j, transformToVersionedTag as k, closestElement as l, applyBodyStylesIfNeeded as m, autoFocusElement as n, form2object as o, getDurationValues as p, getHasFocused as q, recursiveObjectMap as r, selectDropdownWidth as s, toKebabCase as t, uuidv4 as u, setHasFocused as v, getHighestContainerInDOM as w, getOsBarOffsetHeight as x, mergeLocales as y, getScrollbarGutterWidth as z };
+export { getScrollbarGutterWidth as A, uniquePortalId as B, activateOnEnterOrSpace as C, getAriaProps as D, isWppElement as E, version as F, areSetsEqual as a, isEventTargetContained as b, hasParentWithId as c, debounce as d, truncate as e, format as f, getSlotEmptyStates as g, hasShadowDom as h, isObject as i, getHighlightData as j, transformToVersionedTag as k, closestElement as l, applyBodyStylesIfNeeded as m, autoFocusElement as n, form2object as o, getDurationValues as p, getHasFocused as q, recursiveObjectMap as r, selectDropdownWidth as s, toKebabCase as t, uuidv4 as u, setHasFocused as v, getHighestContainerInDOM as w, getOsBarOffsetHeight as x, mergeLocales as y, isMimeAccepted as z };

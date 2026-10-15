@@ -21,5 +21,7 @@ export const LOCALES_DEFAULTS = {
   createNewElement: query => `Create "${query}"`,
   clearMultiple: 'Clear selections',
   clearSingle: 'Clear selection',
+  searchLabel: 'Search',
+  optionsListLabel: 'Search results',
 };
 export const PILL_MARGIN = 8;

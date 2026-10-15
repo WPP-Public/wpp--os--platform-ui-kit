@@ -1,6 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { k as transformToVersionedTag, u as uuidv4, d as debounce, y as mergeLocales } from './utils.js';
-import { T as TREE_ITEM_HEIGHT, a as TREE_PADDING_TOP, r as recalculateIndeterminateTreeState, u as updateTreeByIds, f as findSelectedItems, c as convertToOriginalItems, b as updateTreeById, m as markChildrenAs, i as isHaveFoundChildren, e as extractExtraProps, g as getAllVisibleItems, d as findTreeItemById, h as getSiblings, j as findParentOfItem, L as LOCALES_DEFAULTS, D as DEFAULT_OVERSCAN, k as defineCustomElement$3, l as DEFAULT_TREE_HEIGHT } from './wpp-tree-item2.js';
+import { T as TREE_ITEM_HEIGHT, a as TREE_PADDING_TOP, D as DEFAULT_TREE_HEIGHT, r as recalculateIndeterminateTreeState, u as updateTreeByIds, f as findSelectedItems, c as convertToOriginalItems, b as updateTreeById, m as markChildrenAs, i as isHaveFoundChildren, e as extractExtraProps, g as getAllVisibleItems, d as findItemById, h as findTreeItemById, j as getSiblings, k as findParentOfItem, L as LOCALES_DEFAULTS, l as DEFAULT_OVERSCAN, n as defineCustomElement$3 } from './wpp-tree-item2.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme.js';
 import { d as defineCustomElement$r } from './wpp-action-button2.js';
 import { d as defineCustomElement$q } from './wpp-avatar2.js';
@@ -50,6 +50,27 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     this.visibleItemsList = [];
     this.scrollContainer = undefined;
     this.getTotalHeightOfTree = () => this.visibleItemsList.length * TREE_ITEM_HEIGHT + TREE_PADDING_TOP;
+    /**
+     * Height of the box that actually scrolls. Under virtualisation that is the shadow
+     * `.container-wrapper`, which is what the browser clamps `scrollTop` against; the host is the
+     * fallback for the plain tree and before the container is rendered.
+     */
+    this.getViewportHeight = () => this.scrollContainer?.clientHeight || this.host.clientHeight || DEFAULT_TREE_HEIGHT;
+    /**
+     * Keeps the virtualisation window inside the new bounds when the tree gets shorter.
+     * The browser clamps the scroll container on its own, but `scrollTop` is state that `render`
+     * reads synchronously, so without this the tree paints an out-of-range (empty) window until
+     * the browser's `scroll` event lands.
+     */
+    this.clampScrollTop = () => {
+      const maxScrollTop = Math.max(0, (this.totalHeight || 0) - this.getViewportHeight());
+      if (this.scrollTop <= maxScrollTop)
+        return;
+      this.scrollTop = maxScrollTop;
+      if (this.scrollContainer) {
+        this.scrollContainer.scrollTop = maxScrollTop;
+      }
+    };
     this.focusTreeItem = (itemId) => {
       // Use attribute-only selector — tag names are versioned at runtime (e.g. wpp-tree-item-v3-4-0)
       const treeItemEl = this.host.shadowRoot?.querySelector(`[data-item-id="${itemId}"]`);
@@ -409,16 +430,16 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
       'wpp-tree': true,
       'wpp-virtualised-tree': !!this.withVirtualisation,
     });
-    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v4-4-0", { dropdownConfig: {
+    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v4-5-0", { dropdownConfig: {
         trigger: 'click',
         interactiveDebounce: 15,
         interactiveBorder: 25,
         offset: [0, 0],
-      } }, h("wpp-icon-more-v4-4-0", { class: {
+      } }, h("wpp-icon-more-v4-5-0", { class: {
         'menu-trigger': true,
         disabled: !!item.disabled,
-      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v4-4-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
-    this.renderTreeItem = (item, level, setSize, posInSet, isFocused, extraProps, isParent) => (h("wpp-tree-item-v4-4-0", { id: `tree-item-${item.id}`, key: `tree-item-${item.id}`, style: { top: `${(posInSet - 1) * TREE_ITEM_HEIGHT}px` }, text: item.title, item: item, level: this.withVirtualisation ? item?.level || 1 : level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isDarkTheme: this.isDarkTheme, isFocused: isFocused, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
+      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v4-5-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
+    this.renderTreeItem = (item, level, setSize, posInSet, isFocused, extraProps, isParent) => (h("wpp-tree-item-v4-5-0", { id: `tree-item-${item.id}`, key: `tree-item-${item.id}`, style: { top: `${(posInSet - 1) * TREE_ITEM_HEIGHT}px` }, text: item.title, item: item, level: this.withVirtualisation ? item?.level || 1 : level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isDarkTheme: this.isDarkTheme, isFocused: isFocused, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
       h(transformToVersionedTag(item.iconStart.icon), {
         slot: 'icon-start',
         part: 'icon-start',
@@ -515,6 +536,15 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     this.getActiveDescendantId = () => {
       if (this.focusedItemId === null)
         return undefined;
+      // The reference has to resolve to an element that exists. Virtualisation renders only a
+      // window of the list, so once the focused item scrolls out of that window there is nothing
+      // for the tree to point at.
+      if (this.withVirtualisation) {
+        const { start, end } = this.getVirtualisedRange(this.visibleItemsList.length);
+        const index = this.visibleItemsList.findIndex(item => item.id === this.focusedItemId);
+        if (index < start || index >= end)
+          return undefined;
+      }
       return `tree-item-${this.focusedItemId}`;
     };
     this.handleScroll = (event) => {
@@ -560,7 +590,7 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
   }
   renderSkeletonRows(count = 1, paddingLeft) {
     const { height = 32 } = this.lazyConfig?.skeleton || {};
-    return Array.from({ length: count }, (_, idx) => (h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, h("wpp-skeleton-v4-4-0", { variant: "rectangle", width: "100%", height: height }))));
+    return Array.from({ length: count }, (_, idx) => (h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, h("wpp-skeleton-v4-5-0", { variant: "rectangle", width: "100%", height: height }))));
   }
   onInputChange(searchText) {
     if (!searchText.trim()) {
@@ -598,9 +628,16 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
   updateDate(newData) {
     this.currentTreeData = newData;
     this.preloadInitialOpenChildren();
+    // A replacement data set need not contain the item that was focused last. Keeping it would
+    // leave `aria-activedescendant` on the tree pointing at an item that no longer renders; the
+    // next focus entry re-establishes a target from the new data.
+    if (this.focusedItemId !== null && !findItemById(this.currentTreeData, this.focusedItemId)) {
+      this.focusedItemId = null;
+    }
     if (this.withVirtualisation) {
       this.visibleItemsList = getAllVisibleItems(this.currentTreeData);
       this.totalHeight = this.getTotalHeightOfTree();
+      this.clampScrollTop();
     }
   }
   async handleOpenItem(event) {
@@ -945,6 +982,25 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
       this.singleSelectionUpdate(updatedTreeWithCurrentItem, newItemState);
     }
   }
+  /**
+   * Scrolls the tree back to its first item.
+   *
+   * With `withVirtualisation` the scrollable element lives inside the component's shadow root,
+   * so setting `scrollTop` (or calling `scroll()`) on the host element has no effect. Call this
+   * method after replacing `data` with a different list — moving between wizard steps, for
+   * example — to bring the tree back to the top.
+   *
+   * The jump is instant rather than smooth (unlike `wpp-chat-conversation`'s `scrollToBottom()`):
+   * the list being scrolled away from is usually the one that has just been replaced, and every
+   * intermediate offset of a smooth scroll would re-render the virtualisation window.
+   */
+  async scrollToTop() {
+    this.scrollTop = 0;
+    const scroller = this.withVirtualisation ? this.scrollContainer : this.host;
+    if (scroller) {
+      scroller.scrollTop = 0;
+    }
+  }
   async recalculateTreeWidth() {
     if (this.host) {
       const contentRect = this.host.getBoundingClientRect();
@@ -1206,28 +1262,36 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     this.currentTreeData = this.checkData(this.data);
     this.preloadInitialOpenChildren();
   }
-  getVirtualisedNodes(flatNodes) {
+  /**
+   * Index range of the virtualisation window for the current scroll offset. Kept free of side
+   * effects so it can also be asked which items are on screen, not only used to slice them.
+   */
+  getVirtualisedRange(total) {
     const startIndex = Math.floor(this.scrollTop / TREE_ITEM_HEIGHT);
-    const containerHeight = this.host.clientHeight || DEFAULT_TREE_HEIGHT;
-    const visibleCount = Math.ceil(containerHeight / TREE_ITEM_HEIGHT);
-    const endIndex = startIndex + visibleCount;
+    const visibleCount = Math.ceil(this.getViewportHeight() / TREE_ITEM_HEIGHT);
+    return {
+      start: Math.max(0, startIndex - DEFAULT_OVERSCAN),
+      end: Math.min(total, startIndex + visibleCount + DEFAULT_OVERSCAN),
+    };
+  }
+  getVirtualisedNodes(flatNodes) {
+    const { start, end } = this.getVirtualisedRange(flatNodes.length);
     // We need to keep `bufferStart` value in a state to compute the `top` position of each tree-item
-    this.bufferStart = Math.max(0, startIndex - DEFAULT_OVERSCAN);
-    const bufferedEnd = Math.min(flatNodes.length, endIndex + DEFAULT_OVERSCAN);
-    return flatNodes.slice(this.bufferStart, bufferedEnd);
+    this.bufferStart = start;
+    return flatNodes.slice(start, end);
   }
   render() {
     const hasVisibleContent = this.currentTreeData && this.isSearchResultFound;
     return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text", onScroll: this.handleScroll }, !this.loading && (h("div", { ref: el => (this.scrollContainer = el), class: "container-wrapper", onScroll: this.handleScroll }, h("div", { class: "container", style: this.withVirtualisation ? { height: `${this.totalHeight}px` } : undefined, part: "tree-container", role: "tree", "aria-label": this.label, "aria-multiselectable": this.multiple ? 'true' : undefined, "aria-activedescendant": this.getActiveDescendantId(), tabindex: hasVisibleContent ? '0' : undefined, onFocus: this.handleContainerFocus, onBlur: this.handleContainerBlur }, hasVisibleContent ? (this.handleTreeRender(hasVisibleContent)) : (h("p", { class: "empty-tree-text", part: "tree-empty-text", role: "status" }, this._locales.nothingFound))))), this.loading && (h("div", { class: "skeleton-wrapper", role: "status", "aria-label": this._locales.loadingTree }, this.renderSkeletonRows(this.skeletonNumberItems)))));
   }
-  static get registryIs() { return "wpp-tree-v4-4-0"; }
+  static get registryIs() { return "wpp-tree-v4-5-0"; }
   get host() { return this; }
   static get watchers() { return {
     "search": ["onInputChange"],
     "data": ["updateDate"]
   }; }
   static get style() { return wppTreeCss; }
-}, [1, "wpp-tree", "wpp-tree-v4-4-0", {
+}, [1, "wpp-tree", "wpp-tree-v4-5-0", {
     "data": [16],
     "search": [1],
     "multiple": [516],
@@ -1250,6 +1314,7 @@ const WppTree$1 = /*@__PURE__*/ proxyCustomElement(class WppTree extends HTMLEle
     "scrollTop": [32],
     "isFocusOnAction": [32],
     "totalHeight": [32],
+    "scrollToTop": [64],
     "recalculateTreeWidth": [64],
     "selectAll": [64],
     "clearAll": [64],
@@ -1260,139 +1325,139 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tree-v4-4-0", "wpp-action-button-v4-4-0", "wpp-avatar-v4-4-0", "wpp-avatar-group-v4-4-0", "wpp-checkbox-v4-4-0", "wpp-icon-chevron-v4-4-0", "wpp-icon-cross-v4-4-0", "wpp-icon-dash-v4-4-0", "wpp-icon-error-v4-4-0", "wpp-icon-info-message-v4-4-0", "wpp-icon-more-v4-4-0", "wpp-icon-success-v4-4-0", "wpp-icon-tick-v4-4-0", "wpp-icon-triangle-fill-v4-4-0", "wpp-icon-warning-v4-4-0", "wpp-inline-message-v4-4-0", "wpp-internal-label-v4-4-0", "wpp-internal-tooltip-v4-4-0", "wpp-label-v4-4-0", "wpp-list-item-v4-4-0", "wpp-menu-context-v4-4-0", "wpp-skeleton-v4-4-0", "wpp-spinner-v4-4-0", "wpp-tag-v4-4-0", "wpp-tooltip-v4-4-0", "wpp-tree-item-v4-4-0", "wpp-typography-v4-4-0"];
+  const components = ["wpp-tree-v4-5-0", "wpp-action-button-v4-5-0", "wpp-avatar-v4-5-0", "wpp-avatar-group-v4-5-0", "wpp-checkbox-v4-5-0", "wpp-icon-chevron-v4-5-0", "wpp-icon-cross-v4-5-0", "wpp-icon-dash-v4-5-0", "wpp-icon-error-v4-5-0", "wpp-icon-info-message-v4-5-0", "wpp-icon-more-v4-5-0", "wpp-icon-success-v4-5-0", "wpp-icon-tick-v4-5-0", "wpp-icon-triangle-fill-v4-5-0", "wpp-icon-warning-v4-5-0", "wpp-inline-message-v4-5-0", "wpp-internal-label-v4-5-0", "wpp-internal-tooltip-v4-5-0", "wpp-label-v4-5-0", "wpp-list-item-v4-5-0", "wpp-menu-context-v4-5-0", "wpp-skeleton-v4-5-0", "wpp-spinner-v4-5-0", "wpp-tag-v4-5-0", "wpp-tooltip-v4-5-0", "wpp-tree-item-v4-5-0", "wpp-typography-v4-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tree-v4-4-0":
+    case "wpp-tree-v4-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTree$1);
       }
       break;
-    case "wpp-action-button-v4-4-0":
+    case "wpp-action-button-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$r();
       }
       break;
-    case "wpp-avatar-v4-4-0":
+    case "wpp-avatar-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$q();
       }
       break;
-    case "wpp-avatar-group-v4-4-0":
+    case "wpp-avatar-group-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$p();
       }
       break;
-    case "wpp-checkbox-v4-4-0":
+    case "wpp-checkbox-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$o();
       }
       break;
-    case "wpp-icon-chevron-v4-4-0":
+    case "wpp-icon-chevron-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-icon-cross-v4-4-0":
+    case "wpp-icon-cross-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-icon-dash-v4-4-0":
+    case "wpp-icon-dash-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-error-v4-4-0":
+    case "wpp-icon-error-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-info-message-v4-4-0":
+    case "wpp-icon-info-message-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-more-v4-4-0":
+    case "wpp-icon-more-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-success-v4-4-0":
+    case "wpp-icon-success-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-tick-v4-4-0":
+    case "wpp-icon-tick-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-triangle-fill-v4-4-0":
+    case "wpp-icon-triangle-fill-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-warning-v4-4-0":
+    case "wpp-icon-warning-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-inline-message-v4-4-0":
+    case "wpp-inline-message-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-internal-label-v4-4-0":
+    case "wpp-internal-label-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-internal-tooltip-v4-4-0":
+    case "wpp-internal-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-label-v4-4-0":
+    case "wpp-label-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-list-item-v4-4-0":
+    case "wpp-list-item-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-menu-context-v4-4-0":
+    case "wpp-menu-context-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-skeleton-v4-4-0":
+    case "wpp-skeleton-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-spinner-v4-4-0":
+    case "wpp-spinner-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-tag-v4-4-0":
+    case "wpp-tag-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-tooltip-v4-4-0":
+    case "wpp-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tree-item-v4-4-0":
+    case "wpp-tree-item-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-4-0":
+    case "wpp-typography-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

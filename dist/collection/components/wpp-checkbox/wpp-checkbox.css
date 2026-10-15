@@ -4,8 +4,6 @@
   * @prop --wpp-checkbox-border-radius:
   * @prop --wpp-checkbox-inline-message-margin:
   * @prop --wpp-checkbox-label-margin:
-  * @prop --wpp-checkbox-label-text-color-disabled:
-  * @prop --wpp-checkbox-label-text-color-checked-disabled:
   * @prop --wpp-checkbox-bg-color:
   * @prop --wpp-checkbox-bg-color-hover:
   * @prop --wpp-checkbox-bg-color-active:
@@ -45,11 +43,6 @@
   --checkbox-border-radius: var(--wpp-checkbox-border-radius, var(--wpp-border-radius-xs));
   --checkbox-inline-message-margin: var(--wpp-checkbox-inline-message-margin, 4px 0 0 0);
   --checkbox-label-margin: var(--wpp-checkbox-label-margin, 0 0 0 8px);
-  --checkbox-label-text-color-disabled: var(--wpp-checkbox-label-text-color-disabled, var(--wpp-text-color-disabled));
-  --checkbox-label-text-color-checked-disabled: var(
-    --wpp-checkbox-label-text-color-checked-disabled,
-    var(--wpp-text-color-disabled)
-  );
   --checkbox-bg-color: var(--wpp-checkbox-bg-color-hover, transparent);
   --checkbox-bg-color-hover: var(
     --wpp-checkbox-bg-color-hover,
@@ -185,9 +178,6 @@
 :host(.wpp-checkbox-wrapper):host(.wpp-disabled) .label {
   pointer-events: none;
 }
-:host(.wpp-checkbox-wrapper):host(.wpp-disabled) .label .wpp-internal-label {
-  --label-text-color-disabled: var(--checkbox-label-text-color-disabled);
-}
 :host(.wpp-checkbox-wrapper):host(.wpp-disabled) .label .square {
   background-color: var(--checkbox-bg-color-disabled);
   border-color: var(--checkbox-border-color-disabled);
@@ -219,9 +209,6 @@
   background-color: var(--checkbox-bg-color-checked-active);
   border-color: var(--checkbox-border-color-checked-active);
 }
-:host(.wpp-checked):host(.wpp-disabled) .label .wpp-internal-label {
-  --label-text-color-disabled: var(--checkbox-label-text-color-checked-disabled);
-}
 :host(.wpp-checked):host(.wpp-disabled) .label .square {
   background-color: var(--checkbox-bg-color-checked-disabled);
   border-color: var(--checkbox-border-color-checked-disabled);
@@ -251,9 +238,6 @@
 }
 :host(.wpp-indeterminate) .label:active .wpp-icon-dash, :host(.wpp-indeterminate) .label.pressed .wpp-icon-dash {
   color: var(--checkbox-icon-color-indeterminate-active);
-}
-:host(.wpp-indeterminate):host(.wpp-disabled) .label .wpp-internal-label {
-  --label-text-color-disabled: var(--checkbox-label-text-color-checked-disabled);
 }
 :host(.wpp-indeterminate):host(.wpp-disabled) .label .square {
   background-color: var(--checkbox-bg-color-indeterminate-disabled);

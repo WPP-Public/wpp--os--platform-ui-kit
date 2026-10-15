@@ -3,6 +3,7 @@ import { WppTooltip } from '../wpp-tooltip';
 import * as tooltipConfigModule from '../../../common/menuListConfig';
 import * as utils from '../../../utils/utils';
 import * as themeUtils from '../../../utils/subscribe-to-theme';
+import * as dialogFocus from '../../../utils/dialog-focus';
 describe('wpp-tooltip', () => {
   it('should render component', async () => {
     const page = await newSpecPage({
@@ -297,6 +298,55 @@ describe('wpp-tooltip full coverage', () => {
     });
     instance.createTippyInstance();
     expect(onShow).toHaveBeenCalled();
+  });
+  describe('showing tooltip on focus', () => {
+    // Shows a tooltip whose anchor has the given focus and hover states, with the deepest focused element's
+    // `:focus-visible` state
+    const showWith = async ({ focused = false, hovered = false, focusVisible = false }) => {
+      const page = await newSpecPage({
+        components: [WppTooltip],
+        html: `<wpp-tooltip></wpp-tooltip>`,
+      });
+      const instance = page.rootInstance;
+      const reference = {
+        matches: jest.fn((selector) => ({ ':focus-within': focused, ':hover': hovered })[selector] ?? false),
+      };
+      const onShow = jest.fn();
+      let result;
+      const activeElementSpy = jest
+        .spyOn(dialogFocus, 'getDeepActiveElement')
+        .mockReturnValue({ matches: (selector) => selector === ':focus-visible' && focusVisible });
+      const menuListConfigSpy = jest.spyOn(tooltipConfigModule, 'menuListConfig').mockImplementation((config) => {
+        result = config.onShow?.({ reference, popper: { style: {} } });
+        return {};
+      });
+      instance.anchorRef = document.createElement('div');
+      instance.customContentEl = document.createElement('div');
+      instance.config = { onShow };
+      instance.createTippyInstance();
+      // Restoring every mock would also restore the earlier tests' spies, while their tooltips' timers are pending
+      activeElementSpy.mockRestore();
+      menuListConfigSpy.mockRestore();
+      return { result, onShow };
+    };
+    it('should not show when the anchor got the focus from the pointer', async () => {
+      const { result, onShow } = await showWith({ focused: true });
+      expect(result).toBe(false);
+      expect(onShow).not.toHaveBeenCalled();
+    });
+    it('should show when the anchor got the focus from the keyboard', async () => {
+      const { result, onShow } = await showWith({ focused: true, focusVisible: true });
+      expect(result).not.toBe(false);
+      expect(onShow).toHaveBeenCalled();
+    });
+    it('should show when the focused anchor is hovered', async () => {
+      const { result } = await showWith({ focused: true, hovered: true });
+      expect(result).not.toBe(false);
+    });
+    it('should show when the anchor is hovered without the focus', async () => {
+      const { result } = await showWith({ hovered: true });
+      expect(result).not.toBe(false);
+    });
   });
   it('covers getArrowBgColor logic', async () => {
     const page = await newSpecPage({

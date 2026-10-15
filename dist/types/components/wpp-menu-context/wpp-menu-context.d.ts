@@ -96,6 +96,14 @@ export declare class WppMenuContext {
   private updateTriggerAccessibility;
   private getComponentSelector;
   private setAttributeIfNeeded;
+  /**
+   * The role the consumer asked for. `wpp-list-item` declares `role` as a reflected `@Prop`,
+   * so a parent-set role arrives on the PROPERTY and only reaches the attribute once that
+   * item renders — which is after the menu stamps its own roles. Reading the attribute alone
+   * would therefore overwrite the consumer's value, and because that write syncs straight
+   * back into the reflected prop, the intent would be lost permanently.
+   */
+  private getAuthoredRole;
   private updateMenuItemAccessibility;
   private updateMenuGroupAccessibility;
   private updateMenuAccessibility;
@@ -114,6 +122,9 @@ export declare class WppMenuContext {
    * opened it must drop its visible focus ring so that only the currently
    * focused item appears focused. The parent keeps `aria-expanded` and has its
    * ring restored when the submenu is closed via ArrowLeft/Escape.
+   *
+   * `MENU_ITEM_ACTIVE_CLASS` is deliberately left alone: on a submenu trigger it now tracks
+   * "my submenu is open" (see `handleAriaExpandedOnTrigger`), which is still true here.
    */
   private clearParentTriggerFocusStyles;
   private focusMenuItemByPosition;

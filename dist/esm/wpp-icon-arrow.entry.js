@@ -1,5 +1,5 @@
-import { r as registerInstance, h } from './index-93f63aaa.js';
-import { W as WppIcon } from './WppIcon-a0bcacb1.js';
+import { r as registerInstance, h } from './index-a0877c3d.js';
+import { W as WppIcon } from './WppIcon-bb52ef53.js';
 
 const wppIconCss = ":host{display:-ms-inline-flexbox;display:inline-flex;color:var(--wpp-prop-icon-color)}";
 
@@ -22,7 +22,7 @@ const WppIconArrow = class {
   render() {
     return (h(WppIcon, { name: "wpp-icon-arrow", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: ArrowDirectionIconPath[this.direction], fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-arrow-v4-4-0"; }
+  static get registryIs() { return "wpp-icon-arrow-v4-5-0"; }
 };
 WppIconArrow.style = wppIconCss;
 

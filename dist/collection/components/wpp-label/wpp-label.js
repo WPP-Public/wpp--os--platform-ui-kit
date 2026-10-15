@@ -14,7 +14,7 @@ export class WppLabel {
     this.hostCssClasses = () => ({
       'wpp-label': true,
     });
-    this.renderContent = () => (h("wpp-internal-label-v4-4-0", { labelText: this.config?.text, description: this.config?.description, optional: this.optional, typography: this.typography, disabled: this.disabled, locales: this.config?.locales, tooltipConfig: this.tooltipConfig, part: "content", id: this.labelId }, this.config?.icon && h(transformToVersionedTag(this.config?.icon), { slot: 'icon', part: 'icon' })));
+    this.renderContent = () => (h("wpp-internal-label-v4-5-0", { labelText: this.config?.text, description: this.config?.description, optional: this.optional, typography: this.typography, disabled: this.disabled, locales: this.config?.locales, tooltipConfig: this.tooltipConfig, part: "content", id: this.labelId }, this.config?.icon && h(transformToVersionedTag(this.config?.icon), { slot: 'icon', part: 'icon' })));
     this.description = undefined;
     this.htmlFor = undefined;
     this.optional = false;
@@ -38,7 +38,7 @@ export class WppLabel {
       }) }, this.renderContent())));
   }
   static get is() { return "wpp-label"; }
-  static get registryIs() { return "wpp-label-v4-4-0"; }
+  static get registryIs() { return "wpp-label-v4-5-0"; }
   static get encapsulation() { return "scoped"; }
   static get originalStyleUrls() {
     return {
@@ -144,7 +144,7 @@ export class WppLabel {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "If the component is disabled."
+          "text": "If the component is disabled. The component will retain its visual styling, but on hover, the cursor will change to `not-allowed`."
         },
         "attribute": "disabled",
         "reflect": true,

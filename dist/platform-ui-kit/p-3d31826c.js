@@ -1,0 +1,1 @@
+const a="menubar",s="WPP-MENU-CONTEXT",e="WPP-LIST-ITEM",t="button",n="WPP-NAVIGATION-ITEM",o="menu",u="menuitem",i=["menuitemradio","menuitemcheckbox"],m="group",p="presentation",P="wpp-list",T="tab-focus",b="wppMenuContextKeyboardActivation";export{t as B,e as C,m as G,u as M,p as P,i as S,T,P as W,o as a,s as b,n as c,b as d,a as e}

@@ -17,7 +17,13 @@ export declare class WppAutocomplete {
   protected selectedPillsWrapperRef?: HTMLDivElement;
   protected headerWrapperRef?: HTMLDivElement;
   protected showMoreElementRef?: HTMLDivElement;
+  protected showLessElementRef?: HTMLDivElement;
+  private pendingTogglePress;
+  private truncationTimeout?;
   protected selectedPillRefs: HTMLWppPillElement[];
+  protected extendedPillRefs: HTMLWppPillElement[];
+  private pendingPillFocus;
+  protected crossIconRef?: HTMLWppIconCrossElement;
   protected tippyInstance?: Instance;
   private resizeObserver?;
   protected withPills: boolean;
@@ -27,7 +33,13 @@ export declare class WppAutocomplete {
   protected suggestionsItemsRefs: HTMLWppListItemElement[];
   private infiniteLoadingPromise?;
   private preventBlur;
+  private listboxId;
+  private optionsListRef?;
+  private optionSemanticsObserver?;
+  private optionSemanticsFrame?;
+  private suppressNextFocusDropdown;
   isFocused: boolean;
+  isLabelHovered: boolean;
   isDropdownShown: boolean;
   isInfiniteLoading: boolean;
   internalList: ListItemInterface[];
@@ -45,7 +57,10 @@ export declare class WppAutocomplete {
   activeNdx: number;
   activeSourceList: 'list' | 'suggestions';
   focusType: FOCUS_TYPE;
+  isCrossIconFocused: boolean;
   isInputValueTransparent: boolean;
+  activeOptionAnnouncement: string;
+  isOptionsScrollable: boolean;
   /**
    * Indicates label config
    */
@@ -215,12 +230,17 @@ export declare class WppAutocomplete {
   setFocus(isOutlined?: boolean): Promise<void>;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  componentDidRender(): void;
   connectedCallback(): void;
   disconnectedCallback(): void;
   protected get _locales(): AutocompleteLocales;
   /**
    * Observers
    */
+  private setupOptionSemanticsObserver;
+  private queueOptionSemantics;
+  private applyOptionSemantics;
+  private neutralizeNestedInteractives;
   private setupResizeObserver;
   /**
    * Dropdown methods
@@ -242,7 +262,11 @@ export declare class WppAutocomplete {
   protected handleBlur: (event?: FocusEvent, options?: {
     force?: boolean;
   }) => void;
+  private isInsideCombobox;
+  private handleTriggerFocusOut;
   private handleCrossIconFocus;
+  private handleCrossIconBlur;
+  private clearActiveOption;
   private handleCrossIconKeyDown;
   private handleTriggerClick;
   private handleSearch;
@@ -251,6 +275,10 @@ export declare class WppAutocomplete {
   private handleOptionsScroll;
   private onKeyUp;
   private onKeyDown;
+  private getDropdownInteractables;
+  private focusFirstDropdownInteractable;
+  private handleDropdownKeyDown;
+  private handleDropdownFocusOut;
   /**
    * Validators
    */
@@ -284,10 +312,22 @@ export declare class WppAutocomplete {
    * Dropdown Pills methods
    */
   /**
+   * Removing a pill destroys the control that had focus. After a keyboard removal focus moves to
+   * the remove icon of the pill that takes its place — the last remaining one when the tail pill
+   * goes, the input when none are left — so the user can keep deleting without tabbing back in
+   * (W3C APG, managing focus when an element is removed). A mouse removal returns focus to the
+   * input as before: moving it onto a pill there would paint a keyboard focus ring on a pointer
+   * interaction.
+   */
+  protected restoreFocusAfterPillRemoval: (event: CustomEvent<MouseEvent>, removedNdx: number, getPills: () => HTMLWppPillElement[]) => void;
+  private focusPillAfterRemoval;
+  /**
    * Validate each WppPill if it has a truncated text label inside or WppPill got truncated when it's in `showMore` mode
    */
   private validateTruncatedPills;
-  protected handleShowMoreLessClick: () => void;
+  protected handleShowMoreLessClick: (event?: MouseEvent) => void;
+  private focusToggleAfterRender;
+  protected handleSelectedPillsClick: (event: MouseEvent) => void;
   /**
    * Accessibility Methods
    */
@@ -296,6 +336,8 @@ export declare class WppAutocomplete {
   private clampListNdx;
   private findNextActiveNdx;
   private setActiveClass;
+  private announceActiveOption;
+  private get liveAnnouncement();
   private clearActive;
   /**
    * CSS Classes Methods
@@ -305,6 +347,8 @@ export declare class WppAutocomplete {
   private triggerCssClasses;
   private inputCssClasses;
   private dropdownCssClasses;
+  private isCrossIconHidden;
+  private isCrossIconTabbable;
   private iconCrossCssClasses;
   render(): any;
 }

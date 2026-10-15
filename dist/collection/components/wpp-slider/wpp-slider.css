@@ -385,7 +385,6 @@
   position: relative;
   display: flex;
   justify-content: center;
-  cursor: pointer;
   color: var(--slider-mark-label-color);
   width: 100%;
   min-width: 0;

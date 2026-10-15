@@ -954,10 +954,11 @@
   border-bottom-width: 0;
 }
 .wpp-richtext .ql-form-control:hover:not(.active),
-.wpp-richtext .ql-form-control:hover:not(.active) .tiptap-editor-container {
+.wpp-richtext .ql-form-control:hover:not(.active) .tiptap-editor-container, .wpp-richtext .ql-form-control.label-hovered:not(.active),
+.wpp-richtext .ql-form-control.label-hovered:not(.active) .tiptap-editor-container {
   border-color: var(--richtext-border-color-hover);
 }
-.wpp-richtext .ql-form-control:hover:not(.active) .tiptap-editor-container {
+.wpp-richtext .ql-form-control:hover:not(.active) .tiptap-editor-container, .wpp-richtext .ql-form-control.label-hovered:not(.active) .tiptap-editor-container {
   background-color: var(--wpp-grey-color-200);
 }
 .wpp-richtext .ql-form-control.active,

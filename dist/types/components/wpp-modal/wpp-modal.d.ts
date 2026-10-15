@@ -19,6 +19,7 @@ export declare class WppModal {
   private topOffset;
   private timeouts;
   private themeSubscription;
+  private dialogFocus;
   host: HTMLWppModalElement;
   private dialogRef?;
   hasHeaderSlot: boolean;
@@ -122,6 +123,7 @@ export declare class WppModal {
   private renderActionBtn;
   private renderActionsConfig;
   private focusDialog;
+  componentDidRender(): void;
   private headerCssClasses;
   private bodyCssClasses;
   private actionsCssClasses;

@@ -1,7 +1,7 @@
 export { getAssetPath, setAssetPath, setNonce, setPlatformOptions } from '@stencil/core/internal/client';
 export { Z as Z_INDEX } from './consts.js';
 import { i as isObject, t as toKebabCase, r as recursiveObjectMap } from './utils.js';
-export { B as activateOnEnterOrSpace, m as applyBodyStylesIfNeeded, a as areSetsEqual, n as autoFocusElement, l as closestElement, d as debounce, o as form2object, f as format, C as getAriaProps, p as getDurationValues, q as getHasFocused, w as getHighestContainerInDOM, j as getHighlightData, x as getOsBarOffsetHeight, z as getScrollbarGutterWidth, g as getSlotEmptyStates, c as hasParentWithId, h as hasShadowDom, b as isEventTargetContained, i as isObject, D as isWppElement, y as mergeLocales, r as recursiveObjectMap, s as selectDropdownWidth, v as setHasFocused, t as toKebabCase, k as transformToVersionedTag, e as truncate, A as uniquePortalId, u as uuidv4 } from './utils.js';
+export { C as activateOnEnterOrSpace, m as applyBodyStylesIfNeeded, a as areSetsEqual, n as autoFocusElement, l as closestElement, d as debounce, o as form2object, f as format, D as getAriaProps, p as getDurationValues, q as getHasFocused, w as getHighestContainerInDOM, j as getHighlightData, x as getOsBarOffsetHeight, A as getScrollbarGutterWidth, g as getSlotEmptyStates, c as hasParentWithId, h as hasShadowDom, b as isEventTargetContained, z as isMimeAccepted, i as isObject, E as isWppElement, y as mergeLocales, r as recursiveObjectMap, s as selectDropdownWidth, v as setHasFocused, t as toKebabCase, k as transformToVersionedTag, e as truncate, B as uniquePortalId, u as uuidv4 } from './utils.js';
 export { S as ScrollState, WppFileUpload, defineCustomElement as defineCustomElementWppFileUpload } from './wpp-file-upload.js';
 export { F as FullScreenModalCloseReason, WppFullScreenModal, defineCustomElement as defineCustomElementWppFullScreenModal } from './wpp-full-screen-modal.js';
 export { I as InlineEditModeEnum, WppInlineEdit, defineCustomElement as defineCustomElementWppInlineEdit } from './wpp-inline-edit.js';
@@ -12,6 +12,7 @@ export { S as SidePanelCloseReason, WppSidePanel, defineCustomElement as defineC
 export { WppAccordion, defineCustomElement as defineCustomElementWppAccordion } from './wpp-accordion.js';
 export { WppActionButton, defineCustomElement as defineCustomElementWppActionButton } from './wpp-action-button.js';
 export { WppArtefact, defineCustomElement as defineCustomElementWppArtefact } from './wpp-artefact.js';
+export { WppAudioPlayer, defineCustomElement as defineCustomElementWppAudioPlayer } from './wpp-audio-player.js';
 export { WppAutocomplete, defineCustomElement as defineCustomElementWppAutocomplete } from './wpp-autocomplete.js';
 export { WppAvatar, defineCustomElement as defineCustomElementWppAvatar } from './wpp-avatar.js';
 export { WppAvatarGroup, defineCustomElement as defineCustomElementWppAvatarGroup } from './wpp-avatar-group.js';
@@ -241,7 +242,9 @@ export { WppIconExternalLink, defineCustomElement as defineCustomElementWppIconE
 export { WppIconEyeOff, defineCustomElement as defineCustomElementWppIconEyeOff } from './wpp-icon-eye-off.js';
 export { WppIconEyeOn, defineCustomElement as defineCustomElementWppIconEyeOn } from './wpp-icon-eye-on.js';
 export { WppIconEyedropper, defineCustomElement as defineCustomElementWppIconEyedropper } from './wpp-icon-eyedropper.js';
+export { WppIconFacebook, defineCustomElement as defineCustomElementWppIconFacebook } from './wpp-icon-facebook.js';
 export { WppIconFactory, defineCustomElement as defineCustomElementWppIconFactory } from './wpp-icon-factory.js';
+export { WppIconFastForward, defineCustomElement as defineCustomElementWppIconFastForward } from './wpp-icon-fast-forward.js';
 export { WppIconFavourites, defineCustomElement as defineCustomElementWppIconFavourites } from './wpp-icon-favourites.js';
 export { WppIconFavouritesFilled, defineCustomElement as defineCustomElementWppIconFavouritesFilled } from './wpp-icon-favourites-filled.js';
 export { WppIconFile, defineCustomElement as defineCustomElementWppIconFile } from './wpp-icon-file.js';
@@ -308,10 +311,12 @@ export { WppIconIndentDecrease, defineCustomElement as defineCustomElementWppIco
 export { WppIconIndentIncrease, defineCustomElement as defineCustomElementWppIconIndentIncrease } from './wpp-icon-indent-increase.js';
 export { WppIconInfo, defineCustomElement as defineCustomElementWppIconInfo } from './wpp-icon-info.js';
 export { WppIconInfoMessage, defineCustomElement as defineCustomElementWppIconInfoMessage } from './wpp-icon-info-message.js';
+export { WppIconInstagram, defineCustomElement as defineCustomElementWppIconInstagram } from './wpp-icon-instagram.js';
 export { WppIconInstallUpdate, defineCustomElement as defineCustomElementWppIconInstallUpdate } from './wpp-icon-install-update.js';
 export { WppIconItalic, defineCustomElement as defineCustomElementWppIconItalic } from './wpp-icon-italic.js';
 export { WppIconJavaScript, defineCustomElement as defineCustomElementWppIconJavaScript } from './wpp-icon-java-script.js';
 export { WppIconJoin, defineCustomElement as defineCustomElementWppIconJoin } from './wpp-icon-join.js';
+export { WppIconJson, defineCustomElement as defineCustomElementWppIconJson } from './wpp-icon-json.js';
 export { WppIconKey, defineCustomElement as defineCustomElementWppIconKey } from './wpp-icon-key.js';
 export { WppIconKeyboard, defineCustomElement as defineCustomElementWppIconKeyboard } from './wpp-icon-keyboard.js';
 export { WppIconLaptop, defineCustomElement as defineCustomElementWppIconLaptop } from './wpp-icon-laptop.js';
@@ -432,6 +437,7 @@ export { WppIconResize, defineCustomElement as defineCustomElementWppIconResize 
 export { WppIconResizeLarge, defineCustomElement as defineCustomElementWppIconResizeLarge } from './wpp-icon-resize-large.js';
 export { WppIconResizeSmall, defineCustomElement as defineCustomElementWppIconResizeSmall } from './wpp-icon-resize-small.js';
 export { WppIconRestaurant, defineCustomElement as defineCustomElementWppIconRestaurant } from './wpp-icon-restaurant.js';
+export { WppIconRewind, defineCustomElement as defineCustomElementWppIconRewind } from './wpp-icon-rewind.js';
 export { WppIconRhombus, defineCustomElement as defineCustomElementWppIconRhombus } from './wpp-icon-rhombus.js';
 export { WppIconRotate, defineCustomElement as defineCustomElementWppIconRotate } from './wpp-icon-rotate.js';
 export { WppIconRotateClockwise, defineCustomElement as defineCustomElementWppIconRotateClockwise } from './wpp-icon-rotate-clockwise.js';

@@ -24,7 +24,7 @@
 .trigger.size-m {
   height: 40px;
 }
-.trigger:hover {
+.trigger:hover, .trigger.label-hovered {
   background-color: var(--wpp-grey-color-200);
   border-color: var(--wpp-grey-color-700);
 }
@@ -56,7 +56,7 @@
 .trigger.disabled {
   background-color: var(--wpp-grey-color-100);
   border-color: var(--wpp-grey-color-400);
-  pointer-events: none;
+  cursor: not-allowed;
 }
 .trigger.disabled .input-placeholder {
   --wpp-typography-color: var(--wpp-text-color-disabled);
@@ -139,8 +139,15 @@
   right: 10px;
   display: flex;
   cursor: pointer;
+  outline: none;
 }
 .wpp-icon-cross:hover {
+  color: var(--wpp-icon-color-hover);
+}
+.wpp-icon-cross.tab-focus {
+  border-radius: 3px;
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
   color: var(--wpp-icon-color-hover);
 }
 
@@ -189,6 +196,19 @@
   white-space: nowrap;
   border: 0;
   outline: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
 }
 
 .inline-message {

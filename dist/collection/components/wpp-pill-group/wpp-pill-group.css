@@ -11,6 +11,9 @@
 :host .label {
   margin: var(--pill-group-label-margin);
 }
+:host .label .wpp-internal-label::part(info-wrapper) {
+  cursor: text;
+}
 :host .pills-wrapper {
   display: inline-flex;
 }

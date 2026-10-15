@@ -2,14 +2,15 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-5f5af6a9.js');
-const utils = require('./utils-a6513d61.js');
+const index = require('./index-7d205426.js');
+const utils = require('./utils-a237e765.js');
 const common = require('./common-ee802540.js');
-const WrappedSlot = require('./WrappedSlot-dc89a659.js');
-const WppIcon = require('./WppIcon-86481908.js');
+const WrappedSlot = require('./WrappedSlot-669e1c73.js');
+const WppIcon = require('./WppIcon-0da0cae5.js');
 const isEqual = require('./isEqual-c003d7ce.js');
-const menuListConfig = require('./menuListConfig-ec0bf6d4.js');
+const menuListConfig = require('./menuListConfig-ebbec952.js');
 const consts = require('./consts-d8f5ef98.js');
+const dialogFocus = require('./dialog-focus-adf102b7.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
 const themeObserver = require('./theme-observer-4179316e.js');
 require('./_commonjsHelpers-bcc1208a.js');
@@ -182,9 +183,13 @@ const WppActionButton = class {
     this.validAriaProps = utils.getAriaProps(this.ariaProps);
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onPointerEnter: this.onPointerEnter, onPointerLeave: this.onPointerLeave, exportparts: "button, spinner-wrapper, spinner, body, icon-start-wrapper, icon-start, icon-end-wrapper, icon-end, inner, overlay" }, index.h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, value: this.value, name: this.name, type: this.type, part: "button", "data-testid": "wppActionButton", "aria-pressed": this.isPressed ? 'true' : 'false', tabindex: this.ariaProps?.tabIndex, ...this.validAriaProps }, this.loading && (index.h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, index.h("wpp-spinner-v4-4-0", { color: this.loadingColor(), part: "spinner" }))), index.h("div", { class: this.contentCssClasses(), part: "body" }, index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), index.h("slot", { part: "inner", onSlotchange: this.updateSlotData }), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData }))), index.h("div", { class: "overlay", part: "overlay" })));
+    return (index.h(index.Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onPointerEnter: this.onPointerEnter, onPointerLeave: this.onPointerLeave, exportparts: "button, spinner-wrapper, spinner, body, icon-start-wrapper, icon-start, icon-end-wrapper, icon-end, inner, overlay" }, index.h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, value: this.value, name: this.name, type: this.type, part: "button", "data-testid": "wppActionButton",
+      // `isPressed` is the transient pressed visual (mouse/key down), not a toggle state —
+      // exposing it as `aria-pressed` made every action button announce as an unpressed
+      // toggle button. Consumers with real toggle semantics can pass `ariaProps.pressed`.
+      tabindex: this.ariaProps?.tabIndex, ...this.validAriaProps }, this.loading && (index.h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, index.h("wpp-spinner-v4-5-0", { color: this.loadingColor(), part: "spinner" }))), index.h("div", { class: this.contentCssClasses(), part: "body" }, index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), index.h("slot", { part: "inner", onSlotchange: this.updateSlotData }), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData }))), index.h("div", { class: "overlay", part: "overlay" })));
   }
-  static get registryIs() { return "wpp-action-button-v4-4-0"; }
+  static get registryIs() { return "wpp-action-button-v4-5-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "ariaProps": ["onUpdateAriaProps"],
@@ -206,7 +211,7 @@ const WppIconCross = class {
   render() {
     return (index.h(WppIcon.WppIcon, { name: "wpp-icon-cross", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { d: "M5.70711 4.29289C5.31658 3.90237 4.68342 3.90237 4.29289 4.29289C3.90237 4.68342 3.90237 5.31658 4.29289 5.70711L8.58579 10L4.29289 14.2929C3.90237 14.6834 3.90237 15.3166 4.29289 15.7071C4.68342 16.0976 5.31658 16.0976 5.70711 15.7071L10 11.4142L14.2929 15.7071C14.6834 16.0976 15.3166 16.0976 15.7071 15.7071C16.0976 15.3166 16.0976 14.6834 15.7071 14.2929L11.4142 10L15.7071 5.70711C16.0976 5.31658 16.0976 4.68342 15.7071 4.29289C15.3166 3.90237 14.6834 3.90237 14.2929 4.29289L10 8.58579L5.70711 4.29289Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-cross-v4-4-0"; }
+  static get registryIs() { return "wpp-icon-cross-v4-5-0"; }
 };
 WppIconCross.style = wppIconCss$2;
 
@@ -223,7 +228,7 @@ const WppIconError = class {
   render() {
     return (index.h(WppIcon.WppIcon, { name: "wpp-icon-error", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: "M11.6205 2.68236L17.2903 8.25996C18.2258 9.18045 18.2377 10.6847 17.3183 11.6203L11.7398 17.2904C10.8194 18.2258 9.3149 18.238 8.37946 17.3176L2.70966 11.7396C1.77419 10.8192 1.76202 9.31476 2.68236 8.37933L8.26011 2.70963C9.18053 1.77418 10.6851 1.76203 11.6205 2.68236ZM10 5.33295C10.5198 5.33295 10.9412 5.75433 10.9412 6.27413V10.98C10.9412 11.4998 10.5198 11.9212 10 11.9212C9.4802 11.9212 9.05882 11.4998 9.05882 10.98V6.27413C9.05882 5.75433 9.4802 5.33295 10 5.33295ZM10.9412 13.7647C10.9412 14.2845 10.5198 14.7059 10 14.7059C9.4802 14.7059 9.05882 14.2845 9.05882 13.7647C9.05882 13.2449 9.4802 12.8235 10 12.8235C10.5198 12.8235 10.9412 13.2449 10.9412 13.7647Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-error-v4-4-0"; }
+  static get registryIs() { return "wpp-icon-error-v4-5-0"; }
 };
 WppIconError.style = wppIconCss$1;
 
@@ -240,7 +245,7 @@ const WppIconWarning = class {
   render() {
     return (index.h(WppIcon.WppIcon, { name: "wpp-icon-warning", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: "M8.83422 2.68592L1.77378 15.024C1.26617 15.9112 1.92884 17 2.97644 17H17.0978C18.1454 17 18.808 15.9112 18.3004 15.024L11.2395 2.68592C10.716 1.77136 9.35779 1.77136 8.83422 2.68592ZM10.0374 5.75C10.5552 5.74994 10.9749 6.16963 10.975 6.68739L10.9751 11.3746L9.10014 11.3749L9.09999 6.68761C9.09993 6.16984 9.51962 5.75006 10.0374 5.75ZM10.9751 11.3746C10.9751 11.8923 10.5554 12.3125 10.0376 12.3125C9.51985 12.3125 9.10013 11.8927 9.10014 11.3749L10.9751 11.3746ZM10.9746 14.1875C10.9746 14.7053 10.5549 15.125 10.0371 15.125C9.51934 15.125 9.09961 14.7053 9.09961 14.1875C9.09961 13.6697 9.51934 13.25 10.0371 13.25C10.5549 13.25 10.9746 13.6697 10.9746 14.1875Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-warning-v4-4-0"; }
+  static get registryIs() { return "wpp-icon-warning-v4-5-0"; }
 };
 WppIconWarning.style = wppIconCss;
 
@@ -272,10 +277,10 @@ const WppTooltip$1 = class {
     });
     this.getIconBasedOnProps = () => {
       if (this.error) {
-        return index.h("wpp-icon-error-v4-4-0", { class: "left-icon", part: "icon-error" });
+        return index.h("wpp-icon-error-v4-5-0", { class: "left-icon", part: "icon-error" });
       }
       if (this.warning) {
-        return index.h("wpp-icon-warning-v4-4-0", { color: "var(--wpp-warning-color-400)", class: "left-icon" });
+        return index.h("wpp-icon-warning-v4-5-0", { color: "var(--wpp-warning-color-400)", class: "left-icon" });
       }
       return null;
     };
@@ -301,7 +306,7 @@ const WppTooltip$1 = class {
   render() {
     return (index.h(index.Host, { class: this.hostCssClasses(), style: this.cssStyle, exportparts: "tooltip-content" }, index.h("div", { class: this.cssClasses(), style: { wordBreak: this.wordBreak }, part: "tooltip-content" }, index.h("div", { class: "content-with-icon", id: this.ariaProp.describedby }, this.getIconBasedOnProps() && index.h("div", { class: "icon-wrapper" }, this.getIconBasedOnProps()), index.h("div", { class: "content-wrapper" }, !!this.header && (index.h("span", { class: this.headerCssClasses(), part: "header" }, this.header)), !!this.text && (index.h("span", { class: this.textCssClasses(), part: "text" }, this.getTextLines())), !!this.value && (index.h("span", { class: this.valueCssClasses(), part: "value" }, this.value)))))));
   }
-  static get registryIs() { return "wpp-internal-tooltip-v4-4-0"; }
+  static get registryIs() { return "wpp-internal-tooltip-v4-5-0"; }
   get host() { return index.getElement(this); }
 };
 WppTooltip$1.style = wppInternalTooltipCss;
@@ -337,7 +342,7 @@ const WppSpinner = class {
     const isAnnounced = this.ariaProps?.label && this.ariaProps?.label !== '';
     return (index.h(index.Host, { class: this.hostCssClasses(), role: isAnnounced ? 'status' : null, "aria-hidden": isAnnounced ? null : 'true', "aria-live": isAnnounced ? 'polite' : null, "aria-label": isAnnounced ? this.ariaProps?.label : null, exportparts: "circle" }, index.h("svg", { class: this.spinnerCssClasses(), "aria-hidden": "true", focusable: "false" }, index.h("circle", { cx: SPINNER_SIZES[this.size], cy: SPINNER_SIZES[this.size], r: SPINNER_RADIUS[this.size], fill: "transparent", stroke: this.color, "stroke-linecap": "round", part: "circle" }))));
   }
-  static get registryIs() { return "wpp-spinner-v4-4-0"; }
+  static get registryIs() { return "wpp-spinner-v4-5-0"; }
 };
 WppSpinner.style = wppSpinnerCss;
 
@@ -443,6 +448,8 @@ const WppTooltip = class {
             }
           },
           onShow: (instance) => {
+            if (this.isFocusedWithPointer(instance.reference))
+              return false;
             if (this.dropdownWidth !== 'auto') {
               instance.popper.style.width = this.dropdownWidth;
               instance.popper.style.maxWidth = this.dropdownWidth;
@@ -467,6 +474,15 @@ const WppTooltip = class {
           },
         });
       }
+    };
+    /**
+     * Focus only shows the tooltip to keyboard users, the same way `:focus-visible` paints a ring. Otherwise a popover
+     * closed with the pointer would pop it when it hands the focus back to its trigger, although the pointer is elsewhere.
+     */
+    this.isFocusedWithPointer = (anchor) => {
+      if (!anchor?.matches(':focus-within') || anchor.matches(':hover'))
+        return false;
+      return !dialogFocus.getDeepActiveElement()?.matches(':focus-visible');
     };
     this.getArrowBgColor = () => {
       const isDarkTheme = themeObserver.themeObserver.getThemeAttribute() === 'dark';
@@ -563,9 +579,9 @@ const WppTooltip = class {
     // is not well-supported on a div without a valid role)
     const hasAriaLabel = Boolean(this.ariaProps?.label);
     const anchorRole = this.ariaProps?.role ?? (hasAriaLabel ? 'img' : undefined);
-    return (index.h(index.Host, { class: this.hostCssClasses(), role: "presentation" }, index.h("div", { "aria-label": this.ariaProps?.label, role: anchorRole, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, index.h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), index.h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (index.h("wpp-internal-tooltip-v4-4-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (index.h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), role: "presentation" }, index.h("div", { "aria-label": this.ariaProps?.label, role: anchorRole, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, index.h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), index.h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (index.h("wpp-internal-tooltip-v4-5-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (index.h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
   }
-  static get registryIs() { return "wpp-tooltip-v4-4-0"; }
+  static get registryIs() { return "wpp-tooltip-v4-5-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "config": ["updateConfig"],
@@ -597,7 +613,7 @@ const WppTypography = class {
     const TypographyTag = this.tag;
     return (index.h(index.Host, { class: "wpp-typography", exportparts: "typography, inner", style: { '--typography-color': this.color } }, index.h(TypographyTag, { class: this.typographyCssClasses(), part: "typography", exportparts: "typography" }, index.h("slot", { part: "inner" }))));
   }
-  static get registryIs() { return "wpp-typography-v4-4-0"; }
+  static get registryIs() { return "wpp-typography-v4-5-0"; }
   get host() { return index.getElement(this); }
 };
 WppTypography.style = wppTypographyCss;

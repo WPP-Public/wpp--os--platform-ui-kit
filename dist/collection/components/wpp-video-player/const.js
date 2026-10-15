@@ -1,12 +1,3 @@
-export const INIT_SPLIT_TIME_FORMAT = {
-  minutes: '00',
-  seconds: '00',
-};
-export const INIT_SPLIT_TIME_FORMAT_W_HOURS = {
-  hours: '00',
-  minutes: '00',
-  seconds: '00',
-};
 export const LOCALES_DEFAULTS = {
   notSupportedPlayer: 'Your browser does not support the video tag.',
   hostAriaLabel: 'Video player component',
@@ -31,6 +22,8 @@ export const LOCALES_DEFAULTS = {
   fullscreenButtonAriaLabel: 'Fullscreen button',
   videoProgressLabel: 'Video progress',
   videoProgressAriaLabel: 'Seek video timeline',
+  currentTimeAriaLabel: 'Current time',
+  durationAriaLabel: 'Total time',
   languageMenuAriaLabel: 'Language menu',
   videoCaptionsAriaLabel: 'Video captions',
   keyboardShortcutsDescription: {

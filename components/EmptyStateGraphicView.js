@@ -457,7 +457,7 @@ const EmptyStateGraphicView = ({ graphic, name, width, height, }) => {
   const size = { width: `${boxWidth}px`, height: `${boxHeight}px` };
   return (h(Host, { class: { 'wpp-image': true, [name]: true }, style: graphic.hostStyle },
     h("div", { key: "empty-state-animation", class: EMPTY_STATE_CONTAINER_CLASS, style: size, "aria-hidden": "true", ref: graphic.setContainer }),
-    graphic.status === 'loading' && (h("wpp-skeleton-v4-4-0", { class: "wpp-empty-state-skeleton", variant: "rectangle", width: boxWidth, height: boxHeight })),
+    graphic.status === 'loading' && (h("wpp-skeleton-v4-5-0", { class: "wpp-empty-state-skeleton", variant: "rectangle", width: boxWidth, height: boxHeight })),
     graphic.shadowColorToken && (h("svg", { class: "wpp-empty-state-defs", "aria-hidden": "true", focusable: "false" },
       h("filter", { id: SHADOW_TINT_FILTER_ID, "color-interpolation-filters": "sRGB" },
         h("feFlood", { class: "wpp-empty-state-tint", result: "tint" }),

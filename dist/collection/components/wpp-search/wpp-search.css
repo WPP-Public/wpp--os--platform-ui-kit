@@ -107,26 +107,12 @@
   display: flex;
   flex-wrap: wrap;
 }
-:host .label:not(.focused):hover + .trigger {
-  background-color: var(--search-bg-color-hover);
-  border-color: var(--search-border-color-hover);
-}
-:host .label:not(.focused):hover + .trigger .trigger-actions .wpp-icon-chevron,
-:host .label:not(.focused):hover + .trigger .wpp-icon-cross {
-  color: var(--search-trigger-icon-color-hover);
-}
-:host .label:not(.focused):hover + .trigger.warning {
-  border-color: var(--wpp-warning-color-500);
-}
-:host .label:not(.focused):hover + .trigger.error {
-  border-color: var(--wpp-danger-color-500);
-}
 
 :host(.wpp-disabled) {
   cursor: not-allowed;
 }
-:host(.wpp-disabled) .label {
-  pointer-events: none;
+:host(.wpp-disabled) .wpp-inline-message {
+  cursor: text;
 }
 
 .infinite-loader {
@@ -264,13 +250,15 @@
   height: var(--search-height-m);
   padding: var(--search-padding-m);
 }
-.trigger:hover {
+.trigger:hover, .trigger.label-hovered {
   background-color: var(--search-bg-color-hover);
   border-color: var(--search-border-color-hover);
 }
 .trigger:hover .trigger-actions .wpp-icon-chevron,
 .trigger:hover .wpp-icon-cross,
-.trigger:hover .wpp-icon-search {
+.trigger:hover .wpp-icon-search, .trigger.label-hovered .trigger-actions .wpp-icon-chevron,
+.trigger.label-hovered .wpp-icon-cross,
+.trigger.label-hovered .wpp-icon-search {
   color: var(--search-trigger-icon-color-hover);
 }
 .trigger:active {

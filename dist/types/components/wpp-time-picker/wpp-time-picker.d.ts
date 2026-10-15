@@ -25,6 +25,7 @@ export declare class WppTimePicker {
   host: HTMLWppTimePickerElement;
   focusType: FOCUS_TYPE;
   isInputFocused: boolean;
+  isLabelHovered: boolean;
   showDisplayCross: boolean;
   generatedMinutes: string[];
   checkedTimeValues: {

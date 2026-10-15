@@ -217,6 +217,9 @@
 :host([disabled]:not([disabled=false])) .input-with-icons {
   pointer-events: none;
 }
+:host([disabled]:not([disabled=false])) .wpp-inline-message {
+  cursor: text;
+}
 
 :host(.with-value) .icon-start:not(.disabled-icon) {
   color: var(--wpp-grey-color-800);

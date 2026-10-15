@@ -1061,6 +1061,9 @@
   pointer-events: none;
   cursor: not-allowed;
 }
+:host(.wpp-disabled) .wpp-inline-message {
+  cursor: text;
+}
 
 :host(.wpp-button-trigger) {
   width: fit-content;

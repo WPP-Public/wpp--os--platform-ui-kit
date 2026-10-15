@@ -17,7 +17,7 @@ export class WppEmptyNotifications {
     return (h(EmptyStateGraphicView, { graphic: this.graphic, name: "wpp-empty-notifications", width: this.width, height: this.height }));
   }
   static get is() { return "wpp-empty-notifications"; }
-  static get registryIs() { return "wpp-empty-notifications-v4-4-0"; }
+  static get registryIs() { return "wpp-empty-notifications-v4-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

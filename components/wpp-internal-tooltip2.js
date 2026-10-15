@@ -32,10 +32,10 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
     });
     this.getIconBasedOnProps = () => {
       if (this.error) {
-        return h("wpp-icon-error-v4-4-0", { class: "left-icon", part: "icon-error" });
+        return h("wpp-icon-error-v4-5-0", { class: "left-icon", part: "icon-error" });
       }
       if (this.warning) {
-        return h("wpp-icon-warning-v4-4-0", { color: "var(--wpp-warning-color-400)", class: "left-icon" });
+        return h("wpp-icon-warning-v4-5-0", { color: "var(--wpp-warning-color-400)", class: "left-icon" });
       }
       return null;
     };
@@ -61,10 +61,10 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
   render() {
     return (h(Host, { class: this.hostCssClasses(), style: this.cssStyle, exportparts: "tooltip-content" }, h("div", { class: this.cssClasses(), style: { wordBreak: this.wordBreak }, part: "tooltip-content" }, h("div", { class: "content-with-icon", id: this.ariaProp.describedby }, this.getIconBasedOnProps() && h("div", { class: "icon-wrapper" }, this.getIconBasedOnProps()), h("div", { class: "content-wrapper" }, !!this.header && (h("span", { class: this.headerCssClasses(), part: "header" }, this.header)), !!this.text && (h("span", { class: this.textCssClasses(), part: "text" }, this.getTextLines())), !!this.value && (h("span", { class: this.valueCssClasses(), part: "value" }, this.value)))))));
   }
-  static get registryIs() { return "wpp-internal-tooltip-v4-4-0"; }
+  static get registryIs() { return "wpp-internal-tooltip-v4-5-0"; }
   get host() { return this; }
   static get style() { return wppInternalTooltipCss; }
-}, [1, "wpp-internal-tooltip", "wpp-internal-tooltip-v4-4-0", {
+}, [1, "wpp-internal-tooltip", "wpp-internal-tooltip-v4-5-0", {
     "cssStyle": [16],
     "header": [1],
     "text": [1],
@@ -80,19 +80,19 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-internal-tooltip-v4-4-0", "wpp-icon-error-v4-4-0", "wpp-icon-warning-v4-4-0"];
+  const components = ["wpp-internal-tooltip-v4-5-0", "wpp-icon-error-v4-5-0", "wpp-icon-warning-v4-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-internal-tooltip-v4-4-0":
+    case "wpp-internal-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTooltip);
       }
       break;
-    case "wpp-icon-error-v4-4-0":
+    case "wpp-icon-error-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-icon-warning-v4-4-0":
+    case "wpp-icon-warning-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

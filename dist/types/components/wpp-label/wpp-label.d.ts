@@ -28,7 +28,7 @@ export declare class WppLabel {
    */
   readonly typography: Extract<TypographyType, 's-strong' | 's-body'>;
   /**
-   * If the component is disabled.
+   * If the component is disabled. The component will retain its visual styling, but on hover, the cursor will change to `not-allowed`.
    */
   readonly disabled: boolean;
   /**

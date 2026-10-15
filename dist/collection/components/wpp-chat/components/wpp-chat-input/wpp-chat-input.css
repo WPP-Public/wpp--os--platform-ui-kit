@@ -55,8 +55,6 @@
     var(--wpp-brand-color)
   );
   --chat-minimized-border-radius-focus: var(--wpp-chat-minimized-border-radius-focus, var(--wpp-border-radius-xs));
-  --chat-input-loading-color-primary: var(--wpp-chat-input-loading-color-primary, var(--wpp-primary-color-500));
-  --chat-input-loading-color-secondary: var(--wpp-chat-input-loading-color-secondary, var(--wpp-primary-color-100));
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -89,15 +87,35 @@
   content: "";
   position: absolute;
   z-index: -1;
-  inset: calc(-1 * (var(--chat-input-container-loading-border-width) + var(--chat-input-container-border-width)));
+  inset: calc(-1 * (var(--chat-input-container-border-width) + var(--chat-input-container-loading-border-width) + 13px));
   pointer-events: none;
-  background: conic-gradient(from var(--wpp-chat-input-loading-angle), var(--chat-input-loading-color-primary), var(--chat-input-loading-color-secondary), var(--chat-input-loading-color-primary));
-  animation: loading-rotate 2s linear infinite;
+  background: conic-gradient(from var(--wpp-loading-halo-angle), transparent 0%, color-mix(in srgb, var(--wpp-loading-halo-glow-color, var(--wpp-dataviz-color-seq-brand-400)) 65%, transparent) 16%, transparent 40%);
+  filter: blur(10px);
+  animation: wpp-loading-halo-rotate 2s linear infinite;
+  border-radius: calc(var(--chat-input-container-border-radius) + var(--chat-input-container-loading-border-width) + 6px);
+}
+.chat-input-container.is-loading::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: calc(-1 * (var(--chat-input-container-border-width) + var(--chat-input-container-loading-border-width)));
+  pointer-events: none;
+  background: conic-gradient(from var(--wpp-loading-halo-angle), transparent 0%, var(--wpp-loading-halo-highlight-color, var(--wpp-dataviz-color-seq-brand-600)) 12%, var(--wpp-loading-halo-base-color, var(--wpp-dataviz-color-seq-brand-900)) 30%, transparent 46%);
+  animation: wpp-loading-halo-rotate 2s linear infinite;
   border-radius: calc(var(--chat-input-container-border-radius) + var(--chat-input-container-loading-border-width));
 }
-@keyframes loading-rotate {
+@media (prefers-reduced-motion: reduce) {
+  .chat-input-container.is-loading::before {
+    display: none;
+  }
+  .chat-input-container.is-loading::after {
+    animation: none;
+    background: var(--wpp-loading-halo-base-color, var(--wpp-dataviz-color-seq-brand-900));
+  }
+}
+@keyframes wpp-loading-halo-rotate {
   to {
-    --wpp-chat-input-loading-angle: 360deg;
+    --wpp-loading-halo-angle: 360deg;
   }
 }
 .chat-input-container:not(.is-focused):hover {

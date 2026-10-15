@@ -110,13 +110,14 @@ const WppAvatar = /*@__PURE__*/ proxyCustomElement(class WppAvatar extends HTMLE
     /** A tooltip is only shown for named (non-icon) avatars that opted in via `withTooltip`. */
     this.hasTooltip = () => this.withTooltip && !this.isAvatarIcon();
     /**
-     * Avatars are presentational (removed from the a11y tree) when the tooltip already exposes the
-     * name, or when explicitly marked via `role="presentation"`. Otherwise they expose their role,
-     * tab index and label.
+     * Explicitly presentational avatars are removed from the a11y tree. Tooltip avatars leave their
+     * host unsemanticed because the tooltip supplies the focusable, labelled trigger.
      */
-    this.getHostAriaProps = () => this.hasTooltip() || this.role === 'presentation'
-      ? { role: 'presentation' }
-      : { role: this.role, tabIndex: this.index, ariaLabel: this.ariaProps.label };
+    this.getHostAriaProps = () => this.hasTooltip()
+      ? {}
+      : this.role === 'presentation'
+        ? { role: 'presentation' }
+        : { role: this.role, tabIndex: this.index, ariaLabel: this.ariaProps.label };
     this.isImageFailedToLoad = false;
     this.focusType = undefined;
     this.name = '';
@@ -153,22 +154,28 @@ const WppAvatar = /*@__PURE__*/ proxyCustomElement(class WppAvatar extends HTMLE
       : `var(--wpp-border-radius-${AVATAR_SQUARE_RADIUS_TOKEN[this.size]})`;
     this.host.style.setProperty('--avatar-border-radius', borderRadius);
   }
+  componentDidRender() {
+    if (this.hasTooltip()) {
+      this.host.removeAttribute('role');
+      this.host.removeAttribute('tabindex');
+    }
+  }
   render() {
     const content = this.src && !this.isImageFailedToLoad ? (h("div", { class: this.imageWrapperCssClasses(), part: "content" }, h("img", { src: this.src, alt: `${this.name} - avatar`, class: this.imageCssClasses(), onError: this.handleImageLoadFailure, part: "image" }))) : (h(Fragment, null, h("div", { class: this.contentWrapperCssClasses(), part: "content" }, this.isAvatarIcon()
       ? this.renderIcon()
       : this.amountOfHiddenAvatars
         ? `+${this.amountOfHiddenAvatars}`
         : this.getUserAbbreviation(this.name))));
-    return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onClick: this.handleClick, exportparts: "image, content, tooltip", ...this.getHostAriaProps() }, this.hasTooltip() ? (h("wpp-tooltip-v4-4-0", { text: this.name, config: this.tooltipConfig, part: "tooltip", ariaProps: { label: `User: ${this.name}`, role: 'button' } }, content)) : (content)));
+    return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onClick: this.handleClick, exportparts: "image, content, tooltip", ...this.getHostAriaProps() }, this.hasTooltip() ? (h("wpp-tooltip-v4-5-0", { text: this.name, config: this.tooltipConfig, part: "tooltip", ariaProps: { label: `User: ${this.name}`, role: 'button' } }, content)) : (content)));
   }
-  static get registryIs() { return "wpp-avatar-v4-4-0"; }
+  static get registryIs() { return "wpp-avatar-v4-5-0"; }
   get host() { return this; }
   static get watchers() { return {
     "color": ["colorChange"],
     "src": ["srcChange"]
   }; }
   static get style() { return wppAvatarCss; }
-}, [1, "wpp-avatar", "wpp-avatar-v4-4-0", {
+}, [1, "wpp-avatar", "wpp-avatar-v4-5-0", {
     "name": [1],
     "size": [1],
     "variant": [1],
@@ -189,29 +196,29 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-avatar-v4-4-0", "wpp-icon-error-v4-4-0", "wpp-icon-warning-v4-4-0", "wpp-internal-tooltip-v4-4-0", "wpp-tooltip-v4-4-0"];
+  const components = ["wpp-avatar-v4-5-0", "wpp-icon-error-v4-5-0", "wpp-icon-warning-v4-5-0", "wpp-internal-tooltip-v4-5-0", "wpp-tooltip-v4-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-avatar-v4-4-0":
+    case "wpp-avatar-v4-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppAvatar);
       }
       break;
-    case "wpp-icon-error-v4-4-0":
+    case "wpp-icon-error-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-icon-warning-v4-4-0":
+    case "wpp-icon-warning-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-internal-tooltip-v4-4-0":
+    case "wpp-internal-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-tooltip-v4-4-0":
+    case "wpp-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

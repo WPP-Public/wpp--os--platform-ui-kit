@@ -70,15 +70,15 @@
 :host(.wpp-time-picker) #anchor.no-value .clock-icon {
   --wpp-icon-color: var(--wpp-grey-color-600);
 }
-:host(.wpp-time-picker) #anchor:hover {
+:host(.wpp-time-picker) #anchor:hover, :host(.wpp-time-picker) #anchor.label-hovered {
   background-color: var(--wpp-grey-color-200);
   border-color: var(--wpp-grey-color-700);
   cursor: pointer;
 }
-:host(.wpp-time-picker) #anchor:hover .clock-icon {
+:host(.wpp-time-picker) #anchor:hover .clock-icon, :host(.wpp-time-picker) #anchor.label-hovered .clock-icon {
   --wpp-icon-color: var(--wpp-grey-color-800);
 }
-:host(.wpp-time-picker) #anchor:hover .time-picker-input {
+:host(.wpp-time-picker) #anchor:hover .time-picker-input, :host(.wpp-time-picker) #anchor.label-hovered .time-picker-input {
   background-color: var(--wpp-grey-color-200);
 }
 :host(.wpp-time-picker) #anchor.focus {

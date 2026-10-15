@@ -6,20 +6,16 @@ const PADDING_CHAR = '0';
  * Format time in seconds to a string representation
  * @param format - 'default' returns time as 'MM:SS', 'extended' returns 'HH:MM:SS'
  * @param timeInSeconds - Time in seconds to format
- * @param split - If true, the time will be split into hours, minutes and seconds. If false, the time will be formatted as 'MM:SS' or 'HH:MM:SS'
  * @returns Formatted time string in 'MM:SS' or 'HH:MM:SS' format
  * @throws Error if timeInSeconds is negative
  */
-export const formatTime = (format = 'default', timeInSeconds, split = false) => {
+export const formatTime = (format = 'default', timeInSeconds) => {
   if (timeInSeconds < 0)
     throw new Error('Time cannot be negative');
   const formatTwoDigits = (value) => Math.floor(value).toString().padStart(TIME_PADDING, PADDING_CHAR);
   const hours = formatTwoDigits(timeInSeconds / SECONDS_IN_HOUR);
   const minutes = formatTwoDigits((timeInSeconds % SECONDS_IN_HOUR) / SECONDS_IN_MINUTE);
   const seconds = formatTwoDigits(timeInSeconds % SECONDS_IN_MINUTE);
-  if (split) {
-    return format === 'extended' ? { hours, minutes, seconds } : { minutes, seconds };
-  }
   return format === 'extended' ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
 };
 export const calculateBufferProgress = (videoPlayerRef) => {

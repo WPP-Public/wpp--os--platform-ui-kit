@@ -1,6 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { WppChatInput } from '../wpp-chat-input';
 import * as themeUtils from '../../../../../utils/subscribe-to-theme';
+import * as loadingHalo from '../../../../../utils/loading-halo';
 import { h } from '@stencil/core';
 import { MockSpeechRecognition } from './mocks';
 import { PRIMARY_ACTION_TRANSITION_MS } from '../consts';
@@ -14,6 +15,11 @@ describe('wpp-chat-input', () => {
       components: [WppChatInput],
       html: `<wpp-chat-input enableAttach="true"></wpp-chat-input>`,
     });
+    // Paired with the root snapshot: the model-selector trigger leaves aria-expanded and
+    // aria-haspopup to wpp-menu-context, which is why they no longer appear in it.
+    const trigger = page.root?.shadowRoot?.querySelector('.select-model-trigger');
+    expect(trigger?.hasAttribute('aria-expanded')).toBe(false);
+    expect(trigger?.hasAttribute('aria-haspopup')).toBe(false);
     expect(page.root).toMatchSnapshot();
     expect(page.root).toHaveAttribute('enableAttach');
   });
@@ -22,6 +28,12 @@ describe('wpp-chat-input', () => {
       components: [WppChatInput],
       html: `<wpp-chat-input fileUploadConfig='{"maxFiles": 3, "size": 100, "acceptConfig": {"image/jpeg": [".jpg"], "image/png": [".png"]}}'></wpp-chat-input>`,
     });
+    // Paired with the snapshot, which this change also touched: the default model row is a
+    // single-select menu item and the trigger no longer authors its own aria-haspopup
+    // (WPPOPENDS-1593).
+    const dropdown = page.root?.shadowRoot?.querySelector('.wpp-model-dropdown');
+    expect(dropdown?.querySelector('wpp-list-item')?.getAttribute('role')).toBe('menuitemradio');
+    expect(page.root?.shadowRoot?.querySelector('.select-model-trigger')?.hasAttribute('aria-haspopup')).toBe(false);
     expect(page.root).toMatchSnapshot();
   });
   it('should trigger wppSend event when sending a message', async () => {
@@ -37,6 +49,9 @@ describe('wpp-chat-input', () => {
     expect(sendSpy).toHaveBeenCalledWith({
       message: 'Hello, World!',
       attachments: [],
+      // The model in use rides along so consumers can forward it with the request. "Auto"
+      // offers no reasoning/verbosity levels, so neither key is present.
+      model: expect.objectContaining({ id: 'auto', label: 'Auto' }),
     });
   });
   it('should stop audio recording when clicking send and isAudioRecording is true', async () => {
@@ -163,6 +178,52 @@ describe('wpp-chat-input', () => {
       expect(page.rootInstance.isFocused).toBe(false);
     });
   });
+  describe('outside-interaction guard while expanded', () => {
+    const getInputArea = (page) => page.root?.shadowRoot?.querySelector('.input-area');
+    /**
+     * Puts the `s` variant into the expanded, focused state the guard listens in. The expansion
+     * is set directly because mock-doc never dispatches the host click that normally triggers it;
+     * the `focus` event is real, and is what registers the document listeners under test.
+     */
+    const expand = async (page) => {
+      page.rootInstance.isChatInputExpanded = true;
+      page.root.dispatchEvent(new FocusEvent('focus'));
+      await page.waitForChanges();
+    };
+    /** A portalled dropdown: tippy appends its popup to the body under an `id="tippy-N"` root. */
+    const appendPortalledRow = (page) => {
+      const portal = page.doc.createElement('div');
+      portal.id = 'tippy-1';
+      const row = page.doc.createElement('div');
+      portal.appendChild(row);
+      page.doc.body.appendChild(portal);
+      return row;
+    };
+    it('stays expanded when a row inside a portalled dropdown is pressed', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input size="s"></wpp-chat-input>`,
+      });
+      await expand(page);
+      expect(getInputArea(page)?.className).toContain('expanded');
+      appendPortalledRow(page).dispatchEvent(new MouseEvent('mousedown', { bubbles: true, composed: true }));
+      await page.waitForChanges();
+      expect(getInputArea(page)?.className).toContain('expanded');
+    });
+    it('collapses when the press lands outside both the input and its dropdowns', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input size="s"></wpp-chat-input>`,
+      });
+      await expand(page);
+      expect(getInputArea(page)?.className).toContain('expanded');
+      const elsewhere = page.doc.createElement('div');
+      page.doc.body.appendChild(elsewhere);
+      elsewhere.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, composed: true }));
+      await page.waitForChanges();
+      expect(getInputArea(page)?.className).toContain('minimized');
+    });
+  });
   describe('Testing handleClickAudioRecording', () => {
     afterEach(() => {
       jest.clearAllMocks();
@@ -226,21 +287,21 @@ describe('wpp-chat-input', () => {
     it('Testing that it returns false when component is disabled', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
-        template: () => h("wpp-chat-input-v4-4-0", { disabled: true }),
+        template: () => h("wpp-chat-input-v4-5-0", { disabled: true }),
       });
       expect(page.rootInstance.shouldDisplaySend()).toBe(false);
     });
     it('Testing that it returns true when component is generating and not disabled', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
-        template: () => h("wpp-chat-input-v4-4-0", { disabled: false, isGenerating: true }),
+        template: () => h("wpp-chat-input-v4-5-0", { disabled: false, isGenerating: true }),
       });
       expect(page.rootInstance.shouldDisplaySend()).toBe(true);
     });
     it('Testing that it returns true when component is audio recording with a value and not disabled', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
-        template: () => h("wpp-chat-input-v4-4-0", { disabled: false }),
+        template: () => h("wpp-chat-input-v4-5-0", { disabled: false }),
       });
       page.rootInstance.internalValue = 'Testing';
       page.rootInstance.isAudioRecording = true;
@@ -450,6 +511,48 @@ describe('wpp-chat-input', () => {
       expect(mockStop).toHaveBeenCalledTimes(1);
     });
   });
+  describe('loading animation', () => {
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+    it('should register the loading animation angle when it connects (connectedCallback)', async () => {
+      const registerSpy = jest.spyOn(loadingHalo, 'registerLoadingHaloAngle');
+      await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input></wpp-chat-input>`,
+      });
+      expect(registerSpy).toHaveBeenCalled();
+    });
+    it('should add the is-loading class to the container only while generating', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input></wpp-chat-input>`,
+      });
+      const getContainer = () => page.root?.shadowRoot?.querySelector('.chat-input-container');
+      expect(getContainer()?.classList.contains('is-loading')).toBe(false);
+      page.root.isGenerating = true;
+      await page.waitForChanges();
+      expect(getContainer()?.classList.contains('is-loading')).toBe(true);
+    });
+    it('should keep the is-focused class alongside is-loading while generating, so focus stays visible (WCAG 2.4.7)', async () => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input></wpp-chat-input>`,
+      });
+      const getContainer = () => page.root?.shadowRoot?.querySelector('.chat-input-container');
+      page.rootInstance.isFocused = true;
+      await page.waitForChanges();
+      expect(getContainer()?.classList.contains('is-focused')).toBe(true);
+      page.root.isGenerating = true;
+      await page.waitForChanges();
+      expect(getContainer()?.classList.contains('is-loading')).toBe(true);
+      expect(getContainer()?.classList.contains('is-focused')).toBe(true);
+      page.root.isGenerating = false;
+      await page.waitForChanges();
+      expect(getContainer()?.classList.contains('is-loading')).toBe(false);
+      expect(getContainer()?.classList.contains('is-focused')).toBe(true);
+    });
+  });
   describe('Testing Speech Recognition', () => {
     it('Testing speech recognition setup wiring', async () => {
       const page = await newSpecPage({
@@ -631,6 +734,12 @@ describe('wpp-chat-input', () => {
           components: [WppChatInput],
           html: `<wpp-chat-input></wpp-chat-input>`,
         });
+        // Paired with the snapshot: the model rows form a single-select group, which is what
+        // makes `aria-checked` legal on them (WPPOPENDS-1593).
+        const rows = getDropdown(page).querySelectorAll('wpp-list-item');
+        expect(rows[0].getAttribute('role')).toBe('menuitemradio');
+        expect(rows[0].getAttribute('aria-checked')).toBe('true');
+        expect(rows[1].getAttribute('aria-checked')).toBe('false');
         expect(getSelector(page)).toMatchSnapshot('trigger');
         expect(getDropdown(page)).toMatchSnapshot('dropdown');
       });
@@ -652,6 +761,9 @@ describe('wpp-chat-input', () => {
         });
         page.root.models = customModels;
         await page.waitForChanges();
+        const rows = Array.from(getDropdown(page).querySelectorAll('wpp-list-item'));
+        expect(rows).toHaveLength(2 + customModels.length);
+        expect(rows.every(row => row.getAttribute('role') === 'menuitemradio')).toBe(true);
         expect(getDropdown(page)).toMatchSnapshot();
       });
       it('renders only the avatar (no label) in the trigger for size "s"', async () => {
@@ -661,7 +773,329 @@ describe('wpp-chat-input', () => {
         });
         page.rootInstance.isChatInputExpanded = false;
         await page.waitForChanges();
+        // The "s" trigger is avatar-only, so it carries no label — and therefore never shows a
+        // reasoning level either (WPPOPENDS-1593).
+        expect(getSelector(page)?.querySelector('span[slot="label"]')).toBeNull();
         expect(getSelector(page)).toMatchSnapshot();
+      });
+    });
+    describe('reasoning and verbosity options (WPPOPENDS-1593)', () => {
+      const REASONING_OPTIONS = [
+        { id: 'none', label: 'None' },
+        { id: 'medium', label: 'Medium', caption: 'Balanced with moderate reasoning' },
+        { id: 'high', label: 'High', caption: 'Thorough with deep reasoning' },
+      ];
+      const VERBOSITY_OPTIONS = [
+        { id: 'low', label: 'Low', caption: 'Concise and direct' },
+        { id: 'high', label: 'High', caption: 'Comprehensive and detailed' },
+      ];
+      const GPT_MODEL = {
+        id: 'gpt',
+        label: 'GPT 5.4 Mini',
+        logo: 'gpt.svg',
+        reasoningOptions: REASONING_OPTIONS,
+        verbosityOptions: VERBOSITY_OPTIONS,
+      };
+      const GEMINI_MODEL = {
+        id: 'gemini',
+        label: 'Gemini 3.5 Flash',
+        logo: 'gemini.svg',
+        reasoningOptions: REASONING_OPTIONS,
+      };
+      const getDropdown = (page) => page.root?.shadowRoot?.querySelector('.wpp-model-dropdown');
+      const getTriggerLabel = (page) => page.root?.shadowRoot?.querySelector('.select-model-trigger > span[slot="label"]');
+      /** The trigger label's text with runs of whitespace collapsed, which is what a user reads. */
+      const getTriggerLabelText = (page) => getTriggerLabel(page)?.textContent?.replace(/\s+/g, ' ').trim();
+      /** The submenu whose trigger row carries `label`, or null when no such row is rendered. */
+      const getSubmenu = (page, label) => Array.from(getDropdown(page)?.querySelectorAll('wpp-menu-context') || []).find(menu => menu.querySelector('[slot="trigger-element"] span[slot="label"]')?.textContent === label) || null;
+      /** Direct `wpp-list-item` children of the dropdown — mock-doc has no `:scope` support. */
+      const getModelRow = (page, label) => Array.from(getDropdown(page)?.children || []).find(child => child.tagName.toLowerCase() === 'wpp-list-item' &&
+        child.querySelector('span[slot="label"]')?.textContent === label) || null;
+      const getOptionRows = (page, label) => Array.from(getSubmenu(page, label)?.querySelectorAll('.wpp-model-options-dropdown > wpp-list-item') || []);
+      /**
+       * Mounts with the model ALREADY selected. That matters: once a model is selected the
+       * component owns the levels for it (remembering the user's choice, else applying the
+       * defaults), so assigning `selectedModel` after mount would re-derive them and discard any
+       * level passed here. Passing both up front is how a consumer seeds an initial selection.
+       */
+      const mountWithModel = async (model, extraProps = {}) => {
+        const page = await newSpecPage({
+          components: [WppChatInput],
+          template: () => h("wpp-chat-input-v4-5-0", { selectedModel: model, ...extraProps }),
+        });
+        await page.waitForChanges();
+        return page;
+      };
+      it('renders no option rows for the built-in "auto" and "premium" models', async () => {
+        const page = await newSpecPage({ components: [WppChatInput], html: `<wpp-chat-input></wpp-chat-input>` });
+        expect(getSubmenu(page, 'Reasoning')).toBeNull();
+        expect(getSubmenu(page, 'Verbosity')).toBeNull();
+        page.root.selectedModel = 'premium';
+        await page.waitForChanges();
+        expect(getSubmenu(page, 'Reasoning')).toBeNull();
+        expect(getSubmenu(page, 'Verbosity')).toBeNull();
+      });
+      it('renders a Reasoning row but no Verbosity row for a model that supplies only reasoningOptions', async () => {
+        const page = await mountWithModel(GEMINI_MODEL);
+        expect(getSubmenu(page, 'Reasoning')).not.toBeNull();
+        expect(getSubmenu(page, 'Verbosity')).toBeNull();
+      });
+      it('renders both rows for a model that supplies both option lists', async () => {
+        const page = await mountWithModel(GPT_MODEL);
+        expect(getSubmenu(page, 'Reasoning')).not.toBeNull();
+        expect(getSubmenu(page, 'Verbosity')).not.toBeNull();
+      });
+      it('renders the option label and caption, and omits the caption element when none is supplied', async () => {
+        const page = await mountWithModel(GPT_MODEL);
+        const rows = getOptionRows(page, 'Reasoning');
+        expect(rows.map(row => row.querySelector('span[slot="label"]')?.textContent)).toEqual([
+          'None',
+          'Medium',
+          'High',
+        ]);
+        // `none` carries no caption, so it must render a single-line row.
+        expect(rows[0].querySelector('span[slot="caption"]')).toBeNull();
+        expect(rows[1].querySelector('span[slot="caption"]')?.textContent).toBe('Balanced with moderate reasoning');
+      });
+      it('renders the level rows one step smaller than the row that opens them', async () => {
+        const page = await mountWithModel(GPT_MODEL);
+        const triggerRow = getSubmenu(page, 'Reasoning')?.querySelector('[slot="trigger-element"]');
+        // The submenu trigger keeps the dropdown's default body type; only the levels inside it
+        // step down to `s-midi`.
+        expect(triggerRow?.labelTypography).toBeUndefined();
+        expect(getOptionRows(page, 'Reasoning').map(row => row.labelTypography?.type)).toEqual(['s-midi', 's-midi', 's-midi']);
+      });
+      it('exposes the option rows as a single-select group through role and aria-checked', async () => {
+        const page = await mountWithModel(GPT_MODEL, { selectedReasoning: 'high' });
+        const rows = getOptionRows(page, 'Reasoning');
+        expect(rows.map(row => row.getAttribute('role'))).toEqual(['menuitemradio', 'menuitemradio', 'menuitemradio']);
+        expect(rows.map(row => row.getAttribute('aria-checked'))).toEqual(['false', 'false', 'true']);
+      });
+      it('checks nothing when the selected id matches no option', async () => {
+        const page = await mountWithModel(GPT_MODEL, { selectedReasoning: 'does-not-exist' });
+        expect(getOptionRows(page, 'Reasoning').map(row => row.getAttribute('aria-checked'))).toEqual([
+          'false',
+          'false',
+          'false',
+        ]);
+        // An id that matches nothing must not put a dangling separator in the trigger.
+        expect(getTriggerLabelText(page)).toBe('GPT 5.4 Mini');
+      });
+      it('renders the selected custom model as a checked row when the models list is empty', async () => {
+        const page = await mountWithModel(GPT_MODEL);
+        const rowLabels = Array.from(getDropdown(page).children)
+          .map(child => child.querySelector('span[slot="label"]')?.textContent)
+          .filter(Boolean);
+        expect(rowLabels).toEqual([
+          'Auto',
+          'Premium',
+          'GPT 5.4 Mini',
+          'Reasoning',
+          'Verbosity',
+          'Select model or agent',
+        ]);
+        const modelRow = getModelRow(page, 'GPT 5.4 Mini');
+        expect(modelRow?.getAttribute('role')).toBe('menuitemradio');
+        expect(modelRow?.getAttribute('aria-checked')).toBe('true');
+      });
+      it('appends the selected reasoning level to the trigger label and drops it when nothing is selected', async () => {
+        const page = await mountWithModel(GPT_MODEL, { selectedReasoning: 'high' });
+        // Taken verbatim from the Figma text node (102312:26471): "<model>\u30FB<level>", one
+        // colour, U+30FB KATAKANA MIDDLE DOT and NO surrounding spaces — the glyph's own side
+        // bearings produce the visual gap. Asserted on the raw text, not the normalised one, so a
+        // stray space would fail here.
+        expect(getTriggerLabel(page)?.textContent).toBe('GPT 5.4 Mini\u30FBHigh');
+        page.root.selectedReasoning = undefined;
+        await page.waitForChanges();
+        expect(getTriggerLabelText(page)).toBe('GPT 5.4 Mini');
+      });
+      it('emits wppReasoningSelect with the resulting state and updates selectedReasoning', async () => {
+        const page = await mountWithModel(GPT_MODEL, { selectedVerbosity: 'low' });
+        const spy = jest.fn();
+        page.root.addEventListener('wppReasoningSelect', spy);
+        getOptionRows(page, 'Reasoning')[2].dispatchEvent(new CustomEvent('wppChangeListItem'));
+        await page.waitForChanges();
+        expect(page.root.selectedReasoning).toBe('high');
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy.mock.calls[0][0].detail).toEqual({
+          model: GPT_MODEL,
+          reasoning: REASONING_OPTIONS[2],
+          verbosity: VERBOSITY_OPTIONS[0],
+        });
+        expect(getOptionRows(page, 'Reasoning').map(row => row.getAttribute('aria-checked'))).toEqual([
+          'false',
+          'false',
+          'true',
+        ]);
+      });
+      it('stays silent when the level already in force is picked again', async () => {
+        const page = await mountWithModel(GPT_MODEL, { selectedReasoning: 'high', selectedVerbosity: 'low' });
+        const reasoningSpy = jest.fn();
+        const verbositySpy = jest.fn();
+        page.root.addEventListener('wppReasoningSelect', reasoningSpy);
+        page.root.addEventListener('wppVerbositySelect', verbositySpy);
+        getOptionRows(page, 'Reasoning')[2].dispatchEvent(new CustomEvent('wppChangeListItem'));
+        getOptionRows(page, 'Verbosity')[0].dispatchEvent(new CustomEvent('wppChangeListItem'));
+        await page.waitForChanges();
+        expect(reasoningSpy).not.toHaveBeenCalled();
+        expect(verbositySpy).not.toHaveBeenCalled();
+        expect(page.root.selectedReasoning).toBe('high');
+        expect(page.root.selectedVerbosity).toBe('low');
+      });
+      it('emits wppVerbositySelect without disturbing the reasoning selection', async () => {
+        const page = await mountWithModel(GPT_MODEL, { selectedReasoning: 'high' });
+        const spy = jest.fn();
+        page.root.addEventListener('wppVerbositySelect', spy);
+        getOptionRows(page, 'Verbosity')[1].dispatchEvent(new CustomEvent('wppChangeListItem'));
+        await page.waitForChanges();
+        expect(page.root.selectedVerbosity).toBe('high');
+        expect(page.root.selectedReasoning).toBe('high');
+        expect(spy.mock.calls[0][0].detail).toEqual({
+          model: GPT_MODEL,
+          reasoning: REASONING_OPTIONS[2],
+          verbosity: VERBOSITY_OPTIONS[1],
+        });
+      });
+      it('remembers the levels per model and restores them when the user comes back', async () => {
+        const page = await mountWithModel(GPT_MODEL, { selectedReasoning: 'high', selectedVerbosity: 'low' });
+        page.root.models = [GPT_MODEL, GEMINI_MODEL];
+        await page.waitForChanges();
+        // Away to Gemini: GPT's pair is remembered, Gemini takes its own defaults.
+        getModelRow(page, 'Gemini 3.5 Flash').dispatchEvent(new CustomEvent('wppChangeListItem'));
+        await page.waitForChanges();
+        expect(page.root.selectedReasoning).toBe('medium');
+        expect(page.root.selectedVerbosity).toBeUndefined();
+        // Choose something different on Gemini, then go back to GPT.
+        getOptionRows(page, 'Reasoning')[0].dispatchEvent(new CustomEvent('wppChangeListItem'));
+        await page.waitForChanges();
+        expect(page.root.selectedReasoning).toBe('none');
+        getModelRow(page, 'GPT 5.4 Mini').dispatchEvent(new CustomEvent('wppChangeListItem'));
+        await page.waitForChanges();
+        expect(page.root.selectedReasoning).toBe('high');
+        expect(page.root.selectedVerbosity).toBe('low');
+        // And Gemini still holds what was chosen for it.
+        getModelRow(page, 'Gemini 3.5 Flash').dispatchEvent(new CustomEvent('wppChangeListItem'));
+        await page.waitForChanges();
+        expect(page.root.selectedReasoning).toBe('none');
+      });
+      it('defaults a first-time model to Auto, falling back to Medium, and Verbosity to Medium', async () => {
+        // Offers `auto` for reasoning and `medium` for verbosity, so both documented defaults apply.
+        const withAuto = {
+          ...GPT_MODEL,
+          reasoningOptions: [{ id: 'auto', label: 'Auto' }, ...REASONING_OPTIONS],
+          verbosityOptions: [...VERBOSITY_OPTIONS, { id: 'medium', label: 'Medium' }],
+        };
+        const page = await mountWithModel(GEMINI_MODEL);
+        // GEMINI_MODEL offers no `auto`, so reasoning falls back to `medium`; it has no verbosity
+        // list at all, so verbosity stays unset rather than being guessed.
+        expect(page.root.selectedReasoning).toBe('medium');
+        expect(page.root.selectedVerbosity).toBeUndefined();
+        page.root.selectedModel = withAuto;
+        await page.waitForChanges();
+        expect(page.root.selectedReasoning).toBe('auto');
+        expect(page.root.selectedVerbosity).toBe('medium');
+      });
+      it('leaves a model that offers none of the default ids with nothing selected', async () => {
+        const page = await mountWithModel({
+          id: 'odd',
+          label: 'Odd model',
+          logo: 'odd.svg',
+          reasoningOptions: [{ id: 'turbo', label: 'Turbo' }],
+        });
+        expect(page.root.selectedReasoning).toBeUndefined();
+        expect(getOptionRows(page, 'Reasoning').map(row => row.getAttribute('aria-checked'))).toEqual(['false']);
+      });
+      it('emits the levels it applies on a model change, so a controlled consumer stays in step', async () => {
+        const page = await mountWithModel(GPT_MODEL, { selectedReasoning: 'high', selectedVerbosity: 'low' });
+        page.root.models = [GPT_MODEL, GEMINI_MODEL];
+        await page.waitForChanges();
+        const reasoningSpy = jest.fn();
+        const verbositySpy = jest.fn();
+        page.root.addEventListener('wppReasoningSelect', reasoningSpy);
+        page.root.addEventListener('wppVerbositySelect', verbositySpy);
+        getModelRow(page, 'Gemini 3.5 Flash').dispatchEvent(new CustomEvent('wppChangeListItem'));
+        await page.waitForChanges();
+        // Silently rewriting a controlled prop would be undone by the consumer's next render.
+        expect(reasoningSpy.mock.calls[0][0].detail.reasoning).toEqual(REASONING_OPTIONS[1]);
+        expect(verbositySpy.mock.calls[0][0].detail.verbosity).toBeNull();
+      });
+      it('does not emit for a level the model change left alone', async () => {
+        const page = await mountWithModel(GPT_MODEL, { selectedReasoning: 'high' });
+        page.root.models = [GPT_MODEL, GEMINI_MODEL];
+        await page.waitForChanges();
+        const verbositySpy = jest.fn();
+        page.root.addEventListener('wppVerbositySelect', verbositySpy);
+        // GPT's verbosity was never chosen, so `medium` applies on mount and Gemini offers none —
+        // it changes, so it emits. Going back to a model whose pair is unchanged must stay quiet.
+        getModelRow(page, 'Gemini 3.5 Flash').dispatchEvent(new CustomEvent('wppChangeListItem'));
+        await page.waitForChanges();
+        verbositySpy.mockClear();
+        getModelRow(page, 'Gemini 3.5 Flash').dispatchEvent(new CustomEvent('wppChangeListItem'));
+        await page.waitForChanges();
+        expect(verbositySpy).not.toHaveBeenCalled();
+      });
+      it('carries the model and both levels on wppSend, and omits the levels when the model has none', async () => {
+        const page = await mountWithModel(GPT_MODEL, { selectedReasoning: 'high', selectedVerbosity: 'low' });
+        const spy = jest.fn();
+        page.root.addEventListener('wppSend', spy);
+        page.rootInstance.internalValue = 'hello';
+        await page.waitForChanges();
+        page
+          .root.shadowRoot.querySelector('[data-testid="send-icon-only-button"]')
+          .dispatchEvent(new MouseEvent('click'));
+        await page.waitForChanges();
+        expect(spy.mock.calls[0][0].detail).toMatchObject({
+          message: 'hello',
+          model: GPT_MODEL,
+          reasoning: REASONING_OPTIONS[2],
+          verbosity: VERBOSITY_OPTIONS[0],
+        });
+        page.root.selectedModel = 'auto';
+        page.rootInstance.internalValue = 'second';
+        await page.waitForChanges();
+        page
+          .root.shadowRoot.querySelector('[data-testid="send-icon-only-button"]')
+          .dispatchEvent(new MouseEvent('click'));
+        await page.waitForChanges();
+        const secondDetail = spy.mock.calls[1][0].detail;
+        expect(Object.prototype.hasOwnProperty.call(secondDetail, 'reasoning')).toBe(false);
+        expect(Object.prototype.hasOwnProperty.call(secondDetail, 'verbosity')).toBe(false);
+      });
+      it('leaves aria-expanded and aria-haspopup on the trigger to wpp-menu-context', async () => {
+        const page = await newSpecPage({ components: [WppChatInput], html: `<wpp-chat-input></wpp-chat-input>` });
+        const trigger = page.root?.shadowRoot?.querySelector('.select-model-trigger');
+        // The component used to declare both itself, which re-stamped a raw boolean over the
+        // value wpp-menu-context writes and left aria-expanded="" while the menu was open.
+        // menu-context is now the single writer, so nothing is rendered here.
+        expect(trigger?.hasAttribute('aria-expanded')).toBe(false);
+        expect(trigger?.hasAttribute('aria-haspopup')).toBe(false);
+        expect(trigger?.getAttribute('aria-label')).toBe('Select AI model');
+      });
+      it('survives the transient null selectedModel React produces, and still remembers the model it left', async () => {
+        const page = await mountWithModel(GPT_MODEL, { selectedReasoning: 'high' });
+        page.root.models = [GPT_MODEL, GEMINI_MODEL];
+        await page.waitForChanges();
+        // React removes the `selectedModel` attribute when the value goes from a string preset to a
+        // model object, and Stencil assigns that removal as null before the property lands. The
+        // watch used to resolve it and throw "Cannot read properties of null (reading 'id')".
+        page.root.selectedModel = null;
+        await page.waitForChanges();
+        expect(page.root.selectedReasoning).toBe('high');
+        page.root.selectedModel = GEMINI_MODEL;
+        await page.waitForChanges();
+        expect(page.root.selectedReasoning).toBe('medium');
+        // The null must not have been treated as the previous model, or GPT's levels would have
+        // been remembered against it and lost.
+        page.root.selectedModel = GPT_MODEL;
+        await page.waitForChanges();
+        expect(page.root.selectedReasoning).toBe('high');
+      });
+      it('renders the row labels from locales', async () => {
+        const page = await mountWithModel(GPT_MODEL);
+        page.root.locales = { modelReasoningLabel: 'Raisonnement', modelVerbosityLabel: 'Verbosite' };
+        await page.waitForChanges();
+        expect(getSubmenu(page, 'Raisonnement')).not.toBeNull();
+        expect(getSubmenu(page, 'Verbosite')).not.toBeNull();
       });
     });
     describe('trigger disabled state and size behaviour', () => {

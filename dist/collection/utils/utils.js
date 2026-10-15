@@ -292,6 +292,35 @@ export function getOsBarOffsetHeight() {
 export function mergeLocales(defaults, overrides) {
   return { ...defaults, ...overrides };
 }
+/**
+ * Returns true when `mime` matches one of the configured patterns.
+ *
+ * A pattern is either an exact type (`image/png`), a family wildcard (`image/…`) or the
+ * match-everything pattern. An empty pattern list means unrestricted.
+ *
+ * A file the browser could not type matches nothing except the match-everything pattern, which
+ * holds precisely because it asks nothing of the file - a screenshot saved without an extension
+ * has no type to offer and is still a file. Every other pattern leaves the decision to the caller.
+ *
+ * Matching is case-insensitive on both sides: browsers are inconsistent about the casing they
+ * report, and a file typed `IMAGE/PNG` is the same file as one typed `image/png`.
+ */
+export const isMimeAccepted = (mime, patterns) => {
+  if (!patterns.length)
+    return true;
+  const candidate = mime.toLowerCase();
+  return patterns.some(pattern => {
+    const normalised = pattern.toLowerCase();
+    if (normalised === '*/*')
+      return true;
+    if (!candidate)
+      return false;
+    if (normalised === candidate)
+      return true;
+    // 'image/*' -> 'image/', so only the family has to line up.
+    return normalised.endsWith('/*') && candidate.startsWith(normalised.slice(0, -1));
+  });
+};
 let cachedScrollbarGutterWidth = null;
 /**
  * Width the platform reserves in layout for a scrollbar, in px.
@@ -353,7 +382,9 @@ export const getAriaProps = (ariaProps) => {
     if (key === 'tabIndex')
       return;
     if (val !== undefined && val !== null) {
-      result[`aria-${key}`] = typeof val === 'boolean' ? String(val) : val;
+      // `role` is a plain attribute, not an `aria-*` one — prefixing it would produce the
+      // invalid `aria-role` attribute and silently drop the requested role.
+      result[key === 'role' ? 'role' : `aria-${key}`] = typeof val === 'boolean' ? String(val) : val;
     }
   });
   return result;

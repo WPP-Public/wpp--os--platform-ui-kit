@@ -5,6 +5,8 @@ export { WppActionButton as WppActionButton } from '../dist/types/components/wpp
 export { defineCustomElement as defineCustomElementWppActionButton } from './wpp-action-button';
 export { WppArtefact as WppArtefact } from '../dist/types/components/wpp-artefact/wpp-artefact';
 export { defineCustomElement as defineCustomElementWppArtefact } from './wpp-artefact';
+export { WppAudioPlayer as WppAudioPlayer } from '../dist/types/components/wpp-audio-player/wpp-audio-player';
+export { defineCustomElement as defineCustomElementWppAudioPlayer } from './wpp-audio-player';
 export { WppAutocomplete as WppAutocomplete } from '../dist/types/components/wpp-autocomplete/wpp-autocomplete';
 export { defineCustomElement as defineCustomElementWppAutocomplete } from './wpp-autocomplete';
 export { WppAvatar as WppAvatar } from '../dist/types/components/wpp-avatar/wpp-avatar';
@@ -467,8 +469,12 @@ export { WppIconEyeOn as WppIconEyeOn } from '../dist/types/components/wpp-icon/
 export { defineCustomElement as defineCustomElementWppIconEyeOn } from './wpp-icon-eye-on';
 export { WppIconEyedropper as WppIconEyedropper } from '../dist/types/components/wpp-icon/components/actions/content actions/wpp-icon-eyedropper/wpp-icon-eyedropper';
 export { defineCustomElement as defineCustomElementWppIconEyedropper } from './wpp-icon-eyedropper';
+export { WppIconFacebook as WppIconFacebook } from '../dist/types/components/wpp-icon/components/social/social/wpp-icon-facebook/wpp-icon-facebook';
+export { defineCustomElement as defineCustomElementWppIconFacebook } from './wpp-icon-facebook';
 export { WppIconFactory as WppIconFactory } from '../dist/types/components/wpp-icon/components/content/ecology/wpp-icon-factory/wpp-icon-factory';
 export { defineCustomElement as defineCustomElementWppIconFactory } from './wpp-icon-factory';
+export { WppIconFastForward as WppIconFastForward } from '../dist/types/components/wpp-icon/components/actions/media-actions/wpp-icon-fast-forward/wpp-icon-fast-forward';
+export { defineCustomElement as defineCustomElementWppIconFastForward } from './wpp-icon-fast-forward';
 export { WppIconFavourites as WppIconFavourites } from '../dist/types/components/wpp-icon/components/actions/content actions/wpp-icon-favourites/wpp-icon-favourites';
 export { defineCustomElement as defineCustomElementWppIconFavourites } from './wpp-icon-favourites';
 export { WppIconFavouritesFilled as WppIconFavouritesFilled } from '../dist/types/components/wpp-icon/components/actions/content actions/wpp-icon-favourites-filled/wpp-icon-favourites-filled';
@@ -601,6 +607,8 @@ export { WppIconInfo as WppIconInfo } from '../dist/types/components/wpp-icon/co
 export { defineCustomElement as defineCustomElementWppIconInfo } from './wpp-icon-info';
 export { WppIconInfoMessage as WppIconInfoMessage } from '../dist/types/components/wpp-icon/components/status/status/wpp-icon-info-message/wpp-icon-info-message';
 export { defineCustomElement as defineCustomElementWppIconInfoMessage } from './wpp-icon-info-message';
+export { WppIconInstagram as WppIconInstagram } from '../dist/types/components/wpp-icon/components/social/social/wpp-icon-instagram/wpp-icon-instagram';
+export { defineCustomElement as defineCustomElementWppIconInstagram } from './wpp-icon-instagram';
 export { WppIconInstallUpdate as WppIconInstallUpdate } from '../dist/types/components/wpp-icon/components/actions/content actions/wpp-icon-install-update/wpp-icon-install-update';
 export { defineCustomElement as defineCustomElementWppIconInstallUpdate } from './wpp-icon-install-update';
 export { WppIconItalic as WppIconItalic } from '../dist/types/components/wpp-icon/components/tools/text-formatting/wpp-icon-italic/wpp-icon-italic';
@@ -609,6 +617,8 @@ export { WppIconJavaScript as WppIconJavaScript } from '../dist/types/components
 export { defineCustomElement as defineCustomElementWppIconJavaScript } from './wpp-icon-java-script';
 export { WppIconJoin as WppIconJoin } from '../dist/types/components/wpp-icon/components/split-and-merge/wpp-icon-join/wpp-icon-join';
 export { defineCustomElement as defineCustomElementWppIconJoin } from './wpp-icon-join';
+export { WppIconJson as WppIconJson } from '../dist/types/components/wpp-icon/components/media/media/wpp-icon-json/wpp-icon-json';
+export { defineCustomElement as defineCustomElementWppIconJson } from './wpp-icon-json';
 export { WppIconKey as WppIconKey } from '../dist/types/components/wpp-icon/components/content/content/wpp-icon-key/wpp-icon-key';
 export { defineCustomElement as defineCustomElementWppIconKey } from './wpp-icon-key';
 export { WppIconKeyboard as WppIconKeyboard } from '../dist/types/components/wpp-icon/components/content/content/wpp-icon-keyboard/wpp-icon-keyboard';
@@ -849,6 +859,8 @@ export { WppIconResizeSmall as WppIconResizeSmall } from '../dist/types/componen
 export { defineCustomElement as defineCustomElementWppIconResizeSmall } from './wpp-icon-resize-small';
 export { WppIconRestaurant as WppIconRestaurant } from '../dist/types/components/wpp-icon/components/food-and-drink/wpp-icon-restaurant/wpp-icon-restaurant';
 export { defineCustomElement as defineCustomElementWppIconRestaurant } from './wpp-icon-restaurant';
+export { WppIconRewind as WppIconRewind } from '../dist/types/components/wpp-icon/components/actions/media-actions/wpp-icon-rewind/wpp-icon-rewind';
+export { defineCustomElement as defineCustomElementWppIconRewind } from './wpp-icon-rewind';
 export { WppIconRhombus as WppIconRhombus } from '../dist/types/components/wpp-icon/components/content/shapes/wpp-icon-rhombus/wpp-icon-rhombus';
 export { defineCustomElement as defineCustomElementWppIconRhombus } from './wpp-icon-rhombus';
 export { WppIconRotate as WppIconRotate } from '../dist/types/components/wpp-icon/components/tools/transform/wpp-icon-rotate/wpp-icon-rotate';

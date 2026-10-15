@@ -1,5 +1,5 @@
-import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-93f63aaa.js';
-import { g as getSlotEmptyStates } from './utils-a4b26a20.js';
+import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-a0877c3d.js';
+import { g as getSlotEmptyStates } from './utils-f7e38fc9.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
 import './consts-744c144f.js';
 import './theme-observer-b7886d19.js';
@@ -52,9 +52,9 @@ const WppExpandableCard = class {
     this.themeSubscription.stop();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "expandable-card-body, accordion, section, title, icon, counter, divider, title-wrapper" }, h("div", { class: "body-container", part: "expandable-card-body" }, h("wpp-accordion-v4-4-0", { size: this.size, expanded: this.isExpanded, expandedByDefault: this.expandedByDefault, withDivider: false, onWppChange: this.onChange, part: "accordion" }, h("slot", null), h("slot", { name: "header", slot: "header", class: "header" }), h("slot", { name: "actions", slot: "actions", class: "actions" })))));
+    return (h(Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "expandable-card-body, accordion, section, title, icon, counter, divider, title-wrapper" }, h("div", { class: "body-container", part: "expandable-card-body" }, h("wpp-accordion-v4-5-0", { size: this.size, expanded: this.isExpanded, expandedByDefault: this.expandedByDefault, withDivider: false, onWppChange: this.onChange, part: "accordion" }, h("slot", null), h("slot", { name: "header", slot: "header", class: "header" }), h("slot", { name: "actions", slot: "actions", class: "actions" })))));
   }
-  static get registryIs() { return "wpp-expandable-card-v4-4-0"; }
+  static get registryIs() { return "wpp-expandable-card-v4-5-0"; }
   get host() { return getElement(this); }
 };
 WppExpandableCard.style = wppExpandableCardCss;

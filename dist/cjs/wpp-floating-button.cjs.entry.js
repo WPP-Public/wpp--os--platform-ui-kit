@@ -2,10 +2,10 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-5f5af6a9.js');
-const utils = require('./utils-a6513d61.js');
+const index = require('./index-7d205426.js');
+const utils = require('./utils-a237e765.js');
 const common = require('./common-ee802540.js');
-const WrappedSlot = require('./WrappedSlot-dc89a659.js');
+const WrappedSlot = require('./WrappedSlot-669e1c73.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
 require('./consts-d8f5ef98.js');
 require('./theme-observer-4179316e.js');
@@ -120,9 +120,9 @@ const WppFloatingButton = class {
     this.themeSubscription.stop();
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), onClick: this.handleClick, exportparts: "button, spinner-wrapper, spinner, icon-plus, ws-wrapper, ws-inner", onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, index.h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, form: this.form, formAction: this.formAction, formEncType: this.formEncType, formMethod: this.formMethod, formNoValidate: this.formNoValidate, formTarget: this.formTarget, value: this.value, name: this.name, type: this.type, "data-testid": "wppFloatingButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps, part: "button" }, this.loading && (index.h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, index.h("wpp-spinner-v4-4-0", { color: 'var(--wpp-grey-color-000)', part: "spinner" }))), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.contentCssClasses() }, index.h("wpp-icon-plus-v4-4-0", { class: "icon-plus", part: "icon-plus" })))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), onClick: this.handleClick, exportparts: "button, spinner-wrapper, spinner, icon-plus, ws-wrapper, ws-inner", onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, index.h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, form: this.form, formAction: this.formAction, formEncType: this.formEncType, formMethod: this.formMethod, formNoValidate: this.formNoValidate, formTarget: this.formTarget, value: this.value, name: this.name, type: this.type, "data-testid": "wppFloatingButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps, part: "button" }, this.loading && (index.h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, index.h("wpp-spinner-v4-5-0", { color: 'var(--wpp-grey-color-000)', part: "spinner" }))), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.contentCssClasses() }, index.h("wpp-icon-plus-v4-5-0", { class: "icon-plus", part: "icon-plus" })))));
   }
-  static get registryIs() { return "wpp-floating-button-v4-4-0"; }
+  static get registryIs() { return "wpp-floating-button-v4-5-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "ariaProps": ["onUpdateAriaProps"]

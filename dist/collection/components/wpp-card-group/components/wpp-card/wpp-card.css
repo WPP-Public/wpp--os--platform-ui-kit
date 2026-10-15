@@ -59,12 +59,12 @@
   --card-padding-l: var(--wpp-card-padding-l, 20px 24px 24px 24px);
   --card-padding-xl: var(--wpp-card-padding-xl, 24px 32px 32px 32px);
   --card-padding-2xl: var(--wpp-card-padding-2xl, 32px 40px 40px 40px);
-  --card-header-margin-s: var(--wpp-header-margin-s, 0 0 8px 0);
-  --card-header-margin-m: var(--wpp-header-margin-m, 0 0 12px 0);
-  --card-header-margin-l: var(--wpp-header-margin-l, 0 0 20px 0);
-  --card-header-margin-xl: var(--wpp-header-margin-xl, 0 0 24px 0);
-  --card-header-margin-2xl: var(--wpp-header-margin-2xl, 0 0 32px 0);
-  --card-actions-wrapper-left-margin: var(--wpp-card-actions-wrapper-left-margin, 10px);
+  --card-header-margin-s: var(--wpp-card-header-margin-s, 0 0 8px 0);
+  --card-header-margin-m: var(--wpp-card-header-margin-m, 0 0 12px 0);
+  --card-header-margin-l: var(--wpp-card-header-margin-l, 0 0 20px 0);
+  --card-header-margin-xl: var(--wpp-card-header-margin-xl, 0 0 24px 0);
+  --card-header-margin-2xl: var(--wpp-card-header-margin-2xl, 0 0 32px 0);
+  --card-actions-wrapper-left-margin: var(--wpp-card-actions-wrapper-left-margin, 8px);
   --card-actions-first-border-color-focus: var(--wpp-card-actions-first-border-color-focus, var(--wpp-grey-color-000));
   --card-actions-second-border-color-focus: var(--wpp-card-actions-second-border-color-focus, var(--wpp-brand-color));
   --card-primary-bg-color: var(--wpp-card-primary-bg-color, var(--wpp-grey-color-000));
@@ -149,12 +149,12 @@
 .card.size-s.choosable {
   padding: var(--card-choosable-padding-s);
 }
+.card.size-s .header-wrapper .header:not(.slot-hidden) {
+  margin: var(--card-header-margin-s);
+}
 .card.size-s .radio,
 .card.size-s .checkbox {
   top: 1px;
-}
-.card.size-s .header {
-  margin: var(--card-header-margin-s);
 }
 .card.size-m {
   padding: var(--card-padding-m);
@@ -162,12 +162,12 @@
 .card.size-m.choosable {
   padding: var(--card-choosable-padding-m);
 }
+.card.size-m .header-wrapper .header:not(.slot-hidden) {
+  margin: var(--card-header-margin-m);
+}
 .card.size-m .radio,
 .card.size-m .checkbox {
   top: 2px;
-}
-.card.size-m .header {
-  margin: var(--card-header-margin-m);
 }
 .card.size-l {
   padding: var(--card-padding-l);
@@ -175,12 +175,12 @@
 .card.size-l.choosable {
   padding: var(--card-choosable-padding-l);
 }
+.card.size-l .header-wrapper .header:not(.slot-hidden) {
+  margin: var(--card-header-margin-l);
+}
 .card.size-l .radio,
 .card.size-l .checkbox {
   top: 4px;
-}
-.card.size-l .header {
-  margin: var(--card-header-margin-l);
 }
 .card.size-xl {
   padding: var(--card-padding-xl);
@@ -188,12 +188,12 @@
 .card.size-xl.choosable {
   padding: var(--card-choosable-padding-xl);
 }
+.card.size-xl .header-wrapper .header:not(.slot-hidden) {
+  margin: var(--card-header-margin-xl);
+}
 .card.size-xl .radio,
 .card.size-xl .checkbox {
   top: 6px;
-}
-.card.size-xl .header {
-  margin: var(--card-header-margin-xl);
 }
 .card.size-2xl {
   padding: var(--card-padding-2xl);
@@ -201,12 +201,12 @@
 .card.size-2xl.choosable {
   padding: var(--card-choosable-padding-2xl);
 }
+.card.size-2xl .header-wrapper .header:not(.slot-hidden) {
+  margin: var(--card-header-margin-2xl);
+}
 .card.size-2xl .radio,
 .card.size-2xl .checkbox {
   top: 6px;
-}
-.card.size-2xl .header {
-  margin: var(--card-header-margin-2xl);
 }
 .card.size-2xl .actions ::slotted(.wpp-action-button) {
   top: 1px;
@@ -316,9 +316,16 @@
 .card .header-wrapper .header.slot-hidden {
   display: none;
 }
+.card.size-none.choosable:not(.checked) {
+  padding: calc(var(--card-choosable-selected-border-width) - var(--card-choosable-border-width));
+}
 .card.size-none .header-wrapper .actions {
   top: 0;
   right: 0;
+}
+.card.size-none .header-wrapper .radio,
+.card.size-none .header-wrapper .checkbox {
+  top: 0;
 }
 
 .card.tab-focus.interactive:not(.choosable):not(:hover), .card.tab-focus.interactive:not(.choosable):not(:active) {

@@ -7,6 +7,7 @@
 import { Node, mergeAttributes } from '@tiptap/core';
 import { Plugin, PluginKey } from '@tiptap/pm/state';
 import { TIPTAP_UPLOAD_REQUEST_EVENT } from '../tiptap-types';
+import { isMimeAccepted } from '../../../utils/utils';
 /**
  * ProseMirror Plugin Key for the upload plugin
  */
@@ -86,23 +87,6 @@ export const UploadingImage = Node.create({
     ];
   },
 });
-/**
- * Returns true when `mime` matches one of the configured patterns.
- * Patterns may be exact (e.g. `image/png`) or wildcard suffixes (e.g. `image/*`).
- */
-function isMimeAccepted(mime, accepted) {
-  if (!accepted.length)
-    return true;
-  return accepted.some(pattern => {
-    if (pattern === mime)
-      return true;
-    if (pattern.endsWith('/*')) {
-      const prefix = pattern.slice(0, -1); // 'image/'
-      return mime.startsWith(prefix);
-    }
-    return false;
-  });
-}
 /**
  * Creates a ProseMirror plugin that intercepts paste and drop events
  * to handle image file uploads.

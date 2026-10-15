@@ -9,6 +9,7 @@ export declare class WppRichtext implements BaseComponent {
   private themeSubscription;
   host: HTMLWppRichtextElement;
   focusType: FOCUS_TYPE;
+  isLabelHovered: boolean;
   private enteredCharacters;
   plainText: string;
   private toolbarActiveFormats;

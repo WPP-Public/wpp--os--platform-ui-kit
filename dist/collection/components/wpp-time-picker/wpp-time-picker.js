@@ -681,10 +681,12 @@ export class WppTimePicker {
         [`size-${this.size}`]: true,
         disabled: this.disabled,
         'no-value': this.value === '' || this.value === undefined,
+        'label-hovered': this.isLabelHovered,
       };
     };
     this.focusType = FOCUS_TYPE.NONE;
     this.isInputFocused = false;
+    this.isLabelHovered = false;
     this.showDisplayCross = true;
     this.generatedMinutes = [];
     this.checkedTimeValues = DEFAULT_CHECKED_TIME_VALUES;
@@ -756,19 +758,19 @@ export class WppTimePicker {
     return mergeLocales(TIME_PICKER_LOCALES_DEFAULTS, this.locales);
   }
   render() {
-    return (h(Host, { class: "wpp-time-picker", "aria-disabled": this.disabled, style: { width: !this.width ? DEFAULT_WIDTH_VALUE : this.width } }, this.labelConfig?.text && (h("wpp-label-v4-4-0", { typography: "s-strong", class: "label", htmlFor: this.inputId, optional: !this.required, config: this.labelConfig, disabled: this.disabled, tooltipConfig: this.labelTooltipConfig })), h("div", { ref: el => (this.anchorRef = el), id: "anchor", class: this.getAnchorCssClasses() }, h("div", { class: "anchor-time" }, h("wpp-icon-clock-v4-4-0", { class: "clock-icon" }), h("input", {
+    return (h(Host, { class: "wpp-time-picker", "aria-disabled": this.disabled, style: { width: !this.width ? DEFAULT_WIDTH_VALUE : this.width } }, this.labelConfig?.text && (h("wpp-label-v4-5-0", { typography: "s-strong", class: "label", htmlFor: this.inputId, optional: !this.required, config: this.labelConfig, disabled: this.disabled, tooltipConfig: this.labelTooltipConfig, onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })), h("div", { ref: el => (this.anchorRef = el), id: "anchor", class: this.getAnchorCssClasses() }, h("div", { class: "anchor-time" }, h("wpp-icon-clock-v4-5-0", { class: "clock-icon" }), h("input", {
       // Styled by class, not by id: the id is per-instance (so `for` / `aria-controls`
       // stay unique when several pickers share a page), which a `#time-picker` selector
       // could not follow.
       class: "time-picker-input", ref: el => (this.inputRef = el), onFocus: this.onFocus, onBlur: this.onBlur, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, onKeyPress: this.onKeyPress, onPaste: this.onPaste, disabled: this.disabled, onInput: this.onUpdateInput, id: this.inputId, name: this.name, type: "text", autocomplete: "off", placeholder: this.placeholder, value: this.value, role: "combobox", "aria-haspopup": "dialog", "aria-expanded": this.isDropdownOpen ? 'true' : 'false', "aria-controls": this.popupId, "aria-label": this.labelConfig?.text || this._locales.timePickerLabel
-    })), h("div", { class: "cross-icon-container" }, this.showDisplayCross && (h("wpp-icon-cross-v4-4-0", { class: "cross-icon", "aria-label": this._locales.eraseTimeLabel, role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: this.disabled ? -1 : 0, onClick: this.handleClickCrossIcon, onMouseDown: (event) => event.preventDefault(), onKeyDown: activateOnEnterOrSpace(this.handleClickCrossIcon) })))), h("div", { id: this.popupId, ref: el => (this.portalRef = el), class: "wpp-time-picker-portal", role: "dialog", "aria-modal": "false", "aria-label": this._locales.timePickerLabel, onKeyDown: this.onPortalKeyDown, onPointerDown: this.onPortalPointerDown, onMouseDown: this.onPortalMouseDown }, h("div", { ref: refEl => (this.hoursSectionRef = refEl), class: "hours section", role: "listbox", "aria-label": this._locales.hoursLabel }, HOURS.map((hour, hourIndex) => (h("wpp-list-item-v4-4-0", { id: `hour-${hour}`, key: hour, class: {
+    })), h("div", { class: "cross-icon-container" }, this.showDisplayCross && (h("wpp-icon-cross-v4-5-0", { class: "cross-icon", "aria-label": this._locales.eraseTimeLabel, role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: this.disabled ? -1 : 0, onClick: this.handleClickCrossIcon, onMouseDown: (event) => event.preventDefault(), onKeyDown: activateOnEnterOrSpace(this.handleClickCrossIcon) })))), h("div", { id: this.popupId, ref: el => (this.portalRef = el), class: "wpp-time-picker-portal", role: "dialog", "aria-modal": "false", "aria-label": this._locales.timePickerLabel, onKeyDown: this.onPortalKeyDown, onPointerDown: this.onPortalPointerDown, onMouseDown: this.onPortalMouseDown }, h("div", { ref: refEl => (this.hoursSectionRef = refEl), class: "hours section", role: "listbox", "aria-label": this._locales.hoursLabel }, HOURS.map((hour, hourIndex) => (h("wpp-list-item-v4-5-0", { id: `hour-${hour}`, key: hour, class: {
         'tab-focus': this.focusedColumn === 'hours' && this.rovingTimeValues.hoursIndex === hourIndex,
-      }, checked: this.checkedTimeValues.hoursIndex === hourIndex, role: "option", "aria-selected": this.checkedTimeValues.hoursIndex === hourIndex ? 'true' : 'false', tabIndex: this.rovingTimeValues.hoursIndex === hourIndex ? 0 : -1, onWppChangeListItem: () => this.handleClickListItem(hour, 'hour') }, h("span", { slot: "label" }, hour))))), h("wpp-divider-v4-4-0", { vertical: true }), h("div", { ref: refEl => (this.minutesSectionRef = refEl), class: "minutes section", role: "listbox", "aria-label": this._locales.minutesLabel }, this.generatedMinutes.map((minutes, minutesIndex) => (h("wpp-list-item-v4-4-0", { id: `minutes-${minutes}`, key: minutes, class: {
+      }, checked: this.checkedTimeValues.hoursIndex === hourIndex, role: "option", "aria-selected": this.checkedTimeValues.hoursIndex === hourIndex ? 'true' : 'false', tabIndex: this.rovingTimeValues.hoursIndex === hourIndex ? 0 : -1, onWppChangeListItem: () => this.handleClickListItem(hour, 'hour') }, h("span", { slot: "label" }, hour))))), h("wpp-divider-v4-5-0", { vertical: true }), h("div", { ref: refEl => (this.minutesSectionRef = refEl), class: "minutes section", role: "listbox", "aria-label": this._locales.minutesLabel }, this.generatedMinutes.map((minutes, minutesIndex) => (h("wpp-list-item-v4-5-0", { id: `minutes-${minutes}`, key: minutes, class: {
         'tab-focus': this.focusedColumn === 'minutes' && this.rovingTimeValues.minutesIndex === minutesIndex,
-      }, checked: this.checkedTimeValues.minutesIndex === minutesIndex, role: "option", "aria-selected": this.checkedTimeValues.minutesIndex === minutesIndex ? 'true' : 'false', tabIndex: this.rovingTimeValues.minutesIndex === minutesIndex ? 0 : -1, onWppChangeListItem: () => this.handleClickListItem(minutes, 'minutes') }, h("span", { slot: "label" }, minutes)))))), this.message && (h("wpp-inline-message-v4-4-0", { class: !this.messageType ? 'helper-text' : '', message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
+      }, checked: this.checkedTimeValues.minutesIndex === minutesIndex, role: "option", "aria-selected": this.checkedTimeValues.minutesIndex === minutesIndex ? 'true' : 'false', tabIndex: this.rovingTimeValues.minutesIndex === minutesIndex ? 0 : -1, onWppChangeListItem: () => this.handleClickListItem(minutes, 'minutes') }, h("span", { slot: "label" }, minutes)))))), this.message && (h("wpp-inline-message-v4-5-0", { class: !this.messageType ? 'helper-text' : '', message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
   }
   static get is() { return "wpp-time-picker"; }
-  static get registryIs() { return "wpp-time-picker-v4-4-0"; }
+  static get registryIs() { return "wpp-time-picker-v4-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -1101,6 +1103,7 @@ export class WppTimePicker {
     return {
       "focusType": {},
       "isInputFocused": {},
+      "isLabelHovered": {},
       "showDisplayCross": {},
       "generatedMinutes": {},
       "checkedTimeValues": {},

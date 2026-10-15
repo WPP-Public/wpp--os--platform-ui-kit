@@ -1,4 +1,4 @@
-import { hideOnPopperBlur } from '../tippy-plugins';
+import { hideOnPopperBlur, isWithinPopperTree } from '../tippy-plugins';
 describe('hideOnPopperBlur', () => {
   const createInstance = (popper) => {
     const instance = {
@@ -65,5 +65,49 @@ describe('hideOnPopperBlur', () => {
     unrelatedPopper.appendChild(unrelatedItem);
     popper.dispatchEvent(new FocusEvent('focusout', { relatedTarget: unrelatedItem }));
     expect(instance.hide).toHaveBeenCalled();
+  });
+});
+describe('isWithinPopperTree', () => {
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
+  /** A popup anchored inside `anchorHost`, holding one item inside that item's shadow root. */
+  const createNestedPopup = (anchorHost) => {
+    const anchor = document.createElement('div');
+    anchorHost.appendChild(anchor);
+    const nestedPopper = document.createElement('div');
+    nestedPopper.setAttribute('data-tippy-root', '');
+    nestedPopper._tippy = { reference: anchor };
+    document.body.appendChild(nestedPopper);
+    const row = document.createElement('div');
+    nestedPopper.appendChild(row);
+    const shadowRoot = row.attachShadow({ mode: 'open' });
+    const innerTarget = document.createElement('span');
+    shadowRoot.appendChild(innerTarget);
+    return { nestedPopper, innerTarget };
+  };
+  it('counts a node inside a nested popup as within the popper that anchors it', () => {
+    const popper = document.createElement('div');
+    document.body.appendChild(popper);
+    // The press lands inside the row's shadow root, where neither `closest` nor `contains` can
+    // reach the popup it belongs to — which is what made the parent menu close on mousedown.
+    const { innerTarget } = createNestedPopup(popper);
+    expect(isWithinPopperTree(popper, innerTarget)).toBe(true);
+  });
+  it('does not count a node inside an unrelated popup', () => {
+    const popper = document.createElement('div');
+    const elsewhere = document.createElement('div');
+    document.body.append(popper, elsewhere);
+    const { innerTarget } = createNestedPopup(elsewhere);
+    expect(isWithinPopperTree(popper, innerTarget)).toBe(false);
+  });
+  it('counts a node inside the popper own shadow tree', () => {
+    const popper = document.createElement('div');
+    const host = document.createElement('div');
+    document.body.appendChild(popper);
+    popper.appendChild(host);
+    const inner = document.createElement('span');
+    host.attachShadow({ mode: 'open' }).appendChild(inner);
+    expect(isWithinPopperTree(popper, inner)).toBe(true);
   });
 });

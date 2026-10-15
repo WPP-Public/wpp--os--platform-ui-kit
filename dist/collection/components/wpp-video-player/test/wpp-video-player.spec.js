@@ -1,6 +1,7 @@
 import { h } from '@stencil/core';
 import { newSpecPage } from '@stencil/core/testing';
 import { WppVideoPlayer } from '../wpp-video-player';
+import { placeVolumeSlider } from '../components/wpp-volume-bar';
 import { formatTime, calculateBufferProgress } from '../utils';
 import * as themeUtils from '../../../utils/subscribe-to-theme';
 let originalQuerySelector;
@@ -88,14 +89,14 @@ describe('wpp-video-player', () => {
     it('should render default component', async () => {
       const page = await newSpecPage({
         components: [WppVideoPlayer],
-        template: () => h("wpp-video-player-v4-4-0", { src: videoSrc }),
+        template: () => h("wpp-video-player-v4-5-0", { src: videoSrc }),
       });
       expect(page.root).toMatchSnapshot();
     });
     it('should render component with autoplay and mute', async () => {
       const page = await newSpecPage({
         components: [WppVideoPlayer],
-        template: () => h("wpp-video-player-v4-4-0", { src: videoSrc, controlPanelConfig: { autoplay: true } }),
+        template: () => h("wpp-video-player-v4-5-0", { src: videoSrc, controlPanelConfig: { autoplay: true } }),
       });
       expect(page.root).toMatchSnapshot();
     });
@@ -112,6 +113,30 @@ describe('wpp-video-player', () => {
         expect(page.root?.shadowRoot?.querySelector('.controls')).toBeTruthy();
         expect(page.rootInstance.src).toBe(videoSrc);
       });
+      it('should distinguish the current time and the duration timers by their accessible name', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          html: `<wpp-video-player src="${videoSrc}"></wpp-video-player>`,
+        });
+        // The control bar, and so the timers, are only rendered once the player leaves the idle state.
+        page.rootInstance.videoPlayerState = 'paused';
+        await page.waitForChanges();
+        const [currentTime, duration] = Array.from(page.root?.shadowRoot?.querySelectorAll('[role="timer"]') ?? []);
+        expect(currentTime.getAttribute('aria-label')).toBe(`Current time ${currentTime.textContent}`);
+        expect(duration.getAttribute('aria-label')).toBe(`Total time ${duration.textContent}`);
+      });
+      it('should use the custom locales for the timers accessible names', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          template: () => (h("wpp-video-player-v4-5-0", { src: videoSrc, locales: { currentTimeAriaLabel: 'Elapsed', durationAriaLabel: 'Duration' } })),
+        });
+        // The control bar, and so the timers, are only rendered once the player leaves the idle state.
+        page.rootInstance.videoPlayerState = 'paused';
+        await page.waitForChanges();
+        const [currentTime, duration] = Array.from(page.root?.shadowRoot?.querySelectorAll('[role="timer"]') ?? []);
+        expect(currentTime.getAttribute('aria-label')).toBe(`Elapsed ${currentTime.textContent}`);
+        expect(duration.getAttribute('aria-label')).toBe(`Duration ${duration.textContent}`);
+      });
       it('should render with thumbnail', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
@@ -123,7 +148,7 @@ describe('wpp-video-player', () => {
       it('should render with custom size', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v4-4-0", { src: videoSrc, size: { width: 800, height: 600 } }),
+          template: () => h("wpp-video-player-v4-5-0", { src: videoSrc, size: { width: 800, height: 600 } }),
         });
         const component = page.rootInstance;
         expect(component.videoPlayerSize.width).toBe(800);
@@ -132,7 +157,7 @@ describe('wpp-video-player', () => {
       it('should render with autoplay configuration', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v4-4-0", { src: videoSrc, controlPanelConfig: { autoplay: true } }),
+          template: () => h("wpp-video-player-v4-5-0", { src: videoSrc, controlPanelConfig: { autoplay: true } }),
         });
         const video = page.root?.shadowRoot?.querySelector('video');
         expect(video).toBeTruthy();
@@ -155,7 +180,7 @@ describe('wpp-video-player', () => {
         });
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => (h("wpp-video-player-v4-4-0", { src: [videoSrc, videoSrc], type: ['video/mp4', 'video/webm'] })),
+          template: () => (h("wpp-video-player-v4-5-0", { src: [videoSrc, videoSrc], type: ['video/mp4', 'video/webm'] })),
         });
         const sourceElements = page.root?.shadowRoot?.querySelectorAll('source');
         expect(sourceElements.length).toBe(2);
@@ -172,7 +197,7 @@ describe('wpp-video-player', () => {
         };
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v4-4-0", { src: videoSrc, caption: captionData }),
+          template: () => h("wpp-video-player-v4-5-0", { src: videoSrc, caption: captionData }),
         });
         const trackElements = page.root?.shadowRoot?.querySelectorAll('track');
         expect(trackElements.length).toBe(1);
@@ -181,7 +206,7 @@ describe('wpp-video-player', () => {
       it('should render without volume button and volume need to be set to 0', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => (h("wpp-video-player-v4-4-0", { src: videoSrc, controlPanelConfig: { showVolumeButton: false } })),
+          template: () => (h("wpp-video-player-v4-5-0", { src: videoSrc, controlPanelConfig: { showVolumeButton: false } })),
         });
         expect(page.rootInstance.controlPanelConfigDefault.showVolumeButton).toBe(false);
         expect(page.rootInstance.volume).toBe(0);
@@ -196,10 +221,9 @@ describe('wpp-video-player', () => {
         // Spy on the internal renderVideoCurrentTimeComponent function
         const renderSpy = jest.spyOn(page.rootInstance, 'renderVideoTime');
         // Call the render method with test data
-        const timeFormat = { minutes: '02', seconds: '30' };
-        page.rootInstance.renderVideoTime(timeFormat);
+        page.rootInstance.renderVideoTime(150, 'Current time');
         // Verify the method was called with the correct parameters
-        expect(renderSpy).toHaveBeenCalledWith(timeFormat);
+        expect(renderSpy).toHaveBeenCalledWith(150, 'Current time');
         // Clean up
         renderSpy.mockRestore();
       });
@@ -246,7 +270,7 @@ describe('wpp-video-player', () => {
         };
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v4-4-0", { src: videoSrc, caption: captionData }),
+          template: () => h("wpp-video-player-v4-5-0", { src: videoSrc, caption: captionData }),
         });
         // Set required properties for captions
         page.rootInstance.isCaptionEnabled = true;
@@ -284,7 +308,8 @@ describe('wpp-video-player', () => {
         page.rootInstance.handleMetadataLoaded();
         expect(page.rootInstance.videoPlayerRef.duration).toBe(100);
         expect(page.rootInstance.timeFormat).toBe('default');
-        expect(page.rootInstance.splitOverallVideoTime).toEqual({ minutes: '01', seconds: '40' });
+        expect(page.rootInstance.overallVideoTime).toBe(100);
+        expect(formatTime(page.rootInstance.timeFormat, page.rootInstance.overallVideoTime)).toBe('01:40');
         expect(page.rootInstance.aspectRatio).toBe('1.7777777777777777');
         expect(page.rootInstance.videoPlayerRef.style.setProperty).toHaveBeenCalledWith('--aspect-ratio', '1.7777777777777777');
       });
@@ -299,12 +324,9 @@ describe('wpp-video-player', () => {
         page.rootInstance.handleMetadataLoaded();
         // Check that the time format was updated to "extended" due to longer duration
         expect(page.rootInstance.timeFormat).toBe('extended');
-        // Verify the split time format includes hours
-        expect(page.rootInstance.splitOverallVideoTime).toEqual({
-          hours: '01',
-          minutes: '01',
-          seconds: '20',
-        });
+        // Verify the formatted overall time includes hours
+        expect(page.rootInstance.overallVideoTime).toBe(3680);
+        expect(formatTime(page.rootInstance.timeFormat, page.rootInstance.overallVideoTime)).toBe('01:01:20');
       });
       it('should play video when play method is called', async () => {
         const page = await newSpecPage({
@@ -397,14 +419,19 @@ describe('wpp-video-player', () => {
           components: [WppVideoPlayer],
           html: `<wpp-video-player src="${videoSrc}"></wpp-video-player>`,
         });
-        // Create mock elements
-        const mockBarContainer = { classList: { add: jest.fn() } };
-        const mockButton = {
-          shadowRoot: { querySelector: jest.fn().mockReturnValue({ classList: { add: jest.fn() } }) },
+        // Create mock elements, with room above the button for the slider
+        const mockBarContainer = {
+          classList: { add: jest.fn(), remove: jest.fn() },
+          getBoundingClientRect: () => ({ top: 208 }),
+        };
+        const mockContainer = {
+          classList: { add: jest.fn() },
+          getBoundingClientRect: () => ({ top: 300, bottom: 332 }),
         };
         // Add the mocked elements to the component instance
         page.rootInstance.volumeBarContainerRef = mockBarContainer;
-        page.rootInstance.volumeButtonRef = mockButton;
+        page.rootInstance.volumeContainerRef = mockContainer;
+        page.rootInstance.volumeButtonRef = {};
         // Mock clearTimeout
         jest.spyOn(global, 'clearTimeout').mockImplementation(jest.fn());
         // Call the method
@@ -413,9 +440,11 @@ describe('wpp-video-player', () => {
         expect(global.clearTimeout).toHaveBeenCalled();
         // Verify the classList.add was called with 'active'
         expect(mockBarContainer.classList.add).toHaveBeenCalledWith('active');
-        // Verify the button's classList.add was called with 'hover-active'
-        const btnEl = mockButton.shadowRoot.querySelector();
-        expect(btnEl.classList.add).toHaveBeenCalledWith('hover-active');
+        // Verify the container keeps the button in its hover look while the slider is open
+        expect(mockContainer.classList.add).toHaveBeenCalledWith('open');
+        // Verify the slider is placed before it shows, here above the button
+        expect(mockBarContainer.classList.remove).toHaveBeenCalledWith('below');
+        expect(mockBarContainer.classList.add).not.toHaveBeenCalledWith('below');
       });
       it('should not show volume slider when refs are not available', async () => {
         const page = await newSpecPage({
@@ -448,13 +477,10 @@ describe('wpp-video-player', () => {
         });
         // Create mock elements
         const mockBarContainer = { classList: { remove: jest.fn() } };
-        const mockButtonShadowElement = { classList: { remove: jest.fn() } };
-        const mockButton = {
-          shadowRoot: { querySelector: jest.fn().mockReturnValue(mockButtonShadowElement) },
-        };
+        const mockContainer = { classList: { remove: jest.fn() } };
         // Add the mocked elements to the component instance
         page.rootInstance.volumeBarContainerRef = mockBarContainer;
-        page.rootInstance.volumeButtonRef = mockButton;
+        page.rootInstance.volumeContainerRef = mockContainer;
         // Mock clearTimeout
         jest.spyOn(global, 'clearTimeout').mockImplementation(jest.fn());
         // Call the method with a default delay
@@ -465,12 +491,48 @@ describe('wpp-video-player', () => {
         timeoutCallback();
         // Verify the classList.remove was called with 'active'
         expect(mockBarContainer.classList.remove).toHaveBeenCalledWith('active');
-        // Verify the button's classList.remove was called with 'hover-active'
-        expect(mockButtonShadowElement.classList.remove).toHaveBeenCalledWith('hover-active');
+        // Verify the container drops the button's hover look with the slider
+        expect(mockContainer.classList.remove).toHaveBeenCalledWith('open');
         // Call the method with custom delay
         page.rootInstance.volumeSliderHide(500);
         // Verify setTimeout was called with the custom delay
         expect(timeoutDelay).toBe(500);
+      });
+      it('should dismiss the volume slider on Escape and return the focus to the mute button', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          html: `<wpp-video-player src="${videoSrc}"></wpp-video-player>`,
+        });
+        const mockBarContainer = { classList: { contains: jest.fn().mockReturnValue(true), remove: jest.fn() } };
+        const mockContainer = { classList: { remove: jest.fn() } };
+        const nativeButton = { focus: jest.fn() };
+        const slider = {};
+        page.rootInstance.volumeBarContainerRef = mockBarContainer;
+        page.rootInstance.volumeContainerRef = mockContainer;
+        page.rootInstance.volumeBarRef = slider;
+        page.rootInstance.volumeButtonRef = { shadowRoot: { querySelector: () => nativeButton } };
+        page.rootInstance.hoverTimeout = 123;
+        Object.defineProperty(page.rootInstance, 'host', {
+          value: { shadowRoot: { activeElement: slider } },
+          configurable: true,
+        });
+        const clearTimeoutSpy = jest.spyOn(global, 'clearTimeout').mockImplementation(jest.fn());
+        page.rootInstance.dismissVolumeSlider();
+        // The focus moves first, so the closed slider does not drop it on the body
+        expect(nativeButton.focus).toHaveBeenCalledTimes(1);
+        expect(clearTimeoutSpy).toHaveBeenCalledWith(123);
+        expect(mockBarContainer.classList.remove).toHaveBeenCalledWith('active');
+        expect(mockContainer.classList.remove).toHaveBeenCalledWith('open');
+        // With the focus on the button, it stays there
+        nativeButton.focus.mockClear();
+        page.rootInstance.host.shadowRoot.activeElement = {};
+        page.rootInstance.dismissVolumeSlider();
+        expect(nativeButton.focus).not.toHaveBeenCalled();
+        // Nothing to dismiss while the slider is closed
+        mockBarContainer.classList.contains.mockReturnValue(false);
+        mockBarContainer.classList.remove.mockClear();
+        page.rootInstance.dismissVolumeSlider();
+        expect(mockBarContainer.classList.remove).not.toHaveBeenCalled();
       });
       it('should clear previous timeout when volumeSliderHide is called multiple times', async () => {
         const page = await newSpecPage({
@@ -560,7 +622,28 @@ describe('wpp-video-player', () => {
         page.rootInstance.videoPlayerState = 'playing';
         // Trigger video ended event
         page.rootInstance.handleVideoEnded();
+        expect(page.rootInstance.videoPlayerState).toBe('paused');
+        expect(page.rootInstance.isInvisible).toBe(false);
+      });
+      it('should return to idle when an autoplay video ends', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          html: `<wpp-video-player src="${videoSrc}"></wpp-video-player>`,
+        });
+        page.rootInstance.controlPanelConfigDefault.autoplay = true;
+        page.rootInstance.videoPlayerState = 'playing';
+        page.rootInstance.handleVideoEnded();
         expect(page.rootInstance.videoPlayerState).toBe('idle');
+      });
+      it('should pin the current time to the full duration when video ends', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          html: `<wpp-video-player src="${videoSrc}"></wpp-video-player>`,
+        });
+        Object.defineProperty(page.rootInstance.videoPlayerRef, 'duration', { value: 12.345678, configurable: true });
+        page.rootInstance.currentVideoTime = 12.1;
+        page.rootInstance.handleVideoEnded();
+        expect(page.rootInstance.currentVideoTime).toBe(12.345678);
       });
       it('should update controls visibility on mouse events', async () => {
         const page = await newSpecPage({
@@ -578,12 +661,39 @@ describe('wpp-video-player', () => {
         page.rootInstance.handleMouseMove();
         expect(page.rootInstance.isInvisible).toBe(false);
       });
+      it('should hide controls on mouse leave when paused', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          html: `<wpp-video-player src="${videoSrc}"></wpp-video-player>`,
+        });
+        page.rootInstance.videoPlayerState = 'paused';
+        page.rootInstance.handleMouseLeave();
+        expect(page.rootInstance.isInvisible).toBe(true);
+      });
+      it('should keep controls visible on mouse leave when idle', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          html: `<wpp-video-player src="${videoSrc}"></wpp-video-player>`,
+        });
+        page.rootInstance.handleMouseLeave();
+        expect(page.rootInstance.isInvisible).toBe(false);
+      });
+      it('should show hidden controls when focus moves into the player', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          html: `<wpp-video-player src="${videoSrc}"></wpp-video-player>`,
+        });
+        page.rootInstance.videoPlayerState = 'paused';
+        page.rootInstance.handleMouseLeave();
+        page.rootInstance.handleFocusIn();
+        expect(page.rootInstance.isInvisible).toBe(false);
+      });
     });
     describe('keyboard controls', () => {
       it('should handle space key for play/pause', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v4-4-0", { src: videoSrc }),
+          template: () => h("wpp-video-player-v4-5-0", { src: videoSrc }),
         });
         const playSpy = jest.spyOn(page.rootInstance, 'play');
         // Mock the focus conditions
@@ -603,7 +713,7 @@ describe('wpp-video-player', () => {
       it('should handle arrow keys for seeking', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v4-4-0", { src: videoSrc }),
+          template: () => h("wpp-video-player-v4-5-0", { src: videoSrc }),
         });
         // Mock the focus conditions
         jest.spyOn(page.rootInstance.host, 'contains').mockReturnValue(true);
@@ -697,7 +807,7 @@ describe('wpp-video-player', () => {
       it('should toggle captions when toggleCaptions is called', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v4-4-0", { src: videoSrc, caption: captionData }),
+          template: () => h("wpp-video-player-v4-5-0", { src: videoSrc, caption: captionData }),
         });
         // Initial state
         expect(page.rootInstance.isCaptionEnabled).toBe(false);
@@ -711,7 +821,7 @@ describe('wpp-video-player', () => {
       it('should handle C key for toggling captions', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v4-4-0", { src: videoSrc, caption: captionData }),
+          template: () => h("wpp-video-player-v4-5-0", { src: videoSrc, caption: captionData }),
         });
         const toggleCaptionsSpy = jest.spyOn(page.rootInstance, 'toggleCaptions');
         // Mock the focus conditions
@@ -723,17 +833,58 @@ describe('wpp-video-player', () => {
         expect(toggleCaptionsSpy).toHaveBeenCalled();
       });
     });
+    describe('volume slider placement', () => {
+      const originalInnerHeight = window.innerHeight;
+      /** A button and the slider panel, with the layout the browser would report for them. */
+      const createLayout = ({ anchorTop, panelTop, isBelow = false, }) => {
+        const anchor = document.createElement('div');
+        const panel = document.createElement('div');
+        anchor.getBoundingClientRect = () => ({ top: anchorTop, bottom: anchorTop + 32 });
+        panel.getBoundingClientRect = () => ({ top: panelTop });
+        if (isBelow)
+          panel.classList.add('below');
+        return { anchor, panel };
+      };
+      const setViewportHeight = (height) => Object.defineProperty(window, 'innerHeight', { value: height, configurable: true });
+      afterEach(() => setViewportHeight(originalInnerHeight));
+      it('should open above the button when the slider fits there', () => {
+        setViewportHeight(800);
+        const { anchor, panel } = createLayout({ anchorTop: 300, panelTop: 208 });
+        placeVolumeSlider(anchor, panel);
+        expect(panel.classList.contains('below')).toBe(false);
+      });
+      it('should open below the button when the slider leaves the top of the viewport and there is more room below', () => {
+        setViewportHeight(800);
+        const { anchor, panel } = createLayout({ anchorTop: 50, panelTop: -42 });
+        placeVolumeSlider(anchor, panel);
+        expect(panel.classList.contains('below')).toBe(true);
+      });
+      it('should stay above the button when there is even less room below', () => {
+        setViewportHeight(100);
+        const { anchor, panel } = createLayout({ anchorTop: 50, panelTop: -42 });
+        placeVolumeSlider(anchor, panel);
+        expect(panel.classList.contains('below')).toBe(false);
+      });
+      it('should go back above the button once there is room again', () => {
+        setViewportHeight(800);
+        const { anchor, panel } = createLayout({ anchorTop: 300, panelTop: 208, isBelow: true });
+        placeVolumeSlider(anchor, panel);
+        expect(panel.classList.contains('below')).toBe(false);
+      });
+      it('should do nothing before the volume bar has rendered', () => {
+        const { panel } = createLayout({ anchorTop: 50, panelTop: -42 });
+        expect(() => placeVolumeSlider(undefined, panel)).not.toThrow();
+        expect(() => placeVolumeSlider(panel, undefined)).not.toThrow();
+        expect(panel.classList.contains('below')).toBe(false);
+      });
+    });
     describe('utils', () => {
       it('should format time correctly', () => {
         expect(formatTime('default', 65)).toBe('01:05');
         expect(formatTime('extended', 3665)).toBe('01:01:05');
-        const splitFormat = formatTime('default', 65, true);
-        expect(splitFormat.minutes).toBe('01');
-        expect(splitFormat.seconds).toBe('05');
-        const splitFormatExtended = formatTime('extended', 3665, true);
-        expect(splitFormatExtended.hours).toBe('01');
-        expect(splitFormatExtended.minutes).toBe('01');
-        expect(splitFormatExtended.seconds).toBe('05');
+        expect(formatTime('default', 0)).toBe('00:00');
+        expect(formatTime('extended', 0)).toBe('00:00:00');
+        expect(() => formatTime('default', -1)).toThrow('Time cannot be negative');
       });
       it('should calculate buffer progress correctly', () => {
         const mockVideo = {
@@ -816,7 +967,7 @@ describe('wpp-video-player', () => {
       });
     });
     describe('watchers', () => {
-      it('should update splitCurrentVideoTime when currentVideoTime changes', async () => {
+      it('should update seek progress when currentVideoTime changes', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
           html: `<wpp-video-player src="${videoSrc}"></wpp-video-player>`,
@@ -826,10 +977,6 @@ describe('wpp-video-player', () => {
         page.rootInstance.updateSeekProgress = jest.fn();
         // Call the watcher directly
         page.rootInstance.onCurrentVideoTimeChange(65);
-        expect(page.rootInstance.splitCurrentVideoTime).toEqual({
-          minutes: '01',
-          seconds: '05',
-        });
         expect(page.rootInstance.updateSeekProgress).toHaveBeenCalledWith(65);
       });
       it('should update muted state when volume changes', async () => {
