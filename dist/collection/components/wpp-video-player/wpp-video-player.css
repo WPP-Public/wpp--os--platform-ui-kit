@@ -22,35 +22,13 @@
 }
 
 /**
- * Current/overall play time of a video
+ * Current/overall play time of a video.
+ * Tabular figures keep every digit the same width, so the text does not shift as the time changes.
  */
 .video-time {
   cursor: default;
   color: var(--wpp-grey-color-000);
-}
-
-.wrapper {
-  display: flex;
-  flex-wrap: nowrap;
-}
-
-.time-wrapper {
-  position: relative;
-}
-
-.time-placeholder {
-  opacity: 0;
-  user-select: none;
-}
-
-.time-value {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  text-align: center;
+  font-variant-numeric: tabular-nums;
   user-select: none;
 }
 
@@ -58,6 +36,11 @@
   position: relative;
 }
 
+/**
+ * The slider panel behaves like a popover: while closed it is hidden from the tab order and from
+ * assistive technology, not just faded out, so the only way in is through the mute button. The
+ * `visibility` switch is delayed on close so the fade-out is still visible, and immediate on open.
+ */
 .slider-container {
   position: absolute;
   top: -68px;
@@ -69,12 +52,19 @@
   transform: translateX(-50%) rotate(270deg);
   transform-origin: center center;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.15s ease-in-out;
+  transition: opacity 0.15s ease-in-out, visibility 0s linear 0.15s;
+}
+.slider-container.below {
+  top: auto;
+  bottom: -68px;
 }
 .slider-container.active {
   opacity: 1;
+  visibility: visible;
   pointer-events: initial;
+  transition: opacity 0.15s ease-in-out, visibility 0s;
 }
 .slider-container .progress-bar {
   width: 64px;
@@ -83,18 +73,68 @@
   top: 50%;
   transform: translate(-50%, -50%);
 }
-
-.wpp-action-button::part(button).hover-active {
-  color: var(--ab-inverted-text-color-hover);
+.slider-container .progress-bar::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  margin-top: -4px; /* (thumb height - track height) / 2 */
 }
-.wpp-action-button::part(button).hover-active ~ .overlay {
+.slider-container .progress-bar::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+}
+
+/**
+ * While the slider is open the mute button keeps its hover look, so the two read as one control.
+ * The look is applied through the button's exported parts and its slotted icon, with the button's
+ * own hover variables, which it declares on its host and which therefore reach both.
+ */
+.volume-container.open .volume-button::part(overlay) {
+  background-color: var(--ab-bg-color-hover);
+  opacity: var(--ab-bg-opacity-hover);
+}
+.volume-container.open .volume-button > [slot=icon-start] {
+  color: var(--ab-secondary-icon-color-hover);
+}
+
+.volume-container.open.inverted .volume-button::part(overlay) {
   background-color: var(--ab-inverted-bg-color-hover);
 }
-.wpp-action-button::part(button).hover-active .icon-start ::slotted(*),
-.wpp-action-button::part(button).hover-active .icon-end ::slotted(*) {
+.volume-container.open.inverted .volume-button > [slot=icon-start] {
   color: var(--ab-inverted-icon-color-hover);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .slider-container,
+  .slider-container.active {
+    transition: none;
+  }
+}
+/**
+ * While the slider is open the mute button keeps its hover look, so the two read as one control.
+ * The look is applied through the button's exported parts and its slotted icon, with the button's
+ * own hover variables, which it declares on its host and which therefore reach both.
+ */
+.volume-container.open .volume-button::part(overlay) {
+  background-color: var(--ab-bg-color-hover);
+  opacity: var(--ab-bg-opacity-hover);
+}
+.volume-container.open .volume-button > [slot=icon-start] {
+  color: var(--ab-secondary-icon-color-hover);
+}
+
+.volume-container.open.inverted .volume-button::part(overlay) {
+  background-color: var(--ab-inverted-bg-color-hover);
+}
+.volume-container.open.inverted .volume-button > [slot=icon-start] {
+  color: var(--ab-inverted-icon-color-hover);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slider-container,
+  .slider-container.active {
+    transition: none;
+  }
+}
 .progress-bar {
   cursor: pointer;
   appearance: none;
@@ -282,11 +322,11 @@
   opacity: 1;
   pointer-events: initial;
 }
-.controls.state-playing.invisible .controls-bar {
+.controls.state-playing.invisible .controls-bar, .controls.state-paused.invisible .controls-bar {
   opacity: 0;
   pointer-events: none;
 }
-.controls.state-playing.invisible .captions-wrapper {
+.controls.state-playing.invisible .captions-wrapper, .controls.state-paused.invisible .captions-wrapper {
   bottom: 8px;
 }
 

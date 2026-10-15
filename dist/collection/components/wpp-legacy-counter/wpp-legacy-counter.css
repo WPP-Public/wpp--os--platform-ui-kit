@@ -508,6 +508,9 @@
 :host([disabled]:not([disabled=false])) .counter-wrapper .counter-input .icon-minus {
   color: var(--counter-icons-color-disabled);
 }
+:host([disabled]:not([disabled=false])) .wpp-inline-message {
+  cursor: text;
+}
 
 .counter-wrapper.warning:has(.tab-focus) .increase-wrapper,
 .counter-wrapper.warning:has(.tab-focus) .decrease-wrapper,

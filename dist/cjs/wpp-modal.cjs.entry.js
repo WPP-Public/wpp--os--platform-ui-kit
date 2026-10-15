@@ -2,19 +2,20 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-5f5af6a9.js');
+const index = require('./index-7d205426.js');
 const consts = require('./consts-d8f5ef98.js');
-const utils = require('./utils-a6513d61.js');
+const utils = require('./utils-a237e765.js');
 const timeoutManager = require('./timeout-manager-5ad93b8f.js');
-const WrappedSlot = require('./WrappedSlot-dc89a659.js');
+const WrappedSlot = require('./WrappedSlot-669e1c73.js');
 const types = require('./types-18fdc89e.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
+const dialogFocus = require('./dialog-focus-adf102b7.js');
 require('./theme-observer-4179316e.js');
 
 // The modal can extend up to 60px from top and bottom => 120px
 const TOP_AND_BOTTOM_OFFSET = 120;
 
-const wppModalCss = "@charset \"UTF-8\";:host{--modal-width-s:var(--wpp-modal-width-s, 440px);--modal-width-m:var(--wpp-modal-width-m, 600px);--modal-box-shadow:var(--wpp-modal-box-shadow, var(--wpp-box-shadow-l));--modal-vertical-position-animation-minus-number:var(--wpp-modal-vertical-position-animation-minus-number, 40px);--modal-body-padding-inline:var(--wpp-modal-body-padding-inline, 24px);--modal-body-paddings:var(--wpp-modal-body-paddings, 0 var(--modal-body-padding-inline));--modal-actions-paddings:var(--wpp-modal-actions-paddings, 24px);--modal-header-padding:var(--wpp-modal-header-padding, 20px 24px 16px 24px);--modal-transition:visibility 0.15s linear 0.2s, opacity 0.2s 0.2s;--modal-bg-color:var(--wpp-modal-bg-color, var(--wpp-grey-color-000))}:host(.wpp-modal-wrapper){position:fixed;inset:var(--wpp-modal-top-offset, 0) 0 0 0;display:block;font-family:var(--wpp-font-family, system-ui, sans-serif);visibility:hidden;opacity:0;overflow:auto}:host(.wpp-component-ready){-webkit-transition:var(--modal-transition);transition:var(--modal-transition)}:host(.wpp-visible.wpp-component-ready){display:block;visibility:visible;opacity:1}:host(.wpp-hide){visibility:hidden !important;opacity:0}:host(.wpp-visible:target){opacity:1}.header.slot-hidden,.body.slot-hidden,.actions.slot-hidden{display:none}.actions-container{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:end;justify-content:flex-end;gap:12px;padding:var(--modal-actions-paddings)}.header{font-size:var(--wpp-typography-xl-heading-font-size, 20px);line-height:var(--wpp-typography-xl-heading-line-height, 32px);font-weight:var(--wpp-typography-xl-heading-font-weight, 400);color:var(--wpp-typography-xl-heading-color, var(--wpp-text-color));font-family:var(--wpp-typography-xl-heading-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-xl-heading-letter-spacing, 0);padding:var(--modal-header-padding)}.body{scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent;font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);padding:var(--modal-body-paddings);-webkit-padding-end:max(0px, var(--modal-body-padding-inline) - var(--modal-scrollbar-gutter, 0px));padding-inline-end:max(0px, var(--modal-body-padding-inline) - var(--modal-scrollbar-gutter, 0px));overflow-y:auto;scrollbar-gutter:stable}.body::-webkit-scrollbar{width:4px;height:4px}.body::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.actions{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);padding:var(--modal-actions-paddings)}.modal-overlay{position:absolute;width:100%;height:100%}.modal{position:absolute;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;top:50%;left:50%;background-color:var(--modal-bg-color);border-radius:var(--wpp-border-radius-l);-webkit-box-shadow:var(--modal-box-shadow);box-shadow:var(--modal-box-shadow);-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%);max-height:calc(100vh - 120px);max-width:90vw;overflow:hidden auto}.modal.visible{-webkit-animation:modalAppearAboveCenterAnimations 0.2s linear;animation:modalAppearAboveCenterAnimations 0.2s linear;-webkit-animation-delay:0.15s;animation-delay:0.15s}.modal.size-s{width:var(--modal-width-s)}.modal.size-m{width:var(--modal-width-m)}.focus-sentinel{position:fixed;opacity:0;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}@media (height <= 800px){.modal{-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.modal.visible{-webkit-animation:modalAppearInCenterAnimations 0.2s linear forwards;animation:modalAppearInCenterAnimations 0.2s linear forwards;-webkit-animation-delay:0.15s;animation-delay:0.15s}}@-webkit-keyframes modalAppearInCenterAnimations{0%{-webkit-transform:translate(-50%, -70%);transform:translate(-50%, -70%)}100%{-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}}@keyframes modalAppearInCenterAnimations{0%{-webkit-transform:translate(-50%, -70%);transform:translate(-50%, -70%)}100%{-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}}@-webkit-keyframes modalAppearAboveCenterAnimations{0%{-webkit-transform:translate(-50%, calc(-50% - var(--modal-vertical-position-animation-minus-number)));transform:translate(-50%, calc(-50% - var(--modal-vertical-position-animation-minus-number)))}100%{-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}}@keyframes modalAppearAboveCenterAnimations{0%{-webkit-transform:translate(-50%, calc(-50% - var(--modal-vertical-position-animation-minus-number)));transform:translate(-50%, calc(-50% - var(--modal-vertical-position-animation-minus-number)))}100%{-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}}:host([data-wpp-theme=dark]) .modal{background-color:var(--wpp-grey-color-100)}";
+const wppModalCss = "@charset \"UTF-8\";:host{--modal-width-s:var(--wpp-modal-width-s, 440px);--modal-width-m:var(--wpp-modal-width-m, 600px);--modal-box-shadow:var(--wpp-modal-box-shadow, var(--wpp-box-shadow-l));--modal-vertical-position-animation-minus-number:var(--wpp-modal-vertical-position-animation-minus-number, 40px);--modal-body-padding-inline:var(--wpp-modal-body-padding-inline, 24px);--modal-body-paddings:var(--wpp-modal-body-paddings, 0 var(--modal-body-padding-inline));--modal-actions-paddings:var(--wpp-modal-actions-paddings, 24px);--modal-header-padding:var(--wpp-modal-header-padding, 20px 24px 16px 24px);--modal-transition:visibility 0.15s linear 0.2s, opacity 0.2s 0.2s;--modal-bg-color:var(--wpp-modal-bg-color, var(--wpp-grey-color-000))}:host(.wpp-modal-wrapper){position:fixed;inset:var(--wpp-modal-top-offset, 0) 0 0 0;display:block;font-family:var(--wpp-font-family, system-ui, sans-serif);visibility:hidden;opacity:0;overflow:auto}:host(.wpp-component-ready){-webkit-transition:var(--modal-transition);transition:var(--modal-transition)}:host(.wpp-visible.wpp-component-ready){display:block;visibility:visible;opacity:1}:host(.wpp-hide){visibility:hidden !important;opacity:0}:host(.wpp-visible:target){opacity:1}.header.slot-hidden,.body.slot-hidden,.actions.slot-hidden{display:none}.actions-container{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:end;justify-content:flex-end;gap:12px;padding:var(--modal-actions-paddings)}.header{font-size:var(--wpp-typography-xl-heading-font-size, 20px);line-height:var(--wpp-typography-xl-heading-line-height, 32px);font-weight:var(--wpp-typography-xl-heading-font-weight, 400);color:var(--wpp-typography-xl-heading-color, var(--wpp-text-color));font-family:var(--wpp-typography-xl-heading-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-xl-heading-letter-spacing, 0);padding:var(--modal-header-padding)}.body{scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent;font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);padding:var(--modal-body-paddings);-webkit-padding-end:max(0px, var(--modal-body-padding-inline) - var(--modal-scrollbar-gutter, 0px));padding-inline-end:max(0px, var(--modal-body-padding-inline) - var(--modal-scrollbar-gutter, 0px));overflow-y:auto;scrollbar-gutter:stable}.body::-webkit-scrollbar{width:4px;height:4px}.body::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.actions{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);padding:var(--modal-actions-paddings)}.modal-overlay{position:absolute;width:100%;height:100%}.modal{position:absolute;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;top:50%;left:50%;background-color:var(--modal-bg-color);border-radius:var(--wpp-border-radius-l);-webkit-box-shadow:var(--modal-box-shadow);box-shadow:var(--modal-box-shadow);-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%);max-height:calc(100vh - 120px);max-width:90vw;overflow:hidden auto}.modal:focus,.modal:focus-visible{outline:none}.modal.visible{-webkit-animation:modalAppearAboveCenterAnimations 0.2s linear;animation:modalAppearAboveCenterAnimations 0.2s linear;-webkit-animation-delay:0.15s;animation-delay:0.15s}.modal.size-s{width:var(--modal-width-s)}.modal.size-m{width:var(--modal-width-m)}.focus-sentinel{position:fixed;opacity:0;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}@media (height <= 800px){.modal{-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.modal.visible{-webkit-animation:modalAppearInCenterAnimations 0.2s linear forwards;animation:modalAppearInCenterAnimations 0.2s linear forwards;-webkit-animation-delay:0.15s;animation-delay:0.15s}}@-webkit-keyframes modalAppearInCenterAnimations{0%{-webkit-transform:translate(-50%, -70%);transform:translate(-50%, -70%)}100%{-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}}@keyframes modalAppearInCenterAnimations{0%{-webkit-transform:translate(-50%, -70%);transform:translate(-50%, -70%)}100%{-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}}@-webkit-keyframes modalAppearAboveCenterAnimations{0%{-webkit-transform:translate(-50%, calc(-50% - var(--modal-vertical-position-animation-minus-number)));transform:translate(-50%, calc(-50% - var(--modal-vertical-position-animation-minus-number)))}100%{-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}}@keyframes modalAppearAboveCenterAnimations{0%{-webkit-transform:translate(-50%, calc(-50% - var(--modal-vertical-position-animation-minus-number)));transform:translate(-50%, calc(-50% - var(--modal-vertical-position-animation-minus-number)))}100%{-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}}:host([data-wpp-theme=dark]) .modal{background-color:var(--wpp-grey-color-100)}";
 
 const WppModal = class {
   constructor(hostRef) {
@@ -27,6 +28,7 @@ const WppModal = class {
     this.topOffset = 0;
     this.timeouts = new timeoutManager.TimeoutManager();
     this.themeSubscription = subscribeToTheme.themeSubscriptionController(() => this.host);
+    this.dialogFocus = dialogFocus.dialogFocusController();
     this.onOverlayClick = () => {
       if (this.disableOutsideClick)
         return;
@@ -108,7 +110,7 @@ const WppModal = class {
     };
     this.renderActionBtn = (btnConfig, variant) => {
       const { label, ...rest } = btnConfig;
-      return (index.h("wpp-button-v4-4-0", { size: "s", variant: variant, ...rest }, label));
+      return (index.h("wpp-button-v4-5-0", { size: "s", variant: variant, ...rest }, label));
     };
     this.renderActionsConfig = () => {
       if (!this.actionsConfig)
@@ -118,6 +120,10 @@ const WppModal = class {
     };
     this.focusDialog = () => {
       if (!this.dialogRef)
+        return;
+      // Idempotent: the sentinels, the open render and the transition all route through here, and
+      // pulling focus back to the container would undo whatever the user had reached inside.
+      if (dialogFocus.isFocusInsideDialog(this.host, this.dialogRef))
         return;
       this.dialogRef.focus();
     };
@@ -172,11 +178,25 @@ const WppModal = class {
   }
   handleChangeModalStatus(openStatus) {
     if (openStatus) {
+      // Captured before the dialog takes focus, so it can be handed back on close.
+      this.dialogFocus.capture();
       this.host.classList.add('wpp-component-ready');
       this.setupObserver();
     }
     else {
       this.disconnectObserver();
+      // The dialog is about to hide with focus still inside it, which would leave focus on a
+      // container the user can no longer see and restart the next Tab from the top of the
+      // document. Decide now, while that is still true, and restore once the close render has
+      // been applied.
+      const shouldRestoreFocus = dialogFocus.isFocusInsideDialog(this.host, this.dialogRef);
+      // Read now, alongside the line above: `closeReason` is cleared once the close transition
+      // finishes, which can beat the scheduled restore.
+      const closedFromKeyboard = this.closeReason === types.ModalCloseReason.escapePress;
+      this.timeouts.schedule(() => {
+        if (shouldRestoreFocus)
+          this.dialogFocus.restore({ withKeyboardRing: closedFromKeyboard });
+      });
     }
     // Use the watcher's argument rather than re-reading `this.open` inside the timeout: reading a
     // @Prop off an instance that was torn down first throws asynchronously, which is uncaught and
@@ -225,8 +245,21 @@ const WppModal = class {
   disconnectedCallback() {
     this.themeSubscription.stop();
     this.timeouts.clearAll();
+    // `clearAll` above cancels the scheduled restore, so drop the reference rather than holding
+    // on to a detached element for the lifetime of the page.
+    this.dialogFocus.clear();
     this.closeModal();
     this.disconnectObserver();
+  }
+  componentDidRender() {
+    if (!this.open)
+      return;
+    // Move focus into the dialog as soon as it has painted rather than waiting for the open
+    // transition to finish. `transitionend` never arrives for a reduced-motion user, or when a
+    // consumer turns the animation off, and focus would stay outside a dialog that is
+    // `aria-modal` — leaving the rest of the page hidden from assistive tech with nothing
+    // reachable inside it.
+    this.focusDialog();
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
@@ -236,9 +269,9 @@ const WppModal = class {
         // The body is a scroll container, so a classic scrollbar would eat into its right
         // padding and render the designed inset asymmetrically. The SCSS subtracts this.
         '--modal-scrollbar-gutter': `${utils.getScrollbarGutterWidth()}px`,
-      }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, index.h("div", { class: "modal-overlay", part: "wrapper" }, index.h("wpp-overlay-v4-4-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), index.h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), index.h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && index.h("wpp-divider-v4-4-0", null), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && index.h("wpp-divider-v4-4-0", null), this.actionsConfig ? (this.renderActionsConfig()) : (index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), index.h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
+      }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, index.h("div", { class: "modal-overlay", part: "wrapper" }, index.h("wpp-overlay-v4-5-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), index.h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), index.h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && index.h("wpp-divider-v4-5-0", null), index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && index.h("wpp-divider-v4-5-0", null), this.actionsConfig ? (this.renderActionsConfig()) : (index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), index.h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
   }
-  static get registryIs() { return "wpp-modal-v4-4-0"; }
+  static get registryIs() { return "wpp-modal-v4-5-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "open": ["handleChangeModalStatus"]

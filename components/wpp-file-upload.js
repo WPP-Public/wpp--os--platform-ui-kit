@@ -1,6 +1,6 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { F as FOCUS_TYPE } from './common.js';
-import { c as convertMBToBytes, g as getExtension, m as modifyPropertiesOnFile, a as getBaseName, r as renameFile, b as getExtensionsList, L as LOCALES_DEFAULTS, E as EXTENSION_TO_TYPE } from './const2.js';
+import { g as getFileKey, c as convertMBToBytes, i as isFileAccepted, m as modifyPropertiesOnFile, a as inferTypeFromName, b as getBaseName, d as getExtension, r as renameFile, e as getAcceptTokens, f as getAcceptLabels, L as LOCALES_DEFAULTS, h as acceptsAnyFile, n as normaliseProgress } from './utils3.js';
 import { y as mergeLocales } from './utils.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme.js';
 import { d as defineCustomElement$p } from './wpp-action-button2.js';
@@ -33,7 +33,7 @@ var ScrollState;
   ScrollState["scroll"] = "scroll";
 })(ScrollState || (ScrollState = {}));
 
-const wppFileUploadCss = ":host{--fu-width:var(--wpp-file-upload-width, 100%);--fu-bg-color:var(--wpp-file-upload-bg-color, var(--wpp-grey-color-000));--fu-bg-color-hover:var(--wpp-file-upload-bg-color-hover, var(--wpp-grey-color-200));--fu-bg-color-disabled:var(--wpp-file-upload-bg-color-disabled, var(--wpp-grey-color-200));--fu-border-color:var(--wpp-file-upload-border-color, var(--wpp-grey-color-500));--fu-border-color-hover:var(--wpp-file-upload-border-color-hover, var(--wpp-grey-color-600));--fu-border-style:var(--wpp-file-upload-border-style, dashed);--fu-border-error-style:var(--wpp-file-upload-border-error-style, solid);--fu-border-error-color:var(--wpp-file-upload-border-error-color, var(--wpp-danger-color-500));--fu-border-width:var(--wpp-file-upload-border-width, 1px);--fu-border-radius:var(--wpp-file-upload-border-radius, var(--wpp-border-radius-m));--fu-first-border-color-focus:var(--wpp-file-upload-first-border-color-focus, var(--wpp-grey-color-000));--fu-second-border-color-focus:var(--wpp-file-upload-second-border-color-focus, var(--wpp-brand-color));--fu-text-info-color:var(--wpp-file-upload-text-info-color, var(--wpp-text-color-info));--fu-text-info-margin:var(--wpp-file-upload-text-info-margin, 4px 20px 0 20px);--fu-text-color:var(--wpp-file-upload-text-color, var(--wpp-grey-color-900));--fu-text-color-disabled:var(--wpp-file-upload-text-color-disabled, var(--wpp-text-color-disabled));--fu-label-color-hover:var(--wpp-file-upload-label-color-hover, var(--wpp-primary-color-400));--fu-label-color-active:var(--wpp-file-upload-label-color-active, var(--wpp-primary-color-600));--fu-icon-margin:var(--wpp-file-upload-icon-margin, 0 0 12px 0);--fu-icon-color-disabled:var(--wpp-file-upload-icon-color-disabled, var(--wpp-grey-color-400));--fu-icon-bg-color-disabled:var(--wpp-file-upload-icon-bg-color-disabled, var(--wpp-grey-color-300));--fu-icon-bg-color-hover:var(--wpp-file-upload-icon-bg-color-hover, var(--wpp-grey-color-300));--fu-item-max-width:var(--wpp-file-upload-item-max-width, 100%);--fu-item-gradient:var(\n    --wpp-file-upload-item-gradient,\n    linear-gradient(180deg, rgb(255 255 255 / 0%) 0%, rgb(255 255 255 / 75%) 100%)\n  );--fu-item-gradient-height:var(--wpp-file-upload-item-gradient-height, 32px);--fu-content-margin:var(--wpp-file-upload-content-margin, 0px 20px 0 20px);--fu-upload-wrapper-padding:var(--wpp-file-upload-wrapper-padding, 28px 0 28px 0);outline:none}:host([disabled]:not([disabled=false])){cursor:not-allowed}:host .file-upload-label{margin-bottom:8px}.upload-wrapper{position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-pack:center;justify-content:center;-ms-flex-align:center;align-items:center;width:var(--fu-width);border:var(--fu-border-width) var(--fu-border-style) var(--fu-border-color);border-radius:var(--fu-border-radius);background-color:var(--fu-bg-color);-webkit-transition:0.2s ease-in-out;transition:0.2s ease-in-out;padding:var(--fu-upload-wrapper-padding)}.upload-wrapper.tab-focus.tab-focus{border-radius:var(--fu-border-radius);outline:none;-webkit-box-shadow:0 0 0 1px var(--fu-first-border-color-focus), 0 0 0 3px var(--fu-second-border-color-focus);box-shadow:0 0 0 1px var(--fu-first-border-color-focus), 0 0 0 3px var(--fu-second-border-color-focus)}.upload-wrapper .icon-file{margin:var(--fu-icon-margin)}.upload-wrapper .icon-file::part(content){-webkit-transition:0.2s ease-in-out;transition:0.2s ease-in-out}.upload-wrapper:hover,.upload-wrapper.tab-focus{background-color:var(--fu-bg-color-hover);border-color:var(--fu-border-color-hover)}.upload-wrapper:hover .icon-file::part(content),.upload-wrapper.tab-focus .icon-file::part(content){background-color:var(--fu-icon-bg-color-hover)}.upload-wrapper.message{margin-bottom:8px}.upload-wrapper.error{border:var(--fu-border-width) var(--fu-border-error-style) var(--fu-border-error-color)}.upload-wrapper.error.tab-focus.tab-focus{border-radius:var(--fu-border-radius);outline:none;-webkit-box-shadow:0 0 0 1px var(--fu-first-border-color-focus), 0 0 0 3px var(--fu-second-border-color-focus);box-shadow:0 0 0 1px var(--fu-first-border-color-focus), 0 0 0 3px var(--fu-second-border-color-focus)}.upload-wrapper.disabled{pointer-events:none;background-color:var(--fu-bg-color-disabled);border:none}.upload-wrapper.disabled .icon-file{color:var(--fu-icon-color-disabled)}.upload-wrapper.disabled .icon-file::part(content){background-color:var(--fu-icon-bg-color-disabled)}.upload-wrapper.disabled .label{color:var(--fu-text-color-disabled);text-decoration:none}.upload-wrapper.disabled .text{color:var(--fu-text-color-disabled)}.upload-wrapper.disabled .text-info{color:var(--fu-text-color-disabled)}.upload-wrapper.file-drag{background-color:var(--fu-bg-color-hover)}.upload-wrapper.file-drag:not(.error){border-color:var(--fu-border-color-hover)}.wpp-inline-message{margin-top:8px;display:block}.label{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);color:var(--wpp-brand-color);text-decoration:underline;margin-right:4px}.label:hover{color:var(--fu-label-color-hover)}.label:active{color:var(--fu-label-color-active)}.text{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);color:var(--fu-text-color);white-space:normal}.content{display:-ms-flexbox;display:flex}.content>p{margin:var(--fu-content-margin);white-space:normal;text-align:center}.file-loader{width:100%;height:100%;position:absolute;cursor:pointer;opacity:0}.file-list{scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent;width:var(--fu-item-max-width);max-height:400px;overflow:hidden auto;margin:8px 0 0;padding:0;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:8px}.file-list::-webkit-scrollbar{width:4px;height:4px}.file-list::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.file-list-wrapper{position:relative}.file-list-wrapper::before{content:\"\";position:absolute;left:0;right:0;height:var(--fu-item-gradient-height);top:0;z-index:1;pointer-events:none;-webkit-transition:0.3s ease-in-out;transition:0.3s ease-in-out;background:var(--fu-item-gradient);opacity:0;-webkit-transform:rotate(-180deg);transform:rotate(-180deg)}.file-list-wrapper::after{content:\"\";position:absolute;left:0;right:0;height:var(--fu-item-gradient-height);bottom:0;z-index:1;pointer-events:none;-webkit-transition:0.3s ease-in-out;transition:0.3s ease-in-out;background:var(--fu-item-gradient);opacity:0}.file-list-wrapper.scroll::before{opacity:1}.file-list-wrapper.scroll::after{opacity:1}.text-info{font-size:var(--wpp-typography-xs-body-font-size, 12px);line-height:var(--wpp-typography-xs-body-line-height, 20px);font-weight:var(--wpp-typography-xs-body-font-weight, 400);color:var(--wpp-typography-xs-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-xs-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-xs-body-letter-spacing, 0);text-align:center;color:var(--fu-text-info-color);margin:var(--fu-text-info-margin)}::slotted([slot=label]){font-size:var(--wpp-typography-m-strong-font-size, 16px);line-height:var(--wpp-typography-m-strong-line-height, 24px);font-weight:var(--wpp-typography-m-strong-font-weight, 700);color:var(--wpp-typography-m-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-m-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-m-strong-letter-spacing, 0)}::slotted([slot=description]){font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0)}@supports (-moz-appearance: none){.file-list{padding-right:10px}}:host([data-wpp-theme=dark]) .upload-wrapper{background-color:var(--wpp-grey-color-100)}.sr-only{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0, 0, 0, 0) !important;-webkit-clip-path:inset(50%) !important;clip-path:inset(50%) !important;border:0 !important;white-space:nowrap !important}";
+const wppFileUploadCss = ":host{--fu-width:var(--wpp-file-upload-width, 100%);--fu-bg-color:var(--wpp-file-upload-bg-color, var(--wpp-grey-color-000));--fu-bg-color-hover:var(--wpp-file-upload-bg-color-hover, var(--wpp-grey-color-200));--fu-bg-color-disabled:var(--wpp-file-upload-bg-color-disabled, var(--wpp-grey-color-200));--fu-border-color:var(--wpp-file-upload-border-color, var(--wpp-grey-color-500));--fu-border-color-hover:var(--wpp-file-upload-border-color-hover, var(--wpp-grey-color-600));--fu-border-style:var(--wpp-file-upload-border-style, dashed);--fu-border-error-style:var(--wpp-file-upload-border-error-style, solid);--fu-border-error-color:var(--wpp-file-upload-border-error-color, var(--wpp-danger-color-500));--fu-border-width:var(--wpp-file-upload-border-width, 1px);--fu-border-radius:var(--wpp-file-upload-border-radius, var(--wpp-border-radius-m));--fu-first-border-color-focus:var(--wpp-file-upload-first-border-color-focus, var(--wpp-grey-color-000));--fu-second-border-color-focus:var(--wpp-file-upload-second-border-color-focus, var(--wpp-brand-color));--fu-text-info-color:var(--wpp-file-upload-text-info-color, var(--wpp-text-color-info));--fu-text-info-margin:var(--wpp-file-upload-text-info-margin, 4px 20px 0 20px);--fu-text-color:var(--wpp-file-upload-text-color, var(--wpp-grey-color-900));--fu-text-color-disabled:var(--wpp-file-upload-text-color-disabled, var(--wpp-text-color-disabled));--fu-label-color-hover:var(--wpp-file-upload-label-color-hover, var(--wpp-primary-color-400));--fu-label-color-active:var(--wpp-file-upload-label-color-active, var(--wpp-primary-color-600));--fu-icon-margin:var(--wpp-file-upload-icon-margin, 0 0 12px 0);--fu-icon-color-disabled:var(--wpp-file-upload-icon-color-disabled, var(--wpp-grey-color-400));--fu-icon-bg-color-disabled:var(--wpp-file-upload-icon-bg-color-disabled, var(--wpp-grey-color-300));--fu-icon-bg-color-hover:var(--wpp-file-upload-icon-bg-color-hover, var(--wpp-grey-color-300));--fu-item-max-width:var(--wpp-file-upload-item-max-width, 100%);--fu-item-gradient:var(\n    --wpp-file-upload-item-gradient,\n    linear-gradient(180deg, rgb(255 255 255 / 0%) 0%, rgb(255 255 255 / 75%) 100%)\n  );--fu-item-gradient-height:var(--wpp-file-upload-item-gradient-height, 32px);--fu-content-margin:var(--wpp-file-upload-content-margin, 0px 20px 0 20px);--fu-upload-wrapper-padding:var(--wpp-file-upload-wrapper-padding, 28px 0 28px 0);outline:none}:host([disabled]:not([disabled=false])){cursor:not-allowed}:host([disabled]:not([disabled=false])) .wpp-inline-message{cursor:text}:host .file-upload-label{margin-bottom:8px}.upload-wrapper{position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-pack:center;justify-content:center;-ms-flex-align:center;align-items:center;width:var(--fu-width);border:var(--fu-border-width) var(--fu-border-style) var(--fu-border-color);border-radius:var(--fu-border-radius);background-color:var(--fu-bg-color);-webkit-transition:0.2s ease-in-out;transition:0.2s ease-in-out;padding:var(--fu-upload-wrapper-padding)}.upload-wrapper.tab-focus.tab-focus{border-radius:var(--fu-border-radius);outline:none;-webkit-box-shadow:0 0 0 1px var(--fu-first-border-color-focus), 0 0 0 3px var(--fu-second-border-color-focus);box-shadow:0 0 0 1px var(--fu-first-border-color-focus), 0 0 0 3px var(--fu-second-border-color-focus)}.upload-wrapper .icon-file{margin:var(--fu-icon-margin)}.upload-wrapper .icon-file::part(content){-webkit-transition:0.2s ease-in-out;transition:0.2s ease-in-out}.upload-wrapper:hover,.upload-wrapper.label-hovered,.upload-wrapper.tab-focus{background-color:var(--fu-bg-color-hover);border-color:var(--fu-border-color-hover)}.upload-wrapper:hover .icon-file::part(content),.upload-wrapper.label-hovered .icon-file::part(content),.upload-wrapper.tab-focus .icon-file::part(content){background-color:var(--fu-icon-bg-color-hover)}.upload-wrapper.message{margin-bottom:8px}.upload-wrapper.error{border:var(--fu-border-width) var(--fu-border-error-style) var(--fu-border-error-color)}.upload-wrapper.error.tab-focus.tab-focus{border-radius:var(--fu-border-radius);outline:none;-webkit-box-shadow:0 0 0 1px var(--fu-first-border-color-focus), 0 0 0 3px var(--fu-second-border-color-focus);box-shadow:0 0 0 1px var(--fu-first-border-color-focus), 0 0 0 3px var(--fu-second-border-color-focus)}.upload-wrapper.disabled{pointer-events:none;background-color:var(--fu-bg-color-disabled);border:none}.upload-wrapper.disabled .icon-file{color:var(--fu-icon-color-disabled)}.upload-wrapper.disabled .icon-file::part(content){background-color:var(--fu-icon-bg-color-disabled)}.upload-wrapper.disabled .label{color:var(--fu-text-color-disabled);text-decoration:none}.upload-wrapper.disabled .text{color:var(--fu-text-color-disabled)}.upload-wrapper.disabled .text-info{color:var(--fu-text-color-disabled)}.upload-wrapper.file-drag{background-color:var(--fu-bg-color-hover)}.upload-wrapper.file-drag:not(.error){border-color:var(--fu-border-color-hover)}.wpp-inline-message{margin-top:8px;display:block}.label{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);color:var(--wpp-brand-color);text-decoration:underline;margin-right:4px}.label:hover{color:var(--fu-label-color-hover)}.label:active{color:var(--fu-label-color-active)}.text{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);color:var(--fu-text-color);white-space:normal}.content{display:-ms-flexbox;display:flex}.content>p{margin:var(--fu-content-margin);white-space:normal;text-align:center}.file-loader{width:100%;height:100%;position:absolute;cursor:pointer;opacity:0}.file-list{scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent;width:var(--fu-item-max-width);max-height:400px;overflow:hidden auto;margin:8px 0 0;padding:0;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:8px}.file-list::-webkit-scrollbar{width:4px;height:4px}.file-list::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.file-list-wrapper{position:relative}.file-list-wrapper::before{content:\"\";position:absolute;left:0;right:0;height:var(--fu-item-gradient-height);top:0;z-index:1;pointer-events:none;-webkit-transition:0.3s ease-in-out;transition:0.3s ease-in-out;background:var(--fu-item-gradient);opacity:0;-webkit-transform:rotate(-180deg);transform:rotate(-180deg)}.file-list-wrapper::after{content:\"\";position:absolute;left:0;right:0;height:var(--fu-item-gradient-height);bottom:0;z-index:1;pointer-events:none;-webkit-transition:0.3s ease-in-out;transition:0.3s ease-in-out;background:var(--fu-item-gradient);opacity:0}.file-list-wrapper.scroll::before{opacity:1}.file-list-wrapper.scroll::after{opacity:1}.text-info{font-size:var(--wpp-typography-xs-body-font-size, 12px);line-height:var(--wpp-typography-xs-body-line-height, 20px);font-weight:var(--wpp-typography-xs-body-font-weight, 400);color:var(--wpp-typography-xs-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-xs-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-xs-body-letter-spacing, 0);text-align:center;color:var(--fu-text-info-color);margin:var(--fu-text-info-margin)}::slotted([slot=label]){font-size:var(--wpp-typography-m-strong-font-size, 16px);line-height:var(--wpp-typography-m-strong-line-height, 24px);font-weight:var(--wpp-typography-m-strong-font-weight, 700);color:var(--wpp-typography-m-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-m-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-m-strong-letter-spacing, 0)}::slotted([slot=description]){font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0)}@supports (-moz-appearance: none){.file-list{padding-right:10px}}:host([data-wpp-theme=dark]) .upload-wrapper{background-color:var(--wpp-grey-color-100)}.sr-only{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0, 0, 0, 0) !important;-webkit-clip-path:inset(50%) !important;clip-path:inset(50%) !important;border:0 !important;white-space:nowrap !important}";
 
 const getInitFocusInfo = () => ({
   wrapper: FOCUS_TYPE.NONE,
@@ -53,6 +53,8 @@ const WppFileUpload$1 = /*@__PURE__*/ proxyCustomElement(class WppFileUpload ext
     this.wppFileUploadItemDelete = createEvent(this, "wppFileUploadItemDelete", 1);
     this.wppFileUploadItemClick = createEvent(this, "wppFileUploadItemClick", 1);
     this.wppError = createEvent(this, "wppError", 1);
+    this.wppFileProcessingStart = createEvent(this, "wppFileProcessingStart", 1);
+    this.wppFileProcessingEnd = createEvent(this, "wppFileProcessingEnd", 1);
     this.itemRefs = [];
     this.inputId = this.name || `wpp-file-upload-${++fileUploadInstanceId}`;
     this.labelId = `${this.inputId}-label`;
@@ -63,6 +65,10 @@ const WppFileUpload$1 = /*@__PURE__*/ proxyCustomElement(class WppFileUpload ext
     this.messageId = `${this.inputId}-message`;
     this.lastKeyWasTab = false; // Track keyboard modality and wrapper focus state
     this.themeSubscription = themeSubscriptionController(() => this.host);
+    this.fileStatuses = new Map();
+    this.controllers = new Map();
+    this.hasWarnedAboutControlledProcessor = false;
+    this.isChangeFlushScheduled = false;
     // Index of the item whose delete control should receive focus after the list re-renders.
     // Deleting an item removes the focused element from the DOM, which would silently drop
     // keyboard focus to the page body (WCAG 2.4.3).
@@ -75,7 +81,63 @@ const WppFileUpload$1 = /*@__PURE__*/ proxyCustomElement(class WppFileUpload ext
     this.reInitValue = (list) => {
       this.successList = list.filter(file => !this.isFileWithError(file));
       this.errorList = list.filter(this.isFileWithError);
+      this.orderedFiles = list;
+      this.announceSettledFiles(list);
       this.isMaximumFilesReached();
+    };
+    /**
+     * Keeps files in the order they were first seen and appends anything new,
+     * so an async status change never reorders the list.
+     */
+    this.buildOrderedFiles = (retained, appendOrder = []) => {
+      const byKey = new Map(retained.map(file => [getFileKey(file), file]));
+      const ordered = [];
+      const take = (candidate) => {
+        const key = getFileKey(candidate);
+        const current = byKey.get(key);
+        if (current) {
+          ordered.push(current);
+          byKey.delete(key);
+        }
+      };
+      (this.orderedFiles || []).forEach(take);
+      appendOrder.forEach(take);
+      return [...ordered, ...byKey.values()];
+    };
+    this.getFileStatus = (file) => {
+      if (this.isFileWithError(file))
+        return 'error';
+      if (file.status)
+        return file.status;
+      if (file.isLoading)
+        return 'uploading';
+      return 'done';
+    };
+    /**
+     * Announces only terminal transitions. Progress updates are intentionally not
+     * announced - they are exposed on a progressbar instead, so a screen reader
+     * is not flooded on every percent.
+     */
+    this.announceSettledFiles = (list) => {
+      const next = new Map();
+      const messages = [];
+      list.forEach(file => {
+        const key = getFileKey(file);
+        const status = this.getFileStatus(file);
+        next.set(key, status);
+        const previous = this.fileStatuses.get(key);
+        if (!previous || previous === status || status === 'uploading')
+          return;
+        if (status === 'error') {
+          messages.push(this._locales.processingFailed(file.name, this.getFileErrorText(file)));
+        }
+        else {
+          messages.push(this._locales.processingComplete(file.name));
+        }
+      });
+      this.fileStatuses = next;
+      if (messages.length)
+        this.liveAnnouncement = messages.join('. ');
     };
     this.onGlobalKeyDown = (e) => {
       this.lastKeyWasTab = e.key === 'Tab';
@@ -118,13 +180,16 @@ const WppFileUpload$1 = /*@__PURE__*/ proxyCustomElement(class WppFileUpload ext
       [type]: updateValue,
     });
     this.handleDeleteItem = (event) => {
-      const updatedFilesList = [...this.successList, ...this.errorList].filter(({ name, size }) => name + size !== event.detail.name + event.detail.size);
+      const isDeleted = ({ name, size }) => name + size === event.detail.name + event.detail.size;
+      (this.orderedFiles || []).filter(isDeleted).forEach(file => this.abortFile(getFileKey(file)));
+      const updatedFilesList = (this.orderedFiles || []).filter(file => !isDeleted(file));
       const successList = updatedFilesList.filter(file => !this.isFileWithError(file));
       const errorFileList = updatedFilesList.filter(this.isFileWithError);
       this.clearInputValue();
       this.value = updatedFilesList;
       this.errorList = errorFileList;
       this.successList = successList;
+      this.orderedFiles = updatedFilesList;
       // The focused delete control disappears with the item, so the ring is handed to the delete
       // control that takes its place (or back to the input when the list empties).
       this.focusItemAfterDelete = event.detail.index;
@@ -133,6 +198,7 @@ const WppFileUpload$1 = /*@__PURE__*/ proxyCustomElement(class WppFileUpload ext
         value: successList,
         hasError: !!errorFileList?.length || this.isLimitReached,
         errorFiles: errorFileList,
+        files: updatedFilesList,
         name: this.name,
       });
       this.wppFileUploadItemDelete.emit(event.detail);
@@ -154,57 +220,20 @@ const WppFileUpload$1 = /*@__PURE__*/ proxyCustomElement(class WppFileUpload ext
     this.isAcceptConfigFilled = () => !this.acceptConfig ? false : Object.keys(this.acceptConfig)?.length > 0;
     this.validateFileType = (file) => {
       if (this.isAcceptConfigFilled()) {
-        let allowedExtensions = [];
-        if (file.type) {
-          allowedExtensions = this.acceptConfig[file.type] || [];
-        }
-        else {
-          allowedExtensions = this.getAcceptExtensions();
-        }
-        if (allowedExtensions?.length) {
-          const fileExtension = getExtension(file.name);
-          file.formatError = !allowedExtensions.includes(fileExtension);
-        }
-        else {
-          file.formatError = true;
-        }
+        file.formatError = !isFileAccepted(file, this.acceptConfig);
         return file;
       }
-      if (this.acceptConfig !== undefined && Object.keys(this.acceptConfig).length === 0) {
+      // An explicit empty config means "accept everything", and the file is left exactly as it came in.
+      if (this.acceptConfig !== undefined)
         return file;
-      }
-      // If no acceptConfig specified with valid types, return the file as-is
-      if (!this.acceptConfig || Object.keys(this.acceptConfig).length === 0) {
-        if (!file.type) {
-          const extension = file.name?.split('.').pop() || '';
-          const typeFromExtension = EXTENSION_TO_TYPE[extension] || '';
-          const modifiedFile = modifyPropertiesOnFile(file, { type: typeFromExtension });
-          return modifiedFile;
-        }
-        return file;
-      }
-      // Get accepted formats from acceptConfig
-      const acceptedFormats = Object.keys(this.acceptConfig).flatMap(mimeType => {
-        const extensions = this.acceptConfig[mimeType] || [];
-        return [mimeType, ...extensions];
-      });
-      const isPassValidation = acceptedFormats.some((format) => {
-        const currentFormat = format.replace(/[,.*]/g, '');
-        // .mov format return quicktime type, that's why using this contraction for this particular case
-        if (currentFormat === 'mov') {
-          return file.type.includes('quicktime');
-        }
-        if (/txt|text|msword|document|doc?x/.test(currentFormat)) {
-          return /text|application/.test(file.type);
-        }
-        return file.type.includes(currentFormat);
-      });
-      if (!isPassValidation) {
-        file.formatError = true;
+      // With no configuration at all there is nothing to validate against, but a file the browser
+      // left untyped still gets a type from its extension so the item's icon can resolve.
+      if (!file.type) {
+        return modifyPropertiesOnFile(file, { type: inferTypeFromName(file.name) });
       }
       return file;
     };
-    this.isFileWithError = (file) => !!(file.formatError || file.sizeError || file.validatorError);
+    this.isFileWithError = (file) => !!(file.formatError || file.sizeError || file.validatorError || file.processingError || file.status === 'error');
     this.generateUniqueName = (fileName, fileList) => {
       const baseName = getBaseName(fileName);
       const extension = getExtension(fileName);
@@ -220,13 +249,16 @@ const WppFileUpload$1 = /*@__PURE__*/ proxyCustomElement(class WppFileUpload ext
     };
     this.displayErrorListByShowingOption = (newFilesWithErrors) => this.showOnlyNewErrors ? newFilesWithErrors : [...new Set([...this.errorList, ...newFilesWithErrors])];
     this.handleFileLoad = async (filesList) => {
-      const list = [...(this.successList || []), ...(this.errorList || [])];
+      // `seen` grows as we go so two identically-named files in ONE batch also get
+      // distinct names - `list` alone only covers files already in the component.
+      const seen = [...(this.orderedFiles || [])];
       const filteredFileList = filesList.filter(Boolean).map(newFile => {
-        const isFileWithSameNameExists = !!list.find(item => item.name === newFile.name);
-        if (!isFileWithSameNameExists)
-          return newFile;
-        const uniqueName = this.generateUniqueName(newFile.name, list);
-        return renameFile(newFile, uniqueName);
+        const isFileWithSameNameExists = !!seen.find(item => item.name === newFile.name);
+        const resolved = isFileWithSameNameExists
+          ? renameFile(newFile, this.generateUniqueName(newFile.name, seen))
+          : newFile;
+        seen.push(resolved);
+        return resolved;
       });
       if (!filteredFileList?.length)
         return;
@@ -243,13 +275,19 @@ const WppFileUpload$1 = /*@__PURE__*/ proxyCustomElement(class WppFileUpload ext
         this.value = validatedFileList.some(this.isFileWithError) ? this.value : [...this.value, ...filteredFileList];
       }
       else {
-        this.value = [...(this.successList || []), ...(this.errorList || []), ...validatedFileList];
+        this.value = [...(this.orderedFiles || []), ...validatedFileList];
       }
       const successFileList = this.value.filter(file => !this.isFileWithError(file));
       const newFilesWithErrors = validatedFileList.filter((fileItem) => this.isFileWithError(fileItem));
       const errorFileList = this.displayErrorListByShowingOption(newFilesWithErrors);
       this.errorList = errorFileList;
       this.successList = successFileList;
+      this.orderedFiles = this.buildOrderedFiles([...successFileList, ...errorFileList], validatedFileList);
+      // Start processing first: it marks files as uploading synchronously, so the snapshot
+      // below records that rather than treating them as already settled - otherwise a file
+      // that completes successfully is never announced.
+      this.processFiles(validatedFileList);
+      this.announceSettledFiles(this.orderedFiles);
       // Announce each processed file's outcome — success is otherwise silent and validation
       // errors are conveyed only visually (WCAG 3.3.1 / 4.1.3). The file-limit error is raised on
       // the component rather than on any one file, so append it: without this, hitting the limit
@@ -260,6 +298,7 @@ const WppFileUpload$1 = /*@__PURE__*/ proxyCustomElement(class WppFileUpload ext
         value: successFileList,
         hasError: !!errorFileList?.length || this.isLimitReached,
         errorFiles: errorFileList,
+        files: this.orderedFiles || [],
         name: this.name,
       });
     };
@@ -268,7 +307,144 @@ const WppFileUpload$1 = /*@__PURE__*/ proxyCustomElement(class WppFileUpload ext
         return this._locales.sizeError;
       if (file.formatError)
         return this._locales.formatError;
-      return file.validatorError || '';
+      return file.validatorError || file.processingError || '';
+    };
+    this.getProcessors = () => {
+      if (!this.processor)
+        return [];
+      return Array.isArray(this.processor) ? this.processor : [this.processor];
+    };
+    /**
+     * A file already carrying a terminal status is passed through untouched, the
+     * same convention the shared upload pipeline uses between its own stages.
+     */
+    this.shouldProcessFile = (file) => !this.isFileWithError(file) && file.status !== 'done' && file.status !== 'error';
+    this.isFileStillPresent = (key) => (this.orderedFiles || []).some(file => getFileKey(file) === key);
+    /** Re-assigns the list so Stencil re-renders after a file object was mutated. */
+    this.refreshFiles = () => {
+      this.orderedFiles = [...(this.orderedFiles || [])];
+    };
+    this.abortFile = (key) => {
+      this.controllers.get(key)?.abort();
+      this.controllers.delete(key);
+    };
+    this.abortAllFiles = () => {
+      this.controllers.forEach(controller => controller.abort());
+      this.controllers.clear();
+    };
+    this.processFiles = (files) => {
+      const processors = this.getProcessors();
+      if (!processors.length)
+        return;
+      if (this.controlled) {
+        if (!this.hasWarnedAboutControlledProcessor) {
+          this.hasWarnedAboutControlledProcessor = true;
+          console.warn('[wpp-file-upload] `processor` is ignored while `controlled` is true. Drive `status`, `progress` and `processingError` through `value` instead.');
+        }
+        return;
+      }
+      // In single-file mode a new selection supersedes whatever was still running.
+      if (!this.multiple)
+        this.abortAllFiles();
+      files.filter(this.shouldProcessFile).forEach(file => this.runProcessors(file, processors));
+    };
+    this.runProcessors = async (file, processors) => {
+      const key = getFileKey(file);
+      const controller = new AbortController();
+      this.abortFile(key);
+      this.controllers.set(key, controller);
+      file.status = 'uploading';
+      this.refreshFiles();
+      this.wppFileProcessingStart.emit(this.getProcessingEventData(file, key));
+      const context = {
+        signal: controller.signal,
+        onProgress: (progress) => {
+          if (controller.signal.aborted || !this.isFileStillPresent(key))
+            return;
+          file.progress = normaliseProgress(progress);
+          this.refreshFiles();
+        },
+      };
+      let error;
+      try {
+        for (const processor of processors) {
+          if (controller.signal.aborted)
+            return;
+          const result = await processor(file, context);
+          if (controller.signal.aborted)
+            return;
+          if (result?.error) {
+            error = result.error;
+            break;
+          }
+          this.applyProcessorResult(file, result);
+        }
+      }
+      catch (processorError) {
+        if (controller.signal.aborted)
+          return;
+        error = processorError instanceof Error ? processorError.message : String(processorError);
+      }
+      if (controller.signal.aborted)
+        return;
+      this.controllers.delete(key);
+      // The file may have been removed while its processor was in flight.
+      if (!this.isFileStillPresent(key))
+        return;
+      file.status = error ? 'error' : 'done';
+      if (error)
+        file.processingError = error;
+      this.wppFileProcessingEnd.emit({
+        ...this.getProcessingEventData(file, key),
+        status: file.status,
+        ...(error ? { processingError: error } : {}),
+      });
+      this.scheduleChangeFlush();
+    };
+    /**
+     * Only the fields a processor is allowed to return are copied across. A real
+     * `File` exposes name/size/type as getters, so assigning them would throw.
+     */
+    this.applyProcessorResult = (file, result) => {
+      if (!result)
+        return;
+      if (result.url !== undefined)
+        file.url = result.url;
+      if (result.result !== undefined)
+        file.result = result.result;
+    };
+    this.getProcessingEventData = (file, key) => ({
+      name: file.name,
+      size: file.size,
+      index: (this.orderedFiles || []).findIndex(item => getFileKey(item) === key),
+      uid: key,
+    });
+    /**
+     * Files that settle in the same tick produce a single `wppChange`, so a
+     * consumer bound to `hasError` is not re-rendered once per file.
+     */
+    this.scheduleChangeFlush = () => {
+      if (this.isChangeFlushScheduled)
+        return;
+      this.isChangeFlushScheduled = true;
+      queueMicrotask(() => {
+        this.isChangeFlushScheduled = false;
+        const allFiles = this.orderedFiles || [];
+        const successFileList = allFiles.filter(file => !this.isFileWithError(file));
+        const errorFileList = allFiles.filter(this.isFileWithError);
+        this.successList = successFileList;
+        this.errorList = errorFileList;
+        this.value = allFiles;
+        this.refreshFiles();
+        this.announceSettledFiles(allFiles);
+        this.wppChange.emit({
+          value: successFileList,
+          hasError: !!errorFileList.length || this.isLimitReached,
+          errorFiles: errorFileList,
+          files: allFiles,
+          name: this.name,
+        });
+      });
     };
     this.handleDrop = (event) => {
       event.preventDefault();
@@ -307,15 +483,10 @@ const WppFileUpload$1 = /*@__PURE__*/ proxyCustomElement(class WppFileUpload ext
       }
       this.scrollState = false;
     };
-    this.getAcceptExtensions = () => {
-      if (this.acceptConfig !== undefined) {
-        if (Object.keys(this.acceptConfig).length === 0) {
-          return [];
-        }
-        return getExtensionsList(this.acceptConfig);
-      }
-      return [];
-    };
+    this.getAcceptTokens = () => (this.isAcceptConfigFilled() ? getAcceptTokens(this.acceptConfig) : []);
+    this.getAcceptLabels = () => this.isAcceptConfigFilled()
+      ? getAcceptLabels(this.acceptConfig, this._locales.acceptFamilyLabels, LOCALES_DEFAULTS.acceptFamilyLabels)
+      : [];
     this.isMaximumFilesSet = () => this.maxFiles > 0;
     this.isMaximumFilesReached = () => {
       if (!this.multiple) {
@@ -342,6 +513,7 @@ const WppFileUpload$1 = /*@__PURE__*/ proxyCustomElement(class WppFileUpload ext
       'tab-focus': !this.disabled && this.hasTabFocus,
       disabled: this.disabled,
       'file-drag': this.isFileDrag,
+      'label-hovered': this.isLabelHovered,
       ...(!this.messageType && this.isLimitReached ? { error: true } : {}),
     });
     this.listWrapperCssClasses = () => ({
@@ -355,8 +527,10 @@ const WppFileUpload$1 = /*@__PURE__*/ proxyCustomElement(class WppFileUpload ext
     this.scrollState = false;
     this.focusType = getInitFocusInfo();
     this.isFileDrag = false;
+    this.isLabelHovered = false;
     this.errorList = undefined;
     this.successList = undefined;
+    this.orderedFiles = [];
     this.isLimitReached = false;
     this.liveAnnouncement = '';
     this.name = undefined;
@@ -380,13 +554,18 @@ const WppFileUpload$1 = /*@__PURE__*/ proxyCustomElement(class WppFileUpload ext
       popperOptions: { strategy: 'absolute' },
     };
     this.showOnlyNewErrors = false;
+    this.processor = undefined;
   }
   /**
    * Method to reset FileUpload. Should be called only when the component is uncontrolled.
    */
   async reset() {
     this.reInitValue([]);
+    this.abortAllFiles();
     this.value = [];
+    this.orderedFiles = [];
+    this.fileStatuses.clear();
+    this.liveAnnouncement = '';
     this.scrollState = false;
     this.clearInputValue();
   }
@@ -445,27 +624,43 @@ const WppFileUpload$1 = /*@__PURE__*/ proxyCustomElement(class WppFileUpload ext
   }
   connectedCallback() {
     this.themeSubscription.start();
+    if (this.disconnectTimeout) {
+      clearTimeout(this.disconnectTimeout);
+      this.disconnectTimeout = undefined;
+    }
   }
   disconnectedCallback() {
     this.themeSubscription.stop();
+    // Stencil also calls this when the host is merely MOVED in the DOM, and an
+    // abort cannot be undone - so only abort if it is still detached next tick.
+    // The element is captured now: reading `this.host` later throws once Stencil
+    // has torn the component down.
+    const host = this.host;
+    this.disconnectTimeout = setTimeout(() => {
+      if (!host?.isConnected)
+        this.abortAllFiles();
+    }, 0);
   }
   render() {
-    const allFiles = [...(this.successList || []), ...(this.errorList || [])];
+    const allFiles = this.orderedFiles || [];
     this.itemRefs = [];
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, wrapper, content, file-name, tooltip, loading, percentage, cross-icon", onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onGlobalKeyDown, onPointerDown: this.onPointerDown, onMouseDown: this.onMouseDown, "aria-disabled": this.disabled ? 'true' : undefined }, h("slot", { name: "label", part: "slot-label" }), this.labelConfig?.text && (h("wpp-label-v4-4-0", { class: "file-upload-label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("slot", { name: "description", part: "slot-description" }), h("div", { class: this.uploadWrapperCssClasses(), onDrop: this.handleDrop, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onDragOver: this.handleDragOver, part: "file-upload-container" }, h("wpp-avatar-v4-4-0", { class: "icon-file", icon: "wpp-icon-file", size: "l", role: "presentation", tabindex: "-1", "aria-hidden": "true" }), h("div", { class: "content", part: "content" }, h("p", { id: this.ctaId }, h("span", { class: "label", part: "label" }, this._locales.label), ' ', h("span", { class: "text", part: "text" }, this._locales.text))), h("p", { class: "text-info", part: "text-info", id: this.hintId }, this._locales.info(this.getAcceptExtensions().join(', '), this.size)), h("input", { class: "file-loader", type: "file", id: this.inputId, name: this.name, onChange: this.handleChange, onFocus: this.onInputFocus, onBlur: this.onInputBlur, ref: inputRef => (this.inputRef = inputRef), multiple: this.multiple, accept: this.getAcceptExtensions().join(), part: "input", "aria-labelledby": this.labelConfig?.text ? `${this.labelId} ${this.ctaId}` : this.ctaId, "aria-describedby": this.message || this.isLimitReached ? `${this.hintId} ${this.messageId}` : this.hintId, "aria-invalid": this.isLimitReached || this.messageType === 'error' ? 'true' : undefined, disabled: this.disabled })), h("span", { class: "sr-only", "aria-live": "polite" }, this.liveAnnouncement), (this.message || this.isLimitReached) && (h("wpp-inline-message-v4-4-0", { id: this.messageId, message: this.getMessageText(), type: this.isLimitReached ? 'error' : this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })), allFiles?.length ? (h("div", { class: this.listWrapperCssClasses(), part: "list-wrapper" }, h("ul", { role: "list", class: "file-list", part: "file-list", onScroll: this.handleListScroll }, allFiles.map((file, index) => (h("wpp-file-upload-item-v4-4-0", { ref: el => el && (this.itemRefs[index] = el), key: `${file.name}-${file.size}-${file.lastModified ?? index}`, format: this.format, parentDisabled: this.disabled, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, file: file, locales: {
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, wrapper, content, file-name, tooltip, loading, percentage, cross-icon", onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onGlobalKeyDown, onPointerDown: this.onPointerDown, onMouseDown: this.onMouseDown, "aria-disabled": this.disabled ? 'true' : undefined }, h("slot", { name: "label", part: "slot-label" }), this.labelConfig?.text && (h("wpp-label-v4-5-0", { class: "file-upload-label", id: this.labelId, htmlFor: this.inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label", onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })), h("slot", { name: "description", part: "slot-description" }), h("div", { class: this.uploadWrapperCssClasses(), onDrop: this.handleDrop, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onDragOver: this.handleDragOver, part: "file-upload-container" }, h("wpp-avatar-v4-5-0", { class: "icon-file", icon: "wpp-icon-file", size: "l", role: "presentation", tabindex: "-1", "aria-hidden": "true" }), h("div", { class: "content", part: "content" }, h("p", { id: this.ctaId }, h("span", { class: "label", part: "label" }, this._locales.label), ' ', h("span", { class: "text", part: "text" }, this._locales.text))), h("p", { class: "text-info", part: "text-info", id: this.hintId }, acceptsAnyFile(this.acceptConfig)
+      ? this._locales.infoAnyFormat(this.size)
+      : this._locales.info(this.getAcceptLabels().join(', '), this.size)), h("input", { class: "file-loader", type: "file", id: this.inputId, name: this.name, onChange: this.handleChange, onFocus: this.onInputFocus, onBlur: this.onInputBlur, ref: inputRef => (this.inputRef = inputRef), multiple: this.multiple, accept: this.getAcceptTokens().join(), part: "input", "aria-labelledby": this.labelConfig?.text ? `${this.labelId} ${this.ctaId}` : this.ctaId, "aria-describedby": this.message || this.isLimitReached ? `${this.hintId} ${this.messageId}` : this.hintId, "aria-invalid": this.isLimitReached || this.messageType === 'error' ? 'true' : undefined, disabled: this.disabled })), h("span", { class: "sr-only", "aria-live": "polite" }, this.liveAnnouncement), (this.message || this.isLimitReached) && (h("wpp-inline-message-v4-5-0", { id: this.messageId, message: this.getMessageText(), type: this.isLimitReached ? 'error' : this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" })), allFiles?.length ? (h("div", { class: this.listWrapperCssClasses(), part: "list-wrapper" }, h("ul", { role: "list", class: "file-list", part: "file-list", onScroll: this.handleListScroll }, allFiles.map((file, index) => (h("wpp-file-upload-item-v4-5-0", { ref: el => el && (this.itemRefs[index] = el), key: getFileKey(file), format: this.format, parentDisabled: this.disabled, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, file: file, locales: {
         sizeError: this._locales.sizeError,
         formatError: this._locales.formatError,
         removeFile: this._locales.removeFile,
+        uploadProgress: this._locales.uploadProgress,
       }, part: "file-item", onBlur: this.onBlur, onKeyUp: (event) => this.onKeyUp(event, 'item') })))))) : null));
   }
-  static get registryIs() { return "wpp-file-upload-v4-4-0"; }
+  static get registryIs() { return "wpp-file-upload-v4-5-0"; }
   get host() { return this; }
   static get watchers() { return {
     "disabled": ["onDisabledChange"],
     "value": ["onValueChange"]
   }; }
   static get style() { return wppFileUploadCss; }
-}, [1, "wpp-file-upload", "wpp-file-upload-v4-4-0", {
+}, [1, "wpp-file-upload", "wpp-file-upload-v4-5-0", {
     "name": [1],
     "value": [1040],
     "disabled": [516],
@@ -485,12 +680,15 @@ const WppFileUpload$1 = /*@__PURE__*/ proxyCustomElement(class WppFileUpload ext
     "labelConfig": [1040],
     "labelTooltipConfig": [16],
     "showOnlyNewErrors": [4, "show-only-new-errors"],
+    "processor": [16],
     "hasTabFocus": [32],
     "scrollState": [32],
     "focusType": [32],
     "isFileDrag": [32],
+    "isLabelHovered": [32],
     "errorList": [32],
     "successList": [32],
+    "orderedFiles": [32],
     "isLimitReached": [32],
     "liveAnnouncement": [32],
     "reset": [64]
@@ -499,129 +697,129 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-file-upload-v4-4-0", "wpp-action-button-v4-4-0", "wpp-avatar-v4-4-0", "wpp-file-upload-item-v4-4-0", "wpp-icon-cross-v4-4-0", "wpp-icon-database-v4-4-0", "wpp-icon-document-v4-4-0", "wpp-icon-error-v4-4-0", "wpp-icon-file-v4-4-0", "wpp-icon-file-zip-v4-4-0", "wpp-icon-image-v4-4-0", "wpp-icon-info-message-v4-4-0", "wpp-icon-music-v4-4-0", "wpp-icon-pitch-v4-4-0", "wpp-icon-spreadsheet-v4-4-0", "wpp-icon-success-v4-4-0", "wpp-icon-video-clip-v4-4-0", "wpp-icon-warning-v4-4-0", "wpp-inline-message-v4-4-0", "wpp-internal-label-v4-4-0", "wpp-internal-tooltip-v4-4-0", "wpp-label-v4-4-0", "wpp-spinner-v4-4-0", "wpp-tooltip-v4-4-0", "wpp-typography-v4-4-0"];
+  const components = ["wpp-file-upload-v4-5-0", "wpp-action-button-v4-5-0", "wpp-avatar-v4-5-0", "wpp-file-upload-item-v4-5-0", "wpp-icon-cross-v4-5-0", "wpp-icon-database-v4-5-0", "wpp-icon-document-v4-5-0", "wpp-icon-error-v4-5-0", "wpp-icon-file-v4-5-0", "wpp-icon-file-zip-v4-5-0", "wpp-icon-image-v4-5-0", "wpp-icon-info-message-v4-5-0", "wpp-icon-music-v4-5-0", "wpp-icon-pitch-v4-5-0", "wpp-icon-spreadsheet-v4-5-0", "wpp-icon-success-v4-5-0", "wpp-icon-video-clip-v4-5-0", "wpp-icon-warning-v4-5-0", "wpp-inline-message-v4-5-0", "wpp-internal-label-v4-5-0", "wpp-internal-tooltip-v4-5-0", "wpp-label-v4-5-0", "wpp-spinner-v4-5-0", "wpp-tooltip-v4-5-0", "wpp-typography-v4-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-file-upload-v4-4-0":
+    case "wpp-file-upload-v4-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppFileUpload$1);
       }
       break;
-    case "wpp-action-button-v4-4-0":
+    case "wpp-action-button-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$p();
       }
       break;
-    case "wpp-avatar-v4-4-0":
+    case "wpp-avatar-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$o();
       }
       break;
-    case "wpp-file-upload-item-v4-4-0":
+    case "wpp-file-upload-item-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-icon-cross-v4-4-0":
+    case "wpp-icon-cross-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-icon-database-v4-4-0":
+    case "wpp-icon-database-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-document-v4-4-0":
+    case "wpp-icon-document-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-error-v4-4-0":
+    case "wpp-icon-error-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-file-v4-4-0":
+    case "wpp-icon-file-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-file-zip-v4-4-0":
+    case "wpp-icon-file-zip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-image-v4-4-0":
+    case "wpp-icon-image-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-info-message-v4-4-0":
+    case "wpp-icon-info-message-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-music-v4-4-0":
+    case "wpp-icon-music-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-pitch-v4-4-0":
+    case "wpp-icon-pitch-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-spreadsheet-v4-4-0":
+    case "wpp-icon-spreadsheet-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-success-v4-4-0":
+    case "wpp-icon-success-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-video-clip-v4-4-0":
+    case "wpp-icon-video-clip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-warning-v4-4-0":
+    case "wpp-icon-warning-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-inline-message-v4-4-0":
+    case "wpp-inline-message-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-internal-label-v4-4-0":
+    case "wpp-internal-label-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-tooltip-v4-4-0":
+    case "wpp-internal-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-label-v4-4-0":
+    case "wpp-label-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-4-0":
+    case "wpp-spinner-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-4-0":
+    case "wpp-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-4-0":
+    case "wpp-typography-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

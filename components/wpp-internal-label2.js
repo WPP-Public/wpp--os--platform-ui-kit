@@ -12,7 +12,7 @@ const LOCALES_DEFAULTS = {
   optional: 'Optional',
 };
 
-const wppInternalLabelCss = ":host{--label-tooltip-width:var(--wpp-label-tooltip-width, 100%);--label-optional-text-color:var(--wpp-label-optional-text-color, var(--wpp-text-color-info));--label-optional-margin:var(--wpp-label-optional-margin, 0 0 0 4px);--label-text-color:var(--wpp-label-text-color, var(--wpp-grey-color-800));--label-text-color-disabled:var(--wpp-label-text-color-disabled, var(--wpp-text-color-disabled));--label-info-wrapper-margin:var(--wpp-label-info-wrapper-margin, 0 4px 0 0);--label-icon-color:var(--wpp-label-icon-color, var(--wpp-icon-color));--label-s-strong-text-color:var(--wpp-label-s-strong-text-color, var(--wpp-text-color-info));--label-s-body-text-color:var(--wpp-label-s-body-text-color, var(--wpp-text-color));--icon-first-border-color-focus:var(--wpp-icon-first-border-color-focus, var(--wpp-grey-color-000));--icon-second-border-color-focus:var(--wpp-icon-second-border-color-focus, var(--wpp-brand-color));display:-ms-inline-flexbox;display:inline-flex;-ms-flex-align:center;align-items:center}:host .info-wrapper{display:-ms-inline-flexbox;display:inline-flex;-ms-flex-align:center;align-items:center;cursor:pointer}:host .info-wrapper .optional{color:var(--label-optional-text-color);margin:var(--label-optional-margin)}:host .info-wrapper.with-icon{margin:var(--label-info-wrapper-margin)}:host .tooltip{--tooltip-width:var(--label-tooltip-width)}:host .icon{display:-ms-inline-flexbox;display:inline-flex;color:var(--label-icon-color);cursor:pointer;outline:none;border-radius:50%}:host .icon.slot-hidden{display:none}:host .icon.tab-focus.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--icon-first-border-color-focus), 0 0 0 3px var(--icon-second-border-color-focus);box-shadow:0 0 0 1px var(--icon-first-border-color-focus), 0 0 0 3px var(--icon-second-border-color-focus)}:host:host(.s-strong) .info-wrapper .text{color:var(--label-s-strong-text-color)}:host:host(.disabled){pointer-events:none}:host:host(.disabled) .info-wrapper .text,:host:host(.disabled) .info-wrapper .optional{color:var(--label-text-color-disabled)}";
+const wppInternalLabelCss = ":host{--label-tooltip-width:var(--wpp-label-tooltip-width, 100%);--label-optional-text-color:var(--wpp-label-optional-text-color, var(--wpp-text-color-info));--label-optional-margin:var(--wpp-label-optional-margin, 0 0 0 4px);--label-text-color:var(--wpp-label-text-color, var(--wpp-grey-color-800));--label-info-wrapper-margin:var(--wpp-label-info-wrapper-margin, 0 4px 0 0);--label-icon-color:var(--wpp-label-icon-color, var(--wpp-icon-color));--label-s-strong-text-color:var(--wpp-label-s-strong-text-color, var(--wpp-text-color-info));--label-s-body-text-color:var(--wpp-label-s-body-text-color, var(--wpp-text-color));--icon-first-border-color-focus:var(--wpp-icon-first-border-color-focus, var(--wpp-grey-color-000));--icon-second-border-color-focus:var(--wpp-icon-second-border-color-focus, var(--wpp-brand-color));display:-ms-inline-flexbox;display:inline-flex;-ms-flex-align:center;align-items:center}:host .info-wrapper{display:-ms-inline-flexbox;display:inline-flex;-ms-flex-align:center;align-items:center;cursor:pointer}:host .info-wrapper .optional{color:var(--label-optional-text-color);margin:var(--label-optional-margin)}:host .info-wrapper.with-icon{margin:var(--label-info-wrapper-margin)}:host .tooltip{--tooltip-width:var(--label-tooltip-width)}:host .icon{display:-ms-inline-flexbox;display:inline-flex;color:var(--label-icon-color);cursor:pointer;outline:none;border-radius:50%}:host .icon.slot-hidden{display:none}:host .icon.tab-focus.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--icon-first-border-color-focus), 0 0 0 3px var(--icon-second-border-color-focus);box-shadow:0 0 0 1px var(--icon-first-border-color-focus), 0 0 0 3px var(--icon-second-border-color-focus)}:host:host(.s-strong) .info-wrapper .text{color:var(--label-s-strong-text-color)}:host(.disabled) .info-wrapper{cursor:not-allowed}";
 
 const WppInternalLabel = /*@__PURE__*/ proxyCustomElement(class WppInternalLabel extends HTMLElement {
   constructor() {
@@ -78,12 +78,12 @@ const WppInternalLabel = /*@__PURE__*/ proxyCustomElement(class WppInternalLabel
     return mergeLocales(LOCALES_DEFAULTS, this.locales);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onBlur: this.onBlur, exportparts: "info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" }, !!this.labelText && (h("div", { class: this.infoWrapperCssClasses(), part: "info-wrapper", role: this.role }, h("wpp-typography-v4-4-0", { type: this.typography, class: "text", part: "text" }, this.labelText), this.optional && (h("wpp-typography-v4-4-0", { type: "s-body", class: "optional", part: "optional-text" }, "(", this._locales.optional, ")")))), !!this.description && this.hasIconSlot ? (h("wpp-tooltip-v4-4-0", { class: "tooltip", text: this.description, config: this.tooltipConfig, part: "tooltip" }, h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, ...this.infoIconInteractiveProps() }))) : (h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, ...this.infoIconInteractiveProps() }))));
+    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onBlur: this.onBlur, exportparts: "info-wrapper, text, optional-text, tooltip, icon, icon-wrapper" }, !!this.labelText && (h("div", { class: this.infoWrapperCssClasses(), part: "info-wrapper", role: this.role }, h("wpp-typography-v4-5-0", { type: this.typography, class: "text", part: "text" }, this.labelText), this.optional && (h("wpp-typography-v4-5-0", { type: "s-body", class: "optional", part: "optional-text" }, "(", this._locales.optional, ")")))), !!this.description && this.hasIconSlot ? (h("wpp-tooltip-v4-5-0", { class: "tooltip", text: this.description, config: this.tooltipConfig, part: "tooltip" }, h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, ...this.infoIconInteractiveProps() }))) : (h(WrappedSlot, { wrapperClass: this.iconCssClasses(), name: "icon", onSlotchange: this.updateSlotData, ...this.infoIconInteractiveProps() }))));
   }
-  static get registryIs() { return "wpp-internal-label-v4-4-0"; }
+  static get registryIs() { return "wpp-internal-label-v4-5-0"; }
   get host() { return this; }
   static get style() { return wppInternalLabelCss; }
-}, [1, "wpp-internal-label", "wpp-internal-label-v4-4-0", {
+}, [1, "wpp-internal-label", "wpp-internal-label-v4-5-0", {
     "labelText": [1, "label-text"],
     "description": [1],
     "optional": [4],
@@ -99,34 +99,34 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-internal-label-v4-4-0", "wpp-icon-error-v4-4-0", "wpp-icon-warning-v4-4-0", "wpp-internal-tooltip-v4-4-0", "wpp-tooltip-v4-4-0", "wpp-typography-v4-4-0"];
+  const components = ["wpp-internal-label-v4-5-0", "wpp-icon-error-v4-5-0", "wpp-icon-warning-v4-5-0", "wpp-internal-tooltip-v4-5-0", "wpp-tooltip-v4-5-0", "wpp-typography-v4-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-internal-label-v4-4-0":
+    case "wpp-internal-label-v4-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppInternalLabel);
       }
       break;
-    case "wpp-icon-error-v4-4-0":
+    case "wpp-icon-error-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-warning-v4-4-0":
+    case "wpp-icon-warning-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-internal-tooltip-v4-4-0":
+    case "wpp-internal-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-4-0":
+    case "wpp-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-4-0":
+    case "wpp-typography-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

@@ -1,6 +1,7 @@
 import { h, Host } from '@stencil/core';
 import { applyBodyStylesIfNeeded, getOsBarOffsetHeight, getScrollbarGutterWidth, getSlotEmptyStates, isEventTargetContained, mergeLocales, transformToVersionedTag, } from '../../utils/utils';
 import { TimeoutManager } from '../../utils/timeout-manager';
+import { dialogFocusController, isFocusInsideDialog } from '../../utils/dialog-focus';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { SideModalCloseReason, } from './types';
 import { LOCALES_DEFAULTS } from './const';
@@ -28,6 +29,7 @@ export class WppSideModal {
     this.topOffset = 0;
     this.ignoreOutsideClicks = false;
     this.timeouts = new TimeoutManager();
+    this.dialogFocus = dialogFocusController();
     this.themeSubscription = themeSubscriptionController(() => this.host);
     this.updateButtons = () => {
       // This function is called in componentWillLoad and when actionsConfig changes
@@ -131,7 +133,7 @@ export class WppSideModal {
       if (!this.leftButtonConfig)
         return h("div", { class: "left-button-container" });
       const { label, icon, ...rest } = this.leftButtonConfig;
-      return (h("div", { class: "left-button-container" }, h("wpp-action-button-v4-4-0", { ...rest }, h(transformToVersionedTag(icon), { slot: 'icon-start' }), label)));
+      return (h("div", { class: "left-button-container" }, h("wpp-action-button-v4-5-0", { ...rest }, h(transformToVersionedTag(icon), { slot: 'icon-start' }), label)));
     };
     this.renderRightButtons = () => {
       // Render right buttons based on config.
@@ -139,11 +141,15 @@ export class WppSideModal {
         return;
       return (h("div", { class: "right-button-container" }, this.rightButtonsConfig.map((rightButtonConfigItem) => {
         const { label, ...rest } = rightButtonConfigItem;
-        return (h("wpp-button-v4-4-0", { size: "m", ...rest }, label));
+        return (h("wpp-button-v4-5-0", { size: "m", ...rest }, label));
       })));
     };
     this.focusDialog = () => {
       if (!this.dialogRef)
+        return;
+      // Idempotent: the sentinels, the open render and the transition all route through here, and
+      // pulling focus back to the container would undo whatever the user had reached inside.
+      if (isFocusInsideDialog(this.host, this.dialogRef))
         return;
       this.dialogRef.focus();
     };
@@ -184,11 +190,11 @@ export class WppSideModal {
       // `ariaLabel` has to be mapped onto `ariaProps`: wpp-action-button has no `ariaLabel`
       // prop, so spreading it left these icon-only buttons with no accessible name.
       const { icon, ariaLabel, ...rest } = button;
-      return (h("wpp-action-button-v4-4-0", { variant: "secondary", ariaProps: { label: ariaLabel }, ...rest }, h(transformToVersionedTag(icon), { slot: 'icon-start' })));
+      return (h("wpp-action-button-v4-5-0", { variant: "secondary", ariaProps: { label: ariaLabel }, ...rest }, h(transformToVersionedTag(icon), { slot: 'icon-start' })));
     })));
     this.renderBody = () => {
       const Tag = this.formConfig ? 'form' : 'div';
-      return (h(Tag, { tabindex: "-1", part: "content", class: this.sideModalCssClasses(), ...this.formConfig, "data-testid": "wpp-side-modal-content", ref: ref => (this.dialogRef = ref) }, h("div", { class: this.headerContainerCssClasses(), part: "header-container" }, this.withBackButton ? (h("div", { class: "header-with-back-button", part: "header-with-back-button" }, h("wpp-action-button-v4-4-0", { ariaProps: { label: this._locales.backHeaderButtonLabel }, variant: "secondary", onClick: this.handleBackButtonClick, class: "back-button", part: "back-button" }, h("wpp-icon-chevron-v4-4-0", { direction: "left", slot: "icon-start", part: "icon-chevron" })), h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }))) : (h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData })), h("div", { class: "header-action-container" }, this.headerActionsConfig?.length > 0 && this.renderHeaderActionButtons(), h("wpp-action-button-v4-4-0", { ariaProps: { label: this._locales.closeIconLabel }, variant: "secondary", onClick: this.handleCloseModal, class: "close-button", part: "button" }, h("wpp-icon-cross-v4-4-0", { slot: "icon-start", part: "icon-cross" })))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig && this.actionsConfig.length > 0 ? (h("div", { class: this.actionsCssClasses(), part: "actions" }, this.renderLeftButton(), this.renderRightButtons())) : (h(WrappedSlot, { wrapperClass: this.hasActionsSlot ? this.actionsCssClasses() : '', name: "actions", onSlotchange: this.updateSlotData }))));
+      return (h(Tag, { tabindex: "-1", part: "content", class: this.sideModalCssClasses(), ...this.formConfig, "data-testid": "wpp-side-modal-content", ref: ref => (this.dialogRef = ref) }, h("div", { class: this.headerContainerCssClasses(), part: "header-container" }, this.withBackButton ? (h("div", { class: "header-with-back-button", part: "header-with-back-button" }, h("wpp-action-button-v4-5-0", { ariaProps: { label: this._locales.backHeaderButtonLabel }, variant: "secondary", onClick: this.handleBackButtonClick, class: "back-button", part: "back-button" }, h("wpp-icon-chevron-v4-5-0", { direction: "left", slot: "icon-start", part: "icon-chevron" })), h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }))) : (h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData })), h("div", { class: "header-action-container" }, this.headerActionsConfig?.length > 0 && this.renderHeaderActionButtons(), h("wpp-action-button-v4-5-0", { ariaProps: { label: this._locales.closeIconLabel }, variant: "secondary", onClick: this.handleCloseModal, class: "close-button", part: "button" }, h("wpp-icon-cross-v4-5-0", { slot: "icon-start", part: "icon-cross" })))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig && this.actionsConfig.length > 0 ? (h("div", { class: this.actionsCssClasses(), part: "actions" }, this.renderLeftButton(), this.renderRightButtons())) : (h(WrappedSlot, { wrapperClass: this.hasActionsSlot ? this.actionsCssClasses() : '', name: "actions", onSlotchange: this.updateSlotData }))));
     };
     this.isShowContent = undefined;
     this.isReady = undefined;
@@ -222,7 +228,23 @@ export class WppSideModal {
   }
   handleChangeModalStatus(openStatus) {
     if (openStatus) {
+      // Captured before the dialog takes focus, so it can be handed back on close.
+      this.dialogFocus.capture();
       this.host.classList.add('wpp-component-ready');
+    }
+    else {
+      // The dialog is about to hide with focus still inside it, which would leave focus on a
+      // container the user can no longer see and restart the next Tab from the top of the
+      // document. Decide now, while that is still true, and restore once the close render has
+      // been applied.
+      const shouldRestoreFocus = isFocusInsideDialog(this.host, this.dialogRef);
+      // Read now, alongside the line above: `closeReason` is cleared once the close transition
+      // finishes, which can beat the scheduled restore.
+      const closedFromKeyboard = this.closeReason === SideModalCloseReason.escapePress;
+      this.timeouts.schedule(() => {
+        if (shouldRestoreFocus)
+          this.dialogFocus.restore({ withKeyboardRing: closedFromKeyboard });
+      });
     }
     if (this.backdropVisible) {
       // Use the watcher's argument rather than re-reading `this.open` inside the timeout: reading
@@ -293,6 +315,9 @@ export class WppSideModal {
   disconnectedCallback() {
     this.themeSubscription.stop();
     this.timeouts.clearAll();
+    // `clearAll` above cancels the scheduled restore, so drop the reference rather than holding
+    // on to a detached element for the lifetime of the page.
+    this.dialogFocus.clear();
     this.closeModal();
     const bodySlot = this.host.shadowRoot?.querySelector('.body');
     if (bodySlot) {
@@ -302,6 +327,16 @@ export class WppSideModal {
   get _locales() {
     return mergeLocales(LOCALES_DEFAULTS, this.locales);
   }
+  componentDidRender() {
+    if (!this.open)
+      return;
+    // Move focus into the dialog as soon as it has painted rather than waiting for the open
+    // transition to finish. `transitionend` never arrives for a reduced-motion user, or when a
+    // consumer turns the animation off, and focus would stay outside a dialog that is
+    // `aria-modal` — leaving the rest of the page hidden from assistive tech with nothing
+    // reachable inside it.
+    this.focusDialog();
+  }
   render() {
     return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, side-modal, header-container, button, icon-cross, header, body, actions, header-wrapper, body-wrapper, actions-wrapper, back-button, icon-chevron, header-with-back-button", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: {
         zIndex: this.zIndex.toString(),
@@ -309,10 +344,10 @@ export class WppSideModal {
         // The body is a scroll container, so a classic scrollbar would eat into its right
         // padding and render the designed inset asymmetrically. The SCSS subtracts this.
         '--side-modal-scrollbar-gutter': `${getScrollbarGutterWidth()}px`,
-      }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, this.backdropVisible && (h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-4-0", { isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), this.renderBody(), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))), !this.backdropVisible && this.renderBody()));
+      }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, this.backdropVisible && (h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-5-0", { isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), this.renderBody(), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))), !this.backdropVisible && this.renderBody()));
   }
   static get is() { return "wpp-side-modal"; }
-  static get registryIs() { return "wpp-side-modal-v4-4-0"; }
+  static get registryIs() { return "wpp-side-modal-v4-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

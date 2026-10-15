@@ -2,7 +2,7 @@ import { EventEmitter } from '../../stencil-public-runtime';
 import { AriaProps, DropdownConfig } from '../../types/common';
 import { PopoverClearEventDetail, PopoverInputChangeEventDetail, PopoverLocalesInterface, PopoverShouldCloseOnOutsideClickHandler } from './types';
 /**
- * @slot trigger-element - Can contain the popover anchor element.
+ * @slot trigger-element - Can contain the popover anchor element. It should be a single focusable element (e.g. `wpp-button`), optionally inside wrappers such as `wpp-tooltip`, which receives the focus back from the dropdown and exposes its expanded state.
  * @slot actions - Can contain the right-side popover footer actions.
  * @slot - Can contain the popover content. The default slot, without the name attribute.
  *
@@ -13,11 +13,18 @@ import { PopoverClearEventDetail, PopoverInputChangeEventDetail, PopoverLocalesI
  */
 export declare class WppPopover {
   private anchorRef;
+  private focusScopeEl?;
   private contentEl?;
   private footerEl?;
   private footerActionsEl?;
   private mutationObserver;
+  private triggerRenderObserver?;
+  private observedTriggerRoot?;
+  private isTriggerExpanded;
   private tippyInstance;
+  private hasClickedOutside;
+  private focusType;
+  private isOpenedWithPointer;
   private internalSearchName;
   private searchInputEl?;
   private themeSubscription;
@@ -70,7 +77,8 @@ export declare class WppPopover {
    */
   readonly dropdownWidth: 'auto' | string;
   /**
-   * Contains the button `aria-` props.
+   * Contains the dropdown `aria-` props: `role`, `label`, `labelledby` and `describedby`.
+   * Passing this property replaces the default, so provide a `label` (or `labelledby`) to keep the dropdown named.
    */
   readonly ariaProps: AriaProps;
   /**
@@ -104,11 +112,31 @@ export declare class WppPopover {
   disconnectedCallback(): void;
   connectedCallback(): void;
   private createTippyInstance;
+  private getTippyLifecycleCallbacks;
   private removeDisabledTag;
   private startObserving;
   private handleCrossButtonClick;
   private handleClearButtonClick;
   private handleSearchChange;
+  private getSlottedTriggerElement;
+  private isTriggerControl;
+  private getTriggerElement;
+  private getTriggerFocusTarget;
+  private focusTriggerElement;
+  private hasAriaPropsProperty;
+  private updateTriggerExpandedState;
+  private observeTriggerRender;
+  private restoreTriggerExpandedState;
+  private focusDropdown;
+  private isFocusWithinPopper;
+  private handleStartSentinelFocus;
+  private handleEndSentinelFocus;
+  private handleTriggerKeyDown;
+  private handlePopperPointerDown;
+  private handlePopperKeyDown;
+  private isPointerEvent;
+  private isEscapeKey;
+  private closeOnEscape;
   private updateSlotData;
   private handleTriggerSlotChange;
   private hostCssClasses;

@@ -23,6 +23,8 @@ export interface ChatInputLocaleInterface {
   modelPremiumOptionLabel: string;
   modelPremiumOptionCaption: string;
   modelSelectorListItemLabel: string;
+  modelReasoningLabel: string;
+  modelVerbosityLabel: string;
 }
 export type ChatInputAriaProps = {
   minimizedTrigger?: Pick<AriaProps, 'label' | 'describedby' | 'controls' | 'expanded'>;
@@ -84,10 +86,33 @@ export interface ChatInputFileUploadLocales {
   sizeError: string;
   formatError: string;
   limitError: string;
+  /**
+   * Accessible label of an attachment's delete control.
+   */
+  removeFile?: (name: string) => string;
+  /**
+   * Accessible name of the progress indicator shown while an attachment is processing.
+   */
+  uploadProgress?: (name: string) => string;
 }
 export interface SendEventDetail {
   message: string;
   attachments?: FileItemType[];
+  /**
+   * The model the message was sent with. Optional only so the existing payload stays
+   * backwards compatible — the component always populates it.
+   */
+  model?: ChatInputSelectableModel;
+  /**
+   * The reasoning level in force when the message was sent. Omitted entirely when the
+   * selected model offers no `reasoningOptions` or nothing is selected yet.
+   */
+  reasoning?: ChatInputModelConfigOption;
+  /**
+   * The verbosity level in force when the message was sent. Omitted entirely when the
+   * selected model offers no `verbosityOptions` or nothing is selected yet.
+   */
+  verbosity?: ChatInputModelConfigOption;
 }
 export interface FileUploadConfig {
   format?: FileUploadResultFormaType;
@@ -110,10 +135,40 @@ export type ChatInputSize = 's' | 'm';
 export type MessageChangeEventDetail = {
   value: string;
 };
+/**
+ * A single selectable level inside the Reasoning or Verbosity submenu.
+ *
+ * Both the `label` and the optional `caption` are supplied by the consumer, because the
+ * wording is per-LLM data owned by the platform — the component renders whatever it is
+ * given and hard-codes none of it. An option without a `caption` renders a single-line row.
+ */
+export interface ChatInputModelConfigOption {
+  id: string;
+  label: string;
+  caption?: string;
+}
+/**
+ * Which of the two level submenus a piece of plumbing belongs to. The pair is fixed by the
+ * design — a model offers reasoning levels, verbosity levels, or both — so it is an explicit
+ * union rather than an open string.
+ */
+export type ChatInputModelOptionsKind = 'reasoning' | 'verbosity';
 export interface ChatInputModel {
   id: string | number;
   label: string;
   logo: string;
+  /**
+   * Reasoning levels offered by this model. When non-empty, selecting this model adds a
+   * "Reasoning" row to the model dropdown that opens a submenu of these options; omit it
+   * (or pass an empty array) and no Reasoning row is rendered.
+   */
+  reasoningOptions?: ChatInputModelConfigOption[];
+  /**
+   * Verbosity levels offered by this model. Behaves exactly like `reasoningOptions` but
+   * drives the "Verbosity" row. Only supply it for models that actually support verbosity
+   * — omitting it is how a model opts out of the row.
+   */
+  verbosityOptions?: ChatInputModelConfigOption[];
 }
 export interface ChatInputDefaultModel extends ChatInputModel {
   caption: string;
@@ -128,6 +183,19 @@ export interface ChatInputDefaultModel extends ChatInputModel {
  */
 export type ChatInputSelectableModel = ChatInputModel | ChatInputDefaultModel;
 export type ChatInputSelectedModel = 'auto' | 'premium' | ChatInputModel;
+/**
+ * Resulting state of the model's option selection, emitted by both `wppReasoningSelect`
+ * and `wppVerbositySelect` so a consumer never has to mirror the component's internals:
+ * whichever level was just picked, the payload always describes the full selection.
+ *
+ * `reasoning` / `verbosity` are `null` when the model offers no such options, or when the
+ * consumer has not selected a level yet.
+ */
+export interface ChatInputModelOptionsEventDetail {
+  model: ChatInputModel;
+  reasoning: ChatInputModelConfigOption | null;
+  verbosity: ChatInputModelConfigOption | null;
+}
 export interface ChatInputMicEventDetail {
   /** `true` when the microphone just started listening, `false` when it stopped. */
   isRecording: boolean;

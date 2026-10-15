@@ -64,6 +64,7 @@ export * from './components/wpp-artefact/types';
 export * from './components/wpp-basic-node/types';
 export * from './components/wpp-floating-toolbar/types';
 export * from './components/wpp-side-panel/types';
+export * from './components/wpp-audio-player/types';
 // @legacy - Imports of types from legacy components - should be removed in v5.0.0
 export * from './components/wpp-legacy-autocomplete/types';
 export * from './components/wpp-legacy-sticky-bar/types';

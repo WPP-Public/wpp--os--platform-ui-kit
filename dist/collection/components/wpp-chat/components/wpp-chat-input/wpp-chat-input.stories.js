@@ -56,12 +56,41 @@ const THUMBNAIL_ATTACHMENTS = [
     sizeError: true,
   },
 ];
+// Reasoning / verbosity levels are per-LLM data supplied by the consumer, so the story
+// passes them the same way the platform does. Verbosity is offered by ChatGPT only for now,
+// which is why just that model carries the second list.
+const REASONING_OPTIONS = [
+  { id: 'none', label: 'None' },
+  { id: 'auto', label: 'Auto', caption: 'Adapts to request complexity' },
+  { id: 'minimal', label: 'Minimal', caption: 'Fastest with basic reasoning' },
+  { id: 'low', label: 'Low', caption: 'Quick with light reasoning' },
+  { id: 'medium', label: 'Medium', caption: 'Balanced with moderate reasoning' },
+  { id: 'high', label: 'High', caption: 'Thorough with deep reasoning' },
+  { id: 'extra-high', label: 'Extra High', caption: 'Most detailed response with deep reasoning' },
+  { id: 'max', label: 'Max', caption: 'Maximum level of reasoning' },
+];
+const VERBOSITY_OPTIONS = [
+  { id: 'low', label: 'Low', caption: 'Concise and direct' },
+  { id: 'medium', label: 'Medium', caption: 'Balanced and contextual' },
+  { id: 'high', label: 'High', caption: 'Comprehensive and detailed' },
+];
 // Mock list of additional AI models used to showcase the model selector via the
 // "Show/Hide models" toggle. By default the story renders with no extra models.
 const MOCK_MODELS = [
-  { id: '1', label: 'Gemini 3.5 Flash', logo: 'https://public-assets.os.wpp.com/logos/ai-gemini.svg' },
+  {
+    id: '1',
+    label: 'Gemini 3.5 Flash',
+    logo: 'https://public-assets.os.wpp.com/logos/ai-gemini.svg',
+    reasoningOptions: REASONING_OPTIONS,
+  },
   { id: '2', label: 'Claude 4.6 Sonnet', logo: 'https://public-assets.os.wpp.com/logos/ai-claude.svg' },
-  { id: '3', label: 'GPT 5.4 mini', logo: 'https://public-assets.os.wpp.com/logos/ai-openai.svg' },
+  {
+    id: '3',
+    label: 'GPT 5.4 mini',
+    logo: 'https://public-assets.os.wpp.com/logos/ai-openai.svg',
+    reasoningOptions: REASONING_OPTIONS,
+    verbosityOptions: VERBOSITY_OPTIONS,
+  },
 ];
 // Sample references (quotes) slotted above the textarea via slot="references".
 // One file chip and one text/quote chip exercise both reference variants.
@@ -84,7 +113,9 @@ export const ChatInput = {
     let showAlert = false;
     let showAttachments = false;
     let showReferences = false;
-    let showModels = false;
+    // Starts on, and `selectedModel` below is the GPT mock, so opening the selector shows the
+    // Reasoning and Verbosity rows without the reader hunting for the toggle first.
+    let showModels = true;
     let references = [...REFERENCES];
     let renderChatInput = (messages) => {
       console.log(messages);
@@ -149,32 +180,32 @@ export const ChatInput = {
       render(html `
           <div style=${'display: flex; flex-direction: column; height: 100vh; padding: 20px; box-sizing: border-box;'}>
             <div style=${'display: flex; gap: 8px; margin-bottom: 12px;'}>
-              <wpp-action-button-v4-4-0 variant=${showAlert ? 'primary' : 'secondary'} @click=${toggleAlert}>
+              <wpp-action-button-v4-5-0 variant=${showAlert ? 'primary' : 'secondary'} @click=${toggleAlert}>
                 ${showAlert ? 'Hide alert' : 'Show alert'}
-              </wpp-action-button-v4-4-0>
-              <wpp-action-button-v4-4-0
+              </wpp-action-button-v4-5-0>
+              <wpp-action-button-v4-5-0
                 variant=${showAttachments ? 'primary' : 'secondary'}
                 @click=${toggleAttachments}
               >
                 ${showAttachments ? 'Hide thumbnails' : 'Show thumbnails'}
-              </wpp-action-button-v4-4-0>
-              <wpp-action-button-v4-4-0 variant=${showReferences ? 'primary' : 'secondary'} @click=${toggleReferences}>
+              </wpp-action-button-v4-5-0>
+              <wpp-action-button-v4-5-0 variant=${showReferences ? 'primary' : 'secondary'} @click=${toggleReferences}>
                 ${showReferences ? 'Hide references' : 'Show references'}
-              </wpp-action-button-v4-4-0>
-              <wpp-action-button-v4-4-0 variant=${showModels ? 'primary' : 'secondary'} @click=${toggleModels}>
+              </wpp-action-button-v4-5-0>
+              <wpp-action-button-v4-5-0 variant=${showModels ? 'primary' : 'secondary'} @click=${toggleModels}>
                 ${showModels ? 'Hide models' : 'Show models'}
-              </wpp-action-button-v4-4-0>
+              </wpp-action-button-v4-5-0>
             </div>
 
             <div style=${'display: flex;'}>
-              <wpp-typography-v4-4-0>Message History:</wpp-typography-v4-4-0>
+              <wpp-typography-v4-5-0>Message History:</wpp-typography-v4-5-0>
               <ul style="margin:0;">
-                ${updatedMessages.map(msg => html `<li><wpp-typography-v4-4-0>${msg}</wpp-typography-v4-4-0></li>`)}
+                ${updatedMessages.map(msg => html `<li><wpp-typography-v4-5-0>${msg}</wpp-typography-v4-5-0></li>`)}
               </ul>
             </div>
 
             <div style=${'display: flex; align-items: flex-end; height: 100vh;'}>
-              <wpp-chat-input-v4-4-0
+              <wpp-chat-input-v4-5-0
                 .actions=${args.actions}
                 .disabled=${args.disabled}
                 .isGenerating=${isGenerating}
@@ -188,6 +219,9 @@ export const ChatInput = {
                 .ariaProps=${args.ariaProps}
                 .htmlAttributes=${args.htmlAttributes}
                 .models=${showModels ? MOCK_MODELS : []}
+                .selectedModel=${showModels ? MOCK_MODELS[2] : 'auto'}
+                .selectedReasoning=${args.selectedReasoning}
+                .selectedVerbosity=${args.selectedVerbosity}
                 @wppSend=${handleSendMessage}
                 @wppStop=${handleStop}
                 @wppMessageChanged=${handleMessageChanged}
@@ -195,20 +229,22 @@ export const ChatInput = {
                 @wppActionsMenuItemClick=${(e) => console.log('actions menu item click', e.detail)}
                 @wppModelBrowse=${(e) => console.log('Browse model event', e)}
                 @wppModelSelect=${(e) => console.log('Select model event', e)}
+                @wppReasoningSelect=${(e) => console.log('Reasoning select event', e.detail)}
+                @wppVerbositySelect=${(e) => console.log('Verbosity select event', e.detail)}
               >
                 ${showAlert
         ? html `
-                      <wpp-chat-alert-v4-4-0
+                      <wpp-chat-alert-v4-5-0
                         slot="alert"
                         type="error"
                         message="Connection lost. Please try again."
                         @wppClose=${handleAlertClose}
-                      ></wpp-chat-alert-v4-4-0>
+                      ></wpp-chat-alert-v4-5-0>
                     `
         : null}
                 ${showReferences
         ? references.map(reference => html `
-                        <wpp-chat-reference-v4-4-0
+                        <wpp-chat-reference-v4-5-0
                           slot="references"
                           .type=${reference.type}
                           .name=${reference.name}
@@ -217,10 +253,10 @@ export const ChatInput = {
                           .fileExtension=${reference.fileExtension}
                           .text=${reference.text}
                           @wppClose=${() => handleRemoveReference(reference.id)}
-                        ></wpp-chat-reference-v4-4-0>
+                        ></wpp-chat-reference-v4-5-0>
                       `)
         : null}
-              </wpp-chat-input-v4-4-0>
+              </wpp-chat-input-v4-5-0>
             </div>
           </div>
         `, container);
@@ -237,6 +273,9 @@ export const ChatInput = {
       { id: 'translate', icon: 'wpp-icon-translate', label: 'Translate' },
     ],
     size: 's',
+    // Show the models toggle, then pick GPT to see both submenus, or Gemini for reasoning only.
+    selectedReasoning: undefined,
+    selectedVerbosity: undefined,
     disabled: false,
     isGenerating: false,
     debounceEnabled: true,

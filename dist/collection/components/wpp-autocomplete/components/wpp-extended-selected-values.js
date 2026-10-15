@@ -1,7 +1,14 @@
 import { h } from '@stencil/core';
 export function renderExtendedSelectedValuesComponent() {
-  return (h("div", { class: "selected-values" }, this.extendedSelectedValues?.map(el => (h("wpp-pill-v4-4-0", { label: el.label, type: "display", onWppClose: event => this.handleClickListItem({
-      ...event,
-      ...{ detail: { value: el.value } },
-    }), removable: true })))));
+  this.extendedPillRefs = [];
+  return (h("div", { class: "selected-values" }, this.extendedSelectedValues?.map((el, ndx) => (h("wpp-pill-v4-5-0", { ref: ref => {
+      if (ref)
+        this.extendedPillRefs[ndx] = ref;
+    }, label: el.label, type: "display", onWppClose: event => {
+      this.handleClickListItem({
+        ...event,
+        ...{ detail: { value: el.value } },
+      });
+      this.restoreFocusAfterPillRemoval(event, ndx, () => this.extendedPillRefs);
+    }, removable: true })))));
 }

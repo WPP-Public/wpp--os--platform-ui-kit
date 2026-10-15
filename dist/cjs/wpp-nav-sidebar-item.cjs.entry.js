@@ -2,9 +2,9 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-5f5af6a9.js');
-const WrappedSlot = require('./WrappedSlot-dc89a659.js');
-const utils = require('./utils-a6513d61.js');
+const index = require('./index-7d205426.js');
+const WrappedSlot = require('./WrappedSlot-669e1c73.js');
+const utils = require('./utils-a237e765.js');
 require('./consts-d8f5ef98.js');
 
 const tooltipConfig = {
@@ -78,7 +78,7 @@ const WppNavSidebarItem = class {
       'wpp-nav-sidebar-item': true,
     });
     this.accessibleNameProps = () => (this.isLabelTruncated ? { 'aria-label': this.label } : {});
-    this.item = () => (index.h(index.Fragment, null, index.h(WrappedSlot.WrappedSlot, { name: "icon-start", wrapperClass: "icon-wrapper", class: "slot-icon-start-fallback", onSlotchange: this.updateSlotData }), index.h("p", { class: this.labelCssClasses(), part: "label" }, this.isLabelTruncated ? utils.truncate(this.label, this.maxLabelLength) : this.label), index.h(WrappedSlot.WrappedSlot, { name: "icon-end", wrapperClass: this.iconEndCssClasses(), class: "slot-icon-end-fallback" }, this.extended && index.h("wpp-icon-chevron-v4-4-0", { class: "extended-icon", size: "m", part: "icon-chevron", "aria-hidden": "true" }))));
+    this.item = () => (index.h(index.Fragment, null, index.h(WrappedSlot.WrappedSlot, { name: "icon-start", wrapperClass: "icon-wrapper", class: "slot-icon-start-fallback", onSlotchange: this.updateSlotData }), index.h("p", { class: this.labelCssClasses(), part: "label" }, this.isLabelTruncated ? utils.truncate(this.label, this.maxLabelLength) : this.label), index.h(WrappedSlot.WrappedSlot, { name: "icon-end", wrapperClass: this.iconEndCssClasses(), class: "slot-icon-end-fallback" }, this.extended && index.h("wpp-icon-chevron-v4-5-0", { class: "extended-icon", size: "m", part: "icon-chevron", "aria-hidden": "true" }))));
     // The disclosure toggle for a group of sub-items (W3C ARIA APG): a keyboard-operable button
     // exposing its open state. DOM focus sits here rather than on the host, so assistive tech
     // announces a real control instead of a nameless custom element.
@@ -99,7 +99,7 @@ const WppNavSidebarItem = class {
         this.tooltipInstance = instance;
       },
     };
-    this.renderItemWithTooltip = () => (index.h("wpp-tooltip-v4-4-0", { text: this.label, config: this.itemTooltipConfig, part: "tooltip" }, this.extended ? this.extendedItem() : this.linkItem()));
+    this.renderItemWithTooltip = () => (index.h("wpp-tooltip-v4-5-0", { text: this.label, config: this.itemTooltipConfig, part: "tooltip" }, this.extended ? this.extendedItem() : this.linkItem()));
     this.renderItem = () => {
       const currentMaxLengthLabel = this.extended ? this.maxTitleLengthWithSubItems : this.maxTitleLengthWithoutSubItems;
       const isNeedToTruncate = this.label.length > currentMaxLengthLabel;
@@ -156,9 +156,9 @@ const WppNavSidebarItem = class {
     return this.label.length > this.maxLabelLength;
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "label, icon-chevron, extended-item, link-item, tooltip, title, divider, icon-start, icon-end, ws-inner, icon-start, icon-end, ws-wrapper" }, this.groupTitle && (index.h("p", { class: "group-title", part: "title" }, this.groupTitle)), this.renderItem(), this.divide && index.h("wpp-divider-v4-4-0", { class: "slot-divider-fallback", part: "divider" })));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "label, icon-chevron, extended-item, link-item, tooltip, title, divider, icon-start, icon-end, ws-inner, icon-start, icon-end, ws-wrapper" }, this.groupTitle && (index.h("p", { class: "group-title", part: "title" }, this.groupTitle)), this.renderItem(), this.divide && index.h("wpp-divider-v4-5-0", { class: "slot-divider-fallback", part: "divider" })));
   }
-  static get registryIs() { return "wpp-nav-sidebar-item-v4-4-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-item-v4-5-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "active": ["handleActiveChange"]

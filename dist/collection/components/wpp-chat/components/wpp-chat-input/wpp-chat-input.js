@@ -1,13 +1,13 @@
 import { h, Host, Fragment } from '@stencil/core';
-import { convertMBToBytes, getBaseName, getExtension, getExtensionsList, modifyPropertiesOnFile, renameFile, } from '../../../wpp-file-upload/utils';
-import { EXTENSION_TO_TYPE } from '../../../wpp-file-upload/const';
+import { convertMBToBytes, getAcceptTokens, getBaseName, getExtension, inferTypeFromName, isFileAccepted, modifyPropertiesOnFile, renameFile, } from '../../../wpp-file-upload/utils';
 import { WrappedSlot } from '../../../common/WrappedSlot/WrappedSlot';
-import { debounce, getSlotEmptyStates, hasParentWithId, mergeLocales, transformToVersionedTag, } from '../../../../utils/utils';
-import { debounceWithControl, TOAST_DURATION, registerLoadingAngle } from './utils';
-import { DEFAULT_FILE_UPLOAD_CONFIG, MAX_INPUT_AREA_HEIGHT, MIN_TEXTAREA_HEIGHT, LOCALES_DEFAULTS, PRIMARY_ACTION_TRANSITION_MS, UPLOAD_ACTION_ID, UPLOAD_ICON, getDefaultModelOptions, } from './consts';
+import { debounce, getSlotEmptyStates, mergeLocales, transformToVersionedTag } from '../../../../utils/utils';
+import { debounceWithControl, TOAST_DURATION } from './utils';
+import { DEFAULT_FILE_UPLOAD_CONFIG, MAX_INPUT_AREA_HEIGHT, MIN_TEXTAREA_HEIGHT, LOCALES_DEFAULTS, PRIMARY_ACTION_TRANSITION_MS, UPLOAD_ACTION_ID, UPLOAD_ICON, MODEL_REASONING_SEPARATOR, DEFAULT_REASONING_IDS, DEFAULT_VERBOSITY_IDS, MODEL_OPTIONS_SUBMENU_DISTANCE, MODEL_OPTIONS_SUBMENU_FALLBACK_SKIDDING, getDefaultModelOptions, } from './consts';
 import { Z_INDEX } from '../../../../common/consts';
 import { themeSubscriptionController } from '../../../../utils/subscribe-to-theme';
 import { SpeechRecognitionService } from '../../../../utils/speech-recognition';
+import { registerLoadingHaloAngle } from '../../../../utils/loading-halo';
 /**
  * @slot alert - Optional alert (for example wpp-chat-alert) rendered at the top of the chat input frame. Dismissing it hides the alert without affecting the rest of the input.
  * @part alert - Wrapper around the alert slot.
@@ -21,6 +21,20 @@ export class WppChatInput {
     this.inputAreaId = `wpp-ci-area`;
     this.textareaAutoId = `wpp-ci-ta`;
     this.minimizedDescId = `wpp-ci-min-desc`;
+    /**
+     * The levels the user last chose for each model, so switching away from a model and back
+     * restores their choice instead of resetting it (Mustafa, 23 Sep 2026).
+     *
+     * This is INSTANCE state, not a persisted session: it lives as long as this element does, so a
+     * consumer that needs the selection to survive a remount or a page reload owns that itself and
+     * feeds it back through `selectedReasoning` / `selectedVerbosity`.
+     */
+    this.modelOptionMemory = new Map();
+    /** Which mount-time defaults `componentWillLoad` applied, for `componentDidLoad` to emit. */
+    this.pendingModelOptionDefaults = { reasoningChanged: false, verbosityChanged: false };
+    /** The two level submenus, by kind, so their popper offset can measure against the model menu. */
+    this.modelOptionsSubmenuRefs = {};
+    this.modelOptionsDropdownConfigs = {};
     this.recognition = new SpeechRecognitionService();
     this.themeSubscription = themeSubscriptionController(() => this.host);
     this.aiModelBtn = null;
@@ -30,12 +44,17 @@ export class WppChatInput {
     };
     this.checkInteractedItem = (event) => {
       const path = event.composedPath();
-      if (this.isFocused && this.host && !path.includes(this.host)) {
-        // For cases when the user click item from select.
-        // The dropdown of the select is rendered outside of the component.
-        if (!hasParentWithId(path[0], 'tippy-')) {
-          this.handleSimpleBlur();
-        }
+      if (!this.isFocused || !this.host || path.includes(this.host))
+        return;
+      // Dropdowns (the model selector, the actions menu) are portalled out of the host, so an
+      // interaction inside one still belongs to this chat input. The whole composed path has to
+      // be searched for the tippy wrapper: the event target is usually an element inside a
+      // `wpp-list-item`'s shadow root, and walking `parentElement` up from there stops at the
+      // shadow boundary long before it reaches the wrapper that carries the id — which is why an
+      // `s`-size input collapsed whenever a model row was clicked anywhere but on its label text.
+      const isInsideDropdown = path.some(node => node.id?.includes('tippy-'));
+      if (!isInsideDropdown) {
+        this.handleSimpleBlur();
       }
     };
     this.onExpandedKeyDown = (e) => {
@@ -229,6 +248,7 @@ export class WppChatInput {
         value: this.successAttachmentsList,
         hasError: this.errorAttachmentsList.length > 0,
         errorFiles: this.errorAttachmentsList,
+        files: updatedFilesList,
       });
       this.wppFileUploadItemDelete.emit(event.detail);
       this.attachments = updatedFilesList;
@@ -262,19 +282,15 @@ export class WppChatInput {
       return file;
     };
     this.isAcceptConfigFilled = () => !!this.mergedFileUploadConfig.acceptConfig && Object.keys(this.mergedFileUploadConfig.acceptConfig).length > 0;
-    this.getAcceptExtensions = () => getExtensionsList(this.mergedFileUploadConfig.acceptConfig || {});
+    this.getAcceptTokens = () => this.isAcceptConfigFilled() ? getAcceptTokens(this.mergedFileUploadConfig.acceptConfig) : [];
     this.validateFileType = (file) => {
       if (!this.isAcceptConfigFilled()) {
         if (!file.type) {
-          const typeFromExtension = EXTENSION_TO_TYPE[getExtension(file.name)];
-          return modifyPropertiesOnFile(file, { type: typeFromExtension });
+          return modifyPropertiesOnFile(file, { type: inferTypeFromName(file.name) });
         }
         return file;
       }
-      const allowedExtensions = file.type
-        ? this.mergedFileUploadConfig.acceptConfig?.[file.type] || []
-        : this.getAcceptExtensions();
-      file.formatError = allowedExtensions.length > 0 ? !allowedExtensions.includes(getExtension(file.name)) : true;
+      file.formatError = !isFileAccepted(file, this.mergedFileUploadConfig.acceptConfig);
       return file;
     };
     this.customValidation = (file) => {
@@ -373,19 +389,22 @@ export class WppChatInput {
     this.shouldDisplaySend = () => this.disabled || this.errorAttachmentsList.length > 0
       ? false
       : !!this.internalValue.trim() || this.isGenerating || this.successAttachmentsList.length > 0;
-    this.renderMicrophoneBtn = (recordButtonLabel) => (h("wpp-action-button-v4-4-0", { "data-testid": "wpp-micophone-btn", onClick: this.handleClickAudioRecording, variant: "secondary", ariaProps: { label: recordButtonLabel }, disabled: this.disabled }, this.isAudioRecording ? h("wpp-icon-stop-v4-4-0", { slot: "icon-start" }) : h("wpp-icon-mic-on-v4-4-0", { slot: "icon-start" })));
-    this.renderActionsMenu = () => (h("wpp-menu-context-v4-4-0", { class: "actions-menu", part: "actions-menu", dropdownConfig: this.actionsMenuDropdownConfig }, h("wpp-action-button-v4-4-0", { slot: "trigger-element", class: "actions-menu-trigger", "data-testid": "actions-menu-trigger-button", variant: "secondary", disabled: this.disabled, ariaProps: {
+    this.renderMicrophoneBtn = (recordButtonLabel) => (h("wpp-action-button-v4-5-0", { "data-testid": "wpp-micophone-btn", onClick: this.handleClickAudioRecording, variant: "secondary", ariaProps: { label: recordButtonLabel }, disabled: this.disabled }, this.isAudioRecording ? h("wpp-icon-stop-v4-5-0", { slot: "icon-start" }) : h("wpp-icon-mic-on-v4-5-0", { slot: "icon-start" })));
+    this.renderActionsMenu = () => (h("wpp-menu-context-v4-5-0", { class: "actions-menu", part: "actions-menu", dropdownConfig: this.actionsMenuDropdownConfig }, h("wpp-action-button-v4-5-0", { slot: "trigger-element", class: "actions-menu-trigger", "data-testid": "actions-menu-trigger-button", variant: "secondary", disabled: this.disabled, ariaProps: {
         label: this.getActionsMenuButtonLabel(),
         expanded: this.ariaProps?.actionsMenuButton?.expanded ?? this.actionsMenuOpen,
         haspopup: 'menu',
-      } }, h("wpp-icon-plus-v4-4-0", { slot: "icon-start" })), h("div", null, h("wpp-list-item-v4-4-0", { "data-testid": `actions-menu-item-${UPLOAD_ACTION_ID}`, disabled: this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick({
+      } }, h("wpp-icon-plus-v4-5-0", { slot: "icon-start" })), h("div", null, h("wpp-list-item-v4-5-0", { "data-testid": `actions-menu-item-${UPLOAD_ACTION_ID}`, disabled: this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick({
         id: UPLOAD_ACTION_ID,
         icon: UPLOAD_ICON,
         label: this.getAttachButtonLabel(),
         disabled: this.disabled || this.isFileDialogOpen,
-      }) }, h(transformToVersionedTag(UPLOAD_ICON), { slot: 'left' }), h("span", { slot: "label" }, this.getAttachButtonLabel())), this.actions.map(action => (h("wpp-list-item-v4-4-0", { key: action.id, "data-testid": `actions-menu-item-${action.id}`, disabled: action.disabled || this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))));
+      }) }, h(transformToVersionedTag(UPLOAD_ICON), { slot: 'left' }), h("span", { slot: "label" }, this.getAttachButtonLabel())), this.actions.map(action => (h("wpp-list-item-v4-5-0", { key: action.id, "data-testid": `actions-menu-item-${action.id}`, disabled: action.disabled || this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))));
     this.getSelectedModel = () => {
-      if (this.selectedModel === 'auto') {
+      // `selectedModel` is transiently null between React removing the attribute and setting the
+      // property (see `onSelectedModelChange`). Resolve that to the built-in default rather than
+      // dereferencing it - both this method's own `models.find` and every caller assume a model.
+      if (!this.selectedModel || this.selectedModel === 'auto') {
         return getDefaultModelOptions(this._locales)[0];
       }
       else if (this.selectedModel === 'premium') {
@@ -402,6 +421,9 @@ export class WppChatInput {
       this.isModelMenuOpen = false;
     };
     this.handleModelSelect = (model) => {
+      // Assigning `selectedModel` is what carries the levels over — `handleSelectedModelChange`
+      // watches it, so picking from this dropdown and having the platform set the prop from a
+      // side-modal take exactly the same path.
       if (model.id === 'auto') {
         this.selectedModel = 'auto';
       }
@@ -416,12 +438,131 @@ export class WppChatInput {
     this.handleModelChange = () => {
       this.wppModelBrowse.emit();
     };
+    /**
+     * The level to pre-select for a model the user has not chosen one for yet: the first of the
+     * documented defaults the model actually offers, or nothing when it offers none of them.
+     */
+    this.resolveDefaultOptionId = (options, defaultIds) => defaultIds.find(defaultId => options.some(option => option.id === defaultId));
+    /**
+     * The remembered level for a model, but only if that model still offers it — a consumer can
+     * change a model's option list between selections, and a remembered id that no longer exists
+     * would leave the submenu with nothing checked.
+     */
+    this.getRememberedOptionId = (options, rememberedId) => options.find(option => option.id === rememberedId)?.id;
+    /**
+     * The levels that apply to a model: what the user last chose for it, else the defaults.
+     */
+    this.resolveModelOptions = (model) => {
+      const remembered = this.modelOptionMemory.get(model.id);
+      const reasoningOptions = model.reasoningOptions || [];
+      const verbosityOptions = model.verbosityOptions || [];
+      return {
+        reasoning: this.getRememberedOptionId(reasoningOptions, remembered?.reasoning) ??
+          this.resolveDefaultOptionId(reasoningOptions, DEFAULT_REASONING_IDS),
+        verbosity: this.getRememberedOptionId(verbosityOptions, remembered?.verbosity) ??
+          this.resolveDefaultOptionId(verbosityOptions, DEFAULT_VERBOSITY_IDS),
+      };
+    };
+    /**
+     * Fills in only the levels the consumer left unset for the model selected at mount. It must not
+     * overwrite: a level passed alongside the model is the consumer seeding an explicit selection
+     * (a restored session, say) and outranks any default.
+     *
+     * Returns which levels it filled, so `componentDidLoad` can emit exactly those — the write has
+     * to happen before the first render to avoid a frame with nothing checked, but the events wait
+     * until listeners are attached.
+     */
+    this.applyModelOptionDefaults = () => {
+      const { reasoning, verbosity } = this.resolveModelOptions(this.getSelectedModel());
+      const reasoningChanged = this.selectedReasoning === undefined && reasoning !== undefined;
+      const verbosityChanged = this.selectedVerbosity === undefined && verbosity !== undefined;
+      if (reasoningChanged)
+        this.selectedReasoning = reasoning;
+      if (verbosityChanged)
+        this.selectedVerbosity = verbosity;
+      return { reasoningChanged, verbosityChanged };
+    };
+    /**
+     * The levels offered by whichever model is selected. `Auto` and `Premium` are built-in
+     * presets that carry no per-LLM levels, so they resolve to an empty list and render no row.
+     */
+    this.getModelOptions = (kind) => this.getSelectedModel()[kind] || [];
+    this.getSelectedModelOption = (kind, selectedId) => this.getModelOptions(kind).find(option => option.id === selectedId) || null;
+    this.emitModelOptionsState = (emitter) => {
+      emitter.emit({
+        model: this.getSelectedModel(),
+        reasoning: this.getSelectedModelOption('reasoningOptions', this.selectedReasoning),
+        verbosity: this.getSelectedModelOption('verbosityOptions', this.selectedVerbosity),
+      });
+    };
+    this.handleReasoningSelect = (option) => {
+      if (this.selectedReasoning === option.id)
+        return;
+      this.selectedReasoning = option.id;
+      this.emitModelOptionsState(this.wppReasoningSelect);
+    };
+    this.handleVerbositySelect = (option) => {
+      if (this.selectedVerbosity === option.id)
+        return;
+      this.selectedVerbosity = option.id;
+      this.emitModelOptionsState(this.wppVerbositySelect);
+    };
     this.renderModelSelector = (size) => {
       const selectedModel = this.getSelectedModel();
-      const triggerAvatar = (h("wpp-avatar-v4-4-0", { slot: "left", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, name: selectedModel.label }));
-      return (h("wpp-menu-context-v4-4-0", { isBtnTrigger: true, class: "model-selector", dropdownConfig: { onShow: this.handleModelMenuShow, onHide: this.handleModelMenuHide, placement: 'top-start' } }, h("wpp-list-item-v4-4-0", { slot: "trigger-element", class: this.modelSelectorTriggerCssClasses(), role: "button", disabled: this.disabled, "aria-label": this._locales.modelSelectorBtnLabel, "aria-expanded": this.isModelMenuOpen, "aria-haspopup": 'menu' }, triggerAvatar, size === 'm' && (h(Fragment, null, h("span", { slot: "label" }, selectedModel.label), h("wpp-icon-chevron-v4-4-0", { slot: "right", direction: this.isModelMenuOpen ? 'up' : 'down' })))), h("div", { class: "wpp-model-dropdown" }, getDefaultModelOptions(this._locales).map((model) => this.renderModelListItem(model, model.id === selectedModel.id)), h("wpp-divider-v4-4-0", null), this.models.length > 0 ? (this.models.map((model) => this.renderModelListItem(model, model.id === selectedModel.id))) : (h("wpp-list-item-v4-4-0", { onWppChangeListItem: this.handleModelChange }, h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), h("wpp-icon-chevron-v4-4-0", { slot: "right", direction: "right" }))))));
+      const isCustomModel = this.selectedModel !== 'auto' && this.selectedModel !== 'premium';
+      const reasoningOptions = this.getModelOptions('reasoningOptions');
+      const verbosityOptions = this.getModelOptions('verbosityOptions');
+      const selectedReasoning = this.getSelectedModelOption('reasoningOptions', this.selectedReasoning);
+      const triggerAvatar = (h("wpp-avatar-v4-5-0", { slot: "left", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, name: selectedModel.label }));
+      return (h("wpp-menu-context-v4-5-0", { isBtnTrigger: true, class: "model-selector", dropdownConfig: { onShow: this.handleModelMenuShow, onHide: this.handleModelMenuHide, placement: 'top-start' } }, h("wpp-list-item-v4-5-0", { slot: "trigger-element", class: this.modelSelectorTriggerCssClasses(), role: "button", disabled: this.disabled, "aria-label": this._locales.modelSelectorBtnLabel }, triggerAvatar, size === 'm' && (h(Fragment, null, h("span", { slot: "label" }, selectedModel.label, selectedReasoning && `${MODEL_REASONING_SEPARATOR}${selectedReasoning.label}`), h("wpp-icon-chevron-v4-5-0", { slot: "right", direction: this.isModelMenuOpen ? 'up' : 'down' })))), h("div", { class: "wpp-model-dropdown" }, getDefaultModelOptions(this._locales).map((model) => this.renderModelListItem(model, model.id === selectedModel.id)), h("wpp-divider-v4-5-0", null), this.models.length > 0
+        ? this.models.map((model) => this.renderModelListItem(model, model.id === selectedModel.id))
+        : // Nothing lists the selected model when the list is browsed externally, so
+          // surface it here — otherwise the dropdown never shows what is in use.
+          isCustomModel && this.renderModelListItem(selectedModel, true), reasoningOptions.length > 0 &&
+        this.renderModelOptionsSubmenu('reasoning', this._locales.modelReasoningLabel, reasoningOptions, this.selectedReasoning, this.handleReasoningSelect), verbosityOptions.length > 0 &&
+        this.renderModelOptionsSubmenu('verbosity', this._locales.modelVerbosityLabel, verbosityOptions, this.selectedVerbosity, this.handleVerbositySelect), this.models.length === 0 && (h(Fragment, null, isCustomModel && h("wpp-divider-v4-5-0", null), h("wpp-list-item-v4-5-0", { onWppChangeListItem: this.handleModelChange }, h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), h("wpp-icon-chevron-v4-5-0", { slot: "right", direction: "right" })))))));
     };
-    this.renderModelListItem = (model, checked) => (h("wpp-list-item-v4-4-0", { key: model.id, checked: checked, onWppChangeListItem: () => this.handleModelSelect(model) }, h("wpp-avatar-v4-4-0", { role: "presentation", slot: "left", size: "xs", variant: "square", src: model.logo, name: model.label }), h("span", { slot: "label" }, model.label), model?.caption && (h("span", { slot: "caption" }, model.caption))));
+    this.renderModelListItem = (model, checked) => (h("wpp-list-item-v4-5-0", { key: model.id, checked: checked, role: "menuitemradio", "aria-checked": String(checked), onWppChangeListItem: () => this.handleModelSelect(model) }, h("wpp-avatar-v4-5-0", { role: "presentation", slot: "left", size: "xs", variant: "square", src: model.logo, name: model.label }), h("span", { slot: "label" }, model.label), model?.caption && (h("span", { slot: "caption" }, model.caption))));
+    /**
+     * How far the submenu has to slide past its own row to sit flush with the bottom of the model
+     * menu. Measured when popper asks rather than hard-coded, because it depends on which row opened
+     * the submenu — Reasoning sits one row higher than Verbosity.
+     */
+    this.getModelOptionsSubmenuSkidding = (kind) => {
+      const submenu = this.modelOptionsSubmenuRefs[kind];
+      const menuRoot = submenu?.closest('[data-tippy-root]');
+      if (!submenu || !menuRoot)
+        return MODEL_OPTIONS_SUBMENU_FALLBACK_SKIDDING;
+      return menuRoot.getBoundingClientRect().bottom - submenu.getBoundingClientRect().bottom;
+    };
+    /**
+     * Built once per kind and cached, because `wpp-menu-context` diffs `dropdownConfig` by value and
+     * a fresh `offset` closure on every render would read as a change and re-apply the tippy props.
+     */
+    this.getModelOptionsDropdownConfig = (kind) => {
+      const config = this.modelOptionsDropdownConfigs[kind] ?? {
+        placement: 'right-end',
+        offset: () => [this.getModelOptionsSubmenuSkidding(kind), MODEL_OPTIONS_SUBMENU_DISTANCE],
+        popperOptions: {
+          modifiers: [{ name: 'flip', options: { fallbackPlacements: ['right-start', 'left-end', 'left-start'] } }],
+        },
+      };
+      this.modelOptionsDropdownConfigs[kind] = config;
+      return config;
+    };
+    /**
+     * One row in the model dropdown that opens a submenu of levels. `wpp-menu-context` treats
+     * itself as nested when its first child is a `wpp-list-item`, which gives the submenu the
+     * APG behaviour for free: right-side placement, ArrowRight/ArrowLeft, Escape and roving.
+     *
+     * The nested default top-aligns the submenu with its row (`right-start`), which sends a long
+     * list of levels spilling below the model menu. The design aligns it with the bottom of the
+     * model menu instead, so the placement is flipped to `right-end` and the skidding offset closes
+     * the gap between the row and the menu's bottom edge. A list too tall to sit there without
+     * leaving the viewport falls back to `right-start` before it is allowed to jump to the other
+     * side, so the fallbacks are spelled out rather than left to the nested default.
+     */
+    this.renderModelOptionsSubmenu = (kind, label, options, selectedId, onSelect) => (h("wpp-menu-context-v4-5-0", { class: "model-options-menu", ref: element => (this.modelOptionsSubmenuRefs[kind] = element), dropdownConfig: this.getModelOptionsDropdownConfig(kind) }, h("wpp-list-item-v4-5-0", { slot: "trigger-element", isExtended: true }, h("span", { slot: "label" }, label)), h("div", { class: "wpp-model-options-dropdown" }, options.map((option) => (h("wpp-list-item-v4-5-0", { key: option.id, checked: option.id === selectedId, labelTypography: { type: 's-midi' }, role: "menuitemradio", "aria-checked": String(option.id === selectedId), onWppChangeListItem: () => onSelect(option) }, h("span", { slot: "label" }, option.label), option.caption && h("span", { slot: "caption" }, option.caption)))))));
     this.clearStopBtnHideTimeout = () => {
       if (!this.stopBtnHideTimeout)
         return;
@@ -453,7 +594,7 @@ export class WppChatInput {
       // While hidden the button stays in the DOM (to animate the collapse), but must leave the
       // focus order and a11y tree so its focusable inner control does not trip axe's aria-hidden-focus.
       const inertProps = interactive ? {} : { inert: true };
-      return this.isGenerating || this.isStopBtnHiding ? (h("wpp-action-button-v4-4-0", { class: { 'play-btn': true, 'is-hidden': !interactive }, "data-testid": "stop-icon-only-button", onClick: this.handleStopBtnClick, ariaProps: { label: this.getStopButtonLabel() }, ...inertProps }, h("wpp-icon-stop-v4-4-0", { slot: "icon-start" }))) : (h("wpp-button-v4-4-0", { class: { 'play-btn': true, 'is-hidden': !interactive }, "data-testid": "send-icon-only-button", size: "s", onClick: this.handleSendClick, ariaProps: { label: this.getSendButtonLabel() }, ...inertProps }, h("wpp-icon-arrow-v4-4-0", { direction: "up", slot: "icon-start" })));
+      return this.isGenerating || this.isStopBtnHiding ? (h("wpp-action-button-v4-5-0", { class: { 'play-btn': true, 'is-hidden': !interactive }, "data-testid": "stop-icon-only-button", onClick: this.handleStopBtnClick, ariaProps: { label: this.getStopButtonLabel() }, ...inertProps }, h("wpp-icon-stop-v4-5-0", { slot: "icon-start" }))) : (h("wpp-button-v4-5-0", { class: { 'play-btn': true, 'is-hidden': !interactive }, "data-testid": "send-icon-only-button", size: "s", onClick: this.handleSendClick, ariaProps: { label: this.getSendButtonLabel() }, ...inertProps }, h("wpp-icon-arrow-v4-5-0", { direction: "up", slot: "icon-start" })));
     };
     this.modelSelectorTriggerCssClasses = () => ({
       'select-model-trigger': true,
@@ -562,6 +703,8 @@ export class WppChatInput {
         sizeError: 'File exceeds size limit',
         formatError: 'Wrong format',
         limitError: 'Files limit reached',
+        removeFile: (name) => `Remove file ${name}`,
+        uploadProgress: (name) => `Processing ${name}`,
       },
     };
     this.charactersLimit = undefined;
@@ -569,6 +712,8 @@ export class WppChatInput {
     this.withSelect = false;
     this.models = [];
     this.selectedModel = 'auto';
+    this.selectedReasoning = undefined;
+    this.selectedVerbosity = undefined;
     this.actions = [];
     this.textValue = '';
     this.debounceEnabled = true;
@@ -625,9 +770,19 @@ export class WppChatInput {
     }, this.debounceDelay);
     const list = [...this.attachments, ...(this.successAttachmentsList || []), ...(this.errorAttachmentsList || [])];
     this.reInitValue(list);
+    // Before the first render, so the submenus never paint with nothing checked.
+    this.lastResolvedModelId = this.getSelectedModel()?.id;
+    this.pendingModelOptionDefaults = this.applyModelOptionDefaults();
   }
   componentDidLoad() {
     this.recognition.setupRecognition(this._locales.audioLanguage);
+    // Emitted here rather than in `componentWillLoad` so a consumer's listeners are attached. A
+    // default the component picked has to reach the consumer, or its next render pushes the
+    // unset value straight back over it.
+    if (this.pendingModelOptionDefaults.reasoningChanged)
+      this.emitModelOptionsState(this.wppReasoningSelect);
+    if (this.pendingModelOptionDefaults.verbosityChanged)
+      this.emitModelOptionsState(this.wppVerbositySelect);
     requestAnimationFrame(() => {
       this.initializeObserver();
     });
@@ -662,7 +817,7 @@ export class WppChatInput {
   }
   connectedCallback() {
     // This is needed so the animation from "Processing" state works as expected (this component uses shadow DOM).
-    registerLoadingAngle();
+    registerLoadingHaloAngle();
     this.themeSubscription.start();
   }
   disconnectedCallback() {
@@ -683,6 +838,48 @@ export class WppChatInput {
   }
   get _locales() {
     return mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
+  /**
+   * Carries the reasoning/verbosity levels across a model change, whichever way the model was
+   * changed — picked from this dropdown, or set by the platform after its own side-modal flow.
+   *
+   * The user's choice is remembered per model for the lifetime of this element and restored when
+   * they come back to it; a model they have not chosen a level for yet takes the documented
+   * defaults. It deliberately does NOT reset (Mustafa, 23 Sep 2026 — resetting was the earlier
+   * behaviour and read as a worse experience).
+   *
+   * It EMITS whatever it applies, which is the part that is easy to get wrong: these are
+   * controlled props, so a component that silently rewrote them would be overwritten again by the
+   * next render of a consumer holding its own state. Emitting keeps the two in step. Only levels
+   * that actually changed emit, so a model change that leaves a level alone stays quiet.
+   */
+  onSelectedModelChange(newValue) {
+    // `selectedModel` takes either a string preset or a model object. Going from the string to an
+    // object makes React remove the attribute, and Stencil's attributeChangedCallback assigns that
+    // removal as `null` before the property set lands - so this watch sees a null it must ignore
+    // rather than resolve. The real value arrives on the very next call.
+    if (newValue === null || newValue === undefined)
+      return;
+    const previousModelId = this.lastResolvedModelId;
+    const nextModelId = typeof newValue === 'string' ? newValue : newValue.id;
+    if (previousModelId === nextModelId)
+      return;
+    if (previousModelId !== undefined) {
+      this.modelOptionMemory.set(previousModelId, {
+        reasoning: this.selectedReasoning,
+        verbosity: this.selectedVerbosity,
+      });
+    }
+    const { reasoning, verbosity } = this.resolveModelOptions(this.getSelectedModel());
+    const reasoningChanged = reasoning !== this.selectedReasoning;
+    const verbosityChanged = verbosity !== this.selectedVerbosity;
+    this.selectedReasoning = reasoning;
+    this.selectedVerbosity = verbosity;
+    this.lastResolvedModelId = nextModelId;
+    if (reasoningChanged)
+      this.emitModelOptionsState(this.wppReasoningSelect);
+    if (verbosityChanged)
+      this.emitModelOptionsState(this.wppVerbositySelect);
   }
   onSizeChange(newValue, oldValue) {
     if (newValue !== oldValue && this.size === 's') {
@@ -748,6 +945,10 @@ export class WppChatInput {
     return {
       ...DEFAULT_FILE_UPLOAD_CONFIG,
       ...this.fileUploadConfig,
+      locales: {
+        ...DEFAULT_FILE_UPLOAD_CONFIG.locales,
+        ...this.fileUploadConfig?.locales,
+      },
     };
   }
   // Precedence helpers: ariaProps > locales > internal defaults
@@ -879,16 +1080,23 @@ export class WppChatInput {
       return;
     this.isAudioRecording = false;
     this.recognition.stopRecognition();
+    const reasoning = this.getSelectedModelOption('reasoningOptions', this.selectedReasoning);
+    const verbosity = this.getSelectedModelOption('verbosityOptions', this.selectedVerbosity);
     this.wppSend.emit({
       message: this.internalValue.trim(),
       attachments: this.successAttachmentsList,
+      model: this.getSelectedModel(),
+      // Spread rather than assign `null`: a level the selected model does not offer is
+      // absent from the payload, matching how `attachments` behaves.
+      ...(reasoning ? { reasoning } : {}),
+      ...(verbosity ? { verbosity } : {}),
     });
     Object.assign(this, {
       internalValue: '',
       successAttachmentsList: [],
       errorAttachmentsList: [],
     });
-    this.wppChange.emit({ value: [], hasError: false, errorFiles: [] });
+    this.wppChange.emit({ value: [], hasError: false, errorFiles: [], files: [] });
     this.adjustTextareaHeight(true);
     if (this.size === 's') {
       // Collapse back to the minimized resting state. Use the blur routine so it
@@ -931,7 +1139,9 @@ export class WppChatInput {
       if ('url' in file)
         return file;
       this.validateFileSize(file);
-      this.validateFileType(file);
+      // Reassigned, as in wpp-file-upload: for an untyped file this returns a replacement carrying
+      // the type resolved from its extension, and dropping it left the attachment untyped.
+      file = this.validateFileType(file);
       this.customValidation(file);
       return file;
     });
@@ -946,6 +1156,7 @@ export class WppChatInput {
       value: this.successAttachmentsList,
       hasError: !!this.errorAttachmentsList.length,
       errorFiles: this.errorAttachmentsList,
+      files: this.attachments,
     });
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -981,13 +1192,15 @@ export class WppChatInput {
       ? this.getAudioStopRecordButtonLabel()
       : this.getAudioRecordButtonLabel();
     const ariaInvalid = this.ariaProps?.textarea?.invalid !== undefined ? this.ariaProps.textarea.invalid : undefined;
-    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, alert, toast, input-area, attachments, references, text-input, actions-bar, left-actions, right-actions, file-item, actions-menu", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick, onFocus: this.handleOnFocus }, h("div", { class: this.chatInputContainerClasses(), onKeyDown: this.onExpandedKeyDown, part: "chat-input-container" }, h("div", { class: "alert", part: "alert", hidden: !this.hasAlertSlot || this.isAlertDismissed }, h("slot", { name: "alert", onSlotchange: this.handleAlertSlotChange })), this.showToast && (h("wpp-toast-v4-4-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { id: this.inputAreaId, class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments", role: "list", "aria-label": this._locales.attachmentsLabel }, allFiles.map((file, index) => (h("wpp-file-upload-item-v4-4-0", { key: index, file: file, variant: "chat", format: this.mergedFileUploadConfig.format, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
+    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, alert, toast, input-area, attachments, references, text-input, actions-bar, left-actions, right-actions, file-item, actions-menu", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick, onFocus: this.handleOnFocus }, h("div", { class: this.chatInputContainerClasses(), onKeyDown: this.onExpandedKeyDown, part: "chat-input-container" }, h("div", { class: "alert", part: "alert", hidden: !this.hasAlertSlot || this.isAlertDismissed }, h("slot", { name: "alert", onSlotchange: this.handleAlertSlotChange })), this.showToast && (h("wpp-toast-v4-5-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { id: this.inputAreaId, class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments", role: "list", "aria-label": this._locales.attachmentsLabel }, allFiles.map((file, index) => (h("wpp-file-upload-item-v4-5-0", { key: index, file: file, variant: "chat", format: this.mergedFileUploadConfig.format, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
         sizeError: this.mergedFileUploadConfig.locales.sizeError,
         formatError: this.mergedFileUploadConfig.locales.formatError,
-      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded, role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": allFiles.length.toString() }))))), h("div", { class: "references", part: "references", hidden: !this.hasReferencesSlot }, h("slot", { name: "references", onSlotchange: this.handleReferencesSlotChange })), h("textarea", { id: (this.htmlAttributes?.textarea?.id ?? this.textareaId) || this.textareaAutoId, name: this.htmlAttributes?.textarea?.name ?? this.textareaName ?? 'message', class: this.textInputClasses(), placeholder: placeholderText, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input", "aria-label": this.getTextareaLabel(), "aria-invalid": ariaInvalid, autocomplete: this.htmlAttributes?.textarea?.autocomplete, maxLength: this.htmlAttributes?.textarea?.maxLength, "data-gramm": "false", "data-gramm_editor": "false" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, this.renderActionsMenu(), h("div", { class: this.minimizedInput(), part: "minimized-input", "data-pressed": this.minimizedPressed ? 'true' : null, role: "button", tabindex: this.disabled ? -1 : 0, "aria-expanded": this.isChatInputExpanded ? 'true' : 'false', "aria-controls": this.inputAreaId, "aria-label": this.getMinimizedAriaLabel(), "aria-describedby": this.minimizedDescId, onKeyDown: this.onMinimizedKeyDown, onKeyUp: this.onMinimizedKeyUp }, h("wpp-typography-v4-4-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || placeholderText)), h("span", { id: this.minimizedDescId, class: "sr-only" }, this.getMinimizedDescriptionText()), h("div", { class: this.rightActionsClasses() }, !this.withSelect && this.renderModelSelector('s'), this.renderMicrophoneBtn(recordButtonLabel), this.renderSendStopBtn())))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar", role: "toolbar", "aria-label": this.getActionsToolbarLabel() }, h("div", { class: this.leftActionsClasses(), part: "left-actions", role: "group", "aria-label": this.getLeftActionsLabel() }, this.renderActionsMenu(), this.enableMic && (h("wpp-action-button-v4-4-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled, ariaProps: { label: this._locales.voiceLabel } }, h("wpp-icon-mic-on-v4-4-0", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions", role: "group", "aria-label": this.getRightActionsLabel() }, this.withSelect ? (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })) : (this.renderModelSelector('m')), this.renderMicrophoneBtn(recordButtonLabel), this.renderSendStopBtn()))), h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.htmlAttributes?.attachmentsInput?.multiple ?? this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.htmlAttributes?.attachmentsInput?.accept ?? this.getAcceptExtensions().join(), title: "", id: this.htmlAttributes?.attachmentsInput?.id ?? 'wpp-ci-file', name: this.htmlAttributes?.attachmentsInput?.name ?? 'attachments', "aria-hidden": "true" }))));
+        removeFile: this.mergedFileUploadConfig.locales.removeFile,
+        uploadProgress: this.mergedFileUploadConfig.locales.uploadProgress,
+      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded, role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": allFiles.length.toString() }))))), h("div", { class: "references", part: "references", hidden: !this.hasReferencesSlot }, h("slot", { name: "references", onSlotchange: this.handleReferencesSlotChange })), h("textarea", { id: (this.htmlAttributes?.textarea?.id ?? this.textareaId) || this.textareaAutoId, name: this.htmlAttributes?.textarea?.name ?? this.textareaName ?? 'message', class: this.textInputClasses(), placeholder: placeholderText, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input", "aria-label": this.getTextareaLabel(), "aria-invalid": ariaInvalid, autocomplete: this.htmlAttributes?.textarea?.autocomplete, maxLength: this.htmlAttributes?.textarea?.maxLength, "data-gramm": "false", "data-gramm_editor": "false" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, this.renderActionsMenu(), h("div", { class: this.minimizedInput(), part: "minimized-input", "data-pressed": this.minimizedPressed ? 'true' : null, role: "button", tabindex: this.disabled ? -1 : 0, "aria-expanded": this.isChatInputExpanded ? 'true' : 'false', "aria-controls": this.inputAreaId, "aria-label": this.getMinimizedAriaLabel(), "aria-describedby": this.minimizedDescId, onKeyDown: this.onMinimizedKeyDown, onKeyUp: this.onMinimizedKeyUp }, h("wpp-typography-v4-5-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || placeholderText)), h("span", { id: this.minimizedDescId, class: "sr-only" }, this.getMinimizedDescriptionText()), h("div", { class: this.rightActionsClasses() }, !this.withSelect && this.renderModelSelector('s'), this.renderMicrophoneBtn(recordButtonLabel), this.renderSendStopBtn())))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar", role: "toolbar", "aria-label": this.getActionsToolbarLabel() }, h("div", { class: this.leftActionsClasses(), part: "left-actions", role: "group", "aria-label": this.getLeftActionsLabel() }, this.renderActionsMenu(), this.enableMic && (h("wpp-action-button-v4-5-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled, ariaProps: { label: this._locales.voiceLabel } }, h("wpp-icon-mic-on-v4-5-0", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions", role: "group", "aria-label": this.getRightActionsLabel() }, this.withSelect ? (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })) : (this.renderModelSelector('m')), this.renderMicrophoneBtn(recordButtonLabel), this.renderSendStopBtn()))), h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.htmlAttributes?.attachmentsInput?.multiple ?? this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.htmlAttributes?.attachmentsInput?.accept ?? this.getAcceptTokens().join(), title: "", id: this.htmlAttributes?.attachmentsInput?.id ?? 'wpp-ci-file', name: this.htmlAttributes?.attachmentsInput?.name ?? 'attachments', "aria-hidden": "true" }))));
   }
   static get is() { return "wpp-chat-input"; }
-  static get registryIs() { return "wpp-chat-input-v4-4-0"; }
+  static get registryIs() { return "wpp-chat-input-v4-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -1151,7 +1364,7 @@ export class WppChatInput {
             }],
           "text": "Configuration object for file upload functionality."
         },
-        "defaultValue": "{\n    /**\n     * Format of the file upload result.\n     */\n    format: 'base64',\n\n    /**\n     * If `true`, allows multiple files to be uploaded at once.\n     */\n    multiple: true,\n\n    /**\n     * Maximum number of files allowed for upload.\n     * Set to `0` for no restriction.\n     */\n    maxFiles: 0,\n\n    /**\n     * Maximum allowed size of each file in MB.\n     */\n    size: 150,\n\n    /**\n     * Object defining accepted MIME types and their corresponding extensions.\n     * Example: `{ 'image/png': ['.png'], 'application/pdf': ['.pdf'] }`.\n     */\n    acceptConfig: {},\n\n    /**\n     * Defines custom validation function for uploaded files.\n     * Should return `null` if the file is valid, or a string error message otherwise.\n     */\n    validator: () => null,\n\n    /**\n     * If `true`, replaces existing error messages with new ones for failed uploads.\n     * If `false`, retains existing errors and appends new ones.\n     */\n    showOnlyNewErrors: false,\n\n    /**\n     * If `true`, the file upload works as controlled component.\n     */\n    controlled: false,\n\n    /**\n     * Indicates locales for file upload component\n     */\n    locales: {\n      sizeError: 'File exceeds size limit',\n      formatError: 'Wrong format',\n      limitError: 'Files limit reached',\n    },\n  }"
+        "defaultValue": "{\n    /**\n     * Format of the file upload result.\n     */\n    format: 'base64',\n\n    /**\n     * If `true`, allows multiple files to be uploaded at once.\n     */\n    multiple: true,\n\n    /**\n     * Maximum number of files allowed for upload.\n     * Set to `0` for no restriction.\n     */\n    maxFiles: 0,\n\n    /**\n     * Maximum allowed size of each file in MB.\n     */\n    size: 150,\n\n    /**\n     * Object defining accepted MIME types and their corresponding extensions.\n     * Example: `{ 'image/png': ['.png'], 'application/pdf': ['.pdf'] }`.\n     */\n    acceptConfig: {},\n\n    /**\n     * Defines custom validation function for uploaded files.\n     * Should return `null` if the file is valid, or a string error message otherwise.\n     */\n    validator: () => null,\n\n    /**\n     * If `true`, replaces existing error messages with new ones for failed uploads.\n     * If `false`, retains existing errors and appends new ones.\n     */\n    showOnlyNewErrors: false,\n\n    /**\n     * If `true`, the file upload works as controlled component.\n     */\n    controlled: false,\n\n    /**\n     * Indicates locales for file upload component\n     */\n    locales: {\n      sizeError: 'File exceeds size limit',\n      formatError: 'Wrong format',\n      limitError: 'Files limit reached',\n      removeFile: (name: string) => `Remove file ${name}`,\n      uploadProgress: (name: string) => `Processing ${name}`,\n    },\n  }"
       },
       "charactersLimit": {
         "type": "number",
@@ -1261,6 +1474,40 @@ export class WppChatInput {
         "attribute": "selected-model",
         "reflect": false,
         "defaultValue": "'auto'"
+      },
+      "selectedReasoning": {
+        "type": "string",
+        "mutable": true,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Id of the currently selected reasoning level. It must match the `id` of one of the\nselected model's `reasoningOptions`; an id that matches nothing leaves the submenu with\nno row checked rather than silently selecting a level the consumer did not ask for.\nLeave it unset for \"no level chosen\" \u2014 the trigger label then carries no reasoning\nsuffix. Picking a different model from the dropdown clears it, because option ids are\nscoped to a model."
+        },
+        "attribute": "selected-reasoning",
+        "reflect": false
+      },
+      "selectedVerbosity": {
+        "type": "string",
+        "mutable": true,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Id of the currently selected verbosity level, matched against the selected model's\n`verbosityOptions`. Behaves exactly like `selectedReasoning`, except that verbosity is\nnever shown in the trigger label."
+        },
+        "attribute": "selected-verbosity",
+        "reflect": false
       },
       "actions": {
         "type": "unknown",
@@ -1463,7 +1710,7 @@ export class WppChatInput {
         "mutable": false,
         "complexType": {
           "original": "Partial<ChatInputLocaleInterface>",
-          "resolved": "{ placeholder?: string | undefined; minimizedDescription?: string | undefined; actionsToolbarLabel?: string | undefined; leftActionsGroupLabel?: string | undefined; rightActionsGroupLabel?: string | undefined; sendLabel?: string | undefined; stopLabel?: string | undefined; attachLabel?: string | undefined; voiceLabel?: string | undefined; attachmentsLabel?: string | undefined; messageInputLabel?: string | undefined; actionsMenuLabel?: string | undefined; audioRecordButtonLabel?: string | undefined; audioStopRecordButtonLabel?: string | undefined; audioLanguage?: string | undefined; modelSelectorBtnLabel?: string | undefined; modelAutoOptionLabel?: string | undefined; modelAutoOptionCaption?: string | undefined; modelPremiumOptionLabel?: string | undefined; modelPremiumOptionCaption?: string | undefined; modelSelectorListItemLabel?: string | undefined; }",
+          "resolved": "{ placeholder?: string | undefined; minimizedDescription?: string | undefined; actionsToolbarLabel?: string | undefined; leftActionsGroupLabel?: string | undefined; rightActionsGroupLabel?: string | undefined; sendLabel?: string | undefined; stopLabel?: string | undefined; attachLabel?: string | undefined; voiceLabel?: string | undefined; attachmentsLabel?: string | undefined; messageInputLabel?: string | undefined; actionsMenuLabel?: string | undefined; audioRecordButtonLabel?: string | undefined; audioStopRecordButtonLabel?: string | undefined; audioLanguage?: string | undefined; modelSelectorBtnLabel?: string | undefined; modelAutoOptionLabel?: string | undefined; modelAutoOptionCaption?: string | undefined; modelPremiumOptionLabel?: string | undefined; modelPremiumOptionCaption?: string | undefined; modelSelectorListItemLabel?: string | undefined; modelReasoningLabel?: string | undefined; modelVerbosityLabel?: string | undefined; }",
           "references": {
             "Partial": {
               "location": "global",
@@ -1735,6 +1982,48 @@ export class WppChatInput {
           "resolved": "void",
           "references": {}
         }
+      }, {
+        "method": "wppReasoningSelect",
+        "name": "wppReasoningSelect",
+        "bubbles": false,
+        "cancelable": true,
+        "composed": false,
+        "docs": {
+          "tags": [],
+          "text": "Emitted when a level is picked from the \"Reasoning\" submenu. The detail carries the\nresulting state of the whole selection \u2014 the model plus both levels \u2014 so a consumer can\nforward it to the backend without mirroring the component's internals. Rendered only\nwhen the selected model supplies `reasoningOptions`."
+        },
+        "complexType": {
+          "original": "ChatInputModelOptionsEventDetail",
+          "resolved": "ChatInputModelOptionsEventDetail",
+          "references": {
+            "ChatInputModelOptionsEventDetail": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-chat/components/wpp-chat-input/types.ts::ChatInputModelOptionsEventDetail"
+            }
+          }
+        }
+      }, {
+        "method": "wppVerbositySelect",
+        "name": "wppVerbositySelect",
+        "bubbles": false,
+        "cancelable": true,
+        "composed": false,
+        "docs": {
+          "tags": [],
+          "text": "Emitted when a level is picked from the \"Verbosity\" submenu, with the same resulting\nstate payload as `wppReasoningSelect`. Rendered only when the selected model supplies\n`verbosityOptions`."
+        },
+        "complexType": {
+          "original": "ChatInputModelOptionsEventDetail",
+          "resolved": "ChatInputModelOptionsEventDetail",
+          "references": {
+            "ChatInputModelOptionsEventDetail": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-chat/components/wpp-chat-input/types.ts::ChatInputModelOptionsEventDetail"
+            }
+          }
+        }
       }];
   }
   static get elementRef() { return "host"; }
@@ -1745,6 +2034,9 @@ export class WppChatInput {
       }, {
         "propName": "textValue",
         "methodName": "onTextValueChange"
+      }, {
+        "propName": "selectedModel",
+        "methodName": "onSelectedModelChange"
       }, {
         "propName": "size",
         "methodName": "onSizeChange"

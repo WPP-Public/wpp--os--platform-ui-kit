@@ -21,6 +21,7 @@ export declare class WppFileUploadItem {
   private loadingRef?;
   private observer;
   private pendingTruncation;
+  private crossHadFocus;
   private isTruncated;
   private readonly ELLIPSIS;
   private readonly MIN_WIDTH_THRESHOLD;
@@ -82,6 +83,8 @@ export declare class WppFileUploadItem {
   private setReaderFormat;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  componentWillUpdate(): void;
+  componentDidUpdate(): void;
   disconnectedCallback(): void;
   private get _locales();
   private scheduleTruncate;
@@ -93,7 +96,18 @@ export declare class WppFileUploadItem {
   private updateFileNameAndMarkComputed;
   private handleFileReading;
   private generateThumbnail;
+  /**
+   * An explicit `status` always wins over the deprecated `isLoading` flag and
+   * over the local FileReader, so a backend can own the loading state.
+   */
   private isFileLoading;
+  /**
+   * Percent to render while the file is loading. The design has a single loading
+   * treatment - spinner plus a percentage - so this always resolves to a number.
+   * A backend-supplied `progress` wins; otherwise the local FileReader's value is
+   * used, keeping its original one-decimal precision.
+   */
+  private getDisplayProgress;
   private setCurrentIcon;
   private getErrorMessage;
   private isFileWithError;
@@ -112,6 +126,12 @@ export declare class WppFileUploadItem {
   private getImagePreviewUrl;
   private renderThumbnail;
   private getChatSubtitle;
+  /**
+   * Progress is exposed on a dedicated leaf element. `role="progressbar"` makes
+   * its subtree presentational, so it must never wrap the delete control.
+   */
+  private progressAriaProps;
+  private renderProgress;
   private renderDeleteIcon;
   private renderChatVariant;
   render(): any;

@@ -22,10 +22,10 @@ const WppEmptyNotifications$1 = /*@__PURE__*/ proxyCustomElement(class WppEmptyN
   render() {
     return (h(EmptyStateGraphicView, { graphic: this.graphic, name: "wpp-empty-notifications", width: this.width, height: this.height }));
   }
-  static get registryIs() { return "wpp-empty-notifications-v4-4-0"; }
+  static get registryIs() { return "wpp-empty-notifications-v4-5-0"; }
   get host() { return this; }
   static get style() { return wppImageCss; }
-}, [1, "wpp-empty-notifications", "wpp-empty-notifications-v4-4-0", {
+}, [1, "wpp-empty-notifications", "wpp-empty-notifications-v4-5-0", {
     "width": [2],
     "height": [2]
   }]);
@@ -33,14 +33,14 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-empty-notifications-v4-4-0", "wpp-skeleton-v4-4-0"];
+  const components = ["wpp-empty-notifications-v4-5-0", "wpp-skeleton-v4-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-empty-notifications-v4-4-0":
+    case "wpp-empty-notifications-v4-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppEmptyNotifications$1);
       }
       break;
-    case "wpp-skeleton-v4-4-0":
+    case "wpp-skeleton-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

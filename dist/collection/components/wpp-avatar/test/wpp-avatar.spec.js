@@ -35,6 +35,17 @@ describe('wpp-avatar', () => {
     expect(a.tooltipConfig).toBeDefined();
     expect(a.tooltipConfig.placement).toBe('bottom');
   });
+  describe('Testing accessibility', () => {
+    it('does not use a presentational host when the tooltip trigger is focusable', async () => {
+      const page = await newSpecPage({
+        components: [WppAvatar],
+        html: `<wpp-avatar with-tooltip name="Test Avatar" role="presentation"></wpp-avatar>`,
+      });
+      expect(page.root?.getAttribute('role')).toBeNull();
+      expect(page.root?.getAttribute('tabindex')).toBeNull();
+      expect(page.root?.shadowRoot?.querySelector('wpp-tooltip')).not.toBeNull();
+    });
+  });
   it('should set border radius based on size when variant is square', async () => {
     const expectedBorderRadiusMap = {
       xs: 'var(--wpp-border-radius-xs)',

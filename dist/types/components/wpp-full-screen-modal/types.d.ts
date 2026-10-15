@@ -10,3 +10,6 @@ export interface FullScreenModalFormConfig {
 export interface FullScreenModalCloseDetails {
   reason: FullScreenModalCloseReason;
 }
+export type FullScreenModalLocalesType = {
+  closeIconLabel: string;
+};

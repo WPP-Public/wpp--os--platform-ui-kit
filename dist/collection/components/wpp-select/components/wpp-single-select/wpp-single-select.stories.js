@@ -20,7 +20,7 @@ export const Single = (args) => {
       updatedEl.value = selectedValue;
   };
   return html `
-    <wpp-select-v4-4-0
+    <wpp-select-v4-5-0
       type="single"
       name="single-select"
       .message=${args.message}
@@ -42,15 +42,15 @@ export const Single = (args) => {
     >
       ${args.showIconStart
     ? html `
-            <wpp-icon-clock-v4-4-0
+            <wpp-icon-clock-v4-5-0
               slot="icon-start"
               @click="${(e) => {
       e.stopPropagation();
     }}"
-            ></wpp-icon-clock-v4-4-0>
+            ></wpp-icon-clock-v4-5-0>
           `
     : null}
-    </wpp-select-v4-4-0>
+    </wpp-select-v4-5-0>
   `;
 };
 Single.args = {

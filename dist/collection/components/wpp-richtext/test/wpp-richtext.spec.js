@@ -99,6 +99,35 @@ describe('wpp-richtext', () => {
       const label = page.root.querySelector('wpp-label');
       expect(label).toBeDefined();
     });
+    it('applies the editor hover state while its label is hovered', async () => {
+      page = await newSpecPage({
+        components: [WppRichtext],
+        html: '<wpp-richtext></wpp-richtext>',
+      });
+      page.rootInstance.labelConfig = { text: 'Content' };
+      await page.waitForChanges();
+      const label = page.root.querySelector('wpp-label');
+      const formControl = page.root.querySelector('.ql-form-control');
+      label.dispatchEvent(new MouseEvent('mouseenter'));
+      await page.waitForChanges();
+      expect(formControl).toHaveClass('label-hovered');
+      label.dispatchEvent(new MouseEvent('mouseleave'));
+      await page.waitForChanges();
+      expect(formControl).not.toHaveClass('label-hovered');
+    });
+    it('does not apply the editor hover state from a disabled label', async () => {
+      page = await newSpecPage({
+        components: [WppRichtext],
+        html: '<wpp-richtext></wpp-richtext>',
+      });
+      page.rootInstance.labelConfig = { text: 'Content' };
+      await page.waitForChanges();
+      page.rootInstance.disabled = true;
+      const label = page.root.querySelector('wpp-label');
+      label.dispatchEvent(new MouseEvent('mouseenter'));
+      expect(page.rootInstance.isLabelHovered).toBe(false);
+      expect(page.rootInstance.formControlCssClasses()['label-hovered']).toBe(false);
+    });
     it('should render message when message prop is set', async () => {
       page = await newSpecPage({
         components: [WppRichtext],

@@ -1,4 +1,6 @@
 import { readFileSync } from 'fs';
+/** Selector lists span lines once Prettier gets to them; compare them the way CSS reads them. */
+const normalise = (selector) => selector.replace(/\s+/g, ' ').trim();
 const stripComments = (source) => source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
 /** Splits a block body into the declarations and the nested blocks it owns directly. */
 const parseBlock = (body) => {
@@ -48,7 +50,7 @@ const parseBlock = (body) => {
 export const scssDeclarations = (source, selectorPath) => {
   let scope = stripComments(source);
   for (const selector of selectorPath) {
-    const match = parseBlock(scope).blocks.find(block => block.selector === selector);
+    const match = parseBlock(scope).blocks.find(block => normalise(block.selector) === normalise(selector));
     if (!match) {
       throw new Error(`SCSS block "${selectorPath.join(' > ')}" not found (missing "${selector}")`);
     }

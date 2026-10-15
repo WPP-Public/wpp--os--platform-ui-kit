@@ -22,18 +22,19 @@ export function renderCombinedSelect() {
   const onBlurInput = () => {
     this.isContainerFocused = false;
   };
-  const getInlineMessage = () => (h(Fragment, null, this.message && (h("wpp-inline-message-v4-4-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
+  const getInlineMessage = () => (h(Fragment, null, this.message && (h("wpp-inline-message-v4-5-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
   const combinedInputWrapperCssClasses = () => ({
     'inputs-container': true,
     'with-errors': this.hasErrorsOrWarnings('error'),
     'with-warnings': this.hasErrorsOrWarnings('warning'),
     disabled: this.disabled,
     'is-active': this.isOpen || this.isContainerFocused,
+    'label-hovered': this.isLabelHovered,
   });
   const getHostCssClasses = () => ({
     'wpp-combined-select': true,
     disabled: this.disabled,
   });
-  const renderAnchor = () => (h("div", { class: combinedInputWrapperCssClasses() }, renderSingleSelect.call(this, false, this.size, false), h("wpp-input-v4-4-0", { onWppChange: handleInputChange, value: this.inputValue, disabled: this.disabled, type: this.inputType, maskOptions: this.maskOptions, messageType: this.messageType, placeholder: this.placeholder, size: this.size, tabIndex: -1, onFocus: onFocusInput, onBlur: onBlurInput, onClick: (event) => event.stopPropagation() })));
-  return (h(Host, { class: getHostCssClasses(), onKeyUp: this.onKeyUp, "aria-disabled": this.disabled, onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-4-0", { class: this.labelCssClasses(), htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: () => this.handleClick() })), h("div", { class: "combined-anchor-container" }, this.isRenderMessageInTooltip ? (h("wpp-tooltip-v4-4-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())), h("div", null, !this.isRenderMessageInTooltip && getInlineMessage())));
+  const renderAnchor = () => (h("div", { class: combinedInputWrapperCssClasses() }, renderSingleSelect.call(this, false, this.size, false), h("wpp-input-v4-5-0", { onWppChange: handleInputChange, value: this.inputValue, disabled: this.disabled, type: this.inputType, maskOptions: this.maskOptions, messageType: this.messageType, placeholder: this.placeholder, size: this.size, tabIndex: -1, onFocus: onFocusInput, onBlur: onBlurInput, onClick: (event) => event.stopPropagation() })));
+  return (h(Host, { class: getHostCssClasses(), onKeyUp: this.onKeyUp, "aria-disabled": this.disabled, onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-5-0", { class: this.labelCssClasses(), htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })), h("div", { class: "combined-anchor-container" }, this.isRenderMessageInTooltip ? (h("wpp-tooltip-v4-5-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())), h("div", null, !this.isRenderMessageInTooltip && getInlineMessage())));
 }

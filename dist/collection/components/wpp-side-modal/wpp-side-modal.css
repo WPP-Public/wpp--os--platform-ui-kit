@@ -180,6 +180,9 @@
   background-color: var(--side-modal-bg-color);
   box-shadow: var(--side-modal-box-shadow);
 }
+.side-modal:focus, .side-modal:focus-visible {
+  outline: none;
+}
 .side-modal.visible {
   animation: fadeIn 0.2s ease-in-out forwards;
 }

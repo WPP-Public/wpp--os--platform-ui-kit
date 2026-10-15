@@ -65,5 +65,6 @@ export * from './components/wpp-artefact/types';
 export * from './components/wpp-basic-node/types';
 export * from './components/wpp-floating-toolbar/types';
 export * from './components/wpp-side-panel/types';
+export * from './components/wpp-audio-player/types';
 export * from './components/wpp-legacy-autocomplete/types';
 export * from './components/wpp-legacy-sticky-bar/types';

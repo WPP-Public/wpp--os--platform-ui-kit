@@ -168,6 +168,34 @@ describe('wpp-menu-context', () => {
     expect(items?.[1].getAttribute('role')).toBe(MENU_ITEM);
     expect(items?.[1].hasAttribute('aria-disabled')).toBe(false);
   });
+  describe('selectable menu-item roles (WPPOPENDS-1593)', () => {
+    const mountWithItems = async (itemsHtml) => {
+      const page = await newSpecPage({
+        components: [WppMenuContext, WppListItem],
+        html: `<wpp-menu-context>
+          <button slot="trigger-element">Open menu</button>
+          ${itemsHtml}
+        </wpp-menu-context>`,
+      });
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await page.waitForChanges();
+      return page;
+    };
+    it('preserves an authored menuitemradio and still normalises its role-less sibling', async () => {
+      const page = await mountWithItems(`<wpp-list-item role="menuitemradio" aria-checked="true">Picked</wpp-list-item>
+         <wpp-list-item>Plain</wpp-list-item>`);
+      const items = page.root?.querySelectorAll('wpp-list-item');
+      // `aria-checked` is only legal on a selectable menu-item role, so normalising this row
+      // to `menuitem` would turn it into an axe `aria-allowed-attr` violation.
+      expect(items?.[0].getAttribute('role')).toBe('menuitemradio');
+      expect(items?.[0].getAttribute('aria-checked')).toBe('true');
+      expect(items?.[1].getAttribute('role')).toBe(MENU_ITEM);
+    });
+    it('preserves an authored menuitemcheckbox', async () => {
+      const page = await mountWithItems(`<wpp-list-item role="menuitemcheckbox">Toggle</wpp-list-item>`);
+      expect(page.root?.querySelector('wpp-list-item')?.getAttribute('role')).toBe('menuitemcheckbox');
+    });
+  });
   it('sets submenu trigger ARIA on the nested list item', async () => {
     const page = await newSpecPage({
       components: [WppMenuContext, WppListItem],

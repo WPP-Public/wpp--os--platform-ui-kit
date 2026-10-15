@@ -13,6 +13,10 @@ export const EXTENSION_TO_TYPE = {
   xml: 'application/xml',
   json: 'application/json',
   png: 'image/png',
+  webp: 'image/webp',
+  heic: 'image/heic',
+  heif: 'image/heif',
+  avif: 'image/avif',
   jpg: 'image/jpg',
   jpeg: 'image/jpeg',
   gif: 'image/gif',
@@ -56,19 +60,19 @@ export const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
   switch (fileExtension) {
     // Text
     case '.txt':
-      return h("wpp-icon-document-v4-4-0", null);
+      return h("wpp-icon-document-v4-5-0", null);
     // Compressed
     case '.zip':
     case '.rar':
     case '.7z':
-      return h("wpp-icon-file-zip-v4-4-0", null);
+      return h("wpp-icon-file-zip-v4-5-0", null);
     // Image
     case '.png':
     case '.jpg':
     case '.jpeg':
     case '.svg':
     case '.gif':
-      return h("wpp-icon-image-v4-4-0", null);
+      return h("wpp-icon-image-v4-5-0", null);
     // Video
     case '.mp4':
     case '.mov':
@@ -77,7 +81,7 @@ export const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.mkv':
     case '.flv':
     case '.webm':
-      return h("wpp-icon-video-clip-v4-4-0", null);
+      return h("wpp-icon-video-clip-v4-5-0", null);
     // Audio
     case '.mp3':
     case '.wav':
@@ -85,7 +89,7 @@ export const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.wma':
     case '.m4a':
     case '.aac':
-      return h("wpp-icon-music-v4-4-0", null);
+      return h("wpp-icon-music-v4-5-0", null);
     // Data
     case '.csv':
     case '.json':
@@ -93,7 +97,7 @@ export const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.db':
     case '.sqlite':
     case '.dat':
-      return h("wpp-icon-database-v4-4-0", null);
+      return h("wpp-icon-database-v4-5-0", null);
     // Presentation
     case '.pptx':
     case '.key':
@@ -101,16 +105,16 @@ export const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.pps':
     case '.sldx':
     case '.ppt':
-      return h("wpp-icon-pitch-v4-4-0", null);
+      return h("wpp-icon-pitch-v4-5-0", null);
     // Spreadsheet
     case '.xlsx':
     case '.xls':
     case '.ods':
     case '.numbers':
     case '.tsv':
-      return h("wpp-icon-spreadsheet-v4-4-0", null);
+      return h("wpp-icon-spreadsheet-v4-5-0", null);
     default:
-      return h("wpp-icon-file-v4-4-0", null);
+      return h("wpp-icon-file-v4-5-0", null);
   }
 };
 /**
@@ -174,6 +178,13 @@ export const LOCALES_DEFAULTS = {
   label: 'Choose a file',
   text: 'to upload or drag it here',
   info: (accept, size) => `Only ${accept} file at ${size} MB or less`,
+  infoAnyFormat: (size) => `Any file at ${size} MB or less`,
+  acceptFamilyLabels: {
+    'image/*': 'image',
+    'video/*': 'video',
+    'audio/*': 'audio',
+    'text/*': 'text',
+  },
   sizeError: 'File exceeds size limit',
   formatError: 'Wrong format',
   singleFileLimitError: 'Only one file is allowed',
@@ -181,4 +192,7 @@ export const LOCALES_DEFAULTS = {
   fileAdded: (fileName) => `${fileName} added`,
   fileRemoved: (fileName) => `${fileName} removed`,
   removeFile: (fileName) => `Remove file ${fileName}`,
+  uploadProgress: (fileName) => `Processing ${fileName}`,
+  processingComplete: (fileName) => `${fileName} processed`,
+  processingFailed: (fileName, error) => `${fileName} failed: ${error}`,
 };

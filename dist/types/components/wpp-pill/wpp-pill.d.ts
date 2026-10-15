@@ -21,6 +21,7 @@ interface FocusType {
  */
 export declare class WppPill {
   private inputEl?;
+  private crossIconRef?;
   private labelRef?;
   private resizeObserver?;
   private resizeObserverCallback?;
@@ -97,6 +98,15 @@ export declare class WppPill {
    * Emitted when the drag icon pressed
    */
   wppDragPress: EventEmitter<MouseEvent>;
+  /**
+   * Moves keyboard focus to the pill's remove icon and paints its focus ring.
+   *
+   * The ring is a `tab-focus` class this component only sets from its own Tab keyup, so a parent
+   * that re-homes focus here with a plain `focus()` moves focus invisibly (WCAG 2.4.7). Parents
+   * that take focus off a removed neighbouring pill should call this instead. No-op when the pill
+   * has no remove icon to focus.
+   */
+  setRemoveIconFocus(): Promise<void>;
   componentWillLoad(): void;
   componentDidLoad(): void;
   disconnectedCallback(): void;
@@ -109,6 +119,7 @@ export declare class WppPill {
   private onMouseDown;
   private onKeyUp;
   private onClose;
+  private onCloseKeyDown;
   private onDragPress;
   private setFocus;
   private updateComponentState;

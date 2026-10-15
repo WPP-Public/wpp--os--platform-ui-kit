@@ -13,5 +13,5 @@
   flex-direction: row;
 }
 :host .label .wpp-internal-label::part(info-wrapper) {
-  cursor: default;
+  cursor: text;
 }

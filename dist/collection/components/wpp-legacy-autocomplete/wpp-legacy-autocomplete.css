@@ -137,26 +137,29 @@
   display: flex;
   flex-wrap: wrap;
 }
-:host .label:not(.focused):hover + .trigger {
+:host .label:not(.focused):not([disabled]):hover + .trigger {
   background-color: var(--autocomplete-bg-color-hover);
   border-color: var(--autocomplete-border-color-hover);
 }
-:host .label:not(.focused):hover + .trigger .trigger-actions .wpp-icon-chevron,
-:host .label:not(.focused):hover + .trigger .wpp-icon-cross {
+:host .label:not(.focused):not([disabled]):hover + .trigger .trigger-actions .wpp-icon-chevron,
+:host .label:not(.focused):not([disabled]):hover + .trigger .wpp-icon-cross {
   color: var(--autocomplete-trigger-icon-color-hover);
 }
-:host .label:not(.focused):hover + .trigger.warning {
+:host .label:not(.focused):not([disabled]):hover + .trigger.warning {
   border-color: var(--wpp-warning-color-500);
 }
-:host .label:not(.focused):hover + .trigger.error {
+:host .label:not(.focused):not([disabled]):hover + .trigger.error {
   border-color: var(--wpp-danger-color-500);
 }
 
 :host(.wpp-disabled) {
   cursor: not-allowed;
 }
-:host(.wpp-disabled) .label {
-  pointer-events: none;
+:host(.wpp-disabled) .wpp-inline-message {
+  cursor: text;
+}
+:host(.wpp-disabled) .wpp-inline-message {
+  cursor: text;
 }
 
 .trigger-actions {

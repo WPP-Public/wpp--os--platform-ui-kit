@@ -13,6 +13,7 @@ const meta = {
     numberOfHandles: { control: 'select', options: ['1 handle', '3 handles'] },
     isLoading: { control: 'boolean' },
     isReRun: { control: 'boolean' },
+    errorMessage: { control: 'text' },
   },
 };
 export default meta;
@@ -23,6 +24,7 @@ export const BasicNode = {
     isSelected: false,
     isLoading: false,
     isReRun: false,
+    errorMessage: '',
     actions: [
       {
         icon: 'wpp-icon-pinned',
@@ -39,6 +41,10 @@ export const BasicNode = {
     const handleActionClick = (event) => {
       console.log('Event', event);
     };
+    // The node owns the spacing around its error message, so dismissing it requires no layout handling here.
+    const handleDismissError = (event) => {
+      console.log('Event', event);
+    };
     return html `
       <div
         class="react-flow__node react-flow__node-imageNode nopan selectable draggable"
@@ -47,24 +53,26 @@ export const BasicNode = {
         aria-roledescription="node"
         tabindex="0"
       >
-        <wpp-basic-node-v4-4-0
+        <wpp-basic-node-v4-5-0
           .nodeTitle=${args.nodeTitle}
           .actions=${args.actions}
           .isSelected=${args.isSelected}
           .isLoading=${args.isLoading}
           .isReRun=${args.isReRun}
+          .errorMessage=${args.errorMessage || undefined}
           .locales=${args.locales}
           @wppActionClick=${handleActionClick}
+          @wppDismissError=${handleDismissError}
         >
           <div slot="body" style="display: flex; flex-direction: column; gap: 10px;">
-            <wpp-typography-v4-4-0>This is the body of the basic node.</wpp-typography-v4-4-0>
-            <wpp-typography-v4-4-0
+            <wpp-typography-v4-5-0>This is the body of the basic node.</wpp-typography-v4-5-0>
+            <wpp-typography-v4-5-0
               >You can put any content here, and it will become scrollable if it exceeds the maximum
-              height.</wpp-typography-v4-4-0
+              height.</wpp-typography-v4-5-0
             >
           </div>
           <div slot="handles">${renderHandles(args.numberOfHandles, args.isSelected, args.isLoading)}</div>
-        </wpp-basic-node-v4-4-0>
+        </wpp-basic-node-v4-5-0>
       </div>
     `;
   },

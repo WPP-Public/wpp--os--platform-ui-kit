@@ -1,6 +1,6 @@
 import { h, Host } from '@stencil/core';
 import { debounce, mergeLocales, transformToVersionedTag, uuidv4 } from '../../utils/utils';
-import { findSelectedItems, findTreeItemById, isHaveFoundChildren, markChildrenAs, recalculateIndeterminateTreeState, convertToOriginalItems, updateTreeById, updateTreeByIds, extractExtraProps, getAllVisibleItems, findParentOfItem, getSiblings, } from './utils';
+import { findSelectedItems, findTreeItemById, isHaveFoundChildren, markChildrenAs, recalculateIndeterminateTreeState, convertToOriginalItems, updateTreeById, updateTreeByIds, extractExtraProps, getAllVisibleItems, findParentOfItem, findItemById, getSiblings, } from './utils';
 import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 import { DEFAULT_OVERSCAN, DEFAULT_TREE_HEIGHT, LOCALES_DEFAULTS, TREE_ITEM_HEIGHT, TREE_PADDING_TOP } from './const';
 export class WppTree {
@@ -18,6 +18,27 @@ export class WppTree {
     this.visibleItemsList = [];
     this.scrollContainer = undefined;
     this.getTotalHeightOfTree = () => this.visibleItemsList.length * TREE_ITEM_HEIGHT + TREE_PADDING_TOP;
+    /**
+     * Height of the box that actually scrolls. Under virtualisation that is the shadow
+     * `.container-wrapper`, which is what the browser clamps `scrollTop` against; the host is the
+     * fallback for the plain tree and before the container is rendered.
+     */
+    this.getViewportHeight = () => this.scrollContainer?.clientHeight || this.host.clientHeight || DEFAULT_TREE_HEIGHT;
+    /**
+     * Keeps the virtualisation window inside the new bounds when the tree gets shorter.
+     * The browser clamps the scroll container on its own, but `scrollTop` is state that `render`
+     * reads synchronously, so without this the tree paints an out-of-range (empty) window until
+     * the browser's `scroll` event lands.
+     */
+    this.clampScrollTop = () => {
+      const maxScrollTop = Math.max(0, (this.totalHeight || 0) - this.getViewportHeight());
+      if (this.scrollTop <= maxScrollTop)
+        return;
+      this.scrollTop = maxScrollTop;
+      if (this.scrollContainer) {
+        this.scrollContainer.scrollTop = maxScrollTop;
+      }
+    };
     this.focusTreeItem = (itemId) => {
       // Use attribute-only selector — tag names are versioned at runtime (e.g. wpp-tree-item-v3-4-0)
       const treeItemEl = this.host.shadowRoot?.querySelector(`[data-item-id="${itemId}"]`);
@@ -377,16 +398,16 @@ export class WppTree {
       'wpp-tree': true,
       'wpp-virtualised-tree': !!this.withVirtualisation,
     });
-    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v4-4-0", { dropdownConfig: {
+    this.renderIconsList = (item, icons, place = 'end') => (h("div", { slot: `icon-${place}`, key: uuidv4() }, h("wpp-menu-context-v4-5-0", { dropdownConfig: {
         trigger: 'click',
         interactiveDebounce: 15,
         interactiveBorder: 25,
         offset: [0, 0],
-      } }, h("wpp-icon-more-v4-4-0", { class: {
+      } }, h("wpp-icon-more-v4-5-0", { class: {
         'menu-trigger': true,
         disabled: !!item.disabled,
-      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v4-4-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
-    this.renderTreeItem = (item, level, setSize, posInSet, isFocused, extraProps, isParent) => (h("wpp-tree-item-v4-4-0", { id: `tree-item-${item.id}`, key: `tree-item-${item.id}`, style: { top: `${(posInSet - 1) * TREE_ITEM_HEIGHT}px` }, text: item.title, item: item, level: this.withVirtualisation ? item?.level || 1 : level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isDarkTheme: this.isDarkTheme, isFocused: isFocused, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
+      }, style: { padding: '4px', color: 'var(--wpp-grey-color-800)' }, direction: "horizontal", slot: "trigger-element" }), h("div", null, icons.map(({ icon, name }) => (h("wpp-list-item-v4-5-0", { key: name, value: name, onClick: this.handleActionClick({ item, name, place }) }, h(transformToVersionedTag(icon), { slot: 'left' }), h("span", { slot: "label" }, name))))))));
+    this.renderTreeItem = (item, level, setSize, posInSet, isFocused, extraProps, isParent) => (h("wpp-tree-item-v4-5-0", { id: `tree-item-${item.id}`, key: `tree-item-${item.id}`, style: { top: `${(posInSet - 1) * TREE_ITEM_HEIGHT}px` }, text: item.title, item: item, level: this.withVirtualisation ? item?.level || 1 : level, multiple: this.multiple, search: this.search, highlightOptions: this.searchConfig.highlightOptions, transformSearchQuery: this.searchConfig.transformSearchQuery, disableSearchHighlight: this.disableSearchHighlight, disableOpenCloseAnimation: this.disableOpenCloseAnimation, withItemsTruncation: this.withItemsTruncation, endContent: item.endContent, setSize: setSize, posInSet: posInSet, isDarkTheme: this.isDarkTheme, isFocused: isFocused, "data-item-id": item.id, ...extraProps }, item.iconStart?.icon &&
       h(transformToVersionedTag(item.iconStart.icon), {
         slot: 'icon-start',
         part: 'icon-start',
@@ -483,6 +504,15 @@ export class WppTree {
     this.getActiveDescendantId = () => {
       if (this.focusedItemId === null)
         return undefined;
+      // The reference has to resolve to an element that exists. Virtualisation renders only a
+      // window of the list, so once the focused item scrolls out of that window there is nothing
+      // for the tree to point at.
+      if (this.withVirtualisation) {
+        const { start, end } = this.getVirtualisedRange(this.visibleItemsList.length);
+        const index = this.visibleItemsList.findIndex(item => item.id === this.focusedItemId);
+        if (index < start || index >= end)
+          return undefined;
+      }
       return `tree-item-${this.focusedItemId}`;
     };
     this.handleScroll = (event) => {
@@ -528,7 +558,7 @@ export class WppTree {
   }
   renderSkeletonRows(count = 1, paddingLeft) {
     const { height = 32 } = this.lazyConfig?.skeleton || {};
-    return Array.from({ length: count }, (_, idx) => (h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, h("wpp-skeleton-v4-4-0", { variant: "rectangle", width: "100%", height: height }))));
+    return Array.from({ length: count }, (_, idx) => (h("div", { class: "skeleton-item", key: `skeleton-${idx}`, ...(paddingLeft && { style: { paddingLeft } }) }, h("wpp-skeleton-v4-5-0", { variant: "rectangle", width: "100%", height: height }))));
   }
   onInputChange(searchText) {
     if (!searchText.trim()) {
@@ -566,9 +596,16 @@ export class WppTree {
   updateDate(newData) {
     this.currentTreeData = newData;
     this.preloadInitialOpenChildren();
+    // A replacement data set need not contain the item that was focused last. Keeping it would
+    // leave `aria-activedescendant` on the tree pointing at an item that no longer renders; the
+    // next focus entry re-establishes a target from the new data.
+    if (this.focusedItemId !== null && !findItemById(this.currentTreeData, this.focusedItemId)) {
+      this.focusedItemId = null;
+    }
     if (this.withVirtualisation) {
       this.visibleItemsList = getAllVisibleItems(this.currentTreeData);
       this.totalHeight = this.getTotalHeightOfTree();
+      this.clampScrollTop();
     }
   }
   async handleOpenItem(event) {
@@ -913,6 +950,25 @@ export class WppTree {
       this.singleSelectionUpdate(updatedTreeWithCurrentItem, newItemState);
     }
   }
+  /**
+   * Scrolls the tree back to its first item.
+   *
+   * With `withVirtualisation` the scrollable element lives inside the component's shadow root,
+   * so setting `scrollTop` (or calling `scroll()`) on the host element has no effect. Call this
+   * method after replacing `data` with a different list — moving between wizard steps, for
+   * example — to bring the tree back to the top.
+   *
+   * The jump is instant rather than smooth (unlike `wpp-chat-conversation`'s `scrollToBottom()`):
+   * the list being scrolled away from is usually the one that has just been replaced, and every
+   * intermediate offset of a smooth scroll would re-render the virtualisation window.
+   */
+  async scrollToTop() {
+    this.scrollTop = 0;
+    const scroller = this.withVirtualisation ? this.scrollContainer : this.host;
+    if (scroller) {
+      scroller.scrollTop = 0;
+    }
+  }
   async recalculateTreeWidth() {
     if (this.host) {
       const contentRect = this.host.getBoundingClientRect();
@@ -1174,22 +1230,30 @@ export class WppTree {
     this.currentTreeData = this.checkData(this.data);
     this.preloadInitialOpenChildren();
   }
-  getVirtualisedNodes(flatNodes) {
+  /**
+   * Index range of the virtualisation window for the current scroll offset. Kept free of side
+   * effects so it can also be asked which items are on screen, not only used to slice them.
+   */
+  getVirtualisedRange(total) {
     const startIndex = Math.floor(this.scrollTop / TREE_ITEM_HEIGHT);
-    const containerHeight = this.host.clientHeight || DEFAULT_TREE_HEIGHT;
-    const visibleCount = Math.ceil(containerHeight / TREE_ITEM_HEIGHT);
-    const endIndex = startIndex + visibleCount;
+    const visibleCount = Math.ceil(this.getViewportHeight() / TREE_ITEM_HEIGHT);
+    return {
+      start: Math.max(0, startIndex - DEFAULT_OVERSCAN),
+      end: Math.min(total, startIndex + visibleCount + DEFAULT_OVERSCAN),
+    };
+  }
+  getVirtualisedNodes(flatNodes) {
+    const { start, end } = this.getVirtualisedRange(flatNodes.length);
     // We need to keep `bufferStart` value in a state to compute the `top` position of each tree-item
-    this.bufferStart = Math.max(0, startIndex - DEFAULT_OVERSCAN);
-    const bufferedEnd = Math.min(flatNodes.length, endIndex + DEFAULT_OVERSCAN);
-    return flatNodes.slice(this.bufferStart, bufferedEnd);
+    this.bufferStart = start;
+    return flatNodes.slice(start, end);
   }
   render() {
     const hasVisibleContent = this.currentTreeData && this.isSearchResultFound;
     return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-container, tree-empty-text", onScroll: this.handleScroll }, !this.loading && (h("div", { ref: el => (this.scrollContainer = el), class: "container-wrapper", onScroll: this.handleScroll }, h("div", { class: "container", style: this.withVirtualisation ? { height: `${this.totalHeight}px` } : undefined, part: "tree-container", role: "tree", "aria-label": this.label, "aria-multiselectable": this.multiple ? 'true' : undefined, "aria-activedescendant": this.getActiveDescendantId(), tabindex: hasVisibleContent ? '0' : undefined, onFocus: this.handleContainerFocus, onBlur: this.handleContainerBlur }, hasVisibleContent ? (this.handleTreeRender(hasVisibleContent)) : (h("p", { class: "empty-tree-text", part: "tree-empty-text", role: "status" }, this._locales.nothingFound))))), this.loading && (h("div", { class: "skeleton-wrapper", role: "status", "aria-label": this._locales.loadingTree }, this.renderSkeletonRows(this.skeletonNumberItems)))));
   }
   static get is() { return "wpp-tree"; }
-  static get registryIs() { return "wpp-tree-v4-4-0"; }
+  static get registryIs() { return "wpp-tree-v4-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -1531,6 +1595,23 @@ export class WppTree {
   }
   static get methods() {
     return {
+      "scrollToTop": {
+        "complexType": {
+          "signature": "() => Promise<void>",
+          "parameters": [],
+          "references": {
+            "Promise": {
+              "location": "global",
+              "id": "global::Promise"
+            }
+          },
+          "return": "Promise<void>"
+        },
+        "docs": {
+          "text": "Scrolls the tree back to its first item.\n\nWith `withVirtualisation` the scrollable element lives inside the component's shadow root,\nso setting `scrollTop` (or calling `scroll()`) on the host element has no effect. Call this\nmethod after replacing `data` with a different list \u2014 moving between wizard steps, for\nexample \u2014 to bring the tree back to the top.\n\nThe jump is instant rather than smooth (unlike `wpp-chat-conversation`'s `scrollToBottom()`):\nthe list being scrolled away from is usually the one that has just been replaced, and every\nintermediate offset of a smooth scroll would re-render the virtualisation window.",
+          "tags": []
+        }
+      },
       "recalculateTreeWidth": {
         "complexType": {
           "signature": "() => Promise<void>",

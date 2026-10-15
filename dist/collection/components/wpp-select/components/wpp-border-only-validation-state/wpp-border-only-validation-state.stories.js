@@ -15,7 +15,7 @@ export const BorderOnlyValidationState = (args) => {
   const messageType = args.messageType ?? undefined;
   return html `
     <div style="display: flex; flex-direction: column; gap: 24px; width: 320px;">
-      <wpp-select-v4-4-0
+      <wpp-select-v4-5-0
         type="single"
         name="single-border-only-warning"
         .message=${args.message}
@@ -32,9 +32,9 @@ export const BorderOnlyValidationState = (args) => {
         .maximumSelectedItems=${args.maximumSelectedItems}
         .list=${getSelectStoryList('single')}
         .value=${null}
-      ></wpp-select-v4-4-0>
+      ></wpp-select-v4-5-0>
 
-      <wpp-select-v4-4-0
+      <wpp-select-v4-5-0
         type="multiple"
         name="multiple-border-only-error"
         .message=${args.message}
@@ -53,9 +53,9 @@ export const BorderOnlyValidationState = (args) => {
         .maximumSelectedItems=${args.maximumSelectedItems}
         .list=${getSelectStoryList('multiple')}
         .value=${[]}
-      ></wpp-select-v4-4-0>
+      ></wpp-select-v4-5-0>
 
-      <wpp-select-v4-4-0
+      <wpp-select-v4-5-0
         type="combined"
         name="combined-border-only-warning"
         .message=${args.message}
@@ -71,7 +71,7 @@ export const BorderOnlyValidationState = (args) => {
         .consistentSearch=${args.consistentSearch}
         .list=${getSelectStoryList('single')}
         .value=${null}
-      ></wpp-select-v4-4-0>
+      ></wpp-select-v4-5-0>
     </div>
   `;
 };

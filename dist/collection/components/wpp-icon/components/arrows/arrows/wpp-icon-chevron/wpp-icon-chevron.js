@@ -19,7 +19,7 @@ export class WppIconChevron {
     return (h(WppIcon, { name: "wpp-icon-chevron", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: CHEVRON_ICON_PATH, fill: "currentColor", transform: ChevronDirectionTransform[this.direction] })));
   }
   static get is() { return "wpp-icon-chevron"; }
-  static get registryIs() { return "wpp-icon-chevron-v4-4-0"; }
+  static get registryIs() { return "wpp-icon-chevron-v4-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

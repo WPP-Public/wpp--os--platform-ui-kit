@@ -26,6 +26,9 @@
 :host .label {
   margin: var(--sc-label-margin);
 }
+:host .label .wpp-internal-label::part(info-wrapper) {
+  cursor: text;
+}
 :host .wpp-bar-wrapper {
   display: inline-flex;
   padding: var(--sc-padding-m);

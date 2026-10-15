@@ -1,0 +1,1 @@
+let e=!1;const a=()=>{if(!e&&"undefined"!=typeof CSS&&CSS.registerProperty){e=!0;try{CSS.registerProperty({name:"--wpp-loading-halo-angle",syntax:"<angle>",initialValue:"0deg",inherits:!1})}catch{}}};export{a as r}

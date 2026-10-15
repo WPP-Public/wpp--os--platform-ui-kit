@@ -1,7 +1,8 @@
-import { h, Host } from '@stencil/core';
+import { Fragment, h, Host } from '@stencil/core';
 import { transformToVersionedTag } from '../../utils/utils';
-import { getDefaultMessageActions, getDefaultModelOptions, LOCALES_DEFAULTS } from './consts';
+import { COPIED_CONFIRMATION_TIMEOUT, DEFAULT_REASONING_IDS, DEFAULT_TOKEN_COUNT_ICON, DEFAULT_VERBOSITY_IDS, getDefaultMessageActions, getDefaultModelOptions, LOCALES_DEFAULTS, MODEL_OPTIONS_SUBMENU_DISTANCE, MODEL_OPTIONS_SUBMENU_FALLBACK_SKIDDING, } from './consts';
 import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
+import { registerLoadingHaloAngle } from '../../utils/loading-halo';
 import { SpeechRecognitionService } from '../../utils/speech-recognition';
 const RESPONSE_WAIT_TIMEOUT_MS = 30000;
 /**
@@ -24,6 +25,21 @@ export class WppChatNode {
     this.themeSubscription = themeSubscriptionController(() => this.host);
     this._locales = LOCALES_DEFAULTS;
     this.recognition = new SpeechRecognitionService();
+    this.copyResetHandle = null;
+    /**
+     * The levels the user last chose for each model, so switching away from a model and back
+     * restores their choice instead of resetting it (Mustafa, 23 Sep 2026).
+     *
+     * This is INSTANCE state, not a persisted session: it lives as long as this element does, so a
+     * consumer that needs the selection to survive a remount or a page reload owns that itself and
+     * feeds it back through `selectedReasoning` / `selectedVerbosity`.
+     */
+    this.modelOptionMemory = new Map();
+    /** Which mount-time defaults `componentWillLoad` applied, for `componentDidLoad` to emit. */
+    this.pendingModelOptionDefaults = { reasoningChanged: false, verbosityChanged: false };
+    /** The two level submenus, by kind, so their popper offset can measure against the model menu. */
+    this.modelOptionsSubmenuRefs = {};
+    this.modelOptionsDropdownConfigs = {};
     this.handleInput = (event) => {
       const target = event.target;
       this.activateNode();
@@ -42,7 +58,16 @@ export class WppChatNode {
         role: 'user',
       };
       this.messages = [...this.messages, message];
-      this.wppSend.emit({ message: message.content });
+      const reasoning = this.getSelectedModelOption('reasoningOptions', this.selectedReasoning);
+      const verbosity = this.getSelectedModelOption('verbosityOptions', this.selectedVerbosity);
+      this.wppSend.emit({
+        message: message.content,
+        model: this.getSelectedModel(),
+        // Spread rather than assign `null`: a level the selected model does not offer is
+        // absent from the payload.
+        ...(reasoning ? { reasoning } : {}),
+        ...(verbosity ? { verbosity } : {}),
+      });
       this.inputValue = '';
       this.scrollToBottom();
     };
@@ -110,6 +135,9 @@ export class WppChatNode {
       else {
         this.selectedModel = model;
       }
+      // Assigning `selectedModel` above is what carries the levels over — `onSelectedModelChange`
+      // watches it, so picking from this dropdown and having the platform set the prop take the
+      // same path.
       this.selectedModelId = model.id;
       this.wppModelSelect.emit(model);
     };
@@ -124,9 +152,87 @@ export class WppChatNode {
     this.handleModelMenuHide = () => {
       this.isModelMenuOpen = false;
     };
+    /**
+     * The level to pre-select for a model the user has not chosen one for yet: the first of the
+     * documented defaults the model actually offers, or nothing when it offers none of them.
+     */
+    this.resolveDefaultOptionId = (options, defaultIds) => defaultIds.find(defaultId => options.some(option => option.id === defaultId));
+    /**
+     * The remembered level for a model, but only if that model still offers it — a consumer can
+     * change a model's option list between selections, and a remembered id that no longer exists
+     * would leave the submenu with nothing checked.
+     */
+    this.getRememberedOptionId = (options, rememberedId) => options.find(option => option.id === rememberedId)?.id;
+    /**
+     * Fills in only the levels the consumer left unset for the model selected at mount. It must not
+     * overwrite: a level passed alongside the model is the consumer seeding an explicit selection
+     * and outranks any default. Returns what it filled so `componentDidLoad` can emit exactly that.
+     */
+    this.applyModelOptionDefaults = () => {
+      const { reasoning, verbosity } = this.resolveModelOptions(this.getSelectedModel());
+      const reasoningChanged = this.selectedReasoning === undefined && reasoning !== undefined;
+      const verbosityChanged = this.selectedVerbosity === undefined && verbosity !== undefined;
+      if (reasoningChanged)
+        this.selectedReasoning = reasoning;
+      if (verbosityChanged)
+        this.selectedVerbosity = verbosity;
+      return { reasoningChanged, verbosityChanged };
+    };
+    /** The levels that apply to a model: what the user last chose for it, else the defaults. */
+    this.resolveModelOptions = (model) => {
+      const remembered = this.modelOptionMemory.get(model.id);
+      const reasoningOptions = model.reasoningOptions || [];
+      const verbosityOptions = model.verbosityOptions || [];
+      return {
+        reasoning: this.getRememberedOptionId(reasoningOptions, remembered?.reasoning) ??
+          this.resolveDefaultOptionId(reasoningOptions, DEFAULT_REASONING_IDS),
+        verbosity: this.getRememberedOptionId(verbosityOptions, remembered?.verbosity) ??
+          this.resolveDefaultOptionId(verbosityOptions, DEFAULT_VERBOSITY_IDS),
+      };
+    };
+    /**
+     * The levels offered by whichever model is selected. `Auto` and `Premium` are built-in
+     * presets that carry no per-LLM levels, so they resolve to an empty list and render no row.
+     */
+    this.getModelOptions = (kind) => this.getSelectedModel()[kind] || [];
+    this.getSelectedModelOption = (kind, selectedId) => this.getModelOptions(kind).find(option => option.id === selectedId) || null;
+    this.emitModelOptionsState = (emitter) => {
+      emitter.emit({
+        model: this.getSelectedModel(),
+        reasoning: this.getSelectedModelOption('reasoningOptions', this.selectedReasoning),
+        verbosity: this.getSelectedModelOption('verbosityOptions', this.selectedVerbosity),
+      });
+    };
+    this.handleReasoningSelect = (option) => {
+      this.activateNode();
+      if (this.selectedReasoning === option.id)
+        return;
+      this.selectedReasoning = option.id;
+      this.emitModelOptionsState(this.wppReasoningSelect);
+    };
+    this.handleVerbositySelect = (option) => {
+      this.activateNode();
+      if (this.selectedVerbosity === option.id)
+        return;
+      this.selectedVerbosity = option.id;
+      this.emitModelOptionsState(this.wppVerbositySelect);
+    };
     this.handleMessageActionClick = (message, action) => {
       this.activateNode();
-      this.wppMessageActionClick.emit({ message, action });
+      const isToggle = Boolean(action.activeIcon || action.activeLabel);
+      let isActive = this.isActionActive(message, action);
+      if (isToggle && action.isActive === undefined) {
+        const key = this.toggleKey(message, action);
+        isActive = !isActive;
+        this.toggledActionKeys = isActive
+          ? [...this.toggledActionKeys, key]
+          : this.toggledActionKeys.filter(item => item !== key);
+      }
+      // The detail carries the state the action ends in, not the one it started in.
+      this.wppMessageActionClick.emit({ message, action: isToggle ? { ...action, isActive } : action });
+      if (action.id === 'copy') {
+        this.copyMessageToClipboard(message);
+      }
     };
     this.handleNodeInteraction = () => {
       this.activateNode();
@@ -185,6 +291,8 @@ export class WppChatNode {
     this.messageActions = undefined;
     this.selectedModel = 'auto';
     this.selectedModelId = undefined;
+    this.selectedReasoning = undefined;
+    this.selectedVerbosity = undefined;
     this.locales = {};
     this.inputValue = '';
     this.messages = [];
@@ -193,6 +301,8 @@ export class WppChatNode {
     this.isAudioRecording = false;
     this.isModelMenuOpen = false;
     this.defaultMessageActions = [];
+    this.copiedMessageId = null;
+    this.toggledActionKeys = [];
   }
   static unrefTimer(timer) {
     if (typeof timer === 'object' && timer !== null && 'unref' in timer) {
@@ -206,25 +316,77 @@ export class WppChatNode {
     this._locales = { ...LOCALES_DEFAULTS, ...newLocales };
     this.defaultMessageActions = getDefaultMessageActions(this._locales);
   }
+  /**
+   * Keeps the deprecated `selectedModelId` in step, and carries the reasoning/verbosity levels
+   * across a model change — whichever way the model was changed, picked from this dropdown or set
+   * by the platform.
+   *
+   * The user's choice is remembered per model for the lifetime of this element and restored when
+   * they come back to it; a model they have not chosen a level for yet takes the documented
+   * defaults. It deliberately does NOT reset (Mustafa, 23 Sep 2026).
+   *
+   * It EMITS whatever it applies: these are controlled props, so a component that silently
+   * rewrote them would be overwritten again by the next render of a consumer holding its own
+   * state. Only levels that actually changed emit.
+   */
   onUpdateSelectedModel(newModel) {
     this.selectedModelId = typeof newModel === 'string' ? newModel : newModel?.id;
+    // `selectedModel` takes either a string preset or a model object. Going from the string to an
+    // object makes React remove the attribute, and Stencil's attributeChangedCallback assigns that
+    // removal as `null` before the property set lands - so this watch sees a null it must ignore
+    // rather than resolve. The real value arrives on the very next call.
+    if (newModel === null || newModel === undefined)
+      return;
+    const previousModelId = this.lastResolvedModelId;
+    const nextModelId = typeof newModel === 'string' ? newModel : newModel.id;
+    if (previousModelId === nextModelId)
+      return;
+    if (previousModelId !== undefined) {
+      this.modelOptionMemory.set(previousModelId, {
+        reasoning: this.selectedReasoning,
+        verbosity: this.selectedVerbosity,
+      });
+    }
+    const { reasoning, verbosity } = this.resolveModelOptions(this.getSelectedModel());
+    const reasoningChanged = reasoning !== this.selectedReasoning;
+    const verbosityChanged = verbosity !== this.selectedVerbosity;
+    this.selectedReasoning = reasoning;
+    this.selectedVerbosity = verbosity;
+    this.lastResolvedModelId = nextModelId;
+    if (reasoningChanged)
+      this.emitModelOptionsState(this.wppReasoningSelect);
+    if (verbosityChanged)
+      this.emitModelOptionsState(this.wppVerbositySelect);
   }
   componentWillLoad() {
     this._locales = { ...LOCALES_DEFAULTS, ...this.locales };
     this.defaultMessageActions = getDefaultMessageActions(this._locales);
+    // Before the first render, so the submenus never paint with nothing checked.
+    this.lastResolvedModelId = this.getSelectedModel()?.id;
+    this.pendingModelOptionDefaults = this.applyModelOptionDefaults();
   }
   connectedCallback() {
+    // Needed for the loading animation to rotate (see `registerLoadingHaloAngle`).
+    registerLoadingHaloAngle();
     this.themeSubscription.start();
     window.addEventListener('pointerdown', this.handleWindowPointerDown, true);
   }
   componentDidLoad() {
     this.recognition.setupRecognition(this._locales.audioLanguage);
+    // Emitted here rather than in `componentWillLoad` so a consumer's listeners are attached. A
+    // default the component picked has to reach the consumer, or its next render pushes the unset
+    // value straight back over it.
+    if (this.pendingModelOptionDefaults.reasoningChanged)
+      this.emitModelOptionsState(this.wppReasoningSelect);
+    if (this.pendingModelOptionDefaults.verbosityChanged)
+      this.emitModelOptionsState(this.wppVerbositySelect);
   }
   disconnectedCallback() {
     this.themeSubscription.stop();
     window.removeEventListener('pointerdown', this.handleWindowPointerDown, true);
     this.recognition.stopRecognition();
     this.clearResponseWaitTimer();
+    this.clearCopyReset();
   }
   /**
    * Programmatically add a message (user or assistant) to the chat body.
@@ -235,6 +397,18 @@ export class WppChatNode {
       this.clearWaitingForResponse();
     }
     this.scrollToBottom();
+  }
+  /**
+   * Programmatically update an already-added message, merging `changes` over it.
+   *
+   * Messages live in the component's internal state, so this is the only way to change one after
+   * it has been added — needed for controlled per-message action state such as flipping a pin's
+   * `isActive`. Unknown ids are ignored.
+   */
+  async updateMessage(id, changes) {
+    if (!this.messages.some(message => message.id === id))
+      return;
+    this.messages = this.messages.map(message => (message.id === id ? { ...message, ...changes } : message));
   }
   /**
    * Append text to the last assistant message (for streaming).
@@ -256,13 +430,49 @@ export class WppChatNode {
       }
     });
   }
+  toggleKey(message, action) {
+    return `${message.id}::${action.id}`;
+  }
+  /** Controlled `isActive` when the dev supplies one, otherwise the component's own toggle state. */
+  isActionActive(message, action) {
+    return action.isActive ?? this.toggledActionKeys.includes(this.toggleKey(message, action));
+  }
+  clearCopyReset() {
+    if (this.copyResetHandle !== null) {
+      clearTimeout(this.copyResetHandle);
+      this.copyResetHandle = null;
+    }
+  }
+  async copyMessageToClipboard(message) {
+    const text = message.content?.trim();
+    if (!text || !navigator.clipboard?.writeText)
+      return;
+    try {
+      await navigator.clipboard.writeText(text);
+    }
+    catch {
+      // The clipboard can reject (denied permission, insecure context). Leave the button idle
+      // rather than confirming a copy that did not happen.
+      return;
+    }
+    // Restart the window on a repeat click instead of stacking timers.
+    this.clearCopyReset();
+    this.copiedMessageId = message.id;
+    this.copyResetHandle = setTimeout(() => {
+      this.copiedMessageId = null;
+      this.copyResetHandle = null;
+    }, COPIED_CONFIRMATION_TIMEOUT);
+  }
   getDefaultModels() {
     return getDefaultModelOptions(this._locales);
   }
   // The selector always resolves to a model: the built-in defaults ("Auto" / "Premium")
   // are prepended to the dev-provided `models`, and the selection falls back to "Auto".
   getSelectedModel() {
-    if (this.selectedModel === 'auto') {
+    // `selectedModel` is transiently null between React removing the attribute and setting the
+    // property (see `onUpdateSelectedModel`). Resolve that to the built-in default rather than
+    // dereferencing it - both this method's own `models.find` and every caller assume a model.
+    if (!this.selectedModel || this.selectedModel === 'auto') {
       return this.getModelFromDeprecatedId() ?? this.getDefaultModels()[0];
     }
     else if (this.selectedModel === 'premium') {
@@ -287,12 +497,58 @@ export class WppChatNode {
   renderActionMenu() {
     const hasActions = this.actions.length > 0;
     if (!hasActions) {
-      return (h("wpp-tooltip-v4-4-0", { text: this._locales.attachAction, config: { placement: 'bottom' } }, h("wpp-action-button-v4-4-0", { variant: "secondary", ariaProps: { label: this._locales.attachAction }, onClick: this.handleAttach }, h("wpp-icon-plus-v4-4-0", { slot: "icon-start" }))));
+      return (h("wpp-tooltip-v4-5-0", { text: this._locales.attachAction, config: { placement: 'bottom' } }, h("wpp-action-button-v4-5-0", { variant: "secondary", ariaProps: { label: this._locales.attachAction }, onClick: this.handleAttach }, h("wpp-icon-plus-v4-5-0", { slot: "icon-start" }))));
     }
-    return (h("wpp-menu-context-v4-4-0", { class: "chat-actions-menu-context", style: { width: 'fit-content' } }, h("wpp-action-button-v4-4-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this._locales.actionsMenu } }, h("wpp-icon-plus-v4-4-0", { slot: "icon-start" })), h("div", { class: "chat-actions-menu" }, this.actions.map(action => (h("wpp-list-item-v4-4-0", { key: `${action.icon}-${action.label}`, onWppChangeListItem: () => this.handleActionClick(action) }, this.renderIcon(action.icon, 'left'), h("span", { slot: "label" }, action.label)))))));
+    return (h("wpp-menu-context-v4-5-0", { class: "chat-actions-menu-context", style: { width: 'fit-content' } }, h("wpp-action-button-v4-5-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this._locales.actionsMenu } }, h("wpp-icon-plus-v4-5-0", { slot: "icon-start" })), h("div", { class: "chat-actions-menu" }, this.actions.map(action => (h("wpp-list-item-v4-5-0", { key: `${action.icon}-${action.label}`, onWppChangeListItem: () => this.handleActionClick(action) }, this.renderIcon(action.icon, 'left'), h("span", { slot: "label" }, action.label)))))));
   }
   renderModelListItem(model, checked) {
-    return (h("wpp-list-item-v4-4-0", { key: model.id, checked: checked, onWppChangeListItem: () => this.handleModelSelect(model) }, h("wpp-avatar-v4-4-0", { slot: "left", size: "xs", variant: "square", role: "presentation", src: model.logo, icon: model.icon, name: model.label }), h("span", { slot: "label" }, model.label), model.caption && (h("span", { slot: "caption" }, model.caption))));
+    return (h("wpp-list-item-v4-5-0", { key: model.id, checked: checked, role: "menuitemradio", "aria-checked": String(checked), onWppChangeListItem: () => this.handleModelSelect(model) }, h("wpp-avatar-v4-5-0", { slot: "left", size: "xs", variant: "square", role: "presentation", src: model.logo, icon: model.icon, name: model.label }), h("span", { slot: "label" }, model.label), model.caption && (h("span", { slot: "caption" }, model.caption))));
+  }
+  /**
+   * How far the submenu has to slide past its own row to sit flush with the bottom of the model
+   * menu. Measured when popper asks rather than hard-coded, because it depends on which row opened
+   * the submenu — Reasoning sits one row higher than Verbosity.
+   */
+  getModelOptionsSubmenuSkidding(kind) {
+    const submenu = this.modelOptionsSubmenuRefs[kind];
+    const menuRoot = submenu?.closest('[data-tippy-root]');
+    if (!submenu || !menuRoot)
+      return MODEL_OPTIONS_SUBMENU_FALLBACK_SKIDDING;
+    return menuRoot.getBoundingClientRect().bottom - submenu.getBoundingClientRect().bottom;
+  }
+  /**
+   * Built once per kind and cached, because `wpp-menu-context` diffs `dropdownConfig` by value and
+   * a fresh `offset` closure on every render would read as a change and re-apply the tippy props.
+   */
+  getModelOptionsDropdownConfig(kind) {
+    const config = this.modelOptionsDropdownConfigs[kind] ?? {
+      placement: 'right-end',
+      offset: () => [this.getModelOptionsSubmenuSkidding(kind), MODEL_OPTIONS_SUBMENU_DISTANCE],
+      popperOptions: {
+        modifiers: [{ name: 'flip', options: { fallbackPlacements: ['right-start', 'left-end', 'left-start'] } }],
+      },
+    };
+    this.modelOptionsDropdownConfigs[kind] = config;
+    return config;
+  }
+  /**
+   * One row in the model dropdown that opens a submenu of levels. `wpp-menu-context` treats
+   * itself as nested when its first child is a `wpp-list-item`, which gives the submenu the
+   * APG behaviour for free: right-side placement, ArrowRight/ArrowLeft, Escape and roving.
+   *
+   * The nested default top-aligns the submenu with its row (`right-start`), which sends a long
+   * list of levels spilling below the model menu. The design aligns it with the bottom of the
+   * model menu instead, so the placement is flipped to `right-end` and the skidding offset closes
+   * the gap between the row and the menu's bottom edge. A list too tall to sit there without
+   * leaving the viewport falls back to `right-start` before it is allowed to jump to the other
+   * side, so the fallbacks are spelled out rather than left to the nested default.
+   *
+   * `isExtended` is what marks the row as a submenu trigger rather than a leaf: without it
+   * `wpp-menu-context` treats a click on the row as a selection and dismisses the whole
+   * dropdown. It also renders the right-pointing chevron itself.
+   */
+  renderModelOptionsSubmenu(kind, label, options, selectedId, onSelect) {
+    return (h("wpp-menu-context-v4-5-0", { class: "model-options-menu", ref: element => (this.modelOptionsSubmenuRefs[kind] = element), dropdownConfig: this.getModelOptionsDropdownConfig(kind) }, h("wpp-list-item-v4-5-0", { slot: "trigger-element", isExtended: true }, h("span", { slot: "label" }, label)), h("div", { class: "wpp-model-options-dropdown" }, options.map(option => (h("wpp-list-item-v4-5-0", { key: option.id, checked: option.id === selectedId, labelTypography: { type: 's-midi' }, role: "menuitemradio", "aria-checked": String(option.id === selectedId), onWppChangeListItem: () => onSelect(option) }, h("span", { slot: "label" }, option.label), option.caption && h("span", { slot: "caption" }, option.caption)))))));
   }
   /**
    * Model selector triggered by the compact logo avatar (Figma). Unlike wpp-chat-input,
@@ -303,10 +559,13 @@ export class WppChatNode {
    */
   renderModelSelector() {
     const selectedModel = this.getSelectedModel();
+    const isCustomModel = this.selectedModel !== 'auto' && this.selectedModel !== 'premium';
+    const reasoningOptions = this.getModelOptions('reasoningOptions');
+    const verbosityOptions = this.getModelOptions('verbosityOptions');
     // `logo` (an image URL) wins when provided; `icon` is the asset-free fallback for
     // hosts that cannot serve the brand logos (e.g. Storybook), and initials last.
-    const triggerAvatar = (h("wpp-avatar-v4-4-0", { slot: "icon-start", class: "model-avatar", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, icon: selectedModel.icon, name: selectedModel.label || '' }));
-    return (h("wpp-menu-context-v4-4-0", { class: "chat-model-selector", style: { width: 'fit-content' }, dropdownConfig: {
+    const triggerAvatar = (h("wpp-avatar-v4-5-0", { slot: "icon-start", class: "model-avatar", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, icon: selectedModel.icon, name: selectedModel.label || '' }));
+    return (h("wpp-menu-context-v4-5-0", { class: "chat-model-selector", style: { width: 'fit-content' }, dropdownConfig: {
         onShow: this.handleModelMenuShow,
         onHide: this.handleModelMenuHide,
         // Per Figma (Chat Input / Model Selector): the dropdown opens ABOVE the trigger and
@@ -317,11 +576,17 @@ export class WppChatNode {
         popperOptions: {
           modifiers: [{ name: 'flip', options: { fallbackPlacements: ['bottom-start'] } }],
         },
-      } }, h("wpp-action-button-v4-4-0", { slot: "trigger-element", class: "model-selector-trigger", variant: "secondary", ariaProps: { label: this._locales.modelSelectorLabel, expanded: this.isModelMenuOpen, haspopup: 'menu' } }, triggerAvatar), h("div", { class: "wpp-model-dropdown" }, this.getDefaultModels().map(model => this.renderModelListItem(model, model.id === selectedModel.id)), h("wpp-divider-v4-4-0", null), this.models.length > 0 ? (this.models.map(model => this.renderModelListItem(model, model.id === selectedModel.id))) : (h("wpp-list-item-v4-4-0", { onWppChangeListItem: this.handleModelChange }, h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), h("wpp-icon-chevron-v4-4-0", { slot: "right", direction: "right" }))))));
+      } }, h("wpp-action-button-v4-5-0", { slot: "trigger-element", class: "model-selector-trigger", variant: "secondary", ariaProps: { label: this._locales.modelSelectorLabel, expanded: this.isModelMenuOpen, haspopup: 'menu' } }, triggerAvatar), h("div", { class: "wpp-model-dropdown" }, this.getDefaultModels().map(model => this.renderModelListItem(model, model.id === selectedModel.id)), h("wpp-divider-v4-5-0", null), this.models.length > 0
+      ? this.models.map(model => this.renderModelListItem(model, model.id === selectedModel.id))
+      : // Nothing lists the selected model when the list is browsed externally, so
+        // surface it here — otherwise the dropdown never shows what is in use.
+        isCustomModel && this.renderModelListItem(selectedModel, true), reasoningOptions.length > 0 &&
+      this.renderModelOptionsSubmenu('reasoning', this._locales.modelReasoningLabel, reasoningOptions, this.selectedReasoning, this.handleReasoningSelect), verbosityOptions.length > 0 &&
+      this.renderModelOptionsSubmenu('verbosity', this._locales.modelVerbosityLabel, verbosityOptions, this.selectedVerbosity, this.handleVerbositySelect), this.models.length === 0 && (h(Fragment, null, isCustomModel && h("wpp-divider-v4-5-0", null), h("wpp-list-item-v4-5-0", { onWppChangeListItem: this.handleModelChange }, h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), h("wpp-icon-chevron-v4-5-0", { slot: "right", direction: "right" })))))));
   }
   renderMicrophoneBtn() {
     const recordLabel = this.isAudioRecording ? this._locales.audioStopRecordAction : this._locales.audioRecordAction;
-    return (h("wpp-action-button-v4-4-0", { class: "mic-btn", "data-testid": "chat-node-mic-btn", variant: "secondary", ariaProps: { label: recordLabel }, onClick: this.handleClickAudioRecording }, this.isAudioRecording ? h("wpp-icon-stop-v4-4-0", { slot: "icon-start" }) : h("wpp-icon-mic-on-v4-4-0", { slot: "icon-start" })));
+    return (h("wpp-action-button-v4-5-0", { class: "mic-btn", "data-testid": "chat-node-mic-btn", variant: "secondary", ariaProps: { label: recordLabel }, onClick: this.handleClickAudioRecording }, this.isAudioRecording ? h("wpp-icon-stop-v4-5-0", { slot: "icon-start" }) : h("wpp-icon-mic-on-v4-5-0", { slot: "icon-start" })));
   }
   // The primary action follows a fixed priority: stop (while loading/processing)
   // > re-run (when `isReRun`) > send (once the input has content).
@@ -357,7 +622,7 @@ export class WppChatNode {
   renderSendButton(isLoadingActive) {
     const visible = this.isPrimaryActionVisible(isLoadingActive);
     const { icon, label, handler, variant } = this.getPrimaryAction(isLoadingActive);
-    return (h("wpp-button-v4-4-0", { class: { 'play-btn': true, 'is-hidden': !visible }, size: "s", variant: variant,
+    return (h("wpp-button-v4-5-0", { class: { 'play-btn': true, 'is-hidden': !visible }, size: "s", variant: variant,
       // While hidden the button stays in the DOM (to animate the fade), but must leave the
       // focus order and a11y tree so its focusable inner control does not trip axe's
       // aria-hidden-focus (SC 4.1.2). `inert` does exactly that without the disabled-grey
@@ -391,7 +656,7 @@ export class WppChatNode {
   renderAvatar(config) {
     if (config === false)
       return null;
-    return (h("wpp-avatar-v4-4-0", { class: "message-avatar", size: "s", variant: "circle", name: config.name || '', icon: config.icon, color: config.color, role: "presentation" }));
+    return (h("wpp-avatar-v4-5-0", { class: "message-avatar", size: "s", variant: "circle", name: config.name || '', icon: config.icon, color: config.color, role: "presentation" }));
   }
   getAttachmentKind(attachment) {
     if (attachment.type.startsWith('image/'))
@@ -418,14 +683,37 @@ export class WppChatNode {
       return (h("div", { class: `chat-attachment chat-attachment-${kind}`, role: "listitem", "aria-label": attachment.name, key: `${attachment.name}-${index}` }, imageSource ? (h("img", { src: imageSource, alt: attachment.alt || attachment.name, loading: "lazy", onError: this.handleAttachmentImageError })) : (this.renderAttachmentFallback(kind)), h("span", { class: "chat-attachment-broken-icon" }, this.renderAttachmentFallback(kind)), kind === 'video' && (h("span", { class: "chat-attachment-play", "aria-hidden": "true" }, this.renderIcon('wpp-icon-play-filled')))));
     })));
   }
+  hasTokenCount(message) {
+    return typeof message.tokenCount === 'string' && message.tokenCount.trim().length > 0;
+  }
+  /**
+   * The DS component file renders the token count as an Action Button instance, so it IS a
+   * wpp-action-button — not a styled div — and it emits wppMessageActionClick like the other
+   * footer actions. The only deviation from the button's defaults is the grey-600 icon, set through the
+   * button's own `--wpp-action-button-secondary-icon-color` hook in SCSS.
+   */
+  renderTokenCount(message) {
+    const icon = message.tokenCountIcon ?? DEFAULT_TOKEN_COUNT_ICON;
+    const action = { id: 'tokenCount', icon, label: this._locales.tokenCountLabel };
+    return (h("wpp-action-button-v4-5-0", { variant: "secondary", class: "chat-token-count", ariaProps: { label: `${this._locales.tokenCountLabel} ${message.tokenCount}` }, onClick: () => this.handleMessageActionClick(message, action) }, h(transformToVersionedTag(icon), { slot: 'icon-start' }), message.tokenCount));
+  }
+  renderMessageAction(message, action) {
+    const isCopyConfirmed = action.id === 'copy' && this.copiedMessageId === message.id;
+    const isToggle = Boolean(action.activeIcon || action.activeLabel);
+    const isActive = this.isActionActive(message, action);
+    const icon = isCopyConfirmed ? 'wpp-icon-done' : (isActive && action.activeIcon) || action.icon;
+    const label = isCopyConfirmed ? this._locales.copiedMessageAction : (isActive && action.activeLabel) || action.label;
+    return (h("wpp-tooltip-v4-5-0", { key: action.id, text: label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-5-0", { variant: "secondary", ariaProps: { label, ...(isToggle ? { pressed: isActive } : {}) }, onClick: () => this.handleMessageActionClick(message, action) }, this.renderIcon(icon, 'icon-start'))));
+  }
   renderMessageActions(message) {
     if (message.role !== 'assistant')
       return null;
     const actions = message.actions ?? this.messageActions ?? this.defaultMessageActions;
     const hasRenderableContent = Boolean(message.content.trim() || message.attachments?.length);
-    if (!hasRenderableContent || actions.length === 0)
+    const showTokenCount = this.hasTokenCount(message);
+    if (!hasRenderableContent || (actions.length === 0 && !showTokenCount))
       return null;
-    return (h("div", { class: "chat-message-actions" }, actions.map(action => (h("wpp-tooltip-v4-4-0", { key: action.id, text: action.label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-4-0", { variant: "secondary", ariaProps: { label: action.label }, onClick: () => this.handleMessageActionClick(message, action) }, this.renderIcon(action.icon, 'icon-start')))))));
+    return (h("div", { class: "chat-message-actions" }, actions.map(action => this.renderMessageAction(message, action)), showTokenCount && this.renderTokenCount(message), h("span", { class: "sr-only", "aria-live": "polite" }, this.copiedMessageId === message.id ? this._locales.copiedMessageAction : '')));
   }
   renderMessages() {
     if (this.messages.length === 0)
@@ -440,7 +728,7 @@ export class WppChatNode {
           'chat-message': true,
           [`chat-message-${msg.role}`]: true,
           'chat-message-no-avatar': avatarConfig === false,
-        }, key: msg.id }, this.renderAvatar(avatarConfig), h("div", { class: `chat-message-content chat-message-content-${msg.role}` }, hasContent && (h("div", { class: `chat-bubble chat-bubble-${msg.role}` }, h("wpp-typography-v4-4-0", { type: "s-body" }, msg.content))), this.renderMessageAttachments(msg), this.renderMessageActions(msg))));
+        }, key: msg.id }, this.renderAvatar(avatarConfig), h("div", { class: `chat-message-content chat-message-content-${msg.role}` }, hasContent && (h("div", { class: `chat-bubble chat-bubble-${msg.role}` }, h("wpp-typography-v4-5-0", { type: "s-body" }, msg.content))), this.renderMessageAttachments(msg), this.renderMessageActions(msg))));
     });
   }
   render() {
@@ -461,16 +749,16 @@ export class WppChatNode {
     if (isSizeS) {
       return (h(Host, { class: { 'wpp-chat-node': true, 'wpp-size-s': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, h("div", { class: containerClasses }, h("div", { class: wrapperClasses }, this.renderChatBar(false))), h("slot", { name: "handles" })));
     }
-    return (h(Host, { class: { 'wpp-chat-node': true, 'wpp-size-m': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, h("div", { class: containerClasses }, h("div", { class: wrapperClasses }, h("div", { class: "node-header" }, h("span", { class: "title-icon" }, h("wpp-icon-service-v4-4-0", { color: "var(--wpp-grey-color-700)" })), h("wpp-tooltip-v4-4-0", { text: this.nodeTitle, class: "title-tooltip", config: {
+    return (h(Host, { class: { 'wpp-chat-node': true, 'wpp-size-m': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, h("div", { class: containerClasses }, h("div", { class: wrapperClasses }, h("div", { class: "node-header" }, h("span", { class: "title-icon" }, h("wpp-icon-service-v4-5-0", { color: "var(--wpp-grey-color-700)" })), h("wpp-tooltip-v4-5-0", { text: this.nodeTitle, class: "title-tooltip", config: {
         placement: 'top',
         onShow: () => {
           if (!this.titleRef || this.titleRef.clientWidth >= this.titleRef.scrollWidth)
             return false;
         },
-      } }, h("p", { ref: el => (this.titleRef = el), class: "node-title" }, this.nodeTitle))), h("wpp-divider-v4-4-0", null), h("div", { class: "node-body", ref: el => (this.bodyRef = el) }, this.renderMessages(), h("slot", null)), h("wpp-divider-v4-4-0", null), this.renderChatBar(isLoadingActive))), h("slot", { name: "handles" })));
+      } }, h("p", { ref: el => (this.titleRef = el), class: "node-title" }, this.nodeTitle))), h("wpp-divider-v4-5-0", null), h("div", { class: "node-body", ref: el => (this.bodyRef = el) }, this.renderMessages(), h("slot", null)), h("wpp-divider-v4-5-0", null), this.renderChatBar(isLoadingActive))), h("slot", { name: "handles" })));
   }
   static get is() { return "wpp-chat-node"; }
-  static get registryIs() { return "wpp-chat-node-v4-4-0"; }
+  static get registryIs() { return "wpp-chat-node-v4-5-0"; }
   static get encapsulation() { return "scoped"; }
   static get originalStyleUrls() {
     return {
@@ -757,12 +1045,46 @@ export class WppChatNode {
         "attribute": "selected-model-id",
         "reflect": false
       },
+      "selectedReasoning": {
+        "type": "string",
+        "mutable": true,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Id of the currently selected reasoning level. It must match the `id` of one of the\nselected model's `reasoningOptions`; an id that matches nothing leaves the submenu with\nno row checked rather than silently selecting a level the consumer did not ask for.\nLeave it unset for \"no level chosen\". Picking a different model from the dropdown clears\nit, because option ids are scoped to a model."
+        },
+        "attribute": "selected-reasoning",
+        "reflect": false
+      },
+      "selectedVerbosity": {
+        "type": "string",
+        "mutable": true,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Id of the currently selected verbosity level, matched against the selected model's\n`verbosityOptions`. Behaves exactly like `selectedReasoning`."
+        },
+        "attribute": "selected-verbosity",
+        "reflect": false
+      },
       "locales": {
         "type": "unknown",
         "mutable": false,
         "complexType": {
           "original": "Partial<ChatNodeLocales>",
-          "resolved": "{ attachAction?: string | undefined; actionsMenu?: string | undefined; messageInputLabel?: string | undefined; messageInput?: string | undefined; sendMessage?: string | undefined; stopResponse?: string | undefined; reRunResponse?: string | undefined; copyMessageAction?: string | undefined; likeMessageAction?: string | undefined; dislikeMessageAction?: string | undefined; regenerateMessageAction?: string | undefined; attachmentsRegionLabel?: string | undefined; audioRecordAction?: string | undefined; audioStopRecordAction?: string | undefined; audioLanguage?: string | undefined; modelSelectorLabel?: string | undefined; modelAutoOptionLabel?: string | undefined; modelAutoOptionCaption?: string | undefined; modelPremiumOptionLabel?: string | undefined; modelPremiumOptionCaption?: string | undefined; modelSelectorListItemLabel?: string | undefined; }",
+          "resolved": "{ attachAction?: string | undefined; actionsMenu?: string | undefined; messageInputLabel?: string | undefined; messageInput?: string | undefined; sendMessage?: string | undefined; stopResponse?: string | undefined; reRunResponse?: string | undefined; copyMessageAction?: string | undefined; copiedMessageAction?: string | undefined; pinMessageAction?: string | undefined; unpinMessageAction?: string | undefined; tokenCountLabel?: string | undefined; likeMessageAction?: string | undefined; dislikeMessageAction?: string | undefined; regenerateMessageAction?: string | undefined; attachmentsRegionLabel?: string | undefined; audioRecordAction?: string | undefined; audioStopRecordAction?: string | undefined; audioLanguage?: string | undefined; modelSelectorLabel?: string | undefined; modelAutoOptionLabel?: string | undefined; modelAutoOptionCaption?: string | undefined; modelPremiumOptionLabel?: string | undefined; modelPremiumOptionCaption?: string | undefined; modelSelectorListItemLabel?: string | undefined; modelReasoningLabel?: string | undefined; modelVerbosityLabel?: string | undefined; }",
           "references": {
             "Partial": {
               "location": "global",
@@ -793,7 +1115,9 @@ export class WppChatNode {
       "isWaitingForResponse": {},
       "isAudioRecording": {},
       "isModelMenuOpen": {},
-      "defaultMessageActions": {}
+      "defaultMessageActions": {},
+      "copiedMessageId": {},
+      "toggledActionKeys": {}
     };
   }
   static get events() {
@@ -808,9 +1132,15 @@ export class WppChatNode {
           "text": "Emitted when the user clicks the send button or presses Enter."
         },
         "complexType": {
-          "original": "{ message: string }",
-          "resolved": "{ message: string; }",
-          "references": {}
+          "original": "ChatNodeSendEventDetail",
+          "resolved": "ChatNodeSendEventDetail",
+          "references": {
+            "ChatNodeSendEventDetail": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-chat-node/types.ts::ChatNodeSendEventDetail"
+            }
+          }
         }
       }, {
         "method": "wppStop",
@@ -936,6 +1266,48 @@ export class WppChatNode {
           "references": {}
         }
       }, {
+        "method": "wppReasoningSelect",
+        "name": "wppReasoningSelect",
+        "bubbles": false,
+        "cancelable": true,
+        "composed": false,
+        "docs": {
+          "tags": [],
+          "text": "Emitted when a level is picked from the \"Reasoning\" submenu. The detail carries the\nresulting state of the whole selection \u2014 the model plus both levels \u2014 so a consumer can\nforward it to the backend without mirroring the component's internals. Rendered only\nwhen the selected model supplies `reasoningOptions`."
+        },
+        "complexType": {
+          "original": "ChatNodeModelOptionsEventDetail",
+          "resolved": "ChatNodeModelOptionsEventDetail",
+          "references": {
+            "ChatNodeModelOptionsEventDetail": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-chat-node/types.ts::ChatNodeModelOptionsEventDetail"
+            }
+          }
+        }
+      }, {
+        "method": "wppVerbositySelect",
+        "name": "wppVerbositySelect",
+        "bubbles": false,
+        "cancelable": true,
+        "composed": false,
+        "docs": {
+          "tags": [],
+          "text": "Emitted when a level is picked from the \"Verbosity\" submenu, with the same resulting\nstate payload as `wppReasoningSelect`. Rendered only when the selected model supplies\n`verbosityOptions`."
+        },
+        "complexType": {
+          "original": "ChatNodeModelOptionsEventDetail",
+          "resolved": "ChatNodeModelOptionsEventDetail",
+          "references": {
+            "ChatNodeModelOptionsEventDetail": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-chat-node/types.ts::ChatNodeModelOptionsEventDetail"
+            }
+          }
+        }
+      }, {
         "method": "wppMessageActionClick",
         "name": "wppMessageActionClick",
         "bubbles": false,
@@ -982,6 +1354,38 @@ export class WppChatNode {
         },
         "docs": {
           "text": "Programmatically add a message (user or assistant) to the chat body.",
+          "tags": []
+        }
+      },
+      "updateMessage": {
+        "complexType": {
+          "signature": "(id: string, changes: Partial<ChatNodeMessage>) => Promise<void>",
+          "parameters": [{
+              "tags": [],
+              "text": ""
+            }, {
+              "tags": [],
+              "text": ""
+            }],
+          "references": {
+            "Promise": {
+              "location": "global",
+              "id": "global::Promise"
+            },
+            "Partial": {
+              "location": "global",
+              "id": "global::Partial"
+            },
+            "ChatNodeMessage": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-chat-node/types.ts::ChatNodeMessage"
+            }
+          },
+          "return": "Promise<void>"
+        },
+        "docs": {
+          "text": "Programmatically update an already-added message, merging `changes` over it.\n\nMessages live in the component's internal state, so this is the only way to change one after\nit has been added \u2014 needed for controlled per-message action state such as flipping a pin's\n`isActive`. Unknown ids are ignored.",
           "tags": []
         }
       },

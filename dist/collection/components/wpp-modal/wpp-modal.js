@@ -6,6 +6,7 @@ import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { ModalCloseReason, } from './types';
 import { TOP_AND_BOTTOM_OFFSET } from './consts';
 import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
+import { dialogFocusController, isFocusInsideDialog } from '../../utils/dialog-focus';
 /**
  * @slot header - Content that is displayed within the `.modal` element. To add header content, pass `slot="header"` – can contain the modal title.
  * @slot body - Content that is displayed within the `.modal` element. To add body content, pass `slot="body"` – can contain any text that describes the modal actions.
@@ -24,6 +25,7 @@ export class WppModal {
     this.topOffset = 0;
     this.timeouts = new TimeoutManager();
     this.themeSubscription = themeSubscriptionController(() => this.host);
+    this.dialogFocus = dialogFocusController();
     this.onOverlayClick = () => {
       if (this.disableOutsideClick)
         return;
@@ -105,7 +107,7 @@ export class WppModal {
     };
     this.renderActionBtn = (btnConfig, variant) => {
       const { label, ...rest } = btnConfig;
-      return (h("wpp-button-v4-4-0", { size: "s", variant: variant, ...rest }, label));
+      return (h("wpp-button-v4-5-0", { size: "s", variant: variant, ...rest }, label));
     };
     this.renderActionsConfig = () => {
       if (!this.actionsConfig)
@@ -115,6 +117,10 @@ export class WppModal {
     };
     this.focusDialog = () => {
       if (!this.dialogRef)
+        return;
+      // Idempotent: the sentinels, the open render and the transition all route through here, and
+      // pulling focus back to the container would undo whatever the user had reached inside.
+      if (isFocusInsideDialog(this.host, this.dialogRef))
         return;
       this.dialogRef.focus();
     };
@@ -169,11 +175,25 @@ export class WppModal {
   }
   handleChangeModalStatus(openStatus) {
     if (openStatus) {
+      // Captured before the dialog takes focus, so it can be handed back on close.
+      this.dialogFocus.capture();
       this.host.classList.add('wpp-component-ready');
       this.setupObserver();
     }
     else {
       this.disconnectObserver();
+      // The dialog is about to hide with focus still inside it, which would leave focus on a
+      // container the user can no longer see and restart the next Tab from the top of the
+      // document. Decide now, while that is still true, and restore once the close render has
+      // been applied.
+      const shouldRestoreFocus = isFocusInsideDialog(this.host, this.dialogRef);
+      // Read now, alongside the line above: `closeReason` is cleared once the close transition
+      // finishes, which can beat the scheduled restore.
+      const closedFromKeyboard = this.closeReason === ModalCloseReason.escapePress;
+      this.timeouts.schedule(() => {
+        if (shouldRestoreFocus)
+          this.dialogFocus.restore({ withKeyboardRing: closedFromKeyboard });
+      });
     }
     // Use the watcher's argument rather than re-reading `this.open` inside the timeout: reading a
     // @Prop off an instance that was torn down first throws asynchronously, which is uncaught and
@@ -222,8 +242,21 @@ export class WppModal {
   disconnectedCallback() {
     this.themeSubscription.stop();
     this.timeouts.clearAll();
+    // `clearAll` above cancels the scheduled restore, so drop the reference rather than holding
+    // on to a detached element for the lifetime of the page.
+    this.dialogFocus.clear();
     this.closeModal();
     this.disconnectObserver();
+  }
+  componentDidRender() {
+    if (!this.open)
+      return;
+    // Move focus into the dialog as soon as it has painted rather than waiting for the open
+    // transition to finish. `transitionend` never arrives for a reduced-motion user, or when a
+    // consumer turns the animation off, and focus would stay outside a dialog that is
+    // `aria-modal` — leaving the rest of the page hidden from assistive tech with nothing
+    // reachable inside it.
+    this.focusDialog();
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
@@ -233,10 +266,10 @@ export class WppModal {
         // The body is a scroll container, so a classic scrollbar would eat into its right
         // padding and render the designed inset asymmetrically. The SCSS subtracts this.
         '--modal-scrollbar-gutter': `${getScrollbarGutterWidth()}px`,
-      }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-4-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-4-0", null), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-4-0", null), this.actionsConfig ? (this.renderActionsConfig()) : (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
+      }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-5-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-5-0", null), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-5-0", null), this.actionsConfig ? (this.renderActionsConfig()) : (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
   }
   static get is() { return "wpp-modal"; }
-  static get registryIs() { return "wpp-modal-v4-4-0"; }
+  static get registryIs() { return "wpp-modal-v4-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

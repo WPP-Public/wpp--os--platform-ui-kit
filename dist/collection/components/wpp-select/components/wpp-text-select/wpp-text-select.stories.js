@@ -95,28 +95,28 @@ export const Text = (args) => {
       }
     </style>
     <div style="width: 300px;">
-      <wpp-menu-context-v4-4-0 .dropdownConfig=${dropdownConfig}>
-        <wpp-action-button-v4-4-0
+      <wpp-menu-context-v4-5-0 .dropdownConfig=${dropdownConfig}>
+        <wpp-action-button-v4-5-0
           id="text-select-trigger"
           slot="trigger-element"
           variant="secondary"
           .disabled="${args.disabled}"
         >
           ${selectedValue || args.placeholder}
-          <wpp-icon-chevron-v4-4-0 id="text-select-chevron" slot="icon-end" direction="down"></wpp-icon-chevron-v4-4-0>
-        </wpp-action-button-v4-4-0>
+          <wpp-icon-chevron-v4-5-0 id="text-select-chevron" slot="icon-end" direction="down"></wpp-icon-chevron-v4-5-0>
+        </wpp-action-button-v4-5-0>
         <div>
           ${LIST_TEXT.map(item => html `
-              <wpp-list-item-v4-4-0
+              <wpp-list-item-v4-5-0
                 class="text-select-item"
                 .checked=${item.label === selectedValue}
                 @wppChangeListItem=${() => handleListItemChange(item)}
               >
                 <span slot="label">${item.label}</span>
-              </wpp-list-item-v4-4-0>
+              </wpp-list-item-v4-5-0>
             `)}
         </div>
-      </wpp-menu-context-v4-4-0>
+      </wpp-menu-context-v4-5-0>
     </div>
   `;
 };

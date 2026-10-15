@@ -1,6 +1,6 @@
-import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-93f63aaa.js';
-import { k as transformToVersionedTag } from './utils-a4b26a20.js';
-import { W as WrappedSlot } from './WrappedSlot-6fa08584.js';
+import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-a0877c3d.js';
+import { k as transformToVersionedTag } from './utils-f7e38fc9.js';
+import { W as WrappedSlot } from './WrappedSlot-e91d9cb0.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
 import './theme-observer-b7886d19.js';
@@ -95,7 +95,7 @@ const WppNavSidebar = class {
   render() {
     return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "nav-sidebar, body, header-wrapper, header, ws-wrapper, ws-inner" }, h("aside", { class: this.asideCssClasses(), part: "nav-sidebar" }, h("nav", { class: "nav-wrapper", part: "body", "aria-label": this.navLabel }, h(WrappedSlot, { wrapperClass: "title-wrapper", name: "header" }), h(WrappedSlot, { wrapperClass: "items-wrapper" })))));
   }
-  static get registryIs() { return "wpp-nav-sidebar-v4-4-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-v4-5-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "activePath": ["handleActivePathChange"]

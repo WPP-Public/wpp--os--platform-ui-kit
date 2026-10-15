@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { AriaProps } from '../../types/common';
-import { CaptionValue, VideoPlayerLocales, ControlPanelConfig, JumpValues, SplitTimeFormat, TimeFormats, TrackLanguage, VideoPlayerStates, VideoSizeDimensions, VideoSourceType } from './types';
+import { CaptionValue, VideoPlayerLocales, ControlPanelConfig, JumpValues, TimeFormats, TrackLanguage, VideoPlayerStates, VideoSizeDimensions, VideoSourceType } from './types';
 export declare class WppVideoPlayer {
   private themeSubscription;
   host: HTMLWppVideoPlayerElement;
@@ -11,10 +11,10 @@ export declare class WppVideoPlayer {
   private fullScreenButtonRef;
   protected controlsRef: HTMLDivElement | undefined;
   protected seekBarRef: HTMLInputElement | undefined;
-  protected volumeBarRef: HTMLInputElement | undefined;
-  protected volumeButtonRef: HTMLWppActionButtonElement | undefined;
-  protected volumeContainerRef: HTMLDivElement | undefined;
-  protected volumeBarContainerRef: HTMLDivElement | undefined;
+  volumeBarRef: HTMLInputElement | undefined;
+  volumeButtonRef: HTMLWppActionButtonElement | undefined;
+  volumeContainerRef: HTMLDivElement | undefined;
+  volumeBarContainerRef: HTMLDivElement | undefined;
   private captionButtonRef;
   private videoPlayerHostSize;
   private videoPlayerSize;
@@ -34,9 +34,7 @@ export declare class WppVideoPlayer {
   videoPlayerState: VideoPlayerStates;
   currentVideoTime: number;
   timeFormat: TimeFormats;
-  splitCurrentVideoTime: SplitTimeFormat;
   overallVideoTime: number;
-  splitOverallVideoTime: SplitTimeFormat;
   loadedPercentage: number;
   volume: number;
   isFullscreen: boolean;
@@ -114,7 +112,9 @@ export declare class WppVideoPlayer {
   componentDidLoad(): void;
   connectedCallback(): void;
   disconnectedCallback(): void;
-  protected get _locales(): VideoPlayerLocales;
+  get _locales(): VideoPlayerLocales;
+  /** The shared volume bar reads the mute button's label from here. */
+  get volumeButtonLabel(): string;
   private setupKeyboardEventListeners;
   private removeKeyboardEventListeners;
   private handleKeyboardInput;
@@ -122,15 +122,25 @@ export declare class WppVideoPlayer {
   private handleMetadataLoaded;
   private handleLoadProgress;
   protected handleSeek: (event: Event) => void;
-  protected handleVolume: (event: Event) => void;
+  handleVolume: (event: Event) => void;
   private handlePlayStateChange;
   private handleVideoEnded;
-  protected handleSliderShow: () => void;
-  protected handleSliderHide: (delay: number) => void;
+  handleSliderShow: () => void;
+  handleSliderHide: (delay: number) => void;
+  /** The container's `open` class keeps the mute button in its hover look while the slider shows. */
   private volumeSliderShow;
   private volumeSliderHide;
+  private volumeSliderHideNow;
+  /**
+   * Escape closes the slider at once. A closed slider is hidden from the focus, so when the focus
+   * sits on it, it is moved back to the mute button first; that focus would reopen the slider,
+   * which is why the hide follows it rather than the other way round.
+   */
+  dismissVolumeSlider: () => void;
   private handleFullscreenChange;
   private handleMouseLeave;
+  /** Reveals the controls when focus moves into them, so a focused control is never hidden. */
+  private handleFocusIn;
   private handleMouseMove;
   private handleControlsDblClick;
   private handleControlsClick;
@@ -143,7 +153,7 @@ export declare class WppVideoPlayer {
   private setActiveTrack;
   private togglePlay;
   private toggleCaptions;
-  protected toggleMute: () => void;
+  toggleMute: () => void;
   private toggleFullscreen;
   private sourceRender;
   private trackRender;

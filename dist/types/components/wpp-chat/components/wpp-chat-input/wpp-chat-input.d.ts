@@ -1,6 +1,6 @@
 import { EventEmitter } from '../../../../stencil-public-runtime';
 import { FileItemType, FileUploadEventDetail, FileUploadItemEventDetail } from '../../../wpp-file-upload/types';
-import { ActionsMenuToggleEventDetail, ChatInputAction, ChatInputActionItemClickEventDetail, ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputModel, ChatInputMicEventDetail, ChatInputSelectableModel, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail, ChatInputSelectedModel } from './types';
+import { ActionsMenuToggleEventDetail, ChatInputAction, ChatInputActionItemClickEventDetail, ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputModel, ChatInputModelOptionsEventDetail, ChatInputMicEventDetail, ChatInputSelectableModel, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail, ChatInputSelectedModel } from './types';
 import { MessageTypes } from '../../../../types/common';
 /**
  * @slot alert - Optional alert (for example wpp-chat-alert) rendered at the top of the chat input frame. Dismissing it hides the alert without affecting the rest of the input.
@@ -21,6 +21,27 @@ export declare class WppChatInput {
   private readonly textareaAutoId;
   private readonly minimizedDescId;
   private expandedListenersAbort?;
+  /**
+   * The levels the user last chose for each model, so switching away from a model and back
+   * restores their choice instead of resetting it (Mustafa, 23 Sep 2026).
+   *
+   * This is INSTANCE state, not a persisted session: it lives as long as this element does, so a
+   * consumer that needs the selection to survive a remount or a page reload owns that itself and
+   * feeds it back through `selectedReasoning` / `selectedVerbosity`.
+   */
+  private modelOptionMemory;
+  /** Which mount-time defaults `componentWillLoad` applied, for `componentDidLoad` to emit. */
+  private pendingModelOptionDefaults;
+  /**
+   * The last model the option watch actually resolved for. Tracked here rather than read from the
+   * watch's `oldValue`, because `selectedModel` goes transiently null on the way from a string
+   * preset to a model object (see `onSelectedModelChange`) and `oldValue` would then be that null,
+   * losing the previous model's levels instead of remembering them.
+   */
+  private lastResolvedModelId?;
+  /** The two level submenus, by kind, so their popper offset can measure against the model menu. */
+  private modelOptionsSubmenuRefs;
+  private modelOptionsDropdownConfigs;
   private recognition;
   private themeSubscription;
   private aiModelBtn;
@@ -87,6 +108,21 @@ export declare class WppChatInput {
    * This property should be used when selecting the AI model follows a different flow than that of the component (E.g: selecting model from a side-modal).
    */
   selectedModel: ChatInputSelectedModel;
+  /**
+   * Id of the currently selected reasoning level. It must match the `id` of one of the
+   * selected model's `reasoningOptions`; an id that matches nothing leaves the submenu with
+   * no row checked rather than silently selecting a level the consumer did not ask for.
+   * Leave it unset for "no level chosen" — the trigger label then carries no reasoning
+   * suffix. Picking a different model from the dropdown clears it, because option ids are
+   * scoped to a model.
+   */
+  selectedReasoning?: string;
+  /**
+   * Id of the currently selected verbosity level, matched against the selected model's
+   * `verbosityOptions`. Behaves exactly like `selectedReasoning`, except that verbosity is
+   * never shown in the trigger label.
+   */
+  selectedVerbosity?: string;
   /**
    * Defines the entries shown in the consolidated actions menu (the
    * `wpp-icon-plus` dropdown rendered at the start of the left toolbar).
@@ -218,6 +254,19 @@ export declare class WppChatInput {
    * Note: The "Select model or agent" action is rendered only when the `models` property is an empty array.
    */
   readonly wppModelBrowse: EventEmitter<void>;
+  /**
+   * Emitted when a level is picked from the "Reasoning" submenu. The detail carries the
+   * resulting state of the whole selection — the model plus both levels — so a consumer can
+   * forward it to the backend without mirroring the component's internals. Rendered only
+   * when the selected model supplies `reasoningOptions`.
+   */
+  readonly wppReasoningSelect: EventEmitter<ChatInputModelOptionsEventDetail>;
+  /**
+   * Emitted when a level is picked from the "Verbosity" submenu, with the same resulting
+   * state payload as `wppReasoningSelect`. Rendered only when the selected model supplies
+   * `verbosityOptions`.
+   */
+  readonly wppVerbositySelect: EventEmitter<ChatInputModelOptionsEventDetail>;
   private reInitValue;
   onAttachmentsChange(newValue: FileItemType[]): void;
   onTextValueChange(value: string): void;
@@ -230,6 +279,21 @@ export declare class WppChatInput {
   private get _locales();
   private checkInteractedItem;
   private onExpandedKeyDown;
+  /**
+   * Carries the reasoning/verbosity levels across a model change, whichever way the model was
+   * changed — picked from this dropdown, or set by the platform after its own side-modal flow.
+   *
+   * The user's choice is remembered per model for the lifetime of this element and restored when
+   * they come back to it; a model they have not chosen a level for yet takes the documented
+   * defaults. It deliberately does NOT reset (Mustafa, 23 Sep 2026 — resetting was the earlier
+   * behaviour and read as a worse experience).
+   *
+   * It EMITS whatever it applies, which is the part that is easy to get wrong: these are
+   * controlled props, so a component that silently rewrote them would be overwritten again by the
+   * next render of a consumer holding its own state. Emitting keeps the two in step. Only levels
+   * that actually changed emit, so a model change that leaves a level alone stays quiet.
+   */
+  onSelectedModelChange(newValue: ChatInputSelectedModel): void;
   onSizeChange(newValue: ChatInputSize, oldValue: ChatInputSize): void;
   private handleFileLoaded;
   /**
@@ -292,7 +356,7 @@ export declare class WppChatInput {
   private isMaximumFilesSet;
   private validateFileSize;
   private isAcceptConfigFilled;
-  private getAcceptExtensions;
+  private getAcceptTokens;
   private validateFileType;
   private customValidation;
   private handleFileLoad;
@@ -315,8 +379,66 @@ export declare class WppChatInput {
   private handleModelMenuHide;
   private handleModelSelect;
   private handleModelChange;
+  /**
+   * The level to pre-select for a model the user has not chosen one for yet: the first of the
+   * documented defaults the model actually offers, or nothing when it offers none of them.
+   */
+  private resolveDefaultOptionId;
+  /**
+   * The remembered level for a model, but only if that model still offers it — a consumer can
+   * change a model's option list between selections, and a remembered id that no longer exists
+   * would leave the submenu with nothing checked.
+   */
+  private getRememberedOptionId;
+  /**
+   * The levels that apply to a model: what the user last chose for it, else the defaults.
+   */
+  private resolveModelOptions;
+  /**
+   * Fills in only the levels the consumer left unset for the model selected at mount. It must not
+   * overwrite: a level passed alongside the model is the consumer seeding an explicit selection
+   * (a restored session, say) and outranks any default.
+   *
+   * Returns which levels it filled, so `componentDidLoad` can emit exactly those — the write has
+   * to happen before the first render to avoid a frame with nothing checked, but the events wait
+   * until listeners are attached.
+   */
+  private applyModelOptionDefaults;
+  /**
+   * The levels offered by whichever model is selected. `Auto` and `Premium` are built-in
+   * presets that carry no per-LLM levels, so they resolve to an empty list and render no row.
+   */
+  private getModelOptions;
+  private getSelectedModelOption;
+  private emitModelOptionsState;
+  private handleReasoningSelect;
+  private handleVerbositySelect;
   private renderModelSelector;
   private renderModelListItem;
+  /**
+   * How far the submenu has to slide past its own row to sit flush with the bottom of the model
+   * menu. Measured when popper asks rather than hard-coded, because it depends on which row opened
+   * the submenu — Reasoning sits one row higher than Verbosity.
+   */
+  private getModelOptionsSubmenuSkidding;
+  /**
+   * Built once per kind and cached, because `wpp-menu-context` diffs `dropdownConfig` by value and
+   * a fresh `offset` closure on every render would read as a change and re-apply the tippy props.
+   */
+  private getModelOptionsDropdownConfig;
+  /**
+   * One row in the model dropdown that opens a submenu of levels. `wpp-menu-context` treats
+   * itself as nested when its first child is a `wpp-list-item`, which gives the submenu the
+   * APG behaviour for free: right-side placement, ArrowRight/ArrowLeft, Escape and roving.
+   *
+   * The nested default top-aligns the submenu with its row (`right-start`), which sends a long
+   * list of levels spilling below the model menu. The design aligns it with the bottom of the
+   * model menu instead, so the placement is flipped to `right-end` and the skidding offset closes
+   * the gap between the row and the menu's bottom edge. A list too tall to sit there without
+   * leaving the viewport falls back to `right-start` before it is allowed to jump to the other
+   * side, so the fallbacks are spelled out rather than left to the nested default.
+   */
+  private renderModelOptionsSubmenu;
   private clearStopBtnHideTimeout;
   private handleSendClick;
   private handleStopBtnClick;

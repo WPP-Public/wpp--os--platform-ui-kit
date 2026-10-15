@@ -187,6 +187,21 @@ const getAllVisibleItems = (tree) => {
   return result;
 };
 /**
+ * Find an item by ID in the tree
+ */
+const findItemById = (tree, id) => {
+  for (const item of tree) {
+    if (item.id === id)
+      return item;
+    if (item.children) {
+      const found = findItemById(item.children, id);
+      if (found)
+        return found;
+    }
+  }
+  return undefined;
+};
+/**
  * Find the parent of an item by its ID
  */
 const findParentOfItem = (tree, targetId, parent = null) => {
@@ -439,21 +454,21 @@ const WppTreeItem = /*@__PURE__*/ proxyCustomElement(class WppTreeItem extends H
       const { className } = props;
       switch (contentType) {
         case 'text':
-          return (h("wpp-typography-v4-4-0", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
+          return (h("wpp-typography-v4-5-0", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
         case 'tag': {
           const { icon } = props;
-          return (h("wpp-tag-v4-4-0", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
+          return (h("wpp-tag-v4-5-0", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
             h(transformToVersionedTag(icon), {
               slot: 'icon-start',
               part: 'icon-start',
             })));
         }
         case 'avatar':
-          return (h("wpp-avatar-v4-4-0", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar",
+          return (h("wpp-avatar-v4-5-0", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar",
             // Remove from tab order - tree uses arrow keys per ARIA APG
             index: -1 }));
         case 'avatarGroup':
-          return (h("wpp-avatar-group-v4-4-0", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group",
+          return (h("wpp-avatar-group-v4-5-0", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group",
             // Remove avatars from tab order - tree uses arrow keys per ARIA APG
             avatarsIndex: -1 }));
         default:
@@ -599,7 +614,7 @@ const WppTreeItem = /*@__PURE__*/ proxyCustomElement(class WppTreeItem extends H
   render() {
     const isParent = !!this.item?.hasChildren || !!this.item?.children?.length;
     const selectionAttr = this.getSelectionAttribute();
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeitem", "aria-label": this.item.title, "aria-level": this.level, "aria-setsize": this.setSize, "aria-posinset": this.posInSet, "aria-expanded": isParent ? (this.item.open ? 'true' : 'false') : undefined, "aria-disabled": this.item.disabled ? 'true' : undefined, "aria-busy": this.item.loadingChildren ? 'true' : undefined, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}), ...selectionAttr, ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (h("div", { class: "switcher", onClick: this.onSwitcherClick, part: "tree-item-switcher", "data-switcher": "true", "aria-hidden": "true" }, h("wpp-icon-triangle-fill-v4-4-0", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (h("wpp-checkbox-v4-4-0", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox", isDarkTheme: this.isDarkTheme, "aria-hidden": "true", index: -1 })), h(WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (h("wpp-tooltip-v4-4-0", { text: this.item.title, config: { placement: 'right' }, class: "tooltip", anchorTabIndex: -1 }, this.renderTitle())) : (this.renderTitle()), h("wpp-action-button-v4-4-0", { variant: "secondary", disabled: this.item.disabled || this.item.loadingChildren, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button", ariaProps: {
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeitem", "aria-label": this.item.title, "aria-level": this.level, "aria-setsize": this.setSize, "aria-posinset": this.posInSet, "aria-expanded": isParent ? (this.item.open ? 'true' : 'false') : undefined, "aria-disabled": this.item.disabled ? 'true' : undefined, "aria-busy": this.item.loadingChildren ? 'true' : undefined, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}), ...selectionAttr, ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (h("div", { class: "switcher", onClick: this.onSwitcherClick, part: "tree-item-switcher", "data-switcher": "true", "aria-hidden": "true" }, h("wpp-icon-triangle-fill-v4-5-0", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (h("wpp-checkbox-v4-5-0", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox", isDarkTheme: this.isDarkTheme, "aria-hidden": "true", index: -1 })), h(WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (h("wpp-tooltip-v4-5-0", { text: this.item.title, config: { placement: 'right' }, class: "tooltip", anchorTabIndex: -1 }, this.renderTitle())) : (this.renderTitle()), h("wpp-action-button-v4-5-0", { variant: "secondary", disabled: this.item.disabled || this.item.loadingChildren, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button", ariaProps: {
         label: this.hasIconEndSlot ? `Actions for ${this.item.title}` : undefined,
         // tabIndex=-1 removes from sequential Tab order; tree handles Tab navigation
         // per W3C ARIA APG Treeview: Tab from tree container moves focus here programmatically
@@ -608,14 +623,14 @@ const WppTreeItem = /*@__PURE__*/ proxyCustomElement(class WppTreeItem extends H
       (this.item.loadingChildren || (Array.isArray(this.item.children) && this.item.children.length > 0))) ||
       !this.isCollapseTransitionEnd) && h(WrappedSlot, { name: "content", onSlotchange: this.updateSlotData })));
   }
-  static get registryIs() { return "wpp-tree-item-v4-4-0"; }
+  static get registryIs() { return "wpp-tree-item-v4-5-0"; }
   get host() { return this; }
   static get watchers() { return {
     "item": ["onItemChange"],
     "isDarkTheme": ["onUpdateDarkTheme"]
   }; }
   static get style() { return wppTreeItemCss; }
-}, [1, "wpp-tree-item", "wpp-tree-item-v4-4-0", {
+}, [1, "wpp-tree-item", "wpp-tree-item-v4-5-0", {
     "text": [513],
     "multiple": [516],
     "search": [1],
@@ -642,124 +657,124 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tree-item-v4-4-0", "wpp-action-button-v4-4-0", "wpp-avatar-v4-4-0", "wpp-avatar-group-v4-4-0", "wpp-checkbox-v4-4-0", "wpp-icon-chevron-v4-4-0", "wpp-icon-cross-v4-4-0", "wpp-icon-dash-v4-4-0", "wpp-icon-error-v4-4-0", "wpp-icon-info-message-v4-4-0", "wpp-icon-success-v4-4-0", "wpp-icon-tick-v4-4-0", "wpp-icon-triangle-fill-v4-4-0", "wpp-icon-warning-v4-4-0", "wpp-inline-message-v4-4-0", "wpp-internal-label-v4-4-0", "wpp-internal-tooltip-v4-4-0", "wpp-label-v4-4-0", "wpp-list-item-v4-4-0", "wpp-menu-context-v4-4-0", "wpp-spinner-v4-4-0", "wpp-tag-v4-4-0", "wpp-tooltip-v4-4-0", "wpp-typography-v4-4-0"];
+  const components = ["wpp-tree-item-v4-5-0", "wpp-action-button-v4-5-0", "wpp-avatar-v4-5-0", "wpp-avatar-group-v4-5-0", "wpp-checkbox-v4-5-0", "wpp-icon-chevron-v4-5-0", "wpp-icon-cross-v4-5-0", "wpp-icon-dash-v4-5-0", "wpp-icon-error-v4-5-0", "wpp-icon-info-message-v4-5-0", "wpp-icon-success-v4-5-0", "wpp-icon-tick-v4-5-0", "wpp-icon-triangle-fill-v4-5-0", "wpp-icon-warning-v4-5-0", "wpp-inline-message-v4-5-0", "wpp-internal-label-v4-5-0", "wpp-internal-tooltip-v4-5-0", "wpp-label-v4-5-0", "wpp-list-item-v4-5-0", "wpp-menu-context-v4-5-0", "wpp-spinner-v4-5-0", "wpp-tag-v4-5-0", "wpp-tooltip-v4-5-0", "wpp-typography-v4-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tree-item-v4-4-0":
+    case "wpp-tree-item-v4-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTreeItem);
       }
       break;
-    case "wpp-action-button-v4-4-0":
+    case "wpp-action-button-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-avatar-v4-4-0":
+    case "wpp-avatar-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-avatar-group-v4-4-0":
+    case "wpp-avatar-group-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-checkbox-v4-4-0":
+    case "wpp-checkbox-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-chevron-v4-4-0":
+    case "wpp-icon-chevron-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-cross-v4-4-0":
+    case "wpp-icon-cross-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-dash-v4-4-0":
+    case "wpp-icon-dash-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-error-v4-4-0":
+    case "wpp-icon-error-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-info-message-v4-4-0":
+    case "wpp-icon-info-message-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-success-v4-4-0":
+    case "wpp-icon-success-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-tick-v4-4-0":
+    case "wpp-icon-tick-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-triangle-fill-v4-4-0":
+    case "wpp-icon-triangle-fill-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-warning-v4-4-0":
+    case "wpp-icon-warning-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-inline-message-v4-4-0":
+    case "wpp-inline-message-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-internal-label-v4-4-0":
+    case "wpp-internal-label-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-tooltip-v4-4-0":
+    case "wpp-internal-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-label-v4-4-0":
+    case "wpp-label-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-list-item-v4-4-0":
+    case "wpp-list-item-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-menu-context-v4-4-0":
+    case "wpp-menu-context-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-4-0":
+    case "wpp-spinner-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tag-v4-4-0":
+    case "wpp-tag-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-4-0":
+    case "wpp-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-4-0":
+    case "wpp-typography-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }
@@ -767,4 +782,4 @@ function defineCustomElement() {
   } });
 }
 
-export { DEFAULT_OVERSCAN as D, LOCALES_DEFAULTS as L, TREE_ITEM_HEIGHT as T, WppTreeItem as W, TREE_PADDING_TOP as a, updateTreeById as b, convertToOriginalItems as c, findTreeItemById as d, extractExtraProps as e, findSelectedItems as f, getAllVisibleItems as g, getSiblings as h, isHaveFoundChildren as i, findParentOfItem as j, defineCustomElement as k, DEFAULT_TREE_HEIGHT as l, markChildrenAs as m, recalculateIndeterminateTreeState as r, updateTreeByIds as u };
+export { DEFAULT_TREE_HEIGHT as D, LOCALES_DEFAULTS as L, TREE_ITEM_HEIGHT as T, WppTreeItem as W, TREE_PADDING_TOP as a, updateTreeById as b, convertToOriginalItems as c, findItemById as d, extractExtraProps as e, findSelectedItems as f, getAllVisibleItems as g, findTreeItemById as h, isHaveFoundChildren as i, getSiblings as j, findParentOfItem as k, DEFAULT_OVERSCAN as l, markChildrenAs as m, defineCustomElement as n, recalculateIndeterminateTreeState as r, updateTreeByIds as u };

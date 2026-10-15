@@ -1,13 +1,14 @@
-import { h, F as Fragment, r as registerInstance, H as Host, g as getElement, c as createEvent } from './index-93f63aaa.js';
+import { h, F as Fragment, r as registerInstance, c as createEvent, H as Host, g as getElement } from './index-a0877c3d.js';
 import { m as marked_umd } from './marked.umd-be419d39.js';
-import { k as transformToVersionedTag, c as hasParentWithId, g as getSlotEmptyStates, d as debounce, y as mergeLocales } from './utils-a4b26a20.js';
+import { k as transformToVersionedTag, y as mergeLocales, g as getSlotEmptyStates, d as debounce } from './utils-f7e38fc9.js';
 import { c as createCommonjsModule, a as commonjsGlobal } from './_commonjsHelpers-ba3f0406.js';
-import { L as LIB_COMPONENTS_PREFIX, r as renderSlotsInListItem } from './utils-17d209e0.js';
-import { c as convertMBToBytes, d as getExtensionsList, E as EXTENSION_TO_TYPE, g as getExtension, m as modifyPropertiesOnFile, a as getBaseName, b as renameFile } from './utils-b7410a53.js';
-import { W as WrappedSlot } from './WrappedSlot-6fa08584.js';
+import { L as LIB_COMPONENTS_PREFIX, r as renderSlotsInListItem } from './utils-ec970f38.js';
+import { c as convertMBToBytes, f as getAcceptTokens, m as modifyPropertiesOnFile, b as inferTypeFromName, i as isFileAccepted, d as getBaseName, g as getExtension, e as renameFile } from './utils-697817b2.js';
+import { W as WrappedSlot } from './WrappedSlot-e91d9cb0.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
 import { S as SpeechRecognitionService } from './speech-recognition-6803da23.js';
+import { r as registerLoadingHaloAngle } from './loading-halo-2a7b93f0.js';
 import './lodash-cc2b04b5.js';
 import './theme-observer-b7886d19.js';
 
@@ -113,6 +114,41 @@ const handleDownload = async (href, alt) => {
     console.error('Image download failed:', error);
   }
 };
+
+const LOCALES_DEFAULTS$1 = {
+  quoteAction: 'Reply',
+  copyAction: 'Copy',
+  copiedAction: 'Copied',
+  pinAction: 'Pin',
+  unpinAction: 'Unpin',
+  tokenCountLabel: 'Token usage',
+};
+/**
+ * How long the copy confirmation (checkmark + "Copied" label) stays visible before the button
+ * reverts to its idle state.
+ */
+const COPIED_CONFIRMATION_TIMEOUT = 3000;
+/**
+ * The footer actions rendered when a dev passes no `actionButtonsConfig`. Overrides are merged onto
+ * these by `id`, so a dev can retarget one action without restating the others or preserving order.
+ */
+const getDefaultActionButtons = (locales) => [
+  { id: 'quote', icon: 'wpp-icon-blockquote', label: locales.quoteAction },
+  { id: 'copy', icon: 'wpp-icon-copy', label: locales.copyAction },
+  {
+    id: 'pin',
+    icon: 'wpp-icon-unpinned',
+    activeIcon: 'wpp-icon-pinned',
+    label: locales.pinAction,
+    activeLabel: locales.unpinAction,
+  },
+];
+/**
+ * A valid ARIA role parked on the host so the `role` @Prop's `MessageRole` value ("user" /
+ * "assistant") never occupies the host's global `role` attribute, where it is not a valid ARIA
+ * role (axe: aria-roles, critical). The prop keeps driving layout via internal state.
+ */
+const HOST_ARIA_ROLE = 'group';
 
 var purify = createCommonjsModule(function (module, exports) {
 /*! @license DOMPurify 3.4.14 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.4.14/LICENSE */
@@ -2787,10 +2823,10 @@ const renderImageNode = (role, data, className) => {
         const wrap = e.target.closest('.chat-image-error-wrap');
         wrap?.classList.add('chat-image-broken');
       } }),
-    h("wpp-icon-image-v4-4-0", { role: "presentation", "aria-hidden": "true" })));
+    h("wpp-icon-image-v4-5-0", { role: "presentation", "aria-hidden": "true" })));
   return data.linkHref ? (h("a", { href: data.linkHref, target: "_blank", rel: "noopener noreferrer", class: "chat-image-link" }, img)) : role === 'assistant' ? (h(Fragment, null,
-    h("wpp-action-button-v4-4-0", { class: "image-download-button", variant: "secondary", onClick: () => handleDownload(data.href, data.alt) },
-      h("wpp-icon-download-v4-4-0", { slot: "icon-start", "aria-hidden": "true" })),
+    h("wpp-action-button-v4-5-0", { class: "image-download-button", variant: "secondary", onClick: () => handleDownload(data.href, data.alt) },
+      h("wpp-icon-download-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })),
     img)) : (img);
 };
 const renderToken = (token, role = 'user') => {
@@ -2801,16 +2837,16 @@ const renderToken = (token, role = 'user') => {
       const headingTypes = ['2xl-heading', 'xl-heading', 'l-body', 'm-body', 's-body', 'xs-body'];
       const type = headingTypes[token.depth - 1] || 's-body';
       const tag = `h${token.depth}`;
-      return (h("wpp-typography-v4-4-0", { type: type, tag: tag }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
+      return (h("wpp-typography-v4-5-0", { type: type, tag: tag }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
     }
     case 'del':
       return h("del", null, token.tokens?.map(t => renderToken(t)));
     case 'paragraph':
-      return (h("wpp-typography-v4-4-0", { type: "s-body", tag: "p" }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
+      return (h("wpp-typography-v4-5-0", { type: "s-body", tag: "p" }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
     case 'blockquote':
       return h("blockquote", { class: "chat-quote" }, token.tokens?.map(t => renderToken(t)));
     case 'strong':
-      return (h("wpp-typography-v4-4-0", { type: "s-strong", tag: "span" }, token.tokens?.map(t => renderToken(t))));
+      return (h("wpp-typography-v4-5-0", { type: "s-strong", tag: "span" }, token.tokens?.map(t => renderToken(t))));
     case 'em':
       return h("em", null, token.tokens?.map(t => renderToken(t)));
     case 'codespan':
@@ -2819,7 +2855,7 @@ const renderToken = (token, role = 'user') => {
       return (h("pre", { class: "code-block" },
         h("div", { class: "code-lang" },
           h("span", null, token.lang || 'plaintext'),
-          h("wpp-icon-copy-v4-4-0", { class: "code-block-copy-icon", size: "s", color: "var(--wpp-grey-color-600)", onClick: () => {
+          h("wpp-icon-copy-v4-5-0", { class: "code-block-copy-icon", size: "s", color: "var(--wpp-grey-color-600)", onClick: () => {
               navigator.clipboard.writeText(token.text);
             } })),
         h("code", null, token.text)));
@@ -2836,8 +2872,8 @@ const renderToken = (token, role = 'user') => {
       const nestedLists = token.tokens?.filter(t => t.type === 'list') || [];
       const inlineContent = token.tokens?.filter(t => t.type !== 'list') || [];
       return (h("li", { class: `chat-list-item ${token.task ? `chat-list-item-task ${token.checked ? 'chat-list-item-task-checked' : ''}` : ''}` },
-        token.task && h("wpp-icon-tick-v4-4-0", null),
-        inlineContent.length > 0 && (h("wpp-typography-v4-4-0", { type: "s-body" }, inlineContent.map(t => renderToken(t)))),
+        token.task && h("wpp-icon-tick-v4-5-0", null),
+        inlineContent.length > 0 && (h("wpp-typography-v4-5-0", { type: "s-body" }, inlineContent.map(t => renderToken(t)))),
         nestedLists.map(t => renderToken(t))));
     }
     case 'table': {
@@ -2845,13 +2881,13 @@ const renderToken = (token, role = 'user') => {
         h("table", { class: "chat-table" },
           h("thead", null,
             h("tr", null, token.header.map((cell, i) => (h("th", { key: i },
-              h("wpp-typography-v4-4-0", { type: "s-strong" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))),
+              h("wpp-typography-v4-5-0", { type: "s-strong" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))),
           h("tbody", null, token.rows.map((row, r) => (h("tr", { key: r }, row.map((cell, c) => (h("td", { key: c },
-            h("wpp-typography-v4-4-0", { type: "s-body" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))))))));
+            h("wpp-typography-v4-5-0", { type: "s-body" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))))))));
     }
     case 'link':
       if (token.title) {
-        return (h("wpp-tooltip-v4-4-0", { text: token.title },
+        return (h("wpp-tooltip-v4-5-0", { text: token.title },
           h("a", { href: token.href, target: "_blank", rel: "noopener noreferrer", class: "chat-link" }, token.tokens?.length ? token.tokens.map((t) => renderToken(t)) : token.text)));
       }
       return (h("a", { href: token.href, target: "_blank", rel: "noopener noreferrer", title: token.title, class: "chat-link" }, token.tokens?.length ? token.tokens.map((t) => renderToken(t)) : token.text));
@@ -2872,7 +2908,7 @@ const renderToken = (token, role = 'user') => {
         h("div", { class: "chat-image-grid-row" }, rest.map((data, i) => (h("div", { key: i, class: "chat-image-grid-item chat-image-error-wrap" }, renderImageNode(role, data)))))));
     }
     case 'hr':
-      return h("wpp-divider-v4-4-0", null);
+      return h("wpp-divider-v4-5-0", null);
     case 'text':
       return token.tokens
         ? token.tokens.flatMap(t => renderToken(t)).filter((t) => t !== null)
@@ -2882,33 +2918,57 @@ const renderToken = (token, role = 'user') => {
       // Intentionally ignore raw HTML from LLM output for security
       return null;
     default:
-      return 'text' in token ? h("wpp-typography-v4-4-0", { type: "s-body" }, token.text) : null;
+      return 'text' in token ? h("wpp-typography-v4-5-0", { type: "s-body" }, token.text) : null;
   }
 };
 
-const wppChatConversationMessageCss = "@charset \"UTF-8\";:host{display:-ms-flexbox;display:flex;width:auto}.container{display:grid;width:100%;grid-template-columns:44px minmax(0, 80ch) 44px}.container.no-user-avatar{grid-template-columns:44px minmax(0, 80ch)}.container.no-assistant-avatar{grid-template-columns:minmax(0, 80ch) 44px}.container.no-user-avatar.no-assistant-avatar{grid-template-columns:minmax(0, 80ch)}.avatar-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:start;align-items:flex-start;-ms-flex-pack:center;justify-content:center}.avatar-wrapper.ai-avatar{-ms-flex-pack:start;justify-content:flex-start}.avatar-wrapper.user-avatar{-ms-flex-pack:end;justify-content:flex-end}.content{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:10px;width:100%;margin-left:auto}.content .wpp-typography{display:initial}.content.content-user{width:calc(100% - clamp(10%, 56px, 56px));padding:12px;background-color:var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-m);-webkit-box-shadow:var(--wpp-box-shadow-xs);box-shadow:var(--wpp-box-shadow-xs)}.content.content-user .attachments{-ms-flex-pack:end;justify-content:flex-end}.content p{margin-top:0}.message{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px}.message-text{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:10px}.custom-content ::slotted(*){margin-top:var(--wpp-chat-message-slot-gap, 8px)}.cursor{display:inline-block;width:2px;height:0.85em;margin-left:2px;vertical-align:text-bottom;background-color:currentcolor;border-radius:1px;-webkit-animation:blink 1s steps(1) infinite;animation:blink 1s steps(1) infinite}.code-block{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;background-color:var(--wpp-grey-color-100);border-radius:var(--wpp-border-radius-m)}.code-block:hover .code-block-copy-icon{opacity:1}.code-block .code-lang{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;padding:8px 8px 4px;color:var(--wpp-grey-color-600)}.code-block code{padding:8px}.code-block-copy-icon{cursor:pointer;opacity:0;-webkit-transition:opacity 0.1s linear;transition:opacity 0.1s linear}.code-block-copy-icon:hover{--wpp-prop-icon-color:var(--wpp-grey-color-800) !important}.action-toolbar{display:-ms-flexbox;display:flex;gap:4px}.actions{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;-ms-flex-align:center;align-items:center;margin-top:10px}.actions .sources-action{margin-left:auto}.chat-list{padding:0 0 0 16px;margin:0 0 0 16px}.chat-list.chat-list-nonordered,.chat-list .chat-list-nonordered{list-style-type:disc}.chat-list.chat-list-ordered,.chat-list .chat-list-ordered{list-style-type:decimal}.chat-list.chat-list-task{padding:0;margin:0;list-style-type:none}.chat-list .chat-list-item{display:list-item;margin:0}.chat-list .chat-list-item::marker{font-size:var(--wpp-typography-s-body-font-size);line-height:var(--wpp-typography-s-body-line-height)}.chat-list .chat-list-item .wpp-typography{display:block}.chat-list .chat-list-item .chat-list{display:block}.chat-list .chat-list-item-task{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}.chat-list .chat-list-item-task .chat-list{margin-left:8px}.chat-list .chat-list-item-task:not(.chat-list-item-task-checked){text-decoration:line-through}.chat-list .chat-list-item-task:not(.chat-list-item-task-checked) .wpp-icon-tick{display:inline-block;text-decoration:none}.chat-link{font-size:var(--wpp-typography-s-body-font-size);line-height:var(--wpp-typography-s-body-line-height);color:var(--wpp-primary-color-500);-webkit-transition:color 0.2s ease-in-out;transition:color 0.2s ease-in-out}.chat-link:hover{color:var(--wpp-primary-color-400)}.chat-link:active{color:var(--wpp-primary-color-600)}.chat-table{width:100%;border-collapse:collapse;border-spacing:0}.chat-table th,.chat-table td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--wpp-grey-color-300)}.chat-quote{padding-left:16px;margin-left:0;border-left:3px solid var(--wpp-grey-color-300)}.chat-image-single{position:relative;width:100%}.chat-image-single img{display:block;width:100%;height:auto;-o-object-fit:cover;object-fit:cover}.chat-image-full{display:block;width:100%;height:auto;-o-object-fit:cover;object-fit:cover;border:1px solid var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-xs)}.chat-image-grid{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px;width:100%}.chat-image-grid-first{position:relative;width:100%}.chat-image-grid-row{display:-ms-flexbox;display:flex;gap:12px;-ms-flex-align:start;align-items:flex-start;overflow:visible hidden;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.chat-image-grid-row::-webkit-scrollbar{width:4px;height:4px}.chat-image-grid-row::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.chat-image-grid-row .chat-image-grid-item{display:-ms-flexbox;display:flex;-ms-flex:0 0 calc(23% - 9px);flex:0 0 calc(23% - 9px);aspect-ratio:1/1;min-width:100px;overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;border:1px solid var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-xs);position:relative}.chat-image-grid-row .chat-image-grid-item img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}.image-download-button{--wpp-btns-action-color-fill:var(--wpp-grey-color-000);position:absolute;top:8px;right:8px;opacity:0;-webkit-transition:opacity 0.2s ease-in-out;transition:opacity 0.2s ease-in-out}.chat-image-grid-item:hover .image-download-button,.chat-image-single:hover .image-download-button,.chat-image-grid-first:hover .image-download-button{opacity:1}.wpp-icon-image{display:none;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.chat-image-broken{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;background-color:var(--wpp-grey-color-200)}.chat-image-broken .wpp-icon-image{display:block}.chat-image-broken .image-download-button{display:none}.chat-image-broken img{display:none}.attachments{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;gap:8px;width:100%}.attachments .wpp-file-upload-item{-ms-flex:1 1 calc(50% - 4px);flex:1 1 calc(50% - 4px);min-width:224px;max-width:256px}@-webkit-keyframes blink{0%,100%{opacity:1}50%{opacity:0}}@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}";
+const wppChatConversationMessageCss = "@charset \"UTF-8\";:host{display:-ms-flexbox;display:flex;width:auto}.container{display:grid;width:100%;grid-template-columns:44px minmax(0, 80ch) 44px}.container.no-user-avatar{grid-template-columns:44px minmax(0, 80ch)}.container.no-assistant-avatar{grid-template-columns:minmax(0, 80ch) 44px}.container.no-user-avatar.no-assistant-avatar{grid-template-columns:minmax(0, 80ch)}.avatar-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:start;align-items:flex-start;-ms-flex-pack:center;justify-content:center}.avatar-wrapper.ai-avatar{-ms-flex-pack:start;justify-content:flex-start}.avatar-wrapper.user-avatar{-ms-flex-pack:end;justify-content:flex-end}.content{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:10px;width:100%;margin-left:auto}.content .wpp-typography{display:initial}.content.content-user{width:calc(100% - clamp(10%, 56px, 56px));padding:12px;background-color:var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-m);-webkit-box-shadow:var(--wpp-box-shadow-xs);box-shadow:var(--wpp-box-shadow-xs)}.content.content-user .attachments{-ms-flex-pack:end;justify-content:flex-end}.content p{margin-top:0}.message{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px}.message-text{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:10px}.custom-content ::slotted(*){margin-top:var(--wpp-chat-message-slot-gap, 8px)}.cursor{display:inline-block;width:2px;height:0.85em;margin-left:2px;vertical-align:text-bottom;background-color:currentcolor;border-radius:1px;-webkit-animation:blink 1s steps(1) infinite;animation:blink 1s steps(1) infinite}.code-block{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;background-color:var(--wpp-grey-color-100);border-radius:var(--wpp-border-radius-m)}.code-block:hover .code-block-copy-icon{opacity:1}.code-block .code-lang{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;padding:8px 8px 4px;color:var(--wpp-grey-color-600)}.code-block code{padding:8px}.code-block-copy-icon{cursor:pointer;opacity:0;-webkit-transition:opacity 0.1s linear;transition:opacity 0.1s linear}.code-block-copy-icon:hover{--wpp-prop-icon-color:var(--wpp-grey-color-800) !important}.action-toolbar{display:-ms-flexbox;display:flex;gap:4px}.actions{display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;-ms-flex-align:center;align-items:center;margin-top:10px}.actions .sources-action,.actions .token-count{margin-left:auto}.token-count{--wpp-action-button-secondary-icon-color:var(--wpp-grey-color-600);-ms-flex:0 0 auto;flex:0 0 auto}.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0}.chat-list{padding:0 0 0 16px;margin:0 0 0 16px}.chat-list.chat-list-nonordered,.chat-list .chat-list-nonordered{list-style-type:disc}.chat-list.chat-list-ordered,.chat-list .chat-list-ordered{list-style-type:decimal}.chat-list.chat-list-task{padding:0;margin:0;list-style-type:none}.chat-list .chat-list-item{display:list-item;margin:0}.chat-list .chat-list-item::marker{font-size:var(--wpp-typography-s-body-font-size);line-height:var(--wpp-typography-s-body-line-height)}.chat-list .chat-list-item .wpp-typography{display:block}.chat-list .chat-list-item .chat-list{display:block}.chat-list .chat-list-item-task{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}.chat-list .chat-list-item-task .chat-list{margin-left:8px}.chat-list .chat-list-item-task:not(.chat-list-item-task-checked){text-decoration:line-through}.chat-list .chat-list-item-task:not(.chat-list-item-task-checked) .wpp-icon-tick{display:inline-block;text-decoration:none}.chat-link{font-size:var(--wpp-typography-s-body-font-size);line-height:var(--wpp-typography-s-body-line-height);color:var(--wpp-primary-color-500);-webkit-transition:color 0.2s ease-in-out;transition:color 0.2s ease-in-out}.chat-link:hover{color:var(--wpp-primary-color-400)}.chat-link:active{color:var(--wpp-primary-color-600)}.chat-table{width:100%;border-collapse:collapse;border-spacing:0}.chat-table th,.chat-table td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--wpp-grey-color-300)}.chat-quote{padding-left:16px;margin-left:0;border-left:3px solid var(--wpp-grey-color-300)}.chat-image-single{position:relative;width:100%}.chat-image-single img{display:block;width:100%;height:auto;-o-object-fit:cover;object-fit:cover}.chat-image-full{display:block;width:100%;height:auto;-o-object-fit:cover;object-fit:cover;border:1px solid var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-xs)}.chat-image-grid{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px;width:100%}.chat-image-grid-first{position:relative;width:100%}.chat-image-grid-row{display:-ms-flexbox;display:flex;gap:12px;-ms-flex-align:start;align-items:flex-start;overflow:visible hidden;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.chat-image-grid-row::-webkit-scrollbar{width:4px;height:4px}.chat-image-grid-row::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.chat-image-grid-row .chat-image-grid-item{display:-ms-flexbox;display:flex;-ms-flex:0 0 calc(23% - 9px);flex:0 0 calc(23% - 9px);aspect-ratio:1/1;min-width:100px;overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;border:1px solid var(--wpp-grey-color-000);border-radius:var(--wpp-border-radius-xs);position:relative}.chat-image-grid-row .chat-image-grid-item img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}.image-download-button{--wpp-btns-action-color-fill:var(--wpp-grey-color-000);position:absolute;top:8px;right:8px;opacity:0;-webkit-transition:opacity 0.2s ease-in-out;transition:opacity 0.2s ease-in-out}.chat-image-grid-item:hover .image-download-button,.chat-image-single:hover .image-download-button,.chat-image-grid-first:hover .image-download-button{opacity:1}.wpp-icon-image{display:none;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.chat-image-broken{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;background-color:var(--wpp-grey-color-200)}.chat-image-broken .wpp-icon-image{display:block}.chat-image-broken .image-download-button{display:none}.chat-image-broken img{display:none}.attachments{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;gap:8px;width:100%}.attachments .wpp-file-upload-item{-ms-flex:1 1 calc(50% - 4px);flex:1 1 calc(50% - 4px);min-width:224px;max-width:256px}@-webkit-keyframes blink{0%,100%{opacity:1}50%{opacity:0}}@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}";
 
 const WppChatConversationMessage = class {
   constructor(hostRef) {
     registerInstance(this, hostRef);
-    this._actionButtonConfig = [
-      { icon: 'wpp-icon-thumbs-up' },
-      { icon: 'wpp-icon-thumbs-down' },
-      { icon: 'wpp-icon-refresh' },
-      { icon: 'wpp-icon-copy' },
-    ];
+    this.wppMessageActionClick = createEvent(this, "wppMessageActionClick", 1);
     // Streaming state
     this.accumulatedText = '';
     this.committedLength = 0;
     this.rafHandle = null;
-    this.renderActionButton = (data) => {
-      if (!data.icon)
+    // Handle of the timer that reverts the copy confirmation to the idle copy icon.
+    this.copyResetHandle = null;
+    this.handleActionClick = (action) => {
+      const isToggle = Boolean(action.activeIcon || action.activeLabel);
+      let isActive = this.isActionActive(action);
+      if (isToggle && action.isActive === undefined && action.id) {
+        isActive = !isActive;
+        this.toggledActionIds = isActive
+          ? [...this.toggledActionIds, action.id]
+          : this.toggledActionIds.filter(id => id !== action.id);
+      }
+      // The detail carries the state the action ends in, not the one it started in.
+      this.wppMessageActionClick.emit({
+        action: isToggle ? { ...action, isActive } : action,
+        content: this.finalContent ?? '',
+      });
+      action.onClick?.();
+      if (action.id === 'copy') {
+        this.copyMessageToClipboard();
+      }
+    };
+    this.renderActionButton = (action) => {
+      const isCopyConfirmed = action.id === 'copy' && this.isCopied;
+      const isToggle = Boolean(action.activeIcon || action.activeLabel);
+      const isActive = this.isActionActive(action);
+      const icon = isCopyConfirmed ? 'wpp-icon-done' : (isActive && action.activeIcon) || action.icon;
+      const label = isCopyConfirmed ? this._locales.copiedAction : (isActive && action.activeLabel) || action.label;
+      if (!icon)
         return null;
-      return (h("wpp-action-button-v4-4-0", { variant: "secondary", ...data }, h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
+      return (h("wpp-tooltip-v4-5-0", { key: action.id, text: label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-5-0", { variant: "secondary", disabled: action.disabled, loading: action.loading,
+        // The derived label and toggle state come first so a dev override wins, while the
+        // config-only fields (icon, text, isActive, …) are never spread onto the element.
+        ariaProps: { label, ...(isToggle ? { pressed: isActive } : {}), ...action.ariaProps }, onClick: () => this.handleActionClick(action) }, h(transformToVersionedTag(icon), { slot: 'icon-start', part: 'icon' }))));
     };
     this.renderMenuContextListItems = () => (h(Fragment, null, this.menuContextListItems.map(item => {
       const { label, slots, ...rest } = item;
-      return (h("wpp-list-item-v4-4-0", { ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, h("span", { slot: "label" }, label), slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+      return (h("wpp-list-item-v4-5-0", { ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, h("span", { slot: "label" }, label), slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
     })));
     this.hostCssClasses = () => ({
       'wpp-chat-conversation': true,
@@ -2923,17 +2983,17 @@ const WppChatConversationMessage = class {
     };
     this.containerCssClasses = () => ({
       container: true,
-      [`container-${this.role}`]: true,
+      [`container-${this.resolvedRole}`]: true,
       'no-user-avatar': !this.shouldRenderAvatar('user'),
       'no-assistant-avatar': !this.shouldRenderAvatar('assistant'),
     });
     this.contentCssClasses = () => ({
       content: true,
-      [`content-${this.role}`]: true,
+      [`content-${this.resolvedRole}`]: true,
     });
     this.messageCssClasses = () => ({
       message: true,
-      [`message-${this.role}`]: true,
+      [`message-${this.resolvedRole}`]: true,
       [`message-${this.currentStatus}`]: true,
     });
     this.committedTokens = [] // parsed + rendered blocks
@@ -2942,12 +3002,18 @@ const WppChatConversationMessage = class {
     ;
     this.currentStatus = 'complete';
     this.finalContent = '';
+    this.isCopied = false;
+    this.toggledActionIds = [];
+    this.resolvedRole = 'user';
     this.role = 'user';
     this.content = '';
     this.status = 'complete';
     this.actionButtonsConfig = undefined;
     this.menuContextListItems = undefined;
     this.sourcesActionConfig = undefined;
+    this.tokenCount = undefined;
+    this.tokenCountIcon = 'wpp-icon-premium';
+    this.locales = undefined;
     this.assistantAvatarConfig = {};
     this.userAvatarConfig = {};
     this.attachments = [];
@@ -2996,18 +3062,133 @@ const WppChatConversationMessage = class {
   onContentChange(newValue) {
     this.finalContent = newValue;
   }
+  onRoleChange(newValue) {
+    if (newValue !== 'user' && newValue !== 'assistant')
+      return;
+    this.resolvedRole = newValue;
+    // Re-park immediately rather than waiting for the next render: framework bindings write this
+    // AFTER the component's last render (React does, on every re-render), so a render-time-only
+    // fix leaves the invalid ARIA role on the host until something else forces a re-render.
+    this.parkHostAriaRole();
+  }
   componentWillLoad() {
     this.currentStatus = this.status;
     this.finalContent = this.content;
-    if (this.actionButtonsConfig) {
-      this._actionButtonConfig = this.actionButtonsConfig.map((button, ndx) => ({
-        ...(this._actionButtonConfig[ndx] || {}),
-        ...button,
-        onClick: () => {
-          button.onClick?.();
-        },
-      }));
+    this.onRoleChange(this.role);
+  }
+  // Deliberately NOT connectedCallback: parking the role there runs before the props hydrate, so
+  // `this.role` is already 'group' by the time componentWillLoad reads it and the message role is
+  // lost (it broke 38 specs). The remaining window is pre-first-paint, so nothing renders or is
+  // scanned with the invalid role.
+  componentDidRender() {
+    this.parkHostAriaRole();
+    this.observeHostAriaRole();
+  }
+  /**
+   * `role` is a data prop carrying a MessageRole, but it shares its name with the global ARIA
+   * attribute, so "user"/"assistant" would sit on the host as an invalid ARIA role (axe:
+   * aria-roles, critical). Park a valid role there instead; `resolvedRole` keeps the real value.
+   */
+  parkHostAriaRole() {
+    const current = this.host?.getAttribute('role');
+    if (current === HOST_ARIA_ROLE)
+      return;
+    // Capture a message role written straight to the attribute before overwriting it, so an
+    // attribute-only update still drives the layout.
+    if (current === 'user' || current === 'assistant') {
+      this.resolvedRole = current;
     }
+    this.host?.setAttribute('role', HOST_ARIA_ROLE);
+  }
+  /**
+   * Framework bindings re-assert `role` outside Stencil's prop lifecycle — React rewrites it on
+   * every re-render — so the only reliable guard is observing the attribute itself.
+   *
+   * Why not the `@Watch('role')` alone: it was tried and measured. With the watcher as the sole
+   * guard, hosts read `role="group"` on first paint but reverted to `role="user"`/`"assistant"`
+   * after the very next React re-render (toggling any page state), because React's identical
+   * re-write is not a change from Stencil's point of view once the prop already holds that value,
+   * so the watcher never fires. With this observer, five consecutive forced re-renders and a raw
+   * `setAttribute('role', 'assistant')` all held at `group`, and axe's aria-roles rule went from
+   * 1 critical node per message to 0. mock-doc does not deliver MutationObserver records, so this
+   * is verified in the browser rather than in a spec.
+   *
+   * Re-parking is idempotent: the guard in `parkHostAriaRole` makes the observer's own write a
+   * no-op, so it cannot loop.
+   */
+  observeHostAriaRole() {
+    if (this.roleObserver || typeof MutationObserver === 'undefined')
+      return;
+    this.roleObserver = new MutationObserver(() => this.parkHostAriaRole());
+    this.roleObserver.observe(this.host, { attributes: true, attributeFilter: ['role'] });
+  }
+  disconnectedCallback() {
+    this.clearCopyReset();
+    this.roleObserver?.disconnect();
+    this.roleObserver = undefined;
+    if (this.rafHandle !== null) {
+      cancelAnimationFrame(this.rafHandle);
+      this.rafHandle = null;
+    }
+  }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS$1, this.locales);
+  }
+  /**
+   * The footer actions as rendered: the built-in defaults with any dev override merged on top.
+   *
+   * Overrides are matched by `id` so config order stops being load-bearing — a dev can retarget a
+   * single action without restating the others. An override with no `id` falls back to the default
+   * at the same index, which keeps pre-existing positional configs (handlers only, no icons) wired.
+   * Anything left over is appended as an extra action and must bring its own icon.
+   */
+  get mergedActions() {
+    const defaults = getDefaultActionButtons(this._locales);
+    const overrides = this.actionButtonsConfig;
+    if (!overrides?.length)
+      return defaults;
+    const merged = new Map(defaults.map(action => [action.id, { ...action }]));
+    const extras = [];
+    overrides.forEach((override, ndx) => {
+      const targetId = override.id ?? defaults[ndx]?.id;
+      if (targetId && merged.has(targetId)) {
+        merged.set(targetId, { ...merged.get(targetId), ...override, id: targetId });
+      }
+      else {
+        extras.push({ ...override });
+      }
+    });
+    return [...merged.values(), ...extras];
+  }
+  /** Controlled `isActive` when the dev supplies one, otherwise the component's own toggle state. */
+  isActionActive(action) {
+    return action.isActive ?? (!!action.id && this.toggledActionIds.includes(action.id));
+  }
+  clearCopyReset() {
+    if (this.copyResetHandle !== null) {
+      clearTimeout(this.copyResetHandle);
+      this.copyResetHandle = null;
+    }
+  }
+  async copyMessageToClipboard() {
+    const text = this.finalContent?.trim();
+    if (!text || !navigator.clipboard?.writeText)
+      return;
+    try {
+      await navigator.clipboard.writeText(text);
+    }
+    catch {
+      // The clipboard can reject (denied permission, insecure context). Leave the button in its
+      // idle state rather than confirming a copy that did not happen.
+      return;
+    }
+    // Restart the window on a repeat click instead of stacking timers.
+    this.clearCopyReset();
+    this.isCopied = true;
+    this.copyResetHandle = setTimeout(() => {
+      this.isCopied = false;
+      this.copyResetHandle = null;
+    }, COPIED_CONFIRMATION_TIMEOUT);
   }
   scheduleRefresh() {
     if (this.rafHandle !== null)
@@ -3036,19 +3217,19 @@ const WppChatConversationMessage = class {
     }
   }
   renderStreaming() {
-    return (h("div", { class: "message-text" }, this.committedTokens.map((token) => renderToken(token, this.role)), h("span", { class: "streaming-live" }, purify.sanitize(this.liveText), h("span", { class: "cursor", "aria-hidden": "true" }))));
+    return (h("div", { class: "message-text" }, this.committedTokens.map((token) => renderToken(token, this.resolvedRole)), h("span", { class: "streaming-live" }, purify.sanitize(this.liveText), h("span", { class: "cursor", "aria-hidden": "true" }))));
   }
   renderComplete() {
     const tokens = getMarkdownTokens(this.finalContent);
     if (!Array.isArray(tokens)) {
-      return (h("wpp-typography-v4-4-0", { type: "s-body", tag: "p" }, purify.sanitize(this.finalContent)));
+      return (h("wpp-typography-v4-5-0", { type: "s-body", tag: "p" }, purify.sanitize(this.finalContent)));
     }
-    return h("div", { class: "message-text" }, tokens.map((token) => renderToken(token, this.role)));
+    return h("div", { class: "message-text" }, tokens.map((token) => renderToken(token, this.resolvedRole)));
   }
   renderAttachments() {
     if (!this.attachments || this.attachments.length === 0)
       return null;
-    return (h("div", { class: "attachments", part: "attachments", role: "list" }, this.attachments.map((file, index) => (h("wpp-file-upload-item-v4-4-0", { key: index, variant: "chat", part: "file-item", role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": this.attachments.length.toString(), file: {
+    return (h("div", { class: "attachments", part: "attachments", role: "list" }, this.attachments.map((file, index) => (h("wpp-file-upload-item-v4-5-0", { key: index, variant: "chat", part: "file-item", role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": this.attachments.length.toString(), file: {
         name: file.name,
         url: file.url,
         type: file.type,
@@ -3057,17 +3238,34 @@ const WppChatConversationMessage = class {
         ...file.fileItemProps,
       } })))));
   }
+  hasTokenCount() {
+    return typeof this.tokenCount === 'string' && this.tokenCount.trim().length > 0;
+  }
+  /**
+   * The DS component file renders the token count as an Action Button instance (S-Strong text,
+   * ghost hover, 6px radius), so it IS a wpp-action-button here — not a styled div — and it emits
+   * the same event as the other footer actions so a consumer can hook usage details onto it. The
+   * only deviation from the button's defaults is the grey-600 icon, set through the button's own
+   * `--wpp-action-button-secondary-icon-color` hook in SCSS (an icon `color` prop loses to the
+   * button's ::slotted rule).
+   */
+  renderTokenCount() {
+    return (h("wpp-action-button-v4-5-0", { variant: "secondary", class: "token-count", part: "token-count", ariaProps: { label: `${this._locales.tokenCountLabel} ${this.tokenCount}` }, onClick: () => this.handleActionClick({ id: 'tokenCount', label: this._locales.tokenCountLabel }) }, h(transformToVersionedTag(this.tokenCountIcon), { slot: 'icon-start' }), this.tokenCount));
+  }
   hasTextContent() {
     return !!this.finalContent && this.finalContent.trim().length > 0;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: this.containerCssClasses() }, this.shouldRenderAvatar('assistant') && (h("div", { class: "avatar-wrapper ai-avatar" }, this.role === 'assistant' && (h("wpp-avatar-v4-4-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), h("div", { class: this.contentCssClasses() }, h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.hasTextContent() && this.renderComplete(), h("slot", { part: "custom-content" }), this.currentStatus === 'complete' && !!this.attachments?.length && this.renderAttachments()), this.role === 'assistant' && this.status === 'complete' && (h("div", { class: "actions" }, h("div", { class: "action-toolbar" }, this._actionButtonConfig.map(this.renderActionButton), this.menuContextListItems && (h("wpp-menu-context-v4-4-0", null, h("wpp-action-button-v4-4-0", { variant: "secondary", slot: "trigger-element" }, h("wpp-icon-more-v4-4-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.sourcesActionConfig && (h("div", { class: "sources-action" }, h("wpp-action-button-v4-4-0", { variant: "secondary", ...this.sourcesActionConfig }, this.sourcesActionConfig.text)))))), this.shouldRenderAvatar('user') && (h("div", { class: "avatar-wrapper user-avatar" }, this.role === 'user' && h("wpp-avatar-v4-4-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: this.containerCssClasses() }, this.shouldRenderAvatar('assistant') && (h("div", { class: "avatar-wrapper ai-avatar" }, this.resolvedRole === 'assistant' && (h("wpp-avatar-v4-5-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), h("div", { class: this.contentCssClasses() }, h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.hasTextContent() && this.renderComplete(), h("slot", { part: "custom-content" }), this.currentStatus === 'complete' && !!this.attachments?.length && this.renderAttachments()), this.resolvedRole === 'assistant' && this.currentStatus === 'complete' && (h("div", { class: "actions" }, h("div", { class: "action-toolbar", part: "action-toolbar" }, this.mergedActions.map(this.renderActionButton), this.menuContextListItems && (h("wpp-menu-context-v4-5-0", null, h("wpp-action-button-v4-5-0", { variant: "secondary", slot: "trigger-element" }, h("wpp-icon-more-v4-5-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.hasTokenCount()
+      ? this.renderTokenCount()
+      : this.sourcesActionConfig && (h("div", { class: "sources-action" }, h("wpp-action-button-v4-5-0", { variant: "secondary", ariaProps: this.sourcesActionConfig.ariaProps, disabled: this.sourcesActionConfig.disabled, loading: this.sourcesActionConfig.loading, onClick: () => this.sourcesActionConfig.onClick?.() }, this.sourcesActionConfig.text))), h("span", { class: "sr-only", "aria-live": "polite" }, this.isCopied ? this._locales.copiedAction : '')))), this.shouldRenderAvatar('user') && (h("div", { class: "avatar-wrapper user-avatar" }, this.resolvedRole === 'user' && h("wpp-avatar-v4-5-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
   }
-  static get registryIs() { return "wpp-chat-conversation-message-v4-4-0"; }
+  static get registryIs() { return "wpp-chat-conversation-message-v4-5-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "status": ["onStatusChange"],
-    "content": ["onContentChange"]
+    "content": ["onContentChange"],
+    "role": ["onRoleChange"]
   }; }
 };
 WppChatConversationMessage.style = wppChatConversationMessageCss;
@@ -3094,30 +3292,6 @@ const debounceWithControl = (callback, timeout) => {
     },
   };
 };
-let isLoadingAngleRegistered = false;
-/**
- * Registers the angle driving the `is-loading` conic-gradient border.
- *
- * Custom property registrations are document-scoped, so an `@property` rule inside this
- * component's shadow stylesheet is ignored. Without a registration the angle interpolates
- * discretely and the gradient is invalid for half of every cycle.
- */
-const registerLoadingAngle = () => {
-  if (isLoadingAngleRegistered || typeof CSS === 'undefined' || !CSS.registerProperty)
-    return;
-  isLoadingAngleRegistered = true;
-  try {
-    CSS.registerProperty({
-      name: '--wpp-chat-input-loading-angle',
-      syntax: '<angle>',
-      initialValue: '0deg',
-      inherits: false,
-    });
-  }
-  catch {
-    // Already registered by another instance.
-  }
-};
 
 const DEFAULT_FILE_UPLOAD_CONFIG = {
   acceptConfig: {},
@@ -3130,6 +3304,8 @@ const DEFAULT_FILE_UPLOAD_CONFIG = {
     sizeError: 'File exceeds the allowed size limit',
     formatError: 'Invalid file format',
     limitError: 'Files limit reached',
+    removeFile: (name) => `Remove file ${name}`,
+    uploadProgress: (name) => `Processing ${name}`,
   },
 };
 const MAX_INPUT_AREA_HEIGHT = 240;
@@ -3146,6 +3322,40 @@ const PRIMARY_ACTION_TRANSITION_MS = 200;
  */
 const UPLOAD_ACTION_ID = 'upload';
 const UPLOAD_ICON = 'wpp-icon-attach';
+/**
+ * Sits between the model name and the selected reasoning level in the selector trigger
+ * (`Gemini 3.5 Flash\u30FBHigh`). This is U+30FB KATAKANA MIDDLE DOT, taken verbatim from the
+ * Figma text node — it carries its own wide side bearings, which is why the design shows visual
+ * gaps without any space characters. Do NOT "fix" it to a bullet plus spaces; that reads the
+ * same but is not what the design specifies.
+ *
+ * Not a locale string: it is punctuation, and the same glyph is used in every language.
+ */
+const MODEL_REASONING_SEPARATOR = '\u30FB';
+/**
+ * Levels used when a model is selected and the user has not chosen one for it yet:
+ * "Reasoning: Auto, with fallback to Medium. Verbosity: Medium." (Mustafa, 23 Sep 2026).
+ *
+ * Matched against the ids the consumer supplies in `reasoningOptions` / `verbosityOptions`,
+ * first hit wins. A model offering none of these ids gets no default rather than an arbitrary
+ * guess, so nothing is pre-selected. These literals are the platform's `ReasoningLevel` /
+ * `LlmOutputVerbosity` enum values — the only place the component assumes anything about an
+ * option's meaning.
+ */
+const DEFAULT_REASONING_IDS = ['auto', 'medium'];
+const DEFAULT_VERBOSITY_IDS = ['medium'];
+/**
+ * Geometry for a level submenu, which the design bottom-aligns with the model menu rather than
+ * with the row that opens it.
+ *
+ * Popper's skidding offset moves the popup along the trigger's cross axis, so for a `right-end`
+ * placement the submenu's bottom lands `skidding` pixels below the trigger row's bottom. Both
+ * popups carry 8px of their own padding, so a skidding equal to the gap between the row and the
+ * menu's bottom edge puts the last level in line with the menu's last row. `*_FALLBACK_SKIDDING`
+ * is that gap when the menu is not a popup at all and there is nothing to measure against.
+ */
+const MODEL_OPTIONS_SUBMENU_FALLBACK_SKIDDING = 8;
+const MODEL_OPTIONS_SUBMENU_DISTANCE = 9;
 const LOCALES_DEFAULTS = {
   placeholder: 'Type your message...',
   minimizedDescription: 'Expand message input',
@@ -3169,6 +3379,8 @@ const LOCALES_DEFAULTS = {
   modelPremiumOptionLabel: 'Premium',
   modelPremiumOptionCaption: 'Favours high-end, efficient models',
   modelSelectorListItemLabel: 'Select model or agent',
+  modelReasoningLabel: 'Reasoning',
+  modelVerbosityLabel: 'Verbosity',
 };
 const getDefaultModelOptions = (locales) => [
   {
@@ -3185,7 +3397,7 @@ const getDefaultModelOptions = (locales) => [
   },
 ];
 
-const wppChatInputCss = "@charset \"UTF-8\";:host{--chat-input-container-min-width:var(--wpp-chat-input-container-min-width, 351px);--chat-input-container-bg-color:var(--wpp-chat-input-container-bg-color, var(--wpp-grey-color-000));--chat-input-container-border-width:var(--wpp-chat-input-container-border-width, 1px);--chat-input-container-loading-border-width:var(--wpp-chat-input-container-loading-border-width, 2px);--chat-input-container-border-color-active:var(\n    --wpp-chat-input-container-border-color-active,\n    var(--wpp-primary-color-500)\n  );--chat-input-container-border-radius:var(--wpp-chat-input-container-border-radius, var(--wpp-border-radius-m));--chat-input-area-min-height:var(--wpp-chat-input-area-min-height, 52px);--chat-input-area-max-height:var(--wpp-chat-input-area-max-height, 240px);--chat-input-area-padding:var(\n    --wpp-chat-input-area-padding,\n    calc(16px - var(--chat-input-container-border-width)) 16px 4px 16px\n  );--chat-input-area-placeholder-color:var(--wpp-chat-input-area-placeholder-color, var(--wpp-grey-color-700));--chat-text-input-min-height:var(--wpp-chat-text-input-min-height, 52px);--chat-text-input-padding:var(--wpp-chat-text-input-padding, 0);--chat-text-input-bg-color:var(--wpp-chat-text-input-bg-color, transparent);--chat-text-input-placeholder-color:var(--wpp-chat-text-input-placeholder-color, var(--wpp-grey-color-700));--chat-actions-bar-padding:var(\n    --wpp-chat-actions-bar-padding,\n    12px 16px calc(16px - var(--chat-input-container-border-width)) 12px\n  );--chat-s-size-actions-bar-padding:var(\n    --wpp-chat-s-size-actions-bar-padding,\n    8px 16px calc(8px - var(--chat-input-container-border-width)) 12px\n  );--chat-actions-bar-color:var(--wpp-chat-actions-bar-color, var(--wpp-grey-color-1000));--chat-actions-bar-color-disabled:var(--wpp-chat-actions-bar-color-disabled, var(--wpp-grey-color-400));--chat-actions-bar-char-counter-color:var(--wpp-chat-actions-bar-char-counter-color, var(--wpp-danger-color-500));--chat-actions-bar-char-counter-color-disabled:var(\n    --wpp-chat-actions-bar-char-counter-color-disabled,\n    var(--wpp-danger-color-300)\n  );--chat-text-input-minimized-width:var(--wpp-chat-text-input-minimized-width, 203px);--chat-text-input-minimized-height:var(--wpp-chat-text-input-minimized-height, 22px);--chat-text-input-minimized-padding:var(\n    --wpp-chat-text-input-minimized-padding,\n    calc(8px - var(--chat-input-container-border-width)) 16px calc(8px - var(--chat-input-container-border-width)) 12px\n  );--chat-input-transition-timing:0.3s cubic-bezier(0.4, 0, 0.2, 1);--chat-input-action-transition-duration:200ms;--chat-minimized-focus-ring-color:var(--wpp-focus-ring-color, var(--wpp-primary-color-600));--chat-minimized-focus-ring-width:var(--wpp-focus-ring-width, var(--wpp-border-width-m));--chat-minimized-focus-ring-radius:var(--wpp-chat-input-container-border-radius, var(--wpp-border-radius-m));--chat-minimized-first-border-color-focus:var(\n    --wpp-chat-minimized-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--chat-minimized-second-border-color-focus:var(\n    --wpp-chat-minimized-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--chat-minimized-border-radius-focus:var(--wpp-chat-minimized-border-radius-focus, var(--wpp-border-radius-xs));--chat-input-loading-color-primary:var(--wpp-chat-input-loading-color-primary, var(--wpp-primary-color-500));--chat-input-loading-color-secondary:var(--wpp-chat-input-loading-color-secondary, var(--wpp-primary-color-100));display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-box-sizing:border-box;box-sizing:border-box;position:relative;-ms-flex-align:center;align-items:center;width:100%;isolation:isolate}.chat-input-container{position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;background-color:var(--chat-input-container-bg-color);border-radius:var(--chat-input-container-border-radius);border:var(--chat-input-container-border-width) solid transparent;min-width:var(--chat-input-container-min-width);width:100%;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:var(--wpp-box-shadow-s);box-shadow:var(--wpp-box-shadow-s);-webkit-transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);will-change:width, height;cursor:text}.chat-input-container.is-focused{border-color:var(--chat-input-container-border-color-active)}.chat-input-container.is-loading::before{content:\"\";position:absolute;z-index:-1;inset:calc(-1 * (var(--chat-input-container-loading-border-width) + var(--chat-input-container-border-width)));pointer-events:none;background:conic-gradient(from var(--wpp-chat-input-loading-angle), var(--chat-input-loading-color-primary), var(--chat-input-loading-color-secondary), var(--chat-input-loading-color-primary));-webkit-animation:loading-rotate 2s linear infinite;animation:loading-rotate 2s linear infinite;border-radius:calc(var(--chat-input-container-border-radius) + var(--chat-input-container-loading-border-width))}@-webkit-keyframes loading-rotate{to{--wpp-chat-input-loading-angle:360deg}}@keyframes loading-rotate{to{--wpp-chat-input-loading-angle:360deg}}.chat-input-container:not(.is-focused):hover{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m)}.chat-input-container.disabled{pointer-events:none;cursor:not-allowed}.chat-input-container.has-alert{gap:0}.alert{-ms-flex-item-align:stretch;align-self:stretch;border-top-left-radius:var(--chat-input-container-border-radius);border-top-right-radius:var(--chat-input-container-border-radius);overflow:hidden}.alert[hidden]{display:none}.chat-file-upload-toast{position:absolute;top:8px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);cursor:pointer}.input-area{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);display:-ms-flexbox;display:flex;-ms-flex-direction:column-reverse;flex-direction:column-reverse;-ms-flex-align:stretch;align-items:stretch;color:var(--wpp-grey-color-1000);min-height:var(--chat-input-area-min-height);max-height:var(--chat-input-area-max-height);overflow-y:hidden;-ms-flex:1;flex:1;padding:var(--chat-input-area-padding);gap:12px;-webkit-box-sizing:border-box;box-sizing:border-box;border-radius:var(--wpp-border-radius-m) var(--wpp-border-radius-m) 0 0;-webkit-transition:height var(--chat-input-transition-timing);transition:height var(--chat-input-transition-timing);will-change:height;-webkit-transform-origin:bottom;transform-origin:bottom}.input-area .attachments{-ms-flex-order:3;order:3}.input-area .references{-ms-flex-order:2;order:2}.input-area .text-input{-ms-flex-order:1;order:1}.input-area:not(.minimized){scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.input-area::-webkit-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-moz-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area:-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-webkit-scrollbar{width:4px;height:4px}.input-area::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400);border-radius:var(--wpp-border-radius-xs);margin:6px}.input-area::-webkit-scrollbar-track{background:transparent}.input-area textarea{width:100%;min-height:var(--chat-text-input-min-height);resize:none;border:none;outline:none;padding:var(--chat-text-input-padding);font-family:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;background-color:var(--chat-text-input-bg-color);overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;color:inherit;-webkit-transition:min-height var(--chat-input-transition-timing);transition:min-height var(--chat-input-transition-timing);will-change:min-height;-webkit-transform-origin:bottom;transform-origin:bottom;margin:0}.input-area textarea::-webkit-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-moz-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:hover,.input-area textarea:focus-within{color:var(--wpp-grey-color-1000)}.input-area textarea:active{color:var(--wpp-grey-color-1000)}.input-area textarea:disabled{cursor:not-allowed;color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-webkit-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-moz-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled:-ms-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-ms-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::placeholder{color:var(--wpp-grey-color-500)}.input-area.minimized{min-height:0;padding:var(--chat-text-input-minimized-padding)}.input-area.minimized .input-area-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;gap:8px}.input-area.minimized .input-area-wrapper .actions-menu{--wpp-mc-wrapper-width:auto;display:-ms-flexbox;display:flex}.input-area.minimized .input-area-wrapper .sr-only{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0, 0, 0, 0) !important;-webkit-clip-path:inset(50%) !important;clip-path:inset(50%) !important;border:0 !important;white-space:nowrap !important}.input-area.minimized .minimized-input{-ms-flex-align:center;align-items:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;min-width:var(--chat-text-input-minimized-width);outline:none}.input-area.minimized .minimized-input .input-value{width:100%}.input-area.minimized .minimized-input .input-value.disabled{color:var(--wpp-grey-color-500)}.input-area.minimized .minimized-input .input-value-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area.minimized .minimized-input .input-value-placeholder.disabled{color:var(--wpp-grey-color-500)}.actions-bar{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;-ms-flex-align:end;align-items:flex-end;padding:var(--chat-actions-bar-padding);border-radius:0 0 var(--wpp-border-radius-m) var(--wpp-border-radius-m)}.actions-bar.size-s{padding:var(--chat-s-size-actions-bar-padding)}.actions-bar .left-actions{display:-ms-flexbox;display:flex;gap:8px;-ms-flex-align:center;align-items:center;}.actions-bar .left-actions .actions-menu{--wpp-mc-wrapper-width:auto;display:-ms-inline-flexbox;display:inline-flex;-ms-flex:0 0 auto;flex:0 0 auto;width:auto}.actions-bar .left-actions .select{display:-ms-flexbox;display:flex;width:100%;--wpp-action-button-padding:4px 6px;--wpp-action-button-icon-start-padding:8px;--wpp-action-button-icon-end-padding:6px;--wpp-action-button-icon-start-margin:8px;--wpp-action-button-icon-end-margin:8px;--wpp-action-button-bg-color-active:var(--wpp-grey-color-300);--wpp-action-button-opacity-active:1;}.actions-bar .left-actions .select ::slotted(.wpp-action-button:not(.with-icon-end)){--wpp-action-button-padding:4px 8px}.actions-bar .left-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.actions-bar .left-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.right-actions{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center}.right-actions .select{line-height:0}.right-actions .char-counter{color:var(--chat-actions-bar-char-counter-color)}.right-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.right-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.right-actions.disabled .char-counter{color:var(--chat-actions-bar-char-counter-color-disabled)}.play-btn{--button-padding-s:6px;margin-left:8px;max-width:32px;opacity:1;overflow:clip;overflow-clip-margin:8px;-webkit-transition:max-width var(--chat-input-action-transition-duration) ease, opacity var(--chat-input-action-transition-duration) ease, margin-left var(--chat-input-action-transition-duration) ease, -webkit-transform var(--chat-input-action-transition-duration) ease;transition:max-width var(--chat-input-action-transition-duration) ease, opacity var(--chat-input-action-transition-duration) ease, margin-left var(--chat-input-action-transition-duration) ease, -webkit-transform var(--chat-input-action-transition-duration) ease;transition:max-width var(--chat-input-action-transition-duration) ease, opacity var(--chat-input-action-transition-duration) ease, margin-left var(--chat-input-action-transition-duration) ease, transform var(--chat-input-action-transition-duration) ease;transition:max-width var(--chat-input-action-transition-duration) ease, opacity var(--chat-input-action-transition-duration) ease, margin-left var(--chat-input-action-transition-duration) ease, transform var(--chat-input-action-transition-duration) ease, -webkit-transform var(--chat-input-action-transition-duration) ease}.play-btn::part(icon-start-wrapper){margin:0}.play-btn.is-hidden{max-width:0;margin-left:0;opacity:0;-webkit-transform:scale(0.85);transform:scale(0.85);pointer-events:none}.model-selector{height:32px;margin-right:4px}.select-model-trigger.size-s:not(.is-chat-expanded){--wpp-list-item-padding:4px}.select-model-trigger.size-s:not(.is-chat-expanded)::part(left-wrapper){margin-right:0}.select-model-trigger.is-menu-opened{--li-bg-color:var(--wpp-grey-color-300);--wpp-icon-color:var(--wpp-grey-color-900)}.attachments{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;gap:8px;width:100%;-ms-flex:0 0 auto;flex:0 0 auto;overflow:auto hidden;scrollbar-width:thin;scrollbar-color:transparent transparent;-webkit-transition:scrollbar-color 0.3s ease-in-out;transition:scrollbar-color 0.3s ease-in-out}.attachments::-webkit-scrollbar{height:4px}.attachments::-webkit-scrollbar-thumb{background-color:transparent;border-radius:var(--wpp-border-radius-xs, 4px);-webkit-transition:background-color 0.3s ease-in-out;transition:background-color 0.3s ease-in-out}.attachments:hover,.attachments:focus-within{scrollbar-color:var(--wpp-grey-color-400) transparent}.attachments:hover::-webkit-scrollbar-thumb,.attachments:focus-within::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400)}.attachments .wpp-file-upload-item{--wpp-file-upload-item-chat-gap:0}.attachments .wpp-file-upload-item::part(file-item){margin-top:0}.attachments .wpp-file-upload-item::part(controls){-ms-flex-pack:end;justify-content:flex-end}.attachments .wpp-file-upload-item::part(thumbnail){margin-right:8px}.attachments .wpp-file-upload-item::part(cross-icon){margin-left:12px}.references{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:end;align-items:flex-end;gap:8px;width:100%;-ms-flex:0 0 auto;flex:0 0 auto}.references[hidden]{display:none}.input-area.minimized .minimized-input:focus-visible{border-radius:var(--chat-minimized-border-radius-focus);outline:none;-webkit-box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus);box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus)}:host([data-wpp-theme=dark]) .chat-input-container{background-color:var(--wpp-grey-color-100)}";
+const wppChatInputCss = "@charset \"UTF-8\";:host{--chat-input-container-min-width:var(--wpp-chat-input-container-min-width, 351px);--chat-input-container-bg-color:var(--wpp-chat-input-container-bg-color, var(--wpp-grey-color-000));--chat-input-container-border-width:var(--wpp-chat-input-container-border-width, 1px);--chat-input-container-loading-border-width:var(--wpp-chat-input-container-loading-border-width, 2px);--chat-input-container-border-color-active:var(\n    --wpp-chat-input-container-border-color-active,\n    var(--wpp-primary-color-500)\n  );--chat-input-container-border-radius:var(--wpp-chat-input-container-border-radius, var(--wpp-border-radius-m));--chat-input-area-min-height:var(--wpp-chat-input-area-min-height, 52px);--chat-input-area-max-height:var(--wpp-chat-input-area-max-height, 240px);--chat-input-area-padding:var(\n    --wpp-chat-input-area-padding,\n    calc(16px - var(--chat-input-container-border-width)) 16px 4px 16px\n  );--chat-input-area-placeholder-color:var(--wpp-chat-input-area-placeholder-color, var(--wpp-grey-color-700));--chat-text-input-min-height:var(--wpp-chat-text-input-min-height, 52px);--chat-text-input-padding:var(--wpp-chat-text-input-padding, 0);--chat-text-input-bg-color:var(--wpp-chat-text-input-bg-color, transparent);--chat-text-input-placeholder-color:var(--wpp-chat-text-input-placeholder-color, var(--wpp-grey-color-700));--chat-actions-bar-padding:var(\n    --wpp-chat-actions-bar-padding,\n    12px 16px calc(16px - var(--chat-input-container-border-width)) 12px\n  );--chat-s-size-actions-bar-padding:var(\n    --wpp-chat-s-size-actions-bar-padding,\n    8px 16px calc(8px - var(--chat-input-container-border-width)) 12px\n  );--chat-actions-bar-color:var(--wpp-chat-actions-bar-color, var(--wpp-grey-color-1000));--chat-actions-bar-color-disabled:var(--wpp-chat-actions-bar-color-disabled, var(--wpp-grey-color-400));--chat-actions-bar-char-counter-color:var(--wpp-chat-actions-bar-char-counter-color, var(--wpp-danger-color-500));--chat-actions-bar-char-counter-color-disabled:var(\n    --wpp-chat-actions-bar-char-counter-color-disabled,\n    var(--wpp-danger-color-300)\n  );--chat-text-input-minimized-width:var(--wpp-chat-text-input-minimized-width, 203px);--chat-text-input-minimized-height:var(--wpp-chat-text-input-minimized-height, 22px);--chat-text-input-minimized-padding:var(\n    --wpp-chat-text-input-minimized-padding,\n    calc(8px - var(--chat-input-container-border-width)) 16px calc(8px - var(--chat-input-container-border-width)) 12px\n  );--chat-input-transition-timing:0.3s cubic-bezier(0.4, 0, 0.2, 1);--chat-input-action-transition-duration:200ms;--chat-minimized-focus-ring-color:var(--wpp-focus-ring-color, var(--wpp-primary-color-600));--chat-minimized-focus-ring-width:var(--wpp-focus-ring-width, var(--wpp-border-width-m));--chat-minimized-focus-ring-radius:var(--wpp-chat-input-container-border-radius, var(--wpp-border-radius-m));--chat-minimized-first-border-color-focus:var(\n    --wpp-chat-minimized-first-border-color-focus,\n    var(--wpp-grey-color-000)\n  );--chat-minimized-second-border-color-focus:var(\n    --wpp-chat-minimized-second-border-color-focus,\n    var(--wpp-brand-color)\n  );--chat-minimized-border-radius-focus:var(--wpp-chat-minimized-border-radius-focus, var(--wpp-border-radius-xs));display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-webkit-box-sizing:border-box;box-sizing:border-box;position:relative;-ms-flex-align:center;align-items:center;width:100%;isolation:isolate}.chat-input-container{position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;background-color:var(--chat-input-container-bg-color);border-radius:var(--chat-input-container-border-radius);border:var(--chat-input-container-border-width) solid transparent;min-width:var(--chat-input-container-min-width);width:100%;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-shadow:var(--wpp-box-shadow-s);box-shadow:var(--wpp-box-shadow-s);-webkit-transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);transition:width var(--chat-input-transition-timing), height var(--chat-input-transition-timing);will-change:width, height;cursor:text}.chat-input-container.is-focused{border-color:var(--chat-input-container-border-color-active)}.chat-input-container.is-loading::before{content:\"\";position:absolute;z-index:-1;inset:calc(-1 * (var(--chat-input-container-border-width) + var(--chat-input-container-loading-border-width) + 13px));pointer-events:none;background:conic-gradient(from var(--wpp-loading-halo-angle), transparent 0%, color-mix(in srgb, var(--wpp-loading-halo-glow-color, var(--wpp-dataviz-color-seq-brand-400)) 65%, transparent) 16%, transparent 40%);-webkit-filter:blur(10px);filter:blur(10px);-webkit-animation:wpp-loading-halo-rotate 2s linear infinite;animation:wpp-loading-halo-rotate 2s linear infinite;border-radius:calc(var(--chat-input-container-border-radius) + var(--chat-input-container-loading-border-width) + 6px)}.chat-input-container.is-loading::after{content:\"\";position:absolute;z-index:-1;inset:calc(-1 * (var(--chat-input-container-border-width) + var(--chat-input-container-loading-border-width)));pointer-events:none;background:conic-gradient(from var(--wpp-loading-halo-angle), transparent 0%, var(--wpp-loading-halo-highlight-color, var(--wpp-dataviz-color-seq-brand-600)) 12%, var(--wpp-loading-halo-base-color, var(--wpp-dataviz-color-seq-brand-900)) 30%, transparent 46%);-webkit-animation:wpp-loading-halo-rotate 2s linear infinite;animation:wpp-loading-halo-rotate 2s linear infinite;border-radius:calc(var(--chat-input-container-border-radius) + var(--chat-input-container-loading-border-width))}@media (prefers-reduced-motion: reduce){.chat-input-container.is-loading::before{display:none}.chat-input-container.is-loading::after{-webkit-animation:none;animation:none;background:var(--wpp-loading-halo-base-color, var(--wpp-dataviz-color-seq-brand-900))}}@-webkit-keyframes wpp-loading-halo-rotate{to{--wpp-loading-halo-angle:360deg}}@keyframes wpp-loading-halo-rotate{to{--wpp-loading-halo-angle:360deg}}.chat-input-container:not(.is-focused):hover{-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m)}.chat-input-container.disabled{pointer-events:none;cursor:not-allowed}.chat-input-container.has-alert{gap:0}.alert{-ms-flex-item-align:stretch;align-self:stretch;border-top-left-radius:var(--chat-input-container-border-radius);border-top-right-radius:var(--chat-input-container-border-radius);overflow:hidden}.alert[hidden]{display:none}.chat-file-upload-toast{position:absolute;top:8px;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);cursor:pointer}.input-area{font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);display:-ms-flexbox;display:flex;-ms-flex-direction:column-reverse;flex-direction:column-reverse;-ms-flex-align:stretch;align-items:stretch;color:var(--wpp-grey-color-1000);min-height:var(--chat-input-area-min-height);max-height:var(--chat-input-area-max-height);overflow-y:hidden;-ms-flex:1;flex:1;padding:var(--chat-input-area-padding);gap:12px;-webkit-box-sizing:border-box;box-sizing:border-box;border-radius:var(--wpp-border-radius-m) var(--wpp-border-radius-m) 0 0;-webkit-transition:height var(--chat-input-transition-timing);transition:height var(--chat-input-transition-timing);will-change:height;-webkit-transform-origin:bottom;transform-origin:bottom}.input-area .attachments{-ms-flex-order:3;order:3}.input-area .references{-ms-flex-order:2;order:2}.input-area .text-input{-ms-flex-order:1;order:1}.input-area:not(.minimized){scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent}.input-area::-webkit-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-moz-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area:-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-ms-input-placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::placeholder{color:var(--chat-input-area-placeholder-color)}.input-area::-webkit-scrollbar{width:4px;height:4px}.input-area::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400);border-radius:var(--wpp-border-radius-xs);margin:6px}.input-area::-webkit-scrollbar-track{background:transparent}.input-area textarea{width:100%;min-height:var(--chat-text-input-min-height);resize:none;border:none;outline:none;padding:var(--chat-text-input-padding);font-family:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;background-color:var(--chat-text-input-bg-color);overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;color:inherit;-webkit-transition:min-height var(--chat-input-transition-timing);transition:min-height var(--chat-input-transition-timing);will-change:min-height;-webkit-transform-origin:bottom;transform-origin:bottom;margin:0}.input-area textarea::-webkit-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-moz-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::-ms-input-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea::placeholder{color:var(--chat-text-input-placeholder-color)}.input-area textarea:hover,.input-area textarea:focus-within{color:var(--wpp-grey-color-1000)}.input-area textarea:active{color:var(--wpp-grey-color-1000)}.input-area textarea:disabled{cursor:not-allowed;color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-webkit-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-moz-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled:-ms-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::-ms-input-placeholder{color:var(--wpp-grey-color-500)}.input-area textarea:disabled::placeholder{color:var(--wpp-grey-color-500)}.input-area.minimized{min-height:0;padding:var(--chat-text-input-minimized-padding)}.input-area.minimized .input-area-wrapper{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;gap:8px}.input-area.minimized .input-area-wrapper .actions-menu{--wpp-mc-wrapper-width:auto;display:-ms-flexbox;display:flex}.input-area.minimized .input-area-wrapper .sr-only{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0, 0, 0, 0) !important;-webkit-clip-path:inset(50%) !important;clip-path:inset(50%) !important;border:0 !important;white-space:nowrap !important}.input-area.minimized .minimized-input{-ms-flex-align:center;align-items:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;min-width:var(--chat-text-input-minimized-width);outline:none}.input-area.minimized .minimized-input .input-value{width:100%}.input-area.minimized .minimized-input .input-value.disabled{color:var(--wpp-grey-color-500)}.input-area.minimized .minimized-input .input-value-placeholder{color:var(--chat-text-input-placeholder-color)}.input-area.minimized .minimized-input .input-value-placeholder.disabled{color:var(--wpp-grey-color-500)}.actions-bar{display:-ms-flexbox;display:flex;-ms-flex-pack:justify;justify-content:space-between;-ms-flex-align:end;align-items:flex-end;padding:var(--chat-actions-bar-padding);border-radius:0 0 var(--wpp-border-radius-m) var(--wpp-border-radius-m)}.actions-bar.size-s{padding:var(--chat-s-size-actions-bar-padding)}.actions-bar .left-actions{display:-ms-flexbox;display:flex;gap:8px;-ms-flex-align:center;align-items:center;}.actions-bar .left-actions .actions-menu{--wpp-mc-wrapper-width:auto;display:-ms-inline-flexbox;display:inline-flex;-ms-flex:0 0 auto;flex:0 0 auto;width:auto}.actions-bar .left-actions .select{display:-ms-flexbox;display:flex;width:100%;--wpp-action-button-padding:4px 6px;--wpp-action-button-icon-start-padding:8px;--wpp-action-button-icon-end-padding:6px;--wpp-action-button-icon-start-margin:8px;--wpp-action-button-icon-end-margin:8px;--wpp-action-button-bg-color-active:var(--wpp-grey-color-300);--wpp-action-button-opacity-active:1;}.actions-bar .left-actions .select ::slotted(.wpp-action-button:not(.with-icon-end)){--wpp-action-button-padding:4px 8px}.actions-bar .left-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.actions-bar .left-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.right-actions{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center}.right-actions .select{line-height:0}.right-actions .char-counter{color:var(--chat-actions-bar-char-counter-color)}.right-actions .wpp-action-button::part(button){color:var(--chat-actions-bar-color)}.right-actions.disabled .wpp-action-button::part(button){cursor:not-allowed;color:var(--chat-actions-bar-color-disabled)}.right-actions.disabled .char-counter{color:var(--chat-actions-bar-char-counter-color-disabled)}.play-btn{--button-padding-s:6px;margin-left:8px;max-width:32px;opacity:1;overflow:clip;overflow-clip-margin:8px;-webkit-transition:max-width var(--chat-input-action-transition-duration) ease, opacity var(--chat-input-action-transition-duration) ease, margin-left var(--chat-input-action-transition-duration) ease, -webkit-transform var(--chat-input-action-transition-duration) ease;transition:max-width var(--chat-input-action-transition-duration) ease, opacity var(--chat-input-action-transition-duration) ease, margin-left var(--chat-input-action-transition-duration) ease, -webkit-transform var(--chat-input-action-transition-duration) ease;transition:max-width var(--chat-input-action-transition-duration) ease, opacity var(--chat-input-action-transition-duration) ease, margin-left var(--chat-input-action-transition-duration) ease, transform var(--chat-input-action-transition-duration) ease;transition:max-width var(--chat-input-action-transition-duration) ease, opacity var(--chat-input-action-transition-duration) ease, margin-left var(--chat-input-action-transition-duration) ease, transform var(--chat-input-action-transition-duration) ease, -webkit-transform var(--chat-input-action-transition-duration) ease}.play-btn::part(icon-start-wrapper){margin:0}.play-btn.is-hidden{max-width:0;margin-left:0;opacity:0;-webkit-transform:scale(0.85);transform:scale(0.85);pointer-events:none}.model-selector{height:32px;margin-right:4px}.select-model-trigger.size-s:not(.is-chat-expanded){--wpp-list-item-padding:4px}.select-model-trigger.size-s:not(.is-chat-expanded)::part(left-wrapper){margin-right:0}.select-model-trigger.is-menu-opened{--li-bg-color:var(--wpp-grey-color-300);--wpp-icon-color:var(--wpp-grey-color-900)}.attachments{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;gap:8px;width:100%;-ms-flex:0 0 auto;flex:0 0 auto;overflow:auto hidden;scrollbar-width:thin;scrollbar-color:transparent transparent;-webkit-transition:scrollbar-color 0.3s ease-in-out;transition:scrollbar-color 0.3s ease-in-out}.attachments::-webkit-scrollbar{height:4px}.attachments::-webkit-scrollbar-thumb{background-color:transparent;border-radius:var(--wpp-border-radius-xs, 4px);-webkit-transition:background-color 0.3s ease-in-out;transition:background-color 0.3s ease-in-out}.attachments:hover,.attachments:focus-within{scrollbar-color:var(--wpp-grey-color-400) transparent}.attachments:hover::-webkit-scrollbar-thumb,.attachments:focus-within::-webkit-scrollbar-thumb{background-color:var(--wpp-grey-color-400)}.attachments .wpp-file-upload-item{--wpp-file-upload-item-chat-gap:0}.attachments .wpp-file-upload-item::part(file-item){margin-top:0}.attachments .wpp-file-upload-item::part(controls){-ms-flex-pack:end;justify-content:flex-end}.attachments .wpp-file-upload-item::part(thumbnail){margin-right:8px}.attachments .wpp-file-upload-item::part(cross-icon){margin-left:12px}.references{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:end;align-items:flex-end;gap:8px;width:100%;-ms-flex:0 0 auto;flex:0 0 auto}.references[hidden]{display:none}.input-area.minimized .minimized-input:focus-visible{border-radius:var(--chat-minimized-border-radius-focus);outline:none;-webkit-box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus);box-shadow:0 0 0 1px var(--chat-minimized-first-border-color-focus), 0 0 0 3px var(--chat-minimized-second-border-color-focus)}:host([data-wpp-theme=dark]) .chat-input-container{background-color:var(--wpp-grey-color-100)}";
 
 const WppChatInput = class {
   constructor(hostRef) {
@@ -3201,11 +3413,27 @@ const WppChatInput = class {
     this.wppActionsMenuItemClick = createEvent(this, "wppActionsMenuItemClick", 1);
     this.wppModelSelect = createEvent(this, "wppModelSelect", 1);
     this.wppModelBrowse = createEvent(this, "wppModelBrowse", 1);
+    this.wppReasoningSelect = createEvent(this, "wppReasoningSelect", 1);
+    this.wppVerbositySelect = createEvent(this, "wppVerbositySelect", 1);
     this.scrollTimeout = null;
     this.stopBtnHideTimeout = null;
     this.inputAreaId = `wpp-ci-area`;
     this.textareaAutoId = `wpp-ci-ta`;
     this.minimizedDescId = `wpp-ci-min-desc`;
+    /**
+     * The levels the user last chose for each model, so switching away from a model and back
+     * restores their choice instead of resetting it (Mustafa, 23 Sep 2026).
+     *
+     * This is INSTANCE state, not a persisted session: it lives as long as this element does, so a
+     * consumer that needs the selection to survive a remount or a page reload owns that itself and
+     * feeds it back through `selectedReasoning` / `selectedVerbosity`.
+     */
+    this.modelOptionMemory = new Map();
+    /** Which mount-time defaults `componentWillLoad` applied, for `componentDidLoad` to emit. */
+    this.pendingModelOptionDefaults = { reasoningChanged: false, verbosityChanged: false };
+    /** The two level submenus, by kind, so their popper offset can measure against the model menu. */
+    this.modelOptionsSubmenuRefs = {};
+    this.modelOptionsDropdownConfigs = {};
     this.recognition = new SpeechRecognitionService();
     this.themeSubscription = themeSubscriptionController(() => this.host);
     this.aiModelBtn = null;
@@ -3215,12 +3443,17 @@ const WppChatInput = class {
     };
     this.checkInteractedItem = (event) => {
       const path = event.composedPath();
-      if (this.isFocused && this.host && !path.includes(this.host)) {
-        // For cases when the user click item from select.
-        // The dropdown of the select is rendered outside of the component.
-        if (!hasParentWithId(path[0], 'tippy-')) {
-          this.handleSimpleBlur();
-        }
+      if (!this.isFocused || !this.host || path.includes(this.host))
+        return;
+      // Dropdowns (the model selector, the actions menu) are portalled out of the host, so an
+      // interaction inside one still belongs to this chat input. The whole composed path has to
+      // be searched for the tippy wrapper: the event target is usually an element inside a
+      // `wpp-list-item`'s shadow root, and walking `parentElement` up from there stops at the
+      // shadow boundary long before it reaches the wrapper that carries the id — which is why an
+      // `s`-size input collapsed whenever a model row was clicked anywhere but on its label text.
+      const isInsideDropdown = path.some(node => node.id?.includes('tippy-'));
+      if (!isInsideDropdown) {
+        this.handleSimpleBlur();
       }
     };
     this.onExpandedKeyDown = (e) => {
@@ -3414,6 +3647,7 @@ const WppChatInput = class {
         value: this.successAttachmentsList,
         hasError: this.errorAttachmentsList.length > 0,
         errorFiles: this.errorAttachmentsList,
+        files: updatedFilesList,
       });
       this.wppFileUploadItemDelete.emit(event.detail);
       this.attachments = updatedFilesList;
@@ -3447,19 +3681,15 @@ const WppChatInput = class {
       return file;
     };
     this.isAcceptConfigFilled = () => !!this.mergedFileUploadConfig.acceptConfig && Object.keys(this.mergedFileUploadConfig.acceptConfig).length > 0;
-    this.getAcceptExtensions = () => getExtensionsList(this.mergedFileUploadConfig.acceptConfig || {});
+    this.getAcceptTokens = () => this.isAcceptConfigFilled() ? getAcceptTokens(this.mergedFileUploadConfig.acceptConfig) : [];
     this.validateFileType = (file) => {
       if (!this.isAcceptConfigFilled()) {
         if (!file.type) {
-          const typeFromExtension = EXTENSION_TO_TYPE[getExtension(file.name)];
-          return modifyPropertiesOnFile(file, { type: typeFromExtension });
+          return modifyPropertiesOnFile(file, { type: inferTypeFromName(file.name) });
         }
         return file;
       }
-      const allowedExtensions = file.type
-        ? this.mergedFileUploadConfig.acceptConfig?.[file.type] || []
-        : this.getAcceptExtensions();
-      file.formatError = allowedExtensions.length > 0 ? !allowedExtensions.includes(getExtension(file.name)) : true;
+      file.formatError = !isFileAccepted(file, this.mergedFileUploadConfig.acceptConfig);
       return file;
     };
     this.customValidation = (file) => {
@@ -3558,19 +3788,22 @@ const WppChatInput = class {
     this.shouldDisplaySend = () => this.disabled || this.errorAttachmentsList.length > 0
       ? false
       : !!this.internalValue.trim() || this.isGenerating || this.successAttachmentsList.length > 0;
-    this.renderMicrophoneBtn = (recordButtonLabel) => (h("wpp-action-button-v4-4-0", { "data-testid": "wpp-micophone-btn", onClick: this.handleClickAudioRecording, variant: "secondary", ariaProps: { label: recordButtonLabel }, disabled: this.disabled }, this.isAudioRecording ? h("wpp-icon-stop-v4-4-0", { slot: "icon-start" }) : h("wpp-icon-mic-on-v4-4-0", { slot: "icon-start" })));
-    this.renderActionsMenu = () => (h("wpp-menu-context-v4-4-0", { class: "actions-menu", part: "actions-menu", dropdownConfig: this.actionsMenuDropdownConfig }, h("wpp-action-button-v4-4-0", { slot: "trigger-element", class: "actions-menu-trigger", "data-testid": "actions-menu-trigger-button", variant: "secondary", disabled: this.disabled, ariaProps: {
+    this.renderMicrophoneBtn = (recordButtonLabel) => (h("wpp-action-button-v4-5-0", { "data-testid": "wpp-micophone-btn", onClick: this.handleClickAudioRecording, variant: "secondary", ariaProps: { label: recordButtonLabel }, disabled: this.disabled }, this.isAudioRecording ? h("wpp-icon-stop-v4-5-0", { slot: "icon-start" }) : h("wpp-icon-mic-on-v4-5-0", { slot: "icon-start" })));
+    this.renderActionsMenu = () => (h("wpp-menu-context-v4-5-0", { class: "actions-menu", part: "actions-menu", dropdownConfig: this.actionsMenuDropdownConfig }, h("wpp-action-button-v4-5-0", { slot: "trigger-element", class: "actions-menu-trigger", "data-testid": "actions-menu-trigger-button", variant: "secondary", disabled: this.disabled, ariaProps: {
         label: this.getActionsMenuButtonLabel(),
         expanded: this.ariaProps?.actionsMenuButton?.expanded ?? this.actionsMenuOpen,
         haspopup: 'menu',
-      } }, h("wpp-icon-plus-v4-4-0", { slot: "icon-start" })), h("div", null, h("wpp-list-item-v4-4-0", { "data-testid": `actions-menu-item-${UPLOAD_ACTION_ID}`, disabled: this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick({
+      } }, h("wpp-icon-plus-v4-5-0", { slot: "icon-start" })), h("div", null, h("wpp-list-item-v4-5-0", { "data-testid": `actions-menu-item-${UPLOAD_ACTION_ID}`, disabled: this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick({
         id: UPLOAD_ACTION_ID,
         icon: UPLOAD_ICON,
         label: this.getAttachButtonLabel(),
         disabled: this.disabled || this.isFileDialogOpen,
-      }) }, h(transformToVersionedTag(UPLOAD_ICON), { slot: 'left' }), h("span", { slot: "label" }, this.getAttachButtonLabel())), this.actions.map(action => (h("wpp-list-item-v4-4-0", { key: action.id, "data-testid": `actions-menu-item-${action.id}`, disabled: action.disabled || this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))));
+      }) }, h(transformToVersionedTag(UPLOAD_ICON), { slot: 'left' }), h("span", { slot: "label" }, this.getAttachButtonLabel())), this.actions.map(action => (h("wpp-list-item-v4-5-0", { key: action.id, "data-testid": `actions-menu-item-${action.id}`, disabled: action.disabled || this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))));
     this.getSelectedModel = () => {
-      if (this.selectedModel === 'auto') {
+      // `selectedModel` is transiently null between React removing the attribute and setting the
+      // property (see `onSelectedModelChange`). Resolve that to the built-in default rather than
+      // dereferencing it - both this method's own `models.find` and every caller assume a model.
+      if (!this.selectedModel || this.selectedModel === 'auto') {
         return getDefaultModelOptions(this._locales)[0];
       }
       else if (this.selectedModel === 'premium') {
@@ -3587,6 +3820,9 @@ const WppChatInput = class {
       this.isModelMenuOpen = false;
     };
     this.handleModelSelect = (model) => {
+      // Assigning `selectedModel` is what carries the levels over — `handleSelectedModelChange`
+      // watches it, so picking from this dropdown and having the platform set the prop from a
+      // side-modal take exactly the same path.
       if (model.id === 'auto') {
         this.selectedModel = 'auto';
       }
@@ -3601,12 +3837,131 @@ const WppChatInput = class {
     this.handleModelChange = () => {
       this.wppModelBrowse.emit();
     };
+    /**
+     * The level to pre-select for a model the user has not chosen one for yet: the first of the
+     * documented defaults the model actually offers, or nothing when it offers none of them.
+     */
+    this.resolveDefaultOptionId = (options, defaultIds) => defaultIds.find(defaultId => options.some(option => option.id === defaultId));
+    /**
+     * The remembered level for a model, but only if that model still offers it — a consumer can
+     * change a model's option list between selections, and a remembered id that no longer exists
+     * would leave the submenu with nothing checked.
+     */
+    this.getRememberedOptionId = (options, rememberedId) => options.find(option => option.id === rememberedId)?.id;
+    /**
+     * The levels that apply to a model: what the user last chose for it, else the defaults.
+     */
+    this.resolveModelOptions = (model) => {
+      const remembered = this.modelOptionMemory.get(model.id);
+      const reasoningOptions = model.reasoningOptions || [];
+      const verbosityOptions = model.verbosityOptions || [];
+      return {
+        reasoning: this.getRememberedOptionId(reasoningOptions, remembered?.reasoning) ??
+          this.resolveDefaultOptionId(reasoningOptions, DEFAULT_REASONING_IDS),
+        verbosity: this.getRememberedOptionId(verbosityOptions, remembered?.verbosity) ??
+          this.resolveDefaultOptionId(verbosityOptions, DEFAULT_VERBOSITY_IDS),
+      };
+    };
+    /**
+     * Fills in only the levels the consumer left unset for the model selected at mount. It must not
+     * overwrite: a level passed alongside the model is the consumer seeding an explicit selection
+     * (a restored session, say) and outranks any default.
+     *
+     * Returns which levels it filled, so `componentDidLoad` can emit exactly those — the write has
+     * to happen before the first render to avoid a frame with nothing checked, but the events wait
+     * until listeners are attached.
+     */
+    this.applyModelOptionDefaults = () => {
+      const { reasoning, verbosity } = this.resolveModelOptions(this.getSelectedModel());
+      const reasoningChanged = this.selectedReasoning === undefined && reasoning !== undefined;
+      const verbosityChanged = this.selectedVerbosity === undefined && verbosity !== undefined;
+      if (reasoningChanged)
+        this.selectedReasoning = reasoning;
+      if (verbosityChanged)
+        this.selectedVerbosity = verbosity;
+      return { reasoningChanged, verbosityChanged };
+    };
+    /**
+     * The levels offered by whichever model is selected. `Auto` and `Premium` are built-in
+     * presets that carry no per-LLM levels, so they resolve to an empty list and render no row.
+     */
+    this.getModelOptions = (kind) => this.getSelectedModel()[kind] || [];
+    this.getSelectedModelOption = (kind, selectedId) => this.getModelOptions(kind).find(option => option.id === selectedId) || null;
+    this.emitModelOptionsState = (emitter) => {
+      emitter.emit({
+        model: this.getSelectedModel(),
+        reasoning: this.getSelectedModelOption('reasoningOptions', this.selectedReasoning),
+        verbosity: this.getSelectedModelOption('verbosityOptions', this.selectedVerbosity),
+      });
+    };
+    this.handleReasoningSelect = (option) => {
+      if (this.selectedReasoning === option.id)
+        return;
+      this.selectedReasoning = option.id;
+      this.emitModelOptionsState(this.wppReasoningSelect);
+    };
+    this.handleVerbositySelect = (option) => {
+      if (this.selectedVerbosity === option.id)
+        return;
+      this.selectedVerbosity = option.id;
+      this.emitModelOptionsState(this.wppVerbositySelect);
+    };
     this.renderModelSelector = (size) => {
       const selectedModel = this.getSelectedModel();
-      const triggerAvatar = (h("wpp-avatar-v4-4-0", { slot: "left", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, name: selectedModel.label }));
-      return (h("wpp-menu-context-v4-4-0", { isBtnTrigger: true, class: "model-selector", dropdownConfig: { onShow: this.handleModelMenuShow, onHide: this.handleModelMenuHide, placement: 'top-start' } }, h("wpp-list-item-v4-4-0", { slot: "trigger-element", class: this.modelSelectorTriggerCssClasses(), role: "button", disabled: this.disabled, "aria-label": this._locales.modelSelectorBtnLabel, "aria-expanded": this.isModelMenuOpen, "aria-haspopup": 'menu' }, triggerAvatar, size === 'm' && (h(Fragment, null, h("span", { slot: "label" }, selectedModel.label), h("wpp-icon-chevron-v4-4-0", { slot: "right", direction: this.isModelMenuOpen ? 'up' : 'down' })))), h("div", { class: "wpp-model-dropdown" }, getDefaultModelOptions(this._locales).map((model) => this.renderModelListItem(model, model.id === selectedModel.id)), h("wpp-divider-v4-4-0", null), this.models.length > 0 ? (this.models.map((model) => this.renderModelListItem(model, model.id === selectedModel.id))) : (h("wpp-list-item-v4-4-0", { onWppChangeListItem: this.handleModelChange }, h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), h("wpp-icon-chevron-v4-4-0", { slot: "right", direction: "right" }))))));
+      const isCustomModel = this.selectedModel !== 'auto' && this.selectedModel !== 'premium';
+      const reasoningOptions = this.getModelOptions('reasoningOptions');
+      const verbosityOptions = this.getModelOptions('verbosityOptions');
+      const selectedReasoning = this.getSelectedModelOption('reasoningOptions', this.selectedReasoning);
+      const triggerAvatar = (h("wpp-avatar-v4-5-0", { slot: "left", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, name: selectedModel.label }));
+      return (h("wpp-menu-context-v4-5-0", { isBtnTrigger: true, class: "model-selector", dropdownConfig: { onShow: this.handleModelMenuShow, onHide: this.handleModelMenuHide, placement: 'top-start' } }, h("wpp-list-item-v4-5-0", { slot: "trigger-element", class: this.modelSelectorTriggerCssClasses(), role: "button", disabled: this.disabled, "aria-label": this._locales.modelSelectorBtnLabel }, triggerAvatar, size === 'm' && (h(Fragment, null, h("span", { slot: "label" }, selectedModel.label, selectedReasoning && `${MODEL_REASONING_SEPARATOR}${selectedReasoning.label}`), h("wpp-icon-chevron-v4-5-0", { slot: "right", direction: this.isModelMenuOpen ? 'up' : 'down' })))), h("div", { class: "wpp-model-dropdown" }, getDefaultModelOptions(this._locales).map((model) => this.renderModelListItem(model, model.id === selectedModel.id)), h("wpp-divider-v4-5-0", null), this.models.length > 0
+        ? this.models.map((model) => this.renderModelListItem(model, model.id === selectedModel.id))
+        : // Nothing lists the selected model when the list is browsed externally, so
+          // surface it here — otherwise the dropdown never shows what is in use.
+          isCustomModel && this.renderModelListItem(selectedModel, true), reasoningOptions.length > 0 &&
+        this.renderModelOptionsSubmenu('reasoning', this._locales.modelReasoningLabel, reasoningOptions, this.selectedReasoning, this.handleReasoningSelect), verbosityOptions.length > 0 &&
+        this.renderModelOptionsSubmenu('verbosity', this._locales.modelVerbosityLabel, verbosityOptions, this.selectedVerbosity, this.handleVerbositySelect), this.models.length === 0 && (h(Fragment, null, isCustomModel && h("wpp-divider-v4-5-0", null), h("wpp-list-item-v4-5-0", { onWppChangeListItem: this.handleModelChange }, h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), h("wpp-icon-chevron-v4-5-0", { slot: "right", direction: "right" })))))));
     };
-    this.renderModelListItem = (model, checked) => (h("wpp-list-item-v4-4-0", { key: model.id, checked: checked, onWppChangeListItem: () => this.handleModelSelect(model) }, h("wpp-avatar-v4-4-0", { role: "presentation", slot: "left", size: "xs", variant: "square", src: model.logo, name: model.label }), h("span", { slot: "label" }, model.label), model?.caption && (h("span", { slot: "caption" }, model.caption))));
+    this.renderModelListItem = (model, checked) => (h("wpp-list-item-v4-5-0", { key: model.id, checked: checked, role: "menuitemradio", "aria-checked": String(checked), onWppChangeListItem: () => this.handleModelSelect(model) }, h("wpp-avatar-v4-5-0", { role: "presentation", slot: "left", size: "xs", variant: "square", src: model.logo, name: model.label }), h("span", { slot: "label" }, model.label), model?.caption && (h("span", { slot: "caption" }, model.caption))));
+    /**
+     * How far the submenu has to slide past its own row to sit flush with the bottom of the model
+     * menu. Measured when popper asks rather than hard-coded, because it depends on which row opened
+     * the submenu — Reasoning sits one row higher than Verbosity.
+     */
+    this.getModelOptionsSubmenuSkidding = (kind) => {
+      const submenu = this.modelOptionsSubmenuRefs[kind];
+      const menuRoot = submenu?.closest('[data-tippy-root]');
+      if (!submenu || !menuRoot)
+        return MODEL_OPTIONS_SUBMENU_FALLBACK_SKIDDING;
+      return menuRoot.getBoundingClientRect().bottom - submenu.getBoundingClientRect().bottom;
+    };
+    /**
+     * Built once per kind and cached, because `wpp-menu-context` diffs `dropdownConfig` by value and
+     * a fresh `offset` closure on every render would read as a change and re-apply the tippy props.
+     */
+    this.getModelOptionsDropdownConfig = (kind) => {
+      const config = this.modelOptionsDropdownConfigs[kind] ?? {
+        placement: 'right-end',
+        offset: () => [this.getModelOptionsSubmenuSkidding(kind), MODEL_OPTIONS_SUBMENU_DISTANCE],
+        popperOptions: {
+          modifiers: [{ name: 'flip', options: { fallbackPlacements: ['right-start', 'left-end', 'left-start'] } }],
+        },
+      };
+      this.modelOptionsDropdownConfigs[kind] = config;
+      return config;
+    };
+    /**
+     * One row in the model dropdown that opens a submenu of levels. `wpp-menu-context` treats
+     * itself as nested when its first child is a `wpp-list-item`, which gives the submenu the
+     * APG behaviour for free: right-side placement, ArrowRight/ArrowLeft, Escape and roving.
+     *
+     * The nested default top-aligns the submenu with its row (`right-start`), which sends a long
+     * list of levels spilling below the model menu. The design aligns it with the bottom of the
+     * model menu instead, so the placement is flipped to `right-end` and the skidding offset closes
+     * the gap between the row and the menu's bottom edge. A list too tall to sit there without
+     * leaving the viewport falls back to `right-start` before it is allowed to jump to the other
+     * side, so the fallbacks are spelled out rather than left to the nested default.
+     */
+    this.renderModelOptionsSubmenu = (kind, label, options, selectedId, onSelect) => (h("wpp-menu-context-v4-5-0", { class: "model-options-menu", ref: element => (this.modelOptionsSubmenuRefs[kind] = element), dropdownConfig: this.getModelOptionsDropdownConfig(kind) }, h("wpp-list-item-v4-5-0", { slot: "trigger-element", isExtended: true }, h("span", { slot: "label" }, label)), h("div", { class: "wpp-model-options-dropdown" }, options.map((option) => (h("wpp-list-item-v4-5-0", { key: option.id, checked: option.id === selectedId, labelTypography: { type: 's-midi' }, role: "menuitemradio", "aria-checked": String(option.id === selectedId), onWppChangeListItem: () => onSelect(option) }, h("span", { slot: "label" }, option.label), option.caption && h("span", { slot: "caption" }, option.caption)))))));
     this.clearStopBtnHideTimeout = () => {
       if (!this.stopBtnHideTimeout)
         return;
@@ -3638,7 +3993,7 @@ const WppChatInput = class {
       // While hidden the button stays in the DOM (to animate the collapse), but must leave the
       // focus order and a11y tree so its focusable inner control does not trip axe's aria-hidden-focus.
       const inertProps = interactive ? {} : { inert: true };
-      return this.isGenerating || this.isStopBtnHiding ? (h("wpp-action-button-v4-4-0", { class: { 'play-btn': true, 'is-hidden': !interactive }, "data-testid": "stop-icon-only-button", onClick: this.handleStopBtnClick, ariaProps: { label: this.getStopButtonLabel() }, ...inertProps }, h("wpp-icon-stop-v4-4-0", { slot: "icon-start" }))) : (h("wpp-button-v4-4-0", { class: { 'play-btn': true, 'is-hidden': !interactive }, "data-testid": "send-icon-only-button", size: "s", onClick: this.handleSendClick, ariaProps: { label: this.getSendButtonLabel() }, ...inertProps }, h("wpp-icon-arrow-v4-4-0", { direction: "up", slot: "icon-start" })));
+      return this.isGenerating || this.isStopBtnHiding ? (h("wpp-action-button-v4-5-0", { class: { 'play-btn': true, 'is-hidden': !interactive }, "data-testid": "stop-icon-only-button", onClick: this.handleStopBtnClick, ariaProps: { label: this.getStopButtonLabel() }, ...inertProps }, h("wpp-icon-stop-v4-5-0", { slot: "icon-start" }))) : (h("wpp-button-v4-5-0", { class: { 'play-btn': true, 'is-hidden': !interactive }, "data-testid": "send-icon-only-button", size: "s", onClick: this.handleSendClick, ariaProps: { label: this.getSendButtonLabel() }, ...inertProps }, h("wpp-icon-arrow-v4-5-0", { direction: "up", slot: "icon-start" })));
     };
     this.modelSelectorTriggerCssClasses = () => ({
       'select-model-trigger': true,
@@ -3747,6 +4102,8 @@ const WppChatInput = class {
         sizeError: 'File exceeds size limit',
         formatError: 'Wrong format',
         limitError: 'Files limit reached',
+        removeFile: (name) => `Remove file ${name}`,
+        uploadProgress: (name) => `Processing ${name}`,
       },
     };
     this.charactersLimit = undefined;
@@ -3754,6 +4111,8 @@ const WppChatInput = class {
     this.withSelect = false;
     this.models = [];
     this.selectedModel = 'auto';
+    this.selectedReasoning = undefined;
+    this.selectedVerbosity = undefined;
     this.actions = [];
     this.textValue = '';
     this.debounceEnabled = true;
@@ -3810,9 +4169,19 @@ const WppChatInput = class {
     }, this.debounceDelay);
     const list = [...this.attachments, ...(this.successAttachmentsList || []), ...(this.errorAttachmentsList || [])];
     this.reInitValue(list);
+    // Before the first render, so the submenus never paint with nothing checked.
+    this.lastResolvedModelId = this.getSelectedModel()?.id;
+    this.pendingModelOptionDefaults = this.applyModelOptionDefaults();
   }
   componentDidLoad() {
     this.recognition.setupRecognition(this._locales.audioLanguage);
+    // Emitted here rather than in `componentWillLoad` so a consumer's listeners are attached. A
+    // default the component picked has to reach the consumer, or its next render pushes the
+    // unset value straight back over it.
+    if (this.pendingModelOptionDefaults.reasoningChanged)
+      this.emitModelOptionsState(this.wppReasoningSelect);
+    if (this.pendingModelOptionDefaults.verbosityChanged)
+      this.emitModelOptionsState(this.wppVerbositySelect);
     requestAnimationFrame(() => {
       this.initializeObserver();
     });
@@ -3847,7 +4216,7 @@ const WppChatInput = class {
   }
   connectedCallback() {
     // This is needed so the animation from "Processing" state works as expected (this component uses shadow DOM).
-    registerLoadingAngle();
+    registerLoadingHaloAngle();
     this.themeSubscription.start();
   }
   disconnectedCallback() {
@@ -3868,6 +4237,48 @@ const WppChatInput = class {
   }
   get _locales() {
     return mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
+  /**
+   * Carries the reasoning/verbosity levels across a model change, whichever way the model was
+   * changed — picked from this dropdown, or set by the platform after its own side-modal flow.
+   *
+   * The user's choice is remembered per model for the lifetime of this element and restored when
+   * they come back to it; a model they have not chosen a level for yet takes the documented
+   * defaults. It deliberately does NOT reset (Mustafa, 23 Sep 2026 — resetting was the earlier
+   * behaviour and read as a worse experience).
+   *
+   * It EMITS whatever it applies, which is the part that is easy to get wrong: these are
+   * controlled props, so a component that silently rewrote them would be overwritten again by the
+   * next render of a consumer holding its own state. Emitting keeps the two in step. Only levels
+   * that actually changed emit, so a model change that leaves a level alone stays quiet.
+   */
+  onSelectedModelChange(newValue) {
+    // `selectedModel` takes either a string preset or a model object. Going from the string to an
+    // object makes React remove the attribute, and Stencil's attributeChangedCallback assigns that
+    // removal as `null` before the property set lands - so this watch sees a null it must ignore
+    // rather than resolve. The real value arrives on the very next call.
+    if (newValue === null || newValue === undefined)
+      return;
+    const previousModelId = this.lastResolvedModelId;
+    const nextModelId = typeof newValue === 'string' ? newValue : newValue.id;
+    if (previousModelId === nextModelId)
+      return;
+    if (previousModelId !== undefined) {
+      this.modelOptionMemory.set(previousModelId, {
+        reasoning: this.selectedReasoning,
+        verbosity: this.selectedVerbosity,
+      });
+    }
+    const { reasoning, verbosity } = this.resolveModelOptions(this.getSelectedModel());
+    const reasoningChanged = reasoning !== this.selectedReasoning;
+    const verbosityChanged = verbosity !== this.selectedVerbosity;
+    this.selectedReasoning = reasoning;
+    this.selectedVerbosity = verbosity;
+    this.lastResolvedModelId = nextModelId;
+    if (reasoningChanged)
+      this.emitModelOptionsState(this.wppReasoningSelect);
+    if (verbosityChanged)
+      this.emitModelOptionsState(this.wppVerbositySelect);
   }
   onSizeChange(newValue, oldValue) {
     if (newValue !== oldValue && this.size === 's') {
@@ -3932,6 +4343,10 @@ const WppChatInput = class {
     return {
       ...DEFAULT_FILE_UPLOAD_CONFIG,
       ...this.fileUploadConfig,
+      locales: {
+        ...DEFAULT_FILE_UPLOAD_CONFIG.locales,
+        ...this.fileUploadConfig?.locales,
+      },
     };
   }
   // Precedence helpers: ariaProps > locales > internal defaults
@@ -4063,16 +4478,23 @@ const WppChatInput = class {
       return;
     this.isAudioRecording = false;
     this.recognition.stopRecognition();
+    const reasoning = this.getSelectedModelOption('reasoningOptions', this.selectedReasoning);
+    const verbosity = this.getSelectedModelOption('verbosityOptions', this.selectedVerbosity);
     this.wppSend.emit({
       message: this.internalValue.trim(),
       attachments: this.successAttachmentsList,
+      model: this.getSelectedModel(),
+      // Spread rather than assign `null`: a level the selected model does not offer is
+      // absent from the payload, matching how `attachments` behaves.
+      ...(reasoning ? { reasoning } : {}),
+      ...(verbosity ? { verbosity } : {}),
     });
     Object.assign(this, {
       internalValue: '',
       successAttachmentsList: [],
       errorAttachmentsList: [],
     });
-    this.wppChange.emit({ value: [], hasError: false, errorFiles: [] });
+    this.wppChange.emit({ value: [], hasError: false, errorFiles: [], files: [] });
     this.adjustTextareaHeight(true);
     if (this.size === 's') {
       // Collapse back to the minimized resting state. Use the blur routine so it
@@ -4115,7 +4537,9 @@ const WppChatInput = class {
       if ('url' in file)
         return file;
       this.validateFileSize(file);
-      this.validateFileType(file);
+      // Reassigned, as in wpp-file-upload: for an untyped file this returns a replacement carrying
+      // the type resolved from its extension, and dropping it left the attachment untyped.
+      file = this.validateFileType(file);
       this.customValidation(file);
       return file;
     });
@@ -4130,6 +4554,7 @@ const WppChatInput = class {
       value: this.successAttachmentsList,
       hasError: !!this.errorAttachmentsList.length,
       errorFiles: this.errorAttachmentsList,
+      files: this.attachments,
     });
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -4165,16 +4590,19 @@ const WppChatInput = class {
       ? this.getAudioStopRecordButtonLabel()
       : this.getAudioRecordButtonLabel();
     const ariaInvalid = this.ariaProps?.textarea?.invalid !== undefined ? this.ariaProps.textarea.invalid : undefined;
-    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, alert, toast, input-area, attachments, references, text-input, actions-bar, left-actions, right-actions, file-item, actions-menu", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick, onFocus: this.handleOnFocus }, h("div", { class: this.chatInputContainerClasses(), onKeyDown: this.onExpandedKeyDown, part: "chat-input-container" }, h("div", { class: "alert", part: "alert", hidden: !this.hasAlertSlot || this.isAlertDismissed }, h("slot", { name: "alert", onSlotchange: this.handleAlertSlotChange })), this.showToast && (h("wpp-toast-v4-4-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { id: this.inputAreaId, class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments", role: "list", "aria-label": this._locales.attachmentsLabel }, allFiles.map((file, index) => (h("wpp-file-upload-item-v4-4-0", { key: index, file: file, variant: "chat", format: this.mergedFileUploadConfig.format, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
+    return (h(Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, alert, toast, input-area, attachments, references, text-input, actions-bar, left-actions, right-actions, file-item, actions-menu", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick, onFocus: this.handleOnFocus }, h("div", { class: this.chatInputContainerClasses(), onKeyDown: this.onExpandedKeyDown, part: "chat-input-container" }, h("div", { class: "alert", part: "alert", hidden: !this.hasAlertSlot || this.isAlertDismissed }, h("slot", { name: "alert", onSlotchange: this.handleAlertSlotChange })), this.showToast && (h("wpp-toast-v4-5-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), h("div", { id: this.inputAreaId, class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (h(Fragment, null, allFiles?.length > 0 && (h("div", { class: this.attachmentsWrapperClasses(), part: "attachments", role: "list", "aria-label": this._locales.attachmentsLabel }, allFiles.map((file, index) => (h("wpp-file-upload-item-v4-5-0", { key: index, file: file, variant: "chat", format: this.mergedFileUploadConfig.format, currentIndex: index, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
         sizeError: this.mergedFileUploadConfig.locales.sizeError,
         formatError: this.mergedFileUploadConfig.locales.formatError,
-      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded, role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": allFiles.length.toString() }))))), h("div", { class: "references", part: "references", hidden: !this.hasReferencesSlot }, h("slot", { name: "references", onSlotchange: this.handleReferencesSlotChange })), h("textarea", { id: (this.htmlAttributes?.textarea?.id ?? this.textareaId) || this.textareaAutoId, name: this.htmlAttributes?.textarea?.name ?? this.textareaName ?? 'message', class: this.textInputClasses(), placeholder: placeholderText, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input", "aria-label": this.getTextareaLabel(), "aria-invalid": ariaInvalid, autocomplete: this.htmlAttributes?.textarea?.autocomplete, maxLength: this.htmlAttributes?.textarea?.maxLength, "data-gramm": "false", "data-gramm_editor": "false" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, this.renderActionsMenu(), h("div", { class: this.minimizedInput(), part: "minimized-input", "data-pressed": this.minimizedPressed ? 'true' : null, role: "button", tabindex: this.disabled ? -1 : 0, "aria-expanded": this.isChatInputExpanded ? 'true' : 'false', "aria-controls": this.inputAreaId, "aria-label": this.getMinimizedAriaLabel(), "aria-describedby": this.minimizedDescId, onKeyDown: this.onMinimizedKeyDown, onKeyUp: this.onMinimizedKeyUp }, h("wpp-typography-v4-4-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || placeholderText)), h("span", { id: this.minimizedDescId, class: "sr-only" }, this.getMinimizedDescriptionText()), h("div", { class: this.rightActionsClasses() }, !this.withSelect && this.renderModelSelector('s'), this.renderMicrophoneBtn(recordButtonLabel), this.renderSendStopBtn())))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar", role: "toolbar", "aria-label": this.getActionsToolbarLabel() }, h("div", { class: this.leftActionsClasses(), part: "left-actions", role: "group", "aria-label": this.getLeftActionsLabel() }, this.renderActionsMenu(), this.enableMic && (h("wpp-action-button-v4-4-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled, ariaProps: { label: this._locales.voiceLabel } }, h("wpp-icon-mic-on-v4-4-0", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions", role: "group", "aria-label": this.getRightActionsLabel() }, this.withSelect ? (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })) : (this.renderModelSelector('m')), this.renderMicrophoneBtn(recordButtonLabel), this.renderSendStopBtn()))), h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.htmlAttributes?.attachmentsInput?.multiple ?? this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.htmlAttributes?.attachmentsInput?.accept ?? this.getAcceptExtensions().join(), title: "", id: this.htmlAttributes?.attachmentsInput?.id ?? 'wpp-ci-file', name: this.htmlAttributes?.attachmentsInput?.name ?? 'attachments', "aria-hidden": "true" }))));
+        removeFile: this.mergedFileUploadConfig.locales.removeFile,
+        uploadProgress: this.mergedFileUploadConfig.locales.uploadProgress,
+      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded, role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": allFiles.length.toString() }))))), h("div", { class: "references", part: "references", hidden: !this.hasReferencesSlot }, h("slot", { name: "references", onSlotchange: this.handleReferencesSlotChange })), h("textarea", { id: (this.htmlAttributes?.textarea?.id ?? this.textareaId) || this.textareaAutoId, name: this.htmlAttributes?.textarea?.name ?? this.textareaName ?? 'message', class: this.textInputClasses(), placeholder: placeholderText, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input", "aria-label": this.getTextareaLabel(), "aria-invalid": ariaInvalid, autocomplete: this.htmlAttributes?.textarea?.autocomplete, maxLength: this.htmlAttributes?.textarea?.maxLength, "data-gramm": "false", "data-gramm_editor": "false" }))) : (h("div", { class: this.inputAreaWrapperClasses() }, this.renderActionsMenu(), h("div", { class: this.minimizedInput(), part: "minimized-input", "data-pressed": this.minimizedPressed ? 'true' : null, role: "button", tabindex: this.disabled ? -1 : 0, "aria-expanded": this.isChatInputExpanded ? 'true' : 'false', "aria-controls": this.inputAreaId, "aria-label": this.getMinimizedAriaLabel(), "aria-describedby": this.minimizedDescId, onKeyDown: this.onMinimizedKeyDown, onKeyUp: this.onMinimizedKeyUp }, h("wpp-typography-v4-5-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || placeholderText)), h("span", { id: this.minimizedDescId, class: "sr-only" }, this.getMinimizedDescriptionText()), h("div", { class: this.rightActionsClasses() }, !this.withSelect && this.renderModelSelector('s'), this.renderMicrophoneBtn(recordButtonLabel), this.renderSendStopBtn())))), maximizedSorSizeM && (h("div", { class: this.actionsBarClasses(), part: "actions-bar", role: "toolbar", "aria-label": this.getActionsToolbarLabel() }, h("div", { class: this.leftActionsClasses(), part: "left-actions", role: "group", "aria-label": this.getLeftActionsLabel() }, this.renderActionsMenu(), this.enableMic && (h("wpp-action-button-v4-5-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled, ariaProps: { label: this._locales.voiceLabel } }, h("wpp-icon-mic-on-v4-5-0", { slot: "icon-start" })))), h("div", { class: this.rightActionsClasses(), part: "right-actions", role: "group", "aria-label": this.getRightActionsLabel() }, this.withSelect ? (h(WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })) : (this.renderModelSelector('m')), this.renderMicrophoneBtn(recordButtonLabel), this.renderSendStopBtn()))), h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.htmlAttributes?.attachmentsInput?.multiple ?? this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.htmlAttributes?.attachmentsInput?.accept ?? this.getAcceptTokens().join(), title: "", id: this.htmlAttributes?.attachmentsInput?.id ?? 'wpp-ci-file', name: this.htmlAttributes?.attachmentsInput?.name ?? 'attachments', "aria-hidden": "true" }))));
   }
-  static get registryIs() { return "wpp-chat-input-v4-4-0"; }
+  static get registryIs() { return "wpp-chat-input-v4-5-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "attachments": ["onAttachmentsChange"],
     "textValue": ["onTextValueChange"],
+    "selectedModel": ["onSelectedModelChange"],
     "size": ["onSizeChange"]
   }; }
 };

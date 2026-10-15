@@ -372,11 +372,11 @@
 
 :host(:focus-visible:not(.wpp-disabled, .non-interactive)) {
   outline: none;
-}
-:host(:focus-visible:not(.wpp-disabled, .non-interactive)) .item {
-  border-radius: var(--wpp-border-radius-s);
+  border-radius: var(--li-border-radius);
   outline: none;
   box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
+}
+:host(:focus-visible:not(.wpp-disabled, .non-interactive)) .item {
   background-color: var(--li-bg-color-hover);
 }
 :host(:focus-visible:not(.wpp-disabled, .non-interactive)) .item .wpp-checkbox {
@@ -450,10 +450,12 @@
   margin: 0;
 }
 
-:host(.tab-focus) .item {
-  border-radius: var(--wpp-border-radius-s);
+:host(.tab-focus) {
+  border-radius: var(--li-border-radius);
   outline: none;
   box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
+}
+:host(.tab-focus) .item {
   background-color: var(--li-bg-color-hover);
 }
 :host(.tab-focus) .item ::slotted([slot=left]),
@@ -465,26 +467,29 @@
   color: var(--li-left-icon-color-hover);
 }
 
-:host([role=menuitem].tab-focus) .item,
-:host([role=menuitem].tab-focus:focus-visible:not(.wpp-disabled, .non-interactive)) .item {
+:host(.tab-focus:is([role=menuitem], [role=menuitemradio], [role=menuitemcheckbox])),
+:host(.tab-focus:is([role=menuitem], [role=menuitemradio], [role=menuitemcheckbox]):focus-visible:not(.wpp-disabled,
+.non-interactive)) {
   outline: none;
   box-shadow: none;
 }
-:host([role=menuitem].tab-focus) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle),
-:host([role=menuitem].tab-focus:focus-visible:not(.wpp-disabled, .non-interactive)) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) {
-  background-color: var(--li-bg-color-active);
+:host(.tab-focus:is([role=menuitem], [role=menuitemradio], [role=menuitemcheckbox])) .item,
+:host(.tab-focus:is([role=menuitem], [role=menuitemradio], [role=menuitemcheckbox]):focus-visible:not(.wpp-disabled,
+.non-interactive)) .item {
+  outline: none;
+  box-shadow: none;
 }
-:host([role=menuitem].tab-focus) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=left]),
-:host([role=menuitem].tab-focus) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=right]),
-:host([role=menuitem].tab-focus) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) .fallback-icon,
-:host([role=menuitem].tab-focus:focus-visible:not(.wpp-disabled, .non-interactive)) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=left]),
-:host([role=menuitem].tab-focus:focus-visible:not(.wpp-disabled, .non-interactive)) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=right]),
-:host([role=menuitem].tab-focus:focus-visible:not(.wpp-disabled, .non-interactive)) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) .fallback-icon {
-  color: var(--li-icon-color-active);
+
+:host(.tab-focus:is([role=menuitem], [role=menuitemradio], [role=menuitemcheckbox]):not(.wpp-menu-item-active)) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) {
+  background-color: var(--li-bg-color-hover);
 }
-:host([role=menuitem].tab-focus) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted(.wpp-icon[slot=left]),
-:host([role=menuitem].tab-focus:focus-visible:not(.wpp-disabled, .non-interactive)) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted(.wpp-icon[slot=left]) {
-  color: var(--li-left-icon-color-active);
+:host(.tab-focus:is([role=menuitem], [role=menuitemradio], [role=menuitemcheckbox]):not(.wpp-menu-item-active)) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=left]),
+:host(.tab-focus:is([role=menuitem], [role=menuitemradio], [role=menuitemcheckbox]):not(.wpp-menu-item-active)) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted([slot=right]),
+:host(.tab-focus:is([role=menuitem], [role=menuitemradio], [role=menuitemcheckbox]):not(.wpp-menu-item-active)) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) .fallback-icon {
+  color: var(--li-icon-color-hover);
+}
+:host(.tab-focus:is([role=menuitem], [role=menuitemradio], [role=menuitemcheckbox]):not(.wpp-menu-item-active)) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) ::slotted(.wpp-icon[slot=left]) {
+  color: var(--li-left-icon-color-hover);
 }
 
 :host(.wpp-menu-item-active) .item:not(.checked, .active, .loading-item, .non-interactive, .has-toggle) {

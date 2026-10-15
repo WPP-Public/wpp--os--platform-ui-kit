@@ -1,3 +1,4 @@
+@charset "UTF-8";
 :host {
   display: flex;
   flex-direction: column;
@@ -15,7 +16,8 @@
   min-height: 64px;
   max-height: 64px;
 }
-:host(.wpp-size-s) .node-container.loading-node::before {
+:host(.wpp-size-s) .node-container.loading-node::before,
+:host(.wpp-size-s) .node-container.loading-node::after {
   content: none;
   background: none;
   animation: none;
@@ -44,11 +46,36 @@
   content: "";
   position: absolute;
   z-index: 0;
-  inset: -2px;
+  inset: calc(-1 * (0px + 2px + 13px));
   pointer-events: none;
-  background: conic-gradient(from var(--loading-angle), var(--wpp-primary-color-500), var(--wpp-primary-color-100), var(--wpp-primary-color-500));
-  animation: loading-rotate 2s linear infinite;
+  background: conic-gradient(from var(--wpp-loading-halo-angle), transparent 0%, color-mix(in srgb, var(--wpp-loading-halo-glow-color, var(--wpp-dataviz-color-seq-brand-400)) 65%, transparent) 16%, transparent 40%);
+  filter: blur(10px);
+  animation: wpp-loading-halo-rotate 2s linear infinite;
+  border-radius: calc(var(--wpp-border-radius-l) + 2px + 6px);
+}
+.node-container.loading-node::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: calc(-1 * (0px + 2px));
+  pointer-events: none;
+  background: conic-gradient(from var(--wpp-loading-halo-angle), transparent 0%, var(--wpp-loading-halo-highlight-color, var(--wpp-dataviz-color-seq-brand-600)) 12%, var(--wpp-loading-halo-base-color, var(--wpp-dataviz-color-seq-brand-900)) 30%, transparent 46%);
+  animation: wpp-loading-halo-rotate 2s linear infinite;
   border-radius: calc(var(--wpp-border-radius-l) + 2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .node-container.loading-node::before {
+    display: none;
+  }
+  .node-container.loading-node::after {
+    animation: none;
+    background: var(--wpp-loading-halo-base-color, var(--wpp-dataviz-color-seq-brand-900));
+  }
+}
+@keyframes wpp-loading-halo-rotate {
+  to {
+    --wpp-loading-halo-angle: 360deg;
+  }
 }
 
 .node-wrapper {
@@ -294,6 +321,29 @@
 .chat-message-actions wpp-action-button {
   flex: 0 0 auto;
 }
+.chat-message-actions .chat-token-count {
+  margin-left: auto;
+}
+
+/* Trailing token count — a wpp-action-button per the DS component file; it brings its own
+   S-Strong typography, hover fill and radius, so nothing is restyled here. */
+.chat-token-count {
+  /* The DS node shows the Premium icon at grey-600 (the button's default is grey-800). This is the
+     button's documented theming hook; an icon `color` prop would lose to its ::slotted rule. */
+  --wpp-action-button-secondary-icon-color: var(--wpp-grey-color-600);
+  flex: 0 0 auto;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 .node-chat-bar {
   position: relative;
@@ -400,16 +450,6 @@
   color: var(--wpp-grey-color-800);
 }
 
-@property --loading-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-@keyframes loading-rotate {
-  to {
-    --loading-angle: 360deg;
-  }
-}
 ::slotted([slot=handles]) {
   position: absolute;
   inset: 0;

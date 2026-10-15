@@ -14,7 +14,6 @@ export declare class WppInlineMessage {
   private themeSubscription;
   host: HTMLWppInlineMessageElement;
   isTruncated: boolean;
-  hasTitle: boolean;
   focusType: FOCUS_TYPE;
   private messageRef?;
   private resizeObserver;
@@ -55,6 +54,13 @@ export declare class WppInlineMessage {
    */
   readonly hideCloseBtn: boolean;
   /**
+   * If `true`, the inline message is rendered in a compact layout: reduced padding, full width,
+   * `xs-body` typography and a message clamped to a maximum of two lines, with the full message shown in a tooltip when truncated.
+   *
+   * @internal - This prop is set by other components of the library (e.g. the error state of the Basic Node).
+   */
+  readonly isCompact: boolean;
+  /**
    * Defines the component locale types.
    */
   readonly locales: Partial<InlineMessageLocalesType>;
@@ -66,8 +72,6 @@ export declare class WppInlineMessage {
    * Emitted when the close button is clicked. This event is emitted only for the inline-messages with size="l".
    */
   wppClickCloseBtn: EventEmitter<void>;
-  onUpdateTitleText(): void;
-  componentWillLoad(): void;
   componentDidLoad(): void;
   componentDidRender(): void;
   onMessageChange(): void;
@@ -90,7 +94,6 @@ export declare class WppInlineMessage {
   private getMessageTypesIcons;
   private handleClickClose;
   private handleClickActionBtn;
-  private getContainerContentCssClasses;
   private renderContent;
   private getExportParts;
   render(): any;

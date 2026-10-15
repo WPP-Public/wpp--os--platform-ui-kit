@@ -10,7 +10,7 @@ import { d as defineCustomElement$1 } from './wpp-typography2.js';
 
 const LOCALES_DEFAULTS = { tablistLabel: 'Segmented Control' };
 
-const wppSegmentedControlCss = ":host{--sc-padding-s:var(--wpp-segmented-control-padding-s, 0);--sc-padding-m:var(--wpp-segmented-control-padding-m, 0);--sc-item-margin-s:var(--wpp-segmented-control-item-margin-s, 0);--sc-item-margin-m:var(--wpp-segmented-control-item-margin-m, 0);--sc-border-radius-s:var(--wpp-segmented-control-border-radius-s, var(--wpp-border-radius-s));--sc-border-radius-m:var(--wpp-segmented-control-border-radius-m, var(--wpp-border-radius-m));--sc-border-width:var(--wpp-segmented-control-border-width, 1px);--sc-border-style:var(--wpp-segmented-control-border-style, solid);--sc-border-color:var(--wpp-segmented-control-border-color, var(--wpp-grey-color-500));--sc-bg-color:var(--wpp-segmented-control-bg-color, transparent);--sc-label-margin:var(--wpp-segmented-control-label-margin, 0 0 8px 0);--wpp-bar-width:auto;display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column}:host .label{margin:var(--sc-label-margin)}:host .wpp-bar-wrapper{display:-ms-inline-flexbox;display:inline-flex;padding:var(--sc-padding-m);background-color:var(--sc-bg-color)}:host .wpp-bar-wrapper.hug-content-off{width:var(--wpp-bar-width)}:host .wpp-bar-wrapper.size-s{padding:var(--sc-padding-s);border-radius:var(--sc-border-radius-s)}:host .wpp-bar-wrapper.size-s ::slotted(.wpp-segmented-control-item:not(:last-child)){margin-right:var(--sc-item-margin-s)}:host .wpp-bar-wrapper.size-m{padding:var(--sc-padding-m);border-radius:var(--sc-border-radius-m)}:host .wpp-bar-wrapper.size-m ::slotted(.wpp-segmented-control-item:not(:last-child)){margin-right:var(--sc-item-margin-m)}";
+const wppSegmentedControlCss = ":host{--sc-padding-s:var(--wpp-segmented-control-padding-s, 0);--sc-padding-m:var(--wpp-segmented-control-padding-m, 0);--sc-item-margin-s:var(--wpp-segmented-control-item-margin-s, 0);--sc-item-margin-m:var(--wpp-segmented-control-item-margin-m, 0);--sc-border-radius-s:var(--wpp-segmented-control-border-radius-s, var(--wpp-border-radius-s));--sc-border-radius-m:var(--wpp-segmented-control-border-radius-m, var(--wpp-border-radius-m));--sc-border-width:var(--wpp-segmented-control-border-width, 1px);--sc-border-style:var(--wpp-segmented-control-border-style, solid);--sc-border-color:var(--wpp-segmented-control-border-color, var(--wpp-grey-color-500));--sc-bg-color:var(--wpp-segmented-control-bg-color, transparent);--sc-label-margin:var(--wpp-segmented-control-label-margin, 0 0 8px 0);--wpp-bar-width:auto;display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column}:host .label{margin:var(--sc-label-margin)}:host .label .wpp-internal-label::part(info-wrapper){cursor:text}:host .wpp-bar-wrapper{display:-ms-inline-flexbox;display:inline-flex;padding:var(--sc-padding-m);background-color:var(--sc-bg-color)}:host .wpp-bar-wrapper.hug-content-off{width:var(--wpp-bar-width)}:host .wpp-bar-wrapper.size-s{padding:var(--sc-padding-s);border-radius:var(--sc-border-radius-s)}:host .wpp-bar-wrapper.size-s ::slotted(.wpp-segmented-control-item:not(:last-child)){margin-right:var(--sc-item-margin-s)}:host .wpp-bar-wrapper.size-m{padding:var(--sc-padding-m);border-radius:var(--sc-border-radius-m)}:host .wpp-bar-wrapper.size-m ::slotted(.wpp-segmented-control-item:not(:last-child)){margin-right:var(--sc-item-margin-m)}";
 
 const WppSegmentedControl = /*@__PURE__*/ proxyCustomElement(class WppSegmentedControl extends HTMLElement {
   constructor() {
@@ -192,9 +192,9 @@ const WppSegmentedControl = /*@__PURE__*/ proxyCustomElement(class WppSegmentedC
     const tablistLabel = this.ariaProps?.tablist?.label ??
       (this.ariaProps?.tablist?.labelledby || this.labelConfig?.text ? undefined : this._locales.tablistLabel);
     const tablistLabelledBy = this.ariaProps?.tablist?.labelledby ?? (this.labelConfig?.text ? labelId : undefined);
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-4-0", { class: "label", tag: "span", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, labelId: labelId, part: "label" })), h("div", { class: this.cssClasses(), role: "tablist", "aria-orientation": "horizontal", "aria-label": tablistLabel, "aria-labelledby": tablistLabelledBy, part: "wrapper" }, h("slot", { onSlotchange: this.handleSlotChange, part: "inner" }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, label", onFocus: this.onFocus, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-5-0", { class: "label", tag: "span", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, labelId: labelId, part: "label" })), h("div", { class: this.cssClasses(), role: "tablist", "aria-orientation": "horizontal", "aria-label": tablistLabel, "aria-labelledby": tablistLabelledBy, part: "wrapper" }, h("slot", { onSlotchange: this.handleSlotChange, part: "inner" }))));
   }
-  static get registryIs() { return "wpp-segmented-control-v4-4-0"; }
+  static get registryIs() { return "wpp-segmented-control-v4-5-0"; }
   get host() { return this; }
   static get watchers() { return {
     "value": ["valueChanged"],
@@ -202,7 +202,7 @@ const WppSegmentedControl = /*@__PURE__*/ proxyCustomElement(class WppSegmentedC
     "size": ["onUpdateSize"]
   }; }
   static get style() { return wppSegmentedControlCss; }
-}, [1, "wpp-segmented-control", "wpp-segmented-control-v4-4-0", {
+}, [1, "wpp-segmented-control", "wpp-segmented-control-v4-5-0", {
     "size": [1],
     "hugContentOff": [516, "hug-content-off"],
     "width": [1],
@@ -219,44 +219,44 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-segmented-control-v4-4-0", "wpp-icon-error-v4-4-0", "wpp-icon-warning-v4-4-0", "wpp-internal-label-v4-4-0", "wpp-internal-tooltip-v4-4-0", "wpp-label-v4-4-0", "wpp-tooltip-v4-4-0", "wpp-typography-v4-4-0"];
+  const components = ["wpp-segmented-control-v4-5-0", "wpp-icon-error-v4-5-0", "wpp-icon-warning-v4-5-0", "wpp-internal-label-v4-5-0", "wpp-internal-tooltip-v4-5-0", "wpp-label-v4-5-0", "wpp-tooltip-v4-5-0", "wpp-typography-v4-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-segmented-control-v4-4-0":
+    case "wpp-segmented-control-v4-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppSegmentedControl);
       }
       break;
-    case "wpp-icon-error-v4-4-0":
+    case "wpp-icon-error-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-warning-v4-4-0":
+    case "wpp-icon-warning-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-internal-label-v4-4-0":
+    case "wpp-internal-label-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-internal-tooltip-v4-4-0":
+    case "wpp-internal-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-label-v4-4-0":
+    case "wpp-label-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-4-0":
+    case "wpp-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-4-0":
+    case "wpp-typography-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

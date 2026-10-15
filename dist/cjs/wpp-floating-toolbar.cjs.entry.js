@@ -2,8 +2,8 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const index = require('./index-5f5af6a9.js');
-const utils = require('./utils-a6513d61.js');
+const index = require('./index-7d205426.js');
+const utils = require('./utils-a237e765.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
 require('./consts-d8f5ef98.js');
 require('./theme-observer-4179316e.js');
@@ -31,7 +31,7 @@ const WppFloatingToolbar = class {
         return;
       this.selectedIdentifier = this.hasIdProp ? data.id : index;
     };
-    this.renderActionButton = (data, index$1) => (index.h("wpp-action-button-v4-4-0", { key: `${data.icon}`, ...data, variant: "secondary", class: {
+    this.renderActionButton = (data, index$1) => (index.h("wpp-action-button-v4-5-0", { key: `${data.icon}`, ...data, variant: "secondary", class: {
         'is-selected': this.selectable && (this.hasIdProp ? this.selectedIdentifier === data.id : this.selectedIdentifier === index$1),
       }, onClick: () => this.handleBtnClick(data, index$1) }, index.h(utils.transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' })));
     this.setActionButtons = () => {
@@ -104,7 +104,7 @@ const WppFloatingToolbar = class {
   render() {
     return (index.h(index.Host, { class: this.hostCssClasses(), role: "toolbar", "aria-orientation": this.orientation, "aria-label": this.ariaProps?.label, "aria-labelledby": this.ariaProps?.labelledby, onKeyDown: this.onKeyDown }, index.h("div", { class: this.wrapperCssClasses() }, this._actionButtonsConfig.map(this.renderActionButton))));
   }
-  static get registryIs() { return "wpp-floating-toolbar-v4-4-0"; }
+  static get registryIs() { return "wpp-floating-toolbar-v4-5-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "actionButtonsConfig": ["onUpdateActionButtonsConfig"]

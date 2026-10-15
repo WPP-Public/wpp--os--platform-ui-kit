@@ -64,7 +64,7 @@ const getEmptyStates = ({ width, height }) => imageList.groups[0].images.map(ima
   return html `
       <div style=${styleMap(itemWrapper)}>
         ${unsafeHTML(`<${tag}${size}></${tag}>`)}
-        <wpp-typography-v4-4-0 type="xs-body" style=${styleMap(labelStyle)}>${image.label}</wpp-typography-v4-4-0>
+        <wpp-typography-v4-5-0 type="xs-body" style=${styleMap(labelStyle)}>${image.label}</wpp-typography-v4-5-0>
       </div>
     `;
 });
@@ -72,9 +72,9 @@ export const EmptyStates = {
   render: args => html `
     <div style=${styleMap(pageStyle)}>
       <div style=${styleMap(pageWrapper)}>
-        <wpp-typography-v4-4-0 type="3xl-heading" tag="h3" style=${styleMap(headerStyle)}>
+        <wpp-typography-v4-5-0 type="3xl-heading" tag="h3" style=${styleMap(headerStyle)}>
           Empty States
-        </wpp-typography-v4-4-0>
+        </wpp-typography-v4-5-0>
         <hr />
         <section style=${styleMap(contentWrapper)}>${getEmptyStates(args)}</section>
       </div>

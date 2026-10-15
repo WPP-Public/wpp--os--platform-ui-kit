@@ -27,21 +27,21 @@ export const ButtonAnchor = (args) => {
   const renderAnchor = () => {
     switch (args.anchorComponent) {
       case 'WppActionButton':
-        return html ` <wpp-action-button-v4-4-0 slot="anchor-button"> ${args.anchorLabel} </wpp-action-button-v4-4-0> `;
+        return html ` <wpp-action-button-v4-5-0 slot="anchor-button"> ${args.anchorLabel} </wpp-action-button-v4-5-0> `;
       case 'WppActionButtonWithIcon':
         return html `
-          <wpp-action-button-v4-4-0 slot="anchor-button">
-            <wpp-icon-plus-v4-4-0 slot="icon-start"></wpp-icon-plus-v4-4-0>
+          <wpp-action-button-v4-5-0 slot="anchor-button">
+            <wpp-icon-plus-v4-5-0 slot="icon-start"></wpp-icon-plus-v4-5-0>
             ${args.anchorLabel}
-          </wpp-action-button-v4-4-0>
+          </wpp-action-button-v4-5-0>
         `;
       case 'WppButton':
       default:
-        return html ` <wpp-button-v4-4-0 slot="anchor-button"> ${args.anchorLabel} </wpp-button-v4-4-0> `;
+        return html ` <wpp-button-v4-5-0 slot="anchor-button"> ${args.anchorLabel} </wpp-button-v4-5-0> `;
     }
   };
   return html `
-    <wpp-select-v4-4-0
+    <wpp-select-v4-5-0
       id="button-anchor-select"
       type="single"
       name="button-anchor-select"
@@ -64,15 +64,15 @@ export const ButtonAnchor = (args) => {
       ${renderAnchor()}
       ${args.showIconStart
     ? html `
-            <wpp-icon-clock-v4-4-0
+            <wpp-icon-clock-v4-5-0
               slot="icon-start"
               @click="${(e) => {
       e.stopPropagation();
     }}"
-            ></wpp-icon-clock-v4-4-0>
+            ></wpp-icon-clock-v4-5-0>
           `
     : null}
-    </wpp-select-v4-4-0>
+    </wpp-select-v4-5-0>
   `;
 };
 ButtonAnchor.args = {

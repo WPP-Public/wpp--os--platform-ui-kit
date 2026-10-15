@@ -1,7 +1,8 @@
 import { proxyCustomElement, HTMLElement, h, Host } from '@stencil/core/internal/client';
 import { m as menuListConfig, c as isEqual_1 } from './menuListConfig.js';
 import { Z as Z_INDEX } from './consts.js';
-import { w as getHighestContainerInDOM, D as isWppElement } from './utils.js';
+import { w as getHighestContainerInDOM, E as isWppElement } from './utils.js';
+import { g as getDeepActiveElement } from './dialog-focus.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme.js';
 import { t as themeObserver } from './theme-observer.js';
 import { d as defineCustomElement$3 } from './wpp-icon-error2.js';
@@ -112,6 +113,8 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
             }
           },
           onShow: (instance) => {
+            if (this.isFocusedWithPointer(instance.reference))
+              return false;
             if (this.dropdownWidth !== 'auto') {
               instance.popper.style.width = this.dropdownWidth;
               instance.popper.style.maxWidth = this.dropdownWidth;
@@ -136,6 +139,15 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
           },
         });
       }
+    };
+    /**
+     * Focus only shows the tooltip to keyboard users, the same way `:focus-visible` paints a ring. Otherwise a popover
+     * closed with the pointer would pop it when it hands the focus back to its trigger, although the pointer is elsewhere.
+     */
+    this.isFocusedWithPointer = (anchor) => {
+      if (!anchor?.matches(':focus-within') || anchor.matches(':hover'))
+        return false;
+      return !getDeepActiveElement()?.matches(':focus-visible');
     };
     this.getArrowBgColor = () => {
       const isDarkTheme = themeObserver.getThemeAttribute() === 'dark';
@@ -232,9 +244,9 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
     // is not well-supported on a div without a valid role)
     const hasAriaLabel = Boolean(this.ariaProps?.label);
     const anchorRole = this.ariaProps?.role ?? (hasAriaLabel ? 'img' : undefined);
-    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, role: anchorRole, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v4-4-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
+    return (h(Host, { class: this.hostCssClasses(), role: "presentation" }, h("div", { "aria-label": this.ariaProps?.label, role: anchorRole, part: "anchor", class: "anchor", ...(this.anchorTabIndex ? { tabIndex: this.anchorTabIndex } : {}) }, h("slot", { part: "inner", ref: (slotRef) => (this.slotRef = slotRef), onSlotchange: this.handleSlotChange })), h("div", { class: this.contentWrapperCssClasses() }, !this.config.allowHTML ? (h("wpp-internal-tooltip-v4-5-0", { cssStyle: this.style, ref: contentEl => (this.contentEl = contentEl), header: this.header, text: this.text, value: this.value, error: this.error, wordBreak: this.wordBreak, warning: this.warning, theme: this.theme, externalClass: this.externalClass, ariaProp: this.ariaProps })) : (h("div", { ref: customContentEl => (this.customContentEl = customContentEl), class: `tooltip-custom-content ${this.theme}`, id: this.ariaProps?.describedby })))));
   }
-  static get registryIs() { return "wpp-tooltip-v4-4-0"; }
+  static get registryIs() { return "wpp-tooltip-v4-5-0"; }
   get host() { return this; }
   static get watchers() { return {
     "config": ["updateConfig"],
@@ -245,7 +257,7 @@ const WppTooltip = /*@__PURE__*/ proxyCustomElement(class WppTooltip extends HTM
     "disabled": ["handleDisabledChange"]
   }; }
   static get style() { return wppTooltipCss; }
-}, [1, "wpp-tooltip", "wpp-tooltip-v4-4-0", {
+}, [1, "wpp-tooltip", "wpp-tooltip-v4-5-0", {
     "disabled": [4],
     "header": [1],
     "text": [1],
@@ -266,24 +278,24 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tooltip-v4-4-0", "wpp-icon-error-v4-4-0", "wpp-icon-warning-v4-4-0", "wpp-internal-tooltip-v4-4-0"];
+  const components = ["wpp-tooltip-v4-5-0", "wpp-icon-error-v4-5-0", "wpp-icon-warning-v4-5-0", "wpp-internal-tooltip-v4-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tooltip-v4-4-0":
+    case "wpp-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTooltip);
       }
       break;
-    case "wpp-icon-error-v4-4-0":
+    case "wpp-icon-error-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-icon-warning-v4-4-0":
+    case "wpp-icon-warning-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-internal-tooltip-v4-4-0":
+    case "wpp-internal-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

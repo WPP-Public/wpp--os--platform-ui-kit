@@ -2,8 +2,9 @@ import { h, Host } from '@stencil/core';
 import isEqual from 'lodash/isEqual';
 import { MENU_ITEM_ACTIVE_CLASS } from '../wpp-list-item/const';
 import { getHighestContainerInDOM, transformToVersionedTag } from '../../utils/utils';
-import { BUTTON_ROLE, CONTEXT_ITEM_TAG, GROUP_ROLE, MENU_BAR_ROLE, MENU_CONTEXT_TAG, MENU_CONTEXT_KEYBOARD_ACTIVATION_EVENT, MENU_ITEM, MENU_ROLE, PRESENTATION_ROLE, TAB_FOCUS_CLASS, WPP_LIST_CLASSNAME, TOPBAR_NAVIGATION_ITEM_TAG, } from './constants';
+import { BUTTON_ROLE, CONTEXT_ITEM_TAG, GROUP_ROLE, MENU_BAR_ROLE, MENU_CONTEXT_TAG, MENU_CONTEXT_KEYBOARD_ACTIVATION_EVENT, MENU_ITEM, SELECTABLE_MENU_ITEM_ROLES, MENU_ROLE, PRESENTATION_ROLE, TAB_FOCUS_CLASS, WPP_LIST_CLASSNAME, TOPBAR_NAVIGATION_ITEM_TAG, } from './constants';
 import { menuListConfig } from '../../common/menuListConfig';
+import { isWithinPopperTree } from '../../common/tippy-plugins';
 import { setDefaultDropdownConfig } from './config';
 import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 /**
@@ -140,10 +141,15 @@ export class WppMenuContext {
         onShow: this.handleTippyShow,
         onHide: this.handleTippyHide,
         onHidden: this.handleTippyHidden,
-        onClickOutside: instance => {
-          // This function handles cases when the user clicks anywhere else but on
-          // the trigger element or on the dropdowns. Since the nested menu-contexts
-          // are appended to the parent, they are considered part of the main dropdown
+        onClickOutside: (instance, event) => {
+          // A submenu's popup is appended to the document root, not to this popper, so tippy counts
+          // a press inside one as a press outside and this menu would close out from under the
+          // submenu the user is still working in — most visibly while the button is held down,
+          // before the selection itself lands. `isWithinPopperTree` follows the popup -> anchor
+          // chain, so a press anywhere in this menu's own submenus still counts as inside.
+          const target = (event.composedPath?.()[0] || event.target);
+          if (target && isWithinPopperTree(instance.popper, target))
+            return;
           instance.hide();
         },
       });
@@ -175,11 +181,16 @@ export class WppMenuContext {
         this.triggerRef.removeAttribute('aria-expanded');
         this.triggerRef.removeAttribute('aria-haspopup');
       }
-      if (this.isNestedContext &&
-        !isExpanded &&
-        this.triggerElement?.classList.contains(TAB_FOCUS_CLASS) &&
-        !this.isMenuItemDisabled(this.triggerElement)) {
-        this.triggerElement.tabIndex = 0;
+      if (this.isNestedContext && this.triggerElement) {
+        // A submenu trigger reads as pressed for as long as its submenu is open, which is what the
+        // design shows. Without this the row falls back to its hover fill the moment the pointer
+        // settles on it, so an open submenu and a merely hovered row look the same.
+        this.triggerElement.classList.toggle(MENU_ITEM_ACTIVE_CLASS, isExpanded);
+        if (!isExpanded &&
+          this.triggerElement.classList.contains(TAB_FOCUS_CLASS) &&
+          !this.isMenuItemDisabled(this.triggerElement)) {
+          this.triggerElement.tabIndex = 0;
+        }
       }
       this.updateTriggerAccessibility(isExpanded);
     };
@@ -243,8 +254,24 @@ export class WppMenuContext {
       if (element.getAttribute(attrName) !== value)
         element.setAttribute(attrName, value);
     };
+    /**
+     * The role the consumer asked for. `wpp-list-item` declares `role` as a reflected `@Prop`,
+     * so a parent-set role arrives on the PROPERTY and only reaches the attribute once that
+     * item renders — which is after the menu stamps its own roles. Reading the attribute alone
+     * would therefore overwrite the consumer's value, and because that write syncs straight
+     * back into the reflected prop, the intent would be lost permanently.
+     */
+    this.getAuthoredRole = (item) => {
+      const { role } = item;
+      return role || item.getAttribute('role') || '';
+    };
     this.updateMenuItemAccessibility = (item) => {
-      this.setAttributeIfNeeded(item, 'role', MENU_ITEM);
+      // A consumer can opt a row into a selectable menu role (`menuitemradio` /
+      // `menuitemcheckbox`) to expose its selected state through `aria-checked`, which a plain
+      // `menuitem` may not carry. Those roles are preserved; every other row is normalised.
+      if (!SELECTABLE_MENU_ITEM_ROLES.includes(this.getAuthoredRole(item))) {
+        this.setAttributeIfNeeded(item, 'role', MENU_ITEM);
+      }
       item.addEventListener('keydown', this.handleMenuKeyDown, true);
       item.addEventListener('keyup', this.handleMenuKeyUp, true);
       if (!this.isMenuItemDisabled(item) && !item.classList.contains(TAB_FOCUS_CLASS)) {
@@ -353,12 +380,14 @@ export class WppMenuContext {
      * opened it must drop its visible focus ring so that only the currently
      * focused item appears focused. The parent keeps `aria-expanded` and has its
      * ring restored when the submenu is closed via ArrowLeft/Escape.
+     *
+     * `MENU_ITEM_ACTIVE_CLASS` is deliberately left alone: on a submenu trigger it now tracks
+     * "my submenu is open" (see `handleAriaExpandedOnTrigger`), which is still true here.
      */
     this.clearParentTriggerFocusStyles = () => {
       if (!this.isNestedContext || !this.triggerElement)
         return;
       this.triggerElement.classList.remove(TAB_FOCUS_CLASS);
-      this.triggerElement.classList.remove(MENU_ITEM_ACTIVE_CLASS);
     };
     this.focusMenuItemByPosition = (position) => {
       const items = this.getFocusableMenuItems();
@@ -625,6 +654,10 @@ export class WppMenuContext {
       this.activateMenuItemFromKeyboard(currentItem);
     };
     this.onBlur = () => {
+      // `focusTriggeringElement` paints the keyboard focus class onto the trigger when it restores
+      // focus after Escape, and nothing else took it off again — so the ring stayed on a trigger the
+      // user had already tabbed away from.
+      this.triggerElement?.classList.remove(TAB_FOCUS_CLASS);
       if (this.isInComponent)
         return;
       this.wppBlur.emit();
@@ -825,7 +858,7 @@ export class WppMenuContext {
     return (h(Host, { class: this.menuCssClasses(), exportparts: "trigger, list-wrapper, list, inner", onFocusout: this.onFocusout }, h("div", { ref: this.getTriggerRef, onClick: this.handleClickTrigger, class: this.triggerWrapperCssClasses() }, h("slot", { name: "trigger-element", part: "trigger" })), h("div", { class: "wpp-list-wrapper", part: "list-wrapper", ref: ref => (this.wppListWrapperRef = ref) }, h("ul", { class: this.listWrapperCssClasses(), style: style, ref: this.getContentRef, role: MENU_ROLE, part: "list" }, h("slot", { part: "inner", onSlotchange: this.updateMenuAccessibility })))));
   }
   static get is() { return "wpp-menu-context"; }
-  static get registryIs() { return "wpp-menu-context-v4-4-0"; }
+  static get registryIs() { return "wpp-menu-context-v4-5-0"; }
   static get encapsulation() { return "scoped"; }
   static get originalStyleUrls() {
     return {

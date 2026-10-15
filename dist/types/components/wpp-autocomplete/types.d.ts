@@ -30,6 +30,15 @@ export interface AutocompleteLocales {
   createNewElement: (query: string) => string;
   clearMultiple: string;
   clearSingle: string;
+  /**
+   * Accessible name for the autocomplete input, used when no visible label or placeholder
+   * is provided. Defaults to 'Search'.
+   */
+  searchLabel?: string;
+  /**
+   * Accessible name for the options listbox. Defaults to 'Search results'.
+   */
+  optionsListLabel?: string;
 }
 export interface CancellablePromise<T> extends Promise<T> {
   cancelled?: boolean;

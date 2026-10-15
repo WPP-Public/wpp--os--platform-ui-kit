@@ -26,7 +26,7 @@ describe('wpp-search', () => {
     };
     const page = await newSpecPage({
       components: [WppSearch, WppLabel, WppInternalLabel],
-      template: () => h("wpp-search-v4-4-0", { labelConfig: labelConfig }),
+      template: () => h("wpp-search-v4-5-0", { labelConfig: labelConfig }),
     });
     await new Promise(resolve => setTimeout(resolve, 100));
     await page.waitForChanges();
@@ -35,7 +35,7 @@ describe('wpp-search', () => {
   it('should render with options and form elements', async () => {
     const page = await newSpecPage({
       components: [WppSearch, WppListItem],
-      template: () => (h("wpp-search-v4-4-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message" }, h("wpp-list-item-v4-4-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v4-4-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v4-4-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v4-4-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
+      template: () => (h("wpp-search-v4-5-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message" }, h("wpp-list-item-v4-5-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v4-5-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v4-5-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v4-5-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
     });
     await new Promise(resolve => setTimeout(resolve, 100));
     await page.waitForChanges();
@@ -44,10 +44,10 @@ describe('wpp-search', () => {
   it('should render with selected values', async () => {
     const page = await newSpecPage({
       components: [WppSearch, WppListItem],
-      template: () => (h("wpp-search-v4-4-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message", value: [
+      template: () => (h("wpp-search-v4-5-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message", value: [
           { id: 1, label: 'Item 1' },
           { id: 2, label: 'Item 2' },
-        ] }, h("wpp-list-item-v4-4-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v4-4-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v4-4-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v4-4-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
+        ] }, h("wpp-list-item-v4-5-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v4-5-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v4-5-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v4-5-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
     });
     await new Promise(resolve => setTimeout(resolve, 100));
     await page.waitForChanges();
@@ -56,16 +56,45 @@ describe('wpp-search', () => {
   it('should render opened in loading state', async () => {
     const page = await newSpecPage({
       components: [WppSearch, WppListItem],
-      template: () => (h("wpp-search-v4-4-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message", value: [
+      template: () => (h("wpp-search-v4-5-0", { name: "test", placeholder: "Select Items", messageType: "warning", message: "Test message", value: [
           { id: 1, label: 'Item 1' },
           { id: 2, label: 'Item 2' },
-        ], loading: true }, h("wpp-list-item-v4-4-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v4-4-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v4-4-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v4-4-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
+        ], loading: true }, h("wpp-list-item-v4-5-0", { value: 1, label: 'Item 1' }, h("p", { slot: "label" }, "Item 1")), h("wpp-list-item-v4-5-0", { value: 2, label: 'Item 2' }, h("p", { slot: "label" }, "Item 2")), h("wpp-list-item-v4-5-0", { value: 3, label: 'Item 3' }, h("p", { slot: "label" }, "Item 3")), h("wpp-list-item-v4-5-0", { value: 5, label: 'Item 5' }, h("p", { slot: "label" }, "Item 1"), h("p", { slot: "caption" }, "Caption")))),
     });
     page.root?.querySelector('wpp-search')?.click();
     await page.waitForChanges();
     await new Promise(resolve => setTimeout(resolve, 100));
     await page.waitForChanges();
     expect(page.root).toMatchSnapshot();
+  });
+  describe('label hover state', () => {
+    const renderSearchWithLabel = async (disabled = false) => {
+      const page = await newSpecPage({
+        components: [WppSearch, WppLabel, WppInternalLabel],
+        template: () => h("wpp-search-v4-5-0", { disabled: disabled, labelConfig: { text: 'Search label' } }),
+      });
+      await page.waitForChanges();
+      return {
+        label: page.root?.shadowRoot?.querySelector('wpp-label'),
+        trigger: page.root?.shadowRoot?.querySelector('.trigger'),
+        page,
+      };
+    };
+    it('applies the trigger hover state while its label is hovered', async () => {
+      const { label, trigger, page } = await renderSearchWithLabel();
+      label.dispatchEvent(new MouseEvent('mouseenter'));
+      await page.waitForChanges();
+      expect(trigger).toHaveClass('label-hovered');
+      label.dispatchEvent(new MouseEvent('mouseleave'));
+      await page.waitForChanges();
+      expect(trigger).not.toHaveClass('label-hovered');
+    });
+    it('does not apply the trigger hover state from a disabled label', async () => {
+      const { label, trigger, page } = await renderSearchWithLabel(true);
+      label.dispatchEvent(new MouseEvent('mouseenter'));
+      await page.waitForChanges();
+      expect(trigger).not.toHaveClass('label-hovered');
+    });
   });
   describe('subscribing to theme changes', () => {
     let mockStart;
@@ -103,7 +132,7 @@ describe('wpp-search', () => {
     const renderWithValue = async (props = {}) => {
       const page = await newSpecPage({
         components: [WppSearch],
-        template: () => (h("wpp-search-v4-4-0", { name: "test", value: [{ id: 1, label: 'Item 1' }], ...props }, h("wpp-list-item-v4-4-0", { value: 1, label: 'Item 1' }))),
+        template: () => (h("wpp-search-v4-5-0", { name: "test", value: [{ id: 1, label: 'Item 1' }], ...props }, h("wpp-list-item-v4-5-0", { value: 1, label: 'Item 1' }))),
       });
       await new Promise(resolve => setTimeout(resolve, 100));
       await page.waitForChanges();
@@ -412,7 +441,7 @@ describe('wpp-search', () => {
       const openWithHeader = async () => {
         const page = await newSpecPage({
           components: [WppSearch, WppListItem],
-          template: () => h("wpp-search-v4-4-0", { locales: { dropdownHeader: 'Suggested results' } }),
+          template: () => h("wpp-search-v4-5-0", { locales: { dropdownHeader: 'Suggested results' } }),
         });
         const instance = page.rootInstance;
         instance.isFocused = true;

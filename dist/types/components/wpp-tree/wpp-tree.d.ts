@@ -98,6 +98,19 @@ export declare class WppTree {
   handleOpenItem(event: CustomEvent<TreeType>): Promise<void>;
   handleKeyDown(event: KeyboardEvent): void;
   private getTotalHeightOfTree;
+  /**
+   * Height of the box that actually scrolls. Under virtualisation that is the shadow
+   * `.container-wrapper`, which is what the browser clamps `scrollTop` against; the host is the
+   * fallback for the plain tree and before the container is rendered.
+   */
+  private getViewportHeight;
+  /**
+   * Keeps the virtualisation window inside the new bounds when the tree gets shorter.
+   * The browser clamps the scroll container on its own, but `scrollTop` is state that `render`
+   * reads synchronously, so without this the tree paints an out-of-range (empty) window until
+   * the browser's `scroll` event lands.
+   */
+  private clampScrollTop;
   private focusTreeItem;
   /**
    * Enters action mode for the given tree item.
@@ -161,6 +174,19 @@ export declare class WppTree {
   private isElementFocused;
   handleMouseDown(): void;
   handleSelectedItem(event: CustomEvent<TreeType>): void;
+  /**
+   * Scrolls the tree back to its first item.
+   *
+   * With `withVirtualisation` the scrollable element lives inside the component's shadow root,
+   * so setting `scrollTop` (or calling `scroll()`) on the host element has no effect. Call this
+   * method after replacing `data` with a different list — moving between wizard steps, for
+   * example — to bring the tree back to the top.
+   *
+   * The jump is instant rather than smooth (unlike `wpp-chat-conversation`'s `scrollToBottom()`):
+   * the list being scrolled away from is usually the one that has just been replaced, and every
+   * intermediate offset of a smooth scroll would re-render the virtualisation window.
+   */
+  scrollToTop(): Promise<void>;
   recalculateTreeWidth(): Promise<void>;
   selectAll(): Promise<void>;
   clearAll(): Promise<void>;
@@ -215,6 +241,11 @@ export declare class WppTree {
    */
   private isDescendantOfHost;
   private getActiveDescendantId;
+  /**
+   * Index range of the virtualisation window for the current scroll offset. Kept free of side
+   * effects so it can also be asked which items are on screen, not only used to slice them.
+   */
+  private getVirtualisedRange;
   private getVirtualisedNodes;
   private handleScroll;
   private handleTreeRender;

@@ -174,7 +174,7 @@ const WppSidePanel$1 = /*@__PURE__*/ proxyCustomElement(class WppSidePanel exten
       const [secondaryConfig, primaryConfig] = this.actionsConfig;
       const { label: secondaryLabel, ...secondaryRest } = secondaryConfig;
       const { label: primaryLabel, ...primaryRest } = primaryConfig;
-      return (h("div", { class: "actions-container" }, h("wpp-divider-v4-4-0", null), h("div", { class: "actions" }, h("wpp-button-v4-4-0", { size: "m", variant: "secondary", ...secondaryRest }, secondaryLabel), h("wpp-button-v4-4-0", { size: "m", variant: "primary", ...primaryRest }, primaryLabel))));
+      return (h("div", { class: "actions-container" }, h("wpp-divider-v4-5-0", null), h("div", { class: "actions" }, h("wpp-button-v4-5-0", { size: "m", variant: "secondary", ...secondaryRest }, secondaryLabel), h("wpp-button-v4-5-0", { size: "m", variant: "primary", ...primaryRest }, primaryLabel))));
     };
     this.isHidden = true;
     this.closeReason = null;
@@ -231,7 +231,7 @@ const WppSidePanel$1 = /*@__PURE__*/ proxyCustomElement(class WppSidePanel exten
   render() {
     return (h(Host, { class: this.hostCssClasses(), onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: {
         zIndex: this.zIndex.toString(),
-      }, role: this.ariaProps.role, "aria-label": this.ariaProps.label || this.panelTitle || undefined }, h("div", { class: this.panelCssClasses(), tabindex: "-1", ref: ref => (this.panelRef = ref), "data-testid": "wpp-side-panel-content" }, h("div", { class: "resize-handle", role: "separator", tabindex: "0", "aria-orientation": "vertical", "aria-label": this._locales.resizeHandleLabel, "aria-valuenow": this.currentWidth, "aria-valuemin": SIDE_PANEL_MIN_WIDTH, "aria-valuemax": SIDE_PANEL_MAX_WIDTH, "aria-valuetext": `${this.currentWidth}px`, onPointerDown: this.handleResizeStart, onKeyDown: this.handleResizeKeyDown, "data-testid": "wpp-side-panel-resize-handle" }), h("div", { class: "header-container" }, h("wpp-tooltip-v4-4-0", { class: "title-tooltip", text: this.panelTitle, config: {
+      }, role: this.ariaProps.role, "aria-label": this.ariaProps.label || this.panelTitle || undefined }, h("div", { class: this.panelCssClasses(), tabindex: "-1", ref: ref => (this.panelRef = ref), "data-testid": "wpp-side-panel-content" }, h("div", { class: "resize-handle", role: "separator", tabindex: "0", "aria-orientation": "vertical", "aria-label": this._locales.resizeHandleLabel, "aria-valuenow": this.currentWidth, "aria-valuemin": SIDE_PANEL_MIN_WIDTH, "aria-valuemax": SIDE_PANEL_MAX_WIDTH, "aria-valuetext": `${this.currentWidth}px`, onPointerDown: this.handleResizeStart, onKeyDown: this.handleResizeKeyDown, "data-testid": "wpp-side-panel-resize-handle" }), h("div", { class: "header-container" }, h("wpp-tooltip-v4-5-0", { class: "title-tooltip", text: this.panelTitle, config: {
         placement: 'top',
         onShow: () => {
           if (!this.titleRef)
@@ -239,15 +239,15 @@ const WppSidePanel$1 = /*@__PURE__*/ proxyCustomElement(class WppSidePanel exten
           if (this.titleRef.clientWidth >= this.titleRef.scrollWidth)
             return false;
         },
-      } }, h("wpp-typography-v4-4-0", { ref: el => (this.titleRef = el), type: "s-strong", class: "title" }, this.panelTitle)), h("wpp-action-button-v4-4-0", { ariaProps: { label: this._locales.closeIconLabel }, variant: "secondary", onClick: this.handleCloseClick, class: "close-button" }, h("wpp-icon-cross-v4-4-0", { slot: "icon-start" }))), h("wpp-divider-v4-4-0", null), h("div", { class: "body", ref: el => (this.bodyRef = el) }, h("slot", null)), this.renderActions())));
+      } }, h("wpp-typography-v4-5-0", { ref: el => (this.titleRef = el), type: "s-strong", class: "title" }, this.panelTitle)), h("wpp-action-button-v4-5-0", { ariaProps: { label: this._locales.closeIconLabel }, variant: "secondary", onClick: this.handleCloseClick, class: "close-button" }, h("wpp-icon-cross-v4-5-0", { slot: "icon-start" }))), h("wpp-divider-v4-5-0", null), h("div", { class: "body", ref: el => (this.bodyRef = el) }, h("slot", null)), this.renderActions())));
   }
-  static get registryIs() { return "wpp-side-panel-v4-4-0"; }
+  static get registryIs() { return "wpp-side-panel-v4-5-0"; }
   get host() { return this; }
   static get watchers() { return {
     "open": ["handleChangeOpenStatus"]
   }; }
   static get style() { return wppSidePanelCss; }
-}, [1, "wpp-side-panel", "wpp-side-panel-v4-4-0", {
+}, [1, "wpp-side-panel", "wpp-side-panel-v4-5-0", {
     "panelTitle": [1, "panel-title"],
     "open": [1540],
     "actionsConfig": [16],
@@ -264,64 +264,64 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-side-panel-v4-4-0", "wpp-action-button-v4-4-0", "wpp-button-v4-4-0", "wpp-divider-v4-4-0", "wpp-icon-chevron-v4-4-0", "wpp-icon-cross-v4-4-0", "wpp-icon-error-v4-4-0", "wpp-icon-warning-v4-4-0", "wpp-internal-tooltip-v4-4-0", "wpp-spinner-v4-4-0", "wpp-tooltip-v4-4-0", "wpp-typography-v4-4-0"];
+  const components = ["wpp-side-panel-v4-5-0", "wpp-action-button-v4-5-0", "wpp-button-v4-5-0", "wpp-divider-v4-5-0", "wpp-icon-chevron-v4-5-0", "wpp-icon-cross-v4-5-0", "wpp-icon-error-v4-5-0", "wpp-icon-warning-v4-5-0", "wpp-internal-tooltip-v4-5-0", "wpp-spinner-v4-5-0", "wpp-tooltip-v4-5-0", "wpp-typography-v4-5-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-side-panel-v4-4-0":
+    case "wpp-side-panel-v4-5-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppSidePanel$1);
       }
       break;
-    case "wpp-action-button-v4-4-0":
+    case "wpp-action-button-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-button-v4-4-0":
+    case "wpp-button-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-divider-v4-4-0":
+    case "wpp-divider-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-chevron-v4-4-0":
+    case "wpp-icon-chevron-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-cross-v4-4-0":
+    case "wpp-icon-cross-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-icon-error-v4-4-0":
+    case "wpp-icon-error-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-warning-v4-4-0":
+    case "wpp-icon-warning-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-internal-tooltip-v4-4-0":
+    case "wpp-internal-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-4-0":
+    case "wpp-spinner-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-4-0":
+    case "wpp-tooltip-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-4-0":
+    case "wpp-typography-v4-5-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

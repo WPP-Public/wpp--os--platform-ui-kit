@@ -39,7 +39,7 @@ describe('wpp-modal accessible name', () => {
   it('honours a consumer supplied ariaProps.labelledby instead of deriving a name', async () => {
     const page = await newSpecPage({
       components: [WppModal],
-      template: () => (h("wpp-modal-v4-4-0", { open: true, ariaProps: { role: 'dialog', labelledby: 'their-title' } }, h("div", { slot: "header" }, "Delete report"))),
+      template: () => (h("wpp-modal-v4-5-0", { open: true, ariaProps: { role: 'dialog', labelledby: 'their-title' } }, h("div", { slot: "header" }, "Delete report"))),
     });
     expect(page.root).toEqualAttribute('aria-labelledby', 'their-title');
     expect(page.root?.hasAttribute('aria-label')).toBe(false);
@@ -47,7 +47,7 @@ describe('wpp-modal accessible name', () => {
   it('honours a consumer supplied ariaProps.label', async () => {
     const page = await newSpecPage({
       components: [WppModal],
-      template: () => (h("wpp-modal-v4-4-0", { open: true, ariaProps: { role: 'dialog', label: 'Their label' } }, h("div", { slot: "header" }, "Delete report"))),
+      template: () => (h("wpp-modal-v4-5-0", { open: true, ariaProps: { role: 'dialog', label: 'Their label' } }, h("div", { slot: "header" }, "Delete report"))),
     });
     expect(page.root).toEqualAttribute('aria-label', 'Their label');
   });
@@ -262,7 +262,7 @@ describe('wpp-modal osBarCompatible', () => {
     const spy = jest.spyOn(utils, 'getOsBarOffsetHeight').mockReturnValue(72);
     const page = await newSpecPage({
       components: [WppModal],
-      template: () => h("wpp-modal-v4-4-0", { osBarCompatible: true }),
+      template: () => h("wpp-modal-v4-5-0", { osBarCompatible: true }),
     });
     expect(page.root?.style.getPropertyValue('--wpp-modal-top-offset')).toBe('72px');
     spy.mockRestore();
@@ -270,7 +270,7 @@ describe('wpp-modal osBarCompatible', () => {
   it('applies wpp-os-bar-compatible CSS class when osBarCompatible is true', async () => {
     const page = await newSpecPage({
       components: [WppModal],
-      template: () => h("wpp-modal-v4-4-0", { osBarCompatible: true }),
+      template: () => h("wpp-modal-v4-5-0", { osBarCompatible: true }),
     });
     expect(page.root).toHaveClass('wpp-os-bar-compatible');
   });
@@ -285,7 +285,7 @@ describe('wpp-modal osBarCompatible', () => {
     const spy = jest.spyOn(utils, 'getOsBarOffsetHeight').mockReturnValue(64);
     const page = await newSpecPage({
       components: [WppModal],
-      template: () => h("wpp-modal-v4-4-0", { osBarCompatible: true }),
+      template: () => h("wpp-modal-v4-5-0", { osBarCompatible: true }),
     });
     expect(page.root?.style.getPropertyValue('--wpp-modal-top-offset')).toBe('64px');
     spy.mockRestore();
@@ -324,7 +324,7 @@ describe('wpp-modal osBarCompatible', () => {
     it('Should render only 1 button in the actions section', async () => {
       const page = await newSpecPage({
         components: [WppModal],
-        template: () => (h("wpp-modal-v4-4-0", { actionsConfig: {
+        template: () => (h("wpp-modal-v4-5-0", { actionsConfig: {
             primaryButtonConfig: {
               variant: 'primary',
               label: 'Submit',
@@ -339,7 +339,7 @@ describe('wpp-modal osBarCompatible', () => {
     it('Should render 2 buttons in the actions section', async () => {
       const page = await newSpecPage({
         components: [WppModal],
-        template: () => (h("wpp-modal-v4-4-0", { actionsConfig: {
+        template: () => (h("wpp-modal-v4-5-0", { actionsConfig: {
             primaryButtonConfig: {
               variant: 'primary',
               label: 'Submit',
@@ -358,11 +358,109 @@ describe('wpp-modal osBarCompatible', () => {
     it('Should render the `actions` slot when there is no `actionsConfig` provided', async () => {
       const page = await newSpecPage({
         components: [WppModal],
-        template: () => h("wpp-modal-v4-4-0", null),
+        template: () => h("wpp-modal-v4-5-0", null),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       await page.waitForChanges();
       expect(page.root).toMatchSnapshot();
     });
+  });
+});
+describe('wpp-modal dialog focus', () => {
+  // Stencil's mock DOM does not move `document.activeElement` on focus(), so the focused element
+  // is driven explicitly here — the component reads it to decide what to restore focus to.
+  let stubbedActive = null;
+  beforeEach(() => {
+    stubbedActive = null;
+    Object.defineProperty(document, 'activeElement', { configurable: true, get: () => stubbedActive });
+  });
+  afterEach(() => {
+    delete document.activeElement;
+  });
+  const flushTimers = () => new Promise(resolve => setTimeout(resolve, 0));
+  const mountWithTrigger = async () => {
+    const trigger = document.createElement('button');
+    document.body.appendChild(trigger);
+    stubbedActive = trigger;
+    const page = await newSpecPage({
+      components: [WppModal],
+      html: `<wpp-modal><div slot="header">Title</div><div slot="body">Body</div></wpp-modal>`,
+    });
+    return { page, trigger };
+  };
+  it('moves focus into the dialog when it opens, without waiting for the open transition', async () => {
+    const { page } = await mountWithTrigger();
+    const dialog = page.root?.shadowRoot?.querySelector('[part="content"]');
+    const dialogFocus = jest.fn();
+    dialog.focus = dialogFocus;
+    page.root.open = true;
+    await page.waitForChanges();
+    // `transitionend` is deliberately never fired here: a reduced-motion user, or a consumer who
+    // turns the animation off, never gets one, and focus used to stay outside a dialog that is
+    // `aria-modal` — leaving nothing reachable inside it.
+    expect(dialogFocus).toHaveBeenCalled();
+  });
+  it('hands focus back to whatever opened it when it closes', async () => {
+    const { page, trigger } = await mountWithTrigger();
+    const triggerFocus = jest.spyOn(trigger, 'focus');
+    const dialog = page.root?.shadowRoot?.querySelector('[part="content"]');
+    page.root.open = true;
+    await page.waitForChanges();
+    // The dialog is holding focus, so closing it has to give focus back rather than leave it on
+    // a container the user can no longer see.
+    stubbedActive = dialog;
+    page.root.open = false;
+    await page.waitForChanges();
+    await flushTimers();
+    expect(triggerFocus).toHaveBeenCalled();
+  });
+  it('gives the trigger its keyboard focus ring back when closed with Escape', async () => {
+    const { page, trigger } = await mountWithTrigger();
+    const setFocus = jest.fn();
+    trigger.setFocus = setFocus;
+    const triggerFocus = jest.spyOn(trigger, 'focus');
+    const dialog = page.root?.shadowRoot?.querySelector('[part="content"]');
+    page.root.open = true;
+    await page.waitForChanges();
+    stubbedActive = dialog;
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    await page.waitForChanges();
+    page.root.open = false;
+    await page.waitForChanges();
+    await flushTimers();
+    // Our controls draw the ring from a class they set in `setFocus()`, not from `:focus-visible`,
+    // so a plain `focus()` puts focus back with nothing drawn on it.
+    expect(setFocus).toHaveBeenCalled();
+    expect(triggerFocus).not.toHaveBeenCalled();
+  });
+  it('restores focus without the keyboard ring when it was not closed from the keyboard', async () => {
+    const { page, trigger } = await mountWithTrigger();
+    const setFocus = jest.fn();
+    trigger.setFocus = setFocus;
+    const triggerFocus = jest.spyOn(trigger, 'focus');
+    const dialog = page.root?.shadowRoot?.querySelector('[part="content"]');
+    page.root.open = true;
+    await page.waitForChanges();
+    // Closed by pointer: focus still has to come back, but painting a keyboard ring would show one
+    // where the user never had it.
+    stubbedActive = dialog;
+    page.root.open = false;
+    await page.waitForChanges();
+    await flushTimers();
+    expect(triggerFocus).toHaveBeenCalled();
+    expect(setFocus).not.toHaveBeenCalled();
+  });
+  it('leaves focus alone when the dialog was not holding it', async () => {
+    const { page, trigger } = await mountWithTrigger();
+    const triggerFocus = jest.spyOn(trigger, 'focus');
+    page.root.open = true;
+    await page.waitForChanges();
+    triggerFocus.mockClear();
+    // Closing because focus already moved elsewhere: the dialog must not drag it back.
+    stubbedActive = document.body;
+    page.root.open = false;
+    await page.waitForChanges();
+    await flushTimers();
+    expect(triggerFocus).not.toHaveBeenCalled();
   });
 });

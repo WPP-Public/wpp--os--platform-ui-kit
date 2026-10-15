@@ -8,6 +8,7 @@ import { HTMLStencilElement, JSXBase } from "./stencil-public-runtime";
 import { AriaProps, BannerTypes, DropdownConfig, InputMessageTypes, MessageTypes } from "./types/common";
 import { AccordionSectionChangeEventDetail } from "./components/wpp-accordion/types";
 import { ArtefactAction, ArtefactAriaProps, ArtefactLocales, ArtefactSize } from "./components/wpp-artefact/types";
+import { AudioPlayerLocales, AudioPlayerRateEventDetail, AudioPlayerTimeEventDetail, AudioPlayerVolumeEventDetail, AudioSourceType } from "./components/wpp-audio-player/types";
 import { LabelConfig, LabelLocales } from "./components/wpp-label/types";
 import { AutocompleteChangeEventDetail, AutocompleteLocales, AutocompleteOption, AutocompleteTypes, GetItemKeyType, LoadMoreHandler } from "./components/wpp-autocomplete/types";
 import { ListItemInterface, SelectChangeEventDetails, SelectLabelConfig, SelectLocaleInterface, SelectSize, SelectTypes, SelectValue } from "./components/wpp-select/types";
@@ -20,9 +21,10 @@ import { CardChangeEventDetail, CardSize, CardType, CardValue } from "./componen
 import { CardGroupChangeEventDetail, CardGroupValue } from "./components/wpp-card-group/types";
 import { ChatAlertLocales, ChatAlertType } from "./components/wpp-chat/components/wpp-chat-alert/types";
 import { ActionButtonDataConfig, AvatarConfig, ChatAttachment, ChatInputConfig, ChatMessage, MessageRole, MessageStatus } from "./components/wpp-chat-conversation/types";
-import { ActionsMenuToggleEventDetail, ChatInputAction, ChatInputActionItemClickEventDetail, ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputMicEventDetail, ChatInputModel, ChatInputSelectableModel, ChatInputSelectedModel, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
-import { AcceptConfig, FileItemType, FileUploadErrorEventDetails, FileUploadEventDetail, FileUploadItemEventDetail, FileUploadItemLocales, FileUploadItemVariant, FileUploadLocales, FileUploadMessageType, FileUploadResultFormaType, FileValidatorHandler } from "./components/wpp-file-upload/types";
-import { ChatNodeAction, ChatNodeAvatarConfig, ChatNodeLocales, ChatNodeMessage, ChatNodeMessageAction, ChatNodeMessageActionClickDetail, ChatNodeMicEventDetail, ChatNodeModel, ChatNodeSelectableModel, ChatNodeSelectedModel, WppChatNodeSize } from "./components/wpp-chat-node/types";
+import { ChatConversationMessageActionClickDetail, ChatConversationMessageLocales } from "./components/wpp-chat-conversation/components/types";
+import { ActionsMenuToggleEventDetail, ChatInputAction, ChatInputActionItemClickEventDetail, ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputMicEventDetail, ChatInputModel, ChatInputModelOptionsEventDetail, ChatInputSelectableModel, ChatInputSelectedModel, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
+import { AcceptConfig, FileItemType, FileProcessorHandler, FileUploadErrorEventDetails, FileUploadEventDetail, FileUploadItemEventDetail, FileUploadItemLocales, FileUploadItemVariant, FileUploadLocales, FileUploadMessageType, FileUploadProcessingEventDetail, FileUploadResultFormaType, FileValidatorHandler } from "./components/wpp-file-upload/types";
+import { ChatNodeAction, ChatNodeAvatarConfig, ChatNodeLocales, ChatNodeMessage, ChatNodeMessageAction, ChatNodeMessageActionClickDetail, ChatNodeMicEventDetail, ChatNodeModel, ChatNodeModelOptionsEventDetail, ChatNodeSelectableModel, ChatNodeSelectedModel, ChatNodeSendEventDetail, WppChatNodeSize } from "./components/wpp-chat-node/types";
 import { ChatReferenceLines, ChatReferenceLocales, ChatReferenceType } from "./components/wpp-chat/components/wpp-chat-reference/types";
 import { CheckboxChangeEvent, CheckboxLabelConfig, CheckboxValue } from "./components/wpp-checkbox/types";
 import { CheckboxGroupChangeEvent, CheckboxGroupValue } from "./components/wpp-checkbox-group/types";
@@ -32,7 +34,7 @@ import { CounterChangeEventDetail, CounterFormat, CounterLabelConfig } from "./c
 import { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes, MonthRangeNormalization, YearRangeNormalization } from "./components/wpp-datepicker/types";
 import { ExpandableCardSectionChangeEventDetail } from "./components/wpp-expandable-card/types";
 import { ActionButtonData } from "./components/wpp-floating-toolbar/types";
-import { FullScreenModalCloseDetails, FullScreenModalFormConfig } from "./components/wpp-full-screen-modal/types";
+import { FullScreenModalCloseDetails, FullScreenModalFormConfig, FullScreenModalLocalesType } from "./components/wpp-full-screen-modal/types";
 import { ModalActionsConfig, ModalCloseDetails, ModalFormConfig } from "./components/wpp-modal/types";
 import { AlignItemsType, DirectionType, JustifyContentType } from "./components/wpp-grid/types";
 import { RangeOf } from "./types/numberRange";
@@ -78,6 +80,7 @@ import { CaptionValue, ControlPanelConfig, JumpValues, VideoPlayerLocales, Video
 export { AriaProps, BannerTypes, DropdownConfig, InputMessageTypes, MessageTypes } from "./types/common";
 export { AccordionSectionChangeEventDetail } from "./components/wpp-accordion/types";
 export { ArtefactAction, ArtefactAriaProps, ArtefactLocales, ArtefactSize } from "./components/wpp-artefact/types";
+export { AudioPlayerLocales, AudioPlayerRateEventDetail, AudioPlayerTimeEventDetail, AudioPlayerVolumeEventDetail, AudioSourceType } from "./components/wpp-audio-player/types";
 export { LabelConfig, LabelLocales } from "./components/wpp-label/types";
 export { AutocompleteChangeEventDetail, AutocompleteLocales, AutocompleteOption, AutocompleteTypes, GetItemKeyType, LoadMoreHandler } from "./components/wpp-autocomplete/types";
 export { ListItemInterface, SelectChangeEventDetails, SelectLabelConfig, SelectLocaleInterface, SelectSize, SelectTypes, SelectValue } from "./components/wpp-select/types";
@@ -90,9 +93,10 @@ export { CardChangeEventDetail, CardSize, CardType, CardValue } from "./componen
 export { CardGroupChangeEventDetail, CardGroupValue } from "./components/wpp-card-group/types";
 export { ChatAlertLocales, ChatAlertType } from "./components/wpp-chat/components/wpp-chat-alert/types";
 export { ActionButtonDataConfig, AvatarConfig, ChatAttachment, ChatInputConfig, ChatMessage, MessageRole, MessageStatus } from "./components/wpp-chat-conversation/types";
-export { ActionsMenuToggleEventDetail, ChatInputAction, ChatInputActionItemClickEventDetail, ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputMicEventDetail, ChatInputModel, ChatInputSelectableModel, ChatInputSelectedModel, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
-export { AcceptConfig, FileItemType, FileUploadErrorEventDetails, FileUploadEventDetail, FileUploadItemEventDetail, FileUploadItemLocales, FileUploadItemVariant, FileUploadLocales, FileUploadMessageType, FileUploadResultFormaType, FileValidatorHandler } from "./components/wpp-file-upload/types";
-export { ChatNodeAction, ChatNodeAvatarConfig, ChatNodeLocales, ChatNodeMessage, ChatNodeMessageAction, ChatNodeMessageActionClickDetail, ChatNodeMicEventDetail, ChatNodeModel, ChatNodeSelectableModel, ChatNodeSelectedModel, WppChatNodeSize } from "./components/wpp-chat-node/types";
+export { ChatConversationMessageActionClickDetail, ChatConversationMessageLocales } from "./components/wpp-chat-conversation/components/types";
+export { ActionsMenuToggleEventDetail, ChatInputAction, ChatInputActionItemClickEventDetail, ChatInputAriaProps, ChatInputAttributes, ChatInputLocaleInterface, ChatInputMicEventDetail, ChatInputModel, ChatInputModelOptionsEventDetail, ChatInputSelectableModel, ChatInputSelectedModel, ChatInputSize, FileUploadConfig, MessageChangeEventDetail, SendEventDetail } from "./components/wpp-chat/components/wpp-chat-input/types";
+export { AcceptConfig, FileItemType, FileProcessorHandler, FileUploadErrorEventDetails, FileUploadEventDetail, FileUploadItemEventDetail, FileUploadItemLocales, FileUploadItemVariant, FileUploadLocales, FileUploadMessageType, FileUploadProcessingEventDetail, FileUploadResultFormaType, FileValidatorHandler } from "./components/wpp-file-upload/types";
+export { ChatNodeAction, ChatNodeAvatarConfig, ChatNodeLocales, ChatNodeMessage, ChatNodeMessageAction, ChatNodeMessageActionClickDetail, ChatNodeMicEventDetail, ChatNodeModel, ChatNodeModelOptionsEventDetail, ChatNodeSelectableModel, ChatNodeSelectedModel, ChatNodeSendEventDetail, WppChatNodeSize } from "./components/wpp-chat-node/types";
 export { ChatReferenceLines, ChatReferenceLocales, ChatReferenceType } from "./components/wpp-chat/components/wpp-chat-reference/types";
 export { CheckboxChangeEvent, CheckboxLabelConfig, CheckboxValue } from "./components/wpp-checkbox/types";
 export { CheckboxGroupChangeEvent, CheckboxGroupValue } from "./components/wpp-checkbox-group/types";
@@ -102,7 +106,7 @@ export { CounterChangeEventDetail, CounterFormat, CounterLabelConfig } from "./c
 export { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes, MonthRangeNormalization, YearRangeNormalization } from "./components/wpp-datepicker/types";
 export { ExpandableCardSectionChangeEventDetail } from "./components/wpp-expandable-card/types";
 export { ActionButtonData } from "./components/wpp-floating-toolbar/types";
-export { FullScreenModalCloseDetails, FullScreenModalFormConfig } from "./components/wpp-full-screen-modal/types";
+export { FullScreenModalCloseDetails, FullScreenModalFormConfig, FullScreenModalLocalesType } from "./components/wpp-full-screen-modal/types";
 export { ModalActionsConfig, ModalCloseDetails, ModalFormConfig } from "./components/wpp-modal/types";
 export { AlignItemsType, DirectionType, JustifyContentType } from "./components/wpp-grid/types";
 export { RangeOf } from "./types/numberRange";
@@ -259,6 +263,64 @@ export namespace Components {
           * Allows removing the Pin action from the dropdown list, which is rendered by default.
          */
         "withPinAction": boolean;
+    }
+    interface WppAudioPlayer {
+        /**
+          * Contains the WppAudioPlayer `aria-` props.
+         */
+        "ariaProps": AriaProps;
+        /**
+          * If `true`, playback starts as soon as the track's metadata is loaded. Browsers may block autoplay until the user has interacted with the page.
+         */
+        "autoplay": boolean;
+        /**
+          * Defines the component locale types.
+         */
+        "locales": Partial<AudioPlayerLocales>;
+        /**
+          * If `true`, the track starts again from the beginning when it reaches the end.
+         */
+        "loop": boolean;
+        /**
+          * Pauses the current track.
+          * @return A promise that resolves when the track is paused.
+         */
+        "pause": () => Promise<void>;
+        /**
+          * Plays the current track. At the end of the track, playback starts over from the beginning.
+          * @return A promise that resolves when the playback is requested.
+         */
+        "play": () => Promise<void>;
+        /**
+          * Defines the current playback speed. Mutable, so selecting a speed in the menu updates it.
+         */
+        "playbackRate": number;
+        /**
+          * Defines the playback speeds offered by the playback speed menu.
+         */
+        "playbackRates": number[];
+        /**
+          * Specifies the preferred loading behavior.  - `'auto'`: the browser loads the whole file when the page loads, if possible. - `'metadata'`: only the metadata (e.g. duration) is preloaded. - `'none'`: nothing is preloaded until playback is requested.
+         */
+        "preload": 'auto' | 'metadata' | 'none';
+        /**
+          * Moves the playback position to the given time, in seconds. The value is clamped to the boundaries of the track.
+          * @param time - The playback position to move to, in seconds.
+          * @return A promise that resolves when the position is applied.
+         */
+        "seek": (time: number) => Promise<void>;
+        /**
+          * Represents the source of the audio file. Several sources can be provided as fallbacks, the browser picks the first one it can play.
+         */
+        "src": string | string[];
+        /**
+          * Optional MIME type hint for each audio source, e.g. `'audio/ogg; codecs=opus'`, matched to `src` by index. The browser only uses it to skip sources it cannot play without downloading them, so it mainly helps with fallback sources. Leave it out rather than guess: a wrong type makes the browser skip a source it could have played.
+         */
+        "type"?: AudioSourceType | AudioSourceType[];
+        /**
+          * Defines the current volume, from `0` (muted) to `1`. Mutable, so moving the volume slider updates it. Values outside that range are clamped.
+         */
+        "volume": number;
     }
     interface WppAutocomplete {
         /**
@@ -524,7 +586,11 @@ export namespace Components {
          */
         "ariaProps": BasicNodeAriaProps;
         /**
-          * Defines whether the node is in a loading state. If true, the border of the node will be animated.
+          * Defines the error message of the node. When provided, the node is rendered in the error state: an error icon is displayed in the header and the message is shown in an inline message at the top of the body.
+         */
+        "errorMessage": string | undefined;
+        /**
+          * Defines whether the node is in a loading state. If true, an arc rotates around the border of the node with a soft glow behind it.
          */
         "isLoading": boolean;
         /**
@@ -785,6 +851,10 @@ export namespace Components {
          */
         "completeStream": () => Promise<void>;
         /**
+          * Partial translation overrides applied to every message's footer. A message can override this for itself via `ChatMessage.locales`.
+         */
+        "locales"?: Partial<ChatConversationMessageLocales>;
+        /**
           * Defines the list of messages in the conversation.
          */
         "messages": ChatMessage[];
@@ -823,22 +893,36 @@ export namespace Components {
          */
         "content": string;
         /**
+          * Partial translation overrides for the footer, deep-merged over the English defaults.
+         */
+        "locales"?: Partial<ChatConversationMessageLocales>;
+        /**
           * Defines the list items for the context menu.
+          * @deprecated The response footer is now Quote / Copy / Pin plus the token count, with no overflow menu (WPPOPENDS-1594). Still rendered for backwards compatibility; it will be removed in the next major. Put any extra action in `actionButtonsConfig` instead.
          */
         "menuContextListItems": ListItemInterface[];
         /**
-          * Defines the role of the message.
+          * Defines the role of the message.  Write-only in practice: `role` collides with the global ARIA attribute of the same name, and "user"/"assistant" are not valid ARIA roles, so the component parks a valid role on the host and tracks the message role internally. Reading `el.role` back therefore returns the parked ARIA role, not the message role — set it, don't read it.
          */
         "role": MessageRole;
         "setStatus": (status: MessageStatus) => Promise<void>;
         /**
           * Defines the source action button configuration.
+          * @deprecated Use `tokenCount` instead. The footer's trailing slot now shows the response's token count. Still rendered for backwards compatibility, but suppressed whenever `tokenCount` is set.
          */
         "sourcesActionConfig": ActionButtonDataConfig;
         /**
           * Defines the status of the message.
          */
         "status": MessageStatus;
+        /**
+          * Token count for this response, already formatted for display (e.g. `'30,000'`). The footer tag is rendered only when this is a non-empty string, so omit it for the Auto/Premium model options.
+         */
+        "tokenCount"?: string;
+        /**
+          * Icon rendered beside `tokenCount`.
+         */
+        "tokenCountIcon": `wpp-icon-${string}`;
         /**
           * Defines the avatar configuration for the user avatar.
           * @deprecated - The component should no longer render an avatar for the user.
@@ -914,6 +998,14 @@ export namespace Components {
           * Defines the ID of the selected AI model. Used when the initial selected model should be different than the default value ("Auto"). This property should be used when selecting the AI model follows a different flow than that of the component (E.g: selecting model from a side-modal).
          */
         "selectedModel": ChatInputSelectedModel;
+        /**
+          * Id of the currently selected reasoning level. It must match the `id` of one of the selected model's `reasoningOptions`; an id that matches nothing leaves the submenu with no row checked rather than silently selecting a level the consumer did not ask for. Leave it unset for "no level chosen" — the trigger label then carries no reasoning suffix. Picking a different model from the dropdown clears it, because option ids are scoped to a model.
+         */
+        "selectedReasoning"?: string;
+        /**
+          * Id of the currently selected verbosity level, matched against the selected model's `verbosityOptions`. Behaves exactly like `selectedReasoning`, except that verbosity is never shown in the trigger label.
+         */
+        "selectedVerbosity"?: string;
         /**
           * Size of the component.
          */
@@ -1011,6 +1103,14 @@ export namespace Components {
          */
         "selectedModelId"?: string;
         /**
+          * Id of the currently selected reasoning level. It must match the `id` of one of the selected model's `reasoningOptions`; an id that matches nothing leaves the submenu with no row checked rather than silently selecting a level the consumer did not ask for. Leave it unset for "no level chosen". Picking a different model from the dropdown clears it, because option ids are scoped to a model.
+         */
+        "selectedReasoning"?: string;
+        /**
+          * Id of the currently selected verbosity level, matched against the selected model's `verbosityOptions`. Behaves exactly like `selectedReasoning`.
+         */
+        "selectedVerbosity"?: string;
+        /**
           * Defines the chat node size. `'s'` renders the compact chat bar only.
          */
         "size": WppChatNodeSize;
@@ -1019,6 +1119,10 @@ export namespace Components {
           * @deprecated The node icon is now fixed and non-customizable; this prop is maintained for backward compatibility but no longer affects the rendered icon. This property will be removed in version 5.0.0.
          */
         "titleIcon"?: `wpp-icon-${string}`;
+        /**
+          * Programmatically update an already-added message, merging `changes` over it.  Messages live in the component's internal state, so this is the only way to change one after it has been added — needed for controlled per-message action state such as flipping a pin's `isActive`. Unknown ids are ignored.
+         */
+        "updateMessage": (id: string, changes: Partial<ChatNodeMessage>) => Promise<void>;
         /**
           * Defines the user avatar configuration. Set to `false` to hide the user avatar.
          */
@@ -1578,7 +1682,7 @@ export namespace Components {
     }
     interface WppFileUpload {
         /**
-          * Configuration for accepted file formats. This property allows you to specify supported file types using an object where the key is the MIME type and the value is an array of file extensions.  Example: {   'image/png': ['.png'],   'text/html': ['.htm', '.html'] }  To allow all file types, pass an empty object (`{}`) or leave the property undefined.
+          * Configuration for accepted file formats: an object whose key is a MIME type and whose value is an array of file extensions.  Example: {   'image/png': ['.png'],   'text/html': ['.htm', '.html'] }  A key may also be a wildcard family such as `image/*`, which accepts the whole family the way the native `accept` attribute does: {   'image/*': [] }  Entries are combined as a union - a file only has to satisfy one of them. A single entry is an intersection: when it lists extensions, a file must match the entry's type AND carry one of those extensions. An entry with an empty array puts no extension restriction on the type, so it matches on the MIME type alone.  Matching ignores casing. A file the browser reports with no type is typed from its extension where possible, and otherwise matched against the extensions the configuration lists.  To allow all file types, pass an empty object (`{}`) or leave the property undefined.
          */
         "acceptConfig": AcceptConfig;
         /**
@@ -1629,6 +1733,10 @@ export namespace Components {
           * Defines the input name.
          */
         "name"?: string;
+        /**
+          * Asynchronous processing applied to each newly added file - typically a call to your backend to upload, scan or validate it.  While a processor runs the file is shown in the loading state. Resolve with nothing to mark the file done, resolve `{ error }` to fail it with a message, or reject to fail it using the error's `message`. Report progress with `context.onProgress(0-100)` and honour `context.signal` so work is cancelled when the file is removed.  Pass an array to run several steps in sequence over the same file. They share one abort signal and stop at the first one that fails.  Ignored when `controlled` is `true` - a controlled consumer already owns the file state and should drive `status`, `progress` and `processingError` through `value` instead.
+         */
+        "processor"?: FileProcessorHandler | FileProcessorHandler[];
         /**
           * If the input is required.
          */
@@ -1797,7 +1905,7 @@ export namespace Components {
          */
         "actionsConfig"?: ModalActionsConfig;
         /**
-          * Contains the modal `aria-` props.
+          * Contains the modal `aria-` props.  `labelledby` is intentionally not defaulted: it previously pointed at an id rendered inside the shadow root, which an `aria-labelledby` on the host can never resolve, leaving the dialog with no accessible name. When you do supply one it must name an element in your own tree scope, and it is used verbatim. Otherwise the name is derived from the `header` slot.
          */
         "ariaProps": AriaProps;
         /**
@@ -1812,6 +1920,10 @@ export namespace Components {
           * If you pass this prop wrapper of dialog will be rendered as form.
          */
         "formConfig"?: FullScreenModalFormConfig;
+        /**
+          * Indicates locales for the full screen modal.
+         */
+        "locales": Partial<FullScreenModalLocalesType>;
         /**
           * Indicates is the modal open.
          */
@@ -5295,7 +5407,43 @@ export namespace Components {
          */
         "width"?: number;
     }
+    interface WppIconFacebook {
+        /**
+          * Defines the icon color.
+         */
+        "color": string;
+        /**
+          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
+         */
+        "height"?: number;
+        /**
+          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
+         */
+        "size": 's' | 'm';
+        /**
+          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
+         */
+        "width"?: number;
+    }
     interface WppIconFactory {
+        /**
+          * Defines the icon color.
+         */
+        "color": string;
+        /**
+          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
+         */
+        "height"?: number;
+        /**
+          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
+         */
+        "size": 's' | 'm';
+        /**
+          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
+         */
+        "width"?: number;
+    }
+    interface WppIconFastForward {
         /**
           * Defines the icon color.
          */
@@ -6509,6 +6657,24 @@ export namespace Components {
          */
         "width"?: number;
     }
+    interface WppIconInstagram {
+        /**
+          * Defines the icon color.
+         */
+        "color": string;
+        /**
+          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
+         */
+        "height"?: number;
+        /**
+          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
+         */
+        "size": 's' | 'm';
+        /**
+          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
+         */
+        "width"?: number;
+    }
     interface WppIconInstallUpdate {
         /**
           * Defines the icon color.
@@ -6564,6 +6730,24 @@ export namespace Components {
         "width"?: number;
     }
     interface WppIconJoin {
+        /**
+          * Defines the icon color.
+         */
+        "color": string;
+        /**
+          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
+         */
+        "height"?: number;
+        /**
+          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
+         */
+        "size": 's' | 'm';
+        /**
+          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
+         */
+        "width"?: number;
+    }
+    interface WppIconJson {
         /**
           * Defines the icon color.
          */
@@ -8759,6 +8943,24 @@ export namespace Components {
         "width"?: number;
     }
     interface WppIconRestaurant {
+        /**
+          * Defines the icon color.
+         */
+        "color": string;
+        /**
+          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
+         */
+        "height"?: number;
+        /**
+          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
+         */
+        "size": 's' | 'm';
+        /**
+          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
+         */
+        "width"?: number;
+    }
+    interface WppIconRewind {
         /**
           * Defines the icon color.
          */
@@ -11394,6 +11596,10 @@ export namespace Components {
          */
         "hideCloseBtn": boolean;
         /**
+          * If `true`, the inline message is rendered in a compact layout: reduced padding, full width, `xs-body` typography and a message clamped to a maximum of two lines, with the full message shown in a tooltip when truncated.
+         */
+        "isCompact": boolean;
+        /**
           * Defines the component locale types.
          */
         "locales": Partial<InlineMessageLocalesType>;
@@ -11626,7 +11832,7 @@ export namespace Components {
          */
         "description"?: string;
         /**
-          * If the component is disabled.
+          * If the component is disabled. The component will retain its visual styling, but on hover, the cursor will change to `not-allowed`.
          */
         "disabled": boolean;
         /**
@@ -12494,6 +12700,10 @@ export namespace Components {
          */
         "removable": boolean;
         /**
+          * Moves keyboard focus to the pill's remove icon and paints its focus ring.  The ring is a `tab-focus` class this component only sets from its own Tab keyup, so a parent that re-homes focus here with a plain `focus()` moves focus invisibly (WCAG 2.4.7). Parents that take focus off a removed neighbouring pill should call this instead. No-op when the pill has no remove icon to focus.
+         */
+        "setRemoveIconFocus": () => Promise<void>;
+        /**
           * If set, the tooltip will be shown when the text is truncated.
          */
         "showTooltipOnTruncate": true;
@@ -12542,7 +12752,7 @@ export namespace Components {
     }
     interface WppPopover {
         /**
-          * Contains the button `aria-` props.
+          * Contains the dropdown `aria-` props: `role`, `label`, `labelledby` and `describedby`. Passing this property replaces the default, so provide a `label` (or `labelledby`) to keep the dropdown named.
          */
         "ariaProps": AriaProps;
         /**
@@ -14080,6 +14290,10 @@ export namespace Components {
         "multiple": boolean;
         "recalculateTreeWidth": () => Promise<void>;
         /**
+          * Scrolls the tree back to its first item.  With `withVirtualisation` the scrollable element lives inside the component's shadow root, so setting `scrollTop` (or calling `scroll()`) on the host element has no effect. Call this method after replacing `data` with a different list — moving between wizard steps, for example — to bring the tree back to the top.  The jump is instant rather than smooth (unlike `wpp-chat-conversation`'s `scrollToBottom()`): the list being scrolled away from is usually the one that has just been replaced, and every intermediate offset of a smooth scroll would re-render the virtualisation window.
+         */
+        "scrollToTop": () => Promise<void>;
+        /**
           * Indicates search value
          */
         "search"?: string;
@@ -14235,6 +14449,10 @@ export interface WppArtefactCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppArtefactElement;
 }
+export interface WppAudioPlayerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLWppAudioPlayerElement;
+}
 export interface WppAutocompleteCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppAutocompleteElement;
@@ -14278,6 +14496,10 @@ export interface WppChatAlertCustomEvent<T> extends CustomEvent<T> {
 export interface WppChatConversationCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppChatConversationElement;
+}
+export interface WppChatConversationMessageCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLWppChatConversationMessageElement;
 }
 export interface WppChatInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -14541,6 +14763,12 @@ declare global {
     var HTMLWppArtefactElement: {
         prototype: HTMLWppArtefactElement;
         new (): HTMLWppArtefactElement;
+    };
+    interface HTMLWppAudioPlayerElement extends Components.WppAudioPlayer, HTMLStencilElement {
+    }
+    var HTMLWppAudioPlayerElement: {
+        prototype: HTMLWppAudioPlayerElement;
+        new (): HTMLWppAudioPlayerElement;
     };
     interface HTMLWppAutocompleteElement extends Components.WppAutocomplete, HTMLStencilElement {
     }
@@ -15937,11 +16165,23 @@ declare global {
         prototype: HTMLWppIconEyedropperElement;
         new (): HTMLWppIconEyedropperElement;
     };
+    interface HTMLWppIconFacebookElement extends Components.WppIconFacebook, HTMLStencilElement {
+    }
+    var HTMLWppIconFacebookElement: {
+        prototype: HTMLWppIconFacebookElement;
+        new (): HTMLWppIconFacebookElement;
+    };
     interface HTMLWppIconFactoryElement extends Components.WppIconFactory, HTMLStencilElement {
     }
     var HTMLWppIconFactoryElement: {
         prototype: HTMLWppIconFactoryElement;
         new (): HTMLWppIconFactoryElement;
+    };
+    interface HTMLWppIconFastForwardElement extends Components.WppIconFastForward, HTMLStencilElement {
+    }
+    var HTMLWppIconFastForwardElement: {
+        prototype: HTMLWppIconFastForwardElement;
+        new (): HTMLWppIconFastForwardElement;
     };
     interface HTMLWppIconFavouritesElement extends Components.WppIconFavourites, HTMLStencilElement {
     }
@@ -16339,6 +16579,12 @@ declare global {
         prototype: HTMLWppIconInfoMessageElement;
         new (): HTMLWppIconInfoMessageElement;
     };
+    interface HTMLWppIconInstagramElement extends Components.WppIconInstagram, HTMLStencilElement {
+    }
+    var HTMLWppIconInstagramElement: {
+        prototype: HTMLWppIconInstagramElement;
+        new (): HTMLWppIconInstagramElement;
+    };
     interface HTMLWppIconInstallUpdateElement extends Components.WppIconInstallUpdate, HTMLStencilElement {
     }
     var HTMLWppIconInstallUpdateElement: {
@@ -16362,6 +16608,12 @@ declare global {
     var HTMLWppIconJoinElement: {
         prototype: HTMLWppIconJoinElement;
         new (): HTMLWppIconJoinElement;
+    };
+    interface HTMLWppIconJsonElement extends Components.WppIconJson, HTMLStencilElement {
+    }
+    var HTMLWppIconJsonElement: {
+        prototype: HTMLWppIconJsonElement;
+        new (): HTMLWppIconJsonElement;
     };
     interface HTMLWppIconKeyElement extends Components.WppIconKey, HTMLStencilElement {
     }
@@ -17085,6 +17337,12 @@ declare global {
     var HTMLWppIconRestaurantElement: {
         prototype: HTMLWppIconRestaurantElement;
         new (): HTMLWppIconRestaurantElement;
+    };
+    interface HTMLWppIconRewindElement extends Components.WppIconRewind, HTMLStencilElement {
+    }
+    var HTMLWppIconRewindElement: {
+        prototype: HTMLWppIconRewindElement;
+        new (): HTMLWppIconRewindElement;
     };
     interface HTMLWppIconRhombusElement extends Components.WppIconRhombus, HTMLStencilElement {
     }
@@ -18330,6 +18588,7 @@ declare global {
         "wpp-accordion": HTMLWppAccordionElement;
         "wpp-action-button": HTMLWppActionButtonElement;
         "wpp-artefact": HTMLWppArtefactElement;
+        "wpp-audio-player": HTMLWppAudioPlayerElement;
         "wpp-autocomplete": HTMLWppAutocompleteElement;
         "wpp-avatar": HTMLWppAvatarElement;
         "wpp-avatar-group": HTMLWppAvatarGroupElement;
@@ -18561,7 +18820,9 @@ declare global {
         "wpp-icon-eye-off": HTMLWppIconEyeOffElement;
         "wpp-icon-eye-on": HTMLWppIconEyeOnElement;
         "wpp-icon-eyedropper": HTMLWppIconEyedropperElement;
+        "wpp-icon-facebook": HTMLWppIconFacebookElement;
         "wpp-icon-factory": HTMLWppIconFactoryElement;
+        "wpp-icon-fast-forward": HTMLWppIconFastForwardElement;
         "wpp-icon-favourites": HTMLWppIconFavouritesElement;
         "wpp-icon-favourites-filled": HTMLWppIconFavouritesFilledElement;
         "wpp-icon-file": HTMLWppIconFileElement;
@@ -18628,10 +18889,12 @@ declare global {
         "wpp-icon-indent-increase": HTMLWppIconIndentIncreaseElement;
         "wpp-icon-info": HTMLWppIconInfoElement;
         "wpp-icon-info-message": HTMLWppIconInfoMessageElement;
+        "wpp-icon-instagram": HTMLWppIconInstagramElement;
         "wpp-icon-install-update": HTMLWppIconInstallUpdateElement;
         "wpp-icon-italic": HTMLWppIconItalicElement;
         "wpp-icon-java-script": HTMLWppIconJavaScriptElement;
         "wpp-icon-join": HTMLWppIconJoinElement;
+        "wpp-icon-json": HTMLWppIconJsonElement;
         "wpp-icon-key": HTMLWppIconKeyElement;
         "wpp-icon-keyboard": HTMLWppIconKeyboardElement;
         "wpp-icon-laptop": HTMLWppIconLaptopElement;
@@ -18752,6 +19015,7 @@ declare global {
         "wpp-icon-resize-large": HTMLWppIconResizeLargeElement;
         "wpp-icon-resize-small": HTMLWppIconResizeSmallElement;
         "wpp-icon-restaurant": HTMLWppIconRestaurantElement;
+        "wpp-icon-rewind": HTMLWppIconRewindElement;
         "wpp-icon-rhombus": HTMLWppIconRhombusElement;
         "wpp-icon-rotate": HTMLWppIconRotateElement;
         "wpp-icon-rotate-clockwise": HTMLWppIconRotateClockwiseElement;
@@ -19080,6 +19344,72 @@ declare namespace LocalJSX {
          */
         "withPinAction"?: boolean;
     }
+    interface WppAudioPlayer {
+        /**
+          * Contains the WppAudioPlayer `aria-` props.
+         */
+        "ariaProps"?: AriaProps;
+        /**
+          * If `true`, playback starts as soon as the track's metadata is loaded. Browsers may block autoplay until the user has interacted with the page.
+         */
+        "autoplay"?: boolean;
+        /**
+          * Defines the component locale types.
+         */
+        "locales"?: Partial<AudioPlayerLocales>;
+        /**
+          * If `true`, the track starts again from the beginning when it reaches the end.
+         */
+        "loop"?: boolean;
+        /**
+          * Emitted when the playback reaches the end of the track.
+         */
+        "onWppEnded"?: (event: WppAudioPlayerCustomEvent<void>) => void;
+        /**
+          * Emitted when the playback is paused.
+         */
+        "onWppPause"?: (event: WppAudioPlayerCustomEvent<void>) => void;
+        /**
+          * Emitted when the playback starts.
+         */
+        "onWppPlay"?: (event: WppAudioPlayerCustomEvent<void>) => void;
+        /**
+          * Emitted when the playback speed changes.
+         */
+        "onWppPlaybackRateChange"?: (event: WppAudioPlayerCustomEvent<AudioPlayerRateEventDetail>) => void;
+        /**
+          * Emitted when the playback position changes.
+         */
+        "onWppTimeUpdate"?: (event: WppAudioPlayerCustomEvent<AudioPlayerTimeEventDetail>) => void;
+        /**
+          * Emitted when the volume changes or the track is muted/unmuted.
+         */
+        "onWppVolumeChange"?: (event: WppAudioPlayerCustomEvent<AudioPlayerVolumeEventDetail>) => void;
+        /**
+          * Defines the current playback speed. Mutable, so selecting a speed in the menu updates it.
+         */
+        "playbackRate"?: number;
+        /**
+          * Defines the playback speeds offered by the playback speed menu.
+         */
+        "playbackRates"?: number[];
+        /**
+          * Specifies the preferred loading behavior.  - `'auto'`: the browser loads the whole file when the page loads, if possible. - `'metadata'`: only the metadata (e.g. duration) is preloaded. - `'none'`: nothing is preloaded until playback is requested.
+         */
+        "preload"?: 'auto' | 'metadata' | 'none';
+        /**
+          * Represents the source of the audio file. Several sources can be provided as fallbacks, the browser picks the first one it can play.
+         */
+        "src"?: string | string[];
+        /**
+          * Optional MIME type hint for each audio source, e.g. `'audio/ogg; codecs=opus'`, matched to `src` by index. The browser only uses it to skip sources it cannot play without downloading them, so it mainly helps with fallback sources. Leave it out rather than guess: a wrong type makes the browser skip a source it could have played.
+         */
+        "type"?: AudioSourceType | AudioSourceType[];
+        /**
+          * Defines the current volume, from `0` (muted) to `1`. Mutable, so moving the volume slider updates it. Values outside that range are clamped.
+         */
+        "volume"?: number;
+    }
     interface WppAutocomplete {
         /**
           * Contains the autocomplete `aria-` props.
@@ -19364,7 +19694,11 @@ declare namespace LocalJSX {
          */
         "ariaProps"?: BasicNodeAriaProps;
         /**
-          * Defines whether the node is in a loading state. If true, the border of the node will be animated.
+          * Defines the error message of the node. When provided, the node is rendered in the error state: an error icon is displayed in the header and the message is shown in an inline message at the top of the body.
+         */
+        "errorMessage"?: string | undefined;
+        /**
+          * Defines whether the node is in a loading state. If true, an arc rotates around the border of the node with a soft glow behind it.
          */
         "isLoading"?: boolean;
         /**
@@ -19387,6 +19721,10 @@ declare namespace LocalJSX {
           * Emitted when an action is clicked. The event detail contains the `BasicNodeAction` object corresponding to the clicked action.
          */
         "onWppActionClick"?: (event: WppBasicNodeCustomEvent<BasicNodeAction>) => void;
+        /**
+          * Emitted when the user dismisses the error inline message with its close button. The error icon remains in the header until `errorMessage` is cleared.
+         */
+        "onWppDismissError"?: (event: WppBasicNodeCustomEvent<void>) => void;
     }
     interface WppBreadcrumb {
         /**
@@ -19641,6 +19979,10 @@ declare namespace LocalJSX {
          */
         "chatInputConfig"?: ChatInputConfig;
         /**
+          * Partial translation overrides applied to every message's footer. A message can override this for itself via `ChatMessage.locales`.
+         */
+        "locales"?: Partial<ChatConversationMessageLocales>;
+        /**
           * Defines the list of messages in the conversation.
          */
         "messages"?: ChatMessage[];
@@ -19657,9 +19999,25 @@ declare namespace LocalJSX {
          */
         "onWppChange"?: (event: WppChatConversationCustomEvent<FileUploadEventDetail>) => void;
         /**
+          * Emitted when a footer action (Quote / Copy / Pin, or a custom one) is clicked on a message this component renders from its `messages` prop. Re-emitted from `wpp-chat-conversation-message`, whose own event does not bubble, so the declarative `[messages]` path can reach it.
+         */
+        "onWppMessageActionClick"?: (event: WppChatConversationCustomEvent<ChatConversationMessageActionClickDetail>) => void;
+        /**
           * Emitted when the message in the input message changes.
          */
         "onWppMessageChanged"?: (event: WppChatConversationCustomEvent<MessageChangeEventDetail>) => void;
+        /**
+          * Re-emitted from the chat input: the "Select model or agent" action, shown when `chatInputConfig.models` is empty.
+         */
+        "onWppModelBrowse"?: (event: WppChatConversationCustomEvent<void>) => void;
+        /**
+          * Re-emitted from the chat input: the model picked from its selector.
+         */
+        "onWppModelSelect"?: (event: WppChatConversationCustomEvent<ChatInputSelectableModel>) => void;
+        /**
+          * Re-emitted from the chat input: a reasoning level was picked. The detail carries the resulting state of the whole selection.
+         */
+        "onWppReasoningSelect"?: (event: WppChatConversationCustomEvent<ChatInputModelOptionsEventDetail>) => void;
         /**
           * Emitted when the user clicks the "Send" button.
          */
@@ -19668,6 +20026,10 @@ declare namespace LocalJSX {
           * Emitted when the user clicks the "Stop" button while an AI response is generating.
          */
         "onWppStop"?: (event: WppChatConversationCustomEvent<void>) => void;
+        /**
+          * Re-emitted from the chat input: a verbosity level was picked, with the same payload as `wppReasoningSelect`.
+         */
+        "onWppVerbositySelect"?: (event: WppChatConversationCustomEvent<ChatInputModelOptionsEventDetail>) => void;
         /**
           * Defines the avatar configuration for the user.
           * @deprecated - The component should no longer render an avatar for the user.
@@ -19693,21 +20055,39 @@ declare namespace LocalJSX {
          */
         "content"?: string;
         /**
+          * Partial translation overrides for the footer, deep-merged over the English defaults.
+         */
+        "locales"?: Partial<ChatConversationMessageLocales>;
+        /**
           * Defines the list items for the context menu.
+          * @deprecated The response footer is now Quote / Copy / Pin plus the token count, with no overflow menu (WPPOPENDS-1594). Still rendered for backwards compatibility; it will be removed in the next major. Put any extra action in `actionButtonsConfig` instead.
          */
         "menuContextListItems"?: ListItemInterface[];
         /**
-          * Defines the role of the message.
+          * Emitted when a footer action button is clicked. The detail carries the merged action config (including its `id` — `quote`, `copy` or `pin` for the built-in defaults) and the message's resolved text, which is the only reliable source of that text after a streamed response.
+         */
+        "onWppMessageActionClick"?: (event: WppChatConversationMessageCustomEvent<ChatConversationMessageActionClickDetail>) => void;
+        /**
+          * Defines the role of the message.  Write-only in practice: `role` collides with the global ARIA attribute of the same name, and "user"/"assistant" are not valid ARIA roles, so the component parks a valid role on the host and tracks the message role internally. Reading `el.role` back therefore returns the parked ARIA role, not the message role — set it, don't read it.
          */
         "role"?: MessageRole;
         /**
           * Defines the source action button configuration.
+          * @deprecated Use `tokenCount` instead. The footer's trailing slot now shows the response's token count. Still rendered for backwards compatibility, but suppressed whenever `tokenCount` is set.
          */
         "sourcesActionConfig"?: ActionButtonDataConfig;
         /**
           * Defines the status of the message.
          */
         "status"?: MessageStatus;
+        /**
+          * Token count for this response, already formatted for display (e.g. `'30,000'`). The footer tag is rendered only when this is a non-empty string, so omit it for the Auto/Premium model options.
+         */
+        "tokenCount"?: string;
+        /**
+          * Icon rendered beside `tokenCount`.
+         */
+        "tokenCountIcon"?: `wpp-icon-${string}`;
         /**
           * Defines the avatar configuration for the user avatar.
           * @deprecated - The component should no longer render an avatar for the user.
@@ -19799,6 +20179,10 @@ declare namespace LocalJSX {
          */
         "onWppModelSelect"?: (event: WppChatInputCustomEvent<ChatInputSelectableModel>) => void;
         /**
+          * Emitted when a level is picked from the "Reasoning" submenu. The detail carries the resulting state of the whole selection — the model plus both levels — so a consumer can forward it to the backend without mirroring the component's internals. Rendered only when the selected model supplies `reasoningOptions`.
+         */
+        "onWppReasoningSelect"?: (event: WppChatInputCustomEvent<ChatInputModelOptionsEventDetail>) => void;
+        /**
           * Emitted when the user clicks the "Send" button.
          */
         "onWppSend"?: (event: WppChatInputCustomEvent<SendEventDetail>) => void;
@@ -19806,6 +20190,10 @@ declare namespace LocalJSX {
           * Emitted when the user clicks the "Stop" button while an AI response is generating.
          */
         "onWppStop"?: (event: WppChatInputCustomEvent<void>) => void;
+        /**
+          * Emitted when a level is picked from the "Verbosity" submenu, with the same resulting state payload as `wppReasoningSelect`. Rendered only when the selected model supplies `verbosityOptions`.
+         */
+        "onWppVerbositySelect"?: (event: WppChatInputCustomEvent<ChatInputModelOptionsEventDetail>) => void;
         /**
           * Placeholder text for the input field.
           * @deprecated : Prefer locales.placeholder. This property will be removed in version 5.0.0.
@@ -19815,6 +20203,14 @@ declare namespace LocalJSX {
           * Defines the ID of the selected AI model. Used when the initial selected model should be different than the default value ("Auto"). This property should be used when selecting the AI model follows a different flow than that of the component (E.g: selecting model from a side-modal).
          */
         "selectedModel"?: ChatInputSelectedModel;
+        /**
+          * Id of the currently selected reasoning level. It must match the `id` of one of the selected model's `reasoningOptions`; an id that matches nothing leaves the submenu with no row checked rather than silently selecting a level the consumer did not ask for. Leave it unset for "no level chosen" — the trigger label then carries no reasoning suffix. Picking a different model from the dropdown clears it, because option ids are scoped to a model.
+         */
+        "selectedReasoning"?: string;
+        /**
+          * Id of the currently selected verbosity level, matched against the selected model's `verbosityOptions`. Behaves exactly like `selectedReasoning`, except that verbosity is never shown in the trigger label.
+         */
+        "selectedVerbosity"?: string;
         /**
           * Size of the component.
          */
@@ -19923,13 +20319,21 @@ declare namespace LocalJSX {
          */
         "onWppReRun"?: (event: WppChatNodeCustomEvent<void>) => void;
         /**
+          * Emitted when a level is picked from the "Reasoning" submenu. The detail carries the resulting state of the whole selection — the model plus both levels — so a consumer can forward it to the backend without mirroring the component's internals. Rendered only when the selected model supplies `reasoningOptions`.
+         */
+        "onWppReasoningSelect"?: (event: WppChatNodeCustomEvent<ChatNodeModelOptionsEventDetail>) => void;
+        /**
           * Emitted when the user clicks the send button or presses Enter.
          */
-        "onWppSend"?: (event: WppChatNodeCustomEvent<{ message: string }>) => void;
+        "onWppSend"?: (event: WppChatNodeCustomEvent<ChatNodeSendEventDetail>) => void;
         /**
           * Emitted when the user clicks the stop button while the node is loading.
          */
         "onWppStop"?: (event: WppChatNodeCustomEvent<void>) => void;
+        /**
+          * Emitted when a level is picked from the "Verbosity" submenu, with the same resulting state payload as `wppReasoningSelect`. Rendered only when the selected model supplies `verbosityOptions`.
+         */
+        "onWppVerbositySelect"?: (event: WppChatNodeCustomEvent<ChatNodeModelOptionsEventDetail>) => void;
         /**
           * Defines the selected AI model. Accepts a built-in default option (`'auto'` / `'premium'`) or one of the provided `models`. Defaults to `'auto'`. The component keeps this in sync when the user picks a model from the dropdown; it can also be set externally when selection follows a different flow (e.g. from a side-modal).
          */
@@ -19939,6 +20343,14 @@ declare namespace LocalJSX {
           * @deprecated Use `selectedModel` instead. This id-based prop will be removed in a future release.
          */
         "selectedModelId"?: string;
+        /**
+          * Id of the currently selected reasoning level. It must match the `id` of one of the selected model's `reasoningOptions`; an id that matches nothing leaves the submenu with no row checked rather than silently selecting a level the consumer did not ask for. Leave it unset for "no level chosen". Picking a different model from the dropdown clears it, because option ids are scoped to a model.
+         */
+        "selectedReasoning"?: string;
+        /**
+          * Id of the currently selected verbosity level, matched against the selected model's `verbosityOptions`. Behaves exactly like `selectedReasoning`.
+         */
+        "selectedVerbosity"?: string;
         /**
           * Defines the chat node size. `'s'` renders the compact chat bar only.
          */
@@ -20563,7 +20975,7 @@ declare namespace LocalJSX {
     }
     interface WppFileUpload {
         /**
-          * Configuration for accepted file formats. This property allows you to specify supported file types using an object where the key is the MIME type and the value is an array of file extensions.  Example: {   'image/png': ['.png'],   'text/html': ['.htm', '.html'] }  To allow all file types, pass an empty object (`{}`) or leave the property undefined.
+          * Configuration for accepted file formats: an object whose key is a MIME type and whose value is an array of file extensions.  Example: {   'image/png': ['.png'],   'text/html': ['.htm', '.html'] }  A key may also be a wildcard family such as `image/*`, which accepts the whole family the way the native `accept` attribute does: {   'image/*': [] }  Entries are combined as a union - a file only has to satisfy one of them. A single entry is an intersection: when it lists extensions, a file must match the entry's type AND carry one of those extensions. An entry with an empty array puts no extension restriction on the type, so it matches on the MIME type alone.  Matching ignores casing. A file the browser reports with no type is typed from its extension where possible, and otherwise matched against the extensions the configuration lists.  To allow all file types, pass an empty object (`{}`) or leave the property undefined.
          */
         "acceptConfig"?: AcceptConfig;
         /**
@@ -20627,6 +21039,14 @@ declare namespace LocalJSX {
          */
         "onWppError"?: (event: WppFileUploadCustomEvent<FileUploadErrorEventDetails>) => void;
         /**
+          * Emitted when a file finishes being processed by `processor`, successfully or not.
+         */
+        "onWppFileProcessingEnd"?: (event: WppFileUploadCustomEvent<FileUploadProcessingEventDetail>) => void;
+        /**
+          * Emitted when a file starts being processed by `processor`.
+         */
+        "onWppFileProcessingStart"?: (event: WppFileUploadCustomEvent<FileUploadProcessingEventDetail>) => void;
+        /**
           * Emitted when the file-upload item was clicked.
          */
         "onWppFileUploadItemClick"?: (event: WppFileUploadCustomEvent<FileUploadItemEventDetail>) => void;
@@ -20638,6 +21058,10 @@ declare namespace LocalJSX {
           * Emitted when the input is in focus.
          */
         "onWppFocus"?: (event: WppFileUploadCustomEvent<FocusEvent>) => void;
+        /**
+          * Asynchronous processing applied to each newly added file - typically a call to your backend to upload, scan or validate it.  While a processor runs the file is shown in the loading state. Resolve with nothing to mark the file done, resolve `{ error }` to fail it with a message, or reject to fail it using the error's `message`. Report progress with `context.onProgress(0-100)` and honour `context.signal` so work is cancelled when the file is removed.  Pass an array to run several steps in sequence over the same file. They share one abort signal and stop at the first one that fails.  Ignored when `controlled` is `true` - a controlled consumer already owns the file state and should drive `status`, `progress` and `processingError` through `value` instead.
+         */
+        "processor"?: FileProcessorHandler | FileProcessorHandler[];
         /**
           * If the input is required.
          */
@@ -20790,7 +21214,7 @@ declare namespace LocalJSX {
          */
         "actionsConfig"?: ModalActionsConfig;
         /**
-          * Contains the modal `aria-` props.
+          * Contains the modal `aria-` props.  `labelledby` is intentionally not defaulted: it previously pointed at an id rendered inside the shadow root, which an `aria-labelledby` on the host can never resolve, leaving the dialog with no accessible name. When you do supply one it must name an element in your own tree scope, and it is used verbatim. Otherwise the name is derived from the `header` slot.
          */
         "ariaProps"?: AriaProps;
         /**
@@ -20801,6 +21225,10 @@ declare namespace LocalJSX {
           * If you pass this prop wrapper of dialog will be rendered as form.
          */
         "formConfig"?: FullScreenModalFormConfig;
+        /**
+          * Indicates locales for the full screen modal.
+         */
+        "locales"?: Partial<FullScreenModalLocalesType>;
         /**
           * Handles the modal closing actions.
          */
@@ -24304,7 +24732,43 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
+    interface WppIconFacebook {
+        /**
+          * Defines the icon color.
+         */
+        "color"?: string;
+        /**
+          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
+         */
+        "height"?: number;
+        /**
+          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
+         */
+        "size"?: 's' | 'm';
+        /**
+          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
+         */
+        "width"?: number;
+    }
     interface WppIconFactory {
+        /**
+          * Defines the icon color.
+         */
+        "color"?: string;
+        /**
+          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
+         */
+        "height"?: number;
+        /**
+          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
+         */
+        "size"?: 's' | 'm';
+        /**
+          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
+         */
+        "width"?: number;
+    }
+    interface WppIconFastForward {
         /**
           * Defines the icon color.
          */
@@ -25518,6 +25982,24 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
+    interface WppIconInstagram {
+        /**
+          * Defines the icon color.
+         */
+        "color"?: string;
+        /**
+          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
+         */
+        "height"?: number;
+        /**
+          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
+         */
+        "size"?: 's' | 'm';
+        /**
+          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
+         */
+        "width"?: number;
+    }
     interface WppIconInstallUpdate {
         /**
           * Defines the icon color.
@@ -25573,6 +26055,24 @@ declare namespace LocalJSX {
         "width"?: number;
     }
     interface WppIconJoin {
+        /**
+          * Defines the icon color.
+         */
+        "color"?: string;
+        /**
+          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
+         */
+        "height"?: number;
+        /**
+          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
+         */
+        "size"?: 's' | 'm';
+        /**
+          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
+         */
+        "width"?: number;
+    }
+    interface WppIconJson {
         /**
           * Defines the icon color.
          */
@@ -27768,6 +28268,24 @@ declare namespace LocalJSX {
         "width"?: number;
     }
     interface WppIconRestaurant {
+        /**
+          * Defines the icon color.
+         */
+        "color"?: string;
+        /**
+          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
+         */
+        "height"?: number;
+        /**
+          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
+         */
+        "size"?: 's' | 'm';
+        /**
+          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
+         */
+        "width"?: number;
+    }
+    interface WppIconRewind {
         /**
           * Defines the icon color.
          */
@@ -30635,7 +31153,7 @@ declare namespace LocalJSX {
          */
         "description"?: string;
         /**
-          * If the component is disabled.
+          * If the component is disabled. The component will retain its visual styling, but on hover, the cursor will change to `not-allowed`.
          */
         "disabled"?: boolean;
         /**
@@ -31651,7 +32169,7 @@ declare namespace LocalJSX {
     }
     interface WppPopover {
         /**
-          * Contains the button `aria-` props.
+          * Contains the dropdown `aria-` props: `role`, `label`, `labelledby` and `describedby`. Passing this property replaces the default, so provide a `label` (or `labelledby`) to keep the dropdown named.
          */
         "ariaProps"?: AriaProps;
         /**
@@ -33486,6 +34004,7 @@ declare namespace LocalJSX {
         "wpp-accordion": WppAccordion;
         "wpp-action-button": WppActionButton;
         "wpp-artefact": WppArtefact;
+        "wpp-audio-player": WppAudioPlayer;
         "wpp-autocomplete": WppAutocomplete;
         "wpp-avatar": WppAvatar;
         "wpp-avatar-group": WppAvatarGroup;
@@ -33717,7 +34236,9 @@ declare namespace LocalJSX {
         "wpp-icon-eye-off": WppIconEyeOff;
         "wpp-icon-eye-on": WppIconEyeOn;
         "wpp-icon-eyedropper": WppIconEyedropper;
+        "wpp-icon-facebook": WppIconFacebook;
         "wpp-icon-factory": WppIconFactory;
+        "wpp-icon-fast-forward": WppIconFastForward;
         "wpp-icon-favourites": WppIconFavourites;
         "wpp-icon-favourites-filled": WppIconFavouritesFilled;
         "wpp-icon-file": WppIconFile;
@@ -33784,10 +34305,12 @@ declare namespace LocalJSX {
         "wpp-icon-indent-increase": WppIconIndentIncrease;
         "wpp-icon-info": WppIconInfo;
         "wpp-icon-info-message": WppIconInfoMessage;
+        "wpp-icon-instagram": WppIconInstagram;
         "wpp-icon-install-update": WppIconInstallUpdate;
         "wpp-icon-italic": WppIconItalic;
         "wpp-icon-java-script": WppIconJavaScript;
         "wpp-icon-join": WppIconJoin;
+        "wpp-icon-json": WppIconJson;
         "wpp-icon-key": WppIconKey;
         "wpp-icon-keyboard": WppIconKeyboard;
         "wpp-icon-laptop": WppIconLaptop;
@@ -33908,6 +34431,7 @@ declare namespace LocalJSX {
         "wpp-icon-resize-large": WppIconResizeLarge;
         "wpp-icon-resize-small": WppIconResizeSmall;
         "wpp-icon-restaurant": WppIconRestaurant;
+        "wpp-icon-rewind": WppIconRewind;
         "wpp-icon-rhombus": WppIconRhombus;
         "wpp-icon-rotate": WppIconRotate;
         "wpp-icon-rotate-clockwise": WppIconRotateClockwise;
@@ -34123,6 +34647,7 @@ declare module "@stencil/core" {
             "wpp-accordion": LocalJSX.WppAccordion & JSXBase.HTMLAttributes<HTMLWppAccordionElement>;
             "wpp-action-button": LocalJSX.WppActionButton & JSXBase.HTMLAttributes<HTMLWppActionButtonElement>;
             "wpp-artefact": LocalJSX.WppArtefact & JSXBase.HTMLAttributes<HTMLWppArtefactElement>;
+            "wpp-audio-player": LocalJSX.WppAudioPlayer & JSXBase.HTMLAttributes<HTMLWppAudioPlayerElement>;
             "wpp-autocomplete": LocalJSX.WppAutocomplete & JSXBase.HTMLAttributes<HTMLWppAutocompleteElement>;
             "wpp-avatar": LocalJSX.WppAvatar & JSXBase.HTMLAttributes<HTMLWppAvatarElement>;
             "wpp-avatar-group": LocalJSX.WppAvatarGroup & JSXBase.HTMLAttributes<HTMLWppAvatarGroupElement>;
@@ -34363,7 +34888,9 @@ declare module "@stencil/core" {
             "wpp-icon-eye-off": LocalJSX.WppIconEyeOff & JSXBase.HTMLAttributes<HTMLWppIconEyeOffElement>;
             "wpp-icon-eye-on": LocalJSX.WppIconEyeOn & JSXBase.HTMLAttributes<HTMLWppIconEyeOnElement>;
             "wpp-icon-eyedropper": LocalJSX.WppIconEyedropper & JSXBase.HTMLAttributes<HTMLWppIconEyedropperElement>;
+            "wpp-icon-facebook": LocalJSX.WppIconFacebook & JSXBase.HTMLAttributes<HTMLWppIconFacebookElement>;
             "wpp-icon-factory": LocalJSX.WppIconFactory & JSXBase.HTMLAttributes<HTMLWppIconFactoryElement>;
+            "wpp-icon-fast-forward": LocalJSX.WppIconFastForward & JSXBase.HTMLAttributes<HTMLWppIconFastForwardElement>;
             "wpp-icon-favourites": LocalJSX.WppIconFavourites & JSXBase.HTMLAttributes<HTMLWppIconFavouritesElement>;
             "wpp-icon-favourites-filled": LocalJSX.WppIconFavouritesFilled & JSXBase.HTMLAttributes<HTMLWppIconFavouritesFilledElement>;
             "wpp-icon-file": LocalJSX.WppIconFile & JSXBase.HTMLAttributes<HTMLWppIconFileElement>;
@@ -34430,10 +34957,12 @@ declare module "@stencil/core" {
             "wpp-icon-indent-increase": LocalJSX.WppIconIndentIncrease & JSXBase.HTMLAttributes<HTMLWppIconIndentIncreaseElement>;
             "wpp-icon-info": LocalJSX.WppIconInfo & JSXBase.HTMLAttributes<HTMLWppIconInfoElement>;
             "wpp-icon-info-message": LocalJSX.WppIconInfoMessage & JSXBase.HTMLAttributes<HTMLWppIconInfoMessageElement>;
+            "wpp-icon-instagram": LocalJSX.WppIconInstagram & JSXBase.HTMLAttributes<HTMLWppIconInstagramElement>;
             "wpp-icon-install-update": LocalJSX.WppIconInstallUpdate & JSXBase.HTMLAttributes<HTMLWppIconInstallUpdateElement>;
             "wpp-icon-italic": LocalJSX.WppIconItalic & JSXBase.HTMLAttributes<HTMLWppIconItalicElement>;
             "wpp-icon-java-script": LocalJSX.WppIconJavaScript & JSXBase.HTMLAttributes<HTMLWppIconJavaScriptElement>;
             "wpp-icon-join": LocalJSX.WppIconJoin & JSXBase.HTMLAttributes<HTMLWppIconJoinElement>;
+            "wpp-icon-json": LocalJSX.WppIconJson & JSXBase.HTMLAttributes<HTMLWppIconJsonElement>;
             "wpp-icon-key": LocalJSX.WppIconKey & JSXBase.HTMLAttributes<HTMLWppIconKeyElement>;
             "wpp-icon-keyboard": LocalJSX.WppIconKeyboard & JSXBase.HTMLAttributes<HTMLWppIconKeyboardElement>;
             "wpp-icon-laptop": LocalJSX.WppIconLaptop & JSXBase.HTMLAttributes<HTMLWppIconLaptopElement>;
@@ -34557,6 +35086,7 @@ declare module "@stencil/core" {
             "wpp-icon-resize-large": LocalJSX.WppIconResizeLarge & JSXBase.HTMLAttributes<HTMLWppIconResizeLargeElement>;
             "wpp-icon-resize-small": LocalJSX.WppIconResizeSmall & JSXBase.HTMLAttributes<HTMLWppIconResizeSmallElement>;
             "wpp-icon-restaurant": LocalJSX.WppIconRestaurant & JSXBase.HTMLAttributes<HTMLWppIconRestaurantElement>;
+            "wpp-icon-rewind": LocalJSX.WppIconRewind & JSXBase.HTMLAttributes<HTMLWppIconRewindElement>;
             "wpp-icon-rhombus": LocalJSX.WppIconRhombus & JSXBase.HTMLAttributes<HTMLWppIconRhombusElement>;
             "wpp-icon-rotate": LocalJSX.WppIconRotate & JSXBase.HTMLAttributes<HTMLWppIconRotateElement>;
             "wpp-icon-rotate-clockwise": LocalJSX.WppIconRotateClockwise & JSXBase.HTMLAttributes<HTMLWppIconRotateClockwiseElement>;

@@ -40,7 +40,7 @@ const loadingTotalSizeValue = [
   },
 ];
 export const FileUpload = {
-  render: args => html ` <wpp-file-upload-v4-4-0
+  render: args => html ` <wpp-file-upload-v4-5-0
       .disabled=${args.disabled}
       .acceptConfig=${args.acceptConfig}
       .size=${args.size}
@@ -84,11 +84,57 @@ export const FileUpload = {
 };
 export const LoadingTotalSize = {
   render: () => html `
-    <wpp-file-upload-v4-4-0
+    <wpp-file-upload-v4-5-0
       name="loading-total-size"
       .value=${loadingTotalSizeValue}
       .controlled=${true}
-    ></wpp-file-upload-v4-4-0>
+    ></wpp-file-upload-v4-5-0>
+  `,
+};
+const backendProcessingValue = [
+  {
+    url: 'https://fake-url/quarterly-report.pdf',
+    name: 'quarterly-report.pdf',
+    size: 482311,
+    type: 'application/pdf',
+    status: 'uploading',
+  },
+  {
+    url: 'https://fake-url/brand-logo.png',
+    name: 'brand-logo.png',
+    size: 91204,
+    type: 'image/png',
+    status: 'uploading',
+    progress: 42,
+  },
+  {
+    url: 'https://fake-url/audience-data.csv',
+    name: 'audience-data.csv',
+    size: 1204882,
+    type: 'text/csv',
+    status: 'done',
+  },
+  {
+    url: 'https://fake-url/infected.zip',
+    name: 'infected.zip',
+    size: 88120,
+    type: 'application/zip',
+    status: 'error',
+    processingError: 'Infected file',
+  },
+];
+/**
+ * The four states a file can be in while a backend processes it. A file that has not
+ * reported progress yet reads 0% rather than hiding the percentage.
+ */
+export const BackendProcessing = {
+  render: () => html `
+    <wpp-file-upload-v4-5-0
+      name="backend-processing"
+      .value=${backendProcessingValue}
+      .controlled=${true}
+      .labelConfig=${{ text: 'Driven by a backend pipeline' }}
+    ></wpp-file-upload-v4-5-0>
   `,
 };
 export const ControlledReset = {
@@ -104,7 +150,7 @@ export const ControlledReset = {
     const getFileUpload = () => document.getElementById(fileUploadId);
     return html `
       <div style="display: flex; flex-direction: column; gap: 12px; width: 320px;">
-        <wpp-file-upload-v4-4-0
+        <wpp-file-upload-v4-5-0
           id=${fileUploadId}
           controlled
           .value=${controlledValue}
@@ -121,14 +167,36 @@ export const ControlledReset = {
     }}
         />
         <div style="display: flex; gap: 8px;">
-          <wpp-button-v4-4-0 @click=${() => updateControlledValue(getFileUpload(), [])}>
+          <wpp-button-v4-5-0 @click=${() => updateControlledValue(getFileUpload(), [])}>
             Reset controlled value
-          </wpp-button-v4-4-0>
-          <wpp-button-v4-4-0 @click=${() => updateControlledValue(getFileUpload(), getControlledResetValue())}>
+          </wpp-button-v4-5-0>
+          <wpp-button-v4-5-0 @click=${() => updateControlledValue(getFileUpload(), getControlledResetValue())}>
             Restore controlled value
-          </wpp-button-v4-4-0>
+          </wpp-button-v4-5-0>
         </div>
       </div>
     `;
+  },
+};
+export const WildcardAcceptConfig = {
+  name: 'Wildcard accept config',
+  render: args => html `<wpp-file-upload-v4-5-0
+      .acceptConfig=${args.acceptConfig}
+      .size=${args.size}
+      .maxFiles=${args.maxFiles}
+      .multiple=${args.multiple}
+      .labelConfig=${args.labelConfig}
+      .locales=${args.locales}
+      @wppChange="${(e) => console.log('wppChange', e.detail)}"
+    ></wpp-file-upload-v4-5-0>`,
+  args: {
+    acceptConfig: {
+      'image/*': [],
+      'application/pdf': ['.pdf'],
+    },
+    size: 5,
+    maxFiles: 0,
+    multiple: true,
+    labelConfig: { text: 'Any image, or a PDF' },
   },
 };

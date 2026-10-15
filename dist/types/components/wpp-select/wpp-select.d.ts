@@ -36,6 +36,7 @@ export declare class WppSelect implements BaseComponent, BaseFormControl<SelectV
   anchorButton: boolean;
   shouldShowSearch: boolean;
   focusType: FOCUS_TYPE;
+  isLabelHovered: boolean;
   isRenderMessageInTooltip: boolean;
   isDarkTheme?: boolean;
   withScroll: boolean;

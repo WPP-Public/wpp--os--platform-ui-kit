@@ -845,6 +845,7 @@
 .wpp-autocomplete-dropdown .header-wrapper.overflow.visible .show-more-action {
   position: relative;
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
 }
 .wpp-autocomplete-dropdown .header-wrapper:not(.overflow, .visible) .selected-pills-wrapper.not-empty {
@@ -854,6 +855,7 @@
   padding-left: 8px;
   position: absolute;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
 }
 .wpp-autocomplete-dropdown .show-less-action {
@@ -888,6 +890,7 @@
 }
 .wpp-autocomplete-dropdown-list .wpp-list-item {
   width: 100%;
+  scroll-margin-block: 4px;
 }
 .wpp-autocomplete-dropdown-list .suggestion-heading {
   margin-left: 8px;
@@ -2018,6 +2021,17 @@
 }
 
 /* wpp-popover */
+.wpp-popover-focus-scope {
+  display: contents;
+}
+
+.wpp-popover-focus-sentinel {
+  position: fixed;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
 .wpp-popover-content {
   display: inline-flex;
   width: 100%;
@@ -2027,7 +2041,11 @@
   border-radius: var(--wpp-border-radius-s);
   scrollbar-width: thin;
   position: relative;
-  overflow: hidden;
+}
+.wpp-popover-content:focus-visible {
+  border-radius: "";
+  outline: none;
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
 }
 .wpp-popover-content .cross-button {
   position: absolute;
@@ -2081,12 +2099,14 @@
   background: var(--wpp-grey-color-800);
 }
 
-.wpp-model-dropdown {
+.wpp-model-dropdown,
+.wpp-model-options-dropdown {
   gap: 4px;
   display: flex;
   flex-direction: column;
 }
-.wpp-model-dropdown .wpp-divider {
+.wpp-model-dropdown .wpp-divider,
+.wpp-model-options-dropdown .wpp-divider {
   margin: 4px 0;
 }
 

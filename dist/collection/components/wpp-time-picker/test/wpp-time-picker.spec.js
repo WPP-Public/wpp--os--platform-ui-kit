@@ -43,6 +43,35 @@ describe('wpp-time-picker', () => {
     await page.waitForChanges();
     expect(page.root).toMatchSnapshot();
   });
+  it('applies the anchor hover state while its label is hovered', async () => {
+    const page = await newSpecPage({
+      components: [WppTimePicker],
+      html: `<wpp-time-picker></wpp-time-picker>`,
+    });
+    page.root.labelConfig = { text: 'Start time' };
+    await page.waitForChanges();
+    const label = page.root?.shadowRoot?.querySelector('wpp-label');
+    const anchor = page.root?.shadowRoot?.querySelector('#anchor');
+    label.dispatchEvent(new MouseEvent('mouseenter'));
+    await page.waitForChanges();
+    expect(anchor).toHaveClass('label-hovered');
+    label.dispatchEvent(new MouseEvent('mouseleave'));
+    await page.waitForChanges();
+    expect(anchor).not.toHaveClass('label-hovered');
+  });
+  it('does not apply the anchor hover state from a disabled label', async () => {
+    const page = await newSpecPage({
+      components: [WppTimePicker],
+      html: `<wpp-time-picker disabled></wpp-time-picker>`,
+    });
+    page.root.labelConfig = { text: 'Start time' };
+    await page.waitForChanges();
+    const label = page.root?.shadowRoot?.querySelector('wpp-label');
+    const anchor = page.root?.shadowRoot?.querySelector('#anchor');
+    label.dispatchEvent(new MouseEvent('mouseenter'));
+    await page.waitForChanges();
+    expect(anchor).not.toHaveClass('label-hovered');
+  });
 });
 describe('wpp-time-picker full function & branch coverage', () => {
   let page;

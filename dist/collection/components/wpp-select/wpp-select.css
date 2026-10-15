@@ -12,9 +12,6 @@
   display: inline-flex;
   margin-bottom: 8px;
 }
-:host .wpp-label.disabled .internal-label-wrapper:hover {
-  cursor: not-allowed;
-}
 :host > .wpp-tooltip {
   width: 100%;
 }
@@ -130,16 +127,16 @@
 :host .anchor.opened {
   border-color: var(--wpp-grey-color-800);
 }
-:host .anchor:hover {
+:host .anchor:hover, :host .anchor.label-hovered {
   cursor: pointer;
   background-color: var(--wpp-grey-color-200);
   border-color: var(--wpp-grey-color-700);
   --wpp-icon-color: var(--wpp-grey-color-800);
 }
-:host .anchor:hover .input {
+:host .anchor:hover .input, :host .anchor.label-hovered .input {
   background-color: var(--wpp-grey-color-200);
 }
-:host .anchor:hover .overflow-container {
+:host .anchor:hover .overflow-container, :host .anchor.label-hovered .overflow-container {
   background-color: var(--wpp-grey-color-200);
 }
 :host .anchor:active {
@@ -399,26 +396,35 @@
   padding: 4px 10px 4px 12px;
 }
 :host(.wpp-combined-select) .inputs-container .wpp-input {
+  box-sizing: border-box;
+  height: 40px;
   border: 1px solid var(--wpp-grey-color-500);
   border-radius: 0 var(--wpp-border-radius-m) var(--wpp-border-radius-m) 0;
   border-left: none;
   width: 100%;
 }
+:host(.wpp-combined-select) .inputs-container .wpp-input.wpp-size-s {
+  height: 32px;
+}
+:host(.wpp-combined-select) .inputs-container .wpp-input::part(body), :host(.wpp-combined-select) .inputs-container .wpp-input::part(anchor), :host(.wpp-combined-select) .inputs-container .wpp-input::part(input) {
+  height: 100%;
+}
 :host(.wpp-combined-select) .inputs-container .wpp-input::part(input) {
   border: none;
 }
-:host(.wpp-combined-select) .inputs-container:hover {
+:host(.wpp-combined-select) .inputs-container:hover, :host(.wpp-combined-select) .inputs-container.label-hovered {
   background-color: var(--wpp-grey-color-200);
 }
-:host(.wpp-combined-select) .inputs-container:hover .overflow-container {
+:host(.wpp-combined-select) .inputs-container:hover .overflow-container, :host(.wpp-combined-select) .inputs-container.label-hovered .overflow-container {
   background-color: var(--wpp-grey-color-200);
 }
 :host(.wpp-combined-select) .inputs-container:hover .anchor,
-:host(.wpp-combined-select) .inputs-container:hover .wpp-input {
+:host(.wpp-combined-select) .inputs-container:hover .wpp-input, :host(.wpp-combined-select) .inputs-container.label-hovered .anchor,
+:host(.wpp-combined-select) .inputs-container.label-hovered .wpp-input {
   background-color: var(--wpp-grey-color-200);
   border: 1px solid var(--wpp-grey-color-700);
 }
-:host(.wpp-combined-select) .inputs-container:hover .wpp-input {
+:host(.wpp-combined-select) .inputs-container:hover .wpp-input, :host(.wpp-combined-select) .inputs-container.label-hovered .wpp-input {
   border-left: none;
 }
 :host(.wpp-combined-select) .inputs-container.is-active {

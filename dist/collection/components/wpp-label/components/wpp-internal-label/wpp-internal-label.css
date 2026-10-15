@@ -3,7 +3,6 @@
   * @prop --wpp-label-optional-text-color:
   * @prop --wpp-label-optional-margin:
   * @prop --wpp-label-text-color:
-  * @prop --wpp-label-text-color-disabled:
   * @prop --wpp-label-info-wrapper-margin:
   * @prop --wpp-label-icon-color:
   * @prop --wpp-label-s-strong-text-color:
@@ -14,7 +13,6 @@
   --label-optional-text-color: var(--wpp-label-optional-text-color, var(--wpp-text-color-info));
   --label-optional-margin: var(--wpp-label-optional-margin, 0 0 0 4px);
   --label-text-color: var(--wpp-label-text-color, var(--wpp-grey-color-800));
-  --label-text-color-disabled: var(--wpp-label-text-color-disabled, var(--wpp-text-color-disabled));
   --label-info-wrapper-margin: var(--wpp-label-info-wrapper-margin, 0 4px 0 0);
   --label-icon-color: var(--wpp-label-icon-color, var(--wpp-icon-color));
   --label-s-strong-text-color: var(--wpp-label-s-strong-text-color, var(--wpp-text-color-info));
@@ -57,10 +55,7 @@
 :host:host(.s-strong) .info-wrapper .text {
   color: var(--label-s-strong-text-color);
 }
-:host:host(.disabled) {
-  pointer-events: none;
-}
-:host:host(.disabled) .info-wrapper .text,
-:host:host(.disabled) .info-wrapper .optional {
-  color: var(--label-text-color-disabled);
+
+:host(.disabled) .info-wrapper {
+  cursor: not-allowed;
 }

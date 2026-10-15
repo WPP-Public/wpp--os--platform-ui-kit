@@ -36,6 +36,20 @@ export declare function getHighestContainerInDOM(): HTMLElement;
 export declare function getOsBarOffsetHeight(): number;
 export declare function mergeLocales<T>(defaults: T, overrides: Partial<T> | undefined): T;
 /**
+ * Returns true when `mime` matches one of the configured patterns.
+ *
+ * A pattern is either an exact type (`image/png`), a family wildcard (`image/…`) or the
+ * match-everything pattern. An empty pattern list means unrestricted.
+ *
+ * A file the browser could not type matches nothing except the match-everything pattern, which
+ * holds precisely because it asks nothing of the file - a screenshot saved without an extension
+ * has no type to offer and is still a file. Every other pattern leaves the decision to the caller.
+ *
+ * Matching is case-insensitive on both sides: browsers are inconsistent about the casing they
+ * report, and a file typed `IMAGE/PNG` is the same file as one typed `image/png`.
+ */
+export declare const isMimeAccepted: (mime: string, patterns: string[]) => boolean;
+/**
  * Width the platform reserves in layout for a scrollbar, in px.
  *
  * Measured against `scrollbar-width: thin` + `scrollbar-gutter: stable`, which is what the modal

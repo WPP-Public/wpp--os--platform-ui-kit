@@ -97,6 +97,14 @@ export class WppPill {
       event.stopPropagation();
       this.wppClose.emit(event);
     };
+    // The remove icon is a `role="button"` control, so it must activate on both Enter and Space
+    // (W3C ARIA APG) — without this, keyboard users can reach the icon but not remove the pill.
+    this.onCloseKeyDown = (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        this.onClose(event);
+      }
+    };
     this.onDragPress = (event) => {
       if (this.disabled)
         return;
@@ -172,7 +180,7 @@ export class WppPill {
       const wasMaxLengthTruncated = !!this.maxLength && this.maxLength > 0 && displayed !== originalLabel;
       const shouldShowTooltip = this.showTooltipOnTruncate && (this.isOverflowTruncated || wasMaxLengthTruncated);
       const labelNode = (h("div", { class: "label", part: "label", ref: this.setLabelRef }, displayed));
-      return shouldShowTooltip ? (h("wpp-tooltip-v4-4-0", { text: originalLabel, disabled: this.disabled }, labelNode)) : (labelNode);
+      return shouldShowTooltip ? (h("wpp-tooltip-v4-5-0", { text: originalLabel, disabled: this.disabled }, labelNode)) : (labelNode);
     };
     this.setLabelRef = (el) => {
       if (el === this.labelRef)
@@ -243,6 +251,20 @@ export class WppPill {
     this.maxLength = undefined;
     this.showTooltipOnTruncate = true;
   }
+  /**
+   * Moves keyboard focus to the pill's remove icon and paints its focus ring.
+   *
+   * The ring is a `tab-focus` class this component only sets from its own Tab keyup, so a parent
+   * that re-homes focus here with a plain `focus()` moves focus invisibly (WCAG 2.4.7). Parents
+   * that take focus off a removed neighbouring pill should call this instead. No-op when the pill
+   * has no remove icon to focus.
+   */
+  async setRemoveIconFocus() {
+    if (!this.crossIconRef)
+      return;
+    this.focusType = this.getUpdatedFocusInfo('icon-close', FOCUS_TYPE.TAB);
+    this.crossIconRef.focus();
+  }
   componentWillLoad() {
     const pillGroup = this.host.closest(transformToVersionedTag('wpp-pill-group'));
     if (pillGroup) {
@@ -261,14 +283,20 @@ export class WppPill {
     }
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-checked": this.checked ? 'true' : 'false', "aria-hidden": this.disabled ? 'true' : null, onClick: this.onClick, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'wrapper'), role: "checkbox", exportparts: "input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper", tabIndex: this.checkTabIndex() }, h("input", { class: "pill-input", type: "checkbox", name: this.name, disabled: this.disabled, ref: focusEl => (this.inputEl = focusEl), "aria-label": this.ariaProps.label, "aria-hidden": "true", part: "input", tabIndex: -1 }), h("div", { class: this.cssClasses(), part: "pill-wrapper" }, this.type === 'draggable' ? (h("div", { class: this.slotCssClasses(), part: "drag-wrapper" }, h("wpp-icon-drag-v4-4-0", { class: { [`${this.focusType['icon-draggable']}`]: true }, part: "drag-icon", onMouseEnter: () => this.updateComponentState('hover'), onMouseLeave: () => this.updateComponentState(null), onMouseDown: ev => {
+    // Display and draggable pills are chips whose only interactive control is the remove (and
+    // drag) icon inside them — the host is not focusable for these types (`checkTabIndex`), so
+    // giving it a `checkbox` widget role both lies to assistive tech and makes every focusable
+    // icon inside a nested interactive (AXE nested-interactive, SC 4.1.2). Only the selectable
+    // types keep the checkbox semantics.
+    const hasCheckboxSemantics = this.type !== 'display' && this.type !== 'draggable';
+    return (h(Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-checked": hasCheckboxSemantics ? (this.checked ? 'true' : 'false') : null, "aria-hidden": this.disabled ? 'true' : null, onClick: this.onClick, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'wrapper'), role: hasCheckboxSemantics ? 'checkbox' : null, exportparts: "input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper", tabIndex: this.checkTabIndex() }, h("input", { class: "pill-input", type: "checkbox", name: this.name, disabled: this.disabled, ref: focusEl => (this.inputEl = focusEl), "aria-label": this.ariaProps.label, "aria-hidden": "true", part: "input", tabIndex: -1 }), h("div", { class: this.cssClasses(), part: "pill-wrapper" }, this.type === 'draggable' ? (h("div", { class: this.slotCssClasses(), part: "drag-wrapper" }, h("wpp-icon-drag-v4-5-0", { class: { [`${this.focusType['icon-draggable']}`]: true }, part: "drag-icon", onMouseEnter: () => this.updateComponentState('hover'), onMouseLeave: () => this.updateComponentState(null), onMouseDown: ev => {
         this.updateComponentState('active');
         this.onDragPress(ev);
         this.onMouseDown();
-      }, onMouseUp: () => this.updateComponentState(null), tabIndex: this.disabled ? -1 : 0, onKeyUp: (event) => this.onKeyUp(event, 'icon-draggable') }))) : (h(WrappedSlot, { name: "icon-start", wrapperClass: this.slotCssClasses(), onSlotchange: this.updateSlotData })), this.renderLabel(), this.checked && this.type === 'multiple' && h("wpp-icon-tick-v4-4-0", { class: "active-icon", part: "active-icon" }), this.removable && (this.type === 'display' || this.type === 'draggable') && (h("wpp-icon-cross-v4-4-0", { class: { [`${this.focusType['icon-close']}`]: true }, part: "remove-icon", onClick: this.onClose, tabIndex: this.disabled ? -1 : 0, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'icon-close') })))));
+      }, onMouseUp: () => this.updateComponentState(null), tabIndex: this.disabled ? -1 : 0, onKeyUp: (event) => this.onKeyUp(event, 'icon-draggable') }))) : (h(WrappedSlot, { name: "icon-start", wrapperClass: this.slotCssClasses(), onSlotchange: this.updateSlotData })), this.renderLabel(), this.checked && this.type === 'multiple' && h("wpp-icon-tick-v4-5-0", { class: "active-icon", part: "active-icon" }), this.removable && (this.type === 'display' || this.type === 'draggable') && (h("wpp-icon-cross-v4-5-0", { ref: ref => (this.crossIconRef = ref), class: { [`${this.focusType['icon-close']}`]: true }, part: "remove-icon", role: "button", "aria-label": `Remove ${this.label ?? ''}`.trim(), onClick: this.onClose, tabIndex: this.disabled ? -1 : 0, onMouseDown: this.onMouseDown, onKeyDown: this.onCloseKeyDown, onKeyUp: (event) => this.onKeyUp(event, 'icon-close') })))));
   }
   static get is() { return "wpp-pill"; }
-  static get registryIs() { return "wpp-pill-v4-4-0"; }
+  static get registryIs() { return "wpp-pill-v4-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -614,6 +642,27 @@ export class WppPill {
           }
         }
       }];
+  }
+  static get methods() {
+    return {
+      "setRemoveIconFocus": {
+        "complexType": {
+          "signature": "() => Promise<void>",
+          "parameters": [],
+          "references": {
+            "Promise": {
+              "location": "global",
+              "id": "global::Promise"
+            }
+          },
+          "return": "Promise<void>"
+        },
+        "docs": {
+          "text": "Moves keyboard focus to the pill's remove icon and paints its focus ring.\n\nThe ring is a `tab-focus` class this component only sets from its own Tab keyup, so a parent\nthat re-homes focus here with a plain `focus()` moves focus invisibly (WCAG 2.4.7). Parents\nthat take focus off a removed neighbouring pill should call this instead. No-op when the pill\nhas no remove icon to focus.",
+          "tags": []
+        }
+      }
+    };
   }
   static get elementRef() { return "host"; }
 }

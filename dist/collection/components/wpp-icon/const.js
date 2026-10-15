@@ -286,7 +286,13 @@ export const iconsList = [
             name: 'previous',
           },
           {
+            name: 'rewind',
+          },
+          {
             name: 'next',
+          },
+          {
+            name: 'fast-forward',
           },
           {
             name: 'record',
@@ -1116,6 +1122,9 @@ export const iconsList = [
             name: 'java-script',
           },
           {
+            name: 'json',
+          },
+          {
             name: 'live',
           },
           {
@@ -1567,6 +1576,22 @@ export const iconsList = [
           },
           {
             name: 'columns-one',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Social',
+    groups: [
+      {
+        title: 'Social',
+        icons: [
+          {
+            name: 'facebook',
+          },
+          {
+            name: 'instagram',
           },
         ],
       },

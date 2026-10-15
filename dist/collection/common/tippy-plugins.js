@@ -20,31 +20,63 @@ export const hideOnEsc = {
     };
   },
 };
+/**
+ * `Node.contains` and `Element.closest` both stop at a shadow boundary, and the deepest node of an
+ * event path is routinely inside one — a press on a `wpp-list-item` lands on an element in its
+ * shadow root. These two climb out through each shadow host so the walk below reaches the light
+ * DOM it is really asking about.
+ */
+const containsAcrossShadowRoots = (ancestor, node) => {
+  let current = node;
+  while (current) {
+    if (ancestor.contains(current))
+      return true;
+    current = current.getRootNode?.()?.host ?? null;
+  }
+  return false;
+};
+const closestAcrossShadowRoots = (node, selector) => {
+  let current = node;
+  while (current) {
+    const match = current.closest?.(selector);
+    if (match)
+      return match;
+    current = current.getRootNode?.()?.host ?? null;
+  }
+  return null;
+};
+/**
+ * Whether `target` is logically inside `popper`, counting the popups `popper` has spawned.
+ *
+ * A nested popup (a submenu) is usually appended to the document root rather than to the popper
+ * that anchors it, so anything happening inside it looks, from the outside, like it happened
+ * elsewhere entirely — tippy's own `getNestedPopperTree` only finds popups that really are DOM
+ * descendants. Walk the popup -> anchor chain instead: if any ancestor popup is anchored inside
+ * `popper`, the node is still within it.
+ */
+export const isWithinPopperTree = (popper, target) => {
+  let current = target;
+  while (current) {
+    if (containsAcrossShadowRoots(popper, current))
+      return true;
+    const popperRoot = closestAcrossShadowRoots(current, '[data-tippy-root]');
+    const reference = popperRoot?._tippy?.reference;
+    if (!reference || reference === current)
+      return false;
+    current = reference;
+  }
+  return false;
+};
 export const hideOnPopperBlur = {
   name: 'hideOnPopperBlur',
   defaultValue: false,
   fn(instance) {
-    // A nested popup (e.g. a submenu) can be appended to the document root
-    // rather than to this popper, so focus moving into it looks like focus
-    // leaving. Walk the popup -> anchor chain: if any ancestor popup is
-    // anchored inside this popper, focus is still logically within it.
-    const containsFocus = (target) => {
-      let current = target;
-      while (current) {
-        if (instance.popper.contains(current))
-          return true;
-        const popperRoot = current.closest?.('[data-tippy-root]');
-        const reference = popperRoot?._tippy?.reference;
-        if (!reference || reference === current)
-          return false;
-        current = reference;
-      }
-      return false;
-    };
     return {
       onCreate() {
         instance.popper.addEventListener('focusout', (event) => {
-          if (instance.props.hideOnPopperBlur && event.relatedTarget && !containsFocus(event.relatedTarget)) {
+          if (instance.props.hideOnPopperBlur &&
+            event.relatedTarget &&
+            !isWithinPopperTree(instance.popper, event.relatedTarget)) {
             instance.hide();
           }
         });

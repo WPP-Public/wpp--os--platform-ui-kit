@@ -17,7 +17,7 @@ export class WppEmptyError {
     return (h(EmptyStateGraphicView, { graphic: this.graphic, name: "wpp-empty-error", width: this.width, height: this.height }));
   }
   static get is() { return "wpp-empty-error"; }
-  static get registryIs() { return "wpp-empty-error-v4-4-0"; }
+  static get registryIs() { return "wpp-empty-error-v4-5-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

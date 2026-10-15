@@ -1,6 +1,7 @@
 import { format } from './utils';
 import { getHighlightData } from './utils';
 import { getOsBarOffsetHeight } from './utils';
+import { isMimeAccepted } from './utils';
 describe('format', () => {
   it('returns empty string for no names defined', () => {
     expect(format(undefined, undefined, undefined)).toEqual('');
@@ -78,5 +79,34 @@ describe('getOsBarOffsetHeight', () => {
   });
   it('returns default 64 when no root container is found', () => {
     expect(getOsBarOffsetHeight()).toBe(64);
+  });
+});
+describe('isMimeAccepted', () => {
+  it('matches an exact type', () => {
+    expect(isMimeAccepted('image/png', ['image/png'])).toBe(true);
+  });
+  it('matches a family wildcard', () => {
+    expect(isMimeAccepted('image/png', ['image/*'])).toBe(true);
+  });
+  it('does not match a different family', () => {
+    expect(isMimeAccepted('image/png', ['video/*'])).toBe(false);
+  });
+  it('ignores casing on the type', () => {
+    expect(isMimeAccepted('IMAGE/PNG', ['image/*'])).toBe(true);
+  });
+  it('ignores casing on the pattern', () => {
+    expect(isMimeAccepted('image/png', ['IMAGE/PNG'])).toBe(true);
+  });
+  it('matches everything for the match-all pattern', () => {
+    expect(isMimeAccepted('image/png', ['*/*'])).toBe(true);
+  });
+  it('treats an empty pattern list as unrestricted', () => {
+    expect(isMimeAccepted('image/png', [])).toBe(true);
+  });
+  it('matches nothing when the file has no type', () => {
+    expect(isMimeAccepted('', ['image/*'])).toBe(false);
+  });
+  it('accepts when any one of several patterns matches', () => {
+    expect(isMimeAccepted('application/pdf', ['image/*', 'application/pdf'])).toBe(true);
   });
 });

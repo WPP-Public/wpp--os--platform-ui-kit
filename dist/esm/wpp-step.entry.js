@@ -1,5 +1,5 @@
-import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-93f63aaa.js';
-import { W as WrappedSlot } from './WrappedSlot-6fa08584.js';
+import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-a0877c3d.js';
+import { W as WrappedSlot } from './WrappedSlot-e91d9cb0.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
 import './theme-observer-b7886d19.js';
 
@@ -49,7 +49,7 @@ const WppStep = class {
     };
     this.renderStep = () => {
       if (!this.isSubStep() && this.completed) {
-        return h("wpp-icon-tick-v4-4-0", { color: "var(--wpp-grey-color-000)" });
+        return h("wpp-icon-tick-v4-5-0", { color: "var(--wpp-grey-color-000)" });
       }
       if (this.isSubStep()) {
         return null;
@@ -111,13 +111,13 @@ const WppStep = class {
     this.renderStepTypeData = () => {
       let icon;
       if (this.error)
-        icon = h("wpp-icon-error-v4-4-0", null);
+        icon = h("wpp-icon-error-v4-5-0", null);
       if (this.warning)
-        icon = h("wpp-icon-warning-v4-4-0", null);
+        icon = h("wpp-icon-warning-v4-5-0", null);
       if (!icon)
         return null;
       if (this.iconDescription) {
-        return (h("wpp-tooltip-v4-4-0", { config: { placement: 'bottom' }, text: this.iconDescription }, icon));
+        return (h("wpp-tooltip-v4-5-0", { config: { placement: 'bottom' }, text: this.iconDescription }, icon));
       }
       return (h("div", { class: "icon", part: "icon" }, icon));
     };
@@ -166,9 +166,9 @@ const WppStep = class {
     this.applyTruncationIfNeeded();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, step, step-bg, step-index, step-label, optional, icon, last-step, last-step-text, label, label-wrapper, ws-wrapper, ws-inner", onClick: this.handleStepClick }, h("div", { class: this.stepWrapperCssClasses(), part: "wrapper" }, this.orientation === 'vertical' && (h("div", { class: this.stepBgCssClasses(), part: "step-bg" }, h("div", { class: this.stepTextWrapperCssClasses(), part: "step-label" }, !this.labelTooltipText ? (h(WrappedSlot, { onSlotchange: this.handleSlotChange, name: "label" })) : (h("wpp-tooltip-v4-4-0", { class: "label-tooltip", config: { placement: 'right' }, text: this.labelTooltipText }, h(WrappedSlot, { onSlotchange: this.handleSlotChange, wrapperClass: 'label-wrapper', name: "label" }))), this.tooltipText ? (h("div", { class: "step-description" }, h("wpp-tooltip-v4-4-0", { class: "description-tooltip", config: { placement: 'right' }, text: this.tooltipText }, h(WrappedSlot, { onSlotchange: this.handleSlotChange, name: "description" })))) : (h("div", { class: "step-description" }, h("slot", { onSlotchange: this.handleSlotChange, name: "description" })))), this.renderStepTypeData())), h("div", { class: this.stepCssClasses(), part: "step" }, h("span", { class: this.stepIndexCssClasses(), part: "step-index" }, this.renderStep()), this.orientation === 'horizontal' && (h("div", { class: this.stepTextWrapperCssClasses(), part: "step-label" }, h(WrappedSlot, { name: "label" }), this.renderStepTypeData()))), !this.lastStep && (h("div", { class: this.stepConnectorCssClasses(), part: "last-step" }, h("span", { class: this.connectorLineCssClasses(), part: "last-step-text" })))), h(WrappedSlot, { wrapperClass: "steps-list-container" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, step, step-bg, step-index, step-label, optional, icon, last-step, last-step-text, label, label-wrapper, ws-wrapper, ws-inner", onClick: this.handleStepClick }, h("div", { class: this.stepWrapperCssClasses(), part: "wrapper" }, this.orientation === 'vertical' && (h("div", { class: this.stepBgCssClasses(), part: "step-bg" }, h("div", { class: this.stepTextWrapperCssClasses(), part: "step-label" }, !this.labelTooltipText ? (h(WrappedSlot, { onSlotchange: this.handleSlotChange, name: "label" })) : (h("wpp-tooltip-v4-5-0", { class: "label-tooltip", config: { placement: 'right' }, text: this.labelTooltipText }, h(WrappedSlot, { onSlotchange: this.handleSlotChange, wrapperClass: 'label-wrapper', name: "label" }))), this.tooltipText ? (h("div", { class: "step-description" }, h("wpp-tooltip-v4-5-0", { class: "description-tooltip", config: { placement: 'right' }, text: this.tooltipText }, h(WrappedSlot, { onSlotchange: this.handleSlotChange, name: "description" })))) : (h("div", { class: "step-description" }, h("slot", { onSlotchange: this.handleSlotChange, name: "description" })))), this.renderStepTypeData())), h("div", { class: this.stepCssClasses(), part: "step" }, h("span", { class: this.stepIndexCssClasses(), part: "step-index" }, this.renderStep()), this.orientation === 'horizontal' && (h("div", { class: this.stepTextWrapperCssClasses(), part: "step-label" }, h(WrappedSlot, { name: "label" }), this.renderStepTypeData()))), !this.lastStep && (h("div", { class: this.stepConnectorCssClasses(), part: "last-step" }, h("span", { class: this.connectorLineCssClasses(), part: "last-step-text" })))), h(WrappedSlot, { wrapperClass: "steps-list-container" })));
   }
-  static get registryIs() { return "wpp-step-v4-4-0"; }
+  static get registryIs() { return "wpp-step-v4-5-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "warning": ["watchErrorIcon"],

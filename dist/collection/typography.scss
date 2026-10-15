@@ -276,3 +276,15 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+// Multi-line counterpart of `truncate`: wraps the text and clamps it to `$lines` lines, ending with an ellipsis.
+@mixin lineClamp($lines) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $lines;
+  line-clamp: $lines;
+  overflow: hidden;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
