@@ -185,7 +185,7 @@ const WppPill = /*@__PURE__*/ proxyCustomElement(class WppPill extends HTMLEleme
       const wasMaxLengthTruncated = !!this.maxLength && this.maxLength > 0 && displayed !== originalLabel;
       const shouldShowTooltip = this.showTooltipOnTruncate && (this.isOverflowTruncated || wasMaxLengthTruncated);
       const labelNode = (h("div", { class: "label", part: "label", ref: this.setLabelRef }, displayed));
-      return shouldShowTooltip ? (h("wpp-tooltip-v4-5-0", { text: originalLabel, disabled: this.disabled }, labelNode)) : (labelNode);
+      return shouldShowTooltip ? (h("wpp-tooltip-v4-6-0", { text: originalLabel, disabled: this.disabled }, labelNode)) : (labelNode);
     };
     this.setLabelRef = (el) => {
       if (el === this.labelRef)
@@ -294,16 +294,16 @@ const WppPill = /*@__PURE__*/ proxyCustomElement(class WppPill extends HTMLEleme
     // icon inside a nested interactive (AXE nested-interactive, SC 4.1.2). Only the selectable
     // types keep the checkbox semantics.
     const hasCheckboxSemantics = this.type !== 'display' && this.type !== 'draggable';
-    return (h(Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-checked": hasCheckboxSemantics ? (this.checked ? 'true' : 'false') : null, "aria-hidden": this.disabled ? 'true' : null, onClick: this.onClick, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'wrapper'), role: hasCheckboxSemantics ? 'checkbox' : null, exportparts: "input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper", tabIndex: this.checkTabIndex() }, h("input", { class: "pill-input", type: "checkbox", name: this.name, disabled: this.disabled, ref: focusEl => (this.inputEl = focusEl), "aria-label": this.ariaProps.label, "aria-hidden": "true", part: "input", tabIndex: -1 }), h("div", { class: this.cssClasses(), part: "pill-wrapper" }, this.type === 'draggable' ? (h("div", { class: this.slotCssClasses(), part: "drag-wrapper" }, h("wpp-icon-drag-v4-5-0", { class: { [`${this.focusType['icon-draggable']}`]: true }, part: "drag-icon", onMouseEnter: () => this.updateComponentState('hover'), onMouseLeave: () => this.updateComponentState(null), onMouseDown: ev => {
+    return (h(Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-checked": hasCheckboxSemantics ? (this.checked ? 'true' : 'false') : null, "aria-hidden": this.disabled ? 'true' : null, onClick: this.onClick, onFocus: this.onFocus, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: (event) => this.onKeyUp(event, 'wrapper'), role: hasCheckboxSemantics ? 'checkbox' : null, exportparts: "input, pill-wrapper, drag-wrapper, drag-icon, label, inner, active-icon, remove-icon, icon-start, icon-start-wrapper", tabIndex: this.checkTabIndex() }, h("input", { class: "pill-input", type: "checkbox", name: this.name, disabled: this.disabled, ref: focusEl => (this.inputEl = focusEl), "aria-label": this.ariaProps.label, "aria-hidden": "true", part: "input", tabIndex: -1 }), h("div", { class: this.cssClasses(), part: "pill-wrapper" }, this.type === 'draggable' ? (h("div", { class: this.slotCssClasses(), part: "drag-wrapper" }, h("wpp-icon-drag-v4-6-0", { class: { [`${this.focusType['icon-draggable']}`]: true }, part: "drag-icon", onMouseEnter: () => this.updateComponentState('hover'), onMouseLeave: () => this.updateComponentState(null), onMouseDown: ev => {
         this.updateComponentState('active');
         this.onDragPress(ev);
         this.onMouseDown();
-      }, onMouseUp: () => this.updateComponentState(null), tabIndex: this.disabled ? -1 : 0, onKeyUp: (event) => this.onKeyUp(event, 'icon-draggable') }))) : (h(WrappedSlot, { name: "icon-start", wrapperClass: this.slotCssClasses(), onSlotchange: this.updateSlotData })), this.renderLabel(), this.checked && this.type === 'multiple' && h("wpp-icon-tick-v4-5-0", { class: "active-icon", part: "active-icon" }), this.removable && (this.type === 'display' || this.type === 'draggable') && (h("wpp-icon-cross-v4-5-0", { ref: ref => (this.crossIconRef = ref), class: { [`${this.focusType['icon-close']}`]: true }, part: "remove-icon", role: "button", "aria-label": `Remove ${this.label ?? ''}`.trim(), onClick: this.onClose, tabIndex: this.disabled ? -1 : 0, onMouseDown: this.onMouseDown, onKeyDown: this.onCloseKeyDown, onKeyUp: (event) => this.onKeyUp(event, 'icon-close') })))));
+      }, onMouseUp: () => this.updateComponentState(null), tabIndex: this.disabled ? -1 : 0, onKeyUp: (event) => this.onKeyUp(event, 'icon-draggable') }))) : (h(WrappedSlot, { name: "icon-start", wrapperClass: this.slotCssClasses(), onSlotchange: this.updateSlotData })), this.renderLabel(), this.checked && this.type === 'multiple' && h("wpp-icon-tick-v4-6-0", { class: "active-icon", part: "active-icon" }), this.removable && (this.type === 'display' || this.type === 'draggable') && (h("wpp-icon-cross-v4-6-0", { ref: ref => (this.crossIconRef = ref), class: { [`${this.focusType['icon-close']}`]: true }, part: "remove-icon", role: "button", "aria-label": `Remove ${this.label ?? ''}`.trim(), onClick: this.onClose, tabIndex: this.disabled ? -1 : 0, onMouseDown: this.onMouseDown, onKeyDown: this.onCloseKeyDown, onKeyUp: (event) => this.onKeyUp(event, 'icon-close') })))));
   }
-  static get registryIs() { return "wpp-pill-v4-5-0"; }
+  static get registryIs() { return "wpp-pill-v4-6-0"; }
   get host() { return this; }
   static get style() { return wppPillCss; }
-}, [1, "wpp-pill", "wpp-pill-v4-5-0", {
+}, [1, "wpp-pill", "wpp-pill-v4-6-0", {
     "value": [520],
     "size": [1],
     "type": [1025],
@@ -326,44 +326,44 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-pill-v4-5-0", "wpp-icon-cross-v4-5-0", "wpp-icon-drag-v4-5-0", "wpp-icon-error-v4-5-0", "wpp-icon-tick-v4-5-0", "wpp-icon-warning-v4-5-0", "wpp-internal-tooltip-v4-5-0", "wpp-tooltip-v4-5-0"];
+  const components = ["wpp-pill-v4-6-0", "wpp-icon-cross-v4-6-0", "wpp-icon-drag-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-tick-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-tooltip-v4-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-pill-v4-5-0":
+    case "wpp-pill-v4-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppPill);
       }
       break;
-    case "wpp-icon-cross-v4-5-0":
+    case "wpp-icon-cross-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-drag-v4-5-0":
+    case "wpp-icon-drag-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-icon-error-v4-5-0":
+    case "wpp-icon-error-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-tick-v4-5-0":
+    case "wpp-icon-tick-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-icon-warning-v4-5-0":
+    case "wpp-icon-warning-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-internal-tooltip-v4-5-0":
+    case "wpp-internal-tooltip-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-tooltip-v4-5-0":
+    case "wpp-tooltip-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

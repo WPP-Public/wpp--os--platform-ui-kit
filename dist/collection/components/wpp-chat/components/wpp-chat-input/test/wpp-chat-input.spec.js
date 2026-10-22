@@ -287,21 +287,21 @@ describe('wpp-chat-input', () => {
     it('Testing that it returns false when component is disabled', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
-        template: () => h("wpp-chat-input-v4-5-0", { disabled: true }),
+        template: () => h("wpp-chat-input-v4-6-0", { disabled: true }),
       });
       expect(page.rootInstance.shouldDisplaySend()).toBe(false);
     });
     it('Testing that it returns true when component is generating and not disabled', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
-        template: () => h("wpp-chat-input-v4-5-0", { disabled: false, isGenerating: true }),
+        template: () => h("wpp-chat-input-v4-6-0", { disabled: false, isGenerating: true }),
       });
       expect(page.rootInstance.shouldDisplaySend()).toBe(true);
     });
     it('Testing that it returns true when component is audio recording with a value and not disabled', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
-        template: () => h("wpp-chat-input-v4-5-0", { disabled: false }),
+        template: () => h("wpp-chat-input-v4-6-0", { disabled: false }),
       });
       page.rootInstance.internalValue = 'Testing';
       page.rootInstance.isAudioRecording = true;
@@ -821,7 +821,7 @@ describe('wpp-chat-input', () => {
       const mountWithModel = async (model, extraProps = {}) => {
         const page = await newSpecPage({
           components: [WppChatInput],
-          template: () => h("wpp-chat-input-v4-5-0", { selectedModel: model, ...extraProps }),
+          template: () => h("wpp-chat-input-v4-6-0", { selectedModel: model, ...extraProps }),
         });
         await page.waitForChanges();
         return page;

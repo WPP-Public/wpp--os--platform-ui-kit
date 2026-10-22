@@ -4,10 +4,10 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
 const marked_umd = require('./marked.umd-e1074c94.js');
-const utils = require('./utils-a237e765.js');
+const utils = require('./utils-a3ab9816.js');
 const _commonjsHelpers = require('./_commonjsHelpers-bcc1208a.js');
-const utils$1 = require('./utils-648e2fcf.js');
-const utils$2 = require('./utils-5c55ab23.js');
+const utils$1 = require('./utils-32f91d4c.js');
+const utils$2 = require('./utils-76c38b27.js');
 const WrappedSlot = require('./WrappedSlot-669e1c73.js');
 const consts = require('./consts-d8f5ef98.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
@@ -2827,10 +2827,10 @@ const renderImageNode = (role, data, className) => {
         const wrap = e.target.closest('.chat-image-error-wrap');
         wrap?.classList.add('chat-image-broken');
       } }),
-    index.h("wpp-icon-image-v4-5-0", { role: "presentation", "aria-hidden": "true" })));
+    index.h("wpp-icon-image-v4-6-0", { role: "presentation", "aria-hidden": "true" })));
   return data.linkHref ? (index.h("a", { href: data.linkHref, target: "_blank", rel: "noopener noreferrer", class: "chat-image-link" }, img)) : role === 'assistant' ? (index.h(index.Fragment, null,
-    index.h("wpp-action-button-v4-5-0", { class: "image-download-button", variant: "secondary", onClick: () => handleDownload(data.href, data.alt) },
-      index.h("wpp-icon-download-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })),
+    index.h("wpp-action-button-v4-6-0", { class: "image-download-button", variant: "secondary", onClick: () => handleDownload(data.href, data.alt) },
+      index.h("wpp-icon-download-v4-6-0", { slot: "icon-start", "aria-hidden": "true" })),
     img)) : (img);
 };
 const renderToken = (token, role = 'user') => {
@@ -2841,16 +2841,16 @@ const renderToken = (token, role = 'user') => {
       const headingTypes = ['2xl-heading', 'xl-heading', 'l-body', 'm-body', 's-body', 'xs-body'];
       const type = headingTypes[token.depth - 1] || 's-body';
       const tag = `h${token.depth}`;
-      return (index.h("wpp-typography-v4-5-0", { type: type, tag: tag }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
+      return (index.h("wpp-typography-v4-6-0", { type: type, tag: tag }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
     }
     case 'del':
       return index.h("del", null, token.tokens?.map(t => renderToken(t)));
     case 'paragraph':
-      return (index.h("wpp-typography-v4-5-0", { type: "s-body", tag: "p" }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
+      return (index.h("wpp-typography-v4-6-0", { type: "s-body", tag: "p" }, token.tokens ? token.tokens.map(t => renderToken(t)) : token.text));
     case 'blockquote':
       return index.h("blockquote", { class: "chat-quote" }, token.tokens?.map(t => renderToken(t)));
     case 'strong':
-      return (index.h("wpp-typography-v4-5-0", { type: "s-strong", tag: "span" }, token.tokens?.map(t => renderToken(t))));
+      return (index.h("wpp-typography-v4-6-0", { type: "s-strong", tag: "span" }, token.tokens?.map(t => renderToken(t))));
     case 'em':
       return index.h("em", null, token.tokens?.map(t => renderToken(t)));
     case 'codespan':
@@ -2859,7 +2859,7 @@ const renderToken = (token, role = 'user') => {
       return (index.h("pre", { class: "code-block" },
         index.h("div", { class: "code-lang" },
           index.h("span", null, token.lang || 'plaintext'),
-          index.h("wpp-icon-copy-v4-5-0", { class: "code-block-copy-icon", size: "s", color: "var(--wpp-grey-color-600)", onClick: () => {
+          index.h("wpp-icon-copy-v4-6-0", { class: "code-block-copy-icon", size: "s", color: "var(--wpp-grey-color-600)", onClick: () => {
               navigator.clipboard.writeText(token.text);
             } })),
         index.h("code", null, token.text)));
@@ -2876,8 +2876,8 @@ const renderToken = (token, role = 'user') => {
       const nestedLists = token.tokens?.filter(t => t.type === 'list') || [];
       const inlineContent = token.tokens?.filter(t => t.type !== 'list') || [];
       return (index.h("li", { class: `chat-list-item ${token.task ? `chat-list-item-task ${token.checked ? 'chat-list-item-task-checked' : ''}` : ''}` },
-        token.task && index.h("wpp-icon-tick-v4-5-0", null),
-        inlineContent.length > 0 && (index.h("wpp-typography-v4-5-0", { type: "s-body" }, inlineContent.map(t => renderToken(t)))),
+        token.task && index.h("wpp-icon-tick-v4-6-0", null),
+        inlineContent.length > 0 && (index.h("wpp-typography-v4-6-0", { type: "s-body" }, inlineContent.map(t => renderToken(t)))),
         nestedLists.map(t => renderToken(t))));
     }
     case 'table': {
@@ -2885,13 +2885,13 @@ const renderToken = (token, role = 'user') => {
         index.h("table", { class: "chat-table" },
           index.h("thead", null,
             index.h("tr", null, token.header.map((cell, i) => (index.h("th", { key: i },
-              index.h("wpp-typography-v4-5-0", { type: "s-strong" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))),
+              index.h("wpp-typography-v4-6-0", { type: "s-strong" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))),
           index.h("tbody", null, token.rows.map((row, r) => (index.h("tr", { key: r }, row.map((cell, c) => (index.h("td", { key: c },
-            index.h("wpp-typography-v4-5-0", { type: "s-body" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))))))));
+            index.h("wpp-typography-v4-6-0", { type: "s-body" }, cell.tokens?.map((t) => renderToken(t)) ?? cell.text)))))))))));
     }
     case 'link':
       if (token.title) {
-        return (index.h("wpp-tooltip-v4-5-0", { text: token.title },
+        return (index.h("wpp-tooltip-v4-6-0", { text: token.title },
           index.h("a", { href: token.href, target: "_blank", rel: "noopener noreferrer", class: "chat-link" }, token.tokens?.length ? token.tokens.map((t) => renderToken(t)) : token.text)));
       }
       return (index.h("a", { href: token.href, target: "_blank", rel: "noopener noreferrer", title: token.title, class: "chat-link" }, token.tokens?.length ? token.tokens.map((t) => renderToken(t)) : token.text));
@@ -2912,7 +2912,7 @@ const renderToken = (token, role = 'user') => {
         index.h("div", { class: "chat-image-grid-row" }, rest.map((data, i) => (index.h("div", { key: i, class: "chat-image-grid-item chat-image-error-wrap" }, renderImageNode(role, data)))))));
     }
     case 'hr':
-      return index.h("wpp-divider-v4-5-0", null);
+      return index.h("wpp-divider-v4-6-0", null);
     case 'text':
       return token.tokens
         ? token.tokens.flatMap(t => renderToken(t)).filter((t) => t !== null)
@@ -2922,7 +2922,7 @@ const renderToken = (token, role = 'user') => {
       // Intentionally ignore raw HTML from LLM output for security
       return null;
     default:
-      return 'text' in token ? index.h("wpp-typography-v4-5-0", { type: "s-body" }, token.text) : null;
+      return 'text' in token ? index.h("wpp-typography-v4-6-0", { type: "s-body" }, token.text) : null;
   }
 };
 
@@ -2965,14 +2965,14 @@ const WppChatConversationMessage = class {
       const label = isCopyConfirmed ? this._locales.copiedAction : (isActive && action.activeLabel) || action.label;
       if (!icon)
         return null;
-      return (index.h("wpp-tooltip-v4-5-0", { key: action.id, text: label, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-5-0", { variant: "secondary", disabled: action.disabled, loading: action.loading,
+      return (index.h("wpp-tooltip-v4-6-0", { key: action.id, text: label, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-6-0", { variant: "secondary", disabled: action.disabled, loading: action.loading,
         // The derived label and toggle state come first so a dev override wins, while the
         // config-only fields (icon, text, isActive, …) are never spread onto the element.
         ariaProps: { label, ...(isToggle ? { pressed: isActive } : {}), ...action.ariaProps }, onClick: () => this.handleActionClick(action) }, index.h(utils.transformToVersionedTag(icon), { slot: 'icon-start', part: 'icon' }))));
     };
     this.renderMenuContextListItems = () => (index.h(index.Fragment, null, this.menuContextListItems.map(item => {
       const { label, slots, ...rest } = item;
-      return (index.h("wpp-list-item-v4-5-0", { ...rest, id: item.id !== undefined ? `${utils$1.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, index.h("span", { slot: "label" }, label), slots && utils$1.renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+      return (index.h("wpp-list-item-v4-6-0", { ...rest, id: item.id !== undefined ? `${utils$1.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, index.h("span", { slot: "label" }, label), slots && utils$1.renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
     })));
     this.hostCssClasses = () => ({
       'wpp-chat-conversation': true,
@@ -3226,14 +3226,14 @@ const WppChatConversationMessage = class {
   renderComplete() {
     const tokens = getMarkdownTokens(this.finalContent);
     if (!Array.isArray(tokens)) {
-      return (index.h("wpp-typography-v4-5-0", { type: "s-body", tag: "p" }, purify.sanitize(this.finalContent)));
+      return (index.h("wpp-typography-v4-6-0", { type: "s-body", tag: "p" }, purify.sanitize(this.finalContent)));
     }
     return index.h("div", { class: "message-text" }, tokens.map((token) => renderToken(token, this.resolvedRole)));
   }
   renderAttachments() {
     if (!this.attachments || this.attachments.length === 0)
       return null;
-    return (index.h("div", { class: "attachments", part: "attachments", role: "list" }, this.attachments.map((file, index$1) => (index.h("wpp-file-upload-item-v4-5-0", { key: index$1, variant: "chat", part: "file-item", role: "listitem", "aria-posinset": (index$1 + 1).toString(), "aria-setsize": this.attachments.length.toString(), file: {
+    return (index.h("div", { class: "attachments", part: "attachments", role: "list" }, this.attachments.map((file, index$1) => (index.h("wpp-file-upload-item-v4-6-0", { key: index$1, variant: "chat", part: "file-item", role: "listitem", "aria-posinset": (index$1 + 1).toString(), "aria-setsize": this.attachments.length.toString(), file: {
         name: file.name,
         url: file.url,
         type: file.type,
@@ -3254,17 +3254,17 @@ const WppChatConversationMessage = class {
    * button's ::slotted rule).
    */
   renderTokenCount() {
-    return (index.h("wpp-action-button-v4-5-0", { variant: "secondary", class: "token-count", part: "token-count", ariaProps: { label: `${this._locales.tokenCountLabel} ${this.tokenCount}` }, onClick: () => this.handleActionClick({ id: 'tokenCount', label: this._locales.tokenCountLabel }) }, index.h(utils.transformToVersionedTag(this.tokenCountIcon), { slot: 'icon-start' }), this.tokenCount));
+    return (index.h("wpp-action-button-v4-6-0", { variant: "secondary", class: "token-count", part: "token-count", ariaProps: { label: `${this._locales.tokenCountLabel} ${this.tokenCount}` }, onClick: () => this.handleActionClick({ id: 'tokenCount', label: this._locales.tokenCountLabel }) }, index.h(utils.transformToVersionedTag(this.tokenCountIcon), { slot: 'icon-start' }), this.tokenCount));
   }
   hasTextContent() {
     return !!this.finalContent && this.finalContent.trim().length > 0;
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses() }, index.h("div", { class: this.containerCssClasses() }, this.shouldRenderAvatar('assistant') && (index.h("div", { class: "avatar-wrapper ai-avatar" }, this.resolvedRole === 'assistant' && (index.h("wpp-avatar-v4-5-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), index.h("div", { class: this.contentCssClasses() }, index.h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.hasTextContent() && this.renderComplete(), index.h("slot", { part: "custom-content" }), this.currentStatus === 'complete' && !!this.attachments?.length && this.renderAttachments()), this.resolvedRole === 'assistant' && this.currentStatus === 'complete' && (index.h("div", { class: "actions" }, index.h("div", { class: "action-toolbar", part: "action-toolbar" }, this.mergedActions.map(this.renderActionButton), this.menuContextListItems && (index.h("wpp-menu-context-v4-5-0", null, index.h("wpp-action-button-v4-5-0", { variant: "secondary", slot: "trigger-element" }, index.h("wpp-icon-more-v4-5-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.hasTokenCount()
+    return (index.h(index.Host, { class: this.hostCssClasses() }, index.h("div", { class: this.containerCssClasses() }, this.shouldRenderAvatar('assistant') && (index.h("div", { class: "avatar-wrapper ai-avatar" }, this.resolvedRole === 'assistant' && (index.h("wpp-avatar-v4-6-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), index.h("div", { class: this.contentCssClasses() }, index.h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.hasTextContent() && this.renderComplete(), index.h("slot", { part: "custom-content" }), this.currentStatus === 'complete' && !!this.attachments?.length && this.renderAttachments()), this.resolvedRole === 'assistant' && this.currentStatus === 'complete' && (index.h("div", { class: "actions" }, index.h("div", { class: "action-toolbar", part: "action-toolbar" }, this.mergedActions.map(this.renderActionButton), this.menuContextListItems && (index.h("wpp-menu-context-v4-6-0", null, index.h("wpp-action-button-v4-6-0", { variant: "secondary", slot: "trigger-element" }, index.h("wpp-icon-more-v4-6-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.hasTokenCount()
       ? this.renderTokenCount()
-      : this.sourcesActionConfig && (index.h("div", { class: "sources-action" }, index.h("wpp-action-button-v4-5-0", { variant: "secondary", ariaProps: this.sourcesActionConfig.ariaProps, disabled: this.sourcesActionConfig.disabled, loading: this.sourcesActionConfig.loading, onClick: () => this.sourcesActionConfig.onClick?.() }, this.sourcesActionConfig.text))), index.h("span", { class: "sr-only", "aria-live": "polite" }, this.isCopied ? this._locales.copiedAction : '')))), this.shouldRenderAvatar('user') && (index.h("div", { class: "avatar-wrapper user-avatar" }, this.resolvedRole === 'user' && index.h("wpp-avatar-v4-5-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
+      : this.sourcesActionConfig && (index.h("div", { class: "sources-action" }, index.h("wpp-action-button-v4-6-0", { variant: "secondary", ariaProps: this.sourcesActionConfig.ariaProps, disabled: this.sourcesActionConfig.disabled, loading: this.sourcesActionConfig.loading, onClick: () => this.sourcesActionConfig.onClick?.() }, this.sourcesActionConfig.text))), index.h("span", { class: "sr-only", "aria-live": "polite" }, this.isCopied ? this._locales.copiedAction : '')))), this.shouldRenderAvatar('user') && (index.h("div", { class: "avatar-wrapper user-avatar" }, this.resolvedRole === 'user' && index.h("wpp-avatar-v4-6-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
   }
-  static get registryIs() { return "wpp-chat-conversation-message-v4-5-0"; }
+  static get registryIs() { return "wpp-chat-conversation-message-v4-6-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "status": ["onStatusChange"],
@@ -3792,17 +3792,17 @@ const WppChatInput = class {
     this.shouldDisplaySend = () => this.disabled || this.errorAttachmentsList.length > 0
       ? false
       : !!this.internalValue.trim() || this.isGenerating || this.successAttachmentsList.length > 0;
-    this.renderMicrophoneBtn = (recordButtonLabel) => (index.h("wpp-action-button-v4-5-0", { "data-testid": "wpp-micophone-btn", onClick: this.handleClickAudioRecording, variant: "secondary", ariaProps: { label: recordButtonLabel }, disabled: this.disabled }, this.isAudioRecording ? index.h("wpp-icon-stop-v4-5-0", { slot: "icon-start" }) : index.h("wpp-icon-mic-on-v4-5-0", { slot: "icon-start" })));
-    this.renderActionsMenu = () => (index.h("wpp-menu-context-v4-5-0", { class: "actions-menu", part: "actions-menu", dropdownConfig: this.actionsMenuDropdownConfig }, index.h("wpp-action-button-v4-5-0", { slot: "trigger-element", class: "actions-menu-trigger", "data-testid": "actions-menu-trigger-button", variant: "secondary", disabled: this.disabled, ariaProps: {
+    this.renderMicrophoneBtn = (recordButtonLabel) => (index.h("wpp-action-button-v4-6-0", { "data-testid": "wpp-micophone-btn", onClick: this.handleClickAudioRecording, variant: "secondary", ariaProps: { label: recordButtonLabel }, disabled: this.disabled }, this.isAudioRecording ? index.h("wpp-icon-stop-v4-6-0", { slot: "icon-start" }) : index.h("wpp-icon-mic-on-v4-6-0", { slot: "icon-start" })));
+    this.renderActionsMenu = () => (index.h("wpp-menu-context-v4-6-0", { class: "actions-menu", part: "actions-menu", dropdownConfig: this.actionsMenuDropdownConfig }, index.h("wpp-action-button-v4-6-0", { slot: "trigger-element", class: "actions-menu-trigger", "data-testid": "actions-menu-trigger-button", variant: "secondary", disabled: this.disabled, ariaProps: {
         label: this.getActionsMenuButtonLabel(),
         expanded: this.ariaProps?.actionsMenuButton?.expanded ?? this.actionsMenuOpen,
         haspopup: 'menu',
-      } }, index.h("wpp-icon-plus-v4-5-0", { slot: "icon-start" })), index.h("div", null, index.h("wpp-list-item-v4-5-0", { "data-testid": `actions-menu-item-${UPLOAD_ACTION_ID}`, disabled: this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick({
+      } }, index.h("wpp-icon-plus-v4-6-0", { slot: "icon-start" })), index.h("div", null, index.h("wpp-list-item-v4-6-0", { "data-testid": `actions-menu-item-${UPLOAD_ACTION_ID}`, disabled: this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick({
         id: UPLOAD_ACTION_ID,
         icon: UPLOAD_ICON,
         label: this.getAttachButtonLabel(),
         disabled: this.disabled || this.isFileDialogOpen,
-      }) }, index.h(utils.transformToVersionedTag(UPLOAD_ICON), { slot: 'left' }), index.h("span", { slot: "label" }, this.getAttachButtonLabel())), this.actions.map(action => (index.h("wpp-list-item-v4-5-0", { key: action.id, "data-testid": `actions-menu-item-${action.id}`, disabled: action.disabled || this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick(action) }, index.h(utils.transformToVersionedTag(action.icon), { slot: 'left' }), index.h("span", { slot: "label" }, action.label)))))));
+      }) }, index.h(utils.transformToVersionedTag(UPLOAD_ICON), { slot: 'left' }), index.h("span", { slot: "label" }, this.getAttachButtonLabel())), this.actions.map(action => (index.h("wpp-list-item-v4-6-0", { key: action.id, "data-testid": `actions-menu-item-${action.id}`, disabled: action.disabled || this.disabled, onWppChangeListItem: () => this.handleActionsMenuItemClick(action) }, index.h(utils.transformToVersionedTag(action.icon), { slot: 'left' }), index.h("span", { slot: "label" }, action.label)))))));
     this.getSelectedModel = () => {
       // `selectedModel` is transiently null between React removing the attribute and setting the
       // property (see `onSelectedModelChange`). Resolve that to the built-in default rather than
@@ -3916,16 +3916,16 @@ const WppChatInput = class {
       const reasoningOptions = this.getModelOptions('reasoningOptions');
       const verbosityOptions = this.getModelOptions('verbosityOptions');
       const selectedReasoning = this.getSelectedModelOption('reasoningOptions', this.selectedReasoning);
-      const triggerAvatar = (index.h("wpp-avatar-v4-5-0", { slot: "left", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, name: selectedModel.label }));
-      return (index.h("wpp-menu-context-v4-5-0", { isBtnTrigger: true, class: "model-selector", dropdownConfig: { onShow: this.handleModelMenuShow, onHide: this.handleModelMenuHide, placement: 'top-start' } }, index.h("wpp-list-item-v4-5-0", { slot: "trigger-element", class: this.modelSelectorTriggerCssClasses(), role: "button", disabled: this.disabled, "aria-label": this._locales.modelSelectorBtnLabel }, triggerAvatar, size === 'm' && (index.h(index.Fragment, null, index.h("span", { slot: "label" }, selectedModel.label, selectedReasoning && `${MODEL_REASONING_SEPARATOR}${selectedReasoning.label}`), index.h("wpp-icon-chevron-v4-5-0", { slot: "right", direction: this.isModelMenuOpen ? 'up' : 'down' })))), index.h("div", { class: "wpp-model-dropdown" }, getDefaultModelOptions(this._locales).map((model) => this.renderModelListItem(model, model.id === selectedModel.id)), index.h("wpp-divider-v4-5-0", null), this.models.length > 0
+      const triggerAvatar = (index.h("wpp-avatar-v4-6-0", { slot: "left", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, name: selectedModel.label }));
+      return (index.h("wpp-menu-context-v4-6-0", { isBtnTrigger: true, class: "model-selector", dropdownConfig: { onShow: this.handleModelMenuShow, onHide: this.handleModelMenuHide, placement: 'top-start' } }, index.h("wpp-list-item-v4-6-0", { slot: "trigger-element", class: this.modelSelectorTriggerCssClasses(), role: "button", disabled: this.disabled, "aria-label": this._locales.modelSelectorBtnLabel }, triggerAvatar, size === 'm' && (index.h(index.Fragment, null, index.h("span", { slot: "label" }, selectedModel.label, selectedReasoning && `${MODEL_REASONING_SEPARATOR}${selectedReasoning.label}`), index.h("wpp-icon-chevron-v4-6-0", { slot: "right", direction: this.isModelMenuOpen ? 'up' : 'down' })))), index.h("div", { class: "wpp-model-dropdown" }, getDefaultModelOptions(this._locales).map((model) => this.renderModelListItem(model, model.id === selectedModel.id)), index.h("wpp-divider-v4-6-0", null), this.models.length > 0
         ? this.models.map((model) => this.renderModelListItem(model, model.id === selectedModel.id))
         : // Nothing lists the selected model when the list is browsed externally, so
           // surface it here — otherwise the dropdown never shows what is in use.
           isCustomModel && this.renderModelListItem(selectedModel, true), reasoningOptions.length > 0 &&
         this.renderModelOptionsSubmenu('reasoning', this._locales.modelReasoningLabel, reasoningOptions, this.selectedReasoning, this.handleReasoningSelect), verbosityOptions.length > 0 &&
-        this.renderModelOptionsSubmenu('verbosity', this._locales.modelVerbosityLabel, verbosityOptions, this.selectedVerbosity, this.handleVerbositySelect), this.models.length === 0 && (index.h(index.Fragment, null, isCustomModel && index.h("wpp-divider-v4-5-0", null), index.h("wpp-list-item-v4-5-0", { onWppChangeListItem: this.handleModelChange }, index.h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), index.h("wpp-icon-chevron-v4-5-0", { slot: "right", direction: "right" })))))));
+        this.renderModelOptionsSubmenu('verbosity', this._locales.modelVerbosityLabel, verbosityOptions, this.selectedVerbosity, this.handleVerbositySelect), this.models.length === 0 && (index.h(index.Fragment, null, isCustomModel && index.h("wpp-divider-v4-6-0", null), index.h("wpp-list-item-v4-6-0", { onWppChangeListItem: this.handleModelChange }, index.h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), index.h("wpp-icon-chevron-v4-6-0", { slot: "right", direction: "right" })))))));
     };
-    this.renderModelListItem = (model, checked) => (index.h("wpp-list-item-v4-5-0", { key: model.id, checked: checked, role: "menuitemradio", "aria-checked": String(checked), onWppChangeListItem: () => this.handleModelSelect(model) }, index.h("wpp-avatar-v4-5-0", { role: "presentation", slot: "left", size: "xs", variant: "square", src: model.logo, name: model.label }), index.h("span", { slot: "label" }, model.label), model?.caption && (index.h("span", { slot: "caption" }, model.caption))));
+    this.renderModelListItem = (model, checked) => (index.h("wpp-list-item-v4-6-0", { key: model.id, checked: checked, role: "menuitemradio", "aria-checked": String(checked), onWppChangeListItem: () => this.handleModelSelect(model) }, index.h("wpp-avatar-v4-6-0", { role: "presentation", slot: "left", size: "xs", variant: "square", src: model.logo, name: model.label }), index.h("span", { slot: "label" }, model.label), model?.caption && (index.h("span", { slot: "caption" }, model.caption))));
     /**
      * How far the submenu has to slide past its own row to sit flush with the bottom of the model
      * menu. Measured when popper asks rather than hard-coded, because it depends on which row opened
@@ -3965,7 +3965,7 @@ const WppChatInput = class {
      * leaving the viewport falls back to `right-start` before it is allowed to jump to the other
      * side, so the fallbacks are spelled out rather than left to the nested default.
      */
-    this.renderModelOptionsSubmenu = (kind, label, options, selectedId, onSelect) => (index.h("wpp-menu-context-v4-5-0", { class: "model-options-menu", ref: element => (this.modelOptionsSubmenuRefs[kind] = element), dropdownConfig: this.getModelOptionsDropdownConfig(kind) }, index.h("wpp-list-item-v4-5-0", { slot: "trigger-element", isExtended: true }, index.h("span", { slot: "label" }, label)), index.h("div", { class: "wpp-model-options-dropdown" }, options.map((option) => (index.h("wpp-list-item-v4-5-0", { key: option.id, checked: option.id === selectedId, labelTypography: { type: 's-midi' }, role: "menuitemradio", "aria-checked": String(option.id === selectedId), onWppChangeListItem: () => onSelect(option) }, index.h("span", { slot: "label" }, option.label), option.caption && index.h("span", { slot: "caption" }, option.caption)))))));
+    this.renderModelOptionsSubmenu = (kind, label, options, selectedId, onSelect) => (index.h("wpp-menu-context-v4-6-0", { class: "model-options-menu", ref: element => (this.modelOptionsSubmenuRefs[kind] = element), dropdownConfig: this.getModelOptionsDropdownConfig(kind) }, index.h("wpp-list-item-v4-6-0", { slot: "trigger-element", isExtended: true }, index.h("span", { slot: "label" }, label)), index.h("div", { class: "wpp-model-options-dropdown" }, options.map((option) => (index.h("wpp-list-item-v4-6-0", { key: option.id, checked: option.id === selectedId, labelTypography: { type: 's-midi' }, role: "menuitemradio", "aria-checked": String(option.id === selectedId), onWppChangeListItem: () => onSelect(option) }, index.h("span", { slot: "label" }, option.label), option.caption && index.h("span", { slot: "caption" }, option.caption)))))));
     this.clearStopBtnHideTimeout = () => {
       if (!this.stopBtnHideTimeout)
         return;
@@ -3997,7 +3997,7 @@ const WppChatInput = class {
       // While hidden the button stays in the DOM (to animate the collapse), but must leave the
       // focus order and a11y tree so its focusable inner control does not trip axe's aria-hidden-focus.
       const inertProps = interactive ? {} : { inert: true };
-      return this.isGenerating || this.isStopBtnHiding ? (index.h("wpp-action-button-v4-5-0", { class: { 'play-btn': true, 'is-hidden': !interactive }, "data-testid": "stop-icon-only-button", onClick: this.handleStopBtnClick, ariaProps: { label: this.getStopButtonLabel() }, ...inertProps }, index.h("wpp-icon-stop-v4-5-0", { slot: "icon-start" }))) : (index.h("wpp-button-v4-5-0", { class: { 'play-btn': true, 'is-hidden': !interactive }, "data-testid": "send-icon-only-button", size: "s", onClick: this.handleSendClick, ariaProps: { label: this.getSendButtonLabel() }, ...inertProps }, index.h("wpp-icon-arrow-v4-5-0", { direction: "up", slot: "icon-start" })));
+      return this.isGenerating || this.isStopBtnHiding ? (index.h("wpp-action-button-v4-6-0", { class: { 'play-btn': true, 'is-hidden': !interactive }, "data-testid": "stop-icon-only-button", onClick: this.handleStopBtnClick, ariaProps: { label: this.getStopButtonLabel() }, ...inertProps }, index.h("wpp-icon-stop-v4-6-0", { slot: "icon-start" }))) : (index.h("wpp-button-v4-6-0", { class: { 'play-btn': true, 'is-hidden': !interactive }, "data-testid": "send-icon-only-button", size: "s", onClick: this.handleSendClick, ariaProps: { label: this.getSendButtonLabel() }, ...inertProps }, index.h("wpp-icon-arrow-v4-6-0", { direction: "up", slot: "icon-start" })));
     };
     this.modelSelectorTriggerCssClasses = () => ({
       'select-model-trigger': true,
@@ -4594,14 +4594,14 @@ const WppChatInput = class {
       ? this.getAudioStopRecordButtonLabel()
       : this.getAudioRecordButtonLabel();
     const ariaInvalid = this.ariaProps?.textarea?.invalid !== undefined ? this.ariaProps.textarea.invalid : undefined;
-    return (index.h(index.Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, alert, toast, input-area, attachments, references, text-input, actions-bar, left-actions, right-actions, file-item, actions-menu", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick, onFocus: this.handleOnFocus }, index.h("div", { class: this.chatInputContainerClasses(), onKeyDown: this.onExpandedKeyDown, part: "chat-input-container" }, index.h("div", { class: "alert", part: "alert", hidden: !this.hasAlertSlot || this.isAlertDismissed }, index.h("slot", { name: "alert", onSlotchange: this.handleAlertSlotChange })), this.showToast && (index.h("wpp-toast-v4-5-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), index.h("div", { id: this.inputAreaId, class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (index.h(index.Fragment, null, allFiles?.length > 0 && (index.h("div", { class: this.attachmentsWrapperClasses(), part: "attachments", role: "list", "aria-label": this._locales.attachmentsLabel }, allFiles.map((file, index$1) => (index.h("wpp-file-upload-item-v4-5-0", { key: index$1, file: file, variant: "chat", format: this.mergedFileUploadConfig.format, currentIndex: index$1, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
+    return (index.h(index.Host, { class: this.hostCssClasses(), size: this.size, style: { zIndex: this.zIndex.toString() }, exportparts: "chat-input-container, alert, toast, input-area, attachments, references, text-input, actions-bar, left-actions, right-actions, file-item, actions-menu", onClick: isMinimizedS ? this.handleSizeToggle : this.handleClick, onFocus: this.handleOnFocus }, index.h("div", { class: this.chatInputContainerClasses(), onKeyDown: this.onExpandedKeyDown, part: "chat-input-container" }, index.h("div", { class: "alert", part: "alert", hidden: !this.hasAlertSlot || this.isAlertDismissed }, index.h("slot", { name: "alert", onSlotchange: this.handleAlertSlotChange })), this.showToast && (index.h("wpp-toast-v4-6-0", { message: this.toastMessage, type: this.toastType, duration: TOAST_DURATION, variant: "chat", part: "toast", class: this.chatToastClasses(), onClick: event => this.handleToastClick(event) })), index.h("div", { id: this.inputAreaId, class: this.inputAreaClasses(), ref: el => (this.inputAreaRef = el), part: "input-area" }, maximizedSorSizeM ? (index.h(index.Fragment, null, allFiles?.length > 0 && (index.h("div", { class: this.attachmentsWrapperClasses(), part: "attachments", role: "list", "aria-label": this._locales.attachmentsLabel }, allFiles.map((file, index$1) => (index.h("wpp-file-upload-item-v4-6-0", { key: index$1, file: file, variant: "chat", format: this.mergedFileUploadConfig.format, currentIndex: index$1, onWppDelete: this.handleDeleteItem, onWppClick: this.handleClickItem, locales: {
         sizeError: this.mergedFileUploadConfig.locales.sizeError,
         formatError: this.mergedFileUploadConfig.locales.formatError,
         removeFile: this.mergedFileUploadConfig.locales.removeFile,
         uploadProgress: this.mergedFileUploadConfig.locales.uploadProgress,
-      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded, role: "listitem", "aria-posinset": (index$1 + 1).toString(), "aria-setsize": allFiles.length.toString() }))))), index.h("div", { class: "references", part: "references", hidden: !this.hasReferencesSlot }, index.h("slot", { name: "references", onSlotchange: this.handleReferencesSlotChange })), index.h("textarea", { id: (this.htmlAttributes?.textarea?.id ?? this.textareaId) || this.textareaAutoId, name: this.htmlAttributes?.textarea?.name ?? this.textareaName ?? 'message', class: this.textInputClasses(), placeholder: placeholderText, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input", "aria-label": this.getTextareaLabel(), "aria-invalid": ariaInvalid, autocomplete: this.htmlAttributes?.textarea?.autocomplete, maxLength: this.htmlAttributes?.textarea?.maxLength, "data-gramm": "false", "data-gramm_editor": "false" }))) : (index.h("div", { class: this.inputAreaWrapperClasses() }, this.renderActionsMenu(), index.h("div", { class: this.minimizedInput(), part: "minimized-input", "data-pressed": this.minimizedPressed ? 'true' : null, role: "button", tabindex: this.disabled ? -1 : 0, "aria-expanded": this.isChatInputExpanded ? 'true' : 'false', "aria-controls": this.inputAreaId, "aria-label": this.getMinimizedAriaLabel(), "aria-describedby": this.minimizedDescId, onKeyDown: this.onMinimizedKeyDown, onKeyUp: this.onMinimizedKeyUp }, index.h("wpp-typography-v4-5-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || placeholderText)), index.h("span", { id: this.minimizedDescId, class: "sr-only" }, this.getMinimizedDescriptionText()), index.h("div", { class: this.rightActionsClasses() }, !this.withSelect && this.renderModelSelector('s'), this.renderMicrophoneBtn(recordButtonLabel), this.renderSendStopBtn())))), maximizedSorSizeM && (index.h("div", { class: this.actionsBarClasses(), part: "actions-bar", role: "toolbar", "aria-label": this.getActionsToolbarLabel() }, index.h("div", { class: this.leftActionsClasses(), part: "left-actions", role: "group", "aria-label": this.getLeftActionsLabel() }, this.renderActionsMenu(), this.enableMic && (index.h("wpp-action-button-v4-5-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled, ariaProps: { label: this._locales.voiceLabel } }, index.h("wpp-icon-mic-on-v4-5-0", { slot: "icon-start" })))), index.h("div", { class: this.rightActionsClasses(), part: "right-actions", role: "group", "aria-label": this.getRightActionsLabel() }, this.withSelect ? (index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })) : (this.renderModelSelector('m')), this.renderMicrophoneBtn(recordButtonLabel), this.renderSendStopBtn()))), index.h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.htmlAttributes?.attachmentsInput?.multiple ?? this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.htmlAttributes?.attachmentsInput?.accept ?? this.getAcceptTokens().join(), title: "", id: this.htmlAttributes?.attachmentsInput?.id ?? 'wpp-ci-file', name: this.htmlAttributes?.attachmentsInput?.name ?? 'attachments', "aria-hidden": "true" }))));
+      }, part: "file-item", class: this.isFileWithError(file) ? 'error' : '', onFileLoaded: this.handleFileLoaded, uploaded: !!file.uploaded, role: "listitem", "aria-posinset": (index$1 + 1).toString(), "aria-setsize": allFiles.length.toString() }))))), index.h("div", { class: "references", part: "references", hidden: !this.hasReferencesSlot }, index.h("slot", { name: "references", onSlotchange: this.handleReferencesSlotChange })), index.h("textarea", { id: (this.htmlAttributes?.textarea?.id ?? this.textareaId) || this.textareaAutoId, name: this.htmlAttributes?.textarea?.name ?? this.textareaName ?? 'message', class: this.textInputClasses(), placeholder: placeholderText, value: this.internalValue, ref: el => (this.textareaRef = el), onInput: this.handleInput, onPaste: this.handlePaste, disabled: this.disabled, onKeyDown: this.onKeyDown, part: "text-input", "aria-label": this.getTextareaLabel(), "aria-invalid": ariaInvalid, autocomplete: this.htmlAttributes?.textarea?.autocomplete, maxLength: this.htmlAttributes?.textarea?.maxLength, "data-gramm": "false", "data-gramm_editor": "false" }))) : (index.h("div", { class: this.inputAreaWrapperClasses() }, this.renderActionsMenu(), index.h("div", { class: this.minimizedInput(), part: "minimized-input", "data-pressed": this.minimizedPressed ? 'true' : null, role: "button", tabindex: this.disabled ? -1 : 0, "aria-expanded": this.isChatInputExpanded ? 'true' : 'false', "aria-controls": this.inputAreaId, "aria-label": this.getMinimizedAriaLabel(), "aria-describedby": this.minimizedDescId, onKeyDown: this.onMinimizedKeyDown, onKeyUp: this.onMinimizedKeyUp }, index.h("wpp-typography-v4-6-0", { class: this.inputValue(), type: "s-body" }, this.internalValue || placeholderText)), index.h("span", { id: this.minimizedDescId, class: "sr-only" }, this.getMinimizedDescriptionText()), index.h("div", { class: this.rightActionsClasses() }, !this.withSelect && this.renderModelSelector('s'), this.renderMicrophoneBtn(recordButtonLabel), this.renderSendStopBtn())))), maximizedSorSizeM && (index.h("div", { class: this.actionsBarClasses(), part: "actions-bar", role: "toolbar", "aria-label": this.getActionsToolbarLabel() }, index.h("div", { class: this.leftActionsClasses(), part: "left-actions", role: "group", "aria-label": this.getLeftActionsLabel() }, this.renderActionsMenu(), this.enableMic && (index.h("wpp-action-button-v4-6-0", { "data-testid": "mic-icon-only-button", variant: "secondary", disabled: this.disabled, ariaProps: { label: this._locales.voiceLabel } }, index.h("wpp-icon-mic-on-v4-6-0", { slot: "icon-start" })))), index.h("div", { class: this.rightActionsClasses(), part: "right-actions", role: "group", "aria-label": this.getRightActionsLabel() }, this.withSelect ? (index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.selectClasses(), name: "select", onSlotchange: this.updateSlotData })) : (this.renderModelSelector('m')), this.renderMicrophoneBtn(recordButtonLabel), this.renderSendStopBtn()))), index.h("input", { class: "file-loader", type: "file", ref: inputRef => (this.inputRef = inputRef), style: { display: 'none' }, multiple: this.htmlAttributes?.attachmentsInput?.multiple ?? this.mergedFileUploadConfig.multiple, onChange: this.handleChange, accept: this.htmlAttributes?.attachmentsInput?.accept ?? this.getAcceptTokens().join(), title: "", id: this.htmlAttributes?.attachmentsInput?.id ?? 'wpp-ci-file', name: this.htmlAttributes?.attachmentsInput?.name ?? 'attachments', "aria-hidden": "true" }))));
   }
-  static get registryIs() { return "wpp-chat-input-v4-5-0"; }
+  static get registryIs() { return "wpp-chat-input-v4-6-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "attachments": ["onAttachmentsChange"],

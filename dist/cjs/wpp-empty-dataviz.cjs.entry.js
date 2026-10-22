@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
-const EmptyStateGraphicView = require('./EmptyStateGraphicView-5baa1cbf.js');
+const EmptyStateGraphicView = require('./EmptyStateGraphicView-97d87f93.js');
 require('./theme-observer-4179316e.js');
 
 const wppImageCss = ":host{display:-ms-inline-flexbox;display:inline-flex;position:relative}.wpp-empty-state-animation{display:block;}.wpp-empty-state-animation image{-webkit-filter:url(\"#wpp-empty-state-shadow-tint\");filter:url(\"#wpp-empty-state-shadow-tint\")}.wpp-empty-state-tint{flood-color:var(--wpp-empty-state-shadow-color, transparent)}.wpp-empty-state-skeleton{position:absolute;inset:0}.wpp-empty-state-defs{position:absolute;width:0;height:0}";
@@ -24,7 +24,7 @@ const WppEmptyDataviz = class {
   render() {
     return (index.h(EmptyStateGraphicView.EmptyStateGraphicView, { graphic: this.graphic, name: "wpp-empty-dataviz", width: this.width, height: this.height }));
   }
-  static get registryIs() { return "wpp-empty-dataviz-v4-5-0"; }
+  static get registryIs() { return "wpp-empty-dataviz-v4-6-0"; }
   get host() { return index.getElement(this); }
 };
 WppEmptyDataviz.style = wppImageCss;

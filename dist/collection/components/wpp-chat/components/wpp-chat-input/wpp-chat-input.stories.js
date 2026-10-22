@@ -180,32 +180,32 @@ export const ChatInput = {
       render(html `
           <div style=${'display: flex; flex-direction: column; height: 100vh; padding: 20px; box-sizing: border-box;'}>
             <div style=${'display: flex; gap: 8px; margin-bottom: 12px;'}>
-              <wpp-action-button-v4-5-0 variant=${showAlert ? 'primary' : 'secondary'} @click=${toggleAlert}>
+              <wpp-action-button-v4-6-0 variant=${showAlert ? 'primary' : 'secondary'} @click=${toggleAlert}>
                 ${showAlert ? 'Hide alert' : 'Show alert'}
-              </wpp-action-button-v4-5-0>
-              <wpp-action-button-v4-5-0
+              </wpp-action-button-v4-6-0>
+              <wpp-action-button-v4-6-0
                 variant=${showAttachments ? 'primary' : 'secondary'}
                 @click=${toggleAttachments}
               >
                 ${showAttachments ? 'Hide thumbnails' : 'Show thumbnails'}
-              </wpp-action-button-v4-5-0>
-              <wpp-action-button-v4-5-0 variant=${showReferences ? 'primary' : 'secondary'} @click=${toggleReferences}>
+              </wpp-action-button-v4-6-0>
+              <wpp-action-button-v4-6-0 variant=${showReferences ? 'primary' : 'secondary'} @click=${toggleReferences}>
                 ${showReferences ? 'Hide references' : 'Show references'}
-              </wpp-action-button-v4-5-0>
-              <wpp-action-button-v4-5-0 variant=${showModels ? 'primary' : 'secondary'} @click=${toggleModels}>
+              </wpp-action-button-v4-6-0>
+              <wpp-action-button-v4-6-0 variant=${showModels ? 'primary' : 'secondary'} @click=${toggleModels}>
                 ${showModels ? 'Hide models' : 'Show models'}
-              </wpp-action-button-v4-5-0>
+              </wpp-action-button-v4-6-0>
             </div>
 
             <div style=${'display: flex;'}>
-              <wpp-typography-v4-5-0>Message History:</wpp-typography-v4-5-0>
+              <wpp-typography-v4-6-0>Message History:</wpp-typography-v4-6-0>
               <ul style="margin:0;">
-                ${updatedMessages.map(msg => html `<li><wpp-typography-v4-5-0>${msg}</wpp-typography-v4-5-0></li>`)}
+                ${updatedMessages.map(msg => html `<li><wpp-typography-v4-6-0>${msg}</wpp-typography-v4-6-0></li>`)}
               </ul>
             </div>
 
             <div style=${'display: flex; align-items: flex-end; height: 100vh;'}>
-              <wpp-chat-input-v4-5-0
+              <wpp-chat-input-v4-6-0
                 .actions=${args.actions}
                 .disabled=${args.disabled}
                 .isGenerating=${isGenerating}
@@ -234,17 +234,17 @@ export const ChatInput = {
               >
                 ${showAlert
         ? html `
-                      <wpp-chat-alert-v4-5-0
+                      <wpp-chat-alert-v4-6-0
                         slot="alert"
                         type="error"
                         message="Connection lost. Please try again."
                         @wppClose=${handleAlertClose}
-                      ></wpp-chat-alert-v4-5-0>
+                      ></wpp-chat-alert-v4-6-0>
                     `
         : null}
                 ${showReferences
         ? references.map(reference => html `
-                        <wpp-chat-reference-v4-5-0
+                        <wpp-chat-reference-v4-6-0
                           slot="references"
                           .type=${reference.type}
                           .name=${reference.name}
@@ -253,10 +253,10 @@ export const ChatInput = {
                           .fileExtension=${reference.fileExtension}
                           .text=${reference.text}
                           @wppClose=${() => handleRemoveReference(reference.id)}
-                        ></wpp-chat-reference-v4-5-0>
+                        ></wpp-chat-reference-v4-6-0>
                       `)
         : null}
-              </wpp-chat-input-v4-5-0>
+              </wpp-chat-input-v4-6-0>
             </div>
           </div>
         `, container);

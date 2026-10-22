@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-a0877c3d.js';
-import { k as transformToVersionedTag } from './utils-f7e38fc9.js';
+import { k as transformToVersionedTag } from './utils-49ce8daf.js';
 import './consts-744c144f.js';
 
 const wppCardGroupCss = ":host{display:-ms-flexbox;display:flex}";
@@ -209,7 +209,7 @@ const WppCardGroup = class {
   render() {
     return (h(Host, { "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, class: this.hostCssClasses(), exportparts: "inner", role: this.multiple ? 'group' : 'radiogroup', "aria-labelledby": this.ariaProps.labelledby }, h("slot", { part: "inner" })));
   }
-  static get registryIs() { return "wpp-card-group-v4-5-0"; }
+  static get registryIs() { return "wpp-card-group-v4-6-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "value": ["onValueChange"],

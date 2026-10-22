@@ -1,6 +1,6 @@
 export const LOCALES_DEFAULTS = {
   closeIconLabel: 'Close side panel',
-  resizeHandleLabel: 'Resize handle',
+  resizeHandleLabel: 'Resize side panel',
 };
 export const SIDE_PANEL_MIN_WIDTH = 280;
 export const SIDE_PANEL_MAX_WIDTH = 440;

@@ -53,6 +53,7 @@ export { WppFileUploadItem, defineCustomElement as defineCustomElementWppFileUpl
 export { WppFilterButton, defineCustomElement as defineCustomElementWppFilterButton } from './wpp-filter-button.js';
 export { WppFloatingButton, defineCustomElement as defineCustomElementWppFloatingButton } from './wpp-floating-button.js';
 export { WppFloatingToolbar, defineCustomElement as defineCustomElementWppFloatingToolbar } from './wpp-floating-toolbar.js';
+export { WppFocusArtefact, defineCustomElement as defineCustomElementWppFocusArtefact } from './wpp-focus-artefact.js';
 export { WppGrid, defineCustomElement as defineCustomElementWppGrid } from './wpp-grid.js';
 export { WppHandle, defineCustomElement as defineCustomElementWppHandle } from './wpp-handle.js';
 export { WppHueSlider, defineCustomElement as defineCustomElementWppHueSlider } from './wpp-hue-slider.js';
@@ -590,6 +591,7 @@ export { WppLegacyTopbarItem, defineCustomElement as defineCustomElementWppLegac
 export { WppLegend, defineCustomElement as defineCustomElementWppLegend } from './wpp-legend.js';
 export { WppListItem, defineCustomElement as defineCustomElementWppListItem } from './wpp-list-item.js';
 export { WppLoadMore, defineCustomElement as defineCustomElementWppLoadMore } from './wpp-load-more.js';
+export { WppMediaViewer, defineCustomElement as defineCustomElementWppMediaViewer } from './wpp-media-viewer.js';
 export { WppMenuContext, defineCustomElement as defineCustomElementWppMenuContext } from './wpp-menu-context.js';
 export { WppMenuGroup, defineCustomElement as defineCustomElementWppMenuGroup } from './wpp-menu-group.js';
 export { WppMoreButton, defineCustomElement as defineCustomElementWppMoreButton } from './wpp-more-button.js';

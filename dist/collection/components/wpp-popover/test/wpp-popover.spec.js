@@ -400,7 +400,7 @@ describe('wpp-popover', () => {
     it('should render custom clear text from locales', async () => {
       const page = await newSpecPage({
         components: [WppPopover],
-        template: () => (h("wpp-popover-v4-5-0", { showClearButton: true, locales: { clearText: 'Reset' } }, h("wpp-button-v4-5-0", { slot: "trigger-element" }, "Trigger Button"), h("div", null, "Content"))),
+        template: () => (h("wpp-popover-v4-6-0", { showClearButton: true, locales: { clearText: 'Reset' } }, h("wpp-button-v4-6-0", { slot: "trigger-element" }, "Trigger Button"), h("div", null, "Content"))),
       });
       await waitForDropdown(page);
       const clearButton = page.root?.shadowRoot?.querySelector('.wpp-popover-clear-action wpp-action-button');
@@ -453,7 +453,7 @@ describe('wpp-popover', () => {
       it('should not name the dropdown when the provided ariaProps has no label', async () => {
         const page = await newSpecPage({
           components: [WppPopover],
-          template: () => (h("wpp-popover-v4-5-0", { ariaProps: { describedby: 'filters-hint' } }, h("button", { slot: "trigger-element" }, "Trigger"), h("div", null, "Content"))),
+          template: () => (h("wpp-popover-v4-6-0", { ariaProps: { describedby: 'filters-hint' } }, h("button", { slot: "trigger-element" }, "Trigger"), h("div", null, "Content"))),
         });
         await waitForDropdown(page);
         const contentEl = page.root?.shadowRoot?.querySelector('.wpp-popover-content');
@@ -463,7 +463,7 @@ describe('wpp-popover', () => {
       it('should use ariaProps labelledby instead of an aria-label', async () => {
         const page = await newSpecPage({
           components: [WppPopover],
-          template: () => (h("wpp-popover-v4-5-0", { ariaProps: { labelledby: 'filters-title', label: 'Ignored' } }, h("button", { slot: "trigger-element" }, "Trigger"), h("div", null, "Content"))),
+          template: () => (h("wpp-popover-v4-6-0", { ariaProps: { labelledby: 'filters-title', label: 'Ignored' } }, h("button", { slot: "trigger-element" }, "Trigger"), h("div", null, "Content"))),
         });
         await waitForDropdown(page);
         const contentEl = page.root?.shadowRoot?.querySelector('.wpp-popover-content');
@@ -473,7 +473,7 @@ describe('wpp-popover', () => {
       it('should apply the role, label and description from ariaProps', async () => {
         const page = await newSpecPage({
           components: [WppPopover],
-          template: () => (h("wpp-popover-v4-5-0", { ariaProps: { role: 'menu', label: 'Filters', describedby: 'filters-hint' } }, h("button", { slot: "trigger-element" }, "Trigger"), h("div", null, "Content"))),
+          template: () => (h("wpp-popover-v4-6-0", { ariaProps: { role: 'menu', label: 'Filters', describedby: 'filters-hint' } }, h("button", { slot: "trigger-element" }, "Trigger"), h("div", null, "Content"))),
         });
         await waitForDropdown(page);
         const contentEl = page.root?.shadowRoot?.querySelector('.wpp-popover-content');
@@ -495,7 +495,7 @@ describe('wpp-popover', () => {
       it('should use the locales for the accessible names', async () => {
         const page = await newSpecPage({
           components: [WppPopover],
-          template: () => (h("wpp-popover-v4-5-0", { closable: true, showClearButton: true, locales: { closeText: 'Fermer', actionsText: 'Actions du filtre' } }, h("button", { slot: "trigger-element" }, "Trigger"), h("div", null, "Content"))),
+          template: () => (h("wpp-popover-v4-6-0", { closable: true, showClearButton: true, locales: { closeText: 'Fermer', actionsText: 'Actions du filtre' } }, h("button", { slot: "trigger-element" }, "Trigger"), h("div", null, "Content"))),
         });
         await waitForDropdown(page);
         const contentEl = page.root?.shadowRoot?.querySelector('.wpp-popover-content');

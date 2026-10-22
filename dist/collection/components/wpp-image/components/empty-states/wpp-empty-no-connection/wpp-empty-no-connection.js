@@ -17,7 +17,7 @@ export class WppEmptyNoConnection {
     return (h(EmptyStateGraphicView, { graphic: this.graphic, name: "wpp-empty-no-connection", width: this.width, height: this.height }));
   }
   static get is() { return "wpp-empty-no-connection"; }
-  static get registryIs() { return "wpp-empty-no-connection-v4-5-0"; }
+  static get registryIs() { return "wpp-empty-no-connection-v4-6-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

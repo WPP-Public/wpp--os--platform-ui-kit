@@ -207,6 +207,8 @@ button {
   cursor: pointer;
   position: relative;
   height: 100%;
+  width: 100%;
+  justify-content: center;
 }
 button .loader {
   position: absolute;

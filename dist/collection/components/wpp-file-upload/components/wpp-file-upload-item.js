@@ -181,7 +181,7 @@ export class WppFileUploadItem {
     };
     this.setCurrentIcon = () => {
       if (this.isFileLoading())
-        return h("wpp-spinner-v4-5-0", null);
+        return h("wpp-spinner-v4-6-0", null);
       const { name } = this.file;
       if (this.isFileWithError())
         return null;
@@ -203,7 +203,7 @@ export class WppFileUploadItem {
     this.setCurrentError = () => {
       if (this.isFileWithError()) {
         const currentError = this.getErrorMessage();
-        return (h("div", { class: "error-wrapper" }, h("wpp-inline-message-v4-5-0", { class: "inline-message-error", message: currentError, type: "error", showTooltipFrom: 140, tooltipConfig: { popperOptions: { strategy: 'fixed' } } }), this.file.deletable !== false && (h("wpp-icon-cross-v4-5-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": this._locales.removeFile(this.file.name), onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onKeyUp: this.handleDeleteKeyUp, onBlur: this.handleDeleteBlur }))));
+        return (h("div", { class: "error-wrapper" }, h("wpp-inline-message-v4-6-0", { class: "inline-message-error", message: currentError, type: "error", showTooltipFrom: 140, tooltipConfig: { popperOptions: { strategy: 'fixed' } } }), this.file.deletable !== false && (h("wpp-icon-cross-v4-6-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": this._locales.removeFile(this.file.name), onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onKeyUp: this.handleDeleteKeyUp, onBlur: this.handleDeleteBlur }))));
       }
       return null;
     };
@@ -271,9 +271,9 @@ export class WppFileUploadItem {
     };
     this.renderThumbnail = () => {
       if (this.isFileLoading())
-        return h("wpp-spinner-v4-5-0", null);
+        return h("wpp-spinner-v4-6-0", null);
       if (this.isFileWithError())
-        return h("wpp-icon-error-v4-5-0", { class: "thumbnail-error-icon", "aria-hidden": "true" });
+        return h("wpp-icon-error-v4-6-0", { class: "thumbnail-error-icon", "aria-hidden": "true" });
       const previewUrl = this.thumbnailUrl ?? this.getImagePreviewUrl();
       if (previewUrl)
         return h("img", { src: previewUrl, alt: "", class: "thumbnail-image" });
@@ -298,7 +298,7 @@ export class WppFileUploadItem {
       'aria-valuenow': `${this.getDisplayProgress()}`,
     });
     this.renderProgress = () => (h("span", { class: "percentage", part: "percentage", ...this.progressAriaProps() }, this.getDisplayProgress(), "%"));
-    this.renderDeleteIcon = () => this.file.deletable !== false && (h("wpp-icon-cross-v4-5-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": this._locales.removeFile(this.file.name), onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onKeyUp: this.handleDeleteKeyUp, onBlur: this.handleDeleteBlur }));
+    this.renderDeleteIcon = () => this.file.deletable !== false && (h("wpp-icon-cross-v4-6-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": this._locales.removeFile(this.file.name), onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onKeyUp: this.handleDeleteKeyUp, onBlur: this.handleDeleteBlur }));
     this.thumbnailUrl = null;
     this.percentage = 0;
     this.total = 0;
@@ -410,13 +410,13 @@ export class WppFileUploadItem {
   }
   renderChatVariant() {
     const subtitle = this.getChatSubtitle();
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, thumbnail, content, file-name, subtitle, cross-icon", onClick: this.handleClick, role: "listitem" }, h("div", { class: this.itemCssClasses(), part: "file-item", "aria-busy": this.isFileLoading() ? 'true' : undefined }, h("div", { class: { thumbnail: true, error: this.isFileWithError(), loading: this.isFileLoading() }, part: "thumbnail" }, this.renderThumbnail()), h("div", { class: "details", part: "content" }, h("wpp-tooltip-v4-5-0", { ref: ref => (this.tooltipRef = ref), text: this.file.name, config: {
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, thumbnail, content, file-name, subtitle, cross-icon", onClick: this.handleClick, role: "listitem" }, h("div", { class: this.itemCssClasses(), part: "file-item", "aria-busy": this.isFileLoading() ? 'true' : undefined }, h("div", { class: { thumbnail: true, error: this.isFileWithError(), loading: this.isFileLoading() }, part: "thumbnail" }, this.renderThumbnail()), h("div", { class: "details", part: "content" }, h("wpp-tooltip-v4-6-0", { ref: ref => (this.tooltipRef = ref), text: this.file.name, config: {
         popperOptions: { strategy: 'fixed' },
         onShow: () => {
           if (!this.isTruncated)
             return false;
         },
-      }, part: "tooltip" }, h("wpp-typography-v4-5-0", { ref: ref => (this.fileNameRef = ref), class: this.fileNameCssClasses(), type: "xs-midi", part: "file-name", title: this.file.name }, this.file?.name)), h("wpp-tooltip-v4-5-0", { text: subtitle, config: {
+      }, part: "tooltip" }, h("wpp-typography-v4-6-0", { ref: ref => (this.fileNameRef = ref), class: this.fileNameCssClasses(), type: "xs-midi", part: "file-name", title: this.file.name }, this.file?.name)), h("wpp-tooltip-v4-6-0", { text: subtitle, config: {
         popperOptions: { strategy: 'fixed' },
         onShow: () => {
           // Recompute truncation on demand so the guard is never stale
@@ -425,21 +425,21 @@ export class WppFileUploadItem {
           if (!this.isSubtitleTruncated)
             return false;
         },
-      } }, h("wpp-typography-v4-5-0", { ref: ref => (this.subtitleRef = ref), type: "xs-body", class: { subtitle: true, 'subtitle-error': this.isFileWithError() }, part: "subtitle", ...(this.isFileLoading() ? this.progressAriaProps() : {}) }, subtitle))), this.renderDeleteIcon()), h("wpp-typography-v4-5-0", { ref: ref => (this.measureRef = ref), type: "xs-midi", class: "measure", "aria-hidden": "true", role: "presentation" }), h("wpp-typography-v4-5-0", { ref: ref => (this.subtitleMeasureRef = ref), type: "xs-body", class: "measure", "aria-hidden": "true", role: "presentation" })));
+      } }, h("wpp-typography-v4-6-0", { ref: ref => (this.subtitleRef = ref), type: "xs-body", class: { subtitle: true, 'subtitle-error': this.isFileWithError() }, part: "subtitle", ...(this.isFileLoading() ? this.progressAriaProps() : {}) }, subtitle))), this.renderDeleteIcon()), h("wpp-typography-v4-6-0", { ref: ref => (this.measureRef = ref), type: "xs-midi", class: "measure", "aria-hidden": "true", role: "presentation" }), h("wpp-typography-v4-6-0", { ref: ref => (this.subtitleMeasureRef = ref), type: "xs-body", class: "measure", "aria-hidden": "true", role: "presentation" })));
   }
   render() {
     if (this.variant === 'chat')
       return this.renderChatVariant();
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, wrapper, content, file-name, tooltip, loading, percentage, cross-icon", onClick: this.handleClick, role: "listitem" }, h("div", { class: this.itemCssClasses(), part: "file-item", "aria-busy": this.isFileLoading() ? 'true' : undefined }, this.setCurrentError(), h("div", { class: "content-wrapper", part: "wrapper" }, h("div", { class: this.blockCssClasses(), part: "content" }, h("div", { class: "icon-wrapper" }, this.setCurrentIcon()), h("wpp-tooltip-v4-5-0", { ref: ref => (this.tooltipRef = ref), text: this.file.name, config: {
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "file-item, wrapper, content, file-name, tooltip, loading, percentage, cross-icon", onClick: this.handleClick, role: "listitem" }, h("div", { class: this.itemCssClasses(), part: "file-item", "aria-busy": this.isFileLoading() ? 'true' : undefined }, this.setCurrentError(), h("div", { class: "content-wrapper", part: "wrapper" }, h("div", { class: this.blockCssClasses(), part: "content" }, h("div", { class: "icon-wrapper" }, this.setCurrentIcon()), h("wpp-tooltip-v4-6-0", { ref: ref => (this.tooltipRef = ref), text: this.file.name, config: {
         popperOptions: { strategy: 'fixed' },
         onShow: () => {
           if (!this.isTruncated)
             return false;
         },
-      }, part: "tooltip" }, h("wpp-typography-v4-5-0", { ref: ref => (this.fileNameRef = ref), class: this.fileNameCssClasses(), type: "s-body", part: "file-name", title: this.file.name }, this.file?.name)), !this.isFileWithError() ? (h("span", { ref: ref => (this.loadingRef = ref), class: "loading", part: "loading" }, this.total, " ", this.measurementUnit)) : (h("span", { class: "error-message", part: "error-message" }, this.total, " ", this.measurementUnit))), h("div", { class: "controls-wrapper", part: "controls" }, this.isFileLoading() && this.renderProgress(), this.file.deletable !== false && !this.isFileWithError() && (h("wpp-icon-cross-v4-5-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": this._locales.removeFile(this.file.name), onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onBlur: this.handleDeleteBlur, onKeyUp: this.handleDeleteKeyUp }))))), h("wpp-typography-v4-5-0", { ref: ref => (this.measureRef = ref), type: "s-body", class: "measure", "aria-hidden": "true", role: "presentation" })));
+      }, part: "tooltip" }, h("wpp-typography-v4-6-0", { ref: ref => (this.fileNameRef = ref), class: this.fileNameCssClasses(), type: "s-body", part: "file-name", title: this.file.name }, this.file?.name)), !this.isFileWithError() ? (h("span", { ref: ref => (this.loadingRef = ref), class: "loading", part: "loading" }, this.total, " ", this.measurementUnit)) : (h("span", { class: "error-message", part: "error-message" }, this.total, " ", this.measurementUnit))), h("div", { class: "controls-wrapper", part: "controls" }, this.isFileLoading() && this.renderProgress(), this.file.deletable !== false && !this.isFileWithError() && (h("wpp-icon-cross-v4-6-0", { class: this.crossIconClasses(), part: "cross-icon", role: "button", tabindex: this.parentDisabled || this.file.disabled ? -1 : 0, "aria-disabled": this.parentDisabled || this.file.disabled ? 'true' : undefined, "aria-label": this._locales.removeFile(this.file.name), onClick: this.handleCloseClick, onKeyDown: this.handleDeleteKeyDown, onBlur: this.handleDeleteBlur, onKeyUp: this.handleDeleteKeyUp }))))), h("wpp-typography-v4-6-0", { ref: ref => (this.measureRef = ref), type: "s-body", class: "measure", "aria-hidden": "true", role: "presentation" })));
   }
   static get is() { return "wpp-file-upload-item"; }
-  static get registryIs() { return "wpp-file-upload-item-v4-5-0"; }
+  static get registryIs() { return "wpp-file-upload-item-v4-6-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

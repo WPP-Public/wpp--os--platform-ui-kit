@@ -17,7 +17,7 @@ export class WppEmptyDowntime {
     return (h(EmptyStateGraphicView, { graphic: this.graphic, name: "wpp-empty-downtime", width: this.width, height: this.height }));
   }
   static get is() { return "wpp-empty-downtime"; }
-  static get registryIs() { return "wpp-empty-downtime-v4-5-0"; }
+  static get registryIs() { return "wpp-empty-downtime-v4-6-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

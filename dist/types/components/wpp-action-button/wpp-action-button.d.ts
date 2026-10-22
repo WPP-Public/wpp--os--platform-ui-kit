@@ -67,9 +67,12 @@ export declare class WppActionButton {
    */
   readonly ariaProps: AriaProps;
   /**
-   * Method that sets focus on the native button.
+   * Method that sets focus on the native button. The keyboard focus ring shows unless `focusVisible` is
+   * false, which suits focus moved in response to a pointer press.
    */
-  setFocus(): Promise<void>;
+  setFocus(options?: {
+    focusVisible?: boolean;
+  }): Promise<void>;
   onUpdateAriaProps(): void;
   onDisabledChange(newVal: boolean): void;
   componentWillLoad(): void;
@@ -77,6 +80,7 @@ export declare class WppActionButton {
   private onKeyDown;
   private handleClick;
   private onBlur;
+  private onFocus;
   private onMouseDown;
   private onKeyUp;
   private onPointerEnter;

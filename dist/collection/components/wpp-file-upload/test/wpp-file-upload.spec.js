@@ -32,7 +32,7 @@ describe('wpp-file-upload', () => {
   it('should render file upload with acceptConfig', async () => {
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => (h("wpp-file-upload-v4-5-0", { acceptConfig: {
+      template: () => (h("wpp-file-upload-v4-6-0", { acceptConfig: {
           'video/quicktime': ['.mov'],
           'video/x-msvideo': ['.avi'],
         } })),
@@ -42,7 +42,7 @@ describe('wpp-file-upload', () => {
   it('should render file uploader with file items based on url', async () => {
     const page = await newSpecPage({
       components: [WppFileUpload, WppFileUploadItem],
-      template: () => h("wpp-file-upload-v4-5-0", { value: value }),
+      template: () => h("wpp-file-upload-v4-6-0", { value: value }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -50,7 +50,7 @@ describe('wpp-file-upload', () => {
     const renderFileUploadWithLabel = async (disabled = false) => {
       const page = await newSpecPage({
         components: [WppFileUpload, WppLabel, WppInternalLabel],
-        template: () => h("wpp-file-upload-v4-5-0", { disabled: disabled, labelConfig: { text: 'Attachments' } }),
+        template: () => h("wpp-file-upload-v4-6-0", { disabled: disabled, labelConfig: { text: 'Attachments' } }),
       });
       await page.waitForChanges();
       return {
@@ -78,7 +78,7 @@ describe('wpp-file-upload', () => {
   it('should reset a controlled file upload when value changes to an empty array', async () => {
     const page = await newSpecPage({
       components: [WppFileUpload, WppFileUploadItem],
-      template: () => h("wpp-file-upload-v4-5-0", { controlled: true, value: value }),
+      template: () => h("wpp-file-upload-v4-6-0", { controlled: true, value: value }),
     });
     const fileUpload = page.root;
     expect(page.root?.shadowRoot?.querySelectorAll('wpp-file-upload-item')).toHaveLength(2);
@@ -89,7 +89,7 @@ describe('wpp-file-upload', () => {
   it('should reset a controlled file upload when value changes to undefined', async () => {
     const page = await newSpecPage({
       components: [WppFileUpload, WppFileUploadItem],
-      template: () => h("wpp-file-upload-v4-5-0", { controlled: true, value: value }),
+      template: () => h("wpp-file-upload-v4-6-0", { controlled: true, value: value }),
     });
     const fileUpload = page.root;
     let error;
@@ -122,7 +122,7 @@ describe('wpp-file-upload', () => {
       it('prepends the external label to the accessible name when labelConfig is set', async () => {
         const page = await newSpecPage({
           components: [WppFileUpload],
-          template: () => h("wpp-file-upload-v4-5-0", { labelConfig: { text: 'Attachments' } }),
+          template: () => h("wpp-file-upload-v4-6-0", { labelConfig: { text: 'Attachments' } }),
         });
         const input = getInput(page);
         const ids = input?.getAttribute('aria-labelledby')?.split(' ') ?? [];
@@ -132,7 +132,7 @@ describe('wpp-file-upload', () => {
       it('describes the input with the hint line, adding the message when one is shown', async () => {
         const page = await newSpecPage({
           components: [WppFileUpload],
-          template: () => h("wpp-file-upload-v4-5-0", { message: "Upload failed", messageType: "error" }),
+          template: () => h("wpp-file-upload-v4-6-0", { message: "Upload failed", messageType: "error" }),
         });
         const input = getInput(page);
         const ids = input?.getAttribute('aria-describedby')?.split(' ') ?? [];
@@ -153,7 +153,7 @@ describe('wpp-file-upload', () => {
       it('announces a removed file and hands focus to the replacement delete control', async () => {
         const page = await newSpecPage({
           components: [WppFileUpload, WppFileUploadItem],
-          template: () => h("wpp-file-upload-v4-5-0", { value: value }),
+          template: () => h("wpp-file-upload-v4-6-0", { value: value }),
         });
         const inst = page.rootInstance;
         const items = page.root?.shadowRoot?.querySelectorAll('wpp-file-upload-item') ?? [];
@@ -170,7 +170,7 @@ describe('wpp-file-upload', () => {
         const mixed = [{ ...value[0] }, { ...value[1], deletable: false }, { ...value[0], name: 'Third.png' }];
         const page = await newSpecPage({
           components: [WppFileUpload, WppFileUploadItem],
-          template: () => h("wpp-file-upload-v4-5-0", { value: mixed }),
+          template: () => h("wpp-file-upload-v4-6-0", { value: mixed }),
         });
         const inst = page.rootInstance;
         const items = Array.from(page.root?.shadowRoot?.querySelectorAll('wpp-file-upload-item') ?? []);
@@ -219,7 +219,7 @@ describe('wpp-file-upload', () => {
       it('names the delete control from the locales', async () => {
         const page = await newSpecPage({
           components: [WppFileUpload, WppFileUploadItem],
-          template: () => h("wpp-file-upload-v4-5-0", { value: value }),
+          template: () => h("wpp-file-upload-v4-6-0", { value: value }),
         });
         const cross = page.root?.shadowRoot
           ?.querySelector('wpp-file-upload-item')
@@ -229,7 +229,7 @@ describe('wpp-file-upload', () => {
       it('honours a custom removeFile locale', async () => {
         const page = await newSpecPage({
           components: [WppFileUpload, WppFileUploadItem],
-          template: () => (h("wpp-file-upload-v4-5-0", { value: value, locales: { removeFile: (name) => `Supprimer ${name}` } })),
+          template: () => (h("wpp-file-upload-v4-6-0", { value: value, locales: { removeFile: (name) => `Supprimer ${name}` } })),
         });
         const cross = page.root?.shadowRoot
           ?.querySelector('wpp-file-upload-item')
@@ -302,7 +302,7 @@ describe('backend processing', () => {
     const processor = jest.fn().mockResolvedValue(undefined);
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => h("wpp-file-upload-v4-5-0", { processor: processor }),
+      template: () => h("wpp-file-upload-v4-6-0", { processor: processor }),
     });
     await intake(page, [makeFile('ok.png')]);
     expect(processor).toHaveBeenCalledTimes(1);
@@ -311,7 +311,7 @@ describe('backend processing', () => {
   it('marks a file errored with the message the processor resolves', async () => {
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => h("wpp-file-upload-v4-5-0", { processor: async () => ({ error: 'Rejected by server' }) }),
+      template: () => h("wpp-file-upload-v4-6-0", { processor: async () => ({ error: 'Rejected by server' }) }),
     });
     await intake(page, [makeFile('bad.png')]);
     const file = renderedFiles(page)[0];
@@ -321,7 +321,7 @@ describe('backend processing', () => {
   it('marks a file errored using the message of a rejected promise', async () => {
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => (h("wpp-file-upload-v4-5-0", { processor: async () => {
+      template: () => (h("wpp-file-upload-v4-6-0", { processor: async () => {
           throw new Error('Boom');
         } })),
     });
@@ -332,7 +332,7 @@ describe('backend processing', () => {
     const processor = jest.fn().mockResolvedValue(undefined);
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => h("wpp-file-upload-v4-5-0", { size: 1, processor: processor }),
+      template: () => h("wpp-file-upload-v4-6-0", { size: 1, processor: processor }),
     });
     await intake(page, [makeFile('too-big.png', 5 * 1024 * 1024), makeFile('fine.png')]);
     expect(processor).toHaveBeenCalledTimes(1);
@@ -343,7 +343,7 @@ describe('backend processing', () => {
     const warn = jest.spyOn(console, 'warn').mockImplementation(() => { });
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => h("wpp-file-upload-v4-5-0", { controlled: true, processor: processor }),
+      template: () => h("wpp-file-upload-v4-6-0", { controlled: true, processor: processor }),
     });
     await intake(page, [makeFile('a.png')]);
     await intake(page, [makeFile('b.png')]);
@@ -367,7 +367,7 @@ describe('backend processing', () => {
     });
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => h("wpp-file-upload-v4-5-0", { processor: [first, second, third] }),
+      template: () => h("wpp-file-upload-v4-6-0", { processor: [first, second, third] }),
     });
     await intake(page, [makeFile('staged.png')]);
     expect(order).toEqual(['first', 'second-saw-url']);
@@ -378,7 +378,7 @@ describe('backend processing', () => {
     const processor = jest.fn().mockResolvedValue(undefined);
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => h("wpp-file-upload-v4-5-0", { processor: processor }),
+      template: () => h("wpp-file-upload-v4-6-0", { processor: processor }),
     });
     const done = makeFile('done.png');
     const errored = makeFile('errored.png');
@@ -392,7 +392,7 @@ describe('backend processing', () => {
     let aborted = false;
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => (h("wpp-file-upload-v4-5-0", { processor: (_file, { signal }) => new Promise(resolve => {
+      template: () => (h("wpp-file-upload-v4-6-0", { processor: (_file, { signal }) => new Promise(resolve => {
           signal.addEventListener('abort', () => {
             aborted = true;
             resolve(undefined);
@@ -411,7 +411,7 @@ describe('backend processing', () => {
     let abortCount = 0;
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => (h("wpp-file-upload-v4-5-0", { processor: (_file, { signal }) => new Promise(resolve => {
+      template: () => (h("wpp-file-upload-v4-6-0", { processor: (_file, { signal }) => new Promise(resolve => {
           signal.addEventListener('abort', () => {
             abortCount += 1;
             resolve(undefined);
@@ -426,7 +426,7 @@ describe('backend processing', () => {
   it('keeps a file in its original position when it settles to an error', async () => {
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => (h("wpp-file-upload-v4-5-0", { processor: async (file) => (file.name === 'b.png' ? { error: 'nope' } : undefined) })),
+      template: () => (h("wpp-file-upload-v4-6-0", { processor: async (file) => (file.name === 'b.png' ? { error: 'nope' } : undefined) })),
     });
     await intake(page, [makeFile('a.png'), makeFile('b.png'), makeFile('c.png')]);
     expect(renderedFiles(page).map((file) => file.name)).toEqual(['a.png', 'b.png', 'c.png']);
@@ -434,7 +434,7 @@ describe('backend processing', () => {
   it('keeps synchronous validation errors in insertion order too', async () => {
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => h("wpp-file-upload-v4-5-0", { size: 1 }),
+      template: () => h("wpp-file-upload-v4-6-0", { size: 1 }),
     });
     await intake(page, [makeFile('a.png'), makeFile('b-too-big.png', 5 * 1024 * 1024), makeFile('c.png')]);
     expect(renderedFiles(page).map((file) => file.name)).toEqual(['a.png', 'b-too-big.png', 'c.png']);
@@ -443,7 +443,7 @@ describe('backend processing', () => {
     const processor = jest.fn().mockResolvedValue(undefined);
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => h("wpp-file-upload-v4-5-0", { processor: processor }),
+      template: () => h("wpp-file-upload-v4-6-0", { processor: processor }),
     });
     await intake(page, [makeFile('dup.txt'), makeFile('dup.txt')]);
     const names = renderedFiles(page).map((file) => file.name);
@@ -456,7 +456,7 @@ describe('backend processing', () => {
     // file's key mid-flight, which orphaned the file in the uploading state.
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => h("wpp-file-upload-v4-5-0", { processor: async () => ({ url: 'https://cdn/uploaded.png' }) }),
+      template: () => h("wpp-file-upload-v4-6-0", { processor: async () => ({ url: 'https://cdn/uploaded.png' }) }),
     });
     await intake(page, [makeFile('patched.png')]);
     const file = renderedFiles(page)[0];
@@ -468,7 +468,7 @@ describe('backend processing', () => {
     const ended = [];
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => h("wpp-file-upload-v4-5-0", { processor: async () => ({ error: 'nope' }) }),
+      template: () => h("wpp-file-upload-v4-6-0", { processor: async () => ({ error: 'nope' }) }),
     });
     const host = page.root;
     host.addEventListener('wppFileProcessingStart', (event) => started.push(event.detail));
@@ -495,7 +495,7 @@ describe('processing announcements', () => {
   it('announces a file that finishes processing successfully', async () => {
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => h("wpp-file-upload-v4-5-0", { processor: async () => undefined }),
+      template: () => h("wpp-file-upload-v4-6-0", { processor: async () => undefined }),
     });
     await intake(page, [{ name: 'ok.png', size: 10, type: 'image/png' }]);
     expect(liveText(page)).toContain('ok.png processed');
@@ -503,7 +503,7 @@ describe('processing announcements', () => {
   it('announces a file that fails processing, with the reason', async () => {
     const page = await newSpecPage({
       components: [WppFileUpload],
-      template: () => h("wpp-file-upload-v4-5-0", { processor: async () => ({ error: 'Rejected by server' }) }),
+      template: () => h("wpp-file-upload-v4-6-0", { processor: async () => ({ error: 'Rejected by server' }) }),
     });
     await intake(page, [{ name: 'bad.png', size: 10, type: 'image/png' }]);
     expect(liveText(page)).toContain('bad.png failed: Rejected by server');

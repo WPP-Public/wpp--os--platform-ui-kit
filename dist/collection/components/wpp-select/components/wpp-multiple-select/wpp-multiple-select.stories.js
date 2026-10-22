@@ -23,7 +23,7 @@ export const Multiple = (args) => {
     console.log('Apply clicked — selection confirmed');
   };
   return html `
-    <wpp-select-v4-5-0
+    <wpp-select-v4-6-0
       type="multiple"
       name="multiple-select"
       .message=${args.message}
@@ -49,15 +49,15 @@ export const Multiple = (args) => {
     >
       ${args.showIconStart
     ? html `
-            <wpp-icon-clock-v4-5-0
+            <wpp-icon-clock-v4-6-0
               slot="icon-start"
               @click="${(e) => {
       e.stopPropagation();
     }}"
-            ></wpp-icon-clock-v4-5-0>
+            ></wpp-icon-clock-v4-6-0>
           `
     : null}
-    </wpp-select-v4-5-0>
+    </wpp-select-v4-6-0>
   `;
 };
 Multiple.args = {

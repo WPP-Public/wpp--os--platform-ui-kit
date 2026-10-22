@@ -1,6 +1,7 @@
 :host {
   background-color: var(--wpp-grey-color-000);
   display: inline-flex;
+  border-radius: var(--wpp-border-radius-m);
 }
 
 .wrapper {

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
-const utils = require('./utils-a237e765.js');
+const utils = require('./utils-a3ab9816.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
 require('./consts-d8f5ef98.js');
 require('./theme-observer-4179316e.js');
@@ -56,9 +56,9 @@ const WppExpandableCard = class {
     this.themeSubscription.stop();
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "expandable-card-body, accordion, section, title, icon, counter, divider, title-wrapper" }, index.h("div", { class: "body-container", part: "expandable-card-body" }, index.h("wpp-accordion-v4-5-0", { size: this.size, expanded: this.isExpanded, expandedByDefault: this.expandedByDefault, withDivider: false, onWppChange: this.onChange, part: "accordion" }, index.h("slot", null), index.h("slot", { name: "header", slot: "header", class: "header" }), index.h("slot", { name: "actions", slot: "actions", class: "actions" })))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "expandable-card-body, accordion, section, title, icon, counter, divider, title-wrapper" }, index.h("div", { class: "body-container", part: "expandable-card-body" }, index.h("wpp-accordion-v4-6-0", { size: this.size, expanded: this.isExpanded, expandedByDefault: this.expandedByDefault, withDivider: false, onWppChange: this.onChange, part: "accordion" }, index.h("slot", null), index.h("slot", { name: "header", slot: "header", class: "header" }), index.h("slot", { name: "actions", slot: "actions", class: "actions" })))));
   }
-  static get registryIs() { return "wpp-expandable-card-v4-5-0"; }
+  static get registryIs() { return "wpp-expandable-card-v4-6-0"; }
   get host() { return index.getElement(this); }
 };
 WppExpandableCard.style = wppExpandableCardCss;

@@ -10,7 +10,7 @@ const WppRichtextCommonStyles = class {
   constructor(hostRef) {
     index.registerInstance(this, hostRef);
   }
-  static get registryIs() { return "wpp-richtext-common-styles-v4-5-0"; }
+  static get registryIs() { return "wpp-richtext-common-styles-v4-6-0"; }
 };
 WppRichtextCommonStyles.style = wppRichtextCommonStylesCss;
 

@@ -89,6 +89,8 @@ export { WppFloatingButton as WppFloatingButton } from '../dist/types/components
 export { defineCustomElement as defineCustomElementWppFloatingButton } from './wpp-floating-button';
 export { WppFloatingToolbar as WppFloatingToolbar } from '../dist/types/components/wpp-floating-toolbar/wpp-floating-toolbar';
 export { defineCustomElement as defineCustomElementWppFloatingToolbar } from './wpp-floating-toolbar';
+export { WppFocusArtefact as WppFocusArtefact } from '../dist/types/components/wpp-focus-artefact/wpp-focus-artefact';
+export { defineCustomElement as defineCustomElementWppFocusArtefact } from './wpp-focus-artefact';
 export { WppFullScreenModal as WppFullScreenModal } from '../dist/types/components/wpp-full-screen-modal/wpp-full-screen-modal';
 export { defineCustomElement as defineCustomElementWppFullScreenModal } from './wpp-full-screen-modal';
 export { WppGrid as WppGrid } from '../dist/types/components/wpp-grid/wpp-grid';
@@ -1167,6 +1169,8 @@ export { WppListItem as WppListItem } from '../dist/types/components/wpp-list-it
 export { defineCustomElement as defineCustomElementWppListItem } from './wpp-list-item';
 export { WppLoadMore as WppLoadMore } from '../dist/types/components/wpp-load-more/wpp-load-more';
 export { defineCustomElement as defineCustomElementWppLoadMore } from './wpp-load-more';
+export { WppMediaViewer as WppMediaViewer } from '../dist/types/components/wpp-media-viewer/wpp-media-viewer';
+export { defineCustomElement as defineCustomElementWppMediaViewer } from './wpp-media-viewer';
 export { WppMenuContext as WppMenuContext } from '../dist/types/components/wpp-menu-context/wpp-menu-context';
 export { defineCustomElement as defineCustomElementWppMenuContext } from './wpp-menu-context';
 export { WppMenuGroup as WppMenuGroup } from '../dist/types/components/wpp-menu-context/components/wpp-menu-group/wpp-menu-group';

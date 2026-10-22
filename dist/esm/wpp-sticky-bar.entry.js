@@ -1,6 +1,6 @@
 import { r as registerInstance, c as createEvent, h, F as Fragment, H as Host, g as getElement } from './index-a0877c3d.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
-import { k as transformToVersionedTag } from './utils-f7e38fc9.js';
+import { k as transformToVersionedTag } from './utils-49ce8daf.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
 import './theme-observer-b7886d19.js';
 
@@ -161,19 +161,19 @@ const WppStickyBar = class {
     }, 0);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v4-5-0", { variant: "secondary", onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v4-5-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v4-5-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), this.variant === 'small' && (h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v4-6-0", { variant: "secondary", onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v4-6-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v4-6-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), this.variant === 'small' && (h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
       if (!buttonItem)
         return null;
       if (buttonItem.variant === 'action-button') {
-        return (h("wpp-action-button-v4-5-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary", disabled: buttonItem.disabled, loading: buttonItem.loading }, this.getButtonItemIcons(buttonItem)));
+        return (h("wpp-action-button-v4-6-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary", disabled: buttonItem.disabled, loading: buttonItem.loading }, this.getButtonItemIcons(buttonItem)));
       }
-      return (h("wpp-button-v4-5-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant, disabled: buttonItem.disabled, loading: buttonItem.loading }, this.getButtonItemIcons(buttonItem)));
-    })))), this.variant !== 'small' ? (h("div", { class: `body ${this.tabs?.length > 0 ? 'has-tabs' : ''}` }, this.variant === 'medium' ? (h("slot", { name: "content" })) : (this.tabs?.length > 0 && (h("wpp-tabs-v4-5-0", { size: this.tabSize, onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => {
+      return (h("wpp-button-v4-6-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant, disabled: buttonItem.disabled, loading: buttonItem.loading }, this.getButtonItemIcons(buttonItem)));
+    })))), this.variant !== 'small' ? (h("div", { class: `body ${this.tabs?.length > 0 ? 'has-tabs' : ''}` }, this.variant === 'medium' ? (h("slot", { name: "content" })) : (this.tabs?.length > 0 && (h("wpp-tabs-v4-6-0", { size: this.tabSize, onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => {
       const { text, ...restProps } = tabItem;
-      return (h("wpp-tab-v4-5-0", { size: this.tabSize, key: tabItem.value, ...restProps }, tabItem.text));
-    })))))) : null), h("wpp-divider-v4-5-0", null)));
+      return (h("wpp-tab-v4-6-0", { size: this.tabSize, key: tabItem.value, ...restProps }, tabItem.text));
+    })))))) : null), h("wpp-divider-v4-6-0", null)));
   }
-  static get registryIs() { return "wpp-sticky-bar-v4-5-0"; }
+  static get registryIs() { return "wpp-sticky-bar-v4-6-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "buttons": ["onUpdateButtons"],

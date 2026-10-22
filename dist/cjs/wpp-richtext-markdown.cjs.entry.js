@@ -812,9 +812,9 @@ const WppRichtextMarkdown = class {
     this.handleValueChange(this.value);
   }
   render() {
-    return (index.h(index.Host, null, index.h("wpp-richtext-common-styles-v4-5-0", null), index.h("pre", { class: "richtext-markdown" }, this.markdown)));
+    return (index.h(index.Host, null, index.h("wpp-richtext-common-styles-v4-6-0", null), index.h("pre", { class: "richtext-markdown" }, this.markdown)));
   }
-  static get registryIs() { return "wpp-richtext-markdown-v4-5-0"; }
+  static get registryIs() { return "wpp-richtext-markdown-v4-6-0"; }
   static get watchers() { return {
     "value": ["handleValueChange"]
   }; }

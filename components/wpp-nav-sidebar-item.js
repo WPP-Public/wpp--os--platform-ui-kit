@@ -81,7 +81,7 @@ const WppNavSidebarItem$1 = /*@__PURE__*/ proxyCustomElement(class WppNavSidebar
       'wpp-nav-sidebar-item': true,
     });
     this.accessibleNameProps = () => (this.isLabelTruncated ? { 'aria-label': this.label } : {});
-    this.item = () => (h(Fragment, null, h(WrappedSlot, { name: "icon-start", wrapperClass: "icon-wrapper", class: "slot-icon-start-fallback", onSlotchange: this.updateSlotData }), h("p", { class: this.labelCssClasses(), part: "label" }, this.isLabelTruncated ? truncate(this.label, this.maxLabelLength) : this.label), h(WrappedSlot, { name: "icon-end", wrapperClass: this.iconEndCssClasses(), class: "slot-icon-end-fallback" }, this.extended && h("wpp-icon-chevron-v4-5-0", { class: "extended-icon", size: "m", part: "icon-chevron", "aria-hidden": "true" }))));
+    this.item = () => (h(Fragment, null, h(WrappedSlot, { name: "icon-start", wrapperClass: "icon-wrapper", class: "slot-icon-start-fallback", onSlotchange: this.updateSlotData }), h("p", { class: this.labelCssClasses(), part: "label" }, this.isLabelTruncated ? truncate(this.label, this.maxLabelLength) : this.label), h(WrappedSlot, { name: "icon-end", wrapperClass: this.iconEndCssClasses(), class: "slot-icon-end-fallback" }, this.extended && h("wpp-icon-chevron-v4-6-0", { class: "extended-icon", size: "m", part: "icon-chevron", "aria-hidden": "true" }))));
     // The disclosure toggle for a group of sub-items (W3C ARIA APG): a keyboard-operable button
     // exposing its open state. DOM focus sits here rather than on the host, so assistive tech
     // announces a real control instead of a nameless custom element.
@@ -102,7 +102,7 @@ const WppNavSidebarItem$1 = /*@__PURE__*/ proxyCustomElement(class WppNavSidebar
         this.tooltipInstance = instance;
       },
     };
-    this.renderItemWithTooltip = () => (h("wpp-tooltip-v4-5-0", { text: this.label, config: this.itemTooltipConfig, part: "tooltip" }, this.extended ? this.extendedItem() : this.linkItem()));
+    this.renderItemWithTooltip = () => (h("wpp-tooltip-v4-6-0", { text: this.label, config: this.itemTooltipConfig, part: "tooltip" }, this.extended ? this.extendedItem() : this.linkItem()));
     this.renderItem = () => {
       const currentMaxLengthLabel = this.extended ? this.maxTitleLengthWithSubItems : this.maxTitleLengthWithoutSubItems;
       const isNeedToTruncate = this.label.length > currentMaxLengthLabel;
@@ -159,15 +159,15 @@ const WppNavSidebarItem$1 = /*@__PURE__*/ proxyCustomElement(class WppNavSidebar
     return this.label.length > this.maxLabelLength;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, icon-chevron, extended-item, link-item, tooltip, title, divider, icon-start, icon-end, ws-inner, icon-start, icon-end, ws-wrapper" }, this.groupTitle && (h("p", { class: "group-title", part: "title" }, this.groupTitle)), this.renderItem(), this.divide && h("wpp-divider-v4-5-0", { class: "slot-divider-fallback", part: "divider" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, icon-chevron, extended-item, link-item, tooltip, title, divider, icon-start, icon-end, ws-inner, icon-start, icon-end, ws-wrapper" }, this.groupTitle && (h("p", { class: "group-title", part: "title" }, this.groupTitle)), this.renderItem(), this.divide && h("wpp-divider-v4-6-0", { class: "slot-divider-fallback", part: "divider" })));
   }
-  static get registryIs() { return "wpp-nav-sidebar-item-v4-5-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-item-v4-6-0"; }
   get host() { return this; }
   static get watchers() { return {
     "active": ["handleActiveChange"]
   }; }
   static get style() { return wppNavSidebarItemCss; }
-}, [1, "wpp-nav-sidebar-item", "wpp-nav-sidebar-item-v4-5-0", {
+}, [1, "wpp-nav-sidebar-item", "wpp-nav-sidebar-item-v4-6-0", {
     "expanded": [1540],
     "extended": [516],
     "maxTitleLengthWithSubItems": [2, "max-title-length-with-sub-items"],
@@ -186,39 +186,39 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-nav-sidebar-item-v4-5-0", "wpp-divider-v4-5-0", "wpp-icon-chevron-v4-5-0", "wpp-icon-error-v4-5-0", "wpp-icon-warning-v4-5-0", "wpp-internal-tooltip-v4-5-0", "wpp-tooltip-v4-5-0"];
+  const components = ["wpp-nav-sidebar-item-v4-6-0", "wpp-divider-v4-6-0", "wpp-icon-chevron-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-tooltip-v4-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-nav-sidebar-item-v4-5-0":
+    case "wpp-nav-sidebar-item-v4-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppNavSidebarItem$1);
       }
       break;
-    case "wpp-divider-v4-5-0":
+    case "wpp-divider-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-chevron-v4-5-0":
+    case "wpp-icon-chevron-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-icon-error-v4-5-0":
+    case "wpp-icon-error-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-warning-v4-5-0":
+    case "wpp-icon-warning-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-internal-tooltip-v4-5-0":
+    case "wpp-internal-tooltip-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-5-0":
+    case "wpp-tooltip-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

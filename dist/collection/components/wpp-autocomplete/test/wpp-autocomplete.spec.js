@@ -21,7 +21,7 @@ describe('wpp-autocomplete', () => {
     const renderAutocompleteWithLabel = async (disabled = false) => {
       const page = await newSpecPage({
         components: [WppAutocomplete, WppLabel, WppInternalLabel],
-        template: () => h("wpp-autocomplete-v4-5-0", { disabled: disabled, labelConfig: { text: 'Autocomplete label' } }),
+        template: () => h("wpp-autocomplete-v4-6-0", { disabled: disabled, labelConfig: { text: 'Autocomplete label' } }),
       });
       await page.waitForChanges();
       return {
@@ -319,7 +319,7 @@ describe('wpp-autocomplete', () => {
       const getItemKey = (v) => v?.id;
       const page = await newSpecPage({
         components: [WppAutocomplete],
-        template: () => h("wpp-autocomplete-v4-5-0", { type: "extended", multiple: true, getItemKey: getItemKey }),
+        template: () => h("wpp-autocomplete-v4-6-0", { type: "extended", multiple: true, getItemKey: getItemKey }),
       });
       const inst = page.rootInstance;
       const spyUpdate = (inst.updatePlaceholderText = jest.fn());

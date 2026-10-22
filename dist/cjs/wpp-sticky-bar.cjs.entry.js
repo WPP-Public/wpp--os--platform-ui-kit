@@ -4,7 +4,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
 const consts = require('./consts-d8f5ef98.js');
-const utils = require('./utils-a237e765.js');
+const utils = require('./utils-a3ab9816.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
 require('./theme-observer-4179316e.js');
 
@@ -165,19 +165,19 @@ const WppStickyBar = class {
     }, 0);
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses() }, index.h("div", { class: "container" }, index.h("div", { class: "header" }, index.h("div", { class: "left-area" }, this.withBackButton && (index.h("wpp-action-button-v4-5-0", { variant: "secondary", onClick: this.handleLeftIconClick }, index.h("wpp-icon-chevron-v4-5-0", { slot: "icon-start", direction: "left" }))), index.h("wpp-typography-v4-5-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), this.variant === 'small' && (index.h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
+    return (index.h(index.Host, { class: this.hostCssClasses() }, index.h("div", { class: "container" }, index.h("div", { class: "header" }, index.h("div", { class: "left-area" }, this.withBackButton && (index.h("wpp-action-button-v4-6-0", { variant: "secondary", onClick: this.handleLeftIconClick }, index.h("wpp-icon-chevron-v4-6-0", { slot: "icon-start", direction: "left" }))), index.h("wpp-typography-v4-6-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), this.variant === 'small' && (index.h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
       if (!buttonItem)
         return null;
       if (buttonItem.variant === 'action-button') {
-        return (index.h("wpp-action-button-v4-5-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary", disabled: buttonItem.disabled, loading: buttonItem.loading }, this.getButtonItemIcons(buttonItem)));
+        return (index.h("wpp-action-button-v4-6-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary", disabled: buttonItem.disabled, loading: buttonItem.loading }, this.getButtonItemIcons(buttonItem)));
       }
-      return (index.h("wpp-button-v4-5-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant, disabled: buttonItem.disabled, loading: buttonItem.loading }, this.getButtonItemIcons(buttonItem)));
-    })))), this.variant !== 'small' ? (index.h("div", { class: `body ${this.tabs?.length > 0 ? 'has-tabs' : ''}` }, this.variant === 'medium' ? (index.h("slot", { name: "content" })) : (this.tabs?.length > 0 && (index.h("wpp-tabs-v4-5-0", { size: this.tabSize, onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => {
+      return (index.h("wpp-button-v4-6-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant, disabled: buttonItem.disabled, loading: buttonItem.loading }, this.getButtonItemIcons(buttonItem)));
+    })))), this.variant !== 'small' ? (index.h("div", { class: `body ${this.tabs?.length > 0 ? 'has-tabs' : ''}` }, this.variant === 'medium' ? (index.h("slot", { name: "content" })) : (this.tabs?.length > 0 && (index.h("wpp-tabs-v4-6-0", { size: this.tabSize, onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => {
       const { text, ...restProps } = tabItem;
-      return (index.h("wpp-tab-v4-5-0", { size: this.tabSize, key: tabItem.value, ...restProps }, tabItem.text));
-    })))))) : null), index.h("wpp-divider-v4-5-0", null)));
+      return (index.h("wpp-tab-v4-6-0", { size: this.tabSize, key: tabItem.value, ...restProps }, tabItem.text));
+    })))))) : null), index.h("wpp-divider-v4-6-0", null)));
   }
-  static get registryIs() { return "wpp-sticky-bar-v4-5-0"; }
+  static get registryIs() { return "wpp-sticky-bar-v4-6-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "buttons": ["onUpdateButtons"],

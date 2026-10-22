@@ -48,7 +48,7 @@ const createKeyEvent = (key, init = {}) => ({
 const flushPromises = () => new Promise(resolve => setTimeout(resolve, 0));
 const renderPlayer = (props = {}) => newSpecPage({
   components: [WppAudioPlayer],
-  template: () => h("wpp-audio-player-v4-5-0", { src: "track.mp3", ...props }),
+  template: () => h("wpp-audio-player-v4-6-0", { src: "track.mp3", ...props }),
 });
 const query = (page, selector) => page.root?.shadowRoot?.querySelector(selector);
 const queryAll = (page, selector) => Array.from(page.root?.shadowRoot?.querySelectorAll(selector) ?? []);

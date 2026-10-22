@@ -97,7 +97,7 @@ const meta = {
 export default meta;
 export const Default = {
   render: args => html `
-    <wpp-audio-player-v4-5-0
+    <wpp-audio-player-v4-6-0
       .src=${args.src}
       .type=${args.type}
       .autoplay=${args.autoplay}
@@ -108,7 +108,7 @@ export const Default = {
       .volume=${args.volume}
       .locales=${args.locales}
       .ariaProps=${args.ariaProps}
-    ></wpp-audio-player-v4-5-0>
+    ></wpp-audio-player-v4-6-0>
   `,
   args: {
     src: TRACK,

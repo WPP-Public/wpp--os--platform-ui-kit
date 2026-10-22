@@ -22,10 +22,10 @@ const WppEmptyDataviz$1 = /*@__PURE__*/ proxyCustomElement(class WppEmptyDataviz
   render() {
     return (h(EmptyStateGraphicView, { graphic: this.graphic, name: "wpp-empty-dataviz", width: this.width, height: this.height }));
   }
-  static get registryIs() { return "wpp-empty-dataviz-v4-5-0"; }
+  static get registryIs() { return "wpp-empty-dataviz-v4-6-0"; }
   get host() { return this; }
   static get style() { return wppImageCss; }
-}, [1, "wpp-empty-dataviz", "wpp-empty-dataviz-v4-5-0", {
+}, [1, "wpp-empty-dataviz", "wpp-empty-dataviz-v4-6-0", {
     "width": [2],
     "height": [2]
   }]);
@@ -33,14 +33,14 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-empty-dataviz-v4-5-0", "wpp-skeleton-v4-5-0"];
+  const components = ["wpp-empty-dataviz-v4-6-0", "wpp-skeleton-v4-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-empty-dataviz-v4-5-0":
+    case "wpp-empty-dataviz-v4-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppEmptyDataviz$1);
       }
       break;
-    case "wpp-skeleton-v4-5-0":
+    case "wpp-skeleton-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

@@ -4,8 +4,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
 const common = require('./common-ee802540.js');
-const utils = require('./utils-a237e765.js');
-const wppVolumeBar = require('./wpp-volume-bar-3a0673cf.js');
+const utils = require('./utils-a3ab9816.js');
+const wppVolumeBar = require('./wpp-volume-bar-58772675.js');
 require('./consts-d8f5ef98.js');
 
 const SECONDS_IN_HOUR = 3600;
@@ -239,7 +239,7 @@ const WppAudioPlayer = class {
       return this.timeFormat === 'extended' ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
     };
     this.renderAudioTag = () => (index.h("audio", { ref: ref => (this.audioRef = ref), class: "audio-element", controls: false, preload: this.preload, loop: this.loop, onLoadedMetaData: this.handleMetadataLoaded, onDurationChange: this.syncDuration, onTimeUpdate: this.handleTimeUpdate, onProgress: this.handleLoadProgress, onPlay: this.handlePlay, onPause: this.handlePause, onEnded: this.handleEnded }, this.sourceElements, this._locales.notSupportedPlayer));
-    this.renderTime = (time, label) => (index.h("wpp-typography-v4-5-0", { type: "xs-midi", class: "audio-time" }, index.h("span", { role: "timer", "aria-label": `${label} ${this.formatTime(time)}` }, this.formatTime(time))));
+    this.renderTime = (time, label) => (index.h("wpp-typography-v4-6-0", { type: "xs-midi", class: "audio-time" }, index.h("span", { role: "timer", "aria-label": `${label} ${this.formatTime(time)}` }, this.formatTime(time))));
     /**
      * The rail and the buffered bar sit under the input, which carries the played portion and the
      * thumb. The input's own track is transparent past the played portion, so both layers below
@@ -250,7 +250,7 @@ const WppAudioPlayer = class {
      * shared `handleKeyDown` flow moves the position by `AUDIO_SKIP_TIME_VALUE` itself.
      */
     this.renderSeekBar = () => (index.h("div", { class: "progress-container" }, index.h("div", { class: "progress-rail", "aria-hidden": "true" }), index.h("div", { class: "loading-progress", style: { width: `${this.loadedPercentage}%` }, "aria-hidden": "true" }), index.h("input", { class: "progress-bar seek-bar", style: { '--progress-bar-progress': `${this.seekProgress}%` }, type: "range", min: 0, max: this.overallAudioTime || 0, step: "any", value: this.currentAudioTime, onInput: this.handleSeek, onPointerDown: this.startScrubbing, "aria-label": this._locales.progressAriaLabel, "aria-valuemin": "0", "aria-valuemax": this.overallAudioTime, "aria-valuenow": this.currentAudioTime, "aria-valuetext": this.formatTime(this.currentAudioTime), autocomplete: "off" })));
-    this.renderIconButton = ({ label, icon, onClick, ariaProps = {}, }) => (index.h("wpp-tooltip-v4-5-0", { text: label, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-5-0", { variant: "secondary", onClick: onClick, ariaProps: { label, ...ariaProps } }, icon)));
+    this.renderIconButton = ({ label, icon, onClick, ariaProps = {}, }) => (index.h("wpp-tooltip-v4-6-0", { text: label, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-6-0", { variant: "secondary", onClick: onClick, ariaProps: { label, ...ariaProps } }, icon)));
     /**
      * The volume bar is the video player's, rendered with this player as its host: the slider opens
      * on hover and on focus, a click on the button mutes. Only here the button also carries a tooltip.
@@ -259,7 +259,7 @@ const WppAudioPlayer = class {
     this.renderPlaybackRateControl = () => {
       const currentRate = this.formatPlaybackRate(this.playbackRate);
       const label = `${this._locales.playbackRateButtonAriaLabel} ${currentRate}`;
-      return (index.h("wpp-popover-v4-5-0", { ref: ref => (this.playbackRatePopoverRef = ref), ariaProps: { label: this._locales.playbackRateButtonAriaLabel }, config: {
+      return (index.h("wpp-popover-v4-6-0", { ref: ref => (this.playbackRatePopoverRef = ref), ariaProps: { label: this._locales.playbackRateButtonAriaLabel }, config: {
           placement: 'top-start',
           onShow: () => {
             this.isPlaybackRateOpen = true;
@@ -267,7 +267,7 @@ const WppAudioPlayer = class {
           onHide: () => {
             this.isPlaybackRateOpen = false;
           },
-        } }, index.h("div", { slot: "trigger-element" }, index.h("wpp-tooltip-v4-5-0", { text: this._locales.playbackRateButtonAriaLabel, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-5-0", { variant: "secondary", ariaProps: { label, haspopup: 'dialog', expanded: this.isPlaybackRateOpen } }, currentRate))), index.h("div", { style: { padding: '8px' } }, index.h("wpp-pill-group-v4-5-0", { type: "single", value: this.playbackRate, onWppChange: this.handlePlaybackRateChange, "aria-label": this._locales.playbackRateButtonAriaLabel }, this.playbackRates.map(rate => (index.h("wpp-pill-v4-5-0", { key: rate, value: rate, label: this.formatPlaybackRate(rate) })))))));
+        } }, index.h("div", { slot: "trigger-element" }, index.h("wpp-tooltip-v4-6-0", { text: this._locales.playbackRateButtonAriaLabel, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-6-0", { variant: "secondary", ariaProps: { label, haspopup: 'dialog', expanded: this.isPlaybackRateOpen } }, currentRate))), index.h("div", { style: { padding: '8px' } }, index.h("wpp-pill-group-v4-6-0", { type: "single", value: this.playbackRate, onWppChange: this.handlePlaybackRateChange, "aria-label": this._locales.playbackRateButtonAriaLabel }, this.playbackRates.map(rate => (index.h("wpp-pill-v4-6-0", { key: rate, value: rate, label: this.formatPlaybackRate(rate) })))))));
     };
     this.audioPlayerState = 'idle';
     this.currentAudioTime = 0;
@@ -431,19 +431,19 @@ const WppAudioPlayer = class {
     const playPauseLabel = isPlaying ? this._locales.pauseButtonAriaLabel : this._locales.playButtonAriaLabel;
     return (index.h(index.Host, null, index.h("div", { class: { 'audio-player-container': true, 'tab-focus': this.focusType === common.FOCUS_TYPE.TAB }, role: this.ariaProps.role || 'group', "aria-label": this.ariaProps.label || this._locales.hostAriaLabel, tabIndex: 0, onMouseDown: this.handleContainerMouseDown, onKeyUp: this.handleContainerKeyUp, onBlur: this.handleContainerBlur }, this.renderAudioTag(), index.h("div", { class: "controls" }, index.h("div", { class: "timeline" }, this.renderTime(this.currentAudioTime, this._locales.currentTimeAriaLabel), this.renderSeekBar(), this.renderTime(this.overallAudioTime, this._locales.durationAriaLabel)), index.h("div", { class: "buttons" }, index.h("div", { class: "secondary-buttons" }, this.renderPlaybackRateControl()), index.h("div", { class: "playback-buttons" }, this.renderIconButton({
       label: this._locales.skipBackwardButtonAriaLabel,
-      icon: index.h("wpp-icon-rewind-v4-5-0", { slot: "icon-start", "aria-hidden": "true" }),
+      icon: index.h("wpp-icon-rewind-v4-6-0", { slot: "icon-start", "aria-hidden": "true" }),
       onClick: () => this.skip(-AUDIO_SKIP_TIME_VALUE),
     }), this.renderIconButton({
       label: playPauseLabel,
-      icon: isPlaying ? (index.h("wpp-icon-pause-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (index.h("wpp-icon-play-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })),
+      icon: isPlaying ? (index.h("wpp-icon-pause-v4-6-0", { slot: "icon-start", "aria-hidden": "true" })) : (index.h("wpp-icon-play-v4-6-0", { slot: "icon-start", "aria-hidden": "true" })),
       onClick: this.togglePlay,
     }), this.renderIconButton({
       label: this._locales.skipForwardButtonAriaLabel,
-      icon: index.h("wpp-icon-fast-forward-v4-5-0", { slot: "icon-start", "aria-hidden": "true" }),
+      icon: index.h("wpp-icon-fast-forward-v4-6-0", { slot: "icon-start", "aria-hidden": "true" }),
       onClick: () => this.skip(AUDIO_SKIP_TIME_VALUE),
     })), index.h("div", { class: "volume-controls" }, this.renderVolumeBar()))))));
   }
-  static get registryIs() { return "wpp-audio-player-v4-5-0"; }
+  static get registryIs() { return "wpp-audio-player-v4-6-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "volume": ["onVolumeChange"],

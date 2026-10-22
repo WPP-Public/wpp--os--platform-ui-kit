@@ -22,7 +22,7 @@ describe('wpp-file-upload acceptConfig matching', () => {
       // The item is deliberately not registered: nothing here asserts on it, and its thumbnail
       // path would start a FileReader whose callback outlives the page teardown.
       components: [WppFileUpload],
-      template: () => h("wpp-file-upload-v4-5-0", { acceptConfig: acceptConfig, size: 1, ...extraProps }),
+      template: () => h("wpp-file-upload-v4-6-0", { acceptConfig: acceptConfig, size: 1, ...extraProps }),
     });
     const details = [];
     // wppChange is bubbles:false / composed:false - a document-level listener never sees it.

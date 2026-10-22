@@ -5,3 +5,5 @@ export default _default;
 export declare const FloatingToolbar: StoryObj<Components.WppFloatingToolbar & {
   length: number;
 }>;
+export declare const TextActions: StoryObj<Components.WppFloatingToolbar>;
+export declare const SingleAction: StoryObj<Components.WppFloatingToolbar>;

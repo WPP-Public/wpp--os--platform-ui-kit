@@ -171,9 +171,9 @@ const WppRichtextView = class {
     this.setValue(newValue);
   }
   render() {
-    return (h(Host, null, h("wpp-richtext-common-styles-v4-5-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
+    return (h(Host, null, h("wpp-richtext-common-styles-v4-6-0", null), h("div", { ref: (el) => (this.containerElement = el) })));
   }
-  static get registryIs() { return "wpp-richtext-view-v4-5-0"; }
+  static get registryIs() { return "wpp-richtext-view-v4-6-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "styles": ["updateStyle"],

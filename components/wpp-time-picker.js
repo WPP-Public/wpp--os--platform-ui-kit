@@ -829,25 +829,25 @@ const WppTimePicker$1 = /*@__PURE__*/ proxyCustomElement(class WppTimePicker ext
     return mergeLocales(TIME_PICKER_LOCALES_DEFAULTS, this.locales);
   }
   render() {
-    return (h(Host, { class: "wpp-time-picker", "aria-disabled": this.disabled, style: { width: !this.width ? DEFAULT_WIDTH_VALUE : this.width } }, this.labelConfig?.text && (h("wpp-label-v4-5-0", { typography: "s-strong", class: "label", htmlFor: this.inputId, optional: !this.required, config: this.labelConfig, disabled: this.disabled, tooltipConfig: this.labelTooltipConfig, onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })), h("div", { ref: el => (this.anchorRef = el), id: "anchor", class: this.getAnchorCssClasses() }, h("div", { class: "anchor-time" }, h("wpp-icon-clock-v4-5-0", { class: "clock-icon" }), h("input", {
+    return (h(Host, { class: "wpp-time-picker", "aria-disabled": this.disabled, style: { width: !this.width ? DEFAULT_WIDTH_VALUE : this.width } }, this.labelConfig?.text && (h("wpp-label-v4-6-0", { typography: "s-strong", class: "label", htmlFor: this.inputId, optional: !this.required, config: this.labelConfig, disabled: this.disabled, tooltipConfig: this.labelTooltipConfig, onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })), h("div", { ref: el => (this.anchorRef = el), id: "anchor", class: this.getAnchorCssClasses() }, h("div", { class: "anchor-time" }, h("wpp-icon-clock-v4-6-0", { class: "clock-icon" }), h("input", {
       // Styled by class, not by id: the id is per-instance (so `for` / `aria-controls`
       // stay unique when several pickers share a page), which a `#time-picker` selector
       // could not follow.
       class: "time-picker-input", ref: el => (this.inputRef = el), onFocus: this.onFocus, onBlur: this.onBlur, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, onKeyPress: this.onKeyPress, onPaste: this.onPaste, disabled: this.disabled, onInput: this.onUpdateInput, id: this.inputId, name: this.name, type: "text", autocomplete: "off", placeholder: this.placeholder, value: this.value, role: "combobox", "aria-haspopup": "dialog", "aria-expanded": this.isDropdownOpen ? 'true' : 'false', "aria-controls": this.popupId, "aria-label": this.labelConfig?.text || this._locales.timePickerLabel
-    })), h("div", { class: "cross-icon-container" }, this.showDisplayCross && (h("wpp-icon-cross-v4-5-0", { class: "cross-icon", "aria-label": this._locales.eraseTimeLabel, role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: this.disabled ? -1 : 0, onClick: this.handleClickCrossIcon, onMouseDown: (event) => event.preventDefault(), onKeyDown: activateOnEnterOrSpace(this.handleClickCrossIcon) })))), h("div", { id: this.popupId, ref: el => (this.portalRef = el), class: "wpp-time-picker-portal", role: "dialog", "aria-modal": "false", "aria-label": this._locales.timePickerLabel, onKeyDown: this.onPortalKeyDown, onPointerDown: this.onPortalPointerDown, onMouseDown: this.onPortalMouseDown }, h("div", { ref: refEl => (this.hoursSectionRef = refEl), class: "hours section", role: "listbox", "aria-label": this._locales.hoursLabel }, HOURS.map((hour, hourIndex) => (h("wpp-list-item-v4-5-0", { id: `hour-${hour}`, key: hour, class: {
+    })), h("div", { class: "cross-icon-container" }, this.showDisplayCross && (h("wpp-icon-cross-v4-6-0", { class: "cross-icon", "aria-label": this._locales.eraseTimeLabel, role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: this.disabled ? -1 : 0, onClick: this.handleClickCrossIcon, onMouseDown: (event) => event.preventDefault(), onKeyDown: activateOnEnterOrSpace(this.handleClickCrossIcon) })))), h("div", { id: this.popupId, ref: el => (this.portalRef = el), class: "wpp-time-picker-portal", role: "dialog", "aria-modal": "false", "aria-label": this._locales.timePickerLabel, onKeyDown: this.onPortalKeyDown, onPointerDown: this.onPortalPointerDown, onMouseDown: this.onPortalMouseDown }, h("div", { ref: refEl => (this.hoursSectionRef = refEl), class: "hours section", role: "listbox", "aria-label": this._locales.hoursLabel }, HOURS.map((hour, hourIndex) => (h("wpp-list-item-v4-6-0", { id: `hour-${hour}`, key: hour, class: {
         'tab-focus': this.focusedColumn === 'hours' && this.rovingTimeValues.hoursIndex === hourIndex,
-      }, checked: this.checkedTimeValues.hoursIndex === hourIndex, role: "option", "aria-selected": this.checkedTimeValues.hoursIndex === hourIndex ? 'true' : 'false', tabIndex: this.rovingTimeValues.hoursIndex === hourIndex ? 0 : -1, onWppChangeListItem: () => this.handleClickListItem(hour, 'hour') }, h("span", { slot: "label" }, hour))))), h("wpp-divider-v4-5-0", { vertical: true }), h("div", { ref: refEl => (this.minutesSectionRef = refEl), class: "minutes section", role: "listbox", "aria-label": this._locales.minutesLabel }, this.generatedMinutes.map((minutes, minutesIndex) => (h("wpp-list-item-v4-5-0", { id: `minutes-${minutes}`, key: minutes, class: {
+      }, checked: this.checkedTimeValues.hoursIndex === hourIndex, role: "option", "aria-selected": this.checkedTimeValues.hoursIndex === hourIndex ? 'true' : 'false', tabIndex: this.rovingTimeValues.hoursIndex === hourIndex ? 0 : -1, onWppChangeListItem: () => this.handleClickListItem(hour, 'hour') }, h("span", { slot: "label" }, hour))))), h("wpp-divider-v4-6-0", { vertical: true }), h("div", { ref: refEl => (this.minutesSectionRef = refEl), class: "minutes section", role: "listbox", "aria-label": this._locales.minutesLabel }, this.generatedMinutes.map((minutes, minutesIndex) => (h("wpp-list-item-v4-6-0", { id: `minutes-${minutes}`, key: minutes, class: {
         'tab-focus': this.focusedColumn === 'minutes' && this.rovingTimeValues.minutesIndex === minutesIndex,
-      }, checked: this.checkedTimeValues.minutesIndex === minutesIndex, role: "option", "aria-selected": this.checkedTimeValues.minutesIndex === minutesIndex ? 'true' : 'false', tabIndex: this.rovingTimeValues.minutesIndex === minutesIndex ? 0 : -1, onWppChangeListItem: () => this.handleClickListItem(minutes, 'minutes') }, h("span", { slot: "label" }, minutes)))))), this.message && (h("wpp-inline-message-v4-5-0", { class: !this.messageType ? 'helper-text' : '', message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
+      }, checked: this.checkedTimeValues.minutesIndex === minutesIndex, role: "option", "aria-selected": this.checkedTimeValues.minutesIndex === minutesIndex ? 'true' : 'false', tabIndex: this.rovingTimeValues.minutesIndex === minutesIndex ? 0 : -1, onWppChangeListItem: () => this.handleClickListItem(minutes, 'minutes') }, h("span", { slot: "label" }, minutes)))))), this.message && (h("wpp-inline-message-v4-6-0", { class: !this.messageType ? 'helper-text' : '', message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
   }
-  static get registryIs() { return "wpp-time-picker-v4-5-0"; }
+  static get registryIs() { return "wpp-time-picker-v4-6-0"; }
   get host() { return this; }
   static get watchers() { return {
     "minutesInterval": ["onUpdateMinutesInterval"],
     "value": ["onUpdateValue"]
   }; }
   static get style() { return wppTimePickerCss; }
-}, [1, "wpp-time-picker", "wpp-time-picker-v4-5-0", {
+}, [1, "wpp-time-picker", "wpp-time-picker-v4-6-0", {
     "size": [1],
     "disabled": [516],
     "dropdownConfig": [1040],
@@ -879,109 +879,109 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-time-picker-v4-5-0", "wpp-action-button-v4-5-0", "wpp-checkbox-v4-5-0", "wpp-divider-v4-5-0", "wpp-icon-chevron-v4-5-0", "wpp-icon-clock-v4-5-0", "wpp-icon-cross-v4-5-0", "wpp-icon-dash-v4-5-0", "wpp-icon-error-v4-5-0", "wpp-icon-info-message-v4-5-0", "wpp-icon-success-v4-5-0", "wpp-icon-tick-v4-5-0", "wpp-icon-warning-v4-5-0", "wpp-inline-message-v4-5-0", "wpp-internal-label-v4-5-0", "wpp-internal-tooltip-v4-5-0", "wpp-label-v4-5-0", "wpp-list-item-v4-5-0", "wpp-spinner-v4-5-0", "wpp-tooltip-v4-5-0", "wpp-typography-v4-5-0"];
+  const components = ["wpp-time-picker-v4-6-0", "wpp-action-button-v4-6-0", "wpp-checkbox-v4-6-0", "wpp-divider-v4-6-0", "wpp-icon-chevron-v4-6-0", "wpp-icon-clock-v4-6-0", "wpp-icon-cross-v4-6-0", "wpp-icon-dash-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-info-message-v4-6-0", "wpp-icon-success-v4-6-0", "wpp-icon-tick-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-inline-message-v4-6-0", "wpp-internal-label-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-label-v4-6-0", "wpp-list-item-v4-6-0", "wpp-spinner-v4-6-0", "wpp-tooltip-v4-6-0", "wpp-typography-v4-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-time-picker-v4-5-0":
+    case "wpp-time-picker-v4-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTimePicker$1);
       }
       break;
-    case "wpp-action-button-v4-5-0":
+    case "wpp-action-button-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-checkbox-v4-5-0":
+    case "wpp-checkbox-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-divider-v4-5-0":
+    case "wpp-divider-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-chevron-v4-5-0":
+    case "wpp-icon-chevron-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-clock-v4-5-0":
+    case "wpp-icon-clock-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-cross-v4-5-0":
+    case "wpp-icon-cross-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-dash-v4-5-0":
+    case "wpp-icon-dash-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-error-v4-5-0":
+    case "wpp-icon-error-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-info-message-v4-5-0":
+    case "wpp-icon-info-message-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-success-v4-5-0":
+    case "wpp-icon-success-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-tick-v4-5-0":
+    case "wpp-icon-tick-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-warning-v4-5-0":
+    case "wpp-icon-warning-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-inline-message-v4-5-0":
+    case "wpp-inline-message-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-label-v4-5-0":
+    case "wpp-internal-label-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-internal-tooltip-v4-5-0":
+    case "wpp-internal-tooltip-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-label-v4-5-0":
+    case "wpp-label-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-list-item-v4-5-0":
+    case "wpp-list-item-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-5-0":
+    case "wpp-spinner-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-5-0":
+    case "wpp-tooltip-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-5-0":
+    case "wpp-typography-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

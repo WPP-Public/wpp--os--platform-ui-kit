@@ -147,7 +147,7 @@ describe('WppBasicNode', () => {
     it('Should emit wppActionClick event when an additional action from the dropdown menu is clicked', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-5-0", { nodeTitle: "Test Artefact" }, h("div", { slot: "body" }))),
+        template: () => (h("wpp-basic-node-v4-6-0", { nodeTitle: "Test Artefact" }, h("div", { slot: "body" }))),
       });
       const wppActionClickSpy = jest.spyOn(page.rootInstance.wppActionClick, 'emit');
       const additionalListItem = page.root?.querySelectorAll('wpp-list-item')[0];
@@ -162,7 +162,7 @@ describe('WppBasicNode', () => {
     it('Should emit wppActionClick event when the play / pause action is clicked', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => h("wpp-basic-node-v4-5-0", { isSelected: true, nodeTitle: "Test Artefact" }),
+        template: () => h("wpp-basic-node-v4-6-0", { isSelected: true, nodeTitle: "Test Artefact" }),
       });
       const wppActionClickSpy = jest.spyOn(page.rootInstance.wppActionClick, 'emit');
       const playBtn = page.root?.querySelector('[data-testid="wpp-play-button"]');
@@ -186,7 +186,7 @@ describe('WppBasicNode', () => {
     it('Should render the re-run button with the refresh icon and emit wppActionClick when clicked', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => h("wpp-basic-node-v4-5-0", { isReRun: true, nodeTitle: "Test Artefact" }),
+        template: () => h("wpp-basic-node-v4-6-0", { isReRun: true, nodeTitle: "Test Artefact" }),
       });
       const wppActionClickSpy = jest.spyOn(page.rootInstance.wppActionClick, 'emit');
       const reRunBtn = page.root?.querySelector('[data-testid="wpp-rerun-button"]');
@@ -202,7 +202,7 @@ describe('WppBasicNode', () => {
     it('Should prioritise the loading (stop) state over the re-run state', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => h("wpp-basic-node-v4-5-0", { isReRun: true, isLoading: true, nodeTitle: "Test Artefact" }),
+        template: () => h("wpp-basic-node-v4-6-0", { isReRun: true, isLoading: true, nodeTitle: "Test Artefact" }),
       });
       expect(page.root?.querySelector('[data-testid="wpp-pause-button"]')).toBeTruthy();
       expect(page.root?.querySelector('[data-testid="wpp-rerun-button"]')).toBeFalsy();
@@ -220,7 +220,7 @@ describe('WppBasicNode', () => {
     it('should render the error icon in the header and an L error inline message at the top of the body', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-5-0", { nodeTitle: "Test Node", errorMessage: "Something went wrong" }, h("div", { slot: "body" }, "Body Content"))),
+        template: () => (h("wpp-basic-node-v4-6-0", { nodeTitle: "Test Node", errorMessage: "Something went wrong" }, h("div", { slot: "body" }, "Body Content"))),
       });
       expect(page.root?.querySelector('.node-header wpp-icon-error')).not.toBeNull();
       const body = page.root?.querySelector('.node-body');
@@ -253,7 +253,7 @@ describe('WppBasicNode', () => {
     it('should space the inline message from the body only when the body has content', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-5-0", { nodeTitle: "Test Node", errorMessage: "Something went wrong" }, h("div", { slot: "body" }))),
+        template: () => (h("wpp-basic-node-v4-6-0", { nodeTitle: "Test Node", errorMessage: "Something went wrong" }, h("div", { slot: "body" }))),
       });
       const inlineMessage = () => page.root?.querySelector('wpp-inline-message');
       expect(inlineMessage().classList.contains('with-content')).toBe(false);
@@ -273,7 +273,7 @@ describe('WppBasicNode', () => {
     it('should render the node in error state', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-5-0", { nodeTitle: "Test Node", errorMessage: "Something went wrong" }, h("div", { slot: "body" }, "Body Content"))),
+        template: () => (h("wpp-basic-node-v4-6-0", { nodeTitle: "Test Node", errorMessage: "Something went wrong" }, h("div", { slot: "body" }, "Body Content"))),
       });
       expect(page.root).toMatchSnapshot();
     });
@@ -281,7 +281,7 @@ describe('WppBasicNode', () => {
   describe('Testing error dismissal', () => {
     const renderErrorNode = () => newSpecPage({
       components: [WppBasicNode],
-      template: () => h("wpp-basic-node-v4-5-0", { nodeTitle: "Image generator", errorMessage: "Something went wrong" }),
+      template: () => h("wpp-basic-node-v4-6-0", { nodeTitle: "Image generator", errorMessage: "Something went wrong" }),
     });
     // wpp-tooltip is not registered in this spec, so its props are reflected as attributes, except objects like `config`.
     const getErrorTooltip = (page) => page.root?.querySelector('.node-header wpp-tooltip:not(.title-tooltip)');
@@ -363,7 +363,7 @@ describe('WppBasicNode', () => {
     it('should use the dismissErrorAction locale for the close button label', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-5-0", { nodeTitle: "Image generator", errorMessage: "Something went wrong", locales: { dismissErrorAction: 'Fermer le message' } })),
+        template: () => (h("wpp-basic-node-v4-6-0", { nodeTitle: "Image generator", errorMessage: "Something went wrong", locales: { dismissErrorAction: 'Fermer le message' } })),
       });
       expect((page.root?.querySelector('wpp-inline-message')).locales).toEqual({ close: 'Fermer le message' });
     });
@@ -382,7 +382,7 @@ describe('WppBasicNode', () => {
     it('should announce which node is in error with a visually hidden text built from the errorAnnouncement locale', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => h("wpp-basic-node-v4-5-0", { nodeTitle: "Image generator", errorMessage: "Something went wrong" }),
+        template: () => h("wpp-basic-node-v4-6-0", { nodeTitle: "Image generator", errorMessage: "Something went wrong" }),
       });
       const getAnnouncement = () => page.root?.querySelector('.error-region[role="alert"] .sr-only')?.textContent;
       expect(getAnnouncement()).toBe('Image generator error:');
@@ -405,7 +405,7 @@ describe('WppBasicNode', () => {
     it('Should render the component in isSelected state', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-5-0", { isSelected: true, nodeTitle: "Test Artefact" }, h("div", { slot: "body" }, "Body Content"))),
+        template: () => (h("wpp-basic-node-v4-6-0", { isSelected: true, nodeTitle: "Test Artefact" }, h("div", { slot: "body" }, "Body Content"))),
       });
       await page.waitForChanges();
       expect(page.root).toMatchSnapshot();
@@ -413,7 +413,7 @@ describe('WppBasicNode', () => {
     it('Should render additional actions in the dropdown menu when provided via the actions prop and a scrollbar in the body when the height exceeds the maximum', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-5-0", { nodeTitle: "Test Artefact", actions: [{ icon: 'wpp-icon-edit', label: 'Edit' }] }, h("div", { slot: "body" }, h("div", { style: { height: '1300px' } }, h("p", null, "Body content with height 1300px"))))),
+        template: () => (h("wpp-basic-node-v4-6-0", { nodeTitle: "Test Artefact", actions: [{ icon: 'wpp-icon-edit', label: 'Edit' }] }, h("div", { slot: "body" }, h("div", { style: { height: '1300px' } }, h("p", null, "Body content with height 1300px"))))),
       });
       page.rootInstance.hasScrollbar = true;
       await page.waitForChanges();
@@ -422,7 +422,7 @@ describe('WppBasicNode', () => {
     it('Should render the node in loading state', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-5-0", { nodeTitle: "Test Artefact", isLoading: true }, h("div", { slot: "body" }, h("div", { style: { height: '100px' } }, h("p", null, "Body content with height 100px"))))),
+        template: () => (h("wpp-basic-node-v4-6-0", { nodeTitle: "Test Artefact", isLoading: true }, h("div", { slot: "body" }, h("div", { style: { height: '100px' } }, h("p", null, "Body content with height 100px"))))),
       });
       await page.waitForChanges();
       expect(page.root).toMatchSnapshot();
@@ -488,7 +488,7 @@ describe('WppBasicNode', () => {
     it('should show only the loading animation while loading, suppressing the selected and error borders', async () => {
       const page = await newSpecPage({
         components: [WppBasicNode],
-        template: () => (h("wpp-basic-node-v4-5-0", { nodeTitle: "Test", isLoading: true, isSelected: true, errorMessage: "Something went wrong" }, h("div", { slot: "body" }, "Body"))),
+        template: () => (h("wpp-basic-node-v4-6-0", { nodeTitle: "Test", isLoading: true, isSelected: true, errorMessage: "Something went wrong" }, h("div", { slot: "body" }, "Body"))),
       });
       const container = page.root?.querySelector('.node-container');
       expect(container?.classList.contains('loading-node')).toBe(true);
