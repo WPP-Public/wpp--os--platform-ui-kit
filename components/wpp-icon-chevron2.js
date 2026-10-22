@@ -24,9 +24,9 @@ const WppIconChevron = /*@__PURE__*/ proxyCustomElement(class WppIconChevron ext
   render() {
     return (h(WppIcon, { name: "wpp-icon-chevron", width: this.width, height: this.height, size: this.size, color: this.color }, h("path", { "fill-rule": "evenodd", "clip-rule": "evenodd", d: CHEVRON_ICON_PATH, fill: "currentColor", transform: ChevronDirectionTransform[this.direction] })));
   }
-  static get registryIs() { return "wpp-icon-chevron-v4-5-0"; }
+  static get registryIs() { return "wpp-icon-chevron-v4-6-0"; }
   static get style() { return wppIconCss; }
-}, [1, "wpp-icon-chevron", "wpp-icon-chevron-v4-5-0", {
+}, [1, "wpp-icon-chevron", "wpp-icon-chevron-v4-6-0", {
     "size": [1],
     "width": [2],
     "height": [2],
@@ -37,9 +37,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-icon-chevron-v4-5-0"];
+  const components = ["wpp-icon-chevron-v4-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-icon-chevron-v4-5-0":
+    case "wpp-icon-chevron-v4-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppIconChevron);
       }

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
-const utils = require('./utils-a237e765.js');
+const utils = require('./utils-a3ab9816.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
 const loadingHalo = require('./loading-halo-1b17d535.js');
 require('./consts-d8f5ef98.js');
@@ -158,7 +158,7 @@ const WppBasicNode = class {
   }
   render() {
     const primaryAction = this.getPrimaryAction();
-    return (index.h(index.Host, { class: "wpp-basic-node" }, index.h("div", { class: this.getNodeContainerClasses() }, index.h("div", { class: this.getNodeWrapperClasses() }, index.h("div", { class: "node-header" }, index.h("wpp-icon-service-v4-5-0", { color: "var(--wpp-grey-color-700)" }), index.h("wpp-tooltip-v4-5-0", { text: this.nodeTitle, class: "title-tooltip", config: {
+    return (index.h(index.Host, { class: "wpp-basic-node" }, index.h("div", { class: this.getNodeContainerClasses() }, index.h("div", { class: this.getNodeWrapperClasses() }, index.h("div", { class: "node-header" }, index.h("wpp-icon-service-v4-6-0", { color: "var(--wpp-grey-color-700)" }), index.h("wpp-tooltip-v4-6-0", { text: this.nodeTitle, class: "title-tooltip", config: {
         placement: 'top',
         onShow: () => {
           if (!this.titleRef)
@@ -169,7 +169,7 @@ const WppBasicNode = class {
       } }, index.h("p", { ref: el => (this.titleRef = el), class: "node-title" }, this.nodeTitle)), this.errorMessage && (
     // The tooltip and the keyboard stop are only enabled once the inline message is dismissed,
     // as the icon is then the only place where the error message can be read.
-    index.h("wpp-tooltip-v4-5-0", { text: this.errorMessage, disabled: !this.isErrorDismissed, config: {
+    index.h("wpp-tooltip-v4-6-0", { text: this.errorMessage, disabled: !this.isErrorDismissed, config: {
         // Lets the pointer move onto the tooltip without it closing (WCAG 1.4.13 Content on Hover or Focus).
         interactive: true,
         onCreate: () => {
@@ -186,15 +186,15 @@ const WppBasicNode = class {
           if (!icon.matches(':hover') && !icon.matches(':focus-visible'))
             return false;
         },
-      } }, index.h("wpp-icon-error-v4-5-0", { ref: el => (this.errorIconRef = el), class: this.getErrorIconClasses(), tabIndex: this.isErrorDismissed ? 0 : undefined, role: this.isErrorDismissed ? 'img' : undefined, "aria-label": this.isErrorDismissed ? `${this.getErrorAnnouncement()} ${this.errorMessage}` : undefined })))), index.h("wpp-divider-v4-5-0", null), index.h("div", { ref: el => (this.bodyRef = el), class: "node-body" }, index.h("div", { class: "error-region", role: "alert", "aria-atomic": "true" }, this.errorMessage &&
+      } }, index.h("wpp-icon-error-v4-6-0", { ref: el => (this.errorIconRef = el), class: this.getErrorIconClasses(), tabIndex: this.isErrorDismissed ? 0 : undefined, role: this.isErrorDismissed ? 'img' : undefined, "aria-label": this.isErrorDismissed ? `${this.getErrorAnnouncement()} ${this.errorMessage}` : undefined })))), index.h("wpp-divider-v4-6-0", null), index.h("div", { ref: el => (this.bodyRef = el), class: "node-body" }, index.h("div", { class: "error-region", role: "alert", "aria-atomic": "true" }, this.errorMessage &&
       !this.isErrorDismissed && [
       // Identifies the node in the announcement, as several nodes can be in error on the same canvas.
       index.h("span", { class: "sr-only" }, this.getErrorAnnouncement()),
       // Removed (not just hidden) on dismiss, so the next error renders a fresh inline message.
-      index.h("wpp-inline-message-v4-5-0", { class: this.getErrorMessageClasses(), size: "l", type: "error", message: this.errorMessage, locales: { close: this._locales.dismissErrorAction }, isCompact: true, onWppClickCloseBtn: this.handleErrorDismiss }),
-    ]), index.h("slot", { name: "body" })), this.hasScrollbar && index.h("wpp-divider-v4-5-0", null), index.h("div", { class: "node-actions" }, index.h("div", { class: "node-left-actions" }, index.h("wpp-menu-context-v4-5-0", { appendToListWrapper: true }, index.h("wpp-action-button-v4-5-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this.ariaProps.label } }, index.h("wpp-icon-plus-v4-5-0", { slot: "icon-start" })), index.h("div", null, index.h("wpp-list-item-v4-5-0", { onWppChangeListItem: () => this.handleActionClick({ icon: 'wpp-icon-file', label: this._locales.uploadFileAction }) }, index.h("wpp-icon-file-v4-5-0", { slot: "left" }), index.h("span", { slot: "label" }, this._locales.uploadFileAction)), this.actions.map((action) => (index.h("wpp-list-item-v4-5-0", { key: action.icon, onWppChangeListItem: () => this.handleActionClick(action) }, index.h(utils.transformToVersionedTag(action.icon), { slot: 'left' }), index.h("span", { slot: "label" }, action.label)))))), index.h("wpp-tooltip-v4-5-0", { text: this._locales.filterAction, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-5-0", { variant: "secondary", "data-testid": "wpp-settings-btn", ariaProps: { label: this._locales.filterAction }, onClick: () => this.handleActionClick({ icon: 'wpp-icon-gear', label: this._locales.filterAction }) }, index.h("wpp-icon-gear-v4-5-0", { slot: "icon-start" })))), (this.isSelected || this.isLoading || this.isReRun) && (index.h("wpp-tooltip-v4-5-0", { text: primaryAction.label, config: { placement: 'bottom' } }, index.h("wpp-button-v4-5-0", { class: "play-btn", size: "s", disabled: !this.hasContent && !this.isLoading && !this.isReRun, variant: primaryAction.variant, "data-testid": primaryAction.testId, ariaProps: { label: primaryAction.label }, onClick: this.handlePrimaryActionClick }, this.isLoading ? (index.h("wpp-icon-stop-v4-5-0", { slot: "icon-start" })) : this.isReRun ? (index.h("wpp-icon-refresh-v4-5-0", { slot: "icon-start" })) : (index.h("wpp-icon-play-v4-5-0", { slot: "icon-start" })))))))), index.h("slot", { name: "handles" })));
+      index.h("wpp-inline-message-v4-6-0", { class: this.getErrorMessageClasses(), size: "l", type: "error", message: this.errorMessage, locales: { close: this._locales.dismissErrorAction }, isCompact: true, onWppClickCloseBtn: this.handleErrorDismiss }),
+    ]), index.h("slot", { name: "body" })), this.hasScrollbar && index.h("wpp-divider-v4-6-0", null), index.h("div", { class: "node-actions" }, index.h("div", { class: "node-left-actions" }, index.h("wpp-menu-context-v4-6-0", { appendToListWrapper: true }, index.h("wpp-action-button-v4-6-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this.ariaProps.label } }, index.h("wpp-icon-plus-v4-6-0", { slot: "icon-start" })), index.h("div", null, index.h("wpp-list-item-v4-6-0", { onWppChangeListItem: () => this.handleActionClick({ icon: 'wpp-icon-file', label: this._locales.uploadFileAction }) }, index.h("wpp-icon-file-v4-6-0", { slot: "left" }), index.h("span", { slot: "label" }, this._locales.uploadFileAction)), this.actions.map((action) => (index.h("wpp-list-item-v4-6-0", { key: action.icon, onWppChangeListItem: () => this.handleActionClick(action) }, index.h(utils.transformToVersionedTag(action.icon), { slot: 'left' }), index.h("span", { slot: "label" }, action.label)))))), index.h("wpp-tooltip-v4-6-0", { text: this._locales.filterAction, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-6-0", { variant: "secondary", "data-testid": "wpp-settings-btn", ariaProps: { label: this._locales.filterAction }, onClick: () => this.handleActionClick({ icon: 'wpp-icon-gear', label: this._locales.filterAction }) }, index.h("wpp-icon-gear-v4-6-0", { slot: "icon-start" })))), (this.isSelected || this.isLoading || this.isReRun) && (index.h("wpp-tooltip-v4-6-0", { text: primaryAction.label, config: { placement: 'bottom' } }, index.h("wpp-button-v4-6-0", { class: "play-btn", size: "s", disabled: !this.hasContent && !this.isLoading && !this.isReRun, variant: primaryAction.variant, "data-testid": primaryAction.testId, ariaProps: { label: primaryAction.label }, onClick: this.handlePrimaryActionClick }, this.isLoading ? (index.h("wpp-icon-stop-v4-6-0", { slot: "icon-start" })) : this.isReRun ? (index.h("wpp-icon-refresh-v4-6-0", { slot: "icon-start" })) : (index.h("wpp-icon-play-v4-6-0", { slot: "icon-start" })))))))), index.h("slot", { name: "handles" })));
   }
-  static get registryIs() { return "wpp-basic-node-v4-5-0"; }
+  static get registryIs() { return "wpp-basic-node-v4-6-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "errorMessage": ["onErrorMessageChange"]

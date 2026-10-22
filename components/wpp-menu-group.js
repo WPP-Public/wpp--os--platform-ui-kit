@@ -18,11 +18,11 @@ const WppMenuGroup$1 = /*@__PURE__*/ proxyCustomElement(class WppMenuGroup exten
     this.withDivider = false;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), role: this.getRole(), "aria-label": this.header, exportparts: "header, divider" }, this.header && (h("wpp-typography-v4-5-0", { type: "2xs-strong", part: "header" }, this.header)), h("slot", null), this.withDivider && h("wpp-divider-v4-5-0", { class: "slot-divider", part: "divider" })));
+    return (h(Host, { class: this.hostCssClasses(), role: this.getRole(), "aria-label": this.header, exportparts: "header, divider" }, this.header && (h("wpp-typography-v4-6-0", { type: "2xs-strong", part: "header" }, this.header)), h("slot", null), this.withDivider && h("wpp-divider-v4-6-0", { class: "slot-divider", part: "divider" })));
   }
-  static get registryIs() { return "wpp-menu-group-v4-5-0"; }
+  static get registryIs() { return "wpp-menu-group-v4-6-0"; }
   static get style() { return wppMenuGroupCss; }
-}, [1, "wpp-menu-group", "wpp-menu-group-v4-5-0", {
+}, [1, "wpp-menu-group", "wpp-menu-group-v4-6-0", {
     "header": [1],
     "withDivider": [4, "with-divider"]
   }]);
@@ -30,19 +30,19 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-menu-group-v4-5-0", "wpp-divider-v4-5-0", "wpp-typography-v4-5-0"];
+  const components = ["wpp-menu-group-v4-6-0", "wpp-divider-v4-6-0", "wpp-typography-v4-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-menu-group-v4-5-0":
+    case "wpp-menu-group-v4-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppMenuGroup$1);
       }
       break;
-    case "wpp-divider-v4-5-0":
+    case "wpp-divider-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-5-0":
+    case "wpp-typography-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

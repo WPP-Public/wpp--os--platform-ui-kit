@@ -170,6 +170,46 @@ describe('wpp-action-button', () => {
       expect(onKeyDownSpy).toHaveBeenCalled();
     });
   });
+  describe('Test setFocus', () => {
+    const focusRing = async (options) => {
+      const page = await newSpecPage({
+        components: [WppActionButton],
+        html: '<wpp-action-button>Zoom</wpp-action-button>',
+      });
+      await page.root.setFocus(options);
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await page.waitForChanges();
+      return page.root.shadowRoot.querySelector('button').classList.contains('tab-focus');
+    };
+    it('shows the keyboard focus ring by default', async () => {
+      expect(await focusRing()).toBe(true);
+    });
+    it('leaves the focus ring off when focusVisible is false', async () => {
+      expect(await focusRing({ focusVisible: false })).toBe(false);
+    });
+  });
+  describe('Test focus returning to the button', () => {
+    // Focus leaves for the OS file dialog or another window and comes back with no key press in between
+    const ringAfterRoundTrip = async (focusVisible) => {
+      const page = await newSpecPage({
+        components: [WppActionButton],
+        html: '<wpp-action-button>Upload</wpp-action-button>',
+      });
+      const button = page.root.shadowRoot.querySelector('button');
+      button.matches = () => focusVisible;
+      page.root.dispatchEvent(new FocusEvent('blur', { bubbles: true }));
+      await page.waitForChanges();
+      page.root.dispatchEvent(new FocusEvent('focus', { bubbles: true }));
+      await page.waitForChanges();
+      return button.classList.contains('tab-focus');
+    };
+    it('paints the ring again when the browser still treats the focus as keyboard focus', async () => {
+      expect(await ringAfterRoundTrip(true)).toBe(true);
+    });
+    it('leaves the ring off when the browser does not', async () => {
+      expect(await ringAfterRoundTrip(false)).toBe(false);
+    });
+  });
   describe('Test handleClick', () => {
     afterEach(() => {
       // Clear all created mocks

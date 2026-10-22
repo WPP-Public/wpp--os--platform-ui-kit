@@ -73,6 +73,14 @@ export class WppActionButton {
       this.focusType = FOCUS_TYPE.NONE;
       this.isPressed = false;
     };
+    // The ring is a stateful class rather than `:focus-visible`, and blur clears it. Focus that comes back
+    // without a key press - after the OS file dialog or another window hands it back - would then leave the
+    // button focused with no ring, so take the ring from what the browser itself decided.
+    this.onFocus = () => {
+      if (typeof this.buttonRef?.matches === 'function' && this.buttonRef.matches(':focus-visible')) {
+        this.focusType = FOCUS_TYPE.TAB;
+      }
+    };
     this.onMouseDown = () => {
       this.focusType = FOCUS_TYPE.MOUSE;
     };
@@ -161,13 +169,14 @@ export class WppActionButton {
     this.ariaProps = {};
   }
   /**
-   * Method that sets focus on the native button.
+   * Method that sets focus on the native button. The keyboard focus ring shows unless `focusVisible` is
+   * false, which suits focus moved in response to a pointer press.
    */
-  async setFocus() {
+  async setFocus(options = {}) {
     setTimeout(() => {
       if (this.buttonRef) {
         this.buttonRef.focus();
-        this.focusType = FOCUS_TYPE.TAB;
+        this.focusType = options.focusVisible === false ? FOCUS_TYPE.MOUSE : FOCUS_TYPE.TAB;
       }
     }, 0);
   }
@@ -186,14 +195,14 @@ export class WppActionButton {
     this.validAriaProps = getAriaProps(this.ariaProps);
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onPointerEnter: this.onPointerEnter, onPointerLeave: this.onPointerLeave, exportparts: "button, spinner-wrapper, spinner, body, icon-start-wrapper, icon-start, icon-end-wrapper, icon-end, inner, overlay" }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, value: this.value, name: this.name, type: this.type, part: "button", "data-testid": "wppActionButton",
+    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onPointerEnter: this.onPointerEnter, onPointerLeave: this.onPointerLeave, exportparts: "button, spinner-wrapper, spinner, body, icon-start-wrapper, icon-start, icon-end-wrapper, icon-end, inner, overlay" }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, value: this.value, name: this.name, type: this.type, part: "button", "data-testid": "wppActionButton",
       // `isPressed` is the transient pressed visual (mouse/key down), not a toggle state —
       // exposing it as `aria-pressed` made every action button announce as an unpressed
       // toggle button. Consumers with real toggle semantics can pass `ariaProps.pressed`.
-      tabindex: this.ariaProps?.tabIndex, ...this.validAriaProps }, this.loading && (h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, h("wpp-spinner-v4-5-0", { color: this.loadingColor(), part: "spinner" }))), h("div", { class: this.contentCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("slot", { part: "inner", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData }))), h("div", { class: "overlay", part: "overlay" })));
+      tabindex: this.ariaProps?.tabIndex, ...this.validAriaProps }, this.loading && (h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, h("wpp-spinner-v4-6-0", { color: this.loadingColor(), part: "spinner" }))), h("div", { class: this.contentCssClasses(), part: "body" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("slot", { part: "inner", onSlotchange: this.updateSlotData }), h(WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData }))), h("div", { class: "overlay", part: "overlay" })));
   }
   static get is() { return "wpp-action-button"; }
-  static get registryIs() { return "wpp-action-button-v4-5-0"; }
+  static get registryIs() { return "wpp-action-button-v4-6-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -392,8 +401,11 @@ export class WppActionButton {
     return {
       "setFocus": {
         "complexType": {
-          "signature": "() => Promise<void>",
-          "parameters": [],
+          "signature": "(options?: { focusVisible?: boolean; }) => Promise<void>",
+          "parameters": [{
+              "tags": [],
+              "text": ""
+            }],
           "references": {
             "Promise": {
               "location": "global",
@@ -403,7 +415,7 @@ export class WppActionButton {
           "return": "Promise<void>"
         },
         "docs": {
-          "text": "Method that sets focus on the native button.",
+          "text": "Method that sets focus on the native button. The keyboard focus ring shows unless `focusVisible` is\nfalse, which suits focus moved in response to a pointer press.",
           "tags": []
         }
       }

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
-const utils = require('./utils-a237e765.js');
+const utils = require('./utils-a3ab9816.js');
 const WrappedSlot = require('./WrappedSlot-669e1c73.js');
 const consts = require('./consts-d8f5ef98.js');
 
@@ -145,9 +145,9 @@ const WppTopbar = class {
       children: this.navigation.slice(this.itemsToShow),
     };
     const isMenuActive = !!hiddenNavigation.children?.find(item => this.activeItems.includes(item.value));
-    return (index.h(index.Host, { class: this.hostCssClasses(), style: { zIndex: (this.hasOpenMenu ? topbarMenuZIndex : this.zIndex).toString() }, exportparts: "wrapper, body, navigation, topbar-item, divider, app, right, app-wrapper, right-wrapper" }, index.h("div", { class: this.wrapperCssClasses(), part: "wrapper" }, index.h("wpp-grid-v4-5-0", { container: true }, index.h("wpp-grid-v4-5-0", { item: true, all: 24 }, index.h("div", { class: this.headerCssClasses(), part: "body" }, index.h(WrappedSlot.WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasAppSlot }, name: "app", onSlotchange: this.updateSlotData }), index.h("nav", { class: this.navigationCssClasses(), key: this.itemsToShow, part: "navigation" }, this.navigation.slice(0, this.itemsToShow).map(navigation => (index.h("wpp-topbar-item-v4-5-0", { navigation: navigation, firstLevel: true, active: navigation.active, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, zIndex: topbarMenuZIndex, part: "topbar-item", onWppTopbarItemMenuToggle: this.topbarItemMenuToggle }))), this.truncated && (index.h("wpp-topbar-item-v4-5-0", { key: this.value, navigation: hiddenNavigation, firstLevel: true, menu: true, active: isMenuActive, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, zIndex: topbarMenuZIndex, part: "topbar-item", onWppTopbarItemMenuToggle: this.topbarItemMenuToggle }))), index.h(WrappedSlot.WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasRightSlot }, name: "right", onSlotchange: this.updateSlotData }))))), index.h("wpp-divider-v4-5-0", { part: "divider" })));
+    return (index.h(index.Host, { class: this.hostCssClasses(), style: { zIndex: (this.hasOpenMenu ? topbarMenuZIndex : this.zIndex).toString() }, exportparts: "wrapper, body, navigation, topbar-item, divider, app, right, app-wrapper, right-wrapper" }, index.h("div", { class: this.wrapperCssClasses(), part: "wrapper" }, index.h("wpp-grid-v4-6-0", { container: true }, index.h("wpp-grid-v4-6-0", { item: true, all: 24 }, index.h("div", { class: this.headerCssClasses(), part: "body" }, index.h(WrappedSlot.WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasAppSlot }, name: "app", onSlotchange: this.updateSlotData }), index.h("nav", { class: this.navigationCssClasses(), key: this.itemsToShow, part: "navigation" }, this.navigation.slice(0, this.itemsToShow).map(navigation => (index.h("wpp-topbar-item-v4-6-0", { navigation: navigation, firstLevel: true, active: navigation.active, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, zIndex: topbarMenuZIndex, part: "topbar-item", onWppTopbarItemMenuToggle: this.topbarItemMenuToggle }))), this.truncated && (index.h("wpp-topbar-item-v4-6-0", { key: this.value, navigation: hiddenNavigation, firstLevel: true, menu: true, active: isMenuActive, onWppActiveTopbarItemChange: this.topbarItemClick, activeItems: this.activeItems, nativeLink: this.nativeLink, zIndex: topbarMenuZIndex, part: "topbar-item", onWppTopbarItemMenuToggle: this.topbarItemMenuToggle }))), index.h(WrappedSlot.WrappedSlot, { wrapperClass: { 'slot-hidden': !this.hasRightSlot }, name: "right", onSlotchange: this.updateSlotData }))))), index.h("wpp-divider-v4-6-0", { part: "divider" })));
   }
-  static get registryIs() { return "wpp-topbar-v4-5-0"; }
+  static get registryIs() { return "wpp-topbar-v4-6-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "navigation": ["navigationChanged"],

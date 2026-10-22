@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
-const utils = require('./utils-a237e765.js');
+const utils = require('./utils-a3ab9816.js');
 const common = require('./common-ee802540.js');
 const WrappedSlot = require('./WrappedSlot-669e1c73.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
@@ -179,9 +179,9 @@ const WppButton = class {
     this.validAriaProps = utils.getAriaProps(this.ariaProps);
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), onClick: this.handleClick, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, exportparts: "button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper" }, index.h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, formAction: this.formAction, formEncType: this.formEncType, formMethod: this.formMethod, formNoValidate: this.formNoValidate, formTarget: this.formTarget, value: this.value, name: this.name, type: this.type, part: "button", "data-testid": "wppButton", "aria-pressed": this.isPressed ? 'true' : 'false', "aria-haspopup": this.isMenuBtn ? 'menu' : undefined, ...this.validAriaProps }, this.loading && (index.h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, index.h("wpp-spinner-v4-5-0", { color: this.getSpinnerColor(), part: "spinner" }))), index.h("div", { class: this.contentCssClasses() }, index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), index.h("span", { class: "truncate", part: "text" }, index.h("slot", { onSlotchange: this.updateSlotData, part: "inner" })), this.isMenuButton() ? (index.h("div", { class: this.iconEndCssClasses(), part: "icon-end" }, index.h("wpp-icon-chevron-v4-5-0", { direction: "down", color: "var(--wpp-grey-color-000)" }))) : (index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData }))))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), onClick: this.handleClick, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, exportparts: "button, spinner-wrapper, spinner, text, inner, icon-start, icon-end, icon-start-wrapper, icon-end-wrapper" }, index.h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, formAction: this.formAction, formEncType: this.formEncType, formMethod: this.formMethod, formNoValidate: this.formNoValidate, formTarget: this.formTarget, value: this.value, name: this.name, type: this.type, part: "button", "data-testid": "wppButton", "aria-pressed": this.isPressed ? 'true' : 'false', "aria-haspopup": this.isMenuBtn ? 'menu' : undefined, ...this.validAriaProps }, this.loading && (index.h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, index.h("wpp-spinner-v4-6-0", { color: this.getSpinnerColor(), part: "spinner" }))), index.h("div", { class: this.contentCssClasses() }, index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), index.h("span", { class: "truncate", part: "text" }, index.h("slot", { onSlotchange: this.updateSlotData, part: "inner" })), this.isMenuButton() ? (index.h("div", { class: this.iconEndCssClasses(), part: "icon-end" }, index.h("wpp-icon-chevron-v4-6-0", { direction: "down", color: "var(--wpp-grey-color-000)" }))) : (index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.iconEndCssClasses(), name: "icon-end", onSlotchange: this.updateSlotData }))))));
   }
-  static get registryIs() { return "wpp-button-v4-5-0"; }
+  static get registryIs() { return "wpp-button-v4-6-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "ariaProps": ["onUpdateAriaProps"]

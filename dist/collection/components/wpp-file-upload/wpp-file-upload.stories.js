@@ -40,7 +40,7 @@ const loadingTotalSizeValue = [
   },
 ];
 export const FileUpload = {
-  render: args => html ` <wpp-file-upload-v4-5-0
+  render: args => html ` <wpp-file-upload-v4-6-0
       .disabled=${args.disabled}
       .acceptConfig=${args.acceptConfig}
       .size=${args.size}
@@ -84,11 +84,11 @@ export const FileUpload = {
 };
 export const LoadingTotalSize = {
   render: () => html `
-    <wpp-file-upload-v4-5-0
+    <wpp-file-upload-v4-6-0
       name="loading-total-size"
       .value=${loadingTotalSizeValue}
       .controlled=${true}
-    ></wpp-file-upload-v4-5-0>
+    ></wpp-file-upload-v4-6-0>
   `,
 };
 const backendProcessingValue = [
@@ -129,12 +129,12 @@ const backendProcessingValue = [
  */
 export const BackendProcessing = {
   render: () => html `
-    <wpp-file-upload-v4-5-0
+    <wpp-file-upload-v4-6-0
       name="backend-processing"
       .value=${backendProcessingValue}
       .controlled=${true}
       .labelConfig=${{ text: 'Driven by a backend pipeline' }}
-    ></wpp-file-upload-v4-5-0>
+    ></wpp-file-upload-v4-6-0>
   `,
 };
 export const ControlledReset = {
@@ -150,7 +150,7 @@ export const ControlledReset = {
     const getFileUpload = () => document.getElementById(fileUploadId);
     return html `
       <div style="display: flex; flex-direction: column; gap: 12px; width: 320px;">
-        <wpp-file-upload-v4-5-0
+        <wpp-file-upload-v4-6-0
           id=${fileUploadId}
           controlled
           .value=${controlledValue}
@@ -167,12 +167,12 @@ export const ControlledReset = {
     }}
         />
         <div style="display: flex; gap: 8px;">
-          <wpp-button-v4-5-0 @click=${() => updateControlledValue(getFileUpload(), [])}>
+          <wpp-button-v4-6-0 @click=${() => updateControlledValue(getFileUpload(), [])}>
             Reset controlled value
-          </wpp-button-v4-5-0>
-          <wpp-button-v4-5-0 @click=${() => updateControlledValue(getFileUpload(), getControlledResetValue())}>
+          </wpp-button-v4-6-0>
+          <wpp-button-v4-6-0 @click=${() => updateControlledValue(getFileUpload(), getControlledResetValue())}>
             Restore controlled value
-          </wpp-button-v4-5-0>
+          </wpp-button-v4-6-0>
         </div>
       </div>
     `;
@@ -180,7 +180,7 @@ export const ControlledReset = {
 };
 export const WildcardAcceptConfig = {
   name: 'Wildcard accept config',
-  render: args => html `<wpp-file-upload-v4-5-0
+  render: args => html `<wpp-file-upload-v4-6-0
       .acceptConfig=${args.acceptConfig}
       .size=${args.size}
       .maxFiles=${args.maxFiles}
@@ -188,7 +188,7 @@ export const WildcardAcceptConfig = {
       .labelConfig=${args.labelConfig}
       .locales=${args.locales}
       @wppChange="${(e) => console.log('wppChange', e.detail)}"
-    ></wpp-file-upload-v4-5-0>`,
+    ></wpp-file-upload-v4-6-0>`,
   args: {
     acceptConfig: {
       'image/*': [],

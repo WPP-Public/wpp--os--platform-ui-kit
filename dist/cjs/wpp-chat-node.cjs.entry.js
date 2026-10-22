@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
-const utils = require('./utils-a237e765.js');
+const utils = require('./utils-a3ab9816.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
 const loadingHalo = require('./loading-halo-1b17d535.js');
 const speechRecognition = require('./speech-recognition-f6839ec3.js');
@@ -590,12 +590,12 @@ const WppChatNode = class {
   renderActionMenu() {
     const hasActions = this.actions.length > 0;
     if (!hasActions) {
-      return (index.h("wpp-tooltip-v4-5-0", { text: this._locales.attachAction, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-5-0", { variant: "secondary", ariaProps: { label: this._locales.attachAction }, onClick: this.handleAttach }, index.h("wpp-icon-plus-v4-5-0", { slot: "icon-start" }))));
+      return (index.h("wpp-tooltip-v4-6-0", { text: this._locales.attachAction, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-6-0", { variant: "secondary", ariaProps: { label: this._locales.attachAction }, onClick: this.handleAttach }, index.h("wpp-icon-plus-v4-6-0", { slot: "icon-start" }))));
     }
-    return (index.h("wpp-menu-context-v4-5-0", { class: "chat-actions-menu-context", style: { width: 'fit-content' } }, index.h("wpp-action-button-v4-5-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this._locales.actionsMenu } }, index.h("wpp-icon-plus-v4-5-0", { slot: "icon-start" })), index.h("div", { class: "chat-actions-menu" }, this.actions.map(action => (index.h("wpp-list-item-v4-5-0", { key: `${action.icon}-${action.label}`, onWppChangeListItem: () => this.handleActionClick(action) }, this.renderIcon(action.icon, 'left'), index.h("span", { slot: "label" }, action.label)))))));
+    return (index.h("wpp-menu-context-v4-6-0", { class: "chat-actions-menu-context", style: { width: 'fit-content' } }, index.h("wpp-action-button-v4-6-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this._locales.actionsMenu } }, index.h("wpp-icon-plus-v4-6-0", { slot: "icon-start" })), index.h("div", { class: "chat-actions-menu" }, this.actions.map(action => (index.h("wpp-list-item-v4-6-0", { key: `${action.icon}-${action.label}`, onWppChangeListItem: () => this.handleActionClick(action) }, this.renderIcon(action.icon, 'left'), index.h("span", { slot: "label" }, action.label)))))));
   }
   renderModelListItem(model, checked) {
-    return (index.h("wpp-list-item-v4-5-0", { key: model.id, checked: checked, role: "menuitemradio", "aria-checked": String(checked), onWppChangeListItem: () => this.handleModelSelect(model) }, index.h("wpp-avatar-v4-5-0", { slot: "left", size: "xs", variant: "square", role: "presentation", src: model.logo, icon: model.icon, name: model.label }), index.h("span", { slot: "label" }, model.label), model.caption && (index.h("span", { slot: "caption" }, model.caption))));
+    return (index.h("wpp-list-item-v4-6-0", { key: model.id, checked: checked, role: "menuitemradio", "aria-checked": String(checked), onWppChangeListItem: () => this.handleModelSelect(model) }, index.h("wpp-avatar-v4-6-0", { slot: "left", size: "xs", variant: "square", role: "presentation", src: model.logo, icon: model.icon, name: model.label }), index.h("span", { slot: "label" }, model.label), model.caption && (index.h("span", { slot: "caption" }, model.caption))));
   }
   /**
    * How far the submenu has to slide past its own row to sit flush with the bottom of the model
@@ -641,7 +641,7 @@ const WppChatNode = class {
    * dropdown. It also renders the right-pointing chevron itself.
    */
   renderModelOptionsSubmenu(kind, label, options, selectedId, onSelect) {
-    return (index.h("wpp-menu-context-v4-5-0", { class: "model-options-menu", ref: element => (this.modelOptionsSubmenuRefs[kind] = element), dropdownConfig: this.getModelOptionsDropdownConfig(kind) }, index.h("wpp-list-item-v4-5-0", { slot: "trigger-element", isExtended: true }, index.h("span", { slot: "label" }, label)), index.h("div", { class: "wpp-model-options-dropdown" }, options.map(option => (index.h("wpp-list-item-v4-5-0", { key: option.id, checked: option.id === selectedId, labelTypography: { type: 's-midi' }, role: "menuitemradio", "aria-checked": String(option.id === selectedId), onWppChangeListItem: () => onSelect(option) }, index.h("span", { slot: "label" }, option.label), option.caption && index.h("span", { slot: "caption" }, option.caption)))))));
+    return (index.h("wpp-menu-context-v4-6-0", { class: "model-options-menu", ref: element => (this.modelOptionsSubmenuRefs[kind] = element), dropdownConfig: this.getModelOptionsDropdownConfig(kind) }, index.h("wpp-list-item-v4-6-0", { slot: "trigger-element", isExtended: true }, index.h("span", { slot: "label" }, label)), index.h("div", { class: "wpp-model-options-dropdown" }, options.map(option => (index.h("wpp-list-item-v4-6-0", { key: option.id, checked: option.id === selectedId, labelTypography: { type: 's-midi' }, role: "menuitemradio", "aria-checked": String(option.id === selectedId), onWppChangeListItem: () => onSelect(option) }, index.h("span", { slot: "label" }, option.label), option.caption && index.h("span", { slot: "caption" }, option.caption)))))));
   }
   /**
    * Model selector triggered by the compact logo avatar (Figma). Unlike wpp-chat-input,
@@ -657,8 +657,8 @@ const WppChatNode = class {
     const verbosityOptions = this.getModelOptions('verbosityOptions');
     // `logo` (an image URL) wins when provided; `icon` is the asset-free fallback for
     // hosts that cannot serve the brand logos (e.g. Storybook), and initials last.
-    const triggerAvatar = (index.h("wpp-avatar-v4-5-0", { slot: "icon-start", class: "model-avatar", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, icon: selectedModel.icon, name: selectedModel.label || '' }));
-    return (index.h("wpp-menu-context-v4-5-0", { class: "chat-model-selector", style: { width: 'fit-content' }, dropdownConfig: {
+    const triggerAvatar = (index.h("wpp-avatar-v4-6-0", { slot: "icon-start", class: "model-avatar", variant: "square", size: "xs", role: "presentation", src: selectedModel.logo, icon: selectedModel.icon, name: selectedModel.label || '' }));
+    return (index.h("wpp-menu-context-v4-6-0", { class: "chat-model-selector", style: { width: 'fit-content' }, dropdownConfig: {
         onShow: this.handleModelMenuShow,
         onHide: this.handleModelMenuHide,
         // Per Figma (Chat Input / Model Selector): the dropdown opens ABOVE the trigger and
@@ -669,17 +669,17 @@ const WppChatNode = class {
         popperOptions: {
           modifiers: [{ name: 'flip', options: { fallbackPlacements: ['bottom-start'] } }],
         },
-      } }, index.h("wpp-action-button-v4-5-0", { slot: "trigger-element", class: "model-selector-trigger", variant: "secondary", ariaProps: { label: this._locales.modelSelectorLabel, expanded: this.isModelMenuOpen, haspopup: 'menu' } }, triggerAvatar), index.h("div", { class: "wpp-model-dropdown" }, this.getDefaultModels().map(model => this.renderModelListItem(model, model.id === selectedModel.id)), index.h("wpp-divider-v4-5-0", null), this.models.length > 0
+      } }, index.h("wpp-action-button-v4-6-0", { slot: "trigger-element", class: "model-selector-trigger", variant: "secondary", ariaProps: { label: this._locales.modelSelectorLabel, expanded: this.isModelMenuOpen, haspopup: 'menu' } }, triggerAvatar), index.h("div", { class: "wpp-model-dropdown" }, this.getDefaultModels().map(model => this.renderModelListItem(model, model.id === selectedModel.id)), index.h("wpp-divider-v4-6-0", null), this.models.length > 0
       ? this.models.map(model => this.renderModelListItem(model, model.id === selectedModel.id))
       : // Nothing lists the selected model when the list is browsed externally, so
         // surface it here — otherwise the dropdown never shows what is in use.
         isCustomModel && this.renderModelListItem(selectedModel, true), reasoningOptions.length > 0 &&
       this.renderModelOptionsSubmenu('reasoning', this._locales.modelReasoningLabel, reasoningOptions, this.selectedReasoning, this.handleReasoningSelect), verbosityOptions.length > 0 &&
-      this.renderModelOptionsSubmenu('verbosity', this._locales.modelVerbosityLabel, verbosityOptions, this.selectedVerbosity, this.handleVerbositySelect), this.models.length === 0 && (index.h(index.Fragment, null, isCustomModel && index.h("wpp-divider-v4-5-0", null), index.h("wpp-list-item-v4-5-0", { onWppChangeListItem: this.handleModelChange }, index.h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), index.h("wpp-icon-chevron-v4-5-0", { slot: "right", direction: "right" })))))));
+      this.renderModelOptionsSubmenu('verbosity', this._locales.modelVerbosityLabel, verbosityOptions, this.selectedVerbosity, this.handleVerbositySelect), this.models.length === 0 && (index.h(index.Fragment, null, isCustomModel && index.h("wpp-divider-v4-6-0", null), index.h("wpp-list-item-v4-6-0", { onWppChangeListItem: this.handleModelChange }, index.h("span", { slot: "label" }, this._locales.modelSelectorListItemLabel), index.h("wpp-icon-chevron-v4-6-0", { slot: "right", direction: "right" })))))));
   }
   renderMicrophoneBtn() {
     const recordLabel = this.isAudioRecording ? this._locales.audioStopRecordAction : this._locales.audioRecordAction;
-    return (index.h("wpp-action-button-v4-5-0", { class: "mic-btn", "data-testid": "chat-node-mic-btn", variant: "secondary", ariaProps: { label: recordLabel }, onClick: this.handleClickAudioRecording }, this.isAudioRecording ? index.h("wpp-icon-stop-v4-5-0", { slot: "icon-start" }) : index.h("wpp-icon-mic-on-v4-5-0", { slot: "icon-start" })));
+    return (index.h("wpp-action-button-v4-6-0", { class: "mic-btn", "data-testid": "chat-node-mic-btn", variant: "secondary", ariaProps: { label: recordLabel }, onClick: this.handleClickAudioRecording }, this.isAudioRecording ? index.h("wpp-icon-stop-v4-6-0", { slot: "icon-start" }) : index.h("wpp-icon-mic-on-v4-6-0", { slot: "icon-start" })));
   }
   // The primary action follows a fixed priority: stop (while loading/processing)
   // > re-run (when `isReRun`) > send (once the input has content).
@@ -715,7 +715,7 @@ const WppChatNode = class {
   renderSendButton(isLoadingActive) {
     const visible = this.isPrimaryActionVisible(isLoadingActive);
     const { icon, label, handler, variant } = this.getPrimaryAction(isLoadingActive);
-    return (index.h("wpp-button-v4-5-0", { class: { 'play-btn': true, 'is-hidden': !visible }, size: "s", variant: variant,
+    return (index.h("wpp-button-v4-6-0", { class: { 'play-btn': true, 'is-hidden': !visible }, size: "s", variant: variant,
       // While hidden the button stays in the DOM (to animate the fade), but must leave the
       // focus order and a11y tree so its focusable inner control does not trip axe's
       // aria-hidden-focus (SC 4.1.2). `inert` does exactly that without the disabled-grey
@@ -749,7 +749,7 @@ const WppChatNode = class {
   renderAvatar(config) {
     if (config === false)
       return null;
-    return (index.h("wpp-avatar-v4-5-0", { class: "message-avatar", size: "s", variant: "circle", name: config.name || '', icon: config.icon, color: config.color, role: "presentation" }));
+    return (index.h("wpp-avatar-v4-6-0", { class: "message-avatar", size: "s", variant: "circle", name: config.name || '', icon: config.icon, color: config.color, role: "presentation" }));
   }
   getAttachmentKind(attachment) {
     if (attachment.type.startsWith('image/'))
@@ -788,7 +788,7 @@ const WppChatNode = class {
   renderTokenCount(message) {
     const icon = message.tokenCountIcon ?? DEFAULT_TOKEN_COUNT_ICON;
     const action = { id: 'tokenCount', icon, label: this._locales.tokenCountLabel };
-    return (index.h("wpp-action-button-v4-5-0", { variant: "secondary", class: "chat-token-count", ariaProps: { label: `${this._locales.tokenCountLabel} ${message.tokenCount}` }, onClick: () => this.handleMessageActionClick(message, action) }, index.h(utils.transformToVersionedTag(icon), { slot: 'icon-start' }), message.tokenCount));
+    return (index.h("wpp-action-button-v4-6-0", { variant: "secondary", class: "chat-token-count", ariaProps: { label: `${this._locales.tokenCountLabel} ${message.tokenCount}` }, onClick: () => this.handleMessageActionClick(message, action) }, index.h(utils.transformToVersionedTag(icon), { slot: 'icon-start' }), message.tokenCount));
   }
   renderMessageAction(message, action) {
     const isCopyConfirmed = action.id === 'copy' && this.copiedMessageId === message.id;
@@ -796,7 +796,7 @@ const WppChatNode = class {
     const isActive = this.isActionActive(message, action);
     const icon = isCopyConfirmed ? 'wpp-icon-done' : (isActive && action.activeIcon) || action.icon;
     const label = isCopyConfirmed ? this._locales.copiedMessageAction : (isActive && action.activeLabel) || action.label;
-    return (index.h("wpp-tooltip-v4-5-0", { key: action.id, text: label, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-5-0", { variant: "secondary", ariaProps: { label, ...(isToggle ? { pressed: isActive } : {}) }, onClick: () => this.handleMessageActionClick(message, action) }, this.renderIcon(icon, 'icon-start'))));
+    return (index.h("wpp-tooltip-v4-6-0", { key: action.id, text: label, config: { placement: 'bottom' } }, index.h("wpp-action-button-v4-6-0", { variant: "secondary", ariaProps: { label, ...(isToggle ? { pressed: isActive } : {}) }, onClick: () => this.handleMessageActionClick(message, action) }, this.renderIcon(icon, 'icon-start'))));
   }
   renderMessageActions(message) {
     if (message.role !== 'assistant')
@@ -821,7 +821,7 @@ const WppChatNode = class {
           'chat-message': true,
           [`chat-message-${msg.role}`]: true,
           'chat-message-no-avatar': avatarConfig === false,
-        }, key: msg.id }, this.renderAvatar(avatarConfig), index.h("div", { class: `chat-message-content chat-message-content-${msg.role}` }, hasContent && (index.h("div", { class: `chat-bubble chat-bubble-${msg.role}` }, index.h("wpp-typography-v4-5-0", { type: "s-body" }, msg.content))), this.renderMessageAttachments(msg), this.renderMessageActions(msg))));
+        }, key: msg.id }, this.renderAvatar(avatarConfig), index.h("div", { class: `chat-message-content chat-message-content-${msg.role}` }, hasContent && (index.h("div", { class: `chat-bubble chat-bubble-${msg.role}` }, index.h("wpp-typography-v4-6-0", { type: "s-body" }, msg.content))), this.renderMessageAttachments(msg), this.renderMessageActions(msg))));
     });
   }
   render() {
@@ -842,15 +842,15 @@ const WppChatNode = class {
     if (isSizeS) {
       return (index.h(index.Host, { class: { 'wpp-chat-node': true, 'wpp-size-s': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, index.h("div", { class: containerClasses }, index.h("div", { class: wrapperClasses }, this.renderChatBar(false))), index.h("slot", { name: "handles" })));
     }
-    return (index.h(index.Host, { class: { 'wpp-chat-node': true, 'wpp-size-m': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, index.h("div", { class: containerClasses }, index.h("div", { class: wrapperClasses }, index.h("div", { class: "node-header" }, index.h("span", { class: "title-icon" }, index.h("wpp-icon-service-v4-5-0", { color: "var(--wpp-grey-color-700)" })), index.h("wpp-tooltip-v4-5-0", { text: this.nodeTitle, class: "title-tooltip", config: {
+    return (index.h(index.Host, { class: { 'wpp-chat-node': true, 'wpp-size-m': true }, onFocusin: this.handleNodeInteraction, onPointerDown: this.handleNodeInteraction }, index.h("div", { class: containerClasses }, index.h("div", { class: wrapperClasses }, index.h("div", { class: "node-header" }, index.h("span", { class: "title-icon" }, index.h("wpp-icon-service-v4-6-0", { color: "var(--wpp-grey-color-700)" })), index.h("wpp-tooltip-v4-6-0", { text: this.nodeTitle, class: "title-tooltip", config: {
         placement: 'top',
         onShow: () => {
           if (!this.titleRef || this.titleRef.clientWidth >= this.titleRef.scrollWidth)
             return false;
         },
-      } }, index.h("p", { ref: el => (this.titleRef = el), class: "node-title" }, this.nodeTitle))), index.h("wpp-divider-v4-5-0", null), index.h("div", { class: "node-body", ref: el => (this.bodyRef = el) }, this.renderMessages(), index.h("slot", null)), index.h("wpp-divider-v4-5-0", null), this.renderChatBar(isLoadingActive))), index.h("slot", { name: "handles" })));
+      } }, index.h("p", { ref: el => (this.titleRef = el), class: "node-title" }, this.nodeTitle))), index.h("wpp-divider-v4-6-0", null), index.h("div", { class: "node-body", ref: el => (this.bodyRef = el) }, this.renderMessages(), index.h("slot", null)), index.h("wpp-divider-v4-6-0", null), this.renderChatBar(isLoadingActive))), index.h("slot", { name: "handles" })));
   }
-  static get registryIs() { return "wpp-chat-node-v4-5-0"; }
+  static get registryIs() { return "wpp-chat-node-v4-6-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "locales": ["onUpdateLocales"],

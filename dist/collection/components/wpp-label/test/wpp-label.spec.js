@@ -8,7 +8,7 @@ describe('wpp-label', () => {
   describe('info icon focusability', () => {
     const mkLabel = (props = {}) => newSpecPage({
       components: [WppLabel, WppInternalLabel],
-      template: () => (h("wpp-label-v4-5-0", { config: { text: 'Test label', description: 'More info', icon: 'wpp-icon-info' }, typography: "s-body", ...props })),
+      template: () => (h("wpp-label-v4-6-0", { config: { text: 'Test label', description: 'More info', icon: 'wpp-icon-info' }, typography: "s-body", ...props })),
     });
     const iconOf = (page) => page.root?.querySelector('wpp-internal-label')?.shadowRoot?.querySelector('[part="icon-wrapper"]');
     it('exposes the info icon as a button when the field is enabled', async () => {
@@ -28,7 +28,7 @@ describe('wpp-label', () => {
     it('honours an explicit tabIndex of -1 from the tooltip config', async () => {
       const page = await newSpecPage({
         components: [WppLabel, WppInternalLabel],
-        template: () => h("wpp-label-v4-5-0", { config: { text: 'Test label' }, tooltipConfig: { tabIndex: -1 } }),
+        template: () => h("wpp-label-v4-6-0", { config: { text: 'Test label' }, tooltipConfig: { tabIndex: -1 } }),
       });
       const icon = page.root?.querySelector('wpp-internal-label')?.shadowRoot?.querySelector('[part="icon-wrapper"]');
       expect(icon?.getAttribute('role')).toBe('none');
@@ -41,7 +41,7 @@ describe('wpp-label', () => {
     };
     const page = await newSpecPage({
       components: [WppLabel, WppInternalLabel],
-      template: () => h("wpp-label-v4-5-0", { config: labelConfig, disabled: true, typography: "s-body" }),
+      template: () => h("wpp-label-v4-6-0", { config: labelConfig, disabled: true, typography: "s-body" }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -52,7 +52,7 @@ describe('wpp-label', () => {
     };
     const page = await newSpecPage({
       components: [WppLabel, WppInternalLabel],
-      template: () => h("wpp-label-v4-5-0", { config: labelConfig, typography: "s-body" }),
+      template: () => h("wpp-label-v4-6-0", { config: labelConfig, typography: "s-body" }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -67,7 +67,7 @@ describe('wpp-label', () => {
     };
     const page = await newSpecPage({
       components: [WppLabel, WppInternalLabel],
-      template: () => h("wpp-label-v4-5-0", { config: labelConfig, optional: true, typography: "s-body" }),
+      template: () => h("wpp-label-v4-6-0", { config: labelConfig, optional: true, typography: "s-body" }),
     });
     expect(page.root).toMatchSnapshot();
   });

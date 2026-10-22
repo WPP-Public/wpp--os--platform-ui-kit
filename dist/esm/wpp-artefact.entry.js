@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-a0877c3d.js';
-import { k as transformToVersionedTag } from './utils-f7e38fc9.js';
+import { k as transformToVersionedTag } from './utils-49ce8daf.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
 import './consts-744c144f.js';
 import './theme-observer-b7886d19.js';
@@ -95,7 +95,7 @@ const WppArtefact = class {
     this.resizeObserver = undefined;
   }
   render() {
-    return (h(Host, { class: "wpp-artefact" }, h("div", { class: this.getArtefactWrapperClasses() }, h("div", { class: "artefact-header" }, this.titleIcon && h("div", { class: "artefact-icon-container" }, h(transformToVersionedTag(this.titleIcon))), h("wpp-tooltip-v4-5-0", { text: this.artefactTitle, class: "title-tooltip", config: {
+    return (h(Host, { class: "wpp-artefact" }, h("div", { class: this.getArtefactWrapperClasses() }, h("div", { class: "artefact-header" }, this.titleIcon && h("div", { class: "artefact-icon-container" }, h(transformToVersionedTag(this.titleIcon))), h("wpp-tooltip-v4-6-0", { text: this.artefactTitle, class: "title-tooltip", config: {
         placement: 'top',
         onShow: () => {
           if (!this.titleRef)
@@ -103,9 +103,9 @@ const WppArtefact = class {
           if (this.titleRef.clientWidth >= this.titleRef.scrollWidth)
             return false;
         },
-      } }, h("p", { ref: el => (this.titleRef = el), class: "artefact-title" }, this.artefactTitle))), h("wpp-divider-v4-5-0", null), h("div", { class: "artefact-body" }, h("slot", { name: "body" })), this.hasScrollbar && h("wpp-divider-v4-5-0", null), h("div", { class: "artefact-actions" }, this.defaultActions.map((action) => (h("wpp-tooltip-v4-5-0", { text: action.label, key: action.label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-5-0", { variant: "secondary", onClick: () => this.handleActionClick(action), ariaProps: { label: action.label } }, h(transformToVersionedTag(action.icon), { slot: 'icon-start' }))))), this.dropdownActions.length > 0 && (h("wpp-menu-context-v4-5-0", { appendToListWrapper: true }, h("wpp-action-button-v4-5-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this.ariaProps.label } }, h("wpp-icon-more-v4-5-0", { slot: "icon-start" })), h("div", null, this.dropdownActions.map((action) => (h("wpp-list-item-v4-5-0", { key: action.label, onWppChangeListItem: () => this.handleActionClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))))), h("slot", { name: "handles" }))));
+      } }, h("p", { ref: el => (this.titleRef = el), class: "artefact-title" }, this.artefactTitle))), h("wpp-divider-v4-6-0", null), h("div", { class: "artefact-body" }, h("slot", { name: "body" })), this.hasScrollbar && h("wpp-divider-v4-6-0", null), h("div", { class: "artefact-actions" }, this.defaultActions.map((action) => (h("wpp-tooltip-v4-6-0", { text: action.label, key: action.label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-6-0", { variant: "secondary", onClick: () => this.handleActionClick(action), ariaProps: { label: action.label } }, h(transformToVersionedTag(action.icon), { slot: 'icon-start' }))))), this.dropdownActions.length > 0 && (h("wpp-menu-context-v4-6-0", { appendToListWrapper: true }, h("wpp-action-button-v4-6-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this.ariaProps.label } }, h("wpp-icon-more-v4-6-0", { slot: "icon-start" })), h("div", null, this.dropdownActions.map((action) => (h("wpp-list-item-v4-6-0", { key: action.label, onWppChangeListItem: () => this.handleActionClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))))), h("slot", { name: "handles" }))));
   }
-  static get registryIs() { return "wpp-artefact-v4-5-0"; }
+  static get registryIs() { return "wpp-artefact-v4-6-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "locales": ["onUpdateLocales"],

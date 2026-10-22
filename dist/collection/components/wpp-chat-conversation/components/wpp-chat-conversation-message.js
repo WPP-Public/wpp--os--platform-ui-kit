@@ -49,14 +49,14 @@ export class WppChatConversationMessage {
       const label = isCopyConfirmed ? this._locales.copiedAction : (isActive && action.activeLabel) || action.label;
       if (!icon)
         return null;
-      return (h("wpp-tooltip-v4-5-0", { key: action.id, text: label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-5-0", { variant: "secondary", disabled: action.disabled, loading: action.loading,
+      return (h("wpp-tooltip-v4-6-0", { key: action.id, text: label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-6-0", { variant: "secondary", disabled: action.disabled, loading: action.loading,
         // The derived label and toggle state come first so a dev override wins, while the
         // config-only fields (icon, text, isActive, …) are never spread onto the element.
         ariaProps: { label, ...(isToggle ? { pressed: isActive } : {}), ...action.ariaProps }, onClick: () => this.handleActionClick(action) }, h(transformToVersionedTag(icon), { slot: 'icon-start', part: 'icon' }))));
     };
     this.renderMenuContextListItems = () => (h(Fragment, null, this.menuContextListItems.map(item => {
       const { label, slots, ...rest } = item;
-      return (h("wpp-list-item-v4-5-0", { ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, h("span", { slot: "label" }, label), slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+      return (h("wpp-list-item-v4-6-0", { ...rest, id: item.id !== undefined ? `${LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined, role: "option" }, h("span", { slot: "label" }, label), slots && renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
     })));
     this.hostCssClasses = () => ({
       'wpp-chat-conversation': true,
@@ -310,14 +310,14 @@ export class WppChatConversationMessage {
   renderComplete() {
     const tokens = getMarkdownTokens(this.finalContent);
     if (!Array.isArray(tokens)) {
-      return (h("wpp-typography-v4-5-0", { type: "s-body", tag: "p" }, DOMPurify.sanitize(this.finalContent)));
+      return (h("wpp-typography-v4-6-0", { type: "s-body", tag: "p" }, DOMPurify.sanitize(this.finalContent)));
     }
     return h("div", { class: "message-text" }, tokens.map((token) => renderToken(token, this.resolvedRole)));
   }
   renderAttachments() {
     if (!this.attachments || this.attachments.length === 0)
       return null;
-    return (h("div", { class: "attachments", part: "attachments", role: "list" }, this.attachments.map((file, index) => (h("wpp-file-upload-item-v4-5-0", { key: index, variant: "chat", part: "file-item", role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": this.attachments.length.toString(), file: {
+    return (h("div", { class: "attachments", part: "attachments", role: "list" }, this.attachments.map((file, index) => (h("wpp-file-upload-item-v4-6-0", { key: index, variant: "chat", part: "file-item", role: "listitem", "aria-posinset": (index + 1).toString(), "aria-setsize": this.attachments.length.toString(), file: {
         name: file.name,
         url: file.url,
         type: file.type,
@@ -338,18 +338,18 @@ export class WppChatConversationMessage {
    * button's ::slotted rule).
    */
   renderTokenCount() {
-    return (h("wpp-action-button-v4-5-0", { variant: "secondary", class: "token-count", part: "token-count", ariaProps: { label: `${this._locales.tokenCountLabel} ${this.tokenCount}` }, onClick: () => this.handleActionClick({ id: 'tokenCount', label: this._locales.tokenCountLabel }) }, h(transformToVersionedTag(this.tokenCountIcon), { slot: 'icon-start' }), this.tokenCount));
+    return (h("wpp-action-button-v4-6-0", { variant: "secondary", class: "token-count", part: "token-count", ariaProps: { label: `${this._locales.tokenCountLabel} ${this.tokenCount}` }, onClick: () => this.handleActionClick({ id: 'tokenCount', label: this._locales.tokenCountLabel }) }, h(transformToVersionedTag(this.tokenCountIcon), { slot: 'icon-start' }), this.tokenCount));
   }
   hasTextContent() {
     return !!this.finalContent && this.finalContent.trim().length > 0;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: this.containerCssClasses() }, this.shouldRenderAvatar('assistant') && (h("div", { class: "avatar-wrapper ai-avatar" }, this.resolvedRole === 'assistant' && (h("wpp-avatar-v4-5-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), h("div", { class: this.contentCssClasses() }, h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.hasTextContent() && this.renderComplete(), h("slot", { part: "custom-content" }), this.currentStatus === 'complete' && !!this.attachments?.length && this.renderAttachments()), this.resolvedRole === 'assistant' && this.currentStatus === 'complete' && (h("div", { class: "actions" }, h("div", { class: "action-toolbar", part: "action-toolbar" }, this.mergedActions.map(this.renderActionButton), this.menuContextListItems && (h("wpp-menu-context-v4-5-0", null, h("wpp-action-button-v4-5-0", { variant: "secondary", slot: "trigger-element" }, h("wpp-icon-more-v4-5-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.hasTokenCount()
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: this.containerCssClasses() }, this.shouldRenderAvatar('assistant') && (h("div", { class: "avatar-wrapper ai-avatar" }, this.resolvedRole === 'assistant' && (h("wpp-avatar-v4-6-0", { size: "s", icon: "wpp-icon-ai", role: "presentation", ...this.assistantAvatarConfig })))), h("div", { class: this.contentCssClasses() }, h("div", { class: this.messageCssClasses() }, this.currentStatus === 'streaming' && this.renderStreaming(), this.currentStatus === 'complete' && this.hasTextContent() && this.renderComplete(), h("slot", { part: "custom-content" }), this.currentStatus === 'complete' && !!this.attachments?.length && this.renderAttachments()), this.resolvedRole === 'assistant' && this.currentStatus === 'complete' && (h("div", { class: "actions" }, h("div", { class: "action-toolbar", part: "action-toolbar" }, this.mergedActions.map(this.renderActionButton), this.menuContextListItems && (h("wpp-menu-context-v4-6-0", null, h("wpp-action-button-v4-6-0", { variant: "secondary", slot: "trigger-element" }, h("wpp-icon-more-v4-6-0", { slot: "icon-start", direction: "horizontal" })), this.renderMenuContextListItems()))), this.hasTokenCount()
       ? this.renderTokenCount()
-      : this.sourcesActionConfig && (h("div", { class: "sources-action" }, h("wpp-action-button-v4-5-0", { variant: "secondary", ariaProps: this.sourcesActionConfig.ariaProps, disabled: this.sourcesActionConfig.disabled, loading: this.sourcesActionConfig.loading, onClick: () => this.sourcesActionConfig.onClick?.() }, this.sourcesActionConfig.text))), h("span", { class: "sr-only", "aria-live": "polite" }, this.isCopied ? this._locales.copiedAction : '')))), this.shouldRenderAvatar('user') && (h("div", { class: "avatar-wrapper user-avatar" }, this.resolvedRole === 'user' && h("wpp-avatar-v4-5-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
+      : this.sourcesActionConfig && (h("div", { class: "sources-action" }, h("wpp-action-button-v4-6-0", { variant: "secondary", ariaProps: this.sourcesActionConfig.ariaProps, disabled: this.sourcesActionConfig.disabled, loading: this.sourcesActionConfig.loading, onClick: () => this.sourcesActionConfig.onClick?.() }, this.sourcesActionConfig.text))), h("span", { class: "sr-only", "aria-live": "polite" }, this.isCopied ? this._locales.copiedAction : '')))), this.shouldRenderAvatar('user') && (h("div", { class: "avatar-wrapper user-avatar" }, this.resolvedRole === 'user' && h("wpp-avatar-v4-6-0", { size: "s", role: "presentation", ...this.userAvatarConfig }))))));
   }
   static get is() { return "wpp-chat-conversation-message"; }
-  static get registryIs() { return "wpp-chat-conversation-message-v4-5-0"; }
+  static get registryIs() { return "wpp-chat-conversation-message-v4-6-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -479,7 +479,7 @@ export class WppChatConversationMessage {
         "mutable": false,
         "complexType": {
           "original": "ActionButtonDataConfig",
-          "resolved": "Partial<ActionButtonData> & { text?: string | undefined; label?: string | undefined; isActive?: boolean | undefined; activeIcon?: `wpp-icon-${string}` | undefined; activeLabel?: string | undefined; }",
+          "resolved": "(Partial<Partial<Pick<WppActionButton, \"value\" | \"disabled\" | \"loading\" | \"autoFocus\" | \"name\" | \"form\" | \"type\" | \"ariaProps\">> & { id?: string | undefined; onClick?: (() => void) | undefined; tooltip?: string | undefined; } & { icon: `wpp-icon-${string}`; label?: string | undefined; }> & { text?: string | undefined; label?: string | undefined; isActive?: boolean | undefined; activeIcon?: `wpp-icon-${string}` | undefined; activeLabel?: string | undefined; }) | (Partial<Partial<Pick<WppActionButton, \"value\" | \"disabled\" | \"loading\" | \"autoFocus\" | \"name\" | \"form\" | \"type\" | \"ariaProps\">> & { id?: string | undefined; onClick?: (() => void) | undefined; tooltip?: string | undefined; } & { icon?: undefined; label: string; }> & { text?: string | undefined; label?: string | undefined; isActive?: boolean | undefined; activeIcon?: `wpp-icon-${string}` | undefined; activeLabel?: string | undefined; })",
           "references": {
             "ActionButtonDataConfig": {
               "location": "import",

@@ -1,7 +1,7 @@
 {
   "name": "@wppopen/components-library",
   "description": "WPP Platform Open Components Library",
-  "version": "4.5.0",
+  "version": "4.6.0",
   "files": [
     "components",
     "dist",
@@ -72,6 +72,7 @@
     "lodash": "4.18.1",
     "lottie-web": "5.13.0",
     "marked": "^15.0.7",
+    "online-3d-viewer": "0.18.0",
     "tippy.js": "6.3.7",
     "turndown": "^7.2.0"
   },

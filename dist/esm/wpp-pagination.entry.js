@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, h, F as Fragment, H as Host } from './index-a0877c3d.js';
-import { y as mergeLocales } from './utils-f7e38fc9.js';
+import { y as mergeLocales } from './utils-49ce8daf.js';
 import './consts-744c144f.js';
 
 const LOCALES_DEFAULTS = {
@@ -73,7 +73,7 @@ const WppPagination = class {
     return (h(Host, { class: this.hostCssClasses(),
       // The pagination is a navigation landmark so assistive tech can find and skip it
       // (W3C ARIA APG pagination pattern).
-      role: "navigation", "aria-label": this._locales.paginationLabel, exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, h("div", { class: "control-pagination-wrapper", part: "body" }, !this.hasSingleItemPerPageOption && (h(Fragment, null, h("wpp-typography-v4-5-0", { type: "s-body", part: "per-page-label" }, this._locales.itemsPerPage, ":"), h("wpp-select-v4-5-0", { type: "single", isTextSelect: true, onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig }, dropdownWidth: "100px", part: "pre-page-select",
+      role: "navigation", "aria-label": this._locales.paginationLabel, exportparts: "body, per-page-label, pre-page-select, per-page-item, divider, range, page-select" }, h("div", { class: "control-pagination-wrapper", part: "body" }, !this.hasSingleItemPerPageOption && (h(Fragment, null, h("wpp-typography-v4-6-0", { type: "s-body", part: "per-page-label" }, this._locales.itemsPerPage, ":"), h("wpp-select-v4-6-0", { type: "single", isTextSelect: true, onWppChange: this.handleItemsPerPageNumberChange, value: this.selectedItemPerPage, dropdownConfig: { ...this.dropdownConfig }, dropdownWidth: "100px", part: "pre-page-select",
       // The visible "Items per page" typography cannot be associated across the
       // select's shadow boundary, so the name is passed explicitly — including the
       // current value, which the select's default label would otherwise announce alone.
@@ -81,9 +81,9 @@ const WppPagination = class {
         value: item,
         label: `${item}`,
         part: 'per-page-item',
-      })) }), h("wpp-divider-v4-5-0", { part: "divider" }))), h("wpp-typography-v4-5-0", { type: "s-body", part: "range" }, this.getPageRange())), this.selectedItemPerPage && (h("wpp-pagination-select-v4-5-0", { count: this.count, itemsPerPage: this.selectedItemPerPage, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, previousPageLabel: this._locales.previousPage, nextPageLabel: this._locales.nextPage, pageInputLabel: this._locales.pageInputLabel, pageLabel: this._locales.pageLabel, part: "page-select" }))));
+      })) }), h("wpp-divider-v4-6-0", { part: "divider" }))), h("wpp-typography-v4-6-0", { type: "s-body", part: "range" }, this.getPageRange())), this.selectedItemPerPage && (h("wpp-pagination-select-v4-6-0", { count: this.count, itemsPerPage: this.selectedItemPerPage, pageSelectThreshold: this.pageSelectThreshold, onWppChange: this.handleSelectedPageChange, activePageNumber: this.activePageNumber, previousPageLabel: this._locales.previousPage, nextPageLabel: this._locales.nextPage, pageInputLabel: this._locales.pageInputLabel, pageLabel: this._locales.pageLabel, part: "page-select" }))));
   }
-  static get registryIs() { return "wpp-pagination-v4-5-0"; }
+  static get registryIs() { return "wpp-pagination-v4-6-0"; }
 };
 WppPagination.style = wppPaginationCss;
 

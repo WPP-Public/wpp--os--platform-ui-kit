@@ -17,7 +17,7 @@ export class WppEmptyCards {
     return (h(EmptyStateGraphicView, { graphic: this.graphic, name: "wpp-empty-cards", width: this.width, height: this.height }));
   }
   static get is() { return "wpp-empty-cards"; }
-  static get registryIs() { return "wpp-empty-cards-v4-5-0"; }
+  static get registryIs() { return "wpp-empty-cards-v4-6-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

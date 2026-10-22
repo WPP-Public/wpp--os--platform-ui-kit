@@ -46,10 +46,10 @@ export class WppPaginationItem {
     this.themeSubscription.stop();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), role: "button", "aria-label": this.pageLabel(this.number), "aria-current": this.selected ? 'page' : undefined, onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, tabIndex: 0, exportparts: "number" }, h("wpp-typography-v4-5-0", { type: "s-body", part: "number" }, this.number)));
+    return (h(Host, { class: this.hostCssClasses(), role: "button", "aria-label": this.pageLabel(this.number), "aria-current": this.selected ? 'page' : undefined, onClick: this.handleClick, onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, tabIndex: 0, exportparts: "number" }, h("wpp-typography-v4-6-0", { type: "s-body", part: "number" }, this.number)));
   }
   static get is() { return "wpp-pagination-item"; }
-  static get registryIs() { return "wpp-pagination-item-v4-5-0"; }
+  static get registryIs() { return "wpp-pagination-item-v4-6-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

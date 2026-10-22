@@ -60,19 +60,19 @@ export const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
   switch (fileExtension) {
     // Text
     case '.txt':
-      return h("wpp-icon-document-v4-5-0", null);
+      return h("wpp-icon-document-v4-6-0", null);
     // Compressed
     case '.zip':
     case '.rar':
     case '.7z':
-      return h("wpp-icon-file-zip-v4-5-0", null);
+      return h("wpp-icon-file-zip-v4-6-0", null);
     // Image
     case '.png':
     case '.jpg':
     case '.jpeg':
     case '.svg':
     case '.gif':
-      return h("wpp-icon-image-v4-5-0", null);
+      return h("wpp-icon-image-v4-6-0", null);
     // Video
     case '.mp4':
     case '.mov':
@@ -81,7 +81,7 @@ export const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.mkv':
     case '.flv':
     case '.webm':
-      return h("wpp-icon-video-clip-v4-5-0", null);
+      return h("wpp-icon-video-clip-v4-6-0", null);
     // Audio
     case '.mp3':
     case '.wav':
@@ -89,7 +89,7 @@ export const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.wma':
     case '.m4a':
     case '.aac':
-      return h("wpp-icon-music-v4-5-0", null);
+      return h("wpp-icon-music-v4-6-0", null);
     // Data
     case '.csv':
     case '.json':
@@ -97,7 +97,7 @@ export const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.db':
     case '.sqlite':
     case '.dat':
-      return h("wpp-icon-database-v4-5-0", null);
+      return h("wpp-icon-database-v4-6-0", null);
     // Presentation
     case '.pptx':
     case '.key':
@@ -105,16 +105,16 @@ export const returnIconFromExtension = (fileExtension, thumbnailUrl) => {
     case '.pps':
     case '.sldx':
     case '.ppt':
-      return h("wpp-icon-pitch-v4-5-0", null);
+      return h("wpp-icon-pitch-v4-6-0", null);
     // Spreadsheet
     case '.xlsx':
     case '.xls':
     case '.ods':
     case '.numbers':
     case '.tsv':
-      return h("wpp-icon-spreadsheet-v4-5-0", null);
+      return h("wpp-icon-spreadsheet-v4-6-0", null);
     default:
-      return h("wpp-icon-file-v4-5-0", null);
+      return h("wpp-icon-file-v4-6-0", null);
   }
 };
 /**

@@ -34,6 +34,7 @@ import { CounterChangeEventDetail, CounterFormat, CounterLabelConfig } from "./c
 import { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes, MonthRangeNormalization, YearRangeNormalization } from "./components/wpp-datepicker/types";
 import { ExpandableCardSectionChangeEventDetail } from "./components/wpp-expandable-card/types";
 import { ActionButtonData } from "./components/wpp-floating-toolbar/types";
+import { FocusArtefactActionClickDetail, FocusArtefactAriaProps, FocusArtefactLocales, FocusArtefactMenuAction, FocusArtefactResizeDetail, FocusArtefactVersion, FocusArtefactWidth } from "./components/wpp-focus-artefact/types";
 import { FullScreenModalCloseDetails, FullScreenModalFormConfig, FullScreenModalLocalesType } from "./components/wpp-full-screen-modal/types";
 import { ModalActionsConfig, ModalCloseDetails, ModalFormConfig } from "./components/wpp-modal/types";
 import { AlignItemsType, DirectionType, JustifyContentType } from "./components/wpp-grid/types";
@@ -52,6 +53,7 @@ import { NavigationItemEventDetail, NavigationState, TopbarChangeEventDetail } f
 import { ThemeColorValue } from "./types/theme-tokens";
 import { ContainerStateType, ListItemChangeEventDetail, ListValue as ListValue1, TooltipConfig } from "./components/wpp-list-item/types";
 import { LoadMoreChangeEventDetail } from "./components/wpp-load-more/types";
+import { MediaViewerControlPanelConfig, MediaViewerErrorEventDetail, MediaViewerFullscreenChangeEventDetail, MediaViewerLoadEventDetail, MediaViewerLocales, MediaViewerNavigationMode, MediaViewerSize, MediaViewerUploadEventDetail, MediaViewerZoomChangeEventDetail } from "./components/wpp-media-viewer/types";
 import { NavSidebarItemEventDetail } from "./components/wpp-nav-sidebar/types";
 import { PaginationChangeEventDetail, PaginationLocales, PaginationPageChangeEventDetail } from "./components/wpp-pagination/types";
 import { PillChangeEventDetail, PillSize, PillType, PillValue } from "./components/wpp-pill/types";
@@ -106,6 +108,7 @@ export { CounterChangeEventDetail, CounterFormat, CounterLabelConfig } from "./c
 export { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes, MonthRangeNormalization, YearRangeNormalization } from "./components/wpp-datepicker/types";
 export { ExpandableCardSectionChangeEventDetail } from "./components/wpp-expandable-card/types";
 export { ActionButtonData } from "./components/wpp-floating-toolbar/types";
+export { FocusArtefactActionClickDetail, FocusArtefactAriaProps, FocusArtefactLocales, FocusArtefactMenuAction, FocusArtefactResizeDetail, FocusArtefactVersion, FocusArtefactWidth } from "./components/wpp-focus-artefact/types";
 export { FullScreenModalCloseDetails, FullScreenModalFormConfig, FullScreenModalLocalesType } from "./components/wpp-full-screen-modal/types";
 export { ModalActionsConfig, ModalCloseDetails, ModalFormConfig } from "./components/wpp-modal/types";
 export { AlignItemsType, DirectionType, JustifyContentType } from "./components/wpp-grid/types";
@@ -124,6 +127,7 @@ export { NavigationItemEventDetail, NavigationState, TopbarChangeEventDetail } f
 export { ThemeColorValue } from "./types/theme-tokens";
 export { ContainerStateType, ListItemChangeEventDetail, ListValue as ListValue1, TooltipConfig } from "./components/wpp-list-item/types";
 export { LoadMoreChangeEventDetail } from "./components/wpp-load-more/types";
+export { MediaViewerControlPanelConfig, MediaViewerErrorEventDetail, MediaViewerFullscreenChangeEventDetail, MediaViewerLoadEventDetail, MediaViewerLocales, MediaViewerNavigationMode, MediaViewerSize, MediaViewerUploadEventDetail, MediaViewerZoomChangeEventDetail } from "./components/wpp-media-viewer/types";
 export { NavSidebarItemEventDetail } from "./components/wpp-nav-sidebar/types";
 export { PaginationChangeEventDetail, PaginationLocales, PaginationPageChangeEventDetail } from "./components/wpp-pagination/types";
 export { PillChangeEventDetail, PillSize, PillType, PillValue } from "./components/wpp-pill/types";
@@ -210,9 +214,9 @@ export namespace Components {
          */
         "name"?: string;
         /**
-          * Method that sets focus on the native button.
+          * Method that sets focus on the native button. The keyboard focus ring shows unless `focusVisible` is false, which suits focus moved in response to a pointer press.
          */
-        "setFocus": () => Promise<void>;
+        "setFocus": (options?: { focusVisible?: boolean; }) => Promise<void>;
         /**
           * Defines the button type.
          */
@@ -1883,7 +1887,7 @@ export namespace Components {
     }
     interface WppFloatingToolbar {
         /**
-          * Defines the action buttons configuration. Must contain between 2 and 7 items.
+          * Defines the action buttons configuration. Must contain between 1 and 7 items. Each item needs an `icon`, a text `label`, or both. When the focused action becomes disabled, focus moves to the nearest enabled action. If none is left enabled, the toolbar can't hold focus and the browser moves it to the page, so move it somewhere useful yourself (for example to the content the toolbar controls).
          */
         "actionButtonsConfig": ActionButtonData[];
         /**
@@ -1898,6 +1902,55 @@ export namespace Components {
           * Defines whether the buttons will have a "selected" state after being clicked.
          */
         "selectable": boolean;
+    }
+    /**
+     * WppFocusArtefact: a header with its title which is truncated in case the text is too long, an optional version selector, its actions and a
+     * close button, and the artefact's content below it.
+     * It expands to fill its parent container, taking its full height and its full width up to its `max-width` (`100%` by
+     * default; set it on the element with CSS, e.g. `900px` or `60%`). The
+     * user can resize its width by dragging its left border, or with the arrow keys once that border is focused: from then
+     * on, it keeps the width it was resized to (`width`). Its width never goes below 440px, nor above its `max-width`. Set
+     * its width with the `width` property only: a CSS `width` on the element would override the one the component sets
+     * while resizing. The body has no padding, so the content sets its own spacing.
+     * As the handle is on the left border, the artefact is meant to sit on the right of a split view.
+     * The header always renders the Quote, Pin, Copy and Download actions. The component doesn't know the
+     * artefact's content, so they only emit `wppActionClick`: the app performs them. The pin flips on its own
+     * and the event reports the state it ends in. Copy confirms the copy the app makes, as chat messages do: a
+     * checkmark and "Copied" for 3 seconds.
+     */
+    interface WppFocusArtefact {
+        /**
+          * Defines the ARIA attributes of the artefact region. Its accessible name defaults to the artefact's title.
+         */
+        "ariaProps": FocusArtefactAriaProps;
+        /**
+          * Defines the title of the artefact, displayed in the header. A title that doesn't fit is truncated and shown in full in a tooltip.
+         */
+        "artefactTitle": string;
+        /**
+          * Indicates the locales for the focus artefact component.
+         */
+        "locales": Partial<FocusArtefactLocales>;
+        /**
+          * Defines the additional actions of the header. The Quote, Pin, Copy and Download actions are always rendered; the actions passed here are listed in a "More actions" menu after them. When none are passed, the "More actions" button is hidden.
+         */
+        "menuActions": FocusArtefactMenuAction[];
+        /**
+          * Defines the id of the selected version. Defaults to the first version. The component keeps it in sync when the user picks a version from the selector.
+         */
+        "selectedVersionId"?: string;
+        /**
+          * Defines the icon rendered before the title. Should be a valid icon name from the library.
+         */
+        "titleIcon": `wpp-icon-${string}`;
+        /**
+          * Defines the versions of the artefact. When at least one version is passed, a version selector is shown next to the title.
+         */
+        "versions": FocusArtefactVersion[];
+        /**
+          * Defines the width of the artefact: a number of pixels, or a percentage of its parent, e.g. `'40%'`. Until it's set, the artefact fills its parent, up to its `max-width`. The component keeps it in sync when the user resizes the artefact, in the same unit, so the app can store it and pass it back later: a percentage stays a percentage, so the artefact keeps its share of the parent when the parent's width changes. It is kept between the minimum width (440px) and its `max-width`, and a number of pixels never makes it wider than its container.
+         */
+        "width"?: FocusArtefactWidth;
     }
     interface WppFullScreenModal {
         /**
@@ -12352,6 +12405,104 @@ export namespace Components {
          */
         "totalItems": number;
     }
+    /**
+     * Shows a 3D model that users can rotate, move, zoom, view in fullscreen and replace by uploading files.
+     * It renders with the Online 3D Viewer engine (MIT), which brings its own copy of three.js 0.176.0.
+     * Both are installed with the library, and the engine only downloads on pages that show a viewer.
+     * ### Formats
+     * Tested: glTF and GLB (including Draco-compressed), OBJ with MTL and textures, STL, PLY, FBX, DAE, 3MF and OFF.
+     * The engine also opens 3DS, AMF, WRL and BIM without downloading anything, and SVG, STEP, IGES, BREP, FCStd,
+     * IFC and 3dm (see below). Models made of several files (a `.gltf` with its `.bin` and textures, an `.obj` with
+     * its `.mtl`) need every file: pass all the URLs in `src`, or pick or drop all the files together.
+     * ### Files downloaded at runtime
+     * Some formats load a decoder from `cdn.jsdelivr.net` the first time they're opened. The engine adds it as a
+     * `<script>` in the page head or runs it as a worker, with no Subresource Integrity check, and the decoder then
+     * downloads and compiles its WebAssembly from the same host. Add these to your Content Security Policy:
+     * - Draco-compressed glTF (`draco3d`), tested: `script-src https://cdn.jsdelivr.net 'wasm-unsafe-eval'` and
+     *   `connect-src https://cdn.jsdelivr.net`.
+     * - STEP, IGES, BREP and FCStd (`occt-import-js`, fetched and run as a `blob:` worker), not tested yet: the
+     *   Draco directives plus `worker-src blob:`.
+     * - IFC (`web-ifc`) and 3dm (`rhino3dm`), not tested yet: the Draco directives.
+     * If the download is blocked, the load ends with a `decoder-failed` error. These formats, and SVG (which the
+     * 2D image viewer will handle), aren't in the default `acceptedFileExtensions`; every format in the default
+     * list opens without any download, except Draco-compressed glTF.
+     * ### Many viewers on one page
+     * Browsers allow about 16 live WebGL contexts per page, and each viewer uses one. In a list or grid, show a
+     * static preview per item and open a single live viewer for the selected item.
+     * The library patches the engine (`patches/online-3d-viewer+0.18.0.patch`): its GPU check runs once per page, a
+     * removed viewer drops its document listeners, and a decoder that fails to start ends the load with an error instead
+     * of leaving it hanging. Without the patch every viewer leaked a context.
+     * Safari, and every browser on iOS and iPadOS (all built on WebKit), keeps counting a removed viewer's context
+     * against that limit for a few seconds. There, the viewer hands the context to the next viewer instead, so a page
+     * can still show up to the limit and replace viewers freely. A context no new viewer takes is released after 10
+     * seconds.
+     * ### States
+     * Loading fills the surface with a skeleton, and a failed load replaces it with the error state: the
+     * reason in words, the engine's code where it gave one, and Retry where there is something to retry -
+     * not when the browser has no WebGL or the 3D context was lost, which a reload alone fixes. Both states
+     * own the whole surface, so the toolbars step aside until the model or the empty view is back.
+     * Files turned away before loading starts - the wrong type, or over `maxFileSize` - don't disturb the
+     * model on screen; they only fire `wppError`.
+     * `wppError` carries the reason, the words and the code for every failure, so an app can log it or react
+     * to it. The live region speaks the same words the error state shows.
+     * ### File safety
+     * Uploaded and dropped files are parsed in the browser. Keep `acceptedFileExtensions` to the formats you
+     * expect, and set `maxFileSize` to match what your storage accepts.
+     * ### Keyboard
+     * The 3D view is a single tab stop: arrow keys rotate, Shift and the arrow keys move, plus and minus zoom,
+     * and Home resets the view. Each toolbar is one tab stop; use the left and right arrow keys inside it.
+     * ### Theme and motion
+     * The 3D background takes `--wpp-grey-color-100` and follows theme changes made through the design system's
+     * theme attribute. If your app swaps the token values some other way, without changing that attribute, the 3D
+     * background keeps the old colour until the viewer is recreated. Camera moves are instant, so nothing animates
+     * for people who prefer reduced motion.
+     */
+    interface WppMediaViewer {
+        /**
+          * File extensions, without the dot, that can be uploaded or dropped. Other files are rejected with an error. The default list covers the 3D formats that open without downloading anything, plus the files they reference. SVG is left out because the 2D image viewer will handle it.
+         */
+        "acceptedFileExtensions": string[];
+        /**
+          * `aria-` attributes for the 3D view. `label` replaces the accessible name built from `locales`.
+         */
+        "ariaProps": AriaProps;
+        /**
+          * Which toolbars to show. Hiding the upload button also turns off dropping files on the viewer. Zoom and fullscreen act on the model, so they are disabled until one is on screen. The toolbars themselves are hidden while loading and on the error state, which own the whole surface.
+         */
+        "controlPanelConfig": MediaViewerControlPanelConfig;
+        /**
+          * Fits the model into the view, keeping its orientation.
+         */
+        "fitToView": () => Promise<void>;
+        /**
+          * Overrides for the viewer's text and accessible names.
+         */
+        "locales": Partial<MediaViewerLocales>;
+        /**
+          * Largest file, in MB, that can be uploaded or dropped. No limit by default.
+         */
+        "maxFileSize"?: number;
+        /**
+          * How dragging rotates the model. `free` turns it on all three axes; `fixed-up` keeps its up axis vertical.
+         */
+        "navigationMode": MediaViewerNavigationMode;
+        /**
+          * Returns to the orientation the model opened with, fitted into the view.
+         */
+        "resetView": () => Promise<void>;
+        /**
+          * Size of the viewer. Numbers are pixels; strings are percentages. Defaults to 400 × 400 pixels, which is also the minimum.
+         */
+        "size": MediaViewerSize;
+        /**
+          * URL of the model to show, or a list of URLs when the model is split over several files (for example a `.gltf` with its `.bin` and textures, or an `.obj` with its `.mtl`). An empty value shows the empty state.
+         */
+        "src": string | string[];
+        /**
+          * Enters or leaves fullscreen. Does nothing without a model or where the browser doesn't allow fullscreen. Browsers only grant it from a user gesture, so a call made outside one is refused and warns in the console.
+         */
+        "toggleFullscreen": () => Promise<void>;
+    }
     interface WppMenuContext {
         /**
           * If `true`, menu-context content will be appended to the `.wpp-list-wrapper`
@@ -14545,6 +14696,10 @@ export interface WppFileUploadItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppFileUploadItemElement;
 }
+export interface WppFocusArtefactCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLWppFocusArtefactElement;
+}
 export interface WppFullScreenModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppFullScreenModalElement;
@@ -14596,6 +14751,10 @@ export interface WppListItemCustomEvent<T> extends CustomEvent<T> {
 export interface WppLoadMoreCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLWppLoadMoreElement;
+}
+export interface WppMediaViewerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLWppMediaViewerElement;
 }
 export interface WppMenuContextCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -15024,6 +15183,27 @@ declare global {
     var HTMLWppFloatingToolbarElement: {
         prototype: HTMLWppFloatingToolbarElement;
         new (): HTMLWppFloatingToolbarElement;
+    };
+    /**
+     * WppFocusArtefact: a header with its title which is truncated in case the text is too long, an optional version selector, its actions and a
+     * close button, and the artefact's content below it.
+     * It expands to fill its parent container, taking its full height and its full width up to its `max-width` (`100%` by
+     * default; set it on the element with CSS, e.g. `900px` or `60%`). The
+     * user can resize its width by dragging its left border, or with the arrow keys once that border is focused: from then
+     * on, it keeps the width it was resized to (`width`). Its width never goes below 440px, nor above its `max-width`. Set
+     * its width with the `width` property only: a CSS `width` on the element would override the one the component sets
+     * while resizing. The body has no padding, so the content sets its own spacing.
+     * As the handle is on the left border, the artefact is meant to sit on the right of a split view.
+     * The header always renders the Quote, Pin, Copy and Download actions. The component doesn't know the
+     * artefact's content, so they only emit `wppActionClick`: the app performs them. The pin flips on its own
+     * and the event reports the state it ends in. Copy confirms the copy the app makes, as chat messages do: a
+     * checkmark and "Copied" for 3 seconds.
+     */
+    interface HTMLWppFocusArtefactElement extends Components.WppFocusArtefact, HTMLStencilElement {
+    }
+    var HTMLWppFocusArtefactElement: {
+        prototype: HTMLWppFocusArtefactElement;
+        new (): HTMLWppFocusArtefactElement;
     };
     interface HTMLWppFullScreenModalElement extends Components.WppFullScreenModal, HTMLStencilElement {
     }
@@ -18262,6 +18442,64 @@ declare global {
         prototype: HTMLWppLoadMoreElement;
         new (): HTMLWppLoadMoreElement;
     };
+    /**
+     * Shows a 3D model that users can rotate, move, zoom, view in fullscreen and replace by uploading files.
+     * It renders with the Online 3D Viewer engine (MIT), which brings its own copy of three.js 0.176.0.
+     * Both are installed with the library, and the engine only downloads on pages that show a viewer.
+     * ### Formats
+     * Tested: glTF and GLB (including Draco-compressed), OBJ with MTL and textures, STL, PLY, FBX, DAE, 3MF and OFF.
+     * The engine also opens 3DS, AMF, WRL and BIM without downloading anything, and SVG, STEP, IGES, BREP, FCStd,
+     * IFC and 3dm (see below). Models made of several files (a `.gltf` with its `.bin` and textures, an `.obj` with
+     * its `.mtl`) need every file: pass all the URLs in `src`, or pick or drop all the files together.
+     * ### Files downloaded at runtime
+     * Some formats load a decoder from `cdn.jsdelivr.net` the first time they're opened. The engine adds it as a
+     * `<script>` in the page head or runs it as a worker, with no Subresource Integrity check, and the decoder then
+     * downloads and compiles its WebAssembly from the same host. Add these to your Content Security Policy:
+     * - Draco-compressed glTF (`draco3d`), tested: `script-src https://cdn.jsdelivr.net 'wasm-unsafe-eval'` and
+     *   `connect-src https://cdn.jsdelivr.net`.
+     * - STEP, IGES, BREP and FCStd (`occt-import-js`, fetched and run as a `blob:` worker), not tested yet: the
+     *   Draco directives plus `worker-src blob:`.
+     * - IFC (`web-ifc`) and 3dm (`rhino3dm`), not tested yet: the Draco directives.
+     * If the download is blocked, the load ends with a `decoder-failed` error. These formats, and SVG (which the
+     * 2D image viewer will handle), aren't in the default `acceptedFileExtensions`; every format in the default
+     * list opens without any download, except Draco-compressed glTF.
+     * ### Many viewers on one page
+     * Browsers allow about 16 live WebGL contexts per page, and each viewer uses one. In a list or grid, show a
+     * static preview per item and open a single live viewer for the selected item.
+     * The library patches the engine (`patches/online-3d-viewer+0.18.0.patch`): its GPU check runs once per page, a
+     * removed viewer drops its document listeners, and a decoder that fails to start ends the load with an error instead
+     * of leaving it hanging. Without the patch every viewer leaked a context.
+     * Safari, and every browser on iOS and iPadOS (all built on WebKit), keeps counting a removed viewer's context
+     * against that limit for a few seconds. There, the viewer hands the context to the next viewer instead, so a page
+     * can still show up to the limit and replace viewers freely. A context no new viewer takes is released after 10
+     * seconds.
+     * ### States
+     * Loading fills the surface with a skeleton, and a failed load replaces it with the error state: the
+     * reason in words, the engine's code where it gave one, and Retry where there is something to retry -
+     * not when the browser has no WebGL or the 3D context was lost, which a reload alone fixes. Both states
+     * own the whole surface, so the toolbars step aside until the model or the empty view is back.
+     * Files turned away before loading starts - the wrong type, or over `maxFileSize` - don't disturb the
+     * model on screen; they only fire `wppError`.
+     * `wppError` carries the reason, the words and the code for every failure, so an app can log it or react
+     * to it. The live region speaks the same words the error state shows.
+     * ### File safety
+     * Uploaded and dropped files are parsed in the browser. Keep `acceptedFileExtensions` to the formats you
+     * expect, and set `maxFileSize` to match what your storage accepts.
+     * ### Keyboard
+     * The 3D view is a single tab stop: arrow keys rotate, Shift and the arrow keys move, plus and minus zoom,
+     * and Home resets the view. Each toolbar is one tab stop; use the left and right arrow keys inside it.
+     * ### Theme and motion
+     * The 3D background takes `--wpp-grey-color-100` and follows theme changes made through the design system's
+     * theme attribute. If your app swaps the token values some other way, without changing that attribute, the 3D
+     * background keeps the old colour until the viewer is recreated. Camera moves are instant, so nothing animates
+     * for people who prefer reduced motion.
+     */
+    interface HTMLWppMediaViewerElement extends Components.WppMediaViewer, HTMLStencilElement {
+    }
+    var HTMLWppMediaViewerElement: {
+        prototype: HTMLWppMediaViewerElement;
+        new (): HTMLWppMediaViewerElement;
+    };
     interface HTMLWppMenuContextElement extends Components.WppMenuContext, HTMLStencilElement {
     }
     var HTMLWppMenuContextElement: {
@@ -18630,6 +18868,7 @@ declare global {
         "wpp-filter-button": HTMLWppFilterButtonElement;
         "wpp-floating-button": HTMLWppFloatingButtonElement;
         "wpp-floating-toolbar": HTMLWppFloatingToolbarElement;
+        "wpp-focus-artefact": HTMLWppFocusArtefactElement;
         "wpp-full-screen-modal": HTMLWppFullScreenModalElement;
         "wpp-grid": HTMLWppGridElement;
         "wpp-handle": HTMLWppHandleElement;
@@ -19169,6 +19408,7 @@ declare global {
         "wpp-legend": HTMLWppLegendElement;
         "wpp-list-item": HTMLWppListItemElement;
         "wpp-load-more": HTMLWppLoadMoreElement;
+        "wpp-media-viewer": HTMLWppMediaViewerElement;
         "wpp-menu-context": HTMLWppMenuContextElement;
         "wpp-menu-group": HTMLWppMenuGroupElement;
         "wpp-modal": HTMLWppModalElement;
@@ -21192,7 +21432,7 @@ declare namespace LocalJSX {
     }
     interface WppFloatingToolbar {
         /**
-          * Defines the action buttons configuration. Must contain between 2 and 7 items.
+          * Defines the action buttons configuration. Must contain between 1 and 7 items. Each item needs an `icon`, a text `label`, or both. When the focused action becomes disabled, focus moves to the nearest enabled action. If none is left enabled, the toolbar can't hold focus and the browser moves it to the page, so move it somewhere useful yourself (for example to the content the toolbar controls).
          */
         "actionButtonsConfig"?: ActionButtonData[];
         /**
@@ -21207,6 +21447,71 @@ declare namespace LocalJSX {
           * Defines whether the buttons will have a "selected" state after being clicked.
          */
         "selectable"?: boolean;
+    }
+    /**
+     * WppFocusArtefact: a header with its title which is truncated in case the text is too long, an optional version selector, its actions and a
+     * close button, and the artefact's content below it.
+     * It expands to fill its parent container, taking its full height and its full width up to its `max-width` (`100%` by
+     * default; set it on the element with CSS, e.g. `900px` or `60%`). The
+     * user can resize its width by dragging its left border, or with the arrow keys once that border is focused: from then
+     * on, it keeps the width it was resized to (`width`). Its width never goes below 440px, nor above its `max-width`. Set
+     * its width with the `width` property only: a CSS `width` on the element would override the one the component sets
+     * while resizing. The body has no padding, so the content sets its own spacing.
+     * As the handle is on the left border, the artefact is meant to sit on the right of a split view.
+     * The header always renders the Quote, Pin, Copy and Download actions. The component doesn't know the
+     * artefact's content, so they only emit `wppActionClick`: the app performs them. The pin flips on its own
+     * and the event reports the state it ends in. Copy confirms the copy the app makes, as chat messages do: a
+     * checkmark and "Copied" for 3 seconds.
+     */
+    interface WppFocusArtefact {
+        /**
+          * Defines the ARIA attributes of the artefact region. Its accessible name defaults to the artefact's title.
+         */
+        "ariaProps"?: FocusArtefactAriaProps;
+        /**
+          * Defines the title of the artefact, displayed in the header. A title that doesn't fit is truncated and shown in full in a tooltip.
+         */
+        "artefactTitle"?: string;
+        /**
+          * Indicates the locales for the focus artefact component.
+         */
+        "locales"?: Partial<FocusArtefactLocales>;
+        /**
+          * Defines the additional actions of the header. The Quote, Pin, Copy and Download actions are always rendered; the actions passed here are listed in a "More actions" menu after them. When none are passed, the "More actions" button is hidden.
+         */
+        "menuActions"?: FocusArtefactMenuAction[];
+        /**
+          * Emitted when a header action or a "More actions" menu item is clicked. For the pin, the detail carries the state it ends in (`isActive`).
+         */
+        "onWppActionClick"?: (event: WppFocusArtefactCustomEvent<FocusArtefactActionClickDetail>) => void;
+        /**
+          * Emitted when the close button is clicked.
+         */
+        "onWppClose"?: (event: WppFocusArtefactCustomEvent<void>) => void;
+        /**
+          * Emitted when the user resizes the artefact: once on release for a pointer drag, and on every step for keyboard resizing. The detail contains the new width, in the unit `width` was given in: pixels, or a percentage of the parent.
+         */
+        "onWppResize"?: (event: WppFocusArtefactCustomEvent<FocusArtefactResizeDetail>) => void;
+        /**
+          * Emitted when the user picks a version from the version selector.
+         */
+        "onWppVersionSelect"?: (event: WppFocusArtefactCustomEvent<FocusArtefactVersion>) => void;
+        /**
+          * Defines the id of the selected version. Defaults to the first version. The component keeps it in sync when the user picks a version from the selector.
+         */
+        "selectedVersionId"?: string;
+        /**
+          * Defines the icon rendered before the title. Should be a valid icon name from the library.
+         */
+        "titleIcon"?: `wpp-icon-${string}`;
+        /**
+          * Defines the versions of the artefact. When at least one version is passed, a version selector is shown next to the title.
+         */
+        "versions"?: FocusArtefactVersion[];
+        /**
+          * Defines the width of the artefact: a number of pixels, or a percentage of its parent, e.g. `'40%'`. Until it's set, the artefact fills its parent, up to its `max-width`. The component keeps it in sync when the user resizes the artefact, in the same unit, so the app can store it and pass it back later: a percentage stays a percentage, so the artefact keeps its share of the parent when the parent's width changes. It is kept between the minimum width (440px) and its `max-width`, and a number of pixels never makes it wider than its container.
+         */
+        "width"?: FocusArtefactWidth;
     }
     interface WppFullScreenModal {
         /**
@@ -31697,6 +32002,112 @@ declare namespace LocalJSX {
          */
         "totalItems"?: number;
     }
+    /**
+     * Shows a 3D model that users can rotate, move, zoom, view in fullscreen and replace by uploading files.
+     * It renders with the Online 3D Viewer engine (MIT), which brings its own copy of three.js 0.176.0.
+     * Both are installed with the library, and the engine only downloads on pages that show a viewer.
+     * ### Formats
+     * Tested: glTF and GLB (including Draco-compressed), OBJ with MTL and textures, STL, PLY, FBX, DAE, 3MF and OFF.
+     * The engine also opens 3DS, AMF, WRL and BIM without downloading anything, and SVG, STEP, IGES, BREP, FCStd,
+     * IFC and 3dm (see below). Models made of several files (a `.gltf` with its `.bin` and textures, an `.obj` with
+     * its `.mtl`) need every file: pass all the URLs in `src`, or pick or drop all the files together.
+     * ### Files downloaded at runtime
+     * Some formats load a decoder from `cdn.jsdelivr.net` the first time they're opened. The engine adds it as a
+     * `<script>` in the page head or runs it as a worker, with no Subresource Integrity check, and the decoder then
+     * downloads and compiles its WebAssembly from the same host. Add these to your Content Security Policy:
+     * - Draco-compressed glTF (`draco3d`), tested: `script-src https://cdn.jsdelivr.net 'wasm-unsafe-eval'` and
+     *   `connect-src https://cdn.jsdelivr.net`.
+     * - STEP, IGES, BREP and FCStd (`occt-import-js`, fetched and run as a `blob:` worker), not tested yet: the
+     *   Draco directives plus `worker-src blob:`.
+     * - IFC (`web-ifc`) and 3dm (`rhino3dm`), not tested yet: the Draco directives.
+     * If the download is blocked, the load ends with a `decoder-failed` error. These formats, and SVG (which the
+     * 2D image viewer will handle), aren't in the default `acceptedFileExtensions`; every format in the default
+     * list opens without any download, except Draco-compressed glTF.
+     * ### Many viewers on one page
+     * Browsers allow about 16 live WebGL contexts per page, and each viewer uses one. In a list or grid, show a
+     * static preview per item and open a single live viewer for the selected item.
+     * The library patches the engine (`patches/online-3d-viewer+0.18.0.patch`): its GPU check runs once per page, a
+     * removed viewer drops its document listeners, and a decoder that fails to start ends the load with an error instead
+     * of leaving it hanging. Without the patch every viewer leaked a context.
+     * Safari, and every browser on iOS and iPadOS (all built on WebKit), keeps counting a removed viewer's context
+     * against that limit for a few seconds. There, the viewer hands the context to the next viewer instead, so a page
+     * can still show up to the limit and replace viewers freely. A context no new viewer takes is released after 10
+     * seconds.
+     * ### States
+     * Loading fills the surface with a skeleton, and a failed load replaces it with the error state: the
+     * reason in words, the engine's code where it gave one, and Retry where there is something to retry -
+     * not when the browser has no WebGL or the 3D context was lost, which a reload alone fixes. Both states
+     * own the whole surface, so the toolbars step aside until the model or the empty view is back.
+     * Files turned away before loading starts - the wrong type, or over `maxFileSize` - don't disturb the
+     * model on screen; they only fire `wppError`.
+     * `wppError` carries the reason, the words and the code for every failure, so an app can log it or react
+     * to it. The live region speaks the same words the error state shows.
+     * ### File safety
+     * Uploaded and dropped files are parsed in the browser. Keep `acceptedFileExtensions` to the formats you
+     * expect, and set `maxFileSize` to match what your storage accepts.
+     * ### Keyboard
+     * The 3D view is a single tab stop: arrow keys rotate, Shift and the arrow keys move, plus and minus zoom,
+     * and Home resets the view. Each toolbar is one tab stop; use the left and right arrow keys inside it.
+     * ### Theme and motion
+     * The 3D background takes `--wpp-grey-color-100` and follows theme changes made through the design system's
+     * theme attribute. If your app swaps the token values some other way, without changing that attribute, the 3D
+     * background keeps the old colour until the viewer is recreated. Camera moves are instant, so nothing animates
+     * for people who prefer reduced motion.
+     */
+    interface WppMediaViewer {
+        /**
+          * File extensions, without the dot, that can be uploaded or dropped. Other files are rejected with an error. The default list covers the 3D formats that open without downloading anything, plus the files they reference. SVG is left out because the 2D image viewer will handle it.
+         */
+        "acceptedFileExtensions"?: string[];
+        /**
+          * `aria-` attributes for the 3D view. `label` replaces the accessible name built from `locales`.
+         */
+        "ariaProps"?: AriaProps;
+        /**
+          * Which toolbars to show. Hiding the upload button also turns off dropping files on the viewer. Zoom and fullscreen act on the model, so they are disabled until one is on screen. The toolbars themselves are hidden while loading and on the error state, which own the whole surface.
+         */
+        "controlPanelConfig"?: MediaViewerControlPanelConfig;
+        /**
+          * Overrides for the viewer's text and accessible names.
+         */
+        "locales"?: Partial<MediaViewerLocales>;
+        /**
+          * Largest file, in MB, that can be uploaded or dropped. No limit by default.
+         */
+        "maxFileSize"?: number;
+        /**
+          * How dragging rotates the model. `free` turns it on all three axes; `fixed-up` keeps its up axis vertical.
+         */
+        "navigationMode"?: MediaViewerNavigationMode;
+        /**
+          * Fires when a model can't be shown, or uploaded files are rejected. A failed load shows the error state, but files turned away before loading starts leave the model on screen, so handle those - otherwise a rejected upload looks to a sighted user like nothing happened. `detail.message` is the error in words, and the same words go to the viewer's live region for screen readers.
+         */
+        "onWppError"?: (event: WppMediaViewerCustomEvent<MediaViewerErrorEventDetail>) => void;
+        /**
+          * Fires when the viewer enters or leaves fullscreen.
+         */
+        "onWppFullscreenChange"?: (event: WppMediaViewerCustomEvent<MediaViewerFullscreenChangeEventDetail>) => void;
+        /**
+          * Fires when a model has loaded and is shown.
+         */
+        "onWppLoad"?: (event: WppMediaViewerCustomEvent<MediaViewerLoadEventDetail>) => void;
+        /**
+          * Fires when the user picks or drops files that pass validation, before they open. Call `preventDefault()` on the event to keep the current model, for example to store the files and then set `src`.
+         */
+        "onWppUpload"?: (event: WppMediaViewerCustomEvent<MediaViewerUploadEventDetail>) => void;
+        /**
+          * Fires when the zoom level changes, however it changed: the zoom actions, the wheel, a pinch, a keyboard press, `fitToView()` or `resetView()`.
+         */
+        "onWppZoomChange"?: (event: WppMediaViewerCustomEvent<MediaViewerZoomChangeEventDetail>) => void;
+        /**
+          * Size of the viewer. Numbers are pixels; strings are percentages. Defaults to 400 × 400 pixels, which is also the minimum.
+         */
+        "size"?: MediaViewerSize;
+        /**
+          * URL of the model to show, or a list of URLs when the model is split over several files (for example a `.gltf` with its `.bin` and textures, or an `.obj` with its `.mtl`). An empty value shows the empty state.
+         */
+        "src"?: string | string[];
+    }
     interface WppMenuContext {
         /**
           * If `true`, menu-context content will be appended to the `.wpp-list-wrapper`
@@ -34046,6 +34457,7 @@ declare namespace LocalJSX {
         "wpp-filter-button": WppFilterButton;
         "wpp-floating-button": WppFloatingButton;
         "wpp-floating-toolbar": WppFloatingToolbar;
+        "wpp-focus-artefact": WppFocusArtefact;
         "wpp-full-screen-modal": WppFullScreenModal;
         "wpp-grid": WppGrid;
         "wpp-handle": WppHandle;
@@ -34585,6 +34997,7 @@ declare namespace LocalJSX {
         "wpp-legend": WppLegend;
         "wpp-list-item": WppListItem;
         "wpp-load-more": WppLoadMore;
+        "wpp-media-viewer": WppMediaViewer;
         "wpp-menu-context": WppMenuContext;
         "wpp-menu-group": WppMenuGroup;
         "wpp-modal": WppModal;
@@ -34698,6 +35111,22 @@ declare module "@stencil/core" {
             "wpp-filter-button": LocalJSX.WppFilterButton & JSXBase.HTMLAttributes<HTMLWppFilterButtonElement>;
             "wpp-floating-button": LocalJSX.WppFloatingButton & JSXBase.HTMLAttributes<HTMLWppFloatingButtonElement>;
             "wpp-floating-toolbar": LocalJSX.WppFloatingToolbar & JSXBase.HTMLAttributes<HTMLWppFloatingToolbarElement>;
+            /**
+             * WppFocusArtefact: a header with its title which is truncated in case the text is too long, an optional version selector, its actions and a
+             * close button, and the artefact's content below it.
+             * It expands to fill its parent container, taking its full height and its full width up to its `max-width` (`100%` by
+             * default; set it on the element with CSS, e.g. `900px` or `60%`). The
+             * user can resize its width by dragging its left border, or with the arrow keys once that border is focused: from then
+             * on, it keeps the width it was resized to (`width`). Its width never goes below 440px, nor above its `max-width`. Set
+             * its width with the `width` property only: a CSS `width` on the element would override the one the component sets
+             * while resizing. The body has no padding, so the content sets its own spacing.
+             * As the handle is on the left border, the artefact is meant to sit on the right of a split view.
+             * The header always renders the Quote, Pin, Copy and Download actions. The component doesn't know the
+             * artefact's content, so they only emit `wppActionClick`: the app performs them. The pin flips on its own
+             * and the event reports the state it ends in. Copy confirms the copy the app makes, as chat messages do: a
+             * checkmark and "Copied" for 3 seconds.
+             */
+            "wpp-focus-artefact": LocalJSX.WppFocusArtefact & JSXBase.HTMLAttributes<HTMLWppFocusArtefactElement>;
             "wpp-full-screen-modal": LocalJSX.WppFullScreenModal & JSXBase.HTMLAttributes<HTMLWppFullScreenModalElement>;
             "wpp-grid": LocalJSX.WppGrid & JSXBase.HTMLAttributes<HTMLWppGridElement>;
             "wpp-handle": LocalJSX.WppHandle & JSXBase.HTMLAttributes<HTMLWppHandleElement>;
@@ -35240,6 +35669,59 @@ declare module "@stencil/core" {
             "wpp-legend": LocalJSX.WppLegend & JSXBase.HTMLAttributes<HTMLWppLegendElement>;
             "wpp-list-item": LocalJSX.WppListItem & JSXBase.HTMLAttributes<HTMLWppListItemElement>;
             "wpp-load-more": LocalJSX.WppLoadMore & JSXBase.HTMLAttributes<HTMLWppLoadMoreElement>;
+            /**
+             * Shows a 3D model that users can rotate, move, zoom, view in fullscreen and replace by uploading files.
+             * It renders with the Online 3D Viewer engine (MIT), which brings its own copy of three.js 0.176.0.
+             * Both are installed with the library, and the engine only downloads on pages that show a viewer.
+             * ### Formats
+             * Tested: glTF and GLB (including Draco-compressed), OBJ with MTL and textures, STL, PLY, FBX, DAE, 3MF and OFF.
+             * The engine also opens 3DS, AMF, WRL and BIM without downloading anything, and SVG, STEP, IGES, BREP, FCStd,
+             * IFC and 3dm (see below). Models made of several files (a `.gltf` with its `.bin` and textures, an `.obj` with
+             * its `.mtl`) need every file: pass all the URLs in `src`, or pick or drop all the files together.
+             * ### Files downloaded at runtime
+             * Some formats load a decoder from `cdn.jsdelivr.net` the first time they're opened. The engine adds it as a
+             * `<script>` in the page head or runs it as a worker, with no Subresource Integrity check, and the decoder then
+             * downloads and compiles its WebAssembly from the same host. Add these to your Content Security Policy:
+             * - Draco-compressed glTF (`draco3d`), tested: `script-src https://cdn.jsdelivr.net 'wasm-unsafe-eval'` and
+             *   `connect-src https://cdn.jsdelivr.net`.
+             * - STEP, IGES, BREP and FCStd (`occt-import-js`, fetched and run as a `blob:` worker), not tested yet: the
+             *   Draco directives plus `worker-src blob:`.
+             * - IFC (`web-ifc`) and 3dm (`rhino3dm`), not tested yet: the Draco directives.
+             * If the download is blocked, the load ends with a `decoder-failed` error. These formats, and SVG (which the
+             * 2D image viewer will handle), aren't in the default `acceptedFileExtensions`; every format in the default
+             * list opens without any download, except Draco-compressed glTF.
+             * ### Many viewers on one page
+             * Browsers allow about 16 live WebGL contexts per page, and each viewer uses one. In a list or grid, show a
+             * static preview per item and open a single live viewer for the selected item.
+             * The library patches the engine (`patches/online-3d-viewer+0.18.0.patch`): its GPU check runs once per page, a
+             * removed viewer drops its document listeners, and a decoder that fails to start ends the load with an error instead
+             * of leaving it hanging. Without the patch every viewer leaked a context.
+             * Safari, and every browser on iOS and iPadOS (all built on WebKit), keeps counting a removed viewer's context
+             * against that limit for a few seconds. There, the viewer hands the context to the next viewer instead, so a page
+             * can still show up to the limit and replace viewers freely. A context no new viewer takes is released after 10
+             * seconds.
+             * ### States
+             * Loading fills the surface with a skeleton, and a failed load replaces it with the error state: the
+             * reason in words, the engine's code where it gave one, and Retry where there is something to retry -
+             * not when the browser has no WebGL or the 3D context was lost, which a reload alone fixes. Both states
+             * own the whole surface, so the toolbars step aside until the model or the empty view is back.
+             * Files turned away before loading starts - the wrong type, or over `maxFileSize` - don't disturb the
+             * model on screen; they only fire `wppError`.
+             * `wppError` carries the reason, the words and the code for every failure, so an app can log it or react
+             * to it. The live region speaks the same words the error state shows.
+             * ### File safety
+             * Uploaded and dropped files are parsed in the browser. Keep `acceptedFileExtensions` to the formats you
+             * expect, and set `maxFileSize` to match what your storage accepts.
+             * ### Keyboard
+             * The 3D view is a single tab stop: arrow keys rotate, Shift and the arrow keys move, plus and minus zoom,
+             * and Home resets the view. Each toolbar is one tab stop; use the left and right arrow keys inside it.
+             * ### Theme and motion
+             * The 3D background takes `--wpp-grey-color-100` and follows theme changes made through the design system's
+             * theme attribute. If your app swaps the token values some other way, without changing that attribute, the 3D
+             * background keeps the old colour until the viewer is recreated. Camera moves are instant, so nothing animates
+             * for people who prefer reduced motion.
+             */
+            "wpp-media-viewer": LocalJSX.WppMediaViewer & JSXBase.HTMLAttributes<HTMLWppMediaViewerElement>;
             "wpp-menu-context": LocalJSX.WppMenuContext & JSXBase.HTMLAttributes<HTMLWppMenuContextElement>;
             "wpp-menu-group": LocalJSX.WppMenuGroup & JSXBase.HTMLAttributes<HTMLWppMenuGroupElement>;
             "wpp-modal": LocalJSX.WppModal & JSXBase.HTMLAttributes<HTMLWppModalElement>;

@@ -20,7 +20,7 @@ describe('wpp-chat-input acceptConfig matching', () => {
     const fileUploadConfig = acceptConfig ? { acceptConfig } : {};
     return newSpecPage({
       components: [WppChatInput],
-      template: () => h("wpp-chat-input-v4-5-0", { fileUploadConfig: fileUploadConfig, htmlAttributes: htmlAttributes }),
+      template: () => h("wpp-chat-input-v4-6-0", { fileUploadConfig: fileUploadConfig, htmlAttributes: htmlAttributes }),
     });
   };
   const fileInput = (page) => page.root.shadowRoot.querySelector('input[type="file"]');

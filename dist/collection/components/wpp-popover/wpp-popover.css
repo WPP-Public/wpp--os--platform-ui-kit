@@ -52,3 +52,6 @@
 :host slot {
   display: block;
 }
+:host slot[name=trigger-element] {
+  display: contents;
+}

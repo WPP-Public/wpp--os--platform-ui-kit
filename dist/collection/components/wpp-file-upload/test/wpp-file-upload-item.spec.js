@@ -14,7 +14,7 @@ describe('wpp-file-upload-item', () => {
   it('defaults to the compact variant and keeps the single-line layout', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { file: urlFile() }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { file: urlFile() }),
     });
     const host = page.root;
     expect(host.classList.contains('variant-default')).toBe(true);
@@ -49,7 +49,7 @@ describe('wpp-file-upload-item', () => {
       };
       const page = await newSpecPage({
         components: [WppFileUploadItem],
-        template: () => h("wpp-file-upload-item-v4-5-0", { file: file }),
+        template: () => h("wpp-file-upload-item-v4-6-0", { file: file }),
       });
       progressHandler?.({
         loaded: 5 * 1024 * 1024,
@@ -76,7 +76,7 @@ describe('wpp-file-upload-item', () => {
   ])('shows only the total file size in the %s state', async (_state, overrides) => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { file: urlFile({ size: 15 * 1024 * 1024, ...overrides }) }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { file: urlFile({ size: 15 * 1024 * 1024, ...overrides }) }),
     });
     const size = page.root?.shadowRoot?.querySelector('[part="loading"], [part="error-message"]');
     expect(size?.textContent?.trim()).toBe('15 MB');
@@ -85,7 +85,7 @@ describe('wpp-file-upload-item', () => {
   it('renders the thumbnail card, file name and file-type subtitle in the chat variant', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { variant: "chat", file: urlFile() }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { variant: "chat", file: urlFile() }),
     });
     const host = page.root;
     expect(host.classList.contains('variant-chat')).toBe(true);
@@ -97,7 +97,7 @@ describe('wpp-file-upload-item', () => {
   it('wraps the subtitle in a tooltip whose text mirrors the subtitle for truncation', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { variant: "chat", file: urlFile() }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { variant: "chat", file: urlFile() }),
     });
     const host = page.root;
     const subtitle = host.shadowRoot?.querySelector('.subtitle');
@@ -108,7 +108,7 @@ describe('wpp-file-upload-item', () => {
   it('renders the error icon and danger subtitle for a file with an error', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => (h("wpp-file-upload-item-v4-5-0", { variant: "chat", file: urlFile({ sizeError: true }), locales: { sizeError: 'Too big', formatError: 'Wrong format' } })),
+      template: () => (h("wpp-file-upload-item-v4-6-0", { variant: "chat", file: urlFile({ sizeError: true }), locales: { sizeError: 'Too big', formatError: 'Wrong format' } })),
     });
     const host = page.root;
     expect(host.shadowRoot?.querySelector('.thumbnail.error')).not.toBeNull();
@@ -120,12 +120,12 @@ describe('wpp-file-upload-item', () => {
   it('keeps the delete icon when deletable is not disabled and drops it when deletable is false', async () => {
     const withDelete = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { variant: "chat", file: urlFile() }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { variant: "chat", file: urlFile() }),
     });
     expect(withDelete.root?.shadowRoot?.querySelector('[part="cross-icon"]')).not.toBeNull();
     const withoutDelete = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { variant: "chat", file: urlFile({ deletable: false }) }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { variant: "chat", file: urlFile({ deletable: false }) }),
     });
     expect(withoutDelete.root?.shadowRoot?.querySelector('[part="cross-icon"]')).toBeNull();
   });
@@ -151,7 +151,7 @@ describe('backend processing status model', () => {
   it('still shows a percentage when status is uploading without an explicit progress value', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { file: statusFile({ status: 'uploading' }) }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { file: statusFile({ status: 'uploading' }) }),
     });
     const shadow = page.root.shadowRoot;
     expect(shadow?.querySelector('wpp-spinner')).not.toBeNull();
@@ -164,7 +164,7 @@ describe('backend processing status model', () => {
   it('exposes determinate progress on a progressbar matching the rendered percentage', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { file: statusFile({ status: 'uploading', progress: 42 }) }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { file: statusFile({ status: 'uploading', progress: 42 }) }),
     });
     const shadow = page.root.shadowRoot;
     const progressbar = shadow?.querySelector('[role="progressbar"]');
@@ -177,7 +177,7 @@ describe('backend processing status model', () => {
   it('clamps and rounds out-of-range progress values', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { file: statusFile({ status: 'uploading', progress: 140 }) }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { file: statusFile({ status: 'uploading', progress: 140 }) }),
     });
     const shadow = page.root.shadowRoot;
     expect(shadow?.querySelector('[part="percentage"]')?.textContent?.trim()).toBe('100%');
@@ -186,7 +186,7 @@ describe('backend processing status model', () => {
   it('keeps the delete control outside the progressbar so it is not made presentational', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { file: statusFile({ status: 'uploading', progress: 42 }) }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { file: statusFile({ status: 'uploading', progress: 42 }) }),
     });
     const shadow = page.root.shadowRoot;
     const progressbar = shadow?.querySelector('[role="progressbar"]');
@@ -196,7 +196,7 @@ describe('backend processing status model', () => {
   it('renders the backend error message and clears the busy state', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { file: statusFile({ status: 'error', processingError: 'Infected file' }) }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { file: statusFile({ status: 'error', processingError: 'Infected file' }) }),
     });
     const shadow = page.root.shadowRoot;
     expect(shadow?.querySelector('.inline-message-error')?.getAttribute('message')).toBe('Infected file');
@@ -206,7 +206,7 @@ describe('backend processing status model', () => {
   it('keeps a backend-errored file deletable', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { file: statusFile({ status: 'error', processingError: 'Infected file' }) }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { file: statusFile({ status: 'error', processingError: 'Infected file' }) }),
     });
     const cross = page.root.shadowRoot?.querySelector('[part="cross-icon"]');
     expect(cross).not.toBeNull();
@@ -215,7 +215,7 @@ describe('backend processing status model', () => {
   it('shows no spinner or percentage once the status is done', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { file: statusFile({ status: 'done' }) }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { file: statusFile({ status: 'done' }) }),
     });
     const shadow = page.root.shadowRoot;
     expect(shadow?.querySelector('wpp-spinner')).toBeNull();
@@ -225,7 +225,7 @@ describe('backend processing status model', () => {
   it('still honours the deprecated isLoading flag', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { file: statusFile({ isLoading: true }) }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { file: statusFile({ isLoading: true }) }),
     });
     const shadow = page.root.shadowRoot;
     expect(shadow?.querySelector('wpp-spinner')).not.toBeNull();
@@ -234,7 +234,7 @@ describe('backend processing status model', () => {
   it('lets an explicit status take precedence over the deprecated isLoading flag', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { file: statusFile({ isLoading: true, status: 'done' }) }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { file: statusFile({ isLoading: true, status: 'done' }) }),
     });
     const shadow = page.root.shadowRoot;
     expect(shadow?.querySelector('wpp-spinner')).toBeNull();
@@ -243,14 +243,14 @@ describe('backend processing status model', () => {
   it('localises the delete control label', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => (h("wpp-file-upload-item-v4-5-0", { file: urlFile(), locales: { removeFile: (name) => `Supprimer ${name}` } })),
+      template: () => (h("wpp-file-upload-item-v4-6-0", { file: urlFile(), locales: { removeFile: (name) => `Supprimer ${name}` } })),
     });
     expect(page.root.shadowRoot?.querySelector('[part="cross-icon"]')?.getAttribute('aria-label')).toBe('Supprimer report.pdf');
   });
   it('localises the progressbar accessible name', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => (h("wpp-file-upload-item-v4-5-0", { file: statusFile({ status: 'uploading', progress: 10 }), locales: { uploadProgress: (name) => `Traitement de ${name}` } })),
+      template: () => (h("wpp-file-upload-item-v4-6-0", { file: statusFile({ status: 'uploading', progress: 10 }), locales: { uploadProgress: (name) => `Traitement de ${name}` } })),
     });
     expect(page.root.shadowRoot?.querySelector('[role="progressbar"]')?.getAttribute('aria-label')).toBe('Traitement de report.pdf');
   });
@@ -260,7 +260,7 @@ describe('keyboard operability while a file is processing', () => {
   const renderItem = async (file) => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { file: file }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { file: file }),
     });
     const shadow = page.root.shadowRoot;
     return { page, shadow, cross: shadow.querySelector('[part="cross-icon"]') };
@@ -299,7 +299,7 @@ describe('keyboard operability while a file is processing', () => {
   it('takes the delete control out of the tab order when the parent is disabled', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { file: uploading(), parentDisabled: true }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { file: uploading(), parentDisabled: true }),
     });
     const cross = page.root.shadowRoot?.querySelector('[part="cross-icon"]');
     expect(cross.getAttribute('tabindex')).toBe('-1');
@@ -313,7 +313,7 @@ describe('keyboard operability while a file is processing', () => {
     const file = uploading();
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { file: file }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { file: file }),
     });
     const shadow = page.root.shadowRoot;
     const before = shadow.querySelector('[part="cross-icon"]');
@@ -332,7 +332,7 @@ describe('progress precedence', () => {
   const withReaderProgress = async (file, readerPercent) => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { file: file }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { file: file }),
     });
     page.rootInstance.percentage = readerPercent;
     await page.waitForChanges();
@@ -353,7 +353,7 @@ describe('progress precedence', () => {
   it('still uses the local read for a file that is not backend-driven', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { file: urlFile() }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { file: urlFile() }),
     });
     const instance = page.rootInstance;
     // A file with no status is driven by the local read, so put it mid-read.
@@ -368,7 +368,7 @@ describe('a disabled uploader', () => {
   it('does not let the delete control remove a file', async () => {
     const page = await newSpecPage({
       components: [WppFileUploadItem],
-      template: () => h("wpp-file-upload-item-v4-5-0", { file: urlFile(), parentDisabled: true }),
+      template: () => h("wpp-file-upload-item-v4-6-0", { file: urlFile(), parentDisabled: true }),
     });
     const cross = page.root.shadowRoot?.querySelector('[part="cross-icon"]');
     const deleted = jest.fn();

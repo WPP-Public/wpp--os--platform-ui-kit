@@ -3,8 +3,8 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
-const utils = require('./utils-a237e765.js');
-const wppVolumeBar = require('./wpp-volume-bar-3a0673cf.js');
+const utils = require('./utils-a3ab9816.js');
+const wppVolumeBar = require('./wpp-volume-bar-58772675.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
 require('./consts-d8f5ef98.js');
 require('./theme-observer-4179316e.js');
@@ -115,7 +115,7 @@ function renderSeekBarComponent() {
 }
 
 function renderVideoCurrentTimeComponent(time, label) {
-  return (index.h("wpp-typography-v4-5-0", { class: "video-time", type: "xs-body", part: "time" },
+  return (index.h("wpp-typography-v4-6-0", { class: "video-time", type: "xs-body", part: "time" },
     index.h("span", { role: "timer", "aria-label": `${label} ${time}` }, time)));
 }
 
@@ -570,12 +570,12 @@ const WppVideoPlayer = class {
      * - autoplay=false && state = idle
      * - autoplay=true
      */
-    this.renderMainPlayButton = () => (index.h("wpp-action-button-v4-5-0", { ref: ref => (this.initPlayButtonRef = ref), class: this.playButtonCssClasses(), onClick: this.togglePlay, variant: "inverted", ariaProps: {
+    this.renderMainPlayButton = () => (index.h("wpp-action-button-v4-6-0", { ref: ref => (this.initPlayButtonRef = ref), class: this.playButtonCssClasses(), onClick: this.togglePlay, variant: "inverted", ariaProps: {
         label: this.videoPlayerState === 'playing'
           ? this._locales.playButtonAriaLabel.play
           : this._locales.playButtonAriaLabel.pause,
         pressed: this.videoPlayerState === 'playing',
-      } }, this.videoPlayerState !== 'playing' ? (index.h("wpp-icon-play-filled-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (index.h("wpp-icon-pause-filled-v4-5-0", { slot: "icon-start", "aria-hidden": "true" }))));
+      } }, this.videoPlayerState !== 'playing' ? (index.h("wpp-icon-play-filled-v4-6-0", { slot: "icon-start", "aria-hidden": "true" })) : (index.h("wpp-icon-pause-filled-v4-6-0", { slot: "icon-start", "aria-hidden": "true" }))));
     this.renderVideoTag = () => (index.h("video", { ref: ref => (this.videoPlayerRef = ref), id: "video-element", class: "video-player", part: "video-player", controls: false, poster: this.thumbnail, autoplay: this.controlPanelConfigDefault.autoplay, muted: !this.controlPanelConfigDefault.showVolumeButton || this.controlPanelConfigDefault.autoplay, loop: this.controlPanelConfigDefault.loop, preload: this.preload, onEnded: this.handleVideoEnded, onLoadedMetaData: this.handleMetadataLoaded, ...(this.controlPanelConfigDefault.autoplay
         ? {
           onClick: this.togglePlay,
@@ -716,18 +716,18 @@ const WppVideoPlayer = class {
           role: 'region',
           'aria-label': this._locales.controlsAriaLabel,
         }
-        : {}) }, this.videoPlayerState !== 'idle' && (index.h(index.Fragment, null, this.caption && this.renderCaptions(), index.h("div", { class: "controls-bar", ref: ref => (this.controlsBarRef = ref) }, index.h("wpp-action-button-v4-5-0", { ref: ref => (this.playPauseButtonRef = ref), class: "play-pause-button", variant: "inverted", onClick: this.togglePlay, ariaProps: {
+        : {}) }, this.videoPlayerState !== 'idle' && (index.h(index.Fragment, null, this.caption && this.renderCaptions(), index.h("div", { class: "controls-bar", ref: ref => (this.controlsBarRef = ref) }, index.h("wpp-action-button-v4-6-0", { ref: ref => (this.playPauseButtonRef = ref), class: "play-pause-button", variant: "inverted", onClick: this.togglePlay, ariaProps: {
         label: this.videoPlayerState === 'playing'
           ? this._locales.playPauseButtonArealLabels.pause
           : this._locales.playPauseButtonArealLabels.play,
         pressed: this.videoPlayerState === 'playing',
-      } }, this.videoPlayerState === 'playing' ? (index.h("wpp-icon-pause-filled-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (index.h("wpp-icon-play-filled-v4-5-0", { slot: "icon-start", "aria-hidden": "true" }))), this.renderVideoTime(this.currentVideoTime, this._locales.currentTimeAriaLabel), this.renderSeekBar(), this.renderVideoTime(this.overallVideoTime, this._locales.durationAriaLabel), this.caption && (index.h("wpp-action-button-v4-5-0", { ref: ref => (this.captionButtonRef = ref), onClick: this.toggleCaptions, variant: "inverted", ariaProps: {
+      } }, this.videoPlayerState === 'playing' ? (index.h("wpp-icon-pause-filled-v4-6-0", { slot: "icon-start", "aria-hidden": "true" })) : (index.h("wpp-icon-play-filled-v4-6-0", { slot: "icon-start", "aria-hidden": "true" }))), this.renderVideoTime(this.currentVideoTime, this._locales.currentTimeAriaLabel), this.renderSeekBar(), this.renderVideoTime(this.overallVideoTime, this._locales.durationAriaLabel), this.caption && (index.h("wpp-action-button-v4-6-0", { ref: ref => (this.captionButtonRef = ref), onClick: this.toggleCaptions, variant: "inverted", ariaProps: {
         label: this._locales.captionButtonAriaLabel,
-      } }, this.isCaptionEnabled ? (index.h("wpp-icon-caption-on-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (index.h("wpp-icon-caption-off-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })))), this.controlPanelConfigDefault.showVolumeButton && this.renderVolumeBar(), this.controlPanelConfigDefault.showFullscreenButton && (index.h("wpp-action-button-v4-5-0", { ref: ref => (this.fullScreenButtonRef = ref), onClick: this.toggleFullscreen, variant: "inverted", ariaProps: {
+      } }, this.isCaptionEnabled ? (index.h("wpp-icon-caption-on-v4-6-0", { slot: "icon-start", "aria-hidden": "true" })) : (index.h("wpp-icon-caption-off-v4-6-0", { slot: "icon-start", "aria-hidden": "true" })))), this.controlPanelConfigDefault.showVolumeButton && this.renderVolumeBar(), this.controlPanelConfigDefault.showFullscreenButton && (index.h("wpp-action-button-v4-6-0", { ref: ref => (this.fullScreenButtonRef = ref), onClick: this.toggleFullscreen, variant: "inverted", ariaProps: {
         label: this._locales.fullscreenButtonAriaLabel,
-      } }, this.isFullscreen ? (index.h("wpp-icon-fullscreen-minimise-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })) : (index.h("wpp-icon-fullscreen-v4-5-0", { slot: "icon-start", "aria-hidden": "true" })))), this.renderAccessibilityInstructions())))))));
+      } }, this.isFullscreen ? (index.h("wpp-icon-fullscreen-minimise-v4-6-0", { slot: "icon-start", "aria-hidden": "true" })) : (index.h("wpp-icon-fullscreen-v4-6-0", { slot: "icon-start", "aria-hidden": "true" })))), this.renderAccessibilityInstructions())))))));
   }
-  static get registryIs() { return "wpp-video-player-v4-5-0"; }
+  static get registryIs() { return "wpp-video-player-v4-6-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "videoPlayerState": ["onVideoPlayerState"],

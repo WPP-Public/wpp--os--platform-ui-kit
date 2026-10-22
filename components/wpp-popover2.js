@@ -32,7 +32,7 @@ const TRIGGER_CONTROL_SELECTOR = `${NATIVE_INTERACTIVE_SELECTOR}, [tabindex]:not
 // Dropdown roles that `aria-haspopup` can announce on the trigger
 const ARIA_HASPOPUP_ROLES = ['menu', 'listbox', 'tree', 'grid', 'dialog'];
 
-const wppPopoverCss = ":host{display:-ms-inline-flexbox;display:inline-flex}:host .anchor{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;display:-ms-inline-flexbox;display:inline-flex}:host .wpp-popover-content{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column}:host .wpp-popover-content.wpp-hidden{position:absolute;z-index:-1;opacity:0}:host .wpp-popover-content.inline-edit-popover{display:-ms-inline-flexbox;display:inline-flex;width:100%;height:100%;-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m);background-color:var(--wpp-grey-color-800);border-radius:var(--wpp-border-radius-s);scrollbar-width:thin;position:relative;overflow:hidden}:host .wpp-popover-content.wpp-with-footer{overflow:hidden}:host .wpp-popover-content .wpp-popover-footer{display:-ms-flexbox;display:flex;-ms-flex-negative:0;flex-shrink:0;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;gap:8px;width:100%;padding:8px;-webkit-box-sizing:border-box;box-sizing:border-box;border-top:var(--wpp-border-width-s) solid var(--wpp-grey-color-300)}:host .wpp-popover-content .wpp-popover-clear-action,:host .wpp-popover-content .wpp-popover-footer-actions{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}:host .wpp-popover-content .wpp-popover-footer-actions{-ms-flex-pack:end;justify-content:flex-end;margin-left:auto}:host slot{display:block}";
+const wppPopoverCss = ":host{display:-ms-inline-flexbox;display:inline-flex}:host .anchor{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;display:-ms-inline-flexbox;display:inline-flex}:host .wpp-popover-content{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column}:host .wpp-popover-content.wpp-hidden{position:absolute;z-index:-1;opacity:0}:host .wpp-popover-content.inline-edit-popover{display:-ms-inline-flexbox;display:inline-flex;width:100%;height:100%;-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m);background-color:var(--wpp-grey-color-800);border-radius:var(--wpp-border-radius-s);scrollbar-width:thin;position:relative;overflow:hidden}:host .wpp-popover-content.wpp-with-footer{overflow:hidden}:host .wpp-popover-content .wpp-popover-footer{display:-ms-flexbox;display:flex;-ms-flex-negative:0;flex-shrink:0;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;gap:8px;width:100%;padding:8px;-webkit-box-sizing:border-box;box-sizing:border-box;border-top:var(--wpp-border-width-s) solid var(--wpp-grey-color-300)}:host .wpp-popover-content .wpp-popover-clear-action,:host .wpp-popover-content .wpp-popover-footer-actions{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}:host .wpp-popover-content .wpp-popover-footer-actions{-ms-flex-pack:end;justify-content:flex-end;margin-left:auto}:host slot{display:block}:host slot[name=trigger-element]{display:contents}";
 
 const WppPopover = /*@__PURE__*/ proxyCustomElement(class WppPopover extends HTMLElement {
   constructor() {
@@ -418,15 +418,15 @@ const WppPopover = /*@__PURE__*/ proxyCustomElement(class WppPopover extends HTM
   }
   render() {
     const locales = this.mergedLocales;
-    return (h(Host, { class: this.hostCssClasses(), exportparts: this.exportParts() }, h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref), onKeyDown: this.handleTriggerKeyDown, role: "presentation" }, h("slot", { name: "trigger-element", part: "trigger-element", onSlotchange: this.handleTriggerSlotChange })), h("div", { class: "wpp-popover-focus-scope", ref: focusScopeEl => (this.focusScopeEl = focusScopeEl) }, h("div", { tabindex: "0", class: "wpp-popover-focus-sentinel", onFocus: this.handleStartSentinelFocus }), h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), onKeyDown: this.handlePopperKeyDown, onPointerDown: this.handlePopperPointerDown, role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.labelledby ? undefined : this.ariaProps.label, tabindex: "-1" }, this.withSearch && (h("wpp-input-v4-5-0", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: locales.searchInputPlaceholder, type: "search", size: "m", ariaProps: { label: locales.searchInputPlaceholder } })), !this.withSearch && this.closable && (h("wpp-action-button-v4-5-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary", ariaProps: { label: locales.closeText } }, h("wpp-icon-cross-v4-5-0", { slot: "icon-end", "aria-hidden": "true" }))), h("slot", null), (this.showClearButton || this.hasFooterActions) && (h("div", { class: "wpp-popover-footer", part: "footer", ref: footerEl => (this.footerEl = footerEl), role: "group", "aria-label": locales.actionsText }, h("div", { class: "wpp-popover-clear-action" }, this.showClearButton && (h("wpp-action-button-v4-5-0", { variant: "secondary", onClick: this.handleClearButtonClick }, locales.clearText))), h("div", { class: "wpp-popover-footer-actions", part: "footer-actions", ref: footerActionsEl => (this.footerActionsEl = footerActionsEl) }, h("slot", { name: "actions", onSlotchange: this.updateSlotData }))))), h("div", { tabindex: "0", class: "wpp-popover-focus-sentinel", onFocus: this.handleEndSentinelFocus }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: this.exportParts() }, h("div", { class: "anchor", part: "anchor", ref: ref => (this.anchorRef = ref), onKeyDown: this.handleTriggerKeyDown, role: "presentation" }, h("slot", { name: "trigger-element", part: "trigger-element", onSlotchange: this.handleTriggerSlotChange })), h("div", { class: "wpp-popover-focus-scope", ref: focusScopeEl => (this.focusScopeEl = focusScopeEl) }, h("div", { tabindex: "0", class: "wpp-popover-focus-sentinel", onFocus: this.handleStartSentinelFocus }), h("div", { class: this.contentCssClasses(), part: "content", ref: contentEl => (this.contentEl = contentEl), onKeyDown: this.handlePopperKeyDown, onPointerDown: this.handlePopperPointerDown, role: this.ariaProps.role || 'dialog', "aria-describedby": this.ariaProps.describedby, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.labelledby ? undefined : this.ariaProps.label, tabindex: "-1" }, this.withSearch && (h("wpp-input-v4-6-0", { ref: inputEl => (this.searchInputEl = inputEl), class: "wpp-search-input", value: this.searchValue, onWppChange: this.handleSearchChange, name: this.internalSearchName, placeholder: locales.searchInputPlaceholder, type: "search", size: "m", ariaProps: { label: locales.searchInputPlaceholder } })), !this.withSearch && this.closable && (h("wpp-action-button-v4-6-0", { onClick: this.handleCrossButtonClick, class: "cross-button", variant: "secondary", ariaProps: { label: locales.closeText } }, h("wpp-icon-cross-v4-6-0", { slot: "icon-end", "aria-hidden": "true" }))), h("slot", null), (this.showClearButton || this.hasFooterActions) && (h("div", { class: "wpp-popover-footer", part: "footer", ref: footerEl => (this.footerEl = footerEl), role: "group", "aria-label": locales.actionsText }, h("div", { class: "wpp-popover-clear-action" }, this.showClearButton && (h("wpp-action-button-v4-6-0", { variant: "secondary", onClick: this.handleClearButtonClick }, locales.clearText))), h("div", { class: "wpp-popover-footer-actions", part: "footer-actions", ref: footerActionsEl => (this.footerActionsEl = footerActionsEl) }, h("slot", { name: "actions", onSlotchange: this.updateSlotData }))))), h("div", { tabindex: "0", class: "wpp-popover-focus-sentinel", onFocus: this.handleEndSentinelFocus }))));
   }
-  static get registryIs() { return "wpp-popover-v4-5-0"; }
+  static get registryIs() { return "wpp-popover-v4-6-0"; }
   get host() { return this; }
   static get watchers() { return {
     "config": ["updateConfig"]
   }; }
   static get style() { return wppPopoverCss; }
-}, [1, "wpp-popover", "wpp-popover-v4-5-0", {
+}, [1, "wpp-popover", "wpp-popover-v4-6-0", {
     "config": [1040],
     "shouldCloseOnOutsideClick": [16],
     "closable": [4],
@@ -448,84 +448,84 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-popover-v4-5-0", "wpp-action-button-v4-5-0", "wpp-icon-cross-v4-5-0", "wpp-icon-error-v4-5-0", "wpp-icon-info-message-v4-5-0", "wpp-icon-search-v4-5-0", "wpp-icon-success-v4-5-0", "wpp-icon-warning-v4-5-0", "wpp-inline-message-v4-5-0", "wpp-input-v4-5-0", "wpp-internal-label-v4-5-0", "wpp-internal-tooltip-v4-5-0", "wpp-label-v4-5-0", "wpp-spinner-v4-5-0", "wpp-tooltip-v4-5-0", "wpp-typography-v4-5-0"];
+  const components = ["wpp-popover-v4-6-0", "wpp-action-button-v4-6-0", "wpp-icon-cross-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-info-message-v4-6-0", "wpp-icon-search-v4-6-0", "wpp-icon-success-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-inline-message-v4-6-0", "wpp-input-v4-6-0", "wpp-internal-label-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-label-v4-6-0", "wpp-spinner-v4-6-0", "wpp-tooltip-v4-6-0", "wpp-typography-v4-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-popover-v4-5-0":
+    case "wpp-popover-v4-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppPopover);
       }
       break;
-    case "wpp-action-button-v4-5-0":
+    case "wpp-action-button-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-cross-v4-5-0":
+    case "wpp-icon-cross-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-error-v4-5-0":
+    case "wpp-icon-error-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-info-message-v4-5-0":
+    case "wpp-icon-info-message-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-search-v4-5-0":
+    case "wpp-icon-search-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-success-v4-5-0":
+    case "wpp-icon-success-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-warning-v4-5-0":
+    case "wpp-icon-warning-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-inline-message-v4-5-0":
+    case "wpp-inline-message-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-input-v4-5-0":
+    case "wpp-input-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-label-v4-5-0":
+    case "wpp-internal-label-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-internal-tooltip-v4-5-0":
+    case "wpp-internal-tooltip-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-label-v4-5-0":
+    case "wpp-label-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v4-5-0":
+    case "wpp-spinner-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-5-0":
+    case "wpp-tooltip-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-5-0":
+    case "wpp-typography-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

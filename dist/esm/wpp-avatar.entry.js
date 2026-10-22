@@ -1,7 +1,7 @@
 import { r as registerInstance, c as createEvent, h, F as Fragment, H as Host, g as getElement } from './index-a0877c3d.js';
 import { F as FOCUS_TYPE } from './common-69c8ea89.js';
 import { A as AVATAR_COLORS_VARIANTS } from './const-271ccb95.js';
-import { k as transformToVersionedTag } from './utils-f7e38fc9.js';
+import { k as transformToVersionedTag } from './utils-49ce8daf.js';
 import './consts-744c144f.js';
 
 /** Border radius applied to circular avatars (large enough to always render a full circle). */
@@ -161,9 +161,9 @@ const WppAvatar = class {
       : this.amountOfHiddenAvatars
         ? `+${this.amountOfHiddenAvatars}`
         : this.getUserAbbreviation(this.name))));
-    return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onClick: this.handleClick, exportparts: "image, content, tooltip", ...this.getHostAriaProps() }, this.hasTooltip() ? (h("wpp-tooltip-v4-5-0", { text: this.name, config: this.tooltipConfig, part: "tooltip", ariaProps: { label: `User: ${this.name}`, role: 'button' } }, content)) : (content)));
+    return (h(Host, { class: this.hostCssClasses(), onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp, onClick: this.handleClick, exportparts: "image, content, tooltip", ...this.getHostAriaProps() }, this.hasTooltip() ? (h("wpp-tooltip-v4-6-0", { text: this.name, config: this.tooltipConfig, part: "tooltip", ariaProps: { label: `User: ${this.name}`, role: 'button' } }, content)) : (content)));
   }
-  static get registryIs() { return "wpp-avatar-v4-5-0"; }
+  static get registryIs() { return "wpp-avatar-v4-6-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "color": ["colorChange"],

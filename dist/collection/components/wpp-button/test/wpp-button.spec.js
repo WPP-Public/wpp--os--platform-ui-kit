@@ -76,7 +76,7 @@ describe('wpp-button', () => {
     it('should allow aria-haspopup to be overridden on a menu button', async () => {
       const page = await newSpecPage({
         components: [WppButton],
-        template: () => (h("wpp-button-v4-5-0", { isMenuBtn: true, ariaProps: { haspopup: 'dialog' } }, "Button")),
+        template: () => (h("wpp-button-v4-6-0", { isMenuBtn: true, ariaProps: { haspopup: 'dialog' } }, "Button")),
       });
       expect(page.root?.shadowRoot?.querySelector('button')?.getAttribute('aria-haspopup')).toBe('dialog');
     });
@@ -200,7 +200,7 @@ describe('wpp-button', () => {
         const form = document.createElement('form');
         const page = await newSpecPage({
           components: [WppButton],
-          template: () => h("wpp-button-v4-5-0", { form: form, type: "submit" }),
+          template: () => h("wpp-button-v4-6-0", { form: form, type: "submit" }),
         });
         const mockEvent = new Event('click');
         form.requestSubmit = jest.fn();
@@ -213,7 +213,7 @@ describe('wpp-button', () => {
         const form = document.createElement('form');
         const page = await newSpecPage({
           components: [WppButton],
-          template: () => h("wpp-button-v4-5-0", { form: form, type: "reset" }),
+          template: () => h("wpp-button-v4-6-0", { form: form, type: "reset" }),
         });
         const mockEvent = new Event('click');
         form.reset = jest.fn();
@@ -224,7 +224,7 @@ describe('wpp-button', () => {
       it('should submit when form params as a string (form ID)', async () => {
         const page = await newSpecPage({
           components: [WppButton],
-          template: () => (h("form", { id: "test-form" }, h("wpp-button-v4-5-0", { form: "test-form", type: "submit" }))),
+          template: () => (h("form", { id: "test-form" }, h("wpp-button-v4-6-0", { form: "test-form", type: "submit" }))),
         });
         const form = page.root?.closest('form');
         const mockEvent = new Event('click');
@@ -240,7 +240,7 @@ describe('wpp-button', () => {
       it('should submit when form params is not defined', async () => {
         const page = await newSpecPage({
           components: [WppButton],
-          template: () => (h("form", null, h("wpp-button-v4-5-0", { type: "submit" }))),
+          template: () => (h("form", null, h("wpp-button-v4-6-0", { type: "submit" }))),
         });
         const form = page.root?.closest('form');
         const mockEvent = new Event('click');

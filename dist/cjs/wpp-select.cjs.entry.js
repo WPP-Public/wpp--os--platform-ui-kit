@@ -6,7 +6,7 @@ const index = require('./index-7d205426.js');
 const menuListConfig = require('./menuListConfig-ebbec952.js');
 const common = require('./common-ee802540.js');
 const consts = require('./consts-d8f5ef98.js');
-const utils = require('./utils-a237e765.js');
+const utils = require('./utils-a3ab9816.js');
 const lodash = require('./lodash-6b012aab.js');
 const WrappedSlot = require('./WrappedSlot-669e1c73.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
@@ -54,22 +54,22 @@ function renderSingleSelect(isBaseComponent = true, customSize, isRenderMessageI
     }
     return this.renderedText;
   };
-  const getInlineMessage = () => (index.h(index.Fragment, null, this.message && isBaseComponent && (index.h("wpp-inline-message-v4-5-0", { class: !this.messageType ? 'default-message' : '', showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType || 'information', tooltipConfig: this.tooltipConfig }))));
+  const getInlineMessage = () => (index.h(index.Fragment, null, this.message && isBaseComponent && (index.h("wpp-inline-message-v4-6-0", { class: !this.messageType ? 'default-message' : '', showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType || 'information', tooltipConfig: this.tooltipConfig }))));
   const renderAnchor = () => (index.h("div", { class: getAnchorCSSClasses(), ref: el => (this.anchorRef = el), tabIndex: this.disabled ? -1 : 0, onClick: () => this.handleClick() }, this.anchorButton ? (index.h("slot", { name: "anchor-button", onSlotchange: this.updateSlotData })) : (index.h(index.Fragment, null,
     index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }),
-    index.h("div", { class: "overflow-container", ref: refEl => (this.overflowContainerRef = refEl) }, this.textOverflows ? (index.h("wpp-tooltip-v4-5-0", { text: getSelectPlaceholder() },
+    index.h("div", { class: "overflow-container", ref: refEl => (this.overflowContainerRef = refEl) }, this.textOverflows ? (index.h("wpp-tooltip-v4-6-0", { text: getSelectPlaceholder() },
       index.h("p", null, getSelectPlaceholder()))) : (index.h("p", null, getSelectPlaceholder()))),
     index.h("input", { class: "input", ref: refEl => (this.inputRef = refEl), type: "text", id: this.name, name: this.name, onChange: () => this.checkIfTextOverflows(), disabled: this.disabled, value: getSelectPlaceholder(), tabIndex: -1, readonly: true, "aria-label": this.ariaProps.label, title: "", style: { width: this.overflowContainerRef ? `${this.overflowContainerRef.clientWidth}px` : 'auto' }, required: this.required }),
-    index.h("wpp-icon-chevron-v4-5-0", { class: this.isOpen || this.isDropdownOpen ? 'isOpen' : '', direction: 'down' })))));
+    index.h("wpp-icon-chevron-v4-6-0", { class: this.isOpen || this.isDropdownOpen ? 'isOpen' : '', direction: 'down' })))));
   const RootTag = isBaseComponent ? index.Host : index.Fragment;
   return (index.h(RootTag, { onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, class: "wpp-single-select", "aria-disabled": this.disabled, onFocus: this.onFocus, onBlur: this.onBlur },
-    this.labelConfig?.text && isBaseComponent && (index.h("wpp-label-v4-5-0", { class: this.labelCssClasses(), optional: !this.required, htmlFor: this.name, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })),
-    index.h("div", { class: "anchor-container" }, isRenderMessageInTooltip ? (index.h("wpp-tooltip-v4-5-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
+    this.labelConfig?.text && isBaseComponent && (index.h("wpp-label-v4-6-0", { class: this.labelCssClasses(), optional: !this.required, htmlFor: this.name, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })),
+    index.h("div", { class: "anchor-container" }, isRenderMessageInTooltip ? (index.h("wpp-tooltip-v4-6-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
     index.h("div", null, !isRenderMessageInTooltip && getInlineMessage()),
     index.h("div", { class: "wpp-select-portal", onKeyDown: this.onKeyDownPortal, ref: el => (this.portalRef = el) },
       this.shouldShowSearch && (index.h(index.Fragment, null,
-        index.h("wpp-input-v4-5-0", { type: "search", class: "select-portal-search-input", value: this.searchText, onWppChange: this.handleSearch, name: this.name && `${this.name}-search-input`, placeholder: this._locales.searchInputPlaceholder }),
-        index.h("wpp-divider-v4-5-0", { color: "var(--wpp-grey-color-300)" }))),
+        index.h("wpp-input-v4-6-0", { type: "search", class: "select-portal-search-input", value: this.searchText, onWppChange: this.handleSearch, name: this.name && `${this.name}-search-input`, placeholder: this._locales.searchInputPlaceholder }),
+        index.h("wpp-divider-v4-6-0", { color: "var(--wpp-grey-color-300)" }))),
       index.h("div", { class: "list", ref: el => (this.listRef = el) }, this.renderList()))));
 }
 
@@ -99,26 +99,26 @@ function renderMultipleSelect() {
     }
     return this.renderedText || this.placeholder;
   };
-  const getInlineMessage = () => (index.h(index.Fragment, null, this.message && (index.h("wpp-inline-message-v4-5-0", { class: !this.messageType ? 'default-message' : '', showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType || 'information', tooltipConfig: this.tooltipConfig }))));
+  const getInlineMessage = () => (index.h(index.Fragment, null, this.message && (index.h("wpp-inline-message-v4-6-0", { class: !this.messageType ? 'default-message' : '', showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType || 'information', tooltipConfig: this.tooltipConfig }))));
   const renderAnchor = () => (index.h("div", { class: getAnchorCSSClasses(), ref: el => (this.anchorRef = el), tabIndex: this.disabled ? -1 : 0, onClick: () => this.handleClick() }, this.anchorButton ? (index.h("slot", { name: "anchor-button", onSlotchange: this.updateSlotData })) : (index.h(index.Fragment, null,
     index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }),
     index.h("div", { class: "overflow-container", ref: refEl => (this.overflowContainerRef = refEl) },
       index.h("p", null, getRenderedText())),
     index.h("input", { class: "input", type: "text", ref: refEl => (this.inputRef = refEl), name: this.name, onChange: () => this.checkIfTextOverflows(), disabled: this.disabled, value: this.renderedText, tabIndex: -1, readonly: true, "aria-label": this.ariaProps.label, title: "", style: { width: this.overflowContainerRef ? `${this.overflowContainerRef.clientWidth}px` : 'auto' }, required: this.required }),
-    index.h("wpp-icon-chevron-v4-5-0", { class: this.isOpen ? 'isOpen' : '', direction: 'down' })))));
+    index.h("wpp-icon-chevron-v4-6-0", { class: this.isOpen ? 'isOpen' : '', direction: 'down' })))));
   return (index.h(index.Host, { class: "wpp-multiple-select", onKeyUp: this.onKeyUp, "aria-disabled": this.disabled, onFocus: this.onFocus, onBlur: this.onBlur },
-    this.labelConfig?.text && (index.h("wpp-label-v4-5-0", { class: this.labelCssClasses(), optional: !this.required, htmlFor: this.name, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: () => this.handleClick(), onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })),
-    index.h("div", { class: "anchor-container" }, this.isRenderMessageInTooltip ? (index.h("wpp-tooltip-v4-5-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
+    this.labelConfig?.text && (index.h("wpp-label-v4-6-0", { class: this.labelCssClasses(), optional: !this.required, htmlFor: this.name, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: () => this.handleClick(), onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })),
+    index.h("div", { class: "anchor-container" }, this.isRenderMessageInTooltip ? (index.h("wpp-tooltip-v4-6-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
     index.h("div", null, !this.isRenderMessageInTooltip && getInlineMessage()),
     index.h("div", { class: "wpp-select-portal", ref: el => (this.portalRef = el) },
       this.shouldShowSearch && (index.h(index.Fragment, null,
-        index.h("wpp-input-v4-5-0", { type: "search", class: "select-portal-search-input", value: this.searchText, onWppChange: this.handleSearch, name: this.name && `${this.name}-search-input`, placeholder: this._locales.searchInputPlaceholder }),
-        index.h("wpp-divider-v4-5-0", { color: "var(--wpp-grey-color-300)" }))),
+        index.h("wpp-input-v4-6-0", { type: "search", class: "select-portal-search-input", value: this.searchText, onWppChange: this.handleSearch, name: this.name && `${this.name}-search-input`, placeholder: this._locales.searchInputPlaceholder }),
+        index.h("wpp-divider-v4-6-0", { color: "var(--wpp-grey-color-300)" }))),
       index.h("div", { class: "list list-with-scrollable" },
         index.h("div", { class: "list-scrollable", ref: refEl => (this.listRef = refEl) },
           shouldRenderTopSelectAll && (index.h("div", { class: "select-all-section" },
             !this.maximumSelectedItems && (index.h(index.Fragment, null,
-              index.h("wpp-list-item-v4-5-0", { multiple: true, checked: this.isSelectAllChecked, indeterminate: this.isSelectAllIndeterminate, disabled: this.isSelectAllDisabled, onWppChangeListItem: e => {
+              index.h("wpp-list-item-v4-6-0", { multiple: true, checked: this.isSelectAllChecked, indeterminate: this.isSelectAllIndeterminate, disabled: this.isSelectAllDisabled, onWppChangeListItem: e => {
                   e.stopPropagation();
                   this.handleSelectAllToggle();
                 }, isDarkTheme: this.isDarkTheme, class: "select-all-item" },
@@ -127,17 +127,17 @@ function renderMultipleSelect() {
                   " (",
                   this.selectAllCount,
                   ")")),
-              index.h("wpp-divider-v4-5-0", { class: "select-all-divider", color: "var(--wpp-grey-color-300)" }))),
+              index.h("wpp-divider-v4-6-0", { class: "select-all-divider", color: "var(--wpp-grey-color-300)" }))),
             this.renderPinnedItems(),
-            hasPinnedItems && (index.h("wpp-divider-v4-5-0", { class: "pinned-items-divider", color: "var(--wpp-grey-color-300)" })))),
+            hasPinnedItems && (index.h("wpp-divider-v4-6-0", { class: "pinned-items-divider", color: "var(--wpp-grey-color-300)" })))),
           this.renderList())),
       this.withFolder && this.isOpen && (index.h("div", { class: "multiple-select-folder" },
-        this.withScroll && index.h("wpp-divider-v4-5-0", null),
+        this.withScroll && index.h("wpp-divider-v4-6-0", null),
         this.showSelectAllOption ? (index.h("div", { class: `multiple-select-folder-buttons select-all-mode${this.withScroll ? ' with-divider' : ''}` },
-          this.canClearVisible && (index.h("wpp-action-button-v4-5-0", { variant: "secondary", disabled: this.loading, onClick: this.handleClearAll }, this._locales.clearText)),
-          index.h("wpp-action-button-v4-5-0", { class: "apply-button", variant: "primary", disabled: this.loading, onClick: this.handleApply }, this._locales.applyText))) : (index.h("div", { class: `multiple-select-folder-buttons${this.withScroll ? ' with-divider' : ''}` },
-          index.h("wpp-action-button-v4-5-0", { variant: "secondary", disabled: !this.canSelectAll || this.loading, onClick: this.handleSelectAll }, this._locales.selectAllText),
-          this.canClearAll && (index.h("wpp-action-button-v4-5-0", { variant: "secondary", disabled: this.loading, onClick: this.handleClearAll }, this._locales.clearAllText)))))))));
+          this.canClearVisible && (index.h("wpp-action-button-v4-6-0", { variant: "secondary", disabled: this.loading, onClick: this.handleClearAll }, this._locales.clearText)),
+          index.h("wpp-action-button-v4-6-0", { class: "apply-button", variant: "primary", disabled: this.loading, onClick: this.handleApply }, this._locales.applyText))) : (index.h("div", { class: `multiple-select-folder-buttons${this.withScroll ? ' with-divider' : ''}` },
+          index.h("wpp-action-button-v4-6-0", { variant: "secondary", disabled: !this.canSelectAll || this.loading, onClick: this.handleSelectAll }, this._locales.selectAllText),
+          this.canClearAll && (index.h("wpp-action-button-v4-6-0", { variant: "secondary", disabled: this.loading, onClick: this.handleClearAll }, this._locales.clearAllText)))))))));
 }
 
 /**
@@ -145,8 +145,8 @@ function renderMultipleSelect() {
  */
 function renderTextSelect() {
   const renderAnchor = () => (index.h(index.Fragment, null,
-    index.h("wpp-typography-v4-5-0", { id: "select-text", type: "s-body" }, this.renderedText || this.placeholder),
-    index.h("wpp-icon-chevron-v4-5-0", { class: this.isOpen ? 'isOpen' : '', direction: 'down' })));
+    index.h("wpp-typography-v4-6-0", { id: "select-text", type: "s-body" }, this.renderedText || this.placeholder),
+    index.h("wpp-icon-chevron-v4-6-0", { class: this.isOpen ? 'isOpen' : '', direction: 'down' })));
   const getAnchorCSSClasses = () => ({
     anchor: true,
     disabled: this.disabled,
@@ -155,7 +155,7 @@ function renderTextSelect() {
     'should-truncate': this.shouldTruncate,
     'tab-focus': this.focusType === common.FOCUS_TYPE.TAB,
   });
-  const getInlineMessage = () => (index.h(index.Fragment, null, this.message && (index.h("wpp-inline-message-v4-5-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, tooltipConfig: this.tooltipConfig }))));
+  const getInlineMessage = () => (index.h(index.Fragment, null, this.message && (index.h("wpp-inline-message-v4-6-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, tooltipConfig: this.tooltipConfig }))));
   return (index.h(index.Host, { class: "wpp-text-select", onKeyUp: this.onKeyUp, "aria-disabled": this.disabled, onFocus: this.onFocus, onBlur: this.onBlur },
     index.h("div", { class: getAnchorCSSClasses(), ref: el => (this.anchorRef = el), tabIndex: this.disabled ? -1 : 0, onClick: () => this.handleClick(), role: this.ariaProps.role || 'button', "aria-label": this.ariaProps.label ||
         (this.truncate && this.shouldTruncate
@@ -171,7 +171,7 @@ function renderTextSelect() {
           e.preventDefault();
           this.handleClick();
         }
-      } }, this.truncate && this.shouldTruncate ? (index.h("wpp-tooltip-v4-5-0", { text: this.renderedText || this.placeholder, config: { placement: 'right' }, class: "tooltip" }, renderAnchor())) : (renderAnchor())),
+      } }, this.truncate && this.shouldTruncate ? (index.h("wpp-tooltip-v4-6-0", { text: this.renderedText || this.placeholder, config: { placement: 'right' }, class: "tooltip" }, renderAnchor())) : (renderAnchor())),
     getInlineMessage(),
     index.h("div", { class: "wpp-select-portal", onKeyDown: this.onPortalKeyDown, ref: el => (this.portalRef = el) },
       index.h("div", { class: "list" }, this.renderList()))));
@@ -199,7 +199,7 @@ function renderCombinedSelect() {
   const onBlurInput = () => {
     this.isContainerFocused = false;
   };
-  const getInlineMessage = () => (index.h(index.Fragment, null, this.message && (index.h("wpp-inline-message-v4-5-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
+  const getInlineMessage = () => (index.h(index.Fragment, null, this.message && (index.h("wpp-inline-message-v4-6-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
   const combinedInputWrapperCssClasses = () => ({
     'inputs-container': true,
     'with-errors': this.hasErrorsOrWarnings('error'),
@@ -214,10 +214,10 @@ function renderCombinedSelect() {
   });
   const renderAnchor = () => (index.h("div", { class: combinedInputWrapperCssClasses() },
     renderSingleSelect.call(this, false, this.size, false),
-    index.h("wpp-input-v4-5-0", { onWppChange: handleInputChange, value: this.inputValue, disabled: this.disabled, type: this.inputType, maskOptions: this.maskOptions, messageType: this.messageType, placeholder: this.placeholder, size: this.size, tabIndex: -1, onFocus: onFocusInput, onBlur: onBlurInput, onClick: (event) => event.stopPropagation() })));
+    index.h("wpp-input-v4-6-0", { onWppChange: handleInputChange, value: this.inputValue, disabled: this.disabled, type: this.inputType, maskOptions: this.maskOptions, messageType: this.messageType, placeholder: this.placeholder, size: this.size, tabIndex: -1, onFocus: onFocusInput, onBlur: onBlurInput, onClick: (event) => event.stopPropagation() })));
   return (index.h(index.Host, { class: getHostCssClasses(), onKeyUp: this.onKeyUp, "aria-disabled": this.disabled, onFocus: this.onFocus, onBlur: this.onBlur },
-    this.labelConfig?.text && (index.h("wpp-label-v4-5-0", { class: this.labelCssClasses(), htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })),
-    index.h("div", { class: "combined-anchor-container" }, this.isRenderMessageInTooltip ? (index.h("wpp-tooltip-v4-5-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
+    this.labelConfig?.text && (index.h("wpp-label-v4-6-0", { class: this.labelCssClasses(), htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })),
+    index.h("div", { class: "combined-anchor-container" }, this.isRenderMessageInTooltip ? (index.h("wpp-tooltip-v4-6-0", { text: this.message, error: this.messageType === 'error', warning: this.messageType === 'warning', config: this.tooltipConfig }, renderAnchor())) : (renderAnchor())),
     index.h("div", null, !this.isRenderMessageInTooltip && getInlineMessage())));
 }
 
@@ -385,10 +385,10 @@ const WppSelect = class {
         return index.h(index.Fragment, null);
       }
       if (this.loading) {
-        return (index.h("div", { class: "loading-container" }, index.h("wpp-spinner-v4-5-0", null), index.h("wpp-typography-v4-5-0", { type: "s-body" }, this._locales.loadingText)));
+        return (index.h("div", { class: "loading-container" }, index.h("wpp-spinner-v4-6-0", null), index.h("wpp-typography-v4-6-0", { type: "s-body" }, this._locales.loadingText)));
       }
       if (this.internalList?.length === 0) {
-        return (index.h("wpp-typography-v4-5-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+        return (index.h("wpp-typography-v4-6-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
       }
       let hiddeItemsCount = 0;
       return (index.h(index.Fragment, null, this.internalList?.map((item) => {
@@ -398,11 +398,11 @@ const WppSelect = class {
           if (hidden)
             hiddeItemsCount++;
           if (hiddeItemsCount === this.internalList?.length) {
-            return (index.h("wpp-typography-v4-5-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
+            return (index.h("wpp-typography-v4-6-0", { class: "nothing-found", type: "s-body" }, this._locales.emptyText));
           }
           return null;
         }
-        return (index.h("wpp-list-item-v4-5-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ref: item.checked && this.type === 'single'
+        return (index.h("wpp-list-item-v4-6-0", { onWppChangeListItem: this.handleClickListItem, key: this.convertValueToKey(item.value), ref: item.checked && this.type === 'single'
             ? el => (this.selectedItemRef = el)
             : undefined, isDarkTheme: this.isDarkTheme, ...rest, id: item.id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${item.id}` : undefined }, index.h("p", { slot: "label" }, label), item?.slots && this.renderSlotsInListItem(item.slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
@@ -420,7 +420,7 @@ const WppSelect = class {
           return null;
         const { label, value, checked, disabled, id, slots } = current;
         const itemValueKey = this.convertValueToKey(value);
-        return (index.h("wpp-list-item-v4-5-0", { onWppChangeListItem: this.handleClickListItem, key: `pinned-${itemValueKey}`, value: value, checked: checked, disabled: disabled, multiple: true, isDarkTheme: this.isDarkTheme, id: id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${id}` : undefined, class: "pinned-item" }, index.h("p", { slot: "label" }, label), slots && this.renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
+        return (index.h("wpp-list-item-v4-6-0", { onWppChangeListItem: this.handleClickListItem, key: `pinned-${itemValueKey}`, value: value, checked: checked, disabled: disabled, multiple: true, isDarkTheme: this.isDarkTheme, id: id !== undefined ? `${this.LIB_COMPONENTS_PREFIX}list-item-${id}` : undefined, class: "pinned-item" }, index.h("p", { slot: "label" }, label), slots && this.renderSlotsInListItem(slots, Boolean(label)).map((slotNode) => slotNode)));
       })));
     };
     this.renderSlotsInListItem = (slots, isLabelExists) => slots
@@ -1147,7 +1147,7 @@ const WppSelect = class {
     }
     return renderCombinedSelect.call(this);
   }
-  static get registryIs() { return "wpp-select-v4-5-0"; }
+  static get registryIs() { return "wpp-select-v4-6-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "displayValue": ["onUpdateDisplayValue"],

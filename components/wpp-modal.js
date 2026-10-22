@@ -118,7 +118,7 @@ const WppModal$1 = /*@__PURE__*/ proxyCustomElement(class WppModal extends HTMLE
     };
     this.renderActionBtn = (btnConfig, variant) => {
       const { label, ...rest } = btnConfig;
-      return (h("wpp-button-v4-5-0", { size: "s", variant: variant, ...rest }, label));
+      return (h("wpp-button-v4-6-0", { size: "s", variant: variant, ...rest }, label));
     };
     this.renderActionsConfig = () => {
       if (!this.actionsConfig)
@@ -277,15 +277,15 @@ const WppModal$1 = /*@__PURE__*/ proxyCustomElement(class WppModal extends HTMLE
         // The body is a scroll container, so a classic scrollbar would eat into its right
         // padding and render the designed inset asymmetrically. The SCSS subtracts this.
         '--modal-scrollbar-gutter': `${getScrollbarGutterWidth()}px`,
-      }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-5-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-5-0", null), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-5-0", null), this.actionsConfig ? (this.renderActionsConfig()) : (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
+      }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, h("div", { class: "modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-6-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.modalCssClasses(), part: "content", ...this.formConfig, ref: ref => (this.dialogRef = ref) }, h(WrappedSlot, { wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-6-0", null), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.isBodyScrollable && h("wpp-divider-v4-6-0", null), this.actionsConfig ? (this.renderActionsConfig()) : (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
   }
-  static get registryIs() { return "wpp-modal-v4-5-0"; }
+  static get registryIs() { return "wpp-modal-v4-6-0"; }
   get host() { return this; }
   static get watchers() { return {
     "open": ["handleChangeModalStatus"]
   }; }
   static get style() { return wppModalCss; }
-}, [1, "wpp-modal", "wpp-modal-v4-5-0", {
+}, [1, "wpp-modal", "wpp-modal-v4-6-0", {
     "open": [1540],
     "size": [1],
     "withTransparentOverlay": [4, "with-transparent-overlay"],
@@ -308,34 +308,34 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-modal-v4-5-0", "wpp-button-v4-5-0", "wpp-divider-v4-5-0", "wpp-icon-chevron-v4-5-0", "wpp-overlay-v4-5-0", "wpp-spinner-v4-5-0"];
+  const components = ["wpp-modal-v4-6-0", "wpp-button-v4-6-0", "wpp-divider-v4-6-0", "wpp-icon-chevron-v4-6-0", "wpp-overlay-v4-6-0", "wpp-spinner-v4-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-modal-v4-5-0":
+    case "wpp-modal-v4-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppModal$1);
       }
       break;
-    case "wpp-button-v4-5-0":
+    case "wpp-button-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-divider-v4-5-0":
+    case "wpp-divider-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-chevron-v4-5-0":
+    case "wpp-icon-chevron-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-overlay-v4-5-0":
+    case "wpp-overlay-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-spinner-v4-5-0":
+    case "wpp-spinner-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

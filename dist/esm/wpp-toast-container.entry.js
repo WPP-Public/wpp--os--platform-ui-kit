@@ -1,5 +1,5 @@
 import { r as registerInstance, h, H as Host, g as getElement } from './index-a0877c3d.js';
-import { u as uuidv4 } from './utils-f7e38fc9.js';
+import { u as uuidv4 } from './utils-49ce8daf.js';
 import { D as DEFAULT_STAGGER_INTERVAL, A as ANIMATION_DURATION } from './const-1ce8b834.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
 
@@ -169,9 +169,9 @@ const WppToastContainer = class {
   }
   render() {
     const { toasts } = this;
-    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "item" }, toasts.map(toast => (h("wpp-toast-v4-5-0", { key: toast.id, index: toast.id, message: toast.message, type: toast.type, header: toast.header, duration: toast.duration, primaryBtn: toast.primaryBtn, maxMessageLines: toast.maxMessageLines, icon: toast.icon, part: "item", onWppToastComplete: this.handleToastComplete })))));
+    return (h(Host, { class: this.hostCssClasses(), style: { zIndex: this.zIndex.toString() }, exportparts: "item" }, toasts.map(toast => (h("wpp-toast-v4-6-0", { key: toast.id, index: toast.id, message: toast.message, type: toast.type, header: toast.header, duration: toast.duration, primaryBtn: toast.primaryBtn, maxMessageLines: toast.maxMessageLines, icon: toast.icon, part: "item", onWppToastComplete: this.handleToastComplete })))));
   }
-  static get registryIs() { return "wpp-toast-container-v4-5-0"; }
+  static get registryIs() { return "wpp-toast-container-v4-6-0"; }
   get host() { return getElement(this); }
 };
 WppToastContainer.style = wppToastContainerCss;

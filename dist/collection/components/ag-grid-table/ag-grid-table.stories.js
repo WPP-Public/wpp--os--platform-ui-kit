@@ -44,36 +44,36 @@ export const ValidationStates = () => html `
     <div class="ag-validation-demo-row ag-row-warning">
       <div class="ag-cell-error">
         <div class="ag-cell-error-content">
-          <wpp-select-v4-5-0
+          <wpp-select-v4-6-0
             size="s"
             placeholder="Select user gender"
             .list=${genderOptions}
             .value=${'Male'}
             .messageType=${'warning'}
-          ></wpp-select-v4-5-0>
-          <wpp-tooltip-v4-5-0 text="Warning">
-            <wpp-icon-warning-v4-5-0 color="var(--wpp-warning-color-400)"></wpp-icon-warning-v4-5-0>
-          </wpp-tooltip-v4-5-0>
+          ></wpp-select-v4-6-0>
+          <wpp-tooltip-v4-6-0 text="Warning">
+            <wpp-icon-warning-v4-6-0 color="var(--wpp-warning-color-400)"></wpp-icon-warning-v4-6-0>
+          </wpp-tooltip-v4-6-0>
         </div>
       </div>
 
       <div class="ag-cell-error">
         <div class="ag-cell-error-content">
-          <wpp-input-v4-5-0 size="s" value="PPAPs" message-type="warning"></wpp-input-v4-5-0>
-          <wpp-tooltip-v4-5-0 text="Warning">
-            <wpp-icon-warning-v4-5-0 color="var(--wpp-warning-color-400)"></wpp-icon-warning-v4-5-0>
-          </wpp-tooltip-v4-5-0>
+          <wpp-input-v4-6-0 size="s" value="PPAPs" message-type="warning"></wpp-input-v4-6-0>
+          <wpp-tooltip-v4-6-0 text="Warning">
+            <wpp-icon-warning-v4-6-0 color="var(--wpp-warning-color-400)"></wpp-icon-warning-v4-6-0>
+          </wpp-tooltip-v4-6-0>
         </div>
       </div>
 
       <div class="ag-cell-error">
         <div class="ag-cell-error-content">
           <div class="ag-cell-error-text">
-            <wpp-typography-v4-5-0 type="s-body">Warning text</wpp-typography-v4-5-0>
+            <wpp-typography-v4-6-0 type="s-body">Warning text</wpp-typography-v4-6-0>
           </div>
-          <wpp-tooltip-v4-5-0 text="Warning">
-            <wpp-icon-warning-v4-5-0 color="var(--wpp-warning-color-400)"></wpp-icon-warning-v4-5-0>
-          </wpp-tooltip-v4-5-0>
+          <wpp-tooltip-v4-6-0 text="Warning">
+            <wpp-icon-warning-v4-6-0 color="var(--wpp-warning-color-400)"></wpp-icon-warning-v4-6-0>
+          </wpp-tooltip-v4-6-0>
         </div>
       </div>
     </div>
@@ -81,10 +81,10 @@ export const ValidationStates = () => html `
     <div class="ag-validation-demo-row ag-row-error">
       <div class="ag-cell-error">
         <div class="ag-cell-error-content">
-          <wpp-input-v4-5-0 size="s" value="Invalid value" message-type="error"></wpp-input-v4-5-0>
-          <wpp-tooltip-v4-5-0 text="Error">
-            <wpp-icon-error-v4-5-0 color="var(--wpp-danger-color-400)"></wpp-icon-error-v4-5-0>
-          </wpp-tooltip-v4-5-0>
+          <wpp-input-v4-6-0 size="s" value="Invalid value" message-type="error"></wpp-input-v4-6-0>
+          <wpp-tooltip-v4-6-0 text="Error">
+            <wpp-icon-error-v4-6-0 color="var(--wpp-danger-color-400)"></wpp-icon-error-v4-6-0>
+          </wpp-tooltip-v4-6-0>
         </div>
       </div>
     </div>
@@ -92,10 +92,10 @@ export const ValidationStates = () => html `
     <div class="ag-validation-demo-row ag-row-error ag-row-warning">
       <div class="ag-cell-error">
         <div class="ag-cell-error-content">
-          <wpp-input-v4-5-0 size="s" value="Error takes priority" message-type="error"></wpp-input-v4-5-0>
-          <wpp-tooltip-v4-5-0 text="Error takes priority">
-            <wpp-icon-error-v4-5-0 color="var(--wpp-danger-color-400)"></wpp-icon-error-v4-5-0>
-          </wpp-tooltip-v4-5-0>
+          <wpp-input-v4-6-0 size="s" value="Error takes priority" message-type="error"></wpp-input-v4-6-0>
+          <wpp-tooltip-v4-6-0 text="Error takes priority">
+            <wpp-icon-error-v4-6-0 color="var(--wpp-danger-color-400)"></wpp-icon-error-v4-6-0>
+          </wpp-tooltip-v4-6-0>
         </div>
       </div>
     </div>

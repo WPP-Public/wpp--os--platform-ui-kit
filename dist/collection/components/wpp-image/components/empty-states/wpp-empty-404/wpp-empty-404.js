@@ -17,7 +17,7 @@ export class WppEmpty404 {
     return h(EmptyStateGraphicView, { graphic: this.graphic, name: "wpp-empty-404", width: this.width, height: this.height });
   }
   static get is() { return "wpp-empty-404"; }
-  static get registryIs() { return "wpp-empty-404-v4-5-0"; }
+  static get registryIs() { return "wpp-empty-404-v4-6-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

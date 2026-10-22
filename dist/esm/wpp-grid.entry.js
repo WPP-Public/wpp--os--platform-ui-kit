@@ -67,7 +67,7 @@ const WppGrid = class {
   render() {
     return (h(Host, { class: this.hostCssClasses(), exportparts: "inner" }, h("slot", { part: "inner" })));
   }
-  static get registryIs() { return "wpp-grid-v4-5-0"; }
+  static get registryIs() { return "wpp-grid-v4-6-0"; }
   get host() { return getElement(this); }
 };
 WppGrid.style = wppGridCss;

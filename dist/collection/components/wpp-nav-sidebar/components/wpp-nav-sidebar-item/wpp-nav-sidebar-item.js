@@ -73,7 +73,7 @@ export class WppNavSidebarItem {
       'wpp-nav-sidebar-item': true,
     });
     this.accessibleNameProps = () => (this.isLabelTruncated ? { 'aria-label': this.label } : {});
-    this.item = () => (h(Fragment, null, h(WrappedSlot, { name: "icon-start", wrapperClass: "icon-wrapper", class: "slot-icon-start-fallback", onSlotchange: this.updateSlotData }), h("p", { class: this.labelCssClasses(), part: "label" }, this.isLabelTruncated ? truncate(this.label, this.maxLabelLength) : this.label), h(WrappedSlot, { name: "icon-end", wrapperClass: this.iconEndCssClasses(), class: "slot-icon-end-fallback" }, this.extended && h("wpp-icon-chevron-v4-5-0", { class: "extended-icon", size: "m", part: "icon-chevron", "aria-hidden": "true" }))));
+    this.item = () => (h(Fragment, null, h(WrappedSlot, { name: "icon-start", wrapperClass: "icon-wrapper", class: "slot-icon-start-fallback", onSlotchange: this.updateSlotData }), h("p", { class: this.labelCssClasses(), part: "label" }, this.isLabelTruncated ? truncate(this.label, this.maxLabelLength) : this.label), h(WrappedSlot, { name: "icon-end", wrapperClass: this.iconEndCssClasses(), class: "slot-icon-end-fallback" }, this.extended && h("wpp-icon-chevron-v4-6-0", { class: "extended-icon", size: "m", part: "icon-chevron", "aria-hidden": "true" }))));
     // The disclosure toggle for a group of sub-items (W3C ARIA APG): a keyboard-operable button
     // exposing its open state. DOM focus sits here rather than on the host, so assistive tech
     // announces a real control instead of a nameless custom element.
@@ -94,7 +94,7 @@ export class WppNavSidebarItem {
         this.tooltipInstance = instance;
       },
     };
-    this.renderItemWithTooltip = () => (h("wpp-tooltip-v4-5-0", { text: this.label, config: this.itemTooltipConfig, part: "tooltip" }, this.extended ? this.extendedItem() : this.linkItem()));
+    this.renderItemWithTooltip = () => (h("wpp-tooltip-v4-6-0", { text: this.label, config: this.itemTooltipConfig, part: "tooltip" }, this.extended ? this.extendedItem() : this.linkItem()));
     this.renderItem = () => {
       const currentMaxLengthLabel = this.extended ? this.maxTitleLengthWithSubItems : this.maxTitleLengthWithoutSubItems;
       const isNeedToTruncate = this.label.length > currentMaxLengthLabel;
@@ -151,10 +151,10 @@ export class WppNavSidebarItem {
     return this.label.length > this.maxLabelLength;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, icon-chevron, extended-item, link-item, tooltip, title, divider, icon-start, icon-end, ws-inner, icon-start, icon-end, ws-wrapper" }, this.groupTitle && (h("p", { class: "group-title", part: "title" }, this.groupTitle)), this.renderItem(), this.divide && h("wpp-divider-v4-5-0", { class: "slot-divider-fallback", part: "divider" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, icon-chevron, extended-item, link-item, tooltip, title, divider, icon-start, icon-end, ws-inner, icon-start, icon-end, ws-wrapper" }, this.groupTitle && (h("p", { class: "group-title", part: "title" }, this.groupTitle)), this.renderItem(), this.divide && h("wpp-divider-v4-6-0", { class: "slot-divider-fallback", part: "divider" })));
   }
   static get is() { return "wpp-nav-sidebar-item"; }
-  static get registryIs() { return "wpp-nav-sidebar-item-v4-5-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-item-v4-6-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

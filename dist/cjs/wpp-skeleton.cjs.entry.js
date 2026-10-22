@@ -26,7 +26,7 @@ const WppSkeleton = class {
     };
     return index.h(index.Host, { class: this.hostCssClasses(), style: style, "aria-hidden": "true" });
   }
-  static get registryIs() { return "wpp-skeleton-v4-5-0"; }
+  static get registryIs() { return "wpp-skeleton-v4-6-0"; }
 };
 WppSkeleton.style = wppSkeletonCss;
 

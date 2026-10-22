@@ -17,7 +17,7 @@ export class WppEmptyContent {
     return (h(EmptyStateGraphicView, { graphic: this.graphic, name: "wpp-empty-content", width: this.width, height: this.height }));
   }
   static get is() { return "wpp-empty-content"; }
-  static get registryIs() { return "wpp-empty-content-v4-5-0"; }
+  static get registryIs() { return "wpp-empty-content-v4-6-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

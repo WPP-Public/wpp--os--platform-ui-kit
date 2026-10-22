@@ -17,7 +17,7 @@ export class WppEmptyNothingFound {
     return (h(EmptyStateGraphicView, { graphic: this.graphic, name: "wpp-empty-nothing-found", width: this.width, height: this.height }));
   }
   static get is() { return "wpp-empty-nothing-found"; }
-  static get registryIs() { return "wpp-empty-nothing-found-v4-5-0"; }
+  static get registryIs() { return "wpp-empty-nothing-found-v4-6-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

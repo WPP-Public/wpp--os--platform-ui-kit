@@ -181,7 +181,7 @@ const WppBasicNode$1 = /*@__PURE__*/ proxyCustomElement(class WppBasicNode exten
   }
   render() {
     const primaryAction = this.getPrimaryAction();
-    return (h(Host, { class: "wpp-basic-node" }, h("div", { class: this.getNodeContainerClasses() }, h("div", { class: this.getNodeWrapperClasses() }, h("div", { class: "node-header" }, h("wpp-icon-service-v4-5-0", { color: "var(--wpp-grey-color-700)" }), h("wpp-tooltip-v4-5-0", { text: this.nodeTitle, class: "title-tooltip", config: {
+    return (h(Host, { class: "wpp-basic-node" }, h("div", { class: this.getNodeContainerClasses() }, h("div", { class: this.getNodeWrapperClasses() }, h("div", { class: "node-header" }, h("wpp-icon-service-v4-6-0", { color: "var(--wpp-grey-color-700)" }), h("wpp-tooltip-v4-6-0", { text: this.nodeTitle, class: "title-tooltip", config: {
         placement: 'top',
         onShow: () => {
           if (!this.titleRef)
@@ -192,7 +192,7 @@ const WppBasicNode$1 = /*@__PURE__*/ proxyCustomElement(class WppBasicNode exten
       } }, h("p", { ref: el => (this.titleRef = el), class: "node-title" }, this.nodeTitle)), this.errorMessage && (
     // The tooltip and the keyboard stop are only enabled once the inline message is dismissed,
     // as the icon is then the only place where the error message can be read.
-    h("wpp-tooltip-v4-5-0", { text: this.errorMessage, disabled: !this.isErrorDismissed, config: {
+    h("wpp-tooltip-v4-6-0", { text: this.errorMessage, disabled: !this.isErrorDismissed, config: {
         // Lets the pointer move onto the tooltip without it closing (WCAG 1.4.13 Content on Hover or Focus).
         interactive: true,
         onCreate: () => {
@@ -209,21 +209,21 @@ const WppBasicNode$1 = /*@__PURE__*/ proxyCustomElement(class WppBasicNode exten
           if (!icon.matches(':hover') && !icon.matches(':focus-visible'))
             return false;
         },
-      } }, h("wpp-icon-error-v4-5-0", { ref: el => (this.errorIconRef = el), class: this.getErrorIconClasses(), tabIndex: this.isErrorDismissed ? 0 : undefined, role: this.isErrorDismissed ? 'img' : undefined, "aria-label": this.isErrorDismissed ? `${this.getErrorAnnouncement()} ${this.errorMessage}` : undefined })))), h("wpp-divider-v4-5-0", null), h("div", { ref: el => (this.bodyRef = el), class: "node-body" }, h("div", { class: "error-region", role: "alert", "aria-atomic": "true" }, this.errorMessage &&
+      } }, h("wpp-icon-error-v4-6-0", { ref: el => (this.errorIconRef = el), class: this.getErrorIconClasses(), tabIndex: this.isErrorDismissed ? 0 : undefined, role: this.isErrorDismissed ? 'img' : undefined, "aria-label": this.isErrorDismissed ? `${this.getErrorAnnouncement()} ${this.errorMessage}` : undefined })))), h("wpp-divider-v4-6-0", null), h("div", { ref: el => (this.bodyRef = el), class: "node-body" }, h("div", { class: "error-region", role: "alert", "aria-atomic": "true" }, this.errorMessage &&
       !this.isErrorDismissed && [
       // Identifies the node in the announcement, as several nodes can be in error on the same canvas.
       h("span", { class: "sr-only" }, this.getErrorAnnouncement()),
       // Removed (not just hidden) on dismiss, so the next error renders a fresh inline message.
-      h("wpp-inline-message-v4-5-0", { class: this.getErrorMessageClasses(), size: "l", type: "error", message: this.errorMessage, locales: { close: this._locales.dismissErrorAction }, isCompact: true, onWppClickCloseBtn: this.handleErrorDismiss }),
-    ]), h("slot", { name: "body" })), this.hasScrollbar && h("wpp-divider-v4-5-0", null), h("div", { class: "node-actions" }, h("div", { class: "node-left-actions" }, h("wpp-menu-context-v4-5-0", { appendToListWrapper: true }, h("wpp-action-button-v4-5-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this.ariaProps.label } }, h("wpp-icon-plus-v4-5-0", { slot: "icon-start" })), h("div", null, h("wpp-list-item-v4-5-0", { onWppChangeListItem: () => this.handleActionClick({ icon: 'wpp-icon-file', label: this._locales.uploadFileAction }) }, h("wpp-icon-file-v4-5-0", { slot: "left" }), h("span", { slot: "label" }, this._locales.uploadFileAction)), this.actions.map((action) => (h("wpp-list-item-v4-5-0", { key: action.icon, onWppChangeListItem: () => this.handleActionClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))), h("wpp-tooltip-v4-5-0", { text: this._locales.filterAction, config: { placement: 'bottom' } }, h("wpp-action-button-v4-5-0", { variant: "secondary", "data-testid": "wpp-settings-btn", ariaProps: { label: this._locales.filterAction }, onClick: () => this.handleActionClick({ icon: 'wpp-icon-gear', label: this._locales.filterAction }) }, h("wpp-icon-gear-v4-5-0", { slot: "icon-start" })))), (this.isSelected || this.isLoading || this.isReRun) && (h("wpp-tooltip-v4-5-0", { text: primaryAction.label, config: { placement: 'bottom' } }, h("wpp-button-v4-5-0", { class: "play-btn", size: "s", disabled: !this.hasContent && !this.isLoading && !this.isReRun, variant: primaryAction.variant, "data-testid": primaryAction.testId, ariaProps: { label: primaryAction.label }, onClick: this.handlePrimaryActionClick }, this.isLoading ? (h("wpp-icon-stop-v4-5-0", { slot: "icon-start" })) : this.isReRun ? (h("wpp-icon-refresh-v4-5-0", { slot: "icon-start" })) : (h("wpp-icon-play-v4-5-0", { slot: "icon-start" })))))))), h("slot", { name: "handles" })));
+      h("wpp-inline-message-v4-6-0", { class: this.getErrorMessageClasses(), size: "l", type: "error", message: this.errorMessage, locales: { close: this._locales.dismissErrorAction }, isCompact: true, onWppClickCloseBtn: this.handleErrorDismiss }),
+    ]), h("slot", { name: "body" })), this.hasScrollbar && h("wpp-divider-v4-6-0", null), h("div", { class: "node-actions" }, h("div", { class: "node-left-actions" }, h("wpp-menu-context-v4-6-0", { appendToListWrapper: true }, h("wpp-action-button-v4-6-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this.ariaProps.label } }, h("wpp-icon-plus-v4-6-0", { slot: "icon-start" })), h("div", null, h("wpp-list-item-v4-6-0", { onWppChangeListItem: () => this.handleActionClick({ icon: 'wpp-icon-file', label: this._locales.uploadFileAction }) }, h("wpp-icon-file-v4-6-0", { slot: "left" }), h("span", { slot: "label" }, this._locales.uploadFileAction)), this.actions.map((action) => (h("wpp-list-item-v4-6-0", { key: action.icon, onWppChangeListItem: () => this.handleActionClick(action) }, h(transformToVersionedTag(action.icon), { slot: 'left' }), h("span", { slot: "label" }, action.label)))))), h("wpp-tooltip-v4-6-0", { text: this._locales.filterAction, config: { placement: 'bottom' } }, h("wpp-action-button-v4-6-0", { variant: "secondary", "data-testid": "wpp-settings-btn", ariaProps: { label: this._locales.filterAction }, onClick: () => this.handleActionClick({ icon: 'wpp-icon-gear', label: this._locales.filterAction }) }, h("wpp-icon-gear-v4-6-0", { slot: "icon-start" })))), (this.isSelected || this.isLoading || this.isReRun) && (h("wpp-tooltip-v4-6-0", { text: primaryAction.label, config: { placement: 'bottom' } }, h("wpp-button-v4-6-0", { class: "play-btn", size: "s", disabled: !this.hasContent && !this.isLoading && !this.isReRun, variant: primaryAction.variant, "data-testid": primaryAction.testId, ariaProps: { label: primaryAction.label }, onClick: this.handlePrimaryActionClick }, this.isLoading ? (h("wpp-icon-stop-v4-6-0", { slot: "icon-start" })) : this.isReRun ? (h("wpp-icon-refresh-v4-6-0", { slot: "icon-start" })) : (h("wpp-icon-play-v4-6-0", { slot: "icon-start" })))))))), h("slot", { name: "handles" })));
   }
-  static get registryIs() { return "wpp-basic-node-v4-5-0"; }
+  static get registryIs() { return "wpp-basic-node-v4-6-0"; }
   get host() { return this; }
   static get watchers() { return {
     "errorMessage": ["onErrorMessageChange"]
   }; }
   static get style() { return wppBasicNodeCss; }
-}, [6, "wpp-basic-node", "wpp-basic-node-v4-5-0", {
+}, [6, "wpp-basic-node", "wpp-basic-node-v4-6-0", {
     "nodeTitle": [1, "node-title"],
     "isLoading": [4, "is-loading"],
     "isReRun": [4, "is-re-run"],
@@ -240,149 +240,149 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-basic-node-v4-5-0", "wpp-action-button-v4-5-0", "wpp-button-v4-5-0", "wpp-checkbox-v4-5-0", "wpp-divider-v4-5-0", "wpp-icon-chevron-v4-5-0", "wpp-icon-cross-v4-5-0", "wpp-icon-dash-v4-5-0", "wpp-icon-error-v4-5-0", "wpp-icon-file-v4-5-0", "wpp-icon-gear-v4-5-0", "wpp-icon-info-message-v4-5-0", "wpp-icon-play-v4-5-0", "wpp-icon-plus-v4-5-0", "wpp-icon-refresh-v4-5-0", "wpp-icon-service-v4-5-0", "wpp-icon-stop-v4-5-0", "wpp-icon-success-v4-5-0", "wpp-icon-tick-v4-5-0", "wpp-icon-warning-v4-5-0", "wpp-inline-message-v4-5-0", "wpp-internal-label-v4-5-0", "wpp-internal-tooltip-v4-5-0", "wpp-label-v4-5-0", "wpp-list-item-v4-5-0", "wpp-menu-context-v4-5-0", "wpp-spinner-v4-5-0", "wpp-tooltip-v4-5-0", "wpp-typography-v4-5-0"];
+  const components = ["wpp-basic-node-v4-6-0", "wpp-action-button-v4-6-0", "wpp-button-v4-6-0", "wpp-checkbox-v4-6-0", "wpp-divider-v4-6-0", "wpp-icon-chevron-v4-6-0", "wpp-icon-cross-v4-6-0", "wpp-icon-dash-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-file-v4-6-0", "wpp-icon-gear-v4-6-0", "wpp-icon-info-message-v4-6-0", "wpp-icon-play-v4-6-0", "wpp-icon-plus-v4-6-0", "wpp-icon-refresh-v4-6-0", "wpp-icon-service-v4-6-0", "wpp-icon-stop-v4-6-0", "wpp-icon-success-v4-6-0", "wpp-icon-tick-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-inline-message-v4-6-0", "wpp-internal-label-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-label-v4-6-0", "wpp-list-item-v4-6-0", "wpp-menu-context-v4-6-0", "wpp-spinner-v4-6-0", "wpp-tooltip-v4-6-0", "wpp-typography-v4-6-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-basic-node-v4-5-0":
+    case "wpp-basic-node-v4-6-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppBasicNode$1);
       }
       break;
-    case "wpp-action-button-v4-5-0":
+    case "wpp-action-button-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$t();
       }
       break;
-    case "wpp-button-v4-5-0":
+    case "wpp-button-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$s();
       }
       break;
-    case "wpp-checkbox-v4-5-0":
+    case "wpp-checkbox-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$r();
       }
       break;
-    case "wpp-divider-v4-5-0":
+    case "wpp-divider-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$q();
       }
       break;
-    case "wpp-icon-chevron-v4-5-0":
+    case "wpp-icon-chevron-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$p();
       }
       break;
-    case "wpp-icon-cross-v4-5-0":
+    case "wpp-icon-cross-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$o();
       }
       break;
-    case "wpp-icon-dash-v4-5-0":
+    case "wpp-icon-dash-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-icon-error-v4-5-0":
+    case "wpp-icon-error-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-icon-file-v4-5-0":
+    case "wpp-icon-file-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-gear-v4-5-0":
+    case "wpp-icon-gear-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-info-message-v4-5-0":
+    case "wpp-icon-info-message-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-play-v4-5-0":
+    case "wpp-icon-play-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-plus-v4-5-0":
+    case "wpp-icon-plus-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-refresh-v4-5-0":
+    case "wpp-icon-refresh-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-service-v4-5-0":
+    case "wpp-icon-service-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-stop-v4-5-0":
+    case "wpp-icon-stop-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-success-v4-5-0":
+    case "wpp-icon-success-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-tick-v4-5-0":
+    case "wpp-icon-tick-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-warning-v4-5-0":
+    case "wpp-icon-warning-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-inline-message-v4-5-0":
+    case "wpp-inline-message-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-internal-label-v4-5-0":
+    case "wpp-internal-label-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-tooltip-v4-5-0":
+    case "wpp-internal-tooltip-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-label-v4-5-0":
+    case "wpp-label-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-list-item-v4-5-0":
+    case "wpp-list-item-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-menu-context-v4-5-0":
+    case "wpp-menu-context-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-5-0":
+    case "wpp-spinner-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-5-0":
+    case "wpp-tooltip-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-5-0":
+    case "wpp-typography-v4-6-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

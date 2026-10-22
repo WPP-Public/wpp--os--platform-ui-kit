@@ -6,7 +6,7 @@ const index = require('./index-7d205426.js');
 const _const = require('./const-e53f51b2.js');
 const WppIcon = require('./WppIcon-0da0cae5.js');
 const WrappedSlot = require('./WrappedSlot-669e1c73.js');
-const utils = require('./utils-a237e765.js');
+const utils = require('./utils-a3ab9816.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
 require('./consts-d8f5ef98.js');
 require('./theme-observer-4179316e.js');
@@ -67,7 +67,7 @@ const WppAvatarGroup = class {
     return (index.h(index.Host, { class: this.avatarGroupWrapperCssClasses(), role: "group", exportparts: "list, item, menu, avatar, hidden-item, hidden-item-with-avatar, hidden-item-avatar, hidden-item-name" }, index.h("ul", { class: "avatars-list", part: "list" }, avatarsToDisplay.map((avatar, avatarIndex) => (index.h("li", { class: {
         'avatar-item': true,
         interactable: avatar.interactable ?? true,
-      }, part: "item" }, index.h("wpp-avatar-v4-5-0", { size: this.size, variant: this.variant, name: avatar.name, src: avatar.src, icon: avatar.icon, withTooltip: this.withTooltip, tooltipConfig: this.tooltipConfig, interactable: avatar.interactable ?? true, color: avatar.color, index: this.avatarsIndex, onWppClick: (event) => this.handleAvatarClick(event, avatarIndex, false) })))), this.avatars.length > this.maxAvatarsToDisplay && (index.h("li", { class: "avatar-item", part: "item" }, index.h("wpp-menu-context-v4-5-0", { externalClass: "avatar-group", listWidth: "240px", dropdownConfig: {
+      }, part: "item" }, index.h("wpp-avatar-v4-6-0", { size: this.size, variant: this.variant, name: avatar.name, src: avatar.src, icon: avatar.icon, withTooltip: this.withTooltip, tooltipConfig: this.tooltipConfig, interactable: avatar.interactable ?? true, color: avatar.color, index: this.avatarsIndex, onWppClick: (event) => this.handleAvatarClick(event, avatarIndex, false) })))), this.avatars.length > this.maxAvatarsToDisplay && (index.h("li", { class: "avatar-item", part: "item" }, index.h("wpp-menu-context-v4-6-0", { externalClass: "avatar-group", listWidth: "240px", dropdownConfig: {
         ...this.dropdownConfig,
         onShow: (instance) => {
           const firstListItem = instance.popper.querySelector('.wpp-list-item');
@@ -84,9 +84,9 @@ const WppAvatarGroup = class {
         onDestroy: () => {
           this.menuContextTippyRef = undefined;
         },
-      }, part: "menu", onKeyDown: this.onKeyDown, ariaProps: { label: `+${avatarsInHiddenList.length} more list items with avatars` } }, index.h("wpp-avatar-v4-5-0", { amountOfHiddenAvatars: avatarsInHiddenList.length, size: this.size, variant: this.variant, slot: "trigger-element", part: "avatar" }), index.h(index.Fragment, null, avatarsInHiddenList.map((avatar, avatarIndex) => (index.h("wpp-list-item-v4-5-0", { key: avatar.name, onWppChangeListItem: (event) => this.handleListItemClick(event, avatarIndex + this.maxAvatarsToDisplay), value: avatar.name, nonInteractive: avatar.interactable === false, part: "hidden-item" }, index.h("wpp-avatar-v4-5-0", { name: avatar.name, src: avatar.src, icon: avatar.icon, color: avatar.color, variant: this.variant, interactable: false, role: "presentation", slot: "left", part: "hidden-item-avatar" }), index.h("span", { slot: "label", class: "name", part: "hidden-item-name" }, avatar.name)))))))))));
+      }, part: "menu", onKeyDown: this.onKeyDown, ariaProps: { label: `+${avatarsInHiddenList.length} more list items with avatars` } }, index.h("wpp-avatar-v4-6-0", { amountOfHiddenAvatars: avatarsInHiddenList.length, size: this.size, variant: this.variant, slot: "trigger-element", part: "avatar" }), index.h(index.Fragment, null, avatarsInHiddenList.map((avatar, avatarIndex) => (index.h("wpp-list-item-v4-6-0", { key: avatar.name, onWppChangeListItem: (event) => this.handleListItemClick(event, avatarIndex + this.maxAvatarsToDisplay), value: avatar.name, nonInteractive: avatar.interactable === false, part: "hidden-item" }, index.h("wpp-avatar-v4-6-0", { name: avatar.name, src: avatar.src, icon: avatar.icon, color: avatar.color, variant: this.variant, interactable: false, role: "presentation", slot: "left", part: "hidden-item-avatar" }), index.h("span", { slot: "label", class: "name", part: "hidden-item-name" }, avatar.name)))))))))));
   }
-  static get registryIs() { return "wpp-avatar-group-v4-5-0"; }
+  static get registryIs() { return "wpp-avatar-group-v4-6-0"; }
 };
 WppAvatarGroup.style = wppAvatarGroupCss;
 
@@ -103,7 +103,7 @@ const WppIconTriangleFill = class {
   render() {
     return (index.h(WppIcon.WppIcon, { name: "wpp-icon-triangle-fill", width: this.width, height: this.height, size: this.size, color: this.color }, index.h("path", { d: "M13.1271 9.24407C13.5876 9.64284 13.5876 10.3572 13.1271 10.7559L9.65465 13.7632C9.00701 14.3241 8 13.864 8 13.0073L8 6.99275C8 6.136 9.00701 5.67594 9.65465 6.23682L13.1271 9.24407Z", fill: "currentColor" })));
   }
-  static get registryIs() { return "wpp-icon-triangle-fill-v4-5-0"; }
+  static get registryIs() { return "wpp-icon-triangle-fill-v4-6-0"; }
 };
 WppIconTriangleFill.style = wppIconCss;
 
@@ -179,7 +179,7 @@ const WppTag = class {
       const wasMaxLengthTruncated = !!this.maxLabelLength && this.maxLabelLength > 0 && displayedText !== originalLabel;
       const shouldShowTooltip = this.isOverflowTruncated || wasMaxLengthTruncated;
       const labelNode = (index.h("span", { class: "label-text", part: "tooltip-text", ref: this.setLabelRef }, displayedText));
-      return shouldShowTooltip ? (index.h("wpp-tooltip-v4-5-0", { class: "wpp-tooltip", text: originalLabel, config: this.tooltipConfig, part: "tooltip", disabled: this.disabled }, labelNode)) : (labelNode);
+      return shouldShowTooltip ? (index.h("wpp-tooltip-v4-6-0", { class: "wpp-tooltip", text: originalLabel, config: this.tooltipConfig, part: "tooltip", disabled: this.disabled }, labelNode)) : (labelNode);
     };
     this.hasIconStartSlot = false;
     this.isOverflowTruncated = false;
@@ -206,9 +206,9 @@ const WppTag = class {
     this.resizeObserver?.disconnect();
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), index.h("wpp-typography-v4-5-0", { class: "wpp-typography", type: "xs-midi", tag: "span", part: "label" }, this.renderLabel()), index.h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, index.h(WrappedSlot.WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), index.h("wpp-typography-v4-6-0", { class: "wpp-typography", type: "xs-midi", tag: "span", part: "label" }, this.renderLabel()), index.h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
   }
-  static get registryIs() { return "wpp-tag-v4-5-0"; }
+  static get registryIs() { return "wpp-tag-v4-6-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "label": ["onLabelChange"],

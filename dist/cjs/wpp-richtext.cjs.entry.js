@@ -5,7 +5,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 const index$1 = require('./index-7d205426.js');
 const index = require('./index-7f49a24b.js');
 const common = require('./common-ee802540.js');
-const utils = require('./utils-a237e765.js');
+const utils = require('./utils-a3ab9816.js');
 const tiptapConfig = require('./tiptap-config-85477f82.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
 require('./consts-d8f5ef98.js');
@@ -1403,49 +1403,49 @@ const WppRichtext = class {
     const iconProps = { size: 'm', color: 'inherit' };
     switch (actionName) {
       case 'bold':
-        return index$1.h("wpp-icon-bold-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-bold-v4-6-0", { ...iconProps });
       case 'italic':
-        return index$1.h("wpp-icon-italic-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-italic-v4-6-0", { ...iconProps });
       case 'underline':
-        return index$1.h("wpp-icon-underline-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-underline-v4-6-0", { ...iconProps });
       case 'strike':
-        return index$1.h("wpp-icon-strike-through-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-strike-through-v4-6-0", { ...iconProps });
       case 'codeBlock':
-        return index$1.h("wpp-icon-code-view-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-code-view-v4-6-0", { ...iconProps });
       case 'blockquote':
-        return index$1.h("wpp-icon-blockquote-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-blockquote-v4-6-0", { ...iconProps });
       case 'orderedList':
-        return index$1.h("wpp-icon-ordered-list-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-ordered-list-v4-6-0", { ...iconProps });
       case 'bulletList':
-        return index$1.h("wpp-icon-unordered-list-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-unordered-list-v4-6-0", { ...iconProps });
       case 'outdent':
-        return index$1.h("wpp-icon-indent-decrease-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-indent-decrease-v4-6-0", { ...iconProps });
       case 'indent':
-        return index$1.h("wpp-icon-indent-increase-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-indent-increase-v4-6-0", { ...iconProps });
       case 'heading1':
-        return index$1.h("wpp-icon-h1-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-h1-v4-6-0", { ...iconProps });
       case 'heading2':
-        return index$1.h("wpp-icon-h2-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-h2-v4-6-0", { ...iconProps });
       case 'alignLeft':
-        return index$1.h("wpp-icon-text-alignment-left-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-text-alignment-left-v4-6-0", { ...iconProps });
       case 'alignCenter':
-        return index$1.h("wpp-icon-text-alignment-center-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-text-alignment-center-v4-6-0", { ...iconProps });
       case 'alignRight':
-        return index$1.h("wpp-icon-text-alignment-right-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-text-alignment-right-v4-6-0", { ...iconProps });
       case 'alignJustify':
-        return index$1.h("wpp-icon-text-alignment-justify-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-text-alignment-justify-v4-6-0", { ...iconProps });
       case 'link':
-        return index$1.h("wpp-icon-link-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-link-v4-6-0", { ...iconProps });
       case 'image':
-        return index$1.h("wpp-icon-image-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-image-v4-6-0", { ...iconProps });
       case 'video':
-        return index$1.h("wpp-icon-video-clip-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-video-clip-v4-6-0", { ...iconProps });
       case 'attachment':
-        return index$1.h("wpp-icon-attach-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-attach-v4-6-0", { ...iconProps });
       case 'undo':
-        return index$1.h("wpp-icon-undo-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-undo-v4-6-0", { ...iconProps });
       case 'redo':
-        return index$1.h("wpp-icon-redo-v4-5-0", { ...iconProps });
+        return index$1.h("wpp-icon-redo-v4-6-0", { ...iconProps });
       default:
         return null;
     }
@@ -1591,10 +1591,10 @@ const WppRichtext = class {
       { value: '5xl', label: '5XL' },
     ];
     const currentLabel = sizes.find(s => s.value === this.activeFontSize)?.label || 'S';
-    return (index$1.h("wpp-menu-context-v4-5-0", { class: "ql-size-menu", dropdownConfig: this.fontSizeDropdownConfig, "data-testid": "font-size-picker" }, index$1.h("wpp-action-button-v4-5-0", { slot: "trigger-element", variant: "secondary", class: "ql-size-trigger", disabled: this.disabled }, currentLabel, index$1.h("wpp-icon-chevron-v4-5-0", { slot: "icon-end", direction: this.isFontSizePickerOpen ? 'up' : 'down', size: "s" })), index$1.h("div", null, sizes.map(s => (index$1.h("wpp-list-item-v4-5-0", { checked: this.activeFontSize === s.value, onWppChangeListItem: () => this.onFontSizeChange(s.value) }, index$1.h("span", { slot: "label" }, s.label)))))));
+    return (index$1.h("wpp-menu-context-v4-6-0", { class: "ql-size-menu", dropdownConfig: this.fontSizeDropdownConfig, "data-testid": "font-size-picker" }, index$1.h("wpp-action-button-v4-6-0", { slot: "trigger-element", variant: "secondary", class: "ql-size-trigger", disabled: this.disabled }, currentLabel, index$1.h("wpp-icon-chevron-v4-6-0", { slot: "icon-end", direction: this.isFontSizePickerOpen ? 'up' : 'down', size: "s" })), index$1.h("div", null, sizes.map(s => (index$1.h("wpp-list-item-v4-6-0", { checked: this.activeFontSize === s.value, onWppChangeListItem: () => this.onFontSizeChange(s.value) }, index$1.h("span", { slot: "label" }, s.label)))))));
   }
   render() {
-    return (index$1.h(index$1.Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-required": this.required, "data-testid": "wpp-rich-text" }, index$1.h("wpp-richtext-icon-loader-v4-5-0", null), index$1.h("wpp-richtext-common-styles-v4-5-0", null), this.labelConfig?.text && (index$1.h("wpp-label-v4-5-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label", onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })), index$1.h("div", { class: this.formControlCssClasses(), "data-testid": "rich-text-form" }, index$1.h("slot", { name: "editor-toolbar" }, this.parsedToolbarItems.length > 0 && (index$1.h("div", { class: "ql-toolbar ql-wpp", role: "toolbar", "aria-label": "Text formatting" }, this.parsedToolbarItems.map(group => {
+    return (index$1.h(index$1.Host, { class: this.hostCssClasses(), "aria-disabled": this.disabled, "aria-required": this.required, "data-testid": "wpp-rich-text" }, index$1.h("wpp-richtext-icon-loader-v4-6-0", null), index$1.h("wpp-richtext-common-styles-v4-6-0", null), this.labelConfig?.text && (index$1.h("wpp-label-v4-6-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label", onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })), index$1.h("div", { class: this.formControlCssClasses(), "data-testid": "rich-text-form" }, index$1.h("slot", { name: "editor-toolbar" }, this.parsedToolbarItems.length > 0 && (index$1.h("div", { class: "ql-toolbar ql-wpp", role: "toolbar", "aria-label": "Text formatting" }, this.parsedToolbarItems.map(group => {
       if (group.length === 0)
         return null;
       return (index$1.h("span", { class: "ql-formats" }, group.map(actionName => {
@@ -1609,15 +1609,15 @@ const WppRichtext = class {
         (this.linkPromptMode === 'edit' ? ' ql-editing' : '') +
         (this.linkPromptPosition.flip ? ' ql-flip' : ''), "data-mode": this.linkPromptMode === 'edit' ? 'link' : undefined, "data-testid": "richtext-link-prompt", style: { top: `${this.linkPromptPosition.top}px`, left: `${this.linkPromptPosition.left}px` } }, index$1.h("div", { class: "ql-tooltip-wrapper" }, this.linkPromptMode === 'edit'
       ? [
-        index$1.h("wpp-input-v4-5-0", { key: "link-input", size: "s", type: "text", placeholder: "https://", value: this.linkPromptValue, onWppChange: this.onLinkPromptInput, onKeyDown: this.onLinkPromptKeyDown, "data-testid": "richtext-link-prompt-input" }),
-        index$1.h("wpp-action-button-v4-5-0", { key: "link-save", class: "ql-action ql-save", variant: "primary", onClick: this.onLinkPromptSave, "data-testid": "richtext-link-prompt-save" }, "Save"),
+        index$1.h("wpp-input-v4-6-0", { key: "link-input", size: "s", type: "text", placeholder: "https://", value: this.linkPromptValue, onWppChange: this.onLinkPromptInput, onKeyDown: this.onLinkPromptKeyDown, "data-testid": "richtext-link-prompt-input" }),
+        index$1.h("wpp-action-button-v4-6-0", { key: "link-save", class: "ql-action ql-save", variant: "primary", onClick: this.onLinkPromptSave, "data-testid": "richtext-link-prompt-save" }, "Save"),
       ]
       : [
         index$1.h("a", { key: "link-preview", class: "ql-preview", rel: "noopener noreferrer", target: "_blank", href: this.linkPromptPreviewHref || 'about:blank', "data-testid": "richtext-link-prompt-preview" }, this.linkPromptPreviewHref),
-        index$1.h("div", { key: "link-action-buttons", class: "ql-action-buttons" }, index$1.h("wpp-action-button-v4-5-0", { class: "ql-action ql-edit", variant: "primary", onClick: this.onLinkPromptEdit, "data-testid": "richtext-link-prompt-edit" }, "Edit"), index$1.h("wpp-action-button-v4-5-0", { class: "ql-delete", variant: "destructive", onClick: this.onLinkPromptDelete, "data-testid": "richtext-link-prompt-delete" }, "Delete")),
-      ]))), index$1.h("div", { key: "tiptap-editor-container", ref: el => (this.containerElement = el), class: "tiptap-editor-container", "data-testid": "richtext-editor" }), index$1.h("img", { class: "image-actions__proxy-image", style: { display: 'none' } }), Boolean(this.name) && (index$1.h("input", { ref: el => (this.formControlInput = el), tabindex: "-1", id: this.name, class: "form-control-input", "data-testid": "rich-text-input", disabled: this.disabled }))), (Boolean(this.message) || Boolean(this.charactersLimit)) && (index$1.h("div", { class: this.messageCssClasses(), part: "message-wrapper" }, Boolean(this.message) && (index$1.h("wpp-inline-message-v4-5-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", class: "message", "data-testid": "message" })), Boolean(this.charactersLimit) && (index$1.h("div", { class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, index$1.h("wpp-typography-v4-5-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":\u00A0"), index$1.h("wpp-typography-v4-5-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit)))))));
+        index$1.h("div", { key: "link-action-buttons", class: "ql-action-buttons" }, index$1.h("wpp-action-button-v4-6-0", { class: "ql-action ql-edit", variant: "primary", onClick: this.onLinkPromptEdit, "data-testid": "richtext-link-prompt-edit" }, "Edit"), index$1.h("wpp-action-button-v4-6-0", { class: "ql-delete", variant: "destructive", onClick: this.onLinkPromptDelete, "data-testid": "richtext-link-prompt-delete" }, "Delete")),
+      ]))), index$1.h("div", { key: "tiptap-editor-container", ref: el => (this.containerElement = el), class: "tiptap-editor-container", "data-testid": "richtext-editor" }), index$1.h("img", { class: "image-actions__proxy-image", style: { display: 'none' } }), Boolean(this.name) && (index$1.h("input", { ref: el => (this.formControlInput = el), tabindex: "-1", id: this.name, class: "form-control-input", "data-testid": "rich-text-input", disabled: this.disabled }))), (Boolean(this.message) || Boolean(this.charactersLimit)) && (index$1.h("div", { class: this.messageCssClasses(), part: "message-wrapper" }, Boolean(this.message) && (index$1.h("wpp-inline-message-v4-6-0", { message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message", class: "message", "data-testid": "message" })), Boolean(this.charactersLimit) && (index$1.h("div", { class: this.charLimitCssClasses(), "data-testid": "char-entered-label", part: "limit-wrapper" }, index$1.h("wpp-typography-v4-6-0", { type: "xs-body", tag: "span", part: "limit-label" }, this._locales.charactersEntered, ":\u00A0"), index$1.h("wpp-typography-v4-6-0", { type: "xs-strong", tag: "span", class: "entered-characters", part: "limit-text" }, this.enteredCharacters, "/", this.charactersLimit)))))));
   }
-  static get registryIs() { return "wpp-richtext-v4-5-0"; }
+  static get registryIs() { return "wpp-richtext-v4-6-0"; }
   get host() { return index$1.getElement(this); }
   static get watchers() { return {
     "value": ["updateContent"],
