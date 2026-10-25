@@ -94,7 +94,7 @@
     "jest-runner": "^27.5.1",
     "lit": "^3.3.1",
     "stencil-inline-svg": "1.1.0",
-    "storybook": "9.1.20",
+    "storybook": "9.1.21",
     "cross-env": "^7.0.3"
   },
   "publishConfig": {
