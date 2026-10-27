@@ -462,6 +462,20 @@ describe('WppBasicNode', () => {
       // Selection must not add or remove any layout nodes (header/body/actions stay identical).
       expect(childStructure(selectedWrapper)).toEqual(childStructure(unselectedWrapper));
     });
+    it('should draw the header divider over the bottom of the header, never between the header and the body', async () => {
+      const page = await newSpecPage({
+        components: [WppBasicNode],
+        html: `<wpp-basic-node node-title="Test"><div slot="body">Body</div></wpp-basic-node>`,
+      });
+      const wrapper = getWrapper(page.root);
+      // An in-flow divider takes a pixel from the body, so content that fits the design overflows it.
+      expect(wrapper?.querySelector('.node-header > wpp-divider.header-divider')).not.toBeNull();
+      expect(Array.from(wrapper?.children ?? []).map(child => child.tagName.toLowerCase())).not.toContain('wpp-divider');
+      // The spec page does not inject the compiled scoped stylesheet, so we assert against the SCSS source.
+      const styles = readFileSync(join(__dirname, '..', 'wpp-basic-node.scss'), 'utf8');
+      expect(styles).toMatch(/\.node-header \{\s*position: relative;/);
+      expect(styles).toMatch(/\.header-divider \{\s*position: absolute;\s*right: 0;\s*bottom: 0;\s*left: 0;/);
+    });
     it('should draw the loading animation with the loadingHalo mixin overlays, never affecting layout', () => {
       // The spec page does not inject the compiled scoped stylesheet, so we assert against the
       // SCSS source: the loading state must use the loadingHalo mixin (overlays painted outside the card,

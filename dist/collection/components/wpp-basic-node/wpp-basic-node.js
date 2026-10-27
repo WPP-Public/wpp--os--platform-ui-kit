@@ -166,7 +166,7 @@ export class WppBasicNode {
           if (!icon.matches(':hover') && !icon.matches(':focus-visible'))
             return false;
         },
-      } }, h("wpp-icon-error-v4-6-0", { ref: el => (this.errorIconRef = el), class: this.getErrorIconClasses(), tabIndex: this.isErrorDismissed ? 0 : undefined, role: this.isErrorDismissed ? 'img' : undefined, "aria-label": this.isErrorDismissed ? `${this.getErrorAnnouncement()} ${this.errorMessage}` : undefined })))), h("wpp-divider-v4-6-0", null), h("div", { ref: el => (this.bodyRef = el), class: "node-body" }, h("div", { class: "error-region", role: "alert", "aria-atomic": "true" }, this.errorMessage &&
+      } }, h("wpp-icon-error-v4-6-0", { ref: el => (this.errorIconRef = el), class: this.getErrorIconClasses(), tabIndex: this.isErrorDismissed ? 0 : undefined, role: this.isErrorDismissed ? 'img' : undefined, "aria-label": this.isErrorDismissed ? `${this.getErrorAnnouncement()} ${this.errorMessage}` : undefined }))), h("wpp-divider-v4-6-0", { class: "header-divider" })), h("div", { ref: el => (this.bodyRef = el), class: "node-body" }, h("div", { class: "error-region", role: "alert", "aria-atomic": "true" }, this.errorMessage &&
       !this.isErrorDismissed && [
       // Identifies the node in the announcement, as several nodes can be in error on the same canvas.
       h("span", { class: "sr-only" }, this.getErrorAnnouncement()),
