@@ -1,5 +1,5 @@
 import { EventEmitter } from '../../stencil-public-runtime';
-import { OrientationType, StepChangeEventDetail } from './types';
+import { OrientationType, StepChangeEventDetail, StepperLocales } from './types';
 /**
  * @slot - Can contain only the `wpp-step` component. The default slot, without the name attribute.
  *
@@ -54,6 +54,10 @@ export declare class WppStepper {
    */
   readonly useDecimalSubSteps: boolean;
   /**
+   * Locales for accessible step labels. The stepLabel formatter is used when a main step has no label slot text.
+   */
+  readonly locales: Partial<StepperLocales>;
+  /**
    * If `useDecimalSubSteps` is true, emits the `step`, `index`, and `substep` properties of the active step.
    * The `step` value may include decimal values to represent sub-steps (e.g., 2.1, 3.2).
    * The `substep` property is a boolean that indicates whether the current step is a sub-step.
@@ -63,17 +67,23 @@ export declare class WppStepper {
   handleStepUpdate(): void;
   handleSelectStepClick(event: CustomEvent<StepChangeEventDetail>): void;
   watchActiveStep(): void;
+  watchLocales(): void;
   componentWillLoad(): void;
   private setTextCSSVariables;
   componentDidLoad(): void;
   disconnectedCallback(): void;
   private isHostConnected;
+  private get _locales();
+  private getStepSelector;
+  private setStepAccessibleLabel;
+  private getDirectStepChildren;
   private getStepperProps;
   private calculateStepperPosition;
   private calculateStepperPositionOnResize;
   private setCurrentStepIndicator;
   private setStepWidthOnResize;
   private setStepAttribute;
+  private setRovingTabIndex;
   private setStepAttributeAsIntegers;
   private setStepAttributeAsDecimals;
   private onResize;

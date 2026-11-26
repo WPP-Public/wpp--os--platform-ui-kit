@@ -120,6 +120,7 @@ export declare class WppFileUploadItem {
   private handleClick;
   private blockCssClasses;
   private fileNameCssClasses;
+  private fileNameColor;
   private hostCssClasses;
   private itemCssClasses;
   private crossIconClasses;

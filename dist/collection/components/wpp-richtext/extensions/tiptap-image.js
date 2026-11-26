@@ -9,6 +9,15 @@ export const TiptapImage = Image.extend({
   addAttributes() {
     return {
       ...this.parent?.(),
+      // Always emit an `alt` attribute so images are never announced by their
+      // (often data-URI) `src`. An empty alt marks author images without a
+      // provided description as decorative, which satisfies WCAG 1.1.1 and the
+      // AXE `image-alt` rule while preserving any author-supplied alt text.
+      alt: {
+        default: '',
+        parseHTML: (element) => element.getAttribute('alt') ?? '',
+        renderHTML: (attributes) => ({ alt: attributes.alt ?? '' }),
+      },
       width: {
         default: null,
         parseHTML: (element) => element.getAttribute('width'),

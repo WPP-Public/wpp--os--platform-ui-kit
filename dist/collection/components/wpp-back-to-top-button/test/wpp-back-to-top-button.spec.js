@@ -1,3 +1,4 @@
+import { h } from '@stencil/core';
 import { newSpecPage } from '@stencil/core/testing';
 import { WppBackToTopButton } from '../wpp-back-to-top-button';
 import { FOCUS_TYPE } from '../../../types/common';
@@ -8,10 +9,9 @@ describe('wpp-back-to-top-button', () => {
       const component = new WppBackToTopButton();
       expect(component).toBeTruthy();
     });
-    it('should have default aria props with label', () => {
+    it('should have empty default aria props, with the name coming from locales', () => {
       const component = new WppBackToTopButton();
-      expect(component.ariaProps).toBeDefined();
-      expect(component.ariaProps.label).toBe('Back to top');
+      expect(component.ariaProps).toEqual({});
     });
     it('should initialize with isPressed as false', () => {
       const component = new WppBackToTopButton();
@@ -165,9 +165,8 @@ describe('wpp-back-to-top-button', () => {
     it('should update validAriaProps when ariaProps changes', () => {
       const component = new WppBackToTopButton();
       component.componentWillLoad();
-      expect(component.validAriaProps).toBeDefined();
-      // getAriaProps transforms 'label' to 'aria-label'
-      expect(component.validAriaProps['aria-label']).toBe('Back to top');
+      // The default name now comes from locales, so nothing is left in the default ariaProps.
+      expect(component.validAriaProps).toEqual({});
     });
     it('should update validAriaProps when ariaProps changes at runtime', async () => {
       const page = await newSpecPage({
@@ -176,9 +175,7 @@ describe('wpp-back-to-top-button', () => {
       });
       page.rootInstance.ariaProps = { label: 'Updated label' };
       await page.waitForChanges();
-      expect(page.rootInstance.validAriaProps).toBeDefined();
-      // getAriaProps transforms 'label' to 'aria-label'
-      expect(page.rootInstance.validAriaProps['aria-label']).toBe('Updated label');
+      expect(page.root?.shadowRoot?.querySelector('button')?.getAttribute('aria-label')).toBe('Updated label');
     });
   });
   describe('CSS classes', () => {
@@ -201,26 +198,6 @@ describe('wpp-back-to-top-button', () => {
       await page.waitForChanges();
       const button = page.root?.shadowRoot?.querySelector('button');
       expect(button?.classList.contains('pressed')).toBe(true);
-    });
-  });
-  describe('aria-pressed attribute', () => {
-    it('should set aria-pressed to false by default', async () => {
-      const page = await newSpecPage({
-        components: [WppBackToTopButton],
-        html: `<wpp-back-to-top-button />`,
-      });
-      const button = page.root?.shadowRoot?.querySelector('button');
-      expect(button?.getAttribute('aria-pressed')).toBe('false');
-    });
-    it('should set aria-pressed to true when isPressed is true', async () => {
-      const page = await newSpecPage({
-        components: [WppBackToTopButton],
-        html: `<wpp-back-to-top-button />`,
-      });
-      page.rootInstance.isPressed = true;
-      await page.waitForChanges();
-      const button = page.root?.shadowRoot?.querySelector('button');
-      expect(button?.getAttribute('aria-pressed')).toBe('true');
     });
   });
   describe('subscribing to theme changes', () => {
@@ -251,6 +228,95 @@ describe('wpp-back-to-top-button', () => {
       });
       page.root?.remove();
       expect(mockStop).toHaveBeenCalledTimes(1);
+    });
+  });
+  describe('Testing accessibility', () => {
+    const getButton = (page) => page.root?.shadowRoot?.querySelector('button');
+    it('should name the icon-only button from the default locale', async () => {
+      const page = await newSpecPage({
+        components: [WppBackToTopButton],
+        template: () => h("wpp-back-to-top-button-v4-7-0", null),
+      });
+      expect(getButton(page).getAttribute('aria-label')).toBe('Back to top');
+    });
+    it('should keep the default name when ariaProps carries other aria- props', async () => {
+      const page = await newSpecPage({
+        components: [WppBackToTopButton],
+        template: () => h("wpp-back-to-top-button-v4-7-0", { ariaProps: { controls: 'main-content' } }),
+      });
+      expect(getButton(page).getAttribute('aria-label')).toBe('Back to top');
+    });
+    it('should name the button from locales when ariaProps has no label', async () => {
+      const page = await newSpecPage({
+        components: [WppBackToTopButton],
+        template: () => h("wpp-back-to-top-button-v4-7-0", { locales: { label: 'Localised' } }),
+      });
+      expect(getButton(page).getAttribute('aria-label')).toBe('Localised');
+    });
+    it('should prefer ariaProps.label over locales', async () => {
+      const page = await newSpecPage({
+        components: [WppBackToTopButton],
+        template: () => (h("wpp-back-to-top-button-v4-7-0", { ariaProps: { label: 'From ariaProps' }, locales: { label: 'Localised' } })),
+      });
+      expect(getButton(page).getAttribute('aria-label')).toBe('From ariaProps');
+    });
+    describe('with ariaProps.labelledby', () => {
+      const renderWithLabel = async (ariaProps) => {
+        const page = await newSpecPage({
+          components: [WppBackToTopButton],
+          html: `<span id="external-label">Scroll up</span><span id="section-label"> to the filters </span><wpp-back-to-top-button></wpp-back-to-top-button>`,
+        });
+        const host = page.body.querySelector('wpp-back-to-top-button');
+        host.ariaProps = ariaProps;
+        await page.waitForChanges();
+        return host.shadowRoot?.querySelector('button');
+      };
+      it('should name the button from the text of the labelling elements in the page', async () => {
+        const button = await renderWithLabel({ labelledby: 'external-label section-label' });
+        expect(button.getAttribute('aria-label')).toBe('Scroll up to the filters');
+        expect(button.hasAttribute('aria-labelledby')).toBe(false);
+      });
+      it('should prefer the labelling elements over ariaProps.label', async () => {
+        const button = await renderWithLabel({ label: 'From ariaProps', labelledby: 'external-label' });
+        expect(button.getAttribute('aria-label')).toBe('Scroll up');
+      });
+      it('should fall back to the default name when the ids name nothing', async () => {
+        const button = await renderWithLabel({ labelledby: 'missing-label' });
+        expect(button.getAttribute('aria-label')).toBe('Back to top');
+        expect(button.hasAttribute('aria-labelledby')).toBe(false);
+      });
+    });
+    it('should not expose the transient pressed visual as a toggle state', async () => {
+      const page = await newSpecPage({
+        components: [WppBackToTopButton],
+        html: `<wpp-back-to-top-button></wpp-back-to-top-button>`,
+      });
+      page.root?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      await page.waitForChanges();
+      expect(getButton(page).classList.contains('pressed')).toBe(true);
+      expect(getButton(page).hasAttribute('aria-pressed')).toBe(false);
+    });
+    it('should paint the focus ring when focus is moved here by script after a key press', async () => {
+      const page = await newSpecPage({
+        components: [WppBackToTopButton],
+        html: `<wpp-back-to-top-button></wpp-back-to-top-button>`,
+      });
+      // The browser decides `:focus-visible`; the mock DOM cannot, so answer for it.
+      getButton(page).matches = (selector) => selector === ':focus-visible';
+      getButton(page).dispatchEvent(new FocusEvent('focus'));
+      await page.waitForChanges();
+      expect(getButton(page).classList.contains('tab-focus')).toBe(true);
+    });
+    it('should not paint the focus ring when the browser would not show focus', async () => {
+      const page = await newSpecPage({
+        components: [WppBackToTopButton],
+        html: `<wpp-back-to-top-button></wpp-back-to-top-button>`,
+      });
+      getButton(page).matches = () => false;
+      page.root?.dispatchEvent(new MouseEvent('mousedown'));
+      getButton(page).dispatchEvent(new FocusEvent('focus'));
+      await page.waitForChanges();
+      expect(getButton(page).classList.contains('tab-focus')).toBe(false);
     });
   });
 });

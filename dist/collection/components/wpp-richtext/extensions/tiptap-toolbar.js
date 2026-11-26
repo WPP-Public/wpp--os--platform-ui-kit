@@ -60,9 +60,12 @@ export function isFormatActive(editor, name, attrs) {
 }
 /**
  * Executes a toolbar command on the editor.
+ * @param focusEditor Move focus into the editor. Pass `false` for a keyboard activation, so focus stays on the
+ * toolbar control the way the WAI-ARIA Toolbar pattern expects (e.g. pressing Undo repeatedly).
  */
-export function executeToolbarCommand(editor, name, value) {
-  const chain = editor.chain().focus();
+export function executeToolbarCommand(editor, name, value, focusEditor = true) {
+  const startChain = () => (focusEditor ? editor.chain().focus() : editor.chain());
+  const chain = startChain();
   switch (name) {
     case 'bold':
       chain.toggleBold().run();
@@ -127,12 +130,12 @@ export function executeToolbarCommand(editor, name, value) {
     case 'indent':
       // Try list indent first; fall back to paragraph indent
       if (!chain.sinkListItem('listItem').run()) {
-        editor.chain().focus().increaseIndent().run();
+        startChain().increaseIndent().run();
       }
       break;
     case 'outdent':
       if (!chain.liftListItem('listItem').run()) {
-        editor.chain().focus().decreaseIndent().run();
+        startChain().decreaseIndent().run();
       }
       break;
     case 'undo':

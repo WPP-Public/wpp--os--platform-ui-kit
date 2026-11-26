@@ -17,20 +17,23 @@ export default {
     control: { type: 'boolean' },
   },
 };
-export const NoLabel = (args) => html ` <wpp-radio-v4-6-0
+export const NoLabel = (args) => html ` <wpp-radio-v4-7-0
     @wppChange="${(event) => console.log('wppChange => ', event.detail.value)}"
     .name="${args.name}"
     .value="${args.value}"
     .disabled="${args.disabled}"
     .checked="${args.checked}"
+    .ariaProps="${args.ariaProps}"
   />`;
 NoLabel.args = {
   name: 'contact',
   value: 'email',
   disabled: false,
   checked: false,
+  // Without a visible label the radio still needs an accessible name.
+  ariaProps: { label: 'Email' },
 };
-export const WithLabel = (args) => html ` <wpp-radio-v4-6-0
+export const WithLabel = (args) => html ` <wpp-radio-v4-7-0
     @wppChange="${(event) => console.log('wppChange => ', event.detail.value)}"
     .name="${args.name}"
     .value="${args.value}"

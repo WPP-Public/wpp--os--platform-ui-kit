@@ -16,18 +16,21 @@ export declare class OpacitySlider {
    */
   readonly opacity: number;
   /**
+   * Accessible name of the slider, set by wpp-color-picker from its locales.
+   */
+  readonly label?: string;
+  /**
    * Event emitted when the opacity value changes
    */
   opacityChanged: EventEmitter<number>;
-  markerPosition: number;
   onPropertyChange(): void;
   componentDidLoad(): void;
   private setupCanvas;
   private drawOpacitySlider;
-  private updateMarkerPosition;
   private handleMouseDown;
   private handleMouseUp;
   private handleMouseMove;
   private updateOpacity;
+  private handleKeyDown;
   render(): any;
 }

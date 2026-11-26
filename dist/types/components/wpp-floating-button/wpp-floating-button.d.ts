@@ -1,4 +1,5 @@
 import { AriaProps, FOCUS_TYPE } from '../../types/common';
+import { FloatingButtonLocaleInterface } from './types';
 /**
  * @slot - Icon slot, contains `wpp-icon-plus` by default. The default slot, without the name attribute.
  *
@@ -64,8 +65,16 @@ export declare class WppFloatingButton {
   readonly value?: string;
   /**
    * Contains the button `aria-` props.
+   *
+   * `labelledby` names elements in your own page: their text becomes the button's name, because the
+   * native button lives in this component's shadow root, where your ids cannot be referenced.
    */
   readonly ariaProps: AriaProps;
+  /**
+   * Localised strings. `label` names the button when `ariaProps` provides no `label` and its `labelledby`
+   * ids name nothing. Precedence: ariaProps > locales > defaults.
+   */
+  readonly locales?: Partial<FloatingButtonLocaleInterface>;
   /**
    * Method that sets focus on the native button.
    */
@@ -77,8 +86,11 @@ export declare class WppFloatingButton {
   private onKeyDown;
   private onKeyUp;
   private onBlur;
+  private onFocus;
   private onMouseDown;
   private handleClick;
+  private getButtonAriaProps;
+  private get _locales();
   private hostCssClasses;
   private buttonCssClasses;
   private loaderCssClasses;

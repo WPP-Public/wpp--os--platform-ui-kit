@@ -16,7 +16,7 @@ describe('wpp-side-panel', () => {
   it('Should render open side panel with actions config', async () => {
     const page = await newSpecPage({
       components: [WppSidePanel],
-      template: () => (h("wpp-side-panel-v4-6-0", { open: true, panelTitle: "Title", actionsConfig: [
+      template: () => (h("wpp-side-panel-v4-7-0", { open: true, panelTitle: "Title", actionsConfig: [
           { label: 'Cancel', onClick: () => { } },
           { label: 'Save', onClick: () => { } },
         ] }, h("div", null, "Body content"))),
@@ -323,7 +323,7 @@ describe('wpp-side-panel logic (isolated)', () => {
   describe('handleCloseClick', () => {
     it('emits close with the crossClick reason and records the reason', () => {
       const instance = createInstance();
-      instance.handleCloseClick();
+      instance.handleCloseClick(new MouseEvent('click', { detail: 1 }));
       expect(instance.wppSidePanelClose.emit).toHaveBeenCalledWith({ reason: SidePanelCloseReason.crossClick });
       expect(instance.closeReason).toBe(SidePanelCloseReason.crossClick);
     });
@@ -442,5 +442,121 @@ describe('wpp-side-panel logic (isolated)', () => {
       ];
       expect(instance.renderActions()).not.toBeNull();
     });
+  });
+});
+describe('wpp-side-panel focus on close', () => {
+  // Stencil's mock DOM does not move `document.activeElement` on focus(), so the focused element
+  // is driven explicitly here — the component reads it to decide what to restore focus to.
+  let stubbedActive = null;
+  beforeEach(() => {
+    stubbedActive = null;
+    Object.defineProperty(document, 'activeElement', { configurable: true, get: () => stubbedActive });
+  });
+  afterEach(() => {
+    delete document.activeElement;
+  });
+  const flushTimers = () => new Promise(resolve => setTimeout(resolve, 0));
+  const mountWithTrigger = async () => {
+    const trigger = document.createElement('button');
+    document.body.appendChild(trigger);
+    stubbedActive = trigger;
+    const page = await newSpecPage({
+      components: [WppSidePanel],
+      html: `<wpp-side-panel panel-title="Filters"><div slot="body">Body</div></wpp-side-panel>`,
+    });
+    const panel = page.root?.shadowRoot?.querySelector('[data-testid="wpp-side-panel-content"]');
+    page.root.open = true;
+    await page.waitForChanges();
+    return { page, trigger, panel };
+  };
+  it('hands focus back to whatever opened it when it closes', async () => {
+    const { page, trigger, panel } = await mountWithTrigger();
+    const triggerFocus = jest.spyOn(trigger, 'focus');
+    stubbedActive = panel;
+    page.root.open = false;
+    await page.waitForChanges();
+    await flushTimers();
+    expect(triggerFocus).toHaveBeenCalled();
+  });
+  it('gives the trigger its keyboard focus ring back when closed with Escape', async () => {
+    const { page, trigger, panel } = await mountWithTrigger();
+    const setFocus = jest.fn();
+    trigger.setFocus = setFocus;
+    const triggerFocus = jest.spyOn(trigger, 'focus');
+    stubbedActive = panel;
+    page.root.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, composed: true }));
+    await page.waitForChanges();
+    page.root.open = false;
+    await page.waitForChanges();
+    await flushTimers();
+    expect(setFocus).toHaveBeenCalled();
+    expect(triggerFocus).not.toHaveBeenCalled();
+  });
+  const closeWithCrossClick = async (detail) => {
+    const { page, trigger, panel } = await mountWithTrigger();
+    const setFocus = jest.fn();
+    trigger.setFocus = setFocus;
+    const triggerFocus = jest.spyOn(trigger, 'focus');
+    stubbedActive = panel;
+    page.root.shadowRoot.querySelector('.close-button').dispatchEvent(new MouseEvent('click', { detail }));
+    await page.waitForChanges();
+    page.root.open = false;
+    await page.waitForChanges();
+    await flushTimers();
+    return { setFocus, triggerFocus };
+  };
+  it('gives the trigger its keyboard focus ring back when the close button is pressed with Enter or Space', async () => {
+    // A click the keyboard generates reports `detail === 0`.
+    const { setFocus, triggerFocus } = await closeWithCrossClick(0);
+    expect(setFocus).toHaveBeenCalled();
+    expect(triggerFocus).not.toHaveBeenCalled();
+  });
+  it('hands focus back without the keyboard ring when the close button is clicked with a pointer', async () => {
+    const { setFocus, triggerFocus } = await closeWithCrossClick(1);
+    expect(triggerFocus).toHaveBeenCalled();
+    expect(setFocus).not.toHaveBeenCalled();
+  });
+  // In a browser `document.activeElement` reports the outermost host, and each shadow root reports
+  // the next one down, which is how the component finds the control that really has focus.
+  const focusInsideNestedShadowRoot = (hosts) => {
+    const nativeButton = document.createElement('button');
+    const innermost = hosts[hosts.length - 1].attachShadow({ mode: 'open' });
+    innermost.appendChild(nativeButton);
+    [...hosts.slice(1), nativeButton].forEach((next, index) => {
+      const root = index === hosts.length - 1 ? innermost : hosts[index].shadowRoot;
+      Object.defineProperty(root, 'activeElement', { configurable: true, get: () => next });
+    });
+    stubbedActive = hosts[0];
+  };
+  it('hands focus back when Escape is pressed on the close button', async () => {
+    const { page, trigger } = await mountWithTrigger();
+    const triggerFocus = jest.spyOn(trigger, 'focus');
+    focusInsideNestedShadowRoot([page.root, page.root.shadowRoot.querySelector('.close-button')]);
+    page.root.open = false;
+    await page.waitForChanges();
+    await flushTimers();
+    expect(triggerFocus).toHaveBeenCalled();
+  });
+  it('hands focus back when a control slotted into the panel had focus', async () => {
+    const { page, trigger } = await mountWithTrigger();
+    const triggerFocus = jest.spyOn(trigger, 'focus');
+    // A plain element with its own shadow root stands in for a slotted wpp-button: the spec runtime hands
+    // back an unregistered wpp-* element as a different object from its shadow root's `host`.
+    const slottedButton = document.createElement('div');
+    page.root.appendChild(slottedButton);
+    focusInsideNestedShadowRoot([slottedButton]);
+    page.root.open = false;
+    await page.waitForChanges();
+    await flushTimers();
+    expect(triggerFocus).toHaveBeenCalled();
+  });
+  it('leaves focus alone when the panel was not holding it', async () => {
+    const { page, trigger } = await mountWithTrigger();
+    const triggerFocus = jest.spyOn(trigger, 'focus');
+    stubbedActive = document.body;
+    page.root.open = false;
+    await page.waitForChanges();
+    await flushTimers();
+    expect(triggerFocus).not.toHaveBeenCalled();
   });
 });

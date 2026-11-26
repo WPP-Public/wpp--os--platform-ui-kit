@@ -19,6 +19,9 @@ export interface AriaProps {
   hidden?: boolean;
   autocomplete?: string;
   activedescendant?: boolean;
+  roleDescription?: string;
+  description?: string;
+  invalid?: boolean;
 }
 export interface DropdownConfig extends Partial<Props> {
   triggerElementWidth?: boolean;

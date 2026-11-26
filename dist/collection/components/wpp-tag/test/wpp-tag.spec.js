@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { WppTag } from '../wpp-tag';
+import { WppTypography } from '../../wpp-typography/wpp-typography';
 import * as themeUtils from '../../../utils/subscribe-to-theme';
 describe('wpp-tag', () => {
   it('default init', async () => {
@@ -195,5 +196,18 @@ describe('wpp-tag', () => {
       page.root?.remove();
       expect(mockStop).toHaveBeenCalledTimes(1);
     });
+  });
+});
+describe('wpp-tag: label colour', () => {
+  it('renders the label through --wpp-tag-typography-color, falling back to grey-1000', async () => {
+    const page = await newSpecPage({
+      components: [WppTag, WppTypography],
+      html: `<wpp-tag label="Neutral"></wpp-tag>`,
+    });
+    const label = page.root?.shadowRoot?.querySelector('.wpp-typography');
+    expect(label).toBeTruthy();
+    // The theming hook has to ride the `color` prop: wpp-typography never reads
+    // --wpp-typography-color, so setting it on :host had no effect on the rendered label.
+    expect(label.style.getPropertyValue('--typography-color')).toBe('var(--wpp-tag-typography-color, var(--wpp-grey-color-1000))');
   });
 });

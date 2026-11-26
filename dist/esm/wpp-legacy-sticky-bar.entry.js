@@ -1,5 +1,6 @@
 import { r as registerInstance, c as createEvent, h, F as Fragment, H as Host, g as getElement } from './index-a0877c3d.js';
 import { Z as Z_INDEX } from './consts-744c144f.js';
+import { z as mergeLocales } from './utils-711e1d1b.js';
 
 const MULTIPLE_PRIMARY_BUTTONS_ERROR = 'Only one primary button allowed in the sticky bar.';
 const TOO_MANY_SECONDARY_BUTTONS_ERROR = 'Only 2 secondary buttons allowed in the sticky bar.';
@@ -9,6 +10,9 @@ const MAXIMUM_SECONDARY_BUTTONS = 2;
 const MAXIMUM_ACTION_BUTTONS = 1;
 const INITIAL_BUTTONS_LIST_VALUE = [null, null, null, null];
 const DEFAULT_SCROLL_TRESHOLD = 200;
+const LOCALES_DEFAULTS = {
+  backButtonLabel: 'Back',
+};
 
 const wppLegacyStickyBarCss = ":host{--sticky-bar-offset-top:var(--wpp-sticky-bar-offset-top, 63px);--sticky-bar-padding:var(--wpp-sticky-bar-padding, 12px 32px);--sticky-bar-header-size:var(--wpp-sticky-bar-header-size, 32px);--sticky-bar-header-size-m:var(--wpp-sticky-bar-header-size-m, 40px);--sticky-bar-with-tabs-body-height:var(--wpp-sticky-bar-with-tabs-body-height, 36px);width:100%;position:fixed;left:0;top:0;right:0;z-index:4;-webkit-transform:translateY(-100%);transform:translateY(-100%)}:host .container{-webkit-box-sizing:border-box;box-sizing:border-box;background-color:var(--wpp-grey-color-000);padding:var(--sticky-bar-padding);position:relative}:host .container::before{position:absolute;content:\"\";bottom:0;left:0;width:100%;height:1px;background:var(--wpp-grey-color-300)}:host .container .header{height:var(--sticky-bar-header-size);display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between}:host .container .header .left-area,:host .container .header .right-area{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center}:host .container .header .left-area .wpp-action-button{margin-right:4px}:host .container .header .right-area .wpp-button,:host .container .header .right-area .wpp-action-button{margin-right:12px}:host .container .header .right-area .wpp-button:last-child,:host .container .header .right-area .wpp-action-button:last-child{margin-right:0}:host .container .body{height:var(--sticky-bar-header-size);margin-top:8px;--wpp-tabs-width:auto;--wpp-tab-width:auto}:host(.wpp-visible){-webkit-transition:0.3s ease;transition:0.3s ease;top:var(--sticky-bar-offset-top);-webkit-transform:translateY(0);transform:translateY(0)}:host(.wpp-invisible){-webkit-transition:0.3s ease;transition:0.3s ease;top:0;-webkit-transform:translateY(-100%);transform:translateY(-100%)}:host(.wpp-blank) .container{height:96px}:host(.wpp-two-lines-with-tabs) .container{padding-bottom:0}:host(.wpp-two-lines-with-tabs) .container .body{height:var(--sticky-bar-with-tabs-body-height)}";
 
@@ -88,6 +92,7 @@ const WppLegacyStickyBar = class {
     this.scrollTreshold = DEFAULT_SCROLL_TRESHOLD;
     this.buttons = [];
     this.tabs = [];
+    this.locales = {};
   }
   updateButtons() {
     this.getButtonsList();
@@ -129,17 +134,20 @@ const WppLegacyStickyBar = class {
       this.host.style.setProperty('--wpp-sticky-bar-offset-top', `${this.offsetFromTop}px`);
     }
   }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
   render() {
-    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, this.variant === 'blank' ? (h("slot", { name: "content" })) : (h(Fragment, null, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v4-6-0", { variant: "secondary", onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v4-6-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v4-6-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
+    return (h(Host, { class: this.hostCssClasses() }, h("div", { class: "container" }, this.variant === 'blank' ? (h("slot", { name: "content" })) : (h(Fragment, null, h("div", { class: "header" }, h("div", { class: "left-area" }, this.withBackButton && (h("wpp-action-button-v4-7-0", { variant: "secondary", ariaProps: { label: this._locales.backButtonLabel }, onClick: this.handleLeftIconClick }, h("wpp-icon-chevron-v4-7-0", { slot: "icon-start", direction: "left" }))), h("wpp-typography-v4-7-0", { class: "bar-title", type: 'm-strong' }, this.barTitle)), h("div", { class: "right-area" }, this.buttonsList.map((buttonItem, btnIndex) => {
       if (!buttonItem)
         return null;
       if (buttonItem.variant === 'action-button') {
-        return (h("wpp-action-button-v4-6-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary" }, buttonItem.text));
+        return (h("wpp-action-button-v4-7-0", { key: buttonItem.text, onClick: () => this.handleButtonClick(btnIndex), variant: "primary" }, buttonItem.text));
       }
-      return (h("wpp-button-v4-6-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant }, buttonItem.text));
-    }))), this.variant !== 'one-line' && (h("div", { class: "body" }, this.variant === 'two-lines' ? (h("slot", { name: "content" })) : (this.tabs.length > 0 && (h("wpp-tabs-v4-6-0", { size: "s", onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => (h("wpp-tab-v4-6-0", { size: "s", key: tabItem.value, value: tabItem.value }, tabItem.text)))))))))))));
+      return (h("wpp-button-v4-7-0", { size: "s", onClick: () => this.handleButtonClick(btnIndex), key: buttonItem.text, variant: buttonItem.variant }, buttonItem.text));
+    }))), this.variant !== 'one-line' && (h("div", { class: "body" }, this.variant === 'two-lines' ? (h("slot", { name: "content" })) : (this.tabs.length > 0 && (h("wpp-tabs-v4-7-0", { size: "s", onWppChange: this.handleTabClick, value: this.currentTab }, this.tabs.map((tabItem) => (h("wpp-tab-v4-7-0", { size: "s", key: tabItem.value, value: tabItem.value }, tabItem.text)))))))))))));
   }
-  static get registryIs() { return "wpp-legacy-sticky-bar-v4-6-0"; }
+  static get registryIs() { return "wpp-legacy-sticky-bar-v4-7-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "buttons": ["updateButtons"],

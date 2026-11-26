@@ -38,6 +38,7 @@ export declare class WppSearch implements BaseComponent, InlineMessage {
   private placeholderEl?;
   private valueTooltipConfig;
   private listboxId;
+  private messageId;
   private optionIdPrefix;
   private themeSubscription;
   host: HTMLWppSearchElement;

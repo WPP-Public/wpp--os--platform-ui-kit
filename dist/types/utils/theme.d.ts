@@ -32,6 +32,7 @@ export declare const WppAgGridThemeConfig: {
   rowHoverColor: string;
   oddRowBackgroundColor: string;
   selectedRowBackgroundColor: string;
+  focusShadow: string;
   rangeSelectionBorderColor: string;
   cellHorizontalPadding: number;
   fontFamily: string;

@@ -1,5 +1,5 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
-import { y as mergeLocales, D as getAriaProps } from './utils.js';
+import { z as mergeLocales, E as getAriaProps } from './utils.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme.js';
 import { d as defineCustomElement$d } from './wpp-action-button2.js';
 import { d as defineCustomElement$c } from './wpp-button2.js';
@@ -611,10 +611,10 @@ const WppMediaViewer$1 = /*@__PURE__*/ proxyCustomElement(class WppMediaViewer e
       return h("div", { key: "drop-overlay", class: "drop-overlay" });
     }
     if (this.status === 'loading') {
-      return (h("wpp-skeleton-v4-6-0", { key: "loading-skeleton", class: "loading-skeleton", variant: "rectangle", width: "100%", height: "100%" }));
+      return (h("wpp-skeleton-v4-7-0", { key: "loading-skeleton", class: "loading-skeleton", variant: "rectangle", width: "100%", height: "100%" }));
     }
     if (this.status === 'error') {
-      return (h("div", { key: "error-state", class: "overlay error-state", part: "error-state" }, h("div", { class: "error-text" }, h("wpp-typography-v4-6-0", { class: "error-line", type: "s-strong", tag: "p" }, this._locales.errorTitle), h("wpp-typography-v4-6-0", { class: "error-line", type: "s-body", tag: "p", color: "var(--wpp-grey-color-900)" }, this.errorText())), this.canRetry && (h("wpp-button-v4-6-0", { ref: el => (this.retryButtonRef = el), variant: "secondary", size: "s", onClick: this.onRetryClick }, h("wpp-icon-refresh-v4-6-0", { slot: "icon-start" }), this._locales.retryButtonLabel))));
+      return (h("div", { key: "error-state", class: "overlay error-state", part: "error-state" }, h("div", { class: "error-text" }, h("wpp-typography-v4-7-0", { class: "error-line", type: "s-strong", tag: "p" }, this._locales.errorTitle), h("wpp-typography-v4-7-0", { class: "error-line", type: "s-body", tag: "p", color: "var(--wpp-grey-color-900)" }, this.errorText())), this.canRetry && (h("wpp-button-v4-7-0", { ref: el => (this.retryButtonRef = el), variant: "secondary", size: "s", onClick: this.onRetryClick }, h("wpp-icon-refresh-v4-7-0", { slot: "icon-start" }), this._locales.retryButtonLabel))));
     }
     return null;
   }
@@ -631,7 +631,7 @@ const WppMediaViewer$1 = /*@__PURE__*/ proxyCustomElement(class WppMediaViewer e
     const fullscreenLabel = this.isFullscreen
       ? this._locales.exitFullscreenButtonLabel
       : this._locales.enterFullscreenButtonLabel;
-    return (h("div", { key: "controls", class: "controls", part: "controls" }, showUploadButton && (h("wpp-floating-toolbar-v4-6-0", { class: "toolbar upload-toolbar", ariaProps: { label: this._locales.uploadToolbarLabel }, actionButtonsConfig: [
+    return (h("div", { key: "controls", class: "controls", part: "controls" }, showUploadButton && (h("wpp-floating-toolbar-v4-7-0", { class: "toolbar upload-toolbar", ariaProps: { label: this._locales.uploadToolbarLabel }, actionButtonsConfig: [
         {
           id: 'upload',
           icon: 'wpp-icon-upload',
@@ -639,7 +639,7 @@ const WppMediaViewer$1 = /*@__PURE__*/ proxyCustomElement(class WppMediaViewer e
           ariaProps: { label: this._locales.uploadButtonLabel },
           onClick: this.onUploadClick,
         },
-      ] })), !isErrorState && (h("div", { class: "view-options" }, showZoomControls && (h("wpp-floating-toolbar-v4-6-0", { class: "toolbar zoom-toolbar", ariaProps: { label: this._locales.zoomToolbarLabel }, actionButtonsConfig: this.zoomActions(isLoaded) })), showFullscreen && (h("wpp-floating-toolbar-v4-6-0", { class: "toolbar", ariaProps: { label: this._locales.fullscreenToolbarLabel }, actionButtonsConfig: [
+      ] })), !isErrorState && (h("div", { class: "view-options" }, showZoomControls && (h("wpp-floating-toolbar-v4-7-0", { class: "toolbar zoom-toolbar", ariaProps: { label: this._locales.zoomToolbarLabel }, actionButtonsConfig: this.zoomActions(isLoaded) })), showFullscreen && (h("wpp-floating-toolbar-v4-7-0", { class: "toolbar", ariaProps: { label: this._locales.fullscreenToolbarLabel }, actionButtonsConfig: [
         {
           id: 'fullscreen',
           icon: this.isFullscreen ? 'wpp-icon-fullscreen-minimise' : 'wpp-icon-fullscreen',
@@ -654,14 +654,14 @@ const WppMediaViewer$1 = /*@__PURE__*/ proxyCustomElement(class WppMediaViewer e
     const isLoaded = this.status === 'loaded';
     return (h(Host, { class: this.hostCssClasses(), style: this.hostStyle() }, h("div", { class: "media-viewer", onPointerDown: this.onPointerInput, onKeyDown: this.onKeyboardInput, onDragEnter: this.onDragEnter, onDragOver: this.onDragOver, onDragLeave: this.onDragLeave, onDrop: this.onDrop }, h("div", { key: "viewport", ref: el => (this.viewportRef = el), class: { viewport: true, 'tab-focus': this.hasKeyboardFocus }, part: "viewport", role: "application", tabindex: "0", "aria-label": this.viewportLabel(), "aria-describedby": "keyboard-instructions", "aria-busy": this.status === 'loading' ? 'true' : undefined, ...getAriaProps(this.ariaProps), onKeyDown: this.onViewportKeyDown, onPointerDown: this.onViewportPointerDown, onFocus: this.onViewportFocus, onBlur: this.onViewportBlur }), this.renderOverlay(), this.renderControls(isLoaded), h("span", { key: "instructions", id: "keyboard-instructions", class: "visually-hidden" }, this._locales.keyboardInstructions), h("div", { key: "live-region", class: "visually-hidden", "aria-live": "polite" }, this.announcement), this.controls.showUploadButton && (h("input", { key: "file-input", ref: el => (this.fileInputRef = el), class: "file-input", type: "file", multiple: true, hidden: true, accept: this.acceptedFileExtensions.map(extension => `.${extension}`).join(','), onChange: this.onFileInputChange })))));
   }
-  static get registryIs() { return "wpp-media-viewer-v4-6-0"; }
+  static get registryIs() { return "wpp-media-viewer-v4-7-0"; }
   get host() { return this; }
   static get watchers() { return {
     "src": ["onSrcChange"],
     "navigationMode": ["onNavigationModeChange"]
   }; }
   static get style() { return wppMediaViewerCss; }
-}, [1, "wpp-media-viewer", "wpp-media-viewer-v4-6-0", {
+}, [1, "wpp-media-viewer", "wpp-media-viewer-v4-7-0", {
     "src": [1],
     "size": [16],
     "navigationMode": [1, "navigation-mode"],
@@ -688,69 +688,69 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-media-viewer-v4-6-0", "wpp-action-button-v4-6-0", "wpp-button-v4-6-0", "wpp-floating-toolbar-v4-6-0", "wpp-icon-chevron-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-refresh-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-skeleton-v4-6-0", "wpp-spinner-v4-6-0", "wpp-tooltip-v4-6-0", "wpp-typography-v4-6-0"];
+  const components = ["wpp-media-viewer-v4-7-0", "wpp-action-button-v4-7-0", "wpp-button-v4-7-0", "wpp-floating-toolbar-v4-7-0", "wpp-icon-chevron-v4-7-0", "wpp-icon-error-v4-7-0", "wpp-icon-refresh-v4-7-0", "wpp-icon-warning-v4-7-0", "wpp-internal-tooltip-v4-7-0", "wpp-skeleton-v4-7-0", "wpp-spinner-v4-7-0", "wpp-tooltip-v4-7-0", "wpp-typography-v4-7-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-media-viewer-v4-6-0":
+    case "wpp-media-viewer-v4-7-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppMediaViewer$1);
       }
       break;
-    case "wpp-action-button-v4-6-0":
+    case "wpp-action-button-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-button-v4-6-0":
+    case "wpp-button-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-floating-toolbar-v4-6-0":
+    case "wpp-floating-toolbar-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-chevron-v4-6-0":
+    case "wpp-icon-chevron-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-error-v4-6-0":
+    case "wpp-icon-error-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-refresh-v4-6-0":
+    case "wpp-icon-refresh-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-icon-warning-v4-6-0":
+    case "wpp-icon-warning-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-tooltip-v4-6-0":
+    case "wpp-internal-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-skeleton-v4-6-0":
+    case "wpp-skeleton-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-6-0":
+    case "wpp-spinner-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-6-0":
+    case "wpp-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-6-0":
+    case "wpp-typography-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

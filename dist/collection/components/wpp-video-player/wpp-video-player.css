@@ -245,10 +245,13 @@
   z-index: 10;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.15s ease-in-out, bottom 0.15s ease-in-out;
+  visibility: hidden;
+  transition: opacity 0.15s ease-in-out, bottom 0.15s ease-in-out, visibility 0s linear 0.15s;
 }
 .captions-wrapper.caption-enabled {
   opacity: 1;
+  visibility: visible;
+  transition: opacity 0.15s ease-in-out, bottom 0.15s ease-in-out, visibility 0s;
 }
 
 .caption-cue {
@@ -281,6 +284,9 @@
   width: 100%;
   max-width: 62.5%;
 }
+:host:host(.wpp-full-screen) .controls:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--wpp-brand-color), inset 0 0 0 3px var(--wpp-grey-color-000);
+}
 
 .video-player {
   aspect-ratio: var(--aspect-ratio, 16/9);
@@ -295,10 +301,10 @@
   height: 100%;
   transition: opacity 0.15s ease-in-out;
 }
-.controls.tab-focus {
+.controls:focus-visible {
   border-radius: "";
   outline: none;
-  box-shadow: 0 0 0 1px var(--wpp-grey-color-900), 0 0 0 3px var(--wpp-grey-color-000);
+  box-shadow: 0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);
 }
 .controls.state-idle {
   cursor: default;
@@ -324,7 +330,9 @@
 }
 .controls.state-playing.invisible .controls-bar, .controls.state-paused.invisible .controls-bar {
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
+  transition: opacity 0.15s ease-in-out, visibility 0s linear 0.15s;
 }
 .controls.state-playing.invisible .captions-wrapper, .controls.state-paused.invisible .captions-wrapper {
   bottom: 8px;
@@ -390,7 +398,7 @@
   padding: 6px 8px;
   border-radius: 6px;
   width: calc(100% - 32px);
-  transition: opacity 0.15s ease-in-out;
+  transition: opacity 0.15s ease-in-out, visibility 0s;
   cursor: default;
   z-index: 10;
 }
@@ -419,4 +427,13 @@
 :host([data-wpp-theme=dark]) .wpp-icon-speaker,
 :host([data-wpp-theme=dark]) .wpp-icon-fullscreen {
   color: var(--wpp-grey-color-1000);
+}
+
+@media (forced-colors: active) {
+  .controls:focus-visible {
+    outline: 2px solid CanvasText;
+  }
+  :host(.wpp-full-screen) .controls:focus-visible {
+    outline-offset: -2px;
+  }
 }

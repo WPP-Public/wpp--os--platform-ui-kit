@@ -41,7 +41,8 @@ export declare class WppToggle implements BaseComponent, BooleanFormControl<Togg
    */
   readonly size: 'm' | 's';
   /**
-   * If the toggle works as controlled component.
+   * If the toggle works as controlled component. When true, a click or Space/Enter emits `wppChange` with the
+   * requested `checked` value and the toggle keeps its current state until `checked` is updated.
    */
   readonly controlled: boolean;
   /**

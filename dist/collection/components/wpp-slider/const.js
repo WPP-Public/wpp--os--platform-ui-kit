@@ -1,4 +1,9 @@
 export const DEFAULT_INPUT_WIDTH = '68px';
+export const LOCALES_DEFAULTS = {
+  minimum: 'minimum',
+  maximum: 'maximum',
+  valueRange: '{from} to {to}',
+};
 export const getDefaultMaskOptions = (step) => ({
   decimalSeparator: '.',
   thousandSeparator: '',

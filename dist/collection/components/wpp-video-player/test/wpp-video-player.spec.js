@@ -3,16 +3,27 @@ import { newSpecPage } from '@stencil/core/testing';
 import { WppVideoPlayer } from '../wpp-video-player';
 import { placeVolumeSlider } from '../components/wpp-volume-bar';
 import { formatTime, calculateBufferProgress } from '../utils';
+import { ANNOUNCEMENT_RESET_DELAY, LOCALES_DEFAULTS } from '../const';
 import * as themeUtils from '../../../utils/subscribe-to-theme';
 let originalQuerySelector;
 let originalQuerySelectorAll;
 describe('wpp-video-player', () => {
   const videoSrc = 'https://www.w3schools.com/html/mov_bbb.mp4';
   const thumbnailSrc = 'https://example.com/thumbnail.jpg';
+  const captionValue = {
+    label: 'English',
+    kind: 'captions',
+    src: 'https://example.com/captions-en.vtt',
+    srclang: 'en',
+    // Off, so the specs built on it start from the captions-off state their names describe.
+    default: false,
+  };
   // Mock for HTMLMediaElement
   let playMock;
   let pauseMock;
   let videoMock;
+  // Every player a test loads, so `afterEach` can tear each one down (see there).
+  const loadedPlayers = new Set();
   beforeEach(() => {
     // Create a mock implementation for video element methods
     playMock = jest.fn().mockResolvedValue(undefined);
@@ -53,6 +64,7 @@ describe('wpp-video-player', () => {
     // This is the most reliable approach to ensure the mock is used
     const originalComponentDidLoad = WppVideoPlayer.prototype.componentDidLoad;
     WppVideoPlayer.prototype.componentDidLoad = function () {
+      loadedPlayers.add(this);
       // Call the original method first
       if (originalComponentDidLoad) {
         originalComponentDidLoad.call(this);
@@ -83,20 +95,26 @@ describe('wpp-video-player', () => {
     // Restore original methods
     HTMLElement.prototype.querySelector = originalQuerySelector;
     HTMLElement.prototype.querySelectorAll = originalQuerySelectorAll;
+    // Spec pages are never disconnected, and a second page in the same test replaces the first player
+    // without disconnecting it either. A pending announcement timer would then outlive the test and
+    // fire into a torn-down Stencil, crashing the run after the last test. `disconnectedCallback`
+    // clears it, so it runs for every player the test loaded.
+    loadedPlayers.forEach(player => player.disconnectedCallback());
+    loadedPlayers.clear();
     jest.restoreAllMocks();
   });
   describe('snapshots', () => {
     it('should render default component', async () => {
       const page = await newSpecPage({
         components: [WppVideoPlayer],
-        template: () => h("wpp-video-player-v4-6-0", { src: videoSrc }),
+        template: () => h("wpp-video-player-v4-7-0", { src: videoSrc }),
       });
       expect(page.root).toMatchSnapshot();
     });
     it('should render component with autoplay and mute', async () => {
       const page = await newSpecPage({
         components: [WppVideoPlayer],
-        template: () => h("wpp-video-player-v4-6-0", { src: videoSrc, controlPanelConfig: { autoplay: true } }),
+        template: () => h("wpp-video-player-v4-7-0", { src: videoSrc, controlPanelConfig: { autoplay: true } }),
       });
       expect(page.root).toMatchSnapshot();
     });
@@ -122,20 +140,37 @@ describe('wpp-video-player', () => {
         page.rootInstance.videoPlayerState = 'paused';
         await page.waitForChanges();
         const [currentTime, duration] = Array.from(page.root?.shadowRoot?.querySelectorAll('[role="timer"]') ?? []);
-        expect(currentTime.getAttribute('aria-label')).toBe(`Current time ${currentTime.textContent}`);
-        expect(duration.getAttribute('aria-label')).toBe(`Total time ${duration.textContent}`);
+        // The name identifies the timer; the time itself is the content, so it is not announced
+        // twice and the name does not change on every tick.
+        expect(currentTime.getAttribute('aria-label')).toBe('Current time');
+        expect(duration.getAttribute('aria-label')).toBe('Total time');
+        expect(currentTime.textContent).toBe('00:00');
+      });
+      it('should keep the current-time accessible name stable as the time advances', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          html: `<wpp-video-player src="${videoSrc}"></wpp-video-player>`,
+        });
+        page.rootInstance.videoPlayerState = 'paused';
+        await page.waitForChanges();
+        const timerOf = () => page.root?.shadowRoot?.querySelector('[role="timer"]');
+        const nameBefore = timerOf()?.getAttribute('aria-label');
+        page.rootInstance.currentVideoTime = 42;
+        await page.waitForChanges();
+        expect(timerOf()?.getAttribute('aria-label')).toBe(nameBefore);
+        expect(timerOf()?.textContent).toBe('00:42');
       });
       it('should use the custom locales for the timers accessible names', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => (h("wpp-video-player-v4-6-0", { src: videoSrc, locales: { currentTimeAriaLabel: 'Elapsed', durationAriaLabel: 'Duration' } })),
+          template: () => (h("wpp-video-player-v4-7-0", { src: videoSrc, locales: { currentTimeAriaLabel: 'Elapsed', durationAriaLabel: 'Duration' } })),
         });
         // The control bar, and so the timers, are only rendered once the player leaves the idle state.
         page.rootInstance.videoPlayerState = 'paused';
         await page.waitForChanges();
         const [currentTime, duration] = Array.from(page.root?.shadowRoot?.querySelectorAll('[role="timer"]') ?? []);
-        expect(currentTime.getAttribute('aria-label')).toBe(`Elapsed ${currentTime.textContent}`);
-        expect(duration.getAttribute('aria-label')).toBe(`Duration ${duration.textContent}`);
+        expect(currentTime.getAttribute('aria-label')).toBe('Elapsed');
+        expect(duration.getAttribute('aria-label')).toBe('Duration');
       });
       it('should render with thumbnail', async () => {
         const page = await newSpecPage({
@@ -148,21 +183,27 @@ describe('wpp-video-player', () => {
       it('should render with custom size', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v4-6-0", { src: videoSrc, size: { width: 800, height: 600 } }),
+          template: () => h("wpp-video-player-v4-7-0", { src: videoSrc, size: { width: 800, height: 600 } }),
         });
         const component = page.rootInstance;
         expect(component.videoPlayerSize.width).toBe(800);
         expect(component.videoPlayerSize.height).toBe(600);
       });
-      it('should render with autoplay configuration', async () => {
+      // The `muted` property, not the attribute, decides whether sound plays: `componentDidLoad` writes
+      // it from the starting volume, which used to unmute an autoplay video the attribute had muted.
+      it.each([
+        ['autoplay', true, { autoplay: true }],
+        ['muted', true, { muted: true }],
+        ['no volume button', true, { showVolumeButton: false }],
+        ['the default config', false, {}],
+      ])('with %s, the video starts muted: %s', async (_name, isMuted, controlPanelConfig) => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v4-6-0", { src: videoSrc, controlPanelConfig: { autoplay: true } }),
+          template: () => h("wpp-video-player-v4-7-0", { src: videoSrc, controlPanelConfig: controlPanelConfig }),
         });
         const video = page.root?.shadowRoot?.querySelector('video');
-        expect(video).toBeTruthy();
-        expect(video.hasAttribute('autoplay')).toBe(true);
-        expect(video.hasAttribute('muted')).toBe(true);
+        expect(video.muted).toBe(isMuted);
+        expect(video.hasAttribute('muted')).toBe(isMuted);
       });
       it('should render with multiple source elements when array is provided', async () => {
         // Update the mock for this specific test
@@ -180,7 +221,7 @@ describe('wpp-video-player', () => {
         });
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => (h("wpp-video-player-v4-6-0", { src: [videoSrc, videoSrc], type: ['video/mp4', 'video/webm'] })),
+          template: () => (h("wpp-video-player-v4-7-0", { src: [videoSrc, videoSrc], type: ['video/mp4', 'video/webm'] })),
         });
         const sourceElements = page.root?.shadowRoot?.querySelectorAll('source');
         expect(sourceElements.length).toBe(2);
@@ -197,7 +238,7 @@ describe('wpp-video-player', () => {
         };
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v4-6-0", { src: videoSrc, caption: captionData }),
+          template: () => h("wpp-video-player-v4-7-0", { src: videoSrc, caption: captionData }),
         });
         const trackElements = page.root?.shadowRoot?.querySelectorAll('track');
         expect(trackElements.length).toBe(1);
@@ -206,7 +247,7 @@ describe('wpp-video-player', () => {
       it('should render without volume button and volume need to be set to 0', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => (h("wpp-video-player-v4-6-0", { src: videoSrc, controlPanelConfig: { showVolumeButton: false } })),
+          template: () => (h("wpp-video-player-v4-7-0", { src: videoSrc, controlPanelConfig: { showVolumeButton: false } })),
         });
         expect(page.rootInstance.controlPanelConfigDefault.showVolumeButton).toBe(false);
         expect(page.rootInstance.volume).toBe(0);
@@ -270,7 +311,7 @@ describe('wpp-video-player', () => {
         };
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v4-6-0", { src: videoSrc, caption: captionData }),
+          template: () => h("wpp-video-player-v4-7-0", { src: videoSrc, caption: captionData }),
         });
         // Set required properties for captions
         page.rootInstance.isCaptionEnabled = true;
@@ -693,7 +734,7 @@ describe('wpp-video-player', () => {
       it('should handle space key for play/pause', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v4-6-0", { src: videoSrc }),
+          template: () => h("wpp-video-player-v4-7-0", { src: videoSrc }),
         });
         const playSpy = jest.spyOn(page.rootInstance, 'play');
         // Mock the focus conditions
@@ -713,7 +754,7 @@ describe('wpp-video-player', () => {
       it('should handle arrow keys for seeking', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v4-6-0", { src: videoSrc }),
+          template: () => h("wpp-video-player-v4-7-0", { src: videoSrc }),
         });
         // Mock the focus conditions
         jest.spyOn(page.rootInstance.host, 'contains').mockReturnValue(true);
@@ -804,24 +845,31 @@ describe('wpp-video-player', () => {
         srclang: 'en',
         default: true,
       };
-      it('should toggle captions when toggleCaptions is called', async () => {
+      it('starts with captions on when the track is `default`, and toggles them', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v4-6-0", { src: videoSrc, caption: captionData }),
+          template: () => h("wpp-video-player-v4-7-0", { src: videoSrc, caption: captionData }),
         });
-        // Initial state
+        expect(page.rootInstance.isCaptionEnabled).toBe(true);
+        page.rootInstance.toggleCaptions();
         expect(page.rootInstance.isCaptionEnabled).toBe(false);
-        // Toggle captions
         page.rootInstance.toggleCaptions();
         expect(page.rootInstance.isCaptionEnabled).toBe(true);
-        // Toggle again
-        page.rootInstance.toggleCaptions();
+      });
+      it.each([
+        ['`default: false`', { ...captionData, default: false }],
+        ['no `default`', { label: 'English', kind: 'subtitles', src: 'en-captions.vtt', srclang: 'en' }],
+      ])('starts with captions off for %s', async (_name, caption) => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          template: () => h("wpp-video-player-v4-7-0", { src: videoSrc, caption: caption }),
+        });
         expect(page.rootInstance.isCaptionEnabled).toBe(false);
       });
       it('should handle C key for toggling captions', async () => {
         const page = await newSpecPage({
           components: [WppVideoPlayer],
-          template: () => h("wpp-video-player-v4-6-0", { src: videoSrc, caption: captionData }),
+          template: () => h("wpp-video-player-v4-7-0", { src: videoSrc, caption: captionData }),
         });
         const toggleCaptionsSpy = jest.spyOn(page.rootInstance, 'toggleCaptions');
         // Mock the focus conditions
@@ -1027,6 +1075,668 @@ describe('wpp-video-player', () => {
       });
       page.root?.remove();
       expect(mockStop).toHaveBeenCalledTimes(1);
+    });
+  });
+  describe('Testing accessibility', () => {
+    const playing = async (template) => {
+      const page = await newSpecPage({ components: [WppVideoPlayer], template });
+      // The control bar only exists once the player leaves the idle state.
+      page.rootInstance.videoPlayerState = 'paused';
+      await page.waitForChanges();
+      return page;
+    };
+    const shadow = (page) => page.root?.shadowRoot;
+    const all = (page, selector) => Array.from(shadow(page)?.querySelectorAll(selector) ?? []);
+    // Child `wpp-*` components are not registered in the spec DOM, so `ariaProps` stays a property
+    // and never reflects to an attribute. Read the props the player actually passes down.
+    const ariaOf = (el) => el?.ariaProps ?? {};
+    const labelOf = (el) => ariaOf(el).label ?? el?.getAttribute('aria-label');
+    // An announcement is written once the region has been emptied for `ANNOUNCEMENT_RESET_DELAY`. The
+    // first flush lets async callers (`toggleFullscreen`) reach `announce` before the wait starts.
+    const afterAnnouncement = async (page) => {
+      await page.waitForChanges();
+      await new Promise(resolve => setTimeout(resolve, ANNOUNCEMENT_RESET_DELAY));
+      await page.waitForChanges();
+    };
+    describe('auto-hiding controls', () => {
+      it('takes the control bar out of the tab order and the accessibility tree while it is hidden', async () => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc }));
+        const bar = () => shadow(page)?.querySelector('.controls-bar');
+        expect(bar()?.hasAttribute('inert')).toBe(false);
+        page.rootInstance.isInvisible = true;
+        await page.waitForChanges();
+        // Fading the bar out leaves its buttons focusable, so the markup has to remove them.
+        expect(bar()?.hasAttribute('inert')).toBe(true);
+        expect(bar()?.getAttribute('aria-hidden')).toBe('true');
+        page.rootInstance.isInvisible = false;
+        await page.waitForChanges();
+        expect(bar()?.hasAttribute('inert')).toBe(false);
+        expect(bar()?.hasAttribute('aria-hidden')).toBe(false);
+      });
+      it('matches the rendered playing-state tree', async () => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc, caption: captionValue }));
+        // The seek slider's id is unique per element by design, so pin it for the snapshot only.
+        page.rootInstance.seekBarId = 'progress-slider-test';
+        page.rootInstance.videoPlayerState = 'playing';
+        // The live region takes the new state a moment later; wait for it so the snapshot is stable.
+        await afterAnnouncement(page);
+        // Paired expectations, so the snapshot cannot silently absorb an ARIA regression.
+        const bar = shadow(page)?.querySelector('.controls-bar');
+        expect(bar).toBeTruthy();
+        expect(bar?.hasAttribute('inert')).toBe(false);
+        expect(shadow(page)?.querySelector('[role="status"]')?.getAttribute('aria-live')).toBe('polite');
+        expect(all(page, 'wpp-action-button').map(labelOf)).toEqual([
+          'Pause',
+          'Pause',
+          'Show captions',
+          'Mute',
+          'Enter full screen',
+        ]);
+        expect(page.root).toMatchSnapshot();
+      });
+      it('keeps the status live region outside the control bar, so hiding the bar does not take it', async () => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc }));
+        page.rootInstance.isInvisible = true;
+        await page.waitForChanges();
+        const status = shadow(page)?.querySelector('[role="status"]');
+        const bar = shadow(page)?.querySelector('.controls-bar');
+        expect(status).toBeTruthy();
+        expect(bar?.contains(status)).toBe(false);
+      });
+      it('keeps a tab stop on the player while the control bar is hidden', async () => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc }));
+        const controls = () => shadow(page)?.querySelector('.controls');
+        // Visible: the controls themselves are the tab stops, so the container is not one.
+        expect(controls()?.getAttribute('tabindex')).toBe('-1');
+        page.rootInstance.isInvisible = true;
+        await page.waitForChanges();
+        // Hidden: the bar is inert, so without this the player has no tab stop at all and a
+        // keyboard user can never reach the controls of a playing video.
+        expect(shadow(page)?.querySelector('.controls-bar')?.hasAttribute('inert')).toBe(true);
+        expect(controls()?.getAttribute('tabindex')).toBe('0');
+      });
+      it('reveals the control bar again when focus moves into the player', async () => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc }));
+        const bar = () => shadow(page)?.querySelector('.controls-bar');
+        page.rootInstance.isInvisible = true;
+        await page.waitForChanges();
+        expect(bar()?.hasAttribute('inert')).toBe(true);
+        // A control that takes focus must never be left inside the hidden subtree.
+        page.root?.dispatchEvent(new Event('focusin'));
+        await page.waitForChanges();
+        expect(bar()?.hasAttribute('inert')).toBe(false);
+        expect(bar()?.hasAttribute('aria-hidden')).toBe(false);
+      });
+    });
+    describe('toggle semantics', () => {
+      it('names the play control by its action, never by the player state', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          template: () => h("wpp-video-player-v4-7-0", { src: videoSrc }),
+        });
+        const overlay = () => shadow(page)?.querySelector('.play-button');
+        expect(labelOf(overlay())).toBe('Play');
+        page.rootInstance.videoPlayerState = 'playing';
+        await page.waitForChanges();
+        expect(labelOf(overlay())).toBe('Pause');
+        // "Video paused" named the state of the video, not what pressing the control would do.
+        expect(labelOf(overlay())).not.toContain('Video');
+      });
+      it('never pairs aria-pressed with a label that already flips', async () => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc, caption: captionValue }));
+        const toggles = all(page, 'wpp-action-button');
+        expect(toggles.length).toBeGreaterThan(0);
+        toggles.forEach(button => expect(ariaOf(button).pressed).toBeUndefined());
+      });
+      it('flips the caption and fullscreen labels with their state', async () => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc, caption: captionValue }));
+        const buttons = () => all(page, 'wpp-action-button');
+        const named = (text) => buttons().some(b => labelOf(b) === text);
+        expect(named('Show captions')).toBe(true);
+        expect(named('Enter full screen')).toBe(true);
+        page.rootInstance.isCaptionEnabled = true;
+        page.rootInstance.isFullscreen = true;
+        await page.waitForChanges();
+        expect(named('Hide captions')).toBe(true);
+        expect(named('Exit full screen')).toBe(true);
+      });
+    });
+    describe('keyboard', () => {
+      it('leaves arrow keys to the seek slider while it has focus', async () => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc }));
+        // Let the watcher's setTimeout(0) register the document listener.
+        await new Promise(resolve => setTimeout(resolve, 0));
+        const seek = shadow(page)?.querySelector('input.progress-bar');
+        jest.spyOn(page.rootInstance.host, 'matches').mockReturnValue(true);
+        Object.defineProperty(shadow(page), 'activeElement', { get: () => seek, configurable: true });
+        page.rootInstance.videoPlayerRef = { currentTime: 60, duration: 120 };
+        page.rootInstance.overallVideoTime = 120;
+        document.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowRight' }));
+        // The range input moves itself; seeking here too would jump twice on one press.
+        expect(page.rootInstance.videoPlayerRef.currentTime).toBe(60);
+      });
+      it('keeps a visible pause control on a player that starts by itself', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          template: () => (h("wpp-video-player-v4-7-0", { src: videoSrc, controlPanelConfig: { autoplay: true, loop: true } })),
+        });
+        page.rootInstance.videoPlayerState = 'playing';
+        await page.waitForChanges();
+        const overlay = shadow(page)?.querySelector('.play-button');
+        // An autoplay player renders no control bar, so this is the only way to stop it.
+        expect(overlay?.classList.contains('invisible')).toBe(false);
+        expect(labelOf(overlay)).toBe('Pause');
+      });
+      it.each([
+        ['Ctrl+C (copy)', { code: 'KeyC', ctrlKey: true }],
+        ['Cmd+C (copy)', { code: 'KeyC', metaKey: true }],
+        ['Alt+ArrowLeft (Back)', { code: 'ArrowLeft', altKey: true }],
+        ['Ctrl+F (find)', { code: 'KeyF', ctrlKey: true }],
+        ['Cmd+M (minimise)', { code: 'KeyM', metaKey: true }],
+      ])('leaves %s to the browser', async (_name, init) => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc, caption: captionValue }));
+        const toggleFullscreen = jest.spyOn(page.rootInstance, 'toggleFullscreen');
+        jest.spyOn(page.rootInstance.host, 'matches').mockReturnValue(true);
+        page.rootInstance.videoPlayerRef = { currentTime: 60, duration: 120 };
+        page.rootInstance.overallVideoTime = 120;
+        const event = new KeyboardEvent('keydown', { ...init, cancelable: true });
+        page.rootInstance.handleKeyboardInput(event);
+        expect(event.defaultPrevented).toBe(false);
+        expect(page.rootInstance.isCaptionEnabled).toBe(false);
+        expect(page.rootInstance.videoPlayerRef.currentTime).toBe(60);
+        expect(page.rootInstance.volume).toBe(1);
+        expect(toggleFullscreen).not.toHaveBeenCalled();
+      });
+      it('offers "Play" until an autoplay video reports it is playing', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          template: () => h("wpp-video-player-v4-7-0", { src: videoSrc, controlPanelConfig: { autoplay: true } }),
+        });
+        const overlay = () => shadow(page)?.querySelector('.play-button');
+        // The browser can block autoplay, so a "Pause" here would offer to stop a video that never started.
+        expect(page.rootInstance.videoPlayerState).toBe('idle');
+        expect(labelOf(overlay())).toBe('Play');
+        page.rootInstance.videoPlayerRef = { paused: false };
+        shadow(page)?.querySelector('video')?.dispatchEvent(new Event('play'));
+        await page.waitForChanges();
+        expect(labelOf(overlay())).toBe('Pause');
+      });
+      it('lets Space start an autoplay video the browser blocked, and drops the listener on teardown', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          template: () => h("wpp-video-player-v4-7-0", { src: videoSrc, controlPanelConfig: { autoplay: true } }),
+        });
+        const video = page.rootInstance.videoPlayerRef;
+        jest.spyOn(page.rootInstance.host, 'matches').mockReturnValue(true);
+        Object.defineProperty(shadow(page), 'activeElement', { get: () => video, configurable: true });
+        // Still `idle`: the shortcut listener cannot wait for the state to leave it.
+        document.dispatchEvent(new KeyboardEvent('keydown', { code: 'Space' }));
+        expect(playMock).toHaveBeenCalledTimes(1);
+        const removeSpy = jest.spyOn(document, 'removeEventListener');
+        page.root?.remove();
+        expect(removeSpy).toHaveBeenCalledWith('keydown', page.rootInstance.handleKeyboardInput);
+      });
+      it('lets the autoplay pause control auto-hide rather than sitting on the picture', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          template: () => (h("wpp-video-player-v4-7-0", { src: videoSrc, controlPanelConfig: { autoplay: true, loop: true } })),
+        });
+        page.rootInstance.videoPlayerState = 'playing';
+        page.rootInstance.isInvisible = false;
+        await page.waitForChanges();
+        const overlay = () => shadow(page)?.querySelector('.play-button');
+        expect(overlay()?.classList.contains('invisible')).toBe(false);
+        // It follows the same auto-hide as the control bar; the <video> stays focusable on
+        // autoplay, so there is always a way to bring it back.
+        page.rootInstance.isInvisible = true;
+        await page.waitForChanges();
+        expect(overlay()?.classList.contains('invisible')).toBe(true);
+        expect(shadow(page)?.querySelector('video')?.getAttribute('tabindex')).toBe('0');
+      });
+      it('keeps the replay control once an autoplay video has finished, even if it had auto-hidden', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          template: () => h("wpp-video-player-v4-7-0", { src: videoSrc, controlPanelConfig: { autoplay: true } }),
+        });
+        page.rootInstance.videoPlayerState = 'playing';
+        page.rootInstance.isInvisible = true;
+        await page.waitForChanges();
+        const overlay = () => shadow(page)?.querySelector('.play-button');
+        expect(overlay()?.classList.contains('invisible')).toBe(true);
+        // The video finishes while the controls are hidden. This overlay is the only way to replay
+        // a player with no control bar, so it has to come back rather than follow the hide timer.
+        page.rootInstance.videoPlayerState = 'idle';
+        await page.waitForChanges();
+        expect(overlay()?.classList.contains('invisible')).toBe(false);
+        expect(labelOf(overlay())).toBe('Play');
+      });
+      it('renames the pause control when the browser stops playback by itself', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          template: () => (h("wpp-video-player-v4-7-0", { src: videoSrc, controlPanelConfig: { autoplay: true, loop: true } })),
+        });
+        page.rootInstance.videoPlayerState = 'playing';
+        await page.waitForChanges();
+        expect(labelOf(shadow(page)?.querySelector('.play-button'))).toBe('Pause');
+        // Scrolling an autoplaying video out of view is enough for the browser to pause it; the
+        // player has to notice, or the control offers to pause something already stopped.
+        page.rootInstance.videoPlayerRef = { paused: true };
+        shadow(page)?.querySelector('video')?.dispatchEvent(new Event('pause'));
+        await page.waitForChanges();
+        expect(labelOf(shadow(page)?.querySelector('.play-button'))).toBe('Play');
+      });
+    });
+    describe('announcements', () => {
+      it('has its one live region before the first play, so "Video is playing" changes one that exists', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          template: () => h("wpp-video-player-v4-7-0", { src: videoSrc }),
+        });
+        const regions = () => all(page, '[role="status"]');
+        const [region] = regions();
+        // A live region that appears already holding its text is not announced.
+        expect(regions()).toHaveLength(1);
+        expect(region?.textContent).toBe('Video is ready to play');
+        page.rootInstance.videoPlayerState = 'playing';
+        await afterAnnouncement(page);
+        // Compared as a boolean: on failure Jest would try to print both DOM nodes in full.
+        expect(regions()).toHaveLength(1);
+        expect(regions()[0] === region).toBe(true);
+        expect(region?.textContent).toBe('Video is playing');
+      });
+      it('gives an autoplay player no status regions, so a background video does not announce itself', async () => {
+        const page = await newSpecPage({
+          components: [WppVideoPlayer],
+          template: () => h("wpp-video-player-v4-7-0", { src: videoSrc, controlPanelConfig: { autoplay: true } }),
+        });
+        expect(shadow(page)?.querySelector('[role="status"]')).toBeNull();
+      });
+      it('keeps the player state in a live status region but not the static help', async () => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc }));
+        const regions = all(page, '.sr-only');
+        const status = regions.find(r => r.getAttribute('role') === 'status');
+        const help = regions.find(r => r.querySelector('ul'));
+        expect(status?.getAttribute('aria-live')).toBe('polite');
+        expect(help).toBeTruthy();
+        // Static help is not a status; announcing the whole list on re-render talks over the video.
+        expect(help?.hasAttribute('aria-live')).toBe(false);
+      });
+      describe('keyboard shortcut results', () => {
+        // Focus sits on the Play button, so nothing else would tell a screen reader what changed.
+        const press = async (code, setup = {}) => {
+          const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc, caption: captionValue }));
+          const playButton = shadow(page)?.querySelector('.play-pause-button');
+          jest.spyOn(page.rootInstance.host, 'matches').mockReturnValue(true);
+          Object.defineProperty(shadow(page), 'activeElement', { get: () => playButton, configurable: true });
+          page.rootInstance.videoPlayerRef = { currentTime: setup.time ?? 60, duration: 100 };
+          page.rootInstance.overallVideoTime = 100;
+          page.rootInstance.volume = setup.volume ?? 0.5;
+          page.rootInstance.handleKeyboardInput(new KeyboardEvent('keydown', { code }));
+          await afterAnnouncement(page);
+          return { page, status: () => shadow(page)?.querySelector('.announcement')?.textContent };
+        };
+        it.each([
+          ['ArrowRight', {}, '01:05 of 01:40'],
+          ['ArrowLeft', {}, '00:55 of 01:40'],
+          ['ArrowUp', {}, 'Volume 55%'],
+          ['ArrowDown', {}, 'Volume 45%'],
+          ['KeyM', {}, 'Muted'],
+          ['KeyM', { volume: 0 }, 'Unmuted'],
+          ['KeyC', {}, 'Captions on'],
+          ['KeyF', {}, 'Full screen'],
+        ])('announces what %s changed', async (code, setup, expected) => {
+          const { status } = await press(code, setup);
+          expect(status()).toBe(expected);
+        });
+        it.each([
+          ['ArrowUp at 100%', 'ArrowUp', { volume: 1 }],
+          ['ArrowDown at 0%', 'ArrowDown', { volume: 0 }],
+          ['ArrowRight at the end', 'ArrowRight', { time: 100 }],
+          ['ArrowLeft at the start', 'ArrowLeft', { time: 0 }],
+        ])('says nothing for %s, where nothing changed', async (_name, code, setup) => {
+          const { status } = await press(code, setup);
+          // Still the play state the player was put into; no new message replaced it.
+          expect(status()).toBe('Video is paused');
+        });
+        it('speaks a real change worded like the last message, and leaves the message in place', async () => {
+          const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc }));
+          // Let the "Video is paused" from setting the player up land first, on real timers.
+          await afterAnnouncement(page);
+          jest.useFakeTimers();
+          try {
+            page.rootInstance.toggleMute();
+            jest.advanceTimersByTime(ANNOUNCEMENT_RESET_DELAY);
+            expect(page.rootInstance.announcement).toBe('Muted');
+            // Unmuted by dragging the slider, which announces nothing, then muted again: still "Muted",
+            // so the region is emptied first to make it a change the screen reader hears.
+            page.rootInstance.volume = 0.5;
+            page.rootInstance.toggleMute();
+            expect(page.rootInstance.announcement).toBe('');
+            jest.advanceTimersByTime(ANNOUNCEMENT_RESET_DELAY);
+            expect(page.rootInstance.announcement).toBe('Muted');
+            // Nothing clears it afterwards.
+            jest.advanceTimersByTime(10000);
+            expect(page.rootInstance.announcement).toBe('Muted');
+          }
+          finally {
+            jest.useRealTimers();
+          }
+        });
+        it('moves the focused volume slider by volumeSkipValue on ↑/↓, keeps its fine step for dragging, and stays quiet', async () => {
+          const page = await playing(() => (h("wpp-video-player-v4-7-0", { src: videoSrc, jumpValues: { videoSkipTimeValue: 5, volumeSkipValue: 0.1 } })));
+          const volumeSlider = shadow(page)?.querySelector('#volume-slider');
+          jest.spyOn(page.rootInstance.host, 'matches').mockReturnValue(true);
+          Object.defineProperty(shadow(page), 'activeElement', { get: () => volumeSlider, configurable: true });
+          page.rootInstance.volume = 0.5;
+          const event = new KeyboardEvent('keydown', { code: 'ArrowUp', cancelable: true });
+          page.rootInstance.handleKeyboardInput(event);
+          await afterAnnouncement(page);
+          // The slider's own 1% step is cancelled in favour of the shortcut's.
+          expect(event.defaultPrevented).toBe(true);
+          expect(page.rootInstance.volume).toBe(0.6);
+          expect(volumeSlider?.getAttribute('step')).toBe('0.01');
+          // The focused slider reads its own new value, so the region keeps the play state.
+          expect(shadow(page)?.querySelector('.announcement')?.textContent).toBe('Video is paused');
+        });
+      });
+      it('announces leaving full screen through the browser, and ignores other elements going full screen', async () => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc }));
+        const announcement = () => shadow(page)?.querySelector('.announcement')?.textContent;
+        const setFullscreenElement = (element) => Object.defineProperty(document, 'fullscreenElement', { configurable: true, get: () => element });
+        try {
+          // Escape exits through the browser, never through `toggleFullscreen`.
+          page.rootInstance.isFullscreen = true;
+          setFullscreenElement(null);
+          page.rootInstance.handleFullscreenChange();
+          await afterAnnouncement(page);
+          expect(page.rootInstance.isFullscreen).toBe(false);
+          expect(announcement()).toBe('Exited full screen');
+          page.rootInstance.announcement = '';
+          setFullscreenElement(document.createElement('div'));
+          page.rootInstance.handleFullscreenChange();
+          await afterAnnouncement(page);
+          expect(page.rootInstance.isFullscreen).toBe(false);
+          expect(announcement()).toBe('');
+        }
+        finally {
+          setFullscreenElement(null);
+        }
+      });
+      // Screen readers rarely re-read a focused button whose name has just flipped, so pressing the
+      // button has to be announced like the shortcut is.
+      it.each([
+        ['Mute', 'Muted'],
+        ['Show captions', 'Captions on'],
+        ['Enter full screen', 'Full screen'],
+      ])('announces what the "%s" button changed', async (buttonLabel, expected) => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc, caption: captionValue }));
+        const button = all(page, 'wpp-action-button').find(el => labelOf(el) === buttonLabel);
+        button?.dispatchEvent(new MouseEvent('click'));
+        await afterAnnouncement(page);
+        expect(shadow(page)?.querySelector('.announcement')?.textContent).toBe(expected);
+      });
+    });
+    describe('seek slider arrow keys', () => {
+      // The slider's own step is 1% of the duration: 0.1s on a short clip, which the spoken
+      // "00:03 of 00:10" cannot show, so a press would sound like it did nothing.
+      it.each([
+        ['ArrowRight', 60, 5, 65, '01:05 of 01:40'],
+        ['ArrowLeft', 60, 5, 55, '00:55 of 01:40'],
+        ['ArrowRight', 98, 5, 100, '01:40 of 01:40'],
+        ['ArrowLeft', 2, 5, 0, '00:00 of 01:40'],
+        ['ArrowRight', 60, 15, 75, '01:15 of 01:40'],
+      ])('%s from %ss moves by the %ss shortcut distance', async (code, from, skip, to, valueText) => {
+        const page = await playing(() => (h("wpp-video-player-v4-7-0", { src: videoSrc, jumpValues: { videoSkipTimeValue: skip, volumeSkipValue: 0.05 } })));
+        const seek = shadow(page)?.querySelector('.progress-container input');
+        // Kept in hand: the re-render below puts the real <video> back into `videoPlayerRef`.
+        const video = { currentTime: from, duration: 100 };
+        page.rootInstance.videoPlayerRef = video;
+        page.rootInstance.overallVideoTime = 100;
+        const event = new KeyboardEvent('keydown', { code, cancelable: true });
+        seek.dispatchEvent(event);
+        await page.waitForChanges();
+        expect(event.defaultPrevented).toBe(true);
+        expect(video.currentTime).toBe(to);
+        // Updated at once rather than on `timeupdate`, so the screen reader reads the new time.
+        expect(seek.getAttribute('aria-valuetext')).toBe(valueText);
+        // The slider reads its own value; an announcement would only say it twice, so the region keeps
+        // the play state.
+        await afterAnnouncement(page);
+        expect(shadow(page)?.querySelector('.announcement')?.textContent).toBe('Video is paused');
+      });
+      it('keeps its spoken value still while focused during playback, and moves it only for deliberate seeks', async () => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc }));
+        const seek = shadow(page)?.querySelector('.progress-container input');
+        const video = { currentTime: 0, duration: 100 };
+        // Every re-render puts the real <video> back into `videoPlayerRef`, so this goes back in before each step.
+        const useFakeVideo = () => (page.rootInstance.videoPlayerRef = video);
+        const tick = async (time) => {
+          video.currentTime = time;
+          page.rootInstance.currentVideoTime = time;
+          await page.waitForChanges();
+        };
+        page.rootInstance.overallVideoTime = 100;
+        page.rootInstance.videoPlayerState = 'playing';
+        await page.waitForChanges();
+        // Without focus it keeps up silently, so focus lands on the current time.
+        await tick(3);
+        expect(seek.getAttribute('aria-valuetext')).toBe('00:03 of 01:40');
+        // Focused, playback ticking on would otherwise have it read out every second.
+        Object.defineProperty(shadow(page), 'activeElement', { get: () => seek, configurable: true });
+        await tick(6);
+        expect(seek.getAttribute('aria-valuetext')).toBe('00:03 of 01:40');
+        // An arrow key on the slider.
+        useFakeVideo();
+        seek.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowRight', cancelable: true }));
+        await page.waitForChanges();
+        expect(seek.getAttribute('aria-valuetext')).toBe('00:11 of 01:40');
+        // A drag or a click on the track.
+        useFakeVideo();
+        seek.value = '40';
+        seek.dispatchEvent(new Event('input'));
+        await page.waitForChanges();
+        expect(seek.getAttribute('aria-valuetext')).toBe('00:40 of 01:40');
+        // Paused, it follows the position again.
+        page.rootInstance.currentVideoTime = 42;
+        page.rootInstance.videoPlayerState = 'paused';
+        await page.waitForChanges();
+        expect(seek.getAttribute('aria-valuetext')).toBe('00:42 of 01:40');
+      });
+    });
+    describe('keyboard-shortcut help', () => {
+      it('lists the volume and fullscreen shortcuts only when those controls exist', async () => {
+        const withControls = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc }));
+        const textOf = (page) => shadow(page)?.querySelector('.sr-only ul')?.textContent ?? '';
+        expect(textOf(withControls)).toContain('volume');
+        expect(textOf(withControls)).toContain('mute');
+        const withoutVolume = await playing(() => (h("wpp-video-player-v4-7-0", { src: videoSrc, controlPanelConfig: { showVolumeButton: false, showFullscreenButton: false } })));
+        // These keys are refused when their control is absent, so advertising them would be a lie.
+        expect(textOf(withoutVolume)).not.toContain('volume');
+        expect(textOf(withoutVolume)).not.toContain('Fullscreen');
+      });
+      it('states the seek distance that jumpValues actually uses', async () => {
+        const page = await playing(() => (h("wpp-video-player-v4-7-0", { src: videoSrc, jumpValues: { videoSkipTimeValue: 15, volumeSkipValue: 0.1 } })));
+        const help = shadow(page)?.querySelector('.sr-only ul')?.textContent ?? '';
+        expect(help).toContain('15 seconds');
+        expect(help).not.toContain('{seconds}');
+      });
+      it('introduces the help without adding a heading to the page outline', async () => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc }));
+        const help = all(page, '.sr-only').find(r => r.querySelector('ul'));
+        // The player cannot know its heading level in the page, so a fixed one would break the outline.
+        expect(help?.querySelector('h1, h2, h3, h4, h5, h6')).toBeNull();
+        expect(help?.textContent).toContain('Keyboard shortcuts');
+      });
+    });
+    describe('captions', () => {
+      it('reads the seek position as a clock time out of the total, not a bare number of seconds', async () => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc }));
+        page.rootInstance.overallVideoTime = 100;
+        page.rootInstance.currentVideoTime = 65;
+        await page.waitForChanges();
+        const seek = shadow(page)?.querySelector('input.progress-bar');
+        // `aria-valuenow="65"` is announced as "65"; the value text gives "01:05 of 01:40".
+        expect(seek?.getAttribute('aria-valuenow')).toBe('65');
+        expect(seek?.getAttribute('aria-valuetext')).toBe('01:05 of 01:40');
+      });
+      it('reads only the position for a live stream, whose infinite duration would read as "NaN:NaN"', async () => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc }));
+        page.rootInstance.overallVideoTime = Infinity;
+        page.rootInstance.currentVideoTime = 65;
+        await page.waitForChanges();
+        expect(shadow(page)?.querySelector('input.progress-bar')?.getAttribute('aria-valuetext')).toBe('01:05');
+      });
+      it('marks the captions with the track language, which may not be the page language', async () => {
+        const page = await playing(() => (h("wpp-video-player-v4-7-0", { src: videoSrc, caption: { ...captionValue, srclang: 'fr' } })));
+        expect(shadow(page)?.querySelector('.captions-wrapper')?.getAttribute('lang')).toBe('fr');
+      });
+      it('removes caption text from the accessibility tree while captions are off', async () => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc, caption: captionValue }));
+        const wrapper = () => shadow(page)?.querySelector('.captions-wrapper');
+        expect(wrapper()?.hasAttribute('inert')).toBe(true);
+        expect(wrapper()?.getAttribute('aria-hidden')).toBe('true');
+        page.rootInstance.isCaptionEnabled = true;
+        await page.waitForChanges();
+        expect(wrapper()?.hasAttribute('inert')).toBe(false);
+      });
+      it('shows captions as plain text, not a live region read over the soundtrack', async () => {
+        const page = await playing(() => (h("wpp-video-player-v4-7-0", { src: videoSrc, caption: { ...captionValue, default: true } })));
+        page.rootInstance.activeCues = [{ text: 'Hello there' }];
+        await page.waitForChanges();
+        const wrapper = shadow(page)?.querySelector('.captions-wrapper');
+        // On from the start here, so a live region would read every cue unasked.
+        expect(wrapper?.hasAttribute('aria-live')).toBe(false);
+        expect(wrapper?.hasAttribute('role')).toBe(false);
+        expect(wrapper?.hasAttribute('aria-hidden')).toBe(false);
+        expect(wrapper?.textContent).toBe('Hello there');
+      });
+    });
+    describe('jumpValues', () => {
+      it.each([
+        ['videoSkipTimeValue', { videoSkipTimeValue: 10 }, 70, 0.55],
+        ['volumeSkipValue', { volumeSkipValue: 0.1 }, 65, 0.6],
+      ])('keeps the default for the key left out when only %s is passed', async (_name, jumpValues, time, volume) => {
+        const page = await playing(() => (h("wpp-video-player-v4-7-0", { src: videoSrc, jumpValues: jumpValues })));
+        const video = { currentTime: 60, duration: 100 };
+        jest.spyOn(page.rootInstance.host, 'matches').mockReturnValue(true);
+        Object.defineProperty(shadow(page), 'activeElement', {
+          get: () => shadow(page)?.querySelector('.play-pause-button'),
+          configurable: true,
+        });
+        page.rootInstance.videoPlayerRef = video;
+        page.rootInstance.overallVideoTime = 100;
+        page.rootInstance.volume = 0.5;
+        page.rootInstance.handleKeyboardInput(new KeyboardEvent('keydown', { code: 'ArrowRight' }));
+        page.rootInstance.handleKeyboardInput(new KeyboardEvent('keydown', { code: 'ArrowUp' }));
+        // A missing `volumeSkipValue` used to make the volume NaN.
+        expect(video.currentTime).toBe(time);
+        expect(page.rootInstance.volume).toBe(volume);
+      });
+    });
+    describe('host and popup semantics', () => {
+      it('starts silent but still offers a way back when controlPanelConfig.muted is set', async () => {
+        const page = await playing(() => (h("wpp-video-player-v4-7-0", { src: videoSrc, controlPanelConfig: { muted: true } })));
+        // Silent from the start, with the volume control still there to turn sound on.
+        expect(page.rootInstance.volume).toBe(0);
+        const mute = shadow(page)?.querySelector('.volume-button');
+        expect(mute).toBeTruthy();
+        expect(labelOf(mute)).toBe('Unmute');
+        // And unmuting has to actually produce sound, not restore the silence it began with.
+        page.rootInstance.toggleMute();
+        await page.waitForChanges();
+        expect(page.rootInstance.volume).toBe(1);
+        expect(labelOf(shadow(page)?.querySelector('.volume-button'))).toBe('Mute');
+      });
+      it('defaults the host to a group rather than a landmark, and lets ariaProps override it', async () => {
+        const plain = await newSpecPage({
+          components: [WppVideoPlayer],
+          template: () => h("wpp-video-player-v4-7-0", { src: videoSrc }),
+        });
+        // Ten players on a page used to publish ten identical "Video player" landmarks.
+        expect(plain.root?.getAttribute('role')).toBe('group');
+        expect(plain.root?.getAttribute('aria-label')).toBe('Video player');
+        const named = await newSpecPage({
+          components: [WppVideoPlayer],
+          template: () => (h("wpp-video-player-v4-7-0", { src: videoSrc, ariaProps: { role: 'region', label: 'Trailer' } })),
+        });
+        expect(named.root?.getAttribute('role')).toBe('region');
+        expect(named.root?.getAttribute('aria-label')).toBe('Trailer');
+      });
+      it('exposes the volume slider as a popup on the mute button', async () => {
+        const page = await playing(() => h("wpp-video-player-v4-7-0", { src: videoSrc }));
+        const mute = () => shadow(page)?.querySelector('.volume-button');
+        expect(ariaOf(mute()).haspopup).toBe('dialog');
+        expect(ariaOf(mute()).expanded).toBe(false);
+        page.rootInstance.isVolumeSliderOpen = true;
+        await page.waitForChanges();
+        expect(ariaOf(mute()).expanded).toBe(true);
+      });
+    });
+    describe('locales', () => {
+      it('still honours the deprecated locale keys a consumer already ships', async () => {
+        const page = await playing(() => (h("wpp-video-player-v4-7-0", { src: videoSrc, caption: captionValue, locales: {
+            playButtonAriaLabel: { play: 'LEGACY playing', pause: 'LEGACY paused' },
+            captionButtonAriaLabel: 'LEGACY captions',
+            volumeButtonAriaLabel: 'LEGACY volume',
+            fullscreenButtonAriaLabel: 'LEGACY fullscreen',
+            videoProgressAriaLabel: 'LEGACY seek',
+          } })));
+        // Deprecated is not the same as ignored: dropping these would silently throw away a
+        // translation shipped against 4.4.0.
+        const names = all(page, 'wpp-action-button').map(labelOf);
+        expect(names).toContain('LEGACY paused');
+        expect(names).toContain('LEGACY captions');
+        expect(names).toContain('LEGACY volume');
+        expect(names).toContain('LEGACY fullscreen');
+        expect(shadow(page)?.querySelector('input.progress-bar')?.getAttribute('aria-label')).toBe('LEGACY seek');
+      });
+      it('keeps a name on both states when a deprecated key is only partly supplied', async () => {
+        const page = await playing(() => (h("wpp-video-player-v4-7-0", { src: videoSrc,
+          // Half-filled on purpose. The type forbids it, but `mergeLocales` is a shallow spread,
+          // so a JavaScript consumer can still get here and must not end up with a nameless control.
+          locales: { playButtonAriaLabel: { play: 'ONLY-PLAY' } } })));
+        // `locales` is documented as partial. Supplying one half must not leave the other
+        // unnamed — an icon-only button with no accessible name is an axe `button-name` failure.
+        const names = () => all(page, 'wpp-action-button').map(labelOf);
+        names().forEach(name => expect(name).toBeTruthy());
+        // Paused, so the missing half falls back to the replacement wording for that state.
+        expect(names()).toContain('Play');
+        page.rootInstance.videoPlayerState = 'playing';
+        await page.waitForChanges();
+        expect(names()).toContain('ONLY-PLAY');
+      });
+      it('renders every accessible name it is given, rather than the defaults', async () => {
+        const page = await playing(() => (h("wpp-video-player-v4-7-0", { src: videoSrc, caption: captionValue, locales: {
+            playPauseButtonArealLabels: { play: 'Lire', pause: 'Suspendre' },
+            showCaptionsButtonAriaLabel: 'Afficher les sous-titres',
+            muteButtonAriaLabel: 'Couper le son',
+            enterFullscreenButtonAriaLabel: 'Plein ecran',
+            videoProgressLabel: 'Progression',
+          } })));
+        const names = () => all(page, 'wpp-action-button').map(labelOf);
+        expect(names()).toContain('Lire');
+        expect(names()).toContain('Afficher les sous-titres');
+        expect(names()).toContain('Couper le son');
+        expect(names()).toContain('Plein ecran');
+        expect(shadow(page)?.querySelector('label[class="sr-only"]')?.textContent).toBe('Progression');
+        page.rootInstance.videoPlayerState = 'playing';
+        await page.waitForChanges();
+        expect(names()).toContain('Suspendre');
+      });
+      it('keeps the default wording for the nested keys a partial override leaves out', async () => {
+        const page = await playing(() => (h("wpp-video-player-v4-7-0", { src: videoSrc, locales: {
+            videoStates: { playing: 'Lecture' },
+            playPauseButtonArealLabels: { play: 'Lire' },
+            keyboardShortcutsDescription: { title: 'Raccourcis' },
+          } })));
+        const { videoStates, playPauseButtonArealLabels, keyboardShortcutsDescription } = page.rootInstance._locales;
+        expect(videoStates).toEqual({ ...LOCALES_DEFAULTS.videoStates, playing: 'Lecture' });
+        expect(playPauseButtonArealLabels).toEqual({ ...LOCALES_DEFAULTS.playPauseButtonArealLabels, play: 'Lire' });
+        expect(keyboardShortcutsDescription).toEqual({
+          ...LOCALES_DEFAULTS.keyboardShortcutsDescription,
+          title: 'Raccourcis',
+        });
+      });
     });
   });
 });

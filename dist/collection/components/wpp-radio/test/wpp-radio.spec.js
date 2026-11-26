@@ -47,7 +47,7 @@ describe('wpp-radio', () => {
   it('renders component with label text', async () => {
     const page = await newSpecPage({
       components: [WppRadio, WppLabel, WppInternalLabel],
-      template: () => h("wpp-radio-v4-6-0", { name: "contact", value: "email", labelConfig: { text: 'Email' } }),
+      template: () => h("wpp-radio-v4-7-0", { name: "contact", value: "email", labelConfig: { text: 'Email' } }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -62,7 +62,7 @@ describe('wpp-radio', () => {
     };
     const page = await newSpecPage({
       components: [WppRadio, WppLabel, WppInternalLabel],
-      template: () => h("wpp-radio-v4-6-0", { name: "contact", value: "email", labelConfig: labelConfig }),
+      template: () => h("wpp-radio-v4-7-0", { name: "contact", value: "email", labelConfig: labelConfig }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -232,6 +232,52 @@ describe('wpp-radio', () => {
       value: 'radio-1',
       checked: true,
       name: 'test-radio',
+    });
+  });
+  describe('Testing accessibility', () => {
+    const render = async (html) => {
+      const page = await newSpecPage({ components: [WppRadio], html });
+      const input = page.root?.shadowRoot?.querySelector('input');
+      // The mock DOM never moves focus, so point the shadow root at the input as a real Tab would.
+      Object.defineProperty(page.root.shadowRoot, 'activeElement', { value: input, configurable: true });
+      return { page, input };
+    };
+    it('should emit wppChange and wppClickRadio when Space selects the radio', async () => {
+      const { page, input } = await render(`<wpp-radio name="size" value="m"></wpp-radio>`);
+      const events = [];
+      page.root?.addEventListener('wppChange', (e) => events.push(`change:${JSON.stringify(e.detail)}`));
+      page.root?.addEventListener('wppClickRadio', (e) => events.push(`click:${JSON.stringify(e.detail)}`));
+      page.root?.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+      await page.waitForChanges();
+      expect(events).toEqual([
+        'change:{"value":"m","checked":true,"name":"size"}',
+        'click:{"value":"m","checked":true}',
+      ]);
+      expect(input.checked).toBe(true);
+    });
+    it.each([
+      ['size', 'size'],
+      [undefined, 'wpp-radio'],
+    ])('should point the label at the input when the name is %s', async (name, inputId) => {
+      const { page, input } = await render(`<wpp-radio ${name ? `name="${name}"` : ''} value="s" label-config='{"text":"Small"}'></wpp-radio>`);
+      const label = page.root?.shadowRoot?.querySelector('wpp-label');
+      expect(input.id).toBe(inputId);
+      expect(label?.getAttribute('htmlfor')).toBe(inputId);
+    });
+    it('should keep a disabled radio visible to assistive tech', async () => {
+      const { input } = await render(`<wpp-radio name="size" value="l" disabled></wpp-radio>`);
+      expect(input.disabled).toBe(true);
+      expect(input.hasAttribute('aria-hidden')).toBe(false);
+    });
+    it('should keep required on a standalone radio', async () => {
+      const { input } = await render(`<wpp-radio name="size" value="s" required></wpp-radio>`);
+      expect(input.hasAttribute('required')).toBe(true);
+      expect(input.getAttribute('aria-required')).toBe('true');
+    });
+    it('should leave required off the input of a radio in a group, where the group is what is required', async () => {
+      const { input } = await render(`<wpp-radio name="size" value="s" required is-group-item></wpp-radio>`);
+      expect(input.hasAttribute('required')).toBe(false);
+      expect(input.getAttribute('aria-required')).toBe('false');
     });
   });
   describe('render snapshots', () => {

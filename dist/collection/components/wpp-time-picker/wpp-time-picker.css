@@ -119,9 +119,6 @@
 :host(.wpp-time-picker) #anchor.disabled .clock-icon {
   --wpp-icon-color: var(--wpp-grey-color-400);
 }
-:host(.wpp-time-picker) #anchor.disabled .cross-icon {
-  --wpp-icon-color: var(--wpp-grey-color-400);
-}
 :host(.wpp-time-picker) #anchor.error {
   border-color: var(--wpp-danger-color-500);
 }

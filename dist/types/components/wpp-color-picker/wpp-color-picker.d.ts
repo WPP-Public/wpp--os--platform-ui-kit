@@ -1,5 +1,5 @@
 import { EventEmitter } from '../../stencil-public-runtime';
-import { ColorPickerMode, ColorPickerType, SaturationChangeDetail, ChangeColorEventDetails } from './types';
+import { ColorPickerMode, ColorPickerType, SaturationChangeDetail, ChangeColorEventDetails, ColorPickerLocales } from './types';
 import { DropdownConfig } from '../../types/common';
 import { Theme } from '../../types/theme';
 import { Instance } from 'tippy.js';
@@ -12,6 +12,8 @@ export declare class WppColorPicker {
   private contentEl?;
   private selectTippyInstance?;
   private currentPopoverInstance?;
+  private isOpenedWithKeyboard;
+  private removedSavedColor?;
   private themeSubscription;
   host: HTMLWppColorPickerElement;
   isDropdownVisible: boolean;
@@ -72,6 +74,10 @@ export declare class WppColorPicker {
    */
   readonly disabled: boolean;
   /**
+   * Localised accessible names and texts of the picker.
+   */
+  readonly locales: Partial<ColorPickerLocales>;
+  /**
    * Emitted when the "plus" icon is clicked in the "Saved colors" section. The value emitted is in rgba format.
    */
   readonly wppSaveColor: EventEmitter<string>;
@@ -102,6 +108,7 @@ export declare class WppColorPicker {
   updateIsInComponent(value: boolean): void;
   componentWillLoad(): void;
   componentDidLoad(): void;
+  componentDidRender(): void;
   connectedCallback(): void;
   disconnectedCallback(): void;
   private checkInitialColorInList;
@@ -112,18 +119,30 @@ export declare class WppColorPicker {
   private createTippyInstance;
   private handleSegmentChange;
   private handleClickThemeColor;
+  private handleThemeColorKeyDown;
+  private isThemeColorChecked;
   private handleChangeTypeOfPicker;
   private handleSaveColor;
+  private getSavedColorValue;
   private handleClickSavedColor;
+  private handleSavedColorKeyDown;
+  private handleSaveColorKeyDown;
   private handleRightClick;
+  private openSavedColorMenu;
   private handleRemoveSavedColor;
   private handleInputOpacityChange;
   private handleInputHexChange;
   private handleInputRGBChange;
   private hasColorOpacity;
   private handleAnchorClick;
+  private handleHostKeyDown;
+  private handlePopupKeyDown;
+  private closePopupToTrigger;
+  private focusPopup;
   private onFocus;
   private onBlur;
+  private getRgbInputLabel;
+  private get _locales();
   private hostCssClasses;
   private dropdownCssClasses;
   private colorBoxCssClasses;

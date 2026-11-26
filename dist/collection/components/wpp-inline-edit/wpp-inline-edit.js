@@ -5,6 +5,11 @@ import { debounce, isEventTargetContained, mergeLocales, transformToVersionedTag
 import { LOCALES_DEFAULTS } from './const';
 export class WppInlineEdit {
   constructor() {
+    // Set when this component closes the popover itself, so `onHidden` can tell that apart from the popover
+    // hiding on its own (Tab past the last button, Escape inside it), which must also leave edit mode.
+    this.isClosingPopover = false;
+    // Set when an edit ends from the keyboard, so focus lands back on the read-mode trigger once `mode` is read.
+    this.restoreFocusOnRead = false;
     this.lastValueWithError = undefined;
     this.handleAnchorResize = (entries) => {
       for (const entry of entries) {
@@ -103,7 +108,9 @@ export class WppInlineEdit {
         }
         // Successful validation, close the popover, clear errors.
         this.setErrorState('clear', formEl);
+        this.restoreFocusOnRead = true;
         this.emitModeChange('read', 'apply');
+        this.isClosingPopover = true;
         this.popoverRef?.closePopover();
         this.lastValueWithError = undefined;
       }
@@ -114,7 +121,8 @@ export class WppInlineEdit {
         this.lastValueWithError = this.value;
         // Put input / textarea in error state to display appropiate border-color.
         this.setErrorState('error', formEl, error);
-        formEl.setFocus();
+        // The user did not move focus to the field, so draw its focus ring to show where focus went.
+        formEl.setFocus(true);
         // If error already exists and just the message has changed, display the tooltip again.
         if (this.tooltipInstance) {
           this.tooltipInstance.show();
@@ -137,8 +145,11 @@ export class WppInlineEdit {
       if (this.isPendingRequest || isEventTargetContained(this.host, event))
         return;
       this.lastValueWithError = undefined;
+      this.isClosingPopover = true;
       this.popoverRef?.closePopover();
       if (!(event?.target).closest('[slot="form-element"]')) {
+        if (reason === 'cancel')
+          this.restoreFocusOnRead = true;
         if (reason === 'cancel' || reason === 'outsideClick') {
           this.getFormElement()?.setValue(this.initialValue);
         }
@@ -154,10 +165,72 @@ export class WppInlineEdit {
       popover: true,
       'full-width': this.mode === InlineEditModeEnum.EDIT && this.inputWidth !== 'auto' && this.inputWidth !== undefined,
     });
+    // Ends the edit without a pointer event, for Escape, Shift+Tab and the popover hiding on its own.
+    this.cancelEdit = (reason, restoreFocus) => {
+      if (this.isPendingRequest)
+        return;
+      this.lastValueWithError = undefined;
+      this.restoreFocusOnRead = restoreFocus;
+      this.isClosingPopover = true;
+      this.popoverRef?.closePopover();
+      this.getFormElement()?.setValue(this.initialValue);
+      this.emitModeChange('read', reason);
+    };
+    // The field's own tab stops inside its shadow root: the native control and wpp-input's clear button, which it
+    // shows while the field has text and focus.
+    this.getFieldTabStops = () => Array.from(this.getFormElement()?.shadowRoot?.querySelectorAll('input, textarea, [part="icon-cross"]') ?? []);
     this.onKeyDownFormEl = (event) => {
+      const fieldTabStops = this.getFieldTabStops();
+      const stopIndex = fieldTabStops.indexOf(event.composedPath()[0]);
       if (event.key === 'Enter') {
+        // Enter on the clear button clears the field, it does not confirm it.
+        if (stopIndex > 0)
+          return;
         this.handleAccept();
+        return;
       }
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
+        this.cancelEdit('cancel', true);
+        return;
+      }
+      if (event.key !== 'Tab')
+        return;
+      // Shift+Tab from the first stop leaves the field backwards, which is the same as moving focus outside it.
+      if (event.shiftKey) {
+        if (stopIndex <= 0)
+          this.cancelEdit('outsideClick', false);
+        return;
+      }
+      // Tab moves between the field's own stops as usual, so the clear button stays reachable.
+      if (stopIndex !== -1 && stopIndex < fieldTabStops.length - 1)
+        return;
+      // The buttons render in the popover, outside the field's tab order, so Tab has to hand focus to them.
+      const nextButton = this.confirmButtonRef?.disabled ? this.cancelButtonRef : this.confirmButtonRef;
+      if (nextButton) {
+        event.preventDefault();
+        void nextButton.setFocus();
+      }
+    };
+    // The popover sends Shift+Tab from its first button to the trigger wrapper, which cannot take focus in edit mode,
+    // so focus goes back to the field's last stop instead, the reverse of Tab above. wpp-input only shows its clear
+    // button while it is focused or hovered, so that is usually the input itself.
+    this.onKeyDownButtons = (event) => {
+      const firstButton = this.confirmButtonRef?.disabled ? this.cancelButtonRef : this.confirmButtonRef;
+      const lastFieldTabStop = this.getFieldTabStops().pop();
+      if (event.key !== 'Tab' || !event.shiftKey || event.target !== firstButton || !lastFieldTabStop)
+        return;
+      event.preventDefault();
+      lastFieldTabStop.focus();
+    };
+    // The read-mode trigger is a role="button" div, so Enter and Space have to open the editor themselves; they
+    // click the same content a pointer does, which also opens the popover.
+    this.onKeyDownReadTrigger = (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ')
+        return;
+      event.preventDefault();
+      this.contentRef?.click();
     };
     this.viewTextCssClasses = () => ({
       'view-text': true,
@@ -169,9 +242,11 @@ export class WppInlineEdit {
     };
     this.renderViewContent = () => {
       const shouldShowTooltip = this.isViewTextTruncated && this.value;
-      return shouldShowTooltip ? (h("wpp-tooltip-v4-6-0", { class: "view-tooltip", text: this.value }, this.renderViewText())) : (this.renderViewText());
+      return shouldShowTooltip ? (h("wpp-tooltip-v4-7-0", { class: "view-tooltip", text: this.value }, this.renderViewText())) : (this.renderViewText());
     };
-    this.renderTriggerElement = () => (h("div", { tabIndex: 0, role: "button", class: "trigger", "aria-label": this.value || this.placeholder }, this.mode === InlineEditModeEnum.EDIT ? (h("div", { class: "wrapper", part: "wrapper" }, h("div", { class: "form-element", onKeyDown: this.onKeyDownFormEl }, h("slot", { name: "form-element" })))) : (h("div", { class: "content", onClick: () => this.emitModeChange(InlineEditModeEnum.EDIT), part: "content" }, h("div", { class: "content-bg", part: "content-bg" }), this.renderViewContent(), h("wpp-icon-edit-v4-6-0", { "aria-hidden": "true" })))));
+    // Read and edit mode render different, keyed elements: the read trigger is a button, while in edit mode the
+    // field sits in a group, so a button never contains the textbox and the old button's attributes never linger.
+    this.renderTriggerElement = () => this.mode === InlineEditModeEnum.EDIT ? (h("div", { key: "edit", role: "group", class: "trigger" }, h("div", { class: "wrapper", part: "wrapper" }, h("div", { class: "form-element", onKeyDown: this.onKeyDownFormEl }, h("slot", { name: "form-element" }))))) : (h("div", { key: "read", ref: el => (this.readTriggerRef = el), tabIndex: 0, role: "button", class: "trigger", "aria-label": this.value || this.placeholder, onKeyDown: this.onKeyDownReadTrigger }, h("div", { class: "content", ref: el => (this.contentRef = el), onClick: () => this.emitModeChange(InlineEditModeEnum.EDIT), part: "content" }, h("div", { class: "content-bg", part: "content-bg" }), this.renderViewContent(), h("wpp-icon-edit-v4-7-0", { "aria-hidden": "true" }))));
     this.initialValue = undefined;
     this.inputValue = undefined;
     this.formType = 'input';
@@ -222,6 +297,14 @@ export class WppInlineEdit {
         ? 'textarea'
         : 'input';
   }
+  // The read-mode trigger only exists once the mode change has rendered, so focus is handed back here rather than
+  // from the `mode` watcher.
+  componentDidRender() {
+    if (this.restoreFocusOnRead && this.mode !== InlineEditModeEnum.EDIT && this.readTriggerRef) {
+      this.restoreFocusOnRead = false;
+      this.readTriggerRef.focus();
+    }
+  }
   componentDidLoad() {
     if (!this.triggerContainerRef)
       return;
@@ -240,7 +323,7 @@ export class WppInlineEdit {
   }
   render() {
     const inlineWidth = this.mode === InlineEditModeEnum.EDIT && this.inputWidth !== 'auto' && this.inputWidth !== undefined;
-    return (h(Host, { class: this.inlineEditCssClasses(), exportparts: "label, wrapper, input, textarea, buttons, view-text, content, content-bg" }, h("wpp-popover-v4-6-0", { ref: ref => (this.popoverRef = ref), externalClass: "inline-edit-popover", exportparts: "content", class: this.inlineEditPopoverCssClasses(), style: { width: inlineWidth ? this.inputWidth : '' }, config: {
+    return (h(Host, { class: this.inlineEditCssClasses(), exportparts: "label, wrapper, input, textarea, buttons, view-text, content, content-bg" }, h("wpp-popover-v4-7-0", { ref: ref => (this.popoverRef = ref), externalClass: "inline-edit-popover", exportparts: "content", class: this.inlineEditPopoverCssClasses(), style: { width: inlineWidth ? this.inputWidth : '' }, config: {
         placement: this.formType === 'input' ? 'right-start' : 'bottom-start',
         offset: [0, 4],
         hideOnClick: false,
@@ -269,6 +352,12 @@ export class WppInlineEdit {
           }
         },
         onHidden: (instance) => {
+          // Tab past the last button or Escape inside the popover hides it without going through this
+          // component, which would leave it in edit mode with no buttons. Treat that like leaving the field.
+          if (!this.isClosingPopover && this.mode === InlineEditModeEnum.EDIT) {
+            this.cancelEdit('outsideClick', true);
+          }
+          this.isClosingPopover = false;
           const formEl = this.getFormElement();
           if (!formEl)
             return;
@@ -278,7 +367,7 @@ export class WppInlineEdit {
           }
         },
         onClickOutside: (_, e) => this.handleClose(e, 'outsideClick'),
-      } }, h("div", { slot: "trigger-element", ref: elRef => (this.triggerContainerRef = elRef), class: "trigger-element" }, this.errorMessage && this.mode === InlineEditModeEnum.EDIT ? (h("wpp-tooltip-v4-6-0", { class: 'wpp-anchor-toolip', error: true, text: this.errorMessage, config: {
+      } }, h("div", { slot: "trigger-element", role: "group", ref: elRef => (this.triggerContainerRef = elRef), class: "trigger-element" }, this.errorMessage && this.mode === InlineEditModeEnum.EDIT ? (h("wpp-tooltip-v4-7-0", { class: 'wpp-anchor-toolip', error: true, text: this.errorMessage, config: {
         showOnCreate: true,
         onCreate: instance => {
           this.tooltipInstance = instance;
@@ -288,10 +377,10 @@ export class WppInlineEdit {
             instance.popperInstance?.update();
           }, 20);
         },
-      } }, this.renderTriggerElement())) : (this.renderTriggerElement())), h("div", { class: "wpp-buttons-container", part: "buttons" }, h("wpp-action-button-v4-6-0", { disabled: this.isPendingRequest || this.value === this.lastValueWithError, variant: "inverted", onClick: this.handleAccept }, h("wpp-icon-done-v4-6-0", { slot: "icon-start" })), h("wpp-action-button-v4-6-0", { disabled: this.isPendingRequest, variant: "inverted", onClick: e => this.handleClose(e, 'cancel') }, h("wpp-icon-cross-v4-6-0", { slot: "icon-start" }))))));
+      } }, this.renderTriggerElement())) : (this.renderTriggerElement())), h("div", { class: "wpp-buttons-container", part: "buttons", onKeyDown: this.onKeyDownButtons }, h("wpp-action-button-v4-7-0", { ref: el => (this.confirmButtonRef = el), disabled: this.isPendingRequest || this.value === this.lastValueWithError, variant: "inverted", ariaProps: { label: this._locales.confirmButtonLabel }, onClick: this.handleAccept }, h("wpp-icon-done-v4-7-0", { slot: "icon-start" })), h("wpp-action-button-v4-7-0", { ref: el => (this.cancelButtonRef = el), disabled: this.isPendingRequest, variant: "inverted", ariaProps: { label: this._locales.cancelButtonLabel }, onClick: e => this.handleClose(e, 'cancel') }, h("wpp-icon-cross-v4-7-0", { slot: "icon-start" })))), h("span", { class: "sr-only", "aria-live": "polite" }, this.mode === InlineEditModeEnum.EDIT ? this.errorMessage : '')));
   }
   static get is() { return "wpp-inline-edit"; }
-  static get registryIs() { return "wpp-inline-edit-v4-6-0"; }
+  static get registryIs() { return "wpp-inline-edit-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -409,7 +498,7 @@ export class WppInlineEdit {
         "mutable": false,
         "complexType": {
           "original": "Partial<InlineEditLocales>",
-          "resolved": "{ defaultErrorMessage?: string | undefined; }",
+          "resolved": "{ defaultErrorMessage?: string | undefined; confirmButtonLabel?: string | undefined; cancelButtonLabel?: string | undefined; }",
           "references": {
             "Partial": {
               "location": "global",

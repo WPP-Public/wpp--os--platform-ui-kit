@@ -32,6 +32,10 @@ export const BarChart = () => html `
       title: {
         text: 'Bar chart',
       },
+      // Lets ECharts describe the chart to screen readers; a canvas has no text of its own
+      aria: {
+        enabled: true,
+      },
       color: ['#BC71FB'],
       tooltip: {},
       legend: {

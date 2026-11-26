@@ -1,4 +1,7 @@
 export type OrientationType = 'horizontal' | 'vertical';
+export interface StepperLocales {
+  stepLabel: (index: number) => string;
+}
 export interface StepLocales {
   optional: string;
 }

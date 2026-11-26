@@ -1,6 +1,6 @@
 import { ThemeColor } from '../../types/theme';
 import { DropdownConfig } from '../../types/common';
-import { ColorSection, HexValueWithOpacity, ThemeSection } from './types';
+import { ColorPickerLocales, ColorSection, HexValueWithOpacity, ThemeSection } from './types';
 export declare const DEFAULT_VALUE_RGBA = "rgba(217, 217, 217, 1)";
 export declare const DEFAULT_VALUE_HEX = "#D9D9D9";
 export declare const MAXIMUM_NUMBER_OF_SAVED_COLORS = 33;
@@ -53,3 +53,15 @@ export declare function hexToHsv(hex: string): {
 };
 export declare const rgbToHex: (r: number, g: number, b: number) => string;
 export declare function hsvToHex(h: number, s: number, v: number): string;
+export declare const LOCALES_DEFAULTS: ColorPickerLocales;
+/**
+ * Left offset of a slider marker for a value ratio in [0, 1], kept 8px inside each end so the marker stays on the
+ * rounded track. Resolved by CSS against the track rather than measured, because the sliders first render inside the
+ * closed popover, where the canvas has no size yet.
+ */
+export declare const getSliderMarkerLeft: (ratio: number) => string;
+/**
+ * Next value for a key press on a slider, following the W3C APG slider pattern: arrows move by `step`,
+ * Page Up/Down by `pageStep`, Home/End jump to the ends. Returns `undefined` for any other key.
+ */
+export declare const getSliderKeyValue: (key: string, value: number, min: number, max: number, step?: number, pageStep?: number) => number | undefined;

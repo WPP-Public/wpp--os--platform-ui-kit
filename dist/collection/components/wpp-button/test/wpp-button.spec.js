@@ -76,7 +76,7 @@ describe('wpp-button', () => {
     it('should allow aria-haspopup to be overridden on a menu button', async () => {
       const page = await newSpecPage({
         components: [WppButton],
-        template: () => (h("wpp-button-v4-6-0", { isMenuBtn: true, ariaProps: { haspopup: 'dialog' } }, "Button")),
+        template: () => (h("wpp-button-v4-7-0", { isMenuBtn: true, ariaProps: { haspopup: 'dialog' } }, "Button")),
       });
       expect(page.root?.shadowRoot?.querySelector('button')?.getAttribute('aria-haspopup')).toBe('dialog');
     });
@@ -200,7 +200,7 @@ describe('wpp-button', () => {
         const form = document.createElement('form');
         const page = await newSpecPage({
           components: [WppButton],
-          template: () => h("wpp-button-v4-6-0", { form: form, type: "submit" }),
+          template: () => h("wpp-button-v4-7-0", { form: form, type: "submit" }),
         });
         const mockEvent = new Event('click');
         form.requestSubmit = jest.fn();
@@ -213,7 +213,7 @@ describe('wpp-button', () => {
         const form = document.createElement('form');
         const page = await newSpecPage({
           components: [WppButton],
-          template: () => h("wpp-button-v4-6-0", { form: form, type: "reset" }),
+          template: () => h("wpp-button-v4-7-0", { form: form, type: "reset" }),
         });
         const mockEvent = new Event('click');
         form.reset = jest.fn();
@@ -224,7 +224,7 @@ describe('wpp-button', () => {
       it('should submit when form params as a string (form ID)', async () => {
         const page = await newSpecPage({
           components: [WppButton],
-          template: () => (h("form", { id: "test-form" }, h("wpp-button-v4-6-0", { form: "test-form", type: "submit" }))),
+          template: () => (h("form", { id: "test-form" }, h("wpp-button-v4-7-0", { form: "test-form", type: "submit" }))),
         });
         const form = page.root?.closest('form');
         const mockEvent = new Event('click');
@@ -240,7 +240,7 @@ describe('wpp-button', () => {
       it('should submit when form params is not defined', async () => {
         const page = await newSpecPage({
           components: [WppButton],
-          template: () => (h("form", null, h("wpp-button-v4-6-0", { type: "submit" }))),
+          template: () => (h("form", null, h("wpp-button-v4-7-0", { type: "submit" }))),
         });
         const form = page.root?.closest('form');
         const mockEvent = new Event('click');
@@ -379,6 +379,50 @@ describe('wpp-button', () => {
         html: `<wpp-button variant="secondary" inverted></wpp-button>`,
       });
       expect(page.rootInstance.getSpinnerColor()).toBe('var(--wpp-grey-color-000)');
+    });
+  });
+  describe('Testing accessibility', () => {
+    const getButton = (page) => page.root?.shadowRoot?.querySelector('button');
+    it('should not expose the transient pressed visual as a toggle state', async () => {
+      const page = await newSpecPage({
+        components: [WppButton],
+        html: `<wpp-button>Save</wpp-button>`,
+      });
+      expect(getButton(page).hasAttribute('aria-pressed')).toBe(false);
+      page.root?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      await page.waitForChanges();
+      // The pressed fill is on, but a plain button is still not a toggle button.
+      expect(getButton(page).classList.contains('pressed')).toBe(true);
+      expect(getButton(page).hasAttribute('aria-pressed')).toBe(false);
+    });
+    it('should expose a real toggle state passed through ariaProps', async () => {
+      const page = await newSpecPage({
+        components: [WppButton],
+        template: () => h("wpp-button-v4-7-0", { ariaProps: { pressed: true } }, "Bold"),
+      });
+      expect(getButton(page).getAttribute('aria-pressed')).toBe('true');
+    });
+    it('should paint the focus ring when focus is moved here by script after a key press', async () => {
+      const page = await newSpecPage({
+        components: [WppButton],
+        html: `<wpp-button>Save</wpp-button>`,
+      });
+      // The browser decides `:focus-visible`; the mock DOM cannot, so answer for it.
+      getButton(page).matches = (selector) => selector === ':focus-visible';
+      page.root?.dispatchEvent(new FocusEvent('focus'));
+      await page.waitForChanges();
+      expect(getButton(page).classList.contains('tab-focus')).toBe(true);
+    });
+    it('should not paint the focus ring when the browser would not show focus', async () => {
+      const page = await newSpecPage({
+        components: [WppButton],
+        html: `<wpp-button>Save</wpp-button>`,
+      });
+      getButton(page).matches = () => false;
+      page.root?.dispatchEvent(new MouseEvent('mousedown'));
+      page.root?.dispatchEvent(new FocusEvent('focus'));
+      await page.waitForChanges();
+      expect(getButton(page).classList.contains('tab-focus')).toBe(false);
     });
   });
 });

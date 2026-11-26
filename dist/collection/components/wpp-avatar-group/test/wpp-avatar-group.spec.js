@@ -1,8 +1,21 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { WppAvatarGroup } from '../wpp-avatar-group';
+import { WppAvatar } from '../../wpp-avatar/wpp-avatar';
 import { h } from '@stencil/core';
 import { AVATAR_COLORS_VARIANTS } from '../const';
 describe('wpp-avatar-group', () => {
+  it('passes avatarsIndex to the focusable trigger of tooltip avatars', async () => {
+    const page = await newSpecPage({
+      components: [WppAvatarGroup, WppAvatar],
+      template: () => (h("wpp-avatar-group-v4-7-0", { withTooltip: true, avatarsIndex: -1, avatars: [{ name: 'Ann Lee' }, { name: 'Bo Chan' }] })),
+    });
+    const triggers = Array.from(page.root?.shadowRoot?.querySelectorAll('wpp-avatar') ?? []).map(avatar => avatar.shadowRoot?.querySelector('[part="content"]'));
+    expect(triggers).toHaveLength(2);
+    triggers.forEach(trigger => {
+      expect(trigger?.getAttribute('role')).toBe('button');
+      expect(trigger?.getAttribute('tabindex')).toBe('-1');
+    });
+  });
   it('renders component', async () => {
     const page = await newSpecPage({
       components: [WppAvatarGroup],
@@ -39,7 +52,7 @@ describe('wpp-avatar-group', () => {
     ];
     const page = await newSpecPage({
       components: [WppAvatarGroup],
-      template: () => h("wpp-avatar-group-v4-6-0", { avatars: avatars }),
+      template: () => h("wpp-avatar-group-v4-7-0", { avatars: avatars }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -121,7 +134,7 @@ describe('wpp-avatar-group', () => {
   it('should forward the icon prop to the rendered avatar', async () => {
     const page = await newSpecPage({
       components: [WppAvatarGroup],
-      template: () => (h("wpp-avatar-group-v4-6-0", { variant: "square", avatars: [{ name: 'Premium', icon: 'wpp-icon-premium' }] })),
+      template: () => (h("wpp-avatar-group-v4-7-0", { variant: "square", avatars: [{ name: 'Premium', icon: 'wpp-icon-premium' }] })),
     });
     await page.waitForChanges();
     const avatar = page.root?.shadowRoot?.querySelector('wpp-avatar');
@@ -276,7 +289,7 @@ describe('wpp-avatar-group', () => {
       ];
       const page = await newSpecPage({
         components: [WppAvatarGroup],
-        template: () => h("wpp-avatar-group-v4-6-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
+        template: () => h("wpp-avatar-group-v4-7-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
       });
       await page.waitForChanges();
       const listItemC = page.root?.shadowRoot?.querySelector('wpp-list-item[value="C"]');
@@ -297,7 +310,7 @@ describe('wpp-avatar-group', () => {
       ];
       const page = await newSpecPage({
         components: [WppAvatarGroup],
-        template: () => h("wpp-avatar-group-v4-6-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
+        template: () => h("wpp-avatar-group-v4-7-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
       });
       await page.waitForChanges();
       const listItemC = page.root?.shadowRoot?.querySelector('wpp-list-item[value="C"]');
@@ -318,7 +331,7 @@ describe('wpp-avatar-group', () => {
       ];
       const page = await newSpecPage({
         components: [WppAvatarGroup],
-        template: () => h("wpp-avatar-group-v4-6-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
+        template: () => h("wpp-avatar-group-v4-7-0", { avatars: avatars, maxAvatarsToDisplay: 2 }),
       });
       await page.waitForChanges();
       const listItemC = page.root?.shadowRoot?.querySelector('wpp-list-item[value="C"]');

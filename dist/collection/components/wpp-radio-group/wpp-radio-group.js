@@ -12,7 +12,10 @@ export class WppRadioGroup {
         this.items = Array.from(this.host.querySelectorAll('.wpp-radio'));
         this.items.forEach((radio) => {
           radio.checked = this.value === radio.value;
-          radio.required = true;
+          // Only the group label shows "(Optional)". Forcing `required` onto every radio did that too, but each
+          // radio sits in its own shadow root, so the browser treated every unselected one as an unanswered
+          // required group and announced it as invalid.
+          radio.isGroupItem = true;
         });
         this.syncTabIndexes();
       }, 0);
@@ -119,10 +122,14 @@ export class WppRadioGroup {
     });
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onKeyDown: this.onKeyDown, onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "inner" }, h("div", { class: "group-container", role: "radiogroup", "aria-labelledby": this.ariaProps.labelledby, ...(!!this.message && this.ariaProps.describedby ? { 'aria-describedby': this.ariaProps.describedby } : {}) }, this.labelConfig?.text && (h("wpp-label-v4-6-0", { class: "label", tag: "h3", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, id: this.ariaProps.labelledby })), h("div", { class: this.contentCssClasses(), style: this.gap ? { gap: `${this.gap}px` } : {} }, h("slot", { onSlotchange: this.checkRadioElements, part: "inner" })), !!this.message && (h("wpp-inline-message-v4-6-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, id: this.ariaProps.describedby })))));
+    // A custom ariaProps object replaces the default ids, so fall back to them rather than leaving the group
+    // unnamed and the message unreferenced.
+    const labelId = this.ariaProps.labelledby ?? 'label-id';
+    const messageId = this.ariaProps.describedby ?? 'description-id';
+    return (h(Host, { class: this.hostCssClasses(), onKeyDown: this.onKeyDown, onFocus: this.onFocus, onBlur: this.onBlur, exportparts: "inner" }, h("div", { class: "group-container", role: "radiogroup", "aria-labelledby": this.labelConfig?.text ? labelId : undefined, "aria-label": this.ariaProps.label, "aria-describedby": this.message ? messageId : undefined, "aria-required": this.required ? 'true' : undefined }, this.labelConfig?.text && (h("wpp-label-v4-7-0", { class: "label", tag: "h3", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, id: labelId })), h("div", { class: this.contentCssClasses(), style: this.gap ? { gap: `${this.gap}px` } : {} }, h("slot", { onSlotchange: this.checkRadioElements, part: "inner" })), !!this.message && (h("wpp-inline-message-v4-7-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, id: messageId })))));
   }
   static get is() { return "wpp-radio-group"; }
-  static get registryIs() { return "wpp-radio-group-v4-6-0"; }
+  static get registryIs() { return "wpp-radio-group-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

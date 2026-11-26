@@ -5,6 +5,7 @@ import { ModalCloseReason } from '../types';
 import * as utils from '../../../utils/utils';
 import { ANIMATION_PROPERTY_NAME } from '../../../common/consts';
 import * as themeUtils from '../../../utils/subscribe-to-theme';
+import * as dialogFocus from '../../../utils/dialog-focus';
 describe('wpp-modal', () => {
   it('Should render defaut modal', async () => {
     const page = await newSpecPage({
@@ -39,7 +40,7 @@ describe('wpp-modal accessible name', () => {
   it('honours a consumer supplied ariaProps.labelledby instead of deriving a name', async () => {
     const page = await newSpecPage({
       components: [WppModal],
-      template: () => (h("wpp-modal-v4-6-0", { open: true, ariaProps: { role: 'dialog', labelledby: 'their-title' } }, h("div", { slot: "header" }, "Delete report"))),
+      template: () => (h("wpp-modal-v4-7-0", { open: true, ariaProps: { role: 'dialog', labelledby: 'their-title' } }, h("div", { slot: "header" }, "Delete report"))),
     });
     expect(page.root).toEqualAttribute('aria-labelledby', 'their-title');
     expect(page.root?.hasAttribute('aria-label')).toBe(false);
@@ -47,7 +48,7 @@ describe('wpp-modal accessible name', () => {
   it('honours a consumer supplied ariaProps.label', async () => {
     const page = await newSpecPage({
       components: [WppModal],
-      template: () => (h("wpp-modal-v4-6-0", { open: true, ariaProps: { role: 'dialog', label: 'Their label' } }, h("div", { slot: "header" }, "Delete report"))),
+      template: () => (h("wpp-modal-v4-7-0", { open: true, ariaProps: { role: 'dialog', label: 'Their label' } }, h("div", { slot: "header" }, "Delete report"))),
     });
     expect(page.root).toEqualAttribute('aria-label', 'Their label');
   });
@@ -262,7 +263,7 @@ describe('wpp-modal osBarCompatible', () => {
     const spy = jest.spyOn(utils, 'getOsBarOffsetHeight').mockReturnValue(72);
     const page = await newSpecPage({
       components: [WppModal],
-      template: () => h("wpp-modal-v4-6-0", { osBarCompatible: true }),
+      template: () => h("wpp-modal-v4-7-0", { osBarCompatible: true }),
     });
     expect(page.root?.style.getPropertyValue('--wpp-modal-top-offset')).toBe('72px');
     spy.mockRestore();
@@ -270,7 +271,7 @@ describe('wpp-modal osBarCompatible', () => {
   it('applies wpp-os-bar-compatible CSS class when osBarCompatible is true', async () => {
     const page = await newSpecPage({
       components: [WppModal],
-      template: () => h("wpp-modal-v4-6-0", { osBarCompatible: true }),
+      template: () => h("wpp-modal-v4-7-0", { osBarCompatible: true }),
     });
     expect(page.root).toHaveClass('wpp-os-bar-compatible');
   });
@@ -285,7 +286,7 @@ describe('wpp-modal osBarCompatible', () => {
     const spy = jest.spyOn(utils, 'getOsBarOffsetHeight').mockReturnValue(64);
     const page = await newSpecPage({
       components: [WppModal],
-      template: () => h("wpp-modal-v4-6-0", { osBarCompatible: true }),
+      template: () => h("wpp-modal-v4-7-0", { osBarCompatible: true }),
     });
     expect(page.root?.style.getPropertyValue('--wpp-modal-top-offset')).toBe('64px');
     spy.mockRestore();
@@ -324,7 +325,7 @@ describe('wpp-modal osBarCompatible', () => {
     it('Should render only 1 button in the actions section', async () => {
       const page = await newSpecPage({
         components: [WppModal],
-        template: () => (h("wpp-modal-v4-6-0", { actionsConfig: {
+        template: () => (h("wpp-modal-v4-7-0", { actionsConfig: {
             primaryButtonConfig: {
               variant: 'primary',
               label: 'Submit',
@@ -339,7 +340,7 @@ describe('wpp-modal osBarCompatible', () => {
     it('Should render 2 buttons in the actions section', async () => {
       const page = await newSpecPage({
         components: [WppModal],
-        template: () => (h("wpp-modal-v4-6-0", { actionsConfig: {
+        template: () => (h("wpp-modal-v4-7-0", { actionsConfig: {
             primaryButtonConfig: {
               variant: 'primary',
               label: 'Submit',
@@ -358,7 +359,7 @@ describe('wpp-modal osBarCompatible', () => {
     it('Should render the `actions` slot when there is no `actionsConfig` provided', async () => {
       const page = await newSpecPage({
         components: [WppModal],
-        template: () => h("wpp-modal-v4-6-0", null),
+        template: () => h("wpp-modal-v4-7-0", null),
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       await page.waitForChanges();
@@ -462,5 +463,25 @@ describe('wpp-modal dialog focus', () => {
     await page.waitForChanges();
     await flushTimers();
     expect(triggerFocus).not.toHaveBeenCalled();
+  });
+});
+describe('wpp-modal focus trap', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+  it('wraps Tab around the dialog: the end sentinel focuses its first control and the start sentinel its last', async () => {
+    const focusDialogEdge = jest.spyOn(dialogFocus, 'focusDialogEdge').mockImplementation(() => { });
+    const page = await newSpecPage({
+      components: [WppModal],
+      html: `<wpp-modal open></wpp-modal>`,
+    });
+    await page.waitForChanges();
+    const shadowRoot = page.root.shadowRoot;
+    const [startSentinel, endSentinel] = Array.from(shadowRoot.querySelectorAll('.focus-sentinel'));
+    const dialog = shadowRoot.querySelector('.modal');
+    endSentinel.dispatchEvent(new Event('focus'));
+    expect(focusDialogEdge).toHaveBeenLastCalledWith(dialog, 'first');
+    startSentinel.dispatchEvent(new Event('focus'));
+    expect(focusDialogEdge).toHaveBeenLastCalledWith(dialog, 'last');
   });
 });

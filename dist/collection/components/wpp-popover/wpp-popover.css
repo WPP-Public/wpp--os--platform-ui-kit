@@ -24,6 +24,7 @@
   scrollbar-width: thin;
   position: relative;
   overflow: hidden;
+  vertical-align: top;
 }
 :host .wpp-popover-content.wpp-with-footer {
   overflow: hidden;

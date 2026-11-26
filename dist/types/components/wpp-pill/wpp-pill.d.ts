@@ -1,6 +1,6 @@
 import { EventEmitter } from '../../stencil-public-runtime';
 import { AriaProps, FOCUS_TYPE } from '../../types/common';
-import { PillChangeEventDetail, PillSize, PillState, PillType, PillValue } from './types';
+import { PillChangeEventDetail, PillLocaleInterface, PillSize, PillState, PillType, PillValue } from './types';
 interface FocusType {
   wrapper: FOCUS_TYPE;
   'icon-close': FOCUS_TYPE;
@@ -20,11 +20,11 @@ interface FocusType {
  * @part remove-icon - remove icon element
  */
 export declare class WppPill {
-  private inputEl?;
-  private crossIconRef?;
   private labelRef?;
   private resizeObserver?;
   private resizeObserverCallback?;
+  private iconCrossRef;
+  private iconDragRef;
   host: HTMLWppPillElement;
   hasIconStartSlot: boolean;
   hasSquareIcon: boolean;
@@ -37,6 +37,7 @@ export declare class WppPill {
   readonly value: PillValue;
   /**
    * Defines the pill size.
+   * @deprecated - the pills will always display in only 1 size.
    */
   readonly size: PillSize;
   /**
@@ -64,6 +65,11 @@ export declare class WppPill {
    * Contains the pill `aria-` props.
    */
   readonly ariaProps: AriaProps;
+  /**
+   * Indicates locales for the pill. Holds the accessible names of the close and drag icon buttons and the
+   * `aria-roledescription` of a `draggable` pill. Partial overrides are merged with the English defaults.
+   */
+  readonly locales: Partial<PillLocaleInterface>;
   /**
    * Defines the pill name.
    */
@@ -99,6 +105,10 @@ export declare class WppPill {
    */
   wppDragPress: EventEmitter<MouseEvent>;
   /**
+   * Method that sets focus on the native button.
+   */
+  setFocus(): Promise<void>;
+  /**
    * Moves keyboard focus to the pill's remove icon and paints its focus ring.
    *
    * The ring is a `tab-focus` class this component only sets from its own Tab keyup, so a parent
@@ -107,9 +117,14 @@ export declare class WppPill {
    * has no remove icon to focus.
    */
   setRemoveIconFocus(): Promise<void>;
-  componentWillLoad(): void;
+  /**
+   * Method that sets focus on the drag icon button. Used by the pill group to restore focus after the pills are
+   * re-ordered. `withFocusRing` shows the keyboard focus ring (keyboard re-ordering); pass `false` after a mouse drag.
+   */
+  setFocusDragIcon(withFocusRing?: boolean): Promise<void>;
   componentDidLoad(): void;
   disconnectedCallback(): void;
+  private get _locales();
   private getUpdatedFocusInfo;
   private updateSlotData;
   private makeIconStartNonInteractive;
@@ -118,10 +133,16 @@ export declare class WppPill {
   private onBlur;
   private onMouseDown;
   private onKeyUp;
+  private handleKeyDown;
   private onClose;
   private onCloseKeyDown;
   private onDragPress;
-  private setFocus;
+  /**
+   * Keeps focus on the pill's own control after a click: the host for `single` / `multiple` (it carries the role, state
+   * and keyboard handling), the drag icon button for `draggable`. Without this, clicking slotted `icon-start` content
+   * (e.g. an avatar with `tabindex="-1"`) would focus that content.
+   */
+  private focusHost;
   private updateComponentState;
   private checkTabIndex;
   private getLabelText;
@@ -130,6 +151,10 @@ export declare class WppPill {
   private renderLabel;
   private setLabelRef;
   private findLabelEl;
+  private getPillRole;
+  private getAriaRoleDescription;
+  private getAriaChecked;
+  private getListenersForDraggable;
   private cssClasses;
   private slotCssClasses;
   private hostCssClasses;

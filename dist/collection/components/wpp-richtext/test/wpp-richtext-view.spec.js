@@ -14,6 +14,12 @@ jest.mock('@tiptap/core', () => {
     constructor(options) {
       this.state = { doc: { textContent: '' } };
       this.options = options;
+      // Mirror ProseMirror: the editing surface is marked as a textbox even
+      // when read-only, so the component can strip it for the static view.
+      const dom = document.createElement('div');
+      dom.setAttribute('role', 'textbox');
+      dom.setAttribute('aria-multiline', 'true');
+      this.view = { dom };
     }
     get isEmpty() {
       return true;
@@ -87,6 +93,15 @@ describe('wpp-richtext', () => {
         html: '<wpp-richtext-view value="<p>Test</p>"></wpp-richtext-view>',
       });
       expect(page.rootInstance.value).toBe('<p>Test</p>');
+    });
+    it('should not expose the read-only view as an ARIA textbox', async () => {
+      page = await newSpecPage({
+        components: [WppRichtextView],
+        html: '<wpp-richtext-view value="<p>Test</p>"></wpp-richtext-view>',
+      });
+      const viewDom = page.rootInstance.tiptapEditor.view.dom;
+      expect(viewDom.hasAttribute('role')).toBe(false);
+      expect(viewDom.hasAttribute('aria-multiline')).toBe(false);
     });
     it('should accept format prop', async () => {
       page = await newSpecPage({

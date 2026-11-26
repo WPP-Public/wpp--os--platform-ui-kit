@@ -3,8 +3,13 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
-const utils = require('./utils-a3ab9816.js');
+const utils = require('./utils-8b2c3bc1.js');
+const utils$1 = require('./utils-6bd71e6d.js');
 require('./consts-d8f5ef98.js');
+
+const LOCALES_DEFAULTS = {
+  stepLabel: (index) => `Step ${index}`,
+};
 
 const wppStepperCss = ":host{display:block;min-width:70px}:host([orientation=horizontal]){position:relative;width:100%;overflow:hidden;--stepper-translate-position:var(--wpp-stepper-translate-position, 0)}:host([orientation=vertical]){--vertical-stepper-width:var(--wpp-vertical-stepper-width, 158px);width:var(--vertical-stepper-width)}.stepper{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start}.orientation-horizontal{-ms-flex-direction:row;flex-direction:row;width:9999px;-webkit-transform:translateX(var(--stepper-translate-position));transform:translateX(var(--stepper-translate-position));-webkit-transition:0.5s ease-in-out;transition:0.5s ease-in-out}.step-indicator{position:absolute;top:0;right:0;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:32px;height:24px;color:var(--wpp-grey-color-800);background-color:var(--wpp-grey-color-300);border-radius:24px;-webkit-transition:0.5s ease-in-out;transition:0.5s ease-in-out;font-size:var(--wpp-typography-xs-strong-font-size, 12px);line-height:var(--wpp-typography-xs-strong-line-height, 20px);font-weight:var(--wpp-typography-xs-strong-font-weight, 700);color:var(--wpp-typography-xs-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-xs-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-xs-strong-letter-spacing, 0)}.step-indicator.hide{visibility:hidden;opacity:0}";
 
@@ -32,9 +37,15 @@ const WppStepper = class {
       }
     };
     this.isHostConnected = () => this.hostElement?.isConnected ?? false;
+    this.getStepSelector = () => utils.getTagSelector('wpp-step');
+    this.setStepAccessibleLabel = (step, index) => {
+      const label = Array.from(step.children).find(child => child.getAttribute('slot') === 'label');
+      step.setAttribute('aria-label', label?.textContent?.trim() || this._locales.stepLabel(index));
+    };
+    this.getDirectStepChildren = () => Array.from(this.hostElement?.children ?? []).filter((child) => child instanceof HTMLElement && child.matches(this.getStepSelector()));
     this.getStepperProps = () => {
       const stepperWidth = this.host.clientWidth;
-      const stepList = this.host.querySelectorAll(utils.transformToVersionedTag('wpp-step'));
+      const stepList = this.host.querySelectorAll(this.getStepSelector());
       const listLength = stepList.length;
       const stepListLength = this.stepAmount || stepList.length;
       const lastStep = stepList.length - 1;
@@ -73,7 +84,7 @@ const WppStepper = class {
       }
     };
     this.calculateStepperPositionOnResize = () => {
-      const stepsLength = this.host.querySelectorAll(utils.transformToVersionedTag('wpp-step')).length;
+      const stepsLength = this.host.querySelectorAll(this.getStepSelector()).length;
       if (!this.stepAmount || this.stepAmount === stepsLength)
         return;
       if (this.activeStep === 1)
@@ -96,7 +107,7 @@ const WppStepper = class {
     };
     this.setStepWidthOnResize = () => {
       const { stepWidth } = this.getStepperProps();
-      this.host.querySelectorAll(utils.transformToVersionedTag('wpp-step')).forEach(step => {
+      this.host.querySelectorAll(this.getStepSelector()).forEach(step => {
         step.style.setProperty('--step-container-width', `${stepWidth}px`);
       });
     };
@@ -108,7 +119,17 @@ const WppStepper = class {
         this.setStepAttributeAsIntegers();
       }
     };
+    this.setRovingTabIndex = () => {
+      const steps = Array.from(this.host.querySelectorAll(this.getStepSelector()));
+      const enabledSteps = utils$1.getNavigableSteps(this.host);
+      const activeElement = this.host.getRootNode().activeElement;
+      const focusedStep = enabledSteps.find(step => step === activeElement);
+      const currentStep = enabledSteps.find(step => step.getAttribute('aria-current') === 'step');
+      const tabStop = focusedStep || currentStep || enabledSteps[0];
+      utils$1.setStepTabIndexes(steps, tabStop);
+    };
     this.setStepAttributeAsIntegers = () => {
+      const activeStepValue = Number(this.activeStep) || 0;
       let lastStepWithSubstep = null;
       let currentStep = 1;
       const { stepList, lastStep, stepWidth, isHorizontalOrientation } = this.getStepperProps();
@@ -121,7 +142,8 @@ const WppStepper = class {
           parentStep = step;
         }
       });
-      this.lastCompletedStep = Math.max(this.activeStep, this.lastCompletedStep, this.completedSteps + 1);
+      const stepCount = Array.from(stepList).filter(step => !step.substep).length;
+      this.lastCompletedStep = Math.max(activeStepValue, this.lastCompletedStep, this.completedSteps + 1);
       if (isHorizontalOrientation && this.stepAmount) {
         this.calculateStepperPosition();
         this.setCurrentStepIndicator();
@@ -133,7 +155,7 @@ const WppStepper = class {
         const currentIndex = index + 1;
         const hasDescription = !!step.querySelector('[slot="description"]');
         const isPassCurrentStep = this.lastCompletedStep > currentIndex;
-        const currentStepSubstep = step.querySelectorAll(utils.transformToVersionedTag('wpp-step'));
+        const currentStepSubstep = step.querySelectorAll(this.getStepSelector());
         const isHaveSubstep = !!currentStepSubstep.length;
         const lastIndexSubstep = currentStepSubstep.length - 1;
         const lastSubstepStepIndex = currentStepSubstep[lastIndexSubstep]?.getAttribute('index') || step.getAttribute('lastSubstepStepIndex');
@@ -178,9 +200,28 @@ const WppStepper = class {
         if (isHorizontalOrientation) {
           step.style.setProperty('--step-container-width', `${stepWidth}px`);
         }
+        const finalStepValue = currentStep;
+        const activeStepValue = Number(this.activeStep) || 0;
+        const activeStepIsCurrent = activeStepValue === currentIndex;
+        const isStepDisabled = currentIndex > this.lastCompletedStep;
         step?.setAttribute('index', `${currentIndex}`);
-        step?.setAttribute('step', `${currentStep}`);
+        step?.setAttribute('step', `${finalStepValue}`);
         step?.setAttribute('orientation', this.orientation);
+        if (!isSubStep) {
+          step?.setAttribute('role', 'listitem');
+          step?.setAttribute('aria-posinset', `${finalStepValue}`);
+          step?.setAttribute('aria-setsize', `${stepCount}`);
+          this.setStepAccessibleLabel(step, finalStepValue);
+        }
+        else {
+          step?.removeAttribute('role');
+          step?.removeAttribute('aria-posinset');
+          step?.removeAttribute('aria-setsize');
+          step?.removeAttribute('aria-label');
+        }
+        step?.setAttribute('aria-current', activeStepIsCurrent ? 'step' : 'false');
+        step?.setAttribute('aria-disabled', String(isStepDisabled));
+        step.tabIndex = -1;
         if (this.activeStep === currentIndex) {
           step?.setAttribute('active', 'true');
         }
@@ -215,6 +256,7 @@ const WppStepper = class {
           this.wppChange.emit({ index: this.activeStep < this.prevStep ? currentIndex - 1 : currentIndex + 1 });
         }
       });
+      this.setRovingTabIndex();
       this.prevStep = this.activeStep;
     };
     this.setStepAttributeAsDecimals = () => {
@@ -222,12 +264,14 @@ const WppStepper = class {
       let mainStepCounter = 1;
       let parentStep = null;
       const { stepList } = this.getStepperProps();
-      this.lastCompletedStep = Math.max(this.activeStep, this.lastCompletedStep, this.completedSteps + 1);
+      const stepCount = Array.from(stepList).filter(step => !step.substep).length;
+      const activeStepValue = Number(this.activeStep) || 0;
+      this.lastCompletedStep = Math.max(activeStepValue, this.lastCompletedStep, this.completedSteps + 1);
       // First loop: process all steps and mark sub steps as completed
       stepList.forEach((step, index) => {
         const isSubStep = step.substep;
-        const hasSubStepElements = !!step.querySelector(utils.transformToVersionedTag('wpp-step'));
-        const currentStepSubSteps = step.querySelectorAll(utils.transformToVersionedTag('wpp-step'));
+        const hasSubStepElements = !!step.querySelector(this.getStepSelector());
+        const currentStepSubSteps = step.querySelectorAll(this.getStepSelector());
         const hasDescription = !!step.querySelector('[slot="description"]');
         let stepValue;
         if (isSubStep) {
@@ -273,7 +317,26 @@ const WppStepper = class {
             }
           }
         }
-        step.setAttribute('index', (index + 1).toString());
+        const currentStepNumber = Number(step.getAttribute('step')) || index + 1;
+        const decimalCurrentIndex = index + 1;
+        const decimalIsCurrent = Number(this.activeStep) === currentStepNumber;
+        const decimalIsDisabled = currentStepNumber > this.lastCompletedStep;
+        step.setAttribute('index', decimalCurrentIndex.toString());
+        if (!isSubStep) {
+          step.setAttribute('role', 'listitem');
+          step.setAttribute('aria-posinset', stepValue.toString());
+          step.setAttribute('aria-setsize', `${stepCount}`);
+          this.setStepAccessibleLabel(step, currentStepNumber);
+        }
+        else {
+          step.removeAttribute('role');
+          step.removeAttribute('aria-posinset');
+          step.removeAttribute('aria-setsize');
+          step.removeAttribute('aria-label');
+        }
+        step.setAttribute('aria-current', decimalIsCurrent ? 'step' : 'false');
+        step.setAttribute('aria-disabled', String(decimalIsDisabled));
+        step.tabIndex = -1;
         if (hasDescription) {
           step.setAttribute('has-description', 'true');
         }
@@ -288,7 +351,7 @@ const WppStepper = class {
       // Second loop: after all sub steps are processed, check parent step completion and set last-step
       stepList.forEach((step, index) => {
         const isSubStep = step.substep;
-        const currentStepSubSteps = step.querySelectorAll(utils.transformToVersionedTag('wpp-step'));
+        const currentStepSubSteps = step.querySelectorAll(this.getStepSelector());
         const hasPassedCurrentStep = this.lastCompletedStep > (Number(step.getAttribute('step')) || 0);
         const areAllSubStepsCompleted = currentStepSubSteps.length > 0
           ? Array.from(currentStepSubSteps).every(substep => substep.hasAttribute('completed'))
@@ -329,6 +392,7 @@ const WppStepper = class {
           }
         }
       });
+      this.setRovingTabIndex();
       this.prevStep = this.activeStep;
     };
     this.onResize = async () => {
@@ -353,6 +417,7 @@ const WppStepper = class {
     this.orientation = 'vertical';
     this.useResizeObserver = true;
     this.useDecimalSubSteps = false;
+    this.locales = {};
   }
   handleStepUpdate() {
     if (this.componentHasLoaded) {
@@ -391,6 +456,15 @@ const WppStepper = class {
   watchActiveStep() {
     this.setStepAttribute();
   }
+  watchLocales() {
+    if (this.componentHasLoaded) {
+      this.host.querySelectorAll(this.getStepSelector()).forEach(step => {
+        if (!step.substep) {
+          this.setStepAccessibleLabel(step, Number(step.getAttribute('step')));
+        }
+      });
+    }
+  }
   componentWillLoad() {
     this.hostElement = this.host;
     if (this.stepperWidth && this.orientation === 'vertical') {
@@ -400,7 +474,7 @@ const WppStepper = class {
   }
   componentDidLoad() {
     if (this.orientation === 'horizontal') {
-      const stepsList = this.host.querySelectorAll(utils.transformToVersionedTag('wpp-step'));
+      const stepsList = this.host.querySelectorAll(this.getStepSelector());
       if (stepsList.length > MAX_STEPS_COUNT) {
         throw new Error(`Maximum amount of steps exceeded. Only ${MAX_STEPS_COUNT} steps are allowed.`);
       }
@@ -410,7 +484,7 @@ const WppStepper = class {
         return;
       this.setStepAttribute();
       this.componentHasLoaded = true;
-      const stepMainList = this.hostElement?.querySelectorAll(`:scope > ${utils.transformToVersionedTag('wpp-step')}`);
+      const stepMainList = this.getDirectStepChildren();
       this.stepMainNdx = stepMainList ? Number(stepMainList[stepMainList.length - 1]?.getAttribute('index')) : 0;
       this.stepAttributeTimeout = undefined;
     }, 0);
@@ -437,14 +511,18 @@ const WppStepper = class {
       window.removeEventListener('resize', this.setTextCSSVariables);
     }
   }
+  get _locales() {
+    return utils.mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
   render() {
     const isHorizontalOrientation = this.orientation === 'horizontal';
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, indicator" }, index.h("div", { class: this.stepperWrapperCssClasses(), part: "wrapper" }, index.h("slot", { part: "inner" })), isHorizontalOrientation && this.stepAmount ? (index.h("div", { class: { 'step-indicator': true, hide: this.stepIndicator <= 0 }, part: "indicator" }, "+", this.stepIndicator || 1)) : null));
+    return (index.h(index.Host, { class: this.hostCssClasses(), role: "list", exportparts: "wrapper, inner, indicator" }, index.h("div", { class: this.stepperWrapperCssClasses(), part: "wrapper", role: "presentation" }, index.h("slot", { part: "inner" })), isHorizontalOrientation && this.stepAmount ? (index.h("div", { class: { 'step-indicator': true, hide: this.stepIndicator <= 0 }, part: "indicator" }, "+", this.stepIndicator || 1)) : null));
   }
-  static get registryIs() { return "wpp-stepper-v4-6-0"; }
+  static get registryIs() { return "wpp-stepper-v4-7-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
-    "activeStep": ["watchActiveStep"]
+    "activeStep": ["watchActiveStep"],
+    "locales": ["watchLocales"]
   }; }
 };
 WppStepper.style = wppStepperCss;

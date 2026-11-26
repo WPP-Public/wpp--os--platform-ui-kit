@@ -75,6 +75,13 @@ export declare class WppRadio implements BaseComponent, BooleanFormControl<Radio
    */
   readonly decorative?: boolean;
   /**
+   * Hides the "(Optional)" marker because the surrounding group's label already carries it, and keeps `required`
+   * off the native input because the group, not each radio, is what is required.
+   *
+   * @internal - This prop is controlled by Radio Group
+   */
+  readonly isGroupItem: boolean;
+  /**
    * Emitted when the selected state changes.
    */
   readonly wppChange: EventEmitter<RadioChangeEvent>;
@@ -97,6 +104,7 @@ export declare class WppRadio implements BaseComponent, BooleanFormControl<Radio
    */
   setFocus(): Promise<void>;
   private onClick;
+  private select;
   connectedCallback(): void;
   disconnectedCallback(): void;
   private onFocus;

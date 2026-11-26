@@ -16,6 +16,10 @@
   * @prop --wpp-avatar-icon-bg-color
   * @prop --wpp-avatar-icon-bg-color-hover
   * @prop --wpp-avatar-icon-bg-color-pressed
+  * @prop --wpp-avatar-icon-tint-color
+  * @prop --wpp-avatar-icon-tint-opacity
+  * @prop --wpp-avatar-icon-tint-opacity-hover
+  * @prop --wpp-avatar-icon-tint-opacity-pressed
   * @prop --wpp-avatar-icon-color
   * @prop --wpp-avatar-without-image-border-radius
   * @prop --wpp-avatar-without-image-text-color
@@ -49,10 +53,14 @@
   --avatar-size-4xl-square-border-radius: var(--wpp-avatar-size-4xl-square-border-radius, var(--wpp-border-radius-l));
   --avatar-circle-border-radius: var(--wpp-avatar-circle-border-radius, 120px);
   --avatar-icon-border-radius: var(--wpp-avatar-icon-border-radius, 120px);
-  --avatar-icon-bg-color: var(--wpp-avatar-icon-bg-color, var(--wpp-grey-color-200));
-  --avatar-icon-bg-color-hover: var(--wpp-avatar-icon-bg-color-hover, var(--wpp-grey-color-100));
-  --avatar-icon-bg-color-pressed: var(--wpp-avatar-icon-bg-color-pressed, var(--wpp-grey-color-200));
-  --avatar-icon-color: var(--wpp-avatar-icon-color, var(--wpp-grey-color-800));
+  --avatar-icon-bg-color: var(--wpp-avatar-icon-bg-color, var(--wpp-dataviz-color-cat-light-10));
+  --avatar-icon-bg-color-hover: var(--wpp-avatar-icon-bg-color-hover, var(--wpp-dataviz-color-cat-light-10));
+  --avatar-icon-bg-color-pressed: var(--wpp-avatar-icon-bg-color-pressed, var(--wpp-dataviz-color-cat-light-10));
+  --avatar-icon-tint-color: var(--wpp-avatar-icon-tint-color, var(--wpp-grey-color-000));
+  --avatar-icon-tint-opacity: var(--wpp-avatar-icon-tint-opacity, 0.4);
+  --avatar-icon-tint-opacity-hover: var(--wpp-avatar-icon-tint-opacity-hover, 0.6);
+  --avatar-icon-tint-opacity-pressed: var(--wpp-avatar-icon-tint-opacity-pressed, 0.4);
+  --avatar-icon-color: var(--wpp-avatar-icon-color, var(--wpp-dataviz-color-cat-dark-10));
   --avatar-without-image-border-radius: var(--wpp-avatar-without-image-border-radius, 120px);
   --avatar-without-image-text-color: var(--wpp-avatar-without-image-text-color, var(--wpp-grey-color-000));
   --avatar-circle-counter-border-radius: var(--wpp-avatar-circle-counter-border-radius, 120px);
@@ -111,9 +119,19 @@
   border-radius: var(--avatar-square-counter-border-radius);
 }
 :host .icon-wrapper {
+  position: relative;
+  overflow: hidden;
   background-color: var(--avatar-icon-bg-color);
 }
+:host .icon-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--avatar-icon-tint-color);
+  opacity: var(--avatar-icon-tint-opacity);
+}
 :host .icon-wrapper .wpp-icon {
+  position: relative;
   color: var(--avatar-icon-color);
 }
 :host:host(.tab-focus).with-amount-of-hidden-avatars {
@@ -301,6 +319,10 @@
   width: 100%;
   outline: none;
 }
+:host:host(.with-tooltip) .image-wrapper,
+:host:host(.with-tooltip) .without-image {
+  outline: none;
+}
 :host:host(.tab-focus) .image,
 :host:host(.tab-focus) .without-image {
   border-radius: var(--avatar-border-radius);
@@ -371,11 +393,22 @@
   content: none;
 }
 :host(.interactable) .icon-wrapper::before {
-  content: none;
+  background-color: var(--avatar-icon-tint-color);
 }
 :host(.interactable) .icon-wrapper:hover {
-  background: linear-gradient(0deg, var(--avatar-interactable-hover-background-color), var(--avatar-interactable-hover-background-color)), var(--avatar-icon-bg-color-hover);
+  background-color: var(--avatar-icon-bg-color-hover);
+}
+:host(.interactable) .icon-wrapper:hover::before {
+  background-color: var(--avatar-icon-tint-color);
+  opacity: var(--avatar-icon-tint-opacity-hover);
 }
 :host(.interactable) .icon-wrapper:active {
-  background: var(--avatar-icon-bg-color-pressed);
+  background-color: var(--avatar-icon-bg-color-pressed);
+}
+:host(.interactable) .icon-wrapper:active::before {
+  background-color: var(--avatar-icon-tint-color);
+  opacity: var(--avatar-icon-tint-opacity-pressed);
+}
+:host(.interactable):host(.tab-focus) .icon-wrapper::before {
+  background-color: var(--avatar-icon-tint-color);
 }

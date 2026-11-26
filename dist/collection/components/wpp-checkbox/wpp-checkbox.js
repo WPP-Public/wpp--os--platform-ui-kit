@@ -12,8 +12,14 @@ import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
 export class WppCheckbox {
   constructor() {
     this.themeSubscription = themeSubscriptionController(() => this.host);
+    this.messageId = 'wpp-checkbox-message';
     this.onClick = (event) => {
       event.preventDefault();
+      this.toggle();
+    };
+    // Shared by pointer clicks and Space/Enter, so both paths emit wppChange, respect `controlled` and clear the
+    // indeterminate state the same way.
+    this.toggle = () => {
       if (this.controlled)
         return this.wppChange.emit({
           value: this.value,
@@ -62,7 +68,9 @@ export class WppCheckbox {
         const clickEvent = new MouseEvent('click', { bubbles: true, composed: true });
         this.host.dispatchEvent(clickEvent);
         this.isPressed = true;
-        this.checked = !this.checked;
+        // The click above is dispatched on the host and never reaches the label's click handler, so the keyboard
+        // used to flip `checked` here directly, without wppChange and leaving indeterminate set.
+        this.toggle();
       }
     };
     this.hostCssClasses = () => ({
@@ -104,6 +112,7 @@ export class WppCheckbox {
     this.internalState = '';
     this.index = 0;
     this.decorative = false;
+    this.isGroupItem = false;
     this.isDarkTheme = undefined;
   }
   /**
@@ -135,11 +144,15 @@ export class WppCheckbox {
   }
   render() {
     if (this.decorative)
-      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}) }, h("wpp-label-v4-6-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v4-6-0", { part: "icon-tick" }), h("wpp-icon-dash-v4-6-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v4-6-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
-    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}) }, h("wpp-label-v4-6-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, htmlFor: this.name, disabled: this.disabled, onClick: this.onClick, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("input", { class: this.inputCssClasses(), type: "checkbox", id: this.name, name: this.name, disabled: this.disabled, checked: this.checked || this.indeterminate, required: this.required, onFocus: this.onFocus, onBlur: this.onBlur, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-hidden": this.disabled ? 'true' : null, "aria-required": this.required.toString(), tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v4-6-0", { part: "icon-tick" }), h("wpp-icon-dash-v4-6-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v4-6-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
+      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}) }, h("wpp-label-v4-7-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required && !this.isGroupItem, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v4-7-0", { part: "icon-tick" }), h("wpp-icon-dash-v4-7-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v4-7-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
+    // The label names the input through its id, so a checkbox without a name still needs one
+    const inputId = this.name || 'wpp-checkbox';
+    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}) }, h("wpp-label-v4-7-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required && !this.isGroupItem, htmlFor: inputId, disabled: this.disabled, onClick: this.onClick, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("input", { class: this.inputCssClasses(), type: "checkbox", id: inputId, name: this.name, disabled: this.disabled, checked: this.checked || this.indeterminate,
+      // Exposes the mixed state to assistive tech; `checked` alone made it read as checked.
+      indeterminate: this.indeterminate, required: this.required, onFocus: this.onFocus, onBlur: this.onBlur, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-required": this.required.toString(), "aria-invalid": this.messageType === 'error' ? 'true' : undefined, "aria-describedby": this.message ? this.messageId : undefined, tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v4-7-0", { part: "icon-tick" }), h("wpp-icon-dash-v4-7-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v4-7-0", { id: this.messageId, class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
   }
   static get is() { return "wpp-checkbox"; }
-  static get registryIs() { return "wpp-checkbox-v4-6-0"; }
+  static get registryIs() { return "wpp-checkbox-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -483,6 +496,27 @@ export class WppCheckbox {
           "text": "Create a component with role presentation"
         },
         "attribute": "decorative",
+        "reflect": false,
+        "defaultValue": "false"
+      },
+      "isGroupItem": {
+        "type": "boolean",
+        "mutable": false,
+        "complexType": {
+          "original": "boolean",
+          "resolved": "boolean",
+          "references": {}
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [{
+              "name": "internal",
+              "text": "- This prop is controlled by Checkbox Group"
+            }],
+          "text": "Hides the \"(Optional)\" marker because the surrounding group's label already carries it."
+        },
+        "attribute": "is-group-item",
         "reflect": false,
         "defaultValue": "false"
       },

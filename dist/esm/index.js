@@ -1,11 +1,11 @@
 export { Z as Z_INDEX } from './consts-744c144f.js';
-import { i as isObject, t as toKebabCase, r as recursiveObjectMap } from './utils-49ce8daf.js';
-export { C as activateOnEnterOrSpace, m as applyBodyStylesIfNeeded, a as areSetsEqual, n as autoFocusElement, l as closestElement, d as debounce, o as form2object, f as format, D as getAriaProps, p as getDurationValues, q as getHasFocused, w as getHighestContainerInDOM, j as getHighlightData, x as getOsBarOffsetHeight, A as getScrollbarGutterWidth, g as getSlotEmptyStates, c as hasParentWithId, h as hasShadowDom, b as isEventTargetContained, z as isMimeAccepted, i as isObject, E as isWppElement, y as mergeLocales, r as recursiveObjectMap, s as selectDropdownWidth, v as setHasFocused, t as toKebabCase, k as transformToVersionedTag, e as truncate, B as uniquePortalId, u as uuidv4 } from './utils-49ce8daf.js';
+import { i as isObject, t as toKebabCase, r as recursiveObjectMap } from './utils-711e1d1b.js';
+export { D as activateOnEnterOrSpace, n as applyBodyStylesIfNeeded, a as areSetsEqual, o as autoFocusElement, m as closestElement, d as debounce, p as form2object, f as format, E as getAriaProps, q as getDurationValues, v as getHasFocused, x as getHighestContainerInDOM, j as getHighlightData, F as getLabelledbyText, y as getOsBarOffsetHeight, B as getScrollbarGutterWidth, g as getSlotEmptyStates, l as getTagSelector, c as hasParentWithId, h as hasShadowDom, b as isEventTargetContained, A as isMimeAccepted, i as isObject, G as isWppElement, z as mergeLocales, r as recursiveObjectMap, s as selectDropdownWidth, w as setHasFocused, t as toKebabCase, k as transformToVersionedTag, e as truncate, C as uniquePortalId, u as uuidv4 } from './utils-711e1d1b.js';
 export { S as ScrollState } from './types-6eb465ab.js';
 export { F as FullScreenModalCloseReason } from './types-b5cf2c7a.js';
 export { I as InlineEditModeEnum } from './types-55e66228.js';
 export { M as ModalCloseReason } from './types-9a70ac4e.js';
-export { E as Editor, R as RICHTEXT_UPLOAD_REQUEST_EVENT, T as TIPTAP_UPLOAD_REQUEST_EVENT, d as debugLevels, f as formats, r as richtextUploadTypes, s as sources, a as tiptapFormats, b as tiptapSources, t as tiptapUploadTypes } from './index-37c1afe6.js';
+export { E as Editor, R as RICHTEXT_UPLOAD_REQUEST_EVENT, T as TIPTAP_UPLOAD_REQUEST_EVENT, d as debugLevels, f as formats, r as richtextUploadTypes, s as sources, a as tiptapFormats, b as tiptapSources, t as tiptapUploadTypes } from './index-91a276a0.js';
 export { S as SideModalCloseReason } from './types-945bd5da.js';
 export { S as SidePanelCloseReason } from './types-bb202fab.js';
 
@@ -115,6 +115,7 @@ const WppAgGridThemeConfig = {
   rowHoverColor: 'var(--wpp-grey-color-200)',
   oddRowBackgroundColor: 'var(--wpp-grey-color-000)',
   selectedRowBackgroundColor: 'var(--wpp-grey-color-200)',
+  focusShadow: '0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-primary-color-900)',
   rangeSelectionBorderColor: 'transparent',
   cellHorizontalPadding: 16,
   fontFamily: 'var(--wpp-font-family)',

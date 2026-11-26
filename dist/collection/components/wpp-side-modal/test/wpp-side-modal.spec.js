@@ -3,6 +3,7 @@ import { newSpecPage } from '@stencil/core/testing';
 import { WppSideModal } from '../wpp-side-modal';
 import * as utils from '../../../utils/utils';
 import * as themeUtils from '../../../utils/subscribe-to-theme';
+import * as dialogFocus from '../../../utils/dialog-focus';
 describe('wpp-side-modal', () => {
   it('Should render defaut side modal', async () => {
     const page = await newSpecPage({
@@ -43,7 +44,7 @@ describe('wpp-side-modal accessible name', () => {
   it('honours a consumer supplied ariaProps.labelledby instead of deriving a name', async () => {
     const page = await newSpecPage({
       components: [WppSideModal],
-      template: () => (h("wpp-side-modal-v4-6-0", { open: true, ariaProps: { role: 'dialog', labelledby: 'their-title' } }, h("div", { slot: "header" }, "Reports"))),
+      template: () => (h("wpp-side-modal-v4-7-0", { open: true, ariaProps: { role: 'dialog', labelledby: 'their-title' } }, h("div", { slot: "header" }, "Reports"))),
     });
     expect(page.root).toEqualAttribute('aria-labelledby', 'their-title');
     expect(page.root?.hasAttribute('aria-label')).toBe(false);
@@ -57,7 +58,7 @@ describe('wpp-side-modal headerActionsConfig accessibility', () => {
     ];
     const page = await newSpecPage({
       components: [WppSideModal],
-      template: () => (h("wpp-side-modal-v4-6-0", { open: true, headerActionsConfig: config }, h("div", { slot: "header" }, "Title"))),
+      template: () => (h("wpp-side-modal-v4-7-0", { open: true, headerActionsConfig: config }, h("div", { slot: "header" }, "Title"))),
     });
     const buttons = Array.from(page.root?.shadowRoot?.querySelectorAll('.header-action-buttons-container wpp-action-button') ?? []);
     expect(buttons).toHaveLength(2);
@@ -76,7 +77,7 @@ describe('wpp-side-modal osBarCompatible', () => {
     const spy = jest.spyOn(utils, 'getOsBarOffsetHeight').mockReturnValue(72);
     const page = await newSpecPage({
       components: [WppSideModal],
-      template: () => h("wpp-side-modal-v4-6-0", { osBarCompatible: true }),
+      template: () => h("wpp-side-modal-v4-7-0", { osBarCompatible: true }),
     });
     expect(page.root?.style.getPropertyValue('--wpp-side-modal-top-offset')).toBe('72px');
     spy.mockRestore();
@@ -84,7 +85,7 @@ describe('wpp-side-modal osBarCompatible', () => {
   it('applies wpp-os-bar-compatible CSS class when osBarCompatible is true', async () => {
     const page = await newSpecPage({
       components: [WppSideModal],
-      template: () => h("wpp-side-modal-v4-6-0", { osBarCompatible: true }),
+      template: () => h("wpp-side-modal-v4-7-0", { osBarCompatible: true }),
     });
     expect(page.root).toHaveClass('wpp-os-bar-compatible');
   });
@@ -92,7 +93,7 @@ describe('wpp-side-modal osBarCompatible', () => {
     const spy = jest.spyOn(utils, 'getOsBarOffsetHeight').mockReturnValue(64);
     const page = await newSpecPage({
       components: [WppSideModal],
-      template: () => h("wpp-side-modal-v4-6-0", { osBarCompatible: true }),
+      template: () => h("wpp-side-modal-v4-7-0", { osBarCompatible: true }),
     });
     expect(page.root?.style.getPropertyValue('--wpp-side-modal-top-offset')).toBe('64px');
     spy.mockRestore();
@@ -126,5 +127,25 @@ describe('wpp-side-modal osBarCompatible', () => {
       page.root?.remove();
       expect(mockStop).toHaveBeenCalledTimes(1);
     });
+  });
+});
+describe('wpp-side-modal focus trap', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+  it('wraps Tab around the dialog: the end sentinel focuses its first control and the start sentinel its last', async () => {
+    const focusDialogEdge = jest.spyOn(dialogFocus, 'focusDialogEdge').mockImplementation(() => { });
+    const page = await newSpecPage({
+      components: [WppSideModal],
+      html: `<wpp-side-modal open></wpp-side-modal>`,
+    });
+    await page.waitForChanges();
+    const shadowRoot = page.root.shadowRoot;
+    const [startSentinel, endSentinel] = Array.from(shadowRoot.querySelectorAll('.focus-sentinel'));
+    const dialog = shadowRoot.querySelector('.side-modal');
+    endSentinel.dispatchEvent(new Event('focus'));
+    expect(focusDialogEdge).toHaveBeenLastCalledWith(dialog, 'first');
+    startSentinel.dispatchEvent(new Event('focus'));
+    expect(focusDialogEdge).toHaveBeenLastCalledWith(dialog, 'last');
   });
 });

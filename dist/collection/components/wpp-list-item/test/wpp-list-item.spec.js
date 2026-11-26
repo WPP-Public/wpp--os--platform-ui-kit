@@ -130,6 +130,29 @@ describe('wpp-list-item', () => {
       expect(changeHandler).not.toHaveBeenCalled();
     });
   });
+  describe('option tab stop', () => {
+    it.each([
+      [false, '-1'],
+      [true, '0'],
+    ])('renders an option with isRovingTabStop=%s at tabindex %s', async (isRovingTabStop, tabindex) => {
+      const page = await newSpecPage({
+        components: [WppListItem],
+        html: `<wpp-list-item role="option"></wpp-list-item>`,
+      });
+      page.root.isRovingTabStop = isRovingTabStop;
+      await page.waitForChanges();
+      expect(page.root?.getAttribute('tabindex')).toBe(tabindex);
+    });
+    it('keeps a disabled option out of the tab order even as the tab stop', async () => {
+      const page = await newSpecPage({
+        components: [WppListItem],
+        html: `<wpp-list-item role="option" disabled></wpp-list-item>`,
+      });
+      page.root.isRovingTabStop = true;
+      await page.waitForChanges();
+      expect(page.root?.getAttribute('tabindex')).toBe('-1');
+    });
+  });
   describe('subscribing to theme changes', () => {
     let mockStart;
     let mockStop;

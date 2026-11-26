@@ -2,7 +2,7 @@
   * @prop --wpp-label-tooltip-width:
   * @prop --wpp-label-optional-text-color:
   * @prop --wpp-label-optional-margin:
-  * @prop --wpp-label-text-color:
+  * @prop --DEPRECATED-wpp-label-text-color:
   * @prop --wpp-label-info-wrapper-margin:
   * @prop --wpp-label-icon-color:
   * @prop --wpp-label-s-strong-text-color:
@@ -12,7 +12,6 @@
   --label-tooltip-width: var(--wpp-label-tooltip-width, 100%);
   --label-optional-text-color: var(--wpp-label-optional-text-color, var(--wpp-text-color-info));
   --label-optional-margin: var(--wpp-label-optional-margin, 0 0 0 4px);
-  --label-text-color: var(--wpp-label-text-color, var(--wpp-grey-color-800));
   --label-info-wrapper-margin: var(--wpp-label-info-wrapper-margin, 0 4px 0 0);
   --label-icon-color: var(--wpp-label-icon-color, var(--wpp-icon-color));
   --label-s-strong-text-color: var(--wpp-label-s-strong-text-color, var(--wpp-text-color-info));
@@ -54,6 +53,9 @@
 }
 :host:host(.s-strong) .info-wrapper .text {
   color: var(--label-s-strong-text-color);
+}
+:host:host(.s-body) .info-wrapper .text {
+  color: var(--label-s-body-text-color);
 }
 
 :host(.disabled) .info-wrapper {

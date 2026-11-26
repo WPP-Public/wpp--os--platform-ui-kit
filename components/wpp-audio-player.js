@@ -1,6 +1,7 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { F as FOCUS_TYPE } from './common.js';
-import { y as mergeLocales } from './utils.js';
+import { z as mergeLocales } from './utils.js';
+import { g as getDeepActiveElement } from './dialog-focus.js';
 import { p as placeVolumeSlider, r as renderVolumeBarComponent } from './wpp-volume-bar.js';
 import { d as defineCustomElement$r } from './wpp-action-button2.js';
 import { d as defineCustomElement$q } from './wpp-icon-cross2.js';
@@ -54,7 +55,7 @@ const LOCALES_DEFAULTS = {
   playbackRateButtonAriaLabel: 'Playback speed',
 };
 
-const wppAudioPlayerCss = "@charset \"UTF-8\";.volume-container{position:relative}.slider-container{position:absolute;top:-68px;left:50%;height:32px;width:80px;border-radius:6px;background-color:rgba(0, 0, 0, 0.6);-webkit-transform:translateX(-50%) rotate(270deg);transform:translateX(-50%) rotate(270deg);-webkit-transform-origin:center center;transform-origin:center center;opacity:0;visibility:hidden;pointer-events:none;-webkit-transition:opacity 0.15s ease-in-out, visibility 0s linear 0.15s;transition:opacity 0.15s ease-in-out, visibility 0s linear 0.15s}.slider-container.below{top:auto;bottom:-68px}.slider-container.active{opacity:1;visibility:visible;pointer-events:initial;-webkit-transition:opacity 0.15s ease-in-out, visibility 0s;transition:opacity 0.15s ease-in-out, visibility 0s}.slider-container .progress-bar{width:64px;height:auto;left:50%;top:50%;-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.slider-container .progress-bar::-webkit-slider-thumb{width:12px;height:12px;margin-top:-4px;}.slider-container .progress-bar::-moz-range-thumb{width:12px;height:12px}.volume-container.open .volume-button::part(overlay){background-color:var(--ab-bg-color-hover);opacity:var(--ab-bg-opacity-hover)}.volume-container.open .volume-button>[slot=icon-start]{color:var(--ab-secondary-icon-color-hover)}.volume-container.open.inverted .volume-button::part(overlay){background-color:var(--ab-inverted-bg-color-hover)}.volume-container.open.inverted .volume-button>[slot=icon-start]{color:var(--ab-inverted-icon-color-hover)}@media (prefers-reduced-motion: reduce){.slider-container,.slider-container.active{-webkit-transition:none;transition:none}}.volume-container.open .volume-button::part(overlay){background-color:var(--ab-bg-color-hover);opacity:var(--ab-bg-opacity-hover)}.volume-container.open .volume-button>[slot=icon-start]{color:var(--ab-secondary-icon-color-hover)}.volume-container.open.inverted .volume-button::part(overlay){background-color:var(--ab-inverted-bg-color-hover)}.volume-container.open.inverted .volume-button>[slot=icon-start]{color:var(--ab-inverted-icon-color-hover)}@media (prefers-reduced-motion: reduce){.slider-container,.slider-container.active{-webkit-transition:none;transition:none}}.audio-player-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px;-webkit-box-sizing:border-box;box-sizing:border-box;min-width:400px;width:100%;border-radius:var(--wpp-border-radius-m);background-color:var(--wpp-grey-color-000);outline:none}.audio-player-container.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}.audio-element{display:none}.track-info{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:2px;min-width:0}.track-title,.track-description{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.track-description{color:var(--wpp-grey-color-700)}.controls{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px}.timeline{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:12px;padding:0 6px}.audio-time{-ms-flex-negative:0;flex-shrink:0;color:var(--wpp-grey-color-800);font-variant-numeric:tabular-nums}.progress-container{position:relative;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-positive:1;flex-grow:1;height:16px}.progress-rail,.loading-progress{position:absolute;left:0;height:4px;border-radius:var(--wpp-border-radius-xs);pointer-events:none}.progress-rail{width:100%;background-color:var(--wpp-grey-color-300)}.loading-progress{background-color:var(--wpp-grey-color-500)}.progress-bar{-webkit-appearance:none;-moz-appearance:none;appearance:none;position:relative;-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;height:16px;margin:0;padding:0;background:transparent;cursor:pointer}.progress-bar::-webkit-slider-runnable-track{width:100%;height:4px;border-radius:var(--wpp-border-radius-xs);background:-webkit-gradient(linear, left top, right top, from(var(--wpp-brand-color)), to(transparent));background:linear-gradient(to right, var(--wpp-brand-color) var(--progress-bar-progress, 0%), transparent var(--progress-bar-progress, 0%))}.progress-bar::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;margin-top:-6px;border:none;border-radius:var(--wpp-border-radius-round);background-color:var(--wpp-brand-color);cursor:pointer}.progress-bar::-moz-range-track{width:100%;height:4px;border:none;border-radius:var(--wpp-border-radius-xs);background-color:transparent}.progress-bar::-moz-range-progress{height:4px;border:none;border-radius:var(--wpp-border-radius-xs);background-color:var(--wpp-brand-color)}.progress-bar::-moz-range-thumb{width:16px;height:16px;border:none;border-radius:var(--wpp-border-radius-round);background-color:var(--wpp-brand-color);cursor:pointer}.progress-bar:focus{outline:none}.progress-bar:focus-visible{border-radius:var(--wpp-border-radius-xs);outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}.progress-bar:focus-visible::-webkit-slider-thumb{border-radius:var(--wpp-border-radius-round);outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}.progress-bar:focus-visible::-moz-range-thumb{border-radius:var(--wpp-border-radius-round);outline:none;box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}.buttons{display:grid;grid-template-columns:1fr auto 1fr;-ms-flex-align:center;align-items:center;gap:16px}.volume-controls,.playback-buttons,.secondary-buttons{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}.secondary-buttons{-ms-flex-pack:start;justify-content:flex-start}.volume-controls{-ms-flex-pack:end;justify-content:flex-end}.volume-container .slider-container{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;background-color:var(--wpp-grey-color-000);-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m)}.volume-container .slider-container .progress-bar{position:static;height:16px;-webkit-transform:none;transform:none}.volume-container .slider-container .progress-bar::-webkit-slider-runnable-track{background:-webkit-gradient(linear, left top, right top, from(var(--wpp-brand-color)), to(var(--wpp-grey-color-300)));background:linear-gradient(to right, var(--wpp-brand-color) var(--progress-bar-progress, 0%), var(--wpp-grey-color-300) var(--progress-bar-progress, 0%))}.volume-container .slider-container .progress-bar::-moz-range-track{background-color:var(--wpp-grey-color-300)}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0}@media (forced-colors: active){.progress-bar:focus-visible{outline:2px solid CanvasText}.progress-bar:focus-visible::-webkit-slider-thumb{outline:2px solid CanvasText}.progress-bar:focus-visible::-moz-range-thumb{outline:2px solid CanvasText}}";
+const wppAudioPlayerCss = "@charset \"UTF-8\";.volume-container{position:relative}.slider-container{position:absolute;top:-68px;left:50%;height:32px;width:80px;border-radius:6px;background-color:rgba(0, 0, 0, 0.6);-webkit-transform:translateX(-50%) rotate(270deg);transform:translateX(-50%) rotate(270deg);-webkit-transform-origin:center center;transform-origin:center center;opacity:0;visibility:hidden;pointer-events:none;-webkit-transition:opacity 0.15s ease-in-out, visibility 0s linear 0.15s;transition:opacity 0.15s ease-in-out, visibility 0s linear 0.15s}.slider-container.below{top:auto;bottom:-68px}.slider-container.active{opacity:1;visibility:visible;pointer-events:initial;-webkit-transition:opacity 0.15s ease-in-out, visibility 0s;transition:opacity 0.15s ease-in-out, visibility 0s}.slider-container .progress-bar{width:64px;height:auto;left:50%;top:50%;-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.slider-container .progress-bar::-webkit-slider-thumb{width:12px;height:12px;margin-top:-4px;}.slider-container .progress-bar::-moz-range-thumb{width:12px;height:12px}.volume-container.open .volume-button::part(overlay){background-color:var(--ab-bg-color-hover);opacity:var(--ab-bg-opacity-hover)}.volume-container.open .volume-button>[slot=icon-start]{color:var(--ab-secondary-icon-color-hover)}.volume-container.open.inverted .volume-button::part(overlay){background-color:var(--ab-inverted-bg-color-hover)}.volume-container.open.inverted .volume-button>[slot=icon-start]{color:var(--ab-inverted-icon-color-hover)}@media (prefers-reduced-motion: reduce){.slider-container,.slider-container.active{-webkit-transition:none;transition:none}}.volume-container.open .volume-button::part(overlay){background-color:var(--ab-bg-color-hover);opacity:var(--ab-bg-opacity-hover)}.volume-container.open .volume-button>[slot=icon-start]{color:var(--ab-secondary-icon-color-hover)}.volume-container.open.inverted .volume-button::part(overlay){background-color:var(--ab-inverted-bg-color-hover)}.volume-container.open.inverted .volume-button>[slot=icon-start]{color:var(--ab-inverted-icon-color-hover)}@media (prefers-reduced-motion: reduce){.slider-container,.slider-container.active{-webkit-transition:none;transition:none}}.audio-player-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px;-webkit-box-sizing:border-box;box-sizing:border-box;min-width:376px;width:100%;min-height:64px;max-height:64px;background-color:var(--wpp-grey-color-000);outline:none}.audio-player-container.tab-focus{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}.audio-element{display:none}.track-info{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:2px;min-width:0}.track-title,.track-description{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.track-description{color:var(--wpp-grey-color-700)}.controls{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;gap:12px}.timeline{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px;padding:0 6px}.audio-time{-ms-flex-negative:0;flex-shrink:0;color:var(--wpp-grey-color-800);font-variant-numeric:tabular-nums}.progress-container{position:relative;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-positive:1;flex-grow:1;height:16px}.progress-rail,.loading-progress{position:absolute;left:0;height:4px;border-radius:var(--wpp-border-radius-xs);pointer-events:none}.progress-rail{width:100%;background-color:var(--wpp-grey-color-300)}.loading-progress{background-color:var(--wpp-grey-color-500)}.progress-bar{-webkit-appearance:none;-moz-appearance:none;appearance:none;position:relative;-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;height:16px;margin:0;padding:0;background:transparent;cursor:pointer}.progress-bar::-webkit-slider-runnable-track{width:100%;height:4px;border-radius:var(--wpp-border-radius-xs);background:-webkit-gradient(linear, left top, right top, from(var(--wpp-brand-color)), to(transparent));background:linear-gradient(to right, var(--wpp-brand-color) var(--progress-bar-progress, 0%), transparent var(--progress-bar-progress, 0%))}.progress-bar::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;margin-top:-6px;border:none;border-radius:var(--wpp-border-radius-round);background-color:var(--wpp-brand-color);cursor:pointer}.progress-bar::-moz-range-track{width:100%;height:4px;border:none;border-radius:var(--wpp-border-radius-xs);background-color:transparent}.progress-bar::-moz-range-progress{height:4px;border:none;border-radius:var(--wpp-border-radius-xs);background-color:var(--wpp-brand-color)}.progress-bar::-moz-range-thumb{width:16px;height:16px;border:none;border-radius:var(--wpp-border-radius-round);background-color:var(--wpp-brand-color);cursor:pointer}.progress-bar:focus{outline:none}.progress-bar:focus-visible{border-radius:var(--wpp-border-radius-xs);outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}.progress-bar:focus-visible::-webkit-slider-thumb{border-radius:var(--wpp-border-radius-round);outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}.progress-bar:focus-visible::-moz-range-thumb{border-radius:var(--wpp-border-radius-round);outline:none;box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}.buttons{display:grid;grid-template-columns:1fr auto 1fr;-ms-flex-align:center;align-items:center;gap:16px}.volume-controls,.playback-buttons,.secondary-buttons{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}.secondary-buttons{-ms-flex-pack:start;justify-content:flex-start}.volume-controls{-ms-flex-pack:end;justify-content:flex-end}.volume-container .slider-container{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;background-color:var(--wpp-grey-color-000);-webkit-box-shadow:var(--wpp-box-shadow-m);box-shadow:var(--wpp-box-shadow-m)}.volume-container .slider-container .progress-bar{position:static;height:16px;-webkit-transform:none;transform:none}.volume-container .slider-container .progress-bar::-webkit-slider-runnable-track{background:-webkit-gradient(linear, left top, right top, from(var(--wpp-brand-color)), to(var(--wpp-grey-color-300)));background:linear-gradient(to right, var(--wpp-brand-color) var(--progress-bar-progress, 0%), var(--wpp-grey-color-300) var(--progress-bar-progress, 0%))}.volume-container .slider-container .progress-bar::-moz-range-track{background-color:var(--wpp-grey-color-300)}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0}@media (forced-colors: active){.progress-bar:focus-visible{outline:2px solid CanvasText}.progress-bar:focus-visible::-webkit-slider-thumb{outline:2px solid CanvasText}.progress-bar:focus-visible::-moz-range-thumb{outline:2px solid CanvasText}}";
 
 const WppAudioPlayer$1 = /*@__PURE__*/ proxyCustomElement(class WppAudioPlayer extends HTMLElement {
   constructor() {
@@ -67,6 +68,24 @@ const WppAudioPlayer$1 = /*@__PURE__*/ proxyCustomElement(class WppAudioPlayer e
     this.wppTimeUpdate = createEvent(this, "wppTimeUpdate", 1);
     this.wppVolumeChange = createEvent(this, "wppVolumeChange", 1);
     this.wppPlaybackRateChange = createEvent(this, "wppPlaybackRateChange", 1);
+    // When a speed is picked with the mouse, the popover hands focus back to the speed button. That focus is not keyboard
+    // focus (`:focus-visible`), so the button's tooltip must not open; hover and keyboard focus still open it.
+    this.isSpeedTooltipPointerFocus = false;
+    this.speedTooltipConfig = {
+      placement: 'bottom',
+      onTrigger: (_instance, event) => {
+        this.isSpeedTooltipPointerFocus = event.type === 'focus' && !getDeepActiveElement()?.matches(':focus-visible');
+      },
+      onUntrigger: () => {
+        this.isSpeedTooltipPointerFocus = false;
+      },
+      onShow: () => {
+        const isPointerFocus = this.isSpeedTooltipPointerFocus;
+        this.isSpeedTooltipPointerFocus = false;
+        if (isPointerFocus)
+          return false;
+      },
+    };
     /** Restored when the track is unmuted, so the volume lands back where the listener left it. */
     this.savedVolume = 1;
     /** While the seek bar's thumb is dragged, it shows where the listener is heading, not the playback position. */
@@ -215,12 +234,20 @@ const WppAudioPlayer$1 = /*@__PURE__*/ proxyCustomElement(class WppAudioPlayer e
       this.handleSliderShow();
       this.handleSliderHide(delay);
     };
+    /**
+     * The speed is applied on every change, but the menu only closes on a pick: a click, or Space / Enter. Arrow keys move
+     * the selection (radio group) and keep the menu open, so keyboard users can keep browsing the speeds (SC 3.2.2).
+     */
+    this.closePlaybackRateMenuOnPick = (event) => {
+      if ('key' in event && event.key !== ' ' && event.key !== 'Enter')
+        return;
+      this.playbackRatePopoverRef?.closePopover();
+    };
     this.handlePlaybackRateChange = (event) => {
       const rate = Number(event.detail.value);
       if (!Number.isFinite(rate))
         return;
       this.playbackRate = rate;
-      this.playbackRatePopoverRef?.closePopover();
     };
     /** Controls that Space activates natively: real buttons and ARIA toggles such as the speed pills. */
     this.isActivatedBySpace = (event) => event
@@ -262,7 +289,7 @@ const WppAudioPlayer$1 = /*@__PURE__*/ proxyCustomElement(class WppAudioPlayer e
       return this.timeFormat === 'extended' ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
     };
     this.renderAudioTag = () => (h("audio", { ref: ref => (this.audioRef = ref), class: "audio-element", controls: false, preload: this.preload, loop: this.loop, onLoadedMetaData: this.handleMetadataLoaded, onDurationChange: this.syncDuration, onTimeUpdate: this.handleTimeUpdate, onProgress: this.handleLoadProgress, onPlay: this.handlePlay, onPause: this.handlePause, onEnded: this.handleEnded }, this.sourceElements, this._locales.notSupportedPlayer));
-    this.renderTime = (time, label) => (h("wpp-typography-v4-6-0", { type: "xs-midi", class: "audio-time" }, h("span", { role: "timer", "aria-label": `${label} ${this.formatTime(time)}` }, this.formatTime(time))));
+    this.renderTime = (time, label) => (h("wpp-typography-v4-7-0", { type: "xs-midi", class: "audio-time" }, h("span", { role: "timer", "aria-label": label }, this.formatTime(time))));
     /**
      * The rail and the buffered bar sit under the input, which carries the played portion and the
      * thumb. The input's own track is transparent past the played portion, so both layers below
@@ -273,7 +300,7 @@ const WppAudioPlayer$1 = /*@__PURE__*/ proxyCustomElement(class WppAudioPlayer e
      * shared `handleKeyDown` flow moves the position by `AUDIO_SKIP_TIME_VALUE` itself.
      */
     this.renderSeekBar = () => (h("div", { class: "progress-container" }, h("div", { class: "progress-rail", "aria-hidden": "true" }), h("div", { class: "loading-progress", style: { width: `${this.loadedPercentage}%` }, "aria-hidden": "true" }), h("input", { class: "progress-bar seek-bar", style: { '--progress-bar-progress': `${this.seekProgress}%` }, type: "range", min: 0, max: this.overallAudioTime || 0, step: "any", value: this.currentAudioTime, onInput: this.handleSeek, onPointerDown: this.startScrubbing, "aria-label": this._locales.progressAriaLabel, "aria-valuemin": "0", "aria-valuemax": this.overallAudioTime, "aria-valuenow": this.currentAudioTime, "aria-valuetext": this.formatTime(this.currentAudioTime), autocomplete: "off" })));
-    this.renderIconButton = ({ label, icon, onClick, ariaProps = {}, }) => (h("wpp-tooltip-v4-6-0", { text: label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-6-0", { variant: "secondary", onClick: onClick, ariaProps: { label, ...ariaProps } }, icon)));
+    this.renderIconButton = ({ label, icon, onClick, ariaProps = {}, }) => (h("wpp-tooltip-v4-7-0", { text: label, config: { placement: 'bottom' } }, h("wpp-action-button-v4-7-0", { variant: "secondary", onClick: onClick, ariaProps: { label, ...ariaProps } }, icon)));
     /**
      * The volume bar is the video player's, rendered with this player as its host: the slider opens
      * on hover and on focus, a click on the button mutes. Only here the button also carries a tooltip.
@@ -282,7 +309,7 @@ const WppAudioPlayer$1 = /*@__PURE__*/ proxyCustomElement(class WppAudioPlayer e
     this.renderPlaybackRateControl = () => {
       const currentRate = this.formatPlaybackRate(this.playbackRate);
       const label = `${this._locales.playbackRateButtonAriaLabel} ${currentRate}`;
-      return (h("wpp-popover-v4-6-0", { ref: ref => (this.playbackRatePopoverRef = ref), ariaProps: { label: this._locales.playbackRateButtonAriaLabel }, config: {
+      return (h("wpp-popover-v4-7-0", { ref: ref => (this.playbackRatePopoverRef = ref), ariaProps: { label: this._locales.playbackRateButtonAriaLabel }, config: {
           placement: 'top-start',
           onShow: () => {
             this.isPlaybackRateOpen = true;
@@ -290,7 +317,7 @@ const WppAudioPlayer$1 = /*@__PURE__*/ proxyCustomElement(class WppAudioPlayer e
           onHide: () => {
             this.isPlaybackRateOpen = false;
           },
-        } }, h("div", { slot: "trigger-element" }, h("wpp-tooltip-v4-6-0", { text: this._locales.playbackRateButtonAriaLabel, config: { placement: 'bottom' } }, h("wpp-action-button-v4-6-0", { variant: "secondary", ariaProps: { label, haspopup: 'dialog', expanded: this.isPlaybackRateOpen } }, currentRate))), h("div", { style: { padding: '8px' } }, h("wpp-pill-group-v4-6-0", { type: "single", value: this.playbackRate, onWppChange: this.handlePlaybackRateChange, "aria-label": this._locales.playbackRateButtonAriaLabel }, this.playbackRates.map(rate => (h("wpp-pill-v4-6-0", { key: rate, value: rate, label: this.formatPlaybackRate(rate) })))))));
+        } }, h("div", { slot: "trigger-element" }, h("wpp-tooltip-v4-7-0", { text: this._locales.playbackRateButtonAriaLabel, config: this.speedTooltipConfig }, h("wpp-action-button-v4-7-0", { variant: "secondary", ariaProps: { label, haspopup: 'dialog', expanded: this.isPlaybackRateOpen } }, currentRate))), h("div", { style: { padding: '8px' }, onClick: this.closePlaybackRateMenuOnPick, onKeyDown: this.closePlaybackRateMenuOnPick }, h("wpp-pill-group-v4-7-0", { type: "single", value: this.playbackRate, onWppChange: this.handlePlaybackRateChange, "aria-label": this._locales.playbackRateButtonAriaLabel }, this.playbackRates.map(rate => (h("wpp-pill-v4-7-0", { key: rate, value: rate, label: this.formatPlaybackRate(rate) })))))));
     };
     this.audioPlayerState = 'idle';
     this.currentAudioTime = 0;
@@ -454,26 +481,26 @@ const WppAudioPlayer$1 = /*@__PURE__*/ proxyCustomElement(class WppAudioPlayer e
     const playPauseLabel = isPlaying ? this._locales.pauseButtonAriaLabel : this._locales.playButtonAriaLabel;
     return (h(Host, null, h("div", { class: { 'audio-player-container': true, 'tab-focus': this.focusType === FOCUS_TYPE.TAB }, role: this.ariaProps.role || 'group', "aria-label": this.ariaProps.label || this._locales.hostAriaLabel, tabIndex: 0, onMouseDown: this.handleContainerMouseDown, onKeyUp: this.handleContainerKeyUp, onBlur: this.handleContainerBlur }, this.renderAudioTag(), h("div", { class: "controls" }, h("div", { class: "timeline" }, this.renderTime(this.currentAudioTime, this._locales.currentTimeAriaLabel), this.renderSeekBar(), this.renderTime(this.overallAudioTime, this._locales.durationAriaLabel)), h("div", { class: "buttons" }, h("div", { class: "secondary-buttons" }, this.renderPlaybackRateControl()), h("div", { class: "playback-buttons" }, this.renderIconButton({
       label: this._locales.skipBackwardButtonAriaLabel,
-      icon: h("wpp-icon-rewind-v4-6-0", { slot: "icon-start", "aria-hidden": "true" }),
+      icon: h("wpp-icon-rewind-v4-7-0", { slot: "icon-start", "aria-hidden": "true" }),
       onClick: () => this.skip(-AUDIO_SKIP_TIME_VALUE),
     }), this.renderIconButton({
       label: playPauseLabel,
-      icon: isPlaying ? (h("wpp-icon-pause-v4-6-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-play-v4-6-0", { slot: "icon-start", "aria-hidden": "true" })),
+      icon: isPlaying ? (h("wpp-icon-pause-v4-7-0", { slot: "icon-start", "aria-hidden": "true" })) : (h("wpp-icon-play-v4-7-0", { slot: "icon-start", "aria-hidden": "true" })),
       onClick: this.togglePlay,
     }), this.renderIconButton({
       label: this._locales.skipForwardButtonAriaLabel,
-      icon: h("wpp-icon-fast-forward-v4-6-0", { slot: "icon-start", "aria-hidden": "true" }),
+      icon: h("wpp-icon-fast-forward-v4-7-0", { slot: "icon-start", "aria-hidden": "true" }),
       onClick: () => this.skip(AUDIO_SKIP_TIME_VALUE),
     })), h("div", { class: "volume-controls" }, this.renderVolumeBar()))))));
   }
-  static get registryIs() { return "wpp-audio-player-v4-6-0"; }
+  static get registryIs() { return "wpp-audio-player-v4-7-0"; }
   get host() { return this; }
   static get watchers() { return {
     "volume": ["onVolumeChange"],
     "playbackRate": ["onPlaybackRateChange"]
   }; }
   static get style() { return wppAudioPlayerCss; }
-}, [1, "wpp-audio-player", "wpp-audio-player-v4-6-0", {
+}, [1, "wpp-audio-player", "wpp-audio-player-v4-7-0", {
     "src": [1],
     "type": [1],
     "autoplay": [4],
@@ -499,139 +526,139 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-audio-player-v4-6-0", "wpp-action-button-v4-6-0", "wpp-icon-cross-v4-6-0", "wpp-icon-drag-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-fast-forward-v4-6-0", "wpp-icon-info-message-v4-6-0", "wpp-icon-pause-v4-6-0", "wpp-icon-play-v4-6-0", "wpp-icon-rewind-v4-6-0", "wpp-icon-search-v4-6-0", "wpp-icon-speaker-v4-6-0", "wpp-icon-speaker-mute-v4-6-0", "wpp-icon-success-v4-6-0", "wpp-icon-tick-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-inline-message-v4-6-0", "wpp-input-v4-6-0", "wpp-internal-label-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-label-v4-6-0", "wpp-pill-v4-6-0", "wpp-pill-group-v4-6-0", "wpp-popover-v4-6-0", "wpp-spinner-v4-6-0", "wpp-tooltip-v4-6-0", "wpp-typography-v4-6-0"];
+  const components = ["wpp-audio-player-v4-7-0", "wpp-action-button-v4-7-0", "wpp-icon-cross-v4-7-0", "wpp-icon-drag-v4-7-0", "wpp-icon-error-v4-7-0", "wpp-icon-fast-forward-v4-7-0", "wpp-icon-info-message-v4-7-0", "wpp-icon-pause-v4-7-0", "wpp-icon-play-v4-7-0", "wpp-icon-rewind-v4-7-0", "wpp-icon-search-v4-7-0", "wpp-icon-speaker-v4-7-0", "wpp-icon-speaker-mute-v4-7-0", "wpp-icon-success-v4-7-0", "wpp-icon-tick-v4-7-0", "wpp-icon-warning-v4-7-0", "wpp-inline-message-v4-7-0", "wpp-input-v4-7-0", "wpp-internal-label-v4-7-0", "wpp-internal-tooltip-v4-7-0", "wpp-label-v4-7-0", "wpp-pill-v4-7-0", "wpp-pill-group-v4-7-0", "wpp-popover-v4-7-0", "wpp-spinner-v4-7-0", "wpp-tooltip-v4-7-0", "wpp-typography-v4-7-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-audio-player-v4-6-0":
+    case "wpp-audio-player-v4-7-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppAudioPlayer$1);
       }
       break;
-    case "wpp-action-button-v4-6-0":
+    case "wpp-action-button-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$r();
       }
       break;
-    case "wpp-icon-cross-v4-6-0":
+    case "wpp-icon-cross-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$q();
       }
       break;
-    case "wpp-icon-drag-v4-6-0":
+    case "wpp-icon-drag-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$p();
       }
       break;
-    case "wpp-icon-error-v4-6-0":
+    case "wpp-icon-error-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$o();
       }
       break;
-    case "wpp-icon-fast-forward-v4-6-0":
+    case "wpp-icon-fast-forward-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-icon-info-message-v4-6-0":
+    case "wpp-icon-info-message-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-icon-pause-v4-6-0":
+    case "wpp-icon-pause-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-play-v4-6-0":
+    case "wpp-icon-play-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-rewind-v4-6-0":
+    case "wpp-icon-rewind-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-search-v4-6-0":
+    case "wpp-icon-search-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-speaker-v4-6-0":
+    case "wpp-icon-speaker-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-speaker-mute-v4-6-0":
+    case "wpp-icon-speaker-mute-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-success-v4-6-0":
+    case "wpp-icon-success-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-tick-v4-6-0":
+    case "wpp-icon-tick-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-warning-v4-6-0":
+    case "wpp-icon-warning-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-inline-message-v4-6-0":
+    case "wpp-inline-message-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-input-v4-6-0":
+    case "wpp-input-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-internal-label-v4-6-0":
+    case "wpp-internal-label-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-internal-tooltip-v4-6-0":
+    case "wpp-internal-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-label-v4-6-0":
+    case "wpp-label-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-pill-v4-6-0":
+    case "wpp-pill-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-pill-group-v4-6-0":
+    case "wpp-pill-group-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-popover-v4-6-0":
+    case "wpp-popover-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-6-0":
+    case "wpp-spinner-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-6-0":
+    case "wpp-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-6-0":
+    case "wpp-typography-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

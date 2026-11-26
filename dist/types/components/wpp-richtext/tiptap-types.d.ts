@@ -83,6 +83,16 @@ export declare const tiptapSources: {
 export type TiptapSources = ValuesOf<typeof tiptapSources>;
 export interface TiptapRichtextLocales {
   charactersEntered: string;
+  /** Accessible name for the formatting toolbar (`role="toolbar"`, WCAG 4.1.2). */
+  toolbarLabel: string;
+  /** Accessible name for the font-size picker trigger button. */
+  fontSizeLabel: string;
+  /** Accessible name for the URL field in the link tooltip. */
+  linkUrlLabel: string;
+  /** Accessible name for the editable region when no `labelConfig`/`placeholder` is set. */
+  editorLabel: string;
+  /** Accessible names for each toolbar action button, keyed by action name. */
+  toolbarActions: Record<string, string>;
 }
 /**
  * Backward-compatible type aliases.

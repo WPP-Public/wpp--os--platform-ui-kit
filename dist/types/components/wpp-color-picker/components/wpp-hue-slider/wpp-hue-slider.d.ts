@@ -12,18 +12,20 @@ export declare class HueSlider {
    */
   readonly hue: number;
   /**
+   * Accessible name of the slider, set by wpp-color-picker from its locales.
+   */
+  readonly label?: string;
+  /**
    * Event emitted when the hue of the slider changes.
    */
   hueChanged: EventEmitter<number>;
-  markerPosition: number;
-  updateHue(): void;
   componentDidLoad(): void;
   private setupCanvas;
   private drawHueSlider;
-  private updateMarkerPosition;
   private handleMouseDown;
   private handleMouseUp;
   private handleMouseMove;
   private updateHueFromMouse;
+  private handleKeyDown;
   render(): any;
 }

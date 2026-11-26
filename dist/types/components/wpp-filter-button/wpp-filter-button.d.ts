@@ -43,6 +43,7 @@ export declare class WppFilterButton {
   private onKeyDown;
   private onKeyUp;
   private onBlur;
+  private onFocus;
   private onMouseDown;
   private hostCssClasses;
   private buttonCssClasses;

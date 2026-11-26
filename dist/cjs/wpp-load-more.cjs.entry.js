@@ -3,11 +3,17 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
+const utils = require('./utils-8b2c3bc1.js');
+require('./consts-d8f5ef98.js');
 
 const PROGRESS_WIDTH = 200;
 const TOTAL_ITEMS = 100;
 const ITEMS_LOADED = 0;
 const INCREASE_BY = 10;
+const LOCALES_DEFAULTS = {
+  loadMore: 'Load more',
+  itemsProgress: (loaded, total) => `${loaded} of ${total} items`,
+};
 
 const wppLoadMoreCss = ":host{--load-more-progress-text-color:var(--wpp-load-more-progress-text-color, var(--wpp-grey-color-700));--load-more-progress-text-color-disabled:var(\n    --wpp-load-more-progress-text-color-disabled,\n    var(--wpp-text-color-disabled)\n  );--load-more-progress-bar-color-disabled:var(\n    --wpp-load-more-progress-bar-color-disabled,\n    var(--wpp-brand-color-disabled)\n  );--load-more-button-width:var(--wpp-load-more-button-width, 200px);display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:center;align-items:center;gap:16px;width:var(--load-more-button-width)}.progress-container{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:center;align-items:center;gap:8px}.progress-container.disabled{cursor:not-allowed}.progress-container.disabled .progress-indicator::part(body){--pi-linear-bg-color:var(--load-more-progress-bar-color-disabled)}.progress-text{font-size:var(--wpp-typography-s-midi-font-size, 14px);line-height:var(--wpp-typography-s-midi-line-height, 22px);font-weight:var(--wpp-typography-s-midi-font-weight, 500);color:var(--wpp-typography-s-midi-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-midi-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-midi-letter-spacing, 0);color:var(--load-more-progress-text-color)}.progress-text.disabled{color:var(--load-more-progress-text-color-disabled)}.load-more-button::part(button){width:var(--load-more-button-width)}";
 
@@ -49,6 +55,7 @@ const WppLoadMore = class {
     this.disabled = false;
     this.incrementBy = INCREASE_BY;
     this.ariaProps = {};
+    this.locales = {};
   }
   updateProgress() {
     this.progressPercentage =
@@ -71,13 +78,16 @@ const WppLoadMore = class {
   componentWillLoad() {
     this.updateProgress();
   }
+  get _locales() {
+    return utils.mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
   isDisabled() {
     return this.disabled || this.itemsLoaded >= this.totalItems;
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), onKeyDown: this.onKeyDown, exportparts: "container, progress-text, button" }, this.showProgressBar && (index.h("div", { class: this.progressContainerCssClasses(), part: "container" }, index.h("span", { id: "wpp-progress-indicator-label", class: this.progressTextCssClasses(), part: "progress-text" }, Math.max(0, Math.min(this.itemsLoaded, this.totalItems)), " of ", Math.max(0, this.totalItems), " items"), index.h("wpp-progress-indicator-v4-6-0", { class: "progress-indicator", value: this.progressPercentage, width: PROGRESS_WIDTH, ariaProps: { labelledby: 'wpp-progress-indicator-label' } }))), index.h("wpp-button-v4-6-0", { ref: refEl => (this.loadBtnRef = refEl), class: "load-more-button", variant: "secondary", loading: this.loading && !this.isDisabled(), part: "button", disabled: this.isDisabled(), size: "s", onClick: this.handleClick, ariaProps: this.ariaProps }, "Load more")));
+    return (index.h(index.Host, { class: this.hostCssClasses(), onKeyDown: this.onKeyDown, exportparts: "container, progress-text, button" }, this.showProgressBar && (index.h("div", { class: this.progressContainerCssClasses(), part: "container" }, index.h("span", { id: "wpp-progress-indicator-label", class: this.progressTextCssClasses(), part: "progress-text", "aria-live": "polite" }, this._locales.itemsProgress(Math.max(0, Math.min(this.itemsLoaded, this.totalItems)), Math.max(0, this.totalItems))), index.h("wpp-progress-indicator-v4-7-0", { class: "progress-indicator", value: this.progressPercentage, width: PROGRESS_WIDTH, ariaProps: { labelledby: 'wpp-progress-indicator-label' } }))), index.h("wpp-button-v4-7-0", { ref: refEl => (this.loadBtnRef = refEl), class: "load-more-button", variant: "secondary", loading: this.loading && !this.isDisabled(), part: "button", disabled: this.isDisabled(), size: "s", onClick: this.handleClick, ariaProps: this.ariaProps }, this._locales.loadMore)));
   }
-  static get registryIs() { return "wpp-load-more-v4-6-0"; }
+  static get registryIs() { return "wpp-load-more-v4-7-0"; }
   static get watchers() { return {
     "itemsLoaded": ["updateProgress"],
     "totalItems": ["updateProgress"],

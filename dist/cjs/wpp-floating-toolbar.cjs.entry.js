@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
-const utils = require('./utils-a3ab9816.js');
+const utils = require('./utils-8b2c3bc1.js');
 const subscribeToTheme = require('./subscribe-to-theme-f2fa6289.js');
 require('./consts-d8f5ef98.js');
 require('./theme-observer-4179316e.js');
@@ -79,13 +79,13 @@ const WppFloatingToolbar = class {
       // `action` styles every button from outside; `action-<id>` picks one out, as a toolbar holding a
       // readout of changing width needs
       const part = data.id ? `action action-${data.id}` : 'action';
-      const button = (index.h("wpp-action-button-v4-6-0", { key: key, ...buttonData, part: part, exportparts: "button", ariaProps: { ...data.ariaProps, tabIndex: index$1 === rovingIndex ? 0 : -1 }, variant: "secondary", class: {
+      const button = (index.h("wpp-action-button-v4-7-0", { key: key, ...buttonData, part: part, exportparts: "button", ariaProps: { ...data.ariaProps, tabIndex: index$1 === rovingIndex ? 0 : -1 }, variant: "secondary", class: {
           'is-selected': this.selectable &&
             (this.hasIdProp ? this.selectedIdentifier === data.id : this.selectedIdentifier === index$1),
         }, onClick: () => this.handleBtnClick(data, index$1) }, data.icon && index.h(utils.transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' }), label));
       if (!tooltip)
         return button;
-      return (index.h("wpp-tooltip-v4-6-0", { key: `tooltip-${key}`, text: tooltip, part: "action-tooltip" }, button));
+      return (index.h("wpp-tooltip-v4-7-0", { key: `tooltip-${key}`, text: tooltip, part: "action-tooltip" }, button));
     };
     this.getEnabledButtons = () => this.items.filter(item => !item.disabled);
     this.focusItem = (item) => {
@@ -170,7 +170,7 @@ const WppFloatingToolbar = class {
     const rovingIndex = this.getRovingIndex();
     return (index.h(index.Host, { class: this.hostCssClasses(), role: "toolbar", "aria-orientation": this.orientation, "aria-label": this.ariaProps?.label, "aria-labelledby": this.ariaProps?.labelledby, onKeyDown: this.onKeyDown, onPointerDown: this.onPointerDown }, index.h("div", { class: this.wrapperCssClasses() }, this._actionButtonsConfig.map((data, index) => this.renderActionButton(data, index, rovingIndex)))));
   }
-  static get registryIs() { return "wpp-floating-toolbar-v4-6-0"; }
+  static get registryIs() { return "wpp-floating-toolbar-v4-7-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "actionButtonsConfig": ["onUpdateActionButtonsConfig"]

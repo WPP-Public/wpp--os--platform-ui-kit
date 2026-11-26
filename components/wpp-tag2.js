@@ -8,7 +8,7 @@ import { d as defineCustomElement$3 } from './wpp-internal-tooltip2.js';
 import { d as defineCustomElement$2 } from './wpp-tooltip2.js';
 import { d as defineCustomElement$1 } from './wpp-typography2.js';
 
-const wppTagCss = ":host{--tag-height:var(--wpp-tag-height, 24px);--tag-padding:var(--wpp-tag-padding, 2px 8px);--tag-with-icon-padding:var(--wpp-tag-with-icon-padding, 2px 8px 2px 6px);--tag-bg-opacity:var(--wpp-tag-bg-opacity, 1);--tag-border-radius:var(--wpp-tag-border-radius, var(--wpp-border-radius-xs));--tag-icon-margin:var(--wpp-tag-icon-margin, 0 4px 0 0);--tag-typography-color:var(--wpp-tag-typography-color, var(--wpp-grey-color-1000));--tag-icon-color:var(--wpp-tag-icon-color, var(--wpp-grey-color-900));--tag-neutral-color:var(--wpp-tag-neutral-color, var(--wpp-dataviz-color-seq-grey-600));--tag-neutral-bg-color:var(--wpp-tag-neutral-bg-color, var(--wpp-grey-color-300));--tag-neutral-bg-opacity:var(--wpp-tag-neutral-bg-opacity, 0.25);--tag-warning-color:var(--wpp-tag-warning-color, var(--wpp-dataviz-color-seq-warning-600));--tag-warning-bg-color:var(--wpp-tag-warning-bg-color, var(--wpp-warning-color-200));--tag-warning-bg-opacity:var(--wpp-tag-warning-bg-opacity, 0.25);--tag-positive-color:var(--wpp-tag-positive-color, var(--wpp-dataviz-color-seq-positive-600));--tag-positive-bg-color:var(--wpp-tag-positive-bg-color, var(--wpp-success-color-200));--tag-positive-bg-opacity:var(--wpp-tag-positive-bg-opacity, 0.25);--tag-negative-color:var(--wpp-tag-negative-color, var(--wpp-dataviz-color-seq-negative-600));--tag-negative-bg-color:var(--wpp-tag-negative-bg-color, var(--wpp-danger-color-200));--tag-negative-bg-opacity:var(--wpp-tag-negative-bg-opacity, 0.25);--tag-disabled-opacity:var(--wpp-tag-disabled-opacity, 0.4);display:-ms-inline-flexbox;display:inline-flex;-ms-flex-align:center;align-items:center;-webkit-box-sizing:border-box;box-sizing:border-box;height:var(--tag-height);padding:var(--tag-padding);overflow:hidden;border-radius:var(--tag-border-radius)}:host{--wpp-typography-color:var(--tag-typography-color);--wpp-icon-color:var(--tag-icon-color);background-color:var(--wpp-white-color);position:relative}:host .icon-start ::slotted(*){color:var(--tag-icon-color);mix-blend-mode:plus-darker}:host(.wpp-warning) .overlay{background-color:var(--tag-warning-bg-color)}:host(.wpp-positive) .overlay{background-color:var(--tag-positive-bg-color)}:host(.wpp-negative) .overlay{background-color:var(--tag-negative-bg-color)}:host(.wpp-Cat-1) .overlay{background-color:var(--wpp-dataviz-color-cat-light-1)}:host(.wpp-Cat-2) .overlay{background-color:var(--wpp-dataviz-color-cat-light-2)}:host(.wpp-Cat-3) .overlay{background-color:var(--wpp-dataviz-color-cat-light-3)}:host(.wpp-Cat-4) .overlay{background-color:var(--wpp-dataviz-color-cat-light-4)}:host(.wpp-Cat-5) .overlay{background-color:var(--wpp-dataviz-color-cat-light-5)}:host(.wpp-Cat-6) .overlay{background-color:var(--wpp-dataviz-color-cat-light-6)}:host(.wpp-Cat-7) .overlay{background-color:var(--wpp-dataviz-color-cat-light-7)}:host(.wpp-Cat-8) .overlay{background-color:var(--wpp-dataviz-color-cat-light-8)}:host(.wpp-Cat-9) .overlay{background-color:var(--wpp-dataviz-color-cat-light-9)}:host(.wpp-with-icon){padding:var(--tag-with-icon-padding)}:host(.wpp-with-icon) .icon-start{z-index:1;display:-ms-flexbox;display:flex;margin:var(--tag-icon-margin)}.wpp-typography{z-index:1;display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;mix-blend-mode:plus-darker;min-width:0;max-width:100%;-ms-flex:1;flex:1}.wpp-typography::part(typography){display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;mix-blend-mode:plus-darker;max-width:100%}.wpp-typography::part(inner){display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:100%}.wpp-tooltip{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:100%}.wpp-tooltip::part(anchor){display:block;width:100%;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.label-text{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:100%}.icon-start.slot-hidden{display:none}.overlay{position:absolute;width:100%;height:100%;top:0;left:0;border-radius:var(--tag-border-radius);opacity:var(--tag-bg-opacity)}.categorical-overlay{opacity:0.4}:host(.wpp-neutral) .overlay{background-color:var(--tag-neutral-bg-color);opacity:0.6}:host(.wpp-disabled){opacity:var(--tag-disabled-opacity)}:host([data-wpp-theme=dark]){background-color:var(--wpp-grey-color-300)}";
+const wppTagCss = ":host{--tag-height:var(--wpp-tag-height, 24px);--tag-padding:var(--wpp-tag-padding, 2px 8px);--tag-with-icon-padding:var(--wpp-tag-with-icon-padding, 2px 8px 2px 6px);--tag-bg-opacity:var(--wpp-tag-bg-opacity, 0.6);--tag-content-opacity:var(--wpp-tag-content-opacity, 0.8);--tag-border-radius:var(--wpp-tag-border-radius, var(--wpp-border-radius-xs));--tag-icon-margin:var(--wpp-tag-icon-margin, 0 4px 0 0);--tag-typography-color:var(--wpp-tag-typography-color, var(--wpp-grey-color-1000));--tag-icon-color:var(--wpp-tag-icon-color, var(--wpp-grey-color-900));--tag-neutral-color:var(--wpp-tag-neutral-color, var(--wpp-dataviz-color-seq-grey-600));--tag-neutral-bg-color:var(--wpp-tag-neutral-bg-color, var(--wpp-grey-color-300));--tag-neutral-bg-opacity:var(--wpp-tag-neutral-bg-opacity, var(--tag-bg-opacity));--tag-warning-color:var(--wpp-tag-warning-color, var(--wpp-dataviz-color-seq-warning-600));--tag-warning-bg-color:var(--wpp-tag-warning-bg-color, var(--wpp-dataviz-color-seq-warning-300));--tag-warning-bg-opacity:var(--wpp-tag-warning-bg-opacity, var(--tag-bg-opacity));--tag-positive-color:var(--wpp-tag-positive-color, var(--wpp-dataviz-color-seq-positive-600));--tag-positive-bg-color:var(--wpp-tag-positive-bg-color, var(--wpp-dataviz-color-seq-positive-300));--tag-positive-bg-opacity:var(--wpp-tag-positive-bg-opacity, var(--tag-bg-opacity));--tag-negative-color:var(--wpp-tag-negative-color, var(--wpp-dataviz-color-seq-negative-600));--tag-negative-bg-color:var(--wpp-tag-negative-bg-color, var(--wpp-dataviz-color-seq-negative-300));--tag-negative-bg-opacity:var(--wpp-tag-negative-bg-opacity, var(--tag-bg-opacity));--tag-disabled-opacity:var(--wpp-tag-disabled-opacity, 0.4);display:-ms-inline-flexbox;display:inline-flex;-ms-flex-align:center;align-items:center;-webkit-box-sizing:border-box;box-sizing:border-box;height:var(--tag-height);padding:var(--tag-padding);overflow:hidden;border-radius:var(--tag-border-radius)}:host{--wpp-icon-color:var(--tag-icon-color);background-color:var(--wpp-white-color);position:relative}:host .icon-start ::slotted(*){color:var(--tag-icon-color)}:host(.wpp-neutral) .overlay{background-color:var(--tag-neutral-bg-color);opacity:var(--tag-neutral-bg-opacity)}:host(.wpp-warning) .overlay{background-color:var(--tag-warning-bg-color);opacity:var(--tag-warning-bg-opacity)}:host(.wpp-positive) .overlay{background-color:var(--tag-positive-bg-color);opacity:var(--tag-positive-bg-opacity)}:host(.wpp-negative) .overlay{background-color:var(--tag-negative-bg-color);opacity:var(--tag-negative-bg-opacity)}:host(.wpp-Cat-1) .overlay{background-color:var(--wpp-dataviz-color-cat-light-1)}:host(.wpp-Cat-2) .overlay{background-color:var(--wpp-dataviz-color-cat-light-2)}:host(.wpp-Cat-3) .overlay{background-color:var(--wpp-dataviz-color-cat-light-3)}:host(.wpp-Cat-4) .overlay{background-color:var(--wpp-dataviz-color-cat-light-4)}:host(.wpp-Cat-5) .overlay{background-color:var(--wpp-dataviz-color-cat-light-5)}:host(.wpp-Cat-6) .overlay{background-color:var(--wpp-dataviz-color-cat-light-6)}:host(.wpp-Cat-7) .overlay{background-color:var(--wpp-dataviz-color-cat-light-7)}:host(.wpp-Cat-8) .overlay{background-color:var(--wpp-dataviz-color-cat-light-8)}:host(.wpp-Cat-9) .overlay{background-color:var(--wpp-dataviz-color-cat-light-9)}:host(.wpp-with-icon){padding:var(--tag-with-icon-padding)}:host(.wpp-with-icon) .icon-start{z-index:1;display:-ms-flexbox;display:flex;margin:var(--tag-icon-margin)}.wpp-typography{z-index:1;display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;opacity:var(--tag-content-opacity);min-width:0;max-width:100%;-ms-flex:1;flex:1}.wpp-typography::part(typography){display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:100%}.wpp-typography::part(inner){display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:100%}.wpp-tooltip{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:100%}.wpp-tooltip::part(anchor){display:block;width:100%;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.label-text{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:100%}.icon-start{opacity:var(--tag-content-opacity)}.icon-start.slot-hidden{display:none}.overlay{position:absolute;width:100%;height:100%;top:0;left:0;border-radius:var(--tag-border-radius);opacity:var(--tag-bg-opacity)}:host(.wpp-disabled){opacity:var(--tag-disabled-opacity)}:host([data-wpp-theme=dark]){background-color:var(--wpp-grey-color-300)}";
 
 const WppTag = /*@__PURE__*/ proxyCustomElement(class WppTag extends HTMLElement {
   constructor() {
@@ -82,7 +82,7 @@ const WppTag = /*@__PURE__*/ proxyCustomElement(class WppTag extends HTMLElement
       const wasMaxLengthTruncated = !!this.maxLabelLength && this.maxLabelLength > 0 && displayedText !== originalLabel;
       const shouldShowTooltip = this.isOverflowTruncated || wasMaxLengthTruncated;
       const labelNode = (h("span", { class: "label-text", part: "tooltip-text", ref: this.setLabelRef }, displayedText));
-      return shouldShowTooltip ? (h("wpp-tooltip-v4-6-0", { class: "wpp-tooltip", text: originalLabel, config: this.tooltipConfig, part: "tooltip", disabled: this.disabled }, labelNode)) : (labelNode);
+      return shouldShowTooltip ? (h("wpp-tooltip-v4-7-0", { class: "wpp-tooltip", text: originalLabel, config: this.tooltipConfig, part: "tooltip", disabled: this.disabled }, labelNode)) : (labelNode);
     };
     this.hasIconStartSlot = false;
     this.isOverflowTruncated = false;
@@ -109,16 +109,16 @@ const WppTag = /*@__PURE__*/ proxyCustomElement(class WppTag extends HTMLElement
     this.resizeObserver?.disconnect();
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("wpp-typography-v4-6-0", { class: "wpp-typography", type: "xs-midi", tag: "span", part: "label" }, this.renderLabel()), h("div", { class: `overlay ${this.variant?.includes('Cat-') ? 'categorical-overlay' : ''}`, part: "overlay" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, tooltip, tooltip-text, icon-start, overlay" }, h(WrappedSlot, { wrapperClass: this.iconStartCssClasses(), name: "icon-start", onSlotchange: this.updateSlotData }), h("wpp-typography-v4-7-0", { class: "wpp-typography", type: "xs-midi", tag: "span", color: "var(--wpp-tag-typography-color, var(--wpp-grey-color-1000))", part: "label" }, this.renderLabel()), h("div", { class: "overlay", part: "overlay" })));
   }
-  static get registryIs() { return "wpp-tag-v4-6-0"; }
+  static get registryIs() { return "wpp-tag-v4-7-0"; }
   get host() { return this; }
   static get watchers() { return {
     "label": ["onLabelChange"],
     "maxLabelLength": ["onLabelChange"]
   }; }
   static get style() { return wppTagCss; }
-}, [1, "wpp-tag", "wpp-tag-v4-6-0", {
+}, [1, "wpp-tag", "wpp-tag-v4-7-0", {
     "variant": [1],
     "maxLabelLength": [2, "max-label-length"],
     "tooltipConfig": [16],
@@ -131,34 +131,34 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tag-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-tooltip-v4-6-0", "wpp-typography-v4-6-0"];
+  const components = ["wpp-tag-v4-7-0", "wpp-icon-error-v4-7-0", "wpp-icon-warning-v4-7-0", "wpp-internal-tooltip-v4-7-0", "wpp-tooltip-v4-7-0", "wpp-typography-v4-7-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tag-v4-6-0":
+    case "wpp-tag-v4-7-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTag);
       }
       break;
-    case "wpp-icon-error-v4-6-0":
+    case "wpp-icon-error-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-warning-v4-6-0":
+    case "wpp-icon-warning-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-internal-tooltip-v4-6-0":
+    case "wpp-internal-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-6-0":
+    case "wpp-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-6-0":
+    case "wpp-typography-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

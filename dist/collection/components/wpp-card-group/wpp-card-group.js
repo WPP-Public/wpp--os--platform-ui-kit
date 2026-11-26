@@ -204,10 +204,10 @@ export class WppCardGroup {
     });
   }
   render() {
-    return (h(Host, { "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, class: this.hostCssClasses(), exportparts: "inner", role: this.multiple ? 'group' : 'radiogroup', "aria-labelledby": this.ariaProps.labelledby }, h("slot", { part: "inner" })));
+    return (h(Host, { "aria-required": this.required, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, class: this.hostCssClasses(), exportparts: "inner", role: this.multiple ? 'group' : 'radiogroup', "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label }, h("slot", { part: "inner" })));
   }
   static get is() { return "wpp-card-group"; }
-  static get registryIs() { return "wpp-card-group-v4-6-0"; }
+  static get registryIs() { return "wpp-card-group-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

@@ -6,3 +6,6 @@ export const MAXIMUM_SECONDARY_BUTTONS = 2;
 export const MAXIMUM_ACTION_BUTTONS = 1;
 export const INITIAL_BUTTONS_LIST_VALUE = [null, null, null, null];
 export const DEFAULT_SCROLL_TRESHOLD = 200;
+export const LOCALES_DEFAULTS = {
+  backButtonLabel: 'Back',
+};

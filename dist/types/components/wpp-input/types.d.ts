@@ -13,6 +13,10 @@ export type InputLabelConfig = LabelConfig;
 export type InputLocaleInterface = {
   minLengthErrorMessage: (minLength: number) => string;
   maxLengthErrorMessage: (maxLength: number) => string;
+  /** Accessible name of the button that clears the input. */
+  clearInput: string;
+  /** Accessible name of the spinner a search input shows while loading. */
+  loading: string;
 };
 declare const _CountryCodes: import("libphonenumber-js/types").CountryCode[];
 export type CountryCode = (typeof _CountryCodes)[number];

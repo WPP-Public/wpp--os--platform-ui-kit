@@ -969,10 +969,6 @@
   outline: none;
   box-shadow: 0 0 0 1px var(--datepicker-input-first-border-color-focus), 0 0 0 3px var(--datepicker-input-second-border-color-focus);
 }
-:host .cross-icon.disabled {
-  pointer-events: none;
-  color: var(--datepicker-close-icon-color-disabled);
-}
 :host .cross-icon:hover {
   color: var(--datepicker-close-icon-color-hover);
 }

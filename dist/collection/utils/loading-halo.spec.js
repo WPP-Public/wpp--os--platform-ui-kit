@@ -4,8 +4,8 @@ const MIXIN_PATH = join(__dirname, '..', 'global', 'loadingHalo.scss');
 const SASS_CLI_PATH = join(dirname(require.resolve('sass')), 'sass.js');
 // Compiles a snippet with the mixin file injected, the same way Stencil's `injectGlobalPaths` does.
 // Sass runs in a separate process, as it does not run against the mocked DOM globals of the spec environment.
-const compile = (scss) => execFileSync(process.execPath, [SASS_CLI_PATH, '--stdin', '--no-source-map'], {
-  input: `@import '${MIXIN_PATH}';\n${scss}`,
+const compile = (scss) => execFileSync(process.execPath, [SASS_CLI_PATH, '--stdin', '--no-source-map', '--load-path', dirname(MIXIN_PATH)], {
+  input: `@import 'loadingHalo';\n${scss}`,
   encoding: 'utf8',
 });
 // Returns the declarations of the first rule matching the given selector.

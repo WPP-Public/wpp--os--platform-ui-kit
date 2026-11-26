@@ -8,6 +8,7 @@ import { AvatarChangeEventDetail, AvatarSize, AvatarVariant } from '../wpp-avata
  * @part tooltip - tooltip wrapper content
  */
 export declare class WppAvatar {
+  private contentRef?;
   host: HTMLWppAvatarElement;
   isImageFailedToLoad: boolean;
   focusType: FOCUS_TYPE;
@@ -71,6 +72,13 @@ export declare class WppAvatar {
    * Emitted when the avatar item is clicked.
    */
   wppClick: EventEmitter<AvatarChangeEventDetail>;
+  /**
+   * Method that sets focus on the avatar: its tooltip trigger when it has a tooltip, otherwise the host. The
+   * keyboard focus ring shows unless `focusVisible` is false, which suits focus moved in response to a pointer press.
+   */
+  setFocus(options?: {
+    focusVisible?: boolean;
+  }): Promise<void>;
   colorChange(newValue: string): void;
   srcChange(): void;
   componentWillLoad(): void;
@@ -91,9 +99,20 @@ export declare class WppAvatar {
   /** A tooltip is only shown for named (non-icon) avatars that opted in via `withTooltip`. */
   private hasTooltip;
   /**
+   * A tooltip avatar's content is its focusable, labelled button, unless the avatar is presentational: then it is
+   * decoration inside another control (e.g. a pill, which demotes its `icon-start` avatar), and a button there would
+   * be a nested interactive control and an extra Tab stop. Its tooltip still opens on hover.
+   */
+  private hasFocusableTooltipTrigger;
+  /**
    * Explicitly presentational avatars are removed from the a11y tree. Tooltip avatars leave their
-   * host unsemanticed because the tooltip supplies the focusable, labelled trigger.
+   * host unsemanticed because their content, the tooltip's trigger, is the focusable, labelled button.
    */
   private getHostAriaProps;
+  /**
+   * The tooltip shows when its trigger, the slotted content, takes focus, so for a tooltip avatar that content is
+   * the button. `index` decides whether it is in the Tab order (0) or only focusable from code (-1).
+   */
+  private getTooltipTriggerProps;
   render(): any;
 }

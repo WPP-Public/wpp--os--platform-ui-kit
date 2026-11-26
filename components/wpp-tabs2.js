@@ -1,5 +1,5 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
-import { d as debounce, k as transformToVersionedTag, y as mergeLocales } from './utils.js';
+import { d as debounce, k as transformToVersionedTag, z as mergeLocales } from './utils.js';
 
 const TAB_MARGIN_RIGHT = 20;
 const LOCALES_DEFAULTS = { tablistLabel: 'Tabs' };
@@ -143,14 +143,14 @@ const WppTabs = /*@__PURE__*/ proxyCustomElement(class WppTabs extends HTMLEleme
     const tablistLabelledBy = this.ariaProps?.tablist?.labelledby;
     return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, inner, slider" }, h("div", { class: "wpp-tab-control-wrapper", role: "tablist", "aria-orientation": "horizontal", "aria-label": tablistLabel, "aria-labelledby": tablistLabelledBy, part: "wrapper" }, h("slot", { part: "inner" })), h("div", { class: "slider", part: "slider" })));
   }
-  static get registryIs() { return "wpp-tabs-v4-6-0"; }
+  static get registryIs() { return "wpp-tabs-v4-7-0"; }
   get host() { return this; }
   static get watchers() { return {
     "size": ["sizeChanged"],
     "value": ["valueChanged"]
   }; }
   static get style() { return wppTabsCss; }
-}, [1, "wpp-tabs", "wpp-tabs-v4-6-0", {
+}, [1, "wpp-tabs", "wpp-tabs-v4-7-0", {
     "value": [1537],
     "size": [1],
     "ariaProps": [16],
@@ -162,9 +162,9 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-tabs-v4-6-0"];
+  const components = ["wpp-tabs-v4-7-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-tabs-v4-6-0":
+    case "wpp-tabs-v4-7-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTabs);
       }

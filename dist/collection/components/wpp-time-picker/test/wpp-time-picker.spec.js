@@ -14,6 +14,7 @@ jest.mock('../../../utils/utils', () => {
 });
 import { newSpecPage } from '@stencil/core/testing';
 import { WppTimePicker } from '../wpp-time-picker';
+import { WppListItem } from '../../wpp-list-item/wpp-list-item';
 import { menuListConfig } from '../../../common/menuListConfig';
 import { PLACEHOLDER, DEFAULT_CHECKED_TIME_VALUES, HOURS } from '../config';
 import { FOCUS_TYPE } from '../../../types/common';
@@ -610,6 +611,27 @@ describe('wpp-time-picker accessibility', () => {
       configurable: true,
     });
   });
+  it.each([
+    ['error', 'true'],
+    ['warning', null],
+    [undefined, null],
+  ])('describes the input with its %s message', async (messageType, invalid) => {
+    const page = await newSpecPage({
+      components: [WppTimePicker],
+      html: `<wpp-time-picker message="Use the 24-hour format" ${messageType ? `message-type="${messageType}"` : ''}></wpp-time-picker>`,
+    });
+    const input = page.root?.shadowRoot?.querySelector('input');
+    const message = page.root?.shadowRoot?.querySelector('wpp-inline-message');
+    expect(message?.id).toBeTruthy();
+    expect(input?.getAttribute('aria-describedby')).toBe(message?.id);
+    expect(input?.getAttribute('aria-invalid')).toBe(invalid);
+  });
+  it('leaves the input undescribed without a message', async () => {
+    const page = await newSpecPage({ components: [WppTimePicker], html: `<wpp-time-picker></wpp-time-picker>` });
+    const input = page.root?.shadowRoot?.querySelector('input');
+    expect(input?.hasAttribute('aria-describedby')).toBe(false);
+    expect(input?.hasAttribute('aria-invalid')).toBe(false);
+  });
   it('renders the input as a labelled editable combobox controlling a non-modal dialog', async () => {
     const page = await newSpecPage({
       components: [WppTimePicker],
@@ -701,7 +723,8 @@ describe('wpp-time-picker accessibility', () => {
   });
   it('renders labelled listboxes with option selection and roving tab stops', async () => {
     const page = await newSpecPage({
-      components: [WppTimePicker],
+      // The real list item renders the option's tabindex, so the roving tab stop is checked as it lands
+      components: [WppTimePicker, WppListItem],
       html: `<wpp-time-picker value="10:30"></wpp-time-picker>`,
     });
     const timeoutSpy = runTimeoutsSync();
@@ -756,12 +779,13 @@ describe('wpp-time-picker accessibility', () => {
     expect(crossIcon?.getAttribute('role')).toBe('button');
     expect(crossIcon?.getAttribute('aria-label')).toBe('Erase time');
     expect(crossIcon?.getAttribute('tabindex')).toBe('0');
-    expect(crossIcon?.getAttribute('aria-disabled')).toBe('false');
   });
-  it('marks the clear control as disabled and removes it from the tab order when disabled', async () => {
-    const { crossIcon } = await renderCrossIcon({ disabled: true });
-    expect(crossIcon?.getAttribute('aria-disabled')).toBe('true');
-    expect(crossIcon?.getAttribute('tabindex')).toBe('-1');
+  it('does not render the clear control when disabled and restores it when enabled', async () => {
+    const { page, instance, crossIcon } = await renderCrossIcon({ disabled: true });
+    expect(crossIcon).toBeNull();
+    instance.disabled = false;
+    await page.waitForChanges();
+    expect(page.root?.shadowRoot?.querySelector('.cross-icon')).not.toBeNull();
   });
   it('clears the value when the clear control is activated by keyboard', async () => {
     const { page, instance, crossIcon } = await renderCrossIcon();
@@ -774,6 +798,38 @@ describe('wpp-time-picker accessibility', () => {
     await page.waitForChanges();
     expect(instance.value).toBe('');
     expect(clearSpy).toHaveBeenCalled();
+  });
+  it('moves focus to the input when the clear control is activated by keyboard', async () => {
+    const { page, instance, crossIcon } = await renderCrossIcon();
+    instance.tippyInstance = { state: { isShown: false }, hide: jest.fn(), props: {} };
+    const focusSpy = jest.spyOn(instance.inputRef, 'focus');
+    crossIcon?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await page.waitForChanges();
+    expect(focusSpy).not.toHaveBeenCalled();
+    instance.value = '10:30';
+    await page.waitForChanges();
+    page.root?.shadowRoot
+      ?.querySelector('.cross-icon')
+      ?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await page.waitForChanges();
+    expect(focusSpy).toHaveBeenCalled();
+  });
+  it('keeps the keyboard ring on the input after clearing with Enter on the clear control', async () => {
+    const { page, instance, crossIcon } = await renderCrossIcon();
+    instance.tippyInstance = { state: { isShown: false }, show: jest.fn(), hide: jest.fn(), props: {} };
+    const input = page.root?.shadowRoot?.querySelector('input');
+    const anchor = page.root?.shadowRoot?.querySelector('#anchor');
+    // The mock DOM's focus() fires no event; a browser's does, and that is what reaches onFocus.
+    jest.spyOn(input, 'focus').mockImplementation(() => input.dispatchEvent(new FocusEvent('focus')));
+    // Tab into the field, then Tab on to the clear control: the field counts focus as having left.
+    input.dispatchEvent(new FocusEvent('focus'));
+    input.dispatchEvent(new KeyboardEvent('keyup', { key: 'Tab' }));
+    input.dispatchEvent(new FocusEvent('blur', { relatedTarget: crossIcon }));
+    await page.waitForChanges();
+    crossIcon?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await page.waitForChanges();
+    expect(anchor.classList.contains('tab-focus')).toBe(true);
+    expect(anchor.classList.contains('focus')).toBe(false);
   });
   it('does not clear the value on keyboard activation when disabled', async () => {
     const { page, instance, crossIcon } = await renderCrossIcon({ disabled: true });

@@ -14,6 +14,11 @@ export interface VolumeBarHost {
   };
   /** The mute button's current label. A player may swap it with the mute state, or keep one label. */
   readonly volumeButtonLabel: string;
+  /**
+   * Whether the slider panel is open. A player that tracks this gets `aria-haspopup`/`aria-expanded`
+   * on the mute button; one that does not gets neither, rather than a permanently false `expanded`.
+   */
+  readonly isVolumeSliderOpen?: boolean;
   handleSliderShow: () => void;
   handleSliderHide: (delay: number) => void;
   dismissVolumeSlider: () => void;

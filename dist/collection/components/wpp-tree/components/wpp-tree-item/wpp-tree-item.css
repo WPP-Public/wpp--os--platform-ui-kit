@@ -64,6 +64,10 @@
   border-radius: var(--tree-item-border-radius);
 }
 
+:host([is-focused]) .tree-item:not(.disabled) .icon-end {
+  opacity: 1;
+}
+
 :host(.wpp-hidden) {
   display: none;
 }

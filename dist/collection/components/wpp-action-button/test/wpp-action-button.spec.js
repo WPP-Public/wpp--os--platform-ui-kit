@@ -538,6 +538,41 @@ describe('wpp-action-button', () => {
       await page.waitForChanges();
       expect(button.classList.contains('hovered')).toBe(false);
     });
+    it('Clears the hover and pressed state when the button is removed from the page and put back', async () => {
+      const page = await newSpecPage({
+        components: [WppActionButton],
+        html: `<div><wpp-action-button>Button</wpp-action-button></div>`,
+      });
+      const host = page.body.querySelector('wpp-action-button');
+      const parent = host.parentElement;
+      const button = host.shadowRoot.querySelector('button');
+      host.dispatchEvent(new MouseEvent('pointerenter', { clientX: 10, clientY: 10 }));
+      host.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      await page.waitForChanges();
+      expect(button.classList.contains('hovered')).toBe(true);
+      expect(button.classList.contains('pressed')).toBe(true);
+      // A popover detaches its content on close, so neither pointerleave nor keyup reaches the button.
+      host.remove();
+      parent.appendChild(host);
+      await page.waitForChanges();
+      expect(button.classList.contains('hovered')).toBe(false);
+      expect(button.classList.contains('pressed')).toBe(false);
+    });
+    it('Does not keep the pressed state when Enter clicks a button that the click removes from the page', async () => {
+      const page = await newSpecPage({
+        components: [WppActionButton],
+        html: `<div><wpp-action-button>Button</wpp-action-button></div>`,
+      });
+      const host = page.body.querySelector('wpp-action-button');
+      const parent = host.parentElement;
+      const button = host.shadowRoot.querySelector('button');
+      // A popover that closes on the click detaches its content while the click is still being dispatched.
+      host.addEventListener('click', () => host.remove(), { once: true });
+      host.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      parent.appendChild(host);
+      await page.waitForChanges();
+      expect(button.classList.contains('pressed')).toBe(false);
+    });
     it('Clears the `hovered` class when the button becomes disabled while hovered', async () => {
       const page = await newSpecPage({
         components: [WppActionButton],

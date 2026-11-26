@@ -8,7 +8,7 @@ describe('wpp-label', () => {
   describe('info icon focusability', () => {
     const mkLabel = (props = {}) => newSpecPage({
       components: [WppLabel, WppInternalLabel],
-      template: () => (h("wpp-label-v4-6-0", { config: { text: 'Test label', description: 'More info', icon: 'wpp-icon-info' }, typography: "s-body", ...props })),
+      template: () => (h("wpp-label-v4-7-0", { config: { text: 'Test label', description: 'More info', icon: 'wpp-icon-info' }, typography: "s-body", ...props })),
     });
     const iconOf = (page) => page.root?.querySelector('wpp-internal-label')?.shadowRoot?.querySelector('[part="icon-wrapper"]');
     it('exposes the info icon as a button when the field is enabled', async () => {
@@ -23,12 +23,38 @@ describe('wpp-label', () => {
       expect(icon?.getAttribute('tabindex')).toBe('-1');
       expect(icon?.hasAttribute('aria-label')).toBe(false);
     });
+    // The tooltip's own aria-describedby points from inside these shadow roots to a popup in the
+    // document, so it never resolves; the button has to carry the text it reveals itself.
+    it('describes the info button with the label description', async () => {
+      const icon = iconOf(await mkLabel());
+      expect(icon?.getAttribute('aria-description')).toBe('More info');
+    });
+    it('adds no description to the info button when the label has none', async () => {
+      const icon = iconOf(await mkLabel({ config: { text: 'Test label', icon: 'wpp-icon-info' } }));
+      expect(icon?.getAttribute('aria-label')).toBe('Show info');
+      expect(icon?.hasAttribute('aria-description')).toBe(false);
+    });
+    it('drops the description with the button role when the field is disabled', async () => {
+      const icon = iconOf(await mkLabel({ disabled: true }));
+      expect(icon?.hasAttribute('aria-description')).toBe(false);
+    });
+    it('names the info button from config.locales', async () => {
+      const icon = iconOf(await mkLabel({
+        config: {
+          text: 'Test label',
+          description: 'More info',
+          icon: 'wpp-icon-info',
+          locales: { optional: 'Facultatif', showInfo: 'Afficher les infos' },
+        },
+      }));
+      expect(icon?.getAttribute('aria-label')).toBe('Afficher les infos');
+    });
     // Consumers whose own control is the tab stop (wpp-radio, wpp-checkbox) pass this to suppress
     // the icon; it used to be ignored whenever the label had no description.
     it('honours an explicit tabIndex of -1 from the tooltip config', async () => {
       const page = await newSpecPage({
         components: [WppLabel, WppInternalLabel],
-        template: () => h("wpp-label-v4-6-0", { config: { text: 'Test label' }, tooltipConfig: { tabIndex: -1 } }),
+        template: () => h("wpp-label-v4-7-0", { config: { text: 'Test label' }, tooltipConfig: { tabIndex: -1 } }),
       });
       const icon = page.root?.querySelector('wpp-internal-label')?.shadowRoot?.querySelector('[part="icon-wrapper"]');
       expect(icon?.getAttribute('role')).toBe('none');
@@ -41,7 +67,7 @@ describe('wpp-label', () => {
     };
     const page = await newSpecPage({
       components: [WppLabel, WppInternalLabel],
-      template: () => h("wpp-label-v4-6-0", { config: labelConfig, disabled: true, typography: "s-body" }),
+      template: () => h("wpp-label-v4-7-0", { config: labelConfig, disabled: true, typography: "s-body" }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -52,7 +78,7 @@ describe('wpp-label', () => {
     };
     const page = await newSpecPage({
       components: [WppLabel, WppInternalLabel],
-      template: () => h("wpp-label-v4-6-0", { config: labelConfig, typography: "s-body" }),
+      template: () => h("wpp-label-v4-7-0", { config: labelConfig, typography: "s-body" }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -67,7 +93,7 @@ describe('wpp-label', () => {
     };
     const page = await newSpecPage({
       components: [WppLabel, WppInternalLabel],
-      template: () => h("wpp-label-v4-6-0", { config: labelConfig, optional: true, typography: "s-body" }),
+      template: () => h("wpp-label-v4-7-0", { config: labelConfig, optional: true, typography: "s-body" }),
     });
     expect(page.root).toMatchSnapshot();
   });

@@ -41,7 +41,7 @@ describe('wpp-counter', () => {
       };
       const page = await newSpecPage({
         components: [WppCounter, WppLabel, WppInternalLabel],
-        template: () => h("wpp-counter-v4-6-0", { labelConfig: labelConfig }),
+        template: () => h("wpp-counter-v4-7-0", { labelConfig: labelConfig }),
       });
       expect(page.root).toMatchSnapshot();
     });
@@ -219,7 +219,7 @@ describe('wpp-counter', () => {
       };
       const page = await newSpecPage({
         components: [WppCounter],
-        template: () => h("wpp-counter-v4-6-0", { value: 1000, format: format }),
+        template: () => h("wpp-counter-v4-7-0", { value: 1000, format: format }),
       });
       const input = page.root?.shadowRoot?.querySelector('input');
       expect(input?.value).toBe('1 000');
@@ -285,6 +285,69 @@ describe('wpp-counter', () => {
       });
       const counter = page.rootInstance;
       expect(counter.min).toBe(0);
+    });
+  });
+  describe('Testing accessibility', () => {
+    const render = (html) => newSpecPage({ components: [WppCounter], html });
+    const part = (page, name) => page.root?.shadowRoot?.querySelector(`[part="${name}"]`);
+    it.each([
+      ['qty', 'qty'],
+      [undefined, 'wpp-counter'],
+    ])('should point the label and the message at the input when the name is %s', async (name, inputId) => {
+      const page = await render(`<wpp-counter ${name ? `name="${name}"` : ''} message="Up to 3"></wpp-counter>`);
+      page.root.labelConfig = { text: 'Quantity' };
+      await page.waitForChanges();
+      const input = part(page, 'input');
+      expect(input.getAttribute('id')).toBe(inputId);
+      expect(page.root?.shadowRoot?.querySelector('wpp-label')?.getAttribute('htmlfor')).toBe(inputId);
+      expect(input.getAttribute('aria-describedby')).toBe(`${inputId}-message`);
+      expect(page.root?.shadowRoot?.querySelector(`#${inputId}-message`)).not.toBeNull();
+    });
+    it('should expose the value field as a spinbutton with its value and bounds', async () => {
+      const page = await render(`<wpp-counter name="qty" value="2" min="0" max="3"></wpp-counter>`);
+      const input = part(page, 'input');
+      expect(input.getAttribute('role')).toBe('spinbutton');
+      expect(input.getAttribute('aria-valuenow')).toBe('2');
+      expect(input.getAttribute('aria-valuemin')).toBe('0');
+      expect(input.getAttribute('aria-valuemax')).toBe('3');
+    });
+    it('should announce the new value when a button changes it', async () => {
+      const page = await render(`<wpp-counter name="qty" value="1" min="0" max="3"></wpp-counter>`);
+      const live = page.root?.shadowRoot?.querySelector('[aria-live="polite"]');
+      expect(live.textContent).toBe('');
+      part(page, 'increase-button').click();
+      await page.waitForChanges();
+      expect(live.textContent).toBe('2');
+    });
+    it('should move focus to the value field when a pressed button reaches its limit', async () => {
+      const page = await render(`<wpp-counter name="qty" value="2" min="0" max="3"></wpp-counter>`);
+      const button = part(page, 'increase-button');
+      const input = part(page, 'input');
+      const focusSpy = jest.spyOn(input, 'focus');
+      // The mock DOM never moves focus, so point the shadow root at the button as a real press would.
+      Object.defineProperty(page.root.shadowRoot, 'activeElement', { value: button, configurable: true });
+      button.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      await page.waitForChanges();
+      expect(input.getAttribute('aria-valuenow')).toBe('3');
+      expect(focusSpy).toHaveBeenCalled();
+    });
+    it('should leave focus alone while the pressed button is still below its limit', async () => {
+      const page = await render(`<wpp-counter name="qty" value="1" min="0" max="3"></wpp-counter>`);
+      const button = part(page, 'increase-button');
+      const focusSpy = jest.spyOn(part(page, 'input'), 'focus');
+      Object.defineProperty(page.root.shadowRoot, 'activeElement', { value: button, configurable: true });
+      button.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      await page.waitForChanges();
+      expect(focusSpy).not.toHaveBeenCalled();
+    });
+    it('should take the button and field names from locales', async () => {
+      const page = await newSpecPage({
+        components: [WppCounter],
+        template: () => (h("wpp-counter-v4-7-0", { name: "qty", locales: { decreaseValue: 'Moins', increaseValue: 'Plus', counterValue: 'Quantité' } })),
+      });
+      expect(part(page, 'decrease-button').getAttribute('aria-label')).toBe('Moins');
+      expect(part(page, 'increase-button').getAttribute('aria-label')).toBe('Plus');
+      expect(part(page, 'input').getAttribute('aria-label')).toBe('Quantité');
     });
   });
 });

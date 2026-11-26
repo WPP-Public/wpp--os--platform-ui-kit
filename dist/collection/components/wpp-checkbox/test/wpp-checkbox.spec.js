@@ -21,7 +21,7 @@ describe('wpp-checkbox', () => {
     };
     const { root } = await newSpecPage({
       components: [WppCheckbox, WppLabel, WppInternalLabel],
-      template: () => h("wpp-checkbox-v4-6-0", { indeterminate: true, labelConfig: labelConfig }),
+      template: () => h("wpp-checkbox-v4-7-0", { indeterminate: true, labelConfig: labelConfig }),
     });
     expect(root).toMatchSnapshot();
   });
@@ -36,7 +36,7 @@ describe('wpp-checkbox', () => {
     };
     const { root } = await newSpecPage({
       components: [WppCheckbox, WppLabel, WppInternalLabel],
-      template: () => h("wpp-checkbox-v4-6-0", { indeterminate: true, disabled: true, name: "checkbox", labelConfig: labelConfig }),
+      template: () => h("wpp-checkbox-v4-7-0", { indeterminate: true, disabled: true, name: "checkbox", labelConfig: labelConfig }),
     });
     expect(root).toMatchSnapshot();
   });
@@ -180,6 +180,66 @@ describe('wpp-checkbox', () => {
     expect(host.shadowRoot?.querySelector('wpp-icon-tick')).not.toBeNull();
     expect(host.shadowRoot?.querySelector('wpp-icon-dash')).not.toBeNull();
     expect(host.shadowRoot?.querySelector('.square')).not.toBeNull();
+  });
+  describe('Testing accessibility', () => {
+    // The mock DOM never moves focus, so point the shadow root at the input as a real Tab would.
+    const focusInput = (host, input) => Object.defineProperty(host.shadowRoot, 'activeElement', { value: input, configurable: true });
+    const pressSpace = async (page) => {
+      page.root?.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+      await page.waitForChanges();
+    };
+    it('should emit wppChange when Space toggles the checkbox', async () => {
+      const { page, input } = await setup(`<wpp-checkbox name="terms"></wpp-checkbox>`);
+      const changes = [];
+      page.root?.addEventListener('wppChange', (e) => changes.push(e.detail));
+      focusInput(page.root, input);
+      await pressSpace(page);
+      expect(changes).toEqual([{ value: undefined, checked: true, name: 'terms' }]);
+      expect(input.checked).toBe(true);
+    });
+    it('should clear the indeterminate state when Space checks a mixed checkbox', async () => {
+      const { page, input } = await setup(`<wpp-checkbox name="all" indeterminate></wpp-checkbox>`);
+      const changes = [];
+      page.root?.addEventListener('wppChange', (e) => changes.push(e.detail));
+      focusInput(page.root, input);
+      await pressSpace(page);
+      expect(changes).toEqual([{ value: undefined, checked: true, name: 'all' }]);
+      expect(page.root?.hasAttribute('indeterminate')).toBe(false);
+    });
+    it('should only emit, not toggle, when a controlled checkbox gets Space', async () => {
+      const { page, input } = await setup(`<wpp-checkbox name="ctl" controlled></wpp-checkbox>`);
+      const changes = [];
+      page.root?.addEventListener('wppChange', (e) => changes.push(e.detail));
+      focusInput(page.root, input);
+      await pressSpace(page);
+      expect(changes).toEqual([{ value: undefined, name: 'ctl', checked: true }]);
+      expect(input.checked).toBe(false);
+    });
+    it('should expose an indeterminate checkbox as mixed on the native input', async () => {
+      const { input } = await setup(`<wpp-checkbox indeterminate></wpp-checkbox>`);
+      // Stencil sets the `indeterminate` property in the browser; the mock input has no such property, so
+      // the same binding lands as an attribute here.
+      expect(input.hasAttribute('indeterminate')).toBe(true);
+    });
+    it.each([
+      ['terms', 'terms'],
+      [undefined, 'wpp-checkbox'],
+    ])('should point the label at the input when the name is %s', async (name, inputId) => {
+      const { page, input } = await setup(`<wpp-checkbox ${name ? `name="${name}"` : ''} label-config='{"text":"Accept terms"}'></wpp-checkbox>`);
+      expect(input.id).toBe(inputId);
+      expect(page.root?.shadowRoot?.querySelector('wpp-label')?.getAttribute('htmlfor')).toBe(inputId);
+    });
+    it('should keep a disabled checkbox visible to assistive tech', async () => {
+      const { input } = await setup(`<wpp-checkbox disabled></wpp-checkbox>`);
+      expect(input.disabled).toBe(true);
+      expect(input.hasAttribute('aria-hidden')).toBe(false);
+    });
+    it('should describe the checkbox with its error message', async () => {
+      const { page, input } = await setup(`<wpp-checkbox message="You must accept the terms" message-type="error"></wpp-checkbox>`);
+      const message = page.root?.shadowRoot?.getElementById(input.getAttribute('aria-describedby') ?? '');
+      expect(input.getAttribute('aria-invalid')).toBe('true');
+      expect(message?.getAttribute('message')).toBe('You must accept the terms');
+    });
   });
   describe('subscribing to theme changes', () => {
     let mockStart;

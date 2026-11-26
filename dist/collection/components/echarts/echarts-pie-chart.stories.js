@@ -32,6 +32,10 @@ export const PieChart = () => html `
       title: {
         text: 'Pie chart',
       },
+      // Lets ECharts describe the chart to screen readers; a canvas has no text of its own
+      aria: {
+        enabled: true,
+      },
       color: ['#BC71FB', '#C880B2', '#F87171', '#F48052', '#EAB308', '#68A512', '#1FBC59', '#06B6D4', '#7B90DF'],
       series: [
         {

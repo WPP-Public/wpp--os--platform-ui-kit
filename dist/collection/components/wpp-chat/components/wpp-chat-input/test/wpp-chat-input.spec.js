@@ -67,6 +67,50 @@ describe('wpp-chat-input', () => {
     expect(page.rootInstance.isAudioRecording).toBe(false);
     expect(mockRecognition.stop).toHaveBeenCalledTimes(1);
   });
+  describe('clearing the textarea before the next render', () => {
+    // Each case leaves no render between typing and clearing, as when Enter follows the input within one frame.
+    // Debounce is off so no wppMessageChanged timer outlives the test.
+    const typeWithoutRender = async (text) => {
+      const page = await newSpecPage({
+        components: [WppChatInput],
+        html: `<wpp-chat-input debounce-enabled="false"></wpp-chat-input>`,
+      });
+      const textarea = page.root.shadowRoot.querySelector('textarea');
+      textarea.value = text;
+      textarea.dispatchEvent(new Event('input'));
+      return { page, textarea };
+    };
+    it('empties the textarea when Enter sends the message', async () => {
+      const { page, textarea } = await typeWithoutRender('/mc');
+      const sendSpy = jest.fn();
+      page.root.addEventListener('wppSend', sendSpy);
+      textarea.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      await page.waitForChanges();
+      expect(sendSpy.mock.calls[0][0].detail.message).toBe('/mc');
+      expect(textarea.value).toBe('');
+    });
+    it('empties the textarea when the host clears textValue', async () => {
+      const { page, textarea } = await typeWithoutRender('/mc');
+      page.root.textValue = '/mc';
+      page.root.textValue = '';
+      await page.waitForChanges();
+      expect(textarea.value).toBe('');
+    });
+  });
+  it('cancels the pending wppMessageChanged on disconnect', async () => {
+    const page = await newSpecPage({
+      components: [WppChatInput],
+      html: `<wpp-chat-input debounce-delay="10"></wpp-chat-input>`,
+    });
+    const textarea = page.root.shadowRoot.querySelector('textarea');
+    const messageChangedSpy = jest.fn();
+    page.root.addEventListener('wppMessageChanged', messageChangedSpy);
+    textarea.value = 'Hello';
+    textarea.dispatchEvent(new Event('input'));
+    page.rootInstance.disconnectedCallback();
+    await new Promise(resolve => setTimeout(resolve, 30));
+    expect(messageChangedSpy).not.toHaveBeenCalled();
+  });
   it('should render stop action and emit wppStop while generating', async () => {
     const page = await newSpecPage({
       components: [WppChatInput],
@@ -287,21 +331,21 @@ describe('wpp-chat-input', () => {
     it('Testing that it returns false when component is disabled', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
-        template: () => h("wpp-chat-input-v4-6-0", { disabled: true }),
+        template: () => h("wpp-chat-input-v4-7-0", { disabled: true }),
       });
       expect(page.rootInstance.shouldDisplaySend()).toBe(false);
     });
     it('Testing that it returns true when component is generating and not disabled', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
-        template: () => h("wpp-chat-input-v4-6-0", { disabled: false, isGenerating: true }),
+        template: () => h("wpp-chat-input-v4-7-0", { disabled: false, isGenerating: true }),
       });
       expect(page.rootInstance.shouldDisplaySend()).toBe(true);
     });
     it('Testing that it returns true when component is audio recording with a value and not disabled', async () => {
       const page = await newSpecPage({
         components: [WppChatInput],
-        template: () => h("wpp-chat-input-v4-6-0", { disabled: false }),
+        template: () => h("wpp-chat-input-v4-7-0", { disabled: false }),
       });
       page.rootInstance.internalValue = 'Testing';
       page.rootInstance.isAudioRecording = true;
@@ -821,7 +865,7 @@ describe('wpp-chat-input', () => {
       const mountWithModel = async (model, extraProps = {}) => {
         const page = await newSpecPage({
           components: [WppChatInput],
-          template: () => h("wpp-chat-input-v4-6-0", { selectedModel: model, ...extraProps }),
+          template: () => h("wpp-chat-input-v4-7-0", { selectedModel: model, ...extraProps }),
         });
         await page.waitForChanges();
         return page;
@@ -1069,7 +1113,14 @@ describe('wpp-chat-input', () => {
         // menu-context is now the single writer, so nothing is rendered here.
         expect(trigger?.hasAttribute('aria-expanded')).toBe(false);
         expect(trigger?.hasAttribute('aria-haspopup')).toBe(false);
-        expect(trigger?.getAttribute('aria-label')).toBe('Select AI model');
+        expect(trigger?.getAttribute('aria-label')).toBe('Select AI model Auto');
+      });
+      // axe 4.14 label-content-name-mismatch: the model and reasoning the trigger shows must be in its name.
+      it('names the model trigger with the model and reasoning it shows', async () => {
+        const page = await mountWithModel(GPT_MODEL, { selectedReasoning: 'high' });
+        const trigger = page.root?.shadowRoot?.querySelector('.select-model-trigger');
+        expect(trigger?.querySelector('[slot="label"]')?.textContent).toBe('GPT 5.4 Mini\u30FBHigh');
+        expect(trigger?.getAttribute('aria-label')).toBe('Select AI model GPT 5.4 Mini High');
       });
       it('survives the transient null selectedModel React produces, and still remembers the model it left', async () => {
         const page = await mountWithModel(GPT_MODEL, { selectedReasoning: 'high' });

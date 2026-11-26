@@ -14,6 +14,7 @@ import { AutocompleteChangeEventDetail, AutocompleteLocales, AutocompleteOption,
 import { ListItemInterface, SelectChangeEventDetails, SelectLabelConfig, SelectLocaleInterface, SelectSize, SelectTypes, SelectValue } from "./components/wpp-select/types";
 import { AriaProps as AriaProps1, DropdownConfig as DropdownConfig1, InputTypes as InputTypes1, LabelConfig as LabelConfig1, ListValue, MaskOptions as MaskOptions1 } from "./components";
 import { AvatarChangeEventDetail, AvatarGroupChangeEventDetail, AvatarSize, AvatarState, AvatarVariant } from "./components/wpp-avatar-group/types";
+import { BackToTopButtonLocaleInterface } from "./components/wpp-back-to-top-button/types";
 import { BannerChangeEventDetail } from "./components/wpp-banner/types";
 import { BasicNodeAction, BasicNodeAriaProps, BasicNodeLocales } from "./components/wpp-basic-node/types";
 import { BreadcrumbItemEventDetails, BreadcrumbItemState, BreadcrumbLocaleInterface, WppBreadcrumbAriaProps } from "./components/wpp-breadcrumb/types";
@@ -28,11 +29,12 @@ import { ChatNodeAction, ChatNodeAvatarConfig, ChatNodeLocales, ChatNodeMessage,
 import { ChatReferenceLines, ChatReferenceLocales, ChatReferenceType } from "./components/wpp-chat/components/wpp-chat-reference/types";
 import { CheckboxChangeEvent, CheckboxLabelConfig, CheckboxValue } from "./components/wpp-checkbox/types";
 import { CheckboxGroupChangeEvent, CheckboxGroupValue } from "./components/wpp-checkbox-group/types";
-import { ChangeColorEventDetails, ColorPickerMode, ColorPickerType, SaturationChangeDetail } from "./components/wpp-color-picker/types";
+import { ChangeColorEventDetails, ColorPickerLocales, ColorPickerMode, ColorPickerType, SaturationChangeDetail } from "./components/wpp-color-picker/types";
 import { Theme } from "./types/theme";
-import { CounterChangeEventDetail, CounterFormat, CounterLabelConfig } from "./components/wpp-counter/types";
+import { CounterChangeEventDetail, CounterFormat, CounterLabelConfig, CounterLocales } from "./components/wpp-counter/types";
 import { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes, MonthRangeNormalization, YearRangeNormalization } from "./components/wpp-datepicker/types";
 import { ExpandableCardSectionChangeEventDetail } from "./components/wpp-expandable-card/types";
+import { FloatingButtonLocaleInterface } from "./components/wpp-floating-button/types";
 import { ActionButtonData } from "./components/wpp-floating-toolbar/types";
 import { FocusArtefactActionClickDetail, FocusArtefactAriaProps, FocusArtefactLocales, FocusArtefactMenuAction, FocusArtefactResizeDetail, FocusArtefactVersion, FocusArtefactWidth } from "./components/wpp-focus-artefact/types";
 import { FullScreenModalCloseDetails, FullScreenModalFormConfig, FullScreenModalLocalesType } from "./components/wpp-full-screen-modal/types";
@@ -47,17 +49,19 @@ import { InputChangeEventDetail, InputLabelConfig, InputLocaleInterface, InputTy
 import { Color, TypographyType } from "./components/wpp-typography/types";
 import { TooltipThemeTypes } from "./components/wpp-tooltip/types";
 import { AutocompleteDefaultOption, AutocompleteExtendedOption, AutocompleteLabelConfig, GetOptionIdHandler, GetOptionLabelHandler, LegacyAutocompleteChangeEventDetail, LegacyAutocompleteLocales } from "./components/wpp-legacy-autocomplete/types";
-import { LegacyStickyBarVariants } from "./components/wpp-legacy-sticky-bar/types";
-import { StickyBarButtonItem, StickyBarTabItem, StickyBarVariants } from "./components/wpp-sticky-bar/types";
+import { LegacyAvatarChangeEventDetail } from "./components/wpp-legacy-avatar/types";
+import { LegacyStickyBarLocales, LegacyStickyBarVariants } from "./components/wpp-legacy-sticky-bar/types";
+import { StickyBarButtonItem, StickyBarLocales, StickyBarTabItem, StickyBarVariants } from "./components/wpp-sticky-bar/types";
 import { NavigationItemEventDetail, NavigationState, TopbarChangeEventDetail } from "./components/wpp-topbar/types";
 import { ThemeColorValue } from "./types/theme-tokens";
 import { ContainerStateType, ListItemChangeEventDetail, ListValue as ListValue1, TooltipConfig } from "./components/wpp-list-item/types";
-import { LoadMoreChangeEventDetail } from "./components/wpp-load-more/types";
+import { LoadMoreChangeEventDetail, LoadMoreLocales } from "./components/wpp-load-more/types";
 import { MediaViewerControlPanelConfig, MediaViewerErrorEventDetail, MediaViewerFullscreenChangeEventDetail, MediaViewerLoadEventDetail, MediaViewerLocales, MediaViewerNavigationMode, MediaViewerSize, MediaViewerUploadEventDetail, MediaViewerZoomChangeEventDetail } from "./components/wpp-media-viewer/types";
+import { MoreButtonLocaleInterface } from "./components/wpp-more-button/types";
 import { NavSidebarItemEventDetail } from "./components/wpp-nav-sidebar/types";
 import { PaginationChangeEventDetail, PaginationLocales, PaginationPageChangeEventDetail } from "./components/wpp-pagination/types";
-import { PillChangeEventDetail, PillSize, PillType, PillValue } from "./components/wpp-pill/types";
-import { PillGroupChangeEvent, PillGroupLabelConfig, PillGroupValue } from "./components/wpp-pill-group/types";
+import { PillChangeEventDetail, PillLocaleInterface, PillSize, PillType, PillValue } from "./components/wpp-pill/types";
+import { PillGroupChangeEvent, PillGroupLabelConfig, PillGroupLocaleInterface, PillGroupReorderListEvent, PillGroupValue, WppPillGroupAriaProps } from "./components/wpp-pill-group/types";
 import { PopoverClearEventDetail, PopoverInputChangeEventDetail, PopoverLocalesInterface, PopoverShouldCloseOnOutsideClickHandler } from "./components/wpp-popover/types";
 import { RadioChangeEvent, RadioLabelConfig, RadioValue } from "./components/wpp-radio/types";
 import { RadioGroupChangeEvent, RadioGroupValue } from "./components/wpp-radio-group/types";
@@ -68,9 +72,9 @@ import { SearchChangeEventDetail, SearchDefaultOption, SearchGetOptionIdHandler,
 import { SegmentedControlChangeEventDetail, SegmentedControlItemChangeEventDetail, SegmentedControlItemSize, SegmentedControlLabelConfig, SegmentedControlLocaleInterface, SegmentedControlValue, WppSegmentedControlAriaProps, WppSegmentedControlItemAriaProps } from "./components/wpp-segmented-control/types";
 import { ActionConfig, HeaderActionsConfig, SideModalCloseDetails, SideModalFormConfig, SideModalLocalesType } from "./components/wpp-side-modal/types";
 import { SidePanelActionsConfig, SidePanelAriaProps, SidePanelCloseDetails, SidePanelLocalesType, SidePanelResizeDetails } from "./components/wpp-side-panel/types";
-import { InputWidth, MarkState, SliderChangeEventDetail, SliderLabelConfig, SliderTypes, SliderValue } from "./components/wpp-slider/types";
+import { InputWidth, MarkState, SliderChangeEventDetail, SliderLabelConfig, SliderLocales, SliderTypes, SliderValue, WppSliderAriaProps } from "./components/wpp-slider/types";
 import { MaskitoNumberParams } from "@maskito/kit/src/lib/masks/number/number-params";
-import { OrientationType, StepChangeEventDetail } from "./components/wpp-stepper/types";
+import { OrientationType, StepChangeEventDetail, StepperLocales } from "./components/wpp-stepper/types";
 import { TabChangeEventDetail, TabsChangeEventDetail, TabsLocaleInterface, WppTabAriaProps, WppTabsAriaProps } from "./components/wpp-tabs/types";
 import { TextareaInputChangeEventDetail, TextareaInputLocales, TextareaInputValue, TextareaLabelConfig } from "./components/wpp-textarea-input/types";
 import { TimePickerChangeEventDetails, TimePickerLocaleTypes } from "./components/wpp-time-picker/types";
@@ -88,6 +92,7 @@ export { AutocompleteChangeEventDetail, AutocompleteLocales, AutocompleteOption,
 export { ListItemInterface, SelectChangeEventDetails, SelectLabelConfig, SelectLocaleInterface, SelectSize, SelectTypes, SelectValue } from "./components/wpp-select/types";
 export { AriaProps as AriaProps1, DropdownConfig as DropdownConfig1, InputTypes as InputTypes1, LabelConfig as LabelConfig1, ListValue, MaskOptions as MaskOptions1 } from "./components";
 export { AvatarChangeEventDetail, AvatarGroupChangeEventDetail, AvatarSize, AvatarState, AvatarVariant } from "./components/wpp-avatar-group/types";
+export { BackToTopButtonLocaleInterface } from "./components/wpp-back-to-top-button/types";
 export { BannerChangeEventDetail } from "./components/wpp-banner/types";
 export { BasicNodeAction, BasicNodeAriaProps, BasicNodeLocales } from "./components/wpp-basic-node/types";
 export { BreadcrumbItemEventDetails, BreadcrumbItemState, BreadcrumbLocaleInterface, WppBreadcrumbAriaProps } from "./components/wpp-breadcrumb/types";
@@ -102,11 +107,12 @@ export { ChatNodeAction, ChatNodeAvatarConfig, ChatNodeLocales, ChatNodeMessage,
 export { ChatReferenceLines, ChatReferenceLocales, ChatReferenceType } from "./components/wpp-chat/components/wpp-chat-reference/types";
 export { CheckboxChangeEvent, CheckboxLabelConfig, CheckboxValue } from "./components/wpp-checkbox/types";
 export { CheckboxGroupChangeEvent, CheckboxGroupValue } from "./components/wpp-checkbox-group/types";
-export { ChangeColorEventDetails, ColorPickerMode, ColorPickerType, SaturationChangeDetail } from "./components/wpp-color-picker/types";
+export { ChangeColorEventDetails, ColorPickerLocales, ColorPickerMode, ColorPickerType, SaturationChangeDetail } from "./components/wpp-color-picker/types";
 export { Theme } from "./types/theme";
-export { CounterChangeEventDetail, CounterFormat, CounterLabelConfig } from "./components/wpp-counter/types";
+export { CounterChangeEventDetail, CounterFormat, CounterLabelConfig, CounterLocales } from "./components/wpp-counter/types";
 export { AirDatepickerTypes, DatePickerClearEventDetail, DatePickerEventDetail, DatepickerLabelConfig, DatePickerView, IPreset, LocaleTypes, MonthRangeNormalization, YearRangeNormalization } from "./components/wpp-datepicker/types";
 export { ExpandableCardSectionChangeEventDetail } from "./components/wpp-expandable-card/types";
+export { FloatingButtonLocaleInterface } from "./components/wpp-floating-button/types";
 export { ActionButtonData } from "./components/wpp-floating-toolbar/types";
 export { FocusArtefactActionClickDetail, FocusArtefactAriaProps, FocusArtefactLocales, FocusArtefactMenuAction, FocusArtefactResizeDetail, FocusArtefactVersion, FocusArtefactWidth } from "./components/wpp-focus-artefact/types";
 export { FullScreenModalCloseDetails, FullScreenModalFormConfig, FullScreenModalLocalesType } from "./components/wpp-full-screen-modal/types";
@@ -121,17 +127,19 @@ export { InputChangeEventDetail, InputLabelConfig, InputLocaleInterface, InputTy
 export { Color, TypographyType } from "./components/wpp-typography/types";
 export { TooltipThemeTypes } from "./components/wpp-tooltip/types";
 export { AutocompleteDefaultOption, AutocompleteExtendedOption, AutocompleteLabelConfig, GetOptionIdHandler, GetOptionLabelHandler, LegacyAutocompleteChangeEventDetail, LegacyAutocompleteLocales } from "./components/wpp-legacy-autocomplete/types";
-export { LegacyStickyBarVariants } from "./components/wpp-legacy-sticky-bar/types";
-export { StickyBarButtonItem, StickyBarTabItem, StickyBarVariants } from "./components/wpp-sticky-bar/types";
+export { LegacyAvatarChangeEventDetail } from "./components/wpp-legacy-avatar/types";
+export { LegacyStickyBarLocales, LegacyStickyBarVariants } from "./components/wpp-legacy-sticky-bar/types";
+export { StickyBarButtonItem, StickyBarLocales, StickyBarTabItem, StickyBarVariants } from "./components/wpp-sticky-bar/types";
 export { NavigationItemEventDetail, NavigationState, TopbarChangeEventDetail } from "./components/wpp-topbar/types";
 export { ThemeColorValue } from "./types/theme-tokens";
 export { ContainerStateType, ListItemChangeEventDetail, ListValue as ListValue1, TooltipConfig } from "./components/wpp-list-item/types";
-export { LoadMoreChangeEventDetail } from "./components/wpp-load-more/types";
+export { LoadMoreChangeEventDetail, LoadMoreLocales } from "./components/wpp-load-more/types";
 export { MediaViewerControlPanelConfig, MediaViewerErrorEventDetail, MediaViewerFullscreenChangeEventDetail, MediaViewerLoadEventDetail, MediaViewerLocales, MediaViewerNavigationMode, MediaViewerSize, MediaViewerUploadEventDetail, MediaViewerZoomChangeEventDetail } from "./components/wpp-media-viewer/types";
+export { MoreButtonLocaleInterface } from "./components/wpp-more-button/types";
 export { NavSidebarItemEventDetail } from "./components/wpp-nav-sidebar/types";
 export { PaginationChangeEventDetail, PaginationLocales, PaginationPageChangeEventDetail } from "./components/wpp-pagination/types";
-export { PillChangeEventDetail, PillSize, PillType, PillValue } from "./components/wpp-pill/types";
-export { PillGroupChangeEvent, PillGroupLabelConfig, PillGroupValue } from "./components/wpp-pill-group/types";
+export { PillChangeEventDetail, PillLocaleInterface, PillSize, PillType, PillValue } from "./components/wpp-pill/types";
+export { PillGroupChangeEvent, PillGroupLabelConfig, PillGroupLocaleInterface, PillGroupReorderListEvent, PillGroupValue, WppPillGroupAriaProps } from "./components/wpp-pill-group/types";
 export { PopoverClearEventDetail, PopoverInputChangeEventDetail, PopoverLocalesInterface, PopoverShouldCloseOnOutsideClickHandler } from "./components/wpp-popover/types";
 export { RadioChangeEvent, RadioLabelConfig, RadioValue } from "./components/wpp-radio/types";
 export { RadioGroupChangeEvent, RadioGroupValue } from "./components/wpp-radio-group/types";
@@ -142,9 +150,9 @@ export { SearchChangeEventDetail, SearchDefaultOption, SearchGetOptionIdHandler,
 export { SegmentedControlChangeEventDetail, SegmentedControlItemChangeEventDetail, SegmentedControlItemSize, SegmentedControlLabelConfig, SegmentedControlLocaleInterface, SegmentedControlValue, WppSegmentedControlAriaProps, WppSegmentedControlItemAriaProps } from "./components/wpp-segmented-control/types";
 export { ActionConfig, HeaderActionsConfig, SideModalCloseDetails, SideModalFormConfig, SideModalLocalesType } from "./components/wpp-side-modal/types";
 export { SidePanelActionsConfig, SidePanelAriaProps, SidePanelCloseDetails, SidePanelLocalesType, SidePanelResizeDetails } from "./components/wpp-side-panel/types";
-export { InputWidth, MarkState, SliderChangeEventDetail, SliderLabelConfig, SliderTypes, SliderValue } from "./components/wpp-slider/types";
+export { InputWidth, MarkState, SliderChangeEventDetail, SliderLabelConfig, SliderLocales, SliderTypes, SliderValue, WppSliderAriaProps } from "./components/wpp-slider/types";
 export { MaskitoNumberParams } from "@maskito/kit/src/lib/masks/number/number-params";
-export { OrientationType, StepChangeEventDetail } from "./components/wpp-stepper/types";
+export { OrientationType, StepChangeEventDetail, StepperLocales } from "./components/wpp-stepper/types";
 export { TabChangeEventDetail, TabsChangeEventDetail, TabsLocaleInterface, WppTabAriaProps, WppTabsAriaProps } from "./components/wpp-tabs/types";
 export { TextareaInputChangeEventDetail, TextareaInputLocales, TextareaInputValue, TextareaLabelConfig } from "./components/wpp-textarea-input/types";
 export { TimePickerChangeEventDetails, TimePickerLocaleTypes } from "./components/wpp-time-picker/types";
@@ -490,6 +498,10 @@ export namespace Components {
          */
         "role": string;
         /**
+          * Method that sets focus on the avatar: its tooltip trigger when it has a tooltip, otherwise the host. The keyboard focus ring shows unless `focusVisible` is false, which suits focus moved in response to a pointer press.
+         */
+        "setFocus": (options?: { focusVisible?: boolean; }) => Promise<void>;
+        /**
           * Defines the avatar size.
          */
         "size": AvatarSize;
@@ -546,9 +558,13 @@ export namespace Components {
     }
     interface WppBackToTopButton {
         /**
-          * Contains the button `aria-` props.
+          * Contains the button `aria-` props.  `labelledby` names elements in your own page: their text becomes the button's name, because the native button lives in this component's shadow root, where your ids cannot be referenced.
          */
         "ariaProps": AriaProps;
+        /**
+          * Localised strings. `label` names the button when `ariaProps` provides no `label` and its `labelledby` ids name nothing, so passing other `aria-` props no longer drops the name. Precedence: ariaProps > locales > defaults.
+         */
+        "locales"?: Partial<BackToTopButtonLocaleInterface>;
         /**
           * Method that sets focus on the native button.
          */
@@ -1218,6 +1234,10 @@ export namespace Components {
          */
         "isDarkTheme"?: boolean;
         /**
+          * Hides the "(Optional)" marker because the surrounding group's label already carries it.
+         */
+        "isGroupItem": boolean;
+        /**
           * Indicates label config
          */
         "labelConfig"?: CheckboxLabelConfig;
@@ -1314,6 +1334,10 @@ export namespace Components {
          */
         "initialColor"?: string;
         /**
+          * Localised accessible names and texts of the picker.
+         */
+        "locales": Partial<ColorPickerLocales>;
+        /**
           * The mode of the color-picker. The default value is "theme", meaning that the color-picker will display all the colors from the app's theme. When mode is "custom", the user will have the Saturation picker, Hue slider and Opacity slider and can pick any color. Finally, if mode = "theme and custom", both "theme" and "custom" modes are enabled.
          */
         "mode": ColorPickerMode;
@@ -1355,6 +1379,10 @@ export namespace Components {
           * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
         "labelTooltipConfig": DropdownConfig;
+        /**
+          * Localised accessible names for the buttons and for the value field when it has no label.
+         */
+        "locales": Partial<CounterLocales>;
         /**
           * Defines the counter `max` value.
          */
@@ -1829,7 +1857,7 @@ export namespace Components {
     }
     interface WppFloatingButton {
         /**
-          * Contains the button `aria-` props.
+          * Contains the button `aria-` props.  `labelledby` names elements in your own page: their text becomes the button's name, because the native button lives in this component's shadow root, where your ids cannot be referenced.
          */
         "ariaProps": AriaProps;
         /**
@@ -1868,6 +1896,10 @@ export namespace Components {
           * If the component is in loading state.
          */
         "loading": boolean;
+        /**
+          * Localised strings. `label` names the button when `ariaProps` provides no `label` and its `labelledby` ids name nothing. Precedence: ariaProps > locales > defaults.
+         */
+        "locales"?: Partial<FloatingButtonLocaleInterface>;
         /**
           * Defines the button name.
          */
@@ -2087,6 +2119,10 @@ export namespace Components {
           * Hue value of the slider. Can contain values between: [0, 360].
          */
         "hue": number;
+        /**
+          * Accessible name of the slider, set by wpp-color-picker from its locales.
+         */
+        "label"?: string;
     }
     interface WppIconAbout {
         /**
@@ -5389,6 +5425,24 @@ export namespace Components {
         "width"?: number;
     }
     interface WppIconExternalLink {
+        /**
+          * Defines the icon color.
+         */
+        "color": string;
+        /**
+          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
+         */
+        "height"?: number;
+        /**
+          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
+         */
+        "size": 's' | 'm';
+        /**
+          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
+         */
+        "width"?: number;
+    }
+    interface WppIconExtract {
         /**
           * Defines the icon color.
          */
@@ -12191,6 +12245,10 @@ export namespace Components {
          */
         "buttons": StickyBarButtonItem[];
         /**
+          * Defines the component locale types.
+         */
+        "locales": Partial<LegacyStickyBarLocales>;
+        /**
           * The offset from the top edge of the screen. In most cases, this shouldn't be used, as the sticky-bar searches for the os-bar and places itself right below it. Use this just when the sticky-bar does not find the os-bar.
          */
         "offsetFromTop"?: number;
@@ -12318,6 +12376,10 @@ export namespace Components {
          */
         "isLoadingItem": boolean;
         /**
+          * Makes an `option` its listbox's single tab stop, for listboxes whose options take real focus (the W3C APG roving tabindex) instead of being driven through `aria-activedescendant`.
+         */
+        "isRovingTabStop": boolean;
+        /**
           * Indicates the label of list item
          */
         "label"?: string;
@@ -12351,7 +12413,7 @@ export namespace Components {
          */
         "nonInteractive": boolean;
         /**
-          * Defines the ARIA role of the component. Combobox-style parents (e.g. WppSearch) set this to `option` to expose items as options inside a `listbox`. When the role is `option` the item is removed from the tab order, as it is meant to be driven by the combobox via `aria-activedescendant` rather than receiving its own tab stop.
+          * Defines the ARIA role of the component. Combobox-style parents (e.g. WppSearch) set this to `option` to expose items as options inside a `listbox`. When the role is `option` the item is removed from the tab order, as it is meant to be driven by the combobox via `aria-activedescendant` rather than receiving its own tab stop, unless it is its listbox's roving tab stop.
          */
         "role": string;
         /**
@@ -12392,6 +12454,10 @@ export namespace Components {
           * Determines whether the component is in a loading state.
          */
         "loading": boolean;
+        /**
+          * Localised strings for the button text and the progress text.
+         */
+        "locales": Partial<LoadMoreLocales>;
         /**
           * Method that sets focus on the load button.
          */
@@ -12587,7 +12653,7 @@ export namespace Components {
     }
     interface WppMoreButton {
         /**
-          * Contains the button `aria-` props.
+          * Contains the button `aria-` props.  `labelledby` names elements in your own page: their text becomes the button's name, because the native button lives in this component's shadow root, where your ids cannot be referenced.
          */
         "ariaProps": AriaProps;
         /**
@@ -12598,6 +12664,10 @@ export namespace Components {
           * If the component is in loading state.
          */
         "loading": boolean;
+        /**
+          * Localised strings. `label` names the button when `ariaProps` provides no `label` and its `labelledby` ids name nothing. Precedence: ariaProps > locales > defaults.
+         */
+        "locales"?: Partial<MoreButtonLocaleInterface>;
         /**
           * Defines the button name.
          */
@@ -12728,6 +12798,10 @@ export namespace Components {
          */
         "hexColor": string;
         /**
+          * Accessible name of the slider, set by wpp-color-picker from its locales.
+         */
+        "label"?: string;
+        /**
           * Opacity value of the slider. Values between: [0, 1]
          */
         "opacity": number;
@@ -12838,6 +12912,10 @@ export namespace Components {
          */
         "label"?: string;
         /**
+          * Indicates locales for the pill. Holds the accessible names of the close and drag icon buttons and the `aria-roledescription` of a `draggable` pill. Partial overrides are merged with the English defaults.
+         */
+        "locales": Partial<PillLocaleInterface>;
+        /**
           * Defines the maximum label length (in characters) of a single item. Zero or fewer means there is no limit
           * @deprecated - this prop will be deleted in version 4.0.0.
          */
@@ -12851,6 +12929,14 @@ export namespace Components {
          */
         "removable": boolean;
         /**
+          * Method that sets focus on the native button.
+         */
+        "setFocus": () => Promise<void>;
+        /**
+          * Method that sets focus on the drag icon button. Used by the pill group to restore focus after the pills are re-ordered. `withFocusRing` shows the keyboard focus ring (keyboard re-ordering); pass `false` after a mouse drag.
+         */
+        "setFocusDragIcon": (withFocusRing?: boolean) => Promise<void>;
+        /**
           * Moves keyboard focus to the pill's remove icon and paints its focus ring.  The ring is a `tab-focus` class this component only sets from its own Tab keyup, so a parent that re-homes focus here with a plain `focus()` moves focus invisibly (WCAG 2.4.7). Parents that take focus off a removed neighbouring pill should call this instead. No-op when the pill has no remove icon to focus.
          */
         "setRemoveIconFocus": () => Promise<void>;
@@ -12860,6 +12946,7 @@ export namespace Components {
         "showTooltipOnTruncate": true;
         /**
           * Defines the pill size.
+          * @deprecated - the pills will always display in only 1 size.
          */
         "size": PillSize;
         /**
@@ -12873,6 +12960,10 @@ export namespace Components {
     }
     interface WppPillGroup {
         /**
+          * Contains the pill group `aria-` props. `label` names the group when it has no visible label (`labelConfig`).
+         */
+        "ariaProps": WppPillGroupAriaProps;
+        /**
           * Indicates label config
          */
         "labelConfig"?: PillGroupLabelConfig;
@@ -12880,6 +12971,10 @@ export namespace Components {
           * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
         "labelTooltipConfig": DropdownConfig;
+        /**
+          * Indicates locales for the pill group. Holds the `aria-roledescription` of a `draggable` group and the messages announced to screen readers while reordering pills with the keyboard. Partial overrides are merged with the English defaults.
+         */
+        "locales": Partial<PillGroupLocaleInterface>;
         /**
           * Defines the pill group name.
          */
@@ -12890,10 +12985,11 @@ export namespace Components {
         "required": boolean;
         /**
           * Defines the pill group size.
+          * @deprecated - the pills will always display in only 1 size.
          */
         "size": PillSize;
         /**
-          * Indicates the type of the pill
+          * Indicates the type of the pill group.
          */
         "type": PillType;
         /**
@@ -13019,6 +13115,10 @@ export namespace Components {
           * Indicates custom classes to the radio
          */
         "internalState"?: string;
+        /**
+          * Hides the "(Optional)" marker because the surrounding group's label already carries it, and keeps `required` off the native input because the group, not each radio, is what is required.
+         */
+        "isGroupItem": boolean;
         /**
           * Indicates label config
          */
@@ -13252,6 +13352,10 @@ export namespace Components {
          */
         "hue": number;
         /**
+          * Accessible name of the area, set by wpp-color-picker from its locales.
+         */
+        "label"?: string;
+        /**
           * Saturation value.
          */
         "saturation": number;
@@ -13259,6 +13363,10 @@ export namespace Components {
           * Corresponds to brightness in HSV
          */
         "value": number;
+        /**
+          * Value text announced for the current saturation and brightness, set by wpp-color-picker from its locales.
+         */
+        "valueText"?: string;
     }
     interface WppSearch {
         /**
@@ -13708,9 +13816,9 @@ export namespace Components {
     }
     interface WppSlider {
         /**
-          * Contains the slider `aria-` props.
+          * Contains the slider `aria-` props.  `label` names the control, and is deprecated for `range` sliders because it names BOTH thumbs, leaving them indistinguishable — set `min` and `max` there instead. The deprecation is on that one key, not on this prop.
          */
-        "ariaProps": AriaProps;
+        "ariaProps": WppSliderAriaProps;
         /**
           * If the slider is continuous.
          */
@@ -13731,6 +13839,10 @@ export namespace Components {
           * Tooltip config for label, under the hood tooltip using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
         "labelTooltipConfig": DropdownConfig;
+        /**
+          * Translations for the strings this component generates itself — the thumb qualifiers and the spoken value of a `middle-range` band. The field's own label comes from `labelConfig`.
+         */
+        "locales": Partial<SliderLocales>;
         /**
           * Defines the marker values between which users can move the slider.
          */
@@ -13884,6 +13996,10 @@ export namespace Components {
          */
         "completedSteps": number;
         /**
+          * Locales for accessible step labels. The stepLabel formatter is used when a main step has no label slot text.
+         */
+        "locales": Partial<StepperLocales>;
+        /**
           * Defines the stepper orientation.
          */
         "orientation": OrientationType;
@@ -13913,6 +14029,10 @@ export namespace Components {
           * The configuration of the buttons. Based on this array with config items, buttons are placed on the sticky bar. There can be at most 1 primary button, at most 2 secondary buttons and at most 1 action button.
          */
         "buttons": StickyBarButtonItem[];
+        /**
+          * Defines the component locale types.
+         */
+        "locales": Partial<StickyBarLocales>;
         /**
           * The offset from the top edge of the screen. In most cases, this shouldn't be used, as the sticky-bar searches for the os-bar and places itself right below it. Use this just when the sticky-bar does not find the os-bar.
          */
@@ -14083,9 +14203,9 @@ export namespace Components {
          */
         "select": () => Promise<void>;
         /**
-          * Method that sets focus on the native input.
+          * Method that sets focus on the native input. Pass `isOutlined` to show the keyboard focus ring.
          */
-        "setFocus": () => Promise<void>;
+        "setFocus": (isOutlined?: boolean) => Promise<void>;
         /**
           * Method that sets input value.
          */
@@ -14255,7 +14375,7 @@ export namespace Components {
          */
         "checked": boolean;
         /**
-          * If the toggle works as controlled component.
+          * If the toggle works as controlled component. When true, a click or Space/Enter emits `wppChange` with the requested `checked` value and the toggle keeps its current state until `checked` is updated.
          */
         "controlled": boolean;
         /**
@@ -14420,7 +14540,7 @@ export namespace Components {
          */
         "expandAll": () => Promise<void>;
         /**
-          * Accessible label for the tree component. Provides a name for the tree that assistive technologies can announce.
+          * Accessible label for the tree component. Provides a name for the tree that assistive technologies can announce. When it is omitted the tree falls back to the `treeLabel` locale string, so it always has a name.
          */
         "label"?: string;
         /**
@@ -14496,6 +14616,10 @@ export namespace Components {
          */
         "item": TreeType;
         /**
+          * Name for this item's actions control, already resolved by `wpp-tree` from its locales. Passed in rather than read here so this sub-component keeps no locales API of its own.
+         */
+        "itemActionsLabel"?: string;
+        /**
           * Indicates deep level of tree
          */
         "level": number;
@@ -14552,11 +14676,11 @@ export namespace Components {
          */
         "caption"?: CaptionValue;
         /**
-          * Configuration object for the control panel settings.  If set autoplay to `true`, the control bar will not be visible. `muted` and `loop` property on <video> tag will be set to true as default.
+          * Configuration object for the control panel settings.  If set autoplay to `true`, the control bar will not be visible and the overlay play/pause control stays visible instead, so an autoplaying video can still be stopped. The `<video>` starts muted when `autoplay` is `true`, when `showVolumeButton` is `false`, or when `muted` is set; `loop` is passed through as given.  `autoplay` is meant for decorative or background video: it plays muted, with no control bar and no way to turn sound on, and `caption` is not shown. A video whose speech or visuals carry information should use the default player, which offers sound, captions and the full controls.
          */
         "controlPanelConfig": ControlPanelConfig;
         /**
-          * Defines the jump values for the video progress bar and volume bar.
+          * Defines the jump values for the video progress bar and volume bar: `videoSkipTimeValue` in seconds (default `5`) and `volumeSkipValue` as a fraction of full volume (default `0.05`). A value left out keeps its default.
          */
         "jumpValues": JumpValues;
         /**
@@ -16326,6 +16450,12 @@ declare global {
     var HTMLWppIconExternalLinkElement: {
         prototype: HTMLWppIconExternalLinkElement;
         new (): HTMLWppIconExternalLinkElement;
+    };
+    interface HTMLWppIconExtractElement extends Components.WppIconExtract, HTMLStencilElement {
+    }
+    var HTMLWppIconExtractElement: {
+        prototype: HTMLWppIconExtractElement;
+        new (): HTMLWppIconExtractElement;
     };
     interface HTMLWppIconEyeOffElement extends Components.WppIconEyeOff, HTMLStencilElement {
     }
@@ -19056,6 +19186,7 @@ declare global {
         "wpp-icon-export-file": HTMLWppIconExportFileElement;
         "wpp-icon-extension": HTMLWppIconExtensionElement;
         "wpp-icon-external-link": HTMLWppIconExternalLinkElement;
+        "wpp-icon-extract": HTMLWppIconExtractElement;
         "wpp-icon-eye-off": HTMLWppIconEyeOffElement;
         "wpp-icon-eye-on": HTMLWppIconEyeOnElement;
         "wpp-icon-eyedropper": HTMLWppIconEyedropperElement;
@@ -19890,9 +20021,13 @@ declare namespace LocalJSX {
     }
     interface WppBackToTopButton {
         /**
-          * Contains the button `aria-` props.
+          * Contains the button `aria-` props.  `labelledby` names elements in your own page: their text becomes the button's name, because the native button lives in this component's shadow root, where your ids cannot be referenced.
          */
         "ariaProps"?: AriaProps;
+        /**
+          * Localised strings. `label` names the button when `ariaProps` provides no `label` and its `labelledby` ids name nothing, so passing other `aria-` props no longer drops the name. Precedence: ariaProps > locales > defaults.
+         */
+        "locales"?: Partial<BackToTopButtonLocaleInterface>;
     }
     interface WppBanner {
         /**
@@ -20795,6 +20930,10 @@ declare namespace LocalJSX {
          */
         "initialColor"?: string;
         /**
+          * Localised accessible names and texts of the picker.
+         */
+        "locales"?: Partial<ColorPickerLocales>;
+        /**
           * The mode of the color-picker. The default value is "theme", meaning that the color-picker will display all the colors from the app's theme. When mode is "custom", the user will have the Saturation picker, Hue slider and Opacity slider and can pick any color. Finally, if mode = "theme and custom", both "theme" and "custom" modes are enabled.
          */
         "mode"?: ColorPickerMode;
@@ -20856,6 +20995,10 @@ declare namespace LocalJSX {
           * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
         "labelTooltipConfig"?: DropdownConfig;
+        /**
+          * Localised accessible names for the buttons and for the value field when it has no label.
+         */
+        "locales"?: Partial<CounterLocales>;
         /**
           * Defines the counter `max` value.
          */
@@ -21378,7 +21521,7 @@ declare namespace LocalJSX {
     }
     interface WppFloatingButton {
         /**
-          * Contains the button `aria-` props.
+          * Contains the button `aria-` props.  `labelledby` names elements in your own page: their text becomes the button's name, because the native button lives in this component's shadow root, where your ids cannot be referenced.
          */
         "ariaProps"?: AriaProps;
         /**
@@ -21417,6 +21560,10 @@ declare namespace LocalJSX {
           * If the component is in loading state.
          */
         "loading"?: boolean;
+        /**
+          * Localised strings. `label` names the button when `ariaProps` provides no `label` and its `labelledby` ids name nothing. Precedence: ariaProps > locales > defaults.
+         */
+        "locales"?: Partial<FloatingButtonLocaleInterface>;
         /**
           * Defines the button name.
          */
@@ -21660,6 +21807,10 @@ declare namespace LocalJSX {
           * Hue value of the slider. Can contain values between: [0, 360].
          */
         "hue"?: number;
+        /**
+          * Accessible name of the slider, set by wpp-color-picker from its locales.
+         */
+        "label"?: string;
         /**
           * Event emitted when the hue of the slider changes.
          */
@@ -24966,6 +25117,24 @@ declare namespace LocalJSX {
         "width"?: number;
     }
     interface WppIconExternalLink {
+        /**
+          * Defines the icon color.
+         */
+        "color"?: string;
+        /**
+          * Defines the icon height and changes its default size. If you use `height` only, the icon width will not be affected.
+         */
+        "height"?: number;
+        /**
+          * Defines the icon size, where `s` is **16px** and `m` is **20px**.
+         */
+        "size"?: 's' | 'm';
+        /**
+          * Defines the icon width and changes its default size. If you use `width` only, the icon width and height will be the same.
+         */
+        "width"?: number;
+    }
+    interface WppIconExtract {
         /**
           * Defines the icon color.
          */
@@ -31656,7 +31825,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when the avatar item is clicked.
          */
-        "onWppClick"?: (event: WppLegacyAvatarCustomEvent<AvatarChangeEventDetail>) => void;
+        "onWppClick"?: (event: WppLegacyAvatarCustomEvent<LegacyAvatarChangeEventDetail>) => void;
         /**
           * Role of the avatar component.
          */
@@ -31783,6 +31952,10 @@ declare namespace LocalJSX {
           * The configuration of the buttons. Based on this array with config items, buttons are placed on the sticky bar. There can be at most 1 primary button, at most 2 secondary buttons and at most 1 action button.
          */
         "buttons"?: StickyBarButtonItem[];
+        /**
+          * Defines the component locale types.
+         */
+        "locales"?: Partial<LegacyStickyBarLocales>;
         /**
           * The offset from the top edge of the screen. In most cases, this shouldn't be used, as the sticky-bar searches for the os-bar and places itself right below it. Use this just when the sticky-bar does not find the os-bar.
          */
@@ -31952,7 +32125,7 @@ declare namespace LocalJSX {
          */
         "onWppChangeListItem"?: (event: WppListItemCustomEvent<ListItemChangeEventDetail>) => void;
         /**
-          * Defines the ARIA role of the component. Combobox-style parents (e.g. WppSearch) set this to `option` to expose items as options inside a `listbox`. When the role is `option` the item is removed from the tab order, as it is meant to be driven by the combobox via `aria-activedescendant` rather than receiving its own tab stop.
+          * Defines the ARIA role of the component. Combobox-style parents (e.g. WppSearch) set this to `option` to expose items as options inside a `listbox`. When the role is `option` the item is removed from the tab order, as it is meant to be driven by the combobox via `aria-activedescendant` rather than receiving its own tab stop, unless it is its listbox's roving tab stop.
          */
         "role"?: string;
         /**
@@ -31989,6 +32162,10 @@ declare namespace LocalJSX {
           * Determines whether the component is in a loading state.
          */
         "loading"?: boolean;
+        /**
+          * Localised strings for the button text and the progress text.
+         */
+        "locales"?: Partial<LoadMoreLocales>;
         /**
           * Emitted when the "Load more" button is clicked.
          */
@@ -32208,7 +32385,7 @@ declare namespace LocalJSX {
     }
     interface WppMoreButton {
         /**
-          * Contains the button `aria-` props.
+          * Contains the button `aria-` props.  `labelledby` names elements in your own page: their text becomes the button's name, because the native button lives in this component's shadow root, where your ids cannot be referenced.
          */
         "ariaProps"?: AriaProps;
         /**
@@ -32219,6 +32396,10 @@ declare namespace LocalJSX {
           * If the component is in loading state.
          */
         "loading"?: boolean;
+        /**
+          * Localised strings. `label` names the button when `ariaProps` provides no `label` and its `labelledby` ids name nothing. Precedence: ariaProps > locales > defaults.
+         */
+        "locales"?: Partial<MoreButtonLocaleInterface>;
         /**
           * Defines the button name.
          */
@@ -32357,6 +32538,10 @@ declare namespace LocalJSX {
          */
         "hexColor"?: string;
         /**
+          * Accessible name of the slider, set by wpp-color-picker from its locales.
+         */
+        "label"?: string;
+        /**
           * Event emitted when the opacity value changes
          */
         "onOpacityChanged"?: (event: WppOpacitySliderCustomEvent<number>) => void;
@@ -32487,6 +32672,10 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
+          * Indicates locales for the pill. Holds the accessible names of the close and drag icon buttons and the `aria-roledescription` of a `draggable` pill. Partial overrides are merged with the English defaults.
+         */
+        "locales"?: Partial<PillLocaleInterface>;
+        /**
           * Defines the maximum label length (in characters) of a single item. Zero or fewer means there is no limit
           * @deprecated - this prop will be deleted in version 4.0.0.
          */
@@ -32525,6 +32714,7 @@ declare namespace LocalJSX {
         "showTooltipOnTruncate"?: true;
         /**
           * Defines the pill size.
+          * @deprecated - the pills will always display in only 1 size.
          */
         "size"?: PillSize;
         /**
@@ -32538,6 +32728,10 @@ declare namespace LocalJSX {
     }
     interface WppPillGroup {
         /**
+          * Contains the pill group `aria-` props. `label` names the group when it has no visible label (`labelConfig`).
+         */
+        "ariaProps"?: WppPillGroupAriaProps;
+        /**
           * Indicates label config
          */
         "labelConfig"?: PillGroupLabelConfig;
@@ -32545,6 +32739,10 @@ declare namespace LocalJSX {
           * Defines the dropdown configuration. Under the hood dropdown using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
         "labelTooltipConfig"?: DropdownConfig;
+        /**
+          * Indicates locales for the pill group. Holds the `aria-roledescription` of a `draggable` group and the messages announced to screen readers while reordering pills with the keyboard. Partial overrides are merged with the English defaults.
+         */
+        "locales"?: Partial<PillGroupLocaleInterface>;
         /**
           * Defines the pill group name.
          */
@@ -32562,15 +32760,20 @@ declare namespace LocalJSX {
          */
         "onWppFocus"?: (event: WppPillGroupCustomEvent<FocusEvent>) => void;
         /**
+          * Emitted when two pills need to swap places, either through native drag and drop or through keyboard reordering. The consumer is expected to move the item at `draggedIndex` to `toIndex`.
+         */
+        "onWppReorderList"?: (event: WppPillGroupCustomEvent<PillGroupReorderListEvent>) => void;
+        /**
           * If the pill group is required.
          */
         "required"?: boolean;
         /**
           * Defines the pill group size.
+          * @deprecated - the pills will always display in only 1 size.
          */
         "size"?: PillSize;
         /**
-          * Indicates the type of the pill
+          * Indicates the type of the pill group.
          */
         "type"?: PillType;
         /**
@@ -32961,6 +33164,10 @@ declare namespace LocalJSX {
          */
         "hue"?: number;
         /**
+          * Accessible name of the area, set by wpp-color-picker from its locales.
+         */
+        "label"?: string;
+        /**
           * Event emitted when the saturation changes, containing the saturation and the brightness
          */
         "onSaturationChanged"?: (event: WppSaturationPickerCustomEvent<SaturationChangeDetail>) => void;
@@ -32972,6 +33179,10 @@ declare namespace LocalJSX {
           * Corresponds to brightness in HSV
          */
         "value"?: number;
+        /**
+          * Value text announced for the current saturation and brightness, set by wpp-color-picker from its locales.
+         */
+        "valueText"?: string;
     }
     interface WppSearch {
         /**
@@ -33493,9 +33704,9 @@ declare namespace LocalJSX {
     }
     interface WppSlider {
         /**
-          * Contains the slider `aria-` props.
+          * Contains the slider `aria-` props.  `label` names the control, and is deprecated for `range` sliders because it names BOTH thumbs, leaving them indistinguishable — set `min` and `max` there instead. The deprecation is on that one key, not on this prop.
          */
-        "ariaProps"?: AriaProps;
+        "ariaProps"?: WppSliderAriaProps;
         /**
           * If the slider is continuous.
          */
@@ -33516,6 +33727,10 @@ declare namespace LocalJSX {
           * Tooltip config for label, under the hood tooltip using tippy.js, all information about this library and available props you can see via this link `https://atomiks.github.io/tippyjs/v6/all-props/`
          */
         "labelTooltipConfig"?: DropdownConfig;
+        /**
+          * Translations for the strings this component generates itself — the thumb qualifiers and the spoken value of a `middle-range` band. The field's own label comes from `labelConfig`.
+         */
+        "locales"?: Partial<SliderLocales>;
         /**
           * Defines the marker values between which users can move the slider.
          */
@@ -33673,6 +33888,10 @@ declare namespace LocalJSX {
          */
         "completedSteps"?: number;
         /**
+          * Locales for accessible step labels. The stepLabel formatter is used when a main step has no label slot text.
+         */
+        "locales"?: Partial<StepperLocales>;
+        /**
           * If `useDecimalSubSteps` is true, emits the `step`, `index`, and `substep` properties of the active step. The `step` value may include decimal values to represent sub-steps (e.g., 2.1, 3.2). The `substep` property is a boolean that indicates whether the current step is a sub-step. This ensures both the main step and its sub-steps can be identified and tracked accurately.
          */
         "onWppChange"?: (event: WppStepperCustomEvent<StepChangeEventDetail>) => void;
@@ -33706,6 +33925,10 @@ declare namespace LocalJSX {
           * The configuration of the buttons. Based on this array with config items, buttons are placed on the sticky bar. There can be at most 1 primary button, at most 2 secondary buttons and at most 1 action button.
          */
         "buttons"?: StickyBarButtonItem[];
+        /**
+          * Defines the component locale types.
+         */
+        "locales"?: Partial<StickyBarLocales>;
         /**
           * The offset from the top edge of the screen. In most cases, this shouldn't be used, as the sticky-bar searches for the os-bar and places itself right below it. Use this just when the sticky-bar does not find the os-bar.
          */
@@ -34076,7 +34299,7 @@ declare namespace LocalJSX {
          */
         "checked"?: boolean;
         /**
-          * If the toggle works as controlled component.
+          * If the toggle works as controlled component. When true, a click or Space/Enter emits `wppChange` with the requested `checked` value and the toggle keeps its current state until `checked` is updated.
          */
         "controlled"?: boolean;
         /**
@@ -34244,7 +34467,7 @@ declare namespace LocalJSX {
          */
         "disableSearchHighlight"?: boolean;
         /**
-          * Accessible label for the tree component. Provides a name for the tree that assistive technologies can announce.
+          * Accessible label for the tree component. Provides a name for the tree that assistive technologies can announce. When it is omitted the tree falls back to the `treeLabel` locale string, so it always has a name.
          */
         "label"?: string;
         /**
@@ -34318,6 +34541,10 @@ declare namespace LocalJSX {
          */
         "item"?: TreeType;
         /**
+          * Name for this item's actions control, already resolved by `wpp-tree` from its locales. Passed in rather than read here so this sub-component keeps no locales API of its own.
+         */
+        "itemActionsLabel"?: string;
+        /**
           * Indicates deep level of tree
          */
         "level"?: number;
@@ -34382,11 +34609,11 @@ declare namespace LocalJSX {
          */
         "caption"?: CaptionValue;
         /**
-          * Configuration object for the control panel settings.  If set autoplay to `true`, the control bar will not be visible. `muted` and `loop` property on <video> tag will be set to true as default.
+          * Configuration object for the control panel settings.  If set autoplay to `true`, the control bar will not be visible and the overlay play/pause control stays visible instead, so an autoplaying video can still be stopped. The `<video>` starts muted when `autoplay` is `true`, when `showVolumeButton` is `false`, or when `muted` is set; `loop` is passed through as given.  `autoplay` is meant for decorative or background video: it plays muted, with no control bar and no way to turn sound on, and `caption` is not shown. A video whose speech or visuals carry information should use the default player, which offers sound, captions and the full controls.
          */
         "controlPanelConfig"?: ControlPanelConfig;
         /**
-          * Defines the jump values for the video progress bar and volume bar.
+          * Defines the jump values for the video progress bar and volume bar: `videoSkipTimeValue` in seconds (default `5`) and `volumeSkipValue` as a fraction of full volume (default `0.05`). A value left out keeps its default.
          */
         "jumpValues"?: JumpValues;
         /**
@@ -34645,6 +34872,7 @@ declare namespace LocalJSX {
         "wpp-icon-export-file": WppIconExportFile;
         "wpp-icon-extension": WppIconExtension;
         "wpp-icon-external-link": WppIconExternalLink;
+        "wpp-icon-extract": WppIconExtract;
         "wpp-icon-eye-off": WppIconEyeOff;
         "wpp-icon-eye-on": WppIconEyeOn;
         "wpp-icon-eyedropper": WppIconEyedropper;
@@ -35314,6 +35542,7 @@ declare module "@stencil/core" {
             "wpp-icon-export-file": LocalJSX.WppIconExportFile & JSXBase.HTMLAttributes<HTMLWppIconExportFileElement>;
             "wpp-icon-extension": LocalJSX.WppIconExtension & JSXBase.HTMLAttributes<HTMLWppIconExtensionElement>;
             "wpp-icon-external-link": LocalJSX.WppIconExternalLink & JSXBase.HTMLAttributes<HTMLWppIconExternalLinkElement>;
+            "wpp-icon-extract": LocalJSX.WppIconExtract & JSXBase.HTMLAttributes<HTMLWppIconExtractElement>;
             "wpp-icon-eye-off": LocalJSX.WppIconEyeOff & JSXBase.HTMLAttributes<HTMLWppIconEyeOffElement>;
             "wpp-icon-eye-on": LocalJSX.WppIconEyeOn & JSXBase.HTMLAttributes<HTMLWppIconEyeOnElement>;
             "wpp-icon-eyedropper": LocalJSX.WppIconEyedropper & JSXBase.HTMLAttributes<HTMLWppIconEyedropperElement>;

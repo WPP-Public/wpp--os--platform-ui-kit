@@ -1,6 +1,7 @@
 import { h, Host } from '@stencil/core';
 import { FOCUS_TYPE } from '../../types/common';
-import { autoFocusElement } from '../../utils/utils';
+import { autoFocusElement, mergeLocales } from '../../utils/utils';
+import { LOCALES_DEFAULTS } from './const';
 /**
  * @part input - Counter input element
  * @part label - Label text element
@@ -109,7 +110,9 @@ export class WppCounter {
       if (this.value === this.max) {
         const btn = this.host.shadowRoot?.querySelector('.increase-wrapper');
         btn?.classList.remove('pressed');
+        this.keepFocusAtLimit(btn);
       }
+      this.announceValue();
       this.wppChange.emit({ value: this.value, name: this.name });
     };
     this.decreaseValue = () => {
@@ -120,8 +123,19 @@ export class WppCounter {
       if (this.value === this.min) {
         const btn = this.host.shadowRoot?.querySelector('.decrease-wrapper');
         btn?.classList.remove('pressed');
+        this.keepFocusAtLimit(btn);
       }
+      this.announceValue();
       this.wppChange.emit({ value: this.value, name: this.name });
+    };
+    // Reaching min or max disables the button that was just pressed, and the browser then drops focus to the page.
+    // Hand it to the value field instead, as the spinbutton pattern does, so the user stays in the control.
+    this.keepFocusAtLimit = (button) => {
+      if (button && this.host.shadowRoot?.activeElement === button)
+        this.inputRef?.focus();
+    };
+    this.announceValue = () => {
+      this.valueAnnouncement = this.formattedValue ?? String(this.value);
     };
     this.counterWrapperCssClasses = () => ({
       'counter-wrapper': true,
@@ -183,6 +197,7 @@ export class WppCounter {
     this.formattedValue = undefined;
     this.focusType = undefined;
     this.currentFocused = null;
+    this.valueAnnouncement = '';
     this.name = undefined;
     this.value = 0;
     this.min = 0;
@@ -196,6 +211,7 @@ export class WppCounter {
     this.messageType = undefined;
     this.maxMessageLength = undefined;
     this.ariaProps = {};
+    this.locales = {};
     this.format = undefined;
     this.labelTooltipConfig = {
       popperOptions: { strategy: 'fixed' },
@@ -224,15 +240,22 @@ export class WppCounter {
   componentDidLoad() {
     autoFocusElement(this.autoFocus, this.inputRef);
   }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
   render() {
-    const messageId = this.message ? `${this.name}-message` : undefined;
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, body, decrease-button, decrease-icon, input, increase-button, increase-icon, message", onMouseDown: this.onMouseDown, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-6-0", { class: "label", htmlFor: this.name, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.counterWrapperCssClasses(), part: "body" }, this.withButtons && (h("button", { type: "button", class: this.decreaseWrapperCssClasses(), onClick: this.decreaseValue, part: "decrease-button", "aria-label": "Decrease value", disabled: (!this.isInputEmpty() && this.value === this.min) || this.disabled, tabIndex: (!this.isInputEmpty() && this.value === this.min) || this.disabled ? -1 : 0, onFocus: this.onElementFocus, onBlur: this.onElementBlur, onKeyUp: this.onKeyUp, onKeyDown: e => this.onKeyDownButton(e, 'decrease') }, h("wpp-icon-remove-v4-6-0", { class: "icon-minus", part: "decrease-icon" }))), h("input", { id: this.name, type: this.withButtons ? 'text' : 'decimal', class: this.inputCssClasses(), name: this.name, onKeyDown: this.handleValidate, value: this.formattedValue, required: this.required, disabled: this.disabled, onInput: this.onInput, onKeyUp: this.onKeyUp, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label || (!this.labelConfig?.text ? 'Counter value' : undefined), "aria-labelledby": this.labelConfig?.labelId || undefined, "aria-describedby": messageId, autocomplete: this.ariaProps.autocomplete || 'off', part: "input", title: "", onFocus: e => {
+    // The label names the input through its id, so a counter without a name still needs one
+    const inputId = this.name || 'wpp-counter';
+    const messageId = this.message ? `${inputId}-message` : undefined;
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, body, decrease-button, decrease-icon, input, increase-button, increase-icon, message", onMouseDown: this.onMouseDown, onBlur: this.onBlur }, this.labelConfig?.text && (h("wpp-label-v4-7-0", { class: "label", htmlFor: inputId, optional: !this.required, disabled: this.disabled, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "label" })), h("div", { class: this.counterWrapperCssClasses(), part: "body" }, this.withButtons && (h("button", { type: "button", class: this.decreaseWrapperCssClasses(), onClick: this.decreaseValue, part: "decrease-button", "aria-label": this._locales.decreaseValue, disabled: (!this.isInputEmpty() && this.value === this.min) || this.disabled, tabIndex: (!this.isInputEmpty() && this.value === this.min) || this.disabled ? -1 : 0, onFocus: this.onElementFocus, onBlur: this.onElementBlur, onKeyUp: this.onKeyUp, onKeyDown: e => this.onKeyDownButton(e, 'decrease') }, h("wpp-icon-remove-v4-7-0", { class: "icon-minus", part: "decrease-icon" }))), h("input", { id: inputId, type: this.withButtons ? 'text' : 'decimal', class: this.inputCssClasses(), name: this.name, onKeyDown: this.handleValidate, value: this.formattedValue, required: this.required, disabled: this.disabled, onInput: this.onInput, onKeyUp: this.onKeyUp, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label || (!this.labelConfig?.text ? this._locales.counterValue : undefined), "aria-labelledby": this.labelConfig?.labelId || undefined, "aria-describedby": messageId,
+      // Spinbutton pattern: ArrowUp/ArrowDown already step the value, and the role exposes it with its bounds.
+      role: "spinbutton", "aria-valuenow": this.isInputEmpty() || isNaN(this.value) ? undefined : this.value, "aria-valuemin": this.min, "aria-valuemax": this.max, autocomplete: this.ariaProps.autocomplete || 'off', part: "input", title: "", onFocus: e => {
         this.onElementFocus(e);
         this.onFocus(e);
-      }, onBlur: this.onElementBlur }), this.withButtons && (h("button", { type: "button", class: this.increaseWrapperCssClasses(), onClick: this.increaseValue, part: "increase-button", "aria-label": "Increase value", disabled: (!this.isInputEmpty() && this.value === this.max) || this.disabled, tabIndex: (!this.isInputEmpty() && this.value === this.max) || this.disabled ? -1 : 0, onFocus: this.onElementFocus, onBlur: this.onElementBlur, onKeyUp: this.onKeyUp, onKeyDown: e => this.onKeyDownButton(e, 'increase') }, h("wpp-icon-plus-v4-6-0", { class: "icon-plus", part: "increase-icon" })))), this.message && (h("wpp-inline-message-v4-6-0", { id: messageId, message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" }))));
+      }, onBlur: this.onElementBlur }), this.withButtons && (h("button", { type: "button", class: this.increaseWrapperCssClasses(), onClick: this.increaseValue, part: "increase-button", "aria-label": this._locales.increaseValue, disabled: (!this.isInputEmpty() && this.value === this.max) || this.disabled, tabIndex: (!this.isInputEmpty() && this.value === this.max) || this.disabled ? -1 : 0, onFocus: this.onElementFocus, onBlur: this.onElementBlur, onKeyUp: this.onKeyUp, onKeyDown: e => this.onKeyDownButton(e, 'increase') }, h("wpp-icon-plus-v4-7-0", { class: "icon-plus", part: "increase-icon" })))), h("span", { class: "sr-only", "aria-live": "polite" }, this.valueAnnouncement), this.message && (h("wpp-inline-message-v4-7-0", { id: messageId, message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig, part: "message" }))));
   }
   static get is() { return "wpp-counter"; }
-  static get registryIs() { return "wpp-counter-v4-6-0"; }
+  static get registryIs() { return "wpp-counter-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -489,6 +512,32 @@ export class WppCounter {
         },
         "defaultValue": "{}"
       },
+      "locales": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "Partial<CounterLocales>",
+          "resolved": "{ decreaseValue?: string | undefined; increaseValue?: string | undefined; counterValue?: string | undefined; }",
+          "references": {
+            "Partial": {
+              "location": "global",
+              "id": "global::Partial"
+            },
+            "CounterLocales": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-counter/types.ts::CounterLocales"
+            }
+          }
+        },
+        "required": false,
+        "optional": false,
+        "docs": {
+          "tags": [],
+          "text": "Localised accessible names for the buttons and for the value field when it has no label."
+        },
+        "defaultValue": "{}"
+      },
       "format": {
         "type": "unknown",
         "mutable": false,
@@ -599,7 +648,8 @@ export class WppCounter {
     return {
       "formattedValue": {},
       "focusType": {},
-      "currentFocused": {}
+      "currentFocused": {},
+      "valueAnnouncement": {}
     };
   }
   static get events() {

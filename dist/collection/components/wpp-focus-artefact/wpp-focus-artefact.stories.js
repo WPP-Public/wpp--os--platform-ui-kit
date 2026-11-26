@@ -40,18 +40,18 @@ export const FocusArtefact = {
     const [withMoreContent, setWithMoreContent] = useState(false);
     return html `
       <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 16px;">
-        <wpp-button-v4-6-0 variant="secondary" @click=${() => setWithMoreContent(!withMoreContent)}>
+        <wpp-button-v4-7-0 variant="secondary" @click=${() => setWithMoreContent(!withMoreContent)}>
           ${withMoreContent ? 'Remove extra content' : 'Add more content'}
-        </wpp-button-v4-6-0>
+        </wpp-button-v4-7-0>
 
         <div style="display: flex; width: 100%; height: 280px;">
           <div
             style="flex: 1; box-sizing: border-box; min-width: ${CHAT_MIN_WIDTH}px; padding: 16px; background-color: var(--wpp-grey-color-100); border: 2px dashed var(--wpp-grey-color-400);"
           >
-            <wpp-typography-v4-6-0 type="s-body">Container (minimum width: ${CHAT_MIN_WIDTH}px)</wpp-typography-v4-6-0>
+            <wpp-typography-v4-7-0 type="s-body">Container (minimum width: ${CHAT_MIN_WIDTH}px)</wpp-typography-v4-7-0>
           </div>
 
-          <wpp-focus-artefact-v4-6-0
+          <wpp-focus-artefact-v4-7-0
             .width=${args.width}
             .artefactTitle=${args.artefactTitle}
             .titleIcon=${args.titleIcon}
@@ -65,12 +65,12 @@ export const FocusArtefact = {
             @wppResize=${logEvent('wppResize')}
           >
             <div slot="body" style="display: flex; flex-direction: column; gap: 8px; padding: 16px;">
-              <wpp-typography-v4-6-0 type="s-body">The content of the artefact goes here.</wpp-typography-v4-6-0>
+              <wpp-typography-v4-7-0 type="s-body">The content of the artefact goes here.</wpp-typography-v4-7-0>
               ${withMoreContent
-      ? MORE_CONTENT.map(text => html `<wpp-typography-v4-6-0 type="s-body">${text}</wpp-typography-v4-6-0>`)
+      ? MORE_CONTENT.map(text => html `<wpp-typography-v4-7-0 type="s-body">${text}</wpp-typography-v4-7-0>`)
       : null}
             </div>
-          </wpp-focus-artefact-v4-6-0>
+          </wpp-focus-artefact-v4-7-0>
         </div>
       </div>
     `;

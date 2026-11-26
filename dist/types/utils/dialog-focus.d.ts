@@ -7,11 +7,16 @@
  */
 export declare const getDeepActiveElement: () => HTMLElement | null;
 /**
- * Whether focus currently sits inside a dialog, counting both its slotted light-DOM content and
- * its own shadow content. `host.contains()` does not cross the shadow boundary, so the dialog
- * element has to be checked separately.
+ * Whether focus currently sits inside a dialog, counting its slotted light-DOM content, its own
+ * shadow content and the shadow content of any component nested in either.
  */
 export declare const isFocusInsideDialog: (host: HTMLElement, dialog?: HTMLElement | null) => boolean;
+/**
+ * Wraps keyboard focus around a modal dialog, for the focus sentinels on either side of it: Tab past the last
+ * control lands on the first, Shift+Tab before the first lands on the last (WAI-ARIA APG, Dialog pattern). A
+ * dialog without controls takes focus itself; it is never a tab stop of its own (`tabindex="-1"`).
+ */
+export declare const focusDialogEdge: (dialog: HTMLElement | undefined, edge: 'first' | 'last') => void;
 /**
  * Focus bookkeeping shared by the dialog components (modal, side modal, full screen modal).
  *

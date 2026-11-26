@@ -33,7 +33,7 @@ describe('wpp-radio-group', () => {
   it('renders component with items and attributes', async () => {
     const page = await newSpecPage({
       components: [WppRadioGroup, WppRadio, WppLabel, WppInternalLabel],
-      template: () => (h("wpp-radio-group-v4-6-0", null, h("wpp-radio-v4-6-0", { name: "contact", value: "email", labelConfig: { text: 'Email' } }), h("wpp-radio-v4-6-0", { name: "contact", value: "mail", labelConfig: { text: 'Mail' } }), h("wpp-radio-v4-6-0", { name: "contact", value: "phone", labelConfig: { text: 'Phone' } }))),
+      template: () => (h("wpp-radio-group-v4-7-0", null, h("wpp-radio-v4-7-0", { name: "contact", value: "email", labelConfig: { text: 'Email' } }), h("wpp-radio-v4-7-0", { name: "contact", value: "mail", labelConfig: { text: 'Mail' } }), h("wpp-radio-v4-7-0", { name: "contact", value: "phone", labelConfig: { text: 'Phone' } }))),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -133,14 +133,16 @@ describe('wpp-radio-group', () => {
       html: `<wpp-radio-group></wpp-radio-group>`,
     });
     const instance = page.rootInstance;
-    const radio = { value: 'a', checked: false, required: false };
+    const radio = { value: 'a', checked: false, required: false, isGroupItem: false };
     jest.spyOn(instance.host, 'querySelectorAll').mockReturnValue([radio]);
     instance.value = 'a';
     instance['checkRadioElements']();
     // wait for setTimeout(0)
     await new Promise(resolve => setTimeout(resolve, 0));
     expect(radio.checked).toBe(true);
-    expect(radio.required).toBe(true);
+    // The group no longer forces `required` onto its radios; it only hides their "(Optional)" marker.
+    expect(radio.required).toBe(false);
+    expect(radio.isGroupItem).toBe(true);
   });
   it('wraps to last when ArrowUp is pressed on first item', async () => {
     const page = await newSpecPage({
@@ -190,5 +192,52 @@ describe('wpp-radio-group', () => {
     instance['focusAndSelect'](undefined);
     // Should safely return
     expect(spy).not.toHaveBeenCalled();
+  });
+  describe('Testing accessibility', () => {
+    it('should not make every radio in the group required', async () => {
+      const page = await newSpecPage({
+        components: [WppRadioGroup, WppRadio],
+        template: () => (h("wpp-radio-group-v4-7-0", { labelConfig: { text: 'Size' } }, h("wpp-radio-v4-7-0", { class: "wpp-radio", name: "size", value: "s", labelConfig: { text: 'Small' } }), h("wpp-radio-v4-7-0", { class: "wpp-radio", name: "size", value: "m", labelConfig: { text: 'Medium' } }))),
+      });
+      await page.waitForChanges();
+      const inputs = Array.from(page.body.querySelectorAll('wpp-radio')).map(radio => radio.shadowRoot?.querySelector('input'));
+      expect(inputs).toHaveLength(2);
+      inputs.forEach(input => {
+        expect(input.hasAttribute('required')).toBe(false);
+        expect(input.getAttribute('aria-required')).toBe('false');
+      });
+    });
+    it('should expose required on the radiogroup only when the group is required', async () => {
+      const render = async (required) => {
+        const page = await newSpecPage({
+          components: [WppRadioGroup],
+          template: () => h("wpp-radio-group-v4-7-0", { required: required, labelConfig: { text: 'Size' } }),
+        });
+        return page.root?.shadowRoot?.querySelector('[role="radiogroup"]');
+      };
+      expect((await render(true))?.getAttribute('aria-required')).toBe('true');
+      expect((await render(false))?.hasAttribute('aria-required')).toBe(false);
+    });
+    it('should name the group from ariaProps.label when custom ariaProps replace the default ids', async () => {
+      const page = await newSpecPage({
+        components: [WppRadioGroup],
+        template: () => h("wpp-radio-group-v4-7-0", { ariaProps: { label: 'Extras' } }),
+      });
+      const group = page.root?.shadowRoot?.querySelector('[role="radiogroup"]');
+      expect(group?.getAttribute('aria-label')).toBe('Extras');
+    });
+    it('should keep the label and message linked when custom ariaProps omit the ids', async () => {
+      const page = await newSpecPage({
+        components: [WppRadioGroup],
+        template: () => (h("wpp-radio-group-v4-7-0", { labelConfig: { text: 'Size' }, message: "Pick one", ariaProps: { label: 'Size' } })),
+      });
+      const group = page.root?.shadowRoot?.querySelector('[role="radiogroup"]');
+      const label = page.root?.shadowRoot?.querySelector('wpp-label');
+      const message = page.root?.shadowRoot?.querySelector('wpp-inline-message');
+      expect(label?.id).toBeTruthy();
+      expect(message?.id).toBeTruthy();
+      expect(group?.getAttribute('aria-labelledby')).toBe(label?.id);
+      expect(group?.getAttribute('aria-describedby')).toBe(message?.id);
+    });
   });
 });

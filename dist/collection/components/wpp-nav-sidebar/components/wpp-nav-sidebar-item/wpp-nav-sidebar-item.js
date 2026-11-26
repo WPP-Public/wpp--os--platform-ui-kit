@@ -2,6 +2,8 @@ import { h, Host, Fragment } from '@stencil/core';
 import { WrappedSlot } from '../../../common/WrappedSlot/WrappedSlot';
 import { getSlotEmptyStates, transformToVersionedTag, truncate } from '../../../../utils/utils';
 import { tooltipConfig } from '../../config';
+// Ids are scoped to the item's own shadow root, so a fixed one is unique.
+const FULL_LABEL_ID = 'full-label';
 /**
  * @slot icon-start - May contain an icon that will be placed before the main content, e.g. a plus icon
  * @slot icon-end - May contain an icon that will be placed after the main content, e.g. a plus icon
@@ -72,17 +74,17 @@ export class WppNavSidebarItem {
     this.hostCssClasses = () => ({
       'wpp-nav-sidebar-item': true,
     });
-    this.accessibleNameProps = () => (this.isLabelTruncated ? { 'aria-label': this.label } : {});
-    this.item = () => (h(Fragment, null, h(WrappedSlot, { name: "icon-start", wrapperClass: "icon-wrapper", class: "slot-icon-start-fallback", onSlotchange: this.updateSlotData }), h("p", { class: this.labelCssClasses(), part: "label" }, this.isLabelTruncated ? truncate(this.label, this.maxLabelLength) : this.label), h(WrappedSlot, { name: "icon-end", wrapperClass: this.iconEndCssClasses(), class: "slot-icon-end-fallback" }, this.extended && h("wpp-icon-chevron-v4-6-0", { class: "extended-icon", size: "m", part: "icon-chevron", "aria-hidden": "true" }))));
+    this.fullLabelProps = () => (this.isLabelTruncated ? { 'aria-describedby': FULL_LABEL_ID } : {});
+    this.item = () => (h(Fragment, null, h(WrappedSlot, { name: "icon-start", wrapperClass: "icon-wrapper", class: "slot-icon-start-fallback", onSlotchange: this.updateSlotData }), h("p", { class: this.labelCssClasses(), part: "label" }, this.isLabelTruncated ? truncate(this.label, this.maxLabelLength) : this.label), this.isLabelTruncated && (h("span", { id: FULL_LABEL_ID, hidden: true }, this.label)), h(WrappedSlot, { name: "icon-end", wrapperClass: this.iconEndCssClasses(), class: "slot-icon-end-fallback" }, this.extended && h("wpp-icon-chevron-v4-7-0", { class: "extended-icon", size: "m", part: "icon-chevron", "aria-hidden": "true" }))));
     // The disclosure toggle for a group of sub-items (W3C ARIA APG): a keyboard-operable button
     // exposing its open state. DOM focus sits here rather than on the host, so assistive tech
     // announces a real control instead of a nameless custom element.
-    this.extendedItem = () => (h("div", { class: this.navigationWrapperCssClasses(), role: "button", tabIndex: 0, "aria-expanded": this.expanded ? 'true' : 'false', ...this.accessibleNameProps(), onClick: this.handleClickExpandedItem, onKeyDown: this.handleExpandedItemKeyDown, part: "extended-item" }, this.item()));
+    this.extendedItem = () => (h("div", { class: this.navigationWrapperCssClasses(), role: "button", tabIndex: 0, "aria-expanded": this.expanded ? 'true' : 'false', ...this.fullLabelProps(), onClick: this.handleClickExpandedItem, onKeyDown: this.handleExpandedItemKeyDown, part: "extended-item" }, this.item()));
     // The link itself is the tab stop: a focused native anchor activates on Enter and is announced
     // with its link semantics — the previous host-focus model left Enter dead (WCAG 2.1.1) and
     // nested a link inside a nameless focusable element. The active item is exposed on the link
     // via aria-current="page".
-    this.linkItem = () => (h("a", { ref: el => (this.linkRef = el), class: this.navigationWrapperCssClasses(), href: this.path, onClick: this.handleClickLinkItem, target: this.target, "aria-current": this.active ? 'page' : undefined, ...this.accessibleNameProps(), part: "link-item" }, this.item()));
+    this.linkItem = () => (h("a", { ref: el => (this.linkRef = el), class: this.navigationWrapperCssClasses(), href: this.path, onClick: this.handleClickLinkItem, target: this.target, "aria-current": this.active ? 'page' : undefined, ...this.fullLabelProps(), part: "link-item" }, this.item()));
     // Collapsed sub-items are only visually hidden (max-height 0), so without `inert` their links
     // would stay in the tab order and the accessibility tree.
     this.renderSubItemsWrapper = () => (h("div", { class: this.subItemWrapperCssClasses(), part: "ws-wrapper", ...(!this.expanded ? { inert: true, 'aria-hidden': 'true' } : {}) }, h("slot", { part: "ws-inner" })));
@@ -94,7 +96,7 @@ export class WppNavSidebarItem {
         this.tooltipInstance = instance;
       },
     };
-    this.renderItemWithTooltip = () => (h("wpp-tooltip-v4-6-0", { text: this.label, config: this.itemTooltipConfig, part: "tooltip" }, this.extended ? this.extendedItem() : this.linkItem()));
+    this.renderItemWithTooltip = () => (h("wpp-tooltip-v4-7-0", { text: this.label, config: this.itemTooltipConfig, part: "tooltip" }, this.extended ? this.extendedItem() : this.linkItem()));
     this.renderItem = () => {
       const currentMaxLengthLabel = this.extended ? this.maxTitleLengthWithSubItems : this.maxTitleLengthWithoutSubItems;
       const isNeedToTruncate = this.label.length > currentMaxLengthLabel;
@@ -141,9 +143,9 @@ export class WppNavSidebarItem {
       item.setAttribute('nested-item', `${true}`);
     });
   }
-  // The visible label is shortened to fit the rail. The full text still has to reach assistive
-  // tech, so anything truncated gets an explicit name — otherwise the control is announced as the
-  // clipped string, ellipsis and all (WCAG 4.1.2).
+  // The visible label is shortened to fit the rail. The control keeps the visible text as its name,
+  // so speech users can say what they see (WCAG 2.5.3), and the full text reaches assistive tech as
+  // its description.
   get maxLabelLength() {
     return this.extended ? this.maxTitleLengthWithSubItems : this.maxTitleLengthWithoutSubItems;
   }
@@ -151,10 +153,10 @@ export class WppNavSidebarItem {
     return this.label.length > this.maxLabelLength;
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, icon-chevron, extended-item, link-item, tooltip, title, divider, icon-start, icon-end, ws-inner, icon-start, icon-end, ws-wrapper" }, this.groupTitle && (h("p", { class: "group-title", part: "title" }, this.groupTitle)), this.renderItem(), this.divide && h("wpp-divider-v4-6-0", { class: "slot-divider-fallback", part: "divider" })));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "label, icon-chevron, extended-item, link-item, tooltip, title, divider, icon-start, icon-end, ws-inner, icon-start, icon-end, ws-wrapper" }, this.groupTitle && (h("p", { class: "group-title", part: "title" }, this.groupTitle)), this.renderItem(), this.divide && h("wpp-divider-v4-7-0", { class: "slot-divider-fallback", part: "divider" })));
   }
   static get is() { return "wpp-nav-sidebar-item"; }
-  static get registryIs() { return "wpp-nav-sidebar-item-v4-6-0"; }
+  static get registryIs() { return "wpp-nav-sidebar-item-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

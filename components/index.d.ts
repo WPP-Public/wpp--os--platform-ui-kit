@@ -465,6 +465,8 @@ export { WppIconExtension as WppIconExtension } from '../dist/types/components/w
 export { defineCustomElement as defineCustomElementWppIconExtension } from './wpp-icon-extension';
 export { WppIconExternalLink as WppIconExternalLink } from '../dist/types/components/wpp-icon/components/actions/content actions/wpp-icon-external-link/wpp-icon-external-link';
 export { defineCustomElement as defineCustomElementWppIconExternalLink } from './wpp-icon-external-link';
+export { WppIconExtract as WppIconExtract } from '../dist/types/components/wpp-icon/components/actions/content actions/wpp-icon-extract/wpp-icon-extract';
+export { defineCustomElement as defineCustomElementWppIconExtract } from './wpp-icon-extract';
 export { WppIconEyeOff as WppIconEyeOff } from '../dist/types/components/wpp-icon/components/actions/content actions/wpp-icon-eye-off/wpp-icon-eye-off';
 export { defineCustomElement as defineCustomElementWppIconEyeOff } from './wpp-icon-eye-off';
 export { WppIconEyeOn as WppIconEyeOn } from '../dist/types/components/wpp-icon/components/actions/content actions/wpp-icon-eye-on/wpp-icon-eye-on';

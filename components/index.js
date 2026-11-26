@@ -1,7 +1,7 @@
 export { getAssetPath, setAssetPath, setNonce, setPlatformOptions } from '@stencil/core/internal/client';
 export { Z as Z_INDEX } from './consts.js';
 import { i as isObject, t as toKebabCase, r as recursiveObjectMap } from './utils.js';
-export { C as activateOnEnterOrSpace, m as applyBodyStylesIfNeeded, a as areSetsEqual, n as autoFocusElement, l as closestElement, d as debounce, o as form2object, f as format, D as getAriaProps, p as getDurationValues, q as getHasFocused, w as getHighestContainerInDOM, j as getHighlightData, x as getOsBarOffsetHeight, A as getScrollbarGutterWidth, g as getSlotEmptyStates, c as hasParentWithId, h as hasShadowDom, b as isEventTargetContained, z as isMimeAccepted, i as isObject, E as isWppElement, y as mergeLocales, r as recursiveObjectMap, s as selectDropdownWidth, v as setHasFocused, t as toKebabCase, k as transformToVersionedTag, e as truncate, B as uniquePortalId, u as uuidv4 } from './utils.js';
+export { D as activateOnEnterOrSpace, n as applyBodyStylesIfNeeded, a as areSetsEqual, o as autoFocusElement, m as closestElement, d as debounce, p as form2object, f as format, E as getAriaProps, q as getDurationValues, v as getHasFocused, x as getHighestContainerInDOM, j as getHighlightData, F as getLabelledbyText, y as getOsBarOffsetHeight, B as getScrollbarGutterWidth, g as getSlotEmptyStates, l as getTagSelector, c as hasParentWithId, h as hasShadowDom, b as isEventTargetContained, A as isMimeAccepted, i as isObject, G as isWppElement, z as mergeLocales, r as recursiveObjectMap, s as selectDropdownWidth, w as setHasFocused, t as toKebabCase, k as transformToVersionedTag, e as truncate, C as uniquePortalId, u as uuidv4 } from './utils.js';
 export { S as ScrollState, WppFileUpload, defineCustomElement as defineCustomElementWppFileUpload } from './wpp-file-upload.js';
 export { F as FullScreenModalCloseReason, WppFullScreenModal, defineCustomElement as defineCustomElementWppFullScreenModal } from './wpp-full-screen-modal.js';
 export { I as InlineEditModeEnum, WppInlineEdit, defineCustomElement as defineCustomElementWppInlineEdit } from './wpp-inline-edit.js';
@@ -240,6 +240,7 @@ export { WppIconExport, defineCustomElement as defineCustomElementWppIconExport 
 export { WppIconExportFile, defineCustomElement as defineCustomElementWppIconExportFile } from './wpp-icon-export-file.js';
 export { WppIconExtension, defineCustomElement as defineCustomElementWppIconExtension } from './wpp-icon-extension.js';
 export { WppIconExternalLink, defineCustomElement as defineCustomElementWppIconExternalLink } from './wpp-icon-external-link.js';
+export { WppIconExtract, defineCustomElement as defineCustomElementWppIconExtract } from './wpp-icon-extract.js';
 export { WppIconEyeOff, defineCustomElement as defineCustomElementWppIconEyeOff } from './wpp-icon-eye-off.js';
 export { WppIconEyeOn, defineCustomElement as defineCustomElementWppIconEyeOn } from './wpp-icon-eye-on.js';
 export { WppIconEyedropper, defineCustomElement as defineCustomElementWppIconEyedropper } from './wpp-icon-eyedropper.js';
@@ -749,6 +750,7 @@ const WppAgGridThemeConfig = {
   rowHoverColor: 'var(--wpp-grey-color-200)',
   oddRowBackgroundColor: 'var(--wpp-grey-color-000)',
   selectedRowBackgroundColor: 'var(--wpp-grey-color-200)',
+  focusShadow: '0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-primary-color-900)',
   rangeSelectionBorderColor: 'transparent',
   cellHorizontalPadding: 16,
   fontFamily: 'var(--wpp-font-family)',

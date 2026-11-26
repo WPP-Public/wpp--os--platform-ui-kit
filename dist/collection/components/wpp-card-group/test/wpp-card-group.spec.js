@@ -184,3 +184,18 @@ describe('wpp-card-group value=0 handling', () => {
     expect(innerA.checked).toBe(false);
   });
 });
+describe('wpp-card-group accessible name', () => {
+  it.each([
+    ['multiple', 'multiple', 'group'],
+    ['single', '', 'radiogroup'],
+  ])('names the %s group from ariaProps', async (_, multipleAttr, role) => {
+    const page = await newSpecPage({
+      components: [WppCardGroup],
+      html: `<wpp-card-group ${multipleAttr}></wpp-card-group>`,
+    });
+    page.root.ariaProps = { label: 'Plan' };
+    await page.waitForChanges();
+    expect(page.root?.getAttribute('role')).toBe(role);
+    expect(page.root?.getAttribute('aria-label')).toBe('Plan');
+  });
+});

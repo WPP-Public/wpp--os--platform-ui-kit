@@ -21,20 +21,26 @@ export declare class SaturationPicker {
    */
   readonly hue: number;
   /**
+   * Accessible name of the area, set by wpp-color-picker from its locales.
+   */
+  readonly label?: string;
+  /**
+   * Value text announced for the current saturation and brightness, set by wpp-color-picker from its locales.
+   */
+  readonly valueText?: string;
+  /**
    * Event emitted when the saturation changes, containing the saturation and the brightness
    */
   saturationChanged: EventEmitter<SaturationChangeDetail>;
-  markerX: number;
-  markerY: number;
   onPropertyChange(): void;
   componentDidLoad(): void;
   private setupCanvas;
   private drawSaturationValuePicker;
-  private updateMarkerPosition;
   private handleMouseDown;
   private handleMouseUp;
   private handleMouseMove;
   private updateSaturationValue;
   private handleMarkerMouseDown;
+  private handleKeyDown;
   render(): any;
 }

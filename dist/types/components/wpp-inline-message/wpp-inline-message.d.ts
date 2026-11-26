@@ -94,6 +94,7 @@ export declare class WppInlineMessage {
   private getMessageTypesIcons;
   private handleClickClose;
   private handleClickActionBtn;
+  private renderMessageText;
   private renderContent;
   private getExportParts;
   render(): any;

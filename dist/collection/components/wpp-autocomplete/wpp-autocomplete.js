@@ -98,6 +98,29 @@ export class WppAutocomplete {
     /**
      * Dropdown methods
      */
+    // Keep the options list in the tab order only while it can actually scroll (WCAG 2.1.1 —
+    // options are not tab stops in the combobox pattern, so the scroll region itself must be
+    // reachable). Measured after every render so it stays in sync as options load in or the query
+    // changes, and whenever the list resizes: the options are wpp-list-items that hydrate after the
+    // render that adds them, growing the list without another render of this component.
+    this.updateOptionsScrollable = () => {
+      const scrollable = this.isDropdownShown &&
+        !!this.optionsListRef &&
+        this.optionsListRef.scrollHeight > this.optionsListRef.clientHeight;
+      if (scrollable !== this.isOptionsScrollable) {
+        this.isOptionsScrollable = scrollable;
+      }
+    };
+    // The list is rendered only while the popup is open, so each opening brings a new element to watch
+    this.setOptionsListRef = (ref) => {
+      if (ref === this.optionsListRef)
+        return;
+      this.optionsListRef = ref;
+      this.optionsListResizeObserver ?? (this.optionsListResizeObserver = new ResizeObserver(this.updateOptionsScrollable));
+      this.optionsListResizeObserver.disconnect();
+      if (ref)
+        this.optionsListResizeObserver.observe(ref);
+    };
     this.createTippyInstance = () => {
       if (!this.triggerRef || !this.dropdownRef)
         return;
@@ -189,7 +212,7 @@ export class WppAutocomplete {
       this.multiple ? this.onClickListItemMultiple(clickedValue) : this.onClickListItemSingle(clickedValue);
       this.checkListAgainstValue();
     };
-    this.onClickListItemSingle = (listItemValue) => {
+    this.onClickListItemSingle = (listItemValue, { keepFocus = false } = {}) => {
       const current = this.value?.[0];
       let isSame = false;
       if (this.getItemKey && typeof current === 'object' && typeof listItemValue === 'object') {
@@ -214,9 +237,11 @@ export class WppAutocomplete {
         this.isInputValueTransparent = true;
         this.onSearchTextChange(this.searchText);
       }
-      this.isFocused = false;
-      this.preventBlur = true;
-      this.inputRef?.blur();
+      if (!keepFocus) {
+        this.isFocused = false;
+        this.preventBlur = true;
+        this.inputRef?.blur();
+      }
       this.hideDropdown();
     };
     this.onClickListItemMultiple = (listItemValue) => {
@@ -441,7 +466,8 @@ export class WppAutocomplete {
             const val = item.value;
             if (!val)
               return;
-            this.multiple ? this.onClickListItemMultiple(val) : this.onClickListItemSingle(val);
+            // Picking from the keyboard keeps focus in the combobox (W3C ARIA APG), so the user can go on typing
+            this.multiple ? this.onClickListItemMultiple(val) : this.onClickListItemSingle(val, { keepFocus: true });
             this.checkListAgainstValue();
           }
           return;
@@ -1152,15 +1178,7 @@ export class WppAutocomplete {
       this.setFocus(true);
   }
   componentDidRender() {
-    // Keep the options list in the tab order only while it can actually scroll (WCAG 2.1.1 —
-    // options are not tab stops in the combobox pattern, so the scroll region itself must be
-    // reachable). Measured here so it stays in sync as options load in or the query changes.
-    const scrollable = this.isDropdownShown &&
-      !!this.optionsListRef &&
-      this.optionsListRef.scrollHeight > this.optionsListRef.clientHeight;
-    if (scrollable !== this.isOptionsScrollable) {
-      this.isOptionsScrollable = scrollable;
-    }
+    this.updateOptionsScrollable();
     this.queueOptionSemantics();
     this.focusPillAfterRemoval();
     this.focusToggleAfterRender();
@@ -1175,6 +1193,7 @@ export class WppAutocomplete {
     this.themeSubscription.stop();
     this.tippyInstance?.destroy();
     this.resizeObserver?.disconnect();
+    this.optionsListResizeObserver?.disconnect();
     this.optionSemanticsObserver?.disconnect();
     if (this.optionSemanticsFrame !== undefined)
       cancelAnimationFrame(this.optionSemanticsFrame);
@@ -1198,7 +1217,7 @@ export class WppAutocomplete {
     return '';
   }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onBlur: this.handleBlur, onKeyUp: this.onKeyUp, exportparts: "input, dropdown, trigger, label" }, this.labelConfig?.text && (h("wpp-label-v4-6-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: this.handleTriggerClick, onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })), h("div", { ref: ref => (this.triggerRef = ref), tabindex: -1, class: this.triggerCssClasses(), onClick: this.handleTriggerClick, onFocusout: this.handleTriggerFocusOut }, this.renderPlaceholderText(), h("wpp-input-v4-6-0", { ref: ref => (this.inputRef = ref), part: "input", type: "text", class: this.inputCssClasses(), id: this.name, name: this.name, value: this.searchText, onWppChange: this.handleSearch, disabled: this.disabled, required: this.required, placeholder: this.isFocused || this.isDropdownShown || this.value.length > 0 || this.searchText.trim().length > 0
+    return (h(Host, { class: this.hostCssClasses(), onBlur: this.handleBlur, onKeyUp: this.onKeyUp, exportparts: "input, dropdown, trigger, label" }, this.labelConfig?.text && (h("wpp-label-v4-7-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onClick: this.handleTriggerClick, onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })), h("div", { ref: ref => (this.triggerRef = ref), tabindex: -1, class: this.triggerCssClasses(), onClick: this.handleTriggerClick, onFocusout: this.handleTriggerFocusOut }, this.renderPlaceholderText(), h("wpp-input-v4-7-0", { ref: ref => (this.inputRef = ref), part: "input", type: "text", class: this.inputCssClasses(), id: this.name, name: this.name, value: this.searchText, onWppChange: this.handleSearch, disabled: this.disabled, required: this.required, placeholder: this.isFocused || this.isDropdownShown || this.value.length > 0 || this.searchText.trim().length > 0
         ? undefined
         : this.placeholder, onInput: this.handleInput, onFocus: this.handleFocus, onKeyDown: this.onKeyDown, size: this.size, withCrossIcon: false,
       // The combobox semantics must land on the native input inside wpp-input's shadow DOM —
@@ -1212,10 +1231,14 @@ export class WppAutocomplete {
         controls: this.isDropdownShown ? this.listboxId : undefined,
         haspopup: 'listbox',
         autocomplete: 'list',
-      } }), h("span", { class: "visually-hidden", "aria-live": "polite" }, this.liveAnnouncement), this.multiple && (h("wpp-icon-cross-v4-6-0", { ref: ref => (this.crossIconRef = ref), class: this.iconCrossCssClasses(), role: "button", "aria-label": this.multiple ? this._locales.clearMultiple : this._locales.clearSingle, "aria-disabled": this.disabled ? 'true' : 'false', tabindex: this.isCrossIconTabbable() ? 0 : -1, onClick: this.handleClearClick, onFocus: this.handleCrossIconFocus, onBlur: this.handleCrossIconBlur, onKeyDown: this.handleCrossIconKeyDown }))), h("div", { ref: ref => (this.dropdownRef = ref), class: this.dropdownCssClasses(), part: "dropdown", onKeyDown: this.handleDropdownKeyDown, onFocusout: this.handleDropdownFocusOut }, this.isDropdownShown ? (h(Fragment, null, this.type === 'regular' && this.multiple ? this.renderDropdownPills() : null, h("div", { ref: ref => (this.optionsListRef = ref), class: "wpp-autocomplete-dropdown-list", onMouseDown: e => e.preventDefault(), onScroll: this.handleOptionsScroll, id: this.listboxId, role: "listbox", "aria-label": this.ariaProps?.label || this._locales.optionsListLabel, "aria-busy": this.isInfiniteLoading || this.loading, tabIndex: this.isOptionsScrollable ? 0 : -1 }, this.renderDropdownList()), this.isInfiniteLoading && (h("div", { class: "wpp-dropdown-infinite-loader", role: "status" }, h("wpp-spinner-v4-6-0", null))), this.renderCreateNewElement())) : null), !!this.message && (h("wpp-inline-message-v4-6-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType })), this.type === 'extended' && this.multiple ? this.renderExtendedSelectedValues() : null));
+        // The selection and the message render outside the native input's shadow root, where an id
+        // reference cannot reach, so they are passed as its description.
+        description: [this.placeholderText, this.message].filter(Boolean).join('. ') || undefined,
+        invalid: this.messageType === 'error',
+      } }), h("span", { class: "visually-hidden", "aria-live": "polite" }, this.liveAnnouncement), this.multiple && (h("wpp-icon-cross-v4-7-0", { ref: ref => (this.crossIconRef = ref), class: this.iconCrossCssClasses(), role: "button", "aria-label": this.multiple ? this._locales.clearMultiple : this._locales.clearSingle, "aria-disabled": this.disabled ? 'true' : 'false', tabindex: this.isCrossIconTabbable() ? 0 : -1, onClick: this.handleClearClick, onFocus: this.handleCrossIconFocus, onBlur: this.handleCrossIconBlur, onKeyDown: this.handleCrossIconKeyDown }))), h("div", { ref: ref => (this.dropdownRef = ref), class: this.dropdownCssClasses(), part: "dropdown", onKeyDown: this.handleDropdownKeyDown, onFocusout: this.handleDropdownFocusOut }, this.isDropdownShown ? (h(Fragment, null, this.type === 'regular' && this.multiple ? this.renderDropdownPills() : null, h("div", { ref: this.setOptionsListRef, class: "wpp-autocomplete-dropdown-list", onMouseDown: e => e.preventDefault(), onScroll: this.handleOptionsScroll, id: this.listboxId, role: "listbox", "aria-label": this.ariaProps?.label || this._locales.optionsListLabel, "aria-busy": this.isInfiniteLoading || this.loading, tabIndex: this.isOptionsScrollable ? 0 : -1 }, this.renderDropdownList()), this.isInfiniteLoading && (h("div", { class: "wpp-dropdown-infinite-loader", role: "status" }, h("wpp-spinner-v4-7-0", null))), this.renderCreateNewElement())) : null), !!this.message && (h("wpp-inline-message-v4-7-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType })), this.type === 'extended' && this.multiple ? this.renderExtendedSelectedValues() : null));
   }
   static get is() { return "wpp-autocomplete"; }
-  static get registryIs() { return "wpp-autocomplete-v4-6-0"; }
+  static get registryIs() { return "wpp-autocomplete-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

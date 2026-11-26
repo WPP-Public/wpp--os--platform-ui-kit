@@ -31,7 +31,7 @@ describe('wpp-toggle', () => {
     };
     const page = await newSpecPage({
       components: [WppToggle, WppLabel, WppInternalLabel],
-      template: () => h("wpp-toggle-v4-6-0", { labelConfig: labelConfig, required: true, name: "toggle" }),
+      template: () => h("wpp-toggle-v4-7-0", { labelConfig: labelConfig, required: true, name: "toggle" }),
     });
     expect(page.root).toMatchSnapshot();
   });
@@ -137,6 +137,36 @@ describe('wpp-toggle', () => {
     const page = await setup({ disabled: true });
     const input = page?.root?.shadowRoot?.querySelector('input');
     expect(input.tabIndex).toBe(-1);
+  });
+  describe('Testing accessibility', () => {
+    const pressSpace = async (page) => {
+      const input = page.root?.shadowRoot?.querySelector('input');
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+      await page.waitForChanges();
+      return input;
+    };
+    it('should report the requested state when Space is pressed on a controlled toggle', async () => {
+      const page = await setup({ controlled: true });
+      const changes = [];
+      page.root?.addEventListener('wppChange', (e) => changes.push(e.detail));
+      const input = await pressSpace(page);
+      expect(changes).toEqual([{ value: undefined, checked: true, name: undefined }]);
+      expect(input.getAttribute('aria-checked')).toBe('false');
+    });
+    it('should still toggle and report when Space is pressed on an uncontrolled toggle', async () => {
+      const page = await setup();
+      const changes = [];
+      page.root?.addEventListener('wppChange', (e) => changes.push(e.detail));
+      const input = await pressSpace(page);
+      expect(changes).toEqual([{ value: undefined, checked: true, name: undefined }]);
+      expect(input.getAttribute('aria-checked')).toBe('true');
+    });
+    it('should keep a disabled toggle visible to assistive tech', async () => {
+      const page = await setup({ disabled: true });
+      const input = page.root?.shadowRoot?.querySelector('input');
+      expect(input.disabled).toBe(true);
+      expect(input.hasAttribute('aria-hidden')).toBe(false);
+    });
   });
   describe('subscribing to theme changes', () => {
     let mockStart;

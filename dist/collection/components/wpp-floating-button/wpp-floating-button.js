@@ -1,8 +1,9 @@
 import { h, Host } from '@stencil/core';
-import { getAriaProps, hasShadowDom } from '../../utils/utils';
+import { getAriaProps, getLabelledbyText, hasShadowDom, mergeLocales } from '../../utils/utils';
 import { FOCUS_TYPE } from '../../types/common';
 import { WrappedSlot } from '../common/WrappedSlot/WrappedSlot';
 import { themeSubscriptionController } from '../../utils/subscribe-to-theme';
+import { LOCALES_DEFAULTS } from './const';
 /**
  * @slot - Icon slot, contains `wpp-icon-plus` by default. The default slot, without the name attribute.
  *
@@ -35,6 +36,14 @@ export class WppFloatingButton {
       this.focusType = FOCUS_TYPE.NONE;
       this.isPressed = false;
     };
+    // The ring is a stateful class rather than `:focus-visible`, and blur clears it. Focus moved here by
+    // script after a key press, or handed back by another window, never sees a Tab keyup, so take the
+    // ring from what the browser itself decided.
+    this.onFocus = () => {
+      if (typeof this.buttonRef?.matches === 'function' && this.buttonRef.matches(':focus-visible')) {
+        this.focusType = FOCUS_TYPE.TAB;
+      }
+    };
     this.onMouseDown = () => {
       this.focusType = FOCUS_TYPE.MOUSE;
     };
@@ -56,6 +65,8 @@ export class WppFloatingButton {
         }
       }
     };
+    // The name is set as `aria-label` in render, so `label` and `labelledby` are not passed through.
+    this.getButtonAriaProps = () => getAriaProps({ ...this.ariaProps, label: undefined, labelledby: undefined });
     this.hostCssClasses = () => ({
       'wpp-floating-button': true,
       'wpp-disabled': this.disabled,
@@ -93,6 +104,7 @@ export class WppFloatingButton {
     this.type = 'button';
     this.value = undefined;
     this.ariaProps = {};
+    this.locales = {};
   }
   /**
    * Method that sets focus on the native button.
@@ -106,10 +118,10 @@ export class WppFloatingButton {
     }, 0);
   }
   onUpdateAriaProps() {
-    this.validAriaProps = getAriaProps(this.ariaProps);
+    this.validAriaProps = this.getButtonAriaProps();
   }
   componentWillLoad() {
-    this.validAriaProps = getAriaProps(this.ariaProps);
+    this.validAriaProps = this.getButtonAriaProps();
   }
   connectedCallback() {
     this.themeSubscription.start();
@@ -117,11 +129,14 @@ export class WppFloatingButton {
   disconnectedCallback() {
     this.themeSubscription.stop();
   }
+  get _locales() {
+    return mergeLocales(LOCALES_DEFAULTS, this.locales);
+  }
   render() {
-    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, exportparts: "button, spinner-wrapper, spinner, icon-plus, ws-wrapper, ws-inner", onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, form: this.form, formAction: this.formAction, formEncType: this.formEncType, formMethod: this.formMethod, formNoValidate: this.formNoValidate, formTarget: this.formTarget, value: this.value, name: this.name, type: this.type, "data-testid": "wppFloatingButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps, part: "button" }, this.loading && (h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, h("wpp-spinner-v4-6-0", { color: 'var(--wpp-grey-color-000)', part: "spinner" }))), h(WrappedSlot, { wrapperClass: this.contentCssClasses() }, h("wpp-icon-plus-v4-6-0", { class: "icon-plus", part: "icon-plus" })))));
+    return (h(Host, { class: this.hostCssClasses(), onClick: this.handleClick, exportparts: "button, spinner-wrapper, spinner, icon-plus, ws-wrapper, ws-inner", onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled || this.loading, form: this.form, formAction: this.formAction, formEncType: this.formEncType, formMethod: this.formMethod, formNoValidate: this.formNoValidate, formTarget: this.formTarget, value: this.value, name: this.name, type: this.type, "data-testid": "wppFloatingButton", "aria-label": getLabelledbyText(this.host, this.ariaProps?.labelledby) || this.ariaProps?.label || this._locales.label, ...this.validAriaProps, part: "button" }, this.loading && (h("div", { class: this.loaderCssClasses(), part: "spinner-wrapper" }, h("wpp-spinner-v4-7-0", { color: 'var(--wpp-grey-color-000)', part: "spinner" }))), h(WrappedSlot, { wrapperClass: this.contentCssClasses() }, h("wpp-icon-plus-v4-7-0", { class: "icon-plus", part: "icon-plus" })))));
   }
   static get is() { return "wpp-floating-button"; }
-  static get registryIs() { return "wpp-floating-button-v4-6-0"; }
+  static get registryIs() { return "wpp-floating-button-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -362,7 +377,33 @@ export class WppFloatingButton {
         "optional": false,
         "docs": {
           "tags": [],
-          "text": "Contains the button `aria-` props."
+          "text": "Contains the button `aria-` props.\n\n`labelledby` names elements in your own page: their text becomes the button's name, because the\nnative button lives in this component's shadow root, where your ids cannot be referenced."
+        },
+        "defaultValue": "{}"
+      },
+      "locales": {
+        "type": "unknown",
+        "mutable": false,
+        "complexType": {
+          "original": "Partial<FloatingButtonLocaleInterface>",
+          "resolved": "undefined | { label?: string | undefined; }",
+          "references": {
+            "Partial": {
+              "location": "global",
+              "id": "global::Partial"
+            },
+            "FloatingButtonLocaleInterface": {
+              "location": "import",
+              "path": "./types",
+              "id": "src/components/wpp-floating-button/types.ts::FloatingButtonLocaleInterface"
+            }
+          }
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Localised strings. `label` names the button when `ariaProps` provides no `label` and its `labelledby`\nids name nothing. Precedence: ariaProps > locales > defaults."
         },
         "defaultValue": "{}"
       }

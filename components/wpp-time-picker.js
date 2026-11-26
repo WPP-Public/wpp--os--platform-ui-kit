@@ -1,7 +1,7 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
 import { m as menuListConfig } from './menuListConfig.js';
 import { Z as Z_INDEX } from './consts.js';
-import { B as uniquePortalId, y as mergeLocales, C as activateOnEnterOrSpace, w as getHighestContainerInDOM } from './utils.js';
+import { C as uniquePortalId, z as mergeLocales, D as activateOnEnterOrSpace, x as getHighestContainerInDOM } from './utils.js';
 import { F as FOCUS_TYPE } from './common.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme.js';
 import { d as defineCustomElement$l } from './wpp-action-button2.js';
@@ -67,7 +67,7 @@ const DEFAULT_WIDTH_VALUE = '198px';
 const isValidHour = (value) => /^(0\d|1\d|2[0-3])$/.test(value);
 const isValidMinutes = (value) => /^[0-5]\d$/.test(value);
 
-const wppTimePickerCss = ":host(.wpp-time-picker){display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start;min-width:124px}:host(.wpp-time-picker) .label{margin-bottom:8px}:host(.wpp-time-picker) #anchor{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;border-radius:var(--wpp-border-radius-m);border:var(--wpp-border-width-s) solid;border-color:var(--wpp-grey-color-500);-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;gap:8px}:host(.wpp-time-picker) #anchor .anchor-time{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}:host(.wpp-time-picker) #anchor .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor .cross-icon-container{width:20px;height:20px}:host(.wpp-time-picker) #anchor .cross-icon{outline:none}:host(.wpp-time-picker) #anchor .cross-icon:hover{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor .cross-icon:active{--wpp-icon-color:var(--wpp-grey-color-900)}:host(.wpp-time-picker) #anchor .cross-icon:focus-visible{border-radius:var(--wpp-border-radius-s);outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}:host(.wpp-time-picker) #anchor .time-picker-input{border:none;padding:0;width:100%;outline:none;color:var(--wpp-grey-color-1000);background-color:transparent;font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host(.wpp-time-picker) #anchor .time-picker-input::-webkit-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor .time-picker-input::-moz-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor .time-picker-input:-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor .time-picker-input::-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor .time-picker-input::placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor .time-picker-input::-moz-selection{background-color:var(--wpp-primary-color-200)}:host(.wpp-time-picker) #anchor .time-picker-input::selection{background-color:var(--wpp-primary-color-200)}:host(.wpp-time-picker) #anchor .time-picker-input:hover{cursor:pointer}:host(.wpp-time-picker) #anchor.no-value .clock-icon{--wpp-icon-color:var(--wpp-grey-color-600)}:host(.wpp-time-picker) #anchor:hover,:host(.wpp-time-picker) #anchor.label-hovered{background-color:var(--wpp-grey-color-200);border-color:var(--wpp-grey-color-700);cursor:pointer}:host(.wpp-time-picker) #anchor:hover .clock-icon,:host(.wpp-time-picker) #anchor.label-hovered .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor:hover .time-picker-input,:host(.wpp-time-picker) #anchor.label-hovered .time-picker-input{background-color:var(--wpp-grey-color-200)}:host(.wpp-time-picker) #anchor.focus{border-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor.focus .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor.tab-focus{border-color:var(--wpp-grey-color-800);border-radius:var(--wpp-border-radius-m);outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}:host(.wpp-time-picker) #anchor.tab-focus .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor.idle .time-picker-input{caret-color:transparent}:host(.wpp-time-picker) #anchor.disabled{background-color:var(--wpp-grey-color-100);border-color:var(--wpp-grey-color-400)}:host(.wpp-time-picker) #anchor.disabled:hover{cursor:not-allowed}:host(.wpp-time-picker) #anchor.disabled .time-picker-input{background-color:var(--wpp-grey-color-100);color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input::-webkit-input-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input::-moz-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input:-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input::-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input::placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input:hover{cursor:not-allowed}:host(.wpp-time-picker) #anchor.disabled .clock-icon{--wpp-icon-color:var(--wpp-grey-color-400)}:host(.wpp-time-picker) #anchor.disabled .cross-icon{--wpp-icon-color:var(--wpp-grey-color-400)}:host(.wpp-time-picker) #anchor.error{border-color:var(--wpp-danger-color-500)}:host(.wpp-time-picker) #anchor.warning{border-color:var(--wpp-warning-color-400)}:host(.wpp-time-picker) #anchor.size-s{height:32px;padding:4px 10px}:host(.wpp-time-picker) #anchor.size-m{height:40px;padding:8px 10px}:host(.wpp-time-picker) .wpp-inline-message{margin-top:4px}:host(.wpp-time-picker) .wpp-inline-message.helper-text{--wpp-typography-xs-midi-color:var(--wpp-grey-color-800)}";
+const wppTimePickerCss = ":host(.wpp-time-picker){display:-ms-inline-flexbox;display:inline-flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start;min-width:124px}:host(.wpp-time-picker) .label{margin-bottom:8px}:host(.wpp-time-picker) #anchor{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;border-radius:var(--wpp-border-radius-m);border:var(--wpp-border-width-s) solid;border-color:var(--wpp-grey-color-500);-webkit-box-sizing:border-box;box-sizing:border-box;width:100%;gap:8px}:host(.wpp-time-picker) #anchor .anchor-time{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:8px}:host(.wpp-time-picker) #anchor .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor .cross-icon-container{width:20px;height:20px}:host(.wpp-time-picker) #anchor .cross-icon{outline:none}:host(.wpp-time-picker) #anchor .cross-icon:hover{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor .cross-icon:active{--wpp-icon-color:var(--wpp-grey-color-900)}:host(.wpp-time-picker) #anchor .cross-icon:focus-visible{border-radius:var(--wpp-border-radius-s);outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}:host(.wpp-time-picker) #anchor .time-picker-input{border:none;padding:0;width:100%;outline:none;color:var(--wpp-grey-color-1000);background-color:transparent;font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0)}:host(.wpp-time-picker) #anchor .time-picker-input::-webkit-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor .time-picker-input::-moz-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor .time-picker-input:-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor .time-picker-input::-ms-input-placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor .time-picker-input::placeholder{color:var(--wpp-grey-color-700)}:host(.wpp-time-picker) #anchor .time-picker-input::-moz-selection{background-color:var(--wpp-primary-color-200)}:host(.wpp-time-picker) #anchor .time-picker-input::selection{background-color:var(--wpp-primary-color-200)}:host(.wpp-time-picker) #anchor .time-picker-input:hover{cursor:pointer}:host(.wpp-time-picker) #anchor.no-value .clock-icon{--wpp-icon-color:var(--wpp-grey-color-600)}:host(.wpp-time-picker) #anchor:hover,:host(.wpp-time-picker) #anchor.label-hovered{background-color:var(--wpp-grey-color-200);border-color:var(--wpp-grey-color-700);cursor:pointer}:host(.wpp-time-picker) #anchor:hover .clock-icon,:host(.wpp-time-picker) #anchor.label-hovered .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor:hover .time-picker-input,:host(.wpp-time-picker) #anchor.label-hovered .time-picker-input{background-color:var(--wpp-grey-color-200)}:host(.wpp-time-picker) #anchor.focus{border-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor.focus .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor.tab-focus{border-color:var(--wpp-grey-color-800);border-radius:var(--wpp-border-radius-m);outline:none;-webkit-box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color);box-shadow:0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-brand-color)}:host(.wpp-time-picker) #anchor.tab-focus .clock-icon{--wpp-icon-color:var(--wpp-grey-color-800)}:host(.wpp-time-picker) #anchor.idle .time-picker-input{caret-color:transparent}:host(.wpp-time-picker) #anchor.disabled{background-color:var(--wpp-grey-color-100);border-color:var(--wpp-grey-color-400)}:host(.wpp-time-picker) #anchor.disabled:hover{cursor:not-allowed}:host(.wpp-time-picker) #anchor.disabled .time-picker-input{background-color:var(--wpp-grey-color-100);color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input::-webkit-input-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input::-moz-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input:-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input::-ms-input-placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input::placeholder{color:var(--wpp-text-color-disabled)}:host(.wpp-time-picker) #anchor.disabled .time-picker-input:hover{cursor:not-allowed}:host(.wpp-time-picker) #anchor.disabled .clock-icon{--wpp-icon-color:var(--wpp-grey-color-400)}:host(.wpp-time-picker) #anchor.error{border-color:var(--wpp-danger-color-500)}:host(.wpp-time-picker) #anchor.warning{border-color:var(--wpp-warning-color-400)}:host(.wpp-time-picker) #anchor.size-s{height:32px;padding:4px 10px}:host(.wpp-time-picker) #anchor.size-m{height:40px;padding:8px 10px}:host(.wpp-time-picker) .wpp-inline-message{margin-top:4px}:host(.wpp-time-picker) .wpp-inline-message.helper-text{--wpp-typography-xs-midi-color:var(--wpp-grey-color-800)}";
 
 const WppTimePicker$1 = /*@__PURE__*/ proxyCustomElement(class WppTimePicker extends HTMLElement {
   constructor() {
@@ -87,12 +87,15 @@ const WppTimePicker$1 = /*@__PURE__*/ proxyCustomElement(class WppTimePicker ext
     // with a content"). A shared instance-unique id fixes the association and stops several
     // pickers on one page from all claiming the same id.
     this.inputId = uniquePortalId('wpp-time-picker-input');
+    this.messageId = uniquePortalId('wpp-time-picker-message');
     // Guards the setTimeout(0) callbacks (focus + scroll) that outlive a fast open→unmount.
     this.isDestroyed = false;
     // Whether the selection currently being handled came from Enter/Space rather than a click.
     this.selectionFromKeyboard = false;
     // Whether closing the dropdown is about to take focus with it, so it can be handed back.
     this.restoreFocusOnHidden = false;
+    // Set while the clear control hands focus back to the input after a key press, so onFocus keeps the keyboard ring.
+    this.isFocusFromKeyboard = false;
     this.hasChangedHours = false;
     this.hasChangedMinutes = false;
     this.hasClearedValue = false;
@@ -286,6 +289,12 @@ const WppTimePicker$1 = /*@__PURE__*/ proxyCustomElement(class WppTimePicker ext
       }
       else {
         this.value = '';
+        // The "x" unmounts once the value is gone, which would drop its keyboard focus on `<body>`.
+        if (event.type === 'keydown') {
+          this.isFocusFromKeyboard = true;
+          this.inputRef?.focus();
+          this.isFocusFromKeyboard = false;
+        }
       }
       this.setErrorMessage(undefined);
       this.previousInputValue = this.value;
@@ -544,7 +553,9 @@ const WppTimePicker$1 = /*@__PURE__*/ proxyCustomElement(class WppTimePicker ext
       if (this.isInComponent)
         return;
       this.isInComponent = true;
-      this.focusType = FOCUS_TYPE.MOUSE;
+      // Focus that comes back from the clear control's Enter or Space keeps the keyboard ring; there is no Tab keyup
+      // to restore it, and the pointer border would show instead.
+      this.focusType = this.isFocusFromKeyboard ? FOCUS_TYPE.TAB : FOCUS_TYPE.MOUSE;
       if (this.value === '') {
         this.value = PLACEHOLDER;
         this.previousInputValue = PLACEHOLDER;
@@ -829,25 +840,25 @@ const WppTimePicker$1 = /*@__PURE__*/ proxyCustomElement(class WppTimePicker ext
     return mergeLocales(TIME_PICKER_LOCALES_DEFAULTS, this.locales);
   }
   render() {
-    return (h(Host, { class: "wpp-time-picker", "aria-disabled": this.disabled, style: { width: !this.width ? DEFAULT_WIDTH_VALUE : this.width } }, this.labelConfig?.text && (h("wpp-label-v4-6-0", { typography: "s-strong", class: "label", htmlFor: this.inputId, optional: !this.required, config: this.labelConfig, disabled: this.disabled, tooltipConfig: this.labelTooltipConfig, onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })), h("div", { ref: el => (this.anchorRef = el), id: "anchor", class: this.getAnchorCssClasses() }, h("div", { class: "anchor-time" }, h("wpp-icon-clock-v4-6-0", { class: "clock-icon" }), h("input", {
+    return (h(Host, { class: "wpp-time-picker", "aria-disabled": this.disabled, style: { width: !this.width ? DEFAULT_WIDTH_VALUE : this.width } }, this.labelConfig?.text && (h("wpp-label-v4-7-0", { typography: "s-strong", class: "label", htmlFor: this.inputId, optional: !this.required, config: this.labelConfig, disabled: this.disabled, tooltipConfig: this.labelTooltipConfig, onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })), h("div", { ref: el => (this.anchorRef = el), id: "anchor", class: this.getAnchorCssClasses() }, h("div", { class: "anchor-time" }, h("wpp-icon-clock-v4-7-0", { class: "clock-icon" }), h("input", {
       // Styled by class, not by id: the id is per-instance (so `for` / `aria-controls`
       // stay unique when several pickers share a page), which a `#time-picker` selector
       // could not follow.
-      class: "time-picker-input", ref: el => (this.inputRef = el), onFocus: this.onFocus, onBlur: this.onBlur, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, onKeyPress: this.onKeyPress, onPaste: this.onPaste, disabled: this.disabled, onInput: this.onUpdateInput, id: this.inputId, name: this.name, type: "text", autocomplete: "off", placeholder: this.placeholder, value: this.value, role: "combobox", "aria-haspopup": "dialog", "aria-expanded": this.isDropdownOpen ? 'true' : 'false', "aria-controls": this.popupId, "aria-label": this.labelConfig?.text || this._locales.timePickerLabel
-    })), h("div", { class: "cross-icon-container" }, this.showDisplayCross && (h("wpp-icon-cross-v4-6-0", { class: "cross-icon", "aria-label": this._locales.eraseTimeLabel, role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: this.disabled ? -1 : 0, onClick: this.handleClickCrossIcon, onMouseDown: (event) => event.preventDefault(), onKeyDown: activateOnEnterOrSpace(this.handleClickCrossIcon) })))), h("div", { id: this.popupId, ref: el => (this.portalRef = el), class: "wpp-time-picker-portal", role: "dialog", "aria-modal": "false", "aria-label": this._locales.timePickerLabel, onKeyDown: this.onPortalKeyDown, onPointerDown: this.onPortalPointerDown, onMouseDown: this.onPortalMouseDown }, h("div", { ref: refEl => (this.hoursSectionRef = refEl), class: "hours section", role: "listbox", "aria-label": this._locales.hoursLabel }, HOURS.map((hour, hourIndex) => (h("wpp-list-item-v4-6-0", { id: `hour-${hour}`, key: hour, class: {
+      class: "time-picker-input", ref: el => (this.inputRef = el), onFocus: this.onFocus, onBlur: this.onBlur, onKeyUp: this.onKeyUp, onKeyDown: this.onKeyDown, onKeyPress: this.onKeyPress, onPaste: this.onPaste, disabled: this.disabled, onInput: this.onUpdateInput, id: this.inputId, name: this.name, type: "text", autocomplete: "off", placeholder: this.placeholder, value: this.value, role: "combobox", "aria-haspopup": "dialog", "aria-expanded": this.isDropdownOpen ? 'true' : 'false', "aria-controls": this.popupId, "aria-label": this.labelConfig?.text || this._locales.timePickerLabel, "aria-describedby": this.message ? this.messageId : undefined, "aria-invalid": this.message && this.messageType === 'error' ? 'true' : undefined
+    })), h("div", { class: "cross-icon-container" }, this.showDisplayCross && !this.disabled && (h("wpp-icon-cross-v4-7-0", { class: "cross-icon", "aria-label": this._locales.eraseTimeLabel, role: "button", tabIndex: 0, onClick: this.handleClickCrossIcon, onMouseDown: (event) => event.preventDefault(), onKeyDown: activateOnEnterOrSpace(this.handleClickCrossIcon) })))), h("div", { id: this.popupId, ref: el => (this.portalRef = el), class: "wpp-time-picker-portal", role: "dialog", "aria-modal": "false", "aria-label": this._locales.timePickerLabel, onKeyDown: this.onPortalKeyDown, onPointerDown: this.onPortalPointerDown, onMouseDown: this.onPortalMouseDown }, h("div", { ref: refEl => (this.hoursSectionRef = refEl), class: "hours section", role: "listbox", "aria-label": this._locales.hoursLabel }, HOURS.map((hour, hourIndex) => (h("wpp-list-item-v4-7-0", { id: `hour-${hour}`, key: hour, class: {
         'tab-focus': this.focusedColumn === 'hours' && this.rovingTimeValues.hoursIndex === hourIndex,
-      }, checked: this.checkedTimeValues.hoursIndex === hourIndex, role: "option", "aria-selected": this.checkedTimeValues.hoursIndex === hourIndex ? 'true' : 'false', tabIndex: this.rovingTimeValues.hoursIndex === hourIndex ? 0 : -1, onWppChangeListItem: () => this.handleClickListItem(hour, 'hour') }, h("span", { slot: "label" }, hour))))), h("wpp-divider-v4-6-0", { vertical: true }), h("div", { ref: refEl => (this.minutesSectionRef = refEl), class: "minutes section", role: "listbox", "aria-label": this._locales.minutesLabel }, this.generatedMinutes.map((minutes, minutesIndex) => (h("wpp-list-item-v4-6-0", { id: `minutes-${minutes}`, key: minutes, class: {
+      }, checked: this.checkedTimeValues.hoursIndex === hourIndex, role: "option", "aria-selected": this.checkedTimeValues.hoursIndex === hourIndex ? 'true' : 'false', isRovingTabStop: this.rovingTimeValues.hoursIndex === hourIndex, onWppChangeListItem: () => this.handleClickListItem(hour, 'hour') }, h("span", { slot: "label" }, hour))))), h("wpp-divider-v4-7-0", { vertical: true }), h("div", { ref: refEl => (this.minutesSectionRef = refEl), class: "minutes section", role: "listbox", "aria-label": this._locales.minutesLabel }, this.generatedMinutes.map((minutes, minutesIndex) => (h("wpp-list-item-v4-7-0", { id: `minutes-${minutes}`, key: minutes, class: {
         'tab-focus': this.focusedColumn === 'minutes' && this.rovingTimeValues.minutesIndex === minutesIndex,
-      }, checked: this.checkedTimeValues.minutesIndex === minutesIndex, role: "option", "aria-selected": this.checkedTimeValues.minutesIndex === minutesIndex ? 'true' : 'false', tabIndex: this.rovingTimeValues.minutesIndex === minutesIndex ? 0 : -1, onWppChangeListItem: () => this.handleClickListItem(minutes, 'minutes') }, h("span", { slot: "label" }, minutes)))))), this.message && (h("wpp-inline-message-v4-6-0", { class: !this.messageType ? 'helper-text' : '', message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
+      }, checked: this.checkedTimeValues.minutesIndex === minutesIndex, role: "option", "aria-selected": this.checkedTimeValues.minutesIndex === minutesIndex ? 'true' : 'false', isRovingTabStop: this.rovingTimeValues.minutesIndex === minutesIndex, onWppChangeListItem: () => this.handleClickListItem(minutes, 'minutes') }, h("span", { slot: "label" }, minutes)))))), this.message && (h("wpp-inline-message-v4-7-0", { id: this.messageId, class: !this.messageType ? 'helper-text' : '', message: this.message, type: this.messageType, showTooltipFrom: this.maxMessageLength, tooltipConfig: this.tooltipConfig }))));
   }
-  static get registryIs() { return "wpp-time-picker-v4-6-0"; }
+  static get registryIs() { return "wpp-time-picker-v4-7-0"; }
   get host() { return this; }
   static get watchers() { return {
     "minutesInterval": ["onUpdateMinutesInterval"],
     "value": ["onUpdateValue"]
   }; }
   static get style() { return wppTimePickerCss; }
-}, [1, "wpp-time-picker", "wpp-time-picker-v4-6-0", {
+}, [1, "wpp-time-picker", "wpp-time-picker-v4-7-0", {
     "size": [1],
     "disabled": [516],
     "dropdownConfig": [1040],
@@ -879,109 +890,109 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-time-picker-v4-6-0", "wpp-action-button-v4-6-0", "wpp-checkbox-v4-6-0", "wpp-divider-v4-6-0", "wpp-icon-chevron-v4-6-0", "wpp-icon-clock-v4-6-0", "wpp-icon-cross-v4-6-0", "wpp-icon-dash-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-info-message-v4-6-0", "wpp-icon-success-v4-6-0", "wpp-icon-tick-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-inline-message-v4-6-0", "wpp-internal-label-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-label-v4-6-0", "wpp-list-item-v4-6-0", "wpp-spinner-v4-6-0", "wpp-tooltip-v4-6-0", "wpp-typography-v4-6-0"];
+  const components = ["wpp-time-picker-v4-7-0", "wpp-action-button-v4-7-0", "wpp-checkbox-v4-7-0", "wpp-divider-v4-7-0", "wpp-icon-chevron-v4-7-0", "wpp-icon-clock-v4-7-0", "wpp-icon-cross-v4-7-0", "wpp-icon-dash-v4-7-0", "wpp-icon-error-v4-7-0", "wpp-icon-info-message-v4-7-0", "wpp-icon-success-v4-7-0", "wpp-icon-tick-v4-7-0", "wpp-icon-warning-v4-7-0", "wpp-inline-message-v4-7-0", "wpp-internal-label-v4-7-0", "wpp-internal-tooltip-v4-7-0", "wpp-label-v4-7-0", "wpp-list-item-v4-7-0", "wpp-spinner-v4-7-0", "wpp-tooltip-v4-7-0", "wpp-typography-v4-7-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-time-picker-v4-6-0":
+    case "wpp-time-picker-v4-7-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppTimePicker$1);
       }
       break;
-    case "wpp-action-button-v4-6-0":
+    case "wpp-action-button-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-checkbox-v4-6-0":
+    case "wpp-checkbox-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-divider-v4-6-0":
+    case "wpp-divider-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-chevron-v4-6-0":
+    case "wpp-icon-chevron-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-clock-v4-6-0":
+    case "wpp-icon-clock-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-cross-v4-6-0":
+    case "wpp-icon-cross-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-dash-v4-6-0":
+    case "wpp-icon-dash-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-error-v4-6-0":
+    case "wpp-icon-error-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-info-message-v4-6-0":
+    case "wpp-icon-info-message-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-success-v4-6-0":
+    case "wpp-icon-success-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-tick-v4-6-0":
+    case "wpp-icon-tick-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-warning-v4-6-0":
+    case "wpp-icon-warning-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-inline-message-v4-6-0":
+    case "wpp-inline-message-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-label-v4-6-0":
+    case "wpp-internal-label-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-internal-tooltip-v4-6-0":
+    case "wpp-internal-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-label-v4-6-0":
+    case "wpp-label-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-list-item-v4-6-0":
+    case "wpp-list-item-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-6-0":
+    case "wpp-spinner-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-6-0":
+    case "wpp-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-6-0":
+    case "wpp-typography-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

@@ -62,6 +62,9 @@
   background-color: var(--side-panel-bg-color);
   box-shadow: var(--side-panel-box-shadow);
 }
+.side-panel:focus, .side-panel:focus-visible {
+  outline: none;
+}
 .side-panel.visible {
   animation: fadeIn 0.2s ease-in-out forwards;
 }

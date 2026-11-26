@@ -10,6 +10,7 @@ export declare class WppTooltip {
   private contentEl?;
   private customContentEl?;
   private tippyInstance?;
+  private creationTimer?;
   private themeSubscription;
   host: HTMLWppTooltipElement;
   hidden: boolean;
@@ -78,14 +79,22 @@ export declare class WppTooltip {
   updateConfig(newConfig: DropdownConfig, oldConfig: DropdownConfig): void;
   updateTheme(): void;
   textChanged(newText: string, oldText: string): void;
+  updateAnchorDescription(): void;
   handleDisabledChange(newDisabled: boolean): void;
-  private handleSlotChange;
   componentDidLoad(): void;
   disconnectedCallback(): void;
   connectedCallback(): void;
+  private handleSlotChange;
   private updateTippyProps;
   private arrowSVG;
   private createTippyInstance;
+  /**
+   * The trigger carries the tooltip's words as its description from the start, so a screen reader reads them as focus
+   * lands rather than after the show delay. It is a string rather than an `aria-describedby` to the popup: the popup
+   * only exists while it is shown, and an id never resolves from the control inside a `wpp-*` trigger's shadow root.
+   */
+  private describeAnchor;
+  private getDescription;
   /**
    * Focus only shows the tooltip to keyboard users, the same way `:focus-visible` paints a ring. Otherwise a popover
    * closed with the pointer would pop it when it hands the focus back to its trigger, although the pointer is elsewhere.

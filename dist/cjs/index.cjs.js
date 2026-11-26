@@ -3,12 +3,12 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const consts = require('./consts-d8f5ef98.js');
-const utils = require('./utils-a3ab9816.js');
+const utils = require('./utils-8b2c3bc1.js');
 const types = require('./types-332b969c.js');
 const types$1 = require('./types-05f8f988.js');
 const types$2 = require('./types-7010056a.js');
 const types$3 = require('./types-18fdc89e.js');
-const index = require('./index-7f49a24b.js');
+const index = require('./index-bdb890b1.js');
 const types$4 = require('./types-2185a602.js');
 const types$5 = require('./types-391abf05.js');
 
@@ -118,6 +118,7 @@ const WppAgGridThemeConfig = {
   rowHoverColor: 'var(--wpp-grey-color-200)',
   oddRowBackgroundColor: 'var(--wpp-grey-color-000)',
   selectedRowBackgroundColor: 'var(--wpp-grey-color-200)',
+  focusShadow: '0 0 0 1px var(--wpp-grey-color-000), 0 0 0 3px var(--wpp-primary-color-900)',
   rangeSelectionBorderColor: 'transparent',
   cellHorizontalPadding: 16,
   fontFamily: 'var(--wpp-font-family)',
@@ -143,9 +144,11 @@ exports.getDurationValues = utils.getDurationValues;
 exports.getHasFocused = utils.getHasFocused;
 exports.getHighestContainerInDOM = utils.getHighestContainerInDOM;
 exports.getHighlightData = utils.getHighlightData;
+exports.getLabelledbyText = utils.getLabelledbyText;
 exports.getOsBarOffsetHeight = utils.getOsBarOffsetHeight;
 exports.getScrollbarGutterWidth = utils.getScrollbarGutterWidth;
 exports.getSlotEmptyStates = utils.getSlotEmptyStates;
+exports.getTagSelector = utils.getTagSelector;
 exports.hasParentWithId = utils.hasParentWithId;
 exports.hasShadowDom = utils.hasShadowDom;
 exports.isEventTargetContained = utils.isEventTargetContained;

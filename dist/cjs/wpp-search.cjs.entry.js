@@ -4,7 +4,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
 const isEqual = require('./isEqual-c003d7ce.js');
-const utils = require('./utils-a3ab9816.js');
+const utils = require('./utils-8b2c3bc1.js');
 const menuListConfig = require('./menuListConfig-ebbec952.js');
 const common = require('./common-ee802540.js');
 const consts = require('./consts-d8f5ef98.js');
@@ -57,6 +57,8 @@ const WppSearch = class {
     };
     // Unique ids used to wire the combobox input to its listbox popup.
     this.listboxId = '';
+    // The message renders in this component's own shadow root, so a fixed id cannot clash with another instance.
+    this.messageId = 'wpp-search-message';
     this.optionIdPrefix = '';
     this.themeSubscription = subscribeToTheme.themeSubscriptionController(() => this.dropdownEl);
     // Shared selection path used by both pointer clicks (via `wppChangeListItem`) and
@@ -502,7 +504,7 @@ const WppSearch = class {
       if ((this.isInputFocused && !this.searchValue) || this.isDropdownShown || !this.value.length)
         return null;
       const label = this.getOptionLabel(this.value[0]);
-      return (index.h("wpp-tooltip-v4-6-0", { class: "value-tooltip", text: label, config: this.valueTooltipConfig }, index.h("wpp-typography-v4-6-0", { ref: (el) => {
+      return (index.h("wpp-tooltip-v4-7-0", { class: "value-tooltip", text: label, config: this.valueTooltipConfig }, index.h("wpp-typography-v4-7-0", { ref: (el) => {
           this.placeholderEl = el;
         }, type: "s-body", class: "input-placeholder" }, label)));
     };
@@ -522,14 +524,14 @@ const WppSearch = class {
       // The `role="listbox"` wraps only its option children. The header and the infinite-scroll
       // loader are kept as siblings (outside the listbox) so they don't violate the listbox's
       // required-children contract.
-      return (index.h(index.Fragment, null, !!this._locales.dropdownHeader && (index.h("wpp-list-item-v4-6-0", { class: "dropdown-header", part: "dropdown-header", nonInteractive: true }, index.h("wpp-typography-v4-6-0", { type: "s-strong", slot: "label" }, this._locales.dropdownHeader))), index.h("div", { id: this.listboxId, role: "listbox", "aria-label": this._locales.optionsListLabel, "aria-busy": this.loading ? 'true' : undefined, part: "options", class: "listbox" }, this.renderListboxItems()), this.isInfiniteLoading && (index.h("div", { class: "infinite-loader", role: "status" }, index.h("wpp-spinner-v4-6-0", null)))));
+      return (index.h(index.Fragment, null, !!this._locales.dropdownHeader && (index.h("wpp-list-item-v4-7-0", { class: "dropdown-header", part: "dropdown-header", nonInteractive: true }, index.h("wpp-typography-v4-7-0", { type: "s-strong", slot: "label" }, this._locales.dropdownHeader))), index.h("div", { id: this.listboxId, role: "listbox", "aria-label": this._locales.optionsListLabel, "aria-busy": this.loading ? 'true' : undefined, part: "options", class: "listbox" }, this.renderListboxItems()), this.isInfiniteLoading && (index.h("div", { class: "infinite-loader", role: "status" }, index.h("wpp-spinner-v4-7-0", null)))));
     };
     this.renderListboxItems = () => {
       if (this.loading) {
-        return (index.h("div", { class: "loading", role: "option", "aria-disabled": "true" }, index.h("wpp-spinner-v4-6-0", { slot: "left" }), index.h("wpp-typography-v4-6-0", { type: "s-body", slot: "label" }, this._locales.loading)));
+        return (index.h("div", { class: "loading", role: "option", "aria-disabled": "true" }, index.h("wpp-spinner-v4-7-0", { slot: "left" }), index.h("wpp-typography-v4-7-0", { type: "s-body", slot: "label" }, this._locales.loading)));
       }
       if (this.isEmptyOptions) {
-        return (index.h("wpp-list-item-v4-6-0", { class: "nothing-found-wrapper", role: "option", "aria-disabled": "true", nonInteractive: true }, index.h("wpp-typography-v4-6-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound)));
+        return (index.h("wpp-list-item-v4-7-0", { class: "nothing-found-wrapper", role: "option", "aria-disabled": "true", nonInteractive: true }, index.h("wpp-typography-v4-7-0", { type: "s-body", class: "nothing-found", slot: "label" }, this._locales.nothingFound)));
       }
       return index.h("slot", null);
     };
@@ -732,9 +734,9 @@ const WppSearch = class {
     const style = {
       '--custom-dropdown-width': this.getDropdownWidth(),
     };
-    return (index.h(index.Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, exportparts: "input, dropdown, dropdown-header, options, icon-cross" }, index.h("div", { class: this.searchWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (index.h("wpp-label-v4-6-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })), index.h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, index.h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.hasSearchButton() && index.h("wpp-icon-search-v4-6-0", null), this.renderInputPlaceholder(), index.h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", role: "combobox", "aria-label": this.labelConfig?.text || this.placeholder || this._locales.searchLabel, "aria-required": this.required ? 'true' : undefined, "aria-expanded": this.isDropdownShown ? 'true' : 'false', "aria-haspopup": "listbox", "aria-controls": this.listboxId, "aria-autocomplete": "list", onFocus: this.handleInputFocus, onBlur: this.handleInputBlur, onInput: this.handleInput, onClick: this.handleInputMouseDown, onKeyDown: this.handleInputKeyDown, tabIndex: this.disabled ? -1 : 0 }), index.h("span", { class: "visually-hidden", "aria-live": "polite" }, this.liveAnnouncement)), index.h("div", { class: "trigger-actions" }, this.hasClearButton() && (index.h("wpp-icon-cross-v4-6-0", { part: "icon-cross", "aria-label": this._locales.clearButtonLabel || LOCALES_DEFAULTS.clearButtonLabel, role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: this.disabled ? -1 : 0, onClick: this.handleClearClick, onMouseDown: (event) => event.preventDefault(), onKeyDown: this.handleClearKeyDown })))), !!this.message && (index.h("wpp-inline-message-v4-6-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), index.h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, index.h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll, tabIndex: this.isDropdownShown && this.isOptionsScrollable ? 0 : -1 }, this.renderDropdownContent()))));
+    return (index.h(index.Host, { style: this.hostStyle(), class: this.hostCssClasses(), onFocus: this.handleFocus, onBlur: this.handleBlur, onMouseDown: this.handleMouseDown, onKeyUp: this.handleKeyUp, exportparts: "input, dropdown, dropdown-header, options, icon-cross" }, index.h("div", { class: this.searchWrapperCssClasses(), onMouseDown: this.handleTriggerContainerMouseDown }, this.labelConfig?.text && (index.h("wpp-label-v4-7-0", { class: this.labelCssClasses(), htmlFor: this.name, disabled: this.disabled, optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, onMouseEnter: () => (this.isLabelHovered = !this.disabled), onMouseLeave: () => (this.isLabelHovered = false) })), index.h("div", { ref: triggerEl => (this.triggerEl = triggerEl), class: this.triggerCssClasses(), onClick: this.handleTriggerClick }, index.h("div", { ref: valuesEl => (this.valuesContainerEl = valuesEl), class: "values" }, this.hasSearchButton() && index.h("wpp-icon-search-v4-7-0", null), this.renderInputPlaceholder(), index.h("input", { part: "input", ref: inputEl => (this.inputEl = inputEl), class: this.inputCssClasses(), id: this.name, name: this.name, type: "text", value: this.getInputValue(), disabled: this.disabled, placeholder: this.placeholder, required: this.required, autocomplete: "off", role: "combobox", "aria-label": this.labelConfig?.text || this.placeholder || this._locales.searchLabel, "aria-required": this.required ? 'true' : undefined, "aria-expanded": this.isDropdownShown ? 'true' : 'false', "aria-haspopup": "listbox", "aria-controls": this.listboxId, "aria-autocomplete": "list", "aria-describedby": this.message ? this.messageId : undefined, "aria-invalid": this.message && this.messageType === 'error' ? 'true' : undefined, onFocus: this.handleInputFocus, onBlur: this.handleInputBlur, onInput: this.handleInput, onClick: this.handleInputMouseDown, onKeyDown: this.handleInputKeyDown, tabIndex: this.disabled ? -1 : 0 }), index.h("span", { class: "visually-hidden", "aria-live": "polite" }, this.liveAnnouncement)), index.h("div", { class: "trigger-actions" }, this.hasClearButton() && (index.h("wpp-icon-cross-v4-7-0", { part: "icon-cross", "aria-label": this._locales.clearButtonLabel || LOCALES_DEFAULTS.clearButtonLabel, role: "button", "aria-disabled": this.disabled ? 'true' : 'false', tabIndex: this.disabled ? -1 : 0, onClick: this.handleClearClick, onMouseDown: (event) => event.preventDefault(), onKeyDown: this.handleClearKeyDown })))), !!this.message && (index.h("wpp-inline-message-v4-7-0", { id: this.messageId, class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType }))), index.h("div", { class: "dropdown", part: "dropdown", ref: dropdownEl => (this.dropdownEl = dropdownEl), style: style }, index.h("div", { ref: optionsListEl => (this.optionsListEl = optionsListEl), class: this.dropdownListCssClasses(), onScroll: this.handleOptionsScroll, tabIndex: this.isDropdownShown && this.isOptionsScrollable ? 0 : -1 }, this.renderDropdownContent()))));
   }
-  static get registryIs() { return "wpp-search-v4-6-0"; }
+  static get registryIs() { return "wpp-search-v4-7-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "value": ["onNextValueChange"],

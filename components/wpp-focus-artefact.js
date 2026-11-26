@@ -1,5 +1,5 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
-import { y as mergeLocales, k as transformToVersionedTag, D as getAriaProps } from './utils.js';
+import { z as mergeLocales, k as transformToVersionedTag, E as getAriaProps } from './utils.js';
 import { d as defineCustomElement$n } from './wpp-action-button2.js';
 import { d as defineCustomElement$m } from './wpp-checkbox2.js';
 import { d as defineCustomElement$l } from './wpp-divider2.js';
@@ -317,33 +317,33 @@ const WppFocusArtefact$1 = /*@__PURE__*/ proxyCustomElement(class WppFocusArtefa
     return (h("div", { class: "title-wrapper" }, h(transformToVersionedTag(this.titleIcon), {
       class: { 'title-icon': true },
       color: 'var(--wpp-grey-color-700)',
-    }), h("wpp-tooltip-v4-6-0", { text: this.artefactTitle, class: "title-tooltip", config: this.titleTooltipConfig }, h("p", { ref: el => (this.titleRef = el), class: "title" }, this.artefactTitle)), this.renderVersionSelector()));
+    }), h("wpp-tooltip-v4-7-0", { text: this.artefactTitle, class: "title-tooltip", config: this.titleTooltipConfig }, h("p", { ref: el => (this.titleRef = el), class: "title" }, this.artefactTitle)), this.renderVersionSelector()));
   }
   renderVersionSelector() {
     const selectedVersion = this.selectedVersion;
     if (!selectedVersion)
       return null;
-    return (h("wpp-menu-context-v4-6-0", { class: "version-selector", dropdownConfig: this.versionMenuConfig }, h("wpp-action-button-v4-6-0", { slot: "trigger-element", variant: "secondary", ariaProps: {
+    return (h("wpp-menu-context-v4-7-0", { class: "version-selector", dropdownConfig: this.versionMenuConfig }, h("wpp-action-button-v4-7-0", { slot: "trigger-element", variant: "secondary", ariaProps: {
         label: `${this._locales.versionSelectorLabel}: ${selectedVersion.label}`,
         haspopup: 'menu',
         expanded: this.isVersionMenuOpen,
-      } }, selectedVersion.label, h("wpp-icon-chevron-v4-6-0", { slot: "icon-end", direction: this.isVersionMenuOpen ? 'up' : 'down' })), h("div", { style: MENU_LIST_STYLE }, this.versions.map(version => {
+      } }, selectedVersion.label, h("wpp-icon-chevron-v4-7-0", { slot: "icon-end", direction: this.isVersionMenuOpen ? 'up' : 'down' })), h("div", { style: MENU_LIST_STYLE }, this.versions.map(version => {
       const isSelected = version.id === selectedVersion.id;
-      return (h("wpp-list-item-v4-6-0", { key: version.id, checked: isSelected, role: "menuitemradio", "aria-checked": String(isSelected), onWppChangeListItem: () => this.handleVersionSelect(version) }, h("span", { slot: "label" }, version.label)));
+      return (h("wpp-list-item-v4-7-0", { key: version.id, checked: isSelected, role: "menuitemradio", "aria-checked": String(isSelected), onWppChangeListItem: () => this.handleVersionSelect(version) }, h("span", { slot: "label" }, version.label)));
     }))));
   }
   renderAction(action) {
     // The pin's label names what a click does ("Pin" / "Unpin"), so it needs no `aria-pressed` on top
     const { icon, label } = this.getActionDisplay(action);
-    return (h("wpp-tooltip-v4-6-0", { key: action.id, text: label }, h("wpp-action-button-v4-6-0", { variant: "secondary", ariaProps: { label }, onClick: () => this.handleActionClick(action) }, this.renderIcon(icon, 'icon-start'))));
+    return (h("wpp-tooltip-v4-7-0", { key: action.id, text: label }, h("wpp-action-button-v4-7-0", { variant: "secondary", ariaProps: { label }, onClick: () => this.handleActionClick(action) }, this.renderIcon(icon, 'icon-start'))));
   }
   renderMoreMenu() {
     if (this.menuActions.length === 0)
       return null;
-    return (h("wpp-menu-context-v4-6-0", { class: "more-menu", dropdownConfig: this.moreMenuConfig }, h("wpp-action-button-v4-6-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this._locales.moreActionsLabel, haspopup: 'menu', expanded: this.isMoreMenuOpen } }, h("wpp-icon-more-v4-6-0", { slot: "icon-start" })), h("div", { style: MENU_LIST_STYLE }, this.menuActions.map(action => (h("wpp-list-item-v4-6-0", { key: action.id, disabled: action.disabled, onWppChangeListItem: () => this.handleMenuActionClick(action) }, this.renderIcon(action.icon, 'left'), h("span", { slot: "label" }, action.label)))))));
+    return (h("wpp-menu-context-v4-7-0", { class: "more-menu", dropdownConfig: this.moreMenuConfig }, h("wpp-action-button-v4-7-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this._locales.moreActionsLabel, haspopup: 'menu', expanded: this.isMoreMenuOpen } }, h("wpp-icon-more-v4-7-0", { slot: "icon-start" })), h("div", { style: MENU_LIST_STYLE }, this.menuActions.map(action => (h("wpp-list-item-v4-7-0", { key: action.id, disabled: action.disabled, onWppChangeListItem: () => this.handleMenuActionClick(action) }, this.renderIcon(action.icon, 'left'), h("span", { slot: "label" }, action.label)))))));
   }
   renderActions() {
-    return (h("div", { class: "actions-wrapper" }, h("div", { class: "actions" }, getDefaultActions(this._locales).map(action => this.renderAction(action)), this.renderMoreMenu()), h("wpp-tooltip-v4-6-0", { text: this._locales.closeAction }, h("wpp-action-button-v4-6-0", { class: "close-button", variant: "secondary", ariaProps: { label: this._locales.closeAction }, onClick: this.handleClose }, h("wpp-icon-close-v4-6-0", { slot: "icon-start" })))));
+    return (h("div", { class: "actions-wrapper" }, h("div", { class: "actions" }, getDefaultActions(this._locales).map(action => this.renderAction(action)), this.renderMoreMenu()), h("wpp-tooltip-v4-7-0", { text: this._locales.closeAction }, h("wpp-action-button-v4-7-0", { class: "close-button", variant: "secondary", ariaProps: { label: this._locales.closeAction }, onClick: this.handleClose }, h("wpp-icon-close-v4-7-0", { slot: "icon-start" })))));
   }
   render() {
     // The region is named after the title unless the app names it, by label or by reference
@@ -351,15 +351,15 @@ const WppFocusArtefact$1 = /*@__PURE__*/ proxyCustomElement(class WppFocusArtefa
       ...this.ariaProps,
       label: this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.artefactTitle),
     };
-    return (h(Host, { class: "wpp-focus-artefact", role: "region", ...getAriaProps(ariaProps) }, this.renderResizeHandle(), h("div", { class: "header" }, this.renderTitle(), this.renderActions()), h("wpp-divider-v4-6-0", { class: "divider" }), h("div", { ref: el => (this.bodyRef = el), class: "body", ...(this.isBodyScrollable ? { tabindex: '0', role: 'region', 'aria-label': this._locales.bodyLabel } : {}) }, h("slot", { name: "body", onSlotchange: this.observeBody }))));
+    return (h(Host, { class: "wpp-focus-artefact", role: "region", ...getAriaProps(ariaProps) }, this.renderResizeHandle(), h("div", { class: "header" }, this.renderTitle(), this.renderActions()), h("wpp-divider-v4-7-0", { class: "divider" }), h("div", { ref: el => (this.bodyRef = el), class: "body", ...(this.isBodyScrollable ? { tabindex: '0', role: 'region', 'aria-label': this._locales.bodyLabel } : {}) }, h("slot", { name: "body", onSlotchange: this.observeBody }))));
   }
-  static get registryIs() { return "wpp-focus-artefact-v4-6-0"; }
+  static get registryIs() { return "wpp-focus-artefact-v4-7-0"; }
   get host() { return this; }
   static get watchers() { return {
     "width": ["onWidthChange"]
   }; }
   static get style() { return wppFocusArtefactCss; }
-}, [1, "wpp-focus-artefact", "wpp-focus-artefact-v4-6-0", {
+}, [1, "wpp-focus-artefact", "wpp-focus-artefact-v4-7-0", {
     "artefactTitle": [1, "artefact-title"],
     "titleIcon": [1, "title-icon"],
     "menuActions": [16],
@@ -380,119 +380,119 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-focus-artefact-v4-6-0", "wpp-action-button-v4-6-0", "wpp-checkbox-v4-6-0", "wpp-divider-v4-6-0", "wpp-icon-chevron-v4-6-0", "wpp-icon-close-v4-6-0", "wpp-icon-cross-v4-6-0", "wpp-icon-dash-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-info-message-v4-6-0", "wpp-icon-more-v4-6-0", "wpp-icon-success-v4-6-0", "wpp-icon-tick-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-inline-message-v4-6-0", "wpp-internal-label-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-label-v4-6-0", "wpp-list-item-v4-6-0", "wpp-menu-context-v4-6-0", "wpp-spinner-v4-6-0", "wpp-tooltip-v4-6-0", "wpp-typography-v4-6-0"];
+  const components = ["wpp-focus-artefact-v4-7-0", "wpp-action-button-v4-7-0", "wpp-checkbox-v4-7-0", "wpp-divider-v4-7-0", "wpp-icon-chevron-v4-7-0", "wpp-icon-close-v4-7-0", "wpp-icon-cross-v4-7-0", "wpp-icon-dash-v4-7-0", "wpp-icon-error-v4-7-0", "wpp-icon-info-message-v4-7-0", "wpp-icon-more-v4-7-0", "wpp-icon-success-v4-7-0", "wpp-icon-tick-v4-7-0", "wpp-icon-warning-v4-7-0", "wpp-inline-message-v4-7-0", "wpp-internal-label-v4-7-0", "wpp-internal-tooltip-v4-7-0", "wpp-label-v4-7-0", "wpp-list-item-v4-7-0", "wpp-menu-context-v4-7-0", "wpp-spinner-v4-7-0", "wpp-tooltip-v4-7-0", "wpp-typography-v4-7-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-focus-artefact-v4-6-0":
+    case "wpp-focus-artefact-v4-7-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppFocusArtefact$1);
       }
       break;
-    case "wpp-action-button-v4-6-0":
+    case "wpp-action-button-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$n();
       }
       break;
-    case "wpp-checkbox-v4-6-0":
+    case "wpp-checkbox-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$m();
       }
       break;
-    case "wpp-divider-v4-6-0":
+    case "wpp-divider-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$l();
       }
       break;
-    case "wpp-icon-chevron-v4-6-0":
+    case "wpp-icon-chevron-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$k();
       }
       break;
-    case "wpp-icon-close-v4-6-0":
+    case "wpp-icon-close-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$j();
       }
       break;
-    case "wpp-icon-cross-v4-6-0":
+    case "wpp-icon-cross-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$i();
       }
       break;
-    case "wpp-icon-dash-v4-6-0":
+    case "wpp-icon-dash-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$h();
       }
       break;
-    case "wpp-icon-error-v4-6-0":
+    case "wpp-icon-error-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$g();
       }
       break;
-    case "wpp-icon-info-message-v4-6-0":
+    case "wpp-icon-info-message-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-more-v4-6-0":
+    case "wpp-icon-more-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-success-v4-6-0":
+    case "wpp-icon-success-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-tick-v4-6-0":
+    case "wpp-icon-tick-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-warning-v4-6-0":
+    case "wpp-icon-warning-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-inline-message-v4-6-0":
+    case "wpp-inline-message-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-internal-label-v4-6-0":
+    case "wpp-internal-label-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-internal-tooltip-v4-6-0":
+    case "wpp-internal-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-label-v4-6-0":
+    case "wpp-label-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-list-item-v4-6-0":
+    case "wpp-list-item-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-menu-context-v4-6-0":
+    case "wpp-menu-context-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-6-0":
+    case "wpp-spinner-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-6-0":
+    case "wpp-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-6-0":
+    case "wpp-typography-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

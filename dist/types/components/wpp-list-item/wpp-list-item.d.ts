@@ -155,9 +155,17 @@ export declare class WppListItem {
    * Defines the ARIA role of the component. Combobox-style parents (e.g. WppSearch)
    * set this to `option` to expose items as options inside a `listbox`. When the role
    * is `option` the item is removed from the tab order, as it is meant to be driven by
-   * the combobox via `aria-activedescendant` rather than receiving its own tab stop.
+   * the combobox via `aria-activedescendant` rather than receiving its own tab stop, unless
+   * it is its listbox's roving tab stop.
    */
   readonly role: string;
+  /**
+   * Makes an `option` its listbox's single tab stop, for listboxes whose options take real focus
+   * (the W3C APG roving tabindex) instead of being driven through `aria-activedescendant`.
+   *
+   * @internal - This prop is controlled by Time Picker
+   */
+  readonly isRovingTabStop: boolean;
   /**
    * Emitted when the list item was clicked
    */

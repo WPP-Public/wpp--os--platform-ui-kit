@@ -1,9 +1,9 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-a0877c3d.js';
 import { A as ANIMATION_PROPERTY_NAME, Z as Z_INDEX } from './consts-744c144f.js';
-import { g as getSlotEmptyStates, m as applyBodyStylesIfNeeded, x as getOsBarOffsetHeight, y as mergeLocales } from './utils-49ce8daf.js';
+import { g as getSlotEmptyStates, n as applyBodyStylesIfNeeded, y as getOsBarOffsetHeight, z as mergeLocales } from './utils-711e1d1b.js';
 import { T as TimeoutManager } from './timeout-manager-ad76cedb.js';
-import { d as dialogFocusController, i as isFocusInsideDialog } from './dialog-focus-06045aaf.js';
-import { W as WrappedSlot } from './WrappedSlot-e91d9cb0.js';
+import { d as dialogFocusController, i as isFocusInsideDialog, f as focusDialogEdge } from './dialog-focus-73993dfd.js';
+import { W as WrappedSlot } from './WrappedSlot-ed0f29d7.js';
 import { F as FullScreenModalCloseReason } from './types-b5cf2c7a.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme-487838b3.js';
 import './theme-observer-b7886d19.js';
@@ -93,7 +93,7 @@ const WppFullScreenModal = class {
     };
     this.renderActionBtn = (btnConfig, variant) => {
       const { label, ...rest } = btnConfig;
-      return (h("wpp-button-v4-6-0", { variant: variant, ...rest }, label));
+      return (h("wpp-button-v4-7-0", { variant: variant, ...rest }, label));
     };
     this.renderActionsConfig = () => {
       if (!this.actionsConfig)
@@ -104,8 +104,8 @@ const WppFullScreenModal = class {
     this.focusDialog = () => {
       if (!this.dialogRef)
         return;
-      // Idempotent: the sentinels, the open render and the transition all route through here, and
-      // pulling focus back to the container would undo whatever the user had reached inside.
+      // Idempotent: the open render and the transition both route through here, and pulling focus back to the
+      // container would undo whatever the user had reached inside.
       if (isFocusInsideDialog(this.host, this.dialogRef))
         return;
       this.dialogRef.focus();
@@ -242,9 +242,9 @@ const WppFullScreenModal = class {
   }
   render() {
     const Tag = this.formConfig ? 'form' : 'div';
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-full-screen-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-6-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }), h(Tag, { tabindex: "-1", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-fullscreen-modal-content", ref: ref => (this.dialogRef = ref) }, h("div", { class: this.headerContainerCssClasses() }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h("wpp-action-button-v4-6-0", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button", ariaProps: { label: this._locales.closeIconLabel } }, h("wpp-icon-cross-v4-6-0", { slot: "icon-start" }))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig ? (this.renderActionsConfig()) : (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: this.focusDialog }))));
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "wrapper, full-screen-modal, header, body, actions, header-wrapper, body-wrapper, actions-wrapper", onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: { zIndex: this.zIndex.toString(), '--wpp-full-screen-modal-top-offset': `${this.topOffset}px` }, role: this.ariaProps.role, "aria-labelledby": this.ariaProps.labelledby, "aria-label": this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.headerLabel || undefined), "aria-modal": "true" }, h("div", { class: "full-screen-modal-overlay", part: "wrapper" }, h("wpp-overlay-v4-7-0", { ...(this.withTransparentOverlay ? { style: { opacity: '0' } } : {}), isVisible: this.open, onWppClick: this.onOverlayClick, zIndex: 0 }), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: () => focusDialogEdge(this.dialogRef, 'last') }), h(Tag, { tabindex: "-1", class: this.fullScreenModalCssClasses(), part: "content", ...this.formConfig, "data-testid": "wpp-fullscreen-modal-content", ref: ref => (this.dialogRef = ref) }, h("div", { class: this.headerContainerCssClasses() }, h(WrappedSlot, { id: this.ariaProps.labelledby, wrapperClass: this.headerCssClasses(), name: "header", onSlotchange: this.updateSlotData }), h("wpp-action-button-v4-7-0", { variant: "secondary", onClick: this.handleCloseModal, class: "close-button", ariaProps: { label: this._locales.closeIconLabel } }, h("wpp-icon-cross-v4-7-0", { slot: "icon-start" }))), h(WrappedSlot, { wrapperClass: this.bodyCssClasses(), name: "body", onSlotchange: this.updateSlotData }), this.actionsConfig ? (this.renderActionsConfig()) : (h(WrappedSlot, { wrapperClass: this.actionsCssClasses(), name: "actions", onSlotchange: this.updateSlotData }))), h("div", { tabindex: "0", class: "focus-sentinel", onFocus: () => focusDialogEdge(this.dialogRef, 'first') }))));
   }
-  static get registryIs() { return "wpp-full-screen-modal-v4-6-0"; }
+  static get registryIs() { return "wpp-full-screen-modal-v4-7-0"; }
   get host() { return getElement(this); }
   static get watchers() { return {
     "open": ["handleChangeFullScreenModalStatus"]

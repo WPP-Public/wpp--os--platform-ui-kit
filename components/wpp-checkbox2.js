@@ -29,8 +29,14 @@ const WppCheckbox = /*@__PURE__*/ proxyCustomElement(class WppCheckbox extends H
     this.wppBlur = createEvent(this, "wppBlur", 1);
     this.wppClickCheckbox = createEvent(this, "wppClickCheckbox", 1);
     this.themeSubscription = themeSubscriptionController(() => this.host);
+    this.messageId = 'wpp-checkbox-message';
     this.onClick = (event) => {
       event.preventDefault();
+      this.toggle();
+    };
+    // Shared by pointer clicks and Space/Enter, so both paths emit wppChange, respect `controlled` and clear the
+    // indeterminate state the same way.
+    this.toggle = () => {
       if (this.controlled)
         return this.wppChange.emit({
           value: this.value,
@@ -79,7 +85,9 @@ const WppCheckbox = /*@__PURE__*/ proxyCustomElement(class WppCheckbox extends H
         const clickEvent = new MouseEvent('click', { bubbles: true, composed: true });
         this.host.dispatchEvent(clickEvent);
         this.isPressed = true;
-        this.checked = !this.checked;
+        // The click above is dispatched on the host and never reaches the label's click handler, so the keyboard
+        // used to flip `checked` here directly, without wppChange and leaving indeterminate set.
+        this.toggle();
       }
     };
     this.hostCssClasses = () => ({
@@ -121,6 +129,7 @@ const WppCheckbox = /*@__PURE__*/ proxyCustomElement(class WppCheckbox extends H
     this.internalState = '';
     this.index = 0;
     this.decorative = false;
+    this.isGroupItem = false;
     this.isDarkTheme = undefined;
   }
   /**
@@ -152,16 +161,20 @@ const WppCheckbox = /*@__PURE__*/ proxyCustomElement(class WppCheckbox extends H
   }
   render() {
     if (this.decorative)
-      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}) }, h("wpp-label-v4-6-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v4-6-0", { part: "icon-tick" }), h("wpp-icon-dash-v4-6-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v4-6-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
-    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}) }, h("wpp-label-v4-6-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required, htmlFor: this.name, disabled: this.disabled, onClick: this.onClick, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("input", { class: this.inputCssClasses(), type: "checkbox", id: this.name, name: this.name, disabled: this.disabled, checked: this.checked || this.indeterminate, required: this.required, onFocus: this.onFocus, onBlur: this.onBlur, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-hidden": this.disabled ? 'true' : null, "aria-required": this.required.toString(), tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v4-6-0", { part: "icon-tick" }), h("wpp-icon-dash-v4-6-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v4-6-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
+      return (h(Host, { class: this.hostCssClasses(), "aria-hidden": "true", role: "presentation", tabindex: "-1", exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}) }, h("wpp-label-v4-7-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required && !this.isGroupItem, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v4-7-0", { part: "icon-tick" }), h("wpp-icon-dash-v4-7-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v4-7-0", { class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
+    // The label names the input through its id, so a checkbox without a name still needs one
+    const inputId = this.name || 'wpp-checkbox';
+    return (h(Host, { class: this.hostCssClasses(), onKeyUp: this.onKeyUp, onFocus: this.onFocus, onBlur: this.onBlur, onKeyDown: this.onKeyDown, exportparts: "body, input, square, icon-tick, icon-dash, message", name: this.name, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}) }, h("wpp-label-v4-7-0", { class: this.labelCssClasses(), typography: "s-body", optional: !this.required && !this.isGroupItem, htmlFor: inputId, disabled: this.disabled, onClick: this.onClick, config: this.labelConfig, tooltipConfig: this.labelTooltipConfig, part: "body" }, h("input", { class: this.inputCssClasses(), type: "checkbox", id: inputId, name: this.name, disabled: this.disabled, checked: this.checked || this.indeterminate,
+      // Exposes the mixed state to assistive tech; `checked` alone made it read as checked.
+      indeterminate: this.indeterminate, required: this.required, onFocus: this.onFocus, onBlur: this.onBlur, autoFocus: this.autoFocus, ref: inputRef => (this.inputRef = inputRef), "aria-label": this.ariaProps.label, "aria-required": this.required.toString(), "aria-invalid": this.messageType === 'error' ? 'true' : undefined, "aria-describedby": this.message ? this.messageId : undefined, tabindex: this.disabled ? '-1' : this.index, part: "input" }), h("div", { class: "square", part: "square" }), h("wpp-icon-tick-v4-7-0", { part: "icon-tick" }), h("wpp-icon-dash-v4-7-0", { part: "icon-dash" })), !!this.message && (h("wpp-inline-message-v4-7-0", { id: this.messageId, class: "inline-message", showTooltipFrom: this.maxMessageLength, message: this.message, type: this.messageType, part: "message" }))));
   }
-  static get registryIs() { return "wpp-checkbox-v4-6-0"; }
+  static get registryIs() { return "wpp-checkbox-v4-7-0"; }
   get host() { return this; }
   static get watchers() { return {
     "isDarkTheme": ["onUpdateDarkTheme"]
   }; }
   static get style() { return wppCheckboxCss; }
-}, [1, "wpp-checkbox", "wpp-checkbox-v4-6-0", {
+}, [1, "wpp-checkbox", "wpp-checkbox-v4-7-0", {
     "name": [1],
     "value": [1032],
     "checked": [1540],
@@ -179,6 +192,7 @@ const WppCheckbox = /*@__PURE__*/ proxyCustomElement(class WppCheckbox extends H
     "internalState": [1, "internal-state"],
     "index": [2],
     "decorative": [4],
+    "isGroupItem": [4, "is-group-item"],
     "isDarkTheme": [4, "is-dark-theme"],
     "focusType": [32],
     "isPressed": [32],
@@ -188,84 +202,84 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-checkbox-v4-6-0", "wpp-action-button-v4-6-0", "wpp-icon-cross-v4-6-0", "wpp-icon-dash-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-info-message-v4-6-0", "wpp-icon-success-v4-6-0", "wpp-icon-tick-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-inline-message-v4-6-0", "wpp-internal-label-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-label-v4-6-0", "wpp-spinner-v4-6-0", "wpp-tooltip-v4-6-0", "wpp-typography-v4-6-0"];
+  const components = ["wpp-checkbox-v4-7-0", "wpp-action-button-v4-7-0", "wpp-icon-cross-v4-7-0", "wpp-icon-dash-v4-7-0", "wpp-icon-error-v4-7-0", "wpp-icon-info-message-v4-7-0", "wpp-icon-success-v4-7-0", "wpp-icon-tick-v4-7-0", "wpp-icon-warning-v4-7-0", "wpp-inline-message-v4-7-0", "wpp-internal-label-v4-7-0", "wpp-internal-tooltip-v4-7-0", "wpp-label-v4-7-0", "wpp-spinner-v4-7-0", "wpp-tooltip-v4-7-0", "wpp-typography-v4-7-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-checkbox-v4-6-0":
+    case "wpp-checkbox-v4-7-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppCheckbox);
       }
       break;
-    case "wpp-action-button-v4-6-0":
+    case "wpp-action-button-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$f();
       }
       break;
-    case "wpp-icon-cross-v4-6-0":
+    case "wpp-icon-cross-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$e();
       }
       break;
-    case "wpp-icon-dash-v4-6-0":
+    case "wpp-icon-dash-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$d();
       }
       break;
-    case "wpp-icon-error-v4-6-0":
+    case "wpp-icon-error-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-icon-info-message-v4-6-0":
+    case "wpp-icon-info-message-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-icon-success-v4-6-0":
+    case "wpp-icon-success-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-tick-v4-6-0":
+    case "wpp-icon-tick-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-warning-v4-6-0":
+    case "wpp-icon-warning-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-inline-message-v4-6-0":
+    case "wpp-inline-message-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-internal-label-v4-6-0":
+    case "wpp-internal-label-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-internal-tooltip-v4-6-0":
+    case "wpp-internal-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-label-v4-6-0":
+    case "wpp-label-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-spinner-v4-6-0":
+    case "wpp-spinner-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-tooltip-v4-6-0":
+    case "wpp-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-typography-v4-6-0":
+    case "wpp-typography-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

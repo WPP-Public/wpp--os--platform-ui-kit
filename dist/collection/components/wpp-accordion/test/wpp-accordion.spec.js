@@ -542,3 +542,18 @@ describe('wpp-accordion', () => {
     expect(tooltipEl.text).toBe('Very long title'); // ✅ Access prop directly
   });
 });
+describe('wpp-accordion accessible name', () => {
+  it('names the header button from ariaProps when the accordion has no header text', async () => {
+    const page = await newSpecPage({ components: [WppAccordion], html: `<wpp-accordion></wpp-accordion>` });
+    page.root.ariaProps = { label: 'Accordion with tags only' };
+    await page.waitForChanges();
+    expect(page.root?.shadowRoot?.querySelector('button')?.getAttribute('aria-label')).toBe('Accordion with tags only');
+  });
+  it('leaves the header button to be named by its header text by default', async () => {
+    const page = await newSpecPage({
+      components: [WppAccordion],
+      html: `<wpp-accordion><span slot="header">Shipping</span></wpp-accordion>`,
+    });
+    expect(page.root?.shadowRoot?.querySelector('button')?.hasAttribute('aria-label')).toBe(false);
+  });
+});

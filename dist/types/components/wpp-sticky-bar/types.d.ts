@@ -14,3 +14,7 @@ export interface StickyBarTabItem {
 }
 export type StickyBarVariants = 'small' | 'medium' | 'with-tabs';
 export type VisibilityClasses = `visible` | `invisible` | '';
+export interface StickyBarLocales {
+  /** Accessible name of the back button on the left of the title. */
+  backButtonLabel: string;
+}

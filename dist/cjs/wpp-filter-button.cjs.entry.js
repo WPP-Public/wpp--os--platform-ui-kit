@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const index = require('./index-7d205426.js');
-const utils = require('./utils-a3ab9816.js');
+const utils = require('./utils-8b2c3bc1.js');
 const common = require('./common-ee802540.js');
 require('./consts-d8f5ef98.js');
 
@@ -32,6 +32,14 @@ const WppFilterButton = class {
     this.onBlur = () => {
       this.focusType = common.FOCUS_TYPE.NONE;
       this.isPressed = false;
+    };
+    // The ring is a stateful class rather than `:focus-visible`, and blur clears it. Focus moved here by
+    // script after a key press, or handed back by another window, never sees a Tab keyup, so take the
+    // ring from what the browser itself decided.
+    this.onFocus = () => {
+      if (typeof this.buttonRef?.matches === 'function' && this.buttonRef.matches(':focus-visible')) {
+        this.focusType = common.FOCUS_TYPE.TAB;
+      }
     };
     this.onMouseDown = () => {
       this.focusType = common.FOCUS_TYPE.MOUSE;
@@ -74,9 +82,9 @@ const WppFilterButton = class {
     this.validAriaProps = utils.getAriaProps(this.ariaProps);
   }
   render() {
-    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "button, icon, text, inner, counter", onBlur: this.onBlur, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, index.h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled, name: this.name, type: "button", "data-testid": "wppFilterButton", "aria-pressed": this.isPressed ? 'true' : 'false', ...this.validAriaProps, part: "button" }, index.h("wpp-icon-tune-v4-6-0", { class: "icon", part: "icon" }), index.h("span", { class: "text", part: "text" }, index.h("slot", { part: "inner" })), this.counter > 0 && (index.h("wpp-typography-v4-6-0", { class: "counter", type: "s-body", part: "counter" }, `(${this.counter})`)))));
+    return (index.h(index.Host, { class: this.hostCssClasses(), exportparts: "button, icon, text, inner, counter", onBlur: this.onBlur, onFocus: this.onFocus, onMouseDown: this.onMouseDown, onKeyDown: this.onKeyDown, onKeyUp: this.onKeyUp }, index.h("button", { ref: el => (this.buttonRef = el), class: this.buttonCssClasses(), autoFocus: this.autoFocus, disabled: this.disabled, name: this.name, type: "button", "data-testid": "wppFilterButton", ...this.validAriaProps, part: "button" }, index.h("wpp-icon-tune-v4-7-0", { class: "icon", part: "icon" }), index.h("span", { class: "text", part: "text" }, index.h("slot", { part: "inner" })), this.counter > 0 && (index.h("wpp-typography-v4-7-0", { class: "counter", type: "s-body", part: "counter" }, `(${this.counter})`)))));
   }
-  static get registryIs() { return "wpp-filter-button-v4-6-0"; }
+  static get registryIs() { return "wpp-filter-button-v4-7-0"; }
   get host() { return index.getElement(this); }
   static get watchers() { return {
     "ariaProps": ["onUpdateAriaProps"]

@@ -17,6 +17,8 @@ export declare const getHighlightData: (initString?: string, initSearch?: string
   secondPart: string;
 };
 export declare const transformToVersionedTag: (tag: string) => string;
+/** Builds a selector matching both the plain and the versioned tag, e.g. `wpp-step, wpp-step-v4-4-0`. */
+export declare const getTagSelector: (tag: string) => string;
 export declare function closestElement(selector: string, base: Window | Document | Element): Element | null;
 export declare const applyBodyStylesIfNeeded: (action: 'remove' | 'add') => void;
 export declare const autoFocusElement: (shouldFocus: boolean, el?: HTMLInputElement | HTMLTextAreaElement | HTMLElement) => void;
@@ -76,5 +78,11 @@ export declare const uniquePortalId: (prefix: string) => string;
  */
 export declare const activateOnEnterOrSpace: (handler: (event: KeyboardEvent) => void) => (event: KeyboardEvent) => void;
 export declare const getAriaProps: (ariaProps: AriaProps) => Record<string, string>;
+/**
+ * Text of the elements an `aria-labelledby` list names, looked up in the tree that holds `host`.
+ * A control rendered inside a shadow root cannot carry the dev's `aria-labelledby` itself: IDREFs
+ * only resolve inside the shadow root, never to the dev's elements outside it.
+ */
+export declare const getLabelledbyText: (host: HTMLElement, labelledby?: string) => string;
 export declare const isWppElement: (element: HTMLElement) => boolean;
 export {};

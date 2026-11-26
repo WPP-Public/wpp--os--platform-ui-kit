@@ -13,6 +13,7 @@ import { CheckboxChangeEvent, CheckboxValue, CheckboxLabelConfig } from './types
  */
 export declare class WppCheckbox implements BaseComponent, BooleanFormControl<CheckboxValue> {
   private themeSubscription;
+  private messageId;
   host: HTMLWppCheckboxElement;
   focusType: FOCUS_TYPE;
   isPressed: boolean;
@@ -92,6 +93,12 @@ export declare class WppCheckbox implements BaseComponent, BooleanFormControl<Ch
    */
   readonly decorative?: boolean;
   /**
+   * Hides the "(Optional)" marker because the surrounding group's label already carries it.
+   *
+   * @internal - This prop is controlled by Checkbox Group
+   */
+  readonly isGroupItem: boolean;
+  /**
    * If 'true', the component has dark theme styles applied to it.
    *
    * @internal - This prop is controlled by Select / Autocomplete
@@ -124,6 +131,7 @@ export declare class WppCheckbox implements BaseComponent, BooleanFormControl<Ch
   connectedCallback(): void;
   disconnectedCallback(): void;
   private onClick;
+  private toggle;
   private onFocus;
   private onBlur;
   private onKeyUp;

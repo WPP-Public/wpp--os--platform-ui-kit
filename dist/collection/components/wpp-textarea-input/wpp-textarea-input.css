@@ -112,7 +112,6 @@
   color: var(--wpp-danger-color-500);
 }
 :host(.wpp-textarea-wrapper) .characters-limit .wpp-typography:first-child {
-  --wpp-typography-color: $labelColor;
   white-space: nowrap;
 }
 :host(.wpp-textarea-wrapper) .characters-limit .wpp-typography:first-child::part(typography) {

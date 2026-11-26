@@ -162,3 +162,24 @@ describe('wpp-inline-message', () => {
     });
   });
 });
+describe('wpp-inline-message truncated text for assistive tech', () => {
+  const MESSAGE = 'The file is larger than the 5 MB limit for attachments';
+  it.each(['s', 'm', 'l'])('keeps the full message readable when size %s cuts it short', async (size) => {
+    const page = await newSpecPage({
+      components: [WppInlineMessage],
+      html: `<wpp-inline-message size="${size}" message="${MESSAGE}" show-tooltip-from="10"></wpp-inline-message>`,
+    });
+    const visible = page.root?.shadowRoot?.querySelector('[aria-hidden="true"]');
+    const full = page.root?.shadowRoot?.querySelector('.sr-only');
+    expect(visible?.textContent).toBe('The file i ...');
+    expect(full?.textContent).toBe(MESSAGE);
+  });
+  it('renders the message once when it is not cut short', async () => {
+    const page = await newSpecPage({
+      components: [WppInlineMessage],
+      html: `<wpp-inline-message message="${MESSAGE}" show-tooltip-from="100"></wpp-inline-message>`,
+    });
+    expect(page.root?.shadowRoot?.querySelector('.sr-only')).toBeNull();
+    expect(page.root?.shadowRoot?.querySelector('.message')?.textContent).toBe(MESSAGE);
+  });
+});

@@ -1,6 +1,7 @@
 import { proxyCustomElement, HTMLElement, createEvent, h, Host } from '@stencil/core/internal/client';
-import { b as isEventTargetContained, y as mergeLocales } from './utils.js';
+import { b as isEventTargetContained, z as mergeLocales } from './utils.js';
 import { T as TimeoutManager } from './timeout-manager.js';
+import { d as dialogFocusController, i as isFocusInsideDialog } from './dialog-focus.js';
 import { Z as Z_INDEX } from './consts.js';
 import { t as themeSubscriptionController } from './subscribe-to-theme.js';
 import { d as defineCustomElement$c } from './wpp-action-button2.js';
@@ -30,7 +31,7 @@ const SIDE_PANEL_MAX_WIDTH = 440;
 // Width, in pixels, that each Arrow key press adds to or removes from the panel width.
 const SIDE_PANEL_KEYBOARD_STEP = 10;
 
-const wppSidePanelCss = ":host{--side-panel-min-width:280px;--side-panel-max-width:440px;--side-panel-box-shadow:var(--wpp-side-panel-box-shadow, var(--wpp-box-shadow-l));--side-panel-header-paddings:var(--wpp-side-panel-header-paddings, 8px 8px 8px 16px);--side-panel-body-padding:var(--wpp-side-panel-body-padding, 16px);--side-panel-actions-paddings:var(--wpp-side-panel-actions-paddings, 16px);--side-panel-scrollbar-width:0px;--side-panel-resize-handle-width:6px;--side-panel-resize-divider-width:2px;--side-panel-close-button-margin-left:var(--wpp-side-panel-close-button-margin-left, 8px);--side-panel-transition:0.2s ease-in-out;--side-panel-bg-color:var(--wpp-side-panel-bg-color, var(--wpp-grey-color-000));--side-panel-resize-handle-color:var(--wpp-side-panel-resize-handle-color, var(--wpp-brand-color));--side-panel-first-border-color-focus:var(--wpp-grey-color-000);--side-panel-second-border-color-focus:var(--wpp-brand-color)}:host(.wpp-side-panel-wrapper){position:fixed;inset:0 0 0 auto;display:block;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;font-family:var(--wpp-font-family, system-ui, sans-serif);visibility:hidden}:host(.wpp-component-ready){-webkit-transition:var(--side-panel-transition);transition:var(--side-panel-transition)}:host(.wpp-component-ready.wpp-visible){display:block;visibility:visible;opacity:1}:host(.wpp-hidden){visibility:hidden;opacity:0}.side-panel{position:absolute;top:0;right:0;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:var(--wpp-side-panel-current-width, var(--side-panel-min-width));min-width:var(--side-panel-min-width);max-width:var(--side-panel-max-width);height:100%;background-color:var(--side-panel-bg-color);-webkit-box-shadow:var(--side-panel-box-shadow);box-shadow:var(--side-panel-box-shadow)}.side-panel.visible{-webkit-animation:fadeIn 0.2s ease-in-out forwards;animation:fadeIn 0.2s ease-in-out forwards}.side-panel.hide{-webkit-animation:fadeOut 0.2s ease-in-out forwards;animation:fadeOut 0.2s ease-in-out forwards}.resize-handle{position:absolute;top:0;left:0;z-index:1;width:var(--side-panel-resize-handle-width);height:100%;cursor:ew-resize;-ms-touch-action:none;touch-action:none}.resize-handle:focus-visible{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--side-panel-first-border-color-focus), 0 0 0 3px var(--side-panel-second-border-color-focus);box-shadow:0 0 0 1px var(--side-panel-first-border-color-focus), 0 0 0 3px var(--side-panel-second-border-color-focus)}.resize-handle::before{position:absolute;top:0;left:0;width:var(--side-panel-resize-divider-width);height:100%;background-color:transparent;-webkit-transition:background-color 0.15s ease-in-out;transition:background-color 0.15s ease-in-out;content:\"\"}.resize-handle:hover::before,.resize-handle:active::before{background-color:var(--side-panel-resize-handle-color)}.resize-handle:focus-visible:hover::before,.resize-handle:focus-visible:active::before{background-color:transparent}.header-container{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;padding:var(--side-panel-header-paddings)}.header-container .title-tooltip{min-width:0;overflow:hidden}.header-container .title-tooltip::part(anchor){display:block;overflow:hidden}.header-container .title{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.header-container .close-button{margin-left:var(--side-panel-close-button-margin-left)}.body{scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent;font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);height:100%;padding:var(--side-panel-body-padding) calc(var(--side-panel-body-padding) - var(--side-panel-scrollbar-width)) var(--side-panel-body-padding) var(--side-panel-body-padding);overflow-y:auto;scrollbar-gutter:stable}.body::-webkit-scrollbar{width:4px;height:4px}.body::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.actions-container{margin-top:auto}.actions{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);display:-ms-flexbox;display:flex;gap:12px;-ms-flex-pack:end;justify-content:flex-end;padding:var(--side-panel-actions-paddings)}.actions .wpp-button{-ms-flex:1;flex:1}.actions .wpp-button::part(button){-ms-flex:1;flex:1}@-webkit-keyframes fadeIn{from{-webkit-transform:translateX(100%);transform:translateX(100%)}to{-webkit-transform:translateX(0%);transform:translateX(0%)}}@keyframes fadeIn{from{-webkit-transform:translateX(100%);transform:translateX(100%)}to{-webkit-transform:translateX(0%);transform:translateX(0%)}}@-webkit-keyframes fadeOut{from{-webkit-transform:translateX(0%);transform:translateX(0%)}to{-webkit-transform:translateX(100%);transform:translateX(100%)}}@keyframes fadeOut{from{-webkit-transform:translateX(0%);transform:translateX(0%)}to{-webkit-transform:translateX(100%);transform:translateX(100%)}}:host([data-wpp-theme=dark]) .side-panel{background-color:var(--wpp-grey-color-100)}";
+const wppSidePanelCss = ":host{--side-panel-min-width:280px;--side-panel-max-width:440px;--side-panel-box-shadow:var(--wpp-side-panel-box-shadow, var(--wpp-box-shadow-l));--side-panel-header-paddings:var(--wpp-side-panel-header-paddings, 8px 8px 8px 16px);--side-panel-body-padding:var(--wpp-side-panel-body-padding, 16px);--side-panel-actions-paddings:var(--wpp-side-panel-actions-paddings, 16px);--side-panel-scrollbar-width:0px;--side-panel-resize-handle-width:6px;--side-panel-resize-divider-width:2px;--side-panel-close-button-margin-left:var(--wpp-side-panel-close-button-margin-left, 8px);--side-panel-transition:0.2s ease-in-out;--side-panel-bg-color:var(--wpp-side-panel-bg-color, var(--wpp-grey-color-000));--side-panel-resize-handle-color:var(--wpp-side-panel-resize-handle-color, var(--wpp-brand-color));--side-panel-first-border-color-focus:var(--wpp-grey-color-000);--side-panel-second-border-color-focus:var(--wpp-brand-color)}:host(.wpp-side-panel-wrapper){position:fixed;inset:0 0 0 auto;display:block;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;font-family:var(--wpp-font-family, system-ui, sans-serif);visibility:hidden}:host(.wpp-component-ready){-webkit-transition:var(--side-panel-transition);transition:var(--side-panel-transition)}:host(.wpp-component-ready.wpp-visible){display:block;visibility:visible;opacity:1}:host(.wpp-hidden){visibility:hidden;opacity:0}.side-panel{position:absolute;top:0;right:0;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:var(--wpp-side-panel-current-width, var(--side-panel-min-width));min-width:var(--side-panel-min-width);max-width:var(--side-panel-max-width);height:100%;background-color:var(--side-panel-bg-color);-webkit-box-shadow:var(--side-panel-box-shadow);box-shadow:var(--side-panel-box-shadow)}.side-panel:focus,.side-panel:focus-visible{outline:none}.side-panel.visible{-webkit-animation:fadeIn 0.2s ease-in-out forwards;animation:fadeIn 0.2s ease-in-out forwards}.side-panel.hide{-webkit-animation:fadeOut 0.2s ease-in-out forwards;animation:fadeOut 0.2s ease-in-out forwards}.resize-handle{position:absolute;top:0;left:0;z-index:1;width:var(--side-panel-resize-handle-width);height:100%;cursor:ew-resize;-ms-touch-action:none;touch-action:none}.resize-handle:focus-visible{border-radius:\"\";outline:none;-webkit-box-shadow:0 0 0 1px var(--side-panel-first-border-color-focus), 0 0 0 3px var(--side-panel-second-border-color-focus);box-shadow:0 0 0 1px var(--side-panel-first-border-color-focus), 0 0 0 3px var(--side-panel-second-border-color-focus)}.resize-handle::before{position:absolute;top:0;left:0;width:var(--side-panel-resize-divider-width);height:100%;background-color:transparent;-webkit-transition:background-color 0.15s ease-in-out;transition:background-color 0.15s ease-in-out;content:\"\"}.resize-handle:hover::before,.resize-handle:active::before{background-color:var(--side-panel-resize-handle-color)}.resize-handle:focus-visible:hover::before,.resize-handle:focus-visible:active::before{background-color:transparent}.header-container{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;padding:var(--side-panel-header-paddings)}.header-container .title-tooltip{min-width:0;overflow:hidden}.header-container .title-tooltip::part(anchor){display:block;overflow:hidden}.header-container .title{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.header-container .close-button{margin-left:var(--side-panel-close-button-margin-left)}.body{scrollbar-width:thin;scrollbar-color:var(--wpp-grey-color-400) transparent;font-size:var(--wpp-typography-s-body-font-size, 14px);line-height:var(--wpp-typography-s-body-line-height, 22px);font-weight:var(--wpp-typography-s-body-font-weight, 400);color:var(--wpp-typography-s-body-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-body-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-body-letter-spacing, 0);height:100%;padding:var(--side-panel-body-padding) calc(var(--side-panel-body-padding) - var(--side-panel-scrollbar-width)) var(--side-panel-body-padding) var(--side-panel-body-padding);overflow-y:auto;scrollbar-gutter:stable}.body::-webkit-scrollbar{width:4px;height:4px}.body::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:4px;-webkit-box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400);box-shadow:inset 0 0 0 2px var(--wpp-grey-color-400)}.actions-container{margin-top:auto}.actions{font-size:var(--wpp-typography-s-strong-font-size, 14px);line-height:var(--wpp-typography-s-strong-line-height, 22px);font-weight:var(--wpp-typography-s-strong-font-weight, 700);color:var(--wpp-typography-s-strong-color, var(--wpp-text-color));font-family:var(--wpp-typography-s-strong-font-family, var(--wpp-font-family, system-ui, sans-serif));letter-spacing:var(--wpp-typography-s-strong-letter-spacing, 0);display:-ms-flexbox;display:flex;gap:12px;-ms-flex-pack:end;justify-content:flex-end;padding:var(--side-panel-actions-paddings)}.actions .wpp-button{-ms-flex:1;flex:1}.actions .wpp-button::part(button){-ms-flex:1;flex:1}@-webkit-keyframes fadeIn{from{-webkit-transform:translateX(100%);transform:translateX(100%)}to{-webkit-transform:translateX(0%);transform:translateX(0%)}}@keyframes fadeIn{from{-webkit-transform:translateX(100%);transform:translateX(100%)}to{-webkit-transform:translateX(0%);transform:translateX(0%)}}@-webkit-keyframes fadeOut{from{-webkit-transform:translateX(0%);transform:translateX(0%)}to{-webkit-transform:translateX(100%);transform:translateX(100%)}}@keyframes fadeOut{from{-webkit-transform:translateX(0%);transform:translateX(0%)}to{-webkit-transform:translateX(100%);transform:translateX(100%)}}:host([data-wpp-theme=dark]) .side-panel{background-color:var(--wpp-grey-color-100)}";
 
 const WppSidePanel$1 = /*@__PURE__*/ proxyCustomElement(class WppSidePanel extends HTMLElement {
   constructor() {
@@ -49,6 +50,9 @@ const WppSidePanel$1 = /*@__PURE__*/ proxyCustomElement(class WppSidePanel exten
     this.resizeStartX = 0;
     this.pendingWidth = 0;
     this.themeSubscription = themeSubscriptionController(() => this.host);
+    this.panelFocus = dialogFocusController();
+    // Whether the pending close came from the keyboard, so the trigger gets its focus ring back.
+    this.closedFromKeyboard = false;
     this.setScrollbarWidth = () => {
       if (!this.bodyRef)
         return;
@@ -59,9 +63,11 @@ const WppSidePanel$1 = /*@__PURE__*/ proxyCustomElement(class WppSidePanel exten
     this.applyWidthVar = (width) => {
       this.host.style.setProperty('--wpp-side-panel-current-width', `${width}px`);
     };
-    this.handleCloseClick = () => {
+    this.handleCloseClick = (event) => {
       this.wppSidePanelClose.emit({ reason: SidePanelCloseReason.crossClick });
       this.closeReason = SidePanelCloseReason.crossClick;
+      // A click generated by Enter or Space reports `detail === 0`; a pointer click reports 1 or more.
+      this.closedFromKeyboard = event.detail === 0;
     };
     this.handleResizeStart = (event) => {
       // Only the primary (left) button starts a resize; ignore right / middle clicks.
@@ -153,6 +159,7 @@ const WppSidePanel$1 = /*@__PURE__*/ proxyCustomElement(class WppSidePanel exten
         }
       }
       this.closeReason = null;
+      this.closedFromKeyboard = false;
     };
     this.focusPanel = () => {
       this.panelRef?.focus();
@@ -174,7 +181,7 @@ const WppSidePanel$1 = /*@__PURE__*/ proxyCustomElement(class WppSidePanel exten
       const [secondaryConfig, primaryConfig] = this.actionsConfig;
       const { label: secondaryLabel, ...secondaryRest } = secondaryConfig;
       const { label: primaryLabel, ...primaryRest } = primaryConfig;
-      return (h("div", { class: "actions-container" }, h("wpp-divider-v4-6-0", null), h("div", { class: "actions" }, h("wpp-button-v4-6-0", { size: "m", variant: "secondary", ...secondaryRest }, secondaryLabel), h("wpp-button-v4-6-0", { size: "m", variant: "primary", ...primaryRest }, primaryLabel))));
+      return (h("div", { class: "actions-container" }, h("wpp-divider-v4-7-0", null), h("div", { class: "actions" }, h("wpp-button-v4-7-0", { size: "m", variant: "secondary", ...secondaryRest }, secondaryLabel), h("wpp-button-v4-7-0", { size: "m", variant: "primary", ...primaryRest }, primaryLabel))));
     };
     this.isHidden = true;
     this.closeReason = null;
@@ -202,13 +209,27 @@ const WppSidePanel$1 = /*@__PURE__*/ proxyCustomElement(class WppSidePanel exten
   }
   handleChangeOpenStatus(openStatus) {
     if (openStatus) {
+      // Captured before the panel takes focus, so it can be handed back on close.
+      this.panelFocus.capture();
       this.host.classList.add('wpp-component-ready');
+    }
+    else {
+      // The panel is about to hide with focus still inside it, which would drop focus to the document,
+      // the same as in wpp-side-modal. Decide now, while that is still true, and restore once the close
+      // render has been applied.
+      const shouldRestoreFocus = isFocusInsideDialog(this.host, this.panelRef);
+      const closedFromKeyboard = this.closedFromKeyboard;
+      this.timeouts.schedule(() => {
+        if (shouldRestoreFocus)
+          this.panelFocus.restore({ withKeyboardRing: closedFromKeyboard });
+      });
     }
   }
   handleCloseOnEsc(event) {
     if (event.key === 'Escape' && this.open && isEventTargetContained(this.host, event)) {
       this.wppSidePanelClose.emit({ reason: SidePanelCloseReason.escapePress });
       this.closeReason = SidePanelCloseReason.escapePress;
+      this.closedFromKeyboard = true;
     }
   }
   componentDidLoad() {
@@ -224,6 +245,8 @@ const WppSidePanel$1 = /*@__PURE__*/ proxyCustomElement(class WppSidePanel exten
     this.themeSubscription.stop();
     this.timeouts.clearAll();
     this.toggleResizeListeners(false);
+    // `clearAll` above cancels the scheduled restore, so drop the reference to the captured element too.
+    this.panelFocus.clear();
   }
   get _locales() {
     return mergeLocales(LOCALES_DEFAULTS, this.locales);
@@ -231,7 +254,7 @@ const WppSidePanel$1 = /*@__PURE__*/ proxyCustomElement(class WppSidePanel exten
   render() {
     return (h(Host, { class: this.hostCssClasses(), onTransitionStart: this.handleTransitionStart, onTransitionEnd: this.handleTransitionEnd, style: {
         zIndex: this.zIndex.toString(),
-      }, role: this.ariaProps.role, "aria-label": this.ariaProps.label || this.panelTitle || undefined }, h("div", { class: this.panelCssClasses(), tabindex: "-1", ref: ref => (this.panelRef = ref), "data-testid": "wpp-side-panel-content" }, h("div", { class: "resize-handle", role: "separator", tabindex: "0", "aria-orientation": "vertical", "aria-label": this._locales.resizeHandleLabel, "aria-valuenow": this.currentWidth, "aria-valuemin": SIDE_PANEL_MIN_WIDTH, "aria-valuemax": SIDE_PANEL_MAX_WIDTH, "aria-valuetext": `${this.currentWidth}px`, onPointerDown: this.handleResizeStart, onKeyDown: this.handleResizeKeyDown, "data-testid": "wpp-side-panel-resize-handle" }), h("div", { class: "header-container" }, h("wpp-tooltip-v4-6-0", { class: "title-tooltip", text: this.panelTitle, config: {
+      }, role: this.ariaProps.role, "aria-label": this.ariaProps.label || this.panelTitle || undefined }, h("div", { class: this.panelCssClasses(), tabindex: "-1", ref: ref => (this.panelRef = ref), "data-testid": "wpp-side-panel-content" }, h("div", { class: "resize-handle", role: "separator", tabindex: "0", "aria-orientation": "vertical", "aria-label": this._locales.resizeHandleLabel, "aria-valuenow": this.currentWidth, "aria-valuemin": SIDE_PANEL_MIN_WIDTH, "aria-valuemax": SIDE_PANEL_MAX_WIDTH, "aria-valuetext": `${this.currentWidth}px`, onPointerDown: this.handleResizeStart, onKeyDown: this.handleResizeKeyDown, "data-testid": "wpp-side-panel-resize-handle" }), h("div", { class: "header-container" }, h("wpp-tooltip-v4-7-0", { class: "title-tooltip", text: this.panelTitle, config: {
         placement: 'top',
         onShow: () => {
           if (!this.titleRef)
@@ -239,15 +262,15 @@ const WppSidePanel$1 = /*@__PURE__*/ proxyCustomElement(class WppSidePanel exten
           if (this.titleRef.clientWidth >= this.titleRef.scrollWidth)
             return false;
         },
-      } }, h("wpp-typography-v4-6-0", { ref: el => (this.titleRef = el), type: "s-strong", class: "title" }, this.panelTitle)), h("wpp-action-button-v4-6-0", { ariaProps: { label: this._locales.closeIconLabel }, variant: "secondary", onClick: this.handleCloseClick, class: "close-button" }, h("wpp-icon-cross-v4-6-0", { slot: "icon-start" }))), h("wpp-divider-v4-6-0", null), h("div", { class: "body", ref: el => (this.bodyRef = el) }, h("slot", null)), this.renderActions())));
+      } }, h("wpp-typography-v4-7-0", { ref: el => (this.titleRef = el), type: "s-strong", class: "title" }, this.panelTitle)), h("wpp-action-button-v4-7-0", { ariaProps: { label: this._locales.closeIconLabel }, variant: "secondary", onClick: this.handleCloseClick, class: "close-button" }, h("wpp-icon-cross-v4-7-0", { slot: "icon-start" }))), h("wpp-divider-v4-7-0", null), h("div", { class: "body", ref: el => (this.bodyRef = el) }, h("slot", null)), this.renderActions())));
   }
-  static get registryIs() { return "wpp-side-panel-v4-6-0"; }
+  static get registryIs() { return "wpp-side-panel-v4-7-0"; }
   get host() { return this; }
   static get watchers() { return {
     "open": ["handleChangeOpenStatus"]
   }; }
   static get style() { return wppSidePanelCss; }
-}, [1, "wpp-side-panel", "wpp-side-panel-v4-6-0", {
+}, [1, "wpp-side-panel", "wpp-side-panel-v4-7-0", {
     "panelTitle": [1, "panel-title"],
     "open": [1540],
     "actionsConfig": [16],
@@ -264,64 +287,64 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-side-panel-v4-6-0", "wpp-action-button-v4-6-0", "wpp-button-v4-6-0", "wpp-divider-v4-6-0", "wpp-icon-chevron-v4-6-0", "wpp-icon-cross-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-spinner-v4-6-0", "wpp-tooltip-v4-6-0", "wpp-typography-v4-6-0"];
+  const components = ["wpp-side-panel-v4-7-0", "wpp-action-button-v4-7-0", "wpp-button-v4-7-0", "wpp-divider-v4-7-0", "wpp-icon-chevron-v4-7-0", "wpp-icon-cross-v4-7-0", "wpp-icon-error-v4-7-0", "wpp-icon-warning-v4-7-0", "wpp-internal-tooltip-v4-7-0", "wpp-spinner-v4-7-0", "wpp-tooltip-v4-7-0", "wpp-typography-v4-7-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-side-panel-v4-6-0":
+    case "wpp-side-panel-v4-7-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppSidePanel$1);
       }
       break;
-    case "wpp-action-button-v4-6-0":
+    case "wpp-action-button-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$c();
       }
       break;
-    case "wpp-button-v4-6-0":
+    case "wpp-button-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$b();
       }
       break;
-    case "wpp-divider-v4-6-0":
+    case "wpp-divider-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$a();
       }
       break;
-    case "wpp-icon-chevron-v4-6-0":
+    case "wpp-icon-chevron-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$9();
       }
       break;
-    case "wpp-icon-cross-v4-6-0":
+    case "wpp-icon-cross-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$8();
       }
       break;
-    case "wpp-icon-error-v4-6-0":
+    case "wpp-icon-error-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$7();
       }
       break;
-    case "wpp-icon-warning-v4-6-0":
+    case "wpp-icon-warning-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-internal-tooltip-v4-6-0":
+    case "wpp-internal-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-spinner-v4-6-0":
+    case "wpp-spinner-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-tooltip-v4-6-0":
+    case "wpp-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-typography-v4-6-0":
+    case "wpp-typography-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }

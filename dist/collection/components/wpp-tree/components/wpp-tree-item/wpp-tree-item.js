@@ -79,7 +79,9 @@ export class WppTreeItem {
         start: '[slot="icon-start"]',
         end: '[slot="icon-end"]',
       });
-      const hasMenuContext = !!this.host.querySelector('.wpp-menu-context');
+      // Only this item's own icon-end counts: an open item renders its children inside it, and their menus are
+      // not this item's. Counting them dropped this item's action button and left its icon unreachable.
+      const hasMenuContext = Array.from(this.host.children).some(child => child.getAttribute('slot') === 'icon-end' && !!child.querySelector('.wpp-menu-context'));
       if (this.hasIconStartSlot !== !emptyStates.start ||
         this.hasIconEndSlot !== !emptyStates.end ||
         this.hasIconEndContextMenu !== hasMenuContext) {
@@ -213,21 +215,21 @@ export class WppTreeItem {
       const { className } = props;
       switch (contentType) {
         case 'text':
-          return (h("wpp-typography-v4-6-0", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
+          return (h("wpp-typography-v4-7-0", { type: "s-body", tag: "span", ...props, class: this.endContentCssClasses(className), part: "tree-item-end-text" }, props?.text));
         case 'tag': {
           const { icon } = props;
-          return (h("wpp-tag-v4-6-0", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
+          return (h("wpp-tag-v4-7-0", { ...props, class: this.endContentCssClasses(className), disabled: this.item.disabled, part: "tree-item-end-tag" }, icon &&
             h(transformToVersionedTag(icon), {
               slot: 'icon-start',
               part: 'icon-start',
             })));
         }
         case 'avatar':
-          return (h("wpp-avatar-v4-6-0", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar",
+          return (h("wpp-avatar-v4-7-0", { ...props, class: this.endContentCssClasses(className), size: "xs", part: "tree-item-end-avatar",
             // Remove from tab order - tree uses arrow keys per ARIA APG
             index: -1 }));
         case 'avatarGroup':
-          return (h("wpp-avatar-group-v4-6-0", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group",
+          return (h("wpp-avatar-group-v4-7-0", { ...props, class: this.endContentCssClasses(className), part: "tree-item-end-avatar-group",
             // Remove avatars from tab order - tree uses arrow keys per ARIA APG
             avatarsIndex: -1 }));
         default:
@@ -255,6 +257,7 @@ export class WppTreeItem {
     this.hasIconStartSlot = false;
     this.hasIconEndSlot = false;
     this.hasIconEndContextMenu = false;
+    this.itemActionsLabel = undefined;
     this.isMouseOnIconEnd = false;
     this.isCollapseTransitionEnd = true;
     this.isTextWrappable = false;
@@ -373,17 +376,22 @@ export class WppTreeItem {
   render() {
     const isParent = !!this.item?.hasChildren || !!this.item?.children?.length;
     const selectionAttr = this.getSelectionAttribute();
-    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeitem", "aria-label": this.item.title, "aria-level": this.level, "aria-setsize": this.setSize, "aria-posinset": this.posInSet, "aria-expanded": isParent ? (this.item.open ? 'true' : 'false') : undefined, "aria-disabled": this.item.disabled ? 'true' : undefined, "aria-busy": this.item.loadingChildren ? 'true' : undefined, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}), ...selectionAttr, ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (h("div", { class: "switcher", onClick: this.onSwitcherClick, part: "tree-item-switcher", "data-switcher": "true", "aria-hidden": "true" }, h("wpp-icon-triangle-fill-v4-6-0", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (h("wpp-checkbox-v4-6-0", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox", isDarkTheme: this.isDarkTheme, "aria-hidden": "true", index: -1 })), h(WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (h("wpp-tooltip-v4-6-0", { text: this.item.title, config: { placement: 'right' }, class: "tooltip", anchorTabIndex: -1 }, this.renderTitle())) : (this.renderTitle()), h("wpp-action-button-v4-6-0", { variant: "secondary", disabled: this.item.disabled || this.item.loadingChildren, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button", ariaProps: {
-        label: this.hasIconEndSlot ? `Actions for ${this.item.title}` : undefined,
+    return (h(Host, { class: this.hostCssClasses(), exportparts: "tree-item,tree-item-switcher,tree-item-checkbox,tree-item-title-wrapper,tree-item-title,tree-item-title-highlighted,tree-item-action-button", role: "treeitem", "aria-level": this.level, "aria-setsize": this.setSize, "aria-posinset": this.posInSet, "aria-expanded": isParent ? (this.item.open ? 'true' : 'false') : undefined, "aria-disabled": this.item.disabled ? 'true' : undefined, "aria-busy": this.item.loadingChildren ? 'true' : undefined, ...(this.isDarkTheme !== undefined ? { 'data-wpp-theme': this.isDarkTheme ? 'dark' : 'light' } : {}), ...selectionAttr, ...(!this.disableOpenCloseAnimation && { onTransitionEnd: this.handleTransitionEnd }) }, h("div", { class: this.treeItemClasses(), style: { paddingLeft: this.calculateItemOffset(this.level, isParent) }, onClick: this.handleItemClick, part: "tree-item" }, isParent && (h("div", { class: "switcher", onClick: this.onSwitcherClick, part: "tree-item-switcher", "data-switcher": "true", "aria-hidden": "true" }, h("wpp-icon-triangle-fill-v4-7-0", { "data-open": this.item.open ? 'true' : 'false' }))), this.multiple && !this.item.isNotSelectable && (h("wpp-checkbox-v4-7-0", { class: "checkbox", indeterminate: this.item.indeterminate, checked: this.item.selected, controlled: true, onWppChange: this.handleCheckboxClick, disabled: this.item.disabled, part: "tree-item-checkbox", isDarkTheme: this.isDarkTheme, "aria-hidden": "true", index: -1 })), h(WrappedSlot, { name: "icon-start", onSlotchange: this.updateSlotData, wrapperClass: this.iconStartCssClasses() }), this.isTextWrappable && this.withItemsTruncation ? (h("wpp-tooltip-v4-7-0", { text: this.item.title, config: { placement: 'right' }, class: "tooltip", anchorTabIndex: -1 }, this.renderTitle())) : (this.renderTitle()), this.hasIconEndContextMenu ? (
+    // A menu-context brings its own trigger, which wpp-menu-context promotes to
+    // role="button". Wrapping that in an action-button put a command inside a command and
+    // left the inner one unnamed, so the slot is rendered bare here and the menu's trigger
+    // is the single named control. wpp-tree names it, since it owns that markup.
+    h("div", { class: this.iconEndCssClasses(), part: "tree-item-action-button" }, h("slot", { name: "icon-end", onSlotchange: this.updateSlotData }))) : (h("wpp-action-button-v4-7-0", { variant: "secondary", disabled: this.item.disabled || this.item.loadingChildren, onMouseEnter: this.handleMouseDown, onMouseLeave: this.handleMouseLeave, class: this.iconEndCssClasses(), loading: this.item.loadingActions, part: "tree-item-action-button", ariaProps: {
+        label: this.hasIconEndSlot ? this.itemActionsLabel : undefined,
         // tabIndex=-1 removes from sequential Tab order; tree handles Tab navigation
         // per W3C ARIA APG Treeview: Tab from tree container moves focus here programmatically
         tabIndex: -1,
-      }, "aria-hidden": !this.hasIconEndSlot ? 'true' : undefined }, h("slot", { name: "icon-end", onSlotchange: this.updateSlotData })), this.renderEndContent()), ((this.item.open &&
+      }, "aria-hidden": !this.hasIconEndSlot ? 'true' : undefined }, h("slot", { name: "icon-end", onSlotchange: this.updateSlotData }))), this.renderEndContent()), ((this.item.open &&
       (this.item.loadingChildren || (Array.isArray(this.item.children) && this.item.children.length > 0))) ||
       !this.isCollapseTransitionEnd) && h(WrappedSlot, { name: "content", onSlotchange: this.updateSlotData })));
   }
   static get is() { return "wpp-tree-item"; }
-  static get registryIs() { return "wpp-tree-item-v4-6-0"; }
+  static get registryIs() { return "wpp-tree-item-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
@@ -397,6 +405,23 @@ export class WppTreeItem {
   }
   static get properties() {
     return {
+      "itemActionsLabel": {
+        "type": "string",
+        "mutable": false,
+        "complexType": {
+          "original": "string",
+          "resolved": "string | undefined",
+          "references": {}
+        },
+        "required": false,
+        "optional": true,
+        "docs": {
+          "tags": [],
+          "text": "Name for this item's actions control, already resolved by `wpp-tree` from its locales.\nPassed in rather than read here so this sub-component keeps no locales API of its own."
+        },
+        "attribute": "item-actions-label",
+        "reflect": false
+      },
       "text": {
         "type": "string",
         "mutable": false,

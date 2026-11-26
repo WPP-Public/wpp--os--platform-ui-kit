@@ -1,5 +1,6 @@
 import { Host, h } from '@stencil/core';
 import { BUTTON_ROLE, MENU_ITEM, PRESENTATION_ROLE } from '../../../wpp-menu-context/constants';
+const LINK_ROLE = 'link';
 export class WppNavigationItem {
   constructor() {
     this.onClick = (event) => {
@@ -8,6 +9,13 @@ export class WppNavigationItem {
       event.preventDefault();
       this.wppActiveNavItemChanged.emit({ path: this.path, value: this.value, label: this.label });
     };
+    // An anchor without an href does not follow itself on Enter
+    this.onLinkKeyDown = (event) => {
+      if (event.key !== 'Enter' || this.path || this.nestedItem)
+        return;
+      this.onClick(event);
+    };
+    this.isTopLevelLink = () => !this.menu && !this.extended && !this.nestedItem;
     this.navItemCssClasses = () => ({
       'navigation-item-wrapper': true,
       extended: this.extended,
@@ -46,14 +54,17 @@ export class WppNavigationItem {
         return 'More navigation items';
       return undefined;
     };
-    this.linkItem = () => (h("a", { href: this.path, class: "link", onClick: this.onClick, tabIndex: -1 }, h("div", { class: this.navItemCssClasses() }, h("wpp-typography-v4-6-0", { type: this.nestedItem ? 's-body' : 's-midi', class: { 'label-text': true, 'nested-text': this.nestedItem } }, this.label))));
+    // A top-level link is the anchor itself: it takes focus, is announced as a link with the current page
+    // marked, and Enter follows it. Inside a dropdown the host is the menuitem, so the anchor stays out of
+    // the tab order there.
+    this.linkItem = () => (h("a", { href: this.path, class: "link", onClick: this.onClick, onKeyDown: this.onLinkKeyDown, tabIndex: this.nestedItem ? -1 : 0, role: !this.nestedItem && !this.path ? LINK_ROLE : undefined, "aria-current": !this.nestedItem && this.active ? 'page' : undefined }, h("div", { class: this.navItemCssClasses() }, h("wpp-typography-v4-7-0", { type: this.nestedItem ? 's-body' : 's-midi', class: { 'label-text': true, 'nested-text': this.nestedItem } }, this.label))));
     this.listItem = () => (
     // The menuitem role lives on the host, so the inner <li> is purely
     // structural. Mark it presentation, otherwise it claims listitem
     // semantics without a list parent (axe `listitem`/`list` violation).
     h("li", { class: "list-item", part: "list-item", role: PRESENTATION_ROLE }, this.linkItem()));
-    this.menuItem = () => (h("div", { class: this.navItemCssClasses() }, h("wpp-icon-more-v4-6-0", { direction: "horizontal", class: "menu-icon" })));
-    this.extendedItem = () => (h("div", { class: this.navItemCssClasses() }, !this.chevronOnly && (h("wpp-typography-v4-6-0", { type: "s-midi", class: "label-text" }, this.label)), h("wpp-icon-chevron-v4-6-0", { direction: "down", color: "var(--wpp-grey-color-600)", class: "chevron-icon", part: "chevron-icon" })));
+    this.menuItem = () => (h("div", { class: this.navItemCssClasses() }, h("wpp-icon-more-v4-7-0", { direction: "horizontal", class: "menu-icon" })));
+    this.extendedItem = () => (h("div", { class: this.navItemCssClasses() }, !this.chevronOnly && (h("wpp-typography-v4-7-0", { type: "s-midi", class: "label-text" }, this.label)), h("wpp-icon-chevron-v4-7-0", { direction: "down", color: "var(--wpp-grey-color-600)", class: "chevron-icon", part: "chevron-icon" })));
     this.renderItem = () => {
       if (this.menu) {
         return this.menuItem();
@@ -79,10 +90,10 @@ export class WppNavigationItem {
   }
   render() {
     const hostRole = this.getHostRole();
-    return (h(Host, { class: this.hostCssClasses(), role: hostRole, "aria-label": hostRole === BUTTON_ROLE ? this.getAccessibleName() : undefined, tabIndex: 0, exportparts: "list-item, chevron-icon" }, this.renderItem()));
+    return (h(Host, { class: this.hostCssClasses(), role: hostRole, "aria-label": hostRole === BUTTON_ROLE ? this.getAccessibleName() : undefined, tabIndex: this.isTopLevelLink() ? undefined : 0, exportparts: "list-item, chevron-icon" }, this.renderItem()));
   }
   static get is() { return "wpp-navigation-item"; }
-  static get registryIs() { return "wpp-navigation-item-v4-6-0"; }
+  static get registryIs() { return "wpp-navigation-item-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {

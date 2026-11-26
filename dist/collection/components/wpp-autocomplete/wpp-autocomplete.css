@@ -58,9 +58,6 @@
   border-color: var(--wpp-grey-color-400);
   cursor: not-allowed;
 }
-.trigger.disabled .input-placeholder {
-  --wpp-typography-color: var(--wpp-text-color-disabled);
-}
 .trigger.single .hidden-count {
   right: 10px;
 }

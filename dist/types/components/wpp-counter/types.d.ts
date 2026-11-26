@@ -8,3 +8,11 @@ export interface CounterFormat {
   replaceValue: string;
 }
 export type CounterLabelConfig = LabelConfig;
+export interface CounterLocales {
+  /** Accessible name of the button that decreases the value. */
+  decreaseValue: string;
+  /** Accessible name of the button that increases the value. */
+  increaseValue: string;
+  /** Accessible name of the value field when there is no label and no ariaProps.label. */
+  counterValue: string;
+}

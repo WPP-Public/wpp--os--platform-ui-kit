@@ -81,13 +81,13 @@ const WppFloatingToolbar = /*@__PURE__*/ proxyCustomElement(class WppFloatingToo
       // `action` styles every button from outside; `action-<id>` picks one out, as a toolbar holding a
       // readout of changing width needs
       const part = data.id ? `action action-${data.id}` : 'action';
-      const button = (h("wpp-action-button-v4-6-0", { key: key, ...buttonData, part: part, exportparts: "button", ariaProps: { ...data.ariaProps, tabIndex: index === rovingIndex ? 0 : -1 }, variant: "secondary", class: {
+      const button = (h("wpp-action-button-v4-7-0", { key: key, ...buttonData, part: part, exportparts: "button", ariaProps: { ...data.ariaProps, tabIndex: index === rovingIndex ? 0 : -1 }, variant: "secondary", class: {
           'is-selected': this.selectable &&
             (this.hasIdProp ? this.selectedIdentifier === data.id : this.selectedIdentifier === index),
         }, onClick: () => this.handleBtnClick(data, index) }, data.icon && h(transformToVersionedTag(data.icon), { slot: 'icon-start', part: 'icon' }), label));
       if (!tooltip)
         return button;
-      return (h("wpp-tooltip-v4-6-0", { key: `tooltip-${key}`, text: tooltip, part: "action-tooltip" }, button));
+      return (h("wpp-tooltip-v4-7-0", { key: `tooltip-${key}`, text: tooltip, part: "action-tooltip" }, button));
     };
     this.getEnabledButtons = () => this.items.filter(item => !item.disabled);
     this.focusItem = (item) => {
@@ -172,13 +172,13 @@ const WppFloatingToolbar = /*@__PURE__*/ proxyCustomElement(class WppFloatingToo
     const rovingIndex = this.getRovingIndex();
     return (h(Host, { class: this.hostCssClasses(), role: "toolbar", "aria-orientation": this.orientation, "aria-label": this.ariaProps?.label, "aria-labelledby": this.ariaProps?.labelledby, onKeyDown: this.onKeyDown, onPointerDown: this.onPointerDown }, h("div", { class: this.wrapperCssClasses() }, this._actionButtonsConfig.map((data, index) => this.renderActionButton(data, index, rovingIndex)))));
   }
-  static get registryIs() { return "wpp-floating-toolbar-v4-6-0"; }
+  static get registryIs() { return "wpp-floating-toolbar-v4-7-0"; }
   get host() { return this; }
   static get watchers() { return {
     "actionButtonsConfig": ["onUpdateActionButtonsConfig"]
   }; }
   static get style() { return wppFloatingToolbarCss; }
-}, [1, "wpp-floating-toolbar", "wpp-floating-toolbar-v4-6-0", {
+}, [1, "wpp-floating-toolbar", "wpp-floating-toolbar-v4-7-0", {
     "actionButtonsConfig": [16],
     "selectable": [4],
     "orientation": [1],
@@ -190,39 +190,39 @@ function defineCustomElement() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["wpp-floating-toolbar-v4-6-0", "wpp-action-button-v4-6-0", "wpp-icon-error-v4-6-0", "wpp-icon-warning-v4-6-0", "wpp-internal-tooltip-v4-6-0", "wpp-spinner-v4-6-0", "wpp-tooltip-v4-6-0"];
+  const components = ["wpp-floating-toolbar-v4-7-0", "wpp-action-button-v4-7-0", "wpp-icon-error-v4-7-0", "wpp-icon-warning-v4-7-0", "wpp-internal-tooltip-v4-7-0", "wpp-spinner-v4-7-0", "wpp-tooltip-v4-7-0"];
   components.forEach(tagName => { switch (tagName) {
-    case "wpp-floating-toolbar-v4-6-0":
+    case "wpp-floating-toolbar-v4-7-0":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, WppFloatingToolbar);
       }
       break;
-    case "wpp-action-button-v4-6-0":
+    case "wpp-action-button-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$6();
       }
       break;
-    case "wpp-icon-error-v4-6-0":
+    case "wpp-icon-error-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$5();
       }
       break;
-    case "wpp-icon-warning-v4-6-0":
+    case "wpp-icon-warning-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$4();
       }
       break;
-    case "wpp-internal-tooltip-v4-6-0":
+    case "wpp-internal-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$3();
       }
       break;
-    case "wpp-spinner-v4-6-0":
+    case "wpp-spinner-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$2();
       }
       break;
-    case "wpp-tooltip-v4-6-0":
+    case "wpp-tooltip-v4-7-0":
       if (!customElements.get(tagName)) {
         defineCustomElement$1();
       }

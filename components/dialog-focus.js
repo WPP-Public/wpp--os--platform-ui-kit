@@ -13,15 +13,57 @@ const getDeepActiveElement = () => {
   return node;
 };
 /**
- * Whether focus currently sits inside a dialog, counting both its slotted light-DOM content and
- * its own shadow content. `host.contains()` does not cross the shadow boundary, so the dialog
- * element has to be checked separately.
+ * Whether `node` sits inside `container`, climbing out through every shadow root in between.
+ * `contains()` stops at a shadow boundary, so the native button inside a `wpp-action-button` or a
+ * slotted `wpp-button` would otherwise count as outside the dialog that holds it.
+ */
+const containsAcrossShadowRoots = (container, node) => {
+  let current = node;
+  while (current) {
+    if (container.contains(current))
+      return true;
+    current = current.getRootNode().host;
+  }
+  return false;
+};
+/**
+ * Whether focus currently sits inside a dialog, counting its slotted light-DOM content, its own
+ * shadow content and the shadow content of any component nested in either.
  */
 const isFocusInsideDialog = (host, dialog) => {
   const active = getDeepActiveElement();
   if (!active)
     return false;
-  return host.contains(active) || active === dialog || !!dialog?.contains(active);
+  return containsAcrossShadowRoots(host, active) || (!!dialog && containsAcrossShadowRoots(dialog, active));
+};
+const isInTabOrder = (element) => {
+  if (element.hasAttribute('tabindex'))
+    return element.tabIndex >= 0;
+  // Browsers report 0 for an anchor without `href`, which Tab skips, and -1 for an editable region, which Tab reaches.
+  if (element.tagName === 'A')
+    return element.hasAttribute('href');
+  return element.tabIndex >= 0 || (element.hasAttribute('contenteditable') && element.isContentEditable);
+};
+const isTabbable = (element) => isInTabOrder(element) &&
+  !element.disabled &&
+  !element.closest('fieldset')?.disabled &&
+  (element.checkVisibility?.({ checkVisibilityCSS: true }) ?? true);
+// The tab stops under `node` in the order they render: into open shadow roots, where the native control of a
+// component such as `wpp-button` lives, and through each slot to what is assigned to it (or its fallback content).
+const getTabStops = (node) => {
+  const children = node.assignedElements?.({ flatten: true }) ?? Array.from((node.shadowRoot ?? node).children);
+  return [...(isTabbable(node) ? [node] : []), ...children.flatMap(getTabStops)];
+};
+/**
+ * Wraps keyboard focus around a modal dialog, for the focus sentinels on either side of it: Tab past the last
+ * control lands on the first, Shift+Tab before the first lands on the last (WAI-ARIA APG, Dialog pattern). A
+ * dialog without controls takes focus itself; it is never a tab stop of its own (`tabindex="-1"`).
+ */
+const focusDialogEdge = (dialog, edge) => {
+  if (!dialog)
+    return;
+  const stops = getTabStops(dialog);
+  (stops[edge === 'first' ? 0 : stops.length - 1] ?? dialog).focus();
 };
 /**
  * Nearest ancestor that owns this element's focus state, climbing out through shadow roots.
@@ -91,4 +133,4 @@ const dialogFocusController = () => {
   };
 };
 
-export { dialogFocusController as d, getDeepActiveElement as g, isFocusInsideDialog as i };
+export { dialogFocusController as d, focusDialogEdge as f, getDeepActiveElement as g, isFocusInsideDialog as i };

@@ -168,6 +168,8 @@ export const transformToVersionedTag = (tag) => {
     return tag;
   return `${tag}-${version}`;
 };
+/** Builds a selector matching both the plain and the versioned tag, e.g. `wpp-step, wpp-step-v4-4-0`. */
+export const getTagSelector = (tag) => [tag, transformToVersionedTag(tag)].filter((item, index, items) => items.indexOf(item) === index).join(', ');
 export function closestElement(selector, base) {
   const isWindow = (value) => value === window;
   const isDocument = (value) => value === document;
@@ -388,5 +390,19 @@ export const getAriaProps = (ariaProps) => {
     }
   });
   return result;
+};
+/**
+ * Text of the elements an `aria-labelledby` list names, looked up in the tree that holds `host`.
+ * A control rendered inside a shadow root cannot carry the dev's `aria-labelledby` itself: IDREFs
+ * only resolve inside the shadow root, never to the dev's elements outside it.
+ */
+export const getLabelledbyText = (host, labelledby) => {
+  const root = host.getRootNode();
+  return (labelledby ?? '')
+    .split(/\s+/)
+    .filter(Boolean)
+    .map(id => root.getElementById?.(id)?.textContent?.replace(/\s+/g, ' ').trim())
+    .filter(Boolean)
+    .join(' ');
 };
 export const isWppElement = (element) => element.tagName.toLowerCase().includes('wpp-') && element.tagName.toLowerCase().includes('-v');

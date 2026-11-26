@@ -15,6 +15,7 @@
   * @prop --wpp-file-upload-item-loading-margin:
   * @prop --wpp-file-upload-item-name-error-margin:
   * @prop --wpp-file-upload-item-error-color:
+  * @prop --wpp-file-upload-item-icon-color:
 */
 :host {
   --fu-item-bg-color: var(--wpp-file-upload-item-bg-color, var(--wpp-grey-color-200));
@@ -28,7 +29,7 @@
   --fu-item-thumbnail-margin: var(--wpp-file-upload-item-thumbnail-margin, 0 8px 0 0);
   --fu-item-item-icon-margin: var(--wpp-file-upload-item-icon-margin, 0 2px 0 0);
   --fu-item-item-color: var(--wpp-file-upload-item-color, var(--wpp-grey-color-700));
-  --fu-item-item-name-color: var(--wpp-file-upload-item-name-color, var(--wpp-grey-color-900));
+  --fu-item-icon-color: var(--wpp-file-upload-item-icon-color, var(--wpp-grey-color-800));
   --fu-item-close-icon-color-hover: var(--wpp-file-upload-item-close-icon-color-hover, var(--wpp-icon-color-hover));
   --fu-item-close-icon-active-color: var(--wpp-file-upload-item-close-icon-active-color, var(--wpp-icon-color-active));
   --fu-item-close-icon-first-border-color-focus: var(
@@ -115,9 +116,8 @@
   color: var(--fu-item-text-color-disabled);
   cursor: not-allowed;
 }
-.item-wrapper.disabled .name,
 .item-wrapper.disabled .loading {
-  --wpp-typography-color: var(--fu-item-text-color-disabled);
+  color: var(--fu-item-text-color-disabled);
 }
 .item-wrapper.disabled .wpp-icon {
   color: var(--wpp-icon-color-disabled);
@@ -143,6 +143,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  --wpp-icon-color: var(--fu-item-icon-color);
 }
 
 .extension-icon {
@@ -172,7 +173,6 @@
 }
 
 .name {
-  --wpp-typography-color: var(--fu-item-item-name-color);
   width: 100%;
   white-space: nowrap;
   flex: 1 1 auto;

@@ -8,6 +8,7 @@
   right: 0;
   z-index: 4;
   transform: translateY(-100%);
+  visibility: hidden;
 }
 :host .container {
   box-sizing: border-box;
@@ -87,13 +88,14 @@
 }
 
 :host(.wpp-visible) {
-  transition: 0.3s ease;
+  transition: 0.3s ease, visibility 0s;
   top: var(--sticky-bar-offset-top);
   transform: translateY(0);
+  visibility: visible;
 }
 
 :host(.wpp-invisible) {
-  transition: 0.3s ease;
+  transition: 0.3s ease, visibility 0s 0.3s;
   top: 0;
   transform: translateY(-100%);
 }

@@ -260,33 +260,33 @@ export class WppFocusArtefact {
     return (h("div", { class: "title-wrapper" }, h(transformToVersionedTag(this.titleIcon), {
       class: { 'title-icon': true },
       color: 'var(--wpp-grey-color-700)',
-    }), h("wpp-tooltip-v4-6-0", { text: this.artefactTitle, class: "title-tooltip", config: this.titleTooltipConfig }, h("p", { ref: el => (this.titleRef = el), class: "title" }, this.artefactTitle)), this.renderVersionSelector()));
+    }), h("wpp-tooltip-v4-7-0", { text: this.artefactTitle, class: "title-tooltip", config: this.titleTooltipConfig }, h("p", { ref: el => (this.titleRef = el), class: "title" }, this.artefactTitle)), this.renderVersionSelector()));
   }
   renderVersionSelector() {
     const selectedVersion = this.selectedVersion;
     if (!selectedVersion)
       return null;
-    return (h("wpp-menu-context-v4-6-0", { class: "version-selector", dropdownConfig: this.versionMenuConfig }, h("wpp-action-button-v4-6-0", { slot: "trigger-element", variant: "secondary", ariaProps: {
+    return (h("wpp-menu-context-v4-7-0", { class: "version-selector", dropdownConfig: this.versionMenuConfig }, h("wpp-action-button-v4-7-0", { slot: "trigger-element", variant: "secondary", ariaProps: {
         label: `${this._locales.versionSelectorLabel}: ${selectedVersion.label}`,
         haspopup: 'menu',
         expanded: this.isVersionMenuOpen,
-      } }, selectedVersion.label, h("wpp-icon-chevron-v4-6-0", { slot: "icon-end", direction: this.isVersionMenuOpen ? 'up' : 'down' })), h("div", { style: MENU_LIST_STYLE }, this.versions.map(version => {
+      } }, selectedVersion.label, h("wpp-icon-chevron-v4-7-0", { slot: "icon-end", direction: this.isVersionMenuOpen ? 'up' : 'down' })), h("div", { style: MENU_LIST_STYLE }, this.versions.map(version => {
       const isSelected = version.id === selectedVersion.id;
-      return (h("wpp-list-item-v4-6-0", { key: version.id, checked: isSelected, role: "menuitemradio", "aria-checked": String(isSelected), onWppChangeListItem: () => this.handleVersionSelect(version) }, h("span", { slot: "label" }, version.label)));
+      return (h("wpp-list-item-v4-7-0", { key: version.id, checked: isSelected, role: "menuitemradio", "aria-checked": String(isSelected), onWppChangeListItem: () => this.handleVersionSelect(version) }, h("span", { slot: "label" }, version.label)));
     }))));
   }
   renderAction(action) {
     // The pin's label names what a click does ("Pin" / "Unpin"), so it needs no `aria-pressed` on top
     const { icon, label } = this.getActionDisplay(action);
-    return (h("wpp-tooltip-v4-6-0", { key: action.id, text: label }, h("wpp-action-button-v4-6-0", { variant: "secondary", ariaProps: { label }, onClick: () => this.handleActionClick(action) }, this.renderIcon(icon, 'icon-start'))));
+    return (h("wpp-tooltip-v4-7-0", { key: action.id, text: label }, h("wpp-action-button-v4-7-0", { variant: "secondary", ariaProps: { label }, onClick: () => this.handleActionClick(action) }, this.renderIcon(icon, 'icon-start'))));
   }
   renderMoreMenu() {
     if (this.menuActions.length === 0)
       return null;
-    return (h("wpp-menu-context-v4-6-0", { class: "more-menu", dropdownConfig: this.moreMenuConfig }, h("wpp-action-button-v4-6-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this._locales.moreActionsLabel, haspopup: 'menu', expanded: this.isMoreMenuOpen } }, h("wpp-icon-more-v4-6-0", { slot: "icon-start" })), h("div", { style: MENU_LIST_STYLE }, this.menuActions.map(action => (h("wpp-list-item-v4-6-0", { key: action.id, disabled: action.disabled, onWppChangeListItem: () => this.handleMenuActionClick(action) }, this.renderIcon(action.icon, 'left'), h("span", { slot: "label" }, action.label)))))));
+    return (h("wpp-menu-context-v4-7-0", { class: "more-menu", dropdownConfig: this.moreMenuConfig }, h("wpp-action-button-v4-7-0", { slot: "trigger-element", variant: "secondary", ariaProps: { label: this._locales.moreActionsLabel, haspopup: 'menu', expanded: this.isMoreMenuOpen } }, h("wpp-icon-more-v4-7-0", { slot: "icon-start" })), h("div", { style: MENU_LIST_STYLE }, this.menuActions.map(action => (h("wpp-list-item-v4-7-0", { key: action.id, disabled: action.disabled, onWppChangeListItem: () => this.handleMenuActionClick(action) }, this.renderIcon(action.icon, 'left'), h("span", { slot: "label" }, action.label)))))));
   }
   renderActions() {
-    return (h("div", { class: "actions-wrapper" }, h("div", { class: "actions" }, getDefaultActions(this._locales).map(action => this.renderAction(action)), this.renderMoreMenu()), h("wpp-tooltip-v4-6-0", { text: this._locales.closeAction }, h("wpp-action-button-v4-6-0", { class: "close-button", variant: "secondary", ariaProps: { label: this._locales.closeAction }, onClick: this.handleClose }, h("wpp-icon-close-v4-6-0", { slot: "icon-start" })))));
+    return (h("div", { class: "actions-wrapper" }, h("div", { class: "actions" }, getDefaultActions(this._locales).map(action => this.renderAction(action)), this.renderMoreMenu()), h("wpp-tooltip-v4-7-0", { text: this._locales.closeAction }, h("wpp-action-button-v4-7-0", { class: "close-button", variant: "secondary", ariaProps: { label: this._locales.closeAction }, onClick: this.handleClose }, h("wpp-icon-close-v4-7-0", { slot: "icon-start" })))));
   }
   render() {
     // The region is named after the title unless the app names it, by label or by reference
@@ -294,10 +294,10 @@ export class WppFocusArtefact {
       ...this.ariaProps,
       label: this.ariaProps.label ?? (this.ariaProps.labelledby ? undefined : this.artefactTitle),
     };
-    return (h(Host, { class: "wpp-focus-artefact", role: "region", ...getAriaProps(ariaProps) }, this.renderResizeHandle(), h("div", { class: "header" }, this.renderTitle(), this.renderActions()), h("wpp-divider-v4-6-0", { class: "divider" }), h("div", { ref: el => (this.bodyRef = el), class: "body", ...(this.isBodyScrollable ? { tabindex: '0', role: 'region', 'aria-label': this._locales.bodyLabel } : {}) }, h("slot", { name: "body", onSlotchange: this.observeBody }))));
+    return (h(Host, { class: "wpp-focus-artefact", role: "region", ...getAriaProps(ariaProps) }, this.renderResizeHandle(), h("div", { class: "header" }, this.renderTitle(), this.renderActions()), h("wpp-divider-v4-7-0", { class: "divider" }), h("div", { ref: el => (this.bodyRef = el), class: "body", ...(this.isBodyScrollable ? { tabindex: '0', role: 'region', 'aria-label': this._locales.bodyLabel } : {}) }, h("slot", { name: "body", onSlotchange: this.observeBody }))));
   }
   static get is() { return "wpp-focus-artefact"; }
-  static get registryIs() { return "wpp-focus-artefact-v4-6-0"; }
+  static get registryIs() { return "wpp-focus-artefact-v4-7-0"; }
   static get encapsulation() { return "shadow"; }
   static get originalStyleUrls() {
     return {
